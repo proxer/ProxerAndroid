@@ -1,0 +1,46 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.1"
+
+    defaultConfig {
+        applicationId "com.rubengees.proxerme"
+        minSdkVersion 15
+        targetSdkVersion 23
+        versionCode 1
+        versionName "0.1"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            shrinkResources true
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+repositories {
+    maven { url "https://jitpack.io" }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:appcompat-v7:23.0.1'
+    compile 'com.android.support:design:23.0.1'
+    compile 'com.android.support:percent:23.0.1'
+
+    compile 'com.github.bumptech.glide:glide:3.6.1'
+    compile 'com.afollestad:bridge:1.6.2@aar'
+    compile('com.mikepenz:aboutlibraries:5.2.3@aar') {
+        transitive = true
+    }
+    compile('com.mikepenz:materialdrawer:4.2.0@aar') {
+        transitive = true
+    }
+    compile 'com.mikepenz:google-material-typeface:1.2.0.1@aar'
+
+    androidTestCompile 'com.android.support.test:runner:0.4'
+    androidTestCompile 'com.android.support.test:rules:0.4'
+}
