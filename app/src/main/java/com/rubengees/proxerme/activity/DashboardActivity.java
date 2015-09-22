@@ -15,6 +15,7 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.rubengees.proxerme.R;
 import com.rubengees.proxerme.fragment.NewsFragment;
+import com.rubengees.proxerme.fragment.SettingsFragment;
 
 import java.util.ArrayList;
 
@@ -173,6 +174,7 @@ public class DashboardActivity extends MainActivity {
             case DRAWER_ID_DONATE:
                 return true;
             case DRAWER_ID_SETTINGS:
+                setFragment(SettingsFragment.newInstance(), "Settings");
                 return false;
             default:
                 return true;

@@ -13,7 +13,7 @@ public class UrlHolder {
         return "/notifications?format=json&s=news&p=" + page;
     }
 
-    public static String getNewsImageUrl(int newsId, long imageId){
+    public static String getNewsImageUrl(int newsId, String imageId) {
         return "http://cdn.proxer.me/news/" + newsId + "_" + imageId + ".png";
     }
 

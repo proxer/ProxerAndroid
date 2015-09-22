@@ -27,7 +27,7 @@ public class ProxerParser {
             JSONObject newsObject = newsArray.getJSONObject(i);
 
             result.add(new News(newsObject.getInt("nid"), newsObject.getLong("time"),
-                    newsObject.getString("description"), newsObject.getLong("image_id"),
+                    newsObject.getString("description"), newsObject.getString("image_id"),
                     newsObject.getString("subject"), newsObject.getInt("hits"),
                     newsObject.getInt("thread"), newsObject.getInt("uid"),
                     newsObject.getString("uname"), newsObject.getInt("posts"),

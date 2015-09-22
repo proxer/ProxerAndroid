@@ -35,6 +35,9 @@ import static com.rubengees.proxerme.manager.NewsManager.calculateOffsetFromStar
  */
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
+    private static final String STATE_NEWS_LIST = "news_list";
+    private static final String STATE_NEWS_EXTENSION_IDS = "news_extension_ids";
+
     private ArrayList<News> list;
     private HashMap<Integer, Boolean> extensionMap;
 
@@ -51,13 +54,15 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         notifyItemRangeInserted(0, news.size());
     }
 
-    public NewsAdapter(@NonNull Bundle savedInstanceState){
-        this.list = savedInstanceState.getParcelableArrayList("news_list");
-        List<Integer> indices = savedInstanceState.getIntegerArrayList("news_extension_indices");
+    public NewsAdapter(@NonNull Bundle savedInstanceState) {
+        this.list = savedInstanceState.getParcelableArrayList(STATE_NEWS_LIST);
+        List<Integer> ids = savedInstanceState.getIntegerArrayList(STATE_NEWS_EXTENSION_IDS);
         extensionMap = new HashMap<>(this.list.size() * 2);
 
-        for (Integer index : indices) {
-            extensionMap.put(index, true);
+        if (ids != null) {
+            for (Integer id : ids) {
+                extensionMap.put(id, true);
+            }
         }
     }
 
@@ -77,13 +82,13 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         //holder.time.setText();
 
         holder.expand.setImageDrawable(new IconicsDrawable(holder.expand.getContext())
-                .colorRes(R.color.md_black_1000).sizeDp(32)
-                .icon(GoogleMaterial.Icon.gmd_arrow_drop_down_circle));
+                .colorRes(R.color.md_grey_500).sizeDp(32)
+                .icon(GoogleMaterial.Icon.gmd_keyboard_arrow_down));
 
-        if(extensionMap.containsKey(position)){
+        if (extensionMap.containsKey(position)) {
             holder.description.setMaxLines(Integer.MAX_VALUE);
             ViewCompat.setRotationX(holder.expand, 180f);
-        }else{
+        } else {
             holder.description.setMaxLines(3);
             ViewCompat.setRotationX(holder.expand, 0f);
         }
@@ -95,49 +100,6 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     @Override
     public int getItemCount() {
         return list.size();
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
-
-        ImageView image;
-        TextView title;
-        TextView description;
-        TextView category;
-        TextView time;
-
-        ImageButton expand;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-
-            image = (ImageView) itemView.findViewById(R.id.item_news_image);
-            //title = (TextView) itemView.findViewById(R.id.item_news_title);
-            description = (TextView) itemView.findViewById(R.id.item_news_description);
-            category = (TextView) itemView.findViewById(R.id.item_news_category);
-            time = (TextView) itemView.findViewById(R.id.item_news_time);
-            expand = (ImageButton) itemView.findViewById(R.id.item_news_expand_description);
-
-            expand.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int position = getLayoutPosition();
-                    boolean isExpanded = extensionMap.containsKey(position);
-
-                    if(isExpanded){
-                        extensionMap.remove(position);
-
-                        description.setMaxLines(3);
-                        ViewCompat.animate(v).rotationX(0f);
-                    } else {
-                        extensionMap.put(position, true);
-
-                        description.setMaxLines(Integer.MAX_VALUE);
-                        ViewCompat.animate(v).rotationX(180f);
-                    }
-                }
-            });
-        }
-
     }
 
     /**
@@ -153,7 +115,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         if (!news.isEmpty()) {
             int offset = calculateOffsetFromStart(this.list, news.get(news.size() - 1));
 
-            if (offset > 0) {
+            if (offset >= 0) {
                 news = news.subList(0, offset);
             }
 
@@ -183,8 +145,51 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         return OFFSET_NOT_CALCULABLE;
     }
 
-    public void saveInstanceState(@NonNull Bundle outState){
-        outState.putParcelableArrayList("news_list", list);
-        outState.putIntegerArrayList("news_extension_indices", new ArrayList<>(extensionMap.keySet()));
+    public void saveInstanceState(@NonNull Bundle outState) {
+        outState.putParcelableArrayList(STATE_NEWS_LIST, list);
+        outState.putIntegerArrayList(STATE_NEWS_EXTENSION_IDS, new ArrayList<>(extensionMap.keySet()));
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+
+        ImageView image;
+        TextView title;
+        TextView description;
+        TextView category;
+        TextView time;
+
+        ImageButton expand;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+
+            image = (ImageView) itemView.findViewById(R.id.item_news_image);
+            //title = (TextView) itemView.findViewById(R.id.item_news_title);
+            description = (TextView) itemView.findViewById(R.id.item_news_description);
+            category = (TextView) itemView.findViewById(R.id.item_news_category);
+            time = (TextView) itemView.findViewById(R.id.item_news_time);
+            expand = (ImageButton) itemView.findViewById(R.id.item_news_expand_description);
+
+            expand.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int id = list.get(getLayoutPosition()).getId();
+                    boolean isExpanded = extensionMap.containsKey(id);
+
+                    if (isExpanded) {
+                        extensionMap.remove(id);
+
+                        description.setMaxLines(3);
+                        ViewCompat.animate(v).rotationX(0f);
+                    } else {
+                        extensionMap.put(id, true);
+
+                        description.setMaxLines(Integer.MAX_VALUE);
+                        ViewCompat.animate(v).rotationX(180f);
+                    }
+                }
+            });
+        }
+
     }
 }

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:key="pref_category_general"
+        android:title="General">
+        <CheckBoxPreference
+            android:key="pref_news_notifications"
+            android:summaryOff="Don't receive notifications"
+            android:summaryOn="Receive notifications"
+            android:title="Notifications" />
+    </PreferenceCategory>
+</PreferenceScreen>

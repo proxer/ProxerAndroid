@@ -11,10 +11,19 @@ import android.support.annotation.NonNull;
  */
 public class News implements Parcelable {
 
+    public static final Parcelable.Creator<News> CREATOR = new Parcelable.Creator<News>() {
+        public News createFromParcel(Parcel source) {
+            return new News(source);
+        }
+
+        public News[] newArray(int size) {
+            return new News[size];
+        }
+    };
     private int id;
     private long time;
     private String description;
-    private long imageId;
+    private String imageId;
     private String subject;
     private int hits;
     private int threadId;
@@ -24,7 +33,7 @@ public class News implements Parcelable {
     private int categoryId;
     private String categoryTitle;
 
-    public News(int id, long time, @NonNull String description, long imageId, @NonNull String subject,
+    public News(int id, long time, @NonNull String description, @NonNull String imageId, @NonNull String subject,
                 int hits, int threadId, int authorId, @NonNull String author, int posts,
                 int categoryId, @NonNull String categoryTitle) {
         this.id = id;
@@ -41,6 +50,21 @@ public class News implements Parcelable {
         this.categoryTitle = categoryTitle;
     }
 
+    protected News(Parcel in) {
+        this.id = in.readInt();
+        this.time = in.readLong();
+        this.description = in.readString();
+        this.imageId = in.readString();
+        this.subject = in.readString();
+        this.hits = in.readInt();
+        this.threadId = in.readInt();
+        this.authorId = in.readInt();
+        this.author = in.readString();
+        this.posts = in.readInt();
+        this.categoryId = in.readInt();
+        this.categoryTitle = in.readString();
+    }
+
     public int getId() {
         return id;
     }
@@ -54,7 +78,7 @@ public class News implements Parcelable {
         return description;
     }
 
-    public long getImageId() {
+    public String getImageId() {
         return imageId;
     }
 
@@ -102,13 +126,13 @@ public class News implements Parcelable {
 
         if (id != news.id) return false;
         if (time != news.time) return false;
-        if (imageId != news.imageId) return false;
         if (hits != news.hits) return false;
         if (threadId != news.threadId) return false;
         if (authorId != news.authorId) return false;
         if (posts != news.posts) return false;
         if (categoryId != news.categoryId) return false;
         if (!description.equals(news.description)) return false;
+        if (!imageId.equals(news.imageId)) return false;
         if (!subject.equals(news.subject)) return false;
         if (!author.equals(news.author)) return false;
         return categoryTitle.equals(news.categoryTitle);
@@ -120,7 +144,7 @@ public class News implements Parcelable {
         int result = id;
         result = 31 * result + (int) (time ^ (time >>> 32));
         result = 31 * result + description.hashCode();
-        result = 31 * result + (int) (imageId ^ (imageId >>> 32));
+        result = 31 * result + imageId.hashCode();
         result = 31 * result + subject.hashCode();
         result = 31 * result + hits;
         result = 31 * result + threadId;
@@ -132,7 +156,6 @@ public class News implements Parcelable {
         return result;
     }
 
-
     @Override
     public int describeContents() {
         return 0;
@@ -143,7 +166,7 @@ public class News implements Parcelable {
         dest.writeInt(this.id);
         dest.writeLong(this.time);
         dest.writeString(this.description);
-        dest.writeLong(this.imageId);
+        dest.writeString(this.imageId);
         dest.writeString(this.subject);
         dest.writeInt(this.hits);
         dest.writeInt(this.threadId);
@@ -153,29 +176,4 @@ public class News implements Parcelable {
         dest.writeInt(this.categoryId);
         dest.writeString(this.categoryTitle);
     }
-
-    protected News(Parcel in) {
-        this.id = in.readInt();
-        this.time = in.readLong();
-        this.description = in.readString();
-        this.imageId = in.readLong();
-        this.subject = in.readString();
-        this.hits = in.readInt();
-        this.threadId = in.readInt();
-        this.authorId = in.readInt();
-        this.author = in.readString();
-        this.posts = in.readInt();
-        this.categoryId = in.readInt();
-        this.categoryTitle = in.readString();
-    }
-
-    public static final Parcelable.Creator<News> CREATOR = new Parcelable.Creator<News>() {
-        public News createFromParcel(Parcel source) {
-            return new News(source);
-        }
-
-        public News[] newArray(int size) {
-            return new News[size];
-        }
-    };
 }

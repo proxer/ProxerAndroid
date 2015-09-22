@@ -6,6 +6,7 @@
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="android:textColorPrimary">@color/primary_text</item>
         <item name="android:textColorSecondary">@color/secondary_text</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
     </style>
 
 </resources>
