@@ -85,7 +85,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
                 .colorRes(R.color.md_grey_500).sizeDp(32)
                 .icon(GoogleMaterial.Icon.gmd_keyboard_arrow_down));
 
-        if (extensionMap.containsKey(position)) {
+        if (extensionMap.containsKey(item.getId())) {
             holder.description.setMaxLines(Integer.MAX_VALUE);
             ViewCompat.setRotationX(holder.expand, 180f);
         } else {

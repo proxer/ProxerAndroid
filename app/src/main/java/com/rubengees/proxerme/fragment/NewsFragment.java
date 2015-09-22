@@ -20,6 +20,7 @@ import com.rubengees.proxerme.entity.News;
 import com.rubengees.proxerme.manager.NewsManager;
 import com.rubengees.proxerme.util.EndlessRecyclerOnScrollListener;
 import com.rubengees.proxerme.util.SnackbarManager;
+import com.rubengees.proxerme.util.Utils;
 
 import java.util.List;
 
@@ -71,11 +72,11 @@ public class NewsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.fragment_news, container, false);
-        swipeRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.fragment_news_list_container);
+        swipeRefreshLayout = (SwipeRefreshLayout) inflater.inflate(R.layout.fragment_news, container, false);
         list = (RecyclerView) swipeRefreshLayout.findViewById(R.id.fragment_news_list);
 
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1,
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
+                getActivity() == null ? 1 : Utils.calculateSpanAmount(getActivity()),
                 StaggeredGridLayoutManager.VERTICAL);
 
         list.setHasFixedSize(true);
@@ -102,7 +103,7 @@ public class NewsFragment extends Fragment {
             loadNews(currentPage, false);
         }
 
-        return root;
+        return swipeRefreshLayout;
     }
 
     @Override
