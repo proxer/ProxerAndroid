@@ -17,6 +17,7 @@ import com.mikepenz.iconics.IconicsDrawable;
 import com.rubengees.proxerme.R;
 import com.rubengees.proxerme.connection.UrlHolder;
 import com.rubengees.proxerme.entity.News;
+import com.rubengees.proxerme.util.TimeTools;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -79,7 +80,8 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         //holder.title.setText(item.getSubject());
         holder.description.setText(item.getDescription());
         holder.category.setText(item.getCategoryTitle());
-        //holder.time.setText();
+        holder.time.setText(TimeTools.convertToRelativeReadableTime(holder.time.getContext(),
+                item.getTime()));
 
         holder.expand.setImageDrawable(new IconicsDrawable(holder.expand.getContext())
                 .colorRes(R.color.md_grey_500).sizeDp(32)
