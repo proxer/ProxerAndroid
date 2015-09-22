@@ -17,14 +17,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        addPreferencesFromResource(R.xml.preferences);
-    }
-
-    @Override
     public void onCreatePreferences(Bundle bundle, String s) {
-
+        addPreferencesFromResource(R.xml.preferences);
     }
 }
