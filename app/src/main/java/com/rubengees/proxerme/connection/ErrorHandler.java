@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.afollestad.bridge.BridgeException;
 
-import static com.rubengees.proxerme.connection.ProxerException.*;
+import static com.rubengees.proxerme.connection.ProxerException.ErrorCode;
 import static com.rubengees.proxerme.connection.ProxerException.ErrorCodes.IO;
 import static com.rubengees.proxerme.connection.ProxerException.ErrorCodes.NETWORK;
 import static com.rubengees.proxerme.connection.ProxerException.ErrorCodes.PROXER;
@@ -23,17 +23,17 @@ public class ErrorHandler {
     public static String getMessageForErrorCode(@ErrorCode int code) {
         switch (code) {
             case NETWORK:
-                return "There was a problem with the network. Please check if you are connected";
+                return "There was a problem with the network. Please check if you are connected.";
             case TIMEOUT:
-                return "The server didn't answer in time. There may be problems with your network";
+                return "The server didn't answer in time. There may be problems with your network.";
             case UNPARSEABLE:
-                return "The server sent corrupt data. Please try again";
+                return "The server sent corrupt data. Please try again.";
             case IO:
-                return "There was a problem with your storage. Please try again";
+                return "There was a problem with your storage. Please try again.";
             case UNKNOWN:
-                return "An unknown error occurred. Please try again";
+                return "An unknown error occurred. Please try again.";
             default:
-                return "An unknown error occurred. Please try again";
+                return "An unknown error occurred. Please try again.";
         }
     }
 

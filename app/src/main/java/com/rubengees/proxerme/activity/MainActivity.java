@@ -11,7 +11,8 @@ import com.rubengees.proxerme.connection.ProxerException;
 
 import org.json.JSONObject;
 
-import static com.rubengees.proxerme.connection.ProxerException.ErrorCodes.*;
+import static com.rubengees.proxerme.connection.ProxerException.ErrorCodes.PROXER;
+import static com.rubengees.proxerme.connection.ProxerException.ErrorCodes.UNKNOWN;
 
 /**
  * TODO: Describe Class
@@ -33,10 +34,10 @@ public class MainActivity extends AppCompatActivity {
                     if(json.getInt("error") == 0){
                         return true;
                     }else{
-                        if(json.has("message")){
-                            throw new ProxerException(PROXER, json.getString("message"));
+                        if (json.has("msg")) {
+                            throw new ProxerException(PROXER, json.getString("msg"));
                         }else{
-                            throw new ProxerException(UNKNOWN, "An unknown error occured");
+                            throw new ProxerException(UNKNOWN, "An unknown error occurred.");
                         }
                     }
                 }else{
