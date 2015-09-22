@@ -62,19 +62,26 @@
                     android:id="@+id/item_news_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="start"
+                    android:layout_margin="4dp"
                     android:layout_weight="7"
+                    android:gravity="start"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    tools:text="In: Anime and Managa" />
+                    tools:text="Two days ago" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
 
                 <TextView
                     android:id="@+id/item_news_category"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="end"
+                    android:layout_margin="4dp"
                     android:layout_weight="3"
+                    android:gravity="end"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    tools:text="12.11.2015" />
+                    tools:text="In: Anime and Managa" />
             </LinearLayout>
         </LinearLayout>
 

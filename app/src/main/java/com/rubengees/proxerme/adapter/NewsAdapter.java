@@ -84,7 +84,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
                 item.getTime()));
 
         holder.expand.setImageDrawable(new IconicsDrawable(holder.expand.getContext())
-                .colorRes(R.color.md_grey_500).sizeDp(32)
+                .colorRes(R.color.icons_grey).sizeDp(32).paddingDp(8)
                 .icon(GoogleMaterial.Icon.gmd_keyboard_arrow_down));
 
         if (extensionMap.containsKey(item.getId())) {
