@@ -17,6 +17,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.rubengees.proxerme.R;
 import com.rubengees.proxerme.fragment.NewsFragment;
 import com.rubengees.proxerme.fragment.SettingsFragment;
+import com.rubengees.proxerme.interfaces.OnBackPressedListener;
 
 import java.util.ArrayList;
 
@@ -40,6 +41,8 @@ public class DashboardActivity extends MainActivity {
     private Drawer drawer;
 
     private int currentDrawerItemId = -1;
+
+    private OnBackPressedListener onBackPressedListener;
 
     private Drawer.OnDrawerListener onDrawerListener = new Drawer.OnDrawerListener() {
         @Override
@@ -81,7 +84,10 @@ public class DashboardActivity extends MainActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
-        if (savedInstanceState != null) {
+        if (savedInstanceState == null) {
+            onBackPressedListener = (OnBackPressedListener) getSupportFragmentManager()
+                    .findFragmentById(R.id.activity_main_content_container);
+        } else {
             currentDrawerItemId = savedInstanceState.getInt(STATE_CURRENT_DRAWER_ITEM_ID);
         }
 
@@ -96,6 +102,27 @@ public class DashboardActivity extends MainActivity {
 
         drawer.saveInstanceState(outState);
         outState.putInt(STATE_CURRENT_DRAWER_ITEM_ID, currentDrawerItemId);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen()) {
+            drawer.closeDrawer();
+        } else if (onBackPressedListener == null) {
+            handleBackPressed();
+        } else {
+            if (!onBackPressedListener.onBackPressed()) {
+                handleBackPressed();
+            }
+        }
+    }
+
+    private void handleBackPressed() {
+        if (currentDrawerItemId == DRAWER_ID_NEWS) {
+            super.onBackPressed();
+        } else {
+            drawer.setSelection(DRAWER_ID_NEWS);
+        }
     }
 
     private void findViews() {
@@ -161,6 +188,12 @@ public class DashboardActivity extends MainActivity {
     }
 
     public void setFragment(@NonNull Fragment fragment) {
+        if (fragment instanceof OnBackPressedListener) {
+            onBackPressedListener = (OnBackPressedListener) fragment;
+        } else {
+            onBackPressedListener = null;
+        }
+
         getSupportFragmentManager().beginTransaction().replace(R.id.activity_main_content_container,
                 fragment).commit();
     }
