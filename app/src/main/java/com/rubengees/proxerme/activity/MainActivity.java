@@ -64,11 +64,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
     protected void onStart() {
         super.onStart();
 
@@ -76,8 +71,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
 
         customTabActivityHelper.unbindCustomTabsService(this);
         Bridge.cleanup();
@@ -88,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showPage(String url) {
-
         CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder(customTabActivityHelper
                 .getSession()).setToolbarColor(ContextCompat.getColor(this, R.color.primary))
                 .build();
