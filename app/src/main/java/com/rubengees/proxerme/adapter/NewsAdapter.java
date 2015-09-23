@@ -38,6 +38,10 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
     private static final String STATE_NEWS_LIST = "news_list";
     private static final String STATE_NEWS_EXTENSION_IDS = "news_extension_ids";
+    private static final int ICON_SIZE = 32;
+    private static final int ICON_PADDING = 8;
+    private static final float ROTATION_HALF = 180f;
+    private static final int DESCRIPTION_MAX_LINES = 3;
 
     private ArrayList<News> list;
     private HashMap<Integer, Boolean> extensionMap;
@@ -86,14 +90,14 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
                 item.getTime()));
 
         holder.expand.setImageDrawable(new IconicsDrawable(holder.expand.getContext())
-                .colorRes(R.color.icons_grey).sizeDp(32).paddingDp(8)
+                .colorRes(R.color.icons_grey).sizeDp(ICON_SIZE).paddingDp(ICON_PADDING)
                 .icon(GoogleMaterial.Icon.gmd_keyboard_arrow_down));
 
         if (extensionMap.containsKey(item.getId())) {
             holder.description.setMaxLines(Integer.MAX_VALUE);
-            ViewCompat.setRotationX(holder.expand, 180f);
+            ViewCompat.setRotationX(holder.expand, ROTATION_HALF);
         } else {
-            holder.description.setMaxLines(3);
+            holder.description.setMaxLines(DESCRIPTION_MAX_LINES);
             ViewCompat.setRotationX(holder.expand, 0f);
         }
 
@@ -203,13 +207,13 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
                     if (isExpanded) {
                         extensionMap.remove(id);
 
-                        description.setMaxLines(3);
+                        description.setMaxLines(DESCRIPTION_MAX_LINES);
                         ViewCompat.animate(v).rotationX(0f);
                     } else {
                         extensionMap.put(id, true);
 
                         description.setMaxLines(Integer.MAX_VALUE);
-                        ViewCompat.animate(v).rotationX(180f);
+                        ViewCompat.animate(v).rotationX(ROTATION_HALF);
 
                         if (onNewsInteractionListener != null) {
                             onNewsInteractionListener.onNewsExpanded(news);

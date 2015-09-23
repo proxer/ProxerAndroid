@@ -29,6 +29,10 @@ import static com.rubengees.proxerme.connection.ProxerException.ErrorCodes.UNKNO
 @SuppressLint("Registered")
 public class MainActivity extends AppCompatActivity {
 
+    private static final String RESPONSE_ERROR = "error";
+    private static final String RESPONSE_ERROR_MESSAGE = "msg";
+    private static final String VALIDATOR_ID = "default-validator";
+
     private CustomTabActivityHelper customTabActivityHelper;
 
     @Override
@@ -40,12 +44,12 @@ public class MainActivity extends AppCompatActivity {
             public boolean validate(@NonNull Response response) throws Exception {
                 JSONObject json = response.asJsonObject();
 
-                if(json.has(("error"))){
-                    if(json.getInt("error") == 0){
+                if (json.has(RESPONSE_ERROR)) {
+                    if (json.getInt(RESPONSE_ERROR) == 0) {
                         return true;
                     }else{
-                        if (json.has("msg")) {
-                            throw new ProxerException(PROXER, json.getString("msg"));
+                        if (json.has(RESPONSE_ERROR_MESSAGE)) {
+                            throw new ProxerException(PROXER, json.getString(RESPONSE_ERROR_MESSAGE));
                         }else{
                             throw new ProxerException(UNKNOWN, "An unknown error occurred.");
                         }
@@ -58,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
             @NonNull
             @Override
             public String id() {
-                return "default-validator";
+                return VALIDATOR_ID;
             }
         });
 

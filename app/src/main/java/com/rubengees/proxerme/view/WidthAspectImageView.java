@@ -14,6 +14,8 @@ import com.rubengees.proxerme.R;
  */
 public class WidthAspectImageView extends ImageView {
 
+    private static final float DEFAULT_ASPECT = 1f;
+
     private float aspect;
 
     public WidthAspectImageView(Context context) {
@@ -27,7 +29,7 @@ public class WidthAspectImageView extends ImageView {
                 R.styleable.WidthAspectImageView);
 
         try {
-            aspect = a.getFloat(R.styleable.WidthAspectImageView_aspect, 1f);
+            aspect = a.getFloat(R.styleable.WidthAspectImageView_aspect, DEFAULT_ASPECT);
         } finally {
             a.recycle();
         }
