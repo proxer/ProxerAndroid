@@ -92,6 +92,7 @@ public class CustomTabActivityHelper {
      *
      * @param connectionCallback
      */
+    @SuppressWarnings("JavaDoc")
     public void setConnectionCallback(ConnectionCallback connectionCallback) {
         this.mConnectionCallback = connectionCallback;
     }

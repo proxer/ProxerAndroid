@@ -1,5 +1,6 @@
 package com.rubengees.proxerme.activity;
 
+import android.annotation.SuppressLint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,6 +26,7 @@ import static com.rubengees.proxerme.connection.ProxerException.ErrorCodes.UNKNO
  *
  * @author Ruben Gees
  */
+@SuppressLint("Registered")
 public class MainActivity extends AppCompatActivity {
 
     private CustomTabActivityHelper customTabActivityHelper;

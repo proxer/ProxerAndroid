@@ -34,8 +34,6 @@ public class NewsFragment extends MainFragment {
     private static final String STATE_NEWS_CURRENT_PAGE = "news_current_page";
     private static final String STATE_NEWS_LAST_LOADED_PAGE = "news_last_loaded_page";
 
-    private RecyclerView list;
-
     private NewsAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
 
@@ -87,7 +85,7 @@ public class NewsFragment extends MainFragment {
                              Bundle savedInstanceState) {
 
         swipeRefreshLayout = (SwipeRefreshLayout) inflater.inflate(R.layout.fragment_news, container, false);
-        list = (RecyclerView) swipeRefreshLayout.findViewById(R.id.fragment_news_list);
+        RecyclerView list = (RecyclerView) swipeRefreshLayout.findViewById(R.id.fragment_news_list);
 
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
                 getActivity() == null ? 1 : Utils.calculateSpanAmount(getActivity()),
