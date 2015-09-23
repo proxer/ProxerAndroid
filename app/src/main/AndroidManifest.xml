@@ -21,6 +21,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".customtabs.WebviewActivity"
+            android:parentActivityName="com.rubengees.proxerme.activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.rubengees.proxerme.activity.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

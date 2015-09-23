@@ -1,13 +1,19 @@
 package com.rubengees.proxerme.activity;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.customtabs.CustomTabsIntent;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
 import com.afollestad.bridge.Bridge;
 import com.afollestad.bridge.Response;
 import com.afollestad.bridge.ResponseValidator;
+import com.rubengees.proxerme.R;
 import com.rubengees.proxerme.connection.ProxerException;
+import com.rubengees.proxerme.customtabs.CustomTabActivityHelper;
+import com.rubengees.proxerme.customtabs.WebviewFallback;
 
 import org.json.JSONObject;
 
@@ -21,11 +27,13 @@ import static com.rubengees.proxerme.connection.ProxerException.ErrorCodes.UNKNO
  */
 public class MainActivity extends AppCompatActivity {
 
+    private CustomTabActivityHelper customTabActivityHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Bridge.client().config().host("http://proxer.me").validators(new ResponseValidator() {
+        Bridge.client().config().validators(new ResponseValidator() {
             @Override
             public boolean validate(@NonNull Response response) throws Exception {
                 JSONObject json = response.asJsonObject();
@@ -51,14 +59,41 @@ public class MainActivity extends AppCompatActivity {
                 return "default-validator";
             }
         });
+
+        customTabActivityHelper = new CustomTabActivityHelper();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        customTabActivityHelper.bindCustomTabsService(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        customTabActivityHelper.unbindCustomTabsService(this);
         Bridge.cleanup();
     }
 
+    public void setLikelyUrl(String url) {
+        customTabActivityHelper.mayLaunchUrl(Uri.parse(url), null, null);
+    }
 
+    public void showPage(String url) {
+
+        CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder(customTabActivityHelper
+                .getSession()).setToolbarColor(ContextCompat.getColor(this, R.color.primary))
+                .build();
+
+        CustomTabActivityHelper.openCustomTab(
+                this, customTabsIntent, Uri.parse(url), new WebviewFallback());
+    }
 }

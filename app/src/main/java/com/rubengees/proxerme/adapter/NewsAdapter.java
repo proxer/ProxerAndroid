@@ -42,6 +42,8 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     private ArrayList<News> list;
     private HashMap<Integer, Boolean> extensionMap;
 
+    private OnNewsInteractionListener onNewsInteractionListener;
+
     public NewsAdapter() {
         this.list = new ArrayList<>(NEWS_ON_PAGE * 2);
         extensionMap = new HashMap<>(NEWS_ON_PAGE * 2);
@@ -152,6 +154,16 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         outState.putIntegerArrayList(STATE_NEWS_EXTENSION_IDS, new ArrayList<>(extensionMap.keySet()));
     }
 
+    public void setOnNewsInteractionListener(OnNewsInteractionListener onNewsInteractionListener) {
+        this.onNewsInteractionListener = onNewsInteractionListener;
+    }
+
+    public interface OnNewsInteractionListener {
+        void onNewsClick(News news);
+
+        void onNewsExpanded(News news);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         ImageView image;
@@ -172,10 +184,20 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
             time = (TextView) itemView.findViewById(R.id.item_news_time);
             expand = (ImageButton) itemView.findViewById(R.id.item_news_expand_description);
 
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onNewsInteractionListener != null) {
+                        onNewsInteractionListener.onNewsClick(list.get(getLayoutPosition()));
+                    }
+                }
+            });
+
             expand.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int id = list.get(getLayoutPosition()).getId();
+                    News news = list.get(getLayoutPosition());
+                    int id = news.getId();
                     boolean isExpanded = extensionMap.containsKey(id);
 
                     if (isExpanded) {
@@ -188,10 +210,13 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
                         description.setMaxLines(Integer.MAX_VALUE);
                         ViewCompat.animate(v).rotationX(180f);
+
+                        if (onNewsInteractionListener != null) {
+                            onNewsInteractionListener.onNewsExpanded(news);
+                        }
                     }
                 }
             });
         }
-
     }
 }

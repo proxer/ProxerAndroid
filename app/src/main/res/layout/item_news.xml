@@ -4,13 +4,14 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    tools:context="com.rubengees.proxerme.adapter.NewsAdapter">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
-        android:background="?android:selectableItemBackground"
+        android:foreground="?android:attr/selectableItemBackground"
         card_view:cardCornerRadius="1dp">
 
         <LinearLayout
@@ -81,7 +82,7 @@
                     android:layout_weight="3"
                     android:gravity="end"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    tools:text="In: Anime and Managa" />
+                    tools:text="Anime and Managa" />
             </LinearLayout>
         </LinearLayout>
 

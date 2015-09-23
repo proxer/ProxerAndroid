@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
@@ -115,7 +116,7 @@ public class DashboardActivity extends MainActivity {
                 .withActionBarDrawerToggleAnimated(true).withHasStableIds(true)
                 .withSavedInstance(savedInstanceState).withToolbar(toolbar).build();
 
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             drawer.setSelection(DRAWER_ID_NEWS);
         }
     }
@@ -153,13 +154,13 @@ public class DashboardActivity extends MainActivity {
         return result;
     }
 
-    public void setFragment(@NonNull Fragment fragment, @NonNull String title){
+    public void setFragment(@NonNull Fragment fragment, @NonNull String title) {
         setTitle(title);
 
         setFragment(fragment);
     }
 
-    public void setFragment(@NonNull Fragment fragment){
+    public void setFragment(@NonNull Fragment fragment) {
         getSupportFragmentManager().beginTransaction().replace(R.id.activity_main_content_container,
                 fragment).commit();
     }
@@ -170,6 +171,10 @@ public class DashboardActivity extends MainActivity {
                 setFragment(NewsFragment.newInstance(), "News");
                 return false;
             case DRAWER_ID_INFO:
+                setFragment(new LibsBuilder().withAboutVersionShownName(true)
+                        .withAboutDescription("Developer: Ruben Gees").withAboutIconShown(true)
+                        .withAboutAppName(getString(R.string.app_name))
+                        .withFields(R.string.class.getFields()).fragment(), "Info");
                 return false;
             case DRAWER_ID_DONATE:
                 return true;

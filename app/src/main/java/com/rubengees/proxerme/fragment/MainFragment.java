@@ -22,4 +22,9 @@ public abstract class MainFragment extends Fragment implements OnBackPressedList
             throw new RuntimeException("Don't use this Fragment in another Activity than DashboardActivity.");
         }
     }
+
+    @Override
+    public boolean onBackPressed() {
+        return false;
+    }
 }

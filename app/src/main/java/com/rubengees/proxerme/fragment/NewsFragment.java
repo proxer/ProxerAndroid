@@ -4,7 +4,6 @@ package com.rubengees.proxerme.fragment;
 import android.os.Bundle;
 import android.support.annotation.IntRange;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -16,6 +15,7 @@ import com.rubengees.proxerme.R;
 import com.rubengees.proxerme.adapter.NewsAdapter;
 import com.rubengees.proxerme.connection.ProxerConnection;
 import com.rubengees.proxerme.connection.ProxerException;
+import com.rubengees.proxerme.connection.UrlHolder;
 import com.rubengees.proxerme.entity.News;
 import com.rubengees.proxerme.manager.NewsManager;
 import com.rubengees.proxerme.util.EndlessRecyclerOnScrollListener;
@@ -29,7 +29,7 @@ import java.util.List;
  *
  * @author Ruben Gees
  */
-public class NewsFragment extends Fragment {
+public class NewsFragment extends MainFragment {
 
     private static final String STATE_NEWS_CURRENT_PAGE = "news_current_page";
     private static final String STATE_NEWS_LAST_LOADED_PAGE = "news_last_loaded_page";
@@ -66,6 +66,20 @@ public class NewsFragment extends Fragment {
             currentPage = savedInstanceState.getInt(STATE_NEWS_CURRENT_PAGE);
             lastLoadedPage = savedInstanceState.getInt(STATE_NEWS_LAST_LOADED_PAGE);
         }
+
+        adapter.setOnNewsInteractionListener(new NewsAdapter.OnNewsInteractionListener() {
+            @Override
+            public void onNewsClick(News news) {
+                getDashboardActivity().showPage(UrlHolder.getNewsPageUrl(news.getCategoryId(),
+                        news.getThreadId()));
+            }
+
+            @Override
+            public void onNewsExpanded(News news) {
+                getDashboardActivity().setLikelyUrl(UrlHolder.getNewsPageUrl(news.getCategoryId(),
+                        news.getThreadId()));
+            }
+        });
     }
 
     @Override
@@ -157,5 +171,4 @@ public class NewsFragment extends Fragment {
             adapter.append(result);
         }
     }
-
 }
