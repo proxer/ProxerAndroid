@@ -24,13 +24,22 @@
         </activity>
         <activity
             android:name=".customtabs.WebviewActivity"
-            android:parentActivityName="com.rubengees.proxerme.activity.MainActivity">
+            android:parentActivityName=".activity.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.rubengees.proxerme.activity.MainActivity" />
         </activity>
 
-        <service android:name="com.rubengees.proxerme.customtabs.KeepAliveService" />
+        <service android:name=".customtabs.KeepAliveService" />
+
+        <activity
+            android:name=".activity.NewsImageDetailActivity"
+            android:label="@string/title_activity_news_image_detail"
+            android:parentActivityName=".activity.DashboardActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.rubengees.proxerme.activity.DashboardActivity" />
+        </activity>
     </application>
 
 </manifest>

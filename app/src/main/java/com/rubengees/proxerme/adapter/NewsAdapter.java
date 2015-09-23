@@ -162,10 +162,18 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         this.onNewsInteractionListener = onNewsInteractionListener;
     }
 
-    public interface OnNewsInteractionListener {
-        void onNewsClick(News news);
+    public static abstract class OnNewsInteractionListener {
+        public void onNewsClick(@NonNull View v, @NonNull News news) {
 
-        void onNewsExpanded(News news);
+        }
+
+        public void onNewsImageClick(@NonNull View v, @NonNull News news) {
+
+        }
+
+        public void onNewsExpanded(@NonNull View v, @NonNull News news) {
+
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -192,7 +200,16 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
                 @Override
                 public void onClick(View v) {
                     if (onNewsInteractionListener != null) {
-                        onNewsInteractionListener.onNewsClick(list.get(getLayoutPosition()));
+                        onNewsInteractionListener.onNewsClick(v, list.get(getLayoutPosition()));
+                    }
+                }
+            });
+
+            image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onNewsInteractionListener != null) {
+                        onNewsInteractionListener.onNewsImageClick(v, list.get(getLayoutPosition()));
                     }
                 }
             });
@@ -216,7 +233,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
                         ViewCompat.animate(v).rotationX(ROTATION_HALF);
 
                         if (onNewsInteractionListener != null) {
-                            onNewsInteractionListener.onNewsExpanded(news);
+                            onNewsInteractionListener.onNewsExpanded(v, news);
                         }
                     }
                 }

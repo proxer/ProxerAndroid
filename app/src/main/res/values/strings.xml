@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">ProxerMe</string>
+    <string name="title_activity_news_image_detail">NewsImageDetailActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 </resources>

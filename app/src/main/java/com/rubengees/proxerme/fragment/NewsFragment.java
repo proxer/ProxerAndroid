@@ -3,6 +3,7 @@ package com.rubengees.proxerme.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.IntRange;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
@@ -10,8 +11,10 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.rubengees.proxerme.R;
+import com.rubengees.proxerme.activity.NewsImageDetailActivity;
 import com.rubengees.proxerme.adapter.NewsAdapter;
 import com.rubengees.proxerme.connection.ProxerConnection;
 import com.rubengees.proxerme.connection.ProxerException;
@@ -67,13 +70,18 @@ public class NewsFragment extends MainFragment {
 
         adapter.setOnNewsInteractionListener(new NewsAdapter.OnNewsInteractionListener() {
             @Override
-            public void onNewsClick(News news) {
+            public void onNewsClick(@NonNull View v, @NonNull News news) {
                 getDashboardActivity().showPage(UrlHolder.getNewsPageUrl(news.getCategoryId(),
                         news.getThreadId()));
             }
 
             @Override
-            public void onNewsExpanded(News news) {
+            public void onNewsImageClick(@NonNull View v, @NonNull News news) {
+                NewsImageDetailActivity.navigateTo(getActivity(), (ImageView) v, news);
+            }
+
+            @Override
+            public void onNewsExpanded(@NonNull View v, @NonNull News news) {
                 getDashboardActivity().setLikelyUrl(UrlHolder.getNewsPageUrl(news.getCategoryId(),
                         news.getThreadId()));
             }

@@ -23,6 +23,9 @@
                 android:id="@+id/item_news_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:scaleType="centerCrop"
+                android:transitionName="image"
                 app:aspect="0.75" />
 
             <TextView
