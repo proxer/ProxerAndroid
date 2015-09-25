@@ -82,11 +82,14 @@ public class NewsService extends IntentService {
 
             if (offset == 1) {
                 News current = news.get(0);
+
                 if (current.getSubject().length() > FITTING_CHARS) {
                     builder.setContentText(news.get(0).getSubject().substring(0, FITTING_CHARS));
                 } else {
                     builder.setContentText(current.getSubject());
                 }
+
+                builder.setStyle(new BigTextStyle(builder).bigText(current.getDescription()));
             } else {
                 builder.setContentText(generateNewsNotificationAmount(offset))
                         .setStyle(new BigTextStyle(builder)
