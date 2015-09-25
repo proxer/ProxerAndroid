@@ -105,6 +105,7 @@ public class NewsManager {
     }
 
     public void retrieveNewsLater() {
+        cancelNewsRetrieval();
         if (isNewsRetrievalEnabled()) {
             AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             Intent intent = new Intent(context, NewsReceiver.class);
