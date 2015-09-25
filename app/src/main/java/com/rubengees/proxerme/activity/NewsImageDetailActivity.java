@@ -27,10 +27,10 @@ public class NewsImageDetailActivity extends AppCompatActivity {
         Intent intent = new Intent(context, NewsImageDetailActivity.class);
 
         intent.putExtra(EXTRA_NEWS, news);
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(context,
-                image, "image");
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ActivityOptionsCompat options = ActivityOptionsCompat
+                    .makeSceneTransitionAnimation(context, image, image.getTransitionName());
             context.startActivity(intent, options.toBundle());
         } else {
             context.startActivity(intent);
