@@ -14,7 +14,8 @@ public class SnackbarManager {
 
     private static Snackbar current;
 
-    public static void show(@NonNull final Snackbar snackbar, @Nullable String actionTitle, final @Nullable SnackbarCallback callback) {
+    public static void show(@NonNull final Snackbar snackbar, @Nullable String actionTitle,
+                            final @Nullable SnackbarCallback callback) {
         dismiss();
         current = snackbar;
 

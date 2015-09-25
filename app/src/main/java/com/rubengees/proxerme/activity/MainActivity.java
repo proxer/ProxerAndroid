@@ -18,8 +18,8 @@ import com.rubengees.proxerme.customtabs.WebviewFallback;
 
 import org.json.JSONObject;
 
-import static com.rubengees.proxerme.connection.ProxerException.ErrorCodes.PROXER;
-import static com.rubengees.proxerme.connection.ProxerException.ErrorCodes.UNKNOWN;
+import static com.rubengees.proxerme.connection.ErrorHandler.ErrorCodes.PROXER;
+import static com.rubengees.proxerme.connection.ErrorHandler.ErrorCodes.UNKNOWN;
 
 /**
  * TODO: Describe Class

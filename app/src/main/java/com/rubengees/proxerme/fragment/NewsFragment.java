@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import com.rubengees.proxerme.R;
 import com.rubengees.proxerme.activity.NewsImageDetailActivity;
 import com.rubengees.proxerme.adapter.NewsAdapter;
+import com.rubengees.proxerme.connection.ErrorHandler;
 import com.rubengees.proxerme.connection.ProxerConnection;
 import com.rubengees.proxerme.connection.ProxerException;
 import com.rubengees.proxerme.connection.UrlHolder;
@@ -34,15 +35,20 @@ import java.util.List;
  */
 public class NewsFragment extends MainFragment {
 
-    private static final String STATE_NEWS_CURRENT_PAGE = "news_current_page";
-    private static final String STATE_NEWS_LAST_LOADED_PAGE = "news_last_loaded_page";
-
+    public static final String STATE_METHOD_BEFORE_ERROR = "news_method_before_error";
+    private static final String STATE_CURRENT_PAGE = "news_current_page";
+    private static final String STATE_LAST_LOADED_PAGE = "news_last_loaded_page";
+    private static final String STATE_ERROR_MESSAGE = "news_error_message";
     private NewsAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
 
     private boolean loading = false;
     private int currentPage = 1;
     private int lastLoadedPage = -1;
+
+    private String currentErrorMessage;
+    private boolean methodBeforeErrorInsert;
+    private View root;
 
     public NewsFragment() {
 
@@ -64,8 +70,10 @@ public class NewsFragment extends MainFragment {
             adapter = new NewsAdapter();
         } else {
             adapter = new NewsAdapter(savedInstanceState);
-            currentPage = savedInstanceState.getInt(STATE_NEWS_CURRENT_PAGE);
-            lastLoadedPage = savedInstanceState.getInt(STATE_NEWS_LAST_LOADED_PAGE);
+            currentPage = savedInstanceState.getInt(STATE_CURRENT_PAGE);
+            lastLoadedPage = savedInstanceState.getInt(STATE_LAST_LOADED_PAGE);
+            currentErrorMessage = savedInstanceState.getString(STATE_ERROR_MESSAGE);
+            methodBeforeErrorInsert = savedInstanceState.getBoolean(STATE_METHOD_BEFORE_ERROR);
         }
 
         adapter.setOnNewsInteractionListener(new NewsAdapter.OnNewsInteractionListener() {
@@ -92,7 +100,9 @@ public class NewsFragment extends MainFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        swipeRefreshLayout = (SwipeRefreshLayout) inflater.inflate(R.layout.fragment_news, container, false);
+        root = inflater.inflate(R.layout.fragment_news, container, false);
+        swipeRefreshLayout = (SwipeRefreshLayout) root
+                .findViewById(R.id.fragment_news_list_container);
         RecyclerView list = (RecyclerView) swipeRefreshLayout.findViewById(R.id.fragment_news_list);
 
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
@@ -121,9 +131,11 @@ public class NewsFragment extends MainFragment {
 
         if (savedInstanceState == null) {
             loadNews(currentPage, false);
+        } else if (currentErrorMessage != null) {
+            showError();
         }
 
-        return swipeRefreshLayout;
+        return root;
     }
 
     @Override
@@ -131,8 +143,10 @@ public class NewsFragment extends MainFragment {
         super.onSaveInstanceState(outState);
 
         adapter.saveInstanceState(outState);
-        outState.putInt(STATE_NEWS_CURRENT_PAGE, currentPage);
-        outState.putInt(STATE_NEWS_LAST_LOADED_PAGE, lastLoadedPage);
+        outState.putInt(STATE_CURRENT_PAGE, currentPage);
+        outState.putInt(STATE_LAST_LOADED_PAGE, lastLoadedPage);
+        outState.putString(STATE_ERROR_MESSAGE, currentErrorMessage);
+        outState.putBoolean(STATE_METHOD_BEFORE_ERROR, methodBeforeErrorInsert);
     }
 
     private void loadNews(@IntRange(from = 1) final int page, final boolean insert) {
@@ -149,21 +163,23 @@ public class NewsFragment extends MainFragment {
                 }
 
                 loading = false;
+                currentErrorMessage = null;
                 handleResult(result, insert);
                 swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
             public void onError(ProxerException exception) {
-                SnackbarManager.show(Snackbar.make(swipeRefreshLayout, exception.getMessage(),
-                        Snackbar.LENGTH_INDEFINITE), "Retry", new SnackbarManager.SnackbarCallback() {
-                    @Override
-                    public void onClick(View v) {
-                        loadNews(lastLoadedPage, insert);
-                    }
-                });
+                if (exception.getErrorCode() == ErrorHandler.ErrorCodes.PROXER) {
+                    currentErrorMessage = exception.getMessage();
+                } else {
+                    currentErrorMessage = ErrorHandler.getMessageForErrorCode(getContext(),
+                            exception.getErrorCode());
+                }
 
-                swipeRefreshLayout.setRefreshing(false);
+                methodBeforeErrorInsert = insert;
+
+                showError();
             }
         });
     }
@@ -176,5 +192,19 @@ public class NewsFragment extends MainFragment {
         } else {
             adapter.append(result);
         }
+    }
+
+    private void showError() {
+        SnackbarManager.show(Snackbar.make(root, currentErrorMessage,
+                        Snackbar.LENGTH_INDEFINITE),
+                getContext().getString(R.string.error_retry),
+                new SnackbarManager.SnackbarCallback() {
+                    @Override
+                    public void onClick(View v) {
+                        loadNews(lastLoadedPage, methodBeforeErrorInsert);
+                    }
+                });
+
+        swipeRefreshLayout.setRefreshing(false);
     }
 }

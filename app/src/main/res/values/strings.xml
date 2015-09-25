@@ -1,7 +1,28 @@
 <resources>
     <string name="app_name">ProxerMe</string>
-    <string name="title_activity_news_image_detail">NewsImageDetailActivity</string>
 
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="drawer_item_news">News</string>
+    <string name="drawer_item_info">Info</string>
+    <string name="drawer_item_donate">Donate</string>
+    <string name="drawer_item_settings">Settings</string>
+    <string name="about_description">Developer: Ruben Gees</string>
+    <string name="error_network">There was a problem with the network. Please check if you are connected.</string>
+    <string name="error_timeout">The server didn\'t answer in time. There may be problems with your network.</string>
+    <string name="error_unparseable">The server sent corrupt data. Please try again.</string>
+    <string name="error_io">There was a problem with your storage. Please try again.</string>
+    <string name="error_unknown">An unknown error occurred. Please try again.</string>
+    <string name="error_retry">Retry</string>
+    <string name="time_a_moment_ago">A moment ago</string>
+    <string name="time_one_minute_ago">One minute ago</string>
+    <string name="time_before" />
+    <string name="time_minutes_ago">minutes ago</string>
+    <string name="time_one_hour_ago">One hour ago</string>
+    <string name="time_hours_ago">hours ago</string>
+    <string name="time_yesterday">Yesterday</string>
+    <string name="time_days_ago">days ago</string>
+    <string name="time_more_than_one_month_ago">More than one month ago</string>
+    <string name="preference_category_general_title">General</string>
+    <string name="preference_notifications_summary_title">Notifications</string>
+    <string name="preference_notifications_summary_on">Receive notifications</string>
+    <string name="preference_notifications_summary_off">Don\'t receive notifications</string>
 </resources>

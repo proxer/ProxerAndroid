@@ -19,7 +19,8 @@ public abstract class MainFragment extends Fragment implements OnBackPressedList
         try {
             return (DashboardActivity) getActivity();
         }catch(ClassCastException e){
-            throw new RuntimeException("Don't use this Fragment in another Activity than DashboardActivity.");
+            throw new RuntimeException("Don't use this Fragment in another" +
+                    " Activity than DashboardActivity.");
         }
     }
 

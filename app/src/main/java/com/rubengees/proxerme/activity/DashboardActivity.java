@@ -151,7 +151,7 @@ public class DashboardActivity extends MainActivity {
     private ArrayList<IDrawerItem> generateDrawerItems() {
         ArrayList<IDrawerItem> result = new ArrayList<>(1);
 
-        result.add(new PrimaryDrawerItem().withName("News")
+        result.add(new PrimaryDrawerItem().withName(R.string.drawer_item_news)
                 .withIcon(GoogleMaterial.Icon.gmd_dashboard)
                 .withSelectedTextColorRes(R.color.primary).withSelectedIconColorRes(R.color.primary)
                 .withIconTintingEnabled(true).withIdentifier(DRAWER_ID_NEWS));
@@ -162,18 +162,18 @@ public class DashboardActivity extends MainActivity {
     private ArrayList<IDrawerItem> generateStickyDrawerItems() {
         ArrayList<IDrawerItem> result = new ArrayList<>(1);
 
-        result.add(new PrimaryDrawerItem().withName("Info")
+        result.add(new PrimaryDrawerItem().withName(R.string.drawer_item_info)
                 .withIcon(GoogleMaterial.Icon.gmd_info).withSelectedTextColorRes(R.color.primary)
                 .withSelectedIconColorRes(R.color.primary).withIconTintingEnabled(true)
                 .withIdentifier(DRAWER_ID_INFO));
 
-        result.add(new PrimaryDrawerItem().withName("Donate")
+        result.add(new PrimaryDrawerItem().withName(R.string.drawer_item_donate)
                 .withIcon(GoogleMaterial.Icon.gmd_attach_money)
                 .withSelectedTextColorRes(R.color.primary).withSelectedIconColorRes(R.color.primary)
                 .withIconTintingEnabled(true).withSelectable(false)
                 .withIdentifier(DRAWER_ID_DONATE));
 
-        result.add(new PrimaryDrawerItem().withName("Settings")
+        result.add(new PrimaryDrawerItem().withName(R.string.drawer_item_settings)
                 .withIcon(GoogleMaterial.Icon.gmd_settings)
                 .withSelectedTextColorRes(R.color.primary).withSelectedIconColorRes(R.color.primary)
                 .withIconTintingEnabled(true).withIdentifier(DRAWER_ID_SETTINGS));
@@ -201,18 +201,18 @@ public class DashboardActivity extends MainActivity {
     private boolean handleOnDrawerItemClick(int id) {
         switch (id) {
             case DRAWER_ID_NEWS:
-                setFragment(NewsFragment.newInstance(), "News");
+                setFragment(NewsFragment.newInstance(), getString(R.string.drawer_item_news));
                 return false;
             case DRAWER_ID_INFO:
                 setFragment(new LibsBuilder().withAboutVersionShownName(true)
-                        .withAboutDescription("Developer: Ruben Gees").withAboutIconShown(true)
+                        .withAboutDescription(getString(R.string.about_description)).withAboutIconShown(true)
                         .withAboutAppName(getString(R.string.app_name))
-                        .withFields(R.string.class.getFields()).fragment(), "Info");
+                        .withFields(R.string.class.getFields()).fragment(), getString(R.string.drawer_item_info));
                 return false;
             case DRAWER_ID_DONATE:
                 return true;
             case DRAWER_ID_SETTINGS:
-                setFragment(SettingsFragment.newInstance(), "Settings");
+                setFragment(SettingsFragment.newInstance(), getString(R.string.drawer_item_settings));
                 return false;
             default:
                 return true;

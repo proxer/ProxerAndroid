@@ -14,7 +14,7 @@ import org.json.JSONException;
 
 import java.util.List;
 
-import static com.rubengees.proxerme.connection.ProxerException.ErrorCodes.*;
+import static com.rubengees.proxerme.connection.ErrorHandler.ErrorCodes.UNPARSEABLE;
 
 /**
  * TODO: Describe Class
@@ -22,7 +22,6 @@ import static com.rubengees.proxerme.connection.ProxerException.ErrorCodes.*;
  * @author Ruben Gees
  */
 public class ProxerConnection {
-
     public static void loadNews(@IntRange(from = 1) int page, @NonNull final ResultCallback<List<News>> callback) {
         Bridge.client().get(UrlHolder.getNewsUrl(page)).request(new Callback() {
             @Override
@@ -31,8 +30,7 @@ public class ProxerConnection {
                     try {
                         callback.onResult(ProxerParser.parseNewsJSON(response.asJsonObject()));
                     } catch (JSONException e) {
-                        callback.onError(new ProxerException(UNPARSEABLE,
-                                ErrorHandler.getMessageForErrorCode(UNPARSEABLE)));
+                        callback.onError(new ProxerException(UNPARSEABLE));
                     } catch (BridgeException e) {
                         callback.onError(ErrorHandler.handleException(e));
                     }

@@ -33,7 +33,6 @@
 
         <activity
             android:name=".activity.NewsImageDetailActivity"
-            android:label="@string/title_activity_news_image_detail"
             android:parentActivityName=".activity.DashboardActivity"
             android:theme="@style/Theme.Transparent">
             <meta-data

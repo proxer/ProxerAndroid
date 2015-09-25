@@ -70,7 +70,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_margin="4dp"
-                    android:layout_weight="3"
+                    android:layout_weight="4"
                     android:gravity="start"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     tools:text="Two days ago" />
@@ -86,7 +86,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_margin="4dp"
-                    android:layout_weight="7"
+                    android:layout_weight="6"
                     android:gravity="end"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     tools:text="Anime and Managa" />
