@@ -7,4 +7,5 @@
     <color name="secondary_text">#727272</color>
     <color name="divider">#B6B6B6</color>
     <color name="icons_grey">#B6B6B6</color>
+    <color name="transparent_50">#80000000</color>
 </resources>

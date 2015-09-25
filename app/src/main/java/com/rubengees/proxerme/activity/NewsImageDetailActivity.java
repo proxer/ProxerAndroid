@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -41,6 +42,7 @@ public class NewsImageDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_image_detail);
 
+        View root = findViewById(R.id.activity_news_image_detail_root);
         News news = getIntent().getParcelableExtra(EXTRA_NEWS);
         ImageView image = (ImageView) findViewById(R.id.activity_news_image_detail_image);
 
@@ -64,6 +66,13 @@ public class NewsImageDetailActivity extends AppCompatActivity {
                     }
                 })
                 .into(image);
+
+        root.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                supportFinishAfterTransition();
+            }
+        });
     }
 
     @Override
