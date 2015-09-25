@@ -107,6 +107,16 @@ public class DashboardActivity extends MainActivity {
         findViews();
         initViews();
         initDrawer(savedInstanceState);
+
+        int drawerItemToLoad = getIntent().getIntExtra(EXTRA_DRAWER_ITEM, -1);
+
+        if (drawerItemToLoad == -1) {
+            if (savedInstanceState == null) {
+                drawer.setSelection(DRAWER_ID_NEWS);
+            }
+        } else {
+            drawer.setSelection(drawerItemToLoad);
+        }
     }
 
     @Override
@@ -163,10 +173,6 @@ public class DashboardActivity extends MainActivity {
                 .withShowDrawerOnFirstLaunch(true).withSelectedItem(DRAWER_ID_NEWS)
                 .withActionBarDrawerToggleAnimated(true).withHasStableIds(true)
                 .withSavedInstance(savedInstanceState).withToolbar(toolbar).build();
-
-        if (savedInstanceState == null) {
-            drawer.setSelection(DRAWER_ID_NEWS);
-        }
 
         int newNews = getInstance(this).getNewNews();
 

@@ -5,9 +5,7 @@ import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 
 import com.rubengees.proxerme.entity.News;
@@ -22,15 +20,17 @@ import java.util.List;
  * @author Ruben Gees
  */
 public class NewsManager {
+
     public static final int OFFSET_NOT_CALCULABLE = -2;
     public static final int OFFSET_TOO_LARGE = -1;
     public static final int NEWS_ON_PAGE = 15;
-    public static final String PREFERENCE_NEW_NEWS = "news_new";
-    private static final String PREFERENCE_NEWS_LAST_ID = "news_last_id";
+
     private static NewsManager INSTANCE;
+
+    private Context context;
+
     private int lastId;
     private int newNews = 0;
-    private Context context;
 
     private NewsManager(@NonNull Context context) {
         this.context = context;
@@ -135,32 +135,22 @@ public class NewsManager {
     }
 
     public boolean isNewsRetrievalEnabled() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-
-        return preferences.getBoolean("pref_notifications", false);
+        return com.rubengees.proxerme.util.PreferenceManager.areNotificationsEnabled(context);
     }
 
     private void saveId() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-
-        preferences.edit().putInt(PREFERENCE_NEWS_LAST_ID, lastId).apply();
+        com.rubengees.proxerme.util.PreferenceManager.setLastId(context, lastId);
     }
 
     private void loadId() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-
-        lastId = preferences.getInt(PREFERENCE_NEWS_LAST_ID, -1);
+        lastId = com.rubengees.proxerme.util.PreferenceManager.getLastId(context);
     }
 
     private void saveNewNews() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-
-        preferences.edit().putInt(PREFERENCE_NEW_NEWS, newNews).apply();
+        com.rubengees.proxerme.util.PreferenceManager.setNewNews(context, newNews);
     }
 
     private void loadNewNews() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-
-        newNews = preferences.getInt(PREFERENCE_NEW_NEWS, 0);
+        newNews = com.rubengees.proxerme.util.PreferenceManager.getNewNews(context);
     }
 }
