@@ -1,5 +1,7 @@
 package com.rubengees.proxerme.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,6 +14,7 @@ import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.holder.StringHolder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.rubengees.proxerme.R;
@@ -21,6 +24,10 @@ import com.rubengees.proxerme.interfaces.OnBackPressedListener;
 
 import java.util.ArrayList;
 
+import static com.rubengees.proxerme.manager.NewsManager.NEWS_ON_PAGE;
+import static com.rubengees.proxerme.manager.NewsManager.OFFSET_NOT_CALCULABLE;
+import static com.rubengees.proxerme.manager.NewsManager.getInstance;
+
 /**
  * TODO: Describe Class
  *
@@ -28,13 +35,12 @@ import java.util.ArrayList;
  */
 public class DashboardActivity extends MainActivity {
 
-    private static final int DRAWER_ID_NEWS = 0;
-    private static final int DRAWER_ID_INFO = 10;
-    private static final int DRAWER_ID_DONATE = 11;
-    private static final int DRAWER_ID_SETTINGS = 12;
-
+    public static final int DRAWER_ID_NEWS = 0;
+    public static final int DRAWER_ID_INFO = 10;
+    public static final int DRAWER_ID_DONATE = 11;
+    public static final int DRAWER_ID_SETTINGS = 12;
+    public static final String EXTRA_DRAWER_ITEM = "extra_drawer_item";
     private static final String STATE_CURRENT_DRAWER_ITEM_ID = "current_drawer_item_id";
-
     private Toolbar toolbar;
     private FrameLayout contentContainer;
 
@@ -79,6 +85,13 @@ public class DashboardActivity extends MainActivity {
                 }
             };
 
+    public static Intent getSectionIntent(@NonNull Context context, int drawerItemId) {
+        Intent intent = new Intent(context, DashboardActivity.class);
+
+        intent.putExtra(EXTRA_DRAWER_ITEM, drawerItemId);
+        return intent;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,6 +130,14 @@ public class DashboardActivity extends MainActivity {
         }
     }
 
+    public void setBadge(int drawerItemId, @Nullable String text) {
+        if (text == null) {
+            drawer.updateBadge(drawerItemId, null);
+        } else {
+            drawer.updateBadge(drawerItemId, new StringHolder(text));
+        }
+    }
+
     private void handleBackPressed() {
         if (currentDrawerItemId == DRAWER_ID_NEWS) {
             super.onBackPressed();
@@ -145,6 +166,13 @@ public class DashboardActivity extends MainActivity {
 
         if (savedInstanceState == null) {
             drawer.setSelection(DRAWER_ID_NEWS);
+        }
+
+        int newNews = getInstance(this).getNewNews();
+
+        if (newNews > 0 || newNews == OFFSET_NOT_CALCULABLE) {
+            setBadge(DRAWER_ID_NEWS, newNews == OFFSET_NOT_CALCULABLE ? (NEWS_ON_PAGE + "+") :
+                    (String.valueOf(newNews)));
         }
     }
 

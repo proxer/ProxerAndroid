@@ -4,17 +4,21 @@
     package="com.rubengees.proxerme">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:name=".application.MainApplication"
         android:allowBackup="true"
         android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
         android:theme="@style/AppTheme"
         tools:ignore="UnusedAttribute">
         <activity
             android:name=".activity.DashboardActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -39,6 +43,22 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.rubengees.proxerme.activity.DashboardActivity" />
         </activity>
+
+        <service
+            android:name=".service.NewsService"
+            android:exported="false"></service>
+
+        <receiver
+            android:name=".receiver.NewsReceiver"
+            android:enabled="true"
+            android:exported="false"></receiver>
+        <receiver
+            android:name=".receiver.BootReceiver"
+            android:enabled="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

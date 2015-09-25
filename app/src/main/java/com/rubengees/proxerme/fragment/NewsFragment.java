@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.rubengees.proxerme.R;
+import com.rubengees.proxerme.activity.DashboardActivity;
 import com.rubengees.proxerme.activity.NewsImageDetailActivity;
 import com.rubengees.proxerme.adapter.NewsAdapter;
 import com.rubengees.proxerme.connection.ErrorHandler;
@@ -27,6 +28,9 @@ import com.rubengees.proxerme.util.SnackbarManager;
 import com.rubengees.proxerme.util.Utils;
 
 import java.util.List;
+
+import static com.rubengees.proxerme.manager.NewsManager.NEWS_ON_PAGE;
+import static com.rubengees.proxerme.manager.NewsManager.getInstance;
 
 /**
  * TODO: Describe Class
@@ -164,6 +168,11 @@ public class NewsFragment extends MainFragment {
 
                 loading = false;
                 currentErrorMessage = null;
+                NewsManager manager = getInstance(getContext());
+                manager.setNewNews(0);
+                manager.retrieveNewsLater();
+                manager.setLastId(result.get(NEWS_ON_PAGE - 1).getId());
+                getDashboardActivity().setBadge(DashboardActivity.DRAWER_ID_NEWS, null);
                 handleResult(result, insert);
                 swipeRefreshLayout.setRefreshing(false);
             }
@@ -188,7 +197,7 @@ public class NewsFragment extends MainFragment {
         if (insert) {
             adapter.insertAtStart(result);
 
-            NewsManager.getInstance(getContext()).setLastId(result.get(0).getId());
+            getInstance(getContext()).setLastId(result.get(0).getId());
         } else {
             adapter.append(result);
         }
