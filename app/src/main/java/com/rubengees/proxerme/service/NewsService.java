@@ -67,8 +67,6 @@ public class NewsService extends IntentService {
         } catch (BridgeException | JSONException e) {
             //ignore
         }
-
-        manager.retrieveNewsLater();
     }
 
     private void showNewsNotification(List<News> news, int offset) {
