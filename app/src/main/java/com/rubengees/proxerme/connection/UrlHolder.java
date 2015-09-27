@@ -29,4 +29,8 @@ public class UrlHolder {
         return getHost() + "/forum/" + categoryId + "/" + threadId + "#top";
     }
 
+    public static String getDonateUrl() {
+        return getHost() + "/donate";
+    }
+
 }

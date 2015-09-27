@@ -26,6 +26,7 @@ import com.rubengees.introduction.IntroductionConfiguration;
 import com.rubengees.introduction.entity.Option;
 import com.rubengees.introduction.entity.Slide;
 import com.rubengees.proxerme.R;
+import com.rubengees.proxerme.connection.UrlHolder;
 import com.rubengees.proxerme.fragment.NewsFragment;
 import com.rubengees.proxerme.fragment.SettingsFragment;
 import com.rubengees.proxerme.interfaces.OnBackPressedListener;
@@ -315,6 +316,7 @@ public class DashboardActivity extends MainActivity {
                         .withFields(R.string.class.getFields()).fragment(), getString(R.string.drawer_item_info));
                 return false;
             case DRAWER_ID_DONATE:
+                showPage(UrlHolder.getDonateUrl());
                 return true;
             case DRAWER_ID_SETTINGS:
                 setFragment(SettingsFragment.newInstance(), getString(R.string.drawer_item_settings));
