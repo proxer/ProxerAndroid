@@ -121,7 +121,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
      */
     public int insertAtStart(@NonNull List<News> news) {
         if (!news.isEmpty()) {
-            int offset = calculateOffsetFromStart(this.list, news.get(news.size() - 1));
+            int offset = calculateOffsetFromStart(news, this.list.get(0).getId());
 
             if (offset >= 0) {
                 news = news.subList(0, offset);

@@ -29,7 +29,6 @@ import com.rubengees.proxerme.util.Utils;
 
 import java.util.List;
 
-import static com.rubengees.proxerme.manager.NewsManager.NEWS_ON_PAGE;
 import static com.rubengees.proxerme.manager.NewsManager.getInstance;
 
 /**
@@ -168,12 +167,15 @@ public class NewsFragment extends MainFragment {
 
                 loading = false;
                 currentErrorMessage = null;
-                NewsManager manager = getInstance(getContext());
-                manager.setNewNews(0);
-                manager.retrieveNewsLater();
-                manager.setLastId(result.get(NEWS_ON_PAGE - 1).getId());
                 getDashboardActivity().setBadge(DashboardActivity.DRAWER_ID_NEWS, null);
+                NewsManager manager = getInstance(getContext());
+
+                manager.setNewNews(0);
+                manager.setLastId(result.get(0).getId());
+                manager.retrieveNewsLater();
+
                 handleResult(result, insert);
+
                 swipeRefreshLayout.setRefreshing(false);
             }
 

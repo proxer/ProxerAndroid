@@ -46,12 +46,12 @@
 
         <service
             android:name=".service.NewsService"
-            android:exported="false"></service>
+            android:exported="false" />
 
         <receiver
             android:name=".receiver.NewsReceiver"
             android:enabled="true"
-            android:exported="false"></receiver>
+            android:exported="false" />
         <receiver
             android:name=".receiver.BootReceiver"
             android:enabled="false">

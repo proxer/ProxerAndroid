@@ -63,12 +63,13 @@ public class NewsService extends IntentService {
 
             if (lastId != -1) {
                 List<News> news = ProxerConnection.loadNewsSync(1);
-                int offset = NewsManager.calculateOffsetFromEnd(news, manager.getLastId());
+                int offset = NewsManager.calculateOffsetFromStart(news, manager.getLastId());
 
                 manager.setNewNews(offset);
                 showNewsNotification(news, offset);
             }
         } catch (BridgeException | JSONException e) {
+            int a = 1;
             //ignore
         }
     }

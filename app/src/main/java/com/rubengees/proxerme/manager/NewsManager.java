@@ -6,6 +6,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 
 import com.rubengees.proxerme.entity.News;
@@ -24,6 +25,8 @@ public class NewsManager {
     public static final int OFFSET_NOT_CALCULABLE = -2;
     public static final int OFFSET_TOO_LARGE = -1;
     public static final int NEWS_ON_PAGE = 15;
+
+    private static final int INTERVAL_HOUR = 60 * 60 * 1000;
 
     private static NewsManager INSTANCE;
 
@@ -54,13 +57,13 @@ public class NewsManager {
         return calculateOffsetFromEnd(list, first.getId());
     }
 
-    public static int calculateOffsetFromStart(@NonNull List<News> list, int lastId) {
+    public static int calculateOffsetFromStart(@NonNull List<News> list, int id) {
         if (list.isEmpty()) {
             return OFFSET_NOT_CALCULABLE;
         } else {
             for (int i = 0; i < list.size() || i < NEWS_ON_PAGE; i++) {
-                if (lastId == list.get(i).getId()) {
-                    return NEWS_ON_PAGE - i - 1;
+                if (id == list.get(i).getId()) {
+                    return i;
                 }
             }
 
@@ -68,15 +71,15 @@ public class NewsManager {
         }
     }
 
-    public static int calculateOffsetFromEnd(@NonNull List<News> list, int firstId) {
+    public static int calculateOffsetFromEnd(@NonNull List<News> list, int id) {
         if (list.isEmpty()) {
             return OFFSET_NOT_CALCULABLE;
         } else {
             int lastSearchableIndex = list.size() - NEWS_ON_PAGE;
 
             for (int i = list.size() - 1; i >= 0 && i >= lastSearchableIndex; i--) {
-                if (firstId == list.get(i).getId()) {
-                    return NEWS_ON_PAGE - i - 1;
+                if (id == list.get(i).getId()) {
+                    return (list.size() - 1) - i;
                 }
             }
 
@@ -112,7 +115,7 @@ public class NewsManager {
             PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
 
             alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    AlarmManager.INTERVAL_HOUR, AlarmManager.INTERVAL_HOUR, alarmIntent);
+                    SystemClock.elapsedRealtime() + INTERVAL_HOUR, INTERVAL_HOUR, alarmIntent);
 
             ComponentName receiver = new ComponentName(context, BootReceiver.class);
             PackageManager pm = context.getPackageManager();
