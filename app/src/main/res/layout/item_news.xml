@@ -19,14 +19,33 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.rubengees.proxerme.view.WidthAspectImageView
-                android:id="@+id/item_news_image"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scaleType="centerCrop"
-                android:transitionName="image"
-                app:aspect="0.75"
-                tools:ignore="UnusedAttribute" />
+                android:layout_height="wrap_content">
+
+                <com.rubengees.proxerme.view.WidthAspectImageView
+                    android:id="@+id/item_news_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:scaleType="centerCrop"
+                    android:transitionName="image"
+                    app:aspect="0.75"
+                    tools:ignore="UnusedAttribute" />
+
+                <TextView
+                    android:id="@+id/item_news_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/item_news_image"
+                    android:background="@color/transparent_50"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@android:color/white"
+                    tools:text="Some title" />
+
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/item_news_description"

@@ -83,7 +83,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     public void onBindViewHolder(NewsAdapter.ViewHolder holder, int position) {
         News item = list.get(position);
 
-        //holder.title.setText(item.getSubject());
+        holder.title.setText(item.getSubject());
         holder.description.setText(item.getDescription());
         holder.category.setText(item.getCategoryTitle());
         holder.time.setText(TimeUtils.convertToRelativeReadableTime(holder.time.getContext(),
@@ -190,7 +190,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
             super(itemView);
 
             image = (ImageView) itemView.findViewById(R.id.item_news_image);
-            //title = (TextView) itemView.findViewById(R.id.item_news_title);
+            title = (TextView) itemView.findViewById(R.id.item_news_title);
             description = (TextView) itemView.findViewById(R.id.item_news_description);
             category = (TextView) itemView.findViewById(R.id.item_news_category);
             time = (TextView) itemView.findViewById(R.id.item_news_time);
