@@ -25,4 +25,8 @@
     <string name="time_one_hour_ago">Vor einer Stunde</string>
     <string name="time_one_minute_ago">Vor einer Minute</string>
     <string name="time_yesterday">Gestern</string>
+    <string name="introduction_notifications_description">Werde über News benachrichtigt.</string>
+    <string name="introduction_notifications_title">Benachrichtigungen</string>
+    <string name="introduction_welcome_description">Nur ein paar Einstellungen und es geht los.</string>
+    <string name="introduction_welcome_title">Willkommen!</string>
 </resources>

@@ -26,7 +26,7 @@ public class UrlHolder {
     }
 
     public static String getNewsPageUrl(int categoryId, int threadId) {
-        return getHost() + "/forum/" + categoryId + "/" + threadId;
+        return getHost() + "/forum/" + categoryId + "/" + threadId + "#top";
     }
 
 }

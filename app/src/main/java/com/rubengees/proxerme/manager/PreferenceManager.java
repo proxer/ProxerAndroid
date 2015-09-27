@@ -1,4 +1,4 @@
-package com.rubengees.proxerme.util;
+package com.rubengees.proxerme.manager;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -13,9 +13,10 @@ import static android.preference.PreferenceManager.getDefaultSharedPreferences;
  */
 public class PreferenceManager {
 
-    public static final String PREFERENCE_NEW_NEWS = "news_new";
+    public static final String PREFERENCE_NEW_NEWS = "pref_news_new";
     public static final String PREFERENCE_NEWS_NOTIFICATIONS = "pref_news_notifications";
-    private static final String PREFERENCE_NEWS_LAST_ID = "news_last_id";
+    public static final String PREFERENCE_FIRST_START = "pref_first_start";
+    private static final String PREFERENCE_NEWS_LAST_ID = "pref_news_last_id";
 
     public static boolean areNotificationsEnabled(@NonNull Context context) {
         SharedPreferences preferences = getDefaultSharedPreferences(context);
@@ -51,5 +52,17 @@ public class PreferenceManager {
         SharedPreferences preferences = getDefaultSharedPreferences(context);
 
         preferences.edit().putInt(PREFERENCE_NEW_NEWS, amount).apply();
+    }
+
+    public static void setFirstStartOccurred(@NonNull Context context) {
+        SharedPreferences preferences = getDefaultSharedPreferences(context);
+
+        preferences.edit().putBoolean(PREFERENCE_FIRST_START, false).apply();
+    }
+
+    public static boolean isFirstStart(@NonNull Context context) {
+        SharedPreferences preferences = getDefaultSharedPreferences(context);
+
+        return preferences.getBoolean(PREFERENCE_FIRST_START, true);
     }
 }

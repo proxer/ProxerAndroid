@@ -139,22 +139,22 @@ public class NewsManager {
     }
 
     public boolean isNewsRetrievalEnabled() {
-        return com.rubengees.proxerme.util.PreferenceManager.areNotificationsEnabled(context);
+        return PreferenceManager.areNotificationsEnabled(context);
     }
 
     private void saveId() {
-        com.rubengees.proxerme.util.PreferenceManager.setLastId(context, lastId);
+        PreferenceManager.setLastId(context, lastId);
     }
 
     private void loadId() {
-        lastId = com.rubengees.proxerme.util.PreferenceManager.getLastId(context);
+        lastId = PreferenceManager.getLastId(context);
     }
 
     private void saveNewNews() {
-        com.rubengees.proxerme.util.PreferenceManager.setNewNews(context, newNews);
+        PreferenceManager.setNewNews(context, newNews);
     }
 
     private void loadNewNews() {
-        newNews = com.rubengees.proxerme.util.PreferenceManager.getNewNews(context);
+        newNews = PreferenceManager.getNewNews(context);
     }
 }

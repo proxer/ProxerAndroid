@@ -25,4 +25,8 @@
     <string name="preference_notifications_summary_title">Notifications</string>
     <string name="preference_notifications_summary_on">Receive notifications</string>
     <string name="preference_notifications_summary_off">Don\'t receive notifications</string>
+    <string name="introduction_welcome_title">Welcome!</string>
+    <string name="introduction_welcome_description">Just some settings and you are ready to go.</string>
+    <string name="introduction_notifications_title">Notifications</string>
+    <string name="introduction_notifications_description">Receive notifications about news.</string>
 </resources>

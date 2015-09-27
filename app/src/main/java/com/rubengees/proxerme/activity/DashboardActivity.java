@@ -9,7 +9,10 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.materialdrawer.Drawer;
@@ -17,12 +20,19 @@ import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.holder.StringHolder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.rubengees.introduction.IntroductionActivity;
+import com.rubengees.introduction.IntroductionBuilder;
+import com.rubengees.introduction.IntroductionConfiguration;
+import com.rubengees.introduction.entity.Option;
+import com.rubengees.introduction.entity.Slide;
 import com.rubengees.proxerme.R;
 import com.rubengees.proxerme.fragment.NewsFragment;
 import com.rubengees.proxerme.fragment.SettingsFragment;
 import com.rubengees.proxerme.interfaces.OnBackPressedListener;
+import com.rubengees.proxerme.manager.PreferenceManager;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.rubengees.proxerme.manager.NewsManager.NEWS_ON_PAGE;
 import static com.rubengees.proxerme.manager.NewsManager.OFFSET_NOT_CALCULABLE;
@@ -39,8 +49,10 @@ public class DashboardActivity extends MainActivity {
     public static final int DRAWER_ID_INFO = 10;
     public static final int DRAWER_ID_DONATE = 11;
     public static final int DRAWER_ID_SETTINGS = 12;
+
     public static final String EXTRA_DRAWER_ITEM = "extra_drawer_item";
     private static final String STATE_CURRENT_DRAWER_ITEM_ID = "current_drawer_item_id";
+
     private Toolbar toolbar;
     private FrameLayout contentContainer;
 
@@ -112,10 +124,35 @@ public class DashboardActivity extends MainActivity {
 
         if (drawerItemToLoad == -1) {
             if (savedInstanceState == null) {
-                drawer.setSelection(DRAWER_ID_NEWS);
+                if (PreferenceManager.isFirstStart(this)) {
+                    initIntroduction();
+                } else {
+                    drawer.setSelection(DRAWER_ID_NEWS);
+                }
             }
         } else {
             drawer.setSelection(drawerItemToLoad);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == IntroductionBuilder.INTRODUCTION_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                for (Option option : data.<Option>getParcelableArrayListExtra(IntroductionActivity.
+                        OPTION_RESULT)) {
+                    switch (option.getPosition()) {
+                        case 1:
+                            PreferenceManager.setNotificationsEnabled(DashboardActivity.this,
+                                    option.isActivated());
+                    }
+                }
+            }
+
+            PreferenceManager.setFirstStartOccurred(this);
+            drawer.setSelection(DRAWER_ID_NEWS);
         }
     }
 
@@ -213,6 +250,40 @@ public class DashboardActivity extends MainActivity {
                 .withIconTintingEnabled(true).withIdentifier(DRAWER_ID_SETTINGS));
 
         return result;
+    }
+
+    private void initIntroduction() {
+        new IntroductionBuilder(this).withSlides(generateSlides())
+                .withOnSlideListener(new IntroductionConfiguration.OnSlideListener() {
+                    @Override
+                    protected void onSlideInit(Fragment context, int position, TextView title,
+                                               ImageView image, TextView description) {
+                        switch (position) {
+                            case 0:
+                                Glide.with(context).load(R.drawable.ic_introduction_proxer)
+                                        .into(image);
+                                break;
+                            case 1:
+                                Glide.with(context).load(R.drawable.ic_introduction_notifications)
+                                        .into(image);
+                                break;
+                        }
+                    }
+                }).introduceMyself();
+    }
+
+    private List<Slide> generateSlides() {
+        List<Slide> slides = new ArrayList<>(2);
+
+        slides.add(new Slide().withTitle(R.string.introduction_welcome_title)
+                .withColorResource(R.color.primary)
+                .withDescription(R.string.introduction_welcome_description));
+        slides.add(new Slide().withTitle(R.string.introduction_notifications_title)
+                .withColorResource(R.color.accent)
+                .withOption(new Option(getString(R.string.introduction_notifications_description),
+                        false)));
+
+        return slides;
     }
 
     public void setFragment(@NonNull Fragment fragment, @NonNull String title) {
