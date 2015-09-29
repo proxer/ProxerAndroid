@@ -330,8 +330,8 @@ public class DashboardActivity extends MainActivity {
             case DRAWER_ID_INFO:
                 setFragment(new LibsBuilder().withAboutVersionShownName(true)
                         .withAboutDescription(getString(R.string.about_description)).withAboutIconShown(true)
-                        .withAboutAppName(getString(R.string.app_name))
-                        .withFields(R.string.class.getFields()).fragment(), getString(R.string.drawer_item_info));
+                        .withAboutAppName(getString(R.string.app_name)).withAutoDetect(false)
+                        .withLibraries("glide", "jodatimeandroid", "bridge").fragment(), getString(R.string.drawer_item_info));
                 return false;
             case DRAWER_ID_DONATE:
                 showPage(UrlHolder.getDonateUrl());
