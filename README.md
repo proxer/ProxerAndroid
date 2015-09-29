@@ -13,13 +13,13 @@ Build the project and install it on your device or download the [latest release]
 Assuming that you know how to use [Git](https://git-scm.com/) have the [Android SDK](https://developer.android.com/sdk/index.html) and the [Java SDK](http://www.oracle.com/technetwork/java/javase/overview/index.html) installed,
 run the following commands:
 
-- git clone https://github.com/RubenGees/ProxerMe.git
-- cd ProxerMe
+- `git clone https://github.com/RubenGees/ProxerMe.git`
+- `cd ProxerMe`
 
 Windows:
-- gradlew.bat assemble
+- `gradlew.bat assemble`
 
 Linux:
-- ./gradlew assemble
+- `./gradlew assemble`
 
 You can find the apk in `app/build/outputs/apk/`.
