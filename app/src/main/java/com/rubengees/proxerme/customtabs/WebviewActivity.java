@@ -1,4 +1,4 @@
-package com.rubengees.proxerme.customtabs;// Copyright 2015 Google Inc. All Rights Reserved.
+// Copyright 2015 Google Inc. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,6 +11,8 @@ package com.rubengees.proxerme.customtabs;// Copyright 2015 Google Inc. All Righ
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
+package com.rubengees.proxerme.customtabs;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
