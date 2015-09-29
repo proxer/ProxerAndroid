@@ -29,7 +29,7 @@ import com.rubengees.proxerme.R;
  */
 public class WebviewActivity extends AppCompatActivity {
 
-    public static final String EXTRA_URL = "extra.url";
+    public static final String EXTRA_URL = "url";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +44,7 @@ public class WebviewActivity extends AppCompatActivity {
         webView.setWebViewClient(new WebViewClient());
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(false);
+        webSettings.setSupportZoom(true);
 
         setSupportActionBar(toolbar);
         setTitle(url);
@@ -65,6 +66,7 @@ public class WebviewActivity extends AppCompatActivity {
                 finish();
                 return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 }
