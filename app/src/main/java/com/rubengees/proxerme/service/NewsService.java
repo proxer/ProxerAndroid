@@ -17,26 +17,19 @@
 package com.rubengees.proxerme.service;
 
 import android.app.IntentService;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
-import android.support.v7.app.NotificationCompat;
 
 import com.afollestad.bridge.BridgeException;
-import com.rubengees.proxerme.R;
-import com.rubengees.proxerme.activity.DashboardActivity;
 import com.rubengees.proxerme.connection.ProxerConnection;
 import com.rubengees.proxerme.entity.News;
 import com.rubengees.proxerme.manager.NewsManager;
+import com.rubengees.proxerme.manager.NotificationManager;
 
 import org.json.JSONException;
 
-import java.util.Arrays;
 import java.util.List;
 
-import static android.support.v4.app.NotificationCompat.BigTextStyle;
 
 /**
  * Todo: Describe Class
@@ -45,10 +38,7 @@ import static android.support.v4.app.NotificationCompat.BigTextStyle;
  */
 public class NewsService extends IntentService {
 
-    public static final int ELLIPSIS = 0x2026;
     private static final String ACTION_LOAD_NEWS = "com.rubengees.proxerme.service.action.LOAD_NEWS";
-    private static final int NEWS_NOTIFICATION_ID = 1423;
-    private static final int FITTING_CHARS = 35;
 
     public NewsService() {
         super("NewsService");
@@ -84,67 +74,12 @@ public class NewsService extends IntentService {
 
                 manager.setLastId(news.get(0).getId());
                 manager.setNewNews(offset);
-                showNewsNotification(news, offset);
+                NotificationManager.showNewsNotification(this, news, offset);
             }
         } catch (BridgeException | JSONException e) {
             //ignore
         }
     }
 
-    private void showNewsNotification(List<News> news, int offset) {
-        if (offset > 0 || offset == -2) {
-            NotificationManager notificationManager =
-                    (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-            NotificationCompat.Builder builder =
-                    new NotificationCompat.Builder(this);
 
-            builder.setAutoCancel(true).setContentTitle(getString(R.string.notification_title))
-                    .setLargeIcon(BitmapFactory.decodeResource(getResources(),
-                            R.mipmap.ic_launcher));
-
-            if (offset == 1) {
-                News current = news.get(0);
-
-                if (current.getSubject().length() > FITTING_CHARS) {
-                    builder.setContentText(news.get(0).getSubject().substring(0, FITTING_CHARS));
-                } else {
-                    builder.setContentText(current.getSubject());
-                }
-
-                builder.setStyle(new BigTextStyle(builder).bigText(current.getDescription()));
-            } else {
-                builder.setContentText(generateNewsNotificationAmount(offset))
-                        .setStyle(new BigTextStyle(builder)
-                                .bigText(generateNewsNotificationBigText(news, offset)));
-            }
-
-            builder.setContentIntent(PendingIntent.getActivity(
-                    this, 0, DashboardActivity.getSectionIntent(this,
-                            DashboardActivity.DRAWER_ID_NEWS), PendingIntent.FLAG_UPDATE_CURRENT));
-
-            notificationManager.notify(NEWS_NOTIFICATION_ID, builder.build());
-        }
-    }
-
-    private String generateNewsNotificationAmount(int offset) {
-        return offset == NewsManager.OFFSET_TOO_LARGE ?
-                getString(R.string.notification_amount_more_than_15) :
-                (offset + " " + getString(R.string.notification_amount_text));
-    }
-
-    private String generateNewsNotificationBigText(List<News> news, int offset) {
-        String result = "";
-
-        for (int i = 0; i < offset; i++) {
-            if (news.get(i).getSubject().length() >= FITTING_CHARS) {
-                result += news.get(i).getSubject().substring(0, FITTING_CHARS) +
-                        Arrays.toString(Character.toChars(ELLIPSIS));
-            } else {
-                result += news.get(i).getSubject();
-            }
-            result += '\n';
-        }
-
-        return result;
-    }
 }
