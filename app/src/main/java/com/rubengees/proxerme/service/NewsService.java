@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.NotificationCompat;
 
 import com.afollestad.bridge.BridgeException;
@@ -23,7 +24,7 @@ import static android.support.v4.app.NotificationCompat.BigTextStyle;
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
  * a service on a separate handler thread.
- * <p>
+ * <p/>
  * TODO: Customize class - update intent actions, extra parameters and static
  * helper methods.
  */
@@ -81,7 +82,10 @@ public class NewsService extends IntentService {
             NotificationCompat.Builder builder =
                     new NotificationCompat.Builder(getApplicationContext());
 
-            builder.setAutoCancel(true).setContentTitle("News").setSmallIcon(R.mipmap.ic_launcher);
+            builder.setAutoCancel(true).setContentTitle("News")
+                    .setSmallIcon(R.drawable.ic_introduction_proxer)
+                    .setLargeIcon(BitmapFactory.decodeResource(getResources(),
+                            R.mipmap.ic_launcher));
 
             if (offset == 1) {
                 News current = news.get(0);
@@ -96,8 +100,7 @@ public class NewsService extends IntentService {
             } else {
                 builder.setContentText(generateNewsNotificationAmount(offset))
                         .setStyle(new BigTextStyle(builder)
-                                .bigText(generateNewsNotificationBigText(news, offset))
-                                .setSummaryText(generateNewsNotificationAmount(offset)));
+                                .bigText(generateNewsNotificationBigText(news, offset)));
             }
 
             builder.setContentIntent(PendingIntent.getActivity(
