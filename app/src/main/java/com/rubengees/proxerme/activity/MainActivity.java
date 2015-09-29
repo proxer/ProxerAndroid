@@ -19,6 +19,7 @@ package com.rubengees.proxerme.activity;
 import android.annotation.SuppressLint;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -63,11 +64,11 @@ public class MainActivity extends AppCompatActivity {
         Bridge.cleanup();
     }
 
-    public void setLikelyUrl(String url) {
+    public void setLikelyUrl(@NonNull String url) {
         customTabActivityHelper.mayLaunchUrl(Uri.parse(url), null, null);
     }
 
-    public void showPage(String url) {
+    public void showPage(@NonNull String url) {
         CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder(customTabActivityHelper
                 .getSession()).setToolbarColor(ContextCompat.getColor(this, R.color.primary))
                 .build();

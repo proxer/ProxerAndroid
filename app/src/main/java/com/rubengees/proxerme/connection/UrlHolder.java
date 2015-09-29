@@ -34,15 +34,15 @@ public class UrlHolder {
         return HOST;
     }
 
-    public static String getNewsUrl(@IntRange(from = 1) int page){
+    public static String getNewsUrl(@IntRange(from = 1) int page) {
         return getHost() + NEWS + page;
     }
 
-    public static String getNewsImageUrl(String newsId, @NonNull String imageId) {
+    public static String getNewsImageUrl(@NonNull String newsId, @NonNull String imageId) {
         return NEWS_IMAGE + newsId + "_" + imageId + ".png";
     }
 
-    public static String getNewsPageUrl(String categoryId, String threadId) {
+    public static String getNewsPageUrl(@NonNull String categoryId, @NonNull String threadId) {
         return getHost() + "/forum/" + categoryId + "/" + threadId + "#top";
     }
 
