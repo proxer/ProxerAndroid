@@ -59,7 +59,7 @@ public class NewsService extends IntentService {
 
     private void handleActionLoadNews() {
         ProxerConnection.initBridge();
-        NewsManager manager = NewsManager.getInstance(getApplicationContext());
+        NewsManager manager = NewsManager.getInstance(this);
 
         try {
             int lastId = manager.getLastId();
@@ -79,13 +79,12 @@ public class NewsService extends IntentService {
 
     private void showNewsNotification(List<News> news, int offset) {
         if (offset > 0 || offset == -2) {
-            NotificationManager notificationManager = (NotificationManager) getApplicationContext()
-                    .getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationManager notificationManager =
+                    (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
             NotificationCompat.Builder builder =
-                    new NotificationCompat.Builder(getApplicationContext());
+                    new NotificationCompat.Builder(this);
 
             builder.setAutoCancel(true).setContentTitle(getString(R.string.notification_title))
-                    .setSmallIcon(R.drawable.ic_introduction_proxer)
                     .setLargeIcon(BitmapFactory.decodeResource(getResources(),
                             R.mipmap.ic_launcher));
 
@@ -106,7 +105,7 @@ public class NewsService extends IntentService {
             }
 
             builder.setContentIntent(PendingIntent.getActivity(
-                    this, 0, DashboardActivity.getSectionIntent(getApplicationContext(),
+                    this, 0, DashboardActivity.getSectionIntent(this,
                             DashboardActivity.DRAWER_ID_NEWS), PendingIntent.FLAG_UPDATE_CURRENT));
 
             notificationManager.notify(NEWS_NOTIFICATION_ID, builder.build());
