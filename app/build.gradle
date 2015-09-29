@@ -34,10 +34,10 @@ dependencies {
     compile 'net.danlew:android.joda:2.8.2'
     compile 'com.github.bumptech.glide:glide:3.6.1'
     compile 'com.afollestad:bridge:1.6.2@aar'
-    compile('com.mikepenz:aboutlibraries:5.2.3@aar') {
+    compile('com.mikepenz:aboutlibraries:5.2.4@aar') {
         transitive = true
     }
-    compile('com.mikepenz:materialdrawer:4.2.0@aar') {
+    compile('com.mikepenz:materialdrawer:4.3.1@aar') {
         transitive = true
     }
 
