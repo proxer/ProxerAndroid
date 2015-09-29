@@ -10,7 +10,7 @@ Build the project and install it on your device or download the [latest release]
 
 #### Build
 
-Assuming that you know how to use [Git](https://git-scm.com/) have the [Android SDK](https://developer.android.com/sdk/index.html) and the [Java SDK](http://www.oracle.com/technetwork/java/javase/overview/index.html) installed,
+Assuming that you know how to use [Git](https://git-scm.com/), have the [Android SDK](https://developer.android.com/sdk/index.html) and the [Java SDK](http://www.oracle.com/technetwork/java/javase/overview/index.html) installed,
 run the following commands:
 
 - `git clone https://github.com/RubenGees/ProxerMe.git`
