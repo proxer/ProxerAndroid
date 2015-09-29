@@ -21,7 +21,7 @@ import android.app.Application;
 import net.danlew.android.joda.JodaTimeAndroid;
 
 /**
- * Todo: Describe Class
+ * The {@link Application}, which is used by this App. It does some configuration at start.
  *
  * @author Ruben Gees
  */

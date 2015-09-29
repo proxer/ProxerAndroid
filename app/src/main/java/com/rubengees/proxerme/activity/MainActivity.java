@@ -30,7 +30,8 @@ import com.rubengees.proxerme.customtabs.CustomTabActivityHelper;
 import com.rubengees.proxerme.customtabs.WebviewFallback;
 
 /**
- * TODO: Describe Class
+ * This Activity does some work, all Activities have in common and all Activities should
+ * inherit from this one.
  *
  * @author Ruben Gees
  */

@@ -16,8 +16,13 @@
 
 package com.rubengees.proxerme.interfaces;
 
+import android.support.v4.app.Fragment;
+
+import com.rubengees.proxerme.activity.DashboardActivity;
+
 /**
- * TODO: Describe Class
+ * An interfaces, which is called by the {@link DashboardActivity}, if one of the in the method
+ * specified event happens. All {@link Fragment}s should implement this.
  *
  * @author Ruben Gees
  */

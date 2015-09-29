@@ -23,7 +23,7 @@ import android.content.Intent;
 import com.rubengees.proxerme.service.NewsService;
 
 /**
- * Todo: Describe Class
+ * Receiver for the {@link NewsService}.
  *
  * @author Ruben Gees
  */

@@ -177,7 +177,7 @@ public class NewsFragment extends MainFragment {
 
         ProxerConnection.loadNews(page, new ProxerConnection.ResultCallback<List<News>>() {
             @Override
-            public void onResult(List<News> result) {
+            public void onResult(@NonNull List<News> result) {
                 if (!insert) {
                     currentPage++;
                 }
@@ -197,7 +197,7 @@ public class NewsFragment extends MainFragment {
             }
 
             @Override
-            public void onError(ProxerException exception) {
+            public void onError(@NonNull ProxerException exception) {
                 if (exception.getErrorCode() == ErrorHandler.ErrorCodes.PROXER) {
                     currentErrorMessage = exception.getMessage();
                 } else {

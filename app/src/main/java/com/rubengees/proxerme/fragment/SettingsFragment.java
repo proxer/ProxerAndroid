@@ -18,6 +18,7 @@ package com.rubengees.proxerme.fragment;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.preference.PreferenceFragmentCompat;
 
 import com.rubengees.proxerme.R;
@@ -25,7 +26,7 @@ import com.rubengees.proxerme.interfaces.OnActivityListener;
 import com.rubengees.proxerme.manager.NewsManager;
 
 /**
- * Todo: Describe Class
+ * A {@link Fragment}, showing the settings of this App.
  *
  * @author Ruben Gees
  */

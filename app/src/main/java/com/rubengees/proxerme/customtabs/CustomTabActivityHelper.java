@@ -25,7 +25,7 @@ import android.support.customtabs.CustomTabsSession;
 import java.util.List;
 
 /**
- * Todo: Describe Class
+ * Helper class to interact with Chrome Custom Tabs.
  *
  * @author Ruben Gees
  */
@@ -36,7 +36,7 @@ public class CustomTabActivityHelper {
     private ConnectionCallback mConnectionCallback;
 
     /**
-     * Opens the URL on a Custom Tab if possible. Otherwise fallsback to opening it on a WebView
+     * Opens the URL on a Custom Tab if possible. Otherwise falls back to opening it on a WebView
      *
      * @param activity         The host activity
      * @param customTabsIntent a CustomTabsIntent to be used if Custom Tabs is available

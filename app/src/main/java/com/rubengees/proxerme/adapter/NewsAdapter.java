@@ -46,7 +46,7 @@ import static com.rubengees.proxerme.manager.NewsManager.calculateOffsetFromEnd;
 import static com.rubengees.proxerme.manager.NewsManager.calculateOffsetFromStart;
 
 /**
- * TODO: Describe Class
+ * An adapter for {@link News}, for usage in a {@link RecyclerView}.
  *
  * @author Ruben Gees
  */
@@ -60,7 +60,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     private static final int DESCRIPTION_MAX_LINES = 3;
 
     private ArrayList<News> list;
-    private HashMap<Integer, Boolean> extensionMap;
+    private HashMap<String, Boolean> extensionMap;
 
     private OnNewsInteractionListener onNewsInteractionListener;
 
@@ -79,11 +79,11 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
     public NewsAdapter(@NonNull Bundle savedInstanceState) {
         this.list = savedInstanceState.getParcelableArrayList(STATE_NEWS_LIST);
-        List<Integer> ids = savedInstanceState.getIntegerArrayList(STATE_NEWS_EXTENSION_IDS);
+        List<String> ids = savedInstanceState.getStringArrayList(STATE_NEWS_EXTENSION_IDS);
         extensionMap = new HashMap<>(this.list.size() * 2);
 
         if (ids != null) {
-            for (Integer id : ids) {
+            for (String id : ids) {
                 extensionMap.put(id, true);
             }
         }
@@ -171,7 +171,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
     public void saveInstanceState(@NonNull Bundle outState) {
         outState.putParcelableArrayList(STATE_NEWS_LIST, list);
-        outState.putIntegerArrayList(STATE_NEWS_EXTENSION_IDS, new ArrayList<>(extensionMap.keySet()));
+        outState.putStringArrayList(STATE_NEWS_EXTENSION_IDS, new ArrayList<>(extensionMap.keySet()));
     }
 
     public void setOnNewsInteractionListener(OnNewsInteractionListener onNewsInteractionListener) {
@@ -234,7 +234,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
                 @Override
                 public void onClick(View v) {
                     News news = list.get(getLayoutPosition());
-                    int id = news.getId();
+                    String id = news.getId();
                     boolean isExpanded = extensionMap.containsKey(id);
 
                     if (isExpanded) {

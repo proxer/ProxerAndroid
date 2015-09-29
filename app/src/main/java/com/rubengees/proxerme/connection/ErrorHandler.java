@@ -23,8 +23,10 @@ import android.support.annotation.NonNull;
 import com.afollestad.bridge.BridgeException;
 import com.rubengees.proxerme.R;
 
+import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 import static com.rubengees.proxerme.connection.ErrorHandler.ErrorCodes.IO;
 import static com.rubengees.proxerme.connection.ErrorHandler.ErrorCodes.NETWORK;
@@ -34,7 +36,9 @@ import static com.rubengees.proxerme.connection.ErrorHandler.ErrorCodes.UNKNOWN;
 import static com.rubengees.proxerme.connection.ErrorHandler.ErrorCodes.UNPARSEABLE;
 
 /**
- * TODO: Describe Class
+ * A Helper class, which converts an {@link Exception} to a integer, represented through the
+ * Annotation {@link com.rubengees.proxerme.connection.ErrorHandler.ErrorCode}. It also has
+ * a Method to convert a ErrorCode into a human readable {@link String}.
  *
  * @author Ruben Gees
  */
@@ -59,7 +63,7 @@ public class ErrorHandler {
     }
 
     @NonNull
-    public static ProxerException handleException(@NonNull BridgeException bridgeException){
+    public static ProxerException handleException(@NonNull BridgeException bridgeException) {
         ProxerException exception;
 
         switch (bridgeException.reason()) {
@@ -93,10 +97,10 @@ public class ErrorHandler {
         return exception;
     }
 
-
     @IntDef({PROXER, NETWORK, UNPARSEABLE, IO,
             TIMEOUT, UNKNOWN})
     @Retention(value = RetentionPolicy.SOURCE)
+    @Target({ElementType.CONSTRUCTOR, ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER})
     public @interface ErrorCode {
     }
 

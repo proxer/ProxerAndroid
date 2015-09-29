@@ -27,7 +27,7 @@ import org.joda.time.Hours;
 import org.joda.time.Minutes;
 
 /**
- * Todo: Describe Class
+ * A helper class to convert a unix timestamp to a human-readable {@link String}.
  *
  * @author Ruben Gees
  */

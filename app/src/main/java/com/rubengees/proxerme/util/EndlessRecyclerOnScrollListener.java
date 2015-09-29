@@ -22,7 +22,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import static android.support.v7.widget.RecyclerView.OnScrollListener;
 
 /**
- * Todo: Describe Class
+ * A listener for a {@link RecyclerView}, to load more items, once it reaches near the end.
  *
  * @author Ruben Gees
  */

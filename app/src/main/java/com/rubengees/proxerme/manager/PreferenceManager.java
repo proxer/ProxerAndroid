@@ -18,12 +18,14 @@ package com.rubengees.proxerme.manager;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 
 /**
- * Todo: Describe Class
+ * A helper class, which gives access to the {@link SharedPreferences}.
  *
  * @author Ruben Gees
  */
@@ -46,25 +48,27 @@ public class PreferenceManager {
         preferences.edit().putBoolean(PREFERENCE_NEWS_NOTIFICATIONS, enabled).apply();
     }
 
-    public static int getLastId(@NonNull Context context) {
+    @Nullable
+    public static String getLastId(@NonNull Context context) {
         SharedPreferences preferences = getDefaultSharedPreferences(context);
 
-        return preferences.getInt(PREFERENCE_NEWS_LAST_ID, -1);
+        return preferences.getString(PREFERENCE_NEWS_LAST_ID, null);
     }
 
-    public static void setLastId(@NonNull Context context, int id) {
+    public static void setLastId(@NonNull Context context, @Nullable String id) {
         SharedPreferences preferences = getDefaultSharedPreferences(context);
 
-        preferences.edit().putInt(PREFERENCE_NEWS_LAST_ID, id).apply();
+        preferences.edit().putString(PREFERENCE_NEWS_LAST_ID, id).apply();
     }
 
+    @IntRange(from = 0)
     public static int getNewNews(@NonNull Context context) {
         SharedPreferences preferences = getDefaultSharedPreferences(context);
 
         return preferences.getInt(PREFERENCE_NEW_NEWS, 0);
     }
 
-    public static void setNewNews(@NonNull Context context, int amount) {
+    public static void setNewNews(@NonNull Context context, @IntRange(from = 0) int amount) {
         SharedPreferences preferences = getDefaultSharedPreferences(context);
 
         preferences.edit().putInt(PREFERENCE_NEW_NEWS, amount).apply();

@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * TODO: Describe Class
+ * Helper class for parsing all different answers, received by the {@link ProxerConnection}.
  *
  * @author Ruben Gees
  */
@@ -56,12 +56,12 @@ public class ProxerParser {
         for (int i = 0; i < newsArray.length(); i++) {
             JSONObject newsObject = newsArray.getJSONObject(i);
 
-            result.add(new News(newsObject.getInt(NEWS_ID), newsObject.getLong(NEWS_TIME),
+            result.add(new News(newsObject.getString(NEWS_ID), newsObject.getLong(NEWS_TIME),
                     newsObject.getString(NEWS_DESCRIPTION), newsObject.getString(NEWS_IMAGE_ID),
                     newsObject.getString(NEWS_SUBJECT), newsObject.getInt(NEWS_HITS),
-                    newsObject.getInt(NEWS_THREAD), newsObject.getInt(NEWS_USER_ID),
+                    newsObject.getString(NEWS_THREAD), newsObject.getString(NEWS_USER_ID),
                     newsObject.getString(NEWS_USER_NAME), newsObject.getInt(NEWS_POSTS),
-                    newsObject.getInt(NEWS_CATEGORY_ID), newsObject.getString(NEWS_CATEGORY)));
+                    newsObject.getString(NEWS_CATEGORY_ID), newsObject.getString(NEWS_CATEGORY)));
         }
 
         return result;

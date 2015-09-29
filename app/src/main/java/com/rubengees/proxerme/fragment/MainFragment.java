@@ -22,8 +22,8 @@ import com.rubengees.proxerme.activity.DashboardActivity;
 import com.rubengees.proxerme.interfaces.OnActivityListener;
 
 /**
- * An abstract Fragment which all other Fragments should inherit from. It provides some useful
- * methods and implements interfaces, all inheritors share.
+ * An abstract {@link Fragment}, which all other Fragments should inherit from. It provides some
+ * useful methods and implements interfaces, all inheritors share.
  */
 public abstract class MainFragment extends Fragment implements OnActivityListener {
 

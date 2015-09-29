@@ -36,7 +36,8 @@ import com.rubengees.proxerme.connection.UrlHolder;
 import com.rubengees.proxerme.entity.News;
 
 /**
- * TODO: Describe Class
+ * An Activity which shows a image with an animation on Lollipop and higher.
+ * It also has a transparent background.
  *
  * @author Ruben Gees
  */

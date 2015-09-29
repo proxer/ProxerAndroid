@@ -24,7 +24,7 @@ import android.widget.ImageView;
 import com.rubengees.proxerme.R;
 
 /**
- * Todo: Describe Class
+ * And {@link ImageView}, which calculates it's height by the given width and an aspect.
  *
  * @author Ruben Gees
  */

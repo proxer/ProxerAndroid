@@ -21,7 +21,7 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 /**
- * TODO: Describe Class
+ * A bean holding all relevant info of a single news.
  *
  * @author Ruben Gees
  */
@@ -36,22 +36,23 @@ public class News implements Parcelable {
             return new News[size];
         }
     };
-    private int id;
+    private String id;
     private long time;
     private String description;
     private String imageId;
     private String subject;
     private int hits;
-    private int threadId;
-    private int authorId;
+    private String threadId;
+    private String authorId;
     private String author;
     private int posts;
-    private int categoryId;
+    private String categoryId;
     private String categoryTitle;
 
-    public News(int id, long time, @NonNull String description, @NonNull String imageId, @NonNull String subject,
-                int hits, int threadId, int authorId, @NonNull String author, int posts,
-                int categoryId, @NonNull String categoryTitle) {
+    public News(@NonNull String id, long time, @NonNull String description, @NonNull String imageId,
+                @NonNull String subject, int hits, @NonNull String threadId,
+                @NonNull String authorId, @NonNull String author, int posts,
+                @NonNull String categoryId, @NonNull String categoryTitle) {
         this.id = id;
         this.time = time;
         this.description = description;
@@ -67,21 +68,21 @@ public class News implements Parcelable {
     }
 
     protected News(Parcel in) {
-        this.id = in.readInt();
+        this.id = in.readString();
         this.time = in.readLong();
         this.description = in.readString();
         this.imageId = in.readString();
         this.subject = in.readString();
         this.hits = in.readInt();
-        this.threadId = in.readInt();
-        this.authorId = in.readInt();
+        this.threadId = in.readString();
+        this.authorId = in.readString();
         this.author = in.readString();
         this.posts = in.readInt();
-        this.categoryId = in.readInt();
+        this.categoryId = in.readString();
         this.categoryTitle = in.readString();
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -107,11 +108,11 @@ public class News implements Parcelable {
         return hits;
     }
 
-    public int getThreadId() {
+    public String getThreadId() {
         return threadId;
     }
 
-    public int getAuthorId() {
+    public String getAuthorId() {
         return authorId;
     }
 
@@ -124,7 +125,7 @@ public class News implements Parcelable {
         return posts;
     }
 
-    public int getCategoryId() {
+    public String getCategoryId() {
         return categoryId;
     }
 
@@ -140,34 +141,34 @@ public class News implements Parcelable {
 
         News news = (News) o;
 
-        if (id != news.id) return false;
         if (time != news.time) return false;
         if (hits != news.hits) return false;
-        if (threadId != news.threadId) return false;
-        if (authorId != news.authorId) return false;
         if (posts != news.posts) return false;
-        if (categoryId != news.categoryId) return false;
+        if (!id.equals(news.id)) return false;
         if (!description.equals(news.description)) return false;
         if (!imageId.equals(news.imageId)) return false;
         if (!subject.equals(news.subject)) return false;
+        if (!threadId.equals(news.threadId)) return false;
+        if (!authorId.equals(news.authorId)) return false;
         if (!author.equals(news.author)) return false;
+        if (!categoryId.equals(news.categoryId)) return false;
         return categoryTitle.equals(news.categoryTitle);
 
     }
 
     @Override
     public int hashCode() {
-        int result = id;
+        int result = id.hashCode();
         result = 31 * result + (int) (time ^ (time >>> 32));
         result = 31 * result + description.hashCode();
         result = 31 * result + imageId.hashCode();
         result = 31 * result + subject.hashCode();
         result = 31 * result + hits;
-        result = 31 * result + threadId;
-        result = 31 * result + authorId;
+        result = 31 * result + threadId.hashCode();
+        result = 31 * result + authorId.hashCode();
         result = 31 * result + author.hashCode();
         result = 31 * result + posts;
-        result = 31 * result + categoryId;
+        result = 31 * result + categoryId.hashCode();
         result = 31 * result + categoryTitle.hashCode();
         return result;
     }
@@ -179,17 +180,17 @@ public class News implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.id);
+        dest.writeString(this.id);
         dest.writeLong(this.time);
         dest.writeString(this.description);
         dest.writeString(this.imageId);
         dest.writeString(this.subject);
         dest.writeInt(this.hits);
-        dest.writeInt(this.threadId);
-        dest.writeInt(this.authorId);
+        dest.writeString(this.threadId);
+        dest.writeString(this.authorId);
         dest.writeString(this.author);
         dest.writeInt(this.posts);
-        dest.writeInt(this.categoryId);
+        dest.writeString(this.categoryId);
         dest.writeString(this.categoryTitle);
     }
 }

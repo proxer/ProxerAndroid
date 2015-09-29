@@ -23,7 +23,7 @@ import android.content.Intent;
 import com.rubengees.proxerme.manager.NewsManager;
 
 /**
- * Todo: Describe Class
+ * Receiver for a boot. It starts and schedules all background services and tasks.
  *
  * @author Ruben Gees
  */

@@ -37,7 +37,7 @@ import static com.rubengees.proxerme.connection.ErrorHandler.ErrorCodes.UNKNOWN;
 import static com.rubengees.proxerme.connection.ErrorHandler.ErrorCodes.UNPARSEABLE;
 
 /**
- * TODO: Describe Class
+ * A helper class, which starts all request and manages the {@link Bridge}.
  *
  * @author Ruben Gees
  */
@@ -104,9 +104,9 @@ public class ProxerConnection {
     }
 
     public interface ResultCallback<T> {
-        void onResult(T result);
+        void onResult(@NonNull T result);
 
-        void onError(ProxerException exception);
+        void onError(@NonNull ProxerException exception);
     }
 
 }

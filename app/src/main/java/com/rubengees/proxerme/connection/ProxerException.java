@@ -16,22 +16,25 @@
 
 package com.rubengees.proxerme.connection;
 
+import android.support.annotation.Nullable;
+
 import static com.rubengees.proxerme.connection.ErrorHandler.ErrorCode;
 
 /**
- * TODO: Describe Class
+ * A subclass of {@link Exception}, representing all possible connection problems.
  *
  * @author Ruben Gees
  */
 public class ProxerException extends Exception {
 
+    @ErrorCode
     private int errorCode;
 
     public ProxerException(@ErrorCode int errorCode) {
         this.errorCode = errorCode;
     }
 
-    public ProxerException(int errorCode, String detailMessage) {
+    public ProxerException(@ErrorCode int errorCode, @Nullable String detailMessage) {
         super(detailMessage);
         this.errorCode = errorCode;
     }

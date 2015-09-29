@@ -23,7 +23,7 @@ import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
 
 /**
- * Todo: Describe Class
+ * Class, which holds various util methods.
  *
  * @author Ruben Gees
  */

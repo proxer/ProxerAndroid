@@ -31,7 +31,7 @@ import java.util.List;
 import static android.support.v4.app.NotificationCompat.BigTextStyle;
 
 /**
- * Todo: Describe Class
+ * A helper class for displaying notifications.
  *
  * @author Ruben Gees
  */

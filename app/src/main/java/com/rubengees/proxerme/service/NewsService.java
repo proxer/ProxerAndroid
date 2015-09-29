@@ -30,9 +30,9 @@ import org.json.JSONException;
 
 import java.util.List;
 
-
 /**
- * Todo: Describe Class
+ * An {@link IntentService}, which retrieves the News and shows a notification,if there are unread
+ * ones.
  *
  * @author Ruben Gees
  */
@@ -66,9 +66,9 @@ public class NewsService extends IntentService {
         NewsManager manager = NewsManager.getInstance(this);
 
         try {
-            int lastId = manager.getLastId();
+            String lastId = manager.getLastId();
 
-            if (lastId != -1) {
+            if (lastId != null) {
                 List<News> news = ProxerConnection.loadNewsSync(1);
                 int offset = NewsManager.calculateOffsetFromStart(news, manager.getLastId());
 

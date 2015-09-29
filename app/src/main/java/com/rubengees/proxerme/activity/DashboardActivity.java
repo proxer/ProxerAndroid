@@ -57,7 +57,7 @@ import static com.rubengees.proxerme.manager.NewsManager.OFFSET_NOT_CALCULABLE;
 import static com.rubengees.proxerme.manager.NewsManager.getInstance;
 
 /**
- * TODO: Describe Class
+ * This Activity provides the navigation to all different sections through the Drawer.
  *
  * @author Ruben Gees
  */

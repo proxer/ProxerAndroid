@@ -22,7 +22,7 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 
 /**
- * Todo: Describe Class
+ * A manager for the current displayed {@link Snackbar} instance.
  *
  * @author Ruben Gees
  */

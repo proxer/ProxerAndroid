@@ -17,9 +17,10 @@
 package com.rubengees.proxerme.connection;
 
 import android.support.annotation.IntRange;
+import android.support.annotation.NonNull;
 
 /**
- * TODO: Describe Class
+ * Helper class, containing all the different Urls for accessing the API.
  *
  * @author Ruben Gees
  */
@@ -37,11 +38,11 @@ public class UrlHolder {
         return getHost() + NEWS + page;
     }
 
-    public static String getNewsImageUrl(int newsId, String imageId) {
+    public static String getNewsImageUrl(String newsId, @NonNull String imageId) {
         return NEWS_IMAGE + newsId + "_" + imageId + ".png";
     }
 
-    public static String getNewsPageUrl(int categoryId, int threadId) {
+    public static String getNewsPageUrl(String categoryId, String threadId) {
         return getHost() + "/forum/" + categoryId + "/" + threadId + "#top";
     }
 
