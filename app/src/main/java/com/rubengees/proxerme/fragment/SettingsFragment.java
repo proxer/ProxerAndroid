@@ -21,7 +21,7 @@ import android.os.Bundle;
 import android.support.v7.preference.PreferenceFragmentCompat;
 
 import com.rubengees.proxerme.R;
-import com.rubengees.proxerme.interfaces.OnBackPressedListener;
+import com.rubengees.proxerme.interfaces.OnActivityListener;
 import com.rubengees.proxerme.manager.NewsManager;
 
 /**
@@ -29,7 +29,7 @@ import com.rubengees.proxerme.manager.NewsManager;
  *
  * @author Ruben Gees
  */
-public class SettingsFragment extends PreferenceFragmentCompat implements OnBackPressedListener, SharedPreferences.OnSharedPreferenceChangeListener {
+public class SettingsFragment extends PreferenceFragmentCompat implements OnActivityListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     public static SettingsFragment newInstance() {
         return new SettingsFragment();
@@ -43,6 +43,11 @@ public class SettingsFragment extends PreferenceFragmentCompat implements OnBack
     @Override
     public boolean onBackPressed() {
         return false;
+    }
+
+    @Override
+    public void showErrorIfNecessary() {
+        //Do nothing
     }
 
     @Override

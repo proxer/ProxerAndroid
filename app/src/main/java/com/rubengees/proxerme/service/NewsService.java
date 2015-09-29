@@ -81,5 +81,4 @@ public class NewsService extends IntentService {
         }
     }
 
-
 }

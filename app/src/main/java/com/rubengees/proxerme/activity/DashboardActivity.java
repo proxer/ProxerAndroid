@@ -45,8 +45,9 @@ import com.rubengees.proxerme.R;
 import com.rubengees.proxerme.connection.UrlHolder;
 import com.rubengees.proxerme.fragment.NewsFragment;
 import com.rubengees.proxerme.fragment.SettingsFragment;
-import com.rubengees.proxerme.interfaces.OnBackPressedListener;
+import com.rubengees.proxerme.interfaces.OnActivityListener;
 import com.rubengees.proxerme.manager.PreferenceManager;
+import com.rubengees.proxerme.util.SnackbarManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,17 +78,19 @@ public class DashboardActivity extends MainActivity {
 
     private int currentDrawerItemId = -1;
 
-    private OnBackPressedListener onBackPressedListener;
+    private OnActivityListener onActivityListener;
 
     private Drawer.OnDrawerListener onDrawerListener = new Drawer.OnDrawerListener() {
         @Override
         public void onDrawerOpened(View view) {
-
+            SnackbarManager.dismiss();
         }
 
         @Override
         public void onDrawerClosed(View view) {
-
+            if (onActivityListener != null) {
+                onActivityListener.showErrorIfNecessary();
+            }
         }
 
         @Override
@@ -126,11 +129,10 @@ public class DashboardActivity extends MainActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
-        if (savedInstanceState == null) {
-            onBackPressedListener = (OnBackPressedListener) getSupportFragmentManager()
-                    .findFragmentById(R.id.activity_main_content_container);
-        } else {
+        if (savedInstanceState != null) {
             currentDrawerItemId = savedInstanceState.getInt(STATE_CURRENT_DRAWER_ITEM_ID);
+            onActivityListener = (OnActivityListener) getSupportFragmentManager()
+                    .findFragmentById(R.id.activity_main_content_container);
         }
 
         findViews();
@@ -185,10 +187,10 @@ public class DashboardActivity extends MainActivity {
     public void onBackPressed() {
         if (drawer.isDrawerOpen()) {
             drawer.closeDrawer();
-        } else if (onBackPressedListener == null) {
+        } else if (onActivityListener == null) {
             handleBackPressed();
         } else {
-            if (!onBackPressedListener.onBackPressed()) {
+            if (!onActivityListener.onBackPressed()) {
                 handleBackPressed();
             }
         }
@@ -310,10 +312,10 @@ public class DashboardActivity extends MainActivity {
     }
 
     public void setFragment(@NonNull Fragment fragment) {
-        if (fragment instanceof OnBackPressedListener) {
-            onBackPressedListener = (OnBackPressedListener) fragment;
+        if (fragment instanceof OnActivityListener) {
+            onActivityListener = (OnActivityListener) fragment;
         } else {
-            onBackPressedListener = null;
+            onActivityListener = null;
         }
 
         getSupportFragmentManager().beginTransaction().replace(R.id.activity_main_content_container,

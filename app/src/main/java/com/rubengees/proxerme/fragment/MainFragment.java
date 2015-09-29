@@ -19,13 +19,13 @@ package com.rubengees.proxerme.fragment;
 import android.support.v4.app.Fragment;
 
 import com.rubengees.proxerme.activity.DashboardActivity;
-import com.rubengees.proxerme.interfaces.OnBackPressedListener;
+import com.rubengees.proxerme.interfaces.OnActivityListener;
 
 /**
  * An abstract Fragment which all other Fragments should inherit from. It provides some useful
  * methods and implements interfaces, all inheritors share.
  */
-public abstract class MainFragment extends Fragment implements OnBackPressedListener {
+public abstract class MainFragment extends Fragment implements OnActivityListener {
 
     public MainFragment() {
         
@@ -43,5 +43,10 @@ public abstract class MainFragment extends Fragment implements OnBackPressedList
     @Override
     public boolean onBackPressed() {
         return false;
+    }
+
+    @Override
+    public void showErrorIfNecessary() {
+
     }
 }

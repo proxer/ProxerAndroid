@@ -65,7 +65,7 @@ public class NewsFragment extends MainFragment {
     private int lastLoadedPage = -1;
 
     private String currentErrorMessage;
-    private boolean methodBeforeErrorInsert;
+    private boolean methodBeforeErrorInsert = false;
     private View root;
 
     public NewsFragment() {
@@ -151,6 +151,8 @@ public class NewsFragment extends MainFragment {
             loadNews(currentPage, false);
         } else if (currentErrorMessage != null) {
             showError();
+        } else {
+            loadNews(currentPage, methodBeforeErrorInsert);
         }
 
         return root;
@@ -208,6 +210,13 @@ public class NewsFragment extends MainFragment {
                 showError();
             }
         });
+    }
+
+    @Override
+    public void showErrorIfNecessary() {
+        if (currentErrorMessage != null) {
+            showError();
+        }
     }
 
     private void handleResult(List<News> result, boolean insert) {
