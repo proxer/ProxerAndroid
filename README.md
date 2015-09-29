@@ -6,9 +6,7 @@ This is a client for the german Anime & Manga page [ProxerMe](https://proxer.me/
 
 ### How to use it?
 
-Build the project and install it on your device.
-Or
-Download the [latest release](https://github.com/RubenGees/ProxerMe/releases) and install it on your device.
+Build the project and install it on your device or download the [latest release](https://github.com/RubenGees/ProxerMe/releases) and install it on your device.
 
 #### Build
 
