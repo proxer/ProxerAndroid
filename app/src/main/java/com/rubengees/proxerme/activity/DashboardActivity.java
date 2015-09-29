@@ -336,15 +336,18 @@ public class DashboardActivity extends MainActivity {
                 return false;
             case DRAWER_ID_INFO:
                 setFragment(new LibsBuilder().withAboutVersionShownName(true)
-                        .withAboutDescription(getString(R.string.about_description)).withAboutIconShown(true)
-                        .withAboutAppName(getString(R.string.app_name)).withAutoDetect(false)
-                        .withLibraries("glide", "jodatimeandroid", "bridge").fragment(), getString(R.string.drawer_item_info));
+                                .withAboutDescription(getString(R.string.about_description))
+                                .withAboutIconShown(true).withAutoDetect(false)
+                                .withAboutAppName(getString(R.string.app_name))
+                                .withLibraries("glide", "jodatimeandroid", "bridge").fragment(),
+                        getString(R.string.drawer_item_info));
                 return false;
             case DRAWER_ID_DONATE:
                 showPage(UrlHolder.getDonateUrl());
                 return true;
             case DRAWER_ID_SETTINGS:
-                setFragment(SettingsFragment.newInstance(), getString(R.string.drawer_item_settings));
+                setFragment(SettingsFragment.newInstance(),
+                        getString(R.string.drawer_item_settings));
                 return false;
             default:
                 return true;
