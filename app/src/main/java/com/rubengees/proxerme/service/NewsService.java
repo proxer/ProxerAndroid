@@ -17,6 +17,7 @@ import com.rubengees.proxerme.manager.NewsManager;
 
 import org.json.JSONException;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static android.support.v4.app.NotificationCompat.BigTextStyle;
@@ -82,7 +83,7 @@ public class NewsService extends IntentService {
             NotificationCompat.Builder builder =
                     new NotificationCompat.Builder(getApplicationContext());
 
-            builder.setAutoCancel(true).setContentTitle("News")
+            builder.setAutoCancel(true).setContentTitle(getString(R.string.notification_title))
                     .setSmallIcon(R.drawable.ic_introduction_proxer)
                     .setLargeIcon(BitmapFactory.decodeResource(getResources(),
                             R.mipmap.ic_launcher));
@@ -113,7 +114,8 @@ public class NewsService extends IntentService {
 
     private String generateNewsNotificationAmount(int offset) {
         return offset == NewsManager.OFFSET_TOO_LARGE ?
-                "More than 15 News" : (offset + " " + "News");
+                getString(R.string.notification_amount_more_than_15) :
+                (offset + " " + getString(R.string.notification_amount_text));
     }
 
     private String generateNewsNotificationBigText(List<News> news, int offset) {
@@ -121,7 +123,8 @@ public class NewsService extends IntentService {
 
         for (int i = 0; i < offset; i++) {
             if (news.get(i).getSubject().length() >= FITTING_CHARS) {
-                result += news.get(i).getSubject().substring(0, FITTING_CHARS) + "...";
+                result += news.get(i).getSubject().substring(0, FITTING_CHARS) +
+                        Arrays.toString(Character.toChars(0x2026));
             } else {
                 result += news.get(i).getSubject();
             }

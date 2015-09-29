@@ -29,4 +29,7 @@
     <string name="introduction_welcome_description">Just some settings and you are ready to go.</string>
     <string name="introduction_notifications_title">Notifications</string>
     <string name="introduction_notifications_description">Receive notifications about news.</string>
+    <string name="notification_title">News</string>
+    <string name="notification_amount_more_than_15">More than 15 News</string>
+    <string name="notification_amount_text">News</string>
 </resources>
