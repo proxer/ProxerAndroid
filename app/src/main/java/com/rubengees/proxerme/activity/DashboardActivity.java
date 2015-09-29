@@ -24,7 +24,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -33,6 +32,7 @@ import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.holder.BadgeStyle;
 import com.mikepenz.materialdrawer.holder.StringHolder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
@@ -67,12 +67,11 @@ public class DashboardActivity extends MainActivity {
     public static final int DRAWER_ID_INFO = 10;
     public static final int DRAWER_ID_DONATE = 11;
     public static final int DRAWER_ID_SETTINGS = 12;
-
     public static final String EXTRA_DRAWER_ITEM = "extra_drawer_item";
+    private static final int DRAWER_ID_DEFAULT = DRAWER_ID_NEWS;
     private static final String STATE_CURRENT_DRAWER_ITEM_ID = "current_drawer_item_id";
 
     private Toolbar toolbar;
-    private FrameLayout contentContainer;
 
     private Drawer drawer;
 
@@ -146,10 +145,10 @@ public class DashboardActivity extends MainActivity {
                 if (PreferenceManager.isFirstStart(this)) {
                     initIntroduction();
                 } else {
-                    drawer.setSelection(DRAWER_ID_NEWS);
+                    drawer.setSelection(DRAWER_ID_DEFAULT);
                 }
             }
-        } else {
+        } else if (savedInstanceState == null) {
             drawer.setSelection(drawerItemToLoad);
         }
     }
@@ -171,7 +170,7 @@ public class DashboardActivity extends MainActivity {
             }
 
             PreferenceManager.setFirstStartOccurred(this);
-            drawer.setSelection(DRAWER_ID_NEWS);
+            drawer.setSelection(DRAWER_ID_DEFAULT);
         }
     }
 
@@ -205,16 +204,15 @@ public class DashboardActivity extends MainActivity {
     }
 
     private void handleBackPressed() {
-        if (currentDrawerItemId == DRAWER_ID_NEWS) {
+        if (currentDrawerItemId == DRAWER_ID_DEFAULT) {
             super.onBackPressed();
         } else {
-            drawer.setSelection(DRAWER_ID_NEWS);
+            drawer.setSelection(DRAWER_ID_DEFAULT);
         }
     }
 
     private void findViews() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        contentContainer = (FrameLayout) findViewById(R.id.activity_main_content_container);
     }
 
     private void initViews() {
@@ -226,10 +224,14 @@ public class DashboardActivity extends MainActivity {
                 .withStickyDrawerItems(generateStickyDrawerItems())
                 .withOnDrawerListener(onDrawerListener)
                 .withOnDrawerItemClickListener(onDrawerItemClickListener)
-                .withShowDrawerOnFirstLaunch(true).withSelectedItem(DRAWER_ID_NEWS)
+                .withShowDrawerOnFirstLaunch(true).withToolbar(toolbar)
                 .withActionBarDrawerToggleAnimated(true).withHasStableIds(true)
-                .withSavedInstance(savedInstanceState).withToolbar(toolbar).build();
+                .withSavedInstance(savedInstanceState).build();
 
+        initBadges();
+    }
+
+    private void initBadges() {
         int newNews = getInstance(this).getNewNews();
 
         if (newNews > 0 || newNews == OFFSET_NOT_CALCULABLE) {
@@ -238,17 +240,21 @@ public class DashboardActivity extends MainActivity {
         }
     }
 
+    @NonNull
     private ArrayList<IDrawerItem> generateDrawerItems() {
         ArrayList<IDrawerItem> result = new ArrayList<>(1);
 
         result.add(new PrimaryDrawerItem().withName(R.string.drawer_item_news)
                 .withIcon(GoogleMaterial.Icon.gmd_dashboard)
                 .withSelectedTextColorRes(R.color.primary).withSelectedIconColorRes(R.color.primary)
-                .withIconTintingEnabled(true).withIdentifier(DRAWER_ID_NEWS));
+                .withIconTintingEnabled(true).withBadgeStyle(new BadgeStyle()
+                        .withColorRes(R.color.primary).withTextColorRes(android.R.color.white))
+                .withIdentifier(DRAWER_ID_NEWS));
 
         return result;
     }
 
+    @NonNull
     private ArrayList<IDrawerItem> generateStickyDrawerItems() {
         ArrayList<IDrawerItem> result = new ArrayList<>(1);
 
@@ -291,6 +297,7 @@ public class DashboardActivity extends MainActivity {
                 }).introduceMyself();
     }
 
+    @NonNull
     private List<Slide> generateSlides() {
         List<Slide> slides = new ArrayList<>(2);
 
