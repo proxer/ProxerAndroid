@@ -31,6 +31,7 @@ import static android.support.v4.app.NotificationCompat.BigTextStyle;
  */
 public class NewsService extends IntentService {
 
+    public static final int ELLIPSIS = 0x2026;
     private static final String ACTION_LOAD_NEWS = "com.rubengees.proxerme.service.action.LOAD_NEWS";
     private static final int NEWS_NOTIFICATION_ID = 1423;
     private static final int FITTING_CHARS = 35;
@@ -124,7 +125,7 @@ public class NewsService extends IntentService {
         for (int i = 0; i < offset; i++) {
             if (news.get(i).getSubject().length() >= FITTING_CHARS) {
                 result += news.get(i).getSubject().substring(0, FITTING_CHARS) +
-                        Arrays.toString(Character.toChars(0x2026));
+                        Arrays.toString(Character.toChars(ELLIPSIS));
             } else {
                 result += news.get(i).getSubject();
             }

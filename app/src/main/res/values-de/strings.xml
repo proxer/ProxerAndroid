@@ -29,4 +29,7 @@
     <string name="introduction_notifications_title">Benachrichtigungen</string>
     <string name="introduction_welcome_description">Nur ein paar Einstellungen und es geht los.</string>
     <string name="introduction_welcome_title">Willkommen!</string>
+    <string name="notification_amount_more_than_15">Mehr als 15 News</string>
+    <string name="notification_amount_text">News</string>
+    <string name="notification_title">News</string>
 </resources>
