@@ -130,8 +130,13 @@ public class DashboardActivity extends MainActivity {
 
         if (savedInstanceState != null) {
             currentDrawerItemId = savedInstanceState.getInt(STATE_CURRENT_DRAWER_ITEM_ID);
-            onActivityListener = (OnActivityListener) getSupportFragmentManager()
-                    .findFragmentById(R.id.activity_main_content_container);
+
+            try {
+                onActivityListener = (OnActivityListener) getSupportFragmentManager()
+                        .findFragmentById(R.id.activity_main_content_container);
+            } catch (ClassCastException e) {
+                onActivityListener = null;
+            }
         }
 
         findViews();
@@ -339,8 +344,9 @@ public class DashboardActivity extends MainActivity {
                 setFragment(new LibsBuilder().withAboutVersionShownName(true)
                                 .withAboutDescription(getString(R.string.about_description))
                                 .withAboutIconShown(true).withAutoDetect(false)
-                                .withAboutAppName(getString(R.string.app_name))
-                                .withLibraries("glide", "jodatimeandroid", "bridge").fragment(),
+                                .withAboutAppName(getString(R.string.app_name)).withLibraries("glide",
+                                        "jodatimeandroid", "bridge")
+                                .withFields(R.string.class.getFields()).fragment(),
                         getString(R.string.drawer_item_info));
                 return false;
             case DRAWER_ID_DONATE:
