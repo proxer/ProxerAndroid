@@ -7,7 +7,7 @@
         <item>@string/interval_four_hours</item>
     </string-array>
 
-    <string-array name="notifications_interval_values">
+    <string-array name="notifications_interval_values" translatable="false">
         <item>30</item>
         <item>60</item>
         <item>120</item>
