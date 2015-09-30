@@ -33,9 +33,10 @@
     <string name="time_days_ago">days ago</string>
     <string name="time_more_than_one_month_ago">More than one month ago</string>
     <string name="preference_category_general_title">General</string>
-    <string name="preference_notifications_summary_title">Notifications</string>
+    <string name="preference_notifications_title">Notifications</string>
     <string name="preference_notifications_summary_on">Receive notifications</string>
     <string name="preference_notifications_summary_off">Don\'t receive notifications</string>
+    <string name="preference_notifications_interval_title">Update interval</string>
     <string name="introduction_welcome_title">Welcome!</string>
     <string name="introduction_welcome_description">Just some settings and you are ready to go.</string>
     <string name="introduction_notifications_title">Notifications</string>
@@ -43,4 +44,8 @@
     <string name="notification_title">News</string>
     <string name="notification_amount_more_than_15">More than 15 News</string>
     <string name="notification_amount_text">News</string>
+    <string name="interval_half_hourly">Half-hourly</string>
+    <string name="interval_hourly">Hourly</string>
+    <string name="interval_two_hours">Every two hours</string>
+    <string name="interval_four_hours">Every four hours</string>
 </resources>

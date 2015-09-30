@@ -32,20 +32,21 @@ import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 public class PreferenceManager {
 
     public static final String PREFERENCE_NEW_NEWS = "pref_news_new";
-    public static final String PREFERENCE_NEWS_NOTIFICATIONS = "pref_news_notifications";
+    public static final String PREFERENCE_NOTIFICATIONS = "pref_notifications";
     public static final String PREFERENCE_FIRST_START = "pref_first_start";
-    private static final String PREFERENCE_NEWS_LAST_ID = "pref_news_last_id";
+    public static final String PREFERENCE_NEWS_LAST_ID = "pref_news_last_id";
+    public static final String PREFERENCE_NOTIFICATIONS_INTERVAL = "pref_notifications_interval";
 
     public static boolean areNotificationsEnabled(@NonNull Context context) {
         SharedPreferences preferences = getDefaultSharedPreferences(context);
 
-        return preferences.getBoolean(PREFERENCE_NEWS_NOTIFICATIONS, false);
+        return preferences.getBoolean(PREFERENCE_NOTIFICATIONS, false);
     }
 
     public static void setNotificationsEnabled(@NonNull Context context, boolean enabled) {
         SharedPreferences preferences = getDefaultSharedPreferences(context);
 
-        preferences.edit().putBoolean(PREFERENCE_NEWS_NOTIFICATIONS, enabled).apply();
+        preferences.edit().putBoolean(PREFERENCE_NOTIFICATIONS, enabled).apply();
     }
 
     @Nullable
@@ -84,5 +85,11 @@ public class PreferenceManager {
         SharedPreferences preferences = getDefaultSharedPreferences(context);
 
         return preferences.getBoolean(PREFERENCE_FIRST_START, true);
+    }
+
+    public static int getUpdateInterval(@NonNull Context context) {
+        SharedPreferences preferences = getDefaultSharedPreferences(context);
+
+        return Integer.parseInt(preferences.getString(PREFERENCE_NOTIFICATIONS_INTERVAL, "60"));
     }
 }

@@ -25,7 +25,7 @@
     <string name="preference_category_general_title">Allgemein</string>
     <string name="preference_notifications_summary_off">Erhalte keine Benachrichtigungen</string>
     <string name="preference_notifications_summary_on">Erhalte Benachrichtigungen</string>
-    <string name="preference_notifications_summary_title">Benachrichtigungen</string>
+    <string name="preference_notifications_title">Benachrichtigungen</string>
     <string name="time_a_moment_ago">Eben gerade</string>
     <string name="time_before">Vor</string>
     <string name="time_days_ago">Tagen</string>
@@ -42,4 +42,9 @@
     <string name="notification_amount_more_than_15">Mehr als 15 News</string>
     <string name="notification_amount_text">News</string>
     <string name="notification_title">News</string>
+    <string name="interval_four_hours">Alle vier Stunden</string>
+    <string name="interval_half_hourly">Halbstündlich</string>
+    <string name="interval_hourly">Stündlich</string>
+    <string name="interval_two_hours">Alle zwei Stunden</string>
+    <string name="preference_notifications_interval_title">Aktualisierungsintervall</string>
 </resources>

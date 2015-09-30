@@ -28,8 +28,6 @@ import com.rubengees.proxerme.service.NewsService;
  * @author Ruben Gees
  */
 public class NewsReceiver extends BroadcastReceiver {
-    public NewsReceiver() {
-    }
 
     @Override
     public void onReceive(Context context, Intent intent) {

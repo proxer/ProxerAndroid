@@ -44,8 +44,6 @@ public class NewsManager {
     public static final int OFFSET_TOO_LARGE = -1;
     public static final int NEWS_ON_PAGE = 15;
 
-    private static final int INTERVAL_HOUR = 60 * 60 * 1000;
-
     private static NewsManager INSTANCE;
 
     private Context context;
@@ -132,9 +130,10 @@ public class NewsManager {
             AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             Intent intent = new Intent(context, NewsReceiver.class);
             PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+            int interval = PreferenceManager.getUpdateInterval(context) * 60 * 1000;
 
             alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    SystemClock.elapsedRealtime() + INTERVAL_HOUR, INTERVAL_HOUR, alarmIntent);
+                    SystemClock.elapsedRealtime() + interval, interval, alarmIntent);
 
             ComponentName receiver = new ComponentName(context, BootReceiver.class);
             PackageManager pm = context.getPackageManager();

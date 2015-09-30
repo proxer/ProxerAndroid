@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="notifications_interval_titles">
+        <item>@string/interval_half_hourly</item>
+        <item>@string/interval_hourly</item>
+        <item>@string/interval_two_hours</item>
+        <item>@string/interval_four_hours</item>
+    </string-array>
+
+    <string-array name="notifications_interval_values">
+        <item>30</item>
+        <item>60</item>
+        <item>120</item>
+        <item>240</item>
+    </string-array>
+</resources>

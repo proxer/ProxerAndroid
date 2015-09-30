@@ -24,6 +24,7 @@ import android.support.v7.preference.PreferenceFragmentCompat;
 import com.rubengees.proxerme.R;
 import com.rubengees.proxerme.interfaces.OnActivityListener;
 import com.rubengees.proxerme.manager.NewsManager;
+import com.rubengees.proxerme.manager.PreferenceManager;
 
 /**
  * A {@link Fragment}, showing the settings of this App.
@@ -55,7 +56,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements OnActi
     public void onResume() {
         super.onResume();
         getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
-
     }
 
     @Override
@@ -66,14 +66,18 @@ public class SettingsFragment extends PreferenceFragmentCompat implements OnActi
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals("pref_news_notifications")) {
+        if (key.equals(PreferenceManager.PREFERENCE_NOTIFICATIONS)) {
             NewsManager manager = NewsManager.getInstance(getContext());
+            boolean enabled =
+                    sharedPreferences.getBoolean(PreferenceManager.PREFERENCE_NOTIFICATIONS, false);
 
-            if (sharedPreferences.getBoolean("pref_news_notifications", false)) {
+            if (enabled) {
                 manager.retrieveNewsLater();
             } else {
                 manager.cancelNewsRetrieval();
             }
+        } else if (key.equals(PreferenceManager.PREFERENCE_NOTIFICATIONS_INTERVAL)) {
+            NewsManager.getInstance(getContext()).retrieveNewsLater();
         }
     }
 }
