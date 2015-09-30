@@ -281,16 +281,17 @@ public class DashboardActivity extends MainActivity {
         new IntroductionBuilder(this).withSlides(generateSlides())
                 .withOnSlideListener(new IntroductionConfiguration.OnSlideListener() {
                     @Override
-                    protected void onSlideInit(Fragment context, int position, TextView title,
-                                               ImageView image, TextView description) {
+                    protected void onSlideInit(int position, @NonNull TextView title,
+                                               @NonNull ImageView image,
+                                               @NonNull TextView description) {
                         switch (position) {
                             case 0:
-                                Glide.with(context).load(R.drawable.ic_introduction_proxer)
-                                        .into(image);
+                                Glide.with(image.getContext())
+                                        .load(R.drawable.ic_introduction_proxer).into(image);
                                 break;
                             case 1:
-                                Glide.with(context).load(R.drawable.ic_introduction_notifications)
-                                        .into(image);
+                                Glide.with(image.getContext())
+                                        .load(R.drawable.ic_introduction_notifications).into(image);
                                 break;
                         }
                     }
