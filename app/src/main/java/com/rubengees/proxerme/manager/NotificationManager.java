@@ -51,7 +51,7 @@ public class NotificationManager {
 
             builder.setAutoCancel(true)
                     .setContentTitle(context.getString(R.string.notification_title))
-                    .setSmallIcon(R.drawable.ic_introduction_proxer);
+                    .setSmallIcon(R.drawable.ic_stat_proxer);
 
             if (offset == 1) {
                 News current = news.get(0);
