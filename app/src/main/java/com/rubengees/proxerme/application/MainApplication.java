@@ -18,6 +18,9 @@ package com.rubengees.proxerme.application;
 
 import android.app.Application;
 
+import com.orhanobut.hawk.Hawk;
+import com.orhanobut.hawk.HawkBuilder;
+
 import net.danlew.android.joda.JodaTimeAndroid;
 
 /**
@@ -31,6 +34,8 @@ public class MainApplication extends Application {
     public void onCreate() {
         super.onCreate();
         JodaTimeAndroid.init(this);
+        Hawk.init(this).setEncryptionMethod(HawkBuilder.EncryptionMethod.MEDIUM)
+                .setStorage(HawkBuilder.newSharedPrefStorage(this)).build();
     }
 
 }

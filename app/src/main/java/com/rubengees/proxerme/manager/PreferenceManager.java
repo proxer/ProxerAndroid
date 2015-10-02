@@ -18,9 +18,7 @@ package com.rubengees.proxerme.manager;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 
@@ -33,8 +31,6 @@ public class PreferenceManager {
 
     public static final String PREFERENCE_NEW_NEWS = "pref_news_new";
     public static final String PREFERENCE_NOTIFICATIONS = "pref_notifications";
-    public static final String PREFERENCE_FIRST_START = "pref_first_start";
-    public static final String PREFERENCE_NEWS_LAST_ID = "pref_news_last_id";
     public static final String PREFERENCE_NOTIFICATIONS_INTERVAL = "pref_notifications_interval";
 
     public static boolean areNotificationsEnabled(@NonNull Context context) {
@@ -47,44 +43,6 @@ public class PreferenceManager {
         SharedPreferences preferences = getDefaultSharedPreferences(context);
 
         preferences.edit().putBoolean(PREFERENCE_NOTIFICATIONS, enabled).apply();
-    }
-
-    @Nullable
-    public static String getLastId(@NonNull Context context) {
-        SharedPreferences preferences = getDefaultSharedPreferences(context);
-
-        return preferences.getString(PREFERENCE_NEWS_LAST_ID, null);
-    }
-
-    public static void setLastId(@NonNull Context context, @Nullable String id) {
-        SharedPreferences preferences = getDefaultSharedPreferences(context);
-
-        preferences.edit().putString(PREFERENCE_NEWS_LAST_ID, id).apply();
-    }
-
-    @IntRange(from = 0)
-    public static int getNewNews(@NonNull Context context) {
-        SharedPreferences preferences = getDefaultSharedPreferences(context);
-
-        return preferences.getInt(PREFERENCE_NEW_NEWS, 0);
-    }
-
-    public static void setNewNews(@NonNull Context context, @IntRange(from = 0) int amount) {
-        SharedPreferences preferences = getDefaultSharedPreferences(context);
-
-        preferences.edit().putInt(PREFERENCE_NEW_NEWS, amount).apply();
-    }
-
-    public static void setFirstStartOccurred(@NonNull Context context) {
-        SharedPreferences preferences = getDefaultSharedPreferences(context);
-
-        preferences.edit().putBoolean(PREFERENCE_FIRST_START, false).apply();
-    }
-
-    public static boolean isFirstStart(@NonNull Context context) {
-        SharedPreferences preferences = getDefaultSharedPreferences(context);
-
-        return preferences.getBoolean(PREFERENCE_FIRST_START, true);
     }
 
     public static int getUpdateInterval(@NonNull Context context) {

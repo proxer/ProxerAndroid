@@ -161,18 +161,18 @@ public class NewsManager {
     }
 
     private void saveId() {
-        PreferenceManager.setLastId(context, lastId);
+        StorageManager.setLastId(lastId);
     }
 
     private void loadId() {
-        lastId = PreferenceManager.getLastId(context);
+        lastId = StorageManager.getLastId();
     }
 
     private void saveNewNews() {
-        PreferenceManager.setNewNews(context, newNews);
+        StorageManager.setNewNews(newNews);
     }
 
     private void loadNewNews() {
-        newNews = PreferenceManager.getNewNews(context);
+        newNews = StorageManager.getNewNews();
     }
 }

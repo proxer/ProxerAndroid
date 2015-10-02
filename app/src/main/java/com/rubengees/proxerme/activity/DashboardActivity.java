@@ -47,6 +47,7 @@ import com.rubengees.proxerme.fragment.NewsFragment;
 import com.rubengees.proxerme.fragment.SettingsFragment;
 import com.rubengees.proxerme.interfaces.OnActivityListener;
 import com.rubengees.proxerme.manager.PreferenceManager;
+import com.rubengees.proxerme.manager.StorageManager;
 import com.rubengees.proxerme.util.SnackbarManager;
 
 import java.util.ArrayList;
@@ -147,7 +148,7 @@ public class DashboardActivity extends MainActivity {
 
         if (drawerItemToLoad == -1) {
             if (savedInstanceState == null) {
-                if (PreferenceManager.isFirstStart(this)) {
+                if (StorageManager.isFirstStart()) {
                     initIntroduction();
                 } else {
                     drawer.setSelection(DRAWER_ID_DEFAULT);
@@ -174,7 +175,7 @@ public class DashboardActivity extends MainActivity {
                 }
             }
 
-            PreferenceManager.setFirstStartOccurred(this);
+            StorageManager.setFirstStartOccurred();
             drawer.setSelection(DRAWER_ID_DEFAULT);
         }
     }
@@ -225,7 +226,8 @@ public class DashboardActivity extends MainActivity {
     }
 
     private void initDrawer(@Nullable Bundle savedInstanceState) {
-        drawer = new DrawerBuilder(this).withDrawerItems(generateDrawerItems())
+        drawer = new DrawerBuilder(this)
+                .withDrawerItems(generateDrawerItems())
                 .withStickyDrawerItems(generateStickyDrawerItems())
                 .withOnDrawerListener(onDrawerListener)
                 .withOnDrawerItemClickListener(onDrawerItemClickListener)
