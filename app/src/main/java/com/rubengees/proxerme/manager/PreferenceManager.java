@@ -29,7 +29,6 @@ import static android.preference.PreferenceManager.getDefaultSharedPreferences;
  */
 public class PreferenceManager {
 
-    public static final String PREFERENCE_NEW_NEWS = "pref_news_new";
     public static final String PREFERENCE_NOTIFICATIONS = "pref_notifications";
     public static final String PREFERENCE_NOTIFICATIONS_INTERVAL = "pref_notifications_interval";
 
