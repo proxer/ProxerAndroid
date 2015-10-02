@@ -263,7 +263,7 @@ public class DashboardActivity extends MainActivity {
 
     @NonNull
     private ArrayList<IDrawerItem> generateStickyDrawerItems() {
-        ArrayList<IDrawerItem> result = new ArrayList<>(1);
+        ArrayList<IDrawerItem> result = new ArrayList<>(3);
 
         result.add(new PrimaryDrawerItem().withName(R.string.drawer_item_info)
                 .withIcon(GoogleMaterial.Icon.gmd_info).withSelectedTextColorRes(R.color.primary)

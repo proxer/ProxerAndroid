@@ -67,4 +67,7 @@ public class ProxerParser {
         return result;
     }
 
+    public static String parseLoginJSON(@NonNull JSONObject object) throws JSONException {
+        return object.getString("uid");
+    }
 }
