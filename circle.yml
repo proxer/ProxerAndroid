@@ -11,4 +11,4 @@ test:
     - circle-android wait-for-boot
     
   override:
-    - ./gradlew connectedAndroidTest
+    - ./gradlew connectedAndroidTest -PdisablePreDex
