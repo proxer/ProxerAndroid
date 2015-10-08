@@ -38,3 +38,7 @@
 -keepclasseswithmembernames class * {
     @butterknife.* <methods>;
 }
+
+-dontwarn com.orhanobut.hawk.**
+-keep class com.google.gson.** { *; }
+-keepattributes Signature
