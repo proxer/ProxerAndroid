@@ -53,6 +53,9 @@ import com.rubengees.proxerme.util.SnackbarManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 import static com.rubengees.proxerme.manager.NewsManager.NEWS_ON_PAGE;
 import static com.rubengees.proxerme.manager.NewsManager.OFFSET_NOT_CALCULABLE;
 import static com.rubengees.proxerme.manager.NewsManager.getInstance;
@@ -72,7 +75,8 @@ public class DashboardActivity extends MainActivity {
     private static final int DRAWER_ID_DEFAULT = DRAWER_ID_NEWS;
     private static final String STATE_CURRENT_DRAWER_ITEM_ID = "current_drawer_item_id";
 
-    private Toolbar toolbar;
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
 
     private Drawer drawer;
 
@@ -140,7 +144,7 @@ public class DashboardActivity extends MainActivity {
             }
         }
 
-        findViews();
+        ButterKnife.bind(this);
         initViews();
         initDrawer(savedInstanceState);
 
@@ -215,10 +219,6 @@ public class DashboardActivity extends MainActivity {
         } else {
             drawer.setSelection(DRAWER_ID_DEFAULT);
         }
-    }
-
-    private void findViews() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
     }
 
     private void initViews() {

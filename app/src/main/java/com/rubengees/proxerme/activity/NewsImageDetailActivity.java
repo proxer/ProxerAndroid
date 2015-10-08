@@ -24,7 +24,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -35,6 +34,10 @@ import com.rubengees.proxerme.R;
 import com.rubengees.proxerme.connection.UrlHolder;
 import com.rubengees.proxerme.entity.News;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 /**
  * An Activity which shows a image with an animation on Lollipop and higher.
  * It also has a transparent background.
@@ -44,6 +47,9 @@ import com.rubengees.proxerme.entity.News;
 public class NewsImageDetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_NEWS = "extra_news";
+
+    @Bind(R.id.activity_news_image_detail_image)
+    ImageView image;
 
     public static void navigateTo(@NonNull Activity context, @NonNull ImageView image, @NonNull News news) {
         Intent intent = new Intent(context, NewsImageDetailActivity.class);
@@ -64,9 +70,9 @@ public class NewsImageDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_image_detail);
 
-        View root = findViewById(R.id.activity_news_image_detail_root);
+        ButterKnife.bind(this);
+
         News news = getIntent().getParcelableExtra(EXTRA_NEWS);
-        ImageView image = (ImageView) findViewById(R.id.activity_news_image_detail_image);
 
         supportPostponeEnterTransition();
         Glide.with(this).load(UrlHolder.getNewsImageUrl(news.getId(), news.getImageId()))
@@ -88,13 +94,6 @@ public class NewsImageDetailActivity extends AppCompatActivity {
                     }
                 })
                 .into(image);
-
-        root.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                supportFinishAfterTransition();
-            }
-        });
     }
 
     @Override
@@ -106,5 +105,10 @@ public class NewsImageDetailActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @OnClick(R.id.activity_news_image_detail_root)
+    void exit() {
+        supportFinishAfterTransition();
     }
 }

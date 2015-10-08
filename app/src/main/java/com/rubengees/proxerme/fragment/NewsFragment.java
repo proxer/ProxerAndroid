@@ -45,6 +45,9 @@ import com.rubengees.proxerme.util.Utils;
 
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 import static com.rubengees.proxerme.manager.NewsManager.getInstance;
 
 /**
@@ -58,16 +61,17 @@ public class NewsFragment extends MainFragment {
     private static final String STATE_CURRENT_PAGE = "news_current_page";
     private static final String STATE_LAST_LOADED_PAGE = "news_last_loaded_page";
     private static final String STATE_ERROR_MESSAGE = "news_error_message";
+    View root;
+    @Bind(R.id.fragment_news_list_container)
+    SwipeRefreshLayout swipeRefreshLayout;
+    @Bind(R.id.fragment_news_list)
+    RecyclerView list;
     private NewsAdapter adapter;
-    private SwipeRefreshLayout swipeRefreshLayout;
-
     private boolean loading = false;
     private int currentPage = 1;
     private int lastLoadedPage = -1;
-
     private String currentErrorMessage;
     private boolean methodBeforeErrorInsert = false;
-    private View root;
 
     public NewsFragment() {
 
@@ -120,9 +124,8 @@ public class NewsFragment extends MainFragment {
                              Bundle savedInstanceState) {
 
         root = inflater.inflate(R.layout.fragment_news, container, false);
-        swipeRefreshLayout = (SwipeRefreshLayout) root
-                .findViewById(R.id.fragment_news_list_container);
-        RecyclerView list = (RecyclerView) swipeRefreshLayout.findViewById(R.id.fragment_news_list);
+
+        ButterKnife.bind(this, root);
 
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
                 getActivity() == null ? 1 : Utils.calculateSpanAmount(getActivity()),
@@ -157,6 +160,14 @@ public class NewsFragment extends MainFragment {
         }
 
         return root;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        root = null;
+        ButterKnife.unbind(this);
     }
 
     @Override
