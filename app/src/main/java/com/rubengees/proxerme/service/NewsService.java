@@ -21,8 +21,8 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.afollestad.bridge.BridgeException;
-import com.rubengees.proxerme.connection.ProxerConnection;
-import com.rubengees.proxerme.entity.News;
+import com.proxerme.library.connection.ProxerConnection;
+import com.proxerme.library.entity.News;
 import com.rubengees.proxerme.manager.NewsManager;
 import com.rubengees.proxerme.manager.NotificationManager;
 
@@ -62,7 +62,7 @@ public class NewsService extends IntentService {
     }
 
     private void handleActionLoadNews() {
-        ProxerConnection.initBridge();
+        ProxerConnection.init();
         NewsManager manager = NewsManager.getInstance(this);
 
         try {

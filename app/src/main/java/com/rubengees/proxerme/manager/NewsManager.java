@@ -27,7 +27,7 @@ import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.rubengees.proxerme.entity.News;
+import com.proxerme.library.entity.News;
 import com.rubengees.proxerme.receiver.BootReceiver;
 import com.rubengees.proxerme.receiver.NewsReceiver;
 

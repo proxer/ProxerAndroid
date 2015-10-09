@@ -3,7 +3,7 @@ package com.rubengees.proxerme.manager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.rubengees.proxerme.entity.LoginUser;
+import com.proxerme.library.entity.LoginUser;
 
 /**
  * Todo: Describe Class

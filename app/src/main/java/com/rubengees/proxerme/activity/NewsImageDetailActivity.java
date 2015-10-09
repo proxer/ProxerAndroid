@@ -30,9 +30,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.proxerme.library.connection.UrlHolder;
+import com.proxerme.library.entity.News;
 import com.rubengees.proxerme.R;
-import com.rubengees.proxerme.connection.UrlHolder;
-import com.rubengees.proxerme.entity.News;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

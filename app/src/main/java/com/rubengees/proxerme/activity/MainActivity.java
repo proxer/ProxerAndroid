@@ -25,8 +25,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
 import com.afollestad.bridge.Bridge;
+import com.proxerme.library.connection.ProxerConnection;
 import com.rubengees.proxerme.R;
-import com.rubengees.proxerme.connection.ProxerConnection;
 import com.rubengees.proxerme.customtabs.CustomTabActivityHelper;
 import com.rubengees.proxerme.customtabs.WebviewFallback;
 
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ProxerConnection.initBridge();
+        ProxerConnection.init();
         customTabActivityHelper = new CustomTabActivityHelper();
     }
 

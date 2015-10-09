@@ -21,9 +21,9 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.app.NotificationCompat;
 
+import com.proxerme.library.entity.News;
 import com.rubengees.proxerme.R;
 import com.rubengees.proxerme.activity.DashboardActivity;
-import com.rubengees.proxerme.entity.News;
 
 import java.util.Arrays;
 import java.util.List;

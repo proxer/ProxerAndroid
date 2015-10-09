@@ -30,9 +30,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
+import com.proxerme.library.connection.UrlHolder;
+import com.proxerme.library.entity.News;
 import com.rubengees.proxerme.R;
-import com.rubengees.proxerme.connection.UrlHolder;
-import com.rubengees.proxerme.entity.News;
+import com.rubengees.proxerme.manager.NewsManager;
 import com.rubengees.proxerme.util.TimeUtils;
 
 import java.util.ArrayList;
@@ -42,8 +43,6 @@ import java.util.List;
 
 import static com.rubengees.proxerme.manager.NewsManager.NEWS_ON_PAGE;
 import static com.rubengees.proxerme.manager.NewsManager.OFFSET_NOT_CALCULABLE;
-import static com.rubengees.proxerme.manager.NewsManager.calculateOffsetFromEnd;
-import static com.rubengees.proxerme.manager.NewsManager.calculateOffsetFromStart;
 
 /**
  * An adapter for {@link News}, for usage in a {@link RecyclerView}.
@@ -137,7 +136,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
      */
     public int insertAtStart(@NonNull List<News> news) {
         if (!news.isEmpty()) {
-            int offset = calculateOffsetFromStart(news, this.list.get(0).getId());
+            int offset = NewsManager.calculateOffsetFromStart(news, this.list.get(0).getId());
 
             if (offset >= 0) {
                 news = news.subList(0, offset);
@@ -154,7 +153,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
     public int append(@NonNull List<News> news) {
         if (!news.isEmpty()) {
-            int offset = calculateOffsetFromEnd(this.list, news.get(0));
+            int offset = NewsManager.calculateOffsetFromEnd(this.list, news.get(0));
 
             if (offset > 0) {
                 news = news.subList(offset, news.size());

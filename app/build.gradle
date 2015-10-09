@@ -46,4 +46,5 @@ dependencies {
         transitive = true;
     }
     compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.github.proxer:ProxerLibAndroid:1.0@aar'
 }

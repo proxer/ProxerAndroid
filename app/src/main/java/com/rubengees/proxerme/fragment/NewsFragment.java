@@ -29,15 +29,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.proxerme.library.connection.ErrorHandler;
+import com.proxerme.library.connection.ProxerConnection;
+import com.proxerme.library.connection.ProxerException;
+import com.proxerme.library.connection.UrlHolder;
+import com.proxerme.library.entity.News;
 import com.rubengees.proxerme.R;
 import com.rubengees.proxerme.activity.DashboardActivity;
 import com.rubengees.proxerme.activity.NewsImageDetailActivity;
 import com.rubengees.proxerme.adapter.NewsAdapter;
-import com.rubengees.proxerme.connection.ErrorHandler;
-import com.rubengees.proxerme.connection.ProxerConnection;
-import com.rubengees.proxerme.connection.ProxerException;
-import com.rubengees.proxerme.connection.UrlHolder;
-import com.rubengees.proxerme.entity.News;
 import com.rubengees.proxerme.manager.NewsManager;
 import com.rubengees.proxerme.util.EndlessRecyclerOnScrollListener;
 import com.rubengees.proxerme.util.SnackbarManager;
@@ -49,6 +49,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 import static com.rubengees.proxerme.manager.NewsManager.getInstance;
+import static com.rubengees.proxerme.util.ErrorHandler.getMessageForErrorCode;
 
 /**
  * A {@link Fragment], retrieving and displaying News.
@@ -213,7 +214,7 @@ public class NewsFragment extends MainFragment {
                 if (exception.getErrorCode() == ErrorHandler.ErrorCodes.PROXER) {
                     currentErrorMessage = exception.getMessage();
                 } else {
-                    currentErrorMessage = ErrorHandler.getMessageForErrorCode(getContext(),
+                    currentErrorMessage = getMessageForErrorCode(getContext(),
                             exception.getErrorCode());
                 }
 
