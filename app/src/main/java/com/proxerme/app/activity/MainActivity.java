@@ -8,7 +8,6 @@ import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
-import com.afollestad.bridge.Bridge;
 import com.proxerme.app.R;
 import com.proxerme.app.customtabs.CustomTabActivityHelper;
 import com.proxerme.app.customtabs.WebviewFallback;
@@ -45,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
 
         customTabActivityHelper.unbindCustomTabsService(this);
-        Bridge.cleanup();
+        ProxerConnection.cleanup();
     }
 
     public void setLikelyUrl(@NonNull String url) {

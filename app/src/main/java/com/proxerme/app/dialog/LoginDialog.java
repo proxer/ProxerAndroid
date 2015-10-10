@@ -129,34 +129,36 @@ public class LoginDialog extends MainDialog<LoginDialog.LoginDialogCallback> {
     }
 
     private void login() {
-        String username = usernameInput.getText().toString();
-        String password = passwordInput.getText().toString();
+        if (!loading) {
+            String username = usernameInput.getText().toString();
+            String password = passwordInput.getText().toString();
 
-        if (checkInput(username, password)) {
-            loading = true;
-            handleVisibility();
+            if (checkInput(username, password)) {
+                loading = true;
+                handleVisibility();
 
-            ProxerConnection.login(new LoginUser(username, password),
-                    new ProxerConnection.ResultCallback<LoginUser>() {
-                        @Override
-                        public void onResult(@NonNull LoginUser user) {
-                            if (getCallback() != null) {
-                                getCallback().onLogin(user);
+                ProxerConnection.login(new LoginUser(username, password),
+                        new ProxerConnection.ResultCallback<LoginUser>() {
+                            @Override
+                            public void onResult(@NonNull LoginUser user) {
+                                if (getCallback() != null) {
+                                    getCallback().onLogin(user);
+                                }
+
+                                dismiss();
                             }
 
-                            dismiss();
-                        }
+                            @Override
+                            public void onError(@NonNull ProxerException e) {
+                                Toast.makeText(getContext(),
+                                        ErrorHandler.getMessageForErrorCode(getContext(),
+                                                e.getErrorCode()), Toast.LENGTH_LONG).show();
 
-                        @Override
-                        public void onError(@NonNull ProxerException e) {
-                            Toast.makeText(getContext(),
-                                    ErrorHandler.getMessageForErrorCode(getContext(),
-                                            e.getErrorCode()), Toast.LENGTH_LONG).show();
-
-                            loading = false;
-                            handleVisibility();
-                        }
-                    });
+                                loading = false;
+                                handleVisibility();
+                            }
+                        });
+            }
         }
     }
 
