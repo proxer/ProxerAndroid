@@ -331,7 +331,8 @@ public class DashboardActivity extends MainActivity {
                                 .withAboutDescription(getString(R.string.about_description))
                                 .withAboutIconShown(true).withAutoDetect(false)
                                 .withAboutAppName(getString(R.string.app_name)).withLibraries("glide",
-                                        "jodatimeandroid", "bridge")
+                                        "systembartint", "jodatimeandroid", "bridge", "hawk",
+                                        "butterknife")
                                 .withFields(R.string.class.getFields()).fragment(),
                         getString(R.string.drawer_item_info));
                 return false;
