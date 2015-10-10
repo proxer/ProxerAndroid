@@ -6,19 +6,16 @@ import com.proxerme.app.activity.DashboardActivity;
 import com.proxerme.app.interfaces.OnActivityListener;
 
 /**
- * An abstract {@link Fragment}, which all other Fragments should inherit from. It provides some
- * useful methods and implements interfaces, all inheritors share.
+ * Todo: Describe Class
+ *
+ * @author Ruben Gees
  */
-public abstract class MainFragment extends Fragment implements OnActivityListener {
+public class DashboardFragment extends Fragment implements OnActivityListener {
 
-    public MainFragment() {
-        
-    }
-
-    protected DashboardActivity getDashboardActivity(){
+    protected DashboardActivity getDashboardActivity() {
         try {
             return (DashboardActivity) getActivity();
-        }catch(ClassCastException e){
+        } catch (ClassCastException e) {
             throw new RuntimeException("Don't use this Fragment in another" +
                     " Activity than DashboardActivity.");
         }
@@ -33,4 +30,5 @@ public abstract class MainFragment extends Fragment implements OnActivityListene
     public void showErrorIfNecessary() {
 
     }
+
 }

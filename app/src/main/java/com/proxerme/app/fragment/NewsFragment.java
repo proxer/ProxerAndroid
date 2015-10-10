@@ -40,18 +40,23 @@ import static com.proxerme.app.util.ErrorHandler.getMessageForErrorCode;
  *
  * @author Ruben Gees
  */
-public class NewsFragment extends MainFragment {
+public class NewsFragment extends DashboardFragment {
 
-    public static final String STATE_METHOD_BEFORE_ERROR = "news_method_before_error";
+    private static final String STATE_METHOD_BEFORE_ERROR = "news_method_before_error";
     private static final String STATE_CURRENT_PAGE = "news_current_page";
     private static final String STATE_LAST_LOADED_PAGE = "news_last_loaded_page";
     private static final String STATE_ERROR_MESSAGE = "news_error_message";
+
     View root;
+
     @Bind(R.id.fragment_news_list_container)
     SwipeRefreshLayout swipeRefreshLayout;
+
     @Bind(R.id.fragment_news_list)
     RecyclerView list;
+
     private NewsAdapter adapter;
+
     private boolean loading = false;
     private int currentPage = 1;
     private int lastLoadedPage = -1;
