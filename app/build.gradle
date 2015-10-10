@@ -31,20 +31,20 @@ dependencies {
     compile 'com.android.support:preference-v7:23.0.1'
     compile 'com.android.support:customtabs:23.0.1'
 
+    compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.github.orhanobut:hawk:1.19'
     compile 'net.danlew:android.joda:2.8.2'
     compile 'com.github.bumptech.glide:glide:3.6.1'
     compile('com.mikepenz:aboutlibraries:5.2.4@aar') {
         transitive = true
     }
-    compile('com.mikepenz:materialdrawer:4.3.1@aar') {
+    compile('com.mikepenz:materialdrawer:4.3.4@aar') {
         transitive = true
     }
     compile 'com.mikepenz:google-material-typeface:1.2.0.1@aar'
-    compile('com.rubengees:introduction:1.1.1@aar') {
+    compile('com.github.rubengees:introduction:1.1.2@aar') {
         transitive = true;
     }
-    compile 'com.jakewharton:butterknife:7.0.1'
     compile('com.github.proxer:ProxerLibAndroid:1.0@aar') {
         transitive = true
     }
