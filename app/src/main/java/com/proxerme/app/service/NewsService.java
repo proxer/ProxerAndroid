@@ -4,13 +4,11 @@ import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 
-import com.afollestad.bridge.BridgeException;
 import com.proxerme.app.manager.NewsManager;
 import com.proxerme.app.manager.NotificationManager;
 import com.proxerme.library.connection.ProxerConnection;
+import com.proxerme.library.connection.ProxerException;
 import com.proxerme.library.entity.News;
-
-import org.json.JSONException;
 
 import java.util.List;
 
@@ -60,7 +58,7 @@ public class NewsService extends IntentService {
                 manager.setNewNews(offset);
                 NotificationManager.showNewsNotification(this, news, offset);
             }
-        } catch (BridgeException | JSONException e) {
+        } catch (ProxerException e) {
             //ignore
         }
     }
