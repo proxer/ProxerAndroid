@@ -65,11 +65,11 @@ public class DashboardActivity extends MainActivity {
     public static final int DRAWER_ID_SETTINGS = 12;
     public static final String EXTRA_DRAWER_ITEM = "extra_drawer_item";
     private static final int DRAWER_ID_DEFAULT = DRAWER_ID_NEWS;
-    private static final String STATE_CURRENT_DRAWER_ITEM_ID = "current_drawer_item_id";
     private static final int HEADER_ID_GUEST = 100;
     private static final int HEADER_ID_USER = 101;
     private static final int HEADER_ID_LOGIN = 111;
     private static final int HEADER_ID_CHANGE = 112;
+    private static final String STATE_CURRENT_DRAWER_ITEM_ID = "current_drawer_item_id";
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
