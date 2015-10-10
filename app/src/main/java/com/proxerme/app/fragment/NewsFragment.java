@@ -59,7 +59,7 @@ public class NewsFragment extends DashboardFragment {
 
     private boolean loading = false;
     private int currentPage = 1;
-    private int lastLoadedPage = -1;
+    private int lastLoadedPage = 1;
     private String currentErrorMessage;
     private boolean methodBeforeErrorInsert = false;
 
