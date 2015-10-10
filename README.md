@@ -17,9 +17,9 @@ run the following commands:
 - `cd ProxerMe`
 
 Windows:
-- `gradlew.bat assemble`
+- `gradlew.bat assembleDebug`
 
 Linux:
-- `./gradlew assemble`
+- `./gradlew assembleDebug`
 
 You can find the apk in `app/build/outputs/apk/`.
