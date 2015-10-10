@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.1"
 
     defaultConfig {
-        applicationId "com.rubengees.proxerme"
+        applicationId "com.proxerme.app"
         minSdkVersion 15
         targetSdkVersion 23
         versionCode 5

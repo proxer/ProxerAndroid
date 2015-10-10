@@ -15,7 +15,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="com.rubengees.proxerme.adapter.NewsAdapter">
+    tools:context=".adapter.NewsAdapter">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
@@ -33,7 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <com.rubengees.proxerme.view.WidthAspectImageView
+                <com.proxerme.app.view.WidthAspectImageView
                     android:id="@+id/item_news_image"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
