@@ -53,7 +53,11 @@ public class StorageManager {
         String password = Hawk.get(STORAGE_USER_PASSWORD);
         String userId = Hawk.get(STORAGE_USER_ID);
 
-        return new LoginUser(username, password, userId);
+        if (username == null || password == null || userId == null) {
+            return null;
+        } else {
+            return new LoginUser(username, password, userId);
+        }
     }
 
     public static void setUser(@NonNull LoginUser user) {

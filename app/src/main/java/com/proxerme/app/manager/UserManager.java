@@ -32,10 +32,12 @@ public class UserManager {
     }
 
     public void removeUser() {
+        this.user = null;
         StorageManager.removeUser();
     }
 
     public void changeUser(@NonNull LoginUser user) {
+        this.user = user;
         StorageManager.setUser(user);
     }
 }

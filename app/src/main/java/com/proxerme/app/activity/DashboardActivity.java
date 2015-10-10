@@ -14,20 +14,28 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.materialdrawer.AccountHeader;
+import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.holder.BadgeStyle;
 import com.mikepenz.materialdrawer.holder.StringHolder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileSettingDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.proxerme.app.R;
+import com.proxerme.app.dialog.LoginDialog;
 import com.proxerme.app.fragment.NewsFragment;
 import com.proxerme.app.fragment.SettingsFragment;
 import com.proxerme.app.interfaces.OnActivityListener;
 import com.proxerme.app.manager.PreferenceManager;
 import com.proxerme.app.manager.StorageManager;
+import com.proxerme.app.manager.UserManager;
 import com.proxerme.app.util.SnackbarManager;
 import com.proxerme.library.connection.UrlHolder;
+import com.proxerme.library.entity.LoginUser;
 import com.rubengees.introduction.IntroductionActivity;
 import com.rubengees.introduction.IntroductionBuilder;
 import com.rubengees.introduction.IntroductionConfiguration;
@@ -58,10 +66,15 @@ public class DashboardActivity extends MainActivity {
     public static final String EXTRA_DRAWER_ITEM = "extra_drawer_item";
     private static final int DRAWER_ID_DEFAULT = DRAWER_ID_NEWS;
     private static final String STATE_CURRENT_DRAWER_ITEM_ID = "current_drawer_item_id";
+    private static final int HEADER_ID_GUEST = 100;
+    private static final int HEADER_ID_USER = 101;
+    private static final int HEADER_ID_LOGIN = 111;
+    private static final int HEADER_ID_CHANGE = 112;
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
 
+    private AccountHeader header;
     private Drawer drawer;
 
     private int currentDrawerItemId = -1;
@@ -104,12 +117,49 @@ public class DashboardActivity extends MainActivity {
                     return true;
                 }
             };
+    private LoginDialog.LoginDialogCallback loginDialogCallback =
+            new LoginDialog.LoginDialogCallback() {
+                @Override
+                public void onLogin(LoginUser user) {
+                    UserManager.getInstance().changeUser(user);
+                    refreshHeader();
+                }
+            };
+    private AccountHeader.OnAccountHeaderListener onAccountHeaderClickListener =
+            new AccountHeader.OnAccountHeaderListener() {
+                @Override
+                public boolean onProfileChanged(View view, IProfile profile, boolean current) {
+                    switch (profile.getIdentifier()) {
+                        case HEADER_ID_GUEST:
+                            showLoginDialog();
+                            break;
+                        case HEADER_ID_USER:
+                            //Don't do anything for now
+                            break;
+                        case HEADER_ID_LOGIN:
+                            showLoginDialog();
+                            break;
+                        case HEADER_ID_CHANGE:
+                            showLoginDialog();
+                            break;
+                    }
+
+                    return false;
+                }
+            };
 
     public static Intent getSectionIntent(@NonNull Context context, int drawerItemId) {
         Intent intent = new Intent(context, DashboardActivity.class);
 
         intent.putExtra(EXTRA_DRAWER_ITEM, drawerItemId);
         return intent;
+    }
+
+    private void showLoginDialog() {
+        LoginDialog dialog = LoginDialog.newInstance();
+
+        dialog.setCallback(loginDialogCallback);
+        dialog.show(getSupportFragmentManager(), "dialog_login");
     }
 
     @Override
@@ -126,10 +176,18 @@ public class DashboardActivity extends MainActivity {
             } catch (ClassCastException e) {
                 onActivityListener = null;
             }
+
+            LoginDialog dialog = (LoginDialog) getSupportFragmentManager()
+                    .findFragmentByTag("dialog_login");
+
+            if (dialog != null) {
+                dialog.setCallback(loginDialogCallback);
+            }
         }
 
         ButterKnife.bind(this);
         initViews();
+        initHeader(savedInstanceState);
         initDrawer(savedInstanceState);
 
         int drawerItemToLoad = getIntent().getIntExtra(EXTRA_DRAWER_ITEM, -1);
@@ -173,6 +231,7 @@ public class DashboardActivity extends MainActivity {
         super.onSaveInstanceState(outState);
 
         drawer.saveInstanceState(outState);
+        header.saveInstanceState(outState);
         outState.putInt(STATE_CURRENT_DRAWER_ITEM_ID, currentDrawerItemId);
     }
 
@@ -209,8 +268,36 @@ public class DashboardActivity extends MainActivity {
         setSupportActionBar(toolbar);
     }
 
+    private void initHeader(Bundle savedInstanceState) {
+        header = new AccountHeaderBuilder().withHeaderBackground(R.color.accent)
+                .withActivity(this).withSavedInstance(savedInstanceState)
+                .withProfiles(generateProfiles())
+                .withOnAccountHeaderListener(onAccountHeaderClickListener).build();
+    }
+
+    private ArrayList<IProfile> generateProfiles() {
+        LoginUser user = UserManager.getInstance().getUser();
+        ArrayList<IProfile> result = new ArrayList<>();
+
+        if (user == null) {
+            result.add(new ProfileDrawerItem().withName(getString(R.string.drawer_profile_guest))
+                    .withIcon(R.mipmap.ic_launcher)
+                    .withIdentifier(HEADER_ID_GUEST));
+            result.add(new ProfileSettingDrawerItem().withName(getString(R.string.drawer_header_login))
+                    .withIcon(GoogleMaterial.Icon.gmd_person_add).withIdentifier(HEADER_ID_LOGIN));
+        } else {
+            result.add(new ProfileDrawerItem().withName(user.getUsername())
+                    .withIdentifier(HEADER_ID_USER));
+            result.add(new ProfileSettingDrawerItem().withName(getString(R.string.drawer_header_change))
+                    .withIcon(GoogleMaterial.Icon.gmd_group).withIdentifier(HEADER_ID_CHANGE));
+        }
+
+        return result;
+    }
+
     private void initDrawer(@Nullable Bundle savedInstanceState) {
         drawer = new DrawerBuilder(this)
+                .withAccountHeader(header)
                 .withDrawerItems(generateDrawerItems())
                 .withStickyDrawerItems(generateStickyDrawerItems())
                 .withOnDrawerListener(onDrawerListener)
@@ -220,15 +307,6 @@ public class DashboardActivity extends MainActivity {
                 .withSavedInstance(savedInstanceState).build();
 
         initBadges();
-    }
-
-    private void initBadges() {
-        int newNews = getInstance(this).getNewNews();
-
-        if (newNews > 0 || newNews == OFFSET_NOT_CALCULABLE) {
-            setBadge(DRAWER_ID_NEWS, newNews == OFFSET_NOT_CALCULABLE ? (NEWS_ON_PAGE + "+") :
-                    (String.valueOf(newNews)));
-        }
     }
 
     @NonNull
@@ -266,6 +344,15 @@ public class DashboardActivity extends MainActivity {
                 .withIconTintingEnabled(true).withIdentifier(DRAWER_ID_SETTINGS));
 
         return result;
+    }
+
+    private void initBadges() {
+        int newNews = getInstance(this).getNewNews();
+
+        if (newNews > 0 || newNews == OFFSET_NOT_CALCULABLE) {
+            setBadge(DRAWER_ID_NEWS, newNews == OFFSET_NOT_CALCULABLE ? (NEWS_ON_PAGE + "+") :
+                    (String.valueOf(newNews)));
+        }
     }
 
     private void initIntroduction() {
@@ -321,6 +408,10 @@ public class DashboardActivity extends MainActivity {
                 fragment).commit();
     }
 
+    private void refreshHeader() {
+        header.setProfiles(generateProfiles());
+    }
+
     private boolean handleOnDrawerItemClick(int id) {
         switch (id) {
             case DRAWER_ID_NEWS:
@@ -330,9 +421,9 @@ public class DashboardActivity extends MainActivity {
                 setFragment(new LibsBuilder().withAboutVersionShownName(true)
                                 .withAboutDescription(getString(R.string.about_description))
                                 .withAboutIconShown(true).withAutoDetect(false)
-                                .withAboutAppName(getString(R.string.app_name)).withLibraries("glide",
-                                        "systembartint", "jodatimeandroid", "bridge", "hawk",
-                                        "butterknife")
+                                .withAboutAppName(getString(R.string.app_name))
+                                .withLibraries("glide", "systembartint", "jodatimeandroid",
+                                        "bridge", "hawk", "butterknife", "materialdialogs")
                                 .withFields(R.string.class.getFields()).fragment(),
                         getString(R.string.drawer_item_info));
                 return false;

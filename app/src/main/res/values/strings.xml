@@ -38,4 +38,14 @@
     <string name="interval_hourly">Hourly</string>
     <string name="interval_two_hours">Every two hours</string>
     <string name="interval_four_hours">Every four hours</string>
+    <string name="dialog_login_error_no_username">You have to specify a username</string>
+    <string name="dialog_login_error_no_password">You have to specify a password</string>
+    <string name="drawer_profile_guest">Guest</string>
+    <string name="drawer_header_login">Login</string>
+    <string name="drawer_header_change">Change user</string>
+    <string name="dialog_login_title">Login</string>
+    <string name="dialog_login_go">Login</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_login_username_hint">Username</string>
+    <string name="dialog_login_password_hint">Password</string>
 </resources>

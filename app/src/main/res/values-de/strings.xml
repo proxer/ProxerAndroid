@@ -37,4 +37,14 @@
     <string name="interval_hourly">Stündlich</string>
     <string name="interval_two_hours">Alle zwei Stunden</string>
     <string name="preference_notifications_interval_title">Aktualisierungsintervall</string>
+    <string name="dialog_login_error_no_username">Du musst einen Nutzernamen angeben</string>
+    <string name="dialog_login_error_no_password">Du musst ein Passwort angeben</string>
+    <string name="drawer_profile_guest">Gast</string>
+    <string name="drawer_header_login">Login</string>
+    <string name="drawer_header_change">Nutzer wechseln</string>
+    <string name="dialog_login_title">Login</string>
+    <string name="dialog_login_go">Login</string>
+    <string name="dialog_cancel">Abbrechen</string>
+    <string name="dialog_login_username_hint">Nutzername</string>
+    <string name="dialog_login_password_hint">Passwort</string>
 </resources>
