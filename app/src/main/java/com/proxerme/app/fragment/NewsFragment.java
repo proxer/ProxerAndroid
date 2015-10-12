@@ -47,11 +47,10 @@ public class NewsFragment extends DashboardFragment {
     private static final String STATE_CURRENT_PAGE = "news_current_page";
     private static final String STATE_LAST_LOADED_PAGE = "news_last_loaded_page";
     private static final String STATE_ERROR_MESSAGE = "news_error_message";
-    View root;
 
+    View root;
     @Bind(R.id.fragment_news_list_container)
     SwipeRefreshLayout swipeRefreshLayout;
-
     @Bind(R.id.fragment_news_list)
     RecyclerView list;
 
