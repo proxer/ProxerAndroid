@@ -42,7 +42,7 @@ import static com.proxerme.app.util.ErrorHandler.getMessageForErrorCode;
  */
 public class NewsFragment extends DashboardFragment {
 
-    public static final String STATE_NEWS_LOADING = "news_loading";
+    private static final String STATE_NEWS_LOADING = "news_loading";
     private static final String STATE_METHOD_BEFORE_ERROR = "news_method_before_error";
     private static final String STATE_CURRENT_PAGE = "news_current_page";
     private static final String STATE_LAST_LOADED_PAGE = "news_last_loaded_page";
