@@ -93,6 +93,14 @@ public class LoginDialog extends DialogFragment {
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        root = null;
+        ButterKnife.unbind(this);
+    }
+
+    @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
 

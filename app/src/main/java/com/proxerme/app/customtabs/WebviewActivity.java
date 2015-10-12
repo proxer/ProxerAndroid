@@ -25,6 +25,9 @@ import android.webkit.WebViewClient;
 
 import com.proxerme.app.R;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * This Activity is used as a fallback when there is no browser installed that supports
  * Chrome Custom Tabs
@@ -33,15 +36,19 @@ public class WebviewActivity extends AppCompatActivity {
 
     public static final String EXTRA_URL = "url";
 
+    @Bind(R.id.webview)
+    WebView webView;
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webview);
 
-        String url = getIntent().getStringExtra(EXTRA_URL);
+        ButterKnife.bind(this);
 
-        WebView webView = (WebView) findViewById(R.id.webview);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        String url = getIntent().getStringExtra(EXTRA_URL);
 
         webView.setWebViewClient(new WebViewClient());
         WebSettings webSettings = webView.getSettings();

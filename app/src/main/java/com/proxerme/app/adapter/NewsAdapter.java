@@ -25,6 +25,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 import static com.proxerme.app.manager.NewsManager.NEWS_ON_PAGE;
 import static com.proxerme.app.manager.NewsManager.OFFSET_NOT_CALCULABLE;
 
@@ -177,66 +181,59 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
+        @Bind(R.id.item_news_image)
         ImageView image;
+        @Bind(R.id.item_news_title)
         TextView title;
+        @Bind(R.id.item_news_description)
         TextView description;
+        @Bind(R.id.item_news_category)
         TextView category;
+        @Bind(R.id.item_news_time)
         TextView time;
-
+        @Bind(R.id.item_news_expand_description)
         ImageButton expand;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
 
-            image = (ImageView) itemView.findViewById(R.id.item_news_image);
-            title = (TextView) itemView.findViewById(R.id.item_news_title);
-            description = (TextView) itemView.findViewById(R.id.item_news_description);
-            category = (TextView) itemView.findViewById(R.id.item_news_category);
-            time = (TextView) itemView.findViewById(R.id.item_news_time);
-            expand = (ImageButton) itemView.findViewById(R.id.item_news_expand_description);
+        @OnClick(R.id.item_news_content_container)
+        void onContentClick(View view) {
+            if (onNewsInteractionListener != null) {
+                onNewsInteractionListener.onNewsClick(view, list.get(getLayoutPosition()));
+            }
+        }
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (onNewsInteractionListener != null) {
-                        onNewsInteractionListener.onNewsClick(v, list.get(getLayoutPosition()));
-                    }
+        @OnClick(R.id.item_news_image)
+        void onImageClick(View view) {
+            if (onNewsInteractionListener != null) {
+                onNewsInteractionListener.onNewsImageClick(view, list.get(getLayoutPosition()));
+            }
+        }
+
+        @OnClick(R.id.item_news_expand_description)
+        void onExpandClick(View view) {
+            News news = list.get(getLayoutPosition());
+            String id = news.getId();
+            boolean isExpanded = extensionMap.containsKey(id);
+
+            if (isExpanded) {
+                extensionMap.remove(id);
+
+                description.setMaxLines(DESCRIPTION_MAX_LINES);
+                ViewCompat.animate(view).rotationX(0f);
+            } else {
+                extensionMap.put(id, true);
+
+                description.setMaxLines(Integer.MAX_VALUE);
+                ViewCompat.animate(view).rotationX(ROTATION_HALF);
+
+                if (onNewsInteractionListener != null) {
+                    onNewsInteractionListener.onNewsExpanded(view, news);
                 }
-            });
-
-            image.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (onNewsInteractionListener != null) {
-                        onNewsInteractionListener.onNewsImageClick(v, list.get(getLayoutPosition()));
-                    }
-                }
-            });
-
-            expand.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    News news = list.get(getLayoutPosition());
-                    String id = news.getId();
-                    boolean isExpanded = extensionMap.containsKey(id);
-
-                    if (isExpanded) {
-                        extensionMap.remove(id);
-
-                        description.setMaxLines(DESCRIPTION_MAX_LINES);
-                        ViewCompat.animate(v).rotationX(0f);
-                    } else {
-                        extensionMap.put(id, true);
-
-                        description.setMaxLines(Integer.MAX_VALUE);
-                        ViewCompat.animate(v).rotationX(ROTATION_HALF);
-
-                        if (onNewsInteractionListener != null) {
-                            onNewsInteractionListener.onNewsExpanded(v, news);
-                        }
-                    }
-                }
-            });
+            }
         }
     }
 }
