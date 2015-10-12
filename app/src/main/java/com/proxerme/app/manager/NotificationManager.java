@@ -7,6 +7,7 @@ import android.support.v7.app.NotificationCompat;
 
 import com.proxerme.app.R;
 import com.proxerme.app.activity.DashboardActivity;
+import com.proxerme.app.util.MaterialDrawerHelper;
 import com.proxerme.library.entity.News;
 
 import java.util.Arrays;
@@ -55,7 +56,8 @@ public class NotificationManager {
 
             builder.setContentIntent(PendingIntent.getActivity(
                     context, 0, DashboardActivity.getSectionIntent(context,
-                            DashboardActivity.DRAWER_ID_NEWS, null), PendingIntent.FLAG_UPDATE_CURRENT));
+                            MaterialDrawerHelper.DRAWER_ID_NEWS, null),
+                    PendingIntent.FLAG_UPDATE_CURRENT));
 
             notificationManager.notify(NEWS_NOTIFICATION_ID, builder.build());
         }

@@ -14,11 +14,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.proxerme.app.R;
-import com.proxerme.app.activity.DashboardActivity;
 import com.proxerme.app.activity.NewsImageDetailActivity;
 import com.proxerme.app.adapter.NewsAdapter;
 import com.proxerme.app.manager.NewsManager;
 import com.proxerme.app.util.EndlessRecyclerOnScrollListener;
+import com.proxerme.app.util.MaterialDrawerHelper;
 import com.proxerme.app.util.SnackbarManager;
 import com.proxerme.app.util.Utils;
 import com.proxerme.library.connection.ErrorHandler;
@@ -186,7 +186,7 @@ public class NewsFragment extends DashboardFragment {
 
                 loading = false;
                 currentErrorMessage = null;
-                getDashboardActivity().setBadge(DashboardActivity.DRAWER_ID_NEWS, null);
+                getDashboardActivity().setBadge(MaterialDrawerHelper.DRAWER_ID_NEWS, null);
                 NewsManager manager = getInstance(getContext());
 
                 manager.setNewNews(0);
