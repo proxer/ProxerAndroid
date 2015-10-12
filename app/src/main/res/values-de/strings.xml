@@ -40,7 +40,7 @@
     <string name="dialog_login_error_no_username">Du musst einen Nutzernamen angeben</string>
     <string name="dialog_login_error_no_password">Du musst ein Passwort angeben</string>
     <string name="drawer_profile_guest">Gast</string>
-    <string name="drawer_header_login">Login</string>
+    <string name="drawer_header_login">Anmelden</string>
     <string name="drawer_header_change">Nutzer wechseln</string>
     <string name="dialog_login_title">Anmelden</string>
     <string name="dialog_login_go">Anmelden</string>
