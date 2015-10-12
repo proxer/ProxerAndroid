@@ -51,12 +51,11 @@ public class StorageManager {
     public static LoginUser getUser() {
         String username = Hawk.get(STORAGE_USER_USERNAME);
         String password = Hawk.get(STORAGE_USER_PASSWORD);
-        String userId = Hawk.get(STORAGE_USER_ID);
 
-        if (username == null || password == null || userId == null) {
+        if (username == null || password == null) {
             return null;
         } else {
-            return new LoginUser(username, password, userId);
+            return new LoginUser(username, password);
         }
     }
 
@@ -65,8 +64,7 @@ public class StorageManager {
             throw new IllegalArgumentException("The user must have a user id");
         } else {
             Hawk.chain(3).put(STORAGE_USER_USERNAME, user.getUsername())
-                    .put(STORAGE_USER_PASSWORD, user.getPassword())
-                    .put(STORAGE_USER_ID, user.getUserId()).commit();
+                    .put(STORAGE_USER_PASSWORD, user.getPassword()).commit();
         }
     }
 

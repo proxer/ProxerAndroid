@@ -23,7 +23,6 @@ import com.proxerme.app.manager.StorageManager;
 import com.proxerme.app.manager.UserManager;
 import com.proxerme.app.util.MaterialDrawerHelper;
 import com.proxerme.app.util.SnackbarManager;
-import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.connection.ProxerException;
 import com.proxerme.library.connection.UrlHolder;
 import com.proxerme.library.entity.LoginUser;
@@ -67,15 +66,6 @@ public class DashboardActivity extends MainActivity {
     private MaterialDrawerHelper drawerHelper;
     private OnActivityListener onActivityListener;
 
-    private LoginDialog.LoginDialogCallback loginDialogCallback =
-            new LoginDialog.LoginDialogCallback() {
-                @Override
-                public void onLogin(LoginUser user) {
-                    UserManager.getInstance().changeUser(user);
-                    drawerHelper.refreshHeader();
-                }
-            };
-
     private MaterialDrawerCallback drawerCallback = new MaterialDrawerCallback() {
         @Override
         public boolean onItemClick(int identifier) {
@@ -111,26 +101,7 @@ public class DashboardActivity extends MainActivity {
     }
 
     private void logout() {
-        ProxerConnection.logout(new ProxerConnection.ResultCallback<Void>() {
-            @Override
-            public void onResult(@NonNull Void aVoid) {
-                UserManager.getInstance().removeUser();
-                drawerHelper.refreshHeader();
-            }
-
-            @Override
-            public void onError(@NonNull ProxerException e) {
-                Toast.makeText(DashboardActivity.this, R.string.error_logout,
-                        Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
-    private void showLoginDialog() {
-        LoginDialog dialog = LoginDialog.newInstance();
-
-        dialog.setCallback(loginDialogCallback);
-        dialog.show(getSupportFragmentManager(), "dialog_login");
+        UserManager.getInstance().logout();
     }
 
     @Override
@@ -144,13 +115,6 @@ public class DashboardActivity extends MainActivity {
                         .findFragmentById(R.id.activity_main_content_container);
             } catch (ClassCastException e) {
                 onActivityListener = null;
-            }
-
-            LoginDialog dialog = (LoginDialog) getSupportFragmentManager()
-                    .findFragmentByTag("dialog_login");
-
-            if (dialog != null) {
-                dialog.setCallback(loginDialogCallback);
             }
         }
 
@@ -173,6 +137,24 @@ public class DashboardActivity extends MainActivity {
         } else if (savedInstanceState == null) {
             drawerHelper.select(drawerItemToLoad);
         }
+
+        UserManager.getInstance().addOnLoginStateListener(new UserManager.OnLoginStateListener() {
+            @Override
+            public void onLogin(@NonNull LoginUser user) {
+                drawerHelper.refreshHeader();
+            }
+
+            @Override
+            public void onLogout() {
+                drawerHelper.refreshHeader();
+            }
+
+            @Override
+            public void onLogoutFailed(@NonNull ProxerException exception) {
+                Toast.makeText(DashboardActivity.this, R.string.error_logout,
+                        Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override
@@ -299,6 +281,10 @@ public class DashboardActivity extends MainActivity {
             default:
                 return false;
         }
+    }
+
+    private void showLoginDialog(){
+        LoginDialog.newInstance().show(getSupportFragmentManager(), "dialog_login");
     }
 
     private boolean handleOnDrawerItemClick(int id) {

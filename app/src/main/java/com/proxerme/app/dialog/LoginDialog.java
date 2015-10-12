@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.proxerme.app.R;
+import com.proxerme.app.manager.UserManager;
 import com.proxerme.app.util.ErrorHandler;
 import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.connection.ProxerException;
@@ -33,7 +35,7 @@ import butterknife.ButterKnife;
  *
  * @author Ruben Gees
  */
-public class LoginDialog extends MainDialog<LoginDialog.LoginDialogCallback> {
+public class LoginDialog extends DialogFragment {
 
     ViewGroup root;
 
@@ -137,27 +139,23 @@ public class LoginDialog extends MainDialog<LoginDialog.LoginDialogCallback> {
                 loading = true;
                 handleVisibility();
 
-                ProxerConnection.login(new LoginUser(username, password),
-                        new ProxerConnection.ResultCallback<LoginUser>() {
-                            @Override
-                            public void onResult(@NonNull LoginUser user) {
-                                if (getCallback() != null) {
-                                    getCallback().onLogin(user);
-                                }
+                UserManager.getInstance().addOnLoginStateListener(new UserManager.OnLoginStateListener() {
+                    @Override
+                    public void onLogin(@NonNull LoginUser user) {
+                        dismiss();
+                    }
 
-                                dismiss();
-                            }
+                    @Override
+                    public void onLoginFailed(@NonNull ProxerException exception) {
+                        Toast.makeText(getContext(),
+                                ErrorHandler.getMessageForErrorCode(getContext(),
+                                        exception.getErrorCode()), Toast.LENGTH_LONG).show();
 
-                            @Override
-                            public void onError(@NonNull ProxerException e) {
-                                Toast.makeText(getContext(),
-                                        ErrorHandler.getMessageForErrorCode(getContext(),
-                                                e.getErrorCode()), Toast.LENGTH_LONG).show();
-
-                                loading = false;
-                                handleVisibility();
-                            }
-                        });
+                        loading = false;
+                        handleVisibility();
+                    }
+                });
+                UserManager.getInstance().login(new LoginUser(username, password));
             }
         }
     }
@@ -200,10 +198,6 @@ public class LoginDialog extends MainDialog<LoginDialog.LoginDialogCallback> {
     private void resetError(@NonNull TextInputLayout container) {
         container.setError(null);
         container.setErrorEnabled(false);
-    }
-
-    public interface LoginDialogCallback {
-        void onLogin(LoginUser user);
     }
 
     private static abstract class OnTextListener implements TextWatcher {
