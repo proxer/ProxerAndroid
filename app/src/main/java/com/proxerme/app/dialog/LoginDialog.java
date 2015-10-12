@@ -25,6 +25,7 @@ import com.proxerme.app.manager.UserManager;
 import com.proxerme.app.util.ErrorHandler;
 import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.connection.ProxerException;
+import com.proxerme.library.connection.ProxerTag;
 import com.proxerme.library.entity.LoginUser;
 
 import butterknife.Bind;
@@ -95,7 +96,7 @@ public class LoginDialog extends DialogFragment {
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
 
-        ProxerConnection.cancelSync(ProxerConnection.TAG_LOGIN, false);
+        ProxerConnection.cancelSync(ProxerTag.LOGIN, false);
     }
 
     private void findViews() {
