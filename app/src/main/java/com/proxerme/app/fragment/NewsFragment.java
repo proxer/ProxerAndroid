@@ -112,9 +112,7 @@ public class NewsFragment extends DashboardFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         root = inflater.inflate(R.layout.fragment_news, container, false);
-
         ButterKnife.bind(this, root);
 
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
@@ -187,12 +185,15 @@ public class NewsFragment extends DashboardFragment {
                 }
 
                 loading = false;
-                getDashboardActivity().setBadge(MaterialDrawerHelper.DRAWER_ID_NEWS, null);
                 NewsManager manager = getInstance(getContext());
 
                 manager.setNewNews(0);
                 manager.setLastId(result.get(0).getId());
                 manager.retrieveNewsLater();
+
+                if (getActivity() != null) {
+                    getDashboardActivity().setBadge(MaterialDrawerHelper.DRAWER_ID_NEWS, null);
+                }
 
                 handleResult(result, insert);
 
