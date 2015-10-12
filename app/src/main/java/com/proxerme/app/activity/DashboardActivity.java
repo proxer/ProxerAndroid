@@ -138,7 +138,9 @@ public class DashboardActivity extends MainActivity {
             drawerHelper.select(drawerItemToLoad);
         }
 
-        UserManager.getInstance().addOnLoginStateListener(new UserManager.OnLoginStateListener() {
+        UserManager userManager = UserManager.getInstance();
+
+        userManager.addOnLoginStateListener(new UserManager.OnLoginStateListener() {
             @Override
             public void onLogin(@NonNull LoginUser user) {
                 drawerHelper.refreshHeader();
@@ -155,6 +157,10 @@ public class DashboardActivity extends MainActivity {
                         Toast.LENGTH_LONG).show();
             }
         });
+
+        if (savedInstanceState == null && userManager.getUser() != null) {
+            userManager.login(userManager.getUser());
+        }
     }
 
     @Override

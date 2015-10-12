@@ -48,4 +48,5 @@
     <string name="dialog_login_username_hint">Nutzername</string>
     <string name="dialog_login_password_hint">Passwort</string>
     <string name="error_logout">Abmeldung hat nicht funktioniert</string>
+    <string name="drawer_header_logout">Abmelden</string>
 </resources>

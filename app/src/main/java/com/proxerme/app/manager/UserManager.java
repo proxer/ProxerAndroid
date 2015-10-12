@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 
 import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.connection.ProxerException;
+import com.proxerme.library.connection.ProxerTag;
 import com.proxerme.library.entity.LoginUser;
 
 import java.util.LinkedList;
@@ -49,6 +50,7 @@ public class UserManager {
     }
 
     public void login(@NonNull LoginUser user) {
+        ProxerConnection.cancel(ProxerTag.LOGOUT, false);
         ProxerConnection.login(user).execute(new ProxerConnection.ResultCallback<LoginUser>() {
             @Override
             public void onResult(LoginUser loginUser) {
@@ -69,6 +71,7 @@ public class UserManager {
     }
 
     public void logout(){
+        ProxerConnection.cancel(ProxerTag.LOGIN, false);
         ProxerConnection.logout().execute(new ProxerConnection.ResultCallback<Void>() {
             @Override
             public void onResult(Void aVoid) {

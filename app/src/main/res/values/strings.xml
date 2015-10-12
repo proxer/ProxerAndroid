@@ -49,4 +49,5 @@
     <string name="dialog_login_username_hint">Username</string>
     <string name="dialog_login_password_hint">Password</string>
     <string name="error_logout">Logout was not successful</string>
+    <string name="drawer_header_logout">Logout</string>
 </resources>

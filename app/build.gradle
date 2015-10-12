@@ -44,7 +44,7 @@ dependencies {
     compile('com.github.rubengees:introduction:1.1.2@aar') {
         transitive = true;
     }
-    compile('com.github.proxer:ProxerLibAndroid:1.1.1@aar') {
+    compile('com.github.proxer:ProxerLibAndroid:1.1.2@aar') {
         transitive = true
     }
 }

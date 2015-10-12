@@ -22,6 +22,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.proxerme.app.R;
 import com.proxerme.app.manager.NewsManager;
 import com.proxerme.app.manager.UserManager;
+import com.proxerme.library.connection.UrlHolder;
 import com.proxerme.library.entity.LoginUser;
 
 import java.util.ArrayList;
@@ -140,17 +141,28 @@ public class MaterialDrawerHelper {
         ArrayList<IProfile> result = new ArrayList<>();
 
         if (user == null) {
-            result.add(new ProfileDrawerItem().withName(context.getString(R.string.drawer_profile_guest))
+            result.add(new ProfileDrawerItem()
+                    .withName(context.getString(R.string.drawer_profile_guest))
                     .withIcon(R.mipmap.ic_launcher)
                     .withIdentifier(HEADER_ID_GUEST));
-            result.add(new ProfileSettingDrawerItem().withName(context.getString(R.string.drawer_header_login))
+            result.add(new ProfileSettingDrawerItem()
+                    .withName(context.getString(R.string.drawer_header_login))
                     .withIcon(GoogleMaterial.Icon.gmd_person_add).withIdentifier(HEADER_ID_LOGIN));
         } else {
-            result.add(new ProfileDrawerItem().withName(user.getUsername())
-                    .withIdentifier(HEADER_ID_USER));
-            result.add(new ProfileSettingDrawerItem().withName(context.getString(R.string.drawer_header_change))
+            ProfileDrawerItem profile = new ProfileDrawerItem().withName(user.getUsername())
+                    .withIdentifier(HEADER_ID_USER);
+
+            if (user.getImageLink() != null) {
+                profile.withIcon(UrlHolder.getUserImage(user.getImageLink()));
+            }
+
+            result.add(profile);
+            result.add(new ProfileSettingDrawerItem()
+                    .withName(context.getString(R.string.drawer_header_change))
                     .withIcon(GoogleMaterial.Icon.gmd_group).withIdentifier(HEADER_ID_CHANGE));
-            result.add(new ProfileSettingDrawerItem().withName("Logout")
+            result.add(new ProfileSettingDrawerItem()
+                    .withName(context.getString(R.string.drawer_header_logout))
+                    .withIcon(GoogleMaterial.Icon.gmd_exit_to_app)
                     .withIdentifier(HEADER_ID_LOGOUT));
         }
 
