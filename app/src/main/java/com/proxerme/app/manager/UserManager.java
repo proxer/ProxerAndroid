@@ -49,30 +49,29 @@ public class UserManager {
     }
 
     public void login(@NonNull LoginUser user) {
-        ProxerConnection.login(user,
-                new ProxerConnection.ResultCallback<LoginUser>() {
-                    @Override
-                    public void onResult(@NonNull LoginUser user) {
-                        changeUser(user);
+        ProxerConnection.login(user).execute(new ProxerConnection.ResultCallback<LoginUser>() {
+            @Override
+            public void onResult(LoginUser loginUser) {
+                changeUser(loginUser);
 
-                        for (OnLoginStateListener listener : listeners) {
-                            listener.onLogin(user);
-                        }
-                    }
+                for (OnLoginStateListener listener : listeners) {
+                    listener.onLogin(loginUser);
+                }
+            }
 
-                    @Override
-                    public void onError(@NonNull ProxerException e) {
-                        for (OnLoginStateListener listener : listeners) {
-                            listener.onLoginFailed(e);
-                        }
-                    }
-                });
+            @Override
+            public void onError(@NonNull ProxerException e) {
+                for (OnLoginStateListener listener : listeners) {
+                    listener.onLoginFailed(e);
+                }
+            }
+        });
     }
 
     public void logout(){
-        ProxerConnection.logout(new ProxerConnection.ResultCallback<Void>() {
+        ProxerConnection.logout().execute(new ProxerConnection.ResultCallback<Void>() {
             @Override
-            public void onResult(@NonNull Void aVoid) {
+            public void onResult(Void aVoid) {
                 removeUser();
 
                 for (OnLoginStateListener listener : listeners) {

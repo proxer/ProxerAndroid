@@ -51,7 +51,7 @@ public class NewsService extends IntentService {
             String lastId = manager.getLastId();
 
             if (lastId != null) {
-                List<News> news = ProxerConnection.loadNewsSync(1);
+                List<News> news = ProxerConnection.loadNews(1).executeSynchronized();
                 int offset = NewsManager.calculateOffsetFromStart(news, manager.getLastId());
 
                 manager.setLastId(news.get(0).getId());

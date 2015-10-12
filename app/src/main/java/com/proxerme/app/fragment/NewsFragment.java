@@ -177,9 +177,9 @@ public class NewsFragment extends DashboardFragment {
 
         swipeRefreshLayout.setRefreshing(true);
 
-        ProxerConnection.loadNews(page, new ProxerConnection.ResultCallback<List<News>>() {
+        ProxerConnection.loadNews(page).execute(new ProxerConnection.ResultCallback<List<News>>() {
             @Override
-            public void onResult(@NonNull List<News> result) {
+            public void onResult(List<News> result) {
                 if (!insert) {
                     currentPage++;
                 }
