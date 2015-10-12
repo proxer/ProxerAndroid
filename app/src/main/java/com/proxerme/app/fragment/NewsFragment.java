@@ -42,11 +42,11 @@ import static com.proxerme.app.util.ErrorHandler.getMessageForErrorCode;
  */
 public class NewsFragment extends DashboardFragment {
 
+    public static final String STATE_NEWS_LOADING = "news_loading";
     private static final String STATE_METHOD_BEFORE_ERROR = "news_method_before_error";
     private static final String STATE_CURRENT_PAGE = "news_current_page";
     private static final String STATE_LAST_LOADED_PAGE = "news_last_loaded_page";
     private static final String STATE_ERROR_MESSAGE = "news_error_message";
-
     View root;
 
     @Bind(R.id.fragment_news_list_container)
@@ -83,6 +83,7 @@ public class NewsFragment extends DashboardFragment {
             adapter = new NewsAdapter();
         } else {
             adapter = new NewsAdapter(savedInstanceState);
+            loading = savedInstanceState.getBoolean(STATE_NEWS_LOADING);
             currentPage = savedInstanceState.getInt(STATE_CURRENT_PAGE);
             lastLoadedPage = savedInstanceState.getInt(STATE_LAST_LOADED_PAGE);
             currentErrorMessage = savedInstanceState.getString(STATE_ERROR_MESSAGE);
@@ -145,7 +146,7 @@ public class NewsFragment extends DashboardFragment {
             loadNews(currentPage, false);
         } else if (currentErrorMessage != null) {
             showError();
-        } else {
+        } else if (loading) {
             loadNews(currentPage, methodBeforeErrorInsert);
         }
 
@@ -165,6 +166,7 @@ public class NewsFragment extends DashboardFragment {
         super.onSaveInstanceState(outState);
 
         adapter.saveInstanceState(outState);
+        outState.putBoolean(STATE_NEWS_LOADING, loading);
         outState.putInt(STATE_CURRENT_PAGE, currentPage);
         outState.putInt(STATE_LAST_LOADED_PAGE, lastLoadedPage);
         outState.putString(STATE_ERROR_MESSAGE, currentErrorMessage);
@@ -174,6 +176,7 @@ public class NewsFragment extends DashboardFragment {
     private void loadNews(@IntRange(from = 1) final int page, final boolean insert) {
         lastLoadedPage = page;
         loading = true;
+        currentErrorMessage = null;
 
         swipeRefreshLayout.setRefreshing(true);
 
@@ -185,7 +188,6 @@ public class NewsFragment extends DashboardFragment {
                 }
 
                 loading = false;
-                currentErrorMessage = null;
                 getDashboardActivity().setBadge(MaterialDrawerHelper.DRAWER_ID_NEWS, null);
                 NewsManager manager = getInstance(getContext());
 
@@ -207,6 +209,7 @@ public class NewsFragment extends DashboardFragment {
                             exception.getErrorCode());
                 }
 
+                loading = false;
                 methodBeforeErrorInsert = insert;
 
                 showError();
@@ -232,15 +235,17 @@ public class NewsFragment extends DashboardFragment {
     }
 
     private void showError() {
-        SnackbarManager.show(Snackbar.make(root, currentErrorMessage,
-                        Snackbar.LENGTH_INDEFINITE),
-                getContext().getString(R.string.error_retry),
-                new SnackbarManager.SnackbarCallback() {
-                    @Override
-                    public void onClick(View v) {
-                        loadNews(lastLoadedPage, methodBeforeErrorInsert);
-                    }
-                });
+        if (!SnackbarManager.isShowing()) {
+            SnackbarManager.show(Snackbar.make(root, currentErrorMessage,
+                            Snackbar.LENGTH_INDEFINITE),
+                    getContext().getString(R.string.error_retry),
+                    new SnackbarManager.SnackbarCallback() {
+                        @Override
+                        public void onClick(View v) {
+                            loadNews(lastLoadedPage, methodBeforeErrorInsert);
+                        }
+                    });
+        }
 
         swipeRefreshLayout.setRefreshing(false);
     }
