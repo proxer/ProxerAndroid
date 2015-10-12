@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.mikepenz.aboutlibraries.LibsBuilder;
@@ -34,6 +35,8 @@ import com.proxerme.app.manager.PreferenceManager;
 import com.proxerme.app.manager.StorageManager;
 import com.proxerme.app.manager.UserManager;
 import com.proxerme.app.util.SnackbarManager;
+import com.proxerme.library.connection.ProxerConnection;
+import com.proxerme.library.connection.ProxerException;
 import com.proxerme.library.connection.UrlHolder;
 import com.proxerme.library.entity.LoginUser;
 import com.rubengees.introduction.IntroductionActivity;
@@ -64,13 +67,13 @@ public class DashboardActivity extends MainActivity {
     public static final int DRAWER_ID_DONATE = 11;
     public static final int DRAWER_ID_SETTINGS = 12;
     public static final String EXTRA_DRAWER_ITEM = "extra_drawer_item";
+    public static final int HEADER_ID_LOGOUT = 113;
     private static final int DRAWER_ID_DEFAULT = DRAWER_ID_NEWS;
     private static final int HEADER_ID_GUEST = 100;
     private static final int HEADER_ID_USER = 101;
     private static final int HEADER_ID_LOGIN = 111;
     private static final int HEADER_ID_CHANGE = 112;
     private static final String STATE_CURRENT_DRAWER_ITEM_ID = "current_drawer_item_id";
-
     @Bind(R.id.toolbar)
     Toolbar toolbar;
 
@@ -142,6 +145,9 @@ public class DashboardActivity extends MainActivity {
                         case HEADER_ID_CHANGE:
                             showLoginDialog();
                             break;
+                        case HEADER_ID_LOGOUT:
+                            logout();
+                            break;
                     }
 
                     return false;
@@ -153,6 +159,22 @@ public class DashboardActivity extends MainActivity {
 
         intent.putExtra(EXTRA_DRAWER_ITEM, drawerItemId);
         return intent;
+    }
+
+    private void logout() {
+        ProxerConnection.logout(new ProxerConnection.ResultCallback<Void>() {
+            @Override
+            public void onResult(@NonNull Void aVoid) {
+                UserManager.getInstance().removeUser();
+                refreshHeader();
+            }
+
+            @Override
+            public void onError(@NonNull ProxerException e) {
+                Toast.makeText(DashboardActivity.this, "Logout was not successful",
+                        Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private void showLoginDialog() {
@@ -290,6 +312,8 @@ public class DashboardActivity extends MainActivity {
                     .withIdentifier(HEADER_ID_USER));
             result.add(new ProfileSettingDrawerItem().withName(getString(R.string.drawer_header_change))
                     .withIcon(GoogleMaterial.Icon.gmd_group).withIdentifier(HEADER_ID_CHANGE));
+            result.add(new ProfileSettingDrawerItem().withName("Logout")
+                    .withIdentifier(HEADER_ID_LOGOUT));
         }
 
         return result;
