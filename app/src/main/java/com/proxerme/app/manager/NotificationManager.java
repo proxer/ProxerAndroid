@@ -21,7 +21,7 @@ import static android.support.v4.app.NotificationCompat.BigTextStyle;
  */
 public class NotificationManager {
 
-    public static final int ELLIPSIS = 0x2026;
+    private static final int ELLIPSIS = 0x2026;
     private static final int NEWS_NOTIFICATION_ID = 1423;
     private static final int FITTING_CHARS = 35;
 
@@ -55,7 +55,7 @@ public class NotificationManager {
 
             builder.setContentIntent(PendingIntent.getActivity(
                     context, 0, DashboardActivity.getSectionIntent(context,
-                            DashboardActivity.DRAWER_ID_NEWS), PendingIntent.FLAG_UPDATE_CURRENT));
+                            DashboardActivity.DRAWER_ID_NEWS, null), PendingIntent.FLAG_UPDATE_CURRENT));
 
             notificationManager.notify(NEWS_NOTIFICATION_ID, builder.build());
         }

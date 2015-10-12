@@ -68,6 +68,7 @@ public class DashboardActivity extends MainActivity {
     public static final int DRAWER_ID_SETTINGS = 12;
     public static final String EXTRA_DRAWER_ITEM = "extra_drawer_item";
     public static final int HEADER_ID_LOGOUT = 113;
+    public static final String EXTRA_ADDITIONAL_INFO = "extra_additional_info";
     private static final int DRAWER_ID_DEFAULT = DRAWER_ID_NEWS;
     private static final int HEADER_ID_GUEST = 100;
     private static final int HEADER_ID_USER = 101;
@@ -154,10 +155,13 @@ public class DashboardActivity extends MainActivity {
                 }
             };
 
-    public static Intent getSectionIntent(@NonNull Context context, int drawerItemId) {
+    public static Intent getSectionIntent(@NonNull Context context, int drawerItemId, @Nullable String additionalInfo) {
         Intent intent = new Intent(context, DashboardActivity.class);
 
         intent.putExtra(EXTRA_DRAWER_ITEM, drawerItemId);
+        if (additionalInfo != null) {
+            intent.putExtra(EXTRA_ADDITIONAL_INFO, additionalInfo);
+        }
         return intent;
     }
 
