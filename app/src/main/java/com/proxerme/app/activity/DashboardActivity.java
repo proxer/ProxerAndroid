@@ -143,12 +143,16 @@ public class DashboardActivity extends MainActivity {
         userManager.addOnLoginStateListener(new UserManager.OnLoginStateListener() {
             @Override
             public void onLogin(@NonNull LoginUser user) {
-                drawerHelper.refreshHeader();
+                if (!isFinishing()) {
+                    drawerHelper.refreshHeader();
+                }
             }
 
             @Override
             public void onLogout() {
-                drawerHelper.refreshHeader();
+                if (!isFinishing()) {
+                    drawerHelper.refreshHeader();
+                }
             }
 
             @Override
@@ -289,7 +293,7 @@ public class DashboardActivity extends MainActivity {
         }
     }
 
-    private void showLoginDialog(){
+    private void showLoginDialog() {
         LoginDialog.newInstance().show(getSupportFragmentManager(), "dialog_login");
     }
 
