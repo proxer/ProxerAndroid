@@ -22,10 +22,10 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:23.0.1'
-    compile 'com.android.support:design:23.0.1'
-    compile 'com.android.support:preference-v7:23.0.1'
-    compile 'com.android.support:customtabs:23.0.1'
+    compile 'com.android.support:appcompat-v7:23.1.0'
+    compile 'com.android.support:design:23.1.0'
+    compile 'com.android.support:preference-v7:23.1.0'
+    compile 'com.android.support:customtabs:23.1.0'
 
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.github.orhanobut:hawk:1.19'
