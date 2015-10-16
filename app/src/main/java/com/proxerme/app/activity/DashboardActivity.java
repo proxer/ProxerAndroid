@@ -41,6 +41,7 @@ import butterknife.ButterKnife;
 import static com.proxerme.app.util.MaterialDrawerHelper.DRAWER_ID_DEFAULT;
 import static com.proxerme.app.util.MaterialDrawerHelper.DRAWER_ID_DONATE;
 import static com.proxerme.app.util.MaterialDrawerHelper.DRAWER_ID_INFO;
+import static com.proxerme.app.util.MaterialDrawerHelper.DRAWER_ID_MESSAGES;
 import static com.proxerme.app.util.MaterialDrawerHelper.DRAWER_ID_NEWS;
 import static com.proxerme.app.util.MaterialDrawerHelper.DRAWER_ID_SETTINGS;
 import static com.proxerme.app.util.MaterialDrawerHelper.HEADER_ID_CHANGE;
@@ -301,6 +302,9 @@ public class DashboardActivity extends MainActivity {
         switch (id) {
             case DRAWER_ID_NEWS:
                 setFragment(NewsFragment.newInstance(), getString(R.string.drawer_item_news));
+                return false;
+            case DRAWER_ID_MESSAGES:
+
                 return false;
             case DRAWER_ID_INFO:
                 setFragment(new LibsBuilder().withAboutVersionShownName(true)

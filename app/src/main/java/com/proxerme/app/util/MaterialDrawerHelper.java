@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -38,6 +39,7 @@ public class MaterialDrawerHelper {
 
     //Normal items
     public static final int DRAWER_ID_NEWS = 0;
+    public static final int DRAWER_ID_MESSAGES = 1;
 
     //Sticky items
     public static final int DRAWER_ID_INFO = 10;
@@ -189,11 +191,17 @@ public class MaterialDrawerHelper {
         ArrayList<IDrawerItem> result = new ArrayList<>(1);
 
         result.add(new PrimaryDrawerItem().withName(R.string.drawer_item_news)
-                .withIcon(GoogleMaterial.Icon.gmd_dashboard)
+                .withIcon(CommunityMaterial.Icon.cmd_newspaper)
                 .withSelectedTextColorRes(R.color.primary).withSelectedIconColorRes(R.color.primary)
                 .withIconTintingEnabled(true).withBadgeStyle(new BadgeStyle()
                         .withColorRes(R.color.primary).withTextColorRes(android.R.color.white))
                 .withIdentifier(DRAWER_ID_NEWS));
+
+        result.add(new PrimaryDrawerItem().withName(R.string.drawer_item_messages)
+                .withIcon(GoogleMaterial.Icon.gmd_chat).withSelectedTextColorRes(R.color.primary)
+                .withSelectedIconColorRes(R.color.primary).withIconTintingEnabled(true)
+                .withBadgeStyle(new BadgeStyle().withColorRes(R.color.primary)
+                        .withTextColorRes(android.R.color.white)).withIdentifier(DRAWER_ID_MESSAGES));
 
         return result;
     }
