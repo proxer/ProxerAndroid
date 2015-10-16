@@ -60,12 +60,8 @@ public class StorageManager {
     }
 
     public static void setUser(@NonNull LoginUser user) {
-        if (user.getUserId() == null) {
-            throw new IllegalArgumentException("The user must have a user id");
-        } else {
-            Hawk.chain(3).put(STORAGE_USER_USERNAME, user.getUsername())
-                    .put(STORAGE_USER_PASSWORD, user.getPassword()).commit();
-        }
+        Hawk.chain(3).put(STORAGE_USER_USERNAME, user.getUsername())
+                .put(STORAGE_USER_PASSWORD, user.getPassword()).commit();
     }
 
     public static void removeUser() {

@@ -28,7 +28,6 @@ import com.proxerme.library.entity.LoginUser;
 import java.util.ArrayList;
 
 import static com.proxerme.app.manager.NewsManager.NEWS_ON_PAGE;
-import static com.proxerme.app.manager.NewsManager.OFFSET_NOT_CALCULABLE;
 
 /**
  * Todo: Describe Class
@@ -152,8 +151,10 @@ public class MaterialDrawerHelper {
             ProfileDrawerItem profile = new ProfileDrawerItem().withName(user.getUsername())
                     .withIdentifier(HEADER_ID_USER);
 
-            if (user.getImageLink() != null) {
-                profile.withIcon(UrlHolder.getUserImage(user.getImageLink()));
+            try {
+                profile.withIcon(UrlHolder.getUserImage(user.getImageId()));
+            } catch (RuntimeException e) {
+                //ignore
             }
 
             result.add(profile);
@@ -259,9 +260,9 @@ public class MaterialDrawerHelper {
     private void initBadges() {
         int newNews = NewsManager.getInstance(context).getNewNews();
 
-        if (newNews > 0 || newNews == OFFSET_NOT_CALCULABLE) {
-            setBadge(DRAWER_ID_NEWS, newNews == OFFSET_NOT_CALCULABLE ? (NEWS_ON_PAGE + "+") :
-                    (String.valueOf(newNews)));
+        if (newNews > 0 || newNews == PagingHelper.OFFSET_NOT_CALCULABLE) {
+            setBadge(DRAWER_ID_NEWS, newNews == PagingHelper.OFFSET_NOT_CALCULABLE ?
+                    (NEWS_ON_PAGE + "+") : (String.valueOf(newNews)));
         }
     }
 

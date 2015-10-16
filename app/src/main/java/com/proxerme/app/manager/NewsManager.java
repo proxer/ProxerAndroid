@@ -13,9 +13,6 @@ import android.support.annotation.Nullable;
 
 import com.proxerme.app.receiver.BootReceiver;
 import com.proxerme.app.receiver.NewsReceiver;
-import com.proxerme.library.entity.News;
-
-import java.util.List;
 
 /**
  * A singleton for managing the news.
@@ -24,8 +21,6 @@ import java.util.List;
  */
 public class NewsManager {
 
-    public static final int OFFSET_NOT_CALCULABLE = -2;
-    public static final int OFFSET_TOO_LARGE = -1;
     public static final int NEWS_ON_PAGE = 15;
 
     private static NewsManager INSTANCE;
@@ -47,44 +42,6 @@ public class NewsManager {
             INSTANCE = new NewsManager(context);
         }
         return INSTANCE;
-    }
-
-    public static int calculateOffsetFromStart(@NonNull List<News> list, @NonNull News last) {
-        return calculateOffsetFromStart(list, last.getId());
-    }
-
-    public static int calculateOffsetFromEnd(@NonNull List<News> list, @NonNull News first) {
-        return calculateOffsetFromEnd(list, first.getId());
-    }
-
-    public static int calculateOffsetFromStart(@NonNull List<News> list, @NonNull String id) {
-        if (list.isEmpty()) {
-            return OFFSET_NOT_CALCULABLE;
-        } else {
-            for (int i = 0; i < list.size() || i < NEWS_ON_PAGE; i++) {
-                if (id.equals(list.get(i).getId())) {
-                    return i;
-                }
-            }
-
-            return OFFSET_TOO_LARGE;
-        }
-    }
-
-    public static int calculateOffsetFromEnd(@NonNull List<News> list, @NonNull String id) {
-        if (list.isEmpty()) {
-            return OFFSET_NOT_CALCULABLE;
-        } else {
-            int lastSearchableIndex = list.size() - NEWS_ON_PAGE;
-
-            for (int i = list.size() - 1; i >= 0 && i >= lastSearchableIndex; i--) {
-                if (id.equals(list.get(i).getId())) {
-                    return (list.size() - 1) - i;
-                }
-            }
-
-            return OFFSET_TOO_LARGE;
-        }
     }
 
     @Nullable

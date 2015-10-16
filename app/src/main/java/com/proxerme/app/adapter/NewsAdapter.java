@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.proxerme.app.R;
-import com.proxerme.app.manager.NewsManager;
+import com.proxerme.app.util.PagingHelper;
 import com.proxerme.app.util.TimeUtils;
 import com.proxerme.library.connection.UrlHolder;
 import com.proxerme.library.entity.News;
@@ -30,7 +30,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.proxerme.app.manager.NewsManager.NEWS_ON_PAGE;
-import static com.proxerme.app.manager.NewsManager.OFFSET_NOT_CALCULABLE;
 
 /**
  * An adapter for {@link News}, for usage in a {@link RecyclerView}.
@@ -124,7 +123,8 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
      */
     public int insertAtStart(@NonNull List<News> news) {
         if (!news.isEmpty()) {
-            int offset = NewsManager.calculateOffsetFromStart(news, this.list.get(0).getId());
+            int offset = PagingHelper.calculateOffsetFromStart(news, this.list.get(0),
+                    NEWS_ON_PAGE);
 
             if (offset >= 0) {
                 news = news.subList(0, offset);
@@ -136,12 +136,12 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
             return offset;
         }
 
-        return OFFSET_NOT_CALCULABLE;
+        return PagingHelper.OFFSET_NOT_CALCULABLE;
     }
 
     public int append(@NonNull List<News> news) {
         if (!news.isEmpty()) {
-            int offset = NewsManager.calculateOffsetFromEnd(this.list, news.get(0));
+            int offset = PagingHelper.calculateOffsetFromEnd(this.list, news.get(0), NEWS_ON_PAGE);
 
             if (offset > 0) {
                 news = news.subList(offset, news.size());
@@ -153,7 +153,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
             return offset;
         }
 
-        return OFFSET_NOT_CALCULABLE;
+        return PagingHelper.OFFSET_NOT_CALCULABLE;
     }
 
     public void saveInstanceState(@NonNull Bundle outState) {

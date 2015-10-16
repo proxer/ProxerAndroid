@@ -8,6 +8,7 @@ import android.support.v7.app.NotificationCompat;
 import com.proxerme.app.R;
 import com.proxerme.app.activity.DashboardActivity;
 import com.proxerme.app.util.MaterialDrawerHelper;
+import com.proxerme.app.util.PagingHelper;
 import com.proxerme.library.entity.News;
 
 import java.util.Arrays;
@@ -64,7 +65,7 @@ public class NotificationManager {
     }
 
     private static String generateNewsNotificationAmount(@NonNull Context context, int offset) {
-        return offset == NewsManager.OFFSET_TOO_LARGE ?
+        return offset == PagingHelper.OFFSET_TOO_LARGE ?
                 context.getString(R.string.notification_amount_more_than_15) :
                 (offset + " " + context.getString(R.string.notification_amount_text));
     }
