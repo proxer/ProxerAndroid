@@ -143,14 +143,14 @@ public class DashboardActivity extends MainActivity {
         userManager.addOnLoginStateListener(new UserManager.OnLoginStateListener() {
             @Override
             public void onLogin(@NonNull LoginUser user) {
-                if (!isFinishing()) {
+                if (!isDestroyedCompat()) {
                     drawerHelper.refreshHeader();
                 }
             }
 
             @Override
             public void onLogout() {
-                if (!isFinishing()) {
+                if (!isDestroyedCompat()) {
                     drawerHelper.refreshHeader();
                 }
             }

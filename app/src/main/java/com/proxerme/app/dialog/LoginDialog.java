@@ -38,6 +38,8 @@ import butterknife.ButterKnife;
  */
 public class LoginDialog extends DialogFragment {
 
+    private static final String STATE_LOADING = "login_loading";
+
     ViewGroup root;
 
     @Bind(R.id.dialog_login_username_container)
@@ -69,6 +71,8 @@ public class LoginDialog extends DialogFragment {
         initViews();
 
         if (savedInstanceState != null) {
+            loading = savedInstanceState.getBoolean(STATE_LOADING);
+
             handleVisibility();
         }
 
@@ -107,6 +111,12 @@ public class LoginDialog extends DialogFragment {
         ProxerConnection.cancelSync(ProxerTag.LOGIN, false);
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(STATE_LOADING, loading);
+    }
+
     private void findViews() {
         root = (ViewGroup) View.inflate(getContext(), R.layout.dialog_login, null);
         ButterKnife.bind(this, root);
@@ -118,6 +128,7 @@ public class LoginDialog extends DialogFragment {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_GO) {
                     login();
+
                     return true;
                 }
                 return false;
@@ -156,9 +167,11 @@ public class LoginDialog extends DialogFragment {
 
                     @Override
                     public void onLoginFailed(@NonNull ProxerException exception) {
-                        Toast.makeText(getContext(),
-                                ErrorHandler.getMessageForErrorCode(getContext(),
-                                        exception.getErrorCode()), Toast.LENGTH_LONG).show();
+                        if (getContext() != null) {
+                            Toast.makeText(getContext(),
+                                    ErrorHandler.getMessageForErrorCode(getContext(),
+                                            exception.getErrorCode()), Toast.LENGTH_LONG).show();
+                        }
 
                         loading = false;
                         handleVisibility();

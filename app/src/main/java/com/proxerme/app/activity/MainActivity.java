@@ -2,6 +2,7 @@ package com.proxerme.app.activity;
 
 import android.annotation.SuppressLint;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.customtabs.CustomTabsIntent;
@@ -58,5 +59,9 @@ public class MainActivity extends AppCompatActivity {
 
         CustomTabActivityHelper.openCustomTab(
                 this, customTabsIntent, Uri.parse(url), new WebviewFallback());
+    }
+
+    public boolean isDestroyedCompat() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && isDestroyed();
     }
 }
