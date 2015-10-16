@@ -183,12 +183,14 @@ public class LoginDialog extends DialogFragment {
     }
 
     private void handleVisibility() {
-        if (loading) {
-            inputContainer.setVisibility(View.INVISIBLE);
-            progress.setVisibility(View.VISIBLE);
-        } else {
-            inputContainer.setVisibility(View.VISIBLE);
-            progress.setVisibility(View.INVISIBLE);
+        if (inputContainer != null && progress != null) {
+            if (loading) {
+                inputContainer.setVisibility(View.INVISIBLE);
+                progress.setVisibility(View.VISIBLE);
+            } else {
+                inputContainer.setVisibility(View.VISIBLE);
+                progress.setVisibility(View.INVISIBLE);
+            }
         }
     }
 
