@@ -104,7 +104,8 @@ public class NewsAdapter extends PagingAdapter<News, NewsAdapter.ViewHolder> {
     @Override
     public void saveInstanceState(@NonNull Bundle outState) {
         super.saveInstanceState(outState);
-        outState.putStringArrayList(STATE_NEWS_EXTENSION_IDS, new ArrayList<>(extensionMap.keySet()));
+        outState.putStringArrayList(STATE_NEWS_EXTENSION_IDS,
+                new ArrayList<>(extensionMap.keySet()));
     }
 
     @Override
