@@ -51,7 +51,7 @@ public class NewsAdapter extends PagingAdapter<News, NewsAdapter.ViewHolder> {
         extensionMap = new HashMap<>(ProxerInfo.NEWS_ON_PAGE * 2);
     }
 
-    public NewsAdapter(Collection<News> news) {
+    public NewsAdapter(@NonNull Collection<News> news) {
         super(news);
         extensionMap = new HashMap<>(news.size() * 2);
     }

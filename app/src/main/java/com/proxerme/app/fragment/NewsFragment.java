@@ -42,7 +42,8 @@ public class NewsFragment extends PagingFragment<News, NewsAdapter> {
 
             @Override
             public void onNewsImageClick(@NonNull View v, @NonNull News news) {
-                NewsImageDetailActivity.navigateTo(getActivity(), (ImageView) v, news);
+                NewsImageDetailActivity.navigateTo(getActivity(), (ImageView) v,
+                        UrlHolder.getNewsImageUrl(news.getId(), news.getImageId()));
             }
 
             @Override

@@ -15,8 +15,6 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.proxerme.app.R;
-import com.proxerme.library.connection.UrlHolder;
-import com.proxerme.library.entity.News;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -30,15 +28,16 @@ import butterknife.OnClick;
  */
 public class NewsImageDetailActivity extends AppCompatActivity {
 
-    public static final String EXTRA_NEWS = "extra_news";
+    public static final String EXTRA_URL = "extra_url";
 
     @Bind(R.id.activity_news_image_detail_image)
     ImageView image;
 
-    public static void navigateTo(@NonNull Activity context, @NonNull ImageView image, @NonNull News news) {
+    public static void navigateTo(@NonNull Activity context, @NonNull ImageView image,
+                                  @NonNull String url) {
         Intent intent = new Intent(context, NewsImageDetailActivity.class);
 
-        intent.putExtra(EXTRA_NEWS, news);
+        intent.putExtra(EXTRA_URL, url);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ActivityOptionsCompat options = ActivityOptionsCompat
@@ -56,27 +55,26 @@ public class NewsImageDetailActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        News news = getIntent().getParcelableExtra(EXTRA_NEWS);
+        String url = getIntent().getParcelableExtra(EXTRA_URL);
 
         supportPostponeEnterTransition();
-        Glide.with(this).load(UrlHolder.getNewsImageUrl(news.getId(), news.getImageId()))
-                .listener(new RequestListener<String, GlideDrawable>() {
-                    @Override
-                    public boolean onException(Exception e, String model,
-                                               Target<GlideDrawable> target,
-                                               boolean isFirstResource) {
-                        return false;
-                    }
+        Glide.with(this).load(url).listener(new RequestListener<String, GlideDrawable>() {
+            @Override
+            public boolean onException(Exception e, String model,
+                                       Target<GlideDrawable> target,
+                                       boolean isFirstResource) {
+                return false;
+            }
 
-                    @Override
-                    public boolean onResourceReady(GlideDrawable resource, String model,
-                                                   Target<GlideDrawable> target,
-                                                   boolean isFromMemoryCache,
-                                                   boolean isFirstResource) {
-                        supportStartPostponedEnterTransition();
-                        return false;
-                    }
-                })
+            @Override
+            public boolean onResourceReady(GlideDrawable resource, String model,
+                                           Target<GlideDrawable> target,
+                                           boolean isFromMemoryCache,
+                                           boolean isFirstResource) {
+                supportStartPostponedEnterTransition();
+                return false;
+            }
+        })
                 .into(image);
     }
 

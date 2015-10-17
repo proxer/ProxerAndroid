@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.proxerme.app.R;
 import com.proxerme.app.dialog.LoginDialog;
+import com.proxerme.app.fragment.ConferencesFragment;
 import com.proxerme.app.fragment.NewsFragment;
 import com.proxerme.app.fragment.SettingsFragment;
 import com.proxerme.app.interfaces.OnActivityListener;
@@ -304,7 +305,7 @@ public class DashboardActivity extends MainActivity {
                 setFragment(NewsFragment.newInstance(), getString(R.string.drawer_item_news));
                 return false;
             case DRAWER_ID_MESSAGES:
-
+                setFragment(ConferencesFragment.newInstance(), "Messages");
                 return false;
             case DRAWER_ID_INFO:
                 setFragment(new LibsBuilder().withAboutVersionShownName(true)

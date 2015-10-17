@@ -26,7 +26,7 @@ public abstract class PagingAdapter<T extends IdItem & Parcelable,
         this.list = new ArrayList<>(getItemsOnPage() * 2);
     }
 
-    public PagingAdapter(Collection<T> list) {
+    public PagingAdapter(@NonNull Collection<T> list) {
         this.list = new ArrayList<>(list.size() * 2);
 
         this.list.addAll(list);
