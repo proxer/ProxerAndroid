@@ -10,6 +10,7 @@ import com.proxerme.app.util.PagingHelper;
 import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.connection.ProxerException;
 import com.proxerme.library.entity.News;
+import com.proxerme.library.util.ProxerInfo;
 
 import java.util.List;
 
@@ -54,7 +55,7 @@ public class NewsService extends IntentService {
             if (lastId != null) {
                 List<News> news = ProxerConnection.loadNews(1).executeSynchronized();
                 int offset = PagingHelper.calculateOffsetFromStart(news, manager.getLastId(),
-                        NewsManager.NEWS_ON_PAGE);
+                        ProxerInfo.NEWS_ON_PAGE);
 
                 manager.setLastId(news.get(0).getId());
                 manager.setNewNews(offset);

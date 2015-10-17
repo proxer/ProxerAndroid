@@ -20,9 +20,6 @@ import com.proxerme.app.receiver.NewsReceiver;
  * @author Ruben Gees
  */
 public class NewsManager {
-
-    public static final int NEWS_ON_PAGE = 15;
-
     private static NewsManager INSTANCE;
 
     private Context context;

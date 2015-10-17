@@ -25,10 +25,9 @@ import com.proxerme.app.manager.NewsManager;
 import com.proxerme.app.manager.UserManager;
 import com.proxerme.library.connection.UrlHolder;
 import com.proxerme.library.entity.LoginUser;
+import com.proxerme.library.util.ProxerInfo;
 
 import java.util.ArrayList;
-
-import static com.proxerme.app.manager.NewsManager.NEWS_ON_PAGE;
 
 /**
  * Todo: Describe Class
@@ -270,7 +269,7 @@ public class MaterialDrawerHelper {
 
         if (newNews > 0 || newNews == PagingHelper.OFFSET_NOT_CALCULABLE) {
             setBadge(DRAWER_ID_NEWS, newNews == PagingHelper.OFFSET_NOT_CALCULABLE ?
-                    (NEWS_ON_PAGE + "+") : (String.valueOf(newNews)));
+                    (ProxerInfo.NEWS_ON_PAGE + "+") : (String.valueOf(newNews)));
         }
     }
 

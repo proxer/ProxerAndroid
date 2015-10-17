@@ -18,6 +18,7 @@ import com.proxerme.app.R;
 import com.proxerme.app.util.TimeUtils;
 import com.proxerme.library.connection.UrlHolder;
 import com.proxerme.library.entity.News;
+import com.proxerme.library.util.ProxerInfo;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,8 +28,6 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static com.proxerme.app.manager.NewsManager.NEWS_ON_PAGE;
 
 /**
  * An adapter for {@link News}, for usage in a {@link RecyclerView}.
@@ -49,7 +48,7 @@ public class NewsAdapter extends PagingAdapter<News, NewsAdapter.ViewHolder> {
 
     public NewsAdapter() {
         super();
-        extensionMap = new HashMap<>(NEWS_ON_PAGE * 2);
+        extensionMap = new HashMap<>(ProxerInfo.NEWS_ON_PAGE * 2);
     }
 
     public NewsAdapter(Collection<News> news) {
@@ -110,7 +109,7 @@ public class NewsAdapter extends PagingAdapter<News, NewsAdapter.ViewHolder> {
 
     @Override
     protected int getItemsOnPage() {
-        return NEWS_ON_PAGE;
+        return ProxerInfo.NEWS_ON_PAGE;
     }
 
     public void setOnNewsInteractionListener(OnNewsInteractionListener onNewsInteractionListener) {
