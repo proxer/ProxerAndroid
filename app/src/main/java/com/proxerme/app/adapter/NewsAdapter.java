@@ -15,7 +15,6 @@ import com.bumptech.glide.Glide;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.proxerme.app.R;
-import com.proxerme.app.util.PagingHelper;
 import com.proxerme.app.util.TimeUtils;
 import com.proxerme.library.connection.UrlHolder;
 import com.proxerme.library.entity.News;
@@ -36,37 +35,32 @@ import static com.proxerme.app.manager.NewsManager.NEWS_ON_PAGE;
  *
  * @author Ruben Gees
  */
-public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
+public class NewsAdapter extends PagingAdapter<News, NewsAdapter.ViewHolder> {
 
-    private static final String STATE_NEWS_LIST = "news_list";
     private static final String STATE_NEWS_EXTENSION_IDS = "news_extension_ids";
     private static final int ICON_SIZE = 32;
     private static final int ICON_PADDING = 8;
     private static final float ROTATION_HALF = 180f;
     private static final int DESCRIPTION_MAX_LINES = 3;
 
-    private ArrayList<News> list;
     private HashMap<String, Boolean> extensionMap;
 
     private OnNewsInteractionListener onNewsInteractionListener;
 
     public NewsAdapter() {
-        this.list = new ArrayList<>(NEWS_ON_PAGE * 2);
+        super();
         extensionMap = new HashMap<>(NEWS_ON_PAGE * 2);
     }
 
     public NewsAdapter(Collection<News> news) {
-        this.list = new ArrayList<>(news.size() * 2);
+        super(news);
         extensionMap = new HashMap<>(news.size() * 2);
-
-        this.list.addAll(news);
-        notifyItemRangeInserted(0, news.size());
     }
 
     public NewsAdapter(@NonNull Bundle savedInstanceState) {
-        this.list = savedInstanceState.getParcelableArrayList(STATE_NEWS_LIST);
+        super(savedInstanceState);
         List<String> ids = savedInstanceState.getStringArrayList(STATE_NEWS_EXTENSION_IDS);
-        extensionMap = new HashMap<>(this.list.size() * 2);
+        extensionMap = new HashMap<>();
 
         if (ids != null) {
             for (String id : ids) {
@@ -83,7 +77,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(NewsAdapter.ViewHolder holder, int position) {
-        News item = list.get(position);
+        News item = getItemAt(position);
 
         holder.title.setText(item.getSubject());
         holder.description.setText(item.getDescription());
@@ -108,57 +102,14 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     }
 
     @Override
-    public int getItemCount() {
-        return list.size();
-    }
-
-    /**
-     * Inserts the given List of news into this Adapter. A offset to the existing data is calculated,
-     * to determine if more data needs to be loaded.
-     *
-     * @param news The List of News to insert.
-     * @return The offset to the existing data. -1 is returned, when the offset is to large and
-     * new data needs to be loaded. -2 is returned if the offset could not ne calculated (The
-     * internal List or the passed List is empty)
-     */
-    public int insertAtStart(@NonNull List<News> news) {
-        if (!news.isEmpty()) {
-            int offset = PagingHelper.calculateOffsetFromStart(news, this.list.get(0),
-                    NEWS_ON_PAGE);
-
-            if (offset >= 0) {
-                news = news.subList(0, offset);
-            }
-
-            this.list.addAll(0, news);
-            notifyItemRangeInserted(0, news.size());
-
-            return offset;
-        }
-
-        return PagingHelper.OFFSET_NOT_CALCULABLE;
-    }
-
-    public int append(@NonNull List<News> news) {
-        if (!news.isEmpty()) {
-            int offset = PagingHelper.calculateOffsetFromEnd(this.list, news.get(0), NEWS_ON_PAGE);
-
-            if (offset > 0) {
-                news = news.subList(offset, news.size());
-            }
-
-            this.list.addAll(news);
-            notifyItemRangeInserted(this.list.size() - news.size(), news.size());
-
-            return offset;
-        }
-
-        return PagingHelper.OFFSET_NOT_CALCULABLE;
-    }
-
     public void saveInstanceState(@NonNull Bundle outState) {
-        outState.putParcelableArrayList(STATE_NEWS_LIST, list);
+        super.saveInstanceState(outState);
         outState.putStringArrayList(STATE_NEWS_EXTENSION_IDS, new ArrayList<>(extensionMap.keySet()));
+    }
+
+    @Override
+    protected int getItemsOnPage() {
+        return NEWS_ON_PAGE;
     }
 
     public void setOnNewsInteractionListener(OnNewsInteractionListener onNewsInteractionListener) {
@@ -202,20 +153,20 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         @OnClick(R.id.item_news_content_container)
         void onContentClick(View view) {
             if (onNewsInteractionListener != null) {
-                onNewsInteractionListener.onNewsClick(view, list.get(getLayoutPosition()));
+                onNewsInteractionListener.onNewsClick(view, getItemAt(getLayoutPosition()));
             }
         }
 
         @OnClick(R.id.item_news_image)
         void onImageClick(View view) {
             if (onNewsInteractionListener != null) {
-                onNewsInteractionListener.onNewsImageClick(view, list.get(getLayoutPosition()));
+                onNewsInteractionListener.onNewsImageClick(view, getItemAt(getLayoutPosition()));
             }
         }
 
         @OnClick(R.id.item_news_expand_description)
         void onExpandClick(View view) {
-            News news = list.get(getLayoutPosition());
+            News news = getItemAt(getLayoutPosition());
             String id = news.getId();
             boolean isExpanded = extensionMap.containsKey(id);
 
