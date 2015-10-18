@@ -155,12 +155,13 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
                     if (!insert) {
                         currentPage++;
                     }
+                }
 
                     loading = false;
 
                     handleResult(result, insert);
                     swipeRefreshLayout.setRefreshing(false);
-                }
+
             }
 
             @Override
