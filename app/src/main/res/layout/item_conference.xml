@@ -24,78 +24,73 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_weight="33"
+                android:layout_weight="0.3"
                 android:scaleType="centerCrop"
                 android:transitionName="image"
                 tools:ignore="UnusedAttribute" />
 
-            <RelativeLayout
+            <LinearLayout
                 android:id="@+id/item_conference_content"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="67">
+                android:layout_weight="0.7"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/item_conference_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentRight="true"
                     android:layout_margin="8dp"
-                    android:text="Large Text"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    tools:text="Title" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@color/divider" />
 
                 <LinearLayout
-                    android:id="@+id/item_conference_bottom_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:orientation="vertical">
+                    android:layout_margin="6dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/item_conference_time"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="4dp"
+                        android:layout_weight="4"
+                        android:gravity="start"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        tools:text="Two days ago" />
 
                     <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginRight="4dp"
-                        android:layout_marginTop="4dp"
-                        android:background="@color/divider" />
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/item_conference_participants"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_margin="6dp"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/item_conference_time"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_margin="4dp"
-                            android:layout_weight="4"
-                            android:gravity="start"
-                            android:textAppearance="?android:attr/textAppearanceSmall"
-                            tools:text="Two days ago" />
-
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1" />
-
-                        <TextView
-                            android:id="@+id/item_conference_participants"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_margin="4dp"
-                            android:layout_weight="6"
-                            android:gravity="end"
-                            android:textAppearance="?android:attr/textAppearanceSmall"
-                            tools:text="5 Participants" />
-                    </LinearLayout>
-
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="4dp"
+                        android:layout_weight="6"
+                        android:gravity="end"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        tools:text="5 Participants" />
                 </LinearLayout>
-            </RelativeLayout>
+            </LinearLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </FrameLayout>

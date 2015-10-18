@@ -57,7 +57,7 @@ public class ConferenceAdapter extends PagingAdapter<Conference, ConferenceAdapt
     public void onBindViewHolder(ConferenceAdapter.ViewHolder holder, int position) {
         Conference item = getItemAt(position);
         int participantAmount = item.getParticipantAmount();
-        String participantText = participantAmount +
+        String participantText = participantAmount + " " +
                 (participantAmount == 1 ?
                         holder.participants.getContext().getString(R.string.participant_single) :
                         holder.participants.getContext().getString(R.string.participant_multiple));
