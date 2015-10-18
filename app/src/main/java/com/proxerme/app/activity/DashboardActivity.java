@@ -45,6 +45,7 @@ import static com.proxerme.app.util.MaterialDrawerHelper.DRAWER_ID_DONATE;
 import static com.proxerme.app.util.MaterialDrawerHelper.DRAWER_ID_INFO;
 import static com.proxerme.app.util.MaterialDrawerHelper.DRAWER_ID_MESSAGES;
 import static com.proxerme.app.util.MaterialDrawerHelper.DRAWER_ID_NEWS;
+import static com.proxerme.app.util.MaterialDrawerHelper.DRAWER_ID_NONE;
 import static com.proxerme.app.util.MaterialDrawerHelper.DRAWER_ID_SETTINGS;
 import static com.proxerme.app.util.MaterialDrawerHelper.HEADER_ID_CHANGE;
 import static com.proxerme.app.util.MaterialDrawerHelper.HEADER_ID_GUEST;
@@ -133,9 +134,9 @@ public class DashboardActivity extends MainActivity {
         initViews();
         drawerHelper.build(toolbar, savedInstanceState);
 
-        int drawerItemToLoad = getItemToLoad();
+        int drawerItemToLoad = getItemToLoad(getIntent());
 
-        if (drawerItemToLoad == -1) {
+        if (drawerItemToLoad == DRAWER_ID_NONE) {
             if (savedInstanceState == null) {
                 if (StorageManager.isFirstStart()) {
                     initIntroduction();
@@ -178,8 +179,18 @@ public class DashboardActivity extends MainActivity {
                                 exception.getErrorCode()), Toast.LENGTH_LONG).show();
             }
         });
+
         if (savedInstanceState == null && userManager.getUser() != null) {
             userManager.login(userManager.getUser());
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        int drawerItemToLoad = getItemToLoad(intent);
+
+        if (drawerItemToLoad != DRAWER_ID_NONE) {
+            drawerHelper.select(drawerItemToLoad);
         }
     }
 
@@ -227,8 +238,7 @@ public class DashboardActivity extends MainActivity {
         }
     }
 
-    private int getItemToLoad() {
-        Intent intent = getIntent();
+    private int getItemToLoad(@NonNull Intent intent) {
         String action = intent.getAction();
 
         if (Intent.ACTION_VIEW.equals(action)) {
