@@ -62,12 +62,15 @@ public class DashboardActivity extends MainActivity {
 
     public static final String EXTRA_DRAWER_ITEM = "extra_drawer_item";
     public static final String EXTRA_ADDITIONAL_INFO = "extra_additional_info";
+    public static final String STATE_TITLE = "dashboard_title";
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
 
     private MaterialDrawerHelper drawerHelper;
     private OnActivityListener onActivityListener;
+
+    private String title;
 
     private MaterialDrawerCallback drawerCallback = new MaterialDrawerCallback() {
         @Override
@@ -113,6 +116,9 @@ public class DashboardActivity extends MainActivity {
         setContentView(R.layout.activity_dashboard);
 
         if (savedInstanceState != null) {
+            title = savedInstanceState.getString(STATE_TITLE);
+
+            setTitle(title);
             try {
                 onActivityListener = (OnActivityListener) getSupportFragmentManager()
                         .findFragmentById(R.id.activity_main_content_container);
@@ -202,6 +208,7 @@ public class DashboardActivity extends MainActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
+        outState.putString(STATE_TITLE, title);
         drawerHelper.saveInstanceState(outState);
     }
 
@@ -265,6 +272,7 @@ public class DashboardActivity extends MainActivity {
     }
 
     public void setFragment(@NonNull Fragment fragment, @NonNull String title) {
+        this.title = title;
         setTitle(title);
 
         setFragment(fragment);
