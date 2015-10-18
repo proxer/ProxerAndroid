@@ -50,4 +50,6 @@
     <string name="error_logout">Abmeldung hat nicht funktioniert</string>
     <string name="drawer_header_logout">Abmelden</string>
     <string name="drawer_item_messages">Nachrichten</string>
+    <string name="participant_multiple">Teilnehmer</string>
+    <string name="participant_single">Teilnehmer</string>
 </resources>

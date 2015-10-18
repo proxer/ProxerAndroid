@@ -321,7 +321,8 @@ public class DashboardActivity extends MainActivity {
                 setFragment(NewsFragment.newInstance(), getString(R.string.drawer_item_news));
                 return false;
             case DRAWER_ID_MESSAGES:
-                setFragment(ConferencesFragment.newInstance(), "Messages");
+                setFragment(ConferencesFragment.newInstance(),
+                        getString(R.string.drawer_item_messages));
                 return false;
             case DRAWER_ID_INFO:
                 setFragment(new LibsBuilder().withAboutVersionShownName(true)
