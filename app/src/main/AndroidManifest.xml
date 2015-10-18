@@ -23,6 +23,19 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="proxer.me"
+                    android:path="/news"
+                    android:scheme="http" />
+                <data
+                    android:host="proxer.me"
+                    android:path="/messages"
+                    android:scheme="http" />
             </intent-filter>
         </activity>
         <activity

@@ -36,6 +36,8 @@ import java.util.ArrayList;
  */
 public class MaterialDrawerHelper {
 
+    public static final int DRAWER_ID_NONE = -1;
+
     //Normal items
     public static final int DRAWER_ID_NEWS = 0;
     public static final int DRAWER_ID_MESSAGES = 1;

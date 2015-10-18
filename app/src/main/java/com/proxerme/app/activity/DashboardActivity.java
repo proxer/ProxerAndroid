@@ -133,7 +133,7 @@ public class DashboardActivity extends MainActivity {
         initViews();
         drawerHelper.build(toolbar, savedInstanceState);
 
-        int drawerItemToLoad = getIntent().getIntExtra(EXTRA_DRAWER_ITEM, -1);
+        int drawerItemToLoad = getItemToLoad();
 
         if (drawerItemToLoad == -1) {
             if (savedInstanceState == null) {
@@ -224,6 +224,25 @@ public class DashboardActivity extends MainActivity {
                     super.onBackPressed();
                 }
             }
+        }
+    }
+
+    private int getItemToLoad() {
+        Intent intent = getIntent();
+        String action = intent.getAction();
+
+        if (Intent.ACTION_VIEW.equals(action)) {
+            String url = intent.getDataString();
+
+            if (url.contains("news")) {
+                return MaterialDrawerHelper.DRAWER_ID_NEWS;
+            } else if (url.contains("messages")) {
+                return MaterialDrawerHelper.DRAWER_ID_MESSAGES;
+            } else {
+                return MaterialDrawerHelper.DRAWER_ID_NONE;
+            }
+        } else {
+            return intent.getIntExtra(EXTRA_DRAWER_ITEM, MaterialDrawerHelper.DRAWER_ID_NONE);
         }
     }
 
