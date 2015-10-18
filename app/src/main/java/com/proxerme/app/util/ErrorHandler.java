@@ -4,13 +4,13 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.proxerme.app.R;
-import com.proxerme.library.connection.ErrorHandler.ErrorCode;
+import com.proxerme.library.connection.ProxerException;
 
-import static com.proxerme.library.connection.ErrorHandler.ErrorCodes.IO;
-import static com.proxerme.library.connection.ErrorHandler.ErrorCodes.NETWORK;
-import static com.proxerme.library.connection.ErrorHandler.ErrorCodes.TIMEOUT;
-import static com.proxerme.library.connection.ErrorHandler.ErrorCodes.UNKNOWN;
-import static com.proxerme.library.connection.ErrorHandler.ErrorCodes.UNPARSEABLE;
+import static com.proxerme.library.connection.ProxerException.ErrorCodes.IO;
+import static com.proxerme.library.connection.ProxerException.ErrorCodes.NETWORK;
+import static com.proxerme.library.connection.ProxerException.ErrorCodes.TIMEOUT;
+import static com.proxerme.library.connection.ProxerException.ErrorCodes.UNKNOWN;
+import static com.proxerme.library.connection.ProxerException.ErrorCodes.UNPARSEABLE;
 
 /**
  * Todo: Describe Class
@@ -20,7 +20,8 @@ import static com.proxerme.library.connection.ErrorHandler.ErrorCodes.UNPARSEABL
 public class ErrorHandler {
 
     @NonNull
-    public static String getMessageForErrorCode(@NonNull Context context, @ErrorCode int code) {
+    public static String getMessageForErrorCode(@NonNull Context context,
+                                                @ProxerException.ErrorCode int code) {
         switch (code) {
             case NETWORK:
                 return context.getString(R.string.error_network);

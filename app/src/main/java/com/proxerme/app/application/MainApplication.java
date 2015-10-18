@@ -10,8 +10,13 @@ import com.bumptech.glide.Glide;
 import com.mikepenz.materialdrawer.util.DrawerImageLoader;
 import com.orhanobut.hawk.Hawk;
 import com.orhanobut.hawk.HawkBuilder;
+import com.proxerme.library.util.PersistentCookieStore;
 
 import net.danlew.android.joda.JodaTimeAndroid;
+
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
 
 /**
  * The {@link Application}, which is used by this App. It does some configuration at start.
@@ -49,6 +54,10 @@ public class MainApplication extends Application {
                 return null;
             }
         });
+
+        CookieManager cookieManager = new CookieManager(new PersistentCookieStore(this),
+                CookiePolicy.ACCEPT_ALL);
+        CookieHandler.setDefault(cookieManager);
     }
 
 }

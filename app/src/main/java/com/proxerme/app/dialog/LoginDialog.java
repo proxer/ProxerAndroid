@@ -16,13 +16,11 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.proxerme.app.R;
 import com.proxerme.app.manager.UserManager;
-import com.proxerme.app.util.ErrorHandler;
 import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.connection.ProxerException;
 import com.proxerme.library.connection.ProxerTag;
@@ -167,12 +165,6 @@ public class LoginDialog extends DialogFragment {
 
                     @Override
                     public void onLoginFailed(@NonNull ProxerException exception) {
-                        if (getContext() != null) {
-                            Toast.makeText(getContext(),
-                                    ErrorHandler.getMessageForErrorCode(getContext(),
-                                            exception.getErrorCode()), Toast.LENGTH_LONG).show();
-                        }
-
                         loading = false;
                         handleVisibility();
                     }

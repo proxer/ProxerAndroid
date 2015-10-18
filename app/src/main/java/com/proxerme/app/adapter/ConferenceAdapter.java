@@ -3,6 +3,7 @@ package com.proxerme.app.adapter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -48,19 +49,23 @@ public class ConferenceAdapter extends PagingAdapter<Conference, ConferenceAdapt
 
     @Override
     public ConferenceAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(View.inflate(parent.getContext(), R.layout.item_conference, parent));
+        return new ViewHolder(LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_conference, parent, false));
     }
 
     @Override
     public void onBindViewHolder(ConferenceAdapter.ViewHolder holder, int position) {
         Conference item = getItemAt(position);
         int participantAmount = item.getParticipantAmount();
+        String participantText = participantAmount +
+                (participantAmount == 1 ?
+                        holder.participants.getContext().getString(R.string.participant_single) :
+                        holder.participants.getContext().getString(R.string.participant_multiple));
 
         holder.topic.setText(item.getTopic());
         holder.time.setText(TimeUtils.convertToRelativeReadableTime(holder.time.getContext(),
                 item.getTime()));
-        holder.participants.setText(participantAmount +
-                (participantAmount == 1 ? "Participant" : "Participants"));
+        holder.participants.setText(participantText);
 
         Glide.with(holder.image.getContext()).load(UrlHolder.getUserImage(item.getImageId()))
                 .into(holder.image);

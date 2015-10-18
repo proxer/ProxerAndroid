@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import com.proxerme.app.R;
 import com.proxerme.app.adapter.PagingAdapter;
 import com.proxerme.app.util.EndlessRecyclerOnScrollListener;
+import com.proxerme.app.util.ErrorHandler;
 import com.proxerme.app.util.SnackbarManager;
 import com.proxerme.app.util.Utils;
 import com.proxerme.library.connection.ProxerConnection;
@@ -39,6 +40,7 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
     private static final String STATE_CURRENT_PAGE = "paging_current_page";
     private static final String STATE_LAST_LOADED_PAGE = "paging_last_loaded_page";
     private static final String STATE_ERROR_MESSAGE = "paging_error_message";
+    private static final String STATE_END_REACHED = "paging_end_reached";
 
     View root;
     @Bind(R.id.fragment_paging_list_container)
@@ -53,6 +55,7 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
     private int lastLoadedPage = 1;
     private String currentErrorMessage;
     private boolean methodBeforeErrorInsert = false;
+    private boolean endReached = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,6 +69,7 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
             lastLoadedPage = savedInstanceState.getInt(STATE_LAST_LOADED_PAGE);
             currentErrorMessage = savedInstanceState.getString(STATE_ERROR_MESSAGE);
             methodBeforeErrorInsert = savedInstanceState.getBoolean(STATE_METHOD_BEFORE_ERROR);
+            endReached = savedInstanceState.getBoolean(STATE_END_REACHED);
         }
 
         configAdapter(adapter);
@@ -87,7 +91,7 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
         list.addOnScrollListener(new EndlessRecyclerOnScrollListener(layoutManager) {
             @Override
             public void onLoadMore() {
-                if (!loading) {
+                if (!loading && !endReached) {
                     doLoad(currentPage, false);
                 }
             }
@@ -130,6 +134,7 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
         outState.putInt(STATE_LAST_LOADED_PAGE, lastLoadedPage);
         outState.putString(STATE_ERROR_MESSAGE, currentErrorMessage);
         outState.putBoolean(STATE_METHOD_BEFORE_ERROR, methodBeforeErrorInsert);
+        outState.putBoolean(STATE_END_REACHED, endReached);
     }
 
     private void doLoad(@IntRange(from = 1) final int page, final boolean insert) {
@@ -142,19 +147,35 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
         load(page, insert, new ProxerConnection.ResultCallback<List<T>>() {
             @Override
             public void onResult(List<T> result) {
-                if (!insert) {
-                    currentPage++;
+                if (result.isEmpty()) {
+                    if (!insert) {
+                        endReached = true;
+                    }
+                } else {
+                    if (!insert) {
+                        currentPage++;
+                    }
+
+                    loading = false;
+
+                    handleResult(result, insert);
+                    swipeRefreshLayout.setRefreshing(false);
                 }
-
-                loading = false;
-
-                handleResult(result, insert);
-                swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
-            public void onError(@NonNull ProxerException e) {
+            public void onError(@NonNull ProxerException exception) {
+                if (exception.getErrorCode() == ProxerException.ErrorCodes.PROXER) {
+                    currentErrorMessage = exception.getMessage();
+                } else {
+                    currentErrorMessage = ErrorHandler.getMessageForErrorCode(getContext(),
+                            exception.getErrorCode());
+                }
 
+                loading = false;
+                methodBeforeErrorInsert = insert;
+
+                showError();
             }
         });
     }

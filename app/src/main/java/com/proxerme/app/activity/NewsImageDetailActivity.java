@@ -55,7 +55,7 @@ public class NewsImageDetailActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        String url = getIntent().getParcelableExtra(EXTRA_URL);
+        String url = getIntent().getStringExtra(EXTRA_URL);
 
         supportPostponeEnterTransition();
         Glide.with(this).load(url).listener(new RequestListener<String, GlideDrawable>() {

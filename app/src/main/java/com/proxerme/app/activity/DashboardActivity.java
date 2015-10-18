@@ -22,6 +22,7 @@ import com.proxerme.app.interfaces.OnActivityListener;
 import com.proxerme.app.manager.PreferenceManager;
 import com.proxerme.app.manager.StorageManager;
 import com.proxerme.app.manager.UserManager;
+import com.proxerme.app.util.ErrorHandler;
 import com.proxerme.app.util.MaterialDrawerHelper;
 import com.proxerme.app.util.SnackbarManager;
 import com.proxerme.library.connection.ProxerException;
@@ -162,8 +163,15 @@ public class DashboardActivity extends MainActivity {
                 Toast.makeText(DashboardActivity.this, R.string.error_logout,
                         Toast.LENGTH_LONG).show();
             }
-        });
 
+            @Override
+            public void onLoginFailed(@NonNull ProxerException exception) {
+                UserManager.getInstance().removeUser();
+                Toast.makeText(DashboardActivity.this,
+                        ErrorHandler.getMessageForErrorCode(DashboardActivity.this,
+                                exception.getErrorCode()), Toast.LENGTH_LONG).show();
+            }
+        });
         if (savedInstanceState == null && userManager.getUser() != null) {
             userManager.login(userManager.getUser());
         }
