@@ -125,6 +125,13 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        cancelRequest();
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
@@ -157,11 +164,13 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
                     }
                 }
 
-                    loading = false;
+                loading = false;
 
-                    handleResult(result, insert);
+                handleResult(result, insert);
+
+                if (swipeRefreshLayout != null) {
                     swipeRefreshLayout.setRefreshing(false);
-
+                }
             }
 
             @Override
@@ -216,6 +225,8 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
 
     protected abstract void load(@IntRange(from = 1) final int page, final boolean insert,
                                  @NonNull ProxerConnection.ResultCallback<List<T>> callback);
+
+    protected abstract void cancelRequest();
 
     protected void configAdapter(A adapter) {
 

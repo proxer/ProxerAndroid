@@ -13,6 +13,7 @@ import com.proxerme.app.manager.NewsManager;
 import com.proxerme.app.util.MaterialDrawerHelper;
 import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.connection.ProxerException;
+import com.proxerme.library.connection.ProxerTag;
 import com.proxerme.library.connection.UrlHolder;
 import com.proxerme.library.entity.News;
 
@@ -87,5 +88,10 @@ public class NewsFragment extends PagingFragment<News, NewsAdapter> {
                 callback.onError(exception);
             }
         });
+    }
+
+    @Override
+    protected void cancelRequest() {
+        ProxerConnection.cancel(ProxerTag.NEWS, false);
     }
 }

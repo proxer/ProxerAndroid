@@ -10,6 +10,7 @@ import com.proxerme.app.activity.NewsImageDetailActivity;
 import com.proxerme.app.adapter.ConferenceAdapter;
 import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.connection.ProxerException;
+import com.proxerme.library.connection.ProxerTag;
 import com.proxerme.library.connection.UrlHolder;
 import com.proxerme.library.entity.Conference;
 
@@ -67,5 +68,10 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
                         UrlHolder.getUserImage(conference.getImageId()));
             }
         });
+    }
+
+    @Override
+    protected void cancelRequest() {
+        ProxerConnection.cancel(ProxerTag.CONFERENCES, false);
     }
 }
