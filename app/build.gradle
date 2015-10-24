@@ -49,4 +49,6 @@ dependencies {
     compile('com.github.proxer:ProxerLibAndroid:1.2.1@aar') {
         transitive = true
     }
+
+    testCompile 'junit:junit:4.12'
 }
