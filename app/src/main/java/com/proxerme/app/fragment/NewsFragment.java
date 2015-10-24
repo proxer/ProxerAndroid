@@ -7,7 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.proxerme.app.activity.NewsImageDetailActivity;
+import com.proxerme.app.activity.ImageDetailActivity;
 import com.proxerme.app.adapter.NewsAdapter;
 import com.proxerme.app.manager.NewsManager;
 import com.proxerme.app.util.MaterialDrawerHelper;
@@ -43,7 +43,7 @@ public class NewsFragment extends PagingFragment<News, NewsAdapter> {
 
             @Override
             public void onNewsImageClick(@NonNull View v, @NonNull News news) {
-                NewsImageDetailActivity.navigateTo(getActivity(), (ImageView) v,
+                ImageDetailActivity.navigateTo(getActivity(), (ImageView) v,
                         UrlHolder.getNewsImageUrl(news.getId(), news.getImageId()));
             }
 

@@ -13,7 +13,9 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Created by geesr on 17.10.2015.
+ * Todo: Describe Class
+ *
+ * @author Ruben Gees
  */
 public abstract class PagingAdapter<T extends IdItem & Parcelable,
         V extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<V> {

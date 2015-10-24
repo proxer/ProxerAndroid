@@ -7,7 +7,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.proxerme.app.activity.NewsImageDetailActivity;
+import com.proxerme.app.activity.ImageDetailActivity;
 import com.proxerme.app.adapter.ConferenceAdapter;
 import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.connection.ProxerException;
@@ -60,13 +60,13 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
                 .OnConferenceInteractionListener() {
             @Override
             public void onConferenceClick(@NonNull View v, @NonNull Conference conference) {
-
+                //TODO
             }
 
             @Override
             public void onConferenceImageClick(@NonNull View v, @NonNull Conference conference) {
                 if (!TextUtils.isEmpty(conference.getImageId())) {
-                    NewsImageDetailActivity.navigateTo(getActivity(), (ImageView) v,
+                    ImageDetailActivity.navigateTo(getActivity(), (ImageView) v,
                             UrlHolder.getUserImage(conference.getImageId()));
                 }
             }

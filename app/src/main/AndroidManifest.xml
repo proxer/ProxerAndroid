@@ -51,7 +51,7 @@
         <service android:name=".customtabs.KeepAliveService" />
 
         <activity
-            android:name=".activity.NewsImageDetailActivity"
+            android:name=".activity.ImageDetailActivity"
             android:parentActivityName=".activity.DashboardActivity"
             android:theme="@style/Theme.Transparent">
             <meta-data

@@ -2,10 +2,13 @@ package com.proxerme.app.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -20,22 +23,24 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static android.app.ActivityManager.TaskDescription;
+
 /**
  * An Activity which shows a image with an animation on Lollipop and higher.
  * It also has a transparent background.
  *
  * @author Ruben Gees
  */
-public class NewsImageDetailActivity extends AppCompatActivity {
+public class ImageDetailActivity extends AppCompatActivity {
 
-    public static final String EXTRA_URL = "extra_url";
+    private static final String EXTRA_URL = "extra_url";
 
     @Bind(R.id.activity_news_image_detail_image)
     ImageView image;
 
     public static void navigateTo(@NonNull Activity context, @NonNull ImageView image,
                                   @NonNull String url) {
-        Intent intent = new Intent(context, NewsImageDetailActivity.class);
+        Intent intent = new Intent(context, ImageDetailActivity.class);
 
         intent.putExtra(EXTRA_URL, url);
 
@@ -54,6 +59,7 @@ public class NewsImageDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_news_image_detail);
 
         ButterKnife.bind(this);
+        styleRecents();
 
         String url = getIntent().getStringExtra(EXTRA_URL);
 
@@ -76,6 +82,15 @@ public class NewsImageDetailActivity extends AppCompatActivity {
             }
         })
                 .into(image);
+    }
+
+    private void styleRecents() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Bitmap bm = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+            TaskDescription taskDesc = new TaskDescription(getString(R.string.app_name), bm,
+                    ContextCompat.getColor(this, R.color.primary));
+            setTaskDescription(taskDesc);
+        }
     }
 
     @Override

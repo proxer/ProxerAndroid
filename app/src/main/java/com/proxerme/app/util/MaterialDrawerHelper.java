@@ -109,11 +109,8 @@ public class MaterialDrawerHelper {
             new AccountHeader.OnAccountHeaderListener() {
                 @Override
                 public boolean onProfileChanged(View view, IProfile profile, boolean current) {
-                    if (callback != null) {
-                        return callback.onAccountClick(profile.getIdentifier());
-                    }
+                    return callback != null && callback.onAccountClick(profile.getIdentifier());
 
-                    return false;
                 }
             };
 

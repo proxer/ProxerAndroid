@@ -68,6 +68,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="4dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/button_expand_description"
                 android:scaleType="centerCrop" />
 
             <View

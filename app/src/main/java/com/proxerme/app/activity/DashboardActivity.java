@@ -61,9 +61,9 @@ import static com.proxerme.app.util.MaterialDrawerHelper.MaterialDrawerCallback;
  */
 public class DashboardActivity extends MainActivity {
 
-    public static final String EXTRA_DRAWER_ITEM = "extra_drawer_item";
-    public static final String EXTRA_ADDITIONAL_INFO = "extra_additional_info";
-    public static final String STATE_TITLE = "dashboard_title";
+    private static final String EXTRA_DRAWER_ITEM = "extra_drawer_item";
+    private static final String EXTRA_ADDITIONAL_INFO = "extra_additional_info";
+    private static final String STATE_TITLE = "dashboard_title";
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
