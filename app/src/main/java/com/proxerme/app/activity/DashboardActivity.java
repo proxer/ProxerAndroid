@@ -97,7 +97,8 @@ public class DashboardActivity extends MainActivity {
         }
     };
 
-    public static Intent getSectionIntent(@NonNull Context context, int drawerItemId, @Nullable String additionalInfo) {
+    public static Intent getSectionIntent(@NonNull Context context, int drawerItemId,
+                                          @Nullable String additionalInfo) {
         Intent intent = new Intent(context, DashboardActivity.class);
 
         intent.putExtra(EXTRA_DRAWER_ITEM, drawerItemId);
