@@ -1,96 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:context=".adapter.ConferenceAdapter">
 
     <android.support.v7.widget.CardView
-        android:id="@+id/item_news_content_container"
+        android:id="@+id/item_conference_content_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
         android:foreground="?android:attr/selectableItemBackground"
-        card_view:cardCornerRadius="1dp">
+        app:cardCornerRadius="1dp">
 
-        <LinearLayout
+        <android.support.percent.PercentRelativeLayout
+            android:id="@+id/item_conference_content"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
 
             <com.proxerme.app.view.WidthAspectImageView
                 android:id="@+id/item_conference_image"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="0.3"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
                 android:scaleType="centerCrop"
                 android:transitionName="image"
+                app:layout_widthPercent="30%"
                 tools:ignore="UnusedAttribute" />
 
-            <LinearLayout
-                android:id="@+id/item_conference_content"
+            <TextView
+                android:id="@+id/item_conference_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.7"
-                android:orientation="vertical">
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:padding="8dp"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                app:layout_widthPercent="70%"
+                tools:text="Title" />
+
+            <LinearLayout
+                android:id="@+id/item_conference_bottom_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/item_conference_title"
+                android:orientation="horizontal"
+                android:padding="8dp"
+                app:layout_widthPercent="70%">
 
                 <TextView
-                    android:id="@+id/item_conference_title"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/item_conference_time"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    tools:text="Title" />
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="4dp"
+                    android:layout_weight="4"
+                    android:gravity="start"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    tools:text="Two days ago" />
 
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_weight="1" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginRight="4dp"
-                    android:layout_marginTop="4dp"
-                    android:background="@color/divider" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/item_conference_participants"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="6dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/item_conference_time"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_margin="4dp"
-                        android:layout_weight="4"
-                        android:gravity="start"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        tools:text="Two days ago" />
-
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_weight="1" />
-
-                    <TextView
-                        android:id="@+id/item_conference_participants"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_margin="4dp"
-                        android:layout_weight="6"
-                        android:gravity="end"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        tools:text="5 Participants" />
-                </LinearLayout>
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="4dp"
+                    android:layout_weight="6"
+                    android:gravity="end"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    tools:text="5 Participants" />
             </LinearLayout>
-        </LinearLayout>
+        </android.support.percent.PercentRelativeLayout>
     </android.support.v7.widget.CardView>
 </FrameLayout>

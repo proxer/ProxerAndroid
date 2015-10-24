@@ -3,6 +3,7 @@ package com.proxerme.app.adapter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 import com.proxerme.app.R;
 import com.proxerme.app.util.TimeUtils;
 import com.proxerme.library.connection.UrlHolder;
@@ -67,8 +70,21 @@ public class ConferenceAdapter extends PagingAdapter<Conference, ConferenceAdapt
                 item.getTime()));
         holder.participants.setText(participantText);
 
-        Glide.with(holder.image.getContext()).load(UrlHolder.getUserImage(item.getImageId()))
-                .into(holder.image);
+        if (TextUtils.isEmpty(item.getImageId())) {
+            IconicsDrawable icon = new IconicsDrawable(holder.image.getContext())
+                    .sizeDp(96).paddingDp(16).colorRes(R.color.primary);
+
+            if (item.isConference()) {
+                icon.icon(GoogleMaterial.Icon.gmd_group);
+            } else {
+                icon.icon(GoogleMaterial.Icon.gmd_person);
+            }
+
+            holder.image.setImageDrawable(icon);
+        } else {
+            Glide.with(holder.image.getContext()).load(UrlHolder.getUserImage(item.getImageId()))
+                    .into(holder.image);
+        }
     }
 
     public void setOnConferenceInteractionListener(OnConferenceInteractionListener
@@ -110,7 +126,7 @@ public class ConferenceAdapter extends PagingAdapter<Conference, ConferenceAdapt
             }
         }
 
-        @OnClick(R.id.item_conference_content)
+        @OnClick(R.id.item_conference_content_container)
         void onContentClick(View v) {
             if (onConferenceInteractionListener != null) {
                 onConferenceInteractionListener.onConferenceClick(v, getItemAt(getLayoutPosition()));

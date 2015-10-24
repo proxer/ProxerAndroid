@@ -3,6 +3,7 @@ package com.proxerme.app.fragment;
 import android.os.Bundle;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -64,8 +65,10 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
 
             @Override
             public void onConferenceImageClick(@NonNull View v, @NonNull Conference conference) {
-                NewsImageDetailActivity.navigateTo(getActivity(), (ImageView) v,
-                        UrlHolder.getUserImage(conference.getImageId()));
+                if (!TextUtils.isEmpty(conference.getImageId())) {
+                    NewsImageDetailActivity.navigateTo(getActivity(), (ImageView) v,
+                            UrlHolder.getUserImage(conference.getImageId()));
+                }
             }
         });
     }
