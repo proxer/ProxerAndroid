@@ -35,25 +35,25 @@ public class PagingHelperTest {
 
     @Test
     public void testCalculateOffsetFromStart() throws Exception {
-        IdItem first = new Conference("3", "a", 2, false, 324, false, "a");
+        IdItem first = new Conference("1", "a", 2, false, 324, false, "a");
 
-        Assert.assertEquals(3, PagingHelper.calculateOffsetFromStart(list, first, ITEMS_ON_PAGE));
+        Assert.assertEquals(1, PagingHelper.calculateOffsetFromStart(list, first, ITEMS_ON_PAGE));
     }
 
     @Test
     public void testCalculateOffsetFromEnd() throws Exception {
-        IdItem last = new Conference("3", "a", 2, false, 324, false, "a");
+        IdItem last = new Conference("1", "a", 2, false, 324, false, "a");
 
-        Assert.assertEquals(11, PagingHelper.calculateOffsetFromEnd(list, last, ITEMS_ON_PAGE));
+        Assert.assertEquals(14, PagingHelper.calculateOffsetFromEnd(list, last, ITEMS_ON_PAGE));
     }
 
     @Test
     public void testCalculateOffsetFromStartId() throws Exception {
-        Assert.assertEquals(3, PagingHelper.calculateOffsetFromStart(list, "3", ITEMS_ON_PAGE));
+        Assert.assertEquals(1, PagingHelper.calculateOffsetFromStart(list, "1", ITEMS_ON_PAGE));
     }
 
     @Test
     public void testCalculateOffsetFromEndId() throws Exception {
-        Assert.assertEquals(11, PagingHelper.calculateOffsetFromEnd(list, "3", ITEMS_ON_PAGE));
+        Assert.assertEquals(14, PagingHelper.calculateOffsetFromEnd(list, "1", ITEMS_ON_PAGE));
     }
 }

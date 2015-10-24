@@ -55,7 +55,7 @@ public class PagingHelper {
 
             for (int i = list.size() - 1; i >= 0 && i >= lastSearchableIndex; i--) {
                 if (id.equals(list.get(i).getId())) {
-                    return (list.size() - 1) - i;
+                    return list.size() - i;
                 }
             }
 
