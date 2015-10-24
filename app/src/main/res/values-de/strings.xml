@@ -52,4 +52,6 @@
     <string name="drawer_item_messages">Nachrichten</string>
     <string name="participant_multiple">Teilnehmer</string>
     <string name="participant_single">Teilnehmer</string>
+    <string name="button_expand_description">Erweitere Element</string>
+    <string name="image_detail_description">Detailiertes Bild</string>
 </resources>
