@@ -3,7 +3,6 @@ package com.proxerme.app.fragment;
 import android.os.Bundle;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -22,18 +21,19 @@ import java.util.List;
 import static com.proxerme.app.manager.NewsManager.getInstance;
 
 /**
- * A {@link Fragment], retrieving and displaying News.
+ * A Fragment, retrieving and displaying News.
  *
  * @author Ruben Gees
  */
 public class NewsFragment extends PagingFragment<News, NewsAdapter> {
 
+    @NonNull
     public static NewsFragment newInstance() {
         return new NewsFragment();
     }
 
     @Override
-    protected void configAdapter(NewsAdapter adapter) {
+    protected void configAdapter(@NonNull NewsAdapter adapter) {
         adapter.setOnNewsInteractionListener(new NewsAdapter.OnNewsInteractionListener() {
             @Override
             public void onNewsClick(@NonNull View v, @NonNull News news) {

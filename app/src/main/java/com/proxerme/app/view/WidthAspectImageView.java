@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import com.proxerme.app.R;
 
 /**
- * And {@link ImageView}, which calculates it's height by the given width and an aspect.
+ * An ImageView, which calculates it's height by the given width and an aspect.
  *
  * @author Ruben Gees
  */

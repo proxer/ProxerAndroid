@@ -11,7 +11,7 @@ import org.joda.time.Hours;
 import org.joda.time.Minutes;
 
 /**
- * A helper class to convert a unix timestamp to a human-readable {@link String}.
+ * A helper class to convert a unix timestamp to a human-readable String.
  *
  * @author Ruben Gees
  */
@@ -35,8 +35,8 @@ public class TimeUtils {
                 } else {
                     return minutesBetween.getMinutes() == 1 ? context
                             .getString(R.string.time_one_minute_ago) :
-                            (context.getString(R.string.time_before) + " "
-                                    + minutesBetween.getMinutes() + " " +
+                            (context.getString(R.string.time_before) + " " +
+                                    minutesBetween.getMinutes() + " " +
                                     context.getString(R.string.time_minutes_ago));
                 }
             } else {

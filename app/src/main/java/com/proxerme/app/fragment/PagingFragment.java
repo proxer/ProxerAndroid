@@ -28,7 +28,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
- * Todo: Describe Class
+ * An abstract Fragment, managing page based Lists of items.
  *
  * @author Ruben Gees
  */
@@ -228,7 +228,7 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
 
     protected abstract void cancelRequest();
 
-    protected void configAdapter(A adapter) {
+    protected void configAdapter(@NonNull A adapter) {
 
     }
 

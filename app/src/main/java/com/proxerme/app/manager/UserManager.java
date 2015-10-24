@@ -12,7 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Todo: Describe Class
+ * A singleton for managing the user and it's login state.
  *
  * @author Ruben Gees
  */
@@ -26,6 +26,7 @@ public class UserManager {
         listeners = new LinkedList<>();
     }
 
+    @NonNull
     public static UserManager getInstance() {
         return ourInstance;
     }

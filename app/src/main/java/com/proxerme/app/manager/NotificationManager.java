@@ -27,6 +27,13 @@ public class NotificationManager {
     private static final int NEWS_NOTIFICATION_ID = 1423;
     private static final int FITTING_CHARS = 35;
 
+    /**
+     * Shows a Notification about news to the user. If there are no new news, nothing will be shown.
+     *
+     * @param context The Context.
+     * @param news    The List of {@link News}.
+     * @param offset  The offset to the last retrieved news.
+     */
     public static void showNewsNotification(@NonNull Context context, List<News> news, int offset) {
         if (offset > 0 || offset == -2) {
             android.app.NotificationManager notificationManager =

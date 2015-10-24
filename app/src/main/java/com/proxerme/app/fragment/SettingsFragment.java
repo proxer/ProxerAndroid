@@ -2,7 +2,7 @@ package com.proxerme.app.fragment;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.annotation.NonNull;
 import android.support.v7.preference.PreferenceFragmentCompat;
 
 import com.proxerme.app.R;
@@ -11,12 +11,13 @@ import com.proxerme.app.manager.NewsManager;
 import com.proxerme.app.manager.PreferenceManager;
 
 /**
- * A {@link Fragment}, showing the settings of this App.
+ * A Fragment, showing the settings of this App.
  *
  * @author Ruben Gees
  */
 public class SettingsFragment extends PreferenceFragmentCompat implements OnActivityListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
+    @NonNull
     public static SettingsFragment newInstance() {
         return new SettingsFragment();
     }

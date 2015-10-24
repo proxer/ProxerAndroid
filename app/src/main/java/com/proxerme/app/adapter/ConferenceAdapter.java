@@ -1,7 +1,9 @@
 package com.proxerme.app.adapter;
 
 import android.os.Bundle;
+import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -26,7 +28,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Todo: Describe Class
+ * An Adapter for {@link Conference}s, used in a RecyclerView.
  *
  * @author Ruben Gees
  */
@@ -46,6 +48,7 @@ public class ConferenceAdapter extends PagingAdapter<Conference, ConferenceAdapt
     }
 
     @Override
+    @IntRange(from = 1)
     protected int getItemsOnPage() {
         return ProxerInfo.CONFERENCES_ON_PAGE;
     }
@@ -87,7 +90,7 @@ public class ConferenceAdapter extends PagingAdapter<Conference, ConferenceAdapt
         }
     }
 
-    public void setOnConferenceInteractionListener(OnConferenceInteractionListener
+    public void setOnConferenceInteractionListener(@Nullable OnConferenceInteractionListener
                                                            onConferenceInteractionListener) {
         this.onConferenceInteractionListener = onConferenceInteractionListener;
     }

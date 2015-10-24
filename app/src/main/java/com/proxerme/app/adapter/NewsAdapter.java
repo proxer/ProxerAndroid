@@ -1,7 +1,9 @@
 package com.proxerme.app.adapter;
 
 import android.os.Bundle;
+import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -108,11 +110,13 @@ public class NewsAdapter extends PagingAdapter<News, NewsAdapter.ViewHolder> {
     }
 
     @Override
+    @IntRange(from = 1)
     protected int getItemsOnPage() {
         return ProxerInfo.NEWS_ON_PAGE;
     }
 
-    public void setOnNewsInteractionListener(OnNewsInteractionListener onNewsInteractionListener) {
+    public void setOnNewsInteractionListener(@Nullable OnNewsInteractionListener
+                                                     onNewsInteractionListener) {
         this.onNewsInteractionListener = onNewsInteractionListener;
     }
 

@@ -2,6 +2,7 @@ package com.proxerme.app.adapter;
 
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 
@@ -13,7 +14,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Todo: Describe Class
+ * An abstract Adapter for page based item Lists.
  *
  * @author Ruben Gees
  */
@@ -48,6 +49,13 @@ public abstract class PagingAdapter<T extends IdItem & Parcelable,
         return list.get(position);
     }
 
+    /**
+     * Inserts a List of items into the Adapter, removing the existing ones. The items are inserted
+     * at the first position.
+     *
+     * @param list The List of items.
+     * @return The offset to the existing items.
+     */
     public int insertAtStart(@NonNull List<T> list) {
         if (!list.isEmpty()) {
             int offset = PagingHelper.calculateOffsetFromStart(list, this.list.get(0),
@@ -66,6 +74,13 @@ public abstract class PagingAdapter<T extends IdItem & Parcelable,
         return PagingHelper.OFFSET_NOT_CALCULABLE;
     }
 
+    /**
+     * Appends a List of items to the Adapter, removing the existing ones. The items are appended at
+     * the last position.
+     *
+     * @param list The List of items.
+     * @return The offset to the existing items.
+     */
     public int append(@NonNull List<T> list) {
         if (!list.isEmpty()) {
             int offset = PagingHelper.calculateOffsetFromEnd(this.list, list.get(0),
@@ -88,5 +103,11 @@ public abstract class PagingAdapter<T extends IdItem & Parcelable,
         outState.putParcelableArrayList(STATE_LIST, list);
     }
 
+    /**
+     * Returns the items on a Page of the inheriting Adapter type.
+     *
+     * @return The items on a page.
+     */
+    @IntRange(from = 1)
     protected abstract int getItemsOnPage();
 }

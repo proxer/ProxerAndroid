@@ -22,12 +22,16 @@ public class StorageManager {
     private static final String STORAGE_USER_ID = "storage_user_id";
 
     @Nullable
-    public static String getLastId() {
+    public static String getLastNewsId() {
         return Hawk.get(STORAGE_NEWS_LAST_ID, null);
     }
 
-    public static void setLastId(@Nullable String id) {
-        Hawk.put(STORAGE_NEWS_LAST_ID, id);
+    public static void setLastNewsId(@Nullable String id) {
+        if (id == null) {
+            Hawk.remove(STORAGE_NEWS_LAST_ID);
+        } else {
+            Hawk.put(STORAGE_NEWS_LAST_ID, id);
+        }
     }
 
     @IntRange(from = 0)

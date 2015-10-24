@@ -30,7 +30,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
- * Todo: Describe Class
+ * A dialog, which shows a login mask to the user. It also handles the login and shows a ProgressBar
+ * to the user.
  *
  * @author Ruben Gees
  */

@@ -8,7 +8,7 @@ import com.proxerme.library.interfaces.IdItem;
 import java.util.List;
 
 /**
- * Todo: Describe Class
+ * A helper class for calculating offsets to existing items in a paging based structure.
  *
  * @author Ruben Gees
  */

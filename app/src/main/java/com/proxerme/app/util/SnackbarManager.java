@@ -6,7 +6,8 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 
 /**
- * A manager for the current displayed {@link Snackbar} instance.
+ * A manager for the current displayed {@link Snackbar} instance. Always use this manager if you are
+ * going to show a {@link Snackbar}.
  *
  * @author Ruben Gees
  */

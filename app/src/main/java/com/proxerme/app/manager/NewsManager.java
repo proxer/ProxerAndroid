@@ -41,27 +41,53 @@ public class NewsManager {
         return INSTANCE;
     }
 
+    /**
+     * Returns the last retrieved news id.
+     *
+     * @return The id.
+     */
     @Nullable
     public String getLastId() {
         return lastId;
     }
 
+    /**
+     * Sets the last retrieved id.
+     *
+     * @param id The id.
+     */
     public void setLastId(@Nullable String id) {
         lastId = id;
 
         saveId();
     }
 
+    /**
+     * Returns the new news since the last query. Those are set with the method
+     * {@link #setNewNews(int)}.
+     *
+     * @return The amount of new News.
+     */
+    @IntRange(from = 0)
     public int getNewNews() {
         return newNews;
     }
 
+    /**
+     * Sets the new news since the last query. To be used in a background service.
+     *
+     * @param newNews The amount of new News.
+     */
     public void setNewNews(@IntRange(from = 0) int newNews) {
         this.newNews = newNews;
 
         saveNewNews();
     }
 
+    /**
+     * Retrieves News and interprets them in a background Service in the time span, specified in the
+     * settings. If a news retrieval was already queued, it will be cancelled.
+     */
     public void retrieveNewsLater() {
         cancelNewsRetrieval();
         if (isNewsRetrievalEnabled()) {
@@ -82,6 +108,9 @@ public class NewsManager {
         }
     }
 
+    /**
+     * Cancels a queued news retrieval. If there is none, nothing will happen.
+     */
     public void cancelNewsRetrieval() {
         ((AlarmManager) context.getSystemService(Context.ALARM_SERVICE))
                 .cancel(PendingIntent.getBroadcast(context, 0,
@@ -94,16 +123,21 @@ public class NewsManager {
                 PackageManager.DONT_KILL_APP);
     }
 
+    /**
+     * Returns if news retrieval is enabled.
+     *
+     * @return True, if news retrieval is enabled.
+     */
     public boolean isNewsRetrievalEnabled() {
         return PreferenceManager.areNotificationsEnabled(context);
     }
 
     private void saveId() {
-        StorageManager.setLastId(lastId);
+        StorageManager.setLastNewsId(lastId);
     }
 
     private void loadId() {
-        lastId = StorageManager.getLastId();
+        lastId = StorageManager.getLastNewsId();
     }
 
     private void saveNewNews() {

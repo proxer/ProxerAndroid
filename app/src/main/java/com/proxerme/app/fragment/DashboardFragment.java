@@ -6,13 +6,14 @@ import com.proxerme.app.activity.DashboardActivity;
 import com.proxerme.app.interfaces.OnActivityListener;
 
 /**
- * Todo: Describe Class
+ * An abstract Fragment, all Fragments which are shown in the {@link DashboardActivity} should
+ * inherit from.
  *
  * @author Ruben Gees
  */
 public class DashboardFragment extends Fragment implements OnActivityListener {
 
-    protected DashboardActivity getDashboardActivity() {
+    protected DashboardActivity getDashboardActivity() throws RuntimeException {
         try {
             return (DashboardActivity) getActivity();
         } catch (ClassCastException e) {

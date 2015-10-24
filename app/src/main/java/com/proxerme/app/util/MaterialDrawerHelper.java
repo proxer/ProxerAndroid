@@ -30,7 +30,7 @@ import com.proxerme.library.util.ProxerInfo;
 import java.util.ArrayList;
 
 /**
- * Todo: Describe Class
+ * A helper class for managing the MaterialDrawer.
  *
  * @author Ruben Gees
  */

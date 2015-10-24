@@ -5,7 +5,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.AttributeSet;
 
 /**
- * Todo: Describe Class
+ * An extension of the SwipeRefreshLayout, fixing the bug that no progress is displayed on the first
+ * call to {@link #setRefreshing(boolean)}.
  *
  * @author Ruben Gees
  */

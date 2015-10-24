@@ -13,7 +13,7 @@ import static com.proxerme.library.connection.ProxerException.ErrorCodes.UNKNOWN
 import static com.proxerme.library.connection.ProxerException.ErrorCodes.UNPARSEABLE;
 
 /**
- * Todo: Describe Class
+ * A helper class, turning error codes into human-readable Strings.
  *
  * @author Ruben Gees
  */

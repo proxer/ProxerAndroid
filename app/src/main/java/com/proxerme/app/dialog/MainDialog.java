@@ -3,7 +3,7 @@ package com.proxerme.app.dialog;
 import android.support.v4.app.DialogFragment;
 
 /**
- * Todo: Describe Class
+ * An abstract dialog, which all dialogs with a Callback should inherit from.
  *
  * @author Ruben Gees
  */

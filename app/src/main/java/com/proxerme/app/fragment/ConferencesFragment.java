@@ -18,12 +18,13 @@ import com.proxerme.library.entity.Conference;
 import java.util.List;
 
 /**
- * Todo: Describe Class
+ * A Fragment showing a List of Conferences to the user.
  *
  * @author Ruben Gees
  */
 public class ConferencesFragment extends PagingFragment<Conference, ConferenceAdapter> {
 
+    @NonNull
     public static ConferencesFragment newInstance() {
         return new ConferencesFragment();
     }
@@ -55,7 +56,7 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
     }
 
     @Override
-    protected void configAdapter(ConferenceAdapter adapter) {
+    protected void configAdapter(@NonNull ConferenceAdapter adapter) {
         adapter.setOnConferenceInteractionListener(new ConferenceAdapter
                 .OnConferenceInteractionListener() {
             @Override

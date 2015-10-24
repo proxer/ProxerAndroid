@@ -15,7 +15,7 @@ import com.proxerme.library.util.ProxerInfo;
 import java.util.List;
 
 /**
- * An {@link IntentService}, which retrieves the News and shows a notification,if there are unread
+ * An IntentService, which retrieves the News and shows a notification if there are unread
  * ones.
  *
  * @author Ruben Gees
