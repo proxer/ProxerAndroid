@@ -23,3 +23,11 @@ Linux:
 - `./gradlew assembleDebug`
 
 You can find the apk in `app/build/outputs/apk/`.
+
+### Contribute
+
+Everybody is free to contribute to this project (and I would be happy about it :) ).
+
+To contribute:
+
+Fork this project, make changes and create a Pull Request. 
