@@ -72,6 +72,10 @@ public class ConferenceAdapter extends PagingAdapter<Conference, ConferenceAdapt
             currentPos++;
         }
 
+        if (currentPos > 0) {
+            notifyItemRangeChanged(0, currentPos);
+        }
+
         return result;
     }
 
