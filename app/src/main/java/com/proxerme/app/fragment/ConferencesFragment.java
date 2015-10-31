@@ -36,37 +36,14 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
     public void onStart() {
         super.onStart();
 
-        pollingTask = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    //noinspection InfiniteLoopStatement
-                    while (true) {
-                        Thread.sleep(POLLING_INTERVAL);
-
-                        if (ConferencesFragment.this.getActivity() != null) {
-                            ConferencesFragment.this.getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    doLoad(1, true, false);
-                                }
-                            });
-                        }
-                    }
-                } catch (InterruptedException ignored) {
-                }
-            }
-        });
-
-        pollingTask.start();
+        startPolling();
     }
 
     @Override
     public void onStop() {
         super.onStop();
 
-        pollingTask.interrupt();
-        pollingTask = null;
+        stopPolling();
     }
 
     @Override
@@ -86,11 +63,15 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
             @Override
             public void onResult(List<Conference> conferences) {
                 callback.onResult(conferences);
+
+                startPolling();
             }
 
             @Override
             public void onError(@NonNull ProxerException exception) {
                 callback.onError(exception);
+
+                stopPolling();
             }
         });
     }
@@ -117,5 +98,39 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
     @Override
     protected void cancelRequest() {
         ProxerConnection.cancel(ProxerTag.CONFERENCES, false);
+    }
+
+    private void startPolling() {
+        pollingTask = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    //noinspection InfiniteLoopStatement
+                    while (true) {
+                        Thread.sleep(POLLING_INTERVAL);
+
+                        if (ConferencesFragment.this.getActivity() != null) {
+                            ConferencesFragment.this.getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    doLoad(1, true, false);
+                                }
+                            });
+                        }
+                    }
+                } catch (InterruptedException ignored) {
+                    int a = 1;
+                }
+            }
+        });
+
+        pollingTask.start();
+    }
+
+    private void stopPolling() {
+        if (pollingTask != null) {
+            pollingTask.interrupt();
+            pollingTask = null;
+        }
     }
 }
