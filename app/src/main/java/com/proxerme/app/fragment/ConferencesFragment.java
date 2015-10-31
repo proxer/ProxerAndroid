@@ -1,6 +1,7 @@
 package com.proxerme.app.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -25,7 +26,7 @@ import java.util.List;
 public class ConferencesFragment extends PagingFragment<Conference, ConferenceAdapter> {
 
     private static final int POLLING_INTERVAL = 5000;
-    private Thread pollingTask;
+    private Handler handler;
 
     @NonNull
     public static ConferencesFragment newInstance() {
@@ -64,7 +65,9 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
             public void onResult(List<Conference> conferences) {
                 callback.onResult(conferences);
 
-                startPolling();
+                if (handler == null) {
+                    startPolling();
+                }
             }
 
             @Override
@@ -101,36 +104,22 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
     }
 
     private void startPolling() {
-        pollingTask = new Thread(new Runnable() {
+        handler = new Handler();
+
+        handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                try {
-                    //noinspection InfiniteLoopStatement
-                    while (true) {
-                        Thread.sleep(POLLING_INTERVAL);
+                doLoad(1, true, false);
 
-                        if (ConferencesFragment.this.getActivity() != null) {
-                            ConferencesFragment.this.getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    doLoad(1, true, false);
-                                }
-                            });
-                        }
-                    }
-                } catch (InterruptedException ignored) {
-                    int a = 1;
-                }
+                handler.postDelayed(this, POLLING_INTERVAL);
             }
-        });
-
-        pollingTask.start();
+        }, POLLING_INTERVAL);
     }
 
     private void stopPolling() {
-        if (pollingTask != null) {
-            pollingTask.interrupt();
-            pollingTask = null;
+        if (handler != null) {
+            handler.removeCallbacksAndMessages(null);
+            handler = null;
         }
     }
 }
