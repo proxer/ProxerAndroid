@@ -18,15 +18,55 @@ import com.proxerme.library.entity.Conference;
 import java.util.List;
 
 /**
- * A Fragment showing a List of Conferences to the user.
+ * A Fragment, showing a List of Conferences to the user.
  *
  * @author Ruben Gees
  */
 public class ConferencesFragment extends PagingFragment<Conference, ConferenceAdapter> {
 
+    private static final int POLLING_INTERVAL = 5000;
+    private Thread pollingTask;
+
     @NonNull
     public static ConferencesFragment newInstance() {
         return new ConferencesFragment();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        pollingTask = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    //noinspection InfiniteLoopStatement
+                    while (true) {
+                        Thread.sleep(POLLING_INTERVAL);
+
+                        if (ConferencesFragment.this.getActivity() != null) {
+                            ConferencesFragment.this.getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    doLoad(1, true, false);
+                                }
+                            });
+                        }
+                    }
+                } catch (InterruptedException ignored) {
+                }
+            }
+        });
+
+        pollingTask.start();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        pollingTask.interrupt();
+        pollingTask = null;
     }
 
     @Override

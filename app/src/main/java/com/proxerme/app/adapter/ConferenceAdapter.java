@@ -23,6 +23,7 @@ import com.proxerme.library.entity.Conference;
 import com.proxerme.library.util.ProxerInfo;
 
 import java.util.Collection;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -58,6 +59,20 @@ public class ConferenceAdapter extends PagingAdapter<Conference, ConferenceAdapt
     public ConferenceAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new ViewHolder(LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_conference, parent, false));
+    }
+
+    @Override
+    public int insertAtStart(@NonNull List<Conference> list) {
+        int result = super.insertAtStart(list);
+        int currentPos = 0;
+
+        while (currentPos < list.size() && !list.get(currentPos).equals(getItemAt(currentPos))) {
+            setItemAt(currentPos, list.get(currentPos));
+
+            currentPos++;
+        }
+
+        return result;
     }
 
     @Override
