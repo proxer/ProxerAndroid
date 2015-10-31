@@ -203,6 +203,8 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
         } else {
             adapter.append(result);
         }
+
+        adapter.notifyDataSetChanged();
     }
 
     private void showError() {

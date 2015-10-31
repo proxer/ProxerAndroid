@@ -32,13 +32,13 @@ dependencies {
     compile 'com.github.orhanobut:hawk:1.19'
     compile 'net.danlew:android.joda:2.8.2'
     compile 'com.github.bumptech.glide:glide:3.6.1'
-    compile('com.afollestad.material-dialogs:core:0.8.4.2@aar') {
+    compile('com.afollestad.material-dialogs:core:0.8.5.0@aar') {
         transitive = true
     }
-    compile('com.mikepenz:aboutlibraries:5.2.5@aar') {
+    compile('com.mikepenz:aboutlibraries:5.2.6@aar') {
         transitive = true
     }
-    compile('com.mikepenz:materialdrawer:4.4.0@aar') {
+    compile('com.mikepenz:materialdrawer:4.4.3@aar') {
         transitive = true
     }
     compile 'com.mikepenz:community-material-typeface:1.2.64.1@aar'

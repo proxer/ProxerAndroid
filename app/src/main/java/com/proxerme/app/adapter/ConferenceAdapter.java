@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.proxerme.app.R;
@@ -72,6 +73,15 @@ public class ConferenceAdapter extends PagingAdapter<Conference, ConferenceAdapt
         holder.time.setText(TimeUtils.convertToRelativeReadableTime(holder.time.getContext(),
                 item.getTime()));
         holder.participants.setText(participantText);
+
+        if (item.isRead()) {
+            holder.topic.setCompoundDrawables(null, null, null, null);
+        } else {
+            holder.topic.setCompoundDrawables(null, null,
+                    new IconicsDrawable(holder.image.getContext())
+                            .icon(CommunityMaterial.Icon.cmd_message_alert).sizeDp(32).paddingDp(8)
+                            .colorRes(R.color.primary), null);
+        }
 
         if (TextUtils.isEmpty(item.getImageId())) {
             IconicsDrawable icon = new IconicsDrawable(holder.image.getContext())
