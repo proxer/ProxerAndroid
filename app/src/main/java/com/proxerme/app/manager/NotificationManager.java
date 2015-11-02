@@ -11,7 +11,6 @@ import com.proxerme.app.util.MaterialDrawerHelper;
 import com.proxerme.app.util.PagingHelper;
 import com.proxerme.library.entity.News;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static android.support.v4.app.NotificationCompat.BigTextStyle;
@@ -23,9 +22,7 @@ import static android.support.v4.app.NotificationCompat.BigTextStyle;
  */
 public class NotificationManager {
 
-    private static final int ELLIPSIS = 0x2026;
     private static final int NEWS_NOTIFICATION_ID = 1423;
-    private static final int FITTING_CHARS = 35;
 
     /**
      * Shows a Notification about news to the user. If there are no new news, nothing will be shown.
@@ -35,7 +32,7 @@ public class NotificationManager {
      * @param offset  The offset to the last retrieved news.
      */
     public static void showNewsNotification(@NonNull Context context, List<News> news, int offset) {
-        if (offset > 0 || offset == -2) {
+        if (offset != PagingHelper.OFFSET_NOT_CALCULABLE && offset > 0) {
             android.app.NotificationManager notificationManager =
                     (android.app.NotificationManager) context
                             .getSystemService(Context.NOTIFICATION_SERVICE);
@@ -49,13 +46,9 @@ public class NotificationManager {
             if (offset == 1) {
                 News current = news.get(0);
 
-                if (current.getSubject().length() > FITTING_CHARS) {
-                    builder.setContentText(news.get(0).getSubject().substring(0, FITTING_CHARS));
-                } else {
-                    builder.setContentText(current.getSubject());
-                }
-
-                builder.setStyle(new BigTextStyle(builder).bigText(current.getDescription()));
+                builder.setContentText(current.getSubject());
+                builder.setStyle(new BigTextStyle(builder).bigText(current.getSubject() + "\n\n" +
+                        current.getDescription()));
             } else {
                 builder.setContentText(generateNewsNotificationAmount(context, offset))
                         .setStyle(new BigTextStyle(builder)
@@ -81,12 +74,7 @@ public class NotificationManager {
         String result = "";
 
         for (int i = 0; i < offset; i++) {
-            if (news.get(i).getSubject().length() >= FITTING_CHARS) {
-                result += news.get(i).getSubject().substring(0, FITTING_CHARS) +
-                        Arrays.toString(Character.toChars(ELLIPSIS));
-            } else {
-                result += news.get(i).getSubject();
-            }
+            result += news.get(i).getSubject();
             result += '\n';
         }
 
