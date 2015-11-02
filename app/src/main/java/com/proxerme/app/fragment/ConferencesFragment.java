@@ -1,6 +1,7 @@
 package com.proxerme.app.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -18,15 +19,32 @@ import com.proxerme.library.entity.Conference;
 import java.util.List;
 
 /**
- * A Fragment showing a List of Conferences to the user.
+ * A Fragment, showing a List of Conferences to the user.
  *
  * @author Ruben Gees
  */
 public class ConferencesFragment extends PagingFragment<Conference, ConferenceAdapter> {
 
+    private static final int POLLING_INTERVAL = 5000;
+    private Handler handler;
+
     @NonNull
     public static ConferencesFragment newInstance() {
         return new ConferencesFragment();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        startPolling();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        stopPolling();
     }
 
     @Override
@@ -46,11 +64,17 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
             @Override
             public void onResult(List<Conference> conferences) {
                 callback.onResult(conferences);
+
+                if (handler == null) {
+                    startPolling();
+                }
             }
 
             @Override
             public void onError(@NonNull ProxerException exception) {
                 callback.onError(exception);
+
+                stopPolling();
             }
         });
     }
@@ -77,5 +101,25 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
     @Override
     protected void cancelRequest() {
         ProxerConnection.cancel(ProxerTag.CONFERENCES, false);
+    }
+
+    private void startPolling() {
+        handler = new Handler();
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                doLoad(1, true, false);
+
+                handler.postDelayed(this, POLLING_INTERVAL);
+            }
+        }, POLLING_INTERVAL);
+    }
+
+    private void stopPolling() {
+        if (handler != null) {
+            handler.removeCallbacksAndMessages(null);
+            handler = null;
+        }
     }
 }

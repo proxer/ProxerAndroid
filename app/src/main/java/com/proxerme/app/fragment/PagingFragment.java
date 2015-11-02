@@ -92,7 +92,7 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
             @Override
             public void onLoadMore() {
                 if (!loading && !endReached) {
-                    doLoad(currentPage, false);
+                    doLoad(currentPage, false, true);
                 }
             }
         });
@@ -101,16 +101,16 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                doLoad(1, true);
+                doLoad(1, true, true);
             }
         });
 
         if (savedInstanceState == null) {
-            doLoad(currentPage, false);
+            doLoad(currentPage, false, true);
         } else if (currentErrorMessage != null) {
             showError();
         } else if (loading) {
-            doLoad(currentPage, methodBeforeErrorInsert);
+            doLoad(currentPage, methodBeforeErrorInsert, true);
         }
 
         return root;
@@ -144,50 +144,55 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
         outState.putBoolean(STATE_END_REACHED, endReached);
     }
 
-    private void doLoad(@IntRange(from = 1) final int page, final boolean insert) {
-        lastLoadedPage = page;
-        loading = true;
-        currentErrorMessage = null;
+    protected void doLoad(@IntRange(from = 1) final int page, final boolean insert,
+                          final boolean showProgress) {
+        if (!isLoading()) {
+            lastLoadedPage = page;
+            loading = true;
+            currentErrorMessage = null;
 
-        swipeRefreshLayout.setRefreshing(true);
-
-        load(page, insert, new ProxerConnection.ResultCallback<List<T>>() {
-            @Override
-            public void onResult(List<T> result) {
-                if (result.isEmpty()) {
-                    if (!insert) {
-                        endReached = true;
-                    }
-                } else {
-                    if (!insert) {
-                        currentPage++;
-                    }
-                }
-
-                loading = false;
-
-                handleResult(result, insert);
-
-                if (swipeRefreshLayout != null) {
-                    swipeRefreshLayout.setRefreshing(false);
-                }
+            if (showProgress) {
+                swipeRefreshLayout.setRefreshing(true);
             }
 
-            @Override
-            public void onError(@NonNull ProxerException exception) {
-                if (exception.getErrorCode() == ProxerException.ErrorCodes.PROXER) {
-                    currentErrorMessage = exception.getMessage();
-                } else {
-                    currentErrorMessage = ErrorHandler.getMessageForErrorCode(getContext(),
-                            exception.getErrorCode());
+            load(page, insert, new ProxerConnection.ResultCallback<List<T>>() {
+                @Override
+                public void onResult(List<T> result) {
+                    if (result.isEmpty()) {
+                        if (!insert) {
+                            endReached = true;
+                        }
+                    } else {
+                        if (!insert) {
+                            currentPage++;
+                        }
+                    }
+
+                    loading = false;
+
+                    handleResult(result, insert);
+
+                    if (swipeRefreshLayout != null) {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
                 }
 
-                loading = false;
-                methodBeforeErrorInsert = insert;
+                @Override
+                public void onError(@NonNull ProxerException exception) {
+                    if (exception.getErrorCode() == ProxerException.ErrorCodes.PROXER) {
+                        currentErrorMessage = exception.getMessage();
+                    } else {
+                        currentErrorMessage = ErrorHandler.getMessageForErrorCode(getContext(),
+                                exception.getErrorCode());
+                    }
 
-                showError();
-            }
-        });
+                    loading = false;
+                    methodBeforeErrorInsert = insert;
+
+                    showError();
+                }
+            });
+        }
     }
 
     @Override
@@ -213,12 +218,16 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
                     new SnackbarManager.SnackbarCallback() {
                         @Override
                         public void onClick(View v) {
-                            doLoad(lastLoadedPage, methodBeforeErrorInsert);
+                            doLoad(lastLoadedPage, methodBeforeErrorInsert, true);
                         }
                     });
         }
 
         swipeRefreshLayout.setRefreshing(false);
+    }
+
+    protected boolean isLoading() {
+        return loading;
     }
 
     protected abstract A getAdapter(Bundle savedInstanceState);

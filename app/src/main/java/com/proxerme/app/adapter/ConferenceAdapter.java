@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.proxerme.app.R;
@@ -22,6 +23,7 @@ import com.proxerme.library.entity.Conference;
 import com.proxerme.library.util.ProxerInfo;
 
 import java.util.Collection;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -60,6 +62,24 @@ public class ConferenceAdapter extends PagingAdapter<Conference, ConferenceAdapt
     }
 
     @Override
+    public int insertAtStart(@NonNull List<Conference> list) {
+        int result = super.insertAtStart(list);
+        int currentPos = 0;
+
+        while (currentPos < list.size() && !list.get(currentPos).equals(getItemAt(currentPos))) {
+            setItemAt(currentPos, list.get(currentPos));
+
+            currentPos++;
+        }
+
+        if (currentPos > 0) {
+            notifyItemRangeChanged(0, currentPos);
+        }
+
+        return result;
+    }
+
+    @Override
     public void onBindViewHolder(ConferenceAdapter.ViewHolder holder, int position) {
         Conference item = getItemAt(position);
         int participantAmount = item.getParticipantAmount();
@@ -72,6 +92,15 @@ public class ConferenceAdapter extends PagingAdapter<Conference, ConferenceAdapt
         holder.time.setText(TimeUtils.convertToRelativeReadableTime(holder.time.getContext(),
                 item.getTime()));
         holder.participants.setText(participantText);
+
+        if (item.isRead()) {
+            holder.topic.setCompoundDrawables(null, null, null, null);
+        } else {
+            holder.topic.setCompoundDrawables(null, null,
+                    new IconicsDrawable(holder.image.getContext())
+                            .icon(CommunityMaterial.Icon.cmd_message_alert).sizeDp(32).paddingDp(8)
+                            .colorRes(R.color.primary), null);
+        }
 
         if (TextUtils.isEmpty(item.getImageId())) {
             IconicsDrawable icon = new IconicsDrawable(holder.image.getContext())
