@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    buildToolsVersion "23.0.2"
 
     defaultConfig {
         applicationId "com.proxerme.app"
@@ -35,10 +35,10 @@ dependencies {
     compile('com.afollestad.material-dialogs:core:0.8.5.0@aar') {
         transitive = true
     }
-    compile('com.mikepenz:aboutlibraries:5.2.6@aar') {
+    compile('com.mikepenz:aboutlibraries:5.3.2@aar') {
         transitive = true
     }
-    compile('com.mikepenz:materialdrawer:4.4.4@aar') {
+    compile('com.mikepenz:materialdrawer:4.4.6@aar') {
         transitive = true
     }
     compile 'com.mikepenz:community-material-typeface:1.2.64.1@aar'
