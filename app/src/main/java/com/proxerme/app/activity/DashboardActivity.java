@@ -361,7 +361,7 @@ public class DashboardActivity extends MainActivity {
                                 .withAboutAppName(getString(R.string.app_name))
                                 .withLibraries("glide", "systembartint", "jodatimeandroid",
                                         "bridge", "hawk", "butterknife", "materialdialogs")
-                                .withFields(R.string.class.getFields()).fragment(),
+                                .withFields(R.string.class.getFields()).supportFragment(),
                         getString(R.string.drawer_item_info));
                 return false;
             case DRAWER_ID_DONATE:
