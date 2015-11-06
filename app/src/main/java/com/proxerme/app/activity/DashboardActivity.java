@@ -188,6 +188,7 @@ public class DashboardActivity extends MainActivity {
 
     @Override
     protected void onNewIntent(Intent intent) {
+        setIntent(intent);
         int drawerItemToLoad = getItemToLoad(intent);
 
         if (drawerItemToLoad != DRAWER_ID_NONE) {
