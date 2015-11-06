@@ -130,26 +130,11 @@ public class DashboardActivity extends MainActivity {
         }
 
         drawerHelper = new MaterialDrawerHelper(this, drawerCallback);
+        UserManager userManager = UserManager.getInstance();
 
         ButterKnife.bind(this);
         initViews();
         drawerHelper.build(toolbar, savedInstanceState);
-
-        int drawerItemToLoad = getItemToLoad(getIntent());
-
-        if (drawerItemToLoad == DRAWER_ID_NONE) {
-            if (savedInstanceState == null) {
-                if (StorageManager.isFirstStart()) {
-                    initIntroduction();
-                } else {
-                    drawerHelper.select(DRAWER_ID_DEFAULT);
-                }
-            }
-        } else if (savedInstanceState == null) {
-            drawerHelper.select(drawerItemToLoad);
-        }
-
-        UserManager userManager = UserManager.getInstance();
 
         userManager.addOnLoginStateListener(new UserManager.OnLoginStateListener() {
             @Override
@@ -184,16 +169,15 @@ public class DashboardActivity extends MainActivity {
         if (savedInstanceState == null && userManager.getUser() != null) {
             userManager.login(userManager.getUser());
         }
+
+        displayFirstPage(savedInstanceState);
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         setIntent(intent);
-        int drawerItemToLoad = getItemToLoad(intent);
 
-        if (drawerItemToLoad != DRAWER_ID_NONE) {
-            drawerHelper.select(drawerItemToLoad);
-        }
+        displayFirstPage(null);
     }
 
     @Override
@@ -237,6 +221,22 @@ public class DashboardActivity extends MainActivity {
                     super.onBackPressed();
                 }
             }
+        }
+    }
+
+    private void displayFirstPage(@Nullable Bundle savedInstanceState) {
+        int drawerItemToLoad = getItemToLoad(getIntent());
+
+        if (drawerItemToLoad == DRAWER_ID_NONE) {
+            if (savedInstanceState == null) {
+                if (StorageManager.isFirstStart()) {
+                    initIntroduction();
+                } else {
+                    drawerHelper.select(DRAWER_ID_DEFAULT);
+                }
+            }
+        } else if (savedInstanceState == null) {
+            drawerHelper.select(drawerItemToLoad);
         }
     }
 
