@@ -14,13 +14,18 @@
     <string name="error_unknown">An unknown error occurred. Please try again.</string>
     <string name="error_retry">Retry</string>
     <string name="time_a_moment_ago">A moment ago</string>
-    <string name="time_one_minute_ago">One minute ago</string>
-    <string name="time_before" />
-    <string name="time_minutes_ago">minutes ago</string>
-    <string name="time_one_hour_ago">One hour ago</string>
-    <string name="time_hours_ago">hours ago</string>
-    <string name="time_yesterday">Yesterday</string>
-    <string name="time_days_ago">days ago</string>
+    <plurals name="time_minutes_ago">
+        <item quantity="one">"One minute ago"</item>
+        <item quantity="other">"%d minutes ago"</item>
+    </plurals>
+    <plurals name="time_hours_ago">
+        <item quantity="one">"One hour ago"</item>
+        <item quantity="other">"%d hours ago"</item>
+    </plurals>
+    <plurals name="time_days_ago">
+        <item quantity="one">"Yesterday"</item>
+        <item quantity="other">"%d days ago"</item>
+    </plurals>
     <string name="time_more_than_one_month_ago">More than one month ago</string>
     <string name="preference_category_general_title">General</string>
     <string name="preference_notifications_title">Notifications</string>

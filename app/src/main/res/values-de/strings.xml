@@ -17,14 +17,19 @@
     <string name="preference_notifications_summary_on">Erhalte Benachrichtigungen</string>
     <string name="preference_notifications_title">Benachrichtigungen</string>
     <string name="time_a_moment_ago">Eben gerade</string>
-    <string name="time_before">Vor</string>
-    <string name="time_days_ago">Tagen</string>
-    <string name="time_hours_ago">Stunden</string>
-    <string name="time_minutes_ago">Minuten</string>
+    <plurals name="time_minutes_ago">
+        <item quantity="one">"Vor einer Minute"</item>
+        <item quantity="other">"Vor %d Minuten"</item>
+    </plurals>
+    <plurals name="time_hours_ago">
+        <item quantity="one">"Vor einer Stunde"</item>
+        <item quantity="other">"Vor %d Stunden"</item>
+    </plurals>
+    <plurals name="time_days_ago">
+        <item quantity="one">"Gestern"</item>
+        <item quantity="other">"Vor %d Tagen"</item>
+    </plurals>
     <string name="time_more_than_one_month_ago">Vor mehr als einem Monat</string>
-    <string name="time_one_hour_ago">Vor einer Stunde</string>
-    <string name="time_one_minute_ago">Vor einer Minute</string>
-    <string name="time_yesterday">Gestern</string>
     <string name="introduction_notifications_description">Werde über News benachrichtigt.</string>
     <string name="introduction_notifications_title">Benachrichtigungen</string>
     <string name="introduction_welcome_description">Nur ein paar Einstellungen und es geht los.</string>
@@ -53,5 +58,5 @@
     <string name="participant_multiple">Teilnehmer</string>
     <string name="participant_single">Teilnehmer</string>
     <string name="button_expand_description">Erweitere Element</string>
-    <string name="image_detail_description">Detailiertes Bild</string>
+    <string name="image_detail_description">Detailliertes Bild</string>
 </resources>

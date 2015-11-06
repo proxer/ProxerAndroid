@@ -22,34 +22,27 @@ public class TimeUtils {
         DateTime time = new DateTime(unixTimeStamp * 1000);
         DateTime currentTime = DateTime.now();
 
-        Days daysBetween = Days.daysBetween(time, currentTime);
+        int daysBetween = Days.daysBetween(time, currentTime).getDays();
 
-        if (daysBetween.getDays() <= 0) {
-            Hours hoursBetween = Hours.hoursBetween(time, currentTime);
+        if (daysBetween <= 0) {
+            int hoursBetween = Hours.hoursBetween(time, currentTime).getHours();
 
-            if (hoursBetween.getHours() <= 0) {
-                Minutes minutesBetween = Minutes.minutesBetween(time, currentTime);
+            if (hoursBetween <= 0) {
+                int minutesBetween = Minutes.minutesBetween(time, currentTime).getMinutes();
 
-                if (minutesBetween.getMinutes() <= 0) {
+                if (minutesBetween <= 0) {
                     return context.getString(R.string.time_a_moment_ago);
                 } else {
-                    return minutesBetween.getMinutes() == 1 ? context
-                            .getString(R.string.time_one_minute_ago) :
-                            (context.getString(R.string.time_before) + " " +
-                                    minutesBetween.getMinutes() + " " +
-                                    context.getString(R.string.time_minutes_ago));
+                    return context.getResources().getQuantityString(R.plurals.time_minutes_ago,
+                            minutesBetween, minutesBetween);
                 }
             } else {
-                return hoursBetween.getHours() == 1 ? context
-                        .getString(R.string.time_one_hour_ago) :
-                        (context.getString(R.string.time_before) + " " + hoursBetween.getHours()
-                                + " " + context.getString(R.string.time_hours_ago));
+                return context.getResources().getQuantityString(R.plurals.time_hours_ago,
+                        hoursBetween, hoursBetween);
             }
-        } else if (daysBetween.getDays() <= 1) {
-            return context.getString(R.string.time_yesterday);
-        } else if (daysBetween.getDays() <= 30) {
-            return context.getString(R.string.time_before) + " " + daysBetween.getDays()
-                    + " " + context.getString(R.string.time_days_ago);
+        } else if (daysBetween <= 30) {
+            return context.getResources().getQuantityString(R.plurals.time_days_ago,
+                    daysBetween, daysBetween);
         } else {
             return context.getString(R.string.time_more_than_one_month_ago);
         }
