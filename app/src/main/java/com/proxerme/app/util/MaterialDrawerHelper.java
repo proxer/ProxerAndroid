@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -146,24 +145,24 @@ public class MaterialDrawerHelper {
                     .withIdentifier(HEADER_ID_GUEST));
             result.add(new ProfileSettingDrawerItem()
                     .withName(context.getString(R.string.drawer_header_login))
-                    .withIcon(GoogleMaterial.Icon.gmd_person_add).withIdentifier(HEADER_ID_LOGIN));
+                    .withIcon(GoogleMaterial.Icon.gmd_account_add).withIdentifier(HEADER_ID_LOGIN));
         } else {
             ProfileDrawerItem profile = new ProfileDrawerItem().withName(user.getUsername())
                     .withIdentifier(HEADER_ID_USER);
 
             try {
                 profile.withIcon(UrlHolder.getUserImage(user.getImageId()));
-            } catch (RuntimeException e) {
-                //ignore
+            } catch (RuntimeException ignored) {
+
             }
 
             result.add(profile);
             result.add(new ProfileSettingDrawerItem()
                     .withName(context.getString(R.string.drawer_header_change))
-                    .withIcon(GoogleMaterial.Icon.gmd_group).withIdentifier(HEADER_ID_CHANGE));
+                    .withIcon(GoogleMaterial.Icon.gmd_accounts).withIdentifier(HEADER_ID_CHANGE));
             result.add(new ProfileSettingDrawerItem()
                     .withName(context.getString(R.string.drawer_header_logout))
-                    .withIcon(GoogleMaterial.Icon.gmd_exit_to_app)
+                    .withIcon(R.drawable.ic_logout)
                     .withIdentifier(HEADER_ID_LOGOUT));
         }
 
@@ -189,17 +188,18 @@ public class MaterialDrawerHelper {
         ArrayList<IDrawerItem> result = new ArrayList<>(1);
 
         result.add(new PrimaryDrawerItem().withName(R.string.drawer_item_news)
-                .withIcon(CommunityMaterial.Icon.cmd_newspaper)
+                .withIcon(R.drawable.ic_newspaper)
                 .withSelectedTextColorRes(R.color.primary).withSelectedIconColorRes(R.color.primary)
                 .withIconTintingEnabled(true).withBadgeStyle(new BadgeStyle()
                         .withColorRes(R.color.primary).withTextColorRes(android.R.color.white))
                 .withIdentifier(DRAWER_ID_NEWS));
 
         result.add(new PrimaryDrawerItem().withName(R.string.drawer_item_messages)
-                .withIcon(GoogleMaterial.Icon.gmd_chat).withSelectedTextColorRes(R.color.primary)
-                .withSelectedIconColorRes(R.color.primary).withIconTintingEnabled(true)
-                .withBadgeStyle(new BadgeStyle().withColorRes(R.color.primary)
-                        .withTextColorRes(android.R.color.white)).withIdentifier(DRAWER_ID_MESSAGES));
+                .withIcon(GoogleMaterial.Icon.gmd_comment_text_alt)
+                .withSelectedTextColorRes(R.color.primary).withSelectedIconColorRes(R.color.primary)
+                .withIconTintingEnabled(true).withBadgeStyle(new BadgeStyle()
+                        .withColorRes(R.color.primary).withTextColorRes(android.R.color.white))
+                .withIdentifier(DRAWER_ID_MESSAGES));
 
         return result;
     }
@@ -214,7 +214,7 @@ public class MaterialDrawerHelper {
                 .withIdentifier(DRAWER_ID_INFO));
 
         result.add(new PrimaryDrawerItem().withName(R.string.drawer_item_donate)
-                .withIcon(GoogleMaterial.Icon.gmd_attach_money)
+                .withIcon(GoogleMaterial.Icon.gmd_money)
                 .withSelectedTextColorRes(R.color.primary).withSelectedIconColorRes(R.color.primary)
                 .withIconTintingEnabled(true).withSelectable(false)
                 .withIdentifier(DRAWER_ID_DONATE));

@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.proxerme.app.R;
@@ -98,7 +97,7 @@ public class ConferenceAdapter extends PagingAdapter<Conference, ConferenceAdapt
         } else {
             holder.topic.setCompoundDrawables(null, null,
                     new IconicsDrawable(holder.image.getContext())
-                            .icon(CommunityMaterial.Icon.cmd_message_alert).sizeDp(32).paddingDp(8)
+                            .icon(GoogleMaterial.Icon.gmd_comment_alert).sizeDp(32).paddingDp(8)
                             .colorRes(R.color.primary), null);
         }
 
@@ -107,9 +106,9 @@ public class ConferenceAdapter extends PagingAdapter<Conference, ConferenceAdapt
                     .sizeDp(96).paddingDp(16).colorRes(R.color.primary);
 
             if (item.isConference()) {
-                icon.icon(GoogleMaterial.Icon.gmd_group);
+                icon.icon(GoogleMaterial.Icon.gmd_accounts);
             } else {
-                icon.icon(GoogleMaterial.Icon.gmd_person);
+                icon.icon(GoogleMaterial.Icon.gmd_account);
             }
 
             holder.image.setImageDrawable(icon);

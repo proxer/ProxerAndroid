@@ -88,7 +88,7 @@ public class NewsAdapter extends PagingAdapter<News, NewsAdapter.ViewHolder> {
 
         holder.expand.setImageDrawable(new IconicsDrawable(holder.expand.getContext())
                 .colorRes(R.color.icons_grey).sizeDp(ICON_SIZE).paddingDp(ICON_PADDING)
-                .icon(GoogleMaterial.Icon.gmd_keyboard_arrow_down));
+                .icon(GoogleMaterial.Icon.gmd_chevron_down));
 
         if (extensionMap.containsKey(item.getId())) {
             holder.description.setMaxLines(Integer.MAX_VALUE);
