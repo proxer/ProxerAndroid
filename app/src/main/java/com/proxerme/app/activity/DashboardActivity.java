@@ -3,6 +3,7 @@ package com.proxerme.app.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -175,9 +176,11 @@ public class DashboardActivity extends MainActivity {
 
     @Override
     protected void onNewIntent(Intent intent) {
-        setIntent(intent);
+        if (!intent.getAction().equals(Intent.ACTION_MAIN)) {
+            setIntent(intent);
 
-        displayFirstPage(null);
+            displayFirstPage(null);
+        }
     }
 
     @Override
@@ -309,15 +312,20 @@ public class DashboardActivity extends MainActivity {
         setFragment(fragment);
     }
 
-    public void setFragment(@NonNull Fragment fragment) {
+    public void setFragment(@NonNull final Fragment fragment) {
         if (fragment instanceof OnActivityListener) {
             onActivityListener = (OnActivityListener) fragment;
         } else {
             onActivityListener = null;
         }
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.activity_main_content_container,
-                fragment).commit();
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.activity_main_content_container, fragment).commit();
+            }
+        });
     }
 
     private boolean handleOnHeaderAccountClick(int id) {
