@@ -40,6 +40,7 @@
                 android:layout_alignParentTop="true"
                 android:padding="8dp"
                 android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textIsSelectable="true"
                 app:layout_widthPercent="70%"
                 tools:text="Title" />
 
@@ -64,6 +65,7 @@
                     android:layout_weight="6"
                     android:gravity="start"
                     android:textAppearance="?android:attr/textAppearanceSmall"
+                    tools:ignore="SelectableText"
                     tools:text="Two days ago" />
 
                 <View
@@ -80,6 +82,7 @@
                     android:layout_weight="8"
                     android:gravity="end"
                     android:textAppearance="?android:attr/textAppearanceSmall"
+                    tools:ignore="SelectableText"
                     tools:text="5 Participants" />
             </LinearLayout>
         </android.support.percent.PercentRelativeLayout>

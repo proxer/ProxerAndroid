@@ -44,6 +44,7 @@
                     android:padding="8dp"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@android:color/white"
+                    android:textIsSelectable="true"
                     tools:text="Some title" />
 
             </RelativeLayout>
@@ -56,6 +57,7 @@
                 android:ellipsize="end"
                 android:maxLines="3"
                 android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textIsSelectable="true"
                 tools:text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
                 diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
                 sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
@@ -94,6 +96,7 @@
                     android:layout_weight="4"
                     android:gravity="start"
                     android:textAppearance="?android:attr/textAppearanceSmall"
+                    tools:ignore="SelectableText"
                     tools:text="Two days ago" />
 
                 <View
@@ -110,6 +113,7 @@
                     android:layout_weight="6"
                     android:gravity="end"
                     android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textIsSelectable="true"
                     tools:text="Anime and Managa" />
             </LinearLayout>
         </LinearLayout>

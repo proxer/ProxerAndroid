@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
                 this, customTabsIntent, Uri.parse(url), new WebviewFallback());
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isDestroyedCompat() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && isDestroyed();
     }

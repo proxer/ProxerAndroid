@@ -33,14 +33,12 @@ public class Utils {
 
     public static int calculateSpanAmount(@NonNull Activity activity) {
         int result = 1;
-        boolean isTablet = isTablet(activity);
-        boolean isLandscape = isLandscape(activity);
 
-        if (isTablet) {
+        if (isTablet(activity)) {
             result++;
         }
 
-        if (isLandscape) {
+        if (isLandscape(activity)) {
             result++;
         }
 
