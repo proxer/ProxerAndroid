@@ -8,8 +8,8 @@ android {
         applicationId "com.proxerme.app"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 11
-        versionName "0.2.2"
+        versionCode 12
+        versionName "0.2.3"
     }
     buildTypes {
         release {

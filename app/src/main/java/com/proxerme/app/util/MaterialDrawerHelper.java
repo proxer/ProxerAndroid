@@ -128,10 +128,13 @@ public class MaterialDrawerHelper {
     }
 
     private void initHeader(Bundle savedInstanceState) {
-        header = new AccountHeaderBuilder().withHeaderBackground(R.color.accent)
-                .withActivity(context).withSavedInstance(savedInstanceState)
+        header = new AccountHeaderBuilder()
+                .withHeaderBackground(R.color.accent)
+                .withActivity(context)
+                .withSavedInstance(savedInstanceState)
                 .withProfiles(generateProfiles())
-                .withOnAccountHeaderListener(onAccountHeaderClickListener).build();
+                .withOnAccountHeaderListener(onAccountHeaderClickListener)
+                .build();
     }
 
     private ArrayList<IProfile> generateProfiles() {
@@ -145,7 +148,9 @@ public class MaterialDrawerHelper {
                     .withIdentifier(HEADER_ID_GUEST));
             result.add(new ProfileSettingDrawerItem()
                     .withName(context.getString(R.string.drawer_header_login))
-                    .withIcon(GoogleMaterial.Icon.gmd_account_add).withIdentifier(HEADER_ID_LOGIN));
+                    .withIconTinted(true)
+                    .withIcon(GoogleMaterial.Icon.gmd_account_add)
+                    .withIdentifier(HEADER_ID_LOGIN));
         } else {
             ProfileDrawerItem profile = new ProfileDrawerItem().withName(user.getUsername())
                     .withIdentifier(HEADER_ID_USER);
@@ -159,10 +164,13 @@ public class MaterialDrawerHelper {
             result.add(profile);
             result.add(new ProfileSettingDrawerItem()
                     .withName(context.getString(R.string.drawer_header_change))
-                    .withIcon(GoogleMaterial.Icon.gmd_accounts).withIdentifier(HEADER_ID_CHANGE));
+                    .withIcon(GoogleMaterial.Icon.gmd_accounts)
+                    .withIconTinted(true)
+                    .withIdentifier(HEADER_ID_CHANGE));
             result.add(new ProfileSettingDrawerItem()
                     .withName(context.getString(R.string.drawer_header_logout))
                     .withIcon(R.drawable.ic_logout)
+                    .withIconTinted(true)
                     .withIdentifier(HEADER_ID_LOGOUT));
         }
 
