@@ -100,7 +100,7 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
 
     @Override
     protected void cancelRequest() {
-        ProxerConnection.cancel(ProxerTag.CONFERENCES, false);
+        ProxerConnection.cancel(ProxerTag.CONFERENCES);
     }
 
     private void startPolling() {

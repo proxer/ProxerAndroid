@@ -107,7 +107,7 @@ public class LoginDialog extends DialogFragment {
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
 
-        ProxerConnection.cancelSync(ProxerTag.LOGIN, false);
+        ProxerConnection.cancel(ProxerTag.LOGIN);
     }
 
     @Override

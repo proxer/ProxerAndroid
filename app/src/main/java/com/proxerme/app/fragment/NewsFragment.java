@@ -92,6 +92,6 @@ public class NewsFragment extends PagingFragment<News, NewsAdapter> {
 
     @Override
     protected void cancelRequest() {
-        ProxerConnection.cancel(ProxerTag.NEWS, false);
+        ProxerConnection.cancel(ProxerTag.NEWS);
     }
 }

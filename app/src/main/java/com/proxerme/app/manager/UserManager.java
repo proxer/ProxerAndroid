@@ -51,7 +51,7 @@ public class UserManager {
     }
 
     public void login(@NonNull LoginUser user) {
-        ProxerConnection.cancel(ProxerTag.LOGOUT, false);
+        ProxerConnection.cancel(ProxerTag.LOGOUT);
         ProxerConnection.login(user).execute(new ProxerConnection.ResultCallback<LoginUser>() {
             @Override
             public void onResult(LoginUser loginUser) {
@@ -72,7 +72,7 @@ public class UserManager {
     }
 
     public void logout(){
-        ProxerConnection.cancel(ProxerTag.LOGIN, false);
+        ProxerConnection.cancel(ProxerTag.LOGIN);
         ProxerConnection.logout().execute(new ProxerConnection.ResultCallback<Void>() {
             @Override
             public void onResult(Void aVoid) {
