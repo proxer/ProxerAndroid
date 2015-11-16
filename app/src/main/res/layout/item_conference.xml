@@ -40,8 +40,8 @@
                 android:layout_alignParentTop="true"
                 android:padding="8dp"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textIsSelectable="true"
                 app:layout_widthPercent="70%"
+                tools:ignore="SelectableText"
                 tools:text="Title" />
 
             <LinearLayout
