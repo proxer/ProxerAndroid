@@ -319,6 +319,8 @@ public class DashboardActivity extends MainActivity {
             onActivityListener = null;
         }
 
+        SnackbarManager.dismiss();
+
         new Handler().post(new Runnable() {
             @Override
             public void run() {
