@@ -24,6 +24,11 @@ Linux:
 
 You can find the apk in `app/build/outputs/apk/`.
 
+### Your own App
+
+You want to create your own App? Check out this Lib [ProxerLibAndroid](https://github.com/proxer/ProxerLibAndroid).
+This App depends highly on it and it implements the of the API.
+
 ### Contribute
 
 Everybody is free to contribute to this project (and I would be happy about it :) ).  
