@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.proxerme.app.activity.ImageDetailActivity;
+import com.proxerme.app.activity.MainActivity;
 import com.proxerme.app.adapter.ConferenceAdapter;
 import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.connection.ProxerException;
@@ -85,7 +86,10 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
                 .OnConferenceInteractionListener() {
             @Override
             public void onConferenceClick(@NonNull View v, @NonNull Conference conference) {
-                //TODO
+                if (getActivity() != null) {
+                    ((MainActivity) getActivity())
+                            .showPage(UrlHolder.getConferenceUrl(conference.getId()));
+                }
             }
 
             @Override

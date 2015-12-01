@@ -46,7 +46,6 @@ public class NewsService extends IntentService {
     }
 
     private void handleActionLoadNews() {
-        ProxerConnection.init();
         NewsManager manager = NewsManager.getInstance(this);
 
         try {
@@ -57,7 +56,6 @@ public class NewsService extends IntentService {
                 int offset = PagingHelper.calculateOffsetFromStart(news, manager.getLastId(),
                         ProxerInfo.NEWS_ON_PAGE);
 
-                manager.setLastId(news.get(0).getId());
                 manager.setNewNews(offset);
                 NotificationManager.showNewsNotification(this, news, offset);
             }

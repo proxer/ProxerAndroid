@@ -153,6 +153,7 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
 
             if (showProgress) {
                 swipeRefreshLayout.setRefreshing(true);
+                SnackbarManager.dismiss();
             }
 
             load(page, insert, new ProxerConnection.ResultCallback<List<T>>() {
