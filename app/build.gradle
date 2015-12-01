@@ -34,7 +34,7 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.6.1'
     compile 'com.mikepenz:iconics-core:2.2.1@aar'
     compile 'com.mikepenz:google-material-typeface:2.2.0.1@aar'
-    compile('com.github.afollestad.material-dialogs:core:0.8.5.1@aar') {
+    compile('com.github.afollestad.material-dialogs:core:0.8.5.2@aar') {
         transitive = true
     }
     compile('com.mikepenz:aboutlibraries:5.3.3@aar') {
