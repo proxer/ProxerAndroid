@@ -32,8 +32,8 @@ dependencies {
     compile 'com.github.orhanobut:hawk:1.20'
     compile 'net.danlew:android.joda:2.9.1'
     compile 'com.github.bumptech.glide:glide:3.6.1'
-    compile 'com.mikepenz:iconics-core:2.2.1@aar'
-    compile 'com.mikepenz:google-material-typeface:2.2.0.1@aar'
+    compile 'com.mikepenz:iconics-core:2.5.1@aar'
+    compile 'com.mikepenz:google-material-typeface:2.1.0.1.original@aar'
     compile('com.github.afollestad.material-dialogs:core:0.8.5.2@aar') {
         transitive = true
     }
