@@ -14,7 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.proxerme.app.R;
 import com.proxerme.app.util.TimeUtils;
@@ -88,7 +88,7 @@ public class NewsAdapter extends PagingAdapter<News, NewsAdapter.ViewHolder> {
 
         holder.expand.setImageDrawable(new IconicsDrawable(holder.expand.getContext())
                 .colorRes(R.color.icons_grey).sizeDp(ICON_SIZE).paddingDp(ICON_PADDING)
-                .icon(GoogleMaterial.Icon.gmd_chevron_down));
+                .icon(CommunityMaterial.Icon.cmd_chevron_down));
 
         if (extensionMap.containsKey(item.getId())) {
             holder.description.setMaxLines(Integer.MAX_VALUE);

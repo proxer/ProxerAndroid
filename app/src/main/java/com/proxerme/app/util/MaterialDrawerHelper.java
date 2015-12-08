@@ -7,7 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -149,7 +149,7 @@ public class MaterialDrawerHelper {
             result.add(new ProfileSettingDrawerItem()
                     .withName(context.getString(R.string.drawer_header_login))
                     .withIconTinted(true)
-                    .withIcon(GoogleMaterial.Icon.gmd_account_add)
+                    .withIcon(CommunityMaterial.Icon.cmd_account_key)
                     .withIdentifier(HEADER_ID_LOGIN));
         } else {
             ProfileDrawerItem profile = new ProfileDrawerItem().withName(user.getUsername())
@@ -164,12 +164,12 @@ public class MaterialDrawerHelper {
             result.add(profile);
             result.add(new ProfileSettingDrawerItem()
                     .withName(context.getString(R.string.drawer_header_change))
-                    .withIcon(GoogleMaterial.Icon.gmd_accounts)
+                    .withIcon(CommunityMaterial.Icon.cmd_account_switch)
                     .withIconTinted(true)
                     .withIdentifier(HEADER_ID_CHANGE));
             result.add(new ProfileSettingDrawerItem()
                     .withName(context.getString(R.string.drawer_header_logout))
-                    .withIcon(R.drawable.ic_logout)
+                    .withIcon(CommunityMaterial.Icon.cmd_account_remove)
                     .withIconTinted(true)
                     .withIdentifier(HEADER_ID_LOGOUT));
         }
@@ -196,14 +196,14 @@ public class MaterialDrawerHelper {
         ArrayList<IDrawerItem> result = new ArrayList<>(1);
 
         result.add(new PrimaryDrawerItem().withName(R.string.drawer_item_news)
-                .withIcon(R.drawable.ic_newspaper)
+                .withIcon(CommunityMaterial.Icon.cmd_newspaper)
                 .withSelectedTextColorRes(R.color.primary).withSelectedIconColorRes(R.color.primary)
                 .withIconTintingEnabled(true).withBadgeStyle(new BadgeStyle()
                         .withColorRes(R.color.primary).withTextColorRes(android.R.color.white))
                 .withIdentifier(DRAWER_ID_NEWS));
 
         result.add(new PrimaryDrawerItem().withName(R.string.drawer_item_messages)
-                .withIcon(GoogleMaterial.Icon.gmd_comment_text_alt)
+                .withIcon(CommunityMaterial.Icon.cmd_message_text)
                 .withSelectedTextColorRes(R.color.primary).withSelectedIconColorRes(R.color.primary)
                 .withIconTintingEnabled(true).withBadgeStyle(new BadgeStyle()
                         .withColorRes(R.color.primary).withTextColorRes(android.R.color.white))
@@ -217,18 +217,18 @@ public class MaterialDrawerHelper {
         ArrayList<IDrawerItem> result = new ArrayList<>(3);
 
         result.add(new PrimaryDrawerItem().withName(R.string.drawer_item_info)
-                .withIcon(GoogleMaterial.Icon.gmd_info).withSelectedTextColorRes(R.color.primary)
+                .withIcon(CommunityMaterial.Icon.cmd_information).withSelectedTextColorRes(R.color.primary)
                 .withSelectedIconColorRes(R.color.primary).withIconTintingEnabled(true)
                 .withIdentifier(DRAWER_ID_INFO));
 
         result.add(new PrimaryDrawerItem().withName(R.string.drawer_item_donate)
-                .withIcon(GoogleMaterial.Icon.gmd_money)
+                .withIcon(CommunityMaterial.Icon.cmd_gift)
                 .withSelectedTextColorRes(R.color.primary).withSelectedIconColorRes(R.color.primary)
                 .withIconTintingEnabled(true).withSelectable(false)
                 .withIdentifier(DRAWER_ID_DONATE));
 
         result.add(new PrimaryDrawerItem().withName(R.string.drawer_item_settings)
-                .withIcon(GoogleMaterial.Icon.gmd_settings)
+                .withIcon(CommunityMaterial.Icon.cmd_settings)
                 .withSelectedTextColorRes(R.color.primary).withSelectedIconColorRes(R.color.primary)
                 .withIconTintingEnabled(true).withIdentifier(DRAWER_ID_SETTINGS));
 
