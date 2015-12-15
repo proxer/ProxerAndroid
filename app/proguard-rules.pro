@@ -16,16 +16,12 @@
 #   public *;
 #}
 
--keep class android.support.design.widget.** { *; }
--keep interface android.support.design.widget.** { *; }
-
--keepclassmembers class * implements android.os.Parcelable {
-    static android.os.Parcelable$Creator CREATOR;
+-keep class * implements android.os.Parcelable {
+  public static final android.os.Parcelable$Creator *;
 }
 
--dontwarn android.support.v7.**
--keep class android.support.v7.** { *; }
--keep interface android.support.v7.** { *; }
+-keep class android.support.** { *; }
+-keep interface android.support.** { *; }
 
 -keep class butterknife.** { *; }
 -dontwarn butterknife.internal.**
