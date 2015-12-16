@@ -40,10 +40,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+
+        customTabActivityHelper.unbindCustomTabsService(this);
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
 
-        customTabActivityHelper.unbindCustomTabsService(this);
         ProxerConnection.cleanup();
     }
 
@@ -54,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     public void showPage(@NonNull String url) {
         CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder(customTabActivityHelper
                 .getSession()).setToolbarColor(ContextCompat.getColor(this, R.color.primary))
-                .build();
+                .enableUrlBarHiding().setShowTitle(true).build();
 
         CustomTabActivityHelper.openCustomTab(
                 this, customTabsIntent, Uri.parse(url), new WebviewFallback());

@@ -49,8 +49,6 @@
                 android:value=".activity.MainActivity" />
         </activity>
 
-        <service android:name=".customtabs.KeepAliveService" />
-
         <activity
             android:name=".activity.ImageDetailActivity"
             android:parentActivityName=".activity.DashboardActivity"
@@ -59,6 +57,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.DashboardActivity" />
         </activity>
+
+        <service
+            android:name=".customtabs.KeepAliveService"
+            android:exported="true" />
 
         <service
             android:name=".service.NewsService"
