@@ -1,9 +1,11 @@
 package com.proxerme.app.application;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -24,6 +26,8 @@ import java.net.CookiePolicy;
  * @author Ruben Gees
  */
 public class MainApplication extends Application {
+
+    public static boolean isVisible = false;
 
     @Override
     public void onCreate() {
@@ -58,6 +62,43 @@ public class MainApplication extends Application {
         CookieManager cookieManager = new CookieManager(new PersistentCookieStore(this),
                 CookiePolicy.ACCEPT_ALL);
         CookieHandler.setDefault(cookieManager);
+
+        registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+            @Override
+            public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+
+            }
+
+            @Override
+            public void onActivityStarted(Activity activity) {
+                isVisible = true;
+            }
+
+            @Override
+            public void onActivityResumed(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityPaused(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityStopped(Activity activity) {
+                isVisible = false;
+            }
+
+            @Override
+            public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+
+            }
+
+            @Override
+            public void onActivityDestroyed(Activity activity) {
+
+            }
+        });
     }
 
 }

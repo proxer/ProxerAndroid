@@ -7,7 +7,7 @@ import android.support.v7.preference.PreferenceFragmentCompat;
 
 import com.proxerme.app.R;
 import com.proxerme.app.interfaces.OnActivityListener;
-import com.proxerme.app.manager.NewsManager;
+import com.proxerme.app.manager.NotificationRetrievalManager;
 import com.proxerme.app.manager.PreferenceManager;
 
 /**
@@ -15,7 +15,8 @@ import com.proxerme.app.manager.PreferenceManager;
  *
  * @author Ruben Gees
  */
-public class SettingsFragment extends PreferenceFragmentCompat implements OnActivityListener, SharedPreferences.OnSharedPreferenceChangeListener {
+public class SettingsFragment extends PreferenceFragmentCompat implements OnActivityListener,
+        SharedPreferences.OnSharedPreferenceChangeListener {
 
     @NonNull
     public static SettingsFragment newInstance() {
@@ -40,29 +41,49 @@ public class SettingsFragment extends PreferenceFragmentCompat implements OnActi
     @Override
     public void onResume() {
         super.onResume();
-        getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+
+        getPreferenceManager().getSharedPreferences()
+                .registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
     public void onPause() {
-        getPreferenceManager().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
+        getPreferenceManager().getSharedPreferences()
+                .unregisterOnSharedPreferenceChangeListener(this);
+
         super.onPause();
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals(PreferenceManager.PREFERENCE_NOTIFICATIONS)) {
-            NewsManager manager = NewsManager.getInstance(getContext());
-            boolean enabled =
-                    sharedPreferences.getBoolean(PreferenceManager.PREFERENCE_NOTIFICATIONS, false);
+        switch (key) {
+            case PreferenceManager.PREFERENCE_NEWS_NOTIFICATIONS: {
+                boolean enabled =
+                        sharedPreferences.getBoolean(PreferenceManager.PREFERENCE_NEWS_NOTIFICATIONS,
+                                false);
 
-            if (enabled) {
-                manager.retrieveNewsLater();
-            } else {
-                manager.cancelNewsRetrieval();
+                if (enabled) {
+                    NotificationRetrievalManager.retrieveNewsLater(getContext());
+                } else {
+                    NotificationRetrievalManager.cancelNewsRetrieval(getContext());
+                }
+                break;
             }
-        } else if (key.equals(PreferenceManager.PREFERENCE_NOTIFICATIONS_INTERVAL)) {
-            NewsManager.getInstance(getContext()).retrieveNewsLater();
+            case PreferenceManager.PREFERENCE_MESSAGES_NOTIFICATIONS: {
+                boolean enabled =
+                        sharedPreferences.getBoolean(PreferenceManager.PREFERENCE_MESSAGES_NOTIFICATIONS,
+                                false);
+
+                if (enabled) {
+                    NotificationRetrievalManager.retrieveMessagesLater(getContext());
+                } else {
+                    NotificationRetrievalManager.cancelMessagesRetrieval(getContext());
+                }
+                break;
+            }
+            case PreferenceManager.PREFERENCE_NEWS_NOTIFICATIONS_INTERVAL:
+                NotificationRetrievalManager.retrieveNewsLater(getContext());
+                break;
         }
     }
 }

@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import com.proxerme.app.activity.ImageDetailActivity;
 import com.proxerme.app.activity.MainActivity;
 import com.proxerme.app.adapter.ConferenceAdapter;
+import com.proxerme.app.manager.NotificationRetrievalManager;
+import com.proxerme.app.manager.StorageManager;
 import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.connection.ProxerException;
 import com.proxerme.library.connection.ProxerTag;
@@ -69,6 +71,9 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
                 if (handler == null) {
                     startPolling();
                 }
+
+                StorageManager.resetMessagesInterval();
+                NotificationRetrievalManager.retrieveNewsLater(getContext());
             }
 
             @Override

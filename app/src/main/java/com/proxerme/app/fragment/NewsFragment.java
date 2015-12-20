@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import com.proxerme.app.activity.ImageDetailActivity;
 import com.proxerme.app.adapter.NewsAdapter;
 import com.proxerme.app.manager.NewsManager;
+import com.proxerme.app.manager.NotificationRetrievalManager;
 import com.proxerme.app.util.MaterialDrawerHelper;
 import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.connection.ProxerException;
@@ -17,8 +18,6 @@ import com.proxerme.library.connection.UrlHolder;
 import com.proxerme.library.entity.News;
 
 import java.util.List;
-
-import static com.proxerme.app.manager.NewsManager.getInstance;
 
 /**
  * A Fragment, retrieving and displaying News.
@@ -72,11 +71,11 @@ public class NewsFragment extends PagingFragment<News, NewsAdapter> {
             public void onResult(List<News> result) {
                 callback.onResult(result);
 
-                NewsManager manager = getInstance(getContext());
+                NewsManager manager = NewsManager.getInstance();
 
                 manager.setNewNews(0);
                 manager.setLastId(result.get(0).getId());
-                manager.retrieveNewsLater();
+                NotificationRetrievalManager.retrieveNewsLater(getContext());
 
                 if (getActivity() != null) {
                     getDashboardActivity().setBadge(MaterialDrawerHelper.DRAWER_ID_NEWS, null);

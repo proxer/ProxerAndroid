@@ -48,7 +48,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.MainActivity" />
         </activity>
-
         <activity
             android:name=".activity.ImageDetailActivity"
             android:parentActivityName=".activity.DashboardActivity"
@@ -61,13 +60,16 @@
         <service
             android:name=".customtabs.KeepAliveService"
             android:exported="true" />
-
         <service
-            android:name=".service.NewsService"
+            android:name=".service.NotificationService"
             android:exported="false" />
 
         <receiver
             android:name=".receiver.NewsReceiver"
+            android:enabled="true"
+            android:exported="false" />
+        <receiver
+            android:name=".receiver.MessagesReceiver"
             android:enabled="true"
             android:exported="false" />
         <receiver

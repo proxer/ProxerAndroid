@@ -193,8 +193,12 @@ public class DashboardActivity extends MainActivity {
                         OPTION_RESULT)) {
                     switch (option.getPosition()) {
                         case 1:
-                            PreferenceManager.setNotificationsEnabled(DashboardActivity.this,
+                            PreferenceManager.setNewsNotificationsEnabled(DashboardActivity.this,
                                     option.isActivated());
+                            PreferenceManager.setMessagesNotificationsEnabled(DashboardActivity.this,
+                                    option.isActivated());
+
+                            break;
                     }
                 }
             }

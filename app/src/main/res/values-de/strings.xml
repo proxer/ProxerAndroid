@@ -12,10 +12,9 @@
     <string name="error_timeout">Der Server hat nicht rechtzeitig geantwortet. Möglicherweise gibt es Probleme mit dem Netzwerk.</string>
     <string name="error_unknown">Ein unbekannter Fehler ist aufgetreten. Bitte versuche es erneut.</string>
     <string name="error_unparseable">Der Server hat fehlerhafte Daten gesendet. Bitte versuche es erneut.</string>
-    <string name="preference_category_general_title">Allgemein</string>
-    <string name="preference_notifications_summary_off">Erhalte keine Benachrichtigungen</string>
-    <string name="preference_notifications_summary_on">Erhalte Benachrichtigungen</string>
-    <string name="preference_notifications_title">Benachrichtigungen</string>
+    <string name="preference_news_notifications_summary_off">Erhalte keine Benachrichtigungen über News</string>
+    <string name="preference_news_notifications_summary_on">Erhalte Benachrichtigungen über News</string>
+    <string name="preference_news_notifications_title">News</string>
     <string name="time_a_moment_ago">Eben gerade</string>
     <plurals name="time_minutes_ago">
         <item quantity="one">"Vor einer Minute"</item>
@@ -36,12 +35,11 @@
     <string name="introduction_welcome_title">Willkommen!</string>
     <string name="notification_amount_more_than_15">Mehr als 15 News</string>
     <string name="notification_amount_text">News</string>
-    <string name="notification_title">News</string>
+    <string name="news_notification_title">News</string>
     <string name="interval_four_hours">Alle vier Stunden</string>
     <string name="interval_half_hourly">Halbstündlich</string>
     <string name="interval_hourly">Stündlich</string>
     <string name="interval_two_hours">Alle zwei Stunden</string>
-    <string name="preference_notifications_interval_title">Aktualisierungsintervall</string>
     <string name="dialog_login_error_no_username">Du musst einen Nutzernamen angeben</string>
     <string name="dialog_login_error_no_password">Du musst ein Passwort angeben</string>
     <string name="drawer_profile_guest">Gast</string>
@@ -59,4 +57,11 @@
     <string name="participant_single">Teilnehmer</string>
     <string name="button_expand_description">Erweitere Element</string>
     <string name="image_detail_description">Detailliertes Bild</string>
+    <string name="preference_messages_notifications_summary_off">Erhalte keine Benachrichtigungen über neue Nachrichten</string>
+    <string name="preference_messages_notifications_summary_on">Erhalte Benachrichtigungen über neue Nachrichten</string>
+    <string name="preference_news_notifications_interval_title">News Aktualisierungsintervall</string>
+    <string name="messages_notification_title">Nachrichten</string>
+    <string name="messages_from">Neue Nachrichten von</string>
+    <string name="preference_messages_notifications_title">Nachrichten</string>
+    <string name="preference_category_notifications_title">Benachrichtigungen</string>
 </resources>

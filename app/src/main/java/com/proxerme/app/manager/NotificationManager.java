@@ -9,6 +9,7 @@ import com.proxerme.app.R;
 import com.proxerme.app.activity.DashboardActivity;
 import com.proxerme.app.util.MaterialDrawerHelper;
 import com.proxerme.app.util.PagingHelper;
+import com.proxerme.library.entity.Conference;
 import com.proxerme.library.entity.News;
 
 import java.util.List;
@@ -23,6 +24,7 @@ import static android.support.v4.app.NotificationCompat.BigTextStyle;
 public class NotificationManager {
 
     private static final int NEWS_NOTIFICATION_ID = 1423;
+    private static final int MESSAGES_NOTIFICATION_ID = 1424;
 
     /**
      * Shows a Notification about news to the user. If there are no new news, nothing will be shown.
@@ -40,7 +42,7 @@ public class NotificationManager {
                     new NotificationCompat.Builder(context);
 
             builder.setAutoCancel(true)
-                    .setContentTitle(context.getString(R.string.notification_title))
+                    .setContentTitle(context.getString(R.string.news_notification_title))
                     .setSmallIcon(R.drawable.ic_stat_proxer);
 
             if (offset == 1) {
@@ -81,4 +83,34 @@ public class NotificationManager {
         return result;
     }
 
+    public static void showMessagesNotification(Context context,
+                                                List<Conference> conferences) {
+        if (!conferences.isEmpty()) {
+            android.app.NotificationManager notificationManager =
+                    (android.app.NotificationManager) context
+                            .getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationCompat.Builder builder =
+                    new NotificationCompat.Builder(context);
+
+            builder.setAutoCancel(true)
+                    .setContentTitle(context.getString(R.string.messages_notification_title))
+                    .setSmallIcon(R.drawable.ic_stat_proxer);
+
+            String content = context.getString(R.string.messages_from) + " " +
+                    conferences.get(0).getTopic();
+
+            for (int i = 1; i < conferences.size(); i++) {
+                content += ", " + conferences.get(i).getTopic();
+            }
+
+            builder.setContentText(content);
+
+            builder.setContentIntent(PendingIntent.getActivity(
+                    context, 0, DashboardActivity.getSectionIntent(context,
+                            MaterialDrawerHelper.DRAWER_ID_MESSAGES, null),
+                    PendingIntent.FLAG_UPDATE_CURRENT));
+
+            notificationManager.notify(MESSAGES_NOTIFICATION_ID, builder.build());
+        }
+    }
 }

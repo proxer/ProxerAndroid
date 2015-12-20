@@ -272,7 +272,7 @@ public class MaterialDrawerHelper {
     }
 
     private void initBadges() {
-        int newNews = NewsManager.getInstance(context).getNewNews();
+        int newNews = NewsManager.getInstance().getNewNews();
 
         if (newNews > 0 || newNews == PagingHelper.OFFSET_NOT_CALCULABLE) {
             setBadge(DRAWER_ID_NEWS, newNews == PagingHelper.OFFSET_NOT_CALCULABLE ?

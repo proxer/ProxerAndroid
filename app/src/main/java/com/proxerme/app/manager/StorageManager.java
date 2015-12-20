@@ -14,10 +14,13 @@ import com.proxerme.library.entity.LoginUser;
  */
 public class StorageManager {
 
+    public static final String STORAGE_MESSAGES_NOTIFICATIONS_INTERVAL =
+            "storage_messages_notifications_interval";
     private static final String STORAGE_NEW_NEWS = "storage_news_new";
     private static final String STORAGE_FIRST_START = "storage_first_start";
     private static final String STORAGE_NEWS_LAST_ID = "storage_news_last_id";
     private static final String STORAGE_USER_USERNAME = "storage_user_username";
+    public static final String STORAGE_USER_USERNAME1 = STORAGE_USER_USERNAME;
     private static final String STORAGE_USER_PASSWORD = "storage_user_password";
     private static final String STORAGE_USER_ID = "storage_user_id";
 
@@ -69,6 +72,22 @@ public class StorageManager {
     }
 
     public static void removeUser() {
-        Hawk.remove(STORAGE_USER_USERNAME, STORAGE_USER_PASSWORD, STORAGE_USER_ID);
+        Hawk.remove(STORAGE_USER_USERNAME1, STORAGE_USER_PASSWORD, STORAGE_USER_ID);
+    }
+
+    public static void incrementMessagesInterval() {
+        int interval = getMessagesInterval();
+
+        if (interval <= 850) {
+            Hawk.put(STORAGE_MESSAGES_NOTIFICATIONS_INTERVAL, (int) (interval * 1.5));
+        }
+    }
+
+    public static void resetMessagesInterval() {
+        Hawk.put(STORAGE_MESSAGES_NOTIFICATIONS_INTERVAL, 5);
+    }
+
+    public static int getMessagesInterval() {
+        return Hawk.get(STORAGE_MESSAGES_NOTIFICATIONS_INTERVAL, 5);
     }
 }

@@ -1,18 +1,7 @@
 package com.proxerme.app.manager;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.SystemClock;
 import android.support.annotation.IntRange;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-
-import com.proxerme.app.receiver.BootReceiver;
-import com.proxerme.app.receiver.NewsReceiver;
 
 /**
  * A singleton for managing the news.
@@ -22,21 +11,17 @@ import com.proxerme.app.receiver.NewsReceiver;
 public class NewsManager {
     private static NewsManager INSTANCE;
 
-    private Context context;
-
     private String lastId;
     private int newNews = 0;
 
-    private NewsManager(@NonNull Context context) {
-        this.context = context;
-
+    private NewsManager() {
         loadId();
         loadNewNews();
     }
 
-    public static NewsManager getInstance(@NonNull Context context) {
+    public static NewsManager getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new NewsManager(context);
+            INSTANCE = new NewsManager();
         }
         return INSTANCE;
     }
@@ -82,54 +67,6 @@ public class NewsManager {
         this.newNews = newNews;
 
         saveNewNews();
-    }
-
-    /**
-     * Retrieves News and interprets them in a background Service in the time span, specified in the
-     * settings. If a news retrieval was already queued, it will be cancelled.
-     */
-    public void retrieveNewsLater() {
-        cancelNewsRetrieval();
-        if (isNewsRetrievalEnabled()) {
-            AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            Intent intent = new Intent(context, NewsReceiver.class);
-            PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
-            int interval = PreferenceManager.getUpdateInterval(context) * 60 * 1000;
-
-            alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    SystemClock.elapsedRealtime() + interval, interval, alarmIntent);
-
-            ComponentName receiver = new ComponentName(context, BootReceiver.class);
-            PackageManager pm = context.getPackageManager();
-
-            pm.setComponentEnabledSetting(receiver,
-                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                    PackageManager.DONT_KILL_APP);
-        }
-    }
-
-    /**
-     * Cancels a queued news retrieval. If there is none, nothing will happen.
-     */
-    public void cancelNewsRetrieval() {
-        ((AlarmManager) context.getSystemService(Context.ALARM_SERVICE))
-                .cancel(PendingIntent.getBroadcast(context, 0,
-                        new Intent(context, NewsReceiver.class), 0));
-        ComponentName receiver = new ComponentName(context, BootReceiver.class);
-        PackageManager pm = context.getPackageManager();
-
-        pm.setComponentEnabledSetting(receiver,
-                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                PackageManager.DONT_KILL_APP);
-    }
-
-    /**
-     * Returns if news retrieval is enabled.
-     *
-     * @return True, if news retrieval is enabled.
-     */
-    public boolean isNewsRetrievalEnabled() {
-        return PreferenceManager.areNotificationsEnabled(context);
     }
 
     private void saveId() {
