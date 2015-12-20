@@ -102,6 +102,7 @@ public class NotificationService extends IntentService {
             }
 
             StorageManager.incrementMessagesInterval();
+            NotificationRetrievalManager.retrieveMessagesLater(this);
         } else {
             PreferenceManager.setMessagesNotificationsEnabled(this, false);
             NotificationRetrievalManager.cancelMessagesRetrieval(this);

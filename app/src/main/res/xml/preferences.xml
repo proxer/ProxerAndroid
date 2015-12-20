@@ -2,12 +2,17 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
         android:key="pref_screen_notifications"
-        android:title="Notifications">
+        android:title="@string/preference_category_notifications_title">
         <CheckBoxPreference
             android:key="pref_news_notifications"
             android:summaryOff="@string/preference_news_notifications_summary_off"
             android:summaryOn="@string/preference_news_notifications_summary_on"
             android:title="@string/preference_news_notifications_title" />
+        <CheckBoxPreference
+            android:key="pref_messages_notifications"
+            android:summaryOff="@string/preference_messages_notifications_summary_off"
+            android:summaryOn="@string/preference_messages_notifications_summary_on"
+            android:title="@string/preference_messages_notifications_title" />
         <ListPreference
             android:defaultValue="60"
             android:dependency="pref_news_notifications"
@@ -16,10 +21,5 @@
             android:key="pref_news_notifications_interval"
             android:summary="%s"
             android:title="@string/preference_news_notifications_interval_title" />
-        <CheckBoxPreference
-            android:key="pref_messages_notifications"
-            android:summaryOff="@string/preference_messages_notifications_summary_off"
-            android:summaryOn="@string/preference_messages_notifications_summary_on"
-            android:title="@string/preference_messages_notifications_title" />
     </PreferenceCategory>
 </PreferenceScreen>
