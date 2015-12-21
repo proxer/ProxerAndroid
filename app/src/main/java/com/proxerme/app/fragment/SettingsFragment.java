@@ -3,8 +3,10 @@ package com.proxerme.app.fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 
+import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.proxerme.app.R;
 import com.proxerme.app.interfaces.OnActivityListener;
 import com.proxerme.app.manager.NotificationRetrievalManager;
@@ -26,6 +28,21 @@ public class SettingsFragment extends PreferenceFragmentCompat implements OnActi
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {
         addPreferencesFromResource(R.xml.preferences);
+
+        findPreference("pref_licences").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                new LibsBuilder().withAboutVersionShownName(true)
+                        .withAboutDescription(getString(R.string.about_description))
+                        .withAboutIconShown(true).withAutoDetect(false)
+                        .withAboutAppName(getString(R.string.app_name))
+                        .withLibraries("glide", "systembartint", "jodatimeandroid",
+                                "bridge", "hawk", "butterknife", "materialdialogs")
+                        .withFields(R.string.class.getFields()).start(getContext());
+
+                return true;
+            }
+        });
     }
 
     @Override

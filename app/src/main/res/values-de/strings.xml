@@ -31,9 +31,9 @@
         <item quantity="other">"Vor %d Tagen"</item>
     </plurals>
     <string name="time_more_than_one_month_ago">Vor mehr als einem Monat</string>
-    <string name="introduction_notifications_description">Werde benachrichtigt.</string>
+    <string name="introduction_notifications_description">Erhalte Benachrichtigungen</string>
     <string name="introduction_notifications_title">Benachrichtigungen</string>
-    <string name="introduction_welcome_description">Nur ein paar Einstellungen und es geht los.</string>
+    <string name="introduction_welcome_description">Nur ein paar Einstellungen und es geht los</string>
     <string name="introduction_welcome_title">Willkommen!</string>
     <string name="notification_amount_more_than_15">Mehr als 15 News</string>
     <string name="notification_amount_text">News</string>
@@ -62,4 +62,7 @@
     <string name="preference_news_notifications_interval_title">News Aktualisierungsintervall</string>
     <string name="messages_notification_title">Nachrichten</string>
     <string name="messages_from">Neue Nachrichten von</string>
+    <string name="preference_category_info_title">Info</string>
+    <string name="preference_licences_summary">Projekte, die in dieser App genutzt werden</string>
+    <string name="preference_licences_title">Lizenzen</string>
 </resources>

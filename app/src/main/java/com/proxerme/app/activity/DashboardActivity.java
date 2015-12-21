@@ -13,7 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.proxerme.app.R;
 import com.proxerme.app.dialog.LoginDialog;
 import com.proxerme.app.fragment.ConferencesFragment;
@@ -43,7 +42,6 @@ import butterknife.ButterKnife;
 
 import static com.proxerme.app.util.MaterialDrawerHelper.DRAWER_ID_DEFAULT;
 import static com.proxerme.app.util.MaterialDrawerHelper.DRAWER_ID_DONATE;
-import static com.proxerme.app.util.MaterialDrawerHelper.DRAWER_ID_INFO;
 import static com.proxerme.app.util.MaterialDrawerHelper.DRAWER_ID_MESSAGES;
 import static com.proxerme.app.util.MaterialDrawerHelper.DRAWER_ID_NEWS;
 import static com.proxerme.app.util.MaterialDrawerHelper.DRAWER_ID_NONE;
@@ -379,16 +377,6 @@ public class DashboardActivity extends MainActivity {
             case DRAWER_ID_MESSAGES:
                 setFragment(ConferencesFragment.newInstance(),
                         getString(R.string.drawer_item_messages));
-                return false;
-            case DRAWER_ID_INFO:
-                setFragment(new LibsBuilder().withAboutVersionShownName(true)
-                                .withAboutDescription(getString(R.string.about_description))
-                                .withAboutIconShown(true).withAutoDetect(false)
-                                .withAboutAppName(getString(R.string.app_name))
-                                .withLibraries("glide", "systembartint", "jodatimeandroid",
-                                        "bridge", "hawk", "butterknife", "materialdialogs")
-                                .withFields(R.string.class.getFields()).supportFragment(),
-                        getString(R.string.drawer_item_info));
                 return false;
             case DRAWER_ID_DONATE:
                 showPage(UrlHolder.getDonateUrl());

@@ -46,9 +46,8 @@ public class MaterialDrawerHelper {
     public static final int DRAWER_ID_MESSAGES = 1;
 
     //Sticky items
-    public static final int DRAWER_ID_INFO = 10;
-    public static final int DRAWER_ID_DONATE = 11;
-    public static final int DRAWER_ID_SETTINGS = 12;
+    public static final int DRAWER_ID_DONATE = 10;
+    public static final int DRAWER_ID_SETTINGS = 11;
     public static final int DRAWER_ID_DEFAULT = DRAWER_ID_NEWS;
 
     //Header items
@@ -117,7 +116,8 @@ public class MaterialDrawerHelper {
                 }
             };
 
-    public MaterialDrawerHelper(@NonNull Activity context, @Nullable MaterialDrawerCallback callback) {
+    public MaterialDrawerHelper(@NonNull Activity context,
+                                @Nullable MaterialDrawerCallback callback) {
         this.context = context;
         this.callback = callback;
     }
@@ -218,12 +218,7 @@ public class MaterialDrawerHelper {
 
     @NonNull
     private ArrayList<IDrawerItem> generateStickyDrawerItems() {
-        ArrayList<IDrawerItem> result = new ArrayList<>(3);
-
-        result.add(new PrimaryDrawerItem().withName(R.string.drawer_item_info)
-                .withIcon(CommunityMaterial.Icon.cmd_information).withSelectedTextColorRes(R.color.primary)
-                .withSelectedIconColorRes(R.color.primary).withIconTintingEnabled(true)
-                .withIdentifier(DRAWER_ID_INFO));
+        ArrayList<IDrawerItem> result = new ArrayList<>(2);
 
         result.add(new PrimaryDrawerItem().withName(R.string.drawer_item_donate)
                 .withIcon(CommunityMaterial.Icon.cmd_gift)
@@ -294,7 +289,7 @@ public class MaterialDrawerHelper {
     }
 
     @Retention(RetentionPolicy.SOURCE)
-    @IntDef({DRAWER_ID_NONE, DRAWER_ID_NEWS, DRAWER_ID_MESSAGES, DRAWER_ID_INFO, DRAWER_ID_DONATE,
+    @IntDef({DRAWER_ID_NONE, DRAWER_ID_NEWS, DRAWER_ID_MESSAGES, DRAWER_ID_DONATE,
             DRAWER_ID_SETTINGS})
     public @interface DrawerItemId {
     }

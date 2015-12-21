@@ -28,11 +28,14 @@
     </plurals>
     <string name="time_more_than_one_month_ago">More than one month ago</string>
     <string name="preference_category_notifications_title">Notifications</string>
+    <string name="preference_category_info_title">Info</string>
     <string name="preference_news_notifications_title">News</string>
     <string name="preference_notifications_summary_on">Receive notifications</string>
     <string name="preference_notifications_summary_off">Don\'t receive notifications</string>
     <string name="preference_news_notifications_interval_title">News Update interval</string>
     <string name="preference_messages_notifications_title">Messages</string>
+    <string name="preference_licences_title">Licences</string>
+    <string name="preference_licences_summary">Projects used in this App</string>
     <string name="introduction_welcome_title">Welcome!</string>
     <string name="introduction_welcome_description">Just some settings and you are ready to go.</string>
     <string name="introduction_notifications_title">Notifications</string>
