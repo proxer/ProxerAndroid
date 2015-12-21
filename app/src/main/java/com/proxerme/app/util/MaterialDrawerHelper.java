@@ -2,6 +2,7 @@ package com.proxerme.app.util;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
@@ -21,11 +22,14 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.proxerme.app.R;
 import com.proxerme.app.manager.NewsManager;
+import com.proxerme.app.manager.StorageManager;
 import com.proxerme.app.manager.UserManager;
 import com.proxerme.library.connection.UrlHolder;
 import com.proxerme.library.entity.LoginUser;
 import com.proxerme.library.util.ProxerInfo;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 
 /**
@@ -245,7 +249,7 @@ public class MaterialDrawerHelper {
         return drawer.isDrawerOpen();
     }
 
-    public void select(int id) {
+    public void select(@DrawerItemId int id) {
         drawer.setSelection(id);
     }
 
@@ -263,7 +267,7 @@ public class MaterialDrawerHelper {
         }
     }
 
-    public void setBadge(int drawerItemId, @Nullable String text) {
+    public void setBadge(@DrawerItemId int drawerItemId, @Nullable String text) {
         if (text == null) {
             drawer.updateBadge(drawerItemId, null);
         } else {
@@ -273,15 +277,26 @@ public class MaterialDrawerHelper {
 
     private void initBadges() {
         int newNews = NewsManager.getInstance().getNewNews();
+        int newMessages = StorageManager.getNewMessages();
 
         if (newNews > 0 || newNews == PagingHelper.OFFSET_NOT_CALCULABLE) {
             setBadge(DRAWER_ID_NEWS, newNews == PagingHelper.OFFSET_NOT_CALCULABLE ?
                     (ProxerInfo.NEWS_ON_PAGE + "+") : (String.valueOf(newNews)));
         }
+
+        if (newMessages > 0) {
+            setBadge(DRAWER_ID_MESSAGES, String.valueOf(newMessages));
+        }
     }
 
     public void refreshHeader() {
         header.setProfiles(generateProfiles());
+    }
+
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({DRAWER_ID_NEWS, DRAWER_ID_MESSAGES, DRAWER_ID_INFO, DRAWER_ID_DONATE,
+            DRAWER_ID_SETTINGS})
+    public @interface DrawerItemId {
     }
 
     public static abstract class MaterialDrawerCallback {

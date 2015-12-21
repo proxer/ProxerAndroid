@@ -2,6 +2,8 @@ package com.proxerme.app.manager;
 
 import android.app.PendingIntent;
 import android.content.Context;
+import android.support.annotation.IntDef;
+import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.v7.app.NotificationCompat;
 
@@ -11,7 +13,10 @@ import com.proxerme.app.util.MaterialDrawerHelper;
 import com.proxerme.app.util.PagingHelper;
 import com.proxerme.library.entity.Conference;
 import com.proxerme.library.entity.News;
+import com.proxerme.library.util.ProxerInfo;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 
 import static android.support.v4.app.NotificationCompat.BigTextStyle;
@@ -23,8 +28,8 @@ import static android.support.v4.app.NotificationCompat.BigTextStyle;
  */
 public class NotificationManager {
 
-    private static final int NEWS_NOTIFICATION_ID = 1423;
-    private static final int MESSAGES_NOTIFICATION_ID = 1424;
+    public static final int NEWS_NOTIFICATION = 1423;
+    public static final int MESSAGES_NOTIFICATION = 1424;
 
     /**
      * Shows a Notification about news to the user. If there are no new news, nothing will be shown.
@@ -33,7 +38,9 @@ public class NotificationManager {
      * @param news    The List of {@link News}.
      * @param offset  The offset to the last retrieved news.
      */
-    public static void showNewsNotification(@NonNull Context context, List<News> news, int offset) {
+    public static void showNewsNotification(@NonNull Context context, @NonNull List<News> news,
+                                            @IntRange(from = PagingHelper.OFFSET_NOT_CALCULABLE,
+                                                    to = ProxerInfo.CONFERENCES_ON_PAGE) int offset) {
         if (offset != PagingHelper.OFFSET_NOT_CALCULABLE && offset > 0) {
             android.app.NotificationManager notificationManager =
                     (android.app.NotificationManager) context
@@ -62,17 +69,21 @@ public class NotificationManager {
                             MaterialDrawerHelper.DRAWER_ID_NEWS, null),
                     PendingIntent.FLAG_UPDATE_CURRENT));
 
-            notificationManager.notify(NEWS_NOTIFICATION_ID, builder.build());
+            notificationManager.notify(NEWS_NOTIFICATION, builder.build());
         }
     }
 
-    private static String generateNewsNotificationAmount(@NonNull Context context, int offset) {
+    private static String generateNewsNotificationAmount(@NonNull Context context,
+                                                         @IntRange(from = PagingHelper.OFFSET_TOO_LARGE,
+                                                                 to = ProxerInfo.CONFERENCES_ON_PAGE) int offset) {
         return offset == PagingHelper.OFFSET_TOO_LARGE ?
                 context.getString(R.string.notification_amount_more_than_15) :
                 (offset + " " + context.getString(R.string.notification_amount_text));
     }
 
-    private static String generateNewsNotificationBigText(List<News> news, int offset) {
+    private static String generateNewsNotificationBigText(@NonNull List<News> news,
+                                                          @IntRange(from = PagingHelper.OFFSET_TOO_LARGE,
+                                                                  to = ProxerInfo.CONFERENCES_ON_PAGE) int offset) {
         String result = "";
 
         for (int i = 0; i < offset; i++) {
@@ -83,8 +94,8 @@ public class NotificationManager {
         return result;
     }
 
-    public static void showMessagesNotification(Context context,
-                                                List<Conference> conferences) {
+    public static void showMessagesNotification(@NonNull Context context,
+                                                @NonNull List<Conference> conferences) {
         if (!conferences.isEmpty()) {
             android.app.NotificationManager notificationManager =
                     (android.app.NotificationManager) context
@@ -110,7 +121,20 @@ public class NotificationManager {
                             MaterialDrawerHelper.DRAWER_ID_MESSAGES, null),
                     PendingIntent.FLAG_UPDATE_CURRENT));
 
-            notificationManager.notify(MESSAGES_NOTIFICATION_ID, builder.build());
+            notificationManager.notify(MESSAGES_NOTIFICATION, builder.build());
         }
+    }
+
+    public static void cancel(@NonNull Context context, @NotificationId int id) {
+        android.app.NotificationManager notificationManager =
+                (android.app.NotificationManager) context
+                        .getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notificationManager.cancel(id);
+    }
+
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({NEWS_NOTIFICATION, MESSAGES_NOTIFICATION})
+    public @interface NotificationId {
     }
 }

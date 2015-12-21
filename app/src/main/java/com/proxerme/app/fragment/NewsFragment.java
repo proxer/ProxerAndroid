@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import com.proxerme.app.activity.ImageDetailActivity;
 import com.proxerme.app.adapter.NewsAdapter;
 import com.proxerme.app.manager.NewsManager;
+import com.proxerme.app.manager.NotificationManager;
 import com.proxerme.app.manager.NotificationRetrievalManager;
 import com.proxerme.app.util.MaterialDrawerHelper;
 import com.proxerme.library.connection.ProxerConnection;
@@ -29,6 +30,13 @@ public class NewsFragment extends PagingFragment<News, NewsAdapter> {
     @NonNull
     public static NewsFragment newInstance() {
         return new NewsFragment();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        NotificationManager.cancel(getContext(), NotificationManager.NEWS_NOTIFICATION);
     }
 
     @Override

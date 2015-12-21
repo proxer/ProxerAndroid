@@ -20,9 +20,10 @@ public class StorageManager {
     private static final String STORAGE_FIRST_START = "storage_first_start";
     private static final String STORAGE_NEWS_LAST_ID = "storage_news_last_id";
     private static final String STORAGE_USER_USERNAME = "storage_user_username";
-    public static final String STORAGE_USER_USERNAME1 = STORAGE_USER_USERNAME;
+    private static final String STORAGE_USER_USERNAME1 = STORAGE_USER_USERNAME;
     private static final String STORAGE_USER_PASSWORD = "storage_user_password";
     private static final String STORAGE_USER_ID = "storage_user_id";
+    private static final String STORAGE_NEW_MESSAGES = "storage_messages_new";
 
     @Nullable
     public static String getLastNewsId() {
@@ -44,6 +45,15 @@ public class StorageManager {
 
     public static void setNewNews(@IntRange(from = 0) int amount) {
         Hawk.put(STORAGE_NEW_NEWS, amount);
+    }
+
+    @IntRange(from = 0)
+    public static int getNewMessages() {
+        return Hawk.get(STORAGE_NEW_MESSAGES);
+    }
+
+    public static void setNewMessages(@IntRange(from = 0) int amount) {
+        Hawk.put(STORAGE_NEW_MESSAGES, amount);
     }
 
     public static void setFirstStartOccurred() {
@@ -87,6 +97,7 @@ public class StorageManager {
         Hawk.put(STORAGE_MESSAGES_NOTIFICATIONS_INTERVAL, 5);
     }
 
+    @IntRange(from = 5)
     public static int getMessagesInterval() {
         return Hawk.get(STORAGE_MESSAGES_NOTIFICATIONS_INTERVAL, 5);
     }

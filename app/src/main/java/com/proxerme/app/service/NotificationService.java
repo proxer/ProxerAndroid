@@ -97,6 +97,7 @@ public class NotificationService extends IntentService {
                 }
 
                 NotificationManager.showMessagesNotification(this, conferences);
+                StorageManager.setNewMessages(conferences.size());
             } catch (ProxerException ignored) {
 
             }
