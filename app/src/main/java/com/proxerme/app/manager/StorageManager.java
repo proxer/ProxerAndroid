@@ -49,7 +49,7 @@ public class StorageManager {
 
     @IntRange(from = 0)
     public static int getNewMessages() {
-        return Hawk.get(STORAGE_NEW_MESSAGES);
+        return Hawk.get(STORAGE_NEW_MESSAGES, 0);
     }
 
     public static void setNewMessages(@IntRange(from = 0) int amount) {
