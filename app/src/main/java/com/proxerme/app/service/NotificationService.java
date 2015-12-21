@@ -9,7 +9,6 @@ import com.proxerme.app.application.MainApplication;
 import com.proxerme.app.manager.NewsManager;
 import com.proxerme.app.manager.NotificationManager;
 import com.proxerme.app.manager.NotificationRetrievalManager;
-import com.proxerme.app.manager.PreferenceManager;
 import com.proxerme.app.manager.StorageManager;
 import com.proxerme.app.util.PagingHelper;
 import com.proxerme.library.connection.ProxerConnection;
@@ -105,7 +104,6 @@ public class NotificationService extends IntentService {
             StorageManager.incrementMessagesInterval();
             NotificationRetrievalManager.retrieveMessagesLater(this);
         } else {
-            PreferenceManager.setMessagesNotificationsEnabled(this, false);
             NotificationRetrievalManager.cancelMessagesRetrieval(this);
         }
     }

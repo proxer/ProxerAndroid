@@ -74,6 +74,36 @@ public class DashboardActivity extends MainActivity {
 
     private String title;
 
+    private UserManager.OnLoginStateListener onLoginStateListener = new UserManager.OnLoginStateListener() {
+        @Override
+        public void onLogin(@NonNull LoginUser user) {
+            if (!isDestroyedCompat()) {
+                drawerHelper.refreshHeader();
+            }
+        }
+
+        @Override
+        public void onLogout() {
+            if (!isDestroyedCompat()) {
+                drawerHelper.refreshHeader();
+            }
+        }
+
+        @Override
+        public void onLogoutFailed(@NonNull ProxerException exception) {
+            Toast.makeText(DashboardActivity.this, R.string.error_logout,
+                    Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        public void onLoginFailed(@NonNull ProxerException exception) {
+            UserManager.getInstance().removeUser();
+            Toast.makeText(DashboardActivity.this,
+                    ErrorHandler.getMessageForErrorCode(DashboardActivity.this,
+                            exception.getErrorCode()), Toast.LENGTH_LONG).show();
+        }
+    };
+
     private MaterialDrawerCallback drawerCallback = new MaterialDrawerCallback() {
         @Override
         public boolean onItemClick(int identifier) {
@@ -137,41 +167,20 @@ public class DashboardActivity extends MainActivity {
         initViews();
         drawerHelper.build(toolbar, savedInstanceState);
 
-        userManager.addOnLoginStateListener(new UserManager.OnLoginStateListener() {
-            @Override
-            public void onLogin(@NonNull LoginUser user) {
-                if (!isDestroyedCompat()) {
-                    drawerHelper.refreshHeader();
-                }
-            }
-
-            @Override
-            public void onLogout() {
-                if (!isDestroyedCompat()) {
-                    drawerHelper.refreshHeader();
-                }
-            }
-
-            @Override
-            public void onLogoutFailed(@NonNull ProxerException exception) {
-                Toast.makeText(DashboardActivity.this, R.string.error_logout,
-                        Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onLoginFailed(@NonNull ProxerException exception) {
-                UserManager.getInstance().removeUser();
-                Toast.makeText(DashboardActivity.this,
-                        ErrorHandler.getMessageForErrorCode(DashboardActivity.this,
-                                exception.getErrorCode()), Toast.LENGTH_LONG).show();
-            }
-        });
+        userManager.addOnLoginStateListener(onLoginStateListener);
 
         if (savedInstanceState == null && userManager.getUser() != null) {
             userManager.login(userManager.getUser());
         }
 
         displayFirstPage(savedInstanceState);
+    }
+
+    @Override
+    protected void onDestroy() {
+        UserManager.getInstance().removeOnLoginStateListener(onLoginStateListener);
+
+        super.onDestroy();
     }
 
     @Override
@@ -247,6 +256,7 @@ public class DashboardActivity extends MainActivity {
         }
     }
 
+    @MaterialDrawerHelper.DrawerItemId
     private int getItemToLoad(@NonNull Intent intent) {
         String action = intent.getAction();
 
@@ -261,6 +271,7 @@ public class DashboardActivity extends MainActivity {
                 return MaterialDrawerHelper.DRAWER_ID_NONE;
             }
         } else {
+            //noinspection ResourceType
             return intent.getIntExtra(EXTRA_DRAWER_ITEM, MaterialDrawerHelper.DRAWER_ID_NONE);
         }
     }

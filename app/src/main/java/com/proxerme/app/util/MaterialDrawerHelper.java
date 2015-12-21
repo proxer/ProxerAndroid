@@ -294,7 +294,7 @@ public class MaterialDrawerHelper {
     }
 
     @Retention(RetentionPolicy.SOURCE)
-    @IntDef({DRAWER_ID_NEWS, DRAWER_ID_MESSAGES, DRAWER_ID_INFO, DRAWER_ID_DONATE,
+    @IntDef({DRAWER_ID_NONE, DRAWER_ID_NEWS, DRAWER_ID_MESSAGES, DRAWER_ID_INFO, DRAWER_ID_DONATE,
             DRAWER_ID_SETTINGS})
     public @interface DrawerItemId {
     }

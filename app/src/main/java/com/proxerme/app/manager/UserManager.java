@@ -96,6 +96,10 @@ public class UserManager {
         this.listeners.add(listener);
     }
 
+    public void removeOnLoginStateListener(@NonNull OnLoginStateListener listener) {
+        this.listeners.remove(listener);
+    }
+
     public abstract static class OnLoginStateListener{
         public void onLogin(@NonNull LoginUser user){
 

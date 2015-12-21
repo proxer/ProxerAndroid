@@ -20,6 +20,8 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.proxerme.app.R;
+import com.proxerme.app.manager.NotificationRetrievalManager;
+import com.proxerme.app.manager.PreferenceManager;
 import com.proxerme.app.manager.UserManager;
 import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.connection.ProxerException;
@@ -58,6 +60,23 @@ public class LoginDialog extends DialogFragment {
     ProgressBar progress;
 
     private boolean loading;
+
+    private UserManager.OnLoginStateListener onLoginStateListener = new UserManager.OnLoginStateListener() {
+        @Override
+        public void onLogin(@NonNull LoginUser user) {
+            if (PreferenceManager.areMessagesNotificationsEnabled(getContext())) {
+                NotificationRetrievalManager.retrieveMessagesLater(getContext());
+            }
+
+            dismiss();
+        }
+
+        @Override
+        public void onLoginFailed(@NonNull ProxerException exception) {
+            loading = false;
+            handleVisibility();
+        }
+    };
 
     public static LoginDialog newInstance() {
         return new LoginDialog();
@@ -107,6 +126,7 @@ public class LoginDialog extends DialogFragment {
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
 
+        UserManager.getInstance().removeOnLoginStateListener(onLoginStateListener);
         ProxerConnection.cancel(ProxerTag.LOGIN);
     }
 
@@ -158,18 +178,7 @@ public class LoginDialog extends DialogFragment {
                 loading = true;
                 handleVisibility();
 
-                UserManager.getInstance().addOnLoginStateListener(new UserManager.OnLoginStateListener() {
-                    @Override
-                    public void onLogin(@NonNull LoginUser user) {
-                        dismiss();
-                    }
-
-                    @Override
-                    public void onLoginFailed(@NonNull ProxerException exception) {
-                        loading = false;
-                        handleVisibility();
-                    }
-                });
+                UserManager.getInstance().addOnLoginStateListener(onLoginStateListener);
                 UserManager.getInstance().login(new LoginUser(username, password));
             }
         }

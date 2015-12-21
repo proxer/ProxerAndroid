@@ -22,6 +22,8 @@ public class NotificationRetrievalManager {
     /**
      * Retrieves News and interprets them in a background Service in the time span, specified in the
      * settings. If a news retrieval was already queued, it will be cancelled.
+     *
+     * @param context The context.
      */
     public static void retrieveNewsLater(@NonNull Context context) {
         cancelNewsRetrieval(context);
@@ -34,6 +36,8 @@ public class NotificationRetrievalManager {
 
     /**
      * Cancels a queued news retrieval. If there is none, nothing will happen.
+     *
+     * @param context The context.
      */
     public static void cancelNewsRetrieval(@NonNull Context context) {
         cancelRetrieval(context, NewsReceiver.class);
@@ -42,12 +46,20 @@ public class NotificationRetrievalManager {
     /**
      * Returns if news retrieval is enabled.
      *
+     * @param context The context.
      * @return True, if news retrieval is enabled.
      */
     public static boolean isNewsRetrievalEnabled(@NonNull Context context) {
         return PreferenceManager.areNewsNotificationsEnabled(context);
     }
 
+    /**
+     * Retrieves new messages and interprets them in a background Service.
+     * If a messages retrieval was already queued, it will be cancelled.
+     * The interval is retrieved from the storage and will be incremented in the service.
+     *
+     * @param context The context.
+     */
     public static void retrieveMessagesLater(@NonNull Context context) {
         cancelMessagesRetrieval(context);
         if (isMessagesRetrievalEnabled(context)) {
@@ -57,10 +69,21 @@ public class NotificationRetrievalManager {
         }
     }
 
+    /**
+     * Cancels a queued messages retrieval. If there is none, nothing will happen.
+     *
+     * @param context The context.
+     */
     public static void cancelMessagesRetrieval(@NonNull Context context) {
         cancelRetrieval(context, MessagesReceiver.class);
     }
 
+    /**
+     * Returns if messages retrieval is enabled.
+     *
+     * @param context The context.
+     * @return True, if messages retrieval is enabled.
+     */
     public static boolean isMessagesRetrievalEnabled(@NonNull Context context) {
         return PreferenceManager.areMessagesNotificationsEnabled(context);
     }

@@ -94,6 +94,13 @@ public class NotificationManager {
         return result;
     }
 
+    /**
+     * Shows a notification about new messages to the user. If there are none, nothing will happen.
+     *
+     * @param context     The context.
+     * @param conferences The new messages. It is expected, that only new conferences are passes,
+     *                    as no checks will hapen here.
+     */
     public static void showMessagesNotification(@NonNull Context context,
                                                 @NonNull List<Conference> conferences) {
         if (!conferences.isEmpty()) {
@@ -125,6 +132,13 @@ public class NotificationManager {
         }
     }
 
+    /**
+     * Cancels an existing notification. If the notification is not currently displayed, nothing
+     * will happen.
+     *
+     * @param context The context.
+     * @param id      The id of the notification.
+     */
     public static void cancel(@NonNull Context context, @NotificationId int id) {
         android.app.NotificationManager notificationManager =
                 (android.app.NotificationManager) context
