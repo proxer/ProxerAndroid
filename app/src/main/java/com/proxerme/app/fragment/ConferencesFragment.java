@@ -14,6 +14,7 @@ import com.proxerme.app.adapter.ConferenceAdapter;
 import com.proxerme.app.manager.NotificationManager;
 import com.proxerme.app.manager.NotificationRetrievalManager;
 import com.proxerme.app.manager.StorageManager;
+import com.proxerme.app.util.MaterialDrawerHelper;
 import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.connection.ProxerException;
 import com.proxerme.library.connection.ProxerTag;
@@ -83,6 +84,10 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
                 StorageManager.setNewMessages(0);
                 StorageManager.resetMessagesInterval();
                 NotificationRetrievalManager.retrieveNewsLater(getContext());
+
+                if (getActivity() != null) {
+                    getDashboardActivity().setBadge(MaterialDrawerHelper.DRAWER_ID_MESSAGES, null);
+                }
             }
 
             @Override
