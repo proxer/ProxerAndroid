@@ -65,4 +65,5 @@
     <string name="preference_category_info_title">Info</string>
     <string name="preference_licences_summary">Projekte, die in dieser App genutzt werden</string>
     <string name="preference_licences_title">Lizenzen</string>
+    <string name="about_libraries_title">Lizenzen</string>
 </resources>

@@ -72,35 +72,40 @@ public class DashboardActivity extends MainActivity {
 
     private String title;
 
-    private UserManager.OnLoginStateListener onLoginStateListener = new UserManager.OnLoginStateListener() {
-        @Override
-        public void onLogin(@NonNull LoginUser user) {
-            if (!isDestroyedCompat()) {
-                drawerHelper.refreshHeader();
-            }
-        }
+    private UserManager.OnLoginStateListener onLoginStateListener =
+            new UserManager.OnLoginStateListener() {
+                @Override
+                public void onLogin(@NonNull LoginUser user) {
+                    if (!isDestroyedCompat()) {
+                        drawerHelper.refreshHeader();
+                    }
+                }
 
-        @Override
-        public void onLogout() {
-            if (!isDestroyedCompat()) {
-                drawerHelper.refreshHeader();
-            }
-        }
+                @Override
+                public void onLogout() {
+                    if (!isDestroyedCompat()) {
+                        drawerHelper.refreshHeader();
+                    }
+                }
 
-        @Override
-        public void onLogoutFailed(@NonNull ProxerException exception) {
-            Toast.makeText(DashboardActivity.this, R.string.error_logout,
-                    Toast.LENGTH_LONG).show();
-        }
+                @Override
+                public void onLogoutFailed(@NonNull ProxerException exception) {
+                    Toast.makeText(DashboardActivity.this, R.string.error_logout,
+                            Toast.LENGTH_LONG).show();
+                }
 
-        @Override
-        public void onLoginFailed(@NonNull ProxerException exception) {
-            UserManager.getInstance().removeUser();
-            Toast.makeText(DashboardActivity.this,
-                    ErrorHandler.getMessageForErrorCode(DashboardActivity.this,
-                            exception.getErrorCode()), Toast.LENGTH_LONG).show();
-        }
-    };
+                @Override
+                public void onLoginFailed(@NonNull ProxerException exception) {
+                    UserManager.getInstance().removeUser();
+                    Toast.makeText(DashboardActivity.this,
+                            ErrorHandler.getMessageForErrorCode(DashboardActivity.this,
+                                    exception.getErrorCode()), Toast.LENGTH_LONG).show();
+
+                    if (!isDestroyedCompat()) {
+                        drawerHelper.refreshHeader();
+                    }
+                }
+            };
 
     private MaterialDrawerCallback drawerCallback = new MaterialDrawerCallback() {
         @Override

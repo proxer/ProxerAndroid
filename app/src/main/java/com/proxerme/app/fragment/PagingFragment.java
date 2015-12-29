@@ -16,6 +16,7 @@ import com.proxerme.app.R;
 import com.proxerme.app.adapter.PagingAdapter;
 import com.proxerme.app.util.EndlessRecyclerOnScrollListener;
 import com.proxerme.app.util.ErrorHandler;
+import com.proxerme.app.util.PagingHelper;
 import com.proxerme.app.util.SnackbarManager;
 import com.proxerme.app.util.Utils;
 import com.proxerme.library.connection.ProxerConnection;
@@ -205,7 +206,11 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
 
     private void handleResult(List<T> result, boolean insert) {
         if (insert) {
-            adapter.insertAtStart(result);
+            int offset = adapter.insertAtStart(result);
+
+            if (offset == PagingHelper.OFFSET_TOO_LARGE || offset > 0) {
+                scrollToTop();
+            }
         } else {
             adapter.append(result);
         }
@@ -242,4 +247,7 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
 
     }
 
+    protected void scrollToTop() {
+        list.smoothScrollToPosition(0);
+    }
 }
