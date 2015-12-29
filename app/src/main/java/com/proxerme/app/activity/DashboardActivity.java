@@ -159,19 +159,24 @@ public class DashboardActivity extends MainActivity {
         }
 
         drawerHelper = new MaterialDrawerHelper(this, drawerCallback);
-        UserManager userManager = UserManager.getInstance();
 
         ButterKnife.bind(this);
         initViews();
         drawerHelper.build(toolbar, savedInstanceState);
 
-        userManager.addOnLoginStateListener(onLoginStateListener);
+        displayFirstPage(savedInstanceState);
+    }
 
-        if (savedInstanceState == null && userManager.getUser() != null) {
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        UserManager userManager = UserManager.getInstance();
+
+        userManager.addOnLoginStateListener(onLoginStateListener);
+        if (userManager.getUser() != null) {
             userManager.login(userManager.getUser());
         }
-
-        displayFirstPage(savedInstanceState);
     }
 
     @Override
