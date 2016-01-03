@@ -375,7 +375,7 @@ public class DashboardActivity extends MainActivity {
         }
     }
 
-    private void showLoginDialog() {
+    public void showLoginDialog() {
         LoginDialog.newInstance().show(getSupportFragmentManager(), "dialog_login");
     }
 

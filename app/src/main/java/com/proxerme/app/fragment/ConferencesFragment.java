@@ -4,22 +4,28 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.proxerme.app.R;
+import com.proxerme.app.activity.DashboardActivity;
 import com.proxerme.app.activity.ImageDetailActivity;
 import com.proxerme.app.activity.MainActivity;
 import com.proxerme.app.adapter.ConferenceAdapter;
 import com.proxerme.app.manager.NotificationManager;
 import com.proxerme.app.manager.NotificationRetrievalManager;
 import com.proxerme.app.manager.StorageManager;
+import com.proxerme.app.manager.UserManager;
 import com.proxerme.app.util.MaterialDrawerHelper;
+import com.proxerme.app.util.SnackbarManager;
 import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.connection.ProxerException;
 import com.proxerme.library.connection.ProxerTag;
 import com.proxerme.library.connection.UrlHolder;
 import com.proxerme.library.entity.Conference;
+import com.proxerme.library.entity.LoginUser;
 
 import java.util.List;
 
@@ -33,6 +39,20 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
     private static final int POLLING_INTERVAL = 5000;
     private Handler handler;
 
+    private UserManager.OnLoginStateListener onLoginStateListener =
+            new UserManager.OnLoginStateListener() {
+                @Override
+                public void onLogin(@NonNull LoginUser user) {
+                    doLoad(1, true, true);
+                }
+
+                @Override
+                public void onLogout() {
+                    cancelRequest();
+                    stopPolling();
+                }
+            };
+
     @NonNull
     public static ConferencesFragment newInstance() {
         return new ConferencesFragment();
@@ -43,6 +63,7 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
         super.onCreate(savedInstanceState);
 
         NotificationManager.cancel(getContext(), NotificationManager.MESSAGES_NOTIFICATION);
+        UserManager.getInstance().addOnLoginStateListener(onLoginStateListener);
     }
 
     @Override
@@ -60,6 +81,13 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        UserManager.getInstance().removeOnLoginStateListener(onLoginStateListener);
+    }
+
+    @Override
     protected ConferenceAdapter getAdapter(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
             return new ConferenceAdapter();
@@ -71,32 +99,51 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
     @Override
     protected void load(@IntRange(from = 1) int page, boolean insert,
                         @NonNull final ProxerConnection.ResultCallback<List<Conference>> callback) {
-        ProxerConnection.loadConferences(page).execute(new ProxerConnection
-                .ResultCallback<List<Conference>>() {
-            @Override
-            public void onResult(List<Conference> conferences) {
-                callback.onResult(conferences);
+        if (UserManager.getInstance().hasUser()) {
+            ProxerConnection.loadConferences(page).execute(new ProxerConnection
+                    .ResultCallback<List<Conference>>() {
+                @Override
+                public void onResult(List<Conference> conferences) {
+                    callback.onResult(conferences);
 
-                if (handler == null) {
-                    startPolling();
+                    if (handler == null) {
+                        startPolling();
+                    }
+
+                    StorageManager.setNewMessages(0);
+                    StorageManager.resetMessagesInterval();
+                    NotificationRetrievalManager.retrieveNewsLater(getContext());
+
+                    if (getActivity() != null) {
+                        getDashboardActivity().setBadge(MaterialDrawerHelper.DRAWER_ID_MESSAGES, null);
+                    }
                 }
 
-                StorageManager.setNewMessages(0);
-                StorageManager.resetMessagesInterval();
-                NotificationRetrievalManager.retrieveNewsLater(getContext());
+                @Override
+                public void onError(@NonNull ProxerException exception) {
+                    callback.onError(exception);
 
-                if (getActivity() != null) {
-                    getDashboardActivity().setBadge(MaterialDrawerHelper.DRAWER_ID_MESSAGES, null);
+                    stopPolling();
                 }
-            }
+            });
+        } else {
+            SnackbarManager.show(Snackbar.make(root, R.string.error_not_logged_in,
+                    Snackbar.LENGTH_INDEFINITE),
+                    getContext().getString(R.string.error_do_login),
+                    new SnackbarManager.SnackbarCallback() {
+                        @Override
+                        public void onClick(View v) {
+                            DashboardActivity activity = getDashboardActivity();
 
-            @Override
-            public void onError(@NonNull ProxerException exception) {
-                callback.onError(exception);
+                            if (activity != null && !activity.isDestroyedCompat()) {
+                                activity.showLoginDialog();
+                            }
+                        }
+                    });
 
-                stopPolling();
-            }
-        });
+            stopLoading();
+            stopPolling();
+        }
     }
 
     @Override
@@ -134,7 +181,9 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
             public void run() {
                 doLoad(1, true, false);
 
-                handler.postDelayed(this, POLLING_INTERVAL);
+                if (handler != null) {
+                    handler.postDelayed(this, POLLING_INTERVAL);
+                }
             }
         }, POLLING_INTERVAL);
     }

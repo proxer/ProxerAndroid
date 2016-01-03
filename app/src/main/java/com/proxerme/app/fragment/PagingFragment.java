@@ -170,13 +170,9 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
                         }
                     }
 
-                    loading = false;
+                    stopLoading();
 
                     handleResult(result, insert);
-
-                    if (swipeRefreshLayout != null) {
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
                 }
 
                 @Override
@@ -188,7 +184,7 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
                                 exception.getErrorCode());
                     }
 
-                    loading = false;
+                    stopLoading();
                     methodBeforeErrorInsert = insert;
 
                     showError();
@@ -202,6 +198,8 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
         if (currentErrorMessage != null) {
             showError();
         }
+
+        stopLoading();
     }
 
     private void handleResult(List<T> result, boolean insert) {
@@ -216,20 +214,24 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
         }
     }
 
-    private void showError() {
-        if (!SnackbarManager.isShowing()) {
-            SnackbarManager.show(Snackbar.make(root, currentErrorMessage,
-                            Snackbar.LENGTH_INDEFINITE),
-                    getContext().getString(R.string.error_retry),
-                    new SnackbarManager.SnackbarCallback() {
-                        @Override
-                        public void onClick(View v) {
-                            doLoad(lastLoadedPage, methodBeforeErrorInsert, true);
-                        }
-                    });
+    protected void stopLoading() {
+        if (swipeRefreshLayout != null) {
+            swipeRefreshLayout.setRefreshing(false);
         }
 
-        swipeRefreshLayout.setRefreshing(false);
+        loading = false;
+    }
+
+    private void showError() {
+        SnackbarManager.show(Snackbar.make(root, currentErrorMessage,
+                Snackbar.LENGTH_INDEFINITE),
+                getContext().getString(R.string.error_retry),
+                new SnackbarManager.SnackbarCallback() {
+                    @Override
+                    public void onClick(View v) {
+                        doLoad(lastLoadedPage, methodBeforeErrorInsert, true);
+                    }
+                });
     }
 
     protected boolean isLoading() {

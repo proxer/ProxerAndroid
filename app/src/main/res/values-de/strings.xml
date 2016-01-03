@@ -65,4 +65,6 @@
     <string name="preference_licences_summary">Projekte, die in dieser App genutzt werden</string>
     <string name="preference_licences_title">Lizenzen</string>
     <string name="about_libraries_title">Lizenzen</string>
+    <string name="error_do_login">Einloggen</string>
+    <string name="error_not_logged_in">Du bist nicht eingeloggt.</string>
 </resources>
