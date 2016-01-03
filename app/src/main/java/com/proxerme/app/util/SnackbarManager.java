@@ -14,12 +14,10 @@ import android.view.View;
 public class SnackbarManager {
 
     private static Snackbar current;
-    private static boolean reshowing = false;
 
     public static void show(@NonNull final Snackbar snackbar, @Nullable String actionTitle,
                             final @Nullable SnackbarCallback callback) {
         dismiss();
-        reshowing = true;
         current = snackbar;
 
         if (actionTitle != null && callback != null) {
@@ -41,9 +39,7 @@ public class SnackbarManager {
 
             @Override
             public void onViewDetachedFromWindow(View v) {
-                if (!reshowing) {
-                    current = null;
-                }
+                current = null;
 
                 if (callback != null) {
                     callback.onDismiss(v);
@@ -55,8 +51,6 @@ public class SnackbarManager {
     }
 
     public static void dismiss() {
-        reshowing = false;
-
         if (current != null) {
             current.dismiss();
         }

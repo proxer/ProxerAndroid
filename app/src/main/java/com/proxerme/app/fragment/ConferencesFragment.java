@@ -6,7 +6,9 @@ import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.proxerme.app.R;
@@ -64,6 +66,17 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
 
         NotificationManager.cancel(getContext(), NotificationManager.MESSAGES_NOTIFICATION);
         UserManager.getInstance().addOnLoginStateListener(onLoginStateListener);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View result = super.onCreateView(inflater, container, savedInstanceState);
+
+        if (savedInstanceState != null) {
+            showErrorIfNecessary();
+        }
+
+        return result;
     }
 
     @Override
@@ -127,20 +140,7 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
                 }
             });
         } else {
-            SnackbarManager.show(Snackbar.make(root, R.string.error_not_logged_in,
-                    Snackbar.LENGTH_INDEFINITE),
-                    getContext().getString(R.string.error_do_login),
-                    new SnackbarManager.SnackbarCallback() {
-                        @Override
-                        public void onClick(View v) {
-                            DashboardActivity activity = getDashboardActivity();
-
-                            if (activity != null && !activity.isDestroyedCompat()) {
-                                activity.showLoginDialog();
-                            }
-                        }
-                    });
-
+            showLoginError();
             stopLoading();
             stopPolling();
         }
@@ -171,6 +171,33 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
     @Override
     protected void cancelRequest() {
         ProxerConnection.cancel(ProxerTag.CONFERENCES);
+    }
+
+    @Override
+    public void showErrorIfNecessary() {
+        super.showErrorIfNecessary();
+
+        if (!UserManager.getInstance().hasUser()) {
+            showLoginError();
+        }
+    }
+
+    private void showLoginError() {
+        if (!SnackbarManager.isShowing()) {
+            SnackbarManager.show(Snackbar.make(root, R.string.error_not_logged_in,
+                    Snackbar.LENGTH_INDEFINITE),
+                    getContext().getString(R.string.error_do_login),
+                    new SnackbarManager.SnackbarCallback() {
+                        @Override
+                        public void onClick(View v) {
+                            DashboardActivity activity = getDashboardActivity();
+
+                            if (activity != null && !activity.isDestroyedCompat()) {
+                                activity.showLoginDialog();
+                            }
+                        }
+                    });
+        }
     }
 
     private void startPolling() {

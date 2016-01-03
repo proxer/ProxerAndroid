@@ -223,15 +223,17 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
     }
 
     private void showError() {
-        SnackbarManager.show(Snackbar.make(root, currentErrorMessage,
-                Snackbar.LENGTH_INDEFINITE),
-                getContext().getString(R.string.error_retry),
-                new SnackbarManager.SnackbarCallback() {
-                    @Override
-                    public void onClick(View v) {
-                        doLoad(lastLoadedPage, methodBeforeErrorInsert, true);
-                    }
-                });
+        if (!SnackbarManager.isShowing()) {
+            SnackbarManager.show(Snackbar.make(root, currentErrorMessage,
+                    Snackbar.LENGTH_INDEFINITE),
+                    getContext().getString(R.string.error_retry),
+                    new SnackbarManager.SnackbarCallback() {
+                        @Override
+                        public void onClick(View v) {
+                            doLoad(lastLoadedPage, methodBeforeErrorInsert, true);
+                        }
+                    });
+        }
     }
 
     protected boolean isLoading() {
