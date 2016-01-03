@@ -57,9 +57,7 @@
                 android:value=".activity.DashboardActivity" />
         </activity>
 
-        <service
-            android:name=".customtabs.KeepAliveService"
-            android:exported="true" />
+        <service android:name=".customtabs.KeepAliveService" />
         <service
             android:name=".service.NotificationService"
             android:exported="false" />

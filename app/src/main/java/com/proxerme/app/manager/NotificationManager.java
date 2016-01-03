@@ -99,7 +99,7 @@ public class NotificationManager {
      *
      * @param context     The context.
      * @param conferences The new messages. It is expected, that only new conferences are passes,
-     *                    as no checks will hapen here.
+     *                    as no checks will happen here.
      */
     public static void showMessagesNotification(@NonNull Context context,
                                                 @NonNull List<Conference> conferences) {

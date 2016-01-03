@@ -3,7 +3,6 @@
     <string name="app_name">ProxerMe</string>
 
     <string name="drawer_item_news">News</string>
-    <string name="drawer_item_info">Info</string>
     <string name="drawer_item_donate">Donate</string>
     <string name="drawer_item_settings">Settings</string>
     <string name="about_description">Developer: Ruben Gees</string>

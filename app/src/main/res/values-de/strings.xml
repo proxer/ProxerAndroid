@@ -3,7 +3,6 @@
     <string name="app_name">ProxerMe</string>
     <string name="about_description">Entwickler: Ruben Gees</string>
     <string name="drawer_item_donate">Spenden</string>
-    <string name="drawer_item_info">Info</string>
     <string name="drawer_item_news">News</string>
     <string name="drawer_item_settings">Einstellungen</string>
     <string name="error_io">Es gabe ein Problem mit dem Speicher. Bitte versuche es erneut.</string>
