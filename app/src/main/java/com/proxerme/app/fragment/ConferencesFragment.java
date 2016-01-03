@@ -80,14 +80,16 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
     }
 
     @Override
-    public void onStart() {
+    public void onResume() {
         super.onStart();
 
-        startPolling();
+        if (!UserManager.getInstance().hasUser()) {
+            startPolling();
+        }
     }
 
     @Override
-    public void onStop() {
+    public void onPause() {
         super.onStop();
 
         stopPolling();

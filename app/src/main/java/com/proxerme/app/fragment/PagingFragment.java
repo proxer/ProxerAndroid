@@ -233,6 +233,8 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
                             doLoad(lastLoadedPage, methodBeforeErrorInsert, true);
                         }
                     });
+        } else {
+            SnackbarManager.update(currentErrorMessage);
         }
     }
 
