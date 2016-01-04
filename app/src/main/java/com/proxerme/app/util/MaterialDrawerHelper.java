@@ -122,7 +122,7 @@ public class MaterialDrawerHelper {
         this.callback = callback;
     }
 
-    public void build(@NonNull Toolbar toolbar, Bundle savedInstanceState) {
+    public void build(@NonNull Toolbar toolbar, @Nullable Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             currentDrawerItemId = savedInstanceState.getInt(STATE_CURRENT_DRAWER_ITEM_ID);
         }
@@ -292,6 +292,12 @@ public class MaterialDrawerHelper {
     @IntDef({DRAWER_ID_NONE, DRAWER_ID_NEWS, DRAWER_ID_MESSAGES, DRAWER_ID_DONATE,
             DRAWER_ID_SETTINGS})
     public @interface DrawerItemId {
+    }
+
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({HEADER_ID_GUEST, HEADER_ID_USER, HEADER_ID_LOGIN, HEADER_ID_LOGOUT,
+            HEADER_ID_CHANGE})
+    public @interface HeaderItemId {
     }
 
     public static abstract class MaterialDrawerCallback {

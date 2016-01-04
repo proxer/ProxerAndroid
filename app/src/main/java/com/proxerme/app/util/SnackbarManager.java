@@ -64,6 +64,7 @@ public class SnackbarManager {
         current.setText(text);
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean isShowing() {
         return current != null && current.isShown();
     }

@@ -17,18 +17,21 @@ public class PagingHelper {
     public static final int OFFSET_NOT_CALCULABLE = -2;
     public static final int OFFSET_TOO_LARGE = -1;
 
+    @IntRange(from = OFFSET_NOT_CALCULABLE)
     public static int calculateOffsetFromStart(@NonNull List<? extends IdItem> list,
                                                @NonNull IdItem last,
                                                @IntRange(from = 1) int itemsOnPage) {
         return calculateOffsetFromStart(list, last.getId(), itemsOnPage);
     }
 
+    @IntRange(from = OFFSET_NOT_CALCULABLE)
     public static int calculateOffsetFromEnd(@NonNull List<? extends IdItem> list,
                                              @NonNull IdItem first,
                                              @IntRange(from = 1) int itemsOnPage) {
         return calculateOffsetFromEnd(list, first.getId(), itemsOnPage);
     }
 
+    @IntRange(from = OFFSET_NOT_CALCULABLE)
     public static int calculateOffsetFromStart(@NonNull List<? extends IdItem> list,
                                                @NonNull String id,
                                                @IntRange(from = 1) int itemsOnPage) {
@@ -45,6 +48,7 @@ public class PagingHelper {
         }
     }
 
+    @IntRange(from = OFFSET_NOT_CALCULABLE)
     public static int calculateOffsetFromEnd(@NonNull List<? extends IdItem> list,
                                              @NonNull String id,
                                              @IntRange(from = 1) int itemsOnPage) {

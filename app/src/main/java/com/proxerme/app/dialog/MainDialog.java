@@ -1,5 +1,6 @@
 package com.proxerme.app.dialog;
 
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 
 /**
@@ -11,11 +12,12 @@ public class MainDialog<C> extends DialogFragment {
 
     private C callback;
 
+    @Nullable
     protected C getCallback() {
         return callback;
     }
 
-    public void setCallback(C callback) {
+    public void setCallback(@Nullable C callback) {
         this.callback = callback;
     }
 }

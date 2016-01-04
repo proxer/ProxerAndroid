@@ -78,6 +78,7 @@ public class LoginDialog extends DialogFragment {
         }
     };
 
+    @NonNull
     public static LoginDialog newInstance() {
         return new LoginDialog();
     }

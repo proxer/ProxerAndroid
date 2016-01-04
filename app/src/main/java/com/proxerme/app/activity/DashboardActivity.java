@@ -131,7 +131,8 @@ public class DashboardActivity extends MainActivity {
         }
     };
 
-    public static Intent getSectionIntent(@NonNull Context context, int drawerItemId,
+    public static Intent getSectionIntent(@NonNull Context context,
+                                          @MaterialDrawerHelper.DrawerItemId int drawerItemId,
                                           @Nullable String additionalInfo) {
         Intent intent = new Intent(context, DashboardActivity.class);
 
@@ -284,7 +285,8 @@ public class DashboardActivity extends MainActivity {
         }
     }
 
-    public void setBadge(int drawerItemId, @Nullable String text) {
+    public void setBadge(@MaterialDrawerHelper.DrawerItemId int drawerItemId,
+                         @Nullable String text) {
         drawerHelper.setBadge(drawerItemId, text);
     }
 
@@ -353,7 +355,7 @@ public class DashboardActivity extends MainActivity {
         });
     }
 
-    private boolean handleOnHeaderAccountClick(int id) {
+    private boolean handleOnHeaderAccountClick(@MaterialDrawerHelper.HeaderItemId int id) {
         switch (id) {
             case HEADER_ID_GUEST:
                 showLoginDialog();
@@ -379,7 +381,7 @@ public class DashboardActivity extends MainActivity {
         LoginDialog.newInstance().show(getSupportFragmentManager(), "dialog_login");
     }
 
-    private boolean handleOnDrawerItemClick(int id) {
+    private boolean handleOnDrawerItemClick(@MaterialDrawerHelper.DrawerItemId int id) {
         switch (id) {
             case DRAWER_ID_NEWS:
                 setFragment(NewsFragment.newInstance(), getString(R.string.drawer_item_news));
@@ -395,6 +397,8 @@ public class DashboardActivity extends MainActivity {
                 setFragment(SettingsFragment.newInstance(),
                         getString(R.string.drawer_item_settings));
                 return false;
+            case MaterialDrawerHelper.DRAWER_ID_NONE:
+                throw new RuntimeException("Unknown drawer id");
             default:
                 return true;
         }
