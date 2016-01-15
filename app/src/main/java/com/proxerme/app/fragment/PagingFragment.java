@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
@@ -59,24 +60,6 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
     private boolean endReached = false;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        adapter = createAdapter(savedInstanceState);
-
-        if (savedInstanceState != null) {
-            loading = savedInstanceState.getBoolean(STATE_LOADING);
-            currentPage = savedInstanceState.getInt(STATE_CURRENT_PAGE);
-            lastLoadedPage = savedInstanceState.getInt(STATE_LAST_LOADED_PAGE);
-            currentErrorMessage = savedInstanceState.getString(STATE_ERROR_MESSAGE);
-            methodBeforeErrorInsert = savedInstanceState.getBoolean(STATE_METHOD_BEFORE_ERROR);
-            endReached = savedInstanceState.getBoolean(STATE_END_REACHED);
-        }
-
-        configAdapter(adapter);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_paging, container, false);
@@ -87,7 +70,6 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
                 StaggeredGridLayoutManager.VERTICAL);
 
         list.setHasFixedSize(true);
-        list.setAdapter(adapter);
         list.setLayoutManager(layoutManager);
         list.addOnScrollListener(new EndlessRecyclerOnScrollListener(layoutManager) {
             @Override
@@ -106,6 +88,27 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
             }
         });
 
+        return root;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        adapter = createAdapter(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            loading = savedInstanceState.getBoolean(STATE_LOADING);
+            currentPage = savedInstanceState.getInt(STATE_CURRENT_PAGE);
+            lastLoadedPage = savedInstanceState.getInt(STATE_LAST_LOADED_PAGE);
+            currentErrorMessage = savedInstanceState.getString(STATE_ERROR_MESSAGE);
+            methodBeforeErrorInsert = savedInstanceState.getBoolean(STATE_METHOD_BEFORE_ERROR);
+            endReached = savedInstanceState.getBoolean(STATE_END_REACHED);
+        }
+
+        configAdapter(adapter);
+        list.setAdapter(adapter);
+
         if (savedInstanceState == null) {
             doLoad(currentPage, false, true);
         } else if (currentErrorMessage != null) {
@@ -113,23 +116,21 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
         } else if (loading) {
             doLoad(currentPage, methodBeforeErrorInsert, true);
         }
+    }
 
-        return root;
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        cancelRequest();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
 
-        root = null;
         ButterKnife.unbind(this);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        cancelRequest();
+        root = null;
     }
 
     @Override
