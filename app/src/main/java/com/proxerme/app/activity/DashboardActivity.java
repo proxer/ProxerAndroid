@@ -312,7 +312,7 @@ public class DashboardActivity extends MainActivity {
                                 break;
                         }
                     }
-                }).introduceMyself();
+                }).withSkipEnabled("Überspringen").introduceMyself();
     }
 
     @NonNull

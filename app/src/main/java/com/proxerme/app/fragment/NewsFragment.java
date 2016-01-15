@@ -63,7 +63,7 @@ public class NewsFragment extends PagingFragment<News, NewsAdapter> {
     }
 
     @Override
-    protected NewsAdapter getAdapter(Bundle savedInstanceState) {
+    protected NewsAdapter createAdapter(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
             return new NewsAdapter();
         } else {

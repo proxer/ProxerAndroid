@@ -62,7 +62,7 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        adapter = getAdapter(savedInstanceState);
+        adapter = createAdapter(savedInstanceState);
 
         if (savedInstanceState != null) {
             loading = savedInstanceState.getBoolean(STATE_LOADING);
@@ -242,7 +242,17 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
         return loading;
     }
 
-    protected abstract A getAdapter(Bundle savedInstanceState);
+    protected boolean isEmpty() {
+        return adapter != null && adapter.isEmpty();
+    }
+
+    protected void clear() {
+        if (adapter != null) {
+            adapter.clear();
+        }
+    }
+
+    protected abstract A createAdapter(Bundle savedInstanceState);
 
     protected abstract void load(@IntRange(from = 1) final int page, final boolean insert,
                                  @NonNull ProxerConnection.ResultCallback<List<T>> callback);

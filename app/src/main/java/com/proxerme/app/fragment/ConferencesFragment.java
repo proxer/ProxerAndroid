@@ -45,13 +45,17 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
             new UserManager.OnLoginStateListener() {
                 @Override
                 public void onLogin(@NonNull LoginUser user) {
-                    doLoad(1, true, true);
+                    if (isEmpty()) {
+                        doLoad(1, true, true);
+                    }
                 }
 
                 @Override
                 public void onLogout() {
                     cancelRequest();
                     stopPolling();
+                    clear();
+                    showLoginError();
                 }
             };
 
@@ -103,7 +107,7 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
     }
 
     @Override
-    protected ConferenceAdapter getAdapter(Bundle savedInstanceState) {
+    protected ConferenceAdapter createAdapter(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
             return new ConferenceAdapter();
         } else {

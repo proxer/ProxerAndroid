@@ -118,4 +118,12 @@ public abstract class PagingAdapter<T extends IdItem & Parcelable,
      */
     @IntRange(from = 1)
     protected abstract int getItemsOnPage();
+
+    public boolean isEmpty() {
+        return list.isEmpty();
+    }
+
+    public void clear() {
+        list.clear();
+    }
 }
