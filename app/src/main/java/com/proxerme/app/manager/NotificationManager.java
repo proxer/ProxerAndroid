@@ -1,5 +1,6 @@
 package com.proxerme.app.manager;
 
+import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.support.annotation.IntDef;
@@ -20,6 +21,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 
 import static android.support.v4.app.NotificationCompat.BigTextStyle;
+import static android.support.v4.app.NotificationCompat.InboxStyle;
+import static android.support.v4.app.NotificationCompat.Style;
+
 
 /**
  * A helper class for displaying notifications.
@@ -45,53 +49,51 @@ public class NotificationManager {
             android.app.NotificationManager notificationManager =
                     (android.app.NotificationManager) context
                             .getSystemService(Context.NOTIFICATION_SERVICE);
-            NotificationCompat.Builder builder =
-                    new NotificationCompat.Builder(context);
-
-            builder.setAutoCancel(true)
-                    .setContentTitle(context.getString(R.string.news_notification_title))
-                    .setSmallIcon(R.drawable.ic_stat_proxer);
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+            Style style;
 
             if (offset == 1) {
                 News current = news.get(0);
+                String title = current.getSubject().trim();
+                String content = current.getDescription().trim();
 
-                builder.setContentText(current.getSubject());
-                builder.setStyle(new BigTextStyle(builder).bigText(current.getSubject() + "\n\n" +
-                        current.getDescription()));
+                builder.setContentTitle(title);
+                builder.setContentText(content);
+
+                style = new BigTextStyle(builder).bigText(content)
+                        .setBigContentTitle(title)
+                        .setSummaryText(generateNewsNotificationAmount(context, offset));
             } else {
-                builder.setContentText(generateNewsNotificationAmount(context, offset))
-                        .setStyle(new BigTextStyle(builder)
-                                .bigText(generateNewsNotificationBigText(news, offset)));
+                InboxStyle inboxStyle = new InboxStyle();
+
+                for (int i = 0; i < 5 && i < offset; i++) {
+                    inboxStyle.addLine(news.get(i).getSubject());
+                }
+
+                inboxStyle.setBigContentTitle(context
+                        .getString(R.string.news_notification_title));
+
+                if (offset > 5) {
+                    inboxStyle.setSummaryText((offset - 5) + context
+                            .getString(R.string.news_notification_amount_text));
+                } else {
+                    inboxStyle.setSummaryText(generateNewsNotificationAmount(context, offset));
+                }
+
+                style = inboxStyle;
             }
 
-            builder.setContentIntent(PendingIntent.getActivity(
-                    context, 0, DashboardActivity.getSectionIntent(context,
-                            MaterialDrawerHelper.DRAWER_ID_NEWS, null),
-                    PendingIntent.FLAG_UPDATE_CURRENT));
+            builder.setAutoCancel(true).setSmallIcon(R.drawable.ic_stat_proxer)
+                    .setContentTitle(context.getString(R.string.news_notification_title))
+                    .setContentText(generateNewsNotificationAmount(context, offset))
+                    .setContentIntent(PendingIntent.getActivity(context, 0,
+                            DashboardActivity.getSectionIntent(context,
+                                    MaterialDrawerHelper.DRAWER_ID_NEWS, null),
+                            PendingIntent.FLAG_UPDATE_CURRENT))
+                    .setStyle(style);
 
             notificationManager.notify(NEWS_NOTIFICATION, builder.build());
         }
-    }
-
-    private static String generateNewsNotificationAmount(@NonNull Context context,
-                                                         @IntRange(from = PagingHelper.OFFSET_TOO_LARGE,
-                                                                 to = ProxerInfo.CONFERENCES_ON_PAGE) int offset) {
-        return offset == PagingHelper.OFFSET_TOO_LARGE ?
-                context.getString(R.string.notification_amount_more_than_15) :
-                (offset + " " + context.getString(R.string.notification_amount_text));
-    }
-
-    private static String generateNewsNotificationBigText(@NonNull List<News> news,
-                                                          @IntRange(from = PagingHelper.OFFSET_TOO_LARGE,
-                                                                  to = ProxerInfo.CONFERENCES_ON_PAGE) int offset) {
-        String result = "";
-
-        for (int i = 0; i < offset; i++) {
-            result += news.get(i).getSubject();
-            result += '\n';
-        }
-
-        return result;
     }
 
     /**
@@ -107,8 +109,14 @@ public class NotificationManager {
             android.app.NotificationManager notificationManager =
                     (android.app.NotificationManager) context
                             .getSystemService(Context.NOTIFICATION_SERVICE);
-            NotificationCompat.Builder builder =
-                    new NotificationCompat.Builder(context);
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+            InboxStyle inboxStyle = new InboxStyle();
+
+            inboxStyle.setBigContentTitle(context.getString(R.string.messages_notification_title));
+
+            for (Conference conference : conferences) {
+                inboxStyle.addLine(conference.getTopic());
+            }
 
             builder.setAutoCancel(true)
                     .setContentTitle(context.getString(R.string.messages_notification_title))
@@ -121,7 +129,9 @@ public class NotificationManager {
                 content += ", " + conferences.get(i).getTopic();
             }
 
-            builder.setContentText(content);
+            builder.setContentText(content)
+                    .setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND |
+                            Notification.DEFAULT_LIGHTS);
 
             builder.setContentIntent(PendingIntent.getActivity(
                     context, 0, DashboardActivity.getSectionIntent(context,
@@ -145,6 +155,14 @@ public class NotificationManager {
                         .getSystemService(Context.NOTIFICATION_SERVICE);
 
         notificationManager.cancel(id);
+    }
+
+    private static String generateNewsNotificationAmount(@NonNull Context context,
+                                                         @IntRange(from = PagingHelper.OFFSET_TOO_LARGE,
+                                                                 to = ProxerInfo.CONFERENCES_ON_PAGE) int offset) {
+        return offset == PagingHelper.OFFSET_TOO_LARGE ?
+                context.getString(R.string.news_notification_amount_more_than_15) :
+                (offset + " " + context.getString(R.string.news_notification_amount_text));
     }
 
     @Retention(RetentionPolicy.SOURCE)

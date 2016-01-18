@@ -156,7 +156,7 @@ public class DashboardActivity extends MainActivity {
 
     @Override
     protected void onNewIntent(Intent intent) {
-        if (!intent.getAction().equals(Intent.ACTION_MAIN)) {
+        if (intent.getAction() != null && !intent.getAction().equals(Intent.ACTION_MAIN)) {
             setIntent(intent);
 
             displayFirstPage(null);

@@ -18,6 +18,7 @@ import com.proxerme.library.connection.ProxerTag;
 import com.proxerme.library.connection.UrlHolder;
 import com.proxerme.library.entity.News;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -88,6 +89,11 @@ public class NewsFragment extends PagingFragment<News, NewsAdapter> {
                 if (getActivity() != null) {
                     getDashboardActivity().setBadge(MaterialDrawerHelper.DRAWER_ID_NEWS, null);
                 }
+
+                List<News> news = Arrays.asList(new News("1", 214241, "anoeivnrvevrvnjripevmerpv", "cwenvwo", "Subject", 12, "wev", "cwe", "mcwep", 21, "d", "cew"),
+                        new News("1", 214241, "Description", "cwenvwo", "Subject", 12, "wev", "cwe", "mcwep", 21, "d", "cew"));
+
+                NotificationManager.showNewsNotification(getContext(), news, 2);
             }
 
             @Override
