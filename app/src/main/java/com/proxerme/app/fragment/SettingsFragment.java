@@ -38,7 +38,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements OnActi
                         .withAboutIconShown(true).withAutoDetect(false)
                         .withAboutAppName(getString(R.string.app_name))
                         .withLibraries("glide", "systembartint", "jodatimeandroid",
-                                "bridge", "hawk", "butterknife", "materialdialogs")
+                                "bridge", "hawk", "butterknife", "materialdialogs", "eventbus")
                         .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
                         .withActivityTheme(R.style.AppTheme)
                         .withActivityTitle(getContext().getString(R.string.about_libraries_title))

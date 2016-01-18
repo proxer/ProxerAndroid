@@ -172,7 +172,6 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
                     }
 
                     stopLoading();
-
                     handleResult(result, insert);
                 }
 
@@ -198,9 +197,8 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
     public void showErrorIfNecessary() {
         if (currentErrorMessage != null) {
             showError();
+            stopLoading();
         }
-
-        stopLoading();
     }
 
     private void handleResult(List<T> result, boolean insert) {

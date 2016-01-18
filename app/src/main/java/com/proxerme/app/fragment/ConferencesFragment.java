@@ -16,6 +16,9 @@ import com.proxerme.app.activity.DashboardActivity;
 import com.proxerme.app.activity.ImageDetailActivity;
 import com.proxerme.app.activity.MainActivity;
 import com.proxerme.app.adapter.ConferenceAdapter;
+import com.proxerme.app.event.CancelledEvent;
+import com.proxerme.app.event.LoginEvent;
+import com.proxerme.app.event.LogoutEvent;
 import com.proxerme.app.manager.NotificationManager;
 import com.proxerme.app.manager.NotificationRetrievalManager;
 import com.proxerme.app.manager.StorageManager;
@@ -27,9 +30,10 @@ import com.proxerme.library.connection.ProxerException;
 import com.proxerme.library.connection.ProxerTag;
 import com.proxerme.library.connection.UrlHolder;
 import com.proxerme.library.entity.Conference;
-import com.proxerme.library.entity.LoginUser;
 
 import java.util.List;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * A Fragment, showing a List of Conferences to the user.
@@ -41,24 +45,6 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
     private static final int POLLING_INTERVAL = 5000;
     private Handler handler;
 
-    private UserManager.OnLoginStateListener onLoginStateListener =
-            new UserManager.OnLoginStateListener() {
-                @Override
-                public void onLogin(@NonNull LoginUser user) {
-                    if (isEmpty()) {
-                        doLoad(1, true, true);
-                    }
-                }
-
-                @Override
-                public void onLogout() {
-                    cancelRequest();
-                    stopPolling();
-                    clear();
-                    showLoginError();
-                }
-            };
-
     @NonNull
     public static ConferencesFragment newInstance() {
         return new ConferencesFragment();
@@ -69,7 +55,6 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
         super.onCreate(savedInstanceState);
 
         NotificationManager.cancel(getContext(), NotificationManager.MESSAGES_NOTIFICATION);
-        UserManager.getInstance().addOnLoginStateListener(onLoginStateListener);
     }
 
     @Override
@@ -87,23 +72,30 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
     public void onResume() {
         super.onStart();
 
-        if (!UserManager.getInstance().hasUser()) {
+        if (UserManager.getInstance().isLoggedIn()) {
             startPolling();
         }
     }
 
     @Override
     public void onPause() {
-        super.onStop();
-
         stopPolling();
+
+        super.onStop();
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onStart() {
+        super.onStart();
 
-        UserManager.getInstance().removeOnLoginStateListener(onLoginStateListener);
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+
+        super.onStop();
     }
 
     @Override
@@ -118,7 +110,7 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
     @Override
     protected void load(@IntRange(from = 1) int page, boolean insert,
                         @NonNull final ProxerConnection.ResultCallback<List<Conference>> callback) {
-        if (UserManager.getInstance().hasUser()) {
+        if (UserManager.getInstance().isLoggedIn()) {
             ProxerConnection.loadConferences(page).execute(new ProxerConnection
                     .ResultCallback<List<Conference>>() {
                 @Override
@@ -134,7 +126,8 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
                     NotificationRetrievalManager.retrieveNewsLater(getContext());
 
                     if (getActivity() != null) {
-                        getDashboardActivity().setBadge(MaterialDrawerHelper.DRAWER_ID_MESSAGES, null);
+                        getDashboardActivity().setBadge(MaterialDrawerHelper.DRAWER_ID_MESSAGES,
+                                null);
                     }
                 }
 
@@ -183,9 +176,28 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
     public void showErrorIfNecessary() {
         super.showErrorIfNecessary();
 
-        if (!UserManager.getInstance().hasUser()) {
+        if (!UserManager.getInstance().isLoggedIn()) {
             showLoginError();
         }
+    }
+
+    public void onEvent(LoginEvent event) {
+        if (event.getErrorCode() == null && isEmpty()) {
+            doLoad(1, true, true);
+        }
+    }
+
+    public void onEvent(LogoutEvent event) {
+        if (event.getErrorCode() == null) {
+            cancelRequest();
+            stopPolling();
+            clear();
+            showLoginError();
+        }
+    }
+
+    public void onEvent(CancelledEvent event) {
+        showErrorIfNecessary();
     }
 
     private void showLoginError() {

@@ -124,6 +124,9 @@ public abstract class PagingAdapter<T extends IdItem & Parcelable,
     }
 
     public void clear() {
+        int count = list.size();
+
         list.clear();
+        notifyItemRangeRemoved(0, count);
     }
 }

@@ -11,10 +11,11 @@ import com.proxerme.app.service.NotificationService;
  *
  * @author Ruben Gees
  */
-public class NewsReceiver extends BroadcastReceiver {
+public class NotificationReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        NotificationService.startActionLoadNews(context);
+        //noinspection WrongConstant
+        NotificationService.load(context, intent.getAction());
     }
 }

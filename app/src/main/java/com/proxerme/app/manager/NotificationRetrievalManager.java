@@ -9,8 +9,9 @@ import android.content.pm.PackageManager;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 
-import com.proxerme.app.receiver.MessagesReceiver;
-import com.proxerme.app.receiver.NewsReceiver;
+import com.proxerme.app.receiver.BootReceiver;
+import com.proxerme.app.receiver.NotificationReceiver;
+import com.proxerme.app.service.NotificationService;
 
 /**
  * TODO: Describe Class
@@ -30,7 +31,7 @@ public class NotificationRetrievalManager {
         if (isNewsRetrievalEnabled(context)) {
             int interval = PreferenceManager.getNewsUpdateInterval(context) * 60 * 1000;
 
-            retrieveLater(context, NewsReceiver.class, interval);
+            retrieveLater(context, NotificationService.ACTION_LOAD_NEWS, interval);
         }
     }
 
@@ -40,7 +41,7 @@ public class NotificationRetrievalManager {
      * @param context The context.
      */
     public static void cancelNewsRetrieval(@NonNull Context context) {
-        cancelRetrieval(context, NewsReceiver.class);
+        cancelRetrieval(context, NotificationService.ACTION_LOAD_NEWS);
     }
 
     /**
@@ -65,7 +66,7 @@ public class NotificationRetrievalManager {
         if (isMessagesRetrievalEnabled(context)) {
             int interval = StorageManager.getMessagesInterval() * 1000;
 
-            retrieveLater(context, MessagesReceiver.class, interval);
+            retrieveLater(context, NotificationService.ACTION_LOAD_MESSAGES, interval);
         }
     }
 
@@ -75,7 +76,7 @@ public class NotificationRetrievalManager {
      * @param context The context.
      */
     public static void cancelMessagesRetrieval(@NonNull Context context) {
-        cancelRetrieval(context, MessagesReceiver.class);
+        cancelRetrieval(context, NotificationService.ACTION_LOAD_MESSAGES);
     }
 
     /**
@@ -88,16 +89,19 @@ public class NotificationRetrievalManager {
         return PreferenceManager.areMessagesNotificationsEnabled(context);
     }
 
-    private static void retrieveLater(@NonNull Context context, @NonNull Class<?> receiver,
-                                      int interval) {
+    private static void retrieveLater(@NonNull Context context,
+                                      @NonNull @NotificationService.NotificationAction String
+                                              action, int interval) {
         AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, receiver);
+        Intent intent = new Intent(context, NotificationReceiver.class);
+
+        intent.setAction(action);
         PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
 
         alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                 SystemClock.elapsedRealtime() + interval, interval, alarmIntent);
 
-        ComponentName receiverName = new ComponentName(context, receiver);
+        ComponentName receiverName = new ComponentName(context, BootReceiver.class);
         PackageManager pm = context.getPackageManager();
 
         pm.setComponentEnabledSetting(receiverName,
@@ -105,18 +109,36 @@ public class NotificationRetrievalManager {
                 PackageManager.DONT_KILL_APP);
     }
 
-    private static void cancelRetrieval(@NonNull Context context, @NonNull Class<?> receiver) {
+    private static void cancelRetrieval(@NonNull Context context,
+                                        @NonNull @NotificationService.NotificationAction String
+                                                action) {
+        Intent intent = new Intent(context, NotificationReceiver.class);
+
+        intent.setAction(action);
         ((AlarmManager) context.getSystemService(Context.ALARM_SERVICE))
-                .cancel(PendingIntent.getBroadcast(context, 0,
-                        new Intent(context, receiver), 0));
-        ComponentName receiverName = new ComponentName(context, receiver);
+                .cancel(PendingIntent.getBroadcast(context, 0, intent, 0));
+        ComponentName receiverName = new ComponentName(context, BootReceiver.class);
         PackageManager pm = context.getPackageManager();
 
-        if (!isNewsRetrievalEnabled(context) && !isMessagesRetrievalEnabled(context)) {
+        if (getOngoingRetrievals(context) > 0) {
             pm.setComponentEnabledSetting(receiverName,
                     PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                     PackageManager.DONT_KILL_APP);
         }
+    }
+
+    private static int getOngoingRetrievals(@NonNull Context context) {
+        int count = 0;
+
+        if (isNewsRetrievalEnabled(context)) {
+            count++;
+        }
+
+        if (isMessagesRetrievalEnabled(context)) {
+            count++;
+        }
+
+        return count;
     }
 
 }

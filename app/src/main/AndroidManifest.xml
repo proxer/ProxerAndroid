@@ -63,11 +63,7 @@
             android:exported="false" />
 
         <receiver
-            android:name=".receiver.NewsReceiver"
-            android:enabled="true"
-            android:exported="false" />
-        <receiver
-            android:name=".receiver.MessagesReceiver"
+            android:name=".receiver.NotificationReceiver"
             android:enabled="true"
             android:exported="false" />
         <receiver

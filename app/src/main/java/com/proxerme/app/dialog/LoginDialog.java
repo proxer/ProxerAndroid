@@ -16,20 +16,23 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.proxerme.app.R;
+import com.proxerme.app.event.CancelledEvent;
+import com.proxerme.app.event.LoginEvent;
 import com.proxerme.app.manager.NotificationRetrievalManager;
-import com.proxerme.app.manager.PreferenceManager;
 import com.proxerme.app.manager.UserManager;
+import com.proxerme.app.util.ErrorHandler;
 import com.proxerme.library.connection.ProxerConnection;
-import com.proxerme.library.connection.ProxerException;
 import com.proxerme.library.connection.ProxerTag;
 import com.proxerme.library.entity.LoginUser;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import de.greenrobot.event.EventBus;
 
 /**
  * A dialog, which shows a login mask to the user. It also handles the login and shows a ProgressBar
@@ -61,23 +64,6 @@ public class LoginDialog extends DialogFragment {
 
     private boolean loading;
 
-    private UserManager.OnLoginStateListener onLoginStateListener = new UserManager.OnLoginStateListener() {
-        @Override
-        public void onLogin(@NonNull LoginUser user) {
-            if (PreferenceManager.areMessagesNotificationsEnabled(getContext())) {
-                NotificationRetrievalManager.retrieveMessagesLater(getContext());
-            }
-
-            dismiss();
-        }
-
-        @Override
-        public void onLoginFailed(@NonNull ProxerException exception) {
-            loading = false;
-            handleVisibility();
-        }
-    };
-
     @NonNull
     public static LoginDialog newInstance() {
         return new LoginDialog();
@@ -88,12 +74,6 @@ public class LoginDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         findViews();
         initViews();
-
-        if (savedInstanceState != null) {
-            loading = savedInstanceState.getBoolean(STATE_LOADING);
-
-            handleVisibility();
-        }
 
         MaterialDialog.Builder builder = new MaterialDialog.Builder(getContext()).autoDismiss(false)
                 .title(R.string.dialog_login_title).positiveText(R.string.dialog_login_go)
@@ -108,11 +88,22 @@ public class LoginDialog extends DialogFragment {
                     @Override
                     public void onClick(@NonNull MaterialDialog materialDialog,
                                         @NonNull DialogAction dialogAction) {
-                        materialDialog.dismiss();
+                        materialDialog.cancel();
                     }
                 }).customView(root, true);
 
         return builder.build();
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            loading = savedInstanceState.getBoolean(STATE_LOADING);
+        }
+
+        handleVisibility();
     }
 
     @Override
@@ -127,14 +118,50 @@ public class LoginDialog extends DialogFragment {
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
 
-        UserManager.getInstance().removeOnLoginStateListener(onLoginStateListener);
         ProxerConnection.cancel(ProxerTag.LOGIN);
+    }
+
+    @Override
+    public void onCancel(DialogInterface dialog) {
+        super.onCancel(dialog);
+
+        EventBus.getDefault().post(new CancelledEvent());
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(STATE_LOADING, loading);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+
+        super.onStop();
+    }
+
+    public void onEvent(LoginEvent event) {
+        loading = false;
+
+        if (event.getErrorCode() == null) {
+            NotificationRetrievalManager.retrieveMessagesLater(getContext());
+
+            dismiss();
+        } else {
+            handleVisibility();
+
+            Toast.makeText(getContext(),
+                    ErrorHandler.getMessageForErrorCode(getContext(),
+                            event.getErrorCode()), Toast.LENGTH_LONG).show();
+        }
     }
 
     private void findViews() {
@@ -179,7 +206,6 @@ public class LoginDialog extends DialogFragment {
                 loading = true;
                 handleVisibility();
 
-                UserManager.getInstance().addOnLoginStateListener(onLoginStateListener);
                 UserManager.getInstance().login(new LoginUser(username, password));
             }
         }
@@ -199,7 +225,6 @@ public class LoginDialog extends DialogFragment {
 
     private boolean checkInput(@NonNull String username, @NonNull String password) {
         boolean inputCorrect = true;
-
 
         if (TextUtils.isEmpty(username)) {
             inputCorrect = false;

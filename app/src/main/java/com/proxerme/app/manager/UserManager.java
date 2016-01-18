@@ -3,13 +3,14 @@ package com.proxerme.app.manager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.proxerme.app.event.LoginEvent;
+import com.proxerme.app.event.LogoutEvent;
 import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.connection.ProxerException;
 import com.proxerme.library.connection.ProxerTag;
 import com.proxerme.library.entity.LoginUser;
 
-import java.util.LinkedList;
-import java.util.List;
+import de.greenrobot.event.EventBus;
 
 /**
  * A singleton for managing the user and it's login state.
@@ -19,11 +20,10 @@ import java.util.List;
 public class UserManager {
     private static UserManager ourInstance = new UserManager();
     private LoginUser user;
-    private List<OnLoginStateListener> listeners;
+    private boolean loggedIn = false;
 
     private UserManager() {
         user = StorageManager.getUser();
-        listeners = new LinkedList<>();
     }
 
     @NonNull
@@ -40,6 +40,10 @@ public class UserManager {
         return user;
     }
 
+    public boolean isLoggedIn() {
+        return loggedIn;
+    }
+
     public void removeUser() {
         this.user = null;
         StorageManager.removeUser();
@@ -50,23 +54,24 @@ public class UserManager {
         StorageManager.setUser(user);
     }
 
+    public void notifyLoggedOut() {
+        loggedIn = false;
+    }
+
     public void login(@NonNull LoginUser user) {
         ProxerConnection.cancel(ProxerTag.LOGOUT);
         ProxerConnection.login(user).execute(new ProxerConnection.ResultCallback<LoginUser>() {
             @Override
             public void onResult(LoginUser loginUser) {
+                loggedIn = true;
                 changeUser(loginUser);
 
-                for (OnLoginStateListener listener : listeners) {
-                    listener.onLogin(loginUser);
-                }
+                EventBus.getDefault().post(new LoginEvent(null));
             }
 
             @Override
             public void onError(@NonNull ProxerException e) {
-                for (OnLoginStateListener listener : listeners) {
-                    listener.onLoginFailed(e);
-                }
+                EventBus.getDefault().post(new LoginEvent(e.getErrorCode()));
             }
         });
     }
@@ -77,44 +82,15 @@ public class UserManager {
             @Override
             public void onResult(Void aVoid) {
                 removeUser();
+                loggedIn = false;
 
-                for (OnLoginStateListener listener : listeners) {
-                    listener.onLogout();
-                }
+                EventBus.getDefault().post(new LogoutEvent(null));
             }
 
             @Override
             public void onError(@NonNull ProxerException e) {
-                for (OnLoginStateListener listener : listeners) {
-                    listener.onLogoutFailed(e);
-                }
+                EventBus.getDefault().post(new LogoutEvent(e.getErrorCode()));
             }
         });
-    }
-
-    public void addOnLoginStateListener(@NonNull OnLoginStateListener listener){
-        this.listeners.add(listener);
-    }
-
-    public void removeOnLoginStateListener(@NonNull OnLoginStateListener listener) {
-        this.listeners.remove(listener);
-    }
-
-    public abstract static class OnLoginStateListener{
-        public void onLogin(@NonNull LoginUser user){
-
-        }
-
-        public void onLogout(){
-
-        }
-
-        public void onLoginFailed(@NonNull ProxerException exception){
-
-        }
-
-        public void onLogoutFailed(@NonNull ProxerException exception){
-
-        }
     }
 }

@@ -32,6 +32,7 @@
     <string name="time_more_than_one_month_ago">Vor mehr als einem Monat</string>
     <string name="introduction_notifications_description">Erhalte Benachrichtigungen</string>
     <string name="introduction_notifications_title">Benachrichtigungen</string>
+    <string name="introduction_skip">Überspringen</string>
     <string name="introduction_welcome_description">Nur ein paar Einstellungen und es geht los</string>
     <string name="introduction_welcome_title">Willkommen!</string>
     <string name="notification_amount_more_than_15">Mehr als 15 News</string>
@@ -67,4 +68,6 @@
     <string name="about_libraries_title">Lizenzen</string>
     <string name="error_do_login">Einloggen</string>
     <string name="error_not_logged_in">Du bist nicht eingeloggt.</string>
+    <string name="dialog_logout_go">Abmelden</string>
+    <string name="dialog_logout_title">Möchtest du dich abmelden?</string>
 </resources>

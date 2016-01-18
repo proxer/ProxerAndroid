@@ -38,3 +38,7 @@
 -dontwarn com.orhanobut.hawk.**
 -keep class com.google.gson.** { *; }
 -keepattributes Signature
+
+-keepclassmembers class ** {
+    public void onEvent*(***);
+}

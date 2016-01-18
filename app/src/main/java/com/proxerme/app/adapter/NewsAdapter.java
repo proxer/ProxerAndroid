@@ -80,8 +80,8 @@ public class NewsAdapter extends PagingAdapter<News, NewsAdapter.ViewHolder> {
     public void onBindViewHolder(NewsAdapter.ViewHolder holder, int position) {
         News item = getItemAt(position);
 
-        holder.title.setText(item.getSubject());
-        holder.description.setText(item.getDescription());
+        holder.title.setText(item.getSubject().trim());
+        holder.description.setText(item.getDescription().trim());
         holder.category.setText(item.getCategoryTitle());
         holder.time.setText(TimeUtils.convertToRelativeReadableTime(holder.time.getContext(),
                 item.getTime()));

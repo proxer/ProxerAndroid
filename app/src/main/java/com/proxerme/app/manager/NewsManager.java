@@ -23,6 +23,7 @@ public class NewsManager {
         if (INSTANCE == null) {
             INSTANCE = new NewsManager();
         }
+
         return INSTANCE;
     }
 

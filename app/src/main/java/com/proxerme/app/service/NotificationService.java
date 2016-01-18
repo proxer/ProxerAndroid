@@ -4,6 +4,7 @@ import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.annotation.StringDef;
 
 import com.proxerme.app.application.MainApplication;
 import com.proxerme.app.manager.NewsManager;
@@ -18,6 +19,8 @@ import com.proxerme.library.entity.LoginUser;
 import com.proxerme.library.entity.News;
 import com.proxerme.library.util.ProxerInfo;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 
 /**
@@ -28,22 +31,20 @@ import java.util.List;
  */
 public class NotificationService extends IntentService {
 
-    private static final String ACTION_LOAD_NEWS = "com.proxerme.app.service.action.LOAD_NEWS";
-    private static final String ACTION_LOAD_MESSAGES = "com.proxerme.app.service.action.LOAD_MESSAGES";
+    public static final String ACTION_LOAD_NEWS =
+            "com.proxerme.app.service.action.LOAD_NEWS";
+    public static final String ACTION_LOAD_MESSAGES =
+            "com.proxerme.app.service.action.LOAD_MESSAGES";
+    private static final String SERVICE_TITLE = "Notification Service";
 
     public NotificationService() {
-        super("NotificationService");
+        super(SERVICE_TITLE);
     }
 
-    public static void startActionLoadNews(@NonNull Context context) {
+    public static void load(@NonNull Context context, @NonNull @NotificationAction String action) {
         Intent intent = new Intent(context, NotificationService.class);
-        intent.setAction(ACTION_LOAD_NEWS);
-        context.startService(intent);
-    }
 
-    public static void startActionLoadMessages(@NonNull Context context) {
-        Intent intent = new Intent(context, NotificationService.class);
-        intent.setAction(ACTION_LOAD_MESSAGES);
+        intent.setAction(action);
         context.startService(intent);
     }
 
@@ -85,7 +86,8 @@ public class NotificationService extends IntentService {
         if (user != null) {
             try {
                 ProxerConnection.login(user).executeSynchronized();
-                List<Conference> conferences = ProxerConnection.loadConferences(1).executeSynchronized();
+                List<Conference> conferences = ProxerConnection.loadConferences(1)
+                        .executeSynchronized();
 
                 for (int i = 0; i < conferences.size(); i++) {
                     if (conferences.get(i).isRead()) {
@@ -106,6 +108,11 @@ public class NotificationService extends IntentService {
         } else {
             NotificationRetrievalManager.cancelMessagesRetrieval(this);
         }
+    }
+
+    @Retention(RetentionPolicy.SOURCE)
+    @StringDef({ACTION_LOAD_NEWS, ACTION_LOAD_MESSAGES})
+    public @interface NotificationAction {
     }
 
 }
