@@ -31,6 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:hint="@string/dialog_login_username_hint"
+                android:imeOptions="actionNext"
                 android:singleLine="true" />
         </android.support.design.widget.TextInputLayout>
 

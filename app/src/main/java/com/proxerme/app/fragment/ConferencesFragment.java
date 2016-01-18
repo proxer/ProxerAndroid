@@ -45,6 +45,8 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
     private static final int POLLING_INTERVAL = 5000;
     private Handler handler;
 
+    private boolean canLoad;
+
     @NonNull
     public static ConferencesFragment newInstance() {
         return new ConferencesFragment();
@@ -63,6 +65,16 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
 
         if (savedInstanceState != null) {
             showErrorIfNecessary();
+        }
+
+        if (UserManager.getInstance().isLoggedIn()) {
+            canLoad = true;
+        } else {
+            canLoad = false;
+
+            showLoginError();
+            stopLoading();
+            stopPolling();
         }
 
         return result;
@@ -110,7 +122,6 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
     @Override
     protected void load(@IntRange(from = 1) int page, boolean insert,
                         @NonNull final ProxerConnection.ResultCallback<List<Conference>> callback) {
-        if (UserManager.getInstance().isLoggedIn()) {
             ProxerConnection.loadConferences(page).execute(new ProxerConnection
                     .ResultCallback<List<Conference>>() {
                 @Override
@@ -138,11 +149,6 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
                     stopPolling();
                 }
             });
-        } else {
-            showLoginError();
-            stopLoading();
-            stopPolling();
-        }
     }
 
     @Override
@@ -181,14 +187,23 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
         }
     }
 
+    @Override
+    protected boolean canLoad() {
+        return canLoad;
+    }
+
     public void onEvent(LoginEvent event) {
         if (event.getErrorCode() == null && isEmpty()) {
+            canLoad = true;
+
             doLoad(1, true, true);
         }
     }
 
     public void onEvent(LogoutEvent event) {
         if (event.getErrorCode() == null) {
+            canLoad = false;
+
             cancelRequest();
             stopPolling();
             clear();

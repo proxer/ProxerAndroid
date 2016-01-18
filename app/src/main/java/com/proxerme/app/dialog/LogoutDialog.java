@@ -157,6 +157,7 @@ public class LogoutDialog extends DialogFragment {
     private void logout() {
         if (!loading) {
             loading = true;
+            handleVisibility();
 
             UserManager.getInstance().logout();
         }

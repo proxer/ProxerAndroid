@@ -148,7 +148,7 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
 
     protected void doLoad(@IntRange(from = 1) final int page, final boolean insert,
                           final boolean showProgress) {
-        if (!isLoading()) {
+        if (!isLoading() && canLoad()) {
             lastLoadedPage = page;
             loading = true;
             currentErrorMessage = null;
@@ -190,6 +190,8 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
                     showError();
                 }
             });
+        } else {
+            stopLoading();
         }
     }
 
@@ -249,6 +251,10 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
         if (adapter != null) {
             adapter.clear();
         }
+    }
+
+    protected boolean canLoad() {
+        return true;
     }
 
     protected abstract A createAdapter(Bundle savedInstanceState);
