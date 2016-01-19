@@ -71,14 +71,8 @@ public class NotificationManager {
                 }
 
                 inboxStyle.setBigContentTitle(context
-                        .getString(R.string.news_notification_title));
-
-                if (offset > 5) {
-                    inboxStyle.setSummaryText((offset - 5) + context
-                            .getString(R.string.news_notification_amount_text));
-                } else {
-                    inboxStyle.setSummaryText(generateNewsNotificationAmount(context, offset));
-                }
+                        .getString(R.string.news_notification_title))
+                        .setSummaryText(generateNewsNotificationAmount(context, offset));
 
                 style = inboxStyle;
             }
@@ -111,32 +105,25 @@ public class NotificationManager {
                             .getSystemService(Context.NOTIFICATION_SERVICE);
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
             InboxStyle inboxStyle = new InboxStyle();
+            String amount = conferences.size() + " " + "Messages";
 
-            inboxStyle.setBigContentTitle(context.getString(R.string.messages_notification_title));
+            inboxStyle.setBigContentTitle(context.getString(R.string.messages_notification_title)).setSummaryText(amount);
 
-            for (Conference conference : conferences) {
-                inboxStyle.addLine(conference.getTopic());
+            for (int i = 0; i < 5 && i < conferences.size(); i++) {
+                inboxStyle.addLine(conferences.get(i).getTopic());
             }
 
-            builder.setAutoCancel(true)
-                    .setContentTitle(context.getString(R.string.messages_notification_title))
-                    .setSmallIcon(R.drawable.ic_stat_proxer);
-
-            String content = context.getString(R.string.messages_from) + " " +
-                    conferences.get(0).getTopic();
-
-            for (int i = 1; i < conferences.size(); i++) {
-                content += ", " + conferences.get(i).getTopic();
-            }
-
-            builder.setContentText(content)
+            builder.setContentTitle(context.getString(R.string.messages_notification_title))
+                    .setContentText(amount)
+                    .setSmallIcon(R.drawable.ic_stat_proxer)
                     .setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND |
-                            Notification.DEFAULT_LIGHTS);
-
-            builder.setContentIntent(PendingIntent.getActivity(
-                    context, 0, DashboardActivity.getSectionIntent(context,
-                            MaterialDrawerHelper.DRAWER_ID_MESSAGES, null),
-                    PendingIntent.FLAG_UPDATE_CURRENT));
+                            Notification.DEFAULT_LIGHTS)
+                    .setContentIntent(PendingIntent.getActivity(
+                            context, 0, DashboardActivity.getSectionIntent(context,
+                                    MaterialDrawerHelper.DRAWER_ID_MESSAGES, null),
+                            PendingIntent.FLAG_UPDATE_CURRENT))
+                    .setStyle(inboxStyle)
+                    .setAutoCancel(true);
 
             notificationManager.notify(MESSAGES_NOTIFICATION, builder.build());
         }

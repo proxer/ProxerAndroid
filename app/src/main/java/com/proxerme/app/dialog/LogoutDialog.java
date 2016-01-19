@@ -26,7 +26,7 @@ import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
 
 /**
- * TODO: Describe Class
+ * Dialog, which handles the logout of a user.
  *
  * @author Ruben Gees
  */

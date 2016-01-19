@@ -28,3 +28,5 @@ proguard/
  
 # OS
 .DS_Store
+
+/captures
