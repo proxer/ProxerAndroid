@@ -11,7 +11,7 @@ import com.proxerme.app.interfaces.OnActivityListener;
  *
  * @author Ruben Gees
  */
-public class DashboardFragment extends Fragment implements OnActivityListener {
+public abstract class DashboardFragment extends Fragment implements OnActivityListener {
 
     protected DashboardActivity getDashboardActivity() throws RuntimeException {
         try {

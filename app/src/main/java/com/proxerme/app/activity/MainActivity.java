@@ -1,6 +1,5 @@
 package com.proxerme.app.activity;
 
-import android.annotation.SuppressLint;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,8 +19,7 @@ import com.proxerme.library.connection.ProxerConnection;
  *
  * @author Ruben Gees
  */
-@SuppressLint("Registered")
-public class MainActivity extends AppCompatActivity {
+public abstract class MainActivity extends AppCompatActivity {
 
     private CustomTabActivityHelper customTabActivityHelper;
 
