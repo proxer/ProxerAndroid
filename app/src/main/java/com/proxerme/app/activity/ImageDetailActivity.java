@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
@@ -64,7 +65,8 @@ public class ImageDetailActivity extends AppCompatActivity {
         String url = getIntent().getStringExtra(EXTRA_URL);
 
         supportPostponeEnterTransition();
-        Glide.with(this).load(url).listener(new RequestListener<String, GlideDrawable>() {
+        Glide.with(this).load(url).diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .listener(new RequestListener<String, GlideDrawable>() {
             @Override
             public boolean onException(Exception e, String model,
                                        Target<GlideDrawable> target,

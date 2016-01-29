@@ -17,8 +17,6 @@ import com.proxerme.app.activity.ImageDetailActivity;
 import com.proxerme.app.activity.MainActivity;
 import com.proxerme.app.adapter.ConferenceAdapter;
 import com.proxerme.app.event.CancelledEvent;
-import com.proxerme.app.event.LoginEvent;
-import com.proxerme.app.event.LogoutEvent;
 import com.proxerme.app.manager.NotificationManager;
 import com.proxerme.app.manager.NotificationRetrievalManager;
 import com.proxerme.app.manager.StorageManager;
@@ -26,21 +24,22 @@ import com.proxerme.app.manager.UserManager;
 import com.proxerme.app.util.MaterialDrawerHelper;
 import com.proxerme.app.util.SnackbarManager;
 import com.proxerme.library.connection.ProxerConnection;
-import com.proxerme.library.connection.ProxerException;
 import com.proxerme.library.connection.ProxerTag;
 import com.proxerme.library.connection.UrlHolder;
 import com.proxerme.library.entity.Conference;
-
-import java.util.List;
-
-import de.greenrobot.event.EventBus;
+import com.proxerme.library.event.error.ConferencesErrorEvent;
+import com.proxerme.library.event.error.LoginErrorEvent;
+import com.proxerme.library.event.success.ConferencesEvent;
+import com.proxerme.library.event.success.LoginEvent;
+import com.proxerme.library.event.success.LogoutEvent;
 
 /**
  * A Fragment, showing a List of Conferences to the user.
  *
  * @author Ruben Gees
  */
-public class ConferencesFragment extends PagingFragment<Conference, ConferenceAdapter> {
+public class ConferencesFragment extends PagingFragment<Conference, ConferenceAdapter,
+        ConferencesEvent, ConferencesErrorEvent> {
 
     private static final int POLLING_INTERVAL = 5000;
     private Handler handler;
@@ -97,58 +96,12 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        EventBus.getDefault().unregister(this);
-
-        super.onStop();
-    }
-
-    @Override
     protected ConferenceAdapter createAdapter(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
             return new ConferenceAdapter();
         } else {
             return new ConferenceAdapter(savedInstanceState);
         }
-    }
-
-    @Override
-    protected void load(@IntRange(from = 1) int page, boolean insert,
-                        @NonNull final ProxerConnection.ResultCallback<List<Conference>> callback) {
-            ProxerConnection.loadConferences(page).execute(new ProxerConnection
-                    .ResultCallback<List<Conference>>() {
-                @Override
-                public void onResult(List<Conference> conferences) {
-                    callback.onResult(conferences);
-
-                    if (handler == null) {
-                        startPolling();
-                    }
-
-                    StorageManager.setNewMessages(0);
-                    StorageManager.resetMessagesInterval();
-                    NotificationRetrievalManager.retrieveNewsLater(getContext());
-
-                    if (getActivity() != null) {
-                        getDashboardActivity().setBadge(MaterialDrawerHelper.DRAWER_ID_MESSAGES,
-                                null);
-                    }
-                }
-
-                @Override
-                public void onError(@NonNull ProxerException exception) {
-                    callback.onError(exception);
-
-                    stopPolling();
-                }
-            });
     }
 
     @Override
@@ -174,6 +127,11 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
     }
 
     @Override
+    protected void load(@IntRange(from = 1) int page, boolean insert) {
+        ProxerConnection.loadConferences(page).execute();
+    }
+
+    @Override
     protected void cancelRequest() {
         ProxerConnection.cancel(ProxerTag.CONFERENCES);
     }
@@ -192,26 +150,56 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
         return canLoad;
     }
 
-    public void onEvent(LoginEvent event) {
-        if (event.getErrorCode() == null && isEmpty()) {
+    @Override
+    public void onEventMainThread(ConferencesEvent result) {
+        super.onEventMainThread(result);
+
+        if (handler == null) {
+            startPolling();
+        }
+
+        StorageManager.setNewMessages(0);
+        StorageManager.resetMessagesInterval();
+
+        if (getContext() != null) {
+            NotificationRetrievalManager.retrieveNewsLater(getContext());
+        }
+
+        if (getActivity() != null) {
+            getDashboardActivity().setBadge(MaterialDrawerHelper.DRAWER_ID_MESSAGES,
+                    null);
+        }
+    }
+
+    @Override
+    public void onEventMainThread(ConferencesErrorEvent errorEvent) {
+        super.onEventMainThread(errorEvent);
+
+        stopPolling();
+    }
+
+    public void onEventMainThread(LoginEvent event) {
+        if (isEmpty()) {
             canLoad = true;
 
             doLoad(1, true, true);
         }
     }
 
-    public void onEvent(LogoutEvent event) {
-        if (event.getErrorCode() == null) {
-            canLoad = false;
+    public void onEventMainThread(LogoutEvent event) {
+        canLoad = false;
 
-            cancelRequest();
-            stopPolling();
-            clear();
-            showLoginError();
-        }
+        cancelRequest();
+        stopPolling();
+        clear();
+        showLoginError();
     }
 
-    public void onEvent(CancelledEvent event) {
+    public void onEventMainThread(LoginErrorEvent event) {
+        showLoginError();
+    }
+
+    public void onEvenMainThread(CancelledEvent event) {
         showErrorIfNecessary();
     }
 

@@ -20,22 +20,24 @@ import com.proxerme.app.util.ErrorHandler;
 import com.proxerme.app.util.PagingHelper;
 import com.proxerme.app.util.SnackbarManager;
 import com.proxerme.app.util.Utils;
-import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.connection.ProxerException;
+import com.proxerme.library.event.IListEvent;
+import com.proxerme.library.event.error.ErrorEvent;
 import com.proxerme.library.interfaces.IdItem;
 
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import de.greenrobot.event.EventBus;
 
 /**
  * An abstract Fragment, managing page based Lists of items.
  *
  * @author Ruben Gees
  */
-public abstract class PagingFragment<T extends IdItem & Parcelable, A extends PagingAdapter<T, ?>>
-        extends DashboardFragment {
+public abstract class PagingFragment<T extends IdItem & Parcelable, A extends PagingAdapter<T, ?>,
+        E extends IListEvent<T>, EE extends ErrorEvent> extends DashboardFragment {
 
     private static final String STATE_LOADING = "paging_loading";
     private static final String STATE_METHOD_BEFORE_ERROR = "paging_method_before_error";
@@ -56,7 +58,7 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
     private int currentPage = 1;
     private int lastLoadedPage = 1;
     private String currentErrorMessage;
-    private boolean methodBeforeErrorInsert = false;
+    private boolean lastMethodInsert = false;
     private boolean endReached = false;
 
     @Override
@@ -102,7 +104,7 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
             currentPage = savedInstanceState.getInt(STATE_CURRENT_PAGE);
             lastLoadedPage = savedInstanceState.getInt(STATE_LAST_LOADED_PAGE);
             currentErrorMessage = savedInstanceState.getString(STATE_ERROR_MESSAGE);
-            methodBeforeErrorInsert = savedInstanceState.getBoolean(STATE_METHOD_BEFORE_ERROR);
+            lastMethodInsert = savedInstanceState.getBoolean(STATE_METHOD_BEFORE_ERROR);
             endReached = savedInstanceState.getBoolean(STATE_END_REACHED);
         }
 
@@ -114,15 +116,8 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
         } else if (currentErrorMessage != null) {
             showError();
         } else if (loading) {
-            doLoad(currentPage, methodBeforeErrorInsert, true);
+            swipeRefreshLayout.setRefreshing(true);
         }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        cancelRequest();
     }
 
     @Override
@@ -134,6 +129,31 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().registerSticky(this);
+        }
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+
+        super.onStop();
+    }
+
+    @Override
+    public void onDestroy() {
+        if (getActivity() != null && !getActivity().isChangingConfigurations()) {
+            cancelRequest();
+        }
+
+        super.onDestroy();
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
@@ -142,7 +162,7 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
         outState.putInt(STATE_CURRENT_PAGE, currentPage);
         outState.putInt(STATE_LAST_LOADED_PAGE, lastLoadedPage);
         outState.putString(STATE_ERROR_MESSAGE, currentErrorMessage);
-        outState.putBoolean(STATE_METHOD_BEFORE_ERROR, methodBeforeErrorInsert);
+        outState.putBoolean(STATE_METHOD_BEFORE_ERROR, lastMethodInsert);
         outState.putBoolean(STATE_END_REACHED, endReached);
     }
 
@@ -152,46 +172,14 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
             lastLoadedPage = page;
             loading = true;
             currentErrorMessage = null;
+            lastMethodInsert = insert;
 
             if (showProgress) {
                 swipeRefreshLayout.setRefreshing(true);
                 SnackbarManager.dismiss();
             }
 
-            load(page, insert, new ProxerConnection.ResultCallback<List<T>>() {
-                @Override
-                public void onResult(List<T> result) {
-                    if (result.isEmpty()) {
-                        if (!insert) {
-                            endReached = true;
-                        }
-                    } else {
-                        if (!insert) {
-                            currentPage++;
-                        }
-                    }
-
-                    stopLoading();
-                    handleResult(result, insert);
-                }
-
-                @Override
-                public void onError(@NonNull ProxerException exception) {
-                    if (exception.getErrorCode() == ProxerException.ErrorCodes.PROXER) {
-                        currentErrorMessage = exception.getMessage();
-                    } else {
-                        currentErrorMessage = ErrorHandler.getMessageForErrorCode(getContext(),
-                                exception.getErrorCode());
-                    }
-
-                    stopLoading();
-                    methodBeforeErrorInsert = insert;
-
-                    showError();
-                }
-            });
-        } else {
-            stopLoading();
+            load(page, insert);
         }
     }
 
@@ -199,8 +187,39 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
     public void showErrorIfNecessary() {
         if (currentErrorMessage != null) {
             showError();
-            stopLoading();
         }
+    }
+
+    public void onEventMainThread(E result) {
+        EventBus.getDefault().removeStickyEvent(result);
+
+        if ((result.getItem()).isEmpty()) {
+            if (!lastMethodInsert) {
+                endReached = true;
+            }
+        } else {
+            if (!lastMethodInsert) {
+                currentPage++;
+            }
+        }
+
+        stopLoading();
+        handleResult(result.getItem(), lastMethodInsert);
+    }
+
+    public void onEventMainThread(EE errorResult) {
+        //noinspection ThrowableResultOfMethodCallIgnored
+        ProxerException exception = errorResult.getItem();
+
+        if (exception.getErrorCode() == ProxerException.ErrorCodes.PROXER) {
+            currentErrorMessage = exception.getMessage();
+        } else {
+            currentErrorMessage = ErrorHandler.getMessageForErrorCode(getContext(),
+                    exception.getErrorCode());
+        }
+
+        stopLoading();
+        showError();
     }
 
     private void handleResult(List<T> result, boolean insert) {
@@ -231,7 +250,7 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
                     new SnackbarManager.SnackbarCallback() {
                         @Override
                         public void onClick(View v) {
-                            doLoad(lastLoadedPage, methodBeforeErrorInsert, true);
+                            doLoad(lastLoadedPage, lastMethodInsert, true);
                         }
                     });
         } else {
@@ -259,8 +278,7 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
 
     protected abstract A createAdapter(Bundle savedInstanceState);
 
-    protected abstract void load(@IntRange(from = 1) final int page, final boolean insert,
-                                 @NonNull ProxerConnection.ResultCallback<List<T>> callback);
+    protected abstract void load(@IntRange(from = 1) final int page, final boolean insert);
 
     protected abstract void cancelRequest();
 
@@ -269,6 +287,8 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
     }
 
     protected void scrollToTop() {
-        list.smoothScrollToPosition(0);
+        if (list != null) {
+            list.smoothScrollToPosition(0);
+        }
     }
 }

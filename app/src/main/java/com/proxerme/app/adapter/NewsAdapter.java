@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.proxerme.app.R;
@@ -99,7 +100,7 @@ public class NewsAdapter extends PagingAdapter<News, NewsAdapter.ViewHolder> {
         }
 
         Glide.with(holder.image.getContext()).load(UrlHolder.getNewsImageUrl(item.getId(),
-                item.getImageId())).into(holder.image);
+                item.getImageId())).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(holder.image);
     }
 
     @Override

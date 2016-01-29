@@ -48,7 +48,9 @@ public abstract class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
 
-        ProxerConnection.cleanup();
+        if (isFinishing()) {
+            ProxerConnection.cleanup();
+        }
     }
 
     public void setLikelyUrl(@NonNull String url) {

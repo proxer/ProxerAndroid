@@ -22,13 +22,14 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.proxerme.app.R;
 import com.proxerme.app.event.CancelledEvent;
-import com.proxerme.app.event.LoginEvent;
 import com.proxerme.app.manager.NotificationRetrievalManager;
 import com.proxerme.app.manager.UserManager;
 import com.proxerme.app.util.ErrorHandler;
 import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.connection.ProxerTag;
 import com.proxerme.library.entity.LoginUser;
+import com.proxerme.library.event.error.LoginErrorEvent;
+import com.proxerme.library.event.success.LoginEvent;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -138,7 +139,7 @@ public class LoginDialog extends DialogFragment {
     public void onStart() {
         super.onStart();
 
-        EventBus.getDefault().register(this);
+        EventBus.getDefault().registerSticky(this);
     }
 
     @Override
@@ -151,17 +152,22 @@ public class LoginDialog extends DialogFragment {
     public void onEvent(LoginEvent event) {
         loading = false;
 
-        if (event.getErrorCode() == null) {
-            NotificationRetrievalManager.retrieveMessagesLater(getContext());
+        NotificationRetrievalManager.retrieveMessagesLater(getContext());
 
-            dismiss();
-        } else {
-            handleVisibility();
+        dismiss();
+    }
 
-            Toast.makeText(getContext(),
-                    ErrorHandler.getMessageForErrorCode(getContext(),
-                            event.getErrorCode()), Toast.LENGTH_LONG).show();
-        }
+    public void onEventMainThread(LoginErrorEvent event) {
+        EventBus.getDefault().removeStickyEvent(event);
+
+        loading = false;
+
+        handleVisibility();
+
+        //noinspection ThrowableResultOfMethodCallIgnored
+        Toast.makeText(getContext(),
+                ErrorHandler.getMessageForErrorCode(getContext(),
+                        event.getItem().getErrorCode()), Toast.LENGTH_LONG).show();
     }
 
     private void findViews() {

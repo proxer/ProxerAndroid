@@ -6,17 +6,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.proxerme.app.R;
 import com.proxerme.app.dialog.LoginDialog;
 import com.proxerme.app.dialog.LogoutDialog;
-import com.proxerme.app.event.LoginEvent;
-import com.proxerme.app.event.LogoutEvent;
 import com.proxerme.app.fragment.ConferencesFragment;
 import com.proxerme.app.fragment.NewsFragment;
 import com.proxerme.app.fragment.SettingsFragment;
@@ -24,17 +20,15 @@ import com.proxerme.app.interfaces.OnActivityListener;
 import com.proxerme.app.manager.PreferenceManager;
 import com.proxerme.app.manager.StorageManager;
 import com.proxerme.app.manager.UserManager;
+import com.proxerme.app.util.IntroductionHelper;
 import com.proxerme.app.util.MaterialDrawerHelper;
 import com.proxerme.app.util.SnackbarManager;
 import com.proxerme.library.connection.UrlHolder;
+import com.proxerme.library.event.success.LoginEvent;
+import com.proxerme.library.event.success.LogoutEvent;
 import com.rubengees.introduction.IntroductionActivity;
 import com.rubengees.introduction.IntroductionBuilder;
-import com.rubengees.introduction.IntroductionConfiguration;
 import com.rubengees.introduction.entity.Option;
-import com.rubengees.introduction.entity.Slide;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -66,6 +60,9 @@ public class DashboardActivity extends MainActivity {
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
+
+    @Bind(R.id.toolbar_container)
+    AppBarLayout toolbarContainer;
 
     private MaterialDrawerHelper drawerHelper;
     private OnActivityListener onActivityListener;
@@ -112,18 +109,6 @@ public class DashboardActivity extends MainActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
-
-        if (savedInstanceState != null) {
-            title = savedInstanceState.getString(STATE_TITLE);
-
-            setTitle(title);
-            try {
-                onActivityListener = (OnActivityListener) getSupportFragmentManager()
-                        .findFragmentById(R.id.activity_main_content_container);
-            } catch (ClassCastException e) {
-                onActivityListener = null;
-            }
-        }
 
         drawerHelper = new MaterialDrawerHelper(this, drawerCallback);
 
@@ -197,6 +182,24 @@ public class DashboardActivity extends MainActivity {
     }
 
     @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            try {
+                onActivityListener = (OnActivityListener) getSupportFragmentManager()
+                        .findFragmentById(R.id.activity_main_content_container);
+            } catch (ClassCastException e) {
+                onActivityListener = null;
+            }
+
+            title = savedInstanceState.getString(STATE_TITLE);
+
+            setTitle(title);
+        }
+    }
+
+    @Override
     public void onBackPressed() {
         if (drawerHelper.isDrawerOpen()) {
             drawerHelper.handleBackPressed();
@@ -211,13 +214,13 @@ public class DashboardActivity extends MainActivity {
         }
     }
 
-    public void onEvent(LoginEvent event) {
+    public void onEventMainThread(LoginEvent event) {
         if (!isDestroyedCompat()) {
             drawerHelper.refreshHeader();
         }
     }
 
-    public void onEvent(LogoutEvent event) {
+    public void onEventMainThread(LogoutEvent event) {
         if (!isDestroyedCompat()) {
             drawerHelper.refreshHeader();
         }
@@ -229,7 +232,7 @@ public class DashboardActivity extends MainActivity {
         if (drawerItemToLoad == DRAWER_ID_NONE) {
             if (savedInstanceState == null) {
                 if (StorageManager.isFirstStart()) {
-                    initIntroduction();
+                    IntroductionHelper.build(this);
                 } else {
                     drawerHelper.select(DRAWER_ID_DEFAULT);
                 }
@@ -268,42 +271,6 @@ public class DashboardActivity extends MainActivity {
         setSupportActionBar(toolbar);
     }
 
-    private void initIntroduction() {
-        new IntroductionBuilder(this).withSlides(generateSlides())
-                .withOnSlideListener(new IntroductionConfiguration.OnSlideListener() {
-                    @Override
-                    protected void onSlideInit(int position, @NonNull TextView title,
-                                               @NonNull ImageView image,
-                                               @NonNull TextView description) {
-                        switch (position) {
-                            case 0:
-                                Glide.with(image.getContext())
-                                        .load(R.drawable.ic_introduction_proxer).into(image);
-                                break;
-                            case 1:
-                                Glide.with(image.getContext())
-                                        .load(R.drawable.ic_introduction_notifications).into(image);
-                                break;
-                        }
-                    }
-                }).withSkipEnabled(R.string.introduction_skip).introduceMyself();
-    }
-
-    @NonNull
-    private List<Slide> generateSlides() {
-        List<Slide> slides = new ArrayList<>(2);
-
-        slides.add(new Slide().withTitle(R.string.introduction_welcome_title)
-                .withColorResource(R.color.primary)
-                .withDescription(R.string.introduction_welcome_description));
-        slides.add(new Slide().withTitle(R.string.introduction_notifications_title)
-                .withColorResource(R.color.accent)
-                .withOption(new Option(getString(R.string.introduction_notifications_description),
-                        false)));
-
-        return slides;
-    }
-
     public void setFragment(@NonNull Fragment fragment, @NonNull String title) {
         this.title = title;
         setTitle(title);
@@ -318,6 +285,7 @@ public class DashboardActivity extends MainActivity {
             onActivityListener = null;
         }
 
+        toolbarContainer.setExpanded(true);
         SnackbarManager.dismiss();
 
         new Handler().post(new Runnable() {

@@ -3,12 +3,11 @@ package com.proxerme.app.manager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.proxerme.app.event.LoginEvent;
-import com.proxerme.app.event.LogoutEvent;
 import com.proxerme.library.connection.ProxerConnection;
-import com.proxerme.library.connection.ProxerException;
 import com.proxerme.library.connection.ProxerTag;
 import com.proxerme.library.entity.LoginUser;
+import com.proxerme.library.event.success.LoginEvent;
+import com.proxerme.library.event.success.LogoutEvent;
 
 import de.greenrobot.event.EventBus;
 
@@ -18,17 +17,23 @@ import de.greenrobot.event.EventBus;
  * @author Ruben Gees
  */
 public class UserManager {
-    private static UserManager ourInstance = new UserManager();
+    private static UserManager instance;
     private LoginUser user;
     private boolean loggedIn = false;
 
     private UserManager() {
         user = StorageManager.getUser();
+
+        EventBus.getDefault().registerSticky(this);
     }
 
     @NonNull
     public static UserManager getInstance() {
-        return ourInstance;
+        if (instance == null) {
+            instance = new UserManager();
+        }
+
+        return instance;
     }
 
     public boolean hasUser() {
@@ -60,37 +65,29 @@ public class UserManager {
 
     public void login(@NonNull LoginUser user) {
         ProxerConnection.cancel(ProxerTag.LOGOUT);
-        ProxerConnection.login(user).execute(new ProxerConnection.ResultCallback<LoginUser>() {
-            @Override
-            public void onResult(LoginUser loginUser) {
-                loggedIn = true;
-                changeUser(loginUser);
-
-                EventBus.getDefault().post(new LoginEvent(null));
-            }
-
-            @Override
-            public void onError(@NonNull ProxerException e) {
-                EventBus.getDefault().post(new LoginEvent(e.getErrorCode()));
-            }
-        });
+        ProxerConnection.login(user).execute();
     }
 
     public void logout(){
         ProxerConnection.cancel(ProxerTag.LOGIN);
-        ProxerConnection.logout().execute(new ProxerConnection.ResultCallback<Void>() {
-            @Override
-            public void onResult(Void aVoid) {
-                removeUser();
-                loggedIn = false;
+        ProxerConnection.logout().execute();
+    }
 
-                EventBus.getDefault().post(new LogoutEvent(null));
-            }
+    public void onEvent(LoginEvent event) {
+        EventBus.getDefault().removeStickyEvent(event);
 
-            @Override
-            public void onError(@NonNull ProxerException e) {
-                EventBus.getDefault().post(new LogoutEvent(e.getErrorCode()));
-            }
-        });
+        loggedIn = true;
+        changeUser(event.getItem());
+    }
+
+    public void onEvent(LogoutEvent event) {
+        EventBus.getDefault().removeStickyEvent(event);
+
+        removeUser();
+        loggedIn = false;
+    }
+
+    public void destroy() {
+        EventBus.getDefault().unregister(this);
     }
 }

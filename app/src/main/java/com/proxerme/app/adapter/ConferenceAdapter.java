@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.proxerme.app.R;
@@ -114,7 +115,7 @@ public class ConferenceAdapter extends PagingAdapter<Conference, ConferenceAdapt
             holder.image.setImageDrawable(icon);
         } else {
             Glide.with(holder.image.getContext()).load(UrlHolder.getUserImage(item.getImageId()))
-                    .into(holder.image);
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(holder.image);
         }
     }
 

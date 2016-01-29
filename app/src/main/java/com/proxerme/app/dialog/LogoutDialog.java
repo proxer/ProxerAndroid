@@ -14,12 +14,13 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.proxerme.app.R;
 import com.proxerme.app.event.CancelledEvent;
-import com.proxerme.app.event.LogoutEvent;
 import com.proxerme.app.manager.NotificationRetrievalManager;
 import com.proxerme.app.manager.UserManager;
 import com.proxerme.app.util.ErrorHandler;
 import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.connection.ProxerTag;
+import com.proxerme.library.event.error.LogoutErrorEvent;
+import com.proxerme.library.event.success.LogoutEvent;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -123,7 +124,7 @@ public class LogoutDialog extends DialogFragment {
     public void onStart() {
         super.onStart();
 
-        EventBus.getDefault().register(this);
+        EventBus.getDefault().registerSticky(this);
     }
 
     @Override
@@ -136,17 +137,22 @@ public class LogoutDialog extends DialogFragment {
     public void onEvent(LogoutEvent event) {
         loading = false;
 
-        if (event.getErrorCode() == null) {
-            NotificationRetrievalManager.cancelMessagesRetrieval(getContext());
+        NotificationRetrievalManager.cancelMessagesRetrieval(getContext());
 
-            dismiss();
-        } else {
-            handleVisibility();
+        dismiss();
+    }
 
-            Toast.makeText(getContext(),
-                    ErrorHandler.getMessageForErrorCode(getContext(),
-                            event.getErrorCode()), Toast.LENGTH_LONG).show();
-        }
+    public void onEventMainThread(LogoutErrorEvent event) {
+        EventBus.getDefault().removeStickyEvent(event);
+
+        loading = false;
+
+        handleVisibility();
+
+        //noinspection ThrowableResultOfMethodCallIgnored
+        Toast.makeText(getContext(),
+                ErrorHandler.getMessageForErrorCode(getContext(),
+                        event.getItem().getErrorCode()), Toast.LENGTH_LONG).show();
     }
 
     private void findViews() {
