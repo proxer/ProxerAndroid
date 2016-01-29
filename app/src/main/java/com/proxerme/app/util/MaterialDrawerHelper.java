@@ -91,7 +91,7 @@ public class MaterialDrawerHelper {
             new Drawer.OnDrawerItemClickListener() {
                 @Override
                 public boolean onItemClick(View view, int position, IDrawerItem iDrawerItem) {
-                    int id = iDrawerItem.getIdentifier();
+                    int id = (int) iDrawerItem.getIdentifier();
 
                     if (id != currentDrawerItemId) {
                         if (iDrawerItem.isSelectable()) {
@@ -111,8 +111,8 @@ public class MaterialDrawerHelper {
             new AccountHeader.OnAccountHeaderListener() {
                 @Override
                 public boolean onProfileChanged(View view, IProfile profile, boolean current) {
-                    return callback != null && callback.onAccountClick(profile.getIdentifier());
-
+                    return callback != null &&
+                            callback.onAccountClick((int) profile.getIdentifier());
                 }
             };
 
@@ -190,6 +190,7 @@ public class MaterialDrawerHelper {
                 .withOnDrawerItemClickListener(onDrawerItemClickListener)
                 .withShowDrawerOnFirstLaunch(true).withToolbar(toolbar)
                 .withActionBarDrawerToggleAnimated(true).withHasStableIds(true)
+                .withTranslucentStatusBar(true).withTranslucentStatusBarProgrammatically(true)
                 .withSavedInstance(savedInstanceState).build();
 
         initBadges();
