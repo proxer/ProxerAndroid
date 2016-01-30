@@ -15,7 +15,6 @@
         app:cardCornerRadius="1dp">
 
         <android.support.percent.PercentRelativeLayout
-            android:id="@+id/item_conference_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -45,7 +44,6 @@
                 tools:text="Title" />
 
             <LinearLayout
-                android:id="@+id/item_conference_bottom_container"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"

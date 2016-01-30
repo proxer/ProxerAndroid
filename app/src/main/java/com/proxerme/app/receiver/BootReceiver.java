@@ -15,7 +15,9 @@ public class BootReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        NotificationRetrievalManager.retrieveNewsLater(context);
-        NotificationRetrievalManager.retrieveMessagesLater(context);
+        if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
+            NotificationRetrievalManager.retrieveNewsLater(context);
+            NotificationRetrievalManager.retrieveMessagesLater(context);
+        }
     }
 }

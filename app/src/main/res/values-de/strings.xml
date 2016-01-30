@@ -52,7 +52,6 @@
     <string name="dialog_cancel">Abbrechen</string>
     <string name="dialog_login_username_hint">Nutzername</string>
     <string name="dialog_login_password_hint">Passwort</string>
-    <string name="error_logout">Abmeldung hat nicht funktioniert</string>
     <string name="drawer_header_logout">Abmelden</string>
     <string name="drawer_item_messages">Nachrichten</string>
     <string name="participant_multiple">Teilnehmer</string>
@@ -61,7 +60,6 @@
     <string name="image_detail_description">Detailliertes Bild</string>
     <string name="preference_news_notifications_interval_title">News Aktualisierungsintervall</string>
     <string name="messages_notification_title">Nachrichten</string>
-    <string name="messages_from">Neue Nachrichten von</string>
     <string name="preference_category_info_title">Info</string>
     <string name="preference_licences_summary">Projekte, die in dieser App genutzt werden</string>
     <string name="preference_licences_title">Lizenzen</string>
