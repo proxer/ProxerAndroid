@@ -207,6 +207,8 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
     }
 
     public void onEventMainThread(EE errorResult) {
+        EventBus.getDefault().removeStickyEvent(errorResult);
+
         //noinspection ThrowableResultOfMethodCallIgnored
         ProxerException exception = errorResult.getItem();
 
