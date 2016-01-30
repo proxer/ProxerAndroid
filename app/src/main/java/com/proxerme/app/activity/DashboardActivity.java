@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
@@ -319,7 +320,7 @@ public class DashboardActivity extends MainActivity {
     public void showMessage(@NonNull String message, @Nullable String action,
                             @Nullable View.OnClickListener listener) {
         snackbar = Snackbar.make(coordinator, message, Snackbar.LENGTH_INDEFINITE)
-                .setAction(action, listener);
+                .setAction(action, listener).setActionTextColor(ContextCompat.getColorStateList(this, R.color.primary_light));
 
         snackbar.show();
     }
