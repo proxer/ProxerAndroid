@@ -82,6 +82,7 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
         });
 
         swipeRefreshLayout.setColorSchemeResources(R.color.primary, R.color.accent);
+        swipeRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

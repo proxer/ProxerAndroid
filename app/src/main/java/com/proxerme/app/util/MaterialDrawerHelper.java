@@ -48,7 +48,6 @@ public class MaterialDrawerHelper {
     //Sticky items
     public static final int DRAWER_ID_DONATE = 10;
     public static final int DRAWER_ID_SETTINGS = 11;
-    public static final int DRAWER_ID_DEFAULT = DRAWER_ID_NEWS;
 
     //Header items
     public static final int HEADER_ID_GUEST = 100;
@@ -234,8 +233,8 @@ public class MaterialDrawerHelper {
             drawer.closeDrawer();
 
             return true;
-        } else if (currentDrawerItemId != DRAWER_ID_DEFAULT) {
-            select(DRAWER_ID_DEFAULT);
+        } else if (currentDrawerItemId != DRAWER_ID_NEWS) {
+            select(DRAWER_ID_NEWS);
 
             return true;
         } else {

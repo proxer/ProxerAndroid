@@ -36,7 +36,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
 
-import static com.proxerme.app.util.MaterialDrawerHelper.DRAWER_ID_DEFAULT;
 import static com.proxerme.app.util.MaterialDrawerHelper.DRAWER_ID_DONATE;
 import static com.proxerme.app.util.MaterialDrawerHelper.DRAWER_ID_MESSAGES;
 import static com.proxerme.app.util.MaterialDrawerHelper.DRAWER_ID_NEWS;
@@ -62,6 +61,8 @@ public class DashboardActivity extends MainActivity {
 
     @Bind(R.id.root)
     ViewGroup root;
+    @Bind(R.id.activity_main_content_coordinator)
+    ViewGroup coordinator;
     @Bind(R.id.toolbar_container)
     AppBarLayout toolbarContainer;
     @Bind(R.id.toolbar)
@@ -157,7 +158,7 @@ public class DashboardActivity extends MainActivity {
             }
 
             StorageManager.setFirstStartOccurred();
-            drawerHelper.select(DRAWER_ID_DEFAULT);
+            drawerHelper.select(DRAWER_ID_NEWS);
         }
     }
 
@@ -222,7 +223,7 @@ public class DashboardActivity extends MainActivity {
                 if (StorageManager.isFirstStart()) {
                     IntroductionHelper.build(this);
                 } else {
-                    drawerHelper.select(DRAWER_ID_DEFAULT);
+                    drawerHelper.select(DRAWER_ID_NEWS);
                 }
             }
         } else if (savedInstanceState == null) {
@@ -317,7 +318,7 @@ public class DashboardActivity extends MainActivity {
 
     public void showMessage(@NonNull String message, @Nullable String action,
                             @Nullable View.OnClickListener listener) {
-        snackbar = Snackbar.make(root, message, Snackbar.LENGTH_INDEFINITE)
+        snackbar = Snackbar.make(coordinator, message, Snackbar.LENGTH_INDEFINITE)
                 .setAction(action, listener);
 
         snackbar.show();

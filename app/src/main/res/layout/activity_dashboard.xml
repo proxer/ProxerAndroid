@@ -21,8 +21,15 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
     </android.support.design.widget.AppBarLayout>
 
-    <FrameLayout
-        android:id="@+id/activity_main_content_container"
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/activity_main_content_coordinator"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:id="@+id/activity_main_content_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </android.support.design.widget.CoordinatorLayout>
 </LinearLayout>
