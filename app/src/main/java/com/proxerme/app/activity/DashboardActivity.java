@@ -60,10 +60,8 @@ public class DashboardActivity extends MainActivity {
     private static final String EXTRA_ADDITIONAL_INFO = "extra_additional_info";
     private static final String STATE_TITLE = "dashboard_title";
 
-    @Bind(R.id.root)
-    ViewGroup root;
-    @Bind(R.id.activity_main_content_coordinator)
-    ViewGroup coordinator;
+    @Bind(R.id.activity_main_content_container)
+    ViewGroup content;
     @Bind(R.id.toolbar_container)
     AppBarLayout toolbarContainer;
     @Bind(R.id.toolbar)
@@ -329,8 +327,9 @@ public class DashboardActivity extends MainActivity {
 
     public void showMessage(@NonNull String message, @Nullable String action,
                             @Nullable View.OnClickListener listener) {
-        snackbar = Snackbar.make(coordinator, message, Snackbar.LENGTH_INDEFINITE)
-                .setAction(action, listener).setActionTextColor(ContextCompat.getColorStateList(this, R.color.primary_light));
+        snackbar = Snackbar.make(content, message, Snackbar.LENGTH_INDEFINITE)
+                .setActionTextColor(ContextCompat.getColorStateList(this, R.color.primary_light))
+                .setAction(action, listener);
 
         snackbar.show();
     }
