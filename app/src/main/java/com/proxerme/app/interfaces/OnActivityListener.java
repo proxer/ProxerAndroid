@@ -18,10 +18,4 @@ public interface OnActivityListener {
      * should consume it.
      */
     boolean onBackPressed();
-
-    /**
-     * A method which notify implementing classes that they should reshow an Error if existing.
-     * This is called on an orientation change for example.
-     */
-    void showErrorIfNecessary();
 }

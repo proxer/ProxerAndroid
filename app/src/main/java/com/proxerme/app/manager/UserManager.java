@@ -24,7 +24,7 @@ public class UserManager {
     private UserManager() {
         user = StorageManager.getUser();
 
-        EventBus.getDefault().registerSticky(this);
+        EventBus.getDefault().registerSticky(this, 1);
     }
 
     @NonNull

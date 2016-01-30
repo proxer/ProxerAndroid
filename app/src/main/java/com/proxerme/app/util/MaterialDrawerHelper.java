@@ -67,25 +67,6 @@ public class MaterialDrawerHelper {
     private int currentDrawerItemId = -1;
 
     private MaterialDrawerCallback callback;
-    private Drawer.OnDrawerListener onDrawerListener = new Drawer.OnDrawerListener() {
-        @Override
-        public void onDrawerOpened(View view) {
-            SnackbarManager.dismiss();
-        }
-
-        @Override
-        public void onDrawerClosed(View view) {
-            if (callback != null) {
-                callback.onDrawerClosed();
-            }
-
-        }
-
-        @Override
-        public void onDrawerSlide(View view, float v) {
-
-        }
-    };
 
     private Drawer.OnDrawerItemClickListener onDrawerItemClickListener =
             new Drawer.OnDrawerItemClickListener() {
@@ -186,7 +167,6 @@ public class MaterialDrawerHelper {
                 .withAccountHeader(header)
                 .withDrawerItems(generateDrawerItems())
                 .withStickyDrawerItems(generateStickyDrawerItems())
-                .withOnDrawerListener(onDrawerListener)
                 .withOnDrawerItemClickListener(onDrawerItemClickListener)
                 .withShowDrawerOnFirstLaunch(true).withToolbar(toolbar)
                 .withActionBarDrawerToggleAnimated(true).withHasStableIds(true)
@@ -308,14 +288,6 @@ public class MaterialDrawerHelper {
 
         public boolean onAccountClick(int identifier) {
             return false;
-        }
-
-        public void onDrawerOpened() {
-
-        }
-
-        public void onDrawerClosed() {
-
         }
     }
 }

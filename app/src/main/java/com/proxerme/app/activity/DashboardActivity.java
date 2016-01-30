@@ -7,8 +7,11 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.proxerme.app.R;
 import com.proxerme.app.dialog.LoginDialog;
@@ -22,7 +25,6 @@ import com.proxerme.app.manager.StorageManager;
 import com.proxerme.app.manager.UserManager;
 import com.proxerme.app.util.IntroductionHelper;
 import com.proxerme.app.util.MaterialDrawerHelper;
-import com.proxerme.app.util.SnackbarManager;
 import com.proxerme.library.connection.UrlHolder;
 import com.proxerme.library.event.success.LoginEvent;
 import com.proxerme.library.event.success.LogoutEvent;
@@ -58,16 +60,19 @@ public class DashboardActivity extends MainActivity {
     private static final String EXTRA_ADDITIONAL_INFO = "extra_additional_info";
     private static final String STATE_TITLE = "dashboard_title";
 
-    @Bind(R.id.toolbar)
-    Toolbar toolbar;
-
+    @Bind(R.id.root)
+    ViewGroup root;
     @Bind(R.id.toolbar_container)
     AppBarLayout toolbarContainer;
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
 
     private MaterialDrawerHelper drawerHelper;
     private OnActivityListener onActivityListener;
 
     private String title;
+
+    private Snackbar snackbar;
 
     private MaterialDrawerCallback drawerCallback = new MaterialDrawerCallback() {
         @Override
@@ -78,18 +83,6 @@ public class DashboardActivity extends MainActivity {
         @Override
         public boolean onAccountClick(int identifier) {
             return handleOnHeaderAccountClick(identifier);
-        }
-
-        @Override
-        public void onDrawerClosed() {
-            if (onActivityListener != null) {
-                onActivityListener.showErrorIfNecessary();
-            }
-        }
-
-        @Override
-        public void onDrawerOpened() {
-            SnackbarManager.dismiss();
         }
     };
 
@@ -123,7 +116,7 @@ public class DashboardActivity extends MainActivity {
     protected void onStart() {
         super.onStart();
 
-        EventBus.getDefault().register(this);
+        EventBus.getDefault().registerSticky(this);
 
         UserManager userManager = UserManager.getInstance();
 
@@ -286,7 +279,7 @@ public class DashboardActivity extends MainActivity {
         }
 
         toolbarContainer.setExpanded(true);
-        SnackbarManager.dismiss();
+        clearMessage();
 
         new Handler().post(new Runnable() {
             @Override
@@ -325,6 +318,22 @@ public class DashboardActivity extends MainActivity {
 
     public void showLogoutDialog() {
         LogoutDialog.newInstance().show(getSupportFragmentManager(), "dialog_logout");
+    }
+
+    public void showMessage(@NonNull String message, @Nullable String action,
+                            @Nullable View.OnClickListener listener) {
+        snackbar = Snackbar.make(root, message, Snackbar.LENGTH_INDEFINITE)
+                .setAction(action, listener);
+
+        snackbar.show();
+    }
+
+    public void clearMessage() {
+        if (snackbar != null) {
+            snackbar.dismiss();
+
+            snackbar = null;
+        }
     }
 
     private boolean handleOnDrawerItemClick(@MaterialDrawerHelper.DrawerItemId int id) {

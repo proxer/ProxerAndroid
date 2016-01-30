@@ -55,11 +55,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements OnActi
     }
 
     @Override
-    public void showErrorIfNecessary() {
-        //Do nothing
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
 

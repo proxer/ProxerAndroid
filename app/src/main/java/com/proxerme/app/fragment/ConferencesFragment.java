@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +22,6 @@ import com.proxerme.app.manager.NotificationRetrievalManager;
 import com.proxerme.app.manager.StorageManager;
 import com.proxerme.app.manager.UserManager;
 import com.proxerme.app.util.MaterialDrawerHelper;
-import com.proxerme.app.util.SnackbarManager;
 import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.connection.ProxerTag;
 import com.proxerme.library.connection.UrlHolder;
@@ -42,6 +41,7 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
         ConferencesEvent, ConferencesErrorEvent> {
 
     private static final int POLLING_INTERVAL = 5000;
+    @Nullable
     private Handler handler;
 
     private boolean canLoad;
@@ -59,12 +59,8 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, @Nullable Bundle savedInstanceState) {
         View result = super.onCreateView(inflater, container, savedInstanceState);
-
-        if (savedInstanceState != null) {
-            showErrorIfNecessary();
-        }
 
         if (UserManager.getInstance().isLoggedIn()) {
             canLoad = true;
@@ -95,8 +91,9 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
         super.onStop();
     }
 
+    @NonNull
     @Override
-    protected ConferenceAdapter createAdapter(Bundle savedInstanceState) {
+    protected ConferenceAdapter createAdapter(@Nullable Bundle savedInstanceState) {
         if (savedInstanceState == null) {
             return new ConferenceAdapter();
         } else {
@@ -137,21 +134,12 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
     }
 
     @Override
-    public void showErrorIfNecessary() {
-        super.showErrorIfNecessary();
-
-        if (!UserManager.getInstance().isLoggedIn()) {
-            showLoginError();
-        }
-    }
-
-    @Override
     protected boolean canLoad() {
         return canLoad;
     }
 
     @Override
-    public void onEventMainThread(ConferencesEvent result) {
+    public void onEventMainThread(@NonNull ConferencesEvent result) {
         super.onEventMainThread(result);
 
         if (handler == null) {
@@ -172,7 +160,7 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
     }
 
     @Override
-    public void onEventMainThread(ConferencesErrorEvent errorEvent) {
+    public void onEventMainThread(@NonNull ConferencesErrorEvent errorEvent) {
         super.onEventMainThread(errorEvent);
 
         stopPolling();
@@ -199,16 +187,16 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
         showLoginError();
     }
 
-    public void onEvenMainThread(CancelledEvent event) {
-        showErrorIfNecessary();
+    public void onEventMainThread(CancelledEvent event) {
+        if (!UserManager.getInstance().isLoggedIn()) {
+            showLoginError();
+        }
     }
 
     private void showLoginError() {
-        if (!SnackbarManager.isShowing()) {
-            SnackbarManager.show(Snackbar.make(root, R.string.error_not_logged_in,
-                    Snackbar.LENGTH_INDEFINITE),
-                    getContext().getString(R.string.error_do_login),
-                    new SnackbarManager.SnackbarCallback() {
+        if (getDashboardActivity() != null) {
+            getDashboardActivity().showMessage(getString(R.string.error_not_logged_in),
+                    getString(R.string.error_do_login), new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             DashboardActivity activity = getDashboardActivity();

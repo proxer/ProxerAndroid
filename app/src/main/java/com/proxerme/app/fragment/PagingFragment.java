@@ -5,7 +5,6 @@ import android.os.Parcelable;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -18,7 +17,6 @@ import com.proxerme.app.adapter.PagingAdapter;
 import com.proxerme.app.util.EndlessRecyclerOnScrollListener;
 import com.proxerme.app.util.ErrorHandler;
 import com.proxerme.app.util.PagingHelper;
-import com.proxerme.app.util.SnackbarManager;
 import com.proxerme.app.util.Utils;
 import com.proxerme.library.connection.ProxerException;
 import com.proxerme.library.event.IListEvent;
@@ -47,6 +45,7 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
     private static final String STATE_END_REACHED = "paging_end_reached";
 
     View root;
+
     @Bind(R.id.fragment_paging_list_container)
     SwipeRefreshLayout swipeRefreshLayout;
     @Bind(R.id.fragment_paging_list)
@@ -176,17 +175,16 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
 
             if (showProgress) {
                 swipeRefreshLayout.setRefreshing(true);
-                SnackbarManager.dismiss();
+            }
+
+            if (getDashboardActivity() != null) {
+                getDashboardActivity().clearMessage();
             }
 
             load(page, insert);
-        }
-    }
-
-    @Override
-    public void showErrorIfNecessary() {
-        if (currentErrorMessage != null) {
-            showError();
+        } else {
+            //Possible if the user used swipe to refresh
+            stopLoading();
         }
     }
 
@@ -243,18 +241,14 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
     }
 
     private void showError() {
-        if (!SnackbarManager.isShowing()) {
-            SnackbarManager.show(Snackbar.make(root, currentErrorMessage,
-                    Snackbar.LENGTH_INDEFINITE),
-                    getContext().getString(R.string.error_retry),
-                    new SnackbarManager.SnackbarCallback() {
+        if (getDashboardActivity() != null) {
+            getDashboardActivity().showMessage(currentErrorMessage,
+                    getContext().getString(R.string.error_retry), new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             doLoad(lastLoadedPage, lastMethodInsert, true);
                         }
                     });
-        } else {
-            SnackbarManager.update(currentErrorMessage);
         }
     }
 

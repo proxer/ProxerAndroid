@@ -27,9 +27,4 @@ public abstract class DashboardFragment extends Fragment implements OnActivityLi
         return false;
     }
 
-    @Override
-    public void showErrorIfNecessary() {
-
-    }
-
 }
