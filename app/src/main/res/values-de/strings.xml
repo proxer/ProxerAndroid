@@ -70,4 +70,5 @@
     <string name="error_not_logged_in">Du bist nicht eingeloggt.</string>
     <string name="dialog_logout_go">Abmelden</string>
     <string name="dialog_logout_title">Möchtest du dich abmelden?</string>
+    <string name="dialog_login_remember">Merken</string>
 </resources>

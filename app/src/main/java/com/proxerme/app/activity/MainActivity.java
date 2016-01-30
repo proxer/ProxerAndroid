@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.proxerme.app.R;
 import com.proxerme.app.customtabs.CustomTabActivityHelper;
 import com.proxerme.app.customtabs.WebviewFallback;
+import com.proxerme.app.manager.UserManager;
 import com.proxerme.library.connection.ProxerConnection;
 
 /**
@@ -50,6 +51,7 @@ public abstract class MainActivity extends AppCompatActivity {
 
         if (isFinishing()) {
             ProxerConnection.cleanup();
+            UserManager.getInstance().destroy();
         }
     }
 

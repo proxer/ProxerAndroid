@@ -1,5 +1,6 @@
 package com.proxerme.app.manager;
 
+import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -9,6 +10,9 @@ import com.proxerme.library.entity.LoginUser;
 import com.proxerme.library.event.success.LoginEvent;
 import com.proxerme.library.event.success.LogoutEvent;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
 import de.greenrobot.event.EventBus;
 
 /**
@@ -17,9 +21,16 @@ import de.greenrobot.event.EventBus;
  * @author Ruben Gees
  */
 public class UserManager {
+    private static final int SAVE_USER = 0;
+    private static final int DONT_SAVE_USER = 1;
+    private static final int SAME_AS_IS = 2;
+
     private static UserManager instance;
     private LoginUser user;
     private boolean loggedIn = false;
+
+    @UserSaveMode
+    private int saveUser = SAME_AS_IS;
 
     private UserManager() {
         user = StorageManager.getUser();
@@ -34,10 +45,6 @@ public class UserManager {
         }
 
         return instance;
-    }
-
-    public boolean hasUser() {
-        return user != null;
     }
 
     @Nullable
@@ -56,16 +63,34 @@ public class UserManager {
 
     public void changeUser(@NonNull LoginUser user) {
         this.user = user;
-        StorageManager.setUser(user);
+
+        if (saveUser == SAVE_USER) {
+            StorageManager.setUser(user);
+        } else if (saveUser == DONT_SAVE_USER) {
+            StorageManager.removeUser();
+        }
     }
 
     public void notifyLoggedOut() {
         loggedIn = false;
+
+        EventBus.getDefault().post(new LogoutEvent());
     }
 
-    public void login(@NonNull LoginUser user) {
+    public void login(@NonNull LoginUser user, boolean save) {
+        saveUser = save ? SAVE_USER : DONT_SAVE_USER;
+
         ProxerConnection.cancel(ProxerTag.LOGOUT);
         ProxerConnection.login(user).execute();
+    }
+
+    public void reLogin() {
+        if (user != null) {
+            saveUser = SAME_AS_IS;
+
+            ProxerConnection.cancel(ProxerTag.LOGOUT);
+            ProxerConnection.login(user).execute();
+        }
     }
 
     public void logout(){
@@ -89,5 +114,13 @@ public class UserManager {
 
     public void destroy() {
         EventBus.getDefault().unregister(this);
+
+        instance = null;
+    }
+
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({SAVE_USER, DONT_SAVE_USER, SAME_AS_IS})
+    private @interface UserSaveMode {
+
     }
 }

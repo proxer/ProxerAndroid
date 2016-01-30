@@ -13,6 +13,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -56,6 +57,8 @@ public class LoginDialog extends DialogFragment {
     EditText usernameInput;
     @Bind(R.id.dialog_login_password)
     EditText passwordInput;
+    @Bind(R.id.dialog_login_remember)
+    CheckBox remember;
 
     @Bind(R.id.dialog_login_input_container)
     ViewGroup inputContainer;
@@ -212,7 +215,8 @@ public class LoginDialog extends DialogFragment {
                 loading = true;
                 handleVisibility();
 
-                UserManager.getInstance().login(new LoginUser(username, password));
+                UserManager.getInstance().login(new LoginUser(username, password),
+                        remember.isChecked());
             }
         }
     }

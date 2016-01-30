@@ -71,4 +71,5 @@
     <string name="error_do_login">Login</string>
     <string name="dialog_logout_title">Do you want to logout?</string>
     <string name="dialog_logout_go">Logout</string>
+    <string name="dialog_login_remember">Remember</string>
 </resources>

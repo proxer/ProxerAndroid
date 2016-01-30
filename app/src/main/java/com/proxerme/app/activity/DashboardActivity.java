@@ -117,12 +117,7 @@ public class DashboardActivity extends MainActivity {
         super.onStart();
 
         EventBus.getDefault().registerSticky(this);
-
-        UserManager userManager = UserManager.getInstance();
-
-        if (!userManager.isLoggedIn() && userManager.getUser() != null) {
-            userManager.login(userManager.getUser());
-        }
+        UserManager.getInstance().reLogin();
     }
 
     @Override
