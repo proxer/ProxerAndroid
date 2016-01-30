@@ -99,17 +99,17 @@ public class UserManager {
     }
 
     public void onEvent(LoginEvent event) {
-        EventBus.getDefault().removeStickyEvent(event);
-
         loggedIn = true;
         changeUser(event.getItem());
+
+        EventBus.getDefault().removeStickyEvent(event);
     }
 
     public void onEvent(LogoutEvent event) {
-        EventBus.getDefault().removeStickyEvent(event);
-
         removeUser();
         loggedIn = false;
+
+        EventBus.getDefault().removeStickyEvent(event);
     }
 
     public void destroy() {

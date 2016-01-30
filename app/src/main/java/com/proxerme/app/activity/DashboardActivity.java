@@ -204,15 +204,25 @@ public class DashboardActivity extends MainActivity {
         }
     }
 
-    public void onEventMainThread(LoginEvent event) {
+    public void onEvent(LoginEvent event) {
         if (!isDestroyedCompat()) {
-            drawerHelper.refreshHeader();
+            this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    drawerHelper.refreshHeader();
+                }
+            });
         }
     }
 
-    public void onEventMainThread(LogoutEvent event) {
+    public void onEvent(LogoutEvent event) {
         if (!isDestroyedCompat()) {
-            drawerHelper.refreshHeader();
+            this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    drawerHelper.refreshHeader();
+                }
+            });
         }
     }
 
