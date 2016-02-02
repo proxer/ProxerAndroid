@@ -169,7 +169,7 @@ public class MaterialDrawerHelper {
                 .withOnDrawerItemClickListener(onDrawerItemClickListener)
                 .withShowDrawerOnFirstLaunch(true).withToolbar(toolbar)
                 .withActionBarDrawerToggleAnimated(true).withHasStableIds(true)
-                .withTranslucentStatusBar(true).withTranslucentStatusBarProgrammatically(true)
+                .withTranslucentStatusBar(true)
                 .withSavedInstance(savedInstanceState).build();
 
         initBadges();

@@ -40,7 +40,7 @@ dependencies {
     compile('com.mikepenz:aboutlibraries:5.5.0@aar') {
         transitive = true
     }
-    compile('com.mikepenz:materialdrawer:5.0.0.b21-SNAPSHOT@aar') {
+    compile('com.mikepenz:materialdrawer:5.0.0.b24-SNAPSHOT@aar') {
         transitive = true
     }
     compile('com.github.rubengees:introduction:1.1.5@aar') {
