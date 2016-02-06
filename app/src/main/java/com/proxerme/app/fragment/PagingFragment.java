@@ -23,11 +23,14 @@ import com.proxerme.library.event.IListEvent;
 import com.proxerme.library.event.error.ErrorEvent;
 import com.proxerme.library.interfaces.IdItem;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import de.greenrobot.event.EventBus;
 
 /**
  * An abstract Fragment, managing page based Lists of items.
@@ -133,7 +136,7 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
         super.onStart();
 
         if (!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().registerSticky(this);
+            EventBus.getDefault().register(this);
         }
     }
 
@@ -189,7 +192,8 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
         }
     }
 
-    public void onEventMainThread(E result) {
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onLoad(E result) {
         EventBus.getDefault().removeStickyEvent(result);
 
         if ((result.getItem()).isEmpty()) {
@@ -206,7 +210,8 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
         handleResult(result.getItem(), lastMethodInsert);
     }
 
-    public void onEventMainThread(EE errorResult) {
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onLoadError(EE errorResult) {
         EventBus.getDefault().removeStickyEvent(errorResult);
 
         //noinspection ThrowableResultOfMethodCallIgnored

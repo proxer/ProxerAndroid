@@ -81,8 +81,8 @@ public class NewsFragment extends PagingFragment<News, NewsAdapter, NewsEvent, N
     }
 
     @Override
-    public void onEventMainThread(NewsEvent result) {
-        super.onEventMainThread(result);
+    public void onLoad(NewsEvent result) {
+        super.onLoad(result);
 
         NewsManager manager = NewsManager.getInstance();
 

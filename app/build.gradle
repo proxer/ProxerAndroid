@@ -28,7 +28,7 @@ dependencies {
     compile 'com.android.support:percent:23.1.1'
 
     compile 'com.jakewharton:butterknife:7.0.1'
-    compile 'de.greenrobot:eventbus:2.4.1'
+    compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.github.orhanobut:hawk:1.22'
     compile 'net.danlew:android.joda:2.9.2'
     compile 'com.github.bumptech.glide:glide:3.7.0'
@@ -43,10 +43,10 @@ dependencies {
     compile('com.mikepenz:materialdrawer:5.0.0.b24-SNAPSHOT@aar') {
         transitive = true
     }
-    compile('com.github.rubengees:introduction:1.1.5@aar') {
+    compile('com.github.rubengees:introduction:1.1.6@aar') {
         transitive = true
     }
-    compile('com.github.proxer:ProxerLibAndroid:1.4.2@aar') {
+    compile('com.github.proxer:ProxerLibAndroid:1.4.3@aar') {
         transitive = true
     }
 

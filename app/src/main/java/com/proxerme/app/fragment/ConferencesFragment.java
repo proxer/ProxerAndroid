@@ -32,6 +32,9 @@ import com.proxerme.library.event.success.ConferencesEvent;
 import com.proxerme.library.event.success.LoginEvent;
 import com.proxerme.library.event.success.LogoutEvent;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 /**
  * A Fragment, showing a List of Conferences to the user.
  *
@@ -139,8 +142,8 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
     }
 
     @Override
-    public void onEventMainThread(@NonNull ConferencesEvent result) {
-        super.onEventMainThread(result);
+    public void onLoad(@NonNull ConferencesEvent result) {
+        super.onLoad(result);
 
         if (handler == null) {
             startPolling();
@@ -160,13 +163,14 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
     }
 
     @Override
-    public void onEventMainThread(@NonNull ConferencesErrorEvent errorEvent) {
-        super.onEventMainThread(errorEvent);
+    public void onLoadError(@NonNull ConferencesErrorEvent errorEvent) {
+        super.onLoadError(errorEvent);
 
         stopPolling();
     }
 
-    public void onEventMainThread(LoginEvent event) {
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onLogin(LoginEvent event) {
         if (isEmpty()) {
             canLoad = true;
 
@@ -174,7 +178,8 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
         }
     }
 
-    public void onEventMainThread(LogoutEvent event) {
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onLogout(LogoutEvent event) {
         canLoad = false;
 
         cancelRequest();
@@ -183,11 +188,13 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
         showLoginError();
     }
 
-    public void onEventMainThread(LoginErrorEvent event) {
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onLoginError(LoginErrorEvent event) {
         showLoginError();
     }
 
-    public void onEventMainThread(CancelledEvent event) {
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onCancelled(CancelledEvent event) {
         if (!UserManager.getInstance().isLoggedIn()) {
             showLoginError();
         }

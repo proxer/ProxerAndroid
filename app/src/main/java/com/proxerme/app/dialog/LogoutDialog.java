@@ -22,9 +22,12 @@ import com.proxerme.library.connection.ProxerTag;
 import com.proxerme.library.event.error.LogoutErrorEvent;
 import com.proxerme.library.event.success.LogoutEvent;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import de.greenrobot.event.EventBus;
 
 /**
  * Dialog, which handles the logout of a user.
@@ -124,7 +127,7 @@ public class LogoutDialog extends DialogFragment {
     public void onStart() {
         super.onStart();
 
-        EventBus.getDefault().registerSticky(this);
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -134,7 +137,8 @@ public class LogoutDialog extends DialogFragment {
         super.onStop();
     }
 
-    public void onEvent(LogoutEvent event) {
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onLogout(LogoutEvent event) {
         loading = false;
 
         NotificationRetrievalManager.cancelMessagesRetrieval(getContext());
@@ -142,7 +146,8 @@ public class LogoutDialog extends DialogFragment {
         dismiss();
     }
 
-    public void onEventMainThread(LogoutErrorEvent event) {
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onLogoutError(LogoutErrorEvent event) {
         EventBus.getDefault().removeStickyEvent(event);
 
         loading = false;

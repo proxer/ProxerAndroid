@@ -10,10 +10,11 @@ import com.proxerme.library.entity.LoginUser;
 import com.proxerme.library.event.success.LoginEvent;
 import com.proxerme.library.event.success.LogoutEvent;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-
-import de.greenrobot.event.EventBus;
 
 /**
  * A singleton for managing the user and it's login state.
@@ -35,7 +36,7 @@ public class UserManager {
     private UserManager() {
         user = StorageManager.getUser();
 
-        EventBus.getDefault().registerSticky(this, 1);
+        EventBus.getDefault().register(this);
     }
 
     @NonNull
@@ -98,14 +99,16 @@ public class UserManager {
         ProxerConnection.logout().execute();
     }
 
-    public void onEvent(LoginEvent event) {
+    @Subscribe(sticky = true)
+    public void onLogin(LoginEvent event) {
         loggedIn = true;
         changeUser(event.getItem());
 
         EventBus.getDefault().removeStickyEvent(event);
     }
 
-    public void onEvent(LogoutEvent event) {
+    @Subscribe(sticky = true)
+    public void onLogout(LogoutEvent event) {
         removeUser();
         loggedIn = false;
 

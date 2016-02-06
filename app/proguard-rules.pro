@@ -39,6 +39,8 @@
 -keep class com.google.gson.** { *; }
 -keepattributes Signature
 
+-keepattributes *Annotation*
+-keep enum org.greenrobot.eventbus.ThreadMode { *; }
 -keepclassmembers class ** {
-    public void onEvent*(***);
+    @org.greenrobot.eventbus.Subscribe <methods>;
 }
