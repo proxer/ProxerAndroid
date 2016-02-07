@@ -13,7 +13,7 @@ Build the project and install it on your device or download the [latest release]
 Assuming that you know how to use [Git](https://git-scm.com/), have the [Android SDK](https://developer.android.com/sdk/index.html) and the [Java SDK](http://www.oracle.com/technetwork/java/javase/overview/index.html) installed,
 run the following commands:
 
-- `git clone https://github.com/RubenGees/ProxerMe.git`
+- `git clone https://github.com/proxer/ProxerMe.git`
 - `cd ProxerMe`
 
 Windows:
@@ -31,6 +31,6 @@ This App depends highly on it and it implements most of the available API.
 
 ### Contribute
 
-Everybody is free to contribute to this project (and I would be happy about it :) ).  
+Everybody is free to contribute to this project.
 To contribute:  
 Fork this project, make changes and create a Pull Request.
