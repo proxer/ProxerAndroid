@@ -13,9 +13,12 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.mikepenz.materialdrawer.util.DrawerImageLoader;
 import com.orhanobut.hawk.Hawk;
 import com.orhanobut.hawk.HawkBuilder;
+import com.proxer.app.EventBusIndex;
 import com.proxerme.library.util.PersistentCookieStore;
 
 import net.danlew.android.joda.JodaTimeAndroid;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.net.CookieHandler;
 import java.net.CookieManager;
@@ -36,6 +39,7 @@ public class MainApplication extends Application {
         JodaTimeAndroid.init(this);
         Hawk.init(this).setEncryptionMethod(HawkBuilder.EncryptionMethod.MEDIUM)
                 .setStorage(HawkBuilder.newSharedPrefStorage(this)).build();
+        EventBus.builder().addIndex(new EventBusIndex()).installDefaultEventBus();
 
         DrawerImageLoader.init(new DrawerImageLoader.IDrawerImageLoader() {
             @Override

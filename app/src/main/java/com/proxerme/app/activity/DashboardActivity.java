@@ -208,24 +208,14 @@ public class DashboardActivity extends MainActivity {
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onLogin(LoginEvent event) {
         if (!isDestroyedCompat()) {
-            this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    drawerHelper.refreshHeader();
-                }
-            });
+            drawerHelper.refreshHeader();
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onLogout(LogoutEvent event) {
         if (!isDestroyedCompat()) {
-            this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    drawerHelper.refreshHeader();
-                }
-            });
+            drawerHelper.refreshHeader();
         }
     }
 

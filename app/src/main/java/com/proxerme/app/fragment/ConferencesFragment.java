@@ -194,7 +194,7 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    public void onCancelled(CancelledEvent event) {
+    public void onDialogCancelled(CancelledEvent event) {
         if (!UserManager.getInstance().isLoggedIn()) {
             showLoginError();
         }

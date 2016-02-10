@@ -40,7 +40,6 @@
 -keepattributes Signature
 
 -keepattributes *Annotation*
--keep enum org.greenrobot.eventbus.ThreadMode { *; }
 -keepclassmembers class ** {
     @org.greenrobot.eventbus.Subscribe <methods>;
 }
