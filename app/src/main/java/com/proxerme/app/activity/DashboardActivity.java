@@ -79,12 +79,12 @@ public class DashboardActivity extends MainActivity {
 
     private MaterialDrawerCallback drawerCallback = new MaterialDrawerCallback() {
         @Override
-        public boolean onItemClick(int identifier) {
+        public boolean onItemClick(@MaterialDrawerHelper.DrawerItemId int identifier) {
             return handleOnDrawerItemClick(identifier);
         }
 
         @Override
-        public boolean onAccountClick(int identifier) {
+        public boolean onAccountClick(@MaterialDrawerHelper.HeaderItemId int identifier) {
             return handleOnHeaderAccountClick(identifier);
         }
     };

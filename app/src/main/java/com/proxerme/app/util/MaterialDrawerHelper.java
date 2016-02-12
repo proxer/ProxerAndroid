@@ -79,6 +79,7 @@ public class MaterialDrawerHelper {
                         }
 
                         if (callback != null) {
+                            //noinspection WrongConstant
                             return callback.onItemClick(id);
                         }
                     }
@@ -91,6 +92,7 @@ public class MaterialDrawerHelper {
             new AccountHeader.OnAccountHeaderListener() {
                 @Override
                 public boolean onProfileChanged(View view, IProfile profile, boolean current) {
+                    //noinspection WrongConstant
                     return callback != null &&
                             callback.onAccountClick((int) profile.getIdentifier());
                 }
@@ -281,11 +283,11 @@ public class MaterialDrawerHelper {
     }
 
     public static abstract class MaterialDrawerCallback {
-        public boolean onItemClick(int identifier) {
+        public boolean onItemClick(@HeaderItemId int identifier) {
             return false;
         }
 
-        public boolean onAccountClick(int identifier) {
+        public boolean onAccountClick(@HeaderItemId int identifier) {
             return false;
         }
     }
