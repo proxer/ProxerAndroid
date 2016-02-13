@@ -3,7 +3,6 @@ package com.proxerme.app.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -272,22 +271,19 @@ public class DashboardActivity extends MainActivity {
     }
 
     public void setFragment(@NonNull final Fragment fragment) {
-        if (fragment instanceof OnActivityListener) {
-            onActivityListener = (OnActivityListener) fragment;
-        } else {
-            onActivityListener = null;
-        }
-
-        toolbarContainer.setExpanded(true);
-        clearMessage();
-
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.activity_main_content_container, fragment).commit();
+        if (!this.isFinishing()) {
+            if (fragment instanceof OnActivityListener) {
+                onActivityListener = (OnActivityListener) fragment;
+            } else {
+                onActivityListener = null;
             }
-        });
+
+            toolbarContainer.setExpanded(true);
+            clearMessage();
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.activity_main_content_container, fragment).commit();
+        }
     }
 
     private boolean handleOnHeaderAccountClick(@MaterialDrawerHelper.HeaderItemId int id) {
