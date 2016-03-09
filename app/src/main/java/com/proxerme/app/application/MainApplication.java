@@ -10,6 +10,8 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.materialdrawer.util.DrawerImageLoader;
 import com.orhanobut.hawk.Hawk;
 import com.orhanobut.hawk.HawkBuilder;
@@ -44,7 +46,9 @@ public class MainApplication extends Application {
         DrawerImageLoader.init(new DrawerImageLoader.IDrawerImageLoader() {
             @Override
             public void set(ImageView imageView, Uri uri, Drawable placeholder) {
-                Glide.with(imageView.getContext()).load(uri).placeholder(placeholder)
+                Glide.with(imageView.getContext()).load(uri)
+                        .placeholder(new IconicsDrawable(imageView.getContext(),
+                                CommunityMaterial.Icon.cmd_account).colorRes(android.R.color.white))
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE).centerCrop().into(imageView);
             }
 

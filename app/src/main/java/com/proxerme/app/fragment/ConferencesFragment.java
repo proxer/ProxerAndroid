@@ -12,16 +12,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.proxerme.app.R;
-import com.proxerme.app.activity.DashboardActivity;
 import com.proxerme.app.activity.ImageDetailActivity;
 import com.proxerme.app.activity.MainActivity;
 import com.proxerme.app.adapter.ConferenceAdapter;
+import com.proxerme.app.dialog.LoginDialog;
 import com.proxerme.app.event.CancelledEvent;
 import com.proxerme.app.manager.NotificationManager;
 import com.proxerme.app.manager.NotificationRetrievalManager;
 import com.proxerme.app.manager.StorageManager;
 import com.proxerme.app.manager.UserManager;
 import com.proxerme.app.util.MaterialDrawerHelper;
+import com.proxerme.app.util.Utils;
 import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.connection.ProxerTag;
 import com.proxerme.library.connection.UrlHolder;
@@ -206,10 +207,8 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
                     getString(R.string.error_do_login), new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            DashboardActivity activity = getDashboardActivity();
-
-                            if (activity != null && !activity.isDestroyedCompat()) {
-                                activity.showLoginDialog();
+                            if (Utils.areActionsPossible(getDashboardActivity())) {
+                                LoginDialog.show(getDashboardActivity());
                             }
                         }
                     });

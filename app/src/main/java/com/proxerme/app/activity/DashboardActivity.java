@@ -25,6 +25,7 @@ import com.proxerme.app.manager.StorageManager;
 import com.proxerme.app.manager.UserManager;
 import com.proxerme.app.util.IntroductionHelper;
 import com.proxerme.app.util.MaterialDrawerHelper;
+import com.proxerme.app.util.Utils;
 import com.proxerme.library.connection.UrlHolder;
 import com.proxerme.library.event.success.LoginEvent;
 import com.proxerme.library.event.success.LogoutEvent;
@@ -206,14 +207,14 @@ public class DashboardActivity extends MainActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onLogin(LoginEvent event) {
-        if (!isDestroyedCompat()) {
+        if (!Utils.isDestroyedCompat(this)) {
             drawerHelper.refreshHeader();
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onLogout(LogoutEvent event) {
-        if (!isDestroyedCompat()) {
+        if (!Utils.isDestroyedCompat(this)) {
             drawerHelper.refreshHeader();
         }
     }
@@ -271,7 +272,7 @@ public class DashboardActivity extends MainActivity {
     }
 
     public void setFragment(@NonNull final Fragment fragment) {
-        if (!this.isFinishing()) {
+        if (Utils.areActionsPossible(this)) {
             if (fragment instanceof OnActivityListener) {
                 onActivityListener = (OnActivityListener) fragment;
             } else {
@@ -308,12 +309,16 @@ public class DashboardActivity extends MainActivity {
         }
     }
 
-    public void showLoginDialog() {
-        LoginDialog.newInstance().show(getSupportFragmentManager(), "dialog_login");
+    private void showLoginDialog() {
+        if (Utils.areActionsPossible(this)) {
+            LoginDialog.show(this);
+        }
     }
 
-    public void showLogoutDialog() {
-        LogoutDialog.newInstance().show(getSupportFragmentManager(), "dialog_logout");
+    private void showLogoutDialog() {
+        if (Utils.areActionsPossible(this)) {
+            LogoutDialog.show(this);
+        }
     }
 
     public void showMessage(@NonNull String message, @Nullable String action,

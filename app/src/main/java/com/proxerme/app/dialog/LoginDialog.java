@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -71,9 +72,8 @@ public class LoginDialog extends DialogFragment {
 
     private boolean loading;
 
-    @NonNull
-    public static LoginDialog newInstance() {
-        return new LoginDialog();
+    public static void show(@NonNull AppCompatActivity activity) {
+        new LoginDialog().show(activity.getSupportFragmentManager(), "login_dialog");
     }
 
     @NonNull

@@ -1,7 +1,6 @@
 package com.proxerme.app.activity;
 
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.customtabs.CustomTabsIntent;
@@ -62,14 +61,10 @@ public abstract class MainActivity extends AppCompatActivity {
     public void showPage(@NonNull String url) {
         CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder(customTabActivityHelper
                 .getSession()).setToolbarColor(ContextCompat.getColor(this, R.color.primary))
+                .setSecondaryToolbarColor(ContextCompat.getColor(this, R.color.primary_dark))
                 .enableUrlBarHiding().setShowTitle(true).build();
 
         CustomTabActivityHelper.openCustomTab(
                 this, customTabsIntent, Uri.parse(url), new WebviewFallback());
-    }
-
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public boolean isDestroyedCompat() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && isDestroyed();
     }
 }

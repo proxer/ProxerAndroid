@@ -3,7 +3,10 @@ package com.proxerme.app.util;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 
 /**
@@ -14,6 +17,16 @@ import android.util.DisplayMetrics;
 public class Utils {
 
     private static final int MINIMUM_DIAGONAL_INCHES = 7;
+
+    public static boolean areActionsPossible(@Nullable AppCompatActivity activity) {
+        return activity != null && !activity.isFinishing() && !isDestroyedCompat(activity) &&
+                !activity.isChangingConfigurations();
+    }
+
+    public static boolean isDestroyedCompat(@NonNull Activity activity) {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 &&
+                activity.isDestroyed();
+    }
 
     public static boolean isTablet(@NonNull Activity context) {
         DisplayMetrics metrics = new DisplayMetrics();

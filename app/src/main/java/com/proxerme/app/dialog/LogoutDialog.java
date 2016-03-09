@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -45,9 +46,8 @@ public class LogoutDialog extends DialogFragment {
 
     private boolean loading;
 
-    @NonNull
-    public static LogoutDialog newInstance() {
-        return new LogoutDialog();
+    public static void show(@NonNull AppCompatActivity activity) {
+        new LogoutDialog().show(activity.getSupportFragmentManager(), "logout_dialog");
     }
 
     @NonNull
