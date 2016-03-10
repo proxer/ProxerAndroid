@@ -3,13 +3,11 @@ package com.proxerme.app.fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 
 import com.mikepenz.aboutlibraries.Libs;
 import com.mikepenz.aboutlibraries.LibsBuilder;
-import com.mikepenz.aboutlibraries.util.Colors;
 import com.proxerme.app.R;
 import com.proxerme.app.interfaces.OnActivityListener;
 import com.proxerme.app.manager.NotificationRetrievalManager;
@@ -41,10 +39,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements OnActi
                         .withAboutAppName(getString(R.string.app_name))
                         .withLibraries("glide", "jodatimeandroid", "bridge", "hawk", "butterknife",
                                 "materialdialogs", "eventbus")
+                        .withActivityTheme(R.style.AppTheme)
                         .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
-                        .withActivityColor(new Colors(ContextCompat.getColor(getContext(),
-                                R.color.primary), ContextCompat.getColor(getContext(),
-                                R.color.primary_dark)))
                         .withActivityTitle(getContext().getString(R.string.about_libraries_title)).start(getContext());
 
                 return true;
