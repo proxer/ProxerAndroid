@@ -5,13 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.proxerme.app.R;
 import com.proxerme.app.dialog.LoginDialog;
@@ -19,7 +12,6 @@ import com.proxerme.app.dialog.LogoutDialog;
 import com.proxerme.app.fragment.ConferencesFragment;
 import com.proxerme.app.fragment.NewsFragment;
 import com.proxerme.app.fragment.SettingsFragment;
-import com.proxerme.app.interfaces.OnActivityListener;
 import com.proxerme.app.manager.PreferenceManager;
 import com.proxerme.app.manager.StorageManager;
 import com.proxerme.app.manager.UserManager;
@@ -36,9 +28,6 @@ import com.rubengees.introduction.entity.Option;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
 
 import static com.proxerme.app.util.MaterialDrawerHelper.DRAWER_ID_DONATE;
 import static com.proxerme.app.util.MaterialDrawerHelper.DRAWER_ID_MESSAGES;
@@ -61,21 +50,8 @@ public class DashboardActivity extends MainActivity {
 
     private static final String EXTRA_DRAWER_ITEM = "extra_drawer_item";
     private static final String EXTRA_ADDITIONAL_INFO = "extra_additional_info";
-    private static final String STATE_TITLE = "dashboard_title";
-
-    @Bind(R.id.activity_main_content_container)
-    ViewGroup content;
-    @Bind(R.id.toolbar_container)
-    AppBarLayout toolbarContainer;
-    @Bind(R.id.toolbar)
-    Toolbar toolbar;
 
     private MaterialDrawerHelper drawerHelper;
-    private OnActivityListener onActivityListener;
-
-    private String title;
-
-    private Snackbar snackbar;
 
     private MaterialDrawerCallback drawerCallback = new MaterialDrawerCallback() {
         @Override
@@ -104,12 +80,8 @@ public class DashboardActivity extends MainActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dashboard);
 
         drawerHelper = new MaterialDrawerHelper(this, drawerCallback);
-
-        ButterKnife.bind(this);
-        initViews();
         drawerHelper.build(toolbar, savedInstanceState);
 
         displayFirstPage(savedInstanceState);
@@ -168,39 +140,16 @@ public class DashboardActivity extends MainActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putString(STATE_TITLE, title);
         drawerHelper.saveInstanceState(outState);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-
-        if (savedInstanceState != null) {
-            try {
-                onActivityListener = (OnActivityListener) getSupportFragmentManager()
-                        .findFragmentById(R.id.activity_main_content_container);
-            } catch (ClassCastException e) {
-                onActivityListener = null;
-            }
-
-            title = savedInstanceState.getString(STATE_TITLE);
-
-            setTitle(title);
-        }
     }
 
     @Override
     public void onBackPressed() {
         if (drawerHelper.isDrawerOpen()) {
             drawerHelper.handleBackPressed();
-        } else if (onActivityListener == null) {
-            drawerHelper.handleBackPressed();
-        } else {
-            if (!onActivityListener.onBackPressed()) {
-                if (!drawerHelper.handleBackPressed()) {
-                    super.onBackPressed();
-                }
+        } else if (!handleBackPressed()) {
+            if (!drawerHelper.handleBackPressed()) {
+                super.onBackPressed();
             }
         }
     }
@@ -260,33 +209,6 @@ public class DashboardActivity extends MainActivity {
         drawerHelper.setBadge(drawerItemId, text);
     }
 
-    private void initViews() {
-        setSupportActionBar(toolbar);
-    }
-
-    public void setFragment(@NonNull Fragment fragment, @NonNull String title) {
-        this.title = title;
-        setTitle(title);
-
-        setFragment(fragment);
-    }
-
-    public void setFragment(@NonNull final Fragment fragment) {
-        if (Utils.areActionsPossible(this)) {
-            if (fragment instanceof OnActivityListener) {
-                onActivityListener = (OnActivityListener) fragment;
-            } else {
-                onActivityListener = null;
-            }
-
-            toolbarContainer.setExpanded(true);
-            clearMessage();
-
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.activity_main_content_container, fragment).commit();
-        }
-    }
-
     private boolean handleOnHeaderAccountClick(@MaterialDrawerHelper.HeaderItemId int id) {
         switch (id) {
             case HEADER_ID_GUEST:
@@ -318,23 +240,6 @@ public class DashboardActivity extends MainActivity {
     private void showLogoutDialog() {
         if (Utils.areActionsPossible(this)) {
             LogoutDialog.show(this);
-        }
-    }
-
-    public void showMessage(@NonNull String message, @Nullable String action,
-                            @Nullable View.OnClickListener listener) {
-        snackbar = Snackbar.make(content, message, Snackbar.LENGTH_INDEFINITE)
-                .setActionTextColor(ContextCompat.getColorStateList(this, R.color.primary_light))
-                .setAction(action, listener);
-
-        snackbar.show();
-    }
-
-    public void clearMessage() {
-        if (snackbar != null) {
-            snackbar.dismiss();
-
-            snackbar = null;
         }
     }
 

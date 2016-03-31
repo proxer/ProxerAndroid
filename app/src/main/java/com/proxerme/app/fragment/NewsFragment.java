@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.proxerme.app.activity.DashboardActivity;
 import com.proxerme.app.activity.ImageDetailActivity;
 import com.proxerme.app.adapter.NewsAdapter;
 import com.proxerme.app.manager.NewsManager;
@@ -43,7 +44,7 @@ public class NewsFragment extends PagingFragment<News, NewsAdapter, NewsEvent, N
         adapter.setOnNewsInteractionListener(new NewsAdapter.OnNewsInteractionListener() {
             @Override
             public void onNewsClick(@NonNull View v, @NonNull News news) {
-                getDashboardActivity().showPage(UrlHolder.getNewsPageUrl(news.getCategoryId(),
+                getParentActivity().showPage(UrlHolder.getSingleNewsUrlWeb(news.getCategoryId(),
                         news.getThreadId()));
             }
 
@@ -55,8 +56,8 @@ public class NewsFragment extends PagingFragment<News, NewsAdapter, NewsEvent, N
 
             @Override
             public void onNewsExpanded(@NonNull View v, @NonNull News news) {
-                getDashboardActivity().setLikelyUrl(UrlHolder.getNewsPageUrl(news.getCategoryId(),
-                        news.getThreadId()));
+                getParentActivity().setLikelyUrl(UrlHolder
+                        .getSingleNewsUrlWeb(news.getCategoryId(), news.getThreadId()));
             }
         });
     }
@@ -93,6 +94,15 @@ public class NewsFragment extends PagingFragment<News, NewsAdapter, NewsEvent, N
 
         if (getActivity() != null) {
             getDashboardActivity().setBadge(MaterialDrawerHelper.DRAWER_ID_NEWS, null);
+        }
+    }
+
+    protected DashboardActivity getDashboardActivity() {
+        try {
+            return (DashboardActivity) getActivity();
+        } catch (ClassCastException e) {
+            throw new RuntimeException("Don't use this Fragment in another" +
+                    " Activity than DashboardActivity.");
         }
     }
 }

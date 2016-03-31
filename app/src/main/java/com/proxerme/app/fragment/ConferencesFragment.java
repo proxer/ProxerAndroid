@@ -1,7 +1,6 @@
 package com.proxerme.app.fragment;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.proxerme.app.R;
+import com.proxerme.app.activity.DashboardActivity;
 import com.proxerme.app.activity.ImageDetailActivity;
 import com.proxerme.app.activity.MainActivity;
 import com.proxerme.app.adapter.ConferenceAdapter;
@@ -41,12 +41,8 @@ import org.greenrobot.eventbus.ThreadMode;
  *
  * @author Ruben Gees
  */
-public class ConferencesFragment extends PagingFragment<Conference, ConferenceAdapter,
+public class ConferencesFragment extends PollingPagingFragment<Conference, ConferenceAdapter,
         ConferencesEvent, ConferencesErrorEvent> {
-
-    private static final int POLLING_INTERVAL = 5000;
-    @Nullable
-    private Handler handler;
 
     private boolean canLoad;
 
@@ -63,7 +59,8 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View result = super.onCreateView(inflater, container, savedInstanceState);
 
         if (UserManager.getInstance().isLoggedIn()) {
@@ -73,26 +70,9 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
 
             showLoginError();
             stopLoading();
-            stopPolling();
         }
 
         return result;
-    }
-
-    @Override
-    public void onResume() {
-        super.onStart();
-
-        if (UserManager.getInstance().isLoggedIn()) {
-            startPolling();
-        }
-    }
-
-    @Override
-    public void onPause() {
-        stopPolling();
-
-        super.onStop();
     }
 
     @NonNull
@@ -113,7 +93,7 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
             public void onConferenceClick(@NonNull View v, @NonNull Conference conference) {
                 if (getActivity() != null) {
                     ((MainActivity) getActivity())
-                            .showPage(UrlHolder.getConferenceUrl(conference.getId()));
+                            .showPage(UrlHolder.getConferenceUrlWeb(conference.getId()));
                 }
             }
 
@@ -121,7 +101,7 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
             public void onConferenceImageClick(@NonNull View v, @NonNull Conference conference) {
                 if (!TextUtils.isEmpty(conference.getImageId())) {
                     ImageDetailActivity.navigateTo(getActivity(), (ImageView) v,
-                            UrlHolder.getUserImage(conference.getImageId()));
+                            UrlHolder.getUserImageUrl(conference.getImageId()));
                 }
             }
         });
@@ -146,10 +126,6 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
     public void onLoad(@NonNull ConferencesEvent result) {
         super.onLoad(result);
 
-        if (handler == null) {
-            startPolling();
-        }
-
         StorageManager.setNewMessages(0);
         StorageManager.resetMessagesInterval();
 
@@ -161,13 +137,6 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
             getDashboardActivity().setBadge(MaterialDrawerHelper.DRAWER_ID_MESSAGES,
                     null);
         }
-    }
-
-    @Override
-    public void onLoadError(@NonNull ConferencesErrorEvent errorEvent) {
-        super.onLoadError(errorEvent);
-
-        stopPolling();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
@@ -184,7 +153,6 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
         canLoad = false;
 
         cancelRequest();
-        stopPolling();
         clear();
         showLoginError();
     }
@@ -194,7 +162,7 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
         showLoginError();
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDialogCancelled(CancelledEvent event) {
         if (!UserManager.getInstance().isLoggedIn()) {
             showLoginError();
@@ -202,38 +170,25 @@ public class ConferencesFragment extends PagingFragment<Conference, ConferenceAd
     }
 
     private void showLoginError() {
-        if (getDashboardActivity() != null) {
-            getDashboardActivity().showMessage(getString(R.string.error_not_logged_in),
+        if (getParentActivity() != null) {
+            getParentActivity().showMessage(getString(R.string.error_not_logged_in),
                     getString(R.string.error_do_login), new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if (Utils.areActionsPossible(getDashboardActivity())) {
-                                LoginDialog.show(getDashboardActivity());
+                            if (Utils.areActionsPossible(getParentActivity())) {
+                                LoginDialog.show(getParentActivity());
                             }
                         }
                     });
         }
     }
 
-    private void startPolling() {
-        handler = new Handler();
-
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                doLoad(1, true, false);
-
-                if (handler != null) {
-                    handler.postDelayed(this, POLLING_INTERVAL);
-                }
-            }
-        }, POLLING_INTERVAL);
-    }
-
-    private void stopPolling() {
-        if (handler != null) {
-            handler.removeCallbacksAndMessages(null);
-            handler = null;
+    protected DashboardActivity getDashboardActivity() {
+        try {
+            return (DashboardActivity) getActivity();
+        } catch (ClassCastException e) {
+            throw new RuntimeException("Don't use this Fragment in another" +
+                    " Activity than DashboardActivity.");
         }
     }
 }

@@ -114,7 +114,7 @@ public class ConferenceAdapter extends PagingAdapter<Conference, ConferenceAdapt
 
             holder.image.setImageDrawable(icon);
         } else {
-            Glide.with(holder.image.getContext()).load(UrlHolder.getUserImage(item.getImageId()))
+            Glide.with(holder.image.getContext()).load(UrlHolder.getUserImageUrl(item.getImageId()))
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(holder.image);
         }
     }

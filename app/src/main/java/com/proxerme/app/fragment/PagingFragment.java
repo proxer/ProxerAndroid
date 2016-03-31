@@ -38,7 +38,7 @@ import butterknife.ButterKnife;
  * @author Ruben Gees
  */
 public abstract class PagingFragment<T extends IdItem & Parcelable, A extends PagingAdapter<T, ?>,
-        E extends IListEvent<T>, EE extends ErrorEvent> extends DashboardFragment {
+        E extends IListEvent<T>, EE extends ErrorEvent> extends MainFragment {
 
     private static final String STATE_LOADING = "paging_loading";
     private static final String STATE_METHOD_BEFORE_ERROR = "paging_method_before_error";
@@ -181,8 +181,8 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
                 swipeRefreshLayout.setRefreshing(true);
             }
 
-            if (getDashboardActivity() != null) {
-                getDashboardActivity().clearMessage();
+            if (getParentActivity() != null) {
+                getParentActivity().clearMessage();
             }
 
             load(page, insert);
@@ -249,8 +249,8 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
     }
 
     private void showError() {
-        if (getDashboardActivity() != null) {
-            getDashboardActivity().showMessage(currentErrorMessage,
+        if (getParentActivity() != null) {
+            getParentActivity().showMessage(currentErrorMessage,
                     getContext().getString(R.string.error_retry), new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

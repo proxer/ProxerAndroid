@@ -1,9 +1,6 @@
 package com.proxerme.app.fragment;
 
-import android.support.v4.app.Fragment;
-
 import com.proxerme.app.activity.DashboardActivity;
-import com.proxerme.app.interfaces.OnActivityListener;
 
 /**
  * An abstract Fragment, all Fragments which are shown in the {@link DashboardActivity} should
@@ -11,20 +8,16 @@ import com.proxerme.app.interfaces.OnActivityListener;
  *
  * @author Ruben Gees
  */
-public abstract class DashboardFragment extends Fragment implements OnActivityListener {
+public abstract class DashboardFragment extends MainFragment {
 
-    protected DashboardActivity getDashboardActivity() throws RuntimeException {
+    @Override
+    protected DashboardActivity getParentActivity() throws RuntimeException {
         try {
             return (DashboardActivity) getActivity();
         } catch (ClassCastException e) {
             throw new RuntimeException("Don't use this Fragment in another" +
                     " Activity than DashboardActivity.");
         }
-    }
-
-    @Override
-    public boolean onBackPressed() {
-        return false;
     }
 
 }

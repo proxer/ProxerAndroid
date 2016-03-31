@@ -142,7 +142,7 @@ public class MaterialDrawerHelper {
                     .withIdentifier(HEADER_ID_USER);
 
             try {
-                profile.withIcon(UrlHolder.getUserImage(user.getImageId()));
+                profile.withIcon(UrlHolder.getUserImageUrl(user.getImageId()));
             } catch (RuntimeException ignored) {
 
             }

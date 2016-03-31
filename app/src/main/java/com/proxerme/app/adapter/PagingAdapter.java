@@ -54,8 +54,8 @@ public abstract class PagingAdapter<T extends IdItem & Parcelable,
     }
 
     /**
-     * Inserts a List of items into the Adapter, removing the existing ones. The items are inserted
-     * at the first position.
+     * Inserts a List of items into the Adapter, removing the existing ones from the passed list.
+     * The items are inserted at the first position.
      *
      * @param list The List of items.
      * @return The offset to the existing items.
