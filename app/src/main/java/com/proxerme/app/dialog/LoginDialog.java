@@ -164,7 +164,7 @@ public class LoginDialog extends DialogFragment {
         dismiss();
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)
+    @Subscribe(sticky = true, priority = 1)
     public void onLoginError(LoginErrorEvent event) {
         EventBus.getDefault().cancelEventDelivery(event);
         EventBus.getDefault().removeStickyEvent(event);

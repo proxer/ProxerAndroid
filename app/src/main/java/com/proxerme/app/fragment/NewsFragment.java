@@ -97,6 +97,14 @@ public class NewsFragment extends PagingFragment<News, NewsAdapter, NewsEvent, N
         }
     }
 
+    @Override
+    public void onLoadError(NewsErrorEvent errorResult) {
+        super.onLoadError(errorResult);
+
+        //We need to override every EventBus handler which uses generics with concrete classes as
+        //parameters.
+    }
+
     protected DashboardActivity getDashboardActivity() {
         try {
             return (DashboardActivity) getActivity();

@@ -139,6 +139,14 @@ public class ConferencesFragment extends PollingPagingFragment<Conference, Confe
         }
     }
 
+    @Override
+    public void onLoadError(@NonNull ConferencesErrorEvent errorEvent) {
+        super.onLoadError(errorEvent);
+
+        //We need to override every EventBus handler which uses generics with concrete classes as
+        //parameters.
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onLogin(LoginEvent event) {
         if (isEmpty()) {
