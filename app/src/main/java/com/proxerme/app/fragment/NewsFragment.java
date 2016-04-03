@@ -13,6 +13,7 @@ import com.proxerme.app.manager.NewsManager;
 import com.proxerme.app.manager.NotificationManager;
 import com.proxerme.app.manager.NotificationRetrievalManager;
 import com.proxerme.app.util.MaterialDrawerHelper;
+import com.proxerme.app.util.Utils;
 import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.connection.ProxerTag;
 import com.proxerme.library.connection.UrlHolder;
@@ -44,14 +45,18 @@ public class NewsFragment extends PagingFragment<News, NewsAdapter, NewsEvent, N
         adapter.setOnNewsInteractionListener(new NewsAdapter.OnNewsInteractionListener() {
             @Override
             public void onNewsClick(@NonNull View v, @NonNull News news) {
-                getParentActivity().showPage(UrlHolder.getSingleNewsUrlWeb(news.getCategoryId(),
-                        news.getThreadId()));
+                if (Utils.areActionsPossible(getActivity())) {
+                    getParentActivity().showPage(UrlHolder.getSingleNewsUrlWeb(news.getCategoryId(),
+                            news.getThreadId()));
+                }
             }
 
             @Override
             public void onNewsImageClick(@NonNull View v, @NonNull News news) {
-                ImageDetailActivity.navigateTo(getActivity(), (ImageView) v,
-                        UrlHolder.getNewsImageUrl(news.getId(), news.getImageId()));
+                if (Utils.areActionsPossible(getActivity())) {
+                    ImageDetailActivity.navigateTo(getActivity(), (ImageView) v,
+                            UrlHolder.getNewsImageUrl(news.getId(), news.getImageId()));
+                }
             }
 
             @Override

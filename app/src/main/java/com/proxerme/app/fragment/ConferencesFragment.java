@@ -5,22 +5,16 @@ import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.proxerme.app.R;
 import com.proxerme.app.activity.DashboardActivity;
 import com.proxerme.app.activity.ImageDetailActivity;
-import com.proxerme.app.activity.MainActivity;
+import com.proxerme.app.activity.MessageActivity;
 import com.proxerme.app.adapter.ConferenceAdapter;
-import com.proxerme.app.dialog.LoginDialog;
-import com.proxerme.app.event.CancelledEvent;
 import com.proxerme.app.manager.NotificationManager;
 import com.proxerme.app.manager.NotificationRetrievalManager;
 import com.proxerme.app.manager.StorageManager;
-import com.proxerme.app.manager.UserManager;
 import com.proxerme.app.util.MaterialDrawerHelper;
 import com.proxerme.app.util.Utils;
 import com.proxerme.library.connection.ProxerConnection;
@@ -28,13 +22,7 @@ import com.proxerme.library.connection.ProxerTag;
 import com.proxerme.library.connection.UrlHolder;
 import com.proxerme.library.entity.Conference;
 import com.proxerme.library.event.error.ConferencesErrorEvent;
-import com.proxerme.library.event.error.LoginErrorEvent;
 import com.proxerme.library.event.success.ConferencesEvent;
-import com.proxerme.library.event.success.LoginEvent;
-import com.proxerme.library.event.success.LogoutEvent;
-
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * A Fragment, showing a List of Conferences to the user.
@@ -43,8 +31,6 @@ import org.greenrobot.eventbus.ThreadMode;
  */
 public class ConferencesFragment extends PollingPagingFragment<Conference, ConferenceAdapter,
         ConferencesEvent, ConferencesErrorEvent> {
-
-    private boolean canLoad;
 
     @NonNull
     public static ConferencesFragment newInstance() {
@@ -56,23 +42,6 @@ public class ConferencesFragment extends PollingPagingFragment<Conference, Confe
         super.onCreate(savedInstanceState);
 
         NotificationManager.cancel(getContext(), NotificationManager.MESSAGES_NOTIFICATION);
-    }
-
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        View result = super.onCreateView(inflater, container, savedInstanceState);
-
-        if (UserManager.getInstance().isLoggedIn()) {
-            canLoad = true;
-        } else {
-            canLoad = false;
-
-            showLoginError();
-            stopLoading();
-        }
-
-        return result;
     }
 
     @NonNull
@@ -91,15 +60,15 @@ public class ConferencesFragment extends PollingPagingFragment<Conference, Confe
                 .OnConferenceInteractionListener() {
             @Override
             public void onConferenceClick(@NonNull View v, @NonNull Conference conference) {
-                if (getActivity() != null) {
-                    ((MainActivity) getActivity())
-                            .showPage(UrlHolder.getConferenceUrlWeb(conference.getId()));
+                if (Utils.areActionsPossible(getActivity())) {
+                    MessageActivity.navigateTo(getActivity(), conference);
                 }
             }
 
             @Override
             public void onConferenceImageClick(@NonNull View v, @NonNull Conference conference) {
-                if (!TextUtils.isEmpty(conference.getImageId())) {
+                if (!TextUtils.isEmpty(conference.getImageId())
+                        && Utils.areActionsPossible(getActivity())) {
                     ImageDetailActivity.navigateTo(getActivity(), (ImageView) v,
                             UrlHolder.getUserImageUrl(conference.getImageId()));
                 }
@@ -118,11 +87,6 @@ public class ConferencesFragment extends PollingPagingFragment<Conference, Confe
     }
 
     @Override
-    protected boolean canLoad() {
-        return canLoad;
-    }
-
-    @Override
     public void onLoad(@NonNull ConferencesEvent result) {
         super.onLoad(result);
 
@@ -130,7 +94,7 @@ public class ConferencesFragment extends PollingPagingFragment<Conference, Confe
         StorageManager.resetMessagesInterval();
 
         if (getContext() != null) {
-            NotificationRetrievalManager.retrieveNewsLater(getContext());
+            NotificationRetrievalManager.retrieveMessagesLater(getContext());
         }
 
         if (getActivity() != null) {
@@ -145,50 +109,6 @@ public class ConferencesFragment extends PollingPagingFragment<Conference, Confe
 
         //We need to override every EventBus handler which uses generics with concrete classes as
         //parameters.
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    public void onLogin(LoginEvent event) {
-        if (isEmpty()) {
-            canLoad = true;
-
-            doLoad(1, true, true);
-        }
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    public void onLogout(LogoutEvent event) {
-        canLoad = false;
-
-        cancelRequest();
-        clear();
-        showLoginError();
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    public void onLoginError(LoginErrorEvent event) {
-        showLoginError();
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onDialogCancelled(CancelledEvent event) {
-        if (!UserManager.getInstance().isLoggedIn()) {
-            showLoginError();
-        }
-    }
-
-    private void showLoginError() {
-        if (getParentActivity() != null) {
-            getParentActivity().showMessage(getString(R.string.error_not_logged_in),
-                    getString(R.string.error_do_login), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (Utils.areActionsPossible(getParentActivity())) {
-                                LoginDialog.show(getParentActivity());
-                            }
-                        }
-                    });
-        }
     }
 
     protected DashboardActivity getDashboardActivity() {

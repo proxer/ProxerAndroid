@@ -56,6 +56,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.DashboardActivity" />
         </activity>
+        <activity
+            android:name=".activity.MessageActivity"
+            android:parentActivityName=".activity.DashboardActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.DashboardActivity" />
+        </activity>
 
         <service android:name=".customtabs.KeepAliveService" />
         <service

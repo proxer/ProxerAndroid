@@ -185,6 +185,13 @@ public class LoginDialog extends DialogFragment {
     }
 
     private void initViews() {
+        LoginUser user = UserManager.getInstance().getUser();
+
+        if (user != null) {
+            usernameInput.setText(user.getUsername());
+            passwordInput.setText(user.getPassword());
+        }
+
         passwordInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {

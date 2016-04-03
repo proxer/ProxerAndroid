@@ -46,19 +46,15 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
     private static final String STATE_LAST_LOADED_PAGE = "paging_last_loaded_page";
     private static final String STATE_ERROR_MESSAGE = "paging_error_message";
     private static final String STATE_END_REACHED = "paging_end_reached";
-
+    protected A adapter;
     View root;
-
     @Bind(R.id.fragment_paging_list_container)
     SwipeRefreshLayout swipeRefreshLayout;
     @Bind(R.id.fragment_paging_list)
     RecyclerView list;
-
-    private A adapter;
-
     private boolean loading = false;
-    private int currentPage = 1;
-    private int lastLoadedPage = 1;
+    private int currentPage = getFirstPage();
+    private int lastLoadedPage = getFirstPage();
     private String currentErrorMessage;
     private boolean lastMethodInsert = false;
     private boolean endReached = false;
@@ -66,12 +62,14 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        root = inflater.inflate(R.layout.fragment_paging, container, false);
+        root = inflateLayout(inflater, container, savedInstanceState);
         ButterKnife.bind(this, root);
 
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
                 getActivity() == null ? 1 : Utils.calculateSpanAmount(getActivity()),
                 StaggeredGridLayoutManager.VERTICAL);
+
+        configLayoutManager(layoutManager);
 
         list.setHasFixedSize(true);
         list.setLayoutManager(layoutManager);
@@ -89,7 +87,7 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                doLoad(1, true, true);
+                doLoad(getFirstPage(), true, true);
             }
         });
 
@@ -169,7 +167,7 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
         outState.putBoolean(STATE_END_REACHED, endReached);
     }
 
-    protected void doLoad(@IntRange(from = 1) final int page, final boolean insert,
+    protected void doLoad(@IntRange(from = 0) final int page, final boolean insert,
                           final boolean showProgress) {
         if (!isLoading() && canLoad()) {
             lastLoadedPage = page;
@@ -233,7 +231,7 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
             int offset = adapter.insertAtStart(result);
 
             if (offset == PagingHelper.OFFSET_TOO_LARGE || offset > 0) {
-                scrollToTop();
+                scrollToStart();
             }
         } else {
             adapter.append(result);
@@ -284,11 +282,24 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
 
     protected abstract void cancelRequest();
 
+    protected View inflateLayout(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_paging, container, false);
+    }
+
     protected void configAdapter(@NonNull A adapter) {
 
     }
 
-    protected void scrollToTop() {
+    protected void configLayoutManager(@NonNull StaggeredGridLayoutManager layoutManager) {
+
+    }
+
+    protected int getFirstPage() {
+        return 1;
+    }
+
+    protected void scrollToStart() {
         if (list != null) {
             list.smoothScrollToPosition(0);
         }

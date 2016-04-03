@@ -99,7 +99,7 @@ public class UserManager {
         ProxerConnection.logout().execute();
     }
 
-    @Subscribe(sticky = true)
+    @Subscribe(sticky = true, priority = 1)
     public void onLogin(LoginEvent event) {
         loggedIn = true;
         changeUser(event.getItem());
@@ -107,7 +107,7 @@ public class UserManager {
         EventBus.getDefault().removeStickyEvent(event);
     }
 
-    @Subscribe(sticky = true)
+    @Subscribe(sticky = true, priority = 1)
     public void onLogout(LogoutEvent event) {
         removeUser();
         loggedIn = false;

@@ -19,6 +19,7 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.proxerme.app.R;
+import com.proxerme.app.util.Utils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -41,16 +42,18 @@ public class ImageDetailActivity extends AppCompatActivity {
 
     public static void navigateTo(@NonNull Activity context, @NonNull ImageView image,
                                   @NonNull String url) {
-        Intent intent = new Intent(context, ImageDetailActivity.class);
+        if (Utils.areActionsPossible(context)) {
+            Intent intent = new Intent(context, ImageDetailActivity.class);
 
-        intent.putExtra(EXTRA_URL, url);
+            intent.putExtra(EXTRA_URL, url);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            ActivityOptionsCompat options = ActivityOptionsCompat
-                    .makeSceneTransitionAnimation(context, image, image.getTransitionName());
-            context.startActivity(intent, options.toBundle());
-        } else {
-            context.startActivity(intent);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                ActivityOptionsCompat options = ActivityOptionsCompat
+                        .makeSceneTransitionAnimation(context, image, image.getTransitionName());
+                context.startActivity(intent, options.toBundle());
+            } else {
+                context.startActivity(intent);
+            }
         }
     }
 
