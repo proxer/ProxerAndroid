@@ -24,8 +24,6 @@ import com.proxerme.library.event.error.ErrorEvent;
 import com.proxerme.library.interfaces.IdItem;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -190,8 +188,7 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    public void onLoad(E result) {
+    protected void handleResult(E result) {
         EventBus.getDefault().removeStickyEvent(result);
 
         if ((result.getItem()).isEmpty()) {
@@ -208,8 +205,7 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
         handleResult(result.getItem(), lastMethodInsert);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    public void onLoadError(EE errorResult) {
+    protected void handleError(EE errorResult) {
         EventBus.getDefault().removeStickyEvent(errorResult);
 
         //noinspection ThrowableResultOfMethodCallIgnored

@@ -18,9 +18,7 @@ import com.proxerme.app.R;
 import com.proxerme.app.customtabs.CustomTabActivityHelper;
 import com.proxerme.app.customtabs.WebviewFallback;
 import com.proxerme.app.interfaces.OnActivityListener;
-import com.proxerme.app.manager.UserManager;
 import com.proxerme.app.util.Utils;
-import com.proxerme.library.connection.ProxerConnection;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -71,16 +69,6 @@ public abstract class MainActivity extends AppCompatActivity {
         super.onStop();
 
         customTabActivityHelper.unbindCustomTabsService(this);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        if (isFinishing()) {
-            ProxerConnection.cleanup();
-            UserManager.getInstance().destroy();
-        }
     }
 
     @Override

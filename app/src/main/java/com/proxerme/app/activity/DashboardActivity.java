@@ -18,6 +18,7 @@ import com.proxerme.app.manager.UserManager;
 import com.proxerme.app.util.IntroductionHelper;
 import com.proxerme.app.util.MaterialDrawerHelper;
 import com.proxerme.app.util.Utils;
+import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.connection.UrlHolder;
 import com.proxerme.library.event.success.LoginEvent;
 import com.proxerme.library.event.success.LogoutEvent;
@@ -100,6 +101,16 @@ public class DashboardActivity extends MainActivity {
         EventBus.getDefault().unregister(this);
 
         super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (isFinishing()) {
+            ProxerConnection.cleanup();
+            UserManager.getInstance().destroy();
+        }
     }
 
     @Override

@@ -21,6 +21,9 @@ import com.proxerme.library.entity.News;
 import com.proxerme.library.event.error.NewsErrorEvent;
 import com.proxerme.library.event.success.NewsEvent;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 /**
  * A Fragment, retrieving and displaying News.
  *
@@ -86,9 +89,19 @@ public class NewsFragment extends PagingFragment<News, NewsAdapter, NewsEvent, N
         ProxerConnection.cancel(ProxerTag.NEWS);
     }
 
-    @Override
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onLoad(NewsEvent result) {
-        super.onLoad(result);
+        handleResult(result);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onLoadError(NewsErrorEvent errorResult) {
+        handleError(errorResult);
+    }
+
+    @Override
+    protected void handleResult(NewsEvent result) {
+        super.handleResult(result);
 
         NewsManager manager = NewsManager.getInstance();
 
@@ -100,14 +113,6 @@ public class NewsFragment extends PagingFragment<News, NewsAdapter, NewsEvent, N
         if (getActivity() != null) {
             getDashboardActivity().setBadge(MaterialDrawerHelper.DRAWER_ID_NEWS, null);
         }
-    }
-
-    @Override
-    public void onLoadError(NewsErrorEvent errorResult) {
-        super.onLoadError(errorResult);
-
-        //We need to override every EventBus handler which uses generics with concrete classes as
-        //parameters.
     }
 
     protected DashboardActivity getDashboardActivity() {

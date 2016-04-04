@@ -2,7 +2,6 @@ package com.proxerme.app.fragment;
 
 import android.os.Handler;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.proxerme.app.adapter.PagingAdapter;
@@ -41,8 +40,8 @@ public abstract class PollingPagingFragment<T extends IdItem & Parcelable,
     }
 
     @Override
-    public void onLoad(@NonNull E result) {
-        super.onLoad(result);
+    protected void handleResult(E result) {
+        super.handleResult(result);
 
         if (handler == null) {
             startPolling();
@@ -50,8 +49,8 @@ public abstract class PollingPagingFragment<T extends IdItem & Parcelable,
     }
 
     @Override
-    public void onLoadError(@NonNull EE errorEvent) {
-        super.onLoadError(errorEvent);
+    protected void handleError(EE errorResult) {
+        super.handleError(errorResult);
 
         stopPolling();
     }

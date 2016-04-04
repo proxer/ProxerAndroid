@@ -24,6 +24,9 @@ import com.proxerme.library.entity.Conference;
 import com.proxerme.library.event.error.ConferencesErrorEvent;
 import com.proxerme.library.event.success.ConferencesEvent;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 /**
  * A Fragment, showing a List of Conferences to the user.
  *
@@ -86,9 +89,19 @@ public class ConferencesFragment extends PollingPagingFragment<Conference, Confe
         ProxerConnection.cancel(ProxerTag.CONFERENCES);
     }
 
-    @Override
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onLoad(@NonNull ConferencesEvent result) {
-        super.onLoad(result);
+        handleResult(result);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onLoadError(@NonNull ConferencesErrorEvent errorEvent) {
+        handleError(errorEvent);
+    }
+
+    @Override
+    protected void handleResult(ConferencesEvent result) {
+        super.handleResult(result);
 
         StorageManager.setNewMessages(0);
         StorageManager.resetMessagesInterval();
@@ -101,14 +114,6 @@ public class ConferencesFragment extends PollingPagingFragment<Conference, Confe
             getDashboardActivity().setBadge(MaterialDrawerHelper.DRAWER_ID_MESSAGES,
                     null);
         }
-    }
-
-    @Override
-    public void onLoadError(@NonNull ConferencesErrorEvent errorEvent) {
-        super.onLoadError(errorEvent);
-
-        //We need to override every EventBus handler which uses generics with concrete classes as
-        //parameters.
     }
 
     protected DashboardActivity getDashboardActivity() {

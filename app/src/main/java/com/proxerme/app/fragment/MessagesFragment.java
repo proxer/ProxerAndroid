@@ -23,6 +23,9 @@ import com.proxerme.library.event.success.LoginEvent;
 import com.proxerme.library.event.success.LogoutEvent;
 import com.proxerme.library.event.success.MessagesEvent;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import butterknife.Bind;
 import butterknife.OnClick;
 
@@ -75,9 +78,19 @@ public class MessagesFragment extends LoginPollingPagingFragment<Message, Messag
         ProxerConnection.loadMessages(conferenceId, page).execute();
     }
 
-    @Override
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onLoad(@NonNull MessagesEvent result) {
-        super.onLoad(result);
+        handleResult(result);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onLoadError(@NonNull MessagesErrorEvent errorEvent) {
+        handleError(errorEvent);
+    }
+
+    @Override
+    protected void handleResult(MessagesEvent result) {
+        super.handleResult(result);
 
         StorageManager.setNewMessages(0);
         StorageManager.resetMessagesInterval();
@@ -85,14 +98,6 @@ public class MessagesFragment extends LoginPollingPagingFragment<Message, Messag
         if (getContext() != null) {
             NotificationRetrievalManager.retrieveMessagesLater(getContext());
         }
-    }
-
-    @Override
-    public void onLoadError(@NonNull MessagesErrorEvent errorEvent) {
-        super.onLoadError(errorEvent);
-
-        //We need to override every EventBus handler which uses generics with concrete classes as
-        //parameters.
     }
 
     @Override
