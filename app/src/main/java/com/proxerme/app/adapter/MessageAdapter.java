@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.proxerme.app.R;
 import com.proxerme.library.connection.UrlHolder;
 import com.proxerme.library.entity.LoginUser;
@@ -18,7 +19,9 @@ import com.proxerme.library.util.ProxerInfo;
 
 import java.util.Collection;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -37,6 +40,8 @@ public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.Messag
 
     @Nullable
     private LoginUser user;
+
+    private OnMessageInteractionListener onMessageInteractionListener;
 
     public MessageAdapter(@Nullable LoginUser user) {
         this.user = user;
@@ -103,6 +108,7 @@ public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.Messag
 
             Glide.with(castedHolder.image.getContext())
                     .load(UrlHolder.getUserImageUrl(getItemAt(position).getImageId()))
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(castedHolder.image);
         }
 
@@ -165,49 +171,74 @@ public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.Messag
         this.user = user;
     }
 
+    public void setOnMessageInteractionListener(@Nullable OnMessageInteractionListener
+                                                        onMessageInteractionListener) {
+        this.onMessageInteractionListener = onMessageInteractionListener;
+    }
+
+    public static abstract class OnMessageInteractionListener {
+        public void onMessageImageClick(@NonNull View v, @NonNull Message message) {
+
+        }
+    }
+
     public class MessageViewHolder extends RecyclerView.ViewHolder {
 
+        @Bind(R.id.item_message_message)
         TextView message;
 
         public MessageViewHolder(View itemView) {
             super(itemView);
 
-            message = ButterKnife.findById(itemView, R.id.item_message_message);
+            ButterKnife.bind(this, itemView);
         }
     }
 
     public class MessageTitleViewHolder extends MessageViewHolder {
 
+        @Bind(R.id.item_message_title)
         TextView title;
 
         public MessageTitleViewHolder(View itemView) {
             super(itemView);
-
-            title = ButterKnife.findById(itemView, R.id.item_message_title);
         }
     }
 
     public class MessageImageTitleViewHolder extends MessageViewHolder {
 
+        @Bind(R.id.item_message_title)
         TextView title;
+        @Bind(R.id.item_message_image)
         CircleImageView image;
 
         public MessageImageTitleViewHolder(View itemView) {
             super(itemView);
+        }
 
-            title = ButterKnife.findById(itemView, R.id.item_message_title);
-            image = ButterKnife.findById(itemView, R.id.item_message_image);
+        @OnClick(R.id.item_message_image)
+        public void onImageClick(View v) {
+            if (onMessageInteractionListener != null) {
+                onMessageInteractionListener.onMessageImageClick(v,
+                        getItemAt(getAdapterPosition()));
+            }
         }
     }
 
     public class MessageImageViewHolder extends MessageViewHolder {
 
+        @Bind(R.id.item_message_image)
         CircleImageView image;
 
         public MessageImageViewHolder(View itemView) {
             super(itemView);
+        }
 
-            image = ButterKnife.findById(itemView, R.id.item_message_image);
+        @OnClick(R.id.item_message_image)
+        public void onImageClick(View v) {
+            if (onMessageInteractionListener != null) {
+                onMessageInteractionListener.onMessageImageClick(v,
+                        getItemAt(getAdapterPosition()));
+            }
         }
     }
 }

@@ -41,20 +41,11 @@
                     android:scheme="http" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".customtabs.WebviewActivity"
-            android:parentActivityName=".activity.DashboardActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.DashboardActivity" />
+        <activity android:name=".customtabs.WebviewActivity">
         </activity>
         <activity
             android:name=".activity.ImageDetailActivity"
-            android:parentActivityName=".activity.DashboardActivity"
             android:theme="@style/Theme.Transparent">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.DashboardActivity" />
         </activity>
         <activity
             android:name=".activity.MessageActivity"

@@ -44,16 +44,22 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
     private static final String STATE_LAST_LOADED_PAGE = "paging_last_loaded_page";
     private static final String STATE_ERROR_MESSAGE = "paging_error_message";
     private static final String STATE_END_REACHED = "paging_end_reached";
+
     protected A adapter;
+
     View root;
     @Bind(R.id.fragment_paging_list_container)
     SwipeRefreshLayout swipeRefreshLayout;
     @Bind(R.id.fragment_paging_list)
     RecyclerView list;
+
     private boolean loading = false;
+
     private int currentPage = getFirstPage();
     private int lastLoadedPage = getFirstPage();
+
     private String currentErrorMessage;
+
     private boolean lastMethodInsert = false;
     private boolean endReached = false;
 

@@ -39,12 +39,26 @@ public abstract class LoginPollingPagingFragment<T extends IdItem & Parcelable,
         canLoad = UserManager.getInstance().isLoggedIn();
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        if (!canLoad) {
+            showLoginError();
+            stopLoading();
+        }
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onLogin(LoginEvent event) {
-        if (isEmpty()) {
+        if (!canLoad) {
             canLoad = true;
 
             doLoad(getFirstPage(), true, true);
+
+            if (getParentActivity() != null) {
+                getParentActivity().clearMessage();
+            }
         }
     }
 

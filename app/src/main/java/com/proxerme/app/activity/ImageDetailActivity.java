@@ -19,7 +19,6 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.proxerme.app.R;
-import com.proxerme.app.util.Utils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -42,7 +41,6 @@ public class ImageDetailActivity extends AppCompatActivity {
 
     public static void navigateTo(@NonNull Activity context, @NonNull ImageView image,
                                   @NonNull String url) {
-        if (Utils.areActionsPossible(context)) {
             Intent intent = new Intent(context, ImageDetailActivity.class);
 
             intent.putExtra(EXTRA_URL, url);
@@ -54,13 +52,12 @@ public class ImageDetailActivity extends AppCompatActivity {
             } else {
                 context.startActivity(intent);
             }
-        }
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_news_image_detail);
+        setContentView(R.layout.activity_image_detail);
 
         ButterKnife.bind(this);
         styleRecents();
@@ -70,22 +67,22 @@ public class ImageDetailActivity extends AppCompatActivity {
         supportPostponeEnterTransition();
         Glide.with(this).load(url).diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .listener(new RequestListener<String, GlideDrawable>() {
-            @Override
-            public boolean onException(Exception e, String model,
-                                       Target<GlideDrawable> target,
-                                       boolean isFirstResource) {
-                return false;
-            }
+                    @Override
+                    public boolean onException(Exception e, String model,
+                                               Target<GlideDrawable> target,
+                                               boolean isFirstResource) {
+                        return false;
+                    }
 
-            @Override
-            public boolean onResourceReady(GlideDrawable resource, String model,
-                                           Target<GlideDrawable> target,
-                                           boolean isFromMemoryCache,
-                                           boolean isFirstResource) {
-                supportStartPostponedEnterTransition();
-                return false;
-            }
-        })
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, String model,
+                                                   Target<GlideDrawable> target,
+                                                   boolean isFromMemoryCache,
+                                                   boolean isFirstResource) {
+                        supportStartPostponedEnterTransition();
+                        return false;
+                    }
+                })
                 .into(image);
     }
 

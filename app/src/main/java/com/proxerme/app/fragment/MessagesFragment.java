@@ -6,17 +6,22 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.proxerme.app.R;
+import com.proxerme.app.activity.ImageDetailActivity;
 import com.proxerme.app.adapter.MessageAdapter;
 import com.proxerme.app.manager.NotificationRetrievalManager;
 import com.proxerme.app.manager.StorageManager;
 import com.proxerme.app.manager.UserManager;
+import com.proxerme.app.util.Utils;
 import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.connection.ProxerTag;
+import com.proxerme.library.connection.UrlHolder;
 import com.proxerme.library.entity.Message;
 import com.proxerme.library.event.error.MessagesErrorEvent;
 import com.proxerme.library.event.success.LoginEvent;
@@ -117,6 +122,22 @@ public class MessagesFragment extends LoginPollingPagingFragment<Message, Messag
     @Override
     protected void cancelRequest() {
         ProxerConnection.cancel(ProxerTag.MESSAGES);
+    }
+
+    @Override
+    protected void configAdapter(@NonNull MessageAdapter adapter) {
+        super.configAdapter(adapter);
+
+        adapter.setOnMessageInteractionListener(new MessageAdapter.OnMessageInteractionListener() {
+            @Override
+            public void onMessageImageClick(@NonNull View v, @NonNull Message message) {
+                if (!TextUtils.isEmpty(message.getImageId())
+                        && Utils.areActionsPossible(getActivity())) {
+                    ImageDetailActivity.navigateTo(getActivity(), (ImageView) v,
+                            UrlHolder.getUserImageUrl(message.getImageId()));
+                }
+            }
+        });
     }
 
     @Override

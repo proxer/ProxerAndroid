@@ -154,14 +154,15 @@ public class ConferenceAdapter extends PagingAdapter<Conference, ConferenceAdapt
         void onImageClick(View v) {
             if (onConferenceInteractionListener != null) {
                 onConferenceInteractionListener.onConferenceImageClick(v,
-                        getItemAt(getLayoutPosition()));
+                        getItemAt(getAdapterPosition()));
             }
         }
 
         @OnClick(R.id.item_conference_content_container)
         void onContentClick(View v) {
             if (onConferenceInteractionListener != null) {
-                onConferenceInteractionListener.onConferenceClick(v, getItemAt(getLayoutPosition()));
+                onConferenceInteractionListener.onConferenceClick(v,
+                        getItemAt(getAdapterPosition()));
             }
         }
     }

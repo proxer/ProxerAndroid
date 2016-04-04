@@ -158,20 +158,20 @@ public class NewsAdapter extends PagingAdapter<News, NewsAdapter.ViewHolder> {
         @OnClick(R.id.item_news_content_container)
         void onContentClick(View view) {
             if (onNewsInteractionListener != null) {
-                onNewsInteractionListener.onNewsClick(view, getItemAt(getLayoutPosition()));
+                onNewsInteractionListener.onNewsClick(view, getItemAt(getAdapterPosition()));
             }
         }
 
         @OnClick(R.id.item_news_image)
         void onImageClick(View view) {
             if (onNewsInteractionListener != null) {
-                onNewsInteractionListener.onNewsImageClick(view, getItemAt(getLayoutPosition()));
+                onNewsInteractionListener.onNewsImageClick(view, getItemAt(getAdapterPosition()));
             }
         }
 
         @OnClick(R.id.item_news_expand_description)
         void onExpandClick(View view) {
-            News news = getItemAt(getLayoutPosition());
+            News news = getItemAt(getAdapterPosition());
             String id = news.getId();
             boolean isExpanded = extensionMap.containsKey(id);
 

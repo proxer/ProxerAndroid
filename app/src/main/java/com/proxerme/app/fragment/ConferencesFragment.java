@@ -32,7 +32,7 @@ import org.greenrobot.eventbus.ThreadMode;
  *
  * @author Ruben Gees
  */
-public class ConferencesFragment extends PollingPagingFragment<Conference, ConferenceAdapter,
+public class ConferencesFragment extends LoginPollingPagingFragment<Conference, ConferenceAdapter,
         ConferencesEvent, ConferencesErrorEvent> {
 
     @NonNull
