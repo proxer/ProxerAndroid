@@ -59,6 +59,8 @@ public abstract class LoginPollingPagingFragment<T extends IdItem & Parcelable,
             if (getParentActivity() != null) {
                 getParentActivity().clearMessage();
             }
+        } else {
+            doLoad(getFirstPage(), true, true);
         }
     }
 

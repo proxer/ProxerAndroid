@@ -109,8 +109,8 @@ public class UserManager {
 
     @Subscribe(sticky = true, priority = 1)
     public void onLogout(LogoutEvent event) {
-        removeUser();
         loggedIn = false;
+        removeUser();
 
         EventBus.getDefault().removeStickyEvent(event);
     }
