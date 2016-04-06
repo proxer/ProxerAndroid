@@ -30,6 +30,8 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+import static com.proxerme.library.connection.ProxerException.ERROR_PROXER;
+
 /**
  * An abstract Fragment, managing page based Lists of items.
  *
@@ -217,7 +219,7 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
         //noinspection ThrowableResultOfMethodCallIgnored
         ProxerException exception = errorResult.getItem();
 
-        if (exception.getErrorCode() == ProxerException.ErrorCodes.PROXER) {
+        if (exception.getErrorCode() == ERROR_PROXER) {
             currentErrorMessage = exception.getMessage();
         } else {
             currentErrorMessage = ErrorHandler.getMessageForErrorCode(getContext(),

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     tools:context=".fragment.PagingFragment">
 
     <com.proxerme.app.view.InitialLoadingSwipeRefreshLayout
@@ -16,5 +18,27 @@
             android:layout_height="match_parent"
             android:scrollbars="vertical" />
     </com.proxerme.app.view.InitialLoadingSwipeRefreshLayout>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/fragment_paging_notification_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_margin="8dp"
+        android:background="?attr/selectableItemBackground"
+        android:visibility="gone"
+        app:cardBackgroundColor="@color/accent"
+        app:cardCornerRadius="8dp">
+
+        <TextView
+            android:id="@+id/fragment_paging_notification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:textAppearance="@android:style/TextAppearance.Large"
+            android:textColor="@android:color/white"
+            tools:text="2 News" />
+
+    </android.support.v7.widget.CardView>
 
 </FrameLayout>

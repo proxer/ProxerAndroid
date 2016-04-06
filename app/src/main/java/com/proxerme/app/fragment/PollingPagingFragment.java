@@ -3,11 +3,17 @@ package com.proxerme.app.fragment;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.proxerme.app.R;
 import com.proxerme.app.adapter.PagingAdapter;
 import com.proxerme.library.event.IListEvent;
 import com.proxerme.library.event.error.ErrorEvent;
 import com.proxerme.library.interfaces.IdItem;
+
+import butterknife.Bind;
+import butterknife.OnClick;
 
 /**
  * TODO: Describe class
@@ -19,6 +25,11 @@ public abstract class PollingPagingFragment<T extends IdItem & Parcelable,
         extends PagingFragment<T, A, E, EE> {
 
     private static final int POLLING_INTERVAL = 5000;
+
+    @Bind(R.id.fragment_paging_notification_container)
+    ViewGroup notificationContainer;
+    @Bind(R.id.fragment_paging_notification)
+    TextView notification;
 
     @Nullable
     private Handler handler;
@@ -53,6 +64,11 @@ public abstract class PollingPagingFragment<T extends IdItem & Parcelable,
         super.handleError(errorResult);
 
         stopPolling();
+    }
+
+    @OnClick(R.id.fragment_paging_notification_container)
+    public void onNotificationClick() {
+
     }
 
     private void startPolling() {

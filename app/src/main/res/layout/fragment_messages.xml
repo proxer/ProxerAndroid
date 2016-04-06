@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     tools:context=".fragment.MessagesFragment">
 
     <com.proxerme.app.view.InitialLoadingSwipeRefreshLayout
@@ -18,6 +19,31 @@
             android:layout_height="match_parent"
             android:scrollbars="vertical" />
     </com.proxerme.app.view.InitialLoadingSwipeRefreshLayout>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/fragment_paging_notification_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/fragment_messages_input_container"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:background="?attr/selectableItemBackground"
+        app:cardBackgroundColor="@color/accent"
+        app:cardCornerRadius="8dp">
+
+        <TextView
+            android:id="@+id/fragment_paging_notification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:textAppearance="@android:style/TextAppearance.Large"
+            android:textColor="@android:color/white"
+            tools:text="2 new messages" />
+
+    </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
         android:id="@+id/fragment_messages_input_container"

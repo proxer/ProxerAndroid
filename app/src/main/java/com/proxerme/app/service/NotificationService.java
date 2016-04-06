@@ -50,7 +50,7 @@ public class NotificationService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        if (intent != null && !MainApplication.isVisible) {
+        if (intent != null && !MainApplication.getInstance().isVisible) {
             final String action = intent.getAction();
 
             if (ACTION_LOAD_NEWS.equals(action)) {

@@ -6,8 +6,11 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.widget.ImageView;
 
+import com.birbit.android.jobqueue.JobManager;
+import com.birbit.android.jobqueue.config.Configuration;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
@@ -33,7 +36,17 @@ import java.net.CookiePolicy;
  */
 public class MainApplication extends Application {
 
-    public static boolean isVisible = false;
+    private static MainApplication instance;
+    public boolean isVisible = false;
+    private JobManager jobManager;
+
+    public MainApplication() {
+        instance = this;
+    }
+
+    public static MainApplication getInstance() {
+        return instance;
+    }
 
     @Override
     public void onCreate() {
@@ -42,6 +55,7 @@ public class MainApplication extends Application {
         Hawk.init(this).setEncryptionMethod(HawkBuilder.EncryptionMethod.MEDIUM)
                 .setStorage(HawkBuilder.newSharedPrefStorage(this)).build();
         EventBus.builder().addIndex(new EventBusIndex()).installDefaultEventBus();
+        jobManager = new JobManager(new Configuration.Builder(this).build());
 
         DrawerImageLoader.init(new DrawerImageLoader.IDrawerImageLoader() {
             @Override
@@ -110,4 +124,12 @@ public class MainApplication extends Application {
         });
     }
 
+    @NonNull
+    public JobManager getJobManager() {
+        return jobManager;
+    }
+
+    public boolean isVisible() {
+        return isVisible;
+    }
 }

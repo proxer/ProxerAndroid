@@ -6,12 +6,6 @@ import android.support.annotation.NonNull;
 import com.proxerme.app.R;
 import com.proxerme.library.connection.ProxerException;
 
-import static com.proxerme.library.connection.ProxerException.ErrorCodes.IO;
-import static com.proxerme.library.connection.ProxerException.ErrorCodes.NETWORK;
-import static com.proxerme.library.connection.ProxerException.ErrorCodes.TIMEOUT;
-import static com.proxerme.library.connection.ProxerException.ErrorCodes.UNKNOWN;
-import static com.proxerme.library.connection.ProxerException.ErrorCodes.UNPARSEABLE;
-
 /**
  * A helper class, turning error codes into human-readable Strings.
  *
@@ -23,15 +17,15 @@ public class ErrorHandler {
     public static String getMessageForErrorCode(@NonNull Context context,
                                                 @ProxerException.ErrorCode int code) {
         switch (code) {
-            case NETWORK:
+            case ProxerException.ERROR_NETWORK:
                 return context.getString(R.string.error_network);
-            case TIMEOUT:
+            case ProxerException.ERROR_TIMEOUT:
                 return context.getString(R.string.error_timeout);
-            case UNPARSEABLE:
+            case ProxerException.ERROR_UNPARSEABLE:
                 return context.getString(R.string.error_unparseable);
-            case IO:
+            case ProxerException.ERROR_IO:
                 return context.getString(R.string.error_io);
-            case UNKNOWN:
+            case ProxerException.ERROR_UNKNOWN:
                 return context.getString(R.string.error_unknown);
             default:
                 return context.getString(R.string.error_unknown);

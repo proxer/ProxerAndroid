@@ -15,6 +15,8 @@ import android.widget.ImageView;
 import com.proxerme.app.R;
 import com.proxerme.app.activity.ImageDetailActivity;
 import com.proxerme.app.adapter.MessageAdapter;
+import com.proxerme.app.application.MainApplication;
+import com.proxerme.app.job.SendMessageJob;
 import com.proxerme.app.manager.NotificationRetrievalManager;
 import com.proxerme.app.manager.StorageManager;
 import com.proxerme.app.manager.UserManager;
@@ -24,8 +26,10 @@ import com.proxerme.library.connection.ProxerTag;
 import com.proxerme.library.connection.UrlHolder;
 import com.proxerme.library.entity.Message;
 import com.proxerme.library.event.error.MessagesErrorEvent;
+import com.proxerme.library.event.error.SendingMessageFailedEvent;
 import com.proxerme.library.event.success.LoginEvent;
 import com.proxerme.library.event.success.LogoutEvent;
+import com.proxerme.library.event.success.MessageSentEvent;
 import com.proxerme.library.event.success.MessagesEvent;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -119,6 +123,16 @@ public class MessagesFragment extends LoginPollingPagingFragment<Message, Messag
         super.onLogout(event);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onMessageSent(MessageSentEvent event) {
+        doLoad(getFirstPage(), true, false);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onSendingMessageFailed(SendingMessageFailedEvent event) {
+        //TODO show somehow
+    }
+
     @Override
     protected void cancelRequest() {
         ProxerConnection.cancel(ProxerTag.MESSAGES);
@@ -161,6 +175,11 @@ public class MessagesFragment extends LoginPollingPagingFragment<Message, Messag
 
     @OnClick(R.id.fragment_messages_send)
     public void sendMessage() {
-        //TODO
+        String text = input.getText().toString().trim();
+
+        if (!TextUtils.isEmpty(text)) {
+            MainApplication.getInstance().getJobManager()
+                    .addJobInBackground(new SendMessageJob(conferenceId, text));
+        }
     }
 }
