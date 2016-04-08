@@ -3,7 +3,7 @@ apply plugin: 'com.neenbedankt.android-apt'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion '23.0.2'
+    buildToolsVersion '23.0.3'
 
     defaultConfig {
         applicationId "com.proxerme.app"
@@ -22,31 +22,31 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:23.2.1'
-    compile 'com.android.support:design:23.2.1'
-    compile 'com.android.support:preference-v7:23.2.1'
-    compile 'com.android.support:preference-v14:23.2.1'
-    compile 'com.android.support:customtabs:23.2.1'
-    compile 'com.android.support:percent:23.2.1'
-    compile 'com.android.support:support-annotations:23.2.1'
+    compile 'com.android.support:appcompat-v7:23.3.0'
+    compile 'com.android.support:design:23.3.0'
+    compile 'com.android.support:preference-v7:23.3.0'
+    compile 'com.android.support:preference-v14:23.3.0'
+    compile 'com.android.support:customtabs:23.3.0'
+    compile 'com.android.support:percent:23.3.0'
+    compile 'com.android.support:support-annotations:23.3.0'
 
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'de.hdodenhof:circleimageview:2.0.0'
     compile 'org.greenrobot:eventbus:3.0.0'
-    compile 'com.github.orhanobut:hawk:1.22'
+    compile 'com.github.orhanobut:hawk:1.23'
     compile 'net.danlew:android.joda:2.9.3'
     compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'com.mikepenz:iconics-core:2.5.8@aar'
+    compile 'com.mikepenz:iconics-core:2.5.11@aar'
     compile 'com.birbit:android-priority-jobqueue:2.0.0-alpha2'
     compile 'com.mikepenz:community-material-typeface:1.3.41.1@aar'
 
     compile('com.github.afollestad.material-dialogs:core:0.8.5.7@aar') {
         transitive = true
     }
-    compile('com.mikepenz:aboutlibraries:5.6.3@aar') {
+    compile('com.mikepenz:aboutlibraries:5.6.5@aar') {
         transitive = true
     }
-    compile('com.mikepenz:materialdrawer:5.1.8@aar') {
+    compile('com.mikepenz:materialdrawer:5.1.9@aar') {
         transitive = true
     }
     compile('com.github.rubengees:introduction:1.3.0@aar') {
