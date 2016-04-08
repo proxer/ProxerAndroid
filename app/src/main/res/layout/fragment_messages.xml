@@ -32,7 +32,8 @@
         android:layout_marginTop="8dp"
         android:background="?attr/selectableItemBackground"
         app:cardBackgroundColor="@color/accent"
-        app:cardCornerRadius="8dp">
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp">
 
         <TextView
             android:id="@+id/fragment_paging_notification"

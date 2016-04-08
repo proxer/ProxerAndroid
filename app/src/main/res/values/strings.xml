@@ -70,4 +70,12 @@
     <string name="dialog_logout_title">Do you want to logout?</string>
     <string name="dialog_logout_go">Logout</string>
     <string name="dialog_login_remember">Remember</string>
+    <plurals name="notification_conferences">
+        <item quantity="one">"%d new Conference"</item>
+        <item quantity="other">"%d new Conferences"</item>
+    </plurals>
+    <plurals name="notification_messages">
+        <item quantity="one">"%d new Message"</item>
+        <item quantity="other">"%d new Messages"</item>
+    </plurals>
 </resources>

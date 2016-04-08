@@ -1,4 +1,4 @@
-package com.proxerme.app.util;
+package com.proxerme.app.util.helper;
 
 import android.app.Activity;
 import android.support.annotation.NonNull;

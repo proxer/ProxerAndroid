@@ -6,7 +6,7 @@ import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 
-import com.proxerme.app.util.PagingHelper;
+import com.proxerme.app.util.helper.PagingHelper;
 import com.proxerme.library.interfaces.IdItem;
 
 import java.util.ArrayList;

@@ -36,7 +36,7 @@ public class SendMessageJob extends Job {
 
     @Override
     public void onAdded() {
-        EventBus.getDefault().postSticky(new MessageEnqueuedEvent());
+        EventBus.getDefault().post(new MessageEnqueuedEvent());
     }
 
     @Override
@@ -61,16 +61,14 @@ public class SendMessageJob extends Job {
                 switch (((ProxerException) throwable).getErrorCode()) {
                     case ProxerException.ERROR_PROXER:
                         EventBus.getDefault()
-                                .postSticky(new SendingMessageFailedEvent(
-                                        (ProxerException) throwable));
+                                .postSticky(new SendingMessageFailedEvent(exception));
 
                         return RetryConstraint.CANCEL;
                     default:
                         return RetryConstraint.RETRY;
                 }
             } else {
-                EventBus.getDefault().postSticky(new SendingMessageFailedEvent((ProxerException)
-                        throwable));
+                EventBus.getDefault().postSticky(new SendingMessageFailedEvent(exception));
 
                 return RetryConstraint.CANCEL;
             }

@@ -11,7 +11,7 @@ import com.proxerme.app.manager.NewsManager;
 import com.proxerme.app.manager.NotificationManager;
 import com.proxerme.app.manager.NotificationRetrievalManager;
 import com.proxerme.app.manager.StorageManager;
-import com.proxerme.app.util.PagingHelper;
+import com.proxerme.app.util.helper.PagingHelper;
 import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.connection.ProxerException;
 import com.proxerme.library.entity.Conference;

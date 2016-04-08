@@ -16,6 +16,7 @@ import com.proxerme.app.R;
 import com.proxerme.app.activity.ImageDetailActivity;
 import com.proxerme.app.adapter.MessageAdapter;
 import com.proxerme.app.application.MainApplication;
+import com.proxerme.app.event.MessageEnqueuedEvent;
 import com.proxerme.app.job.SendMessageJob;
 import com.proxerme.app.manager.NotificationRetrievalManager;
 import com.proxerme.app.manager.StorageManager;
@@ -109,6 +110,12 @@ public class MessagesFragment extends LoginPollingPagingFragment<Message, Messag
         }
     }
 
+    @NonNull
+    @Override
+    protected String getNotificationText(int amount) {
+        return getResources().getQuantityString(R.plurals.notification_messages, amount, amount);
+    }
+
     @Override
     public void onLogin(LoginEvent event) {
         adapter.setUser(event.getItem());
@@ -131,6 +138,11 @@ public class MessagesFragment extends LoginPollingPagingFragment<Message, Messag
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onSendingMessageFailed(SendingMessageFailedEvent event) {
         //TODO show somehow
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEnqueued(MessageEnqueuedEvent event) {
+        updateCount();
     }
 
     @Override
@@ -182,4 +194,9 @@ public class MessagesFragment extends LoginPollingPagingFragment<Message, Messag
                     .addJobInBackground(new SendMessageJob(conferenceId, text));
         }
     }
+
+    private void updateCount() {
+
+    }
 }
+

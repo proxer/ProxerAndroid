@@ -10,8 +10,8 @@ import android.support.v7.app.NotificationCompat;
 
 import com.proxerme.app.R;
 import com.proxerme.app.activity.DashboardActivity;
-import com.proxerme.app.util.MaterialDrawerHelper;
-import com.proxerme.app.util.PagingHelper;
+import com.proxerme.app.util.helper.MaterialDrawerHelper;
+import com.proxerme.app.util.helper.PagingHelper;
 import com.proxerme.library.entity.Conference;
 import com.proxerme.library.entity.News;
 import com.proxerme.library.util.ProxerInfo;

@@ -1,5 +1,6 @@
 package com.proxerme.app.util;
 
+import com.proxerme.app.util.helper.PagingHelper;
 import com.proxerme.library.entity.Conference;
 import com.proxerme.library.interfaces.IdItem;
 

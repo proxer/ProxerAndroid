@@ -1,5 +1,6 @@
-package com.proxerme.app.util;
+package com.proxerme.app.util.listener;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 
@@ -16,7 +17,7 @@ public abstract class EndlessRecyclerOnScrollListener extends OnScrollListener {
     private int pastVisibleItems;
     private StaggeredGridLayoutManager mLayoutManager;
 
-    public EndlessRecyclerOnScrollListener(StaggeredGridLayoutManager mLayoutManager) {
+    public EndlessRecyclerOnScrollListener(@NonNull StaggeredGridLayoutManager mLayoutManager) {
         this.mLayoutManager = mLayoutManager;
     }
 

@@ -1,4 +1,4 @@
-package com.proxerme.app.util;
+package com.proxerme.app.util.helper;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -179,7 +179,7 @@ public class MaterialDrawerHelper {
 
     @NonNull
     private ArrayList<IDrawerItem> generateDrawerItems() {
-        ArrayList<IDrawerItem> result = new ArrayList<>(1);
+        ArrayList<IDrawerItem> result = new ArrayList<>(2);
 
         result.add(new PrimaryDrawerItem().withName(R.string.drawer_item_news)
                 .withIcon(CommunityMaterial.Icon.cmd_newspaper)

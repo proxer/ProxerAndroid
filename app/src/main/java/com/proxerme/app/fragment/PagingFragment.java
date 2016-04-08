@@ -14,10 +14,9 @@ import android.view.ViewGroup;
 
 import com.proxerme.app.R;
 import com.proxerme.app.adapter.PagingAdapter;
-import com.proxerme.app.util.EndlessRecyclerOnScrollListener;
 import com.proxerme.app.util.ErrorHandler;
-import com.proxerme.app.util.PagingHelper;
 import com.proxerme.app.util.Utils;
+import com.proxerme.app.util.listener.EndlessRecyclerOnScrollListener;
 import com.proxerme.library.connection.ProxerException;
 import com.proxerme.library.event.IListEvent;
 import com.proxerme.library.event.error.ErrorEvent;
@@ -54,14 +53,11 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
     SwipeRefreshLayout swipeRefreshLayout;
     @Bind(R.id.fragment_paging_list)
     RecyclerView list;
-
+    StaggeredGridLayoutManager layoutManager;
     private boolean loading = false;
-
     private int currentPage = getFirstPage();
     private int lastLoadedPage = getFirstPage();
-
     private String currentErrorMessage;
-
     private boolean lastMethodInsert = false;
     private boolean endReached = false;
 
@@ -71,7 +67,7 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
         root = inflateLayout(inflater, container, savedInstanceState);
         ButterKnife.bind(this, root);
 
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
+        layoutManager = new StaggeredGridLayoutManager(
                 getActivity() == null ? 1 : Utils.calculateSpanAmount(getActivity()),
                 StaggeredGridLayoutManager.VERTICAL);
 
@@ -209,8 +205,16 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
             }
         }
 
+        int[] itemPositions = new int[layoutManager.getSpanCount()];
+        layoutManager.findFirstVisibleItemPositions(itemPositions);
+        boolean wasAtStart = itemPositions.length > 0 && itemPositions[0] == 0;
+
         stopLoading();
         handleResult(result.getItem(), lastMethodInsert);
+
+        if (lastMethodInsert && wasAtStart) { //If user is at top scroll to the new top
+            list.smoothScrollToPosition(0);
+        }
     }
 
     protected void handleError(EE errorResult) {
@@ -232,11 +236,7 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
 
     private void handleResult(List<T> result, boolean insert) {
         if (insert) {
-            int offset = adapter.insertAtStart(result);
-
-            if (offset == PagingHelper.OFFSET_TOO_LARGE || offset > 0) {
-                scrollToStart();
-            }
+            adapter.insertAtStart(result);
         } else {
             adapter.append(result);
         }

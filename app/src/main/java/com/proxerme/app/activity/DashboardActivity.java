@@ -15,9 +15,9 @@ import com.proxerme.app.fragment.SettingsFragment;
 import com.proxerme.app.manager.PreferenceManager;
 import com.proxerme.app.manager.StorageManager;
 import com.proxerme.app.manager.UserManager;
-import com.proxerme.app.util.IntroductionHelper;
-import com.proxerme.app.util.MaterialDrawerHelper;
 import com.proxerme.app.util.Utils;
+import com.proxerme.app.util.helper.IntroductionHelper;
+import com.proxerme.app.util.helper.MaterialDrawerHelper;
 import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.connection.UrlHolder;
 import com.proxerme.library.event.success.LoginEvent;
@@ -30,17 +30,17 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import static com.proxerme.app.util.MaterialDrawerHelper.DRAWER_ID_DONATE;
-import static com.proxerme.app.util.MaterialDrawerHelper.DRAWER_ID_MESSAGES;
-import static com.proxerme.app.util.MaterialDrawerHelper.DRAWER_ID_NEWS;
-import static com.proxerme.app.util.MaterialDrawerHelper.DRAWER_ID_NONE;
-import static com.proxerme.app.util.MaterialDrawerHelper.DRAWER_ID_SETTINGS;
-import static com.proxerme.app.util.MaterialDrawerHelper.HEADER_ID_CHANGE;
-import static com.proxerme.app.util.MaterialDrawerHelper.HEADER_ID_GUEST;
-import static com.proxerme.app.util.MaterialDrawerHelper.HEADER_ID_LOGIN;
-import static com.proxerme.app.util.MaterialDrawerHelper.HEADER_ID_LOGOUT;
-import static com.proxerme.app.util.MaterialDrawerHelper.HEADER_ID_USER;
-import static com.proxerme.app.util.MaterialDrawerHelper.MaterialDrawerCallback;
+import static com.proxerme.app.util.helper.MaterialDrawerHelper.DRAWER_ID_DONATE;
+import static com.proxerme.app.util.helper.MaterialDrawerHelper.DRAWER_ID_MESSAGES;
+import static com.proxerme.app.util.helper.MaterialDrawerHelper.DRAWER_ID_NEWS;
+import static com.proxerme.app.util.helper.MaterialDrawerHelper.DRAWER_ID_NONE;
+import static com.proxerme.app.util.helper.MaterialDrawerHelper.DRAWER_ID_SETTINGS;
+import static com.proxerme.app.util.helper.MaterialDrawerHelper.HEADER_ID_CHANGE;
+import static com.proxerme.app.util.helper.MaterialDrawerHelper.HEADER_ID_GUEST;
+import static com.proxerme.app.util.helper.MaterialDrawerHelper.HEADER_ID_LOGIN;
+import static com.proxerme.app.util.helper.MaterialDrawerHelper.HEADER_ID_LOGOUT;
+import static com.proxerme.app.util.helper.MaterialDrawerHelper.HEADER_ID_USER;
+import static com.proxerme.app.util.helper.MaterialDrawerHelper.MaterialDrawerCallback;
 
 /**
  * This Activity provides the navigation to all different sections through the Drawer.

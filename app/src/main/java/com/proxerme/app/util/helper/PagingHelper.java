@@ -1,4 +1,4 @@
-package com.proxerme.app.util;
+package com.proxerme.app.util.helper;
 
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
@@ -38,7 +38,7 @@ public class PagingHelper {
         if (list.isEmpty()) {
             return OFFSET_NOT_CALCULABLE;
         } else {
-            for (int i = 0; i < list.size() || i < itemsOnPage; i++) {
+            for (int i = 0; i < list.size() && i < itemsOnPage; i++) {
                 if (id.equals(list.get(i).getId())) {
                     return i;
                 }

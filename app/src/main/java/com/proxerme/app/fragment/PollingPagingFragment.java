@@ -1,13 +1,18 @@
 package com.proxerme.app.fragment;
 
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.proxerme.app.R;
 import com.proxerme.app.adapter.PagingAdapter;
+import com.proxerme.app.util.listener.StartReachedRecyclerOnScrollListener;
 import com.proxerme.library.event.IListEvent;
 import com.proxerme.library.event.error.ErrorEvent;
 import com.proxerme.library.interfaces.IdItem;
@@ -31,8 +36,40 @@ public abstract class PollingPagingFragment<T extends IdItem & Parcelable,
     @Bind(R.id.fragment_paging_notification)
     TextView notification;
 
+    private int newItems;
+
     @Nullable
     private Handler handler;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            newItems = savedInstanceState.getInt("new_items");
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View result = super.onCreateView(inflater, container, savedInstanceState);
+
+        list.addOnScrollListener(new StartReachedRecyclerOnScrollListener(layoutManager) {
+            @Override
+            public void onStartReached() {
+                notificationContainer.setVisibility(View.GONE);
+            }
+        });
+
+        if (newItems > 0) {
+            notificationContainer.setVisibility(View.VISIBLE);
+        } else {
+            notificationContainer.setVisibility(View.GONE);
+        }
+
+        return result;
+    }
 
     @Override
     public void onResume() {
@@ -51,8 +88,32 @@ public abstract class PollingPagingFragment<T extends IdItem & Parcelable,
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putInt("new_items", newItems);
+    }
+
+    @Override
     protected void handleResult(E result) {
+        int countBefore = adapter.getItemCount();
+        String firstIdBefore = countBefore > 0 ? adapter.getItemAt(0).getId() : null;
+        int[] itemPositions = new int[layoutManager.getSpanCount()];
+        boolean wasAtStart = itemPositions.length > 0 && itemPositions[0] != 0;
+
         super.handleResult(result);
+
+        newItems = adapter.getItemCount() - countBefore;
+        layoutManager.findFirstVisibleItemPositions(itemPositions);
+
+        if (wasAtStart) {
+            if (newItems > 0 && firstIdBefore != null &&
+                    !firstIdBefore.equals(adapter.getItemAt(0).getId())) { //Were the items inserted at start
+                notificationContainer.setVisibility(View.VISIBLE);
+
+                notification.setText(getNotificationText(newItems));
+            }
+        }
 
         if (handler == null) {
             startPolling();
@@ -63,12 +124,22 @@ public abstract class PollingPagingFragment<T extends IdItem & Parcelable,
     protected void handleError(EE errorResult) {
         super.handleError(errorResult);
 
+        notificationContainer.setVisibility(View.GONE);
+
         stopPolling();
+    }
+
+    @Override
+    protected View inflateLayout(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_polling_paging, container, false);
     }
 
     @OnClick(R.id.fragment_paging_notification_container)
     public void onNotificationClick() {
+        list.smoothScrollToPosition(0);
 
+        notificationContainer.setVisibility(View.GONE);
     }
 
     private void startPolling() {
@@ -96,5 +167,8 @@ public abstract class PollingPagingFragment<T extends IdItem & Parcelable,
             handler = null;
         }
     }
+
+    @NonNull
+    protected abstract String getNotificationText(int amount);
 
 }
