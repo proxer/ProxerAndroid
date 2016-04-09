@@ -21,12 +21,9 @@ import com.mikepenz.materialdrawer.model.ProfileSettingDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.proxerme.app.R;
-import com.proxerme.app.manager.NewsManager;
-import com.proxerme.app.manager.StorageManager;
 import com.proxerme.app.manager.UserManager;
 import com.proxerme.library.connection.UrlHolder;
 import com.proxerme.library.entity.LoginUser;
-import com.proxerme.library.util.ProxerInfo;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -173,8 +170,6 @@ public class MaterialDrawerHelper {
                 .withActionBarDrawerToggleAnimated(true).withHasStableIds(true)
                 .withTranslucentStatusBar(true)
                 .withSavedInstance(savedInstanceState).build();
-
-        initBadges();
     }
 
     @NonNull
@@ -255,20 +250,6 @@ public class MaterialDrawerHelper {
             drawer.updateBadge(drawerItemId, null);
         } else {
             drawer.updateBadge(drawerItemId, new StringHolder(text));
-        }
-    }
-
-    private void initBadges() {
-        int newNews = NewsManager.getInstance().getNewNews();
-        int newMessages = StorageManager.getNewMessages();
-
-        if (newNews > 0 || newNews == PagingHelper.OFFSET_NOT_CALCULABLE) {
-            setBadge(DRAWER_ID_NEWS, newNews == PagingHelper.OFFSET_NOT_CALCULABLE ?
-                    (ProxerInfo.NEWS_ON_PAGE + "+") : (String.valueOf(newNews)));
-        }
-
-        if (newMessages > 0) {
-            setBadge(DRAWER_ID_MESSAGES, String.valueOf(newMessages));
         }
     }
 

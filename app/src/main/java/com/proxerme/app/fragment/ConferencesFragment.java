@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.proxerme.app.R;
-import com.proxerme.app.activity.DashboardActivity;
 import com.proxerme.app.activity.ImageDetailActivity;
 import com.proxerme.app.activity.MessageActivity;
 import com.proxerme.app.adapter.ConferenceAdapter;
@@ -17,7 +16,6 @@ import com.proxerme.app.manager.NotificationManager;
 import com.proxerme.app.manager.NotificationRetrievalManager;
 import com.proxerme.app.manager.StorageManager;
 import com.proxerme.app.util.Utils;
-import com.proxerme.app.util.helper.MaterialDrawerHelper;
 import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.connection.ProxerTag;
 import com.proxerme.library.connection.UrlHolder;
@@ -110,25 +108,11 @@ public class ConferencesFragment extends LoginPollingPagingFragment<Conference, 
         if (getContext() != null) {
             NotificationRetrievalManager.retrieveMessagesLater(getContext());
         }
-
-        if (getActivity() != null) {
-            getDashboardActivity().setBadge(MaterialDrawerHelper.DRAWER_ID_MESSAGES,
-                    null);
-        }
     }
 
     @NonNull
     @Override
     protected String getNotificationText(int amount) {
         return getResources().getQuantityString(R.plurals.notification_conferences, amount, amount);
-    }
-
-    protected DashboardActivity getDashboardActivity() {
-        try {
-            return (DashboardActivity) getActivity();
-        } catch (ClassCastException e) {
-            throw new RuntimeException("Don't use this Fragment in another" +
-                    " Activity than DashboardActivity.");
-        }
     }
 }

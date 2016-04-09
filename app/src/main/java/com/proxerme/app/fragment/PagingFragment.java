@@ -207,8 +207,6 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
 
         stopLoading();
         handleResult(result.getItem(), lastMethodInsert);
-
-
     }
 
     protected void handleError(EE errorResult) {

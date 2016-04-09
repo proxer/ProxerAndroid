@@ -12,6 +12,7 @@ import com.proxerme.app.dialog.LogoutDialog;
 import com.proxerme.app.fragment.ConferencesFragment;
 import com.proxerme.app.fragment.NewsFragment;
 import com.proxerme.app.fragment.SettingsFragment;
+import com.proxerme.app.manager.BadgeManager;
 import com.proxerme.app.manager.PreferenceManager;
 import com.proxerme.app.manager.StorageManager;
 import com.proxerme.app.manager.UserManager;
@@ -53,6 +54,7 @@ public class DashboardActivity extends MainActivity {
     private static final String EXTRA_ADDITIONAL_INFO = "extra_additional_info";
 
     private MaterialDrawerHelper drawerHelper;
+    private BadgeManager badgeManager;
 
     private MaterialDrawerCallback drawerCallback = new MaterialDrawerCallback() {
         @Override
@@ -63,6 +65,13 @@ public class DashboardActivity extends MainActivity {
         @Override
         public boolean onAccountClick(@MaterialDrawerHelper.HeaderItemId int identifier) {
             return handleOnHeaderAccountClick(identifier);
+        }
+    };
+
+    private BadgeManager.BadgeCallback badgeCallback = new BadgeManager.BadgeCallback() {
+        @Override
+        public void updateBadge(@MaterialDrawerHelper.DrawerItemId int id, @Nullable String count) {
+            drawerHelper.setBadge(id, count);
         }
     };
 
@@ -85,6 +94,8 @@ public class DashboardActivity extends MainActivity {
         drawerHelper = new MaterialDrawerHelper(this, drawerCallback);
         drawerHelper.build(toolbar, savedInstanceState);
 
+        badgeManager = new BadgeManager(badgeCallback);
+
         displayFirstPage(savedInstanceState);
     }
 
@@ -94,13 +105,15 @@ public class DashboardActivity extends MainActivity {
 
         EventBus.getDefault().register(this);
         UserManager.getInstance().reLogin();
+        badgeManager.startListenForEvents();
     }
 
     @Override
-    protected void onPause() {
+    protected void onStop() {
         EventBus.getDefault().unregister(this);
+        badgeManager.stopListenForEvents();
 
-        super.onPause();
+        super.onStop();
     }
 
     @Override
@@ -213,11 +226,6 @@ public class DashboardActivity extends MainActivity {
             //noinspection ResourceType
             return intent.getIntExtra(EXTRA_DRAWER_ITEM, MaterialDrawerHelper.DRAWER_ID_NONE);
         }
-    }
-
-    public void setBadge(@MaterialDrawerHelper.DrawerItemId int drawerItemId,
-                         @Nullable String text) {
-        drawerHelper.setBadge(drawerItemId, text);
     }
 
     private boolean handleOnHeaderAccountClick(@MaterialDrawerHelper.HeaderItemId int id) {

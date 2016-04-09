@@ -6,14 +6,12 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.proxerme.app.activity.DashboardActivity;
 import com.proxerme.app.activity.ImageDetailActivity;
 import com.proxerme.app.adapter.NewsAdapter;
 import com.proxerme.app.manager.NewsManager;
 import com.proxerme.app.manager.NotificationManager;
 import com.proxerme.app.manager.NotificationRetrievalManager;
 import com.proxerme.app.util.Utils;
-import com.proxerme.app.util.helper.MaterialDrawerHelper;
 import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.connection.ProxerTag;
 import com.proxerme.library.connection.UrlHolder;
@@ -109,18 +107,5 @@ public class NewsFragment extends PagingFragment<News, NewsAdapter, NewsEvent, N
         manager.setLastId(result.getItem().get(0).getId());
 
         NotificationRetrievalManager.retrieveNewsLater(getContext());
-
-        if (getActivity() != null) {
-            getDashboardActivity().setBadge(MaterialDrawerHelper.DRAWER_ID_NEWS, null);
-        }
-    }
-
-    protected DashboardActivity getDashboardActivity() {
-        try {
-            return (DashboardActivity) getActivity();
-        } catch (ClassCastException e) {
-            throw new RuntimeException("Don't use this Fragment in another" +
-                    " Activity than DashboardActivity.");
-        }
     }
 }
