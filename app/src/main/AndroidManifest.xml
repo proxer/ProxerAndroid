@@ -41,15 +41,14 @@
                     android:scheme="http" />
             </intent-filter>
         </activity>
-        <activity android:name=".customtabs.WebviewActivity">
-        </activity>
+        <activity android:name=".customtabs.WebviewActivity" />
         <activity
             android:name=".activity.ImageDetailActivity"
-            android:theme="@style/Theme.Transparent">
-        </activity>
+            android:theme="@style/Theme.Transparent" />
         <activity
             android:name=".activity.MessageActivity"
-            android:parentActivityName=".activity.DashboardActivity">
+            android:parentActivityName=".activity.DashboardActivity"
+            android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.DashboardActivity" />

@@ -37,8 +37,10 @@ import java.net.CookiePolicy;
 public class MainApplication extends Application {
 
     private static MainApplication instance;
-    public boolean isVisible = false;
+
     private JobManager jobManager;
+
+    private boolean isVisible = false;
 
     public MainApplication() {
         instance = this;

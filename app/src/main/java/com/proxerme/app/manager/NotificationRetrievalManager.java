@@ -14,7 +14,6 @@ import com.proxerme.app.receiver.NotificationReceiver;
 import com.proxerme.app.service.NotificationService;
 import com.proxerme.library.event.success.ConferencesEvent;
 import com.proxerme.library.event.success.MessagesEvent;
-import com.proxerme.library.event.success.NewsEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -165,14 +164,6 @@ public class NotificationRetrievalManager {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    public void onNewsLoaded(NewsEvent event) {
-        StorageManager.setNewNews(0);
-        StorageManager.setLastNewsId(event.getItem().get(0).getId());
-
-        NotificationRetrievalManager.retrieveNewsLater(context);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onConferencesLoaded(ConferencesEvent event) {
         StorageManager.setNewMessages(0);
         StorageManager.resetMessagesInterval();
@@ -182,7 +173,6 @@ public class NotificationRetrievalManager {
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onMessagesLoaded(MessagesEvent event) {
-        StorageManager.setNewMessages(0);
         StorageManager.resetMessagesInterval();
 
         NotificationRetrievalManager.retrieveMessagesLater(context);

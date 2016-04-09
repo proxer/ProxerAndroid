@@ -104,7 +104,6 @@ public class DashboardActivity extends MainActivity {
         super.onStart();
 
         EventBus.getDefault().register(this);
-        UserManager.getInstance().reLogin();
         badgeManager.startListenForEvents();
     }
 

@@ -19,6 +19,7 @@ import com.proxerme.app.customtabs.CustomTabActivityHelper;
 import com.proxerme.app.customtabs.WebviewFallback;
 import com.proxerme.app.interfaces.OnActivityListener;
 import com.proxerme.app.manager.NotificationRetrievalManager;
+import com.proxerme.app.manager.UserManager;
 import com.proxerme.app.util.Utils;
 
 import butterknife.Bind;
@@ -67,6 +68,8 @@ public abstract class MainActivity extends AppCompatActivity {
 
         customTabActivityHelper.bindCustomTabsService(this);
         notificationRetrievalManager.startListenForEvents();
+
+        UserManager.getInstance().reLogin();
     }
 
     @Override

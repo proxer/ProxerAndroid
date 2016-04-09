@@ -53,11 +53,16 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
     SwipeRefreshLayout swipeRefreshLayout;
     @Bind(R.id.fragment_paging_list)
     RecyclerView list;
+
     StaggeredGridLayoutManager layoutManager;
+
     private boolean loading = false;
+
     private int currentPage = getFirstPage();
     private int lastLoadedPage = getFirstPage();
+
     private String currentErrorMessage;
+
     private boolean lastMethodInsert = false;
     private boolean endReached = false;
 
@@ -74,6 +79,7 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
         configLayoutManager(layoutManager);
 
         list.setHasFixedSize(true);
+        list.setScrollContainer(true);
         list.setLayoutManager(layoutManager);
         list.addOnScrollListener(new EndlessRecyclerOnScrollListener(layoutManager) {
             @Override
@@ -192,7 +198,7 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
         }
     }
 
-    protected void handleResult(E result) {
+    protected final void handleResult(E result) {
         EventBus.getDefault().removeStickyEvent(result);
 
         if ((result.getItem()).isEmpty()) {
@@ -226,7 +232,7 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
         showError();
     }
 
-    private void handleResult(List<T> result, boolean insert) {
+    protected void handleResult(List<T> result, boolean insert) {
         if (insert) {
             int[] itemPositions = new int[layoutManager.getSpanCount()];
             layoutManager.findFirstVisibleItemPositions(itemPositions);
@@ -237,6 +243,8 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
             if (offset > 0 && wasAtStart) {
                 list.smoothScrollToPosition(0);
             }
+
+
         } else {
             adapter.append(result);
         }
@@ -264,10 +272,6 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
 
     protected boolean isLoading() {
         return loading;
-    }
-
-    protected boolean isEmpty() {
-        return adapter != null && adapter.isEmpty();
     }
 
     protected void clear() {
@@ -301,11 +305,5 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
 
     protected int getFirstPage() {
         return 1;
-    }
-
-    protected void scrollToStart() {
-        if (list != null) {
-            list.smoothScrollToPosition(0);
-        }
     }
 }

@@ -17,6 +17,8 @@ import com.proxerme.library.event.IListEvent;
 import com.proxerme.library.event.error.ErrorEvent;
 import com.proxerme.library.interfaces.IdItem;
 
+import java.util.List;
+
 import butterknife.Bind;
 import butterknife.OnClick;
 
@@ -95,13 +97,13 @@ public abstract class PollingPagingFragment<T extends IdItem & Parcelable,
     }
 
     @Override
-    protected void handleResult(E result) {
+    protected void handleResult(List<T> result, boolean insert) {
         int countBefore = adapter.getItemCount();
         String firstIdBefore = countBefore > 0 ? adapter.getItemAt(0).getId() : null;
         int[] itemPositions = new int[layoutManager.getSpanCount()];
         boolean wasAtStart = itemPositions.length > 0 && itemPositions[0] != 0;
 
-        super.handleResult(result);
+        super.handleResult(result, insert);
 
         newItems = adapter.getItemCount() - countBefore;
         layoutManager.findFirstVisibleItemPositions(itemPositions);
