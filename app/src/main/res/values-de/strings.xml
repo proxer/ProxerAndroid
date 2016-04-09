@@ -77,4 +77,6 @@
         <item quantity="one">"%d neue Nachricht"</item>
         <item quantity="other">"%d neue Nachrichten"</item>
     </plurals>
+    <string name="fragment_messages_input_hint">Nachricht eingeben</string>
+    <string name="fragment_messages_send">Senden</string>
 </resources>

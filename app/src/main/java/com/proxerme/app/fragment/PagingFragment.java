@@ -205,16 +205,10 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
             }
         }
 
-        int[] itemPositions = new int[layoutManager.getSpanCount()];
-        layoutManager.findFirstVisibleItemPositions(itemPositions);
-        boolean wasAtStart = itemPositions.length > 0 && itemPositions[0] == 0;
-
         stopLoading();
         handleResult(result.getItem(), lastMethodInsert);
 
-        if (lastMethodInsert && wasAtStart) { //If user is at top scroll to the new top
-            list.smoothScrollToPosition(0);
-        }
+
     }
 
     protected void handleError(EE errorResult) {
@@ -236,7 +230,15 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
 
     private void handleResult(List<T> result, boolean insert) {
         if (insert) {
-            adapter.insertAtStart(result);
+            int[] itemPositions = new int[layoutManager.getSpanCount()];
+            layoutManager.findFirstVisibleItemPositions(itemPositions);
+            boolean wasAtStart = itemPositions.length > 0 && itemPositions[0] == 0;
+
+            int offset = adapter.insertAtStart(result);
+
+            if (offset > 0 && wasAtStart) {
+                list.smoothScrollToPosition(0);
+            }
         } else {
             adapter.append(result);
         }

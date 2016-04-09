@@ -61,10 +61,6 @@ public abstract class PagingAdapter<T extends IdItem & Parcelable,
      * @return The offset to the existing items.
      */
     public int insertAtStart(@NonNull List<T> list) {
-        if (this.list.isEmpty()) {
-            append(list);
-        }
-
         if (!list.isEmpty()) {
             int offset = PagingHelper.calculateOffsetFromStart(list, this.list.get(0),
                     getItemsOnPage());

@@ -192,6 +192,8 @@ public class MessagesFragment extends LoginPollingPagingFragment<Message, Messag
         if (!TextUtils.isEmpty(text)) {
             MainApplication.getInstance().getJobManager()
                     .addJobInBackground(new SendMessageJob(conferenceId, text));
+
+            input.getText().clear();
         }
     }
 

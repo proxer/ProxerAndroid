@@ -78,4 +78,6 @@
         <item quantity="one">"%d new Message"</item>
         <item quantity="other">"%d new Messages"</item>
     </plurals>
+    <string name="fragment_messages_input_hint">Type message</string>
+    <string name="fragment_messages_send">Send</string>
 </resources>

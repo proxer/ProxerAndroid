@@ -183,16 +183,20 @@ public class MaterialDrawerHelper {
 
         result.add(new PrimaryDrawerItem().withName(R.string.drawer_item_news)
                 .withIcon(CommunityMaterial.Icon.cmd_newspaper)
-                .withSelectedTextColorRes(R.color.primary).withSelectedIconColorRes(R.color.primary)
-                .withIconTintingEnabled(true).withBadgeStyle(new BadgeStyle()
-                        .withColorRes(R.color.primary).withTextColorRes(android.R.color.white))
+                .withSelectedTextColorRes(R.color.primary)
+                .withSelectedIconColorRes(R.color.primary)
+                .withBadgeStyle(new BadgeStyle()
+                        .withColorRes(R.color.primary)
+                        .withTextColorRes(android.R.color.white))
                 .withIdentifier(DRAWER_ID_NEWS));
 
         result.add(new PrimaryDrawerItem().withName(R.string.drawer_item_messages)
                 .withIcon(CommunityMaterial.Icon.cmd_message_text)
-                .withSelectedTextColorRes(R.color.primary).withSelectedIconColorRes(R.color.primary)
-                .withIconTintingEnabled(true).withBadgeStyle(new BadgeStyle()
-                        .withColorRes(R.color.primary).withTextColorRes(android.R.color.white))
+                .withSelectedTextColorRes(R.color.primary)
+                .withSelectedIconColorRes(R.color.primary)
+                .withBadgeStyle(new BadgeStyle()
+                        .withColorRes(R.color.primary)
+                        .withTextColorRes(android.R.color.white))
                 .withIdentifier(DRAWER_ID_MESSAGES));
 
         return result;
@@ -204,14 +208,16 @@ public class MaterialDrawerHelper {
 
         result.add(new PrimaryDrawerItem().withName(R.string.drawer_item_donate)
                 .withIcon(CommunityMaterial.Icon.cmd_gift)
-                .withSelectedTextColorRes(R.color.primary).withSelectedIconColorRes(R.color.primary)
-                .withIconTintingEnabled(true).withSelectable(false)
+                .withSelectedTextColorRes(R.color.primary)
+                .withSelectedIconColorRes(R.color.primary)
+                .withSelectable(false)
                 .withIdentifier(DRAWER_ID_DONATE));
 
         result.add(new PrimaryDrawerItem().withName(R.string.drawer_item_settings)
                 .withIcon(CommunityMaterial.Icon.cmd_settings)
-                .withSelectedTextColorRes(R.color.primary).withSelectedIconColorRes(R.color.primary)
-                .withIconTintingEnabled(true).withIdentifier(DRAWER_ID_SETTINGS));
+                .withSelectedTextColorRes(R.color.primary)
+                .withSelectedIconColorRes(R.color.primary)
+                .withIdentifier(DRAWER_ID_SETTINGS));
 
         return result;
     }

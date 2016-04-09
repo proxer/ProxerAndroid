@@ -12,12 +12,14 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.proxerme.app.R;
+import com.proxerme.app.util.helper.PagingHelper;
 import com.proxerme.library.connection.UrlHolder;
 import com.proxerme.library.entity.LoginUser;
 import com.proxerme.library.entity.Message;
 import com.proxerme.library.util.ProxerInfo;
 
 import java.util.Collection;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -132,7 +134,7 @@ public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.Messag
                 if (position + 1 >= getItemCount()) {
                     return TYPE_MESSAGE_PROFILE_IMAGE_WITH_TITLE;
                 } else {
-                    if (getItemAt(position + 1).getFromId().equals(current.getId())
+                    if (getItemAt(position + 1).getFromId().equals(current.getFromId())
                             && getItemAt(position + 1).getAction() == null) {
                         return TYPE_MESSAGE_WITH_TITLE;
                     } else {
@@ -140,31 +142,61 @@ public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.Messag
                     }
                 }
             } else if (position + 1 >= getItemCount()) {
-                if (getItemAt(position - 1).getFromId().equals(current.getId())
+                if (getItemAt(position - 1).getFromId().equals(current.getFromId())
                         && getItemAt(position - 1).getAction() == null) {
                     return TYPE_MESSAGE_PROFILE_IMAGE;
                 } else {
                     return TYPE_MESSAGE_PROFILE_IMAGE_WITH_TITLE;
                 }
             } else {
-                if (getItemAt(position - 1).getFromId().equals(current.getId())
+                if (getItemAt(position - 1).getFromId().equals(current.getFromId())
                         && getItemAt(position - 1).getAction() == null) {
-                    if (getItemAt(position + 1).getFromId().equals(current.getId())
+                    if (getItemAt(position + 1).getFromId().equals(current.getFromId())
                             && getItemAt(position + 1).getAction() == null) {
                         return TYPE_MESSAGE;
                     } else {
-                        return TYPE_MESSAGE_PROFILE_IMAGE;
+                        return TYPE_MESSAGE_WITH_TITLE;
                     }
                 } else {
-                    if (getItemAt(position + 1).getFromId().equals(current.getId())
+                    if (getItemAt(position + 1).getFromId().equals(current.getFromId())
                             && getItemAt(position + 1).getAction() == null) {
-                        return TYPE_MESSAGE_WITH_TITLE;
+                        return TYPE_MESSAGE_PROFILE_IMAGE;
                     } else {
                         return TYPE_MESSAGE_PROFILE_IMAGE_WITH_TITLE;
                     }
                 }
             }
         }
+    }
+
+    @Override
+    public int insertAtStart(@NonNull List<Message> list) {
+        int offset = super.insertAtStart(list);
+
+        if (offset != PagingHelper.OFFSET_NOT_CALCULABLE) {
+            if (offset == PagingHelper.OFFSET_TOO_LARGE) {
+                notifyItemChanged(list.size());
+            } else if (offset > 0) {
+                notifyItemChanged(offset);
+            }
+        }
+
+        return offset;
+    }
+
+    @Override
+    public int append(@NonNull List<Message> list) {
+        int offset = super.append(list);
+
+        if (offset != PagingHelper.OFFSET_NOT_CALCULABLE) {
+            if (offset == PagingHelper.OFFSET_TOO_LARGE) {
+                notifyItemChanged(getItemCount() - list.size() - 1);
+            } else if (offset > 0) {
+                notifyItemChanged(getItemCount() - offset - 1);
+            }
+        }
+
+        return offset;
     }
 
     public void setUser(@Nullable LoginUser user) {
