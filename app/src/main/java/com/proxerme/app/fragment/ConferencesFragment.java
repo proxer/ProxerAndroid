@@ -13,8 +13,6 @@ import com.proxerme.app.activity.ImageDetailActivity;
 import com.proxerme.app.activity.MessageActivity;
 import com.proxerme.app.adapter.ConferenceAdapter;
 import com.proxerme.app.manager.NotificationManager;
-import com.proxerme.app.manager.NotificationRetrievalManager;
-import com.proxerme.app.manager.StorageManager;
 import com.proxerme.app.util.Utils;
 import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.connection.ProxerTag;
@@ -96,18 +94,6 @@ public class ConferencesFragment extends LoginPollingPagingFragment<Conference, 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onLoadError(@NonNull ConferencesErrorEvent errorEvent) {
         handleError(errorEvent);
-    }
-
-    @Override
-    protected void handleResult(ConferencesEvent result) {
-        super.handleResult(result);
-
-        StorageManager.setNewMessages(0);
-        StorageManager.resetMessagesInterval();
-
-        if (getContext() != null) {
-            NotificationRetrievalManager.retrieveMessagesLater(getContext());
-        }
     }
 
     @NonNull

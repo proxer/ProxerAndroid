@@ -51,7 +51,7 @@ public class BadgeManager {
     }
 
     private void init() {
-        int newNews = NewsManager.getInstance().getNewNews();
+        int newNews = StorageManager.getNewNews();
         int newMessages = StorageManager.getNewMessages();
 
         if (newNews > 0 || newNews == PagingHelper.OFFSET_NOT_CALCULABLE) {

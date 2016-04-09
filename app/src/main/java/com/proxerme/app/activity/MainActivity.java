@@ -18,6 +18,7 @@ import com.proxerme.app.R;
 import com.proxerme.app.customtabs.CustomTabActivityHelper;
 import com.proxerme.app.customtabs.WebviewFallback;
 import com.proxerme.app.interfaces.OnActivityListener;
+import com.proxerme.app.manager.NotificationRetrievalManager;
 import com.proxerme.app.util.Utils;
 
 import butterknife.Bind;
@@ -46,6 +47,8 @@ public abstract class MainActivity extends AppCompatActivity {
     private OnActivityListener onActivityListener;
     private Snackbar snackbar;
 
+    private NotificationRetrievalManager notificationRetrievalManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +58,7 @@ public abstract class MainActivity extends AppCompatActivity {
         initViews();
 
         customTabActivityHelper = new CustomTabActivityHelper();
+        notificationRetrievalManager = new NotificationRetrievalManager(this);
     }
 
     @Override
@@ -62,6 +66,7 @@ public abstract class MainActivity extends AppCompatActivity {
         super.onStart();
 
         customTabActivityHelper.bindCustomTabsService(this);
+        notificationRetrievalManager.startListenForEvents();
     }
 
     @Override
@@ -69,6 +74,7 @@ public abstract class MainActivity extends AppCompatActivity {
         super.onStop();
 
         customTabActivityHelper.unbindCustomTabsService(this);
+        notificationRetrievalManager.stopListenForEvents();
     }
 
     @Override

@@ -12,6 +12,13 @@ import android.support.annotation.NonNull;
 import com.proxerme.app.receiver.BootReceiver;
 import com.proxerme.app.receiver.NotificationReceiver;
 import com.proxerme.app.service.NotificationService;
+import com.proxerme.library.event.success.ConferencesEvent;
+import com.proxerme.library.event.success.MessagesEvent;
+import com.proxerme.library.event.success.NewsEvent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * TODO: Describe Class
@@ -19,6 +26,12 @@ import com.proxerme.app.service.NotificationService;
  * @author Ruben Gees
  */
 public class NotificationRetrievalManager {
+
+    private Context context;
+
+    public NotificationRetrievalManager(@NonNull Context context) {
+        this.context = context;
+    }
 
     /**
      * Retrieves News and interprets them in a background Service in the time span, specified in the
@@ -139,6 +152,40 @@ public class NotificationRetrievalManager {
         }
 
         return count;
+    }
+
+    public void startListenForEvents() {
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
+    }
+
+    public void stopListenForEvents() {
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onNewsLoaded(NewsEvent event) {
+        StorageManager.setNewNews(0);
+        StorageManager.setLastNewsId(event.getItem().get(0).getId());
+
+        NotificationRetrievalManager.retrieveNewsLater(context);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onConferencesLoaded(ConferencesEvent event) {
+        StorageManager.setNewMessages(0);
+        StorageManager.resetMessagesInterval();
+
+        NotificationRetrievalManager.retrieveMessagesLater(context);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onMessagesLoaded(MessagesEvent event) {
+        StorageManager.setNewMessages(0);
+        StorageManager.resetMessagesInterval();
+
+        NotificationRetrievalManager.retrieveMessagesLater(context);
     }
 
 }

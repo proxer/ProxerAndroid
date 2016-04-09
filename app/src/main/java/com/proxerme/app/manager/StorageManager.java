@@ -25,6 +25,8 @@ public class StorageManager {
     private static final String STORAGE_USER_ID = "storage_user_id";
     private static final String STORAGE_NEW_MESSAGES = "storage_messages_new";
 
+    private static final int MAX_MESSAGE_POLLING_INTERVAL = 850;
+
     @Nullable
     public static String getLastNewsId() {
         return Hawk.get(STORAGE_NEWS_LAST_ID, null);
@@ -88,7 +90,7 @@ public class StorageManager {
     public static void incrementMessagesInterval() {
         int interval = getMessagesInterval();
 
-        if (interval <= 850) {
+        if (interval <= MAX_MESSAGE_POLLING_INTERVAL) {
             Hawk.put(STORAGE_MESSAGES_NOTIFICATIONS_INTERVAL, (int) (interval * 1.5));
         }
     }

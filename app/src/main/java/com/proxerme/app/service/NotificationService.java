@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.StringDef;
 
 import com.proxerme.app.application.MainApplication;
-import com.proxerme.app.manager.NewsManager;
 import com.proxerme.app.manager.NotificationManager;
 import com.proxerme.app.manager.NotificationRetrievalManager;
 import com.proxerme.app.manager.StorageManager;
@@ -62,17 +61,15 @@ public class NotificationService extends IntentService {
     }
 
     private void handleActionLoadNews() {
-        NewsManager manager = NewsManager.getInstance();
+        String lastId = StorageManager.getLastNewsId();
 
         try {
-            String lastId = manager.getLastId();
-
             if (lastId != null) {
                 List<News> news = ProxerConnection.loadNews(1).executeSynchronized();
-                int offset = PagingHelper.calculateOffsetFromStart(news, manager.getLastId(),
+                int offset = PagingHelper.calculateOffsetFromStart(news, lastId,
                         ProxerInfo.NEWS_ON_PAGE);
 
-                manager.setNewNews(offset);
+                StorageManager.setNewNews(offset);
                 NotificationManager.showNewsNotification(this, news, offset);
             }
         } catch (ProxerException ignored) {

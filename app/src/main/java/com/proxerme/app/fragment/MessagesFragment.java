@@ -18,8 +18,6 @@ import com.proxerme.app.adapter.MessageAdapter;
 import com.proxerme.app.application.MainApplication;
 import com.proxerme.app.event.MessageEnqueuedEvent;
 import com.proxerme.app.job.SendMessageJob;
-import com.proxerme.app.manager.NotificationRetrievalManager;
-import com.proxerme.app.manager.StorageManager;
 import com.proxerme.app.manager.UserManager;
 import com.proxerme.app.util.Utils;
 import com.proxerme.library.connection.ProxerConnection;
@@ -96,24 +94,6 @@ public class MessagesFragment extends LoginPollingPagingFragment<Message, Messag
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onLoadError(@NonNull MessagesErrorEvent errorEvent) {
         handleError(errorEvent);
-    }
-
-    @Override
-    protected void handleResult(MessagesEvent result) {
-        super.handleResult(result);
-
-        StorageManager.setNewMessages(0);
-        StorageManager.resetMessagesInterval();
-
-        if (getContext() != null) {
-            NotificationRetrievalManager.retrieveMessagesLater(getContext());
-        }
-    }
-
-    @NonNull
-    @Override
-    protected String getNotificationText(int amount) {
-        return getResources().getQuantityString(R.plurals.notification_messages, amount, amount);
     }
 
     @Override
@@ -199,6 +179,12 @@ public class MessagesFragment extends LoginPollingPagingFragment<Message, Messag
 
     private void updateCount() {
 
+    }
+
+    @NonNull
+    @Override
+    protected String getNotificationText(int amount) {
+        return getResources().getQuantityString(R.plurals.notification_messages, amount, amount);
     }
 }
 

@@ -8,9 +8,7 @@ import android.widget.ImageView;
 
 import com.proxerme.app.activity.ImageDetailActivity;
 import com.proxerme.app.adapter.NewsAdapter;
-import com.proxerme.app.manager.NewsManager;
 import com.proxerme.app.manager.NotificationManager;
-import com.proxerme.app.manager.NotificationRetrievalManager;
 import com.proxerme.app.util.Utils;
 import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.connection.ProxerTag;
@@ -95,17 +93,5 @@ public class NewsFragment extends PagingFragment<News, NewsAdapter, NewsEvent, N
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onLoadError(NewsErrorEvent errorResult) {
         handleError(errorResult);
-    }
-
-    @Override
-    protected void handleResult(NewsEvent result) {
-        super.handleResult(result);
-
-        NewsManager manager = NewsManager.getInstance();
-
-        manager.setNewNews(0);
-        manager.setLastId(result.getItem().get(0).getId());
-
-        NotificationRetrievalManager.retrieveNewsLater(getContext());
     }
 }
