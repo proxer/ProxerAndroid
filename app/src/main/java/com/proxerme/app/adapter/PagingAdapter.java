@@ -62,8 +62,14 @@ public abstract class PagingAdapter<T extends IdItem & Parcelable,
      */
     public int insertAtStart(@NonNull List<T> list) {
         if (!list.isEmpty()) {
-            int offset = PagingHelper.calculateOffsetFromStart(list, this.list.get(0),
-                    getItemsOnPage());
+            int offset;
+
+            if (this.list.isEmpty()) {
+                offset = list.size();
+            } else {
+                offset = PagingHelper.calculateOffsetFromStart(list, this.list.get(0),
+                        getItemsOnPage());
+            }
 
             if (offset >= 0) {
                 list = list.subList(0, offset);
@@ -104,7 +110,7 @@ public abstract class PagingAdapter<T extends IdItem & Parcelable,
     }
 
     public void saveInstanceState(@NonNull Bundle outState) {
-        outState.putParcelableArrayList(STATE_LIST, list);
+        outState.putParcelableArrayList(STATE_LIST, this.list);
     }
 
     /**
@@ -116,7 +122,7 @@ public abstract class PagingAdapter<T extends IdItem & Parcelable,
     protected abstract int getItemsOnPage();
 
     public boolean isEmpty() {
-        return list.isEmpty();
+        return this.list.isEmpty();
     }
 
     public void clear() {
