@@ -29,8 +29,8 @@ public class UserManager {
     private static UserManager instance;
     private LoginUser user;
 
-    private boolean loggedIn = false;
-    private boolean loggingIn = false;
+    private volatile boolean loggedIn = false;
+    private volatile boolean working = false;
 
     @UserSaveMode
     private int saveUser = SAME_AS_IS;
@@ -59,12 +59,13 @@ public class UserManager {
         return loggedIn;
     }
 
-    public boolean isLoggingIn() {
-        return loggingIn;
+    public boolean isWorking() {
+        return working;
     }
 
     public void removeUser() {
         this.user = null;
+
         StorageManager.removeUser();
     }
 
@@ -86,7 +87,7 @@ public class UserManager {
 
     public void login(@NonNull LoginUser user, boolean save) {
         saveUser = save ? SAVE_USER : DONT_SAVE_USER;
-        loggingIn = true;
+        working = true;
 
         ProxerConnection.cancel(ProxerTag.LOGOUT);
         ProxerConnection.login(user).execute();
@@ -95,7 +96,7 @@ public class UserManager {
     public void reLogin() {
         if (user != null) {
             saveUser = SAME_AS_IS;
-            loggingIn = true;
+            working = true;
 
             ProxerConnection.cancel(ProxerTag.LOGOUT);
             ProxerConnection.login(user).execute();
@@ -103,16 +104,28 @@ public class UserManager {
     }
 
     public void logout() {
-        loggingIn = false;
+        working = false;
 
         ProxerConnection.cancel(ProxerTag.LOGIN);
         ProxerConnection.logout().execute();
     }
 
+    public void cancelLogin() {
+        ProxerConnection.cancel(ProxerTag.LOGIN);
+
+        working = false;
+    }
+
+    public void cancelLogout() {
+        ProxerConnection.cancel(ProxerTag.LOGOUT);
+
+        working = false;
+    }
+
     @Subscribe(sticky = true, priority = 1)
     public void onLogin(LoginEvent event) {
         loggedIn = true;
-        loggingIn = false;
+        working = false;
         changeUser(event.getItem());
 
         EventBus.getDefault().removeStickyEvent(event);
@@ -121,7 +134,7 @@ public class UserManager {
     @Subscribe(sticky = true, priority = 1)
     public void onLogout(LogoutEvent event) {
         loggedIn = false;
-        loggingIn = false;
+        working = false;
         removeUser();
 
         EventBus.getDefault().removeStickyEvent(event);

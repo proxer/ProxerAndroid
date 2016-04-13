@@ -13,11 +13,12 @@ import com.proxerme.app.receiver.BootReceiver;
 import com.proxerme.app.receiver.NotificationReceiver;
 import com.proxerme.app.service.NotificationService;
 import com.proxerme.library.event.success.ConferencesEvent;
+import com.proxerme.library.event.success.LoginEvent;
+import com.proxerme.library.event.success.LogoutEvent;
 import com.proxerme.library.event.success.MessagesEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * TODO: Describe Class
@@ -163,7 +164,7 @@ public class NotificationRetrievalManager {
         EventBus.getDefault().unregister(this);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    @Subscribe(sticky = true)
     public void onConferencesLoaded(ConferencesEvent event) {
         StorageManager.setNewMessages(0);
         StorageManager.resetMessagesInterval();
@@ -171,11 +172,21 @@ public class NotificationRetrievalManager {
         NotificationRetrievalManager.retrieveMessagesLater(context);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    @Subscribe(sticky = true)
     public void onMessagesLoaded(MessagesEvent event) {
         StorageManager.resetMessagesInterval();
 
         NotificationRetrievalManager.retrieveMessagesLater(context);
+    }
+
+    @Subscribe(sticky = true)
+    public void onLogin(LoginEvent event) {
+        retrieveMessagesLater(context);
+    }
+
+    @Subscribe(sticky = true)
+    public void onLogout(LogoutEvent event) {
+        cancelMessagesRetrieval(context);
     }
 
 }

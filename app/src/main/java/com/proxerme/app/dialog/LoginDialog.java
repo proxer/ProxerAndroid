@@ -24,11 +24,8 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.proxerme.app.R;
 import com.proxerme.app.event.CancelledEvent;
-import com.proxerme.app.manager.NotificationRetrievalManager;
 import com.proxerme.app.manager.UserManager;
 import com.proxerme.app.util.ErrorHandler;
-import com.proxerme.library.connection.ProxerConnection;
-import com.proxerme.library.connection.ProxerTag;
 import com.proxerme.library.entity.LoginUser;
 import com.proxerme.library.event.error.LoginErrorEvent;
 import com.proxerme.library.event.success.LoginEvent;
@@ -125,7 +122,7 @@ public class LoginDialog extends DialogFragment {
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
 
-        ProxerConnection.cancel(ProxerTag.LOGIN);
+        UserManager.getInstance().cancelLogin();
     }
 
     @Override
@@ -138,6 +135,7 @@ public class LoginDialog extends DialogFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+
         outState.putBoolean(STATE_LOADING, loading);
     }
 
@@ -158,8 +156,6 @@ public class LoginDialog extends DialogFragment {
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onLogin(LoginEvent event) {
         loading = false;
-
-        NotificationRetrievalManager.retrieveMessagesLater(getContext());
 
         dismiss();
     }

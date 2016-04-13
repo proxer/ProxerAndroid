@@ -91,7 +91,6 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
         });
 
         swipeRefreshLayout.setColorSchemeResources(R.color.primary, R.color.accent);
-        swipeRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -177,18 +176,22 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
 
     protected void doLoad(@IntRange(from = 0) final int page, final boolean insert,
                           final boolean showProgress) {
-        if (!isLoading() && canLoad()) {
-            lastLoadedPage = page;
-            currentErrorMessage = null;
-            lastMethodInsert = insert;
+        if (!isLoading()) {
+            if (canLoad()) {
+                lastLoadedPage = page;
+                currentErrorMessage = null;
+                lastMethodInsert = insert;
 
-            startLoading(showProgress);
+                startLoading(showProgress);
 
-            if (getParentActivity() != null) {
-                getParentActivity().clearMessage();
+                if (getParentActivity() != null) {
+                    getParentActivity().clearMessage();
+                }
+
+                load(page, insert);
+            } else {
+                stopLoading();
             }
-
-            load(page, insert);
         }
     }
 
