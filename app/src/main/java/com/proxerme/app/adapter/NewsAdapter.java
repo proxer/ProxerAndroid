@@ -51,16 +51,19 @@ public class NewsAdapter extends PagingAdapter<News, NewsAdapter.ViewHolder> {
 
     public NewsAdapter() {
         super();
+
         extensionMap = new HashMap<>(ProxerInfo.NEWS_ON_PAGE * 2);
     }
 
     public NewsAdapter(@NonNull Collection<News> news) {
         super(news);
+
         extensionMap = new HashMap<>(news.size() * 2);
     }
 
     public NewsAdapter(@NonNull Bundle savedInstanceState) {
         super(savedInstanceState);
+
         List<String> ids = savedInstanceState.getStringArrayList(STATE_NEWS_EXTENSION_IDS);
         extensionMap = new HashMap<>();
 
@@ -106,6 +109,7 @@ public class NewsAdapter extends PagingAdapter<News, NewsAdapter.ViewHolder> {
     @Override
     public void saveInstanceState(@NonNull Bundle outState) {
         super.saveInstanceState(outState);
+
         outState.putStringArrayList(STATE_NEWS_EXTENSION_IDS,
                 new ArrayList<>(extensionMap.keySet()));
     }
@@ -152,6 +156,7 @@ public class NewsAdapter extends PagingAdapter<News, NewsAdapter.ViewHolder> {
 
         public ViewHolder(View itemView) {
             super(itemView);
+
             ButterKnife.bind(this, itemView);
         }
 

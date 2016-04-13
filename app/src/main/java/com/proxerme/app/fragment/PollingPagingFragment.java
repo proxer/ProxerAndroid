@@ -101,16 +101,16 @@ public abstract class PollingPagingFragment<T extends IdItem & Parcelable,
         int countBefore = adapter.getItemCount();
         String firstIdBefore = countBefore > 0 ? adapter.getItemAt(0).getId() : null;
         int[] itemPositions = new int[layoutManager.getSpanCount()];
+        layoutManager.findFirstVisibleItemPositions(itemPositions);
         boolean wasAtStart = itemPositions.length > 0 && itemPositions[0] != 0;
 
         super.handleResult(result, insert);
 
         newItems = adapter.getItemCount() - countBefore;
-        layoutManager.findFirstVisibleItemPositions(itemPositions);
 
         if (wasAtStart) {
             if (newItems > 0 && firstIdBefore != null &&
-                    !firstIdBefore.equals(adapter.getItemAt(0).getId())) { //Were the items inserted at start
+                    !firstIdBefore.equals(adapter.getItemAt(0).getId())) {
                 notificationContainer.setVisibility(View.VISIBLE);
 
                 notification.setText(getNotificationText(newItems));
@@ -138,7 +138,7 @@ public abstract class PollingPagingFragment<T extends IdItem & Parcelable,
     }
 
     @OnClick(R.id.fragment_paging_notification_container)
-    public void onNotificationClick() {
+    void onNotificationClick() {
         list.smoothScrollToPosition(0);
 
         notificationContainer.setVisibility(View.GONE);

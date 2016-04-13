@@ -17,11 +17,13 @@
         android:layout_marginRight="32dp"
         android:layout_marginStart="48dp"
         android:layout_marginTop="8dp"
+        android:foreground="?attr/selectableItemBackground"
         app:cardCornerRadius="1dp"
         app:cardElevation="2dp">
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/item_message_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -36,8 +38,19 @@
                 android:layout_marginTop="8dp"
                 android:autoLink="web"
                 android:textAppearance="@android:style/TextAppearance.Medium"
-                android:textIsSelectable="true"
                 tools:text="Message looooooooooooooooooooooooooong" />
+
+            <TextView
+                android:id="@+id/item_message_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
+                android:textAppearance="@android:style/TextAppearance.Small"
+                tools:text="10 minutes ago" />
 
         </LinearLayout>
     </android.support.v7.widget.CardView>

@@ -12,13 +12,16 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.proxerme.app.R;
+import com.proxerme.app.util.TimeUtils;
 import com.proxerme.app.util.helper.PagingHelper;
 import com.proxerme.library.connection.UrlHolder;
 import com.proxerme.library.entity.LoginUser;
 import com.proxerme.library.entity.Message;
 import com.proxerme.library.util.ProxerInfo;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -33,6 +36,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.MessageViewHolder> {
 
+    private static final String STATE_MESSAGE_SHOWING_TIME_IDS = "message_showing_time_ids";
+
     private static final int TYPE_MESSAGE_SELF = 0;
     private static final int TYPE_MESSAGE = 1;
     private static final int TYPE_MESSAGE_WITH_TITLE = 2;
@@ -42,23 +47,35 @@ public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.Messag
 
     @Nullable
     private LoginUser user;
+    private HashMap<String, Boolean> showingTimeMap;
 
     private OnMessageInteractionListener onMessageInteractionListener;
 
     public MessageAdapter(@Nullable LoginUser user) {
         this.user = user;
+        this.showingTimeMap = new HashMap<>(ProxerInfo.MESSAGES_ON_PAGE * 2);
     }
 
     public MessageAdapter(@NonNull Collection<Message> list, @Nullable LoginUser user) {
         super(list);
 
         this.user = user;
+        this.showingTimeMap = new HashMap<>(list.size() * 2);
     }
 
     public MessageAdapter(@NonNull Bundle savedInstanceState, @Nullable LoginUser user) {
         super(savedInstanceState);
 
         this.user = user;
+
+        List<String> ids = savedInstanceState.getStringArrayList(STATE_MESSAGE_SHOWING_TIME_IDS);
+        this.showingTimeMap = new HashMap<>();
+
+        if (ids != null) {
+            for (String id : ids) {
+                this.showingTimeMap.put(id, true);
+            }
+        }
     }
 
     @Override
@@ -96,25 +113,35 @@ public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.Messag
 
     @Override
     public void onBindViewHolder(MessageViewHolder holder, int position) {
+        Message current = getItemAt(position);
+
         if (holder.getClass().equals(MessageTitleViewHolder.class)) {
-            ((MessageTitleViewHolder) holder).title.setText(getItemAt(position).getUsername());
+            ((MessageTitleViewHolder) holder).title.setText(current.getUsername());
         } else if (holder.getClass().equals(MessageImageTitleViewHolder.class)) {
             MessageImageTitleViewHolder castedHolder = (MessageImageTitleViewHolder) holder;
 
-            castedHolder.title.setText(getItemAt(position).getUsername());
+            castedHolder.title.setText(current.getUsername());
             Glide.with(castedHolder.image.getContext())
-                    .load(UrlHolder.getUserImageUrl(getItemAt(position).getImageId()))
+                    .load(UrlHolder.getUserImageUrl(current.getImageId()))
                     .into(castedHolder.image);
         } else if (holder.getClass().equals(MessageImageViewHolder.class)) {
             MessageImageViewHolder castedHolder = (MessageImageViewHolder) holder;
 
             Glide.with(castedHolder.image.getContext())
-                    .load(UrlHolder.getUserImageUrl(getItemAt(position).getImageId()))
+                    .load(UrlHolder.getUserImageUrl(current.getImageId()))
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(castedHolder.image);
         }
 
-        holder.message.setText(getItemAt(position).getMessage());
+        holder.message.setText(current.getMessage());
+        holder.time.setText(TimeUtils.convertToRelativeReadableTime(holder.time.getContext(),
+                current.getTime()));
+
+        if (showingTimeMap.containsKey(current.getId())) {
+            holder.time.setVisibility(View.VISIBLE);
+        } else {
+            holder.time.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -199,6 +226,21 @@ public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.Messag
         return offset;
     }
 
+    @Override
+    public void saveInstanceState(@NonNull Bundle outState) {
+        super.saveInstanceState(outState);
+
+        outState.putStringArrayList(STATE_MESSAGE_SHOWING_TIME_IDS,
+                new ArrayList<>(showingTimeMap.keySet()));
+    }
+
+    @Override
+    public void clear() {
+        super.clear();
+
+        user = null;
+    }
+
     public void setUser(@Nullable LoginUser user) {
         this.user = user;
     }
@@ -218,11 +260,28 @@ public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.Messag
 
         @Bind(R.id.item_message_message)
         TextView message;
+        @Bind(R.id.item_message_time)
+        TextView time;
 
         public MessageViewHolder(View itemView) {
             super(itemView);
 
             ButterKnife.bind(this, itemView);
+        }
+
+        @OnClick(R.id.item_message_container)
+        void onMessageContainerClick() {
+            Message current = getItemAt(getAdapterPosition());
+
+            if (showingTimeMap.containsKey(current.getId())) {
+                time.setVisibility(View.GONE);
+
+                showingTimeMap.remove(current.getId());
+            } else {
+                time.setVisibility(View.VISIBLE);
+
+                showingTimeMap.put(current.getId(), true);
+            }
         }
     }
 
