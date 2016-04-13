@@ -36,9 +36,9 @@
     <string name="preference_licences_title">Licences</string>
     <string name="preference_licences_summary">Projects used in this App</string>
     <string name="introduction_welcome_title">Welcome!</string>
-    <string name="introduction_welcome_description">Just some settings and you are ready to go.</string>
+    <string name="introduction_welcome_description">Just some settings and you are ready to go</string>
     <string name="introduction_notifications_title">Notifications</string>
-    <string name="introduction_notifications_description">Receive notifications.</string>
+    <string name="introduction_notifications_description">Receive notifications</string>
     <string name="introduction_skip">Skip</string>
     <string name="news_notification_title">News!</string>
     <string name="messages_notification_title">New Messages</string>
