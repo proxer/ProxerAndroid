@@ -48,10 +48,10 @@ public class IntroductionHelper {
         List<Slide> slides = new ArrayList<>(2);
 
         slides.add(new Slide().withTitle(R.string.introduction_welcome_title)
-                .withColorResource(R.color.primary)
+                .withColorResource(R.color.colorPrimary)
                 .withDescription(R.string.introduction_welcome_description));
         slides.add(new Slide().withTitle(R.string.introduction_notifications_title)
-                .withColorResource(R.color.accent)
+                .withColorResource(R.color.colorAccent)
                 .withOption(new Option(activity.
                         getString(R.string.introduction_notifications_description), false)));
 

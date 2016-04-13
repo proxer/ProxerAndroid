@@ -135,7 +135,7 @@ public abstract class MainActivity extends AppCompatActivity {
     public void showMessage(@NonNull String message, @Nullable String action,
                             @Nullable View.OnClickListener listener) {
         snackbar = Snackbar.make(content, message, Snackbar.LENGTH_INDEFINITE)
-                .setActionTextColor(ContextCompat.getColorStateList(this, R.color.primary_light))
+                .setActionTextColor(ContextCompat.getColorStateList(this, R.color.colorPrimaryLight))
                 .setAction(action, listener);
 
         snackbar.show();
@@ -155,8 +155,8 @@ public abstract class MainActivity extends AppCompatActivity {
 
     public void showPage(@NonNull String url) {
         CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder(customTabActivityHelper
-                .getSession()).setToolbarColor(ContextCompat.getColor(this, R.color.primary))
-                .setSecondaryToolbarColor(ContextCompat.getColor(this, R.color.primary_dark))
+                .getSession()).setToolbarColor(ContextCompat.getColor(this, R.color.colorPrimary))
+                .setSecondaryToolbarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
                 .enableUrlBarHiding().setShowTitle(true).build();
 
         CustomTabActivityHelper.openCustomTab(

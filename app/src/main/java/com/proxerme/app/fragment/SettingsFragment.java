@@ -33,15 +33,19 @@ public class SettingsFragment extends PreferenceFragmentCompat implements OnActi
         findPreference("pref_licences").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                new LibsBuilder().withAboutVersionShownName(true)
+                new LibsBuilder()
+                        .withAboutVersionShownName(true)
                         .withAboutDescription(getString(R.string.about_description))
-                        .withAboutIconShown(true).withAutoDetect(false)
+                        .withAboutIconShown(true)
+                        .withAutoDetect(false)
                         .withAboutAppName(getString(R.string.app_name))
                         .withLibraries("glide", "jodatimeandroid", "bridge", "hawk", "butterknife",
-                                "materialdialogs", "eventbus")
-                        .withActivityTheme(R.style.AppTheme)
+                                "materialdialogs", "eventbus", "circleimageview", "priorityjobqueue")
+                        .withExcludedLibraries("fastadapter", "materialize")
+                        .withFields(R.string.class.getFields())
                         .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
-                        .withActivityTitle(getContext().getString(R.string.about_libraries_title)).start(getContext());
+                        .withActivityTitle(getContext().getString(R.string.about_libraries_title))
+                        .start(getContext());
 
                 return true;
             }

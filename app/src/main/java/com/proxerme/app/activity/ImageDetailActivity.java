@@ -90,7 +90,7 @@ public class ImageDetailActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Bitmap bm = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
             TaskDescription taskDesc = new TaskDescription(getString(R.string.app_name), bm,
-                    ContextCompat.getColor(this, R.color.primary));
+                    ContextCompat.getColor(this, R.color.colorPrimary));
             setTaskDescription(taskDesc);
         }
     }

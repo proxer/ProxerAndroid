@@ -108,12 +108,12 @@ public class ConferenceAdapter extends PagingAdapter<Conference, ConferenceAdapt
             holder.topic.setCompoundDrawables(null, null,
                     new IconicsDrawable(holder.image.getContext())
                             .icon(CommunityMaterial.Icon.cmd_message_alert).sizeDp(32).paddingDp(8)
-                            .colorRes(R.color.primary), null);
+                            .colorRes(R.color.colorPrimary), null);
         }
 
         if (TextUtils.isEmpty(item.getImageId())) {
             IconicsDrawable icon = new IconicsDrawable(holder.image.getContext())
-                    .sizeDp(96).paddingDp(16).colorRes(R.color.primary);
+                    .sizeDp(96).paddingDp(16).colorRes(R.color.colorPrimary);
 
             if (item.isConference()) {
                 icon.icon(CommunityMaterial.Icon.cmd_account_multiple);

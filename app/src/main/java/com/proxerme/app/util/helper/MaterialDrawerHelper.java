@@ -112,7 +112,7 @@ public class MaterialDrawerHelper {
 
     private void initHeader(Bundle savedInstanceState) {
         header = new AccountHeaderBuilder()
-                .withHeaderBackground(R.color.accent)
+                .withHeaderBackground(R.color.colorAccent)
                 .withActivity(context)
                 .withSavedInstance(savedInstanceState)
                 .withProfiles(generateProfiles())
@@ -178,19 +178,19 @@ public class MaterialDrawerHelper {
 
         result.add(new PrimaryDrawerItem().withName(R.string.drawer_item_news)
                 .withIcon(CommunityMaterial.Icon.cmd_newspaper)
-                .withSelectedTextColorRes(R.color.primary)
-                .withSelectedIconColorRes(R.color.primary)
+                .withSelectedTextColorRes(R.color.colorPrimary)
+                .withSelectedIconColorRes(R.color.colorPrimary)
                 .withBadgeStyle(new BadgeStyle()
-                        .withColorRes(R.color.primary)
+                        .withColorRes(R.color.colorPrimary)
                         .withTextColorRes(android.R.color.white))
                 .withIdentifier(DRAWER_ID_NEWS));
 
         result.add(new PrimaryDrawerItem().withName(R.string.drawer_item_messages)
                 .withIcon(CommunityMaterial.Icon.cmd_message_text)
-                .withSelectedTextColorRes(R.color.primary)
-                .withSelectedIconColorRes(R.color.primary)
+                .withSelectedTextColorRes(R.color.colorPrimary)
+                .withSelectedIconColorRes(R.color.colorPrimary)
                 .withBadgeStyle(new BadgeStyle()
-                        .withColorRes(R.color.primary)
+                        .withColorRes(R.color.colorPrimary)
                         .withTextColorRes(android.R.color.white))
                 .withIdentifier(DRAWER_ID_MESSAGES));
 
@@ -203,15 +203,15 @@ public class MaterialDrawerHelper {
 
         result.add(new PrimaryDrawerItem().withName(R.string.drawer_item_donate)
                 .withIcon(CommunityMaterial.Icon.cmd_gift)
-                .withSelectedTextColorRes(R.color.primary)
-                .withSelectedIconColorRes(R.color.primary)
+                .withSelectedTextColorRes(R.color.colorPrimary)
+                .withSelectedIconColorRes(R.color.colorPrimary)
                 .withSelectable(false)
                 .withIdentifier(DRAWER_ID_DONATE));
 
         result.add(new PrimaryDrawerItem().withName(R.string.drawer_item_settings)
                 .withIcon(CommunityMaterial.Icon.cmd_settings)
-                .withSelectedTextColorRes(R.color.primary)
-                .withSelectedIconColorRes(R.color.primary)
+                .withSelectedTextColorRes(R.color.colorPrimary)
+                .withSelectedIconColorRes(R.color.colorPrimary)
                 .withIdentifier(DRAWER_ID_SETTINGS));
 
         return result;

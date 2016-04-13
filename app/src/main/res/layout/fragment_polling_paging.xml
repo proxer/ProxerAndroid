@@ -28,7 +28,7 @@
         android:clickable="true"
         android:foreground="?attr/selectableItemBackground"
         android:visibility="gone"
-        app:cardBackgroundColor="@color/accent"
+        app:cardBackgroundColor="@color/colorAccent"
         app:cardCornerRadius="8dp">
 
         <TextView
