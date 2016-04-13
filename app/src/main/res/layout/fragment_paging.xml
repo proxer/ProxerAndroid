@@ -6,7 +6,7 @@
     android:animateLayoutChanges="true"
     tools:context=".fragment.PagingFragment">
 
-    <com.proxerme.app.view.InitialLoadingSwipeRefreshLayout
+    <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/fragment_paging_list_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -16,6 +16,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="vertical" />
-    </com.proxerme.app.view.InitialLoadingSwipeRefreshLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </FrameLayout>

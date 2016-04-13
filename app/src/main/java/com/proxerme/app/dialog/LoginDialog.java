@@ -176,7 +176,7 @@ public class LoginDialog extends DialogFragment {
         //noinspection ThrowableResultOfMethodCallIgnored
         Toast.makeText(getContext(),
                 ErrorHandler.getMessageForErrorCode(getContext(),
-                        event.getItem().getErrorCode()), Toast.LENGTH_LONG).show();
+                        event.getItem()), Toast.LENGTH_LONG).show();
     }
 
     private void findViews() {

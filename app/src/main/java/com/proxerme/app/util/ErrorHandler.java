@@ -15,8 +15,10 @@ public class ErrorHandler {
 
     @NonNull
     public static String getMessageForErrorCode(@NonNull Context context,
-                                                @ProxerException.ErrorCode int code) {
-        switch (code) {
+                                                ProxerException exception) {
+        switch (exception.getErrorCode()) {
+            case ProxerException.ERROR_PROXER:
+                return exception.getMessage();
             case ProxerException.ERROR_NETWORK:
                 return context.getString(R.string.error_network);
             case ProxerException.ERROR_TIMEOUT:

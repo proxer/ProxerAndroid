@@ -136,7 +136,7 @@ public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.Messag
                 } else {
                     if (getItemAt(position + 1).getFromId().equals(current.getFromId())
                             && getItemAt(position + 1).getAction() == null) {
-                        return TYPE_MESSAGE_WITH_TITLE;
+                        return TYPE_MESSAGE_PROFILE_IMAGE;
                     } else {
                         return TYPE_MESSAGE_PROFILE_IMAGE_WITH_TITLE;
                     }
@@ -144,7 +144,7 @@ public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.Messag
             } else if (position + 1 >= getItemCount()) {
                 if (getItemAt(position - 1).getFromId().equals(current.getFromId())
                         && getItemAt(position - 1).getAction() == null) {
-                    return TYPE_MESSAGE_PROFILE_IMAGE;
+                    return TYPE_MESSAGE_WITH_TITLE;
                 } else {
                     return TYPE_MESSAGE_PROFILE_IMAGE_WITH_TITLE;
                 }

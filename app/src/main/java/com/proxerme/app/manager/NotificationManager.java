@@ -10,6 +10,7 @@ import android.support.v7.app.NotificationCompat;
 
 import com.proxerme.app.R;
 import com.proxerme.app.activity.DashboardActivity;
+import com.proxerme.app.activity.MessageActivity;
 import com.proxerme.app.util.helper.MaterialDrawerHelper;
 import com.proxerme.app.util.helper.PagingHelper;
 import com.proxerme.library.entity.Conference;
@@ -94,7 +95,7 @@ public class NotificationManager {
      * Shows a notification about new messages to the user. If there are none, nothing will happen.
      *
      * @param context     The context.
-     * @param conferences The new messages. It is expected, that only new conferences are passes,
+     * @param conferences The new messages. It is expected that only new conferences are passed
      *                    as no checks will happen here.
      */
     public static void showMessagesNotification(@NonNull Context context,
@@ -105,12 +106,26 @@ public class NotificationManager {
                             .getSystemService(Context.NOTIFICATION_SERVICE);
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
             InboxStyle inboxStyle = new InboxStyle();
-            String amount = conferences.size() + " " + "Messages";
+            String amount = context.getResources()
+                    .getQuantityString(R.plurals.messages_notification_amount_text,
+                            conferences.size(), conferences.size());
+            PendingIntent intent;
 
-            inboxStyle.setBigContentTitle(context.getString(R.string.messages_notification_title)).setSummaryText(amount);
+            inboxStyle.setBigContentTitle(context.getString(R.string.messages_notification_title))
+                    .setSummaryText(amount);
 
             for (int i = 0; i < 5 && i < conferences.size(); i++) {
                 inboxStyle.addLine(conferences.get(i).getTopic());
+            }
+
+            if (conferences.size() == 1) {
+                intent = PendingIntent.getActivity(context, 0, MessageActivity.getIntent(context,
+                        conferences.get(0)), PendingIntent.FLAG_UPDATE_CURRENT);
+            } else {
+                intent = PendingIntent.getActivity(
+                        context, 0, DashboardActivity.getSectionIntent(context,
+                                MaterialDrawerHelper.DRAWER_ID_MESSAGES, null),
+                        PendingIntent.FLAG_UPDATE_CURRENT);
             }
 
             builder.setContentTitle(context.getString(R.string.messages_notification_title))
@@ -118,10 +133,7 @@ public class NotificationManager {
                     .setSmallIcon(R.drawable.ic_stat_proxer)
                     .setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND |
                             Notification.DEFAULT_LIGHTS)
-                    .setContentIntent(PendingIntent.getActivity(
-                            context, 0, DashboardActivity.getSectionIntent(context,
-                                    MaterialDrawerHelper.DRAWER_ID_MESSAGES, null),
-                            PendingIntent.FLAG_UPDATE_CURRENT))
+                    .setContentIntent(intent)
                     .setStyle(inboxStyle)
                     .setAutoCancel(true);
 
@@ -146,10 +158,12 @@ public class NotificationManager {
 
     private static String generateNewsNotificationAmount(@NonNull Context context,
                                                          @IntRange(from = PagingHelper.OFFSET_TOO_LARGE,
-                                                                 to = ProxerInfo.CONFERENCES_ON_PAGE) int offset) {
+                                                                 to = ProxerInfo.CONFERENCES_ON_PAGE)
+                                                         int offset) {
         return offset == PagingHelper.OFFSET_TOO_LARGE ?
                 context.getString(R.string.news_notification_amount_more_than_15) :
-                (offset + " " + context.getString(R.string.news_notification_amount_text));
+                (context.getResources().getQuantityString(R.plurals.news_notification_amount_text,
+                        offset, offset));
     }
 
     @Retention(RetentionPolicy.SOURCE)

@@ -23,6 +23,7 @@ import com.proxerme.library.entity.Conference;
 import com.proxerme.library.util.ProxerInfo;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -63,20 +64,28 @@ public class ConferenceAdapter extends PagingAdapter<Conference, ConferenceAdapt
 
     @Override
     public int insertAtStart(@NonNull List<Conference> list) {
-        int result = super.insertAtStart(list);
-        int currentPos = 0;
+        int offset = super.insertAtStart(list);
+        HashMap<String, Boolean> foundItems = new HashMap<>();
 
-        while (currentPos < list.size() && !list.get(currentPos).equals(getItemAt(currentPos))) {
-            setItemAt(currentPos, list.get(currentPos));
+        for (int i = 0; i < getItemCount(); i++) {
+            if (foundItems.containsKey(getItemAt(i).getId())) {
+                removeItemAt(i);
 
-            currentPos++;
+                i--;
+            } else {
+                foundItems.put(getItemAt(i).getId(), true);
+            }
+
+            if (i < list.size()) {
+                if (!getItemAt(i).equals(list.get(i))) {
+                    setItemAt(i, list.get(i));
+                }
+            }
+
+            foundItems.put(getItemAt(i).getId(), true);
         }
 
-        if (currentPos > 0) {
-            notifyItemRangeChanged(0, currentPos);
-        }
-
-        return result;
+        return offset;
     }
 
     @Override
@@ -122,6 +131,10 @@ public class ConferenceAdapter extends PagingAdapter<Conference, ConferenceAdapt
     public void setOnConferenceInteractionListener(@Nullable OnConferenceInteractionListener
                                                            onConferenceInteractionListener) {
         this.onConferenceInteractionListener = onConferenceInteractionListener;
+    }
+
+    private void updateList(@NonNull List<Conference> list) {
+
     }
 
     public static abstract class OnConferenceInteractionListener {

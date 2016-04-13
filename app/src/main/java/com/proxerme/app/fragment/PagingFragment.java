@@ -84,7 +84,7 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
         list.addOnScrollListener(new EndlessRecyclerOnScrollListener(layoutManager) {
             @Override
             public void onLoadMore() {
-                if (!loading && !endReached) {
+                if (!endReached) {
                     doLoad(currentPage, false, true);
                 }
             }
@@ -125,7 +125,7 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
         } else if (currentErrorMessage != null) {
             showError();
         } else if (loading) {
-            swipeRefreshLayout.setRefreshing(true);
+            startLoading(true);
         }
     }
 
@@ -179,22 +179,16 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
                           final boolean showProgress) {
         if (!isLoading() && canLoad()) {
             lastLoadedPage = page;
-            loading = true;
             currentErrorMessage = null;
             lastMethodInsert = insert;
 
-            if (showProgress) {
-                swipeRefreshLayout.setRefreshing(true);
-            }
+            startLoading(showProgress);
 
             if (getParentActivity() != null) {
                 getParentActivity().clearMessage();
             }
 
             load(page, insert);
-        } else {
-            //Possible if the user used swipe to refresh
-            stopLoading();
         }
     }
 
@@ -224,8 +218,7 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
         if (exception.getErrorCode() == ERROR_PROXER) {
             currentErrorMessage = exception.getMessage();
         } else {
-            currentErrorMessage = ErrorHandler.getMessageForErrorCode(getContext(),
-                    exception.getErrorCode());
+            currentErrorMessage = ErrorHandler.getMessageForErrorCode(getContext(), exception);
         }
 
         stopLoading();
@@ -244,16 +237,31 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
                 list.smoothScrollToPosition(0);
             }
 
-
         } else {
             adapter.append(result);
         }
     }
 
-    protected void stopLoading() {
-        if (swipeRefreshLayout != null) {
-            swipeRefreshLayout.setRefreshing(false);
+    protected final void startLoading(boolean show) {
+        if (show) {
+            swipeRefreshLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    swipeRefreshLayout.setRefreshing(true);
+                }
+            });
         }
+
+        loading = true;
+    }
+
+    protected final void stopLoading() {
+        swipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
 
         loading = false;
     }

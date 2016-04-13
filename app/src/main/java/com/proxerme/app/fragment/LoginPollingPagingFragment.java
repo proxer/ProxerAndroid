@@ -44,7 +44,10 @@ public abstract class LoginPollingPagingFragment<T extends IdItem & Parcelable,
         super.onViewCreated(view, savedInstanceState);
 
         if (!canLoad) {
-            showLoginError();
+            if (!UserManager.getInstance().isLoggingIn()) {
+                showLoginError();
+            }
+
             stopLoading();
         }
     }

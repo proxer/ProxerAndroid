@@ -1,6 +1,7 @@
 package com.proxerme.app.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,11 +19,15 @@ public class MessageActivity extends MainActivity {
     private static final String ARGUMENT_CONFERENCE = "conference";
 
     public static void navigateTo(@NonNull Activity context, @NonNull Conference conference) {
+        context.startActivity(getIntent(context, conference));
+    }
+
+    public static Intent getIntent(@NonNull Context context, @NonNull Conference conference) {
         Intent intent = new Intent(context, MessageActivity.class);
 
         intent.putExtra(ARGUMENT_CONFERENCE, conference);
 
-        context.startActivity(intent);
+        return intent;
     }
 
     @Override

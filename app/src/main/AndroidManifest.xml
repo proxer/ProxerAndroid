@@ -48,7 +48,7 @@
         <activity
             android:name=".activity.MessageActivity"
             android:parentActivityName=".activity.DashboardActivity"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.DashboardActivity" />

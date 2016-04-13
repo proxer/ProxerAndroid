@@ -36,8 +36,16 @@
     <string name="introduction_welcome_description">Nur ein paar Einstellungen und es geht los</string>
     <string name="introduction_welcome_title">Willkommen!</string>
     <string name="news_notification_amount_more_than_15">Mehr als 15 News</string>
-    <string name="news_notification_amount_text">News</string>
     <string name="news_notification_title">News!</string>
+    <string name="messages_notification_title">Neue Nachrichten</string>
+    <plurals name="news_notification_amount_text">
+        <item quantity="one">%d News</item>
+        <item quantity="other">%d News</item>
+    </plurals>
+    <plurals name="messages_notification_amount_text">
+        <item quantity="one">Neue Nachrichten in %d Konferenz</item>
+        <item quantity="other">Neue Nachrichten in %d Konferenzen</item>
+    </plurals>
     <string name="interval_four_hours">Alle vier Stunden</string>
     <string name="interval_half_hourly">Halbstündlich</string>
     <string name="interval_hourly">Stündlich</string>
@@ -59,13 +67,12 @@
     <string name="button_expand_description">Erweitere Element</string>
     <string name="image_detail_description">Detailliertes Bild</string>
     <string name="preference_news_notifications_interval_title">News Aktualisierungsintervall</string>
-    <string name="messages_notification_title">Nachrichten</string>
     <string name="preference_category_info_title">Info</string>
     <string name="preference_licences_summary">Projekte, die in dieser App genutzt werden</string>
     <string name="preference_licences_title">Lizenzen</string>
     <string name="about_libraries_title">Lizenzen</string>
     <string name="error_do_login">Einloggen</string>
-    <string name="error_not_logged_in">Du bist nicht eingeloggt.</string>
+    <string name="error_not_logged_in">Du bist nicht eingeloggt</string>
     <string name="dialog_logout_go">Abmelden</string>
     <string name="dialog_logout_title">Möchtest du dich abmelden?</string>
     <string name="dialog_login_remember">Merken</string>

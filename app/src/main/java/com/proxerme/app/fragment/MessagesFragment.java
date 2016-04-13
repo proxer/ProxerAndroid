@@ -125,6 +125,10 @@ public class MessagesFragment extends LoginPollingPagingFragment<Message, Messag
         updateCount();
     }
 
+    private void updateCount() {
+
+    }
+
     @Override
     protected void cancelRequest() {
         ProxerConnection.cancel(ProxerTag.MESSAGES);
@@ -175,10 +179,6 @@ public class MessagesFragment extends LoginPollingPagingFragment<Message, Messag
 
             input.getText().clear();
         }
-    }
-
-    private void updateCount() {
-
     }
 
     @NonNull

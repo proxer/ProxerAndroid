@@ -51,6 +51,14 @@ public abstract class PagingAdapter<T extends IdItem & Parcelable,
 
     public void setItemAt(int position, T item) {
         list.set(position, item);
+
+        notifyItemChanged(position);
+    }
+
+    public void removeItemAt(int position) {
+        list.remove(position);
+
+        notifyItemRemoved(position);
     }
 
     /**

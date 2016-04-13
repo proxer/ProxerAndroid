@@ -8,7 +8,7 @@
     android:fitsSystemWindows="true"
     tools:context=".fragment.MessagesFragment">
 
-    <com.proxerme.app.view.InitialLoadingSwipeRefreshLayout
+    <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/fragment_paging_list_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="vertical" />
-    </com.proxerme.app.view.InitialLoadingSwipeRefreshLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <android.support.v7.widget.CardView
         android:id="@+id/fragment_paging_notification_container"

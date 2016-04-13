@@ -28,7 +28,9 @@ public class UserManager {
 
     private static UserManager instance;
     private LoginUser user;
+
     private boolean loggedIn = false;
+    private boolean loggingIn = false;
 
     @UserSaveMode
     private int saveUser = SAME_AS_IS;
@@ -57,6 +59,10 @@ public class UserManager {
         return loggedIn;
     }
 
+    public boolean isLoggingIn() {
+        return loggingIn;
+    }
+
     public void removeUser() {
         this.user = null;
         StorageManager.removeUser();
@@ -80,6 +86,7 @@ public class UserManager {
 
     public void login(@NonNull LoginUser user, boolean save) {
         saveUser = save ? SAVE_USER : DONT_SAVE_USER;
+        loggingIn = true;
 
         ProxerConnection.cancel(ProxerTag.LOGOUT);
         ProxerConnection.login(user).execute();
@@ -88,13 +95,16 @@ public class UserManager {
     public void reLogin() {
         if (user != null) {
             saveUser = SAME_AS_IS;
+            loggingIn = true;
 
             ProxerConnection.cancel(ProxerTag.LOGOUT);
             ProxerConnection.login(user).execute();
         }
     }
 
-    public void logout(){
+    public void logout() {
+        loggingIn = false;
+
         ProxerConnection.cancel(ProxerTag.LOGIN);
         ProxerConnection.logout().execute();
     }
@@ -102,6 +112,7 @@ public class UserManager {
     @Subscribe(sticky = true, priority = 1)
     public void onLogin(LoginEvent event) {
         loggedIn = true;
+        loggingIn = false;
         changeUser(event.getItem());
 
         EventBus.getDefault().removeStickyEvent(event);
@@ -110,6 +121,7 @@ public class UserManager {
     @Subscribe(sticky = true, priority = 1)
     public void onLogout(LogoutEvent event) {
         loggedIn = false;
+        loggingIn = false;
         removeUser();
 
         EventBus.getDefault().removeStickyEvent(event);

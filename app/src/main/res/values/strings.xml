@@ -41,9 +41,15 @@
     <string name="introduction_notifications_description">Receive notifications.</string>
     <string name="introduction_skip">Skip</string>
     <string name="news_notification_title">News!</string>
-    <string name="messages_notification_title">Messages</string>
+    <string name="messages_notification_title">New Messages</string>
     <string name="news_notification_amount_more_than_15">More than 15 News</string>
-    <string name="news_notification_amount_text">News</string>
+    <plurals name="news_notification_amount_text">
+        <item quantity="other">%d News</item>
+    </plurals>
+    <plurals name="messages_notification_amount_text">
+        <item quantity="one">New messages in %d conference</item>
+        <item quantity="other">New messages in %d conferences</item>
+    </plurals>
     <string name="interval_half_hourly">Half-hourly</string>
     <string name="interval_hourly">Hourly</string>
     <string name="interval_two_hours">Every two hours</string>
