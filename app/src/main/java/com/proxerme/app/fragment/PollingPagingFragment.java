@@ -145,22 +145,24 @@ public abstract class PollingPagingFragment<T extends IdItem & Parcelable,
     }
 
     private void startPolling() {
-        handler = new Handler();
+        if (handler == null) {
+            handler = new Handler();
 
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (canLoad()) {
-                    doLoad(getFirstPage(), true, false);
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (canLoad()) {
+                        doLoad(getFirstPage(), true, false);
 
-                    if (handler != null) {
-                        handler.postDelayed(this, POLLING_INTERVAL);
+                        if (handler != null) {
+                            handler.postDelayed(this, POLLING_INTERVAL);
+                        }
+                    } else {
+                        stopPolling();
                     }
-                } else {
-                    stopPolling();
                 }
-            }
-        }, POLLING_INTERVAL);
+            }, POLLING_INTERVAL);
+        }
     }
 
     private void stopPolling() {

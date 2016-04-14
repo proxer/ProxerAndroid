@@ -24,8 +24,11 @@ public class StorageManager {
     private static final String STORAGE_USER_PASSWORD = "storage_user_password";
     private static final String STORAGE_USER_ID = "storage_user_id";
     private static final String STORAGE_NEW_MESSAGES = "storage_messages_new";
+    private static final String STORAGE_LAST_LOGIN = "storage_last_login";
 
     private static final int MAX_MESSAGE_POLLING_INTERVAL = 850;
+    private static final int DEFAULT_MESSAGES_INTERVAL = 5;
+    private static final double MESSAGES_INTERVAL_MULTIPLICAND = 1.5;
 
     @Nullable
     public static String getLastNewsId() {
@@ -91,16 +94,25 @@ public class StorageManager {
         int interval = getMessagesInterval();
 
         if (interval <= MAX_MESSAGE_POLLING_INTERVAL) {
-            Hawk.put(STORAGE_MESSAGES_NOTIFICATIONS_INTERVAL, (int) (interval * 1.5));
+            Hawk.put(STORAGE_MESSAGES_NOTIFICATIONS_INTERVAL,
+                    (int) (interval * MESSAGES_INTERVAL_MULTIPLICAND));
         }
     }
 
     public static void resetMessagesInterval() {
-        Hawk.put(STORAGE_MESSAGES_NOTIFICATIONS_INTERVAL, 5);
+        Hawk.put(STORAGE_MESSAGES_NOTIFICATIONS_INTERVAL, DEFAULT_MESSAGES_INTERVAL);
     }
 
     @IntRange(from = 5)
     public static int getMessagesInterval() {
-        return Hawk.get(STORAGE_MESSAGES_NOTIFICATIONS_INTERVAL, 5);
+        return Hawk.get(STORAGE_MESSAGES_NOTIFICATIONS_INTERVAL, DEFAULT_MESSAGES_INTERVAL);
+    }
+
+    public static long getLastLogin() {
+        return Hawk.get(STORAGE_LAST_LOGIN, -1);
+    }
+
+    public static void setLastLogin(long lastLogin) {
+        Hawk.put(STORAGE_LAST_LOGIN, lastLogin);
     }
 }

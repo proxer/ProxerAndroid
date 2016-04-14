@@ -7,11 +7,14 @@ import android.support.annotation.Nullable;
 import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.connection.ProxerTag;
 import com.proxerme.library.entity.LoginUser;
+import com.proxerme.library.event.error.LoginErrorEvent;
+import com.proxerme.library.event.error.LogoutErrorEvent;
 import com.proxerme.library.event.success.LoginEvent;
 import com.proxerme.library.event.success.LogoutEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.joda.time.DateTime;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -25,8 +28,11 @@ public class UserManager {
     private static final int SAVE_USER = 0;
     private static final int DONT_SAVE_USER = 1;
     private static final int SAME_AS_IS = 2;
+    private static final int RELOGIN_THRESHOLD = 30;
 
     private static UserManager instance;
+
+    @Nullable
     private LoginUser user;
 
     private volatile boolean loggedIn = false;
@@ -95,11 +101,16 @@ public class UserManager {
 
     public void reLogin() {
         if (user != null) {
-            saveUser = SAME_AS_IS;
-            working = true;
+            long lastLogin = StorageManager.getLastLogin();
 
-            ProxerConnection.cancel(ProxerTag.LOGOUT);
-            ProxerConnection.login(user).execute();
+            if (lastLogin <= 0 || new DateTime(lastLogin)
+                    .isBefore(new DateTime().minusMinutes(RELOGIN_THRESHOLD))) {
+                saveUser = SAME_AS_IS;
+                working = true;
+
+                ProxerConnection.cancel(ProxerTag.LOGOUT);
+                ProxerConnection.login(user).execute();
+            }
         }
     }
 
@@ -127,6 +138,7 @@ public class UserManager {
         loggedIn = true;
         working = false;
         changeUser(event.getItem());
+        StorageManager.setLastLogin(System.currentTimeMillis());
 
         EventBus.getDefault().removeStickyEvent(event);
     }
@@ -136,8 +148,21 @@ public class UserManager {
         loggedIn = false;
         working = false;
         removeUser();
+        StorageManager.setLastLogin(-1);
 
         EventBus.getDefault().removeStickyEvent(event);
+    }
+
+    @Subscribe(sticky = true)
+    public void onLoginError(LoginErrorEvent event) {
+        working = false;
+        StorageManager.setLastLogin(-1);
+    }
+
+    @Subscribe(sticky = true)
+    public void onLogoutError(LogoutErrorEvent event) {
+        working = false;
+        StorageManager.setLastLogin(-1);
     }
 
     public void destroy() {

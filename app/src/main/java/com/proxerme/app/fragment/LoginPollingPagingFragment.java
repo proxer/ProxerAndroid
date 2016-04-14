@@ -36,7 +36,7 @@ public abstract class LoginPollingPagingFragment<T extends IdItem & Parcelable,
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        canLoad = UserManager.getInstance().isLoggedIn();
+        canLoad = UserManager.getInstance().isLoggedIn() && !UserManager.getInstance().isWorking();
     }
 
     @Override
