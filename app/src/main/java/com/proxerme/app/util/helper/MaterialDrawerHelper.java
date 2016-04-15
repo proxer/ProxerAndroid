@@ -138,11 +138,7 @@ public class MaterialDrawerHelper {
             ProfileDrawerItem profile = new ProfileDrawerItem().withName(user.getUsername())
                     .withIdentifier(HEADER_ID_USER);
 
-            try {
                 profile.withIcon(UrlHolder.getUserImageUrl(user.getImageId()));
-            } catch (RuntimeException ignored) {
-
-            }
 
             result.add(profile);
             result.add(new ProfileSettingDrawerItem()

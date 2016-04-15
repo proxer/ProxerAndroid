@@ -65,6 +65,26 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
 
     private boolean lastMethodInsert = false;
     private boolean endReached = false;
+    private boolean firstLoad = true;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        adapter = createAdapter(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            loading = savedInstanceState.getBoolean(STATE_LOADING);
+            currentPage = savedInstanceState.getInt(STATE_CURRENT_PAGE);
+            lastLoadedPage = savedInstanceState.getInt(STATE_LAST_LOADED_PAGE);
+            currentErrorMessage = savedInstanceState.getString(STATE_ERROR_MESSAGE);
+            lastMethodInsert = savedInstanceState.getBoolean(STATE_METHOD_BEFORE_ERROR);
+            endReached = savedInstanceState.getBoolean(STATE_END_REACHED);
+            firstLoad = false;
+        }
+
+        configAdapter(adapter);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -81,6 +101,7 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
         list.setHasFixedSize(true);
         list.setScrollContainer(true);
         list.setLayoutManager(layoutManager);
+        list.setAdapter(adapter);
         list.addOnScrollListener(new EndlessRecyclerOnScrollListener(layoutManager) {
             @Override
             public void onLoadMore() {
@@ -102,33 +123,6 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        adapter = createAdapter(savedInstanceState);
-
-        if (savedInstanceState != null) {
-            loading = savedInstanceState.getBoolean(STATE_LOADING);
-            currentPage = savedInstanceState.getInt(STATE_CURRENT_PAGE);
-            lastLoadedPage = savedInstanceState.getInt(STATE_LAST_LOADED_PAGE);
-            currentErrorMessage = savedInstanceState.getString(STATE_ERROR_MESSAGE);
-            lastMethodInsert = savedInstanceState.getBoolean(STATE_METHOD_BEFORE_ERROR);
-            endReached = savedInstanceState.getBoolean(STATE_END_REACHED);
-        }
-
-        configAdapter(adapter);
-        list.setAdapter(adapter);
-
-        if (savedInstanceState == null) {
-            doLoad(currentPage, false, true);
-        } else if (currentErrorMessage != null) {
-            showError();
-        } else if (loading) {
-            startLoading(true);
-        }
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
 
@@ -142,6 +136,14 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
 
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
+        }
+
+        if (firstLoad) {
+            doLoad(currentPage, false, true);
+        } else if (currentErrorMessage != null) {
+            showError();
+        } else if (loading) {
+            startLoading(true);
         }
     }
 

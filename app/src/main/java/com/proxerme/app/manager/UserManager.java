@@ -101,15 +101,20 @@ public class UserManager {
 
     public void reLogin() {
         if (user != null) {
+            working = true;
+            saveUser = SAME_AS_IS;
             long lastLogin = StorageManager.getLastLogin();
 
             if (lastLogin <= 0 || new DateTime(lastLogin)
                     .isBefore(new DateTime().minusMinutes(RELOGIN_THRESHOLD))) {
-                saveUser = SAME_AS_IS;
-                working = true;
 
                 ProxerConnection.cancel(ProxerTag.LOGOUT);
                 ProxerConnection.login(user).execute();
+            } else {
+                loggedIn = true;
+                working = false;
+
+                EventBus.getDefault().postSticky(new LoginEvent(user));
             }
         }
     }

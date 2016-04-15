@@ -1,7 +1,6 @@
 package com.proxerme.app.fragment;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,6 +17,9 @@ import com.proxerme.library.event.error.ErrorEvent;
 import com.proxerme.library.interfaces.IdItem;
 
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -32,6 +34,7 @@ public abstract class PollingPagingFragment<T extends IdItem & Parcelable,
         extends PagingFragment<T, A, E, EE> {
 
     private static final int POLLING_INTERVAL = 5000;
+    private static final String STATE_NEW_ITEMS = "new_items";
 
     @Bind(R.id.fragment_paging_notification_container)
     ViewGroup notificationContainer;
@@ -40,15 +43,14 @@ public abstract class PollingPagingFragment<T extends IdItem & Parcelable,
 
     private int newItems;
 
-    @Nullable
-    private Handler handler;
+    private ScheduledExecutorService executor;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState != null) {
-            newItems = savedInstanceState.getInt("new_items");
+            newItems = savedInstanceState.getInt(STATE_NEW_ITEMS);
         }
     }
 
@@ -93,7 +95,7 @@ public abstract class PollingPagingFragment<T extends IdItem & Parcelable,
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putInt("new_items", newItems);
+        outState.putInt(STATE_NEW_ITEMS, newItems);
     }
 
     @Override
@@ -117,9 +119,7 @@ public abstract class PollingPagingFragment<T extends IdItem & Parcelable,
             }
         }
 
-        if (handler == null) {
-            startPolling();
-        }
+        startPolling();
     }
 
     @Override
@@ -145,31 +145,25 @@ public abstract class PollingPagingFragment<T extends IdItem & Parcelable,
     }
 
     private void startPolling() {
-        if (handler == null) {
-            handler = new Handler();
-
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (canLoad()) {
-                        doLoad(getFirstPage(), true, false);
-
-                        if (handler != null) {
-                            handler.postDelayed(this, POLLING_INTERVAL);
-                        }
-                    } else {
-                        stopPolling();
-                    }
-                }
-            }, POLLING_INTERVAL);
+        if (executor == null || executor.isShutdown()) {
+            executor = Executors.newSingleThreadScheduledExecutor();
         }
+
+        executor.scheduleWithFixedDelay(new Runnable() {
+            @Override
+            public void run() {
+                if (canLoad()) {
+                    doLoad(getFirstPage(), true, false);
+                } else {
+                    stopPolling();
+                }
+            }
+        }, POLLING_INTERVAL, POLLING_INTERVAL, TimeUnit.MILLISECONDS);
     }
 
     private void stopPolling() {
-        if (handler != null) {
-            handler.removeCallbacksAndMessages(null);
-            handler = null;
-        }
+        executor.shutdownNow();
+        executor = null;
     }
 
     @NonNull

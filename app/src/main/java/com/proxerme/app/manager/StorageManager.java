@@ -16,11 +16,11 @@ public class StorageManager {
 
     public static final String STORAGE_MESSAGES_NOTIFICATIONS_INTERVAL =
             "storage_messages_notifications_interval";
+    public static final String STORAGE_USER_IMAGE_ID = "storage_user_image_id";
     private static final String STORAGE_NEW_NEWS = "storage_news_new";
     private static final String STORAGE_FIRST_START = "storage_first_start";
     private static final String STORAGE_NEWS_LAST_ID = "storage_news_last_id";
     private static final String STORAGE_USER_USERNAME = "storage_user_username";
-    private static final String STORAGE_USER_USERNAME1 = STORAGE_USER_USERNAME;
     private static final String STORAGE_USER_PASSWORD = "storage_user_password";
     private static final String STORAGE_USER_ID = "storage_user_id";
     private static final String STORAGE_NEW_MESSAGES = "storage_messages_new";
@@ -73,21 +73,25 @@ public class StorageManager {
     public static LoginUser getUser() {
         String username = Hawk.get(STORAGE_USER_USERNAME);
         String password = Hawk.get(STORAGE_USER_PASSWORD);
+        String id = Hawk.get(STORAGE_USER_ID);
+        String imageId = Hawk.get(STORAGE_USER_IMAGE_ID);
 
-        if (username == null || password == null) {
+        if (username == null || password == null || id == null || imageId == null) {
             return null;
         } else {
-            return new LoginUser(username, password);
+            return new LoginUser(username, password, id, imageId);
         }
     }
 
     public static void setUser(@NonNull LoginUser user) {
-        Hawk.chain(3).put(STORAGE_USER_USERNAME, user.getUsername())
-                .put(STORAGE_USER_PASSWORD, user.getPassword()).commit();
+        Hawk.chain(4).put(STORAGE_USER_USERNAME, user.getUsername())
+                .put(STORAGE_USER_PASSWORD, user.getPassword()).put(STORAGE_USER_ID, user.getId())
+                .put(STORAGE_USER_IMAGE_ID, user.getImageId()).commit();
     }
 
     public static void removeUser() {
-        Hawk.remove(STORAGE_USER_USERNAME1, STORAGE_USER_PASSWORD, STORAGE_USER_ID);
+        Hawk.remove(STORAGE_USER_USERNAME, STORAGE_USER_PASSWORD, STORAGE_USER_ID,
+                STORAGE_USER_IMAGE_ID);
     }
 
     public static void incrementMessagesInterval() {
@@ -109,7 +113,7 @@ public class StorageManager {
     }
 
     public static long getLastLogin() {
-        return Hawk.get(STORAGE_LAST_LOGIN, -1);
+        return Hawk.get(STORAGE_LAST_LOGIN, -1L);
     }
 
     public static void setLastLogin(long lastLogin) {
