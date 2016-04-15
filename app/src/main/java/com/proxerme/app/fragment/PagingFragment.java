@@ -97,7 +97,6 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
         configLayoutManager(layoutManager);
 
         list.setHasFixedSize(true);
-        list.setScrollContainer(true);
         list.setLayoutManager(layoutManager);
         list.setAdapter(adapter);
         list.addOnScrollListener(new EndlessRecyclerOnScrollListener(layoutManager) {

@@ -122,11 +122,7 @@ public class MessagesFragment extends LoginPollingPagingFragment<Message, Messag
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEnqueued(MessageEnqueuedEvent event) {
-        updateCount();
-    }
-
-    private void updateCount() {
-
+        //TODO show somehow
     }
 
     @Override

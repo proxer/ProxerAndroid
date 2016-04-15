@@ -133,10 +133,6 @@ public class ConferenceAdapter extends PagingAdapter<Conference, ConferenceAdapt
         this.onConferenceInteractionListener = onConferenceInteractionListener;
     }
 
-    private void updateList(@NonNull List<Conference> list) {
-
-    }
-
     public static abstract class OnConferenceInteractionListener {
         public void onConferenceClick(@NonNull View v, @NonNull Conference conference) {
 
