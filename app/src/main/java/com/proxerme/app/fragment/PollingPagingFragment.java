@@ -112,18 +112,18 @@ public abstract class PollingPagingFragment<T extends IdItem & Parcelable,
     @Override
     protected void handleResult(List<T> result, boolean insert) {
         int countBefore = adapter.getItemCount();
-        String firstIdBefore = countBefore > 0 ? adapter.getItemAt(0).getId() : null;
         int[] itemPositions = new int[layoutManager.getSpanCount()];
+
         layoutManager.findFirstVisibleItemPositions(itemPositions);
+
         boolean wasAtStart = itemPositions.length > 0 && itemPositions[0] != 0;
 
         super.handleResult(result, insert);
 
-        newItems = adapter.getItemCount() - countBefore;
+        if (insert) {
+            newItems = adapter.getItemCount() - countBefore;
 
-        if (wasAtStart) {
-            if (newItems > 0 && firstIdBefore != null &&
-                    !firstIdBefore.equals(adapter.getItemAt(0).getId())) {
+            if (wasAtStart && newItems > 0) {
                 notificationContainer.setVisibility(View.VISIBLE);
 
                 notification.setText(getNotificationText(newItems));
