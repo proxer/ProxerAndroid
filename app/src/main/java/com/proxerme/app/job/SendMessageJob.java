@@ -1,5 +1,6 @@
 package com.proxerme.app.job;
 
+import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
 
 import com.birbit.android.jobqueue.CancelReason;
@@ -51,6 +52,7 @@ public class SendMessageJob extends Job {
 
     }
 
+    @SuppressLint("SwitchIntDef")
     @Override
     protected RetryConstraint shouldReRunOnThrowable(Throwable throwable, int runCount,
                                                      int maxRunCount) {
@@ -61,14 +63,14 @@ public class SendMessageJob extends Job {
                 switch (((ProxerException) throwable).getErrorCode()) {
                     case ProxerException.ERROR_PROXER:
                         EventBus.getDefault()
-                                .postSticky(new SendingMessageFailedEvent(exception));
+                                .post(new SendingMessageFailedEvent(exception));
 
                         return RetryConstraint.CANCEL;
                     default:
                         return RetryConstraint.RETRY;
                 }
             } else {
-                EventBus.getDefault().postSticky(new SendingMessageFailedEvent(exception));
+                EventBus.getDefault().post(new SendingMessageFailedEvent(exception));
 
                 return RetryConstraint.CANCEL;
             }
@@ -77,7 +79,7 @@ public class SendMessageJob extends Job {
 
                 return RetryConstraint.RETRY;
             } else {
-                EventBus.getDefault().postSticky(new SendingMessageFailedEvent(
+                EventBus.getDefault().post(new SendingMessageFailedEvent(
                         new ProxerException(ProxerException.ERROR_UNKNOWN)));
 
                 return RetryConstraint.CANCEL;

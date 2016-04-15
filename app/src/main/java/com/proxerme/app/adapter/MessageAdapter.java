@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -136,6 +137,8 @@ public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.Messag
         holder.message.setText(current.getMessage());
         holder.time.setText(TimeUtils.convertToRelativeReadableTime(holder.time.getContext(),
                 current.getTime()));
+
+        Linkify.addLinks(holder.message, Linkify.ALL);
 
         if (showingTimeMap.containsKey(current.getId())) {
             holder.time.setVisibility(View.VISIBLE);

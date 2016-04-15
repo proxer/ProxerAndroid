@@ -86,12 +86,12 @@ public class MessagesFragment extends LoginPollingPagingFragment<Message, Messag
         ProxerConnection.loadMessages(conferenceId, page).execute();
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLoad(@NonNull MessagesEvent result) {
         handleResult(result);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLoadError(@NonNull MessagesErrorEvent errorEvent) {
         handleError(errorEvent);
     }
@@ -110,12 +110,12 @@ public class MessagesFragment extends LoginPollingPagingFragment<Message, Messag
         super.onLogout(event);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageSent(MessageSentEvent event) {
         doLoad(getFirstPage(), true, false);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSendingMessageFailed(SendingMessageFailedEvent event) {
         //TODO show somehow
     }

@@ -81,9 +81,11 @@ public class DashboardActivity extends MainActivity {
         Intent intent = new Intent(context, DashboardActivity.class);
 
         intent.putExtra(EXTRA_DRAWER_ITEM, drawerItemId);
+
         if (additionalInfo != null) {
             intent.putExtra(EXTRA_ADDITIONAL_INFO, additionalInfo);
         }
+
         return intent;
     }
 
@@ -100,29 +102,31 @@ public class DashboardActivity extends MainActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onResume() {
+        super.onResume();
 
         EventBus.getDefault().register(this);
+
         badgeManager.startListenForEvents();
     }
 
     @Override
-    protected void onStop() {
-        EventBus.getDefault().unregister(this);
+    protected void onPause() {
         badgeManager.stopListenForEvents();
 
-        super.onStop();
+        EventBus.getDefault().unregister(this);
+
+        super.onPause();
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
-
         if (isFinishing()) {
             ProxerConnection.cleanup();
             UserManager.getInstance().destroy();
         }
+
+        super.onDestroy();
     }
 
     @Override
@@ -177,14 +181,14 @@ public class DashboardActivity extends MainActivity {
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLogin(LoginEvent event) {
         if (!Utils.isDestroyedCompat(this)) {
             drawerHelper.refreshHeader();
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLogout(LogoutEvent event) {
         if (!Utils.isDestroyedCompat(this)) {
             drawerHelper.refreshHeader();

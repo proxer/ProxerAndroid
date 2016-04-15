@@ -20,6 +20,7 @@ import com.proxerme.app.customtabs.WebviewFallback;
 import com.proxerme.app.interfaces.OnActivityListener;
 import com.proxerme.app.manager.NotificationRetrievalManager;
 import com.proxerme.app.manager.UserManager;
+import com.proxerme.app.util.EventBusBuffer;
 import com.proxerme.app.util.Utils;
 
 import butterknife.Bind;
@@ -34,6 +35,7 @@ import butterknife.ButterKnife;
 public abstract class MainActivity extends AppCompatActivity {
 
     private static final String STATE_TITLE = "title";
+    private static final String STATE_CURRENT_FRAGMENT_TAG = "current_fragment_id";
 
     @Bind(R.id.activity_main_content_container)
     ViewGroup content;
@@ -53,6 +55,7 @@ public abstract class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
@@ -60,6 +63,13 @@ public abstract class MainActivity extends AppCompatActivity {
 
         customTabActivityHelper = new CustomTabActivityHelper();
         notificationRetrievalManager = new NotificationRetrievalManager(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        EventBusBuffer.stopAndProcess();
     }
 
     @Override
@@ -73,11 +83,27 @@ public abstract class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onPause() {
+        EventBusBuffer.startBuffering();
 
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
         customTabActivityHelper.unbindCustomTabsService(this);
         notificationRetrievalManager.stopListenForEvents();
+
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (isFinishing()) {
+            EventBusBuffer.stopAndPurge();
+        }
+
+        super.onDestroy();
     }
 
     @Override

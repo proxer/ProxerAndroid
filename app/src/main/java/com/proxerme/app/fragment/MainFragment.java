@@ -5,6 +5,8 @@ import android.support.v4.app.Fragment;
 import com.proxerme.app.activity.MainActivity;
 import com.proxerme.app.interfaces.OnActivityListener;
 
+import org.greenrobot.eventbus.EventBus;
+
 /**
  * TODO: Describe class
  *
@@ -19,6 +21,20 @@ public class MainFragment extends Fragment implements OnActivityListener {
             throw new RuntimeException("Don't use this Fragment in another" +
                     " Activity than MainActivity.");
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onPause() {
+        EventBus.getDefault().unregister(this);
+
+        super.onPause();
     }
 
     @Override

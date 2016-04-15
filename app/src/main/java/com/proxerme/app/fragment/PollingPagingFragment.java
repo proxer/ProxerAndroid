@@ -1,6 +1,7 @@
 package com.proxerme.app.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,9 +18,6 @@ import com.proxerme.library.event.error.ErrorEvent;
 import com.proxerme.library.interfaces.IdItem;
 
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -43,7 +41,20 @@ public abstract class PollingPagingFragment<T extends IdItem & Parcelable,
 
     private int newItems;
 
-    private ScheduledExecutorService executor;
+    private Handler handler = new Handler();
+
+    private Runnable pollingRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (canLoad()) {
+                doLoad(getFirstPage(), true, false);
+
+                handler.postDelayed(pollingRunnable, POLLING_INTERVAL);
+            } else {
+                stopPolling();
+            }
+        }
+    };
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,7 +88,7 @@ public abstract class PollingPagingFragment<T extends IdItem & Parcelable,
 
     @Override
     public void onResume() {
-        super.onStart();
+        super.onResume();
 
         if (canLoad()) {
             startPolling();
@@ -88,7 +99,7 @@ public abstract class PollingPagingFragment<T extends IdItem & Parcelable,
     public void onPause() {
         stopPolling();
 
-        super.onStop();
+        super.onPause();
     }
 
     @Override
@@ -145,25 +156,13 @@ public abstract class PollingPagingFragment<T extends IdItem & Parcelable,
     }
 
     private void startPolling() {
-        if (executor == null || executor.isShutdown()) {
-            executor = Executors.newSingleThreadScheduledExecutor();
-        }
+        stopPolling();
 
-        executor.scheduleWithFixedDelay(new Runnable() {
-            @Override
-            public void run() {
-                if (canLoad()) {
-                    doLoad(getFirstPage(), true, false);
-                } else {
-                    stopPolling();
-                }
-            }
-        }, POLLING_INTERVAL, POLLING_INTERVAL, TimeUnit.MILLISECONDS);
+        handler.postDelayed(pollingRunnable, POLLING_INTERVAL);
     }
 
     private void stopPolling() {
-        executor.shutdownNow();
-        executor = null;
+        handler.removeCallbacks(pollingRunnable);
     }
 
     @NonNull

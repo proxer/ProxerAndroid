@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -43,7 +42,7 @@ import butterknife.ButterKnife;
  *
  * @author Ruben Gees
  */
-public class LoginDialog extends DialogFragment {
+public class LoginDialog extends MainDialog {
 
     private static final String STATE_LOADING = "login_loading";
 
@@ -76,9 +75,6 @@ public class LoginDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        findViews();
-        initViews();
-
         MaterialDialog.Builder builder = new MaterialDialog.Builder(getContext()).autoDismiss(false)
                 .title(R.string.dialog_login_title).positiveText(R.string.dialog_login_go)
                 .negativeText(R.string.dialog_cancel)
@@ -94,7 +90,7 @@ public class LoginDialog extends DialogFragment {
                                         @NonNull DialogAction dialogAction) {
                         materialDialog.cancel();
                     }
-                }).customView(root, true);
+                }).customView(initViews(), true);
 
         return builder.build();
     }
@@ -112,10 +108,10 @@ public class LoginDialog extends DialogFragment {
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
-
-        root = null;
         ButterKnife.unbind(this);
+        root = null;
+
+        super.onDestroyView();
     }
 
     @Override
@@ -139,31 +135,16 @@ public class LoginDialog extends DialogFragment {
         outState.putBoolean(STATE_LOADING, loading);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        EventBus.getDefault().unregister(this);
-
-        super.onStop();
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLogin(LoginEvent event) {
         loading = false;
 
         dismiss();
     }
 
-    @Subscribe(sticky = true, priority = 1)
+    @Subscribe(priority = 1)
     public void onLoginError(LoginErrorEvent event) {
         EventBus.getDefault().cancelEventDelivery(event);
-        EventBus.getDefault().removeStickyEvent(event);
 
         loading = false;
 
@@ -175,12 +156,11 @@ public class LoginDialog extends DialogFragment {
                         event.getItem()), Toast.LENGTH_LONG).show();
     }
 
-    private void findViews() {
+    private View initViews() {
         root = (ViewGroup) View.inflate(getContext(), R.layout.dialog_login, null);
-        ButterKnife.bind(this, root);
-    }
 
-    private void initViews() {
+        ButterKnife.bind(this, root);
+
         LoginUser user = UserManager.getInstance().getUser();
 
         if (user != null) {
@@ -213,6 +193,8 @@ public class LoginDialog extends DialogFragment {
                 resetError(passwordInputContainer);
             }
         });
+
+        return root;
     }
 
     private void login() {

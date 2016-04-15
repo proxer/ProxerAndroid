@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +31,7 @@ import butterknife.ButterKnife;
  *
  * @author Ruben Gees
  */
-public class LogoutDialog extends DialogFragment {
+public class LogoutDialog extends MainDialog {
 
     private static final String STATE_LOADING = "login_loading";
 
@@ -50,8 +49,6 @@ public class LogoutDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        findViews();
-
         MaterialDialog.Builder builder = new MaterialDialog.Builder(getContext()).autoDismiss(false)
                 .title(R.string.dialog_logout_title).positiveText(R.string.dialog_logout_go)
                 .negativeText(R.string.dialog_cancel)
@@ -67,7 +64,7 @@ public class LogoutDialog extends DialogFragment {
                                         @NonNull DialogAction dialogAction) {
                         materialDialog.cancel();
                     }
-                }).customView(root, true);
+                }).customView(initViews(), true);
 
         return builder.build();
     }
@@ -93,10 +90,10 @@ public class LogoutDialog extends DialogFragment {
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
-
-        root = null;
         ButterKnife.unbind(this);
+        root = null;
+
+        super.onDestroyView();
     }
 
     @Override
@@ -120,31 +117,15 @@ public class LogoutDialog extends DialogFragment {
         outState.putBoolean(STATE_LOADING, loading);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        EventBus.getDefault().unregister(this);
-
-        super.onStop();
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLogout(LogoutEvent event) {
         loading = false;
 
         dismiss();
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLogoutError(LogoutErrorEvent event) {
-        EventBus.getDefault().removeStickyEvent(event);
-
         loading = false;
 
         handleVisibility();
@@ -155,9 +136,12 @@ public class LogoutDialog extends DialogFragment {
                         event.getItem()), Toast.LENGTH_LONG).show();
     }
 
-    private void findViews() {
+    private View initViews() {
         root = (ViewGroup) View.inflate(getContext(), R.layout.dialog_logout, null);
+
         ButterKnife.bind(this, root);
+
+        return root;
     }
 
     private void logout() {

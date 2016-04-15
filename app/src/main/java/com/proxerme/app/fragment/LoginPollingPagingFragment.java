@@ -52,7 +52,7 @@ public abstract class LoginPollingPagingFragment<T extends IdItem & Parcelable,
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLogin(LoginEvent event) {
         if (!canLoad) {
             canLoad = true;
@@ -67,7 +67,7 @@ public abstract class LoginPollingPagingFragment<T extends IdItem & Parcelable,
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLogout(LogoutEvent event) {
         canLoad = false;
 
@@ -76,7 +76,7 @@ public abstract class LoginPollingPagingFragment<T extends IdItem & Parcelable,
         showLoginError();
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLoginError(LoginErrorEvent event) {
         showLoginError();
     }

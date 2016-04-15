@@ -22,8 +22,6 @@ import com.proxerme.library.event.IListEvent;
 import com.proxerme.library.event.error.ErrorEvent;
 import com.proxerme.library.interfaces.IdItem;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.List;
 
 import butterknife.Bind;
@@ -124,19 +122,15 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
-
         ButterKnife.unbind(this);
         root = null;
+
+        super.onDestroyView();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
-        if (!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().register(this);
-        }
 
         if (firstLoad) {
             doLoad(currentPage, false, true);
@@ -145,13 +139,6 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
         } else if (loading) {
             startLoading(true);
         }
-    }
-
-    @Override
-    public void onStop() {
-        EventBus.getDefault().unregister(this);
-
-        super.onStop();
     }
 
     @Override
@@ -176,8 +163,10 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
         outState.putBoolean(STATE_END_REACHED, endReached);
     }
 
-    protected void doLoad(@IntRange(from = 0) final int page, final boolean insert,
-                          final boolean showProgress) {
+    protected synchronized void doLoad(@IntRange(from = 0) final int page, final boolean insert,
+                                       final boolean showProgress) {
+        firstLoad = false;
+
         if (!isLoading()) {
             if (canLoad()) {
                 lastLoadedPage = page;
@@ -198,8 +187,6 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
     }
 
     protected final void handleResult(E result) {
-        EventBus.getDefault().removeStickyEvent(result);
-
         if ((result.getItem()).isEmpty()) {
             if (!lastMethodInsert) {
                 endReached = true;
@@ -215,8 +202,6 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
     }
 
     protected void handleError(EE errorResult) {
-        EventBus.getDefault().removeStickyEvent(errorResult);
-
         //noinspection ThrowableResultOfMethodCallIgnored
         ProxerException exception = errorResult.getItem();
 

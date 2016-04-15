@@ -85,12 +85,6 @@ public class UserManager {
         }
     }
 
-    public void notifyLoggedOut() {
-        loggedIn = false;
-
-        EventBus.getDefault().post(new LogoutEvent());
-    }
-
     public void login(@NonNull LoginUser user, boolean save) {
         saveUser = save ? SAVE_USER : DONT_SAVE_USER;
         working = true;
@@ -113,8 +107,6 @@ public class UserManager {
             } else {
                 loggedIn = true;
                 working = false;
-
-                EventBus.getDefault().postSticky(new LoginEvent(user));
             }
         }
     }
@@ -138,33 +130,29 @@ public class UserManager {
         working = false;
     }
 
-    @Subscribe(sticky = true, priority = 1)
+    @Subscribe(priority = 1)
     public void onLogin(LoginEvent event) {
         loggedIn = true;
         working = false;
         changeUser(event.getItem());
         StorageManager.setLastLogin(System.currentTimeMillis());
-
-        EventBus.getDefault().removeStickyEvent(event);
     }
 
-    @Subscribe(sticky = true, priority = 1)
+    @Subscribe(priority = 1)
     public void onLogout(LogoutEvent event) {
         loggedIn = false;
         working = false;
         removeUser();
         StorageManager.setLastLogin(-1);
-
-        EventBus.getDefault().removeStickyEvent(event);
     }
 
-    @Subscribe(sticky = true)
+    @Subscribe()
     public void onLoginError(LoginErrorEvent event) {
         working = false;
         StorageManager.setLastLogin(-1);
     }
 
-    @Subscribe(sticky = true)
+    @Subscribe()
     public void onLogoutError(LogoutErrorEvent event) {
         working = false;
         StorageManager.setLastLogin(-1);

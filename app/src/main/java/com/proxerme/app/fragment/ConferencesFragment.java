@@ -86,12 +86,12 @@ public class ConferencesFragment extends LoginPollingPagingFragment<Conference, 
         ProxerConnection.cancel(ProxerTag.CONFERENCES);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLoad(@NonNull ConferencesEvent result) {
         handleResult(result);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLoadError(@NonNull ConferencesErrorEvent errorEvent) {
         handleError(errorEvent);
     }

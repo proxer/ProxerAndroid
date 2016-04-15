@@ -99,12 +99,12 @@ public class NewsFragment extends PagingFragment<News, NewsAdapter, NewsEvent, N
         ProxerConnection.cancel(ProxerTag.NEWS);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLoad(NewsEvent result) {
         handleResult(result);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLoadError(NewsErrorEvent errorResult) {
         handleError(errorResult);
     }

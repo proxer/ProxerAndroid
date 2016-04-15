@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
+            <com.proxerme.app.view.LinkifiedTextView
                 android:id="@+id/item_message_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -48,7 +48,6 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginTop="8dp"
-                android:autoLink="web"
                 android:textAppearance="@android:style/TextAppearance.Medium"
                 tools:text="Message looooooooooooooooooooooooooong" />
 

@@ -9,10 +9,11 @@
         android:id="@+id/item_message_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:foreground="?android:attr/selectableItemBackground"
         android:orientation="vertical"
         tools:ignore="UselessParent">
 
-        <TextView
+        <com.proxerme.app.view.LinkifiedTextView
             android:id="@+id/item_message_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

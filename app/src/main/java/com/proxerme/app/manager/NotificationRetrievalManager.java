@@ -164,7 +164,7 @@ public class NotificationRetrievalManager {
         EventBus.getDefault().unregister(this);
     }
 
-    @Subscribe(sticky = true)
+    @Subscribe()
     public void onConferencesLoaded(ConferencesEvent event) {
         StorageManager.setNewMessages(0);
         StorageManager.resetMessagesInterval();
@@ -172,19 +172,19 @@ public class NotificationRetrievalManager {
         NotificationRetrievalManager.retrieveMessagesLater(context);
     }
 
-    @Subscribe(sticky = true)
+    @Subscribe()
     public void onMessagesLoaded(MessagesEvent event) {
         StorageManager.resetMessagesInterval();
 
         NotificationRetrievalManager.retrieveMessagesLater(context);
     }
 
-    @Subscribe(sticky = true)
+    @Subscribe()
     public void onLogin(LoginEvent event) {
         retrieveMessagesLater(context);
     }
 
-    @Subscribe(sticky = true)
+    @Subscribe()
     public void onLogout(LogoutEvent event) {
         cancelMessagesRetrieval(context);
     }
