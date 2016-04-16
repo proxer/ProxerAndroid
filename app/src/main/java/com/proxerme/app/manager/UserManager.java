@@ -135,13 +135,13 @@ public class UserManager extends Manager {
         StorageHelper.setLastLogin(-1);
     }
 
-    @Subscribe()
+    @Subscribe
     public void onLoginError(LoginErrorEvent event) {
         working = false;
         StorageHelper.setLastLogin(-1);
     }
 
-    @Subscribe()
+    @Subscribe
     public void onLogoutError(LogoutErrorEvent event) {
         working = false;
         StorageHelper.setLastLogin(-1);

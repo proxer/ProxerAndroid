@@ -164,7 +164,7 @@ public class NotificationRetrievalManager extends Manager {
         this.context = null;
     }
 
-    @Subscribe()
+    @Subscribe
     public void onConferencesLoaded(ConferencesEvent event) {
         StorageHelper.setNewMessages(0);
         StorageHelper.resetMessagesInterval();
@@ -172,19 +172,19 @@ public class NotificationRetrievalManager extends Manager {
         NotificationRetrievalManager.retrieveMessagesLater(context);
     }
 
-    @Subscribe()
+    @Subscribe
     public void onMessagesLoaded(MessagesEvent event) {
         StorageHelper.resetMessagesInterval();
 
         NotificationRetrievalManager.retrieveMessagesLater(context);
     }
 
-    @Subscribe()
+    @Subscribe
     public void onLogin(LoginEvent event) {
         retrieveMessagesLater(context);
     }
 
-    @Subscribe()
+    @Subscribe
     public void onLogout(LogoutEvent event) {
         cancelMessagesRetrieval(context);
     }
