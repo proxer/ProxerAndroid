@@ -19,6 +19,7 @@ import com.proxerme.app.event.MessageEnqueuedEvent;
 import com.proxerme.app.job.SendMessageJob;
 import com.proxerme.app.manager.UserManager;
 import com.proxerme.app.util.Utils;
+import com.proxerme.app.util.helper.NotificationHelper;
 import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.connection.ProxerTag;
 import com.proxerme.library.connection.UrlHolder;
@@ -66,6 +67,8 @@ public class MessagesFragment extends LoginPollingPagingFragment<Message, Messag
         super.onCreate(savedInstanceState);
 
         conferenceId = getArguments().getString(ARGUMENT_CONFERENCE_ID);
+
+        NotificationHelper.cancel(getContext(), NotificationHelper.MESSAGES_NOTIFICATION);
     }
 
     @Override
