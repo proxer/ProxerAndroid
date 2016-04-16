@@ -15,43 +15,34 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class EventBusBuffer {
 
-    private static EventBusBuffer instance;
     private ConcurrentLinkedQueue<Object> queue;
 
-    private EventBusBuffer() {
-        this.queue = new ConcurrentLinkedQueue<>();
+    public EventBusBuffer() {
+        queue = new ConcurrentLinkedQueue<>();
     }
 
-    public static void startBuffering() {
-        if (!EventBus.getDefault().isRegistered(getInstance())) {
-            EventBus.getDefault().register(getInstance());
+    public void startBuffering() {
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
         }
     }
 
-    public static void stopAndProcess() {
+    public void stopAndProcess() {
         safeUnregister();
 
-        while (!getInstance().queue.isEmpty()) {
-            EventBus.getDefault().post(getInstance().queue.poll());
+        while (!queue.isEmpty()) {
+            EventBus.getDefault().post(queue.poll());
         }
     }
 
-    public static void stopAndPurge() {
+    public void stopAndPurge() {
         safeUnregister();
 
-        getInstance().queue.clear();
+        queue.clear();
     }
 
-    private static EventBusBuffer getInstance() {
-        if (instance == null) {
-            instance = new EventBusBuffer();
-        }
-
-        return instance;
-    }
-
-    private static void safeUnregister() {
-        EventBus.getDefault().unregister(getInstance());
+    private void safeUnregister() {
+        EventBus.getDefault().unregister(this);
     }
 
     @Subscribe

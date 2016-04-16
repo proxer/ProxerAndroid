@@ -14,7 +14,6 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.proxerme.app.R;
 import com.proxerme.app.event.CancelledEvent;
-import com.proxerme.app.manager.UserManager;
 import com.proxerme.app.util.ErrorHandler;
 import com.proxerme.library.event.error.LogoutErrorEvent;
 import com.proxerme.library.event.success.LogoutEvent;
@@ -100,7 +99,7 @@ public class LogoutDialog extends MainDialog {
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
 
-        UserManager.getInstance().cancelLogout();
+        getMainApplication().getUserManager().cancelLogout();
     }
 
     @Override
@@ -149,7 +148,7 @@ public class LogoutDialog extends MainDialog {
             loading = true;
             handleVisibility();
 
-            UserManager.getInstance().logout();
+            getMainApplication().getUserManager().logout();
         }
     }
 }

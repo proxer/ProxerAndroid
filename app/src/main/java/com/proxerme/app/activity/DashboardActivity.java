@@ -13,13 +13,11 @@ import com.proxerme.app.fragment.ConferencesFragment;
 import com.proxerme.app.fragment.NewsFragment;
 import com.proxerme.app.fragment.SettingsFragment;
 import com.proxerme.app.manager.BadgeManager;
-import com.proxerme.app.manager.PreferenceManager;
-import com.proxerme.app.manager.StorageManager;
-import com.proxerme.app.manager.UserManager;
 import com.proxerme.app.util.Utils;
 import com.proxerme.app.util.helper.IntroductionHelper;
 import com.proxerme.app.util.helper.MaterialDrawerHelper;
-import com.proxerme.library.connection.ProxerConnection;
+import com.proxerme.app.util.helper.PreferenceHelper;
+import com.proxerme.app.util.helper.StorageHelper;
 import com.proxerme.library.connection.UrlHolder;
 import com.proxerme.library.event.success.LoginEvent;
 import com.proxerme.library.event.success.LogoutEvent;
@@ -96,7 +94,7 @@ public class DashboardActivity extends MainActivity {
         drawerHelper = new MaterialDrawerHelper(this, drawerCallback);
         drawerHelper.build(toolbar, savedInstanceState);
 
-        badgeManager = new BadgeManager(badgeCallback);
+        getMainApplication().getBadgeManager().setCallback(badgeCallback);
 
         displayFirstPage(savedInstanceState);
     }
@@ -106,27 +104,13 @@ public class DashboardActivity extends MainActivity {
         super.onResume();
 
         EventBus.getDefault().register(this);
-
-        badgeManager.startListenForEvents();
     }
 
     @Override
     protected void onPause() {
-        badgeManager.stopListenForEvents();
-
         EventBus.getDefault().unregister(this);
 
         super.onPause();
-    }
-
-    @Override
-    protected void onDestroy() {
-        if (isFinishing()) {
-            ProxerConnection.cleanup();
-            UserManager.getInstance().destroy();
-        }
-
-        super.onDestroy();
     }
 
     @Override
@@ -148,9 +132,9 @@ public class DashboardActivity extends MainActivity {
                         OPTION_RESULT)) {
                     switch (option.getPosition()) {
                         case 1:
-                            PreferenceManager.setNewsNotificationsEnabled(DashboardActivity.this,
+                            PreferenceHelper.setNewsNotificationsEnabled(DashboardActivity.this,
                                     option.isActivated());
-                            PreferenceManager.setMessagesNotificationsEnabled(DashboardActivity.this,
+                            PreferenceHelper.setMessagesNotificationsEnabled(DashboardActivity.this,
                                     option.isActivated());
 
                             break;
@@ -158,7 +142,7 @@ public class DashboardActivity extends MainActivity {
                 }
             }
 
-            StorageManager.setFirstStartOccurred();
+            StorageHelper.setFirstStartOccurred();
             drawerHelper.select(DRAWER_ID_NEWS);
         }
     }
@@ -200,7 +184,7 @@ public class DashboardActivity extends MainActivity {
 
         if (drawerItemToLoad == DRAWER_ID_NONE) {
             if (savedInstanceState == null) {
-                if (StorageManager.isFirstStart()) {
+                if (StorageHelper.isFirstStart()) {
                     IntroductionHelper.build(this);
                 } else {
                     drawerHelper.select(DRAWER_ID_NEWS);

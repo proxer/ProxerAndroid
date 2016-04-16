@@ -11,7 +11,7 @@ import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.proxerme.app.R;
 import com.proxerme.app.interfaces.OnActivityListener;
 import com.proxerme.app.manager.NotificationRetrievalManager;
-import com.proxerme.app.manager.PreferenceManager;
+import com.proxerme.app.util.helper.PreferenceHelper;
 
 /**
  * A Fragment, showing the settings of this App.
@@ -76,9 +76,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements OnActi
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         switch (key) {
-            case PreferenceManager.PREFERENCE_NEWS_NOTIFICATIONS: {
+            case PreferenceHelper.PREFERENCE_NEWS_NOTIFICATIONS: {
                 boolean enabled =
-                        sharedPreferences.getBoolean(PreferenceManager.PREFERENCE_NEWS_NOTIFICATIONS,
+                        sharedPreferences.getBoolean(PreferenceHelper.PREFERENCE_NEWS_NOTIFICATIONS,
                                 false);
 
                 if (enabled) {
@@ -88,9 +88,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements OnActi
                 }
                 break;
             }
-            case PreferenceManager.PREFERENCE_MESSAGES_NOTIFICATIONS: {
+            case PreferenceHelper.PREFERENCE_MESSAGES_NOTIFICATIONS: {
                 boolean enabled =
-                        sharedPreferences.getBoolean(PreferenceManager.PREFERENCE_MESSAGES_NOTIFICATIONS,
+                        sharedPreferences.getBoolean(PreferenceHelper.PREFERENCE_MESSAGES_NOTIFICATIONS,
                                 false);
 
                 if (enabled) {
@@ -100,7 +100,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements OnActi
                 }
                 break;
             }
-            case PreferenceManager.PREFERENCE_NEWS_NOTIFICATIONS_INTERVAL:
+            case PreferenceHelper.PREFERENCE_NEWS_NOTIFICATIONS_INTERVAL:
                 NotificationRetrievalManager.retrieveNewsLater(getContext());
                 break;
         }

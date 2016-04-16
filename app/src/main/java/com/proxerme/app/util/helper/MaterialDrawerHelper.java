@@ -21,6 +21,7 @@ import com.mikepenz.materialdrawer.model.ProfileSettingDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.proxerme.app.R;
+import com.proxerme.app.application.MainApplication;
 import com.proxerme.app.manager.UserManager;
 import com.proxerme.library.connection.UrlHolder;
 import com.proxerme.library.entity.LoginUser;
@@ -59,6 +60,8 @@ public class MaterialDrawerHelper {
 
     private AccountHeader header;
     private Drawer drawer;
+
+    private UserManager userManager;
 
     private int currentDrawerItemId = -1;
 
@@ -99,6 +102,8 @@ public class MaterialDrawerHelper {
                                 @Nullable MaterialDrawerCallback callback) {
         this.context = context;
         this.callback = callback;
+
+        this.userManager = ((MainApplication) context.getApplication()).getUserManager();
     }
 
     public void build(@NonNull Toolbar toolbar, @Nullable Bundle savedInstanceState) {
@@ -121,7 +126,7 @@ public class MaterialDrawerHelper {
     }
 
     private ArrayList<IProfile> generateProfiles() {
-        LoginUser user = UserManager.getInstance().getUser();
+        LoginUser user = userManager.getUser();
         ArrayList<IProfile> result = new ArrayList<>();
 
         if (user == null) {

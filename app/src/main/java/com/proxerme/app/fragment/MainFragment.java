@@ -3,6 +3,7 @@ package com.proxerme.app.fragment;
 import android.support.v4.app.Fragment;
 
 import com.proxerme.app.activity.MainActivity;
+import com.proxerme.app.application.MainApplication;
 import com.proxerme.app.interfaces.OnActivityListener;
 
 import org.greenrobot.eventbus.EventBus;
@@ -21,6 +22,10 @@ public class MainFragment extends Fragment implements OnActivityListener {
             throw new RuntimeException("Don't use this Fragment in another" +
                     " Activity than MainActivity.");
         }
+    }
+
+    protected final MainApplication getMainApplication() {
+        return (MainApplication) getActivity().getApplication();
     }
 
     @Override

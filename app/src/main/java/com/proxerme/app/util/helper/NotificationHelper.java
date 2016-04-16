@@ -1,4 +1,4 @@
-package com.proxerme.app.manager;
+package com.proxerme.app.util.helper;
 
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -11,8 +11,6 @@ import android.support.v7.app.NotificationCompat;
 import com.proxerme.app.R;
 import com.proxerme.app.activity.DashboardActivity;
 import com.proxerme.app.activity.MessageActivity;
-import com.proxerme.app.util.helper.MaterialDrawerHelper;
-import com.proxerme.app.util.helper.PagingHelper;
 import com.proxerme.library.entity.Conference;
 import com.proxerme.library.entity.News;
 import com.proxerme.library.util.ProxerInfo;
@@ -31,7 +29,7 @@ import static android.support.v4.app.NotificationCompat.Style;
  *
  * @author Ruben Gees
  */
-public class NotificationManager {
+public class NotificationHelper {
 
     public static final int NEWS_NOTIFICATION = 1423;
     public static final int MESSAGES_NOTIFICATION = 1424;

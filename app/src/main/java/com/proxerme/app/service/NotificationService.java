@@ -7,10 +7,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.StringDef;
 
 import com.proxerme.app.application.MainApplication;
-import com.proxerme.app.manager.NotificationManager;
 import com.proxerme.app.manager.NotificationRetrievalManager;
-import com.proxerme.app.manager.StorageManager;
+import com.proxerme.app.util.helper.NotificationHelper;
 import com.proxerme.app.util.helper.PagingHelper;
+import com.proxerme.app.util.helper.StorageHelper;
 import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.connection.ProxerException;
 import com.proxerme.library.entity.Conference;
@@ -49,7 +49,7 @@ public class NotificationService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        if (intent != null && !MainApplication.getInstance().isVisible()) {
+        if (intent != null && ((MainApplication) getApplication()).getStartedActivities() <= 0) {
             final String action = intent.getAction();
 
             if (ACTION_LOAD_NEWS.equals(action)) {
@@ -61,7 +61,7 @@ public class NotificationService extends IntentService {
     }
 
     private void handleActionLoadNews() {
-        String lastId = StorageManager.getLastNewsId();
+        String lastId = StorageHelper.getLastNewsId();
 
         try {
             if (lastId != null) {
@@ -69,8 +69,8 @@ public class NotificationService extends IntentService {
                 int offset = PagingHelper.calculateOffsetFromStart(news, lastId,
                         ProxerInfo.NEWS_ON_PAGE);
 
-                StorageManager.setNewNews(offset);
-                NotificationManager.showNewsNotification(this, news, offset);
+                StorageHelper.setNewNews(offset);
+                NotificationHelper.showNewsNotification(this, news, offset);
             }
         } catch (ProxerException ignored) {
 
@@ -78,7 +78,7 @@ public class NotificationService extends IntentService {
     }
 
     private void handleActionLoadMessages() {
-        LoginUser user = StorageManager.getUser();
+        LoginUser user = StorageHelper.getUser();
 
         if (user != null) {
             try {
@@ -93,13 +93,13 @@ public class NotificationService extends IntentService {
                         break;
                     }
                 }
-                NotificationManager.showMessagesNotification(this, conferences);
-                StorageManager.setNewMessages(conferences.size());
+                NotificationHelper.showMessagesNotification(this, conferences);
+                StorageHelper.setNewMessages(conferences.size());
             } catch (ProxerException ignored) {
 
             }
 
-            StorageManager.incrementMessagesInterval();
+            StorageHelper.incrementMessagesInterval();
             NotificationRetrievalManager.retrieveMessagesLater(this);
         } else {
             NotificationRetrievalManager.cancelMessagesRetrieval(this);

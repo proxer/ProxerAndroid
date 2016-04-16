@@ -12,12 +12,13 @@ import android.support.annotation.NonNull;
 import com.proxerme.app.receiver.BootReceiver;
 import com.proxerme.app.receiver.NotificationReceiver;
 import com.proxerme.app.service.NotificationService;
+import com.proxerme.app.util.helper.PreferenceHelper;
+import com.proxerme.app.util.helper.StorageHelper;
 import com.proxerme.library.event.success.ConferencesEvent;
 import com.proxerme.library.event.success.LoginEvent;
 import com.proxerme.library.event.success.LogoutEvent;
 import com.proxerme.library.event.success.MessagesEvent;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 /**
@@ -25,11 +26,13 @@ import org.greenrobot.eventbus.Subscribe;
  *
  * @author Ruben Gees
  */
-public class NotificationRetrievalManager {
+public class NotificationRetrievalManager extends Manager {
 
     private Context context;
 
     public NotificationRetrievalManager(@NonNull Context context) {
+        super();
+
         this.context = context;
     }
 
@@ -42,7 +45,7 @@ public class NotificationRetrievalManager {
     public static void retrieveNewsLater(@NonNull Context context) {
         cancelNewsRetrieval(context);
         if (isNewsRetrievalEnabled(context)) {
-            int interval = PreferenceManager.getNewsUpdateInterval(context) * 60 * 1000;
+            int interval = PreferenceHelper.getNewsUpdateInterval(context) * 60 * 1000;
 
             retrieveLater(context, NotificationService.ACTION_LOAD_NEWS, interval);
         }
@@ -64,7 +67,7 @@ public class NotificationRetrievalManager {
      * @return True, if news retrieval is enabled.
      */
     public static boolean isNewsRetrievalEnabled(@NonNull Context context) {
-        return PreferenceManager.areNewsNotificationsEnabled(context);
+        return PreferenceHelper.areNewsNotificationsEnabled(context);
     }
 
     /**
@@ -77,7 +80,7 @@ public class NotificationRetrievalManager {
     public static void retrieveMessagesLater(@NonNull Context context) {
         cancelMessagesRetrieval(context);
         if (isMessagesRetrievalEnabled(context)) {
-            int interval = StorageManager.getMessagesInterval() * 1000;
+            int interval = StorageHelper.getMessagesInterval() * 1000;
 
             retrieveLater(context, NotificationService.ACTION_LOAD_MESSAGES, interval);
         }
@@ -99,7 +102,7 @@ public class NotificationRetrievalManager {
      * @return True, if messages retrieval is enabled.
      */
     public static boolean isMessagesRetrievalEnabled(@NonNull Context context) {
-        return PreferenceManager.areMessagesNotificationsEnabled(context);
+        return PreferenceHelper.areMessagesNotificationsEnabled(context);
     }
 
     private static void retrieveLater(@NonNull Context context,
@@ -154,27 +157,24 @@ public class NotificationRetrievalManager {
         return count;
     }
 
-    public void startListenForEvents() {
-        if (!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().register(this);
-        }
-    }
+    @Override
+    public void destroy() {
+        super.destroy();
 
-    public void stopListenForEvents() {
-        EventBus.getDefault().unregister(this);
+        this.context = null;
     }
 
     @Subscribe()
     public void onConferencesLoaded(ConferencesEvent event) {
-        StorageManager.setNewMessages(0);
-        StorageManager.resetMessagesInterval();
+        StorageHelper.setNewMessages(0);
+        StorageHelper.resetMessagesInterval();
 
         NotificationRetrievalManager.retrieveMessagesLater(context);
     }
 
     @Subscribe()
     public void onMessagesLoaded(MessagesEvent event) {
-        StorageManager.resetMessagesInterval();
+        StorageHelper.resetMessagesInterval();
 
         NotificationRetrievalManager.retrieveMessagesLater(context);
     }

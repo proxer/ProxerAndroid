@@ -2,6 +2,8 @@ package com.proxerme.app.dialog;
 
 import android.support.v4.app.DialogFragment;
 
+import com.proxerme.app.application.MainApplication;
+
 import org.greenrobot.eventbus.EventBus;
 
 /**
@@ -23,6 +25,10 @@ public class MainDialog extends DialogFragment {
         EventBus.getDefault().unregister(this);
 
         super.onPause();
+    }
+
+    protected final MainApplication getMainApplication() {
+        return (MainApplication) getActivity().getApplication();
     }
 
 }

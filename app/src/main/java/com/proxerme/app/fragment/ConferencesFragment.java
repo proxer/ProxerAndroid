@@ -12,8 +12,8 @@ import com.proxerme.app.R;
 import com.proxerme.app.activity.ImageDetailActivity;
 import com.proxerme.app.activity.MessageActivity;
 import com.proxerme.app.adapter.ConferenceAdapter;
-import com.proxerme.app.manager.NotificationManager;
 import com.proxerme.app.util.Utils;
+import com.proxerme.app.util.helper.NotificationHelper;
 import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.connection.ProxerTag;
 import com.proxerme.library.connection.UrlHolder;
@@ -41,7 +41,7 @@ public class ConferencesFragment extends LoginPollingPagingFragment<Conference, 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        NotificationManager.cancel(getContext(), NotificationManager.MESSAGES_NOTIFICATION);
+        NotificationHelper.cancel(getContext(), NotificationHelper.MESSAGES_NOTIFICATION);
     }
 
     @NonNull

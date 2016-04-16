@@ -15,7 +15,6 @@ import android.widget.ImageView;
 import com.proxerme.app.R;
 import com.proxerme.app.activity.ImageDetailActivity;
 import com.proxerme.app.adapter.MessageAdapter;
-import com.proxerme.app.application.MainApplication;
 import com.proxerme.app.event.MessageEnqueuedEvent;
 import com.proxerme.app.job.SendMessageJob;
 import com.proxerme.app.manager.UserManager;
@@ -71,7 +70,7 @@ public class MessagesFragment extends LoginPollingPagingFragment<Message, Messag
 
     @Override
     protected MessageAdapter createAdapter(Bundle savedInstanceState) {
-        UserManager userManager = UserManager.getInstance();
+        UserManager userManager = getMainApplication().getUserManager();
 
         if (savedInstanceState == null) {
             return new MessageAdapter(userManager.isLoggedIn() ? userManager.getUser() : null);
@@ -170,7 +169,7 @@ public class MessagesFragment extends LoginPollingPagingFragment<Message, Messag
         String text = input.getText().toString().trim();
 
         if (!TextUtils.isEmpty(text)) {
-            MainApplication.getInstance().getJobManager()
+            getMainApplication().getJobManager()
                     .addJobInBackground(new SendMessageJob(conferenceId, text));
 
             input.getText().clear();

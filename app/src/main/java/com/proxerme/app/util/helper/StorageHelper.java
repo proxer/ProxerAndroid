@@ -1,4 +1,4 @@
-package com.proxerme.app.manager;
+package com.proxerme.app.util.helper;
 
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
@@ -12,7 +12,7 @@ import com.proxerme.library.entity.LoginUser;
  *
  * @author Ruben Gees
  */
-public class StorageManager {
+public class StorageHelper {
 
     public static final String STORAGE_MESSAGES_NOTIFICATIONS_INTERVAL =
             "storage_messages_notifications_interval";

@@ -15,12 +15,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.proxerme.app.R;
+import com.proxerme.app.application.MainApplication;
 import com.proxerme.app.customtabs.CustomTabActivityHelper;
 import com.proxerme.app.customtabs.WebviewFallback;
 import com.proxerme.app.interfaces.OnActivityListener;
-import com.proxerme.app.manager.NotificationRetrievalManager;
-import com.proxerme.app.manager.UserManager;
-import com.proxerme.app.util.EventBusBuffer;
 import com.proxerme.app.util.Utils;
 
 import butterknife.Bind;
@@ -50,8 +48,6 @@ public abstract class MainActivity extends AppCompatActivity {
     private OnActivityListener onActivityListener;
     private Snackbar snackbar;
 
-    private NotificationRetrievalManager notificationRetrievalManager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,14 +58,6 @@ public abstract class MainActivity extends AppCompatActivity {
         initViews();
 
         customTabActivityHelper = new CustomTabActivityHelper();
-        notificationRetrievalManager = new NotificationRetrievalManager(this);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        EventBusBuffer.stopAndProcess();
     }
 
     @Override
@@ -77,33 +65,13 @@ public abstract class MainActivity extends AppCompatActivity {
         super.onStart();
 
         customTabActivityHelper.bindCustomTabsService(this);
-        notificationRetrievalManager.startListenForEvents();
-
-        UserManager.getInstance().reLogin();
-    }
-
-    @Override
-    protected void onPause() {
-        EventBusBuffer.startBuffering();
-
-        super.onPause();
     }
 
     @Override
     protected void onStop() {
         customTabActivityHelper.unbindCustomTabsService(this);
-        notificationRetrievalManager.stopListenForEvents();
 
         super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        if (isFinishing()) {
-            EventBusBuffer.stopAndPurge();
-        }
-
-        super.onDestroy();
     }
 
     @Override
@@ -187,6 +155,10 @@ public abstract class MainActivity extends AppCompatActivity {
 
         CustomTabActivityHelper.openCustomTab(
                 this, customTabsIntent, Uri.parse(url), new WebviewFallback());
+    }
+
+    protected final MainApplication getMainApplication() {
+        return (MainApplication) getApplication();
     }
 
     private void initViews() {

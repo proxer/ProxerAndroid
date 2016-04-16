@@ -1,15 +1,14 @@
 package com.proxerme.app.manager;
 
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.proxerme.app.util.helper.MaterialDrawerHelper;
 import com.proxerme.app.util.helper.PagingHelper;
+import com.proxerme.app.util.helper.StorageHelper;
 import com.proxerme.library.event.success.ConferencesEvent;
 import com.proxerme.library.event.success.NewsEvent;
 import com.proxerme.library.util.ProxerInfo;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -20,50 +19,55 @@ import static com.proxerme.app.util.helper.MaterialDrawerHelper.DrawerItemId;
  *
  * @author Ruben Gees
  */
-public class BadgeManager {
+public class BadgeManager extends StarteableManager {
 
+    @Nullable
     private BadgeCallback callback;
 
-    public BadgeManager(@NonNull BadgeCallback callback) {
-        this.callback = callback;
-
-        init();
-    }
-
-    public void startListenForEvents() {
-        if (!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().register(this);
-        }
-    }
-
-    public void stopListenForEvents() {
-        EventBus.getDefault().unregister(this);
+    public BadgeManager() {
+        super();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onNewsLoaded(NewsEvent event) {
-        callback.updateBadge(MaterialDrawerHelper.DRAWER_ID_NEWS, null);
+        if (callback != null) {
+            callback.updateBadge(MaterialDrawerHelper.DRAWER_ID_NEWS, null);
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onConferencesLoaded(ConferencesEvent event) {
-        callback.updateBadge(MaterialDrawerHelper.DRAWER_ID_MESSAGES, null);
+        if (callback != null) {
+            callback.updateBadge(MaterialDrawerHelper.DRAWER_ID_MESSAGES, null);
+        }
     }
 
     private void init() {
-        int newNews = StorageManager.getNewNews();
-        int newMessages = StorageManager.getNewMessages();
+        if (callback != null) {
+            int newNews = StorageHelper.getNewNews();
+            int newMessages = StorageHelper.getNewMessages();
 
-        if (newNews > 0 || newNews == PagingHelper.OFFSET_NOT_CALCULABLE) {
-            callback.updateBadge(MaterialDrawerHelper.DRAWER_ID_NEWS,
-                    newNews == PagingHelper.OFFSET_NOT_CALCULABLE ?
-                            (ProxerInfo.NEWS_ON_PAGE + "+") : (String.valueOf(newNews)));
-        }
+            if (newNews > 0 || newNews == PagingHelper.OFFSET_NOT_CALCULABLE) {
+                callback.updateBadge(MaterialDrawerHelper.DRAWER_ID_NEWS,
+                        newNews == PagingHelper.OFFSET_NOT_CALCULABLE ?
+                                (ProxerInfo.NEWS_ON_PAGE + "+") : (String.valueOf(newNews)));
+            }
 
-        if (newMessages > 0) {
-            callback.updateBadge(MaterialDrawerHelper.DRAWER_ID_MESSAGES,
-                    String.valueOf(newMessages));
+            if (newMessages > 0) {
+                callback.updateBadge(MaterialDrawerHelper.DRAWER_ID_MESSAGES,
+                        String.valueOf(newMessages));
+            }
         }
+    }
+
+    public void destroy() {
+        this.callback = null;
+    }
+
+    public void setCallback(@Nullable BadgeCallback callback) {
+        this.callback = callback;
+
+        init();
     }
 
     public interface BadgeCallback {

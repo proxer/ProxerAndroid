@@ -4,6 +4,7 @@ import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.proxerme.app.util.helper.StorageHelper;
 import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.connection.ProxerTag;
 import com.proxerme.library.entity.LoginUser;
@@ -12,7 +13,6 @@ import com.proxerme.library.event.error.LogoutErrorEvent;
 import com.proxerme.library.event.success.LoginEvent;
 import com.proxerme.library.event.success.LogoutEvent;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.joda.time.DateTime;
 
@@ -24,13 +24,11 @@ import java.lang.annotation.RetentionPolicy;
  *
  * @author Ruben Gees
  */
-public class UserManager {
+public class UserManager extends Manager {
     private static final int SAVE_USER = 0;
     private static final int DONT_SAVE_USER = 1;
     private static final int SAME_AS_IS = 2;
     private static final int RELOGIN_THRESHOLD = 30;
-
-    private static UserManager instance;
 
     @Nullable
     private LoginUser user;
@@ -41,19 +39,10 @@ public class UserManager {
     @UserSaveMode
     private int saveUser = SAME_AS_IS;
 
-    private UserManager() {
-        user = StorageManager.getUser();
+    public UserManager() {
+        super();
 
-        EventBus.getDefault().register(this);
-    }
-
-    @NonNull
-    public static UserManager getInstance() {
-        if (instance == null) {
-            instance = new UserManager();
-        }
-
-        return instance;
+        user = StorageHelper.getUser();
     }
 
     @Nullable
@@ -72,16 +61,16 @@ public class UserManager {
     public void removeUser() {
         this.user = null;
 
-        StorageManager.removeUser();
+        StorageHelper.removeUser();
     }
 
     public void changeUser(@NonNull LoginUser user) {
         this.user = user;
 
         if (saveUser == SAVE_USER) {
-            StorageManager.setUser(user);
+            StorageHelper.setUser(user);
         } else if (saveUser == DONT_SAVE_USER) {
-            StorageManager.removeUser();
+            StorageHelper.removeUser();
         }
     }
 
@@ -97,7 +86,7 @@ public class UserManager {
         if (user != null) {
             working = true;
             saveUser = SAME_AS_IS;
-            long lastLogin = StorageManager.getLastLogin();
+            long lastLogin = StorageHelper.getLastLogin();
 
             if (lastLogin <= 0 || new DateTime(lastLogin)
                     .isBefore(new DateTime().minusMinutes(RELOGIN_THRESHOLD))) {
@@ -135,7 +124,7 @@ public class UserManager {
         loggedIn = true;
         working = false;
         changeUser(event.getItem());
-        StorageManager.setLastLogin(System.currentTimeMillis());
+        StorageHelper.setLastLogin(System.currentTimeMillis());
     }
 
     @Subscribe(priority = 1)
@@ -143,25 +132,19 @@ public class UserManager {
         loggedIn = false;
         working = false;
         removeUser();
-        StorageManager.setLastLogin(-1);
+        StorageHelper.setLastLogin(-1);
     }
 
     @Subscribe()
     public void onLoginError(LoginErrorEvent event) {
         working = false;
-        StorageManager.setLastLogin(-1);
+        StorageHelper.setLastLogin(-1);
     }
 
     @Subscribe()
     public void onLogoutError(LogoutErrorEvent event) {
         working = false;
-        StorageManager.setLastLogin(-1);
-    }
-
-    public void destroy() {
-        EventBus.getDefault().unregister(this);
-
-        instance = null;
+        StorageHelper.setLastLogin(-1);
     }
 
     @Retention(RetentionPolicy.SOURCE)

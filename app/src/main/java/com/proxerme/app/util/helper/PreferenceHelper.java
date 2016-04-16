@@ -1,4 +1,4 @@
-package com.proxerme.app.manager;
+package com.proxerme.app.util.helper;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -11,7 +11,7 @@ import static android.preference.PreferenceManager.getDefaultSharedPreferences;
  *
  * @author Ruben Gees
  */
-public class PreferenceManager {
+public class PreferenceHelper {
 
     public static final String PREFERENCE_NEWS_NOTIFICATIONS = "pref_news_notifications";
     public static final String PREFERENCE_NEWS_NOTIFICATIONS_INTERVAL =

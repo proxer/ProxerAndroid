@@ -23,7 +23,6 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.proxerme.app.R;
 import com.proxerme.app.event.CancelledEvent;
-import com.proxerme.app.manager.UserManager;
 import com.proxerme.app.util.ErrorHandler;
 import com.proxerme.library.entity.LoginUser;
 import com.proxerme.library.event.error.LoginErrorEvent;
@@ -118,7 +117,7 @@ public class LoginDialog extends MainDialog {
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
 
-        UserManager.getInstance().cancelLogin();
+        getMainApplication().getUserManager().cancelLogin();
     }
 
     @Override
@@ -161,7 +160,7 @@ public class LoginDialog extends MainDialog {
 
         ButterKnife.bind(this, root);
 
-        LoginUser user = UserManager.getInstance().getUser();
+        LoginUser user = getMainApplication().getUserManager().getUser();
 
         if (user != null) {
             usernameInput.setText(user.getUsername());
@@ -206,7 +205,7 @@ public class LoginDialog extends MainDialog {
                 loading = true;
                 handleVisibility();
 
-                UserManager.getInstance().login(new LoginUser(username, password),
+                getMainApplication().getUserManager().login(new LoginUser(username, password),
                         remember.isChecked());
             }
         }

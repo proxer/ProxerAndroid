@@ -36,7 +36,9 @@ public abstract class LoginPollingPagingFragment<T extends IdItem & Parcelable,
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        canLoad = UserManager.getInstance().isLoggedIn() && !UserManager.getInstance().isWorking();
+        UserManager userManager = getMainApplication().getUserManager();
+
+        canLoad = userManager.isLoggedIn() && !userManager.isWorking();
     }
 
     @Override
@@ -44,7 +46,7 @@ public abstract class LoginPollingPagingFragment<T extends IdItem & Parcelable,
         super.onViewCreated(view, savedInstanceState);
 
         if (!canLoad) {
-            if (!UserManager.getInstance().isWorking()) {
+            if (!getMainApplication().getUserManager().isWorking()) {
                 showLoginError();
             }
 
@@ -83,7 +85,7 @@ public abstract class LoginPollingPagingFragment<T extends IdItem & Parcelable,
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDialogCancelled(CancelledEvent event) {
-        if (!UserManager.getInstance().isLoggedIn()) {
+        if (!getMainApplication().getUserManager().isLoggedIn()) {
             showLoginError();
         }
     }
