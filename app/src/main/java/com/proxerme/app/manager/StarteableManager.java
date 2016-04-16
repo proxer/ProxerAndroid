@@ -16,7 +16,7 @@ public abstract class StarteableManager {
     }
 
     public void stopListeningForEvents() {
-        EventBus.getDefault().register(this);
+        EventBus.getDefault().unregister(this);
     }
 
 }
