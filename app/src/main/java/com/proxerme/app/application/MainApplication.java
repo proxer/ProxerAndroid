@@ -51,6 +51,8 @@ public class MainApplication extends Application {
     private int createdActivities = 0;
     private int startedActivities = 0;
 
+    private boolean changingOrientation = false;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -60,10 +62,14 @@ public class MainApplication extends Application {
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-                createdActivities++;
+                if (changingOrientation) {
+                    changingOrientation = false;
+                } else {
+                    createdActivities++;
 
-                if (createdActivities == 1) {
-                    initManagers();
+                    if (createdActivities == 1) {
+                        initManagers();
+                    }
                 }
             }
 
@@ -100,10 +106,14 @@ public class MainApplication extends Application {
 
             @Override
             public void onActivityDestroyed(Activity activity) {
-                createdActivities--;
+                if (activity.isChangingConfigurations()) {
+                    changingOrientation = true;
+                } else {
+                    createdActivities--;
 
-                if (createdActivities <= 0) {
-                    destroyManagers();
+                    if (createdActivities <= 0) {
+                        destroyManagers();
+                    }
                 }
             }
         });
