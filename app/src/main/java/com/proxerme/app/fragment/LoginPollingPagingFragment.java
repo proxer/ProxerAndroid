@@ -42,8 +42,8 @@ public abstract class LoginPollingPagingFragment<T extends IdItem & Parcelable,
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onResume() {
+        super.onResume();
 
         if (!canLoad) {
             if (!getMainApplication().getUserManager().isWorking()) {

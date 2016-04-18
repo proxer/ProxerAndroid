@@ -32,7 +32,7 @@ import butterknife.ButterKnife;
  */
 public class LogoutDialog extends MainDialog {
 
-    private static final String STATE_LOADING = "login_loading";
+    private static final String STATE_LOADING = "logout_loading";
 
     ViewGroup root;
 

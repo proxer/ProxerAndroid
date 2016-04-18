@@ -8,10 +8,8 @@ import android.widget.ImageView;
 
 import com.proxerme.app.activity.ImageDetailActivity;
 import com.proxerme.app.adapter.NewsAdapter;
-import com.proxerme.app.manager.NotificationRetrievalManager;
+import com.proxerme.app.util.Section;
 import com.proxerme.app.util.Utils;
-import com.proxerme.app.util.helper.NotificationHelper;
-import com.proxerme.app.util.helper.StorageHelper;
 import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.connection.ProxerTag;
 import com.proxerme.library.connection.UrlHolder;
@@ -21,8 +19,6 @@ import com.proxerme.library.event.success.NewsEvent;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
-import java.util.List;
 
 /**
  * A Fragment, retrieving and displaying News.
@@ -37,10 +33,10 @@ public class NewsFragment extends PagingFragment<News, NewsAdapter, NewsEvent, N
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onResume() {
+        super.onResume();
 
-        NotificationHelper.cancel(getContext(), NotificationHelper.NEWS_NOTIFICATION);
+        getMainApplication().setCurrentSection(Section.NEWS);
     }
 
     @Override
@@ -85,18 +81,14 @@ public class NewsFragment extends PagingFragment<News, NewsAdapter, NewsEvent, N
     }
 
     @Override
-    protected void handleResult(List<News> result, boolean insert) {
-        super.handleResult(result, insert);
-
-        StorageHelper.setNewNews(0);
-        StorageHelper.setLastNewsId(result.get(0).getId());
-
-        NotificationRetrievalManager.retrieveNewsLater(getContext());
-    }
-
-    @Override
     protected void cancelRequest() {
         ProxerConnection.cancel(ProxerTag.NEWS);
+    }
+
+    @NonNull
+    @Override
+    protected String getNotificationText(int amount) {
+        return null;
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

@@ -19,10 +19,12 @@ import com.mikepenz.materialdrawer.util.DrawerImageLoader;
 import com.orhanobut.hawk.Hawk;
 import com.orhanobut.hawk.HawkBuilder;
 import com.proxer.app.EventBusIndex;
+import com.proxerme.app.event.SectionChangedEvent;
 import com.proxerme.app.manager.BadgeManager;
-import com.proxerme.app.manager.NotificationRetrievalManager;
+import com.proxerme.app.manager.NotificationManager;
 import com.proxerme.app.manager.UserManager;
 import com.proxerme.app.util.EventBusBuffer;
+import com.proxerme.app.util.Section;
 import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.util.PersistentCookieStore;
 
@@ -44,12 +46,15 @@ public class MainApplication extends Application {
     private JobManager jobManager;
     private BadgeManager badgeManager;
     private UserManager userManager;
-    private NotificationRetrievalManager notificationRetrievalManager;
+    private NotificationManager notificationManager;
 
     private EventBusBuffer eventBusBuffer = new EventBusBuffer();
 
     private int createdActivities = 0;
     private int startedActivities = 0;
+
+    @Section.SectionId
+    private int currentSection = Section.NONE;
 
     private boolean changingOrientation = false;
 
@@ -113,6 +118,8 @@ public class MainApplication extends Application {
 
                     if (createdActivities <= 0) {
                         destroyManagers();
+
+                        setCurrentSection(Section.NONE);
                     }
                 }
             }
@@ -160,7 +167,7 @@ public class MainApplication extends Application {
         jobManager = new JobManager(new Configuration.Builder(this).build());
         badgeManager = new BadgeManager();
         userManager = new UserManager();
-        notificationRetrievalManager = new NotificationRetrievalManager(this);
+        notificationManager = new NotificationManager(this);
     }
 
     private void destroyManagers() {
@@ -169,7 +176,7 @@ public class MainApplication extends Application {
 
         badgeManager.destroy();
         userManager.destroy();
-        notificationRetrievalManager.destroy();
+        notificationManager.destroy();
     }
 
     public int getStartedActivities() {
@@ -192,7 +199,18 @@ public class MainApplication extends Application {
     }
 
     @NonNull
-    public NotificationRetrievalManager getNotificationRetrievalManager() {
-        return notificationRetrievalManager;
+    public NotificationManager getNotificationManager() {
+        return notificationManager;
+    }
+
+    @Section.SectionId
+    public int getCurrentSection() {
+        return currentSection;
+    }
+
+    public void setCurrentSection(@Section.SectionId int newSection) {
+        this.currentSection = newSection;
+
+        EventBus.getDefault().post(new SectionChangedEvent(newSection));
     }
 }

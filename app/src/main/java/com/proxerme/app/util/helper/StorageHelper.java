@@ -24,7 +24,8 @@ public class StorageHelper {
     private static final String STORAGE_USER_PASSWORD = "storage_user_password";
     private static final String STORAGE_USER_ID = "storage_user_id";
     private static final String STORAGE_NEW_MESSAGES = "storage_messages_new";
-    private static final String STORAGE_LAST_LOGIN = "storage_last_login";
+    private static final String STORAGE_LAST_LOGIN_TIME = "storage_last_login";
+    private static final String STORAGE_LAST_MESSAGE_TIME = "storage_last_message";
 
     private static final int MAX_MESSAGE_POLLING_INTERVAL = 850;
     private static final int DEFAULT_MESSAGES_INTERVAL = 5;
@@ -112,11 +113,19 @@ public class StorageHelper {
         return Hawk.get(STORAGE_MESSAGES_NOTIFICATIONS_INTERVAL, DEFAULT_MESSAGES_INTERVAL);
     }
 
-    public static long getLastLogin() {
-        return Hawk.get(STORAGE_LAST_LOGIN, -1L);
+    public static long getLastLoginTime() {
+        return Hawk.get(STORAGE_LAST_LOGIN_TIME, -1L);
     }
 
-    public static void setLastLogin(long lastLogin) {
-        Hawk.put(STORAGE_LAST_LOGIN, lastLogin);
+    public static void setLastLoginTime(long lastLoginTime) {
+        Hawk.put(STORAGE_LAST_LOGIN_TIME, lastLoginTime);
+    }
+
+    public static long getLastReceivedMessageTime() {
+        return Hawk.get(STORAGE_LAST_MESSAGE_TIME, -1L);
+    }
+
+    public static void setLastReceivedMessageTime(long lastReceivedMessageTime) {
+        Hawk.put(STORAGE_LAST_MESSAGE_TIME, lastReceivedMessageTime);
     }
 }

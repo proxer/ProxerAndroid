@@ -1,5 +1,6 @@
 package com.proxerme.app.manager;
 
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.ComponentName;
@@ -9,15 +10,18 @@ import android.content.pm.PackageManager;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 
+import com.proxerme.app.event.SectionChangedEvent;
 import com.proxerme.app.receiver.BootReceiver;
 import com.proxerme.app.receiver.NotificationReceiver;
 import com.proxerme.app.service.NotificationService;
+import com.proxerme.app.util.helper.NotificationHelper;
 import com.proxerme.app.util.helper.PreferenceHelper;
 import com.proxerme.app.util.helper.StorageHelper;
 import com.proxerme.library.event.success.ConferencesEvent;
 import com.proxerme.library.event.success.LoginEvent;
 import com.proxerme.library.event.success.LogoutEvent;
 import com.proxerme.library.event.success.MessagesEvent;
+import com.proxerme.library.event.success.NewsEvent;
 
 import org.greenrobot.eventbus.Subscribe;
 
@@ -26,38 +30,14 @@ import org.greenrobot.eventbus.Subscribe;
  *
  * @author Ruben Gees
  */
-public class NotificationRetrievalManager extends Manager {
+public class NotificationManager extends Manager {
 
     private Context context;
 
-    public NotificationRetrievalManager(@NonNull Context context) {
+    public NotificationManager(@NonNull Context context) {
         super();
 
         this.context = context;
-    }
-
-    /**
-     * Retrieves News and interprets them in a background Service in the time span, specified in the
-     * settings. If a news retrieval was already queued, it will be cancelled.
-     *
-     * @param context The context.
-     */
-    public static void retrieveNewsLater(@NonNull Context context) {
-        cancelNewsRetrieval(context);
-        if (isNewsRetrievalEnabled(context)) {
-            int interval = PreferenceHelper.getNewsUpdateInterval(context) * 60 * 1000;
-
-            retrieveLater(context, NotificationService.ACTION_LOAD_NEWS, interval);
-        }
-    }
-
-    /**
-     * Cancels a queued news retrieval. If there is none, nothing will happen.
-     *
-     * @param context The context.
-     */
-    public static void cancelNewsRetrieval(@NonNull Context context) {
-        cancelRetrieval(context, NotificationService.ACTION_LOAD_NEWS);
     }
 
     /**
@@ -71,13 +51,37 @@ public class NotificationRetrievalManager extends Manager {
     }
 
     /**
+     * Retrieves News and interprets them in a background Service in the time span, specified in the
+     * settings. If a news retrieval was already queued, it will be cancelled.
+     *
+     * @param context The context.
+     */
+    public void retrieveNewsLater(@NonNull Context context) {
+        cancelNewsRetrieval(context);
+        if (isNewsRetrievalEnabled(context)) {
+            int interval = PreferenceHelper.getNewsUpdateInterval(context) * 60 * 1000;
+
+            retrieveLater(context, NotificationService.ACTION_LOAD_NEWS, interval);
+        }
+    }
+
+    /**
+     * Cancels a queued news retrieval. If there is none, nothing will happen.
+     *
+     * @param context The context.
+     */
+    public void cancelNewsRetrieval(@NonNull Context context) {
+        cancelRetrieval(context, NotificationService.ACTION_LOAD_NEWS);
+    }
+
+    /**
      * Retrieves new messages and interprets them in a background Service.
      * If a messages retrieval was already queued, it will be cancelled.
      * The interval is retrieved from the storage and will be incremented in the service.
      *
      * @param context The context.
      */
-    public static void retrieveMessagesLater(@NonNull Context context) {
+    public void retrieveMessagesLater(@NonNull Context context) {
         cancelMessagesRetrieval(context);
         if (isMessagesRetrievalEnabled(context)) {
             int interval = StorageHelper.getMessagesInterval() * 1000;
@@ -91,7 +95,7 @@ public class NotificationRetrievalManager extends Manager {
      *
      * @param context The context.
      */
-    public static void cancelMessagesRetrieval(@NonNull Context context) {
+    public void cancelMessagesRetrieval(@NonNull Context context) {
         cancelRetrieval(context, NotificationService.ACTION_LOAD_MESSAGES);
     }
 
@@ -101,12 +105,12 @@ public class NotificationRetrievalManager extends Manager {
      * @param context The context.
      * @return True, if messages retrieval is enabled.
      */
-    public static boolean isMessagesRetrievalEnabled(@NonNull Context context) {
+    public boolean isMessagesRetrievalEnabled(@NonNull Context context) {
         return PreferenceHelper.areMessagesNotificationsEnabled(context);
     }
 
-    private static void retrieveLater(@NonNull Context context,
-                                      @NonNull @NotificationService.NotificationAction String
+    private void retrieveLater(@NonNull Context context,
+                               @NonNull @NotificationService.NotificationAction String
                                               action, int interval) {
         AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, NotificationReceiver.class);
@@ -125,8 +129,8 @@ public class NotificationRetrievalManager extends Manager {
                 PackageManager.DONT_KILL_APP);
     }
 
-    private static void cancelRetrieval(@NonNull Context context,
-                                        @NonNull @NotificationService.NotificationAction String
+    private void cancelRetrieval(@NonNull Context context,
+                                 @NonNull @NotificationService.NotificationAction String
                                                 action) {
         Intent intent = new Intent(context, NotificationReceiver.class);
 
@@ -143,7 +147,7 @@ public class NotificationRetrievalManager extends Manager {
         }
     }
 
-    private static int getOngoingRetrievals(@NonNull Context context) {
+    private int getOngoingRetrievals(@NonNull Context context) {
         int count = 0;
 
         if (isNewsRetrievalEnabled(context)) {
@@ -165,18 +169,27 @@ public class NotificationRetrievalManager extends Manager {
     }
 
     @Subscribe
+    public void onNewsLoaded(NewsEvent event) {
+        StorageHelper.setNewNews(0);
+        StorageHelper.setLastNewsId(event.getItem().get(0).getId());
+
+        retrieveNewsLater(context);
+    }
+
+    @Subscribe
     public void onConferencesLoaded(ConferencesEvent event) {
         StorageHelper.setNewMessages(0);
+        StorageHelper.setLastReceivedMessageTime(event.getItem().get(0).getTime());
         StorageHelper.resetMessagesInterval();
 
-        NotificationRetrievalManager.retrieveMessagesLater(context);
+        retrieveMessagesLater(context);
     }
 
     @Subscribe
     public void onMessagesLoaded(MessagesEvent event) {
         StorageHelper.resetMessagesInterval();
 
-        NotificationRetrievalManager.retrieveMessagesLater(context);
+        retrieveMessagesLater(context);
     }
 
     @Subscribe
@@ -187,6 +200,27 @@ public class NotificationRetrievalManager extends Manager {
     @Subscribe
     public void onLogout(LogoutEvent event) {
         cancelMessagesRetrieval(context);
+    }
+
+    @SuppressLint("SwitchIntDef")
+    @Subscribe
+    public void onSectionChanged(SectionChangedEvent event) {
+        switch (event.getNewSection()) {
+            case com.proxerme.app.util.Section.CONFERENCES:
+                NotificationHelper.cancel(context, NotificationHelper.MESSAGES_NOTIFICATION);
+
+                break;
+            case com.proxerme.app.util.Section.MESSAGES:
+                NotificationHelper.cancel(context, NotificationHelper.MESSAGES_NOTIFICATION);
+
+                break;
+            case com.proxerme.app.util.Section.NEWS:
+                NotificationHelper.cancel(context, NotificationHelper.NEWS_NOTIFICATION);
+
+                break;
+            case com.proxerme.app.util.Section.SETTINGS:
+                break;
+        }
     }
 
 }

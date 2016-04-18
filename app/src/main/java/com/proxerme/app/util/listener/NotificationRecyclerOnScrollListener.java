@@ -9,11 +9,11 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
  *
  * @author Ruben Gees
  */
-public abstract class StartReachedRecyclerOnScrollListener extends RecyclerView.OnScrollListener {
+public abstract class NotificationRecyclerOnScrollListener extends RecyclerView.OnScrollListener {
 
     private StaggeredGridLayoutManager mLayoutManager;
 
-    public StartReachedRecyclerOnScrollListener(@NonNull StaggeredGridLayoutManager mLayoutManager) {
+    public NotificationRecyclerOnScrollListener(@NonNull StaggeredGridLayoutManager mLayoutManager) {
         this.mLayoutManager = mLayoutManager;
     }
 

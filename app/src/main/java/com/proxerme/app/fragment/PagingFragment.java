@@ -11,12 +11,14 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.proxerme.app.R;
 import com.proxerme.app.adapter.PagingAdapter;
 import com.proxerme.app.util.ErrorHandler;
 import com.proxerme.app.util.Utils;
 import com.proxerme.app.util.listener.EndlessRecyclerOnScrollListener;
+import com.proxerme.app.util.listener.NotificationRecyclerOnScrollListener;
 import com.proxerme.library.connection.ProxerException;
 import com.proxerme.library.event.IListEvent;
 import com.proxerme.library.event.error.ErrorEvent;
@@ -26,6 +28,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static com.proxerme.library.connection.ProxerException.ERROR_PROXER;
 
@@ -43,6 +46,8 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
     private static final String STATE_LAST_LOADED_PAGE = "paging_last_loaded_page";
     private static final String STATE_ERROR_MESSAGE = "paging_error_message";
     private static final String STATE_END_REACHED = "paging_end_reached";
+    private static final String STATE_NEW_ITEMS = "paging_new_items";
+    private static final String STATE_SHOW_LOADING = "paging_show_loading";
 
     protected A adapter;
 
@@ -52,9 +57,15 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
     @Bind(R.id.fragment_paging_list)
     RecyclerView list;
 
+    @Bind(R.id.fragment_paging_notification_container)
+    ViewGroup notificationContainer;
+    @Bind(R.id.fragment_paging_notification)
+    TextView notification;
+
     StaggeredGridLayoutManager layoutManager;
 
     private boolean loading = false;
+    private boolean showLoading;
 
     private int currentPage = getFirstPage();
     private int lastLoadedPage = getFirstPage();
@@ -63,7 +74,9 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
 
     private boolean lastMethodInsert = false;
     private boolean endReached = false;
-    private boolean firstLoad = true;
+    private boolean firstLoad;
+
+    private int newItems = 0;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,12 +86,17 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
 
         if (savedInstanceState != null) {
             loading = savedInstanceState.getBoolean(STATE_LOADING);
+            showLoading = savedInstanceState.getBoolean(STATE_SHOW_LOADING);
             currentPage = savedInstanceState.getInt(STATE_CURRENT_PAGE);
             lastLoadedPage = savedInstanceState.getInt(STATE_LAST_LOADED_PAGE);
             currentErrorMessage = savedInstanceState.getString(STATE_ERROR_MESSAGE);
             lastMethodInsert = savedInstanceState.getBoolean(STATE_METHOD_BEFORE_ERROR);
             endReached = savedInstanceState.getBoolean(STATE_END_REACHED);
+            newItems = savedInstanceState.getInt(STATE_NEW_ITEMS);
             firstLoad = false;
+        } else {
+            showLoading = true;
+            firstLoad = true;
         }
 
         configAdapter(adapter);
@@ -108,6 +126,13 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
             }
         });
 
+        list.addOnScrollListener(new NotificationRecyclerOnScrollListener(layoutManager) {
+            @Override
+            public void onStartReached() {
+                notificationContainer.setVisibility(View.GONE);
+            }
+        });
+
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -115,6 +140,12 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
                 doLoad(getFirstPage(), true, true);
             }
         });
+
+        if (newItems > 0) {
+            notificationContainer.setVisibility(View.VISIBLE);
+        } else {
+            notificationContainer.setVisibility(View.GONE);
+        }
 
         return root;
     }
@@ -128,15 +159,15 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onResume() {
+        super.onResume();
 
         if (firstLoad) {
             doLoad(currentPage, false, true);
         } else if (currentErrorMessage != null) {
             showError();
         } else if (loading) {
-            startLoading(true);
+            startLoading(showLoading);
         }
     }
 
@@ -155,15 +186,24 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
 
         adapter.saveInstanceState(outState);
         outState.putBoolean(STATE_LOADING, loading);
+        outState.putBoolean(STATE_SHOW_LOADING, showLoading);
         outState.putInt(STATE_CURRENT_PAGE, currentPage);
         outState.putInt(STATE_LAST_LOADED_PAGE, lastLoadedPage);
         outState.putString(STATE_ERROR_MESSAGE, currentErrorMessage);
         outState.putBoolean(STATE_METHOD_BEFORE_ERROR, lastMethodInsert);
         outState.putBoolean(STATE_END_REACHED, endReached);
+        outState.putInt(STATE_NEW_ITEMS, newItems);
     }
 
-    protected synchronized void doLoad(@IntRange(from = 0) final int page, final boolean insert,
-                                       final boolean showProgress) {
+    @OnClick(R.id.fragment_paging_notification_container)
+    void onNotificationClick() {
+        list.smoothScrollToPosition(0);
+
+        notificationContainer.setVisibility(View.GONE);
+    }
+
+    protected void doLoad(@IntRange(from = 0) final int page, final boolean insert,
+                          final boolean showProgress) {
         firstLoad = false;
 
         if (!isLoading()) {
@@ -209,7 +249,6 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
         } else {
             currentErrorMessage = ErrorHandler.getMessageForErrorCode(getContext(), exception);
         }
-
         stopLoading();
         showError();
     }
@@ -220,10 +259,17 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
             layoutManager.findFirstVisibleItemPositions(itemPositions);
             boolean wasAtStart = itemPositions.length > 0 && itemPositions[0] == 0;
 
-            int offset = adapter.insertAtStart(result);
+            newItems = adapter.insertAtStart(result);
 
-            if (offset > 0 && wasAtStart) {
-                list.smoothScrollToPosition(0);
+            //noinspection ConstantConditions
+            if (newItems > 0) {
+                if (wasAtStart) {
+                    list.smoothScrollToPosition(0);
+                } else {
+                    notificationContainer.setVisibility(View.VISIBLE);
+
+                    notification.setText(getNotificationText(newItems));
+                }
             }
 
         } else {
@@ -232,6 +278,8 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
     }
 
     protected final void startLoading(boolean show) {
+        showLoading = show;
+
         if (show) {
             swipeRefreshLayout.post(new Runnable() {
                 @Override
@@ -281,11 +329,18 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
         return true;
     }
 
+    protected boolean isFirstLoad() {
+        return firstLoad;
+    }
+
     protected abstract A createAdapter(Bundle savedInstanceState);
 
     protected abstract void load(@IntRange(from = 1) final int page, final boolean insert);
 
     protected abstract void cancelRequest();
+
+    @NonNull
+    protected abstract String getNotificationText(int amount);
 
     protected View inflateLayout(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {

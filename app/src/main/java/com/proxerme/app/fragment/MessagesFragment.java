@@ -18,8 +18,8 @@ import com.proxerme.app.adapter.MessageAdapter;
 import com.proxerme.app.event.MessageEnqueuedEvent;
 import com.proxerme.app.job.SendMessageJob;
 import com.proxerme.app.manager.UserManager;
+import com.proxerme.app.util.Section;
 import com.proxerme.app.util.Utils;
-import com.proxerme.app.util.helper.NotificationHelper;
 import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.connection.ProxerTag;
 import com.proxerme.library.connection.UrlHolder;
@@ -47,6 +47,8 @@ public class MessagesFragment extends LoginPollingPagingFragment<Message, Messag
 
     private static final String ARGUMENT_CONFERENCE_ID = "conference_id";
 
+    private static final int POLLING_INTERVAL = 3000;
+
     @Bind(R.id.fragment_messages_input)
     TextInputEditText input;
 
@@ -67,8 +69,13 @@ public class MessagesFragment extends LoginPollingPagingFragment<Message, Messag
         super.onCreate(savedInstanceState);
 
         conferenceId = getArguments().getString(ARGUMENT_CONFERENCE_ID);
+    }
 
-        NotificationHelper.cancel(getContext(), NotificationHelper.MESSAGES_NOTIFICATION);
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        getMainApplication().setCurrentSection(Section.MESSAGES);
     }
 
     @Override
@@ -165,6 +172,11 @@ public class MessagesFragment extends LoginPollingPagingFragment<Message, Messag
     protected View inflateLayout(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_messages, container, false);
+    }
+
+    @Override
+    protected int getPollingInterval() {
+        return POLLING_INTERVAL;
     }
 
     @OnClick(R.id.fragment_messages_send)

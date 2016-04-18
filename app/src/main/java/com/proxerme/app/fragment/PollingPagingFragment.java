@@ -3,24 +3,14 @@ package com.proxerme.app.fragment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.proxerme.app.R;
 import com.proxerme.app.adapter.PagingAdapter;
-import com.proxerme.app.util.listener.StartReachedRecyclerOnScrollListener;
 import com.proxerme.library.event.IListEvent;
 import com.proxerme.library.event.error.ErrorEvent;
 import com.proxerme.library.interfaces.IdItem;
 
 import java.util.List;
-
-import butterknife.Bind;
-import butterknife.OnClick;
 
 /**
  * TODO: Describe class
@@ -31,17 +21,12 @@ public abstract class PollingPagingFragment<T extends IdItem & Parcelable,
         A extends PagingAdapter<T, ?>, E extends IListEvent<T>, EE extends ErrorEvent>
         extends PagingFragment<T, A, E, EE> {
 
-    private static final int POLLING_INTERVAL = 5000;
-    private static final String STATE_NEW_ITEMS = "new_items";
-
-    @Bind(R.id.fragment_paging_notification_container)
-    ViewGroup notificationContainer;
-    @Bind(R.id.fragment_paging_notification)
-    TextView notification;
-
-    private int newItems;
+    private static final String STATE_POLLING = "polling";
 
     private Handler handler = new Handler();
+
+    private boolean polling = false;
+    private boolean wasPolling = false;
 
     private Runnable pollingRunnable = new Runnable() {
         @Override
@@ -49,7 +34,7 @@ public abstract class PollingPagingFragment<T extends IdItem & Parcelable,
             if (canLoad()) {
                 doLoad(getFirstPage(), true, false);
 
-                handler.postDelayed(pollingRunnable, POLLING_INTERVAL);
+                handler.postDelayed(pollingRunnable, getPollingInterval());
             } else {
                 stopPolling();
             }
@@ -61,29 +46,8 @@ public abstract class PollingPagingFragment<T extends IdItem & Parcelable,
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState != null) {
-            newItems = savedInstanceState.getInt(STATE_NEW_ITEMS);
+            wasPolling = savedInstanceState.getBoolean(STATE_POLLING);
         }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View result = super.onCreateView(inflater, container, savedInstanceState);
-
-        list.addOnScrollListener(new StartReachedRecyclerOnScrollListener(layoutManager) {
-            @Override
-            public void onStartReached() {
-                notificationContainer.setVisibility(View.GONE);
-            }
-        });
-
-        if (newItems > 0) {
-            notificationContainer.setVisibility(View.VISIBLE);
-        } else {
-            notificationContainer.setVisibility(View.GONE);
-        }
-
-        return result;
     }
 
     @Override
@@ -91,12 +55,22 @@ public abstract class PollingPagingFragment<T extends IdItem & Parcelable,
         super.onResume();
 
         if (canLoad()) {
-            startPolling();
+            if (wasPolling) { //The Fragment must have been active already so this is an orientation change. Restart polling immediately.
+                wasPolling = false; //Reset wasPolling as it is only used for state management.
+
+                startPolling(false);
+            } else {
+                startPolling(true);
+            }
         }
     }
 
     @Override
     public void onPause() {
+        if (polling) {
+            wasPolling = true;
+        }
+
         stopPolling();
 
         super.onPause();
@@ -106,66 +80,42 @@ public abstract class PollingPagingFragment<T extends IdItem & Parcelable,
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putInt(STATE_NEW_ITEMS, newItems);
+        outState.putBoolean(STATE_POLLING, wasPolling);
     }
 
     @Override
     protected void handleResult(List<T> result, boolean insert) {
-        int countBefore = adapter.getItemCount();
-        int[] itemPositions = new int[layoutManager.getSpanCount()];
-
-        layoutManager.findFirstVisibleItemPositions(itemPositions);
-
-        boolean wasAtStart = itemPositions.length > 0 && itemPositions[0] != 0;
-
         super.handleResult(result, insert);
 
-        if (insert) {
-            newItems = adapter.getItemCount() - countBefore;
-
-            if (wasAtStart && newItems > 0) {
-                notificationContainer.setVisibility(View.VISIBLE);
-
-                notification.setText(getNotificationText(newItems));
-            }
-        }
-
-        startPolling();
+        startPolling(true);
     }
 
     @Override
     protected void handleError(EE errorResult) {
         super.handleError(errorResult);
 
-        notificationContainer.setVisibility(View.GONE);
-
         stopPolling();
     }
 
-    @Override
-    protected View inflateLayout(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_polling_paging, container, false);
-    }
+    private void startPolling(boolean delay) {
+        if (!polling) {
+            polling = true;
 
-    @OnClick(R.id.fragment_paging_notification_container)
-    void onNotificationClick() {
-        list.smoothScrollToPosition(0);
-
-        notificationContainer.setVisibility(View.GONE);
-    }
-
-    private void startPolling() {
-        stopPolling();
-
-        handler.postDelayed(pollingRunnable, POLLING_INTERVAL);
+            if (delay) {
+                handler.postDelayed(pollingRunnable, getPollingInterval());
+            } else {
+                handler.post(pollingRunnable);
+            }
+        }
     }
 
     private void stopPolling() {
+        polling = false;
+
         handler.removeCallbacks(pollingRunnable);
     }
 
-    @NonNull
-    protected abstract String getNotificationText(int amount);
+
+    protected abstract int getPollingInterval();
 
 }

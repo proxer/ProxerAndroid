@@ -39,19 +39,15 @@ public class NotificationHelper {
      *
      * @param context The Context.
      * @param news    The List of {@link News}.
-     * @param offset  The offset to the last retrieved news.
      */
-    public static void showNewsNotification(@NonNull Context context, @NonNull List<News> news,
-                                            @IntRange(from = PagingHelper.OFFSET_NOT_CALCULABLE,
-                                                    to = ProxerInfo.CONFERENCES_ON_PAGE) int offset) {
-        if (offset != PagingHelper.OFFSET_NOT_CALCULABLE && offset > 0) {
+    public static void showNewsNotification(@NonNull Context context, @NonNull List<News> news) {
             android.app.NotificationManager notificationManager =
                     (android.app.NotificationManager) context
                             .getSystemService(Context.NOTIFICATION_SERVICE);
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
             Style style;
 
-            if (offset == 1) {
+        if (news.size() == 1) {
                 News current = news.get(0);
                 String title = current.getSubject().trim();
                 String content = current.getDescription().trim();
@@ -61,24 +57,24 @@ public class NotificationHelper {
 
                 style = new BigTextStyle(builder).bigText(content)
                         .setBigContentTitle(title)
-                        .setSummaryText(generateNewsNotificationAmount(context, offset));
+                        .setSummaryText(generateNewsNotificationAmount(context, news.size()));
             } else {
                 InboxStyle inboxStyle = new InboxStyle();
 
-                for (int i = 0; i < 5 && i < offset; i++) {
+            for (int i = 0; i < 5 && i < news.size(); i++) {
                     inboxStyle.addLine(news.get(i).getSubject());
                 }
 
                 inboxStyle.setBigContentTitle(context
                         .getString(R.string.news_notification_title))
-                        .setSummaryText(generateNewsNotificationAmount(context, offset));
+                        .setSummaryText(generateNewsNotificationAmount(context, news.size()));
 
                 style = inboxStyle;
             }
 
             builder.setAutoCancel(true).setSmallIcon(R.drawable.ic_stat_proxer)
                     .setContentTitle(context.getString(R.string.news_notification_title))
-                    .setContentText(generateNewsNotificationAmount(context, offset))
+                    .setContentText(generateNewsNotificationAmount(context, news.size()))
                     .setContentIntent(PendingIntent.getActivity(context, 0,
                             DashboardActivity.getSectionIntent(context,
                                     MaterialDrawerHelper.DRAWER_ID_NEWS, null),
@@ -86,7 +82,6 @@ public class NotificationHelper {
                     .setStyle(style);
 
             notificationManager.notify(NEWS_NOTIFICATION, builder.build());
-        }
     }
 
     /**
@@ -98,7 +93,6 @@ public class NotificationHelper {
      */
     public static void showMessagesNotification(@NonNull Context context,
                                                 @NonNull List<Conference> conferences) {
-        if (!conferences.isEmpty()) {
             android.app.NotificationManager notificationManager =
                     (android.app.NotificationManager) context
                             .getSystemService(Context.NOTIFICATION_SERVICE);
@@ -136,7 +130,6 @@ public class NotificationHelper {
                     .setAutoCancel(true);
 
             notificationManager.notify(MESSAGES_NOTIFICATION, builder.build());
-        }
     }
 
     /**

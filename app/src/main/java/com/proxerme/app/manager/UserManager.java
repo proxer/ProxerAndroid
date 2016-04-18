@@ -86,7 +86,7 @@ public class UserManager extends Manager {
         if (user != null) {
             working = true;
             saveUser = SAME_AS_IS;
-            long lastLogin = StorageHelper.getLastLogin();
+            long lastLogin = StorageHelper.getLastLoginTime();
 
             if (lastLogin <= 0 || new DateTime(lastLogin)
                     .isBefore(new DateTime().minusMinutes(RELOGIN_THRESHOLD))) {
@@ -124,7 +124,7 @@ public class UserManager extends Manager {
         loggedIn = true;
         working = false;
         changeUser(event.getItem());
-        StorageHelper.setLastLogin(System.currentTimeMillis());
+        StorageHelper.setLastLoginTime(System.currentTimeMillis());
     }
 
     @Subscribe(priority = 1)
@@ -132,19 +132,19 @@ public class UserManager extends Manager {
         loggedIn = false;
         working = false;
         removeUser();
-        StorageHelper.setLastLogin(-1);
+        StorageHelper.setLastLoginTime(-1);
     }
 
     @Subscribe
     public void onLoginError(LoginErrorEvent event) {
         working = false;
-        StorageHelper.setLastLogin(-1);
+        StorageHelper.setLastLoginTime(-1);
     }
 
     @Subscribe
     public void onLogoutError(LogoutErrorEvent event) {
         working = false;
-        StorageHelper.setLastLogin(-1);
+        StorageHelper.setLastLoginTime(-1);
     }
 
     @Retention(RetentionPolicy.SOURCE)

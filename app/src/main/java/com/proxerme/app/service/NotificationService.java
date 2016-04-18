@@ -7,7 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.StringDef;
 
 import com.proxerme.app.application.MainApplication;
-import com.proxerme.app.manager.NotificationRetrievalManager;
+import com.proxerme.app.util.Section;
 import com.proxerme.app.util.helper.NotificationHelper;
 import com.proxerme.app.util.helper.PagingHelper;
 import com.proxerme.app.util.helper.StorageHelper;
@@ -49,13 +49,18 @@ public class NotificationService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        if (intent != null && ((MainApplication) getApplication()).getStartedActivities() <= 0) {
+        if (intent != null) {
             final String action = intent.getAction();
 
             if (ACTION_LOAD_NEWS.equals(action)) {
-                handleActionLoadNews();
+                if (getMainApplication().getCurrentSection() != Section.NEWS) {
+                    handleActionLoadNews();
+                }
             } else if (ACTION_LOAD_MESSAGES.equals(action)) {
-                handleActionLoadMessages();
+                if (getMainApplication().getCurrentSection() != Section.CONFERENCES &&
+                        getMainApplication().getCurrentSection() != Section.MESSAGES) {
+                    handleActionLoadMessages();
+                }
             }
         }
     }
@@ -66,11 +71,15 @@ public class NotificationService extends IntentService {
         try {
             if (lastId != null) {
                 List<News> news = ProxerConnection.loadNews(1).executeSynchronized();
-                int offset = PagingHelper.calculateOffsetFromStart(news, lastId,
-                        ProxerInfo.NEWS_ON_PAGE);
+                news = news.subList(0, PagingHelper.calculateOffsetFromStart(news, lastId,
+                        ProxerInfo.NEWS_ON_PAGE));
 
-                StorageHelper.setNewNews(offset);
-                NotificationHelper.showNewsNotification(this, news, offset);
+                int previousNewNews = StorageHelper.getNewNews();
+
+                if (news.size() > previousNewNews) {
+                    StorageHelper.setNewNews(news.size());
+                    NotificationHelper.showNewsNotification(this, news);
+                }
             }
         } catch (ProxerException ignored) {
 
@@ -93,17 +102,31 @@ public class NotificationService extends IntentService {
                         break;
                     }
                 }
-                NotificationHelper.showMessagesNotification(this, conferences);
-                StorageHelper.setNewMessages(conferences.size());
+
+                if (conferences.size() > 0) {
+                    long lastReceivedMessageTime = StorageHelper.getLastReceivedMessageTime();
+
+                    if (lastReceivedMessageTime != -1L &&
+                            lastReceivedMessageTime != conferences.get(0).getTime()) {
+                        StorageHelper.setLastReceivedMessageTime(conferences.get(0).getTime());
+
+                        NotificationHelper.showMessagesNotification(this, conferences);
+                        StorageHelper.setNewMessages(conferences.size());
+                    }
+                }
             } catch (ProxerException ignored) {
 
             }
 
             StorageHelper.incrementMessagesInterval();
-            NotificationRetrievalManager.retrieveMessagesLater(this);
+            getMainApplication().getNotificationManager().retrieveMessagesLater(this);
         } else {
-            NotificationRetrievalManager.cancelMessagesRetrieval(this);
+            getMainApplication().getNotificationManager().cancelMessagesRetrieval(this);
         }
+    }
+
+    protected final MainApplication getMainApplication() {
+        return (MainApplication) getApplication();
     }
 
     @Retention(RetentionPolicy.SOURCE)

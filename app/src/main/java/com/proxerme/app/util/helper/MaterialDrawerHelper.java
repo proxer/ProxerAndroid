@@ -54,7 +54,7 @@ public class MaterialDrawerHelper {
     public static final int HEADER_ID_CHANGE = 112;
     public static final int HEADER_ID_LOGOUT = 113;
 
-    private static final String STATE_CURRENT_DRAWER_ITEM_ID = "current_drawer_item_id";
+    private static final String STATE_CURRENT_DRAWER_ITEM_ID = "drawer_current_drawer_item_id";
 
     private Activity context;
 

@@ -9,8 +9,9 @@ import android.support.v7.preference.PreferenceFragmentCompat;
 import com.mikepenz.aboutlibraries.Libs;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.proxerme.app.R;
+import com.proxerme.app.application.MainApplication;
 import com.proxerme.app.interfaces.OnActivityListener;
-import com.proxerme.app.manager.NotificationRetrievalManager;
+import com.proxerme.app.util.Section;
 import com.proxerme.app.util.helper.PreferenceHelper;
 
 /**
@@ -63,6 +64,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements OnActi
 
         getPreferenceManager().getSharedPreferences()
                 .registerOnSharedPreferenceChangeListener(this);
+
+        getMainApplication().setCurrentSection(Section.SETTINGS);
     }
 
     @Override
@@ -82,10 +85,11 @@ public class SettingsFragment extends PreferenceFragmentCompat implements OnActi
                                 false);
 
                 if (enabled) {
-                    NotificationRetrievalManager.retrieveNewsLater(getContext());
+                    getMainApplication().getNotificationManager().retrieveNewsLater(getContext());
                 } else {
-                    NotificationRetrievalManager.cancelNewsRetrieval(getContext());
+                    getMainApplication().getNotificationManager().cancelNewsRetrieval(getContext());
                 }
+
                 break;
             }
             case PreferenceHelper.PREFERENCE_MESSAGES_NOTIFICATIONS: {
@@ -94,15 +98,23 @@ public class SettingsFragment extends PreferenceFragmentCompat implements OnActi
                                 false);
 
                 if (enabled) {
-                    NotificationRetrievalManager.retrieveMessagesLater(getContext());
+                    getMainApplication().getNotificationManager()
+                            .retrieveMessagesLater(getContext());
                 } else {
-                    NotificationRetrievalManager.cancelMessagesRetrieval(getContext());
+                    getMainApplication().getNotificationManager()
+                            .cancelMessagesRetrieval(getContext());
                 }
+
                 break;
             }
             case PreferenceHelper.PREFERENCE_NEWS_NOTIFICATIONS_INTERVAL:
-                NotificationRetrievalManager.retrieveNewsLater(getContext());
+                getMainApplication().getNotificationManager().retrieveNewsLater(getContext());
+
                 break;
         }
+    }
+
+    protected final MainApplication getMainApplication() {
+        return (MainApplication) getActivity().getApplication();
     }
 }

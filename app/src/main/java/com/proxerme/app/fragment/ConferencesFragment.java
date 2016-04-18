@@ -12,8 +12,8 @@ import com.proxerme.app.R;
 import com.proxerme.app.activity.ImageDetailActivity;
 import com.proxerme.app.activity.MessageActivity;
 import com.proxerme.app.adapter.ConferenceAdapter;
+import com.proxerme.app.util.Section;
 import com.proxerme.app.util.Utils;
-import com.proxerme.app.util.helper.NotificationHelper;
 import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.connection.ProxerTag;
 import com.proxerme.library.connection.UrlHolder;
@@ -32,16 +32,18 @@ import org.greenrobot.eventbus.ThreadMode;
 public class ConferencesFragment extends LoginPollingPagingFragment<Conference, ConferenceAdapter,
         ConferencesEvent, ConferencesErrorEvent> {
 
+    private static final int POLLING_INTERVAL = 7000;
+
     @NonNull
     public static ConferencesFragment newInstance() {
         return new ConferencesFragment();
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onResume() {
+        super.onResume();
 
-        NotificationHelper.cancel(getContext(), NotificationHelper.MESSAGES_NOTIFICATION);
+        getMainApplication().setCurrentSection(Section.CONFERENCES);
     }
 
     @NonNull
@@ -100,5 +102,10 @@ public class ConferencesFragment extends LoginPollingPagingFragment<Conference, 
     @Override
     protected String getNotificationText(int amount) {
         return getResources().getQuantityString(R.plurals.notification_conferences, amount, amount);
+    }
+
+    @Override
+    protected int getPollingInterval() {
+        return POLLING_INTERVAL;
     }
 }
