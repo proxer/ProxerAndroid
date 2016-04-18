@@ -36,14 +36,14 @@ public abstract class LoginPollingPagingFragment<T extends IdItem & Parcelable,
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        UserManager userManager = getMainApplication().getUserManager();
-
-        canLoad = userManager.isLoggedIn() && !userManager.isWorking();
+        updateCanLoad();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+
+        updateCanLoad();
 
         if (!canLoad) {
             if (!getMainApplication().getUserManager().isWorking()) {
@@ -109,5 +109,10 @@ public abstract class LoginPollingPagingFragment<T extends IdItem & Parcelable,
         }
     }
 
+    private void updateCanLoad() {
+        UserManager userManager = getMainApplication().getUserManager();
+
+        canLoad = userManager.isLoggedIn() && !userManager.isWorking();
+    }
 
 }
