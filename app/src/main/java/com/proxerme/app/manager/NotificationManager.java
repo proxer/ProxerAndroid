@@ -171,7 +171,10 @@ public class NotificationManager extends Manager {
     @Subscribe
     public void onNewsLoaded(NewsEvent event) {
         StorageHelper.setNewNews(0);
-        StorageHelper.setLastNewsId(event.getItem().get(0).getId());
+
+        if (event.getItem().size() > 0) {
+            StorageHelper.setLastNewsId(event.getItem().get(0).getId());
+        }
 
         retrieveNewsLater(context);
     }
@@ -179,8 +182,11 @@ public class NotificationManager extends Manager {
     @Subscribe
     public void onConferencesLoaded(ConferencesEvent event) {
         StorageHelper.setNewMessages(0);
-        StorageHelper.setLastReceivedMessageTime(event.getItem().get(0).getTime());
         StorageHelper.resetMessagesInterval();
+
+        if (event.getItem().size() > 0) {
+            StorageHelper.setLastReceivedMessageTime(event.getItem().get(0).getTime());
+        }
 
         retrieveMessagesLater(context);
     }
