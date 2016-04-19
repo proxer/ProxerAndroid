@@ -89,12 +89,12 @@ public class ConferencesFragment extends LoginPollingPagingFragment<Conference, 
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onLoad(@NonNull ConferencesEvent result) {
+    public void onLoad(ConferencesEvent result) {
         handleResult(result);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onLoadError(@NonNull ConferencesErrorEvent errorEvent) {
+    public void onLoadError(ConferencesErrorEvent errorEvent) {
         handleError(errorEvent);
     }
 

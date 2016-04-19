@@ -96,12 +96,12 @@ public class MessagesFragment extends LoginPollingPagingFragment<Message, Messag
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onLoad(@NonNull MessagesEvent result) {
+    public void onLoad(MessagesEvent result) {
         handleResult(result);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onLoadError(@NonNull MessagesErrorEvent errorEvent) {
+    public void onLoadError(MessagesErrorEvent errorEvent) {
         handleError(errorEvent);
     }
 

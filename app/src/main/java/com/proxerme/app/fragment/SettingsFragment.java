@@ -99,7 +99,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements OnActi
 
                 if (enabled) {
                     getMainApplication().getNotificationManager()
-                            .retrieveMessagesLater(getContext());
+                            .retrieveConferencesLater(getContext());
                 } else {
                     getMainApplication().getNotificationManager()
                             .cancelMessagesRetrieval(getContext());

@@ -35,8 +35,8 @@ public class NotificationService extends IntentService {
 
     public static final String ACTION_LOAD_NEWS =
             "com.proxerme.app.service.action.LOAD_NEWS";
-    public static final String ACTION_LOAD_MESSAGES =
-            "com.proxerme.app.service.action.LOAD_MESSAGES";
+    public static final String ACTION_LOAD_CONFERENCES =
+            "com.proxerme.app.service.action.LOAD_CONFERENCES";
     private static final String SERVICE_TITLE = "Notification Service";
 
     public NotificationService() {
@@ -59,10 +59,10 @@ public class NotificationService extends IntentService {
                 if (getMainApplication().getCurrentSection() != Section.NEWS) {
                     handleActionLoadNews();
                 }
-            } else if (ACTION_LOAD_MESSAGES.equals(action)) {
+            } else if (ACTION_LOAD_CONFERENCES.equals(action)) {
                 if (getMainApplication().getCurrentSection() != Section.CONFERENCES &&
                         getMainApplication().getCurrentSection() != Section.MESSAGES) {
-                    handleActionLoadMessages();
+                    handleActionLoadConferences();
                 }
             }
         }
@@ -89,7 +89,7 @@ public class NotificationService extends IntentService {
         }
     }
 
-    private void handleActionLoadMessages() {
+    private void handleActionLoadConferences() {
         LoginUser user = StorageHelper.getUser();
 
         if (user != null) {
@@ -124,7 +124,7 @@ public class NotificationService extends IntentService {
             }
 
             StorageHelper.incrementMessagesInterval();
-            getMainApplication().getNotificationManager().retrieveMessagesLater(this);
+            getMainApplication().getNotificationManager().retrieveConferencesLater(this);
         } else {
             getMainApplication().getNotificationManager().cancelMessagesRetrieval(this);
         }
@@ -135,7 +135,7 @@ public class NotificationService extends IntentService {
     }
 
     @Retention(RetentionPolicy.SOURCE)
-    @StringDef({ACTION_LOAD_NEWS, ACTION_LOAD_MESSAGES})
+    @StringDef({ACTION_LOAD_NEWS, ACTION_LOAD_CONFERENCES})
     public @interface NotificationAction {
     }
 

@@ -171,12 +171,12 @@ public class MainApplication extends Application {
     }
 
     private void destroyManagers() {
-        ProxerConnection.cleanup();
-        eventBusBuffer.stopAndPurge();
-
         badgeManager.destroy();
         userManager.destroy();
         notificationManager.destroy();
+
+        ProxerConnection.cleanup();
+        eventBusBuffer.stopAndPurge();
     }
 
     public int getStartedActivities() {

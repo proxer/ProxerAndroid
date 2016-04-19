@@ -81,12 +81,12 @@ public class NotificationManager extends Manager {
      *
      * @param context The context.
      */
-    public void retrieveMessagesLater(@NonNull Context context) {
+    public void retrieveConferencesLater(@NonNull Context context) {
         cancelMessagesRetrieval(context);
         if (isMessagesRetrievalEnabled(context)) {
             int interval = StorageHelper.getMessagesInterval() * 1000;
 
-            retrieveLater(context, NotificationService.ACTION_LOAD_MESSAGES, interval);
+            retrieveLater(context, NotificationService.ACTION_LOAD_CONFERENCES, interval);
         }
     }
 
@@ -96,7 +96,7 @@ public class NotificationManager extends Manager {
      * @param context The context.
      */
     public void cancelMessagesRetrieval(@NonNull Context context) {
-        cancelRetrieval(context, NotificationService.ACTION_LOAD_MESSAGES);
+        cancelRetrieval(context, NotificationService.ACTION_LOAD_CONFERENCES);
     }
 
     /**
@@ -188,19 +188,25 @@ public class NotificationManager extends Manager {
             StorageHelper.setLastReceivedMessageTime(event.getItem().get(0).getTime());
         }
 
-        retrieveMessagesLater(context);
+        retrieveConferencesLater(context);
     }
 
     @Subscribe
     public void onMessagesLoaded(MessagesEvent event) {
         StorageHelper.resetMessagesInterval();
 
-        retrieveMessagesLater(context);
+        if (event.getItem().size() > 0) {
+            if (event.getItem().get(0).getTime() > StorageHelper.getLastReceivedMessageTime()) {
+                StorageHelper.setLastReceivedMessageTime(event.getItem().get(0).getTime());
+            }
+        }
+
+        retrieveConferencesLater(context);
     }
 
     @Subscribe
     public void onLogin(LoginEvent event) {
-        retrieveMessagesLater(context);
+        retrieveConferencesLater(context);
     }
 
     @Subscribe

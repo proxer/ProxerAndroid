@@ -101,7 +101,7 @@ public class UserManager extends Manager {
     }
 
     public void logout() {
-        working = false;
+        working = true;
 
         ProxerConnection.cancel(ProxerTag.LOGIN);
         ProxerConnection.logout().execute();
@@ -145,6 +145,14 @@ public class UserManager extends Manager {
     public void onLogoutError(LogoutErrorEvent event) {
         working = false;
         StorageHelper.setLastLoginTime(-1);
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+
+        ProxerConnection.cancel(ProxerTag.LOGIN);
+        ProxerConnection.cancel(ProxerTag.LOGOUT);
     }
 
     @Retention(RetentionPolicy.SOURCE)

@@ -21,7 +21,7 @@ public class BootReceiver extends BroadcastReceiver {
                 MainApplication application = (MainApplication) context.getApplicationContext();
 
                 application.getNotificationManager().retrieveNewsLater(context);
-                application.getNotificationManager().retrieveMessagesLater(context);
+                application.getNotificationManager().retrieveConferencesLater(context);
             } catch (ClassCastException e) {
                 Log.e(getClass().getName(), "getApplicationContext did not return the " +
                         "Application. Notifications after boot will not work on this device.");
