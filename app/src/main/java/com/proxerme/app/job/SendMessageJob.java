@@ -76,7 +76,6 @@ public class SendMessageJob extends Job {
             }
         } else {
             if (runCount < maxRunCount) {
-
                 return RetryConstraint.RETRY;
             } else {
                 EventBus.getDefault().post(new SendingMessageFailedEvent(

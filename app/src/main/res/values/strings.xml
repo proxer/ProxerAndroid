@@ -86,4 +86,5 @@
     </plurals>
     <string name="fragment_messages_input_hint">Type message</string>
     <string name="fragment_messages_send">Send</string>
+    <string name="fragment_messages_send_error">One or more messages could not be sent</string>
 </resources>

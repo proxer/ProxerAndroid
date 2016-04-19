@@ -127,12 +127,17 @@ public abstract class MainActivity extends AppCompatActivity {
     }
 
     public void showMessage(@NonNull String message, @Nullable String action,
-                            @Nullable View.OnClickListener listener) {
-        snackbar = Snackbar.make(content, message, Snackbar.LENGTH_INDEFINITE)
+                            @Nullable View.OnClickListener listener, int duration) {
+        snackbar = Snackbar.make(content, message, duration)
                 .setActionTextColor(ContextCompat.getColorStateList(this, R.color.colorPrimaryLight))
                 .setAction(action, listener);
 
         snackbar.show();
+    }
+
+    public void showMessage(@NonNull String message, @Nullable String action,
+                            @Nullable View.OnClickListener listener) {
+        showMessage(message, action, listener, Snackbar.LENGTH_INDEFINITE);
     }
 
     public void clearMessage() {

@@ -96,10 +96,10 @@ public class NewsAdapter extends PagingAdapter<News, NewsAdapter.ViewHolder> {
 
         if (extensionMap.containsKey(item.getId())) {
             holder.description.setMaxLines(Integer.MAX_VALUE);
-            ViewCompat.setRotationX(holder.expand, ROTATION_HALF);
+            ViewCompat.setRotation(holder.expand, ROTATION_HALF);
         } else {
             holder.description.setMaxLines(DESCRIPTION_MAX_LINES);
-            ViewCompat.setRotationX(holder.expand, 0f);
+            ViewCompat.setRotation(holder.expand, 0f);
         }
 
         Glide.with(holder.image.getContext()).load(UrlHolder.getNewsImageUrl(item.getId(),
@@ -184,12 +184,12 @@ public class NewsAdapter extends PagingAdapter<News, NewsAdapter.ViewHolder> {
                 extensionMap.remove(id);
 
                 description.setMaxLines(DESCRIPTION_MAX_LINES);
-                ViewCompat.animate(view).rotationX(0f);
+                ViewCompat.animate(view).rotation(0f);
             } else {
                 extensionMap.put(id, true);
 
                 description.setMaxLines(Integer.MAX_VALUE);
-                ViewCompat.animate(view).rotationX(ROTATION_HALF);
+                ViewCompat.animate(view).rotation(ROTATION_HALF);
 
                 if (onNewsInteractionListener != null) {
                     onNewsInteractionListener.onNewsExpanded(view, news);
