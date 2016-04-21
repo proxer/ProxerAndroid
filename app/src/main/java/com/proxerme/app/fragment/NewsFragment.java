@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.proxerme.app.R;
 import com.proxerme.app.activity.ImageDetailActivity;
 import com.proxerme.app.adapter.NewsAdapter;
 import com.proxerme.app.util.Section;
@@ -88,7 +89,7 @@ public class NewsFragment extends PagingFragment<News, NewsAdapter, NewsEvent, N
     @NonNull
     @Override
     protected String getNotificationText(int amount) {
-        return null;
+        return getResources().getQuantityString(R.plurals.notification_news, amount, amount);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

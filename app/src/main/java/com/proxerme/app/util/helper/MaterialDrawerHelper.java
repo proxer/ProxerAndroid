@@ -143,7 +143,7 @@ public class MaterialDrawerHelper {
             ProfileDrawerItem profile = new ProfileDrawerItem().withName(user.getUsername())
                     .withIdentifier(HEADER_ID_USER);
 
-                profile.withIcon(UrlHolder.getUserImageUrl(user.getImageId()));
+            profile.withIcon(UrlHolder.getUserImageUrl(user.getImageId()));
 
             result.add(profile);
             result.add(new ProfileSettingDrawerItem()
@@ -271,7 +271,7 @@ public class MaterialDrawerHelper {
     }
 
     public static abstract class MaterialDrawerCallback {
-        public boolean onItemClick(@HeaderItemId int identifier) {
+        public boolean onItemClick(@DrawerItemId int identifier) {
             return false;
         }
 

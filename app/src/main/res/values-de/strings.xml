@@ -76,6 +76,10 @@
     <string name="dialog_logout_go">Abmelden</string>
     <string name="dialog_logout_title">Möchtest du dich abmelden?</string>
     <string name="dialog_login_remember">Merken</string>
+    <plurals name="notification_news">
+        <item quantity="one">"%d News"</item>
+        <item quantity="other">"%d News"</item>
+    </plurals>
     <plurals name="notification_conferences">
         <item quantity="one">"%d neue Konferenz"</item>
         <item quantity="other">"%d neue Konferenzen"</item>

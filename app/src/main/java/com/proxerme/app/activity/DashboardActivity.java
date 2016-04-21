@@ -52,7 +52,6 @@ public class DashboardActivity extends MainActivity {
     private static final String EXTRA_ADDITIONAL_INFO = "extra_additional_info";
 
     private MaterialDrawerHelper drawerHelper;
-    private BadgeManager badgeManager;
 
     private MaterialDrawerCallback drawerCallback = new MaterialDrawerCallback() {
         @Override

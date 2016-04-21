@@ -33,7 +33,6 @@ import butterknife.ButterKnife;
 public abstract class MainActivity extends AppCompatActivity {
 
     private static final String STATE_TITLE = "title";
-    private static final String STATE_CURRENT_FRAGMENT_TAG = "current_fragment_id";
 
     @Bind(R.id.activity_main_content_container)
     ViewGroup content;

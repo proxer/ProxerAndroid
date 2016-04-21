@@ -102,6 +102,10 @@ public class MainApplication extends Application {
             @Override
             public void onActivityStopped(Activity activity) {
                 startedActivities--;
+
+                if (startedActivities <= 0) {
+                    setCurrentSection(Section.NONE);
+                }
             }
 
             @Override
