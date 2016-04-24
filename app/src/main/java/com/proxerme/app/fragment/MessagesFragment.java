@@ -21,6 +21,7 @@ import com.proxerme.app.job.SendMessageJob;
 import com.proxerme.app.manager.UserManager;
 import com.proxerme.app.util.Section;
 import com.proxerme.app.util.Utils;
+import com.proxerme.app.util.helper.StorageHelper;
 import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.connection.ProxerTag;
 import com.proxerme.library.connection.UrlHolder;
@@ -34,6 +35,8 @@ import com.proxerme.library.event.success.MessagesEvent;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -156,6 +159,23 @@ public class MessagesFragment extends LoginPollingPagingFragment<Message, Messag
                 }
             }
         });
+    }
+
+    @Override
+    protected void handleResult(List<Message> result, boolean insert) {
+        super.handleResult(result, insert);
+
+        if (insert) {
+            StorageHelper.resetMessagesInterval();
+
+            if (result.size() > 0) {
+                if (result.get(0).getTime() > StorageHelper.getLastReceivedMessageTime()) {
+                    StorageHelper.setLastReceivedMessageTime(result.get(0).getTime());
+                }
+            }
+
+            getMainApplication().getNotificationManager().retrieveConferencesLater(getContext());
+        }
     }
 
     @Override

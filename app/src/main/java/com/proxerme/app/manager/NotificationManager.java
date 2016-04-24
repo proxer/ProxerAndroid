@@ -17,11 +17,8 @@ import com.proxerme.app.service.NotificationService;
 import com.proxerme.app.util.helper.NotificationHelper;
 import com.proxerme.app.util.helper.PreferenceHelper;
 import com.proxerme.app.util.helper.StorageHelper;
-import com.proxerme.library.event.success.ConferencesEvent;
 import com.proxerme.library.event.success.LoginEvent;
 import com.proxerme.library.event.success.LogoutEvent;
-import com.proxerme.library.event.success.MessagesEvent;
-import com.proxerme.library.event.success.NewsEvent;
 
 import org.greenrobot.eventbus.Subscribe;
 
@@ -166,42 +163,6 @@ public class NotificationManager extends Manager {
         super.destroy();
 
         this.context = null;
-    }
-
-    @Subscribe
-    public void onNewsLoaded(NewsEvent event) {
-        StorageHelper.setNewNews(0);
-
-        if (event.getItem().size() > 0) {
-            StorageHelper.setLastNewsId(event.getItem().get(0).getId());
-        }
-
-        retrieveNewsLater(context);
-    }
-
-    @Subscribe
-    public void onConferencesLoaded(ConferencesEvent event) {
-        StorageHelper.setNewMessages(0);
-        StorageHelper.resetMessagesInterval();
-
-        if (event.getItem().size() > 0) {
-            StorageHelper.setLastReceivedMessageTime(event.getItem().get(0).getTime());
-        }
-
-        retrieveConferencesLater(context);
-    }
-
-    @Subscribe
-    public void onMessagesLoaded(MessagesEvent event) {
-        StorageHelper.resetMessagesInterval();
-
-        if (event.getItem().size() > 0) {
-            if (event.getItem().get(0).getTime() > StorageHelper.getLastReceivedMessageTime()) {
-                StorageHelper.setLastReceivedMessageTime(event.getItem().get(0).getTime());
-            }
-        }
-
-        retrieveConferencesLater(context);
     }
 
     @Subscribe

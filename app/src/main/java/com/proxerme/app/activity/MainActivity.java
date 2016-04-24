@@ -19,6 +19,7 @@ import com.proxerme.app.application.MainApplication;
 import com.proxerme.app.customtabs.CustomTabActivityHelper;
 import com.proxerme.app.customtabs.WebviewFallback;
 import com.proxerme.app.interfaces.OnActivityListener;
+import com.proxerme.app.util.EventBusBuffer;
 import com.proxerme.app.util.Utils;
 
 import butterknife.Bind;
@@ -47,6 +48,8 @@ public abstract class MainActivity extends AppCompatActivity {
     private OnActivityListener onActivityListener;
     private Snackbar snackbar;
 
+    private EventBusBuffer eventBusBuffer = new EventBusBuffer();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +60,27 @@ public abstract class MainActivity extends AppCompatActivity {
         initViews();
 
         customTabActivityHelper = new CustomTabActivityHelper();
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+
+        eventBusBuffer.stopAndProcess();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        eventBusBuffer.startBuffering();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        eventBusBuffer.stopAndPurge();
     }
 
     @Override

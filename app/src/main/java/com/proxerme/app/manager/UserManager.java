@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 
 import com.proxerme.app.util.helper.StorageHelper;
 import com.proxerme.library.connection.ProxerConnection;
+import com.proxerme.library.connection.ProxerException;
 import com.proxerme.library.connection.ProxerTag;
 import com.proxerme.library.entity.LoginUser;
 import com.proxerme.library.event.error.LoginErrorEvent;
@@ -25,6 +26,7 @@ import java.lang.annotation.RetentionPolicy;
  * @author Ruben Gees
  */
 public class UserManager extends Manager {
+
     private static final int SAVE_USER = 0;
     private static final int DONT_SAVE_USER = 1;
     private static final int SAME_AS_IS = 2;
@@ -96,6 +98,29 @@ public class UserManager extends Manager {
             } else {
                 loggedIn = true;
                 working = false;
+            }
+        }
+    }
+
+    public void reLoginSync() throws ProxerException {
+        if (user != null) {
+            long lastLogin = StorageHelper.getLastLoginTime();
+
+            if (lastLogin <= 0 || new DateTime(lastLogin)
+                    .isBefore(new DateTime().minusMinutes(RELOGIN_THRESHOLD))) {
+
+                ProxerConnection.cancel(ProxerTag.LOGOUT);
+
+                try {
+                    changeUser(ProxerConnection.login(user).executeSynchronized());
+                    StorageHelper.setLastLoginTime(System.currentTimeMillis());
+                } catch (ProxerException e) {
+                    StorageHelper.setLastLoginTime(-1);
+
+                    throw e;
+                }
+            } else {
+                loggedIn = true;
             }
         }
     }

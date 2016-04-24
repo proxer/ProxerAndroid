@@ -16,10 +16,7 @@ import com.proxerme.library.connection.ProxerException;
 import com.proxerme.library.entity.Conference;
 import com.proxerme.library.entity.LoginUser;
 import com.proxerme.library.entity.News;
-import com.proxerme.library.event.success.LoginEvent;
 import com.proxerme.library.util.ProxerInfo;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -94,11 +91,9 @@ public class NotificationService extends IntentService {
 
         if (user != null) {
             try {
-                user = ProxerConnection.login(user).executeSynchronized();
+                getMainApplication().getUserManager().reLoginSync();
                 List<Conference> conferences = ProxerConnection.loadConferences(1)
                         .executeSynchronized();
-
-                EventBus.getDefault().post(new LoginEvent(user));
 
                 for (int i = 0; i < conferences.size(); i++) {
                     if (conferences.get(i).isRead()) {

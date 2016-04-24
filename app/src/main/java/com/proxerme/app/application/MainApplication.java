@@ -87,15 +87,11 @@ public class MainApplication extends Application {
 
             @Override
             public void onActivityResumed(Activity activity) {
-                eventBusBuffer.stopAndProcess();
-
                 badgeManager.startListeningForEvents();
             }
 
             @Override
             public void onActivityPaused(Activity activity) {
-                eventBusBuffer.startBuffering();
-
                 badgeManager.stopListeningForEvents();
             }
 
@@ -166,8 +162,6 @@ public class MainApplication extends Application {
     }
 
     private void initManagers() {
-        eventBusBuffer = new EventBusBuffer();
-
         jobManager = new JobManager(new Configuration.Builder(this).build());
         badgeManager = new BadgeManager();
         userManager = new UserManager();
@@ -180,7 +174,6 @@ public class MainApplication extends Application {
         notificationManager.destroy();
 
         ProxerConnection.cleanup();
-        eventBusBuffer.stopAndPurge();
     }
 
     public int getStartedActivities() {

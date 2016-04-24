@@ -14,6 +14,7 @@ import com.proxerme.app.activity.MessageActivity;
 import com.proxerme.app.adapter.ConferenceAdapter;
 import com.proxerme.app.util.Section;
 import com.proxerme.app.util.Utils;
+import com.proxerme.app.util.helper.StorageHelper;
 import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.connection.ProxerTag;
 import com.proxerme.library.connection.UrlHolder;
@@ -23,6 +24,8 @@ import com.proxerme.library.event.success.ConferencesEvent;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.List;
 
 /**
  * A Fragment, showing a List of Conferences to the user.
@@ -86,6 +89,22 @@ public class ConferencesFragment extends LoginPollingPagingFragment<Conference, 
     @Override
     protected void cancelRequest() {
         ProxerConnection.cancel(ProxerTag.CONFERENCES);
+    }
+
+    @Override
+    protected void handleResult(List<Conference> result, boolean insert) {
+        super.handleResult(result, insert);
+
+        if (insert) {
+            StorageHelper.setNewMessages(0);
+            StorageHelper.resetMessagesInterval();
+
+            if (result.size() > 0) {
+                StorageHelper.setLastReceivedMessageTime(result.get(0).getTime());
+            }
+
+            getMainApplication().getNotificationManager().retrieveConferencesLater(getContext());
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

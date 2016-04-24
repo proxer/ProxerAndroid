@@ -123,8 +123,10 @@ public class LogoutDialog extends MainDialog {
         dismiss();
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe(priority = 1, threadMode = ThreadMode.MAIN)
     public void onLogoutError(LogoutErrorEvent event) {
+        EventBus.getDefault().cancelEventDelivery(event);
+
         loading = false;
 
         handleVisibility();

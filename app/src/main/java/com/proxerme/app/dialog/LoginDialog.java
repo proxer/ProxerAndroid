@@ -141,7 +141,7 @@ public class LoginDialog extends MainDialog {
         dismiss();
     }
 
-    @Subscribe(priority = 1)
+    @Subscribe(priority = 1, threadMode = ThreadMode.MAIN)
     public void onLoginError(LoginErrorEvent event) {
         EventBus.getDefault().cancelEventDelivery(event);
 
