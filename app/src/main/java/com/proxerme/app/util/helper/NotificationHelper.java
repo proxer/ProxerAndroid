@@ -6,6 +6,7 @@ import android.content.Context;
 import android.support.annotation.IntDef;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.NotificationCompat;
 
 import com.proxerme.app.R;
@@ -111,8 +112,12 @@ public class NotificationHelper {
             }
 
             if (conferences.size() == 1) {
-                intent = PendingIntent.getActivity(context, 0, MessageActivity.getIntent(context,
-                        conferences.get(0)), PendingIntent.FLAG_UPDATE_CURRENT);
+                TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+
+                stackBuilder.addNextIntentWithParentStack(MessageActivity.getIntent(context,
+                        conferences.get(0)));
+
+                intent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
             } else {
                 intent = PendingIntent.getActivity(
                         context, 0, DashboardActivity.getSectionIntent(context,

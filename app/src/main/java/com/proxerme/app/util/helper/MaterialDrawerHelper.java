@@ -167,7 +167,7 @@ public class MaterialDrawerHelper {
                 .withStickyDrawerItems(generateStickyDrawerItems())
                 .withOnDrawerItemClickListener(onDrawerItemClickListener)
                 .withShowDrawerOnFirstLaunch(true).withToolbar(toolbar)
-                .withActionBarDrawerToggleAnimated(true).withHasStableIds(true)
+                .withActionBarDrawerToggleAnimated(true)
                 .withTranslucentStatusBar(true)
                 .withSavedInstance(savedInstanceState).build();
     }
