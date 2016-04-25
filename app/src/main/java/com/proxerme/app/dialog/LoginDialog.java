@@ -33,8 +33,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * A dialog, which shows a login mask to the user. It also handles the login and shows a ProgressBar
@@ -48,25 +49,27 @@ public class LoginDialog extends MainDialog {
 
     ViewGroup root;
 
-    @Bind(R.id.dialog_login_username_container)
+    @BindView(R.id.dialog_login_username_container)
     TextInputLayout usernameInputContainer;
-    @Bind(R.id.dialog_login_password_container)
+    @BindView(R.id.dialog_login_password_container)
     TextInputLayout passwordInputContainer;
 
-    @Bind(R.id.dialog_login_username)
+    @BindView(R.id.dialog_login_username)
     EditText usernameInput;
-    @Bind(R.id.dialog_login_password)
+    @BindView(R.id.dialog_login_password)
     EditText passwordInput;
-    @Bind(R.id.dialog_login_remember)
+    @BindView(R.id.dialog_login_remember)
     CheckBox remember;
 
-    @Bind(R.id.dialog_login_input_container)
+    @BindView(R.id.dialog_login_input_container)
     ViewGroup inputContainer;
 
-    @Bind(R.id.dialog_login_progress)
+    @BindView(R.id.dialog_login_progress)
     ProgressBar progress;
 
     private boolean loading;
+
+    private Unbinder unbinder;
 
     private EventBusBuffer eventBusBuffer = new EventBusBuffer() {
         @Subscribe
@@ -120,7 +123,7 @@ public class LoginDialog extends MainDialog {
 
     @Override
     public void onDestroyView() {
-        ButterKnife.unbind(this);
+        unbinder.unbind();
         root = null;
 
         super.onDestroyView();
@@ -171,7 +174,7 @@ public class LoginDialog extends MainDialog {
     private View initViews() {
         root = (ViewGroup) View.inflate(getContext(), R.layout.dialog_login, null);
 
-        ButterKnife.bind(this, root);
+        unbinder = ButterKnife.bind(this, root);
 
         LoginUser user = getMainApplication().getUserManager().getUser();
 

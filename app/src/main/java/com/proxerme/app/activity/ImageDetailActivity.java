@@ -20,7 +20,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.proxerme.app.R;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -36,7 +36,7 @@ public class ImageDetailActivity extends AppCompatActivity {
 
     private static final String EXTRA_URL = "extra_url";
 
-    @Bind(R.id.activity_news_image_detail_image)
+    @BindView(R.id.activity_news_image_detail_image)
     ImageView image;
 
     public static void navigateTo(@NonNull Activity context, @NonNull ImageView image,

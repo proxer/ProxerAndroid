@@ -23,7 +23,7 @@ import com.proxerme.app.util.Utils;
 
 import java.lang.ref.WeakReference;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -36,11 +36,11 @@ public abstract class MainActivity extends AppCompatActivity {
 
     private static final String STATE_TITLE = "title";
 
-    @Bind(R.id.activity_main_content_container)
+    @BindView(R.id.activity_main_content_container)
     ViewGroup content;
-    @Bind(R.id.toolbar_container)
+    @BindView(R.id.toolbar_container)
     AppBarLayout toolbarContainer;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
 
     private CustomTabActivityHelper customTabActivityHelper;

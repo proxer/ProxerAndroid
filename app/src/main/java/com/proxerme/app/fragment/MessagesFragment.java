@@ -39,7 +39,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
@@ -53,8 +53,12 @@ public class MessagesFragment extends LoginPollingPagingFragment<Message, Messag
     private static final String ARGUMENT_CONFERENCE_ID = "conference_id";
 
     private static final int POLLING_INTERVAL = 3000;
-    @Bind(R.id.fragment_messages_input)
+
+    @BindView(R.id.fragment_messages_input)
     TextInputEditText input;
+
+    private String conferenceId;
+
     private EventBusBuffer eventBusBuffer = new EventBusBuffer() {
         @Subscribe
         public void onMessagesLoad(MessagesEvent event) {
@@ -76,7 +80,6 @@ public class MessagesFragment extends LoginPollingPagingFragment<Message, Messag
             addToQueue(event);
         }
     };
-    private String conferenceId;
 
     public static MessagesFragment newInstance(@NonNull String conferenceId) {
         MessagesFragment result = new MessagesFragment();

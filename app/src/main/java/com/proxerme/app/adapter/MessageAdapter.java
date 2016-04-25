@@ -25,7 +25,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -261,9 +261,9 @@ public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.Messag
 
     public class MessageViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.item_message_message)
+        @BindView(R.id.item_message_message)
         TextView message;
-        @Bind(R.id.item_message_time)
+        @BindView(R.id.item_message_time)
         TextView time;
 
         public MessageViewHolder(View itemView) {
@@ -290,7 +290,7 @@ public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.Messag
 
     public class MessageTitleViewHolder extends MessageViewHolder {
 
-        @Bind(R.id.item_message_title)
+        @BindView(R.id.item_message_title)
         TextView title;
 
         public MessageTitleViewHolder(View itemView) {
@@ -300,9 +300,9 @@ public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.Messag
 
     public class MessageImageTitleViewHolder extends MessageViewHolder {
 
-        @Bind(R.id.item_message_title)
+        @BindView(R.id.item_message_title)
         TextView title;
-        @Bind(R.id.item_message_image)
+        @BindView(R.id.item_message_image)
         CircleImageView image;
 
         public MessageImageTitleViewHolder(View itemView) {
@@ -320,7 +320,7 @@ public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.Messag
 
     public class MessageImageViewHolder extends MessageViewHolder {
 
-        @Bind(R.id.item_message_image)
+        @BindView(R.id.item_message_image)
         CircleImageView image;
 
         public MessageImageViewHolder(View itemView) {

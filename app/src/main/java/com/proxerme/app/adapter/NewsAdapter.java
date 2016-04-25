@@ -28,7 +28,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -141,17 +141,17 @@ public class NewsAdapter extends PagingAdapter<News, NewsAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.item_news_image)
+        @BindView(R.id.item_news_image)
         ImageView image;
-        @Bind(R.id.item_news_title)
+        @BindView(R.id.item_news_title)
         TextView title;
-        @Bind(R.id.item_news_description)
+        @BindView(R.id.item_news_description)
         TextView description;
-        @Bind(R.id.item_news_category)
+        @BindView(R.id.item_news_category)
         TextView category;
-        @Bind(R.id.item_news_time)
+        @BindView(R.id.item_news_time)
         TextView time;
-        @Bind(R.id.item_news_expand_description)
+        @BindView(R.id.item_news_expand_description)
         ImageButton expand;
 
         public ViewHolder(View itemView) {

@@ -26,7 +26,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -145,13 +145,13 @@ public class ConferenceAdapter extends PagingAdapter<Conference, ConferenceAdapt
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.item_conference_image)
+        @BindView(R.id.item_conference_image)
         ImageView image;
-        @Bind(R.id.item_conference_title)
+        @BindView(R.id.item_conference_title)
         TextView topic;
-        @Bind(R.id.item_conference_time)
+        @BindView(R.id.item_conference_time)
         TextView time;
-        @Bind(R.id.item_conference_participants)
+        @BindView(R.id.item_conference_participants)
         TextView participants;
 
         public ViewHolder(View itemView) {

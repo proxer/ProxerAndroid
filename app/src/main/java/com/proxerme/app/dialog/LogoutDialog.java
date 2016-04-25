@@ -23,8 +23,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Dialog, which handles the logout of a user.
@@ -37,10 +38,12 @@ public class LogoutDialog extends MainDialog {
 
     ViewGroup root;
 
-    @Bind(R.id.dialog_logout_progress)
+    @BindView(R.id.dialog_logout_progress)
     ProgressBar progress;
 
     private boolean loading;
+
+    private Unbinder unbinder;
 
     private EventBusBuffer eventBusBuffer = new EventBusBuffer() {
         @Subscribe
@@ -102,7 +105,7 @@ public class LogoutDialog extends MainDialog {
 
     @Override
     public void onDestroyView() {
-        ButterKnife.unbind(this);
+        unbinder.unbind();
         root = null;
 
         super.onDestroyView();
@@ -153,7 +156,7 @@ public class LogoutDialog extends MainDialog {
     private View initViews() {
         root = (ViewGroup) View.inflate(getContext(), R.layout.dialog_logout, null);
 
-        ButterKnife.bind(this, root);
+        unbinder = ButterKnife.bind(this, root);
 
         return root;
     }

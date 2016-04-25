@@ -26,9 +26,10 @@ import com.proxerme.library.interfaces.IdItem;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 
 import static com.proxerme.library.connection.ProxerException.ERROR_PROXER;
 
@@ -52,14 +53,14 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
     protected A adapter;
 
     View root;
-    @Bind(R.id.fragment_paging_list_container)
+    @BindView(R.id.fragment_paging_list_container)
     SwipeRefreshLayout swipeRefreshLayout;
-    @Bind(R.id.fragment_paging_list)
+    @BindView(R.id.fragment_paging_list)
     RecyclerView list;
 
-    @Bind(R.id.fragment_paging_notification_container)
+    @BindView(R.id.fragment_paging_notification_container)
     ViewGroup notificationContainer;
-    @Bind(R.id.fragment_paging_notification)
+    @BindView(R.id.fragment_paging_notification)
     TextView notification;
 
     StaggeredGridLayoutManager layoutManager;
@@ -77,6 +78,8 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
     private boolean firstLoad;
 
     private int newItems = 0;
+
+    private Unbinder unbinder;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -106,7 +109,7 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         root = inflateLayout(inflater, container, savedInstanceState);
-        ButterKnife.bind(this, root);
+        unbinder = ButterKnife.bind(this, root);
 
         layoutManager = new StaggeredGridLayoutManager(
                 getActivity() == null ? 1 : Utils.calculateSpanAmount(getActivity()),
@@ -152,7 +155,7 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
 
     @Override
     public void onDestroyView() {
-        ButterKnife.unbind(this);
+        unbinder.unbind();
         root = null;
 
         super.onDestroyView();

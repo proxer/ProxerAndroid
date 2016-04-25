@@ -25,7 +25,7 @@ import android.webkit.WebViewClient;
 
 import com.proxerme.app.R;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -36,9 +36,9 @@ public class WebviewActivity extends AppCompatActivity {
 
     public static final String EXTRA_URL = "url";
 
-    @Bind(R.id.webview)
+    @BindView(R.id.webview)
     WebView webView;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
 
     @Override
