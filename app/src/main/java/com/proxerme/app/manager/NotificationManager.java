@@ -22,6 +22,8 @@ import com.proxerme.library.event.success.LogoutEvent;
 
 import org.greenrobot.eventbus.Subscribe;
 
+import java.lang.ref.WeakReference;
+
 /**
  * TODO: Describe Class
  *
@@ -29,12 +31,12 @@ import org.greenrobot.eventbus.Subscribe;
  */
 public class NotificationManager extends Manager {
 
-    private Context context;
+    private WeakReference<Context> context;
 
     public NotificationManager(@NonNull Context context) {
         super();
 
-        this.context = context;
+        this.context = new WeakReference<>(context);
     }
 
     /**
@@ -79,7 +81,7 @@ public class NotificationManager extends Manager {
      * @param context The context.
      */
     public void retrieveConferencesLater(@NonNull Context context) {
-        cancelMessagesRetrieval(context);
+        cancelConferencesRetrieval(context);
         if (isMessagesRetrievalEnabled(context)) {
             int interval = StorageHelper.getMessagesInterval() * 1000;
 
@@ -92,7 +94,7 @@ public class NotificationManager extends Manager {
      *
      * @param context The context.
      */
-    public void cancelMessagesRetrieval(@NonNull Context context) {
+    public void cancelConferencesRetrieval(@NonNull Context context) {
         cancelRetrieval(context, NotificationService.ACTION_LOAD_CONFERENCES);
     }
 
@@ -108,7 +110,7 @@ public class NotificationManager extends Manager {
 
     private void retrieveLater(@NonNull Context context,
                                @NonNull @NotificationService.NotificationAction String
-                                              action, int interval) {
+                                       action, int interval) {
         AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, NotificationReceiver.class);
 
@@ -128,7 +130,7 @@ public class NotificationManager extends Manager {
 
     private void cancelRetrieval(@NonNull Context context,
                                  @NonNull @NotificationService.NotificationAction String
-                                                action) {
+                                         action) {
         Intent intent = new Intent(context, NotificationReceiver.class);
 
         intent.setAction(action);
@@ -158,41 +160,43 @@ public class NotificationManager extends Manager {
         return count;
     }
 
-    @Override
-    public void destroy() {
-        super.destroy();
-
-        this.context = null;
-    }
-
     @Subscribe
     public void onLogin(LoginEvent event) {
-        retrieveConferencesLater(context);
+        if (context.get() != null) {
+            retrieveConferencesLater(context.get());
+        }
     }
 
     @Subscribe
     public void onLogout(LogoutEvent event) {
-        cancelMessagesRetrieval(context);
+        if (context.get() != null) {
+            cancelConferencesRetrieval(context.get());
+        }
     }
 
     @SuppressLint("SwitchIntDef")
     @Subscribe
     public void onSectionChanged(SectionChangedEvent event) {
-        switch (event.getNewSection()) {
-            case com.proxerme.app.util.Section.CONFERENCES:
-                NotificationHelper.cancel(context, NotificationHelper.MESSAGES_NOTIFICATION);
+        if (context.get() != null) {
+            switch (event.getNewSection()) {
+                case com.proxerme.app.util.Section.CONFERENCES:
+                    NotificationHelper.cancel(context.get(),
+                            NotificationHelper.MESSAGES_NOTIFICATION);
 
-                break;
-            case com.proxerme.app.util.Section.MESSAGES:
-                NotificationHelper.cancel(context, NotificationHelper.MESSAGES_NOTIFICATION);
+                    break;
+                case com.proxerme.app.util.Section.MESSAGES:
+                    NotificationHelper.cancel(context.get(),
+                            NotificationHelper.MESSAGES_NOTIFICATION);
 
-                break;
-            case com.proxerme.app.util.Section.NEWS:
-                NotificationHelper.cancel(context, NotificationHelper.NEWS_NOTIFICATION);
+                    break;
+                case com.proxerme.app.util.Section.NEWS:
+                    NotificationHelper.cancel(context.get(),
+                            NotificationHelper.NEWS_NOTIFICATION);
 
-                break;
-            case com.proxerme.app.util.Section.SETTINGS:
-                break;
+                    break;
+                case com.proxerme.app.util.Section.SETTINGS:
+                    break;
+            }
         }
     }
 

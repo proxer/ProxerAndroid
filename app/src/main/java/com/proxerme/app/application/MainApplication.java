@@ -23,10 +23,11 @@ import com.proxerme.app.event.SectionChangedEvent;
 import com.proxerme.app.manager.BadgeManager;
 import com.proxerme.app.manager.NotificationManager;
 import com.proxerme.app.manager.UserManager;
-import com.proxerme.app.util.EventBusBuffer;
 import com.proxerme.app.util.Section;
 import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.util.PersistentCookieStore;
+import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
@@ -43,12 +44,12 @@ import java.net.CookiePolicy;
  */
 public class MainApplication extends Application {
 
+    private RefWatcher refWatcher;
+
     private JobManager jobManager;
     private BadgeManager badgeManager;
     private UserManager userManager;
     private NotificationManager notificationManager;
-
-    private EventBusBuffer eventBusBuffer = new EventBusBuffer();
 
     private int createdActivities = 0;
     private int startedActivities = 0;
@@ -63,6 +64,7 @@ public class MainApplication extends Application {
         super.onCreate();
 
         initLibs();
+        initManagers();
 
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
@@ -71,10 +73,6 @@ public class MainApplication extends Application {
                     changingOrientation = false;
                 } else {
                     createdActivities++;
-
-                    if (createdActivities == 1) {
-                        initManagers();
-                    }
                 }
             }
 
@@ -117,7 +115,7 @@ public class MainApplication extends Application {
                     createdActivities--;
 
                     if (createdActivities <= 0) {
-                        destroyManagers();
+                        ProxerConnection.cleanup();
 
                         setCurrentSection(Section.NONE);
                     }
@@ -127,6 +125,7 @@ public class MainApplication extends Application {
     }
 
     private void initLibs() {
+        refWatcher = LeakCanary.install(this);
         JodaTimeAndroid.init(this);
         Hawk.init(this).setEncryptionMethod(HawkBuilder.EncryptionMethod.MEDIUM)
                 .setStorage(HawkBuilder.newSharedPrefStorage(this)).build();
@@ -168,14 +167,6 @@ public class MainApplication extends Application {
         notificationManager = new NotificationManager(this);
     }
 
-    private void destroyManagers() {
-        badgeManager.destroy();
-        userManager.destroy();
-        notificationManager.destroy();
-
-        ProxerConnection.cleanup();
-    }
-
     public int getStartedActivities() {
         return startedActivities;
     }
@@ -209,5 +200,10 @@ public class MainApplication extends Application {
         this.currentSection = newSection;
 
         EventBus.getDefault().post(new SectionChangedEvent(newSection));
+    }
+
+    @NonNull
+    public RefWatcher getRefWatcher() {
+        return refWatcher;
     }
 }

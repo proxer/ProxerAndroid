@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import com.proxerme.app.R;
 import com.proxerme.app.activity.ImageDetailActivity;
 import com.proxerme.app.adapter.NewsAdapter;
+import com.proxerme.app.util.EventBusBuffer;
 import com.proxerme.app.util.Section;
 import com.proxerme.app.util.Utils;
 import com.proxerme.app.util.helper.StorageHelper;
@@ -30,6 +31,18 @@ import java.util.List;
  * @author Ruben Gees
  */
 public class NewsFragment extends PagingFragment<News, NewsAdapter, NewsEvent, NewsErrorEvent> {
+
+    private EventBusBuffer eventBusBuffer = new EventBusBuffer() {
+        @Subscribe
+        public void onLoad(NewsEvent event) {
+            addToQueue(event);
+        }
+
+        @Subscribe
+        public void onLoadError(NewsErrorEvent event) {
+            addToQueue(event);
+        }
+    };
 
     @NonNull
     public static NewsFragment newInstance() {
@@ -84,6 +97,16 @@ public class NewsFragment extends PagingFragment<News, NewsAdapter, NewsEvent, N
         ProxerConnection.loadNews(page).execute();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onLoad(NewsEvent result) {
+        handleResult(result);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onLoadError(NewsErrorEvent errorResult) {
+        handleError(errorResult);
+    }
+
     @Override
     protected void cancelRequest() {
         ProxerConnection.cancel(ProxerTag.NEWS);
@@ -110,13 +133,8 @@ public class NewsFragment extends PagingFragment<News, NewsAdapter, NewsEvent, N
         return getResources().getQuantityString(R.plurals.notification_news, amount, amount);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onLoad(NewsEvent result) {
-        handleResult(result);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onLoadError(NewsErrorEvent errorResult) {
-        handleError(errorResult);
+    @Override
+    protected EventBusBuffer getEventBusBuffer() {
+        return eventBusBuffer;
     }
 }

@@ -15,6 +15,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.proxerme.app.R;
 import com.proxerme.app.event.CancelledEvent;
 import com.proxerme.app.util.ErrorHandler;
+import com.proxerme.app.util.EventBusBuffer;
 import com.proxerme.library.event.error.LogoutErrorEvent;
 import com.proxerme.library.event.success.LogoutEvent;
 
@@ -40,6 +41,18 @@ public class LogoutDialog extends MainDialog {
     ProgressBar progress;
 
     private boolean loading;
+
+    private EventBusBuffer eventBusBuffer = new EventBusBuffer() {
+        @Subscribe
+        public void onLogout(LogoutEvent event) {
+            addToQueue(event);
+        }
+
+        @Subscribe
+        public void onLoginError(LogoutErrorEvent event) {
+            addToQueue(event);
+        }
+    };
 
     public static void show(@NonNull AppCompatActivity activity) {
         new LogoutDialog().show(activity.getSupportFragmentManager(), "logout_dialog");
@@ -152,5 +165,10 @@ public class LogoutDialog extends MainDialog {
 
             getMainApplication().getUserManager().logout();
         }
+    }
+
+    @Override
+    protected EventBusBuffer getEventBusBuffer() {
+        return eventBusBuffer;
     }
 }

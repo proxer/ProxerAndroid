@@ -56,8 +56,6 @@ public class MaterialDrawerHelper {
 
     private static final String STATE_CURRENT_DRAWER_ITEM_ID = "drawer_current_drawer_item_id";
 
-    private Activity context;
-
     private AccountHeader header;
     private Drawer drawer;
 
@@ -100,32 +98,32 @@ public class MaterialDrawerHelper {
 
     public MaterialDrawerHelper(@NonNull Activity context,
                                 @Nullable MaterialDrawerCallback callback) {
-        this.context = context;
         this.callback = callback;
 
         this.userManager = ((MainApplication) context.getApplication()).getUserManager();
     }
 
-    public void build(@NonNull Toolbar toolbar, @Nullable Bundle savedInstanceState) {
+    public void build(@NonNull Activity context, @NonNull Toolbar toolbar,
+                      @Nullable Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             currentDrawerItemId = savedInstanceState.getInt(STATE_CURRENT_DRAWER_ITEM_ID);
         }
 
-        initHeader(savedInstanceState);
-        initDrawer(toolbar, savedInstanceState);
+        initHeader(context, savedInstanceState);
+        initDrawer(context, toolbar, savedInstanceState);
     }
 
-    private void initHeader(Bundle savedInstanceState) {
+    private void initHeader(@NonNull Activity context, Bundle savedInstanceState) {
         header = new AccountHeaderBuilder()
                 .withHeaderBackground(R.color.colorAccent)
                 .withActivity(context)
                 .withSavedInstance(savedInstanceState)
-                .withProfiles(generateProfiles())
+                .withProfiles(generateProfiles(context))
                 .withOnAccountHeaderListener(onAccountHeaderClickListener)
                 .build();
     }
 
-    private ArrayList<IProfile> generateProfiles() {
+    private ArrayList<IProfile> generateProfiles(@NonNull Activity context) {
         LoginUser user = userManager.getUser();
         ArrayList<IProfile> result = new ArrayList<>();
 
@@ -161,7 +159,8 @@ public class MaterialDrawerHelper {
         return result;
     }
 
-    private void initDrawer(@NonNull Toolbar toolbar, @Nullable Bundle savedInstanceState) {
+    private void initDrawer(@NonNull Activity context, @NonNull Toolbar toolbar,
+                            @Nullable Bundle savedInstanceState) {
         drawer = new DrawerBuilder(context)
                 .withAccountHeader(header)
                 .withDrawerItems(generateDrawerItems())
@@ -254,8 +253,8 @@ public class MaterialDrawerHelper {
         }
     }
 
-    public void refreshHeader() {
-        header.setProfiles(generateProfiles());
+    public void refreshHeader(@NonNull Activity context) {
+        header.setProfiles(generateProfiles(context));
     }
 
     @Retention(RetentionPolicy.SOURCE)

@@ -163,21 +163,15 @@ public class UserManager extends Manager {
     @Subscribe
     public void onLoginError(LoginErrorEvent event) {
         working = false;
+
         StorageHelper.setLastLoginTime(-1);
     }
 
     @Subscribe
     public void onLogoutError(LogoutErrorEvent event) {
         working = false;
+
         StorageHelper.setLastLoginTime(-1);
-    }
-
-    @Override
-    public void destroy() {
-        super.destroy();
-
-        ProxerConnection.cancel(ProxerTag.LOGIN);
-        ProxerConnection.cancel(ProxerTag.LOGOUT);
     }
 
     @Retention(RetentionPolicy.SOURCE)

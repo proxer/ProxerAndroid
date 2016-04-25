@@ -19,8 +19,9 @@ import com.proxerme.app.application.MainApplication;
 import com.proxerme.app.customtabs.CustomTabActivityHelper;
 import com.proxerme.app.customtabs.WebviewFallback;
 import com.proxerme.app.interfaces.OnActivityListener;
-import com.proxerme.app.util.EventBusBuffer;
 import com.proxerme.app.util.Utils;
+
+import java.lang.ref.WeakReference;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -45,10 +46,8 @@ public abstract class MainActivity extends AppCompatActivity {
     private CustomTabActivityHelper customTabActivityHelper;
 
     private String title;
-    private OnActivityListener onActivityListener;
+    private WeakReference<OnActivityListener> onActivityListener = new WeakReference<>(null);
     private Snackbar snackbar;
-
-    private EventBusBuffer eventBusBuffer = new EventBusBuffer();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,27 +59,6 @@ public abstract class MainActivity extends AppCompatActivity {
         initViews();
 
         customTabActivityHelper = new CustomTabActivityHelper();
-    }
-
-    @Override
-    protected void onPostResume() {
-        super.onPostResume();
-
-        eventBusBuffer.stopAndProcess();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        eventBusBuffer.startBuffering();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        eventBusBuffer.stopAndPurge();
     }
 
     @Override
@@ -109,11 +87,16 @@ public abstract class MainActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
 
         if (savedInstanceState != null) {
-            try {
-                onActivityListener = (OnActivityListener) getSupportFragmentManager()
-                        .findFragmentById(R.id.activity_main_content_container);
-            } catch (ClassCastException e) {
-                onActivityListener = null;
+            Fragment lastFragment = getSupportFragmentManager()
+                    .findFragmentById(R.id.activity_main_content_container);
+
+            if (lastFragment != null && lastFragment instanceof OnActivityListener) {
+
+                onActivityListener =
+                        new WeakReference<>((OnActivityListener) getSupportFragmentManager()
+                                .findFragmentById(R.id.activity_main_content_container));
+            } else {
+                onActivityListener = new WeakReference<>(null);
             }
 
             title = savedInstanceState.getString(STATE_TITLE);
@@ -123,7 +106,7 @@ public abstract class MainActivity extends AppCompatActivity {
     }
 
     protected boolean handleBackPressed() {
-        return onActivityListener != null && onActivityListener.onBackPressed();
+        return onActivityListener.get() != null && onActivityListener.get().onBackPressed();
     }
 
     public void setFragment(@NonNull Fragment fragment, @NonNull String title) {
@@ -136,7 +119,7 @@ public abstract class MainActivity extends AppCompatActivity {
     public void setFragment(@NonNull final Fragment fragment) {
         if (Utils.areActionsPossible(this)) {
             if (fragment instanceof OnActivityListener) {
-                onActivityListener = (OnActivityListener) fragment;
+                onActivityListener = new WeakReference<>((OnActivityListener) fragment);
             } else {
                 onActivityListener = null;
             }

@@ -41,7 +41,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements OnActi
                         .withAutoDetect(false)
                         .withAboutAppName(getString(R.string.app_name))
                         .withLibraries("glide", "jodatimeandroid", "bridge", "hawk", "butterknife",
-                                "materialdialogs", "eventbus", "circleimageview", "priorityjobqueue")
+                                "materialdialogs", "eventbus", "circleimageview",
+                                "priorityjobqueue", "leakcanary")
                         .withExcludedLibraries("fastadapter", "materialize")
                         .withFields(R.string.class.getFields())
                         .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
@@ -77,6 +78,13 @@ public class SettingsFragment extends PreferenceFragmentCompat implements OnActi
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        getMainApplication().getRefWatcher().watch(this);
+    }
+
+    @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         switch (key) {
             case PreferenceHelper.PREFERENCE_NEWS_NOTIFICATIONS: {
@@ -102,7 +110,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements OnActi
                             .retrieveConferencesLater(getContext());
                 } else {
                     getMainApplication().getNotificationManager()
-                            .cancelMessagesRetrieval(getContext());
+                            .cancelConferencesRetrieval(getContext());
                 }
 
                 break;

@@ -7,6 +7,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.StringDef;
 
 import com.proxerme.app.application.MainApplication;
+import com.proxerme.app.manager.NotificationManager;
+import com.proxerme.app.manager.UserManager;
 import com.proxerme.app.util.Section;
 import com.proxerme.app.util.helper.NotificationHelper;
 import com.proxerme.app.util.helper.PagingHelper;
@@ -88,10 +90,12 @@ public class NotificationService extends IntentService {
 
     private void handleActionLoadConferences() {
         LoginUser user = StorageHelper.getUser();
+        UserManager userManager = getMainApplication().getUserManager();
+        NotificationManager notificationManager = getMainApplication().getNotificationManager();
 
         if (user != null) {
             try {
-                getMainApplication().getUserManager().reLoginSync();
+                userManager.reLoginSync();
                 List<Conference> conferences = ProxerConnection.loadConferences(1)
                         .executeSynchronized();
 
@@ -119,13 +123,13 @@ public class NotificationService extends IntentService {
             }
 
             StorageHelper.incrementMessagesInterval();
-            getMainApplication().getNotificationManager().retrieveConferencesLater(this);
+            notificationManager.retrieveConferencesLater(this);
         } else {
-            getMainApplication().getNotificationManager().cancelMessagesRetrieval(this);
+            notificationManager.cancelConferencesRetrieval(this);
         }
     }
 
-    protected final MainApplication getMainApplication() {
+    private MainApplication getMainApplication() {
         return (MainApplication) getApplication();
     }
 

@@ -19,6 +19,7 @@ import com.proxerme.app.adapter.MessageAdapter;
 import com.proxerme.app.event.MessageEnqueuedEvent;
 import com.proxerme.app.job.SendMessageJob;
 import com.proxerme.app.manager.UserManager;
+import com.proxerme.app.util.EventBusBuffer;
 import com.proxerme.app.util.Section;
 import com.proxerme.app.util.Utils;
 import com.proxerme.app.util.helper.StorageHelper;
@@ -52,10 +53,29 @@ public class MessagesFragment extends LoginPollingPagingFragment<Message, Messag
     private static final String ARGUMENT_CONFERENCE_ID = "conference_id";
 
     private static final int POLLING_INTERVAL = 3000;
-
     @Bind(R.id.fragment_messages_input)
     TextInputEditText input;
+    private EventBusBuffer eventBusBuffer = new EventBusBuffer() {
+        @Subscribe
+        public void onMessagesLoad(MessagesEvent event) {
+            addToQueue(event);
+        }
 
+        @Subscribe
+        public void onMessagesLoadError(MessagesErrorEvent event) {
+            addToQueue(event);
+        }
+
+        @Subscribe
+        public void onMessageSent(MessageSentEvent event) {
+            addToQueue(event);
+        }
+
+        @Subscribe
+        public void onMessageEnqueued(MessageEnqueuedEvent event) {
+            addToQueue(event);
+        }
+    };
     private String conferenceId;
 
     public static MessagesFragment newInstance(@NonNull String conferenceId) {
@@ -218,6 +238,11 @@ public class MessagesFragment extends LoginPollingPagingFragment<Message, Messag
     @Override
     protected String getNotificationText(int amount) {
         return getResources().getQuantityString(R.plurals.notification_messages, amount, amount);
+    }
+
+    @Override
+    protected EventBusBuffer getEventBusBuffer() {
+        return eventBusBuffer;
     }
 }
 

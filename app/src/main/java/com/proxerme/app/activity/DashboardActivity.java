@@ -91,7 +91,7 @@ public class DashboardActivity extends MainActivity {
         super.onCreate(savedInstanceState);
 
         drawerHelper = new MaterialDrawerHelper(this, drawerCallback);
-        drawerHelper.build(toolbar, savedInstanceState);
+        drawerHelper.build(this, toolbar, savedInstanceState);
 
         getMainApplication().getBadgeManager().setCallback(badgeCallback);
 
@@ -166,16 +166,12 @@ public class DashboardActivity extends MainActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLogin(LoginEvent event) {
-        if (!Utils.isDestroyedCompat(this)) {
-            drawerHelper.refreshHeader();
-        }
+        drawerHelper.refreshHeader(this);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLogout(LogoutEvent event) {
-        if (!Utils.isDestroyedCompat(this)) {
-            drawerHelper.refreshHeader();
-        }
+        drawerHelper.refreshHeader(this);
     }
 
     private void displayFirstPage(@Nullable Bundle savedInstanceState) {

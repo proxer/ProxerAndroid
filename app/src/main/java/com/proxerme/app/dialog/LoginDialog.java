@@ -24,6 +24,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.proxerme.app.R;
 import com.proxerme.app.event.CancelledEvent;
 import com.proxerme.app.util.ErrorHandler;
+import com.proxerme.app.util.EventBusBuffer;
 import com.proxerme.library.entity.LoginUser;
 import com.proxerme.library.event.error.LoginErrorEvent;
 import com.proxerme.library.event.success.LoginEvent;
@@ -66,6 +67,18 @@ public class LoginDialog extends MainDialog {
     ProgressBar progress;
 
     private boolean loading;
+
+    private EventBusBuffer eventBusBuffer = new EventBusBuffer() {
+        @Subscribe
+        public void onLogin(LoginEvent event) {
+            addToQueue(event);
+        }
+
+        @Subscribe
+        public void onLoginError(LoginErrorEvent event) {
+            addToQueue(event);
+        }
+    };
 
     public static void show(@NonNull AppCompatActivity activity) {
         new LoginDialog().show(activity.getSupportFragmentManager(), "login_dialog");
@@ -250,6 +263,11 @@ public class LoginDialog extends MainDialog {
     private void resetError(@NonNull TextInputLayout container) {
         container.setError(null);
         container.setErrorEnabled(false);
+    }
+
+    @Override
+    protected EventBusBuffer getEventBusBuffer() {
+        return eventBusBuffer;
     }
 
     private static abstract class OnTextListener implements TextWatcher {

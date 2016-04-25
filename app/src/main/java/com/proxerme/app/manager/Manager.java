@@ -10,10 +10,8 @@ import org.greenrobot.eventbus.EventBus;
 public abstract class Manager {
 
     public Manager() {
-        EventBus.getDefault().register(this);
-    }
-
-    public void destroy() {
-        EventBus.getDefault().unregister(this);
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
     }
 }

@@ -28,18 +28,7 @@ public abstract class PollingPagingFragment<T extends IdItem & Parcelable,
     private boolean polling = false;
     private boolean wasPolling = false;
 
-    private Runnable pollingRunnable = new Runnable() {
-        @Override
-        public void run() {
-            if (canLoad()) {
-                doLoad(getFirstPage(), true, false);
-
-                handler.postDelayed(pollingRunnable, getPollingInterval());
-            } else {
-                stopPolling();
-            }
-        }
-    };
+    private PollingRunnable pollingRunnable = new PollingRunnable();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -115,7 +104,20 @@ public abstract class PollingPagingFragment<T extends IdItem & Parcelable,
         handler.removeCallbacks(pollingRunnable);
     }
 
-
     protected abstract int getPollingInterval();
+
+    private class PollingRunnable implements Runnable {
+
+        @Override
+        public void run() {
+            if (canLoad()) {
+                doLoad(getFirstPage(), true, false);
+
+                handler.postDelayed(pollingRunnable, getPollingInterval());
+            } else {
+                stopPolling();
+            }
+        }
+    }
 
 }

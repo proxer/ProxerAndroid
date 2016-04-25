@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import com.proxerme.app.activity.MainActivity;
 import com.proxerme.app.application.MainApplication;
 import com.proxerme.app.interfaces.OnActivityListener;
+import com.proxerme.app.util.EventBusBuffer;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -13,7 +14,7 @@ import org.greenrobot.eventbus.EventBus;
  *
  * @author Ruben Gees
  */
-public class MainFragment extends Fragment implements OnActivityListener {
+public abstract class MainFragment extends Fragment implements OnActivityListener {
 
     protected MainActivity getParentActivity() throws RuntimeException {
         try {
@@ -33,18 +34,30 @@ public class MainFragment extends Fragment implements OnActivityListener {
         super.onResume();
 
         EventBus.getDefault().register(this);
+        getEventBusBuffer().stopAndProcess();
     }
 
     @Override
     public void onPause() {
+        getEventBusBuffer().startBuffering();
         EventBus.getDefault().unregister(this);
 
         super.onPause();
     }
 
     @Override
+    public void onDestroy() {
+        getEventBusBuffer().stopAndPurge();
+        getMainApplication().getRefWatcher().watch(this);
+
+        super.onDestroy();
+    }
+
+    @Override
     public boolean onBackPressed() {
         return false;
     }
+
+    protected abstract EventBusBuffer getEventBusBuffer();
 
 }

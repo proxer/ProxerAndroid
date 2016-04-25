@@ -12,6 +12,7 @@ import com.proxerme.app.R;
 import com.proxerme.app.activity.ImageDetailActivity;
 import com.proxerme.app.activity.MessageActivity;
 import com.proxerme.app.adapter.ConferenceAdapter;
+import com.proxerme.app.util.EventBusBuffer;
 import com.proxerme.app.util.Section;
 import com.proxerme.app.util.Utils;
 import com.proxerme.app.util.helper.StorageHelper;
@@ -36,6 +37,18 @@ public class ConferencesFragment extends LoginPollingPagingFragment<Conference, 
         ConferencesEvent, ConferencesErrorEvent> {
 
     private static final int POLLING_INTERVAL = 7000;
+
+    private EventBusBuffer eventBusBuffer = new EventBusBuffer() {
+        @Subscribe
+        public void onLoad(ConferencesEvent event) {
+            addToQueue(event);
+        }
+
+        @Subscribe
+        public void onLoadError(ConferencesErrorEvent event) {
+            addToQueue(event);
+        }
+    };
 
     @NonNull
     public static ConferencesFragment newInstance() {
@@ -126,5 +139,10 @@ public class ConferencesFragment extends LoginPollingPagingFragment<Conference, 
     @Override
     protected int getPollingInterval() {
         return POLLING_INTERVAL;
+    }
+
+    @Override
+    protected EventBusBuffer getEventBusBuffer() {
+        return eventBusBuffer;
     }
 }
