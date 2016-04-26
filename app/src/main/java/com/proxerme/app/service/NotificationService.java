@@ -34,8 +34,8 @@ public class NotificationService extends IntentService {
 
     public static final String ACTION_LOAD_NEWS =
             "com.proxerme.app.service.action.LOAD_NEWS";
-    public static final String ACTION_LOAD_CONFERENCES =
-            "com.proxerme.app.service.action.LOAD_CONFERENCES";
+    public static final String ACTION_LOAD_MESSAGES =
+            "com.proxerme.app.service.action.LOAD_NEW_MESSAGES";
     private static final String SERVICE_TITLE = "Notification Service";
 
     public NotificationService() {
@@ -58,10 +58,10 @@ public class NotificationService extends IntentService {
                 if (getMainApplication().getCurrentSection() != Section.NEWS) {
                     handleActionLoadNews();
                 }
-            } else if (ACTION_LOAD_CONFERENCES.equals(action)) {
+            } else if (ACTION_LOAD_MESSAGES.equals(action)) {
                 if (getMainApplication().getCurrentSection() != Section.CONFERENCES &&
                         getMainApplication().getCurrentSection() != Section.MESSAGES) {
-                    handleActionLoadConferences();
+                    handleActionLoadMessages();
                 }
             }
         }
@@ -88,7 +88,7 @@ public class NotificationService extends IntentService {
         }
     }
 
-    private void handleActionLoadConferences() {
+    private void handleActionLoadMessages() {
         LoginUser user = StorageHelper.getUser();
         UserManager userManager = getMainApplication().getUserManager();
         NotificationManager notificationManager = getMainApplication().getNotificationManager();
@@ -123,9 +123,9 @@ public class NotificationService extends IntentService {
             }
 
             StorageHelper.incrementMessagesInterval();
-            notificationManager.retrieveConferencesLater(this);
+            notificationManager.retrieveNewMessagesLater(this);
         } else {
-            notificationManager.cancelConferencesRetrieval(this);
+            notificationManager.cancelNewMessageRetrieval(this);
         }
     }
 
@@ -134,7 +134,7 @@ public class NotificationService extends IntentService {
     }
 
     @Retention(RetentionPolicy.SOURCE)
-    @StringDef({ACTION_LOAD_NEWS, ACTION_LOAD_CONFERENCES})
+    @StringDef({ACTION_LOAD_NEWS, ACTION_LOAD_MESSAGES})
     public @interface NotificationAction {
     }
 

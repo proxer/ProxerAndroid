@@ -116,7 +116,7 @@ public class ConferencesFragment extends LoginPollingPagingFragment<Conference, 
                 StorageHelper.setLastReceivedMessageTime(result.get(0).getTime());
             }
 
-            getMainApplication().getNotificationManager().retrieveConferencesLater(getContext());
+            getMainApplication().getNotificationManager().retrieveNewMessagesLater(getContext());
         }
     }
 

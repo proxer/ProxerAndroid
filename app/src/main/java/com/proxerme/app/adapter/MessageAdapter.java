@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.proxerme.app.R;
 import com.proxerme.app.util.TimeUtils;
 import com.proxerme.app.util.helper.PagingHelper;
@@ -39,15 +38,19 @@ public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.Messag
 
     private static final String STATE_MESSAGE_SHOWING_TIME_IDS = "message_showing_time_ids";
 
-    private static final int TYPE_MESSAGE_SELF = 0;
-    private static final int TYPE_MESSAGE = 1;
-    private static final int TYPE_MESSAGE_WITH_TITLE = 2;
-    private static final int TYPE_MESSAGE_PROFILE_IMAGE = 3;
-    private static final int TYPE_MESSAGE_PROFILE_IMAGE_WITH_TITLE = 4;
-    private static final int TYPE_ACTION = 5;
+    private static final int TYPE_MESSAGE_INNER = 0;
+    private static final int TYPE_MESSAGE_SINGLE = 1;
+    private static final int TYPE_MESSAGE_TOP = 2;
+    private static final int TYPE_MESSAGE_BOTTOM = 3;
+    private static final int TYPE_MESSAGE_SELF_INNER = 4;
+    private static final int TYPE_MESSAGE_SELF_SINGLE = 5;
+    private static final int TYPE_MESSAGE_SELF_TOP = 6;
+    private static final int TYPE_MESSAGE_SELF_BOTTOM = 7;
+    private static final int TYPE_ACTION = 8;
 
     @Nullable
     private LoginUser user;
+
     private HashMap<String, Boolean> showingTimeMap;
 
     private OnMessageInteractionListener onMessageInteractionListener;
@@ -89,21 +92,30 @@ public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.Messag
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
         switch (viewType) {
-            case TYPE_MESSAGE_SELF:
-                return new MessageViewHolder(inflater.inflate(R.layout.item_message_self, parent,
+            case TYPE_MESSAGE_INNER:
+                return new MessageViewHolder(inflater.inflate(R.layout.item_message_inner, parent,
                         false));
-            case TYPE_MESSAGE:
-                return new MessageViewHolder(inflater.inflate(R.layout.item_message, parent,
+            case TYPE_MESSAGE_SINGLE:
+                return new MessageImageTitleViewHolder(inflater
+                        .inflate(R.layout.item_message_single, parent, false));
+            case TYPE_MESSAGE_TOP:
+                return new MessageImageTitleViewHolder(inflater
+                        .inflate(R.layout.item_message_top, parent, false));
+            case TYPE_MESSAGE_BOTTOM:
+                return new MessageViewHolder(inflater.inflate(R.layout.item_message_bottom, parent,
                         false));
-            case TYPE_MESSAGE_WITH_TITLE:
-                return new MessageTitleViewHolder(inflater.inflate(R.layout.item_message_with_title,
+            case TYPE_MESSAGE_SELF_INNER:
+                return new MessageViewHolder(inflater.inflate(R.layout.item_message_self_inner,
                         parent, false));
-            case TYPE_MESSAGE_PROFILE_IMAGE:
-                return new MessageImageViewHolder(inflater.inflate(
-                        R.layout.item_message_profile_image, parent, false));
-            case TYPE_MESSAGE_PROFILE_IMAGE_WITH_TITLE:
-                return new MessageImageTitleViewHolder(inflater.inflate(
-                        R.layout.item_message_profile_image_with_title, parent, false));
+            case TYPE_MESSAGE_SELF_SINGLE:
+                return new MessageViewHolder(inflater.inflate(R.layout.item_message_self_single,
+                        parent, false));
+            case TYPE_MESSAGE_SELF_TOP:
+                return new MessageViewHolder(inflater.inflate(R.layout.item_message_self_top,
+                        parent, false));
+            case TYPE_MESSAGE_SELF_BOTTOM:
+                return new MessageViewHolder(inflater.inflate(R.layout.item_message_self_bottom,
+                        parent, false));
             case TYPE_ACTION:
                 return new MessageViewHolder(inflater.inflate(R.layout.item_message_action, parent,
                         false));
@@ -116,21 +128,12 @@ public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.Messag
     public void onBindViewHolder(MessageViewHolder holder, int position) {
         Message current = getItemAt(position);
 
-        if (holder.getClass().equals(MessageTitleViewHolder.class)) {
-            ((MessageTitleViewHolder) holder).title.setText(current.getUsername());
-        } else if (holder.getClass().equals(MessageImageTitleViewHolder.class)) {
+        if (holder.getClass().equals(MessageImageTitleViewHolder.class)) {
             MessageImageTitleViewHolder castedHolder = (MessageImageTitleViewHolder) holder;
 
             castedHolder.title.setText(current.getUsername());
             Glide.with(castedHolder.image.getContext())
                     .load(UrlHolder.getUserImageUrl(current.getImageId()))
-                    .into(castedHolder.image);
-        } else if (holder.getClass().equals(MessageImageViewHolder.class)) {
-            MessageImageViewHolder castedHolder = (MessageImageViewHolder) holder;
-
-            Glide.with(castedHolder.image.getContext())
-                    .load(UrlHolder.getUserImageUrl(current.getImageId()))
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(castedHolder.image);
         }
 
@@ -153,50 +156,55 @@ public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.Messag
             throw new RuntimeException("This method should not be called if the user is null");
         }
 
+        int result;
         Message current = getItemAt(position);
 
         if (current.getAction() != null) {
-            return TYPE_ACTION;
-        } else if (current.getFromId().equals(user.getId())) {
-            return TYPE_MESSAGE_SELF;
+            result = TYPE_ACTION;
         } else {
             if (position - 1 < 0) {
                 if (position + 1 >= getItemCount()) {
-                    return TYPE_MESSAGE_PROFILE_IMAGE_WITH_TITLE;
+                    result = TYPE_MESSAGE_SINGLE; // The item is the only one
                 } else {
                     if (getItemAt(position + 1).getFromId().equals(current.getFromId())
                             && getItemAt(position + 1).getAction() == null) {
-                        return TYPE_MESSAGE_PROFILE_IMAGE;
+                        result = TYPE_MESSAGE_BOTTOM; // The item is the bottommost item and has an item from the same user above
                     } else {
-                        return TYPE_MESSAGE_PROFILE_IMAGE_WITH_TITLE;
+                        result = TYPE_MESSAGE_SINGLE; // The item is the bottommost item and doesn't have an item from the same user above
                     }
                 }
             } else if (position + 1 >= getItemCount()) {
                 if (getItemAt(position - 1).getFromId().equals(current.getFromId())
                         && getItemAt(position - 1).getAction() == null) {
-                    return TYPE_MESSAGE_WITH_TITLE;
+                    result = TYPE_MESSAGE_TOP; // The item is the topmost item and has an item from the same user beneath
                 } else {
-                    return TYPE_MESSAGE_PROFILE_IMAGE_WITH_TITLE;
+                    result = TYPE_MESSAGE_SINGLE; // The item is the topmost item and doesn't have an item from the same user beneath
                 }
             } else {
                 if (getItemAt(position - 1).getFromId().equals(current.getFromId())
                         && getItemAt(position - 1).getAction() == null) {
                     if (getItemAt(position + 1).getFromId().equals(current.getFromId())
                             && getItemAt(position + 1).getAction() == null) {
-                        return TYPE_MESSAGE;
+                        result = TYPE_MESSAGE_INNER; // The item is in between two other items from the same user
                     } else {
-                        return TYPE_MESSAGE_WITH_TITLE;
+                        result = TYPE_MESSAGE_TOP; // The item has an item from the same user beneath but not above
                     }
                 } else {
                     if (getItemAt(position + 1).getFromId().equals(current.getFromId())
                             && getItemAt(position + 1).getAction() == null) {
-                        return TYPE_MESSAGE_PROFILE_IMAGE;
+                        result = TYPE_MESSAGE_BOTTOM; // The item has an item from the same user above but not beneath
                     } else {
-                        return TYPE_MESSAGE_PROFILE_IMAGE_WITH_TITLE;
+                        result = TYPE_MESSAGE_SINGLE;  // The item stands alone
                     }
                 }
             }
+
+            if (current.getFromId().equals(user.getId())) {
+                result += 4; // Make the item a "self" item
+            }
         }
+
+        return result;
     }
 
     @Override
@@ -288,16 +296,6 @@ public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.Messag
         }
     }
 
-    public class MessageTitleViewHolder extends MessageViewHolder {
-
-        @BindView(R.id.item_message_title)
-        TextView title;
-
-        public MessageTitleViewHolder(View itemView) {
-            super(itemView);
-        }
-    }
-
     public class MessageImageTitleViewHolder extends MessageViewHolder {
 
         @BindView(R.id.item_message_title)
@@ -306,24 +304,6 @@ public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.Messag
         CircleImageView image;
 
         public MessageImageTitleViewHolder(View itemView) {
-            super(itemView);
-        }
-
-        @OnClick(R.id.item_message_image)
-        public void onImageClick(View v) {
-            if (onMessageInteractionListener != null) {
-                onMessageInteractionListener.onMessageImageClick(v,
-                        getItemAt(getAdapterPosition()));
-            }
-        }
-    }
-
-    public class MessageImageViewHolder extends MessageViewHolder {
-
-        @BindView(R.id.item_message_image)
-        CircleImageView image;
-
-        public MessageImageViewHolder(View itemView) {
             super(itemView);
         }
 

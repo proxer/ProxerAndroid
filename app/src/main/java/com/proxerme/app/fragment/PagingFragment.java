@@ -210,9 +210,8 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
         firstLoad = false;
 
         if (!isLoading()) {
-            if (canLoad()) {
+            if (canLoad() && currentErrorMessage == null) {
                 lastLoadedPage = page;
-                currentErrorMessage = null;
                 lastMethodInsert = insert;
 
                 startLoading(showProgress);
@@ -312,6 +311,8 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
                     getContext().getString(R.string.error_retry), new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            currentErrorMessage = null;
+
                             doLoad(lastLoadedPage, lastMethodInsert, true);
                         }
                     });

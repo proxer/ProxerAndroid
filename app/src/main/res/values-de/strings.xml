@@ -91,4 +91,5 @@
     <string name="fragment_messages_input_hint">Nachricht eingeben</string>
     <string name="fragment_messages_send">Senden</string>
     <string name="fragment_messages_send_error">Eine oder mehr Nachrichten konnten nicht versandt werden</string>
+    <string name="fragment_login_logging_in">Einloggen...</string>
 </resources>

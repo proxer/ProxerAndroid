@@ -46,7 +46,9 @@ public abstract class LoginPollingPagingFragment<T extends IdItem & Parcelable,
         updateCanLoad();
 
         if (!canLoad) {
-            if (!getMainApplication().getUserManager().isWorking()) {
+            if (getMainApplication().getUserManager().isWorking()) {
+                showCurrentLogin();
+            } else {
                 showLoginError();
             }
 
@@ -93,6 +95,18 @@ public abstract class LoginPollingPagingFragment<T extends IdItem & Parcelable,
     @Override
     protected boolean canLoad() {
         return canLoad;
+    }
+
+    private void showCurrentLogin() {
+        getParentActivity().showMessage(getString(R.string.fragment_login_logging_in),
+                getString(R.string.dialog_cancel), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        getMainApplication().getUserManager().cancelLogin();
+
+                        showLoginError();
+                    }
+                });
     }
 
     private void showLoginError() {

@@ -197,7 +197,7 @@ public class MessagesFragment extends LoginPollingPagingFragment<Message, Messag
                 }
             }
 
-            getMainApplication().getNotificationManager().retrieveConferencesLater(getContext());
+            getMainApplication().getNotificationManager().retrieveNewMessagesLater(getContext());
         }
     }
 

@@ -80,12 +80,12 @@ public class NotificationManager extends Manager {
      *
      * @param context The context.
      */
-    public void retrieveConferencesLater(@NonNull Context context) {
-        cancelConferencesRetrieval(context);
+    public void retrieveNewMessagesLater(@NonNull Context context) {
+        cancelNewMessageRetrieval(context);
         if (isMessagesRetrievalEnabled(context)) {
             int interval = StorageHelper.getMessagesInterval() * 1000;
 
-            retrieveLater(context, NotificationService.ACTION_LOAD_CONFERENCES, interval);
+            retrieveLater(context, NotificationService.ACTION_LOAD_MESSAGES, interval);
         }
     }
 
@@ -94,8 +94,8 @@ public class NotificationManager extends Manager {
      *
      * @param context The context.
      */
-    public void cancelConferencesRetrieval(@NonNull Context context) {
-        cancelRetrieval(context, NotificationService.ACTION_LOAD_CONFERENCES);
+    public void cancelNewMessageRetrieval(@NonNull Context context) {
+        cancelRetrieval(context, NotificationService.ACTION_LOAD_MESSAGES);
     }
 
     /**
@@ -163,14 +163,14 @@ public class NotificationManager extends Manager {
     @Subscribe
     public void onLogin(LoginEvent event) {
         if (context.get() != null) {
-            retrieveConferencesLater(context.get());
+            retrieveNewMessagesLater(context.get());
         }
     }
 
     @Subscribe
     public void onLogout(LogoutEvent event) {
         if (context.get() != null) {
-            cancelConferencesRetrieval(context.get());
+            cancelNewMessageRetrieval(context.get());
         }
     }
 

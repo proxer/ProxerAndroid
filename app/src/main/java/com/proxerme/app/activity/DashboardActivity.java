@@ -216,7 +216,7 @@ public class DashboardActivity extends MainActivity {
                 showLoginDialog();
                 return false;
             case HEADER_ID_USER:
-                //Don't do anything for now
+                // Don't do anything for now
                 return false;
             case HEADER_ID_LOGIN:
                 showLoginDialog();
