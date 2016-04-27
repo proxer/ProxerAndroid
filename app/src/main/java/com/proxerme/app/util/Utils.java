@@ -4,16 +4,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.target.Target;
+
+import java.util.concurrent.ExecutionException;
 
 /**
  * Class, which holds various util methods.
@@ -65,18 +65,15 @@ public class Utils {
     }
 
     @Nullable
-    public static Bitmap getBitmapFromURL(String src) {
+    public static Bitmap getBitmapFromURL(@NonNull Context context, @NonNull String url) {
         try {
-            URL url = new URL(src);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-            connection.setDoInput(true);
-            connection.connect();
-
-            InputStream input = connection.getInputStream();
-
-            return BitmapFactory.decodeStream(input);
-        } catch (IOException e) {
+            return Glide.with(context)
+                    .load(url)
+                    .asBitmap()
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .into(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+                    .get();
+        } catch (InterruptedException | ExecutionException e) {
             return null;
         }
     }
