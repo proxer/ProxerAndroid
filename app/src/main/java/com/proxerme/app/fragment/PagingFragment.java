@@ -166,7 +166,7 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
         super.onResume();
 
         if (firstLoad) {
-            doLoad(currentPage, false, true);
+            doLoad(currentPage, true, true);
         } else if (currentErrorMessage != null) {
             showError();
         } else if (loading) {
@@ -229,7 +229,7 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
 
     protected final void handleResult(E result) {
         if ((result.getItem()).isEmpty()) {
-            if (!lastMethodInsert) {
+            if (!lastMethodInsert || adapter.isEmpty()) {
                 endReached = true;
             }
         } else {
@@ -251,6 +251,7 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
         } else {
             currentErrorMessage = ErrorHandler.getMessageForErrorCode(getContext(), exception);
         }
+
         stopLoading();
         showError();
     }
@@ -331,10 +332,6 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
 
     protected boolean canLoad() {
         return true;
-    }
-
-    protected boolean isFirstLoad() {
-        return firstLoad;
     }
 
     protected abstract A createAdapter(Bundle savedInstanceState);

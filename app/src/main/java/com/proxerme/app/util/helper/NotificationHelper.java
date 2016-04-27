@@ -122,7 +122,7 @@ public class NotificationHelper {
 
             intent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            builder.setLargeIcon(Utils.getBitmapFromURL(UrlHolder
+            builder.setLargeIcon(Utils.getBitmapFromURL(context, UrlHolder
                     .getUserImageUrl(conference.getImageId())));
         } else {
             intent = PendingIntent.getActivity(

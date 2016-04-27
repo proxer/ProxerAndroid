@@ -93,8 +93,6 @@ public class DashboardActivity extends MainActivity {
         drawerHelper = new MaterialDrawerHelper(this, drawerCallback);
         drawerHelper.build(this, toolbar, savedInstanceState);
 
-        getMainApplication().getBadgeManager().setCallback(badgeCallback);
-
         displayFirstPage(savedInstanceState);
     }
 
@@ -102,11 +100,13 @@ public class DashboardActivity extends MainActivity {
     protected void onResume() {
         super.onResume();
 
+        getMainApplication().getBadgeManager().setCallback(badgeCallback);
         EventBus.getDefault().register(this);
     }
 
     @Override
     protected void onPause() {
+        getMainApplication().getBadgeManager().setCallback(null);
         EventBus.getDefault().unregister(this);
 
         super.onPause();

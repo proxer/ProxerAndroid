@@ -228,9 +228,9 @@ public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.Messag
 
         if (offset != PagingHelper.OFFSET_NOT_CALCULABLE) {
             if (offset == PagingHelper.OFFSET_TOO_LARGE) {
-                notifyItemChanged(getItemCount() - list.size() - 1);
+                notifyItemChanged(getItemCount() - list.size());
             } else if (offset > 0) {
-                notifyItemChanged(getItemCount() - offset - 1);
+                notifyItemChanged(getItemCount() - offset);
             }
         }
 
