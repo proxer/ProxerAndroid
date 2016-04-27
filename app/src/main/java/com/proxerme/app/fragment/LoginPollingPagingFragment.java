@@ -8,7 +8,7 @@ import android.view.View;
 import com.proxerme.app.R;
 import com.proxerme.app.adapter.PagingAdapter;
 import com.proxerme.app.dialog.LoginDialog;
-import com.proxerme.app.event.CancelledEvent;
+import com.proxerme.app.event.DialogCancelledEvent;
 import com.proxerme.app.manager.UserManager;
 import com.proxerme.app.util.Utils;
 import com.proxerme.library.event.IListEvent;
@@ -30,22 +30,22 @@ public abstract class LoginPollingPagingFragment<T extends IdItem & Parcelable,
         A extends PagingAdapter<T, ?>, E extends IListEvent<T>, EE extends ErrorEvent>
         extends PollingPagingFragment<T, A, E, EE> {
 
-    private boolean canLoad;
+    private boolean loggedIn;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        updateCanLoad();
+        updateLoggedIn();
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
-        updateCanLoad();
+        updateLoggedIn();
 
-        if (!canLoad) {
+        if (!loggedIn) {
             if (getMainApplication().getUserManager().isWorking()) {
                 showCurrentLogin();
             } else {
@@ -58,8 +58,8 @@ public abstract class LoginPollingPagingFragment<T extends IdItem & Parcelable,
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLogin(LoginEvent event) {
-        if (!canLoad) {
-            canLoad = true;
+        if (!loggedIn) {
+            loggedIn = true;
 
             doLoad(getFirstPage(), true, true);
 
@@ -73,7 +73,7 @@ public abstract class LoginPollingPagingFragment<T extends IdItem & Parcelable,
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLogout(LogoutEvent event) {
-        canLoad = false;
+        loggedIn = false;
 
         cancelRequest();
         clear();
@@ -86,7 +86,7 @@ public abstract class LoginPollingPagingFragment<T extends IdItem & Parcelable,
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onDialogCancelled(CancelledEvent event) {
+    public void onDialogCancelled(DialogCancelledEvent event) {
         if (!getMainApplication().getUserManager().isLoggedIn()) {
             showLoginError();
         }
@@ -94,19 +94,21 @@ public abstract class LoginPollingPagingFragment<T extends IdItem & Parcelable,
 
     @Override
     protected boolean canLoad() {
-        return canLoad;
+        return loggedIn;
     }
 
     private void showCurrentLogin() {
-        getParentActivity().showMessage(getString(R.string.fragment_login_logging_in),
-                getString(R.string.dialog_cancel), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        getMainApplication().getUserManager().cancelLogin();
+        if (getParentActivity() != null) {
+            getParentActivity().showMessage(getString(R.string.fragment_login_logging_in),
+                    getString(R.string.dialog_cancel), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            getMainApplication().getUserManager().cancelLogin();
 
-                        showLoginError();
-                    }
-                });
+                            showLoginError();
+                        }
+                    });
+        }
     }
 
     private void showLoginError() {
@@ -123,10 +125,10 @@ public abstract class LoginPollingPagingFragment<T extends IdItem & Parcelable,
         }
     }
 
-    private void updateCanLoad() {
+    private void updateLoggedIn() {
         UserManager userManager = getMainApplication().getUserManager();
 
-        canLoad = userManager.isLoggedIn() && !userManager.isWorking();
+        loggedIn = userManager.isLoggedIn() && !userManager.isWorking();
     }
 
 }

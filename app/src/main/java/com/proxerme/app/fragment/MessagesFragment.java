@@ -189,6 +189,7 @@ public class MessagesFragment extends LoginPollingPagingFragment<Message, Messag
         super.handleResult(result, insert);
 
         if (insert) {
+            StorageHelper.setNewMessages(0);
             StorageHelper.resetMessagesInterval();
 
             if (result.size() > 0) {

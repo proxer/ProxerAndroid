@@ -12,6 +12,8 @@ import android.support.v7.app.NotificationCompat;
 import com.proxerme.app.R;
 import com.proxerme.app.activity.DashboardActivity;
 import com.proxerme.app.activity.MessageActivity;
+import com.proxerme.app.util.Utils;
+import com.proxerme.library.connection.UrlHolder;
 import com.proxerme.library.entity.Conference;
 import com.proxerme.library.entity.News;
 import com.proxerme.library.util.ProxerInfo;
@@ -42,47 +44,47 @@ public class NotificationHelper {
      * @param news    The List of {@link News}.
      */
     public static void showNewsNotification(@NonNull Context context, @NonNull List<News> news) {
-            android.app.NotificationManager notificationManager =
-                    (android.app.NotificationManager) context
-                            .getSystemService(Context.NOTIFICATION_SERVICE);
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-            Style style;
+        android.app.NotificationManager notificationManager =
+                (android.app.NotificationManager) context
+                        .getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+        Style style;
 
         if (news.size() == 1) {
-                News current = news.get(0);
-                String title = current.getSubject().trim();
-                String content = current.getDescription().trim();
+            News current = news.get(0);
+            String title = current.getSubject().trim();
+            String content = current.getDescription().trim();
 
-                builder.setContentTitle(title);
-                builder.setContentText(content);
+            builder.setContentTitle(title);
+            builder.setContentText(content);
 
-                style = new BigTextStyle(builder).bigText(content)
-                        .setBigContentTitle(title)
-                        .setSummaryText(generateNewsNotificationAmount(context, news.size()));
-            } else {
-                InboxStyle inboxStyle = new InboxStyle();
+            style = new BigTextStyle(builder).bigText(content)
+                    .setBigContentTitle(title)
+                    .setSummaryText(generateNewsNotificationAmount(context, news.size()));
+        } else {
+            InboxStyle inboxStyle = new InboxStyle();
 
             for (int i = 0; i < 5 && i < news.size(); i++) {
-                    inboxStyle.addLine(news.get(i).getSubject());
-                }
-
-                inboxStyle.setBigContentTitle(context
-                        .getString(R.string.news_notification_title))
-                        .setSummaryText(generateNewsNotificationAmount(context, news.size()));
-
-                style = inboxStyle;
+                inboxStyle.addLine(news.get(i).getSubject());
             }
 
-            builder.setAutoCancel(true).setSmallIcon(R.drawable.ic_stat_proxer)
-                    .setContentTitle(context.getString(R.string.news_notification_title))
-                    .setContentText(generateNewsNotificationAmount(context, news.size()))
-                    .setContentIntent(PendingIntent.getActivity(context, 0,
-                            DashboardActivity.getSectionIntent(context,
-                                    MaterialDrawerHelper.DRAWER_ID_NEWS, null),
-                            PendingIntent.FLAG_UPDATE_CURRENT))
-                    .setStyle(style);
+            inboxStyle.setBigContentTitle(context
+                    .getString(R.string.news_notification_title))
+                    .setSummaryText(generateNewsNotificationAmount(context, news.size()));
 
-            notificationManager.notify(NEWS_NOTIFICATION, builder.build());
+            style = inboxStyle;
+        }
+
+        builder.setAutoCancel(true).setSmallIcon(R.drawable.ic_stat_proxer)
+                .setContentTitle(context.getString(R.string.news_notification_title))
+                .setContentText(generateNewsNotificationAmount(context, news.size()))
+                .setContentIntent(PendingIntent.getActivity(context, 0,
+                        DashboardActivity.getSectionIntent(context,
+                                MaterialDrawerHelper.DRAWER_ID_NEWS, null),
+                        PendingIntent.FLAG_UPDATE_CURRENT))
+                .setStyle(style);
+
+        notificationManager.notify(NEWS_NOTIFICATION, builder.build());
     }
 
     /**
@@ -94,47 +96,51 @@ public class NotificationHelper {
      */
     public static void showMessagesNotification(@NonNull Context context,
                                                 @NonNull List<Conference> conferences) {
-            android.app.NotificationManager notificationManager =
-                    (android.app.NotificationManager) context
-                            .getSystemService(Context.NOTIFICATION_SERVICE);
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-            InboxStyle inboxStyle = new InboxStyle();
-            String amount = context.getResources()
-                    .getQuantityString(R.plurals.messages_notification_amount_text,
-                            conferences.size(), conferences.size());
-            PendingIntent intent;
+        android.app.NotificationManager notificationManager =
+                (android.app.NotificationManager) context
+                        .getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+        InboxStyle inboxStyle = new InboxStyle();
+        String amount = context.getResources()
+                .getQuantityString(R.plurals.messages_notification_amount_text,
+                        conferences.size(), conferences.size());
+        PendingIntent intent;
 
-            inboxStyle.setBigContentTitle(context.getString(R.string.messages_notification_title))
-                    .setSummaryText(amount);
+        inboxStyle.setBigContentTitle(context.getString(R.string.messages_notification_title))
+                .setSummaryText(amount);
 
-            for (int i = 0; i < 5 && i < conferences.size(); i++) {
-                inboxStyle.addLine(conferences.get(i).getTopic());
-            }
+        for (int i = 0; i < 5 && i < conferences.size(); i++) {
+            inboxStyle.addLine(conferences.get(i).getTopic());
+        }
 
-            if (conferences.size() == 1) {
-                TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+        if (conferences.size() == 1) {
+            Conference conference = conferences.get(0);
+            TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
 
-                stackBuilder.addNextIntentWithParentStack(MessageActivity.getIntent(context,
-                        conferences.get(0)));
+            stackBuilder.addNextIntentWithParentStack(MessageActivity.getIntent(context,
+                    conference));
 
-                intent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-            } else {
-                intent = PendingIntent.getActivity(
-                        context, 0, DashboardActivity.getSectionIntent(context,
-                                MaterialDrawerHelper.DRAWER_ID_MESSAGES, null),
-                        PendingIntent.FLAG_UPDATE_CURRENT);
-            }
+            intent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            builder.setContentTitle(context.getString(R.string.messages_notification_title))
-                    .setContentText(amount)
-                    .setSmallIcon(R.drawable.ic_stat_proxer)
-                    .setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND |
-                            Notification.DEFAULT_LIGHTS)
-                    .setContentIntent(intent)
-                    .setStyle(inboxStyle)
-                    .setAutoCancel(true);
+            builder.setLargeIcon(Utils.getBitmapFromURL(UrlHolder
+                    .getUserImageUrl(conference.getImageId())));
+        } else {
+            intent = PendingIntent.getActivity(
+                    context, 0, DashboardActivity.getSectionIntent(context,
+                            MaterialDrawerHelper.DRAWER_ID_MESSAGES, null),
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+        }
 
-            notificationManager.notify(MESSAGES_NOTIFICATION, builder.build());
+        builder.setContentTitle(context.getString(R.string.messages_notification_title))
+                .setContentText(amount)
+                .setSmallIcon(R.drawable.ic_stat_proxer)
+                .setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND |
+                        Notification.DEFAULT_LIGHTS)
+                .setContentIntent(intent)
+                .setStyle(inboxStyle)
+                .setAutoCancel(true);
+
+        notificationManager.notify(MESSAGES_NOTIFICATION, builder.build());
     }
 
     /**

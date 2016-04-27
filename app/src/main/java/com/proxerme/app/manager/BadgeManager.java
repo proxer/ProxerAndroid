@@ -43,6 +43,13 @@ public class BadgeManager extends StarteableManager {
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessagesLoaded(ConferencesEvent event) {
+        if (callback != null) {
+            callback.get().updateBadge(MaterialDrawerHelper.DRAWER_ID_MESSAGES, null);
+        }
+    }
+
     private void init() {
         if (callback.get() != null) {
             int newNews = StorageHelper.getNewNews();
@@ -66,7 +73,7 @@ public class BadgeManager extends StarteableManager {
     }
 
     public void setCallback(@Nullable BadgeCallback callback) {
-        this.callback = new WeakReference<BadgeCallback>(callback);
+        this.callback = new WeakReference<>(callback);
 
         init();
     }

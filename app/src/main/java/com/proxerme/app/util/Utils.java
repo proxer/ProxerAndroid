@@ -3,10 +3,17 @@ package com.proxerme.app.util;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 /**
  * Class, which holds various util methods.
@@ -55,6 +62,23 @@ public class Utils {
         }
 
         return result;
+    }
+
+    @Nullable
+    public static Bitmap getBitmapFromURL(String src) {
+        try {
+            URL url = new URL(src);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+            connection.setDoInput(true);
+            connection.connect();
+
+            InputStream input = connection.getInputStream();
+
+            return BitmapFactory.decodeStream(input);
+        } catch (IOException e) {
+            return null;
+        }
     }
 
 }

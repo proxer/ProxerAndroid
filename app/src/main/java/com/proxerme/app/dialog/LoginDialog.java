@@ -22,7 +22,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.proxerme.app.R;
-import com.proxerme.app.event.CancelledEvent;
+import com.proxerme.app.event.DialogCancelledEvent;
 import com.proxerme.app.util.ErrorHandler;
 import com.proxerme.app.util.EventBusBuffer;
 import com.proxerme.library.entity.LoginUser;
@@ -140,7 +140,7 @@ public class LoginDialog extends MainDialog {
     public void onCancel(DialogInterface dialog) {
         super.onCancel(dialog);
 
-        EventBus.getDefault().post(new CancelledEvent());
+        EventBus.getDefault().post(new DialogCancelledEvent());
     }
 
     @Override

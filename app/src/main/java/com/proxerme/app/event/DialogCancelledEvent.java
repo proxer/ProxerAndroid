@@ -5,6 +5,6 @@ package com.proxerme.app.event;
  *
  * @author Ruben Gees
  */
-public class CancelledEvent {
+public class DialogCancelledEvent {
 
 }

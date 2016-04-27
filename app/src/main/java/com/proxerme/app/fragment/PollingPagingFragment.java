@@ -113,7 +113,7 @@ public abstract class PollingPagingFragment<T extends IdItem & Parcelable,
             if (canLoad()) {
                 doLoad(getFirstPage(), true, false);
 
-                handler.postDelayed(pollingRunnable, getPollingInterval());
+                handler.postDelayed(this, getPollingInterval());
             } else {
                 stopPolling();
             }
