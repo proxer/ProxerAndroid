@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 import com.proxerme.app.R;
 import com.proxerme.app.util.TimeUtils;
 import com.proxerme.app.util.helper.PagingHelper;
@@ -132,9 +135,17 @@ public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.Messag
             MessageImageTitleViewHolder castedHolder = (MessageImageTitleViewHolder) holder;
 
             castedHolder.title.setText(current.getUsername());
-            Glide.with(castedHolder.image.getContext())
-                    .load(UrlHolder.getUserImageUrl(current.getImageId()))
-                    .into(castedHolder.image);
+
+            if (TextUtils.isEmpty(current.getImageId())) {
+                castedHolder.image
+                        .setImageDrawable(new IconicsDrawable(castedHolder.image.getContext())
+                                .icon(CommunityMaterial.Icon.cmd_account).sizeDp(32).paddingDp(32)
+                                .colorRes(R.color.colorPrimary));
+            } else {
+                Glide.with(castedHolder.image.getContext())
+                        .load(UrlHolder.getUserImageUrl(current.getImageId()))
+                        .into(castedHolder.image);
+            }
         }
 
         holder.message.setText(current.getMessage());

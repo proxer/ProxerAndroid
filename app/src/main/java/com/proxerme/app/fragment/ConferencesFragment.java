@@ -15,7 +15,6 @@ import com.proxerme.app.adapter.ConferenceAdapter;
 import com.proxerme.app.util.EventBusBuffer;
 import com.proxerme.app.util.Section;
 import com.proxerme.app.util.Utils;
-import com.proxerme.app.util.helper.StorageHelper;
 import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.connection.ProxerTag;
 import com.proxerme.library.connection.UrlHolder;
@@ -109,14 +108,10 @@ public class ConferencesFragment extends LoginPollingPagingFragment<Conference, 
         super.handleResult(result, insert);
 
         if (insert) {
-            StorageHelper.setNewMessages(0);
-            StorageHelper.resetMessagesInterval();
+            long lastMessageRetrievedTime = result.isEmpty() ? -1 : result.get(0).getTime();
 
-            if (result.size() > 0) {
-                StorageHelper.setLastReceivedMessageTime(result.get(0).getTime());
-            }
-
-            getMainApplication().getNotificationManager().retrieveNewMessagesLater(getContext());
+            getMainApplication().getNotificationManager()
+                    .processMessageRetrieval(lastMessageRetrievedTime);
         }
     }
 

@@ -36,7 +36,8 @@ public class UserManager extends Manager {
     private LoginUser user;
 
     private volatile boolean loggedIn = false;
-    private volatile boolean working = false;
+    private volatile boolean loggingIn = false;
+    private volatile boolean loggingOut = false;
 
     @UserSaveMode
     private int saveUser = SAME_AS_IS;
@@ -56,8 +57,12 @@ public class UserManager extends Manager {
         return loggedIn;
     }
 
-    public boolean isWorking() {
-        return working;
+    public boolean isLoggingIn() {
+        return loggingIn;
+    }
+
+    public boolean isLoggingOut() {
+        return loggingOut;
     }
 
     public void removeUser() {
@@ -78,7 +83,8 @@ public class UserManager extends Manager {
 
     public void login(@NonNull LoginUser user, boolean save) {
         saveUser = save ? SAVE_USER : DONT_SAVE_USER;
-        working = true;
+        loggingIn = true;
+        loggingOut = false;
 
         ProxerConnection.cancel(ProxerTag.LOGOUT);
         ProxerConnection.login(user).execute();
@@ -86,18 +92,19 @@ public class UserManager extends Manager {
 
     public void reLogin() {
         if (user != null) {
-            working = true;
+            loggingIn = true;
             saveUser = SAME_AS_IS;
             long lastLogin = StorageHelper.getLastLoginTime();
 
             if (lastLogin <= 0 || new DateTime(lastLogin)
                     .isBefore(new DateTime().minusMinutes(RELOGIN_THRESHOLD))) {
+                loggingOut = false;
 
                 ProxerConnection.cancel(ProxerTag.LOGOUT);
                 ProxerConnection.login(user).execute();
             } else {
                 loggedIn = true;
-                working = false;
+                loggingIn = false;
             }
         }
     }
@@ -108,6 +115,7 @@ public class UserManager extends Manager {
 
             if (lastLogin <= 0 || new DateTime(lastLogin)
                     .isBefore(new DateTime().minusMinutes(RELOGIN_THRESHOLD))) {
+                loggingOut = false;
 
                 ProxerConnection.cancel(ProxerTag.LOGOUT);
 
@@ -126,28 +134,25 @@ public class UserManager extends Manager {
     }
 
     public void logout() {
-        working = true;
+        loggingOut = true;
+        loggingIn = false;
 
         ProxerConnection.cancel(ProxerTag.LOGIN);
         ProxerConnection.logout().execute();
     }
 
-    public void cancelLogin() {
-        ProxerConnection.cancel(ProxerTag.LOGIN);
+    public void cancel() {
+        loggingIn = false;
+        loggingOut = false;
 
-        working = false;
-    }
-
-    public void cancelLogout() {
         ProxerConnection.cancel(ProxerTag.LOGOUT);
-
-        working = false;
+        ProxerConnection.cancel(ProxerTag.LOGIN);
     }
 
     @Subscribe(priority = 1)
     public void onLogin(LoginEvent event) {
         loggedIn = true;
-        working = false;
+        loggingIn = false;
         changeUser(event.getItem());
         StorageHelper.setLastLoginTime(System.currentTimeMillis());
     }
@@ -155,21 +160,21 @@ public class UserManager extends Manager {
     @Subscribe(priority = 1)
     public void onLogout(LogoutEvent event) {
         loggedIn = false;
-        working = false;
+        loggingOut = false;
         removeUser();
         StorageHelper.setLastLoginTime(-1);
     }
 
     @Subscribe
     public void onLoginError(LoginErrorEvent event) {
-        working = false;
+        loggingIn = false;
 
         StorageHelper.setLastLoginTime(-1);
     }
 
     @Subscribe
     public void onLogoutError(LogoutErrorEvent event) {
-        working = false;
+        loggingOut = false;
 
         StorageHelper.setLastLoginTime(-1);
     }

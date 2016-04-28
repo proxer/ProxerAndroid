@@ -3,6 +3,7 @@ package com.proxerme.app.dialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -21,7 +22,6 @@ import com.proxerme.library.event.success.LogoutEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -115,7 +115,7 @@ public class LogoutDialog extends MainDialog {
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
 
-        getMainApplication().getUserManager().cancelLogout();
+        getMainApplication().getUserManager().cancel();
     }
 
     @Override
@@ -132,25 +132,30 @@ public class LogoutDialog extends MainDialog {
         outState.putBoolean(STATE_LOADING, loading);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe()
     public void onLogout(LogoutEvent event) {
         loading = false;
 
         dismiss();
     }
 
-    @Subscribe(priority = 1, threadMode = ThreadMode.MAIN)
-    public void onLogoutError(LogoutErrorEvent event) {
+    @Subscribe(priority = 1)
+    public void onLogoutError(final LogoutErrorEvent event) {
         EventBus.getDefault().cancelEventDelivery(event);
 
         loading = false;
 
-        handleVisibility();
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                handleVisibility();
 
-        //noinspection ThrowableResultOfMethodCallIgnored
-        Toast.makeText(getContext(),
-                ErrorHandler.getMessageForErrorCode(getContext(),
-                        event.getItem()), Toast.LENGTH_LONG).show();
+                //noinspection ThrowableResultOfMethodCallIgnored
+                Toast.makeText(getContext(),
+                        ErrorHandler.getMessageForErrorCode(getContext(),
+                                event.getItem()), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private View initViews() {

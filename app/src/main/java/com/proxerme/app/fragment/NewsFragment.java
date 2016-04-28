@@ -12,7 +12,6 @@ import com.proxerme.app.adapter.NewsAdapter;
 import com.proxerme.app.util.EventBusBuffer;
 import com.proxerme.app.util.Section;
 import com.proxerme.app.util.Utils;
-import com.proxerme.app.util.helper.StorageHelper;
 import com.proxerme.library.connection.ProxerConnection;
 import com.proxerme.library.connection.ProxerTag;
 import com.proxerme.library.connection.UrlHolder;
@@ -117,13 +116,10 @@ public class NewsFragment extends PagingFragment<News, NewsAdapter, NewsEvent, N
         super.handleResult(result, insert);
 
         if (insert) {
-            StorageHelper.setNewNews(0);
+            String lastNewsId = result.size() <= 0 ? null : result.get(0).getId();
 
-            if (result.size() > 0) {
-                StorageHelper.setLastNewsId(result.get(0).getId());
-            }
-
-            getMainApplication().getNotificationManager().retrieveNewsLater(getContext());
+            getMainApplication().getNotificationManager()
+                    .processNewsRetrieval(lastNewsId);
         }
     }
 

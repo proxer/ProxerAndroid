@@ -3,6 +3,7 @@ package com.proxerme.app.dialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -133,7 +134,7 @@ public class LoginDialog extends MainDialog {
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
 
-        getMainApplication().getUserManager().cancelLogin();
+        getMainApplication().getUserManager().cancel();
     }
 
     @Override
@@ -157,18 +158,23 @@ public class LoginDialog extends MainDialog {
         dismiss();
     }
 
-    @Subscribe(priority = 1, threadMode = ThreadMode.MAIN)
-    public void onLoginError(LoginErrorEvent event) {
+    @Subscribe(priority = 1)
+    public void onLoginError(final LoginErrorEvent event) {
         EventBus.getDefault().cancelEventDelivery(event);
 
         loading = false;
 
-        handleVisibility();
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                handleVisibility();
 
-        //noinspection ThrowableResultOfMethodCallIgnored
-        Toast.makeText(getContext(),
-                ErrorHandler.getMessageForErrorCode(getContext(),
-                        event.getItem()), Toast.LENGTH_LONG).show();
+                //noinspection ThrowableResultOfMethodCallIgnored
+                Toast.makeText(getContext(),
+                        ErrorHandler.getMessageForErrorCode(getContext(),
+                                event.getItem()), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private View initViews() {

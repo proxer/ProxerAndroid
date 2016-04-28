@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.proxerme.app.event.SectionChangedEvent;
 import com.proxerme.app.receiver.BootReceiver;
@@ -171,6 +172,31 @@ public class NotificationManager extends Manager {
     public void onLogout(LogoutEvent event) {
         if (context.get() != null) {
             cancelNewMessageRetrieval(context.get());
+        }
+    }
+
+    public void processNewsRetrieval(@Nullable String lastNewsId) {
+        StorageHelper.setNewNews(0);
+
+        if (lastNewsId != null) {
+            StorageHelper.setLastNewsId(lastNewsId);
+        }
+
+        if (context.get() != null) {
+            retrieveNewsLater(context.get());
+        }
+    }
+
+    public void processMessageRetrieval(long lastMessageRetrievedTime) {
+        StorageHelper.setNewMessages(0);
+        StorageHelper.resetMessagesInterval();
+
+        if (lastMessageRetrievedTime > StorageHelper.getLastReceivedMessageTime()) {
+            StorageHelper.setLastReceivedMessageTime(lastMessageRetrievedTime);
+        }
+
+        if (context.get() != null) {
+            retrieveNewMessagesLater(context.get());
         }
     }
 
