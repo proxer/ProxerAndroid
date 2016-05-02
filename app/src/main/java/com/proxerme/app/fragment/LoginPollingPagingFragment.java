@@ -46,6 +46,8 @@ public abstract class LoginPollingPagingFragment<T extends IdItem & Parcelable,
         updateLoggedIn();
 
         if (!loggedIn) {
+            clear();
+
             if (getMainApplication().getUserManager().isLoggingIn()) {
                 showCurrentlyLogin();
             } else {

@@ -37,14 +37,14 @@ public class SendMessageJob extends Job {
 
     @Override
     public void onAdded() {
-        EventBus.getDefault().post(new MessageEnqueuedEvent());
+        EventBus.getDefault().post(new MessageEnqueuedEvent(conferenceId));
     }
 
     @Override
     public void onRun() throws Throwable {
         ProxerConnection.sendMessage(conferenceId, text).executeSynchronized();
 
-        EventBus.getDefault().postSticky(new MessageSentEvent());
+        EventBus.getDefault().post(new MessageSentEvent(conferenceId));
     }
 
     @Override
@@ -63,14 +63,14 @@ public class SendMessageJob extends Job {
                 switch (((ProxerException) throwable).getErrorCode()) {
                     case ProxerException.ERROR_PROXER:
                         EventBus.getDefault()
-                                .post(new SendingMessageFailedEvent(exception));
+                                .post(new SendingMessageFailedEvent(conferenceId, exception));
 
                         return RetryConstraint.CANCEL;
                     default:
                         return RetryConstraint.RETRY;
                 }
             } else {
-                EventBus.getDefault().post(new SendingMessageFailedEvent(exception));
+                EventBus.getDefault().post(new SendingMessageFailedEvent(conferenceId, exception));
 
                 return RetryConstraint.CANCEL;
             }
@@ -78,7 +78,7 @@ public class SendMessageJob extends Job {
             if (runCount < maxRunCount) {
                 return RetryConstraint.RETRY;
             } else {
-                EventBus.getDefault().post(new SendingMessageFailedEvent(
+                EventBus.getDefault().post(new SendingMessageFailedEvent(conferenceId,
                         new ProxerException(ProxerException.ERROR_UNKNOWN)));
 
                 return RetryConstraint.CANCEL;

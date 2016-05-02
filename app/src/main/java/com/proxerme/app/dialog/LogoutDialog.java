@@ -113,16 +113,16 @@ public class LogoutDialog extends MainDialog {
 
     @Override
     public void onDismiss(DialogInterface dialog) {
-        super.onDismiss(dialog);
-
         getMainApplication().getUserManager().cancel();
+
+        super.onDismiss(dialog);
     }
 
     @Override
     public void onCancel(DialogInterface dialog) {
-        super.onCancel(dialog);
-
         EventBus.getDefault().post(new DialogCancelledEvent());
+
+        super.onCancel(dialog);
     }
 
     @Override

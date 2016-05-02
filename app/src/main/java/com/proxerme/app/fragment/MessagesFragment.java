@@ -61,22 +61,30 @@ public class MessagesFragment extends LoginPollingPagingFragment<Message, Messag
     private EventBusBuffer eventBusBuffer = new EventBusBuffer() {
         @Subscribe
         public void onMessagesLoad(MessagesEvent event) {
-            addToQueue(event);
+            if (event.getConferenceId().equals(conferenceId)) {
+                addToQueue(event);
+            }
         }
 
         @Subscribe
         public void onMessagesLoadError(MessagesErrorEvent event) {
-            addToQueue(event);
+            if (event.getConferenceId().equals(conferenceId)) {
+                addToQueue(event);
+            }
         }
 
         @Subscribe
         public void onMessageSent(MessageSentEvent event) {
-            addToQueue(event);
+            if (event.getConferenceId().equals(conferenceId)) {
+                addToQueue(event);
+            }
         }
 
         @Subscribe
         public void onMessageEnqueued(MessageEnqueuedEvent event) {
-            addToQueue(event);
+            if (event.getConferenceId().equals(conferenceId)) {
+                addToQueue(event);
+            }
         }
     };
 
