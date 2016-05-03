@@ -267,7 +267,12 @@ public abstract class PagingFragment<T extends IdItem & Parcelable, A extends Pa
             //noinspection ConstantConditions
             if (newItems > 0) {
                 if (wasAtStart) {
-                    list.smoothScrollToPosition(0);
+                    list.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            list.smoothScrollToPosition(0);
+                        }
+                    });
                 } else {
                     notificationContainer.setVisibility(View.VISIBLE);
 

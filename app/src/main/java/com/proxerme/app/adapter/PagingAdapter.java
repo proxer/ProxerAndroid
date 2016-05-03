@@ -59,15 +59,27 @@ public abstract class PagingAdapter<T extends IdItem & Parcelable,
     }
 
     public void setItemAt(int position, T item) {
-        list.set(position, item);
-
-        notifyDataSetChanged();
+        setItemAt(position, item, true);
     }
 
     public void removeItemAt(int position) {
+        removeItemAt(position, true);
+    }
+
+    protected void setItemAt(int position, T item, boolean notify) {
+        list.set(position, item);
+
+        if (notify) {
+            notifyDataSetChanged();
+        }
+    }
+
+    protected void removeItemAt(int position, boolean notify) {
         list.remove(position);
 
-        notifyDataSetChanged();
+        if (notify) {
+            notifyDataSetChanged();
+        }
     }
 
     /**
@@ -78,6 +90,21 @@ public abstract class PagingAdapter<T extends IdItem & Parcelable,
      * @return The offset to the existing items.
      */
     public int insertAtStart(@NonNull List<T> list) {
+        return insertAtStart(list, true);
+    }
+
+    /**
+     * Appends a List of items to the Adapter, removing the existing ones. The items are appended at
+     * the last position.
+     *
+     * @param list The List of items.
+     * @return The offset to the existing items.
+     */
+    public int append(@NonNull List<T> list) {
+        return append(list, true);
+    }
+
+    protected int insertAtStart(@NonNull List<T> list, boolean notify) {
         if (!list.isEmpty()) {
             int offset;
 
@@ -93,7 +120,10 @@ public abstract class PagingAdapter<T extends IdItem & Parcelable,
             }
 
             this.list.addAll(0, list);
-            notifyDataSetChanged();
+
+            if (notify) {
+                notifyDataSetChanged();
+            }
 
             return offset;
         }
@@ -101,14 +131,7 @@ public abstract class PagingAdapter<T extends IdItem & Parcelable,
         return PagingHelper.OFFSET_NOT_CALCULABLE;
     }
 
-    /**
-     * Appends a List of items to the Adapter, removing the existing ones. The items are appended at
-     * the last position.
-     *
-     * @param list The List of items.
-     * @return The offset to the existing items.
-     */
-    public int append(@NonNull List<T> list) {
+    protected int append(@NonNull List<T> list, boolean notify) {
         if (!list.isEmpty()) {
             int offset = PagingHelper.calculateOffsetFromEnd(this.list, list.get(0),
                     getItemsOnPage());
@@ -118,7 +141,10 @@ public abstract class PagingAdapter<T extends IdItem & Parcelable,
             }
 
             this.list.addAll(list);
-            notifyDataSetChanged();
+
+            if (notify) {
+                notifyDataSetChanged();
+            }
 
             return offset;
         }
@@ -143,7 +169,14 @@ public abstract class PagingAdapter<T extends IdItem & Parcelable,
     }
 
     public void clear() {
+        clear(true);
+    }
+
+    protected void clear(boolean notify) {
         list.clear();
-        notifyDataSetChanged();
+
+        if (notify) {
+            notifyDataSetChanged();
+        }
     }
 }

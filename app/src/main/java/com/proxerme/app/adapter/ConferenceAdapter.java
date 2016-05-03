@@ -64,12 +64,12 @@ public class ConferenceAdapter extends PagingAdapter<Conference, ConferenceAdapt
 
     @Override
     public int insertAtStart(@NonNull List<Conference> list) {
-        int offset = super.insertAtStart(list);
+        int offset = super.insertAtStart(list, false);
         HashMap<String, Boolean> foundItems = new HashMap<>();
 
         for (int i = 0; i < getItemCount(); i++) {
             if (foundItems.containsKey(getItemAt(i).getId())) {
-                removeItemAt(i);
+                removeItemAt(i, false);
 
                 i--;
             } else {
@@ -78,12 +78,14 @@ public class ConferenceAdapter extends PagingAdapter<Conference, ConferenceAdapt
 
             if (i < list.size()) {
                 if (!getItemAt(i).equals(list.get(i))) {
-                    setItemAt(i, list.get(i));
+                    setItemAt(i, list.get(i), false);
                 }
             }
 
             foundItems.put(getItemAt(i).getId(), true);
         }
+
+        notifyDataSetChanged();
 
         return offset;
     }

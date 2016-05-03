@@ -16,7 +16,6 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.proxerme.app.R;
 import com.proxerme.app.util.TimeUtils;
-import com.proxerme.app.util.helper.PagingHelper;
 import com.proxerme.library.connection.UrlHolder;
 import com.proxerme.library.entity.LoginUser;
 import com.proxerme.library.entity.Message;
@@ -87,6 +86,7 @@ public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.Messag
         List<String> showingTimeIds =
                 savedInstanceState.getStringArrayList(STATE_MESSAGE_SHOWING_TIME_IDS);
 
+        this.selecting = savedInstanceState.getBoolean(STATE_MESSAGE_SELECTING);
         this.selectedMap = new HashMap<>();
         this.showingTimeMap = new HashMap<>();
 
@@ -243,36 +243,6 @@ public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.Messag
     }
 
     @Override
-    public int insertAtStart(@NonNull List<Message> list) {
-        int offset = super.insertAtStart(list);
-
-        if (offset != PagingHelper.OFFSET_NOT_CALCULABLE) {
-            if (offset == PagingHelper.OFFSET_TOO_LARGE) {
-                notifyItemChanged(list.size());
-            } else if (offset > 0) {
-                notifyItemChanged(offset);
-            }
-        }
-
-        return offset;
-    }
-
-    @Override
-    public int append(@NonNull List<Message> list) {
-        int offset = super.append(list);
-
-        if (offset != PagingHelper.OFFSET_NOT_CALCULABLE) {
-            if (offset == PagingHelper.OFFSET_TOO_LARGE) {
-                notifyItemChanged(getItemCount() - list.size());
-            } else if (offset > 0) {
-                notifyItemChanged(getItemCount() - offset);
-            }
-        }
-
-        return offset;
-    }
-
-    @Override
     public void saveInstanceState(@NonNull Bundle outState) {
         super.saveInstanceState(outState);
 
@@ -365,38 +335,38 @@ public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.Messag
                     selectedMap.put(current.getId(), true);
                 }
 
-                notifyItemChanged(getAdapterPosition());
-
                 if (onMessageInteractionListener != null) {
                     onMessageInteractionListener.onMessageSelection(selectedMap.size());
                 }
             } else {
                 if (showingTimeMap.containsKey(current.getId())) {
-                    time.setVisibility(View.GONE);
-
                     showingTimeMap.remove(current.getId());
                 } else {
-                    time.setVisibility(View.VISIBLE);
-
                     showingTimeMap.put(current.getId(), true);
                 }
             }
+
+            notifyDataSetChanged();
         }
 
         @OnLongClick(R.id.item_message_container)
-        void onMessageContainerLongClick() {
+        boolean onMessageContainerLongClick() {
             Message current = getItemAt(getAdapterPosition());
 
             if (!selecting) {
                 selecting = true;
 
                 selectedMap.put(current.getId(), true);
-                notifyItemChanged(getAdapterPosition());
+                notifyDataSetChanged();
 
                 if (onMessageInteractionListener != null) {
                     onMessageInteractionListener.onMessageSelection(selectedMap.size());
                 }
+
+                return true;
             }
+
+            return false;
         }
     }
 
