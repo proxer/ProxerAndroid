@@ -30,6 +30,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnLongClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -39,6 +40,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.MessageViewHolder> {
 
+    private static final String STATE_MESSAGE_SELECTED_IDS = "message_selected_ids";
+    private static final String STATE_MESSAGE_SELECTING = "message_selecting";
     private static final String STATE_MESSAGE_SHOWING_TIME_IDS = "message_showing_time_ids";
 
     private static final int TYPE_MESSAGE_INNER = 0;
@@ -54,12 +57,16 @@ public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.Messag
     @Nullable
     private LoginUser user;
 
+    private HashMap<String, Boolean> selectedMap;
     private HashMap<String, Boolean> showingTimeMap;
+
+    private boolean selecting = false;
 
     private OnMessageInteractionListener onMessageInteractionListener;
 
     public MessageAdapter(@Nullable LoginUser user) {
         this.user = user;
+        this.selectedMap = new HashMap<>(ProxerInfo.MESSAGES_ON_PAGE * 2);
         this.showingTimeMap = new HashMap<>(ProxerInfo.MESSAGES_ON_PAGE * 2);
     }
 
@@ -67,6 +74,7 @@ public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.Messag
         super(list);
 
         this.user = user;
+        this.selectedMap = new HashMap<>(list.size() * 2);
         this.showingTimeMap = new HashMap<>(list.size() * 2);
     }
 
@@ -75,11 +83,21 @@ public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.Messag
 
         this.user = user;
 
-        List<String> ids = savedInstanceState.getStringArrayList(STATE_MESSAGE_SHOWING_TIME_IDS);
+        List<String> selectedIds = savedInstanceState.getStringArrayList(STATE_MESSAGE_SELECTED_IDS);
+        List<String> showingTimeIds =
+                savedInstanceState.getStringArrayList(STATE_MESSAGE_SHOWING_TIME_IDS);
+
+        this.selectedMap = new HashMap<>();
         this.showingTimeMap = new HashMap<>();
 
-        if (ids != null) {
-            for (String id : ids) {
+        if (selectedIds != null) {
+            for (String id : selectedIds) {
+                this.selectedMap.put(id, true);
+            }
+        }
+
+        if (showingTimeIds != null) {
+            for (String id : showingTimeIds) {
                 this.showingTimeMap.put(id, true);
             }
         }
@@ -120,7 +138,7 @@ public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.Messag
                 return new MessageViewHolder(inflater.inflate(R.layout.item_message_self_bottom,
                         parent, false));
             case TYPE_ACTION:
-                return new MessageViewHolder(inflater.inflate(R.layout.item_message_action, parent,
+                return new ActionViewHolder(inflater.inflate(R.layout.item_message_action, parent,
                         false));
             default:
                 throw new RuntimeException("An unknown viewType was passed: " + viewType);
@@ -153,6 +171,12 @@ public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.Messag
                 current.getTime()));
 
         Linkify.addLinks(holder.message, Linkify.ALL);
+
+        if (selectedMap.containsKey(current.getId())) {
+            holder.container.setBackgroundResource(R.color.md_grey_300);
+        } else {
+            holder.container.setBackgroundResource(android.R.color.white);
+        }
 
         if (showingTimeMap.containsKey(current.getId())) {
             holder.time.setVisibility(View.VISIBLE);
@@ -252,6 +276,9 @@ public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.Messag
     public void saveInstanceState(@NonNull Bundle outState) {
         super.saveInstanceState(outState);
 
+        outState.putBoolean(STATE_MESSAGE_SELECTING, selecting);
+        outState.putStringArrayList(STATE_MESSAGE_SELECTED_IDS,
+                new ArrayList<>(selectedMap.keySet()));
         outState.putStringArrayList(STATE_MESSAGE_SHOWING_TIME_IDS,
                 new ArrayList<>(showingTimeMap.keySet()));
     }
@@ -261,6 +288,32 @@ public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.Messag
         super.clear();
 
         user = null;
+    }
+
+    @NonNull
+    public List<Message> getSelectedItems() {
+        List<Message> result = new ArrayList<>(selectedMap.size());
+
+        for (int i = 0; i < getItemCount(); i++) {
+            if (selectedMap.containsKey(getItemAt(i).getId())) {
+                result.add(getItemAt(i));
+            }
+        }
+
+        return result;
+    }
+
+    public boolean handleBackPress() {
+        if (selecting) {
+            selecting = false;
+
+            selectedMap.clear();
+            notifyDataSetChanged();
+
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public void setUser(@Nullable LoginUser user) {
@@ -276,10 +329,16 @@ public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.Messag
         public void onMessageImageClick(@NonNull View v, @NonNull Message message) {
 
         }
+
+        public void onMessageSelection(int count) {
+
+        }
     }
 
     public class MessageViewHolder extends RecyclerView.ViewHolder {
 
+        @BindView(R.id.item_message_container)
+        ViewGroup container;
         @BindView(R.id.item_message_message)
         TextView message;
         @BindView(R.id.item_message_time)
@@ -295,14 +354,48 @@ public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.Messag
         void onMessageContainerClick() {
             Message current = getItemAt(getAdapterPosition());
 
-            if (showingTimeMap.containsKey(current.getId())) {
-                time.setVisibility(View.GONE);
+            if (selecting) {
+                if (selectedMap.containsKey(current.getId())) {
+                    selectedMap.remove(current.getId());
 
-                showingTimeMap.remove(current.getId());
+                    if (selectedMap.size() <= 0) {
+                        selecting = false;
+                    }
+                } else {
+                    selectedMap.put(current.getId(), true);
+                }
+
+                notifyItemChanged(getAdapterPosition());
+
+                if (onMessageInteractionListener != null) {
+                    onMessageInteractionListener.onMessageSelection(selectedMap.size());
+                }
             } else {
-                time.setVisibility(View.VISIBLE);
+                if (showingTimeMap.containsKey(current.getId())) {
+                    time.setVisibility(View.GONE);
 
-                showingTimeMap.put(current.getId(), true);
+                    showingTimeMap.remove(current.getId());
+                } else {
+                    time.setVisibility(View.VISIBLE);
+
+                    showingTimeMap.put(current.getId(), true);
+                }
+            }
+        }
+
+        @OnLongClick(R.id.item_message_container)
+        void onMessageContainerLongClick() {
+            Message current = getItemAt(getAdapterPosition());
+
+            if (!selecting) {
+                selecting = true;
+
+                selectedMap.put(current.getId(), true);
+                notifyItemChanged(getAdapterPosition());
+
+                if (onMessageInteractionListener != null) {
+                    onMessageInteractionListener.onMessageSelection(selectedMap.size());
+                }
             }
         }
     }
@@ -323,6 +416,28 @@ public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.Messag
             if (onMessageInteractionListener != null) {
                 onMessageInteractionListener.onMessageImageClick(v,
                         getItemAt(getAdapterPosition()));
+            }
+        }
+    }
+
+    public class ActionViewHolder extends MessageViewHolder {
+
+        public ActionViewHolder(View itemView) {
+            super(itemView);
+        }
+
+        @Override
+        void onMessageContainerClick() {
+            Message current = getItemAt(getAdapterPosition());
+
+            if (showingTimeMap.containsKey(current.getId())) {
+                time.setVisibility(View.GONE);
+
+                showingTimeMap.remove(current.getId());
+            } else {
+                time.setVisibility(View.VISIBLE);
+
+                showingTimeMap.put(current.getId(), true);
             }
         }
     }

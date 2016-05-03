@@ -27,17 +27,26 @@ public abstract class PagingAdapter<T extends IdItem & Parcelable,
 
     public PagingAdapter() {
         this.list = new ArrayList<>(getItemsOnPage() * 2);
+
+        setHasStableIds(true);
     }
 
     public PagingAdapter(@NonNull Collection<T> list) {
         this.list = new ArrayList<>(list.size() * 2);
 
         this.list.addAll(list);
-        notifyItemRangeInserted(0, list.size());
+        setHasStableIds(true);
     }
 
     public PagingAdapter(@NonNull Bundle savedInstanceState) {
         this.list = savedInstanceState.getParcelableArrayList(STATE_LIST);
+
+        setHasStableIds(true);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return Long.valueOf(list.get(position).getId());
     }
 
     @Override
@@ -52,13 +61,13 @@ public abstract class PagingAdapter<T extends IdItem & Parcelable,
     public void setItemAt(int position, T item) {
         list.set(position, item);
 
-        notifyItemChanged(position);
+        notifyDataSetChanged();
     }
 
     public void removeItemAt(int position) {
         list.remove(position);
 
-        notifyItemRemoved(position);
+        notifyDataSetChanged();
     }
 
     /**
@@ -84,7 +93,7 @@ public abstract class PagingAdapter<T extends IdItem & Parcelable,
             }
 
             this.list.addAll(0, list);
-            notifyItemRangeInserted(0, list.size());
+            notifyDataSetChanged();
 
             return offset;
         }
@@ -109,7 +118,7 @@ public abstract class PagingAdapter<T extends IdItem & Parcelable,
             }
 
             this.list.addAll(list);
-            notifyItemRangeInserted(this.list.size() - list.size(), list.size());
+            notifyDataSetChanged();
 
             return offset;
         }
@@ -134,9 +143,7 @@ public abstract class PagingAdapter<T extends IdItem & Parcelable,
     }
 
     public void clear() {
-        int count = list.size();
-
         list.clear();
-        notifyItemRangeRemoved(0, count);
+        notifyDataSetChanged();
     }
 }
