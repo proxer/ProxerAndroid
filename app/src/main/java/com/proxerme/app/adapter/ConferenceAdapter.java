@@ -92,42 +92,7 @@ public class ConferenceAdapter extends PagingAdapter<Conference, ConferenceAdapt
 
     @Override
     public void onBindViewHolder(ConferenceAdapter.ViewHolder holder, int position) {
-        Conference item = getItemAt(position);
-        int participantAmount = item.getParticipantAmount();
-        String participantText = participantAmount + " " +
-                (participantAmount == 1 ?
-                        holder.participants.getContext().getString(R.string.participant_single) :
-                        holder.participants.getContext().getString(R.string.participant_multiple));
-
-        holder.topic.setText(item.getTopic());
-        holder.time.setText(TimeUtils.convertToRelativeReadableTime(holder.time.getContext(),
-                item.getTime()));
-        holder.participants.setText(participantText);
-
-        if (item.isRead()) {
-            holder.topic.setCompoundDrawables(null, null, null, null);
-        } else {
-            holder.topic.setCompoundDrawables(null, null,
-                    new IconicsDrawable(holder.image.getContext())
-                            .icon(CommunityMaterial.Icon.cmd_message_alert).sizeDp(32).paddingDp(8)
-                            .colorRes(R.color.colorPrimary), null);
-        }
-
-        if (TextUtils.isEmpty(item.getImageId())) {
-            IconicsDrawable icon = new IconicsDrawable(holder.image.getContext())
-                    .sizeDp(96).paddingDp(16).colorRes(R.color.colorPrimary);
-
-            if (item.isConference()) {
-                icon.icon(CommunityMaterial.Icon.cmd_account_multiple);
-            } else {
-                icon.icon(CommunityMaterial.Icon.cmd_account);
-            }
-
-            holder.image.setImageDrawable(icon);
-        } else {
-            Glide.with(holder.image.getContext()).load(UrlHolder.getUserImageUrl(item.getImageId()))
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(holder.image);
-        }
+        holder.bind(getItemAt(position));
     }
 
     public void setOnConferenceInteractionListener(@Nullable OnConferenceInteractionListener
@@ -159,6 +124,45 @@ public class ConferenceAdapter extends PagingAdapter<Conference, ConferenceAdapt
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+        }
+
+        public void bind(@NonNull Conference conference) {
+            int participantAmount = conference.getParticipantAmount();
+            String participantText = participantAmount + " " +
+                    (participantAmount == 1 ?
+                            participants.getContext().getString(R.string.participant_single) :
+                            participants.getContext().getString(R.string.participant_multiple));
+
+            topic.setText(conference.getTopic());
+            time.setText(TimeUtils.convertToRelativeReadableTime(time.getContext(),
+                    conference.getTime()));
+            participants.setText(participantText);
+
+            if (conference.isRead()) {
+                topic.setCompoundDrawables(null, null, null, null);
+            } else {
+                topic.setCompoundDrawables(null, null,
+                        new IconicsDrawable(image.getContext())
+                                .icon(CommunityMaterial.Icon.cmd_message_alert).sizeDp(32)
+                                .paddingDp(8).colorRes(R.color.colorPrimary), null);
+            }
+
+            if (TextUtils.isEmpty(conference.getImageId())) {
+                IconicsDrawable icon = new IconicsDrawable(image.getContext())
+                        .sizeDp(96).paddingDp(16).colorRes(R.color.colorPrimary);
+
+                if (conference.isConference()) {
+                    icon.icon(CommunityMaterial.Icon.cmd_account_multiple);
+                } else {
+                    icon.icon(CommunityMaterial.Icon.cmd_account);
+                }
+
+                image.setImageDrawable(icon);
+            } else {
+                Glide.with(image.getContext())
+                        .load(UrlHolder.getUserImageUrl(conference.getImageId()))
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(image);
+            }
         }
 
         @OnClick(R.id.item_conference_image)

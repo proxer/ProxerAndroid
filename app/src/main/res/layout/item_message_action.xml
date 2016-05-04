@@ -18,10 +18,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="16dp"
             android:layout_marginLeft="32dp"
             android:layout_marginRight="32dp"
-            android:layout_marginTop="16dp"
             android:gravity="center"
             android:textAppearance="@android:style/TextAppearance.Medium"
             tools:text="User A was added by B" />

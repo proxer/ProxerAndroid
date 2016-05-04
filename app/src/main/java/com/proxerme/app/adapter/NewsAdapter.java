@@ -82,28 +82,7 @@ public class NewsAdapter extends PagingAdapter<News, NewsAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(NewsAdapter.ViewHolder holder, int position) {
-        News item = getItemAt(position);
-
-        holder.title.setText(item.getSubject().trim());
-        holder.description.setText(item.getDescription().trim());
-        holder.category.setText(item.getCategoryTitle());
-        holder.time.setText(TimeUtils.convertToRelativeReadableTime(holder.time.getContext(),
-                item.getTime()));
-
-        holder.expand.setImageDrawable(new IconicsDrawable(holder.expand.getContext())
-                .colorRes(R.color.icons_grey).sizeDp(ICON_SIZE).paddingDp(ICON_PADDING)
-                .icon(CommunityMaterial.Icon.cmd_chevron_down));
-
-        if (extensionMap.containsKey(item.getId())) {
-            holder.description.setMaxLines(Integer.MAX_VALUE);
-            ViewCompat.setRotation(holder.expand, ROTATION_HALF);
-        } else {
-            holder.description.setMaxLines(DESCRIPTION_MAX_LINES);
-            ViewCompat.setRotation(holder.expand, 0f);
-        }
-
-        Glide.with(holder.image.getContext()).load(UrlHolder.getNewsImageUrl(item.getId(),
-                item.getImageId())).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(holder.image);
+        holder.bind(getItemAt(position));
     }
 
     @Override
@@ -158,6 +137,30 @@ public class NewsAdapter extends PagingAdapter<News, NewsAdapter.ViewHolder> {
             super(itemView);
 
             ButterKnife.bind(this, itemView);
+        }
+
+        public void bind(@NonNull News news) {
+            title.setText(news.getSubject().trim());
+            description.setText(news.getDescription().trim());
+            category.setText(news.getCategoryTitle());
+            time.setText(TimeUtils.convertToRelativeReadableTime(time.getContext(),
+                    news.getTime()));
+
+            expand.setImageDrawable(new IconicsDrawable(expand.getContext())
+                    .colorRes(R.color.icons_grey).sizeDp(ICON_SIZE).paddingDp(ICON_PADDING)
+                    .icon(CommunityMaterial.Icon.cmd_chevron_down));
+
+            if (extensionMap.containsKey(news.getId())) {
+                description.setMaxLines(Integer.MAX_VALUE);
+                ViewCompat.setRotation(expand, ROTATION_HALF);
+            } else {
+                description.setMaxLines(DESCRIPTION_MAX_LINES);
+                ViewCompat.setRotation(expand, 0f);
+            }
+
+            Glide.with(image.getContext())
+                    .load(UrlHolder.getNewsImageUrl(news.getId(), news.getImageId()))
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(image);
         }
 
         @OnClick(R.id.item_news_content_container)

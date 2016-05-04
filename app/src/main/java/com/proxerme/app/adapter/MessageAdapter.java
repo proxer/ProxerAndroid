@@ -3,17 +3,20 @@ package com.proxerme.app.adapter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.iconics.utils.Utils;
 import com.proxerme.app.R;
 import com.proxerme.app.util.TimeUtils;
 import com.proxerme.library.connection.UrlHolder;
@@ -30,7 +33,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnLongClick;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * TODO: Describe class
@@ -112,77 +114,86 @@ public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.Messag
     public MessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
-        switch (viewType) {
-            case TYPE_MESSAGE_INNER:
-                return new MessageViewHolder(inflater.inflate(R.layout.item_message_inner, parent,
-                        false));
-            case TYPE_MESSAGE_SINGLE:
-                return new MessageImageTitleViewHolder(inflater
-                        .inflate(R.layout.item_message_single, parent, false));
-            case TYPE_MESSAGE_TOP:
-                return new MessageImageTitleViewHolder(inflater
-                        .inflate(R.layout.item_message_top, parent, false));
-            case TYPE_MESSAGE_BOTTOM:
-                return new MessageViewHolder(inflater.inflate(R.layout.item_message_bottom, parent,
-                        false));
-            case TYPE_MESSAGE_SELF_INNER:
-                return new MessageViewHolder(inflater.inflate(R.layout.item_message_self_inner,
-                        parent, false));
-            case TYPE_MESSAGE_SELF_SINGLE:
-                return new MessageViewHolder(inflater.inflate(R.layout.item_message_self_single,
-                        parent, false));
-            case TYPE_MESSAGE_SELF_TOP:
-                return new MessageViewHolder(inflater.inflate(R.layout.item_message_self_top,
-                        parent, false));
-            case TYPE_MESSAGE_SELF_BOTTOM:
-                return new MessageViewHolder(inflater.inflate(R.layout.item_message_self_bottom,
-                        parent, false));
-            case TYPE_ACTION:
-                return new ActionViewHolder(inflater.inflate(R.layout.item_message_action, parent,
-                        false));
-            default:
-                throw new RuntimeException("An unknown viewType was passed: " + viewType);
+        if (viewType == TYPE_ACTION) {
+            return new ActionViewHolder(inflater.inflate(R.layout.item_message_action,
+                    parent, false));
+        } else if (viewType == TYPE_MESSAGE_TOP || viewType == TYPE_MESSAGE_SINGLE) {
+            return new MessageImageTitleViewHolder(inflater.inflate(R.layout.item_message_single,
+                    parent, false));
+        } else if (viewType == TYPE_MESSAGE_BOTTOM || viewType == TYPE_MESSAGE_INNER) {
+            return new MessageViewHolder(inflater.inflate(R.layout.item_message,
+                    parent, false));
+        } else {
+            return new MessageViewHolder(inflater.inflate(R.layout.item_message_self,
+                    parent, false));
         }
     }
 
     @Override
     public void onBindViewHolder(MessageViewHolder holder, int position) {
-        Message current = getItemAt(position);
+        Pair<Integer, Integer> margins = getMarginsForPosition(position);
 
-        if (holder.getClass().equals(MessageImageTitleViewHolder.class)) {
-            MessageImageTitleViewHolder castedHolder = (MessageImageTitleViewHolder) holder;
+        holder.bind(getItemAt(position),
+                Utils.convertDpToPx(holder.container.getContext(), margins.first),
+                Utils.convertDpToPx(holder.container.getContext(), margins.second));
+    }
 
-            castedHolder.title.setText(current.getUsername());
+    private Pair<Integer, Integer> getMarginsForPosition(int position) {
+        int marginTop;
+        int marginBottom;
+        int viewType = getItemViewType(position);
 
-            if (TextUtils.isEmpty(current.getImageId())) {
-                castedHolder.image
-                        .setImageDrawable(new IconicsDrawable(castedHolder.image.getContext())
-                                .icon(CommunityMaterial.Icon.cmd_account).sizeDp(32).paddingDp(32)
-                                .colorRes(R.color.colorPrimary));
-            } else {
-                Glide.with(castedHolder.image.getContext())
-                        .load(UrlHolder.getUserImageUrl(current.getImageId()))
-                        .into(castedHolder.image);
-            }
+        switch (viewType) {
+            case TYPE_MESSAGE_INNER:
+                marginTop = 2;
+                marginBottom = 2;
+
+                break;
+            case TYPE_MESSAGE_SINGLE:
+                marginTop = 8;
+                marginBottom = 8;
+
+                break;
+            case TYPE_MESSAGE_TOP:
+                marginTop = 8;
+                marginBottom = 2;
+
+                break;
+            case TYPE_MESSAGE_BOTTOM:
+                marginTop = 2;
+                marginBottom = 8;
+
+                break;
+            case TYPE_MESSAGE_SELF_INNER:
+                marginTop = 2;
+                marginBottom = 2;
+
+                break;
+            case TYPE_MESSAGE_SELF_SINGLE:
+                marginTop = 8;
+                marginBottom = 8;
+
+                break;
+            case TYPE_MESSAGE_SELF_TOP:
+                marginTop = 8;
+                marginBottom = 2;
+
+                break;
+            case TYPE_MESSAGE_SELF_BOTTOM:
+                marginTop = 2;
+                marginBottom = 8;
+
+                break;
+            case TYPE_ACTION:
+                marginTop = 16;
+                marginBottom = 16;
+
+                break;
+            default:
+                throw new RuntimeException("An unknown viewType was passed: " + viewType);
         }
 
-        holder.message.setText(current.getMessage());
-        holder.time.setText(TimeUtils.convertToRelativeReadableTime(holder.time.getContext(),
-                current.getTime()));
-
-        Linkify.addLinks(holder.message, Linkify.ALL);
-
-        if (selectedMap.containsKey(current.getId())) {
-            holder.container.setBackgroundResource(R.color.md_grey_300);
-        } else {
-            holder.container.setBackgroundResource(android.R.color.white);
-        }
-
-        if (showingTimeMap.containsKey(current.getId())) {
-            holder.time.setVisibility(View.VISIBLE);
-        } else {
-            holder.time.setVisibility(View.GONE);
-        }
+        return new Pair<>(marginTop, marginBottom);
     }
 
     @Override
@@ -310,7 +321,7 @@ public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.Messag
         @BindView(R.id.item_message_container)
         ViewGroup container;
         @BindView(R.id.item_message_message)
-        TextView message;
+        TextView text;
         @BindView(R.id.item_message_time)
         TextView time;
 
@@ -318,6 +329,34 @@ public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.Messag
             super(itemView);
 
             ButterKnife.bind(this, itemView);
+        }
+
+        public void bind(@NonNull Message message, int marginTop, int marginBottom) {
+            text.setText(message.getMessage());
+            time.setText(TimeUtils.convertToRelativeReadableTime(time.getContext(),
+                    message.getTime()));
+
+            Linkify.addLinks(text, Linkify.ALL);
+
+            if (selectedMap.containsKey(message.getId())) {
+                container.setBackgroundResource(R.color.md_grey_200);
+            } else {
+                container.setBackgroundResource(android.R.color.white);
+            }
+
+            if (showingTimeMap.containsKey(message.getId())) {
+                time.setVisibility(View.VISIBLE);
+            } else {
+                time.setVisibility(View.GONE);
+            }
+
+            ViewGroup.MarginLayoutParams params =
+                    (ViewGroup.MarginLayoutParams) container.getLayoutParams();
+
+            params.topMargin = marginTop;
+            params.bottomMargin = marginBottom;
+
+            container.setLayoutParams(params);
         }
 
         @OnClick(R.id.item_message_container)
@@ -375,10 +414,27 @@ public class MessageAdapter extends PagingAdapter<Message, MessageAdapter.Messag
         @BindView(R.id.item_message_title)
         TextView title;
         @BindView(R.id.item_message_image)
-        CircleImageView image;
+        ImageView image;
 
         public MessageImageTitleViewHolder(View itemView) {
             super(itemView);
+        }
+
+        @Override
+        public void bind(@NonNull Message message, int marginTop, int marginBottom) {
+            super.bind(message, marginTop, marginBottom);
+
+            title.setText(message.getUsername());
+
+            if (TextUtils.isEmpty(message.getImageId())) {
+                image.setImageDrawable(new IconicsDrawable(image.getContext())
+                        .icon(CommunityMaterial.Icon.cmd_account).sizeDp(32).paddingDp(32)
+                        .colorRes(R.color.colorPrimary));
+            } else {
+                Glide.with(image.getContext())
+                        .load(UrlHolder.getUserImageUrl(message.getImageId()))
+                        .into(image);
+            }
         }
 
         @OnClick(R.id.item_message_image)
