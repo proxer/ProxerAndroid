@@ -22,6 +22,7 @@ import com.proxerme.library.event.success.LogoutEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -132,7 +133,7 @@ public class LogoutDialog extends MainDialog {
         outState.putBoolean(STATE_LOADING, loading);
     }
 
-    @Subscribe()
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLogout(LogoutEvent event) {
         loading = false;
 
