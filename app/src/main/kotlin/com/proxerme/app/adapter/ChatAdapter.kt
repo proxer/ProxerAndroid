@@ -1,7 +1,9 @@
 package com.proxerme.app.adapter
 
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v4.util.Pair
+import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -115,40 +117,40 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.MessageViewHolder> {
 
         when (viewType) {
             TYPE_MESSAGE_INNER -> {
-                marginTop = 2
-                marginBottom = 2
+                marginTop = 0
+                marginBottom = 0
             }
             TYPE_MESSAGE_SINGLE -> {
-                marginTop = 8
-                marginBottom = 8
+                marginTop = 6
+                marginBottom = 6
             }
             TYPE_MESSAGE_TOP -> {
-                marginTop = 8
-                marginBottom = 2
+                marginTop = 6
+                marginBottom = 0
             }
             TYPE_MESSAGE_BOTTOM -> {
-                marginTop = 2
-                marginBottom = 8
+                marginTop = 0
+                marginBottom = 6
             }
             TYPE_MESSAGE_SELF_INNER -> {
-                marginTop = 2
-                marginBottom = 2
+                marginTop = 0
+                marginBottom = 0
             }
             TYPE_MESSAGE_SELF_SINGLE -> {
-                marginTop = 8
-                marginBottom = 8
+                marginTop = 6
+                marginBottom = 6
             }
             TYPE_MESSAGE_SELF_TOP -> {
-                marginTop = 8
-                marginBottom = 2
+                marginTop = 6
+                marginBottom = 0
             }
             TYPE_MESSAGE_SELF_BOTTOM -> {
-                marginTop = 2
-                marginBottom = 8
+                marginTop = 0
+                marginBottom = 6
             }
             TYPE_ACTION -> {
-                marginTop = 16
-                marginBottom = 16
+                marginTop = 12
+                marginBottom = 12
             }
             else -> throw RuntimeException("An unknown viewType was passed: " + viewType)
         }
@@ -264,13 +266,16 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.MessageViewHolder> {
 
     open inner class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        protected val container: ViewGroup by bindView(R.id.container)
+        protected val root: ViewGroup by bindView(R.id.root)
+        protected val container: CardView by bindView(R.id.container)
         protected val text: LinkConsumableTextView by bindView(R.id.text)
         protected val time: TextView by bindView(R.id.time)
 
+        open protected val backgroundColor = android.R.color.white
+
         init {
-            container.setOnClickListener { onContainerClick(it) }
-            container.setOnLongClickListener { onContainerLongClick(it) }
+            root.setOnClickListener { onContainerClick(it) }
+            root.setOnLongClickListener { onContainerLongClick(it) }
             text.movementMethod = TouchableMovementMethod.getInstance()
         }
 
@@ -284,9 +289,9 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.MessageViewHolder> {
                     message.time)
 
             if (selectedMap.containsKey(message.id)) {
-                container.setBackgroundResource(R.color.md_grey_200)
+                container.cardBackgroundColor = ContextCompat.getColorStateList(container.context, R.color.md_grey_200)
             } else {
-                container.setBackgroundResource(android.R.color.white)
+                container.cardBackgroundColor = ContextCompat.getColorStateList(container.context, backgroundColor)
             }
 
             if (showingTimeMap.containsKey(message.id)) {
@@ -295,12 +300,12 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.MessageViewHolder> {
                 time.visibility = View.GONE
             }
 
-            val params = container.layoutParams as ViewGroup.MarginLayoutParams
+            val params = root.layoutParams as ViewGroup.MarginLayoutParams
 
             params.topMargin = marginTop
             params.bottomMargin = marginBottom
 
-            container.layoutParams = params
+            root.layoutParams = params
         }
 
         open protected fun onContainerClick(v: View) {
@@ -382,6 +387,8 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.MessageViewHolder> {
     }
 
     inner class ActionViewHolder(itemView: View) : MessageViewHolder(itemView) {
+
+        override val backgroundColor = android.R.color.background_light
 
         override fun onContainerClick(v: View) {
             val current = list[adapterPosition]

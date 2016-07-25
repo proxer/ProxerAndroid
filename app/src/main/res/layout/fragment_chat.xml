@@ -24,9 +24,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_margin="8dp"
+            android:layout_margin="4dp"
             android:background="@android:color/white"
-            app:cardElevation="4dp">
+            app:cardCornerRadius="1dp"
+            app:cardElevation="4dp"
+            app:cardUseCompatPadding="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
