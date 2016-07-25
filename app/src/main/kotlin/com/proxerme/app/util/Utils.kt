@@ -99,6 +99,7 @@ object Utils {
         var result = LinkBuilder.from(context, text)
                 .addLink(Link(WEB_REGEX)
                         .setTextColor(Color.BLUE)
+                        .setUnderlined(false)
                         .setOnClickListener(onClickListener)
                         .setOnLongClickListener(onLongClickListener))
                 .build()

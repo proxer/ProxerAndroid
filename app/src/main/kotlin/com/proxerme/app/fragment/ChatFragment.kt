@@ -15,7 +15,6 @@ import android.widget.ImageView
 import android.widget.Toast
 import butterknife.bindView
 import com.proxerme.app.R
-import com.proxerme.app.activity.ChatActivity
 import com.proxerme.app.activity.ImageDetailActivity
 import com.proxerme.app.activity.UserActivity
 import com.proxerme.app.adapter.ChatAdapter
@@ -146,7 +145,7 @@ class ChatFragment : PagingFragment() {
         override fun onMessageSelection(count: Int) {
             if (count > 0) {
                 if (actionMode == null) {
-                    actionMode = (activity as ChatActivity)
+                    actionMode = (activity as AppCompatActivity)
                             .startSupportActionMode(actionModeCallback)
                     actionMode?.title = count.toString()
                 } else {
