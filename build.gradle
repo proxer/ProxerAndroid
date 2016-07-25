@@ -1,16 +1,29 @@
 buildscript {
+    ext.kotlin_version = '1.0.3'
+    ext.support_version = '24.1.1'
+    ext.build_tools_version = '24.0.1'
+
     repositories {
         jcenter()
     }
+
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.0-alpha1'
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.android.tools.build:gradle:2.2.0-alpha6'
     }
 }
 
 allprojects {
     repositories {
-        jcenter()
         maven { url "https://jitpack.io" }
+        jcenter()
+        mavenCentral()
+        maven {
+            url "https://oss.sonatype.org/content/repositories/snapshots"
+        }
     }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
 }

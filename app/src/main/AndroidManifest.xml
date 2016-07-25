@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.proxerme.app">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:name=".application.MainApplication"
@@ -14,55 +11,39 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        tools:ignore="UnusedAttribute">
-        <activity
-            android:name=".activity.DashboardActivity"
-            android:label="@string/app_name"
-            android:launchMode="singleTop">
+        android:theme="@style/Theme.AppTheme">
+        <activity android:name=".activity.DashboardActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="proxer.me"
-                    android:path="/news"
-                    android:scheme="http" />
-                <data
-                    android:host="proxer.me"
-                    android:path="/messages"
-                    android:scheme="http" />
-            </intent-filter>
         </activity>
-        <activity android:name=".customtabs.WebviewActivity" />
         <activity
-            android:name=".activity.ImageDetailActivity"
-            android:theme="@style/Theme.Transparent" />
-        <activity
-            android:name=".activity.MessageActivity"
+            android:name=".activity.UserActivity"
             android:parentActivityName=".activity.DashboardActivity"
-            android:windowSoftInputMode="adjustPan">
+            android:theme="@style/Theme.Translucent">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.DashboardActivity" />
+        </activity>
+        <activity
+            android:name=".activity.ChatActivity"
+            android:parentActivityName=".activity.DashboardActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.DashboardActivity" />
         </activity>
 
-        <service android:name=".customtabs.KeepAliveService" />
-        <service
-            android:name=".service.NotificationService"
-            android:exported="false" />
+        <activity
+            android:name=".activity.ImageDetailActivity"
+            android:theme="@style/Theme.Transparent" />
+        <activity android:name=".customtabs.WebviewActivity" />
 
-        <receiver
-            android:name=".receiver.NotificationReceiver"
-            android:enabled="true"
-            android:exported="false" />
+        <service android:name=".customtabs.KeepAliveService" />
+        <service android:name=".service.NotificationService" />
+
+        <receiver android:name=".receiver.NotificationReceiver" />
         <receiver
             android:name=".receiver.BootReceiver"
             android:enabled="false">

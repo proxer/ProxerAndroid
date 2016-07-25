@@ -1,38 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".adapter.MessageAdapter">
+    android:orientation="vertical"
+    tools:context="com.proxerme.app.adapter.ChatAdapter"
+    tools:ignore="UselessParent">
 
-    <LinearLayout
-        android:id="@+id/item_message_container"
-        android:layout_width="match_parent"
+    <com.stephenvinouze.linkifiedtextview.LinkTextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:orientation="vertical"
-        tools:ignore="UselessParent">
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:gravity="center"
+        android:textAppearance="@android:style/TextAppearance.Medium"
+        app:tvLinkType="web"
+        tools:text="User A was added by B" />
 
-        <com.proxerme.app.view.LinkifiedTextView
-            android:id="@+id/item_message_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="32dp"
-            android:layout_marginRight="32dp"
-            android:gravity="center"
-            android:textAppearance="@android:style/TextAppearance.Medium"
-            tools:text="User A was added by B" />
-
-        <TextView
-            android:id="@+id/item_message_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:textAppearance="@android:style/TextAppearance.Small"
-            tools:text="10 minutes ago" />
-    </LinearLayout>
-</FrameLayout>
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:textAppearance="@android:style/TextAppearance.Small"
+        tools:text="10 minutes ago" />
+</LinearLayout>

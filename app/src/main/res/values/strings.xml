@@ -1,95 +1,120 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">ProxerMe</string>
 
-    <string name="drawer_item_news">News</string>
-    <string name="drawer_item_donate">Donate</string>
-    <string name="drawer_item_settings">Settings</string>
-    <string name="about_description">Developer: Ruben Gees</string>
-    <string name="error_network">There was a problem with the network. Please check if you are connected.</string>
-    <string name="error_timeout">The server didn\'t answer in time. There may be problems with your network.</string>
-    <string name="error_unparseable">The server sent corrupt data. Please try again.</string>
-    <string name="error_io">There was a problem with your storage. Please try again.</string>
-    <string name="error_unknown">An unknown error occurred. Please try again.</string>
-    <string name="error_retry">Retry</string>
-    <string name="time_a_moment_ago">A moment ago</string>
+    <string name="introduction_welcome_title">Willkommen!</string>
+    <string name="introduction_welcome_description">Ein paar Einstellungen und es geht los</string>
+    <string name="introduction_notifications_title">Benachrichtigungen</string>
+    <string name="introduction_notifications_description">Erhalte Benachrichtigungen</string>
+    <string name="introduction_skip">Überspringen</string>
+
+    <string name="time_a_moment_ago">Eben gerade</string>
     <plurals name="time_minutes_ago">
-        <item quantity="one">"One minute ago"</item>
-        <item quantity="other">"%d minutes ago"</item>
+        <item quantity="one">"Vor einer Minute"</item>
+        <item quantity="other">"Vor %d Minuten"</item>
     </plurals>
     <plurals name="time_hours_ago">
-        <item quantity="one">"One hour ago"</item>
-        <item quantity="other">"%d hours ago"</item>
+        <item quantity="one">"Vor einer Stunde"</item>
+        <item quantity="other">"Vor %d Stunden"</item>
     </plurals>
     <plurals name="time_days_ago">
-        <item quantity="one">"Yesterday"</item>
-        <item quantity="other">"%d days ago"</item>
+        <item quantity="one">"Gestern"</item>
+        <item quantity="other">"Vor %d Tagen"</item>
     </plurals>
-    <string name="time_more_than_one_month_ago">More than one month ago</string>
-    <string name="preference_category_notifications_title">Notifications</string>
+    <plurals name="time_months_ago">
+        <item quantity="one">"Vor einem Monat"</item>
+        <item quantity="other">"Vor %d Monaten"</item>
+    </plurals>
+    <plurals name="time_years_ago">
+        <item quantity="one">"Vor einem Jahr"</item>
+        <item quantity="other">"Vor %d Jahren"</item>
+    </plurals>
+
+    <string name="error_network">Es gab ein Problem mit dem Netzwerk. Bitte überprüfe ob du verbunden bist.</string>
+    <string name="error_timeout">Der Server hat nicht rechtzeitig geantwortet. Möglicherweise gibt es Probleme mit deinem Netzwerk.</string>
+    <string name="error_unparseable">Der Server hat beschädigte Daten gesendet. Versuche es erneut.</string>
+    <string name="error_io">Es gab ein Speicherproblem. Versuche es erneut.</string>
+    <string name="error_unknown">Ein unbekannter Fehler ist aufgetreten. Versuche es erneut.</string>
+    <string name="error_retry">Erneut versuchen</string>
+
+    <string name="preference_category_notifications_title">Benachrichtigungen</string>
     <string name="preference_category_info_title">Info</string>
     <string name="preference_news_notifications_title">News</string>
-    <string name="preference_notifications_summary_on">Receive notifications</string>
-    <string name="preference_notifications_summary_off">Don\'t receive notifications</string>
-    <string name="preference_news_notifications_interval_title">News Update interval</string>
-    <string name="preference_messages_notifications_title">Messages</string>
-    <string name="preference_licences_title">Licences</string>
-    <string name="preference_licences_summary">Projects used in this App</string>
-    <string name="introduction_welcome_title">Welcome!</string>
-    <string name="introduction_welcome_description">Just some settings and you are ready to go</string>
-    <string name="introduction_notifications_title">Notifications</string>
-    <string name="introduction_notifications_description">Receive notifications</string>
-    <string name="introduction_skip">Skip</string>
-    <string name="news_notification_title">News!</string>
-    <string name="messages_notification_title">New Messages</string>
-    <string name="news_notification_amount_more_than_15">More than 15 News</string>
-    <plurals name="news_notification_amount_text">
+    <string name="preference_notifications_summary_on">Erhalte Benachrichtigungen</string>
+    <string name="preference_notifications_summary_off">Erhalte keine Benachrichtigungen</string>
+    <string name="preference_news_notifications_interval_title">News Update Intervall</string>
+    <string name="preference_messages_notifications_title">Nachrichten</string>
+    <string name="preference_licences_title">Lizenzen</string>
+    <string name="preference_licences_summary">Bibliotheken die in diser App verwendet werden</string>
+
+    <string name="about_description">Entwickler: Ruben Gees</string>
+    <string name="about_libraries_title">Lizenzen</string>
+
+    <string name="interval_half_hourly">Halbstündlich</string>
+    <string name="interval_hourly">Stündlich</string>
+    <string name="interval_two_hours">Alle zwei Stunden</string>
+    <string name="interval_four_hours">Alle vier Stunden</string>
+
+    <string name="fragment_profile_title">Profil</string>
+    <string name="fragment_profile_points_anime">Anime</string>
+    <string name="fragment_profile_points_manga">Manga</string>
+    <string name="fragment_profile_points_uploads">Uploads</string>
+    <string name="fragment_profile_points_forum">Forum</string>
+    <string name="fragment_profile_points_info">Info</string>
+    <string name="fragment_profile_points_miscellaneous">Verschiedenes</string>
+    <string name="fragment_profile_points_total">Insgesamt</string>
+
+    <string name="fragment_topten_title">Top 10</string>
+
+    <string name="fragment_paging_retry">Erneut versuchen</string>
+
+    <string name="dialog_login_username">Nutzername</string>
+    <string name="dialog_login_password">Passwort</string>
+    <string name="dialog_login_remember">Merken</string>
+
+    <string name="drawer_item_news">News</string>
+    <string name="drawer_item_chat">Nachrichten</string>
+    <string name="drawer_item_donate">Spenden</string>
+    <string name="drawer_item_settings">Einstellungen</string>
+    <string name="drawer_account_guest">Gast</string>
+    <string name="drawer_account_login">Anmelden</string>
+    <string name="drawer_account_logout">Abmelden</string>
+
+    <string name="dialog_cancel">Abbrechen</string>
+
+    <string name="dialog_login_title">Anmelden</string>
+    <string name="dialog_login_positive">Anmelden</string>
+    <string name="dialog_login_error_username">Bitte gib einen Nutzernamen an</string>
+    <string name="dialog_login_error_password">Bitte gib ein Passwort an</string>
+
+    <string name="dialog_logout_title">Möchtest du dich abmelden?</string>
+    <string name="dialog_logout_positive">Abmelden</string>
+
+    <plurals name="item_conferences_participants">
+        <item quantity="other">%d Teilnehmer</item>
+    </plurals>
+
+    <string name="notification_news_title">News</string>
+    <plurals name="notification_news_amount">
         <item quantity="other">%d News</item>
     </plurals>
-    <plurals name="messages_notification_amount_text">
-        <item quantity="one">New messages in %d conference</item>
-        <item quantity="other">New messages in %d conferences</item>
+
+    <string name="notification_chat_title">Neue Nachrichten</string>
+    <plurals name="notification_chat_amount">
+        <item quantity="one">Nachrichten in einem Chat</item>
+        <item quantity="other">Nachrichten in %d Chats</item>
     </plurals>
-    <string name="interval_half_hourly">Half-hourly</string>
-    <string name="interval_hourly">Hourly</string>
-    <string name="interval_two_hours">Every two hours</string>
-    <string name="interval_four_hours">Every four hours</string>
-    <string name="dialog_login_error_no_username">You have to specify a username</string>
-    <string name="dialog_login_error_no_password">You have to specify a password</string>
-    <string name="drawer_profile_guest">Guest</string>
-    <string name="drawer_header_login">Login</string>
-    <string name="drawer_header_change">Change user</string>
-    <string name="dialog_login_title">Login</string>
-    <string name="dialog_login_go">Login</string>
-    <string name="dialog_cancel">Cancel</string>
-    <string name="dialog_login_username_hint">Username</string>
-    <string name="dialog_login_password_hint">Password</string>
-    <string name="drawer_header_logout">Logout</string>
-    <string name="drawer_item_messages">Messages</string>
-    <string name="participant_single">Participant</string>
-    <string name="participant_multiple">Participants</string>
-    <string name="image_detail_description">Detailed image</string>
-    <string name="button_expand_description">Expand item</string>
-    <string name="about_libraries_title">Licences</string>
-    <string name="error_not_logged_in">You are not logged in</string>
-    <string name="error_do_login">Login</string>
-    <string name="dialog_logout_title">Do you want to logout?</string>
-    <string name="dialog_logout_go">Logout</string>
-    <string name="dialog_login_remember">Remember</string>
-    <plurals name="notification_news">
-        <item quantity="one">"%d News"</item>
-        <item quantity="other">"%d News"</item>
-    </plurals>
-    <plurals name="notification_conferences">
-        <item quantity="one">"%d new Conference"</item>
-        <item quantity="other">"%d new Conferences"</item>
-    </plurals>
-    <plurals name="notification_messages">
-        <item quantity="one">"%d new Message"</item>
-        <item quantity="other">"%d new Messages"</item>
-    </plurals>
-    <string name="fragment_messages_input_hint">Type message</string>
-    <string name="fragment_messages_send">Send</string>
-    <string name="fragment_messages_send_error">One or more messages could not be sent</string>
-    <string name="fragment_login_logging_in">Logging in…</string>
+
+    <string name="fragment_chat_message">Tippe eine Nachricht</string>
+    <string name="fragment_chat_send">Senden</string>
+    <string name="fragment_chat_clip_title">Nachrichtenverlauf</string>
+    <string name="fragment_chat_clip_status">In die Zwischenablage kopiert</string>
+
+    <string name="status_currently_logging_in">Du wirst angemeldet…</string>
+    <string name="status_not_logged_in">Du bist nicht angemeldet</string>
+
+    <string name="module_login_login">Anmelden</string>
+
+    <string name="menu_chat_cab_copy">Kopieren</string>
+    <string name="fragment_topten_anime">Anime</string>
+    <string name="fragment_topten_manga">Manga</string>
 </resources>

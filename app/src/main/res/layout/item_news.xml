@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".adapter.NewsAdapter">
+    tools:context="com.proxerme.app.adapter.NewsAdapter">
 
     <android.support.v7.widget.CardView
-        android:id="@+id/item_news_content_container"
+        android:id="@+id/root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content">
 
                 <com.proxerme.app.view.WidthAspectImageView
-                    android:id="@+id/item_news_image"
+                    android:id="@+id/image"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
@@ -35,10 +35,10 @@
                     tools:ignore="UnusedAttribute" />
 
                 <TextView
-                    android:id="@+id/item_news_title"
+                    android:id="@+id/title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/item_news_image"
+                    android:layout_alignBottom="@+id/image"
                     android:background="@color/transparent_50"
                     android:gravity="center"
                     android:padding="8dp"
@@ -50,7 +50,7 @@
             </RelativeLayout>
 
             <TextView
-                android:id="@+id/item_news_description"
+                android:id="@+id/description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="6dp"
@@ -64,13 +64,12 @@
                 clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet." />
 
             <ImageButton
-                android:id="@+id/item_news_expand_description"
+                android:id="@+id/expand"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="4dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="@string/button_expand_description"
                 android:scaleType="centerCrop" />
 
             <View
@@ -88,7 +87,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/item_news_time"
+                    android:id="@+id/time"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -105,7 +104,7 @@
                     android:layout_weight="1" />
 
                 <TextView
-                    android:id="@+id/item_news_category"
+                    android:id="@+id/category"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
