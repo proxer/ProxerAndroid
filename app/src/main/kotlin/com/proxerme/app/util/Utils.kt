@@ -25,6 +25,7 @@ import java.util.concurrent.ExecutionException
 object Utils {
 
     private const val MINIMUM_DIAGONAL_INCHES = 7
+    private val WEB_REGEX = Patterns.WEB_URL
 
     fun areActionsPossible(activity: Activity?): Boolean {
         return activity != null && !activity.isFinishing && !isDestroyedCompat(activity) &&
@@ -96,7 +97,7 @@ object Utils {
                            onClickListener: Link.OnClickListener? = null,
                            onLongClickListener: Link.OnLongClickListener? = null): CharSequence {
         var result = LinkBuilder.from(context, text)
-                .addLink(Link(Patterns.WEB_URL)
+                .addLink(Link(WEB_REGEX)
                         .setTextColor(Color.BLUE)
                         .setOnClickListener(onClickListener)
                         .setOnLongClickListener(onLongClickListener))
