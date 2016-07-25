@@ -10,16 +10,19 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import butterknife.bindView
+import com.klinker.android.link_builder.Link
+import com.klinker.android.link_builder.LinkConsumableTextView
+import com.klinker.android.link_builder.TouchableMovementMethod
 import com.proxerme.app.R
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.util.TimeUtil
+import com.proxerme.app.util.Utils
 import com.proxerme.library.connection.ProxerConnection
 import com.proxerme.library.connection.user.entitiy.UserInfo
 import com.proxerme.library.connection.user.request.UserInfoRequest
 import com.proxerme.library.info.ProxerTag
 import com.proxerme.library.interfaces.ProxerErrorResult
 import com.proxerme.library.interfaces.ProxerResult
-import com.stephenvinouze.linkifiedtextview.LinkTextView
 
 /**
  * TODO: Describe class
@@ -63,7 +66,7 @@ class ProfileFragment : LoadingFragment() {
     private val totalPointsRow: TextView by bindView(R.id.totalPointsRow)
     private val rank: TextView by bindView(R.id.rank)
     private val statusContainer: ViewGroup by bindView(R.id.statusContainer)
-    private val statusText: LinkTextView by bindView(R.id.statusText)
+    private val statusText: LinkConsumableTextView by bindView(R.id.statusText)
     override val errorContainer: ViewGroup by bindView(R.id.errorContainer)
     override val errorText: TextView by bindView(R.id.errorText)
     override val errorButton: Button by bindView(R.id.errorButton)
@@ -84,9 +87,7 @@ class ProfileFragment : LoadingFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        statusText.setOnLinkClickListener({ view: View, link: String, type: Int ->
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link)))
-        })
+        statusText.movementMethod = TouchableMovementMethod.getInstance()
 
         show()
     }
@@ -156,8 +157,11 @@ class ProfileFragment : LoadingFragment() {
                 if (status.isBlank()) {
                     statusContainer.visibility = View.GONE
                 } else {
-                    statusText.setLinkText(status + " - " +
-                            TimeUtil.convertToRelativeReadableTime(context, lastStatusChange))
+                    statusText.text = Utils.buildClickableText(statusText.context, status + " - " +
+                            TimeUtil.convertToRelativeReadableTime(context, lastStatusChange),
+                            Link.OnClickListener {
+                                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it)))
+                            })
                 }
             }
         }

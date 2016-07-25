@@ -9,15 +9,17 @@ import android.view.ViewGroup
 import android.widget.TextView
 import butterknife.bindView
 import com.bumptech.glide.Glide
+import com.klinker.android.link_builder.Link
+import com.klinker.android.link_builder.LinkConsumableTextView
+import com.klinker.android.link_builder.TouchableMovementMethod
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
-import com.mikepenz.iconics.utils.Utils
 import com.proxerme.app.R
 import com.proxerme.app.util.TimeUtil
+import com.proxerme.app.util.Utils
 import com.proxerme.library.connection.experimental.chat.entity.Message
 import com.proxerme.library.connection.user.entitiy.User
 import com.proxerme.library.info.ProxerUrlHolder
-import com.stephenvinouze.linkifiedtextview.LinkTextView
 import de.hdodenhof.circleimageview.CircleImageView
 import java.util.*
 import kotlin.comparisons.compareByDescending
@@ -263,19 +265,21 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.MessageViewHolder> {
     open inner class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         protected val container: ViewGroup by bindView(R.id.container)
-        protected val text: LinkTextView by bindView(R.id.text)
+        protected val text: LinkConsumableTextView by bindView(R.id.text)
         protected val time: TextView by bindView(R.id.time)
 
         init {
             container.setOnClickListener { onContainerClick(it) }
             container.setOnLongClickListener { onContainerLongClick(it) }
-            text.setOnLinkClickListener({ view: View, link: String, type: Int ->
-                callback?.onMessageLinkClick(link)
-            })
+            text.movementMethod = TouchableMovementMethod.getInstance()
         }
 
         open fun bind(message: Message, marginTop: Int, marginBottom: Int) {
-            text.setLinkText(message.message)
+            text.text = Utils.buildClickableText(text.context, message.message,
+                    Link.OnClickListener {
+                        callback?.onMessageLinkClick(it)
+                    })
+
             time.text = TimeUtil.convertToRelativeReadableTime(time.context,
                     message.time)
 

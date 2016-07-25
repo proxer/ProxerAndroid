@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.stephenvinouze.linkifiedtextview.LinkTextView
+            <com.klinker.android.link_builder.LinkConsumableTextView
                 android:id="@+id/text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -33,7 +33,6 @@
                 android:layout_marginRight="8dp"
                 android:layout_marginTop="8dp"
                 android:textAppearance="@android:style/TextAppearance.Medium"
-                app:tvLinkType="web"
                 tools:text="Message looooooooooooooooooooooooooong" />
 
             <TextView

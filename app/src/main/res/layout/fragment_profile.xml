@@ -1,5 +1,4 @@
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -192,13 +191,12 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp">
 
-                <com.stephenvinouze.linkifiedtextview.LinkTextView
+                <com.klinker.android.link_builder.LinkConsumableTextView
                     android:id="@+id/statusText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    app:tvLinkType="web"
                     tools:text="This is a test: https://github.com/proxer/ProxerAndroid - 2 days ago" />
             </android.support.v7.widget.CardView>
         </LinearLayout>

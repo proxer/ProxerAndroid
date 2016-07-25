@@ -4,15 +4,17 @@ import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.os.Build
 import android.support.annotation.ColorRes
 import android.support.v4.content.ContextCompat
 import android.util.DisplayMetrics
-
+import android.util.Patterns
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.Target
-
+import com.klinker.android.link_builder.Link
+import com.klinker.android.link_builder.LinkBuilder
 import java.util.concurrent.ExecutionException
 
 /**
@@ -42,6 +44,11 @@ object Utils {
         val diagonalInches = Math.sqrt((xInches * xInches + yInches * yInches).toDouble())
 
         return diagonalInches >= MINIMUM_DIAGONAL_INCHES
+    }
+
+    fun convertDpToPx(context: Context, dp: Float): Int {
+        return (dp * (context.resources.displayMetrics.densityDpi.toFloat() /
+                DisplayMetrics.DENSITY_DEFAULT)).toInt()
     }
 
     fun isLandscape(context: Context): Boolean {
@@ -83,7 +90,22 @@ object Utils {
         } catch (e: ExecutionException) {
             return null
         }
-
     }
 
+    fun buildClickableText(context: Context, text: String,
+                           onClickListener: Link.OnClickListener? = null,
+                           onLongClickListener: Link.OnLongClickListener? = null): CharSequence {
+        var result = LinkBuilder.from(context, text)
+                .addLink(Link(Patterns.WEB_URL)
+                        .setTextColor(Color.BLUE)
+                        .setOnClickListener(onClickListener)
+                        .setOnLongClickListener(onLongClickListener))
+                .build()
+
+        if (result == null) {
+            result = text
+        }
+
+        return result
+    }
 }
