@@ -115,6 +115,9 @@
     <string name="module_login_login">Anmelden</string>
 
     <string name="menu_chat_cab_copy">Kopieren</string>
+
     <string name="fragment_topten_anime">Anime</string>
     <string name="fragment_topten_manga">Manga</string>
+
+    <string name="link_error_not_found">Der Link konnte nicht geöffnet werden</string>
 </resources>

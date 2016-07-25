@@ -1,5 +1,6 @@
 package com.proxerme.app.fragment
 
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -157,7 +158,11 @@ class ChatFragment : PagingFragment() {
         }
 
         override fun onMessageLinkClick(link: String) {
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link)))
+            try {
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link)))
+            } catch (exception: ActivityNotFoundException) {
+                Toast.makeText(context, R.string.link_error_not_found, Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

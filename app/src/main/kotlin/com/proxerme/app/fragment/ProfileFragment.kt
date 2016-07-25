@@ -1,5 +1,6 @@
 package com.proxerme.app.fragment
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import butterknife.bindView
 import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.LinkConsumableTextView
@@ -160,7 +162,12 @@ class ProfileFragment : LoadingFragment() {
                     statusText.text = Utils.buildClickableText(statusText.context, status + " - " +
                             TimeUtil.convertToRelativeReadableTime(context, lastStatusChange),
                             Link.OnClickListener {
-                                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it)))
+                                try {
+                                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it)))
+                                } catch (exception: ActivityNotFoundException) {
+                                    Toast.makeText(context, R.string.link_error_not_found,
+                                            Toast.LENGTH_SHORT).show()
+                                }
                             })
                 }
             }
