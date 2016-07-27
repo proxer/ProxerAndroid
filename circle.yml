@@ -1,0 +1,18 @@
+machine:
+  java:
+    version: openjdk8
+
+dependencies:
+  pre:
+    - echo y | android update sdk --no-ui --all --filter "tools,platform-tools,android-24,extra-android-m2repository,extra-android-support,extra-google-google_play_services,extra-google-m2repository"
+    - echo y | android update sdk --no-ui --all --filter "build-tools-24.0.1"
+
+test:
+  override:
+    - emulator -avd circleci-android22 -no-audio -no-window:
+        background: true
+        parallel: true
+    - circle-android wait-for-boot
+    - ./gradlew connectedAndroidTest
+    - cp -r my-project/build/outputs $CIRCLE_ARTIFACTS
+    - cp -r my-project/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
