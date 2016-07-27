@@ -87,15 +87,21 @@ class ConferenceAdapter : RecyclerView.Adapter<ConferenceAdapter.ViewHolder> {
 
         init {
             image.setOnClickListener {
-                callback?.onConferenceImageClick(it, list[adapterPosition])
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    callback?.onConferenceImageClick(it, list[adapterPosition])
+                }
             }
 
             container.setOnClickListener {
-                callback?.onConferenceClick(it, list[adapterPosition])
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    callback?.onConferenceClick(it, list[adapterPosition])
+                }
             }
 
             topic.setOnClickListener {
-                callback?.onConferenceTopicClick(it, list[adapterPosition])
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    callback?.onConferenceTopicClick(it, list[adapterPosition])
+                }
             }
         }
 

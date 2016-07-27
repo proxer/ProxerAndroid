@@ -120,4 +120,15 @@
     <string name="fragment_topten_manga">Manga</string>
 
     <string name="link_error_not_found">Der Link konnte nicht geöffnet werden</string>
+
+    <string name="fragment_user_media_list_anime_title">Anime</string>
+    <string name="fragment_user_media_list_manga_title">Manga</string>
+
+    <string name="user_media_state_watched">Geschaut</string>
+    <string name="user_media_state_watching">Am schauen</string>
+    <string name="user_media_state_will_watch">Wird noch geschaut</string>
+    <string name="user_media_state_read">Gelesen</string>
+    <string name="user_media_state_reading">Am lesen</string>
+    <string name="user_media_state_will_read">Wird noch gelesen</string>
+    <string name="user_media_state_cancelled">Abgebrochen</string>
 </resources>

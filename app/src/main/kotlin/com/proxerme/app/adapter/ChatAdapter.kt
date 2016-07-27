@@ -309,43 +309,47 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.MessageViewHolder> {
         }
 
         open protected fun onContainerClick(v: View) {
-            val current = list[adapterPosition]
+            if (adapterPosition != RecyclerView.NO_POSITION) {
+                val current = list[adapterPosition]
 
-            if (selecting) {
-                if (selectedMap.containsKey(current.id)) {
-                    selectedMap.remove(current.id)
+                if (selecting) {
+                    if (selectedMap.containsKey(current.id)) {
+                        selectedMap.remove(current.id)
 
-                    if (selectedMap.size <= 0) {
-                        selecting = false
+                        if (selectedMap.size <= 0) {
+                            selecting = false
+                        }
+                    } else {
+                        selectedMap.put(current.id, true)
                     }
+
+                    callback?.onMessageSelection(selectedMap.size)
                 } else {
-                    selectedMap.put(current.id, true)
+                    if (showingTimeMap.containsKey(current.id)) {
+                        showingTimeMap.remove(current.id)
+                    } else {
+                        showingTimeMap.put(current.id, true)
+                    }
                 }
 
-                callback?.onMessageSelection(selectedMap.size)
-            } else {
-                if (showingTimeMap.containsKey(current.id)) {
-                    showingTimeMap.remove(current.id)
-                } else {
-                    showingTimeMap.put(current.id, true)
-                }
+                notifyDataSetChanged()
             }
-
-            notifyDataSetChanged()
         }
 
         open protected fun onContainerLongClick(v: View): Boolean {
-            val current = list[adapterPosition]
+            if (adapterPosition != RecyclerView.NO_POSITION) {
+                val current = list[adapterPosition]
 
-            if (!selecting) {
-                selecting = true
+                if (!selecting) {
+                    selecting = true
 
-                selectedMap.put(current.id, true)
-                notifyDataSetChanged()
+                    selectedMap.put(current.id, true)
+                    notifyDataSetChanged()
 
-                callback?.onMessageSelection(selectedMap.size)
+                    callback?.onMessageSelection(selectedMap.size)
 
-                return true
+                    return true
+                }
             }
 
             return false
@@ -359,11 +363,15 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.MessageViewHolder> {
 
         init {
             image.setOnClickListener {
-                callback?.onMessageImageClick(it, list[adapterPosition])
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    callback?.onMessageImageClick(it, list[adapterPosition])
+                }
             }
 
             title.setOnClickListener {
-                callback?.onMessageTitleClick(it, list[adapterPosition])
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    callback?.onMessageTitleClick(it, list[adapterPosition])
+                }
             }
         }
 
@@ -391,16 +399,18 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.MessageViewHolder> {
         override val backgroundColor = android.R.color.background_light
 
         override fun onContainerClick(v: View) {
-            val current = list[adapterPosition]
+            if (adapterPosition != RecyclerView.NO_POSITION) {
+                val current = list[adapterPosition]
 
-            if (showingTimeMap.containsKey(current.id)) {
-                time.visibility = View.GONE
+                if (showingTimeMap.containsKey(current.id)) {
+                    time.visibility = View.GONE
 
-                showingTimeMap.remove(current.id)
-            } else {
-                time.visibility = View.VISIBLE
+                    showingTimeMap.remove(current.id)
+                } else {
+                    time.visibility = View.VISIBLE
 
-                showingTimeMap.put(current.id, true)
+                    showingTimeMap.put(current.id, true)
+                }
             }
         }
 

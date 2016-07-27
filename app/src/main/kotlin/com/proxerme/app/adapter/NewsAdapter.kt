@@ -98,29 +98,35 @@ class NewsAdapter(val savedInstanceState: Bundle?) :
                     .icon(CommunityMaterial.Icon.cmd_chevron_down))
 
             expand.setOnClickListener {
-                val id = list[adapterPosition].id
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    val id = list[adapterPosition].id
 
-                if (expanded.containsKey(id)) {
-                    expanded.remove(id)
+                    if (expanded.containsKey(id)) {
+                        expanded.remove(id)
 
-                    description.maxLines = DESCRIPTION_MAX_LINES
-                    ViewCompat.animate(expand).rotation(0f)
-                } else {
-                    expanded.put(id, true)
+                        description.maxLines = DESCRIPTION_MAX_LINES
+                        ViewCompat.animate(expand).rotation(0f)
+                    } else {
+                        expanded.put(id, true)
 
-                    description.maxLines = Integer.MAX_VALUE
-                    ViewCompat.animate(expand).rotation(ROTATION_HALF)
+                        description.maxLines = Integer.MAX_VALUE
+                        ViewCompat.animate(expand).rotation(ROTATION_HALF)
+                    }
+
+                    callback?.onNewsExpanded(it, list[adapterPosition])
                 }
-
-                callback?.onNewsExpanded(it, list[adapterPosition])
             }
 
             itemView.setOnClickListener {
-                callback?.onNewsClick(it, list[adapterPosition])
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    callback?.onNewsClick(it, list[adapterPosition])
+                }
             }
 
             image.setOnClickListener {
-                callback?.onNewsImageClick(it, list[adapterPosition])
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    callback?.onNewsImageClick(it, list[adapterPosition])
+                }
             }
         }
 

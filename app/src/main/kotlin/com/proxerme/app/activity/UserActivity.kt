@@ -7,7 +7,7 @@ import android.support.design.widget.CollapsingToolbarLayout
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
+import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
@@ -21,6 +21,8 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
 import com.proxerme.app.fragment.ProfileFragment
 import com.proxerme.app.fragment.ToptenFragment
+import com.proxerme.app.fragment.UserMediaListFragment
+import com.proxerme.library.connection.parameters.CategoryParameter
 import com.proxerme.library.info.ProxerUrlHolder
 
 class UserActivity : AppCompatActivity() {
@@ -104,22 +106,26 @@ class UserActivity : AppCompatActivity() {
     }
 
     inner class SectionsPagerAdapter(fragmentManager: FragmentManager) :
-            FragmentPagerAdapter(fragmentManager) {
+            FragmentStatePagerAdapter(fragmentManager) {
 
         override fun getItem(position: Int): Fragment {
             return when (position) {
                 0 -> ProfileFragment.newInstance(userId, username)
                 1 -> ToptenFragment.newInstance(userId, username)
+                2 -> UserMediaListFragment.newInstance(userId, username, CategoryParameter.ANIME)
+                3 -> UserMediaListFragment.newInstance(userId, username, CategoryParameter.MANGA)
                 else -> throw RuntimeException("Unknown index passed")
             }
         }
 
-        override fun getCount() = 2
+        override fun getCount() = 4
 
         override fun getPageTitle(position: Int): CharSequence? {
             return when (position) {
                 0 -> getString(R.string.fragment_profile_title)
                 1 -> getString(R.string.fragment_topten_title)
+                2 -> getString(R.string.fragment_user_media_list_anime_title)
+                3 -> getString(R.string.fragment_user_media_list_manga_title)
                 else -> throw RuntimeException("Unknown index passed")
             }
         }
