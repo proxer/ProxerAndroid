@@ -6,6 +6,7 @@ import com.proxerme.library.connection.ProxerException
 import com.proxerme.library.connection.user.entitiy.User
 import com.proxerme.library.connection.user.request.LoginRequest
 import com.proxerme.library.connection.user.request.LogoutRequest
+import com.proxerme.library.connection.user.request.UserInfoRequest
 import com.proxerme.library.connection.user.result.LoginResult
 import com.proxerme.library.connection.user.result.LogoutResult
 import com.proxerme.library.info.ProxerTag
@@ -59,8 +60,22 @@ object UserManager {
                 doLogin(result.item, shouldSave)
                 callback?.invoke(result)
             }, { result ->
-                doLogout()
-                errorCallback?.invoke(result)
+                if (result.item.errorCode == ProxerException.PROXER &&
+                        result.item.proxerErrorCode ==
+                                ProxerException.LOGIN_ALREADY_LOGGED_IN) {
+                    UserInfoRequest(null, user.username).execute({ userInfoResult ->
+                        val newUser = User(user.username, user.password, userInfoResult.item.id,
+                                userInfoResult.item.imageId)
+
+                        doLogin(newUser, shouldSave)
+                        callback?.invoke(LoginResult(newUser))
+                    }, { userInfoResult ->
+                        errorCallback?.invoke(userInfoResult)
+                    })
+                } else {
+                    doLogout()
+                    errorCallback?.invoke(result)
+                }
             })
         }
     }
