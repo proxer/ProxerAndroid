@@ -14,5 +14,5 @@ test:
         parallel: true
     - circle-android wait-for-boot
     - ./gradlew connectedAndroidTest
-    - cp -r my-project/build/outputs $CIRCLE_ARTIFACTS
-    - cp -r my-project/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
+    - cp -r app/build/outputs $CIRCLE_ARTIFACTS
+    - cp -r app/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
