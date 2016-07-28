@@ -10,6 +10,7 @@ android {
         targetSdkVersion 24
         versionCode 21
         versionName "0.5.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -25,6 +26,8 @@ android {
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
+        test.java.srcDirs += 'src/test/kotlin'
+        androidTest.java.srcDirs += 'src/androidTest/kotlin'
     }
 }
 
@@ -63,6 +66,10 @@ dependencies {
     compile 'com.birbit:android-priority-jobqueue:2.0.0-beta2'
     compile 'com.github.proxer:ProxerLibAndroid:1.9.1'
     compile 'com.jakewharton:kotterknife:0.1.0-SNAPSHOT'
+
+    androidTestCompile "com.android.support:support-annotations:$support_version"
+    androidTestCompile 'com.android.support.test:runner:0.5'
+    androidTestCompile 'com.android.support.test:rules:0.5'
 }
 
 def getProxerApiKey() {
