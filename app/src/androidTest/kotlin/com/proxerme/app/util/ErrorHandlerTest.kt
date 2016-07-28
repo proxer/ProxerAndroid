@@ -1,13 +1,11 @@
 package com.proxerme.app.util
 
+import android.support.test.InstrumentationRegistry.getTargetContext
 import android.support.test.filters.SmallTest
-import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import com.proxerme.app.R
-import com.proxerme.app.activity.DashboardActivity
 import com.proxerme.library.connection.ProxerException
 import org.junit.Assert.assertEquals
-import org.junit.Rule
 import org.junit.runner.RunWith
 
 /**
@@ -19,47 +17,44 @@ import org.junit.runner.RunWith
 @SmallTest
 class ErrorHandlerTest {
 
-    @Rule @JvmField
-    var activityTestRule = ActivityTestRule(DashboardActivity::class.java)
-
     @org.junit.Test
     fun getMessageForErrorCodeProxer() {
-        assertEquals("test", ErrorHandler.getMessageForErrorCode(activityTestRule.activity,
+        assertEquals("test", ErrorHandler.getMessageForErrorCode(getTargetContext(),
                 ProxerException(ProxerException.PROXER, "test")))
     }
 
     @org.junit.Test
     fun getMessageForErrorCodeIO() {
-        assertEquals(activityTestRule.activity.getString(R.string.error_io),
-                ErrorHandler.getMessageForErrorCode(activityTestRule.activity,
+        assertEquals(getTargetContext().getString(R.string.error_io),
+                ErrorHandler.getMessageForErrorCode(getTargetContext(),
                         ProxerException(ProxerException.IO)))
     }
 
     @org.junit.Test
     fun getMessageForErrorCodeNetwork() {
-        assertEquals(activityTestRule.activity.getString(R.string.error_network),
-                ErrorHandler.getMessageForErrorCode(activityTestRule.activity,
+        assertEquals(getTargetContext().getString(R.string.error_network),
+                ErrorHandler.getMessageForErrorCode(getTargetContext(),
                         ProxerException(ProxerException.NETWORK)))
     }
 
     @org.junit.Test
     fun getMessageForErrorCodeTimeout() {
-        assertEquals(activityTestRule.activity.getString(R.string.error_timeout),
-                ErrorHandler.getMessageForErrorCode(activityTestRule.activity,
+        assertEquals(getTargetContext().getString(R.string.error_timeout),
+                ErrorHandler.getMessageForErrorCode(getTargetContext(),
                         ProxerException(ProxerException.TIMEOUT)))
     }
 
     @org.junit.Test
     fun getMessageForErrorCodeUnparseable() {
-        assertEquals(activityTestRule.activity.getString(R.string.error_unparseable),
-                ErrorHandler.getMessageForErrorCode(activityTestRule.activity,
+        assertEquals(getTargetContext().getString(R.string.error_unparseable),
+                ErrorHandler.getMessageForErrorCode(getTargetContext(),
                         ProxerException(ProxerException.UNPARSEABLE)))
     }
 
     @org.junit.Test
     fun getMessageForErrorCodeUnknown() {
-        assertEquals(activityTestRule.activity.getString(R.string.error_unknown),
-                ErrorHandler.getMessageForErrorCode(activityTestRule.activity,
+        assertEquals(getTargetContext().getString(R.string.error_unknown),
+                ErrorHandler.getMessageForErrorCode(getTargetContext(),
                         ProxerException(ProxerException.UNKNOWN)))
     }
 }
