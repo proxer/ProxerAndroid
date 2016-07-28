@@ -1,5 +1,8 @@
 package com.proxerme.app.fragment
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.view.LayoutInflater
@@ -7,10 +10,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import butterknife.bindView
+import com.klinker.android.link_builder.Link
+import com.klinker.android.link_builder.TouchableMovementMethod
 import com.proxerme.app.R
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.util.ErrorHandler
+import com.proxerme.app.util.Utils
 import com.proxerme.library.interfaces.ProxerErrorResult
 import com.proxerme.library.interfaces.ProxerResult
 
@@ -104,6 +111,8 @@ abstract class LoadingFragment : MainFragment() {
                 isDisplayingLoad = false
             }
         }
+
+        errorText.movementMethod = TouchableMovementMethod.getInstance()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -158,7 +167,13 @@ abstract class LoadingFragment : MainFragment() {
     open protected fun showError(message: String, buttonMessage: String? = null,
                                  onButtonClickListener: View.OnClickListener? = null) {
         errorContainer.visibility = View.VISIBLE
-        errorText.text = message
+        errorText.text = Utils.buildClickableText(context, message, Link.OnClickListener { link ->
+            try {
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link)))
+            } catch (exception: ActivityNotFoundException) {
+                Toast.makeText(context, R.string.link_error_not_found, Toast.LENGTH_SHORT).show()
+            }
+        })
 
         if (buttonMessage == null) {
             errorButton.text = getString(R.string.error_retry)
