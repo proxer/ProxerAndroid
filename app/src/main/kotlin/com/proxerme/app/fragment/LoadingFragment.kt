@@ -169,7 +169,7 @@ abstract class LoadingFragment : MainFragment() {
         errorContainer.visibility = View.VISIBLE
         errorText.text = Utils.buildClickableText(context, message, Link.OnClickListener { link ->
             try {
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link)))
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link + "?device=mobile")))
             } catch (exception: ActivityNotFoundException) {
                 Toast.makeText(context, R.string.link_error_not_found, Toast.LENGTH_SHORT).show()
             }

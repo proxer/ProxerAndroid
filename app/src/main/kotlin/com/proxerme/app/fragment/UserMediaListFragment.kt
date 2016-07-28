@@ -77,7 +77,7 @@ class UserMediaListFragment : PagingFragment() {
     override fun loadPage(number: Int) {
         UserMediaListRequest(userId, userName, number)
                 .withCategory(category)
-                .withLimit(25)
+                .withLimit(50)
                 .withSortCriteria(SortParameter.NAME_ASCENDING)
                 .execute({ result ->
                     adapter.addItems(result.item.toList())
