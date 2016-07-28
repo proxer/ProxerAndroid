@@ -74,10 +74,18 @@ dependencies {
 
 def getProxerApiKey() {
     def Properties props = new Properties()
+
     try {
         props.load(new FileInputStream(new File('secrets.properties')))
-    } catch (IOException exception) {
-        props.load(new FileInputStream(new File('secrets-ci.properties')))
+    } catch (Exception exception) {
+        try {
+            if (System.getenv('CI').toBoolean()) {
+                props.load(new FileInputStream(new File('secrets-ci.properties')))
+            }
+        } catch (Exception innerException) {
+            throw new GradleException('Please add a secrets.properties file with your API key.')
+        }
     }
+
     return props['PROXER_API_KEY']
 }
