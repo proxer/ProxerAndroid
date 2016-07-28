@@ -67,6 +67,10 @@ dependencies {
 
 def getProxerApiKey() {
     def Properties props = new Properties()
-    props.load(new FileInputStream(new File('secrets.properties')))
+    try {
+        props.load(new FileInputStream(new File('secrets.properties')))
+    } catch (IOException exception) {
+        props.load(new FileInputStream(new File('secrets-ci.properties')))
+    }
     return props['PROXER_API_KEY']
 }
