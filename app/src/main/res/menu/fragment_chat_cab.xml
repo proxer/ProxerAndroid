@@ -5,6 +5,6 @@
     <item
         android:id="@+id/copy"
         android:icon="@drawable/ic_action_copy"
-        android:title="@string/menu_chat_cab_copy"
+        android:title="@string/action_copy"
         app:showAsAction="ifRoom" />
 </menu>

@@ -103,6 +103,14 @@ abstract class PagingFragment : LoadingFragment() {
         notifyLoadFinishedWithError(result)
     }
 
+    override fun reset() {
+        nextPageToLoad = firstPage
+        endReached = false
+        clear()
+
+        super.reset()
+    }
+
     abstract protected fun clear()
 
     abstract protected fun loadPage(number: Int)

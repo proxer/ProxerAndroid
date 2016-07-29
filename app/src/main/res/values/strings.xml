@@ -114,7 +114,7 @@
 
     <string name="module_login_login">Anmelden</string>
 
-    <string name="menu_chat_cab_copy">Kopieren</string>
+    <string name="action_copy">Kopieren</string>
 
     <string name="fragment_topten_anime">Anime</string>
     <string name="fragment_topten_manga">Manga</string>
@@ -131,4 +131,10 @@
     <string name="user_media_state_reading">Am lesen</string>
     <string name="user_media_state_will_read">Wird noch gelesen</string>
     <string name="user_media_state_cancelled">Abgebrochen</string>
+
+    <string name="action_sort">Sortierung</string>
+    <string name="action_sort_ascending">Aufsteigend</string>
+    <string name="action_sort_descending">Absteigend</string>
+    <string name="action_sort_name">Nach Name</string>
+    <string name="action_sort_state">Nach Status</string>
 </resources>

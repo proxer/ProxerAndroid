@@ -14,17 +14,23 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.proxerme.app.R
 import com.proxerme.library.connection.parameters.CategoryParameter
 import com.proxerme.library.connection.parameters.CategoryParameter.Category
+import com.proxerme.library.connection.parameters.SortParameter
 import com.proxerme.library.connection.user.entitiy.UserMediaListEntry
 import com.proxerme.library.info.ProxerUrlHolder
 import java.util.*
 import kotlin.comparisons.compareBy
+import kotlin.comparisons.compareByDescending
+import kotlin.comparisons.thenBy
+import kotlin.comparisons.thenByDescending
 
 /**
  * TODO: Describe class
  *
  * @author Ruben Gees
  */
-class UserMediaAdapter(val savedInstanceState: Bundle?, @Category val category: String) :
+class UserMediaAdapter(private val savedInstanceState: Bundle?,
+                       @Category private val category: String,
+                       @SortParameter.SortCriteria var sortCriteria: String) :
         RecyclerView.Adapter<UserMediaAdapter.ViewHolder>() {
 
     private companion object {
@@ -59,8 +65,43 @@ class UserMediaAdapter(val savedInstanceState: Bundle?, @Category val category: 
     }
 
     fun addItems(newItems: Collection<UserMediaListEntry>) {
-        list.addAll(newItems.filter { list.binarySearch(it, compareBy { it.name }) < 0 })
-        list.sortBy { it.name }
+        when (sortCriteria) {
+            SortParameter.NAME_ASCENDING -> {
+                list.addAll(newItems.filter {
+                    list.binarySearch(it, compareBy({ it.name })) < 0
+                })
+
+                list.sortBy { it.name }
+            }
+
+            SortParameter.NAME_DESCENDING -> {
+                list.addAll(newItems.filter {
+                    list.binarySearch(it, compareByDescending { it.name }) < 0
+                })
+
+                list.sortByDescending { it.name }
+            }
+
+            SortParameter.STATE_NAME_ASCENDING -> {
+                list.addAll(newItems.filter {
+                    list.binarySearch(it, compareBy<UserMediaListEntry> { it.commentState }
+                            .thenBy { it.name }) < 0
+                })
+
+                list.sortWith(compareBy<UserMediaListEntry> { it.commentState }
+                        .thenBy { it.name })
+            }
+
+            SortParameter.STATE_NAME_DESCENDING -> {
+                list.addAll(newItems.filter {
+                    list.binarySearch(it, compareBy<UserMediaListEntry> { it.commentState }
+                            .thenByDescending { it.name }) < 0
+                })
+
+                list.sortWith(compareBy<UserMediaListEntry> { it.commentState }
+                        .thenByDescending { it.name })
+            }
+        }
 
         notifyDataSetChanged()
     }
@@ -106,15 +147,15 @@ class UserMediaAdapter(val savedInstanceState: Bundle?, @Category val category: 
             if (category == CategoryParameter.ANIME) {
                 return when (entry.commentState) {
                     0 -> itemView.context.getString(R.string.user_media_state_watched)
-                    1 -> itemView.context.getString(R.string.user_media_state_watched)
+                    1 -> itemView.context.getString(R.string.user_media_state_watching)
                     2 -> itemView.context.getString(R.string.user_media_state_will_watch)
                     3 -> itemView.context.getString(R.string.user_media_state_cancelled)
                     else -> throw IllegalArgumentException("The state must be between 0 and 3")
                 }
             } else {
                 return when (entry.commentState) {
-                    0 -> itemView.context.getString(R.string.user_media_state_reading)
-                    1 -> itemView.context.getString(R.string.user_media_state_read)
+                    0 -> itemView.context.getString(R.string.user_media_state_read)
+                    1 -> itemView.context.getString(R.string.user_media_state_reading)
                     2 -> itemView.context.getString(R.string.user_media_state_will_read)
                     3 -> itemView.context.getString(R.string.user_media_state_cancelled)
                     else -> throw IllegalArgumentException("The state must be between 0 and 3")

@@ -191,4 +191,18 @@ abstract class LoadingFragment : MainFragment() {
     open protected fun hideError() {
         errorContainer.visibility = View.INVISIBLE
     }
+
+    open protected fun reset() {
+        cancel()
+
+        isDisplayingLoad = false
+        isLoading = false
+        ongoingLoads = 0
+        isFirstLoad = true
+        currentError = null
+
+        if (isFirstLoad && canLoad) {
+            load(true)
+        }
+    }
 }
