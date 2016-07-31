@@ -33,17 +33,19 @@ class MaterialDrawerHelper : OnActivityListener {
     companion object {
         const val ITEM_NEWS = 0L
         const val ITEM_CHAT = 1L
-        const val ITEM_DONATE = 2L
-        const val ITEM_SETTINGS = 3L
+        const val ITEM_ANIME = 2L
+        const val ITEM_MANGA = 3L
+        const val ITEM_DONATE = 10L
+        const val ITEM_SETTINGS = 11L
 
-        const val ACCOUNT_GUEST = 10L
-        const val ACCOUNT_LOGIN = 11L
-        const val ACCOUNT_USER = 12L
-        const val ACCOUNT_LOGOUT = 13L
+        const val ACCOUNT_GUEST = 100L
+        const val ACCOUNT_LOGIN = 101L
+        const val ACCOUNT_USER = 102L
+        const val ACCOUNT_LOGOUT = 103L
 
         private const val STATE_CURRENT_DRAWER_ITEM_ID = "material_drawer_helper_current_id"
 
-        @IntDef(ITEM_NEWS, ITEM_CHAT, ITEM_DONATE, ITEM_SETTINGS)
+        @IntDef(ITEM_NEWS, ITEM_CHAT, ITEM_DONATE, ITEM_SETTINGS, ITEM_ANIME, ITEM_MANGA)
         @Retention(AnnotationRetention.SOURCE)
         @Target(AnnotationTarget.FUNCTION, AnnotationTarget.FIELD,
                 AnnotationTarget.VALUE_PARAMETER)
@@ -187,7 +189,26 @@ class MaterialDrawerHelper : OnActivityListener {
                         .withBadgeStyle(BadgeStyle()
                                 .withColorRes(R.color.colorPrimary)
                                 .withTextColorRes(android.R.color.white))
-                        .withIdentifier(ITEM_CHAT))
+                        .withIdentifier(ITEM_CHAT),
+                PrimaryDrawerItem()
+                        .withName(R.string.drawer_item_anime)
+                        .withIcon(CommunityMaterial.Icon.cmd_television)
+                        .withSelectedTextColorRes(R.color.colorPrimary)
+                        .withSelectedIconColorRes(R.color.colorPrimary)
+                        .withBadgeStyle(BadgeStyle()
+                                .withColorRes(R.color.colorPrimary)
+                                .withTextColorRes(android.R.color.white))
+                        .withIdentifier(ITEM_ANIME),
+                PrimaryDrawerItem()
+                        .withName(R.string.drawer_item_manga)
+                        .withIcon(CommunityMaterial.Icon.cmd_book_open_variant)
+                        .withSelectedTextColorRes(R.color.colorPrimary)
+                        .withSelectedIconColorRes(R.color.colorPrimary)
+                        .withBadgeStyle(BadgeStyle()
+                                .withColorRes(R.color.colorPrimary)
+                                .withTextColorRes(android.R.color.white))
+                        .withIdentifier(ITEM_MANGA)
+        )
     }
 
     private fun generateStickyDrawerItems(): ArrayList<IDrawerItem<*, *>> {

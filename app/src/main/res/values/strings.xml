@@ -72,7 +72,9 @@
     <string name="dialog_login_remember">Merken</string>
 
     <string name="drawer_item_news">News</string>
-    <string name="drawer_item_chat">Nachrichten</string>
+    <string name="drawer_item_chat">Chat</string>
+    <string name="drawer_item_anime">Anime</string>
+    <string name="drawer_item_manga">Manga</string>
     <string name="drawer_item_donate">Spenden</string>
     <string name="drawer_item_settings">Einstellungen</string>
     <string name="drawer_account_guest">Gast</string>
@@ -106,7 +108,7 @@
 
     <string name="fragment_chat_message">Tippe eine Nachricht</string>
     <string name="fragment_chat_send">Senden</string>
-    <string name="fragment_chat_clip_title">Nachrichtenverlauf</string>
+    <string name="fragment_chat_clip_title">Chatverlauf</string>
     <string name="fragment_chat_clip_status">In die Zwischenablage kopiert</string>
 
     <string name="status_currently_logging_in">Du wirst angemeldet…</string>
@@ -116,6 +118,12 @@
 
     <string name="action_copy">Kopieren</string>
 
+    <string name="fragment_settings">Einstellungen</string>
+
+    <string name="fragment_conferences">Chat</string>
+
+    <string name="fragment_news">News</string>
+
     <string name="fragment_topten_anime">Anime</string>
     <string name="fragment_topten_manga">Manga</string>
 
@@ -123,6 +131,9 @@
 
     <string name="fragment_user_media_list_anime_title">Anime</string>
     <string name="fragment_user_media_list_manga_title">Manga</string>
+
+    <string name="fragment_media_list_anime_title">Anime</string>
+    <string name="fragment_media_list_manga_title">Manga</string>
 
     <string name="user_media_state_watched">Geschaut</string>
     <string name="user_media_state_watching">Am schauen</string>

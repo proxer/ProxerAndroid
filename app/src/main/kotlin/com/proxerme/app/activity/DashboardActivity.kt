@@ -13,6 +13,7 @@ import com.proxerme.app.customtabs.CustomTabActivityHelper
 import com.proxerme.app.dialog.LoginDialog
 import com.proxerme.app.dialog.LogoutDialog
 import com.proxerme.app.fragment.ConferencesFragment
+import com.proxerme.app.fragment.MediaListFragment
 import com.proxerme.app.fragment.NewsFragment
 import com.proxerme.app.fragment.SettingsFragment
 import com.proxerme.app.helper.IntroductionHelper
@@ -21,8 +22,10 @@ import com.proxerme.app.helper.MaterialDrawerHelper.Companion.ACCOUNT_GUEST
 import com.proxerme.app.helper.MaterialDrawerHelper.Companion.ACCOUNT_LOGIN
 import com.proxerme.app.helper.MaterialDrawerHelper.Companion.ACCOUNT_LOGOUT
 import com.proxerme.app.helper.MaterialDrawerHelper.Companion.ACCOUNT_USER
+import com.proxerme.app.helper.MaterialDrawerHelper.Companion.ITEM_ANIME
 import com.proxerme.app.helper.MaterialDrawerHelper.Companion.ITEM_CHAT
 import com.proxerme.app.helper.MaterialDrawerHelper.Companion.ITEM_DONATE
+import com.proxerme.app.helper.MaterialDrawerHelper.Companion.ITEM_MANGA
 import com.proxerme.app.helper.MaterialDrawerHelper.Companion.ITEM_NEWS
 import com.proxerme.app.helper.MaterialDrawerHelper.Companion.ITEM_SETTINGS
 import com.proxerme.app.helper.PreferenceHelper
@@ -30,6 +33,7 @@ import com.proxerme.app.helper.StorageHelper
 import com.proxerme.app.interfaces.OnActivityListener
 import com.proxerme.app.manager.UserManager
 import com.proxerme.app.module.CustomTabsModule
+import com.proxerme.library.connection.parameters.CategoryParameter
 import com.proxerme.library.info.ProxerUrlHolder
 import com.rubengees.introduction.IntroductionActivity.OPTION_RESULT
 import com.rubengees.introduction.IntroductionBuilder
@@ -189,13 +193,27 @@ class DashboardActivity : AppCompatActivity(), CustomTabsModule {
     private fun onDrawerItemClick(id: Long): Boolean {
         when (id) {
             ITEM_NEWS -> {
-                setFragment(NewsFragment.newInstance(), "News")
+                setFragment(NewsFragment.newInstance(), getString(R.string.fragment_news))
 
                 return false
             }
 
             ITEM_CHAT -> {
-                setFragment(ConferencesFragment.newInstance(), "Nachrichten")
+                setFragment(ConferencesFragment.newInstance(), getString(R.string.fragment_conferences))
+
+                return false
+            }
+
+            ITEM_ANIME -> {
+                setFragment(MediaListFragment.newInstance(CategoryParameter.ANIME),
+                        getString(R.string.fragment_media_list_anime_title))
+
+                return false
+            }
+
+            ITEM_MANGA -> {
+                setFragment(MediaListFragment.newInstance(CategoryParameter.MANGA),
+                        getString(R.string.fragment_media_list_manga_title))
 
                 return false
             }
@@ -207,7 +225,7 @@ class DashboardActivity : AppCompatActivity(), CustomTabsModule {
             }
 
             ITEM_SETTINGS -> {
-                setFragment(SettingsFragment.newInstance(), "Einstellungen")
+                setFragment(SettingsFragment.newInstance(), getString(R.string.fragment_settings))
 
                 return false
             }

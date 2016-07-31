@@ -28,13 +28,13 @@ import kotlin.comparisons.thenByDescending
  *
  * @author Ruben Gees
  */
-class UserMediaAdapter(private val savedInstanceState: Bundle?,
+class UserMediaAdapter(savedInstanceState: Bundle?,
                        @Category private val category: String,
                        @SortParameter.SortCriteria var sortCriteria: String) :
         RecyclerView.Adapter<UserMediaAdapter.ViewHolder>() {
 
     private companion object {
-        const val STATE_ITEMS = "adapter_topten_state_items"
+        const val STATE_ITEMS = "adapter_user_media_state_items"
     }
 
     private val list = ArrayList<UserMediaListEntry>()
