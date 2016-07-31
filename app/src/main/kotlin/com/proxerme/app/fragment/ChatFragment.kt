@@ -11,11 +11,9 @@ import android.support.v7.view.ActionMode
 import android.support.v7.widget.LinearLayoutManager
 import android.view.*
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.Toast
 import butterknife.bindView
 import com.proxerme.app.R
-import com.proxerme.app.activity.ImageDetailActivity
 import com.proxerme.app.activity.UserActivity
 import com.proxerme.app.adapter.ChatAdapter
 import com.proxerme.app.application.MainApplication
@@ -33,7 +31,6 @@ import com.proxerme.library.connection.experimental.chat.entity.Conference
 import com.proxerme.library.connection.experimental.chat.entity.Message
 import com.proxerme.library.connection.experimental.chat.request.ChatRequest
 import com.proxerme.library.info.ProxerTag
-import com.proxerme.library.info.ProxerUrlHolder
 import com.proxerme.library.interfaces.ProxerErrorResult
 import com.proxerme.library.interfaces.ProxerResult
 import org.greenrobot.eventbus.EventBus
@@ -131,10 +128,8 @@ class ChatFragment : PagingFragment() {
 
     private val adapterCallback = object : ChatAdapter.OnMessageInteractionListener() {
         override fun onMessageImageClick(v: View, message: Message) {
-            if (!message.imageId.isBlank()) {
-                ImageDetailActivity.navigateTo(activity, v as ImageView,
-                        ProxerUrlHolder.getUserImageUrl(message.imageId))
-            }
+            UserActivity.navigateTo(activity, message.fromId, message.username,
+                    message.imageId)
         }
 
         override fun onMessageTitleClick(v: View, message: Message) {

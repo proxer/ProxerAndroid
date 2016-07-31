@@ -4,9 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
-import android.widget.ImageView
 import com.proxerme.app.activity.ChatActivity
-import com.proxerme.app.activity.ImageDetailActivity
 import com.proxerme.app.activity.UserActivity
 import com.proxerme.app.adapter.ConferenceAdapter
 import com.proxerme.app.helper.NotificationHelper
@@ -19,7 +17,6 @@ import com.proxerme.library.connection.ProxerConnection
 import com.proxerme.library.connection.experimental.chat.entity.Conference
 import com.proxerme.library.connection.experimental.chat.request.ConferencesRequest
 import com.proxerme.library.info.ProxerTag
-import com.proxerme.library.info.ProxerUrlHolder
 import com.proxerme.library.interfaces.ProxerErrorResult
 import com.proxerme.library.interfaces.ProxerResult
 
@@ -85,8 +82,10 @@ class ConferencesFragment : PagingFragment() {
             }
 
             override fun onConferenceImageClick(v: View, conference: Conference) {
-                ImageDetailActivity.navigateTo(activity, v as ImageView,
-                        ProxerUrlHolder.getUserImageUrl(conference.imageId))
+                if (!conference.isConference) {
+                    UserActivity.navigateTo(activity, null, conference.topic,
+                            conference.imageId)
+                }
             }
 
             override fun onConferenceTopicClick(v: View, conference: Conference) {
