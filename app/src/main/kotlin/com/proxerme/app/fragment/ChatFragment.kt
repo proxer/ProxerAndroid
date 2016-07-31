@@ -158,6 +158,10 @@ class ChatFragment : PagingFragment() {
                 Toast.makeText(context, R.string.link_error_not_found, Toast.LENGTH_SHORT).show()
             }
         }
+
+        override fun onMentionsClick(username: String) {
+            UserActivity.navigateTo(activity, username = username)
+        }
     }
 
     private val contentRoot: ViewGroup by bindView(R.id.contentRoot)

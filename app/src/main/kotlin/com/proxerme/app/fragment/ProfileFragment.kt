@@ -16,6 +16,7 @@ import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.LinkConsumableTextView
 import com.klinker.android.link_builder.TouchableMovementMethod
 import com.proxerme.app.R
+import com.proxerme.app.activity.UserActivity
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.util.TimeUtil
 import com.proxerme.app.util.Utils
@@ -109,6 +110,7 @@ class ProfileFragment : LoadingFragment() {
 
         UserInfoRequest(userId, userName).execute({ result ->
             userInfo = result.item
+            userInfo?.run { (activity as UserActivity).setImageId(this.imageId) }
 
             notifyLoadFinishedSuccessful(result)
         }, { result ->

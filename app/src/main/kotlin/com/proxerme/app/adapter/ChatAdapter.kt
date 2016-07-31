@@ -262,6 +262,10 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.MessageViewHolder> {
         open fun onMessageLinkClick(link: String) {
 
         }
+
+        open fun onMentionsClick(username: String) {
+
+        }
     }
 
     open inner class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -281,17 +285,22 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.MessageViewHolder> {
 
         open fun bind(message: Message, marginTop: Int, marginBottom: Int) {
             text.text = Utils.buildClickableText(text.context, message.message,
-                    Link.OnClickListener {
+                    onWebClickListener = Link.OnClickListener {
                         callback?.onMessageLinkClick(it)
+                    },
+                    onMentionsClickListener = Link.OnClickListener {
+                        callback?.onMentionsClick(it.trim().substring(1))
                     })
 
             time.text = TimeUtil.convertToRelativeReadableTime(time.context,
                     message.time)
 
             if (selectedMap.containsKey(message.id)) {
-                container.cardBackgroundColor = ContextCompat.getColorStateList(container.context, R.color.md_grey_200)
+                container.cardBackgroundColor = ContextCompat
+                        .getColorStateList(container.context, R.color.md_grey_200)
             } else {
-                container.cardBackgroundColor = ContextCompat.getColorStateList(container.context, backgroundColor)
+                container.cardBackgroundColor = ContextCompat
+                        .getColorStateList(container.context, backgroundColor)
             }
 
             if (showingTimeMap.containsKey(message.id)) {

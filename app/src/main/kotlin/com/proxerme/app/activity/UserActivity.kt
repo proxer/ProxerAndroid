@@ -31,8 +31,10 @@ class UserActivity : AppCompatActivity() {
         private const val EXTRA_USER_ID = "extra_user_id"
         private const val EXTRA_USERNAME = "extra_username"
         private const val EXTRA_IMAGE_ID = "extra_image_id"
+        private const val STATE_IMAGE_ID = "activity_user_image_id"
 
-        fun navigateTo(context: Activity, userId: String?, username: String?, imageId: String) {
+        fun navigateTo(context: Activity, userId: String? = null, username: String? = null,
+                       imageId: String? = null) {
             if (userId.isNullOrBlank() && username.isNullOrBlank()) {
                 return
             }
@@ -50,7 +52,7 @@ class UserActivity : AppCompatActivity() {
 
     private var userId: String? = null
     private var username: String? = null
-    private lateinit var imageId: String
+    private var imageId: String? = null
     private var sectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
 
     private val toolbar: Toolbar by bindView(R.id.toolbar)
@@ -67,7 +69,13 @@ class UserActivity : AppCompatActivity() {
 
         userId = intent.getStringExtra(EXTRA_USER_ID)
         username = intent.getStringExtra(EXTRA_USERNAME)
-        imageId = intent.getStringExtra(EXTRA_IMAGE_ID)
+
+        if (savedInstanceState == null) {
+            imageId = intent.getStringExtra(EXTRA_IMAGE_ID)
+        } else {
+            imageId = savedInstanceState.getString(STATE_IMAGE_ID)
+        }
+
         viewPager.adapter = sectionsPagerAdapter
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -76,21 +84,13 @@ class UserActivity : AppCompatActivity() {
         tabs.setupWithViewPager(viewPager)
 
         profileImage.setOnClickListener {
-            ImageDetailActivity.navigateTo(this, it as ImageView,
-                    ProxerUrlHolder.getUserImageUrl(imageId))
+            if (!imageId.isNullOrBlank()) {
+                ImageDetailActivity.navigateTo(this@UserActivity, it as ImageView,
+                        ProxerUrlHolder.getUserImageUrl(imageId!!))
+            }
         }
 
-        if (imageId.isBlank()) {
-            profileImage.setImageDrawable(IconicsDrawable(profileImage.context)
-                    .icon(CommunityMaterial.Icon.cmd_account)
-                    .sizeDp(32)
-                    .colorRes(R.color.colorPrimary))
-        } else {
-            Glide.with(this)
-                    .load(ProxerUrlHolder.getUserImageUrl(imageId))
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .into(profileImage)
-        }
+        loadImage()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -103,6 +103,36 @@ class UserActivity : AppCompatActivity() {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        outState.putString(STATE_IMAGE_ID, imageId)
+    }
+
+    fun setImageId(imageId: String) {
+        if (this.imageId == null && imageId.isNotBlank()) {
+            this.imageId = imageId
+
+            loadImage()
+        }
+    }
+
+    private fun loadImage() {
+        if (imageId.isNullOrBlank()) {
+            profileImage.setImageDrawable(IconicsDrawable(profileImage.context)
+                    .icon(CommunityMaterial.Icon.cmd_account)
+                    .sizeDp(256)
+                    .paddingDp(32)
+                    .backgroundColorRes(R.color.colorPrimaryLight)
+                    .colorRes(R.color.colorPrimary))
+        } else {
+            Glide.with(this)
+                    .load(ProxerUrlHolder.getUserImageUrl(imageId!!))
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .into(profileImage)
+        }
     }
 
     inner class SectionsPagerAdapter(fragmentManager: FragmentManager) :

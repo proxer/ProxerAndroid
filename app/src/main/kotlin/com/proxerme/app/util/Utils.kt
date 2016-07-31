@@ -16,6 +16,7 @@ import com.bumptech.glide.request.target.Target
 import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.LinkBuilder
 import java.util.concurrent.ExecutionException
+import java.util.regex.Pattern
 
 /**
  * Class, which holds various util methods.
@@ -26,6 +27,7 @@ object Utils {
 
     private const val MINIMUM_DIAGONAL_INCHES = 7
     private val WEB_REGEX = Patterns.WEB_URL
+    private val MENTIONS_REGEX = Pattern.compile("(@[a-zA-Z0-9_]+)")
 
     fun areActionsPossible(activity: Activity?): Boolean {
         return activity != null && !activity.isFinishing && !isDestroyedCompat(activity) &&
@@ -94,15 +96,30 @@ object Utils {
     }
 
     fun buildClickableText(context: Context, text: String,
-                           onClickListener: Link.OnClickListener? = null,
-                           onLongClickListener: Link.OnLongClickListener? = null): CharSequence {
-        var result = LinkBuilder.from(context, text)
-                .addLink(Link(WEB_REGEX)
-                        .setTextColor(Color.BLUE)
-                        .setUnderlined(false)
-                        .setOnClickListener(onClickListener)
-                        .setOnLongClickListener(onLongClickListener))
-                .build()
+                           onWebClickListener: Link.OnClickListener? = null,
+                           onWebLongClickListener: Link.OnLongClickListener? = null,
+                           onMentionsClickListener: Link.OnClickListener? = null,
+                           onMentionsLongClickListener: Link.OnLongClickListener? = null):
+            CharSequence {
+        val builder = LinkBuilder.from(context, text)
+
+        if (onWebClickListener != null || onWebLongClickListener != null) {
+            builder.addLink(Link(WEB_REGEX)
+                    .setTextColor(Color.BLUE)
+                    .setUnderlined(false)
+                    .setOnClickListener(onWebClickListener)
+                    .setOnLongClickListener(onWebLongClickListener))
+        }
+
+        if (onMentionsClickListener != null || onMentionsLongClickListener != null) {
+            builder.addLink(Link(MENTIONS_REGEX)
+                    .setTextColor(Color.BLUE)
+                    .setUnderlined(false)
+                    .setOnClickListener(onMentionsClickListener)
+                    .setOnLongClickListener(onMentionsLongClickListener))
+        }
+
+        var result = builder.build()
 
         if (result == null) {
             result = text
