@@ -61,6 +61,8 @@ class NotificationService : IntentService(NotificationService.SERVICE_TITLE) {
         } catch (ignored: Exception) {
 
         }
+
+        NotificationHelper.retrieveNewsLater(applicationContext)
     }
 
     private fun handleActionLoadChat() {
