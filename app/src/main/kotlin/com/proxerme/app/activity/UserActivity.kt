@@ -22,8 +22,8 @@ import com.proxerme.app.R
 import com.proxerme.app.fragment.ProfileFragment
 import com.proxerme.app.fragment.ToptenFragment
 import com.proxerme.app.fragment.UserMediaListFragment
-import com.proxerme.library.connection.parameters.CategoryParameter
 import com.proxerme.library.info.ProxerUrlHolder
+import com.proxerme.library.parameters.CategoryParameter
 
 class UserActivity : AppCompatActivity() {
 

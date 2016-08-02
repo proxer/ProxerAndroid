@@ -14,11 +14,11 @@ import com.proxerme.app.adapter.ToptenAdapter
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.util.Utils
 import com.proxerme.library.connection.ProxerConnection
-import com.proxerme.library.connection.parameters.CategoryParameter
 import com.proxerme.library.connection.user.request.ToptenRequest
 import com.proxerme.library.info.ProxerTag
 import com.proxerme.library.interfaces.ProxerErrorResult
 import com.proxerme.library.interfaces.ProxerResult
+import com.proxerme.library.parameters.CategoryParameter
 
 /**
  * TODO: Describe class

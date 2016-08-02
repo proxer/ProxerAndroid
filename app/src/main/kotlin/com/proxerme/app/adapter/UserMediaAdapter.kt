@@ -12,11 +12,10 @@ import butterknife.bindView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.proxerme.app.R
-import com.proxerme.library.connection.parameters.CategoryParameter
-import com.proxerme.library.connection.parameters.CategoryParameter.Category
-import com.proxerme.library.connection.parameters.SortParameter
 import com.proxerme.library.connection.user.entitiy.UserMediaListEntry
 import com.proxerme.library.info.ProxerUrlHolder
+import com.proxerme.library.parameters.CategoryParameter
+import com.proxerme.library.parameters.UserMediaSortParameter
 import java.util.*
 import kotlin.comparisons.compareBy
 import kotlin.comparisons.compareByDescending
@@ -29,8 +28,8 @@ import kotlin.comparisons.thenByDescending
  * @author Ruben Gees
  */
 class UserMediaAdapter(savedInstanceState: Bundle?,
-                       @Category private val category: String,
-                       @SortParameter.SortCriteria var sortCriteria: String) :
+                       @CategoryParameter.Category private val category: String,
+                       @UserMediaSortParameter.UserMediaSortCriteria var sortCriteria: String) :
         RecyclerView.Adapter<UserMediaAdapter.ViewHolder>() {
 
     private companion object {
@@ -65,49 +64,33 @@ class UserMediaAdapter(savedInstanceState: Bundle?,
     }
 
     fun addItems(newItems: Collection<UserMediaListEntry>) {
-        when (sortCriteria) {
-            SortParameter.NAME_ASCENDING -> {
-                list.addAll(newItems.filter {
-                    list.binarySearch(it, compareBy({ it.name })) < 0
-                })
+        val comparator = generateComparator()
 
-                list.sortBy { it.name }
-            }
-
-            SortParameter.NAME_DESCENDING -> {
-                list.addAll(newItems.filter {
-                    list.binarySearch(it, compareByDescending { it.name }) < 0
-                })
-
-                list.sortByDescending { it.name }
-            }
-
-            SortParameter.STATE_NAME_ASCENDING -> {
-                list.addAll(newItems.filter {
-                    list.binarySearch(it, compareBy<UserMediaListEntry> { it.commentState }
-                            .thenBy { it.name }) < 0
-                })
-
-                list.sortWith(compareBy<UserMediaListEntry> { it.commentState }
-                        .thenBy { it.name })
-            }
-
-            SortParameter.STATE_NAME_DESCENDING -> {
-                list.addAll(newItems.filter {
-                    list.binarySearch(it, compareBy<UserMediaListEntry> { it.commentState }
-                            .thenByDescending { it.name }) < 0
-                })
-
-                list.sortWith(compareBy<UserMediaListEntry> { it.commentState }
-                        .thenByDescending { it.name })
-            }
-        }
+        list.addAll(newItems.filter {
+            list.binarySearch(it, comparator) < 0
+        })
+        list.sortWith(comparator)
 
         notifyDataSetChanged()
     }
 
     fun saveInstanceState(outState: Bundle) {
         outState.putParcelableArrayList(STATE_ITEMS, list)
+    }
+
+    private fun generateComparator(): Comparator<in UserMediaListEntry> {
+        return when (sortCriteria) {
+            UserMediaSortParameter.NAME_ASCENDING -> compareBy { it.name }
+            UserMediaSortParameter.NAME_DESCENDING -> compareByDescending { it.name }
+            UserMediaSortParameter.STATE_NAME_ASCENDING -> {
+                compareBy<UserMediaListEntry> { it.commentState }.thenBy { it.name }
+            }
+            UserMediaSortParameter.STATE_NAME_DESCENDING -> {
+                compareBy<UserMediaListEntry> { it.commentState }
+                        .thenByDescending { it.name }
+            }
+            else -> compareBy { it.name }
+        }
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

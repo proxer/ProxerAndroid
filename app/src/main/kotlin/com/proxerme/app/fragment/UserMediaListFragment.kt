@@ -1,7 +1,7 @@
 package com.proxerme.app.fragment
 
 import android.os.Bundle
-import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -11,10 +11,10 @@ import com.proxerme.app.adapter.UserMediaAdapter
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.util.Utils
 import com.proxerme.library.connection.ProxerConnection
-import com.proxerme.library.connection.parameters.CategoryParameter.Category
-import com.proxerme.library.connection.parameters.SortParameter
 import com.proxerme.library.connection.user.request.UserMediaListRequest
 import com.proxerme.library.info.ProxerTag
+import com.proxerme.library.parameters.CategoryParameter
+import com.proxerme.library.parameters.UserMediaSortParameter
 
 /**
  * TODO: Describe class
@@ -30,7 +30,7 @@ class UserMediaListFragment : PagingFragment() {
         private const val STATE_SORT_CRITERIA = "state_sort_criteria"
 
         fun newInstance(userId: String? = null, userName: String? = null,
-                        @Category category: String): UserMediaListFragment {
+                        @CategoryParameter.Category category: String): UserMediaListFragment {
             if (userId.isNullOrBlank() && userName.isNullOrBlank()) {
                 throw IllegalArgumentException("You must provide at least one of the arguments")
             }
@@ -50,14 +50,14 @@ class UserMediaListFragment : PagingFragment() {
     private var userId: String? = null
     private var userName: String? = null
 
-    @Category
+    @CategoryParameter.Category
     private lateinit var category: String
 
-    @SortParameter.SortCriteria
+    @UserMediaSortParameter.UserMediaSortCriteria
     private lateinit var sortCriteria: String
 
     private lateinit var adapter: UserMediaAdapter
-    override lateinit var layoutManager: GridLayoutManager
+    override lateinit var layoutManager: StaggeredGridLayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,11 +69,12 @@ class UserMediaListFragment : PagingFragment() {
         if (savedInstanceState != null) {
             sortCriteria = savedInstanceState.getString(STATE_SORT_CRITERIA)
         } else {
-            sortCriteria = SortParameter.NAME_ASCENDING
+            sortCriteria = UserMediaSortParameter.NAME_ASCENDING
         }
 
         adapter = UserMediaAdapter(savedInstanceState, category, sortCriteria)
-        layoutManager = GridLayoutManager(context, Utils.calculateSpanAmount(activity) + 1)
+        layoutManager = StaggeredGridLayoutManager(Utils.calculateSpanAmount(activity) + 1,
+                StaggeredGridLayoutManager.VERTICAL)
 
         setHasOptionsMenu(true)
     }
@@ -82,22 +83,22 @@ class UserMediaListFragment : PagingFragment() {
         inflater.inflate(R.menu.fragment_user_media_list, menu)
 
         when (sortCriteria) {
-            SortParameter.NAME_ASCENDING -> {
+            UserMediaSortParameter.NAME_ASCENDING -> {
                 menu.findItem(R.id.ascending).isChecked = true
                 menu.findItem(R.id.name).isChecked = true
             }
 
-            SortParameter.NAME_DESCENDING -> {
+            UserMediaSortParameter.NAME_DESCENDING -> {
                 menu.findItem(R.id.descending).isChecked = true
                 menu.findItem(R.id.name).isChecked = true
             }
 
-            SortParameter.STATE_NAME_ASCENDING -> {
+            UserMediaSortParameter.STATE_NAME_ASCENDING -> {
                 menu.findItem(R.id.ascending).isChecked = true
                 menu.findItem(R.id.state).isChecked = true
             }
 
-            SortParameter.STATE_NAME_DESCENDING -> {
+            UserMediaSortParameter.STATE_NAME_DESCENDING -> {
                 menu.findItem(R.id.descending).isChecked = true
                 menu.findItem(R.id.state).isChecked = true
             }
@@ -106,71 +107,50 @@ class UserMediaListFragment : PagingFragment() {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
+        val previousCriteria = sortCriteria
+        when (item.itemId) {
             R.id.ascending -> {
-                if (sortCriteria == SortParameter.NAME_DESCENDING) {
-                    sortCriteria = SortParameter.NAME_ASCENDING
-
-                    reset()
-                } else if (sortCriteria == SortParameter.STATE_NAME_DESCENDING) {
-                    sortCriteria = SortParameter.STATE_NAME_ASCENDING
-
-                    reset()
+                if (sortCriteria == UserMediaSortParameter.NAME_DESCENDING) {
+                    sortCriteria = UserMediaSortParameter.NAME_ASCENDING
+                } else if (sortCriteria == UserMediaSortParameter.STATE_NAME_DESCENDING) {
+                    sortCriteria = UserMediaSortParameter.STATE_NAME_ASCENDING
                 }
-
-                item.isChecked = true
-
-                true
             }
 
             R.id.descending -> {
-                if (sortCriteria == SortParameter.NAME_ASCENDING) {
-                    sortCriteria = SortParameter.NAME_DESCENDING
-
-                    reset()
-                } else if (sortCriteria == SortParameter.STATE_NAME_ASCENDING) {
-                    sortCriteria = SortParameter.STATE_NAME_DESCENDING
-
-                    reset()
+                if (sortCriteria == UserMediaSortParameter.NAME_ASCENDING) {
+                    sortCriteria = UserMediaSortParameter.NAME_DESCENDING
+                } else if (sortCriteria == UserMediaSortParameter.STATE_NAME_ASCENDING) {
+                    sortCriteria = UserMediaSortParameter.STATE_NAME_DESCENDING
                 }
-
-                item.isChecked = true
-
-                true
             }
 
             R.id.name -> {
-                if (sortCriteria == SortParameter.STATE_NAME_ASCENDING) {
-                    sortCriteria = SortParameter.NAME_ASCENDING
-
-                    reset()
-                } else if (sortCriteria == SortParameter.STATE_NAME_DESCENDING) {
-                    sortCriteria = SortParameter.NAME_DESCENDING
+                if (sortCriteria == UserMediaSortParameter.STATE_NAME_ASCENDING) {
+                    sortCriteria = UserMediaSortParameter.NAME_ASCENDING
+                } else if (sortCriteria == UserMediaSortParameter.STATE_NAME_DESCENDING) {
+                    sortCriteria = UserMediaSortParameter.NAME_DESCENDING
                 }
-
-                item.isChecked = true
-
-                true
             }
 
             R.id.state -> {
-                if (sortCriteria == SortParameter.NAME_ASCENDING) {
-                    sortCriteria = SortParameter.STATE_NAME_ASCENDING
-
-                    reset()
-                } else if (sortCriteria == SortParameter.NAME_DESCENDING) {
-                    sortCriteria = SortParameter.STATE_NAME_DESCENDING
+                if (sortCriteria == UserMediaSortParameter.NAME_ASCENDING) {
+                    sortCriteria = UserMediaSortParameter.STATE_NAME_ASCENDING
+                } else if (sortCriteria == UserMediaSortParameter.NAME_DESCENDING) {
+                    sortCriteria = UserMediaSortParameter.STATE_NAME_DESCENDING
                 }
-
-                item.isChecked = true
-
-                true
             }
 
-            else -> false
+            else -> return false
         }
+
+        if (previousCriteria != sortCriteria) {
+            reset()
+            item.isChecked = true
+        }
+
+        return true
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

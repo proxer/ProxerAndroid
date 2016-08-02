@@ -33,8 +33,8 @@ import com.proxerme.app.helper.StorageHelper
 import com.proxerme.app.interfaces.OnActivityListener
 import com.proxerme.app.manager.UserManager
 import com.proxerme.app.module.CustomTabsModule
-import com.proxerme.library.connection.parameters.CategoryParameter
 import com.proxerme.library.info.ProxerUrlHolder
+import com.proxerme.library.parameters.CategoryParameter
 import com.rubengees.introduction.IntroductionActivity.OPTION_RESULT
 import com.rubengees.introduction.IntroductionBuilder
 import com.rubengees.introduction.entity.Option

@@ -148,4 +148,8 @@
     <string name="action_sort_descending">Absteigend</string>
     <string name="action_sort_name">Nach Name</string>
     <string name="action_sort_state">Nach Status</string>
+    <string name="action_sort_relevance">Nach Relevanz</string>
+    <string name="action_sort_rating">Nach Bewertungen</string>
+    <string name="action_sort_clicks">Nach Zugriffen</string>
+    <string name="action_sort_count">Nach Episoden</string>
 </resources>

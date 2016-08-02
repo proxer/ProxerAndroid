@@ -13,10 +13,13 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.proxerme.app.R
 import com.proxerme.library.connection.list.entity.MediaListEntry
-import com.proxerme.library.connection.parameters.CategoryParameter.*
 import com.proxerme.library.info.ProxerUrlHolder
+import com.proxerme.library.parameters.CategoryParameter
+import com.proxerme.library.parameters.MediaSortParameter
 import java.util.*
 import kotlin.comparisons.compareBy
+import kotlin.comparisons.compareByDescending
+import kotlin.comparisons.thenByDescending
 
 /**
  * TODO: Describe class
@@ -24,7 +27,8 @@ import kotlin.comparisons.compareBy
  * @author Ruben Gees
  */
 class MediaAdapter(savedInstanceState: Bundle?,
-                   @Category private val category: String) :
+                   @CategoryParameter.Category private val category: String,
+                   @MediaSortParameter.MediaSortCriteria var sortCriteria: String) :
         RecyclerView.Adapter<MediaAdapter.ViewHolder>() {
 
     private companion object {
@@ -59,14 +63,27 @@ class MediaAdapter(savedInstanceState: Bundle?,
     }
 
     fun addItems(newItems: Collection<MediaListEntry>) {
-        list.addAll(newItems.filter { list.binarySearch(it, compareBy { it.name }) < 0 })
-        list.sortBy { it.name }
+        val comparator = generateComparator()
+
+        list.addAll(newItems.filter { list.binarySearch(it, comparator) < 0 })
+        list.sortWith(comparator)
 
         notifyDataSetChanged()
     }
 
     fun saveInstanceState(outState: Bundle) {
         outState.putParcelableArrayList(STATE_ITEMS, list)
+    }
+
+    private fun generateComparator(): Comparator<in MediaListEntry> {
+        return when (sortCriteria) {
+            MediaSortParameter.RATING -> {
+                compareByDescending<MediaListEntry> { it.rateCount }.thenByDescending { it.rating }
+            }
+            MediaSortParameter.COUNT -> compareByDescending { it.episodeCount }
+            MediaSortParameter.NAME -> compareBy { it.name }
+            else -> compareBy { it.name }
+        }
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -81,6 +98,7 @@ class MediaAdapter(savedInstanceState: Bundle?,
         private val medium: TextView by bindView(R.id.medium)
         private val image: ImageView by bindView(R.id.image)
         private val rating: RatingBar by bindView(R.id.rating)
+        private val ratingAmount: TextView by bindView(R.id.ratingAmount)
         private val genres: TextView by bindView(R.id.genres)
         private val episodes: TextView by bindView(R.id.episodes)
         private val languages: TextView by bindView(R.id.languages)
@@ -95,8 +113,11 @@ class MediaAdapter(savedInstanceState: Bundle?,
             if (entry.rating > 0) {
                 rating.visibility = View.VISIBLE
                 rating.rating = entry.rating.toFloat() / 2.0f
+                ratingAmount.visibility = View.VISIBLE
+                ratingAmount.text = "(${entry.rateCount.toString()})"
             } else {
                 rating.visibility = View.GONE
+                ratingAmount.visibility = View.GONE
             }
 
             Glide.with(image.context)
@@ -107,8 +128,8 @@ class MediaAdapter(savedInstanceState: Bundle?,
 
         private fun generateEpisodeCountDescription(count: Int): String {
             return when (category) {
-                ANIME -> "${count} Episoden"
-                MANGA -> "${count} Kapitel"
+                CategoryParameter.ANIME -> "${count} Episoden"
+                CategoryParameter.MANGA -> "${count} Kapitel"
                 else -> throw RuntimeException("Category has an illegal value")
             }
         }
