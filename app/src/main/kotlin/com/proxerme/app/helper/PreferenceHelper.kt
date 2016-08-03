@@ -12,31 +12,35 @@ import android.preference.PreferenceManager.getDefaultSharedPreferences
  */
 object PreferenceHelper {
 
+    const val PREFERENCE_HENTAI = "pref_hentai"
+    const val PREFERENCE_LICENCES = "pref_licences"
     const val PREFERENCE_NEWS_NOTIFICATIONS = "pref_news_notifications"
     const val PREFERENCE_NEWS_NOTIFICATIONS_INTERVAL = "pref_news_notifications_interval"
     const val PREFERENCE_MESSAGES_NOTIFICATIONS = "pref_messages_notifications"
     const private val DEFAULT_NEWS_NOTIFICATIONS_INTERVAL = "60"
 
-    fun areNewsNotificationsEnabled(context: Context): Boolean =
+    fun isHentaiAllowed(context: Context) =
+            getDefaultSharedPreferences(context).getBoolean(PREFERENCE_HENTAI, false)
+
+    fun areNewsNotificationsEnabled(context: Context) =
             getDefaultSharedPreferences(context).getBoolean(PREFERENCE_NEWS_NOTIFICATIONS, false)
 
     fun setNewsNotificationsEnabled(context: Context, enabled: Boolean) =
             getDefaultSharedPreferences(context).edit()
                     .putBoolean(PREFERENCE_NEWS_NOTIFICATIONS, enabled).apply()
 
-    fun getNewsUpdateInterval(context: Context): Long =
+    fun getNewsUpdateInterval(context: Context) =
             getDefaultSharedPreferences(context).getString(PREFERENCE_NEWS_NOTIFICATIONS_INTERVAL,
                     DEFAULT_NEWS_NOTIFICATIONS_INTERVAL).toLong()
 
-    fun areChatNotificationsEnabled(context: Context): Boolean {
-        val preferences = getDefaultSharedPreferences(context)
+    fun areChatNotificationsEnabled(context: Context) =
+            getDefaultSharedPreferences(context)
+                    .getBoolean(PREFERENCE_MESSAGES_NOTIFICATIONS, false)
 
-        return preferences.getBoolean(PREFERENCE_MESSAGES_NOTIFICATIONS, false)
-    }
+    fun setChatNotificationsEnabled(context: Context, enabled: Boolean) =
+            getDefaultSharedPreferences(context).edit()
+                    .putBoolean(PREFERENCE_MESSAGES_NOTIFICATIONS, enabled).apply()
 
-    fun setChatNotificationsEnabled(context: Context, enabled: Boolean) {
-        val preferences = getDefaultSharedPreferences(context)
-
-        preferences.edit().putBoolean(PREFERENCE_MESSAGES_NOTIFICATIONS, enabled).apply()
-    }
+    fun setHentaiAllowed(context: Context, isAllowed: Boolean) =
+            getDefaultSharedPreferences(context).edit().putBoolean(PREFERENCE_HENTAI, isAllowed).apply()
 }

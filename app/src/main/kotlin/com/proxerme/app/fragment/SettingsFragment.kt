@@ -2,10 +2,13 @@ package com.proxerme.app.fragment
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.preference.Preference
+import android.support.v7.preference.TwoStatePreference
 import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.LibsBuilder
 import com.proxerme.app.R
+import com.proxerme.app.dialog.HentaiConfirmationDialog
 import com.proxerme.app.helper.NotificationHelper
 import com.proxerme.app.helper.PreferenceHelper
 import com.proxerme.app.interfaces.OnActivityListener
@@ -20,7 +23,6 @@ class SettingsFragment : PreferenceFragmentCompat(), OnActivityListener,
         SharedPreferences.OnSharedPreferenceChangeListener {
 
     companion object {
-        private const val PREFERENCE_LICENCES = "pref_licences"
         private val LIBRARIES: Array<String> = arrayOf("glide", "jodatimeandroid", "bridge",
                 "hawk", "materialdialogs", "eventbus", "circleimageview",
                 "priorityjobqueue")
@@ -31,10 +33,12 @@ class SettingsFragment : PreferenceFragmentCompat(), OnActivityListener,
         }
     }
 
+    private lateinit var hentaiPreference: TwoStatePreference
+
     override fun onCreatePreferencesFix(bundle: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences)
 
-        findPreference(PREFERENCE_LICENCES).onPreferenceClickListener =
+        findPreference(PreferenceHelper.PREFERENCE_LICENCES).onPreferenceClickListener =
                 Preference.OnPreferenceClickListener {
                     LibsBuilder().withAboutVersionShownName(true)
                             .withAboutDescription(getString(R.string.about_description))
@@ -50,6 +54,17 @@ class SettingsFragment : PreferenceFragmentCompat(), OnActivityListener,
 
                     true
                 }
+
+        hentaiPreference = findPreference(PreferenceHelper.PREFERENCE_HENTAI) as TwoStatePreference
+        hentaiPreference.setOnPreferenceClickListener { preference ->
+            if ((hentaiPreference).isChecked) {
+                hentaiPreference.isChecked = false
+
+                HentaiConfirmationDialog.show(activity as AppCompatActivity)
+            }
+
+            true
+        }
     }
 
     override fun onBackPressed() = false
@@ -78,6 +93,12 @@ class SettingsFragment : PreferenceFragmentCompat(), OnActivityListener,
 
             PreferenceHelper.PREFERENCE_NEWS_NOTIFICATIONS_INTERVAL -> {
                 NotificationHelper.retrieveNewsLater(context)
+            }
+
+            PreferenceHelper.PREFERENCE_HENTAI -> {
+                if (PreferenceHelper.isHentaiAllowed(context)) {
+                    hentaiPreference.isChecked = true
+                }
             }
         }
     }

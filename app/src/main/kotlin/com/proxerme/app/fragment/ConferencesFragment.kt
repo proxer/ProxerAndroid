@@ -147,8 +147,11 @@ class ConferencesFragment : PagingFragment() {
                 if (number == firstPage) {
                     StorageHelper.lastMessageTime = result.item.first().time
                     StorageHelper.newMessages = 0
-                    StorageHelper.resetMessagesInterval()
-                    NotificationHelper.retrieveChatLater(context)
+
+                    if (context != null) {
+                        StorageHelper.resetMessagesInterval()
+                        NotificationHelper.retrieveChatLater(context)
+                    }
                 }
             }
 

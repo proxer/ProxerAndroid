@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="Allgemein">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_hentai"
+            android:persistent="true"
+            android:summaryOff="Hentai wird nicht angezeigt"
+            android:summaryOn="Hentai wird angezeigt"
+            android:title="Hentai" />
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="@string/preference_category_notifications_title">
         <CheckBoxPreference
             android:key="pref_news_notifications"
