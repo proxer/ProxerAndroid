@@ -15,12 +15,10 @@ buildscript {
 
 allprojects {
     repositories {
-        maven { url "https://jitpack.io" }
-        jcenter()
         mavenCentral()
-        maven {
-            url "https://oss.sonatype.org/content/repositories/snapshots"
-        }
+        jcenter()
+        maven { url "https://jitpack.io" }
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
     }
 }
 

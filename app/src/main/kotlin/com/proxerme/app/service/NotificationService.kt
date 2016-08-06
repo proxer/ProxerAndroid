@@ -4,12 +4,14 @@ import android.app.IntentService
 import android.content.Context
 import android.content.Intent
 import android.support.annotation.StringDef
+import com.proxerme.app.event.NewsEvent
 import com.proxerme.app.helper.NotificationHelper
 import com.proxerme.app.helper.StorageHelper
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.manager.UserManager
 import com.proxerme.library.connection.experimental.chat.request.ConferencesRequest
 import com.proxerme.library.connection.notifications.request.NewsRequest
+import org.greenrobot.eventbus.EventBus
 
 /**
  * An IntentService, which retrieves the News and shows a notification if there are unread
@@ -33,8 +35,7 @@ class NotificationService : IntentService(NotificationService.SERVICE_TITLE) {
 
     override fun onHandleIntent(intent: Intent?) {
         intent?.run {
-            if (ACTION_LOAD_NEWS == action &&
-                    SectionManager.currentSection !== SectionManager.Section.NEWS) {
+            if (ACTION_LOAD_NEWS == action) {
                 handleActionLoadNews()
             } else if (ACTION_LOAD_CHAT == action &&
                     SectionManager.currentSection !== SectionManager.Section.CONFERENCES
@@ -54,8 +55,12 @@ class NotificationService : IntentService(NotificationService.SERVICE_TITLE) {
                 }
 
                 if (result.size > StorageHelper.newNews) {
-                    NotificationHelper.showNewsNotification(this, result)
-                    StorageHelper.newNews = result.size
+                    if (SectionManager.currentSection == SectionManager.Section.NEWS) {
+                        EventBus.getDefault().post(NewsEvent(result))
+                    } else {
+                        NotificationHelper.showNewsNotification(this, result)
+                        StorageHelper.newNews = result.size
+                    }
                 }
             }
         } catch (ignored: Exception) {
