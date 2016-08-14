@@ -1,4 +1,4 @@
-# ProxerMe
+# ProxerMe [![Latest Release](https://img.shields.io/github/release/proxer/ProxerAndroid.svg)](https://github.com/proxer/ProxerAndroid/releases/latest) [![Build status](https://circleci.com/gh/proxer/ProxerAndroid.svg?style=shield)](https://circleci.com/gh/proxer/ProxerAndroid)
 
 ### What is this?
 
