@@ -16,7 +16,6 @@ object PreferenceHelper {
     const val PREFERENCE_LICENCES = "pref_licences"
     const val PREFERENCE_NEWS_NOTIFICATIONS = "pref_news_notifications"
     const val PREFERENCE_NEWS_NOTIFICATIONS_INTERVAL = "pref_news_notifications_interval"
-    const val PREFERENCE_MESSAGES_NOTIFICATIONS = "pref_messages_notifications"
     const private val DEFAULT_NEWS_NOTIFICATIONS_INTERVAL = "60"
 
     fun isHentaiAllowed(context: Context) =
@@ -32,14 +31,6 @@ object PreferenceHelper {
     fun getNewsUpdateInterval(context: Context) =
             getDefaultSharedPreferences(context).getString(PREFERENCE_NEWS_NOTIFICATIONS_INTERVAL,
                     DEFAULT_NEWS_NOTIFICATIONS_INTERVAL).toLong()
-
-    fun areChatNotificationsEnabled(context: Context) =
-            getDefaultSharedPreferences(context)
-                    .getBoolean(PREFERENCE_MESSAGES_NOTIFICATIONS, false)
-
-    fun setChatNotificationsEnabled(context: Context, enabled: Boolean) =
-            getDefaultSharedPreferences(context).edit()
-                    .putBoolean(PREFERENCE_MESSAGES_NOTIFICATIONS, enabled).apply()
 
     fun setHentaiAllowed(context: Context, isAllowed: Boolean) =
             getDefaultSharedPreferences(context).edit().putBoolean(PREFERENCE_HENTAI, isAllowed).apply()

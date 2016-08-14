@@ -1,6 +1,5 @@
 package com.proxerme.app.adapter
 
-import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +13,7 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
 import com.proxerme.app.util.TimeUtil
-import com.proxerme.library.connection.experimental.chat.entity.Conference
+import com.proxerme.library.connection.messenger.entity.Conference
 import com.proxerme.library.info.ProxerUrlHolder
 import java.util.*
 
@@ -23,7 +22,7 @@ import java.util.*
 
  * @author Ruben Gees
  */
-class ConferenceAdapter : RecyclerView.Adapter<ConferenceAdapter.ViewHolder> {
+class ConferenceAdapter : RecyclerView.Adapter<ConferenceAdapter.ViewHolder>() {
 
     private companion object {
         const val STATE_ITEMS = "adapter_conferences_state_items"
@@ -32,12 +31,8 @@ class ConferenceAdapter : RecyclerView.Adapter<ConferenceAdapter.ViewHolder> {
     private val list = ArrayList<Conference>()
     var callback: OnConferenceInteractionListener? = null
 
-    constructor(savedInstanceState: Bundle?) : super() {
+    init {
         setHasStableIds(true)
-
-        savedInstanceState?.let {
-            list.addAll(it.getParcelableArrayList(STATE_ITEMS))
-        }
     }
 
     override fun getItemCount(): Int = list.count()
@@ -51,18 +46,9 @@ class ConferenceAdapter : RecyclerView.Adapter<ConferenceAdapter.ViewHolder> {
 
     override fun getItemId(position: Int): Long = list[position].id.toLong()
 
-    fun addItems(newItems: Collection<Conference>) {
-        newItems.forEach { newConference ->
-            val index = list.indexOfFirst { oldConference -> oldConference.id == newConference.id }
-
-            if (index >= 0) {
-                list.removeAt(index)
-            }
-
-            list.add(newConference)
-        }
-
-        list.sortByDescending { it.time }
+    fun replace(newItems: Collection<Conference>) {
+        list.clear()
+        list.addAll(newItems)
 
         notifyDataSetChanged()
     }
@@ -71,10 +57,6 @@ class ConferenceAdapter : RecyclerView.Adapter<ConferenceAdapter.ViewHolder> {
         list.clear()
 
         notifyDataSetChanged()
-    }
-
-    fun saveInstanceState(outState: Bundle) {
-        outState.putParcelableArrayList(STATE_ITEMS, list)
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -130,7 +112,7 @@ class ConferenceAdapter : RecyclerView.Adapter<ConferenceAdapter.ViewHolder> {
                         .paddingDp(16)
                         .colorRes(R.color.colorPrimary)
 
-                if (conference.isConference) {
+                if (conference.isGroup) {
                     icon.icon(CommunityMaterial.Icon.cmd_account_multiple)
                 } else {
                     icon.icon(CommunityMaterial.Icon.cmd_account)

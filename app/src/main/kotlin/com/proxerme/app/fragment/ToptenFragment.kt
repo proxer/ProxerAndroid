@@ -99,7 +99,7 @@ class ToptenFragment : LoadingFragment() {
     }
 
     override fun cancel() {
-        ProxerConnection.cancel(ProxerTag.TOPTEN)
+        ProxerConnection.cancel(ProxerTag.USER_TOPTEN)
     }
 
     override fun load(showProgress: Boolean) {

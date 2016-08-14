@@ -16,11 +16,6 @@
             android:summaryOff="@string/preference_notifications_summary_off"
             android:summaryOn="@string/preference_notifications_summary_on"
             android:title="@string/preference_news_notifications_title" />
-        <CheckBoxPreference
-            android:key="pref_messages_notifications"
-            android:summaryOff="@string/preference_notifications_summary_off"
-            android:summaryOn="@string/preference_notifications_summary_on"
-            android:title="@string/preference_messages_notifications_title" />
         <ListPreference
             android:defaultValue="60"
             android:dependency="pref_news_notifications"

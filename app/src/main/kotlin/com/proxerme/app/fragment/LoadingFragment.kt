@@ -15,7 +15,6 @@ import butterknife.bindView
 import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.TouchableMovementMethod
 import com.proxerme.app.R
-import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.util.ErrorHandler
 import com.proxerme.app.util.Utils
 import com.proxerme.library.interfaces.ProxerErrorResult
@@ -49,8 +48,6 @@ abstract class LoadingFragment : MainFragment() {
     open protected val loadAlways = false
     open protected val parallelLoads = 1
 
-    abstract val section: SectionManager.Section
-
     protected val refreshLayout: SwipeRefreshLayout by bindView(R.id.refreshLayout)
     abstract protected val errorContainer: ViewGroup
     abstract protected val errorText: TextView
@@ -69,8 +66,6 @@ abstract class LoadingFragment : MainFragment() {
     override fun onResume() {
         super.onResume()
 
-        SectionManager.currentSection = section
-
         if (currentError != null) {
             currentError?.run { showError(this) }
         } else if ((isLoading || isFirstLoad) && canLoad) {
@@ -78,12 +73,6 @@ abstract class LoadingFragment : MainFragment() {
         } else if (loadAlways && canLoad) {
             load(false)
         }
-    }
-
-    override fun onPause() {
-        super.onPause()
-
-        SectionManager.currentSection = SectionManager.Section.NONE
     }
 
     override fun onDestroy() {

@@ -102,7 +102,7 @@ class ProfileFragment : LoadingFragment() {
     }
 
     override fun cancel() {
-        ProxerConnection.cancel(ProxerTag.USERINFO)
+        ProxerConnection.cancel(ProxerTag.USER_INFO)
     }
 
     override fun load(showProgress: Boolean) {

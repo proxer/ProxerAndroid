@@ -101,9 +101,13 @@
     </plurals>
 
     <string name="notification_chat_title">Neue Nachrichten</string>
-    <plurals name="notification_chat_amount">
-        <item quantity="one">Nachrichten in einem Chat</item>
-        <item quantity="other">Nachrichten in %d Chats</item>
+    <plurals name="notification_chat_message_amount">
+        <item quantity="one">Eine Nachricht</item>
+        <item quantity="other">%d Nachrichten</item>
+    </plurals>
+    <plurals name="notification_chat_conference_amount">
+        <item quantity="one">in einem Chat"</item>
+        <item quantity="other">in %d Chats</item>
     </plurals>
 
     <string name="fragment_chat_message">Tippe eine Nachricht</string>

@@ -8,8 +8,6 @@ import com.proxerme.app.event.NewsEvent
 import com.proxerme.app.helper.NotificationHelper
 import com.proxerme.app.helper.StorageHelper
 import com.proxerme.app.manager.SectionManager
-import com.proxerme.app.manager.UserManager
-import com.proxerme.library.connection.experimental.chat.request.ConferencesRequest
 import com.proxerme.library.connection.notifications.request.NewsRequest
 import org.greenrobot.eventbus.EventBus
 
@@ -22,9 +20,7 @@ import org.greenrobot.eventbus.EventBus
 class NotificationService : IntentService(NotificationService.SERVICE_TITLE) {
 
     companion object {
-
         const val ACTION_LOAD_NEWS = "com.proxerme.app.service.action.LOAD_NEWS"
-        const val ACTION_LOAD_CHAT = "com.proxerme.app.service.action.LOAD_CHAT"
         private const val SERVICE_TITLE = "Notification Service"
 
         fun load(context: Context, @NotificationAction action: String) {
@@ -37,10 +33,6 @@ class NotificationService : IntentService(NotificationService.SERVICE_TITLE) {
         intent?.run {
             if (ACTION_LOAD_NEWS == action) {
                 handleActionLoadNews()
-            } else if (ACTION_LOAD_CHAT == action &&
-                    SectionManager.currentSection !== SectionManager.Section.CONFERENCES
-                    && SectionManager.currentSection !== SectionManager.Section.CHAT) {
-                handleActionLoadChat()
             }
         }
     }
@@ -66,36 +58,10 @@ class NotificationService : IntentService(NotificationService.SERVICE_TITLE) {
         } catch (ignored: Exception) {
 
         }
-
-        NotificationHelper.retrieveNewsLater(applicationContext)
-    }
-
-    private fun handleActionLoadChat() {
-        try {
-            val lastTime = StorageHelper.lastMessageTime
-
-            if (lastTime != null) {
-                UserManager.reLoginSync()
-
-                val result = ConferencesRequest(1).executeSynchronized().item.filter {
-                    it.time > lastTime && !it.isRead
-                }
-
-                if (result.size > StorageHelper.newMessages) {
-                    NotificationHelper.showChatNotification(this, result)
-                    StorageHelper.newMessages = result.size
-                }
-            }
-        } catch (ignored: Exception) {
-
-        }
-
-        StorageHelper.incrementChatInterval()
-        NotificationHelper.retrieveChatLater(applicationContext)
     }
 
     @Retention(AnnotationRetention.SOURCE)
-    @StringDef(ACTION_LOAD_NEWS, ACTION_LOAD_CHAT)
+    @StringDef(ACTION_LOAD_NEWS)
     annotation class NotificationAction
 
 }

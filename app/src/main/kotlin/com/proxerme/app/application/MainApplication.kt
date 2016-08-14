@@ -5,8 +5,6 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.widget.ImageView
-import com.birbit.android.jobqueue.JobManager
-import com.birbit.android.jobqueue.config.Configuration
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
@@ -15,11 +13,14 @@ import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import com.orhanobut.hawk.Hawk
 import com.orhanobut.hawk.HawkBuilder
 import com.proxerme.app.BuildConfig
+import com.proxerme.app.manager.UserManager
+import com.proxerme.app.service.ChatService
 import com.proxerme.library.connection.ProxerConnection
 import com.proxerme.library.info.ProxerUrlHolder
 import com.proxerme.library.util.PersistentCookieStore
 import net.danlew.android.joda.JodaTimeAndroid
 import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 import java.net.CookieHandler
 import java.net.CookieManager
 import java.net.CookiePolicy
@@ -30,10 +31,6 @@ import java.net.CookiePolicy
  * @author Ruben Gees
  */
 class MainApplication : Application() {
-
-    companion object {
-        lateinit var jobManager: JobManager
-    }
 
     override fun onCreate() {
         super.onCreate()
@@ -72,12 +69,24 @@ class MainApplication : Application() {
             }
         })
 
-        jobManager = JobManager(Configuration.Builder(this).build())
-
         ProxerConnection.init(BuildConfig.PROXER_API_KEY)
         CookieHandler.setDefault(CookieManager(PersistentCookieStore(this),
                 CookiePolicy { uri, httpCookie ->
                     uri.scheme + "://" + uri.host == ProxerUrlHolder.getHost()
                 }))
+
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onTerminate() {
+        EventBus.getDefault().unregister(this)
+        ProxerConnection.cleanup()
+
+        super.onTerminate()
+    }
+
+    @Subscribe
+    fun onLoginStateChanged(state: UserManager.LoginState) {
+        ChatService.synchronize(this)
     }
 }

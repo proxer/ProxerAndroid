@@ -25,10 +25,7 @@ abstract class PagingFragment : LoadingFragment() {
         const val STATE_END_REACHED = "fragment_paging_state_end_reached"
     }
 
-    open protected val firstPage: Int
-        get() = 0
-
-    protected var nextPageToLoad = firstPage
+    protected var nextPageToLoad = 0
     protected var endReached = false
 
     abstract protected val layoutManager: RecyclerView.LayoutManager
@@ -53,7 +50,7 @@ abstract class PagingFragment : LoadingFragment() {
         list.addOnScrollListener(object :
                 EndlessRecyclerOnScrollListener(layoutManager) {
             override fun onLoadMore() {
-                if (!isLoading && !endReached && canLoad) {
+                if (!isLoading && !endReached && canLoad && currentError == null) {
                     notifyLoadStarted(false)
                     loadPage(nextPageToLoad)
                 }
@@ -71,7 +68,7 @@ abstract class PagingFragment : LoadingFragment() {
     override fun load(showProgress: Boolean) {
         super.load(showProgress)
 
-        loadPage(firstPage)
+        loadPage(0)
     }
 
     override fun inflateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -98,13 +95,13 @@ abstract class PagingFragment : LoadingFragment() {
 
     open protected fun notifyPagedLoadFinishedWithError(page: Int, result: ProxerErrorResult) {
         endReached = false
-        nextPageToLoad = firstPage
+        nextPageToLoad = 0
 
         notifyLoadFinishedWithError(result)
     }
 
     override fun reset() {
-        nextPageToLoad = firstPage
+        nextPageToLoad = 0
         endReached = false
         clear()
 

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
 import android.widget.ImageView
+import com.afollestad.bridge.Request
 import com.proxerme.app.activity.DashboardActivity
 import com.proxerme.app.activity.ImageDetailActivity
 import com.proxerme.app.adapter.NewsAdapter
@@ -12,10 +13,8 @@ import com.proxerme.app.helper.NotificationHelper
 import com.proxerme.app.helper.StorageHelper
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.util.Utils
-import com.proxerme.library.connection.ProxerConnection
 import com.proxerme.library.connection.notifications.entitiy.News
 import com.proxerme.library.connection.notifications.request.NewsRequest
-import com.proxerme.library.info.ProxerTag
 import com.proxerme.library.info.ProxerUrlHolder
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -38,6 +37,8 @@ class NewsFragment : PagingFragment() {
     lateinit private var adapter: NewsAdapter
 
     override val section: SectionManager.Section = SectionManager.Section.NEWS
+
+    private var request: Request? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,11 +95,11 @@ class NewsFragment : PagingFragment() {
     }
 
     override fun loadPage(number: Int) {
-        NewsRequest(number).execute({ result ->
+        request = NewsRequest(number).execute({ result ->
             if (result.item.isNotEmpty()) {
                 adapter.addItems(result.item.asList())
 
-                if (number == firstPage) {
+                if (number == 0) {
                     StorageHelper.lastNewsTime = result.item.first().time
                     StorageHelper.newNews = 0
                 }
@@ -111,7 +112,7 @@ class NewsFragment : PagingFragment() {
     }
 
     override fun cancel() {
-        ProxerConnection.cancel(ProxerTag.NEWS)
+        request?.cancel()
     }
 
     override fun clear() {

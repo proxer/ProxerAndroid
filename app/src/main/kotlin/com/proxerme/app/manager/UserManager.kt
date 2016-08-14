@@ -1,7 +1,7 @@
 package com.proxerme.app.manager
 
+import com.afollestad.bridge.Request
 import com.proxerme.app.helper.StorageHelper
-import com.proxerme.library.connection.ProxerConnection
 import com.proxerme.library.connection.ProxerException
 import com.proxerme.library.connection.user.entitiy.User
 import com.proxerme.library.connection.user.request.LoginRequest
@@ -9,10 +9,10 @@ import com.proxerme.library.connection.user.request.LogoutRequest
 import com.proxerme.library.connection.user.request.UserInfoRequest
 import com.proxerme.library.connection.user.result.LoginResult
 import com.proxerme.library.connection.user.result.LogoutResult
-import com.proxerme.library.info.ProxerTag
 import com.proxerme.library.interfaces.ProxerErrorResult
 import org.greenrobot.eventbus.EventBus
 import org.joda.time.DateTime
+import java.util.*
 import kotlin.properties.Delegates
 
 /**
@@ -28,12 +28,16 @@ object UserManager {
         private set
 
     var loginState: LoginState by Delegates.observable(LoginState.LOGGED_OUT, { property, old, new ->
-        EventBus.getDefault().post(new)
+        if (new != old) {
+            EventBus.getDefault().post(new)
+        }
     })
         private set
 
     var ongoingState: OngoingState by Delegates.observable(OngoingState.NONE, { property, old, new ->
-        EventBus.getDefault().post(new)
+        if (new != old) {
+            EventBus.getDefault().post(new)
+        }
     })
         private set
 
@@ -49,6 +53,8 @@ object UserManager {
         SAVE, DONT_SAVE, SAME_AS_IS
     }
 
+    val requests: MutableList<Request> = Collections.synchronizedList(ArrayList<Request>())
+
     fun login(user: User, shouldSave: SaveOption, callback: ((LoginResult) -> Unit)? = null,
               errorCallback: ((ProxerErrorResult) -> Unit)? = null) {
         if (ongoingState != OngoingState.LOGGING_IN) {
@@ -56,27 +62,35 @@ object UserManager {
 
             cancel()
 
-            LoginRequest(user).execute({ result ->
+            requests.add(LoginRequest(user).execute({ result ->
+                requests.clear()
+
                 doLogin(result.item, shouldSave)
                 callback?.invoke(result)
             }, { result ->
                 if (result.item.errorCode == ProxerException.PROXER &&
-                        result.item.proxerErrorCode ==
-                                ProxerException.LOGIN_ALREADY_LOGGED_IN) {
-                    UserInfoRequest(null, user.username).execute({ userInfoResult ->
-                        val newUser = User(user.username, user.password, userInfoResult.item.id,
-                                userInfoResult.item.imageId)
+                        result.item.proxerErrorCode == ProxerException.LOGIN_ALREADY_LOGGED_IN) {
+                    requests.add(UserInfoRequest(null, user.username).execute({ userInfoResult ->
+                        requests.clear()
+
+                        val newUser = User(user.username, user.password,
+                                userInfoResult.item.id, userInfoResult.item.imageId)
 
                         doLogin(newUser, shouldSave)
                         callback?.invoke(LoginResult(newUser))
                     }, { userInfoResult ->
+                        requests.clear()
+                        doLogout()
+
                         errorCallback?.invoke(userInfoResult)
-                    })
+                    }))
                 } else {
+                    requests.clear()
                     doLogout()
+
                     errorCallback?.invoke(result)
                 }
-            })
+            }))
         }
     }
 
@@ -91,8 +105,12 @@ object UserManager {
 
                 user?.run {
                     LoginRequest(this).execute({ result ->
+                        requests.clear()
+
                         doLogin(result.item, SaveOption.SAME_AS_IS)
                     }, { result ->
+                        requests.clear()
+
                         if (result.item.errorCode == ProxerException.PROXER &&
                                 result.item.proxerErrorCode ==
                                         ProxerException.LOGIN_ALREADY_LOGGED_IN) {
@@ -110,6 +128,7 @@ object UserManager {
     }
 
     @Throws(ProxerException::class)
+    @Synchronized
     fun reLoginSync() {
         if (user == null) {
             throw RuntimeException("No user available")
@@ -130,14 +149,14 @@ object UserManager {
                     doLogin(LoginRequest(this).executeSynchronized().item,
                             SaveOption.SAME_AS_IS)
                 } catch (exception: ProxerException) {
-                    if (exception.errorCode == ProxerException.PROXER &&
-                            exception.proxerErrorCode ==
-                                    ProxerException.LOGIN_ALREADY_LOGGED_IN) {
-                        doLogin(this, SaveOption.SAME_AS_IS)
+                    if (exception.errorCode == ProxerException.PROXER) {
+                        if (exception.proxerErrorCode == ProxerException.LOGIN_ALREADY_LOGGED_IN) {
+                            doLogin(this, SaveOption.SAME_AS_IS)
+                        } else {
+                            doLogout()
+                        }
                     } else {
                         doLogout()
-
-                        throw exception
                     }
                 }
             }
@@ -154,14 +173,16 @@ object UserManager {
 
             cancel()
 
-            LogoutRequest().execute({ result ->
+            requests.add(LogoutRequest().execute({ result ->
+                requests.clear()
+
+                removeUser()
                 doLogout()
                 callback?.invoke(result)
             }, { result ->
-                removeUser()
                 ongoingState = OngoingState.NONE
                 errorCallback?.invoke(result)
-            })
+            }))
         }
     }
 
@@ -174,16 +195,17 @@ object UserManager {
     }
 
     private fun doLogout() {
-        removeUser()
-
         loginState = LoginState.LOGGED_OUT
         ongoingState = OngoingState.NONE
         StorageHelper.lastLoginTime = -1L
     }
 
     fun cancel() {
-        ProxerConnection.cancel(ProxerTag.LOGOUT)
-        ProxerConnection.cancel(ProxerTag.LOGIN)
+        requests.forEach {
+            it.cancel()
+        }
+
+        requests.clear()
     }
 
     private fun removeUser() {

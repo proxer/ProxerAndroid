@@ -10,7 +10,7 @@ import android.view.MenuItem
 import butterknife.bindView
 import com.proxerme.app.R
 import com.proxerme.app.fragment.ChatFragment
-import com.proxerme.library.connection.experimental.chat.entity.Conference
+import com.proxerme.library.connection.messenger.entity.Conference
 
 class ChatActivity : AppCompatActivity() {
 

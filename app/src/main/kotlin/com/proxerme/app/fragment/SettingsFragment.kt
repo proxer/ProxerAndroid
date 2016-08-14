@@ -9,8 +9,8 @@ import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.LibsBuilder
 import com.proxerme.app.R
 import com.proxerme.app.dialog.HentaiConfirmationDialog
-import com.proxerme.app.helper.NotificationHelper
 import com.proxerme.app.helper.PreferenceHelper
+import com.proxerme.app.helper.ServiceHelper
 import com.proxerme.app.interfaces.OnActivityListener
 import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat
 
@@ -84,15 +84,11 @@ class SettingsFragment : PreferenceFragmentCompat(), OnActivityListener,
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         when (key) {
             PreferenceHelper.PREFERENCE_NEWS_NOTIFICATIONS -> {
-                NotificationHelper.retrieveNewsLater(context)
-            }
-
-            PreferenceHelper.PREFERENCE_MESSAGES_NOTIFICATIONS -> {
-                NotificationHelper.retrieveChatLater(context)
+                ServiceHelper.retrieveNewsLater(context)
             }
 
             PreferenceHelper.PREFERENCE_NEWS_NOTIFICATIONS_INTERVAL -> {
-                NotificationHelper.retrieveNewsLater(context)
+                ServiceHelper.retrieveNewsLater(context)
             }
 
             PreferenceHelper.PREFERENCE_HENTAI -> {

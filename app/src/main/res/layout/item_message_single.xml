@@ -26,29 +26,14 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/title"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/image"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_margin="8dp"
-                    android:transitionName="image"
-                    tools:targetApi="lollipop" />
-
-                <TextView
-                    android:id="@+id/title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_margin="8dp"
-                    android:textAppearance="@android:style/TextAppearance.Large"
-                    tools:text="Rubyderboss" />
-
-            </LinearLayout>
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="8dp"
+                android:textAppearance="@android:style/TextAppearance.Large"
+                tools:text="Rubyderboss" />
 
             <com.klinker.android.link_builder.LinkConsumableTextView
                 android:id="@+id/text"

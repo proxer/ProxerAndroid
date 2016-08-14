@@ -10,31 +10,25 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import butterknife.bindView
-import com.bumptech.glide.Glide
 import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.LinkConsumableTextView
 import com.klinker.android.link_builder.TouchableMovementMethod
-import com.mikepenz.community_material_typeface_library.CommunityMaterial
-import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
 import com.proxerme.app.util.TimeUtil
 import com.proxerme.app.util.Utils
-import com.proxerme.library.connection.experimental.chat.entity.Message
+import com.proxerme.library.connection.messenger.entity.Message
 import com.proxerme.library.connection.user.entitiy.User
-import com.proxerme.library.info.ProxerUrlHolder
-import de.hdodenhof.circleimageview.CircleImageView
 import java.util.*
-import kotlin.comparisons.compareByDescending
 
 /**
  * TODO: Describe class
 
  * @author Ruben Gees
  */
-class ChatAdapter : RecyclerView.Adapter<ChatAdapter.MessageViewHolder> {
+class ChatAdapter(savedInstanceState: Bundle?) :
+        RecyclerView.Adapter<ChatAdapter.MessageViewHolder>() {
 
     private companion object {
-        const val STATE_ITEMS = "adapter_chat_state_items"
         const val STATE_MESSAGE_SELECTED_IDS = "message_selected_ids"
         const val STATE_MESSAGE_SELECTING = "message_selecting"
         const val STATE_MESSAGE_SHOWING_TIME_IDS = "message_showing_time_ids"
@@ -52,29 +46,21 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.MessageViewHolder> {
 
     var user: User? = null
 
-    private val list: ArrayList<Message>
-    private val selectedMap: HashMap<String, Boolean>
-    private val showingTimeMap: HashMap<String, Boolean>
+    private val list = ArrayList<Message>()
+    private val selectedMap = HashMap<String, Boolean>()
+    private val showingTimeMap = HashMap<String, Boolean>()
 
     private var selecting = false
 
     var callback: OnMessageInteractionListener? = null
 
-    constructor(savedInstanceState: Bundle?) {
+    init {
         setHasStableIds(true)
-
-        this.list = ArrayList<Message>()
-
-        savedInstanceState?.let {
-            list.addAll(it.getParcelableArrayList(STATE_ITEMS))
-        }
 
         val selectedIds = savedInstanceState?.getStringArrayList(STATE_MESSAGE_SELECTED_IDS)
         val showingTimeIds = savedInstanceState?.getStringArrayList(STATE_MESSAGE_SHOWING_TIME_IDS)
 
         this.selecting = savedInstanceState?.getBoolean(STATE_MESSAGE_SELECTING) ?: false
-        this.selectedMap = HashMap<String, Boolean>()
-        this.showingTimeMap = HashMap<String, Boolean>()
 
         selectedIds?.associateByTo(this.selectedMap, { it }, { true })
         showingTimeIds?.associateByTo(this.showingTimeMap, { it }, { true })
@@ -169,27 +155,27 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.MessageViewHolder> {
                 if (position + 1 >= itemCount) {
                     result = TYPE_MESSAGE_SINGLE // The item is the only one
                 } else {
-                    if (list[position + 1].fromId == current.fromId && list[position + 1].action.isBlank()) {
+                    if (list[position + 1].userId == current.userId && list[position + 1].action.isBlank()) {
                         result = TYPE_MESSAGE_BOTTOM // The item is the bottommost item and has an item from the same user above
                     } else {
                         result = TYPE_MESSAGE_SINGLE // The item is the bottommost item and doesn't have an item from the same user above
                     }
                 }
             } else if (position + 1 >= itemCount) {
-                if (list[position - 1].fromId == current.fromId && list[position - 1].action.isBlank()) {
+                if (list[position - 1].userId == current.userId && list[position - 1].action.isBlank()) {
                     result = TYPE_MESSAGE_TOP // The item is the topmost item and has an item from the same user beneath
                 } else {
                     result = TYPE_MESSAGE_SINGLE // The item is the topmost item and doesn't have an item from the same user beneath
                 }
             } else {
-                if (list[position - 1].fromId == current.fromId && list[position - 1].action.isBlank()) {
-                    if (list[position + 1].fromId == current.fromId && list[position + 1].action.isBlank()) {
+                if (list[position - 1].userId == current.userId && list[position - 1].action.isBlank()) {
+                    if (list[position + 1].userId == current.userId && list[position + 1].action.isBlank()) {
                         result = TYPE_MESSAGE_INNER // The item is in between two other items from the same user
                     } else {
                         result = TYPE_MESSAGE_TOP // The item has an item from the same user beneath but not above
                     }
                 } else {
-                    if (list[position + 1].fromId == current.fromId && list[position + 1].action.isBlank()) {
+                    if (list[position + 1].userId == current.userId && list[position + 1].action.isBlank()) {
                         result = TYPE_MESSAGE_BOTTOM // The item has an item from the same user above but not beneath
                     } else {
                         result = TYPE_MESSAGE_SINGLE  // The item stands alone
@@ -197,7 +183,7 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.MessageViewHolder> {
                 }
             }
 
-            if (current.fromId == user?.id) {
+            if (current.userId == user?.id) {
                 result += 4 // Make the item a "self" item
             }
         }
@@ -205,15 +191,14 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.MessageViewHolder> {
         return result
     }
 
-    fun addItems(newItems: Collection<Message>) {
-        list.addAll(newItems.filter { list.binarySearch(it, compareByDescending { it.time }) < 0 })
-        list.sortByDescending { it.time }
+    fun replace(newItems: Collection<Message>) {
+        list.clear()
+        list.addAll(newItems)
 
         notifyDataSetChanged()
     }
 
     fun saveInstanceState(outState: Bundle) {
-        outState.putParcelableArrayList(STATE_ITEMS, list)
         outState.putBoolean(STATE_MESSAGE_SELECTING, selecting)
         outState.putStringArrayList(STATE_MESSAGE_SELECTED_IDS,
                 ArrayList(selectedMap.keys))
@@ -247,10 +232,6 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.MessageViewHolder> {
         get() = list.filter { selectedMap.containsKey(it.id) }.sortedBy { it.time }
 
     abstract class OnMessageInteractionListener {
-        open fun onMessageImageClick(v: View, message: Message) {
-
-        }
-
         open fun onMessageTitleClick(v: View, message: Message) {
 
         }
@@ -367,16 +348,9 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.MessageViewHolder> {
 
     inner class MessageImageTitleViewHolder(itemView: View) : MessageViewHolder(itemView) {
 
-        private val image: CircleImageView by bindView(R.id.image)
         private val title: TextView by bindView(R.id.title)
 
         init {
-            image.setOnClickListener {
-                if (adapterPosition != RecyclerView.NO_POSITION) {
-                    callback?.onMessageImageClick(it, list[adapterPosition])
-                }
-            }
-
             title.setOnClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     callback?.onMessageTitleClick(it, list[adapterPosition])
@@ -388,18 +362,6 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.MessageViewHolder> {
             super.bind(message, marginTop, marginBottom)
 
             title.text = message.username
-
-            if (message.imageId.isBlank()) {
-                image.setImageDrawable(IconicsDrawable(image.context)
-                        .icon(CommunityMaterial.Icon.cmd_account)
-                        .sizeDp(32)
-                        .paddingDp(4)
-                        .colorRes(R.color.colorPrimary))
-            } else {
-                Glide.with(image.context)
-                        .load(ProxerUrlHolder.getUserImageUrl(message.imageId))
-                        .into(image)
-            }
         }
     }
 

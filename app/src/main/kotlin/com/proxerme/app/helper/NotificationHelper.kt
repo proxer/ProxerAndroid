@@ -1,28 +1,28 @@
 package com.proxerme.app.helper
 
-import android.app.AlarmManager
 import android.app.Notification
 import android.app.PendingIntent
-import android.content.ComponentName
 import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.os.SystemClock
+import android.graphics.Typeface
 import android.support.annotation.IntDef
 import android.support.v4.app.NotificationCompat.*
 import android.support.v4.app.TaskStackBuilder
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.NotificationCompat
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.StyleSpan
+import com.mikepenz.community_material_typeface_library.CommunityMaterial
+import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
 import com.proxerme.app.activity.ChatActivity
 import com.proxerme.app.activity.DashboardActivity
-import com.proxerme.app.receiver.BootReceiver
-import com.proxerme.app.receiver.NotificationReceiver
-import com.proxerme.app.service.NotificationService
 import com.proxerme.app.util.Utils
-import com.proxerme.library.connection.experimental.chat.entity.Conference
+import com.proxerme.library.connection.messenger.entity.Conference
+import com.proxerme.library.connection.messenger.entity.Message
 import com.proxerme.library.connection.notifications.entitiy.News
 import com.proxerme.library.info.ProxerUrlHolder
+import org.jetbrains.anko.notificationManager
 
 
 /**
@@ -35,103 +35,20 @@ object NotificationHelper {
     const val NEWS_NOTIFICATION = 1423L
     const val CHAT_NOTIFICATION = 1424L
 
-    fun isNewsRetrievalEnabled(context: Context): Boolean {
-        return PreferenceHelper.areNewsNotificationsEnabled(context)
-    }
-
-    fun retrieveNewsLater(context: Context) {
-        cancelNewsRetrieval(context)
-        if (isNewsRetrievalEnabled(context)) {
-            val interval = PreferenceHelper.getNewsUpdateInterval(context) * 60L * 1000L
-
-            retrieveLater(context, NotificationService.ACTION_LOAD_NEWS, interval)
-        }
-    }
-
-    fun cancelNewsRetrieval(context: Context) {
-        cancelRetrieval(context, NotificationService.ACTION_LOAD_NEWS)
-    }
-
-    fun isChatRetrievalEnabled(context: Context): Boolean {
-        return PreferenceHelper.areChatNotificationsEnabled(context)
-    }
-
-    fun retrieveChatLater(context: Context) {
-        cancelChatRetrieval(context)
-        if (isChatRetrievalEnabled(context)) {
-            val interval = StorageHelper.chatInterval * 1000
-
-            retrieveLater(context, NotificationService.ACTION_LOAD_CHAT, interval)
-        }
-    }
-
-    fun cancelChatRetrieval(context: Context) {
-        cancelRetrieval(context, NotificationService.ACTION_LOAD_CHAT)
-    }
-
-    private fun retrieveLater(context: Context,
-                              @NotificationService.NotificationAction action: String,
-                              interval: Long) {
-        val alarmMgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(context, NotificationReceiver::class.java)
-                .apply { this.action = action }
-        val alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0)
-
-        alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                SystemClock.elapsedRealtime() + interval, interval, alarmIntent)
-
-        val receiverName = ComponentName(context, BootReceiver::class.java)
-        val pm = context.packageManager
-
-        pm.setComponentEnabledSetting(receiverName,
-                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                PackageManager.DONT_KILL_APP)
-    }
-
-    private fun cancelRetrieval(context: Context,
-                                @NotificationService.NotificationAction action: String) {
-
-        (context.getSystemService(Context.ALARM_SERVICE) as AlarmManager)
-                .cancel(PendingIntent.getBroadcast(context, 0, Intent(context,
-                        NotificationReceiver::class.java).apply { this.action = action }, 0))
-        val receiverName = ComponentName(context, BootReceiver::class.java)
-        val pm = context.packageManager
-
-        if (getOngoingRetrievals(context) > 0) {
-            pm.setComponentEnabledSetting(receiverName,
-                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                    PackageManager.DONT_KILL_APP)
-        }
-    }
-
-    private fun getOngoingRetrievals(context: Context): Int {
-        var count = 0
-
-        if (isNewsRetrievalEnabled(context)) {
-            count++
-        }
-
-        if (isChatRetrievalEnabled(context)) {
-            count++
-        }
-
-        return count
-    }
-
-    fun showNewsNotification(context: Context, news: List<News>) {
+    fun showNewsNotification(context: Context, news: Collection<News>) {
         if (news.size <= 0) {
+            context.notificationManager.cancel(NEWS_NOTIFICATION.toInt())
+
             return
         }
 
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE)
-                as android.app.NotificationManager
         val builder = NotificationCompat.Builder(context)
         val style: Style
         val amount = context.resources.getQuantityString(
                 R.plurals.notification_news_amount, news.size, news.size)
 
         if (news.size == 1) {
-            val current = news[0]
+            val current = news.first()
             val title = current.subject.trim()
             val content = current.description.trim()
 
@@ -145,7 +62,7 @@ object NotificationHelper {
         } else {
             val inboxStyle = InboxStyle()
 
-            news.take(5).forEach {
+            news.forEach {
                 inboxStyle.addLine(it.subject)
             }
 
@@ -163,60 +80,103 @@ object NotificationHelper {
                         DashboardActivity.getSectionIntent(context, MaterialDrawerHelper.ITEM_NEWS),
                         PendingIntent.FLAG_UPDATE_CURRENT))
                 .setColor(ContextCompat.getColor(context, R.color.primary))
+                .setPriority(PRIORITY_LOW)
                 .setStyle(style)
 
-        notificationManager.notify(NEWS_NOTIFICATION.toInt(), builder.build())
+        context.notificationManager.notify(NEWS_NOTIFICATION.toInt(), builder.build())
     }
 
     fun showChatNotification(context: Context,
-                             conferences: Collection<Conference>) {
-        if (conferences.size < 0) {
+                             messages: Map<Conference, List<Message>>) {
+        if (messages.size <= 0) {
+            context.notificationManager.cancel(CHAT_NOTIFICATION.toInt())
+
             return
         }
 
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE)
-                as android.app.NotificationManager
         val builder = NotificationCompat.Builder(context)
         val inboxStyle = InboxStyle()
-        val amount = context.resources.getQuantityString(R.plurals.notification_chat_amount,
-                conferences.size, conferences.size)
-        val intent: PendingIntent
+        var messageAmount = 0
 
-        inboxStyle.setBigContentTitle(context.getString(R.string.notification_chat_title))
-                .setSummaryText(amount)
+        messages.forEach { entry ->
+            messageAmount += entry.value.size
 
-        conferences.take(5).forEach {
-            inboxStyle.addLine(it.topic)
+            entry.value.forEach { message ->
+                val sender = if (entry.key.isGroup) message.username + "@" +
+                        entry.key.topic else entry.key.topic
+
+                inboxStyle.addLine(SpannableString(sender + " " + message.message).apply {
+                    this.setSpan(StyleSpan(Typeface.BOLD), 0, sender.length,
+                            Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+                })
+            }
         }
 
-        if (conferences.size == 1) {
-            val conference = conferences.first()
-            val stackBuilder = TaskStackBuilder.create(context)
+        if (messages.size == 1) {
+            inboxStyle.setBigContentTitle(messages.keys.first().topic)
+                    .setSummaryText(context.resources
+                            .getQuantityString(R.plurals.notification_chat_message_amount,
+                                    messageAmount, messageAmount))
 
-            stackBuilder.addNextIntentWithParentStack(ChatActivity.getIntent(context,
-                    conference))
+            builder.setContentTitle(messages.keys.first().topic)
+            builder.setContentIntent(TaskStackBuilder.create(context)
+                    .addNextIntentWithParentStack(ChatActivity
+                            .getIntent(context, messages.keys.first()))
+                    .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT))
 
-            intent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+            if (messages.values.first().size == 1) {
+                builder.setContentText(messages.values.first().first().message)
+            } else {
+                builder.setContentText(context.resources
+                        .getQuantityString(R.plurals.notification_chat_message_amount,
+                                messageAmount, messageAmount))
+            }
 
-            builder.setLargeIcon(Utils.getBitmapFromURL(context,
-                    ProxerUrlHolder.getUserImageUrl(conference.imageId)))
+            if (messages.keys.first().imageId.isNotBlank()) {
+                builder.setLargeIcon(Utils.getBitmapFromURL(context,
+                        ProxerUrlHolder.getUserImageUrl(messages.keys.first().imageId)))
+            } else {
+                if (messages.keys.first().isGroup) {
+                    builder.setLargeIcon(
+                            IconicsDrawable(context, CommunityMaterial.Icon.cmd_account_multiple)
+                                    .sizeDp(96)
+                                    .colorRes(R.color.colorPrimary)
+                                    .toBitmap())
+                } else {
+                    builder.setLargeIcon(
+                            IconicsDrawable(context, CommunityMaterial.Icon.cmd_account)
+                                    .sizeDp(96)
+                                    .colorRes(R.color.colorPrimary)
+                                    .toBitmap())
+                }
+            }
         } else {
-            intent = PendingIntent.getActivity(
-                    context, 0, DashboardActivity.getSectionIntent(context,
-                    MaterialDrawerHelper.ITEM_CHAT), PendingIntent.FLAG_UPDATE_CURRENT)
+            val title = context.resources
+                    .getQuantityString(R.plurals.notification_chat_message_amount,
+                            messageAmount, messageAmount) + " " +
+                    context.resources
+                            .getQuantityString(R.plurals.notification_chat_conference_amount,
+                                    messages.size, messages.size)
+
+            inboxStyle.setBigContentTitle(title)
+            builder.setContentTitle(title)
+            builder.setContentText(messages.keys.joinToString(", ", transform = { it.topic }))
+
+            builder.setContentIntent(PendingIntent.getActivity(context, 0, DashboardActivity
+                    .getSectionIntent(context, MaterialDrawerHelper.ITEM_CHAT),
+                    PendingIntent.FLAG_UPDATE_CURRENT))
         }
 
-        builder.setContentTitle(context.getString(R.string.notification_chat_title))
-                .setContentText(amount)
-                .setSmallIcon(R.drawable.ic_stat_proxer)
+        builder.setSmallIcon(R.drawable.ic_stat_proxer)
                 .setDefaults(Notification.DEFAULT_VIBRATE or Notification.DEFAULT_SOUND or
                         Notification.DEFAULT_LIGHTS)
-                .setContentIntent(intent)
                 .setColor(ContextCompat.getColor(context, R.color.primary))
+                .setPriority(PRIORITY_HIGH)
+                .setCategory(CATEGORY_MESSAGE)
                 .setStyle(inboxStyle)
                 .setAutoCancel(true)
 
-        notificationManager.notify(CHAT_NOTIFICATION.toInt(), builder.build())
+        context.notificationManager.notify(CHAT_NOTIFICATION.toInt(), builder.build())
     }
 
     fun cancelNotification(context: Context, @NotificationId id: Long) {

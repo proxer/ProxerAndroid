@@ -42,11 +42,11 @@
 
         <service android:name=".customtabs.KeepAliveService" />
         <service android:name=".service.NotificationService" />
+        <service android:name=".service.ChatService" />
 
         <receiver android:name=".receiver.NotificationReceiver" />
-        <receiver
-            android:name=".receiver.BootReceiver"
-            android:enabled="false">
+        <receiver android:name=".receiver.ChatReceiver" />
+        <receiver android:name=".receiver.BootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>

@@ -3,6 +3,7 @@ package com.proxerme.app.helper
 import android.support.annotation.IntRange
 import com.orhanobut.hawk.Hawk
 import com.proxerme.library.connection.user.entitiy.User
+import java.util.*
 
 /**
  * A helper class, giving access to the storage.
@@ -11,7 +12,7 @@ import com.proxerme.library.connection.user.entitiy.User
  */
 object StorageHelper {
 
-    const private val STORAGE_CHAT_NOTIFICATIONS_INTERVAL = "storage_messages_notifications_interval"
+    const private val STORAGE_CHAT_NOTIFICATIONS_INTERVAL = "storage_chat_notifications_interval"
     const private val STORAGE_USER_IMAGE_ID = "storage_user_image_id"
     const private val STORAGE_FIRST_START = "storage_first_start"
     const private val STORAGE_NEWS_LAST_TIME = "storage_news_last_time"
@@ -19,13 +20,13 @@ object StorageHelper {
     const private val STORAGE_USER_PASSWORD = "storage_user_password"
     const private val STORAGE_USER_ID = "storage_user_id"
     const private val STORAGE_LAST_LOGIN_TIME = "storage_last_login"
-    const private val STORAGE_LAST_MESSAGE_TIME = "storage_last_message"
-    const private val STORAGE_NEW_MESSAGES = "storage_new_messages"
     const private val STORAGE_NEW_NEWS = "storage_new_news"
+    const private val STORAGE_CONFERENCE_LIST_END_REACHED = "storage_conference_list_end_reached"
+    const private val STORAGE_CONFERENCE_END_REACHED_MAP = "storage_conference_end_reached_map"
 
-    const private val MAX_MESSAGE_POLLING_INTERVAL = 850
-    const private val DEFAULT_MESSAGES_INTERVAL = 5L
-    const private val MESSAGES_INTERVAL_MULTIPLICAND = 1.5
+    const private val MAX_CHAT_POLLING_INTERVAL = 850L
+    const private val DEFAULT_CHAT_INTERVAL = 5L
+    const private val CHAT_INTERVAL_MULTIPLICAND = 1.5
 
     var firstStart: Boolean
         get() = Hawk.get(STORAGE_FIRST_START, true)
@@ -59,9 +60,12 @@ object StorageHelper {
             }
         }
 
-    val chatInterval: Long
+    var chatInterval: Long
         @IntRange(from = 5)
-        get() = Hawk.get(STORAGE_CHAT_NOTIFICATIONS_INTERVAL, DEFAULT_MESSAGES_INTERVAL)
+        get() = Hawk.get(STORAGE_CHAT_NOTIFICATIONS_INTERVAL, DEFAULT_CHAT_INTERVAL)
+        set(chatInterval) {
+            Hawk.put(STORAGE_CHAT_NOTIFICATIONS_INTERVAL, chatInterval)
+        }
 
     var lastLoginTime: Long?
         get() = Hawk.get(STORAGE_LAST_LOGIN_TIME, null)
@@ -70,16 +74,6 @@ object StorageHelper {
                 Hawk.remove(STORAGE_LAST_LOGIN_TIME)
             } else {
                 Hawk.put(STORAGE_LAST_LOGIN_TIME, lastLoginTime)
-            }
-        }
-
-    var lastMessageTime: Long?
-        get() = Hawk.get(STORAGE_LAST_MESSAGE_TIME, null)
-        set(lastReceivedMessageTime) {
-            if (lastReceivedMessageTime == null) {
-                Hawk.remove(STORAGE_LAST_MESSAGE_TIME)
-            } else {
-                Hawk.put(STORAGE_LAST_MESSAGE_TIME, lastReceivedMessageTime)
             }
         }
 
@@ -93,27 +87,39 @@ object StorageHelper {
             }
         }
 
-    var newMessages: Int
-        get() = Hawk.get(STORAGE_NEW_MESSAGES, 0)
-        set(newMessages) {
-            Hawk.put(STORAGE_NEW_MESSAGES, newMessages)
-        }
-
     var newNews: Int
         get() = Hawk.get(STORAGE_NEW_NEWS, 0)
         set(newNews) {
             Hawk.put(STORAGE_NEW_NEWS, newNews)
         }
 
+    var conferenceListEndReached: Boolean
+        get() = Hawk.get(STORAGE_CONFERENCE_LIST_END_REACHED, false)
+        set(hasReachedEnd) {
+            Hawk.put(STORAGE_CONFERENCE_LIST_END_REACHED, hasReachedEnd)
+        }
+
+    fun hasConferenceReachedEnd(conferenceId: String): Boolean {
+        return Hawk.get<Map<String, Boolean>>(STORAGE_CONFERENCE_END_REACHED_MAP, HashMap())
+                .getOrElse(conferenceId, { false })
+    }
+
+    fun setConferenceReachedEnd(conferenceId: String) {
+        val map: MutableMap<String, Boolean> = Hawk.get(STORAGE_CONFERENCE_END_REACHED_MAP,
+                HashMap())
+
+        map.put(conferenceId, true)
+    }
+
     fun incrementChatInterval() {
         val interval = chatInterval
 
-        if (interval <= MAX_MESSAGE_POLLING_INTERVAL) {
-            Hawk.put(STORAGE_CHAT_NOTIFICATIONS_INTERVAL, interval * MESSAGES_INTERVAL_MULTIPLICAND)
+        if (interval <= MAX_CHAT_POLLING_INTERVAL) {
+            Hawk.put(STORAGE_CHAT_NOTIFICATIONS_INTERVAL, interval * CHAT_INTERVAL_MULTIPLICAND)
         }
     }
 
-    fun resetMessagesInterval() {
-        Hawk.put(STORAGE_CHAT_NOTIFICATIONS_INTERVAL, DEFAULT_MESSAGES_INTERVAL)
+    fun resetChatInterval() {
+        Hawk.put(STORAGE_CHAT_NOTIFICATIONS_INTERVAL, DEFAULT_CHAT_INTERVAL)
     }
 }

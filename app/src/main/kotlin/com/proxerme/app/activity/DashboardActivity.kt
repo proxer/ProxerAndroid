@@ -141,7 +141,6 @@ class DashboardActivity : AppCompatActivity(), CustomTabsModule {
                     when (option.position) {
                         1 -> {
                             PreferenceHelper.setNewsNotificationsEnabled(this, option.isActivated)
-                            PreferenceHelper.setChatNotificationsEnabled(this, option.isActivated)
                         }
                     }
                 }

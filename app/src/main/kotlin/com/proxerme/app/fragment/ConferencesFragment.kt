@@ -1,42 +1,58 @@
 package com.proxerme.app.fragment
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.database.SQLException
+import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
+import butterknife.bindView
+import com.klinker.android.link_builder.Link
+import com.proxerme.app.R
 import com.proxerme.app.activity.ChatActivity
 import com.proxerme.app.activity.UserActivity
 import com.proxerme.app.adapter.ConferenceAdapter
+import com.proxerme.app.data.chatDatabase
+import com.proxerme.app.event.ConferencesEvent
 import com.proxerme.app.helper.NotificationHelper
 import com.proxerme.app.helper.StorageHelper
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.module.LoginModule
-import com.proxerme.app.module.PollingModule
+import com.proxerme.app.service.ChatService
 import com.proxerme.app.util.Utils
-import com.proxerme.library.connection.ProxerConnection
-import com.proxerme.library.connection.experimental.chat.entity.Conference
-import com.proxerme.library.connection.experimental.chat.request.ConferencesRequest
-import com.proxerme.library.info.ProxerTag
-import com.proxerme.library.interfaces.ProxerErrorResult
-import com.proxerme.library.interfaces.ProxerResult
+import com.proxerme.app.util.listener.EndlessRecyclerOnScrollListener
+import com.proxerme.library.connection.messenger.entity.Conference
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
+import java.util.concurrent.Future
 
 /**
  * TODO: Describe Class
  *
  * @author Ruben Gees
  */
-class ConferencesFragment : PagingFragment() {
+class ConferencesFragment : MainFragment() {
 
     companion object {
-        private const val POLLING_INTERVAL = 10000L
-
         fun newInstance(): ConferencesFragment {
             return ConferencesFragment()
         }
     }
 
-    lateinit override var layoutManager: StaggeredGridLayoutManager
+    lateinit var layoutManager: StaggeredGridLayoutManager
     lateinit private var adapter: ConferenceAdapter
+
+    private var refreshTask: Future<Unit>? = null
 
     private val loginModule = LoginModule(object : LoginModule.LoginModuleCallback {
         override val activity: AppCompatActivity
@@ -48,48 +64,38 @@ class ConferencesFragment : PagingFragment() {
         }
 
         override fun load(showProgress: Boolean) {
-            this@ConferencesFragment.load(showProgress)
+            hideError()
+            refresh()
         }
     })
 
-    override val firstPage = 1
-    override val canLoad: Boolean
-        get() = super.canLoad && loginModule.canLoad()
-    override val loadAlways = true
-
     override val section: SectionManager.Section = SectionManager.Section.CONFERENCES
 
-    private val pollingModule = PollingModule(object : PollingModule.PollingModuleCallback {
-        override val isLoading: Boolean
-            get() = this@ConferencesFragment.isLoading
-        override val canLoad: Boolean
-            get() = this@ConferencesFragment.canLoad && currentError == null
-
-        override fun load(showProgress: Boolean) {
-            this@ConferencesFragment.load(showProgress)
-        }
-    }, POLLING_INTERVAL)
+    private val list: RecyclerView by bindView(R.id.list)
+    private val errorContainer: ViewGroup by bindView(R.id.errorContainer)
+    private val errorText: TextView by bindView(R.id.errorText)
+    private val errorButton: Button by bindView(R.id.errorButton)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         NotificationHelper.cancelNotification(context, NotificationHelper.CHAT_NOTIFICATION)
 
-        adapter = ConferenceAdapter(savedInstanceState)
+        adapter = ConferenceAdapter()
         adapter.callback = object : ConferenceAdapter.OnConferenceInteractionListener() {
             override fun onConferenceClick(v: View, conference: Conference) {
                 ChatActivity.navigateTo(activity, conference)
             }
 
             override fun onConferenceImageClick(v: View, conference: Conference) {
-                if (!conference.isConference) {
+                if (!conference.isGroup) {
                     UserActivity.navigateTo(activity, null, conference.topic,
                             conference.imageId)
                 }
             }
 
             override fun onConferenceTopicClick(v: View, conference: Conference) {
-                if (!conference.isConference) {
+                if (!conference.isGroup) {
                     UserActivity.navigateTo(activity, null, conference.topic,
                             conference.imageId)
                 }
@@ -100,84 +106,120 @@ class ConferencesFragment : PagingFragment() {
                 StaggeredGridLayoutManager.VERTICAL)
     }
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View {
+        return inflater.inflate(R.layout.fragment_paging_default, container, false)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         list.setHasFixedSize(true)
         list.layoutManager = layoutManager
         list.adapter = adapter
+        list.addOnScrollListener(object : EndlessRecyclerOnScrollListener(layoutManager) {
+            override fun onLoadMore() {
+                if (!StorageHelper.conferenceListEndReached && !ChatService.isLoadingConferences &&
+                        refreshTask?.isDone ?: true) {
+                    ChatService.loadMoreConferences(context)
+                }
+            }
+        })
     }
 
     override fun onResume() {
         super.onResume()
 
         loginModule.onResume()
-        pollingModule.onResume()
+
+        if (loginModule.canLoad()) {
+            if (!ChatService.isSynchronizing) {
+                ChatService.synchronize(context)
+            }
+
+            refresh()
+        }
     }
 
     override fun onStart() {
         super.onStart()
 
         loginModule.onStart()
-    }
-
-    override fun onPause() {
-        super.onPause()
-
-        pollingModule.onPause()
+        EventBus.getDefault().register(this)
     }
 
     override fun onStop() {
+        EventBus.getDefault().unregister(this)
         loginModule.onStop()
 
         super.onStop()
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
+    override fun onDestroy() {
+        refreshTask?.cancel(true)
 
-        adapter.saveInstanceState(outState)
+        super.onDestroy()
     }
 
-    override fun loadPage(number: Int) {
-        ConferencesRequest(number).execute({ result ->
-            if (result.item.isNotEmpty()) {
-                adapter.addItems(result.item.asList())
+    @Subscribe
+    fun onConferencesChanged(event: ConferencesEvent) {
+        if (loginModule.canLoad()) {
+            refresh()
+        }
+    }
 
-                if (number == firstPage) {
-                    StorageHelper.lastMessageTime = result.item.first().time
-                    StorageHelper.newMessages = 0
-
-                    if (context != null) {
-                        StorageHelper.resetMessagesInterval()
-                        NotificationHelper.retrieveChatLater(context)
-                    }
-                }
+    private fun showError(message: String, buttonMessage: String? = null,
+                          onButtonClickListener: View.OnClickListener? = null) {
+        errorContainer.visibility = View.VISIBLE
+        errorText.text = Utils.buildClickableText(context, message, Link.OnClickListener { link ->
+            try {
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link + "?device=mobile")))
+            } catch (exception: ActivityNotFoundException) {
+                Toast.makeText(context, R.string.link_error_not_found, Toast.LENGTH_SHORT).show()
             }
-
-            notifyPagedLoadFinishedSuccessful(number, result)
-        }, { result ->
-            notifyPagedLoadFinishedWithError(number, result)
         })
+
+        if (buttonMessage == null) {
+            errorButton.text = getString(R.string.error_retry)
+        } else {
+            errorButton.text = buttonMessage
+        }
+
+        if (onButtonClickListener == null) {
+            errorButton.setOnClickListener {
+                hideError()
+                refresh()
+            }
+        } else {
+            errorButton.setOnClickListener(onButtonClickListener)
+        }
+
+        clear()
     }
 
-    override fun clear() {
+    private fun hideError() {
+        errorContainer.visibility = View.INVISIBLE
+    }
+
+    private fun clear() {
         adapter.clear()
     }
 
-    override fun cancel() {
-        ProxerConnection.cancel(ProxerTag.CONFERENCES)
-    }
+    private fun refresh() {
+        refreshTask?.cancel(true)
 
-    override fun notifyLoadFinishedSuccessful(result: ProxerResult<*>) {
-        super.notifyLoadFinishedSuccessful(result)
+        refreshTask = doAsync {
+            try {
+                val conferences = context.chatDatabase.getConferences()
 
-        pollingModule.onSuccessfulRequest()
-    }
-
-    override fun notifyLoadFinishedWithError(result: ProxerErrorResult) {
-        super.notifyLoadFinishedWithError(result)
-
-        pollingModule.onErrorRequest()
+                uiThread {
+                    adapter.replace(conferences)
+                }
+            } catch(exception: SQLException) {
+                uiThread {
+                    showError("Eine Datenbankabfrage ist fehlgeschlagen. Versuche es erneut")
+                }
+            }
+        }
     }
 }
