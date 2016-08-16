@@ -60,6 +60,7 @@ class ChatDatabase(context: Context) :
 
     val conferenceParser = ConferenceParser()
     val messageParser = MessageParser()
+    val messageToSendParser = MessageToSendParser()
 
     override fun onCreate(db: SQLiteDatabase) {
         db.createTable(TABLE_CONFERENCE, true,
@@ -115,7 +116,7 @@ class ChatDatabase(context: Context) :
 
             result.addAll(this.select(ChatDatabase.TABLE_MESSAGE_TO_SEND)
                     .where("$COLUMN_MESSAGE_CONFERENCE_ID = $conferenceId")
-                    .parseList(messageParser))
+                    .parseList(messageToSendParser))
 
             result.sortByDescending { it.time }
 

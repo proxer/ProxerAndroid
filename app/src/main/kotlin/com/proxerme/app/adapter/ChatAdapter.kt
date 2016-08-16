@@ -13,6 +13,8 @@ import butterknife.bindView
 import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.LinkConsumableTextView
 import com.klinker.android.link_builder.TouchableMovementMethod
+import com.mikepenz.community_material_typeface_library.CommunityMaterial
+import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
 import com.proxerme.app.util.TimeUtil
 import com.proxerme.app.util.Utils
@@ -275,6 +277,17 @@ class ChatAdapter(savedInstanceState: Bundle?) :
 
             time.text = TimeUtil.convertToRelativeReadableTime(time.context,
                     message.time)
+
+            if (message.id.toLong() < 0) {
+                text.setCompoundDrawables(null, null,
+                        IconicsDrawable(text.context)
+                                .icon(CommunityMaterial.Icon.cmd_clock)
+                                .sizeDp(32)
+                                .paddingDp(8)
+                                .colorRes(R.color.secondary_text), null)
+            } else {
+                text.setCompoundDrawables(null, null, null, null)
+            }
 
             if (selectedMap.containsKey(message.id)) {
                 container.cardBackgroundColor = ContextCompat
