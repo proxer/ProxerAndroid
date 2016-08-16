@@ -218,7 +218,7 @@ class ChatService : IntentService("ChatService") {
         val newMessages = LinkedList<Message>()
 
         for (conference in changedConferences) {
-            var mostRecentMessage = chatDatabase.getMostRecentMessage(conference.id)
+            var mostRecentMessage: Message? = chatDatabase.getMostRecentMessage(conference.id)
             var existingUnreadMessageAmount = chatDatabase.getUnreadMessageAmount(conference.id,
                     conference.lastReadMessageId)
             var nextId = "0"
