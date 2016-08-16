@@ -4,6 +4,7 @@ import android.app.IntentService
 import android.content.Context
 import android.content.Intent
 import com.proxerme.app.data.chatDatabase
+import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.event.ChatEvent
 import com.proxerme.app.event.ConferencesEvent
 import com.proxerme.app.helper.NotificationHelper
@@ -174,7 +175,7 @@ class ChatService : IntentService("ChatService") {
                     throw MessageSendingException(result.item)
                 }
 
-                chatDatabase.removeMessageToSend(it.id.toLong())
+                chatDatabase.removeMessageToSend(it.localId)
             } catch(exception: ProxerException) {
 
             }
@@ -262,7 +263,7 @@ class ChatService : IntentService("ChatService") {
     }
 
     private fun showNotification() {
-        val unreadMap = HashMap<Conference, List<Message>>()
+        val unreadMap = HashMap<LocalConference, List<Message>>()
 
         chatDatabase.getUnreadConferences().forEach {
             val unreadMessages = chatDatabase.getMostRecentMessages(it.id, it.unreadMessageAmount)

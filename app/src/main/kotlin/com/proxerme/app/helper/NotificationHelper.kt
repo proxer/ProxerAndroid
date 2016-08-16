@@ -17,8 +17,8 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
 import com.proxerme.app.activity.ChatActivity
 import com.proxerme.app.activity.DashboardActivity
+import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.util.Utils
-import com.proxerme.library.connection.messenger.entity.Conference
 import com.proxerme.library.connection.messenger.entity.Message
 import com.proxerme.library.connection.notifications.entitiy.News
 import com.proxerme.library.info.ProxerUrlHolder
@@ -87,7 +87,7 @@ object NotificationHelper {
     }
 
     fun showChatNotification(context: Context,
-                             messages: Map<Conference, List<Message>>) {
+                             messages: Map<LocalConference, List<Message>>) {
         if (messages.size <= 0) {
             context.notificationManager.cancel(CHAT_NOTIFICATION.toInt())
 

@@ -21,6 +21,7 @@ import com.proxerme.app.activity.ChatActivity
 import com.proxerme.app.activity.UserActivity
 import com.proxerme.app.adapter.ConferenceAdapter
 import com.proxerme.app.data.chatDatabase
+import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.event.ConferencesEvent
 import com.proxerme.app.helper.NotificationHelper
 import com.proxerme.app.helper.StorageHelper
@@ -29,7 +30,6 @@ import com.proxerme.app.module.LoginModule
 import com.proxerme.app.service.ChatService
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.listener.EndlessRecyclerOnScrollListener
-import com.proxerme.library.connection.messenger.entity.Conference
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.jetbrains.anko.doAsync
@@ -83,18 +83,18 @@ class ConferencesFragment : MainFragment() {
 
         adapter = ConferenceAdapter()
         adapter.callback = object : ConferenceAdapter.OnConferenceInteractionListener() {
-            override fun onConferenceClick(v: View, conference: Conference) {
+            override fun onConferenceClick(v: View, conference: LocalConference) {
                 ChatActivity.navigateTo(activity, conference)
             }
 
-            override fun onConferenceImageClick(v: View, conference: Conference) {
+            override fun onConferenceImageClick(v: View, conference: LocalConference) {
                 if (!conference.isGroup) {
                     UserActivity.navigateTo(activity, null, conference.topic,
                             conference.imageId)
                 }
             }
 
-            override fun onConferenceTopicClick(v: View, conference: Conference) {
+            override fun onConferenceTopicClick(v: View, conference: LocalConference) {
                 if (!conference.isGroup) {
                     UserActivity.navigateTo(activity, null, conference.topic,
                             conference.imageId)

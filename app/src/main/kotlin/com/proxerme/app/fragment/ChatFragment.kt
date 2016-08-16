@@ -21,6 +21,8 @@ import com.proxerme.app.R
 import com.proxerme.app.activity.UserActivity
 import com.proxerme.app.adapter.ChatAdapter
 import com.proxerme.app.data.chatDatabase
+import com.proxerme.app.entitiy.LocalConference
+import com.proxerme.app.entitiy.LocalMessage
 import com.proxerme.app.event.ChatEvent
 import com.proxerme.app.helper.NotificationHelper
 import com.proxerme.app.helper.StorageHelper
@@ -30,8 +32,6 @@ import com.proxerme.app.module.LoginModule
 import com.proxerme.app.service.ChatService
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.listener.EndlessRecyclerOnScrollListener
-import com.proxerme.library.connection.messenger.entity.Conference
-import com.proxerme.library.connection.messenger.entity.Message
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.jetbrains.anko.doAsync
@@ -48,7 +48,7 @@ class ChatFragment : MainFragment() {
     companion object {
         private const val ARGUMENT_CONFERENCE = "conference"
 
-        fun newInstance(conference: Conference): ChatFragment {
+        fun newInstance(conference: LocalConference): ChatFragment {
 
             return ChatFragment().apply {
                 this.arguments = Bundle().apply {
@@ -58,7 +58,7 @@ class ChatFragment : MainFragment() {
         }
     }
 
-    private lateinit var conference: Conference
+    private lateinit var conference: LocalConference
 
     override val section: SectionManager.Section = SectionManager.Section.CHAT
 
@@ -115,7 +115,7 @@ class ChatFragment : MainFragment() {
     private var actionMode: ActionMode? = null
 
     private val adapterCallback = object : ChatAdapter.OnMessageInteractionListener() {
-        override fun onMessageTitleClick(v: View, message: Message) {
+        override fun onMessageTitleClick(v: View, message: LocalMessage) {
             UserActivity.navigateTo(activity, message.userId, message.username)
         }
 
@@ -194,7 +194,7 @@ class ChatFragment : MainFragment() {
             val text = messageInput.text.toString().trim()
 
             if (!text.isEmpty()) {
-                context.chatDatabase.insertMessageToSend(StorageHelper.user!!, conference, text)
+                context.chatDatabase.insertMessageToSend(StorageHelper.user!!, conference.id, text)
 
                 if (loginModule.canLoad()) {
                     refresh()

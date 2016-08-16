@@ -12,6 +12,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
+import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.util.TimeUtil
 import com.proxerme.library.connection.messenger.entity.Conference
 import com.proxerme.library.info.ProxerUrlHolder
@@ -28,7 +29,7 @@ class ConferenceAdapter : RecyclerView.Adapter<ConferenceAdapter.ViewHolder>() {
         const val STATE_ITEMS = "adapter_conferences_state_items"
     }
 
-    private val list = ArrayList<Conference>()
+    private val list = ArrayList<LocalConference>()
     var callback: OnConferenceInteractionListener? = null
 
     init {
@@ -44,9 +45,9 @@ class ConferenceAdapter : RecyclerView.Adapter<ConferenceAdapter.ViewHolder>() {
                 .inflate(R.layout.item_conference, parent, false))
     }
 
-    override fun getItemId(position: Int): Long = list[position].id.toLong()
+    override fun getItemId(position: Int): Long = list[position].localId
 
-    fun replace(newItems: Collection<Conference>) {
+    fun replace(newItems: Collection<LocalConference>) {
         list.clear()
         list.addAll(newItems)
 
@@ -87,7 +88,7 @@ class ConferenceAdapter : RecyclerView.Adapter<ConferenceAdapter.ViewHolder>() {
             }
         }
 
-        fun bind(conference: Conference) {
+        fun bind(conference: LocalConference) {
             topic.text = conference.topic
             time.text = TimeUtil.convertToRelativeReadableTime(time.context,
                     conference.time)
@@ -98,6 +99,7 @@ class ConferenceAdapter : RecyclerView.Adapter<ConferenceAdapter.ViewHolder>() {
             if (conference.isRead) {
                 topic.setCompoundDrawables(null, null, null, null)
             } else {
+                //TODO display number of new messages
                 topic.setCompoundDrawables(null, null,
                         IconicsDrawable(topic.context)
                                 .icon(CommunityMaterial.Icon.cmd_message_alert)
@@ -129,15 +131,15 @@ class ConferenceAdapter : RecyclerView.Adapter<ConferenceAdapter.ViewHolder>() {
     }
 
     abstract class OnConferenceInteractionListener {
-        open fun onConferenceClick(v: View, conference: Conference) {
+        open fun onConferenceClick(v: View, conference: LocalConference) {
 
         }
 
-        open fun onConferenceImageClick(v: View, conference: Conference) {
+        open fun onConferenceImageClick(v: View, conference: LocalConference) {
 
         }
 
-        open fun onConferenceTopicClick(v: View, conference: Conference) {
+        open fun onConferenceTopicClick(v: View, conference: LocalConference) {
 
         }
     }

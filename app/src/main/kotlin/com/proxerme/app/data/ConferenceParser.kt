@@ -1,6 +1,6 @@
 package com.proxerme.app.data
 
-import com.proxerme.library.connection.messenger.entity.Conference
+import com.proxerme.app.entitiy.LocalConference
 import org.jetbrains.anko.db.RowParser
 
 /**
@@ -8,12 +8,12 @@ import org.jetbrains.anko.db.RowParser
  *
  * @author Ruben Gees
  */
-class ConferenceParser : RowParser<Conference> {
+class ConferenceParser : RowParser<LocalConference> {
 
-    override fun parseRow(columns: Array<Any?>): Conference {
-        return Conference(columns[0].toString(), columns[1].toString(), columns[2].toString(),
-                (columns[3] as Long).toInt(), columns[4].toString(), columns[5].toString(),
-                columns[6] == 1L, columns[7] == 1L, columns[8] as Long,
-                (columns[9] as Long).toInt(), columns[10].toString())
+    override fun parseRow(columns: Array<Any?>): LocalConference {
+        return LocalConference(columns[0] as Long, columns[1].toString(), columns[2].toString(),
+                columns[3].toString(), (columns[4] as Long).toInt(), columns[5].toString(),
+                columns[6].toString(), columns[7] == 1L, columns[8] == 1L, columns[9] as Long,
+                (columns[10] as Long).toInt(), columns[11].toString())
     }
 }

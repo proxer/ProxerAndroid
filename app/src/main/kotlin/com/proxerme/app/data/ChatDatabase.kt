@@ -3,12 +3,13 @@ package com.proxerme.app.data
 import android.content.Context
 import android.database.DatabaseUtils
 import android.database.sqlite.SQLiteDatabase
+import com.proxerme.app.entitiy.LocalConference
+import com.proxerme.app.entitiy.LocalMessage
 import com.proxerme.library.connection.messenger.entity.Conference
 import com.proxerme.library.connection.messenger.entity.Message
 import com.proxerme.library.connection.user.entitiy.User
 import org.jetbrains.anko.db.*
 import org.joda.time.DateTime
-import java.util.*
 
 /**
  * TODO: Describe class
@@ -23,9 +24,9 @@ class ChatDatabase(context: Context) :
 
         const val TABLE_CONFERENCE = "Conference"
         const val TABLE_MESSAGE = "Message"
-        const val TABLE_MESSAGE_TO_SEND = "MessageToSend"
 
-        const val COLUMN_CONFERENCE_ID = "_id"
+        const val COLUMN_CONFERENCE_LOCAL_ID = "_id"
+        const val COLUMN_CONFERENCE_ID = "id"
         const val COLUMN_CONFERENCE_TOPIC = "topic"
         const val COLUMN_CONFERENCE_CUSTOM_TOPIC = "customTopic"
         const val COLUMN_CONFERENCE_PARTICIPANT_AMOUNT = "participantAmount"
@@ -37,7 +38,8 @@ class ChatDatabase(context: Context) :
         const val COLUMN_CONFERENCE_IMAGE_ID = "imageId"
         const val COLUMN_CONFERENCE_IMAGE_TYPE = "imageType"
 
-        const val COLUMN_MESSAGE_ID = "_id"
+        const val COLUMN_MESSAGE_LOCAL_ID = "_id"
+        const val COLUMN_MESSAGE_ID = "id"
         const val COLUMN_MESSAGE_CONFERENCE_ID = "conferenceId"
         const val COLUMN_MESSAGE_USER_ID = "user_id"
         const val COLUMN_MESSAGE_USER_NAME = "username"
@@ -60,11 +62,11 @@ class ChatDatabase(context: Context) :
 
     val conferenceParser = ConferenceParser()
     val messageParser = MessageParser()
-    val messageToSendParser = MessageToSendParser()
 
     override fun onCreate(db: SQLiteDatabase) {
         db.createTable(TABLE_CONFERENCE, true,
-                COLUMN_CONFERENCE_ID to INTEGER + PRIMARY_KEY,
+                COLUMN_CONFERENCE_LOCAL_ID to INTEGER + PRIMARY_KEY + AUTOINCREMENT,
+                COLUMN_CONFERENCE_ID to TEXT + NOT_NULL,
                 COLUMN_CONFERENCE_TOPIC to TEXT + NOT_NULL,
                 COLUMN_CONFERENCE_CUSTOM_TOPIC to TEXT + NOT_NULL,
                 COLUMN_CONFERENCE_PARTICIPANT_AMOUNT to INTEGER + NOT_NULL,
@@ -76,16 +78,8 @@ class ChatDatabase(context: Context) :
                 COLUMN_CONFERENCE_UNREAD_MESSAGE_AMOUNT to INTEGER + NOT_NULL,
                 COLUMN_CONFERENCE_LAST_READ_MESSAGE_ID to TEXT + NOT_NULL)
         db.createTable(TABLE_MESSAGE, true,
-                COLUMN_MESSAGE_ID to INTEGER + PRIMARY_KEY,
-                COLUMN_MESSAGE_CONFERENCE_ID to INTEGER + NOT_NULL,
-                COLUMN_MESSAGE_USER_ID to INTEGER + NOT_NULL,
-                COLUMN_MESSAGE_USER_NAME to TEXT + NOT_NULL,
-                COLUMN_MESSAGE_MESSAGE to TEXT + NOT_NULL,
-                COLUMN_MESSAGE_ACTION to TEXT + NOT_NULL,
-                COLUMN_MESSAGE_TIME to INTEGER + NOT_NULL,
-                COLUMN_MESSAGE_DEVICE to TEXT + NOT_NULL)
-        db.createTable(TABLE_MESSAGE_TO_SEND, true,
-                COLUMN_MESSAGE_ID to INTEGER + PRIMARY_KEY + AUTOINCREMENT,
+                COLUMN_MESSAGE_LOCAL_ID to INTEGER + PRIMARY_KEY + AUTOINCREMENT,
+                COLUMN_MESSAGE_ID to TEXT + NOT_NULL,
                 COLUMN_MESSAGE_CONFERENCE_ID to INTEGER + NOT_NULL,
                 COLUMN_MESSAGE_USER_ID to INTEGER + NOT_NULL,
                 COLUMN_MESSAGE_USER_NAME to TEXT + NOT_NULL,
@@ -99,7 +93,7 @@ class ChatDatabase(context: Context) :
 
     }
 
-    fun getConferences(): List<Conference> {
+    fun getConferences(): List<LocalConference> {
         return use {
             this.select(ChatDatabase.TABLE_CONFERENCE)
                     .orderBy(ChatDatabase.COLUMN_CONFERENCE_LAST_MESSAGE_TIME,
@@ -108,19 +102,12 @@ class ChatDatabase(context: Context) :
         }
     }
 
-    fun getMessages(conferenceId: String): List<Message> {
+    fun getMessages(conferenceId: String): List<LocalMessage> {
         return use {
-            val result = ArrayList(this.select(ChatDatabase.TABLE_MESSAGE)
+            this.select(ChatDatabase.TABLE_MESSAGE)
                     .where("$COLUMN_MESSAGE_CONFERENCE_ID = $conferenceId")
-                    .parseList(messageParser))
-
-            result.addAll(this.select(ChatDatabase.TABLE_MESSAGE_TO_SEND)
-                    .where("$COLUMN_MESSAGE_CONFERENCE_ID = $conferenceId")
-                    .parseList(messageToSendParser))
-
-            result.sortByDescending { it.time }
-
-            result
+                    .orderBy(COLUMN_MESSAGE_LOCAL_ID, SqlOrderDirection.DESC)
+                    .parseList(messageParser)
         }
     }
 
@@ -149,11 +136,12 @@ class ChatDatabase(context: Context) :
         }
     }
 
-    fun insertMessageToSend(user: User, conference: Conference, message: String) {
+    fun insertMessageToSend(user: User, conferenceId: String, message: String) {
         use {
             transaction {
-                this.replaceOrThrow(ChatDatabase.TABLE_MESSAGE_TO_SEND,
-                        COLUMN_MESSAGE_CONFERENCE_ID to conference.id,
+                this.insertOrThrow(ChatDatabase.TABLE_MESSAGE,
+                        COLUMN_MESSAGE_ID to "-1",
+                        COLUMN_MESSAGE_CONFERENCE_ID to conferenceId,
                         COLUMN_MESSAGE_USER_ID to user.id,
                         COLUMN_MESSAGE_USER_NAME to user.username,
                         COLUMN_MESSAGE_MESSAGE to message,
@@ -164,18 +152,18 @@ class ChatDatabase(context: Context) :
         }
     }
 
-    fun getMessagesToSend(): List<Message> {
+    fun getMessagesToSend(): List<LocalMessage> {
         return use {
-            this.select(ChatDatabase.TABLE_MESSAGE_TO_SEND)
-                    .orderBy(COLUMN_MESSAGE_TIME, SqlOrderDirection.ASC)
+            this.select(ChatDatabase.TABLE_MESSAGE)
+                    .where("$COLUMN_MESSAGE_ID = -1")
+                    .orderBy(COLUMN_MESSAGE_LOCAL_ID, SqlOrderDirection.ASC)
                     .parseList(messageParser)
-
         }
     }
 
     fun removeMessageToSend(id: Long) {
         use {
-            this.delete(TABLE_MESSAGE_TO_SEND, "$COLUMN_MESSAGE_ID = $id")
+            this.delete(TABLE_MESSAGE, "$COLUMN_MESSAGE_LOCAL_ID = $id")
         }
     }
 
@@ -184,12 +172,11 @@ class ChatDatabase(context: Context) :
             transaction {
                 this.delete(TABLE_CONFERENCE)
                 this.delete(TABLE_MESSAGE)
-                this.delete(TABLE_MESSAGE_TO_SEND)
             }
         }
     }
 
-    fun getConference(id: String): Conference? {
+    fun getConference(id: String): LocalConference? {
         return use {
             this.select(TABLE_CONFERENCE)
                     .where("$COLUMN_CONFERENCE_ID = $id")
@@ -197,7 +184,7 @@ class ChatDatabase(context: Context) :
         }
     }
 
-    fun getUnreadConferences(): List<Conference> {
+    fun getUnreadConferences(): List<LocalConference> {
         return use {
             this.select(TABLE_CONFERENCE)
                     .where("$COLUMN_CONFERENCE_IS_READ = 0")
@@ -222,63 +209,79 @@ class ChatDatabase(context: Context) :
 
     private fun doInsertOrUpdateConferences(db: SQLiteDatabase, items: Collection<Conference>) {
         items.forEach {
-            db.replaceOrThrow(ChatDatabase.TABLE_CONFERENCE,
-                    COLUMN_CONFERENCE_ID to it.id,
-                    COLUMN_CONFERENCE_TOPIC to it.topic,
-                    COLUMN_CONFERENCE_CUSTOM_TOPIC to it.customTopic,
-                    COLUMN_CONFERENCE_PARTICIPANT_AMOUNT to it.participantAmount,
-                    COLUMN_CONFERENCE_IMAGE_TYPE to it.imageType,
-                    COLUMN_CONFERENCE_IMAGE_ID to it.imageId,
-                    COLUMN_CONFERENCE_IS_GROUP to if (it.isGroup) 1 else 0,
-                    COLUMN_CONFERENCE_IS_READ to if (it.isRead) 1 else 0,
-                    COLUMN_CONFERENCE_LAST_MESSAGE_TIME to it.time,
-                    COLUMN_CONFERENCE_UNREAD_MESSAGE_AMOUNT to it.unreadMessageAmount,
-                    COLUMN_CONFERENCE_LAST_READ_MESSAGE_ID to it.lastReadMessageId)
+            if (db.update(TABLE_CONFERENCE, *generateInsertionValues(it))
+                    .where("$COLUMN_CONFERENCE_ID = ${it.id}").exec() <= 0) {
+                db.insertOrThrow(TABLE_CONFERENCE, *generateInsertionValues(it))
+            }
         }
     }
 
     private fun doInsertOrUpdateMessages(db: SQLiteDatabase, items: Collection<Message>) {
         items.forEach {
-            db.replaceOrThrow(ChatDatabase.TABLE_MESSAGE,
-                    COLUMN_MESSAGE_ID to it.id,
-                    COLUMN_MESSAGE_CONFERENCE_ID to it.conferenceId,
-                    COLUMN_MESSAGE_USER_ID to it.userId,
-                    COLUMN_MESSAGE_USER_NAME to it.username,
-                    COLUMN_MESSAGE_MESSAGE to it.message,
-                    COLUMN_MESSAGE_ACTION to it.action,
-                    COLUMN_MESSAGE_TIME to it.time,
-                    COLUMN_MESSAGE_DEVICE to it.device)
+            if (db.update(TABLE_MESSAGE, *generateInsertionValues(it))
+                    .where("$COLUMN_MESSAGE_ID = ${it.id}")
+                    .exec() <= 0) {
+                db.insertOrThrow(TABLE_MESSAGE, *generateInsertionValues(it))
+            }
         }
     }
 
-    fun getOldestMessage(conferenceId: String): Message? {
+    fun getOldestMessage(conferenceId: String): LocalMessage? {
         return use {
             this.select(TABLE_MESSAGE)
-                    .where("$COLUMN_MESSAGE_CONFERENCE_ID = $conferenceId")
+                    .where("($COLUMN_MESSAGE_CONFERENCE_ID = $conferenceId) and " +
+                            "($COLUMN_MESSAGE_ID != -1)")
                     .orderBy(COLUMN_MESSAGE_ID, SqlOrderDirection.ASC)
                     .limit(1)
                     .parseOpt(messageParser)
         }
     }
 
-    fun getMostRecentMessage(conferenceId: String): Message? {
+    fun getMostRecentMessage(conferenceId: String): LocalMessage? {
         return use {
             this.select(TABLE_MESSAGE)
-                    .where("$COLUMN_MESSAGE_CONFERENCE_ID = $conferenceId")
+                    .where("($COLUMN_MESSAGE_CONFERENCE_ID = $conferenceId) and " +
+                            "($COLUMN_MESSAGE_ID != -1)")
                     .orderBy(COLUMN_MESSAGE_ID, SqlOrderDirection.DESC)
                     .limit(1)
                     .parseOpt(messageParser)
         }
     }
 
-    fun getMostRecentMessages(conferenceId: String, amount: Int): List<Message> {
+    fun getMostRecentMessages(conferenceId: String, amount: Int): List<LocalMessage> {
         return use {
             this.select(TABLE_MESSAGE)
-                    .where("$COLUMN_MESSAGE_CONFERENCE_ID = $conferenceId")
+                    .where("($COLUMN_MESSAGE_CONFERENCE_ID = $conferenceId) and " +
+                            "($COLUMN_MESSAGE_ID != -1)")
                     .orderBy(COLUMN_MESSAGE_ID, SqlOrderDirection.DESC)
                     .limit(amount)
                     .parseList(messageParser)
         }
+    }
+
+    private fun generateInsertionValues(message: Message): Array<Pair<String, Any?>> {
+        return arrayOf(COLUMN_MESSAGE_ID to message.id,
+                COLUMN_MESSAGE_CONFERENCE_ID to message.conferenceId,
+                COLUMN_MESSAGE_USER_ID to message.userId,
+                COLUMN_MESSAGE_USER_NAME to message.username,
+                COLUMN_MESSAGE_MESSAGE to message.message,
+                COLUMN_MESSAGE_ACTION to message.action,
+                COLUMN_MESSAGE_TIME to message.time,
+                COLUMN_MESSAGE_DEVICE to message.device)
+    }
+
+    private fun generateInsertionValues(conference: Conference): Array<Pair<String, Any?>> {
+        return arrayOf(COLUMN_CONFERENCE_ID to conference.id,
+                COLUMN_CONFERENCE_TOPIC to conference.topic,
+                COLUMN_CONFERENCE_CUSTOM_TOPIC to conference.customTopic,
+                COLUMN_CONFERENCE_PARTICIPANT_AMOUNT to conference.participantAmount,
+                COLUMN_CONFERENCE_IMAGE_TYPE to conference.imageType,
+                COLUMN_CONFERENCE_IMAGE_ID to conference.imageId,
+                COLUMN_CONFERENCE_IS_GROUP to if (conference.isGroup) 1 else 0,
+                COLUMN_CONFERENCE_IS_READ to if (conference.isRead) 1 else 0,
+                COLUMN_CONFERENCE_LAST_MESSAGE_TIME to conference.time,
+                COLUMN_CONFERENCE_UNREAD_MESSAGE_AMOUNT to conference.unreadMessageAmount,
+                COLUMN_CONFERENCE_LAST_READ_MESSAGE_ID to conference.lastReadMessageId)
     }
 }
 

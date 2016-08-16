@@ -9,21 +9,21 @@ import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import butterknife.bindView
 import com.proxerme.app.R
+import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.fragment.ChatFragment
-import com.proxerme.library.connection.messenger.entity.Conference
 
 class ChatActivity : AppCompatActivity() {
 
     companion object {
         private const val EXTRA_CONFERENCE = "extra_conference"
 
-        fun navigateTo(context: Activity, conference: Conference) {
+        fun navigateTo(context: Activity, conference: LocalConference) {
             context.startActivity(Intent(context, ChatActivity::class.java).apply {
                 this.putExtra(EXTRA_CONFERENCE, conference)
             })
         }
 
-        fun getIntent(context: Context, conference: Conference): Intent {
+        fun getIntent(context: Context, conference: LocalConference): Intent {
             return Intent(context, ChatActivity::class.java).apply {
                 this.putExtra(EXTRA_CONFERENCE, conference)
             }
@@ -40,7 +40,7 @@ class ChatActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        title = intent.getParcelableExtra<Conference>(EXTRA_CONFERENCE).topic
+        title = intent.getParcelableExtra<LocalConference>(EXTRA_CONFERENCE).topic
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction().replace(R.id.contentContainer,

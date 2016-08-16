@@ -16,9 +16,9 @@ import com.klinker.android.link_builder.TouchableMovementMethod
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
+import com.proxerme.app.entitiy.LocalMessage
 import com.proxerme.app.util.TimeUtil
 import com.proxerme.app.util.Utils
-import com.proxerme.library.connection.messenger.entity.Message
 import com.proxerme.library.connection.user.entitiy.User
 import java.util.*
 
@@ -48,9 +48,9 @@ class ChatAdapter(savedInstanceState: Bundle?) :
 
     var user: User? = null
 
-    private val list = ArrayList<Message>()
-    private val selectedMap = HashMap<String, Boolean>()
-    private val showingTimeMap = HashMap<String, Boolean>()
+    private val list = ArrayList<LocalMessage>()
+    private val selectedMap = HashMap<Long, Boolean>()
+    private val showingTimeMap = HashMap<Long, Boolean>()
 
     private var selecting = false
 
@@ -59,8 +59,8 @@ class ChatAdapter(savedInstanceState: Bundle?) :
     init {
         setHasStableIds(true)
 
-        val selectedIds = savedInstanceState?.getStringArrayList(STATE_MESSAGE_SELECTED_IDS)
-        val showingTimeIds = savedInstanceState?.getStringArrayList(STATE_MESSAGE_SHOWING_TIME_IDS)
+        val selectedIds = savedInstanceState?.getLongArray(STATE_MESSAGE_SELECTED_IDS)
+        val showingTimeIds = savedInstanceState?.getLongArray(STATE_MESSAGE_SHOWING_TIME_IDS)
 
         this.selecting = savedInstanceState?.getBoolean(STATE_MESSAGE_SELECTING) ?: false
 
@@ -96,7 +96,7 @@ class ChatAdapter(savedInstanceState: Bundle?) :
                 Utils.convertDpToPx(holder.itemView.context, margins.second.toFloat()))
     }
 
-    override fun getItemId(position: Int): Long = list[position].id.toLong()
+    override fun getItemId(position: Int): Long = list[position].localId
 
     private fun getMarginsForPosition(position: Int): Pair<Int, Int> {
         val marginTop: Int
@@ -193,7 +193,7 @@ class ChatAdapter(savedInstanceState: Bundle?) :
         return result
     }
 
-    fun replace(newItems: Collection<Message>) {
+    fun replace(newItems: Collection<LocalMessage>) {
         list.clear()
         list.addAll(newItems)
 
@@ -202,10 +202,10 @@ class ChatAdapter(savedInstanceState: Bundle?) :
 
     fun saveInstanceState(outState: Bundle) {
         outState.putBoolean(STATE_MESSAGE_SELECTING, selecting)
-        outState.putStringArrayList(STATE_MESSAGE_SELECTED_IDS,
-                ArrayList(selectedMap.keys))
-        outState.putStringArrayList(STATE_MESSAGE_SHOWING_TIME_IDS,
-                ArrayList(showingTimeMap.keys))
+        outState.putLongArray(STATE_MESSAGE_SELECTED_IDS,
+                selectedMap.keys.toLongArray())
+        outState.putLongArray(STATE_MESSAGE_SHOWING_TIME_IDS,
+                showingTimeMap.keys.toLongArray())
     }
 
     fun clear() {
@@ -230,11 +230,11 @@ class ChatAdapter(savedInstanceState: Bundle?) :
         notifyDataSetChanged()
     }
 
-    val selectedItems: List<Message>
-        get() = list.filter { selectedMap.containsKey(it.id) }.sortedBy { it.time }
+    val selectedItems: List<LocalMessage>
+        get() = list.filter { selectedMap.containsKey(it.localId) }.sortedBy { it.time }
 
     abstract class OnMessageInteractionListener {
-        open fun onMessageTitleClick(v: View, message: Message) {
+        open fun onMessageTitleClick(v: View, message: LocalMessage) {
 
         }
 
@@ -266,7 +266,7 @@ class ChatAdapter(savedInstanceState: Bundle?) :
             text.movementMethod = TouchableMovementMethod.getInstance()
         }
 
-        open fun bind(message: Message, marginTop: Int, marginBottom: Int) {
+        open fun bind(message: LocalMessage, marginTop: Int, marginBottom: Int) {
             text.text = Utils.buildClickableText(text.context, message.message,
                     onWebClickListener = Link.OnClickListener {
                         callback?.onMessageLinkClick(it)
@@ -289,7 +289,7 @@ class ChatAdapter(savedInstanceState: Bundle?) :
                 text.setCompoundDrawables(null, null, null, null)
             }
 
-            if (selectedMap.containsKey(message.id)) {
+            if (selectedMap.containsKey(message.localId)) {
                 container.cardBackgroundColor = ContextCompat
                         .getColorStateList(container.context, R.color.md_grey_200)
             } else {
@@ -297,7 +297,7 @@ class ChatAdapter(savedInstanceState: Bundle?) :
                         .getColorStateList(container.context, backgroundColor)
             }
 
-            if (showingTimeMap.containsKey(message.id)) {
+            if (showingTimeMap.containsKey(message.localId)) {
                 time.visibility = View.VISIBLE
             } else {
                 time.visibility = View.GONE
@@ -316,22 +316,22 @@ class ChatAdapter(savedInstanceState: Bundle?) :
                 val current = list[adapterPosition]
 
                 if (selecting) {
-                    if (selectedMap.containsKey(current.id)) {
-                        selectedMap.remove(current.id)
+                    if (selectedMap.containsKey(current.localId)) {
+                        selectedMap.remove(current.localId)
 
                         if (selectedMap.size <= 0) {
                             selecting = false
                         }
                     } else {
-                        selectedMap.put(current.id, true)
+                        selectedMap.put(current.localId, true)
                     }
 
                     callback?.onMessageSelection(selectedMap.size)
                 } else {
-                    if (showingTimeMap.containsKey(current.id)) {
-                        showingTimeMap.remove(current.id)
+                    if (showingTimeMap.containsKey(current.localId)) {
+                        showingTimeMap.remove(current.localId)
                     } else {
-                        showingTimeMap.put(current.id, true)
+                        showingTimeMap.put(current.localId, true)
                     }
                 }
 
@@ -346,7 +346,7 @@ class ChatAdapter(savedInstanceState: Bundle?) :
                 if (!selecting) {
                     selecting = true
 
-                    selectedMap.put(current.id, true)
+                    selectedMap.put(current.localId, true)
                     notifyDataSetChanged()
 
                     callback?.onMessageSelection(selectedMap.size)
@@ -371,7 +371,7 @@ class ChatAdapter(savedInstanceState: Bundle?) :
             }
         }
 
-        override fun bind(message: Message, marginTop: Int, marginBottom: Int) {
+        override fun bind(message: LocalMessage, marginTop: Int, marginBottom: Int) {
             super.bind(message, marginTop, marginBottom)
 
             title.text = message.username
@@ -386,14 +386,14 @@ class ChatAdapter(savedInstanceState: Bundle?) :
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 val current = list[adapterPosition]
 
-                if (showingTimeMap.containsKey(current.id)) {
+                if (showingTimeMap.containsKey(current.localId)) {
                     time.visibility = View.GONE
 
-                    showingTimeMap.remove(current.id)
+                    showingTimeMap.remove(current.localId)
                 } else {
                     time.visibility = View.VISIBLE
 
-                    showingTimeMap.put(current.id, true)
+                    showingTimeMap.put(current.localId, true)
                 }
             }
         }
