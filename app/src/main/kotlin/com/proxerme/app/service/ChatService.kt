@@ -169,16 +169,12 @@ class ChatService : IntentService("ChatService") {
 
     private fun sendMessages() {
         chatDatabase.getMessagesToSend().forEach {
-            try {
-                val result = SendMessageRequest(it.conferenceId, it.message).executeSynchronized()
+            val result = SendMessageRequest(it.conferenceId, it.message).executeSynchronized()
 
-                if (result.item != null) {
-                    throw MessageSendingException(result.item)
-                }
+            chatDatabase.removeMessageToSend(it.localId)
 
-                chatDatabase.removeMessageToSend(it.localId)
-            } catch(exception: ProxerException) {
-
+            if (result.item != null) {
+                throw MessageSendingException(result.item)
             }
         }
     }
@@ -191,7 +187,7 @@ class ChatService : IntentService("ChatService") {
             val fetchedConferences = ConferencesRequest(page).executeSynchronized().item
 
             for (conference in fetchedConferences) {
-                if (conference != chatDatabase.getConference(conference.id)) {
+                if (conference != chatDatabase.getConference(conference.id)?.toNonLocalConference()) {
                     changedConferences.add(conference)
                 } else {
                     break

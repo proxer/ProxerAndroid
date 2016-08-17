@@ -57,4 +57,9 @@ class LocalConference : Conference, Parcelable {
         result = 31 * result + localId.hashCode()
         return result
     }
+
+    fun toNonLocalConference(): Conference {
+        return Conference(id, topic, customTopic, participantAmount, imageType, imageId, isGroup,
+                isRead, time, unreadMessageAmount, lastReadMessageId)
+    }
 }
