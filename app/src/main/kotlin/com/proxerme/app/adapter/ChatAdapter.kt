@@ -282,8 +282,8 @@ class ChatAdapter(savedInstanceState: Bundle?) :
                 text.setCompoundDrawables(null, null,
                         IconicsDrawable(text.context)
                                 .icon(CommunityMaterial.Icon.cmd_clock)
-                                .sizeDp(32)
-                                .paddingDp(8)
+                                .sizeDp(24)
+                                .paddingDp(4)
                                 .colorRes(R.color.secondary_text), null)
             } else {
                 text.setCompoundDrawables(null, null, null, null)
