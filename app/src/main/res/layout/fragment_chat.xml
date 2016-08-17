@@ -41,14 +41,15 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_margin="4dp"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    app:hintEnabled="false">
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/messageInput"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/fragment_chat_message"
-                        android:inputType="textMultiLine" />
+                        android:inputType="textMultiLine|textCapSentences|textAutoCorrect" />
                 </android.support.design.widget.TextInputLayout>
 
                 <Button

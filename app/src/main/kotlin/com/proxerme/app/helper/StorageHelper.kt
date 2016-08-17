@@ -109,6 +109,8 @@ object StorageHelper {
                 HashMap())
 
         map.put(conferenceId, true)
+
+        Hawk.put(STORAGE_CONFERENCE_END_REACHED_MAP, map)
     }
 
     fun incrementChatInterval() {

@@ -33,12 +33,6 @@ abstract class LoadingFragment : MainFragment() {
         const val STATE_CURRENT_ERROR = "fragment_loading_current_error"
     }
 
-    protected var isDisplayingLoad: Boolean
-        get() = refreshLayout.isRefreshing
-        protected set(value) {
-            refreshLayout.post { refreshLayout.isRefreshing = value }
-        }
-
     protected var isLoading = false
     protected var ongoingLoads = 0
     protected var isFirstLoad = true
@@ -97,7 +91,7 @@ abstract class LoadingFragment : MainFragment() {
             if (!isLoading && canLoad) {
                 load(true)
             } else {
-                isDisplayingLoad = false
+                refreshLayout.isRefreshing = false
             }
         }
 
@@ -121,7 +115,7 @@ abstract class LoadingFragment : MainFragment() {
         isLoading = true
         currentError = null
         if (showProgress) {
-            isDisplayingLoad = true
+            refreshLayout.isRefreshing = true
         }
 
         hideError()
@@ -132,8 +126,8 @@ abstract class LoadingFragment : MainFragment() {
 
         if (ongoingLoads <= 0) {
             isLoading = false
-            isDisplayingLoad = false
             isFirstLoad = false
+            refreshLayout.isRefreshing = false
         }
     }
 
@@ -142,7 +136,7 @@ abstract class LoadingFragment : MainFragment() {
 
         ongoingLoads = 0
         isLoading = false
-        isDisplayingLoad = false
+        refreshLayout.isRefreshing = false
         currentError = ErrorHandler.getMessageForErrorCode(context, result.item)
 
         showError(currentError!!)
@@ -184,7 +178,7 @@ abstract class LoadingFragment : MainFragment() {
     open protected fun reset() {
         cancel()
 
-        isDisplayingLoad = false
+        refreshLayout.isRefreshing = false
         isLoading = false
         ongoingLoads = 0
         isFirstLoad = true

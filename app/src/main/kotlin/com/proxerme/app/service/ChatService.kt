@@ -155,9 +155,14 @@ class ChatService : IntentService("ChatService") {
     private fun doLoadConferences() {
         try {
             val pageToRetrieve = chatDatabase.getConferenceAmount() / CONFERENCES_ON_PAGE
+            val newConferences = ConferencesRequest(pageToRetrieve.toInt())
+                    .executeSynchronized().item.toList()
 
-            chatDatabase.insertOrUpdateConferences(ConferencesRequest(pageToRetrieve.toInt())
-                    .executeSynchronized().item.toList())
+            chatDatabase.insertOrUpdateConferences(newConferences)
+
+            if (newConferences.size < CONFERENCES_ON_PAGE) {
+                StorageHelper.conferenceListEndReached = true
+            }
 
             EventBus.getDefault().post(ConferencesEvent())
         } catch(exception: ProxerException) {
@@ -168,9 +173,14 @@ class ChatService : IntentService("ChatService") {
     private fun doLoadMessages(conferenceId: String) {
         try {
             val idToLoadFrom = chatDatabase.getOldestMessage(conferenceId)?.id ?: "0"
+            val newMessages = MessagesRequest(conferenceId, idToLoadFrom)
+                    .executeSynchronized().item.toList()
 
-            chatDatabase.insertOrUpdateMessages(MessagesRequest(conferenceId, idToLoadFrom)
-                    .executeSynchronized().item.toList())
+            chatDatabase.insertOrUpdateMessages(newMessages)
+
+            if (newMessages.size < MESSAGES_ON_PAGE) {
+                StorageHelper.setConferenceReachedEnd(conferenceId)
+            }
 
             EventBus.getDefault().post(ChatEvent())
         } catch(exception: ProxerException) {

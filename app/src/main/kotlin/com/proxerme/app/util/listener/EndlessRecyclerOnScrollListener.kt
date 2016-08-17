@@ -24,10 +24,11 @@ abstract class EndlessRecyclerOnScrollListener
         val totalItemCount = layoutManager.itemCount
 
         if (layoutManager is StaggeredGridLayoutManager) {
-            var firstVisibleItems = IntArray(layoutManager.spanCount)
-            firstVisibleItems = layoutManager.findFirstVisibleItemPositions(firstVisibleItems)
+            val firstVisibleItems = IntArray(layoutManager.spanCount)
 
-            if (firstVisibleItems != null && firstVisibleItems.size > 0) {
+            layoutManager.findFirstVisibleItemPositions(firstVisibleItems)
+
+            if (firstVisibleItems.size > 0) {
                 pastVisibleItems = firstVisibleItems[0]
             }
         } else if (layoutManager is LinearLayoutManager) {

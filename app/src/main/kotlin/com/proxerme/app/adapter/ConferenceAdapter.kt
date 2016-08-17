@@ -25,10 +25,6 @@ import java.util.*
  */
 class ConferenceAdapter : RecyclerView.Adapter<ConferenceAdapter.ViewHolder>() {
 
-    private companion object {
-        const val STATE_ITEMS = "adapter_conferences_state_items"
-    }
-
     private val list = ArrayList<LocalConference>()
     var callback: OnConferenceInteractionListener? = null
 

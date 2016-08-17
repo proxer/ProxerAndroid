@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Translucent" parent="Theme.AppTheme">
+    <style name="Theme.AppTheme" parent="Base.Theme.AppTheme">
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
 
-        <item name="android:windowContentTransitions">true</item>
+    <style name="Theme.Translucent" parent="Theme.AppTheme">
+        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
 </resources>
