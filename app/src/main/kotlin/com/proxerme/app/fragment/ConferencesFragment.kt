@@ -163,7 +163,7 @@ class ConferencesFragment : MainFragment() {
     }
 
     @Subscribe
-    fun onConferencesChanged(event: ConferencesEvent) {
+    fun onConferencesChanged(@Suppress("UNUSED_PARAMETER") event: ConferencesEvent) {
         if (loginModule.canLoad()) {
             refresh()
         }

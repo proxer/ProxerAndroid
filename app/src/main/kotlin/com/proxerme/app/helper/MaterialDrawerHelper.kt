@@ -228,6 +228,7 @@ class MaterialDrawerHelper : OnActivityListener {
                         .withIdentifier(ITEM_SETTINGS))
     }
 
+    @Suppress("UNUSED_PARAMETER")
     private fun onDrawerItemClick(view: View?, id: Int, item: IDrawerItem<*, *>): Boolean {
         if (item.identifier != currentId) {
             if (item.isSelectable) {
@@ -240,6 +241,7 @@ class MaterialDrawerHelper : OnActivityListener {
         return true
     }
 
+    @Suppress("UNUSED_PARAMETER")
     private fun onAccountItemClick(view: View?, profile: IProfile<*>, current: Boolean): Boolean {
         return accountClickCallback.invoke(profile.identifier)
     }

@@ -48,12 +48,12 @@ class LoginModule(private val callback: LoginModuleCallback) {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onLoginStateChanged(loginState: UserManager.LoginState) {
+    fun onLoginStateChanged(@Suppress("UNUSED_PARAMETER") loginState: UserManager.LoginState) {
         update()
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onOngoingStateChanged(ongoingState: UserManager.OngoingState) {
+    fun onOngoingStateChanged(@Suppress("UNUSED_PARAMETER") ongoingState: UserManager.OngoingState) {
         update()
     }
 

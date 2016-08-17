@@ -86,7 +86,7 @@ class MainApplication : Application() {
     }
 
     @Subscribe
-    fun onLoginStateChanged(state: UserManager.LoginState) {
+    fun onLoginStateChanged(@Suppress("UNUSED_PARAMETER") state: UserManager.LoginState) {
         ChatService.synchronize(this)
     }
 }

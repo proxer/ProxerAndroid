@@ -170,7 +170,7 @@ class DashboardActivity : AppCompatActivity(), CustomTabsModule {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onLoginStateChanged(newState: UserManager.LoginState) {
+    fun onLoginStateChanged(@Suppress("UNUSED_PARAMETER") newState: UserManager.LoginState) {
         drawer.refreshHeader(this)
     }
 

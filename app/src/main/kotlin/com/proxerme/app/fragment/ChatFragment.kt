@@ -259,7 +259,7 @@ class ChatFragment : MainFragment() {
     }
 
     @Subscribe
-    fun onMessagesChanged(event: ChatEvent) {
+    fun onMessagesChanged(@Suppress("UNUSED_PARAMETER") event: ChatEvent) {
         if (loginModule.canLoad()) {
             refresh()
         }
