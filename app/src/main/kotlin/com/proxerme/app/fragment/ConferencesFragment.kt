@@ -32,6 +32,7 @@ import com.proxerme.app.util.Utils
 import com.proxerme.app.util.listener.EndlessRecyclerOnScrollListener
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.util.concurrent.Future
@@ -168,6 +169,13 @@ class ConferencesFragment : MainFragment() {
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onLoadMoreConferencesException(exception: ChatService.LoadMoreConferencesException) {
+        if (!StorageHelper.conferenceListEndReached) {
+            showError(exception.message!!)
+        }
+    }
+
     private fun showError(message: String, buttonMessage: String? = null,
                           onButtonClickListener: View.OnClickListener? = null) {
         errorContainer.visibility = View.VISIBLE
@@ -187,7 +195,6 @@ class ConferencesFragment : MainFragment() {
 
         if (onButtonClickListener == null) {
             errorButton.setOnClickListener {
-                hideError()
                 refresh()
             }
         } else {
@@ -212,8 +219,19 @@ class ConferencesFragment : MainFragment() {
             try {
                 val conferences = context.chatDatabase.getConferences()
 
-                uiThread {
-                    adapter.replace(conferences)
+                if (conferences.isEmpty()) {
+                    if (!StorageHelper.conferenceListEndReached &&
+                            !ChatService.isLoadingConferences) {
+                        ChatService.loadMoreConferences(context)
+                    } else {
+                        //TODO show empty view
+                    }
+                } else {
+                    uiThread {
+                        hideError()
+
+                        adapter.replace(conferences)
+                    }
                 }
             } catch(exception: SQLException) {
                 uiThread {

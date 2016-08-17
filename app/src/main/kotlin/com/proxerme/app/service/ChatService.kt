@@ -13,6 +13,7 @@ import com.proxerme.app.helper.ServiceHelper
 import com.proxerme.app.helper.StorageHelper
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.manager.UserManager
+import com.proxerme.app.util.ErrorHandler
 import com.proxerme.library.connection.ProxerException
 import com.proxerme.library.connection.messenger.entity.Conference
 import com.proxerme.library.connection.messenger.entity.Message
@@ -109,6 +110,8 @@ class ChatService : IntentService("ChatService") {
                     }
                     else -> return
                 }
+            } catch(exception: ChatException) {
+                EventBus.getDefault().post(exception)
             } catch(exception: ProxerException) {
 
             } catch (exception: Exception) {
@@ -150,109 +153,133 @@ class ChatService : IntentService("ChatService") {
     }
 
     private fun doLoadConferences() {
-        val pageToRetrieve = chatDatabase.getConferenceAmount() / CONFERENCES_ON_PAGE
+        try {
+            val pageToRetrieve = chatDatabase.getConferenceAmount() / CONFERENCES_ON_PAGE
 
-        chatDatabase.insertOrUpdateConferences(ConferencesRequest(pageToRetrieve.toInt())
-                .executeSynchronized().item.toList())
+            chatDatabase.insertOrUpdateConferences(ConferencesRequest(pageToRetrieve.toInt())
+                    .executeSynchronized().item.toList())
 
-        EventBus.getDefault().post(ConferencesEvent())
+            EventBus.getDefault().post(ConferencesEvent())
+        } catch(exception: ProxerException) {
+            throw LoadMoreConferencesException(ErrorHandler.getMessageForErrorCode(this, exception))
+        }
     }
 
     private fun doLoadMessages(conferenceId: String) {
-        val idToLoadFrom = chatDatabase.getOldestMessage(conferenceId)?.id ?: "0"
+        try {
+            val idToLoadFrom = chatDatabase.getOldestMessage(conferenceId)?.id ?: "0"
 
-        chatDatabase.insertOrUpdateMessages(MessagesRequest(conferenceId, idToLoadFrom)
-                .executeSynchronized().item.toList())
+            chatDatabase.insertOrUpdateMessages(MessagesRequest(conferenceId, idToLoadFrom)
+                    .executeSynchronized().item.toList())
 
-        EventBus.getDefault().post(ChatEvent())
+            EventBus.getDefault().post(ChatEvent())
+        } catch(exception: ProxerException) {
+            throw LoadMoreMessagesException(ErrorHandler.getMessageForErrorCode(this, exception),
+                    conferenceId)
+        }
     }
 
     private fun sendMessages() {
         chatDatabase.getMessagesToSend().forEach {
-            val result = SendMessageRequest(it.conferenceId, it.message).executeSynchronized()
+            try {
+                val result = SendMessageRequest(it.conferenceId, it.message).executeSynchronized()
 
-            chatDatabase.removeMessageToSend(it.localId)
+                chatDatabase.removeMessageToSend(it.localId)
 
-            if (result.item != null) {
-                throw MessageSendingException(result.item)
+                if (result.item != null) {
+                    throw SendMessageException(result.item!!, it.conferenceId)
+                }
+            } catch(exception: ProxerException) {
+                throw SendMessageException(ErrorHandler.getMessageForErrorCode(this, exception),
+                        it.conferenceId)
             }
         }
     }
 
     private fun fetchConferences(): Collection<Conference> {
-        val changedConferences = HashSet<Conference>()
-        var page = 0
+        try {
+            val changedConferences = HashSet<Conference>()
+            var page = 0
 
-        while (true) {
-            val fetchedConferences = ConferencesRequest(page).executeSynchronized().item
+            while (true) {
+                val fetchedConferences = ConferencesRequest(page).executeSynchronized().item
 
-            for (conference in fetchedConferences) {
-                if (conference != chatDatabase.getConference(conference.id)?.toNonLocalConference()) {
-                    changedConferences.add(conference)
-                } else {
+                for (conference in fetchedConferences) {
+                    if (conference != chatDatabase.getConference(conference.id)
+                            ?.toNonLocalConference()) {
+                        changedConferences.add(conference)
+                    } else {
+                        break
+                    }
+                }
+
+                if (fetchedConferences.size < CONFERENCES_ON_PAGE) {
+                    StorageHelper.conferenceListEndReached = true
+
                     break
+                }
+
+                if (changedConferences.size / (page + 1) < CONFERENCES_ON_PAGE) {
+                    break
+                } else {
+                    page++
                 }
             }
 
-            if (fetchedConferences.size < CONFERENCES_ON_PAGE) {
-                StorageHelper.conferenceListEndReached = true
-
-                break
-            }
-
-            if (changedConferences.size / (page + 1) < CONFERENCES_ON_PAGE) {
-                break
-            } else {
-                page++
-            }
+            return changedConferences
+        } catch (exception: ProxerException) {
+            throw FetchConferencesException(ErrorHandler.getMessageForErrorCode(this, exception))
         }
-
-        return changedConferences
     }
 
     private fun fetchMessages(changedConferences: Collection<Conference>): Collection<Message> {
         val newMessages = LinkedList<Message>()
 
         for (conference in changedConferences) {
-            var mostRecentMessage: Message? = chatDatabase.getMostRecentMessage(conference.id)
-            var existingUnreadMessageAmount = chatDatabase.getUnreadMessageAmount(conference.id,
-                    conference.lastReadMessageId)
-            var nextId = "0"
+            try {
+                var mostRecentMessage: Message? = chatDatabase.getMostRecentMessage(conference.id)
+                var existingUnreadMessageAmount = chatDatabase.getUnreadMessageAmount(conference.id,
+                        conference.lastReadMessageId)
+                var nextId = "0"
 
-            if (mostRecentMessage == null) {
-                while (existingUnreadMessageAmount < conference.unreadMessageAmount) {
-                    val fetchedMessages = MessagesRequest(conference.id, nextId)
-                            .executeSynchronized().item
+                if (mostRecentMessage == null) {
+                    while (existingUnreadMessageAmount < conference.unreadMessageAmount) {
+                        val fetchedMessages = MessagesRequest(conference.id, nextId)
+                                .executeSynchronized().item
 
-                    newMessages.addAll(fetchedMessages)
+                        newMessages.addAll(fetchedMessages)
 
-                    if (fetchedMessages.size < MESSAGES_ON_PAGE) {
-                        StorageHelper.setConferenceReachedEnd(conference.id)
+                        if (fetchedMessages.size < MESSAGES_ON_PAGE) {
+                            StorageHelper.setConferenceReachedEnd(conference.id)
 
-                        break
-                    } else {
-                        existingUnreadMessageAmount += fetchedMessages.size
-                        nextId = fetchedMessages.first().id
+                            break
+                        } else {
+                            existingUnreadMessageAmount += fetchedMessages.size
+                            nextId = fetchedMessages.first().id
+                        }
+                    }
+                } else {
+                    while (mostRecentMessage!!.time < conference.time ||
+                            existingUnreadMessageAmount < conference.unreadMessageAmount) {
+                        val fetchedMessages = MessagesRequest(conference.id, nextId)
+                                .executeSynchronized().item
+
+                        newMessages.addAll(fetchedMessages)
+
+                        if (fetchedMessages.size < MESSAGES_ON_PAGE) {
+                            StorageHelper.setConferenceReachedEnd(conference.id)
+
+                            break
+                        } else {
+                            existingUnreadMessageAmount += fetchedMessages.size
+                            mostRecentMessage = fetchedMessages.last()
+                            nextId = fetchedMessages.first().id
+                        }
                     }
                 }
-            } else {
-                while (mostRecentMessage!!.time < conference.time ||
-                        existingUnreadMessageAmount < conference.unreadMessageAmount) {
-                    val fetchedMessages = MessagesRequest(conference.id, nextId)
-                            .executeSynchronized().item
-
-                    newMessages.addAll(fetchedMessages)
-
-                    if (fetchedMessages.size < MESSAGES_ON_PAGE) {
-                        StorageHelper.setConferenceReachedEnd(conference.id)
-
-                        break
-                    } else {
-                        existingUnreadMessageAmount += fetchedMessages.size
-                        mostRecentMessage = fetchedMessages.last()
-                        nextId = fetchedMessages.first().id
-                    }
-                }
+            } catch (exception: ProxerException) {
+                throw FetchMessagesException(ErrorHandler.getMessageForErrorCode(this, exception),
+                        conference.id)
             }
         }
 
@@ -273,5 +300,17 @@ class ChatService : IntentService("ChatService") {
         NotificationHelper.showChatNotification(this, unreadMap)
     }
 
-    class MessageSendingException(message: String?) : Exception(message)
+    open class ChatException(message: String) : Exception(message)
+
+    class LoadMoreMessagesException(message: String, val conferenceId: String) :
+            ChatException(message)
+
+    class LoadMoreConferencesException(message: String) : ChatException(message)
+
+    class SendMessageException(message: String, val conferenceId: String) : ChatException(message)
+
+    class FetchMessagesException(message: String, val conferenceId: String) :
+            ChatException(message)
+
+    class FetchConferencesException(message: String) : ChatException(message)
 }

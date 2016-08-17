@@ -48,7 +48,6 @@ class LoginDialog : DialogFragment() {
     private lateinit var inputContainer: ViewGroup
     private lateinit var progress: ProgressBar
 
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return MaterialDialog.Builder(context)
                 .autoDismiss(false)

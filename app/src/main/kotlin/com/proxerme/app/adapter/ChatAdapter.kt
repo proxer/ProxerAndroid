@@ -402,4 +402,8 @@ class ChatAdapter(savedInstanceState: Bundle?) :
             return false
         }
     }
+
+    fun isEmpty(): Boolean {
+        return list.isEmpty()
+    }
 }
