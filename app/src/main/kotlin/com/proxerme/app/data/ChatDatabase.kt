@@ -10,6 +10,7 @@ import com.proxerme.library.connection.messenger.entity.Message
 import com.proxerme.library.connection.user.entitiy.User
 import org.jetbrains.anko.db.*
 import org.joda.time.DateTime
+import java.util.*
 
 /**
  * TODO: Describe class
@@ -104,10 +105,21 @@ class ChatDatabase(context: Context) :
 
     fun getMessages(conferenceId: String): List<LocalMessage> {
         return use {
-            this.select(ChatDatabase.TABLE_MESSAGE)
-                    .where("$COLUMN_MESSAGE_CONFERENCE_ID = $conferenceId")
-                    .orderBy(COLUMN_MESSAGE_LOCAL_ID, SqlOrderDirection.DESC)
-                    .parseList(messageParser)
+            val result = ArrayList<LocalMessage>()
+
+            result.addAll(this.select(ChatDatabase.TABLE_MESSAGE)
+                    .where("($COLUMN_MESSAGE_CONFERENCE_ID = $conferenceId) and " +
+                            "($COLUMN_MESSAGE_ID != -1)")
+                    .orderBy(COLUMN_MESSAGE_ID, SqlOrderDirection.DESC)
+                    .parseList(messageParser))
+
+            result.addAll(0, this.select(ChatDatabase.TABLE_MESSAGE)
+                    .where("($COLUMN_MESSAGE_CONFERENCE_ID = $conferenceId) and " +
+                            "($COLUMN_MESSAGE_ID = -1)")
+                    .orderBy(COLUMN_MESSAGE_TIME, SqlOrderDirection.DESC)
+                    .parseList(messageParser))
+
+            result
         }
     }
 
