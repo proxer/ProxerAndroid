@@ -128,8 +128,8 @@ class MediaAdapter(savedInstanceState: Bundle?,
 
         private fun generateEpisodeCountDescription(count: Int): String {
             return when (category) {
-                CategoryParameter.ANIME -> "${count} Episoden"
-                CategoryParameter.MANGA -> "${count} Kapitel"
+                CategoryParameter.ANIME -> "$count Episoden"
+                CategoryParameter.MANGA -> "$count Kapitel"
                 else -> throw RuntimeException("Category has an illegal value")
             }
         }
