@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import butterknife.bindView
 import com.proxerme.app.R
@@ -47,7 +46,7 @@ import org.greenrobot.eventbus.ThreadMode
  *
  * @author Ruben Gees
  */
-class DashboardActivity : AppCompatActivity(), CustomTabsModule {
+class DashboardActivity : MainActivity(), CustomTabsModule {
 
     companion object {
         private const val STATE_TITLE = "activity_dashboard_title"

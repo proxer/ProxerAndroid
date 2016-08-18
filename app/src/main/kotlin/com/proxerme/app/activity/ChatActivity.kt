@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import butterknife.bindView
@@ -12,7 +11,7 @@ import com.proxerme.app.R
 import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.fragment.ChatFragment
 
-class ChatActivity : AppCompatActivity() {
+class ChatActivity : MainActivity() {
 
     companion object {
         private const val EXTRA_CONFERENCE = "extra_conference"

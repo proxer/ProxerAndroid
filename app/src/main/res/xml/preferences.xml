@@ -10,6 +10,17 @@
             android:title="Hentai" />
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="Design">
+        <ListPreference
+            android:defaultValue="0"
+            android:dependency="pref_night_mode"
+            android:entries="@array/night_mode_titles"
+            android:entryValues="@array/night_mode_values"
+            android:key="pref_night_mode"
+            android:summary="%s"
+            android:title="Nachtmodus" />
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="@string/preference_category_notifications_title">
         <CheckBoxPreference
             android:key="pref_news_notifications"

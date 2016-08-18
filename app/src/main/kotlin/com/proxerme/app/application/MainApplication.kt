@@ -4,7 +4,6 @@ import android.app.Application
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.net.Uri
-import android.support.v7.app.AppCompatDelegate
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -33,12 +32,6 @@ import java.net.CookiePolicy
  */
 
 class MainApplication : Application() {
-
-    companion object {
-        init {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        }
-    }
 
     override fun onCreate() {
         super.onCreate()

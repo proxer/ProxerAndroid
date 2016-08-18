@@ -8,6 +8,7 @@ import android.support.v7.preference.TwoStatePreference
 import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.LibsBuilder
 import com.proxerme.app.R
+import com.proxerme.app.activity.MainActivity
 import com.proxerme.app.dialog.HentaiConfirmationDialog
 import com.proxerme.app.helper.PreferenceHelper
 import com.proxerme.app.helper.ServiceHelper
@@ -95,6 +96,10 @@ class SettingsFragment : PreferenceFragmentCompat(), OnActivityListener,
                 if (PreferenceHelper.isHentaiAllowed(context)) {
                     hentaiPreference.isChecked = true
                 }
+            }
+
+            PreferenceHelper.PREFERENCE_NIGHT_MODE -> {
+                (activity as MainActivity).setNightMode()
             }
         }
     }
