@@ -4,10 +4,13 @@
     <color name="colorPrimaryDark">#710000</color>
     <color name="colorPrimaryLight">#A42828</color>
     <color name="colorAccent">#8A0E0E</color>
-    <color name="primary_text">#000000</color>
-    <color name="secondary_text">#727272</color>
-    <color name="divider">#B6B6B6</color>
-    <color name="icons_grey">#B6B6B6</color>
+    <color name="colorBackground">#FAFAFA</color>
+    <color name="divider">#1F000000</color>
+    <color name="icon">#61000000</color>
     <color name="transparent_50">#80000000</color>
+
+    <color name="colorLink">#0000EE</color>
+    <color name="cardview_background">@color/cardview_light_background</color>
+
     <color name="preference_accent">@color/colorAccent</color>
 </resources>

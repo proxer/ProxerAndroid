@@ -92,7 +92,7 @@ class NewsAdapter(val savedInstanceState: Bundle?) :
 
         init {
             expand.setImageDrawable(IconicsDrawable(expand.context)
-                    .colorRes(R.color.icons_grey)
+                    .colorRes(R.color.icon)
                     .sizeDp(ICON_SIZE)
                     .paddingDp(ICON_PADDING)
                     .icon(CommunityMaterial.Icon.cmd_chevron_down))

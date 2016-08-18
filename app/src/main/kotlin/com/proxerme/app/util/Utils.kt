@@ -15,6 +15,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.Target
 import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.LinkBuilder
+import com.proxerme.app.R
 import java.util.concurrent.ExecutionException
 import java.util.regex.Pattern
 
@@ -105,7 +106,7 @@ object Utils {
 
         if (onWebClickListener != null || onWebLongClickListener != null) {
             builder.addLink(Link(WEB_REGEX)
-                    .setTextColor(Color.BLUE)
+                    .setTextColor(ContextCompat.getColor(context, R.color.colorLink))
                     .setUnderlined(false)
                     .setOnClickListener(onWebClickListener)
                     .setOnLongClickListener(onWebLongClickListener))
@@ -113,6 +114,7 @@ object Utils {
 
         if (onMentionsClickListener != null || onMentionsLongClickListener != null) {
             builder.addLink(Link(MENTIONS_REGEX)
+                    .setTextColor(ContextCompat.getColor(context, R.color.colorLink))
                     .setTextColor(Color.BLUE)
                     .setUnderlined(false)
                     .setOnClickListener(onMentionsClickListener)

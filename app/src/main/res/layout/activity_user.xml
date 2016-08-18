@@ -41,7 +41,7 @@
                 android:gravity="top"
                 android:minHeight="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                app:popupTheme="@style/MenuOverlay"
                 app:titleMarginTop="15dp" />
 
             <android.support.design.widget.TabLayout

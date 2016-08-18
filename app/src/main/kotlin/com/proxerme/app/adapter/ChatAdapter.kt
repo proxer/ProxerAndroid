@@ -284,7 +284,7 @@ class ChatAdapter(savedInstanceState: Bundle?) :
                                 .icon(CommunityMaterial.Icon.cmd_clock)
                                 .sizeDp(24)
                                 .paddingDp(4)
-                                .colorRes(R.color.secondary_text), null)
+                                .colorRes(R.color.icon), null)
             } else {
                 text.setCompoundDrawables(null, null, null, null)
             }
@@ -294,7 +294,7 @@ class ChatAdapter(savedInstanceState: Bundle?) :
                         .getColorStateList(container.context, R.color.md_grey_200)
             } else {
                 container.cardBackgroundColor = ContextCompat
-                        .getColorStateList(container.context, backgroundColor)
+                        .getColorStateList(container.context, R.color.cardview_background)
             }
 
             if (showingTimeMap.containsKey(message.localId)) {
