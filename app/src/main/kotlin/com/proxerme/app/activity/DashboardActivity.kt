@@ -40,6 +40,7 @@ import com.rubengees.introduction.entity.Option
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import org.jetbrains.anko.intentFor
 
 /**
  * TODO: Describe class
@@ -54,8 +55,7 @@ class DashboardActivity : MainActivity(), CustomTabsModule {
 
         fun getSectionIntent(context: Context,
                              @MaterialDrawerHelper.Companion.DrawerItem itemId: Long): Intent {
-            return Intent(context, DashboardActivity::class.java)
-                    .apply { this.putExtra(EXTRA_DRAWER_ITEM, itemId) }
+            return context.intentFor<DashboardActivity>(EXTRA_DRAWER_ITEM to itemId)
         }
     }
 

@@ -21,6 +21,7 @@ import com.proxerme.library.connection.messenger.request.ConferencesRequest
 import com.proxerme.library.connection.messenger.request.MessagesRequest
 import com.proxerme.library.connection.messenger.request.SendMessageRequest
 import org.greenrobot.eventbus.EventBus
+import org.jetbrains.anko.intentFor
 import java.util.*
 
 /**
@@ -54,22 +55,17 @@ class ChatService : IntentService("ChatService") {
         fun synchronize(context: Context) {
             ServiceHelper.cancelChatRetrieval(context)
 
-            context.startService(Intent(context, ChatService::class.java)
-                    .apply { action = ACTION_SYNCHRONIZE })
+            context.startService(context.intentFor<ChatService>().setAction(ACTION_SYNCHRONIZE))
         }
 
         fun loadMoreConferences(context: Context) {
-            context.startService(Intent(context, ChatService::class.java)
-                    .apply { action = ACTION_LOAD_CONFERENCES })
+            context.startService(context.intentFor<ChatService>()
+                    .setAction(ACTION_LOAD_CONFERENCES))
         }
 
         fun loadMoreMessages(context: Context, conferenceId: String) {
-            context.startService(Intent(context, ChatService::class.java)
-                    .apply {
-                        action = ACTION_LOAD_MESSAGES
-
-                        putExtra(EXTRA_CONFERENCE_ID, conferenceId)
-                    })
+            context.startService(context.intentFor<ChatService>(EXTRA_CONFERENCE_ID to conferenceId)
+                    .setAction(ACTION_LOAD_MESSAGES))
         }
 
         fun reschedule(context: Context) {

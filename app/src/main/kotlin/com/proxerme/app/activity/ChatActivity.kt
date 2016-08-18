@@ -10,6 +10,7 @@ import butterknife.bindView
 import com.proxerme.app.R
 import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.fragment.ChatFragment
+import org.jetbrains.anko.intentFor
 
 class ChatActivity : MainActivity() {
 
@@ -17,15 +18,11 @@ class ChatActivity : MainActivity() {
         private const val EXTRA_CONFERENCE = "extra_conference"
 
         fun navigateTo(context: Activity, conference: LocalConference) {
-            context.startActivity(Intent(context, ChatActivity::class.java).apply {
-                this.putExtra(EXTRA_CONFERENCE, conference)
-            })
+            context.startActivity(context.intentFor<ChatActivity>(EXTRA_CONFERENCE to conference))
         }
 
         fun getIntent(context: Context, conference: LocalConference): Intent {
-            return Intent(context, ChatActivity::class.java).apply {
-                this.putExtra(EXTRA_CONFERENCE, conference)
-            }
+            return context.intentFor<ChatActivity>(EXTRA_CONFERENCE to conference)
         }
     }
 

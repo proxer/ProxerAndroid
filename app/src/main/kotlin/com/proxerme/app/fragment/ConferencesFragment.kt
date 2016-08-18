@@ -13,7 +13,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import butterknife.bindView
 import com.klinker.android.link_builder.Link
 import com.proxerme.app.R
@@ -34,6 +33,7 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
 import java.util.concurrent.Future
 
@@ -183,7 +183,7 @@ class ConferencesFragment : MainFragment() {
             try {
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link + "?device=mobile")))
             } catch (exception: ActivityNotFoundException) {
-                Toast.makeText(context, R.string.link_error_not_found, Toast.LENGTH_SHORT).show()
+                context.toast(R.string.link_error_not_found)
             }
         })
 

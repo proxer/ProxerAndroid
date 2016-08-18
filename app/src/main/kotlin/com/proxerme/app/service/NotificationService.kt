@@ -10,6 +10,7 @@ import com.proxerme.app.helper.StorageHelper
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.library.connection.notifications.request.NewsRequest
 import org.greenrobot.eventbus.EventBus
+import org.jetbrains.anko.intentFor
 
 /**
  * An IntentService, which retrieves the News and shows a notification if there are unread
@@ -24,8 +25,7 @@ class NotificationService : IntentService(NotificationService.SERVICE_TITLE) {
         private const val SERVICE_TITLE = "Notification Service"
 
         fun load(context: Context, @NotificationAction action: String) {
-            context.startService(Intent(context, NotificationService::class.java)
-                    .apply { this.action = action })
+            context.startService(context.intentFor<NotificationService>().setAction(action))
         }
     }
 

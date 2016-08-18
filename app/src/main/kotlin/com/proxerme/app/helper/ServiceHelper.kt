@@ -24,7 +24,7 @@ object ServiceHelper {
         cancelNewsRetrieval(context)
 
         if (isNewsRetrievalEnabled(context)) {
-            val interval = PreferenceHelper.getNewsUpdateInterval(context) * 60L * 1000L
+            val interval = PreferenceHelper.getNewsUpdateInterval(context) * 60L
 
             context.alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                     SystemClock.elapsedRealtime() + interval, interval,

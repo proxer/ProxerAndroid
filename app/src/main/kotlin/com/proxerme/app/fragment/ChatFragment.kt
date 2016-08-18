@@ -14,7 +14,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.*
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import butterknife.bindView
 import com.klinker.android.link_builder.Link
 import com.proxerme.app.R
@@ -36,6 +35,7 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
 import java.util.concurrent.Future
 
@@ -138,7 +138,7 @@ class ChatFragment : MainFragment() {
             try {
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link)))
             } catch (exception: ActivityNotFoundException) {
-                Toast.makeText(context, R.string.link_error_not_found, Toast.LENGTH_SHORT).show()
+                context.toast(R.string.link_error_not_found)
             }
         }
 
@@ -281,7 +281,7 @@ class ChatFragment : MainFragment() {
             try {
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link + "?device=mobile")))
             } catch (exception: ActivityNotFoundException) {
-                Toast.makeText(context, R.string.link_error_not_found, Toast.LENGTH_SHORT).show()
+                context.toast(R.string.link_error_not_found)
             }
         })
 
@@ -352,7 +352,7 @@ class ChatFragment : MainFragment() {
 
         clipboard.primaryClip = clip
 
-        Toast.makeText(context, R.string.fragment_chat_clip_status, Toast.LENGTH_SHORT).show()
+        context.toast(R.string.fragment_chat_clip_status)
         actionMode?.finish()
     }
 }

@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import butterknife.bindView
 import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.LinkConsumableTextView
@@ -26,6 +25,7 @@ import com.proxerme.library.connection.user.request.UserInfoRequest
 import com.proxerme.library.info.ProxerTag
 import com.proxerme.library.interfaces.ProxerErrorResult
 import com.proxerme.library.interfaces.ProxerResult
+import org.jetbrains.anko.toast
 
 /**
  * TODO: Describe class
@@ -167,8 +167,7 @@ class ProfileFragment : LoadingFragment() {
                                 try {
                                     startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it)))
                                 } catch (exception: ActivityNotFoundException) {
-                                    Toast.makeText(context, R.string.link_error_not_found,
-                                            Toast.LENGTH_SHORT).show()
+                                    context.toast(R.string.link_error_not_found)
                                 }
                             })
                 }

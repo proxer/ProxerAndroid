@@ -7,11 +7,11 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
-import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
 import com.proxerme.app.R
 import com.proxerme.app.manager.UserManager
 import com.proxerme.app.util.ErrorHandler
+import org.jetbrains.anko.longToast
 
 /**
  * Dialog, which handles the logout of a user.
@@ -99,9 +99,7 @@ class LogoutDialog : DialogFragment() {
                 loading = false
 
                 handleVisibility()
-                Toast.makeText(context,
-                        ErrorHandler.getMessageForErrorCode(context, result.item),
-                        Toast.LENGTH_LONG).show()
+                context.longToast(ErrorHandler.getMessageForErrorCode(context, result.item))
             })
         }
     }

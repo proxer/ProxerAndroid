@@ -14,12 +14,12 @@ import android.view.inputmethod.EditorInfo
 import android.widget.CheckBox
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
 import com.proxerme.app.R
 import com.proxerme.app.manager.UserManager
 import com.proxerme.app.util.ErrorHandler
 import com.proxerme.library.connection.user.entitiy.User
+import org.jetbrains.anko.longToast
 
 /**
  * A dialog, which shows a login mask to the user. It also handles the login and shows a ProgressBar
@@ -148,9 +148,7 @@ class LoginDialog : DialogFragment() {
                     loading = false
 
                     handleVisibility()
-                    Toast.makeText(context,
-                            ErrorHandler.getMessageForErrorCode(context, result.item),
-                            Toast.LENGTH_LONG).show()
+                    context.longToast(ErrorHandler.getMessageForErrorCode(context, result.item))
                 })
             }
         }

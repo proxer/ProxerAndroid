@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import butterknife.bindView
 import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.TouchableMovementMethod
@@ -19,6 +18,7 @@ import com.proxerme.app.util.ErrorHandler
 import com.proxerme.app.util.Utils
 import com.proxerme.library.interfaces.ProxerErrorResult
 import com.proxerme.library.interfaces.ProxerResult
+import org.jetbrains.anko.longToast
 
 /**
  * TODO: Describe Class
@@ -154,7 +154,7 @@ abstract class LoadingFragment : MainFragment() {
             try {
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link + "?device=mobile")))
             } catch (exception: ActivityNotFoundException) {
-                Toast.makeText(context, R.string.link_error_not_found, Toast.LENGTH_SHORT).show()
+                context.longToast(R.string.link_error_not_found)
             }
         })
 
