@@ -291,7 +291,7 @@ class ChatAdapter(savedInstanceState: Bundle?) :
 
             if (selectedMap.containsKey(message.localId)) {
                 container.cardBackgroundColor = ContextCompat
-                        .getColorStateList(container.context, R.color.md_grey_200)
+                        .getColorStateList(container.context, R.color.selected_card)
             } else {
                 container.cardBackgroundColor = ContextCompat
                         .getColorStateList(container.context, R.color.cardview_background)

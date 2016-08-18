@@ -101,14 +101,14 @@ class ConferenceAdapter : RecyclerView.Adapter<ConferenceAdapter.ViewHolder>() {
                                 .icon(CommunityMaterial.Icon.cmd_message_alert)
                                 .sizeDp(32)
                                 .paddingDp(8)
-                                .colorRes(R.color.colorPrimary), null)
+                                .colorRes(R.color.colorAccent), null)
             }
 
             if (conference.imageId.isBlank()) {
                 val icon = IconicsDrawable(image.context)
                         .sizeDp(96)
                         .paddingDp(16)
-                        .colorRes(R.color.colorPrimary)
+                        .colorRes(R.color.colorAccent)
 
                 if (conference.isGroup) {
                     icon.icon(CommunityMaterial.Icon.cmd_account_multiple)

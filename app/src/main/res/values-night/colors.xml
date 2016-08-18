@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimaryDark">#8A0E0E</color>
-    <color name="colorPrimaryLight">#710000</color>
-    <color name="colorPrimary">#A42828</color>
-    <color name="colorAccent">#A42828</color>
+    <color name="colorAccent">#BD4141</color>
     <color name="colorBackground">#303030</color>
     <color name="divider">#15FFFFFF</color>
     <color name="icon">#80FFFFFF</color>
+    <color name="selected">#4A4A4A</color>
 
+    <color name="selected_card">#636363</color>
     <color name="colorLink">#05c5cf</color>
     <color name="cardview_background">@color/cardview_dark_background</color>
 
@@ -15,6 +14,6 @@
     <color name="material_drawer_primary_text">@android:color/primary_text_dark</color>
     <color name="material_drawer_primary_icon">@color/icon</color>
     <color name="material_drawer_secondary_text">@android:color/secondary_text_dark</color>
-    <color name="material_drawer_selected">#202020</color>
+    <color name="material_drawer_selected">@color/selected</color>
     <color name="material_drawer_divider">@color/divider</color>
 </resources>

@@ -60,7 +60,7 @@
                     android:layout_gravity="center_vertical"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:text="@string/fragment_chat_send"
-                    android:textColor="@color/colorPrimary" />
+                    android:textColor="@color/colorAccent" />
             </LinearLayout>
 
         </android.support.v7.widget.CardView>

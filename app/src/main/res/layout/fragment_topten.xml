@@ -27,7 +27,7 @@
                     android:layout_margin="16dp"
                     android:text="@string/fragment_topten_anime"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                    android:textColor="@color/accent" />
+                    android:textColor="@color/colorAccent" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/animeList"
@@ -47,7 +47,7 @@
                     android:layout_margin="16dp"
                     android:text="@string/fragment_topten_manga"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                    android:textColor="@color/accent" />
+                    android:textColor="@color/colorAccent" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/mangaList"

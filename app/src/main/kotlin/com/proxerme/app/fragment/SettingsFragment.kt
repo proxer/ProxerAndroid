@@ -1,6 +1,7 @@
 package com.proxerme.app.fragment
 
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.preference.Preference
@@ -25,8 +26,7 @@ class SettingsFragment : PreferenceFragmentCompat(), OnActivityListener,
 
     companion object {
         private val LIBRARIES: Array<String> = arrayOf("glide", "jodatimeandroid", "bridge",
-                "hawk", "materialdialogs", "eventbus", "circleimageview",
-                "priorityjobqueue")
+                "hawk", "materialdialogs", "eventbus", "circleimageview")
         private val EXCLUDED_LIBRARIES: Array<String> = arrayOf("fastadapter", "materialize")
 
         fun newInstance(): SettingsFragment {
@@ -49,7 +49,7 @@ class SettingsFragment : PreferenceFragmentCompat(), OnActivityListener,
                             .withLibraries(*LIBRARIES)
                             .withExcludedLibraries(*EXCLUDED_LIBRARIES)
                             .withFields(R.string::class.java.fields)
-                            .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
+                            .withActivityStyle(getAboutLibrariesActivityStyle())
                             .withActivityTitle(context.getString(R.string.about_libraries_title))
                             .start(context)
 
@@ -101,6 +101,15 @@ class SettingsFragment : PreferenceFragmentCompat(), OnActivityListener,
             PreferenceHelper.PREFERENCE_NIGHT_MODE -> {
                 (activity as MainActivity).setNightMode()
             }
+        }
+    }
+
+    private fun getAboutLibrariesActivityStyle(): Libs.ActivityStyle {
+        return when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+            Configuration.UI_MODE_NIGHT_NO -> Libs.ActivityStyle.LIGHT_DARK_TOOLBAR
+            Configuration.UI_MODE_NIGHT_YES -> Libs.ActivityStyle.DARK
+            Configuration.UI_MODE_NIGHT_UNDEFINED -> Libs.ActivityStyle.LIGHT_DARK_TOOLBAR
+            else -> throw RuntimeException("Unknown mode")
         }
     }
 }
