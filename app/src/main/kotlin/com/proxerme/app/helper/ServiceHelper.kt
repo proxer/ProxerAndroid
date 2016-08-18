@@ -28,7 +28,7 @@ object ServiceHelper {
 
             context.alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                     SystemClock.elapsedRealtime() + interval, interval,
-                    PendingIntent.getBroadcast(context, 0, context.intentFor<ChatReceiver>()
+                    PendingIntent.getBroadcast(context, 0, context.intentFor<NotificationReceiver>()
                             .setAction(NotificationService.ACTION_LOAD_NEWS), 0))
         }
     }
@@ -42,7 +42,7 @@ object ServiceHelper {
     fun retrieveChatLater(context: Context) {
         cancelChatRetrieval(context)
 
-        val interval = StorageHelper.chatInterval * 1000
+        val interval = StorageHelper.chatInterval * 1000L
 
         context.alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                 SystemClock.elapsedRealtime() + interval,
