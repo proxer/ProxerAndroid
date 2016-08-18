@@ -45,7 +45,6 @@
                 android:textColor="@android:color/white"
                 android:textIsSelectable="true"
                 tools:text="Some title" />
-
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </FrameLayout>

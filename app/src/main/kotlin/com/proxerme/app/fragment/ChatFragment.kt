@@ -338,7 +338,7 @@ class ChatFragment : MainFragment() {
                 }
             } catch(exception: SQLException) {
                 uiThread {
-                    showError("Eine Datenbankabfrage ist fehlgeschlagen. Versuche es erneut")
+                    showError(context.getString(R.string.error_io))
                 }
             }
         }

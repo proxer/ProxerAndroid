@@ -67,10 +67,6 @@
 
     <string name="fragment_paging_retry">Erneut versuchen</string>
 
-    <string name="dialog_login_username">Nutzername</string>
-    <string name="dialog_login_password">Passwort</string>
-    <string name="dialog_login_remember">Merken</string>
-
     <string name="drawer_item_news">News</string>
     <string name="drawer_item_chat">Chat</string>
     <string name="drawer_item_anime">Anime</string>
@@ -87,9 +83,15 @@
     <string name="dialog_login_positive">Anmelden</string>
     <string name="dialog_login_error_username">Bitte gib einen Nutzernamen an</string>
     <string name="dialog_login_error_password">Bitte gib ein Passwort an</string>
+    <string name="dialog_login_username">Nutzername</string>
+    <string name="dialog_login_password">Passwort</string>
+    <string name="dialog_login_remember">Merken</string>
 
     <string name="dialog_logout_title">Möchtest du dich abmelden?</string>
     <string name="dialog_logout_positive">Abmelden</string>
+
+    <string name="dialog_hentai_content">Dieser Bereich darf nur von Benutzern über 18 Jahren betreten werden! Eltern haften für ihre Kinder. Proxer.Me übernimmt keinerlei Haftung!</string>
+    <string name="dialog_hentai_positive">Verstanden</string>
 
     <plurals name="item_conferences_participants">
         <item quantity="other">%d Teilnehmer</item>
@@ -156,4 +158,24 @@
     <string name="action_sort_rating">Nach Bewertungen</string>
     <string name="action_sort_clicks">Nach Zugriffen</string>
     <string name="action_sort_count">Nach Episoden</string>
+    <string name="preference_theme_title">Thema</string>
+    <string name="preference_hentai_summary_off">Hentai wird nicht angezeigt</string>
+    <string name="preference_hentai_summary_on">Hentai wird angezeigt</string>
+    <string name="preference_hentai_title">Hentai</string>
+    <string name="preference_category_general_title">Allgemein</string>
+    <string name="preference_category_design_title">Design</string>
+    <string name="theme_system">Systemeinstellung</string>
+    <string name="theme_auto">Automatisch nach Tageszeit</string>
+    <string name="theme_dark">Dunkel</string>
+    <string name="theme_light">Hell</string>
+
+    <plurals name="media_episode_count">
+        <item quantity="one">Eine Episode</item>
+        <item quantity="other">%d Episoden</item>
+    </plurals>
+
+    <plurals name="media_chapter_count">
+        <item quantity="one">Ein Kapiter</item>
+        <item quantity="other">%d Kapitel</item>
+    </plurals>
 </resources>

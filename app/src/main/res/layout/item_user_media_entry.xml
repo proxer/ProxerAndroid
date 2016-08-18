@@ -86,7 +86,6 @@
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     tools:ignore="SelectableText"
                     tools:text="Folge 13/24 - Am schauen" />
-
             </LinearLayout>
         </RelativeLayout>
     </android.support.v7.widget.CardView>

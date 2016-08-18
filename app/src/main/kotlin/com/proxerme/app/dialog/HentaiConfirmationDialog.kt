@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AppCompatActivity
 import com.afollestad.materialdialogs.MaterialDialog
+import com.proxerme.app.R
 import com.proxerme.app.helper.PreferenceHelper
 
 /**
@@ -23,9 +24,9 @@ class HentaiConfirmationDialog : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return MaterialDialog.Builder(context)
-                .content("Dieser Bereich darf nur von Benutzern über 18 Jahren betreten werden! Eltern haften für ihre Kinder. Proxer.Me übernimmt keinerlei Haftung!")
-                .positiveText("Verstanden")
-                .negativeText("Abbrechen")
+                .content(R.string.dialog_hentai_content)
+                .positiveText(R.string.dialog_hentai_positive)
+                .negativeText(R.string.dialog_cancel)
                 .onPositive { materialDialog, dialogAction ->
                     PreferenceHelper.setHentaiAllowed(context, true)
                 }

@@ -1,5 +1,6 @@
 package com.proxerme.app.adapter
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -107,7 +108,7 @@ class MediaAdapter(savedInstanceState: Bundle?,
             title.text = entry.name
             medium.text = entry.medium
             genres.text = entry.genres.joinToString(", ")
-            episodes.text = generateEpisodeCountDescription(entry.episodeCount)
+            episodes.text = generateEpisodeCountDescription(episodes.context, entry.episodeCount)
             languages.text = entry.languages.joinToString(", ")
 
             if (entry.rating > 0) {
@@ -126,10 +127,12 @@ class MediaAdapter(savedInstanceState: Bundle?,
                     .into(image)
         }
 
-        private fun generateEpisodeCountDescription(count: Int): String {
+        private fun generateEpisodeCountDescription(context: Context, count: Int): String {
             return when (category) {
-                CategoryParameter.ANIME -> "$count Episoden"
-                CategoryParameter.MANGA -> "$count Kapitel"
+                CategoryParameter.ANIME -> context.resources
+                        .getQuantityString(R.plurals.media_episode_count, count, count)
+                CategoryParameter.MANGA -> context.resources
+                        .getQuantityString(R.plurals.media_chapter_count, count, count)
                 else -> throw RuntimeException("Category has an illegal value")
             }
         }

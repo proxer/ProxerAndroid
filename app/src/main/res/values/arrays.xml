@@ -14,14 +14,14 @@
         <item>240</item>
     </string-array>
 
-    <string-array name="night_mode_titles">
-        <item>Systemeinstellung</item>
-        <item>Automatisch</item>
-        <item>Immer Nacht</item>
-        <item>Immer Tag</item>
+    <string-array name="theme_titles">
+        <item>@string/theme_system</item>
+        <item>@string/theme_auto</item>
+        <item>@string/theme_dark</item>
+        <item>@string/theme_light</item>
     </string-array>
 
-    <string-array name="night_mode_values">
+    <string-array name="theme_values">
         <item>0</item>
         <item>1</item>
         <item>2</item>
