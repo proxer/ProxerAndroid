@@ -169,6 +169,11 @@
     <string name="theme_dark">Dunkel</string>
     <string name="theme_light">Hell</string>
 
+    <string name="action_add_user">%1$s hat %2$s zur Konferenz hinzugefügt</string>
+    <string name="action_remove_user">%1$s hat %2$s aus der Konferenz entfernt</string>
+    <string name="action_set_topic">%1$s hat den Konferenztitel in %2$s geändert</string>
+    <string name="action_set_leader">%1$s hat %2$s als neuen Konferenzleiter bestimmt</string>
+
     <plurals name="media_episode_count">
         <item quantity="one">Eine Episode</item>
         <item quantity="other">%d Episoden</item>

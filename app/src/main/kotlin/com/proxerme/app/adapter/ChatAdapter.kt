@@ -20,6 +20,7 @@ import com.proxerme.app.entitiy.LocalMessage
 import com.proxerme.app.util.TimeUtil
 import com.proxerme.app.util.Utils
 import com.proxerme.library.connection.user.entitiy.User
+import com.proxerme.library.parameters.ActionParameter
 import java.util.*
 
 /**
@@ -75,7 +76,7 @@ class ChatAdapter(savedInstanceState: Bundle?) :
             return ActionViewHolder(inflater.inflate(R.layout.item_message_action,
                     parent, false))
         } else if (viewType == TYPE_MESSAGE_TOP || viewType == TYPE_MESSAGE_SINGLE) {
-            return MessageImageTitleViewHolder(inflater.inflate(R.layout.item_message_single,
+            return MessageTitleViewHolder(inflater.inflate(R.layout.item_message_single,
                     parent, false))
         } else if (viewType == TYPE_MESSAGE_BOTTOM || viewType == TYPE_MESSAGE_INNER) {
             return MessageViewHolder(inflater.inflate(R.layout.item_message,
@@ -150,34 +151,39 @@ class ChatAdapter(savedInstanceState: Bundle?) :
         var result: Int
         val current = list[position]
 
-        if (!current.action.isBlank()) {
+        if (current.action != ActionParameter.NONE) {
             result = TYPE_ACTION
         } else {
             if (position - 1 < 0) {
                 if (position + 1 >= itemCount) {
                     result = TYPE_MESSAGE_SINGLE // The item is the only one
                 } else {
-                    if (list[position + 1].userId == current.userId && list[position + 1].action.isBlank()) {
+                    if (list[position + 1].userId == current.userId &&
+                            list[position + 1].action == ActionParameter.NONE) {
                         result = TYPE_MESSAGE_BOTTOM // The item is the bottommost item and has an item from the same user above
                     } else {
                         result = TYPE_MESSAGE_SINGLE // The item is the bottommost item and doesn't have an item from the same user above
                     }
                 }
             } else if (position + 1 >= itemCount) {
-                if (list[position - 1].userId == current.userId && list[position - 1].action.isBlank()) {
+                if (list[position - 1].userId == current.userId &&
+                        list[position - 1].action == ActionParameter.NONE) {
                     result = TYPE_MESSAGE_TOP // The item is the topmost item and has an item from the same user beneath
                 } else {
                     result = TYPE_MESSAGE_SINGLE // The item is the topmost item and doesn't have an item from the same user beneath
                 }
             } else {
-                if (list[position - 1].userId == current.userId && list[position - 1].action.isBlank()) {
-                    if (list[position + 1].userId == current.userId && list[position + 1].action.isBlank()) {
+                if (list[position - 1].userId == current.userId &&
+                        list[position - 1].action == ActionParameter.NONE) {
+                    if (list[position + 1].userId == current.userId &&
+                            list[position + 1].action == ActionParameter.NONE) {
                         result = TYPE_MESSAGE_INNER // The item is in between two other items from the same user
                     } else {
                         result = TYPE_MESSAGE_TOP // The item has an item from the same user beneath but not above
                     }
                 } else {
-                    if (list[position + 1].userId == current.userId && list[position + 1].action.isBlank()) {
+                    if (list[position + 1].userId == current.userId &&
+                            list[position + 1].action == ActionParameter.NONE) {
                         result = TYPE_MESSAGE_BOTTOM // The item has an item from the same user above but not beneath
                     } else {
                         result = TYPE_MESSAGE_SINGLE  // The item stands alone
@@ -258,8 +264,6 @@ class ChatAdapter(savedInstanceState: Bundle?) :
         protected val text: LinkConsumableTextView by bindView(R.id.text)
         protected val time: TextView by bindView(R.id.time)
 
-        open protected val backgroundColor = android.R.color.white
-
         init {
             root.setOnClickListener { onContainerClick(it) }
             root.setOnLongClickListener { onContainerLongClick(it) }
@@ -267,48 +271,12 @@ class ChatAdapter(savedInstanceState: Bundle?) :
         }
 
         open fun bind(message: LocalMessage, marginTop: Int, marginBottom: Int) {
-            text.text = Utils.buildClickableText(text.context, message.message,
-                    onWebClickListener = Link.OnClickListener {
-                        callback?.onMessageLinkClick(it)
-                    },
-                    onMentionsClickListener = Link.OnClickListener {
-                        callback?.onMentionsClick(it.trim().substring(1))
-                    })
-
-            time.text = TimeUtil.convertToRelativeReadableTime(time.context,
-                    message.time)
-
-            if (message.id.toLong() < 0) {
-                text.setCompoundDrawables(null, null,
-                        IconicsDrawable(text.context)
-                                .icon(CommunityMaterial.Icon.cmd_clock)
-                                .sizeDp(24)
-                                .paddingDp(4)
-                                .colorRes(R.color.icon), null)
-            } else {
-                text.setCompoundDrawables(null, null, null, null)
-            }
-
-            if (selectedMap.containsKey(message.localId)) {
-                container.cardBackgroundColor = ContextCompat
-                        .getColorStateList(container.context, R.color.selected_card)
-            } else {
-                container.cardBackgroundColor = ContextCompat
-                        .getColorStateList(container.context, R.color.cardview_background)
-            }
-
-            if (showingTimeMap.containsKey(message.localId)) {
-                time.visibility = View.VISIBLE
-            } else {
-                time.visibility = View.GONE
-            }
-
-            val params = root.layoutParams as ViewGroup.MarginLayoutParams
-
-            params.topMargin = marginTop
-            params.bottomMargin = marginBottom
-
-            root.layoutParams = params
+            applyMessage(message)
+            applyTime(message)
+            applySendStatus(message)
+            applySelection(message)
+            applyTimeVisibility(message)
+            applyMargins(marginTop, marginBottom)
         }
 
         open protected fun onContainerClick(v: View) {
@@ -357,9 +325,64 @@ class ChatAdapter(savedInstanceState: Bundle?) :
 
             return false
         }
+
+        protected open fun applyMessage(message: LocalMessage) {
+            text.text = Utils.buildClickableText(text.context, message.message,
+                    onWebClickListener = Link.OnClickListener {
+                        callback?.onMessageLinkClick(it)
+                    },
+                    onMentionsClickListener = Link.OnClickListener {
+                        callback?.onMentionsClick(it.trim().substring(1))
+                    })
+        }
+
+        protected open fun applyTime(message: LocalMessage) {
+            time.text = TimeUtil.convertToRelativeReadableTime(time.context,
+                    message.time)
+        }
+
+        protected open fun applySendStatus(message: LocalMessage) {
+            if (message.id.toLong() < 0) {
+                text.setCompoundDrawables(null, null,
+                        IconicsDrawable(text.context)
+                                .icon(CommunityMaterial.Icon.cmd_clock)
+                                .sizeDp(24)
+                                .paddingDp(4)
+                                .colorRes(R.color.icon), null)
+            } else {
+                text.setCompoundDrawables(null, null, null, null)
+            }
+        }
+
+        protected open fun applySelection(message: LocalMessage) {
+            if (selectedMap.containsKey(message.localId)) {
+                container.cardBackgroundColor = ContextCompat
+                        .getColorStateList(container.context, R.color.selected_card)
+            } else {
+                container.cardBackgroundColor = ContextCompat
+                        .getColorStateList(container.context, R.color.cardview_background)
+            }
+        }
+
+        protected open fun applyTimeVisibility(message: LocalMessage) {
+            if (showingTimeMap.containsKey(message.localId)) {
+                time.visibility = View.VISIBLE
+            } else {
+                time.visibility = View.GONE
+            }
+        }
+
+        protected open fun applyMargins(marginTop: Int, marginBottom: Int) {
+            val params = root.layoutParams as ViewGroup.MarginLayoutParams
+
+            params.topMargin = marginTop
+            params.bottomMargin = marginBottom
+
+            root.layoutParams = params
+        }
     }
 
-    inner class MessageImageTitleViewHolder(itemView: View) : MessageViewHolder(itemView) {
+    inner class MessageTitleViewHolder(itemView: View) : MessageViewHolder(itemView) {
 
         private val title: TextView by bindView(R.id.title)
 
@@ -380,8 +403,6 @@ class ChatAdapter(savedInstanceState: Bundle?) :
 
     inner class ActionViewHolder(itemView: View) : MessageViewHolder(itemView) {
 
-        override val backgroundColor = android.R.color.background_light
-
         override fun onContainerClick(v: View) {
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 val current = list[adapterPosition]
@@ -400,6 +421,27 @@ class ChatAdapter(savedInstanceState: Bundle?) :
 
         override fun onContainerLongClick(v: View): Boolean {
             return false
+        }
+
+        override fun applyMessage(message: LocalMessage) {
+            text.text = Utils.buildClickableText(text.context, generateText(message),
+                    onMentionsClickListener = Link.OnClickListener {
+                        callback?.onMentionsClick(it.trim().substring(1))
+                    })
+        }
+
+        private fun generateText(message: LocalMessage): String {
+            return when (message.action) {
+                ActionParameter.ADD_USER -> text.context.getString(R.string.action_add_user,
+                        "@${message.username}", "@${message.message}")
+                ActionParameter.REMOVE_USER -> text.context.getString(R.string.action_remove_user,
+                        "@${message.username}", "@${message.message}")
+                ActionParameter.SET_LEADER -> text.context.getString(R.string.action_set_leader,
+                        "@${message.username}", "@${message.message}")
+                ActionParameter.SET_TOPIC -> text.context.getString(R.string.action_set_topic,
+                        "@${message.username}", message.message)
+                else -> message.message
+            }
         }
     }
 }
