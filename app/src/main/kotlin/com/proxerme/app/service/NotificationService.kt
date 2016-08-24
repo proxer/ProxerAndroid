@@ -4,6 +4,7 @@ import android.app.IntentService
 import android.content.Context
 import android.content.Intent
 import android.support.annotation.StringDef
+import com.proxerme.app.application.MainApplication
 import com.proxerme.app.event.NewsEvent
 import com.proxerme.app.helper.NotificationHelper
 import com.proxerme.app.helper.StorageHelper
@@ -42,9 +43,10 @@ class NotificationService : IntentService(NotificationService.SERVICE_TITLE) {
             val lastTime = StorageHelper.lastNewsTime
 
             if (lastTime != null) {
-                val result = NewsRequest(0).executeSynchronized().item.filter {
-                    it.time > lastTime
-                }
+                val result = MainApplication.proxerConnection.executeSynchronized(NewsRequest(0))
+                        .filter {
+                            it.time > lastTime
+                        }
 
                 if (result.size > StorageHelper.newNews) {
                     if (SectionManager.currentSection == SectionManager.Section.NEWS) {

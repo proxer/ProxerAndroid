@@ -16,10 +16,6 @@ object ErrorHandler {
         when (exception.errorCode) {
             ProxerException.PROXER -> return exception.message!!
             ProxerException.NETWORK -> return context.getString(R.string.error_network)
-            ProxerException.TIMEOUT -> return context.getString(R.string.error_timeout)
-            ProxerException.UNPARSEABLE -> return context.getString(R.string.error_unparseable)
-            ProxerException.IO -> return context.getString(R.string.error_io)
-            ProxerException.UNKNOWN -> return context.getString(R.string.error_unknown)
             else -> return context.getString(R.string.error_unknown)
         }
     }

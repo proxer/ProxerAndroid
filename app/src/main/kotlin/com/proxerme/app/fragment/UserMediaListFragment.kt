@@ -8,11 +8,11 @@ import android.view.MenuItem
 import android.view.View
 import com.proxerme.app.R
 import com.proxerme.app.adapter.UserMediaAdapter
+import com.proxerme.app.application.MainApplication
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.util.Utils
-import com.proxerme.library.connection.ProxerConnection
+import com.proxerme.library.connection.ProxerCall
 import com.proxerme.library.connection.user.request.UserMediaListRequest
-import com.proxerme.library.info.ProxerTag
 import com.proxerme.library.parameters.CategoryParameter
 import com.proxerme.library.parameters.UserMediaSortParameter
 
@@ -58,6 +58,8 @@ class UserMediaListFragment : PagingFragment() {
 
     private lateinit var adapter: UserMediaAdapter
     override lateinit var layoutManager: StaggeredGridLayoutManager
+
+    private var call: ProxerCall? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -169,21 +171,23 @@ class UserMediaListFragment : PagingFragment() {
     }
 
     override fun loadPage(number: Int) {
-        UserMediaListRequest(userId, userName, number)
-                .withCategory(category)
-                .withLimit(50)
-                .withSortCriteria(sortCriteria)
-                .execute({ result ->
-                    adapter.addItems(result.item.toList())
+        call = MainApplication.proxerConnection.execute(
+                UserMediaListRequest(userId, userName, number)
+                        .withCategory(category)
+                        .withLimit(50)
+                        .withSortCriteria(sortCriteria),
+                { result ->
+                    adapter.addItems(result.toList())
 
                     notifyPagedLoadFinishedSuccessful(number, result)
-                }, { result ->
+                },
+                { result ->
                     notifyPagedLoadFinishedWithError(number, result)
                 })
     }
 
     override fun cancel() {
-        ProxerConnection.cancel(ProxerTag.USER_MEDIA_LIST)
+        call?.cancel()
     }
 
     override fun clear() {

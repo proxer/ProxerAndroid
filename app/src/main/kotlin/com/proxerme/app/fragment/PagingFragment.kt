@@ -10,8 +10,7 @@ import android.widget.TextView
 import butterknife.bindView
 import com.proxerme.app.R
 import com.proxerme.app.util.listener.EndlessRecyclerOnScrollListener
-import com.proxerme.library.interfaces.ProxerErrorResult
-import com.proxerme.library.interfaces.ProxerResult
+import com.proxerme.library.connection.ProxerException
 
 /**
  * TODO: Describe Class
@@ -83,8 +82,8 @@ abstract class PagingFragment : LoadingFragment() {
         clear()
     }
 
-    open protected fun notifyPagedLoadFinishedSuccessful(page: Int, result: ProxerResult<*>) {
-        endReached = (result.item as Array<*>).isEmpty()
+    open protected fun notifyPagedLoadFinishedSuccessful(page: Int, result: Any) {
+        endReached = (result as Array<*>).isEmpty()
 
         if (page >= nextPageToLoad) {
             nextPageToLoad = page + 1
@@ -93,7 +92,7 @@ abstract class PagingFragment : LoadingFragment() {
         notifyLoadFinishedSuccessful(result)
     }
 
-    open protected fun notifyPagedLoadFinishedWithError(page: Int, result: ProxerErrorResult) {
+    open protected fun notifyPagedLoadFinishedWithError(page: Int, result: ProxerException) {
         endReached = false
         nextPageToLoad = 0
 

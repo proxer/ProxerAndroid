@@ -144,7 +144,7 @@ class MaterialDrawerHelper : OnActivityListener {
             return arrayListOf(
                     ProfileDrawerItem()
                             .withName(user.username)
-                            .withIcon(ProxerUrlHolder.getUserImageUrl(user.imageId))
+                            .withIcon(ProxerUrlHolder.getUserImageUrl(user.imageId).toString())
                             .withSelectedTextColorRes(R.color.colorAccent)
                             .withIdentifier(ACCOUNT_USER),
                     ProfileSettingDrawerItem()

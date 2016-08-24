@@ -4,15 +4,16 @@ import android.os.Bundle
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
 import android.widget.ImageView
-import com.afollestad.bridge.Request
 import com.proxerme.app.activity.DashboardActivity
 import com.proxerme.app.activity.ImageDetailActivity
 import com.proxerme.app.adapter.NewsAdapter
+import com.proxerme.app.application.MainApplication
 import com.proxerme.app.event.NewsEvent
 import com.proxerme.app.helper.NotificationHelper
 import com.proxerme.app.helper.StorageHelper
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.util.Utils
+import com.proxerme.library.connection.ProxerCall
 import com.proxerme.library.connection.notifications.entitiy.News
 import com.proxerme.library.connection.notifications.request.NewsRequest
 import com.proxerme.library.info.ProxerUrlHolder
@@ -38,7 +39,7 @@ class NewsFragment : PagingFragment() {
 
     override val section: SectionManager.Section = SectionManager.Section.NEWS
 
-    private var request: Request? = null
+    private var call: ProxerCall? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,24 +96,26 @@ class NewsFragment : PagingFragment() {
     }
 
     override fun loadPage(number: Int) {
-        request = NewsRequest(number).execute({ result ->
-            if (result.item.isNotEmpty()) {
-                adapter.addItems(result.item.asList())
+        call = MainApplication.proxerConnection.execute(NewsRequest(number),
+                { result ->
+                    if (result.isNotEmpty()) {
+                        adapter.addItems(result.asList())
 
-                if (number == 0) {
-                    StorageHelper.lastNewsTime = result.item.first().time
-                    StorageHelper.newNews = 0
-                }
+                        if (number == 0) {
+                            StorageHelper.lastNewsTime = result.first().time
+                            StorageHelper.newNews = 0
+                        }
 
-                notifyPagedLoadFinishedSuccessful(number, result)
-            }
-        }, { result ->
-            notifyPagedLoadFinishedWithError(number, result)
-        })
+                        notifyPagedLoadFinishedSuccessful(number, result)
+                    }
+                },
+                { result ->
+                    notifyPagedLoadFinishedWithError(number, result)
+                })
     }
 
     override fun cancel() {
-        request?.cancel()
+        call?.cancel()
     }
 
     override fun clear() {

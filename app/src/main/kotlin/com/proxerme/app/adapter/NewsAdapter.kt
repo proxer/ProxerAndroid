@@ -132,7 +132,7 @@ class NewsAdapter(val savedInstanceState: Bundle?) :
 
         fun bind(item: News) {
             Glide.with(image.context)
-                    .load(ProxerUrlHolder.getNewsImageUrl(item.id, item.imageId))
+                    .load(ProxerUrlHolder.getNewsImageUrl(item.id, item.imageId).toString())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(image)
 

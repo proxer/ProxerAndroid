@@ -128,7 +128,7 @@ class UserActivity : MainActivity() {
                     .colorRes(R.color.colorPrimary))
         } else {
             Glide.with(this)
-                    .load(ProxerUrlHolder.getUserImageUrl(imageId!!))
+                    .load(ProxerUrlHolder.getUserImageUrl(imageId!!).toString())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(profileImage)
         }

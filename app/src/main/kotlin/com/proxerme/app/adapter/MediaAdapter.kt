@@ -122,7 +122,7 @@ class MediaAdapter(savedInstanceState: Bundle?,
             }
 
             Glide.with(image.context)
-                    .load(ProxerUrlHolder.getCoverImageUrl(entry.id))
+                    .load(ProxerUrlHolder.getCoverImageUrl(entry.id).toString())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(image)
         }

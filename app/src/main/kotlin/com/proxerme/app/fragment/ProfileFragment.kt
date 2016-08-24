@@ -16,15 +16,14 @@ import com.klinker.android.link_builder.LinkConsumableTextView
 import com.klinker.android.link_builder.TouchableMovementMethod
 import com.proxerme.app.R
 import com.proxerme.app.activity.UserActivity
+import com.proxerme.app.application.MainApplication
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.util.TimeUtil
 import com.proxerme.app.util.Utils
-import com.proxerme.library.connection.ProxerConnection
+import com.proxerme.library.connection.ProxerCall
+import com.proxerme.library.connection.ProxerException
 import com.proxerme.library.connection.user.entitiy.UserInfo
 import com.proxerme.library.connection.user.request.UserInfoRequest
-import com.proxerme.library.info.ProxerTag
-import com.proxerme.library.interfaces.ProxerErrorResult
-import com.proxerme.library.interfaces.ProxerResult
 import org.jetbrains.anko.toast
 
 /**
@@ -74,6 +73,8 @@ class ProfileFragment : LoadingFragment() {
     override val errorText: TextView by bindView(R.id.errorText)
     override val errorButton: Button by bindView(R.id.errorButton)
 
+    private var call: ProxerCall? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -102,22 +103,24 @@ class ProfileFragment : LoadingFragment() {
     }
 
     override fun cancel() {
-        ProxerConnection.cancel(ProxerTag.USER_INFO)
+        call?.cancel()
     }
 
     override fun load(showProgress: Boolean) {
         super.load(showProgress)
 
-        UserInfoRequest(userId, userName).execute({ result ->
-            userInfo = result.item
-            userInfo?.run { (activity as UserActivity).setImageId(this.imageId) }
+        call = MainApplication.proxerConnection.execute(UserInfoRequest(userId, userName),
+                { result ->
+                    userInfo = result
+                    (activity as UserActivity).setImageId(result.imageId)
 
-            notifyLoadFinishedSuccessful(result)
-        }, { result ->
-            userInfo = null
+                    notifyLoadFinishedSuccessful(result)
+                },
+                { result ->
+                    userInfo = null
 
-            notifyLoadFinishedWithError(result)
-        })
+                    notifyLoadFinishedWithError(result)
+                })
     }
 
     override fun showError(message: String, buttonMessage: String?,
@@ -127,13 +130,13 @@ class ProfileFragment : LoadingFragment() {
         infoContainer.visibility = View.INVISIBLE
     }
 
-    override fun notifyLoadFinishedSuccessful(result: ProxerResult<*>) {
+    override fun notifyLoadFinishedSuccessful(result: Any) {
         show()
 
         super.notifyLoadFinishedSuccessful(result)
     }
 
-    override fun notifyLoadFinishedWithError(result: ProxerErrorResult) {
+    override fun notifyLoadFinishedWithError(result: ProxerException) {
         show()
 
         super.notifyLoadFinishedWithError(result)

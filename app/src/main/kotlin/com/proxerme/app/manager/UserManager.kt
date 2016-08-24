@@ -1,15 +1,13 @@
 package com.proxerme.app.manager
 
-import com.afollestad.bridge.Request
+import com.proxerme.app.application.MainApplication
 import com.proxerme.app.helper.StorageHelper
+import com.proxerme.library.connection.ProxerCall
 import com.proxerme.library.connection.ProxerException
 import com.proxerme.library.connection.user.entitiy.User
 import com.proxerme.library.connection.user.request.LoginRequest
 import com.proxerme.library.connection.user.request.LogoutRequest
 import com.proxerme.library.connection.user.request.UserInfoRequest
-import com.proxerme.library.connection.user.result.LoginResult
-import com.proxerme.library.connection.user.result.LogoutResult
-import com.proxerme.library.interfaces.ProxerErrorResult
 import org.greenrobot.eventbus.EventBus
 import org.joda.time.DateTime
 import java.util.*
@@ -53,44 +51,50 @@ object UserManager {
         SAVE, DONT_SAVE, SAME_AS_IS
     }
 
-    val requests: MutableList<Request> = Collections.synchronizedList(ArrayList<Request>())
+    val requests: MutableList<ProxerCall> = Collections.synchronizedList(ArrayList<ProxerCall>())
 
-    fun login(user: User, shouldSave: SaveOption, callback: ((LoginResult) -> Unit)? = null,
-              errorCallback: ((ProxerErrorResult) -> Unit)? = null) {
+    fun login(user: User, shouldSave: SaveOption, callback: ((User) -> Unit)? = null,
+              errorCallback: ((ProxerException) -> Unit)? = null) {
         if (ongoingState != OngoingState.LOGGING_IN) {
             ongoingState = OngoingState.LOGGING_IN
 
             cancel()
 
-            requests.add(LoginRequest(user).execute({ result ->
-                requests.clear()
-
-                doLogin(result.item, shouldSave)
-                callback?.invoke(result)
-            }, { result ->
-                if (result.item.errorCode == ProxerException.PROXER &&
-                        result.item.proxerErrorCode == ProxerException.LOGIN_ALREADY_LOGGED_IN) {
-                    requests.add(UserInfoRequest(null, user.username).execute({ userInfoResult ->
+            requests.add(MainApplication.proxerConnection.execute(
+                    LoginRequest(user.username, user.password),
+                    { result ->
                         requests.clear()
 
-                        val newUser = User(user.username, user.password,
-                                userInfoResult.item.id, userInfoResult.item.imageId)
+                        doLogin(result, shouldSave)
+                        callback?.invoke(result)
+                    },
+                    { result ->
+                        if (result.errorCode == ProxerException.PROXER &&
+                                result.proxerErrorCode == ProxerException.LOGIN_ALREADY_LOGGED_IN) {
+                            requests.add(MainApplication.proxerConnection.execute(
+                                    UserInfoRequest(null, user.username),
+                                    { userInfoResult ->
+                                        requests.clear()
 
-                        doLogin(newUser, shouldSave)
-                        callback?.invoke(LoginResult(newUser))
-                    }, { userInfoResult ->
-                        requests.clear()
-                        doLogout()
+                                        val newUser = User(user.username, user.password,
+                                                userInfoResult.id, userInfoResult.imageId)
 
-                        errorCallback?.invoke(userInfoResult)
+                                        doLogin(newUser, shouldSave)
+                                        callback?.invoke(newUser)
+                                    },
+                                    { userInfoResult ->
+                                        requests.clear()
+                                        doLogout()
+
+                                        errorCallback?.invoke(userInfoResult)
+                                    }))
+                        } else {
+                            requests.clear()
+                            doLogout()
+
+                            errorCallback?.invoke(result)
+                        }
                     }))
-                } else {
-                    requests.clear()
-                    doLogout()
-
-                    errorCallback?.invoke(result)
-                }
-            }))
         }
     }
 
@@ -103,22 +107,27 @@ object UserManager {
             if (DateTime(lastLoginTime).isBefore(DateTime().minusMinutes(RELOGIN_THRESHOLD))) {
                 ongoingState = OngoingState.LOGGING_IN
 
-                user?.run {
-                    LoginRequest(this).execute({ result ->
-                        requests.clear()
+                if (user != null) {
+                }
+                user?.apply {
+                    MainApplication.proxerConnection.execute(
+                            LoginRequest(this.username, this.password),
+                            { result ->
+                                requests.clear()
 
-                        doLogin(result.item, SaveOption.SAME_AS_IS)
-                    }, { result ->
-                        requests.clear()
+                                doLogin(result, SaveOption.SAME_AS_IS)
+                            },
+                            { result ->
+                                requests.clear()
 
-                        if (result.item.errorCode == ProxerException.PROXER &&
-                                result.item.proxerErrorCode ==
-                                        ProxerException.LOGIN_ALREADY_LOGGED_IN) {
-                            doLogin(this, SaveOption.SAME_AS_IS)
-                        } else {
-                            doLogout()
-                        }
-                    })
+                                if (result.errorCode == ProxerException.PROXER &&
+                                        result.proxerErrorCode ==
+                                                ProxerException.LOGIN_ALREADY_LOGGED_IN) {
+                                    doLogin(this, SaveOption.SAME_AS_IS)
+                                } else {
+                                    doLogout()
+                                }
+                            })
                 }
             } else {
                 ongoingState = OngoingState.NONE
@@ -144,10 +153,10 @@ object UserManager {
         if (DateTime(lastLogin).isBefore(DateTime().minusMinutes(RELOGIN_THRESHOLD))) {
             ongoingState = OngoingState.LOGGING_IN
 
-            user?.run {
+            user?.apply {
                 try {
-                    doLogin(LoginRequest(this).executeSynchronized().item,
-                            SaveOption.SAME_AS_IS)
+                    doLogin(MainApplication.proxerConnection.executeSynchronized(
+                            LoginRequest(this.username, this.password)), SaveOption.SAME_AS_IS)
                 } catch (exception: ProxerException) {
                     if (exception.errorCode == ProxerException.PROXER) {
                         if (exception.proxerErrorCode == ProxerException.LOGIN_ALREADY_LOGGED_IN) {
@@ -166,23 +175,25 @@ object UserManager {
         }
     }
 
-    fun logout(callback: ((LogoutResult) -> Unit)? = null,
-               errorCallback: ((ProxerErrorResult) -> Unit)?) {
+    fun logout(callback: (() -> Unit)? = null,
+               errorCallback: ((ProxerException) -> Unit)?) {
         if (ongoingState != OngoingState.LOGGING_OUT) {
             ongoingState = OngoingState.LOGGING_OUT
 
             cancel()
 
-            requests.add(LogoutRequest().execute({ result ->
-                requests.clear()
+            requests.add(MainApplication.proxerConnection.execute(LogoutRequest(),
+                    { result ->
+                        requests.clear()
 
-                removeUser()
-                doLogout()
-                callback?.invoke(result)
-            }, { result ->
-                ongoingState = OngoingState.NONE
-                errorCallback?.invoke(result)
-            }))
+                        removeUser()
+                        doLogout()
+                        callback?.invoke()
+                    },
+                    { result ->
+                        ongoingState = OngoingState.NONE
+                        errorCallback?.invoke(result)
+                    }))
         }
     }
 

@@ -3,6 +3,7 @@ package com.proxerme.app.service
 import android.app.IntentService
 import android.content.Context
 import android.content.Intent
+import com.proxerme.app.application.MainApplication
 import com.proxerme.app.data.chatDatabase
 import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.entitiy.LocalMessage
@@ -151,8 +152,8 @@ class ChatService : IntentService("ChatService") {
     private fun doLoadConferences() {
         try {
             val pageToRetrieve = chatDatabase.getConferenceAmount() / CONFERENCES_ON_PAGE
-            val newConferences = ConferencesRequest(pageToRetrieve.toInt())
-                    .executeSynchronized().item.toList()
+            val newConferences = MainApplication.proxerConnection
+                    .executeSynchronized(ConferencesRequest(pageToRetrieve.toInt())).toList()
 
             chatDatabase.insertOrUpdateConferences(newConferences)
 
@@ -169,8 +170,8 @@ class ChatService : IntentService("ChatService") {
     private fun doLoadMessages(conferenceId: String) {
         try {
             val idToLoadFrom = chatDatabase.getOldestMessage(conferenceId)?.id ?: "0"
-            val newMessages = MessagesRequest(conferenceId, idToLoadFrom)
-                    .executeSynchronized().item.toList()
+            val newMessages = MainApplication.proxerConnection
+                    .executeSynchronized(MessagesRequest(conferenceId, idToLoadFrom)).toList()
 
             chatDatabase.insertOrUpdateMessages(newMessages)
 
@@ -188,12 +189,13 @@ class ChatService : IntentService("ChatService") {
     private fun sendMessages() {
         chatDatabase.getMessagesToSend().forEach {
             try {
-                val result = SendMessageRequest(it.conferenceId, it.message).executeSynchronized()
+                val result = MainApplication.proxerConnection
+                        .executeSynchronized(SendMessageRequest(it.conferenceId, it.message))
 
                 chatDatabase.removeMessageToSend(it.localId)
 
-                if (result.item != null) {
-                    throw SendMessageException(result.item!!, it.conferenceId)
+                if (result != null) {
+                    throw SendMessageException(result, it.conferenceId)
                 }
             } catch(exception: ProxerException) {
                 throw SendMessageException(ErrorHandler.getMessageForErrorCode(this, exception),
@@ -208,7 +210,8 @@ class ChatService : IntentService("ChatService") {
             var page = 0
 
             while (true) {
-                val fetchedConferences = ConferencesRequest(page).executeSynchronized().item
+                val fetchedConferences = MainApplication.proxerConnection
+                        .executeSynchronized(ConferencesRequest(page))
 
                 for (conference in fetchedConferences) {
                     if (conference != chatDatabase.getConference(conference.id)
@@ -250,8 +253,8 @@ class ChatService : IntentService("ChatService") {
 
                 if (mostRecentMessage == null) {
                     while (existingUnreadMessageAmount < conference.unreadMessageAmount) {
-                        val fetchedMessages = MessagesRequest(conference.id, nextId)
-                                .executeSynchronized().item
+                        val fetchedMessages = MainApplication.proxerConnection
+                                .executeSynchronized(MessagesRequest(conference.id, nextId))
 
                         newMessages.addAll(fetchedMessages)
 
@@ -267,8 +270,8 @@ class ChatService : IntentService("ChatService") {
                 } else {
                     while (mostRecentMessage!!.time < conference.time ||
                             existingUnreadMessageAmount < conference.unreadMessageAmount) {
-                        val fetchedMessages = MessagesRequest(conference.id, nextId)
-                                .executeSynchronized().item
+                        val fetchedMessages = MainApplication.proxerConnection
+                                .executeSynchronized(MessagesRequest(conference.id, nextId))
 
                         newMessages.addAll(fetchedMessages)
 

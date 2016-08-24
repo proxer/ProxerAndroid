@@ -2,9 +2,6 @@
   public static final android.os.Parcelable$Creator *;
 }
 
--keep class android.support.** { *; }
--keep interface android.support.** { *; }
-
 -dontwarn com.orhanobut.hawk.**
 -keep class com.google.gson.** { *; }
 -keepattributes Signature
@@ -21,6 +18,6 @@
     **[] $VALUES;
     public *;
 }
+-keepresourcexmlelements manifest/application/meta-data@value=GlideModule
 
 -dontwarn okio.**
--dontwarn com.birbit.android.jobqueue.scheduling.**

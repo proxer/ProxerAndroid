@@ -119,7 +119,7 @@ class ConferenceAdapter : RecyclerView.Adapter<ConferenceAdapter.ViewHolder>() {
                 image.setImageDrawable(icon)
             } else {
                 Glide.with(image.context)
-                        .load(ProxerUrlHolder.getUserImageUrl(conference.imageId))
+                        .load(ProxerUrlHolder.getUserImageUrl(conference.imageId).toString())
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                         .into(image)
             }

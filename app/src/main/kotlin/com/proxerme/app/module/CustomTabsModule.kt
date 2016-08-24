@@ -9,6 +9,7 @@ import com.proxerme.app.R
 import com.proxerme.app.customtabs.CustomTabActivityHelper
 import com.proxerme.app.customtabs.CustomTabsHelper
 import com.proxerme.app.customtabs.WebviewFallback
+import okhttp3.HttpUrl
 
 /**
  * TODO: Describe class
@@ -19,11 +20,11 @@ interface CustomTabsModule {
 
     val customTabActivityHelper: CustomTabActivityHelper
 
-    fun setLikelyUrl(url: String) {
-        customTabActivityHelper.mayLaunchUrl(Uri.parse(url), Bundle(), listOf())
+    fun setLikelyUrl(url: HttpUrl) {
+        customTabActivityHelper.mayLaunchUrl(Uri.parse(url.toString()), Bundle(), listOf())
     }
 
-    fun showPage(url: String) {
+    fun showPage(url: HttpUrl) {
         val self = this as Activity
 
         val customTabsIntent = CustomTabsIntent.Builder(customTabActivityHelper.session)
@@ -36,7 +37,7 @@ interface CustomTabsModule {
 
         CustomTabsHelper.addKeepAliveExtra(self, customTabsIntent.intent)
         CustomTabActivityHelper.openCustomTab(
-                self, customTabsIntent, Uri.parse(url), WebviewFallback())
+                self, customTabsIntent, Uri.parse(url.toString()), WebviewFallback())
     }
 
 }

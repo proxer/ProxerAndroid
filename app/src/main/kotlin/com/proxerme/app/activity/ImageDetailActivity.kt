@@ -15,6 +15,7 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.proxerme.app.R
+import okhttp3.HttpUrl
 
 /**
  * An Activity which shows a image with an animation on Lollipop and higher.
@@ -28,9 +29,9 @@ class ImageDetailActivity : MainActivity() {
         private const val EXTRA_URL = "extra_url"
 
         fun navigateTo(context: Activity, image: ImageView,
-                       url: String) {
+                       url: HttpUrl) {
             val intent = Intent(context, ImageDetailActivity::class.java)
-                    .apply { this.putExtra(EXTRA_URL, url) }
+                    .apply { this.putExtra(EXTRA_URL, url.toString()) }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 context.startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation(

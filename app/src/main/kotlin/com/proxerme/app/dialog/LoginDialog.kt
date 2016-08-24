@@ -148,7 +148,7 @@ class LoginDialog : DialogFragment() {
                     loading = false
 
                     handleVisibility()
-                    context.longToast(ErrorHandler.getMessageForErrorCode(context, result.item))
+                    context.longToast(ErrorHandler.getMessageForErrorCode(context, result))
                 })
             }
         }

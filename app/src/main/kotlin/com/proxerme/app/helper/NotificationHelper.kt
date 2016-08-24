@@ -134,7 +134,7 @@ object NotificationHelper {
 
             if (messages.keys.first().imageId.isNotBlank()) {
                 builder.setLargeIcon(Utils.getBitmapFromURL(context,
-                        ProxerUrlHolder.getUserImageUrl(messages.keys.first().imageId)))
+                        ProxerUrlHolder.getUserImageUrl(messages.keys.first().imageId).toString()))
             } else {
                 if (messages.keys.first().isGroup) {
                     builder.setLargeIcon(

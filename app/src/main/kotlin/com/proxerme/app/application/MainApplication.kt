@@ -16,22 +16,21 @@ import com.proxerme.app.BuildConfig
 import com.proxerme.app.manager.UserManager
 import com.proxerme.app.service.ChatService
 import com.proxerme.library.connection.ProxerConnection
-import com.proxerme.library.info.ProxerUrlHolder
-import com.proxerme.library.util.PersistentCookieStore
 import net.danlew.android.joda.JodaTimeAndroid
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
-import java.net.CookieHandler
-import java.net.CookieManager
-import java.net.CookiePolicy
 
 /**
  * TODO: Describe Class
  *
  * @author Ruben Gees
  */
-
 class MainApplication : Application() {
+
+    companion object {
+        lateinit var proxerConnection: ProxerConnection
+            private set
+    }
 
     override fun onCreate() {
         super.onCreate()
@@ -70,18 +69,13 @@ class MainApplication : Application() {
             }
         })
 
-        ProxerConnection.init(BuildConfig.PROXER_API_KEY)
-        CookieHandler.setDefault(CookieManager(PersistentCookieStore(this),
-                CookiePolicy { uri, httpCookie ->
-                    uri.scheme + "://" + uri.host == ProxerUrlHolder.getHost()
-                }))
+        proxerConnection = ProxerConnection.Builder(BuildConfig.PROXER_API_KEY, this).build()
 
         EventBus.getDefault().register(this)
     }
 
     override fun onTerminate() {
         EventBus.getDefault().unregister(this)
-        ProxerConnection.cleanup()
 
         super.onTerminate()
     }

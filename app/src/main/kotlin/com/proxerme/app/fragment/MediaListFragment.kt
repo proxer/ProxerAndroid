@@ -8,11 +8,10 @@ import android.view.MenuItem
 import android.view.View
 import com.proxerme.app.R
 import com.proxerme.app.adapter.MediaAdapter
+import com.proxerme.app.application.MainApplication
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.util.Utils
-import com.proxerme.library.connection.ProxerConnection
 import com.proxerme.library.connection.list.request.MediaSearchRequest
-import com.proxerme.library.info.ProxerTag
 import com.proxerme.library.parameters.CategoryParameter
 import com.proxerme.library.parameters.MediaSortParameter
 import com.proxerme.library.parameters.TypeParameter
@@ -113,21 +112,23 @@ class MediaListFragment : PagingFragment() {
     }
 
     override fun loadPage(number: Int) {
-        MediaSearchRequest(number)
-                .withType(getTypeParameter())
-                .withSortCriteria(sortCriteria)
-                .withLimit(50)
-                .execute({ result ->
-                    adapter.addItems(result.item.toList())
+        MainApplication.proxerConnection
+                .execute(MediaSearchRequest(number)
+                        .withType(getTypeParameter())
+                        .withSortCriteria(sortCriteria)
+                        .withLimit(50),
+                        { result ->
+                            adapter.addItems(result.toList())
 
-                    notifyPagedLoadFinishedSuccessful(number, result)
-                }, { result ->
-                    notifyPagedLoadFinishedWithError(number, result)
-                })
+                            notifyPagedLoadFinishedSuccessful(number, result)
+                        },
+                        { result ->
+                            notifyPagedLoadFinishedWithError(number, result)
+                        })
     }
 
     override fun cancel() {
-        ProxerConnection.cancel(ProxerTag.MEDIA_LIST)
+        //  ProxerConnection.cancel(ProxerTag.MEDIA_LIST)
     }
 
     override fun clear() {

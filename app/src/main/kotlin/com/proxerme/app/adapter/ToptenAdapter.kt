@@ -13,6 +13,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.proxerme.app.R
 import com.proxerme.library.connection.user.entitiy.ToptenEntry
 import com.proxerme.library.info.ProxerUrlHolder
+import com.proxerme.library.parameters.CategoryParameter
 import java.util.*
 
 /**
@@ -20,7 +21,8 @@ import java.util.*
  *
  * @author Ruben Gees
  */
-class ToptenAdapter(savedInstanceState: Bundle?) :
+class ToptenAdapter(savedInstanceState: Bundle?,
+                    @CategoryParameter.Category private val category: String) :
         RecyclerView.Adapter<ToptenAdapter.ViewHolder>() {
 
     private companion object {
@@ -33,7 +35,7 @@ class ToptenAdapter(savedInstanceState: Bundle?) :
         setHasStableIds(true)
 
         savedInstanceState?.let {
-            list.addAll(it.getParcelableArrayList(STATE_ITEMS))
+            list.addAll(it.getParcelableArrayList("${STATE_ITEMS}_$category"))
         }
     }
 
@@ -65,7 +67,7 @@ class ToptenAdapter(savedInstanceState: Bundle?) :
     fun isEmpty() = list.isEmpty()
 
     fun saveInstanceState(outState: Bundle) {
-        outState.putParcelableArrayList(STATE_ITEMS, list)
+        outState.putParcelableArrayList("${STATE_ITEMS}_$category", list)
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -83,7 +85,7 @@ class ToptenAdapter(savedInstanceState: Bundle?) :
             title.text = entry.name
 
             Glide.with(image.context)
-                    .load(ProxerUrlHolder.getCoverImageUrl(entry.id))
+                    .load(ProxerUrlHolder.getCoverImageUrl(entry.id).toString())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(image)
         }

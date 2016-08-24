@@ -16,8 +16,7 @@ import com.klinker.android.link_builder.TouchableMovementMethod
 import com.proxerme.app.R
 import com.proxerme.app.util.ErrorHandler
 import com.proxerme.app.util.Utils
-import com.proxerme.library.interfaces.ProxerErrorResult
-import com.proxerme.library.interfaces.ProxerResult
+import com.proxerme.library.connection.ProxerException
 import org.jetbrains.anko.longToast
 
 /**
@@ -121,7 +120,7 @@ abstract class LoadingFragment : MainFragment() {
         hideError()
     }
 
-    open protected fun notifyLoadFinishedSuccessful(result: ProxerResult<*>) {
+    open protected fun notifyLoadFinishedSuccessful(result: Any) {
         ongoingLoads--
 
         if (ongoingLoads <= 0) {
@@ -131,13 +130,13 @@ abstract class LoadingFragment : MainFragment() {
         }
     }
 
-    open protected fun notifyLoadFinishedWithError(result: ProxerErrorResult) {
+    open protected fun notifyLoadFinishedWithError(result: ProxerException) {
         cancel()
 
         ongoingLoads = 0
         isLoading = false
         refreshLayout.isRefreshing = false
-        currentError = ErrorHandler.getMessageForErrorCode(context, result.item)
+        currentError = ErrorHandler.getMessageForErrorCode(context, result)
 
         showError(currentError!!)
     }
