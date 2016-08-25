@@ -27,7 +27,7 @@ import kotlin.comparisons.compareByDescending
  * @author Ruben Gees
  */
 class NewsAdapter(savedInstanceState: Bundle? = null) :
-        PagingAdapter<News>(savedInstanceState) {
+        PagingAdapter<News>() {
 
     private companion object {
         private const val ITEMS_STATE = "adapter_news_state_items"
@@ -38,8 +38,6 @@ class NewsAdapter(savedInstanceState: Bundle? = null) :
         private const val DESCRIPTION_MAX_LINES = 3
     }
 
-    override val stateKey = ITEMS_STATE
-
     var callback: OnNewsInteractionListener? = null
 
     private val expanded = HashMap<String, Boolean>()
@@ -49,6 +47,7 @@ class NewsAdapter(savedInstanceState: Bundle? = null) :
         setHasStableIds(true)
 
         savedInstanceState?.let {
+            list.addAll(it.getParcelableArrayList(ITEMS_STATE))
             it.getStringArrayList(EXPANDED_IDS_STATE)
                     .associateByTo(expanded, { it }, { true })
         }
@@ -60,8 +59,7 @@ class NewsAdapter(savedInstanceState: Bundle? = null) :
     }
 
     override fun saveInstanceState(outState: Bundle) {
-        super.saveInstanceState(outState)
-
+        outState.putParcelableArrayList(ITEMS_STATE, list)
         outState.putStringArrayList(EXPANDED_IDS_STATE, ArrayList(expanded.keys))
     }
 

@@ -2,7 +2,6 @@ package com.proxerme.app.adapter
 
 import android.os.Bundle
 import android.os.Parcelable
-import android.support.annotation.CallSuper
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.proxerme.library.interfaces.IdItem
@@ -13,19 +12,13 @@ import java.util.*
  *
  * @author Ruben Gees
  */
-abstract class PagingAdapter<T>(savedInstanceState: Bundle?) :
+abstract class PagingAdapter<T>() :
         RecyclerView.Adapter<PagingAdapter.PagingViewHolder<T>>() where T : Parcelable, T : IdItem {
-
-    abstract protected val stateKey: String
 
     protected val list: ArrayList<T> = arrayListOf()
 
     init {
         setHasStableIds(true)
-
-        savedInstanceState?.let {
-            list.addAll(it.getParcelableArrayList(stateKey))
-        }
     }
 
     override fun onBindViewHolder(holder: PagingViewHolder<T>, position: Int) {
@@ -75,9 +68,8 @@ abstract class PagingAdapter<T>(savedInstanceState: Bundle?) :
         notifyDataSetChanged()
     }
 
-    @CallSuper
     open fun saveInstanceState(outState: Bundle) {
-        outState.putParcelableArrayList(stateKey, list)
+
     }
 
     open protected fun contains(item: T): Boolean {

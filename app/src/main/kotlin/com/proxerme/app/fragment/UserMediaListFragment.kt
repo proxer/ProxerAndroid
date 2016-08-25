@@ -167,6 +167,7 @@ class UserMediaListFragment : PagingFragment<UserMediaListEntry>() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
+        adapter.saveInstanceState(outState)
         outState.putString(STATE_SORT_CRITERIA, sortCriteria)
     }
 

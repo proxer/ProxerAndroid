@@ -29,7 +29,7 @@ import java.util.*
  * @author Ruben Gees
  */
 class ChatAdapter(savedInstanceState: Bundle? = null) :
-        PagingAdapter<LocalMessage>(savedInstanceState) {
+        PagingAdapter<LocalMessage>() {
 
     private companion object {
         private const val ITEMS_STATE = "adapter_conference_state_items"
@@ -48,8 +48,6 @@ class ChatAdapter(savedInstanceState: Bundle? = null) :
         private const val TYPE_ACTION = 8
     }
 
-    override val stateKey = ITEMS_STATE
-
     var user: User? = null
     var callback: OnMessageInteractionListener? = null
 
@@ -62,13 +60,17 @@ class ChatAdapter(savedInstanceState: Bundle? = null) :
         get() = list.filter { selectedMap.containsKey(it.localId) }.sortedBy { it.time }
 
     init {
-        val selectedIds = savedInstanceState?.getLongArray(MESSAGE_SELECTED_IDS_STATE)
-        val showingTimeIds = savedInstanceState?.getLongArray(MESSAGE_SHOWING_TIME_IDS_STATE)
+        savedInstanceState?.let {
+            list.addAll(it.getParcelableArrayList(ITEMS_STATE))
 
-        this.selecting = savedInstanceState?.getBoolean(MESSAGE_SELECTING_STATE) ?: false
+            val selectedIds = it.getLongArray(MESSAGE_SELECTED_IDS_STATE)
+            val showingTimeIds = it.getLongArray(MESSAGE_SHOWING_TIME_IDS_STATE)
 
-        selectedIds?.associateByTo(this.selectedMap, { it }, { true })
-        showingTimeIds?.associateByTo(this.showingTimeMap, { it }, { true })
+            this.selecting = it.getBoolean(MESSAGE_SELECTING_STATE)
+
+            selectedIds?.associateByTo(this.selectedMap, { it }, { true })
+            showingTimeIds?.associateByTo(this.showingTimeMap, { it }, { true })
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
@@ -203,8 +205,7 @@ class ChatAdapter(savedInstanceState: Bundle? = null) :
     }
 
     override fun saveInstanceState(outState: Bundle) {
-        super.saveInstanceState(outState)
-
+        outState.putParcelableArrayList(ITEMS_STATE, list)
         outState.putBoolean(MESSAGE_SELECTING_STATE, selecting)
         outState.putLongArray(MESSAGE_SELECTED_IDS_STATE,
                 selectedMap.keys.toLongArray())

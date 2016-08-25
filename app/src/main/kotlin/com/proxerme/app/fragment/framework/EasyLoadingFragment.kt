@@ -42,10 +42,14 @@ abstract class EasyLoadingFragment<T> : LoadingFragment<T>() {
     override fun onResume() {
         super.onResume()
 
-        if (exception == null) {
-            show()
+        if (isLoading) {
+            showLoading()
         } else {
-            onLoadFinishedWithError(exception!!)
+            if (exception == null) {
+                showResult()
+            } else {
+                showError()
+            }
         }
     }
 
@@ -64,9 +68,7 @@ abstract class EasyLoadingFragment<T> : LoadingFragment<T>() {
     override fun onLoadStarted() {
         super.onLoadStarted()
 
-        contentContainer.visibility = View.INVISIBLE
-        errorContainer.visibility = View.INVISIBLE
-        progress.visibility = View.VISIBLE
+        showLoading()
     }
 
     override fun onLoadFinished(result: T) {
@@ -76,11 +78,7 @@ abstract class EasyLoadingFragment<T> : LoadingFragment<T>() {
 
         save(result)
 
-        contentContainer.visibility = View.VISIBLE
-        errorContainer.visibility = View.INVISIBLE
-        progress.visibility = View.INVISIBLE
-
-        show()
+        showResult()
     }
 
     override fun onLoadFinishedWithError(result: ProxerException) {
@@ -89,14 +87,10 @@ abstract class EasyLoadingFragment<T> : LoadingFragment<T>() {
         exception = result
 
         clear()
-        showError(result)
-
-        contentContainer.visibility = View.INVISIBLE
-        errorContainer.visibility = View.VISIBLE
-        progress.visibility = View.INVISIBLE
+        showError()
     }
 
-    open protected fun showError(exception: ProxerException) {
+    open protected fun doShowError(exception: ProxerException) {
         errorText.text = ErrorHandler.getMessageForErrorCode(context, exception)
         errorButton.text = getString(R.string.error_retry)
         errorButton.onClick {
@@ -107,5 +101,27 @@ abstract class EasyLoadingFragment<T> : LoadingFragment<T>() {
     protected abstract fun save(result: T)
 
     protected abstract fun show()
+
+    private fun showLoading() {
+        contentContainer.visibility = View.INVISIBLE
+        errorContainer.visibility = View.INVISIBLE
+        progress.visibility = View.VISIBLE
+    }
+
+    private fun showResult() {
+        contentContainer.visibility = View.VISIBLE
+        errorContainer.visibility = View.INVISIBLE
+        progress.visibility = View.INVISIBLE
+
+        show()
+    }
+
+    private fun showError() {
+        doShowError(exception!!)
+
+        contentContainer.visibility = View.INVISIBLE
+        errorContainer.visibility = View.VISIBLE
+        progress.visibility = View.INVISIBLE
+    }
 
 }

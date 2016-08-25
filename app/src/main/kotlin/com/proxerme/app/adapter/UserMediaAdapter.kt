@@ -23,13 +23,17 @@ import com.proxerme.library.parameters.CommentStateParameter.*
  */
 class UserMediaAdapter(savedInstanceState: Bundle? = null,
                        @CategoryParameter.Category private val category: String) :
-        PagingAdapter<UserMediaListEntry>(savedInstanceState) {
+        PagingAdapter<UserMediaListEntry>() {
 
     private companion object {
-        private const val STATE_ITEMS = "adapter_user_media_state_items"
+        private const val ITEMS_STATE = "adapter_user_media_state_items"
     }
 
-    override val stateKey = "${STATE_ITEMS}_$category"
+    init {
+        savedInstanceState?.let {
+            list.addAll(it.getParcelableArrayList("${ITEMS_STATE}_$category"))
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(parent.context)
@@ -37,6 +41,10 @@ class UserMediaAdapter(savedInstanceState: Bundle? = null,
     }
 
     override fun getItemId(position: Int) = list[position].id.toLong()
+
+    override fun saveInstanceState(outState: Bundle) {
+        outState.putParcelableArrayList("${ITEMS_STATE}_$category", list)
+    }
 
     inner class ViewHolder(itemView: View) : PagingViewHolder<UserMediaListEntry>(itemView) {
 

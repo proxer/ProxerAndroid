@@ -25,17 +25,25 @@ import com.proxerme.library.parameters.CategoryParameter.MANGA
  */
 class MediaAdapter(savedInstanceState: Bundle? = null,
                    @CategoryParameter.Category private val category: String) :
-        PagingAdapter<MediaListEntry>(savedInstanceState) {
+        PagingAdapter<MediaListEntry>() {
 
     private companion object {
-        private const val STATE_ITEMS = "adapter_media_state_items"
+        private const val ITEMS_STATE = "adapter_media_state_items"
     }
 
-    override val stateKey = "${STATE_ITEMS}_$category"
+    init {
+        savedInstanceState?.let {
+            list.addAll(it.getParcelableArrayList("${ITEMS_STATE}_$category"))
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_media_entry, parent, false))
+    }
+
+    override fun saveInstanceState(outState: Bundle) {
+        outState.putParcelableArrayList("${ITEMS_STATE}_$category", list)
     }
 
     inner class ViewHolder(itemView: View) : PagingViewHolder<MediaListEntry>(itemView) {

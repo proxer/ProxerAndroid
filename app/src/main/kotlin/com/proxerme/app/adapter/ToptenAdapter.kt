@@ -21,17 +21,25 @@ import com.proxerme.library.parameters.CategoryParameter
  */
 class ToptenAdapter(savedInstanceState: Bundle? = null,
                     @CategoryParameter.Category private val category: String) :
-        PagingAdapter<ToptenEntry>(savedInstanceState) {
+        PagingAdapter<ToptenEntry>() {
 
     private companion object {
         private const val ITEMS_STATE = "adapter_topten_state_items"
     }
 
-    override val stateKey = "${ITEMS_STATE}_$category"
+    init {
+        savedInstanceState?.let {
+            list.addAll(it.getParcelableArrayList("${ITEMS_STATE}_$category"))
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
             ViewHolder(LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_topten_entry, parent, false))
+
+    override fun saveInstanceState(outState: Bundle) {
+        outState.putParcelableArrayList("${ITEMS_STATE}_$category", list)
+    }
 
     class ViewHolder(itemView: View) : PagingViewHolder<ToptenEntry>(itemView) {
 

@@ -24,15 +24,20 @@ import com.proxerme.library.info.ProxerUrlHolder
  * @author Ruben Gees
  */
 class ConferenceAdapter(savedInstanceState: Bundle? = null) :
-        PagingAdapter<LocalConference>(savedInstanceState) {
+        PagingAdapter<LocalConference>() {
 
     private companion object {
         private const val ITEMS_STATE = "adapter_conference_state_items"
     }
 
-    override val stateKey = ITEMS_STATE
-
     var callback: OnConferenceInteractionListener? = null
+
+
+    init {
+        savedInstanceState?.let {
+            list.addAll(it.getParcelableArrayList(ITEMS_STATE))
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(parent.context)
@@ -40,6 +45,10 @@ class ConferenceAdapter(savedInstanceState: Bundle? = null) :
     }
 
     override fun getItemId(position: Int): Long = list[position].localId
+
+    override fun saveInstanceState(outState: Bundle) {
+        outState.putParcelableArrayList(ITEMS_STATE, list)
+    }
 
     inner class ViewHolder(itemView: View) : PagingViewHolder<LocalConference>(itemView) {
 

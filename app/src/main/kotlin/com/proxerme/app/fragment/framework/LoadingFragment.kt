@@ -22,9 +22,10 @@ abstract class LoadingFragment<T> : MainFragment() {
     private var firstLoad = true
 
     open protected val canLoad: Boolean
-        get() {
-            return !loader.isLoading()
-        }
+        get() = !isLoading
+
+    protected val isLoading: Boolean
+        get() = loader.isLoading()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

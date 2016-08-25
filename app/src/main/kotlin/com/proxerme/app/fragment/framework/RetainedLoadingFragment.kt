@@ -30,7 +30,9 @@ class RetainedLoadingFragment<T>() : Fragment() {
     }
 
     override fun onDestroy() {
-        cancelAndClean()
+        synchronized(calls, {
+            cancelAndClean()
+        })
 
         super.onDestroy()
     }
@@ -40,7 +42,10 @@ class RetainedLoadingFragment<T>() : Fragment() {
         this.successCallback = successCallback
         this.errorCallback = errorCallback
 
-        deliverAndCleanIfPossible()
+
+        synchronized(calls, {
+            deliverAndCleanIfPossible()
+        })
 
         return this
     }
@@ -53,47 +58,59 @@ class RetainedLoadingFragment<T>() : Fragment() {
     @Suppress("UNCHECKED_CAST")
     fun load(vararg requests: ProxerRequest<*>,
              zipFunction: ((partialResults: Array<Any?>) -> LoadingResult<T>)? = null) {
-        if (requests.isEmpty()) {
-            throw RuntimeException("You have to pass at least one request")
-        }
+        synchronized(calls, {
+            if (requests.isEmpty()) {
+                throw RuntimeException("You have to pass at least one request")
+            }
 
-        cancelAndClean()
+            cancelAndClean()
 
-        val partialResults: Array<Any?> = arrayOfNulls(requests.size)
+            val partialResults: Array<Any?> = arrayOfNulls(requests.size)
+            var readyCount = 0
 
-        requests.forEach {
-            calls.add(MainApplication.proxerConnection.execute(it, { successResult ->
-                partialResults[requests.indexOf(it)] = successResult
+            requests.forEachIndexed { i, proxerRequest ->
+                calls.add(MainApplication.proxerConnection.execute(proxerRequest, { successResult ->
+                    partialResults[i] = successResult
+                    readyCount++
 
-                if (partialResults.size == requests.size) {
-                    if (partialResults.size > 1) {
-                        if (zipFunction == null) {
-                            throw RuntimeException("You have to provide a zip function for" +
-                                    "multiple request loading")
+                    if (readyCount == requests.size) {
+                        if (partialResults.size > 1) {
+                            if (zipFunction == null) {
+                                throw RuntimeException("You have to provide a zip function for" +
+                                        "multiple request loading")
+                            } else {
+                                result = zipFunction.invoke(partialResults)
+                            }
                         } else {
-                            result = zipFunction.invoke(partialResults)
+                            result = LoadingResult(successResult as T)
                         }
-                    } else {
-                        result = LoadingResult(successResult as T)
                     }
-                }
 
-                deliverAndCleanIfPossible()
-            }, { errorResult ->
-                exception = errorResult
+                    synchronized(calls, {
+                        deliverAndCleanIfPossible()
+                    })
+                }, { errorResult ->
+                    exception = errorResult
 
-                deliverAndCleanIfPossible()
-            }))
-
-            return
-        }
+                    synchronized(calls, {
+                        deliverAndCleanIfPossible()
+                    })
+                }))
+            }
+        })
     }
 
     fun cancel() {
-        cancelAndClean()
+        synchronized(calls, {
+            cancelAndClean()
+        })
     }
 
-    fun isLoading() = calls.isNotEmpty()
+    fun isLoading(): Boolean {
+        return synchronized(calls, {
+            calls.isNotEmpty()
+        })
+    }
 
     private fun cancelAndClean() {
         calls.forEach {
