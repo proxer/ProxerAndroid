@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
+import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import com.orhanobut.hawk.Hawk
 import com.orhanobut.hawk.HawkBuilder
@@ -44,28 +45,23 @@ class MainApplication : Application() {
                 .logNoSubscriberMessages(false)
                 .sendNoSubscriberEvent(false)
                 .installDefaultEventBus()
-        DrawerImageLoader.init(object : DrawerImageLoader.IDrawerImageLoader {
-            override fun set(imageView: ImageView, uri: Uri, placeholder: Drawable?) {
+        DrawerImageLoader.init(object : AbstractDrawerImageLoader() {
+            override fun set(imageView: ImageView, uri: Uri?, placeholder: Drawable?) {
                 Glide.with(imageView.context)
                         .load(uri)
-                        .placeholder(IconicsDrawable(imageView.context,
-                                CommunityMaterial.Icon.cmd_account)
-                                .colorRes(android.R.color.white))
+                        .placeholder(placeholder)
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                         .centerCrop()
-                        .into(imageView)
             }
 
             override fun cancel(imageView: ImageView) {
                 Glide.clear(imageView)
             }
 
-            override fun placeholder(ctx: Context): Drawable? {
-                return null
-            }
-
-            override fun placeholder(ctx: Context, tag: String): Drawable? {
-                return null
+            override fun placeholder(context: Context, tag: String): Drawable? {
+                return IconicsDrawable(context,
+                        CommunityMaterial.Icon.cmd_account)
+                        .colorRes(android.R.color.white)
             }
         })
 

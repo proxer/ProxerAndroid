@@ -47,10 +47,10 @@ dependencies {
 
     compile 'com.takisoft.fix:preference-v7:24.2.0.0'
 
-    compile('com.mikepenz:aboutlibraries:5.8.0@aar') {
+    compile('com.mikepenz:aboutlibraries:5.8.1@aar') {
         transitive = true
     }
-    compile('com.mikepenz:materialdrawer:5.5.0@aar') {
+    compile('com.mikepenz:materialdrawer:5.6.0@aar') {
         transitive = true
     }
     compile('com.github.rubengees:introduction:1.3.3@aar') {
@@ -61,7 +61,7 @@ dependencies {
     compile 'com.github.orhanobut:hawk:1.23'
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.github.bumptech.glide:okhttp3-integration:1.4.0@aar'
-    compile 'com.mikepenz:iconics-core:2.8.0@aar'
+    compile 'com.mikepenz:iconics-core:2.8.1@aar'
     compile 'com.mikepenz:community-material-typeface:1.5.54.2@aar'
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'de.hdodenhof:circleimageview:2.1.0'
