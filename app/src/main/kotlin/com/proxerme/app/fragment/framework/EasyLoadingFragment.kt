@@ -1,5 +1,8 @@
 package com.proxerme.app.fragment.framework
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -7,10 +10,14 @@ import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
 import butterknife.bindView
+import com.klinker.android.link_builder.Link
+import com.klinker.android.link_builder.TouchableMovementMethod
 import com.proxerme.app.R
 import com.proxerme.app.util.ErrorHandler
+import com.proxerme.app.util.Utils
 import com.proxerme.library.connection.ProxerException
 import org.jetbrains.anko.onClick
+import org.jetbrains.anko.toast
 
 /**
  * TODO: Describe class
@@ -37,6 +44,12 @@ abstract class EasyLoadingFragment<T> : LoadingFragment<T>() {
         savedInstanceState?.let {
             exception = it.getSerializable(EXCEPTION_STATE) as ProxerException?
         }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        errorText.movementMethod = TouchableMovementMethod.getInstance()
     }
 
     override fun onResume() {
@@ -91,7 +104,16 @@ abstract class EasyLoadingFragment<T> : LoadingFragment<T>() {
     }
 
     open protected fun doShowError(exception: ProxerException) {
-        errorText.text = ErrorHandler.getMessageForErrorCode(context, exception)
+        errorText.text = Utils.buildClickableText(context,
+                ErrorHandler.getMessageForErrorCode(context, exception),
+                onWebClickListener = Link.OnClickListener { link ->
+                    try {
+                        startActivity(Intent(Intent.ACTION_VIEW,
+                                Uri.parse(link + "?device=mobile")))
+                    } catch (exception: ActivityNotFoundException) {
+                        context.toast(R.string.link_error_not_found)
+                    }
+                })
         errorButton.text = getString(R.string.error_retry)
         errorButton.onClick {
             load()

@@ -52,6 +52,7 @@ class MainApplication : Application() {
                         .placeholder(placeholder)
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                         .centerCrop()
+                        .into(imageView)
             }
 
             override fun cancel(imageView: ImageView) {

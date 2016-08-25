@@ -16,6 +16,7 @@ import android.widget.Button
 import android.widget.TextView
 import butterknife.bindView
 import com.klinker.android.link_builder.Link
+import com.klinker.android.link_builder.TouchableMovementMethod
 import com.proxerme.app.R
 import com.proxerme.app.activity.UserActivity
 import com.proxerme.app.adapter.ChatAdapter
@@ -209,6 +210,8 @@ class ChatFragment : MainFragment() {
 
             messageInput.text.clear()
         }
+
+        errorText.movementMethod = TouchableMovementMethod.getInstance()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -278,13 +281,15 @@ class ChatFragment : MainFragment() {
                           onButtonClickListener: View.OnClickListener? = null) {
         contentRoot.visibility = View.INVISIBLE
         errorContainer.visibility = View.VISIBLE
-        errorText.text = Utils.buildClickableText(context, message, Link.OnClickListener { link ->
-            try {
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link + "?device=mobile")))
-            } catch (exception: ActivityNotFoundException) {
-                context.toast(R.string.link_error_not_found)
-            }
-        })
+        errorText.text = Utils.buildClickableText(context, message,
+                onWebClickListener = Link.OnClickListener { link ->
+                    try {
+                        startActivity(Intent(Intent.ACTION_VIEW,
+                                Uri.parse(link + "?device=mobile")))
+                    } catch (exception: ActivityNotFoundException) {
+                        context.toast(R.string.link_error_not_found)
+                    }
+                })
 
         if (buttonMessage == null) {
             errorButton.text = getString(R.string.error_retry)

@@ -15,6 +15,7 @@ import android.widget.Button
 import android.widget.TextView
 import butterknife.bindView
 import com.klinker.android.link_builder.Link
+import com.klinker.android.link_builder.TouchableMovementMethod
 import com.proxerme.app.R
 import com.proxerme.app.activity.ChatActivity
 import com.proxerme.app.activity.UserActivity
@@ -127,6 +128,8 @@ class ConferencesFragment : MainFragment() {
                 }
             }
         })
+
+        errorText.movementMethod = TouchableMovementMethod.getInstance()
     }
 
     override fun onResume() {
