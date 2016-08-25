@@ -8,9 +8,10 @@ import android.view.MenuItem
 import android.view.View
 import com.proxerme.app.R
 import com.proxerme.app.adapter.MediaAdapter
-import com.proxerme.app.application.MainApplication
+import com.proxerme.app.fragment.framework.PagingFragment
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.util.Utils
+import com.proxerme.library.connection.list.entity.MediaListEntry
 import com.proxerme.library.connection.list.request.MediaSearchRequest
 import com.proxerme.library.parameters.CategoryParameter
 import com.proxerme.library.parameters.MediaSortParameter
@@ -21,9 +22,12 @@ import com.proxerme.library.parameters.TypeParameter
  *
  * @author Ruben Gees
  */
-class MediaListFragment : PagingFragment() {
+class MediaListFragment : PagingFragment<MediaListEntry>() {
 
     companion object {
+
+        const val ITEMS_ON_PAGE = 15
+
         private const val ARGUMENT_CATEGORY = "category"
         private const val STATE_SORT_CRITERIA = "state_sort_criteria"
 
@@ -37,6 +41,7 @@ class MediaListFragment : PagingFragment() {
     }
 
     override val section = SectionManager.Section.MEDIA_LIST
+    override val itemsOnPage = ITEMS_ON_PAGE
 
     @CategoryParameter.Category
     private lateinit var category: String
@@ -44,7 +49,7 @@ class MediaListFragment : PagingFragment() {
     @MediaSortParameter.MediaSortCriteria
     private lateinit var sortCriteria: String
 
-    private lateinit var adapter: MediaAdapter
+    override lateinit var adapter: MediaAdapter
     override lateinit var layoutManager: StaggeredGridLayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,7 +63,7 @@ class MediaListFragment : PagingFragment() {
             sortCriteria = MediaSortParameter.RATING
         }
 
-        adapter = MediaAdapter(savedInstanceState, category, sortCriteria)
+        adapter = MediaAdapter(savedInstanceState, category)
         layoutManager = StaggeredGridLayoutManager(Utils.calculateSpanAmount(activity) + 1,
                 StaggeredGridLayoutManager.VERTICAL)
 
@@ -77,7 +82,6 @@ class MediaListFragment : PagingFragment() {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val previousCriteria = sortCriteria
 
@@ -90,6 +94,7 @@ class MediaListFragment : PagingFragment() {
 
         if (previousCriteria != sortCriteria) {
             reset()
+
             item.isChecked = true
         }
 
@@ -100,45 +105,19 @@ class MediaListFragment : PagingFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         list.setHasFixedSize(true)
-        list.layoutManager = layoutManager
-        list.adapter = adapter
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
         outState.putString(STATE_SORT_CRITERIA, sortCriteria)
-        adapter.saveInstanceState(outState)
     }
 
-    override fun loadPage(number: Int) {
-        MainApplication.proxerConnection
-                .execute(MediaSearchRequest(number)
-                        .withType(getTypeParameter())
-                        .withSortCriteria(sortCriteria)
-                        .withLimit(50),
-                        { result ->
-                            adapter.addItems(result.toList())
-
-                            notifyPagedLoadFinishedSuccessful(number, result)
-                        },
-                        { result ->
-                            notifyPagedLoadFinishedWithError(number, result)
-                        })
-    }
-
-    override fun cancel() {
-        //  ProxerConnection.cancel(ProxerTag.MEDIA_LIST)
-    }
-
-    override fun clear() {
-        adapter.clear()
-    }
-
-    override fun reset() {
-        adapter.sortCriteria = sortCriteria
-
-        super.reset()
+    override fun constructPagedLoadingRequest(page: Int): LoadingRequest<Array<MediaListEntry>> {
+        return LoadingRequest(MediaSearchRequest(page)
+                .withType(getTypeParameter())
+                .withSortCriteria(sortCriteria)
+                .withLimit(ITEMS_ON_PAGE))
     }
 
     @TypeParameter.Type

@@ -22,6 +22,7 @@ import com.proxerme.app.adapter.ConferenceAdapter
 import com.proxerme.app.data.chatDatabase
 import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.event.ConferencesEvent
+import com.proxerme.app.fragment.framework.MainFragment
 import com.proxerme.app.helper.NotificationHelper
 import com.proxerme.app.helper.StorageHelper
 import com.proxerme.app.manager.SectionManager

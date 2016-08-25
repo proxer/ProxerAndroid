@@ -24,37 +24,9 @@ class ErrorHandlerTest {
     }
 
     @org.junit.Test
-    fun getMessageForErrorCodeIO() {
-        assertEquals(getTargetContext().getString(R.string.error_io),
-                ErrorHandler.getMessageForErrorCode(getTargetContext(),
-                        ProxerException(ProxerException.IO)))
-    }
-
-    @org.junit.Test
     fun getMessageForErrorCodeNetwork() {
         assertEquals(getTargetContext().getString(R.string.error_network),
                 ErrorHandler.getMessageForErrorCode(getTargetContext(),
                         ProxerException(ProxerException.NETWORK)))
-    }
-
-    @org.junit.Test
-    fun getMessageForErrorCodeTimeout() {
-        assertEquals(getTargetContext().getString(R.string.error_timeout),
-                ErrorHandler.getMessageForErrorCode(getTargetContext(),
-                        ProxerException(ProxerException.TIMEOUT)))
-    }
-
-    @org.junit.Test
-    fun getMessageForErrorCodeUnparseable() {
-        assertEquals(getTargetContext().getString(R.string.error_unparseable),
-                ErrorHandler.getMessageForErrorCode(getTargetContext(),
-                        ProxerException(ProxerException.UNPARSEABLE)))
-    }
-
-    @org.junit.Test
-    fun getMessageForErrorCodeUnknown() {
-        assertEquals(getTargetContext().getString(R.string.error_unknown),
-                ErrorHandler.getMessageForErrorCode(getTargetContext(),
-                        ProxerException(ProxerException.UNKNOWN)))
     }
 }

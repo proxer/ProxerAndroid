@@ -8,10 +8,10 @@ import android.view.MenuItem
 import android.view.View
 import com.proxerme.app.R
 import com.proxerme.app.adapter.UserMediaAdapter
-import com.proxerme.app.application.MainApplication
+import com.proxerme.app.fragment.framework.PagingFragment
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.util.Utils
-import com.proxerme.library.connection.ProxerCall
+import com.proxerme.library.connection.user.entitiy.UserMediaListEntry
 import com.proxerme.library.connection.user.request.UserMediaListRequest
 import com.proxerme.library.parameters.CategoryParameter
 import com.proxerme.library.parameters.UserMediaSortParameter
@@ -21,9 +21,12 @@ import com.proxerme.library.parameters.UserMediaSortParameter
  *
  * @author Ruben Gees
  */
-class UserMediaListFragment : PagingFragment() {
+class UserMediaListFragment : PagingFragment<UserMediaListEntry>() {
 
     companion object {
+
+        const val ITEMS_ON_PAGE = 30
+
         private const val ARGUMENT_USER_ID = "user_id"
         private const val ARGUMENT_USER_NAME = "user_name"
         private const val ARGUMENT_CATEGORY = "category"
@@ -45,7 +48,8 @@ class UserMediaListFragment : PagingFragment() {
         }
     }
 
-    override val section: SectionManager.Section = SectionManager.Section.USER_MEDIA_LIST
+    override val section = SectionManager.Section.USER_MEDIA_LIST
+    override val itemsOnPage = ITEMS_ON_PAGE
 
     private var userId: String? = null
     private var userName: String? = null
@@ -56,10 +60,8 @@ class UserMediaListFragment : PagingFragment() {
     @UserMediaSortParameter.UserMediaSortCriteria
     private lateinit var sortCriteria: String
 
-    private lateinit var adapter: UserMediaAdapter
+    override lateinit var adapter: UserMediaAdapter
     override lateinit var layoutManager: StaggeredGridLayoutManager
-
-    private var call: ProxerCall? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,7 +76,7 @@ class UserMediaListFragment : PagingFragment() {
             sortCriteria = UserMediaSortParameter.NAME_ASCENDING
         }
 
-        adapter = UserMediaAdapter(savedInstanceState, category, sortCriteria)
+        adapter = UserMediaAdapter(savedInstanceState, category)
         layoutManager = StaggeredGridLayoutManager(Utils.calculateSpanAmount(activity) + 1,
                 StaggeredGridLayoutManager.VERTICAL)
 
@@ -149,6 +151,7 @@ class UserMediaListFragment : PagingFragment() {
 
         if (previousCriteria != sortCriteria) {
             reset()
+
             item.isChecked = true
         }
 
@@ -159,44 +162,17 @@ class UserMediaListFragment : PagingFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         list.setHasFixedSize(true)
-        list.layoutManager = layoutManager
-        list.adapter = adapter
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
         outState.putString(STATE_SORT_CRITERIA, sortCriteria)
-        adapter.saveInstanceState(outState)
     }
 
-    override fun loadPage(number: Int) {
-        call = MainApplication.proxerConnection.execute(
-                UserMediaListRequest(userId, userName, number)
-                        .withCategory(category)
-                        .withLimit(50)
-                        .withSortCriteria(sortCriteria),
-                { result ->
-                    adapter.addItems(result.toList())
-
-                    notifyPagedLoadFinishedSuccessful(number, result)
-                },
-                { result ->
-                    notifyPagedLoadFinishedWithError(number, result)
-                })
-    }
-
-    override fun cancel() {
-        call?.cancel()
-    }
-
-    override fun clear() {
-        adapter.clear()
-    }
-
-    override fun reset() {
-        adapter.sortCriteria = sortCriteria
-
-        super.reset()
+    override fun constructPagedLoadingRequest(page: Int):
+            LoadingRequest<Array<UserMediaListEntry>> {
+        return LoadingRequest(UserMediaListRequest(userId, userName, page).withCategory(category)
+                .withSortCriteria(sortCriteria).withLimit(ITEMS_ON_PAGE))
     }
 }

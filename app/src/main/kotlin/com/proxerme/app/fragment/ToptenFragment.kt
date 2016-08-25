@@ -6,16 +6,14 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
 import butterknife.bindView
 import com.proxerme.app.R
 import com.proxerme.app.adapter.ToptenAdapter
-import com.proxerme.app.application.MainApplication
+import com.proxerme.app.fragment.framework.EasyLoadingFragment
+import com.proxerme.app.fragment.framework.RetainedLoadingFragment
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.util.Utils
-import com.proxerme.library.connection.ProxerCall
-import com.proxerme.library.connection.ProxerException
+import com.proxerme.library.connection.user.entitiy.ToptenEntry
 import com.proxerme.library.connection.user.request.ToptenRequest
 import com.proxerme.library.parameters.CategoryParameter.ANIME
 import com.proxerme.library.parameters.CategoryParameter.MANGA
@@ -25,7 +23,7 @@ import com.proxerme.library.parameters.CategoryParameter.MANGA
  *
  * @author Ruben Gees
  */
-class ToptenFragment : LoadingFragment() {
+class ToptenFragment : EasyLoadingFragment<Array<Array<ToptenEntry>>>() {
 
     companion object {
         private const val ARGUMENT_USER_ID = "user_id"
@@ -53,18 +51,10 @@ class ToptenFragment : LoadingFragment() {
     private lateinit var animeAdapter: ToptenAdapter
     private lateinit var mangaAdapter: ToptenAdapter
 
-    override val parallelLoads = 2
-
-    private val toptenContainer: ViewGroup by bindView(R.id.toptenContainer)
     private val animeContainer: ViewGroup by bindView(R.id.animeContainer)
     private val mangaContainer: ViewGroup by bindView(R.id.mangaContainer)
     private val animeList: RecyclerView by bindView(R.id.animeList)
     private val mangaList: RecyclerView by bindView(R.id.mangaList)
-    override val errorContainer: ViewGroup by bindView(R.id.errorContainer)
-    override val errorText: TextView by bindView(R.id.errorText)
-    override val errorButton: Button by bindView(R.id.errorButton)
-
-    private var calls: Array<ProxerCall?> = arrayOfNulls<ProxerCall>(2)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,6 +63,11 @@ class ToptenFragment : LoadingFragment() {
         userName = arguments.getString(ARGUMENT_USER_NAME)
         animeAdapter = ToptenAdapter(savedInstanceState, ANIME)
         mangaAdapter = ToptenAdapter(savedInstanceState, MANGA)
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View {
+        return inflater.inflate(R.layout.fragment_topten, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -95,63 +90,29 @@ class ToptenFragment : LoadingFragment() {
         mangaAdapter.saveInstanceState(outState)
     }
 
-    override fun inflateView(inflater: LayoutInflater, container: ViewGroup?,
-                             savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_topten, container, false)
+    override fun constructLoadingRequest(): LoadingRequest<Array<Array<ToptenEntry>>> {
+        return LoadingRequest(ToptenRequest(userId, userName, ANIME),
+                ToptenRequest(userId, userName, MANGA), zipFunction = { partialResults ->
+
+            @Suppress("UNCHECKED_CAST")
+            RetainedLoadingFragment.LoadingResult(arrayOf(
+                    partialResults[0] as Array<ToptenEntry>,
+                    partialResults[1] as Array<ToptenEntry>
+            ))
+        })
     }
 
-    override fun cancel() {
-        calls.forEach {
-            it?.cancel()
-        }
+    override fun clear() {
+        animeAdapter.clear()
+        mangaAdapter.clear()
     }
 
-    override fun load(showProgress: Boolean) {
-        super.load(showProgress)
-
-        calls[0] = MainApplication.proxerConnection.execute(
-                ToptenRequest(userId, userName, ANIME),
-                { result ->
-                    animeAdapter.setItems(result.asList())
-
-                    notifyLoadFinishedSuccessful(result)
-                },
-                { result ->
-                    notifyLoadFinishedWithError(result)
-                })
-
-        calls[1] = MainApplication.proxerConnection.execute(
-                ToptenRequest(userId, userName, MANGA),
-                { result ->
-                    mangaAdapter.setItems(result.asList())
-
-                    notifyLoadFinishedSuccessful(result)
-                },
-                { result ->
-                    notifyLoadFinishedWithError(result)
-                })
+    override fun save(result: Array<Array<ToptenEntry>>) {
+        animeAdapter.replace(result[0])
+        mangaAdapter.replace(result[1])
     }
 
-    override fun showError(message: String, buttonMessage: String?,
-                           onButtonClickListener: View.OnClickListener?) {
-        super.showError(message, buttonMessage, onButtonClickListener)
-
-        toptenContainer.visibility = View.INVISIBLE
-    }
-
-    override fun notifyLoadFinishedWithError(result: ProxerException) {
-        super.notifyLoadFinishedWithError(result)
-
-        show()
-    }
-
-    override fun notifyLoadFinishedSuccessful(result: Any) {
-        super.notifyLoadFinishedSuccessful(result)
-
-        show()
-    }
-
-    private fun show() {
+    override fun show() {
         if (animeAdapter.isEmpty()) {
             animeContainer.visibility = View.GONE
         } else {

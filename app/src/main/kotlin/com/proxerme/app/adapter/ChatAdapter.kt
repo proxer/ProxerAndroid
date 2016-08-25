@@ -28,42 +28,44 @@ import java.util.*
 
  * @author Ruben Gees
  */
-class ChatAdapter(savedInstanceState: Bundle?) :
-        RecyclerView.Adapter<ChatAdapter.MessageViewHolder>() {
+class ChatAdapter(savedInstanceState: Bundle? = null) :
+        PagingAdapter<LocalMessage>(savedInstanceState) {
 
     private companion object {
-        const val STATE_MESSAGE_SELECTED_IDS = "message_selected_ids"
-        const val STATE_MESSAGE_SELECTING = "message_selecting"
-        const val STATE_MESSAGE_SHOWING_TIME_IDS = "message_showing_time_ids"
+        private const val ITEMS_STATE = "adapter_conference_state_items"
+        private const val MESSAGE_SELECTED_IDS_STATE = "message_selected_ids"
+        private const val MESSAGE_SELECTING_STATE = "message_selecting"
+        private const val MESSAGE_SHOWING_TIME_IDS_STATE = "message_showing_time_ids"
 
-        const val TYPE_MESSAGE_INNER = 0
-        const val TYPE_MESSAGE_SINGLE = 1
-        const val TYPE_MESSAGE_TOP = 2
-        const val TYPE_MESSAGE_BOTTOM = 3
-        const val TYPE_MESSAGE_SELF_INNER = 4
-        const val TYPE_MESSAGE_SELF_SINGLE = 5
-        const val TYPE_MESSAGE_SELF_TOP = 6
-        const val TYPE_MESSAGE_SELF_BOTTOM = 7
-        const val TYPE_ACTION = 8
+        private const val TYPE_MESSAGE_INNER = 0
+        private const val TYPE_MESSAGE_SINGLE = 1
+        private const val TYPE_MESSAGE_TOP = 2
+        private const val TYPE_MESSAGE_BOTTOM = 3
+        private const val TYPE_MESSAGE_SELF_INNER = 4
+        private const val TYPE_MESSAGE_SELF_SINGLE = 5
+        private const val TYPE_MESSAGE_SELF_TOP = 6
+        private const val TYPE_MESSAGE_SELF_BOTTOM = 7
+        private const val TYPE_ACTION = 8
     }
 
-    var user: User? = null
+    override val stateKey = ITEMS_STATE
 
-    private val list = ArrayList<LocalMessage>()
+    var user: User? = null
+    var callback: OnMessageInteractionListener? = null
+
     private val selectedMap = HashMap<Long, Boolean>()
     private val showingTimeMap = HashMap<Long, Boolean>()
 
     private var selecting = false
 
-    var callback: OnMessageInteractionListener? = null
+    val selectedItems: List<LocalMessage>
+        get() = list.filter { selectedMap.containsKey(it.localId) }.sortedBy { it.time }
 
     init {
-        setHasStableIds(true)
+        val selectedIds = savedInstanceState?.getLongArray(MESSAGE_SELECTED_IDS_STATE)
+        val showingTimeIds = savedInstanceState?.getLongArray(MESSAGE_SHOWING_TIME_IDS_STATE)
 
-        val selectedIds = savedInstanceState?.getLongArray(STATE_MESSAGE_SELECTED_IDS)
-        val showingTimeIds = savedInstanceState?.getLongArray(STATE_MESSAGE_SHOWING_TIME_IDS)
-
-        this.selecting = savedInstanceState?.getBoolean(STATE_MESSAGE_SELECTING) ?: false
+        this.selecting = savedInstanceState?.getBoolean(MESSAGE_SELECTING_STATE) ?: false
 
         selectedIds?.associateByTo(this.selectedMap, { it }, { true })
         showingTimeIds?.associateByTo(this.showingTimeMap, { it }, { true })
@@ -87,9 +89,10 @@ class ChatAdapter(savedInstanceState: Bundle?) :
         }
     }
 
-    override fun getItemCount() = list.size
+    override fun onBindViewHolder(holder: PagingAdapter.PagingViewHolder<LocalMessage>,
+                                  position: Int) {
+        holder as MessageViewHolder
 
-    override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
         val margins = getMarginsForPosition(position)
 
         holder.bind(list[position],
@@ -199,32 +202,25 @@ class ChatAdapter(savedInstanceState: Bundle?) :
         return result
     }
 
-    fun replace(newItems: Collection<LocalMessage>) {
-        list.clear()
-        list.addAll(newItems)
+    override fun saveInstanceState(outState: Bundle) {
+        super.saveInstanceState(outState)
 
-        notifyDataSetChanged()
-    }
-
-    fun saveInstanceState(outState: Bundle) {
-        outState.putBoolean(STATE_MESSAGE_SELECTING, selecting)
-        outState.putLongArray(STATE_MESSAGE_SELECTED_IDS,
+        outState.putBoolean(MESSAGE_SELECTING_STATE, selecting)
+        outState.putLongArray(MESSAGE_SELECTED_IDS_STATE,
                 selectedMap.keys.toLongArray())
-        outState.putLongArray(STATE_MESSAGE_SHOWING_TIME_IDS,
+        outState.putLongArray(MESSAGE_SHOWING_TIME_IDS_STATE,
                 showingTimeMap.keys.toLongArray())
     }
 
-    fun clear() {
-        selecting = false
-
+    override fun clear() {
         list.clear()
+        showingTimeMap.clear()
+
+        clearSelection()
 
         if (selectedMap.size > 0) {
             callback?.onMessageSelection(0)
         }
-
-        selectedMap.clear()
-        showingTimeMap.clear()
 
         notifyDataSetChanged()
     }
@@ -235,9 +231,6 @@ class ChatAdapter(savedInstanceState: Bundle?) :
         selectedMap.clear()
         notifyDataSetChanged()
     }
-
-    val selectedItems: List<LocalMessage>
-        get() = list.filter { selectedMap.containsKey(it.localId) }.sortedBy { it.time }
 
     abstract class OnMessageInteractionListener {
         open fun onMessageTitleClick(v: View, message: LocalMessage) {
@@ -257,7 +250,7 @@ class ChatAdapter(savedInstanceState: Bundle?) :
         }
     }
 
-    open inner class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    open inner class MessageViewHolder(itemView: View) : PagingViewHolder<LocalMessage>(itemView) {
 
         protected val root: ViewGroup by bindView(R.id.root)
         protected val container: CardView by bindView(R.id.container)

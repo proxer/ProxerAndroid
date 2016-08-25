@@ -1,5 +1,6 @@
 package com.proxerme.app.adapter
 
+import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -16,25 +17,22 @@ import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.util.TimeUtil
 import com.proxerme.library.connection.messenger.entity.Conference
 import com.proxerme.library.info.ProxerUrlHolder
-import java.util.*
 
 /**
  * An Adapter for [Conference]s, used in a RecyclerView.
 
  * @author Ruben Gees
  */
-class ConferenceAdapter : RecyclerView.Adapter<ConferenceAdapter.ViewHolder>() {
+class ConferenceAdapter(savedInstanceState: Bundle? = null) :
+        PagingAdapter<LocalConference>(savedInstanceState) {
 
-    private val list = ArrayList<LocalConference>()
-    var callback: OnConferenceInteractionListener? = null
-
-    init {
-        setHasStableIds(true)
+    private companion object {
+        private const val ITEMS_STATE = "adapter_conference_state_items"
     }
 
-    override fun getItemCount(): Int = list.count()
+    override val stateKey = ITEMS_STATE
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(list[position])
+    var callback: OnConferenceInteractionListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(parent.context)
@@ -43,20 +41,7 @@ class ConferenceAdapter : RecyclerView.Adapter<ConferenceAdapter.ViewHolder>() {
 
     override fun getItemId(position: Int): Long = list[position].localId
 
-    fun replace(newItems: Collection<LocalConference>) {
-        list.clear()
-        list.addAll(newItems)
-
-        notifyDataSetChanged()
-    }
-
-    fun clear() {
-        list.clear()
-
-        notifyDataSetChanged()
-    }
-
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : PagingViewHolder<LocalConference>(itemView) {
 
         private val image: ImageView by bindView(R.id.image)
         private val container: ViewGroup by bindView(R.id.container)
@@ -84,15 +69,15 @@ class ConferenceAdapter : RecyclerView.Adapter<ConferenceAdapter.ViewHolder>() {
             }
         }
 
-        fun bind(conference: LocalConference) {
-            topic.text = conference.topic
+        override fun bind(item: LocalConference) {
+            topic.text = item.topic
             time.text = TimeUtil.convertToRelativeReadableTime(time.context,
-                    conference.time)
+                    item.time)
             participants.text = participants.context.resources.getQuantityString(
-                    R.plurals.item_conferences_participants, conference.participantAmount,
-                    conference.participantAmount)
+                    R.plurals.item_conferences_participants, item.participantAmount,
+                    item.participantAmount)
 
-            if (conference.isRead) {
+            if (item.isRead) {
                 topic.setCompoundDrawables(null, null, null, null)
             } else {
                 //TODO display number of new messages
@@ -104,13 +89,13 @@ class ConferenceAdapter : RecyclerView.Adapter<ConferenceAdapter.ViewHolder>() {
                                 .colorRes(R.color.colorAccent), null)
             }
 
-            if (conference.imageId.isBlank()) {
+            if (item.imageId.isBlank()) {
                 val icon = IconicsDrawable(image.context)
                         .sizeDp(96)
                         .paddingDp(16)
                         .colorRes(R.color.colorAccent)
 
-                if (conference.isGroup) {
+                if (item.isGroup) {
                     icon.icon(CommunityMaterial.Icon.cmd_account_multiple)
                 } else {
                     icon.icon(CommunityMaterial.Icon.cmd_account)
@@ -119,7 +104,7 @@ class ConferenceAdapter : RecyclerView.Adapter<ConferenceAdapter.ViewHolder>() {
                 image.setImageDrawable(icon)
             } else {
                 Glide.with(image.context)
-                        .load(ProxerUrlHolder.getUserImageUrl(conference.imageId).toString())
+                        .load(ProxerUrlHolder.getUserImageUrl(item.imageId).toString())
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                         .into(image)
             }

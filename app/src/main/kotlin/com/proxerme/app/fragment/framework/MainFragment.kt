@@ -1,4 +1,4 @@
-package com.proxerme.app.fragment
+package com.proxerme.app.fragment.framework
 
 import android.support.v4.app.Fragment
 import com.proxerme.app.manager.SectionManager

@@ -1,16 +1,24 @@
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
     tools:context="com.proxerme.app.fragment.ToptenFragment">
 
-    <FrameLayout
+    <ProgressBar
+        android:id="@+id/progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/contentContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
         <LinearLayout
-            android:id="@+id/toptenContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -55,7 +63,7 @@
                     android:layout_height="wrap_content" />
             </LinearLayout>
         </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 
-        <include layout="@layout/layout_error" />
-    </FrameLayout>
-</android.support.v4.widget.NestedScrollView>
+    <include layout="@layout/layout_error" />
+</FrameLayout>

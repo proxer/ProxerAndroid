@@ -26,28 +26,30 @@ import kotlin.comparisons.compareByDescending
  *
  * @author Ruben Gees
  */
-class NewsAdapter(val savedInstanceState: Bundle?) :
-        RecyclerView.Adapter<NewsAdapter.ViewHolder>() {
+class NewsAdapter(savedInstanceState: Bundle? = null) :
+        PagingAdapter<News>(savedInstanceState) {
 
     private companion object {
-        const val STATE_ITEMS = "adapter_news_state_items"
-        const val STATE_EXPANDED_IDS = "adapter_news_state_extension_ids"
-        const val ICON_SIZE = 32
-        const val ICON_PADDING = 8
-        const val ROTATION_HALF = 180f
-        const val DESCRIPTION_MAX_LINES = 3
+        private const val ITEMS_STATE = "adapter_news_state_items"
+        private const val EXPANDED_IDS_STATE = "adapter_news_state_extension_ids"
+        private const val ICON_SIZE = 32
+        private const val ICON_PADDING = 8
+        private const val ROTATION_HALF = 180f
+        private const val DESCRIPTION_MAX_LINES = 3
     }
 
-    private val list = ArrayList<News>()
-    private val expanded = HashMap<String, Boolean>()
+    override val stateKey = ITEMS_STATE
+
     var callback: OnNewsInteractionListener? = null
+
+    private val expanded = HashMap<String, Boolean>()
+    private val comparator = compareByDescending<News> { it.time }
 
     init {
         setHasStableIds(true)
 
         savedInstanceState?.let {
-            list.addAll(it.getParcelableArrayList(STATE_ITEMS))
-            it.getStringArrayList(STATE_EXPANDED_IDS)
+            it.getStringArrayList(EXPANDED_IDS_STATE)
                     .associateByTo(expanded, { it }, { true })
         }
     }
@@ -57,31 +59,15 @@ class NewsAdapter(val savedInstanceState: Bundle?) :
                 .inflate(R.layout.item_news, parent, false))
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(list[position])
+    override fun saveInstanceState(outState: Bundle) {
+        super.saveInstanceState(outState)
 
-    override fun getItemCount(): Int = list.count()
-
-    override fun getItemId(position: Int): Long = list[position].id.toLong()
-
-    fun addItems(newItems: Collection<News>) {
-        list.addAll(newItems.filter { list.binarySearch(it, compareByDescending { it.time }) < 0 })
-        list.sortByDescending { it.time }
-
-        notifyDataSetChanged()
+        outState.putStringArrayList(EXPANDED_IDS_STATE, ArrayList(expanded.keys))
     }
 
-    fun clear() {
-        list.clear()
+    override fun contains(item: News) = list.binarySearch(item, comparator) < 0
 
-        notifyDataSetChanged()
-    }
-
-    fun saveInstanceState(outState: Bundle) {
-        outState.putParcelableArrayList(STATE_ITEMS, list)
-        outState.putStringArrayList(STATE_EXPANDED_IDS, ArrayList(expanded.keys))
-    }
-
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : PagingAdapter.PagingViewHolder<News>(itemView) {
 
         private val expand: ImageButton by bindView(R.id.expand)
         private val description: TextView by bindView(R.id.description)
@@ -130,7 +116,7 @@ class NewsAdapter(val savedInstanceState: Bundle?) :
             }
         }
 
-        fun bind(item: News) {
+        override fun bind(item: News) {
             Glide.with(image.context)
                     .load(ProxerUrlHolder.getNewsImageUrl(item.id, item.imageId).toString())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)

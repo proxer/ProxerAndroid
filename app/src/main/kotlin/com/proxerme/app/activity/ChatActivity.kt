@@ -39,7 +39,7 @@ class ChatActivity : MainActivity() {
         title = intent.getParcelableExtra<LocalConference>(EXTRA_CONFERENCE).topic
 
         if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction().replace(R.id.contentContainer,
+            supportFragmentManager.beginTransaction().replace(R.id.container,
                     ChatFragment.newInstance(intent.getParcelableExtra(EXTRA_CONFERENCE)))
                     .commitNow()
         }

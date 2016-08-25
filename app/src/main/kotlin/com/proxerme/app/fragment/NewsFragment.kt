@@ -7,13 +7,11 @@ import android.widget.ImageView
 import com.proxerme.app.activity.DashboardActivity
 import com.proxerme.app.activity.ImageDetailActivity
 import com.proxerme.app.adapter.NewsAdapter
-import com.proxerme.app.application.MainApplication
 import com.proxerme.app.event.NewsEvent
+import com.proxerme.app.fragment.framework.PagingFragment
 import com.proxerme.app.helper.NotificationHelper
-import com.proxerme.app.helper.StorageHelper
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.util.Utils
-import com.proxerme.library.connection.ProxerCall
 import com.proxerme.library.connection.notifications.entitiy.News
 import com.proxerme.library.connection.notifications.request.NewsRequest
 import com.proxerme.library.info.ProxerUrlHolder
@@ -26,20 +24,22 @@ import org.greenrobot.eventbus.ThreadMode
  *
  * @author Ruben Gees
  */
-class NewsFragment : PagingFragment() {
+class NewsFragment : PagingFragment<News>() {
 
     companion object {
+
+        const val ITEMS_ON_PAGE = 15
+
         fun newInstance(): NewsFragment {
             return NewsFragment()
         }
     }
 
-    lateinit override var layoutManager: StaggeredGridLayoutManager
-    lateinit private var adapter: NewsAdapter
+    override val section = SectionManager.Section.NEWS
+    override val itemsOnPage = ITEMS_ON_PAGE
 
-    override val section: SectionManager.Section = SectionManager.Section.NEWS
-
-    private var call: ProxerCall? = null
+    override lateinit var layoutManager: StaggeredGridLayoutManager
+    override lateinit var adapter: NewsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,8 +85,6 @@ class NewsFragment : PagingFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         list.setHasFixedSize(true)
-        list.layoutManager = layoutManager
-        list.adapter = adapter
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -95,35 +93,12 @@ class NewsFragment : PagingFragment() {
         adapter.saveInstanceState(outState)
     }
 
-    override fun loadPage(number: Int) {
-        call = MainApplication.proxerConnection.execute(NewsRequest(number),
-                { result ->
-                    if (result.isNotEmpty()) {
-                        adapter.addItems(result.asList())
-
-                        if (number == 0) {
-                            StorageHelper.lastNewsTime = result.first().time
-                            StorageHelper.newNews = 0
-                        }
-
-                        notifyPagedLoadFinishedSuccessful(number, result)
-                    }
-                },
-                { result ->
-                    notifyPagedLoadFinishedWithError(number, result)
-                })
-    }
-
-    override fun cancel() {
-        call?.cancel()
-    }
-
-    override fun clear() {
-        adapter.clear()
+    override fun constructPagedLoadingRequest(page: Int): LoadingRequest<Array<News>> {
+        return LoadingRequest(NewsRequest(page).withLimit(ITEMS_ON_PAGE))
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onNewsReceived(event: NewsEvent) {
-        adapter.addItems(event.news)
+        adapter.insert(event.news)
     }
 }

@@ -8,20 +8,16 @@ import android.support.annotation.IntRange
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
 import butterknife.bindView
 import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.LinkConsumableTextView
 import com.klinker.android.link_builder.TouchableMovementMethod
 import com.proxerme.app.R
-import com.proxerme.app.activity.UserActivity
-import com.proxerme.app.application.MainApplication
+import com.proxerme.app.fragment.framework.EasyLoadingFragment
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.util.TimeUtil
 import com.proxerme.app.util.Utils
-import com.proxerme.library.connection.ProxerCall
-import com.proxerme.library.connection.ProxerException
 import com.proxerme.library.connection.user.entitiy.UserInfo
 import com.proxerme.library.connection.user.request.UserInfoRequest
 import org.jetbrains.anko.toast
@@ -31,7 +27,7 @@ import org.jetbrains.anko.toast
  *
  * @author Ruben Gees
  */
-class ProfileFragment : LoadingFragment() {
+class ProfileFragment : EasyLoadingFragment<UserInfo>() {
 
     companion object {
         private const val ARGUMENT_USER_ID = "user_id"
@@ -58,7 +54,6 @@ class ProfileFragment : LoadingFragment() {
     private var userName: String? = null
     private var userInfo: UserInfo? = null
 
-    private val infoContainer: ViewGroup by bindView(R.id.infoContainer)
     private val animePointsRow: TextView by bindView(R.id.animePointsRow)
     private val mangaPointsRow: TextView by bindView(R.id.mangaPointsRow)
     private val uploadPointsRow: TextView by bindView(R.id.uploadPointsRow)
@@ -67,13 +62,9 @@ class ProfileFragment : LoadingFragment() {
     private val miscellaneousPointsRow: TextView by bindView(R.id.miscellaneousPointsRow)
     private val totalPointsRow: TextView by bindView(R.id.totalPointsRow)
     private val rank: TextView by bindView(R.id.rank)
+
     private val statusContainer: ViewGroup by bindView(R.id.statusContainer)
     private val statusText: LinkConsumableTextView by bindView(R.id.statusText)
-    override val errorContainer: ViewGroup by bindView(R.id.errorContainer)
-    override val errorText: TextView by bindView(R.id.errorText)
-    override val errorButton: Button by bindView(R.id.errorButton)
-
-    private var call: ProxerCall? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,8 +74,8 @@ class ProfileFragment : LoadingFragment() {
         userInfo = savedInstanceState?.getParcelable(STATE_USER_INFO)
     }
 
-    override fun inflateView(inflater: LayoutInflater, container: ViewGroup?,
-                             savedInstanceState: Bundle?): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_profile, container, false)
     }
 
@@ -92,8 +83,6 @@ class ProfileFragment : LoadingFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         statusText.movementMethod = TouchableMovementMethod.getInstance()
-
-        show()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -102,78 +91,44 @@ class ProfileFragment : LoadingFragment() {
         outState.putParcelable(STATE_USER_INFO, userInfo)
     }
 
-    override fun cancel() {
-        call?.cancel()
+    override fun constructLoadingRequest(): LoadingRequest<UserInfo> {
+        return LoadingRequest(UserInfoRequest(userId, userName))
     }
 
-    override fun load(showProgress: Boolean) {
-        super.load(showProgress)
-
-        call = MainApplication.proxerConnection.execute(UserInfoRequest(userId, userName),
-                { result ->
-                    userInfo = result
-                    (activity as UserActivity).setImageId(result.imageId)
-
-                    notifyLoadFinishedSuccessful(result)
-                },
-                { result ->
-                    userInfo = null
-
-                    notifyLoadFinishedWithError(result)
-                })
+    override fun save(result: UserInfo) {
+        userInfo = result
     }
 
-    override fun showError(message: String, buttonMessage: String?,
-                           onButtonClickListener: View.OnClickListener?) {
-        super.showError(message, buttonMessage, onButtonClickListener)
-
-        infoContainer.visibility = View.INVISIBLE
+    override fun clear() {
+        userInfo = null
     }
 
-    override fun notifyLoadFinishedSuccessful(result: Any) {
-        show()
+    override fun show() {
+        userInfo?.run {
+            val totalPoints = animePoints + mangaPoints + uploadPoints + forumPoints +
+                    infoPoints + miscPoints
 
-        super.notifyLoadFinishedSuccessful(result)
-    }
+            animePointsRow.text = animePoints.toString()
+            mangaPointsRow.text = mangaPoints.toString()
+            uploadPointsRow.text = uploadPoints.toString()
+            forumPointsRow.text = forumPoints.toString()
+            infoPointsRow.text = infoPoints.toString()
+            miscellaneousPointsRow.text = miscPoints.toString()
+            totalPointsRow.text = totalPoints.toString()
+            rank.text = calculateRank(totalPoints)
 
-    override fun notifyLoadFinishedWithError(result: ProxerException) {
-        show()
-
-        super.notifyLoadFinishedWithError(result)
-    }
-
-    private fun show() {
-        if (userInfo == null) {
-            infoContainer.visibility = View.INVISIBLE
-        } else {
-            infoContainer.visibility = View.VISIBLE
-
-            userInfo?.run {
-                val totalPoints = animePoints + mangaPoints + uploadPoints + forumPoints +
-                        infoPoints + miscPoints
-
-                animePointsRow.text = animePoints.toString()
-                mangaPointsRow.text = mangaPoints.toString()
-                uploadPointsRow.text = uploadPoints.toString()
-                forumPointsRow.text = forumPoints.toString()
-                infoPointsRow.text = infoPoints.toString()
-                miscellaneousPointsRow.text = miscPoints.toString()
-                totalPointsRow.text = totalPoints.toString()
-                rank.text = calculateRank(totalPoints)
-
-                if (status.isBlank()) {
-                    statusContainer.visibility = View.GONE
-                } else {
-                    statusText.text = Utils.buildClickableText(statusText.context, status + " - " +
-                            TimeUtil.convertToRelativeReadableTime(context, lastStatusChange),
-                            Link.OnClickListener {
-                                try {
-                                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it)))
-                                } catch (exception: ActivityNotFoundException) {
-                                    context.toast(R.string.link_error_not_found)
-                                }
-                            })
-                }
+            if (status.isBlank()) {
+                statusContainer.visibility = View.GONE
+            } else {
+                statusText.text = Utils.buildClickableText(statusText.context, status + " - " +
+                        TimeUtil.convertToRelativeReadableTime(context, lastStatusChange),
+                        Link.OnClickListener {
+                            try {
+                                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it)))
+                            } catch (exception: ActivityNotFoundException) {
+                                context.toast(R.string.link_error_not_found)
+                            }
+                        })
             }
         }
     }

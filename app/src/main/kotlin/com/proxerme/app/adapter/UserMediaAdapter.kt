@@ -1,7 +1,6 @@
 package com.proxerme.app.adapter
 
 import android.os.Bundle
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,40 +14,22 @@ import com.proxerme.app.R
 import com.proxerme.library.connection.user.entitiy.UserMediaListEntry
 import com.proxerme.library.info.ProxerUrlHolder
 import com.proxerme.library.parameters.CategoryParameter
-import com.proxerme.library.parameters.UserMediaSortParameter
-import java.util.*
-import kotlin.comparisons.compareBy
-import kotlin.comparisons.compareByDescending
-import kotlin.comparisons.thenBy
-import kotlin.comparisons.thenByDescending
+import com.proxerme.library.parameters.CommentStateParameter.*
 
 /**
  * TODO: Describe class
  *
  * @author Ruben Gees
  */
-class UserMediaAdapter(savedInstanceState: Bundle?,
-                       @CategoryParameter.Category private val category: String,
-                       @UserMediaSortParameter.UserMediaSortCriteria var sortCriteria: String) :
-        RecyclerView.Adapter<UserMediaAdapter.ViewHolder>() {
+class UserMediaAdapter(savedInstanceState: Bundle? = null,
+                       @CategoryParameter.Category private val category: String) :
+        PagingAdapter<UserMediaListEntry>(savedInstanceState) {
 
     private companion object {
-        const val STATE_ITEMS = "adapter_user_media_state_items"
+        private const val STATE_ITEMS = "adapter_user_media_state_items"
     }
 
-    private val list = ArrayList<UserMediaListEntry>()
-
-    init {
-        setHasStableIds(true)
-
-        savedInstanceState?.let {
-            list.addAll(it.getParcelableArrayList(STATE_ITEMS))
-        }
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(list[position])
-
-    override fun getItemCount() = list.size
+    override val stateKey = "${STATE_ITEMS}_$category"
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(parent.context)
@@ -57,43 +38,7 @@ class UserMediaAdapter(savedInstanceState: Bundle?,
 
     override fun getItemId(position: Int) = list[position].id.toLong()
 
-    fun clear() {
-        list.clear()
-
-        notifyDataSetChanged()
-    }
-
-    fun addItems(newItems: Collection<UserMediaListEntry>) {
-        val comparator = generateComparator()
-
-        list.addAll(newItems.filter {
-            list.binarySearch(it, comparator) < 0
-        })
-        list.sortWith(comparator)
-
-        notifyDataSetChanged()
-    }
-
-    fun saveInstanceState(outState: Bundle) {
-        outState.putParcelableArrayList(STATE_ITEMS, list)
-    }
-
-    private fun generateComparator(): Comparator<in UserMediaListEntry> {
-        return when (sortCriteria) {
-            UserMediaSortParameter.NAME_ASCENDING -> compareBy { it.name }
-            UserMediaSortParameter.NAME_DESCENDING -> compareByDescending { it.name }
-            UserMediaSortParameter.STATE_NAME_ASCENDING -> {
-                compareBy<UserMediaListEntry> { it.commentState }.thenBy { it.name }
-            }
-            UserMediaSortParameter.STATE_NAME_DESCENDING -> {
-                compareBy<UserMediaListEntry> { it.commentState }
-                        .thenByDescending { it.name }
-            }
-            else -> compareBy { it.name }
-        }
-    }
-
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : PagingViewHolder<UserMediaListEntry>(itemView) {
 
         init {
             itemView.setOnClickListener {
@@ -107,21 +52,21 @@ class UserMediaAdapter(savedInstanceState: Bundle?,
         private val status: TextView by bindView(R.id.status)
         private val rating: RatingBar by bindView(R.id.rating)
 
-        fun bind(entry: UserMediaListEntry) {
-            title.text = entry.name
-            medium.text = entry.medium
-            status.text = "${entry.commentEpisode}/${entry.episodeCount} - " +
-                    "${convertStateToText(entry)}"
+        override fun bind(item: UserMediaListEntry) {
+            title.text = item.name
+            medium.text = item.medium
+            status.text = "${item.commentEpisode}/${item.episodeCount} - " +
+                    "${convertStateToText(item)}"
 
-            if (entry.commentRating > 0) {
+            if (item.commentRating > 0) {
                 rating.visibility = View.VISIBLE
-                rating.rating = entry.commentRating.toFloat() / 2.0f
+                rating.rating = item.commentRating.toFloat() / 2.0f
             } else {
                 rating.visibility = View.GONE
             }
 
             Glide.with(image.context)
-                    .load(ProxerUrlHolder.getCoverImageUrl(entry.id).toString())
+                    .load(ProxerUrlHolder.getCoverImageUrl(item.id).toString())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(image)
         }
@@ -129,19 +74,19 @@ class UserMediaAdapter(savedInstanceState: Bundle?,
         fun convertStateToText(entry: UserMediaListEntry): String {
             if (category == CategoryParameter.ANIME) {
                 return when (entry.commentState) {
-                    0 -> itemView.context.getString(R.string.user_media_state_watched)
-                    1 -> itemView.context.getString(R.string.user_media_state_watching)
-                    2 -> itemView.context.getString(R.string.user_media_state_will_watch)
-                    3 -> itemView.context.getString(R.string.user_media_state_cancelled)
-                    else -> throw IllegalArgumentException("The state must be between 0 and 3")
+                    WATCHED -> itemView.context.getString(R.string.user_media_state_watched)
+                    WATCHING -> itemView.context.getString(R.string.user_media_state_watching)
+                    WILL_WATCH -> itemView.context.getString(R.string.user_media_state_will_watch)
+                    CANCELLED -> itemView.context.getString(R.string.user_media_state_cancelled)
+                    else -> throw IllegalArgumentException("Illegal comment state")
                 }
             } else {
                 return when (entry.commentState) {
-                    0 -> itemView.context.getString(R.string.user_media_state_read)
-                    1 -> itemView.context.getString(R.string.user_media_state_reading)
-                    2 -> itemView.context.getString(R.string.user_media_state_will_read)
-                    3 -> itemView.context.getString(R.string.user_media_state_cancelled)
-                    else -> throw IllegalArgumentException("The state must be between 0 and 3")
+                    WATCHED -> itemView.context.getString(R.string.user_media_state_read)
+                    WATCHING -> itemView.context.getString(R.string.user_media_state_reading)
+                    WILL_WATCH -> itemView.context.getString(R.string.user_media_state_will_read)
+                    CANCELLED -> itemView.context.getString(R.string.user_media_state_cancelled)
+                    else -> throw IllegalArgumentException("Illegal comment state")
                 }
             }
         }

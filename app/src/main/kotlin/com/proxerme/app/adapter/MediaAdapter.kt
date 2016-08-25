@@ -2,7 +2,6 @@ package com.proxerme.app.adapter
 
 import android.content.Context
 import android.os.Bundle
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,78 +15,30 @@ import com.proxerme.app.R
 import com.proxerme.library.connection.list.entity.MediaListEntry
 import com.proxerme.library.info.ProxerUrlHolder
 import com.proxerme.library.parameters.CategoryParameter
-import com.proxerme.library.parameters.MediaSortParameter
-import java.util.*
-import kotlin.comparisons.compareBy
-import kotlin.comparisons.compareByDescending
-import kotlin.comparisons.thenByDescending
+import com.proxerme.library.parameters.CategoryParameter.ANIME
+import com.proxerme.library.parameters.CategoryParameter.MANGA
 
 /**
  * TODO: Describe class
  *
  * @author Ruben Gees
  */
-class MediaAdapter(savedInstanceState: Bundle?,
-                   @CategoryParameter.Category private val category: String,
-                   @MediaSortParameter.MediaSortCriteria var sortCriteria: String) :
-        RecyclerView.Adapter<MediaAdapter.ViewHolder>() {
+class MediaAdapter(savedInstanceState: Bundle? = null,
+                   @CategoryParameter.Category private val category: String) :
+        PagingAdapter<MediaListEntry>(savedInstanceState) {
 
     private companion object {
-        const val STATE_ITEMS = "adapter_media_state_items"
+        private const val STATE_ITEMS = "adapter_media_state_items"
     }
 
-    private val list = ArrayList<MediaListEntry>()
-
-    init {
-        setHasStableIds(true)
-
-        savedInstanceState?.let {
-            list.addAll(it.getParcelableArrayList(STATE_ITEMS))
-        }
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(list[position])
-
-    override fun getItemCount() = list.size
+    override val stateKey = "${STATE_ITEMS}_$category"
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_media_entry, parent, false))
     }
 
-    override fun getItemId(position: Int) = list[position].id.toLong()
-
-    fun clear() {
-        list.clear()
-
-        notifyDataSetChanged()
-    }
-
-    fun addItems(newItems: Collection<MediaListEntry>) {
-        val comparator = generateComparator()
-
-        list.addAll(newItems.filter { list.binarySearch(it, comparator) < 0 })
-        list.sortWith(comparator)
-
-        notifyDataSetChanged()
-    }
-
-    fun saveInstanceState(outState: Bundle) {
-        outState.putParcelableArrayList(STATE_ITEMS, list)
-    }
-
-    private fun generateComparator(): Comparator<in MediaListEntry> {
-        return when (sortCriteria) {
-            MediaSortParameter.RATING -> {
-                compareByDescending<MediaListEntry> { it.rateCount }.thenByDescending { it.rating }
-            }
-            MediaSortParameter.COUNT -> compareByDescending { it.episodeCount }
-            MediaSortParameter.NAME -> compareBy { it.name }
-            else -> compareBy { it.name }
-        }
-    }
-
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : PagingViewHolder<MediaListEntry>(itemView) {
 
         init {
             itemView.setOnClickListener {
@@ -104,34 +55,34 @@ class MediaAdapter(savedInstanceState: Bundle?,
         private val episodes: TextView by bindView(R.id.episodes)
         private val languages: TextView by bindView(R.id.languages)
 
-        fun bind(entry: MediaListEntry) {
-            title.text = entry.name
-            medium.text = entry.medium
-            genres.text = entry.genres.joinToString(", ")
-            episodes.text = generateEpisodeCountDescription(episodes.context, entry.episodeCount)
-            languages.text = entry.languages.joinToString(", ")
+        override fun bind(item: MediaListEntry) {
+            title.text = item.name
+            medium.text = item.medium
+            genres.text = item.genres.joinToString(", ")
+            episodes.text = generateEpisodeCountDescription(episodes.context, item.episodeCount)
+            languages.text = item.languages.joinToString(", ")
 
-            if (entry.rating > 0) {
+            if (item.rating > 0) {
                 rating.visibility = View.VISIBLE
-                rating.rating = entry.rating.toFloat() / 2.0f
+                rating.rating = item.rating.toFloat() / 2.0f
                 ratingAmount.visibility = View.VISIBLE
-                ratingAmount.text = "(${entry.rateCount.toString()})"
+                ratingAmount.text = "(${item.rateCount.toString()})"
             } else {
                 rating.visibility = View.GONE
                 ratingAmount.visibility = View.GONE
             }
 
             Glide.with(image.context)
-                    .load(ProxerUrlHolder.getCoverImageUrl(entry.id).toString())
+                    .load(ProxerUrlHolder.getCoverImageUrl(item.id).toString())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(image)
         }
 
         private fun generateEpisodeCountDescription(context: Context, count: Int): String {
             return when (category) {
-                CategoryParameter.ANIME -> context.resources
+                ANIME -> context.resources
                         .getQuantityString(R.plurals.media_episode_count, count, count)
-                CategoryParameter.MANGA -> context.resources
+                MANGA -> context.resources
                         .getQuantityString(R.plurals.media_chapter_count, count, count)
                 else -> throw RuntimeException("Category has an illegal value")
             }

@@ -106,7 +106,7 @@ class DashboardActivity : MainActivity(), CustomTabsModule {
         super.onRestoreInstanceState(savedInstanceState)
 
         if (savedInstanceState != null) {
-            val lastFragment = supportFragmentManager.findFragmentById(R.id.contentContainer)
+            val lastFragment = supportFragmentManager.findFragmentById(R.id.container)
 
             when (lastFragment) {
                 is OnActivityListener -> onActivityListener = lastFragment
@@ -164,7 +164,7 @@ class DashboardActivity : MainActivity(), CustomTabsModule {
         }
 
         appbar.setExpanded(true, true)
-        supportFragmentManager.beginTransaction().replace(R.id.contentContainer, fragment)
+        supportFragmentManager.beginTransaction().replace(R.id.container, fragment)
                 .commitNow()
     }
 
