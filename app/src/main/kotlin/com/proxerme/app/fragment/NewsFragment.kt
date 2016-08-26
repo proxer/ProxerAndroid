@@ -4,11 +4,12 @@ import android.os.Bundle
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
 import android.widget.ImageView
+import com.liucanwen.app.headerfooterrecyclerview.ExStaggeredGridLayoutManager
 import com.proxerme.app.activity.DashboardActivity
 import com.proxerme.app.activity.ImageDetailActivity
 import com.proxerme.app.adapter.NewsAdapter
 import com.proxerme.app.event.NewsEvent
-import com.proxerme.app.fragment.framework.PagingFragment
+import com.proxerme.app.fragment.framework.EasyPagingFragment
 import com.proxerme.app.helper.NotificationHelper
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.util.Utils
@@ -24,7 +25,7 @@ import org.greenrobot.eventbus.ThreadMode
  *
  * @author Ruben Gees
  */
-class NewsFragment : PagingFragment<News>() {
+class NewsFragment : EasyPagingFragment<News>() {
 
     companion object {
 
@@ -38,7 +39,7 @@ class NewsFragment : PagingFragment<News>() {
     override val section = SectionManager.Section.NEWS
     override val itemsOnPage = ITEMS_ON_PAGE
 
-    override lateinit var layoutManager: StaggeredGridLayoutManager
+    override lateinit var layoutManager: ExStaggeredGridLayoutManager
     override lateinit var adapter: NewsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,7 +66,7 @@ class NewsFragment : PagingFragment<News>() {
             }
         }
 
-        layoutManager = StaggeredGridLayoutManager(Utils.calculateSpanAmount(activity),
+        layoutManager = ExStaggeredGridLayoutManager(Utils.calculateSpanAmount(activity),
                 StaggeredGridLayoutManager.VERTICAL)
     }
 
@@ -79,12 +80,6 @@ class NewsFragment : PagingFragment<News>() {
         EventBus.getDefault().unregister(this)
 
         super.onStop()
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        list.setHasFixedSize(true)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

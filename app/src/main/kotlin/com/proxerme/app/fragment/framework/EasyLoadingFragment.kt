@@ -4,10 +4,11 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
+import android.support.v4.widget.SwipeRefreshLayout
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ProgressBar
 import android.widget.TextView
 import butterknife.bindView
 import com.klinker.android.link_builder.Link
@@ -30,9 +31,11 @@ abstract class EasyLoadingFragment<T> : LoadingFragment<T>() {
         private const val EXCEPTION_STATE = "fragment_easy_loading_state_exception"
     }
 
+    open protected val isSwipeToRefreshEnabled = false
+
     protected var exception: ProxerException? = null
 
-    open protected val progress: ProgressBar by bindView(R.id.progress)
+    open protected val progress: SwipeRefreshLayout by bindView(R.id.progress)
     open protected val contentContainer: ViewGroup by bindView(R.id.contentContainer)
     open protected val errorContainer: ViewGroup by bindView(R.id.errorContainer)
     open protected val errorText: TextView by bindView(R.id.errorText)
@@ -50,6 +53,8 @@ abstract class EasyLoadingFragment<T> : LoadingFragment<T>() {
         super.onViewCreated(view, savedInstanceState)
 
         errorText.movementMethod = TouchableMovementMethod.getInstance()
+
+        initProgress()
     }
 
     override fun onResume() {
@@ -103,6 +108,19 @@ abstract class EasyLoadingFragment<T> : LoadingFragment<T>() {
         showError()
     }
 
+    open protected fun initProgress() {
+        progress.setColorSchemeColors(ContextCompat.getColor(context,
+                R.color.primary))
+
+        progress.setOnRefreshListener {
+            if (canLoad) {
+                load()
+            } else {
+                hideProgress()
+            }
+        }
+    }
+
     open protected fun doShowError(exception: ProxerException) {
         errorText.text = Utils.buildClickableText(context,
                 ErrorHandler.getMessageForErrorCode(context, exception),
@@ -125,15 +143,15 @@ abstract class EasyLoadingFragment<T> : LoadingFragment<T>() {
     protected abstract fun show()
 
     private fun showLoading() {
+        showProgress()
         contentContainer.visibility = View.INVISIBLE
         errorContainer.visibility = View.INVISIBLE
-        progress.visibility = View.VISIBLE
     }
 
     private fun showResult() {
+        hideProgress()
         contentContainer.visibility = View.VISIBLE
         errorContainer.visibility = View.INVISIBLE
-        progress.visibility = View.INVISIBLE
 
         show()
     }
@@ -141,9 +159,19 @@ abstract class EasyLoadingFragment<T> : LoadingFragment<T>() {
     private fun showError() {
         doShowError(exception!!)
 
+        hideProgress()
         contentContainer.visibility = View.INVISIBLE
         errorContainer.visibility = View.VISIBLE
-        progress.visibility = View.INVISIBLE
+    }
+
+    private fun showProgress() {
+        progress.isEnabled = true
+        progress.isRefreshing = true
+    }
+
+    private fun hideProgress() {
+        progress.isEnabled = isSwipeToRefreshEnabled
+        progress.isRefreshing = false
     }
 
 }

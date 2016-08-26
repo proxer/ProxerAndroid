@@ -5,10 +5,10 @@ import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.view.View
+import com.liucanwen.app.headerfooterrecyclerview.ExStaggeredGridLayoutManager
 import com.proxerme.app.R
 import com.proxerme.app.adapter.MediaAdapter
-import com.proxerme.app.fragment.framework.PagingFragment
+import com.proxerme.app.fragment.framework.EasyPagingFragment
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.util.Utils
 import com.proxerme.library.connection.list.entity.MediaListEntry
@@ -22,7 +22,7 @@ import com.proxerme.library.parameters.TypeParameter
  *
  * @author Ruben Gees
  */
-class MediaListFragment : PagingFragment<MediaListEntry>() {
+class MediaListFragment : EasyPagingFragment<MediaListEntry>() {
 
     companion object {
 
@@ -42,6 +42,7 @@ class MediaListFragment : PagingFragment<MediaListEntry>() {
 
     override val section = SectionManager.Section.MEDIA_LIST
     override val itemsOnPage = ITEMS_ON_PAGE
+    override val isSwipeToRefreshEnabled = false
 
     @CategoryParameter.Category
     private lateinit var category: String
@@ -50,7 +51,7 @@ class MediaListFragment : PagingFragment<MediaListEntry>() {
     private lateinit var sortCriteria: String
 
     override lateinit var adapter: MediaAdapter
-    override lateinit var layoutManager: StaggeredGridLayoutManager
+    override lateinit var layoutManager: ExStaggeredGridLayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,7 +65,7 @@ class MediaListFragment : PagingFragment<MediaListEntry>() {
         }
 
         adapter = MediaAdapter(savedInstanceState, category)
-        layoutManager = StaggeredGridLayoutManager(Utils.calculateSpanAmount(activity) + 1,
+        layoutManager = ExStaggeredGridLayoutManager(Utils.calculateSpanAmount(activity) + 1,
                 StaggeredGridLayoutManager.VERTICAL)
 
         setHasOptionsMenu(true)
@@ -101,15 +102,10 @@ class MediaListFragment : PagingFragment<MediaListEntry>() {
         return true
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        list.setHasFixedSize(true)
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
+        adapter.saveInstanceState(outState)
         outState.putString(STATE_SORT_CRITERIA, sortCriteria)
     }
 

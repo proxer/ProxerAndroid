@@ -7,6 +7,8 @@ import android.database.SQLException
 import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.TextInputEditText
+import android.support.v4.content.ContextCompat
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.view.ActionMode
 import android.support.v7.widget.LinearLayoutManager
@@ -80,7 +82,6 @@ class ChatFragment : MainFragment() {
         }
 
         override fun load(showProgress: Boolean) {
-            hideError()
             refresh()
         }
     })
@@ -153,6 +154,7 @@ class ChatFragment : MainFragment() {
     private val messageInput: TextInputEditText by bindView(R.id.messageInput)
     private val sendButton: Button by bindView(R.id.sendButton)
     private val list: RecyclerView by bindView(R.id.list)
+    private val progress: SwipeRefreshLayout by bindView(R.id.progress)
     private val errorContainer: ViewGroup by bindView(R.id.errorContainer)
     private val errorText: TextView by bindView(R.id.errorText)
     private val errorButton: Button by bindView(R.id.errorButton)
@@ -212,6 +214,8 @@ class ChatFragment : MainFragment() {
         }
 
         errorText.movementMethod = TouchableMovementMethod.getInstance()
+        progress.setColorSchemeColors(ContextCompat.getColor(context,
+                R.color.primary))
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -279,6 +283,8 @@ class ChatFragment : MainFragment() {
 
     private fun showError(message: String, buttonMessage: String? = null,
                           onButtonClickListener: View.OnClickListener? = null) {
+        clear()
+
         contentRoot.visibility = View.INVISIBLE
         errorContainer.visibility = View.VISIBLE
         errorText.text = Utils.buildClickableText(context, message,
@@ -306,8 +312,6 @@ class ChatFragment : MainFragment() {
         } else {
             errorButton.setOnClickListener(onButtonClickListener)
         }
-
-        clear()
     }
 
     private fun hideError() {
@@ -324,6 +328,9 @@ class ChatFragment : MainFragment() {
     private fun refresh() {
         refreshTask?.cancel(true)
 
+        showProgress()
+        hideError()
+
         refreshTask = doAsync {
             try {
                 val messages = context.chatDatabase.getMessages(conference.id)
@@ -333,11 +340,14 @@ class ChatFragment : MainFragment() {
                             !ChatService.isLoadingMessages(conference.id)) {
                         ChatService.loadMoreMessages(context, conference.id)
                     } else {
+                        hideProgress()
+
                         //TODO show empty view
                     }
                 } else {
                     uiThread {
                         hideError()
+                        hideProgress()
 
                         adapter.replace(messages)
                     }
@@ -345,6 +355,7 @@ class ChatFragment : MainFragment() {
             } catch(exception: SQLException) {
                 uiThread {
                     showError(context.getString(R.string.error_io))
+                    hideProgress()
                 }
             }
         }
@@ -360,5 +371,15 @@ class ChatFragment : MainFragment() {
 
         context.toast(R.string.fragment_chat_clip_status)
         actionMode?.finish()
+    }
+
+    private fun showProgress() {
+        progress.isEnabled = true
+        progress.isRefreshing = true
+    }
+
+    private fun hideProgress() {
+        progress.isEnabled = false
+        progress.isRefreshing = false
     }
 }

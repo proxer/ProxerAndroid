@@ -5,6 +5,8 @@ import android.content.Intent
 import android.database.SQLException
 import android.net.Uri
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
@@ -67,7 +69,6 @@ class ConferencesFragment : MainFragment() {
         }
 
         override fun load(showProgress: Boolean) {
-            hideError()
             refresh()
         }
     })
@@ -75,6 +76,7 @@ class ConferencesFragment : MainFragment() {
     override val section: SectionManager.Section = SectionManager.Section.CONFERENCES
 
     private val list: RecyclerView by bindView(R.id.list)
+    private val progress: SwipeRefreshLayout by bindView(R.id.progress)
     private val errorContainer: ViewGroup by bindView(R.id.errorContainer)
     private val errorText: TextView by bindView(R.id.errorText)
     private val errorButton: Button by bindView(R.id.errorButton)
@@ -111,7 +113,7 @@ class ConferencesFragment : MainFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_paging_default, container, false)
+        return inflater.inflate(R.layout.fragment_conferences, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -130,6 +132,8 @@ class ConferencesFragment : MainFragment() {
         })
 
         errorText.movementMethod = TouchableMovementMethod.getInstance()
+        progress.setColorSchemeColors(ContextCompat.getColor(context,
+                R.color.primary))
     }
 
     override fun onResume() {
@@ -182,6 +186,8 @@ class ConferencesFragment : MainFragment() {
 
     private fun showError(message: String, buttonMessage: String? = null,
                           onButtonClickListener: View.OnClickListener? = null) {
+        clear()
+
         errorContainer.visibility = View.VISIBLE
         errorText.text = Utils.buildClickableText(context, message, Link.OnClickListener { link ->
             try {
@@ -204,8 +210,6 @@ class ConferencesFragment : MainFragment() {
         } else {
             errorButton.setOnClickListener(onButtonClickListener)
         }
-
-        clear()
     }
 
     private fun hideError() {
@@ -219,20 +223,27 @@ class ConferencesFragment : MainFragment() {
     private fun refresh() {
         refreshTask?.cancel(true)
 
+        showProgress()
+        hideError()
+
         refreshTask = doAsync {
             try {
                 val conferences = context.chatDatabase.getConferences()
 
                 if (conferences.isEmpty()) {
-                    if (!StorageHelper.conferenceListEndReached &&
-                            !ChatService.isLoadingConferences) {
-                        ChatService.loadMoreConferences(context)
+                    if (!StorageHelper.conferenceListEndReached) {
+                        if (!ChatService.isLoadingConferences) {
+                            ChatService.loadMoreConferences(context)
+                        }
                     } else {
+                        hideProgress()
+
                         //TODO show empty view
                     }
                 } else {
                     uiThread {
                         hideError()
+                        hideProgress()
 
                         adapter.replace(conferences)
                     }
@@ -240,8 +251,19 @@ class ConferencesFragment : MainFragment() {
             } catch(exception: SQLException) {
                 uiThread {
                     showError(context.getString(R.string.error_io))
+                    hideProgress()
                 }
             }
         }
+    }
+
+    private fun showProgress() {
+        progress.isEnabled = true
+        progress.isRefreshing = true
+    }
+
+    private fun hideProgress() {
+        progress.isEnabled = false
+        progress.isRefreshing = false
     }
 }

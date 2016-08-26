@@ -5,10 +5,10 @@ import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.view.View
+import com.liucanwen.app.headerfooterrecyclerview.ExStaggeredGridLayoutManager
 import com.proxerme.app.R
 import com.proxerme.app.adapter.UserMediaAdapter
-import com.proxerme.app.fragment.framework.PagingFragment
+import com.proxerme.app.fragment.framework.EasyPagingFragment
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.util.Utils
 import com.proxerme.library.connection.user.entitiy.UserMediaListEntry
@@ -21,7 +21,7 @@ import com.proxerme.library.parameters.UserMediaSortParameter
  *
  * @author Ruben Gees
  */
-class UserMediaListFragment : PagingFragment<UserMediaListEntry>() {
+class UserMediaListFragment : EasyPagingFragment<UserMediaListEntry>() {
 
     companion object {
 
@@ -50,6 +50,7 @@ class UserMediaListFragment : PagingFragment<UserMediaListEntry>() {
 
     override val section = SectionManager.Section.USER_MEDIA_LIST
     override val itemsOnPage = ITEMS_ON_PAGE
+    override val isSwipeToRefreshEnabled = false
 
     private var userId: String? = null
     private var userName: String? = null
@@ -61,7 +62,7 @@ class UserMediaListFragment : PagingFragment<UserMediaListEntry>() {
     private lateinit var sortCriteria: String
 
     override lateinit var adapter: UserMediaAdapter
-    override lateinit var layoutManager: StaggeredGridLayoutManager
+    override lateinit var layoutManager: ExStaggeredGridLayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,7 +78,7 @@ class UserMediaListFragment : PagingFragment<UserMediaListEntry>() {
         }
 
         adapter = UserMediaAdapter(savedInstanceState, category)
-        layoutManager = StaggeredGridLayoutManager(Utils.calculateSpanAmount(activity) + 1,
+        layoutManager = ExStaggeredGridLayoutManager(Utils.calculateSpanAmount(activity) + 1,
                 StaggeredGridLayoutManager.VERTICAL)
 
         setHasOptionsMenu(true)
@@ -156,12 +157,6 @@ class UserMediaListFragment : PagingFragment<UserMediaListEntry>() {
         }
 
         return true
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        list.setHasFixedSize(true)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
