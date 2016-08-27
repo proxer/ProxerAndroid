@@ -51,7 +51,7 @@ object UserManager {
         SAVE, DONT_SAVE, SAME_AS_IS
     }
 
-    val requests: MutableList<ProxerCall> = Collections.synchronizedList(ArrayList<ProxerCall>())
+    private val requests: MutableList<ProxerCall> = Collections.synchronizedList(ArrayList<ProxerCall>())
 
     fun login(user: User, shouldSave: SaveOption, callback: ((User) -> Unit)? = null,
               errorCallback: ((ProxerException) -> Unit)? = null) {
