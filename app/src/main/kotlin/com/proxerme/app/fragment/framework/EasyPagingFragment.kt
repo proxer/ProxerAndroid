@@ -1,5 +1,8 @@
 package com.proxerme.app.fragment.framework
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import android.support.v4.content.ContextCompat
@@ -11,18 +14,20 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import butterknife.bindView
+import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.TouchableMovementMethod
-import com.liucanwen.app.headerfooterrecyclerview.ExStaggeredGridLayoutManager
 import com.liucanwen.app.headerfooterrecyclerview.HeaderAndFooterRecyclerViewAdapter
 import com.liucanwen.app.headerfooterrecyclerview.HeaderSpanSizeLookup
 import com.liucanwen.app.headerfooterrecyclerview.RecyclerViewUtils
 import com.proxerme.app.R
 import com.proxerme.app.adapter.PagingAdapter
 import com.proxerme.app.util.ErrorHandler
+import com.proxerme.app.util.Utils
 import com.proxerme.app.util.listener.EndlessRecyclerOnScrollListener
 import com.proxerme.library.connection.ProxerException
 import com.proxerme.library.interfaces.IdItem
 import org.jetbrains.anko.onClick
+import org.jetbrains.anko.toast
 
 /**
  * TODO: Describe class
@@ -78,10 +83,6 @@ abstract class EasyPagingFragment<T> : PagingFragment<T>()  where T : IdItem, T 
             (layoutManager as GridLayoutManager).spanSizeLookup =
                     HeaderSpanSizeLookup(headerAndFooterAdapter,
                             (layoutManager as GridLayoutManager).spanCount)
-        } else if (layoutManager is ExStaggeredGridLayoutManager) {
-            (layoutManager as ExStaggeredGridLayoutManager).spanSizeLookup =
-                    HeaderSpanSizeLookup(headerAndFooterAdapter,
-                            (layoutManager as ExStaggeredGridLayoutManager).spanCount)
         }
 
         initProgress()
@@ -193,7 +194,17 @@ abstract class EasyPagingFragment<T> : PagingFragment<T>()  where T : IdItem, T 
         val errorButton: Button = errorContainer.findViewById(R.id.errorButton) as Button
 
         errorText.movementMethod = TouchableMovementMethod.getInstance()
-        errorText.text = ErrorHandler.getMessageForErrorCode(context, exception)
+        errorText.text = Utils.buildClickableText(context,
+                ErrorHandler.getMessageForErrorCode(context, exception),
+                onWebClickListener = Link.OnClickListener { link ->
+                    try {
+                        startActivity(Intent(Intent.ACTION_VIEW,
+                                Uri.parse(link + "?device=mobile")))
+                    } catch (exception: ActivityNotFoundException) {
+                        context.toast(R.string.link_error_not_found)
+                    }
+                })
+
         errorButton.onClick {
             load()
         }
