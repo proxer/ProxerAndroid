@@ -107,8 +107,6 @@ object UserManager {
             if (DateTime(lastLoginTime).isBefore(DateTime().minusMinutes(RELOGIN_THRESHOLD))) {
                 ongoingState = OngoingState.LOGGING_IN
 
-                if (user != null) {
-                }
                 user?.apply {
                     MainApplication.proxerConnection.execute(
                             LoginRequest(this.username, this.password),
