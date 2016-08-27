@@ -1,10 +1,9 @@
 package com.proxerme.app.fragment
 
 import android.os.Bundle
-import android.support.v7.widget.StaggeredGridLayoutManager
+import android.support.v7.widget.GridLayoutManager
 import android.view.View
 import android.widget.ImageView
-import com.liucanwen.app.headerfooterrecyclerview.ExStaggeredGridLayoutManager
 import com.proxerme.app.activity.DashboardActivity
 import com.proxerme.app.activity.ImageDetailActivity
 import com.proxerme.app.adapter.NewsAdapter
@@ -39,7 +38,7 @@ class NewsFragment : EasyPagingFragment<News>() {
     override val section = SectionManager.Section.NEWS
     override val itemsOnPage = ITEMS_ON_PAGE
 
-    override lateinit var layoutManager: ExStaggeredGridLayoutManager
+    override lateinit var layoutManager: GridLayoutManager
     override lateinit var adapter: NewsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,8 +65,7 @@ class NewsFragment : EasyPagingFragment<News>() {
             }
         }
 
-        layoutManager = ExStaggeredGridLayoutManager(Utils.calculateSpanAmount(activity),
-                StaggeredGridLayoutManager.VERTICAL)
+        layoutManager = GridLayoutManager(context, Utils.calculateSpanAmount(activity))
     }
 
     override fun onStart() {

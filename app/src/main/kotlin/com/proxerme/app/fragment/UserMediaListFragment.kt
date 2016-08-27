@@ -1,11 +1,10 @@
 package com.proxerme.app.fragment
 
 import android.os.Bundle
-import android.support.v7.widget.StaggeredGridLayoutManager
+import android.support.v7.widget.GridLayoutManager
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import com.liucanwen.app.headerfooterrecyclerview.ExStaggeredGridLayoutManager
 import com.proxerme.app.R
 import com.proxerme.app.adapter.UserMediaAdapter
 import com.proxerme.app.fragment.framework.EasyPagingFragment
@@ -62,7 +61,7 @@ class UserMediaListFragment : EasyPagingFragment<UserMediaListEntry>() {
     private lateinit var sortCriteria: String
 
     override lateinit var adapter: UserMediaAdapter
-    override lateinit var layoutManager: ExStaggeredGridLayoutManager
+    override lateinit var layoutManager: GridLayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,8 +77,7 @@ class UserMediaListFragment : EasyPagingFragment<UserMediaListEntry>() {
         }
 
         adapter = UserMediaAdapter(savedInstanceState, category)
-        layoutManager = ExStaggeredGridLayoutManager(Utils.calculateSpanAmount(activity) + 1,
-                StaggeredGridLayoutManager.VERTICAL)
+        layoutManager = GridLayoutManager(context, Utils.calculateSpanAmount(activity) + 1)
 
         setHasOptionsMenu(true)
     }
