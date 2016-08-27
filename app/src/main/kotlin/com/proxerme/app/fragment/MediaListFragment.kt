@@ -74,6 +74,7 @@ class MediaListFragment : EasyPagingFragment<MediaListEntry>() {
 
         when (sortCriteria) {
             MediaSortParameter.RATING -> menu.findItem(R.id.rating).isChecked = true
+            MediaSortParameter.CLICKS -> menu.findItem(R.id.clicks).isChecked = true
             MediaSortParameter.COUNT -> menu.findItem(R.id.count).isChecked = true
             MediaSortParameter.NAME -> menu.findItem(R.id.name).isChecked = true
         }
@@ -86,6 +87,7 @@ class MediaListFragment : EasyPagingFragment<MediaListEntry>() {
 
         when (item.itemId) {
             R.id.rating -> sortCriteria = MediaSortParameter.RATING
+            R.id.clicks -> sortCriteria = MediaSortParameter.CLICKS
             R.id.count -> sortCriteria = MediaSortParameter.COUNT
             R.id.name -> sortCriteria = MediaSortParameter.NAME
             else -> return false

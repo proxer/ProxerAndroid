@@ -16,6 +16,10 @@
                     android:title="@string/action_sort_rating"
                     app:showAsAction="never" />
                 <item
+                    android:id="@+id/clicks"
+                    android:title="@string/action_sort_clicks"
+                    app:showAsAction="never" />
+                <item
                     android:id="@+id/count"
                     android:title="@string/action_sort_count"
                     app:showAsAction="never" />
