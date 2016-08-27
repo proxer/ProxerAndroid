@@ -106,11 +106,15 @@ object StorageHelper {
 
     fun setConferenceReachedEnd(conferenceId: String) {
         val map: MutableMap<String, Boolean> = Hawk.get(STORAGE_CONFERENCE_END_REACHED_MAP,
-                HashMap())
+                HashMap<String, Boolean>())
 
         map.put(conferenceId, true)
 
         Hawk.put(STORAGE_CONFERENCE_END_REACHED_MAP, map)
+    }
+
+    fun resetConferenceReachedEndMap() {
+        Hawk.put(STORAGE_CONFERENCE_END_REACHED_MAP, HashMap<String, Boolean>())
     }
 
     fun incrementChatInterval() {

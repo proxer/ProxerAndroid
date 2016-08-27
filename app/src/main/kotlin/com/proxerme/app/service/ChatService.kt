@@ -95,6 +95,8 @@ class ChatService : IntentService("ChatService") {
     override fun onHandleIntent(intent: Intent) {
         if (UserManager.user == null) {
             chatDatabase.clear()
+            StorageHelper.conferenceListEndReached = false
+            StorageHelper.resetConferenceReachedEndMap()
         } else {
             try {
                 UserManager.reLoginSync()
