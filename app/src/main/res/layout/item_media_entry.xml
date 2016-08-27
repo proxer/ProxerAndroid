@@ -96,7 +96,6 @@
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         tools:ignore="SelectableText"
                         tools:text="(12910)" />
-
                 </LinearLayout>
 
                 <TextView

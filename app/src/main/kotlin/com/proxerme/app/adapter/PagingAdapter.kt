@@ -76,7 +76,7 @@ abstract class PagingAdapter<T>() :
         return list.contains(item)
     }
 
-    abstract class PagingViewHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    abstract class PagingViewHolder<in T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         open fun bind(item: T) {
 

@@ -30,7 +30,6 @@
     </plurals>
 
     <string name="error_network">Es gab ein Problem mit dem Netzwerk. Bitte überprüfe ob du verbunden bist.</string>
-    <string name="error_timeout">Der Server hat nicht rechtzeitig geantwortet. Möglicherweise gibt es Probleme mit deinem Netzwerk.</string>
     <string name="error_unparseable">Der Server hat beschädigte Daten gesendet. Versuche es erneut.</string>
     <string name="error_io">Es gab ein Speicherproblem. Versuche es erneut.</string>
     <string name="error_unknown">Ein unbekannter Fehler ist aufgetreten. Versuche es erneut.</string>
