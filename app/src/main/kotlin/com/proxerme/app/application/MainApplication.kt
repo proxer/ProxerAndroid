@@ -12,14 +12,16 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import com.orhanobut.hawk.Hawk
-import com.orhanobut.hawk.HawkBuilder
+import com.orhanobut.hawk.Parser
 import com.proxerme.app.BuildConfig
 import com.proxerme.app.manager.UserManager
 import com.proxerme.app.service.ChatService
 import com.proxerme.library.connection.ProxerConnection
+import com.squareup.moshi.Moshi
 import net.danlew.android.joda.JodaTimeAndroid
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
+import java.lang.reflect.Type
 
 /**
  * TODO: Describe Class
@@ -36,15 +38,19 @@ class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
+        val moshi = Moshi.Builder().build()
+
         JodaTimeAndroid.init(this)
+
         Hawk.init(this)
-                .setEncryptionMethod(HawkBuilder.EncryptionMethod.MEDIUM)
-                .setStorage(HawkBuilder.newSharedPrefStorage(this))
+                .setParser(MoshiParser(moshi))
                 .build()
+
         EventBus.builder()
                 .logNoSubscriberMessages(false)
                 .sendNoSubscriberEvent(false)
                 .installDefaultEventBus()
+
         DrawerImageLoader.init(object : AbstractDrawerImageLoader() {
             override fun set(imageView: ImageView, uri: Uri?, placeholder: Drawable?) {
                 Glide.with(imageView.context)
@@ -66,7 +72,9 @@ class MainApplication : Application() {
             }
         })
 
-        proxerConnection = ProxerConnection.Builder(BuildConfig.PROXER_API_KEY, this).build()
+        proxerConnection = ProxerConnection.Builder(BuildConfig.PROXER_API_KEY, this)
+                .withCustomMoshi(moshi)
+                .build()
 
         EventBus.getDefault().register(this)
     }
@@ -80,5 +88,19 @@ class MainApplication : Application() {
     @Subscribe
     fun onLoginStateChanged(@Suppress("UNUSED_PARAMETER") state: UserManager.LoginState) {
         ChatService.synchronize(this)
+    }
+
+    class MoshiParser(val moshi: Moshi) : Parser {
+        override fun <T : Any?> fromJson(content: String, type: Type): T? {
+            if (content.isEmpty()) {
+                return null
+            }
+
+            return moshi.adapter<T>(type).fromJson(content)
+        }
+
+        override fun toJson(body: Any): String {
+            return moshi.adapter(Any::class.java).toJson(body)
+        }
     }
 }

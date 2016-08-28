@@ -49,14 +49,15 @@ object StorageHelper {
         }
         set(value) {
             if (value == null) {
-                Hawk.remove(STORAGE_USER_USERNAME, STORAGE_USER_PASSWORD, STORAGE_USER_ID,
-                        STORAGE_USER_IMAGE_ID)
+                Hawk.delete(STORAGE_USER_USERNAME)
+                Hawk.delete(STORAGE_USER_PASSWORD)
+                Hawk.delete(STORAGE_USER_ID)
+                Hawk.delete(STORAGE_USER_IMAGE_ID)
             } else {
-                Hawk.chain(4).put(STORAGE_USER_USERNAME,
-                        value.username).put(STORAGE_USER_PASSWORD,
-                        value.password).put(STORAGE_USER_ID,
-                        value.id).put(STORAGE_USER_IMAGE_ID,
-                        value.imageId).commit()
+                Hawk.put(STORAGE_USER_USERNAME, value.username)
+                Hawk.put(STORAGE_USER_PASSWORD, value.password)
+                Hawk.put(STORAGE_USER_ID, value.id)
+                Hawk.put(STORAGE_USER_IMAGE_ID, value.imageId)
             }
         }
 
@@ -71,7 +72,7 @@ object StorageHelper {
         get() = Hawk.get(STORAGE_LAST_LOGIN_TIME, null)
         set(lastLoginTime) {
             if (lastLoginTime == null) {
-                Hawk.remove(STORAGE_LAST_LOGIN_TIME)
+                Hawk.delete(STORAGE_LAST_LOGIN_TIME)
             } else {
                 Hawk.put(STORAGE_LAST_LOGIN_TIME, lastLoginTime)
             }
@@ -81,7 +82,7 @@ object StorageHelper {
         get() = Hawk.get(STORAGE_NEWS_LAST_TIME, null)
         set(lastNewsTime) {
             if (lastNewsTime == null) {
-                Hawk.remove(STORAGE_NEWS_LAST_TIME)
+                Hawk.delete(STORAGE_NEWS_LAST_TIME)
             } else {
                 Hawk.put(STORAGE_NEWS_LAST_TIME, lastNewsTime)
             }
