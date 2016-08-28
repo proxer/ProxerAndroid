@@ -25,7 +25,7 @@ class MediaListFragment : EasyPagingFragment<MediaListEntry>() {
 
     companion object {
 
-        const val ITEMS_ON_PAGE = 15
+        const val ITEMS_ON_PAGE = 30
 
         private const val ARGUMENT_CATEGORY = "category"
         private const val STATE_SORT_CRITERIA = "state_sort_criteria"
