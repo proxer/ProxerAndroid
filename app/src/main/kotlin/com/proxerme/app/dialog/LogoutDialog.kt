@@ -80,7 +80,7 @@ class LogoutDialog : DialogFragment() {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onLoginStateChanged(state: UserManager.LoginState) {
+    fun onLoginStateChanged(@Suppress("UNUSED_PARAMETER") state: UserManager.LoginState) {
         if (UserManager.user == null) {
             dismiss()
         } else {
@@ -89,7 +89,7 @@ class LogoutDialog : DialogFragment() {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onOngoingStateChanged(state: UserManager.OngoingState) {
+    fun onOngoingStateChanged(@Suppress("UNUSED_PARAMETER") state: UserManager.OngoingState) {
         handleVisibility()
     }
 

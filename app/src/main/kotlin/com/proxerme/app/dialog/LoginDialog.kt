@@ -104,7 +104,7 @@ class LoginDialog : DialogFragment() {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onOngoingStateChanged(state: UserManager.OngoingState) {
+    fun onOngoingStateChanged(@Suppress("UNUSED_PARAMETER") state: UserManager.OngoingState) {
         handleVisibility()
     }
 
