@@ -52,7 +52,7 @@ class LogoutDialog : DialogFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        if (UserManager.loginState == UserManager.LoginState.LOGGED_OUT) {
+        if (UserManager.user == null) {
             dismiss()
         } else {
             handleVisibility()
@@ -81,7 +81,7 @@ class LogoutDialog : DialogFragment() {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLoginStateChanged(state: UserManager.LoginState) {
-        if (state == UserManager.LoginState.LOGGED_OUT) {
+        if (UserManager.user == null) {
             dismiss()
         } else {
             handleVisibility()
