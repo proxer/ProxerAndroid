@@ -9,8 +9,12 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import com.afollestad.materialdialogs.MaterialDialog
 import com.proxerme.app.R
+import com.proxerme.app.event.LogoutFailedEvent
 import com.proxerme.app.manager.UserManager
 import com.proxerme.app.util.ErrorHandler
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.longToast
 
 /**
@@ -21,14 +25,10 @@ import org.jetbrains.anko.longToast
 class LogoutDialog : DialogFragment() {
 
     companion object {
-        private const val STATE_LOADING = "dialog_logout_state_loading"
-
         fun show(activity: AppCompatActivity) {
             LogoutDialog().show(activity.supportFragmentManager, "dialog_logout")
         }
     }
-
-    private var loading: Boolean = false
 
     private lateinit var root: ViewGroup
     private lateinit var progress: ProgressBar
@@ -49,20 +49,53 @@ class LogoutDialog : DialogFragment() {
                 .build()
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        if (UserManager.loginState == UserManager.LoginState.LOGGED_OUT) {
+            dismiss()
+        } else {
+            handleVisibility()
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onStop() {
+        EventBus.getDefault().unregister(this)
+
+        super.onStop()
+    }
+
     override fun onDestroy() {
-        UserManager.cancel()
+        if (activity != null && !activity.isChangingConfigurations) {
+            UserManager.cancel()
+        }
 
         super.onDestroy()
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        if (savedInstanceState != null) {
-            loading = savedInstanceState.getBoolean(STATE_LOADING)
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onLoginStateChanged(state: UserManager.LoginState) {
+        if (state == UserManager.LoginState.LOGGED_OUT) {
+            dismiss()
+        } else {
+            handleVisibility()
         }
+    }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onOngoingStateChanged(state: UserManager.OngoingState) {
         handleVisibility()
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onLoginFailed(event: LogoutFailedEvent) {
+        context.longToast(ErrorHandler.getMessageForErrorCode(context, event.exception))
     }
 
     private fun initViews(): View {
@@ -73,34 +106,16 @@ class LogoutDialog : DialogFragment() {
     }
 
     private fun handleVisibility() {
-        if (loading) {
+        if (UserManager.ongoingState == UserManager.OngoingState.LOGGING_OUT) {
             progress.visibility = View.VISIBLE
         } else {
             progress.visibility = View.GONE
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-        outState.putBoolean(STATE_LOADING, loading)
-    }
-
     private fun logout() {
-        if (!loading) {
-            loading = true
-            handleVisibility()
-
-            UserManager.logout({
-                loading = false
-
-                dismiss()
-            }, { result ->
-                loading = false
-
-                handleVisibility()
-                context.longToast(ErrorHandler.getMessageForErrorCode(context, result))
-            })
+        if (UserManager.ongoingState != UserManager.OngoingState.LOGGING_OUT) {
+            UserManager.logout()
         }
     }
 }

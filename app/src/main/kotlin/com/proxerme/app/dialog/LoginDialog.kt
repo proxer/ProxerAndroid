@@ -16,9 +16,13 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.proxerme.app.R
+import com.proxerme.app.event.LoginFailedEvent
 import com.proxerme.app.manager.UserManager
 import com.proxerme.app.util.ErrorHandler
 import com.proxerme.library.connection.user.entitiy.User
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.longToast
 
 /**
@@ -30,14 +34,10 @@ import org.jetbrains.anko.longToast
 class LoginDialog : DialogFragment() {
 
     companion object {
-        private const val STATE_LOADING = "dialog_login_state_loading"
-
         fun show(activity: AppCompatActivity) {
             LoginDialog().show(activity.supportFragmentManager, "dialog_login")
         }
     }
-
-    private var loading: Boolean = false
 
     private lateinit var root: ViewGroup
     private lateinit var inputUsername: TextInputEditText
@@ -67,23 +67,50 @@ class LoginDialog : DialogFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        if (savedInstanceState != null) {
-            loading = savedInstanceState.getBoolean(STATE_LOADING)
+        if (UserManager.loginState == UserManager.LoginState.LOGGED_IN) {
+            dismiss()
+        } else {
+            handleVisibility()
         }
+    }
 
-        handleVisibility()
+    override fun onStart() {
+        super.onStart()
+
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onStop() {
+        EventBus.getDefault().unregister(this)
+
+        super.onStop()
     }
 
     override fun onDestroy() {
-        UserManager.cancel()
+        if (activity != null && !activity.isChangingConfigurations) {
+            UserManager.cancel()
+        }
 
         super.onDestroy()
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onLoginStateChanged(state: UserManager.LoginState) {
+        if (state == UserManager.LoginState.LOGGED_IN) {
+            dismiss()
+        } else {
+            handleVisibility()
+        }
+    }
 
-        outState.putBoolean(STATE_LOADING, loading)
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onOngoingStateChanged(state: UserManager.OngoingState) {
+        handleVisibility()
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onLoginFailed(event: LoginFailedEvent) {
+        context.longToast(ErrorHandler.getMessageForErrorCode(context, event.exception))
     }
 
     private fun initViews(): View {
@@ -129,7 +156,7 @@ class LoginDialog : DialogFragment() {
     }
 
     private fun login() {
-        if (!loading) {
+        if (UserManager.ongoingState != UserManager.OngoingState.LOGGING_IN) {
             val username = inputUsername.text.toString()
             val password = inputPassword.text.toString()
 
@@ -137,25 +164,15 @@ class LoginDialog : DialogFragment() {
                 val remember: UserManager.SaveOption =
                         if (remember.isChecked) UserManager.SaveOption.SAVE
                         else UserManager.SaveOption.DONT_SAVE
-                loading = true
                 handleVisibility()
 
-                UserManager.login(User(username, password), remember, {
-                    loading = false
-
-                    dismiss()
-                }, { result ->
-                    loading = false
-
-                    handleVisibility()
-                    context.longToast(ErrorHandler.getMessageForErrorCode(context, result))
-                })
+                UserManager.login(User(username, password), remember)
             }
         }
     }
 
     private fun handleVisibility() {
-        if (loading) {
+        if (UserManager.ongoingState == UserManager.OngoingState.LOGGING_IN) {
             inputContainer.visibility = View.INVISIBLE
             progress.visibility = View.VISIBLE
         } else {
