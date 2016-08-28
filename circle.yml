@@ -5,14 +5,17 @@ machine:
 dependencies:
   pre:
     - echo y | android update sdk --no-ui --all --filter "tools,platform-tools,android-24,extra-android-m2repository,extra-android-support,extra-google-google_play_services,extra-google-m2repository"
-    - echo y | android update sdk --no-ui --all --filter "build-tools-24.0.1"
+    - echo y | android update sdk --no-ui --all --filter "build-tools-24.0.2"
+  override:
+    - ./gradlew dependencies -Dorg.gradle.daemon=false --console=plain
 
 test:
-  override:
+  pre:
     - emulator -avd circleci-android22 -no-audio -no-window:
         background: true
         parallel: true
     - circle-android wait-for-boot
-    - ./gradlew connectedAndroidTest -PdisablePreDex -Dorg.gradle.daemon=false
+  override:
+    - ./gradlew clean connectedAndroidTest -PdisablePreDex -Dorg.gradle.daemon=false --console=plain
     - cp -r app/build/outputs $CIRCLE_ARTIFACTS
     - cp -r app/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
