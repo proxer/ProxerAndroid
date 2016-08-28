@@ -176,7 +176,6 @@ object UserManager {
             throw ProxerException(ProxerException.CANCELLED)
         }
 
-        ongoingState = OngoingState.LOGGING_IN
         val lastLogin = StorageHelper.lastLoginTime
 
         cancelAndClearRequests()
