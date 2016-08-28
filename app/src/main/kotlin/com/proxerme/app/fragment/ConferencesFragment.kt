@@ -178,7 +178,7 @@ class ConferencesFragment : MainFragment() {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onLoadMoreConferencesException(exception: ChatService.LoadMoreConferencesException) {
+    fun onLoadMoreConferencesFailed(exception: ChatService.LoadMoreConferencesException) {
         if (!StorageHelper.conferenceListEndReached) {
             showError(exception.message!!)
         }
@@ -223,7 +223,6 @@ class ConferencesFragment : MainFragment() {
     private fun refresh() {
         refreshTask?.cancel(true)
 
-        showProgress()
         hideError()
 
         refreshTask = doAsync {
@@ -233,6 +232,8 @@ class ConferencesFragment : MainFragment() {
                 if (conferences.isEmpty()) {
                     if (!StorageHelper.conferenceListEndReached) {
                         if (!ChatService.isLoadingConferences) {
+                            showProgress()
+
                             ChatService.loadMoreConferences(context)
                         }
                     } else {
@@ -258,8 +259,10 @@ class ConferencesFragment : MainFragment() {
     }
 
     private fun showProgress() {
-        progress.isEnabled = true
-        progress.isRefreshing = true
+        if (!progress.isRefreshing) {
+            progress.isEnabled = true
+            progress.isRefreshing = true
+        }
     }
 
     private fun hideProgress() {

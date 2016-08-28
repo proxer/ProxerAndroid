@@ -274,7 +274,7 @@ class ChatFragment : MainFragment() {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onLoadMoreMessagesException(exception: ChatService.LoadMoreMessagesException) {
+    fun onLoadMoreMessagesFailed(exception: ChatService.LoadMoreMessagesException) {
         if (!StorageHelper.hasConferenceReachedEnd(conference.id) &&
                 exception.conferenceId == conference.id) {
             showError(exception.message!!)
@@ -328,7 +328,6 @@ class ChatFragment : MainFragment() {
     private fun refresh() {
         refreshTask?.cancel(true)
 
-        showProgress()
         hideError()
 
         refreshTask = doAsync {
@@ -338,6 +337,8 @@ class ChatFragment : MainFragment() {
                 if (messages.isEmpty()) {
                     if (!StorageHelper.hasConferenceReachedEnd(conference.id) &&
                             !ChatService.isLoadingMessages(conference.id)) {
+                        showProgress()
+
                         ChatService.loadMoreMessages(context, conference.id)
                     } else {
                         hideProgress()
@@ -374,8 +375,10 @@ class ChatFragment : MainFragment() {
     }
 
     private fun showProgress() {
-        progress.isEnabled = true
-        progress.isRefreshing = true
+        if (!progress.isRefreshing) {
+            progress.isEnabled = true
+            progress.isRefreshing = true
+        }
     }
 
     private fun hideProgress() {
