@@ -4,25 +4,27 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import butterknife.bindView
 import com.proxerme.app.R
 import com.proxerme.app.entitiy.LocalConference
-import com.proxerme.app.fragment.ChatFragment
+import com.proxerme.app.fragment.ConferenceInfoFragment
 import org.jetbrains.anko.intentFor
 
-class ChatActivity : MainActivity() {
+class ConferenceInfoActivity : AppCompatActivity() {
 
     companion object {
         private const val EXTRA_CONFERENCE = "extra_conference"
 
         fun navigateTo(context: Activity, conference: LocalConference) {
-            context.startActivity(context.intentFor<ChatActivity>(EXTRA_CONFERENCE to conference))
+            context.startActivity(context
+                    .intentFor<ConferenceInfoActivity>(EXTRA_CONFERENCE to conference))
         }
 
         fun getIntent(context: Context, conference: LocalConference): Intent {
-            return context.intentFor<ChatActivity>(EXTRA_CONFERENCE to conference)
+            return context.intentFor<ConferenceInfoActivity>(EXTRA_CONFERENCE to conference)
         }
     }
 
@@ -31,27 +33,17 @@ class ChatActivity : MainActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_chat)
+        setContentView(R.layout.activity_conference_info)
         setSupportActionBar(toolbar)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         title = intent.getParcelableExtra<LocalConference>(EXTRA_CONFERENCE).topic
 
-        toolbar.setOnClickListener {
-            val conference = intent.getParcelableExtra<LocalConference>(EXTRA_CONFERENCE)
-
-            if (conference.isGroup) {
-                ConferenceInfoActivity.navigateTo(this, conference)
-            } else {
-                UserActivity.navigateTo(this, null, conference.topic, conference.imageId)
-            }
-        }
-
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction().replace(R.id.container,
-                    ChatFragment.newInstance(intent.getParcelableExtra(EXTRA_CONFERENCE)))
-                    .commitNow()
+                    ConferenceInfoFragment.newInstance(intent
+                            .getParcelableExtra<LocalConference>(EXTRA_CONFERENCE).id)).commitNow()
         }
     }
 

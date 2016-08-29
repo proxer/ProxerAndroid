@@ -44,8 +44,6 @@ class NewsAdapter(savedInstanceState: Bundle? = null) :
     private val comparator = compareByDescending<News> { it.time }
 
     init {
-        setHasStableIds(true)
-
         savedInstanceState?.let {
             list.addAll(it.getParcelableArrayList(ITEMS_STATE))
             it.getStringArrayList(EXPANDED_IDS_STATE)

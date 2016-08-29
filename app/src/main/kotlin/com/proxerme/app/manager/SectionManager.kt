@@ -12,7 +12,8 @@ import kotlin.properties.Delegates
 object SectionManager {
 
     enum class Section {
-        NONE, NEWS, PROFILE, TOPTEN, CONFERENCES, CHAT, USER_MEDIA_LIST, MEDIA_LIST
+        NONE, NEWS, PROFILE, TOPTEN, CONFERENCES, CHAT, USER_MEDIA_LIST, MEDIA_LIST,
+        CONFERENCE_INFO
     }
 
     var currentSection: Section by Delegates.observable(Section.NONE, { property, old, new ->

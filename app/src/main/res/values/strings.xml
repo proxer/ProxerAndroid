@@ -132,6 +132,8 @@
     <string name="fragment_topten_anime">Anime</string>
     <string name="fragment_topten_manga">Manga</string>
 
+    <string name="fragment_conference_info_time">Erstellt am %1$s um %2$s</string>
+
     <string name="link_error_not_found">Der Link konnte nicht geöffnet werden</string>
 
     <string name="fragment_user_media_list_anime_title">Anime</string>
@@ -172,6 +174,9 @@
     <string name="action_remove_user">%1$s hat %2$s aus der Konferenz entfernt</string>
     <string name="action_set_topic">%1$s hat den Konferenztitel in %2$s geändert</string>
     <string name="action_set_leader">%1$s hat %2$s als neuen Konferenzleiter bestimmt</string>
+    <string name="action_info">Info</string>
+    <string name="fragment_conference_info_info_title">Info</string>
+    <string name="fragment_conference_info_participants_title">Teilnehmer</string>
 
     <plurals name="media_episode_count">
         <item quantity="one">Eine Episode</item>

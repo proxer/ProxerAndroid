@@ -20,7 +20,6 @@ import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.TouchableMovementMethod
 import com.proxerme.app.R
 import com.proxerme.app.activity.ChatActivity
-import com.proxerme.app.activity.UserActivity
 import com.proxerme.app.adapter.ConferenceAdapter
 import com.proxerme.app.data.chatDatabase
 import com.proxerme.app.entitiy.LocalConference
@@ -90,20 +89,6 @@ class ConferencesFragment : MainFragment() {
         adapter.callback = object : ConferenceAdapter.OnConferenceInteractionListener() {
             override fun onConferenceClick(v: View, conference: LocalConference) {
                 ChatActivity.navigateTo(activity, conference)
-            }
-
-            override fun onConferenceImageClick(v: View, conference: LocalConference) {
-                if (!conference.isGroup) {
-                    UserActivity.navigateTo(activity, null, conference.topic,
-                            conference.imageId)
-                }
-            }
-
-            override fun onConferenceTopicClick(v: View, conference: LocalConference) {
-                if (!conference.isGroup) {
-                    UserActivity.navigateTo(activity, null, conference.topic,
-                            conference.imageId)
-                }
             }
         }
 

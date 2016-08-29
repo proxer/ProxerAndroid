@@ -53,27 +53,14 @@ class ConferenceAdapter(savedInstanceState: Bundle? = null) :
     inner class ViewHolder(itemView: View) : PagingViewHolder<LocalConference>(itemView) {
 
         private val image: ImageView by bindView(R.id.image)
-        private val container: ViewGroup by bindView(R.id.container)
         private val topic: TextView by bindView(R.id.topic)
         private val time: TextView by bindView(R.id.time)
         private val participants: TextView by bindView(R.id.participants)
 
         init {
-            image.setOnClickListener {
-                if (adapterPosition != RecyclerView.NO_POSITION) {
-                    callback?.onConferenceImageClick(it, list[adapterPosition])
-                }
-            }
-
-            container.setOnClickListener {
+            itemView.setOnClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     callback?.onConferenceClick(it, list[adapterPosition])
-                }
-            }
-
-            topic.setOnClickListener {
-                if (adapterPosition != RecyclerView.NO_POSITION) {
-                    callback?.onConferenceTopicClick(it, list[adapterPosition])
                 }
             }
         }
@@ -122,14 +109,6 @@ class ConferenceAdapter(savedInstanceState: Bundle? = null) :
 
     abstract class OnConferenceInteractionListener {
         open fun onConferenceClick(v: View, conference: LocalConference) {
-
-        }
-
-        open fun onConferenceImageClick(v: View, conference: LocalConference) {
-
-        }
-
-        open fun onConferenceTopicClick(v: View, conference: LocalConference) {
 
         }
     }
