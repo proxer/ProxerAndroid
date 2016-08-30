@@ -166,7 +166,7 @@ class ChatFragment : MainFragment() {
 
         conference = arguments.getParcelable(ARGUMENT_CONFERENCE)
 
-        adapter = ChatAdapter(savedInstanceState)
+        adapter = ChatAdapter(savedInstanceState, conference.isGroup)
         adapter.user = UserManager.user
         adapter.callback = adapterCallback
 

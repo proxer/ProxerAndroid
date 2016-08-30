@@ -28,14 +28,14 @@ import java.util.*
 
  * @author Ruben Gees
  */
-class ChatAdapter(savedInstanceState: Bundle? = null) :
+class ChatAdapter(savedInstanceState: Bundle? = null, val isGroup: Boolean) :
         PagingAdapter<LocalMessage>() {
 
     private companion object {
-        private const val ITEMS_STATE = "adapter_conference_state_items"
-        private const val MESSAGE_SELECTED_IDS_STATE = "message_selected_ids"
-        private const val MESSAGE_SELECTING_STATE = "message_selecting"
-        private const val MESSAGE_SHOWING_TIME_IDS_STATE = "message_showing_time_ids"
+        private const val ITEMS_STATE = "adapter_chat_state_items"
+        private const val MESSAGE_SELECTED_IDS_STATE = "adapter_chat_state_message_selected_ids"
+        private const val MESSAGE_SELECTING_STATE = "adapter_chat_state_message_selecting"
+        private const val MESSAGE_SHOWING_TIME_IDS_STATE = "adapter_chat_state_showing_time_ids"
 
         private const val TYPE_MESSAGE_INNER = 0
         private const val TYPE_MESSAGE_SINGLE = 1
@@ -80,8 +80,13 @@ class ChatAdapter(savedInstanceState: Bundle? = null) :
             return ActionViewHolder(inflater.inflate(R.layout.item_message_action,
                     parent, false))
         } else if (viewType == TYPE_MESSAGE_TOP || viewType == TYPE_MESSAGE_SINGLE) {
-            return MessageTitleViewHolder(inflater.inflate(R.layout.item_message_single,
-                    parent, false))
+            if (isGroup) {
+                return MessageTitleViewHolder(inflater.inflate(R.layout.item_message_single,
+                        parent, false))
+            } else {
+                return MessageViewHolder(inflater.inflate(R.layout.item_message,
+                        parent, false))
+            }
         } else if (viewType == TYPE_MESSAGE_BOTTOM || viewType == TYPE_MESSAGE_INNER) {
             return MessageViewHolder(inflater.inflate(R.layout.item_message,
                     parent, false))
