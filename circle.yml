@@ -25,5 +25,6 @@ test:
     - ./gradlew lint assembleDebug assembleDebugAndroidTest -PdisablePreDex -Dorg.gradle.daemon=false --console=plain
     - circle-android wait-for-boot
     - ./gradlew connectedAndroidTest -PdisablePreDex -Dorg.gradle.daemon=false --console=plain
+  post:
     - cp -r app/build/outputs $CIRCLE_ARTIFACTS
     - cp -r app/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
