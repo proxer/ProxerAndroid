@@ -221,19 +221,23 @@ class ChatDatabase(context: Context) :
 
     private fun doInsertOrUpdateConferences(db: SQLiteDatabase, items: Collection<Conference>) {
         items.forEach {
-            if (db.update(TABLE_CONFERENCE, *generateInsertionValues(it))
+            val insertionValues = generateInsertionValues(it)
+
+            if (db.update(TABLE_CONFERENCE, *insertionValues)
                     .where("$COLUMN_CONFERENCE_ID = ${it.id}").exec() <= 0) {
-                db.insertOrThrow(TABLE_CONFERENCE, *generateInsertionValues(it))
+                db.insertOrThrow(TABLE_CONFERENCE, *insertionValues)
             }
         }
     }
 
     private fun doInsertOrUpdateMessages(db: SQLiteDatabase, items: Collection<Message>) {
         items.forEach {
-            if (db.update(TABLE_MESSAGE, *generateInsertionValues(it))
+            val insertionValues = generateInsertionValues(it)
+
+            if (db.update(TABLE_MESSAGE, *insertionValues)
                     .where("$COLUMN_MESSAGE_ID = ${it.id}")
                     .exec() <= 0) {
-                db.insertOrThrow(TABLE_MESSAGE, *generateInsertionValues(it))
+                db.insertOrThrow(TABLE_MESSAGE, *insertionValues)
             }
         }
     }
