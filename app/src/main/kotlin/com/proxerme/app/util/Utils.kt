@@ -1,6 +1,8 @@
 package com.proxerme.app.util
 
 import android.app.Activity
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Bitmap
@@ -29,15 +31,6 @@ object Utils {
     private const val MINIMUM_DIAGONAL_INCHES = 7
     private val WEB_REGEX = Patterns.WEB_URL
     private val MENTIONS_REGEX = Pattern.compile("(@[a-zA-Z0-9_]+)")
-
-    fun areActionsPossible(activity: Activity?): Boolean {
-        return activity != null && !activity.isFinishing && !isDestroyedCompat(activity) &&
-                !activity.isChangingConfigurations
-    }
-
-    fun isDestroyedCompat(activity: Activity): Boolean {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && activity.isDestroyed
-    }
 
     fun isTablet(context: Activity): Boolean {
         val metrics = DisplayMetrics()
@@ -128,5 +121,13 @@ object Utils {
         }
 
         return result
+    }
+
+    fun setClipboardContent(activity: Activity, label: String, content: String) {
+        val clipboard = activity.getSystemService(Context.CLIPBOARD_SERVICE)
+                as ClipboardManager
+        val clip = ClipData.newPlainText(label, content)
+
+        clipboard.primaryClip = clip
     }
 }

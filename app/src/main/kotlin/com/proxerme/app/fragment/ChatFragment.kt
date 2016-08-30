@@ -1,7 +1,6 @@
 package com.proxerme.app.fragment
 
 import android.content.ActivityNotFoundException
-import android.content.Context
 import android.content.Intent
 import android.database.SQLException
 import android.net.Uri
@@ -154,6 +153,13 @@ class ChatFragment : MainFragment() {
             } catch (exception: ActivityNotFoundException) {
                 context.toast(R.string.link_error_not_found)
             }
+        }
+
+        override fun onMessageLinkLongClick(link: String) {
+            Utils.setClipboardContent(activity, getString(R.string.fragment_chat_link_clip_title),
+                    link)
+
+            context.toast(R.string.fragment_chat_clip_status)
         }
 
         override fun onMentionsClick(username: String) {
@@ -374,12 +380,8 @@ class ChatFragment : MainFragment() {
     }
 
     private fun handleCopyMenuItem() {
-        val clipboard = activity.getSystemService(Context.CLIPBOARD_SERVICE)
-                as android.content.ClipboardManager
-        val clip = android.content.ClipData.newPlainText(getString(R.string.fragment_chat_clip_title),
+        Utils.setClipboardContent(activity, getString(R.string.fragment_chat_clip_title),
                 adapter.selectedItems.joinToString(separator = "\n", transform = { it.message }))
-
-        clipboard.primaryClip = clip
 
         context.toast(R.string.fragment_chat_clip_status)
         actionMode?.finish()

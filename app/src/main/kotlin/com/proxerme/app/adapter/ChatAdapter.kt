@@ -254,6 +254,10 @@ class ChatAdapter(savedInstanceState: Bundle? = null, val isGroup: Boolean) :
         open fun onMentionsClick(username: String) {
 
         }
+
+        open fun onMessageLinkLongClick(link: String) {
+
+        }
     }
 
     open inner class MessageViewHolder(itemView: View) : PagingViewHolder<LocalMessage>(itemView) {
@@ -329,6 +333,9 @@ class ChatAdapter(savedInstanceState: Bundle? = null, val isGroup: Boolean) :
             text.text = Utils.buildClickableText(text.context, message.message,
                     onWebClickListener = Link.OnClickListener {
                         callback?.onMessageLinkClick(it)
+                    },
+                    onWebLongClickListener = Link.OnLongClickListener {
+                        callback?.onMessageLinkLongClick(it)
                     },
                     onMentionsClickListener = Link.OnClickListener {
                         callback?.onMentionsClick(it.trim().substring(1))

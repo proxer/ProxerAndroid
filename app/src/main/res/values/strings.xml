@@ -114,6 +114,7 @@
     <string name="fragment_chat_message">Tippe eine Nachricht</string>
     <string name="fragment_chat_send">Senden</string>
     <string name="fragment_chat_reply">"@%s "</string>
+    <string name="fragment_chat_link_clip_title">Link</string>
     <string name="fragment_chat_clip_title">Chatverlauf</string>
     <string name="fragment_chat_clip_status">In die Zwischenablage kopiert</string>
 
