@@ -1,11 +1,12 @@
 machine:
   java:
     version: openjdk8
+  environment:
+    GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
 
 dependencies:
   cache_directories:
     - ~/.android
-    - ~/android
   pre:
     - echo y | android update sdk --no-ui --all --filter "tools,platform-tools,android-24,extra-android-m2repository,extra-android-support,extra-google-google_play_services,extra-google-m2repository"
     - echo y | android update sdk --no-ui --all --filter "build-tools-24.0.2"
@@ -18,7 +19,7 @@ test:
         background: true
         parallel: true
   override:
-    - ./gradlew lint assembleDebug assembleDebugTest -PdisablePreDex -Dorg.gradle.daemon=false --console=plain
+    - ./gradlew lint assembleDebug assembleDebugAndroidTest -PdisablePreDex -Dorg.gradle.daemon=false --console=plain
     - circle-android wait-for-boot
     - ./gradlew connectedAndroidTest -PdisablePreDex -Dorg.gradle.daemon=false --console=plain
     - cp -r app/build/outputs $CIRCLE_ARTIFACTS
