@@ -113,6 +113,7 @@
 
     <string name="fragment_chat_message">Tippe eine Nachricht</string>
     <string name="fragment_chat_send">Senden</string>
+    <string name="fragment_chat_reply">"@%s "</string>
     <string name="fragment_chat_clip_title">Chatverlauf</string>
     <string name="fragment_chat_clip_status">In die Zwischenablage kopiert</string>
 
@@ -177,6 +178,7 @@
     <string name="action_info">Info</string>
     <string name="fragment_conference_info_info_title">Info</string>
     <string name="fragment_conference_info_participants_title">Teilnehmer</string>
+    <string name="action_reply">Antworten</string>
 
     <plurals name="media_episode_count">
         <item quantity="one">Eine Episode</item>

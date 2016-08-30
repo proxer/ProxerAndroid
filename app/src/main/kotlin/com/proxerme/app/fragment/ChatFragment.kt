@@ -14,6 +14,7 @@ import android.support.v7.view.ActionMode
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.*
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.TextView
 import butterknife.bindView
@@ -39,6 +40,7 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.inputMethodManager
 import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
 import java.util.concurrent.Future
@@ -90,12 +92,20 @@ class ChatFragment : MainFragment() {
         override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
             Utils.setStatusBarColorIfPossible(activity, R.color.primary)
 
+            if (adapter.selectedItems.size == 1 &&
+                    adapter.selectedItems.first().userId != StorageHelper.user?.id ?: null) {
+                menu.findItem(R.id.reply).isVisible = true
+            } else {
+                menu.findItem(R.id.reply).isVisible = false
+            }
+
             return false
         }
 
         override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
             when (item.itemId) {
                 R.id.copy -> handleCopyMenuItem()
+                R.id.reply -> handleReplyMenuItem()
                 else -> return false
             }
 
@@ -131,6 +141,7 @@ class ChatFragment : MainFragment() {
                     actionMode?.title = count.toString()
                 } else {
                     actionMode?.title = count.toString()
+                    actionMode?.invalidate()
                 }
             } else {
                 actionMode?.finish()
@@ -371,6 +382,17 @@ class ChatFragment : MainFragment() {
         clipboard.primaryClip = clip
 
         context.toast(R.string.fragment_chat_clip_status)
+        actionMode?.finish()
+    }
+
+    private fun handleReplyMenuItem() {
+        messageInput.setText(getString(R.string.fragment_chat_reply,
+                adapter.selectedItems.first().username))
+        messageInput.setSelection(messageInput.text.length)
+        messageInput.requestFocus()
+
+        activity.inputMethodManager.showSoftInput(messageInput, InputMethodManager.SHOW_IMPLICIT)
+
         actionMode?.finish()
     }
 
