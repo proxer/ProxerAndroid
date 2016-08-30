@@ -17,8 +17,9 @@ test:
     - emulator -avd circleci-android22 -no-audio -no-window:
         background: true
         parallel: true
-    - circle-android wait-for-boot
   override:
-    - ./gradlew clean lint connectedAndroidTest -PdisablePreDex -Dorg.gradle.daemon=false --console=plain
+    - ./gradlew lint assembleDebug assembleDebugTest -PdisablePreDex -Dorg.gradle.daemon=false --console=plain
+    - circle-android wait-for-boot
+    - ./gradlew connectedAndroidTest -PdisablePreDex -Dorg.gradle.daemon=false --console=plain
     - cp -r app/build/outputs $CIRCLE_ARTIFACTS
     - cp -r app/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
