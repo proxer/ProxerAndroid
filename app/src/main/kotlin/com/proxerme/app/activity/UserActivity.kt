@@ -21,6 +21,7 @@ import com.proxerme.app.R
 import com.proxerme.app.fragment.ProfileFragment
 import com.proxerme.app.fragment.ToptenFragment
 import com.proxerme.app.fragment.UserMediaListFragment
+import com.proxerme.library.connection.user.entitiy.UserInfo
 import com.proxerme.library.info.ProxerUrlHolder
 import com.proxerme.library.parameters.CategoryParameter
 
@@ -110,9 +111,17 @@ class UserActivity : MainActivity() {
         outState.putString(STATE_IMAGE_ID, imageId)
     }
 
-    fun setImageId(imageId: String) {
-        if (this.imageId == null && imageId.isNotBlank()) {
-            this.imageId = imageId
+    fun setUserInfo(userInfo: UserInfo) {
+        if (this.userId == null) {
+            this.userId = userInfo.id
+        }
+
+        if (this.username == null) {
+            this.username = userInfo.username
+        }
+
+        if (this.imageId == null) {
+            this.imageId = userInfo.imageId
 
             loadImage()
         }

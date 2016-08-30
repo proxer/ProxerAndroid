@@ -14,6 +14,7 @@ import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.LinkConsumableTextView
 import com.klinker.android.link_builder.TouchableMovementMethod
 import com.proxerme.app.R
+import com.proxerme.app.activity.UserActivity
 import com.proxerme.app.fragment.framework.EasyLoadingFragment
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.util.TimeUtil
@@ -97,6 +98,8 @@ class ProfileFragment : EasyLoadingFragment<UserInfo>() {
 
     override fun save(result: UserInfo) {
         userInfo = result
+
+        (activity as UserActivity).setUserInfo(result)
     }
 
     override fun clear() {
