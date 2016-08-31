@@ -5,7 +5,7 @@ import android.content.Intent
 import android.database.SQLException
 import android.net.Uri
 import android.os.Bundle
-import android.support.design.widget.TextInputEditText
+import android.support.design.widget.FloatingActionButton
 import android.support.v4.content.ContextCompat
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
@@ -15,6 +15,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import butterknife.bindView
 import com.klinker.android.link_builder.Link
@@ -29,6 +30,7 @@ import com.proxerme.app.event.ChatEvent
 import com.proxerme.app.fragment.framework.MainFragment
 import com.proxerme.app.helper.NotificationHelper
 import com.proxerme.app.helper.StorageHelper
+import com.proxerme.app.interfaces.OnActivityListener
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.manager.UserManager
 import com.proxerme.app.module.LoginModule
@@ -49,7 +51,7 @@ import java.util.concurrent.Future
  *
  * @author Ruben Gees
  */
-class ChatFragment : MainFragment() {
+class ChatFragment : MainFragment(), OnActivityListener {
 
     companion object {
         private const val ARGUMENT_CONFERENCE = "conference"
@@ -168,8 +170,8 @@ class ChatFragment : MainFragment() {
     }
 
     private val contentRoot: ViewGroup by bindView(R.id.contentRoot)
-    private val messageInput: TextInputEditText by bindView(R.id.messageInput)
-    private val sendButton: Button by bindView(R.id.sendButton)
+    private val messageInput: EditText by bindView(R.id.messageInput)
+    private val sendButton: FloatingActionButton by bindView(R.id.sendButton)
     private val list: RecyclerView by bindView(R.id.list)
     private val progress: SwipeRefreshLayout by bindView(R.id.progress)
     private val errorContainer: ViewGroup by bindView(R.id.errorContainer)

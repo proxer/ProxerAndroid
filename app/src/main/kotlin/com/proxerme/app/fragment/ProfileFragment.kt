@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import butterknife.bindView
 import com.klinker.android.link_builder.Link
-import com.klinker.android.link_builder.LinkConsumableTextView
 import com.klinker.android.link_builder.TouchableMovementMethod
 import com.proxerme.app.R
 import com.proxerme.app.activity.UserActivity
@@ -65,7 +64,7 @@ class ProfileFragment : EasyLoadingFragment<UserInfo>() {
     private val rank: TextView by bindView(R.id.rank)
 
     private val statusContainer: ViewGroup by bindView(R.id.statusContainer)
-    private val statusText: LinkConsumableTextView by bindView(R.id.statusText)
+    private val statusText: TextView by bindView(R.id.statusText)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

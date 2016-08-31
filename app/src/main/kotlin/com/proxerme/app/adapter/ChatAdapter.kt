@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import butterknife.bindView
 import com.klinker.android.link_builder.Link
-import com.klinker.android.link_builder.LinkConsumableTextView
 import com.klinker.android.link_builder.TouchableMovementMethod
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
@@ -264,7 +263,7 @@ class ChatAdapter(savedInstanceState: Bundle? = null, val isGroup: Boolean) :
 
         protected val root: ViewGroup by bindView(R.id.root)
         protected val container: CardView by bindView(R.id.container)
-        protected val text: LinkConsumableTextView by bindView(R.id.text)
+        protected val text: TextView by bindView(R.id.text)
         protected val time: TextView by bindView(R.id.time)
 
         init {
