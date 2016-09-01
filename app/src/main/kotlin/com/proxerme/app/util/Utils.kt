@@ -12,12 +12,20 @@ import android.support.annotation.ColorRes
 import android.support.v4.content.ContextCompat
 import android.util.DisplayMetrics
 import android.util.Patterns
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.Target
+import com.headerfooter.songhang.library.SmartRecyclerAdapter
 import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.LinkBuilder
+import com.klinker.android.link_builder.TouchableMovementMethod
 import com.proxerme.app.R
+import com.proxerme.library.connection.ProxerException
 import java.util.concurrent.ExecutionException
 import java.util.regex.Pattern
 
@@ -89,13 +97,13 @@ object Utils {
         }
     }
 
-    fun buildClickableText(context: Context, text: String,
+    fun buildClickableText(context: Context, text: CharSequence,
                            onWebClickListener: Link.OnClickListener? = null,
                            onWebLongClickListener: Link.OnLongClickListener? = null,
                            onMentionsClickListener: Link.OnClickListener? = null,
                            onMentionsLongClickListener: Link.OnLongClickListener? = null):
             CharSequence {
-        val builder = LinkBuilder.from(context, text)
+        val builder = LinkBuilder.from(context, text.toString())
 
         if (onWebClickListener != null || onWebLongClickListener != null) {
             builder.addLink(Link(WEB_REGEX)
@@ -121,6 +129,38 @@ object Utils {
         }
 
         return result
+    }
+
+    fun showError(context: Context, exception: ProxerException, adapter: SmartRecyclerAdapter,
+                  buttonMessage: String? = null, parent: ViewGroup? = null,
+                  onWebClickListener: Link.OnClickListener ? = null,
+                  onButtonClickListener: View.OnClickListener? = null) {
+        showError(context, ErrorHandler.getMessageForErrorCode(context, exception), adapter,
+                buttonMessage, parent, onWebClickListener, onButtonClickListener)
+    }
+
+    fun showError(context: Context, message: CharSequence, adapter: SmartRecyclerAdapter,
+                  buttonMessage: String? = null, parent: ViewGroup? = null,
+                  onWebClickListener: Link.OnClickListener ? = null,
+                  onButtonClickListener: View.OnClickListener? = null) {
+        val errorContainer = if (adapter.wrappedAdapter.itemCount <= 0) {
+            LayoutInflater.from(context).inflate(R.layout.layout_error, parent, false)
+        } else {
+            LayoutInflater.from(context).inflate(R.layout.item_error, parent, false)
+        }
+
+        val errorText: TextView = errorContainer.findViewById(R.id.errorText) as TextView
+        val errorButton: Button = errorContainer.findViewById(R.id.errorButton) as Button
+
+        errorText.movementMethod = TouchableMovementMethod.getInstance()
+        errorText.text = Utils.buildClickableText(context, message, onWebClickListener)
+
+        val buttonMessageToSet = buttonMessage ?: context.getString(R.string.error_retry)
+
+        errorButton.text = buttonMessageToSet
+        errorButton.setOnClickListener(onButtonClickListener)
+
+        adapter.setFooterView(errorContainer)
     }
 
     fun setClipboardContent(activity: Activity, label: String, content: String) {

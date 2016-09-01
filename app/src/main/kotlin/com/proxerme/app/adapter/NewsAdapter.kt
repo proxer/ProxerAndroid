@@ -19,7 +19,6 @@ import com.proxerme.app.util.TimeUtil
 import com.proxerme.library.connection.notifications.entitiy.News
 import com.proxerme.library.info.ProxerUrlHolder
 import java.util.*
-import kotlin.comparisons.compareByDescending
 
 /**
  * TODO: Describe Class
@@ -41,7 +40,6 @@ class NewsAdapter(savedInstanceState: Bundle? = null) :
     var callback: OnNewsInteractionListener? = null
 
     private val expanded = HashMap<String, Boolean>()
-    private val comparator = compareByDescending<News> { it.time }
 
     init {
         savedInstanceState?.let {
@@ -60,8 +58,6 @@ class NewsAdapter(savedInstanceState: Bundle? = null) :
         outState.putParcelableArrayList(ITEMS_STATE, list)
         outState.putStringArrayList(EXPANDED_IDS_STATE, ArrayList(expanded.keys))
     }
-
-    override fun contains(item: News) = list.binarySearch(item, comparator) < 0
 
     inner class ViewHolder(itemView: View) : PagingAdapter.PagingViewHolder<News>(itemView) {
 

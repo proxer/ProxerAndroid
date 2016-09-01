@@ -7,26 +7,18 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.support.v4.content.ContextCompat
 import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
 import butterknife.bindView
+import com.headerfooter.songhang.library.SmartRecyclerAdapter
 import com.klinker.android.link_builder.Link
-import com.klinker.android.link_builder.TouchableMovementMethod
-import com.liucanwen.app.headerfooterrecyclerview.HeaderAndFooterRecyclerViewAdapter
-import com.liucanwen.app.headerfooterrecyclerview.HeaderSpanSizeLookup
-import com.liucanwen.app.headerfooterrecyclerview.RecyclerViewUtils
 import com.proxerme.app.R
 import com.proxerme.app.adapter.PagingAdapter
-import com.proxerme.app.util.ErrorHandler
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.listener.EndlessRecyclerOnScrollListener
 import com.proxerme.library.connection.ProxerException
 import com.proxerme.library.interfaces.IdItem
-import org.jetbrains.anko.onClick
 import org.jetbrains.anko.toast
 
 /**
@@ -43,7 +35,7 @@ abstract class EasyPagingFragment<T> : PagingFragment<T>()  where T : IdItem, T 
     open protected val isSwipeToRefreshEnabled = true
 
     abstract protected val adapter: PagingAdapter<T>
-    protected lateinit var headerAndFooterAdapter: HeaderAndFooterRecyclerViewAdapter
+    protected lateinit var smartRecyclerAdapter: SmartRecyclerAdapter
 
     open protected val root: ViewGroup by bindView(R.id.root)
     open protected val progress: SwipeRefreshLayout by bindView(R.id.progress)
@@ -66,11 +58,11 @@ abstract class EasyPagingFragment<T> : PagingFragment<T>()  where T : IdItem, T 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        headerAndFooterAdapter = HeaderAndFooterRecyclerViewAdapter(adapter)
+        smartRecyclerAdapter = SmartRecyclerAdapter(adapter)
 
         list.setHasFixedSize(true)
-        list.adapter = headerAndFooterAdapter
         list.layoutManager = layoutManager
+        list.adapter = smartRecyclerAdapter
         list.addOnScrollListener(object : EndlessRecyclerOnScrollListener(layoutManager) {
             override fun onLoadMore() {
                 if (exception == null && !endReached) {
@@ -78,12 +70,6 @@ abstract class EasyPagingFragment<T> : PagingFragment<T>()  where T : IdItem, T 
                 }
             }
         })
-
-        if (layoutManager is GridLayoutManager) {
-            (layoutManager as GridLayoutManager).spanSizeLookup =
-                    HeaderSpanSizeLookup(headerAndFooterAdapter,
-                            (layoutManager as GridLayoutManager).spanCount)
-        }
 
         initProgress()
     }
@@ -177,42 +163,26 @@ abstract class EasyPagingFragment<T> : PagingFragment<T>()  where T : IdItem, T 
     }
 
     private fun showError(exception: ProxerException) {
-        val errorContainer: ViewGroup
-
-        if (adapter.itemCount <= 0) {
-            errorContainer = LayoutInflater.from(context).inflate(R.layout.layout_error,
-                    root, false) as ViewGroup
-        } else {
-            errorContainer = LayoutInflater.from(context).inflate(R.layout.item_error,
-                    root, false) as ViewGroup
-
-            errorContainer.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT)
+        val onWebClickListener = Link.OnClickListener { link ->
+            try {
+                startActivity(Intent(Intent.ACTION_VIEW,
+                        Uri.parse(link + "?device=mobile")))
+            } catch (exception: ActivityNotFoundException) {
+                context.toast(R.string.link_error_not_found)
+            }
         }
 
-        val errorText: TextView = errorContainer.findViewById(R.id.errorText) as TextView
-        val errorButton: Button = errorContainer.findViewById(R.id.errorButton) as Button
-
-        errorText.movementMethod = TouchableMovementMethod.getInstance()
-        errorText.text = Utils.buildClickableText(context,
-                ErrorHandler.getMessageForErrorCode(context, exception),
-                onWebClickListener = Link.OnClickListener { link ->
-                    try {
-                        startActivity(Intent(Intent.ACTION_VIEW,
-                                Uri.parse(link + "?device=mobile")))
-                    } catch (exception: ActivityNotFoundException) {
-                        context.toast(R.string.link_error_not_found)
-                    }
-                })
-
-        errorButton.onClick {
+        val onButtonClickListener = View.OnClickListener {
             load()
         }
 
-        RecyclerViewUtils.setFooterView(list, errorContainer)
+        Utils.showError(context, exception, smartRecyclerAdapter,
+                buttonMessage = null, parent = root,
+                onWebClickListener = onWebClickListener,
+                onButtonClickListener = onButtonClickListener)
     }
 
     private fun hideError() {
-        RecyclerViewUtils.removeFooterView(list)
+        smartRecyclerAdapter.removeFooterView()
     }
 }

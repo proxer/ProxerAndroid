@@ -41,6 +41,7 @@ dependencies {
     compile "com.android.support:customtabs:$support_version"
     compile "com.android.support:percent:$support_version"
     compile "com.android.support:support-annotations:$support_version"
+
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "org.jetbrains.anko:anko-sdk23:$anko_version"
     compile "org.jetbrains.anko:anko-sqlite:$anko_version"
@@ -53,23 +54,32 @@ dependencies {
     compile('com.mikepenz:materialdrawer:5.6.0@aar') {
         transitive = true
     }
+    compile 'com.mikepenz:iconics-core:2.8.1@aar'
+    compile 'com.mikepenz:community-material-typeface:1.5.54.2@aar'
+
+    compile 'net.danlew:android.joda:2.9.4.1'
+
+    compile 'com.orhanobut:hawk:2.0.0-Alpha'
+
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.github.bumptech.glide:okhttp3-integration:1.4.0@aar'
+
+    compile 'org.greenrobot:eventbus:3.0.0'
+
+    compile 'de.hdodenhof:circleimageview:2.1.0'
+
+    compile 'com.afollestad.material-dialogs:core:0.9.0.1'
+
+    compile 'com.klinkerapps:link_builder:1.3.2'
+
+    compile 'com.songhang:smart-headerfooter-recyclerview:1.0.0'
+
+    compile 'com.jakewharton:kotterknife:0.1.0-SNAPSHOT'
+
+    compile 'com.github.proxer:ProxerLibAndroid:55efe286af'
     compile('com.github.rubengees:introduction:1.3.3@aar') {
         transitive = true
     }
-
-    compile 'net.danlew:android.joda:2.9.4.1'
-    compile 'com.orhanobut:hawk:2.0.0-Alpha'
-    compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'com.github.bumptech.glide:okhttp3-integration:1.4.0@aar'
-    compile 'com.mikepenz:iconics-core:2.8.1@aar'
-    compile 'com.mikepenz:community-material-typeface:1.5.54.2@aar'
-    compile 'org.greenrobot:eventbus:3.0.0'
-    compile 'de.hdodenhof:circleimageview:2.1.0'
-    compile 'com.afollestad.material-dialogs:core:0.9.0.1'
-    compile 'com.klinkerapps:link_builder:1.3.2'
-    compile 'com.liucanwen.app:headerfooterrecyclerview:1.0.0'
-    compile 'com.github.proxer:ProxerLibAndroid:55efe286af'
-    compile 'com.jakewharton:kotterknife:0.1.0-SNAPSHOT'
 
     androidTestCompile "com.android.support:support-annotations:$support_version"
     androidTestCompile 'com.android.support.test:runner:0.5'

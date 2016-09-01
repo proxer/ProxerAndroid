@@ -2,24 +2,18 @@ package com.proxerme.app.fragment
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.database.SQLException
 import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.content.ContextCompat
-import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.view.ActionMode
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.*
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
 import butterknife.bindView
-import com.klinker.android.link_builder.Link
-import com.klinker.android.link_builder.TouchableMovementMethod
 import com.proxerme.app.R
 import com.proxerme.app.activity.UserActivity
 import com.proxerme.app.adapter.ChatAdapter
@@ -27,31 +21,24 @@ import com.proxerme.app.data.chatDatabase
 import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.entitiy.LocalMessage
 import com.proxerme.app.event.ChatEvent
-import com.proxerme.app.fragment.framework.MainFragment
-import com.proxerme.app.helper.NotificationHelper
+import com.proxerme.app.fragment.framework.EasyChatServiceFragment
 import com.proxerme.app.helper.StorageHelper
-import com.proxerme.app.interfaces.OnActivityListener
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.manager.UserManager
-import com.proxerme.app.module.LoginModule
 import com.proxerme.app.service.ChatService
 import com.proxerme.app.util.Utils
-import com.proxerme.app.util.listener.EndlessRecyclerOnScrollListener
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.inputMethodManager
 import org.jetbrains.anko.toast
-import org.jetbrains.anko.uiThread
-import java.util.concurrent.Future
 
 /**
  * TODO: Describe class
  *
  * @author Ruben Gees
  */
-class ChatFragment : MainFragment(), OnActivityListener {
+class ChatFragment : EasyChatServiceFragment<LocalMessage>() {
 
     companion object {
         private const val ARGUMENT_CONFERENCE = "conference"
@@ -66,28 +53,19 @@ class ChatFragment : MainFragment(), OnActivityListener {
         }
     }
 
-    private lateinit var conference: LocalConference
-
     override val section: SectionManager.Section = SectionManager.Section.CHAT
 
-    private lateinit var layoutManager: LinearLayoutManager
-    private lateinit var adapter: ChatAdapter
+    override lateinit var layoutManager: RecyclerView.LayoutManager
+    override lateinit var adapter: ChatAdapter
 
-    private var refreshTask: Future<Unit>? = null
+    override val hasReachedEnd: Boolean
+        get() = StorageHelper.hasConferenceReachedEnd(conference.id)
+    override val isLoading: Boolean
+        get() = ChatService.isLoadingMessages(conference.id)
 
-    private val loginModule = LoginModule(object : LoginModule.LoginModuleCallback {
-        override val activity: AppCompatActivity
-            get() = this@ChatFragment.activity as AppCompatActivity
+    private lateinit var conference: LocalConference
 
-        override fun showError(message: String, buttonMessage: String?,
-                               onButtonClickListener: View.OnClickListener?) {
-            this@ChatFragment.showError(message, buttonMessage, onButtonClickListener)
-        }
-
-        override fun load(showProgress: Boolean) {
-            refresh()
-        }
-    })
+    private var actionMode: ActionMode? = null
 
     private val actionModeCallback: ActionMode.Callback = object : ActionMode.Callback {
         override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
@@ -126,8 +104,6 @@ class ChatFragment : MainFragment(), OnActivityListener {
             Utils.setStatusBarColorIfPossible(activity, R.color.primary_dark)
         }
     }
-
-    private var actionMode: ActionMode? = null
 
     private val adapterCallback = object : ChatAdapter.OnMessageInteractionListener() {
         override fun onMessageTitleClick(v: View, message: LocalMessage) {
@@ -169,19 +145,12 @@ class ChatFragment : MainFragment(), OnActivityListener {
         }
     }
 
-    private val contentRoot: ViewGroup by bindView(R.id.contentRoot)
+    private val inputContainer: ViewGroup by bindView(R.id.inputContainer)
     private val messageInput: EditText by bindView(R.id.messageInput)
     private val sendButton: FloatingActionButton by bindView(R.id.sendButton)
-    private val list: RecyclerView by bindView(R.id.list)
-    private val progress: SwipeRefreshLayout by bindView(R.id.progress)
-    private val errorContainer: ViewGroup by bindView(R.id.errorContainer)
-    private val errorText: TextView by bindView(R.id.errorText)
-    private val errorButton: Button by bindView(R.id.errorButton)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        NotificationHelper.cancelNotification(context, NotificationHelper.CHAT_NOTIFICATION)
 
         conference = arguments.getParcelable(ARGUMENT_CONFERENCE)
 
@@ -190,7 +159,19 @@ class ChatFragment : MainFragment(), OnActivityListener {
         adapter.callback = adapterCallback
 
         layoutManager = LinearLayoutManager(context)
-        layoutManager.reverseLayout = true
+        (layoutManager as LinearLayoutManager).reverseLayout = true
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onStop() {
+        EventBus.getDefault().unregister(this)
+
+        super.onStop()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -201,26 +182,13 @@ class ChatFragment : MainFragment(), OnActivityListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        list.setHasFixedSize(true)
-        list.layoutManager = layoutManager
-        list.adapter = adapter
-        list.addOnScrollListener(object : EndlessRecyclerOnScrollListener(layoutManager) {
-            override fun onLoadMore() {
-                if (!StorageHelper.hasConferenceReachedEnd(conference.id) &&
-                        !ChatService.isLoadingMessages(conference.id) &&
-                        refreshTask?.isDone ?: true) {
-                    ChatService.loadMoreMessages(context, conference.id)
-                }
-            }
-        })
-
         sendButton.setOnClickListener {
             val text = messageInput.text.toString().trim()
 
             if (!text.isEmpty()) {
                 context.chatDatabase.insertMessageToSend(StorageHelper.user!!, conference.id, text)
 
-                if (loginModule.canLoad()) {
+                if (canLoad) {
                     refresh()
 
                     if (!ChatService.isSynchronizing) {
@@ -232,7 +200,6 @@ class ChatFragment : MainFragment(), OnActivityListener {
             messageInput.text.clear()
         }
 
-        errorText.movementMethod = TouchableMovementMethod.getInstance()
         progress.setColorSchemeColors(ContextCompat.getColor(context,
                 R.color.primary))
     }
@@ -245,140 +212,48 @@ class ChatFragment : MainFragment(), OnActivityListener {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        loginModule.onResume()
-
-        if (loginModule.canLoad()) {
-            if (!ChatService.isSynchronizing) {
-                ChatService.synchronize(context)
-            }
-
-            refresh()
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        EventBus.getDefault().register(this)
-        loginModule.onStart()
-    }
-
-    override fun onStop() {
-        EventBus.getDefault().unregister(this)
-        loginModule.onStop()
-
-        super.onStop()
-    }
-
-    override fun onDestroy() {
-        refreshTask?.cancel(true)
-
-        super.onDestroy()
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
         adapter.saveInstanceState(outState)
     }
 
-    @Subscribe
+    override fun loadFromDB(): Collection<LocalMessage> {
+        return context.chatDatabase.getMessages(conference.id)
+    }
+
+    override fun startLoadMore() {
+        ChatService.loadMoreMessages(context, conference.id)
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
     fun onMessagesChanged(@Suppress("UNUSED_PARAMETER") event: ChatEvent) {
-        if (loginModule.canLoad()) {
+        if (canLoad) {
             refresh()
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLoadMoreMessagesFailed(exception: ChatService.LoadMoreMessagesException) {
-        if (!StorageHelper.hasConferenceReachedEnd(conference.id) &&
-                exception.conferenceId == conference.id) {
-            showError(exception.message!!)
+        if (exception.conferenceId == conference.id) {
+            showError(exception)
         }
     }
 
-    private fun showError(message: String, buttonMessage: String? = null,
-                          onButtonClickListener: View.OnClickListener? = null) {
-        clear()
+    override fun showError(message: String, buttonMessage: String?,
+                           onButtonClickListener: View.OnClickListener?,
+                           clear: Boolean) {
+        super.showError(message, buttonMessage, onButtonClickListener, clear)
 
-        contentRoot.visibility = View.INVISIBLE
-        errorContainer.visibility = View.VISIBLE
-        errorText.text = Utils.buildClickableText(context, message,
-                onWebClickListener = Link.OnClickListener { link ->
-                    try {
-                        startActivity(Intent(Intent.ACTION_VIEW,
-                                Uri.parse(link + "?device=mobile")))
-                    } catch (exception: ActivityNotFoundException) {
-                        context.toast(R.string.link_error_not_found)
-                    }
-                })
-
-        if (buttonMessage == null) {
-            errorButton.text = getString(R.string.error_retry)
-        } else {
-            errorButton.text = buttonMessage
-        }
-
-        if (onButtonClickListener == null) {
-            errorButton.setOnClickListener {
-                if (loginModule.canLoad()) {
-                    refresh()
-                }
-            }
-        } else {
-            errorButton.setOnClickListener(onButtonClickListener)
+        if (clear) {
+            inputContainer.visibility = View.GONE
         }
     }
 
-    private fun hideError() {
-        errorContainer.visibility = View.INVISIBLE
-        contentRoot.visibility = View.VISIBLE
-        adapter.user = UserManager.user
-    }
+    override fun hideError() {
+        super.hideError()
 
-    private fun clear() {
-        adapter.clear()
-        adapter.user = null
-    }
-
-    private fun refresh() {
-        refreshTask?.cancel(true)
-
-        hideError()
-
-        refreshTask = doAsync {
-            try {
-                val messages = context.chatDatabase.getMessages(conference.id)
-
-                if (messages.isEmpty()) {
-                    if (!StorageHelper.hasConferenceReachedEnd(conference.id) &&
-                            !ChatService.isLoadingMessages(conference.id)) {
-                        showProgress()
-
-                        ChatService.loadMoreMessages(context, conference.id)
-                    } else {
-                        hideProgress()
-
-                        //TODO show empty view
-                    }
-                } else {
-                    uiThread {
-                        hideError()
-                        hideProgress()
-
-                        adapter.replace(messages)
-                    }
-                }
-            } catch(exception: SQLException) {
-                uiThread {
-                    showError(context.getString(R.string.error_io))
-                    hideProgress()
-                }
-            }
-        }
+        inputContainer.visibility = View.VISIBLE
     }
 
     private fun handleCopyMenuItem() {
@@ -398,17 +273,5 @@ class ChatFragment : MainFragment(), OnActivityListener {
         activity.inputMethodManager.showSoftInput(messageInput, InputMethodManager.SHOW_IMPLICIT)
 
         actionMode?.finish()
-    }
-
-    private fun showProgress() {
-        if (!progress.isRefreshing) {
-            progress.isEnabled = true
-            progress.isRefreshing = true
-        }
-    }
-
-    private fun hideProgress() {
-        progress.isEnabled = false
-        progress.isRefreshing = false
     }
 }

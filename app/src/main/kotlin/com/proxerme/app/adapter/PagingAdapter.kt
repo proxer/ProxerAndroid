@@ -32,7 +32,7 @@ abstract class PagingAdapter<T>() :
     fun isEmpty() = list.isEmpty()
 
     open fun insert(items: Iterable<T>) {
-        list.addAll(0, items.filter { !list.contains(it) })
+        list.addAll(0, items.filter { !contains(it) })
 
         notifyDataSetChanged()
     }
@@ -42,7 +42,7 @@ abstract class PagingAdapter<T>() :
     }
 
     open fun append(items: Iterable<T>) {
-        list.addAll(items.filter { !list.contains(it) })
+        list.addAll(items.filter { !contains(it) })
 
         notifyDataSetChanged()
     }
