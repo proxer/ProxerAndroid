@@ -118,6 +118,8 @@ class UserActivity : MainActivity() {
 
         if (this.username == null) {
             this.username = userInfo.username
+
+            supportActionBar?.title = username
         }
 
         if (this.imageId == null) {
