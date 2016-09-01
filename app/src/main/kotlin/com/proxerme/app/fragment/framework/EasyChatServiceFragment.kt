@@ -132,7 +132,7 @@ abstract class EasyChatServiceFragment<T> : MainFragment()  where T : IdItem, T 
         list.adapter = smartRecyclerAdapter
         list.addOnScrollListener(object : EndlessRecyclerOnScrollListener(layoutManager) {
             override fun onLoadMore() {
-                if (canLoad && !hasReachedEnd && !isLoading) {
+                if (exception == null && loginModule.canLoad() && !isLoading && !hasReachedEnd) {
                     startLoadMore()
                 }
             }
