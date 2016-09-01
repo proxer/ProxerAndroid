@@ -7,7 +7,6 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.os.Build
 import android.support.annotation.ColorRes
 import android.support.v4.content.ContextCompat
@@ -116,7 +115,6 @@ object Utils {
         if (onMentionsClickListener != null || onMentionsLongClickListener != null) {
             builder.addLink(Link(MENTIONS_REGEX)
                     .setTextColor(ContextCompat.getColor(context, R.color.colorLink))
-                    .setTextColor(Color.BLUE)
                     .setUnderlined(false)
                     .setOnClickListener(onMentionsClickListener)
                     .setOnLongClickListener(onMentionsLongClickListener))
