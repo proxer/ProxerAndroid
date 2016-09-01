@@ -84,7 +84,12 @@ class DashboardActivity : MainActivity(), CustomTabsModule {
     override fun onStart() {
         super.onStart()
 
-        customTabActivityHelper.bindCustomTabsService(this)
+        try {
+            customTabActivityHelper.bindCustomTabsService(this)
+        } catch(ignored: Exception) {
+            // Workaround for crash if chrome is not installed
+        }
+
         EventBus.getDefault().register(this)
     }
 

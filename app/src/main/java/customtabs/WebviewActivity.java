@@ -17,6 +17,7 @@ package customtabs;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -43,6 +44,8 @@ public class WebviewActivity extends AppCompatActivity {
         webView.setWebViewClient(new WebViewClient());
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
+
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
         setTitle(url);
         //noinspection ConstantConditions
