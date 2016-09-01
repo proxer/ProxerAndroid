@@ -96,6 +96,7 @@ abstract class EasyChatServiceFragment<T> : MainFragment()  where T : IdItem, T 
             showError(exception!!)
         }
 
+        ChatService.synchronize(context)
         NotificationHelper.cancelNotification(context, NotificationHelper.CHAT_NOTIFICATION)
     }
 
