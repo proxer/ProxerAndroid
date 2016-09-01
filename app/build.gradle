@@ -72,8 +72,6 @@ dependencies {
 
     compile 'com.klinkerapps:link_builder:1.3.2'
 
-    compile 'com.songhang:smart-headerfooter-recyclerview:1.0.0'
-
     compile 'com.jakewharton:kotterknife:0.1.0-SNAPSHOT'
 
     compile 'com.github.proxer:ProxerLibAndroid:55efe286af'

@@ -1,5 +1,6 @@
 package com.proxerme.app.util
 
+import adapter.FooterAdapter
 import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -20,7 +21,6 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.Target
-import com.headerfooter.songhang.library.SmartRecyclerAdapter
 import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.LinkBuilder
 import com.klinker.android.link_builder.TouchableMovementMethod
@@ -131,7 +131,7 @@ object Utils {
         return result
     }
 
-    fun showError(context: Context, exception: ProxerException, adapter: SmartRecyclerAdapter,
+    fun showError(context: Context, exception: ProxerException, adapter: FooterAdapter,
                   buttonMessage: String? = null, parent: ViewGroup? = null,
                   onWebClickListener: Link.OnClickListener ? = null,
                   onButtonClickListener: View.OnClickListener? = null) {
@@ -139,11 +139,11 @@ object Utils {
                 buttonMessage, parent, onWebClickListener, onButtonClickListener)
     }
 
-    fun showError(context: Context, message: CharSequence, adapter: SmartRecyclerAdapter,
+    fun showError(context: Context, message: CharSequence, adapter: FooterAdapter,
                   buttonMessage: String? = null, parent: ViewGroup? = null,
                   onWebClickListener: Link.OnClickListener ? = null,
                   onButtonClickListener: View.OnClickListener? = null) {
-        val errorContainer = if (adapter.wrappedAdapter.itemCount <= 0) {
+        val errorContainer = if (adapter.innerAdapter.itemCount <= 0) {
             LayoutInflater.from(context).inflate(R.layout.layout_error, parent, false)
         } else {
             LayoutInflater.from(context).inflate(R.layout.item_error, parent, false)
@@ -160,7 +160,7 @@ object Utils {
         errorButton.text = buttonMessageToSet
         errorButton.setOnClickListener(onButtonClickListener)
 
-        adapter.setFooterView(errorContainer)
+        adapter.setFooter(errorContainer)
     }
 
     fun setClipboardContent(activity: Activity, label: String, content: String) {

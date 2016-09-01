@@ -1,5 +1,6 @@
 package com.proxerme.app.fragment.framework
 
+import adapter.FooterAdapter
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.database.SQLException
@@ -15,7 +16,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import butterknife.bindView
-import com.headerfooter.songhang.library.SmartRecyclerAdapter
 import com.klinker.android.link_builder.Link
 import com.proxerme.app.R
 import com.proxerme.app.adapter.PagingAdapter
@@ -60,7 +60,7 @@ abstract class EasyChatServiceFragment<T> : MainFragment()  where T : IdItem, T 
 
     abstract protected var layoutManager: RecyclerView.LayoutManager
     abstract protected val adapter: PagingAdapter<T>
-    protected lateinit var smartRecyclerAdapter: SmartRecyclerAdapter
+    protected lateinit var footerAdapter: FooterAdapter
 
     open protected val root: ViewGroup by bindView(R.id.root)
     open protected val list: RecyclerView by bindView(R.id.list)
@@ -125,11 +125,11 @@ abstract class EasyChatServiceFragment<T> : MainFragment()  where T : IdItem, T 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        smartRecyclerAdapter = SmartRecyclerAdapter(adapter)
+        footerAdapter = FooterAdapter(adapter)
 
         list.setHasFixedSize(true)
         list.layoutManager = layoutManager
-        list.adapter = smartRecyclerAdapter
+        list.adapter = footerAdapter
         list.addOnScrollListener(object : EndlessRecyclerOnScrollListener(layoutManager) {
             override fun onLoadMore() {
                 if (exception == null && loginModule.canLoad() && !isLoading && !hasReachedEnd) {
@@ -187,7 +187,7 @@ abstract class EasyChatServiceFragment<T> : MainFragment()  where T : IdItem, T 
             }
         }
 
-        Utils.showError(context, message, smartRecyclerAdapter, buttonMessage, root,
+        Utils.showError(context, message, footerAdapter, buttonMessage, root,
                 onWebClickListener = onWebClickListener,
                 onButtonClickListener = onButtonClickListenerToSet)
 
@@ -247,7 +247,7 @@ abstract class EasyChatServiceFragment<T> : MainFragment()  where T : IdItem, T 
     open protected fun hideError() {
         exception = null
 
-        smartRecyclerAdapter.removeFooterView()
+        footerAdapter.removeFooter()
     }
 
     @CallSuper
