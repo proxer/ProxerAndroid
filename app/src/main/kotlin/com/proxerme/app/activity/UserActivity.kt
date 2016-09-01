@@ -19,6 +19,8 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
 import com.proxerme.app.fragment.user.ProfileFragment
+import com.proxerme.app.fragment.user.ToptenFragment
+import com.proxerme.app.fragment.user.UserMediaListFragment
 import com.proxerme.library.connection.user.entitiy.UserInfo
 import com.proxerme.library.info.ProxerUrlHolder
 import com.proxerme.library.parameters.CategoryParameter
