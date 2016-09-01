@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment
 import android.support.v7.widget.Toolbar
 import butterknife.bindView
 import com.proxerme.app.R
-import com.proxerme.app.customtabs.CustomTabActivityHelper
 import com.proxerme.app.dialog.LoginDialog
 import com.proxerme.app.dialog.LogoutDialog
 import com.proxerme.app.fragment.ConferencesFragment
@@ -37,6 +36,7 @@ import com.proxerme.library.parameters.CategoryParameter
 import com.rubengees.introduction.IntroductionActivity.OPTION_RESULT
 import com.rubengees.introduction.IntroductionBuilder
 import com.rubengees.introduction.entity.Option
+import customtabs.CustomTabActivityHelper
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode

@@ -6,9 +6,9 @@ import android.os.Bundle
 import android.support.customtabs.CustomTabsIntent
 import android.support.v4.content.ContextCompat
 import com.proxerme.app.R
-import com.proxerme.app.customtabs.CustomTabActivityHelper
-import com.proxerme.app.customtabs.CustomTabsHelper
-import com.proxerme.app.customtabs.WebviewFallback
+import customtabs.CustomTabActivityHelper
+import customtabs.CustomTabsHelper
+import customtabs.WebviewFallback
 import okhttp3.HttpUrl
 
 /**

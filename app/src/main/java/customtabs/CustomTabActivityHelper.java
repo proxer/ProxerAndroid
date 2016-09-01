@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.proxerme.app.customtabs;
+package customtabs;
 
 import android.app.Activity;
 import android.net.Uri;

@@ -11,20 +11,22 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package com.proxerme.app.customtabs;
 
-import android.app.Activity;
+package customtabs;
+
+import android.app.Service;
 import android.content.Intent;
-import android.net.Uri;
+import android.os.Binder;
+import android.os.IBinder;
 
 /**
- * A Fallback that opens a Webview when Custom Tabs is not available
+ * Empty service used by the custom tab to bind to, raising the application's importance.
  */
-public class WebviewFallback implements CustomTabActivityHelper.CustomTabFallback {
+public class KeepAliveService extends Service {
+    private static final Binder sBinder = new Binder();
+
     @Override
-    public void openUri(Activity activity, Uri uri) {
-        Intent intent = new Intent(activity, WebviewActivity.class);
-        intent.putExtra(WebviewActivity.EXTRA_URL, uri.toString());
-        activity.startActivity(intent);
+    public IBinder onBind(Intent intent) {
+        return sBinder;
     }
 }

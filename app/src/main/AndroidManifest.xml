@@ -37,10 +37,10 @@
         <activity
             android:name=".activity.ImageDetailActivity"
             android:theme="@style/Theme.Transparent" />
-        <activity android:name=".customtabs.WebviewActivity" />
+        <activity android:name="customtabs.WebviewActivity" />
         <activity android:name=".activity.ConferenceInfoActivity" />
 
-        <service android:name=".customtabs.KeepAliveService" />
+        <service android:name="customtabs.KeepAliveService" />
         <service android:name=".service.NotificationService" />
         <service android:name=".service.ChatService" />
 

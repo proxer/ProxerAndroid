@@ -12,21 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.proxerme.app.customtabs;
+package customtabs;
 
-import android.app.Service;
-import android.content.Intent;
-import android.os.Binder;
-import android.os.IBinder;
+import android.support.customtabs.CustomTabsClient;
 
 /**
- * Empty service used by the custom tab to bind to, raising the application's importance.
+ * Callback for events when connecting and disconnecting from Custom Tabs Service.
  */
-public class KeepAliveService extends Service {
-    private static final Binder sBinder = new Binder();
+public interface ServiceConnectionCallback {
+    /**
+     * Called when the service is connected.
+     *
+     * @param client a CustomTabsClient
+     */
+    void onServiceConnected(CustomTabsClient client);
 
-    @Override
-    public IBinder onBind(Intent intent) {
-        return sBinder;
-    }
+    /**
+     * Called when the service is disconnected.
+     */
+    void onServiceDisconnected();
 }
