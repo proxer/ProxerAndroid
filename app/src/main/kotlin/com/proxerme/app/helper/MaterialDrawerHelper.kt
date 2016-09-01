@@ -1,6 +1,7 @@
 package com.proxerme.app.helper
 
 import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.support.annotation.IntDef
 import android.support.v7.widget.Toolbar
@@ -144,6 +145,7 @@ class MaterialDrawerHelper : OnActivityListener {
             return arrayListOf(
                     ProfileDrawerItem()
                             .withName(user.username)
+                            .withEmail(getTextForLoginState(context))
                             .withIcon(ProxerUrlHolder.getUserImageUrl(user.imageId).toString())
                             .withSelectedTextColorRes(R.color.colorAccent)
                             .withIdentifier(ACCOUNT_USER),
@@ -247,6 +249,28 @@ class MaterialDrawerHelper : OnActivityListener {
     @Suppress("UNUSED_PARAMETER")
     private fun onAccountItemClick(view: View?, profile: IProfile<*>, current: Boolean): Boolean {
         return accountClickCallback.invoke(profile.identifier)
+    }
+
+    private fun getTextForLoginState(context: Context): String {
+        return when (UserManager.ongoingState) {
+            UserManager.OngoingState.LOGGING_IN -> {
+                context.getString(R.string.login_state_indicator_logging_in)
+            }
+
+            UserManager.OngoingState.LOGGING_OUT -> {
+                context.getString(R.string.login_state_indicator_logging_out)
+            }
+
+            UserManager.OngoingState.NONE -> when (UserManager.loginState) {
+                UserManager.LoginState.LOGGED_IN -> {
+                    context.getString(R.string.login_state_indicator_logged_in)
+                }
+
+                UserManager.LoginState.LOGGED_OUT -> {
+                    context.getString(R.string.login_state_indicator_logged_out)
+                }
+            }
+        }
     }
 
 }

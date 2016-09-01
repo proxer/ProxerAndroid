@@ -178,6 +178,11 @@ class DashboardActivity : MainActivity(), CustomTabsModule {
         drawer.refreshHeader(this)
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onOngoingStateChanged(@Suppress("UNUSED_PARAMETER") newState: UserManager.OngoingState) {
+        drawer.refreshHeader(this)
+    }
+
     private fun displayFirstPage(savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
             if (StorageHelper.firstStart) {

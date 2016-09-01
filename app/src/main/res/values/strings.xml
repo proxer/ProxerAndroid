@@ -181,6 +181,12 @@
     <string name="fragment_conference_info_participants_title">Teilnehmer</string>
     <string name="action_reply">Antworten</string>
 
+    <string name="login_state_indicator_logging_in">Anmeldung</string>
+    <string name="login_state_indicator_logging_out">Abmeldung</string>
+    <string name="login_state_indicator_logged_in">Angemeldet</string>
+    <string name="login_state_indicator_logged_out">Abgemeldet</string>
+
+
     <plurals name="media_episode_count">
         <item quantity="one">Eine Episode</item>
         <item quantity="other">%d Episoden</item>
