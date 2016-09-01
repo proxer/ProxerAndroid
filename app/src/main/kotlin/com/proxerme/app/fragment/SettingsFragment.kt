@@ -25,8 +25,8 @@ class SettingsFragment : PreferenceFragmentCompat(), OnActivityListener,
         SharedPreferences.OnSharedPreferenceChangeListener {
 
     companion object {
-        private val LIBRARIES: Array<String> = arrayOf("glide", "jodatimeandroid", "bridge",
-                "hawk", "materialdialogs", "eventbus", "circleimageview", "okhttp")
+        private val LIBRARIES: Array<String> = arrayOf("glide", "jodatimeandroid", "hawk",
+                "materialdialogs", "eventbus", "circleimageview", "okhttp")
         private val EXCLUDED_LIBRARIES: Array<String> = arrayOf("fastadapter", "materialize")
 
         fun newInstance(): SettingsFragment {
