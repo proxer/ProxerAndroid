@@ -102,10 +102,18 @@ class ConferenceParticipantAdapter(val savedInstanceState: Bundle?) :
                         })
             }
 
-            Glide.with(image.context)
-                    .load(ProxerUrlHolder.getUserImageUrl(item.imageId).toString())
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .into(image)
+            if (item.imageId.isBlank()) {
+                image.setImageDrawable(IconicsDrawable(image.context)
+                        .icon(CommunityMaterial.Icon.cmd_account)
+                        .sizeDp(96)
+                        .paddingDp(16)
+                        .colorRes(R.color.colorAccent))
+            } else {
+                Glide.with(image.context)
+                        .load(ProxerUrlHolder.getUserImageUrl(item.imageId).toString())
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .into(image)
+            }
         }
 
     }
