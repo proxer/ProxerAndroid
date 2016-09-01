@@ -1,4 +1,4 @@
-package com.proxerme.app.fragment
+package com.proxerme.app.fragment.user
 
 import android.content.ActivityNotFoundException
 import android.content.Intent

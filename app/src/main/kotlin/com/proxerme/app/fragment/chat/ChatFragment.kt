@@ -1,4 +1,4 @@
-package com.proxerme.app.fragment
+package com.proxerme.app.fragment.chat
 
 import android.content.ActivityNotFoundException
 import android.content.Intent

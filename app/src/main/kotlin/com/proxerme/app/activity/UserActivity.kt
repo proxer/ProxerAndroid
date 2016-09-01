@@ -18,9 +18,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
-import com.proxerme.app.fragment.ProfileFragment
-import com.proxerme.app.fragment.ToptenFragment
-import com.proxerme.app.fragment.UserMediaListFragment
+import com.proxerme.app.fragment.user.ProfileFragment
 import com.proxerme.library.connection.user.entitiy.UserInfo
 import com.proxerme.library.info.ProxerUrlHolder
 import com.proxerme.library.parameters.CategoryParameter

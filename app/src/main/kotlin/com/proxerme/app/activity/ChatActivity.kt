@@ -9,7 +9,7 @@ import android.view.MenuItem
 import butterknife.bindView
 import com.proxerme.app.R
 import com.proxerme.app.entitiy.LocalConference
-import com.proxerme.app.fragment.ChatFragment
+import com.proxerme.app.fragment.chat.ChatFragment
 import org.jetbrains.anko.intentFor
 
 class ChatActivity : MainActivity() {

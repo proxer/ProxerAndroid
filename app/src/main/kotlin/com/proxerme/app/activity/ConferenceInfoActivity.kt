@@ -10,7 +10,7 @@ import android.view.MenuItem
 import butterknife.bindView
 import com.proxerme.app.R
 import com.proxerme.app.entitiy.LocalConference
-import com.proxerme.app.fragment.ConferenceInfoFragment
+import com.proxerme.app.fragment.chat.ConferenceInfoFragment
 import org.jetbrains.anko.intentFor
 
 class ConferenceInfoActivity : AppCompatActivity() {

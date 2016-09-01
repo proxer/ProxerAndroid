@@ -10,10 +10,10 @@ import butterknife.bindView
 import com.proxerme.app.R
 import com.proxerme.app.dialog.LoginDialog
 import com.proxerme.app.dialog.LogoutDialog
-import com.proxerme.app.fragment.ConferencesFragment
-import com.proxerme.app.fragment.MediaListFragment
-import com.proxerme.app.fragment.NewsFragment
 import com.proxerme.app.fragment.SettingsFragment
+import com.proxerme.app.fragment.chat.ConferencesFragment
+import com.proxerme.app.fragment.media.MediaListFragment
+import com.proxerme.app.fragment.news.NewsFragment
 import com.proxerme.app.helper.IntroductionHelper
 import com.proxerme.app.helper.MaterialDrawerHelper
 import com.proxerme.app.helper.MaterialDrawerHelper.Companion.ACCOUNT_GUEST
