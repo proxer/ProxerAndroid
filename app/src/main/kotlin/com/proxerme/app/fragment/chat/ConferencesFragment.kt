@@ -3,12 +3,17 @@ package com.proxerme.app.fragment.chat
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
+import com.proxerme.app.R
 import com.proxerme.app.activity.ChatActivity
+import com.proxerme.app.activity.NewChatActivity
 import com.proxerme.app.adapter.ConferenceAdapter
 import com.proxerme.app.data.chatDatabase
 import com.proxerme.app.entitiy.LocalConference
-import com.proxerme.app.event.ConferencesEvent
+import com.proxerme.app.event.ChatSynchronizationEvent
 import com.proxerme.app.fragment.framework.EasyChatServiceFragment
 import com.proxerme.app.helper.StorageHelper
 import com.proxerme.app.manager.SectionManager
@@ -53,6 +58,23 @@ class ConferencesFragment : EasyChatServiceFragment<LocalConference>() {
 
         layoutManager = StaggeredGridLayoutManager(Utils.calculateSpanAmount(activity),
                 StaggeredGridLayoutManager.VERTICAL)
+
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater) {
+        inflater.inflate(R.menu.fragment_conferences, menu)
+
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.new_chat -> NewChatActivity.navigateTo(activity)
+            R.id.new_group -> NewChatActivity.navigateTo(activity, isGroup = true)
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onStart() {
@@ -82,7 +104,7 @@ class ConferencesFragment : EasyChatServiceFragment<LocalConference>() {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onConferencesChanged(@Suppress("UNUSED_PARAMETER") event: ConferencesEvent) {
+    fun onConferencesChanged(@Suppress("UNUSED_PARAMETER") event: ChatSynchronizationEvent) {
         if (canLoad) {
             refresh()
         }

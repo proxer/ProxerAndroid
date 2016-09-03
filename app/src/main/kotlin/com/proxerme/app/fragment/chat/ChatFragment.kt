@@ -5,7 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
-import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.view.ActionMode
 import android.support.v7.widget.LinearLayoutManager
@@ -200,8 +199,7 @@ class ChatFragment : EasyChatServiceFragment<LocalMessage>() {
             messageInput.text.clear()
         }
 
-        progress.setColorSchemeColors(ContextCompat.getColor(context,
-                R.color.primary))
+        progress.setColorSchemeResources(R.color.primary)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -228,8 +226,10 @@ class ChatFragment : EasyChatServiceFragment<LocalMessage>() {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onMessagesChanged(@Suppress("UNUSED_PARAMETER") event: ChatEvent) {
-        if (canLoad) {
-            refresh()
+        if (event.conferenceId == conference.id) {
+            if (canLoad) {
+                refresh()
+            }
         }
     }
 

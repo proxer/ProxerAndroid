@@ -13,7 +13,7 @@ object SectionManager {
 
     enum class Section {
         NONE, NEWS, PROFILE, TOPTEN, CONFERENCES, CHAT, USER_MEDIA_LIST, MEDIA_LIST,
-        CONFERENCE_INFO
+        CONFERENCE_INFO, NEW_CHAT
     }
 
     var currentSection: Section by Delegates.observable(Section.NONE, { property, old, new ->

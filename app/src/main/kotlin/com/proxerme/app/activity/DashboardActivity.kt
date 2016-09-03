@@ -72,13 +72,19 @@ class DashboardActivity : MainActivity(), CustomTabsModule {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_dashboard)
+        setContentView(R.layout.activity_default)
         setSupportActionBar(toolbar)
 
         drawer = MaterialDrawerHelper(this, toolbar, savedInstanceState,
                 { id -> onDrawerItemClick(id) }, { id -> onAccountItemClick(id) })
 
         displayFirstPage(savedInstanceState)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        drawer.refreshHeader(this)
     }
 
     override fun onStart() {

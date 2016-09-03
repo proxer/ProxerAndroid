@@ -8,7 +8,7 @@ import com.proxerme.app.data.chatDatabase
 import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.entitiy.LocalMessage
 import com.proxerme.app.event.ChatEvent
-import com.proxerme.app.event.ConferencesEvent
+import com.proxerme.app.event.ChatSynchronizationEvent
 import com.proxerme.app.helper.NotificationHelper
 import com.proxerme.app.helper.ServiceHelper
 import com.proxerme.app.helper.StorageHelper
@@ -142,10 +142,17 @@ class ChatService : IntentService("ChatService") {
             chatDatabase.insertOrUpdate(changedConferences, newMessages)
 
             when (SectionManager.currentSection) {
-                SectionManager.Section.CONFERENCES -> EventBus.getDefault().post(ConferencesEvent())
-                SectionManager.Section.CHAT -> EventBus.getDefault().post(ChatEvent())
+                SectionManager.Section.CHAT -> {
+                    changedConferences.forEach {
+                        EventBus.getDefault().post(ChatEvent(it.id))
+                    }
+                }
                 else -> {
-                    showNotification()
+                    EventBus.getDefault().post(ChatSynchronizationEvent())
+
+                    if (SectionManager.currentSection != SectionManager.Section.CONFERENCES) {
+                        showNotification()
+                    }
                 }
             }
         }
@@ -163,7 +170,7 @@ class ChatService : IntentService("ChatService") {
                 StorageHelper.conferenceListEndReached = true
             }
 
-            EventBus.getDefault().post(ConferencesEvent())
+            EventBus.getDefault().post(ChatSynchronizationEvent())
         } catch(exception: ProxerException) {
             throw LoadMoreConferencesException(ErrorHandler.getMessageForErrorCode(this, exception))
         }
@@ -181,7 +188,7 @@ class ChatService : IntentService("ChatService") {
                 StorageHelper.setConferenceReachedEnd(conferenceId)
             }
 
-            EventBus.getDefault().post(ChatEvent())
+            EventBus.getDefault().post(ChatEvent(conferenceId))
         } catch(exception: ProxerException) {
             throw LoadMoreMessagesException(ErrorHandler.getMessageForErrorCode(this, exception),
                     conferenceId)

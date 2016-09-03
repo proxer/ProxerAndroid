@@ -6,7 +6,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
-import android.support.v4.content.ContextCompat
 import android.support.v4.widget.SwipeRefreshLayout
 import android.view.LayoutInflater
 import android.view.View
@@ -140,8 +139,7 @@ abstract class EasyPagingFragment<T> : PagingFragment<T>()  where T : IdItem, T 
     }
 
     open protected fun initProgress() {
-        progress.setColorSchemeColors(ContextCompat.getColor(context,
-                R.color.primary))
+        progress.setColorSchemeResources(R.color.primary)
 
         progress.setOnRefreshListener {
             if (canLoad) {

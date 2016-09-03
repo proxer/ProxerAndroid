@@ -138,6 +138,10 @@
 
     <string name="link_error_not_found">Der Link konnte nicht geöffnet werden</string>
 
+    <string name="error_input_empty">Gib etwas ein</string>
+    <string name="error_no_users">Füge mindestens einen Nutzer hinzu</string>
+    <string name="error_duplicate_user">Diesen Nutzer hast du schon hinzugefügt</string>
+
     <string name="fragment_user_media_list_anime_title">Anime</string>
     <string name="fragment_user_media_list_manga_title">Manga</string>
 
@@ -185,7 +189,14 @@
     <string name="login_state_indicator_logging_out">Abmeldung</string>
     <string name="login_state_indicator_logged_in">Angemeldet</string>
     <string name="login_state_indicator_logged_out">Abgemeldet</string>
-
+    <string name="action_send_message">Nachricht schreiben</string>
+    <string name="action_new_group_with_user">Neue Gruppe mit diesem Nutzer</string>
+    <string name="action_new_chat">Neuer Chat</string>
+    <string name="action_new_group">Neue Gruppe</string>
+    <string name="hint_topic">Thema</string>
+    <string name="participants">Teilnehmer</string>
+    <string name="add_user">Nutzer hinzufügen</string>
+    <string name="hint_participant">Nutzername</string>
 
     <plurals name="media_episode_count">
         <item quantity="one">Eine Episode</item>

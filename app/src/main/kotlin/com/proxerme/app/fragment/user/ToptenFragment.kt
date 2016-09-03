@@ -2,6 +2,7 @@ package com.proxerme.app.fragment.user
 
 import android.view.View
 import butterknife.bindView
+import com.proxerme.app.adapter.ToptenAdapter
 import com.proxerme.library.connection.user.entitiy.ToptenEntry
 import com.proxerme.library.parameters.CategoryParameter.ANIME
 import com.proxerme.library.parameters.CategoryParameter.MANGA
@@ -36,8 +37,8 @@ class ToptenFragment : com.proxerme.app.fragment.framework.EasyLoadingFragment<A
     private var userId: String? = null
     private var userName: String? = null
 
-    private lateinit var animeAdapter: com.proxerme.app.adapter.ToptenAdapter
-    private lateinit var mangaAdapter: com.proxerme.app.adapter.ToptenAdapter
+    private lateinit var animeAdapter: ToptenAdapter
+    private lateinit var mangaAdapter: ToptenAdapter
 
     private val animeContainer: android.view.ViewGroup by bindView(com.proxerme.app.R.id.animeContainer)
     private val mangaContainer: android.view.ViewGroup by bindView(com.proxerme.app.R.id.mangaContainer)
@@ -49,8 +50,8 @@ class ToptenFragment : com.proxerme.app.fragment.framework.EasyLoadingFragment<A
 
         userId = arguments.getString(com.proxerme.app.fragment.user.ToptenFragment.Companion.ARGUMENT_USER_ID)
         userName = arguments.getString(com.proxerme.app.fragment.user.ToptenFragment.Companion.ARGUMENT_USER_NAME)
-        animeAdapter = com.proxerme.app.adapter.ToptenAdapter(savedInstanceState, ANIME)
-        mangaAdapter = com.proxerme.app.adapter.ToptenAdapter(savedInstanceState, MANGA)
+        animeAdapter = ToptenAdapter(savedInstanceState, ANIME)
+        mangaAdapter = ToptenAdapter(savedInstanceState, MANGA)
     }
 
     override fun onCreateView(inflater: android.view.LayoutInflater, container: android.view.ViewGroup?,

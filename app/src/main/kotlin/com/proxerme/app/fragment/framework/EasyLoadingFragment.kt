@@ -4,7 +4,6 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import android.support.v4.widget.SwipeRefreshLayout
 import android.view.View
 import android.view.ViewGroup
@@ -109,8 +108,7 @@ abstract class EasyLoadingFragment<T> : LoadingFragment<T>() {
     }
 
     open protected fun initProgress() {
-        progress.setColorSchemeColors(ContextCompat.getColor(context,
-                R.color.primary))
+        progress.setColorSchemeResources(R.color.primary)
 
         progress.setOnRefreshListener {
             if (canLoad) {

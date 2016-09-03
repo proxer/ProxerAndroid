@@ -6,8 +6,6 @@ import android.support.design.widget.TextInputEditText
 import android.support.design.widget.TextInputLayout
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AppCompatActivity
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
@@ -19,6 +17,7 @@ import com.proxerme.app.R
 import com.proxerme.app.event.LoginFailedEvent
 import com.proxerme.app.manager.UserManager
 import com.proxerme.app.util.ErrorHandler
+import com.proxerme.app.util.Utils
 import com.proxerme.library.connection.user.entitiy.User
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -140,13 +139,13 @@ class LoginDialog : DialogFragment() {
             false
         })
 
-        inputUsername.addTextChangedListener(object : OnTextListener() {
+        inputUsername.addTextChangedListener(object : Utils.OnTextListener() {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 resetError(usernameContainer)
             }
         })
 
-        inputPassword.addTextChangedListener(object : OnTextListener() {
+        inputPassword.addTextChangedListener(object : Utils.OnTextListener() {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 resetError(passwordContainer)
             }
@@ -207,19 +206,5 @@ class LoginDialog : DialogFragment() {
     private fun resetError(container: TextInputLayout) {
         container.error = null
         container.isErrorEnabled = false
-    }
-
-    private abstract class OnTextListener : TextWatcher {
-        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-
-        }
-
-        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-
-        }
-
-        override fun afterTextChanged(s: Editable) {
-
-        }
     }
 }

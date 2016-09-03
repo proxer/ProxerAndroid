@@ -2,10 +2,14 @@ package adapter;
 
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.GridLayoutManager.SpanSizeLookup;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.proxerme.app.R;
 
 /**
  * TODO: Describe class
@@ -47,7 +51,7 @@ public class FooterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             }
         });
 
-        setHasStableIds(true);
+        setHasStableIds(innerAdapter.hasStableIds());
     }
 
     @Override
@@ -62,9 +66,34 @@ public class FooterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_FOOTER && footer != null) {
-            if (layoutManager instanceof StaggeredGridLayoutManager) {
-                StaggeredGridLayoutManager.LayoutParams layoutParams;
+            return new FooterViewHolder(LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.adapter_footer_item, parent, false));
+        } else {
+            return innerAdapter.onCreateViewHolder(parent, viewType);
+        }
+    }
 
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof FooterViewHolder) {
+            ((ViewGroup) holder.itemView).removeAllViews();
+            ((ViewGroup) holder.itemView).addView(footer);
+
+            ViewGroup.LayoutParams layoutParams = null;
+
+            if (layoutManager instanceof LinearLayoutManager) {
+                if (footer.getLayoutParams() == null) {
+                    layoutParams = new ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT
+                    );
+                } else {
+                    layoutParams = new ViewGroup.LayoutParams(
+                            footer.getLayoutParams().width,
+                            footer.getLayoutParams().height
+                    );
+                }
+            } else if (layoutManager instanceof StaggeredGridLayoutManager) {
                 if (footer.getLayoutParams() == null) {
                     layoutParams = new StaggeredGridLayoutManager.LayoutParams(
                             ViewGroup.LayoutParams.MATCH_PARENT,
@@ -77,20 +106,12 @@ public class FooterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     );
                 }
 
-                layoutParams.setFullSpan(true);
-
-                footer.setLayoutParams(layoutParams);
+                ((StaggeredGridLayoutManager.LayoutParams) layoutParams).setFullSpan(true);
             }
 
-            return new FooterViewHolder(footer);
+            holder.itemView.setLayoutParams(layoutParams);
+            holder.itemView.invalidate();
         } else {
-            return innerAdapter.onCreateViewHolder(parent, viewType);
-        }
-    }
-
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (!(holder instanceof FooterViewHolder)) {
             //noinspection unchecked
             innerAdapter.onBindViewHolder(holder, position);
         }
@@ -124,19 +145,29 @@ public class FooterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     public void setFooter(View footer) {
-        if (footer == null) {
-            this.footer = null;
-        } else {
-            this.footer = footer;
-        }
+        boolean hadFooter = this.footer != null;
+        this.footer = footer;
 
-        notifyDataSetChanged();
+        if (footer == null) {
+            if (hadFooter) {
+                notifyItemRemoved(innerAdapter.getItemCount());
+            }
+        } else {
+            if (hadFooter) {
+                notifyItemChanged(innerAdapter.getItemCount());
+            } else {
+                notifyItemInserted(innerAdapter.getItemCount());
+            }
+        }
     }
 
     public void removeFooter() {
+        boolean hadFooter = this.footer != null;
         this.footer = null;
 
-        notifyDataSetChanged();
+        if (hadFooter) {
+            notifyItemRemoved(innerAdapter.getItemCount());
+        }
     }
 
     public RecyclerView.Adapter getInnerAdapter() {

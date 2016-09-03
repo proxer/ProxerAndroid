@@ -10,6 +10,8 @@ import android.graphics.Bitmap
 import android.os.Build
 import android.support.annotation.ColorRes
 import android.support.v4.content.ContextCompat
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.DisplayMetrics
 import android.util.Patterns
 import android.view.LayoutInflater
@@ -167,5 +169,19 @@ object Utils {
         val clip = ClipData.newPlainText(label, content)
 
         clipboard.primaryClip = clip
+    }
+
+    abstract class OnTextListener : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+
+        }
+
+        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+
+        }
+
+        override fun afterTextChanged(s: Editable) {
+
+        }
     }
 }

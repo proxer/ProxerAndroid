@@ -275,6 +275,15 @@ class ChatDatabase(context: Context) :
         }
     }
 
+    fun getChat(username: String): LocalConference? {
+        return use {
+            this.select(TABLE_CONFERENCE)
+                    .where("($COLUMN_CONFERENCE_TOPIC = '$username') and " +
+                            "($COLUMN_CONFERENCE_IS_GROUP = 0)")
+                    .parseOpt(conferenceParser)
+        }
+    }
+
     private fun generateInsertionValues(message: Message): Array<Pair<String, Any?>> {
         return arrayOf(COLUMN_MESSAGE_ID to message.id,
                 COLUMN_MESSAGE_CONFERENCE_ID to message.conferenceId,

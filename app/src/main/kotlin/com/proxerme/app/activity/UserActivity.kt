@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.ViewPager
 import android.support.v7.widget.Toolbar
+import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
 import butterknife.bindView
@@ -18,9 +19,12 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
+import com.proxerme.app.data.chatDatabase
+import com.proxerme.app.entitiy.Participant
 import com.proxerme.app.fragment.user.ProfileFragment
 import com.proxerme.app.fragment.user.ToptenFragment
 import com.proxerme.app.fragment.user.UserMediaListFragment
+import com.proxerme.app.manager.UserManager
 import com.proxerme.library.connection.user.entitiy.UserInfo
 import com.proxerme.library.info.ProxerUrlHolder
 import com.proxerme.library.parameters.CategoryParameter
@@ -93,8 +97,33 @@ class UserActivity : MainActivity() {
         loadImage()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        if (UserManager.user == null || UserManager.user!!.username != username) {
+            menuInflater.inflate(R.menu.activity_user, menu)
+        }
+
+        return super.onCreateOptionsMenu(menu)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.new_chat -> {
+                if (username != null && imageId != null) {
+                    val existingChat = chatDatabase.getChat(username!!)
+
+                    if (existingChat == null) {
+                        NewChatActivity.navigateTo(this, Participant(username!!, imageId!!))
+                    } else {
+                        ChatActivity.navigateTo(this, existingChat)
+                    }
+                }
+            }
+            R.id.new_group -> {
+                if (username != null && imageId != null) {
+                    NewChatActivity.navigateTo(this, Participant(username!!, imageId!!),
+                            isGroup = true)
+                }
+            }
             android.R.id.home -> {
                 finish()
 
