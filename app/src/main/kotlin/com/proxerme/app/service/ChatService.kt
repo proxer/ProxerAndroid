@@ -7,7 +7,7 @@ import com.proxerme.app.application.MainApplication
 import com.proxerme.app.data.chatDatabase
 import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.entitiy.LocalMessage
-import com.proxerme.app.event.ChatEvent
+import com.proxerme.app.event.ChatMessagesEvent
 import com.proxerme.app.event.ChatSynchronizationEvent
 import com.proxerme.app.helper.NotificationHelper
 import com.proxerme.app.helper.ServiceHelper
@@ -144,7 +144,7 @@ class ChatService : IntentService("ChatService") {
             when (SectionManager.currentSection) {
                 SectionManager.Section.CHAT -> {
                     changedConferences.forEach {
-                        EventBus.getDefault().post(ChatEvent(it.id))
+                        EventBus.getDefault().post(ChatMessagesEvent(it.id))
                     }
                 }
                 else -> {
@@ -188,7 +188,7 @@ class ChatService : IntentService("ChatService") {
                 StorageHelper.setConferenceReachedEnd(conferenceId)
             }
 
-            EventBus.getDefault().post(ChatEvent(conferenceId))
+            EventBus.getDefault().post(ChatMessagesEvent(conferenceId))
         } catch(exception: ProxerException) {
             throw LoadMoreMessagesException(ErrorHandler.getMessageForErrorCode(this, exception),
                     conferenceId)

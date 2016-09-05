@@ -19,7 +19,7 @@ import com.proxerme.app.adapter.ChatAdapter
 import com.proxerme.app.data.chatDatabase
 import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.entitiy.LocalMessage
-import com.proxerme.app.event.ChatEvent
+import com.proxerme.app.event.ChatMessagesEvent
 import com.proxerme.app.fragment.framework.EasyChatServiceFragment
 import com.proxerme.app.helper.StorageHelper
 import com.proxerme.app.manager.SectionManager
@@ -225,7 +225,7 @@ class ChatFragment : EasyChatServiceFragment<LocalMessage>() {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onMessagesChanged(@Suppress("UNUSED_PARAMETER") event: ChatEvent) {
+    fun onMessagesChanged(@Suppress("UNUSED_PARAMETER") event: ChatMessagesEvent) {
         if (event.conferenceId == conference.id) {
             if (canLoad) {
                 refresh()
