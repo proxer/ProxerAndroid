@@ -1,5 +1,8 @@
 # ProxerMe [![Latest Release](https://img.shields.io/github/release/proxer/ProxerAndroid.svg)](https://github.com/proxer/ProxerAndroid/releases/latest) [![Build status](https://circleci.com/gh/proxer/ProxerAndroid.svg?style=shield)](https://circleci.com/gh/proxer/ProxerAndroid)
 
+![Showcase 1](/art/showcase_news_anime_manga.png?raw=true)
+![Showcase 2](/art/showcase_profile_conferences_conference_info_chat.png?raw=true)
+
 ### What is this?
 
 This is a client for the german Anime & Manga page [ProxerMe](https://proxer.me/).
