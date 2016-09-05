@@ -10,6 +10,7 @@ import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.LibsBuilder
 import com.proxerme.app.R
 import com.proxerme.app.activity.MainActivity
+import com.proxerme.app.application.MainApplication
 import com.proxerme.app.dialog.HentaiConfirmationDialog
 import com.proxerme.app.helper.PreferenceHelper
 import com.proxerme.app.helper.ServiceHelper
@@ -26,7 +27,7 @@ class SettingsFragment : PreferenceFragmentCompat(), OnActivityListener,
 
     companion object {
         private val LIBRARIES: Array<String> = arrayOf("glide", "jodatimeandroid", "hawk",
-                "materialdialogs", "eventbus", "circleimageview", "okhttp")
+                "materialdialogs", "eventbus", "circleimageview", "okhttp", "leakcanary")
         private val EXCLUDED_LIBRARIES: Array<String> = arrayOf("fastadapter", "materialize")
 
         fun newInstance(): SettingsFragment {
@@ -80,6 +81,12 @@ class SettingsFragment : PreferenceFragmentCompat(), OnActivityListener,
         preferenceManager.sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
 
         super.onPause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        MainApplication.refWatcher.watch(this)
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {

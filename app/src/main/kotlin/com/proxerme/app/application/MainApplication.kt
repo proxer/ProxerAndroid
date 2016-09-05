@@ -16,6 +16,8 @@ import com.proxerme.app.BuildConfig
 import com.proxerme.app.manager.UserManager
 import com.proxerme.app.service.ChatService
 import com.proxerme.library.connection.ProxerConnection
+import com.squareup.leakcanary.LeakCanary
+import com.squareup.leakcanary.RefWatcher
 import net.danlew.android.joda.JodaTimeAndroid
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -30,10 +32,15 @@ class MainApplication : Application() {
     companion object {
         lateinit var proxerConnection: ProxerConnection
             private set
+
+        lateinit var refWatcher: RefWatcher
+            private set
     }
 
     override fun onCreate() {
         super.onCreate()
+
+        refWatcher = LeakCanary.install(this)
 
         JodaTimeAndroid.init(this)
 
@@ -45,12 +52,13 @@ class MainApplication : Application() {
                 .installDefaultEventBus()
 
         DrawerImageLoader.init(object : AbstractDrawerImageLoader() {
-            override fun set(imageView: ImageView, uri: Uri?, placeholder: Drawable?) {
+            override fun set(imageView: ImageView, uri: Uri?, placeholder: Drawable?,
+                             tag: String?) {
                 Glide.with(imageView.context)
                         .load(uri)
                         .placeholder(placeholder)
-                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                         .centerCrop()
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                         .into(imageView)
             }
 
@@ -59,12 +67,9 @@ class MainApplication : Application() {
             }
 
             override fun placeholder(context: Context, tag: String): Drawable? {
-                return IconicsDrawable(context,
-                        CommunityMaterial.Icon.cmd_account)
+                return IconicsDrawable(context, CommunityMaterial.Icon.cmd_account)
                         .colorRes(android.R.color.white)
             }
-
-
         })
 
         proxerConnection = ProxerConnection.Builder(BuildConfig.PROXER_API_KEY, this).build()

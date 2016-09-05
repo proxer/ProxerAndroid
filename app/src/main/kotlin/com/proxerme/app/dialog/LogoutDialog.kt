@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import com.afollestad.materialdialogs.MaterialDialog
 import com.proxerme.app.R
+import com.proxerme.app.application.MainApplication
 import com.proxerme.app.event.LogoutFailedEvent
 import com.proxerme.app.manager.UserManager
 import com.proxerme.app.util.ErrorHandler
@@ -77,6 +78,8 @@ class LogoutDialog : DialogFragment() {
         }
 
         super.onDestroy()
+
+        MainApplication.refWatcher.watch(this)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

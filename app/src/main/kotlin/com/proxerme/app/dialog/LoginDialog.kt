@@ -14,6 +14,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.proxerme.app.R
+import com.proxerme.app.application.MainApplication
 import com.proxerme.app.event.LoginFailedEvent
 import com.proxerme.app.manager.UserManager
 import com.proxerme.app.util.ErrorHandler
@@ -91,6 +92,8 @@ class LoginDialog : DialogFragment() {
         }
 
         super.onDestroy()
+
+        MainApplication.refWatcher.watch(this)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

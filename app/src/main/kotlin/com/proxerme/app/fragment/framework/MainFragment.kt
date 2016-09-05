@@ -1,6 +1,7 @@
 package com.proxerme.app.fragment.framework
 
 import android.support.v4.app.Fragment
+import com.proxerme.app.application.MainApplication
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.manager.UserManager
 
@@ -25,5 +26,11 @@ abstract class MainFragment : Fragment() {
         super.onPause()
 
         SectionManager.currentSection = SectionManager.Section.NONE
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        MainApplication.refWatcher.watch(this)
     }
 }

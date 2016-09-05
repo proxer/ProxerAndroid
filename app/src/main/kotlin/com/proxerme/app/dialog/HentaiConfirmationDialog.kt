@@ -6,6 +6,7 @@ import android.support.v4.app.DialogFragment
 import android.support.v7.app.AppCompatActivity
 import com.afollestad.materialdialogs.MaterialDialog
 import com.proxerme.app.R
+import com.proxerme.app.application.MainApplication
 import com.proxerme.app.helper.PreferenceHelper
 
 /**
@@ -31,5 +32,11 @@ class HentaiConfirmationDialog : DialogFragment() {
                     PreferenceHelper.setHentaiAllowed(context, true)
                 }
                 .build()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        MainApplication.refWatcher.watch(this)
     }
 }
