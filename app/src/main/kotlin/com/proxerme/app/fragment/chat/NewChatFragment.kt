@@ -160,6 +160,7 @@ class NewChatFragment : MainFragment() {
         }, { result ->
             Snackbar.make(root, ErrorHandler.getMessageForErrorCode(context, result),
                     Snackbar.LENGTH_LONG).show()
+            hideProgress()
         })
 
         handleProgress()
@@ -231,6 +232,13 @@ class NewChatFragment : MainFragment() {
 
                 return false
             }
+        }
+
+        if (messageInput.text.isBlank()) {
+            Snackbar.make(root, context.getString(R.string.error_no_message), Snackbar.LENGTH_LONG)
+                    .show()
+
+            return false
         }
 
         if (adapter.isEmpty()) {

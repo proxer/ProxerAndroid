@@ -22,7 +22,9 @@
                 android:id="@+id/participantInput"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="@string/hint_participant" />
+                android:hint="@string/hint_participant"
+                android:inputType="text"
+                android:maxLines="1" />
         </android.support.design.widget.TextInputLayout>
 
         <ImageButton

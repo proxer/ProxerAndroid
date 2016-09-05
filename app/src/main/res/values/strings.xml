@@ -141,6 +141,7 @@
     <string name="error_input_empty">Gib etwas ein</string>
     <string name="error_no_users">Füge mindestens einen Nutzer hinzu</string>
     <string name="error_duplicate_user">Diesen Nutzer hast du schon hinzugefügt</string>
+    <string name="error_no_message">Gib eine Nachricht ein</string>
 
     <string name="fragment_user_media_list_anime_title">Anime</string>
     <string name="fragment_user_media_list_manga_title">Manga</string>

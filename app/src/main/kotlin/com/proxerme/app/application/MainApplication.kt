@@ -63,6 +63,8 @@ class MainApplication : Application() {
                         CommunityMaterial.Icon.cmd_account)
                         .colorRes(android.R.color.white)
             }
+
+
         })
 
         proxerConnection = ProxerConnection.Builder(BuildConfig.PROXER_API_KEY, this).build()
