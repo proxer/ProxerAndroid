@@ -44,8 +44,6 @@ class NewsFragment : EasyPagingFragment<News>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        NotificationHelper.cancelNotification(context, NotificationHelper.NEWS_NOTIFICATION)
-
         adapter = NewsAdapter(savedInstanceState)
         adapter.callback = object : NewsAdapter.OnNewsInteractionListener() {
             override fun onNewsClick(v: View, news: News) {
@@ -72,6 +70,12 @@ class NewsFragment : EasyPagingFragment<News>() {
         super.onStart()
 
         EventBus.getDefault().register(this)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        NotificationHelper.cancelNotification(context, NotificationHelper.NEWS_NOTIFICATION)
     }
 
     override fun onStop() {

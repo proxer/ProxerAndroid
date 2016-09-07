@@ -203,6 +203,8 @@
     <string name="hint_participant">Nutzername</string>
     <string name="activity_ucp_title">User-Control-Panel</string>
 
+    <string name="history_entry_status">%1$s - %2$s</string>
+
     <plurals name="media_episode_count">
         <item quantity="one">Eine Episode</item>
         <item quantity="other">%d Episoden</item>
