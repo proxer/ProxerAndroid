@@ -6,7 +6,7 @@ import android.view.View
 import android.widget.ImageView
 import com.proxerme.app.activity.DashboardActivity
 import com.proxerme.app.activity.ImageDetailActivity
-import com.proxerme.app.adapter.NewsAdapter
+import com.proxerme.app.adapter.news.NewsAdapter
 import com.proxerme.app.event.NewsEvent
 import com.proxerme.app.fragment.framework.EasyPagingFragment
 import com.proxerme.app.helper.NotificationHelper

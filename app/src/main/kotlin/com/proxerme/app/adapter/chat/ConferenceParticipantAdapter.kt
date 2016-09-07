@@ -1,4 +1,4 @@
-package com.proxerme.app.adapter
+package com.proxerme.app.adapter.chat
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
@@ -18,6 +18,7 @@ import com.klinker.android.link_builder.TouchableMovementMethod
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
+import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.util.Utils
 import com.proxerme.library.connection.messenger.entity.ConferenceInfoUser
 import com.proxerme.library.info.ProxerUrlHolder

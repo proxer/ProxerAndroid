@@ -6,7 +6,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import com.proxerme.app.R
-import com.proxerme.app.adapter.MediaAdapter
+import com.proxerme.app.adapter.media.MediaAdapter
 import com.proxerme.app.fragment.framework.EasyPagingFragment
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.util.Utils

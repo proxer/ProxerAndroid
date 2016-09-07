@@ -10,7 +10,7 @@ import android.widget.TextView
 import butterknife.bindView
 import com.proxerme.app.R
 import com.proxerme.app.activity.UserActivity
-import com.proxerme.app.adapter.ConferenceParticipantAdapter
+import com.proxerme.app.adapter.chat.ConferenceParticipantAdapter
 import com.proxerme.app.fragment.framework.EasyLoadingFragment
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.library.connection.messenger.entity.ConferenceInfo

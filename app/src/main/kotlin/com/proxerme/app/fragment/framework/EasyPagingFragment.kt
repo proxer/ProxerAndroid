@@ -13,7 +13,7 @@ import android.view.ViewGroup
 import butterknife.bindView
 import com.klinker.android.link_builder.Link
 import com.proxerme.app.R
-import com.proxerme.app.adapter.PagingAdapter
+import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.listener.EndlessRecyclerOnScrollListener
 import com.proxerme.library.connection.ProxerException

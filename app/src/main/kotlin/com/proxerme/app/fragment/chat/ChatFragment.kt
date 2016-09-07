@@ -15,7 +15,7 @@ import android.widget.EditText
 import butterknife.bindView
 import com.proxerme.app.R
 import com.proxerme.app.activity.UserActivity
-import com.proxerme.app.adapter.ChatAdapter
+import com.proxerme.app.adapter.chat.ChatAdapter
 import com.proxerme.app.data.chatDatabase
 import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.entitiy.LocalMessage

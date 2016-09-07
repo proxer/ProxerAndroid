@@ -10,7 +10,7 @@ import android.view.View
 import com.proxerme.app.R
 import com.proxerme.app.activity.ChatActivity
 import com.proxerme.app.activity.NewChatActivity
-import com.proxerme.app.adapter.ConferenceAdapter
+import com.proxerme.app.adapter.chat.ConferenceAdapter
 import com.proxerme.app.data.chatDatabase
 import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.event.ChatSynchronizationEvent

@@ -2,7 +2,7 @@ package com.proxerme.app.fragment.user
 
 import android.view.View
 import butterknife.bindView
-import com.proxerme.app.adapter.ToptenAdapter
+import com.proxerme.app.adapter.user.ToptenAdapter
 import com.proxerme.library.connection.user.entitiy.ToptenEntry
 import com.proxerme.library.parameters.CategoryParameter.ANIME
 import com.proxerme.library.parameters.CategoryParameter.MANGA

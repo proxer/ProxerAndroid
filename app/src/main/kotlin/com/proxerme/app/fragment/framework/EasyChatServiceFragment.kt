@@ -17,7 +17,7 @@ import android.view.ViewGroup
 import butterknife.bindView
 import com.klinker.android.link_builder.Link
 import com.proxerme.app.R
-import com.proxerme.app.adapter.PagingAdapter
+import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.helper.NotificationHelper
 import com.proxerme.app.module.LoginModule
 import com.proxerme.app.service.ChatService

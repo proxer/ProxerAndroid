@@ -1,4 +1,4 @@
-package com.proxerme.app.adapter
+package com.proxerme.app.adapter.framework
 
 import android.os.Bundle
 import android.os.Parcelable

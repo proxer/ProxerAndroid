@@ -1,4 +1,4 @@
-package com.proxerme.app.adapter
+package com.proxerme.app.adapter.news
 
 import android.os.Bundle
 import android.support.v4.view.ViewCompat
@@ -15,6 +15,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
+import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.util.TimeUtil
 import com.proxerme.library.connection.notifications.entitiy.News
 import com.proxerme.library.info.ProxerUrlHolder
@@ -59,7 +60,7 @@ class NewsAdapter(savedInstanceState: Bundle? = null) :
         outState.putStringArrayList(EXPANDED_IDS_STATE, ArrayList(expanded.keys))
     }
 
-    inner class ViewHolder(itemView: View) : PagingAdapter.PagingViewHolder<News>(itemView) {
+    inner class ViewHolder(itemView: View) : PagingViewHolder<News>(itemView) {
 
         private val expand: ImageButton by bindView(R.id.expand)
         private val description: TextView by bindView(R.id.description)

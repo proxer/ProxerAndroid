@@ -1,4 +1,4 @@
-package com.proxerme.app.adapter
+package com.proxerme.app.adapter.chat
 
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
@@ -15,6 +15,7 @@ import com.klinker.android.link_builder.TouchableMovementMethod
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
+import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.entitiy.LocalMessage
 import com.proxerme.app.util.TimeUtil
 import com.proxerme.app.util.Utils
@@ -95,7 +96,7 @@ class ChatAdapter(savedInstanceState: Bundle? = null, val isGroup: Boolean) :
         }
     }
 
-    override fun onBindViewHolder(holder: PagingAdapter.PagingViewHolder<LocalMessage>,
+    override fun onBindViewHolder(holder: PagingViewHolder<LocalMessage>,
                                   position: Int) {
         holder as MessageViewHolder
 

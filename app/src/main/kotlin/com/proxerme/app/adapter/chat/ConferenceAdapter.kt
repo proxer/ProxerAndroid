@@ -1,4 +1,4 @@
-package com.proxerme.app.adapter
+package com.proxerme.app.adapter.chat
 
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
@@ -13,6 +13,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
+import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.util.TimeUtil
 import com.proxerme.library.connection.messenger.entity.Conference

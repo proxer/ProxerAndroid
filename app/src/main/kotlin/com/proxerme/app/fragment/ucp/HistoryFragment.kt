@@ -2,7 +2,7 @@ package com.proxerme.app.fragment.ucp
 
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
-import com.proxerme.app.adapter.HistoryAdapter
+import com.proxerme.app.adapter.ucp.HistoryAdapter
 import com.proxerme.app.fragment.framework.EasyPagingFragment
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.util.Utils
