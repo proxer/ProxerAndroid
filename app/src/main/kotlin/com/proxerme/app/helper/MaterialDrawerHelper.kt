@@ -43,6 +43,7 @@ class MaterialDrawerHelper : OnActivityListener {
         const val ACCOUNT_LOGIN = 101L
         const val ACCOUNT_USER = 102L
         const val ACCOUNT_LOGOUT = 103L
+        const val ACCOUNT_UCP = 104L
 
         private const val STATE_CURRENT_DRAWER_ITEM_ID = "material_drawer_helper_current_id"
 
@@ -52,7 +53,7 @@ class MaterialDrawerHelper : OnActivityListener {
                 AnnotationTarget.VALUE_PARAMETER)
         annotation class DrawerItem
 
-        @IntDef(ACCOUNT_GUEST, ACCOUNT_LOGIN, ACCOUNT_USER, ACCOUNT_LOGOUT)
+        @IntDef(ACCOUNT_GUEST, ACCOUNT_LOGIN, ACCOUNT_USER, ACCOUNT_LOGOUT, ACCOUNT_UCP)
         @Retention(AnnotationRetention.SOURCE)
         @Target(AnnotationTarget.FUNCTION, AnnotationTarget.FIELD,
                 AnnotationTarget.VALUE_PARAMETER)
@@ -149,6 +150,11 @@ class MaterialDrawerHelper : OnActivityListener {
                             .withIcon(ProxerUrlHolder.getUserImageUrl(user.imageId).toString())
                             .withSelectedTextColorRes(R.color.colorAccent)
                             .withIdentifier(ACCOUNT_USER),
+                    ProfileSettingDrawerItem()
+                            .withName(context.getString(R.string.drawer_account_ucp))
+                            .withIcon(CommunityMaterial.Icon.cmd_account_key)
+                            .withIconTinted(true)
+                            .withIdentifier(ACCOUNT_UCP),
                     ProfileSettingDrawerItem()
                             .withName(context.getString(R.string.drawer_account_logout))
                             .withIcon(CommunityMaterial.Icon.cmd_account_remove)

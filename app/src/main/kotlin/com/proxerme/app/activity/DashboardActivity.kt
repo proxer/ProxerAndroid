@@ -19,6 +19,7 @@ import com.proxerme.app.helper.MaterialDrawerHelper
 import com.proxerme.app.helper.MaterialDrawerHelper.Companion.ACCOUNT_GUEST
 import com.proxerme.app.helper.MaterialDrawerHelper.Companion.ACCOUNT_LOGIN
 import com.proxerme.app.helper.MaterialDrawerHelper.Companion.ACCOUNT_LOGOUT
+import com.proxerme.app.helper.MaterialDrawerHelper.Companion.ACCOUNT_UCP
 import com.proxerme.app.helper.MaterialDrawerHelper.Companion.ACCOUNT_USER
 import com.proxerme.app.helper.MaterialDrawerHelper.Companion.ITEM_ANIME
 import com.proxerme.app.helper.MaterialDrawerHelper.Companion.ITEM_CHAT
@@ -272,6 +273,12 @@ class DashboardActivity : MainActivity(), CustomTabsModule {
                 UserManager.user?.let {
                     UserActivity.navigateTo(this, it.id, it.username, it.imageId)
                 }
+
+                return false
+            }
+
+            ACCOUNT_UCP -> {
+                UcpActivity.navigateTo(this)
 
                 return false
             }

@@ -75,6 +75,7 @@
     <string name="drawer_account_guest">Gast</string>
     <string name="drawer_account_login">Anmelden</string>
     <string name="drawer_account_logout">Abmelden</string>
+    <string name="drawer_account_ucp">User-Control-Panel</string>
 
     <string name="dialog_cancel">Abbrechen</string>
 
@@ -186,6 +187,8 @@
     <string name="fragment_conference_info_participants_title">Teilnehmer</string>
     <string name="action_reply">Antworten</string>
 
+    <string name="fragment_history_title">Chronik</string>
+
     <string name="login_state_indicator_logging_in">Anmeldung</string>
     <string name="login_state_indicator_logging_out">Abmeldung</string>
     <string name="login_state_indicator_logged_in">Angemeldet</string>
@@ -198,6 +201,7 @@
     <string name="participants">Teilnehmer</string>
     <string name="add_user">Nutzer hinzufügen</string>
     <string name="hint_participant">Nutzername</string>
+    <string name="activity_ucp_title">User-Control-Panel</string>
 
     <plurals name="media_episode_count">
         <item quantity="one">Eine Episode</item>

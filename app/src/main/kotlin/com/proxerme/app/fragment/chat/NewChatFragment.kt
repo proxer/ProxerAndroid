@@ -193,7 +193,7 @@ class NewChatFragment : MainFragment() {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onChatCreatedAndLoaded(event: ChatSynchronizationEvent) {
+    fun onChatCreatedAndLoaded(@Suppress("UNUSED_PARAMETER") event: ChatSynchronizationEvent) {
         if (newConferenceId != null) {
             val conference = context.chatDatabase.getConference(newConferenceId!!)
 
