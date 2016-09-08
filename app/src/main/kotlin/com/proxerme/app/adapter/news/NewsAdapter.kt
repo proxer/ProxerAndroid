@@ -27,7 +27,7 @@ import java.util.*
  * @author Ruben Gees
  */
 class NewsAdapter(savedInstanceState: Bundle? = null) :
-        PagingAdapter<News>() {
+        PagingAdapter<News, NewsAdapter.NewsAdapterCallback>() {
 
     private companion object {
         private const val ITEMS_STATE = "adapter_news_state_items"
@@ -37,8 +37,6 @@ class NewsAdapter(savedInstanceState: Bundle? = null) :
         private const val ROTATION_HALF = 180f
         private const val DESCRIPTION_MAX_LINES = 3
     }
-
-    var callback: OnNewsInteractionListener? = null
 
     private val expanded = HashMap<String, Boolean>()
 
@@ -60,7 +58,12 @@ class NewsAdapter(savedInstanceState: Bundle? = null) :
         outState.putStringArrayList(EXPANDED_IDS_STATE, ArrayList(expanded.keys))
     }
 
-    inner class ViewHolder(itemView: View) : PagingViewHolder<News>(itemView) {
+    inner class ViewHolder(itemView: View) : PagingViewHolder<News, NewsAdapterCallback>(itemView) {
+
+        override val adapterList: List<News>
+            get() = list
+        override val adapterCallback: NewsAdapterCallback?
+            get() = callback
 
         private val expand: ImageButton by bindView(R.id.expand)
         private val description: TextView by bindView(R.id.description)
@@ -78,7 +81,7 @@ class NewsAdapter(savedInstanceState: Bundle? = null) :
 
             expand.setOnClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {
-                    val id = list[adapterPosition].id
+                    val id = adapterList[adapterPosition].id
 
                     if (expanded.containsKey(id)) {
                         expanded.remove(id)
@@ -92,19 +95,13 @@ class NewsAdapter(savedInstanceState: Bundle? = null) :
                         ViewCompat.animate(expand).rotation(ROTATION_HALF)
                     }
 
-                    callback?.onNewsExpanded(it, list[adapterPosition])
-                }
-            }
-
-            itemView.setOnClickListener {
-                if (adapterPosition != RecyclerView.NO_POSITION) {
-                    callback?.onNewsClick(it, list[adapterPosition])
+                    adapterCallback?.onNewsExpanded(it, adapterList[adapterPosition])
                 }
             }
 
             image.setOnClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {
-                    callback?.onNewsImageClick(it, list[adapterPosition])
+                    adapterCallback?.onNewsImageClick(it, adapterList[adapterPosition])
                 }
             }
         }
@@ -131,11 +128,7 @@ class NewsAdapter(savedInstanceState: Bundle? = null) :
         }
     }
 
-    abstract class OnNewsInteractionListener {
-        open fun onNewsClick(v: View, news: News) {
-
-        }
-
+    abstract class NewsAdapterCallback : PagingAdapter.PagingAdapterCallback<News>() {
         open fun onNewsImageClick(v: View, news: News) {
 
         }

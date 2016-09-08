@@ -1,7 +1,6 @@
 package com.proxerme.app.adapter.chat
 
 import android.os.Bundle
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,14 +24,11 @@ import com.proxerme.library.info.ProxerUrlHolder
  * @author Ruben Gees
  */
 class ConferenceAdapter(savedInstanceState: Bundle? = null) :
-        PagingAdapter<LocalConference>() {
+        PagingAdapter<LocalConference, ConferenceAdapter.ConferenceAdapterCallback>() {
 
     private companion object {
         private const val ITEMS_STATE = "adapter_conference_state_items"
     }
-
-    var callback: OnConferenceInteractionListener? = null
-
 
     init {
         savedInstanceState?.let {
@@ -51,20 +47,18 @@ class ConferenceAdapter(savedInstanceState: Bundle? = null) :
         outState.putParcelableArrayList(ITEMS_STATE, list)
     }
 
-    inner class ViewHolder(itemView: View) : PagingViewHolder<LocalConference>(itemView) {
+    inner class ViewHolder(itemView: View) :
+            PagingViewHolder<LocalConference, ConferenceAdapterCallback>(itemView) {
+
+        override val adapterList: List<LocalConference>
+            get() = list
+        override val adapterCallback: ConferenceAdapterCallback?
+            get() = callback
 
         private val image: ImageView by bindView(R.id.image)
         private val topic: TextView by bindView(R.id.topic)
         private val time: TextView by bindView(R.id.time)
         private val participants: TextView by bindView(R.id.participants)
-
-        init {
-            itemView.setOnClickListener {
-                if (adapterPosition != RecyclerView.NO_POSITION) {
-                    callback?.onConferenceClick(it, list[adapterPosition])
-                }
-            }
-        }
 
         override fun bind(item: LocalConference) {
             topic.text = item.topic
@@ -108,9 +102,5 @@ class ConferenceAdapter(savedInstanceState: Bundle? = null) :
         }
     }
 
-    abstract class OnConferenceInteractionListener {
-        open fun onConferenceClick(v: View, conference: LocalConference) {
-
-        }
-    }
+    abstract class ConferenceAdapterCallback : PagingAdapterCallback<LocalConference>()
 }

@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import com.proxerme.app.adapter.ucp.HistoryAdapter
 import com.proxerme.app.fragment.framework.EasyPagingFragment
-import com.proxerme.app.manager.SectionManager
+import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.util.Utils
 import com.proxerme.library.connection.ucp.entitiy.HistoryEntry
 import com.proxerme.library.connection.ucp.request.HistoryRequest
@@ -14,7 +14,7 @@ import com.proxerme.library.connection.ucp.request.HistoryRequest
  *
  * @author Ruben Gees
  */
-class HistoryFragment : EasyPagingFragment<HistoryEntry>() {
+class HistoryFragment : EasyPagingFragment<HistoryEntry, HistoryAdapter.HistoryAdapterCallback>() {
 
     companion object {
         fun newInstance(): HistoryFragment {
@@ -22,7 +22,7 @@ class HistoryFragment : EasyPagingFragment<HistoryEntry>() {
         }
     }
 
-    override val section = SectionManager.Section.HISTORY
+    override val section = Section.HISTORY
     override val itemsOnPage = 50
 
     override lateinit var adapter: HistoryAdapter

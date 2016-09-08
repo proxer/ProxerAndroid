@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
+import com.proxerme.app.adapter.media.MediaAdapter.MediaAdapterCallback
 import com.proxerme.library.connection.list.entity.MediaListEntry
 import com.proxerme.library.info.ProxerUrlHolder
 import com.proxerme.library.parameters.CategoryParameter
@@ -26,7 +27,7 @@ import com.proxerme.library.parameters.CategoryParameter.MANGA
  */
 class MediaAdapter(savedInstanceState: Bundle? = null,
                    @CategoryParameter.Category private val category: String) :
-        PagingAdapter<MediaListEntry>() {
+        PagingAdapter<MediaListEntry, MediaAdapterCallback>() {
 
     private companion object {
         private const val ITEMS_STATE = "adapter_media_state_items"
@@ -47,13 +48,13 @@ class MediaAdapter(savedInstanceState: Bundle? = null,
         outState.putParcelableArrayList("${ITEMS_STATE}_$category", list)
     }
 
-    inner class ViewHolder(itemView: View) : PagingViewHolder<MediaListEntry>(itemView) {
+    inner class ViewHolder(itemView: View) : PagingViewHolder<MediaListEntry,
+            MediaAdapterCallback>(itemView) {
 
-        init {
-            itemView.setOnClickListener {
-                //TODO
-            }
-        }
+        override val adapterList: List<MediaListEntry>
+            get() = list
+        override val adapterCallback: MediaAdapterCallback?
+            get() = callback
 
         private val title: TextView by bindView(R.id.title)
         private val medium: TextView by bindView(R.id.medium)
@@ -97,4 +98,6 @@ class MediaAdapter(savedInstanceState: Bundle? = null,
             }
         }
     }
+
+    abstract class MediaAdapterCallback : PagingAdapterCallback<MediaListEntry>()
 }

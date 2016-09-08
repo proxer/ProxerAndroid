@@ -18,6 +18,7 @@ import butterknife.bindView
 import com.klinker.android.link_builder.Link
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
+import com.proxerme.app.adapter.framework.PagingAdapter.PagingAdapterCallback
 import com.proxerme.app.helper.NotificationHelper
 import com.proxerme.app.module.LoginModule
 import com.proxerme.app.service.ChatService
@@ -36,7 +37,8 @@ import java.util.concurrent.Future
  *
  * @author Ruben Gees
  */
-abstract class EasyChatServiceFragment<T> : MainFragment()  where T : IdItem, T : Parcelable {
+abstract class EasyChatServiceFragment<T, C : PagingAdapterCallback<T>> :
+        MainFragment() where T : IdItem, T : Parcelable {
 
     private companion object {
         private const val EXCEPTION_STATE = "fragment_easy_chat_service_state_exception"
@@ -58,7 +60,7 @@ abstract class EasyChatServiceFragment<T> : MainFragment()  where T : IdItem, T 
     })
 
     abstract protected var layoutManager: RecyclerView.LayoutManager
-    abstract protected val adapter: PagingAdapter<T>
+    abstract protected val adapter: PagingAdapter<T, C>
     protected lateinit var footerAdapter: FooterAdapter
 
     open protected val root: ViewGroup by bindView(R.id.root)

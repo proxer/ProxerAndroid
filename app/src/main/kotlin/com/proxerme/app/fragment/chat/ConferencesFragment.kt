@@ -11,6 +11,7 @@ import com.proxerme.app.R
 import com.proxerme.app.activity.ChatActivity
 import com.proxerme.app.activity.NewChatActivity
 import com.proxerme.app.adapter.chat.ConferenceAdapter
+import com.proxerme.app.adapter.chat.ConferenceAdapter.ConferenceAdapterCallback
 import com.proxerme.app.data.chatDatabase
 import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.event.ChatSynchronizationEvent
@@ -28,7 +29,7 @@ import org.greenrobot.eventbus.ThreadMode
  *
  * @author Ruben Gees
  */
-class ConferencesFragment : EasyChatServiceFragment<LocalConference>() {
+class ConferencesFragment : EasyChatServiceFragment<LocalConference, ConferenceAdapterCallback>() {
 
     companion object {
         fun newInstance(): ConferencesFragment {
@@ -50,9 +51,9 @@ class ConferencesFragment : EasyChatServiceFragment<LocalConference>() {
         super.onCreate(savedInstanceState)
 
         adapter = ConferenceAdapter()
-        adapter.callback = object : ConferenceAdapter.OnConferenceInteractionListener() {
-            override fun onConferenceClick(v: View, conference: LocalConference) {
-                ChatActivity.navigateTo(activity, conference)
+        adapter.callback = object : ConferenceAdapterCallback() {
+            override fun onItemClick(v: View, item: LocalConference) {
+                ChatActivity.navigateTo(activity, item)
             }
         }
 

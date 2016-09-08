@@ -15,7 +15,7 @@ import com.klinker.android.link_builder.TouchableMovementMethod
 import com.proxerme.app.R
 import com.proxerme.app.activity.UserActivity
 import com.proxerme.app.fragment.framework.EasyLoadingFragment
-import com.proxerme.app.manager.SectionManager
+import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.util.TimeUtil
 import com.proxerme.app.util.Utils
 import com.proxerme.library.connection.user.entitiy.UserInfo
@@ -48,7 +48,7 @@ class ProfileFragment : EasyLoadingFragment<UserInfo>() {
         }
     }
 
-    override val section: SectionManager.Section = SectionManager.Section.PROFILE
+    override val section = Section.PROFILE
 
     private var userId: String? = null
     private var userName: String? = null

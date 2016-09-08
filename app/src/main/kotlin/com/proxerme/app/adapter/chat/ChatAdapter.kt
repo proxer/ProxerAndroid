@@ -29,7 +29,7 @@ import java.util.*
  * @author Ruben Gees
  */
 class ChatAdapter(savedInstanceState: Bundle? = null, val isGroup: Boolean) :
-        PagingAdapter<LocalMessage>() {
+        PagingAdapter<LocalMessage, ChatAdapter.ChatAdapterCallback>() {
 
     private companion object {
         private const val ITEMS_STATE = "adapter_chat_state_items"
@@ -49,7 +49,6 @@ class ChatAdapter(savedInstanceState: Bundle? = null, val isGroup: Boolean) :
     }
 
     var user: User? = null
-    var callback: OnMessageInteractionListener? = null
 
     private val selectedMap = HashMap<Long, Boolean>()
     private val showingTimeMap = HashMap<Long, Boolean>()
@@ -96,7 +95,7 @@ class ChatAdapter(savedInstanceState: Bundle? = null, val isGroup: Boolean) :
         }
     }
 
-    override fun onBindViewHolder(holder: PagingViewHolder<LocalMessage>,
+    override fun onBindViewHolder(holder: PagingViewHolder<LocalMessage, ChatAdapterCallback>,
                                   position: Int) {
         holder as MessageViewHolder
 
@@ -238,7 +237,7 @@ class ChatAdapter(savedInstanceState: Bundle? = null, val isGroup: Boolean) :
         notifyDataSetChanged()
     }
 
-    abstract class OnMessageInteractionListener {
+    abstract class ChatAdapterCallback : PagingAdapter.PagingAdapterCallback<LocalMessage>() {
         open fun onMessageTitleClick(v: View, message: LocalMessage) {
 
         }
@@ -251,16 +250,22 @@ class ChatAdapter(savedInstanceState: Bundle? = null, val isGroup: Boolean) :
 
         }
 
-        open fun onMentionsClick(username: String) {
+        open fun onMessageLinkLongClick(link: String) {
 
         }
 
-        open fun onMessageLinkLongClick(link: String) {
+        open fun onMentionsClick(username: String) {
 
         }
     }
 
-    open inner class MessageViewHolder(itemView: View) : PagingViewHolder<LocalMessage>(itemView) {
+    open inner class MessageViewHolder(itemView: View) :
+            PagingAdapter.PagingViewHolder<LocalMessage, ChatAdapterCallback>(itemView) {
+
+        override val adapterList: List<LocalMessage>
+            get() = list
+        override val adapterCallback: ChatAdapterCallback?
+            get() = callback
 
         protected val root: ViewGroup by bindView(R.id.root)
         protected val container: CardView by bindView(R.id.container)
@@ -284,7 +289,7 @@ class ChatAdapter(savedInstanceState: Bundle? = null, val isGroup: Boolean) :
 
         open protected fun onContainerClick(v: View) {
             if (adapterPosition != RecyclerView.NO_POSITION) {
-                val current = list[adapterPosition]
+                val current = adapterList[adapterPosition]
 
                 if (selecting) {
                     if (selectedMap.containsKey(current.localId)) {
@@ -297,7 +302,7 @@ class ChatAdapter(savedInstanceState: Bundle? = null, val isGroup: Boolean) :
                         selectedMap.put(current.localId, true)
                     }
 
-                    callback?.onMessageSelection(selectedMap.size)
+                    adapterCallback?.onMessageSelection(selectedMap.size)
                 } else {
                     if (showingTimeMap.containsKey(current.localId)) {
                         showingTimeMap.remove(current.localId)
@@ -312,7 +317,7 @@ class ChatAdapter(savedInstanceState: Bundle? = null, val isGroup: Boolean) :
 
         open protected fun onContainerLongClick(v: View): Boolean {
             if (adapterPosition != RecyclerView.NO_POSITION) {
-                val current = list[adapterPosition]
+                val current = adapterList[adapterPosition]
 
                 if (!selecting) {
                     selecting = true
@@ -320,7 +325,7 @@ class ChatAdapter(savedInstanceState: Bundle? = null, val isGroup: Boolean) :
                     selectedMap.put(current.localId, true)
                     notifyDataSetChanged()
 
-                    callback?.onMessageSelection(selectedMap.size)
+                    adapterCallback?.onMessageSelection(selectedMap.size)
 
                     return true
                 }
@@ -332,13 +337,13 @@ class ChatAdapter(savedInstanceState: Bundle? = null, val isGroup: Boolean) :
         protected open fun applyMessage(message: LocalMessage) {
             text.text = Utils.buildClickableText(text.context, message.message,
                     onWebClickListener = Link.OnClickListener {
-                        callback?.onMessageLinkClick(it)
+                        adapterCallback?.onMessageLinkClick(it)
                     },
                     onWebLongClickListener = Link.OnLongClickListener {
-                        callback?.onMessageLinkLongClick(it)
+                        adapterCallback?.onMessageLinkLongClick(it)
                     },
                     onMentionsClickListener = Link.OnClickListener {
-                        callback?.onMentionsClick(it.trim().substring(1))
+                        adapterCallback?.onMentionsClick(it.trim().substring(1))
                     })
         }
 
@@ -395,7 +400,7 @@ class ChatAdapter(savedInstanceState: Bundle? = null, val isGroup: Boolean) :
         init {
             title.setOnClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {
-                    callback?.onMessageTitleClick(it, list[adapterPosition])
+                    adapterCallback?.onMessageTitleClick(it, adapterList[adapterPosition])
                 }
             }
         }
@@ -411,7 +416,7 @@ class ChatAdapter(savedInstanceState: Bundle? = null, val isGroup: Boolean) :
 
         override fun onContainerClick(v: View) {
             if (adapterPosition != RecyclerView.NO_POSITION) {
-                val current = list[adapterPosition]
+                val current = adapterList[adapterPosition]
 
                 if (showingTimeMap.containsKey(current.localId)) {
                     time.visibility = View.GONE
@@ -432,7 +437,7 @@ class ChatAdapter(savedInstanceState: Bundle? = null, val isGroup: Boolean) :
         override fun applyMessage(message: LocalMessage) {
             text.text = Utils.buildClickableText(text.context, generateText(message),
                     onMentionsClickListener = Link.OnClickListener {
-                        callback?.onMentionsClick(it.trim().substring(1))
+                        adapterCallback?.onMentionsClick(it.trim().substring(1))
                     })
         }
 

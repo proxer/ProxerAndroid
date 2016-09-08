@@ -11,6 +11,7 @@ import butterknife.bindView
 import com.proxerme.app.R
 import com.proxerme.app.activity.UserActivity
 import com.proxerme.app.adapter.chat.ConferenceParticipantAdapter
+import com.proxerme.app.adapter.chat.ConferenceParticipantAdapter.ConferenceParticipantAdapterCallback
 import com.proxerme.app.fragment.framework.EasyLoadingFragment
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.library.connection.messenger.entity.ConferenceInfo
@@ -55,10 +56,10 @@ class ConferenceInfoFragment : EasyLoadingFragment<ConferenceInfoContainer>() {
 
         conferenceId = arguments.getString(CONFERENCE_ID_ARGUMENT)
         adapter = ConferenceParticipantAdapter(savedInstanceState)
-        adapter.listener = object : ConferenceParticipantAdapter.OnParticipantInteractionListener() {
-            override fun onParticipantClick(v: View, participant: ConferenceInfoUser) {
-                UserActivity.navigateTo(activity, participant.id, participant.username,
-                        participant.imageId)
+        adapter.callback = object : ConferenceParticipantAdapterCallback() {
+            override fun onItemClick(v: View, item: ConferenceInfoUser) {
+                UserActivity.navigateTo(activity, item.id, item.username,
+                        item.imageId)
             }
         }
 

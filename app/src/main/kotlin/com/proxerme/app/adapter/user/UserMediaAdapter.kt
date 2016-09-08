@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
+import com.proxerme.app.adapter.user.UserMediaAdapter.UserMediaAdapterCallback
 import com.proxerme.library.connection.user.entitiy.UserMediaListEntry
 import com.proxerme.library.info.ProxerUrlHolder
 import com.proxerme.library.parameters.CategoryParameter
@@ -24,7 +25,7 @@ import com.proxerme.library.parameters.CommentStateParameter.*
  */
 class UserMediaAdapter(savedInstanceState: Bundle? = null,
                        @CategoryParameter.Category private val category: String) :
-        PagingAdapter<UserMediaListEntry>() {
+        PagingAdapter<UserMediaListEntry, UserMediaAdapterCallback>() {
 
     private companion object {
         private const val ITEMS_STATE = "adapter_user_media_state_items"
@@ -47,13 +48,13 @@ class UserMediaAdapter(savedInstanceState: Bundle? = null,
         outState.putParcelableArrayList("${ITEMS_STATE}_$category", list)
     }
 
-    inner class ViewHolder(itemView: View) : PagingViewHolder<UserMediaListEntry>(itemView) {
+    inner class ViewHolder(itemView: View) : PagingViewHolder<UserMediaListEntry,
+            UserMediaAdapterCallback>(itemView) {
 
-        init {
-            itemView.setOnClickListener {
-                //TODO
-            }
-        }
+        override val adapterList: List<UserMediaListEntry>
+            get() = list
+        override val adapterCallback: UserMediaAdapterCallback?
+            get() = callback
 
         private val title: TextView by bindView(R.id.title)
         private val medium: TextView by bindView(R.id.medium)
@@ -100,4 +101,6 @@ class UserMediaAdapter(savedInstanceState: Bundle? = null,
             }
         }
     }
+
+    abstract class UserMediaAdapterCallback : PagingAdapterCallback<UserMediaListEntry>()
 }

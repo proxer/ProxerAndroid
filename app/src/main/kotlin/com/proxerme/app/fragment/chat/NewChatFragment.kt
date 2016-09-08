@@ -27,7 +27,7 @@ import com.proxerme.app.entitiy.Participant
 import com.proxerme.app.event.ChatSynchronizationEvent
 import com.proxerme.app.fragment.framework.MainFragment
 import com.proxerme.app.fragment.framework.RetainedLoadingFragment
-import com.proxerme.app.manager.SectionManager
+import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.manager.UserManager
 import com.proxerme.app.service.ChatService
 import com.proxerme.app.util.ErrorHandler
@@ -63,7 +63,7 @@ class NewChatFragment : MainFragment() {
         }
     }
 
-    override val section = SectionManager.Section.NEW_CHAT
+    override val section = Section.NEW_CHAT
 
     private lateinit var loader: RetainedLoadingFragment<String>
 

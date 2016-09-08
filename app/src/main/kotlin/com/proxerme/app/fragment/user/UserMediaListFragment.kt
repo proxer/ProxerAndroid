@@ -7,8 +7,9 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import com.proxerme.app.R
 import com.proxerme.app.adapter.user.UserMediaAdapter
+import com.proxerme.app.adapter.user.UserMediaAdapter.UserMediaAdapterCallback
 import com.proxerme.app.fragment.framework.EasyPagingFragment
-import com.proxerme.app.manager.SectionManager
+import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.util.Utils
 import com.proxerme.library.connection.user.entitiy.UserMediaListEntry
 import com.proxerme.library.connection.user.request.UserMediaListRequest
@@ -20,7 +21,7 @@ import com.proxerme.library.parameters.UserMediaSortParameter
  *
  * @author Ruben Gees
  */
-class UserMediaListFragment : EasyPagingFragment<UserMediaListEntry>() {
+class UserMediaListFragment : EasyPagingFragment<UserMediaListEntry, UserMediaAdapterCallback>() {
 
     companion object {
 
@@ -47,7 +48,7 @@ class UserMediaListFragment : EasyPagingFragment<UserMediaListEntry>() {
         }
     }
 
-    override val section = SectionManager.Section.USER_MEDIA_LIST
+    override val section = Section.USER_MEDIA_LIST
     override val itemsOnPage = ITEMS_ON_PAGE
     override val isSwipeToRefreshEnabled = false
 

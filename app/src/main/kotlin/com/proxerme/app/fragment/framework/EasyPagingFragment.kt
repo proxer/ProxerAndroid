@@ -14,6 +14,7 @@ import butterknife.bindView
 import com.klinker.android.link_builder.Link
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
+import com.proxerme.app.adapter.framework.PagingAdapter.PagingAdapterCallback
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.listener.EndlessRecyclerOnScrollListener
 import com.proxerme.library.connection.ProxerException
@@ -25,7 +26,8 @@ import org.jetbrains.anko.toast
  *
  * @author Ruben Gees
  */
-abstract class EasyPagingFragment<T> : PagingFragment<T>()  where T : IdItem, T : Parcelable {
+abstract class EasyPagingFragment<T, C : PagingAdapterCallback<T>> :
+        PagingFragment<T>()  where T : IdItem, T : Parcelable {
 
     private companion object {
         private const val EXCEPTION_STATE = "fragment_easy_paging_state_exception"
@@ -33,7 +35,7 @@ abstract class EasyPagingFragment<T> : PagingFragment<T>()  where T : IdItem, T 
 
     open protected val isSwipeToRefreshEnabled = true
 
-    abstract protected val adapter: PagingAdapter<T>
+    abstract protected val adapter: PagingAdapter<T, C>
     protected lateinit var footerAdapter: FooterAdapter
 
     open protected val root: ViewGroup by bindView(R.id.root)

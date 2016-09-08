@@ -7,10 +7,11 @@ import android.widget.ImageView
 import com.proxerme.app.activity.DashboardActivity
 import com.proxerme.app.activity.ImageDetailActivity
 import com.proxerme.app.adapter.news.NewsAdapter
+import com.proxerme.app.adapter.news.NewsAdapter.NewsAdapterCallback
 import com.proxerme.app.event.NewsEvent
 import com.proxerme.app.fragment.framework.EasyPagingFragment
 import com.proxerme.app.helper.NotificationHelper
-import com.proxerme.app.manager.SectionManager
+import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.util.Utils
 import com.proxerme.library.connection.notifications.entitiy.News
 import com.proxerme.library.connection.notifications.request.NewsRequest
@@ -24,7 +25,7 @@ import org.greenrobot.eventbus.ThreadMode
  *
  * @author Ruben Gees
  */
-class NewsFragment : EasyPagingFragment<News>() {
+class NewsFragment : EasyPagingFragment<News, NewsAdapterCallback>() {
 
     companion object {
 
@@ -35,7 +36,7 @@ class NewsFragment : EasyPagingFragment<News>() {
         }
     }
 
-    override val section = SectionManager.Section.NEWS
+    override val section = Section.NEWS
     override val itemsOnPage = ITEMS_ON_PAGE
 
     override lateinit var layoutManager: GridLayoutManager
@@ -45,10 +46,10 @@ class NewsFragment : EasyPagingFragment<News>() {
         super.onCreate(savedInstanceState)
 
         adapter = NewsAdapter(savedInstanceState)
-        adapter.callback = object : NewsAdapter.OnNewsInteractionListener() {
-            override fun onNewsClick(v: View, news: News) {
-                (activity as DashboardActivity).showPage(ProxerUrlHolder.getNewsUrl(news.categoryId,
-                        news.threadId, "mobile"))
+        adapter.callback = object : NewsAdapterCallback() {
+            override fun onItemClick(v: View, item: News) {
+                (activity as DashboardActivity).showPage(ProxerUrlHolder.getNewsUrl(item.categoryId,
+                        item.threadId, "mobile"))
             }
 
             override fun onNewsImageClick(v: View, news: News) {
