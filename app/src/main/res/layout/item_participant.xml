@@ -4,7 +4,8 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:foreground="?android:attr/selectableItemBackground">
+    android:foreground="?android:attr/selectableItemBackground"
+    tools:context="com.proxerme.app.adapter.chat.NewChatParticipantAdapter">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/image"
