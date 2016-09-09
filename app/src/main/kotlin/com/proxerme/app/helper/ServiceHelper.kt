@@ -7,7 +7,7 @@ import android.os.SystemClock
 import com.proxerme.app.receiver.ChatReceiver
 import com.proxerme.app.receiver.NotificationReceiver
 import com.proxerme.app.service.NotificationService
-import org.jetbrains.anko.alarmManager
+import com.proxerme.app.util.alarmManager
 import org.jetbrains.anko.intentFor
 
 /**

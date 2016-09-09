@@ -43,7 +43,7 @@ dependencies {
     compile "com.android.support:support-annotations:$support_version"
 
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile "org.jetbrains.anko:anko-sdk23:$anko_version"
+    compile "org.jetbrains.anko:anko-common:$anko_version"
     compile "org.jetbrains.anko:anko-sqlite:$anko_version"
 
     compile 'com.takisoft.fix:preference-v7:24.2.0.0'

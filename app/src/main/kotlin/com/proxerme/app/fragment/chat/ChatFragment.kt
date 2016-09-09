@@ -26,10 +26,10 @@ import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.manager.UserManager
 import com.proxerme.app.service.ChatService
 import com.proxerme.app.util.Utils
+import com.proxerme.app.util.inputMethodManager
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import org.jetbrains.anko.inputMethodManager
 import org.jetbrains.anko.toast
 
 /**

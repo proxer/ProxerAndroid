@@ -16,7 +16,6 @@ import com.proxerme.app.R
 import com.proxerme.app.util.ErrorHandler
 import com.proxerme.app.util.Utils
 import com.proxerme.library.connection.ProxerException
-import org.jetbrains.anko.onClick
 import org.jetbrains.anko.toast
 
 /**
@@ -142,11 +141,11 @@ abstract class EasyLoadingFragment<T> : LoadingFragment<T>() {
         }
 
         if (onButtonClickListener == null) {
-            errorButton.onClick {
+            errorButton.setOnClickListener {
                 load()
             }
         } else {
-            errorButton.onClick {
+            errorButton.setOnClickListener {
                 onButtonClickListener.onClick(it)
             }
         }

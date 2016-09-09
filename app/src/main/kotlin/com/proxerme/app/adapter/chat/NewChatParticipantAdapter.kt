@@ -16,7 +16,6 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
 import com.proxerme.app.entitiy.Participant
 import com.proxerme.library.info.ProxerUrlHolder
-import org.jetbrains.anko.onClick
 import java.util.*
 
 /**
@@ -79,7 +78,7 @@ class NewChatParticipantAdapter(savedInstanceState: Bundle?) :
                     .sizeDp(48)
                     .paddingDp(16)
                     .colorRes(R.color.icon))
-            remove.onClick {
+            remove.setOnClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     participants.removeAt(adapterPosition)
 

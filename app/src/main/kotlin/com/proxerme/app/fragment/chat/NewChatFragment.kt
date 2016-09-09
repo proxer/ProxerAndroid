@@ -36,7 +36,6 @@ import com.proxerme.library.connection.messenger.request.NewConferenceRequest
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import org.jetbrains.anko.onClick
 
 /**
  * TODO: Describe class
@@ -127,7 +126,7 @@ class NewChatFragment : MainFragment() {
             topicContainer.visibility = View.GONE
         }
 
-        sendButton.onClick {
+        sendButton.setOnClickListener {
             if (checkIfCanLoad()) {
                 createChat()
             }
@@ -291,7 +290,7 @@ class NewChatFragment : MainFragment() {
                     .inflate(R.layout.item_add_participant, root, false)
             val image: ImageView = addParticipantItem.findViewById(R.id.image) as ImageView
 
-            addParticipantItem.onClick {
+            addParticipantItem.setOnClickListener {
                 newParticipant = ""
 
                 refreshNewParticipantFooter()
@@ -335,7 +334,7 @@ class NewChatFragment : MainFragment() {
                     .sizeDp(48)
                     .paddingDp(16)
                     .colorRes(R.color.icon))
-            accept.onClick {
+            accept.setOnClickListener {
                 if (input.text.isBlank()) {
                     inputContainer.isErrorEnabled = true
                     inputContainer.error = context.getString(R.string.error_input_empty)
@@ -359,7 +358,7 @@ class NewChatFragment : MainFragment() {
                     .sizeDp(48)
                     .paddingDp(16)
                     .colorRes(R.color.icon))
-            cancel.onClick {
+            cancel.setOnClickListener {
                 newParticipant = null
 
                 refreshNewParticipantFooter()

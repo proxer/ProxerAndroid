@@ -20,9 +20,9 @@ import com.proxerme.app.activity.DashboardActivity
 import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.entitiy.LocalMessage
 import com.proxerme.app.util.Utils
+import com.proxerme.app.util.notificationManager
 import com.proxerme.library.connection.notifications.entitiy.News
 import com.proxerme.library.info.ProxerUrlHolder
-import org.jetbrains.anko.notificationManager
 
 
 /**
