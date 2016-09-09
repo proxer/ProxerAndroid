@@ -117,7 +117,7 @@
     <string name="fragment_chat_reply">"@%s "</string>
     <string name="fragment_chat_link_clip_title">Link</string>
     <string name="fragment_chat_clip_title">Chatverlauf</string>
-    <string name="fragment_chat_clip_status">In die Zwischenablage kopiert</string>
+    <string name="clipboard_status">In die Zwischenablage kopiert</string>
 
     <string name="status_currently_logging_in">Du wirst angemeldet…</string>
     <string name="status_not_logged_in">Du bist nicht angemeldet</string>
@@ -203,7 +203,19 @@
     <string name="hint_participant">Nutzername</string>
     <string name="activity_ucp_title">User-Control-Panel</string>
 
+    <string name="fragment_ucp_overview_title">Übersicht</string>
+    <string name="fragment_ucp_overview_clip_title">Proxer Profillink</string>
+
     <string name="history_entry_status">%1$s - %2$s</string>
+    <string name="fragment_ucp_overview_general">Allgemein</string>
+    <string name="fragment_ucp_overview_profile_link">Profillink</string>
+    <string name="usernamefragment_ucp_overview_username">Username</string>
+    <string name="fragment_ucp_overview_user_id">User ID</string>
+    <string name="fragment_ucp_overview_epsiode_counter">Episodencounter</string>
+    <string name="fragment_ucp_overview_epsiode_counter_episodes">Episoden</string>
+    <string name="fragment_ucp_overview_epsiode_counter_minutes">Minuten</string>
+    <string name="fragment_ucp_overview_epsiode_counter_hours">Stunden</string>
+    <string name="fragment_ucp_overview_epsiode_counter_days">Tage</string>
 
     <plurals name="media_episode_count">
         <item quantity="one">Eine Episode</item>

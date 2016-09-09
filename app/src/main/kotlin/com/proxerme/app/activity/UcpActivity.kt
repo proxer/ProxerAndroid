@@ -13,6 +13,7 @@ import android.view.MenuItem
 import butterknife.bindView
 import com.proxerme.app.R
 import com.proxerme.app.fragment.ucp.HistoryFragment
+import com.proxerme.app.fragment.ucp.UcpOverviewFragment
 import org.jetbrains.anko.startActivity
 
 class UcpActivity : AppCompatActivity() {
@@ -59,16 +60,18 @@ class UcpActivity : AppCompatActivity() {
 
         override fun getItem(position: Int): Fragment {
             return when (position) {
-                0 -> HistoryFragment.newInstance()
+                0 -> UcpOverviewFragment.newInstance()
+                1 -> HistoryFragment.newInstance()
                 else -> throw RuntimeException("Unknown index passed")
             }
         }
 
-        override fun getCount() = 1
+        override fun getCount() = 2
 
         override fun getPageTitle(position: Int): CharSequence? {
             return when (position) {
-                0 -> getString(R.string.fragment_history_title)
+                0 -> getString(R.string.fragment_ucp_overview_title)
+                1 -> getString(R.string.fragment_history_title)
                 else -> throw RuntimeException("Unknown index passed")
             }
         }

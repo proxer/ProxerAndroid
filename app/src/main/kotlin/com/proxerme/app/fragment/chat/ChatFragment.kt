@@ -136,7 +136,7 @@ class ChatFragment : EasyChatServiceFragment<LocalMessage, ChatAdapter.ChatAdapt
             Utils.setClipboardContent(activity, getString(R.string.fragment_chat_link_clip_title),
                     link)
 
-            context.toast(R.string.fragment_chat_clip_status)
+            context.toast(R.string.clipboard_status)
         }
 
         override fun onMentionsClick(username: String) {
@@ -260,7 +260,7 @@ class ChatFragment : EasyChatServiceFragment<LocalMessage, ChatAdapter.ChatAdapt
         Utils.setClipboardContent(activity, getString(R.string.fragment_chat_clip_title),
                 adapter.selectedItems.joinToString(separator = "\n", transform = { it.message }))
 
-        context.toast(R.string.fragment_chat_clip_status)
+        context.toast(R.string.clipboard_status)
         actionMode?.finish()
     }
 

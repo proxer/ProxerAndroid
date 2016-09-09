@@ -119,9 +119,13 @@ abstract class EasyLoadingFragment<T> : LoadingFragment<T>() {
         }
     }
 
-    open protected fun doShowError(exception: ProxerException) {
-        errorText.text = Utils.buildClickableText(context,
-                ErrorHandler.getMessageForErrorCode(context, exception),
+    open protected fun doShowError(message: String, buttonMessage: String? = null,
+                                   onButtonClickListener: View.OnClickListener? = null) {
+        hideProgress()
+        contentContainer.visibility = View.INVISIBLE
+        errorContainer.visibility = View.VISIBLE
+
+        errorText.text = Utils.buildClickableText(context, message,
                 onWebClickListener = Link.OnClickListener { link ->
                     try {
                         startActivity(Intent(Intent.ACTION_VIEW,
@@ -130,9 +134,21 @@ abstract class EasyLoadingFragment<T> : LoadingFragment<T>() {
                         context.toast(R.string.link_error_not_found)
                     }
                 })
-        errorButton.text = getString(R.string.error_retry)
-        errorButton.onClick {
-            load()
+
+        if (buttonMessage == null) {
+            errorButton.text = getString(R.string.error_retry)
+        } else {
+            errorButton.text = buttonMessage
+        }
+
+        if (onButtonClickListener == null) {
+            errorButton.onClick {
+                load()
+            }
+        } else {
+            errorButton.onClick {
+                onButtonClickListener.onClick(it)
+            }
         }
     }
 
@@ -155,11 +171,7 @@ abstract class EasyLoadingFragment<T> : LoadingFragment<T>() {
     }
 
     private fun showError() {
-        doShowError(exception!!)
-
-        hideProgress()
-        contentContainer.visibility = View.INVISIBLE
-        errorContainer.visibility = View.VISIBLE
+        doShowError(ErrorHandler.getMessageForErrorCode(context, exception!!))
     }
 
     private fun showProgress() {
