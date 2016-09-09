@@ -33,6 +33,8 @@ android {
 }
 
 dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
     compile "com.android.support:support-v4:$support_version"
     compile "com.android.support:appcompat-v7:$support_version"
     compile "com.android.support:recyclerview-v7:$support_version"
@@ -43,8 +45,10 @@ dependencies {
     compile "com.android.support:support-annotations:$support_version"
 
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    /* Use custom built ones until bugfix update is out
     compile "org.jetbrains.anko:anko-common:$anko_version"
     compile "org.jetbrains.anko:anko-sqlite:$anko_version"
+     */
 
     compile 'com.takisoft.fix:preference-v7:24.2.0.0'
 
