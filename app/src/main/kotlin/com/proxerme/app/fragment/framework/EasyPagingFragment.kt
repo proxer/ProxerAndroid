@@ -97,6 +97,12 @@ abstract class EasyPagingFragment<T, C : PagingAdapterCallback<T>> :
         }
     }
 
+    override fun onDestroy() {
+        adapter.callback = null
+
+        super.onDestroy()
+    }
+
     override fun onPagedLoadStarted(page: Int) {
         super.onPagedLoadStarted(page)
 
