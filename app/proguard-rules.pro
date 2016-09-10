@@ -4,6 +4,7 @@
 
 -keep class com.google.gson.** { *; }
 -keepattributes Signature
+-keepattributes EnclosingMethod
 
 -keepattributes *Annotation*
 -keepclassmembers class ** {
