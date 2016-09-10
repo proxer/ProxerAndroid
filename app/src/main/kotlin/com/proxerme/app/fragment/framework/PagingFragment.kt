@@ -3,9 +3,6 @@ package com.proxerme.app.fragment.framework
 import android.os.Bundle
 import android.os.Parcelable
 import android.support.annotation.CallSuper
-import android.support.v7.widget.RecyclerView
-import butterknife.bindView
-import com.proxerme.app.R
 import com.proxerme.library.connection.ProxerException
 import com.proxerme.library.interfaces.IdItem
 
@@ -22,9 +19,6 @@ abstract class PagingFragment<T> : LoadingFragment<Array<T>>() where T : IdItem,
     }
 
     abstract protected val itemsOnPage: Int
-
-    abstract protected val layoutManager: RecyclerView.LayoutManager
-    open protected val list: RecyclerView by bindView(R.id.list)
 
     protected var currentlyLoadingPage = -1
     protected var endReached = false

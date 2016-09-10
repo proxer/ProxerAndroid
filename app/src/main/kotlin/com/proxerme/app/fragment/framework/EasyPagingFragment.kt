@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import android.support.v4.widget.SwipeRefreshLayout
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,9 +37,11 @@ abstract class EasyPagingFragment<T, C : PagingAdapterCallback<T>> :
 
     open protected val isSwipeToRefreshEnabled = true
 
+    abstract protected val layoutManager: RecyclerView.LayoutManager
     abstract protected val adapter: PagingAdapter<T, C>
     protected lateinit var footerAdapter: FooterAdapter
 
+    open protected val list: RecyclerView by bindView(R.id.list)
     open protected val root: ViewGroup by bindView(R.id.root)
     open protected val progress: SwipeRefreshLayout by bindView(R.id.progress)
 
