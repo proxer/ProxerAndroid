@@ -15,11 +15,13 @@ import java.util.*
 abstract class PagingAdapter<T, C : PagingAdapter.PagingAdapterCallback<T>>() :
         RecyclerView.Adapter<PagingAdapter.PagingViewHolder<T, C>>() where T : Parcelable, T : IdItem {
 
+    open protected val hasStableIds = true
+
     protected val list: ArrayList<T> = arrayListOf()
     var callback: C? = null
 
     init {
-        setHasStableIds(true)
+        setHasStableIds(hasStableIds)
     }
 
     override fun onBindViewHolder(holder: PagingViewHolder<T, C>, position: Int) {
@@ -33,9 +35,11 @@ abstract class PagingAdapter<T, C : PagingAdapter.PagingAdapterCallback<T>>() :
     fun isEmpty() = list.isEmpty()
 
     open fun insert(items: Iterable<T>) {
-        list.addAll(0, items.filter { !contains(it) })
+        val filtered = items.filter { !contains(it) }
 
-        notifyDataSetChanged()
+        list.addAll(0, filtered)
+
+        notifyItemRangeInserted(0, filtered.size)
     }
 
     fun insert(items: Array<T>) {
@@ -43,9 +47,12 @@ abstract class PagingAdapter<T, C : PagingAdapter.PagingAdapterCallback<T>>() :
     }
 
     open fun append(items: Iterable<T>) {
-        list.addAll(items.filter { !contains(it) })
+        val filtered = items.filter { !contains(it) }
+        val previousSize = list.size
 
-        notifyDataSetChanged()
+        list.addAll(filtered)
+
+        notifyItemRangeInserted(previousSize, filtered.size)
     }
 
     fun append(items: Array<T>) {
@@ -64,16 +71,18 @@ abstract class PagingAdapter<T, C : PagingAdapter.PagingAdapterCallback<T>>() :
     }
 
     open fun clear() {
+        val previousSize = list.size
+
         list.clear()
 
-        notifyDataSetChanged()
+        notifyItemRangeRemoved(0, previousSize)
     }
 
     open fun saveInstanceState(outState: Bundle) {
 
     }
 
-    open protected fun contains(item: T): Boolean {
+    open fun contains(item: T): Boolean {
         return list.contains(item)
     }
 
