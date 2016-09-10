@@ -17,7 +17,7 @@ abstract class LoadingFragment<T> : MainFragment() {
         private const val FIRST_LOAD_STATE = "fragment_loading_state_first_load"
     }
 
-    private lateinit var loader: RetainedLoadingFragment<T>
+    private var loader: RetainedLoadingFragment<T>? = null
 
     private var firstLoad = true
 
@@ -25,7 +25,7 @@ abstract class LoadingFragment<T> : MainFragment() {
         get() = !isLoading
 
     protected val isLoading: Boolean
-        get() = loader.isLoading()
+        get() = loader?.isLoading() ?: false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +40,7 @@ abstract class LoadingFragment<T> : MainFragment() {
     override fun onResume() {
         super.onResume()
 
-        loader.setListener({ result ->
+        loader?.setListener({ result ->
             firstLoad = false
 
             onLoadFinished(result)
@@ -56,7 +56,8 @@ abstract class LoadingFragment<T> : MainFragment() {
     }
 
     override fun onDestroy() {
-        loader.removeListener()
+        loader?.removeListener()
+        loader = null
 
         super.onDestroy()
     }
@@ -69,16 +70,16 @@ abstract class LoadingFragment<T> : MainFragment() {
 
     @CallSuper
     open fun load() {
-        if (canLoad) {
+        if (canLoad && loader != null) {
             val loadingRequest = constructLoadingRequest()
 
             onLoadStarted()
-            loader.load(*loadingRequest.requests, zipFunction = loadingRequest.zipFunction)
+            loader!!.load(*loadingRequest.requests, zipFunction = loadingRequest.zipFunction)
         }
     }
 
     open fun reset() {
-        loader.cancel()
+        loader?.cancel()
         firstLoad = false
         clear()
 
@@ -101,19 +102,17 @@ abstract class LoadingFragment<T> : MainFragment() {
 
     protected abstract fun constructLoadingRequest(): LoadingRequest<T>
 
+    @Suppress("UNCHECKED_CAST")
     private fun initLoader() {
-        @Suppress("UNCHECKED_CAST")
-        val foundLoader = childFragmentManager.findFragmentByTag(LOADER_TAG)
+        loader = childFragmentManager.findFragmentByTag(LOADER_TAG)
                 as RetainedLoadingFragment<T>?
 
-        if (foundLoader == null) {
+        if (loader == null) {
             loader = RetainedLoadingFragment<T>()
 
             childFragmentManager.beginTransaction()
                     .add(loader, LOADER_TAG)
                     .commitNow()
-        } else {
-            loader = foundLoader
         }
     }
 
