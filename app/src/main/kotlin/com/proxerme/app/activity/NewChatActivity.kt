@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import butterknife.bindView
@@ -13,7 +12,7 @@ import com.proxerme.app.entitiy.Participant
 import com.proxerme.app.fragment.chat.NewChatFragment
 import org.jetbrains.anko.intentFor
 
-class NewChatActivity : AppCompatActivity() {
+class NewChatActivity : MainActivity() {
 
     companion object {
         private const val EXTRA_PARTICIPANT = "extra_participant"

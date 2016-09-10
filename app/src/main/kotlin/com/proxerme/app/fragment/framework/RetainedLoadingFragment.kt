@@ -35,6 +35,8 @@ class RetainedLoadingFragment<T>() : Fragment() {
         })
 
         super.onDestroy()
+
+        MainApplication.refWatcher.watch(this)
     }
 
     fun setListener(successCallback: (T) -> Unit,
