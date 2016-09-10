@@ -1,10 +1,13 @@
 package com.proxerme.app.fragment.ucp
 
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
+import android.view.View
 import com.proxerme.app.adapter.ucp.HistoryAdapter
 import com.proxerme.app.fragment.framework.EasyPagingFragment
 import com.proxerme.app.manager.SectionManager.Section
+import com.proxerme.app.module.LoginModule
 import com.proxerme.app.util.Utils
 import com.proxerme.library.connection.ucp.entitiy.HistoryEntry
 import com.proxerme.library.connection.ucp.request.HistoryRequest
@@ -22,8 +25,24 @@ class HistoryFragment : EasyPagingFragment<HistoryEntry, HistoryAdapter.HistoryA
         }
     }
 
+    private val loginModule = LoginModule(object : LoginModule.LoginModuleCallback {
+        override val activity: AppCompatActivity
+            get() = this@HistoryFragment.activity as AppCompatActivity
+
+        override fun showError(message: String, buttonMessage: String?,
+                               onButtonClickListener: View.OnClickListener?) {
+            this@HistoryFragment.doShowError(message, buttonMessage, onButtonClickListener)
+        }
+
+        override fun load(showProgress: Boolean) {
+            this@HistoryFragment.load()
+        }
+    })
+
     override val section = Section.HISTORY
     override val itemsOnPage = 50
+    override val canLoad: Boolean
+        get() = super.canLoad && loginModule.canLoad()
 
     override lateinit var adapter: HistoryAdapter
     override lateinit var layoutManager: GridLayoutManager
@@ -33,6 +52,24 @@ class HistoryFragment : EasyPagingFragment<HistoryEntry, HistoryAdapter.HistoryA
 
         adapter = HistoryAdapter(savedInstanceState)
         layoutManager = GridLayoutManager(context, Utils.calculateSpanAmount(activity) + 1)
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        loginModule.onStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        loginModule.onResume()
+    }
+
+    override fun onStop() {
+        loginModule.onStop()
+
+        super.onStop()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

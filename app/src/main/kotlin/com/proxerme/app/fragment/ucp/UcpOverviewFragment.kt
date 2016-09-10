@@ -53,6 +53,8 @@ class UcpOverviewFragment : EasyLoadingFragment<Int>() {
     })
 
     override val section = Section.UCP_OVERVIEW
+    override val canLoad: Boolean
+        get() = super.canLoad && loginModule.canLoad()
 
     private var watchedEpisodes: Int? = null
 

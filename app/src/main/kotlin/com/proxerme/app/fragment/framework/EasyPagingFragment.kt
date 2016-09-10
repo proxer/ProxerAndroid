@@ -15,6 +15,7 @@ import com.klinker.android.link_builder.Link
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.adapter.framework.PagingAdapter.PagingAdapterCallback
+import com.proxerme.app.util.ErrorHandler
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.listener.EndlessRecyclerOnScrollListener
 import com.proxerme.library.connection.ProxerException
@@ -162,7 +163,10 @@ abstract class EasyPagingFragment<T, C : PagingAdapterCallback<T>> :
         progress.isEnabled = isSwipeToRefreshEnabled
     }
 
-    private fun showError(exception: ProxerException) {
+    open protected fun doShowError(message: String, buttonMessage: String? = null,
+                                   onButtonClickListener: View.OnClickListener? = null) {
+        hideProgress()
+
         val onWebClickListener = Link.OnClickListener { link ->
             try {
                 startActivity(Intent(Intent.ACTION_VIEW,
@@ -172,14 +176,16 @@ abstract class EasyPagingFragment<T, C : PagingAdapterCallback<T>> :
             }
         }
 
-        val onButtonClickListener = View.OnClickListener {
-            load()
-        }
-
-        Utils.showError(context, exception, footerAdapter,
+        Utils.showError(context, message, footerAdapter,
                 buttonMessage = null, parent = root,
                 onWebClickListener = onWebClickListener,
-                onButtonClickListener = onButtonClickListener)
+                onButtonClickListener = onButtonClickListener ?: View.OnClickListener {
+                    load()
+                })
+    }
+
+    private fun showError(exception: ProxerException) {
+        doShowError(ErrorHandler.getMessageForErrorCode(context, exception))
     }
 
     private fun hideError() {
