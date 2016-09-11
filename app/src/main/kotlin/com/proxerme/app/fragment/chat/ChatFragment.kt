@@ -1,8 +1,5 @@
 package com.proxerme.app.fragment.chat
 
-import android.content.ActivityNotFoundException
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AppCompatActivity
@@ -125,11 +122,7 @@ class ChatFragment : EasyChatServiceFragment<LocalMessage, ChatAdapter.ChatAdapt
         }
 
         override fun onMessageLinkClick(link: String) {
-            try {
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link)))
-            } catch (exception: ActivityNotFoundException) {
-                context.toast(R.string.link_error_not_found)
-            }
+            Utils.viewLink(context, link)
         }
 
         override fun onMessageLinkLongClick(link: String) {

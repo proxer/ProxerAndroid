@@ -1,9 +1,6 @@
 package com.proxerme.app.fragment.framework
 
 import adapter.FooterAdapter
-import android.content.ActivityNotFoundException
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import android.support.v4.widget.SwipeRefreshLayout
@@ -21,7 +18,6 @@ import com.proxerme.app.util.Utils
 import com.proxerme.app.util.listener.EndlessRecyclerOnScrollListener
 import com.proxerme.library.connection.ProxerException
 import com.proxerme.library.interfaces.IdItem
-import org.jetbrains.anko.toast
 
 /**
  * TODO: Describe class
@@ -176,18 +172,11 @@ abstract class EasyPagingFragment<T, C : PagingAdapterCallback<T>> :
                                    onButtonClickListener: View.OnClickListener? = null) {
         hideProgress()
 
-        val onWebClickListener = Link.OnClickListener { link ->
-            try {
-                startActivity(Intent(Intent.ACTION_VIEW,
-                        Uri.parse(link + "?device=mobile")))
-            } catch (exception: ActivityNotFoundException) {
-                context.toast(R.string.link_error_not_found)
-            }
-        }
-
         Utils.showError(context, message, footerAdapter,
                 buttonMessage = null, parent = root,
-                onWebClickListener = onWebClickListener,
+                onWebClickListener = Link.OnClickListener { link ->
+                    Utils.viewLink(context, link + "?device=mobile")
+                },
                 onButtonClickListener = onButtonClickListener ?: View.OnClickListener {
                     load()
                 })

@@ -1,8 +1,5 @@
 package com.proxerme.app.fragment.ucp
 
-import android.content.ActivityNotFoundException
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
@@ -123,11 +120,7 @@ class UcpOverviewFragment : EasyLoadingFragment<Int>() {
             profileLink.text = Utils.buildClickableText(context,
                     ProxerUrlHolder.getUserUrl(UserManager.user!!.id, null).toString(),
                     onWebClickListener = Link.OnClickListener { link ->
-                        try {
-                            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link)))
-                        } catch (exception: ActivityNotFoundException) {
-                            context.toast(R.string.link_error_not_found)
-                        }
+                        Utils.viewLink(context, link)
                     },
                     onWebLongClickListener = Link.OnLongClickListener { link ->
                         Utils.setClipboardContent(activity,

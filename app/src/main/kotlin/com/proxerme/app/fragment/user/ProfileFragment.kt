@@ -1,8 +1,5 @@
 package com.proxerme.app.fragment.user
 
-import android.content.ActivityNotFoundException
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.support.annotation.IntRange
 import android.view.LayoutInflater
@@ -20,7 +17,6 @@ import com.proxerme.app.util.TimeUtil
 import com.proxerme.app.util.Utils
 import com.proxerme.library.connection.user.entitiy.UserInfo
 import com.proxerme.library.connection.user.request.UserInfoRequest
-import org.jetbrains.anko.toast
 
 /**
  * TODO: Describe class
@@ -124,12 +120,8 @@ class ProfileFragment : EasyLoadingFragment<UserInfo>() {
             } else {
                 statusText.text = Utils.buildClickableText(statusText.context, status + " - " +
                         TimeUtil.convertToRelativeReadableTime(context, lastStatusChange),
-                        Link.OnClickListener {
-                            try {
-                                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it)))
-                            } catch (exception: ActivityNotFoundException) {
-                                context.toast(R.string.link_error_not_found)
-                            }
+                        Link.OnClickListener { link ->
+                            Utils.viewLink(context, link + "?device=mobile")
                         })
             }
         }

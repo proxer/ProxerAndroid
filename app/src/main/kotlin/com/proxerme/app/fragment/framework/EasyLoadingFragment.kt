@@ -1,8 +1,5 @@
 package com.proxerme.app.fragment.framework
 
-import android.content.ActivityNotFoundException
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.view.View
@@ -16,7 +13,6 @@ import com.proxerme.app.R
 import com.proxerme.app.util.ErrorHandler
 import com.proxerme.app.util.Utils
 import com.proxerme.library.connection.ProxerException
-import org.jetbrains.anko.toast
 
 /**
  * TODO: Describe class
@@ -126,12 +122,7 @@ abstract class EasyLoadingFragment<T> : LoadingFragment<T>() {
 
         errorText.text = Utils.buildClickableText(context, message,
                 onWebClickListener = Link.OnClickListener { link ->
-                    try {
-                        startActivity(Intent(Intent.ACTION_VIEW,
-                                Uri.parse(link + "?device=mobile")))
-                    } catch (exception: ActivityNotFoundException) {
-                        context.toast(R.string.link_error_not_found)
-                    }
+                    Utils.viewLink(context, link + "?device=mobile")
                 })
 
         if (buttonMessage == null) {

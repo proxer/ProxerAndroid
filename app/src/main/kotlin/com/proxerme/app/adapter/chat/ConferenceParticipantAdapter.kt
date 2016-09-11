@@ -1,8 +1,5 @@
 package com.proxerme.app.adapter.chat
 
-import android.content.ActivityNotFoundException
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -22,7 +19,6 @@ import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.util.Utils
 import com.proxerme.library.connection.messenger.entity.ConferenceInfoUser
 import com.proxerme.library.info.ProxerUrlHolder
-import org.jetbrains.anko.toast
 
 /**
  * TODO: Describe class
@@ -93,12 +89,7 @@ class ConferenceParticipantAdapter(val savedInstanceState: Bundle?) :
                 status.visibility = View.VISIBLE
                 status.text = Utils.buildClickableText(status.context, item.status,
                         onWebClickListener = Link.OnClickListener { link ->
-                            try {
-                                status.context.startActivity(Intent(Intent.ACTION_VIEW,
-                                        Uri.parse(link)))
-                            } catch (exception: ActivityNotFoundException) {
-                                status.context.toast(R.string.link_error_not_found)
-                            }
+                            Utils.viewLink(status.context, link)
                         })
             }
 

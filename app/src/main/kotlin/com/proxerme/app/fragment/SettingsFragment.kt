@@ -1,10 +1,7 @@
 package com.proxerme.app.fragment
 
-import android.content.ActivityNotFoundException
-import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
-import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.preference.TwoStatePreference
@@ -17,8 +14,8 @@ import com.proxerme.app.dialog.HentaiConfirmationDialog
 import com.proxerme.app.helper.PreferenceHelper
 import com.proxerme.app.helper.ServiceHelper
 import com.proxerme.app.interfaces.OnActivityListener
+import com.proxerme.app.util.Utils
 import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat
-import org.jetbrains.anko.toast
 
 /**
  * TODO: Describe Class
@@ -61,11 +58,7 @@ class SettingsFragment : PreferenceFragmentCompat(), OnActivityListener,
         }
 
         findPreference(PreferenceHelper.PREFERENCE_OPEN_SOURCE).setOnPreferenceClickListener {
-            try {
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(OPEN_SOURCE_LINK)))
-            } catch (exception: ActivityNotFoundException) {
-                context.toast(R.string.link_error_not_found)
-            }
+            Utils.viewLink(context, OPEN_SOURCE_LINK)
 
             true
         }

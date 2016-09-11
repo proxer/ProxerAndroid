@@ -1,10 +1,7 @@
 package com.proxerme.app.fragment.framework
 
 import adapter.FooterAdapter
-import android.content.ActivityNotFoundException
-import android.content.Intent
 import android.database.SQLException
-import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import android.support.annotation.CallSuper
@@ -28,7 +25,6 @@ import com.proxerme.app.util.listener.EndlessRecyclerOnScrollListener
 import com.proxerme.library.connection.ProxerException
 import com.proxerme.library.interfaces.IdItem
 import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
 import java.util.concurrent.Future
 
@@ -175,11 +171,7 @@ abstract class EasyChatServiceFragment<T, C : PagingAdapterCallback<T>> :
         hideProgress()
 
         val onWebClickListener = Link.OnClickListener { link ->
-            try {
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link + "?device=mobile")))
-            } catch (exception: ActivityNotFoundException) {
-                context.toast(R.string.link_error_not_found)
-            }
+            Utils.viewLink(context, link + "?device=mobile")
         }
 
         val onButtonClickListenerToSet = onButtonClickListener ?: View.OnClickListener {
