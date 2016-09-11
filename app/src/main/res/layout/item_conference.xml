@@ -36,19 +36,41 @@
                 app:layout_widthPercent="20%"
                 tools:ignore="UnusedAttribute" />
 
-            <TextView
-                android:id="@+id/topic"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:id="@+id/topBar"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
                 android:layout_toEndOf="@+id/image"
-                android:layout_toRightOf="@+id/image"
-                android:paddingBottom="4dp"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:paddingTop="8dp"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                tools:ignore="SelectableText"
-                tools:text="Title" />
+                android:layout_toRightOf="@+id/image">
+
+                <TextView
+                    android:id="@+id/topic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/newMessages"
+                    android:layout_toStartOf="@+id/newMessages"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    tools:ignore="SelectableText"
+                    tools:text="Title" />
+
+                <ImageView
+                    android:id="@+id/newMessages"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginStart="4dp" />
+
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -56,7 +78,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_below="@+id/topic"
+                android:layout_below="@+id/topBar"
                 android:layout_toEndOf="@+id/image"
                 android:layout_toRightOf="@+id/image"
                 android:orientation="horizontal"
@@ -73,7 +95,7 @@
                     android:layout_marginBottom="4dp"
                     android:layout_marginEnd="4dp"
                     android:layout_marginRight="4dp"
-                    android:layout_weight="6"
+                    android:layout_weight="8"
                     android:gravity="start"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     tools:ignore="SelectableText"

@@ -1,12 +1,14 @@
 package com.proxerme.app.adapter.chat
 
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import butterknife.bindView
+import cn.nekocode.badge.BadgeDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
@@ -57,6 +59,7 @@ class ConferenceAdapter(savedInstanceState: Bundle? = null) :
 
         private val image: ImageView by bindView(R.id.image)
         private val topic: TextView by bindView(R.id.topic)
+        private val newMessages: ImageView by bindView(R.id.newMessages)
         private val time: TextView by bindView(R.id.time)
         private val participants: TextView by bindView(R.id.participants)
 
@@ -69,15 +72,15 @@ class ConferenceAdapter(savedInstanceState: Bundle? = null) :
                     item.participantAmount)
 
             if (item.isRead) {
-                topic.setCompoundDrawables(null, null, null, null)
+                newMessages.setImageDrawable(null)
+                newMessages.visibility = View.GONE
             } else {
-                //TODO display number of new messages
-                topic.setCompoundDrawables(null, null,
-                        IconicsDrawable(topic.context)
-                                .icon(CommunityMaterial.Icon.cmd_message_alert)
-                                .sizeDp(32)
-                                .paddingDp(8)
-                                .colorRes(R.color.colorAccent), null)
+                newMessages.setImageDrawable(BadgeDrawable.Builder()
+                        .type(BadgeDrawable.TYPE_NUMBER)
+                        .number(item.unreadMessageAmount)
+                        .badgeColor(ContextCompat.getColor(topic.context, R.color.accent))
+                        .build())
+                newMessages.visibility = View.VISIBLE
             }
 
             if (item.imageId.isBlank()) {
