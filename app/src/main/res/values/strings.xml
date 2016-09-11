@@ -216,6 +216,8 @@
     <string name="fragment_ucp_overview_epsiode_counter_minutes">Minuten</string>
     <string name="fragment_ucp_overview_epsiode_counter_hours">Stunden</string>
     <string name="fragment_ucp_overview_epsiode_counter_days">Tage</string>
+    <string name="preference_open_source_title">Open Source</string>
+    <string name="preference_open_source_summary">Sieh dir den Quellcode auf GitHub an</string>
 
     <plurals name="media_episode_count">
         <item quantity="one">Eine Episode</item>
