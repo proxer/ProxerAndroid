@@ -95,6 +95,7 @@ abstract class EasyPagingFragment<T, C : PagingAdapterCallback<T>> :
 
     override fun onDestroy() {
         adapter.callback = null
+        progress.setOnRefreshListener(null)
 
         super.onDestroy()
     }

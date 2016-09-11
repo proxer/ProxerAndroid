@@ -65,6 +65,12 @@ abstract class EasyLoadingFragment<T> : LoadingFragment<T>() {
         }
     }
 
+    override fun onDestroy() {
+        progress.setOnRefreshListener(null)
+
+        super.onDestroy()
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
