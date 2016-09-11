@@ -22,6 +22,7 @@ import com.proxerme.library.connection.messenger.request.ConferencesRequest
 import com.proxerme.library.connection.messenger.request.MessagesRequest
 import com.proxerme.library.connection.messenger.request.SendMessageRequest
 import org.greenrobot.eventbus.EventBus
+import org.jetbrains.anko.collections.forEachReversedByIndex
 import org.jetbrains.anko.intentFor
 import java.util.*
 
@@ -307,8 +308,9 @@ class ChatService : IntentService("ChatService") {
     private fun showNotification() {
         val unreadMap = HashMap<LocalConference, List<LocalMessage>>()
 
-        chatDatabase.getUnreadConferences().forEach {
+        chatDatabase.getUnreadConferences().forEachReversedByIndex {
             val unreadMessages = chatDatabase.getMostRecentMessages(it.id, it.unreadMessageAmount)
+                    .reversed()
 
             if (unreadMessages.size > 0) {
                 unreadMap.put(it, unreadMessages)
