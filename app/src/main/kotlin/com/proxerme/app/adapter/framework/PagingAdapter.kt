@@ -35,7 +35,7 @@ abstract class PagingAdapter<T, C : PagingAdapter.PagingAdapterCallback<T>>() :
     fun isEmpty() = list.isEmpty()
 
     open fun insert(items: Iterable<T>) {
-        val filtered = items.filter { !contains(it) }
+        val filtered = items.filterNot { contains(it) }
 
         list.addAll(0, filtered)
 
@@ -83,7 +83,11 @@ abstract class PagingAdapter<T, C : PagingAdapter.PagingAdapterCallback<T>>() :
     }
 
     open fun contains(item: T): Boolean {
-        return list.contains(item)
+        if (hasStableIds) {
+            return list.find { it.id == item.id } != null
+        } else {
+            return list.contains(item)
+        }
     }
 
     abstract class PagingViewHolder<T, out C : PagingAdapter.PagingAdapterCallback<T>>(itemView: View) :
