@@ -5,7 +5,7 @@
     <item
         android:id="@+id/filter"
         android:icon="@drawable/ic_action_filter"
-        android:title="Filter"
+        android:title="@string/action_filter"
         app:showAsAction="ifRoom">
 
         <menu>
@@ -101,4 +101,11 @@
             </group>
         </menu>
     </item>
+
+    <item
+        android:id="@+id/search"
+        android:icon="@drawable/ic_action_search"
+        android:title="@string/action_search"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="always|collapseActionView" />
 </menu>

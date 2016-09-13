@@ -1,7 +1,9 @@
 package com.proxerme.app.fragment.media
 
 import android.os.Bundle
+import android.support.v4.view.MenuItemCompat
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.SearchView
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.Menu
 import android.view.MenuInflater
@@ -39,6 +41,8 @@ class MediaListFragment : EasyPagingFragment<MediaListEntry, MediaAdapterCallbac
         private const val ARGUMENT_CATEGORY = "category"
         private const val STATE_SORT_CRITERIA = "state_sort_criteria"
         private const val STATE_TYPE = "state_type"
+        private const val STATE_SEARCH_QUERY = "state_search_query"
+        private const val STATE_HAS_SEARCHED = "state_has_searched"
 
         fun newInstance(@CategoryParameter.Category category: String): MediaListFragment {
             return MediaListFragment().apply {
@@ -67,6 +71,9 @@ class MediaListFragment : EasyPagingFragment<MediaListEntry, MediaAdapterCallbac
     @TypeParameter.Type
     private lateinit var type: String
 
+    private var searchQuery: String? = null
+    private var hasSearched = false
+
     override lateinit var adapter: MediaAdapter
     override lateinit var layoutManager: StaggeredGridLayoutManager
 
@@ -78,6 +85,8 @@ class MediaListFragment : EasyPagingFragment<MediaListEntry, MediaAdapterCallbac
         if (savedInstanceState != null) {
             sortCriteria = savedInstanceState.getString(STATE_SORT_CRITERIA)
             type = savedInstanceState.getString(STATE_TYPE)
+            searchQuery = savedInstanceState.getString(STATE_SEARCH_QUERY)
+            hasSearched = savedInstanceState.getBoolean(STATE_HAS_SEARCHED)
         } else {
             sortCriteria = MediaSortParameter.RATING
             type = when (category) {
@@ -135,6 +144,51 @@ class MediaListFragment : EasyPagingFragment<MediaListEntry, MediaAdapterCallbac
             TypeParameter.HMANGA -> filterSubMenu.findItem(R.id.hmanga).isChecked = true
         }
 
+        val searchItem = menu.findItem(R.id.search)
+        val searchView = searchItem.actionView as SearchView
+
+        if (searchQuery != null) {
+            searchItem.expandActionView()
+            searchView.setQuery(searchQuery, false)
+            searchView.clearFocus()
+        }
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                hasSearched = true
+
+                searchView.clearFocus()
+                reset()
+
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                searchQuery = newText
+
+                return false
+            }
+        })
+
+        MenuItemCompat.setOnActionExpandListener(searchItem,
+                object : MenuItemCompat.OnActionExpandListener {
+                    override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+                        return true
+                    }
+
+                    override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+                        searchQuery = null
+
+                        if (hasSearched) {
+                            reset()
+
+                            hasSearched = false
+                        }
+
+                        return true
+                    }
+                })
+
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -180,10 +234,13 @@ class MediaListFragment : EasyPagingFragment<MediaListEntry, MediaAdapterCallbac
         adapter.saveInstanceState(outState)
         outState.putString(STATE_SORT_CRITERIA, sortCriteria)
         outState.putString(STATE_TYPE, type)
+        outState.putString(STATE_SEARCH_QUERY, searchQuery)
+        outState.putBoolean(STATE_HAS_SEARCHED, hasSearched)
     }
 
     override fun constructPagedLoadingRequest(page: Int): LoadingRequest<Array<MediaListEntry>> {
         return LoadingRequest(MediaSearchRequest(page)
+                .withName(searchQuery)
                 .withType(type)
                 .withSortCriteria(sortCriteria)
                 .withLimit(ITEMS_ON_PAGE))

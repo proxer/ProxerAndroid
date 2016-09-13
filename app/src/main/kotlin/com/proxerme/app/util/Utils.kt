@@ -1,6 +1,6 @@
 package com.proxerme.app.util
 
-import adapter.FooterAdapter
+import adapter.HeaderFooterAdapter
 import android.app.Activity
 import android.content.*
 import android.content.res.Configuration
@@ -131,7 +131,7 @@ object Utils {
         return result
     }
 
-    fun showError(context: Context, exception: ProxerException, adapter: FooterAdapter,
+    fun showError(context: Context, exception: ProxerException, adapter: HeaderFooterAdapter,
                   buttonMessage: String? = null, parent: ViewGroup? = null,
                   onWebClickListener: Link.OnClickListener ? = null,
                   onButtonClickListener: View.OnClickListener? = null) {
@@ -139,7 +139,7 @@ object Utils {
                 buttonMessage, parent, onWebClickListener, onButtonClickListener)
     }
 
-    fun showError(context: Context, message: CharSequence, adapter: FooterAdapter,
+    fun showError(context: Context, message: CharSequence, adapter: HeaderFooterAdapter,
                   buttonMessage: String? = null, parent: ViewGroup? = null,
                   onWebClickListener: Link.OnClickListener ? = null,
                   onButtonClickListener: View.OnClickListener? = null) {

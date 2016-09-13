@@ -1,6 +1,6 @@
 package com.proxerme.app.fragment.chat
 
-import adapter.FooterAdapter
+import adapter.HeaderFooterAdapter
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
@@ -67,7 +67,7 @@ class NewChatFragment : MainFragment() {
     private lateinit var loader: RetainedLoadingFragment<String>
 
     private lateinit var adapter: NewChatParticipantAdapter
-    private lateinit var footerAdapter: FooterAdapter
+    private lateinit var headerFooterAdapter: HeaderFooterAdapter
 
     private var newParticipant: String? = null
     private var newConferenceId: String? = null
@@ -93,7 +93,7 @@ class NewChatFragment : MainFragment() {
             }
         }
 
-        footerAdapter = FooterAdapter(adapter)
+        headerFooterAdapter = HeaderFooterAdapter(adapter)
 
         if (arguments.getParcelable<Participant>(PARTICIPANT_ARGUMENT) != null) {
             adapter.add(arguments.getParcelable(PARTICIPANT_ARGUMENT))
@@ -134,7 +134,7 @@ class NewChatFragment : MainFragment() {
 
         participantList.isNestedScrollingEnabled = false
         participantList.layoutManager = LinearLayoutManager(context)
-        participantList.adapter = footerAdapter
+        participantList.adapter = headerFooterAdapter
 
         progress.setColorSchemeResources(R.color.primary)
 
@@ -280,7 +280,7 @@ class NewChatFragment : MainFragment() {
     private fun refreshNewParticipantFooter() {
         if (!arguments.getBoolean(IS_GROUP_ARGUMENT) && adapter.itemCount >= 1) {
             newParticipant = null
-            footerAdapter.removeFooter()
+            headerFooterAdapter.removeFooter()
 
             return
         }
@@ -304,7 +304,7 @@ class NewChatFragment : MainFragment() {
                     .paddingDp(16)
                     .colorRes(R.color.icon))
 
-            footerAdapter.setFooter(addParticipantItem)
+            headerFooterAdapter.setFooter(addParticipantItem)
         } else {
             val addParticipantInputItem = LayoutInflater.from(context)
                     .inflate(R.layout.item_add_participant_input, root, false)
@@ -364,7 +364,7 @@ class NewChatFragment : MainFragment() {
                 refreshNewParticipantFooter()
             }
 
-            footerAdapter.setFooter(addParticipantInputItem)
+            headerFooterAdapter.setFooter(addParticipantInputItem)
         }
     }
 

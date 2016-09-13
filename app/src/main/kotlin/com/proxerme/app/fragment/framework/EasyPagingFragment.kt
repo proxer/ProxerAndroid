@@ -1,6 +1,6 @@
 package com.proxerme.app.fragment.framework
 
-import adapter.FooterAdapter
+import adapter.HeaderFooterAdapter
 import android.os.Bundle
 import android.os.Parcelable
 import android.support.v4.widget.SwipeRefreshLayout
@@ -32,10 +32,11 @@ abstract class EasyPagingFragment<T, C : PagingAdapterCallback<T>> :
     }
 
     open protected val isSwipeToRefreshEnabled = true
+    open protected val hasListFixedSize = true
 
     abstract protected val layoutManager: RecyclerView.LayoutManager
     abstract protected val adapter: PagingAdapter<T, C>
-    protected lateinit var footerAdapter: FooterAdapter
+    protected lateinit var headerFooterAdapter: HeaderFooterAdapter
 
     open protected val list: RecyclerView by bindView(R.id.list)
     open protected val root: ViewGroup by bindView(R.id.root)
@@ -59,11 +60,11 @@ abstract class EasyPagingFragment<T, C : PagingAdapterCallback<T>> :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        footerAdapter = FooterAdapter(adapter)
+        headerFooterAdapter = HeaderFooterAdapter(adapter)
 
-        list.setHasFixedSize(true)
+        list.setHasFixedSize(hasListFixedSize)
         list.layoutManager = layoutManager
-        list.adapter = footerAdapter
+        list.adapter = headerFooterAdapter
         list.addOnScrollListener(object : EndlessRecyclerOnScrollListener(layoutManager) {
             override fun onLoadMore() {
                 if (exception == null && !endReached) {
@@ -174,7 +175,7 @@ abstract class EasyPagingFragment<T, C : PagingAdapterCallback<T>> :
                                    onButtonClickListener: View.OnClickListener? = null) {
         hideProgress()
 
-        Utils.showError(context, message, footerAdapter,
+        Utils.showError(context, message, headerFooterAdapter,
                 buttonMessage = buttonMessage, parent = root,
                 onWebClickListener = Link.OnClickListener { link ->
                     Utils.viewLink(context, link + "?device=mobile")
@@ -189,6 +190,6 @@ abstract class EasyPagingFragment<T, C : PagingAdapterCallback<T>> :
     }
 
     private fun hideError() {
-        footerAdapter.removeFooter()
+        headerFooterAdapter.removeFooter()
     }
 }

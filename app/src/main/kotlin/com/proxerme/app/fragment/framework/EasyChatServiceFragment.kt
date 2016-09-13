@@ -1,6 +1,6 @@
 package com.proxerme.app.fragment.framework
 
-import adapter.FooterAdapter
+import adapter.HeaderFooterAdapter
 import android.database.SQLException
 import android.os.Bundle
 import android.os.Parcelable
@@ -57,7 +57,7 @@ abstract class EasyChatServiceFragment<T, C : PagingAdapterCallback<T>> :
 
     abstract protected var layoutManager: RecyclerView.LayoutManager
     abstract protected val adapter: PagingAdapter<T, C>
-    protected lateinit var footerAdapter: FooterAdapter
+    protected lateinit var headerFooterAdapter: HeaderFooterAdapter
 
     open protected val root: ViewGroup by bindView(R.id.root)
     open protected val list: RecyclerView by bindView(R.id.list)
@@ -123,11 +123,11 @@ abstract class EasyChatServiceFragment<T, C : PagingAdapterCallback<T>> :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        footerAdapter = FooterAdapter(adapter)
+        headerFooterAdapter = HeaderFooterAdapter(adapter)
 
         list.setHasFixedSize(true)
         list.layoutManager = layoutManager
-        list.adapter = footerAdapter
+        list.adapter = headerFooterAdapter
         list.addOnScrollListener(object : EndlessRecyclerOnScrollListener(layoutManager) {
             override fun onLoadMore() {
                 if (exception == null && loginModule.canLoad() && !isLoading && !hasReachedEnd) {
@@ -180,7 +180,7 @@ abstract class EasyChatServiceFragment<T, C : PagingAdapterCallback<T>> :
             }
         }
 
-        Utils.showError(context, message, footerAdapter, buttonMessage, root,
+        Utils.showError(context, message, headerFooterAdapter, buttonMessage, root,
                 onWebClickListener = onWebClickListener,
                 onButtonClickListener = onButtonClickListenerToSet)
 
@@ -240,7 +240,7 @@ abstract class EasyChatServiceFragment<T, C : PagingAdapterCallback<T>> :
     open protected fun hideError() {
         exception = null
 
-        footerAdapter.removeFooter()
+        headerFooterAdapter.removeFooter()
     }
 
     @CallSuper

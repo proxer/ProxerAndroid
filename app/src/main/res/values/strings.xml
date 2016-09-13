@@ -232,6 +232,8 @@
     <string name="action_filter_one_shots">One-Shots</string>
     <string name="action_filter_doujin">Doujinshi</string>
     <string name="action_filter_hmanga">H-Manga</string>
+    <string name="action_search">Suchen</string>
+    <string name="action_filter">Filter</string>
 
     <plurals name="media_episode_count">
         <item quantity="one">Eine Episode</item>
