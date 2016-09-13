@@ -43,6 +43,8 @@ dependencies {
     compile "com.android.support:customtabs:$support_version"
     compile "com.android.support:percent:$support_version"
     compile "com.android.support:support-annotations:$support_version"
+    compile "com.android.support:preference-v14:$support_version"
+    compile "com.android.support:preference-v7:$support_version"
 
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     /* Use custom built ones until bugfix update is out
