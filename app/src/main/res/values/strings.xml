@@ -34,6 +34,7 @@
     <string name="error_io">Es gab ein Speicherproblem. Versuche es erneut.</string>
     <string name="error_unknown">Ein unbekannter Fehler ist aufgetreten. Versuche es erneut.</string>
     <string name="error_retry">Erneut versuchen</string>
+    <string name="error_confirm">Bestätigen</string>
 
     <string name="preference_category_notifications_title">Benachrichtigungen</string>
     <string name="preference_category_info_title">Info</string>
@@ -78,6 +79,9 @@
     <string name="drawer_account_ucp">User-Control-Panel</string>
 
     <string name="dialog_cancel">Abbrechen</string>
+
+    <string name="error_hentai_confirmation_needed">Für diese Kategorie musst du bestätigen, dass du 18 jahre oder älter bist</string>
+
 
     <string name="dialog_login_title">Anmelden</string>
     <string name="dialog_login_positive">Anmelden</string>
@@ -218,6 +222,16 @@
     <string name="fragment_ucp_overview_epsiode_counter_days">Tage</string>
     <string name="preference_open_source_title">Open Source</string>
     <string name="preference_open_source_summary">Sieh dir den Quellcode auf GitHub an</string>
+    <string name="action_filter_all_anime">Alles</string>
+    <string name="action_filter_anime_series">Serien</string>
+    <string name="action_filter_movies">Filme</string>
+    <string name="action_filter_ova">OVA</string>
+    <string name="action_filter_hentai">Hentai</string>
+    <string name="action_filter_all_manga">Alles</string>
+    <string name="action_filter_manga_series">Mangaserien</string>
+    <string name="action_filter_one_shots">One-Shots</string>
+    <string name="action_filter_doujin">Doujinshi</string>
+    <string name="action_filter_hmanga">H-Manga</string>
 
     <plurals name="media_episode_count">
         <item quantity="one">Eine Episode</item>

@@ -7,7 +7,9 @@ import android.support.v7.app.AppCompatActivity
 import com.afollestad.materialdialogs.MaterialDialog
 import com.proxerme.app.R
 import com.proxerme.app.application.MainApplication
+import com.proxerme.app.event.HentaiConfirmationEvent
 import com.proxerme.app.helper.PreferenceHelper
+import org.greenrobot.eventbus.EventBus
 
 /**
  * TODO: Describe class
@@ -30,6 +32,8 @@ class HentaiConfirmationDialog : DialogFragment() {
                 .negativeText(R.string.dialog_cancel)
                 .onPositive { materialDialog, dialogAction ->
                     PreferenceHelper.setHentaiAllowed(context, true)
+
+                    EventBus.getDefault().post(HentaiConfirmationEvent())
                 }
                 .build()
     }

@@ -175,7 +175,7 @@ abstract class EasyPagingFragment<T, C : PagingAdapterCallback<T>> :
         hideProgress()
 
         Utils.showError(context, message, footerAdapter,
-                buttonMessage = null, parent = root,
+                buttonMessage = buttonMessage, parent = root,
                 onWebClickListener = Link.OnClickListener { link ->
                     Utils.viewLink(context, link + "?device=mobile")
                 },

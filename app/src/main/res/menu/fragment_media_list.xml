@@ -3,6 +3,77 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/filter"
+        android:icon="@drawable/ic_action_filter"
+        android:title="Filter"
+        app:showAsAction="ifRoom">
+
+        <menu>
+            <group
+                android:id="@+id/filterAnime"
+                android:checkableBehavior="single">
+
+                <item
+                    android:id="@+id/all_anime"
+                    android:title="@string/action_filter_all_anime"
+                    app:showAsAction="never" />
+
+                <item
+                    android:id="@+id/animeseries"
+                    android:title="@string/action_filter_anime_series"
+                    app:showAsAction="never" />
+
+                <item
+                    android:id="@+id/movies"
+                    android:title="@string/action_filter_movies"
+                    app:showAsAction="never" />
+
+                <item
+                    android:id="@+id/ova"
+                    android:title="@string/action_filter_ova"
+                    app:showAsAction="never" />
+
+                <item
+                    android:id="@+id/hentai"
+                    android:title="@string/action_filter_hentai"
+                    app:showAsAction="never" />
+
+            </group>
+
+            <group
+                android:id="@+id/filterManga"
+                android:checkableBehavior="single">
+
+                <item
+                    android:id="@+id/all_manga"
+                    android:title="@string/action_filter_all_manga"
+                    app:showAsAction="never" />
+
+                <item
+                    android:id="@+id/mangaseries"
+                    android:title="@string/action_filter_manga_series"
+                    app:showAsAction="never" />
+
+                <item
+                    android:id="@+id/oneshot"
+                    android:title="@string/action_filter_one_shots"
+                    app:showAsAction="never" />
+
+                <item
+                    android:id="@+id/doujin"
+                    android:title="@string/action_filter_doujin"
+                    app:showAsAction="never" />
+
+                <item
+                    android:id="@+id/hmanga"
+                    android:title="@string/action_filter_hmanga"
+                    app:showAsAction="never" />
+
+            </group>
+        </menu>
+    </item>
+
+    <item
         android:id="@+id/sort"
         android:icon="@drawable/ic_action_sort"
         android:title="@string/action_sort"
