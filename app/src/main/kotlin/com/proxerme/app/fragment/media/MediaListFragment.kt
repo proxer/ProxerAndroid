@@ -77,6 +77,9 @@ class MediaListFragment : EasyPagingFragment<MediaListEntry, MediaAdapterCallbac
     override lateinit var adapter: MediaAdapter
     override lateinit var layoutManager: StaggeredGridLayoutManager
 
+    private lateinit var searchItem: MenuItem
+    private lateinit var searchView: SearchView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -144,8 +147,8 @@ class MediaListFragment : EasyPagingFragment<MediaListEntry, MediaAdapterCallbac
             TypeParameter.HMANGA -> filterSubMenu.findItem(R.id.hmanga).isChecked = true
         }
 
-        val searchItem = menu.findItem(R.id.search)
-        val searchView = searchItem.actionView as SearchView
+        searchItem = menu.findItem(R.id.search)
+        searchView = searchItem.actionView as SearchView
 
         if (searchQuery != null) {
             searchItem.expandActionView()
@@ -220,6 +223,13 @@ class MediaListFragment : EasyPagingFragment<MediaListEntry, MediaAdapterCallbac
         }
 
         return true
+    }
+
+    override fun onDestroyOptionsMenu() {
+        searchView.setOnQueryTextListener(null)
+        MenuItemCompat.setOnActionExpandListener(searchItem, null)
+
+        super.onDestroyOptionsMenu()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
