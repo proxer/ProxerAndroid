@@ -64,5 +64,5 @@ class ToptenAdapter(savedInstanceState: Bundle? = null,
         }
     }
 
-    class ToptenAdapterCallback : PagingAdapterCallback<ToptenEntry>()
+    open class ToptenAdapterCallback : PagingAdapterCallback<ToptenEntry>()
 }

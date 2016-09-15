@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import butterknife.bindView
+import com.proxerme.app.activity.MediaActivity
 import com.proxerme.app.adapter.user.ToptenAdapter
 import com.proxerme.app.fragment.framework.EasyLoadingFragment
 import com.proxerme.app.manager.SectionManager.Section
@@ -57,8 +58,27 @@ class ToptenFragment : EasyLoadingFragment<Array<Array<ToptenEntry>>>() {
 
         userId = arguments.getString(ToptenFragment.Companion.ARGUMENT_USER_ID)
         userName = arguments.getString(ToptenFragment.Companion.ARGUMENT_USER_NAME)
+
         animeAdapter = ToptenAdapter(savedInstanceState, ANIME)
+        animeAdapter.callback = object : ToptenAdapter.ToptenAdapterCallback() {
+            override fun onItemClick(v: View, item: ToptenEntry) {
+                MediaActivity.navigateTo(activity, item.id, item.name)
+            }
+        }
+
         mangaAdapter = ToptenAdapter(savedInstanceState, MANGA)
+        mangaAdapter.callback = object : ToptenAdapter.ToptenAdapterCallback() {
+            override fun onItemClick(v: View, item: ToptenEntry) {
+                MediaActivity.navigateTo(activity, item.id, item.name)
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        animeAdapter.callback = null
+        mangaAdapter.callback = null
+
+        super.onDestroy()
     }
 
     override fun onCreateView(inflater: android.view.LayoutInflater, container: ViewGroup?,

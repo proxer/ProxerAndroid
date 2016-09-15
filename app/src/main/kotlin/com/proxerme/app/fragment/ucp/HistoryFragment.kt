@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import android.view.View
+import com.proxerme.app.activity.MediaActivity
 import com.proxerme.app.adapter.ucp.HistoryAdapter
 import com.proxerme.app.fragment.framework.EasyPagingFragment
 import com.proxerme.app.manager.SectionManager.Section
@@ -51,6 +52,12 @@ class HistoryFragment : EasyPagingFragment<HistoryEntry, HistoryAdapter.HistoryA
         super.onCreate(savedInstanceState)
 
         adapter = HistoryAdapter(savedInstanceState)
+        adapter.callback = object : HistoryAdapter.HistoryAdapterCallback() {
+            override fun onItemClick(v: View, item: HistoryEntry) {
+                MediaActivity.navigateTo(activity, item.id, item.name)
+            }
+        }
+
         layoutManager = GridLayoutManager(context, Utils.calculateSpanAmount(activity) + 1)
     }
 

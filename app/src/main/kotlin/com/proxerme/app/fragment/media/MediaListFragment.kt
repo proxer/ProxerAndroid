@@ -10,6 +10,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import com.proxerme.app.R
+import com.proxerme.app.activity.MediaActivity
 import com.proxerme.app.adapter.media.MediaAdapter
 import com.proxerme.app.adapter.media.MediaAdapter.MediaAdapterCallback
 import com.proxerme.app.dialog.HentaiConfirmationDialog
@@ -100,6 +101,12 @@ class MediaListFragment : EasyPagingFragment<MediaListEntry, MediaAdapterCallbac
         }
 
         adapter = MediaAdapter(savedInstanceState, category)
+        adapter.callback = object : MediaAdapterCallback() {
+            override fun onItemClick(v: View, item: MediaListEntry) {
+                MediaActivity.navigateTo(activity, item.id, item.name)
+            }
+        }
+
         layoutManager = StaggeredGridLayoutManager(Utils.calculateSpanAmount(activity) + 1,
                 StaggeredGridLayoutManager.VERTICAL)
 

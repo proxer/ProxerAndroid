@@ -5,7 +5,9 @@ import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
 import com.proxerme.app.R
+import com.proxerme.app.activity.MediaActivity
 import com.proxerme.app.adapter.user.UserMediaAdapter
 import com.proxerme.app.adapter.user.UserMediaAdapter.UserMediaAdapterCallback
 import com.proxerme.app.fragment.framework.EasyPagingFragment
@@ -78,6 +80,12 @@ class UserMediaListFragment : EasyPagingFragment<UserMediaListEntry, UserMediaAd
         }
 
         adapter = UserMediaAdapter(savedInstanceState, category)
+        adapter.callback = object : UserMediaAdapterCallback() {
+            override fun onItemClick(v: View, item: UserMediaListEntry) {
+                MediaActivity.navigateTo(activity, item.id, item.name)
+            }
+        }
+
         layoutManager = StaggeredGridLayoutManager(Utils.calculateSpanAmount(activity) + 1,
                 StaggeredGridLayoutManager.VERTICAL)
 

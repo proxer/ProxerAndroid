@@ -42,6 +42,18 @@
                 android:value=".activity.DashboardActivity" />
         </activity>
         <activity
+            android:name=".activity.NewChatActivity"
+            android:windowSoftInputMode="stateUnchanged" />
+        <activity
+            android:name=".activity.MediaActivity"
+            android:parentActivityName=".activity.DashboardActivity"
+            android:theme="@style/Theme.Translucent">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.DashboardActivity" />
+        </activity>
+
+        <activity
             android:name=".activity.ImageDetailActivity"
             android:theme="@style/Theme.Transparent" />
         <activity android:name="customtabs.WebviewActivity" />
@@ -58,10 +70,6 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
-        <activity
-            android:name=".activity.NewChatActivity"
-            android:windowSoftInputMode="stateUnchanged" />
     </application>
 
 </manifest>

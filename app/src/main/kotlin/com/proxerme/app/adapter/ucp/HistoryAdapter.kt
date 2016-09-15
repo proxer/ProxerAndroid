@@ -72,5 +72,5 @@ class HistoryAdapter(savedInstanceState: Bundle? = null) : PagingAdapter<History
         }
     }
 
-    class HistoryAdapterCallback : PagingAdapterCallback<HistoryEntry>()
+    open class HistoryAdapterCallback : PagingAdapterCallback<HistoryEntry>()
 }
