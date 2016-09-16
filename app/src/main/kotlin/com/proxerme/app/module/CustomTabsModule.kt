@@ -31,6 +31,7 @@ interface CustomTabsModule {
                 .setToolbarColor(ContextCompat.getColor(self, R.color.colorPrimary))
                 .setSecondaryToolbarColor(ContextCompat.getColor(self,
                         R.color.colorPrimaryDark))
+                .addDefaultShareMenuItem()
                 .enableUrlBarHiding()
                 .setShowTitle(true)
                 .build()
