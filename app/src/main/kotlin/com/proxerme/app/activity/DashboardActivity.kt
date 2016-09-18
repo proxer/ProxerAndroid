@@ -14,6 +14,7 @@ import com.proxerme.app.fragment.SettingsFragment
 import com.proxerme.app.fragment.chat.ConferencesFragment
 import com.proxerme.app.fragment.media.MediaListFragment
 import com.proxerme.app.fragment.news.NewsFragment
+import com.proxerme.app.fragment.ucp.ReminderFragment
 import com.proxerme.app.helper.IntroductionHelper
 import com.proxerme.app.helper.MaterialDrawerHelper
 import com.proxerme.app.helper.MaterialDrawerHelper.Companion.ACCOUNT_GUEST
@@ -26,6 +27,7 @@ import com.proxerme.app.helper.MaterialDrawerHelper.Companion.ITEM_CHAT
 import com.proxerme.app.helper.MaterialDrawerHelper.Companion.ITEM_DONATE
 import com.proxerme.app.helper.MaterialDrawerHelper.Companion.ITEM_MANGA
 import com.proxerme.app.helper.MaterialDrawerHelper.Companion.ITEM_NEWS
+import com.proxerme.app.helper.MaterialDrawerHelper.Companion.ITEM_REMINDER
 import com.proxerme.app.helper.MaterialDrawerHelper.Companion.ITEM_SETTINGS
 import com.proxerme.app.helper.PreferenceHelper
 import com.proxerme.app.helper.StorageHelper
@@ -214,7 +216,14 @@ class DashboardActivity : MainActivity(), CustomTabsModule {
             }
 
             ITEM_CHAT -> {
-                setFragment(ConferencesFragment.newInstance(), getString(R.string.fragment_conferences))
+                setFragment(ConferencesFragment.newInstance(),
+                        getString(R.string.fragment_conferences))
+
+                return false
+            }
+
+            ITEM_REMINDER -> {
+                setFragment(ReminderFragment.newInstance(), getString(R.string.fragment_reminder))
 
                 return false
             }

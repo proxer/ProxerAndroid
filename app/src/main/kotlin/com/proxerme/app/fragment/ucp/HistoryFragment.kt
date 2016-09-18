@@ -21,6 +21,9 @@ import com.proxerme.library.connection.ucp.request.HistoryRequest
 class HistoryFragment : EasyPagingFragment<HistoryEntry, HistoryAdapter.HistoryAdapterCallback>() {
 
     companion object {
+
+        const val ITEMS_ON_PAGE = 50
+
         fun newInstance(): HistoryFragment {
             return HistoryFragment()
         }
@@ -41,7 +44,7 @@ class HistoryFragment : EasyPagingFragment<HistoryEntry, HistoryAdapter.HistoryA
     })
 
     override val section = Section.HISTORY
-    override val itemsOnPage = 50
+    override val itemsOnPage = ITEMS_ON_PAGE
     override val canLoad: Boolean
         get() = super.canLoad && loginModule.canLoad()
 
@@ -86,7 +89,7 @@ class HistoryFragment : EasyPagingFragment<HistoryEntry, HistoryAdapter.HistoryA
     }
 
     override fun constructPagedLoadingRequest(page: Int): LoadingRequest<Array<HistoryEntry>> {
-        return LoadingRequest(HistoryRequest(page).withLimit(itemsOnPage))
+        return LoadingRequest(HistoryRequest(page).withLimit(ITEMS_ON_PAGE))
     }
 
 }

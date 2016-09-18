@@ -34,8 +34,9 @@ class MaterialDrawerHelper : OnActivityListener {
     companion object {
         const val ITEM_NEWS = 0L
         const val ITEM_CHAT = 1L
-        const val ITEM_ANIME = 2L
-        const val ITEM_MANGA = 3L
+        const val ITEM_REMINDER = 2L
+        const val ITEM_ANIME = 3L
+        const val ITEM_MANGA = 4L
         const val ITEM_DONATE = 10L
         const val ITEM_SETTINGS = 11L
 
@@ -47,7 +48,8 @@ class MaterialDrawerHelper : OnActivityListener {
 
         private const val STATE_CURRENT_DRAWER_ITEM_ID = "material_drawer_helper_current_id"
 
-        @IntDef(ITEM_NEWS, ITEM_CHAT, ITEM_DONATE, ITEM_SETTINGS, ITEM_ANIME, ITEM_MANGA)
+        @IntDef(ITEM_NEWS, ITEM_CHAT, ITEM_REMINDER, ITEM_DONATE, ITEM_SETTINGS, ITEM_ANIME,
+                ITEM_MANGA)
         @Retention(AnnotationRetention.SOURCE)
         @Target(AnnotationTarget.FUNCTION, AnnotationTarget.FIELD,
                 AnnotationTarget.VALUE_PARAMETER)
@@ -201,6 +203,15 @@ class MaterialDrawerHelper : OnActivityListener {
                                 .withColorRes(R.color.colorAccent)
                                 .withTextColorRes(android.R.color.white))
                         .withIdentifier(ITEM_CHAT),
+                PrimaryDrawerItem()
+                        .withName(R.string.drawer_item_reminder)
+                        .withIcon(CommunityMaterial.Icon.cmd_bookmark)
+                        .withSelectedTextColorRes(R.color.colorAccent)
+                        .withSelectedIconColorRes(R.color.colorAccent)
+                        .withBadgeStyle(BadgeStyle()
+                                .withColorRes(R.color.colorAccent)
+                                .withTextColorRes(android.R.color.white))
+                        .withIdentifier(ITEM_REMINDER),
                 PrimaryDrawerItem()
                         .withName(R.string.drawer_item_anime)
                         .withIcon(CommunityMaterial.Icon.cmd_television)

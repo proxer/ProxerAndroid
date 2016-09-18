@@ -69,6 +69,7 @@
 
     <string name="drawer_item_news">News</string>
     <string name="drawer_item_chat">Chat</string>
+    <string name="drawer_item_reminder">Lesezeichen</string>
     <string name="drawer_item_anime">Anime</string>
     <string name="drawer_item_manga">Manga</string>
     <string name="drawer_item_donate">Spenden</string>
@@ -140,6 +141,9 @@
     <string name="fragment_topten_manga">Manga</string>
 
     <string name="fragment_conference_info_time">Erstellt am %1$s um %2$s</string>
+
+    <string name="fragment_reminder">Lesezeichen</string>
+    <string name="reminder_episode">Episode %d</string>
 
     <string name="link_error_not_found">Der Link konnte nicht geöffnet werden</string>
 

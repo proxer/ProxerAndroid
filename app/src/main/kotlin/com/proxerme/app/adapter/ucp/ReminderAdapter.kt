@@ -1,0 +1,98 @@
+package com.proxerme.app.adapter.ucp
+
+import android.os.Bundle
+import android.support.v7.widget.RecyclerView
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.TextView
+import butterknife.bindView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.mikepenz.community_material_typeface_library.CommunityMaterial
+import com.mikepenz.iconics.IconicsDrawable
+import com.proxerme.app.R
+import com.proxerme.app.adapter.framework.PagingAdapter
+import com.proxerme.library.connection.ucp.entitiy.Reminder
+import com.proxerme.library.info.ProxerUrlHolder
+
+/**
+ * TODO: Describe Class
+ *
+ * @author Ruben Gees
+ */
+class ReminderAdapter(savedInstanceState: Bundle? = null) :
+        PagingAdapter<Reminder, ReminderAdapter.ReminderAdapterCallback>() {
+
+    private companion object {
+        private const val ITEMS_STATE = "adapter_reminder_state_items"
+    }
+
+    init {
+        savedInstanceState?.let {
+            list.addAll(it.getParcelableArrayList(ITEMS_STATE))
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
+            PagingViewHolder<Reminder, ReminderAdapterCallback> {
+        return ReminderViewHolder(LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_reminder, parent, false))
+    }
+
+    override fun saveInstanceState(outState: Bundle) {
+        outState.putParcelableArrayList(ITEMS_STATE, list)
+    }
+
+    inner class ReminderViewHolder(itemView: View) :
+            PagingViewHolder<Reminder, ReminderAdapterCallback>(itemView) {
+
+        override val adapterList: List<Reminder>
+            get() = list
+        override val adapterCallback: ReminderAdapterCallback?
+            get() = callback
+
+        private val title: TextView by bindView(R.id.title)
+        private val medium: TextView by bindView(R.id.medium)
+        private val image: ImageView by bindView(R.id.image)
+        private val episode: TextView by bindView(R.id.episode)
+        private val language: TextView by bindView(R.id.language)
+        private val removeButton: ImageButton by bindView(R.id.removeButton)
+
+        init {
+            removeButton.setImageDrawable(IconicsDrawable(removeButton.context)
+                    .icon(CommunityMaterial.Icon.cmd_bookmark_remove)
+                    .colorRes(R.color.icon)
+                    .sizeDp(48)
+                    .paddingDp(12))
+            removeButton.setOnClickListener {
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    callback?.onRemoveClick(it, list[adapterPosition])
+                }
+            }
+        }
+
+        override fun bind(item: Reminder) {
+            title.text = item.name
+            medium.text = item.medium
+            episode.text = episode.context.getString(R.string.reminder_episode, item.episode)
+            language.text = item.language
+
+            Glide.with(image.context)
+                    .load(ProxerUrlHolder.getCoverImageUrl(item.entryId).toString())
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .into(image)
+        }
+    }
+
+    open class ReminderAdapterCallback : PagingAdapterCallback<Reminder>() {
+
+        open fun onRemoveClick(v: View, item: Reminder) {
+
+        }
+
+    }
+
+}
