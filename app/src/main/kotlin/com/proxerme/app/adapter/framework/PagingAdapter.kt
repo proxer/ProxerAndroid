@@ -70,6 +70,16 @@ abstract class PagingAdapter<T, C : PagingAdapter.PagingAdapterCallback<T>>() :
         replace(items.asIterable())
     }
 
+    fun remove(item: T) {
+        val position = when (hasStableIds) {
+            true -> list.indexOfFirst { it.id == item.id }
+            false -> list.indexOf(item)
+        }
+
+        list.removeAt(position)
+        notifyItemRemoved(position)
+    }
+
     open fun clear() {
         val previousSize = list.size
 
