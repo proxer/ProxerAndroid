@@ -45,6 +45,7 @@ class HistoryFragment : EasyPagingFragment<HistoryEntry, HistoryAdapter.HistoryA
 
     override val section = Section.HISTORY
     override val itemsOnPage = ITEMS_ON_PAGE
+    override val isSwipeToRefreshEnabled = false
     override val canLoad: Boolean
         get() = super.canLoad && loginModule.canLoad()
 

@@ -44,7 +44,6 @@ class RetainedLoadingFragment<T>() : Fragment() {
         this.successCallback = successCallback
         this.errorCallback = errorCallback
 
-
         synchronized(calls, {
             deliverAndCleanIfPossible()
         })
