@@ -2,6 +2,8 @@
 <resources>
 
     <style name="Theme.AppTheme" parent="Base.Theme.AppTheme">
+        <item name="android:navigationBarColor">@color/colorPrimary</item>
+
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
     </style>
 
