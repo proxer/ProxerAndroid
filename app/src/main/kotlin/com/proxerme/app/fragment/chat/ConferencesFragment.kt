@@ -90,6 +90,12 @@ class ConferencesFragment : EasyChatServiceFragment<LocalConference, ConferenceA
         super.onStop()
     }
 
+    override fun onDestroy() {
+        adapter.callback = null
+
+        super.onDestroy()
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 

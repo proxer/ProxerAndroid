@@ -166,6 +166,13 @@ class ChatFragment : EasyChatServiceFragment<LocalMessage, ChatAdapter.ChatAdapt
         super.onStop()
     }
 
+    override fun onDestroy() {
+        adapter.user = null
+        adapter.callback = null
+
+        super.onDestroy()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_chat, container, false)
