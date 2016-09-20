@@ -5,6 +5,7 @@ import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
+import com.proxerme.app.R
 import com.proxerme.app.activity.MediaActivity
 import com.proxerme.app.adapter.ucp.ReminderAdapter
 import com.proxerme.app.application.MainApplication
@@ -131,11 +132,14 @@ class ReminderFragment : EasyPagingFragment<Reminder, ReminderAdapter.ReminderAd
 
                         synchronize()
                     }, {
+                        val amount = adapter.itemsToRemove.size
+                        val errorText = context.resources
+                                .getQuantityString(R.plurals.error_reminder_removal, amount, amount)
+
                         adapter.clearRemovalQueue()
                         removalTask = null
 
-                        Snackbar.make(root, "Lesezeichen konnte nicht gelöscht werden",
-                                Snackbar.LENGTH_LONG).show()
+                        Snackbar.make(root, errorText, Snackbar.LENGTH_LONG).show()
                     })
         }
     }

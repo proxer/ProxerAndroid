@@ -35,6 +35,10 @@
     <string name="error_unknown">Ein unbekannter Fehler ist aufgetreten. Versuche es erneut.</string>
     <string name="error_retry">Erneut versuchen</string>
     <string name="error_confirm">Bestätigen</string>
+    <plurals name="error_reminder_removal">
+        <item quantity="one">Ein Lesezeichen konnte nicht gelöscht werden</item>
+        <item quantity="other">%d Lesezeichen konnten nicht gelöscht werden</item>
+    </plurals>
 
     <string name="preference_category_notifications_title">Benachrichtigungen</string>
     <string name="preference_category_info_title">Info</string>
@@ -83,7 +87,6 @@
 
     <string name="error_hentai_confirmation_needed">Für diese Kategorie musst du bestätigen, dass du 18 jahre oder älter bist</string>
 
-
     <string name="dialog_login_title">Anmelden</string>
     <string name="dialog_login_positive">Anmelden</string>
     <string name="dialog_login_error_username">Bitte gib einen Nutzernamen an</string>
@@ -113,7 +116,7 @@
         <item quantity="other">%d Nachrichten</item>
     </plurals>
     <plurals name="notification_chat_conference_amount">
-        <item quantity="one">in einem Chat"</item>
+        <item quantity="one">in einem Chat</item>
         <item quantity="other">in %d Chats</item>
     </plurals>
 
