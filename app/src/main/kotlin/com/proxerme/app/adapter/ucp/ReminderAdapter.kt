@@ -17,6 +17,7 @@ import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.library.connection.ucp.entitiy.Reminder
 import com.proxerme.library.info.ProxerUrlHolder
+import java.util.*
 
 /**
  * TODO: Describe Class
@@ -28,11 +29,17 @@ class ReminderAdapter(savedInstanceState: Bundle? = null) :
 
     private companion object {
         private const val ITEMS_STATE = "adapter_reminder_state_items"
+        private const val ITEMS_TO_REMOVE_STATE = "adapter_reminder_state_items_to_remove"
     }
+
+    private val _itemsToRemove = ArrayList<Reminder>()
+    val itemsToRemove: List<Reminder>
+        get() = _itemsToRemove
 
     init {
         savedInstanceState?.let {
             list.addAll(it.getParcelableArrayList(ITEMS_STATE))
+            _itemsToRemove.addAll(it.getParcelableArrayList(ITEMS_TO_REMOVE_STATE))
         }
     }
 
@@ -44,6 +51,7 @@ class ReminderAdapter(savedInstanceState: Bundle? = null) :
 
     override fun saveInstanceState(outState: Bundle) {
         outState.putParcelableArrayList(ITEMS_STATE, list)
+        outState.putParcelableArrayList(ITEMS_TO_REMOVE_STATE, _itemsToRemove)
     }
 
     inner class ReminderViewHolder(itemView: View) :
@@ -84,7 +92,31 @@ class ReminderAdapter(savedInstanceState: Bundle? = null) :
                     .load(ProxerUrlHolder.getCoverImageUrl(item.entryId).toString())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(image)
+
+            if (itemsToRemove.firstOrNull { it.id == item.id } != null) {
+                removeButton.visibility = View.GONE
+            } else {
+                removeButton.visibility = View.VISIBLE
+            }
         }
+    }
+
+    override fun remove(item: Reminder) {
+        _itemsToRemove.remove(item)
+
+        super.remove(item)
+    }
+
+    fun addItemToRemove(item: Reminder) {
+        _itemsToRemove.add(item)
+
+        notifyItemChanged(list.indexOfFirst { it.id == item.id })
+    }
+
+    fun clearRemovalQueue() {
+        _itemsToRemove.clear()
+
+        notifyDataSetChanged()
     }
 
     open class ReminderAdapterCallback : PagingAdapterCallback<Reminder>() {
