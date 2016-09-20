@@ -122,6 +122,7 @@ class UserMediaListFragment : EasyPagingFragment<UserMediaListEntry, UserMediaAd
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val previousCriteria = sortCriteria
+
         when (item.itemId) {
             R.id.ascending -> {
                 if (sortCriteria == UserMediaSortParameter.NAME_DESCENDING) {

@@ -241,6 +241,9 @@
     <string name="action_filter_hmanga">H-Manga</string>
     <string name="action_search">Suchen</string>
     <string name="action_filter">Filter</string>
+    <string name="filter_manga">Manga</string>
+    <string name="filter_anime">Anime</string>
+    <string name="filter_all">Alles</string>
 
     <plurals name="media_episode_count">
         <item quantity="one">Eine Episode</item>
