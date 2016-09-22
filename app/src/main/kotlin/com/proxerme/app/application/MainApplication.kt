@@ -40,17 +40,40 @@ class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            return
+        }
+
         refWatcher = LeakCanary.install(this)
+        proxerConnection = ProxerConnection.Builder(BuildConfig.PROXER_API_KEY, this).build()
 
+        initLibs()
+        initDrawerImageLoader()
+
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onTerminate() {
+        EventBus.getDefault().unregister(this)
+
+        super.onTerminate()
+    }
+
+    @Subscribe
+    fun onLoginStateChanged(@Suppress("UNUSED_PARAMETER") state: UserManager.LoginState) {
+        ChatService.synchronize(this)
+    }
+
+    private fun initLibs() {
         JodaTimeAndroid.init(this)
-
         Hawk.init(this).build()
-
         EventBus.builder()
                 .logNoSubscriberMessages(false)
                 .sendNoSubscriberEvent(false)
                 .installDefaultEventBus()
+    }
 
+    private fun initDrawerImageLoader() {
         DrawerImageLoader.init(object : AbstractDrawerImageLoader() {
             override fun set(imageView: ImageView, uri: Uri?, placeholder: Drawable?,
                              tag: String?) {
@@ -71,20 +94,5 @@ class MainApplication : Application() {
                         .colorRes(android.R.color.white)
             }
         })
-
-        proxerConnection = ProxerConnection.Builder(BuildConfig.PROXER_API_KEY, this).build()
-
-        EventBus.getDefault().register(this)
-    }
-
-    override fun onTerminate() {
-        EventBus.getDefault().unregister(this)
-
-        super.onTerminate()
-    }
-
-    @Subscribe
-    fun onLoginStateChanged(@Suppress("UNUSED_PARAMETER") state: UserManager.LoginState) {
-        ChatService.synchronize(this)
     }
 }
