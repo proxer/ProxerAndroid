@@ -15,14 +15,8 @@ import java.util.*
 abstract class PagingAdapter<T, C : PagingAdapter.PagingAdapterCallback<T>>() :
         RecyclerView.Adapter<PagingAdapter.PagingViewHolder<T, C>>() where T : Parcelable, T : IdItem {
 
-    open protected val hasStableIds = true
-
     protected val list: ArrayList<T> = arrayListOf()
     var callback: C? = null
-
-    init {
-        setHasStableIds(hasStableIds)
-    }
 
     override fun onBindViewHolder(holder: PagingViewHolder<T, C>, position: Int) {
         holder.bind(list[position])
@@ -71,10 +65,7 @@ abstract class PagingAdapter<T, C : PagingAdapter.PagingAdapterCallback<T>>() :
     }
 
     open fun remove(item: T) {
-        val position = when (hasStableIds) {
-            true -> list.indexOfFirst { it.id == item.id }
-            false -> list.indexOf(item)
-        }
+        val position = list.indexOf(item)
 
         list.removeAt(position)
         notifyItemRemoved(position)
@@ -93,11 +84,7 @@ abstract class PagingAdapter<T, C : PagingAdapter.PagingAdapterCallback<T>>() :
     }
 
     open fun contains(item: T): Boolean {
-        if (hasStableIds) {
-            return list.find { it.id == item.id } != null
-        } else {
-            return list.contains(item)
-        }
+        return list.contains(item)
     }
 
     abstract class PagingViewHolder<T, out C : PagingAdapter.PagingAdapterCallback<T>>(itemView: View) :
@@ -120,7 +107,7 @@ abstract class PagingAdapter<T, C : PagingAdapter.PagingAdapterCallback<T>>() :
 
     }
 
-    abstract class PagingAdapterCallback<T> {
+    abstract class PagingAdapterCallback<in T> {
         open fun onItemClick(v: View, item: T) {
 
         }

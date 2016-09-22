@@ -33,6 +33,8 @@ class ToptenAdapter(savedInstanceState: Bundle? = null,
         savedInstanceState?.let {
             list.addAll(it.getParcelableArrayList("${ITEMS_STATE}_$category"))
         }
+
+        setHasStableIds(true)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =

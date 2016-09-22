@@ -56,7 +56,7 @@ object UserManager {
         SAVE, DONT_SAVE, SAME_AS_IS
     }
 
-    private val requests: MutableList<ProxerCall> = ArrayList<ProxerCall>()
+    private val requests: MutableList<ProxerCall> = ArrayList()
     private val lock = ReentrantLock()
 
     fun login(user: User, shouldSave: SaveOption) {
@@ -261,9 +261,7 @@ object UserManager {
     }
 
     private fun cancelAndClearRequests() {
-        requests.forEach {
-            it.cancel()
-        }
+        requests.forEach(ProxerCall::cancel)
 
         requests.clear()
     }

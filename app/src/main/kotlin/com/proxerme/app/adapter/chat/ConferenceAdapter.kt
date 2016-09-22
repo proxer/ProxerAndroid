@@ -36,6 +36,8 @@ class ConferenceAdapter(savedInstanceState: Bundle? = null) :
         savedInstanceState?.let {
             list.addAll(it.getParcelableArrayList(ITEMS_STATE))
         }
+
+        setHasStableIds(true)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

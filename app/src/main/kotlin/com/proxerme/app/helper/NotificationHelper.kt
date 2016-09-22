@@ -127,10 +127,10 @@ object NotificationHelper {
         if (messages.size == 1) {
             return messages.keys.first().topic
         } else {
-            return "${resources.getQuantityString(R.plurals.notification_chat_message_amount,
-                    messageAmount, messageAmount)} " +
-                    "${resources.getQuantityString(R.plurals.notification_chat_conference_amount,
-                            messages.size, messages.size)}"
+            return resources.getQuantityString(R.plurals.notification_chat_message_amount,
+                    messageAmount, messageAmount) + " " +
+                    resources.getQuantityString(R.plurals.notification_chat_conference_amount,
+                            messages.size, messages.size)
         }
     }
 

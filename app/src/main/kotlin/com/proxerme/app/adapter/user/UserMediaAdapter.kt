@@ -35,6 +35,8 @@ class UserMediaAdapter(savedInstanceState: Bundle? = null,
         savedInstanceState?.let {
             list.addAll(it.getParcelableArrayList("${ITEMS_STATE}_$category"))
         }
+
+        setHasStableIds(true)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -66,7 +68,7 @@ class UserMediaAdapter(savedInstanceState: Bundle? = null,
             title.text = item.name
             medium.text = item.medium
             status.text = "${item.commentEpisode}/${item.episodeCount} - " +
-                    "${convertStateToText(item)}"
+                    convertStateToText(item)
 
             if (item.commentRating > 0) {
                 rating.visibility = View.VISIBLE

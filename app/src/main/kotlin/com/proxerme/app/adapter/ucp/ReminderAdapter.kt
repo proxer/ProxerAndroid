@@ -41,6 +41,8 @@ class ReminderAdapter(savedInstanceState: Bundle? = null) :
             list.addAll(it.getParcelableArrayList(ITEMS_STATE))
             _itemsToRemove.addAll(it.getParcelableArrayList(ITEMS_TO_REMOVE_STATE))
         }
+
+        setHasStableIds(true)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):

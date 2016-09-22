@@ -37,6 +37,8 @@ class NewChatParticipantAdapter(savedInstanceState: Bundle?) :
         savedInstanceState?.let {
             participants.addAll(it.getParcelableArrayList(ITEMS_STATE))
         }
+
+        setHasStableIds(true)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

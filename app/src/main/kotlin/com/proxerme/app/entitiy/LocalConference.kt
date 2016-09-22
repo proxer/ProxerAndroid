@@ -28,16 +28,16 @@ class LocalConference : Conference, Parcelable {
         this.localId = localId
     }
 
-    constructor(source: Parcel) : super(source) {
+    private constructor(source: Parcel) : super(source) {
         this.localId = source.readLong()
     }
 
     override fun describeContents() = 0
 
-    override fun writeToParcel(dest: Parcel?, flags: Int) {
+    override fun writeToParcel(dest: Parcel, flags: Int) {
         super.writeToParcel(dest, flags)
 
-        dest?.writeLong(localId)
+        dest.writeLong(localId)
     }
 
     override fun equals(other: Any?): Boolean {

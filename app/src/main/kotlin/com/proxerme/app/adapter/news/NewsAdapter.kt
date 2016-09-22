@@ -46,6 +46,8 @@ class NewsAdapter(savedInstanceState: Bundle? = null) :
             it.getStringArrayList(EXPANDED_IDS_STATE)
                     .associateByTo(expanded, { it }, { true })
         }
+
+        setHasStableIds(true)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder? {

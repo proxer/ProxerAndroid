@@ -114,9 +114,7 @@ class RetainedLoadingFragment<T>() : Fragment() {
     }
 
     private fun cancelAndClean() {
-        calls.forEach {
-            it.cancel()
-        }
+        calls.forEach(ProxerCall::cancel)
 
         clean()
     }

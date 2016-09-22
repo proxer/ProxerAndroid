@@ -17,11 +17,11 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.entitiy.LocalMessage
+import com.proxerme.app.util.ParcelableLongBooleanSparseArray
 import com.proxerme.app.util.TimeUtil
 import com.proxerme.app.util.Utils
 import com.proxerme.library.connection.user.entitiy.User
 import com.proxerme.library.parameters.ActionParameter
-import java.util.*
 
 /**
  * TODO: Describe class
@@ -50,26 +50,27 @@ class ChatAdapter(savedInstanceState: Bundle? = null, val isGroup: Boolean) :
 
     var user: User? = null
 
-    private val selectedMap = HashMap<Long, Boolean>()
-    private val showingTimeMap = HashMap<Long, Boolean>()
+    private val selectedMap: ParcelableLongBooleanSparseArray
+    private val showingTimeMap: ParcelableLongBooleanSparseArray
 
-    private var selecting = false
+    private var selecting: Boolean
 
     val selectedItems: List<LocalMessage>
-        get() = list.filter { selectedMap.containsKey(it.localId) }.sortedBy { it.time }
+        get() = list.filter { selectedMap.get(it.localId, false) }.sortedBy { it.time }
 
     init {
-        savedInstanceState?.let {
-            list.addAll(it.getParcelableArrayList(ITEMS_STATE))
-
-            val selectedIds = it.getLongArray(MESSAGE_SELECTED_IDS_STATE)
-            val showingTimeIds = it.getLongArray(MESSAGE_SHOWING_TIME_IDS_STATE)
-
-            this.selecting = it.getBoolean(MESSAGE_SELECTING_STATE)
-
-            selectedIds?.associateByTo(this.selectedMap, { it }, { true })
-            showingTimeIds?.associateByTo(this.showingTimeMap, { it }, { true })
+        if (savedInstanceState == null) {
+            selectedMap = ParcelableLongBooleanSparseArray()
+            showingTimeMap = ParcelableLongBooleanSparseArray()
+            selecting = false
+        } else {
+            selectedMap = savedInstanceState.getParcelable(MESSAGE_SELECTED_IDS_STATE)
+            showingTimeMap = savedInstanceState.getParcelable(MESSAGE_SHOWING_TIME_IDS_STATE)
+            selecting = savedInstanceState.getBoolean(MESSAGE_SELECTING_STATE)
+            list.addAll(savedInstanceState.getParcelableArrayList(ITEMS_STATE))
         }
+
+        setHasStableIds(true)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
@@ -211,10 +212,8 @@ class ChatAdapter(savedInstanceState: Bundle? = null, val isGroup: Boolean) :
     override fun saveInstanceState(outState: Bundle) {
         outState.putParcelableArrayList(ITEMS_STATE, list)
         outState.putBoolean(MESSAGE_SELECTING_STATE, selecting)
-        outState.putLongArray(MESSAGE_SELECTED_IDS_STATE,
-                selectedMap.keys.toLongArray())
-        outState.putLongArray(MESSAGE_SHOWING_TIME_IDS_STATE,
-                showingTimeMap.keys.toLongArray())
+        outState.putParcelable(MESSAGE_SELECTED_IDS_STATE, selectedMap)
+        outState.putParcelable(MESSAGE_SHOWING_TIME_IDS_STATE, showingTimeMap)
     }
 
     override fun clear() {
@@ -223,7 +222,7 @@ class ChatAdapter(savedInstanceState: Bundle? = null, val isGroup: Boolean) :
 
         clearSelection()
 
-        if (selectedMap.size > 0) {
+        if (selectedMap.size() > 0) {
             callback?.onMessageSelection(0)
         }
 
@@ -292,19 +291,19 @@ class ChatAdapter(savedInstanceState: Bundle? = null, val isGroup: Boolean) :
                 val current = adapterList[adapterPosition]
 
                 if (selecting) {
-                    if (selectedMap.containsKey(current.localId)) {
+                    if (selectedMap.get(current.localId, false)) {
                         selectedMap.remove(current.localId)
 
-                        if (selectedMap.size <= 0) {
+                        if (selectedMap.size() <= 0) {
                             selecting = false
                         }
                     } else {
                         selectedMap.put(current.localId, true)
                     }
 
-                    adapterCallback?.onMessageSelection(selectedMap.size)
+                    adapterCallback?.onMessageSelection(selectedMap.size())
                 } else {
-                    if (showingTimeMap.containsKey(current.localId)) {
+                    if (showingTimeMap.get(current.localId, false)) {
                         showingTimeMap.remove(current.localId)
                     } else {
                         showingTimeMap.put(current.localId, true)
@@ -325,7 +324,7 @@ class ChatAdapter(savedInstanceState: Bundle? = null, val isGroup: Boolean) :
                     selectedMap.put(current.localId, true)
                     notifyDataSetChanged()
 
-                    adapterCallback?.onMessageSelection(selectedMap.size)
+                    adapterCallback?.onMessageSelection(selectedMap.size())
 
                     return true
                 }
@@ -366,7 +365,7 @@ class ChatAdapter(savedInstanceState: Bundle? = null, val isGroup: Boolean) :
         }
 
         protected open fun applySelection(message: LocalMessage) {
-            if (selectedMap.containsKey(message.localId)) {
+            if (selectedMap.get(message.localId, false)) {
                 container.cardBackgroundColor = ContextCompat
                         .getColorStateList(container.context, R.color.selected_card)
             } else {
@@ -376,7 +375,7 @@ class ChatAdapter(savedInstanceState: Bundle? = null, val isGroup: Boolean) :
         }
 
         protected open fun applyTimeVisibility(message: LocalMessage) {
-            if (showingTimeMap.containsKey(message.localId)) {
+            if (showingTimeMap.get(message.localId, false)) {
                 time.visibility = View.VISIBLE
             } else {
                 time.visibility = View.GONE
@@ -418,7 +417,7 @@ class ChatAdapter(savedInstanceState: Bundle? = null, val isGroup: Boolean) :
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 val current = adapterList[adapterPosition]
 
-                if (showingTimeMap.containsKey(current.localId)) {
+                if (showingTimeMap.get(current.localId, false)) {
                     time.visibility = View.GONE
 
                     showingTimeMap.remove(current.localId)

@@ -40,6 +40,8 @@ class ConferenceParticipantAdapter(val savedInstanceState: Bundle?) :
             list.addAll(it.getParcelableArrayList(ITEMS_STATE))
             leader = it.getString(LEADER_STATE)
         }
+
+        setHasStableIds(true)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):

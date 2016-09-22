@@ -37,6 +37,8 @@ class MediaAdapter(savedInstanceState: Bundle? = null,
         savedInstanceState?.let {
             list.addAll(it.getParcelableArrayList("${ITEMS_STATE}_$category"))
         }
+
+        setHasStableIds(true)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -76,7 +78,7 @@ class MediaAdapter(savedInstanceState: Bundle? = null,
                 rating.visibility = View.VISIBLE
                 rating.rating = item.rating.toFloat() / 2.0f
                 ratingAmount.visibility = View.VISIBLE
-                ratingAmount.text = "(${item.rateCount.toString()})"
+                ratingAmount.text = "(${item.rateCount})"
             } else {
                 rating.visibility = View.GONE
                 ratingAmount.visibility = View.GONE

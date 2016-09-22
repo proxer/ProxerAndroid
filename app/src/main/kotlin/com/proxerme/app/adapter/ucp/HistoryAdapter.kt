@@ -28,12 +28,12 @@ class HistoryAdapter(savedInstanceState: Bundle? = null) : PagingAdapter<History
         private const val ITEMS_STATE = "adapter_history_state_items"
     }
 
-    override val hasStableIds = false
-
     init {
         savedInstanceState?.let {
             list.addAll(it.getParcelableArrayList(ITEMS_STATE))
         }
+
+        setHasStableIds(false)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):

@@ -17,12 +17,12 @@ data class Participant(val username: String, val imageId: String) : Parcelable {
         }
     }
 
-    constructor(source: Parcel) : this(source.readString(), source.readString())
+    private constructor(source: Parcel) : this(source.readString(), source.readString())
 
     override fun describeContents() = 0
 
-    override fun writeToParcel(dest: Parcel?, flags: Int) {
-        dest?.writeString(username)
-        dest?.writeString(imageId)
+    override fun writeToParcel(dest: Parcel, flags: Int) {
+        dest.writeString(username)
+        dest.writeString(imageId)
     }
 }
