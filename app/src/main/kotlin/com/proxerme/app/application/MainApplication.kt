@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.StrictMode
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -45,6 +46,7 @@ class MainApplication : Application() {
 
         initLibs()
         initDrawerImageLoader()
+        enableStrictModeForDebug()
 
         EventBus.getDefault().register(this)
     }
@@ -90,5 +92,19 @@ class MainApplication : Application() {
                         .colorRes(android.R.color.white)
             }
         })
+    }
+
+    private fun enableStrictModeForDebug() {
+        if (BuildConfig.DEBUG) {
+            StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()
+                    .detectAll()
+                    .penaltyLog()
+                    .penaltyDialog()
+                    .build())
+            StrictMode.setVmPolicy(StrictMode.VmPolicy.Builder()
+                    .detectAll()
+                    .penaltyLog()
+                    .build())
+        }
     }
 }
