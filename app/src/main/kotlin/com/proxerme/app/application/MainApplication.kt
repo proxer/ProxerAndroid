@@ -40,10 +40,6 @@ class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            return
-        }
-
         refWatcher = LeakCanary.install(this)
         proxerConnection = ProxerConnection.Builder(BuildConfig.PROXER_API_KEY, this).build()
 
