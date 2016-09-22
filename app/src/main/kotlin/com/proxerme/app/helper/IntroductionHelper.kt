@@ -24,11 +24,11 @@ class IntroductionHelper {
         return arrayListOf(
                 Slide().withTitle(R.string.introduction_welcome_title)
                         .withColorResource(R.color.colorPrimary)
-                        .withImageResource(R.drawable.ic_proxer)
+                        .withImage(R.drawable.ic_proxer)
                         .withDescription(R.string.introduction_welcome_description),
                 Slide().withTitle(R.string.introduction_notifications_title)
                         .withColorResource(R.color.colorAccent)
-                        .withImageResource(R.drawable.ic_notifications)
+                        .withImage(R.drawable.ic_notifications)
                         .withOption(Option(activity.getString(
                                 R.string.introduction_notifications_description), false))
         )
