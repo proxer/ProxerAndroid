@@ -18,6 +18,7 @@ android {
         applicationVariants.all { variant ->
             variant.buildConfigField "String", "PROXER_API_KEY", "\"" + getProxerApiKey() + "\""
         }
+
         release {
             minifyEnabled true
             shrinkResources true
