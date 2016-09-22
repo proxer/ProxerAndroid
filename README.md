@@ -67,8 +67,6 @@ You want to create your own App? Check out
 [ProxerLibAndroid](https://github.com/proxer/ProxerLibAndroid). This App depends
 highly on it and it implements most of the available API.
 
-### Contribute
+### Contributions and contributors
 
-Everybody is free to contribute to this project.
-To contribute:  
-Fork this project, make changes and create a Pull Request.
+See [here](.github/CONTRIBUTING.md).
