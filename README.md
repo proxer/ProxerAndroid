@@ -69,4 +69,4 @@ highly on it and it implements most of the available API.
 
 ### Contributions and contributors
 
-See [here](.github/CONTRIBUTING.md).
+A guide for contribution can be found [here](.github/CONTRIBUTING.md).
