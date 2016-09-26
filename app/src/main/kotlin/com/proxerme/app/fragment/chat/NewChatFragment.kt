@@ -1,6 +1,5 @@
 package com.proxerme.app.fragment.chat
 
-import adapter.HeaderFooterAdapter
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
@@ -33,6 +32,7 @@ import com.proxerme.app.service.ChatService
 import com.proxerme.app.util.ErrorHandler
 import com.proxerme.app.util.Utils
 import com.proxerme.library.connection.messenger.request.NewConferenceRequest
+import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -67,7 +67,7 @@ class NewChatFragment : MainFragment() {
     private lateinit var loader: RetainedLoadingFragment<String>
 
     private lateinit var adapter: NewChatParticipantAdapter
-    private lateinit var headerFooterAdapter: HeaderFooterAdapter
+    private lateinit var headerFooterAdapter: EasyHeaderFooterAdapter
 
     private var newParticipant: String? = null
     private var newConferenceId: String? = null
@@ -93,7 +93,7 @@ class NewChatFragment : MainFragment() {
             }
         }
 
-        headerFooterAdapter = HeaderFooterAdapter(adapter)
+        headerFooterAdapter = EasyHeaderFooterAdapter(adapter)
 
         if (arguments.getParcelable<Participant>(PARTICIPANT_ARGUMENT) != null) {
             adapter.add(arguments.getParcelable(PARTICIPANT_ARGUMENT))

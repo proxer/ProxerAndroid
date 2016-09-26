@@ -1,6 +1,5 @@
 package com.proxerme.app.util
 
-import adapter.HeaderFooterAdapter
 import android.app.Activity
 import android.content.*
 import android.content.res.Configuration
@@ -26,6 +25,7 @@ import com.klinker.android.link_builder.LinkBuilder
 import com.klinker.android.link_builder.TouchableMovementMethod
 import com.proxerme.app.R
 import com.proxerme.library.connection.ProxerException
+import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import org.jetbrains.anko.toast
 import java.util.concurrent.ExecutionException
 import java.util.regex.Pattern
@@ -131,7 +131,7 @@ object Utils {
         return result
     }
 
-    fun showError(context: Context, exception: ProxerException, adapter: HeaderFooterAdapter,
+    fun showError(context: Context, exception: ProxerException, adapter: EasyHeaderFooterAdapter,
                   buttonMessage: String? = null, parent: ViewGroup? = null,
                   onWebClickListener: Link.OnClickListener ? = null,
                   onButtonClickListener: View.OnClickListener? = null) {
@@ -139,7 +139,7 @@ object Utils {
                 buttonMessage, parent, onWebClickListener, onButtonClickListener)
     }
 
-    fun showError(context: Context, message: CharSequence, adapter: HeaderFooterAdapter,
+    fun showError(context: Context, message: CharSequence, adapter: EasyHeaderFooterAdapter,
                   buttonMessage: String? = null, parent: ViewGroup? = null,
                   onWebClickListener: Link.OnClickListener ? = null,
                   onButtonClickListener: View.OnClickListener? = null) {

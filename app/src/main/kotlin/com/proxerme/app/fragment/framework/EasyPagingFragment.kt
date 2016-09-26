@@ -1,6 +1,5 @@
 package com.proxerme.app.fragment.framework
 
-import adapter.HeaderFooterAdapter
 import android.os.Bundle
 import android.os.Parcelable
 import android.support.v4.widget.SwipeRefreshLayout
@@ -18,6 +17,7 @@ import com.proxerme.app.util.Utils
 import com.proxerme.app.util.listener.EndlessRecyclerOnScrollListener
 import com.proxerme.library.connection.ProxerException
 import com.proxerme.library.interfaces.IdItem
+import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 
 /**
  * TODO: Describe class
@@ -36,7 +36,7 @@ abstract class EasyPagingFragment<T, C : PagingAdapterCallback<T>> :
 
     abstract protected val layoutManager: RecyclerView.LayoutManager
     abstract protected val adapter: PagingAdapter<T, C>
-    protected lateinit var headerFooterAdapter: HeaderFooterAdapter
+    protected lateinit var headerFooterAdapter: EasyHeaderFooterAdapter
 
     open protected val list: RecyclerView by bindView(R.id.list)
     open protected val root: ViewGroup by bindView(R.id.root)
@@ -60,7 +60,7 @@ abstract class EasyPagingFragment<T, C : PagingAdapterCallback<T>> :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        headerFooterAdapter = HeaderFooterAdapter(adapter)
+        headerFooterAdapter = EasyHeaderFooterAdapter(adapter)
 
         list.setHasFixedSize(hasListFixedSize)
         list.layoutManager = layoutManager

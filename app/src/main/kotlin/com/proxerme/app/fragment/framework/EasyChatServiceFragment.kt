@@ -1,6 +1,5 @@
 package com.proxerme.app.fragment.framework
 
-import adapter.HeaderFooterAdapter
 import android.database.SQLException
 import android.os.Bundle
 import android.os.Parcelable
@@ -24,6 +23,7 @@ import com.proxerme.app.util.Utils
 import com.proxerme.app.util.listener.EndlessRecyclerOnScrollListener
 import com.proxerme.library.connection.ProxerException
 import com.proxerme.library.interfaces.IdItem
+import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.util.concurrent.Future
@@ -57,7 +57,7 @@ abstract class EasyChatServiceFragment<T, C : PagingAdapterCallback<T>> :
 
     abstract protected var layoutManager: RecyclerView.LayoutManager
     abstract protected val adapter: PagingAdapter<T, C>
-    protected lateinit var headerFooterAdapter: HeaderFooterAdapter
+    protected lateinit var headerFooterAdapter: EasyHeaderFooterAdapter
 
     open protected val root: ViewGroup by bindView(R.id.root)
     open protected val list: RecyclerView by bindView(R.id.list)
@@ -123,7 +123,7 @@ abstract class EasyChatServiceFragment<T, C : PagingAdapterCallback<T>> :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        headerFooterAdapter = HeaderFooterAdapter(adapter)
+        headerFooterAdapter = EasyHeaderFooterAdapter(adapter)
 
         list.setHasFixedSize(true)
         list.layoutManager = layoutManager
