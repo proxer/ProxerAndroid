@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import butterknife.bindView
 import com.proxerme.app.R
@@ -50,7 +51,7 @@ import org.jetbrains.anko.intentFor
  *
  * @author Ruben Gees
  */
-class DashboardActivity : MainActivity(), CustomTabsModule {
+class DashboardActivity : AppCompatActivity(), CustomTabsModule {
 
     companion object {
         private const val STATE_TITLE = "activity_dashboard_title"

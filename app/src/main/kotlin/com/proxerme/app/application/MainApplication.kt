@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.StrictMode
+import android.support.v7.app.AppCompatDelegate
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -14,6 +15,7 @@ import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import com.orhanobut.hawk.Hawk
 import com.proxerme.app.BuildConfig
+import com.proxerme.app.helper.PreferenceHelper
 import com.proxerme.app.manager.UserManager
 import com.proxerme.app.service.ChatService
 import com.proxerme.library.connection.ProxerConnection
@@ -40,6 +42,8 @@ class MainApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        AppCompatDelegate.setDefaultNightMode(PreferenceHelper.getNightMode(this))
 
         refWatcher = LeakCanary.install(this)
         proxerConnection = ProxerConnection.Builder(BuildConfig.PROXER_API_KEY, this).build()

@@ -4,11 +4,11 @@ import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.app.AppCompatDelegate
 import android.support.v7.preference.TwoStatePreference
 import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.LibsBuilder
 import com.proxerme.app.R
-import com.proxerme.app.activity.MainActivity
 import com.proxerme.app.application.MainApplication
 import com.proxerme.app.dialog.HentaiConfirmationDialog
 import com.proxerme.app.helper.PreferenceHelper
@@ -112,7 +112,9 @@ class SettingsFragment : PreferenceFragmentCompat(), OnActivityListener,
             }
 
             PreferenceHelper.PREFERENCE_NIGHT_MODE -> {
-                (activity as MainActivity).setNightMode()
+                AppCompatDelegate.setDefaultNightMode(PreferenceHelper.getNightMode(context))
+
+                activity.recreate()
             }
         }
     }
