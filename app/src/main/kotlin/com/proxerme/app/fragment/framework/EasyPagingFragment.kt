@@ -2,6 +2,7 @@ package com.proxerme.app.fragment.framework
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.support.design.widget.Snackbar
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -131,10 +132,15 @@ abstract class EasyPagingFragment<T, C : PagingAdapterCallback<T>> :
     override fun onPagedLoadFinishedWithError(result: ProxerException, page: Int) {
         super.onPagedLoadFinishedWithError(result, page)
 
-        exception = result
-
         hideProgress()
-        showError(result)
+
+        if (page == 0 && adapter.itemCount > 0) {
+            Snackbar.make(root, "Aktualisierung fehlgeschlagen", Snackbar.LENGTH_LONG).show()
+        } else {
+            exception = result
+
+            showError(result)
+        }
     }
 
     override fun calculateNextPage(): Int {
