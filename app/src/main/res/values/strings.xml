@@ -244,6 +244,13 @@
     <string name="filter_manga">Manga</string>
     <string name="filter_anime">Anime</string>
     <string name="filter_all">Alles</string>
+    <string name="fragment_media_info_description">Beschreibung</string>
+    <string name="fragment_media_info_fsk">PSK</string>
+    <string name="fragment_media_info_genres">Genres</string>
+    <string name="fragment_media_info_japanese_title">Japanischer Titel</string>
+    <string name="fragment_media_info_english_title">Englischer Titel</string>
+    <string name="fragment_media_info_original_title">Original Titel</string>
+    <string name="fragment_media_info_general">Allgemein</string>
 
     <plurals name="media_episode_count">
         <item quantity="one">Eine Episode</item>
