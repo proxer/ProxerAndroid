@@ -38,6 +38,7 @@
                         <TableLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:shrinkColumns="1"
                             android:stretchColumns="0">
 
                             <TableRow>
@@ -45,6 +46,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_margin="8dp"
                                     android:text="@string/fragment_profile_points_anime"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
@@ -53,6 +55,7 @@
                                     android:id="@+id/animePointsRow"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_margin="8dp"
                                     android:gravity="end"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -64,6 +67,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_margin="8dp"
                                     android:text="@string/fragment_profile_points_manga"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
@@ -72,6 +76,7 @@
                                     android:id="@+id/mangaPointsRow"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_margin="8dp"
                                     android:gravity="end"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -83,6 +88,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_margin="8dp"
                                     android:text="@string/fragment_profile_points_uploads"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
@@ -91,6 +97,7 @@
                                     android:id="@+id/uploadPointsRow"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_margin="8dp"
                                     android:gravity="end"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -102,6 +109,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_margin="8dp"
                                     android:text="@string/fragment_profile_points_forum"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
@@ -110,6 +118,7 @@
                                     android:id="@+id/forumPointsRow"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_margin="8dp"
                                     android:gravity="end"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -121,6 +130,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_margin="8dp"
                                     android:text="@string/fragment_profile_points_info"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
@@ -129,6 +139,7 @@
                                     android:id="@+id/infoPointsRow"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_margin="8dp"
                                     android:gravity="end"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -140,6 +151,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_margin="8dp"
                                     android:text="@string/fragment_profile_points_miscellaneous"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
@@ -148,6 +160,7 @@
                                     android:id="@+id/miscellaneousPointsRow"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_margin="8dp"
                                     android:gravity="end"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
