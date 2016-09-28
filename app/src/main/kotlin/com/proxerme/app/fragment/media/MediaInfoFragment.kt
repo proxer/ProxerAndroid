@@ -11,11 +11,20 @@ import android.widget.TextView
 import butterknife.bindView
 import cn.nekocode.badge.BadgeDrawable
 import com.proxerme.app.R
+import com.proxerme.app.activity.MediaActivity
 import com.proxerme.app.fragment.framework.EasyLoadingFragment
 import com.proxerme.app.manager.SectionManager.Section
+import com.proxerme.app.util.Utils
 import com.proxerme.library.connection.info.entity.Entry
+import com.proxerme.library.connection.info.entity.EntrySeason
+import com.proxerme.library.connection.info.entity.Publisher
 import com.proxerme.library.connection.info.request.EntryRequest
+import com.proxerme.library.info.ProxerUrlHolder
+import com.proxerme.library.parameters.LicenseParameter
+import com.proxerme.library.parameters.SeasonParameter
+import com.proxerme.library.parameters.StateParameter
 import org.apmem.tools.layouts.FlowLayout
+import java.security.InvalidParameterException
 
 /**
  * TODO: Describe class
@@ -46,10 +55,24 @@ class MediaInfoFragment : EasyLoadingFragment<Entry>() {
     private val originalTitleRow: TableRow by bindView(R.id.originalTitleRow)
     private val englishTitle: TextView by bindView(R.id.englishTitle)
     private val englishTitleRow: TableRow by bindView(R.id.englishTitleRow)
+    private val germanTitle: TextView by bindView(R.id.germanTitle)
+    private val germanTitleRow: TableRow by bindView(R.id.germanTitleRow)
     private val japaneseTitle: TextView by bindView(R.id.japaneseTitle)
     private val japaneseTitleRow: TableRow by bindView(R.id.japaneseTitleRow)
+    private val seasonStart: TextView by bindView(R.id.seasonStart)
+    private val seasonEnd: TextView by bindView(R.id.seasonEnd)
+    private val seasonsRow: TableRow by bindView(R.id.seasonsRow)
+    private val status: TextView by bindView(R.id.status)
+    private val license: TextView by bindView(R.id.license)
+
     private val genres: FlowLayout by bindView(R.id.genres)
+    private val genresTitle: TextView by bindView(R.id.genresTitle)
     private val fsk: FlowLayout by bindView(R.id.fsk)
+    private val fskTitle: TextView  by bindView(R.id.fskTitle)
+    private val groups: FlowLayout by bindView(R.id.groups)
+    private val groupsTitle: TextView by bindView(R.id.groupsTitle)
+    private val publishers: FlowLayout by bindView(R.id.publishers)
+    private val publishersTitle: TextView by bindView(R.id.publishersTitle)
     private val description: TextView by bindView(R.id.description)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,6 +103,8 @@ class MediaInfoFragment : EasyLoadingFragment<Entry>() {
 
     override fun save(result: Entry) {
         entry = result
+
+        (activity as MediaActivity).setName(result.name)
     }
 
     override fun show() {
@@ -98,6 +123,11 @@ class MediaInfoFragment : EasyLoadingFragment<Entry>() {
                         englishTitleRow.visibility = View.VISIBLE
                     }
 
+                    "nameger" -> {
+                        germanTitle.text = it.name
+                        germanTitleRow.visibility = View.VISIBLE
+                    }
+
                     "namejap" -> {
                         japaneseTitle.text = it.name
                         japaneseTitleRow.visibility = View.VISIBLE
@@ -105,23 +135,50 @@ class MediaInfoFragment : EasyLoadingFragment<Entry>() {
                 }
             }
 
+            if (it.seasons.size >= 1) {
+                seasonStart.text = "Start: ${getSeasonString(it.seasons[0])}"
+
+                if (it.seasons.size >= 2) {
+                    seasonEnd.text = "Ende: ${getSeasonString(it.seasons[1])}"
+                } else {
+                    seasonEnd.visibility = View.GONE
+                }
+            } else {
+                seasonsRow.visibility = View.GONE
+            }
+
+            status.text = getStateString(it.state)
+
+            license.text = when (it.license) {
+                LicenseParameter.LICENSED -> "Lizensiert"
+                LicenseParameter.NON_LICENSED -> "Nicht Lizensiert"
+                LicenseParameter.UNKNOWN -> "Unbekannt"
+                else -> throw InvalidParameterException("Unknwon license: " + it.license)
+            }
+
             genres.removeAllViews()
 
             if (it.genres.isEmpty()) {
+                genresTitle.visibility = View.GONE
                 genres.visibility = View.GONE
             } else {
-                it.genres.forEach {
+                it.genres.forEach { genre ->
                     val imageView = layoutInflater.inflate(R.layout.item_badge, genres, false)
                             as ImageView
 
                     imageView.setImageDrawable(BadgeDrawable.Builder()
                             .type(BadgeDrawable.TYPE_ONLY_ONE_TEXT)
                             .badgeColor(ContextCompat.getColor(context, R.color.colorAccent))
-                            .text1(it)
+                            .text1(genre)
+                            .textSize(Utils.convertSpToPx(context, 14f))
                             .build()
                             .apply {
                                 setNeedAutoSetBounds(true)
                             })
+                    imageView.setOnClickListener {
+                        Utils.viewLink(context,
+                                ProxerUrlHolder.getWikiUrl(genre).toString())
+                    }
 
                     genres.addView(imageView)
                 }
@@ -130,6 +187,7 @@ class MediaInfoFragment : EasyLoadingFragment<Entry>() {
             fsk.removeAllViews()
 
             if (it.fsk.isEmpty()) {
+                fskTitle.visibility = View.GONE
                 fsk.visibility = View.GONE
             } else {
                 it.fsk.forEach {
@@ -140,6 +198,7 @@ class MediaInfoFragment : EasyLoadingFragment<Entry>() {
                             .type(BadgeDrawable.TYPE_ONLY_ONE_TEXT)
                             .badgeColor(ContextCompat.getColor(context, R.color.colorAccent))
                             .text1(it)
+                            .textSize(Utils.convertSpToPx(context, 14f))
                             .build()
                             .apply {
                                 setNeedAutoSetBounds(true)
@@ -149,7 +208,90 @@ class MediaInfoFragment : EasyLoadingFragment<Entry>() {
                 }
             }
 
+            groups.removeAllViews()
+
+            if (it.subgroups.isEmpty()) {
+                groupsTitle.visibility = View.VISIBLE
+                groups.visibility = View.VISIBLE
+            } else {
+                it.subgroups.forEach { subgroup ->
+                    val imageView = layoutInflater.inflate(R.layout.item_badge, groups, false)
+                            as ImageView
+
+                    imageView.setImageDrawable(BadgeDrawable.Builder()
+                            .type(BadgeDrawable.TYPE_ONLY_ONE_TEXT)
+                            .badgeColor(ContextCompat.getColor(context, R.color.colorAccent))
+                            .text1(subgroup.name)
+                            .textSize(Utils.convertSpToPx(context, 14f))
+                            .build()
+                            .apply {
+                                setNeedAutoSetBounds(true)
+                            })
+                    imageView.setOnClickListener {
+                        Utils.viewLink(context,
+                                ProxerUrlHolder.getSubgroupUrl(subgroup.id,
+                                        ProxerUrlHolder.DEVICE_QUERY_PARAMETER_DEFAULT).toString())
+                    }
+
+                    groups.addView(imageView)
+                }
+            }
+
+            publishers.removeAllViews()
+
+            if (it.publishers.isEmpty()) {
+                publishersTitle.visibility = View.VISIBLE
+                publishers.visibility = View.VISIBLE
+            } else {
+                it.publishers.forEach { publisher ->
+                    val imageView = layoutInflater.inflate(R.layout.item_badge, groups, false)
+                            as ImageView
+
+                    imageView.setImageDrawable(BadgeDrawable.Builder()
+                            .type(BadgeDrawable.TYPE_ONLY_ONE_TEXT)
+                            .badgeColor(ContextCompat.getColor(context, R.color.colorAccent))
+                            .text1(getPublisherString(publisher))
+                            .textSize(Utils.convertSpToPx(context, 14f))
+                            .build()
+                            .apply {
+                                setNeedAutoSetBounds(true)
+                            })
+                    imageView.setOnClickListener {
+                        Utils.viewLink(context,
+                                ProxerUrlHolder.getPublisherUrl(publisher.id,
+                                        ProxerUrlHolder.DEVICE_QUERY_PARAMETER_DEFAULT).toString())
+                    }
+
+                    publishers.addView(imageView)
+                }
+            }
+
             description.text = it.description
         }
+    }
+
+    private fun getPublisherString(publisher: Publisher): String {
+        return "${publisher.name} (${publisher.type.capitalize()})"
+    }
+
+    private fun getStateString(state: Int): String {
+        return when (state) {
+            StateParameter.PRE_AIRING -> "Nicht erschienen (Pre-Airing)"
+            StateParameter.AIRING -> "Airing"
+            StateParameter.CANCELLED -> "Abgebrochen"
+            StateParameter.CANCELLED_SUB -> "Abgebrochener Sub"
+            StateParameter.FINISHED -> "Abgeschlossen"
+            else -> throw IllegalArgumentException("Unknwon state: $state")
+        }
+    }
+
+    private fun getSeasonString(season: EntrySeason): String {
+        return "${when (season.season) {
+            SeasonParameter.WINTER -> "Winter"
+            SeasonParameter.SPRING -> "Frühling"
+            SeasonParameter.SUMMER -> "Sommer"
+            SeasonParameter.AUTUMN -> "Herbst"
+            else -> throw IllegalArgumentException("Unknwon season: ${season.season}")
+        }} ${season.year}"
     }
 }

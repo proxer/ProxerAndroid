@@ -57,6 +57,10 @@ object Utils {
                 DisplayMetrics.DENSITY_DEFAULT)).toInt()
     }
 
+    fun convertSpToPx(context: Context, sp: Float): Float {
+        return sp * context.resources.displayMetrics.scaledDensity + 0.5f
+    }
+
     fun isLandscape(context: Context): Boolean {
         return context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
     }
@@ -133,7 +137,7 @@ object Utils {
 
     fun showError(context: Context, exception: ProxerException, adapter: EasyHeaderFooterAdapter,
                   buttonMessage: String? = null, parent: ViewGroup? = null,
-                  onWebClickListener: Link.OnClickListener ? = null,
+                  onWebClickListener: Link.OnClickListener? = null,
                   onButtonClickListener: View.OnClickListener? = null) {
         showError(context, ErrorHandler.getMessageForErrorCode(context, exception), adapter,
                 buttonMessage, parent, onWebClickListener, onButtonClickListener)
@@ -141,7 +145,7 @@ object Utils {
 
     fun showError(context: Context, message: CharSequence, adapter: EasyHeaderFooterAdapter,
                   buttonMessage: String? = null, parent: ViewGroup? = null,
-                  onWebClickListener: Link.OnClickListener ? = null,
+                  onWebClickListener: Link.OnClickListener? = null,
                   onButtonClickListener: View.OnClickListener? = null) {
         val errorContainer = if (adapter.innerAdapter.itemCount <= 0) {
             LayoutInflater.from(context).inflate(R.layout.layout_error, parent, false)

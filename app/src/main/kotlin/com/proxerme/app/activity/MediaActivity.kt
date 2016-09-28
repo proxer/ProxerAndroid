@@ -82,7 +82,7 @@ class MediaActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        outState.putString(EXTRA_NAME, name)
+        outState.putString(STATE_NAME, name)
     }
 
     fun setName(name: String) {

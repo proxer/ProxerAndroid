@@ -245,12 +245,16 @@
     <string name="filter_anime">Anime</string>
     <string name="filter_all">Alles</string>
     <string name="fragment_media_info_description">Beschreibung</string>
-    <string name="fragment_media_info_fsk">PSK</string>
+    <string name="fragment_media_info_fsk">FSK</string>
     <string name="fragment_media_info_genres">Genres</string>
     <string name="fragment_media_info_japanese_title">Japanischer Titel</string>
     <string name="fragment_media_info_english_title">Englischer Titel</string>
     <string name="fragment_media_info_original_title">Original Titel</string>
     <string name="fragment_media_info_general">Allgemein</string>
+    <string name="fragment_media_info_german_title">Deutscher Titel</string>
+    <string name="fragment_media_info_season_title">Season</string>
+    <string name="fragment_media_info_license_title">Lizenz</string>
+    <string name="fragment_media_info_status_title">Status</string>
 
     <plurals name="media_episode_count">
         <item quantity="one">Eine Episode</item>

@@ -96,6 +96,29 @@
                             </TableRow>
 
                             <TableRow
+                                android:id="@+id/germanTitleRow"
+                                android:visibility="gone">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_margin="8dp"
+                                    android:text="@string/fragment_media_info_german_title"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                                <TextView
+                                    android:id="@+id/germanTitle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_margin="8dp"
+                                    android:gravity="end"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    tools:text="Sword Art Online" />
+                            </TableRow>
+
+                            <TableRow
                                 android:id="@+id/japaneseTitleRow"
                                 android:visibility="gone">
 
@@ -117,9 +140,91 @@
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                                     tools:text="I can't type japanese symbols :D" />
                             </TableRow>
+
+                            <TableRow android:id="@+id/seasonsRow">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_margin="8dp"
+                                    android:text="@string/fragment_media_info_season_title"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/seasonStart"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="end"
+                                        android:layout_margin="8dp"
+                                        android:gravity="end"
+                                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                        tools:text="Start: Winter 2016" />
+
+                                    <TextView
+                                        android:id="@+id/seasonEnd"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="end"
+                                        android:layout_margin="8dp"
+                                        android:gravity="end"
+                                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                        tools:text="End: Summer 2016" />
+
+                                </LinearLayout>
+                            </TableRow>
+
+                            <TableRow android:id="@+id/statusRow">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_margin="8dp"
+                                    android:text="@string/fragment_media_info_status_title"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                                <TextView
+                                    android:id="@+id/status"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_margin="8dp"
+                                    android:gravity="end"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    tools:text="Finished" />
+                            </TableRow>
+
+                            <TableRow android:id="@+id/licenseRow">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_margin="8dp"
+                                    android:text="@string/fragment_media_info_license_title"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                                <TextView
+                                    android:id="@+id/license"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_margin="8dp"
+                                    android:gravity="end"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    tools:text="Licensed" />
+                            </TableRow>
                         </TableLayout>
 
                         <TextView
+                            android:id="@+id/genresTitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="8dp"
@@ -134,6 +239,7 @@
                             android:layout_margin="4dp" />
 
                         <TextView
+                            android:id="@+id/fskTitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="8dp"
@@ -143,6 +249,36 @@
 
                         <org.apmem.tools.layouts.FlowLayout
                             android:id="@+id/fsk"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp" />
+
+                        <TextView
+                            android:id="@+id/groupsTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text="Gruppen"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textColor="@color/colorAccent" />
+
+                        <org.apmem.tools.layouts.FlowLayout
+                            android:id="@+id/groups"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp" />
+
+                        <TextView
+                            android:id="@+id/publishersTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text="Industrie"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textColor="@color/colorAccent" />
+
+                        <org.apmem.tools.layouts.FlowLayout
+                            android:id="@+id/publishers"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="4dp" />
