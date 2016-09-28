@@ -1,6 +1,7 @@
 package com.proxerme.app.fragment.media
 
 import android.os.Bundle
+import android.support.annotation.DrawableRes
 import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +21,7 @@ import com.proxerme.library.connection.info.entity.EntrySeason
 import com.proxerme.library.connection.info.entity.Publisher
 import com.proxerme.library.connection.info.request.EntryRequest
 import com.proxerme.library.info.ProxerUrlHolder
+import com.proxerme.library.parameters.FskParameter
 import com.proxerme.library.parameters.LicenseParameter
 import com.proxerme.library.parameters.SeasonParameter
 import com.proxerme.library.parameters.StateParameter
@@ -170,15 +172,7 @@ class MediaInfoFragment : EasyLoadingFragment<Entry>() {
                     val imageView = layoutInflater.inflate(R.layout.item_badge, fsk, false)
                             as ImageView
 
-                    imageView.setImageDrawable(BadgeDrawable.Builder()
-                            .type(BadgeDrawable.TYPE_ONLY_ONE_TEXT)
-                            .badgeColor(ContextCompat.getColor(context, R.color.colorAccent))
-                            .text1(it)
-                            .textSize(Utils.convertSpToPx(context, 14f))
-                            .build()
-                            .apply {
-                                setNeedAutoSetBounds(true)
-                            })
+                    imageView.setImageResource(getFskImage(it))
 
                     fsk.addView(imageView)
                 }
@@ -197,6 +191,22 @@ class MediaInfoFragment : EasyLoadingFragment<Entry>() {
             })
 
             description.text = it.description
+        }
+    }
+
+    @DrawableRes
+    private fun getFskImage(fsk: String): Int {
+        return when (fsk) {
+            FskParameter.FSK_0 -> R.drawable.ic_fsk0
+            FskParameter.FSK_6 -> R.drawable.ic_fsk6
+            FskParameter.FSK_12 -> R.drawable.ic_fsk12
+            FskParameter.FSK_16 -> R.drawable.ic_fsk16
+            FskParameter.FSK_18 -> R.drawable.ic_fsk18
+            FskParameter.BAD_LANGUAGE -> R.drawable.ic_bad_language
+            FskParameter.FEAR -> R.drawable.ic_fear
+            FskParameter.SEX -> R.drawable.ic_sex
+            FskParameter.VIOLENCE -> R.drawable.ic_violence
+            else -> throw IllegalArgumentException("Unknown fsk: $fsk")
         }
     }
 
@@ -243,7 +253,7 @@ class MediaInfoFragment : EasyLoadingFragment<Entry>() {
             StateParameter.CANCELLED -> "Abgebrochen"
             StateParameter.CANCELLED_SUB -> "Abgebrochener Sub"
             StateParameter.FINISHED -> "Abgeschlossen"
-            else -> throw IllegalArgumentException("Unknwon state: $state")
+            else -> throw IllegalArgumentException("Unknown state: $state")
         }
     }
 
@@ -253,7 +263,7 @@ class MediaInfoFragment : EasyLoadingFragment<Entry>() {
             SeasonParameter.SPRING -> "Frühling"
             SeasonParameter.SUMMER -> "Sommer"
             SeasonParameter.AUTUMN -> "Herbst"
-            else -> throw IllegalArgumentException("Unknwon season: ${season.season}")
+            else -> throw IllegalArgumentException("Unknown season: ${season.season}")
         }} ${season.year}"
     }
 }
