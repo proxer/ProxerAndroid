@@ -156,33 +156,9 @@ class MediaInfoFragment : EasyLoadingFragment<Entry>() {
                 else -> throw InvalidParameterException("Unknwon license: " + it.license)
             }
 
-            genres.removeAllViews()
-
-            if (it.genres.isEmpty()) {
-                genresTitle.visibility = View.GONE
-                genres.visibility = View.GONE
-            } else {
-                it.genres.forEach { genre ->
-                    val imageView = layoutInflater.inflate(R.layout.item_badge, genres, false)
-                            as ImageView
-
-                    imageView.setImageDrawable(BadgeDrawable.Builder()
-                            .type(BadgeDrawable.TYPE_ONLY_ONE_TEXT)
-                            .badgeColor(ContextCompat.getColor(context, R.color.colorAccent))
-                            .text1(genre)
-                            .textSize(Utils.convertSpToPx(context, 14f))
-                            .build()
-                            .apply {
-                                setNeedAutoSetBounds(true)
-                            })
-                    imageView.setOnClickListener {
-                        Utils.viewLink(context,
-                                ProxerUrlHolder.getWikiUrl(genre).toString())
-                    }
-
-                    genres.addView(imageView)
-                }
-            }
+            buildBadgeView(genresTitle, genres, it.genres, { it }, {
+                ProxerUrlHolder.getWikiUrl(it).toString()
+            })
 
             fsk.removeAllViews()
 
@@ -208,65 +184,51 @@ class MediaInfoFragment : EasyLoadingFragment<Entry>() {
                 }
             }
 
-            groups.removeAllViews()
+            buildBadgeView(groupsTitle, groups, it.subgroups, { it.name }, {
+                ProxerUrlHolder.getSubgroupUrl(it.id,
+                        ProxerUrlHolder.DEVICE_QUERY_PARAMETER_DEFAULT).toString()
+            })
 
-            if (it.subgroups.isEmpty()) {
-                groupsTitle.visibility = View.VISIBLE
-                groups.visibility = View.VISIBLE
-            } else {
-                it.subgroups.forEach { subgroup ->
-                    val imageView = layoutInflater.inflate(R.layout.item_badge, groups, false)
-                            as ImageView
-
-                    imageView.setImageDrawable(BadgeDrawable.Builder()
-                            .type(BadgeDrawable.TYPE_ONLY_ONE_TEXT)
-                            .badgeColor(ContextCompat.getColor(context, R.color.colorAccent))
-                            .text1(subgroup.name)
-                            .textSize(Utils.convertSpToPx(context, 14f))
-                            .build()
-                            .apply {
-                                setNeedAutoSetBounds(true)
-                            })
-                    imageView.setOnClickListener {
-                        Utils.viewLink(context,
-                                ProxerUrlHolder.getSubgroupUrl(subgroup.id,
-                                        ProxerUrlHolder.DEVICE_QUERY_PARAMETER_DEFAULT).toString())
-                    }
-
-                    groups.addView(imageView)
-                }
-            }
-
-            publishers.removeAllViews()
-
-            if (it.publishers.isEmpty()) {
-                publishersTitle.visibility = View.VISIBLE
-                publishers.visibility = View.VISIBLE
-            } else {
-                it.publishers.forEach { publisher ->
-                    val imageView = layoutInflater.inflate(R.layout.item_badge, groups, false)
-                            as ImageView
-
-                    imageView.setImageDrawable(BadgeDrawable.Builder()
-                            .type(BadgeDrawable.TYPE_ONLY_ONE_TEXT)
-                            .badgeColor(ContextCompat.getColor(context, R.color.colorAccent))
-                            .text1(getPublisherString(publisher))
-                            .textSize(Utils.convertSpToPx(context, 14f))
-                            .build()
-                            .apply {
-                                setNeedAutoSetBounds(true)
-                            })
-                    imageView.setOnClickListener {
-                        Utils.viewLink(context,
-                                ProxerUrlHolder.getPublisherUrl(publisher.id,
-                                        ProxerUrlHolder.DEVICE_QUERY_PARAMETER_DEFAULT).toString())
-                    }
-
-                    publishers.addView(imageView)
-                }
-            }
+            buildBadgeView(publishersTitle, publishers, it.publishers, {
+                getPublisherString(it)
+            }, {
+                ProxerUrlHolder.getPublisherUrl(it.id,
+                        ProxerUrlHolder.DEVICE_QUERY_PARAMETER_DEFAULT).toString()
+            })
 
             description.text = it.description
+        }
+    }
+
+    private fun <T> buildBadgeView(title: TextView, badgeContainer: ViewGroup,
+                                   items: Array<T>, transform: (T) -> String, url: (T) -> String) {
+        badgeContainer.removeAllViews()
+
+        if (items.isEmpty()) {
+            title.visibility = View.GONE
+            badgeContainer.visibility = View.GONE
+        } else {
+            val inflater = LayoutInflater.from(context)
+
+            items.forEach { item ->
+                val imageView = inflater.inflate(R.layout.item_badge, badgeContainer, false)
+                        as ImageView
+
+                imageView.setImageDrawable(BadgeDrawable.Builder()
+                        .type(BadgeDrawable.TYPE_ONLY_ONE_TEXT)
+                        .badgeColor(ContextCompat.getColor(context, R.color.colorAccent))
+                        .text1(transform.invoke(item))
+                        .textSize(Utils.convertSpToPx(context, 14f))
+                        .build()
+                        .apply {
+                            setNeedAutoSetBounds(true)
+                        })
+                imageView.setOnClickListener {
+                    Utils.viewLink(context, url.invoke(item))
+                }
+
+                badgeContainer.addView(imageView)
+            }
         }
     }
 
