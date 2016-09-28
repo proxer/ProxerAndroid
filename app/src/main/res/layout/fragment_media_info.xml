@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.proxerme.app.fragment.media.MediaInfoFragment">
@@ -239,6 +240,59 @@
                             android:layout_margin="4dp" />
 
                         <TextView
+                            android:id="@+id/tagsTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text="@string/fragment_media_info_tags"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textColor="@color/colorAccent" />
+
+                        <org.apmem.tools.layouts.FlowLayout
+                            android:id="@+id/tags"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp" />
+
+                        <LinearLayout
+                            style="?android:buttonBarStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:orientation="horizontal">
+
+                            <Button
+                                android:id="@+id/unratedTagsButton"
+                                style="?android:attr/borderlessButtonStyle"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginBottom="8dp"
+                                android:layout_marginEnd="4dp"
+                                android:layout_marginLeft="8dp"
+                                android:layout_marginRight="4dp"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginTop="4dp"
+                                android:layout_weight="1"
+                                android:textColor="@color/colorAccent" />
+
+                            <Button
+                                android:id="@+id/spoilerTagsButton"
+                                style="?android:attr/borderlessButtonStyle"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginBottom="8dp"
+                                android:layout_marginEnd="8dp"
+                                android:layout_marginLeft="4dp"
+                                android:layout_marginRight="8dp"
+                                android:layout_marginStart="4dp"
+                                android:layout_marginTop="4dp"
+                                android:layout_weight="1"
+                                android:textColor="@color/colorAccent" />
+                        </LinearLayout>
+
+                        <TextView
                             android:id="@+id/fskTitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -323,4 +377,4 @@
 
     <include layout="@layout/layout_error" />
 
-</FrameLayout>
+</android.support.design.widget.CoordinatorLayout>

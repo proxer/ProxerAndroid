@@ -7,6 +7,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.support.annotation.ColorRes
+import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.text.Editable
 import android.text.TextWatcher
@@ -16,7 +17,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
+import cn.nekocode.badge.BadgeDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.Target
@@ -26,6 +29,7 @@ import com.klinker.android.link_builder.TouchableMovementMethod
 import com.proxerme.app.R
 import com.proxerme.library.connection.ProxerException
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
+import org.jetbrains.anko.childrenSequence
 import org.jetbrains.anko.toast
 import java.util.concurrent.ExecutionException
 import java.util.regex.Pattern
@@ -135,6 +139,18 @@ object Utils {
         return result
     }
 
+    fun makeMultilineSnackbar(rootView: View, message: String, duration: Int,
+                              maxLines: Int = 5): Snackbar {
+        return Snackbar.make(rootView, message, duration)
+                .apply {
+                    view.childrenSequence().forEach {
+                        if (it is TextView && it !is Button) {
+                            it.maxLines = maxLines
+                        }
+                    }
+                }
+    }
+
     fun showError(context: Context, exception: ProxerException, adapter: EasyHeaderFooterAdapter,
                   buttonMessage: String? = null, parent: ViewGroup? = null,
                   onWebClickListener: Link.OnClickListener? = null,
@@ -165,6 +181,43 @@ object Utils {
         errorButton.setOnClickListener(onButtonClickListener)
 
         adapter.setFooter(errorContainer)
+    }
+
+    fun <T> populateBadgeView(badgeContainer: ViewGroup, items: Array<T>, transform: (T) -> String,
+                              onClick: ((View, T) -> Unit)? = null,
+                              textSizeSp: Float = 14f) {
+        badgeContainer.removeAllViews()
+
+        items.forEach { item ->
+            badgeContainer.addView(buildBadgeViewEntry(badgeContainer, item, transform, onClick,
+                    textSizeSp))
+        }
+    }
+
+    fun <T> buildBadgeViewEntry(container: ViewGroup, item: T, transform: (T) -> String,
+                                onClick: ((View, T) -> Unit)? = null,
+                                textSizeSp: Float = 14f): ImageView {
+        val imageView = LayoutInflater.from(container.context).inflate(R.layout.item_badge,
+                container, false) as ImageView
+
+        imageView.setImageDrawable(BadgeDrawable.Builder()
+                .type(BadgeDrawable.TYPE_ONLY_ONE_TEXT)
+                .badgeColor(ContextCompat.getColor(container.context,
+                        R.color.colorAccent))
+                .text1(transform.invoke(item))
+                .textSize(Utils.convertSpToPx(container.context, textSizeSp))
+                .build()
+                .apply {
+                    setNeedAutoSetBounds(true)
+                })
+
+        if (onClick != null) {
+            imageView.setOnClickListener {
+                onClick.invoke(it, item)
+            }
+        }
+
+        return imageView
     }
 
     fun setClipboardContent(activity: Activity, label: String, content: String) {

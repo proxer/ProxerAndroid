@@ -2,29 +2,24 @@ package com.proxerme.app.fragment.media
 
 import android.os.Bundle
 import android.support.annotation.DrawableRes
-import android.support.v4.content.ContextCompat
+import android.support.design.widget.Snackbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TableRow
 import android.widget.TextView
 import butterknife.bindView
-import cn.nekocode.badge.BadgeDrawable
 import com.proxerme.app.R
 import com.proxerme.app.activity.MediaActivity
 import com.proxerme.app.fragment.framework.EasyLoadingFragment
 import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.util.Utils
-import com.proxerme.library.connection.info.entity.Entry
-import com.proxerme.library.connection.info.entity.EntrySeason
-import com.proxerme.library.connection.info.entity.Publisher
+import com.proxerme.library.connection.info.entity.*
 import com.proxerme.library.connection.info.request.EntryRequest
 import com.proxerme.library.info.ProxerUrlHolder
-import com.proxerme.library.parameters.FskParameter
-import com.proxerme.library.parameters.LicenseParameter
-import com.proxerme.library.parameters.SeasonParameter
-import com.proxerme.library.parameters.StateParameter
+import com.proxerme.library.parameters.*
 import org.apmem.tools.layouts.FlowLayout
 import java.security.InvalidParameterException
 
@@ -38,6 +33,8 @@ class MediaInfoFragment : EasyLoadingFragment<Entry>() {
     companion object {
         private const val ARGUMENT_ID = "id"
         private const val STATE_ENTRY = "state_entry"
+        private const val STATE_SHOW_UNRATED_TAGS = "state_unrated_tags"
+        private const val STATE_SHOW_SPOILER_TAGS = "state_spoiler_tags"
 
         fun newInstance(id: String): MediaInfoFragment {
             return MediaInfoFragment().apply {
@@ -52,6 +49,11 @@ class MediaInfoFragment : EasyLoadingFragment<Entry>() {
 
     private lateinit var id: String
     private var entry: Entry? = null
+
+    private var showUnratedTags: Boolean = false
+    private var showSpoilerTags: Boolean = false
+
+    private val root: ViewGroup by bindView(R.id.root)
 
     private val originalTitle: TextView by bindView(R.id.originalTitle)
     private val originalTitleRow: TableRow by bindView(R.id.originalTitleRow)
@@ -69,6 +71,10 @@ class MediaInfoFragment : EasyLoadingFragment<Entry>() {
 
     private val genres: FlowLayout by bindView(R.id.genres)
     private val genresTitle: TextView by bindView(R.id.genresTitle)
+    private val tags: FlowLayout by bindView(R.id.tags)
+    private val tagsTitle: TextView by bindView(R.id.tagsTitle)
+    private val unratedTagsButton: Button by bindView(R.id.unratedTagsButton)
+    private val spoilerTagsButton: Button by bindView(R.id.spoilerTagsButton)
     private val fsk: FlowLayout by bindView(R.id.fsk)
     private val fskTitle: TextView  by bindView(R.id.fskTitle)
     private val groups: FlowLayout by bindView(R.id.groups)
@@ -81,7 +87,12 @@ class MediaInfoFragment : EasyLoadingFragment<Entry>() {
         super.onCreate(savedInstanceState)
 
         id = arguments.getString(ARGUMENT_ID)
-        entry = savedInstanceState?.getParcelable(STATE_ENTRY)
+
+        if (savedInstanceState != null) {
+            entry = savedInstanceState.getParcelable(STATE_ENTRY)
+            showUnratedTags = savedInstanceState.getBoolean(STATE_SHOW_UNRATED_TAGS)
+            showSpoilerTags = savedInstanceState.getBoolean(STATE_SHOW_SPOILER_TAGS)
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -93,6 +104,8 @@ class MediaInfoFragment : EasyLoadingFragment<Entry>() {
         super.onSaveInstanceState(outState)
 
         outState.putParcelable(STATE_ENTRY, entry)
+        outState.putBoolean(STATE_SHOW_UNRATED_TAGS, showUnratedTags)
+        outState.putBoolean(STATE_SHOW_SPOILER_TAGS, showSpoilerTags)
     }
 
     override fun clear() {
@@ -111,46 +124,10 @@ class MediaInfoFragment : EasyLoadingFragment<Entry>() {
 
     override fun show() {
         entry?.let {
-            val layoutInflater = LayoutInflater.from(context)
-
-            it.synonyms.forEach {
-                when (it.type) {
-                    "name" -> {
-                        originalTitle.text = it.name
-                        originalTitleRow.visibility = View.VISIBLE
-                    }
-
-                    "nameeng" -> {
-                        englishTitle.text = it.name
-                        englishTitleRow.visibility = View.VISIBLE
-                    }
-
-                    "nameger" -> {
-                        germanTitle.text = it.name
-                        germanTitleRow.visibility = View.VISIBLE
-                    }
-
-                    "namejap" -> {
-                        japaneseTitle.text = it.name
-                        japaneseTitleRow.visibility = View.VISIBLE
-                    }
-                }
-            }
-
-            if (it.seasons.size >= 1) {
-                seasonStart.text = getSeasonStartString(it.seasons[0])
-
-                if (it.seasons.size >= 2) {
-                    seasonEnd.text = getSeasonEndString(it.seasons[1])
-                } else {
-                    seasonEnd.visibility = View.GONE
-                }
-            } else {
-                seasonsRow.visibility = View.GONE
-            }
+            buildSynonymsView(it.synonyms)
+            buildSeasonsView(it.seasons)
 
             status.text = getStateString(it.state)
-
             license.text = getString(when (it.license) {
                 LicenseParameter.LICENSED -> R.string.media_license_licensed
                 LicenseParameter.NON_LICENSED -> R.string.media_license_non_licensed
@@ -158,40 +135,160 @@ class MediaInfoFragment : EasyLoadingFragment<Entry>() {
                 else -> throw InvalidParameterException("Unknown license: " + it.license)
             })
 
-            buildBadgeView(genresTitle, genres, it.genres, { it }, {
-                ProxerUrlHolder.getWikiUrl(it).toString()
-            })
+            buildBadgeView(genres, it.genres, { it }, { view, genre ->
+                Utils.viewLink(context, ProxerUrlHolder.getWikiUrl(genre).toString())
+            }, genresTitle)
 
-            fsk.removeAllViews()
+            buildTagsView(it.tags)
+            buildFskView(it.fsk)
 
-            if (it.fsk.isEmpty()) {
-                fskTitle.visibility = View.GONE
-                fsk.visibility = View.GONE
-            } else {
-                it.fsk.forEach {
-                    val imageView = layoutInflater.inflate(R.layout.item_badge, fsk, false)
-                            as ImageView
+            buildBadgeView(groups, it.subgroups, { it.name }, { view, subgroup ->
+                Utils.viewLink(context, ProxerUrlHolder.getSubgroupUrl(subgroup.id,
+                        ProxerUrlHolder.DEVICE_QUERY_PARAMETER_DEFAULT).toString())
+            }, groupsTitle)
 
-                    imageView.setImageResource(getFskImage(it))
-
-                    fsk.addView(imageView)
-                }
-            }
-
-            buildBadgeView(groupsTitle, groups, it.subgroups, { it.name }, {
-                ProxerUrlHolder.getSubgroupUrl(it.id,
-                        ProxerUrlHolder.DEVICE_QUERY_PARAMETER_DEFAULT).toString()
-            })
-
-            buildBadgeView(publishersTitle, publishers, it.publishers, {
+            buildBadgeView(publishers, it.publishers, {
                 getPublisherString(it)
-            }, {
-                ProxerUrlHolder.getPublisherUrl(it.id,
-                        ProxerUrlHolder.DEVICE_QUERY_PARAMETER_DEFAULT).toString()
-            })
+            }, { view, publisher ->
+                Utils.viewLink(context, ProxerUrlHolder.getPublisherUrl(publisher.id,
+                        ProxerUrlHolder.DEVICE_QUERY_PARAMETER_DEFAULT).toString())
+            }, publishersTitle)
 
             description.text = it.description
         }
+    }
+
+    private fun buildSynonymsView(synonyms: Array<Synonym>) {
+        synonyms.forEach {
+            when (it.type) {
+                SynonymTypeParameter.ORIGINAL -> {
+                    originalTitle.text = it.name
+                    originalTitleRow.visibility = View.VISIBLE
+                }
+
+                SynonymTypeParameter.ENGLISH -> {
+                    englishTitle.text = it.name
+                    englishTitleRow.visibility = View.VISIBLE
+                }
+
+                SynonymTypeParameter.GERMAN -> {
+                    germanTitle.text = it.name
+                    germanTitleRow.visibility = View.VISIBLE
+                }
+
+                SynonymTypeParameter.JAPANESE -> {
+                    japaneseTitle.text = it.name
+                    japaneseTitleRow.visibility = View.VISIBLE
+                }
+            }
+        }
+    }
+
+    private fun buildSeasonsView(seasons: Array<EntrySeason>) {
+        if (seasons.size >= 1) {
+            seasonStart.text = getSeasonStartString(seasons[0])
+
+            if (seasons.size >= 2) {
+                seasonEnd.text = getSeasonEndString(seasons[1])
+            } else {
+                seasonEnd.visibility = View.GONE
+            }
+        } else {
+            seasonsRow.visibility = View.GONE
+        }
+    }
+
+    private fun buildTagsView(tagArray: Array<Tag>) {
+        updateUnratedButton()
+        unratedTagsButton.setOnClickListener {
+            showUnratedTags = !showUnratedTags
+
+            entry?.let {
+                buildTagsView(it.tags)
+            }
+        }
+
+        updateSpoilerButton()
+        spoilerTagsButton.setOnClickListener {
+            showSpoilerTags = !showSpoilerTags
+
+            entry?.let {
+                buildTagsView(it.tags)
+            }
+        }
+
+        buildBadgeView(tags, tagArray.filter {
+            if (it.isRated) {
+                if (it.isSpoiler) {
+                    showSpoilerTags
+                } else {
+                    true
+                }
+            } else {
+                if (showUnratedTags) {
+                    if (it.isSpoiler) {
+                        showSpoilerTags
+                    } else {
+                        true
+                    }
+                } else {
+                    false
+                }
+            }
+        }.toTypedArray(), { it.name }, { view, tag ->
+            Utils.makeMultilineSnackbar(root, tag.description, Snackbar.LENGTH_LONG).show()
+        }, tagsTitle)
+    }
+
+    private fun updateUnratedButton() {
+        unratedTagsButton.text = getString(when (showUnratedTags) {
+            true -> R.string.tags_unrated_hide
+            false -> R.string.tags_unrated_show
+        })
+    }
+
+    private fun updateSpoilerButton() {
+        spoilerTagsButton.text = getString(when (showSpoilerTags) {
+            true -> R.string.tags_spoiler_hide
+            false -> R.string.tags_spoiler_show
+        })
+    }
+
+    private fun buildFskView(fskEntries: Array<String>) {
+        fsk.removeAllViews()
+
+        if (fskEntries.isEmpty()) {
+            fskTitle.visibility = View.GONE
+            fsk.visibility = View.GONE
+        } else {
+            fskEntries.forEach { fskEntry ->
+                val imageView = LayoutInflater.from(context).inflate(R.layout.item_badge,
+                        fsk, false) as ImageView
+
+                imageView.setImageResource(getFskImage(fskEntry))
+                imageView.setOnClickListener {
+                    Utils.makeMultilineSnackbar(root, getFskDescription(fskEntry),
+                            Snackbar.LENGTH_LONG).show()
+                }
+
+                fsk.addView(imageView)
+            }
+        }
+    }
+
+    private fun getFskDescription(fsk: String): String {
+        return getString(when (fsk) {
+            FskParameter.FSK_0 -> R.string.fsk_0_description
+            FskParameter.FSK_6 -> R.string.fsk_6_description
+            FskParameter.FSK_12 -> R.string.fsk_12_description
+            FskParameter.FSK_16 -> R.string.fsk_16_description
+            FskParameter.FSK_18 -> R.string.fsk_18_description
+            FskParameter.BAD_LANGUAGE -> R.string.fsk_bad_language_description
+            FskParameter.FEAR -> R.string.fsk_fear_description
+            FskParameter.SEX -> R.string.fsk_sex_description
+            FskParameter.VIOLENCE -> R.string.fsk_violence_description
+            else -> throw IllegalArgumentException("Unknown fsk: $fsk")
+        })
     }
 
     @DrawableRes
@@ -210,35 +307,18 @@ class MediaInfoFragment : EasyLoadingFragment<Entry>() {
         }
     }
 
-    private fun <T> buildBadgeView(title: TextView, badgeContainer: ViewGroup,
-                                   items: Array<T>, transform: (T) -> String, url: (T) -> String) {
+    private fun <T> buildBadgeView(badgeContainer: ViewGroup, items: Array<T>,
+                                   transform: (T) -> String, onClick: ((View, T) -> Unit)? = null,
+                                   vararg viewsToHideIfEmpty: View) {
         badgeContainer.removeAllViews()
 
         if (items.isEmpty()) {
-            title.visibility = View.GONE
             badgeContainer.visibility = View.GONE
-        } else {
-            val inflater = LayoutInflater.from(context)
-
-            items.forEach { item ->
-                val imageView = inflater.inflate(R.layout.item_badge, badgeContainer, false)
-                        as ImageView
-
-                imageView.setImageDrawable(BadgeDrawable.Builder()
-                        .type(BadgeDrawable.TYPE_ONLY_ONE_TEXT)
-                        .badgeColor(ContextCompat.getColor(context, R.color.colorAccent))
-                        .text1(transform.invoke(item))
-                        .textSize(Utils.convertSpToPx(context, 14f))
-                        .build()
-                        .apply {
-                            setNeedAutoSetBounds(true)
-                        })
-                imageView.setOnClickListener {
-                    Utils.viewLink(context, url.invoke(item))
-                }
-
-                badgeContainer.addView(imageView)
+            viewsToHideIfEmpty.forEach {
+                it.visibility = View.GONE
             }
+        } else {
+            Utils.populateBadgeView(badgeContainer, items, transform, onClick)
         }
     }
 

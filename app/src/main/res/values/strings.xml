@@ -276,8 +276,25 @@
     <string name="media_license_licensed">Lizensiert</string>
     <string name="media_license_non_licensed">Nicht Lizensiert</string>
     <string name="media_license_unknown">Unbekannt</string>
+
+    <string name="fsk_0_description">Dieser Anime ist für alle geeignet.</string>
+    <string name="fsk_6_description">Dieser Anime ist nicht für Personen unter 6 Jahren geeignet.</string>
+    <string name="fsk_12_description">Dieser Anime ist nicht für Personen unter 12 Jahren geeignet.</string>
+    <string name="fsk_16_description">Dieser Anime ist nicht für Personen unter 16 Jahren geeignet.</string>
+    <string name="fsk_18_description">Dieser Anime ist nicht für Personen unter 18 Jahren geeignet.</string>
+    <string name="fsk_bad_language_description">Dieser Anime beinhaltet vulgäre Ausdrücke.</string>
+    <string name="fsk_violence_description">Dieser Anime enthält Gewaltdarstellungen.</string>
+    <string name="fsk_fear_description">Inhalt könnte verängstigend auf Kinder wirken.</string>
+    <string name="fsk_sex_description">Erotische Darstellungen und Nacktheit mit sexuellem Bezug und Sexdarstellungen.</string>
+
+    <string name="tags_unrated_show">Unbewertete Tags anzeigen</string>
+    <string name="tags_unrated_hide">Unbewertete Tags verstecken</string>
+    <string name="tags_spoiler_show">Spoiler Tags anzeigen</string>
+    <string name="tags_spoiler_hide">Spoiler Tags verstecken</string>
+
     <string name="fragment_media_info_groups">Gruppen</string>
     <string name="fragment_media_info_publishers">Industrie</string>
+    <string name="fragment_media_info_tags">Tags</string>
 
     <plurals name="media_episode_count">
         <item quantity="one">Eine Episode</item>
