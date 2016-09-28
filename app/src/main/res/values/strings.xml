@@ -244,6 +244,7 @@
     <string name="filter_manga">Manga</string>
     <string name="filter_anime">Anime</string>
     <string name="filter_all">Alles</string>
+
     <string name="fragment_media_info_description">Beschreibung</string>
     <string name="fragment_media_info_fsk">FSK</string>
     <string name="fragment_media_info_genres">Genres</string>
@@ -255,6 +256,28 @@
     <string name="fragment_media_info_season_title">Season</string>
     <string name="fragment_media_info_license_title">Lizenz</string>
     <string name="fragment_media_info_status_title">Status</string>
+
+    <string name="fragment_media_season_winter_start">Start: Winter %d</string>
+    <string name="fragment_media_season_spring_start">Start: Frühling %d</string>
+    <string name="fragment_media_season_summer_start">Start: Sommer %d</string>
+    <string name="fragment_media_season_autumn_start">Start: Herbst %d</string>
+
+    <string name="fragment_media_season_winter_end">Ende: Winter %d</string>
+    <string name="fragment_media_season_spring_end">Ende: Frühling %d</string>
+    <string name="fragment_media_season_summer_end">Ende: Sommer %d</string>
+    <string name="fragment_media_season_autumn_end">Ende: Herbst %d</string>
+
+    <string name="media_state_pre_airing">Nicht erschienen (Pre-Airing)</string>
+    <string name="media_state_airing">Airing</string>
+    <string name="media_state_cancelled">Abgebrochen</string>
+    <string name="media_state_cancelled_sub">Abgebrochener Sub</string>
+    <string name="media_state_finished">Abgeschlossen</string>
+
+    <string name="media_license_licensed">Lizensiert</string>
+    <string name="media_license_non_licensed">Nicht Lizensiert</string>
+    <string name="media_license_unknown">Unbekannt</string>
+    <string name="fragment_media_info_groups">Gruppen</string>
+    <string name="fragment_media_info_publishers">Industrie</string>
 
     <plurals name="media_episode_count">
         <item quantity="one">Eine Episode</item>

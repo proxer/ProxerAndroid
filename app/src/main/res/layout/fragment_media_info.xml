@@ -258,7 +258,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="8dp"
-                            android:text="Gruppen"
+                            android:text="@string/fragment_media_info_groups"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="@color/colorAccent" />
 
@@ -273,7 +273,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="8dp"
-                            android:text="Industrie"
+                            android:text="@string/fragment_media_info_publishers"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="@color/colorAccent" />
 

@@ -138,10 +138,10 @@ class MediaInfoFragment : EasyLoadingFragment<Entry>() {
             }
 
             if (it.seasons.size >= 1) {
-                seasonStart.text = "Start: ${getSeasonString(it.seasons[0])}"
+                seasonStart.text = getSeasonStartString(it.seasons[0])
 
                 if (it.seasons.size >= 2) {
-                    seasonEnd.text = "Ende: ${getSeasonString(it.seasons[1])}"
+                    seasonEnd.text = getSeasonEndString(it.seasons[1])
                 } else {
                     seasonEnd.visibility = View.GONE
                 }
@@ -151,12 +151,12 @@ class MediaInfoFragment : EasyLoadingFragment<Entry>() {
 
             status.text = getStateString(it.state)
 
-            license.text = when (it.license) {
-                LicenseParameter.LICENSED -> "Lizensiert"
-                LicenseParameter.NON_LICENSED -> "Nicht Lizensiert"
-                LicenseParameter.UNKNOWN -> "Unbekannt"
-                else -> throw InvalidParameterException("Unknwon license: " + it.license)
-            }
+            license.text = getString(when (it.license) {
+                LicenseParameter.LICENSED -> R.string.media_license_licensed
+                LicenseParameter.NON_LICENSED -> R.string.media_license_non_licensed
+                LicenseParameter.UNKNOWN -> R.string.media_license_unknown
+                else -> throw InvalidParameterException("Unknown license: " + it.license)
+            })
 
             buildBadgeView(genresTitle, genres, it.genres, { it }, {
                 ProxerUrlHolder.getWikiUrl(it).toString()
@@ -247,23 +247,33 @@ class MediaInfoFragment : EasyLoadingFragment<Entry>() {
     }
 
     private fun getStateString(state: Int): String {
-        return when (state) {
-            StateParameter.PRE_AIRING -> "Nicht erschienen (Pre-Airing)"
-            StateParameter.AIRING -> "Airing"
-            StateParameter.CANCELLED -> "Abgebrochen"
-            StateParameter.CANCELLED_SUB -> "Abgebrochener Sub"
-            StateParameter.FINISHED -> "Abgeschlossen"
+        return getString(when (state) {
+            StateParameter.PRE_AIRING -> R.string.media_state_pre_airing
+            StateParameter.AIRING -> R.string.media_state_airing
+            StateParameter.CANCELLED -> R.string.media_state_cancelled
+            StateParameter.CANCELLED_SUB -> R.string.media_state_cancelled_sub
+            StateParameter.FINISHED -> R.string.media_state_finished
             else -> throw IllegalArgumentException("Unknown state: $state")
-        }
+        })
     }
 
-    private fun getSeasonString(season: EntrySeason): String {
-        return "${when (season.season) {
-            SeasonParameter.WINTER -> "Winter"
-            SeasonParameter.SPRING -> "Frühling"
-            SeasonParameter.SUMMER -> "Sommer"
-            SeasonParameter.AUTUMN -> "Herbst"
+    private fun getSeasonStartString(season: EntrySeason): String {
+        return getString(when (season.season) {
+            SeasonParameter.WINTER -> R.string.fragment_media_season_winter_start
+            SeasonParameter.SPRING -> R.string.fragment_media_season_spring_start
+            SeasonParameter.SUMMER -> R.string.fragment_media_season_summer_start
+            SeasonParameter.AUTUMN -> R.string.fragment_media_season_autumn_start
             else -> throw IllegalArgumentException("Unknown season: ${season.season}")
-        }} ${season.year}"
+        }, season.year)
+    }
+
+    private fun getSeasonEndString(season: EntrySeason): String {
+        return getString(when (season.season) {
+            SeasonParameter.WINTER -> R.string.fragment_media_season_winter_end
+            SeasonParameter.SPRING -> R.string.fragment_media_season_spring_end
+            SeasonParameter.SUMMER -> R.string.fragment_media_season_summer_end
+            SeasonParameter.AUTUMN -> R.string.fragment_media_season_autumn_end
+            else -> throw IllegalArgumentException("Unknown season: ${season.season}")
+        }, season.year)
     }
 }
