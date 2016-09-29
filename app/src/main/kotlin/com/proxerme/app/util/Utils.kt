@@ -183,7 +183,8 @@ object Utils {
         adapter.setFooter(errorContainer)
     }
 
-    fun <T> populateBadgeView(badgeContainer: ViewGroup, items: Array<T>, transform: (T) -> String,
+    fun <T> populateBadgeView(badgeContainer: ViewGroup, items: Array<T>,
+                              transform: (T) -> String,
                               onClick: ((View, T) -> Unit)? = null,
                               textSizeSp: Float = 14f) {
         badgeContainer.removeAllViews()
@@ -196,9 +197,10 @@ object Utils {
 
     fun <T> buildBadgeViewEntry(container: ViewGroup, item: T, transform: (T) -> String,
                                 onClick: ((View, T) -> Unit)? = null,
-                                textSizeSp: Float = 14f): ImageView {
-        val imageView = LayoutInflater.from(container.context).inflate(R.layout.item_badge,
-                container, false) as ImageView
+                                textSizeSp: Float = 14f, imageViewToReuse: ImageView? = null):
+            ImageView {
+        val imageView = imageViewToReuse ?: LayoutInflater.from(container.context)
+                .inflate(R.layout.item_badge, container, false) as ImageView
 
         imageView.setImageDrawable(BadgeDrawable.Builder()
                 .type(BadgeDrawable.TYPE_ONLY_ONE_TEXT)

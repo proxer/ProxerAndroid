@@ -98,14 +98,11 @@
                         tools:text="(12910)" />
                 </LinearLayout>
 
-                <TextView
+                <org.apmem.tools.layouts.FlowLayout
                     android:id="@+id/genres"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    tools:ignore="SelectableText"
-                    tools:text="Slice of life, School, Romance, Shounen" />
+                    android:layout_margin="4dp" />
 
                 <View
                     android:layout_width="match_parent"
