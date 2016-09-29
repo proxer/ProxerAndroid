@@ -199,21 +199,26 @@ class MediaInfoFragment : EasyLoadingFragment<Entry>() {
     }
 
     private fun buildTagsView(tagArray: Array<Tag>) {
-        updateUnratedButton()
-        unratedTagsButton.setOnClickListener {
-            showUnratedTags = !showUnratedTags
+        if (tagArray.isEmpty()) {
+            unratedTagsButton.visibility = View.GONE
+            spoilerTagsButton.visibility = View.GONE
+        } else {
+            updateUnratedButton()
+            unratedTagsButton.setOnClickListener {
+                showUnratedTags = !showUnratedTags
 
-            entry?.let {
-                buildTagsView(it.tags)
+                entry?.let {
+                    buildTagsView(it.tags)
+                }
             }
-        }
 
-        updateSpoilerButton()
-        spoilerTagsButton.setOnClickListener {
-            showSpoilerTags = !showSpoilerTags
+            updateSpoilerButton()
+            spoilerTagsButton.setOnClickListener {
+                showSpoilerTags = !showSpoilerTags
 
-            entry?.let {
-                buildTagsView(it.tags)
+                entry?.let {
+                    buildTagsView(it.tags)
+                }
             }
         }
 
@@ -338,13 +343,18 @@ class MediaInfoFragment : EasyLoadingFragment<Entry>() {
     }
 
     private fun getSeasonStartString(season: EntrySeason): String {
-        return getString(when (season.season) {
-            SeasonParameter.WINTER -> R.string.fragment_media_season_winter_start
-            SeasonParameter.SPRING -> R.string.fragment_media_season_spring_start
-            SeasonParameter.SUMMER -> R.string.fragment_media_season_summer_start
-            SeasonParameter.AUTUMN -> R.string.fragment_media_season_autumn_start
+        return when (season.season) {
+            SeasonParameter.WINTER -> getString(R.string.fragment_media_season_winter_start,
+                    season.year)
+            SeasonParameter.SPRING -> getString(R.string.fragment_media_season_spring_start,
+                    season.year)
+            SeasonParameter.SUMMER -> getString(R.string.fragment_media_season_summer_start,
+                    season.year)
+            SeasonParameter.AUTUMN -> getString(R.string.fragment_media_season_autumn_start,
+                    season.year)
+            SeasonParameter.UNSPECIFIED -> season.year.toString()
             else -> throw IllegalArgumentException("Unknown season: ${season.season}")
-        }, season.year)
+        }
     }
 
     private fun getSeasonEndString(season: EntrySeason): String {
