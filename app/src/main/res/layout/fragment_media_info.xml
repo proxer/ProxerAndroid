@@ -70,6 +70,7 @@
                                     android:layout_margin="8dp"
                                     android:gravity="end"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    android:textIsSelectable="true"
                                     tools:text="RE:Zero" />
                             </TableRow>
 
@@ -93,6 +94,7 @@
                                     android:layout_margin="8dp"
                                     android:gravity="end"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    android:textIsSelectable="true"
                                     tools:text="Sword Art Online" />
                             </TableRow>
 
@@ -116,6 +118,7 @@
                                     android:layout_margin="8dp"
                                     android:gravity="end"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    android:textIsSelectable="true"
                                     tools:text="Sword Art Online" />
                             </TableRow>
 
@@ -139,6 +142,7 @@
                                     android:layout_margin="8dp"
                                     android:gravity="end"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    android:textIsSelectable="true"
                                     tools:text="I can't type japanese symbols :D" />
                             </TableRow>
 
@@ -368,7 +372,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="8dp"
-                            android:textAppearance="?android:attr/textAppearanceMedium" />
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textIsSelectable="true" />
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
             </LinearLayout>

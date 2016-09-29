@@ -37,8 +37,7 @@
             android:paddingRight="8dp"
             android:paddingTop="8dp"
             android:text="@string/add_user"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            tools:ignore="SelectableText" />
+            android:textAppearance="?android:attr/textAppearanceLarge" />
     </RelativeLayout>
 
 </FrameLayout>

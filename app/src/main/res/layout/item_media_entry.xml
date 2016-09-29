@@ -43,7 +43,6 @@
                 android:padding="8dp"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@android:color/white"
-                android:textIsSelectable="true"
                 tools:text="Some title" />
 
             <TextView
@@ -58,7 +57,6 @@
                 android:paddingRight="8dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@android:color/white"
-                tools:ignore="SelectableText"
                 tools:text="Animeserie" />
 
             <LinearLayout
@@ -94,7 +92,6 @@
                         android:paddingStart="2dp"
                         android:paddingTop="8dp"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        tools:ignore="SelectableText"
                         tools:text="(12910)" />
                 </LinearLayout>
 
@@ -126,7 +123,6 @@
                         android:layout_weight="1"
                         android:padding="8dp"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        tools:ignore="SelectableText"
                         tools:text="12 Episoden - Abgeschlossen" />
 
                     <TextView
@@ -138,7 +134,6 @@
                         android:gravity="end"
                         android:padding="8dp"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        tools:ignore="SelectableText"
                         tools:text="Gersub, Engsub" />
                 </LinearLayout>
             </LinearLayout>

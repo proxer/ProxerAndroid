@@ -43,7 +43,7 @@
                 android:paddingRight="8dp"
                 android:paddingTop="8dp"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                tools:ignore="SelectableText"
+
                 tools:text="Ruby" />
 
             <com.klinker.android.link_builder.LinkConsumableTextView
@@ -56,7 +56,7 @@
                 android:paddingRight="8dp"
                 android:paddingTop="2dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                tools:ignore="SelectableText"
+
                 tools:text="This is a status" />
 
         </LinearLayout>
