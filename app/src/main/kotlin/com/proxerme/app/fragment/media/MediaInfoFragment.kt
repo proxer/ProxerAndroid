@@ -136,22 +136,22 @@ class MediaInfoFragment : EasyLoadingFragment<Entry>() {
             })
 
             buildBadgeView(genres, it.genres, { it }, { view, genre ->
-                Utils.viewLink(context, ProxerUrlHolder.getWikiUrl(genre).toString())
+                (activity as MediaActivity).showPage(ProxerUrlHolder.getWikiUrl(genre))
             }, genresTitle)
 
             buildTagsView(it.tags)
             buildFskView(it.fsk)
 
             buildBadgeView(groups, it.subgroups, { it.name }, { view, subgroup ->
-                Utils.viewLink(context, ProxerUrlHolder.getSubgroupUrl(subgroup.id,
-                        ProxerUrlHolder.DEVICE_QUERY_PARAMETER_DEFAULT).toString())
+                (activity as MediaActivity).showPage(ProxerUrlHolder.getSubgroupUrl(subgroup.id,
+                        ProxerUrlHolder.DEVICE_QUERY_PARAMETER_DEFAULT))
             }, groupsTitle)
 
             buildBadgeView(publishers, it.publishers, {
                 getPublisherString(it)
             }, { view, publisher ->
-                Utils.viewLink(context, ProxerUrlHolder.getPublisherUrl(publisher.id,
-                        ProxerUrlHolder.DEVICE_QUERY_PARAMETER_DEFAULT).toString())
+                (activity as MediaActivity).showPage(ProxerUrlHolder.getPublisherUrl(publisher.id,
+                        ProxerUrlHolder.DEVICE_QUERY_PARAMETER_DEFAULT))
             }, publishersTitle)
 
             description.text = it.description

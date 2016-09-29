@@ -18,9 +18,11 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.proxerme.app.R
 import com.proxerme.app.fragment.media.MediaInfoFragment
+import com.proxerme.app.module.CustomTabsModule
 import com.proxerme.library.info.ProxerUrlHolder
+import customtabs.CustomTabActivityHelper
 
-class MediaActivity : AppCompatActivity() {
+class MediaActivity : AppCompatActivity(), CustomTabsModule {
 
     companion object {
         private const val EXTRA_ID = "extra_id"
@@ -38,6 +40,8 @@ class MediaActivity : AppCompatActivity() {
             context.startActivity(intent)
         }
     }
+
+    override val customTabActivityHelper: CustomTabActivityHelper = CustomTabActivityHelper()
 
     private lateinit var id: String
     private var name: String? = null
@@ -65,6 +69,22 @@ class MediaActivity : AppCompatActivity() {
 
         setupToolbar()
         setupImage()
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        try {
+            customTabActivityHelper.bindCustomTabsService(this)
+        } catch(ignored: Exception) {
+            // Workaround for crash if chrome is not installed
+        }
+    }
+
+    override fun onStop() {
+        customTabActivityHelper.unbindCustomTabsService(this)
+
+        super.onStop()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
