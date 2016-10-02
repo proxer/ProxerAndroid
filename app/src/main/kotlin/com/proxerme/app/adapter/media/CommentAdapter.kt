@@ -6,10 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.RatingBar
 import android.widget.TextView
 import butterknife.bindView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.mikepenz.community_material_typeface_library.CommunityMaterial
+import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.view.BBCodeView
@@ -57,6 +60,19 @@ class CommentAdapter(savedInstanceState: Bundle? = null) :
         private val userContainer: ViewGroup by bindView(R.id.userContainer)
         private val userImage: ImageView by bindView(R.id.userImage)
         private val username: TextView by bindView(R.id.username)
+
+        private val rating: RatingBar by bindView(R.id.rating)
+        private val ratingGenre: RatingBar by bindView(R.id.ratingGenre)
+        private val ratingGenreRow: ViewGroup by bindView(R.id.ratingGenreRow)
+        private val ratingStory: RatingBar by bindView(R.id.ratingStory)
+        private val ratingStoryRow: ViewGroup by bindView(R.id.ratingStoryRow)
+        private val ratingAnimation: RatingBar by bindView(R.id.ratingAnimation)
+        private val ratingAnimationRow: ViewGroup by bindView(R.id.ratingAnimationRow)
+        private val ratingCharacters: RatingBar by bindView(R.id.ratingCharacters)
+        private val ratingCharactersRow: ViewGroup by bindView(R.id.ratingCharactersRow)
+        private val ratingMusic: RatingBar by bindView(R.id.ratingMusic)
+        private val ratingMusicRow: ViewGroup by bindView(R.id.ratingMusicRow)
+
         private val comment: BBCodeView by bindView(R.id.comment)
 
         init {
@@ -70,11 +86,40 @@ class CommentAdapter(savedInstanceState: Bundle? = null) :
         override fun bind(item: Comment) {
             username.text = item.username
             comment.bbCode = item.comment
+            rating.rating = item.rating.toFloat() / 2.0f
 
-            Glide.with(userImage.context)
-                    .load(ProxerUrlHolder.getUserImageUrl(item.imageId).toString())
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .into(userImage)
+            bindRatingRow(ratingGenreRow, ratingGenre,
+                    item.ratingDetails.genre.toFloat())
+            bindRatingRow(ratingStoryRow, ratingStory,
+                    item.ratingDetails.story.toFloat())
+            bindRatingRow(ratingAnimationRow, ratingAnimation,
+                    item.ratingDetails.animation.toFloat())
+            bindRatingRow(ratingCharactersRow, ratingCharacters,
+                    item.ratingDetails.characters.toFloat())
+            bindRatingRow(ratingMusicRow, ratingMusic,
+                    item.ratingDetails.music.toFloat())
+
+            if (item.imageId.isBlank()) {
+                userImage.setImageDrawable(IconicsDrawable(userImage.context)
+                        .icon(CommunityMaterial.Icon.cmd_account)
+                        .sizeDp(96)
+                        .paddingDp(16)
+                        .colorRes(R.color.colorAccent))
+            } else {
+                Glide.with(userImage.context)
+                        .load(ProxerUrlHolder.getUserImageUrl(item.imageId).toString())
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .into(userImage)
+            }
+        }
+
+        private fun bindRatingRow(container: ViewGroup, ratingBar: RatingBar, rating: Float) {
+            if (rating <= 0) {
+                container.visibility = View.GONE
+            } else {
+                ratingBar.visibility = View.VISIBLE
+                ratingBar.rating = rating
+            }
         }
     }
 

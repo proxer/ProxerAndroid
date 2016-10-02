@@ -28,23 +28,32 @@
                 android:id="@+id/userContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginTop="8dp"
                 android:background="?attr/selectableItemBackground"
                 android:orientation="horizontal">
 
                 <com.proxerme.app.view.WidthAspectCircleImageView
                     android:id="@+id/userImage"
-                    android:layout_width="64dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical" />
+                    android:layout_width="32dp"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp" />
 
                 <TextView
                     android:id="@+id/username"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="8dp"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     tools:text="Username" />
 
@@ -53,13 +62,158 @@
             <RatingBar
                 android:id="@+id/rating"
                 style="?attr/ratingBarStyleIndicator"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
-                android:layout_marginTop="8dp"
                 android:isIndicator="true"
-                android:numStars="10" />
+                android:numStars="5" />
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:shrinkColumns="0"
+                android:stretchColumns="1">
+
+                <TableRow android:id="@+id/ratingGenreRow">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="8dp"
+                        android:text="@string/comment_rating_genre"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="8dp">
+
+                        <RatingBar
+                            android:id="@+id/ratingGenre"
+                            style="?attr/ratingBarStyleSmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:isIndicator="true"
+                            android:numStars="5" />
+
+                    </FrameLayout>
+                </TableRow>
+
+                <TableRow android:id="@+id/ratingStoryRow">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="8dp"
+                        android:text="@string/comment_rating_story"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="8dp">
+
+                        <RatingBar
+                            android:id="@+id/ratingStory"
+                            style="?attr/ratingBarStyleSmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:isIndicator="true"
+                            android:numStars="5" />
+                    </FrameLayout>
+                </TableRow>
+
+                <TableRow android:id="@+id/ratingAnimationRow">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="8dp"
+                        android:text="@string/comment_rating_animation"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="8dp">
+
+                        <RatingBar
+                            android:id="@+id/ratingAnimation"
+                            style="?attr/ratingBarStyleSmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:isIndicator="true"
+                            android:numStars="5" />
+                    </FrameLayout>
+                </TableRow>
+
+                <TableRow android:id="@+id/ratingCharactersRow">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="8dp"
+                        android:text="@string/comment_rating_characters"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="8dp">
+
+                        <RatingBar
+                            android:id="@+id/ratingCharacters"
+                            style="?attr/ratingBarStyleSmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:isIndicator="true"
+                            android:numStars="5" />
+                    </FrameLayout>
+                </TableRow>
+
+                <TableRow android:id="@+id/ratingMusicRow">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="8dp"
+                        android:text="@string/comment_rating_music"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="8dp">
+
+                        <RatingBar
+                            android:id="@+id/ratingMusic"
+                            style="?attr/ratingBarStyleSmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:isIndicator="true"
+                            android:numStars="5" />
+
+                    </FrameLayout>
+                </TableRow>
+
+            </TableLayout>
 
             <com.proxerme.app.view.BBCodeView
                 android:id="@+id/comment"

@@ -295,6 +295,11 @@
     <string name="fragment_media_info_groups">Gruppen</string>
     <string name="fragment_media_info_publishers">Industrie</string>
     <string name="fragment_media_info_tags">Tags</string>
+    <string name="comment_rating_genre">Genre</string>
+    <string name="comment_rating_story">Story</string>
+    <string name="comment_rating_animation">Animation/Bilder</string>
+    <string name="comment_rating_characters">Charaktere</string>
+    <string name="comment_rating_music">Musik</string>
 
     <plurals name="media_episode_count">
         <item quantity="one">Eine Episode</item>

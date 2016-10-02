@@ -183,7 +183,7 @@ class BBCodeView : LinearLayout {
 
         private fun merge(): List<BBViewConfiguration> {
             val result = LinkedList<BBViewConfiguration>()
-            val compatibleSpannables = LinkedList<SpannableString>()
+            val compatibleSpannables = LinkedList<CharSequence>()
 
             for (i in 0 until entries.size) {
                 val entry = entries[i]
@@ -222,6 +222,18 @@ class BBCodeView : LinearLayout {
 
                 if (i + 1 >= entries.size || entries[i + 1].gravity != entry.gravity ||
                         entries[i + 1].isSpoiler != entry.isSpoiler) {
+
+                    if (compatibleSpannables.last.endsWith('\n')) {
+                        val trimmed = compatibleSpannables.last.subSequence(0,
+                                compatibleSpannables.last.length - 1)
+
+                        compatibleSpannables.removeLast()
+
+                        if (trimmed.length > 0) {
+                            compatibleSpannables.add(trimmed)
+                        }
+                    }
+
                     result.add(BBViewConfiguration(TextUtils
                             .concat(*compatibleSpannables.toTypedArray()), entry.gravity,
                             entry.isSpoiler))
