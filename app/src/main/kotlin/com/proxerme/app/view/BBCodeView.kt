@@ -14,9 +14,12 @@ import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.proxerme.app.R
+import org.jetbrains.anko.find
 import java.util.*
 
 /**
@@ -37,9 +40,10 @@ class BBCodeView : LinearLayout {
         private const val TOKEN_CENTER = 7
         private const val TOKEN_RIGHT = 8
         private const val TOKEN_COLOR = 9
+        private const val TOKEN_SPOILER = 10
 
         private val bbTokens = arrayOf(SizeToken(), BoldToken(), ItalicToken(), UnderlineToken(),
-                LeftToken(), CenterToken(), RightToken(), ColorToken())
+                LeftToken(), CenterToken(), RightToken(), ColorToken(), SpoilerToken())
     }
 
     var bbCode: String? = null
@@ -144,11 +148,34 @@ class BBCodeView : LinearLayout {
 
         fun buildViews(): List<View> {
             return merge().map {
-                val result = LayoutInflater.from(context)
-                        .inflate(R.layout.layout_bbcode_text, this@BBCodeView, false) as TextView
+                val result: View
+                val textView: TextView
 
-                result.text = it.styledText
-                result.gravity = it.gravity
+                if (it.isSpoiler) {
+                    result = LayoutInflater.from(context)
+                            .inflate(R.layout.layout_bbcode_spoiler, this@BBCodeView, false)
+                            as ViewGroup
+                    textView = result.find(R.id.text)
+                    val spoilerButton = result.find<Button>(R.id.spoilerButton)
+
+                    spoilerButton.setOnClickListener {
+                        if (textView.visibility == View.VISIBLE) {
+                            textView.visibility = View.GONE
+                            spoilerButton.text = "Spoiler!"
+                        } else {
+                            textView.visibility = View.VISIBLE
+                            spoilerButton.text = "Spoiler verstecken"
+                        }
+                    }
+                } else {
+                    textView = LayoutInflater.from(context)
+                            .inflate(R.layout.layout_bbcode_text, this@BBCodeView, false)
+                            as TextView
+                    result = textView
+                }
+
+                textView.text = it.styledText
+                textView.gravity = it.gravity
 
                 result
             }
@@ -193,9 +220,11 @@ class BBCodeView : LinearLayout {
                     compatibleSpannables.add(text)
                 }
 
-                if (i + 1 >= entries.size || entries[i + 1].gravity != entry.gravity) {
+                if (i + 1 >= entries.size || entries[i + 1].gravity != entry.gravity ||
+                        entries[i + 1].isSpoiler != entry.isSpoiler) {
                     result.add(BBViewConfiguration(TextUtils
-                            .concat(*compatibleSpannables.toTypedArray()), entry.gravity))
+                            .concat(*compatibleSpannables.toTypedArray()), entry.gravity,
+                            entry.isSpoiler))
 
                     compatibleSpannables.clear()
                 }
@@ -226,6 +255,7 @@ class BBCodeView : LinearLayout {
                 TOKEN_CENTER -> entry.gravity = Gravity.CENTER
                 TOKEN_RIGHT -> entry.gravity = Gravity.END
                 TOKEN_COLOR -> entry.color = token.attribute as String
+                TOKEN_SPOILER -> entry.isSpoiler = true
             }
 
             return entry
@@ -240,11 +270,13 @@ class BBCodeView : LinearLayout {
         var isBold = false
         var isItalic = false
         var isUnderlined = false
+        var isSpoiler = false
 
         constructor()
 
         private constructor(text: String?, gravity: Int, size: Float, color: String?,
-                            isBold: Boolean, isItalic: Boolean, isUnderlined: Boolean) {
+                            isBold: Boolean, isItalic: Boolean, isUnderlined: Boolean,
+                            isSpoiler: Boolean) {
             this.text = text
             this.gravity = gravity
             this.size = size
@@ -252,15 +284,18 @@ class BBCodeView : LinearLayout {
             this.isBold = isBold
             this.isItalic = isItalic
             this.isUnderlined = isUnderlined
+            this.isSpoiler = isSpoiler
         }
 
 
         fun clone(): BBResultEntry {
-            return BBResultEntry(text, gravity, size, color, isBold, isItalic, isUnderlined)
+            return BBResultEntry(text, gravity, size, color, isBold, isItalic, isUnderlined,
+                    isSpoiler)
         }
     }
 
-    private class BBViewConfiguration(val styledText: CharSequence, val gravity: Int)
+    private class BBViewConfiguration(val styledText: CharSequence, val gravity: Int,
+                                      val isSpoiler: Boolean)
 
     private class Token(val type: Int, val attribute: Any? = null) {
         var parent: Token? = null
@@ -386,5 +421,17 @@ class BBCodeView : LinearLayout {
 
         override fun createFrom(segment: String) =
                 Token(TOKEN_COLOR, segment.substring(7, 14))
+    }
+
+    private class SpoilerToken : BBToken() {
+
+        override val startLength = 9
+        override val endLength = 10
+
+        override fun isStart(segment: String) = segment.startsWith("[SPOILER]", true)
+
+        override fun isEnd(segment: String) = segment.startsWith("[/SPOILER]", true)
+
+        override fun createFrom(segment: String) = Token(TOKEN_SPOILER)
     }
 }
