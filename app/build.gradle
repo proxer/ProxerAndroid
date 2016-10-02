@@ -49,7 +49,7 @@ dependencies {
 
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
-    // Use custom built ones until bugfix update is out
+    // TODO: Update when bugfix is out. Until then use the custom compiled ones in /libs
     // compile "org.jetbrains.anko:anko-common:$anko_version"
     // compile "org.jetbrains.anko:anko-sqlite:$anko_version"
 
@@ -66,6 +66,8 @@ dependencies {
 
     compile 'net.danlew:android.joda:2.9.4.1'
 
+    // TODO: Remove when hawk update is out
+    compile 'com.facebook.conceal:conceal:1.1.3'
     compile 'com.orhanobut:hawk:2.0.0-Alpha'
 
     compile 'com.github.bumptech.glide:glide:3.7.0'
