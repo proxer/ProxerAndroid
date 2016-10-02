@@ -68,7 +68,7 @@ class UserMediaAdapter(savedInstanceState: Bundle? = null,
             title.text = item.name
             medium.text = item.medium
             status.text = "${item.commentEpisode}/${item.episodeCount} - " +
-                    convertStateToText(item)
+                    convertStateToText(item.commentState)
 
             if (item.commentRating > 0) {
                 rating.visibility = View.VISIBLE
@@ -83,22 +83,22 @@ class UserMediaAdapter(savedInstanceState: Bundle? = null,
                     .into(image)
         }
 
-        fun convertStateToText(entry: UserMediaListEntry): String {
+        fun convertStateToText(@CommentState state: Int): String {
             if (category == CategoryParameter.ANIME) {
-                return when (entry.commentState) {
+                return when (state) {
                     WATCHED -> itemView.context.getString(R.string.user_media_state_watched)
                     WATCHING -> itemView.context.getString(R.string.user_media_state_watching)
                     WILL_WATCH -> itemView.context.getString(R.string.user_media_state_will_watch)
                     CANCELLED -> itemView.context.getString(R.string.user_media_state_cancelled)
-                    else -> throw IllegalArgumentException("Illegal comment state")
+                    else -> throw IllegalArgumentException("Illegal comment state: $state")
                 }
             } else {
-                return when (entry.commentState) {
+                return when (state) {
                     WATCHED -> itemView.context.getString(R.string.user_media_state_read)
                     WATCHING -> itemView.context.getString(R.string.user_media_state_reading)
                     WILL_WATCH -> itemView.context.getString(R.string.user_media_state_will_read)
                     CANCELLED -> itemView.context.getString(R.string.user_media_state_cancelled)
-                    else -> throw IllegalArgumentException("Illegal comment state")
+                    else -> throw IllegalArgumentException("Illegal comment state: $state")
                 }
             }
         }

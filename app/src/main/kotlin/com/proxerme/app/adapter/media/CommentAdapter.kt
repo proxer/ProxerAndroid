@@ -15,9 +15,11 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
+import com.proxerme.app.util.TimeUtil
 import com.proxerme.app.view.BBCodeView
 import com.proxerme.library.connection.info.entity.Comment
 import com.proxerme.library.info.ProxerUrlHolder
+import com.proxerme.library.parameters.CommentStateParameter.*
 
 /**
  * TODO: Describe class
@@ -75,6 +77,9 @@ class CommentAdapter(savedInstanceState: Bundle? = null) :
 
         private val comment: BBCodeView by bindView(R.id.comment)
 
+        private val time: TextView by bindView(R.id.time)
+        private val state: TextView by bindView(R.id.state)
+
         init {
             userContainer.setOnClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {
@@ -99,6 +104,9 @@ class CommentAdapter(savedInstanceState: Bundle? = null) :
             bindRatingRow(ratingMusicRow, ratingMusic,
                     item.ratingDetails.music.toFloat())
 
+            time.text = TimeUtil.convertToRelativeReadableTime(time.context, item.time)
+            state.text = convertStateToText(item.state, item.episode)
+
             if (item.imageId.isBlank()) {
                 userImage.setImageDrawable(IconicsDrawable(userImage.context)
                         .icon(CommunityMaterial.Icon.cmd_account)
@@ -119,6 +127,16 @@ class CommentAdapter(savedInstanceState: Bundle? = null) :
             } else {
                 ratingBar.visibility = View.VISIBLE
                 ratingBar.rating = rating
+            }
+        }
+
+        fun convertStateToText(@CommentState state: Int, episode: Int): String {
+            return when (state) {
+                WATCHED -> itemView.context.getString(R.string.comment_state_watched)
+                WATCHING -> itemView.context.getString(R.string.comment_state_watching, episode)
+                WILL_WATCH -> itemView.context.getString(R.string.comment_state_will_watch)
+                CANCELLED -> itemView.context.getString(R.string.comment_state_cancelled, episode)
+                else -> throw IllegalArgumentException("Illegal comment state: $state")
             }
         }
     }

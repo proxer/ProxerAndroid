@@ -273,6 +273,11 @@
     <string name="media_state_cancelled_sub">Abgebrochener Sub</string>
     <string name="media_state_finished">Abgeschlossen</string>
 
+    <string name="comment_state_watched">Abgeschlossen</string>
+    <string name="comment_state_watching">Bei Episode %d</string>
+    <string name="comment_state_will_watch">Auf Warteliste</string>
+    <string name="comment_state_cancelled">Abgebrochen (%d)</string>
+
     <string name="media_license_licensed">Lizensiert</string>
     <string name="media_license_non_licensed">Nicht Lizensiert</string>
     <string name="media_license_unknown">Unbekannt</string>
