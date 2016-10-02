@@ -17,6 +17,7 @@ import butterknife.bindView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.proxerme.app.R
+import com.proxerme.app.fragment.media.CommentFragment
 import com.proxerme.app.fragment.media.MediaInfoFragment
 import com.proxerme.app.module.CustomTabsModule
 import com.proxerme.library.info.ProxerUrlHolder
@@ -140,15 +141,17 @@ class MediaActivity : AppCompatActivity(), CustomTabsModule {
         override fun getItem(position: Int): Fragment {
             return when (position) {
                 0 -> MediaInfoFragment.newInstance(id)
+                1 -> CommentFragment.newInstance(id)
                 else -> throw RuntimeException("Unknown index passed")
             }
         }
 
-        override fun getCount() = 1
+        override fun getCount() = 2
 
         override fun getPageTitle(position: Int): CharSequence? {
             return when (position) {
                 0 -> "Info"
+                1 -> "Kommentare"
                 else -> throw RuntimeException("Unknown index passed")
             }
         }
