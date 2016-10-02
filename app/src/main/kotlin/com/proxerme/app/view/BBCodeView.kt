@@ -3,15 +3,20 @@ package com.proxerme.app.view
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
+import android.text.Spannable
 import android.text.SpannableString
+import android.text.TextUtils
+import android.text.style.ForegroundColorSpan
+import android.text.style.RelativeSizeSpan
+import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater
-import android.view.ViewGroup
+import android.view.View
+import android.widget.LinearLayout
 import android.widget.TextView
 import com.proxerme.app.R
-import org.apmem.tools.layouts.FlowLayout
 import java.util.*
 
 /**
@@ -19,7 +24,7 @@ import java.util.*
  *
  * @author Ruben Gees
  */
-class BBCodeView : FlowLayout {
+class BBCodeView : LinearLayout {
 
     private companion object {
         private const val TOKEN_ROOT = 0
@@ -55,124 +60,8 @@ class BBCodeView : FlowLayout {
         removeAllViews()
 
         if (!bbCode.isNullOrBlank()) {
-            buildViews(this, tokenize(bbCode!!), BBFlags())
-        }
-    }
-
-    private fun buildViews(currentView: ViewGroup, currentTree: Token, flags: BBFlags) {
-        when (currentTree.type) {
-            TOKEN_ROOT -> {
-                currentTree.children.forEach {
-                    buildViews(currentView, it, flags)
-                }
-            }
-
-            TOKEN_TEXT -> {
-                val view = LayoutInflater.from(context)
-                        .inflate(R.layout.layout_bbcode_text, this, false) as TextView
-                val text = SpannableString(currentTree.attribute as String)
-
-                if (flags.isBold) {
-                    if (flags.isItalic) {
-                        view.setTypeface(view.typeface, Typeface.BOLD_ITALIC)
-                    } else {
-                        view.setTypeface(view.typeface, Typeface.BOLD)
-                    }
-                } else if (flags.isItalic) {
-                    view.setTypeface(view.typeface, Typeface.ITALIC)
-                }
-
-                if (flags.isUnderlined) {
-                    text.setSpan(UnderlineSpan(), 0, text.length, 0)
-                }
-
-                if (flags.textColor != null) {
-                    view.setTextColor(Color.parseColor(flags.textColor!!))
-                }
-
-                view.textSize = flags.textSize
-                view.text = text
-
-                currentView.addView(view)
-            }
-
-            TOKEN_SIZE -> {
-                currentTree.children.forEach {
-                    buildViews(currentView, it, flags.clone().apply {
-                        textSize = currentTree.attribute as Float
-                    })
-                }
-            }
-
-            TOKEN_BOLD -> {
-                currentTree.children.forEach {
-                    buildViews(currentView, it, flags.clone().apply {
-                        isBold = true
-                    })
-                }
-            }
-
-            TOKEN_ITALIC -> {
-                currentTree.children.forEach {
-                    buildViews(currentView, it, flags.clone().apply {
-                        isItalic = true
-                    })
-                }
-            }
-
-            TOKEN_UNDERLINE -> {
-                currentTree.children.forEach {
-                    buildViews(currentView, it, flags.clone().apply {
-                        isUnderlined = true
-                    })
-                }
-            }
-
-            TOKEN_LEFT -> {
-                val container = LayoutInflater.from(context)
-                        .inflate(R.layout.layout_bbcode_container, this, false) as FlowLayout
-
-                container.gravity = Gravity.START
-
-                currentTree.children.forEach {
-                    buildViews(container, it, flags.clone())
-                }
-
-                currentView.addView(container)
-            }
-
-            TOKEN_CENTER -> {
-                val container = LayoutInflater.from(context)
-                        .inflate(R.layout.layout_bbcode_container, this, false) as FlowLayout
-
-                container.gravity = Gravity.CENTER_HORIZONTAL
-
-                currentTree.children.forEach {
-                    buildViews(container, it, flags.clone())
-                }
-
-                currentView.addView(container)
-            }
-
-            TOKEN_RIGHT -> {
-                val container = LayoutInflater.from(context)
-                        .inflate(R.layout.layout_bbcode_container, this, false) as FlowLayout
-
-                container.gravity = Gravity.END
-
-                currentTree.children.forEach {
-                    buildViews(container, it, flags.clone())
-                }
-
-                currentView.addView(container)
-            }
-
-            TOKEN_COLOR -> {
-                currentTree.children.forEach {
-                    buildViews(currentView, it, flags.clone().apply {
-                        textColor = currentTree.attribute as String
-                    })
-                }
+            BBTreeProcessor(tokenize(bbCode!!)).buildViews().forEach {
+                addView(it)
             }
         }
     }
@@ -246,29 +135,136 @@ class BBCodeView : FlowLayout {
         return input.substring(index, subIndex)
     }
 
-    private class Token(val type: Int, val attribute: Any? = null) {
-        var parent: Token? = null
-        val children = ArrayList<Token>()
+    private inner class BBTreeProcessor(tree: Token) {
+        private val entries = LinkedList<BBResultEntry>()
+
+        init {
+            traverse(tree, BBResultEntry())
+        }
+
+        fun buildViews(): List<View> {
+            return merge().map {
+                val result = LayoutInflater.from(context)
+                        .inflate(R.layout.layout_bbcode_text, this@BBCodeView, false) as TextView
+
+                result.text = it.styledText
+                result.gravity = it.gravity
+
+                result
+            }
+        }
+
+        private fun merge(): List<BBViewConfiguration> {
+            val result = LinkedList<BBViewConfiguration>()
+            val compatibleSpannables = LinkedList<SpannableString>()
+
+            for (i in 0 until entries.size) {
+                val entry = entries[i]
+
+                if (entry.text != null) {
+                    val text = SpannableString(entry.text)
+
+                    text.setSpan(RelativeSizeSpan(entry.size), 0, entry.text!!.length,
+                            Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+
+                    if (entry.isBold) {
+                        if (entry.isItalic) {
+                            text.setSpan(StyleSpan(Typeface.BOLD_ITALIC), 0, entry.text!!.length,
+                                    Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+                        } else {
+                            text.setSpan(StyleSpan(Typeface.BOLD), 0, entry.text!!.length,
+                                    Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+                        }
+                    } else if (entry.isItalic) {
+                        text.setSpan(StyleSpan(Typeface.ITALIC), 0, entry.text!!.length,
+                                Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+                    }
+
+                    if (entry.isUnderlined) {
+                        text.setSpan(UnderlineSpan(), 0, entry.text!!.length,
+                                Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+                    }
+
+                    if (entry.color != null) {
+                        text.setSpan(ForegroundColorSpan(Color.parseColor(entry.color)), 0,
+                                entry.text!!.length, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+                    }
+
+                    compatibleSpannables.add(text)
+                }
+
+                if (i + 1 >= entries.size || entries[i + 1].gravity != entry.gravity) {
+                    result.add(BBViewConfiguration(TextUtils
+                            .concat(*compatibleSpannables.toTypedArray()), entry.gravity))
+
+                    compatibleSpannables.clear()
+                }
+            }
+
+            return result
+        }
+
+        private fun traverse(tree: Token, currentEntry: BBResultEntry) {
+            if (tree.type == TOKEN_TEXT) {
+                currentEntry.text = tree.attribute as String
+
+                entries.add(currentEntry)
+            } else {
+                tree.children.forEach {
+                    traverse(it, applyStyle(tree, currentEntry.clone()))
+                }
+            }
+        }
+
+        private fun applyStyle(token: Token, entry: BBResultEntry): BBResultEntry {
+            when (token.type) {
+                TOKEN_SIZE -> entry.size = token.attribute as Float
+                TOKEN_BOLD -> entry.isBold = true
+                TOKEN_ITALIC -> entry.isItalic = true
+                TOKEN_UNDERLINE -> entry.isUnderlined = true
+                TOKEN_LEFT -> entry.gravity = Gravity.START
+                TOKEN_CENTER -> entry.gravity = Gravity.CENTER
+                TOKEN_RIGHT -> entry.gravity = Gravity.END
+                TOKEN_COLOR -> entry.color = token.attribute as String
+            }
+
+            return entry
+        }
     }
 
-    private class BBFlags {
-        var textSize: Float = 14f
-        var textColor: String? = null
+    private class BBResultEntry {
+        var text: String? = null
+        var gravity = Gravity.START
+        var size = 1.0f
+        var color: String? = null
         var isBold = false
         var isItalic = false
         var isUnderlined = false
-        var gravity: Int? = null
 
         constructor()
 
-        private constructor(textSize: Float, isBold: Boolean) {
+        private constructor(text: String?, gravity: Int, size: Float, color: String?,
+                            isBold: Boolean, isItalic: Boolean, isUnderlined: Boolean) {
+            this.text = text
+            this.gravity = gravity
+            this.size = size
+            this.color = color
             this.isBold = isBold
-            this.textSize = textSize
+            this.isItalic = isItalic
+            this.isUnderlined = isUnderlined
         }
 
-        fun clone(): BBFlags {
-            return BBFlags(textSize, isBold)
+
+        fun clone(): BBResultEntry {
+            return BBResultEntry(text, gravity, size, color, isBold, isItalic, isUnderlined)
         }
+    }
+
+    private class BBViewConfiguration(val styledText: CharSequence, val gravity: Int)
+
+    private class Token(val type: Int, val attribute: Any? = null) {
+        var parent: Token? = null
+        val children = ArrayList<Token>()
     }
 
     private abstract class BBToken() {
@@ -296,12 +292,12 @@ class BBCodeView : FlowLayout {
 
         override fun createFrom(segment: String) =
                 Token(TOKEN_SIZE, when (segment.substring(6, 7).toInt()) {
-                    1 -> 10f
-                    2 -> 12f
-                    3 -> 14f
-                    4 -> 16f
-                    5 -> 18f
-                    else -> 14f
+                    1 -> 0.6f
+                    2 -> 0.8f
+                    3 -> 1.0f
+                    4 -> 1.2f
+                    5 -> 1.4f
+                    else -> 1.0f
                 })
     }
 
