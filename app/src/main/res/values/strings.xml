@@ -305,6 +305,7 @@
     <string name="comment_rating_animation">Animation/Bilder</string>
     <string name="comment_rating_characters">Charaktere</string>
     <string name="comment_rating_music">Musik</string>
+    <string name="action_sort_time">Nach Datum</string>
 
     <plurals name="media_episode_count">
         <item quantity="one">Eine Episode</item>
