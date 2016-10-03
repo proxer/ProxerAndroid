@@ -223,9 +223,9 @@ class BBCodeView : LinearLayout {
                 if (i + 1 >= entries.size || entries[i + 1].gravity != entry.gravity ||
                         entries[i + 1].isSpoiler != entry.isSpoiler) {
 
-                    if (compatibleSpannables.last.endsWith('\n')) {
+                    if (compatibleSpannables.last.endsWith("\r\n")) {
                         val trimmed = compatibleSpannables.last.subSequence(0,
-                                compatibleSpannables.last.length - 1)
+                                compatibleSpannables.last.length - 2)
 
                         compatibleSpannables.removeLast()
 
