@@ -16,7 +16,7 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.util.TimeUtil
-import com.proxerme.app.view.BBCodeView
+import com.proxerme.app.view.bbcode.BBCodeView
 import com.proxerme.library.connection.info.entity.Comment
 import com.proxerme.library.info.ProxerUrlHolder
 import com.proxerme.library.parameters.CommentStateParameter.*

@@ -4,20 +4,36 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <Button
-        android:id="@+id/spoilerButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="4dp"
-        android:text="Spoiler!"
-        android:textColor="@color/md_white_1000"
-        android:theme="@style/ButtonTheme" />
-
     <TextView
-        android:id="@+id/text"
+        android:id="@+id/spoilerToggle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone" />
+        android:layout_marginBottom="4dp"
+        android:text="@string/spoiler_show"
+        android:textAlignment="center"
+        android:textAppearance="@android:style/TextAppearance.Medium"
+        android:textColor="@color/colorAccent" />
+
+    <LinearLayout
+        android:id="@+id/spoilerDecoration"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="4dp"
+            android:layout_marginRight="4dp"
+            android:background="@color/divider" />
+
+        <LinearLayout
+            android:id="@+id/spoilerContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
+    </LinearLayout>
 
 </LinearLayout>

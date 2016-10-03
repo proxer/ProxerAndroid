@@ -306,6 +306,8 @@
     <string name="comment_rating_characters">Charaktere</string>
     <string name="comment_rating_music">Musik</string>
     <string name="action_sort_time">Nach Datum</string>
+    <string name="spoiler_show">Spoiler!</string>
+    <string name="spoiler_hide">Spoiler verstecken</string>
 
     <plurals name="media_episode_count">
         <item quantity="one">Eine Episode</item>
