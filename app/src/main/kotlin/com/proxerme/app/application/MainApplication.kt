@@ -43,6 +43,10 @@ class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            return
+        }
+
         AppCompatDelegate.setDefaultNightMode(PreferenceHelper.getNightMode(this))
 
         refWatcher = LeakCanary.install(this)
