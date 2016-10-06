@@ -71,6 +71,10 @@
 
     <string name="fragment_paging_retry">Erneut versuchen</string>
 
+    <string name="fragment_media_info_title">Info</string>
+    <string name="fragment_comments_title">Kommentare</string>
+    <string name="fragment_relations_title">Verbindungen</string>
+
     <string name="drawer_item_news">News</string>
     <string name="drawer_item_chat">Chat</string>
     <string name="drawer_item_reminder">Lesezeichen</string>
@@ -315,7 +319,7 @@
     </plurals>
 
     <plurals name="media_chapter_count">
-        <item quantity="one">Ein Kapiter</item>
+        <item quantity="one">Ein Kapitel</item>
         <item quantity="other">%d Kapitel</item>
     </plurals>
 </resources>

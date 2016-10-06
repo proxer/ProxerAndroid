@@ -19,6 +19,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.proxerme.app.R
 import com.proxerme.app.fragment.media.CommentFragment
 import com.proxerme.app.fragment.media.MediaInfoFragment
+import com.proxerme.app.fragment.media.RelationsFragment
 import com.proxerme.app.module.CustomTabsModule
 import com.proxerme.library.info.ProxerUrlHolder
 import customtabs.CustomTabActivityHelper
@@ -142,16 +143,18 @@ class MediaActivity : AppCompatActivity(), CustomTabsModule {
             return when (position) {
                 0 -> MediaInfoFragment.newInstance(id)
                 1 -> CommentFragment.newInstance(id)
+                2 -> RelationsFragment.newInstance(id)
                 else -> throw RuntimeException("Unknown index passed")
             }
         }
 
-        override fun getCount() = 2
+        override fun getCount() = 3
 
         override fun getPageTitle(position: Int): CharSequence? {
             return when (position) {
-                0 -> "Info"
-                1 -> "Kommentare"
+                0 -> getString(R.string.fragment_media_info_title)
+                1 -> getString(R.string.fragment_comments_title)
+                2 -> getString(R.string.fragment_relations_title)
                 else -> throw RuntimeException("Unknown index passed")
             }
         }
