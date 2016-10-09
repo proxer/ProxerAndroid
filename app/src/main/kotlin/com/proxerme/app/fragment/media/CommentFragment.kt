@@ -24,7 +24,7 @@ class CommentFragment : EasyPagingFragment<Comment, CommentAdapter.CommentAdapte
 
     companion object {
 
-        const val ITEMS_ON_PAGE = 25
+        const val ITEMS_ON_PAGE = 15
 
         private const val ARGUMENT_ID = "id"
         private const val STATE_SORT_CRITERIA = "state_sort_criteria"
