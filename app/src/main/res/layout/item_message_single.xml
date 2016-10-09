@@ -28,10 +28,11 @@
 
             <TextView
                 android:id="@+id/title"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_margin="8dp"
+                android:background="?attr/selectableItemBackground"
+                android:padding="8dp"
                 android:textAppearance="@android:style/TextAppearance.Large"
                 tools:text="Rubyderboss" />
 
@@ -39,7 +40,9 @@
                 android:id="@+id/text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:textAppearance="@android:style/TextAppearance.Medium"
                 tools:text="Message looooooooooooooooooooooooooong" />
 
