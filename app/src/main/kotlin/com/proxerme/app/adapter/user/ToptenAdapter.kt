@@ -37,6 +37,8 @@ class ToptenAdapter(savedInstanceState: Bundle? = null,
         setHasStableIds(true)
     }
 
+    override fun getItemId(position: Int) = list[position].id.toLong()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
             ViewHolder(LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_topten_entry, parent, false))

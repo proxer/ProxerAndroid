@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import com.proxerme.library.interfaces.IdItem
 import java.util.*
 
 /**
@@ -13,7 +12,7 @@ import java.util.*
  * @author Ruben Gees
  */
 abstract class PagingAdapter<T, C : PagingAdapter.PagingAdapterCallback<T>>() :
-        RecyclerView.Adapter<PagingAdapter.PagingViewHolder<T, C>>() where T : Parcelable, T : IdItem {
+        RecyclerView.Adapter<PagingAdapter.PagingViewHolder<T, C>>() where T : Parcelable {
 
     protected val list: ArrayList<T> = arrayListOf()
     var callback: C? = null
@@ -23,8 +22,6 @@ abstract class PagingAdapter<T, C : PagingAdapter.PagingAdapterCallback<T>>() :
     }
 
     override fun getItemCount() = list.size
-
-    override fun getItemId(position: Int) = list[position].id.toLong()
 
     fun isEmpty() = list.isEmpty()
 
@@ -88,7 +85,7 @@ abstract class PagingAdapter<T, C : PagingAdapter.PagingAdapterCallback<T>>() :
     }
 
     abstract class PagingViewHolder<T, out C : PagingAdapter.PagingAdapterCallback<T>>(itemView: View) :
-            RecyclerView.ViewHolder(itemView) where T : Parcelable, T : IdItem {
+            RecyclerView.ViewHolder(itemView) where T : Parcelable {
 
         abstract val adapterList: List<T>
         abstract val adapterCallback: C?

@@ -4,14 +4,13 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.support.annotation.CallSuper
 import com.proxerme.library.connection.ProxerException
-import com.proxerme.library.interfaces.IdItem
 
 /**
  * TODO: Describe Class
  *
  * @author Ruben Gees
  */
-abstract class PagingFragment<T> : LoadingFragment<Array<T>>() where T : IdItem, T : Parcelable {
+abstract class PagingFragment<T> : LoadingFragment<Array<T>>() where T : Parcelable {
 
     private companion object {
         private const val CURRENTLY_LOADING_PAGE_STATE = "fragment_paging_state_next_page"

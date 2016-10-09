@@ -36,6 +36,8 @@ class HistoryAdapter(savedInstanceState: Bundle? = null) : PagingAdapter<History
         setHasStableIds(false)
     }
 
+    override fun getItemId(position: Int) = list[position].id.toLong()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
             PagingViewHolder<HistoryEntry, HistoryAdapterCallback> {
         return HistoryViewHolder(LayoutInflater.from(parent.context)

@@ -39,12 +39,12 @@ class UserMediaAdapter(savedInstanceState: Bundle? = null,
         setHasStableIds(true)
     }
 
+    override fun getItemId(position: Int) = list[position].id.toLong()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_user_media_entry, parent, false))
     }
-
-    override fun getItemId(position: Int) = list[position].id.toLong()
 
     override fun saveInstanceState(outState: Bundle) {
         outState.putParcelableArrayList("${ITEMS_STATE}_$category", list)

@@ -39,6 +39,8 @@ class RelationsAdapter(savedInstanceState: Bundle? = null) :
         setHasStableIds(true)
     }
 
+    override fun getItemId(position: Int) = list[position].id.toLong()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
             PagingViewHolder<Relation, RelationsAdapterCallback> {
         return ViewHolder(LayoutInflater.from(parent.context)

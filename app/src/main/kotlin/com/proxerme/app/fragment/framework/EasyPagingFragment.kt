@@ -17,7 +17,6 @@ import com.proxerme.app.util.ErrorHandler
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.listener.EndlessRecyclerOnScrollListener
 import com.proxerme.library.connection.ProxerException
-import com.proxerme.library.interfaces.IdItem
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 
 /**
@@ -26,7 +25,7 @@ import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
  * @author Ruben Gees
  */
 abstract class EasyPagingFragment<T, C : PagingAdapterCallback<T>> :
-        PagingFragment<T>()  where T : IdItem, T : Parcelable {
+        PagingFragment<T>()  where T : Parcelable {
 
     private companion object {
         private const val EXCEPTION_STATE = "fragment_easy_paging_state_exception"
