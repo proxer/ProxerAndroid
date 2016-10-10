@@ -1,6 +1,7 @@
 package com.proxerme.app.adapter.media
 
 import android.os.Bundle
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +13,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.entitiy.RichEpisode
-import com.proxerme.library.info.ProxerUrlHolder
+import com.proxerme.app.util.ParcelableBooleanSparseArray
+import com.proxerme.library.parameters.LanguageParameter.Language
 import org.jetbrains.anko.find
 import org.jetbrains.anko.forEachChildWithIndex
 
@@ -26,13 +28,20 @@ class EpisodeAdapter(savedInstanceState: Bundle? = null) :
 
     private companion object {
         private const val ITEMS_STATE = "adapter_episode_state_items"
+        private const val EXPANDED_STATE = "adapter_episode_expanded_items"
     }
 
     var userState: Int = 0
 
+    private val expanded: ParcelableBooleanSparseArray
+
     init {
-        savedInstanceState?.let {
-            list.addAll(it.getParcelableArrayList(ITEMS_STATE))
+        if (savedInstanceState == null) {
+            expanded = ParcelableBooleanSparseArray()
+        } else {
+            expanded = savedInstanceState.getParcelable(EXPANDED_STATE)
+
+            list.addAll(savedInstanceState.getParcelableArrayList(ITEMS_STATE))
         }
     }
 
@@ -44,9 +53,14 @@ class EpisodeAdapter(savedInstanceState: Bundle? = null) :
 
     override fun saveInstanceState(outState: Bundle) {
         outState.putParcelableArrayList(ITEMS_STATE, list)
+        outState.putParcelable(EXPANDED_STATE, expanded)
     }
 
-    open class EpisodeAdapterCallback : PagingAdapter.PagingAdapterCallback<RichEpisode>()
+    open class EpisodeAdapterCallback : PagingAdapter.PagingAdapterCallback<RichEpisode>() {
+        open fun onLanguageClick(@Language language: String, episode: RichEpisode) {
+
+        }
+    }
 
     inner class ViewHolder(itemView: View) :
             PagingViewHolder<RichEpisode, EpisodeAdapterCallback>(itemView) {
@@ -56,15 +70,35 @@ class EpisodeAdapter(savedInstanceState: Bundle? = null) :
         override val adapterCallback: EpisodeAdapterCallback?
             get() = callback
 
-        private val number: TextView by bindView(R.id.number)
+        private val title: TextView by bindView(R.id.title)
+        private val titleContainer: ViewGroup by bindView(R.id.titleContainer)
         private val watched: ImageView by bindView(R.id.watched)
         private val languages: ViewGroup by bindView(R.id.languages)
 
+        init {
+            itemView.setOnClickListener(null)
+            titleContainer.setOnClickListener {
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    val number = list[adapterPosition].number
+
+                    if (expanded.get(number)) {
+                        expanded.delete(number)
+                    } else {
+                        expanded.put(number, true)
+                    }
+
+                    notifyItemChanged(adapterPosition)
+                }
+
+                languages.visibility = View.VISIBLE
+            }
+        }
+
         override fun bind(item: RichEpisode) {
             if (item.title == null) {
-                number.text = "Episode ${item.number}"
+                title.text = "Episode ${item.number}"
             } else {
-                number.text = item.title
+                title.text = item.title
             }
 
             if (userState >= item.number) {
@@ -83,26 +117,42 @@ class EpisodeAdapter(savedInstanceState: Bundle? = null) :
                 }
             }
 
+            populateLanguages(item)
+
+            if (expanded.get(item.number)) {
+                languages.visibility = View.VISIBLE
+            } else {
+                languages.visibility = View.GONE
+            }
+        }
+
+        private fun populateLanguages(item: RichEpisode) {
             var index = 0
 
-            item.languageHosterMap.forEach {
-                val language = languages.getChildAt(index).find<TextView>(R.id.language)
-                val hosters = languages.getChildAt(index).find<ViewGroup>(R.id.hosters)
+            item.languageHosterMap.forEach { languageEntry ->
+                val languageContainer = languages.getChildAt(index)
+                val language = languageContainer.find<TextView>(R.id.language)
+                val hosters = languageContainer.find<ViewGroup>(R.id.hosters)
 
-                language.text = it.key
+                language.text = languageEntry.key
+                languageContainer.setOnClickListener {
+                    if (adapterPosition != RecyclerView.NO_POSITION) {
+                        callback?.onLanguageClick(languageEntry.key, item)
+                    }
+                }
 
-                if (it.value == null) {
+                if (languageEntry.value == null) {
                     hosters.removeAllViews()
                     hosters.visibility = View.GONE
                 } else {
                     hosters.visibility = View.VISIBLE
 
-                    if (hosters.childCount < it.value!!.size) {
-                        for (i in 0 until it.value!!.size - hosters.childCount) {
+                    if (hosters.childCount < languageEntry.value!!.size) {
+                        for (i in 0 until languageEntry.value!!.size - hosters.childCount) {
                             View.inflate(hosters.context, R.layout.item_hoster, hosters)
                         }
-                    } else if (hosters.childCount > it.value!!.size) {
-                        for (i in 0 until hosters.childCount - it.value!!.size) {
+                    } else if (hosters.childCount > languageEntry.value!!.size) {
+                        for (i in 0 until hosters.childCount - languageEntry.value!!.size) {
                             hosters.removeViewAt(0)
                         }
                     }
@@ -111,9 +161,7 @@ class EpisodeAdapter(savedInstanceState: Bundle? = null) :
                         view as ImageView
 
                         Glide.with(view.context)
-                                .load(ProxerUrlHolder
-                                        .getHosterImageUrl(it.value!![position].imageId)
-                                        .toString())
+                                .load("https://s-media-cache-ak0.pinimg.com/originals/e5/85/f1/e585f10ef6c221b91e210a2295beb56b.jpg")
                                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                                 .into(view)
                     }

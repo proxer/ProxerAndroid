@@ -2,19 +2,19 @@ package com.proxerme.app.util
 
 import android.os.Parcel
 import android.os.Parcelable
-import android.support.v4.util.LongSparseArray
+import android.util.SparseBooleanArray
 
 /**
  * TODO: Describe class
  *
  * @author Ruben Gees
  */
-class ParcelableLongSparseArray : LongSparseArray<Boolean>, Parcelable {
+class ParcelableBooleanSparseArray : SparseBooleanArray, Parcelable {
 
     companion object {
-        @JvmField val CREATOR: Parcelable.Creator<ParcelableLongSparseArray> = object : Parcelable.Creator<ParcelableLongSparseArray> {
-            override fun createFromParcel(source: Parcel): ParcelableLongSparseArray = ParcelableLongSparseArray(source)
-            override fun newArray(size: Int): Array<ParcelableLongSparseArray?> = arrayOfNulls(size)
+        @JvmField val CREATOR: Parcelable.Creator<ParcelableBooleanSparseArray> = object : Parcelable.Creator<ParcelableBooleanSparseArray> {
+            override fun createFromParcel(source: Parcel): ParcelableBooleanSparseArray = ParcelableBooleanSparseArray(source)
+            override fun newArray(size: Int): Array<ParcelableBooleanSparseArray?> = arrayOfNulls(size)
         }
     }
 
@@ -23,10 +23,10 @@ class ParcelableLongSparseArray : LongSparseArray<Boolean>, Parcelable {
 
     private constructor(source: Parcel) {
         val size = source.readInt()
-        val keyArray = LongArray(size)
+        val keyArray = IntArray(size)
         val valueArray = BooleanArray(size)
 
-        source.readLongArray(keyArray)
+        source.readIntArray(keyArray)
         source.readBooleanArray(valueArray)
 
         for (i in 0..size - 1) {
@@ -40,7 +40,7 @@ class ParcelableLongSparseArray : LongSparseArray<Boolean>, Parcelable {
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         val size = size()
-        val keyArray = LongArray(size())
+        val keyArray = IntArray(size())
         val valueArray = BooleanArray(size())
 
         for (i in 0..size - 1) {
@@ -49,7 +49,7 @@ class ParcelableLongSparseArray : LongSparseArray<Boolean>, Parcelable {
         }
 
         dest.writeInt(size)
-        dest.writeLongArray(keyArray)
+        dest.writeIntArray(keyArray)
         dest.writeBooleanArray(valueArray)
     }
 }

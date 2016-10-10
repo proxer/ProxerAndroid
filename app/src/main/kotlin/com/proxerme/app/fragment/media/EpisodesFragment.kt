@@ -47,7 +47,9 @@ class EpisodesFragment : EasyPagingFragment<RichEpisode, EpisodeAdapter.EpisodeA
 
         adapter = EpisodeAdapter(savedInstanceState)
         adapter.callback = object : EpisodeAdapter.EpisodeAdapterCallback() {
-
+            override fun onLanguageClick(language: String, episode: RichEpisode) {
+                // TODO
+            }
         }
 
         layoutManager = LinearLayoutManager(context)

@@ -17,7 +17,7 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.entitiy.LocalMessage
-import com.proxerme.app.util.ParcelableLongBooleanSparseArray
+import com.proxerme.app.util.ParcelableLongSparseArray
 import com.proxerme.app.util.TimeUtil
 import com.proxerme.app.util.Utils
 import com.proxerme.library.connection.user.entitiy.User
@@ -50,8 +50,8 @@ class ChatAdapter(savedInstanceState: Bundle? = null, val isGroup: Boolean) :
 
     var user: User? = null
 
-    private val selectedMap: ParcelableLongBooleanSparseArray
-    private val showingTimeMap: ParcelableLongBooleanSparseArray
+    private val selectedMap: ParcelableLongSparseArray
+    private val showingTimeMap: ParcelableLongSparseArray
 
     private var selecting: Boolean
 
@@ -60,8 +60,8 @@ class ChatAdapter(savedInstanceState: Bundle? = null, val isGroup: Boolean) :
 
     init {
         if (savedInstanceState == null) {
-            selectedMap = ParcelableLongBooleanSparseArray()
-            showingTimeMap = ParcelableLongBooleanSparseArray()
+            selectedMap = ParcelableLongSparseArray()
+            showingTimeMap = ParcelableLongSparseArray()
             selecting = false
         } else {
             selectedMap = savedInstanceState.getParcelable(MESSAGE_SELECTED_IDS_STATE)

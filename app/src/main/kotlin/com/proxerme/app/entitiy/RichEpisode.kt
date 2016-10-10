@@ -63,4 +63,8 @@ class RichEpisode : Parcelable {
             dest.writeTypedArray(it.value, 0)
         }
     }
+
+    fun isAnime(): Boolean {
+        return title == null
+    }
 }
