@@ -14,6 +14,7 @@ import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.entitiy.RichEpisode
 import com.proxerme.app.util.ParcelableBooleanSparseArray
+import com.proxerme.library.info.ProxerUrlHolder
 import com.proxerme.library.parameters.LanguageParameter.Language
 import org.jetbrains.anko.find
 import org.jetbrains.anko.forEachChildWithIndex
@@ -161,7 +162,9 @@ class EpisodeAdapter(savedInstanceState: Bundle? = null) :
                         view as ImageView
 
                         Glide.with(view.context)
-                                .load("https://s-media-cache-ak0.pinimg.com/originals/e5/85/f1/e585f10ef6c221b91e210a2295beb56b.jpg")
+                                .load(ProxerUrlHolder
+                                        .getHosterImageUrl(languageEntry.value!![position].imageId)
+                                        .toString())
                                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                                 .into(view)
                     }
