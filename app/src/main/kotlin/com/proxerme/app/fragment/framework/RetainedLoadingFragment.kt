@@ -58,6 +58,7 @@ class RetainedLoadingFragment<T>() : Fragment() {
 
     @Suppress("UNCHECKED_CAST")
     fun load(vararg requests: ProxerRequest<*>,
+             transformFunction: ((result: Any?) -> T)? = null,
              zipFunction: ((partialResults: Array<Any?>) -> LoadingResult<T>)? = null) {
         synchronized(calls, {
             if (requests.isEmpty()) {
@@ -77,13 +78,19 @@ class RetainedLoadingFragment<T>() : Fragment() {
                     if (readyCount == requests.size) {
                         if (partialResults.size > 1) {
                             if (zipFunction == null) {
-                                throw RuntimeException("You have to provide a zip function for" +
+                                throw RuntimeException("You have to provide a zip function for " +
                                         "multiple request loading")
                             } else {
-                                result = zipFunction.invoke(partialResults)
+                                if (transformFunction == null) {
+                                    result = zipFunction.invoke(partialResults)
+                                } else {
+                                    result = zipFunction.invoke(arrayOf(transformFunction
+                                            .invoke(successResult)))
+                                }
                             }
                         } else {
-                            result = LoadingResult(successResult as T)
+                            result = LoadingResult(transformFunction?.invoke(successResult) ?:
+                                    successResult as T)
                         }
                     }
 

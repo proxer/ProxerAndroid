@@ -143,7 +143,7 @@ abstract class EasyPagingFragment<T, C : PagingAdapterCallback<T>> :
     }
 
     override fun calculateNextPage(): Int {
-        if (adapter.itemCount == 0) {
+        if (adapter.isEmpty()) {
             return 0
         } else {
             return adapter.itemCount / itemsOnPage

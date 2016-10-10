@@ -57,7 +57,6 @@
                     android:layout_toLeftOf="@+id/newMessages"
                     android:layout_toStartOf="@+id/newMessages"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-
                     tools:text="Title" />
 
                 <ImageView
@@ -98,7 +97,6 @@
                     android:layout_weight="8"
                     android:gravity="start"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-
                     tools:text="Two days ago" />
 
                 <View
@@ -117,7 +115,6 @@
                     android:layout_weight="8"
                     android:gravity="end"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-
                     tools:text="5 Participants" />
             </LinearLayout>
         </android.support.percent.PercentRelativeLayout>

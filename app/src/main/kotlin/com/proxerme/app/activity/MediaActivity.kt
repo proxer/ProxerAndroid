@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.proxerme.app.R
 import com.proxerme.app.fragment.media.CommentFragment
+import com.proxerme.app.fragment.media.EpisodesFragment
 import com.proxerme.app.fragment.media.MediaInfoFragment
 import com.proxerme.app.fragment.media.RelationsFragment
 import com.proxerme.app.module.CustomTabsModule
@@ -32,14 +33,11 @@ class MediaActivity : AppCompatActivity(), CustomTabsModule {
         private const val STATE_NAME = "activity_media_name"
 
         fun navigateTo(context: Activity, id: String, name: String? = null) {
-
-            val intent = Intent(context, MediaActivity::class.java)
+            context.startActivity(Intent(context, MediaActivity::class.java)
                     .apply {
                         this.putExtra(EXTRA_ID, id)
                         this.putExtra(EXTRA_NAME, name)
-                    }
-
-            context.startActivity(intent)
+                    })
         }
     }
 
@@ -143,18 +141,20 @@ class MediaActivity : AppCompatActivity(), CustomTabsModule {
             return when (position) {
                 0 -> MediaInfoFragment.newInstance(id)
                 1 -> CommentFragment.newInstance(id)
-                2 -> RelationsFragment.newInstance(id)
+                2 -> EpisodesFragment.newInstance(id)
+                3 -> RelationsFragment.newInstance(id)
                 else -> throw RuntimeException("Unknown index passed")
             }
         }
 
-        override fun getCount() = 3
+        override fun getCount() = 4
 
         override fun getPageTitle(position: Int): CharSequence? {
             return when (position) {
                 0 -> getString(R.string.fragment_media_info_title)
                 1 -> getString(R.string.fragment_comments_title)
-                2 -> getString(R.string.fragment_relations_title)
+                2 -> "Episoden"
+                3 -> getString(R.string.fragment_relations_title)
                 else -> throw RuntimeException("Unknown index passed")
             }
         }

@@ -91,13 +91,15 @@ abstract class PagingFragment<T> : LoadingFragment<Array<T>>() where T : Parcela
     @CallSuper
     open protected fun onPagedLoadFinished(result: Array<T>, page: Int) {
         currentlyLoadingPage = -1
-        endReached = result.size < itemsOnPage
+        endReached = hasReachedEnd(result)
     }
 
     @CallSuper
     open protected fun onPagedLoadFinishedWithError(result: ProxerException, page: Int) {
         currentlyLoadingPage = -1
     }
+
+    open fun hasReachedEnd(result: Array<T>) = result.size < itemsOnPage
 
     protected abstract fun constructPagedLoadingRequest(page: Int): LoadingRequest<Array<T>>
 

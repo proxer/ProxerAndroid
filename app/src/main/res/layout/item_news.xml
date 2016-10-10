@@ -60,7 +60,6 @@
                 android:ellipsize="end"
                 android:maxLines="3"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-
                 tools:text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
                 diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
                 sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
@@ -98,7 +97,6 @@
                     android:layout_weight="4"
                     android:gravity="start"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-
                     tools:text="Two days ago" />
 
                 <View
@@ -115,7 +113,6 @@
                     android:layout_weight="6"
                     android:gravity="end"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-
                     tools:text="Anime and Managa" />
             </LinearLayout>
         </LinearLayout>

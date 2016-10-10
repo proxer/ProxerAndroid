@@ -74,7 +74,9 @@ abstract class LoadingFragment<T> : MainFragment() {
             val loadingRequest = constructLoadingRequest()
 
             onLoadStarted()
-            loader!!.load(*loadingRequest.requests, zipFunction = loadingRequest.zipFunction)
+            loader!!.load(*loadingRequest.requests,
+                    transformFunction = loadingRequest.transformFunction,
+                    zipFunction = loadingRequest.zipFunction)
         }
     }
 
@@ -119,13 +121,16 @@ abstract class LoadingFragment<T> : MainFragment() {
     class LoadingRequest<T> {
 
         val requests: Array<out ProxerRequest<*>>
+        val transformFunction: ((result: Any?) -> T)?
         val zipFunction: ((partialResults: Array<Any?>) ->
         RetainedLoadingFragment.LoadingResult<T>)?
 
         constructor(vararg requests: ProxerRequest<*>,
+                    transformFunction: ((result: Any?) -> T)? = null,
                     zipFunction: ((partialResults: Array<Any?>) ->
                     RetainedLoadingFragment.LoadingResult<T>)? = null) {
             this.requests = requests
+            this.transformFunction = transformFunction
             this.zipFunction = zipFunction
         }
     }

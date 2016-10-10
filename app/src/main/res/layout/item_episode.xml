@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context="com.proxerme.app.adapter.media.EpisodeAdapter">
+
+    <TextView
+        android:id="@+id/number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="8dp"
+        android:layout_toLeftOf="@+id/watched"
+        android:layout_toStartOf="@+id/watched"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        tools:text="Episode 1" />
+
+    <com.mikepenz.iconics.view.IconicsImageView
+        android:id="@+id/watched"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="8dp"
+        app:iiv_icon="cmd-check" />
+
+    <LinearLayout
+        android:id="@+id/languages"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/number"
+        android:layout_margin="8dp"
+        android:orientation="horizontal" />
+
+</RelativeLayout>
