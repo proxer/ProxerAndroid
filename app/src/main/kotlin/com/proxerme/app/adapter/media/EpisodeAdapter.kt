@@ -12,6 +12,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.entitiy.RichEpisode
+import com.proxerme.library.info.ProxerUrlHolder
 import org.jetbrains.anko.find
 import org.jetbrains.anko.forEachChildWithIndex
 
@@ -25,8 +26,9 @@ class EpisodeAdapter(savedInstanceState: Bundle? = null) :
 
     private companion object {
         private const val ITEMS_STATE = "adapter_episode_state_items"
-        private const val REAL_ITEM_COUNT_STATE = "adapter_episode_state_real_item_count"
     }
+
+    var userState: Int = 0
 
     init {
         savedInstanceState?.let {
@@ -38,10 +40,6 @@ class EpisodeAdapter(savedInstanceState: Bundle? = null) :
             PagingViewHolder<RichEpisode, EpisodeAdapterCallback> {
         return ViewHolder(LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_episode, parent, false))
-    }
-
-    override fun clear() {
-        super.clear()
     }
 
     override fun saveInstanceState(outState: Bundle) {
@@ -63,8 +61,17 @@ class EpisodeAdapter(savedInstanceState: Bundle? = null) :
         private val languages: ViewGroup by bindView(R.id.languages)
 
         override fun bind(item: RichEpisode) {
-            number.text = item.number.toString()
-            // TODO: watched
+            if (item.title == null) {
+                number.text = "Episode ${item.number}"
+            } else {
+                number.text = item.title
+            }
+
+            if (userState >= item.number) {
+                watched.visibility = View.VISIBLE
+            } else {
+                watched.visibility = View.INVISIBLE
+            }
 
             if (languages.childCount < item.languageHosterMap.size) {
                 for (i in 0 until item.languageHosterMap.size - languages.childCount) {
@@ -104,9 +111,9 @@ class EpisodeAdapter(savedInstanceState: Bundle? = null) :
                         view as ImageView
 
                         Glide.with(view.context)
-                                //   .load(ProxerUrlHolder.getHosterImageUrl(hosters[position].imageId)
-                                //             .toString())
-                                .load("http://www.flooringvillage.co.uk/ekmps/shops/flooringvillage/images/request-a-sample--547-p.jpg")
+                                .load(ProxerUrlHolder
+                                        .getHosterImageUrl(it.value!![position].imageId)
+                                        .toString())
                                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                                 .into(view)
                     }

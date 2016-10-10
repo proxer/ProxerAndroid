@@ -22,6 +22,7 @@ class RichEpisode : Parcelable {
 
     val userState: Int
     val number: Int
+    val title: String?
     val languageHosterMap: Map<String, Array<Hoster>?>
 
     constructor(userState: Int, episodes: List<Episode>) {
@@ -31,12 +32,14 @@ class RichEpisode : Parcelable {
 
         this.userState = userState
         this.number = episodes.first().number
+        this.title = episodes.first().title
         this.languageHosterMap = episodes.associate { it.language to it.hosters }
     }
 
     constructor(source: Parcel) {
         userState = source.readInt()
         number = source.readInt()
+        title = source.readString()
 
         val parcelledMap = HashMap<String, Array<Hoster>?>()
 
@@ -52,6 +55,7 @@ class RichEpisode : Parcelable {
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.writeInt(userState)
         dest.writeInt(number)
+        dest.writeString(title)
         dest.writeInt(languageHosterMap.size)
 
         languageHosterMap.forEach {
