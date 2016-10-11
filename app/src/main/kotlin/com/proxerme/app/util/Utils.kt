@@ -252,14 +252,3 @@ object Utils {
         }
     }
 }
-
-fun TextView.measureAndGetHeight(): Int {
-    val widthMeasureSpec = View.MeasureSpec.makeMeasureSpec((parent as ViewGroup).measuredWidth,
-            View.MeasureSpec.AT_MOST)
-    val heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(ViewGroup.LayoutParams.WRAP_CONTENT,
-            View.MeasureSpec.UNSPECIFIED)
-
-    measure(widthMeasureSpec, heightMeasureSpec)
-
-    return measuredHeight
-}
