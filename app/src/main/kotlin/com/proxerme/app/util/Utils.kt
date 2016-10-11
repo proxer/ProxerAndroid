@@ -192,8 +192,6 @@ object Utils {
                               transform: (T) -> String,
                               onClick: ((View, T) -> Unit)? = null,
                               textSizeSp: Float = 14f) {
-        badgeContainer.removeAllViews()
-
         items.forEach { item ->
             badgeContainer.addView(buildBadgeViewEntry(badgeContainer, item, transform, onClick,
                     textSizeSp))

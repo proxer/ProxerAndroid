@@ -200,9 +200,12 @@ class MediaInfoFragment : EasyLoadingFragment<Entry>() {
 
     private fun buildTagsView(tagArray: Array<Tag>) {
         if (tagArray.isEmpty()) {
+            tagsTitle.visibility = View.GONE
             unratedTagsButton.visibility = View.GONE
             spoilerTagsButton.visibility = View.GONE
         } else {
+            tagsTitle.visibility = View.VISIBLE
+
             updateUnratedButton()
             unratedTagsButton.setOnClickListener {
                 showUnratedTags = !showUnratedTags
@@ -242,7 +245,7 @@ class MediaInfoFragment : EasyLoadingFragment<Entry>() {
             }
         }.toTypedArray(), { it.name }, { view, tag ->
             Utils.makeMultilineSnackbar(root, tag.description, Snackbar.LENGTH_LONG).show()
-        }, tagsTitle)
+        })
     }
 
     private fun updateUnratedButton() {
@@ -323,6 +326,11 @@ class MediaInfoFragment : EasyLoadingFragment<Entry>() {
                 it.visibility = View.GONE
             }
         } else {
+            badgeContainer.visibility = View.VISIBLE
+            viewsToHideIfEmpty.forEach {
+                it.visibility = View.VISIBLE
+            }
+
             Utils.populateBadgeView(badgeContainer, items, transform, onClick)
         }
     }
