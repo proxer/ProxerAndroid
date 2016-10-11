@@ -107,16 +107,16 @@ class NewsAdapter(savedInstanceState: Bundle? = null) :
         }
 
         override fun bind(item: News) {
-            val maximumHeight = Utils.convertDpToPx(description.context, 88f)
+            val maximumHeight = Utils.convertDpToPx(description.context, 86f)
 
             title.text = item.subject
-            description.text = item.description
+            description.text = item.description.trim()
             description.maxHeight = Int.MAX_VALUE
             category.text = item.categoryTitle
             time.text = TimeUtil.convertToRelativeReadableTime(time.context,
                     item.time)
 
-            if (description.measureAndGetHeight() <= maximumHeight) {
+            if (description.measureAndGetHeight(14f) <= maximumHeight) {
                 expand.visibility = View.GONE
             } else {
                 expand.visibility = View.VISIBLE

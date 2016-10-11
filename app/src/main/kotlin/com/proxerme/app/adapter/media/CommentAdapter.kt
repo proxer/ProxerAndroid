@@ -197,7 +197,7 @@ class CommentAdapter(savedInstanceState: Bundle? = null) :
         private fun bindExpanded(item: Comment) {
             val maximumHeight = Utils.convertDpToPx(comment.context, 150f)
 
-            if (comment.measureAndGetHeight() <= maximumHeight) {
+            if (comment.measureAndGetHeight(32f) <= maximumHeight) {
                 expand.visibility = View.GONE
             } else {
                 expand.visibility = View.VISIBLE

@@ -57,8 +57,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="6dp"
-                android:ellipsize="end"
-                android:maxLines="3"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 tools:text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
                 diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,

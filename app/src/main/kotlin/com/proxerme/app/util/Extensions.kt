@@ -4,7 +4,7 @@ import android.app.AlarmManager
 import android.app.NotificationManager
 import android.content.Context
 import android.view.View
-import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 
@@ -23,10 +23,14 @@ val Context.notificationManager: NotificationManager
 val Context.alarmManager: AlarmManager
     get() = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-fun TextView.measureAndGetHeight(): Int {
-    val widthMeasureSpec = View.MeasureSpec.makeMeasureSpec((parent as ViewGroup).measuredWidth,
+val Context.windowManager: WindowManager
+    get() = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+
+fun TextView.measureAndGetHeight(totalMarginDp: Float): Int {
+    val widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(
+            Utils.getScreenWidth(context) - Utils.convertDpToPx(context, totalMarginDp),
             View.MeasureSpec.AT_MOST)
-    val heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(ViewGroup.LayoutParams.WRAP_CONTENT,
+    val heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0,
             View.MeasureSpec.UNSPECIFIED)
 
     measure(widthMeasureSpec, heightMeasureSpec)

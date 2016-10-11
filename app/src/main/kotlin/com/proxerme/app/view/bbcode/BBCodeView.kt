@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.proxerme.app.R
+import com.proxerme.app.util.Utils
 import java.util.*
 import kotlin.properties.Delegates
 
@@ -74,7 +75,7 @@ class BBCodeView : LinearLayout {
         }
     }
 
-    fun measureAndGetHeight(): Int {
+    fun measureAndGetHeight(totalMarginDp: Float): Int {
         val previousMaxHeight = maxHeight
         val previousSpoilerStates = getSpoilerStates()
 
@@ -82,7 +83,8 @@ class BBCodeView : LinearLayout {
 
         setSpoilerStates(BooleanArray(spoilers.size, { true }).toList())
 
-        val widthMeasureSpec = View.MeasureSpec.makeMeasureSpec((parent as ViewGroup).measuredWidth,
+        val widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(
+                Utils.getScreenWidth(context) - Utils.convertDpToPx(context, totalMarginDp),
                 View.MeasureSpec.AT_MOST)
         val heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(ViewGroup.LayoutParams.WRAP_CONTENT,
                 View.MeasureSpec.UNSPECIFIED)

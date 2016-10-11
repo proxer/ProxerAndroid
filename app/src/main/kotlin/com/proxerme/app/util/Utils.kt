@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.*
 import android.content.res.Configuration
 import android.graphics.Bitmap
+import android.graphics.Point
 import android.net.Uri
 import android.os.Build
 import android.support.annotation.ColorRes
@@ -63,6 +64,10 @@ object Utils {
 
     fun convertSpToPx(context: Context, sp: Float): Float {
         return sp * context.resources.displayMetrics.scaledDensity + 0.5f
+    }
+
+    fun getScreenWidth(context: Context): Int {
+        return Point().apply { context.windowManager.defaultDisplay.getSize(this) }.x
     }
 
     fun isLandscape(context: Context): Boolean {
