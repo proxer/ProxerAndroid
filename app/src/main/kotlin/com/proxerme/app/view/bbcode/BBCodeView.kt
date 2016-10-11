@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.proxerme.app.R
@@ -22,6 +23,8 @@ class BBCodeView : LinearLayout {
             build()
         }
     })
+
+    var maxHeight = Int.MAX_VALUE
 
     var expanded by Delegates.observable(true, { property, old, new ->
         if (old != new) {
@@ -42,26 +45,24 @@ class BBCodeView : LinearLayout {
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         var modifiableHeightMeasureSpec = heightMeasureSpec
+        val hSize = MeasureSpec.getSize(heightMeasureSpec)
+        val hMode = MeasureSpec.getMode(heightMeasureSpec)
 
-        /* TODO: Make this work
-        if (!expanded) {
-            val hSize = MeasureSpec.getSize(heightMeasureSpec)
-            val hMode = MeasureSpec.getMode(heightMeasureSpec)
+        when (hMode) {
+            MeasureSpec.AT_MOST -> modifiableHeightMeasureSpec = MeasureSpec
+                    .makeMeasureSpec(Math.min(hSize, maxHeight), MeasureSpec.AT_MOST)
 
-            when (hMode) {
-                MeasureSpec.AT_MOST -> modifiableHeightMeasureSpec = MeasureSpec
-                        .makeMeasureSpec(Math.min(hSize, Utils.convertDpToPx(context, 150f)),
-                                MeasureSpec.AT_MOST)
-                MeasureSpec.UNSPECIFIED -> modifiableHeightMeasureSpec = MeasureSpec
-                        .makeMeasureSpec(Utils.convertDpToPx(context, 150f), MeasureSpec.AT_MOST)
-                MeasureSpec.EXACTLY -> modifiableHeightMeasureSpec = MeasureSpec
-                        .makeMeasureSpec(Math.min(hSize, Utils.convertDpToPx(context, 150f)),
-                                MeasureSpec.EXACTLY)
-            }
-        } */
+            MeasureSpec.UNSPECIFIED -> modifiableHeightMeasureSpec = MeasureSpec
+                    .makeMeasureSpec(maxHeight, MeasureSpec.AT_MOST)
+
+            MeasureSpec.EXACTLY -> modifiableHeightMeasureSpec = MeasureSpec
+                    .makeMeasureSpec(Math.min(hSize, maxHeight), MeasureSpec.EXACTLY)
+        }
 
         super.onMeasure(widthMeasureSpec, modifiableHeightMeasureSpec)
     }
+
+    fun getSpoilerStates() = spoilers.map { it.expanded }
 
     fun setSpoilerStates(states: List<Boolean>?) {
         if (states == null) {
@@ -71,6 +72,29 @@ class BBCodeView : LinearLayout {
                 spoiler.expanded = if (states.lastIndex < index) false else states[index]
             }
         }
+    }
+
+    fun measureAndGetHeight(): Int {
+        val previousMaxHeight = maxHeight
+        val previousSpoilerStates = getSpoilerStates()
+
+        maxHeight = Int.MAX_VALUE
+
+        setSpoilerStates(BooleanArray(spoilers.size, { true }).toList())
+
+        val widthMeasureSpec = View.MeasureSpec.makeMeasureSpec((parent as ViewGroup).measuredWidth,
+                View.MeasureSpec.AT_MOST)
+        val heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(ViewGroup.LayoutParams.WRAP_CONTENT,
+                View.MeasureSpec.UNSPECIFIED)
+
+        measure(widthMeasureSpec, heightMeasureSpec)
+
+        val result = measuredHeight
+
+        maxHeight = previousMaxHeight
+        setSpoilerStates(previousSpoilerStates)
+
+        return result
     }
 
     private fun build() {
@@ -98,7 +122,7 @@ class BBCodeView : LinearLayout {
                 result.add(textView)
             } else if (element is BBProcessor.BBSpoilerElement) {
                 val spoiler = BBSpoiler(this).apply {
-                    listener = { spoilerStateListener?.invoke(spoilers.map { it.expanded }) }
+                    listener = { spoilerStateListener?.invoke(getSpoilerStates()) }
 
                     addViews(buildViews(element.children))
                 }

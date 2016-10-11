@@ -19,6 +19,7 @@ import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.util.ParcelableLongSparseArray
 import com.proxerme.app.util.TimeUtil
+import com.proxerme.app.util.Utils
 import com.proxerme.app.view.bbcode.BBCodeView
 import com.proxerme.library.connection.info.entity.Comment
 import com.proxerme.library.info.ProxerUrlHolder
@@ -143,12 +144,8 @@ class CommentAdapter(savedInstanceState: Bundle? = null) :
 
                     if (expandedMap.get(id.toLong(), false)) {
                         expandedMap.remove(id.toLong())
-
-                        ViewCompat.animate(expand).rotation(0f)
                     } else {
                         expandedMap.put(id.toLong(), true)
-
-                        ViewCompat.animate(expand).rotation(ROTATION_HALF)
                     }
 
                     notifyItemChanged(adapterPosition)
@@ -165,20 +162,9 @@ class CommentAdapter(savedInstanceState: Bundle? = null) :
         override fun bind(item: Comment) {
             username.text = item.username
 
-            comment.bbCode = item.comment
-            comment.expanded = expandedMap.get(item.id.toLong(), false)
-            comment.spoilerStateListener = {
-                spoilerStateMap.put(item.id, it)
-            }
-
-            comment.setSpoilerStates(spoilerStateMap[item.id])
-
-            if (item.rating <= 0) {
-                rating.visibility = View.GONE
-            } else {
-                rating.visibility = View.VISIBLE
-                rating.rating = item.rating.toFloat() / 2.0f
-            }
+            bindComment(item)
+            bindRating(item)
+            bindExpanded(item)
 
             bindRatingRow(ratingGenreRow, ratingGenre,
                     item.ratingDetails.genre)
@@ -194,12 +180,6 @@ class CommentAdapter(savedInstanceState: Bundle? = null) :
             time.text = TimeUtil.convertToRelativeReadableTime(time.context, item.time)
             state.text = convertStateToText(item.state, item.episode)
 
-            if (expandedMap.get(item.id.toLong(), false)) {
-                ViewCompat.setRotation(expand, ROTATION_HALF)
-            } else {
-                ViewCompat.setRotation(expand, 0f)
-            }
-
             if (item.imageId.isBlank()) {
                 userImage.setImageDrawable(IconicsDrawable(userImage.context)
                         .icon(CommunityMaterial.Icon.cmd_account)
@@ -214,11 +194,50 @@ class CommentAdapter(savedInstanceState: Bundle? = null) :
             }
         }
 
+        private fun bindExpanded(item: Comment) {
+            val maximumHeight = Utils.convertDpToPx(comment.context, 150f)
+
+            if (comment.measureAndGetHeight() <= maximumHeight) {
+                expand.visibility = View.GONE
+            } else {
+                expand.visibility = View.VISIBLE
+            }
+
+            if (expandedMap.get(item.id.toLong(), false)) {
+                comment.maxHeight = Int.MAX_VALUE
+
+                ViewCompat.animate(expand).rotation(ROTATION_HALF)
+            } else {
+                comment.maxHeight = maximumHeight
+
+                ViewCompat.animate(expand).rotation(0f)
+            }
+        }
+
+        private fun bindRating(item: Comment) {
+            if (item.rating <= 0) {
+                rating.visibility = View.GONE
+            } else {
+                rating.visibility = View.VISIBLE
+                rating.rating = item.rating.toFloat() / 2.0f
+            }
+        }
+
+        private fun bindComment(item: Comment) {
+            comment.bbCode = item.comment
+            comment.expanded = expandedMap.get(item.id.toLong(), false)
+            comment.spoilerStateListener = {
+                spoilerStateMap.put(item.id, it)
+            }
+
+            comment.setSpoilerStates(spoilerStateMap[item.id])
+        }
+
         private fun bindRatingRow(container: ViewGroup, ratingBar: RatingBar, rating: Int) {
             if (rating <= 0) {
                 container.visibility = View.GONE
             } else {
-                ratingBar.visibility = View.VISIBLE
+                container.visibility = View.VISIBLE
                 ratingBar.rating = rating.toFloat()
             }
         }

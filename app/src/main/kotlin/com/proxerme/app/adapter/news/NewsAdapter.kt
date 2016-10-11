@@ -17,6 +17,8 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.util.TimeUtil
+import com.proxerme.app.util.Utils
+import com.proxerme.app.util.measureAndGetHeight
 import com.proxerme.library.connection.notifications.entitiy.News
 import com.proxerme.library.info.ProxerUrlHolder
 import java.util.*
@@ -35,7 +37,6 @@ class NewsAdapter(savedInstanceState: Bundle? = null) :
         private const val ICON_SIZE = 32
         private const val ICON_PADDING = 8
         private const val ROTATION_HALF = 180f
-        private const val DESCRIPTION_MAX_LINES = 3
     }
 
     private val expanded = HashMap<String, Boolean>()
@@ -89,16 +90,11 @@ class NewsAdapter(savedInstanceState: Bundle? = null) :
 
                     if (expanded.containsKey(id)) {
                         expanded.remove(id)
-
-                        description.maxLines = DESCRIPTION_MAX_LINES
-                        ViewCompat.animate(expand).rotation(0f)
                     } else {
                         expanded.put(id, true)
-
-                        description.maxLines = Integer.MAX_VALUE
-                        ViewCompat.animate(expand).rotation(ROTATION_HALF)
                     }
 
+                    notifyItemChanged(adapterPosition)
                     adapterCallback?.onNewsExpanded(it, adapterList[adapterPosition])
                 }
             }
@@ -111,24 +107,35 @@ class NewsAdapter(savedInstanceState: Bundle? = null) :
         }
 
         override fun bind(item: News) {
-            Glide.with(image.context)
-                    .load(ProxerUrlHolder.getNewsImageUrl(item.id, item.imageId).toString())
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .into(image)
+            val maximumHeight = Utils.convertDpToPx(description.context, 88f)
 
             title.text = item.subject
             description.text = item.description
+            description.maxHeight = Int.MAX_VALUE
             category.text = item.categoryTitle
             time.text = TimeUtil.convertToRelativeReadableTime(time.context,
                     item.time)
 
-            if (expanded.containsKey(item.id)) {
-                description.maxLines = Integer.MAX_VALUE
-                ViewCompat.setRotation(expand, ROTATION_HALF)
+            if (description.measureAndGetHeight() <= maximumHeight) {
+                expand.visibility = View.GONE
             } else {
-                description.maxLines = DESCRIPTION_MAX_LINES
-                ViewCompat.setRotation(expand, 0f)
+                expand.visibility = View.VISIBLE
             }
+
+            if (expanded.containsKey(item.id)) {
+                description.maxHeight = Int.MAX_VALUE
+
+                ViewCompat.animate(expand).rotation(ROTATION_HALF)
+            } else {
+                description.maxHeight = maximumHeight
+
+                ViewCompat.animate(expand).rotation(0f)
+            }
+
+            Glide.with(image.context)
+                    .load(ProxerUrlHolder.getNewsImageUrl(item.id, item.imageId).toString())
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .into(image)
         }
     }
 
