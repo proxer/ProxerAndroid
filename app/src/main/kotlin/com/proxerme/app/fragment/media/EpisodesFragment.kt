@@ -72,10 +72,4 @@ class EpisodesFragment : EasyPagingFragment<RichEpisode, EpisodeAdapter.EpisodeA
                             .toTypedArray()
                 })
     }
-
-    override fun onLoadFinished(result: Array<RichEpisode>) {
-        adapter.userState = result.firstOrNull()?.userState ?: 0
-
-        super.onLoadFinished(result)
-    }
 }

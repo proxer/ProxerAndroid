@@ -41,14 +41,12 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
                     tools:text="Episode 1" />
 
-                <com.mikepenz.iconics.view.IconicsImageView
+                <ImageView
                     android:id="@+id/watched"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_margin="8dp"
-                    app:iiv_color="@color/icon"
-                    app:iiv_icon="cmd-check" />
+                    android:layout_margin="8dp" />
             </LinearLayout>
 
             <LinearLayout

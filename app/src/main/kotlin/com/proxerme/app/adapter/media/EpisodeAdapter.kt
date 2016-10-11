@@ -10,6 +10,8 @@ import android.widget.TextView
 import butterknife.bindView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.mikepenz.community_material_typeface_library.CommunityMaterial
+import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.entitiy.RichEpisode
@@ -31,8 +33,6 @@ class EpisodeAdapter(savedInstanceState: Bundle? = null) :
         private const val ITEMS_STATE = "adapter_episode_state_items"
         private const val EXPANDED_STATE = "adapter_episode_expanded_items"
     }
-
-    var userState: Int = 0
 
     private val expanded: ParcelableBooleanSparseArray
 
@@ -93,6 +93,11 @@ class EpisodeAdapter(savedInstanceState: Bundle? = null) :
 
                 languages.visibility = View.VISIBLE
             }
+
+            watched.setImageDrawable(IconicsDrawable(watched.context)
+                    .icon(CommunityMaterial.Icon.cmd_check)
+                    .sizeDp(24)
+                    .colorRes(R.color.icon))
         }
 
         override fun bind(item: RichEpisode) {
@@ -102,7 +107,7 @@ class EpisodeAdapter(savedInstanceState: Bundle? = null) :
                 title.text = item.title
             }
 
-            if (userState >= item.number) {
+            if (item.userState >= item.number) {
                 watched.visibility = View.VISIBLE
             } else {
                 watched.visibility = View.INVISIBLE
