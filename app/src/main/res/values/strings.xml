@@ -301,6 +301,8 @@
     <string name="tags_spoiler_show">Spoiler Tags anzeigen</string>
     <string name="tags_spoiler_hide">Spoiler Tags verstecken</string>
 
+    <string name="activity_manga_title">Kapitel %d</string>
+
     <string name="fragment_media_info_groups">Gruppen</string>
     <string name="fragment_media_info_publishers">Industrie</string>
     <string name="fragment_media_info_tags">Tags</string>

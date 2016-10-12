@@ -17,8 +17,8 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
 import com.proxerme.app.R
-import com.proxerme.app.activity.ChatActivity
 import com.proxerme.app.activity.DashboardActivity
+import com.proxerme.app.activity.chat.ChatActivity
 import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.entitiy.LocalMessage
 import com.proxerme.app.util.Utils

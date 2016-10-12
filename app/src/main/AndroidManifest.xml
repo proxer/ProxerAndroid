@@ -28,7 +28,7 @@
                 android:value=".activity.DashboardActivity" />
         </activity>
         <activity
-            android:name=".activity.ChatActivity"
+            android:name=".activity.chat.ChatActivity"
             android:parentActivityName=".activity.DashboardActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -42,7 +42,7 @@
                 android:value=".activity.DashboardActivity" />
         </activity>
         <activity
-            android:name=".activity.NewChatActivity"
+            android:name=".activity.chat.NewChatActivity"
             android:windowSoftInputMode="stateUnchanged" />
         <activity
             android:name=".activity.MediaActivity"
@@ -52,12 +52,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.DashboardActivity" />
         </activity>
-
         <activity
             android:name=".activity.ImageDetailActivity"
             android:theme="@style/Theme.Transparent" />
         <activity android:name="customtabs.WebviewActivity" />
-        <activity android:name=".activity.ConferenceInfoActivity" />
+        <activity android:name=".activity.chat.ConferenceInfoActivity" />
 
         <service android:name="customtabs.KeepAliveService" />
         <service android:name=".service.NotificationService" />
@@ -70,6 +69,8 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
+        <activity android:name=".activity.MangaActivity"></activity>
     </application>
 
 </manifest>

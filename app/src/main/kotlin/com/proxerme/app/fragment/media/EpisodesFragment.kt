@@ -2,6 +2,7 @@ package com.proxerme.app.fragment.media
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import com.proxerme.app.activity.MangaActivity
 import com.proxerme.app.adapter.media.EpisodeAdapter
 import com.proxerme.app.entitiy.RichEpisode
 import com.proxerme.app.fragment.framework.EasyPagingFragment
@@ -48,7 +49,11 @@ class EpisodesFragment : EasyPagingFragment<RichEpisode, EpisodeAdapter.EpisodeA
         adapter = EpisodeAdapter(savedInstanceState)
         adapter.callback = object : EpisodeAdapter.EpisodeAdapterCallback() {
             override fun onLanguageClick(language: String, episode: RichEpisode) {
-                // TODO
+                if (episode.isAnime()) {
+                    // TODO
+                } else {
+                    MangaActivity.navigateTo(activity, id, episode.number, language)
+                }
             }
         }
 

@@ -1,4 +1,4 @@
-package com.proxerme.app.activity
+package com.proxerme.app.activity.chat
 
 import android.app.Activity
 import android.content.Context
@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import butterknife.bindView
 import com.proxerme.app.R
+import com.proxerme.app.activity.UserActivity
 import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.fragment.chat.ChatFragment
 import org.jetbrains.anko.intentFor

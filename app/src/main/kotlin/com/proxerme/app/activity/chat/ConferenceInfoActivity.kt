@@ -1,4 +1,4 @@
-package com.proxerme.app.activity
+package com.proxerme.app.activity.chat
 
 import android.app.Activity
 import android.content.Context

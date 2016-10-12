@@ -8,8 +8,8 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import com.proxerme.app.R
-import com.proxerme.app.activity.ChatActivity
-import com.proxerme.app.activity.NewChatActivity
+import com.proxerme.app.activity.chat.ChatActivity
+import com.proxerme.app.activity.chat.NewChatActivity
 import com.proxerme.app.adapter.chat.ConferenceAdapter
 import com.proxerme.app.adapter.chat.ConferenceAdapter.ConferenceAdapterCallback
 import com.proxerme.app.data.chatDatabase
