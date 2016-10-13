@@ -19,7 +19,7 @@ class EpisodesFragment : EasyPagingFragment<RichEpisode, EpisodeAdapter.EpisodeA
 
     companion object {
 
-        const val ITEMS_ON_PAGE = 100
+        const val ITEMS_ON_PAGE = Int.MAX_VALUE
 
         private const val ARGUMENT_ID = "id"
 
@@ -52,7 +52,8 @@ class EpisodesFragment : EasyPagingFragment<RichEpisode, EpisodeAdapter.EpisodeA
                 if (episode.isAnime()) {
                     // TODO
                 } else {
-                    MangaActivity.navigateTo(activity, id, episode.number, language)
+                    MangaActivity.navigateTo(activity, id, episode.number, episode.totalEpisodes,
+                            language)
                 }
             }
         }
@@ -73,7 +74,7 @@ class EpisodesFragment : EasyPagingFragment<RichEpisode, EpisodeAdapter.EpisodeA
 
                     listInfo.episodes
                             .groupBy { it.number }
-                            .values.map { RichEpisode(listInfo.userState, it) }
+                            .values.map { RichEpisode(listInfo.userState, listInfo.lastEpisode, it) }
                             .toTypedArray()
                 })
     }

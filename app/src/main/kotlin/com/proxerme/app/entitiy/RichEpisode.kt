@@ -22,15 +22,17 @@ class RichEpisode : Parcelable {
 
     val userState: Int
     val number: Int
+    val totalEpisodes: Int
     val title: String?
     val languageHosterMap: Map<String, Array<Hoster>?>
 
-    constructor(userState: Int, episodes: List<Episode>) {
+    constructor(userState: Int, totalEpisodes: Int, episodes: List<Episode>) {
         if (episodes.isEmpty()) {
             throw IllegalArgumentException("At least one episode has to be passed.")
         }
 
         this.userState = userState
+        this.totalEpisodes = totalEpisodes
         this.number = episodes.first().number
         this.title = episodes.first().title
         this.languageHosterMap = episodes.associate { it.language to it.hosters }
@@ -38,6 +40,7 @@ class RichEpisode : Parcelable {
 
     constructor(source: Parcel) {
         userState = source.readInt()
+        totalEpisodes = source.readInt()
         number = source.readInt()
         title = source.readString()
 
@@ -54,6 +57,7 @@ class RichEpisode : Parcelable {
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.writeInt(userState)
+        dest.writeInt(totalEpisodes)
         dest.writeInt(number)
         dest.writeString(title)
         dest.writeInt(languageHosterMap.size)

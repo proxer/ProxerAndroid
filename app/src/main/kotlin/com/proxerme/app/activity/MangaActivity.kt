@@ -15,12 +15,15 @@ class MangaActivity : AppCompatActivity() {
     companion object {
         private const val EXTRA_ID = "extra_id"
         private const val EXTRA_EPISODE = "extra_episode"
+        private const val EXTRA_TOTAL_EPISODES = "extra_total_episodes"
         private const val EXTRA_LANGUAGE = "extra_language"
 
-        fun navigateTo(context: Activity, id: String, episode: Int, language: String) {
+        fun navigateTo(context: Activity, id: String, episode: Int, totalEpisodes: Int,
+                       language: String) {
             context.startActivity(context.intentFor<MangaActivity>(
                     EXTRA_ID to id,
                     EXTRA_EPISODE to episode,
+                    EXTRA_TOTAL_EPISODES to totalEpisodes,
                     EXTRA_LANGUAGE to language
             ))
         }
@@ -31,6 +34,9 @@ class MangaActivity : AppCompatActivity() {
 
     private val episode: Int
         get() = intent.getIntExtra(EXTRA_EPISODE, 1)
+
+    private val totalEpisodes: Int
+        get() = intent.getIntExtra(EXTRA_TOTAL_EPISODES, 1)
 
     private val language: String
         get() = intent.getStringExtra(EXTRA_LANGUAGE)
@@ -48,7 +54,7 @@ class MangaActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction().replace(R.id.container,
-                    MangaFragment.newInstance(id, episode, language)).commitNow()
+                    MangaFragment.newInstance(id, episode, totalEpisodes, language)).commitNow()
         }
     }
 
@@ -62,5 +68,11 @@ class MangaActivity : AppCompatActivity() {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    fun updateEpisode(episode: Int) {
+        intent.putExtra(EXTRA_EPISODE, episode)
+
+        title = getString(R.string.activity_manga_title, episode)
     }
 }

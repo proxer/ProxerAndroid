@@ -185,7 +185,7 @@ class MediaInfoFragment : EasyLoadingFragment<Entry>() {
     }
 
     private fun buildSeasonsView(seasons: Array<EntrySeason>) {
-        if (seasons.size >= 1) {
+        if (seasons.isNotEmpty()) {
             seasonStart.text = getSeasonStartString(seasons[0])
 
             if (seasons.size >= 2) {
