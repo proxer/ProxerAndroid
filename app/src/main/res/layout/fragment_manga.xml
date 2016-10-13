@@ -52,7 +52,7 @@
                                     android:focusable="true"
                                     android:focusableInTouchMode="true"
                                     android:padding="8dp"
-                                    android:text="Uploader"
+                                    android:text="@string/fragment_manga_uploader"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
                                 <TextView
@@ -72,7 +72,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:padding="8dp"
-                                    android:text="Scanlator-Gruppe"
+                                    android:text="@string/fragment_manga_scangroup"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
                                 <TextView
@@ -92,7 +92,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:padding="8dp"
-                                    android:text="Datum"
+                                    android:text="@string/fragment_manga_date"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
                                 <TextView
@@ -124,6 +124,7 @@
                                 android:layout_marginTop="8dp"
                                 android:layout_toLeftOf="@+id/centerAnchor"
                                 android:layout_toStartOf="@+id/centerAnchor"
+                                android:lines="2"
                                 android:textColor="@color/md_white_1000"
                                 android:theme="@style/ButtonTheme"
                                 android:visibility="gone" />
@@ -146,6 +147,7 @@
                                 android:layout_marginTop="8dp"
                                 android:layout_toEndOf="@+id/centerAnchor"
                                 android:layout_toRightOf="@+id/centerAnchor"
+                                android:lines="2"
                                 android:textColor="@color/md_white_1000"
                                 android:theme="@style/ButtonTheme"
                                 android:visibility="gone" />

@@ -40,6 +40,10 @@
         <item quantity="other">%d Lesezeichen konnten nicht gelöscht werden</item>
     </plurals>
 
+    <string name="fragment_manga_previous_chapter">Vorheriges Kapitel</string>
+    <string name="fragment_manga_next_chapter">Nächstes Kapitel</string>
+    <string name="fragment_manga_empty_scangroup">Siehe Kapitelcredits</string>
+
     <string name="preference_category_notifications_title">Benachrichtigungen</string>
     <string name="preference_category_info_title">Info</string>
     <string name="preference_news_notifications_title">News</string>
@@ -314,6 +318,9 @@
     <string name="action_sort_time">Nach Datum</string>
     <string name="spoiler_show">Spoiler!</string>
     <string name="spoiler_hide">Spoiler verstecken</string>
+    <string name="fragment_manga_uploader">Uploader</string>
+    <string name="fragment_manga_scangroup">Scanlator-Gruppe</string>
+    <string name="fragment_manga_date">Datum</string>
 
     <plurals name="media_episode_count">
         <item quantity="one">Eine Episode</item>

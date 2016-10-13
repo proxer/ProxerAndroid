@@ -35,6 +35,8 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
 
         private const val CHAPTER_STATE = "chapter_state"
 
+        private const val DATE_PATTERN = "dd.MM.yyyy"
+
         fun newInstance(id: String, episode: Int, totalEpisodes: Int, language: String):
                 MangaFragment {
             return MangaFragment().apply {
@@ -112,7 +114,7 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
             uploader.text = it.uploader
 
             if (it.scangroup == null) {
-                scangroup.text = "Siehe Kapitelcredits"
+                scangroup.text = context.getString(R.string.fragment_manga_empty_scangroup)
             } else {
                 scangroup.text = it.scangroup
             }
@@ -128,13 +130,13 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
                 }
             }
 
-            date.text = DateTime(it.time * 1000).toString("dd.MM.YYYY")
+            date.text = DateTime(it.time * 1000).toString(DATE_PATTERN)
 
             if (episode <= 1) {
                 previous.visibility = View.GONE
             } else {
                 previous.visibility = View.VISIBLE
-                previous.text = "Vorheriges Kapitel"
+                previous.text = getString(R.string.fragment_manga_previous_chapter)
                 previous.setOnClickListener {
                     switchEpisode(episode - 1)
                 }
@@ -144,7 +146,7 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
                 next.visibility = View.GONE
             } else {
                 next.visibility = View.VISIBLE
-                next.text = "Nächstes Kapitel"
+                next.text = getString(R.string.fragment_manga_next_chapter)
                 next.setOnClickListener {
                     switchEpisode(episode + 1)
                 }
@@ -162,7 +164,7 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
     }
 
     private fun switchEpisode(newEpisode: Int) {
-        arguments.putInt(ARGUMENT_EPISODE, episode + 1)
+        arguments.putInt(ARGUMENT_EPISODE, newEpisode)
         (activity as MangaActivity).updateEpisode(newEpisode)
 
         reset()
