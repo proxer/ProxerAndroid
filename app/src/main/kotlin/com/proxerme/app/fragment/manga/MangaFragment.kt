@@ -1,12 +1,13 @@
 package com.proxerme.app.fragment.manga
 
+import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.widget.NestedScrollView
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Button
 import android.widget.TextView
 import butterknife.bindView
@@ -90,6 +91,8 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
         }
 
         adapter = MangaAdapter(savedInstanceState)
+
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(inflater: android.view.LayoutInflater, container: ViewGroup?,
@@ -100,6 +103,16 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
     override fun onViewCreated(view: android.view.View, savedInstanceState: android.os.Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            activity.window.decorView.setOnSystemUiVisibilityChangeListener { visibility ->
+                if (visibility and View.SYSTEM_UI_FLAG_FULLSCREEN === View.VISIBLE) {
+                    (activity as AppCompatActivity).supportActionBar?.show()
+                } else {
+                    (activity as AppCompatActivity).supportActionBar?.hide()
+                }
+            }
+        }
+
         pages.isNestedScrollingEnabled = false
         pages.layoutManager = LinearLayoutManager(context)
         pages.adapter = adapter
@@ -109,6 +122,27 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
                 .sizeDp(ICON_SIZE)
                 .paddingDp(ICON_PADDING)
                 .colorRes(android.R.color.white))
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater) {
+        inflater.inflate(R.menu.fragment_manga, menu)
+
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.fullscreen -> {
+                if (activity.window.decorView.systemUiVisibility and
+                        View.SYSTEM_UI_FLAG_FULLSCREEN === View.SYSTEM_UI_FLAG_FULLSCREEN) {
+                    showSystemUI()
+                } else {
+                    hideSystemUI()
+                }
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -188,5 +222,20 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
         (activity as MangaActivity).updateEpisode(newEpisode)
 
         reset()
+    }
+
+    private fun showSystemUI() {
+        activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+    }
+
+    private fun hideSystemUI() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+                    View.SYSTEM_UI_FLAG_FULLSCREEN or
+                    View.SYSTEM_UI_FLAG_IMMERSIVE
+        } else {
+            activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LOW_PROFILE or
+                    View.SYSTEM_UI_FLAG_FULLSCREEN
+        }
     }
 }

@@ -321,6 +321,7 @@
     <string name="fragment_manga_uploader">Uploader</string>
     <string name="fragment_manga_scangroup">Scanlator-Gruppe</string>
     <string name="fragment_manga_date">Datum</string>
+    <string name="action_fullscreen">Vollbildmodus</string>
 
     <plurals name="media_episode_count">
         <item quantity="one">Eine Episode</item>
