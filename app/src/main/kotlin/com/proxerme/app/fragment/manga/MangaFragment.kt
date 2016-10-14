@@ -1,6 +1,8 @@
 package com.proxerme.app.fragment.manga
 
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
+import android.support.v4.widget.NestedScrollView
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -8,6 +10,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import butterknife.bindView
+import com.mikepenz.community_material_typeface_library.CommunityMaterial
+import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
 import com.proxerme.app.activity.MangaActivity
 import com.proxerme.app.activity.UserActivity
@@ -37,6 +41,9 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
 
         private const val DATE_PATTERN = "dd.MM.yyyy"
 
+        private const val ICON_SIZE = 56
+        private const val ICON_PADDING = 8
+
         fun newInstance(id: String, episode: Int, totalEpisodes: Int, language: String):
                 MangaFragment {
             return MangaFragment().apply {
@@ -65,12 +72,15 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
 
     private var chapter: Chapter? = null
 
+    private val scrollContainer: NestedScrollView by bindView(R.id.scrollContainer)
+
     private val uploader: TextView by bindView(R.id.uploader)
     private val scangroup: TextView by bindView(R.id.scangroup)
     private val date: TextView by bindView(R.id.date)
     private val previous: Button by bindView(R.id.previous)
     private val next: Button by bindView(R.id.next)
     private val pages: RecyclerView by bindView(R.id.pages)
+    private val scrollToTop: FloatingActionButton by bindView(R.id.scrollToTop)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,6 +103,12 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
         pages.isNestedScrollingEnabled = false
         pages.layoutManager = LinearLayoutManager(context)
         pages.adapter = adapter
+
+        scrollToTop.setImageDrawable(IconicsDrawable(context)
+                .icon(CommunityMaterial.Icon.cmd_chevron_up)
+                .sizeDp(ICON_SIZE)
+                .paddingDp(ICON_PADDING)
+                .colorRes(android.R.color.white))
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -150,6 +166,10 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
                 next.setOnClickListener {
                     switchEpisode(episode + 1)
                 }
+            }
+
+            scrollToTop.setOnClickListener {
+                scrollContainer.smoothScrollTo(0, 0)
             }
         }
     }
