@@ -78,7 +78,9 @@ class ReminderFragment : EasyPagingFragment<Reminder, ReminderAdapter.ReminderAd
         adapter = ReminderAdapter(savedInstanceState)
         adapter.callback = object : ReminderAdapter.ReminderAdapterCallback() {
             override fun onItemClick(v: View, item: Reminder) {
-                MediaActivity.navigateTo(activity, item.entryId, item.name)
+                if (item.category == CategoryParameter.MANGA) {
+                    MediaActivity.navigateTo(activity, item.entryId, item.name)
+                }
             }
 
             override fun onRemoveClick(v: View, item: Reminder) {

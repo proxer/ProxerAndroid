@@ -54,6 +54,9 @@
     <string name="preference_licences_title">Lizenzen</string>
     <string name="preference_licences_summary">Bibliotheken die in diser App verwendet werden</string>
 
+    <string name="fragment_set_reminder_success">Lesezeichen wurde hinzugefügt und aktualisiert</string>
+    <string name="fragment_set_reminder_error">Lesezeichen konnte nicht aktualisiert werden</string>
+
     <string name="about_description">Entwickler: Ruben Gees</string>
     <string name="about_libraries_title">Lizenzen</string>
 

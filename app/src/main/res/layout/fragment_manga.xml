@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_manga"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.proxerme.app.activity.MangaActivity">
@@ -130,7 +130,7 @@
                                     android:layout_marginLeft="16dp"
                                     android:layout_marginRight="16dp"
                                     android:layout_marginTop="8dp"
-                                    android:lines="2"
+                                    android:minLines="2"
                                     android:textColor="@color/md_white_1000"
                                     android:theme="@style/ButtonTheme"
                                     android:visibility="gone" />
@@ -151,7 +151,56 @@
                                     android:layout_marginLeft="16dp"
                                     android:layout_marginRight="16dp"
                                     android:layout_marginTop="8dp"
-                                    android:lines="2"
+                                    android:minLines="2"
+                                    android:textColor="@color/md_white_1000"
+                                    android:theme="@style/ButtonTheme"
+                                    android:visibility="gone" />
+                            </FrameLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:baselineAligned="false">
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="1">
+
+                                <Button
+                                    android:id="@+id/reminderThis"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="start"
+                                    android:layout_marginBottom="16dp"
+                                    android:layout_marginLeft="16dp"
+                                    android:layout_marginRight="16dp"
+                                    android:layout_marginTop="8dp"
+                                    android:minLines="2"
+                                    android:text="Lesezeichen: Dieses Kapitel"
+                                    android:textColor="@color/md_white_1000"
+                                    android:theme="@style/ButtonTheme" />
+                            </FrameLayout>
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="1">
+
+                                <Button
+                                    android:id="@+id/reminderNext"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="end"
+                                    android:layout_marginBottom="16dp"
+                                    android:layout_marginLeft="16dp"
+                                    android:layout_marginRight="16dp"
+                                    android:layout_marginTop="8dp"
+                                    android:minLines="2"
+                                    android:text="Lesezeichen: Nächstes Kapitel"
                                     android:textColor="@color/md_white_1000"
                                     android:theme="@style/ButtonTheme"
                                     android:visibility="gone" />
@@ -178,4 +227,4 @@
 
     <include layout="@layout/layout_error" />
 
-</FrameLayout>
+</android.support.design.widget.CoordinatorLayout>

@@ -3,6 +3,7 @@ package com.proxerme.app.fragment.manga
 import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
+import android.support.design.widget.Snackbar
 import android.support.v4.widget.NestedScrollView
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -17,12 +18,16 @@ import com.proxerme.app.R
 import com.proxerme.app.activity.MangaActivity
 import com.proxerme.app.activity.UserActivity
 import com.proxerme.app.adapter.manga.MangaAdapter
+import com.proxerme.app.application.MainApplication
 import com.proxerme.app.fragment.framework.EasyLoadingFragment
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.util.Utils
+import com.proxerme.library.connection.ProxerCall
 import com.proxerme.library.connection.manga.entity.Chapter
 import com.proxerme.library.connection.manga.request.ChapterRequest
+import com.proxerme.library.connection.ucp.request.SetReminderRequest
 import com.proxerme.library.info.ProxerUrlHolder
+import com.proxerme.library.parameters.CategoryParameter
 import org.joda.time.DateTime
 
 /**
@@ -39,6 +44,7 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
         private const val ARGUMENT_LANGUAGE = "language"
 
         private const val CHAPTER_STATE = "chapter_state"
+        private const val REMINDER_EPISODE_STATE = "reminder_episode_state"
 
         private const val DATE_PATTERN = "dd.MM.yyyy"
 
@@ -70,9 +76,12 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
         get() = arguments.getString(ARGUMENT_LANGUAGE)
 
     private lateinit var adapter: MangaAdapter
-
     private var chapter: Chapter? = null
 
+    private var reminderEpisode: Int? = null
+    private var reminderTask: ProxerCall? = null
+
+    private val root: ViewGroup by bindView(R.id.root)
     private val scrollContainer: NestedScrollView by bindView(R.id.scrollContainer)
 
     private val uploader: TextView by bindView(R.id.uploader)
@@ -80,6 +89,8 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
     private val date: TextView by bindView(R.id.date)
     private val previous: Button by bindView(R.id.previous)
     private val next: Button by bindView(R.id.next)
+    private val reminderThis: Button by bindView(R.id.reminderThis)
+    private val reminderNext: Button by bindView(R.id.reminderNext)
     private val pages: RecyclerView by bindView(R.id.pages)
     private val scrollToTop: FloatingActionButton by bindView(R.id.scrollToTop)
 
@@ -88,10 +99,12 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
 
         savedInstanceState?.let {
             chapter = it.getParcelable(CHAPTER_STATE)
+            reminderEpisode = it.getString(REMINDER_EPISODE_STATE)?.toInt()
         }
 
         adapter = MangaAdapter(savedInstanceState)
 
+        synchronize(reminderEpisode)
         setHasOptionsMenu(true)
     }
 
@@ -148,6 +161,7 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
+        outState.putString(REMINDER_EPISODE_STATE, reminderEpisode.toString())
         outState.putParcelable(CHAPTER_STATE, chapter)
         adapter.saveInstanceState(outState)
     }
@@ -194,11 +208,23 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
 
             if (episode >= totalEpisodes) {
                 next.visibility = View.GONE
+                reminderNext.visibility = View.GONE
             } else {
                 next.visibility = View.VISIBLE
                 next.text = getString(R.string.fragment_manga_next_chapter)
                 next.setOnClickListener {
                     switchEpisode(episode + 1)
+                }
+
+                reminderNext.visibility = View.VISIBLE
+                reminderNext.setOnClickListener {
+                    synchronize(episode + 1)
+                }
+            }
+
+            reminderThis.setOnClickListener {
+                if (episode != reminderEpisode) {
+                    synchronize(episode)
                 }
             }
 
@@ -222,6 +248,36 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
         (activity as MangaActivity).updateEpisode(newEpisode)
 
         reset()
+    }
+
+    @Synchronized
+    private fun synchronize(episodeToSet: Int? = null) {
+        if (episodeToSet == null) {
+            reminderTask?.cancel()
+
+            reminderTask = null
+            reminderEpisode = null
+        } else if (episodeToSet != reminderEpisode) {
+            reminderTask?.cancel()
+
+            reminderEpisode = episodeToSet
+            reminderTask = MainApplication.proxerConnection.execute(SetReminderRequest(id,
+                    reminderEpisode!!, language, CategoryParameter.MANGA),
+                    {
+                        reminderTask = null
+                        reminderEpisode = null
+
+                        Snackbar.make(root, R.string.fragment_set_reminder_success,
+                                Snackbar.LENGTH_LONG).show()
+                    },
+                    {
+                        reminderTask = null
+                        reminderEpisode = null
+
+                        Snackbar.make(root, R.string.fragment_set_reminder_error,
+                                Snackbar.LENGTH_LONG).show()
+                    })
+        }
     }
 
     private fun showSystemUI() {
