@@ -234,8 +234,14 @@ object Utils {
     }
 
     fun viewLink(context: Context, link: String) {
+        var uri = Uri.parse(link)
+
+        if (uri.isRelative) {
+            uri = uri.buildUpon().scheme("http").build()
+        }
+
         try {
-            context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link)))
+            context.startActivity(Intent(Intent.ACTION_VIEW, uri))
         } catch (exception: ActivityNotFoundException) {
             context.toast(R.string.link_error_not_found)
         }
