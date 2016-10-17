@@ -99,7 +99,11 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
 
         savedInstanceState?.let {
             chapter = it.getParcelable(CHAPTER_STATE)
-            reminderEpisode = it.getString(REMINDER_EPISODE_STATE)?.toInt()
+            reminderEpisode = it.getInt(REMINDER_EPISODE_STATE)
+
+            if (reminderEpisode == 0) {
+                reminderEpisode = null
+            }
         }
 
         adapter = MangaAdapter(savedInstanceState)
@@ -161,7 +165,7 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        outState.putString(REMINDER_EPISODE_STATE, reminderEpisode.toString())
+        outState.putInt(REMINDER_EPISODE_STATE, reminderEpisode ?: 0)
         outState.putParcelable(CHAPTER_STATE, chapter)
         adapter.saveInstanceState(outState)
     }
