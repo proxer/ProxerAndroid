@@ -2,12 +2,12 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 24
+    compileSdkVersion 25
     buildToolsVersion "$build_tools_version"
     defaultConfig {
         applicationId 'com.proxerme.app'
         minSdkVersion 15
-        targetSdkVersion 24
+        targetSdkVersion 25
         versionCode 23
         versionName "0.6.0-beta"
         vectorDrawables.useSupportLibrary = true
