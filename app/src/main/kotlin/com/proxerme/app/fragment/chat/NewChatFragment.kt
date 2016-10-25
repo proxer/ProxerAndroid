@@ -139,6 +139,8 @@ class NewChatFragment : MainFragment() {
         emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_emoticon))
         emojiButton.setOnClickListener {
             emojiPopup.toggle()
+
+            root.viewTreeObserver.dispatchOnGlobalLayout()
         }
 
         sendButton.setOnClickListener {
