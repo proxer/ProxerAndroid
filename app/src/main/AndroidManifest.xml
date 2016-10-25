@@ -29,7 +29,8 @@
         </activity>
         <activity
             android:name=".activity.chat.ChatActivity"
-            android:parentActivityName=".activity.DashboardActivity">
+            android:parentActivityName=".activity.DashboardActivity"
+            android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.DashboardActivity" />
@@ -43,7 +44,7 @@
         </activity>
         <activity
             android:name=".activity.chat.NewChatActivity"
-            android:windowSoftInputMode="stateUnchanged" />
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activity.MediaActivity"
             android:parentActivityName=".activity.DashboardActivity"

@@ -14,21 +14,33 @@
         android:orientation="horizontal"
         android:weightSum="1">
 
-        <EditText
+        <ImageButton
+            android:id="@+id/emojiButton"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless" />
+
+        <com.vanniktech.emoji.EmojiEditText
             android:id="@+id/messageInput"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginBottom="4dp"
-            android:layout_marginLeft="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
             android:layout_marginRight="16dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="4dp"
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:hint="@string/fragment_chat_message"
             android:inputType="textMultiLine|textCapSentences|textAutoCorrect"
             android:maxLines="5"
-            android:scrollbars="vertical" />
+            android:scrollbars="vertical"
+            app:emojiSize="26sp" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/sendButton"

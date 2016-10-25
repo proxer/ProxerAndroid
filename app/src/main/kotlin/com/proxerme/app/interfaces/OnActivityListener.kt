@@ -7,6 +7,9 @@ package com.proxerme.app.interfaces
  */
 interface OnActivityListener {
 
+    /**
+     * Returns true if back press has been handled by this instance
+     */
     fun onBackPressed(): Boolean {
         return true
     }

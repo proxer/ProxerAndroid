@@ -1,5 +1,6 @@
 package com.proxerme.app.fragment.chat
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AppCompatActivity
@@ -8,8 +9,11 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.*
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
+import android.widget.ImageButton
 import butterknife.bindView
+import com.mikepenz.community_material_typeface_library.CommunityMaterial
+import com.mikepenz.iconics.IconicsDrawable
+import com.mikepenz.iconics.typeface.IIcon
 import com.proxerme.app.R
 import com.proxerme.app.activity.UserActivity
 import com.proxerme.app.adapter.chat.ChatAdapter
@@ -24,6 +28,8 @@ import com.proxerme.app.manager.UserManager
 import com.proxerme.app.service.ChatService
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.inputMethodManager
+import com.vanniktech.emoji.EmojiEditText
+import com.vanniktech.emoji.EmojiPopup
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -38,6 +44,9 @@ class ChatFragment : EasyChatServiceFragment<LocalMessage, ChatAdapter.ChatAdapt
 
     companion object {
         private const val ARGUMENT_CONFERENCE = "conference"
+
+        private const val ICON_SIZE = 32
+        private const val ICON_PADDING = 8
 
         fun newInstance(conference: LocalConference): ChatFragment {
 
@@ -137,8 +146,11 @@ class ChatFragment : EasyChatServiceFragment<LocalMessage, ChatAdapter.ChatAdapt
         }
     }
 
+    private lateinit var emojiPopup: EmojiPopup
+
+    private val emojiButton: ImageButton by bindView(R.id.emojiButton)
     private val inputContainer: ViewGroup by bindView(R.id.inputContainer)
-    private val messageInput: EditText by bindView(R.id.messageInput)
+    private val messageInput: EmojiEditText by bindView(R.id.messageInput)
     private val sendButton: FloatingActionButton by bindView(R.id.sendButton)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -181,6 +193,13 @@ class ChatFragment : EasyChatServiceFragment<LocalMessage, ChatAdapter.ChatAdapt
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_emoticon))
+        emojiButton.setOnClickListener {
+            emojiPopup.toggle()
+
+            root.viewTreeObserver.dispatchOnGlobalLayout()
+        }
+
         sendButton.setOnClickListener {
             val text = messageInput.text.toString().trim()
 
@@ -200,6 +219,18 @@ class ChatFragment : EasyChatServiceFragment<LocalMessage, ChatAdapter.ChatAdapt
         }
 
         progress.setColorSchemeResources(R.color.primary)
+
+        emojiPopup = EmojiPopup.Builder.fromRootView(root)
+                .setOnEmojiPopupShownListener {
+                    emojiButton.setImageDrawable(
+                            generateEmojiDrawable(CommunityMaterial.Icon.cmd_keyboard))
+                }
+                .setOnEmojiPopupDismissListener {
+                    emojiButton.setImageDrawable(
+                            generateEmojiDrawable(CommunityMaterial.Icon.cmd_emoticon))
+                }
+                .setOnSoftKeyboardCloseListener { emojiPopup.dismiss() }
+                .build(messageInput)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -225,7 +256,7 @@ class ChatFragment : EasyChatServiceFragment<LocalMessage, ChatAdapter.ChatAdapt
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onMessagesChanged(@Suppress("UNUSED_PARAMETER") event: ChatMessagesEvent) {
+    fun onMessagesChanged(event: ChatMessagesEvent) {
         if (event.conferenceId == conference.id) {
             if (canLoad) {
                 refresh()
@@ -254,6 +285,14 @@ class ChatFragment : EasyChatServiceFragment<LocalMessage, ChatAdapter.ChatAdapt
         super.hideError()
 
         inputContainer.visibility = View.VISIBLE
+    }
+
+    private fun generateEmojiDrawable(iconicRes: IIcon): Drawable {
+        return IconicsDrawable(context)
+                .icon(iconicRes)
+                .sizeDp(ICON_SIZE)
+                .paddingDp(ICON_PADDING)
+                .colorRes(R.color.icon)
     }
 
     private fun handleCopyMenuItem() {

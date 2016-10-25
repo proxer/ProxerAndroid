@@ -1,5 +1,6 @@
 package com.proxerme.app.fragment.chat
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
@@ -17,6 +18,7 @@ import android.widget.ImageView
 import butterknife.bindView
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
+import com.mikepenz.iconics.typeface.IIcon
 import com.proxerme.app.R
 import com.proxerme.app.activity.chat.ChatActivity
 import com.proxerme.app.adapter.chat.NewChatParticipantAdapter
@@ -33,6 +35,8 @@ import com.proxerme.app.util.ErrorHandler
 import com.proxerme.app.util.Utils
 import com.proxerme.library.connection.messenger.request.NewConferenceRequest
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
+import com.vanniktech.emoji.EmojiEditText
+import com.vanniktech.emoji.EmojiPopup
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -50,6 +54,9 @@ class NewChatFragment : MainFragment() {
         private const val NEW_PARTICIPANT_STATE = "new_chat_fragment_state_new_participant"
         private const val NEW_CONFERENCE_ID_STATE = "new_chat_fragment_state_new_conference"
         private const val LOADER_TAG = "loader"
+
+        private const val ICON_SIZE = 32
+        private const val ICON_PADDING = 8
 
         fun newInstance(initialParticipant: Participant? = null,
                         isGroup: Boolean = false): NewChatFragment {
@@ -72,13 +79,16 @@ class NewChatFragment : MainFragment() {
     private var newParticipant: String? = null
     private var newConferenceId: String? = null
 
+    private lateinit var emojiPopup: EmojiPopup
+
     private val root: ViewGroup by bindView(R.id.root)
     private val progress: SwipeRefreshLayout by bindView(R.id.progress)
     private val topicContainer: ViewGroup by bindView(R.id.topicContainer)
     private val topicInputContainer: TextInputLayout by bindView(R.id.topicInputContainer)
     private val topicInput: EditText by bindView(R.id.topicInput)
     private val participantList: RecyclerView by bindView(R.id.participantList)
-    private val messageInput: EditText by bindView(R.id.messageInput)
+    private val emojiButton: ImageButton by bindView(R.id.emojiButton)
+    private val messageInput: EmojiEditText by bindView(R.id.messageInput)
     private val sendButton: FloatingActionButton by bindView(R.id.sendButton)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -126,6 +136,11 @@ class NewChatFragment : MainFragment() {
             topicContainer.visibility = View.GONE
         }
 
+        emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_emoticon))
+        emojiButton.setOnClickListener {
+            emojiPopup.toggle()
+        }
+
         sendButton.setOnClickListener {
             if (checkIfCanLoad()) {
                 createChat()
@@ -137,6 +152,18 @@ class NewChatFragment : MainFragment() {
         participantList.adapter = headerFooterAdapter
 
         progress.setColorSchemeResources(R.color.primary)
+
+        emojiPopup = EmojiPopup.Builder.fromRootView(root)
+                .setOnEmojiPopupShownListener {
+                    emojiButton.setImageDrawable(
+                            generateEmojiDrawable(CommunityMaterial.Icon.cmd_keyboard))
+                }
+                .setOnEmojiPopupDismissListener {
+                    emojiButton.setImageDrawable(
+                            generateEmojiDrawable(CommunityMaterial.Icon.cmd_emoticon))
+                }
+                .setOnSoftKeyboardCloseListener { emojiPopup.dismiss() }
+                .build(messageInput)
 
         refreshNewParticipantFooter()
     }
@@ -257,6 +284,14 @@ class NewChatFragment : MainFragment() {
         }
 
         return true
+    }
+
+    private fun generateEmojiDrawable(iconicRes: IIcon): Drawable {
+        return IconicsDrawable(context)
+                .icon(iconicRes)
+                .sizeDp(ICON_SIZE)
+                .paddingDp(ICON_PADDING)
+                .colorRes(R.color.icon)
     }
 
     private fun createChat() {
