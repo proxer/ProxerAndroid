@@ -19,17 +19,20 @@ class LocalConference : Conference, Parcelable {
     }
 
     val localId: Long
+    var isReadLocal: Boolean
 
     constructor(localId: Long, id: String, topic: String, customTopic: String,
                 participantAmount: Int, imageType: String?, imageId: String?, isGroup: Boolean,
-                isRead: Boolean, time: Long, unreadMessageAmount: Int,
+                localIsRead: Boolean, isRead: Boolean, time: Long, unreadMessageAmount: Int,
                 lastReadMessageId: String) : super(id, topic, customTopic, participantAmount,
             imageType, imageId, isGroup, isRead, time, unreadMessageAmount, lastReadMessageId) {
         this.localId = localId
+        this.isReadLocal = localIsRead
     }
 
     private constructor(source: Parcel) : super(source) {
         this.localId = source.readLong()
+        this.isReadLocal = source.readInt() == 1
     }
 
     override fun describeContents() = 0
@@ -38,6 +41,12 @@ class LocalConference : Conference, Parcelable {
         super.writeToParcel(dest, flags)
 
         dest.writeLong(localId)
+        dest.writeInt(if (isReadLocal) 1 else 0)
+    }
+
+    fun toNonLocalConference(): Conference {
+        return Conference(id, topic, customTopic, participantAmount, imageType, imageId, isGroup,
+                isRead, time, unreadMessageAmount, lastReadMessageId)
     }
 
     override fun equals(other: Any?): Boolean {
@@ -48,6 +57,7 @@ class LocalConference : Conference, Parcelable {
         other as LocalConference
 
         if (localId != other.localId) return false
+        if (isReadLocal != other.isReadLocal) return false
 
         return true
     }
@@ -55,11 +65,7 @@ class LocalConference : Conference, Parcelable {
     override fun hashCode(): Int {
         var result = super.hashCode()
         result = 31 * result + localId.hashCode()
+        result = 31 * result + isReadLocal.hashCode()
         return result
-    }
-
-    fun toNonLocalConference(): Conference {
-        return Conference(id, topic, customTopic, participantAmount, imageType, imageId, isGroup,
-                isRead, time, unreadMessageAmount, lastReadMessageId)
     }
 }

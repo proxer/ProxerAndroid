@@ -73,7 +73,7 @@ class ConferenceAdapter(savedInstanceState: Bundle? = null) :
                     R.plurals.item_conferences_participants, item.participantAmount,
                     item.participantAmount)
 
-            if (item.isRead) {
+            if (item.isReadLocal) {
                 newMessages.setImageDrawable(null)
                 newMessages.visibility = View.GONE
             } else {

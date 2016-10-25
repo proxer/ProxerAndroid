@@ -255,6 +255,12 @@ class ChatFragment : EasyChatServiceFragment<LocalMessage, ChatAdapter.ChatAdapt
         ChatService.loadMoreMessages(context, conference.id)
     }
 
+    override fun refresh() {
+        context.chatDatabase.markAsRead(conference.id)
+
+        super.refresh()
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onMessagesChanged(event: ChatMessagesEvent) {
         if (event.conferenceId == conference.id) {

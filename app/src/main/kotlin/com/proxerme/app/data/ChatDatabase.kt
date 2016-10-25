@@ -33,6 +33,7 @@ class ChatDatabase(context: Context) :
         const val COLUMN_CONFERENCE_PARTICIPANT_AMOUNT = "participantAmount"
         const val COLUMN_CONFERENCE_IS_GROUP = "isGroup"
         const val COLUMN_CONFERENCE_LAST_MESSAGE_TIME = "lastMessageTime"
+        const val COLUMN_CONFERENCE_LOCAL_IS_READ = "isReadLocal"
         const val COLUMN_CONFERENCE_IS_READ = "isRead"
         const val COLUMN_CONFERENCE_UNREAD_MESSAGE_AMOUNT = "unreadMessageAmount"
         const val COLUMN_CONFERENCE_LAST_READ_MESSAGE_ID = "lastReadMessageId"
@@ -74,6 +75,7 @@ class ChatDatabase(context: Context) :
                 COLUMN_CONFERENCE_IMAGE_TYPE to TEXT + NOT_NULL,
                 COLUMN_CONFERENCE_IMAGE_ID to TEXT + NOT_NULL,
                 COLUMN_CONFERENCE_IS_GROUP to INTEGER + NOT_NULL,
+                COLUMN_CONFERENCE_LOCAL_IS_READ to INTEGER + NOT_NULL,
                 COLUMN_CONFERENCE_IS_READ to INTEGER + NOT_NULL,
                 COLUMN_CONFERENCE_LAST_MESSAGE_TIME to INTEGER + NOT_NULL,
                 COLUMN_CONFERENCE_UNREAD_MESSAGE_AMOUNT to INTEGER + NOT_NULL,
@@ -284,6 +286,15 @@ class ChatDatabase(context: Context) :
         }
     }
 
+    fun getConferencesToMark(): List<LocalConference> {
+        return use {
+            this.select(TABLE_CONFERENCE)
+                    .where("($COLUMN_CONFERENCE_LOCAL_IS_READ = 1) and " +
+                            "($COLUMN_CONFERENCE_IS_READ = 0)")
+                    .parseList(conferenceParser)
+        }
+    }
+
     private fun generateInsertionValues(message: Message): Array<Pair<String, Any?>> {
         return arrayOf(COLUMN_MESSAGE_ID to message.id,
                 COLUMN_MESSAGE_CONFERENCE_ID to message.conferenceId,
@@ -303,10 +314,21 @@ class ChatDatabase(context: Context) :
                 COLUMN_CONFERENCE_IMAGE_TYPE to conference.imageType,
                 COLUMN_CONFERENCE_IMAGE_ID to conference.imageId,
                 COLUMN_CONFERENCE_IS_GROUP to if (conference.isGroup) 1 else 0,
+                COLUMN_CONFERENCE_LOCAL_IS_READ to if (conference.isRead) 1 else 0,
                 COLUMN_CONFERENCE_IS_READ to if (conference.isRead) 1 else 0,
                 COLUMN_CONFERENCE_LAST_MESSAGE_TIME to conference.time,
                 COLUMN_CONFERENCE_UNREAD_MESSAGE_AMOUNT to conference.unreadMessageAmount,
                 COLUMN_CONFERENCE_LAST_READ_MESSAGE_ID to conference.lastReadMessageId)
+    }
+
+    fun markAsRead(conferenceId: String) {
+        use {
+            transaction {
+                this.update(TABLE_CONFERENCE, COLUMN_CONFERENCE_LOCAL_IS_READ to 1)
+                        .where("$COLUMN_CONFERENCE_ID = $conferenceId")
+                        .exec()
+            }
+        }
     }
 }
 

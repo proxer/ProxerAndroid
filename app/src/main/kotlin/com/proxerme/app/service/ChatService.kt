@@ -20,6 +20,7 @@ import com.proxerme.library.connection.messenger.entity.Conference
 import com.proxerme.library.connection.messenger.entity.Message
 import com.proxerme.library.connection.messenger.request.ConferencesRequest
 import com.proxerme.library.connection.messenger.request.MessagesRequest
+import com.proxerme.library.connection.messenger.request.ModifyConferenceRequest
 import com.proxerme.library.connection.messenger.request.SendMessageRequest
 import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.collections.forEachReversedByIndex
@@ -135,6 +136,8 @@ class ChatService : IntentService("ChatService") {
 
     private fun doSynchronize() {
         sendMessages()
+        markConferencesAsRead()
+
         val changedConferences = fetchConferences()
 
         if (changedConferences.size > 0) {
@@ -181,7 +184,8 @@ class ChatService : IntentService("ChatService") {
         try {
             val idToLoadFrom = chatDatabase.getOldestMessage(conferenceId)?.id ?: "0"
             val newMessages = MainApplication.proxerConnection
-                    .executeSynchronized(MessagesRequest(conferenceId, idToLoadFrom)).toList()
+                    .executeSynchronized(MessagesRequest(conferenceId, idToLoadFrom)
+                            .withMarkAsRead(false)).toList()
 
             chatDatabase.insertOrUpdateMessages(newMessages)
 
@@ -203,6 +207,7 @@ class ChatService : IntentService("ChatService") {
                         .executeSynchronized(SendMessageRequest(it.conferenceId, it.message))
 
                 chatDatabase.removeMessageToSend(it.localId)
+                chatDatabase.markAsRead(it.conferenceId)
 
                 if (result != null) {
                     throw SendMessageException(result, it.conferenceId)
@@ -211,6 +216,14 @@ class ChatService : IntentService("ChatService") {
                 throw SendMessageException(ErrorHandler.getMessageForErrorCode(this, exception),
                         it.conferenceId)
             }
+        }
+    }
+
+    private fun markConferencesAsRead() {
+        chatDatabase.getConferencesToMark().forEach {
+            MainApplication.proxerConnection
+                    .executeSynchronized(ModifyConferenceRequest(it.id,
+                            ModifyConferenceRequest.READ))
         }
     }
 
@@ -264,7 +277,8 @@ class ChatService : IntentService("ChatService") {
                 if (mostRecentMessage == null) {
                     while (existingUnreadMessageAmount < conference.unreadMessageAmount) {
                         val fetchedMessages = MainApplication.proxerConnection
-                                .executeSynchronized(MessagesRequest(conference.id, nextId))
+                                .executeSynchronized(MessagesRequest(conference.id, nextId)
+                                        .withMarkAsRead(false))
 
                         newMessages.addAll(fetchedMessages)
 
@@ -281,7 +295,8 @@ class ChatService : IntentService("ChatService") {
                     while (mostRecentMessage!!.time < conference.time ||
                             existingUnreadMessageAmount < conference.unreadMessageAmount) {
                         val fetchedMessages = MainApplication.proxerConnection
-                                .executeSynchronized(MessagesRequest(conference.id, nextId))
+                                .executeSynchronized(MessagesRequest(conference.id, nextId)
+                                        .withMarkAsRead(false))
 
                         newMessages.addAll(fetchedMessages)
 
