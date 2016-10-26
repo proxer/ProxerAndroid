@@ -254,19 +254,11 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
                 pages.scrollToPosition(0)
             }
 
-            if (!adapter.hasHeader()) {
-                adapter.setHeader(header)
-            }
-
-            if (!adapter.hasFooter()) {
-                adapter.setFooter(footer)
-            }
+            adapter.setHeader(header)
+            adapter.setFooter(footer)
         } else {
             adapter.removeHeader()
             adapter.removeFooter()
-
-            (header.parent as ViewGroup?)?.removeAllViews()
-            (footer.parent as ViewGroup?)?.removeAllViews()
         }
     }
 
@@ -275,9 +267,6 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
 
         adapter.removeHeader()
         adapter.removeFooter()
-
-        (header.parent as ViewGroup?)?.removeAllViews()
-        (footer.parent as ViewGroup?)?.removeAllViews()
 
         mangaAdapter.clear()
     }
