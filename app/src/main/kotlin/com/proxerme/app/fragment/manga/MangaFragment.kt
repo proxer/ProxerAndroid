@@ -4,7 +4,6 @@ import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
-import android.support.v4.widget.NestedScrollView
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -28,6 +27,8 @@ import com.proxerme.library.connection.manga.request.ChapterRequest
 import com.proxerme.library.connection.ucp.request.SetReminderRequest
 import com.proxerme.library.info.ProxerUrlHolder
 import com.proxerme.library.parameters.CategoryParameter
+import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
+import org.jetbrains.anko.find
 import org.joda.time.DateTime
 
 /**
@@ -75,24 +76,28 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
     private val language: String
         get() = arguments.getString(ARGUMENT_LANGUAGE)
 
-    private lateinit var adapter: MangaAdapter
+    private lateinit var mangaAdapter: MangaAdapter
+    private lateinit var adapter: EasyHeaderFooterAdapter
     private var chapter: Chapter? = null
 
     private var reminderEpisode: Int? = null
     private var reminderTask: ProxerCall? = null
 
     private val root: ViewGroup by bindView(R.id.root)
-    private val scrollContainer: NestedScrollView by bindView(R.id.scrollContainer)
 
-    private val uploader: TextView by bindView(R.id.uploader)
-    private val scangroup: TextView by bindView(R.id.scangroup)
-    private val date: TextView by bindView(R.id.date)
-    private val previous: Button by bindView(R.id.previous)
-    private val next: Button by bindView(R.id.next)
-    private val reminderThis: Button by bindView(R.id.reminderThis)
-    private val reminderNext: Button by bindView(R.id.reminderNext)
+    private lateinit var header: ViewGroup
+    private lateinit var footer: ViewGroup
+
+    private lateinit var uploader: TextView
+    private lateinit var scangroup: TextView
+    private lateinit var date: TextView
+    private lateinit var previous: Button
+    private lateinit var next: Button
+    private lateinit var reminderThis: Button
+    private lateinit var reminderNext: Button
+    private lateinit var scrollToTop: FloatingActionButton
+
     private val pages: RecyclerView by bindView(R.id.pages)
-    private val scrollToTop: FloatingActionButton by bindView(R.id.scrollToTop)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,18 +111,31 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
             }
         }
 
-        adapter = MangaAdapter(savedInstanceState)
+        mangaAdapter = MangaAdapter(savedInstanceState)
+        adapter = EasyHeaderFooterAdapter(mangaAdapter)
 
         synchronize(reminderEpisode)
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateView(inflater: android.view.LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: android.os.Bundle?): android.view.View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View {
+        header = inflater.inflate(R.layout.item_manga_header, container, false) as ViewGroup
+        footer = inflater.inflate(R.layout.item_manga_footer, container, false) as ViewGroup
+
+        uploader = header.find(R.id.uploader)
+        scangroup = header.find(R.id.scangroup)
+        date = header.find(R.id.date)
+        previous = header.find(R.id.previous)
+        next = header.find(R.id.next)
+        reminderThis = header.find(R.id.reminderThis)
+        reminderNext = header.find(R.id.reminderNext)
+        scrollToTop = footer.find(R.id.scrollToTop)
+
         return inflater.inflate(R.layout.fragment_manga, container, false)
     }
 
-    override fun onViewCreated(view: android.view.View, savedInstanceState: android.os.Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -167,38 +185,38 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
 
         outState.putInt(REMINDER_EPISODE_STATE, reminderEpisode ?: 0)
         outState.putParcelable(CHAPTER_STATE, chapter)
-        adapter.saveInstanceState(outState)
+        mangaAdapter.saveInstanceState(outState)
     }
 
     override fun save(result: Chapter) {
         chapter = result
 
-        adapter.init(result.server, result.entryId, result.id)
-        adapter.replace(result.pages)
+        mangaAdapter.init(result.server, result.entryId, result.id)
+        mangaAdapter.replace(result.pages)
     }
 
     override fun show() {
-        chapter?.let {
-            uploader.text = it.uploader
+        if (chapter != null) {
+            uploader.text = chapter!!.uploader
 
-            if (it.scangroup == null) {
+            if (chapter!!.scangroup == null) {
                 scangroup.text = context.getString(R.string.fragment_manga_empty_scangroup)
             } else {
-                scangroup.text = it.scangroup
+                scangroup.text = chapter!!.scangroup
             }
 
             uploader.setOnClickListener { view ->
-                UserActivity.navigateTo(activity, it.uploaderId, it.uploader)
+                UserActivity.navigateTo(activity, chapter!!.uploaderId, chapter!!.uploader)
             }
 
             scangroup.setOnClickListener { view ->
-                it.scangroup?.let {
+                chapter!!.scangroup?.let {
                     Utils.viewLink(context, ProxerUrlHolder.getSubgroupUrl(it,
                             ProxerUrlHolder.DEVICE_QUERY_PARAMETER_DEFAULT).toString())
                 }
             }
 
-            date.text = DateTime(it.time * 1000).toString(DATE_PATTERN)
+            date.text = DateTime(chapter!!.time * 1000).toString(DATE_PATTERN)
 
             if (episode <= 1) {
                 previous.visibility = View.GONE
@@ -233,14 +251,35 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
             }
 
             scrollToTop.setOnClickListener {
-                scrollContainer.smoothScrollTo(0, 0)
+                pages.scrollToPosition(0)
             }
+
+            if (!adapter.hasHeader()) {
+                adapter.setHeader(header)
+            }
+
+            if (!adapter.hasFooter()) {
+                adapter.setFooter(footer)
+            }
+        } else {
+            adapter.removeHeader()
+            adapter.removeFooter()
+
+            (header.parent as ViewGroup?)?.removeAllViews()
+            (footer.parent as ViewGroup?)?.removeAllViews()
         }
     }
 
     override fun clear() {
         chapter = null
-        adapter.clear()
+
+        adapter.removeHeader()
+        adapter.removeFooter()
+
+        (header.parent as ViewGroup?)?.removeAllViews()
+        (footer.parent as ViewGroup?)?.removeAllViews()
+
+        mangaAdapter.clear()
     }
 
     override fun constructLoadingRequest(): LoadingRequest<Chapter> {
