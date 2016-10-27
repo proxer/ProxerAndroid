@@ -47,6 +47,19 @@ class ToptenFragment : EasyLoadingFragment<Array<Array<ToptenEntry>>>() {
 
     private lateinit var animeAdapter: ToptenAdapter
     private lateinit var mangaAdapter: ToptenAdapter
+    override var result: Array<Array<ToptenEntry>>?
+        get() {
+            return arrayOf(animeAdapter.items.toTypedArray(), mangaAdapter.items.toTypedArray())
+        }
+        set(value) {
+            if (value == null) {
+                animeAdapter.clear()
+                mangaAdapter.clear()
+            } else {
+                animeAdapter.replace(value[0])
+                mangaAdapter.replace(value[1])
+            }
+        }
 
     private val animeContainer: ViewGroup by bindView(com.proxerme.app.R.id.animeContainer)
     private val mangaContainer: ViewGroup by bindView(com.proxerme.app.R.id.mangaContainer)
@@ -96,7 +109,7 @@ class ToptenFragment : EasyLoadingFragment<Array<Array<ToptenEntry>>>() {
         mangaList.layoutManager = GridLayoutManager(context, Utils.calculateSpanAmount(activity) + 1)
         mangaList.adapter = mangaAdapter
 
-        show()
+        updateVisibility()
     }
 
     override fun onSaveInstanceState(outState: android.os.Bundle) {
@@ -118,17 +131,11 @@ class ToptenFragment : EasyLoadingFragment<Array<Array<ToptenEntry>>>() {
         })
     }
 
-    override fun clear() {
-        animeAdapter.clear()
-        mangaAdapter.clear()
+    override fun showContent(result: Array<Array<ToptenEntry>>) {
+        updateVisibility()
     }
 
-    override fun save(result: Array<Array<ToptenEntry>>) {
-        animeAdapter.replace(result[0])
-        mangaAdapter.replace(result[1])
-    }
-
-    override fun show() {
+    private fun updateVisibility() {
         if (animeAdapter.isEmpty()) {
             animeContainer.visibility = View.GONE
         } else {

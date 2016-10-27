@@ -48,7 +48,6 @@ class MediaInfoFragment : EasyLoadingFragment<Entry>() {
     override val section = Section.MEDIA_INFO
 
     private lateinit var id: String
-    private var entry: Entry? = null
 
     private var showUnratedTags: Boolean = false
     private var showSpoilerTags: Boolean = false
@@ -89,7 +88,7 @@ class MediaInfoFragment : EasyLoadingFragment<Entry>() {
         id = arguments.getString(ARGUMENT_ID)
 
         if (savedInstanceState != null) {
-            entry = savedInstanceState.getParcelable(STATE_ENTRY)
+            result = savedInstanceState.getParcelable(STATE_ENTRY)
             showUnratedTags = savedInstanceState.getBoolean(STATE_SHOW_UNRATED_TAGS)
             showSpoilerTags = savedInstanceState.getBoolean(STATE_SHOW_SPOILER_TAGS)
         }
@@ -103,59 +102,49 @@ class MediaInfoFragment : EasyLoadingFragment<Entry>() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        outState.putParcelable(STATE_ENTRY, entry)
+        outState.putParcelable(STATE_ENTRY, result)
         outState.putBoolean(STATE_SHOW_UNRATED_TAGS, showUnratedTags)
         outState.putBoolean(STATE_SHOW_SPOILER_TAGS, showSpoilerTags)
     }
 
-    override fun clear() {
-        entry = null
+    override fun showContent(result: Entry) {
+        (activity as MediaActivity).setName(result.name)
+
+        buildSynonymsView(result.synonyms)
+        buildSeasonsView(result.seasons)
+
+        status.text = getStateString(result.state)
+        license.text = getString(when (result.license) {
+            LicenseParameter.LICENSED -> R.string.media_license_licensed
+            LicenseParameter.NON_LICENSED -> R.string.media_license_non_licensed
+            LicenseParameter.UNKNOWN -> R.string.media_license_unknown
+            else -> throw InvalidParameterException("Unknown license: " + result.license)
+        })
+
+        buildBadgeView(genres, result.genres, { it }, { view, genre ->
+            (activity as MediaActivity).showPage(ProxerUrlHolder.getWikiUrl(genre))
+        }, genresTitle)
+
+        buildTagsView(result.tags)
+        buildFskView(result.fsk)
+
+        buildBadgeView(groups, result.subgroups, { it.name }, { view, subgroup ->
+            (activity as MediaActivity).showPage(ProxerUrlHolder.getSubgroupUrl(subgroup.id,
+                    ProxerUrlHolder.DEVICE_QUERY_PARAMETER_DEFAULT))
+        }, groupsTitle)
+
+        buildBadgeView(publishers, result.publishers, {
+            getPublisherString(it)
+        }, { view, publisher ->
+            (activity as MediaActivity).showPage(ProxerUrlHolder.getPublisherUrl(publisher.id,
+                    ProxerUrlHolder.DEVICE_QUERY_PARAMETER_DEFAULT))
+        }, publishersTitle)
+
+        description.text = result.description
     }
 
     override fun constructLoadingRequest(): LoadingRequest<Entry> {
         return LoadingRequest(EntryRequest(id))
-    }
-
-    override fun save(result: Entry) {
-        entry = result
-
-        (activity as MediaActivity).setName(result.name)
-    }
-
-    override fun show() {
-        entry?.let {
-            buildSynonymsView(it.synonyms)
-            buildSeasonsView(it.seasons)
-
-            status.text = getStateString(it.state)
-            license.text = getString(when (it.license) {
-                LicenseParameter.LICENSED -> R.string.media_license_licensed
-                LicenseParameter.NON_LICENSED -> R.string.media_license_non_licensed
-                LicenseParameter.UNKNOWN -> R.string.media_license_unknown
-                else -> throw InvalidParameterException("Unknown license: " + it.license)
-            })
-
-            buildBadgeView(genres, it.genres, { it }, { view, genre ->
-                (activity as MediaActivity).showPage(ProxerUrlHolder.getWikiUrl(genre))
-            }, genresTitle)
-
-            buildTagsView(it.tags)
-            buildFskView(it.fsk)
-
-            buildBadgeView(groups, it.subgroups, { it.name }, { view, subgroup ->
-                (activity as MediaActivity).showPage(ProxerUrlHolder.getSubgroupUrl(subgroup.id,
-                        ProxerUrlHolder.DEVICE_QUERY_PARAMETER_DEFAULT))
-            }, groupsTitle)
-
-            buildBadgeView(publishers, it.publishers, {
-                getPublisherString(it)
-            }, { view, publisher ->
-                (activity as MediaActivity).showPage(ProxerUrlHolder.getPublisherUrl(publisher.id,
-                        ProxerUrlHolder.DEVICE_QUERY_PARAMETER_DEFAULT))
-            }, publishersTitle)
-
-            description.text = it.description
-        }
     }
 
     private fun buildSynonymsView(synonyms: Array<Synonym>) {
@@ -210,7 +199,7 @@ class MediaInfoFragment : EasyLoadingFragment<Entry>() {
             unratedTagsButton.setOnClickListener {
                 showUnratedTags = !showUnratedTags
 
-                entry?.let {
+                result?.let {
                     buildTagsView(it.tags)
                 }
             }
@@ -219,7 +208,7 @@ class MediaInfoFragment : EasyLoadingFragment<Entry>() {
             spoilerTagsButton.setOnClickListener {
                 showSpoilerTags = !showSpoilerTags
 
-                entry?.let {
+                result?.let {
                     buildTagsView(it.tags)
                 }
             }

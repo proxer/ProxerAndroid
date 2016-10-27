@@ -14,7 +14,6 @@ import com.proxerme.app.adapter.chat.ConferenceParticipantAdapter
 import com.proxerme.app.adapter.chat.ConferenceParticipantAdapter.ConferenceParticipantAdapterCallback
 import com.proxerme.app.fragment.framework.EasyLoadingFragment
 import com.proxerme.app.manager.SectionManager
-import com.proxerme.library.connection.messenger.entity.ConferenceInfo
 import com.proxerme.library.connection.messenger.entity.ConferenceInfoContainer
 import com.proxerme.library.connection.messenger.entity.ConferenceInfoUser
 import com.proxerme.library.connection.messenger.request.ConferenceInfoRequest
@@ -45,7 +44,6 @@ class ConferenceInfoFragment : EasyLoadingFragment<ConferenceInfoContainer>() {
 
     private lateinit var conferenceId: String
 
-    private var conferenceInfo: ConferenceInfo? = null
     private lateinit var adapter: ConferenceParticipantAdapter
 
     private val time: TextView by bindView(R.id.time)
@@ -64,7 +62,7 @@ class ConferenceInfoFragment : EasyLoadingFragment<ConferenceInfoContainer>() {
         }
 
         savedInstanceState?.let {
-            conferenceInfo = it.getParcelable(CONFERENCE_INFO_STATE)
+            result = it.getParcelable(CONFERENCE_INFO_STATE)
         }
     }
 
@@ -85,11 +83,10 @@ class ConferenceInfoFragment : EasyLoadingFragment<ConferenceInfoContainer>() {
         super.onSaveInstanceState(outState)
 
         adapter.saveInstanceState(outState)
-        outState.putParcelable(CONFERENCE_INFO_STATE, conferenceInfo)
+        outState.putParcelable(CONFERENCE_INFO_STATE, result)
     }
 
     override fun clear() {
-        conferenceInfo = null
         adapter.leader = null
         adapter.clear()
     }
@@ -98,20 +95,14 @@ class ConferenceInfoFragment : EasyLoadingFragment<ConferenceInfoContainer>() {
         return LoadingRequest(ConferenceInfoRequest(conferenceId))
     }
 
-    override fun save(result: ConferenceInfoContainer) {
-        conferenceInfo = result.conferenceInfo
+    override fun showContent(result: ConferenceInfoContainer) {
+        val dateTime = DateTime(result.conferenceInfo.firstMessageTime * 1000)
+        val creationDate = dateTime.toString(DateTimeFormat.forPattern("dd.MM.yyyy"))
+        val creationTime = dateTime.toString(DateTimeFormat.forPattern("HH:mm"))
+
+        time.text = getString(R.string.fragment_conference_info_time, creationDate,
+                creationTime)
         adapter.leader = result.conferenceInfo.leaderId
         adapter.replace(result.participants)
-    }
-
-    override fun show() {
-        conferenceInfo?.run {
-            val dateTime = DateTime(this.firstMessageTime * 1000)
-            val creationDate = dateTime.toString(DateTimeFormat.forPattern("dd.MM.yyyy"))
-            val creationTime = dateTime.toString(DateTimeFormat.forPattern("HH:mm"))
-
-            time.text = getString(R.string.fragment_conference_info_time, creationDate,
-                    creationTime)
-        }
     }
 }

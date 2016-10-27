@@ -27,7 +27,8 @@ abstract class EasyLoadingFragment<T> : LoadingFragment<T>() {
 
     open protected val isSwipeToRefreshEnabled = false
 
-    protected var exception: ProxerException? = null
+    protected open var result: T? = null
+    protected open var exception: ProxerException? = null
 
     open protected val progress: SwipeRefreshLayout by bindView(R.id.progress)
     open protected val contentContainer: ViewGroup by bindView(R.id.contentContainer)
@@ -57,11 +58,7 @@ abstract class EasyLoadingFragment<T> : LoadingFragment<T>() {
         if (isLoading) {
             showLoading()
         } else {
-            if (exception == null) {
-                showResult()
-            } else {
-                showError()
-            }
+            show()
         }
     }
 
@@ -77,10 +74,9 @@ abstract class EasyLoadingFragment<T> : LoadingFragment<T>() {
         outState.putSerializable(EXCEPTION_STATE, exception)
     }
 
-    override fun reset() {
-        super.reset()
-
-        exception = null
+    override fun clear() {
+        this.result = null
+        this.exception = null
     }
 
     override fun onLoadStarted() {
@@ -92,22 +88,21 @@ abstract class EasyLoadingFragment<T> : LoadingFragment<T>() {
     override fun onLoadFinished(result: T) {
         super.onLoadFinished(result)
 
-        exception = null
+        this.result = result
+        this.exception = null
 
-        save(result)
-
-        showResult()
+        show()
     }
 
     override fun onLoadFinishedWithError(result: ProxerException) {
         super.onLoadFinishedWithError(result)
 
-        exception = result
+        this.result = null
+        this.exception = result
 
         clear()
         showError()
     }
-
     open protected fun initProgress() {
         progress.setColorSchemeResources(R.color.primary)
 
@@ -123,6 +118,7 @@ abstract class EasyLoadingFragment<T> : LoadingFragment<T>() {
     open protected fun doShowError(message: String, buttonMessage: String? = null,
                                    onButtonClickListener: View.OnClickListener? = null) {
         hideProgress()
+
         contentContainer.visibility = View.INVISIBLE
         errorContainer.visibility = View.VISIBLE
 
@@ -148,22 +144,33 @@ abstract class EasyLoadingFragment<T> : LoadingFragment<T>() {
         }
     }
 
-    protected abstract fun save(result: T)
-
-    protected abstract fun show()
+    protected abstract fun showContent(result: T)
 
     private fun showLoading() {
         showProgress()
+
         contentContainer.visibility = View.INVISIBLE
         errorContainer.visibility = View.INVISIBLE
     }
 
-    private fun showResult() {
+    private fun show() {
         hideProgress()
-        contentContainer.visibility = View.VISIBLE
-        errorContainer.visibility = View.INVISIBLE
 
-        show()
+        if (exception != null) {
+            contentContainer.visibility = View.INVISIBLE
+            errorContainer.visibility = View.VISIBLE
+
+            showError()
+        } else {
+            contentContainer.visibility = View.VISIBLE
+            errorContainer.visibility = View.INVISIBLE
+
+            if (result != null) {
+                showContent(result!!)
+            } else {
+                clear()
+            }
+        }
     }
 
     private fun showError() {

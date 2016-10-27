@@ -53,8 +53,6 @@ class UcpOverviewFragment : EasyLoadingFragment<Int>() {
     override val canLoad: Boolean
         get() = super.canLoad && loginModule.canLoad()
 
-    private var watchedEpisodes: Int? = null
-
     private val profileLink: TextView by bindView(R.id.profileLink)
     private val username: TextView by bindView(R.id.username)
     private val userId: TextView by bindView(R.id.userId)
@@ -69,7 +67,7 @@ class UcpOverviewFragment : EasyLoadingFragment<Int>() {
 
         savedInstanceState?.let {
             if (savedInstanceState.containsKey(STATE_WATCHED_EPISODES)) {
-                watchedEpisodes = it.getInt(STATE_WATCHED_EPISODES)
+                result = it.getInt(STATE_WATCHED_EPISODES)
             }
         }
     }
@@ -106,17 +104,13 @@ class UcpOverviewFragment : EasyLoadingFragment<Int>() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        watchedEpisodes?.let {
+        result?.let {
             outState.putInt(STATE_WATCHED_EPISODES, it)
         }
     }
 
-    override fun save(result: Int) {
-        watchedEpisodes = result
-    }
-
-    override fun show() {
-        if (watchedEpisodes != null && UserManager.user != null) {
+    override fun showContent(result: Int) {
+        if (UserManager.user != null) {
             profileLink.text = Utils.buildClickableText(context,
                     ProxerUrlHolder.getUserUrl(UserManager.user!!.id, null).toString(),
                     onWebClickListener = Link.OnClickListener { link ->
@@ -131,9 +125,9 @@ class UcpOverviewFragment : EasyLoadingFragment<Int>() {
             username.text = UserManager.user!!.username
             userId.text = UserManager.user!!.id
 
-            episodesRow.text = watchedEpisodes.toString()
+            episodesRow.text = result.toString()
 
-            val minutes = watchedEpisodes!! * 20
+            val minutes = result * 20
             val hours = minutes / 60f
             val days = hours / 24f
 
@@ -142,11 +136,6 @@ class UcpOverviewFragment : EasyLoadingFragment<Int>() {
             daysRow.text = FORMAT.format(days)
         }
     }
-
-    override fun clear() {
-        watchedEpisodes = null
-    }
-
     override fun constructLoadingRequest(): LoadingRequest<Int> {
         return LoadingRequest(ListsumRequest())
     }

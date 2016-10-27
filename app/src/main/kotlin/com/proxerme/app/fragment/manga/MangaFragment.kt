@@ -78,7 +78,6 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
 
     private lateinit var mangaAdapter: MangaAdapter
     private lateinit var adapter: EasyHeaderFooterAdapter
-    private var chapter: Chapter? = null
 
     private var reminderEpisode: Int? = null
     private var reminderTask: ProxerCall? = null
@@ -103,7 +102,7 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
         super.onCreate(savedInstanceState)
 
         savedInstanceState?.let {
-            chapter = it.getParcelable(CHAPTER_STATE)
+            result = it.getParcelable(CHAPTER_STATE)
             reminderEpisode = it.getInt(REMINDER_EPISODE_STATE)
 
             if (reminderEpisode == 0) {
@@ -184,87 +183,77 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
         super.onSaveInstanceState(outState)
 
         outState.putInt(REMINDER_EPISODE_STATE, reminderEpisode ?: 0)
-        outState.putParcelable(CHAPTER_STATE, chapter)
+        outState.putParcelable(CHAPTER_STATE, result)
         mangaAdapter.saveInstanceState(outState)
     }
 
-    override fun save(result: Chapter) {
-        chapter = result
+    override fun showContent(result: Chapter) {
+        uploader.text = result.uploader
+
+        if (result.scangroup == null) {
+            scangroup.text = context.getString(R.string.fragment_manga_empty_scangroup)
+        } else {
+            scangroup.text = result.scangroup
+        }
+
+        uploader.setOnClickListener { view ->
+            UserActivity.navigateTo(activity, result.uploaderId, result.uploader)
+        }
+
+        scangroup.setOnClickListener { view ->
+            result.scangroup?.let {
+                Utils.viewLink(context, ProxerUrlHolder.getSubgroupUrl(it,
+                        ProxerUrlHolder.DEVICE_QUERY_PARAMETER_DEFAULT).toString())
+            }
+        }
+
+        date.text = DateTime(result.time * 1000).toString(DATE_PATTERN)
+
+        if (episode <= 1) {
+            previous.visibility = View.GONE
+        } else {
+            previous.visibility = View.VISIBLE
+            previous.text = getString(R.string.fragment_manga_previous_chapter)
+            previous.setOnClickListener {
+                switchEpisode(episode - 1)
+            }
+        }
+
+        if (episode >= totalEpisodes) {
+            next.visibility = View.GONE
+            reminderNext.visibility = View.GONE
+        } else {
+            next.visibility = View.VISIBLE
+            next.text = getString(R.string.fragment_manga_next_chapter)
+            next.setOnClickListener {
+                switchEpisode(episode + 1)
+            }
+
+            reminderNext.visibility = View.VISIBLE
+            reminderNext.setOnClickListener {
+                synchronize(episode + 1)
+            }
+        }
+
+        reminderThis.setOnClickListener {
+            if (episode != reminderEpisode) {
+                synchronize(episode)
+            }
+        }
+
+        scrollToTop.setOnClickListener {
+            pages.scrollToPosition(0)
+        }
+
+        adapter.setHeader(header)
+        adapter.setFooter(footer)
 
         mangaAdapter.init(result.server, result.entryId, result.id)
         mangaAdapter.replace(result.pages)
     }
 
-    override fun show() {
-        if (chapter != null) {
-            uploader.text = chapter!!.uploader
-
-            if (chapter!!.scangroup == null) {
-                scangroup.text = context.getString(R.string.fragment_manga_empty_scangroup)
-            } else {
-                scangroup.text = chapter!!.scangroup
-            }
-
-            uploader.setOnClickListener { view ->
-                UserActivity.navigateTo(activity, chapter!!.uploaderId, chapter!!.uploader)
-            }
-
-            scangroup.setOnClickListener { view ->
-                chapter!!.scangroup?.let {
-                    Utils.viewLink(context, ProxerUrlHolder.getSubgroupUrl(it,
-                            ProxerUrlHolder.DEVICE_QUERY_PARAMETER_DEFAULT).toString())
-                }
-            }
-
-            date.text = DateTime(chapter!!.time * 1000).toString(DATE_PATTERN)
-
-            if (episode <= 1) {
-                previous.visibility = View.GONE
-            } else {
-                previous.visibility = View.VISIBLE
-                previous.text = getString(R.string.fragment_manga_previous_chapter)
-                previous.setOnClickListener {
-                    switchEpisode(episode - 1)
-                }
-            }
-
-            if (episode >= totalEpisodes) {
-                next.visibility = View.GONE
-                reminderNext.visibility = View.GONE
-            } else {
-                next.visibility = View.VISIBLE
-                next.text = getString(R.string.fragment_manga_next_chapter)
-                next.setOnClickListener {
-                    switchEpisode(episode + 1)
-                }
-
-                reminderNext.visibility = View.VISIBLE
-                reminderNext.setOnClickListener {
-                    synchronize(episode + 1)
-                }
-            }
-
-            reminderThis.setOnClickListener {
-                if (episode != reminderEpisode) {
-                    synchronize(episode)
-                }
-            }
-
-            scrollToTop.setOnClickListener {
-                pages.scrollToPosition(0)
-            }
-
-            adapter.setHeader(header)
-            adapter.setFooter(footer)
-        } else {
-            adapter.removeHeader()
-            adapter.removeFooter()
-        }
-    }
 
     override fun clear() {
-        chapter = null
-
         adapter.removeHeader()
         adapter.removeFooter()
 

@@ -39,6 +39,17 @@ class RelationsFragment : EasyLoadingFragment<Array<Relation>>() {
     override val section = Section.RELATIONS
 
     private lateinit var adapter: RelationsAdapter
+    override var result: Array<Relation>?
+        get() {
+            return adapter.items.toTypedArray()
+        }
+        set(value) {
+            if (value == null) {
+                adapter.clear()
+            } else {
+                adapter.replace(value)
+            }
+        }
 
     private lateinit var id: String
 
@@ -82,15 +93,7 @@ class RelationsFragment : EasyLoadingFragment<Array<Relation>>() {
         adapter.saveInstanceState(outState)
     }
 
-    override fun clear() {
-        adapter.clear()
-    }
-
-    override fun save(result: Array<Relation>) {
-        adapter.replace(result)
-    }
-
-    override fun show() {
+    override fun showContent(result: Array<Relation>) {
         // Nothing to do
     }
 

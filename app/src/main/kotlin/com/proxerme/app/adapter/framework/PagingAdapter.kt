@@ -15,7 +15,12 @@ abstract class PagingAdapter<T, C : PagingAdapter.PagingAdapterCallback<T>>() :
         RecyclerView.Adapter<PagingAdapter.PagingViewHolder<T, C>>() where T : Parcelable {
 
     protected val list: ArrayList<T> = arrayListOf()
+
     var callback: C? = null
+    val items: List<T>
+        get() {
+            return ArrayList(list)
+        }
 
     override fun onBindViewHolder(holder: PagingViewHolder<T, C>, position: Int) {
         holder.bind(list[position])

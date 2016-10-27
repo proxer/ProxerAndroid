@@ -24,7 +24,6 @@ import com.proxerme.library.connection.user.request.UserInfoRequest
  * @author Ruben Gees
  */
 class ProfileFragment : EasyLoadingFragment<UserInfo>() {
-
     companion object {
         private const val ARGUMENT_USER_ID = "user_id"
         private const val ARGUMENT_USER_NAME = "user_name"
@@ -48,7 +47,6 @@ class ProfileFragment : EasyLoadingFragment<UserInfo>() {
 
     private var userId: String? = null
     private var userName: String? = null
-    private var userInfo: UserInfo? = null
 
     private val animePointsRow: TextView by bindView(R.id.animePointsRow)
     private val mangaPointsRow: TextView by bindView(R.id.mangaPointsRow)
@@ -67,7 +65,7 @@ class ProfileFragment : EasyLoadingFragment<UserInfo>() {
 
         userId = arguments.getString(ARGUMENT_USER_ID)
         userName = arguments.getString(ARGUMENT_USER_NAME)
-        userInfo = savedInstanceState?.getParcelable(STATE_USER_INFO)
+        result = savedInstanceState?.getParcelable(STATE_USER_INFO)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -84,46 +82,36 @@ class ProfileFragment : EasyLoadingFragment<UserInfo>() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        outState.putParcelable(STATE_USER_INFO, userInfo)
+        outState.putParcelable(STATE_USER_INFO, result)
     }
 
     override fun constructLoadingRequest(): LoadingRequest<UserInfo> {
         return LoadingRequest(UserInfoRequest(userId, userName))
     }
 
-    override fun save(result: UserInfo) {
-        userInfo = result
-
+    override fun showContent(result: UserInfo) {
         (activity as UserActivity).setUserInfo(result)
-    }
 
-    override fun clear() {
-        userInfo = null
-    }
+        val totalPoints = result.animePoints + result.mangaPoints + result.uploadPoints +
+                result.forumPoints + result.infoPoints + result.miscPoints
 
-    override fun show() {
-        userInfo?.run {
-            val totalPoints = animePoints + mangaPoints + uploadPoints + forumPoints +
-                    infoPoints + miscPoints
+        animePointsRow.text = result.animePoints.toString()
+        mangaPointsRow.text = result.mangaPoints.toString()
+        uploadPointsRow.text = result.uploadPoints.toString()
+        forumPointsRow.text = result.forumPoints.toString()
+        infoPointsRow.text = result.infoPoints.toString()
+        miscellaneousPointsRow.text = result.miscPoints.toString()
+        totalPointsRow.text = totalPoints.toString()
+        rank.text = calculateRank(totalPoints)
 
-            animePointsRow.text = animePoints.toString()
-            mangaPointsRow.text = mangaPoints.toString()
-            uploadPointsRow.text = uploadPoints.toString()
-            forumPointsRow.text = forumPoints.toString()
-            infoPointsRow.text = infoPoints.toString()
-            miscellaneousPointsRow.text = miscPoints.toString()
-            totalPointsRow.text = totalPoints.toString()
-            rank.text = calculateRank(totalPoints)
-
-            if (status.isBlank()) {
-                statusContainer.visibility = View.GONE
-            } else {
-                statusText.text = Utils.buildClickableText(statusText.context, status + " - " +
-                        TimeUtil.convertToRelativeReadableTime(context, lastStatusChange),
-                        Link.OnClickListener { link ->
-                            Utils.viewLink(context, link + "?device=mobile")
-                        })
-            }
+        if (result.status.isBlank()) {
+            statusContainer.visibility = View.GONE
+        } else {
+            statusText.text = Utils.buildClickableText(statusText.context, result.status + " - " +
+                    TimeUtil.convertToRelativeReadableTime(context, result.lastStatusChange),
+                    Link.OnClickListener { link ->
+                        Utils.viewLink(context, link + "?device=mobile")
+                    })
         }
     }
 
