@@ -27,7 +27,8 @@ class SettingsFragment : PreferenceFragmentCompat(), OnActivityListener,
 
     companion object {
         private val LIBRARIES: Array<String> = arrayOf("glide", "jodatimeandroid", "hawk",
-                "materialdialogs", "eventbus", "circleimageview", "okhttp", "leakcanary")
+                "materialdialogs", "eventbus", "circleimageview", "okhttp", "leakcanary",
+                "android_textview_linkbuilder", "androidflowlayout", "kotterknife")
         private val EXCLUDED_LIBRARIES: Array<String> = arrayOf("fastadapter", "materialize")
         private const val OPEN_SOURCE_LINK = "https://github.com/proxer/ProxerAndroid"
 
