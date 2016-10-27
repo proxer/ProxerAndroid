@@ -46,7 +46,7 @@ class ChatFragment : EasyChatServiceFragment<LocalMessage, ChatAdapter.ChatAdapt
         private const val ARGUMENT_CONFERENCE = "conference"
 
         private const val ICON_SIZE = 32
-        private const val ICON_PADDING = 8
+        private const val ICON_PADDING = 6
 
         fun newInstance(conference: LocalConference): ChatFragment {
 
