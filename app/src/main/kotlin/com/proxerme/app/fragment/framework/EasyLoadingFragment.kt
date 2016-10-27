@@ -74,9 +74,14 @@ abstract class EasyLoadingFragment<T> : LoadingFragment<T>() {
         outState.putSerializable(EXCEPTION_STATE, exception)
     }
 
+    override fun reset() {
+        this.exception = null
+
+        super.reset()
+    }
+
     override fun clear() {
         this.result = null
-        this.exception = null
     }
 
     override fun onLoadStarted() {
@@ -103,6 +108,7 @@ abstract class EasyLoadingFragment<T> : LoadingFragment<T>() {
         clear()
         showError()
     }
+
     open protected fun initProgress() {
         progress.setColorSchemeResources(R.color.primary)
 
