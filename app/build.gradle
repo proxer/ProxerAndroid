@@ -79,7 +79,7 @@ dependencies {
 
     compile 'org.apmem.tools:layouts:1.10@aar'
 
-    compile 'com.klinkerapps:link_builder:1.3.2'
+    compile 'com.klinkerapps:link_builder:1.3.3'
 
     compile 'com.github.nekocode:Badge:1.6.2'
 
