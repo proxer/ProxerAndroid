@@ -5,8 +5,10 @@ import android.app.PendingIntent
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Typeface
+import android.os.Build
 import android.support.annotation.IntDef
 import android.support.v4.app.NotificationCompat.*
+import android.support.v4.app.RemoteInput
 import android.support.v4.app.TaskStackBuilder
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.NotificationCompat
@@ -21,6 +23,7 @@ import com.proxerme.app.activity.DashboardActivity
 import com.proxerme.app.activity.chat.ChatActivity
 import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.entitiy.LocalMessage
+import com.proxerme.app.receiver.DirectReplyReceiver
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.notificationManager
 import com.proxerme.library.connection.notifications.entitiy.News
@@ -98,21 +101,36 @@ object NotificationHelper {
 
         val messageAmount = messages.values.sumBy { it.size }
         val title = buildTitle(context, messages, messageAmount)
+        val notificationBuilder = NotificationCompat.Builder(context)
+                .setSmallIcon(R.drawable.ic_stat_proxer)
+                .setContentTitle(title)
+                .setContentText(buildText(context, messages, messageAmount))
+                .setLargeIcon(buildIconIfAppropriate(context, messages))
+                .setContentIntent(buildIntent(context, messages))
+                .setStyle(buildStyle(context, messages, title, messageAmount))
+                .setDefaults(Notification.DEFAULT_VIBRATE or Notification.DEFAULT_SOUND or
+                        Notification.DEFAULT_LIGHTS)
+                .setColor(ContextCompat.getColor(context, R.color.primary))
+                .setPriority(PRIORITY_HIGH)
+                .setCategory(CATEGORY_MESSAGE)
+                .setAutoCancel(true)
 
-        context.notificationManager.notify(CHAT_NOTIFICATION.toInt(),
-                NotificationCompat.Builder(context)
-                        .setSmallIcon(R.drawable.ic_stat_proxer)
-                        .setContentTitle(title)
-                        .setContentText(buildText(context, messages, messageAmount))
-                        .setLargeIcon(buildIconIfAppropriate(context, messages))
-                        .setContentIntent(buildIntent(context, messages))
-                        .setStyle(buildStyle(context, messages, title, messageAmount))
-                        .setDefaults(Notification.DEFAULT_VIBRATE or Notification.DEFAULT_SOUND or
-                                Notification.DEFAULT_LIGHTS)
-                        .setColor(ContextCompat.getColor(context, R.color.primary))
-                        .setPriority(PRIORITY_HIGH)
-                        .setCategory(CATEGORY_MESSAGE)
-                        .setAutoCancel(true).build())
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && messages.size == 1) {
+            val remoteInput = RemoteInput.Builder(DirectReplyReceiver.EXTRA_REMOTE_REPLY)
+                    .setLabel("Antworten").build()
+            val replyIntent = PendingIntent.getBroadcast(context, messages.keys.first().id.toInt(),
+                    DirectReplyReceiver.getMessageReplyIntent(messages.keys.first().id),
+                    PendingIntent.FLAG_UPDATE_CURRENT)
+            val actionReplyByRemoteInput =
+                    Action.Builder(R.mipmap.ic_launcher, "Antworten", replyIntent)
+                            .addRemoteInput(remoteInput)
+                            .setAllowGeneratedReplies(true)
+                            .build()
+
+            notificationBuilder.addAction(actionReplyByRemoteInput)
+        }
+
+        context.notificationManager.notify(CHAT_NOTIFICATION.toInt(), notificationBuilder.build())
     }
 
     fun cancelNotification(context: Context, @NotificationId id: Long) {

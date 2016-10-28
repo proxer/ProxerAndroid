@@ -53,8 +53,9 @@
         <activity
             android:name=".activity.ImageDetailActivity"
             android:theme="@style/Theme.Transparent" />
-        <activity android:name="customtabs.WebviewActivity" />
         <activity android:name=".activity.chat.ConferenceInfoActivity" />
+        <activity android:name=".activity.MangaActivity" />
+        <activity android:name="customtabs.WebviewActivity" />
 
         <service android:name="customtabs.KeepAliveService" />
         <service android:name=".service.NotificationService" />
@@ -62,13 +63,16 @@
 
         <receiver android:name=".receiver.NotificationReceiver" />
         <receiver android:name=".receiver.ChatReceiver" />
+        <receiver android:name=".receiver.DirectReplyReceiver">
+            <intent-filter>
+                <action android:name="com.proxerme.app.ACTION_MESSAGE_REPLY" />
+            </intent-filter>
+        </receiver>
         <receiver android:name=".receiver.BootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
-        <activity android:name=".activity.MangaActivity"></activity>
     </application>
 
 </manifest>
