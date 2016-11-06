@@ -8,8 +8,6 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.*
-import android.widget.Button
-import android.widget.TextView
 import butterknife.bindView
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
@@ -21,6 +19,7 @@ import com.proxerme.app.application.MainApplication
 import com.proxerme.app.fragment.framework.EasyLoadingFragment
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.util.Utils
+import com.proxerme.app.view.MediaControlView
 import com.proxerme.library.connection.ProxerCall
 import com.proxerme.library.connection.manga.entity.Chapter
 import com.proxerme.library.connection.manga.request.ChapterRequest
@@ -46,8 +45,6 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
 
         private const val CHAPTER_STATE = "chapter_state"
         private const val REMINDER_EPISODE_STATE = "reminder_episode_state"
-
-        private const val DATE_PATTERN = "dd.MM.yyyy"
 
         private const val ICON_SIZE = 56
         private const val ICON_PADDING = 8
@@ -84,16 +81,9 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
 
     private val root: ViewGroup by bindView(R.id.root)
 
-    private lateinit var header: ViewGroup
+    private lateinit var header: MediaControlView
     private lateinit var footer: ViewGroup
 
-    private lateinit var uploader: TextView
-    private lateinit var scangroup: TextView
-    private lateinit var date: TextView
-    private lateinit var previous: Button
-    private lateinit var next: Button
-    private lateinit var reminderThis: Button
-    private lateinit var reminderNext: Button
     private lateinit var scrollToTop: FloatingActionButton
 
     private val pages: RecyclerView by bindView(R.id.pages)
@@ -119,16 +109,8 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        header = inflater.inflate(R.layout.item_manga_header, container, false) as ViewGroup
+        header = inflater.inflate(R.layout.item_manga_header, container, false) as MediaControlView
         footer = inflater.inflate(R.layout.item_manga_footer, container, false) as ViewGroup
-
-        uploader = header.find(R.id.uploader)
-        scangroup = header.find(R.id.scangroup)
-        date = header.find(R.id.date)
-        previous = header.find(R.id.previous)
-        next = header.find(R.id.next)
-        reminderThis = header.find(R.id.reminderThis)
-        reminderNext = header.find(R.id.reminderNext)
         scrollToTop = footer.find(R.id.scrollToTop)
 
         return inflater.inflate(R.layout.fragment_manga, container, false)
@@ -151,11 +133,38 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
         pages.layoutManager = LinearLayoutManager(context)
         pages.adapter = adapter
 
+        header.onTranslatorGroupClickListener = {
+            result?.scangroup?.let {
+                Utils.viewLink(context, ProxerUrlHolder.getSubgroupUrl(it,
+                        ProxerUrlHolder.DEVICE_QUERY_PARAMETER_DEFAULT).toString())
+            }
+        }
+
+        header.onUploaderClickListener = {
+            result?.let {
+                UserActivity.navigateTo(activity, it.uploaderId, it.uploader)
+            }
+        }
+
+        header.onReminderClickListener = {
+            if (it != reminderEpisode) {
+                synchronize(it)
+            }
+        }
+
+        header.onSwitchClickListener = {
+            switchEpisode(it)
+        }
+
         scrollToTop.setImageDrawable(IconicsDrawable(context)
                 .icon(CommunityMaterial.Icon.cmd_chevron_up)
                 .sizeDp(ICON_SIZE)
                 .paddingDp(ICON_PADDING)
                 .colorRes(android.R.color.white))
+
+        scrollToTop.setOnClickListener {
+            pages.scrollToPosition(0)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater) {
@@ -188,62 +197,11 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
     }
 
     override fun showContent(result: Chapter) {
-        uploader.text = result.uploader
-
-        if (result.scangroup == null) {
-            scangroup.text = context.getString(R.string.fragment_manga_empty_scangroup)
-        } else {
-            scangroup.text = result.scangroup
-        }
-
-        uploader.setOnClickListener { view ->
-            UserActivity.navigateTo(activity, result.uploaderId, result.uploader)
-        }
-
-        scangroup.setOnClickListener { view ->
-            result.scangroup?.let {
-                Utils.viewLink(context, ProxerUrlHolder.getSubgroupUrl(it,
-                        ProxerUrlHolder.DEVICE_QUERY_PARAMETER_DEFAULT).toString())
-            }
-        }
-
-        date.text = DateTime(result.time * 1000).toString(DATE_PATTERN)
-
-        if (episode <= 1) {
-            previous.visibility = View.GONE
-        } else {
-            previous.visibility = View.VISIBLE
-            previous.text = getString(R.string.fragment_manga_previous_chapter)
-            previous.setOnClickListener {
-                switchEpisode(episode - 1)
-            }
-        }
-
-        if (episode >= totalEpisodes) {
-            next.visibility = View.GONE
-            reminderNext.visibility = View.GONE
-        } else {
-            next.visibility = View.VISIBLE
-            next.text = getString(R.string.fragment_manga_next_chapter)
-            next.setOnClickListener {
-                switchEpisode(episode + 1)
-            }
-
-            reminderNext.visibility = View.VISIBLE
-            reminderNext.setOnClickListener {
-                synchronize(episode + 1)
-            }
-        }
-
-        reminderThis.setOnClickListener {
-            if (episode != reminderEpisode) {
-                synchronize(episode)
-            }
-        }
-
-        scrollToTop.setOnClickListener {
-            pages.scrollToPosition(0)
-        }
+        header.setUploader(result.uploader)
+        header.setTranslatorGroup(result.scangroup ?:
+                context.getString(R.string.fragment_manga_empty_scangroup))
+        header.setDate(DateTime(result.time * 1000))
+        header.setEpisodeInfo(totalEpisodes, episode)
 
         adapter.setHeader(header)
         adapter.setFooter(footer)
@@ -251,7 +209,6 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
         mangaAdapter.init(result.server, result.entryId, result.id)
         mangaAdapter.replace(result.pages)
     }
-
 
     override fun clear() {
         adapter.removeHeader()
