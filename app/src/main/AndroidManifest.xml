@@ -55,6 +55,7 @@
             android:theme="@style/Theme.Transparent" />
         <activity android:name=".activity.chat.ConferenceInfoActivity" />
         <activity android:name=".activity.MangaActivity" />
+        <activity android:name=".activity.AnimeActivity" />
         <activity android:name="customtabs.WebviewActivity" />
 
         <service android:name="customtabs.KeepAliveService" />
