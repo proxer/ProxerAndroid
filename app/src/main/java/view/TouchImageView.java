@@ -526,6 +526,7 @@ public class TouchImageView extends ImageView {
         int heightSize = MeasureSpec.getSize(heightMeasureSpec);
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
         viewWidth = setViewSize(widthMode, widthSize, drawableWidth);
+        //noinspection SuspiciousNameCombination
         viewHeight = setViewSize(heightMode, heightSize, drawableHeight);
 
         //

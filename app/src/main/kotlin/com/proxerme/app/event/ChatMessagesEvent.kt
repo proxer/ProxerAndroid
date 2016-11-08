@@ -5,5 +5,4 @@ package com.proxerme.app.event
  *
  * @author Ruben Gees
  */
-class ChatMessagesEvent(val conferenceId: String = "") {
-}
+class ChatMessagesEvent(val conferenceId: String = "")

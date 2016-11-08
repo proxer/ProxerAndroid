@@ -93,7 +93,7 @@ class RelationsAdapter(savedInstanceState: Bundle? = null) :
 
             if (item.rating > 0) {
                 rating.visibility = View.VISIBLE
-                rating.rating = item.rating.toFloat() / 2.0f
+                rating.rating = item.rating / 2.0f
                 ratingAmount.visibility = View.VISIBLE
                 ratingAmount.text = "(${item.rateCount})"
             } else {

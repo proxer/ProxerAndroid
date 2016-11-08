@@ -152,7 +152,5 @@ class RetainedLoadingFragment<T>() : Fragment() {
         cancelAndClean()
     }
 
-    class LoadingResult<out T>(val data: T) {
-
-    }
+    class LoadingResult<out T>(val data: T)
 }

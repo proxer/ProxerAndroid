@@ -140,7 +140,7 @@ class ChatService : IntentService("ChatService") {
 
         val changedConferences = fetchConferences()
 
-        if (changedConferences.size > 0) {
+        if (changedConferences.isNotEmpty()) {
             val newMessages = fetchMessages(changedConferences)
 
             chatDatabase.insertOrUpdate(changedConferences, newMessages)
@@ -236,13 +236,9 @@ class ChatService : IntentService("ChatService") {
                 val fetchedConferences = MainApplication.proxerConnection
                         .executeSynchronized(ConferencesRequest(page))
 
-                for (conference in fetchedConferences) {
-                    if (conference != chatDatabase.getConference(conference.id)
-                            ?.toNonLocalConference()) {
-                        changedConferences.add(conference)
-                    } else {
-                        break
-                    }
+                changedConferences += fetchedConferences.takeWhile {
+                    it != chatDatabase.getConference(it.id)
+                            ?.toNonLocalConference()
                 }
 
                 if (fetchedConferences.size < CONFERENCES_ON_PAGE) {
@@ -327,7 +323,7 @@ class ChatService : IntentService("ChatService") {
             val unreadMessages = chatDatabase.getMostRecentMessages(it.id, it.unreadMessageAmount)
                     .reversed()
 
-            if (unreadMessages.size > 0) {
+            if (unreadMessages.isNotEmpty()) {
                 unreadMap.put(it, unreadMessages)
             }
         }

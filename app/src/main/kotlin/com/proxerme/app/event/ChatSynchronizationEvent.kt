@@ -5,5 +5,4 @@ package com.proxerme.app.event
  *
  * @author Ruben Gees
  */
-class ChatSynchronizationEvent {
-}
+class ChatSynchronizationEvent

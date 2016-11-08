@@ -7,5 +7,4 @@ import com.proxerme.library.connection.ProxerException
  *
  * @author Ruben Gees
  */
-class LoginFailedEvent(val exception: ProxerException) {
-}
+class LoginFailedEvent(val exception: ProxerException)

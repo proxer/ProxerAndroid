@@ -41,7 +41,7 @@ object NotificationHelper {
     const val CHAT_NOTIFICATION = 1424L
 
     fun showNewsNotification(context: Context, news: Collection<News>) {
-        if (news.size <= 0) {
+        if (news.isEmpty()) {
             context.notificationManager.cancel(NEWS_NOTIFICATION.toInt())
 
             return
@@ -93,7 +93,7 @@ object NotificationHelper {
 
     fun showChatNotification(context: Context,
                              messages: Map<LocalConference, List<LocalMessage>>) {
-        if (messages.size <= 0) {
+        if (messages.isEmpty()) {
             context.notificationManager.cancel(CHAT_NOTIFICATION.toInt())
 
             return

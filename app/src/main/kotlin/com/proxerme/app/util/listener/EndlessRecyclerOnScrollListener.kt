@@ -28,7 +28,7 @@ abstract class EndlessRecyclerOnScrollListener
 
             layoutManager.findFirstVisibleItemPositions(firstVisibleItems)
 
-            if (firstVisibleItems.size > 0) {
+            if (firstVisibleItems.isNotEmpty()) {
                 pastVisibleItems = firstVisibleItems[0]
             }
         } else if (layoutManager is LinearLayoutManager) {

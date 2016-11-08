@@ -7,5 +7,4 @@ import com.proxerme.library.connection.notifications.entitiy.News
  *
  * @author Ruben Gees
  */
-class NewsEvent(val news: List<News>) {
-}
+class NewsEvent(val news: List<News>)

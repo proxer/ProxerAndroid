@@ -7,5 +7,4 @@ import com.proxerme.app.manager.SectionManager
  *
  * @author Ruben Gees
  */
-class SectionChangedEvent(val newSection: SectionManager.Section) {
-}
+class SectionChangedEvent(val newSection: SectionManager.Section)

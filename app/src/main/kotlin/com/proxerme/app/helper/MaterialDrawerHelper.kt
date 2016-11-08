@@ -29,7 +29,11 @@ import java.util.*
  * @author Ruben Gees
  */
 
-class MaterialDrawerHelper : OnActivityListener {
+class MaterialDrawerHelper(context: Activity, toolbar: Toolbar,
+                           savedInstanceState: Bundle?,
+                           private val itemClickCallback: (id: Long) -> Boolean = { false },
+                           private val accountClickCallback: (id: Long) -> Boolean = { false }) :
+        OnActivityListener {
 
     companion object {
         const val ITEM_NEWS = 0L
@@ -66,21 +70,6 @@ class MaterialDrawerHelper : OnActivityListener {
     private val drawer: Drawer
 
     private var currentId: Long
-
-    private val itemClickCallback: (id: Long) -> Boolean
-    private val accountClickCallback: (id: Long) -> Boolean
-
-    constructor(context: Activity, toolbar: Toolbar, savedInstanceState: Bundle?,
-                itemClickCallback: (id: Long) -> Boolean = { false },
-                accountClickCallback: (id: Long) -> Boolean = { false }) {
-        this.itemClickCallback = itemClickCallback
-        this.accountClickCallback = accountClickCallback
-
-        header = buildAccountHeader(context, savedInstanceState)
-        drawer = buildDrawer(context, toolbar, header, savedInstanceState)
-
-        currentId = savedInstanceState?.getLong(STATE_CURRENT_DRAWER_ITEM_ID) ?: -1L
-    }
 
     override fun onBackPressed(): Boolean {
         if (isDrawerOpen()) {
@@ -241,7 +230,7 @@ class MaterialDrawerHelper : OnActivityListener {
                         .withSelectedTextColorRes(R.color.colorAccent)
                         .withSelectedIconColorRes(R.color.colorAccent)
                         .withSelectable(false)
-                        .withIdentifier(ITEM_DONATE.toLong()),
+                        .withIdentifier(ITEM_DONATE),
                 PrimaryDrawerItem()
                         .withName(R.string.drawer_item_settings)
                         .withIcon(CommunityMaterial.Icon.cmd_settings)
@@ -288,6 +277,12 @@ class MaterialDrawerHelper : OnActivityListener {
                 }
             }
         }
+    }
+
+    init {
+        header = buildAccountHeader(context, savedInstanceState)
+        drawer = buildDrawer(context, toolbar, header, savedInstanceState)
+        currentId = savedInstanceState?.getLong(STATE_CURRENT_DRAWER_ITEM_ID) ?: -1L
     }
 
 }

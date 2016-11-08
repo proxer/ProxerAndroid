@@ -11,14 +11,7 @@ import com.rubengees.introduction.entity.Slide
  *
  * @author Ruben Gees
  */
-class IntroductionHelper {
-
-    constructor(activity: Activity) {
-        IntroductionBuilder(activity)
-                .withSlides(generateSlides(activity))
-                .withSkipEnabled(R.string.introduction_skip)
-                .introduceMyself()
-    }
+class IntroductionHelper(activity: Activity) {
 
     private fun generateSlides(activity: Activity): List<Slide> {
         return arrayListOf(
@@ -32,5 +25,12 @@ class IntroductionHelper {
                         .withOption(Option(activity.getString(
                                 R.string.introduction_notifications_description), false))
         )
+    }
+
+    init {
+        IntroductionBuilder(activity)
+                .withSlides(generateSlides(activity))
+                .withSkipEnabled(R.string.introduction_skip)
+                .introduceMyself()
     }
 }

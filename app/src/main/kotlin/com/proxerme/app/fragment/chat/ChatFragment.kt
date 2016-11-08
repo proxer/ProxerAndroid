@@ -236,7 +236,7 @@ class ChatFragment : EasyChatServiceFragment<LocalMessage, ChatAdapter.ChatAdapt
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        if (adapter.selectedItems.size > 0) {
+        if (adapter.selectedItems.isNotEmpty()) {
             adapterCallback.onMessageSelection(adapter.selectedItems.size)
         }
     }
