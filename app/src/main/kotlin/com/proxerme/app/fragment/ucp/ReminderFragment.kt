@@ -56,7 +56,7 @@ class ReminderFragment : EasyPagingFragment<Reminder, ReminderAdapter.ReminderAd
 
     override val section = Section.REMINDER
     override val itemsOnPage = ITEMS_ON_PAGE
-    override val isSwipeToRefreshEnabled = false
+    override val isSwipeToRefreshEnabled = true
     override val canLoad: Boolean
         get() = super.canLoad && loginModule.canLoad()
 
@@ -150,6 +150,14 @@ class ReminderFragment : EasyPagingFragment<Reminder, ReminderAdapter.ReminderAd
         removalTask = null
 
         super.onDestroy()
+    }
+
+    override fun onPagedLoadStarted(page: Int) {
+        super.onPagedLoadStarted(page)
+
+        if (page == 0) {
+            clear()
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
