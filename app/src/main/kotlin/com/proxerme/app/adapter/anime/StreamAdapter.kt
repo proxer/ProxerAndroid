@@ -1,6 +1,7 @@
 package com.proxerme.app.adapter.anime
 
 import android.os.Bundle
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +20,7 @@ import com.proxerme.library.info.ProxerUrlHolder
  *
  * @author Ruben Gees
  */
-class StreamAdapter(savedInstanceState: Bundle?) :
+class StreamAdapter(private val getRealPosition: (Int) -> Int, savedInstanceState: Bundle?) :
         PagingAdapter<Stream, StreamAdapter.StreamAdapterCallback>() {
 
     private companion object {
@@ -49,6 +50,11 @@ class StreamAdapter(savedInstanceState: Bundle?) :
             get() = list
         override val adapterCallback: StreamAdapterCallback?
             get() = callback
+        override val pos: Int
+            get() {
+                return if (adapterPosition == RecyclerView.NO_POSITION)
+                    adapterPosition else getRealPosition(adapterPosition)
+            }
 
         private val name: TextView by bindView(R.id.name)
         private val image: ImageView by bindView(R.id.image)
@@ -63,6 +69,6 @@ class StreamAdapter(savedInstanceState: Bundle?) :
         }
     }
 
-    class StreamAdapterCallback : PagingAdapter.PagingAdapterCallback<Stream>()
+    open class StreamAdapterCallback : PagingAdapter.PagingAdapterCallback<Stream>()
 
 }

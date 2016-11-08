@@ -1,5 +1,7 @@
 package com.proxerme.app.fragment.anime
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.widget.LinearLayoutManager
@@ -15,16 +17,20 @@ import com.proxerme.app.adapter.anime.StreamAdapter
 import com.proxerme.app.application.MainApplication
 import com.proxerme.app.fragment.framework.EasyLoadingFragment
 import com.proxerme.app.manager.SectionManager
+import com.proxerme.app.util.ErrorHandler
 import com.proxerme.app.util.Utils
 import com.proxerme.app.view.MediaControlView
 import com.proxerme.library.connection.ProxerCall
 import com.proxerme.library.connection.anime.entity.Stream
+import com.proxerme.library.connection.anime.request.LinkRequest
 import com.proxerme.library.connection.anime.request.StreamsRequest
 import com.proxerme.library.connection.ucp.request.SetReminderRequest
 import com.proxerme.library.info.ProxerUrlHolder
 import com.proxerme.library.parameters.CategoryParameter
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
+import org.jetbrains.anko.toast
 import org.joda.time.DateTime
+import java.net.URLConnection
 
 /**
  * TODO: Describe class
@@ -103,8 +109,23 @@ class AnimeFragment : EasyLoadingFragment<Array<Stream>>() {
             }
         }
 
-        streamAdapter = StreamAdapter(savedInstanceState)
+        streamAdapter = StreamAdapter({ adapter.getRealPosition(it) }, savedInstanceState)
         adapter = EasyHeaderFooterAdapter(streamAdapter)
+
+        streamAdapter.callback = object : StreamAdapter.StreamAdapterCallback() {
+            override fun onItemClick(v: View, item: Stream) {
+                MainApplication.proxerConnection.execute(LinkRequest(item.id), {
+                    val uri = Uri.parse(it)
+
+                    startActivity(Intent().apply {
+                        action = Intent.ACTION_VIEW
+                        setDataAndType(uri, URLConnection.guessContentTypeFromName(uri.toString()))
+                    })
+                }, {
+                    context.toast(ErrorHandler.getMessageForErrorCode(context, it))
+                })
+            }
+        }
 
         synchronize(reminderEpisode)
     }
