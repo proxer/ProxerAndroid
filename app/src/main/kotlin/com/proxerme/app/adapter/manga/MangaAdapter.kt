@@ -1,6 +1,8 @@
 package com.proxerme.app.adapter.manga
 
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -71,16 +73,15 @@ class MangaAdapter(savedInstanceState: Bundle?) :
         override fun bind(item: Page) {
             itemView as ImageView
 
-            val screenWidth = Utils.getScreenWidth(itemView.context)
-            val scaleFactor = screenWidth.toFloat() / item.width.toFloat()
-
-            itemView.layoutParams.width = screenWidth
-            itemView.layoutParams.height = (item.height * scaleFactor).toInt()
-            itemView.requestLayout()
+            val width = Utils.getScreenWidth(itemView.context)
+            val height = (item.height * width.toFloat() / item.width.toFloat()).toInt()
 
             Glide.with(itemView.context)
                     .load(ProxerUrlHolder.getMangaPageUrl(server!!, entryId!!, id!!, item.name)
                             .toString())
+                    .asBitmap()
+                    .override(width, height)
+                    .placeholder(ColorDrawable(ContextCompat.getColor(itemView.context, R.color.divider)))
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(itemView)
         }
