@@ -112,6 +112,16 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
         footer = inflater.inflate(R.layout.item_manga_footer, container, false) as ViewGroup
         scrollToTop = footer.find(R.id.scrollToTop)
 
+        header.textResolver = object : MediaControlView.TextResourceResolver {
+            override fun next() = context.getString(R.string.fragment_manga_next_chapter)
+            override fun previous() = context.getString(R.string.fragment_manga_previous_chapter)
+            override fun reminderThis() =
+                    context.getString(R.string.fragment_manga_reminder_this_chapter)
+
+            override fun reminderNext() =
+                    context.getString(R.string.fragment_manga_reminder_next_chapter)
+        }
+
         return inflater.inflate(R.layout.fragment_manga, container, false)
     }
 

@@ -40,11 +40,17 @@
         <item quantity="other">%d Lesezeichen konnten nicht gelöscht werden</item>
     </plurals>
 
+    <string name="fragment_manga_empty_scangroup">Siehe Kapitelcredits</string>
     <string name="fragment_manga_previous_chapter">Vorheriges Kapitel</string>
     <string name="fragment_manga_next_chapter">Nächstes Kapitel</string>
-    <string name="fragment_manga_empty_scangroup">Siehe Kapitelcredits</string>
+    <string name="fragment_manga_reminder_this_chapter">Lesezeichen: Dieses Kapitel</string>
+    <string name="fragment_manga_reminder_next_chapter">Lesezeichen: Nächstes Kapitel</string>
 
     <string name="fragment_anime_empty_subgoup">Keine angegeben</string>
+    <string name="fragment_anime_previous_chapter">Vorherige Episode</string>
+    <string name="fragment_anime_next_chapter">Nächste Episode</string>
+    <string name="fragment_anime_reminder_this_chapter">Lesezeichen: Diese Episode</string>
+    <string name="fragment_anime_reminder_next_chapter">Lesezeichen: Nächste Episode</string>
 
     <string name="preference_category_notifications_title">Benachrichtigungen</string>
     <string name="preference_category_info_title">Info</string>

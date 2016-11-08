@@ -27,6 +27,17 @@ class MediaControlView(context: Context?, attrs: AttributeSet?) : FrameLayout(co
     var onSwitchClickListener: ((episode: Int) -> Unit)? = null
     var onReminderClickListener: ((episode: Int) -> Unit)? = null
 
+    var textResolver: TextResourceResolver?
+        set(value) {
+            if (value != null) {
+                previous.text = value.previous()
+                next.text = value.next()
+                reminderThis.text = value.reminderThis()
+                reminderNext.text = value.reminderNext()
+            }
+        }
+        get() = null
+
     private val uploaderText: TextView by bindView(R.id.uploader)
     private val translatorGroup: TextView by bindView(R.id.translatorGroup)
     private val dateText: TextView by bindView(R.id.date)
@@ -59,7 +70,6 @@ class MediaControlView(context: Context?, attrs: AttributeSet?) : FrameLayout(co
             previous.visibility = View.GONE
         } else {
             previous.visibility = View.VISIBLE
-            previous.text = context.getString(R.string.fragment_manga_previous_chapter)
             previous.setOnClickListener {
                 onSwitchClickListener?.invoke(currentEpisode - 1)
             }
@@ -70,7 +80,6 @@ class MediaControlView(context: Context?, attrs: AttributeSet?) : FrameLayout(co
             reminderNext.visibility = View.GONE
         } else {
             next.visibility = View.VISIBLE
-            next.text = context.getString(R.string.fragment_manga_next_chapter)
             next.setOnClickListener {
                 onSwitchClickListener?.invoke(currentEpisode + 1)
             }
@@ -84,5 +93,12 @@ class MediaControlView(context: Context?, attrs: AttributeSet?) : FrameLayout(co
         reminderThis.setOnClickListener {
             onReminderClickListener?.invoke(currentEpisode)
         }
+    }
+
+    interface TextResourceResolver {
+        fun next(): String
+        fun previous(): String
+        fun reminderThis(): String
+        fun reminderNext(): String
     }
 }
