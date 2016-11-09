@@ -77,7 +77,7 @@ class ChatFragment : EasyChatServiceFragment<LocalMessage, ChatAdapter.ChatAdapt
             Utils.setStatusBarColorIfPossible(activity, R.color.primary)
 
             if (adapter.selectedItems.size == 1 &&
-                    adapter.selectedItems.first().userId != StorageHelper.user?.id ?: null) {
+                    adapter.selectedItems.first().userId != StorageHelper.user?.id) {
                 menu.findItem(R.id.reply).isVisible = true
             } else {
                 menu.findItem(R.id.reply).isVisible = false

@@ -59,7 +59,11 @@ class MediaActivity : AppCompatActivity(), CustomTabsModule {
         setContentView(R.layout.activity_media)
         setSupportActionBar(toolbar)
 
-        id = intent.getStringExtra(EXTRA_ID)
+        if (intent.action == Intent.ACTION_VIEW)
+            id = intent.data.lastPathSegment
+        else {
+            id = intent.getStringExtra(EXTRA_ID)
+        }
 
         if (savedInstanceState == null) {
             name = intent.getStringExtra(EXTRA_NAME)
