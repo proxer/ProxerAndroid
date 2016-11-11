@@ -220,6 +220,7 @@ class NewChatFragment : MainFragment() {
         adapter.saveInstanceState(outState)
     }
 
+    @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onChatCreatedAndLoaded(@Suppress("UNUSED_PARAMETER") event: ChatSynchronizationEvent) {
         if (newConferenceId != null) {

@@ -110,6 +110,7 @@ class ConferencesFragment : EasyChatServiceFragment<LocalConference, ConferenceA
         ChatService.loadMoreConferences(context)
     }
 
+    @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onConferencesChanged(@Suppress("UNUSED_PARAMETER") event: ChatSynchronizationEvent) {
         if (canLoad) {
@@ -117,6 +118,7 @@ class ConferencesFragment : EasyChatServiceFragment<LocalConference, ConferenceA
         }
     }
 
+    @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLoadMoreConferencesFailed(exception: ChatService.LoadMoreConferencesException) {
         showError(exception)

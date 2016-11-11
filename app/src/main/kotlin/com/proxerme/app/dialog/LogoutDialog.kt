@@ -82,6 +82,7 @@ class LogoutDialog : DialogFragment() {
         MainApplication.refWatcher.watch(this)
     }
 
+    @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLoginStateChanged(@Suppress("UNUSED_PARAMETER") state: UserManager.LoginState) {
         if (UserManager.user == null) {
@@ -91,11 +92,13 @@ class LogoutDialog : DialogFragment() {
         }
     }
 
+    @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onOngoingStateChanged(@Suppress("UNUSED_PARAMETER") state: UserManager.OngoingState) {
         handleVisibility()
     }
 
+    @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLoginFailed(event: LogoutFailedEvent) {
         context.longToast(ErrorHandler.getMessageForErrorCode(context, event.exception))

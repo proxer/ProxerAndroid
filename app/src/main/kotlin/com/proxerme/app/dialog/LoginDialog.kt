@@ -96,6 +96,7 @@ class LoginDialog : DialogFragment() {
         MainApplication.refWatcher.watch(this)
     }
 
+    @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLoginStateChanged(state: UserManager.LoginState) {
         if (state == UserManager.LoginState.LOGGED_IN) {
@@ -105,11 +106,13 @@ class LoginDialog : DialogFragment() {
         }
     }
 
+    @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onOngoingStateChanged(@Suppress("UNUSED_PARAMETER") state: UserManager.OngoingState) {
         handleVisibility()
     }
 
+    @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLoginFailed(event: LoginFailedEvent) {
         context.longToast(ErrorHandler.getMessageForErrorCode(context, event.exception))

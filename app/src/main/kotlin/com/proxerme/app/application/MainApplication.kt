@@ -65,6 +65,7 @@ class MainApplication : Application() {
         super.onTerminate()
     }
 
+    @Suppress("unused")
     @Subscribe
     fun onLoginStateChanged(@Suppress("UNUSED_PARAMETER") state: UserManager.LoginState) {
         ChatService.synchronize(this)

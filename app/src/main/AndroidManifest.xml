@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.proxerme.app">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -22,21 +23,24 @@
         <activity
             android:name=".activity.UserActivity"
             android:parentActivityName=".activity.DashboardActivity"
-            android:theme="@style/Theme.Translucent">
+            android:theme="@style/Theme.Translucent"
+            tools:ignore="UnusedAttribute">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.DashboardActivity" />
         </activity>
         <activity
             android:name=".activity.chat.ChatActivity"
-            android:parentActivityName=".activity.DashboardActivity">
+            android:parentActivityName=".activity.DashboardActivity"
+            tools:ignore="UnusedAttribute">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.DashboardActivity" />
         </activity>
         <activity
             android:name=".activity.UcpActivity"
-            android:parentActivityName=".activity.DashboardActivity">
+            android:parentActivityName=".activity.DashboardActivity"
+            tools:ignore="UnusedAttribute">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.DashboardActivity" />
@@ -45,7 +49,8 @@
         <activity
             android:name=".activity.MediaActivity"
             android:parentActivityName=".activity.DashboardActivity"
-            android:theme="@style/Theme.Translucent">
+            android:theme="@style/Theme.Translucent"
+            tools:ignore="UnusedAttribute">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.DashboardActivity" />
@@ -75,7 +80,9 @@
 
         <receiver android:name=".receiver.NotificationReceiver" />
         <receiver android:name=".receiver.ChatReceiver" />
-        <receiver android:name=".receiver.DirectReplyReceiver">
+        <receiver
+            android:name=".receiver.DirectReplyReceiver"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.proxerme.app.ACTION_MESSAGE_REPLY" />
             </intent-filter>

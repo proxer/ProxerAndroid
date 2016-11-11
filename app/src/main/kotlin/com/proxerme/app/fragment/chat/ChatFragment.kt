@@ -261,6 +261,7 @@ class ChatFragment : EasyChatServiceFragment<LocalMessage, ChatAdapter.ChatAdapt
         super.refresh()
     }
 
+    @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onMessagesChanged(event: ChatMessagesEvent) {
         if (event.conferenceId == conference.id) {
@@ -270,6 +271,7 @@ class ChatFragment : EasyChatServiceFragment<LocalMessage, ChatAdapter.ChatAdapt
         }
     }
 
+    @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLoadMoreMessagesFailed(exception: ChatService.LoadMoreMessagesException) {
         if (exception.conferenceId == conference.id) {

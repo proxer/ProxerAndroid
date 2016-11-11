@@ -1,8 +1,6 @@
 package com.proxerme.app.activity.chat
 
 import android.app.Activity
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
@@ -21,10 +19,6 @@ class ConferenceInfoActivity : AppCompatActivity() {
         fun navigateTo(context: Activity, conference: LocalConference) {
             context.startActivity(context
                     .intentFor<ConferenceInfoActivity>(EXTRA_CONFERENCE to conference))
-        }
-
-        fun getIntent(context: Context, conference: LocalConference): Intent {
-            return context.intentFor<ConferenceInfoActivity>(EXTRA_CONFERENCE to conference)
         }
     }
 

@@ -266,6 +266,7 @@ class MediaListFragment : EasyPagingFragment<MediaListEntry, MediaAdapterCallbac
     /**
      * ( ͡° ͜ʖ ͡°)
      */
+    @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onHentaiConfirmation(@Suppress("UNUSED_PARAMETER") event: HentaiConfirmationEvent) {
         if (type == TypeParameter.HENTAI || type == TypeParameter.HMANGA) {

@@ -12,6 +12,7 @@ import android.support.v4.util.LongSparseArray
 class ParcelableLongSparseArray : LongSparseArray<Boolean>, Parcelable {
 
     companion object {
+        @Suppress("unused")
         @JvmField val CREATOR: Parcelable.Creator<ParcelableLongSparseArray> = object : Parcelable.Creator<ParcelableLongSparseArray> {
             override fun createFromParcel(source: Parcel): ParcelableLongSparseArray = ParcelableLongSparseArray(source)
             override fun newArray(size: Int): Array<ParcelableLongSparseArray?> = arrayOfNulls(size)
@@ -19,7 +20,6 @@ class ParcelableLongSparseArray : LongSparseArray<Boolean>, Parcelable {
     }
 
     constructor() : super()
-    constructor(initialCapacity: Int) : super(initialCapacity)
 
     private constructor(source: Parcel) {
         val size = source.readInt()

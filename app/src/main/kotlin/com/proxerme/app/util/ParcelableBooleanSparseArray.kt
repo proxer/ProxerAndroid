@@ -12,6 +12,7 @@ import android.util.SparseBooleanArray
 class ParcelableBooleanSparseArray : SparseBooleanArray, Parcelable {
 
     companion object {
+        @Suppress("unused")
         @JvmField val CREATOR: Parcelable.Creator<ParcelableBooleanSparseArray> = object : Parcelable.Creator<ParcelableBooleanSparseArray> {
             override fun createFromParcel(source: Parcel): ParcelableBooleanSparseArray = ParcelableBooleanSparseArray(source)
             override fun newArray(size: Int): Array<ParcelableBooleanSparseArray?> = arrayOfNulls(size)
@@ -19,7 +20,6 @@ class ParcelableBooleanSparseArray : SparseBooleanArray, Parcelable {
     }
 
     constructor() : super()
-    constructor(initialCapacity: Int) : super(initialCapacity)
 
     private constructor(source: Parcel) {
         val size = source.readInt()

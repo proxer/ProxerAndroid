@@ -11,6 +11,7 @@ import android.os.Parcelable
 data class Participant(val username: String, val imageId: String) : Parcelable {
 
     companion object {
+        @Suppress("unused")
         @JvmField val CREATOR: Parcelable.Creator<Participant> = object : Parcelable.Creator<Participant> {
             override fun createFromParcel(source: Parcel): Participant = Participant(source)
             override fun newArray(size: Int): Array<Participant?> = arrayOfNulls(size)

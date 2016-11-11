@@ -1,8 +1,6 @@
 package com.proxerme.app.view
 
-import android.annotation.TargetApi
 import android.content.Context
-import android.os.Build
 import android.util.AttributeSet
 import android.widget.ImageView
 import com.proxerme.app.R
@@ -35,17 +33,6 @@ class WidthAspectImageView : ImageView {
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) :
     super(context, attrs, defStyleAttr) {
-        val attributes = context.obtainStyledAttributes(attrs, R.styleable.WidthAspectImageView)
-
-        aspect = attributes.getFloat(R.styleable.WidthAspectImageView_aspect,
-                DEFAULT_ASPECT)
-
-        attributes.recycle()
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int,
-                defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes) {
         val attributes = context.obtainStyledAttributes(attrs, R.styleable.WidthAspectImageView)
 
         aspect = attributes.getFloat(R.styleable.WidthAspectImageView_aspect,

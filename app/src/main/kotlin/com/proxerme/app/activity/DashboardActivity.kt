@@ -183,11 +183,13 @@ class DashboardActivity : AppCompatActivity(), CustomTabsModule {
                 .commitNow()
     }
 
+    @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLoginStateChanged(@Suppress("UNUSED_PARAMETER") newState: UserManager.LoginState) {
         drawer.refreshHeader(this)
     }
 
+    @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onOngoingStateChanged(@Suppress("UNUSED_PARAMETER") newState: UserManager.OngoingState) {
         drawer.refreshHeader(this)

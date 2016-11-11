@@ -95,6 +95,7 @@ class NewsFragment : EasyPagingFragment<News, NewsAdapterCallback>() {
         return LoadingRequest(NewsRequest(page).withLimit(ITEMS_ON_PAGE))
     }
 
+    @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onNewsReceived(event: NewsEvent) {
         adapter.insert(event.news)

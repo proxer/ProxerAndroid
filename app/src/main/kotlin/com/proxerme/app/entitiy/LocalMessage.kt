@@ -12,6 +12,7 @@ import com.proxerme.library.connection.messenger.entity.Message
 class LocalMessage : Message, Parcelable {
 
     companion object {
+        @Suppress("unused")
         @JvmField val CREATOR: Parcelable.Creator<LocalMessage> = object : Parcelable.Creator<LocalMessage> {
             override fun createFromParcel(source: Parcel): LocalMessage = LocalMessage(source)
             override fun newArray(size: Int): Array<LocalMessage?> = arrayOfNulls(size)

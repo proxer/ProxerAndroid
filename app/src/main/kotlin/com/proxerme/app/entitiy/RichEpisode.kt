@@ -14,6 +14,7 @@ import java.util.*
 class RichEpisode : Parcelable {
 
     companion object {
+        @Suppress("unused")
         @JvmField val CREATOR: Parcelable.Creator<RichEpisode> = object : Parcelable.Creator<RichEpisode> {
             override fun createFromParcel(source: Parcel): RichEpisode = RichEpisode(source)
             override fun newArray(size: Int): Array<RichEpisode?> = arrayOfNulls(size)
