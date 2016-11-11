@@ -90,7 +90,13 @@ object Utils {
         }
 
         if (isLandscape(activity)) {
-            result++
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                if (!activity.isInMultiWindowMode) {
+                    result++
+                }
+            } else {
+                result++
+            }
         }
 
         return result
