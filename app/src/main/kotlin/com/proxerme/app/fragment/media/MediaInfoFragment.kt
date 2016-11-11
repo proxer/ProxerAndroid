@@ -6,10 +6,7 @@ import android.support.design.widget.Snackbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TableRow
-import android.widget.TextView
+import android.widget.*
 import butterknife.bindView
 import com.proxerme.app.R
 import com.proxerme.app.activity.MediaActivity
@@ -53,6 +50,9 @@ class MediaInfoFragment : EasyLoadingFragment<Entry>() {
     private var showSpoilerTags: Boolean = false
 
     private val root: ViewGroup by bindView(R.id.root)
+
+    private val rating: RatingBar by bindView(R.id.rating)
+    private val ratingAmount: TextView by bindView(R.id.ratingAmount)
 
     private val originalTitle: TextView by bindView(R.id.originalTitle)
     private val originalTitleRow: TableRow by bindView(R.id.originalTitleRow)
@@ -109,6 +109,16 @@ class MediaInfoFragment : EasyLoadingFragment<Entry>() {
 
     override fun showContent(result: Entry) {
         (activity as MediaActivity).setName(result.name)
+
+        if (result.rating > 0) {
+            rating.visibility = View.VISIBLE
+            rating.rating = result.rating / 2.0f
+            ratingAmount.visibility = View.VISIBLE
+            ratingAmount.text = "(${result.rateCount})"
+        } else {
+            rating.visibility = View.GONE
+            ratingAmount.visibility = View.GONE
+        }
 
         buildSynonymsView(result.synonyms)
         buildSeasonsView(result.seasons)

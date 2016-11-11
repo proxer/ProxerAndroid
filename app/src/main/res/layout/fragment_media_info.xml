@@ -46,6 +46,36 @@
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="@color/colorAccent" />
 
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <RatingBar
+                                android:id="@+id/rating"
+                                style="?attr/ratingBarStyleSmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="8dp"
+                                android:layout_marginRight="8dp"
+                                android:layout_marginTop="8dp"
+                                android:isIndicator="true"
+                                android:numStars="5" />
+
+                            <TextView
+                                android:id="@+id/ratingAmount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:paddingBottom="8dp"
+                                android:paddingEnd="8dp"
+                                android:paddingLeft="2dp"
+                                android:paddingRight="8dp"
+                                android:paddingStart="2dp"
+                                android:paddingTop="8dp"
+                                android:textAppearance="?android:attr/textAppearanceSmall"
+                                tools:text="(12910)" />
+                        </LinearLayout>
+
                         <TableLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

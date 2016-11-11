@@ -65,49 +65,16 @@
                 android:layout_below="@+id/medium"
                 android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <RatingBar
-                        android:id="@+id/rating"
-                        style="?attr/ratingBarStyleSmall"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
-                        android:layout_marginTop="8dp"
-                        android:isIndicator="true"
-                        android:numStars="5" />
-
-                    <TextView
-                        android:id="@+id/ratingAmount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:paddingBottom="8dp"
-                        android:paddingEnd="8dp"
-                        android:paddingLeft="2dp"
-                        android:paddingRight="8dp"
-                        android:paddingStart="2dp"
-                        android:paddingTop="8dp"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        tools:text="(12910)" />
-                </LinearLayout>
-
-                <org.apmem.tools.layouts.FlowLayout
-                    android:id="@+id/genres"
+                <RatingBar
+                    android:id="@+id/rating"
+                    style="?attr/ratingBarStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="4dp" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginRight="4dp"
-                    android:layout_marginTop="4dp"
-                    android:background="@color/divider" />
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="8dp"
+                    android:isIndicator="true"
+                    android:numStars="5" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

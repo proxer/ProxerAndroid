@@ -14,13 +14,11 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.adapter.media.MediaAdapter.MediaAdapterCallback
-import com.proxerme.app.util.Utils
 import com.proxerme.library.connection.list.entity.MediaListEntry
 import com.proxerme.library.info.ProxerUrlHolder
 import com.proxerme.library.parameters.CategoryParameter
 import com.proxerme.library.parameters.CategoryParameter.ANIME
 import com.proxerme.library.parameters.CategoryParameter.MANGA
-import org.apmem.tools.layouts.FlowLayout
 
 /**
  * TODO: Describe class
@@ -66,8 +64,6 @@ class MediaAdapter(savedInstanceState: Bundle? = null,
         private val medium: TextView by bindView(R.id.medium)
         private val image: ImageView by bindView(R.id.image)
         private val rating: RatingBar by bindView(R.id.rating)
-        private val ratingAmount: TextView by bindView(R.id.ratingAmount)
-        private val genres: FlowLayout by bindView(R.id.genres)
         private val episodes: TextView by bindView(R.id.episodes)
         private val languages: TextView by bindView(R.id.languages)
 
@@ -77,30 +73,11 @@ class MediaAdapter(savedInstanceState: Bundle? = null,
             episodes.text = generateEpisodeCountDescription(episodes.context, item.episodeCount)
             languages.text = item.languages.joinToString(", ")
 
-            if (genres.childCount < item.genres.size) {
-                for (i in 0 until item.genres.size - genres.childCount) {
-                    View.inflate(genres.context, R.layout.item_badge, genres)
-                }
-            } else if (genres.childCount > item.genres.size) {
-                for (i in 0 until genres.childCount - item.genres.size) {
-                    genres.removeViewAt(0)
-                }
-            }
-
-            for (i in 0 until item.genres.size) {
-                Utils.buildBadgeViewEntry(genres, item.genres[i], { it }, null,
-                        textSizeSp = 10f, imageViewToReuse = genres.getChildAt(i) as ImageView)
-                genres.getChildAt(i).visibility = View.VISIBLE
-            }
-
             if (item.rating > 0) {
                 rating.visibility = View.VISIBLE
                 rating.rating = item.rating / 2.0f
-                ratingAmount.visibility = View.VISIBLE
-                ratingAmount.text = "(${item.rateCount})"
             } else {
                 rating.visibility = View.GONE
-                ratingAmount.visibility = View.GONE
             }
 
             Glide.with(image.context)
