@@ -1,12 +1,14 @@
 package com.proxerme.app.adapter.manga
 
-import android.graphics.drawable.ColorDrawable
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
+import butterknife.bindView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.proxerme.app.R
@@ -14,6 +16,7 @@ import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.util.Utils
 import com.proxerme.library.connection.manga.entity.Page
 import com.proxerme.library.info.ProxerUrlHolder
+import view.TouchImageView
 
 /**
  * TODO: Describe class
@@ -70,20 +73,30 @@ class MangaAdapter(savedInstanceState: Bundle?) :
         override val adapterCallback: MangaAdapterCallback?
             get() = callback
 
-        override fun bind(item: Page) {
-            itemView as ImageView
+        private val image: TouchImageView by bindView(R.id.image)
+        private val placeholder: View by bindView(R.id.placeholder)
 
-            val width = Utils.getScreenWidth(itemView.context)
+        override fun bind(item: Page) {
+            val width = Utils.getScreenWidth(image.context)
             val height = (item.height * width.toFloat() / item.width.toFloat()).toInt()
 
-            Glide.with(itemView.context)
+            placeholder.minimumHeight = height
+
+            Glide.with(image.context)
                     .load(ProxerUrlHolder.getMangaPageUrl(server!!, entryId!!, id!!, item.name)
                             .toString())
                     .asBitmap()
                     .override(width, height)
-                    .placeholder(ColorDrawable(ContextCompat.getColor(itemView.context, R.color.divider)))
+                    .placeholder(generatePlaceholder(width, height))
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .into(itemView)
+                    .into(image)
+        }
+
+        private fun generatePlaceholder(width: Int, height: Int): Drawable {
+            return BitmapDrawable(itemView.context.resources,
+                    Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_4444).apply {
+                        eraseColor(ContextCompat.getColor(itemView.context, R.color.divider))
+                    })
         }
     }
 
