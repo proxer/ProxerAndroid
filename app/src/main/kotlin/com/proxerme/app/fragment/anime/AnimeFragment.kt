@@ -2,6 +2,7 @@ package com.proxerme.app.fragment.anime
 
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -13,8 +14,10 @@ import com.proxerme.app.activity.AnimeActivity
 import com.proxerme.app.activity.UserActivity
 import com.proxerme.app.adapter.anime.StreamAdapter
 import com.proxerme.app.application.MainApplication
+import com.proxerme.app.dialog.StreamResolverDialog
 import com.proxerme.app.fragment.framework.EasyLoadingFragment
 import com.proxerme.app.manager.SectionManager
+import com.proxerme.app.module.StreamResolvers
 import com.proxerme.app.util.Utils
 import com.proxerme.app.view.MediaControlView
 import com.proxerme.library.connection.ProxerCall
@@ -24,6 +27,7 @@ import com.proxerme.library.connection.ucp.request.SetReminderRequest
 import com.proxerme.library.info.ProxerUrlHolder
 import com.proxerme.library.parameters.CategoryParameter
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
+import org.jetbrains.anko.toast
 import org.joda.time.DateTime
 
 /**
@@ -108,7 +112,11 @@ class AnimeFragment : EasyLoadingFragment<Array<Stream>>() {
 
         streamAdapter.callback = object : StreamAdapter.StreamAdapterCallback() {
             override fun onItemClick(v: View, item: Stream) {
-                // TODO
+                if (StreamResolvers.hasResolverFor(item.hosterName)) {
+                    StreamResolverDialog.show(activity as AppCompatActivity, item.id)
+                } else {
+                    context.toast("Dieser Hoster wird nicht unterstürzt")
+                }
             }
         }
 

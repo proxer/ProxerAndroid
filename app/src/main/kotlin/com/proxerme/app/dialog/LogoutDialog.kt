@@ -105,7 +105,7 @@ class LogoutDialog : DialogFragment() {
     }
 
     private fun initViews(): View {
-        root = View.inflate(context, R.layout.dialog_logout, null) as ViewGroup
+        root = View.inflate(context, R.layout.dialog_progress, null) as ViewGroup
         progress = root.findViewById(R.id.progress) as ProgressBar
 
         return root

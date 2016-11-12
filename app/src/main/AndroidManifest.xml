@@ -45,7 +45,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.DashboardActivity" />
         </activity>
-        <activity android:name=".activity.chat.NewChatActivity" />
         <activity
             android:name=".activity.MediaActivity"
             android:parentActivityName=".activity.DashboardActivity"
@@ -54,6 +53,7 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.DashboardActivity" />
+
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -69,6 +69,20 @@
         <activity
             android:name=".activity.ImageDetailActivity"
             android:theme="@style/Theme.Transparent" />
+        <activity
+            android:name=".activity.StreamActivity"
+            android:configChanges="orientation|keyboardHidden|screenLayout|screenSize"
+            android:exported="true">
+            <intent-filter tools:ignore="GoogleAppIndexingWarning">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:mimeType="video/mp4" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".activity.chat.NewChatActivity" />
         <activity android:name=".activity.chat.ConferenceInfoActivity" />
         <activity android:name=".activity.MangaActivity" />
         <activity android:name=".activity.AnimeActivity" />
