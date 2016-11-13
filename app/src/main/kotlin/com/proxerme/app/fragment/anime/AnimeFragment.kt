@@ -115,7 +115,7 @@ class AnimeFragment : EasyLoadingFragment<Array<Stream>>() {
                 if (StreamResolvers.hasResolverFor(item.hosterName)) {
                     StreamResolverDialog.show(activity as AppCompatActivity, item.id)
                 } else {
-                    context.toast("Dieser Hoster wird nicht unterstürzt")
+                    context.toast(getString(R.string.error_hoster_not_supported))
                 }
             }
         }

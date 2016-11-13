@@ -117,6 +117,8 @@
     <string name="dialog_logout_title">Möchtest du dich abmelden?</string>
     <string name="dialog_logout_positive">Abmelden</string>
 
+    <string name="dialog_stream_resolver_title">Lade Stream…</string>
+
     <string name="dialog_hentai_content">Dieser Bereich darf nur von Benutzern über 18 Jahren betreten werden! Eltern haften für ihre Kinder. Proxer.Me übernimmt keinerlei Haftung!</string>
     <string name="dialog_hentai_positive">Verstanden</string>
 
@@ -334,6 +336,8 @@
     <string name="view_media_translatorgroup">Translator-Gruppe</string>
     <string name="fragment_manga_date">Datum</string>
     <string name="action_fullscreen">Vollbildmodus</string>
+    <string name="error_resolve">Dieser Hoster konnte nicht verarbeitet werden</string>
+    <string name="error_hoster_not_supported">Dieser Hoster wird nicht unterstürzt</string>
 
     <plurals name="media_episode_count">
         <item quantity="one">Eine Episode</item>

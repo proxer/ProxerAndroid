@@ -48,14 +48,18 @@ class StreamResolverDialog : DialogFragment() {
         retainInstance = true
         task = doAsync(exceptionHandler = {
             context.runOnUiThread {
-                context.toast(it.message ?: context.getString(R.string.error_unknown))
+                if (it.message.isNullOrBlank()) {
+                    context.toast(it.message!!)
+                } else {
+                    context.toast(context.getString(R.string.error_network))
+                }
 
                 dismiss()
             }
         }, task = {
             val link = MainApplication.proxerConnection.executeSynchronized(LinkRequest(id))
             val result = StreamResolvers.getResolverFor(link)?.resolve(link)
-                    ?: throw RuntimeException("Dieser Hoster wird nicht unterstützt: $link")
+                    ?: throw RuntimeException(getString(R.string.error_resolve))
             val uri = Uri.parse(result)
 
             uiThread {
@@ -71,8 +75,8 @@ class StreamResolverDialog : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return MaterialDialog.Builder(context)
                 .autoDismiss(false)
-                .title("Lade Stream")
-                .negativeText("Abbrechen")
+                .title(getString(R.string.dialog_stream_resolver_title))
+                .negativeText(getString(R.string.dialog_cancel))
                 .onNegative({ materialDialog, dialogAction ->
                     materialDialog.cancel()
                 })
