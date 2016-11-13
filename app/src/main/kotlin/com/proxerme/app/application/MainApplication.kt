@@ -33,6 +33,9 @@ import org.greenrobot.eventbus.Subscribe
 class MainApplication : Application() {
 
     companion object {
+
+        private const val USER_AGENT = "ProxerAndroid"
+
         lateinit var proxerConnection: ProxerConnection
             private set
 
@@ -50,7 +53,9 @@ class MainApplication : Application() {
         AppCompatDelegate.setDefaultNightMode(PreferenceHelper.getNightMode(this))
 
         refWatcher = LeakCanary.install(this)
-        proxerConnection = ProxerConnection.Builder(BuildConfig.PROXER_API_KEY, this).build()
+        proxerConnection = ProxerConnection.Builder(BuildConfig.PROXER_API_KEY, this)
+                .withCustomUserAgent("$USER_AGENT/${BuildConfig.VERSION_NAME}")
+                .build()
 
         initLibs()
         initDrawerImageLoader()
