@@ -87,7 +87,7 @@ dependencies {
 
     compile 'com.jakewharton:kotterknife:0.1.0-SNAPSHOT'
 
-    compile 'com.afollestad:easyvideoplayer:0.3.0'
+    compile 'com.devbrackets.android:exomedia:3.0.1'
 
     compile 'com.github.proxer:ProxerLibAndroid:4c6aff6fe3'
     compile 'com.github.rubengees:EasyHeaderFooterAdapter:1.0.4@aar'
