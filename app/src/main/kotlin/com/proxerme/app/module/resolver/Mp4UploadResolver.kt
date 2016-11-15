@@ -16,13 +16,15 @@ class Mp4UploadResolver : StreamResolver() {
     private val regex = Regex("\"file\": \"(.+)\"")
 
     @Throws(IOException::class)
-    override fun resolve(url: String): String {
+    override fun resolve(url: String): ResolverResult {
         val response = MainApplication.proxerConnection.httpClient.newCall(Request.Builder()
                 .get()
                 .url(url)
                 .build()).execute()
 
-        return regex.find(validateAndGetResult(response))?.groupValues?.get(1)
+        val result = regex.find(validateAndGetResult(response))?.groupValues?.get(1)
                 ?: throw IOException()
+
+        return ResolverResult(result, "video/mp4")
     }
 }

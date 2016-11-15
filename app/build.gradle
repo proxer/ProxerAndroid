@@ -104,7 +104,7 @@ dependencies {
     androidTestCompile 'com.android.support.test:rules:0.5'
 }
 
-def getProxerApiKey() {
+static def getProxerApiKey() {
     def props = openProperties()
 
     if (props.containsKey('PROXER_API_KEY')) {
@@ -115,7 +115,7 @@ def getProxerApiKey() {
     }
 }
 
-def openProperties() {
+static def openProperties() {
     def Properties result = new Properties()
 
     try {

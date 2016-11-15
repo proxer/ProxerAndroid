@@ -48,7 +48,7 @@ class StreamResolverDialog : DialogFragment() {
         task = doAsync(exceptionHandler = {
             context.runOnUiThread {
                 if (it.message.isNullOrBlank()) {
-                    context.toast(context.getString(R.string.error_network))
+                    context.toast(context.getString(R.string.error_unknown))
                 } else {
                     context.toast(it.message!!)
                 }
@@ -59,11 +59,10 @@ class StreamResolverDialog : DialogFragment() {
             val link = MainApplication.proxerConnection.executeSynchronized(LinkRequest(id))
             val result = StreamResolvers.getResolverFor(link)?.resolve(link)
                     ?: throw RuntimeException(getString(R.string.error_resolve))
-            val uri = Uri.parse(result)
 
             uiThread {
                 context.startActivity(Intent(Intent.ACTION_VIEW).apply {
-                    setDataAndType(uri, "video/mp4")
+                    setDataAndType(Uri.parse(result.url), result.mimeType)
                 })
 
                 dismiss()

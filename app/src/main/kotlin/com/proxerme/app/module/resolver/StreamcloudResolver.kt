@@ -17,7 +17,7 @@ class StreamcloudResolver : StreamResolver() {
     private val fromRegex = Regex("<input.*?name=\"(.*?)\".*?value=\"(.*?)\">")
     private val fileRegex = Regex("file: \"(.+?)\",")
 
-    override fun resolve(url: String): String {
+    override fun resolve(url: String): ResolverResult {
         var response = MainApplication.proxerConnection.httpClient.newCall(Request.Builder()
                 .get()
                 .url(url)
@@ -34,7 +34,9 @@ class StreamcloudResolver : StreamResolver() {
                 .build())
                 .execute()
 
-        return fileRegex.find(validateAndGetResult(response))?.groupValues?.get(1)
+        val result = fileRegex.find(validateAndGetResult(response))?.groupValues?.get(1)
                 ?: throw IOException()
+
+        return ResolverResult(result, "video/mp4")
     }
 }

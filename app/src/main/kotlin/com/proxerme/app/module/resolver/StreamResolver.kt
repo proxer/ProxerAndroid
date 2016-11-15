@@ -12,7 +12,11 @@ abstract class StreamResolver {
 
     abstract val name: String
 
-    abstract fun resolve(url: String): String
+    abstract fun resolve(url: String): ResolverResult
+
+    open fun appliesTo(url: String): Boolean {
+        return url.contains(name, ignoreCase = true)
+    }
 
     @Throws(IOException::class)
     protected fun validateAndGetResult(response: Response): String {

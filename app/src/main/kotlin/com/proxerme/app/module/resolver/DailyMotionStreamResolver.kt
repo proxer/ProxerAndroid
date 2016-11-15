@@ -15,7 +15,7 @@ class DailyMotionStreamResolver : StreamResolver() {
 
     private val regex = Regex("\"qualities\":(\\{.+\\}\\]\\}),")
 
-    override fun resolve(url: String): String {
+    override fun resolve(url: String): ResolverResult {
         val fixedUrl = if (url.startsWith("//")) "http:" + url else url
         val response = validateAndGetResult(MainApplication.proxerConnection.httpClient
                 .newCall(Request.Builder()
@@ -45,7 +45,9 @@ class DailyMotionStreamResolver : StreamResolver() {
                 }
             }?.flatten()?.sortedByDescending { it.first }
 
-            return mp4Links?.firstOrNull()?.second ?: throw IOException()
+            val result = mp4Links?.firstOrNull()?.second ?: throw IOException()
+
+            return ResolverResult(result, "video/mp4")
         } else {
             throw IOException()
         }
