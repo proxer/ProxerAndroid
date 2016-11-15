@@ -16,7 +16,6 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.runOnUiThread
 import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
-import java.net.URLConnection
 import java.util.concurrent.Future
 
 /**
@@ -49,9 +48,9 @@ class StreamResolverDialog : DialogFragment() {
         task = doAsync(exceptionHandler = {
             context.runOnUiThread {
                 if (it.message.isNullOrBlank()) {
-                    context.toast(it.message!!)
-                } else {
                     context.toast(context.getString(R.string.error_network))
+                } else {
+                    context.toast(it.message!!)
                 }
 
                 dismiss()
@@ -64,7 +63,7 @@ class StreamResolverDialog : DialogFragment() {
 
             uiThread {
                 context.startActivity(Intent(Intent.ACTION_VIEW).apply {
-                    setDataAndType(uri, URLConnection.guessContentTypeFromName(uri.toString()))
+                    setDataAndType(uri, "video/mp4")
                 })
 
                 dismiss()
