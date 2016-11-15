@@ -1,9 +1,6 @@
 package com.proxerme.app.module
 
-import com.proxerme.app.module.resolver.DailyMotionStreamResolver
-import com.proxerme.app.module.resolver.Mp4UploadResolver
-import com.proxerme.app.module.resolver.StreamResolver
-import com.proxerme.app.module.resolver.StreamcloudResolver
+import com.proxerme.app.module.resolver.*
 
 /**
  * TODO: Describe class
@@ -13,7 +10,7 @@ import com.proxerme.app.module.resolver.StreamcloudResolver
 object StreamResolvers {
 
     private val resolvers = arrayOf(Mp4UploadResolver(), StreamcloudResolver(),
-            DailyMotionStreamResolver())
+            DailyMotionStreamResolver(), NovamovStreamResolver())
 
     fun hasResolverFor(url: String): Boolean {
         return resolvers.any { url.contains(it.name, ignoreCase = true) }
