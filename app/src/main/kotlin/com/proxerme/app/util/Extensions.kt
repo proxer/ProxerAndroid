@@ -3,7 +3,6 @@ package com.proxerme.app.util
 import android.app.AlarmManager
 import android.app.NotificationManager
 import android.content.Context
-import android.telephony.TelephonyManager
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
@@ -26,9 +25,6 @@ val Context.alarmManager: AlarmManager
 
 val Context.windowManager: WindowManager
     get() = getSystemService(Context.WINDOW_SERVICE) as WindowManager
-
-val Context.telephonyManager: TelephonyManager
-    get() = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
 
 fun TextView.measureAndGetHeight(totalMarginDp: Float): Int {
     val widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(
