@@ -108,6 +108,7 @@ class CommentAdapter(savedInstanceState: Bundle? = null) :
             get() = list
         override val adapterCallback: CommentAdapterCallback?
             get() = callback
+        override val allowOnRootClick = false
 
         private val userContainer: ViewGroup by bindView(R.id.userContainer)
         private val userImage: ImageView by bindView(R.id.userImage)

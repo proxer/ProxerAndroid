@@ -68,6 +68,7 @@ class StreamAdapter(private val getRealPosition: (Int) -> Int, savedInstanceStat
             get() = list
         override val adapterCallback: StreamAdapterCallback?
             get() = callback
+        override val allowOnRootClick = false
         override val pos: Int
             get() {
                 return if (adapterPosition == RecyclerView.NO_POSITION)

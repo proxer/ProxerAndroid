@@ -94,13 +94,16 @@ abstract class PagingAdapter<T, C : PagingAdapter.PagingAdapterCallback<T>>() :
 
         abstract val adapterList: List<T>
         abstract val adapterCallback: C?
+        open val allowOnRootClick = true
         open val pos: Int
             get() = adapterPosition
 
         init {
-            itemView.setOnClickListener {
-                if (pos != RecyclerView.NO_POSITION) {
-                    adapterCallback?.onItemClick(it, adapterList[pos])
+            if (allowOnRootClick) {
+                itemView.setOnClickListener {
+                    if (pos != RecyclerView.NO_POSITION) {
+                        adapterCallback?.onItemClick(it, adapterList[pos])
+                    }
                 }
             }
         }
