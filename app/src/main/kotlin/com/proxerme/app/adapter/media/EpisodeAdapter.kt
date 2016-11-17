@@ -70,6 +70,7 @@ class EpisodeAdapter(savedInstanceState: Bundle? = null) :
             get() = list
         override val adapterCallback: EpisodeAdapterCallback?
             get() = callback
+        override val allowOnRootClick = false
 
         private val title: TextView by bindView(R.id.title)
         private val titleContainer: ViewGroup by bindView(R.id.titleContainer)
@@ -77,7 +78,6 @@ class EpisodeAdapter(savedInstanceState: Bundle? = null) :
         private val languages: ViewGroup by bindView(R.id.languages)
 
         init {
-            itemView.setOnClickListener(null)
             titleContainer.setOnClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     val number = list[adapterPosition].number
