@@ -15,11 +15,13 @@ android {
     }
 
     signingConfigs {
-        release {
-            storeFile file(getFromSecrets("RELEASE_STORE_FILE"))
-            storePassword getFromSecrets("RELEASE_STORE_PASSWORD")
-            keyAlias getFromSecrets("RELEASE_KEY_ALIAS")
-            keyPassword getFromSecrets("RELEASE_KEY_PASSWORD")
+        if (shouldSign()) {
+            release {
+                storeFile file(getFromSecrets("RELEASE_STORE_FILE"))
+                storePassword getFromSecrets("RELEASE_STORE_PASSWORD")
+                keyAlias getFromSecrets("RELEASE_KEY_ALIAS")
+                keyPassword getFromSecrets("RELEASE_KEY_PASSWORD")
+            }
         }
     }
 
@@ -35,7 +37,14 @@ android {
             zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
-            signingConfig signingConfigs.release
+            if (shouldSign()) {
+                signingConfig signingConfigs.release
+            } else {
+                logger.warn('This build will not be signed because it is missing the keystore info. ' +
+                        'Please add values for "RELEASE_STORE_FILE", "RELEASE_STORE_PASSWORD", ' +
+                        '"RELEASE_KEY_ALIAS" and "RELEASE_KEY_PASSWORD" to your secrets.properties' +
+                        'file if you want the apk to be signed.')
+            }
         }
     }
 
@@ -139,4 +148,17 @@ static def getFromSecrets(String key) {
     }
 
     return result[key]
+}
+
+static def shouldSign() {
+    def Properties result = new Properties()
+
+    try {
+        result.load(new FileInputStream(new File('secrets.properties')))
+    } catch (Exception ignored) {
+        return false
+    }
+
+    return result.containsKey("RELEASE_STORE_FILE") && result.containsKey("RELEASE_STORE_PASSWORD") &&
+            result.containsKey("RELEASE_KEY_ALIAS") && result.containsKey("RELEASE_KEY_PASSWORD")
 }

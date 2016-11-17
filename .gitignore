@@ -68,6 +68,7 @@ crashlytics-build.properties
 fabric.properties
 
 # Other things
+secrets.properties
 *.iml
 .DS_Store
 /captures
