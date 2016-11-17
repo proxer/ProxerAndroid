@@ -83,7 +83,7 @@ class StreamAdapter(private val getRealPosition: (Int) -> Int, savedInstanceStat
         private val translatorGroup: TextView by bindView(R.id.translatorGroup)
         private val dateText: TextView by bindView(R.id.date)
 
-        private val watchButton: Button by bindView(R.id.watch)
+        private val watchButton: Button by bindView(R.id.play)
 
         init {
             nameContainer.setOnClickListener {
@@ -128,7 +128,8 @@ class StreamAdapter(private val getRealPosition: (Int) -> Int, savedInstanceStat
         override fun bind(item: Stream) {
             name.text = item.hosterName
             uploaderText.text = item.uploader
-            translatorGroup.text = item.subgroup
+            translatorGroup.text = item.subgroup ?:
+                    translatorGroup.context.getString(R.string.fragment_anime_empty_subgoup)
             dateText.text = DateTime(item.time * 1000).toString(DATE_PATTERN)
 
             if (expanded.get(item.id.toLong(), false)) {

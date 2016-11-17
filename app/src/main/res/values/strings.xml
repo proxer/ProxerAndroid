@@ -35,6 +35,8 @@
     <string name="error_unknown">Ein unbekannter Fehler ist aufgetreten. Versuche es erneut.</string>
     <string name="error_retry">Erneut versuchen</string>
     <string name="error_confirm">Bestätigen</string>
+    <string name="error_resolve">Dieser Hoster konnte nicht verarbeitet werden</string>
+    <string name="error_hoster_not_supported">Dieser Hoster wird nicht unterstürzt</string>
     <plurals name="error_reminder_removal">
         <item quantity="one">Ein Lesezeichen konnte nicht gelöscht werden</item>
         <item quantity="other">%d Lesezeichen konnten nicht gelöscht werden</item>
@@ -324,20 +326,26 @@
     <string name="fragment_media_info_groups">Gruppen</string>
     <string name="fragment_media_info_publishers">Industrie</string>
     <string name="fragment_media_info_tags">Tags</string>
+
     <string name="comment_rating_genre">Genre</string>
     <string name="comment_rating_story">Story</string>
     <string name="comment_rating_animation">Animation/Bilder</string>
     <string name="comment_rating_characters">Charaktere</string>
     <string name="comment_rating_music">Musik</string>
+
     <string name="action_sort_time">Nach Datum</string>
+
     <string name="spoiler_show">Spoiler!</string>
     <string name="spoiler_hide">Spoiler verstecken</string>
+
     <string name="fragment_manga_uploader">Uploader</string>
-    <string name="view_media_translatorgroup">Translator-Gruppe</string>
     <string name="fragment_manga_date">Datum</string>
+
+    <string name="view_media_translatorgroup">Translator-Gruppe</string>
+
     <string name="action_fullscreen">Vollbildmodus</string>
-    <string name="error_resolve">Dieser Hoster konnte nicht verarbeitet werden</string>
-    <string name="error_hoster_not_supported">Dieser Hoster wird nicht unterstürzt</string>
+
+    <string name="item_stream_play">Abspielen</string>
 
     <plurals name="media_episode_count">
         <item quantity="one">Eine Episode</item>
