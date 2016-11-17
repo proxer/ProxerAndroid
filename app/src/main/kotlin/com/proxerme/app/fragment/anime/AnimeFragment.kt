@@ -28,7 +28,6 @@ import com.proxerme.library.info.ProxerUrlHolder
 import com.proxerme.library.parameters.CategoryParameter
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import org.jetbrains.anko.toast
-import org.joda.time.DateTime
 
 /**
  * TODO: Describe class
@@ -110,8 +109,20 @@ class AnimeFragment : EasyLoadingFragment<Array<Stream>>() {
         streamAdapter = StreamAdapter({ adapter.getRealPosition(it) }, savedInstanceState)
         adapter = EasyHeaderFooterAdapter(streamAdapter)
 
+
         streamAdapter.callback = object : StreamAdapter.StreamAdapterCallback() {
-            override fun onItemClick(v: View, item: Stream) {
+            override fun onUploaderClick(item: Stream) {
+                UserActivity.navigateTo(activity, item.uploaderId, item.uploader)
+            }
+
+            override fun onTranslatorGroupClick(item: Stream) {
+                item.subgroupId?.let {
+                    Utils.viewLink(context, ProxerUrlHolder.getSubgroupUrl(it,
+                            ProxerUrlHolder.DEVICE_QUERY_PARAMETER_DEFAULT).toString())
+                }
+            }
+
+            override fun onWatchClick(item: Stream) {
                 if (StreamResolvers.hasResolverFor(item.hosterName)) {
                     StreamResolverDialog.show(activity as AppCompatActivity, item.id)
                 } else {
@@ -146,19 +157,6 @@ class AnimeFragment : EasyLoadingFragment<Array<Stream>>() {
         streams.layoutManager = LinearLayoutManager(context)
         streams.adapter = adapter
 
-        header.onTranslatorGroupClickListener = {
-            result?.firstOrNull()?.subgroupId?.let {
-                Utils.viewLink(context, ProxerUrlHolder.getSubgroupUrl(it,
-                        ProxerUrlHolder.DEVICE_QUERY_PARAMETER_DEFAULT).toString())
-            }
-        }
-
-        header.onUploaderClickListener = {
-            result?.firstOrNull()?.let {
-                UserActivity.navigateTo(activity, it.uploaderId, it.uploader)
-            }
-        }
-
         header.onReminderClickListener = {
             if (it != reminderEpisode) {
                 synchronize(it)
@@ -168,6 +166,10 @@ class AnimeFragment : EasyLoadingFragment<Array<Stream>>() {
         header.onSwitchClickListener = {
             switchEpisode(it)
         }
+
+        header.setUploader(null)
+        header.setTranslatorGroup(null)
+        header.setDate(null)
 
         if (savedInstanceState != null && !streamAdapter.isEmpty()) {
             adapter.setHeader(header)
@@ -183,10 +185,6 @@ class AnimeFragment : EasyLoadingFragment<Array<Stream>>() {
 
     override fun showContent(result: Array<Stream>) {
         if (result.isNotEmpty()) {
-            header.setUploader(result.first().uploader)
-            header.setTranslatorGroup(result.first().subgroup ?:
-                    context.getString(R.string.fragment_anime_empty_subgoup))
-            header.setDate(DateTime(result.first().time * 1000))
             header.setEpisodeInfo(totalEpisodes, episode)
         }
     }

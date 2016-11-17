@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
@@ -38,9 +39,14 @@ class MediaControlView(context: Context?, attrs: AttributeSet?) : FrameLayout(co
         }
         get() = null
 
+    private val uploaderRow: ViewGroup by bindView(R.id.uploaderRow)
+    private val translatorRow: ViewGroup by bindView(R.id.translatorRow)
+    private val dateRow: ViewGroup by bindView(R.id.dateRow)
+
     private val uploaderText: TextView by bindView(R.id.uploader)
     private val translatorGroup: TextView by bindView(R.id.translatorGroup)
     private val dateText: TextView by bindView(R.id.date)
+
     private val previous: Button by bindView(R.id.previous)
     private val next: Button by bindView(R.id.next)
     private val reminderThis: Button by bindView(R.id.reminderThis)
@@ -54,15 +60,30 @@ class MediaControlView(context: Context?, attrs: AttributeSet?) : FrameLayout(co
     }
 
     fun setUploader(uploader: String?) {
-        uploaderText.text = uploader
+        if (uploader == null) {
+            uploaderRow.visibility = View.GONE
+        } else {
+            uploaderRow.visibility = View.VISIBLE
+            uploaderText.text = uploader
+        }
     }
 
     fun setTranslatorGroup(group: String?) {
-        translatorGroup.text = group
+        if (group == null) {
+            translatorRow.visibility = View.GONE
+        } else {
+            translatorRow.visibility = View.VISIBLE
+            translatorGroup.text = group
+        }
     }
 
     fun setDate(date: DateTime?) {
-        dateText.text = date?.toString(DATE_PATTERN)
+        if (date == null) {
+            dateRow.visibility = View.GONE
+        } else {
+            dateRow.visibility = View.VISIBLE
+            dateText.text = date.toString(DATE_PATTERN)
+        }
     }
 
     fun setEpisodeInfo(totalEpisodes: Int, currentEpisode: Int) {

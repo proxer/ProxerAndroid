@@ -73,6 +73,6 @@ class AnimeActivity : AppCompatActivity() {
     fun updateEpisode(episode: Int) {
         intent.putExtra(EXTRA_EPISODE, episode)
 
-        title = getString(R.string.activity_manga_title, episode)
+        title = getString(R.string.activity_anime_title, episode)
     }
 }
