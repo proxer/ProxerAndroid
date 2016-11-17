@@ -14,6 +14,15 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        release {
+            storeFile file(getFromSecrets("RELEASE_STORE_FILE"))
+            storePassword getFromSecrets("RELEASE_STORE_PASSWORD")
+            keyAlias getFromSecrets("RELEASE_KEY_ALIAS")
+            keyPassword getFromSecrets("RELEASE_KEY_PASSWORD")
+        }
+    }
+
     buildTypes {
         applicationVariants.all { variant ->
             variant.buildConfigField "String", "PROXER_API_KEY", "\"" + getProxerApiKey() + "\""
@@ -22,7 +31,10 @@ android {
         release {
             minifyEnabled true
             shrinkResources true
+            zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            signingConfig signingConfigs.release
         }
     }
 
@@ -105,31 +117,36 @@ dependencies {
     androidTestCompile 'com.android.support.test:rules:0.5'
 }
 
-static def getProxerApiKey() {
-    def props = openProperties()
-
-    if (props.containsKey('PROXER_API_KEY')) {
-        return props['PROXER_API_KEY']
-    } else {
-        throw new GradleException('Please add a PROXER_API_KEY value to your secrets.properties ' +
-                'file.')
-    }
-}
-
-static def openProperties() {
+static def getFromSecrets(String key) {
     def Properties result = new Properties()
 
     try {
+        result.load(new FileInputStream(new File('secrets.properties')))
+    } catch (Exception ignored) {
+        throw new GradleException('Please add a secrets.properties file with a value for "' + key
+                + 'to perform this action.')
+    }
+
+    if (!result.containsKey(key)) {
+        throw new GradleException('Please include a value for "' + key +
+                '" in your secrets.properties file to perform this action.')
+    }
+
+    return result[key]
+}
+
+static def getProxerApiKey() {
+    def key = getFromSecrets('PROXER_API_KEY');
+
+    if (key == null) {
         def isCI = System.getenv('CI')
 
         if (isCI != null && isCI.toBoolean()) {
-            result.load(new FileInputStream(new File('secrets-ci.properties')))
+            return "dummy";
         } else {
-            result.load(new FileInputStream(new File('secrets.properties')))
+            throw new GradleException('Please add a secrets.properties file with your API key.')
         }
-    } catch (Exception ignored) {
-        throw new GradleException('Please add a secrets.properties file with your API key.')
+    } else {
+        return key
     }
-
-    return result
 }
