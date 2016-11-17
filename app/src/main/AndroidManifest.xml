@@ -74,7 +74,8 @@
         <activity
             android:name=".activity.StreamActivity"
             android:configChanges="orientation|keyboardHidden|screenLayout|screenSize"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Base.Theme.AppTheme">
             <intent-filter tools:ignore="GoogleAppIndexingWarning">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
