@@ -43,7 +43,7 @@ android {
                 logger.warn('This build will not be signed because it is missing the keystore info. ' +
                         'Please add values for "RELEASE_STORE_FILE", "RELEASE_STORE_PASSWORD", ' +
                         '"RELEASE_KEY_ALIAS" and "RELEASE_KEY_PASSWORD" to your secrets.properties' +
-                        'file if you want the apk to be signed.')
+                        ' file if you want the apk to be signed.')
             }
         }
     }
