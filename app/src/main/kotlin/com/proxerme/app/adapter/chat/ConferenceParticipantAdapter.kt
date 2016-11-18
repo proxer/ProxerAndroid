@@ -1,6 +1,7 @@
 package com.proxerme.app.adapter.chat
 
 import android.os.Bundle
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +15,6 @@ import com.klinker.android.link_builder.TouchableMovementMethod
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
-import com.proxerme.app.adapter.chat.ConferenceParticipantAdapter.ConferenceParticipantAdapterCallback
 import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.util.Utils
 import com.proxerme.library.connection.messenger.entity.ConferenceInfoUser
@@ -25,8 +25,7 @@ import com.proxerme.library.info.ProxerUrlHolder
  *
  * @author Ruben Gees
  */
-class ConferenceParticipantAdapter(val savedInstanceState: Bundle?) :
-        PagingAdapter<ConferenceInfoUser, ConferenceParticipantAdapterCallback>() {
+class ConferenceParticipantAdapter(val savedInstanceState: Bundle?) : PagingAdapter<ConferenceInfoUser>() {
 
     private companion object {
         private const val ITEMS_STATE = "adapter_conference_participant_state_items"
@@ -34,6 +33,7 @@ class ConferenceParticipantAdapter(val savedInstanceState: Bundle?) :
     }
 
     var leader: String? = null
+    var callback: ConferenceParticipantAdapterCallback? = null
 
     init {
         savedInstanceState?.let {
@@ -44,8 +44,7 @@ class ConferenceParticipantAdapter(val savedInstanceState: Bundle?) :
         setHasStableIds(true)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
-            PagingViewHolder<ConferenceInfoUser, ConferenceParticipantAdapterCallback> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagingViewHolder<ConferenceInfoUser> {
         return ViewHolder(LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_conference_participant, parent, false))
     }
@@ -55,13 +54,11 @@ class ConferenceParticipantAdapter(val savedInstanceState: Bundle?) :
         outState.putString(LEADER_STATE, leader)
     }
 
-    inner class ViewHolder(itemView: View) :
-            PagingViewHolder<ConferenceInfoUser, ConferenceParticipantAdapterCallback>(itemView) {
+    override fun removeCallback() {
+        callback = null
+    }
 
-        override val adapterList: List<ConferenceInfoUser>
-            get() = list
-        override val adapterCallback: ConferenceParticipantAdapterCallback?
-            get() = callback
+    inner class ViewHolder(itemView: View) : PagingViewHolder<ConferenceInfoUser>(itemView) {
 
         private val image: ImageView by bindView(R.id.image)
         private val username: TextView by bindView(R.id.username)
@@ -69,6 +66,12 @@ class ConferenceParticipantAdapter(val savedInstanceState: Bundle?) :
 
         init {
             status.movementMethod = TouchableMovementMethod.getInstance()
+
+            itemView.setOnClickListener {
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    callback?.onItemClick(list[adapterPosition])
+                }
+            }
         }
 
         override fun bind(item: ConferenceInfoUser) {
@@ -110,6 +113,9 @@ class ConferenceParticipantAdapter(val savedInstanceState: Bundle?) :
         }
     }
 
-    abstract class ConferenceParticipantAdapterCallback :
-            PagingAdapterCallback<ConferenceInfoUser>()
+    abstract class ConferenceParticipantAdapterCallback {
+        open fun onItemClick(item: ConferenceInfoUser) {
+
+        }
+    }
 }

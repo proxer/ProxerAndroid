@@ -33,7 +33,7 @@ import org.greenrobot.eventbus.ThreadMode
  *
  * @author Ruben Gees
  */
-class MediaListFragment : EasyPagingFragment<MediaListEntry, MediaAdapterCallback>() {
+class MediaListFragment : EasyPagingFragment<MediaListEntry>() {
 
     companion object {
 
@@ -102,7 +102,7 @@ class MediaListFragment : EasyPagingFragment<MediaListEntry, MediaAdapterCallbac
 
         adapter = MediaAdapter(savedInstanceState, category)
         adapter.callback = object : MediaAdapterCallback() {
-            override fun onItemClick(v: View, item: MediaListEntry) {
+            override fun onItemClick(item: MediaListEntry) {
                 MediaActivity.navigateTo(activity, item.id, item.name)
             }
         }

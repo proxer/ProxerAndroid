@@ -95,7 +95,7 @@ class NewChatFragment : MainFragment() {
         super.onCreate(savedInstanceState)
 
         adapter = NewChatParticipantAdapter(savedInstanceState)
-        adapter.callback = object : NewChatParticipantAdapter.NewChatParticipantAdapterCallback {
+        adapter.callback = object : NewChatParticipantAdapter.NewChatParticipantAdapterCallback() {
             override fun onParticipantRemoved() {
                 if (adapter.itemCount <= 0) {
                     refreshNewParticipantFooter()

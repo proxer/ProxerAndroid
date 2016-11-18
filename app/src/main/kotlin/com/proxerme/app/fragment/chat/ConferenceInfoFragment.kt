@@ -55,7 +55,7 @@ class ConferenceInfoFragment : EasyLoadingFragment<ConferenceInfoContainer>() {
         conferenceId = arguments.getString(CONFERENCE_ID_ARGUMENT)
         adapter = ConferenceParticipantAdapter(savedInstanceState)
         adapter.callback = object : ConferenceParticipantAdapterCallback() {
-            override fun onItemClick(v: View, item: ConferenceInfoUser) {
+            override fun onItemClick(item: ConferenceInfoUser) {
                 UserActivity.navigateTo(activity, item.id, item.username,
                         item.imageId)
             }

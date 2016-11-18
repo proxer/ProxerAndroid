@@ -26,8 +26,7 @@ import org.jetbrains.anko.forEachChildWithIndex
  *
  * @author Ruben Gees
  */
-class EpisodeAdapter(savedInstanceState: Bundle? = null) :
-        PagingAdapter<RichEpisode, EpisodeAdapter.EpisodeAdapterCallback>() {
+class EpisodeAdapter(savedInstanceState: Bundle? = null) : PagingAdapter<RichEpisode>() {
 
     private companion object {
         private const val ITEMS_STATE = "adapter_episode_state_items"
@@ -35,6 +34,8 @@ class EpisodeAdapter(savedInstanceState: Bundle? = null) :
     }
 
     private val expanded: ParcelableBooleanSparseArray
+
+    var callback: EpisodeAdapterCallback? = null
 
     init {
         if (savedInstanceState == null) {
@@ -46,8 +47,7 @@ class EpisodeAdapter(savedInstanceState: Bundle? = null) :
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
-            PagingViewHolder<RichEpisode, EpisodeAdapterCallback> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagingViewHolder<RichEpisode> {
         return ViewHolder(LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_episode, parent, false))
     }
@@ -57,20 +57,11 @@ class EpisodeAdapter(savedInstanceState: Bundle? = null) :
         outState.putParcelable(EXPANDED_STATE, expanded)
     }
 
-    open class EpisodeAdapterCallback : PagingAdapter.PagingAdapterCallback<RichEpisode>() {
-        open fun onLanguageClick(@Language language: String, episode: RichEpisode) {
-
-        }
+    override fun removeCallback() {
+        callback = null
     }
 
-    inner class ViewHolder(itemView: View) :
-            PagingViewHolder<RichEpisode, EpisodeAdapterCallback>(itemView) {
-
-        override val adapterList: List<RichEpisode>
-            get() = list
-        override val adapterCallback: EpisodeAdapterCallback?
-            get() = callback
-        override val allowOnRootClick = false
+    inner class ViewHolder(itemView: View) : PagingViewHolder<RichEpisode>(itemView) {
 
         private val title: TextView by bindView(R.id.title)
         private val titleContainer: ViewGroup by bindView(R.id.titleContainer)
@@ -177,6 +168,12 @@ class EpisodeAdapter(savedInstanceState: Bundle? = null) :
 
                 index++
             }
+        }
+    }
+
+    abstract class EpisodeAdapterCallback {
+        open fun onLanguageClick(@Language language: String, episode: RichEpisode) {
+
         }
     }
 }

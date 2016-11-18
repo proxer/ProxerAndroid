@@ -11,18 +11,17 @@ import java.util.*
  *
  * @author Ruben Gees
  */
-abstract class PagingAdapter<T, C : PagingAdapter.PagingAdapterCallback<T>>() :
-        RecyclerView.Adapter<PagingAdapter.PagingViewHolder<T, C>>() where T : Parcelable {
+abstract class PagingAdapter<T>() : RecyclerView.Adapter<PagingAdapter.PagingViewHolder<T>>()
+where T : Parcelable {
 
     protected val list: ArrayList<T> = arrayListOf()
 
-    var callback: C? = null
     val items: List<T>
         get() {
             return ArrayList(list)
         }
 
-    override fun onBindViewHolder(holder: PagingViewHolder<T, C>, position: Int) {
+    override fun onBindViewHolder(holder: PagingViewHolder<T>, position: Int) {
         holder.bind(list[position])
     }
 
@@ -89,35 +88,17 @@ abstract class PagingAdapter<T, C : PagingAdapter.PagingAdapterCallback<T>>() :
         return list.contains(item)
     }
 
-    abstract class PagingViewHolder<T, out C : PagingAdapter.PagingAdapterCallback<T>>(itemView: View) :
+    open fun removeCallback() {
+
+    }
+
+    abstract class PagingViewHolder<T>(itemView: View) :
             RecyclerView.ViewHolder(itemView) where T : Parcelable {
-
-        abstract val adapterList: List<T>
-        abstract val adapterCallback: C?
-        open val allowOnRootClick = true
-        open val pos: Int
-            get() = adapterPosition
-
-        init {
-            if (allowOnRootClick) {
-                itemView.setOnClickListener {
-                    if (pos != RecyclerView.NO_POSITION) {
-                        adapterCallback?.onItemClick(it, adapterList[pos])
-                    }
-                }
-            }
-        }
 
         open fun bind(item: T) {
 
         }
 
-    }
-
-    abstract class PagingAdapterCallback<in T> {
-        open fun onItemClick(v: View, item: T) {
-
-        }
     }
 
 }

@@ -2,6 +2,7 @@ package com.proxerme.app.adapter.media
 
 import android.content.Context
 import android.os.Bundle
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +14,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
-import com.proxerme.app.adapter.media.MediaAdapter.MediaAdapterCallback
 import com.proxerme.library.connection.list.entity.MediaListEntry
 import com.proxerme.library.info.ProxerUrlHolder
 import com.proxerme.library.parameters.CategoryParameter
@@ -27,11 +27,13 @@ import com.proxerme.library.parameters.CategoryParameter.MANGA
  */
 class MediaAdapter(savedInstanceState: Bundle? = null,
                    @CategoryParameter.Category private val category: String) :
-        PagingAdapter<MediaListEntry, MediaAdapterCallback>() {
+        PagingAdapter<MediaListEntry>() {
 
     private companion object {
         private const val ITEMS_STATE = "adapter_media_state_items"
     }
+
+    var callback: MediaAdapterCallback? = null
 
     init {
         savedInstanceState?.let {
@@ -52,13 +54,11 @@ class MediaAdapter(savedInstanceState: Bundle? = null,
         outState.putParcelableArrayList("${ITEMS_STATE}_$category", list)
     }
 
-    inner class ViewHolder(itemView: View) : PagingViewHolder<MediaListEntry,
-            MediaAdapterCallback>(itemView) {
+    override fun removeCallback() {
+        callback = null
+    }
 
-        override val adapterList: List<MediaListEntry>
-            get() = list
-        override val adapterCallback: MediaAdapterCallback?
-            get() = callback
+    inner class ViewHolder(itemView: View) : PagingViewHolder<MediaListEntry>(itemView) {
 
         private val title: TextView by bindView(R.id.title)
         private val medium: TextView by bindView(R.id.medium)
@@ -66,6 +66,14 @@ class MediaAdapter(savedInstanceState: Bundle? = null,
         private val rating: RatingBar by bindView(R.id.rating)
         private val episodes: TextView by bindView(R.id.episodes)
         private val languages: TextView by bindView(R.id.languages)
+
+        init {
+            itemView.setOnClickListener {
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    callback?.onItemClick(list[adapterPosition])
+                }
+            }
+        }
 
         override fun bind(item: MediaListEntry) {
             title.text = item.name
@@ -97,5 +105,9 @@ class MediaAdapter(savedInstanceState: Bundle? = null,
         }
     }
 
-    abstract class MediaAdapterCallback : PagingAdapterCallback<MediaListEntry>()
+    abstract class MediaAdapterCallback {
+        open fun onItemClick(item: MediaListEntry) {
+
+        }
+    }
 }

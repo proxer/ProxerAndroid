@@ -20,7 +20,7 @@ import com.proxerme.library.parameters.CommentSortParameter.CommentSort
  *
  * @author Ruben Gees
  */
-class CommentFragment : EasyPagingFragment<Comment, CommentAdapter.CommentAdapterCallback>() {
+class CommentFragment : EasyPagingFragment<Comment>() {
 
     companion object {
 

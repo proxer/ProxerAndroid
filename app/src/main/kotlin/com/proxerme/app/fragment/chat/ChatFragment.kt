@@ -40,7 +40,7 @@ import org.jetbrains.anko.toast
  *
  * @author Ruben Gees
  */
-class ChatFragment : EasyChatServiceFragment<LocalMessage, ChatAdapter.ChatAdapterCallback>() {
+class ChatFragment : EasyChatServiceFragment<LocalMessage>() {
 
     companion object {
         private const val ARGUMENT_CONFERENCE = "conference"
@@ -111,7 +111,7 @@ class ChatFragment : EasyChatServiceFragment<LocalMessage, ChatAdapter.ChatAdapt
     }
 
     private val adapterCallback = object : ChatAdapter.ChatAdapterCallback() {
-        override fun onMessageTitleClick(v: View, message: LocalMessage) {
+        override fun onMessageTitleClick(message: LocalMessage) {
             UserActivity.navigateTo(activity, message.userId, message.username)
         }
 

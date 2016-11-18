@@ -18,7 +18,7 @@ import com.proxerme.library.connection.ucp.request.HistoryRequest
  *
  * @author Ruben Gees
  */
-class HistoryFragment : EasyPagingFragment<HistoryEntry, HistoryAdapter.HistoryAdapterCallback>() {
+class HistoryFragment : EasyPagingFragment<HistoryEntry>() {
 
     companion object {
 
@@ -57,7 +57,7 @@ class HistoryFragment : EasyPagingFragment<HistoryEntry, HistoryAdapter.HistoryA
 
         adapter = HistoryAdapter(savedInstanceState)
         adapter.callback = object : HistoryAdapter.HistoryAdapterCallback() {
-            override fun onItemClick(v: View, item: HistoryEntry) {
+            override fun onItemClick(item: HistoryEntry) {
                 MediaActivity.navigateTo(activity, item.id, item.name)
             }
         }

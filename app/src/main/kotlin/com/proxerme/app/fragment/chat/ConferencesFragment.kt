@@ -6,7 +6,6 @@ import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.view.View
 import com.proxerme.app.R
 import com.proxerme.app.activity.chat.ChatActivity
 import com.proxerme.app.activity.chat.NewChatActivity
@@ -29,7 +28,7 @@ import org.greenrobot.eventbus.ThreadMode
  *
  * @author Ruben Gees
  */
-class ConferencesFragment : EasyChatServiceFragment<LocalConference, ConferenceAdapterCallback>() {
+class ConferencesFragment : EasyChatServiceFragment<LocalConference>() {
 
     companion object {
         fun newInstance(): ConferencesFragment {
@@ -52,7 +51,7 @@ class ConferencesFragment : EasyChatServiceFragment<LocalConference, ConferenceA
 
         adapter = ConferenceAdapter()
         adapter.callback = object : ConferenceAdapterCallback() {
-            override fun onItemClick(v: View, item: LocalConference) {
+            override fun onItemClick(item: LocalConference) {
                 ChatActivity.navigateTo(activity, item)
             }
         }

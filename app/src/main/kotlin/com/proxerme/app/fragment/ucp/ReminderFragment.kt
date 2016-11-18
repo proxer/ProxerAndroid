@@ -27,7 +27,7 @@ import com.proxerme.library.parameters.CategoryParameter
  *
  * @author Ruben Gees
  */
-class ReminderFragment : EasyPagingFragment<Reminder, ReminderAdapter.ReminderAdapterCallback>() {
+class ReminderFragment : EasyPagingFragment<Reminder>() {
 
     companion object {
 
@@ -77,11 +77,11 @@ class ReminderFragment : EasyPagingFragment<Reminder, ReminderAdapter.ReminderAd
 
         adapter = ReminderAdapter(savedInstanceState)
         adapter.callback = object : ReminderAdapter.ReminderAdapterCallback() {
-            override fun onItemClick(v: View, item: Reminder) {
+            override fun onItemClick(item: Reminder) {
                 MediaActivity.navigateTo(activity, item.entryId, item.name)
             }
 
-            override fun onRemoveClick(v: View, item: Reminder) {
+            override fun onRemoveClick(item: Reminder) {
                 adapter.addItemToRemove(item)
 
                 synchronize()

@@ -24,8 +24,7 @@ import java.util.*
  *
  * @author Ruben Gees
  */
-class ReminderAdapter(savedInstanceState: Bundle? = null) :
-        PagingAdapter<Reminder, ReminderAdapter.ReminderAdapterCallback>() {
+class ReminderAdapter(savedInstanceState: Bundle? = null) : PagingAdapter<Reminder>() {
 
     private companion object {
         private const val ITEMS_STATE = "adapter_reminder_state_items"
@@ -35,6 +34,8 @@ class ReminderAdapter(savedInstanceState: Bundle? = null) :
     private val _itemsToRemove = ArrayList<Reminder>()
     val itemsToRemove: List<Reminder>
         get() = _itemsToRemove
+
+    var callback: ReminderAdapterCallback? = null
 
     init {
         savedInstanceState?.let {
@@ -47,8 +48,7 @@ class ReminderAdapter(savedInstanceState: Bundle? = null) :
 
     override fun getItemId(position: Int) = list[position].id.toLong()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
-            PagingViewHolder<Reminder, ReminderAdapterCallback> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagingViewHolder<Reminder> {
         return ReminderViewHolder(LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_reminder, parent, false))
     }
@@ -58,13 +58,11 @@ class ReminderAdapter(savedInstanceState: Bundle? = null) :
         outState.putParcelableArrayList(ITEMS_TO_REMOVE_STATE, _itemsToRemove)
     }
 
-    inner class ReminderViewHolder(itemView: View) :
-            PagingViewHolder<Reminder, ReminderAdapterCallback>(itemView) {
+    override fun removeCallback() {
+        callback = null
+    }
 
-        override val adapterList: List<Reminder>
-            get() = list
-        override val adapterCallback: ReminderAdapterCallback?
-            get() = callback
+    inner class ReminderViewHolder(itemView: View) : PagingViewHolder<Reminder>(itemView) {
 
         private val title: TextView by bindView(R.id.title)
         private val medium: TextView by bindView(R.id.medium)
@@ -74,14 +72,21 @@ class ReminderAdapter(savedInstanceState: Bundle? = null) :
         private val removeButton: ImageButton by bindView(R.id.removeButton)
 
         init {
+            itemView.setOnClickListener {
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    callback?.onItemClick(list[adapterPosition])
+                }
+            }
+
             removeButton.setImageDrawable(IconicsDrawable(removeButton.context)
                     .icon(CommunityMaterial.Icon.cmd_bookmark_remove)
                     .colorRes(R.color.icon)
                     .sizeDp(48)
                     .paddingDp(12))
+
             removeButton.setOnClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {
-                    callback?.onRemoveClick(it, list[adapterPosition])
+                    callback?.onRemoveClick(list[adapterPosition])
                 }
             }
         }
@@ -123,9 +128,13 @@ class ReminderAdapter(savedInstanceState: Bundle? = null) :
         notifyDataSetChanged()
     }
 
-    open class ReminderAdapterCallback : PagingAdapterCallback<Reminder>() {
+    abstract class ReminderAdapterCallback {
 
-        open fun onRemoveClick(v: View, item: Reminder) {
+        open fun onItemClick(item: Reminder) {
+
+        }
+
+        open fun onRemoveClick(item: Reminder) {
 
         }
 

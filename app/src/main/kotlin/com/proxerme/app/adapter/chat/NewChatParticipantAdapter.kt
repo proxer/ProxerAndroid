@@ -66,6 +66,10 @@ class NewChatParticipantAdapter(savedInstanceState: Bundle?) :
         outState.putParcelableArrayList(ITEMS_STATE, participants)
     }
 
+    fun removeCallback() {
+        callback = null
+    }
+
     inner class ViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
 
         private val image: ImageView by bindView(R.id.image)
@@ -107,7 +111,9 @@ class NewChatParticipantAdapter(savedInstanceState: Bundle?) :
         }
     }
 
-    interface NewChatParticipantAdapterCallback {
-        fun onParticipantRemoved()
+    abstract class NewChatParticipantAdapterCallback {
+        open fun onParticipantRemoved() {
+
+        }
     }
 }

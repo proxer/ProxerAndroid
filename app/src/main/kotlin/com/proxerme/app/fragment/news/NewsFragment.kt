@@ -2,7 +2,6 @@ package com.proxerme.app.fragment.news
 
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
-import android.view.View
 import android.widget.ImageView
 import com.proxerme.app.activity.DashboardActivity
 import com.proxerme.app.activity.ImageDetailActivity
@@ -25,7 +24,7 @@ import org.greenrobot.eventbus.ThreadMode
  *
  * @author Ruben Gees
  */
-class NewsFragment : EasyPagingFragment<News, NewsAdapterCallback>() {
+class NewsFragment : EasyPagingFragment<News>() {
 
     companion object {
 
@@ -47,20 +46,20 @@ class NewsFragment : EasyPagingFragment<News, NewsAdapterCallback>() {
 
         adapter = NewsAdapter(savedInstanceState)
         adapter.callback = object : NewsAdapterCallback() {
-            override fun onItemClick(v: View, item: News) {
+            override fun onItemClick(item: News) {
                 (activity as DashboardActivity).showPage(ProxerUrlHolder.getNewsUrl(item.categoryId,
                         item.threadId, "mobile"))
             }
 
-            override fun onNewsImageClick(v: View, news: News) {
-                ImageDetailActivity.navigateTo(activity, v as ImageView,
-                        ProxerUrlHolder.getNewsImageUrl(news.id, news.imageId))
+            override fun onNewsImageClick(view: ImageView, item: News) {
+                ImageDetailActivity.navigateTo(activity, view,
+                        ProxerUrlHolder.getNewsImageUrl(item.id, item.imageId))
             }
 
-            override fun onNewsExpanded(v: View, news: News) {
+            override fun onNewsExpanded(item: News) {
                 (activity as DashboardActivity)
-                        .setLikelyUrl(ProxerUrlHolder.getNewsUrl(news.categoryId,
-                                news.threadId, "mobile"))
+                        .setLikelyUrl(ProxerUrlHolder.getNewsUrl(item.categoryId,
+                                item.threadId, "mobile"))
             }
         }
 

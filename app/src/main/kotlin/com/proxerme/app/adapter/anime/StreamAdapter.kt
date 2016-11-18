@@ -26,7 +26,7 @@ import org.joda.time.DateTime
  * @author Ruben Gees
  */
 class StreamAdapter(private val getRealPosition: (Int) -> Int, savedInstanceState: Bundle?) :
-        PagingAdapter<Stream, StreamAdapter.StreamAdapterCallback>() {
+        PagingAdapter<Stream>() {
 
     private companion object {
         private const val ITEMS_STATE = "adapter_anime_state_items"
@@ -37,6 +37,8 @@ class StreamAdapter(private val getRealPosition: (Int) -> Int, savedInstanceStat
         private const val ICON_SIZE = 28
         private const val ICON_PADDING = 8
     }
+
+    var callback: StreamAdapterCallback? = null
 
     private val expanded: ParcelableLongSparseArray
 
@@ -51,7 +53,7 @@ class StreamAdapter(private val getRealPosition: (Int) -> Int, savedInstanceStat
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
-            PagingViewHolder<Stream, StreamAdapterCallback> {
+            PagingViewHolder<Stream> {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_stream,
                 parent, false))
     }
@@ -61,19 +63,12 @@ class StreamAdapter(private val getRealPosition: (Int) -> Int, savedInstanceStat
         outState.putParcelable(EXPANDED_STATE, expanded)
     }
 
-    inner class ViewHolder(itemView: View) :
-            PagingAdapter.PagingViewHolder<Stream, StreamAdapterCallback>(itemView) {
+    override fun removeCallback() {
+        callback = null
+    }
 
-        override val adapterList: List<Stream>
-            get() = list
-        override val adapterCallback: StreamAdapterCallback?
-            get() = callback
-        override val allowOnRootClick = false
-        override val pos: Int
-            get() {
-                return if (adapterPosition == RecyclerView.NO_POSITION)
-                    adapterPosition else getRealPosition(adapterPosition)
-            }
+    inner class ViewHolder(itemView: View) :
+            PagingAdapter.PagingViewHolder<Stream>(itemView) {
 
         private val nameContainer: ViewGroup by bindView(R.id.nameContainer)
         private val name: TextView by bindView(R.id.name)
@@ -88,8 +83,8 @@ class StreamAdapter(private val getRealPosition: (Int) -> Int, savedInstanceStat
 
         init {
             nameContainer.setOnClickListener {
-                if (pos != RecyclerView.NO_POSITION) {
-                    val number = list[pos].id.toLong()
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    val number = list[getRealPosition(adapterPosition)].id.toLong()
 
                     if (expanded.get(number, false)) {
                         expanded.delete(number)
@@ -97,25 +92,25 @@ class StreamAdapter(private val getRealPosition: (Int) -> Int, savedInstanceStat
                         expanded.put(number, true)
                     }
 
-                    notifyItemChanged(pos)
+                    notifyItemChanged(getRealPosition(adapterPosition))
                 }
             }
 
             uploaderText.setOnClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {
-                    callback?.onUploaderClick(list[pos])
+                    callback?.onUploaderClick(list[getRealPosition(adapterPosition)])
                 }
             }
 
             translatorGroup.setOnClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {
-                    callback?.onTranslatorGroupClick(list[pos])
+                    callback?.onTranslatorGroupClick(list[getRealPosition(adapterPosition)])
                 }
             }
 
             watchButton.setOnClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {
-                    callback?.onWatchClick(list[pos])
+                    callback?.onWatchClick(list[getRealPosition(adapterPosition)])
                 }
             }
 
@@ -132,7 +127,6 @@ class StreamAdapter(private val getRealPosition: (Int) -> Int, savedInstanceStat
             translatorGroup.text = item.subgroup ?:
                     translatorGroup.context.getString(R.string.fragment_anime_empty_subgoup)
             dateText.text = DateTime(item.time * 1000).toString(DATE_PATTERN)
-
             if (expanded.get(item.id.toLong(), false)) {
                 uploadInfoContainer.visibility = View.VISIBLE
             } else {
@@ -146,7 +140,7 @@ class StreamAdapter(private val getRealPosition: (Int) -> Int, savedInstanceStat
         }
     }
 
-    open class StreamAdapterCallback : PagingAdapter.PagingAdapterCallback<Stream>() {
+    abstract class StreamAdapterCallback() {
         open fun onUploaderClick(item: Stream) {
 
         }

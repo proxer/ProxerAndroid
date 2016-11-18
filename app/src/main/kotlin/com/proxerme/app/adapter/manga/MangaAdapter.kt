@@ -23,8 +23,7 @@ import view.TouchImageView
  *
  * @author Ruben Gees
  */
-class MangaAdapter(savedInstanceState: Bundle?) :
-        PagingAdapter<Page, MangaAdapter.MangaAdapterCallback>() {
+class MangaAdapter(savedInstanceState: Bundle?) : PagingAdapter<Page>() {
 
     private companion object {
         private const val ITEMS_STATE = "adapter_manga_state_items"
@@ -47,8 +46,7 @@ class MangaAdapter(savedInstanceState: Bundle?) :
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
-            PagingViewHolder<Page, MangaAdapterCallback> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagingViewHolder<Page> {
         return ViewHolder(LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_manga_page, parent, false))
     }
@@ -66,12 +64,7 @@ class MangaAdapter(savedInstanceState: Bundle?) :
         this.id = id
     }
 
-    inner class ViewHolder(itemView: View) : PagingViewHolder<Page, MangaAdapterCallback>(itemView) {
-
-        override val adapterList: List<Page>
-            get() = list
-        override val adapterCallback: MangaAdapterCallback?
-            get() = callback
+    inner class ViewHolder(itemView: View) : PagingViewHolder<Page>(itemView) {
 
         private val image: TouchImageView by bindView(R.id.image)
         private val placeholder: View by bindView(R.id.placeholder)
@@ -99,7 +92,5 @@ class MangaAdapter(savedInstanceState: Bundle?) :
                     })
         }
     }
-
-    class MangaAdapterCallback : PagingAdapter.PagingAdapterCallback<Page>()
 
 }

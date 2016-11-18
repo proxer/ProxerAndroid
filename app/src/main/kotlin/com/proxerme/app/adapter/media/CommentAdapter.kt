@@ -31,8 +31,7 @@ import java.util.*
  *
  * @author Ruben Gees
  */
-class CommentAdapter(savedInstanceState: Bundle? = null) :
-        PagingAdapter<Comment, CommentAdapter.CommentAdapterCallback>() {
+class CommentAdapter(savedInstanceState: Bundle? = null) : PagingAdapter<Comment>() {
 
     private companion object {
         private const val ITEMS_STATE = "adapter_comment_state_items"
@@ -45,6 +44,8 @@ class CommentAdapter(savedInstanceState: Bundle? = null) :
 
     private val expandedMap: ParcelableLongSparseArray
     private val spoilerStateMap: HashMap<String, List<Boolean>>
+
+    var callback: CommentAdapterCallback? = null
 
     init {
         if (savedInstanceState == null) {
@@ -62,8 +63,7 @@ class CommentAdapter(savedInstanceState: Bundle? = null) :
 
     override fun getItemId(position: Int) = list[position].id.toLong()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
-            PagingViewHolder<Comment, CommentAdapterCallback> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagingViewHolder<Comment> {
         return ViewHolder(LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_comment, parent, false))
     }
@@ -72,6 +72,10 @@ class CommentAdapter(savedInstanceState: Bundle? = null) :
         outState.putParcelableArrayList(ITEMS_STATE, list)
         outState.putParcelable(EXPANDED_STATE, expandedMap)
         outState.putBundle(SPOILER_STATE, spoilerStateMap.toBundle())
+    }
+
+    override fun removeCallback() {
+        callback = null
     }
 
     private fun HashMap<String, List<Boolean>>.toBundle(): Bundle {
@@ -101,14 +105,7 @@ class CommentAdapter(savedInstanceState: Bundle? = null) :
         }
     }
 
-    inner class ViewHolder(itemView: View) :
-            PagingViewHolder<Comment, CommentAdapterCallback>(itemView) {
-
-        override val adapterList: List<Comment>
-            get() = list
-        override val adapterCallback: CommentAdapterCallback?
-            get() = callback
-        override val allowOnRootClick = false
+    inner class ViewHolder(itemView: View) : PagingViewHolder<Comment>(itemView) {
 
         private val userContainer: ViewGroup by bindView(R.id.userContainer)
         private val userImage: ImageView by bindView(R.id.userImage)
@@ -141,7 +138,7 @@ class CommentAdapter(savedInstanceState: Bundle? = null) :
 
             expand.setOnClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {
-                    val id = adapterList[adapterPosition].id
+                    val id = list[adapterPosition].id
 
                     if (expandedMap.get(id.toLong(), false)) {
                         expandedMap.remove(id.toLong())
@@ -254,7 +251,7 @@ class CommentAdapter(savedInstanceState: Bundle? = null) :
         }
     }
 
-    abstract class CommentAdapterCallback : PagingAdapter.PagingAdapterCallback<Comment>() {
+    abstract class CommentAdapterCallback {
         open fun onUserClick(item: Comment) {
 
         }

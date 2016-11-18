@@ -12,7 +12,6 @@ import butterknife.bindView
 import com.klinker.android.link_builder.Link
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
-import com.proxerme.app.adapter.framework.PagingAdapter.PagingAdapterCallback
 import com.proxerme.app.util.ErrorHandler
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.listener.EndlessRecyclerOnScrollListener
@@ -24,8 +23,7 @@ import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
  *
  * @author Ruben Gees
  */
-abstract class EasyPagingFragment<T, C : PagingAdapterCallback<T>> :
-        PagingFragment<T>()  where T : Parcelable {
+abstract class EasyPagingFragment<T> : PagingFragment<T>()  where T : Parcelable {
 
     private companion object {
         private const val EXCEPTION_STATE = "fragment_easy_paging_state_exception"
@@ -35,7 +33,7 @@ abstract class EasyPagingFragment<T, C : PagingAdapterCallback<T>> :
     open protected val hasListFixedSize = true
 
     abstract protected val layoutManager: RecyclerView.LayoutManager
-    abstract protected val adapter: PagingAdapter<T, C>
+    abstract protected val adapter: PagingAdapter<T>
     protected lateinit var headerFooterAdapter: EasyHeaderFooterAdapter
 
     open protected val list: RecyclerView by bindView(R.id.list)
@@ -95,7 +93,7 @@ abstract class EasyPagingFragment<T, C : PagingAdapterCallback<T>> :
     }
 
     override fun onDestroy() {
-        adapter.callback = null
+        adapter.removeCallback()
         progress.setOnRefreshListener(null)
         list.clearOnScrollListeners()
 

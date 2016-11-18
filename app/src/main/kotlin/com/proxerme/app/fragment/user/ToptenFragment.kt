@@ -74,14 +74,14 @@ class ToptenFragment : EasyLoadingFragment<Array<Array<ToptenEntry>>>() {
 
         animeAdapter = ToptenAdapter(savedInstanceState, ANIME)
         animeAdapter.callback = object : ToptenAdapter.ToptenAdapterCallback() {
-            override fun onItemClick(v: View, item: ToptenEntry) {
+            override fun onItemClick(item: ToptenEntry) {
                 MediaActivity.navigateTo(activity, item.id, item.name)
             }
         }
 
         mangaAdapter = ToptenAdapter(savedInstanceState, MANGA)
         mangaAdapter.callback = object : ToptenAdapter.ToptenAdapterCallback() {
-            override fun onItemClick(v: View, item: ToptenEntry) {
+            override fun onItemClick(item: ToptenEntry) {
                 MediaActivity.navigateTo(activity, item.id, item.name)
             }
         }

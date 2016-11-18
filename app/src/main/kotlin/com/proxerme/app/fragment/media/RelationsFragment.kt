@@ -62,7 +62,7 @@ class RelationsFragment : EasyLoadingFragment<Array<Relation>>() {
 
         adapter = RelationsAdapter(savedInstanceState)
         adapter.callback = object : RelationsAdapter.RelationsAdapterCallback() {
-            override fun onItemClick(v: View, item: Relation) {
+            override fun onItemClick(item: Relation) {
                 MediaActivity.navigateTo(activity, item.id, item.name)
             }
         }

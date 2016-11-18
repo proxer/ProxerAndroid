@@ -16,7 +16,7 @@ import com.proxerme.library.connection.info.request.ListInfoRequest
  *
  * @author Ruben Gees
  */
-class EpisodesFragment : EasyPagingFragment<RichEpisode, EpisodeAdapter.EpisodeAdapterCallback>() {
+class EpisodesFragment : EasyPagingFragment<RichEpisode>() {
 
     companion object {
 

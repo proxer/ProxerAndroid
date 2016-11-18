@@ -2,6 +2,7 @@ package com.proxerme.app.adapter.media
 
 import android.content.Context
 import android.os.Bundle
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,12 +23,13 @@ import com.proxerme.library.parameters.CategoryParameter
  *
  * @author Ruben Gees
  */
-class RelationsAdapter(savedInstanceState: Bundle? = null) :
-        PagingAdapter<Relation, RelationsAdapter.RelationsAdapterCallback>() {
+class RelationsAdapter(savedInstanceState: Bundle? = null) : PagingAdapter<Relation>() {
 
     private companion object {
         private const val ITEMS_STATE = "adapter_relations_state_items"
     }
+
+    var callback: RelationsAdapterCallback? = null
 
     init {
         savedInstanceState?.let {
@@ -39,8 +41,7 @@ class RelationsAdapter(savedInstanceState: Bundle? = null) :
 
     override fun getItemId(position: Int) = list[position].id.toLong()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
-            PagingViewHolder<Relation, RelationsAdapterCallback> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagingViewHolder<Relation> {
         return ViewHolder(LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_media_entry, parent, false))
     }
@@ -49,13 +50,11 @@ class RelationsAdapter(savedInstanceState: Bundle? = null) :
         outState.putParcelableArrayList(ITEMS_STATE, list)
     }
 
-    inner class ViewHolder(itemView: View) :
-            PagingViewHolder<Relation, RelationsAdapterCallback>(itemView) {
+    override fun removeCallback() {
+        callback = null
+    }
 
-        override val adapterList: List<Relation>
-            get() = list
-        override val adapterCallback: RelationsAdapterCallback?
-            get() = callback
+    inner class ViewHolder(itemView: View) : PagingViewHolder<Relation>(itemView) {
 
         private val title: TextView by bindView(R.id.title)
         private val medium: TextView by bindView(R.id.medium)
@@ -63,6 +62,14 @@ class RelationsAdapter(savedInstanceState: Bundle? = null) :
         private val rating: RatingBar by bindView(R.id.rating)
         private val episodes: TextView by bindView(R.id.episodes)
         private val languages: TextView by bindView(R.id.languages)
+
+        init {
+            itemView.setOnClickListener {
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    callback?.onItemClick(list[adapterPosition])
+                }
+            }
+        }
 
         override fun bind(item: Relation) {
             title.text = item.name
@@ -97,6 +104,10 @@ class RelationsAdapter(savedInstanceState: Bundle? = null) :
         }
     }
 
-    open class RelationsAdapterCallback : PagingAdapter.PagingAdapterCallback<Relation>()
+    abstract class RelationsAdapterCallback {
+        open fun onItemClick(item: Relation) {
+
+        }
+    }
 
 }
