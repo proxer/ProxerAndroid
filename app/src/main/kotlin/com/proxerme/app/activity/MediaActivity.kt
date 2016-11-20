@@ -59,10 +59,10 @@ class MediaActivity : AppCompatActivity(), CustomTabsModule {
         setContentView(R.layout.activity_media)
         setSupportActionBar(toolbar)
 
-        if (intent.action == Intent.ACTION_VIEW)
-            id = intent.data.lastPathSegment
+        id = if (intent.action == Intent.ACTION_VIEW)
+            intent.data.pathSegments.getOrElse(1, { "-1" })
         else {
-            id = intent.getStringExtra(EXTRA_ID)
+            intent.getStringExtra(EXTRA_ID)
         }
 
         if (savedInstanceState == null) {
@@ -73,6 +73,21 @@ class MediaActivity : AppCompatActivity(), CustomTabsModule {
 
         setupToolbar()
         setupImage()
+
+        if (savedInstanceState == null) {
+            val sectionToShow = if (intent.action == Intent.ACTION_VIEW)
+                when (intent.data.pathSegments.getOrNull(2)) {
+                    "comments" -> 1
+                    "episodes" -> 2
+                    "relation" -> 3
+                    else -> 0
+                }
+            else {
+                0
+            }
+
+            viewPager.currentItem = sectionToShow
+        }
     }
 
     override fun onStart() {
@@ -157,7 +172,7 @@ class MediaActivity : AppCompatActivity(), CustomTabsModule {
             return when (position) {
                 0 -> getString(R.string.fragment_media_info_title)
                 1 -> getString(R.string.fragment_comments_title)
-                2 -> "Episoden"
+                2 -> getString(R.string.fragment_episodes_title)
                 3 -> getString(R.string.fragment_relations_title)
                 else -> throw RuntimeException("Unknown index passed")
             }
