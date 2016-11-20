@@ -76,7 +76,7 @@ dependencies {
     // compile "org.jetbrains.anko:anko-common:$anko_version"
     // compile "org.jetbrains.anko:anko-sqlite:$anko_version"
 
-    compile 'com.takisoft.fix:preference-v7:25.0.0.1'
+    compile 'com.takisoft.fix:preference-v7:25.0.1.0'
 
     compile('com.mikepenz:aboutlibraries:5.9.0@aar') {
         transitive = true
@@ -111,6 +111,8 @@ dependencies {
     compile 'com.jakewharton:kotterknife:0.1.0-SNAPSHOT'
 
     compile 'com.devbrackets.android:exomedia:3.0.1'
+
+    compile 'me.zhanghai.android.materialratingbar:library:1.0.2'
 
     compile 'com.github.proxer:ProxerLibAndroid:2.3.0'
     compile 'com.github.rubengees:EasyHeaderFooterAdapter:1.0.4@aar'

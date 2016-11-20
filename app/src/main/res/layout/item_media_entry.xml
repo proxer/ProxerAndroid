@@ -65,7 +65,7 @@
                 android:layout_below="@+id/medium"
                 android:orientation="vertical">
 
-                <RatingBar
+                <me.zhanghai.android.materialratingbar.MaterialRatingBar
                     android:id="@+id/rating"
                     style="?attr/ratingBarStyleSmall"
                     android:layout_width="wrap_content"

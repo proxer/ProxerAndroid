@@ -111,7 +111,8 @@ class CommentAdapter(savedInstanceState: Bundle? = null) : PagingAdapter<Comment
         private val userImage: ImageView by bindView(R.id.userImage)
         private val username: TextView by bindView(R.id.username)
 
-        private val rating: RatingBar by bindView(R.id.rating)
+        private val ratingOverallRow: ViewGroup by bindView(R.id.ratingOverallRow)
+        private val ratingOverall: RatingBar by bindView(R.id.ratingOverall)
         private val ratingGenre: RatingBar by bindView(R.id.ratingGenre)
         private val ratingGenreRow: ViewGroup by bindView(R.id.ratingGenreRow)
         private val ratingStory: RatingBar by bindView(R.id.ratingStory)
@@ -161,7 +162,6 @@ class CommentAdapter(savedInstanceState: Bundle? = null) : PagingAdapter<Comment
             username.text = item.username
 
             bindComment(item)
-            bindRating(item)
             bindExpanded(item)
 
             bindRatingRow(ratingGenreRow, ratingGenre,
@@ -174,6 +174,7 @@ class CommentAdapter(savedInstanceState: Bundle? = null) : PagingAdapter<Comment
                     item.ratingDetails.characters)
             bindRatingRow(ratingMusicRow, ratingMusic,
                     item.ratingDetails.music)
+            bindRatingRow(ratingOverallRow, ratingOverall, (item.rating.toFloat() / 2.0f).toInt())
 
             time.text = TimeUtil.convertToRelativeReadableTime(time.context, item.time)
             state.text = convertStateToText(item.state, item.episode)
@@ -209,15 +210,6 @@ class CommentAdapter(savedInstanceState: Bundle? = null) : PagingAdapter<Comment
                 comment.maxHeight = maximumHeight
 
                 ViewCompat.animate(expand).rotation(0f)
-            }
-        }
-
-        private fun bindRating(item: Comment) {
-            if (item.rating <= 0) {
-                rating.visibility = View.GONE
-            } else {
-                rating.visibility = View.VISIBLE
-                rating.rating = item.rating.toFloat() / 2.0f
             }
         }
 
