@@ -42,6 +42,16 @@ class CachedTask<O>(private val task: Task<O>) : BaseTask<O>() {
     }
 
     override fun reset() {
+        cachedResult = null
+        cachedException = null
+
         task.reset()
+    }
+
+    override fun destroy() {
+        cachedResult = null
+        cachedException = null
+
+        super.destroy()
     }
 }

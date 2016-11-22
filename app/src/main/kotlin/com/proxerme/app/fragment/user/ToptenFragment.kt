@@ -1,13 +1,17 @@
 package com.proxerme.app.fragment.user
 
+import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import com.proxerme.app.activity.MediaActivity
 import com.proxerme.app.adapter.user.ToptenAdapter
-import com.proxerme.app.fragment.framework.EasyLoadingFragment
+import com.proxerme.app.fragment.framework.SingleLoadingFragment
 import com.proxerme.app.manager.SectionManager.Section
+import com.proxerme.app.task.LoadingTask
+import com.proxerme.app.task.Task
+import com.proxerme.app.task.ZippedTask
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.user.entitiy.ToptenEntry
@@ -20,7 +24,7 @@ import com.proxerme.library.parameters.CategoryParameter.MANGA
  *
  * @author Ruben Gees
  */
-class ToptenFragment : EasyLoadingFragment<Array<Array<ToptenEntry>>>() {
+class ToptenFragment : SingleLoadingFragment<ToptenFragment.ZippedToptenResult>() {
 
     companion object {
         private const val ARGUMENT_USER_ID = "user_id"
@@ -47,19 +51,6 @@ class ToptenFragment : EasyLoadingFragment<Array<Array<ToptenEntry>>>() {
 
     private lateinit var animeAdapter: ToptenAdapter
     private lateinit var mangaAdapter: ToptenAdapter
-    override var result: Array<Array<ToptenEntry>>?
-        get() {
-            return arrayOf(animeAdapter.items.toTypedArray(), mangaAdapter.items.toTypedArray())
-        }
-        set(value) {
-            if (value == null) {
-                animeAdapter.clear()
-                mangaAdapter.clear()
-            } else {
-                animeAdapter.replace(value[0])
-                mangaAdapter.replace(value[1])
-            }
-        }
 
     private val animeContainer: ViewGroup by bindView(com.proxerme.app.R.id.animeContainer)
     private val mangaContainer: ViewGroup by bindView(com.proxerme.app.R.id.mangaContainer)
@@ -72,14 +63,14 @@ class ToptenFragment : EasyLoadingFragment<Array<Array<ToptenEntry>>>() {
         userId = arguments.getString(ToptenFragment.Companion.ARGUMENT_USER_ID)
         userName = arguments.getString(ToptenFragment.Companion.ARGUMENT_USER_NAME)
 
-        animeAdapter = ToptenAdapter(savedInstanceState, ANIME)
+        animeAdapter = ToptenAdapter(null, ANIME)
         animeAdapter.callback = object : ToptenAdapter.ToptenAdapterCallback() {
             override fun onItemClick(item: ToptenEntry) {
                 MediaActivity.navigateTo(activity, item.id, item.name)
             }
         }
 
-        mangaAdapter = ToptenAdapter(savedInstanceState, MANGA)
+        mangaAdapter = ToptenAdapter(null, MANGA)
         mangaAdapter.callback = object : ToptenAdapter.ToptenAdapterCallback() {
             override fun onItemClick(item: ToptenEntry) {
                 MediaActivity.navigateTo(activity, item.id, item.name)
@@ -99,7 +90,7 @@ class ToptenFragment : EasyLoadingFragment<Array<Array<ToptenEntry>>>() {
         return inflater.inflate(com.proxerme.app.R.layout.fragment_topten, container, false)
     }
 
-    override fun onViewCreated(view: android.view.View, savedInstanceState: android.os.Bundle?) {
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         animeList.isNestedScrollingEnabled = false
@@ -108,34 +99,12 @@ class ToptenFragment : EasyLoadingFragment<Array<Array<ToptenEntry>>>() {
         mangaList.isNestedScrollingEnabled = false
         mangaList.layoutManager = GridLayoutManager(context, Utils.calculateSpanAmount(activity) + 1)
         mangaList.adapter = mangaAdapter
-
-        updateVisibility()
     }
 
-    override fun onSaveInstanceState(outState: android.os.Bundle) {
-        super.onSaveInstanceState(outState)
+    override fun present(data: ZippedToptenResult) {
+        animeAdapter.replace(data.animeEntries)
+        mangaAdapter.replace(data.mangaEntries)
 
-        animeAdapter.saveInstanceState(outState)
-        mangaAdapter.saveInstanceState(outState)
-    }
-
-    override fun constructLoadingRequest(): LoadingRequest<Array<Array<ToptenEntry>>> {
-        return LoadingRequest(ToptenRequest(userId, userName, ANIME),
-                ToptenRequest(userId, userName, MANGA), zipFunction = { partialResults ->
-
-            @Suppress("UNCHECKED_CAST")
-            (com.proxerme.app.fragment.framework.RetainedLoadingFragment.LoadingResult(arrayOf(
-                    partialResults[0] as Array<ToptenEntry>,
-                    partialResults[1] as Array<ToptenEntry>
-            )))
-        })
-    }
-
-    override fun showContent(result: Array<Array<ToptenEntry>>) {
-        updateVisibility()
-    }
-
-    private fun updateVisibility() {
         if (animeAdapter.isEmpty()) {
             animeContainer.visibility = View.GONE
         } else {
@@ -148,4 +117,15 @@ class ToptenFragment : EasyLoadingFragment<Array<Array<ToptenEntry>>>() {
             mangaContainer.visibility = View.VISIBLE
         }
     }
+
+    override fun constructTask(): Task<ZippedToptenResult> {
+        return ZippedTask(
+                LoadingTask({ ToptenRequest(userId, userName, ANIME) }),
+                LoadingTask({ ToptenRequest(userId, userName, MANGA) }),
+                zipFunction = ::ZippedToptenResult
+        )
+    }
+
+    class ZippedToptenResult(val animeEntries: Array<ToptenEntry>,
+                             val mangaEntries: Array<ToptenEntry>)
 }
