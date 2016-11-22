@@ -33,7 +33,7 @@ abstract class SingleLoadingFragment<T> : MainFragment() {
             ErrorHandler.getMessageForErrorCode(context, exception)
         } else context.getString(R.string.error_unknown)
 
-        doShowError(message)
+        showError(message)
     }
 
     open protected val isSwipeToRefreshEnabled = false
@@ -86,28 +86,21 @@ abstract class SingleLoadingFragment<T> : MainFragment() {
         super.onDestroy()
     }
 
-    open protected fun doShowError(message: String, buttonMessage: String? = null,
-                                   onButtonClickListener: View.OnClickListener? = null) {
+    open protected fun showError(message: String, buttonMessage: String? = null,
+                                 onButtonClickListener: View.OnClickListener? = null) {
         errorText.text = Utils.buildClickableText(context, message,
                 onWebClickListener = Link.OnClickListener { link ->
                     Utils.viewLink(context, link + "?device=mobile")
                 })
 
-        if (buttonMessage == null) {
-            errorButton.text = getString(R.string.error_retry)
-        } else {
-            errorButton.text = buttonMessage
+        errorButton.text = when (buttonMessage) {
+            null -> getString(R.string.error_retry)
+            else -> buttonMessage
         }
-
-        if (onButtonClickListener == null) {
-            errorButton.setOnClickListener {
-                reset()
-            }
-        } else {
-            errorButton.setOnClickListener {
-                onButtonClickListener.onClick(it)
-            }
-        }
+        errorButton.setOnClickListener(when (onButtonClickListener) {
+            null -> View.OnClickListener { reset() }
+            else -> onButtonClickListener
+        })
     }
 
     open protected fun reset() {
