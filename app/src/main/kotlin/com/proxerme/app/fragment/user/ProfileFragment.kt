@@ -10,8 +10,10 @@ import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.TouchableMovementMethod
 import com.proxerme.app.R
 import com.proxerme.app.activity.UserActivity
-import com.proxerme.app.fragment.framework.EasyLoadingFragment
+import com.proxerme.app.fragment.framework.SingleLoadingFragment
 import com.proxerme.app.manager.SectionManager.Section
+import com.proxerme.app.task.LoadingTask
+import com.proxerme.app.task.Task
 import com.proxerme.app.util.TimeUtil
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.bindView
@@ -23,11 +25,11 @@ import com.proxerme.library.connection.user.request.UserInfoRequest
  *
  * @author Ruben Gees
  */
-class ProfileFragment : EasyLoadingFragment<UserInfo>() {
+class ProfileFragment : SingleLoadingFragment<UserInfo>() {
+
     companion object {
         private const val ARGUMENT_USER_ID = "user_id"
         private const val ARGUMENT_USER_NAME = "user_name"
-        private const val STATE_USER_INFO = "fragment_profile_state_user_info"
 
         fun newInstance(userId: String? = null, userName: String? = null): ProfileFragment {
             if (userId.isNullOrBlank() && userName.isNullOrBlank()) {
@@ -65,7 +67,6 @@ class ProfileFragment : EasyLoadingFragment<UserInfo>() {
 
         userId = arguments.getString(ARGUMENT_USER_ID)
         userName = arguments.getString(ARGUMENT_USER_NAME)
-        result = savedInstanceState?.getParcelable(STATE_USER_INFO)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -73,23 +74,17 @@ class ProfileFragment : EasyLoadingFragment<UserInfo>() {
         return inflater.inflate(R.layout.fragment_profile, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         statusText.movementMethod = TouchableMovementMethod.getInstance()
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-        outState.putParcelable(STATE_USER_INFO, result)
+    override fun constructTask(): Task<UserInfo> {
+        return LoadingTask { UserInfoRequest(userId, userName) }
     }
 
-    override fun constructLoadingRequest(): LoadingRequest<UserInfo> {
-        return LoadingRequest(UserInfoRequest(userId, userName))
-    }
-
-    override fun showContent(result: UserInfo) {
+    override fun present(result: UserInfo) {
         (activity as UserActivity).setUserInfo(result)
 
         val totalPoints = result.animePoints + result.mangaPoints + result.uploadPoints +
