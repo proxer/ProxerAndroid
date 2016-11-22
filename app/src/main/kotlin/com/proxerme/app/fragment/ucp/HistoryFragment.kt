@@ -55,7 +55,7 @@ class HistoryFragment : EasyPagingFragment<HistoryEntry>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        adapter = HistoryAdapter(savedInstanceState)
+        adapter = HistoryAdapter()
         adapter.callback = object : HistoryAdapter.HistoryAdapterCallback() {
             override fun onItemClick(item: HistoryEntry) {
                 MediaActivity.navigateTo(activity, item.id, item.name)
@@ -81,12 +81,6 @@ class HistoryFragment : EasyPagingFragment<HistoryEntry>() {
         loginModule.onStop()
 
         super.onStop()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-        adapter.saveInstanceState(outState)
     }
 
     override fun constructPagedLoadingRequest(page: Int): LoadingRequest<Array<HistoryEntry>> {

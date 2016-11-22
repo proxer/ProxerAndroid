@@ -60,7 +60,7 @@ class CommentFragment : EasyPagingFragment<Comment>() {
             sortCriteria = CommentSortParameter.RATING
         }
 
-        adapter = CommentAdapter(savedInstanceState)
+        adapter = CommentAdapter()
         adapter.callback = object : CommentAdapter.CommentAdapterCallback() {
             override fun onUserClick(item: Comment) {
                 UserActivity.navigateTo(activity, item.userId, item.username, item.imageId)
@@ -104,7 +104,6 @@ class CommentFragment : EasyPagingFragment<Comment>() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        adapter.saveInstanceState(outState)
         outState.putString(STATE_SORT_CRITERIA, sortCriteria)
     }
 

@@ -99,7 +99,7 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
             }
         }
 
-        mangaAdapter = MangaAdapter(savedInstanceState)
+        mangaAdapter = MangaAdapter()
         adapter = EasyHeaderFooterAdapter(mangaAdapter)
 
         synchronize(reminderEpisode)
@@ -201,7 +201,6 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
 
         outState.putInt(REMINDER_EPISODE_STATE, reminderEpisode ?: 0)
         outState.putParcelable(CHAPTER_STATE, result)
-        mangaAdapter.saveInstanceState(outState)
     }
 
     override fun showContent(result: Chapter) {

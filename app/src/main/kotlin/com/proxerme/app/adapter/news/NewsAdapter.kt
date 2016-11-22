@@ -1,6 +1,5 @@
 package com.proxerme.app.adapter.news
 
-import android.os.Bundle
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -28,11 +27,9 @@ import java.util.*
  *
  * @author Ruben Gees
  */
-class NewsAdapter(savedInstanceState: Bundle? = null) : PagingAdapter<News>() {
+class NewsAdapter : PagingAdapter<News>() {
 
     private companion object {
-        private const val ITEMS_STATE = "adapter_news_state_items"
-        private const val EXPANDED_IDS_STATE = "adapter_news_state_extension_ids"
         private const val ICON_SIZE = 32
         private const val ICON_PADDING = 8
         private const val ROTATION_HALF = 180f
@@ -43,12 +40,6 @@ class NewsAdapter(savedInstanceState: Bundle? = null) : PagingAdapter<News>() {
     var callback: NewsAdapterCallback? = null
 
     init {
-        savedInstanceState?.let {
-            list.addAll(it.getParcelableArrayList(ITEMS_STATE))
-            it.getStringArrayList(EXPANDED_IDS_STATE)
-                    .associateByTo(expanded, { it }, { true })
-        }
-
         setHasStableIds(true)
     }
 
@@ -57,11 +48,6 @@ class NewsAdapter(savedInstanceState: Bundle? = null) : PagingAdapter<News>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder? {
         return ViewHolder(LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_news, parent, false))
-    }
-
-    override fun saveInstanceState(outState: Bundle) {
-        outState.putParcelableArrayList(ITEMS_STATE, list)
-        outState.putStringArrayList(EXPANDED_IDS_STATE, ArrayList(expanded.keys))
     }
 
     override fun removeCallback() {

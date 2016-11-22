@@ -1,6 +1,5 @@
 package com.proxerme.app.adapter.ucp
 
-import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -21,19 +20,11 @@ import com.proxerme.library.info.ProxerUrlHolder
  *
  * @author Ruben Gees
  */
-class HistoryAdapter(savedInstanceState: Bundle? = null) : PagingAdapter<HistoryEntry>() {
-
-    private companion object {
-        private const val ITEMS_STATE = "adapter_history_state_items"
-    }
+class HistoryAdapter : PagingAdapter<HistoryEntry>() {
 
     var callback: HistoryAdapterCallback? = null
 
     init {
-        savedInstanceState?.let {
-            list.addAll(it.getParcelableArrayList(ITEMS_STATE))
-        }
-
         setHasStableIds(false)
     }
 
@@ -43,10 +34,6 @@ class HistoryAdapter(savedInstanceState: Bundle? = null) : PagingAdapter<History
             PagingViewHolder<HistoryEntry> {
         return HistoryViewHolder(LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_history_entry, parent, false))
-    }
-
-    override fun saveInstanceState(outState: Bundle) {
-        outState.putParcelableArrayList(ITEMS_STATE, list)
     }
 
     override fun removeCallback() {

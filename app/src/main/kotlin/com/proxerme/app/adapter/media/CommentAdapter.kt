@@ -1,6 +1,6 @@
 package com.proxerme.app.adapter.media
 
-import android.os.Bundle
+import android.support.v4.util.LongSparseArray
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -16,7 +16,6 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
-import com.proxerme.app.util.ParcelableLongSparseArray
 import com.proxerme.app.util.TimeUtil
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.bindView
@@ -31,33 +30,20 @@ import java.util.*
  *
  * @author Ruben Gees
  */
-class CommentAdapter(savedInstanceState: Bundle? = null) : PagingAdapter<Comment>() {
+class CommentAdapter : PagingAdapter<Comment>() {
 
     private companion object {
-        private const val ITEMS_STATE = "adapter_comment_state_items"
-        private const val EXPANDED_STATE = "adapter_comment_expanded_items"
-        private const val SPOILER_STATE = "adapter_comment_spoiler_items"
         private const val ICON_SIZE = 32
         private const val ICON_PADDING = 8
         private const val ROTATION_HALF = 180f
     }
 
-    private val expandedMap: ParcelableLongSparseArray
-    private val spoilerStateMap: HashMap<String, List<Boolean>>
+    private val expandedMap = LongSparseArray<Boolean>()
+    private val spoilerStateMap = HashMap<String, List<Boolean>>()
 
     var callback: CommentAdapterCallback? = null
 
     init {
-        if (savedInstanceState == null) {
-            expandedMap = ParcelableLongSparseArray()
-            spoilerStateMap = HashMap<String, List<Boolean>>()
-        } else {
-            expandedMap = savedInstanceState.getParcelable(EXPANDED_STATE)
-            spoilerStateMap = savedInstanceState.getBundle(SPOILER_STATE).toSpoilerMap()
-
-            list.addAll(savedInstanceState.getParcelableArrayList(ITEMS_STATE))
-        }
-
         setHasStableIds(true)
     }
 
@@ -68,41 +54,8 @@ class CommentAdapter(savedInstanceState: Bundle? = null) : PagingAdapter<Comment
                 .inflate(R.layout.item_comment, parent, false))
     }
 
-    override fun saveInstanceState(outState: Bundle) {
-        outState.putParcelableArrayList(ITEMS_STATE, list)
-        outState.putParcelable(EXPANDED_STATE, expandedMap)
-        outState.putBundle(SPOILER_STATE, spoilerStateMap.toBundle())
-    }
-
     override fun removeCallback() {
         callback = null
-    }
-
-    private fun HashMap<String, List<Boolean>>.toBundle(): Bundle {
-        return Bundle().apply {
-            entries.forEach {
-                this.putIntegerArrayList(it.key, it.value.map {
-                    when (it) {
-                        true -> 1
-                        false -> 0
-                    }
-                } as ArrayList<Int>)
-            }
-        }
-    }
-
-    private fun Bundle.toSpoilerMap(): HashMap<String, List<Boolean>> {
-        return HashMap<String, List<Boolean>>().apply {
-            keySet().forEach {
-                put(it, getIntegerArrayList(it).map {
-                    when (it) {
-                        1 -> true
-                        0 -> false
-                        else -> throw IllegalArgumentException("Illegal mapping for Boolean: $it")
-                    }
-                })
-            }
-        }
     }
 
     inner class ViewHolder(itemView: View) : PagingViewHolder<Comment>(itemView) {

@@ -60,7 +60,7 @@ class RelationsFragment : EasyLoadingFragment<Array<Relation>>() {
 
         id = arguments.getString(ARGUMENT_ID)
 
-        adapter = RelationsAdapter(savedInstanceState)
+        adapter = RelationsAdapter()
         adapter.callback = object : RelationsAdapter.RelationsAdapterCallback() {
             override fun onItemClick(item: Relation) {
                 MediaActivity.navigateTo(activity, item.id, item.name)
@@ -85,12 +85,6 @@ class RelationsFragment : EasyLoadingFragment<Array<Relation>>() {
         list.layoutManager = StaggeredGridLayoutManager(Utils.calculateSpanAmount(activity) + 1,
                 StaggeredGridLayoutManager.VERTICAL)
         list.adapter = adapter
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-        adapter.saveInstanceState(outState)
     }
 
     override fun showContent(result: Array<Relation>) {

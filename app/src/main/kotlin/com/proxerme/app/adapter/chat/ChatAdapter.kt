@@ -1,7 +1,7 @@
 package com.proxerme.app.adapter.chat
 
-import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.support.v4.util.LongSparseArray
 import android.support.v4.util.Pair
 import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
@@ -16,7 +16,6 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.entitiy.LocalMessage
-import com.proxerme.app.util.ParcelableLongSparseArray
 import com.proxerme.app.util.TimeUtil
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.bindView
@@ -28,15 +27,9 @@ import com.proxerme.library.parameters.ActionParameter
 
  * @author Ruben Gees
  */
-class ChatAdapter(savedInstanceState: Bundle? = null, val isGroup: Boolean) :
-        PagingAdapter<LocalMessage>() {
+class ChatAdapter(val isGroup: Boolean) : PagingAdapter<LocalMessage>() {
 
     private companion object {
-        private const val ITEMS_STATE = "adapter_chat_state_items"
-        private const val MESSAGE_SELECTED_IDS_STATE = "adapter_chat_state_message_selected_ids"
-        private const val MESSAGE_SELECTING_STATE = "adapter_chat_state_message_selecting"
-        private const val MESSAGE_SHOWING_TIME_IDS_STATE = "adapter_chat_state_showing_time_ids"
-
         private const val TYPE_MESSAGE_INNER = 0
         private const val TYPE_MESSAGE_SINGLE = 1
         private const val TYPE_MESSAGE_TOP = 2
@@ -50,28 +43,17 @@ class ChatAdapter(savedInstanceState: Bundle? = null, val isGroup: Boolean) :
 
     var user: User? = null
 
-    private val selectedMap: ParcelableLongSparseArray
-    private val showingTimeMap: ParcelableLongSparseArray
+    private val selectedMap = LongSparseArray<Boolean>()
+    private val showingTimeMap = LongSparseArray<Boolean>()
 
     var callback: ChatAdapterCallback? = null
 
-    private var selecting: Boolean
+    private var selecting = false
 
     val selectedItems: List<LocalMessage>
         get() = list.filter { selectedMap.get(it.localId, false) }.sortedBy { it.time }
 
     init {
-        if (savedInstanceState == null) {
-            selectedMap = ParcelableLongSparseArray()
-            showingTimeMap = ParcelableLongSparseArray()
-            selecting = false
-        } else {
-            selectedMap = savedInstanceState.getParcelable(MESSAGE_SELECTED_IDS_STATE)
-            showingTimeMap = savedInstanceState.getParcelable(MESSAGE_SHOWING_TIME_IDS_STATE)
-            selecting = savedInstanceState.getBoolean(MESSAGE_SELECTING_STATE)
-            list.addAll(savedInstanceState.getParcelableArrayList(ITEMS_STATE))
-        }
-
         setHasStableIds(true)
     }
 
@@ -209,13 +191,6 @@ class ChatAdapter(savedInstanceState: Bundle? = null, val isGroup: Boolean) :
         }
 
         return result
-    }
-
-    override fun saveInstanceState(outState: Bundle) {
-        outState.putParcelableArrayList(ITEMS_STATE, list)
-        outState.putBoolean(MESSAGE_SELECTING_STATE, selecting)
-        outState.putParcelable(MESSAGE_SELECTED_IDS_STATE, selectedMap)
-        outState.putParcelable(MESSAGE_SHOWING_TIME_IDS_STATE, showingTimeMap)
     }
 
     override fun clear() {

@@ -100,7 +100,7 @@ class MediaListFragment : EasyPagingFragment<MediaListEntry>() {
             }
         }
 
-        adapter = MediaAdapter(savedInstanceState, category)
+        adapter = MediaAdapter(category)
         adapter.callback = object : MediaAdapterCallback() {
             override fun onItemClick(item: MediaListEntry) {
                 MediaActivity.navigateTo(activity, item.id, item.name)
@@ -248,7 +248,6 @@ class MediaListFragment : EasyPagingFragment<MediaListEntry>() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        adapter.saveInstanceState(outState)
         outState.putString(STATE_SORT_CRITERIA, sortCriteria)
         outState.putString(STATE_TYPE, type)
         outState.putString(STATE_SEARCH_QUERY, searchQuery)

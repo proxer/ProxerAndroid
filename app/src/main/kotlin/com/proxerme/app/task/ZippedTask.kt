@@ -5,17 +5,17 @@ package com.proxerme.app.task
  *
  * @author Ruben Gees
  */
-class ZippedTask<O, O2, O3>(private val firstTask: Task<O>, private val secondTask: Task<O2>,
-                            private val zipFunction: (O, O2) -> O3) : BaseTask<O3>() {
+class ZippedTask<I, I2, O>(private val firstTask: Task<I>, private val secondTask: Task<I2>,
+                           private val zipFunction: (I, I2) -> O) : BaseTask<O>() {
 
     override val isWorking: Boolean
         get() = firstTask.isWorking || secondTask.isWorking
 
-    override fun execute(successCallback: (O3) -> Unit, exceptionCallback: (Exception) -> Unit) {
+    override fun execute(successCallback: (O) -> Unit, exceptionCallback: (Exception) -> Unit) {
         onStartCallback?.invoke()
 
-        var firstResult: O? = null
-        var secondResult: O2? = null
+        var firstResult: I? = null
+        var secondResult: I2? = null
 
         firstTask.execute({ result ->
             secondResult?.let {

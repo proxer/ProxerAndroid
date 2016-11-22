@@ -1,6 +1,5 @@
 package com.proxerme.app.adapter.chat
 
-import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -26,19 +25,11 @@ import com.proxerme.library.info.ProxerUrlHolder
 
  * @author Ruben Gees
  */
-class ConferenceAdapter(savedInstanceState: Bundle? = null) : PagingAdapter<LocalConference>() {
-
-    private companion object {
-        private const val ITEMS_STATE = "adapter_conference_state_items"
-    }
+class ConferenceAdapter : PagingAdapter<LocalConference>() {
 
     var callback: ConferenceAdapterCallback? = null
 
     init {
-        savedInstanceState?.let {
-            list.addAll(it.getParcelableArrayList(ITEMS_STATE))
-        }
-
         setHasStableIds(true)
     }
 
@@ -48,10 +39,6 @@ class ConferenceAdapter(savedInstanceState: Bundle? = null) : PagingAdapter<Loca
     }
 
     override fun getItemId(position: Int): Long = list[position].localId
-
-    override fun saveInstanceState(outState: Bundle) {
-        outState.putParcelableArrayList(ITEMS_STATE, list)
-    }
 
     override fun removeCallback() {
         callback = null

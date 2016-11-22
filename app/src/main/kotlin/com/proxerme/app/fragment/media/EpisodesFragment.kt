@@ -47,7 +47,7 @@ class EpisodesFragment : EasyPagingFragment<RichEpisode>() {
 
         id = arguments.getString(ARGUMENT_ID)
 
-        adapter = EpisodeAdapter(savedInstanceState)
+        adapter = EpisodeAdapter()
         adapter.callback = object : EpisodeAdapter.EpisodeAdapterCallback() {
             override fun onLanguageClick(language: String, episode: RichEpisode) {
                 if (episode.isAnime()) {
@@ -61,12 +61,6 @@ class EpisodesFragment : EasyPagingFragment<RichEpisode>() {
         }
 
         layoutManager = LinearLayoutManager(context)
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-        adapter.saveInstanceState(outState)
     }
 
     override fun constructPagedLoadingRequest(page: Int): LoadingRequest<Array<RichEpisode>> {

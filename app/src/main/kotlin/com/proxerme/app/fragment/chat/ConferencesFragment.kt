@@ -95,12 +95,6 @@ class ConferencesFragment : EasyChatServiceFragment<LocalConference>() {
         super.onDestroy()
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-        adapter.saveInstanceState(outState)
-    }
-
     override fun loadFromDB(): Collection<LocalConference> {
         return context.chatDatabase.getConferences()
     }

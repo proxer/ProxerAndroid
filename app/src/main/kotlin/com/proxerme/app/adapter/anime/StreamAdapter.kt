@@ -1,6 +1,6 @@
 package com.proxerme.app.adapter.anime
 
-import android.os.Bundle
+import android.support.v4.util.LongSparseArray
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +14,6 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
-import com.proxerme.app.util.ParcelableLongSparseArray
 import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.anime.entity.Stream
 import com.proxerme.library.info.ProxerUrlHolder
@@ -25,13 +24,9 @@ import org.joda.time.DateTime
  *
  * @author Ruben Gees
  */
-class StreamAdapter(private val getRealPosition: (Int) -> Int, savedInstanceState: Bundle?) :
-        PagingAdapter<Stream>() {
+class StreamAdapter(private val getRealPosition: (Int) -> Int) : PagingAdapter<Stream>() {
 
     private companion object {
-        private const val ITEMS_STATE = "adapter_anime_state_items"
-        private const val EXPANDED_STATE = "adapter_stream_expanded_items"
-
         private const val DATE_PATTERN = "dd.MM.yyyy"
 
         private const val ICON_SIZE = 28
@@ -40,27 +35,12 @@ class StreamAdapter(private val getRealPosition: (Int) -> Int, savedInstanceStat
 
     var callback: StreamAdapterCallback? = null
 
-    private val expanded: ParcelableLongSparseArray
-
-    init {
-        if (savedInstanceState == null) {
-            expanded = ParcelableLongSparseArray()
-        } else {
-            expanded = savedInstanceState.getParcelable(EXPANDED_STATE)
-
-            list.addAll(savedInstanceState.getParcelableArrayList(ITEMS_STATE))
-        }
-    }
+    private val expanded = LongSparseArray<Boolean>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
             PagingViewHolder<Stream> {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_stream,
                 parent, false))
-    }
-
-    override fun saveInstanceState(outState: Bundle) {
-        outState.putParcelableArrayList(ITEMS_STATE, list)
-        outState.putParcelable(EXPANDED_STATE, expanded)
     }
 
     override fun removeCallback() {

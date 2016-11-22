@@ -158,7 +158,7 @@ class ChatFragment : EasyChatServiceFragment<LocalMessage>() {
 
         conference = arguments.getParcelable(ARGUMENT_CONFERENCE)
 
-        adapter = ChatAdapter(savedInstanceState, conference.isGroup)
+        adapter = ChatAdapter(conference.isGroup)
         adapter.user = UserManager.user
         adapter.callback = adapterCallback
 
@@ -239,12 +239,6 @@ class ChatFragment : EasyChatServiceFragment<LocalMessage>() {
         if (adapter.selectedItems.isNotEmpty()) {
             adapterCallback.onMessageSelection(adapter.selectedItems.size)
         }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-        adapter.saveInstanceState(outState)
     }
 
     override fun loadFromDB(): Collection<LocalMessage> {

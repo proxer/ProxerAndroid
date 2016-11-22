@@ -94,7 +94,7 @@ class NewChatFragment : MainFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        adapter = NewChatParticipantAdapter(savedInstanceState)
+        adapter = NewChatParticipantAdapter()
         adapter.callback = object : NewChatParticipantAdapter.NewChatParticipantAdapterCallback() {
             override fun onParticipantRemoved() {
                 if (adapter.itemCount <= 0) {
@@ -217,7 +217,6 @@ class NewChatFragment : MainFragment() {
 
         outState.putString(NEW_PARTICIPANT_STATE, newParticipant)
         outState.putString(NEW_CONFERENCE_ID_STATE, newConferenceId)
-        adapter.saveInstanceState(outState)
     }
 
     @Suppress("unused")

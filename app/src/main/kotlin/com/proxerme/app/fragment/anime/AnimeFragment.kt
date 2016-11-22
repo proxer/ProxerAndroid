@@ -106,7 +106,7 @@ class AnimeFragment : EasyLoadingFragment<Array<Stream>>() {
             }
         }
 
-        streamAdapter = StreamAdapter({ adapter.getRealPosition(it) }, savedInstanceState)
+        streamAdapter = StreamAdapter({ adapter.getRealPosition(it) })
         adapter = EasyHeaderFooterAdapter(streamAdapter)
 
 
@@ -180,7 +180,6 @@ class AnimeFragment : EasyLoadingFragment<Array<Stream>>() {
         super.onSaveInstanceState(outState)
 
         outState.putInt(REMINDER_EPISODE_STATE, reminderEpisode ?: 0)
-        streamAdapter.saveInstanceState(outState)
     }
 
     override fun showContent(result: Array<Stream>) {

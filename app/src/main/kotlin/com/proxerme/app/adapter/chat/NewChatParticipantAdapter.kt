@@ -1,6 +1,5 @@
 package com.proxerme.app.adapter.chat
 
-import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -23,21 +22,10 @@ import java.util.*
  *
  * @author Ruben Gees
  */
-class NewChatParticipantAdapter(savedInstanceState: Bundle?) :
-        RecyclerView.Adapter<NewChatParticipantAdapter.ViewHolder>() {
-
-    private companion object {
-        private const val ITEMS_STATE = "new_chat_participant_adapter_state_items"
-    }
+class NewChatParticipantAdapter : RecyclerView.Adapter<NewChatParticipantAdapter.ViewHolder>() {
 
     val participants = ArrayList<Participant>()
     var callback: NewChatParticipantAdapterCallback? = null
-
-    init {
-        savedInstanceState?.let {
-            participants.addAll(it.getParcelableArrayList(ITEMS_STATE))
-        }
-    }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(participants[position])
@@ -61,10 +49,6 @@ class NewChatParticipantAdapter(savedInstanceState: Bundle?) :
     }
 
     fun isEmpty() = participants.isEmpty()
-
-    fun saveInstanceState(outState: Bundle) {
-        outState.putParcelableArrayList(ITEMS_STATE, participants)
-    }
 
     fun removeCallback() {
         callback = null

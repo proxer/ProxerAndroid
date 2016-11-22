@@ -75,7 +75,7 @@ class ReminderFragment : EasyPagingFragment<Reminder>() {
             category = it.getString(CATEGORY_STATE)
         }
 
-        adapter = ReminderAdapter(savedInstanceState)
+        adapter = ReminderAdapter()
         adapter.callback = object : ReminderAdapter.ReminderAdapterCallback() {
             override fun onItemClick(item: Reminder) {
                 MediaActivity.navigateTo(activity, item.entryId, item.name)
@@ -161,7 +161,6 @@ class ReminderFragment : EasyPagingFragment<Reminder>() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        adapter.saveInstanceState(outState)
         outState.putString(CATEGORY_STATE, category)
     }
 

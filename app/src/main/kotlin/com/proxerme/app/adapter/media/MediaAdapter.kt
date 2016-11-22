@@ -1,7 +1,6 @@
 package com.proxerme.app.adapter.media
 
 import android.content.Context
-import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -25,21 +24,12 @@ import com.proxerme.library.parameters.CategoryParameter.MANGA
  *
  * @author Ruben Gees
  */
-class MediaAdapter(savedInstanceState: Bundle? = null,
-                   @CategoryParameter.Category private val category: String) :
+class MediaAdapter(@CategoryParameter.Category private val category: String) :
         PagingAdapter<MediaListEntry>() {
-
-    private companion object {
-        private const val ITEMS_STATE = "adapter_media_state_items"
-    }
 
     var callback: MediaAdapterCallback? = null
 
     init {
-        savedInstanceState?.let {
-            list.addAll(it.getParcelableArrayList("${ITEMS_STATE}_$category"))
-        }
-
         setHasStableIds(true)
     }
 
@@ -48,10 +38,6 @@ class MediaAdapter(savedInstanceState: Bundle? = null,
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_media_entry, parent, false))
-    }
-
-    override fun saveInstanceState(outState: Bundle) {
-        outState.putParcelableArrayList("${ITEMS_STATE}_$category", list)
     }
 
     override fun removeCallback() {

@@ -63,14 +63,14 @@ class ToptenFragment : SingleLoadingFragment<ToptenFragment.ZippedToptenResult>(
         userId = arguments.getString(ToptenFragment.Companion.ARGUMENT_USER_ID)
         userName = arguments.getString(ToptenFragment.Companion.ARGUMENT_USER_NAME)
 
-        animeAdapter = ToptenAdapter(null, ANIME)
+        animeAdapter = ToptenAdapter()
         animeAdapter.callback = object : ToptenAdapter.ToptenAdapterCallback() {
             override fun onItemClick(item: ToptenEntry) {
                 MediaActivity.navigateTo(activity, item.id, item.name)
             }
         }
 
-        mangaAdapter = ToptenAdapter(null, MANGA)
+        mangaAdapter = ToptenAdapter()
         mangaAdapter.callback = object : ToptenAdapter.ToptenAdapterCallback() {
             override fun onItemClick(item: ToptenEntry) {
                 MediaActivity.navigateTo(activity, item.id, item.name)

@@ -1,6 +1,5 @@
 package com.proxerme.app.adapter.user
 
-import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -23,21 +22,12 @@ import com.proxerme.library.parameters.CommentStateParameter.*
  *
  * @author Ruben Gees
  */
-class UserMediaAdapter(savedInstanceState: Bundle? = null,
-                       @CategoryParameter.Category private val category: String) :
+class UserMediaAdapter(@CategoryParameter.Category private val category: String) :
         PagingAdapter<UserMediaListEntry>() {
-
-    private companion object {
-        private const val ITEMS_STATE = "adapter_user_media_state_items"
-    }
 
     var callback: UserMediaAdapterCallback? = null
 
     init {
-        savedInstanceState?.let {
-            list.addAll(it.getParcelableArrayList("${ITEMS_STATE}_$category"))
-        }
-
         setHasStableIds(true)
     }
 
@@ -46,10 +36,6 @@ class UserMediaAdapter(savedInstanceState: Bundle? = null,
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_user_media_entry, parent, false))
-    }
-
-    override fun saveInstanceState(outState: Bundle) {
-        outState.putParcelableArrayList("${ITEMS_STATE}_$category", list)
     }
 
     override fun removeCallback() {

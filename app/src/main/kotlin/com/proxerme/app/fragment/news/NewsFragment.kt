@@ -7,44 +7,39 @@ import com.proxerme.app.activity.DashboardActivity
 import com.proxerme.app.activity.ImageDetailActivity
 import com.proxerme.app.adapter.news.NewsAdapter
 import com.proxerme.app.adapter.news.NewsAdapter.NewsAdapterCallback
-import com.proxerme.app.event.NewsEvent
-import com.proxerme.app.fragment.framework.EasyPagingFragment
+import com.proxerme.app.fragment.framework.PagedLoadingFragment
 import com.proxerme.app.helper.NotificationHelper
 import com.proxerme.app.manager.SectionManager.Section
+import com.proxerme.app.task.LoadingTask
+import com.proxerme.app.task.Task
 import com.proxerme.app.util.Utils
 import com.proxerme.library.connection.notifications.entitiy.News
 import com.proxerme.library.connection.notifications.request.NewsRequest
 import com.proxerme.library.info.ProxerUrlHolder
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 
 /**
  * TODO: Describe Class
  *
  * @author Ruben Gees
  */
-class NewsFragment : EasyPagingFragment<News>() {
+class NewsFragment : PagedLoadingFragment<News>() {
 
     companion object {
-
-        const val ITEMS_ON_PAGE = 15
-
         fun newInstance(): NewsFragment {
             return NewsFragment()
         }
     }
 
     override val section = Section.NEWS
-    override val itemsOnPage = ITEMS_ON_PAGE
+    override val itemsOnPage = 15
 
-    override lateinit var layoutManager: GridLayoutManager
+    override lateinit var layoutManager: () -> GridLayoutManager
     override lateinit var adapter: NewsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        adapter = NewsAdapter(savedInstanceState)
+        adapter = NewsAdapter()
         adapter.callback = object : NewsAdapterCallback() {
             override fun onItemClick(item: News) {
                 (activity as DashboardActivity).showPage(ProxerUrlHolder.getNewsUrl(item.categoryId,
@@ -63,13 +58,7 @@ class NewsFragment : EasyPagingFragment<News>() {
             }
         }
 
-        layoutManager = GridLayoutManager(context, Utils.calculateSpanAmount(activity))
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        EventBus.getDefault().register(this)
+        layoutManager = { GridLayoutManager(context, Utils.calculateSpanAmount(activity)) }
     }
 
     override fun onResume() {
@@ -78,25 +67,7 @@ class NewsFragment : EasyPagingFragment<News>() {
         NotificationHelper.cancelNotification(context, NotificationHelper.NEWS_NOTIFICATION)
     }
 
-    override fun onStop() {
-        EventBus.getDefault().unregister(this)
-
-        super.onStop()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-        adapter.saveInstanceState(outState)
-    }
-
-    override fun constructPagedLoadingRequest(page: Int): LoadingRequest<Array<News>> {
-        return LoadingRequest(NewsRequest(page).withLimit(ITEMS_ON_PAGE))
-    }
-
-    @Suppress("unused")
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onNewsReceived(event: NewsEvent) {
-        adapter.insert(event.news)
+    override fun constructTask(pageCallback: () -> Int): Task<Array<News>> {
+        return LoadingTask({ NewsRequest(pageCallback.invoke()) })
     }
 }

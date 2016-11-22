@@ -240,7 +240,7 @@
     <string name="fragment_ucp_overview_title">Übersicht</string>
     <string name="fragment_ucp_overview_clip_title">Proxer Profillink</string>
 
-    <string name="history_entry_status">%1$s - %2$s</string>
+    <string name="history_entry_status">%1$d - %2$s</string>
     <string name="fragment_ucp_overview_general">Allgemein</string>
     <string name="fragment_ucp_overview_profile_link">Profillink</string>
     <string name="usernamefragment_ucp_overview_username">Username</string>

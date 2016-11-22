@@ -78,7 +78,7 @@ class UserMediaListFragment : EasyPagingFragment<UserMediaListEntry>() {
             sortCriteria = UserMediaSortParameter.NAME_ASCENDING
         }
 
-        adapter = UserMediaAdapter(savedInstanceState, category)
+        adapter = UserMediaAdapter(category)
         adapter.callback = object : UserMediaAdapterCallback() {
             override fun onItemClick(item: UserMediaListEntry) {
                 MediaActivity.navigateTo(activity, item.id, item.name)
@@ -170,7 +170,6 @@ class UserMediaListFragment : EasyPagingFragment<UserMediaListEntry>() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        adapter.saveInstanceState(outState)
         outState.putString(STATE_SORT_CRITERIA, sortCriteria)
     }
 

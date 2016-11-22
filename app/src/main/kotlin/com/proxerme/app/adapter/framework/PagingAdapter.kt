@@ -1,7 +1,5 @@
 package com.proxerme.app.adapter.framework
 
-import android.os.Bundle
-import android.os.Parcelable
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import java.util.*
@@ -11,8 +9,7 @@ import java.util.*
  *
  * @author Ruben Gees
  */
-abstract class PagingAdapter<T>() : RecyclerView.Adapter<PagingAdapter.PagingViewHolder<T>>()
-where T : Parcelable {
+abstract class PagingAdapter<T>() : RecyclerView.Adapter<PagingAdapter.PagingViewHolder<T>>() {
 
     protected val list: ArrayList<T> = arrayListOf()
 
@@ -80,10 +77,6 @@ where T : Parcelable {
         notifyItemRangeRemoved(0, previousSize)
     }
 
-    open fun saveInstanceState(outState: Bundle) {
-
-    }
-
     open fun contains(item: T): Boolean {
         return list.contains(item)
     }
@@ -92,8 +85,7 @@ where T : Parcelable {
 
     }
 
-    abstract class PagingViewHolder<T>(itemView: View) :
-            RecyclerView.ViewHolder(itemView) where T : Parcelable {
+    abstract class PagingViewHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         open fun bind(item: T) {
 

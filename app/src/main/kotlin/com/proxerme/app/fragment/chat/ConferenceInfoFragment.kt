@@ -53,7 +53,7 @@ class ConferenceInfoFragment : EasyLoadingFragment<ConferenceInfoContainer>() {
         super.onCreate(savedInstanceState)
 
         conferenceId = arguments.getString(CONFERENCE_ID_ARGUMENT)
-        adapter = ConferenceParticipantAdapter(savedInstanceState)
+        adapter = ConferenceParticipantAdapter()
         adapter.callback = object : ConferenceParticipantAdapterCallback() {
             override fun onItemClick(item: ConferenceInfoUser) {
                 UserActivity.navigateTo(activity, item.id, item.username,
@@ -82,7 +82,6 @@ class ConferenceInfoFragment : EasyLoadingFragment<ConferenceInfoContainer>() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        adapter.saveInstanceState(outState)
         outState.putParcelable(CONFERENCE_INFO_STATE, result)
     }
 

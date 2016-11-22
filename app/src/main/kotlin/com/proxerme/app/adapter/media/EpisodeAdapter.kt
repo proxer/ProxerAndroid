@@ -1,7 +1,7 @@
 package com.proxerme.app.adapter.media
 
-import android.os.Bundle
 import android.support.v7.widget.RecyclerView
+import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +14,6 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.entitiy.RichEpisode
-import com.proxerme.app.util.ParcelableBooleanSparseArray
 import com.proxerme.app.util.bindView
 import com.proxerme.library.info.ProxerUrlHolder
 import com.proxerme.library.parameters.LanguageParameter.Language
@@ -26,35 +25,15 @@ import org.jetbrains.anko.forEachChildWithIndex
  *
  * @author Ruben Gees
  */
-class EpisodeAdapter(savedInstanceState: Bundle? = null) : PagingAdapter<RichEpisode>() {
+class EpisodeAdapter() : PagingAdapter<RichEpisode>() {
 
-    private companion object {
-        private const val ITEMS_STATE = "adapter_episode_state_items"
-        private const val EXPANDED_STATE = "adapter_episode_expanded_items"
-    }
-
-    private val expanded: ParcelableBooleanSparseArray
+    private val expanded = SparseBooleanArray()
 
     var callback: EpisodeAdapterCallback? = null
-
-    init {
-        if (savedInstanceState == null) {
-            expanded = ParcelableBooleanSparseArray()
-        } else {
-            expanded = savedInstanceState.getParcelable(EXPANDED_STATE)
-
-            list.addAll(savedInstanceState.getParcelableArrayList(ITEMS_STATE))
-        }
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagingViewHolder<RichEpisode> {
         return ViewHolder(LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_episode, parent, false))
-    }
-
-    override fun saveInstanceState(outState: Bundle) {
-        outState.putParcelableArrayList(ITEMS_STATE, list)
-        outState.putParcelable(EXPANDED_STATE, expanded)
     }
 
     override fun removeCallback() {

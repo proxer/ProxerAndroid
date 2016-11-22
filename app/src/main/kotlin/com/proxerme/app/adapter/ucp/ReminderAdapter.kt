@@ -1,6 +1,5 @@
 package com.proxerme.app.adapter.ucp
 
-import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -24,12 +23,7 @@ import java.util.*
  *
  * @author Ruben Gees
  */
-class ReminderAdapter(savedInstanceState: Bundle? = null) : PagingAdapter<Reminder>() {
-
-    private companion object {
-        private const val ITEMS_STATE = "adapter_reminder_state_items"
-        private const val ITEMS_TO_REMOVE_STATE = "adapter_reminder_state_items_to_remove"
-    }
+class ReminderAdapter : PagingAdapter<Reminder>() {
 
     private val _itemsToRemove = ArrayList<Reminder>()
     val itemsToRemove: List<Reminder>
@@ -38,11 +32,6 @@ class ReminderAdapter(savedInstanceState: Bundle? = null) : PagingAdapter<Remind
     var callback: ReminderAdapterCallback? = null
 
     init {
-        savedInstanceState?.let {
-            list.addAll(it.getParcelableArrayList(ITEMS_STATE))
-            _itemsToRemove.addAll(it.getParcelableArrayList(ITEMS_TO_REMOVE_STATE))
-        }
-
         setHasStableIds(true)
     }
 
@@ -51,11 +40,6 @@ class ReminderAdapter(savedInstanceState: Bundle? = null) : PagingAdapter<Remind
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagingViewHolder<Reminder> {
         return ReminderViewHolder(LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_reminder, parent, false))
-    }
-
-    override fun saveInstanceState(outState: Bundle) {
-        outState.putParcelableArrayList(ITEMS_STATE, list)
-        outState.putParcelableArrayList(ITEMS_TO_REMOVE_STATE, _itemsToRemove)
     }
 
     override fun removeCallback() {

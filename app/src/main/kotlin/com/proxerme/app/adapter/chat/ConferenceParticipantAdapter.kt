@@ -1,6 +1,5 @@
 package com.proxerme.app.adapter.chat
 
-import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -25,33 +24,18 @@ import com.proxerme.library.info.ProxerUrlHolder
  *
  * @author Ruben Gees
  */
-class ConferenceParticipantAdapter(val savedInstanceState: Bundle?) : PagingAdapter<ConferenceInfoUser>() {
-
-    private companion object {
-        private const val ITEMS_STATE = "adapter_conference_participant_state_items"
-        private const val LEADER_STATE = "adapter_conference_participant_state_leader"
-    }
+class ConferenceParticipantAdapter : PagingAdapter<ConferenceInfoUser>() {
 
     var leader: String? = null
     var callback: ConferenceParticipantAdapterCallback? = null
 
     init {
-        savedInstanceState?.let {
-            list.addAll(it.getParcelableArrayList(ITEMS_STATE))
-            leader = it.getString(LEADER_STATE)
-        }
-
         setHasStableIds(true)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagingViewHolder<ConferenceInfoUser> {
         return ViewHolder(LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_conference_participant, parent, false))
-    }
-
-    override fun saveInstanceState(outState: Bundle) {
-        outState.putParcelableArrayList(ITEMS_STATE, list)
-        outState.putString(LEADER_STATE, leader)
     }
 
     override fun removeCallback() {
