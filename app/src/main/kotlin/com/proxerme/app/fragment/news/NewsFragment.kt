@@ -2,7 +2,9 @@ package com.proxerme.app.fragment.news
 
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import com.proxerme.app.activity.DashboardActivity
 import com.proxerme.app.activity.ImageDetailActivity
@@ -60,10 +62,11 @@ class NewsFragment : PagedLoadingFragment<News>() {
         }
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View {
         layoutManager = GridLayoutManager(context, Utils.calculateSpanAmount(activity))
 
-        super.onViewCreated(view, savedInstanceState)
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun onResume() {

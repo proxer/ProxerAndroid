@@ -6,12 +6,17 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.klinker.android.link_builder.Link
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.task.Task
+import com.proxerme.app.util.ErrorHandler
 import com.proxerme.app.util.KotterKnife
+import com.proxerme.app.util.Utils
 import com.proxerme.app.util.bindView
 import com.proxerme.app.util.listener.EndlessRecyclerOnScrollListener
+import com.proxerme.library.connection.ProxerException
+import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 
 /**
  * TODO: Describe class
@@ -28,12 +33,11 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
     }
 
     private val exceptionCallback = { exception: Exception ->
-//        TODO
-//        val message = if (exception is ProxerException) {
-//            ErrorHandler.getMessageForErrorCode(context, exception)
-//        } else context.getString(R.string.error_unknown)
-//
-//        showError(message)
+        val message = if (exception is ProxerException) {
+            ErrorHandler.getMessageForErrorCode(context, exception)
+        } else context.getString(R.string.error_unknown)
+
+        showError(message)
     }
 
     open protected val isSwipeToRefreshEnabled = false
@@ -43,6 +47,8 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
     open protected val list: RecyclerView by bindView(R.id.list)
     open protected val root: ViewGroup by bindView(R.id.root)
     open protected val progress: SwipeRefreshLayout by bindView(R.id.progress)
+
+    protected lateinit var headerFooterAdapter: EasyHeaderFooterAdapter
 
     abstract protected val layoutManager: RecyclerView.LayoutManager
     abstract protected val adapter: PagingAdapter<T>
@@ -100,15 +106,16 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
 
     open protected fun showError(message: String, buttonMessage: String? = null,
                                  onButtonClickListener: View.OnClickListener? = null) {
-//        TODO
-//        Utils.showError(context, message, headerFooterAdapter,
-//                buttonMessage = buttonMessage, parent = root,
-//                onWebClickListener = Link.OnClickListener { link ->
-//                    Utils.viewLink(context, link + "?device=mobile")
-//                },
-//                onButtonClickListener = onButtonClickListener ?: View.OnClickListener {
-//
-//                })
+        Utils.showError(context, message, headerFooterAdapter,
+                buttonMessage = buttonMessage, parent = root,
+                onWebClickListener = Link.OnClickListener { link ->
+                    Utils.viewLink(context, link + "?device=mobile")
+                },
+                onButtonClickListener = onButtonClickListener ?: View.OnClickListener {
+                    task.execute(successCallback, exceptionCallback)
+
+                    headerFooterAdapter.removeFooter()
+                })
     }
 
     open protected fun reset() {
@@ -121,13 +128,13 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
     }
 
     private fun setupList() {
-        val resolvedLayoutManager = layoutManager
+        headerFooterAdapter = EasyHeaderFooterAdapter(adapter)
 
-        list.layoutManager = resolvedLayoutManager
-        list.adapter = adapter
-        list.addOnScrollListener(object : EndlessRecyclerOnScrollListener(resolvedLayoutManager) {
+        list.layoutManager = layoutManager
+        list.adapter = headerFooterAdapter
+        list.addOnScrollListener(object : EndlessRecyclerOnScrollListener(layoutManager) {
             override fun onLoadMore() {
-                if (!hasReachedEnd && !task.isWorking) {
+                if (!hasReachedEnd && !headerFooterAdapter.hasFooter() && !task.isWorking) {
                     task.execute(successCallback, exceptionCallback)
                 }
             }
