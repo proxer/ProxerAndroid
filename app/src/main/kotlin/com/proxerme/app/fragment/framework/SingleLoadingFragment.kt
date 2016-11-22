@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import com.klinker.android.link_builder.Link
+import com.klinker.android.link_builder.TouchableMovementMethod
 import com.proxerme.app.R
 import com.proxerme.app.task.CachedTask
 import com.proxerme.app.task.Task
@@ -74,6 +75,7 @@ abstract class SingleLoadingFragment<T> : MainFragment() {
 
         progress.setColorSchemeResources(R.color.primary, R.color.accent)
         progress.isEnabled = isSwipeToRefreshEnabled
+        errorText.movementMethod = TouchableMovementMethod.getInstance()
 
         task.execute(successCallback, exceptionCallback)
     }
