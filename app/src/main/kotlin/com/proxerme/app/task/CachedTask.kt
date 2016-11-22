@@ -52,6 +52,7 @@ class CachedTask<O>(private val task: Task<O>) : BaseTask<O>() {
         cachedResult = null
         cachedException = null
 
+        task.destroy()
         super.destroy()
     }
 }

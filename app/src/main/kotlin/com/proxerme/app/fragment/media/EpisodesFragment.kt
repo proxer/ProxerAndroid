@@ -2,13 +2,18 @@ package com.proxerme.app.fragment.media
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import com.proxerme.app.activity.AnimeActivity
 import com.proxerme.app.activity.MangaActivity
 import com.proxerme.app.adapter.media.EpisodeAdapter
 import com.proxerme.app.entitiy.RichEpisode
-import com.proxerme.app.fragment.framework.EasyPagingFragment
+import com.proxerme.app.fragment.framework.PagedLoadingFragment
 import com.proxerme.app.manager.SectionManager.Section
-import com.proxerme.library.connection.info.entity.ListInfo
+import com.proxerme.app.task.LoadingTask
+import com.proxerme.app.task.MappedTask
+import com.proxerme.app.task.Task
 import com.proxerme.library.connection.info.request.ListInfoRequest
 
 /**
@@ -16,11 +21,8 @@ import com.proxerme.library.connection.info.request.ListInfoRequest
  *
  * @author Ruben Gees
  */
-class EpisodesFragment : EasyPagingFragment<RichEpisode>() {
-
+class EpisodesFragment : PagedLoadingFragment<RichEpisode>() {
     companion object {
-
-        const val ITEMS_ON_PAGE = Int.MAX_VALUE
 
         private const val ARGUMENT_ID = "id"
 
@@ -33,19 +35,18 @@ class EpisodesFragment : EasyPagingFragment<RichEpisode>() {
         }
     }
 
-    override val itemsOnPage = ITEMS_ON_PAGE
+    override val itemsOnPage = Int.MAX_VALUE
     override val section = Section.EPISODES
     override val isSwipeToRefreshEnabled = false
 
     override lateinit var adapter: EpisodeAdapter
     override lateinit var layoutManager: LinearLayoutManager
 
-    private lateinit var id: String
+    private val id: String
+        get() = arguments.getString(ARGUMENT_ID)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        id = arguments.getString(ARGUMENT_ID)
 
         adapter = EpisodeAdapter()
         adapter.callback = object : EpisodeAdapter.EpisodeAdapterCallback() {
@@ -59,19 +60,21 @@ class EpisodesFragment : EasyPagingFragment<RichEpisode>() {
                 }
             }
         }
-
-        layoutManager = LinearLayoutManager(context)
     }
 
-    override fun constructPagedLoadingRequest(page: Int): LoadingRequest<Array<RichEpisode>> {
-        return LoadingRequest(ListInfoRequest(id, page).withLimit(itemsOnPage),
-                transformFunction = {
-                    val listInfo = it as ListInfo
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View {
+        layoutManager = LinearLayoutManager(context)
 
-                    listInfo.episodes
-                            .groupBy { it.number }
-                            .values.map { RichEpisode(listInfo.userState, listInfo.lastEpisode, it) }
-                            .toTypedArray()
-                })
+        return super.onCreateView(inflater, container, savedInstanceState)
+    }
+
+    override fun constructTask(pageCallback: () -> Int): Task<Array<RichEpisode>> {
+        return MappedTask(LoadingTask({ ListInfoRequest(id, pageCallback.invoke()) }), { listInfo ->
+            listInfo.episodes
+                    .groupBy { it.number }
+                    .values.map { RichEpisode(listInfo.userState, listInfo.lastEpisode, it) }
+                    .toTypedArray()
+        })
     }
 }

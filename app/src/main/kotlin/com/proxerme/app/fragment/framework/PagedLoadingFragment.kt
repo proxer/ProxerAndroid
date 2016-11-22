@@ -21,8 +21,9 @@ import com.proxerme.app.util.listener.EndlessRecyclerOnScrollListener
 abstract class PagedLoadingFragment<T> : MainFragment() {
 
     private val successCallback = { data: Array<T> ->
-        present(calculateNextPage(), data)
+        hasReachedEnd = data.size < itemsOnPage
 
+        present(calculateNextPage(), data)
         adapter.append(data)
     }
 
@@ -48,6 +49,7 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
     abstract protected val itemsOnPage: Int
 
     private var hasReachedEnd = false
+    private var firstLoad = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,7 +77,9 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
 
         setupList()
 
-        if (savedInstanceState == null) {
+        if (firstLoad) {
+            firstLoad = false
+
             task.execute(successCallback, exceptionCallback)
         }
     }

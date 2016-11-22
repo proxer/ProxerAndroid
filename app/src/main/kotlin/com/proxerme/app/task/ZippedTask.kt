@@ -51,4 +51,10 @@ class ZippedTask<I, I2, O>(private val firstTask: Task<I>, private val secondTas
         firstTask.reset()
         secondTask.reset()
     }
+
+    override fun destroy() {
+        firstTask.destroy()
+        secondTask.destroy()
+        super.destroy()
+    }
 }
