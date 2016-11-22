@@ -74,7 +74,6 @@ abstract class SingleLoadingFragment<T> : MainFragment() {
         KotterKnife.reset(this)
 
         progress.setColorSchemeResources(R.color.primary, R.color.accent)
-        progress.isEnabled = isSwipeToRefreshEnabled
         errorText.movementMethod = TouchableMovementMethod.getInstance()
 
         task.execute(successCallback, exceptionCallback)
@@ -109,10 +108,7 @@ abstract class SingleLoadingFragment<T> : MainFragment() {
     }
 
     private fun setRefreshing(enable: Boolean) {
-        if (isSwipeToRefreshEnabled) {
-            progress.isEnabled = enable
-        }
-
+        progress.isEnabled = if (!enable) isSwipeToRefreshEnabled else true
         progress.isRefreshing = enable
     }
 
