@@ -2,6 +2,7 @@ package com.proxerme.app.fragment.news
 
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
+import android.view.View
 import android.widget.ImageView
 import com.proxerme.app.activity.DashboardActivity
 import com.proxerme.app.activity.ImageDetailActivity
@@ -33,7 +34,7 @@ class NewsFragment : PagedLoadingFragment<News>() {
     override val section = Section.NEWS
     override val itemsOnPage = 15
 
-    override lateinit var layoutManager: () -> GridLayoutManager
+    override lateinit var layoutManager: GridLayoutManager
     override lateinit var adapter: NewsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,8 +58,12 @@ class NewsFragment : PagedLoadingFragment<News>() {
                                 item.threadId, "mobile"))
             }
         }
+    }
 
-        layoutManager = { GridLayoutManager(context, Utils.calculateSpanAmount(activity)) }
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        layoutManager = GridLayoutManager(context, Utils.calculateSpanAmount(activity))
+
+        super.onViewCreated(view, savedInstanceState)
     }
 
     override fun onResume() {

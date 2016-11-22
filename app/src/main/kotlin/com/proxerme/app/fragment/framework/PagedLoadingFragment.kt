@@ -43,7 +43,7 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
     open protected val root: ViewGroup by bindView(R.id.root)
     open protected val progress: SwipeRefreshLayout by bindView(R.id.progress)
 
-    abstract protected val layoutManager: () -> RecyclerView.LayoutManager
+    abstract protected val layoutManager: RecyclerView.LayoutManager
     abstract protected val adapter: PagingAdapter<T>
     abstract protected val itemsOnPage: Int
 
@@ -71,8 +71,6 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        KotterKnife.reset(this)
-
         progress.setColorSchemeResources(R.color.primary, R.color.accent)
 
         setupList()
@@ -80,6 +78,14 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
         if (savedInstanceState == null) {
             task.execute(successCallback, exceptionCallback)
         }
+    }
+
+    override fun onDestroyView() {
+        list.adapter = null
+        list.layoutManager = null
+        KotterKnife.reset(this)
+
+        super.onDestroyView()
     }
 
     override fun onDestroy() {
@@ -111,7 +117,7 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
     }
 
     private fun setupList() {
-        val resolvedLayoutManager = layoutManager.invoke()
+        val resolvedLayoutManager = layoutManager
 
         list.layoutManager = resolvedLayoutManager
         list.adapter = adapter

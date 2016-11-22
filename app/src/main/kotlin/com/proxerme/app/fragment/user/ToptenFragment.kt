@@ -78,13 +78,6 @@ class ToptenFragment : SingleLoadingFragment<ToptenFragment.ZippedToptenResult>(
         }
     }
 
-    override fun onDestroy() {
-        animeAdapter.callback = null
-        mangaAdapter.callback = null
-
-        super.onDestroy()
-    }
-
     override fun onCreateView(inflater: android.view.LayoutInflater, container: ViewGroup?,
                               savedInstanceState: android.os.Bundle?): android.view.View {
         return inflater.inflate(com.proxerme.app.R.layout.fragment_topten, container, false)
@@ -99,6 +92,20 @@ class ToptenFragment : SingleLoadingFragment<ToptenFragment.ZippedToptenResult>(
         mangaList.isNestedScrollingEnabled = false
         mangaList.layoutManager = GridLayoutManager(context, Utils.calculateSpanAmount(activity) + 1)
         mangaList.adapter = mangaAdapter
+    }
+
+    override fun onDestroyView() {
+        animeList.adapter = null
+        mangaList.adapter = null
+
+        super.onDestroyView()
+    }
+
+    override fun onDestroy() {
+        animeAdapter.callback = null
+        mangaAdapter.callback = null
+
+        super.onDestroy()
     }
 
     override fun present(data: ZippedToptenResult) {

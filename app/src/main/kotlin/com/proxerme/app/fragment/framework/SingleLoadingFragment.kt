@@ -71,12 +71,16 @@ abstract class SingleLoadingFragment<T> : MainFragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        KotterKnife.reset(this)
-
         progress.setColorSchemeResources(R.color.primary, R.color.accent)
         errorText.movementMethod = TouchableMovementMethod.getInstance()
 
         task.execute(successCallback, exceptionCallback)
+    }
+
+    override fun onDestroyView() {
+        KotterKnife.reset(this)
+
+        super.onDestroyView()
     }
 
     override fun onDestroy() {
