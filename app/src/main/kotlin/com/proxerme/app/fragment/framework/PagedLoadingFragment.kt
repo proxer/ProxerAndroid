@@ -1,6 +1,7 @@
 package com.proxerme.app.fragment.framework
 
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -37,9 +38,18 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
         internalShowErrorIfNecessary()
     }
 
-    open protected val isSwipeToRefreshEnabled = false
+    private val refreshSuccessCallback = { data: Array<T> ->
+        adapter.insert(data)
+    }
+
+    private val refreshExceptionCallback = { exceptionResult: Exception ->
+        Snackbar.make(root, "Aktualisierung fehlgeschlagen", Snackbar.LENGTH_LONG).show()
+    }
+
+    open protected val isSwipeToRefreshEnabled = true
 
     private lateinit var task: Task<Array<T>>
+    private lateinit var refreshTask: Task<Array<T>>
 
     open protected val list: RecyclerView by bindView(R.id.list)
     open protected val root: ViewGroup by bindView(R.id.root)
@@ -64,11 +74,19 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
                 .onStart {
                     exception = null
 
-                    setRefreshing(true)
+                    updateRefreshing()
                     internalShowErrorIfNecessary()
                 }
                 .onFinish {
-                    setRefreshing(false)
+                    updateRefreshing()
+                }
+
+        refreshTask = constructTask { 0 }
+                .onStart {
+                    updateRefreshing()
+                }
+                .onFinish {
+                    updateRefreshing()
                 }
     }
 
@@ -81,9 +99,16 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         progress.setColorSchemeResources(R.color.primary, R.color.accent)
+        progress.setOnRefreshListener(when (isSwipeToRefreshEnabled) {
+            true -> SwipeRefreshLayout.OnRefreshListener {
+                refreshTask.execute(refreshSuccessCallback, refreshExceptionCallback)
+            }
+            false -> null
+        })
 
         setupList()
         internalShowErrorIfNecessary()
+        updateRefreshing()
 
         if (firstLoad) {
             firstLoad = false
@@ -103,6 +128,7 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
 
     override fun onDestroy() {
         task.destroy()
+        refreshTask.destroy()
 
         super.onDestroy()
     }
@@ -121,6 +147,8 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
 
     open protected fun reset() {
         task.reset()
+        refreshTask.reset()
+
         task.execute(successCallback, exceptionCallback)
     }
 
@@ -158,6 +186,10 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
         } else {
             return adapter.itemCount / itemsOnPage
         }
+    }
+
+    private fun updateRefreshing() {
+        setRefreshing(if (task.isWorking || refreshTask.isWorking) true else false)
     }
 
     private fun setRefreshing(enable: Boolean) {

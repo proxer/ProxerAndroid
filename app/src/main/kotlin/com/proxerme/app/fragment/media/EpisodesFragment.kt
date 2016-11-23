@@ -77,6 +77,13 @@ class EpisodesFragment : SingleLoadingFragment<Array<RichEpisode>>() {
         list.adapter = adapter
     }
 
+    override fun onDestroyView() {
+        list.adapter = null
+        list.layoutManager = null
+
+        super.onDestroyView()
+    }
+
     override fun present(data: Array<RichEpisode>) {
         adapter.replace(data)
     }
