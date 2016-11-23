@@ -2,19 +2,16 @@ package com.proxerme.app.fragment.ucp
 
 import android.os.Bundle
 import android.support.design.widget.Snackbar
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.StaggeredGridLayoutManager
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import com.proxerme.app.R
 import com.proxerme.app.activity.MediaActivity
 import com.proxerme.app.adapter.ucp.ReminderAdapter
 import com.proxerme.app.application.MainApplication
-import com.proxerme.app.fragment.framework.EasyPagingFragment
+import com.proxerme.app.fragment.framework.PagedLoadingFragment
 import com.proxerme.app.manager.SectionManager.Section
-import com.proxerme.app.module.LoginModule
+import com.proxerme.app.task.LoadingTask
+import com.proxerme.app.task.Task
 import com.proxerme.app.util.Utils
 import com.proxerme.library.connection.ProxerCall
 import com.proxerme.library.connection.ucp.entitiy.Reminder
@@ -27,38 +24,19 @@ import com.proxerme.library.parameters.CategoryParameter
  *
  * @author Ruben Gees
  */
-class ReminderFragment : EasyPagingFragment<Reminder>() {
+class ReminderFragment : PagedLoadingFragment<Reminder>() {
 
     companion object {
-
-        const val ITEMS_ON_PAGE = 30
-        private const val CATEGORY_STATE = "fragment_reminder_state_category"
 
         fun newInstance(): ReminderFragment {
             return ReminderFragment()
         }
     }
 
-    private val loginModule = LoginModule(object : LoginModule.LoginModuleCallback {
-        override val activity: AppCompatActivity
-            get() = this@ReminderFragment.activity as AppCompatActivity
-
-        override fun showError(message: String, buttonMessage: String?,
-                               onButtonClickListener: View.OnClickListener?) {
-            this@ReminderFragment.clear()
-            this@ReminderFragment.doShowError(message, buttonMessage, onButtonClickListener)
-        }
-
-        override fun load(showProgress: Boolean) {
-            this@ReminderFragment.load()
-        }
-    })
-
     override val section = Section.REMINDER
-    override val itemsOnPage = ITEMS_ON_PAGE
+    override val itemsOnPage = 30
     override val isSwipeToRefreshEnabled = true
-    override val canLoad: Boolean
-        get() = super.canLoad && loginModule.canLoad()
+    override val isLoginRequired = true
 
     override lateinit var layoutManager: StaggeredGridLayoutManager
     override lateinit var adapter: ReminderAdapter
@@ -70,10 +48,6 @@ class ReminderFragment : EasyPagingFragment<Reminder>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        savedInstanceState?.let {
-            category = it.getString(CATEGORY_STATE)
-        }
 
         adapter = ReminderAdapter()
         adapter.callback = object : ReminderAdapter.ReminderAdapterCallback() {
@@ -87,9 +61,6 @@ class ReminderFragment : EasyPagingFragment<Reminder>() {
                 synchronize()
             }
         }
-
-        layoutManager = StaggeredGridLayoutManager(Utils.calculateSpanAmount(activity) + 1,
-                StaggeredGridLayoutManager.VERTICAL)
 
         setHasOptionsMenu(true)
         synchronize()
@@ -105,6 +76,14 @@ class ReminderFragment : EasyPagingFragment<Reminder>() {
         }
 
         super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View {
+        layoutManager = StaggeredGridLayoutManager(Utils.calculateSpanAmount(activity) + 1,
+                StaggeredGridLayoutManager.VERTICAL)
+
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -125,24 +104,6 @@ class ReminderFragment : EasyPagingFragment<Reminder>() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onStart() {
-        super.onStart()
-
-        loginModule.onStart()
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        loginModule.onResume()
-    }
-
-    override fun onStop() {
-        loginModule.onStop()
-
-        super.onStop()
-    }
-
     override fun onDestroy() {
         removalTask?.cancel()
         removalTask = null
@@ -150,22 +111,12 @@ class ReminderFragment : EasyPagingFragment<Reminder>() {
         super.onDestroy()
     }
 
-    override fun onPagedLoadStarted(page: Int) {
-        super.onPagedLoadStarted(page)
-
-        if (page == 0) {
-            clear()
+    override fun constructTask(pageCallback: () -> Int): Task<Array<Reminder>> {
+        return LoadingTask {
+            ReminderRequest(pageCallback.invoke())
+                    .withCategory(category)
+                    .withLimit(itemsOnPage)
         }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-        outState.putString(CATEGORY_STATE, category)
-    }
-
-    override fun constructPagedLoadingRequest(page: Int): LoadingRequest<Array<Reminder>> {
-        return LoadingRequest(ReminderRequest(page).withCategory(category).withLimit(ITEMS_ON_PAGE))
     }
 
     @Synchronized

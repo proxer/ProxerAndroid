@@ -3,6 +3,7 @@ package com.proxerme.app.fragment.framework
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.widget.SwipeRefreshLayout
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -10,14 +11,21 @@ import android.view.ViewGroup
 import com.klinker.android.link_builder.Link
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
+import com.proxerme.app.dialog.LoginDialog
+import com.proxerme.app.manager.UserManager
 import com.proxerme.app.task.CachedTask
 import com.proxerme.app.task.Task
+import com.proxerme.app.task.ValidatingTask
 import com.proxerme.app.util.ErrorHandler
+import com.proxerme.app.util.KotterKnife
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.bindView
 import com.proxerme.app.util.listener.EndlessRecyclerOnScrollListener
 import com.proxerme.library.connection.ProxerException
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 /**
  * TODO: Describe class
@@ -33,12 +41,18 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
     }
 
     private val exceptionCallback = { exceptionResult: Exception ->
-        val message = when (exceptionResult) {
-            is ProxerException -> ErrorHandler.getMessageForErrorCode(context, exceptionResult)
-            else -> context.getString(R.string.error_unknown)
+        when (exceptionResult) {
+            is ProxerException -> {
+                showError(ErrorHandler.getMessageForErrorCode(context, exceptionResult))
+            }
+            is NotLoggedInException -> {
+                showError(getString(R.string.status_not_logged_in),
+                        getString(R.string.module_login_login), View.OnClickListener {
+                    LoginDialog.show(activity as AppCompatActivity)
+                })
+            }
+            else -> showError(context.getString(R.string.error_unknown))
         }
-
-        showError(message)
     }
 
     private val refreshSuccessCallback = { data: Array<T> ->
@@ -48,6 +62,17 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
     private val refreshExceptionCallback = { exceptionResult: Exception ->
         Snackbar.make(root, getString(R.string.error_refresh), Snackbar.LENGTH_LONG).show()
     }
+
+    private val loginValidator = {
+        if (isLoginRequired) {
+            if (UserManager.loginState != UserManager.LoginState.LOGGED_IN ||
+                    UserManager.ongoingState != UserManager.OngoingState.NONE) {
+                throw NotLoggedInException()
+            }
+        }
+    }
+
+    private class NotLoggedInException : Exception()
 
     open protected val isSwipeToRefreshEnabled = true
     open protected val isLoginRequired = false
@@ -72,7 +97,7 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
 
         retainInstance = true
 
-        task = CachedTask(constructTask({ calculateNextPage() }))
+        task = ValidatingTask(CachedTask(constructTask({ calculateNextPage() })), loginValidator)
                 .onStart {
                     headerFooterAdapter.removeFooter()
 
@@ -82,7 +107,7 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
                     updateRefreshing()
                 }
 
-        refreshTask = constructTask { 0 }
+        refreshTask = ValidatingTask(constructTask { 0 }, loginValidator)
                 .onStart {
                     setRefreshing(true)
                 }
@@ -113,7 +138,17 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
     override fun onStart() {
         super.onStart()
 
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this)
+        }
+
         task.execute(successCallback, exceptionCallback)
+    }
+
+    override fun onStop() {
+        EventBus.getDefault().unregister(this)
+
+        super.onStop()
     }
 
     override fun onDestroyView() {
@@ -121,6 +156,8 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
         adapter.removeCallback()
         list.adapter = null
         list.layoutManager = null
+
+        KotterKnife.reset(this)
 
         super.onDestroyView()
     }
@@ -156,6 +193,18 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
                     task.reset()
                     task.execute(successCallback, exceptionCallback)
                 })
+    }
+
+    @Suppress("unused")
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onLoginStateChanged(@Suppress("UNUSED_PARAMETER") loginState: UserManager.LoginState) {
+        reset()
+    }
+
+    @Suppress("unused")
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onOngoingStateChanged(@Suppress("UNUSED_PARAMETER") ongoingState: UserManager.OngoingState) {
+        reset()
     }
 
     private fun setupList() {

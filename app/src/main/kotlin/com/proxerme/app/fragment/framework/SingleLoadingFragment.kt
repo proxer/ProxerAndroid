@@ -12,6 +12,7 @@ import com.proxerme.app.R
 import com.proxerme.app.task.CachedTask
 import com.proxerme.app.task.Task
 import com.proxerme.app.util.ErrorHandler
+import com.proxerme.app.util.KotterKnife
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.ProxerException
@@ -80,6 +81,12 @@ abstract class SingleLoadingFragment<T> : MainFragment() {
         super.onStart()
 
         task.execute(successCallback, exceptionCallback)
+    }
+
+    override fun onDestroyView() {
+        KotterKnife.reset(this)
+
+        super.onDestroyView()
     }
 
     override fun onDestroy() {
