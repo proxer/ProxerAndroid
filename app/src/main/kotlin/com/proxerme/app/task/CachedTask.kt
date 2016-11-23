@@ -8,7 +8,7 @@ package com.proxerme.app.task
 class CachedTask<O>(private val task: Task<O>) : BaseTask<O>() {
 
     override val isWorking: Boolean
-        get() = throw UnsupportedOperationException()
+        get() = task.isWorking
 
     private var cachedResult: O? = null
     private var cachedException: Exception? = null

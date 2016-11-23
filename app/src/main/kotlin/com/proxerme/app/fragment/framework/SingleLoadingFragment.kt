@@ -1,7 +1,6 @@
 package com.proxerme.app.fragment.framework
 
 import android.os.Bundle
-import android.support.v4.widget.SwipeRefreshLayout
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -12,7 +11,6 @@ import com.proxerme.app.R
 import com.proxerme.app.task.CachedTask
 import com.proxerme.app.task.Task
 import com.proxerme.app.util.ErrorHandler
-import com.proxerme.app.util.KotterKnife
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.ProxerException
@@ -22,7 +20,7 @@ import com.proxerme.library.connection.ProxerException
  *
  * @author Ruben Gees
  */
-abstract class SingleLoadingFragment<T> : MainFragment() {
+abstract class SingleLoadingFragment<T> : BaseLoadingFragment() {
 
     private val successCallback = { data: T ->
         present(data)
@@ -36,11 +34,8 @@ abstract class SingleLoadingFragment<T> : MainFragment() {
         showError(message)
     }
 
-    open protected val isSwipeToRefreshEnabled = false
-
     private lateinit var task: Task<T>
 
-    open protected val progress: SwipeRefreshLayout by bindView(R.id.progress)
     open protected val contentContainer: ViewGroup by bindView(R.id.contentContainer)
     open protected val errorContainer: ViewGroup by bindView(R.id.errorContainer)
     open protected val errorText: TextView by bindView(R.id.errorText)
@@ -71,16 +66,9 @@ abstract class SingleLoadingFragment<T> : MainFragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        progress.setColorSchemeResources(R.color.primary, R.color.accent)
         errorText.movementMethod = TouchableMovementMethod.getInstance()
 
         task.execute(successCallback, exceptionCallback)
-    }
-
-    override fun onDestroyView() {
-        KotterKnife.reset(this)
-
-        super.onDestroyView()
     }
 
     override fun onDestroy() {
@@ -109,11 +97,6 @@ abstract class SingleLoadingFragment<T> : MainFragment() {
     open protected fun reset() {
         task.reset()
         task.execute(successCallback, exceptionCallback)
-    }
-
-    private fun setRefreshing(enable: Boolean) {
-        progress.isEnabled = if (!enable) isSwipeToRefreshEnabled else true
-        progress.isRefreshing = enable
     }
 
     abstract fun present(data: T)
