@@ -28,16 +28,13 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
     private val successCallback = { data: Array<T> ->
         hasReachedEnd = data.size < itemsOnPage
 
-        present(calculateNextPage(), data)
         adapter.append(data)
     }
 
-    private val exceptionCallback = { exception: Exception ->
-        val message = if (exception is ProxerException) {
-            ErrorHandler.getMessageForErrorCode(context, exception)
-        } else context.getString(R.string.error_unknown)
+    private val exceptionCallback = { exceptionResult: Exception ->
+        exception = exceptionResult
 
-        showError(message)
+        internalShowErrorIfNecessary()
     }
 
     open protected val isSwipeToRefreshEnabled = false
@@ -56,6 +53,7 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
 
     private var hasReachedEnd = false
     private var firstLoad = true
+    private var exception: Exception? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,7 +62,10 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
 
         task = constructTask { calculateNextPage() }
                 .onStart {
+                    exception = null
+
                     setRefreshing(true)
+                    internalShowErrorIfNecessary()
                 }
                 .onFinish {
                     setRefreshing(false)
@@ -82,6 +83,7 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
         progress.setColorSchemeResources(R.color.primary, R.color.accent)
 
         setupList()
+        internalShowErrorIfNecessary()
 
         if (firstLoad) {
             firstLoad = false
@@ -91,6 +93,7 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
     }
 
     override fun onDestroyView() {
+        headerFooterAdapter.removeFooter()
         list.adapter = null
         list.layoutManager = null
         KotterKnife.reset(this)
@@ -113,8 +116,6 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
                 },
                 onButtonClickListener = onButtonClickListener ?: View.OnClickListener {
                     task.execute(successCallback, exceptionCallback)
-
-                    headerFooterAdapter.removeFooter()
                 })
     }
 
@@ -123,8 +124,18 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
         task.execute(successCallback, exceptionCallback)
     }
 
-    open protected fun present(page: Int, data: Array<T>) {
+    private fun internalShowErrorIfNecessary() {
+        exception?.let {
+            val message = if (it is ProxerException) {
+                ErrorHandler.getMessageForErrorCode(context, it)
+            } else context.getString(R.string.error_unknown)
 
+            showError(message)
+
+            return
+        }
+
+        headerFooterAdapter.removeFooter()
     }
 
     private fun setupList() {
@@ -134,7 +145,7 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
         list.adapter = headerFooterAdapter
         list.addOnScrollListener(object : EndlessRecyclerOnScrollListener(layoutManager) {
             override fun onLoadMore() {
-                if (!hasReachedEnd && !headerFooterAdapter.hasFooter() && !task.isWorking) {
+                if (!hasReachedEnd && exception == null && !task.isWorking) {
                     task.execute(successCallback, exceptionCallback)
                 }
             }
