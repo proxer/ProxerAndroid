@@ -24,7 +24,7 @@ import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
  *
  * @author Ruben Gees
  */
-abstract class PagedLoadingFragment<T> : BaseLoadingFragment() {
+abstract class PagedLoadingFragment<T> : MainFragment() {
 
     private val successCallback = { data: Array<T> ->
         hasReachedEnd = data.size < itemsOnPage
@@ -33,9 +33,10 @@ abstract class PagedLoadingFragment<T> : BaseLoadingFragment() {
     }
 
     private val exceptionCallback = { exceptionResult: Exception ->
-        val message = if (exceptionResult is ProxerException) {
-            ErrorHandler.getMessageForErrorCode(context, exceptionResult)
-        } else context.getString(R.string.error_unknown)
+        val message = when (exceptionResult) {
+            is ProxerException -> ErrorHandler.getMessageForErrorCode(context, exceptionResult)
+            else -> context.getString(R.string.error_unknown)
+        }
 
         showError(message)
     }
@@ -45,14 +46,16 @@ abstract class PagedLoadingFragment<T> : BaseLoadingFragment() {
     }
 
     private val refreshExceptionCallback = { exceptionResult: Exception ->
-        Snackbar.make(root, "Aktualisierung fehlgeschlagen", Snackbar.LENGTH_LONG).show()
+        Snackbar.make(root, getString(R.string.error_refresh), Snackbar.LENGTH_LONG).show()
     }
 
-    override val isSwipeToRefreshEnabled = true
+    open protected val isSwipeToRefreshEnabled = true
+    open protected val isLoginRequired = false
 
     private lateinit var task: Task<Array<T>>
     private lateinit var refreshTask: Task<Array<T>>
 
+    open protected val progress: SwipeRefreshLayout by bindView(R.id.progress)
     open protected val list: RecyclerView by bindView(R.id.list)
     open protected val root: ViewGroup by bindView(R.id.root)
 
@@ -69,7 +72,7 @@ abstract class PagedLoadingFragment<T> : BaseLoadingFragment() {
 
         retainInstance = true
 
-        task = CachedTask(constructTask { calculateNextPage() })
+        task = CachedTask(constructTask({ calculateNextPage() }))
                 .onStart {
                     headerFooterAdapter.removeFooter()
 
@@ -105,12 +108,17 @@ abstract class PagedLoadingFragment<T> : BaseLoadingFragment() {
         })
 
         setupList()
+    }
+
+    override fun onStart() {
+        super.onStart()
 
         task.execute(successCallback, exceptionCallback)
     }
 
     override fun onDestroyView() {
         headerFooterAdapter.removeFooter()
+        adapter.removeCallback()
         list.adapter = null
         list.layoutManager = null
 
@@ -124,6 +132,19 @@ abstract class PagedLoadingFragment<T> : BaseLoadingFragment() {
         super.onDestroy()
     }
 
+    open protected fun clear() {
+        task.reset()
+        refreshTask.reset()
+        adapter.clear()
+    }
+
+    open protected fun reset() {
+        hasReachedEnd = false
+
+        clear()
+        task.execute(successCallback, exceptionCallback)
+    }
+
     open protected fun showError(message: String, buttonMessage: String? = null,
                                  onButtonClickListener: View.OnClickListener? = null) {
         Utils.showError(context, message, headerFooterAdapter,
@@ -135,13 +156,6 @@ abstract class PagedLoadingFragment<T> : BaseLoadingFragment() {
                     task.reset()
                     task.execute(successCallback, exceptionCallback)
                 })
-    }
-
-    open protected fun reset() {
-        task.reset()
-        refreshTask.reset()
-
-        task.execute(successCallback, exceptionCallback)
     }
 
     private fun setupList() {
@@ -165,6 +179,11 @@ abstract class PagedLoadingFragment<T> : BaseLoadingFragment() {
         } else {
             return adapter.itemCount / itemsOnPage
         }
+    }
+
+    private fun setRefreshing(enable: Boolean) {
+        progress.isEnabled = if (!enable) isSwipeToRefreshEnabled else true
+        progress.isRefreshing = enable
     }
 
     private fun updateRefreshing() {

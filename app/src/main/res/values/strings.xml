@@ -151,6 +151,7 @@
     <string name="clipboard_status">In die Zwischenablage kopiert</string>
 
     <string name="status_currently_logging_in">Du wirst angemeldet…</string>
+    <string name="status_currently_logging_out">Du wirst abgemeldet…</string>
     <string name="status_not_logged_in">Du bist nicht angemeldet</string>
 
     <string name="module_login_login">Anmelden</string>
@@ -348,6 +349,7 @@
     <string name="item_stream_play">Abspielen</string>
     <string name="comment_rating_overall">Insgesamt</string>
     <string name="fragment_episodes_title">Episoden</string>
+    <string name="error_refresh">Aktualisierung fehlgeschlagen</string>
 
     <plurals name="media_episode_count">
         <item quantity="one">Eine Episode</item>

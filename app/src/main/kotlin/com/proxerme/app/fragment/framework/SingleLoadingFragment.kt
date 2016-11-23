@@ -1,6 +1,7 @@
 package com.proxerme.app.fragment.framework
 
 import android.os.Bundle
+import android.support.v4.widget.SwipeRefreshLayout
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -20,22 +21,27 @@ import com.proxerme.library.connection.ProxerException
  *
  * @author Ruben Gees
  */
-abstract class SingleLoadingFragment<T> : BaseLoadingFragment() {
+abstract class SingleLoadingFragment<T> : MainFragment() {
 
     private val successCallback = { data: T ->
         present(data)
     }
 
     private val exceptionCallback = { exception: Exception ->
-        val message = if (exception is ProxerException) {
-            ErrorHandler.getMessageForErrorCode(context, exception)
-        } else context.getString(R.string.error_unknown)
+        val message = when (exception) {
+            is ProxerException -> ErrorHandler.getMessageForErrorCode(context, exception)
+            else -> context.getString(R.string.error_unknown)
+        }
 
         showError(message)
     }
 
+    open protected val isSwipeToRefreshEnabled = false
+    open protected val isLoginRequired = false
+
     private lateinit var task: Task<T>
 
+    open protected val progress: SwipeRefreshLayout by bindView(R.id.progress)
     open protected val contentContainer: ViewGroup by bindView(R.id.contentContainer)
     open protected val errorContainer: ViewGroup by bindView(R.id.errorContainer)
     open protected val errorText: TextView by bindView(R.id.errorText)
@@ -66,7 +72,12 @@ abstract class SingleLoadingFragment<T> : BaseLoadingFragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        progress.setColorSchemeResources(R.color.primary, R.color.accent)
         errorText.movementMethod = TouchableMovementMethod.getInstance()
+    }
+
+    override fun onStart() {
+        super.onStart()
 
         task.execute(successCallback, exceptionCallback)
     }
@@ -75,6 +86,15 @@ abstract class SingleLoadingFragment<T> : BaseLoadingFragment() {
         task.destroy()
 
         super.onDestroy()
+    }
+
+    open protected fun clear() {
+        task.reset()
+    }
+
+    open protected fun reset() {
+        clear()
+        task.execute(successCallback, exceptionCallback)
     }
 
     open protected fun showError(message: String, buttonMessage: String? = null,
@@ -94,9 +114,9 @@ abstract class SingleLoadingFragment<T> : BaseLoadingFragment() {
         })
     }
 
-    open protected fun reset() {
-        task.reset()
-        task.execute(successCallback, exceptionCallback)
+    private fun setRefreshing(enable: Boolean) {
+        progress.isEnabled = if (!enable) isSwipeToRefreshEnabled else true
+        progress.isRefreshing = enable
     }
 
     abstract fun present(data: T)
