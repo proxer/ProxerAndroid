@@ -41,18 +41,22 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
     }
 
     private val exceptionCallback = { exceptionResult: Exception ->
-        when (exceptionResult) {
-            is ProxerException -> {
-                showError(ErrorHandler.getMessageForErrorCode(context, exceptionResult))
+        context?.let {
+            when (exceptionResult) {
+                is ProxerException -> {
+                    showError(ErrorHandler.getMessageForErrorCode(context, exceptionResult))
+                }
+                is NotLoggedInException -> {
+                    showError(getString(R.string.status_not_logged_in),
+                            getString(R.string.module_login_login), View.OnClickListener {
+                        LoginDialog.show(activity as AppCompatActivity)
+                    })
+                }
+                else -> showError(context.getString(R.string.error_unknown))
             }
-            is NotLoggedInException -> {
-                showError(getString(R.string.status_not_logged_in),
-                        getString(R.string.module_login_login), View.OnClickListener {
-                    LoginDialog.show(activity as AppCompatActivity)
-                })
-            }
-            else -> showError(context.getString(R.string.error_unknown))
         }
+
+        Unit
     }
 
     private val refreshSuccessCallback = { data: Array<T> ->
@@ -198,13 +202,17 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLoginStateChanged(@Suppress("UNUSED_PARAMETER") loginState: UserManager.LoginState) {
-        reset()
+        if (isLoginRequired) {
+            reset()
+        }
     }
 
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onOngoingStateChanged(@Suppress("UNUSED_PARAMETER") ongoingState: UserManager.OngoingState) {
-        reset()
+        if (isLoginRequired) {
+            reset()
+        }
     }
 
     private fun setupList() {

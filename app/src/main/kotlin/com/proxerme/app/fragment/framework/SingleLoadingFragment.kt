@@ -29,12 +29,16 @@ abstract class SingleLoadingFragment<T> : MainFragment() {
     }
 
     private val exceptionCallback = { exception: Exception ->
-        val message = when (exception) {
-            is ProxerException -> ErrorHandler.getMessageForErrorCode(context, exception)
-            else -> context.getString(R.string.error_unknown)
+        context?.let {
+            val message = when (exception) {
+                is ProxerException -> ErrorHandler.getMessageForErrorCode(context, exception)
+                else -> context.getString(R.string.error_unknown)
+            }
+
+            showError(message)
         }
 
-        showError(message)
+        Unit
     }
 
     open protected val isSwipeToRefreshEnabled = false
