@@ -6,13 +6,13 @@ import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import butterknife.bindView
 import com.proxerme.app.R
 import com.proxerme.app.activity.MediaActivity
 import com.proxerme.app.adapter.media.RelationsAdapter
 import com.proxerme.app.fragment.framework.EasyLoadingFragment
 import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.util.Utils
+import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.info.entity.Relation
 import com.proxerme.library.connection.info.request.RelationRequest
 

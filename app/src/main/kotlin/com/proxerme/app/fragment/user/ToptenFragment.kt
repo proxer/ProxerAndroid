@@ -4,12 +4,12 @@ import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
-import butterknife.bindView
 import com.proxerme.app.activity.MediaActivity
 import com.proxerme.app.adapter.user.ToptenAdapter
 import com.proxerme.app.fragment.framework.EasyLoadingFragment
 import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.util.Utils
+import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.user.entitiy.ToptenEntry
 import com.proxerme.library.connection.user.request.ToptenRequest
 import com.proxerme.library.parameters.CategoryParameter.ANIME

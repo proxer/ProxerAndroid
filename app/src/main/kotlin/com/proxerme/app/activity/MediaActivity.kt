@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.widget.ImageView
-import butterknife.bindView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.proxerme.app.R
@@ -22,6 +21,7 @@ import com.proxerme.app.fragment.media.EpisodesFragment
 import com.proxerme.app.fragment.media.MediaInfoFragment
 import com.proxerme.app.fragment.media.RelationsFragment
 import com.proxerme.app.module.CustomTabsModule
+import com.proxerme.app.util.bindView
 import com.proxerme.library.info.ProxerUrlHolder
 import customtabs.CustomTabActivityHelper
 

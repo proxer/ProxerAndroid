@@ -10,10 +10,10 @@ import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
-import butterknife.bindView
 import com.proxerme.app.R
 import com.proxerme.app.fragment.ucp.HistoryFragment
 import com.proxerme.app.fragment.ucp.UcpOverviewFragment
+import com.proxerme.app.util.bindView
 import org.jetbrains.anko.startActivity
 
 class UcpActivity : AppCompatActivity() {

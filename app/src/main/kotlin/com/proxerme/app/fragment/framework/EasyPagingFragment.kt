@@ -8,12 +8,12 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import butterknife.bindView
 import com.klinker.android.link_builder.Link
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.util.ErrorHandler
 import com.proxerme.app.util.Utils
+import com.proxerme.app.util.bindView
 import com.proxerme.app.util.listener.EndlessRecyclerOnScrollListener
 import com.proxerme.library.connection.ProxerException
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter

@@ -7,12 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import butterknife.bindView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.util.TimeUtil
+import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.ucp.entitiy.HistoryEntry
 import com.proxerme.library.info.ProxerUrlHolder
 

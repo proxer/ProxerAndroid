@@ -7,7 +7,6 @@ import android.support.design.widget.AppBarLayout
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
-import butterknife.bindView
 import com.proxerme.app.R
 import com.proxerme.app.dialog.LoginDialog
 import com.proxerme.app.dialog.LogoutDialog
@@ -35,6 +34,7 @@ import com.proxerme.app.helper.StorageHelper
 import com.proxerme.app.interfaces.OnActivityListener
 import com.proxerme.app.manager.UserManager
 import com.proxerme.app.module.CustomTabsModule
+import com.proxerme.app.util.bindView
 import com.proxerme.library.info.ProxerUrlHolder
 import com.proxerme.library.parameters.CategoryParameter
 import com.rubengees.introduction.IntroductionActivity.OPTION_RESULT

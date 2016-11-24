@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import butterknife.bindView
 import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.TouchableMovementMethod
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
@@ -20,6 +19,7 @@ import com.proxerme.app.entitiy.LocalMessage
 import com.proxerme.app.util.ParcelableLongSparseArray
 import com.proxerme.app.util.TimeUtil
 import com.proxerme.app.util.Utils
+import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.user.entitiy.User
 import com.proxerme.library.parameters.ActionParameter
 

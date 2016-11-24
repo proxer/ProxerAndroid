@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageButton
-import butterknife.bindView
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
@@ -27,6 +26,7 @@ import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.manager.UserManager
 import com.proxerme.app.service.ChatService
 import com.proxerme.app.util.Utils
+import com.proxerme.app.util.bindView
 import com.proxerme.app.util.inputMethodManager
 import com.vanniktech.emoji.EmojiEditText
 import com.vanniktech.emoji.EmojiPopup

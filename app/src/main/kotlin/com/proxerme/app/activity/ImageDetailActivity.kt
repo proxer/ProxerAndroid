@@ -9,13 +9,13 @@ import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.view.ViewGroup
 import android.widget.ImageView
-import butterknife.bindView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.GlideDrawable
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.proxerme.app.R
+import com.proxerme.app.util.bindView
 import okhttp3.HttpUrl
 
 /**

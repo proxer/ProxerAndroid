@@ -6,12 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import butterknife.bindView
 import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.TouchableMovementMethod
 import com.proxerme.app.R
 import com.proxerme.app.util.ErrorHandler
 import com.proxerme.app.util.Utils
+import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.ProxerException
 
 /**

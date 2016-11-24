@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import butterknife.bindView
 import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.TouchableMovementMethod
 import com.proxerme.app.R
@@ -15,6 +14,7 @@ import com.proxerme.app.fragment.framework.EasyLoadingFragment
 import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.util.TimeUtil
 import com.proxerme.app.util.Utils
+import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.user.entitiy.UserInfo
 import com.proxerme.library.connection.user.request.UserInfoRequest
 

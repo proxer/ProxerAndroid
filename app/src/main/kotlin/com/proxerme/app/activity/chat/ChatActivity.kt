@@ -7,11 +7,11 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
-import butterknife.bindView
 import com.proxerme.app.R
 import com.proxerme.app.activity.UserActivity
 import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.fragment.chat.ChatFragment
+import com.proxerme.app.util.bindView
 import org.jetbrains.anko.intentFor
 
 class ChatActivity : AppCompatActivity() {

@@ -8,10 +8,10 @@ import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View.*
 import android.view.WindowManager
-import butterknife.bindView
 import com.devbrackets.android.exomedia.listener.VideoControlsVisibilityListener
 import com.devbrackets.android.exomedia.ui.widget.EMVideoView
 import com.proxerme.app.R
+import com.proxerme.app.util.bindView
 
 class StreamActivity : AppCompatActivity() {
 

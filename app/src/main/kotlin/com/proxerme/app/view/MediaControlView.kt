@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
-import butterknife.bindView
 import com.proxerme.app.R
+import com.proxerme.app.util.bindView
 import org.joda.time.DateTime
 
 /**

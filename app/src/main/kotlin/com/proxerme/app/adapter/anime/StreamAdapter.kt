@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import butterknife.bindView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
@@ -16,6 +15,7 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.util.ParcelableLongSparseArray
+import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.anime.entity.Stream
 import com.proxerme.library.info.ProxerUrlHolder
 import org.joda.time.DateTime

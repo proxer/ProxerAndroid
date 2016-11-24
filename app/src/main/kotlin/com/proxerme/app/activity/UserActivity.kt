@@ -14,7 +14,6 @@ import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
-import butterknife.bindView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
@@ -28,6 +27,7 @@ import com.proxerme.app.fragment.user.ProfileFragment
 import com.proxerme.app.fragment.user.ToptenFragment
 import com.proxerme.app.fragment.user.UserMediaListFragment
 import com.proxerme.app.manager.UserManager
+import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.user.entitiy.UserInfo
 import com.proxerme.library.info.ProxerUrlHolder
 import com.proxerme.library.parameters.CategoryParameter

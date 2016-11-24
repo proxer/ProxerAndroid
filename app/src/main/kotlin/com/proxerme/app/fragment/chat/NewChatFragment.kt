@@ -15,7 +15,6 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
-import butterknife.bindView
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
@@ -33,6 +32,7 @@ import com.proxerme.app.manager.UserManager
 import com.proxerme.app.service.ChatService
 import com.proxerme.app.util.ErrorHandler
 import com.proxerme.app.util.Utils
+import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.messenger.request.NewConferenceRequest
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import com.vanniktech.emoji.EmojiEditText

@@ -108,8 +108,6 @@ dependencies {
 
     compile 'com.vanniktech:emoji:0.4.0-SNAPSHOT'
 
-    compile 'com.jakewharton:kotterknife:0.1.0-SNAPSHOT'
-
     compile 'com.devbrackets.android:exomedia:3.0.1'
 
     compile 'me.zhanghai.android.materialratingbar:library:1.0.2'
