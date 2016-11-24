@@ -44,8 +44,8 @@ class MangaFragment : SingleLoadingFragment<Chapter>() {
         private const val ARGUMENT_TOTAL_EPISODES = "total_episodes"
         private const val ARGUMENT_LANGUAGE = "language"
 
-        private const val ICON_SIZE = 56
-        private const val ICON_PADDING = 8
+        private const val SCROLL_TO_TOP_ICON_SIZE = 56
+        private const val SCROLL_TO_TOP_ICON_PADDING = 8
 
         fun newInstance(id: String, episode: Int, totalEpisodes: Int, language: String):
                 MangaFragment {
@@ -161,8 +161,8 @@ class MangaFragment : SingleLoadingFragment<Chapter>() {
 
         scrollToTop.setImageDrawable(IconicsDrawable(context)
                 .icon(CommunityMaterial.Icon.cmd_chevron_up)
-                .sizeDp(ICON_SIZE)
-                .paddingDp(ICON_PADDING)
+                .sizeDp(SCROLL_TO_TOP_ICON_SIZE)
+                .paddingDp(SCROLL_TO_TOP_ICON_PADDING)
                 .colorRes(android.R.color.white))
 
         scrollToTop.setOnClickListener {
