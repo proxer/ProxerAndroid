@@ -2,14 +2,14 @@ package com.proxerme.app.fragment.media
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
+import android.view.*
 import com.proxerme.app.R
 import com.proxerme.app.activity.UserActivity
 import com.proxerme.app.adapter.media.CommentAdapter
-import com.proxerme.app.fragment.framework.EasyPagingFragment
+import com.proxerme.app.fragment.framework.PagedLoadingFragment
 import com.proxerme.app.manager.SectionManager.Section
+import com.proxerme.app.task.LoadingTask
+import com.proxerme.app.task.Task
 import com.proxerme.library.connection.info.entity.Comment
 import com.proxerme.library.connection.info.request.CommentRequest
 import com.proxerme.library.parameters.CommentSortParameter
@@ -20,14 +20,11 @@ import com.proxerme.library.parameters.CommentSortParameter.CommentSort
  *
  * @author Ruben Gees
  */
-class CommentFragment : EasyPagingFragment<Comment>() {
+class CommentFragment : PagedLoadingFragment<Comment>() {
 
     companion object {
 
-        const val ITEMS_ON_PAGE = 15
-
         private const val ARGUMENT_ID = "id"
-        private const val STATE_SORT_CRITERIA = "state_sort_criteria"
 
         fun newInstance(id: String): CommentFragment {
             return CommentFragment().apply {
@@ -39,35 +36,21 @@ class CommentFragment : EasyPagingFragment<Comment>() {
     }
 
     override val section = Section.COMMENTS
-    override val itemsOnPage = ITEMS_ON_PAGE
+    override val itemsOnPage = 15
 
     @CommentSort
-    private lateinit var sortCriteria: String
+    private var sortCriteria = CommentSortParameter.RATING
 
     override lateinit var adapter: CommentAdapter
     override lateinit var layoutManager: LinearLayoutManager
 
-    private lateinit var id: String
+    private val id: String
+        get() = arguments.getString(ARGUMENT_ID)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        id = arguments.getString(ARGUMENT_ID)
-
-        if (savedInstanceState != null) {
-            sortCriteria = savedInstanceState.getString(STATE_SORT_CRITERIA)
-        } else {
-            sortCriteria = CommentSortParameter.RATING
-        }
-
         adapter = CommentAdapter()
-        adapter.callback = object : CommentAdapter.CommentAdapterCallback() {
-            override fun onUserClick(item: Comment) {
-                UserActivity.navigateTo(activity, item.userId, item.username, item.imageId)
-            }
-        }
-
-        layoutManager = LinearLayoutManager(context)
 
         setHasOptionsMenu(true)
     }
@@ -101,16 +84,29 @@ class CommentFragment : EasyPagingFragment<Comment>() {
         return true
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View {
+        layoutManager = LinearLayoutManager(context)
 
-        outState.putString(STATE_SORT_CRITERIA, sortCriteria)
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
-    override fun constructPagedLoadingRequest(page: Int): LoadingRequest<Array<Comment>> {
-        return LoadingRequest(CommentRequest(id)
-                .withPage(page)
-                .withLimit(itemsOnPage)
-                .withSortType(sortCriteria))
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        adapter.callback = object : CommentAdapter.CommentAdapterCallback() {
+            override fun onUserClick(item: Comment) {
+                UserActivity.navigateTo(activity, item.userId, item.username, item.imageId)
+            }
+        }
+    }
+
+    override fun constructTask(pageCallback: () -> Int): Task<Array<Comment>> {
+        return LoadingTask {
+            CommentRequest(id)
+                    .withPage(pageCallback.invoke())
+                    .withLimit(itemsOnPage)
+                    .withSortType(sortCriteria)
+        }
     }
 }
