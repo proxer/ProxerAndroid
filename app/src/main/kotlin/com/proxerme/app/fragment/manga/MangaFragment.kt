@@ -82,7 +82,7 @@ class MangaFragment : SingleLoadingFragment<Chapter>() {
     private lateinit var mangaAdapter: MangaAdapter
     private lateinit var adapter: EasyHeaderFooterAdapter
 
-    private var reminderTask: Task<Void> = constructReminderTask()
+    private var reminderTask = constructReminderTask()
     private var reminderEpisode: Int? = null
 
     private lateinit var header: MediaControlView
@@ -148,6 +148,8 @@ class MangaFragment : SingleLoadingFragment<Chapter>() {
 
         header.onReminderClickListener = {
             if (it != reminderEpisode) {
+                reminderEpisode = it
+
                 reminderTask.cancel()
                 reminderTask.execute(reminderSuccess, reminderException)
             }
@@ -208,10 +210,14 @@ class MangaFragment : SingleLoadingFragment<Chapter>() {
         header.setDate(DateTime(data.time * 1000))
         header.setEpisodeInfo(totalEpisodes, episode)
         header.setUploader(MediaControlView.Uploader(data.uploaderId, data.uploader))
+        header.setTranslatorGroup(when (data.scangroupId == null || data.scangroup == null) {
+            true -> null
+            else -> MediaControlView.TranslatorGroup(data.scangroupId!!, data.scangroup!!)
+        })
 
         data.scangroupId?.let { id ->
             data.scangroup?.let { name ->
-                MediaControlView.TranslatorGroup(id, name)
+                header.setTranslatorGroup(MediaControlView.TranslatorGroup(id, name))
             }
         }
 
@@ -231,6 +237,8 @@ class MangaFragment : SingleLoadingFragment<Chapter>() {
         adapter.removeFooter()
 
         mangaAdapter.clear()
+
+        super.clear()
     }
 
     private fun constructReminderTask(): Task<Void> {
