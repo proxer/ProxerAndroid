@@ -2,6 +2,7 @@ package com.proxerme.app.adapter.framework
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import com.proxerme.library.interfaces.IdItem
 import java.util.*
 
 /**
@@ -78,7 +79,10 @@ abstract class PagingAdapter<T>() : RecyclerView.Adapter<PagingAdapter.PagingVie
     }
 
     open fun contains(item: T): Boolean {
-        return list.contains(item)
+        return when {
+            hasStableIds() -> list.find { (item as IdItem).id == (it as IdItem).id } != null
+            else -> list.contains(item)
+        }
     }
 
     open fun removeCallback() {
