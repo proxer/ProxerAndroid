@@ -2,6 +2,7 @@ package com.proxerme.app.fragment.framework
 
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
+import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -9,13 +10,20 @@ import android.widget.TextView
 import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.TouchableMovementMethod
 import com.proxerme.app.R
+import com.proxerme.app.dialog.LoginDialog
+import com.proxerme.app.manager.UserManager
+import com.proxerme.app.module.LoginUtils
 import com.proxerme.app.task.CachedTask
 import com.proxerme.app.task.Task
+import com.proxerme.app.task.ValidatingTask
 import com.proxerme.app.util.ErrorHandler
 import com.proxerme.app.util.KotterKnife
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.ProxerException
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 /**
  * TODO: Describe class
@@ -30,12 +38,18 @@ abstract class SingleLoadingFragment<T> : MainFragment() {
 
     private val exceptionCallback = { exception: Exception ->
         context?.let {
-            val message = when (exception) {
-                is ProxerException -> ErrorHandler.getMessageForErrorCode(context, exception)
-                else -> context.getString(R.string.error_unknown)
+            when (exception) {
+                is ProxerException -> {
+                    showError(ErrorHandler.getMessageForErrorCode(context, exception))
+                }
+                is LoginUtils.NotLoggedInException -> {
+                    showError(getString(R.string.status_not_logged_in),
+                            getString(R.string.module_login_login), View.OnClickListener {
+                        LoginDialog.show(activity as AppCompatActivity)
+                    })
+                }
+                else -> showError(context.getString(R.string.error_unknown))
             }
-
-            showError(message)
         }
 
         Unit
@@ -57,7 +71,7 @@ abstract class SingleLoadingFragment<T> : MainFragment() {
 
         retainInstance = true
 
-        task = CachedTask(constructTask())
+        task = ValidatingTask(CachedTask(constructTask()), LoginUtils.loginValidator(isLoginRequired))
                 .onStart {
                     setRefreshing(true)
                     contentContainer.visibility = View.GONE
@@ -84,7 +98,17 @@ abstract class SingleLoadingFragment<T> : MainFragment() {
     override fun onStart() {
         super.onStart()
 
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this)
+        }
+
         task.execute(successCallback, exceptionCallback)
+    }
+
+    override fun onStop() {
+        EventBus.getDefault().unregister(this)
+
+        super.onStop()
     }
 
     override fun onDestroyView() {
@@ -124,6 +148,23 @@ abstract class SingleLoadingFragment<T> : MainFragment() {
             else -> onButtonClickListener
         })
     }
+
+    @Suppress("unused")
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onLoginStateChanged(@Suppress("UNUSED_PARAMETER") loginState: UserManager.LoginState) {
+        if (isLoginRequired) {
+            reset()
+        }
+    }
+
+    @Suppress("unused")
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onOngoingStateChanged(@Suppress("UNUSED_PARAMETER") ongoingState: UserManager.OngoingState) {
+        if (isLoginRequired) {
+            reset()
+        }
+    }
+
 
     private fun setRefreshing(enable: Boolean) {
         progress.isEnabled = if (!enable) isSwipeToRefreshEnabled else true

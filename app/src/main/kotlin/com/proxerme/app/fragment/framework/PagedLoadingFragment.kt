@@ -13,6 +13,7 @@ import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.dialog.LoginDialog
 import com.proxerme.app.manager.UserManager
+import com.proxerme.app.module.LoginUtils
 import com.proxerme.app.task.CachedTask
 import com.proxerme.app.task.Task
 import com.proxerme.app.task.ValidatingTask
@@ -40,13 +41,13 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
         adapter.append(data)
     }
 
-    private val exceptionCallback = { exceptionResult: Exception ->
+    private val exceptionCallback = { exception: Exception ->
         context?.let {
-            when (exceptionResult) {
+            when (exception) {
                 is ProxerException -> {
-                    showError(ErrorHandler.getMessageForErrorCode(context, exceptionResult))
+                    showError(ErrorHandler.getMessageForErrorCode(context, exception))
                 }
-                is NotLoggedInException -> {
+                is LoginUtils.NotLoggedInException -> {
                     showError(getString(R.string.status_not_logged_in),
                             getString(R.string.module_login_login), View.OnClickListener {
                         LoginDialog.show(activity as AppCompatActivity)
@@ -66,17 +67,6 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
     private val refreshExceptionCallback = { exceptionResult: Exception ->
         Snackbar.make(root, getString(R.string.error_refresh), Snackbar.LENGTH_LONG).show()
     }
-
-    private val loginValidator = {
-        if (isLoginRequired) {
-            if (UserManager.loginState != UserManager.LoginState.LOGGED_IN ||
-                    UserManager.ongoingState != UserManager.OngoingState.NONE) {
-                throw NotLoggedInException()
-            }
-        }
-    }
-
-    private class NotLoggedInException : Exception()
 
     open protected val isSwipeToRefreshEnabled = true
     open protected val isLoginRequired = false
@@ -101,7 +91,8 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
 
         retainInstance = true
 
-        task = ValidatingTask(CachedTask(constructTask({ calculateNextPage() })), loginValidator)
+        task = ValidatingTask(CachedTask(constructTask({ calculateNextPage() })),
+                LoginUtils.loginValidator(isLoginRequired))
                 .onStart {
                     headerFooterAdapter.removeFooter()
 
@@ -111,7 +102,7 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
                     updateRefreshing()
                 }
 
-        refreshTask = ValidatingTask(constructTask { 0 }, loginValidator)
+        refreshTask = ValidatingTask(constructTask { 0 }, LoginUtils.loginValidator(isLoginRequired))
                 .onStart {
                     setRefreshing(true)
                 }
