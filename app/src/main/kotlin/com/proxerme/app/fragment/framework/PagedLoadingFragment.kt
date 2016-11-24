@@ -153,7 +153,6 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
 
     override fun onDestroyView() {
         headerFooterAdapter.removeFooter()
-        adapter.removeCallback()
         list.adapter = null
         list.layoutManager = null
 
@@ -163,6 +162,7 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
     }
 
     override fun onDestroy() {
+        adapter.removeCallback()
         task.destroy()
         refreshTask.destroy()
 

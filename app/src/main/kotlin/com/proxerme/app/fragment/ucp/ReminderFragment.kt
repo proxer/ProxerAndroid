@@ -50,6 +50,17 @@ class ReminderFragment : PagedLoadingFragment<Reminder>() {
         super.onCreate(savedInstanceState)
 
         adapter = ReminderAdapter()
+        adapter.callback = object : ReminderAdapter.ReminderAdapterCallback() {
+            override fun onItemClick(item: Reminder) {
+                MediaActivity.navigateTo(activity, item.entryId, item.name)
+            }
+
+            override fun onRemoveClick(item: Reminder) {
+                adapter.addItemToRemove(item)
+
+                synchronize()
+            }
+        }
 
         setHasOptionsMenu(true)
         synchronize()
@@ -73,22 +84,6 @@ class ReminderFragment : PagedLoadingFragment<Reminder>() {
                 StaggeredGridLayoutManager.VERTICAL)
 
         return super.onCreateView(inflater, container, savedInstanceState)
-    }
-
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        adapter.callback = object : ReminderAdapter.ReminderAdapterCallback() {
-            override fun onItemClick(item: Reminder) {
-                MediaActivity.navigateTo(activity, item.entryId, item.name)
-            }
-
-            override fun onRemoveClick(item: Reminder) {
-                adapter.addItemToRemove(item)
-
-                synchronize()
-            }
-        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

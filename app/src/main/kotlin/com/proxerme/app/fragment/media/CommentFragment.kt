@@ -51,6 +51,11 @@ class CommentFragment : PagedLoadingFragment<Comment>() {
         super.onCreate(savedInstanceState)
 
         adapter = CommentAdapter()
+        adapter.callback = object : CommentAdapter.CommentAdapterCallback() {
+            override fun onUserClick(item: Comment) {
+                UserActivity.navigateTo(activity, item.userId, item.username, item.imageId)
+            }
+        }
 
         setHasOptionsMenu(true)
     }
@@ -89,16 +94,6 @@ class CommentFragment : PagedLoadingFragment<Comment>() {
         layoutManager = LinearLayoutManager(context)
 
         return super.onCreateView(inflater, container, savedInstanceState)
-    }
-
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        adapter.callback = object : CommentAdapter.CommentAdapterCallback() {
-            override fun onUserClick(item: Comment) {
-                UserActivity.navigateTo(activity, item.userId, item.username, item.imageId)
-            }
-        }
     }
 
     override fun constructTask(pageCallback: () -> Int): Task<Array<Comment>> {

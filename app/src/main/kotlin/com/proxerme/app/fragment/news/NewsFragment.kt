@@ -43,18 +43,6 @@ class NewsFragment : PagedLoadingFragment<News>() {
         super.onCreate(savedInstanceState)
 
         adapter = NewsAdapter()
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
-        layoutManager = GridLayoutManager(context, Utils.calculateSpanAmount(activity))
-
-        return super.onCreateView(inflater, container, savedInstanceState)
-    }
-
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
         adapter.callback = object : NewsAdapterCallback() {
             override fun onItemClick(item: News) {
                 (activity as DashboardActivity).showPage(ProxerUrlHolder.getNewsUrl(item.categoryId,
@@ -72,6 +60,13 @@ class NewsFragment : PagedLoadingFragment<News>() {
                                 item.threadId, "mobile"))
             }
         }
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View {
+        layoutManager = GridLayoutManager(context, Utils.calculateSpanAmount(activity))
+
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun onResume() {
