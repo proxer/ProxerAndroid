@@ -9,8 +9,10 @@ import android.view.ViewGroup
 import com.proxerme.app.R
 import com.proxerme.app.activity.MediaActivity
 import com.proxerme.app.adapter.media.RelationsAdapter
-import com.proxerme.app.fragment.framework.EasyLoadingFragment
+import com.proxerme.app.fragment.framework.SingleLoadingFragment
 import com.proxerme.app.manager.SectionManager.Section
+import com.proxerme.app.task.LoadingTask
+import com.proxerme.app.task.Task
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.info.entity.Relation
@@ -21,7 +23,7 @@ import com.proxerme.library.connection.info.request.RelationRequest
  *
  * @author Ruben Gees
  */
-class RelationsFragment : EasyLoadingFragment<Array<Relation>>() {
+class RelationsFragment : SingleLoadingFragment<Array<Relation>>() {
 
     companion object {
 
@@ -38,27 +40,15 @@ class RelationsFragment : EasyLoadingFragment<Array<Relation>>() {
 
     override val section = Section.RELATIONS
 
-    private lateinit var adapter: RelationsAdapter
-    override var result: Array<Relation>?
-        get() {
-            return adapter.items.toTypedArray()
-        }
-        set(value) {
-            if (value == null) {
-                adapter.clear()
-            } else {
-                adapter.replace(value)
-            }
-        }
+    private val id: String
+        get() = arguments.getString(ARGUMENT_ID)
 
-    private lateinit var id: String
+    private lateinit var adapter: RelationsAdapter
 
     private val list: RecyclerView by bindView(R.id.list)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        id = arguments.getString(ARGUMENT_ID)
 
         adapter = RelationsAdapter()
         adapter.callback = object : RelationsAdapter.RelationsAdapterCallback() {
@@ -68,18 +58,12 @@ class RelationsFragment : EasyLoadingFragment<Array<Relation>>() {
         }
     }
 
-    override fun onDestroy() {
-        adapter.callback = null
-
-        super.onDestroy()
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_relations, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         list.layoutManager = StaggeredGridLayoutManager(Utils.calculateSpanAmount(activity) + 1,
@@ -87,11 +71,17 @@ class RelationsFragment : EasyLoadingFragment<Array<Relation>>() {
         list.adapter = adapter
     }
 
-    override fun showContent(result: Array<Relation>) {
-        // Nothing to do
+    override fun onDestroy() {
+        adapter.callback = null
+
+        super.onDestroy()
     }
 
-    override fun constructLoadingRequest(): LoadingRequest<Array<Relation>> {
-        return LoadingRequest(RelationRequest(id))
+    override fun present(data: Array<Relation>) {
+        adapter.replace(data)
+    }
+
+    override fun constructTask(): Task<Array<Relation>> {
+        return LoadingTask { RelationRequest(id) }
     }
 }

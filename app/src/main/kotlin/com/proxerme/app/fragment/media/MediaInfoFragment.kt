@@ -9,11 +9,16 @@ import android.view.ViewGroup
 import android.widget.*
 import com.proxerme.app.R
 import com.proxerme.app.activity.MediaActivity
-import com.proxerme.app.fragment.framework.EasyLoadingFragment
+import com.proxerme.app.fragment.framework.SingleLoadingFragment
 import com.proxerme.app.manager.SectionManager.Section
+import com.proxerme.app.task.LoadingTask
+import com.proxerme.app.task.Task
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.bindView
-import com.proxerme.library.connection.info.entity.*
+import com.proxerme.library.connection.info.entity.Entry
+import com.proxerme.library.connection.info.entity.EntrySeason
+import com.proxerme.library.connection.info.entity.Publisher
+import com.proxerme.library.connection.info.entity.Synonym
 import com.proxerme.library.connection.info.request.EntryRequest
 import com.proxerme.library.info.ProxerUrlHolder
 import com.proxerme.library.parameters.*
@@ -25,7 +30,7 @@ import java.security.InvalidParameterException
  *
  * @author Ruben Gees
  */
-class MediaInfoFragment : EasyLoadingFragment<Entry>() {
+class MediaInfoFragment : SingleLoadingFragment<Entry>() {
 
     companion object {
         private const val ARGUMENT_ID = "id"
@@ -44,7 +49,8 @@ class MediaInfoFragment : EasyLoadingFragment<Entry>() {
 
     override val section = Section.MEDIA_INFO
 
-    private lateinit var id: String
+    private val id: String
+        get() = arguments.getString(ARGUMENT_ID)
 
     private var showUnratedTags: Boolean = false
     private var showSpoilerTags: Boolean = false
@@ -82,79 +88,60 @@ class MediaInfoFragment : EasyLoadingFragment<Entry>() {
     private val publishersTitle: TextView by bindView(R.id.publishersTitle)
     private val description: TextView by bindView(R.id.description)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        id = arguments.getString(ARGUMENT_ID)
-
-        if (savedInstanceState != null) {
-            result = savedInstanceState.getParcelable(STATE_ENTRY)
-            showUnratedTags = savedInstanceState.getBoolean(STATE_SHOW_UNRATED_TAGS)
-            showSpoilerTags = savedInstanceState.getBoolean(STATE_SHOW_SPOILER_TAGS)
-        }
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_media_info, container, false)
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-        outState.putParcelable(STATE_ENTRY, result)
-        outState.putBoolean(STATE_SHOW_UNRATED_TAGS, showUnratedTags)
-        outState.putBoolean(STATE_SHOW_SPOILER_TAGS, showSpoilerTags)
+    override fun constructTask(): Task<Entry> {
+        return LoadingTask { EntryRequest(id) }
     }
 
-    override fun showContent(result: Entry) {
-        (activity as MediaActivity).setName(result.name)
+    override fun present(data: Entry) {
+        (activity as MediaActivity).setName(data.name)
 
-        if (result.rating > 0) {
+        if (data.rating > 0) {
             rating.visibility = View.VISIBLE
-            rating.rating = result.rating / 2.0f
+            rating.rating = data.rating / 2.0f
             ratingAmount.visibility = View.VISIBLE
-            ratingAmount.text = "(${result.rateCount})"
+            ratingAmount.text = "(${data.rateCount})"
         } else {
             rating.visibility = View.GONE
             ratingAmount.visibility = View.GONE
         }
 
-        buildSynonymsView(result.synonyms)
-        buildSeasonsView(result.seasons)
+        buildSynonymsView(data.synonyms)
+        buildSeasonsView(data.seasons)
 
-        status.text = getStateString(result.state)
-        license.text = getString(when (result.license) {
+        status.text = getStateString(data.state)
+        license.text = getString(when (data.license) {
             LicenseParameter.LICENSED -> R.string.media_license_licensed
             LicenseParameter.NON_LICENSED -> R.string.media_license_non_licensed
             LicenseParameter.UNKNOWN -> R.string.media_license_unknown
-            else -> throw InvalidParameterException("Unknown license: " + result.license)
+            else -> throw InvalidParameterException("Unknown license: " + data.license)
         })
 
-        buildBadgeView(genres, result.genres, { it }, { view, genre ->
+        buildBadgeView(genres, data.genres, { it }, { view, genre ->
             (activity as MediaActivity).showPage(ProxerUrlHolder.getWikiUrl(genre))
         }, genresTitle)
 
-        buildTagsView(result.tags)
-        buildFskView(result.fsk)
+        buildTagsView(data)
+        buildFskView(data.fsk)
 
-        buildBadgeView(groups, result.subgroups, { it.name }, { view, subgroup ->
+        buildBadgeView(groups, data.subgroups, { it.name }, { view, subgroup ->
             (activity as MediaActivity).showPage(ProxerUrlHolder.getSubgroupUrl(subgroup.id,
                     ProxerUrlHolder.DEVICE_QUERY_PARAMETER_DEFAULT))
         }, groupsTitle)
 
-        buildBadgeView(publishers, result.publishers, {
+        buildBadgeView(publishers, data.publishers, {
             getPublisherString(it)
         }, { view, publisher ->
             (activity as MediaActivity).showPage(ProxerUrlHolder.getPublisherUrl(publisher.id,
                     ProxerUrlHolder.DEVICE_QUERY_PARAMETER_DEFAULT))
         }, publishersTitle)
 
-        description.text = result.description
-    }
-
-    override fun constructLoadingRequest(): LoadingRequest<Entry> {
-        return LoadingRequest(EntryRequest(id))
+        description.text = data.description
     }
 
     private fun buildSynonymsView(synonyms: Array<Synonym>) {
@@ -197,8 +184,8 @@ class MediaInfoFragment : EasyLoadingFragment<Entry>() {
         }
     }
 
-    private fun buildTagsView(tagArray: Array<Tag>) {
-        if (tagArray.isEmpty()) {
+    private fun buildTagsView(data: Entry) {
+        if (data.tags.isEmpty()) {
             tagsTitle.visibility = View.GONE
             unratedTagsButton.visibility = View.GONE
             spoilerTagsButton.visibility = View.GONE
@@ -208,23 +195,18 @@ class MediaInfoFragment : EasyLoadingFragment<Entry>() {
             updateUnratedButton()
             unratedTagsButton.setOnClickListener {
                 showUnratedTags = !showUnratedTags
-
-                result?.let {
-                    buildTagsView(it.tags)
-                }
+                buildTagsView(data)
             }
 
             updateSpoilerButton()
             spoilerTagsButton.setOnClickListener {
                 showSpoilerTags = !showSpoilerTags
 
-                result?.let {
-                    buildTagsView(it.tags)
-                }
+                buildTagsView(data)
             }
         }
 
-        buildBadgeView(tags, tagArray.filter {
+        buildBadgeView(tags, data.tags.filter {
             if (it.isRated) {
                 if (it.isSpoiler) {
                     showSpoilerTags

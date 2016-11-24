@@ -47,8 +47,10 @@ class ProfileFragment : SingleLoadingFragment<UserInfo>() {
 
     override val section = Section.PROFILE
 
-    private var userId: String? = null
-    private var userName: String? = null
+    private val userId: String?
+        get() = arguments.getString(ARGUMENT_USER_ID)
+    private val userName: String?
+        get() = arguments.getString(ARGUMENT_USER_NAME)
 
     private val animePointsRow: TextView by bindView(R.id.animePointsRow)
     private val mangaPointsRow: TextView by bindView(R.id.mangaPointsRow)
@@ -61,13 +63,6 @@ class ProfileFragment : SingleLoadingFragment<UserInfo>() {
 
     private val statusContainer: ViewGroup by bindView(R.id.statusContainer)
     private val statusText: TextView by bindView(R.id.statusText)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        userId = arguments.getString(ARGUMENT_USER_ID)
-        userName = arguments.getString(ARGUMENT_USER_NAME)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -84,26 +79,26 @@ class ProfileFragment : SingleLoadingFragment<UserInfo>() {
         return LoadingTask { UserInfoRequest(userId, userName) }
     }
 
-    override fun present(result: UserInfo) {
-        (activity as UserActivity).setUserInfo(result)
+    override fun present(data: UserInfo) {
+        (activity as UserActivity).setUserInfo(data)
 
-        val totalPoints = result.animePoints + result.mangaPoints + result.uploadPoints +
-                result.forumPoints + result.infoPoints + result.miscPoints
+        val totalPoints = data.animePoints + data.mangaPoints + data.uploadPoints +
+                data.forumPoints + data.infoPoints + data.miscPoints
 
-        animePointsRow.text = result.animePoints.toString()
-        mangaPointsRow.text = result.mangaPoints.toString()
-        uploadPointsRow.text = result.uploadPoints.toString()
-        forumPointsRow.text = result.forumPoints.toString()
-        infoPointsRow.text = result.infoPoints.toString()
-        miscellaneousPointsRow.text = result.miscPoints.toString()
+        animePointsRow.text = data.animePoints.toString()
+        mangaPointsRow.text = data.mangaPoints.toString()
+        uploadPointsRow.text = data.uploadPoints.toString()
+        forumPointsRow.text = data.forumPoints.toString()
+        infoPointsRow.text = data.infoPoints.toString()
+        miscellaneousPointsRow.text = data.miscPoints.toString()
         totalPointsRow.text = totalPoints.toString()
         rank.text = calculateRank(totalPoints)
 
-        if (result.status.isBlank()) {
+        if (data.status.isBlank()) {
             statusContainer.visibility = View.GONE
         } else {
-            statusText.text = Utils.buildClickableText(statusText.context, result.status + " - " +
-                    TimeUtil.convertToRelativeReadableTime(context, result.lastStatusChange),
+            statusText.text = Utils.buildClickableText(statusText.context, data.status + " - " +
+                    TimeUtil.convertToRelativeReadableTime(context, data.lastStatusChange),
                     Link.OnClickListener { link ->
                         Utils.viewLink(context, link + "?device=mobile")
                     })
