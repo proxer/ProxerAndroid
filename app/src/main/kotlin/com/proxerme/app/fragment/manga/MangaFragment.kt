@@ -14,13 +14,13 @@ import com.proxerme.app.R
 import com.proxerme.app.activity.MangaActivity
 import com.proxerme.app.activity.UserActivity
 import com.proxerme.app.adapter.manga.MangaAdapter
-import com.proxerme.app.application.MainApplication
-import com.proxerme.app.fragment.framework.EasyLoadingFragment
+import com.proxerme.app.fragment.framework.SingleLoadingFragment
 import com.proxerme.app.manager.SectionManager
+import com.proxerme.app.task.LoadingTask
+import com.proxerme.app.task.Task
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.bindView
 import com.proxerme.app.view.MediaControlView
-import com.proxerme.library.connection.ProxerCall
 import com.proxerme.library.connection.manga.entity.Chapter
 import com.proxerme.library.connection.manga.request.ChapterRequest
 import com.proxerme.library.connection.ucp.request.SetReminderRequest
@@ -35,16 +35,14 @@ import org.joda.time.DateTime
  *
  * @author Ruben Gees
  */
-class MangaFragment : EasyLoadingFragment<Chapter>() {
+class MangaFragment : SingleLoadingFragment<Chapter>() {
 
     companion object {
+
         private const val ARGUMENT_ID = "id"
         private const val ARGUMENT_EPISODE = "episode"
         private const val ARGUMENT_TOTAL_EPISODES = "total_episodes"
         private const val ARGUMENT_LANGUAGE = "language"
-
-        private const val CHAPTER_STATE = "chapter_state"
-        private const val REMINDER_EPISODE_STATE = "reminder_episode_state"
 
         private const val ICON_SIZE = 56
         private const val ICON_PADDING = 8
@@ -62,6 +60,14 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
         }
     }
 
+    private val reminderSuccess = { nothing: Void ->
+        Snackbar.make(root, R.string.fragment_set_reminder_success, Snackbar.LENGTH_LONG).show()
+    }
+
+    private val reminderException = { exception: Exception ->
+        Snackbar.make(root, R.string.fragment_set_reminder_error, Snackbar.LENGTH_LONG).show()
+    }
+
     override val section = SectionManager.Section.MANGA
 
     private val id: String
@@ -76,8 +82,8 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
     private lateinit var mangaAdapter: MangaAdapter
     private lateinit var adapter: EasyHeaderFooterAdapter
 
+    private var reminderTask: Task<Void> = constructReminderTask()
     private var reminderEpisode: Int? = null
-    private var reminderTask: ProxerCall? = null
 
     private lateinit var header: MediaControlView
     private lateinit var footer: ViewGroup
@@ -90,19 +96,9 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        savedInstanceState?.let {
-            result = it.getParcelable(CHAPTER_STATE)
-            reminderEpisode = it.getInt(REMINDER_EPISODE_STATE)
-
-            if (reminderEpisode == 0) {
-                reminderEpisode = null
-            }
-        }
-
         mangaAdapter = MangaAdapter()
         adapter = EasyHeaderFooterAdapter(mangaAdapter)
 
-        synchronize(reminderEpisode)
         setHasOptionsMenu(true)
     }
 
@@ -125,7 +121,7 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
         return inflater.inflate(R.layout.fragment_manga, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -142,21 +138,18 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
         pages.adapter = adapter
 
         header.onTranslatorGroupClickListener = {
-            result?.scangroupId?.let {
-                Utils.viewLink(context, ProxerUrlHolder.getSubgroupUrl(it,
-                        ProxerUrlHolder.DEVICE_QUERY_PARAMETER_DEFAULT).toString())
-            }
+            Utils.viewLink(context, ProxerUrlHolder.getSubgroupUrl(it.id,
+                    ProxerUrlHolder.DEVICE_QUERY_PARAMETER_DEFAULT).toString())
         }
 
         header.onUploaderClickListener = {
-            result?.let {
-                UserActivity.navigateTo(activity, it.uploaderId, it.uploader)
-            }
+            UserActivity.navigateTo(activity, it.id, it.name)
         }
 
         header.onReminderClickListener = {
             if (it != reminderEpisode) {
-                synchronize(it)
+                reminderTask.cancel()
+                reminderTask.execute(reminderSuccess, reminderException)
             }
         }
 
@@ -196,25 +189,41 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
+    override fun onDestroyView() {
+        adapter.removeHeader()
+        adapter.removeFooter()
+        pages.adapter = null
+        pages.layoutManager = null
 
-        outState.putInt(REMINDER_EPISODE_STATE, reminderEpisode ?: 0)
-        outState.putParcelable(CHAPTER_STATE, result)
+        super.onDestroyView()
     }
 
-    override fun showContent(result: Chapter) {
-        header.setUploader(result.uploader)
-        header.setTranslatorGroup(result.scangroup ?:
-                context.getString(R.string.fragment_manga_empty_scangroup))
-        header.setDate(DateTime(result.time * 1000))
+    override fun onDestroy() {
+        reminderTask.destroy()
+
+        super.onDestroy()
+    }
+
+    override fun present(data: Chapter) {
+        header.setDate(DateTime(data.time * 1000))
         header.setEpisodeInfo(totalEpisodes, episode)
+        header.setUploader(MediaControlView.Uploader(data.uploaderId, data.uploader))
+
+        data.scangroupId?.let { id ->
+            data.scangroup?.let { name ->
+                MediaControlView.TranslatorGroup(id, name)
+            }
+        }
 
         adapter.setHeader(header)
         adapter.setFooter(footer)
 
-        mangaAdapter.init(result.server, result.entryId, result.id)
-        mangaAdapter.replace(result.pages)
+        mangaAdapter.init(data.server, data.entryId, data.id)
+        mangaAdapter.replace(data.pages)
+    }
+
+    override fun constructTask(): Task<Chapter> {
+        return LoadingTask { ChapterRequest(id, episode, language) }
     }
 
     override fun clear() {
@@ -224,8 +233,10 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
         mangaAdapter.clear()
     }
 
-    override fun constructLoadingRequest(): LoadingRequest<Chapter> {
-        return LoadingRequest(ChapterRequest(id, episode, language))
+    private fun constructReminderTask(): Task<Void> {
+        return LoadingTask {
+            SetReminderRequest(id, reminderEpisode!!, language, CategoryParameter.MANGA)
+        }
     }
 
     private fun switchEpisode(newEpisode: Int) {
@@ -233,36 +244,6 @@ class MangaFragment : EasyLoadingFragment<Chapter>() {
         (activity as MangaActivity).updateEpisode(newEpisode)
 
         reset()
-    }
-
-    @Synchronized
-    private fun synchronize(episodeToSet: Int? = null) {
-        if (episodeToSet == null) {
-            reminderTask?.cancel()
-
-            reminderTask = null
-            reminderEpisode = null
-        } else if (episodeToSet != reminderEpisode) {
-            reminderTask?.cancel()
-
-            reminderEpisode = episodeToSet
-            reminderTask = MainApplication.proxerConnection.execute(SetReminderRequest(id,
-                    reminderEpisode!!, language, CategoryParameter.MANGA),
-                    {
-                        reminderTask = null
-                        reminderEpisode = null
-
-                        Snackbar.make(root, R.string.fragment_set_reminder_success,
-                                Snackbar.LENGTH_LONG).show()
-                    },
-                    {
-                        reminderTask = null
-                        reminderEpisode = null
-
-                        Snackbar.make(root, R.string.fragment_set_reminder_error,
-                                Snackbar.LENGTH_LONG).show()
-                    })
-        }
     }
 
     private fun showSystemUI() {

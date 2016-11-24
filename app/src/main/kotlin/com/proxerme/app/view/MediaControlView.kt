@@ -23,8 +23,8 @@ class MediaControlView(context: Context?, attrs: AttributeSet?) : FrameLayout(co
         private const val DATE_PATTERN = "dd.MM.yyyy"
     }
 
-    var onUploaderClickListener: (() -> Unit)? = null
-    var onTranslatorGroupClickListener: (() -> Unit)? = null
+    var onUploaderClickListener: ((Uploader) -> Unit)? = null
+    var onTranslatorGroupClickListener: ((TranslatorGroup) -> Unit)? = null
     var onSwitchClickListener: ((episode: Int) -> Unit)? = null
     var onReminderClickListener: ((episode: Int) -> Unit)? = null
 
@@ -44,7 +44,7 @@ class MediaControlView(context: Context?, attrs: AttributeSet?) : FrameLayout(co
     private val dateRow: ViewGroup by bindView(R.id.dateRow)
 
     private val uploaderText: TextView by bindView(R.id.uploader)
-    private val translatorGroup: TextView by bindView(R.id.translatorGroup)
+    private val translatorGroupText: TextView by bindView(R.id.translatorGroup)
     private val dateText: TextView by bindView(R.id.date)
 
     private val previous: Button by bindView(R.id.previous)
@@ -54,26 +54,31 @@ class MediaControlView(context: Context?, attrs: AttributeSet?) : FrameLayout(co
 
     init {
         LayoutInflater.from(context).inflate(R.layout.view_media_control, this, true)
-
-        uploaderText.setOnClickListener { onUploaderClickListener?.invoke() }
-        translatorGroup.setOnClickListener { onTranslatorGroupClickListener?.invoke() }
     }
 
-    fun setUploader(uploader: String?) {
+    fun setUploader(uploader: Uploader?) {
         if (uploader == null) {
             uploaderRow.visibility = View.GONE
+            uploaderText.setOnClickListener(null)
         } else {
             uploaderRow.visibility = View.VISIBLE
-            uploaderText.text = uploader
+            uploaderText.text = uploader.name
+            uploaderText.setOnClickListener {
+                onUploaderClickListener?.invoke(uploader)
+            }
         }
     }
 
-    fun setTranslatorGroup(group: String?) {
+    fun setTranslatorGroup(group: TranslatorGroup?) {
         if (group == null) {
             translatorRow.visibility = View.GONE
+            translatorGroupText.setOnClickListener(null)
         } else {
             translatorRow.visibility = View.VISIBLE
-            translatorGroup.text = group
+            translatorGroupText.text = group.name
+            translatorGroupText.setOnClickListener {
+                onTranslatorGroupClickListener?.invoke(group)
+            }
         }
     }
 
@@ -115,6 +120,9 @@ class MediaControlView(context: Context?, attrs: AttributeSet?) : FrameLayout(co
             onReminderClickListener?.invoke(currentEpisode)
         }
     }
+
+    class Uploader(val id: String, val name: String)
+    class TranslatorGroup(val id: String, val name: String)
 
     interface TextResourceResolver {
         fun next(): String
