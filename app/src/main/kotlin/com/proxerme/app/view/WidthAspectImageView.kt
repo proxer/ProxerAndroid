@@ -1,8 +1,8 @@
 package com.proxerme.app.view
 
 import android.content.Context
+import android.support.v7.widget.AppCompatImageView
 import android.util.AttributeSet
-import android.widget.ImageView
 import com.proxerme.app.R
 
 /**
@@ -10,7 +10,7 @@ import com.proxerme.app.R
 
  * @author Ruben Gees
  */
-class WidthAspectImageView : ImageView {
+class WidthAspectImageView : AppCompatImageView {
 
     companion object {
         private val DEFAULT_ASPECT = 1f
