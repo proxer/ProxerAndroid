@@ -145,6 +145,7 @@ class MediaActivity : AppCompatActivity(), CustomTabsModule {
     }
 
     private fun setupToolbar() {
+        viewPager.offscreenPageLimit = 3
         viewPager.adapter = sectionsPagerAdapter
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
