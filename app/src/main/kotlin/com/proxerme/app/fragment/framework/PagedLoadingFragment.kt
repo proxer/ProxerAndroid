@@ -69,6 +69,7 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
     }
 
     open protected val isSwipeToRefreshEnabled = true
+    open protected val resetOnRefresh = false
     open protected val isLoginRequired = false
 
     private lateinit var task: Task<Array<T>>
@@ -122,7 +123,11 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
         progress.setColorSchemeResources(R.color.primary, R.color.accent)
         progress.setOnRefreshListener(when (isSwipeToRefreshEnabled) {
             true -> SwipeRefreshLayout.OnRefreshListener {
-                refreshTask.execute(refreshSuccessCallback, refreshExceptionCallback)
+                if (resetOnRefresh) {
+                    reset()
+                } else {
+                    refreshTask.execute(refreshSuccessCallback, refreshExceptionCallback)
+                }
             }
             false -> null
         })

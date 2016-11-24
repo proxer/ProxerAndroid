@@ -129,6 +129,7 @@ abstract class SingleLoadingFragment<T> : MainFragment() {
 
     open protected fun reset() {
         clear()
+
         task.execute(successCallback, exceptionCallback)
     }
 
