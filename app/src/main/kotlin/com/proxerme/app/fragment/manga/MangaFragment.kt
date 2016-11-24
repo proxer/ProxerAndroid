@@ -60,7 +60,7 @@ class MangaFragment : SingleLoadingFragment<Chapter>() {
         }
     }
 
-    private val reminderSuccess = { nothing: Void ->
+    private val reminderSuccess = { nothing: Void? ->
         Snackbar.make(root, R.string.fragment_set_reminder_success, Snackbar.LENGTH_LONG).show()
     }
 
@@ -228,10 +228,6 @@ class MangaFragment : SingleLoadingFragment<Chapter>() {
         mangaAdapter.replace(data.pages)
     }
 
-    override fun constructTask(): Task<Chapter> {
-        return LoadingTask { ChapterRequest(id, episode, language) }
-    }
-
     override fun clear() {
         adapter.removeHeader()
         adapter.removeFooter()
@@ -239,6 +235,10 @@ class MangaFragment : SingleLoadingFragment<Chapter>() {
         mangaAdapter.clear()
 
         super.clear()
+    }
+
+    override fun constructTask(): Task<Chapter> {
+        return LoadingTask { ChapterRequest(id, episode, language) }
     }
 
     private fun constructReminderTask(): Task<Void> {
