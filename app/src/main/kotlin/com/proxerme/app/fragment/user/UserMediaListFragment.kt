@@ -2,15 +2,15 @@ package com.proxerme.app.fragment.user
 
 import android.os.Bundle
 import android.support.v7.widget.StaggeredGridLayoutManager
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
+import android.view.*
 import com.proxerme.app.R
 import com.proxerme.app.activity.MediaActivity
 import com.proxerme.app.adapter.user.UserMediaAdapter
 import com.proxerme.app.adapter.user.UserMediaAdapter.UserMediaAdapterCallback
-import com.proxerme.app.fragment.framework.EasyPagingFragment
+import com.proxerme.app.fragment.framework.PagedLoadingFragment
 import com.proxerme.app.manager.SectionManager.Section
+import com.proxerme.app.task.LoadingTask
+import com.proxerme.app.task.Task
 import com.proxerme.app.util.Utils
 import com.proxerme.library.connection.user.entitiy.UserMediaListEntry
 import com.proxerme.library.connection.user.request.UserMediaListRequest
@@ -22,16 +22,13 @@ import com.proxerme.library.parameters.UserMediaSortParameter
  *
  * @author Ruben Gees
  */
-class UserMediaListFragment : EasyPagingFragment<UserMediaListEntry>() {
+class UserMediaListFragment : PagedLoadingFragment<UserMediaListEntry>() {
 
     companion object {
-
-        const val ITEMS_ON_PAGE = 30
 
         private const val ARGUMENT_USER_ID = "user_id"
         private const val ARGUMENT_USER_NAME = "user_name"
         private const val ARGUMENT_CATEGORY = "category"
-        private const val STATE_SORT_CRITERIA = "state_sort_criteria"
 
         fun newInstance(userId: String? = null, userName: String? = null,
                         @CategoryParameter.Category category: String): UserMediaListFragment {
@@ -50,17 +47,18 @@ class UserMediaListFragment : EasyPagingFragment<UserMediaListEntry>() {
     }
 
     override val section = Section.USER_MEDIA_LIST
-    override val itemsOnPage = ITEMS_ON_PAGE
+    override val itemsOnPage = 30
     override val isSwipeToRefreshEnabled = false
 
-    private var userId: String? = null
-    private var userName: String? = null
+    private val userId: String?
+        get() = arguments.getString(ARGUMENT_USER_ID)
+    private val userName: String?
+        get() = arguments.getString(ARGUMENT_USER_NAME)
+    private var category: String
+        get() = arguments.getString(ARGUMENT_CATEGORY)
+        set(value) = arguments.putString(ARGUMENT_CATEGORY, value)
 
-    @CategoryParameter.Category
-    private lateinit var category: String
-
-    @UserMediaSortParameter.UserMediaSortCriteria
-    private lateinit var sortCriteria: String
+    private var sortCriteria = UserMediaSortParameter.NAME_ASCENDING
 
     override lateinit var adapter: UserMediaAdapter
     override lateinit var layoutManager: StaggeredGridLayoutManager
@@ -68,25 +66,12 @@ class UserMediaListFragment : EasyPagingFragment<UserMediaListEntry>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        userId = arguments.getString(ARGUMENT_USER_ID)
-        userName = arguments.getString(ARGUMENT_USER_NAME)
-        category = arguments.getString(ARGUMENT_CATEGORY)
-
-        if (savedInstanceState != null) {
-            sortCriteria = savedInstanceState.getString(STATE_SORT_CRITERIA)
-        } else {
-            sortCriteria = UserMediaSortParameter.NAME_ASCENDING
-        }
-
         adapter = UserMediaAdapter(category)
         adapter.callback = object : UserMediaAdapterCallback() {
             override fun onItemClick(item: UserMediaListEntry) {
                 MediaActivity.navigateTo(activity, item.id, item.name)
             }
         }
-
-        layoutManager = StaggeredGridLayoutManager(Utils.calculateSpanAmount(activity) + 1,
-                StaggeredGridLayoutManager.VERTICAL)
 
         setHasOptionsMenu(true)
     }
@@ -167,15 +152,20 @@ class UserMediaListFragment : EasyPagingFragment<UserMediaListEntry>() {
         return true
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View {
+        layoutManager = StaggeredGridLayoutManager(Utils.calculateSpanAmount(activity) + 1,
+                StaggeredGridLayoutManager.VERTICAL)
 
-        outState.putString(STATE_SORT_CRITERIA, sortCriteria)
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
-    override fun constructPagedLoadingRequest(page: Int):
-            LoadingRequest<Array<UserMediaListEntry>> {
-        return LoadingRequest(UserMediaListRequest(userId, userName, page).withCategory(category)
-                .withSortCriteria(sortCriteria).withLimit(ITEMS_ON_PAGE))
+    override fun constructTask(pageCallback: () -> Int): Task<Array<UserMediaListEntry>> {
+        return LoadingTask {
+            UserMediaListRequest(userId, userName, pageCallback.invoke())
+                    .withCategory(category)
+                    .withSortCriteria(sortCriteria)
+                    .withLimit(itemsOnPage)
+        }
     }
 }
