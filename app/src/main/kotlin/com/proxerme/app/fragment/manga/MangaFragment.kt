@@ -207,6 +207,7 @@ class MangaFragment : SingleLoadingFragment<Chapter>() {
         adapter.removeHeader()
         adapter.removeFooter()
         pages.adapter = null
+        pages.layoutManager = null
 
         super.onDestroyView()
     }

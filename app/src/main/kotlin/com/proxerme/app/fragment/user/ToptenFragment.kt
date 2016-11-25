@@ -97,6 +97,8 @@ class ToptenFragment : SingleLoadingFragment<ToptenFragment.ZippedToptenResult>(
     override fun onDestroyView() {
         animeList.adapter = null
         mangaList.adapter = null
+        animeList.layoutManager = null
+        mangaList.layoutManager = null
 
         super.onDestroyView()
     }
