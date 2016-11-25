@@ -83,6 +83,7 @@ class UserActivity : AppCompatActivity() {
             imageId = savedInstanceState.getString(STATE_IMAGE_ID)
         }
 
+        viewPager.offscreenPageLimit = 3
         viewPager.adapter = sectionsPagerAdapter
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
