@@ -11,8 +11,10 @@ import com.proxerme.app.R
 import com.proxerme.app.activity.UserActivity
 import com.proxerme.app.adapter.chat.ConferenceParticipantAdapter
 import com.proxerme.app.adapter.chat.ConferenceParticipantAdapter.ConferenceParticipantAdapterCallback
-import com.proxerme.app.fragment.framework.EasyLoadingFragment
+import com.proxerme.app.fragment.framework.SingleLoadingFragment
 import com.proxerme.app.manager.SectionManager
+import com.proxerme.app.task.LoadingTask
+import com.proxerme.app.task.Task
 import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.messenger.entity.ConferenceInfoContainer
 import com.proxerme.library.connection.messenger.entity.ConferenceInfoUser
@@ -25,10 +27,9 @@ import org.joda.time.format.DateTimeFormat
  *
  * @author Ruben Gees
  */
-class ConferenceInfoFragment : EasyLoadingFragment<ConferenceInfoContainer>() {
+class ConferenceInfoFragment : SingleLoadingFragment<ConferenceInfoContainer>() {
 
     companion object {
-        private const val CONFERENCE_INFO_STATE = "fragment_conference_info_state"
         private const val CONFERENCE_ID_ARGUMENT = "conference_id"
 
         fun newInstance(conferenceId: String): ConferenceInfoFragment {
@@ -42,7 +43,8 @@ class ConferenceInfoFragment : EasyLoadingFragment<ConferenceInfoContainer>() {
 
     override val section = SectionManager.Section.CONFERENCE_INFO
 
-    private lateinit var conferenceId: String
+    private val conferenceId: String
+        get() = arguments.getString(CONFERENCE_ID_ARGUMENT)
 
     private lateinit var adapter: ConferenceParticipantAdapter
 
@@ -52,17 +54,12 @@ class ConferenceInfoFragment : EasyLoadingFragment<ConferenceInfoContainer>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        conferenceId = arguments.getString(CONFERENCE_ID_ARGUMENT)
         adapter = ConferenceParticipantAdapter()
         adapter.callback = object : ConferenceParticipantAdapterCallback() {
             override fun onItemClick(item: ConferenceInfoUser) {
                 UserActivity.navigateTo(activity, item.id, item.username,
                         item.imageId)
             }
-        }
-
-        savedInstanceState?.let {
-            result = it.getParcelable(CONFERENCE_INFO_STATE)
         }
     }
 
@@ -71,7 +68,7 @@ class ConferenceInfoFragment : EasyLoadingFragment<ConferenceInfoContainer>() {
         return inflater.inflate(R.layout.fragment_conference_info, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         list.isNestedScrollingEnabled = false
@@ -79,10 +76,11 @@ class ConferenceInfoFragment : EasyLoadingFragment<ConferenceInfoContainer>() {
         list.adapter = adapter
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
+    override fun onDestroyView() {
+        list.adapter = null
+        list.layoutManager = null
 
-        outState.putParcelable(CONFERENCE_INFO_STATE, result)
+        super.onDestroyView()
     }
 
     override fun clear() {
@@ -90,18 +88,19 @@ class ConferenceInfoFragment : EasyLoadingFragment<ConferenceInfoContainer>() {
         adapter.clear()
     }
 
-    override fun constructLoadingRequest(): LoadingRequest<ConferenceInfoContainer> {
-        return LoadingRequest(ConferenceInfoRequest(conferenceId))
+    override fun constructTask(): Task<ConferenceInfoContainer> {
+        return LoadingTask { ConferenceInfoRequest(conferenceId) }
     }
 
-    override fun showContent(result: ConferenceInfoContainer) {
-        val dateTime = DateTime(result.conferenceInfo.firstMessageTime * 1000)
+    override fun present(data: ConferenceInfoContainer) {
+        val dateTime = DateTime(data.conferenceInfo.firstMessageTime * 1000)
         val creationDate = dateTime.toString(DateTimeFormat.forPattern("dd.MM.yyyy"))
         val creationTime = dateTime.toString(DateTimeFormat.forPattern("HH:mm"))
 
         time.text = getString(R.string.fragment_conference_info_time, creationDate,
                 creationTime)
-        adapter.leader = result.conferenceInfo.leaderId
-        adapter.replace(result.participants)
+
+        adapter.leader = data.conferenceInfo.leaderId
+        adapter.replace(data.participants)
     }
 }

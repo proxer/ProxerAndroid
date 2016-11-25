@@ -2,29 +2,26 @@ package com.proxerme.app.fragment.media
 
 import android.os.Bundle
 import android.support.v4.view.MenuItemCompat
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.SearchView
 import android.support.v7.widget.StaggeredGridLayoutManager
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import com.proxerme.app.R
 import com.proxerme.app.activity.MediaActivity
 import com.proxerme.app.adapter.media.MediaAdapter
 import com.proxerme.app.adapter.media.MediaAdapter.MediaAdapterCallback
-import com.proxerme.app.dialog.HentaiConfirmationDialog
 import com.proxerme.app.event.HentaiConfirmationEvent
-import com.proxerme.app.fragment.framework.EasyPagingFragment
+import com.proxerme.app.fragment.framework.PagedLoadingFragment
 import com.proxerme.app.helper.PreferenceHelper
 import com.proxerme.app.manager.SectionManager.Section
+import com.proxerme.app.task.LoadingTask
+import com.proxerme.app.task.Task
+import com.proxerme.app.task.ValidatingTask
 import com.proxerme.app.util.Utils
 import com.proxerme.library.connection.list.entity.MediaListEntry
 import com.proxerme.library.connection.list.request.MediaSearchRequest
 import com.proxerme.library.parameters.CategoryParameter
 import com.proxerme.library.parameters.MediaSortParameter
 import com.proxerme.library.parameters.TypeParameter
-import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
@@ -33,17 +30,13 @@ import org.greenrobot.eventbus.ThreadMode
  *
  * @author Ruben Gees
  */
-class MediaListFragment : EasyPagingFragment<MediaListEntry>() {
+class MediaListFragment : PagedLoadingFragment<MediaListEntry>() {
 
     companion object {
 
         const val ITEMS_ON_PAGE = 30
 
         private const val ARGUMENT_CATEGORY = "category"
-        private const val STATE_SORT_CRITERIA = "state_sort_criteria"
-        private const val STATE_TYPE = "state_type"
-        private const val STATE_SEARCH_QUERY = "state_search_query"
-        private const val STATE_HAS_SEARCHED = "state_has_searched"
 
         fun newInstance(@CategoryParameter.Category category: String): MediaListFragment {
             return MediaListFragment().apply {
@@ -57,11 +50,6 @@ class MediaListFragment : EasyPagingFragment<MediaListEntry>() {
     override val section = Section.MEDIA_LIST
     override val itemsOnPage = ITEMS_ON_PAGE
     override val isSwipeToRefreshEnabled = false
-
-    override val canLoad: Boolean
-        get() {
-            return checkHentai() && super.canLoad
-        }
 
     @CategoryParameter.Category
     private lateinit var category: String
@@ -86,18 +74,11 @@ class MediaListFragment : EasyPagingFragment<MediaListEntry>() {
 
         category = arguments.getString(ARGUMENT_CATEGORY)
 
-        if (savedInstanceState != null) {
-            sortCriteria = savedInstanceState.getString(STATE_SORT_CRITERIA)
-            type = savedInstanceState.getString(STATE_TYPE)
-            searchQuery = savedInstanceState.getString(STATE_SEARCH_QUERY)
-            hasSearched = savedInstanceState.getBoolean(STATE_HAS_SEARCHED)
-        } else {
-            sortCriteria = MediaSortParameter.RATING
-            type = when (category) {
-                CategoryParameter.ANIME -> TypeParameter.ALL_ANIME
-                CategoryParameter.MANGA -> TypeParameter.ALL_MANGA
-                else -> throw IllegalArgumentException("Unknown value for category")
-            }
+        sortCriteria = MediaSortParameter.RATING
+        type = when (category) {
+            CategoryParameter.ANIME -> TypeParameter.ALL_ANIME
+            CategoryParameter.MANGA -> TypeParameter.ALL_MANGA
+            else -> throw IllegalArgumentException("Unknown value for category")
         }
 
         adapter = MediaAdapter(category)
@@ -107,22 +88,7 @@ class MediaListFragment : EasyPagingFragment<MediaListEntry>() {
             }
         }
 
-        layoutManager = StaggeredGridLayoutManager(Utils.calculateSpanAmount(activity) + 1,
-                StaggeredGridLayoutManager.VERTICAL)
-
         setHasOptionsMenu(true)
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        EventBus.getDefault().register(this)
-    }
-
-    override fun onStop() {
-        EventBus.getDefault().unregister(this)
-
-        super.onStop()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -232,6 +198,14 @@ class MediaListFragment : EasyPagingFragment<MediaListEntry>() {
         return true
     }
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View {
+        layoutManager = StaggeredGridLayoutManager(Utils.calculateSpanAmount(activity) + 1,
+                StaggeredGridLayoutManager.VERTICAL)
+
+        return super.onCreateView(inflater, container, savedInstanceState)
+    }
+
     override fun onDestroyOptionsMenu() {
         searchView.setOnQueryTextListener(null)
         MenuItemCompat.setOnActionExpandListener(searchItem, null)
@@ -239,27 +213,20 @@ class MediaListFragment : EasyPagingFragment<MediaListEntry>() {
         super.onDestroyOptionsMenu()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        checkHentai()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-        outState.putString(STATE_SORT_CRITERIA, sortCriteria)
-        outState.putString(STATE_TYPE, type)
-        outState.putString(STATE_SEARCH_QUERY, searchQuery)
-        outState.putBoolean(STATE_HAS_SEARCHED, hasSearched)
-    }
-
-    override fun constructPagedLoadingRequest(page: Int): LoadingRequest<Array<MediaListEntry>> {
-        return LoadingRequest(MediaSearchRequest(page)
-                .withName(searchQuery)
-                .withType(type)
-                .withSortCriteria(sortCriteria)
-                .withLimit(ITEMS_ON_PAGE))
+    override fun constructTask(pageCallback: () -> Int): Task<Array<MediaListEntry>> {
+        return ValidatingTask(LoadingTask {
+            MediaSearchRequest(pageCallback.invoke())
+                    .withName(searchQuery)
+                    .withType(type)
+                    .withSortCriteria(sortCriteria)
+                    .withLimit(ITEMS_ON_PAGE)
+        }, {
+            if (type == TypeParameter.HENTAI || type == TypeParameter.HMANGA) {
+                if (!PreferenceHelper.isHentaiAllowed(context)) {
+                    throw HentaiConfirmationRequiredException()
+                }
+            }
+        })
     }
 
     /**
@@ -271,21 +238,5 @@ class MediaListFragment : EasyPagingFragment<MediaListEntry>() {
         if (type == TypeParameter.HENTAI || type == TypeParameter.HMANGA) {
             reset()
         }
-    }
-
-    private fun checkHentai(): Boolean {
-        if (type == TypeParameter.HENTAI || type == TypeParameter.HMANGA) {
-            if (!PreferenceHelper.isHentaiAllowed(context)) {
-                doShowError(getString(R.string.error_hentai_confirmation_needed),
-                        getString(R.string.error_confirm),
-                        onButtonClickListener = View.OnClickListener {
-                            HentaiConfirmationDialog.show(activity as AppCompatActivity)
-                        })
-
-                return false
-            }
-        }
-
-        return true
     }
 }

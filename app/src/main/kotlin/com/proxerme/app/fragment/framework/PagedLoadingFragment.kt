@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import com.klinker.android.link_builder.Link
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
+import com.proxerme.app.dialog.HentaiConfirmationDialog
 import com.proxerme.app.dialog.LoginDialog
 import com.proxerme.app.manager.UserManager
 import com.proxerme.app.module.LoginUtils
@@ -52,6 +53,13 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
                             getString(R.string.module_login_login), View.OnClickListener {
                         LoginDialog.show(activity as AppCompatActivity)
                     })
+                }
+                is HentaiConfirmationRequiredException -> {
+                    showError(getString(R.string.error_hentai_confirmation_needed),
+                            getString(R.string.error_confirm),
+                            onButtonClickListener = View.OnClickListener {
+                                HentaiConfirmationDialog.show(activity as AppCompatActivity)
+                            })
                 }
                 else -> showError(context.getString(R.string.error_unknown))
             }
@@ -244,4 +252,6 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
     }
 
     abstract fun constructTask(pageCallback: () -> Int): Task<Array<T>>
+
+    protected class HentaiConfirmationRequiredException : Exception()
 }
