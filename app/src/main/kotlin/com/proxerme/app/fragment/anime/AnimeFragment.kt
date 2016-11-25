@@ -12,37 +12,37 @@ import com.proxerme.app.R
 import com.proxerme.app.activity.AnimeActivity
 import com.proxerme.app.activity.UserActivity
 import com.proxerme.app.adapter.anime.StreamAdapter
-import com.proxerme.app.application.MainApplication
+import com.proxerme.app.dialog.LoginDialog
 import com.proxerme.app.dialog.StreamResolverDialog
-import com.proxerme.app.fragment.framework.EasyLoadingFragment
+import com.proxerme.app.fragment.framework.SingleLoadingFragment
 import com.proxerme.app.manager.SectionManager
+import com.proxerme.app.module.LoginUtils
 import com.proxerme.app.module.StreamResolvers
+import com.proxerme.app.task.LoadingTask
+import com.proxerme.app.task.Task
+import com.proxerme.app.task.ValidatingTask
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.bindView
 import com.proxerme.app.view.MediaControlView
-import com.proxerme.library.connection.ProxerCall
 import com.proxerme.library.connection.anime.entity.Stream
 import com.proxerme.library.connection.anime.request.StreamsRequest
 import com.proxerme.library.connection.ucp.request.SetReminderRequest
 import com.proxerme.library.info.ProxerUrlHolder
 import com.proxerme.library.parameters.CategoryParameter
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
-import org.jetbrains.anko.toast
 
 /**
  * TODO: Describe class
  *
  * @author Ruben Gees
  */
-class AnimeFragment : EasyLoadingFragment<Array<Stream>>() {
+class AnimeFragment : SingleLoadingFragment<Array<Stream>>() {
 
     companion object {
         private const val ARGUMENT_ID = "id"
         private const val ARGUMENT_EPISODE = "episode"
         private const val ARGUMENT_TOTAL_EPISODES = "total_episodes"
         private const val ARGUMENT_LANGUAGE = "language"
-
-        private const val REMINDER_EPISODE_STATE = "reminder_episode_state"
 
         fun newInstance(id: String, episode: Int, totalEpisodes: Int, language: String):
                 AnimeFragment {
@@ -55,6 +55,23 @@ class AnimeFragment : EasyLoadingFragment<Array<Stream>>() {
                 }
             }
         }
+    }
+
+    private val reminderSuccess = { nothing: Void? ->
+        Snackbar.make(root, R.string.fragment_set_reminder_success, Snackbar.LENGTH_LONG).show()
+    }
+
+    private val reminderException = { exception: Exception ->
+        when (exception) {
+            is LoginUtils.NotLoggedInException -> Snackbar.make(root, R.string.status_not_logged_in,
+                    Snackbar.LENGTH_LONG).setAction(R.string.module_login_login, {
+                LoginDialog.show(activity as AppCompatActivity)
+            })
+            else -> Snackbar.make(root, R.string.fragment_set_reminder_error,
+                    Snackbar.LENGTH_LONG).show()
+        }
+
+        Unit
     }
 
     override val section = SectionManager.Section.ANIME
@@ -70,25 +87,9 @@ class AnimeFragment : EasyLoadingFragment<Array<Stream>>() {
 
     private lateinit var streamAdapter: StreamAdapter
     private lateinit var adapter: EasyHeaderFooterAdapter
-    override var result: Array<Stream>?
-        get() {
-            return streamAdapter.items.toTypedArray()
-        }
-        set(value) {
-            if (value == null) {
-                streamAdapter.clear()
-                streamAdapter.clear()
-
-                adapter.removeHeader()
-            } else {
-                streamAdapter.replace(value)
-
-                adapter.setHeader(header)
-            }
-        }
 
     private var reminderEpisode: Int? = null
-    private var reminderTask: ProxerCall? = null
+    private val reminderTask = constructReminderTask()
 
     private lateinit var header: MediaControlView
 
@@ -98,17 +99,8 @@ class AnimeFragment : EasyLoadingFragment<Array<Stream>>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        savedInstanceState?.let {
-            reminderEpisode = it.getInt(REMINDER_EPISODE_STATE)
-
-            if (reminderEpisode == 0) {
-                reminderEpisode = null
-            }
-        }
-
         streamAdapter = StreamAdapter({ adapter.getRealPosition(it) })
         adapter = EasyHeaderFooterAdapter(streamAdapter)
-
 
         streamAdapter.callback = object : StreamAdapter.StreamAdapterCallback() {
             override fun onUploaderClick(item: Stream) {
@@ -126,12 +118,11 @@ class AnimeFragment : EasyLoadingFragment<Array<Stream>>() {
                 if (StreamResolvers.hasResolverFor(item.hosterName)) {
                     StreamResolverDialog.show(activity as AppCompatActivity, item.id)
                 } else {
-                    context.toast(getString(R.string.error_hoster_not_supported))
+                    Snackbar.make(root, getString(R.string.error_hoster_not_supported),
+                            Snackbar.LENGTH_LONG).show()
                 }
             }
         }
-
-        synchronize(reminderEpisode)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -151,7 +142,7 @@ class AnimeFragment : EasyLoadingFragment<Array<Stream>>() {
         return inflater.inflate(R.layout.fragment_anime, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         streams.layoutManager = LinearLayoutManager(context)
@@ -159,7 +150,10 @@ class AnimeFragment : EasyLoadingFragment<Array<Stream>>() {
 
         header.onReminderClickListener = {
             if (it != reminderEpisode) {
-                synchronize(it)
+                reminderEpisode = it
+
+                reminderTask.cancel()
+                reminderTask.execute(reminderSuccess, reminderException)
             }
         }
 
@@ -170,33 +164,44 @@ class AnimeFragment : EasyLoadingFragment<Array<Stream>>() {
         header.setUploader(null)
         header.setTranslatorGroup(null)
         header.setDate(null)
-
-        if (savedInstanceState != null && !streamAdapter.isEmpty()) {
-            adapter.setHeader(header)
-        }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-        outState.putInt(REMINDER_EPISODE_STATE, reminderEpisode ?: 0)
-    }
-
-    override fun showContent(result: Array<Stream>) {
-        if (result.isNotEmpty()) {
-            header.setEpisodeInfo(totalEpisodes, episode)
-        }
+    override fun present(data: Array<Stream>) {
+        header.setEpisodeInfo(totalEpisodes, episode)
+        streamAdapter.replace(data)
+        adapter.setHeader(header)
     }
 
     override fun clear() {
         adapter.removeHeader()
-        adapter.removeFooter()
-
         streamAdapter.clear()
+
+        super.clear()
     }
 
-    override fun constructLoadingRequest(): LoadingRequest<Array<Stream>> {
-        return LoadingRequest(StreamsRequest(id, episode, language))
+    override fun onDestroyView() {
+        adapter.removeHeader()
+        streams.adapter = null
+        streams.layoutManager = null
+
+        super.onDestroyView()
+    }
+
+    override fun onDestroy() {
+        reminderTask.destroy()
+        streamAdapter.removeCallback()
+
+        super.onDestroy()
+    }
+
+    override fun constructTask(): Task<Array<Stream>> {
+        return LoadingTask { StreamsRequest(id, episode, language) }
+    }
+
+    private fun constructReminderTask(): Task<Void?> {
+        return ValidatingTask(LoadingTask {
+            SetReminderRequest(id, reminderEpisode!!, language, CategoryParameter.ANIME)
+        }, LoginUtils.loginValidator(true))
     }
 
     private fun switchEpisode(newEpisode: Int) {
@@ -204,35 +209,5 @@ class AnimeFragment : EasyLoadingFragment<Array<Stream>>() {
         (activity as AnimeActivity).updateEpisode(newEpisode)
 
         reset()
-    }
-
-    @Synchronized
-    private fun synchronize(episodeToSet: Int? = null) {
-        if (episodeToSet == null) {
-            reminderTask?.cancel()
-
-            reminderTask = null
-            reminderEpisode = null
-        } else if (episodeToSet != reminderEpisode) {
-            reminderTask?.cancel()
-
-            reminderEpisode = episodeToSet
-            reminderTask = MainApplication.proxerConnection.execute(SetReminderRequest(id,
-                    reminderEpisode!!, language, CategoryParameter.ANIME),
-                    {
-                        reminderTask = null
-                        reminderEpisode = null
-
-                        Snackbar.make(root, R.string.fragment_set_reminder_success,
-                                Snackbar.LENGTH_LONG).show()
-                    },
-                    {
-                        reminderTask = null
-                        reminderEpisode = null
-
-                        Snackbar.make(root, R.string.fragment_set_reminder_error,
-                                Snackbar.LENGTH_LONG).show()
-                    })
-        }
     }
 }

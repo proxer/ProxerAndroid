@@ -207,7 +207,6 @@ class MangaFragment : SingleLoadingFragment<Chapter>() {
         adapter.removeHeader()
         adapter.removeFooter()
         pages.adapter = null
-        pages.layoutManager = null
 
         super.onDestroyView()
     }
@@ -253,7 +252,7 @@ class MangaFragment : SingleLoadingFragment<Chapter>() {
         return LoadingTask { ChapterRequest(id, episode, language) }
     }
 
-    private fun constructReminderTask(): Task<Void> {
+    private fun constructReminderTask(): Task<Void?> {
         return ValidatingTask(LoadingTask {
             SetReminderRequest(id, reminderEpisode!!, language, CategoryParameter.MANGA)
         }, LoginUtils.loginValidator(true))
