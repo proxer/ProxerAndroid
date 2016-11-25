@@ -150,7 +150,7 @@ object Utils {
         return result
     }
 
-    fun makeMultilineSnackbar(rootView: View, message: String, duration: Int,
+    fun makeMultilineSnackbar(rootView: View, message: CharSequence, duration: Int,
                               maxLines: Int = 5): Snackbar {
         return Snackbar.make(rootView, message, duration)
                 .apply {

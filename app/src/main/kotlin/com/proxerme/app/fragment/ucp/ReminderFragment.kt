@@ -2,18 +2,22 @@ package com.proxerme.app.fragment.ucp
 
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.*
 import com.proxerme.app.R
 import com.proxerme.app.activity.MediaActivity
 import com.proxerme.app.adapter.ucp.ReminderAdapter
-import com.proxerme.app.application.MainApplication
+import com.proxerme.app.dialog.LoginDialog
 import com.proxerme.app.fragment.framework.PagedLoadingFragment
 import com.proxerme.app.manager.SectionManager.Section
+import com.proxerme.app.module.LoginUtils
 import com.proxerme.app.task.LoadingTask
 import com.proxerme.app.task.Task
+import com.proxerme.app.task.ValidatingTask
+import com.proxerme.app.util.ErrorHandler
 import com.proxerme.app.util.Utils
-import com.proxerme.library.connection.ProxerCall
+import com.proxerme.library.connection.ProxerException
 import com.proxerme.library.connection.ucp.entitiy.Reminder
 import com.proxerme.library.connection.ucp.request.DeleteReminderRequest
 import com.proxerme.library.connection.ucp.request.ReminderRequest
@@ -33,6 +37,38 @@ class ReminderFragment : PagedLoadingFragment<Reminder>() {
         }
     }
 
+    private val removalSuccess = { nothing: Void? ->
+        adapter.remove(adapter.itemsToRemove.first())
+
+        if (adapter.itemsToRemove.isNotEmpty()) {
+            processQueuedRemovals()
+        }
+    }
+
+    private val removalException = { exception: Exception ->
+        val amount = adapter.itemsToRemove.size
+        adapter.clearRemovalQueue()
+
+        when (exception) {
+            is LoginUtils.NotLoggedInException -> Snackbar.make(root, R.string.status_not_logged_in,
+                    Snackbar.LENGTH_LONG).setAction(R.string.module_login_login, {
+                LoginDialog.show(activity as AppCompatActivity)
+            })
+            is ProxerException -> {
+                Snackbar.make(root,
+                        ErrorHandler.getMessageForErrorCode(context, exception),
+                        Snackbar.LENGTH_LONG).show()
+            }
+            else -> {
+                Snackbar.make(root, context.resources
+                        .getQuantityString(R.plurals.error_reminder_removal, amount, amount),
+                        Snackbar.LENGTH_LONG).show()
+            }
+        }
+
+        Unit
+    }
+
     override val section = Section.REMINDER
     override val itemsOnPage = 30
     override val resetOnRefresh = true
@@ -44,7 +80,7 @@ class ReminderFragment : PagedLoadingFragment<Reminder>() {
     @CategoryParameter.Category
     private var category: String? = null
 
-    private var removalTask: ProxerCall? = null
+    private var removalTask: Task<Void> = constructRemovalTask()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,13 +93,11 @@ class ReminderFragment : PagedLoadingFragment<Reminder>() {
 
             override fun onRemoveClick(item: Reminder) {
                 adapter.addItemToRemove(item)
-
-                synchronize()
+                processQueuedRemovals()
             }
         }
 
         setHasOptionsMenu(true)
-        synchronize()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -105,8 +139,7 @@ class ReminderFragment : PagedLoadingFragment<Reminder>() {
     }
 
     override fun onDestroy() {
-        removalTask?.cancel()
-        removalTask = null
+        removalTask.cancel()
 
         super.onDestroy()
     }
@@ -119,31 +152,15 @@ class ReminderFragment : PagedLoadingFragment<Reminder>() {
         }
     }
 
-    @Synchronized
-    private fun synchronize() {
-        if (removalTask != null) {
-            return
-        }
+    private fun constructRemovalTask(): Task<Void> {
+        return ValidatingTask(LoadingTask {
+            DeleteReminderRequest(adapter.itemsToRemove.first().id)
+        }, LoginUtils.loginValidator(true))
+    }
 
-        if (adapter.itemsToRemove.isNotEmpty()) {
-            val itemToRemove = adapter.itemsToRemove.first()
-
-            removalTask = MainApplication.proxerConnection
-                    .execute(DeleteReminderRequest(itemToRemove.id), {
-                        adapter.remove(itemToRemove)
-                        removalTask = null
-
-                        synchronize()
-                    }, {
-                        val amount = adapter.itemsToRemove.size
-                        val errorText = context.resources
-                                .getQuantityString(R.plurals.error_reminder_removal, amount, amount)
-
-                        adapter.clearRemovalQueue()
-                        removalTask = null
-
-                        Snackbar.make(root, errorText, Snackbar.LENGTH_LONG).show()
-                    })
+    private fun processQueuedRemovals() {
+        if (!removalTask.isWorking) {
+            removalTask.execute(removalSuccess, removalException)
         }
     }
 }
