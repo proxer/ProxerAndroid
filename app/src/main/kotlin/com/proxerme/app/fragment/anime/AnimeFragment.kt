@@ -16,12 +16,12 @@ import com.proxerme.app.dialog.LoginDialog
 import com.proxerme.app.dialog.StreamResolverDialog
 import com.proxerme.app.fragment.framework.SingleLoadingFragment
 import com.proxerme.app.manager.SectionManager
-import com.proxerme.app.module.LoginUtils
 import com.proxerme.app.module.StreamResolvers
 import com.proxerme.app.task.LoadingTask
 import com.proxerme.app.task.Task
 import com.proxerme.app.task.ValidatingTask
 import com.proxerme.app.util.Utils
+import com.proxerme.app.util.Validators
 import com.proxerme.app.util.bindView
 import com.proxerme.app.view.MediaControlView
 import com.proxerme.library.connection.anime.entity.Stream
@@ -63,7 +63,7 @@ class AnimeFragment : SingleLoadingFragment<Array<Stream>>() {
 
     private val reminderException = { exception: Exception ->
         when (exception) {
-            is LoginUtils.NotLoggedInException -> Snackbar.make(root, R.string.status_not_logged_in,
+            is Validators.NotLoggedInException -> Snackbar.make(root, R.string.status_not_logged_in,
                     Snackbar.LENGTH_LONG).setAction(R.string.module_login_login, {
                 LoginDialog.show(activity as AppCompatActivity)
             })
@@ -201,7 +201,7 @@ class AnimeFragment : SingleLoadingFragment<Array<Stream>>() {
     private fun constructReminderTask(): Task<Void?> {
         return ValidatingTask(LoadingTask {
             SetReminderRequest(id, reminderEpisode!!, language, CategoryParameter.ANIME)
-        }, LoginUtils.loginValidator(true))
+        }, { Validators.validateLogin(true) })
     }
 
     private fun switchEpisode(newEpisode: Int) {

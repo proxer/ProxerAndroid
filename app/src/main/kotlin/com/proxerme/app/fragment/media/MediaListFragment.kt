@@ -9,21 +9,16 @@ import com.proxerme.app.R
 import com.proxerme.app.activity.MediaActivity
 import com.proxerme.app.adapter.media.MediaAdapter
 import com.proxerme.app.adapter.media.MediaAdapter.MediaAdapterCallback
-import com.proxerme.app.event.HentaiConfirmationEvent
 import com.proxerme.app.fragment.framework.PagedLoadingFragment
-import com.proxerme.app.helper.PreferenceHelper
 import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.task.LoadingTask
 import com.proxerme.app.task.Task
-import com.proxerme.app.task.ValidatingTask
 import com.proxerme.app.util.Utils
 import com.proxerme.library.connection.list.entity.MediaListEntry
 import com.proxerme.library.connection.list.request.MediaSearchRequest
 import com.proxerme.library.parameters.CategoryParameter
 import com.proxerme.library.parameters.MediaSortParameter
 import com.proxerme.library.parameters.TypeParameter
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 
 /**
  * TODO: Describe class
@@ -50,6 +45,8 @@ class MediaListFragment : PagedLoadingFragment<MediaListEntry>() {
     override val section = Section.MEDIA_LIST
     override val itemsOnPage = ITEMS_ON_PAGE
     override val isSwipeToRefreshEnabled = false
+    override val isHentaiConfirmationRequired: Boolean
+        get() = type == TypeParameter.HENTAI || type == TypeParameter.HMANGA
 
     @CategoryParameter.Category
     private lateinit var category: String
@@ -214,29 +211,12 @@ class MediaListFragment : PagedLoadingFragment<MediaListEntry>() {
     }
 
     override fun constructTask(pageCallback: () -> Int): Task<Array<MediaListEntry>> {
-        return ValidatingTask(LoadingTask {
+        return LoadingTask {
             MediaSearchRequest(pageCallback.invoke())
                     .withName(searchQuery)
                     .withType(type)
                     .withSortCriteria(sortCriteria)
                     .withLimit(ITEMS_ON_PAGE)
-        }, {
-            if (type == TypeParameter.HENTAI || type == TypeParameter.HMANGA) {
-                if (!PreferenceHelper.isHentaiAllowed(context)) {
-                    throw HentaiConfirmationRequiredException()
-                }
-            }
-        })
-    }
-
-    /**
-     * ( ͡° ͜ʖ ͡°)
-     */
-    @Suppress("unused")
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onHentaiConfirmation(@Suppress("UNUSED_PARAMETER") event: HentaiConfirmationEvent) {
-        if (type == TypeParameter.HENTAI || type == TypeParameter.HMANGA) {
-            reset()
         }
     }
 }

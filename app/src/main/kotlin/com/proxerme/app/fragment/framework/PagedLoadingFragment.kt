@@ -13,15 +13,12 @@ import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.dialog.HentaiConfirmationDialog
 import com.proxerme.app.dialog.LoginDialog
+import com.proxerme.app.event.HentaiConfirmationEvent
 import com.proxerme.app.manager.UserManager
-import com.proxerme.app.module.LoginUtils
 import com.proxerme.app.task.CachedTask
 import com.proxerme.app.task.Task
 import com.proxerme.app.task.ValidatingTask
-import com.proxerme.app.util.ErrorHandler
-import com.proxerme.app.util.KotterKnife
-import com.proxerme.app.util.Utils
-import com.proxerme.app.util.bindView
+import com.proxerme.app.util.*
 import com.proxerme.app.util.listener.EndlessRecyclerOnScrollListener
 import com.proxerme.library.connection.ProxerException
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
@@ -48,13 +45,20 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
                 is ProxerException -> {
                     showError(ErrorHandler.getMessageForErrorCode(context, exception))
                 }
-                is LoginUtils.NotLoggedInException -> {
+                is Validators.NotLoggedInException -> {
                     showError(getString(R.string.status_not_logged_in),
                             getString(R.string.module_login_login), View.OnClickListener {
                         LoginDialog.show(activity as AppCompatActivity)
                     })
                 }
                 is HentaiConfirmationRequiredException -> {
+                    showError(getString(R.string.error_hentai_confirmation_needed),
+                            getString(R.string.error_confirm),
+                            onButtonClickListener = View.OnClickListener {
+                                HentaiConfirmationDialog.show(activity as AppCompatActivity)
+                            })
+                }
+                is Validators.HentaiConfirmationRequiredException -> {
                     showError(getString(R.string.error_hentai_confirmation_needed),
                             getString(R.string.error_confirm),
                             onButtonClickListener = View.OnClickListener {
@@ -79,6 +83,7 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
     open protected val isSwipeToRefreshEnabled = true
     open protected val resetOnRefresh = false
     open protected val isLoginRequired = false
+    open protected val isHentaiConfirmationRequired = false
 
     private lateinit var task: Task<Array<T>>
     private lateinit var refreshTask: Task<Array<T>>
@@ -100,24 +105,25 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
 
         retainInstance = true
 
-        task = ValidatingTask(CachedTask(constructTask({ calculateNextPage() })),
-                LoginUtils.loginValidator(isLoginRequired))
-                .onStart {
-                    headerFooterAdapter.removeFooter()
+        task = ValidatingTask(CachedTask(constructTask({ calculateNextPage() })), {
+            Validators.validateLogin(isLoginRequired)
+            Validators.validateHentaiConfirmation(context, isHentaiConfirmationRequired)
+        }).onStart {
+            headerFooterAdapter.removeFooter()
 
-                    setRefreshing(true)
-                }
-                .onFinish {
-                    updateRefreshing()
-                }
+            setRefreshing(true)
+        }.onFinish {
+            updateRefreshing()
+        }
 
-        refreshTask = ValidatingTask(constructTask { 0 }, LoginUtils.loginValidator(isLoginRequired))
-                .onStart {
-                    setRefreshing(true)
-                }
-                .onFinish {
-                    updateRefreshing()
-                }
+        refreshTask = ValidatingTask(constructTask { 0 }, {
+            Validators.validateLogin(isLoginRequired)
+            Validators.validateHentaiConfirmation(context, isHentaiConfirmationRequired)
+        }).onStart {
+            setRefreshing(true)
+        }.onFinish {
+            updateRefreshing()
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -215,6 +221,17 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onOngoingStateChanged(@Suppress("UNUSED_PARAMETER") ongoingState: UserManager.OngoingState) {
         if (isLoginRequired) {
+            reset()
+        }
+    }
+
+    /**
+     * ( ͡° ͜ʖ ͡°)
+     */
+    @Suppress("unused")
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onHentaiConfirmation(@Suppress("UNUSED_PARAMETER") event: HentaiConfirmationEvent) {
+        if (isHentaiConfirmationRequired) {
             reset()
         }
     }

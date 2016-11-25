@@ -10,16 +10,14 @@ import android.widget.TextView
 import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.TouchableMovementMethod
 import com.proxerme.app.R
+import com.proxerme.app.dialog.HentaiConfirmationDialog
 import com.proxerme.app.dialog.LoginDialog
+import com.proxerme.app.event.HentaiConfirmationEvent
 import com.proxerme.app.manager.UserManager
-import com.proxerme.app.module.LoginUtils
 import com.proxerme.app.task.CachedTask
 import com.proxerme.app.task.Task
 import com.proxerme.app.task.ValidatingTask
-import com.proxerme.app.util.ErrorHandler
-import com.proxerme.app.util.KotterKnife
-import com.proxerme.app.util.Utils
-import com.proxerme.app.util.bindView
+import com.proxerme.app.util.*
 import com.proxerme.library.connection.ProxerException
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -42,11 +40,18 @@ abstract class SingleLoadingFragment<T> : MainFragment() {
                 is ProxerException -> {
                     showError(ErrorHandler.getMessageForErrorCode(context, exception))
                 }
-                is LoginUtils.NotLoggedInException -> {
+                is Validators.NotLoggedInException -> {
                     showError(getString(R.string.status_not_logged_in),
                             getString(R.string.module_login_login), View.OnClickListener {
                         LoginDialog.show(activity as AppCompatActivity)
                     })
+                }
+                is Validators.HentaiConfirmationRequiredException -> {
+                    showError(getString(R.string.error_hentai_confirmation_needed),
+                            getString(R.string.error_confirm),
+                            onButtonClickListener = View.OnClickListener {
+                                HentaiConfirmationDialog.show(activity as AppCompatActivity)
+                            })
                 }
                 else -> showError(context.getString(R.string.error_unknown))
             }
@@ -57,6 +62,7 @@ abstract class SingleLoadingFragment<T> : MainFragment() {
 
     open protected val isSwipeToRefreshEnabled = false
     open protected val isLoginRequired = false
+    open protected val isHentaiConfirmationRequired = false
 
     private lateinit var task: Task<T>
 
@@ -71,21 +77,20 @@ abstract class SingleLoadingFragment<T> : MainFragment() {
 
         retainInstance = true
 
-        task = ValidatingTask(CachedTask(constructTask()), LoginUtils.loginValidator(isLoginRequired))
-                .onStart {
-                    setRefreshing(true)
-                    contentContainer.visibility = View.GONE
-                    errorContainer.visibility = View.GONE
-                }
-                .onSuccess {
-                    contentContainer.visibility = View.VISIBLE
-                }
-                .onException {
-                    errorContainer.visibility = View.VISIBLE
-                }
-                .onFinish {
-                    setRefreshing(false)
-                }
+        task = ValidatingTask(CachedTask(constructTask()), {
+            Validators.validateLogin(isLoginRequired)
+            Validators.validateHentaiConfirmation(context, isHentaiConfirmationRequired)
+        }).onStart {
+            setRefreshing(true)
+            contentContainer.visibility = View.GONE
+            errorContainer.visibility = View.GONE
+        }.onSuccess {
+            contentContainer.visibility = View.VISIBLE
+        }.onException {
+            errorContainer.visibility = View.VISIBLE
+        }.onFinish {
+            setRefreshing(false)
+        }
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -166,6 +171,16 @@ abstract class SingleLoadingFragment<T> : MainFragment() {
         }
     }
 
+    /**
+     * ( ͡° ͜ʖ ͡°)
+     */
+    @Suppress("unused")
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onHentaiConfirmation(@Suppress("UNUSED_PARAMETER") event: HentaiConfirmationEvent) {
+        if (isHentaiConfirmationRequired) {
+            reset()
+        }
+    }
 
     private fun setRefreshing(enable: Boolean) {
         progress.isEnabled = if (!enable) isSwipeToRefreshEnabled else true

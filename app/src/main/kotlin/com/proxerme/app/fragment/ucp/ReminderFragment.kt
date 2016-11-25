@@ -11,12 +11,12 @@ import com.proxerme.app.adapter.ucp.ReminderAdapter
 import com.proxerme.app.dialog.LoginDialog
 import com.proxerme.app.fragment.framework.PagedLoadingFragment
 import com.proxerme.app.manager.SectionManager.Section
-import com.proxerme.app.module.LoginUtils
 import com.proxerme.app.task.LoadingTask
 import com.proxerme.app.task.Task
 import com.proxerme.app.task.ValidatingTask
 import com.proxerme.app.util.ErrorHandler
 import com.proxerme.app.util.Utils
+import com.proxerme.app.util.Validators
 import com.proxerme.library.connection.ProxerException
 import com.proxerme.library.connection.ucp.entitiy.Reminder
 import com.proxerme.library.connection.ucp.request.DeleteReminderRequest
@@ -50,7 +50,7 @@ class ReminderFragment : PagedLoadingFragment<Reminder>() {
         adapter.clearRemovalQueue()
 
         when (exception) {
-            is LoginUtils.NotLoggedInException -> Snackbar.make(root, R.string.status_not_logged_in,
+            is Validators.NotLoggedInException -> Snackbar.make(root, R.string.status_not_logged_in,
                     Snackbar.LENGTH_LONG).setAction(R.string.module_login_login, {
                 LoginDialog.show(activity as AppCompatActivity)
             })
@@ -155,7 +155,7 @@ class ReminderFragment : PagedLoadingFragment<Reminder>() {
     private fun constructRemovalTask(): Task<Void> {
         return ValidatingTask(LoadingTask {
             DeleteReminderRequest(adapter.itemsToRemove.first().id)
-        }, LoginUtils.loginValidator(true))
+        }, { Validators.validateLogin(true) })
     }
 
     private fun processQueuedRemovals() {
