@@ -29,6 +29,7 @@ class UserMediaListFragment : PagedLoadingFragment<UserMediaListEntry>() {
         private const val ARGUMENT_USER_ID = "user_id"
         private const val ARGUMENT_USER_NAME = "user_name"
         private const val ARGUMENT_CATEGORY = "category"
+        private const val ARGUMENT_SORT_CRITERIA = "sort_criteria"
 
         fun newInstance(userId: String? = null, userName: String? = null,
                         @CategoryParameter.Category category: String): UserMediaListFragment {
@@ -57,8 +58,9 @@ class UserMediaListFragment : PagedLoadingFragment<UserMediaListEntry>() {
     private var category: String
         get() = arguments.getString(ARGUMENT_CATEGORY)
         set(value) = arguments.putString(ARGUMENT_CATEGORY, value)
-
-    private var sortCriteria = UserMediaSortParameter.NAME_ASCENDING
+    private var sortCriteria: String
+        get() = arguments.getString(ARGUMENT_SORT_CRITERIA, UserMediaSortParameter.NAME_ASCENDING)
+        set(value) = arguments.putString(ARGUMENT_SORT_CRITERIA, value)
 
     override lateinit var adapter: UserMediaAdapter
     override lateinit var layoutManager: StaggeredGridLayoutManager
