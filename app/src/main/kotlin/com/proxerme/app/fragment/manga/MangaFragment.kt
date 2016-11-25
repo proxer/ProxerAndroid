@@ -14,10 +14,13 @@ import com.proxerme.app.R
 import com.proxerme.app.activity.MangaActivity
 import com.proxerme.app.activity.UserActivity
 import com.proxerme.app.adapter.manga.MangaAdapter
+import com.proxerme.app.dialog.LoginDialog
 import com.proxerme.app.fragment.framework.SingleLoadingFragment
 import com.proxerme.app.manager.SectionManager
+import com.proxerme.app.module.LoginUtils
 import com.proxerme.app.task.LoadingTask
 import com.proxerme.app.task.Task
+import com.proxerme.app.task.ValidatingTask
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.bindView
 import com.proxerme.app.view.MediaControlView
@@ -65,7 +68,16 @@ class MangaFragment : SingleLoadingFragment<Chapter>() {
     }
 
     private val reminderException = { exception: Exception ->
-        Snackbar.make(root, R.string.fragment_set_reminder_error, Snackbar.LENGTH_LONG).show()
+        when (exception) {
+            is LoginUtils.NotLoggedInException -> Snackbar.make(root, R.string.status_not_logged_in,
+                    Snackbar.LENGTH_LONG).setAction(R.string.module_login_login, {
+                LoginDialog.show(activity as AppCompatActivity)
+            })
+            else -> Snackbar.make(root, R.string.fragment_set_reminder_error,
+                    Snackbar.LENGTH_LONG).show()
+        }
+
+        Unit
     }
 
     override val section = SectionManager.Section.MANGA
@@ -242,9 +254,9 @@ class MangaFragment : SingleLoadingFragment<Chapter>() {
     }
 
     private fun constructReminderTask(): Task<Void> {
-        return LoadingTask {
+        return ValidatingTask(LoadingTask {
             SetReminderRequest(id, reminderEpisode!!, language, CategoryParameter.MANGA)
-        }
+        }, LoginUtils.loginValidator(true))
     }
 
     private fun switchEpisode(newEpisode: Int) {
