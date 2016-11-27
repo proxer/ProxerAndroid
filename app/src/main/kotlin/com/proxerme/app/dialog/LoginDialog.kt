@@ -48,6 +48,16 @@ class LoginDialog : DialogFragment() {
     private lateinit var inputContainer: ViewGroup
     private lateinit var progress: ProgressBar
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        retainInstance = true
+
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this)
+        }
+    }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return MaterialDialog.Builder(context)
                 .autoDismiss(false)
@@ -64,8 +74,8 @@ class LoginDialog : DialogFragment() {
                 .build()
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onResume() {
+        super.onResume()
 
         if (UserManager.loginState == UserManager.LoginState.LOGGED_IN) {
             dismiss()
@@ -74,19 +84,9 @@ class LoginDialog : DialogFragment() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-
-        EventBus.getDefault().register(this)
-    }
-
-    override fun onStop() {
+    override fun onDestroy() {
         EventBus.getDefault().unregister(this)
 
-        super.onStop()
-    }
-
-    override fun onDestroy() {
         if (activity != null && !activity.isChangingConfigurations) {
             UserManager.cancel()
         }
@@ -94,6 +94,14 @@ class LoginDialog : DialogFragment() {
         super.onDestroy()
 
         MainApplication.refWatcher.watch(this)
+    }
+
+    override fun onDestroyView() {
+        if (dialog != null && retainInstance) {
+            dialog.setDismissMessage(null)
+        }
+
+        super.onDestroyView()
     }
 
     @Suppress("unused")
