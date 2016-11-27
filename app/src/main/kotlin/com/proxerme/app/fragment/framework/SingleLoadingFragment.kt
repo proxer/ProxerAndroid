@@ -77,6 +77,10 @@ abstract class SingleLoadingFragment<T> : MainFragment() {
 
         retainInstance = true
 
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this)
+        }
+
         task = ValidatingTask(CachedTask(constructTask()), {
             Validators.validateLogin(isLoginRequired)
             Validators.validateHentaiConfirmation(context, isHentaiConfirmationRequired)
@@ -103,17 +107,7 @@ abstract class SingleLoadingFragment<T> : MainFragment() {
     override fun onStart() {
         super.onStart()
 
-        if (!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().register(this)
-        }
-
         task.execute(successCallback, exceptionCallback)
-    }
-
-    override fun onStop() {
-        EventBus.getDefault().unregister(this)
-
-        super.onStop()
     }
 
     override fun onDestroyView() {
@@ -123,6 +117,7 @@ abstract class SingleLoadingFragment<T> : MainFragment() {
     }
 
     override fun onDestroy() {
+        EventBus.getDefault().unregister(this)
         task.destroy()
 
         super.onDestroy()

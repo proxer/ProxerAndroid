@@ -105,6 +105,10 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
 
         retainInstance = true
 
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this)
+        }
+
         task = ValidatingTask(CachedTask(constructTask({ calculateNextPage() })), {
             Validators.validateLogin(isLoginRequired)
             Validators.validateHentaiConfirmation(context, isHentaiConfirmationRequired)
@@ -152,17 +156,7 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
     override fun onStart() {
         super.onStart()
 
-        if (!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().register(this)
-        }
-
         task.execute(successCallback, exceptionCallback)
-    }
-
-    override fun onStop() {
-        EventBus.getDefault().unregister(this)
-
-        super.onStop()
     }
 
     override fun onDestroyView() {
@@ -176,6 +170,8 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
     }
 
     override fun onDestroy() {
+        EventBus.getDefault().unregister(this)
+
         adapter.removeCallback()
         task.destroy()
         refreshTask.destroy()
