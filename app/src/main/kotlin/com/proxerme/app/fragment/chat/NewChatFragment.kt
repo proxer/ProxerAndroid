@@ -26,13 +26,13 @@ import com.proxerme.app.dialog.LoginDialog
 import com.proxerme.app.entitiy.Participant
 import com.proxerme.app.event.ChatSynchronizationEvent
 import com.proxerme.app.fragment.framework.MainFragment
-import com.proxerme.app.fragment.framework.RetainedLoadingFragment
 import com.proxerme.app.manager.SectionManager.Section
-import com.proxerme.app.manager.UserManager
 import com.proxerme.app.service.ChatService
-import com.proxerme.app.util.ErrorHandler
-import com.proxerme.app.util.Utils
-import com.proxerme.app.util.bindView
+import com.proxerme.app.task.LoadingTask
+import com.proxerme.app.task.Task
+import com.proxerme.app.task.ValidatingTask
+import com.proxerme.app.util.*
+import com.proxerme.library.connection.ProxerException
 import com.proxerme.library.connection.messenger.request.NewConferenceRequest
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import com.vanniktech.emoji.EmojiEditText
@@ -51,9 +51,6 @@ class NewChatFragment : MainFragment() {
     companion object {
         private const val PARTICIPANT_ARGUMENT = "participant"
         private const val IS_GROUP_ARGUMENT = "is_group"
-        private const val NEW_PARTICIPANT_STATE = "new_chat_fragment_state_new_participant"
-        private const val NEW_CONFERENCE_ID_STATE = "new_chat_fragment_state_new_conference"
-        private const val LOADER_TAG = "loader"
 
         private const val ICON_SIZE = 32
         private const val ICON_PADDING = 8
@@ -69,15 +66,65 @@ class NewChatFragment : MainFragment() {
         }
     }
 
-    override val section = Section.NEW_CHAT
+    private val success = { newId: String ->
+        newConferenceId = newId
 
-    private lateinit var loader: RetainedLoadingFragment<String>
+        val existingConference = context.chatDatabase.getConference(newId)
+
+        if (existingConference == null) {
+            if (!ChatService.isSynchronizing) {
+                ChatService.synchronize(context)
+            }
+        } else {
+            activity.finish()
+
+            ChatActivity.navigateTo(activity, existingConference)
+        }
+    }
+
+    private val exception = { exception: Exception ->
+        context?.let {
+            when (exception) {
+                is ProxerException -> {
+                    Snackbar.make(root, ErrorHandler.getMessageForErrorCode(context, exception),
+                            Snackbar.LENGTH_LONG).show()
+                }
+                is Validators.NotLoggedInException -> {
+                    Snackbar.make(root, R.string.status_not_logged_in, Snackbar.LENGTH_LONG)
+                            .setAction(R.string.module_login_login, {
+                                LoginDialog.show(activity as AppCompatActivity)
+                            }).show()
+                }
+                is InvalidInputException -> {
+                    exception.message?.let {
+                        Snackbar.make(root, it, Snackbar.LENGTH_LONG).show()
+                    }
+                }
+                is TopicEmptyException -> {
+                    topicInputContainer.isErrorEnabled = true
+                    topicInputContainer.error = context.getString(R.string.error_input_empty)
+                }
+                else -> Snackbar.make(root, R.string.error_unknown, Snackbar.LENGTH_LONG).show()
+            }
+        }
+
+        Unit
+    }
+
+    override val section = Section.NEW_CHAT
 
     private lateinit var adapter: NewChatParticipantAdapter
     private lateinit var headerFooterAdapter: EasyHeaderFooterAdapter
 
+    private val isGroup: Boolean
+        get() = arguments.getBoolean(IS_GROUP_ARGUMENT)
+    private val initialParticipant: Participant?
+        get() = arguments.getParcelable(PARTICIPANT_ARGUMENT)
+
     private var newParticipant: String? = null
     private var newConferenceId: String? = null
+
+    private val task = constructTask()
 
     private lateinit var emojiPopup: EmojiPopup
 
@@ -94,6 +141,8 @@ class NewChatFragment : MainFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        retainInstance = true
+
         adapter = NewChatParticipantAdapter()
         adapter.callback = object : NewChatParticipantAdapter.NewChatParticipantAdapterCallback() {
             override fun onParticipantRemoved() {
@@ -105,16 +154,9 @@ class NewChatFragment : MainFragment() {
 
         headerFooterAdapter = EasyHeaderFooterAdapter(adapter)
 
-        if (arguments.getParcelable<Participant>(PARTICIPANT_ARGUMENT) != null) {
-            adapter.add(arguments.getParcelable(PARTICIPANT_ARGUMENT))
+        initialParticipant?.let {
+            adapter.add(it)
         }
-
-        savedInstanceState?.let {
-            newParticipant = it.getString(NEW_PARTICIPANT_STATE)
-            newConferenceId = it.getString(NEW_CONFERENCE_ID_STATE)
-        }
-
-        initLoader()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -125,7 +167,7 @@ class NewChatFragment : MainFragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (arguments.getBoolean(IS_GROUP_ARGUMENT)) {
+        if (isGroup) {
             topicInput.addTextChangedListener(object : Utils.OnTextListener() {
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                     topicInputContainer.isErrorEnabled = false
@@ -144,8 +186,8 @@ class NewChatFragment : MainFragment() {
         }
 
         sendButton.setOnClickListener {
-            if (checkIfCanLoad()) {
-                createChat()
+            if (!isLoading()) {
+                task.execute(success, exception)
             }
         }
 
@@ -168,30 +210,7 @@ class NewChatFragment : MainFragment() {
                 .build(messageInput)
 
         refreshNewParticipantFooter()
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        loader.setListener({ result ->
-            newConferenceId = result
-            val existingConference = context.chatDatabase.getConference(result)
-
-            if (existingConference == null) {
-                if (!ChatService.isSynchronizing) {
-                    ChatService.synchronize(context)
-                }
-            } else {
-                activity.finish()
-                ChatActivity.navigateTo(activity, existingConference)
-            }
-        }, { result ->
-            Snackbar.make(root, ErrorHandler.getMessageForErrorCode(context, result),
-                    Snackbar.LENGTH_LONG).show()
-            hideProgress()
-        })
-
-        handleProgress()
+        updateRefreshing()
     }
 
     override fun onStart() {
@@ -207,85 +226,69 @@ class NewChatFragment : MainFragment() {
     }
 
     override fun onDestroy() {
-        loader.removeListener()
+        task.destroy()
 
         super.onDestroy()
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
+    override fun onDestroyView() {
+        participantList.adapter = null
+        participantList.layoutManager = null
 
-        outState.putString(NEW_PARTICIPANT_STATE, newParticipant)
-        outState.putString(NEW_CONFERENCE_ID_STATE, newConferenceId)
+        KotterKnife.reset(this)
+
+        super.onDestroyView()
     }
 
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onChatCreatedAndLoaded(@Suppress("UNUSED_PARAMETER") event: ChatSynchronizationEvent) {
-        if (newConferenceId != null) {
-            val conference = context.chatDatabase.getConference(newConferenceId!!)
+        newConferenceId?.let {
+            val conference = context.chatDatabase.getConference(it)
 
             activity.finish()
+
             if (conference != null) {
                 ChatActivity.navigateTo(activity, conference)
             }
         }
     }
 
-    private fun initLoader() {
-        @Suppress("UNCHECKED_CAST")
-        val foundLoader = childFragmentManager.findFragmentByTag(LOADER_TAG)
-                as RetainedLoadingFragment<String>?
-
-        if (foundLoader == null) {
-            loader = RetainedLoadingFragment<String>()
-
-            childFragmentManager.beginTransaction()
-                    .add(loader, LOADER_TAG)
-                    .commitNow()
-        } else {
-            loader = foundLoader
-        }
+    private fun constructTask(): Task<String> {
+        return ValidatingTask(LoadingTask {
+            when (isGroup) {
+                true -> {
+                    NewConferenceRequest(topicInput.text.toString().trim(), adapter.participants
+                            .map { it.username })
+                            .withFirstMessage(messageInput.text.toString().trim())
+                }
+                false -> {
+                    NewConferenceRequest(adapter.participants.first().username)
+                            .withFirstMessage(messageInput.text.toString().trim())
+                }
+            }
+        }, {
+            Validators.validateLogin(true)
+            validateInput()
+        }).onStart {
+            setRefreshing(true)
+        }.onFinish { updateRefreshing() }
     }
 
-    private fun checkIfCanLoad(): Boolean {
-        if (loader.isLoading()) {
-            return false
-        }
-
-        if (arguments.getBoolean(IS_GROUP_ARGUMENT)) {
+    private fun validateInput() {
+        if (isGroup) {
             if (topicInput.text.isBlank()) {
-                topicInputContainer.isErrorEnabled = true
-                topicInputContainer.error = context.getString(R.string.error_input_empty)
-
-                return false
+                throw TopicEmptyException()
             }
         }
 
         if (messageInput.text.isBlank()) {
-            Snackbar.make(root, context.getString(R.string.error_no_message), Snackbar.LENGTH_LONG)
-                    .show()
-
-            return false
+            throw InvalidInputException(context.getString(R.string.error_no_message))
         }
 
         if (adapter.isEmpty()) {
-            Snackbar.make(root, context.getString(R.string.error_no_users), Snackbar.LENGTH_LONG)
-                    .show()
-
-            return false
+            throw InvalidInputException(context.getString(R.string.error_no_users))
         }
-
-        if (UserManager.loginState != UserManager.LoginState.LOGGED_IN) {
-            Snackbar.make(root, context.getString(R.string.status_not_logged_in), Snackbar.LENGTH_LONG)
-                    .setAction(context.getString(R.string.module_login_login), {
-                        LoginDialog.show(activity as AppCompatActivity)
-                    }).show()
-
-            return false
-        }
-
-        return true
     }
 
     private fun generateEmojiDrawable(iconicRes: IIcon): Drawable {
@@ -296,26 +299,8 @@ class NewChatFragment : MainFragment() {
                 .colorRes(R.color.icon)
     }
 
-    private fun createChat() {
-        val request: NewConferenceRequest
-
-        if (arguments.getBoolean(IS_GROUP_ARGUMENT)) {
-            request = NewConferenceRequest(topicInput.text.toString().trim(),
-                    adapter.participants.map { it.username })
-        } else {
-            request = NewConferenceRequest(adapter.participants.first().username)
-        }
-
-        if (messageInput.text.isNotBlank()) {
-            request.withFirstMessage(messageInput.text.toString().trim())
-        }
-
-        loader.load(request)
-        handleProgress()
-    }
-
     private fun refreshNewParticipantFooter() {
-        if (!arguments.getBoolean(IS_GROUP_ARGUMENT) && adapter.itemCount >= 1) {
+        if (!isGroup && adapter.itemCount >= 1) {
             newParticipant = null
             headerFooterAdapter.removeFooter()
 
@@ -384,7 +369,7 @@ class NewChatFragment : MainFragment() {
 
                     input.text.clear()
 
-                    if (!arguments.getBoolean(IS_GROUP_ARGUMENT) && adapter.itemCount >= 1) {
+                    if (!isGroup && adapter.itemCount >= 1) {
                         refreshNewParticipantFooter()
                     }
                 }
@@ -405,26 +390,24 @@ class NewChatFragment : MainFragment() {
         }
     }
 
-    private fun showProgress() {
-        progress.isEnabled = true
-        progress.isRefreshing = true
+    private fun setRefreshing(enable: Boolean) {
+        progress.isEnabled = enable
+        progress.isRefreshing = enable
     }
 
-    private fun hideProgress() {
-        progress.isEnabled = false
-        progress.isRefreshing = false
-    }
-
-    private fun handleProgress() {
+    private fun updateRefreshing() {
         if (isLoading()) {
-            showProgress()
+            setRefreshing(true)
         } else {
-            hideProgress()
+            setRefreshing(false)
         }
     }
 
     private fun isLoading(): Boolean {
-        return loader.isLoading() || if (newConferenceId == null) false else
+        return task.isWorking || if (newConferenceId == null) false else
             ChatService.isSynchronizing
     }
+
+    private class InvalidInputException(message: String) : Exception(message)
+    private class TopicEmptyException : Exception()
 }
