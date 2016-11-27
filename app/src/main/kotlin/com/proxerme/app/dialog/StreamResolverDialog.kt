@@ -39,12 +39,13 @@ class StreamResolverDialog : DialogFragment() {
     private val id: String
         get() = arguments.getString(ID_ARGUMENT)
 
-    private var task: Future<Unit>? = null
+    private lateinit var task: Future<Unit>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         retainInstance = true
+
         task = doAsync(exceptionHandler = {
             context.runOnUiThread {
                 if (it.message.isNullOrBlank()) {
@@ -83,8 +84,7 @@ class StreamResolverDialog : DialogFragment() {
     }
 
     override fun onDestroy() {
-        task?.cancel(true)
-        task = null
+        task.cancel(true)
 
         super.onDestroy()
     }
