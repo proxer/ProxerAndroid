@@ -188,7 +188,7 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
     open protected fun reset() {
         hasReachedEnd = false
 
-        clear()
+        // clear()
         task.execute(successCallback, exceptionCallback)
     }
 

@@ -57,3 +57,7 @@ class LocalMessage : Message, Parcelable {
         dest.writeLong(localId)
     }
 }
+
+fun Message.toLocalMessage(localId: Long): LocalMessage {
+    return LocalMessage(localId, id, conferenceId, userId, username, message, action, time, device)
+}

@@ -125,7 +125,9 @@ class ChatService : IntentService("ChatService") {
 
                     reschedule(this@ChatService)
                 }
-                ACTION_LOAD_CONFERENCES -> isLoadingConferences = false
+                ACTION_LOAD_CONFERENCES -> {
+                    isLoadingConferences = false
+                }
                 ACTION_LOAD_MESSAGES -> {
                     isLoadingMessagesMap.remove(intent.getStringExtra(EXTRA_CONFERENCE_ID))
                 }
@@ -141,18 +143,18 @@ class ChatService : IntentService("ChatService") {
         val changedConferences = fetchConferences()
 
         if (changedConferences.isNotEmpty()) {
-            val newMessages = fetchMessages(changedConferences)
-
-            chatDatabase.insertOrUpdate(changedConferences, newMessages)
+            val insertedMap = chatDatabase.insertOrUpdate(changedConferences.associate {
+                it to fetchMessages(it)
+            })
 
             when (SectionManager.currentSection) {
                 SectionManager.Section.CHAT -> {
-                    changedConferences.forEach {
-                        EventBus.getDefault().post(ChatMessagesEvent(it.id))
+                    insertedMap.forEach {
+                        EventBus.getDefault().post(ChatMessagesEvent(it.key.id, it.value))
                     }
                 }
                 else -> {
-                    EventBus.getDefault().post(ChatSynchronizationEvent())
+                    EventBus.getDefault().post(ChatSynchronizationEvent(insertedMap.keys.toList()))
 
                     if (SectionManager.currentSection != SectionManager.Section.CONFERENCES) {
                         showNotification()
@@ -168,13 +170,13 @@ class ChatService : IntentService("ChatService") {
             val newConferences = MainApplication.proxerConnection
                     .executeSynchronized(ConferencesRequest(pageToRetrieve.toInt())).toList()
 
-            chatDatabase.insertOrUpdateConferences(newConferences)
+            val insertedConferences = chatDatabase.insertOrUpdateConferences(newConferences)
 
             if (newConferences.size < CONFERENCES_ON_PAGE) {
                 StorageHelper.conferenceListEndReached = true
             }
 
-            EventBus.getDefault().post(ChatSynchronizationEvent())
+            EventBus.getDefault().post(ChatSynchronizationEvent(insertedConferences))
         } catch(exception: ProxerException) {
             throw LoadMoreConferencesException(ErrorHandler.getMessageForErrorCode(this, exception))
         }
@@ -187,13 +189,13 @@ class ChatService : IntentService("ChatService") {
                     .executeSynchronized(MessagesRequest(conferenceId, idToLoadFrom)
                             .withMarkAsRead(false)).toList()
 
-            chatDatabase.insertOrUpdateMessages(newMessages)
+            val insertedMessages = chatDatabase.insertOrUpdateMessages(newMessages)
 
             if (newMessages.size < MESSAGES_ON_PAGE) {
                 StorageHelper.setConferenceReachedEnd(conferenceId)
             }
 
-            EventBus.getDefault().post(ChatMessagesEvent(conferenceId))
+            EventBus.getDefault().post(ChatMessagesEvent(conferenceId, insertedMessages))
         } catch(exception: ProxerException) {
             throw LoadMoreMessagesException(ErrorHandler.getMessageForErrorCode(this, exception),
                     conferenceId)
@@ -260,57 +262,55 @@ class ChatService : IntentService("ChatService") {
         }
     }
 
-    private fun fetchMessages(changedConferences: Collection<Conference>): Collection<Message> {
-        val newMessages = LinkedList<Message>()
+    private fun fetchMessages(conference: Conference): List<Message> {
+        val newMessages = ArrayList<Message>()
 
-        for (conference in changedConferences) {
-            try {
-                var mostRecentMessage: Message? = chatDatabase.getMostRecentMessage(conference.id)
-                var existingUnreadMessageAmount = chatDatabase.getUnreadMessageAmount(conference.id,
-                        conference.lastReadMessageId)
-                var nextId = "0"
+        try {
+            var mostRecentMessage: Message? = chatDatabase.getMostRecentMessage(conference.id)
+            var existingUnreadMessageAmount = chatDatabase.getUnreadMessageAmount(conference.id,
+                    conference.lastReadMessageId)
+            var nextId = "0"
 
-                if (mostRecentMessage == null) {
-                    while (existingUnreadMessageAmount < conference.unreadMessageAmount) {
-                        val fetchedMessages = MainApplication.proxerConnection
-                                .executeSynchronized(MessagesRequest(conference.id, nextId)
-                                        .withMarkAsRead(false))
+            if (mostRecentMessage == null) {
+                while (existingUnreadMessageAmount < conference.unreadMessageAmount) {
+                    val fetchedMessages = MainApplication.proxerConnection
+                            .executeSynchronized(MessagesRequest(conference.id, nextId)
+                                    .withMarkAsRead(false))
 
-                        newMessages.addAll(fetchedMessages)
+                    newMessages.addAll(fetchedMessages)
 
-                        if (fetchedMessages.size < MESSAGES_ON_PAGE) {
-                            StorageHelper.setConferenceReachedEnd(conference.id)
+                    if (fetchedMessages.size < MESSAGES_ON_PAGE) {
+                        StorageHelper.setConferenceReachedEnd(conference.id)
 
-                            break
-                        } else {
-                            existingUnreadMessageAmount += fetchedMessages.size
-                            nextId = fetchedMessages.first().id
-                        }
-                    }
-                } else {
-                    while (mostRecentMessage!!.time < conference.time ||
-                            existingUnreadMessageAmount < conference.unreadMessageAmount) {
-                        val fetchedMessages = MainApplication.proxerConnection
-                                .executeSynchronized(MessagesRequest(conference.id, nextId)
-                                        .withMarkAsRead(false))
-
-                        newMessages.addAll(fetchedMessages)
-
-                        if (fetchedMessages.size < MESSAGES_ON_PAGE) {
-                            StorageHelper.setConferenceReachedEnd(conference.id)
-
-                            break
-                        } else {
-                            existingUnreadMessageAmount += fetchedMessages.size
-                            mostRecentMessage = fetchedMessages.last()
-                            nextId = fetchedMessages.first().id
-                        }
+                        break
+                    } else {
+                        existingUnreadMessageAmount += fetchedMessages.size
+                        nextId = fetchedMessages.first().id
                     }
                 }
-            } catch (exception: ProxerException) {
-                throw FetchMessagesException(ErrorHandler.getMessageForErrorCode(this, exception),
-                        conference.id)
+            } else {
+                while (mostRecentMessage!!.time < conference.time ||
+                        existingUnreadMessageAmount < conference.unreadMessageAmount) {
+                    val fetchedMessages = MainApplication.proxerConnection
+                            .executeSynchronized(MessagesRequest(conference.id, nextId)
+                                    .withMarkAsRead(false))
+
+                    newMessages.addAll(fetchedMessages)
+
+                    if (fetchedMessages.size < MESSAGES_ON_PAGE) {
+                        StorageHelper.setConferenceReachedEnd(conference.id)
+
+                        break
+                    } else {
+                        existingUnreadMessageAmount += fetchedMessages.size
+                        mostRecentMessage = fetchedMessages.last()
+                        nextId = fetchedMessages.first().id
+                    }
+                }
             }
+        } catch (exception: ProxerException) {
+            throw FetchMessagesException(ErrorHandler.getMessageForErrorCode(this, exception),
+                    conference.id)
         }
 
         return newMessages

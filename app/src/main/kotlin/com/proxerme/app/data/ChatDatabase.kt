@@ -3,8 +3,11 @@ package com.proxerme.app.data
 import android.content.Context
 import android.database.DatabaseUtils
 import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteException
 import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.entitiy.LocalMessage
+import com.proxerme.app.entitiy.toLocalConference
+import com.proxerme.app.entitiy.toLocalMessage
 import com.proxerme.library.connection.messenger.entity.Conference
 import com.proxerme.library.connection.messenger.entity.Message
 import com.proxerme.library.connection.user.entitiy.User
@@ -125,28 +128,43 @@ class ChatDatabase(context: Context) :
         }
     }
 
-    fun insertOrUpdate(conferences: Collection<Conference>, messages: Collection<Message>) {
-        use {
+    fun insertOrUpdate(conferenceMap: Map<Conference, List<Message>>):
+            Map<LocalConference, List<LocalMessage>> {
+        return use {
+            val result = LinkedHashMap<LocalConference, List<LocalMessage>>()
+
             transaction {
-                doInsertOrUpdateConferences(this, conferences)
-                doInsertOrUpdateMessages(this, messages)
+                for ((conference, messages) in conferenceMap) {
+                    result.put(doInsertOrUpdateConference(this, conference),
+                            doInsertOrUpdateMessages(this, messages))
+                }
             }
+
+            result
         }
     }
 
-    fun insertOrUpdateConferences(items: Collection<Conference>) {
-        use {
+    fun insertOrUpdateConferences(items: Collection<Conference>): List<LocalConference> {
+        return use {
+            var result: List<LocalConference>? = null
+
             transaction {
-                doInsertOrUpdateConferences(this, items)
+                result = doInsertOrUpdateConferences(this, items)
             }
+
+            result ?: throw SQLiteException()
         }
     }
 
-    fun insertOrUpdateMessages(items: Collection<Message>) {
-        use {
+    fun insertOrUpdateMessages(items: Collection<Message>): List<LocalMessage> {
+        return use {
+            var result: List<LocalMessage>? = null
+
             transaction {
-                doInsertOrUpdateMessages(this, items)
+                result = doInsertOrUpdateMessages(this, items)
             }
+
+            result ?: throw SQLiteException()
         }
     }
 
@@ -198,6 +216,14 @@ class ChatDatabase(context: Context) :
         }
     }
 
+    fun getMessage(id: String): LocalMessage? {
+        return use {
+            this.select(TABLE_CONFERENCE)
+                    .where("$COLUMN_MESSAGE_ID = $id")
+                    .parseOpt(messageParser)
+        }
+    }
+
     fun getUnreadConferences(): List<LocalConference> {
         return use {
             this.select(TABLE_CONFERENCE)
@@ -221,25 +247,45 @@ class ChatDatabase(context: Context) :
         }
     }
 
-    private fun doInsertOrUpdateConferences(db: SQLiteDatabase, items: Collection<Conference>) {
-        items.forEach {
-            val insertionValues = generateInsertionValues(it)
+    private fun doInsertOrUpdateConference(db: SQLiteDatabase, item: Conference): LocalConference {
+        val insertionValues = generateInsertionValues(item)
+        val updated = db.update(TABLE_CONFERENCE, *insertionValues)
+                .where("$COLUMN_CONFERENCE_ID = ${item.id}").exec() > 0
 
-            if (db.update(TABLE_CONFERENCE, *insertionValues)
-                    .where("$COLUMN_CONFERENCE_ID = ${it.id}").exec() <= 0) {
-                db.insertOrThrow(TABLE_CONFERENCE, *insertionValues)
+        return if (updated) {
+            getConference(item.id) ?: throw SQLiteException()
+        } else {
+            item.toLocalConference(db.insertOrThrow(TABLE_CONFERENCE, *insertionValues))
+        }
+    }
+
+    private fun doInsertOrUpdateConferences(db: SQLiteDatabase, items: Collection<Conference>):
+            List<LocalConference> {
+        return items.map {
+            val insertionValues = generateInsertionValues(it)
+            val updated = db.update(TABLE_CONFERENCE, *insertionValues)
+                    .where("$COLUMN_CONFERENCE_ID = ${it.id}").exec() > 0
+
+            if (updated) {
+                getConference(it.id) ?: throw SQLiteException()
+            } else {
+                it.toLocalConference(db.insertOrThrow(TABLE_CONFERENCE, *insertionValues))
             }
         }
     }
 
-    private fun doInsertOrUpdateMessages(db: SQLiteDatabase, items: Collection<Message>) {
-        items.forEach {
+    private fun doInsertOrUpdateMessages(db: SQLiteDatabase, items: Collection<Message>):
+            List<LocalMessage> {
+        return items.map {
             val insertionValues = generateInsertionValues(it)
-
-            if (db.update(TABLE_MESSAGE, *insertionValues)
+            val updated = db.update(TABLE_MESSAGE, *insertionValues)
                     .where("$COLUMN_MESSAGE_ID = ${it.id}")
-                    .exec() <= 0) {
-                db.insertOrThrow(TABLE_MESSAGE, *insertionValues)
+                    .exec() > 0
+
+            if (updated) {
+                getMessage(it.id) ?: throw SQLiteException()
+            } else {
+                it.toLocalMessage(db.insertOrThrow(TABLE_MESSAGE, *insertionValues))
             }
         }
     }

@@ -70,3 +70,8 @@ class LocalConference : Conference, Parcelable {
         return result
     }
 }
+
+fun Conference.toLocalConference(localId: Long): LocalConference {
+    return LocalConference(localId, id, topic, customTopic, participantAmount, imageType,
+            imageId, isGroup, isRead, isRead, time, unreadMessageAmount, lastReadMessageId)
+}
