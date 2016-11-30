@@ -18,8 +18,8 @@ import java.util.concurrent.Future
  *
  * @author Ruben Gees
  */
-abstract class ConferenceTask(private val contextCallback: () -> Context,
-                              private val onlyRefreshCallback: () -> Boolean) :
+class ConferenceTask(private val contextCallback: () -> Context,
+                     private val onlyRefreshCallback: () -> Boolean) :
         BaseTask<Array<LocalConference>>() {
 
     override var isWorking: Boolean = false

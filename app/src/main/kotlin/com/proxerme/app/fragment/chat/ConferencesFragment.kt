@@ -82,6 +82,6 @@ class ConferencesFragment : PagedLoadingFragment<LocalConference>() {
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onConferencesChanged(@Suppress("UNUSED_PARAMETER") event: ChatSynchronizationEvent) {
-        adapter.update(event.newEntryMap.keys)
+        adapter.replace(event.newEntryMap.keys)
     }
 }

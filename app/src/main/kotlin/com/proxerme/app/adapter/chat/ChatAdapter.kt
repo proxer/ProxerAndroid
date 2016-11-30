@@ -194,16 +194,14 @@ class ChatAdapter(val isGroup: Boolean) : PagingAdapter<LocalMessage>() {
     }
 
     override fun clear() {
-        list.clear()
-        showingTimeMap.clear()
+        super.clear()
 
+        showingTimeMap.clear()
         clearSelection()
 
         if (selectedMap.size() > 0) {
             callback?.onMessageSelection(0)
         }
-
-        notifyDataSetChanged()
     }
 
     override fun removeCallback() {
