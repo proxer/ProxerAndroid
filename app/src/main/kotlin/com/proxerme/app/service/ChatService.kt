@@ -7,6 +7,7 @@ import com.proxerme.app.application.MainApplication
 import com.proxerme.app.data.chatDatabase
 import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.entitiy.LocalMessage
+import com.proxerme.app.event.ChatConferencesEvent
 import com.proxerme.app.event.ChatMessagesEvent
 import com.proxerme.app.event.ChatSynchronizationEvent
 import com.proxerme.app.helper.NotificationHelper
@@ -42,8 +43,8 @@ class ChatService : IntentService("ChatService") {
 
         private const val EXTRA_CONFERENCE_ID = "conferenceId"
 
-        private const val CONFERENCES_ON_PAGE = 48
-        private const val MESSAGES_ON_PAGE = 30
+        const val CONFERENCES_ON_PAGE = 48
+        const val MESSAGES_ON_PAGE = 30
 
         var isSynchronizing = false
             private set
@@ -154,7 +155,7 @@ class ChatService : IntentService("ChatService") {
                     }
                 }
                 else -> {
-                    EventBus.getDefault().post(ChatSynchronizationEvent(insertedMap.keys.toList()))
+                    EventBus.getDefault().post(ChatSynchronizationEvent(insertedMap))
 
                     if (SectionManager.currentSection != SectionManager.Section.CONFERENCES) {
                         showNotification()
@@ -176,7 +177,7 @@ class ChatService : IntentService("ChatService") {
                 StorageHelper.conferenceListEndReached = true
             }
 
-            EventBus.getDefault().post(ChatSynchronizationEvent(insertedConferences))
+            EventBus.getDefault().post(ChatConferencesEvent(insertedConferences))
         } catch(exception: ProxerException) {
             throw LoadMoreConferencesException(ErrorHandler.getMessageForErrorCode(this, exception))
         }

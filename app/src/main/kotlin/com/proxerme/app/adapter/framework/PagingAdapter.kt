@@ -70,6 +70,28 @@ abstract class PagingAdapter<T>() : RecyclerView.Adapter<PagingAdapter.PagingVie
         notifyItemRemoved(position)
     }
 
+    open fun update(items: Iterable<T>) {
+        val updatedPositions = ArrayList<Int>()
+        var newItems = 0
+
+        items.forEach { item ->
+            val foundPosition = list.indexOfFirst { (item as IdItem).id == (it as IdItem).id }
+
+            if (foundPosition > 0) {
+                list[foundPosition] = item
+
+                updatedPositions += foundPosition
+            } else {
+                list.add(0, item)
+
+                newItems++
+            }
+        }
+
+        updatedPositions.forEach { notifyItemChanged(it) }
+        notifyItemRangeInserted(0, newItems)
+    }
+
     open fun clear() {
         val previousSize = list.size
 

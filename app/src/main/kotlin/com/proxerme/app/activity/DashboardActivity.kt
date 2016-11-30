@@ -11,7 +11,7 @@ import com.proxerme.app.R
 import com.proxerme.app.dialog.LoginDialog
 import com.proxerme.app.dialog.LogoutDialog
 import com.proxerme.app.fragment.SettingsFragment
-import com.proxerme.app.fragment.chat.ConferencesFragment2
+import com.proxerme.app.fragment.chat.ConferencesFragment
 import com.proxerme.app.fragment.media.MediaListFragment
 import com.proxerme.app.fragment.news.NewsFragment
 import com.proxerme.app.fragment.ucp.ReminderFragment
@@ -219,7 +219,7 @@ class DashboardActivity : AppCompatActivity(), CustomTabsModule {
             }
 
             ITEM_CHAT -> {
-                setFragment(ConferencesFragment2.newInstance(),
+                setFragment(ConferencesFragment.newInstance(),
                         getString(R.string.fragment_conferences))
 
                 return false

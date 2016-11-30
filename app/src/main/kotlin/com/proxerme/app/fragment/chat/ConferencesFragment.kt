@@ -1,34 +1,29 @@
 package com.proxerme.app.fragment.chat
 
 import android.os.Bundle
-import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
+import android.view.*
 import com.proxerme.app.R
 import com.proxerme.app.activity.chat.ChatActivity
 import com.proxerme.app.activity.chat.NewChatActivity
 import com.proxerme.app.adapter.chat.ConferenceAdapter
-import com.proxerme.app.adapter.chat.ConferenceAdapter.ConferenceAdapterCallback
-import com.proxerme.app.data.chatDatabase
 import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.event.ChatSynchronizationEvent
-import com.proxerme.app.fragment.framework.EasyChatServiceFragment
-import com.proxerme.app.helper.StorageHelper
-import com.proxerme.app.manager.SectionManager
+import com.proxerme.app.fragment.framework.PagedLoadingFragment
+import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.service.ChatService
+import com.proxerme.app.task.ConferenceTask
+import com.proxerme.app.task.Task
 import com.proxerme.app.util.Utils
-import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
 /**
- * TODO: Describe Class
+ * TODO: Describe class
  *
  * @author Ruben Gees
  */
-class ConferencesFragment : EasyChatServiceFragment<LocalConference>() {
+class ConferencesFragment : PagedLoadingFragment<LocalConference>() {
 
     companion object {
         fun newInstance(): ConferencesFragment {
@@ -36,30 +31,33 @@ class ConferencesFragment : EasyChatServiceFragment<LocalConference>() {
         }
     }
 
-    override val section: SectionManager.Section = SectionManager.Section.CONFERENCES
+    override val section = Section.CONFERENCES
+    override val itemsOnPage = ChatService.CONFERENCES_ON_PAGE
+    override val isLoginRequired = true
+    override val isSwipeToRefreshEnabled = false
 
-    override lateinit var layoutManager: RecyclerView.LayoutManager
+    override lateinit var layoutManager: StaggeredGridLayoutManager
     override lateinit var adapter: ConferenceAdapter
-
-    override val hasReachedEnd: Boolean
-        get() = StorageHelper.conferenceListEndReached
-    override val isLoading: Boolean
-        get() = ChatService.isLoadingConferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         adapter = ConferenceAdapter()
-        adapter.callback = object : ConferenceAdapterCallback() {
+        adapter.callback = object : ConferenceAdapter.ConferenceAdapterCallback() {
             override fun onItemClick(item: LocalConference) {
                 ChatActivity.navigateTo(activity, item)
             }
         }
 
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View {
         layoutManager = StaggeredGridLayoutManager(Utils.calculateSpanAmount(activity),
                 StaggeredGridLayoutManager.VERTICAL)
 
-        setHasOptionsMenu(true)
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater) {
@@ -77,43 +75,13 @@ class ConferencesFragment : EasyChatServiceFragment<LocalConference>() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onStart() {
-        super.onStart()
-
-        EventBus.getDefault().register(this)
-    }
-
-    override fun onStop() {
-        EventBus.getDefault().unregister(this)
-
-        super.onStop()
-    }
-
-    override fun onDestroy() {
-        adapter.callback = null
-
-        super.onDestroy()
-    }
-
-    override fun loadFromDB(): Collection<LocalConference> {
-        return context.chatDatabase.getConferences()
-    }
-
-    override fun startLoadMore() {
-        ChatService.loadMoreConferences(context)
+    override fun constructTask(pageCallback: () -> Int): Task<Array<LocalConference>> {
+        return ConferenceTask({ context }, { pageCallback.invoke() == 0 })
     }
 
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onConferencesChanged(@Suppress("UNUSED_PARAMETER") event: ChatSynchronizationEvent) {
-        if (canLoad) {
-            refresh()
-        }
-    }
-
-    @Suppress("unused")
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onLoadMoreConferencesFailed(exception: ChatService.LoadMoreConferencesException) {
-        showError(exception)
+        adapter.update(event.newEntryMap.keys)
     }
 }
