@@ -45,7 +45,6 @@ abstract class BaseListenableTask<O> : ListenableTask<O> {
     }
 
     protected fun finishSuccessful(result: O, successCallback: (O) -> Unit) {
-        cancel()
         successCallback.invoke(result)
 
         onSuccessCallback?.invoke()
@@ -53,7 +52,6 @@ abstract class BaseListenableTask<O> : ListenableTask<O> {
     }
 
     protected fun finishWithException(result: Exception, exceptionCallback: (Exception) -> Unit) {
-        cancel()
         exceptionCallback.invoke(result)
 
         onExceptionCallback?.invoke()

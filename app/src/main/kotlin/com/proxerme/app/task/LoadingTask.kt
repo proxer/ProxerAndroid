@@ -20,8 +20,12 @@ class LoadingTask<O>(private val taskResolver: () -> ProxerRequest<O>) : BaseLis
     override fun execute(successCallback: (O) -> Unit, exceptionCallback: (Exception) -> Unit) {
         start {
             call = MainApplication.proxerConnection.execute(taskResolver.invoke(), {
+                cancel()
+
                 finishSuccessful(it, successCallback)
             }, {
+                cancel()
+
                 finishWithException(it, exceptionCallback)
             })
         }

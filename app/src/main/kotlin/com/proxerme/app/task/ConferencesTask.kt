@@ -71,6 +71,8 @@ class ConferencesTask(private val contextCallback: () -> Context) : BaseListenab
     override fun destroy() {
         EventBus.getDefault().unregister(this)
 
+        reset()
+
         this.successCallback = null
         this.exceptionCallback = null
 

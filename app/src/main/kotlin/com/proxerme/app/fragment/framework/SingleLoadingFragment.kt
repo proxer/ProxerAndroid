@@ -86,7 +86,10 @@ abstract class SingleLoadingFragment<T> : MainFragment() {
         task = ValidatingTask(CachedTask(internalConstructTask(), cacheStrategy), {
             Validators.validateLogin(isLoginRequired)
             Validators.validateHentaiConfirmation(context, isHentaiConfirmationRequired)
-        })
+        }).onException {
+            contentContainer.visibility = View.GONE
+            errorContainer.visibility = View.VISIBLE
+        }
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {

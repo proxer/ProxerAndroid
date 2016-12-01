@@ -13,11 +13,18 @@ class ValidatingTask<O>(private val task: Task<O>, private val validateFunction:
     override val isWorking: Boolean
         get() = task.isWorking
 
+    private var onExceptionCallback: (() -> Unit)? = null
+
+    fun onException(callback: () -> Unit): ValidatingTask<O> {
+        return this.apply { onExceptionCallback = callback }
+    }
+
     override fun execute(successCallback: (O) -> Unit, exceptionCallback: (Exception) -> Unit) {
         try {
             validateFunction.invoke()
         } catch (exception: Exception) {
             exceptionCallback.invoke(exception)
+            onExceptionCallback?.invoke()
 
             return
         }
@@ -30,6 +37,8 @@ class ValidatingTask<O>(private val task: Task<O>, private val validateFunction:
     }
 
     override fun destroy() {
+        onExceptionCallback = null
+        
         task.destroy()
     }
 
