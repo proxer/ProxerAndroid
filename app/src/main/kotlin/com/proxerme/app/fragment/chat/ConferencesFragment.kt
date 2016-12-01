@@ -10,7 +10,9 @@ import com.proxerme.app.activity.chat.NewChatActivity
 import com.proxerme.app.adapter.chat.ConferenceAdapter
 import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.fragment.framework.SingleLoadingFragment
+import com.proxerme.app.helper.NotificationHelper
 import com.proxerme.app.manager.SectionManager.Section
+import com.proxerme.app.service.ChatService
 import com.proxerme.app.task.CachedTask
 import com.proxerme.app.task.ConferencesTask
 import com.proxerme.app.task.framework.ListenableTask
@@ -50,6 +52,18 @@ class ConferencesFragment : SingleLoadingFragment<List<LocalConference>>() {
         }
 
         setHasOptionsMenu(true)
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        ChatService.synchronize(context)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        NotificationHelper.cancelNotification(context, NotificationHelper.CHAT_NOTIFICATION)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
