@@ -218,7 +218,7 @@ class ChatDatabase(context: Context) :
 
     fun getMessage(id: String): LocalMessage? {
         return use {
-            this.select(TABLE_CONFERENCE)
+            this.select(TABLE_MESSAGE)
                     .where("$COLUMN_MESSAGE_ID = $id")
                     .parseOpt(messageParser)
         }
@@ -253,7 +253,8 @@ class ChatDatabase(context: Context) :
                 .where("$COLUMN_CONFERENCE_ID = ${item.id}").exec() > 0
 
         return if (updated) {
-            getConference(item.id) ?: throw SQLiteException()
+            getConference(item.id) ?: throw SQLiteException("Could not find conference with " +
+                    "id ${item.id}")
         } else {
             item.toLocalConference(db.insertOrThrow(TABLE_CONFERENCE, *insertionValues))
         }
@@ -267,7 +268,8 @@ class ChatDatabase(context: Context) :
                     .where("$COLUMN_CONFERENCE_ID = ${it.id}").exec() > 0
 
             if (updated) {
-                getConference(it.id) ?: throw SQLiteException()
+                getConference(it.id) ?: throw SQLiteException("Could not find conference with " +
+                        "id ${it.id}")
             } else {
                 it.toLocalConference(db.insertOrThrow(TABLE_CONFERENCE, *insertionValues))
             }
@@ -283,7 +285,8 @@ class ChatDatabase(context: Context) :
                     .exec() > 0
 
             if (updated) {
-                getMessage(it.id) ?: throw SQLiteException()
+                getMessage(it.id) ?: throw SQLiteException("Could not find message with i" +
+                        "d ${it.id}")
             } else {
                 it.toLocalMessage(db.insertOrThrow(TABLE_MESSAGE, *insertionValues))
             }

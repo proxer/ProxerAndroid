@@ -1,5 +1,6 @@
 package com.proxerme.app.adapter.framework
 
+import android.support.annotation.CallSuper
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -69,23 +70,36 @@ abstract class PagingAdapter<T>() : RecyclerView.Adapter<PagingAdapter.PagingVie
         doUpdates(items.toList())
     }
 
+    @CallSuper
     open fun remove(item: T) {
         doUpdates(list.minus(item))
     }
 
+    @CallSuper
     open fun clear() {
         doUpdates(ArrayList<T>(0))
+    }
+
+    open fun removeCallback() {
+
+    }
+
+    open protected fun areItemsTheSame(oldItem: T, newItem: T): Boolean {
+        if (hasStableIds()) {
+            return (oldItem as IdItem).id == (newItem as IdItem).id
+        } else {
+            return oldItem == newItem
+        }
+    }
+
+    open protected fun areContentsTheSame(oldItem: T, newItem: T): Boolean {
+        return oldItem == newItem
     }
 
     private fun doUpdates(newList: List<T>) {
         val result = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
             override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-                if (hasStableIds()) {
-                    return (list[oldItemPosition] as IdItem).id ==
-                            (newList[newItemPosition] as IdItem).id
-                } else {
-                    return list[oldItemPosition] == newList[newItemPosition]
-                }
+                return areItemsTheSame(list[oldItemPosition], newList[newItemPosition])
             }
 
             override fun getOldListSize(): Int {
@@ -97,17 +111,14 @@ abstract class PagingAdapter<T>() : RecyclerView.Adapter<PagingAdapter.PagingVie
             }
 
             override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-                return list[oldItemPosition] == newList[newItemPosition]
+                return areContentsTheSame(list[oldItemPosition], newList[newItemPosition])
             }
-        }, true)
+        })
 
         list.clear()
         list.addAll(newList)
+
         result.dispatchUpdatesTo(this)
-    }
-
-    open fun removeCallback() {
-
     }
 
     abstract class PagingViewHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemView) {

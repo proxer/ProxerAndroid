@@ -1,36 +1,48 @@
 package com.proxerme.app.task
 
+import com.proxerme.app.task.CachedTask.CacheStrategy
+
 /**
  * TODO: Describe class
  *
  * @author Ruben Gees
  */
-class CachedTask<O>(private val task: Task<O>) : BaseTask<O>() {
+class CachedTask<O>(private val task: Task<O>,
+                    private val cacheStrategy: CacheStrategy = CacheStrategy.FULL) : BaseTask<O>() {
 
     override val isWorking: Boolean
         get() = task.isWorking
+
+    private val shouldCachedResult = cacheStrategy == CacheStrategy.FULL ||
+            cacheStrategy == CacheStrategy.RESULT
+    private val shouldCacheException = cacheStrategy == CacheStrategy.FULL ||
+            cacheStrategy == CacheStrategy.EXCEPTION
 
     private var cachedResult: O? = null
     private var cachedException: Exception? = null
 
     override fun execute(successCallback: (O) -> Unit, exceptionCallback: (Exception) -> Unit) {
         start {
-            cachedResult?.let {
-                finishSuccessful(it, successCallback)
-                return@start
+            if (shouldCachedResult) {
+                cachedResult?.let {
+                    finishSuccessful(it, successCallback)
+                    return@start
+                }
             }
 
-            cachedException?.let {
-                finishWithException(it, exceptionCallback)
-                return@start
+            if (shouldCacheException) {
+                cachedException?.let {
+                    finishWithException(it, exceptionCallback)
+                    return@start
+                }
             }
 
             task.execute({
-                cachedResult = it
+                cachedResult = if (shouldCachedResult) it else null
 
                 finishSuccessful(it, successCallback)
             }, {
-                cachedException = it
+                cachedException = if (shouldCacheException) it else null
 
                 finishWithException(it, exceptionCallback)
             })
@@ -55,4 +67,6 @@ class CachedTask<O>(private val task: Task<O>) : BaseTask<O>() {
         task.destroy()
         super.destroy()
     }
+
+    enum class CacheStrategy {FULL, RESULT, EXCEPTION }
 }

@@ -1,6 +1,7 @@
 package com.proxerme.app.fragment.chat
 
 import android.os.Bundle
+import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.*
 import com.proxerme.app.R
@@ -9,12 +10,13 @@ import com.proxerme.app.activity.chat.NewChatActivity
 import com.proxerme.app.adapter.chat.ConferenceAdapter
 import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.event.ChatSynchronizationEvent
-import com.proxerme.app.fragment.framework.PagedLoadingFragment
+import com.proxerme.app.fragment.framework.SingleLoadingFragment
 import com.proxerme.app.manager.SectionManager.Section
-import com.proxerme.app.service.ChatService
-import com.proxerme.app.task.ConferenceTask
+import com.proxerme.app.task.CachedTask
+import com.proxerme.app.task.DatabaseTask
 import com.proxerme.app.task.Task
 import com.proxerme.app.util.Utils
+import com.proxerme.app.util.bindView
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
@@ -23,7 +25,7 @@ import org.greenrobot.eventbus.ThreadMode
  *
  * @author Ruben Gees
  */
-class ConferencesFragment : PagedLoadingFragment<LocalConference>() {
+class ConferencesFragment : SingleLoadingFragment<List<LocalConference>>() {
 
     companion object {
         fun newInstance(): ConferencesFragment {
@@ -32,12 +34,13 @@ class ConferencesFragment : PagedLoadingFragment<LocalConference>() {
     }
 
     override val section = Section.CONFERENCES
-    override val itemsOnPage = ChatService.CONFERENCES_ON_PAGE
     override val isLoginRequired = true
     override val isSwipeToRefreshEnabled = false
+    override val cacheStrategy = CachedTask.CacheStrategy.EXCEPTION
 
-    override lateinit var layoutManager: StaggeredGridLayoutManager
-    override lateinit var adapter: ConferenceAdapter
+    private lateinit var adapter: ConferenceAdapter
+
+    private val list: RecyclerView by bindView(R.id.list)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,10 +57,7 @@ class ConferencesFragment : PagedLoadingFragment<LocalConference>() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        layoutManager = StaggeredGridLayoutManager(Utils.calculateSpanAmount(activity),
-                StaggeredGridLayoutManager.VERTICAL)
-
-        return super.onCreateView(inflater, container, savedInstanceState)
+        return inflater.inflate(R.layout.fragment_conferences, container, false)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater) {
@@ -75,13 +75,33 @@ class ConferencesFragment : PagedLoadingFragment<LocalConference>() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun constructTask(pageCallback: () -> Int): Task<Array<LocalConference>> {
-        return ConferenceTask({ context }, { pageCallback.invoke() == 0 })
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        list.setHasFixedSize(true)
+        list.layoutManager = StaggeredGridLayoutManager(Utils.calculateSpanAmount(activity),
+                StaggeredGridLayoutManager.VERTICAL)
+        list.adapter = adapter
+    }
+
+    override fun onDestroyView() {
+        list.layoutManager = null
+        list.adapter = null
+
+        super.onDestroyView()
+    }
+
+    override fun constructTask(): Task<List<LocalConference>> {
+        return DatabaseTask({ context }, { it.getConferences() })
+    }
+
+    override fun present(data: List<LocalConference>) {
+        adapter.replace(data)
     }
 
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onConferencesChanged(@Suppress("UNUSED_PARAMETER") event: ChatSynchronizationEvent) {
-        adapter.replace(event.newEntryMap.keys)
+    fun onSynchronization(@Suppress("UNUSED_PARAMETER") event: ChatSynchronizationEvent) {
+        adapter.insert(event.newEntryMap.keys)
     }
 }

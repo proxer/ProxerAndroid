@@ -63,8 +63,9 @@ abstract class SingleLoadingFragment<T> : MainFragment() {
     open protected val isSwipeToRefreshEnabled = false
     open protected val isLoginRequired = false
     open protected val isHentaiConfirmationRequired = false
+    open protected val cacheStrategy = CachedTask.CacheStrategy.FULL
 
-    private lateinit var task: Task<T>
+    protected lateinit var task: Task<T>
 
     open protected val progress: SwipeRefreshLayout by bindView(R.id.progress)
     open protected val contentContainer: ViewGroup by bindView(R.id.contentContainer)
@@ -81,7 +82,7 @@ abstract class SingleLoadingFragment<T> : MainFragment() {
             EventBus.getDefault().register(this)
         }
 
-        task = ValidatingTask(CachedTask(constructTask()), {
+        task = ValidatingTask(CachedTask(constructTask(), cacheStrategy), {
             Validators.validateLogin(isLoginRequired)
             Validators.validateHentaiConfirmation(context, isHentaiConfirmationRequired)
         }).onStart {
@@ -104,8 +105,8 @@ abstract class SingleLoadingFragment<T> : MainFragment() {
         errorText.movementMethod = TouchableMovementMethod.getInstance()
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onResume() {
+        super.onResume()
 
         task.execute(successCallback, exceptionCallback)
     }

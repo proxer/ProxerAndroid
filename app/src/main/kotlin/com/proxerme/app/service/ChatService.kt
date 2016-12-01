@@ -7,7 +7,6 @@ import com.proxerme.app.application.MainApplication
 import com.proxerme.app.data.chatDatabase
 import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.entitiy.LocalMessage
-import com.proxerme.app.event.ChatConferencesEvent
 import com.proxerme.app.event.ChatMessagesEvent
 import com.proxerme.app.event.ChatSynchronizationEvent
 import com.proxerme.app.helper.NotificationHelper
@@ -37,8 +36,6 @@ class ChatService : IntentService("ChatService") {
 
     companion object {
         private const val ACTION_SYNCHRONIZE = "com.proxerme.app.service.action.SYNCHRONIZE"
-        private const val ACTION_LOAD_CONFERENCES =
-                "com.proxerme.app.service.action.LOAD_CONFERENCES"
         private const val ACTION_LOAD_MESSAGES = "com.proxerme.app.service.action.LOAD_MESSAGES"
 
         private const val EXTRA_CONFERENCE_ID = "conferenceId"
@@ -47,8 +44,6 @@ class ChatService : IntentService("ChatService") {
         const val MESSAGES_ON_PAGE = 30
 
         var isSynchronizing = false
-            private set
-        var isLoadingConferences = false
             private set
         private val isLoadingMessagesMap = HashMap<String, Boolean>()
 
@@ -60,11 +55,6 @@ class ChatService : IntentService("ChatService") {
             ServiceHelper.cancelChatRetrieval(context)
 
             context.startService(context.intentFor<ChatService>().setAction(ACTION_SYNCHRONIZE))
-        }
-
-        fun loadMoreConferences(context: Context) {
-            context.startService(context.intentFor<ChatService>()
-                    .setAction(ACTION_LOAD_CONFERENCES))
         }
 
         fun loadMoreMessages(context: Context, conferenceId: String) {
@@ -86,7 +76,6 @@ class ChatService : IntentService("ChatService") {
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         when (intent.action) {
             ACTION_SYNCHRONIZE -> isSynchronizing = true
-            ACTION_LOAD_CONFERENCES -> isLoadingConferences = true
             ACTION_LOAD_MESSAGES -> {
                 isLoadingMessagesMap.put(intent.getStringExtra(EXTRA_CONFERENCE_ID), true)
             }
@@ -106,7 +95,6 @@ class ChatService : IntentService("ChatService") {
 
                 when (intent.action) {
                     ACTION_SYNCHRONIZE -> doSynchronize()
-                    ACTION_LOAD_CONFERENCES -> doLoadConferences()
                     ACTION_LOAD_MESSAGES -> {
                         doLoadMessages(intent.getStringExtra(EXTRA_CONFERENCE_ID))
                     }
@@ -125,9 +113,6 @@ class ChatService : IntentService("ChatService") {
                     isSynchronizing = false
 
                     reschedule(this@ChatService)
-                }
-                ACTION_LOAD_CONFERENCES -> {
-                    isLoadingConferences = false
                 }
                 ACTION_LOAD_MESSAGES -> {
                     isLoadingMessagesMap.remove(intent.getStringExtra(EXTRA_CONFERENCE_ID))
@@ -162,24 +147,6 @@ class ChatService : IntentService("ChatService") {
                     }
                 }
             }
-        }
-    }
-
-    private fun doLoadConferences() {
-        try {
-            val pageToRetrieve = chatDatabase.getConferenceAmount() / CONFERENCES_ON_PAGE
-            val newConferences = MainApplication.proxerConnection
-                    .executeSynchronized(ConferencesRequest(pageToRetrieve.toInt())).toList()
-
-            val insertedConferences = chatDatabase.insertOrUpdateConferences(newConferences)
-
-            if (newConferences.size < CONFERENCES_ON_PAGE) {
-                StorageHelper.conferenceListEndReached = true
-            }
-
-            EventBus.getDefault().post(ChatConferencesEvent(insertedConferences))
-        } catch(exception: ProxerException) {
-            throw LoadMoreConferencesException(ErrorHandler.getMessageForErrorCode(this, exception))
         }
     }
 
@@ -336,8 +303,6 @@ class ChatService : IntentService("ChatService") {
 
     class LoadMoreMessagesException(message: String, val conferenceId: String) :
             ChatException(message)
-
-    class LoadMoreConferencesException(message: String) : ChatException(message)
 
     class SendMessageException(message: String, val conferenceId: String) : ChatException(message)
 

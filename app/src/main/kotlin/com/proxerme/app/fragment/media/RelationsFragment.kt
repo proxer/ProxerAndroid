@@ -71,6 +71,13 @@ class RelationsFragment : SingleLoadingFragment<Array<Relation>>() {
         list.adapter = adapter
     }
 
+    override fun onDestroyView() {
+        list.layoutManager = null
+        list.adapter = null
+
+        super.onDestroyView()
+    }
+
     override fun onDestroy() {
         adapter.callback = null
 

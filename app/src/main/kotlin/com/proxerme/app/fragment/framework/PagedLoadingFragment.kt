@@ -85,8 +85,8 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
     open protected val isLoginRequired = false
     open protected val isHentaiConfirmationRequired = false
 
-    private lateinit var task: Task<Array<T>>
-    private lateinit var refreshTask: Task<Array<T>>
+    protected lateinit var task: Task<Array<T>>
+    protected lateinit var refreshTask: Task<Array<T>>
 
     open protected val progress: SwipeRefreshLayout by bindView(R.id.progress)
     open protected val list: RecyclerView by bindView(R.id.list)
@@ -153,8 +153,8 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
         setupList()
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onResume() {
+        super.onResume()
 
         task.execute(successCallback, exceptionCallback)
     }
