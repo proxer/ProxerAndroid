@@ -1,33 +1,36 @@
-package com.proxerme.app.task
+package com.proxerme.app.task.framework
+
+import android.support.annotation.CallSuper
 
 /**
  * TODO: Describe class
  *
  * @author Ruben Gees
  */
-abstract class BaseTask<O> : Task<O> {
+abstract class BaseListenableTask<O> : ListenableTask<O> {
 
-    open protected var onStartCallback: (() -> Unit)? = null
-    open protected var onSuccessCallback: (() -> Unit)? = null
-    open protected var onExceptionCallback: (() -> Unit)? = null
-    open protected var onFinishCallback: (() -> Unit)? = null
+    private var onStartCallback: (() -> Unit)? = null
+    private var onSuccessCallback: (() -> Unit)? = null
+    private var onExceptionCallback: (() -> Unit)? = null
+    private var onFinishCallback: (() -> Unit)? = null
 
-    override fun onStart(callback: () -> Unit): Task<O> {
+    override fun onStart(callback: () -> Unit): ListenableTask<O> {
         return this.apply { onStartCallback = callback }
     }
 
-    override fun onSuccess(callback: () -> Unit): Task<O> {
+    override fun onSuccess(callback: () -> Unit): ListenableTask<O> {
         return this.apply { onSuccessCallback = callback }
     }
 
-    override fun onException(callback: () -> Unit): Task<O> {
+    override fun onException(callback: () -> Unit): ListenableTask<O> {
         return this.apply { onExceptionCallback = callback }
     }
 
-    override fun onFinish(callback: () -> Unit): Task<O> {
+    override fun onFinish(callback: () -> Unit): ListenableTask<O> {
         return this.apply { onFinishCallback = callback }
     }
 
+    @CallSuper
     override fun destroy() {
         onStartCallback = null
         onSuccessCallback = null

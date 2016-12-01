@@ -18,8 +18,9 @@ import com.proxerme.app.fragment.framework.SingleLoadingFragment
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.module.StreamResolvers
 import com.proxerme.app.task.LoadingTask
-import com.proxerme.app.task.Task
 import com.proxerme.app.task.ValidatingTask
+import com.proxerme.app.task.framework.ListenableTask
+import com.proxerme.app.task.framework.Task
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.Validators
 import com.proxerme.app.util.bindView
@@ -194,7 +195,7 @@ class AnimeFragment : SingleLoadingFragment<Array<Stream>>() {
         super.onDestroy()
     }
 
-    override fun constructTask(): Task<Array<Stream>> {
+    override fun constructTask(): ListenableTask<Array<Stream>> {
         return LoadingTask { StreamsRequest(id, episode, language) }
     }
 

@@ -7,6 +7,7 @@ import com.proxerme.app.data.chatDatabase
 import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.event.ChatSynchronizationEvent
 import com.proxerme.app.helper.StorageHelper
+import com.proxerme.app.task.framework.BaseListenableTask
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -18,7 +19,7 @@ import java.util.concurrent.Future
  *
  * @author Ruben Gees
  */
-class ConferencesTask(private val contextCallback: () -> Context) : BaseTask<List<LocalConference>>() {
+class ConferencesTask(private val contextCallback: () -> Context) : BaseListenableTask<List<LocalConference>>() {
 
     override val isWorking: Boolean
         get() = !(future?.isDone ?: true)

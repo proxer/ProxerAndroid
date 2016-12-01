@@ -9,7 +9,7 @@ import com.proxerme.app.adapter.media.CommentAdapter
 import com.proxerme.app.fragment.framework.PagedLoadingFragment
 import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.task.LoadingTask
-import com.proxerme.app.task.Task
+import com.proxerme.app.task.framework.ListenableTask
 import com.proxerme.library.connection.info.entity.Comment
 import com.proxerme.library.connection.info.request.CommentRequest
 import com.proxerme.library.parameters.CommentSortParameter
@@ -96,7 +96,7 @@ class CommentFragment : PagedLoadingFragment<Comment>() {
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
-    override fun constructTask(pageCallback: () -> Int): Task<Array<Comment>> {
+    override fun constructTask(pageCallback: () -> Int): ListenableTask<Array<Comment>> {
         return LoadingTask {
             CommentRequest(id)
                     .withPage(pageCallback.invoke())

@@ -9,9 +9,10 @@ import com.proxerme.app.activity.MediaActivity
 import com.proxerme.app.adapter.user.ToptenAdapter
 import com.proxerme.app.fragment.framework.SingleLoadingFragment
 import com.proxerme.app.manager.SectionManager.Section
+import com.proxerme.app.task.ListeningTask
 import com.proxerme.app.task.LoadingTask
-import com.proxerme.app.task.Task
 import com.proxerme.app.task.ZippedTask
+import com.proxerme.app.task.framework.ListenableTask
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.user.entitiy.ToptenEntry
@@ -127,12 +128,12 @@ class ToptenFragment : SingleLoadingFragment<ToptenFragment.ZippedToptenResult>(
         }
     }
 
-    override fun constructTask(): Task<ZippedToptenResult> {
-        return ZippedTask(
+    override fun constructTask(): ListenableTask<ZippedToptenResult> {
+        return ListeningTask(ZippedTask(
                 LoadingTask({ ToptenRequest(userId, userName, ANIME) }),
                 LoadingTask({ ToptenRequest(userId, userName, MANGA) }),
                 zipFunction = ::ZippedToptenResult
-        )
+        ))
     }
 
     class ZippedToptenResult(val animeEntries: Array<ToptenEntry>,

@@ -1,36 +1,36 @@
 package com.proxerme.app.task
 
+import com.proxerme.app.task.framework.Task
+
 /**
  * TODO: Describe class
  *
  * @author Ruben Gees
  */
 class ValidatingTask<O>(private val task: Task<O>, private val validateFunction: () -> Unit) :
-        BaseTask<O>() {
+        Task<O> {
 
     override val isWorking: Boolean
         get() = task.isWorking
 
     override fun execute(successCallback: (O) -> Unit, exceptionCallback: (Exception) -> Unit) {
-        start {
-            try {
-                validateFunction.invoke()
-            } catch (exception: Exception) {
-                finishWithException(exception, exceptionCallback)
-                return@start
-            }
+        try {
+            validateFunction.invoke()
+        } catch (exception: Exception) {
+            exceptionCallback.invoke(exception)
 
-            task.execute({
-                finishSuccessful(it, successCallback)
-            }, {
-                finishWithException(it, exceptionCallback)
-            })
+            return
         }
+
+        task.execute({
+            successCallback.invoke(it)
+        }, {
+            exceptionCallback.invoke(it)
+        })
     }
 
     override fun destroy() {
         task.destroy()
-        super.destroy()
     }
 
     override fun cancel() {

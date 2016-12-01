@@ -29,8 +29,8 @@ import com.proxerme.app.fragment.framework.MainFragment
 import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.service.ChatService
 import com.proxerme.app.task.LoadingTask
-import com.proxerme.app.task.Task
 import com.proxerme.app.task.ValidatingTask
+import com.proxerme.app.task.framework.Task
 import com.proxerme.app.util.*
 import com.proxerme.library.connection.ProxerException
 import com.proxerme.library.connection.messenger.request.NewConferenceRequest
@@ -267,12 +267,12 @@ class NewChatFragment : MainFragment() {
                             .withFirstMessage(messageInput.text.toString().trim())
                 }
             }
-        }, {
+        }.onStart {
+            setRefreshing(true)
+        }.onFinish { updateRefreshing() }, {
             Validators.validateLogin(true)
             validateInput()
-        }).onStart {
-            setRefreshing(true)
-        }.onFinish { updateRefreshing() }
+        })
     }
 
     private fun validateInput() {

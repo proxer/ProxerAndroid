@@ -1,6 +1,7 @@
 package com.proxerme.app.task
 
 import com.proxerme.app.application.MainApplication
+import com.proxerme.app.task.framework.BaseListenableTask
 import com.proxerme.library.connection.ProxerCall
 import com.proxerme.library.connection.ProxerRequest
 
@@ -9,7 +10,7 @@ import com.proxerme.library.connection.ProxerRequest
  *
  * @author Ruben Gees
  */
-class LoadingTask<O>(private val taskResolver: () -> ProxerRequest<O>) : BaseTask<O>() {
+class LoadingTask<O>(private val taskResolver: () -> ProxerRequest<O>) : BaseListenableTask<O>() {
 
     override val isWorking: Boolean
         get() = call != null

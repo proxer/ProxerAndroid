@@ -15,8 +15,9 @@ import com.proxerme.app.dialog.LoginDialog
 import com.proxerme.app.event.HentaiConfirmationEvent
 import com.proxerme.app.manager.UserManager
 import com.proxerme.app.task.CachedTask
-import com.proxerme.app.task.Task
 import com.proxerme.app.task.ValidatingTask
+import com.proxerme.app.task.framework.ListenableTask
+import com.proxerme.app.task.framework.Task
 import com.proxerme.app.util.*
 import com.proxerme.library.connection.ProxerException
 import org.greenrobot.eventbus.EventBus
@@ -82,20 +83,10 @@ abstract class SingleLoadingFragment<T> : MainFragment() {
             EventBus.getDefault().register(this)
         }
 
-        task = ValidatingTask(CachedTask(constructTask(), cacheStrategy), {
+        task = ValidatingTask(CachedTask(internalConstructTask(), cacheStrategy), {
             Validators.validateLogin(isLoginRequired)
             Validators.validateHentaiConfirmation(context, isHentaiConfirmationRequired)
-        }).onStart {
-            setRefreshing(true)
-            contentContainer.visibility = View.GONE
-            errorContainer.visibility = View.GONE
-        }.onSuccess {
-            contentContainer.visibility = View.VISIBLE
-        }.onException {
-            errorContainer.visibility = View.VISIBLE
-        }.onFinish {
-            setRefreshing(false)
-        }
+        })
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -183,7 +174,21 @@ abstract class SingleLoadingFragment<T> : MainFragment() {
         progress.isRefreshing = enable
     }
 
+    private fun internalConstructTask(): ListenableTask<T> {
+        return constructTask().onStart {
+            setRefreshing(true)
+            contentContainer.visibility = View.GONE
+            errorContainer.visibility = View.GONE
+        }.onSuccess {
+            contentContainer.visibility = View.VISIBLE
+        }.onException {
+            errorContainer.visibility = View.VISIBLE
+        }.onFinish {
+            setRefreshing(false)
+        }
+    }
+
     abstract fun present(data: T)
-    abstract fun constructTask(): Task<T>
+    abstract fun constructTask(): ListenableTask<T>
 
 }

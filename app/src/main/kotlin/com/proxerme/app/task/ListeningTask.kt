@@ -1,5 +1,6 @@
 package com.proxerme.app.task
 
+import com.proxerme.app.task.framework.BaseListenableTask
 import com.proxerme.app.task.framework.Task
 
 /**
@@ -7,17 +8,25 @@ import com.proxerme.app.task.framework.Task
  *
  * @author Ruben Gees
  */
-class MappedTask<I, O>(private val task: Task<I>, private val mapFunction: (I) -> O) : Task<O> {
+class ListeningTask<O>(private val task: Task<O>) : BaseListenableTask<O>() {
 
     override val isWorking: Boolean
         get() = task.isWorking
 
     override fun execute(successCallback: (O) -> Unit, exceptionCallback: (Exception) -> Unit) {
-        task.execute({
-            successCallback.invoke(mapFunction.invoke(it))
-        }, {
-            exceptionCallback.invoke(it)
-        })
+        start {
+            task.execute({
+                finishSuccessful(it, successCallback)
+            }, {
+                finishWithException(it, exceptionCallback)
+            })
+        }
+    }
+
+    override fun destroy() {
+        task.destroy()
+
+        super.destroy()
     }
 
     override fun cancel() {
@@ -26,9 +35,5 @@ class MappedTask<I, O>(private val task: Task<I>, private val mapFunction: (I) -
 
     override fun reset() {
         task.reset()
-    }
-
-    override fun destroy() {
-        task.destroy()
     }
 }

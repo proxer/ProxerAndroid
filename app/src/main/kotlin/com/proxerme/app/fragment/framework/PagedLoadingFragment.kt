@@ -16,8 +16,9 @@ import com.proxerme.app.dialog.LoginDialog
 import com.proxerme.app.event.HentaiConfirmationEvent
 import com.proxerme.app.manager.UserManager
 import com.proxerme.app.task.CachedTask
-import com.proxerme.app.task.Task
 import com.proxerme.app.task.ValidatingTask
+import com.proxerme.app.task.framework.ListenableTask
+import com.proxerme.app.task.framework.Task
 import com.proxerme.app.util.*
 import com.proxerme.app.util.listener.EndlessRecyclerOnScrollListener
 import com.proxerme.library.connection.ProxerException
@@ -110,25 +111,15 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
             EventBus.getDefault().register(this)
         }
 
-        task = ValidatingTask(CachedTask(constructTask({ calculateNextPage() }), cacheStrategy), {
+        task = ValidatingTask(CachedTask(internalConstructTask(), cacheStrategy), {
             Validators.validateLogin(isLoginRequired)
             Validators.validateHentaiConfirmation(context, isHentaiConfirmationRequired)
-        }).onStart {
-            headerFooterAdapter.removeFooter()
+        })
 
-            setRefreshing(true)
-        }.onFinish {
-            updateRefreshing()
-        }
-
-        refreshTask = ValidatingTask(constructTask { 0 }, {
+        refreshTask = ValidatingTask(internalConstructRefreshingTask(), {
             Validators.validateLogin(isLoginRequired)
             Validators.validateHentaiConfirmation(context, isHentaiConfirmationRequired)
-        }).onStart {
-            setRefreshing(true)
-        }.onFinish {
-            updateRefreshing()
-        }
+        })
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -265,7 +256,25 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
         }
     }
 
-    abstract fun constructTask(pageCallback: () -> Int): Task<Array<T>>
+    private fun internalConstructTask(): ListenableTask<Array<T>> {
+        return constructTask { calculateNextPage() }.onStart {
+            headerFooterAdapter.removeFooter()
+
+            setRefreshing(true)
+        }.onFinish {
+            updateRefreshing()
+        }
+    }
+
+    private fun internalConstructRefreshingTask(): ListenableTask<Array<T>> {
+        return constructTask { 0 }.onStart {
+            setRefreshing(true)
+        }.onFinish {
+            updateRefreshing()
+        }
+    }
+
+    abstract fun constructTask(pageCallback: () -> Int): ListenableTask<Array<T>>
 
     protected class HentaiConfirmationRequiredException : Exception()
 }

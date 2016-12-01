@@ -12,8 +12,9 @@ import com.proxerme.app.dialog.LoginDialog
 import com.proxerme.app.fragment.framework.PagedLoadingFragment
 import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.task.LoadingTask
-import com.proxerme.app.task.Task
 import com.proxerme.app.task.ValidatingTask
+import com.proxerme.app.task.framework.ListenableTask
+import com.proxerme.app.task.framework.Task
 import com.proxerme.app.util.ErrorHandler
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.Validators
@@ -144,7 +145,7 @@ class ReminderFragment : PagedLoadingFragment<Reminder>() {
         super.onDestroy()
     }
 
-    override fun constructTask(pageCallback: () -> Int): Task<Array<Reminder>> {
+    override fun constructTask(pageCallback: () -> Int): ListenableTask<Array<Reminder>> {
         return LoadingTask {
             ReminderRequest(pageCallback.invoke())
                     .withCategory(category)

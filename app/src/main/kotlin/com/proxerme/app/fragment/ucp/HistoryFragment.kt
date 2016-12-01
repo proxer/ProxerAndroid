@@ -10,7 +10,7 @@ import com.proxerme.app.adapter.ucp.HistoryAdapter
 import com.proxerme.app.fragment.framework.PagedLoadingFragment
 import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.task.LoadingTask
-import com.proxerme.app.task.Task
+import com.proxerme.app.task.framework.ListenableTask
 import com.proxerme.app.util.Utils
 import com.proxerme.library.connection.ucp.entitiy.HistoryEntry
 import com.proxerme.library.connection.ucp.request.HistoryRequest
@@ -55,7 +55,7 @@ class HistoryFragment : PagedLoadingFragment<HistoryEntry>() {
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
-    override fun constructTask(pageCallback: () -> Int): Task<Array<HistoryEntry>> {
+    override fun constructTask(pageCallback: () -> Int): ListenableTask<Array<HistoryEntry>> {
         return LoadingTask { HistoryRequest(pageCallback.invoke()).withLimit(itemsOnPage) }
     }
 }

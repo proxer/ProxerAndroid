@@ -12,7 +12,7 @@ import com.proxerme.app.activity.MediaActivity
 import com.proxerme.app.fragment.framework.SingleLoadingFragment
 import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.task.LoadingTask
-import com.proxerme.app.task.Task
+import com.proxerme.app.task.framework.ListenableTask
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.info.entity.Entry
@@ -94,7 +94,7 @@ class MediaInfoFragment : SingleLoadingFragment<Entry>() {
         return inflater.inflate(R.layout.fragment_media_info, container, false)
     }
 
-    override fun constructTask(): Task<Entry> {
+    override fun constructTask(): ListenableTask<Entry> {
         return LoadingTask { EntryRequest(id) }
     }
 

@@ -1,4 +1,4 @@
-package com.proxerme.app.task
+package com.proxerme.app.task.framework
 
 /**
  * TODO: Describe class
@@ -8,11 +8,6 @@ package com.proxerme.app.task
 interface Task<O> {
 
     val isWorking: Boolean
-
-    fun onStart(callback: () -> Unit): Task<O>
-    fun onSuccess(callback: () -> Unit): Task<O>
-    fun onException(callback: () -> Unit): Task<O>
-    fun onFinish(callback: () -> Unit): Task<O>
 
     fun execute(successCallback: (O) -> Unit, exceptionCallback: (Exception) -> Unit)
 

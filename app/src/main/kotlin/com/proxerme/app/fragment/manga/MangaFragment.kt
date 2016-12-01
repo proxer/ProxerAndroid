@@ -18,8 +18,9 @@ import com.proxerme.app.dialog.LoginDialog
 import com.proxerme.app.fragment.framework.SingleLoadingFragment
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.task.LoadingTask
-import com.proxerme.app.task.Task
 import com.proxerme.app.task.ValidatingTask
+import com.proxerme.app.task.framework.ListenableTask
+import com.proxerme.app.task.framework.Task
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.Validators
 import com.proxerme.app.util.bindView
@@ -249,7 +250,7 @@ class MangaFragment : SingleLoadingFragment<Chapter>() {
         super.clear()
     }
 
-    override fun constructTask(): Task<Chapter> {
+    override fun constructTask(): ListenableTask<Chapter> {
         return LoadingTask { ChapterRequest(id, episode, language) }
     }
 

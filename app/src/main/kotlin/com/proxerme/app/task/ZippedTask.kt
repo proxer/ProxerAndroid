@@ -1,44 +1,44 @@
 package com.proxerme.app.task
 
+import com.proxerme.app.task.framework.Task
+
 /**
  * TODO: Describe class
  *
  * @author Ruben Gees
  */
 class ZippedTask<I, I2, O>(private val firstTask: Task<I>, private val secondTask: Task<I2>,
-                           private val zipFunction: (I, I2) -> O) : BaseTask<O>() {
+                           private val zipFunction: (I, I2) -> O) : Task<O> {
 
     override val isWorking: Boolean
         get() = firstTask.isWorking || secondTask.isWorking
 
     override fun execute(successCallback: (O) -> Unit, exceptionCallback: (Exception) -> Unit) {
-        onStartCallback?.invoke()
-
         var firstResult: I? = null
         var secondResult: I2? = null
 
         firstTask.execute({ result ->
             secondResult?.let {
-                finishSuccessful(zipFunction.invoke(result, it), successCallback)
+                successCallback.invoke(zipFunction.invoke(result, it))
 
                 return@let
             }
 
             firstResult = result
         }, {
-            finishWithException(it, exceptionCallback)
+            exceptionCallback.invoke(it)
         })
 
         secondTask.execute({ result ->
             firstResult?.let {
-                finishSuccessful(zipFunction.invoke(it, result), successCallback)
+                successCallback.invoke(zipFunction.invoke(it, result))
 
                 return@let
             }
 
             secondResult = result
         }, {
-            finishWithException(it, exceptionCallback)
+            exceptionCallback.invoke(it)
         })
     }
 
@@ -55,6 +55,5 @@ class ZippedTask<I, I2, O>(private val firstTask: Task<I>, private val secondTas
     override fun destroy() {
         firstTask.destroy()
         secondTask.destroy()
-        super.destroy()
     }
 }
