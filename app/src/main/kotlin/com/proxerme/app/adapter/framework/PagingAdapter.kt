@@ -29,13 +29,7 @@ abstract class PagingAdapter<T>() : RecyclerView.Adapter<PagingAdapter.PagingVie
     fun insert(items: Iterable<T>) {
         doUpdates(items.plus(ArrayList<T>(list).apply {
             removeAll<T> { oldItem ->
-                if (hasStableIds()) {
-                    items.find { newItem ->
-                        (oldItem as IdItem).id == (newItem as IdItem).id
-                    } != null
-                } else {
-                    items.contains(oldItem)
-                }
+                items.find { areItemsTheSame(oldItem, it) } != null
             }
         }))
     }
@@ -47,13 +41,7 @@ abstract class PagingAdapter<T>() : RecyclerView.Adapter<PagingAdapter.PagingVie
     fun append(items: Iterable<T>) {
         doUpdates(ArrayList<T>(list).apply {
             removeAll<T> { oldItem ->
-                if (hasStableIds()) {
-                    items.find { newItem ->
-                        (oldItem as IdItem).id == (newItem as IdItem).id
-                    } != null
-                } else {
-                    items.contains(oldItem)
-                }
+                items.find { areItemsTheSame(oldItem, it) } != null
             }
         }.plus(items))
     }

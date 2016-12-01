@@ -199,7 +199,7 @@ class ChatService : IntentService("ChatService") {
 
     private fun fetchConferences(): Collection<Conference> {
         try {
-            val changedConferences = HashSet<Conference>()
+            val changedConferences = LinkedHashSet<Conference>()
             var page = 0
 
             while (true) {
@@ -211,18 +211,14 @@ class ChatService : IntentService("ChatService") {
                             ?.toNonLocalConference()
                 }
 
-                if (fetchedConferences.size < CONFERENCES_ON_PAGE) {
-                    StorageHelper.conferenceListEndReached = true
-
-                    break
-                }
-
                 if (changedConferences.size / (page + 1) < CONFERENCES_ON_PAGE) {
                     break
                 } else {
                     page++
                 }
             }
+
+            StorageHelper.conferenceListEndReached = true
 
             return changedConferences
         } catch (exception: ProxerException) {

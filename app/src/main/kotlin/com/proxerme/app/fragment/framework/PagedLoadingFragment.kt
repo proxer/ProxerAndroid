@@ -84,6 +84,7 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
     open protected val resetOnRefresh = false
     open protected val isLoginRequired = false
     open protected val isHentaiConfirmationRequired = false
+    open protected val cacheStrategy = CachedTask.CacheStrategy.FULL
 
     protected lateinit var task: Task<Array<T>>
     protected lateinit var refreshTask: Task<Array<T>>
@@ -98,7 +99,7 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
     abstract protected val adapter: PagingAdapter<T>
     abstract protected val itemsOnPage: Int
 
-    private var hasReachedEnd = false
+    open protected var hasReachedEnd = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -109,7 +110,7 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
             EventBus.getDefault().register(this)
         }
 
-        task = ValidatingTask(CachedTask(constructTask({ calculateNextPage() })), {
+        task = ValidatingTask(CachedTask(constructTask({ calculateNextPage() }), cacheStrategy), {
             Validators.validateLogin(isLoginRequired)
             Validators.validateHentaiConfirmation(context, isHentaiConfirmationRequired)
         }).onStart {
@@ -232,6 +233,15 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
         }
     }
 
+    protected fun setRefreshing(enable: Boolean) {
+        progress.isEnabled = if (!enable) isSwipeToRefreshEnabled else true
+        progress.isRefreshing = enable
+    }
+
+    protected fun updateRefreshing() {
+        setRefreshing(if (task.isWorking || refreshTask.isWorking) true else false)
+    }
+
     private fun setupList() {
         headerFooterAdapter = EasyHeaderFooterAdapter(adapter)
 
@@ -253,15 +263,6 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
         } else {
             return adapter.itemCount / itemsOnPage
         }
-    }
-
-    private fun setRefreshing(enable: Boolean) {
-        progress.isEnabled = if (!enable) isSwipeToRefreshEnabled else true
-        progress.isRefreshing = enable
-    }
-
-    private fun updateRefreshing() {
-        setRefreshing(if (task.isWorking || refreshTask.isWorking) true else false)
     }
 
     abstract fun constructTask(pageCallback: () -> Int): Task<Array<T>>

@@ -178,7 +178,7 @@ abstract class SingleLoadingFragment<T> : MainFragment() {
         }
     }
 
-    private fun setRefreshing(enable: Boolean) {
+    protected fun setRefreshing(enable: Boolean) {
         progress.isEnabled = if (!enable) isSwipeToRefreshEnabled else true
         progress.isRefreshing = enable
     }
