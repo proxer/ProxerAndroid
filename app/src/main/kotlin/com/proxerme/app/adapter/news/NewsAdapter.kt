@@ -54,6 +54,12 @@ class NewsAdapter : PagingAdapter<News>() {
         callback = null
     }
 
+    override fun areContentsTheSame(oldItem: News, newItem: News): Boolean {
+        return oldItem.time == newItem.time && oldItem.categoryTitle == newItem.categoryTitle &&
+                oldItem.imageId == newItem.imageId && oldItem.subject == newItem.subject &&
+                oldItem.description == newItem.description
+    }
+
     inner class ViewHolder(itemView: View) : PagingViewHolder<News>(itemView) {
 
         private val expand: ImageButton by bindView(R.id.expand)
