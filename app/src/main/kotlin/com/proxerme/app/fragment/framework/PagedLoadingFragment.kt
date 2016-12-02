@@ -74,7 +74,7 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
     }
 
     private val refreshSuccessCallback = { data: Array<T> ->
-        adapter.insert(data)
+        Utils.insertAndScrollUpIfNecessary(adapter, list.layoutManager, list, data)
     }
 
     private val refreshExceptionCallback = { exceptionResult: Exception ->

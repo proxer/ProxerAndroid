@@ -14,10 +14,10 @@ import java.util.*
  */
 abstract class PagingAdapter<T>() : RecyclerView.Adapter<PagingAdapter.PagingViewHolder<T>>() {
 
-    protected var list: ArrayList<T> = ArrayList<T>()
+    protected var list = ArrayList<T>()
 
     val items: List<T>
-        get() = ArrayList(list)
+        get() = list
 
     override fun onBindViewHolder(holder: PagingViewHolder<T>, position: Int) {
         holder.bind(list[position])
@@ -35,7 +35,7 @@ abstract class PagingAdapter<T>() : RecyclerView.Adapter<PagingAdapter.PagingVie
     }
 
     fun insert(items: Array<T>) {
-        insert(items.asIterable())
+        return insert(items.asIterable())
     }
 
     fun append(items: Iterable<T>) {

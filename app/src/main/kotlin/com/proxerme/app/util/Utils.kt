@@ -10,6 +10,9 @@ import android.os.Build
 import android.support.annotation.ColorRes
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.StaggeredGridLayoutManager
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.DisplayMetrics
@@ -28,6 +31,7 @@ import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.LinkBuilder
 import com.klinker.android.link_builder.TouchableMovementMethod
 import com.proxerme.app.R
+import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.library.connection.ProxerException
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import org.jetbrains.anko.childrenSequence
@@ -160,6 +164,28 @@ object Utils {
                         }
                     }
                 }
+    }
+
+    fun <T> insertAndScrollUpIfNecessary(adapter: PagingAdapter<T>,
+                                         layoutManager: RecyclerView.LayoutManager,
+                                         recyclerView: RecyclerView,
+                                         items: Array<T>) {
+        val isFirstDifferent = adapter.items.firstOrNull() != items.firstOrNull()
+        val wasAtTop = when (layoutManager) {
+            is LinearLayoutManager -> layoutManager.findFirstVisibleItemPosition() == 0
+            is StaggeredGridLayoutManager -> {
+                layoutManager.findFirstVisibleItemPositions(null).contains(0)
+            }
+            else -> throw IllegalArgumentException("Unknown LayoutManager: ${layoutManager}")
+        }
+
+        adapter.insert(items)
+
+        if (wasAtTop && isFirstDifferent) {
+            recyclerView.post {
+                recyclerView.smoothScrollToPosition(0)
+            }
+        }
     }
 
     fun showError(context: Context, exception: ProxerException, adapter: EasyHeaderFooterAdapter,

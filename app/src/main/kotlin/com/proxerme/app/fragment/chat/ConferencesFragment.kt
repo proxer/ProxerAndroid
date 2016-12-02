@@ -107,6 +107,6 @@ class ConferencesFragment : SingleLoadingFragment<List<LocalConference>>() {
     }
 
     override fun present(data: List<LocalConference>) {
-        adapter.insert(data)
+        Utils.insertAndScrollUpIfNecessary(adapter, list.layoutManager, list, data.toTypedArray())
     }
 }
