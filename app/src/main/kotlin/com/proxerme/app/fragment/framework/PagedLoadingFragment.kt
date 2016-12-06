@@ -52,13 +52,6 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
                         LoginDialog.show(activity as AppCompatActivity)
                     })
                 }
-                is HentaiConfirmationRequiredException -> {
-                    showError(getString(R.string.error_hentai_confirmation_needed),
-                            getString(R.string.error_confirm),
-                            onButtonClickListener = View.OnClickListener {
-                                HentaiConfirmationDialog.show(activity as AppCompatActivity)
-                            })
-                }
                 is Validators.HentaiConfirmationRequiredException -> {
                     showError(getString(R.string.error_hentai_confirmation_needed),
                             getString(R.string.error_confirm),
@@ -281,6 +274,4 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
     open protected fun constructRefreshingTask(): ListenableTask<Array<T>> {
         return constructTask { 0 }
     }
-
-    protected class HentaiConfirmationRequiredException : Exception()
 }

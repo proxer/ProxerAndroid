@@ -21,7 +21,7 @@ import java.util.concurrent.Future
  * @author Ruben Gees
  */
 class ChatTask(private val contextCallback: () -> Context,
-               private val pageCallback: () -> Int,
+               private val refreshOnlyCallback: () -> Boolean,
                private val id: String, successCallback: ((Array<LocalMessage>) -> Unit)? = null,
                exceptionCallback: ((Exception) -> Unit)? = null) :
         BaseListenableTask<Array<LocalMessage>>(successCallback, exceptionCallback) {
@@ -39,8 +39,7 @@ class ChatTask(private val contextCallback: () -> Context,
 
     override fun execute() {
         start {
-            if (pageCallback.invoke() === 0) {
-
+            if (refreshOnlyCallback.invoke()) {
                 future = doAsync {
                     try {
                         contextCallback.invoke().chatDatabase.markAsRead(id)

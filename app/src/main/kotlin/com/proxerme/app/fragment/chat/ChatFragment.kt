@@ -151,7 +151,6 @@ class ChatFragment : PagedLoadingFragment<LocalMessage>() {
     private lateinit var emojiPopup: EmojiPopup
 
     private val emojiButton: ImageButton by bindView(R.id.emojiButton)
-    private val inputContainer: ViewGroup by bindView(R.id.inputContainer)
     private val messageInput: EmojiEditText by bindView(R.id.messageInput)
     private val sendButton: FloatingActionButton by bindView(R.id.sendButton)
 
@@ -223,7 +222,7 @@ class ChatFragment : PagedLoadingFragment<LocalMessage>() {
     }
 
     override fun constructTask(pageCallback: () -> Int): ListenableTask<Array<LocalMessage>> {
-        return ChatTask({ context }, pageCallback, conference.id)
+        return ChatTask({ context }, { pageCallback.invoke() === 0 }, conference.id)
     }
 
     override fun constructRefreshingTask(): ListenableTask<Array<LocalMessage>> {
