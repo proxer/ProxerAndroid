@@ -14,7 +14,9 @@ import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.dialog.HentaiConfirmationDialog
 import com.proxerme.app.dialog.LoginDialog
 import com.proxerme.app.event.HentaiConfirmationEvent
+import com.proxerme.app.helper.NotificationHelper
 import com.proxerme.app.manager.UserManager
+import com.proxerme.app.service.ChatService
 import com.proxerme.app.task.CachedTask
 import com.proxerme.app.task.ValidatingTask
 import com.proxerme.app.task.framework.ListenableTask
@@ -97,6 +99,7 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
     abstract protected val itemsOnPage: Int
 
     open protected var hasReachedEnd = false
+    private var firstLoad = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -141,9 +144,18 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
         setupList()
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        ChatService.synchronize(context)
+    }
+
     override fun onResume() {
         super.onResume()
 
+        NotificationHelper.cancelNotification(context, NotificationHelper.CHAT_NOTIFICATION)
+
+        firstLoad = true
         task.execute()
     }
 
@@ -245,7 +257,11 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
     }
 
     private fun calculateNextPage(): Int {
-        if (adapter.isEmpty()) {
+        if (firstLoad) {
+            firstLoad = false
+
+            return 0
+        } else if (adapter.isEmpty()) {
             return 0
         } else {
             return adapter.itemCount / itemsOnPage
