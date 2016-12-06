@@ -163,11 +163,11 @@ class UserMediaListFragment : PagedLoadingFragment<UserMediaListEntry>() {
     }
 
     override fun constructTask(pageCallback: () -> Int): ListenableTask<Array<UserMediaListEntry>> {
-        return LoadingTask {
+        return LoadingTask({
             UserMediaListRequest(userId, userName, pageCallback.invoke())
                     .withCategory(category)
                     .withSortCriteria(sortCriteria)
                     .withLimit(itemsOnPage)
-        }
+        })
     }
 }

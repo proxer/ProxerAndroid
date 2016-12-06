@@ -8,8 +8,10 @@ package com.proxerme.app.task.framework
 interface Task<O> {
 
     val isWorking: Boolean
+    var successCallback: ((O) -> Unit)?
+    var exceptionCallback: ((Exception) -> Unit)?
 
-    fun execute(successCallback: (O) -> Unit, exceptionCallback: (Exception) -> Unit)
+    fun execute()
 
     fun cancel()
     fun reset()

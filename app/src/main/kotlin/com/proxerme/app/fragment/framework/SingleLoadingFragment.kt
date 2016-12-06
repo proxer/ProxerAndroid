@@ -15,6 +15,7 @@ import com.proxerme.app.dialog.LoginDialog
 import com.proxerme.app.event.HentaiConfirmationEvent
 import com.proxerme.app.manager.UserManager
 import com.proxerme.app.task.CachedTask
+import com.proxerme.app.task.ListeningTask
 import com.proxerme.app.task.ValidatingTask
 import com.proxerme.app.task.framework.ListenableTask
 import com.proxerme.app.task.framework.Task
@@ -83,12 +84,20 @@ abstract class SingleLoadingFragment<T> : MainFragment() {
             EventBus.getDefault().register(this)
         }
 
-        task = ValidatingTask(CachedTask(internalConstructTask(), cacheStrategy), {
+        task = ListeningTask(ValidatingTask(CachedTask(constructTask(), cacheStrategy), {
             Validators.validateLogin(isLoginRequired)
             Validators.validateHentaiConfirmation(context, isHentaiConfirmationRequired)
-        }).onException {
+        }), successCallback, exceptionCallback).onStart {
+            setRefreshing(true)
+            contentContainer.visibility = View.GONE
+            errorContainer.visibility = View.GONE
+        }.onSuccess {
+            contentContainer.visibility = View.VISIBLE
+        }.onException {
             contentContainer.visibility = View.GONE
             errorContainer.visibility = View.VISIBLE
+        }.onFinish {
+            setRefreshing(false)
         }
     }
 
@@ -97,12 +106,15 @@ abstract class SingleLoadingFragment<T> : MainFragment() {
 
         progress.setColorSchemeResources(R.color.primary, R.color.accent)
         errorText.movementMethod = TouchableMovementMethod.getInstance()
+
+        contentContainer.visibility = View.GONE
+        errorContainer.visibility = View.GONE
     }
 
     override fun onResume() {
         super.onResume()
 
-        task.execute(successCallback, exceptionCallback)
+        task.execute()
     }
 
     override fun onDestroyView() {
@@ -124,8 +136,7 @@ abstract class SingleLoadingFragment<T> : MainFragment() {
 
     open protected fun reset() {
         clear()
-
-        task.execute(successCallback, exceptionCallback)
+        task.execute()
     }
 
     open protected fun showError(message: String, buttonMessage: String? = null,
@@ -175,20 +186,6 @@ abstract class SingleLoadingFragment<T> : MainFragment() {
     protected fun setRefreshing(enable: Boolean) {
         progress.isEnabled = if (!enable) isSwipeToRefreshEnabled else true
         progress.isRefreshing = enable
-    }
-
-    private fun internalConstructTask(): ListenableTask<T> {
-        return constructTask().onStart {
-            setRefreshing(true)
-            contentContainer.visibility = View.GONE
-            errorContainer.visibility = View.GONE
-        }.onSuccess {
-            contentContainer.visibility = View.VISIBLE
-        }.onException {
-            errorContainer.visibility = View.VISIBLE
-        }.onFinish {
-            setRefreshing(false)
-        }
     }
 
     abstract fun present(data: T)

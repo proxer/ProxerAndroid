@@ -1,5 +1,6 @@
 package com.proxerme.app.task
 
+import com.proxerme.app.task.framework.BaseTask
 import com.proxerme.app.task.framework.Task
 
 /**
@@ -8,37 +9,40 @@ import com.proxerme.app.task.framework.Task
  * @author Ruben Gees
  */
 class ZippedTask<I, I2, O>(private val firstTask: Task<I>, private val secondTask: Task<I2>,
-                           private val zipFunction: (I, I2) -> O) : Task<O> {
+                           private val zipFunction: (I, I2) -> O,
+                           successCallback: ((O) -> Unit)? = null,
+                           exceptionCallback: ((Exception) -> Unit)? = null) :
+        BaseTask<O>(successCallback, exceptionCallback) {
 
     override val isWorking: Boolean
         get() = firstTask.isWorking || secondTask.isWorking
 
-    override fun execute(successCallback: (O) -> Unit, exceptionCallback: (Exception) -> Unit) {
+    override fun execute() {
         var firstResult: I? = null
         var secondResult: I2? = null
 
-        firstTask.execute({ result ->
+        delegatedExecute(firstTask, { result ->
             secondResult?.let {
-                successCallback.invoke(zipFunction.invoke(result, it))
+                successCallback?.invoke(zipFunction.invoke(result, it))
 
                 return@let
             }
 
             firstResult = result
         }, {
-            exceptionCallback.invoke(it)
+            exceptionCallback?.invoke(it)
         })
 
-        secondTask.execute({ result ->
+        delegatedExecute(secondTask, { result ->
             firstResult?.let {
-                successCallback.invoke(zipFunction.invoke(it, result))
+                successCallback?.invoke(zipFunction.invoke(it, result))
 
                 return@let
             }
 
             secondResult = result
         }, {
-            exceptionCallback.invoke(it)
+            exceptionCallback?.invoke(it)
         })
     }
 
@@ -55,5 +59,6 @@ class ZippedTask<I, I2, O>(private val firstTask: Task<I>, private val secondTas
     override fun destroy() {
         firstTask.destroy()
         secondTask.destroy()
+        super.destroy()
     }
 }

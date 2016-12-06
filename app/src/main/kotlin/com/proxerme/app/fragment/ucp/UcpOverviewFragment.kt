@@ -58,7 +58,7 @@ class UcpOverviewFragment : SingleLoadingFragment<Int>() {
     }
 
     override fun constructTask(): ListenableTask<Int> {
-        return LoadingTask { ListsumRequest() }
+        return LoadingTask({ ListsumRequest() })
     }
 
     override fun present(data: Int) {

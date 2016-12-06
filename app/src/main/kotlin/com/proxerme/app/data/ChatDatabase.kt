@@ -168,10 +168,12 @@ class ChatDatabase(context: Context) :
         }
     }
 
-    fun insertMessageToSend(user: User, conferenceId: String, message: String) {
-        use {
+    fun insertMessageToSend(user: User, conferenceId: String, message: String): LocalMessage {
+        return use {
+            var result: LocalMessage? = null
+
             transaction {
-                this.insertOrThrow(ChatDatabase.TABLE_MESSAGE,
+                val id = this.insertOrThrow(ChatDatabase.TABLE_MESSAGE,
                         COLUMN_MESSAGE_ID to "-1",
                         COLUMN_MESSAGE_CONFERENCE_ID to conferenceId,
                         COLUMN_MESSAGE_USER_ID to user.id,
@@ -180,7 +182,12 @@ class ChatDatabase(context: Context) :
                         COLUMN_MESSAGE_ACTION to "",
                         COLUMN_MESSAGE_TIME to DateTime.now().millis / 1000L,
                         COLUMN_MESSAGE_DEVICE to "mobile")
+
+                result = LocalMessage(id, "-1", conferenceId, user.id, user.username, message, "",
+                        DateTime.now().millis / 1000L, "mobile")
             }
+
+            result ?: throw SQLiteException()
         }
     }
 

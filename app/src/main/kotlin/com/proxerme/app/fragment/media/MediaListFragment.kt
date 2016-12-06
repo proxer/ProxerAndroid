@@ -211,12 +211,12 @@ class MediaListFragment : PagedLoadingFragment<MediaListEntry>() {
     }
 
     override fun constructTask(pageCallback: () -> Int): ListenableTask<Array<MediaListEntry>> {
-        return LoadingTask {
+        return LoadingTask({
             MediaSearchRequest(pageCallback.invoke())
                     .withName(searchQuery)
                     .withType(type)
                     .withSortCriteria(sortCriteria)
                     .withLimit(ITEMS_ON_PAGE)
-        }
+        })
     }
 }

@@ -7,7 +7,9 @@ import android.support.annotation.CallSuper
  *
  * @author Ruben Gees
  */
-abstract class BaseListenableTask<O> : ListenableTask<O> {
+abstract class BaseListenableTask<O>(successCallback: ((O) -> Unit)? = null,
+                                     exceptionCallback: ((Exception) -> Unit)? = null) :
+        BaseTask<O>(successCallback, exceptionCallback), ListenableTask<O> {
 
     private var onStartCallback: (() -> Unit)? = null
     private var onSuccessCallback: (() -> Unit)? = null
@@ -36,6 +38,8 @@ abstract class BaseListenableTask<O> : ListenableTask<O> {
         onSuccessCallback = null
         onExceptionCallback = null
         onFinishCallback = null
+
+        super.destroy()
     }
 
     protected fun start(action: () -> Unit) {
@@ -44,15 +48,15 @@ abstract class BaseListenableTask<O> : ListenableTask<O> {
         action.invoke()
     }
 
-    protected fun finishSuccessful(result: O, successCallback: (O) -> Unit) {
-        successCallback.invoke(result)
+    protected fun finishSuccessful(result: O, successCallback: ((O) -> Unit)?) {
+        successCallback?.invoke(result)
 
         onSuccessCallback?.invoke()
         onFinishCallback?.invoke()
     }
 
-    protected fun finishWithException(result: Exception, exceptionCallback: (Exception) -> Unit) {
-        exceptionCallback.invoke(result)
+    protected fun finishWithException(result: Exception, exceptionCallback: ((Exception) -> Unit)?) {
+        exceptionCallback?.invoke(result)
 
         onExceptionCallback?.invoke()
         onFinishCallback?.invoke()

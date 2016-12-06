@@ -89,7 +89,7 @@ class ConferenceInfoFragment : SingleLoadingFragment<ConferenceInfoContainer>() 
     }
 
     override fun constructTask(): ListenableTask<ConferenceInfoContainer> {
-        return LoadingTask { ConferenceInfoRequest(conferenceId) }
+        return LoadingTask({ ConferenceInfoRequest(conferenceId) })
     }
 
     override fun present(data: ConferenceInfoContainer) {

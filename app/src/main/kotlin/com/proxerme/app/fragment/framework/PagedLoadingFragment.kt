@@ -34,13 +34,13 @@ import org.greenrobot.eventbus.ThreadMode
  */
 abstract class PagedLoadingFragment<T> : MainFragment() {
 
-    private val successCallback = { data: Array<T> ->
+    protected val successCallback = { data: Array<T> ->
         hasReachedEnd = data.size < itemsOnPage
 
         adapter.append(data)
     }
 
-    private val exceptionCallback = { exception: Exception ->
+    protected val exceptionCallback = { exception: Exception ->
         context?.let {
             when (exception) {
                 is ProxerException -> {
@@ -73,11 +73,11 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
         Unit
     }
 
-    private val refreshSuccessCallback = { data: Array<T> ->
+    protected val refreshSuccessCallback = { data: Array<T> ->
         Utils.insertAndScrollUpIfNecessary(adapter, list.layoutManager, list, data)
     }
 
-    private val refreshExceptionCallback = { exceptionResult: Exception ->
+    protected val refreshExceptionCallback = { exceptionResult: Exception ->
         Snackbar.make(root, getString(R.string.error_refresh), Snackbar.LENGTH_LONG).show()
     }
 
@@ -86,6 +86,9 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
     open protected val isLoginRequired = false
     open protected val isHentaiConfirmationRequired = false
     open protected val cacheStrategy = CachedTask.CacheStrategy.FULL
+
+    open protected val isWorking: Boolean
+        get() = task.isWorking || refreshTask.isWorking
 
     protected lateinit var task: Task<Array<T>>
     protected lateinit var refreshTask: Task<Array<T>>
@@ -114,12 +117,12 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
         task = ValidatingTask(CachedTask(internalConstructTask(), cacheStrategy), {
             Validators.validateLogin(isLoginRequired)
             Validators.validateHentaiConfirmation(context, isHentaiConfirmationRequired)
-        })
+        }, successCallback, exceptionCallback)
 
         refreshTask = ValidatingTask(internalConstructRefreshingTask(), {
             Validators.validateLogin(isLoginRequired)
             Validators.validateHentaiConfirmation(context, isHentaiConfirmationRequired)
-        })
+        }, refreshSuccessCallback, refreshExceptionCallback)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -136,7 +139,7 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
                 if (resetOnRefresh) {
                     reset()
                 } else {
-                    refreshTask.execute(refreshSuccessCallback, refreshExceptionCallback)
+                    refreshTask.execute()
                 }
             }
             false -> null
@@ -148,7 +151,7 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
     override fun onResume() {
         super.onResume()
 
-        task.execute(successCallback, exceptionCallback)
+        task.execute()
     }
 
     override fun onDestroyView() {
@@ -181,7 +184,7 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
         hasReachedEnd = false
 
         clear()
-        task.execute(successCallback, exceptionCallback)
+        task.execute()
     }
 
     open protected fun showError(message: String, buttonMessage: String? = null,
@@ -193,7 +196,7 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
                 },
                 onButtonClickListener = onButtonClickListener ?: View.OnClickListener {
                     task.reset()
-                    task.execute(successCallback, exceptionCallback)
+                    task.execute()
                 })
     }
 
@@ -230,7 +233,7 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
     }
 
     protected fun updateRefreshing() {
-        setRefreshing(if (task.isWorking || refreshTask.isWorking) true else false)
+        setRefreshing(if (isWorking) true else false)
     }
 
     private fun setupList() {
@@ -242,7 +245,7 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
             override fun onLoadMore() {
                 if (!hasReachedEnd && !headerFooterAdapter.hasFooter() && !task.isWorking) {
                     task.reset()
-                    task.execute(successCallback, exceptionCallback)
+                    task.execute()
                 }
             }
         })
@@ -267,7 +270,7 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
     }
 
     private fun internalConstructRefreshingTask(): ListenableTask<Array<T>> {
-        return constructTask { 0 }.onStart {
+        return constructRefreshingTask().onStart {
             setRefreshing(true)
         }.onFinish {
             updateRefreshing()
@@ -275,6 +278,9 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
     }
 
     abstract fun constructTask(pageCallback: () -> Int): ListenableTask<Array<T>>
+    open protected fun constructRefreshingTask(): ListenableTask<Array<T>> {
+        return constructTask { 0 }
+    }
 
     protected class HentaiConfirmationRequiredException : Exception()
 }

@@ -93,6 +93,14 @@ class ChatAdapter(val isGroup: Boolean) : PagingAdapter<LocalMessage>() {
 
     override fun getItemId(position: Int): Long = list[position].localId
 
+    override fun insert(items: Iterable<LocalMessage>) {
+        if (items.firstOrNull()?.id != "-1") {
+            list.removeAll { it.id == "-1" }
+        }
+
+        super.insert(items)
+    }
+
     private fun getMarginsForPosition(position: Int): Pair<Int, Int> {
         val marginTop: Int
         val marginBottom: Int

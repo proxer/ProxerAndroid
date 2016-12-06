@@ -187,7 +187,7 @@ class NewChatFragment : MainFragment() {
 
         sendButton.setOnClickListener {
             if (!isLoading()) {
-                task.execute(success, exception)
+                task.execute()
             }
         }
 
@@ -255,7 +255,7 @@ class NewChatFragment : MainFragment() {
     }
 
     private fun constructTask(): Task<String> {
-        return ValidatingTask(LoadingTask {
+        return ValidatingTask(LoadingTask({
             when (isGroup) {
                 true -> {
                     NewConferenceRequest(topicInput.text.toString().trim(), adapter.participants
@@ -267,12 +267,12 @@ class NewChatFragment : MainFragment() {
                             .withFirstMessage(messageInput.text.toString().trim())
                 }
             }
-        }.onStart {
+        }).onStart {
             setRefreshing(true)
         }.onFinish { updateRefreshing() }, {
             Validators.validateLogin(true)
             validateInput()
-        })
+        }, success, exception)
     }
 
     private fun validateInput() {

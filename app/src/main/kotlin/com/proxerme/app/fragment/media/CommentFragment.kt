@@ -97,11 +97,11 @@ class CommentFragment : PagedLoadingFragment<Comment>() {
     }
 
     override fun constructTask(pageCallback: () -> Int): ListenableTask<Array<Comment>> {
-        return LoadingTask {
+        return LoadingTask({
             CommentRequest(id)
                     .withPage(pageCallback.invoke())
                     .withLimit(itemsOnPage)
                     .withSortType(sortCriteria)
-        }
+        })
     }
 }

@@ -26,11 +26,9 @@ abstract class PagingAdapter<T>() : RecyclerView.Adapter<PagingAdapter.PagingVie
     override fun getItemCount() = list.size
     fun isEmpty() = list.isEmpty()
 
-    fun insert(items: Iterable<T>) {
-        doUpdates(items.plus(ArrayList<T>(list).apply {
-            removeAll<T> { oldItem ->
-                items.find { areItemsTheSame(oldItem, it) } != null
-            }
+    open fun insert(items: Iterable<T>) {
+        doUpdates(items.plus(list.filterNot { oldItem ->
+            items.find { areItemsTheSame(oldItem, it) } != null
         }))
     }
 
@@ -38,11 +36,9 @@ abstract class PagingAdapter<T>() : RecyclerView.Adapter<PagingAdapter.PagingVie
         return insert(items.asIterable())
     }
 
-    fun append(items: Iterable<T>) {
-        doUpdates(ArrayList<T>(list).apply {
-            removeAll<T> { oldItem ->
-                items.find { areItemsTheSame(oldItem, it) } != null
-            }
+    open fun append(items: Iterable<T>) {
+        doUpdates(list.filterNot { oldItem ->
+            items.find { areItemsTheSame(oldItem, it) } != null
         }.plus(items))
     }
 
@@ -84,7 +80,7 @@ abstract class PagingAdapter<T>() : RecyclerView.Adapter<PagingAdapter.PagingVie
         return oldItem == newItem
     }
 
-    private fun doUpdates(newList: List<T>) {
+    protected fun doUpdates(newList: List<T>) {
         val result = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
             override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
                 return areItemsTheSame(list[oldItemPosition], newList[newItemPosition])

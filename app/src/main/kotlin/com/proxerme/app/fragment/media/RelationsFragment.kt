@@ -89,6 +89,6 @@ class RelationsFragment : SingleLoadingFragment<Array<Relation>>() {
     }
 
     override fun constructTask(): ListenableTask<Array<Relation>> {
-        return LoadingTask { RelationRequest(id) }
+        return LoadingTask({ RelationRequest(id) })
     }
 }

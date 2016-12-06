@@ -1,6 +1,7 @@
 package com.proxerme.app.task
 
 import com.proxerme.app.task.CachedTask.CacheStrategy
+import com.proxerme.app.task.framework.BaseTask
 import com.proxerme.app.task.framework.Task
 
 /**
@@ -9,7 +10,10 @@ import com.proxerme.app.task.framework.Task
  * @author Ruben Gees
  */
 class CachedTask<O>(private val task: Task<O>,
-                    cacheStrategy: CacheStrategy = CacheStrategy.FULL) : Task<O> {
+                    cacheStrategy: CacheStrategy = CacheStrategy.FULL,
+                    successCallback: ((O) -> Unit)? = null,
+                    exceptionCallback: ((Exception) -> Unit)? = null) :
+        BaseTask<O>(successCallback, exceptionCallback) {
 
     override val isWorking: Boolean
         get() = task.isWorking
@@ -22,31 +26,39 @@ class CachedTask<O>(private val task: Task<O>,
     private var cachedResult: O? = null
     private var cachedException: Exception? = null
 
-    override fun execute(successCallback: (O) -> Unit, exceptionCallback: (Exception) -> Unit) {
+    override fun execute() {
         if (shouldCachedResult) {
             cachedResult?.let {
-                successCallback.invoke(it)
+                successCallback?.invoke(it)
 
+                return
+            }
+
+            if (isWorking) {
                 return
             }
         }
 
         if (shouldCacheException) {
             cachedException?.let {
-                exceptionCallback.invoke(it)
+                exceptionCallback?.invoke(it)
 
+                return
+            }
+
+            if (isWorking) {
                 return
             }
         }
 
-        task.execute({
+        delegatedExecute(task, {
             cachedResult = if (shouldCachedResult) it else null
 
-            successCallback.invoke(it)
+            successCallback?.invoke(it)
         }, {
             cachedException = if (shouldCacheException) it else null
 
-            exceptionCallback.invoke(it)
+            exceptionCallback?.invoke(it)
         })
     }
 
@@ -66,6 +78,7 @@ class CachedTask<O>(private val task: Task<O>,
         cachedException = null
 
         task.destroy()
+        super.destroy()
     }
 
     enum class CacheStrategy {FULL, RESULT, EXCEPTION }

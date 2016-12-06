@@ -126,27 +126,16 @@ class ChatService : IntentService("ChatService") {
         sendMessages()
         markConferencesAsRead()
 
-        val changedConferences = fetchConferences()
+        val insertedMap = chatDatabase.insertOrUpdate(fetchConferences().associate {
+            it to fetchMessages(it).asReversed()
+        })
 
-        if (changedConferences.isNotEmpty()) {
-            val insertedMap = chatDatabase.insertOrUpdate(changedConferences.associate {
-                it to fetchMessages(it)
-            })
+        EventBus.getDefault().post(ChatSynchronizationEvent(insertedMap))
 
-            when (SectionManager.currentSection) {
-                SectionManager.Section.CHAT -> {
-                    insertedMap.forEach {
-                        EventBus.getDefault().post(ChatMessagesEvent(it.key.id, it.value))
-                    }
-                }
-                else -> {
-                    EventBus.getDefault().post(ChatSynchronizationEvent(insertedMap))
-
-                    if (SectionManager.currentSection != SectionManager.Section.CONFERENCES) {
-                        showNotification()
-                    }
-                }
-            }
+        if (SectionManager.currentSection != SectionManager.Section.CONFERENCES &&
+                SectionManager.currentSection != SectionManager.Section.CHAT &&
+                insertedMap.isNotEmpty()) {
+            showNotification()
         }
     }
 
@@ -163,7 +152,8 @@ class ChatService : IntentService("ChatService") {
                 StorageHelper.setConferenceReachedEnd(conferenceId)
             }
 
-            EventBus.getDefault().post(ChatMessagesEvent(conferenceId, insertedMessages))
+            EventBus.getDefault().post(ChatMessagesEvent(conferenceId,
+                    insertedMessages.asReversed()))
         } catch(exception: ProxerException) {
             throw LoadMoreMessagesException(ErrorHandler.getMessageForErrorCode(this, exception),
                     conferenceId)

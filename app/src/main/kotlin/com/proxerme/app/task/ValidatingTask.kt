@@ -1,5 +1,6 @@
 package com.proxerme.app.task
 
+import com.proxerme.app.task.framework.BaseTask
 import com.proxerme.app.task.framework.Task
 
 /**
@@ -7,8 +8,10 @@ import com.proxerme.app.task.framework.Task
  *
  * @author Ruben Gees
  */
-class ValidatingTask<O>(private val task: Task<O>, private val validateFunction: () -> Unit) :
-        Task<O> {
+class ValidatingTask<O>(private val task: Task<O>, private val validateFunction: () -> Unit,
+                        successCallback: ((O) -> Unit)? = null,
+                        exceptionCallback: ((Exception) -> Unit)? = null) :
+        BaseTask<O>(successCallback, exceptionCallback) {
 
     override val isWorking: Boolean
         get() = task.isWorking
@@ -19,27 +22,21 @@ class ValidatingTask<O>(private val task: Task<O>, private val validateFunction:
         return this.apply { onExceptionCallback = callback }
     }
 
-    override fun execute(successCallback: (O) -> Unit, exceptionCallback: (Exception) -> Unit) {
+    override fun execute() {
         try {
             validateFunction.invoke()
         } catch (exception: Exception) {
-            exceptionCallback.invoke(exception)
+            exceptionCallback?.invoke(exception)
             onExceptionCallback?.invoke()
 
             return
         }
 
-        task.execute({
-            successCallback.invoke(it)
+        delegatedExecute(task, {
+            successCallback?.invoke(it)
         }, {
-            exceptionCallback.invoke(it)
+            exceptionCallback?.invoke(it)
         })
-    }
-
-    override fun destroy() {
-        onExceptionCallback = null
-        
-        task.destroy()
     }
 
     override fun cancel() {
@@ -48,5 +45,10 @@ class ValidatingTask<O>(private val task: Task<O>, private val validateFunction:
 
     override fun reset() {
         task.reset()
+    }
+
+    override fun destroy() {
+        task.destroy()
+        super.destroy()
     }
 }

@@ -103,7 +103,7 @@ class ConferencesFragment : SingleLoadingFragment<List<LocalConference>>() {
     }
 
     override fun constructTask(): ListenableTask<List<LocalConference>> {
-        return ConferencesTask { context }
+        return ConferencesTask({ context })
     }
 
     override fun present(data: List<LocalConference>) {

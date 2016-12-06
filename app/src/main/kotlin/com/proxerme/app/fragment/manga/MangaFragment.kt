@@ -164,7 +164,7 @@ class MangaFragment : SingleLoadingFragment<Chapter>() {
                 reminderEpisode = it
 
                 reminderTask.cancel()
-                reminderTask.execute(reminderSuccess, reminderException)
+                reminderTask.execute()
             }
         }
 
@@ -251,13 +251,13 @@ class MangaFragment : SingleLoadingFragment<Chapter>() {
     }
 
     override fun constructTask(): ListenableTask<Chapter> {
-        return LoadingTask { ChapterRequest(id, episode, language) }
+        return LoadingTask({ ChapterRequest(id, episode, language) })
     }
 
     private fun constructReminderTask(): Task<Void?> {
-        return ValidatingTask(LoadingTask {
+        return ValidatingTask(LoadingTask({
             SetReminderRequest(id, reminderEpisode!!, language, CategoryParameter.MANGA)
-        }, { Validators.validateLogin(true) })
+        }), { Validators.validateLogin(true) }, reminderSuccess, reminderException)
     }
 
     private fun switchEpisode(newEpisode: Int) {

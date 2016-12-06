@@ -10,14 +10,17 @@ import com.proxerme.library.connection.ProxerRequest
  *
  * @author Ruben Gees
  */
-class LoadingTask<O>(private val taskResolver: () -> ProxerRequest<O>) : BaseListenableTask<O>() {
+class LoadingTask<O>(private var taskResolver: () -> ProxerRequest<O>,
+                     successCallback: ((O) -> Unit)? = null,
+                     exceptionCallback: ((Exception) -> Unit)? = null) :
+        BaseListenableTask<O>(successCallback, exceptionCallback) {
 
     override val isWorking: Boolean
         get() = call != null
 
     private var call: ProxerCall? = null
 
-    override fun execute(successCallback: (O) -> Unit, exceptionCallback: (Exception) -> Unit) {
+    override fun execute() {
         start {
             call = MainApplication.proxerConnection.execute(taskResolver.invoke(), {
                 cancel()
@@ -39,5 +42,4 @@ class LoadingTask<O>(private val taskResolver: () -> ProxerRequest<O>) : BaseLis
     override fun reset() {
         cancel()
     }
-
 }

@@ -1,5 +1,6 @@
 package com.proxerme.app.task
 
+import com.proxerme.app.task.framework.BaseTask
 import com.proxerme.app.task.framework.Task
 
 /**
@@ -7,16 +8,19 @@ import com.proxerme.app.task.framework.Task
  *
  * @author Ruben Gees
  */
-class MappedTask<I, O>(private val task: Task<I>, private val mapFunction: (I) -> O) : Task<O> {
+class MappedTask<I, O>(private val task: Task<I>, private val mapFunction: (I) -> O,
+                       successCallback: ((O) -> Unit)? = null,
+                       exceptionCallback: ((Exception) -> Unit)? = null) :
+        BaseTask<O>(successCallback, exceptionCallback) {
 
     override val isWorking: Boolean
         get() = task.isWorking
 
-    override fun execute(successCallback: (O) -> Unit, exceptionCallback: (Exception) -> Unit) {
-        task.execute({
-            successCallback.invoke(mapFunction.invoke(it))
+    override fun execute() {
+        delegatedExecute(task, {
+            successCallback?.invoke(mapFunction.invoke(it))
         }, {
-            exceptionCallback.invoke(it)
+            exceptionCallback?.invoke(it)
         })
     }
 
@@ -30,5 +34,6 @@ class MappedTask<I, O>(private val task: Task<I>, private val mapFunction: (I) -
 
     override fun destroy() {
         task.destroy()
+        super.destroy()
     }
 }

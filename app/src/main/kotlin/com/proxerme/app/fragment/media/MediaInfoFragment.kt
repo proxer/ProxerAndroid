@@ -95,7 +95,7 @@ class MediaInfoFragment : SingleLoadingFragment<Entry>() {
     }
 
     override fun constructTask(): ListenableTask<Entry> {
-        return LoadingTask { EntryRequest(id) }
+        return LoadingTask({ EntryRequest(id) })
     }
 
     override fun present(data: Entry) {

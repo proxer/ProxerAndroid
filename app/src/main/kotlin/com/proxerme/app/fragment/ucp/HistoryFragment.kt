@@ -56,6 +56,6 @@ class HistoryFragment : PagedLoadingFragment<HistoryEntry>() {
     }
 
     override fun constructTask(pageCallback: () -> Int): ListenableTask<Array<HistoryEntry>> {
-        return LoadingTask { HistoryRequest(pageCallback.invoke()).withLimit(itemsOnPage) }
+        return LoadingTask({ HistoryRequest(pageCallback.invoke()).withLimit(itemsOnPage) })
     }
 }

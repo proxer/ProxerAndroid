@@ -154,7 +154,7 @@ class AnimeFragment : SingleLoadingFragment<Array<Stream>>() {
                 reminderEpisode = it
 
                 reminderTask.cancel()
-                reminderTask.execute(reminderSuccess, reminderException)
+                reminderTask.execute()
             }
         }
 
@@ -196,13 +196,13 @@ class AnimeFragment : SingleLoadingFragment<Array<Stream>>() {
     }
 
     override fun constructTask(): ListenableTask<Array<Stream>> {
-        return LoadingTask { StreamsRequest(id, episode, language) }
+        return LoadingTask({ StreamsRequest(id, episode, language) })
     }
 
     private fun constructReminderTask(): Task<Void?> {
-        return ValidatingTask(LoadingTask {
+        return ValidatingTask(LoadingTask({
             SetReminderRequest(id, reminderEpisode!!, language, CategoryParameter.ANIME)
-        }, { Validators.validateLogin(true) })
+        }), { Validators.validateLogin(true) }, reminderSuccess, reminderException)
     }
 
     private fun switchEpisode(newEpisode: Int) {

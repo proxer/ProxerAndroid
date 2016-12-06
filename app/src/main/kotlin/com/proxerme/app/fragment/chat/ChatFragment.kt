@@ -6,7 +6,6 @@ import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.view.ActionMode
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageButton
@@ -19,20 +18,20 @@ import com.proxerme.app.adapter.chat.ChatAdapter
 import com.proxerme.app.data.chatDatabase
 import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.entitiy.LocalMessage
-import com.proxerme.app.event.ChatMessagesEvent
-import com.proxerme.app.fragment.framework.EasyChatServiceFragment
+import com.proxerme.app.fragment.framework.PagedLoadingFragment
 import com.proxerme.app.helper.StorageHelper
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.manager.UserManager
 import com.proxerme.app.service.ChatService
+import com.proxerme.app.task.CachedTask
+import com.proxerme.app.task.ChatTask
+import com.proxerme.app.task.RefreshingChatTask
+import com.proxerme.app.task.framework.ListenableTask
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.bindView
 import com.proxerme.app.util.inputMethodManager
 import com.vanniktech.emoji.EmojiEditText
 import com.vanniktech.emoji.EmojiPopup
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.toast
 
 /**
@@ -40,7 +39,7 @@ import org.jetbrains.anko.toast
  *
  * @author Ruben Gees
  */
-class ChatFragment : EasyChatServiceFragment<LocalMessage>() {
+class ChatFragment : PagedLoadingFragment<LocalMessage>() {
 
     companion object {
         private const val ARGUMENT_CONFERENCE = "conference"
@@ -49,7 +48,6 @@ class ChatFragment : EasyChatServiceFragment<LocalMessage>() {
         private const val ICON_PADDING = 6
 
         fun newInstance(conference: LocalConference): ChatFragment {
-
             return ChatFragment().apply {
                 this.arguments = Bundle().apply {
                     this.putParcelable(ARGUMENT_CONFERENCE, conference)
@@ -58,17 +56,21 @@ class ChatFragment : EasyChatServiceFragment<LocalMessage>() {
         }
     }
 
-    override val section: SectionManager.Section = SectionManager.Section.CHAT
+    override val section = SectionManager.Section.CHAT
+    override val itemsOnPage = ChatService.MESSAGES_ON_PAGE
+    override val isLoginRequired = true
+    override val isSwipeToRefreshEnabled = false
+    override val cacheStrategy = CachedTask.CacheStrategy.EXCEPTION
+    override var hasReachedEnd: Boolean
+        get() = StorageHelper.hasConferenceReachedEnd(conference.id)
+        set(value) {
+        }
 
-    override lateinit var layoutManager: RecyclerView.LayoutManager
+    override lateinit var layoutManager: LinearLayoutManager
     override lateinit var adapter: ChatAdapter
 
-    override val hasReachedEnd: Boolean
-        get() = StorageHelper.hasConferenceReachedEnd(conference.id)
-    override val isLoading: Boolean
-        get() = ChatService.isLoadingMessages(conference.id)
-
-    private lateinit var conference: LocalConference
+    private val conference: LocalConference
+        get() = arguments.getParcelable(ARGUMENT_CONFERENCE)
 
     private var actionMode: ActionMode? = null
 
@@ -156,42 +158,22 @@ class ChatFragment : EasyChatServiceFragment<LocalMessage>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        conference = arguments.getParcelable(ARGUMENT_CONFERENCE)
-
         adapter = ChatAdapter(conference.isGroup)
         adapter.user = UserManager.user
         adapter.callback = adapterCallback
-
-        layoutManager = LinearLayoutManager(context)
-        (layoutManager as LinearLayoutManager).reverseLayout = true
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        EventBus.getDefault().register(this)
-    }
-
-    override fun onStop() {
-        EventBus.getDefault().unregister(this)
-
-        super.onStop()
-    }
-
-    override fun onDestroy() {
-        adapter.user = null
-        adapter.callback = null
-
-        super.onDestroy()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
+        layoutManager = LinearLayoutManager(context)
+
         return inflater.inflate(R.layout.fragment_chat, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        layoutManager.reverseLayout = true
 
         emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_emoticon))
         emojiButton.setOnClickListener {
@@ -204,21 +186,18 @@ class ChatFragment : EasyChatServiceFragment<LocalMessage>() {
             val text = messageInput.text.toString().trim()
 
             if (!text.isEmpty()) {
-                context.chatDatabase.insertMessageToSend(StorageHelper.user!!, conference.id, text)
+                adapter.insert(arrayOf(context.chatDatabase.insertMessageToSend(StorageHelper.user!!,
+                        conference.id, text)))
 
-                if (canLoad) {
-                    refresh()
-
-                    if (!ChatService.isSynchronizing) {
-                        ChatService.synchronize(context)
-                    }
+                if (!ChatService.isSynchronizing) {
+                    ChatService.synchronize(context)
                 }
+
+                list.post { list.scrollToPosition(0) }
             }
 
             messageInput.text.clear()
         }
-
-        progress.setColorSchemeResources(R.color.primary)
 
         emojiPopup = EmojiPopup.Builder.fromRootView(root)
                 .setOnEmojiPopupShownListener {
@@ -231,62 +210,25 @@ class ChatFragment : EasyChatServiceFragment<LocalMessage>() {
                 }
                 .setOnSoftKeyboardCloseListener { emojiPopup.dismiss() }
                 .build(messageInput)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
 
         if (adapter.selectedItems.isNotEmpty()) {
             adapterCallback.onMessageSelection(adapter.selectedItems.size)
         }
     }
 
-    override fun loadFromDB(): Collection<LocalMessage> {
-        return context.chatDatabase.getMessages(conference.id)
+    override fun onDestroy() {
+        adapter.user = null
+
+        super.onDestroy()
     }
 
-    override fun startLoadMore() {
-        ChatService.loadMoreMessages(context, conference.id)
+    override fun constructTask(pageCallback: () -> Int): ListenableTask<Array<LocalMessage>> {
+        return ChatTask({ context }, pageCallback, conference.id)
     }
 
-    override fun refresh() {
-        context.chatDatabase.markAsRead(conference.id)
-
-        super.refresh()
-    }
-
-    @Suppress("unused")
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onMessagesChanged(event: ChatMessagesEvent) {
-        if (event.conferenceId == conference.id) {
-            if (canLoad) {
-                refresh()
-            }
-        }
-    }
-
-    @Suppress("unused")
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onLoadMoreMessagesFailed(exception: ChatService.LoadMoreMessagesException) {
-        if (exception.conferenceId == conference.id) {
-            showError(exception)
-        }
-    }
-
-    override fun showError(message: String, buttonMessage: String?,
-                           onButtonClickListener: View.OnClickListener?,
-                           clear: Boolean) {
-        super.showError(message, buttonMessage, onButtonClickListener, clear)
-
-        if (clear) {
-            inputContainer.visibility = View.GONE
-        }
-    }
-
-    override fun hideError() {
-        super.hideError()
-
-        inputContainer.visibility = View.VISIBLE
+    override fun constructRefreshingTask(): ListenableTask<Array<LocalMessage>> {
+        return RefreshingChatTask(conference.id, { context }, refreshSuccessCallback,
+                refreshExceptionCallback)
     }
 
     private fun generateEmojiDrawable(iconicRes: IIcon): Drawable {

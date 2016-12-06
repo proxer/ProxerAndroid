@@ -146,22 +146,22 @@ class ReminderFragment : PagedLoadingFragment<Reminder>() {
     }
 
     override fun constructTask(pageCallback: () -> Int): ListenableTask<Array<Reminder>> {
-        return LoadingTask {
+        return LoadingTask({
             ReminderRequest(pageCallback.invoke())
                     .withCategory(category)
                     .withLimit(itemsOnPage)
-        }
+        })
     }
 
     private fun constructRemovalTask(): Task<Void> {
-        return ValidatingTask(LoadingTask {
+        return ValidatingTask(LoadingTask({
             DeleteReminderRequest(adapter.itemsToRemove.first().id)
-        }, { Validators.validateLogin(true) })
+        }), { Validators.validateLogin(true) }, removalSuccess, removalException)
     }
 
     private fun processQueuedRemovals() {
         if (!removalTask.isWorking) {
-            removalTask.execute(removalSuccess, removalException)
+            removalTask.execute()
         }
     }
 }

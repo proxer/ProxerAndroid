@@ -76,7 +76,7 @@ class ProfileFragment : SingleLoadingFragment<UserInfo>() {
     }
 
     override fun constructTask(): ListenableTask<UserInfo> {
-        return LoadingTask { UserInfoRequest(userId, userName) }
+        return LoadingTask({ UserInfoRequest(userId, userName) })
     }
 
     override fun present(data: UserInfo) {
