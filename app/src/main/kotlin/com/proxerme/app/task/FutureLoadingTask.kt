@@ -8,18 +8,19 @@ import java.util.concurrent.Future
  *
  * @author Ruben Gees
  */
-class FutureLoadingTask<O>(private val requestResolver: ((O) -> Unit, (Exception) -> Unit) -> Future<O>,
-                           successCallback: ((O) -> Unit)? = null,
-                           exceptionCallback: ((Exception) -> Unit)? = null) :
-        BaseListenableTask<O>(successCallback, exceptionCallback) {
+class FutureLoadingTask<I, O>(private val requestConstructor: (I, (O) -> Unit,
+                                                               (Exception) -> Unit) -> Future<O>,
+                              successCallback: ((O) -> Unit)? = null,
+                              exceptionCallback: ((Exception) -> Unit)? = null) :
+        BaseListenableTask<I, O>(successCallback, exceptionCallback) {
 
     override val isWorking: Boolean
         get() = call != null
 
     private var call: Future<O>? = null
 
-    override fun execute() {
-        call = requestResolver.invoke({
+    override fun execute(input: I) {
+        call = requestConstructor.invoke(input, {
             cancel()
 
             finishSuccessful(it, successCallback)

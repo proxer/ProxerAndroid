@@ -11,6 +11,7 @@ import com.klinker.android.link_builder.TouchableMovementMethod
 import com.proxerme.app.R
 import com.proxerme.app.activity.UserActivity
 import com.proxerme.app.fragment.framework.SingleLoadingFragment
+import com.proxerme.app.fragment.user.ProfileFragment.ProfileInput
 import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.framework.ListenableTask
@@ -25,7 +26,7 @@ import com.proxerme.library.connection.user.request.UserInfoRequest
  *
  * @author Ruben Gees
  */
-class ProfileFragment : SingleLoadingFragment<UserInfo>() {
+class ProfileFragment : SingleLoadingFragment<ProfileInput, UserInfo>() {
 
     companion object {
         private const val ARGUMENT_USER_ID = "user_id"
@@ -49,7 +50,7 @@ class ProfileFragment : SingleLoadingFragment<UserInfo>() {
 
     private val userId: String?
         get() = arguments.getString(ARGUMENT_USER_ID)
-    private val userName: String?
+    private val username: String?
         get() = arguments.getString(ARGUMENT_USER_NAME)
 
     private val animePointsRow: TextView by bindView(R.id.animePointsRow)
@@ -73,10 +74,6 @@ class ProfileFragment : SingleLoadingFragment<UserInfo>() {
         super.onViewCreated(view, savedInstanceState)
 
         statusText.movementMethod = TouchableMovementMethod.getInstance()
-    }
-
-    override fun constructTask(): ListenableTask<UserInfo> {
-        return ProxerLoadingTask({ UserInfoRequest(userId, userName) })
     }
 
     override fun present(data: UserInfo) {
@@ -105,6 +102,14 @@ class ProfileFragment : SingleLoadingFragment<UserInfo>() {
         }
     }
 
+    override fun constructTask(): ListenableTask<ProfileInput, UserInfo> {
+        return ProxerLoadingTask({ UserInfoRequest(userId, username) })
+    }
+
+    override fun constructInput(): ProfileInput {
+        return ProfileInput(userId, username)
+    }
+
     private fun calculateRank(@IntRange(from = 0) points: Int): String {
         when {
             (points < 10) -> return "Schnupperninja"
@@ -130,4 +135,6 @@ class ProfileFragment : SingleLoadingFragment<UserInfo>() {
             else -> throw RuntimeException("No negative values allowed")
         }
     }
+
+    class ProfileInput(val userId: String?, val username: String?)
 }

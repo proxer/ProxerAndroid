@@ -7,6 +7,7 @@ import com.proxerme.app.R
 import com.proxerme.app.activity.UserActivity
 import com.proxerme.app.adapter.media.CommentAdapter
 import com.proxerme.app.fragment.framework.PagedLoadingFragment
+import com.proxerme.app.fragment.media.CommentFragment.CommentInput
 import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.framework.ListenableTask
@@ -20,7 +21,7 @@ import com.proxerme.library.parameters.CommentSortParameter.CommentSort
  *
  * @author Ruben Gees
  */
-class CommentFragment : PagedLoadingFragment<Comment>() {
+class CommentFragment : PagedLoadingFragment<CommentInput, Comment>() {
 
     companion object {
 
@@ -96,12 +97,19 @@ class CommentFragment : PagedLoadingFragment<Comment>() {
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
-    override fun constructTask(pageCallback: () -> Int): ListenableTask<Array<Comment>> {
+    override fun constructTask(): ListenableTask<CommentInput, Array<Comment>> {
         return ProxerLoadingTask({
-            CommentRequest(id)
-                    .withPage(pageCallback.invoke())
-                    .withLimit(itemsOnPage)
-                    .withSortType(sortCriteria)
+            CommentRequest(it.id)
+                    .withPage(it.page)
+                    .withLimit(it.itemsOnPage)
+                    .withSortType(it.sortCriteria)
         })
     }
+
+    override fun constructInput(page: Int): CommentInput {
+        return CommentInput(page, id, itemsOnPage, sortCriteria)
+    }
+
+    class CommentInput(page: Int, val id: String, val itemsOnPage: Int, val sortCriteria: String) :
+            PagedInput(page)
 }

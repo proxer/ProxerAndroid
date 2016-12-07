@@ -16,6 +16,7 @@ import com.proxerme.app.activity.UserActivity
 import com.proxerme.app.adapter.manga.MangaAdapter
 import com.proxerme.app.dialog.LoginDialog
 import com.proxerme.app.fragment.framework.SingleLoadingFragment
+import com.proxerme.app.fragment.manga.MangaFragment.MangaInput
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.ValidatingTask
@@ -39,7 +40,7 @@ import org.joda.time.DateTime
  *
  * @author Ruben Gees
  */
-class MangaFragment : SingleLoadingFragment<Chapter>() {
+class MangaFragment : SingleLoadingFragment<MangaInput, Chapter>() {
 
     companion object {
 
@@ -164,7 +165,7 @@ class MangaFragment : SingleLoadingFragment<Chapter>() {
                 reminderEpisode = it
 
                 reminderTask.cancel()
-                reminderTask.execute()
+                reminderTask.execute(MangaInput(id, reminderEpisode!!, language))
             }
         }
 
@@ -250,14 +251,18 @@ class MangaFragment : SingleLoadingFragment<Chapter>() {
         super.clear()
     }
 
-    override fun constructTask(): ListenableTask<Chapter> {
-        return ProxerLoadingTask({ ChapterRequest(id, episode, language) })
+    override fun constructTask(): ListenableTask<MangaInput, Chapter> {
+        return ProxerLoadingTask({ ChapterRequest(it.id, it.episode, it.language) })
     }
 
-    private fun constructReminderTask(): Task<Void?> {
+    private fun constructReminderTask(): Task<MangaInput, Void?> {
         return ValidatingTask(ProxerLoadingTask({
-            SetReminderRequest(id, reminderEpisode!!, language, CategoryParameter.MANGA)
+            SetReminderRequest(it.id, it.episode, it.language, CategoryParameter.MANGA)
         }), { Validators.validateLogin(true) }, reminderSuccess, reminderException)
+    }
+
+    override fun constructInput(): MangaInput {
+        return MangaInput(id, episode, language)
     }
 
     private fun switchEpisode(newEpisode: Int) {
@@ -281,4 +286,6 @@ class MangaFragment : SingleLoadingFragment<Chapter>() {
                     View.SYSTEM_UI_FLAG_FULLSCREEN
         }
     }
+
+    class MangaInput(val id: String, val episode: Int, val language: String)
 }

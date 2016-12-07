@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import com.proxerme.app.activity.MediaActivity
 import com.proxerme.app.adapter.ucp.HistoryAdapter
 import com.proxerme.app.fragment.framework.PagedLoadingFragment
+import com.proxerme.app.fragment.ucp.HistoryFragment.HistoryInput
 import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.framework.ListenableTask
@@ -20,7 +21,7 @@ import com.proxerme.library.connection.ucp.request.HistoryRequest
  *
  * @author Ruben Gees
  */
-class HistoryFragment : PagedLoadingFragment<HistoryEntry>() {
+class HistoryFragment : PagedLoadingFragment<HistoryInput, HistoryEntry>() {
 
     companion object {
 
@@ -55,7 +56,13 @@ class HistoryFragment : PagedLoadingFragment<HistoryEntry>() {
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
-    override fun constructTask(pageCallback: () -> Int): ListenableTask<Array<HistoryEntry>> {
-        return ProxerLoadingTask({ HistoryRequest(pageCallback.invoke()).withLimit(itemsOnPage) })
+    override fun constructTask(): ListenableTask<HistoryInput, Array<HistoryEntry>> {
+        return ProxerLoadingTask({ HistoryRequest(it.page).withLimit(it.itemsOnPage) })
     }
+
+    override fun constructInput(page: Int): HistoryInput {
+        return HistoryInput(page, itemsOnPage)
+    }
+
+    class HistoryInput(page: Int, val itemsOnPage: Int) : PagedInput(page)
 }

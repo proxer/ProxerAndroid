@@ -24,7 +24,7 @@ import org.jetbrains.anko.toast
  *
  * @author Ruben Gees
  */
-class UcpOverviewFragment : SingleLoadingFragment<Int>() {
+class UcpOverviewFragment : SingleLoadingFragment<Unit, Int>() {
 
     companion object {
         private const val FORMAT = "%.1f"
@@ -57,8 +57,12 @@ class UcpOverviewFragment : SingleLoadingFragment<Int>() {
         profileLink.movementMethod = TouchableMovementMethod.getInstance()
     }
 
-    override fun constructTask(): ListenableTask<Int> {
+    override fun constructTask(): ListenableTask<Unit, Int> {
         return ProxerLoadingTask({ ListsumRequest() })
+    }
+
+    override fun constructInput() {
+        return Unit
     }
 
     override fun present(data: Int) {

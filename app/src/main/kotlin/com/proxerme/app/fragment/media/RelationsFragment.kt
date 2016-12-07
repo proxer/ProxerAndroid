@@ -23,7 +23,7 @@ import com.proxerme.library.connection.info.request.RelationRequest
  *
  * @author Ruben Gees
  */
-class RelationsFragment : SingleLoadingFragment<Array<Relation>>() {
+class RelationsFragment : SingleLoadingFragment<String, Array<Relation>>() {
 
     companion object {
 
@@ -88,7 +88,11 @@ class RelationsFragment : SingleLoadingFragment<Array<Relation>>() {
         adapter.replace(data)
     }
 
-    override fun constructTask(): ListenableTask<Array<Relation>> {
-        return ProxerLoadingTask({ RelationRequest(id) })
+    override fun constructTask(): ListenableTask<String, Array<Relation>> {
+        return ProxerLoadingTask(::RelationRequest)
+    }
+
+    override fun constructInput(): String {
+        return id
     }
 }

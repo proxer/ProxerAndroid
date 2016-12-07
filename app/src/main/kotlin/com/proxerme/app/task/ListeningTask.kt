@@ -8,17 +8,17 @@ import com.proxerme.app.task.framework.Task
  *
  * @author Ruben Gees
  */
-class ListeningTask<O>(private val task: Task<O>,
-                       successCallback: ((O) -> Unit)? = null,
-                       exceptionCallback: ((Exception) -> Unit)? = null) :
-        BaseListenableTask<O>(successCallback, exceptionCallback) {
+class ListeningTask<I, O>(private val task: Task<I, O>,
+                          successCallback: ((O) -> Unit)? = null,
+                          exceptionCallback: ((Exception) -> Unit)? = null) :
+        BaseListenableTask<I, O>(successCallback, exceptionCallback) {
 
     override val isWorking: Boolean
         get() = task.isWorking
 
-    override fun execute() {
+    override fun execute(input: I) {
         start {
-            delegatedExecute(task, {
+            delegatedExecute(task, input, {
                 finishSuccessful(it, successCallback)
             }, {
                 finishWithException(it, exceptionCallback)

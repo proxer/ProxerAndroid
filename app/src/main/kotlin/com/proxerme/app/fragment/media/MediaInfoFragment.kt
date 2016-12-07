@@ -30,7 +30,7 @@ import java.security.InvalidParameterException
  *
  * @author Ruben Gees
  */
-class MediaInfoFragment : SingleLoadingFragment<Entry>() {
+class MediaInfoFragment : SingleLoadingFragment<String, Entry>() {
 
     companion object {
         private const val ARGUMENT_ID = "id"
@@ -94,8 +94,12 @@ class MediaInfoFragment : SingleLoadingFragment<Entry>() {
         return inflater.inflate(R.layout.fragment_media_info, container, false)
     }
 
-    override fun constructTask(): ListenableTask<Entry> {
-        return ProxerLoadingTask({ EntryRequest(id) })
+    override fun constructTask(): ListenableTask<String, Entry> {
+        return ProxerLoadingTask(::EntryRequest)
+    }
+
+    override fun constructInput(): String {
+        return id
     }
 
     override fun present(data: Entry) {

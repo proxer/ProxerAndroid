@@ -30,7 +30,7 @@ import org.greenrobot.eventbus.ThreadMode
  *
  * @author Ruben Gees
  */
-abstract class SingleLoadingFragment<T> : MainFragment() {
+abstract class SingleLoadingFragment<I, T> : MainFragment() {
 
     private val successCallback = { data: T ->
         present(data)
@@ -67,7 +67,7 @@ abstract class SingleLoadingFragment<T> : MainFragment() {
     open protected val isHentaiConfirmationRequired = false
     open protected val cacheStrategy = CachedTask.CacheStrategy.FULL
 
-    protected lateinit var task: Task<T>
+    protected lateinit var task: Task<I, T>
 
     open protected val progress: SwipeRefreshLayout by bindView(R.id.progress)
     open protected val contentContainer: ViewGroup by bindView(R.id.contentContainer)
@@ -114,7 +114,7 @@ abstract class SingleLoadingFragment<T> : MainFragment() {
     override fun onResume() {
         super.onResume()
 
-        task.execute()
+        task.execute(constructInput())
     }
 
     override fun onDestroyView() {
@@ -136,7 +136,7 @@ abstract class SingleLoadingFragment<T> : MainFragment() {
 
     open protected fun reset() {
         clear()
-        task.execute()
+        task.execute(constructInput())
     }
 
     open protected fun showError(message: String, buttonMessage: String? = null,
@@ -189,6 +189,7 @@ abstract class SingleLoadingFragment<T> : MainFragment() {
     }
 
     abstract fun present(data: T)
-    abstract fun constructTask(): ListenableTask<T>
+    abstract fun constructTask(): ListenableTask<I, T>
+    abstract fun constructInput(): I
 
 }

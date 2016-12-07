@@ -187,7 +187,8 @@ class NewChatFragment : MainFragment() {
 
         sendButton.setOnClickListener {
             if (!isLoading()) {
-                task.execute()
+                task.execute(NewChatInput(isGroup, topicInput.text.toString(),
+                        adapter.participants, messageInput.text.toString()))
             }
         }
 
@@ -254,16 +255,16 @@ class NewChatFragment : MainFragment() {
         }
     }
 
-    private fun constructTask(): Task<String> {
-        return ValidatingTask(ProxerLoadingTask({
-            when (isGroup) {
+    private fun constructTask(): Task<NewChatInput, String> {
+        return ValidatingTask(ProxerLoadingTask<NewChatInput, String>({
+            when (it.isGroup) {
                 true -> {
-                    NewConferenceRequest(topicInput.text.toString().trim(), adapter.participants
+                    NewConferenceRequest(it.topic, it.participants
                             .map { it.username })
                             .withFirstMessage(messageInput.text.toString().trim())
                 }
                 false -> {
-                    NewConferenceRequest(adapter.participants.first().username)
+                    NewConferenceRequest(it.participants.first().username)
                             .withFirstMessage(messageInput.text.toString().trim())
                 }
             }
@@ -407,6 +408,9 @@ class NewChatFragment : MainFragment() {
         return task.isWorking || if (newConferenceId == null) false else
             ChatService.isSynchronizing
     }
+
+    class NewChatInput(val isGroup: Boolean, val topic: String, val participants: List<Participant>,
+                       val firstMessage: String)
 
     private class InvalidInputException(message: String) : Exception(message)
     private class TopicEmptyException : Exception()

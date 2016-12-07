@@ -11,6 +11,7 @@ import com.proxerme.app.activity.ImageDetailActivity
 import com.proxerme.app.adapter.news.NewsAdapter
 import com.proxerme.app.adapter.news.NewsAdapter.NewsAdapterCallback
 import com.proxerme.app.fragment.framework.PagedLoadingFragment
+import com.proxerme.app.fragment.framework.PagedLoadingFragment.PagedInput
 import com.proxerme.app.helper.NotificationHelper
 import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.task.ProxerLoadingTask
@@ -25,7 +26,7 @@ import com.proxerme.library.info.ProxerUrlHolder
  *
  * @author Ruben Gees
  */
-class NewsFragment : PagedLoadingFragment<News>() {
+class NewsFragment : PagedLoadingFragment<PagedInput, News>() {
 
     companion object {
         fun newInstance(): NewsFragment {
@@ -75,7 +76,11 @@ class NewsFragment : PagedLoadingFragment<News>() {
         NotificationHelper.cancelNotification(context, NotificationHelper.NEWS_NOTIFICATION)
     }
 
-    override fun constructTask(pageCallback: () -> Int): ListenableTask<Array<News>> {
-        return ProxerLoadingTask({ NewsRequest(pageCallback.invoke()) })
+    override fun constructTask(): ListenableTask<PagedInput, Array<News>> {
+        return ProxerLoadingTask({ NewsRequest(it.page) })
+    }
+
+    override fun constructInput(page: Int): PagedInput {
+        return PagedInput(page)
     }
 }

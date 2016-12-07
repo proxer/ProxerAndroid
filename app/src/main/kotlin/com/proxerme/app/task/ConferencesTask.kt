@@ -19,10 +19,9 @@ import java.util.concurrent.Future
  *
  * @author Ruben Gees
  */
-class ConferencesTask(private val contextCallback: () -> Context,
-                      successCallback: ((List<LocalConference>) -> Unit)? = null,
+class ConferencesTask(successCallback: ((List<LocalConference>) -> Unit)? = null,
                       exceptionCallback: ((Exception) -> Unit)? = null) :
-        BaseListenableTask<List<LocalConference>>(successCallback, exceptionCallback) {
+        BaseListenableTask<Context, List<LocalConference>>(successCallback, exceptionCallback) {
 
     override val isWorking: Boolean
         get() = !(future?.isDone ?: true)
@@ -34,12 +33,12 @@ class ConferencesTask(private val contextCallback: () -> Context,
         EventBus.getDefault().register(this)
     }
 
-    override fun execute() {
+    override fun execute(input: Context) {
         start {
             if (StorageHelper.conferenceListEndReached) {
                 future = doAsync {
                     try {
-                        val result = contextCallback.invoke().chatDatabase.getConferences()
+                        val result = input.chatDatabase.getConferences()
 
                         handler.post {
                             finishSuccessful(result, successCallback)

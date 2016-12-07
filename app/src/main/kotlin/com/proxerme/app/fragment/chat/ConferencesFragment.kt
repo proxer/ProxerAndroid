@@ -1,5 +1,6 @@
 package com.proxerme.app.fragment.chat
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
@@ -24,7 +25,7 @@ import com.proxerme.app.util.bindView
  *
  * @author Ruben Gees
  */
-class ConferencesFragment : SingleLoadingFragment<List<LocalConference>>() {
+class ConferencesFragment : SingleLoadingFragment<Context, List<LocalConference>>() {
 
     companion object {
         fun newInstance(): ConferencesFragment {
@@ -102,8 +103,12 @@ class ConferencesFragment : SingleLoadingFragment<List<LocalConference>>() {
         super.onDestroyView()
     }
 
-    override fun constructTask(): ListenableTask<List<LocalConference>> {
-        return ConferencesTask({ context })
+    override fun constructTask(): ListenableTask<Context, List<LocalConference>> {
+        return ConferencesTask()
+    }
+
+    override fun constructInput(): Context {
+        return context
     }
 
     override fun present(data: List<LocalConference>) {

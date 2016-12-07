@@ -14,10 +14,11 @@ import com.proxerme.app.entitiy.RichEpisode
 import com.proxerme.app.fragment.framework.SingleLoadingFragment
 import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.task.ListeningTask
-import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.MappedTask
+import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.framework.ListenableTask
 import com.proxerme.app.util.bindView
+import com.proxerme.library.connection.info.entity.ListInfo
 import com.proxerme.library.connection.info.request.ListInfoRequest
 
 /**
@@ -25,7 +26,7 @@ import com.proxerme.library.connection.info.request.ListInfoRequest
  *
  * @author Ruben Gees
  */
-class EpisodesFragment : SingleLoadingFragment<Array<RichEpisode>>() {
+class EpisodesFragment : SingleLoadingFragment<String, Array<RichEpisode>>() {
 
     companion object {
         private const val ARGUMENT_ID = "id"
@@ -89,14 +90,17 @@ class EpisodesFragment : SingleLoadingFragment<Array<RichEpisode>>() {
         adapter.replace(data)
     }
 
-    override fun constructTask(): ListenableTask<Array<RichEpisode>> {
-        return ListeningTask(MappedTask(ProxerLoadingTask({
-            ListInfoRequest(id, 0).withLimit(Int.MAX_VALUE)
+    override fun constructTask(): ListenableTask<String, Array<RichEpisode>> {
+        return ListeningTask(MappedTask(ProxerLoadingTask<String, ListInfo>({
+            ListInfoRequest(it, 0).withLimit(Int.MAX_VALUE)
         }), { listInfo ->
-            listInfo.episodes
-                    .groupBy { it.number }
+            listInfo.episodes.groupBy { it.number }
                     .values.map { RichEpisode(listInfo.userState, listInfo.lastEpisode, it) }
                     .toTypedArray()
         }))
+    }
+
+    override fun constructInput(): String {
+        return id
     }
 }

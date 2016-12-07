@@ -1,5 +1,6 @@
 package com.proxerme.app.task
 
+import com.proxerme.app.task.ZippedTask.ZippedInput
 import com.proxerme.app.task.framework.BaseTask
 import com.proxerme.app.task.framework.Task
 
@@ -8,20 +9,21 @@ import com.proxerme.app.task.framework.Task
  *
  * @author Ruben Gees
  */
-class ZippedTask<I, I2, O>(private val firstTask: Task<I>, private val secondTask: Task<I2>,
-                           private val zipFunction: (I, I2) -> O,
-                           successCallback: ((O) -> Unit)? = null,
-                           exceptionCallback: ((Exception) -> Unit)? = null) :
-        BaseTask<O>(successCallback, exceptionCallback) {
+class ZippedTask<I, I2, M, M2, O>(private val firstTask: Task<I, M>,
+                                  private val secondTask: Task<I2, M2>,
+                                  private val zipFunction: (M, M2) -> O,
+                                  successCallback: ((O) -> Unit)? = null,
+                                  exceptionCallback: ((Exception) -> Unit)? = null) :
+        BaseTask<ZippedInput<I, I2>, O>(successCallback, exceptionCallback) {
 
     override val isWorking: Boolean
         get() = firstTask.isWorking || secondTask.isWorking
 
-    override fun execute() {
-        var firstResult: I? = null
-        var secondResult: I2? = null
+    override fun execute(input: ZippedInput<I, I2>) {
+        var firstResult: M? = null
+        var secondResult: M2? = null
 
-        delegatedExecute(firstTask, { result ->
+        delegatedExecute(firstTask, input.first, { result ->
             secondResult?.let {
                 successCallback?.invoke(zipFunction.invoke(result, it))
 
@@ -33,7 +35,7 @@ class ZippedTask<I, I2, O>(private val firstTask: Task<I>, private val secondTas
             exceptionCallback?.invoke(it)
         })
 
-        delegatedExecute(secondTask, { result ->
+        delegatedExecute(secondTask, input.second, { result ->
             firstResult?.let {
                 successCallback?.invoke(zipFunction.invoke(it, result))
 
@@ -61,4 +63,6 @@ class ZippedTask<I, I2, O>(private val firstTask: Task<I>, private val secondTas
         secondTask.destroy()
         super.destroy()
     }
+
+    class ZippedInput<out I, out I2>(val first: I, val second: I2)
 }

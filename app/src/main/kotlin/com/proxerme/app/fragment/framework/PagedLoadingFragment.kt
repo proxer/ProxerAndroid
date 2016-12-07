@@ -14,6 +14,7 @@ import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.dialog.HentaiConfirmationDialog
 import com.proxerme.app.dialog.LoginDialog
 import com.proxerme.app.event.HentaiConfirmationEvent
+import com.proxerme.app.fragment.framework.PagedLoadingFragment.PagedInput
 import com.proxerme.app.helper.NotificationHelper
 import com.proxerme.app.manager.UserManager
 import com.proxerme.app.service.ChatService
@@ -34,7 +35,7 @@ import org.greenrobot.eventbus.ThreadMode
  *
  * @author Ruben Gees
  */
-abstract class PagedLoadingFragment<T> : MainFragment() {
+abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput {
 
     protected val successCallback = { data: Array<T> ->
         hasReachedEnd = data.size < itemsOnPage
@@ -85,8 +86,8 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
     open protected val isWorking: Boolean
         get() = task.isWorking || refreshTask.isWorking
 
-    protected lateinit var task: Task<Array<T>>
-    protected lateinit var refreshTask: Task<Array<T>>
+    protected lateinit var task: Task<I, Array<T>>
+    protected lateinit var refreshTask: Task<I, Array<T>>
 
     open protected val progress: SwipeRefreshLayout by bindView(R.id.progress)
     open protected val list: RecyclerView by bindView(R.id.list)
@@ -99,7 +100,6 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
     abstract protected val itemsOnPage: Int
 
     open protected var hasReachedEnd = false
-    private var firstLoad = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -135,7 +135,7 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
                 if (resetOnRefresh) {
                     reset()
                 } else {
-                    refreshTask.execute()
+                    refreshTask.execute(constructInput(0))
                 }
             }
             false -> null
@@ -155,8 +155,7 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
 
         NotificationHelper.cancelNotification(context, NotificationHelper.CHAT_NOTIFICATION)
 
-        firstLoad = true
-        task.execute()
+        task.execute(constructInput(0))
     }
 
     override fun onDestroyView() {
@@ -189,7 +188,7 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
         hasReachedEnd = false
 
         clear()
-        task.execute()
+        task.execute(constructInput(calculateNextPage()))
     }
 
     open protected fun showError(message: String, buttonMessage: String? = null,
@@ -201,7 +200,7 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
                 },
                 onButtonClickListener = onButtonClickListener ?: View.OnClickListener {
                     task.reset()
-                    task.execute()
+                    task.execute(constructInput(calculateNextPage()))
                 })
     }
 
@@ -250,26 +249,22 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
             override fun onLoadMore() {
                 if (!hasReachedEnd && !headerFooterAdapter.hasFooter() && !task.isWorking) {
                     task.reset()
-                    task.execute()
+                    task.execute(constructInput(calculateNextPage()))
                 }
             }
         })
     }
 
     private fun calculateNextPage(): Int {
-        if (firstLoad) {
-            firstLoad = false
-
-            return 0
-        } else if (adapter.isEmpty()) {
+        if (adapter.isEmpty()) {
             return 0
         } else {
             return adapter.itemCount / itemsOnPage
         }
     }
 
-    private fun internalConstructTask(): ListenableTask<Array<T>> {
-        return constructTask { calculateNextPage() }.onStart {
+    private fun internalConstructTask(): ListenableTask<I, Array<T>> {
+        return constructTask().onStart {
             headerFooterAdapter.removeFooter()
 
             setRefreshing(true)
@@ -278,7 +273,7 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
         }
     }
 
-    private fun internalConstructRefreshingTask(): ListenableTask<Array<T>> {
+    private fun internalConstructRefreshingTask(): ListenableTask<I, Array<T>> {
         return constructRefreshingTask().onStart {
             setRefreshing(true)
         }.onFinish {
@@ -286,8 +281,15 @@ abstract class PagedLoadingFragment<T> : MainFragment() {
         }
     }
 
-    abstract fun constructTask(pageCallback: () -> Int): ListenableTask<Array<T>>
-    open protected fun constructRefreshingTask(): ListenableTask<Array<T>> {
-        return constructTask { 0 }
+    abstract fun constructTask(): ListenableTask<I, Array<T>>
+    open protected fun constructRefreshingTask(): ListenableTask<I, Array<T>> {
+        return constructTask()
     }
+
+    abstract fun constructInput(page: Int): I
+    open protected fun constructRefreshingInput(page: Int): I {
+        return constructInput(page)
+    }
+
+    open class PagedInput(val page: Int)
 }

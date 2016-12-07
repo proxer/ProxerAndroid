@@ -6,8 +6,10 @@ import android.os.Looper
 import com.proxerme.app.data.chatDatabase
 import com.proxerme.app.entitiy.LocalMessage
 import com.proxerme.app.event.ChatMessagesEvent
+import com.proxerme.app.fragment.framework.PagedLoadingFragment.PagedInput
 import com.proxerme.app.service.ChatService
 import com.proxerme.app.service.ChatService.LoadMoreMessagesException
+import com.proxerme.app.task.ChatTask.ChatInput
 import com.proxerme.app.task.framework.BaseListenableTask
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -20,11 +22,10 @@ import java.util.concurrent.Future
  *
  * @author Ruben Gees
  */
-class ChatTask(private val contextCallback: () -> Context,
-               private val refreshOnlyCallback: () -> Boolean,
-               private val id: String, successCallback: ((Array<LocalMessage>) -> Unit)? = null,
+class ChatTask(private val id: String,
+               successCallback: ((Array<LocalMessage>) -> Unit)? = null,
                exceptionCallback: ((Exception) -> Unit)? = null) :
-        BaseListenableTask<Array<LocalMessage>>(successCallback, exceptionCallback) {
+        BaseListenableTask<ChatInput, Array<LocalMessage>>(successCallback, exceptionCallback) {
 
     override val isWorking: Boolean
         get() = !(future?.isDone ?: true) || ChatService.isLoadingMessages(id)
@@ -37,18 +38,18 @@ class ChatTask(private val contextCallback: () -> Context,
         EventBus.getDefault().register(this)
     }
 
-    override fun execute() {
+    override fun execute(input: ChatInput) {
         start {
-            if (refreshOnlyCallback.invoke()) {
+            if (input.page === 0) {
                 future = doAsync {
                     try {
-                        contextCallback.invoke().chatDatabase.markAsRead(id)
+                        input.context.chatDatabase.markAsRead(id)
 
-                        val result = contextCallback.invoke().chatDatabase.getMessages(id)
+                        val result = input.context.chatDatabase.getMessages(id)
 
                         if (result.isEmpty()) {
                             if (!ChatService.isLoadingMessages(id)) {
-                                ChatService.loadMoreMessages(contextCallback.invoke(), id)
+                                ChatService.loadMoreMessages(input.context, id)
                             }
                         } else {
                             handler.post {
@@ -62,7 +63,7 @@ class ChatTask(private val contextCallback: () -> Context,
                     }
                 }
             } else if (!ChatService.isLoadingMessages(id)) {
-                ChatService.loadMoreMessages(contextCallback.invoke(), id)
+                ChatService.loadMoreMessages(input.context, id)
             }
         }
     }
@@ -100,5 +101,7 @@ class ChatTask(private val contextCallback: () -> Context,
             finishWithException(exception, it)
         }
     }
+
+    class ChatInput(page: Int, val context: Context) : PagedInput(page)
 
 }

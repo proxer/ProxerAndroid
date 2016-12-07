@@ -9,11 +9,11 @@ import com.proxerme.app.task.framework.Task
  *
  * @author Ruben Gees
  */
-class CachedTask<O>(private val task: Task<O>,
-                    cacheStrategy: CacheStrategy = CacheStrategy.FULL,
-                    successCallback: ((O) -> Unit)? = null,
-                    exceptionCallback: ((Exception) -> Unit)? = null) :
-        BaseTask<O>(successCallback, exceptionCallback) {
+class CachedTask<I, O>(private val task: Task<I, O>,
+                       cacheStrategy: CacheStrategy = CacheStrategy.FULL,
+                       successCallback: ((O) -> Unit)? = null,
+                       exceptionCallback: ((Exception) -> Unit)? = null) :
+        BaseTask<I, O>(successCallback, exceptionCallback) {
 
     override val isWorking: Boolean
         get() = task.isWorking
@@ -26,7 +26,7 @@ class CachedTask<O>(private val task: Task<O>,
     private var cachedResult: O? = null
     private var cachedException: Exception? = null
 
-    override fun execute() {
+    override fun execute(input: I) {
         if (shouldCachedResult) {
             cachedResult?.let {
                 successCallback?.invoke(it)
@@ -51,7 +51,7 @@ class CachedTask<O>(private val task: Task<O>,
             }
         }
 
-        delegatedExecute(task, {
+        delegatedExecute(task, input, {
             cachedResult = if (shouldCachedResult) it else null
 
             successCallback?.invoke(it)

@@ -5,13 +5,13 @@ package com.proxerme.app.task.framework
  *
  * @author Ruben Gees
  */
-interface Task<O> {
+interface Task<I, O> {
 
     val isWorking: Boolean
     var successCallback: ((O) -> Unit)?
     var exceptionCallback: ((Exception) -> Unit)?
 
-    fun execute()
+    fun execute(input: I)
 
     fun cancel()
     fun reset()

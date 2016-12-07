@@ -8,6 +8,7 @@ import com.proxerme.app.activity.MediaActivity
 import com.proxerme.app.adapter.user.UserMediaAdapter
 import com.proxerme.app.adapter.user.UserMediaAdapter.UserMediaAdapterCallback
 import com.proxerme.app.fragment.framework.PagedLoadingFragment
+import com.proxerme.app.fragment.user.UserMediaListFragment.UserMediaInput
 import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.framework.ListenableTask
@@ -22,7 +23,7 @@ import com.proxerme.library.parameters.UserMediaSortParameter
  *
  * @author Ruben Gees
  */
-class UserMediaListFragment : PagedLoadingFragment<UserMediaListEntry>() {
+class UserMediaListFragment : PagedLoadingFragment<UserMediaInput, UserMediaListEntry>() {
 
     companion object {
 
@@ -53,7 +54,7 @@ class UserMediaListFragment : PagedLoadingFragment<UserMediaListEntry>() {
 
     private val userId: String?
         get() = arguments.getString(ARGUMENT_USER_ID)
-    private val userName: String?
+    private val username: String?
         get() = arguments.getString(ARGUMENT_USER_NAME)
     private var category: String
         get() = arguments.getString(ARGUMENT_CATEGORY)
@@ -162,12 +163,19 @@ class UserMediaListFragment : PagedLoadingFragment<UserMediaListEntry>() {
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
-    override fun constructTask(pageCallback: () -> Int): ListenableTask<Array<UserMediaListEntry>> {
+    override fun constructTask(): ListenableTask<UserMediaInput, Array<UserMediaListEntry>> {
         return ProxerLoadingTask({
-            UserMediaListRequest(userId, userName, pageCallback.invoke())
-                    .withCategory(category)
-                    .withSortCriteria(sortCriteria)
-                    .withLimit(itemsOnPage)
+            UserMediaListRequest(it.userId, it.username, it.page)
+                    .withCategory(it.category)
+                    .withSortCriteria(it.sortCriteria)
+                    .withLimit(it.itemsOnPage)
         })
     }
+
+    override fun constructInput(page: Int): UserMediaInput {
+        return UserMediaInput(page, userId, username, category, sortCriteria, itemsOnPage)
+    }
+
+    class UserMediaInput(page: Int, val userId: String?, val username: String?, val category: String,
+                         val sortCriteria: String, val itemsOnPage: Int) : PagedInput(page)
 }

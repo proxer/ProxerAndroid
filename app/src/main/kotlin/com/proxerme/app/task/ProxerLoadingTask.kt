@@ -10,19 +10,19 @@ import com.proxerme.library.connection.ProxerRequest
  *
  * @author Ruben Gees
  */
-class ProxerLoadingTask<O>(private var requestResolver: () -> ProxerRequest<O>,
-                           successCallback: ((O) -> Unit)? = null,
-                           exceptionCallback: ((Exception) -> Unit)? = null) :
-        BaseListenableTask<O>(successCallback, exceptionCallback) {
+class ProxerLoadingTask<I, O>(private var requestConstructor: (I) -> ProxerRequest<O>,
+                              successCallback: ((O) -> Unit)? = null,
+                              exceptionCallback: ((Exception) -> Unit)? = null) :
+        BaseListenableTask<I, O>(successCallback, exceptionCallback) {
 
     override val isWorking: Boolean
         get() = call != null
 
     private var call: ProxerCall? = null
 
-    override fun execute() {
+    override fun execute(input: I) {
         start {
-            call = MainApplication.proxerConnection.execute(requestResolver.invoke(), {
+            call = MainApplication.proxerConnection.execute(requestConstructor.invoke(input), {
                 cancel()
 
                 finishSuccessful(it, successCallback)

@@ -25,6 +25,7 @@ import com.proxerme.app.manager.UserManager
 import com.proxerme.app.service.ChatService
 import com.proxerme.app.task.CachedTask
 import com.proxerme.app.task.ChatTask
+import com.proxerme.app.task.ChatTask.ChatInput
 import com.proxerme.app.task.RefreshingChatTask
 import com.proxerme.app.task.framework.ListenableTask
 import com.proxerme.app.util.Utils
@@ -39,7 +40,7 @@ import org.jetbrains.anko.toast
  *
  * @author Ruben Gees
  */
-class ChatFragment : PagedLoadingFragment<LocalMessage>() {
+class ChatFragment : PagedLoadingFragment<ChatInput, LocalMessage>() {
 
     companion object {
         private const val ARGUMENT_CONFERENCE = "conference"
@@ -221,13 +222,16 @@ class ChatFragment : PagedLoadingFragment<LocalMessage>() {
         super.onDestroy()
     }
 
-    override fun constructTask(pageCallback: () -> Int): ListenableTask<Array<LocalMessage>> {
-        return ChatTask({ context }, { pageCallback.invoke() === 0 }, conference.id)
+    override fun constructTask(): ListenableTask<ChatInput, Array<LocalMessage>> {
+        return ChatTask(conference.id)
     }
 
-    override fun constructRefreshingTask(): ListenableTask<Array<LocalMessage>> {
-        return RefreshingChatTask(conference.id, { context }, refreshSuccessCallback,
-                refreshExceptionCallback)
+    override fun constructRefreshingTask(): ListenableTask<ChatInput, Array<LocalMessage>> {
+        return RefreshingChatTask(conference.id, context)
+    }
+
+    override fun constructInput(page: Int): ChatInput {
+        return ChatInput(page, context)
     }
 
     private fun generateEmojiDrawable(iconicRes: IIcon): Drawable {

@@ -10,6 +10,7 @@ import com.proxerme.app.activity.MediaActivity
 import com.proxerme.app.adapter.ucp.ReminderAdapter
 import com.proxerme.app.dialog.LoginDialog
 import com.proxerme.app.fragment.framework.PagedLoadingFragment
+import com.proxerme.app.fragment.ucp.ReminderFragment.ReminderInput
 import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.ValidatingTask
@@ -29,7 +30,7 @@ import com.proxerme.library.parameters.CategoryParameter
  *
  * @author Ruben Gees
  */
-class ReminderFragment : PagedLoadingFragment<Reminder>() {
+class ReminderFragment : PagedLoadingFragment<ReminderInput, Reminder>() {
 
     companion object {
 
@@ -81,7 +82,7 @@ class ReminderFragment : PagedLoadingFragment<Reminder>() {
     @CategoryParameter.Category
     private var category: String? = null
 
-    private var removalTask: Task<Void> = constructRemovalTask()
+    private var removalTask: Task<RemovalInput, Void> = constructRemovalTask()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -145,23 +146,30 @@ class ReminderFragment : PagedLoadingFragment<Reminder>() {
         super.onDestroy()
     }
 
-    override fun constructTask(pageCallback: () -> Int): ListenableTask<Array<Reminder>> {
+    override fun constructTask(): ListenableTask<ReminderInput, Array<Reminder>> {
         return ProxerLoadingTask({
-            ReminderRequest(pageCallback.invoke())
-                    .withCategory(category)
-                    .withLimit(itemsOnPage)
+            ReminderRequest(it.page)
+                    .withCategory(it.category)
+                    .withLimit(it.itemsOnPage)
         })
     }
 
-    private fun constructRemovalTask(): Task<Void> {
+    override fun constructInput(page: Int): ReminderInput {
+        return ReminderInput(page, category, itemsOnPage)
+    }
+
+    private fun constructRemovalTask(): Task<RemovalInput, Void> {
         return ValidatingTask(ProxerLoadingTask({
-            DeleteReminderRequest(adapter.itemsToRemove.first().id)
+            DeleteReminderRequest(it.id)
         }), { Validators.validateLogin(true) }, removalSuccess, removalException)
     }
 
     private fun processQueuedRemovals() {
         if (!removalTask.isWorking) {
-            removalTask.execute()
+            removalTask.execute(RemovalInput(adapter.itemsToRemove.first().id))
         }
     }
+
+    class ReminderInput(page: Int, val category: String?, val itemsOnPage: Int) : PagedInput(page)
+    class RemovalInput(val id: String)
 }

@@ -5,14 +5,14 @@ package com.proxerme.app.task.framework
  *
  * @author Ruben Gees
  */
-interface ListenableTask<O> : Task<O> {
+interface ListenableTask<I, O> : Task<I, O> {
 
-    fun onStart(callback: () -> Unit): ListenableTask<O>
+    fun onStart(callback: () -> Unit): ListenableTask<I, O>
 
-    fun onSuccess(callback: () -> Unit): ListenableTask<O>
+    fun onSuccess(callback: () -> Unit): ListenableTask<I, O>
 
-    fun onException(callback: () -> Unit): ListenableTask<O>
+    fun onException(callback: () -> Unit): ListenableTask<I, O>
 
-    fun onFinish(callback: () -> Unit): ListenableTask<O>
+    fun onFinish(callback: () -> Unit): ListenableTask<I, O>
 
 }

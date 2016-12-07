@@ -27,7 +27,7 @@ import org.joda.time.format.DateTimeFormat
  *
  * @author Ruben Gees
  */
-class ConferenceInfoFragment : SingleLoadingFragment<ConferenceInfoContainer>() {
+class ConferenceInfoFragment : SingleLoadingFragment<String, ConferenceInfoContainer>() {
 
     companion object {
         private const val CONFERENCE_ID_ARGUMENT = "conference_id"
@@ -88,8 +88,12 @@ class ConferenceInfoFragment : SingleLoadingFragment<ConferenceInfoContainer>() 
         adapter.clear()
     }
 
-    override fun constructTask(): ListenableTask<ConferenceInfoContainer> {
-        return ProxerLoadingTask({ ConferenceInfoRequest(conferenceId) })
+    override fun constructTask(): ListenableTask<String, ConferenceInfoContainer> {
+        return ProxerLoadingTask({ ConferenceInfoRequest(it) })
+    }
+
+    override fun constructInput(): String {
+        return conferenceId
     }
 
     override fun present(data: ConferenceInfoContainer) {

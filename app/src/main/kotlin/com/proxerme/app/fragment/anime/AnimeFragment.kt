@@ -14,6 +14,7 @@ import com.proxerme.app.activity.UserActivity
 import com.proxerme.app.adapter.anime.StreamAdapter
 import com.proxerme.app.dialog.LoginDialog
 import com.proxerme.app.dialog.StreamResolverDialog
+import com.proxerme.app.fragment.anime.AnimeFragment.AnimeInput
 import com.proxerme.app.fragment.framework.SingleLoadingFragment
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.module.StreamResolvers
@@ -37,7 +38,7 @@ import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
  *
  * @author Ruben Gees
  */
-class AnimeFragment : SingleLoadingFragment<Array<Stream>>() {
+class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
 
     companion object {
         private const val ARGUMENT_ID = "id"
@@ -154,7 +155,7 @@ class AnimeFragment : SingleLoadingFragment<Array<Stream>>() {
                 reminderEpisode = it
 
                 reminderTask.cancel()
-                reminderTask.execute()
+                reminderTask.execute(AnimeInput(id, reminderEpisode!!, language))
             }
         }
 
@@ -195,14 +196,18 @@ class AnimeFragment : SingleLoadingFragment<Array<Stream>>() {
         super.onDestroy()
     }
 
-    override fun constructTask(): ListenableTask<Array<Stream>> {
-        return ProxerLoadingTask({ StreamsRequest(id, episode, language) })
+    override fun constructTask(): ListenableTask<AnimeInput, Array<Stream>> {
+        return ProxerLoadingTask({ StreamsRequest(it.id, it.episode, it.language) })
     }
 
-    private fun constructReminderTask(): Task<Void?> {
+    private fun constructReminderTask(): Task<AnimeInput, Void?> {
         return ValidatingTask(ProxerLoadingTask({
-            SetReminderRequest(id, reminderEpisode!!, language, CategoryParameter.ANIME)
+            SetReminderRequest(it.id, it.episode, it.language, CategoryParameter.ANIME)
         }), { Validators.validateLogin(true) }, reminderSuccess, reminderException)
+    }
+
+    override fun constructInput(): AnimeInput {
+        return AnimeInput(id, episode, language)
     }
 
     private fun switchEpisode(newEpisode: Int) {
@@ -211,4 +216,6 @@ class AnimeFragment : SingleLoadingFragment<Array<Stream>>() {
 
         reset()
     }
+
+    class AnimeInput(val id: String, val episode: Int, val language: String)
 }

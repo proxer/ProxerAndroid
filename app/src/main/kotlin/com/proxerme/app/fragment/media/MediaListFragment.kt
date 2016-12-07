@@ -10,6 +10,7 @@ import com.proxerme.app.activity.MediaActivity
 import com.proxerme.app.adapter.media.MediaAdapter
 import com.proxerme.app.adapter.media.MediaAdapter.MediaAdapterCallback
 import com.proxerme.app.fragment.framework.PagedLoadingFragment
+import com.proxerme.app.fragment.media.MediaListFragment.MediaInput
 import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.framework.ListenableTask
@@ -25,11 +26,9 @@ import com.proxerme.library.parameters.TypeParameter
  *
  * @author Ruben Gees
  */
-class MediaListFragment : PagedLoadingFragment<MediaListEntry>() {
+class MediaListFragment : PagedLoadingFragment<MediaInput, MediaListEntry>() {
 
     companion object {
-
-        const val ITEMS_ON_PAGE = 30
 
         private const val ARGUMENT_CATEGORY = "category"
 
@@ -43,7 +42,7 @@ class MediaListFragment : PagedLoadingFragment<MediaListEntry>() {
     }
 
     override val section = Section.MEDIA_LIST
-    override val itemsOnPage = ITEMS_ON_PAGE
+    override val itemsOnPage = 30
     override val isSwipeToRefreshEnabled = false
     override val isHentaiConfirmationRequired: Boolean
         get() = type == TypeParameter.HENTAI || type == TypeParameter.HMANGA
@@ -210,13 +209,20 @@ class MediaListFragment : PagedLoadingFragment<MediaListEntry>() {
         super.onDestroyOptionsMenu()
     }
 
-    override fun constructTask(pageCallback: () -> Int): ListenableTask<Array<MediaListEntry>> {
+    override fun constructTask(): ListenableTask<MediaInput, Array<MediaListEntry>> {
         return ProxerLoadingTask({
-            MediaSearchRequest(pageCallback.invoke())
-                    .withName(searchQuery)
-                    .withType(type)
-                    .withSortCriteria(sortCriteria)
-                    .withLimit(ITEMS_ON_PAGE)
+            MediaSearchRequest(it.page)
+                    .withName(it.searchQuery)
+                    .withType(it.type)
+                    .withSortCriteria(it.sortCriteria)
+                    .withLimit(it.itemsOnPage)
         })
     }
+
+    override fun constructInput(page: Int): MediaInput {
+        return MediaInput(page, searchQuery, type, sortCriteria, itemsOnPage)
+    }
+
+    class MediaInput(page: Int, val searchQuery: String?, val type: String,
+                     val sortCriteria: String, val itemsOnPage: Int) : PagedInput(page)
 }

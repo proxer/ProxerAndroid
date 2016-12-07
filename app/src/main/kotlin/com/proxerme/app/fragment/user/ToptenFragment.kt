@@ -8,10 +8,13 @@ import android.view.ViewGroup
 import com.proxerme.app.activity.MediaActivity
 import com.proxerme.app.adapter.user.ToptenAdapter
 import com.proxerme.app.fragment.framework.SingleLoadingFragment
+import com.proxerme.app.fragment.user.ToptenFragment.ToptenInput
+import com.proxerme.app.fragment.user.ToptenFragment.ZippedToptenResult
 import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.task.ListeningTask
 import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.ZippedTask
+import com.proxerme.app.task.ZippedTask.ZippedInput
 import com.proxerme.app.task.framework.ListenableTask
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.bindView
@@ -25,7 +28,8 @@ import com.proxerme.library.parameters.CategoryParameter.MANGA
  *
  * @author Ruben Gees
  */
-class ToptenFragment : SingleLoadingFragment<ToptenFragment.ZippedToptenResult>() {
+class ToptenFragment : SingleLoadingFragment<ZippedInput<ToptenInput, ToptenInput>,
+        ZippedToptenResult>() {
 
     companion object {
         private const val ARGUMENT_USER_ID = "user_id"
@@ -48,7 +52,7 @@ class ToptenFragment : SingleLoadingFragment<ToptenFragment.ZippedToptenResult>(
     override val section = Section.TOPTEN
 
     private var userId: String? = null
-    private var userName: String? = null
+    private var username: String? = null
 
     private lateinit var animeAdapter: ToptenAdapter
     private lateinit var mangaAdapter: ToptenAdapter
@@ -62,7 +66,7 @@ class ToptenFragment : SingleLoadingFragment<ToptenFragment.ZippedToptenResult>(
         super.onCreate(savedInstanceState)
 
         userId = arguments.getString(ToptenFragment.Companion.ARGUMENT_USER_ID)
-        userName = arguments.getString(ToptenFragment.Companion.ARGUMENT_USER_NAME)
+        username = arguments.getString(ToptenFragment.Companion.ARGUMENT_USER_NAME)
 
         animeAdapter = ToptenAdapter()
         animeAdapter.callback = object : ToptenAdapter.ToptenAdapterCallback() {
@@ -128,14 +132,20 @@ class ToptenFragment : SingleLoadingFragment<ToptenFragment.ZippedToptenResult>(
         }
     }
 
-    override fun constructTask(): ListenableTask<ZippedToptenResult> {
-        return ListeningTask(ZippedTask(
-                ProxerLoadingTask({ ToptenRequest(userId, userName, ANIME) }),
-                ProxerLoadingTask({ ToptenRequest(userId, userName, MANGA) }),
+    override fun constructTask(): ListenableTask<ZippedInput<ToptenInput, ToptenInput>,
+            ZippedToptenResult> {
+        return ListeningTask(ZippedTask<ToptenInput, ToptenInput, Array<ToptenEntry>, Array<ToptenEntry>, ZippedToptenResult>(
+                ProxerLoadingTask({ ToptenRequest(userId, username, ANIME) }),
+                ProxerLoadingTask({ ToptenRequest(userId, username, MANGA) }),
                 zipFunction = ::ZippedToptenResult
         ))
     }
 
+    override fun constructInput(): ZippedInput<ToptenInput, ToptenInput> {
+        return ZippedInput(ToptenInput(userId, username), ToptenInput(userId, username))
+    }
+
+    class ToptenInput(val userId: String?, val username: String?)
     class ZippedToptenResult(val animeEntries: Array<ToptenEntry>,
                              val mangaEntries: Array<ToptenEntry>)
 }
