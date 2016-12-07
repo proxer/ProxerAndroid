@@ -28,7 +28,7 @@ import com.proxerme.app.event.ChatSynchronizationEvent
 import com.proxerme.app.fragment.framework.MainFragment
 import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.service.ChatService
-import com.proxerme.app.task.LoadingTask
+import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.ValidatingTask
 import com.proxerme.app.task.framework.Task
 import com.proxerme.app.util.*
@@ -255,7 +255,7 @@ class NewChatFragment : MainFragment() {
     }
 
     private fun constructTask(): Task<String> {
-        return ValidatingTask(LoadingTask({
+        return ValidatingTask(ProxerLoadingTask({
             when (isGroup) {
                 true -> {
                     NewConferenceRequest(topicInput.text.toString().trim(), adapter.participants

@@ -9,7 +9,7 @@ import com.proxerme.app.adapter.user.UserMediaAdapter
 import com.proxerme.app.adapter.user.UserMediaAdapter.UserMediaAdapterCallback
 import com.proxerme.app.fragment.framework.PagedLoadingFragment
 import com.proxerme.app.manager.SectionManager.Section
-import com.proxerme.app.task.LoadingTask
+import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.framework.ListenableTask
 import com.proxerme.app.util.Utils
 import com.proxerme.library.connection.user.entitiy.UserMediaListEntry
@@ -163,7 +163,7 @@ class UserMediaListFragment : PagedLoadingFragment<UserMediaListEntry>() {
     }
 
     override fun constructTask(pageCallback: () -> Int): ListenableTask<Array<UserMediaListEntry>> {
-        return LoadingTask({
+        return ProxerLoadingTask({
             UserMediaListRequest(userId, userName, pageCallback.invoke())
                     .withCategory(category)
                     .withSortCriteria(sortCriteria)

@@ -8,7 +8,7 @@ import com.proxerme.app.activity.UserActivity
 import com.proxerme.app.adapter.media.CommentAdapter
 import com.proxerme.app.fragment.framework.PagedLoadingFragment
 import com.proxerme.app.manager.SectionManager.Section
-import com.proxerme.app.task.LoadingTask
+import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.framework.ListenableTask
 import com.proxerme.library.connection.info.entity.Comment
 import com.proxerme.library.connection.info.request.CommentRequest
@@ -97,7 +97,7 @@ class CommentFragment : PagedLoadingFragment<Comment>() {
     }
 
     override fun constructTask(pageCallback: () -> Int): ListenableTask<Array<Comment>> {
-        return LoadingTask({
+        return ProxerLoadingTask({
             CommentRequest(id)
                     .withPage(pageCallback.invoke())
                     .withLimit(itemsOnPage)

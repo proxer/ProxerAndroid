@@ -10,9 +10,9 @@ import com.proxerme.library.connection.ProxerRequest
  *
  * @author Ruben Gees
  */
-class LoadingTask<O>(private var taskResolver: () -> ProxerRequest<O>,
-                     successCallback: ((O) -> Unit)? = null,
-                     exceptionCallback: ((Exception) -> Unit)? = null) :
+class ProxerLoadingTask<O>(private var requestResolver: () -> ProxerRequest<O>,
+                           successCallback: ((O) -> Unit)? = null,
+                           exceptionCallback: ((Exception) -> Unit)? = null) :
         BaseListenableTask<O>(successCallback, exceptionCallback) {
 
     override val isWorking: Boolean
@@ -22,7 +22,7 @@ class LoadingTask<O>(private var taskResolver: () -> ProxerRequest<O>,
 
     override fun execute() {
         start {
-            call = MainApplication.proxerConnection.execute(taskResolver.invoke(), {
+            call = MainApplication.proxerConnection.execute(requestResolver.invoke(), {
                 cancel()
 
                 finishSuccessful(it, successCallback)

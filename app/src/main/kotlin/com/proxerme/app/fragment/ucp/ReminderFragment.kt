@@ -11,7 +11,7 @@ import com.proxerme.app.adapter.ucp.ReminderAdapter
 import com.proxerme.app.dialog.LoginDialog
 import com.proxerme.app.fragment.framework.PagedLoadingFragment
 import com.proxerme.app.manager.SectionManager.Section
-import com.proxerme.app.task.LoadingTask
+import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.ValidatingTask
 import com.proxerme.app.task.framework.ListenableTask
 import com.proxerme.app.task.framework.Task
@@ -146,7 +146,7 @@ class ReminderFragment : PagedLoadingFragment<Reminder>() {
     }
 
     override fun constructTask(pageCallback: () -> Int): ListenableTask<Array<Reminder>> {
-        return LoadingTask({
+        return ProxerLoadingTask({
             ReminderRequest(pageCallback.invoke())
                     .withCategory(category)
                     .withLimit(itemsOnPage)
@@ -154,7 +154,7 @@ class ReminderFragment : PagedLoadingFragment<Reminder>() {
     }
 
     private fun constructRemovalTask(): Task<Void> {
-        return ValidatingTask(LoadingTask({
+        return ValidatingTask(ProxerLoadingTask({
             DeleteReminderRequest(adapter.itemsToRemove.first().id)
         }), { Validators.validateLogin(true) }, removalSuccess, removalException)
     }

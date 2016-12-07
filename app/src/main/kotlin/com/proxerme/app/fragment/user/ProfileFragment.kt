@@ -12,7 +12,7 @@ import com.proxerme.app.R
 import com.proxerme.app.activity.UserActivity
 import com.proxerme.app.fragment.framework.SingleLoadingFragment
 import com.proxerme.app.manager.SectionManager.Section
-import com.proxerme.app.task.LoadingTask
+import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.framework.ListenableTask
 import com.proxerme.app.util.TimeUtil
 import com.proxerme.app.util.Utils
@@ -76,7 +76,7 @@ class ProfileFragment : SingleLoadingFragment<UserInfo>() {
     }
 
     override fun constructTask(): ListenableTask<UserInfo> {
-        return LoadingTask({ UserInfoRequest(userId, userName) })
+        return ProxerLoadingTask({ UserInfoRequest(userId, userName) })
     }
 
     override fun present(data: UserInfo) {

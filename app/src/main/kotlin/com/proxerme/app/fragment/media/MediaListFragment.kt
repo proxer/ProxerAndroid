@@ -11,7 +11,7 @@ import com.proxerme.app.adapter.media.MediaAdapter
 import com.proxerme.app.adapter.media.MediaAdapter.MediaAdapterCallback
 import com.proxerme.app.fragment.framework.PagedLoadingFragment
 import com.proxerme.app.manager.SectionManager.Section
-import com.proxerme.app.task.LoadingTask
+import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.framework.ListenableTask
 import com.proxerme.app.util.Utils
 import com.proxerme.library.connection.list.entity.MediaListEntry
@@ -211,7 +211,7 @@ class MediaListFragment : PagedLoadingFragment<MediaListEntry>() {
     }
 
     override fun constructTask(pageCallback: () -> Int): ListenableTask<Array<MediaListEntry>> {
-        return LoadingTask({
+        return ProxerLoadingTask({
             MediaSearchRequest(pageCallback.invoke())
                     .withName(searchQuery)
                     .withType(type)

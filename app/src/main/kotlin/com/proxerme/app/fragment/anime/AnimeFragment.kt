@@ -17,7 +17,7 @@ import com.proxerme.app.dialog.StreamResolverDialog
 import com.proxerme.app.fragment.framework.SingleLoadingFragment
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.module.StreamResolvers
-import com.proxerme.app.task.LoadingTask
+import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.ValidatingTask
 import com.proxerme.app.task.framework.ListenableTask
 import com.proxerme.app.task.framework.Task
@@ -196,11 +196,11 @@ class AnimeFragment : SingleLoadingFragment<Array<Stream>>() {
     }
 
     override fun constructTask(): ListenableTask<Array<Stream>> {
-        return LoadingTask({ StreamsRequest(id, episode, language) })
+        return ProxerLoadingTask({ StreamsRequest(id, episode, language) })
     }
 
     private fun constructReminderTask(): Task<Void?> {
-        return ValidatingTask(LoadingTask({
+        return ValidatingTask(ProxerLoadingTask({
             SetReminderRequest(id, reminderEpisode!!, language, CategoryParameter.ANIME)
         }), { Validators.validateLogin(true) }, reminderSuccess, reminderException)
     }

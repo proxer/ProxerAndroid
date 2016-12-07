@@ -13,7 +13,7 @@ import com.proxerme.app.adapter.news.NewsAdapter.NewsAdapterCallback
 import com.proxerme.app.fragment.framework.PagedLoadingFragment
 import com.proxerme.app.helper.NotificationHelper
 import com.proxerme.app.manager.SectionManager.Section
-import com.proxerme.app.task.LoadingTask
+import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.framework.ListenableTask
 import com.proxerme.app.util.Utils
 import com.proxerme.library.connection.notifications.entitiy.News
@@ -76,6 +76,6 @@ class NewsFragment : PagedLoadingFragment<News>() {
     }
 
     override fun constructTask(pageCallback: () -> Int): ListenableTask<Array<News>> {
-        return LoadingTask({ NewsRequest(pageCallback.invoke()) })
+        return ProxerLoadingTask({ NewsRequest(pageCallback.invoke()) })
     }
 }
