@@ -21,25 +21,20 @@ import com.mikepenz.iconics.typeface.IIcon
 import com.proxerme.app.R
 import com.proxerme.app.activity.chat.ChatActivity
 import com.proxerme.app.adapter.chat.NewChatParticipantAdapter
-import com.proxerme.app.data.chatDatabase
 import com.proxerme.app.dialog.LoginDialog
+import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.entitiy.Participant
-import com.proxerme.app.event.ChatSynchronizationEvent
 import com.proxerme.app.fragment.framework.MainFragment
 import com.proxerme.app.manager.SectionManager.Section
-import com.proxerme.app.service.ChatService
-import com.proxerme.app.task.ProxerLoadingTask
+import com.proxerme.app.task.NewChatTask
+import com.proxerme.app.task.NewChatTask.NewChatInput
 import com.proxerme.app.task.framework.Task
 import com.proxerme.app.task.framework.ValidatingTask
 import com.proxerme.app.util.*
 import com.proxerme.library.connection.ProxerException
-import com.proxerme.library.connection.messenger.request.NewConferenceRequest
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import com.vanniktech.emoji.EmojiEditText
 import com.vanniktech.emoji.EmojiPopup
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 
 /**
  * TODO: Describe class
@@ -66,19 +61,11 @@ class NewChatFragment : MainFragment() {
         }
     }
 
-    private val success = { newId: String ->
-        newConferenceId = newId
+    private val success = { conference: LocalConference? ->
+        activity.finish()
 
-        val existingConference = context.chatDatabase.getConference(newId)
-
-        if (existingConference == null) {
-            if (!ChatService.isSynchronizing) {
-                ChatService.synchronize(context)
-            }
-        } else {
-            activity.finish()
-
-            ChatActivity.navigateTo(activity, existingConference)
+        if (conference != null) {
+            ChatActivity.navigateTo(activity, conference)
         }
     }
 
@@ -122,7 +109,6 @@ class NewChatFragment : MainFragment() {
         get() = arguments.getParcelable(PARTICIPANT_ARGUMENT)
 
     private var newParticipant: String? = null
-    private var newConferenceId: String? = null
 
     private val task = constructTask()
 
@@ -186,7 +172,7 @@ class NewChatFragment : MainFragment() {
         }
 
         sendButton.setOnClickListener {
-            if (!isLoading()) {
+            if (!task.isWorking) {
                 task.execute(NewChatInput(isGroup, topicInput.text.toString(),
                         adapter.participants, messageInput.text.toString()))
             }
@@ -214,18 +200,6 @@ class NewChatFragment : MainFragment() {
         updateRefreshing()
     }
 
-    override fun onStart() {
-        super.onStart()
-
-        EventBus.getDefault().register(this)
-    }
-
-    override fun onStop() {
-        EventBus.getDefault().unregister(this)
-
-        super.onStop()
-    }
-
     override fun onDestroy() {
         task.destroy()
 
@@ -241,34 +215,8 @@ class NewChatFragment : MainFragment() {
         super.onDestroyView()
     }
 
-    @Suppress("unused")
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onChatCreatedAndLoaded(@Suppress("UNUSED_PARAMETER") event: ChatSynchronizationEvent) {
-        newConferenceId?.let {
-            val conference = context.chatDatabase.getConference(it)
-
-            activity.finish()
-
-            if (conference != null) {
-                ChatActivity.navigateTo(activity, conference)
-            }
-        }
-    }
-
-    private fun constructTask(): Task<NewChatInput, String> {
-        return ValidatingTask(ProxerLoadingTask<NewChatInput, String>({
-            when (it.isGroup) {
-                true -> {
-                    NewConferenceRequest(it.topic, it.participants
-                            .map { it.username })
-                            .withFirstMessage(messageInput.text.toString().trim())
-                }
-                false -> {
-                    NewConferenceRequest(it.participants.first().username)
-                            .withFirstMessage(messageInput.text.toString().trim())
-                }
-            }
-        }).onStart {
+    private fun constructTask(): Task<NewChatInput, LocalConference?> {
+        return ValidatingTask(NewChatTask({ context }).onStart {
             setRefreshing(true)
         }.onFinish { updateRefreshing() }, {
             Validators.validateLogin(true)
@@ -397,20 +345,12 @@ class NewChatFragment : MainFragment() {
     }
 
     private fun updateRefreshing() {
-        if (isLoading()) {
+        if (task.isWorking) {
             setRefreshing(true)
         } else {
             setRefreshing(false)
         }
     }
-
-    private fun isLoading(): Boolean {
-        return task.isWorking || if (newConferenceId == null) false else
-            ChatService.isSynchronizing
-    }
-
-    class NewChatInput(val isGroup: Boolean, val topic: String, val participants: List<Participant>,
-                       val firstMessage: String)
 
     private class InvalidInputException(message: String) : Exception(message)
     private class TopicEmptyException : Exception()

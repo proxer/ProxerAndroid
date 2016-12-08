@@ -8,7 +8,8 @@ import android.support.annotation.CallSuper
  * @author Ruben Gees
  */
 abstract class BaseTask<I, O>(override var successCallback: ((O) -> Unit)? = null,
-                              override var exceptionCallback: ((Exception) -> Unit)? = null) : Task<I, O> {
+                              override var exceptionCallback: ((Exception) -> Unit)? = null) :
+        Task<I, O> {
 
     @CallSuper
     override fun destroy() {
