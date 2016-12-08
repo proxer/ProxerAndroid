@@ -49,14 +49,12 @@ class RefreshingChatTask(private val id: String, private val context: Context,
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onSynchronization(@Suppress("UNUSED_PARAMETER") event: ChatSynchronizationEvent) {
-        successCallback?.let {
-            val relevantEntries = event.newEntryMap.entries.filter { it.key.id == id }
+        val relevantEntries = event.newEntryMap.entries.filter { it.key.id == id }
 
-            if (relevantEntries.isNotEmpty()) {
-                context.chatDatabase.markAsRead(id)
+        if (relevantEntries.isNotEmpty()) {
+            context.chatDatabase.markAsRead(id)
 
-                it.invoke(relevantEntries.flatMap { it.value }.toTypedArray())
-            }
+            finishSuccessful(relevantEntries.flatMap { it.value }.toTypedArray())
         }
     }
 }

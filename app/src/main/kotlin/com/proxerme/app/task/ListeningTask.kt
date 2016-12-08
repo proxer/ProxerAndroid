@@ -16,13 +16,19 @@ class ListeningTask<I, O>(private val task: Task<I, O>,
     override val isWorking: Boolean
         get() = task.isWorking
 
+    init {
+        task.successCallback = {
+            finishSuccessful(it)
+        }
+
+        task.exceptionCallback = {
+            finishWithException(it)
+        }
+    }
+
     override fun execute(input: I) {
         start {
-            delegatedExecute(task, input, {
-                finishSuccessful(it, successCallback)
-            }, {
-                finishWithException(it, exceptionCallback)
-            })
+            task.execute(input)
         }
     }
 

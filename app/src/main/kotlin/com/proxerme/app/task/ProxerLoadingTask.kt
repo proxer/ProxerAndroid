@@ -25,11 +25,11 @@ class ProxerLoadingTask<I, O>(private var requestConstructor: (I) -> ProxerReque
             call = MainApplication.proxerConnection.execute(requestConstructor.invoke(input), {
                 cancel()
 
-                finishSuccessful(it, successCallback)
+                finishSuccessful(it)
             }, {
                 cancel()
 
-                finishWithException(it, exceptionCallback)
+                finishWithException(it)
             })
         }
     }

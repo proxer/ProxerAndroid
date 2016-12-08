@@ -26,6 +26,20 @@ class CachedTask<I, O>(private val task: Task<I, O>,
     private var cachedResult: O? = null
     private var cachedException: Exception? = null
 
+    init {
+        task.successCallback = {
+            cachedResult = if (shouldCachedResult) it else null
+
+            super.successCallback?.invoke(it)
+        }
+
+        task.exceptionCallback = {
+            cachedException = if (shouldCacheException) it else null
+
+            super.exceptionCallback?.invoke(it)
+        }
+    }
+
     override fun execute(input: I) {
         if (shouldCachedResult) {
             cachedResult?.let {
@@ -51,15 +65,7 @@ class CachedTask<I, O>(private val task: Task<I, O>,
             }
         }
 
-        delegatedExecute(task, input, {
-            cachedResult = if (shouldCachedResult) it else null
-
-            successCallback?.invoke(it)
-        }, {
-            cachedException = if (shouldCacheException) it else null
-
-            exceptionCallback?.invoke(it)
-        })
+        task.execute(input)
     }
 
     override fun cancel() {

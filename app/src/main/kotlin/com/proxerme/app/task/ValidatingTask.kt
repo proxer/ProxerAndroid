@@ -18,6 +18,16 @@ class ValidatingTask<I, O>(private val task: Task<I, O>, private val validateFun
 
     private var onExceptionCallback: (() -> Unit)? = null
 
+    init {
+        task.successCallback = {
+            finishSuccessful(it)
+        }
+
+        task.exceptionCallback = {
+            finishWithException(it)
+        }
+    }
+
     fun onException(callback: () -> Unit): ValidatingTask<I, O> {
         return this.apply { onExceptionCallback = callback }
     }
@@ -32,11 +42,7 @@ class ValidatingTask<I, O>(private val task: Task<I, O>, private val validateFun
             return
         }
 
-        delegatedExecute(task, input, {
-            successCallback?.invoke(it)
-        }, {
-            exceptionCallback?.invoke(it)
-        })
+        task.execute(input)
     }
 
     override fun cancel() {

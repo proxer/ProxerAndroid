@@ -16,12 +16,18 @@ class MappedTask<I, M, O>(private val task: Task<I, M>, private val mapFunction:
     override val isWorking: Boolean
         get() = task.isWorking
 
+    init {
+        task.successCallback = {
+            super.successCallback?.invoke(mapFunction.invoke(it))
+        }
+
+        task.exceptionCallback = {
+            super.exceptionCallback?.invoke(it)
+        }
+    }
+
     override fun execute(input: I) {
-        delegatedExecute(task, input, {
-            successCallback?.invoke(mapFunction.invoke(it))
-        }, {
-            exceptionCallback?.invoke(it)
-        })
+        task.execute(input)
     }
 
     override fun cancel() {

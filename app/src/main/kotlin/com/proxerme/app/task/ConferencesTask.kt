@@ -41,11 +41,11 @@ class ConferencesTask(successCallback: ((List<LocalConference>) -> Unit)? = null
                         val result = input.chatDatabase.getConferences()
 
                         handler.post {
-                            finishSuccessful(result, successCallback)
+                            finishSuccessful(result)
                         }
                     } catch (exception: Exception) {
                         handler.post {
-                            finishWithException(exception, exceptionCallback)
+                            finishWithException(exception)
                         }
                     }
                 }
@@ -72,8 +72,6 @@ class ConferencesTask(successCallback: ((List<LocalConference>) -> Unit)? = null
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onSynchronization(@Suppress("UNUSED_PARAMETER") event: ChatSynchronizationEvent) {
-        successCallback?.let {
-            finishSuccessful(event.newEntryMap.keys.toList(), it)
-        }
+        finishSuccessful(event.newEntryMap.keys.toList())
     }
 }

@@ -24,4 +24,12 @@ abstract class BaseTask<I, O>(override var successCallback: ((O) -> Unit)? = nul
 
         task.execute(input)
     }
+
+    open protected fun finishSuccessful(result: O) {
+        successCallback?.invoke(result)
+    }
+
+    open protected fun finishWithException(result: Exception) {
+        exceptionCallback?.invoke(result)
+    }
 }

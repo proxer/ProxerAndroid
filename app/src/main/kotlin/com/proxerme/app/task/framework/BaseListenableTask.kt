@@ -48,15 +48,15 @@ abstract class BaseListenableTask<I, O>(successCallback: ((O) -> Unit)? = null,
         action.invoke()
     }
 
-    protected fun finishSuccessful(result: O, successCallback: ((O) -> Unit)?) {
-        successCallback?.invoke(result)
+    override fun finishSuccessful(result: O) {
+        super.finishSuccessful(result)
 
         onSuccessCallback?.invoke()
         onFinishCallback?.invoke()
     }
 
-    protected fun finishWithException(result: Exception, exceptionCallback: ((Exception) -> Unit)?) {
-        exceptionCallback?.invoke(result)
+    override fun finishWithException(result: Exception) {
+        super.finishWithException(result)
 
         onExceptionCallback?.invoke()
         onFinishCallback?.invoke()

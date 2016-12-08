@@ -23,11 +23,11 @@ class FutureLoadingTask<I, O>(private val requestConstructor: (I, (O) -> Unit,
         call = requestConstructor.invoke(input, {
             cancel()
 
-            finishSuccessful(it, successCallback)
+            finishSuccessful(it)
         }, {
             cancel()
 
-            finishWithException(it, exceptionCallback)
+            finishWithException(it)
         })
     }
 

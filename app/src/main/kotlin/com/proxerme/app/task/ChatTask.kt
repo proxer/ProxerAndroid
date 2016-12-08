@@ -53,12 +53,12 @@ class ChatTask(private val id: String,
                             }
                         } else {
                             handler.post {
-                                finishSuccessful(result.toTypedArray(), successCallback)
+                                finishSuccessful(result.toTypedArray())
                             }
                         }
                     } catch (exception: Exception) {
                         handler.post {
-                            finishWithException(exception, exceptionCallback)
+                            finishWithException(exception)
                         }
                     }
                 }
@@ -89,7 +89,7 @@ class ChatTask(private val id: String,
     fun onLoadMessages(@Suppress("UNUSED_PARAMETER") event: ChatMessagesEvent) {
         successCallback?.let {
             if (event.messages.isNotEmpty()) {
-                finishSuccessful(event.messages.toTypedArray(), it)
+                finishSuccessful(event.messages.toTypedArray())
             }
         }
     }
@@ -98,7 +98,7 @@ class ChatTask(private val id: String,
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLoadMessagesFailed(@Suppress("UNUSED_PARAMETER") exception: LoadMoreMessagesException) {
         exceptionCallback?.let {
-            finishWithException(exception, it)
+            finishWithException(exception)
         }
     }
 

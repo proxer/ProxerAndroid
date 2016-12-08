@@ -19,38 +19,54 @@ class ZippedTask<I, I2, M, M2, O>(private val firstTask: Task<I, M>,
     override val isWorking: Boolean
         get() = firstTask.isWorking || secondTask.isWorking
 
-    override fun execute(input: ZippedInput<I, I2>) {
-        var firstResult: M? = null
-        var secondResult: M2? = null
+    private var firstResult: M? = null
+    private var secondResult: M2? = null
 
-        delegatedExecute(firstTask, input.first, { result ->
+    init {
+        firstTask.successCallback = { result ->
             secondResult?.let {
-                successCallback?.invoke(zipFunction.invoke(result, it))
+                finishSuccessful(zipFunction.invoke(result, it))
+                cancel()
 
                 return@let
             }
 
             firstResult = result
-        }, {
-            exceptionCallback?.invoke(it)
-        })
+        }
 
-        delegatedExecute(secondTask, input.second, { result ->
+        firstTask.exceptionCallback = {
+            finishWithException(it)
+            cancel()
+        }
+
+        secondTask.successCallback = { result ->
             firstResult?.let {
-                successCallback?.invoke(zipFunction.invoke(it, result))
+                finishSuccessful(zipFunction.invoke(it, result))
+                cancel()
 
                 return@let
             }
 
             secondResult = result
-        }, {
-            exceptionCallback?.invoke(it)
-        })
+        }
+
+        secondTask.exceptionCallback = {
+            finishWithException(it)
+            cancel()
+        }
+    }
+
+    override fun execute(input: Pair<I, I2>) {
+        firstTask.execute(input.first)
+        secondTask.execute(input.second)
     }
 
     override fun cancel() {
         firstTask.cancel()
         secondTask.cancel()
+
+        firstResult = null
+        secondResult = null
     }
 
     override fun reset() {
