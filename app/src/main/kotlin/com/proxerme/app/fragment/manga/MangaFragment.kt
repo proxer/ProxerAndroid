@@ -19,9 +19,9 @@ import com.proxerme.app.fragment.framework.SingleLoadingFragment
 import com.proxerme.app.fragment.manga.MangaFragment.MangaInput
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.task.ProxerLoadingTask
-import com.proxerme.app.task.ValidatingTask
 import com.proxerme.app.task.framework.ListenableTask
 import com.proxerme.app.task.framework.Task
+import com.proxerme.app.task.framework.ValidatingTask
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.Validators
 import com.proxerme.app.util.bindView

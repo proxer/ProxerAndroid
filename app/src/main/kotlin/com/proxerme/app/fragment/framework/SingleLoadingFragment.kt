@@ -14,11 +14,7 @@ import com.proxerme.app.dialog.HentaiConfirmationDialog
 import com.proxerme.app.dialog.LoginDialog
 import com.proxerme.app.event.HentaiConfirmationEvent
 import com.proxerme.app.manager.UserManager
-import com.proxerme.app.task.CachedTask
-import com.proxerme.app.task.ListeningTask
-import com.proxerme.app.task.ValidatingTask
-import com.proxerme.app.task.framework.ListenableTask
-import com.proxerme.app.task.framework.Task
+import com.proxerme.app.task.framework.*
 import com.proxerme.app.util.*
 import com.proxerme.library.connection.ProxerException
 import org.greenrobot.eventbus.EventBus

@@ -1,35 +1,30 @@
-package com.proxerme.app.task
-
-import com.proxerme.app.task.framework.BaseListenableTask
-import com.proxerme.app.task.framework.Task
+package com.proxerme.app.task.framework
 
 /**
  * TODO: Describe class
  *
  * @author Ruben Gees
  */
-class ListeningTask<I, O>(private val task: Task<I, O>,
+class MappedTask<I, M, O>(private val task: Task<I, M>, private val mapFunction: (M) -> O,
                           successCallback: ((O) -> Unit)? = null,
                           exceptionCallback: ((Exception) -> Unit)? = null) :
-        BaseListenableTask<I, O>(successCallback, exceptionCallback) {
+        BaseTask<I, O>(successCallback, exceptionCallback) {
 
     override val isWorking: Boolean
         get() = task.isWorking
 
     init {
         task.successCallback = {
-            finishSuccessful(it)
+            super.successCallback?.invoke(mapFunction.invoke(it))
         }
 
         task.exceptionCallback = {
-            finishWithException(it)
+            super.exceptionCallback?.invoke(it)
         }
     }
 
     override fun execute(input: I) {
-        start {
-            task.execute(input)
-        }
+        task.execute(input)
     }
 
     override fun cancel() {

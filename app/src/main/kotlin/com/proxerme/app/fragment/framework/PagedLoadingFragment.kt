@@ -18,10 +18,10 @@ import com.proxerme.app.fragment.framework.PagedLoadingFragment.PagedInput
 import com.proxerme.app.helper.NotificationHelper
 import com.proxerme.app.manager.UserManager
 import com.proxerme.app.service.ChatService
-import com.proxerme.app.task.CachedTask
-import com.proxerme.app.task.ValidatingTask
+import com.proxerme.app.task.framework.CachedTask
 import com.proxerme.app.task.framework.ListenableTask
 import com.proxerme.app.task.framework.Task
+import com.proxerme.app.task.framework.ValidatingTask
 import com.proxerme.app.util.*
 import com.proxerme.app.util.listener.EndlessRecyclerOnScrollListener
 import com.proxerme.library.connection.ProxerException

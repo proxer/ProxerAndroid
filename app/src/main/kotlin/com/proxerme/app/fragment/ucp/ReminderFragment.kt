@@ -13,9 +13,9 @@ import com.proxerme.app.fragment.framework.PagedLoadingFragment
 import com.proxerme.app.fragment.ucp.ReminderFragment.ReminderInput
 import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.task.ProxerLoadingTask
-import com.proxerme.app.task.ValidatingTask
 import com.proxerme.app.task.framework.ListenableTask
 import com.proxerme.app.task.framework.Task
+import com.proxerme.app.task.framework.ValidatingTask
 import com.proxerme.app.util.ErrorHandler
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.Validators

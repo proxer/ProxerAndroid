@@ -11,11 +11,10 @@ import com.proxerme.app.fragment.framework.SingleLoadingFragment
 import com.proxerme.app.fragment.user.ToptenFragment.ToptenInput
 import com.proxerme.app.fragment.user.ToptenFragment.ZippedToptenResult
 import com.proxerme.app.manager.SectionManager.Section
-import com.proxerme.app.task.ListeningTask
 import com.proxerme.app.task.ProxerLoadingTask
-import com.proxerme.app.task.ZippedTask
-import com.proxerme.app.task.ZippedTask.ZippedInput
 import com.proxerme.app.task.framework.ListenableTask
+import com.proxerme.app.task.framework.ListeningTask
+import com.proxerme.app.task.framework.ZippedTask
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.user.entitiy.ToptenEntry
@@ -28,7 +27,7 @@ import com.proxerme.library.parameters.CategoryParameter.MANGA
  *
  * @author Ruben Gees
  */
-class ToptenFragment : SingleLoadingFragment<ZippedInput<ToptenInput, ToptenInput>,
+class ToptenFragment : SingleLoadingFragment<Pair<ToptenInput, ToptenInput>,
         ZippedToptenResult>() {
 
     companion object {
@@ -132,17 +131,18 @@ class ToptenFragment : SingleLoadingFragment<ZippedInput<ToptenInput, ToptenInpu
         }
     }
 
-    override fun constructTask(): ListenableTask<ZippedInput<ToptenInput, ToptenInput>,
+    override fun constructTask(): ListenableTask<Pair<ToptenInput, ToptenInput>,
             ZippedToptenResult> {
-        return ListeningTask(ZippedTask<ToptenInput, ToptenInput, Array<ToptenEntry>, Array<ToptenEntry>, ZippedToptenResult>(
+        return ListeningTask(ZippedTask<ToptenInput, ToptenInput, Array<ToptenEntry>,
+                Array<ToptenEntry>, ZippedToptenResult>(
                 ProxerLoadingTask({ ToptenRequest(userId, username, ANIME) }),
                 ProxerLoadingTask({ ToptenRequest(userId, username, MANGA) }),
                 zipFunction = ::ZippedToptenResult
         ))
     }
 
-    override fun constructInput(): ZippedInput<ToptenInput, ToptenInput> {
-        return ZippedInput(ToptenInput(userId, username), ToptenInput(userId, username))
+    override fun constructInput(): Pair<ToptenInput, ToptenInput> {
+        return Pair(ToptenInput(userId, username), ToptenInput(userId, username))
     }
 
     class ToptenInput(val userId: String?, val username: String?)

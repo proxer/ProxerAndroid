@@ -1,8 +1,6 @@
-package com.proxerme.app.task
+package com.proxerme.app.task.framework
 
-import com.proxerme.app.task.CachedTask.CacheStrategy
-import com.proxerme.app.task.framework.BaseTask
-import com.proxerme.app.task.framework.Task
+import com.proxerme.app.task.framework.CachedTask.CacheStrategy
 
 /**
  * TODO: Describe class

@@ -23,10 +23,10 @@ import com.proxerme.app.helper.StorageHelper
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.manager.UserManager
 import com.proxerme.app.service.ChatService
-import com.proxerme.app.task.CachedTask
 import com.proxerme.app.task.ChatTask
 import com.proxerme.app.task.ChatTask.ChatInput
 import com.proxerme.app.task.RefreshingChatTask
+import com.proxerme.app.task.framework.CachedTask
 import com.proxerme.app.task.framework.ListenableTask
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.bindView

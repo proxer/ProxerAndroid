@@ -1,8 +1,4 @@
-package com.proxerme.app.task
-
-import com.proxerme.app.task.ZippedTask.ZippedInput
-import com.proxerme.app.task.framework.BaseTask
-import com.proxerme.app.task.framework.Task
+package com.proxerme.app.task.framework
 
 /**
  * TODO: Describe class
@@ -14,7 +10,7 @@ class ZippedTask<I, I2, M, M2, O>(private val firstTask: Task<I, M>,
                                   private val zipFunction: (M, M2) -> O,
                                   successCallback: ((O) -> Unit)? = null,
                                   exceptionCallback: ((Exception) -> Unit)? = null) :
-        BaseTask<ZippedInput<I, I2>, O>(successCallback, exceptionCallback) {
+        BaseTask<Pair<I, I2>, O>(successCallback, exceptionCallback) {
 
     override val isWorking: Boolean
         get() = firstTask.isWorking || secondTask.isWorking
@@ -79,6 +75,4 @@ class ZippedTask<I, I2, M, M2, O>(private val firstTask: Task<I, M>,
         secondTask.destroy()
         super.destroy()
     }
-
-    class ZippedInput<out I, out I2>(val first: I, val second: I2)
 }

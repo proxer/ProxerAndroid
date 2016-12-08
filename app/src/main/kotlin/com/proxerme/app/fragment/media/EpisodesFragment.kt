@@ -13,10 +13,10 @@ import com.proxerme.app.adapter.media.EpisodeAdapter
 import com.proxerme.app.entitiy.RichEpisode
 import com.proxerme.app.fragment.framework.SingleLoadingFragment
 import com.proxerme.app.manager.SectionManager.Section
-import com.proxerme.app.task.ListeningTask
-import com.proxerme.app.task.MappedTask
 import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.framework.ListenableTask
+import com.proxerme.app.task.framework.ListeningTask
+import com.proxerme.app.task.framework.MappedTask
 import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.info.entity.ListInfo
 import com.proxerme.library.connection.info.request.ListInfoRequest

@@ -1,7 +1,4 @@
-package com.proxerme.app.task
-
-import com.proxerme.app.task.framework.BaseTask
-import com.proxerme.app.task.framework.Task
+package com.proxerme.app.task.framework
 
 /**
  * TODO: Describe class
