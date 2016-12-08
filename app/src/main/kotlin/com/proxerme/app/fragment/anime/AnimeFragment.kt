@@ -1,5 +1,7 @@
 package com.proxerme.app.fragment.anime
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
@@ -13,25 +15,25 @@ import com.proxerme.app.activity.AnimeActivity
 import com.proxerme.app.activity.UserActivity
 import com.proxerme.app.adapter.anime.StreamAdapter
 import com.proxerme.app.dialog.LoginDialog
-import com.proxerme.app.dialog.StreamResolverDialog
 import com.proxerme.app.fragment.anime.AnimeFragment.AnimeInput
 import com.proxerme.app.fragment.framework.SingleLoadingFragment
 import com.proxerme.app.manager.SectionManager
-import com.proxerme.app.module.StreamResolvers
 import com.proxerme.app.task.ProxerLoadingTask
-import com.proxerme.app.task.framework.ListenableTask
-import com.proxerme.app.task.framework.Task
-import com.proxerme.app.task.framework.ValidatingTask
+import com.proxerme.app.task.StreamResolutionTask
+import com.proxerme.app.task.StreamResolutionTask.StreamResolutionResult
+import com.proxerme.app.task.framework.*
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.Validators
 import com.proxerme.app.util.bindView
 import com.proxerme.app.view.MediaControlView
 import com.proxerme.library.connection.anime.entity.Stream
+import com.proxerme.library.connection.anime.request.LinkRequest
 import com.proxerme.library.connection.anime.request.StreamsRequest
 import com.proxerme.library.connection.ucp.request.SetReminderRequest
 import com.proxerme.library.info.ProxerUrlHolder
 import com.proxerme.library.parameters.CategoryParameter
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
+import org.jetbrains.anko.toast
 
 /**
  * TODO: Describe class
@@ -76,7 +78,20 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
         Unit
     }
 
+    private val streamResolverSuccess = { result: StreamResolutionResult ->
+        context.startActivity(Intent(Intent.ACTION_VIEW).apply {
+            setDataAndType(Uri.parse(result.url), result.mimeType)
+        })
+    }
+
+    private val streamResolverException = { exception: Exception ->
+        context.toast(context.getString(R.string.error_unknown))
+    }
+
     override val section = SectionManager.Section.ANIME
+
+    override val isWorking: Boolean
+        get() = super.isWorking && streamResolverTask.isWorking
 
     private val id: String
         get() = arguments.getString(ARGUMENT_ID)
@@ -92,6 +107,8 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
 
     private var reminderEpisode: Int? = null
     private val reminderTask = constructReminderTask()
+
+    private val streamResolverTask = constructStreamResolverTask()
 
     private lateinit var header: MediaControlView
 
@@ -117,12 +134,8 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
             }
 
             override fun onWatchClick(item: Stream) {
-                if (StreamResolvers.hasResolverFor(item.hosterName)) {
-                    StreamResolverDialog.show(activity as AppCompatActivity, item.id)
-                } else {
-                    Snackbar.make(root, getString(R.string.error_hoster_not_supported),
-                            Snackbar.LENGTH_LONG).show()
-                }
+                streamResolverTask.cancel()
+                streamResolverTask.execute(item.id)
             }
         }
     }
@@ -191,6 +204,7 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
 
     override fun onDestroy() {
         reminderTask.destroy()
+        streamResolverTask.destroy()
         streamAdapter.removeCallback()
 
         super.onDestroy()
@@ -204,6 +218,13 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
         return ValidatingTask(ProxerLoadingTask({
             SetReminderRequest(it.id, it.episode, it.language, CategoryParameter.ANIME)
         }), { Validators.validateLogin(true) }, reminderSuccess, reminderException)
+    }
+
+    private fun constructStreamResolverTask(): Task<String, StreamResolutionResult> {
+        return ListeningTask(StreamedTask(ProxerLoadingTask<String, String>(::LinkRequest),
+                StreamResolutionTask()), streamResolverSuccess, streamResolverException).onStart {
+            setRefreshing(true)
+        }
     }
 
     override fun constructInput(): AnimeInput {

@@ -1,6 +1,7 @@
 package com.proxerme.app.module.resolver
 
 import com.proxerme.app.application.MainApplication
+import com.proxerme.app.task.StreamResolutionTask.StreamResolutionResult
 import okhttp3.Request
 import java.io.IOException
 
@@ -15,7 +16,7 @@ class DailyMotionStreamResolver : StreamResolver() {
 
     private val regex = Regex("\"qualities\":(\\{.+\\}\\]\\}),")
 
-    override fun resolve(url: String): ResolverResult {
+    override fun resolve(url: String): StreamResolutionResult {
         val fixedUrl = if (url.startsWith("//")) "http:" + url else url
         val response = validateAndGetResult(MainApplication.proxerConnection.httpClient
                 .newCall(Request.Builder()
@@ -47,7 +48,7 @@ class DailyMotionStreamResolver : StreamResolver() {
 
             val result = mp4Links?.firstOrNull()?.second ?: throw IOException()
 
-            return ResolverResult(result, "video/mp4")
+            return StreamResolutionResult(result, "video/mp4")
         } else {
             throw IOException()
         }

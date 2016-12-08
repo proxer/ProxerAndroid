@@ -7,7 +7,7 @@ import com.proxerme.app.module.resolver.*
  *
  * @author Ruben Gees
  */
-object StreamResolvers {
+object StreamResolverFactory {
 
     private val resolvers = arrayOf(Mp4UploadResolver(), StreamcloudResolver(),
             DailyMotionStreamResolver(), NovamovStreamResolver(), ProxerProductStreamResolver())

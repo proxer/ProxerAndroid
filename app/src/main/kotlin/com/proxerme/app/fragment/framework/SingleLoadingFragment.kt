@@ -63,6 +63,9 @@ abstract class SingleLoadingFragment<I, T> : MainFragment() {
     open protected val isHentaiConfirmationRequired = false
     open protected val cacheStrategy = CachedTask.CacheStrategy.FULL
 
+    open protected val isWorking: Boolean
+        get() = task.isWorking
+
     protected lateinit var task: Task<I, T>
 
     open protected val progress: SwipeRefreshLayout by bindView(R.id.progress)
@@ -93,7 +96,7 @@ abstract class SingleLoadingFragment<I, T> : MainFragment() {
             contentContainer.visibility = View.GONE
             errorContainer.visibility = View.VISIBLE
         }.onFinish {
-            setRefreshing(false)
+            updateRefreshing()
         }
     }
 
@@ -146,6 +149,7 @@ abstract class SingleLoadingFragment<I, T> : MainFragment() {
             null -> getString(R.string.error_retry)
             else -> buttonMessage
         }
+
         errorButton.setOnClickListener(when (onButtonClickListener) {
             null -> View.OnClickListener { reset() }
             else -> onButtonClickListener
@@ -177,6 +181,10 @@ abstract class SingleLoadingFragment<I, T> : MainFragment() {
         if (isHentaiConfirmationRequired) {
             reset()
         }
+    }
+
+    protected fun updateRefreshing() {
+        setRefreshing(if (isWorking) true else false)
     }
 
     protected fun setRefreshing(enable: Boolean) {

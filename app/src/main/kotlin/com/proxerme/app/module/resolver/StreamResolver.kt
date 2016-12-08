@@ -1,5 +1,6 @@
 package com.proxerme.app.module.resolver
 
+import com.proxerme.app.task.StreamResolutionTask.StreamResolutionResult
 import okhttp3.Response
 import java.io.IOException
 
@@ -12,7 +13,7 @@ abstract class StreamResolver {
 
     abstract val name: String
 
-    abstract fun resolve(url: String): ResolverResult
+    abstract fun resolve(url: String): StreamResolutionResult
 
     open fun appliesTo(url: String): Boolean {
         return url.contains(name, ignoreCase = true)

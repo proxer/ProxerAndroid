@@ -1,6 +1,7 @@
 package com.proxerme.app.module.resolver
 
 import com.proxerme.app.application.MainApplication
+import com.proxerme.app.task.StreamResolutionTask.StreamResolutionResult
 import okhttp3.Request
 import java.io.IOException
 
@@ -16,7 +17,7 @@ class Mp4UploadResolver : StreamResolver() {
     private val regex = Regex("\"file\": \"(.+)\"")
 
     @Throws(IOException::class)
-    override fun resolve(url: String): ResolverResult {
+    override fun resolve(url: String): StreamResolutionResult {
         val response = MainApplication.proxerConnection.httpClient.newCall(Request.Builder()
                 .get()
                 .url(url)
@@ -25,6 +26,6 @@ class Mp4UploadResolver : StreamResolver() {
         val result = regex.find(validateAndGetResult(response))?.groupValues?.get(1)
                 ?: throw IOException()
 
-        return ResolverResult(result, "video/mp4")
+        return StreamResolutionResult(result, "video/mp4")
     }
 }
