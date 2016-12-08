@@ -227,7 +227,7 @@ class ChatFragment : PagedLoadingFragment<ChatInput, LocalMessage>() {
     }
 
     override fun constructRefreshingTask(): ListenableTask<ChatInput, Array<LocalMessage>> {
-        return RefreshingChatTask(conference.id, context)
+        return RefreshingChatTask(conference.id, { context })
     }
 
     override fun constructInput(page: Int): ChatInput {

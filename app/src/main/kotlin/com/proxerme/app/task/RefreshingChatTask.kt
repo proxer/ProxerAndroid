@@ -15,7 +15,8 @@ import org.greenrobot.eventbus.ThreadMode
  *
  * @author Ruben Gees
  */
-class RefreshingChatTask(private val id: String, private val context: Context,
+class RefreshingChatTask(private val id: String,
+                         private var contextResolver: (() -> Context)? = null,
                          successCallback: ((Array<LocalMessage>) -> Unit)? = null,
                          exceptionCallback: ((Exception) -> Unit)? = null) :
         BaseListenableTask<ChatInput, Array<LocalMessage>>(successCallback, exceptionCallback) {
@@ -43,6 +44,8 @@ class RefreshingChatTask(private val id: String, private val context: Context,
         EventBus.getDefault().unregister(this)
         reset()
 
+        contextResolver = null
+
         super.destroy()
     }
 
@@ -52,7 +55,7 @@ class RefreshingChatTask(private val id: String, private val context: Context,
         val relevantEntries = event.newEntryMap.entries.filter { it.key.id == id }
 
         if (relevantEntries.isNotEmpty()) {
-            context.chatDatabase.markAsRead(id)
+            contextResolver?.invoke()?.chatDatabase?.markAsRead(id)
 
             finishSuccessful(relevantEntries.flatMap { it.value }.toTypedArray())
         }
