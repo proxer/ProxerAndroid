@@ -346,6 +346,7 @@ class MediaInfoFragment : SingleLoadingFragment<String, Entry>() {
             SeasonParameter.AUTUMN -> getString(R.string.fragment_media_season_autumn_start,
                     season.year)
             SeasonParameter.UNSPECIFIED -> season.year.toString()
+            0 -> season.year.toString()
             else -> throw IllegalArgumentException("Unknown season: ${season.season}")
         }
     }
@@ -356,6 +357,8 @@ class MediaInfoFragment : SingleLoadingFragment<String, Entry>() {
             SeasonParameter.SPRING -> R.string.fragment_media_season_spring_end
             SeasonParameter.SUMMER -> R.string.fragment_media_season_summer_end
             SeasonParameter.AUTUMN -> R.string.fragment_media_season_autumn_end
+            SeasonParameter.UNSPECIFIED -> season.year.toString()
+            0 -> season.year.toString()
             else -> throw IllegalArgumentException("Unknown season: ${season.season}")
         }, season.year)
     }
