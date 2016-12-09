@@ -176,7 +176,7 @@ object Utils {
             is StaggeredGridLayoutManager -> {
                 layoutManager.findFirstVisibleItemPositions(null).contains(0)
             }
-            else -> throw IllegalArgumentException("Unknown LayoutManager: ${layoutManager}")
+            else -> throw IllegalArgumentException("Unknown LayoutManager: $layoutManager")
         }
 
         adapter.insert(items)

@@ -89,7 +89,7 @@ class ConferenceInfoFragment : SingleLoadingFragment<String, ConferenceInfoConta
     }
 
     override fun constructTask(): ListenableTask<String, ConferenceInfoContainer> {
-        return ProxerLoadingTask({ ConferenceInfoRequest(it) })
+        return ProxerLoadingTask(::ConferenceInfoRequest)
     }
 
     override fun constructInput(): String {

@@ -105,7 +105,7 @@ abstract class PagingAdapter<T>() : RecyclerView.Adapter<PagingAdapter.PagingVie
         result.dispatchUpdatesTo(this)
     }
 
-    abstract class PagingViewHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    abstract class PagingViewHolder<in T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         open fun bind(item: T) {
 

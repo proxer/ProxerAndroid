@@ -5,7 +5,7 @@ package com.proxerme.app.task.framework
  *
  * @author Ruben Gees
  */
-interface Task<I, O> {
+interface Task<in I, O> {
 
     val isWorking: Boolean
     var successCallback: ((O) -> Unit)?
