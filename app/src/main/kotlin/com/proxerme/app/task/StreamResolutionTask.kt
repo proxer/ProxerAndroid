@@ -2,7 +2,7 @@ package com.proxerme.app.task
 
 import android.os.Handler
 import android.os.Looper
-import com.proxerme.app.module.StreamResolverFactory
+import com.proxerme.app.stream.StreamResolverFactory
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionResult
 import com.proxerme.app.task.framework.BaseListenableTask
 import org.jetbrains.anko.doAsync

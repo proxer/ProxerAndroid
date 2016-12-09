@@ -1,6 +1,6 @@
-package com.proxerme.app.module
+package com.proxerme.app.stream
 
-import com.proxerme.app.module.resolver.*
+import com.proxerme.app.stream.resolver.*
 
 /**
  * TODO: Describe class

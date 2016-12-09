@@ -1,4 +1,4 @@
-package com.proxerme.app.module.resolver
+package com.proxerme.app.stream.resolver
 
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionResult
 import okhttp3.Response
