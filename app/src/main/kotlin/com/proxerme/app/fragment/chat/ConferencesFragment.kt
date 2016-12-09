@@ -37,6 +37,7 @@ class ConferencesFragment : SingleLoadingFragment<Context, List<LocalConference>
     override val isLoginRequired = true
     override val isSwipeToRefreshEnabled = false
     override val cacheStrategy = CachedTask.CacheStrategy.EXCEPTION
+    override val refreshLifecycle = RefreshLifecycle.RESUME
 
     private lateinit var adapter: ConferenceAdapter
 

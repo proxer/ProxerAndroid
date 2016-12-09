@@ -63,6 +63,7 @@ abstract class SingleLoadingFragment<I, T> : MainFragment() {
     open protected val isHentaiConfirmationRequired = false
     open protected val cacheStrategy = CachedTask.CacheStrategy.FULL
 
+    open protected val refreshLifecycle = RefreshLifecycle.START
     open protected val isWorking: Boolean
         get() = task.isWorking
 
@@ -79,9 +80,7 @@ abstract class SingleLoadingFragment<I, T> : MainFragment() {
 
         retainInstance = true
 
-        if (!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().register(this)
-        }
+        EventBus.getDefault().register(this)
 
         task = ListeningTask(ValidatingTask(CachedTask(constructTask(), cacheStrategy), {
             Validators.validateLogin(isLoginRequired)
@@ -98,6 +97,10 @@ abstract class SingleLoadingFragment<I, T> : MainFragment() {
         }.onFinish {
             updateRefreshing()
         }
+
+        if (refreshLifecycle == RefreshLifecycle.CREATE) {
+            task.execute(constructInput())
+        }
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -108,12 +111,24 @@ abstract class SingleLoadingFragment<I, T> : MainFragment() {
 
         contentContainer.visibility = View.GONE
         errorContainer.visibility = View.GONE
+
+        updateRefreshing()
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        if (refreshLifecycle == RefreshLifecycle.START) {
+            task.execute(constructInput())
+        }
     }
 
     override fun onResume() {
         super.onResume()
 
-        task.execute(constructInput())
+        if (refreshLifecycle == RefreshLifecycle.RESUME) {
+            task.execute(constructInput())
+        }
     }
 
     override fun onDestroyView() {

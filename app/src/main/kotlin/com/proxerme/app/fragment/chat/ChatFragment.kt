@@ -62,6 +62,7 @@ class ChatFragment : PagedLoadingFragment<ChatInput, LocalMessage>() {
     override val isLoginRequired = true
     override val isSwipeToRefreshEnabled = false
     override val cacheStrategy = CachedTask.CacheStrategy.EXCEPTION
+    override val refreshLifecycle = RefreshLifecycle.RESUME
     override var hasReachedEnd: Boolean
         get() = StorageHelper.hasConferenceReachedEnd(conference.id)
         set(value) {

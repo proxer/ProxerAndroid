@@ -83,6 +83,7 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
     open protected val isHentaiConfirmationRequired = false
     open protected val cacheStrategy = CachedTask.CacheStrategy.FULL
 
+    open protected val refreshLifecycle = RefreshLifecycle.START
     open protected val isWorking: Boolean
         get() = task.isWorking || refreshTask.isWorking
 
@@ -106,9 +107,7 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
 
         retainInstance = true
 
-        if (!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().register(this)
-        }
+        EventBus.getDefault().register(this)
 
         task = ValidatingTask(CachedTask(internalConstructTask(), cacheStrategy), {
             Validators.validateLogin(isLoginRequired)
@@ -119,6 +118,10 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
             Validators.validateLogin(isLoginRequired)
             Validators.validateHentaiConfirmation(context, isHentaiConfirmationRequired)
         }, refreshSuccessCallback, refreshExceptionCallback)
+
+        if (refreshLifecycle == RefreshLifecycle.CREATE) {
+            task.execute(constructInput(0))
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -142,12 +145,17 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
         })
 
         setupList()
+        updateRefreshing()
     }
 
     override fun onStart() {
         super.onStart()
 
         ChatService.synchronize(context)
+
+        if (refreshLifecycle == RefreshLifecycle.START) {
+            task.execute(constructInput(0))
+        }
     }
 
     override fun onResume() {
@@ -155,7 +163,9 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
 
         NotificationHelper.cancelNotification(context, NotificationHelper.CHAT_NOTIFICATION)
 
-        task.execute(constructInput(0))
+        if (refreshLifecycle == RefreshLifecycle.RESUME) {
+            task.execute(constructInput(0))
+        }
     }
 
     override fun onDestroyView() {

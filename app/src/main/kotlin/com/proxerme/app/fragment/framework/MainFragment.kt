@@ -33,4 +33,6 @@ abstract class MainFragment : Fragment() {
 
         MainApplication.refWatcher.watch(this)
     }
+
+    enum class RefreshLifecycle {CREATE, START, RESUME }
 }

@@ -53,9 +53,7 @@ class LoginDialog : DialogFragment() {
 
         retainInstance = true
 
-        if (!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().register(this)
-        }
+        EventBus.getDefault().register(this)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
