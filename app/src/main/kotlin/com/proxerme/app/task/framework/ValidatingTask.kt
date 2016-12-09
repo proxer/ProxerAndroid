@@ -5,7 +5,7 @@ package com.proxerme.app.task.framework
  *
  * @author Ruben Gees
  */
-class ValidatingTask<I, O>(private val task: Task<I, O>, private val validateFunction: () -> Unit,
+class ValidatingTask<I, O>(private val task: Task<I, O>, private val validateFunction: (I) -> Unit,
                            successCallback: ((O) -> Unit)? = null,
                            exceptionCallback: ((Exception) -> Unit)? = null) :
         BaseTask<I, O>(successCallback, exceptionCallback) {
@@ -31,7 +31,7 @@ class ValidatingTask<I, O>(private val task: Task<I, O>, private val validateFun
 
     override fun execute(input: I) {
         try {
-            validateFunction.invoke()
+            validateFunction.invoke(input)
         } catch (exception: Exception) {
             exceptionCallback?.invoke(exception)
             onExceptionCallback?.invoke()

@@ -18,6 +18,7 @@ import com.proxerme.app.dialog.LoginDialog
 import com.proxerme.app.fragment.anime.AnimeFragment.AnimeInput
 import com.proxerme.app.fragment.framework.SingleLoadingFragment
 import com.proxerme.app.manager.SectionManager
+import com.proxerme.app.stream.StreamResolverFactory
 import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.StreamResolutionTask
 import com.proxerme.app.task.StreamResolutionTask.*
@@ -232,8 +233,10 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
     }
 
     private fun constructStreamResolverTask(): Task<String, StreamResolutionResult> {
-        return ListeningTask(StreamedTask(ProxerLoadingTask<String, String>(::LinkRequest),
-                StreamResolutionTask()), streamResolverSuccess, streamResolverException).onStart {
+        return ListeningTask(ValidatingTask(StreamedTask(ProxerLoadingTask(::LinkRequest),
+                StreamResolutionTask()), {
+            StreamResolverFactory.hasResolverFor(it)
+        }), streamResolverSuccess, streamResolverException).onStart {
             setRefreshing(true)
         }.onFinish {
             updateRefreshing()
