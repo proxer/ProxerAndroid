@@ -352,14 +352,18 @@ class MediaInfoFragment : SingleLoadingFragment<String, Entry>() {
     }
 
     private fun getSeasonEndString(season: EntrySeason): String {
-        return getString(when (season.season) {
-            SeasonParameter.WINTER -> R.string.fragment_media_season_winter_end
-            SeasonParameter.SPRING -> R.string.fragment_media_season_spring_end
-            SeasonParameter.SUMMER -> R.string.fragment_media_season_summer_end
-            SeasonParameter.AUTUMN -> R.string.fragment_media_season_autumn_end
+        return when (season.season) {
+            SeasonParameter.WINTER -> getString(R.string.fragment_media_season_winter_end,
+                    season.year)
+            SeasonParameter.SPRING -> getString(R.string.fragment_media_season_spring_end,
+                    season.year)
+            SeasonParameter.SUMMER -> getString(R.string.fragment_media_season_summer_end,
+                    season.year)
+            SeasonParameter.AUTUMN -> getString(R.string.fragment_media_season_autumn_end,
+                    season.year)
             SeasonParameter.UNSPECIFIED -> season.year.toString()
             0 -> season.year.toString()
             else -> throw IllegalArgumentException("Unknown season: ${season.season}")
-        }, season.year)
+        }
     }
 }

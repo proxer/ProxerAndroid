@@ -27,7 +27,7 @@ class DailyMotionStreamResolver : StreamResolver() {
         val qualitiesJson = regex.find(response)?.value
 
         if (qualitiesJson != null) {
-            val qualityMap = MainApplication.proxerConnection.moshi.adapter(com.proxerme.app.stream.DailyMotionStreamResolver.QualityMap::class.java)
+            val qualityMap = MainApplication.proxerConnection.moshi.adapter(QualityMap::class.java)
                     .fromJson("{${qualitiesJson.trimEnd(',')}}")
 
             val mp4Links = qualityMap.qualities?.mapNotNull { qualityEntry ->
@@ -44,9 +44,9 @@ class DailyMotionStreamResolver : StreamResolver() {
                         null
                     }
                 }
-            }?.flatten().sortedByDescending { it.first }
+            }?.flatten()?.sortedByDescending { it.first }
 
-            val result = mp4Links?.firstOrNull().second
+            val result = mp4Links?.firstOrNull()?.second ?: throw IOException()
 
             return StreamResolutionResult(result, "video/mp4")
         } else {
