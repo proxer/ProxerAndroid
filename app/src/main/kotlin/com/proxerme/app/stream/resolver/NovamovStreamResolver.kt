@@ -1,6 +1,7 @@
 package com.proxerme.app.stream.resolver
 
 import com.proxerme.app.application.MainApplication
+import com.proxerme.app.task.StreamResolutionTask.StreamResolutionException
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionResult
 import okhttp3.Request
 import java.io.IOException
@@ -37,7 +38,7 @@ class NovamovStreamResolver : StreamResolver() {
                 .build()).execute()
 
         val result = urlRegex.find(validateAndGetResult(apiResponse))?.groupValues?.get(1)
-                ?: throw IOException()
+                ?: throw StreamResolutionException()
 
         return StreamResolutionResult(result, "video/x-flv")
     }

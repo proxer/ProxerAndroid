@@ -1,9 +1,9 @@
 package com.proxerme.app.stream.resolver
 
 import com.proxerme.app.application.MainApplication
+import com.proxerme.app.task.StreamResolutionTask.StreamResolutionException
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionResult
 import okhttp3.Request
-import java.io.IOException
 
 /**
  * TODO: Describe class
@@ -46,11 +46,11 @@ class DailyMotionStreamResolver : StreamResolver() {
                 }
             }?.flatten()?.sortedByDescending { it.first }
 
-            val result = mp4Links?.firstOrNull()?.second ?: throw IOException()
+            val result = mp4Links?.firstOrNull()?.second ?: throw StreamResolutionException()
 
             return StreamResolutionResult(result, "video/mp4")
         } else {
-            throw IOException()
+            throw StreamResolutionException()
         }
     }
 

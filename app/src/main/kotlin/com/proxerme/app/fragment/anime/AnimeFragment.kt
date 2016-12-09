@@ -20,7 +20,7 @@ import com.proxerme.app.fragment.framework.SingleLoadingFragment
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.StreamResolutionTask
-import com.proxerme.app.task.StreamResolutionTask.StreamResolutionResult
+import com.proxerme.app.task.StreamResolutionTask.*
 import com.proxerme.app.task.framework.*
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.Validators
@@ -33,7 +33,7 @@ import com.proxerme.library.connection.ucp.request.SetReminderRequest
 import com.proxerme.library.info.ProxerUrlHolder
 import com.proxerme.library.parameters.CategoryParameter
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
-import org.jetbrains.anko.toast
+import java.io.IOException
 
 /**
  * TODO: Describe class
@@ -85,7 +85,18 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
     }
 
     private val streamResolverException = { exception: Exception ->
-        context.toast(context.getString(R.string.error_unknown))
+        when (exception) {
+            is NoResolverException -> {
+                Snackbar.make(root, R.string.error_unsupported_hoster, Snackbar.LENGTH_LONG).show()
+            }
+            is StreamResolutionException -> {
+                Snackbar.make(root, R.string.error_stream_resolution, Snackbar.LENGTH_LONG).show()
+            }
+            is IOException -> {
+                Snackbar.make(root, R.string.error_io, Snackbar.LENGTH_LONG).show()
+            }
+            else -> Snackbar.make(root, R.string.error_unknown, Snackbar.LENGTH_LONG).show()
+        }
     }
 
     override val section = SectionManager.Section.ANIME
@@ -224,6 +235,8 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
         return ListeningTask(StreamedTask(ProxerLoadingTask<String, String>(::LinkRequest),
                 StreamResolutionTask()), streamResolverSuccess, streamResolverException).onStart {
             setRefreshing(true)
+        }.onFinish {
+            updateRefreshing()
         }
     }
 

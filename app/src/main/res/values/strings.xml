@@ -36,7 +36,9 @@
     <string name="error_retry">Erneut versuchen</string>
     <string name="error_confirm">Bestätigen</string>
     <string name="error_resolve">Dieser Hoster konnte nicht verarbeitet werden</string>
-    <string name="error_hoster_not_supported">Dieser Hoster wird nicht unterstürzt</string>
+    <string name="error_refresh">Aktualisierung fehlgeschlagen</string>
+    <string name="error_unsupported_hoster">Dieser Hoster wird nicht unterstützt</string>
+    <string name="error_stream_resolution">Fehler beim Laden des Streams</string>
     <plurals name="error_reminder_removal">
         <item quantity="one">Ein Lesezeichen konnte nicht gelöscht werden</item>
         <item quantity="other">%d Lesezeichen konnten nicht gelöscht werden</item>
@@ -349,7 +351,6 @@
     <string name="item_stream_play">Abspielen</string>
     <string name="comment_rating_overall">Insgesamt</string>
     <string name="fragment_episodes_title">Episoden</string>
-    <string name="error_refresh">Aktualisierung fehlgeschlagen</string>
 
     <plurals name="media_episode_count">
         <item quantity="one">Eine Episode</item>

@@ -1,6 +1,7 @@
 package com.proxerme.app.stream.resolver
 
 import com.proxerme.app.application.MainApplication
+import com.proxerme.app.task.StreamResolutionTask.StreamResolutionException
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionResult
 import okhttp3.Request
 import java.io.IOException
@@ -24,7 +25,7 @@ class Mp4UploadResolver : StreamResolver() {
                 .build()).execute()
 
         val result = regex.find(validateAndGetResult(response))?.groupValues?.get(1)
-                ?: throw IOException()
+                ?: throw StreamResolutionException()
 
         return StreamResolutionResult(result, "video/mp4")
     }

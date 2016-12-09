@@ -6,7 +6,6 @@ import com.proxerme.app.stream.StreamResolverFactory
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionResult
 import com.proxerme.app.task.framework.BaseListenableTask
 import org.jetbrains.anko.doAsync
-import java.io.IOException
 import java.util.concurrent.Future
 
 /**
@@ -29,7 +28,7 @@ class StreamResolutionTask(successCallback: ((StreamResolutionResult) -> Unit)? 
             future = doAsync {
                 try {
                     val result = StreamResolverFactory.getResolverFor(input)?.resolve(input)
-                            ?: throw IOException()
+                            ?: throw NoResolverException()
 
                     cancel()
 
@@ -63,4 +62,6 @@ class StreamResolutionTask(successCallback: ((StreamResolutionResult) -> Unit)? 
     }
 
     class StreamResolutionResult(val url: String, val mimeType: String)
+    class NoResolverException : Exception()
+    class StreamResolutionException : Exception()
 }
