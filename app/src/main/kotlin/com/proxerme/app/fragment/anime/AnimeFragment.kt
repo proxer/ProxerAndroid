@@ -18,15 +18,16 @@ import com.proxerme.app.dialog.LoginDialog
 import com.proxerme.app.fragment.anime.AnimeFragment.AnimeInput
 import com.proxerme.app.fragment.framework.SingleLoadingFragment
 import com.proxerme.app.manager.SectionManager
-import com.proxerme.app.stream.StreamResolverFactory
 import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.StreamResolutionTask
 import com.proxerme.app.task.StreamResolutionTask.*
 import com.proxerme.app.task.framework.*
+import com.proxerme.app.util.ErrorHandler
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.Validators
 import com.proxerme.app.util.bindView
 import com.proxerme.app.view.MediaControlView
+import com.proxerme.library.connection.ProxerException
 import com.proxerme.library.connection.anime.entity.Stream
 import com.proxerme.library.connection.anime.request.LinkRequest
 import com.proxerme.library.connection.anime.request.StreamsRequest
@@ -92,6 +93,10 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
             }
             is StreamResolutionException -> {
                 Snackbar.make(root, R.string.error_stream_resolution, Snackbar.LENGTH_LONG).show()
+            }
+            is ProxerException -> {
+                Snackbar.make(root, ErrorHandler.getMessageForErrorCode(context, exception),
+                        Snackbar.LENGTH_LONG).show()
             }
             is IOException -> {
                 Snackbar.make(root, R.string.error_io, Snackbar.LENGTH_LONG).show()
@@ -233,10 +238,8 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
     }
 
     private fun constructStreamResolverTask(): Task<String, StreamResolutionResult> {
-        return ListeningTask(ValidatingTask(StreamedTask(ProxerLoadingTask(::LinkRequest),
-                StreamResolutionTask()), {
-            StreamResolverFactory.hasResolverFor(it)
-        }), streamResolverSuccess, streamResolverException).onStart {
+        return ListeningTask((StreamedTask(ProxerLoadingTask(::LinkRequest),
+                StreamResolutionTask())), streamResolverSuccess, streamResolverException).onStart {
             setRefreshing(true)
         }.onFinish {
             updateRefreshing()
