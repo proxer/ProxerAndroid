@@ -25,7 +25,7 @@ import org.jetbrains.anko.forEachChildWithIndex
  *
  * @author Ruben Gees
  */
-class EpisodeAdapter() : PagingAdapter<RichEpisode>() {
+class EpisodeAdapter : PagingAdapter<RichEpisode>() {
 
     private val expanded = SparseBooleanArray()
 

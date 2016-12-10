@@ -15,6 +15,7 @@ import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import com.orhanobut.hawk.Hawk
 import com.proxerme.app.BuildConfig
+import com.proxerme.app.EventBusIndex
 import com.proxerme.app.helper.PreferenceHelper
 import com.proxerme.app.manager.UserManager
 import com.proxerme.app.service.ChatService
@@ -79,7 +80,7 @@ class MainApplication : Application() {
     private fun initLibs() {
         JodaTimeAndroid.init(this)
         Hawk.init(this).build()
-        EventBus.builder()
+        EventBus.builder().addIndex(EventBusIndex())
                 .logNoSubscriberMessages(false)
                 .sendNoSubscriberEvent(false)
                 .installDefaultEventBus()

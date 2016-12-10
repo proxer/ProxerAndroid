@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.0.5-2'
+    ext.kotlin_version = '1.0.6-eap-77'
     ext.support_version = '25.0.1'
     ext.anko_version = '0.9'
     ext.leak_canary_version = '1.5'
@@ -7,6 +7,7 @@ buildscript {
 
     repositories {
         jcenter()
+        maven { url "https://dl.bintray.com/kotlin/kotlin-eap" }
     }
 
     dependencies {
@@ -21,7 +22,8 @@ allprojects {
         jcenter()
         maven { url "https://jitpack.io" }
         maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
-        maven { url 'https://dl.bintray.com/drummer-aidan/maven' }
+        maven { url "https://dl.bintray.com/drummer-aidan/maven" }
+        maven { url "https://dl.bintray.com/kotlin/kotlin-eap" }
     }
 }
 

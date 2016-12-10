@@ -199,7 +199,7 @@ abstract class SingleLoadingFragment<I, T> : MainFragment() {
     }
 
     protected fun updateRefreshing() {
-        setRefreshing(if (isWorking) true else false)
+        setRefreshing(isWorking)
     }
 
     protected fun setRefreshing(enable: Boolean) {

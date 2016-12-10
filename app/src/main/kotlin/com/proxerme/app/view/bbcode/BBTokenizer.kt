@@ -98,7 +98,7 @@ object BBTokenizer {
         val children = ArrayList<BBToken>()
     }
 
-    private abstract class InternalBBToken() {
+    private abstract class InternalBBToken {
 
         abstract val startLength: Int
         abstract val endLength: Int

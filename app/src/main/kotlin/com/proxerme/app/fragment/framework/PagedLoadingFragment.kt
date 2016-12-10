@@ -247,7 +247,7 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
     }
 
     protected fun updateRefreshing() {
-        setRefreshing(if (isWorking) true else false)
+        setRefreshing(isWorking)
     }
 
     private fun setupList() {

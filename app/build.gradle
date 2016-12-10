@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: "kotlin-kapt"
 
 android {
     compileSdkVersion 25
@@ -95,6 +96,7 @@ dependencies {
     compile 'com.github.bumptech.glide:okhttp3-integration:1.4.0@aar'
 
     compile 'org.greenrobot:eventbus:3.0.0'
+    kapt 'org.greenrobot:eventbus-annotation-processor:3.0.1'
 
     compile 'de.hdodenhof:circleimageview:2.1.0'
 
@@ -125,6 +127,12 @@ dependencies {
     androidTestCompile "com.android.support:support-annotations:$support_version"
     androidTestCompile 'com.android.support.test:runner:0.5'
     androidTestCompile 'com.android.support.test:rules:0.5'
+}
+
+kapt {
+    arguments {
+        arg('eventBusIndex', 'com.proxerme.app.EventBusIndex')
+    }
 }
 
 static def getFromSecrets(String key) {

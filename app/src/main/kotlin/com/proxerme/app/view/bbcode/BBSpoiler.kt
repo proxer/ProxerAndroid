@@ -17,7 +17,9 @@ class BBSpoiler(val parent: ViewGroup) {
 
     var listener: ((isExpanded: Boolean) -> Unit)? = null
 
-    val root: ViewGroup
+    val root = LayoutInflater.from(parent.context)
+            .inflate(R.layout.layout_bbcode_spoiler, parent, false) as ViewGroup
+
     private val toggle: TextView
     private val decoration: ViewGroup
     private val container: ViewGroup
@@ -31,8 +33,6 @@ class BBSpoiler(val parent: ViewGroup) {
     })
 
     init {
-        root = LayoutInflater.from(parent.context)
-                .inflate(R.layout.layout_bbcode_spoiler, parent, false) as ViewGroup
         toggle = root.find(R.id.spoilerToggle)
         decoration = root.find(R.id.spoilerDecoration)
         container = root.find(R.id.spoilerContainer)

@@ -80,12 +80,8 @@ class ChatFragment : PagedLoadingFragment<ChatInput, LocalMessage>() {
         override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
             Utils.setStatusBarColorIfPossible(activity, R.color.primary)
 
-            if (adapter.selectedItems.size == 1 &&
-                    adapter.selectedItems.first().userId != StorageHelper.user?.id) {
-                menu.findItem(R.id.reply).isVisible = true
-            } else {
-                menu.findItem(R.id.reply).isVisible = false
-            }
+            menu.findItem(R.id.reply).isVisible = adapter.selectedItems.size == 1 &&
+                    adapter.selectedItems.first().userId != StorageHelper.user?.id
 
             return false
         }

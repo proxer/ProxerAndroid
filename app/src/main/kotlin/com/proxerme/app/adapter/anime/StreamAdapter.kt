@@ -120,7 +120,7 @@ class StreamAdapter(private val getRealPosition: (Int) -> Int) : PagingAdapter<S
         }
     }
 
-    abstract class StreamAdapterCallback() {
+    abstract class StreamAdapterCallback {
         open fun onUploaderClick(item: Stream) {
 
         }

@@ -12,7 +12,7 @@ import java.util.*
  *
  * @author Ruben Gees
  */
-abstract class PagingAdapter<T>() : RecyclerView.Adapter<PagingAdapter.PagingViewHolder<T>>() {
+abstract class PagingAdapter<T> : RecyclerView.Adapter<PagingAdapter.PagingViewHolder<T>>() {
 
     protected var list = ArrayList<T>()
 
