@@ -1,13 +1,11 @@
 package com.proxerme.app.view.bbcode
 
 import android.content.Context
+import android.support.v7.widget.AppCompatTextView
 import android.util.AttributeSet
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.TextView
-import com.proxerme.app.R
 import com.proxerme.app.util.Utils
 import java.util.*
 import kotlin.properties.Delegates
@@ -115,8 +113,7 @@ class BBCodeView : LinearLayout {
 
         for (element in elements) {
             if (element is BBProcessor.BBTextElement) {
-                val textView = LayoutInflater.from(context)
-                        .inflate(R.layout.layout_bbcode_text, this, false) as TextView
+                val textView = AppCompatTextView(context)
 
                 textView.text = element.text
                 textView.gravity = element.gravity
