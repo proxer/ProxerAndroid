@@ -6,10 +6,13 @@ machine:
 
 dependencies:
   pre:
-    # Install license hashes to enable auto-update feature in android plugin v2.2.x
-    - mkdir -p "$ANDROID_HOME/licenses"
-    - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
-    - echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
+    - echo y | android update sdk --no-ui --all --filter "extra-android-m2repository"
+    - echo y | android update sdk --no-ui --all --filter "extra-google-m2repository"
+    - echo y | android update sdk --no-ui --all --filter "extra-android-support"
+    - echo y | android update sdk --no-ui --all --filter "android-25"
+    - echo y | android update sdk --no-ui --all --filter "build-tools-25.0.1"
+    - echo y | android update sdk --no-ui --all --filter "tools"
+    - echo y | android update sdk --no-ui --all --filter "platform-tools"
   override:
     - ./gradlew dependencies --console=plain
 
