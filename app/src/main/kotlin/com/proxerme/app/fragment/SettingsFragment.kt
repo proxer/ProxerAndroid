@@ -13,7 +13,6 @@ import com.proxerme.app.application.MainApplication
 import com.proxerme.app.dialog.HentaiConfirmationDialog
 import com.proxerme.app.helper.PreferenceHelper
 import com.proxerme.app.helper.ServiceHelper
-import com.proxerme.app.interfaces.OnActivityListener
 import com.proxerme.app.util.openHttpPage
 import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
@@ -24,7 +23,7 @@ import okhttp3.HttpUrl
  *
  * @author Ruben Gees
  */
-class SettingsFragment : PreferenceFragmentCompat(), OnActivityListener,
+class SettingsFragment : PreferenceFragmentCompat(),
         SharedPreferences.OnSharedPreferenceChangeListener {
 
     companion object {
@@ -90,8 +89,6 @@ class SettingsFragment : PreferenceFragmentCompat(), OnActivityListener,
             true
         }
     }
-
-    override fun onBackPressed() = false
 
     override fun onResume() {
         super.onResume()

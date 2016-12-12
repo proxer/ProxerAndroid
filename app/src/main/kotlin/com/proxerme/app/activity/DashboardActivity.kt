@@ -21,6 +21,7 @@ import com.proxerme.app.helper.MaterialDrawerHelper.Companion.ACCOUNT_LOGIN
 import com.proxerme.app.helper.MaterialDrawerHelper.Companion.ACCOUNT_LOGOUT
 import com.proxerme.app.helper.MaterialDrawerHelper.Companion.ACCOUNT_UCP
 import com.proxerme.app.helper.MaterialDrawerHelper.Companion.ACCOUNT_USER
+import com.proxerme.app.helper.MaterialDrawerHelper.Companion.DrawerItem
 import com.proxerme.app.helper.MaterialDrawerHelper.Companion.ITEM_ANIME
 import com.proxerme.app.helper.MaterialDrawerHelper.Companion.ITEM_CHAT
 import com.proxerme.app.helper.MaterialDrawerHelper.Companion.ITEM_DONATE
@@ -30,7 +31,6 @@ import com.proxerme.app.helper.MaterialDrawerHelper.Companion.ITEM_REMINDER
 import com.proxerme.app.helper.MaterialDrawerHelper.Companion.ITEM_SETTINGS
 import com.proxerme.app.helper.PreferenceHelper
 import com.proxerme.app.helper.StorageHelper
-import com.proxerme.app.interfaces.OnActivityListener
 import com.proxerme.app.manager.UserManager
 import com.proxerme.app.util.bindView
 import com.proxerme.library.info.ProxerUrlHolder
@@ -54,14 +54,12 @@ class DashboardActivity : MainActivity() {
         private const val STATE_TITLE = "activity_dashboard_title"
         private const val EXTRA_DRAWER_ITEM = "extra_drawer_item"
 
-        fun getSectionIntent(context: Context,
-                             @MaterialDrawerHelper.Companion.DrawerItem itemId: Long): Intent {
+        fun getSectionIntent(context: Context, @DrawerItem itemId: Long): Intent {
             return context.intentFor<DashboardActivity>(EXTRA_DRAWER_ITEM to itemId)
         }
     }
 
     private lateinit var drawer: MaterialDrawerHelper
-    private var onActivityListener: OnActivityListener? = null
 
     private var title: String? = null
 
@@ -109,13 +107,6 @@ class DashboardActivity : MainActivity() {
         super.onRestoreInstanceState(savedInstanceState)
 
         if (savedInstanceState != null) {
-            val lastFragment = supportFragmentManager.findFragmentById(R.id.container)
-
-            when (lastFragment) {
-                is OnActivityListener -> onActivityListener = lastFragment
-                else -> onActivityListener = null
-            }
-
             title = savedInstanceState.getString(STATE_TITLE)
 
             setTitle(title)
@@ -126,10 +117,8 @@ class DashboardActivity : MainActivity() {
         if (drawer.isDrawerOpen()) {
             drawer.onBackPressed()
         } else {
-            if (!(onActivityListener?.onBackPressed() ?: false)) {
-                if (!drawer.onBackPressed()) {
-                    super.onBackPressed()
-                }
+            if (!drawer.onBackPressed()) {
+                super.onBackPressed()
             }
         }
     }
@@ -161,11 +150,6 @@ class DashboardActivity : MainActivity() {
     }
 
     private fun setFragment(fragment: Fragment): Unit {
-        when (fragment) {
-            is OnActivityListener -> onActivityListener = fragment
-            else -> onActivityListener = null
-        }
-
         appbar.setExpanded(true, true)
         supportFragmentManager.beginTransaction().replace(R.id.container, fragment)
                 .commitNow()
@@ -193,7 +177,7 @@ class DashboardActivity : MainActivity() {
         }
     }
 
-    @MaterialDrawerHelper.Companion.DrawerItem
+    @DrawerItem
     private fun getItemToLoad(): Long {
         return intent.getLongExtra(EXTRA_DRAWER_ITEM, MaterialDrawerHelper.ITEM_NEWS)
     }
