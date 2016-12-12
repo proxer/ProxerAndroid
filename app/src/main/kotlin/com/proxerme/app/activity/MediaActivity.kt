@@ -70,18 +70,16 @@ class MediaActivity : MainActivity() {
         setupImage()
 
         if (savedInstanceState == null) {
-            val sectionToShow = if (intent.action == Intent.ACTION_VIEW)
+            viewPager.currentItem = if (intent.action == Intent.ACTION_VIEW) {
                 when (intent.data.pathSegments.getOrNull(2)) {
                     "comments" -> 1
                     "episodes" -> 2
                     "relation" -> 3
                     else -> 0
                 }
-            else {
+            } else {
                 0
             }
-
-            viewPager.currentItem = sectionToShow
         }
     }
 

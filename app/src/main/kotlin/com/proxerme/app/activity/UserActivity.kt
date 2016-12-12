@@ -73,7 +73,12 @@ class UserActivity : MainActivity() {
         setContentView(R.layout.activity_user)
         setSupportActionBar(toolbar)
 
-        userId = intent.getStringExtra(EXTRA_USER_ID)
+        userId = if (intent.action == Intent.ACTION_VIEW) {
+            intent.data.pathSegments.getOrElse(1, { "-1" })
+        } else {
+            intent.getStringExtra(EXTRA_USER_ID)
+        }
+
         username = intent.getStringExtra(EXTRA_USERNAME)
 
         if (savedInstanceState == null) {
@@ -82,22 +87,19 @@ class UserActivity : MainActivity() {
             imageId = savedInstanceState.getString(STATE_IMAGE_ID)
         }
 
-        viewPager.offscreenPageLimit = 3
-        viewPager.adapter = sectionsPagerAdapter
+        initViews()
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = username
-        collapsingToolbar.isTitleEnabled = false
-        tabs.setupWithViewPager(viewPager)
-
-        profileImage.setOnClickListener {
-            if (!imageId.isNullOrBlank()) {
-                ImageDetailActivity.navigateTo(this@UserActivity, it as ImageView,
-                        ProxerUrlHolder.getUserImageUrl(imageId!!))
+        if (savedInstanceState == null) {
+            viewPager.currentItem = if (intent.action == Intent.ACTION_VIEW) {
+                when (intent.data.pathSegments.getOrNull(2)) {
+                    "anime" -> 2
+                    "manga" -> 3
+                    else -> 0
+                }
+            } else {
+                0
             }
         }
-
-        loadImage()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -159,6 +161,25 @@ class UserActivity : MainActivity() {
 
             loadImage()
         }
+    }
+
+    private fun initViews() {
+        viewPager.offscreenPageLimit = 3
+        viewPager.adapter = sectionsPagerAdapter
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = username
+        collapsingToolbar.isTitleEnabled = false
+        tabs.setupWithViewPager(viewPager)
+
+        profileImage.setOnClickListener {
+            if (!imageId.isNullOrBlank()) {
+                ImageDetailActivity.navigateTo(this@UserActivity, it as ImageView,
+                        ProxerUrlHolder.getUserImageUrl(imageId!!))
+            }
+        }
+
+        loadImage()
     }
 
     private fun loadImage() {

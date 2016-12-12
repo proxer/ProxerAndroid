@@ -30,6 +30,18 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.DashboardActivity" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="proxer.me" />
+                <data android:pathPrefix="/user/" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".activity.chat.ChatActivity"
