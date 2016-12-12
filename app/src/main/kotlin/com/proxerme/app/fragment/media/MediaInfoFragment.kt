@@ -13,7 +13,7 @@ import com.proxerme.app.fragment.framework.SingleLoadingFragment
 import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.framework.ListenableTask
-import com.proxerme.app.util.Utils
+import com.proxerme.app.util.ViewUtils
 import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.info.entity.Entry
 import com.proxerme.library.connection.info.entity.EntrySeason
@@ -229,7 +229,7 @@ class MediaInfoFragment : SingleLoadingFragment<String, Entry>() {
                 }
             }
         }.toTypedArray(), { it.name }, { view, tag ->
-            Utils.makeMultilineSnackbar(root, tag.description, Snackbar.LENGTH_LONG).show()
+            ViewUtils.makeMultilineSnackbar(root, tag.description, Snackbar.LENGTH_LONG).show()
         })
     }
 
@@ -260,7 +260,7 @@ class MediaInfoFragment : SingleLoadingFragment<String, Entry>() {
 
                 imageView.setImageResource(getFskImage(fskEntry))
                 imageView.setOnClickListener {
-                    Utils.makeMultilineSnackbar(root, getFskDescription(fskEntry),
+                    ViewUtils.makeMultilineSnackbar(root, getFskDescription(fskEntry),
                             Snackbar.LENGTH_LONG).show()
                 }
 
@@ -316,7 +316,7 @@ class MediaInfoFragment : SingleLoadingFragment<String, Entry>() {
                 it.visibility = View.VISIBLE
             }
 
-            Utils.populateBadgeView(badgeContainer, items, transform, onClick)
+            ViewUtils.populateBadgeView(badgeContainer, items, transform, onClick)
         }
     }
 

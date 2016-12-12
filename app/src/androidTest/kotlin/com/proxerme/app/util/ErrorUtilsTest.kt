@@ -15,18 +15,18 @@ import org.junit.runner.RunWith
  */
 @RunWith(AndroidJUnit4::class)
 @SmallTest
-class ErrorHandlerTest {
+class ErrorUtilsTest {
 
     @org.junit.Test
     fun getMessageForErrorCodeProxer() {
-        assertEquals("test", ErrorHandler.getMessageForErrorCode(getTargetContext(),
+        assertEquals("test", ErrorUtils.getMessageForErrorCode(getTargetContext(),
                 ProxerException(ProxerException.PROXER, "test")))
     }
 
     @org.junit.Test
     fun getMessageForErrorCodeNetwork() {
         assertEquals(getTargetContext().getString(R.string.error_network),
-                ErrorHandler.getMessageForErrorCode(getTargetContext(),
+                ErrorUtils.getMessageForErrorCode(getTargetContext(),
                         ProxerException(ProxerException.NETWORK)))
     }
 }

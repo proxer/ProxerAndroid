@@ -17,8 +17,9 @@ import com.proxerme.app.service.ChatService
 import com.proxerme.app.task.ConferencesTask
 import com.proxerme.app.task.framework.CachedTask
 import com.proxerme.app.task.framework.ListenableTask
-import com.proxerme.app.util.Utils
+import com.proxerme.app.util.DeviceUtils
 import com.proxerme.app.util.bindView
+import com.proxerme.app.util.insertAndScrollUpIfNecessary
 
 /**
  * TODO: Describe class
@@ -92,7 +93,7 @@ class ConferencesFragment : SingleLoadingFragment<Context, List<LocalConference>
         super.onViewCreated(view, savedInstanceState)
 
         list.setHasFixedSize(true)
-        list.layoutManager = StaggeredGridLayoutManager(Utils.calculateSpanAmount(activity),
+        list.layoutManager = StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity),
                 StaggeredGridLayoutManager.VERTICAL)
         list.adapter = adapter
     }
@@ -113,6 +114,6 @@ class ConferencesFragment : SingleLoadingFragment<Context, List<LocalConference>
     }
 
     override fun present(data: List<LocalConference>) {
-        Utils.insertAndScrollUpIfNecessary(adapter, list.layoutManager, list, data.toTypedArray())
+        adapter.insertAndScrollUpIfNecessary(list.layoutManager, list, data.toTypedArray())
     }
 }

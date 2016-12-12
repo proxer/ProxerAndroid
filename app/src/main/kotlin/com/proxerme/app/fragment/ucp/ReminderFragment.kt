@@ -16,8 +16,8 @@ import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.framework.ListenableTask
 import com.proxerme.app.task.framework.Task
 import com.proxerme.app.task.framework.ValidatingTask
-import com.proxerme.app.util.ErrorHandler
-import com.proxerme.app.util.Utils
+import com.proxerme.app.util.DeviceUtils
+import com.proxerme.app.util.ErrorUtils
 import com.proxerme.app.util.Validators
 import com.proxerme.library.connection.ProxerException
 import com.proxerme.library.connection.ucp.entitiy.Reminder
@@ -58,7 +58,7 @@ class ReminderFragment : PagedLoadingFragment<ReminderInput, Reminder>() {
             })
             is ProxerException -> {
                 Snackbar.make(root,
-                        ErrorHandler.getMessageForErrorCode(context, exception),
+                        ErrorUtils.getMessageForErrorCode(context, exception),
                         Snackbar.LENGTH_LONG).show()
             }
             else -> {
@@ -116,7 +116,7 @@ class ReminderFragment : PagedLoadingFragment<ReminderInput, Reminder>() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        layoutManager = StaggeredGridLayoutManager(Utils.calculateSpanAmount(activity) + 1,
+        layoutManager = StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity) + 1,
                 StaggeredGridLayoutManager.VERTICAL)
 
         return super.onCreateView(inflater, container, savedInstanceState)

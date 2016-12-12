@@ -22,7 +22,7 @@ class WebViewActivity : AppCompatActivity() {
         private const val EXTRA_URL = "extra_url"
 
         fun navigateTo(context: Activity, url: String) {
-            context.startActivity(context.intentFor<AnimeActivity>(
+            context.startActivity(context.intentFor<WebViewActivity>(
                     EXTRA_URL to url
             ))
         }

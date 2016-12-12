@@ -16,7 +16,8 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.entitiy.LocalMessage
-import com.proxerme.app.util.TimeUtil
+import com.proxerme.app.util.DeviceUtils
+import com.proxerme.app.util.TimeUtils
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.user.entitiy.User
@@ -88,8 +89,8 @@ class ChatAdapter(val isGroup: Boolean) : PagingAdapter<LocalMessage>() {
         val margins = getMarginsForPosition(position)
 
         holder.bind(list[position],
-                Utils.convertDpToPx(holder.itemView.context, margins.first.toFloat()),
-                Utils.convertDpToPx(holder.itemView.context, margins.second.toFloat()))
+                DeviceUtils.convertDpToPx(holder.itemView.context, margins.first.toFloat()),
+                DeviceUtils.convertDpToPx(holder.itemView.context, margins.second.toFloat()))
     }
 
     override fun getItemId(position: Int): Long = list[position].localId
@@ -330,7 +331,7 @@ class ChatAdapter(val isGroup: Boolean) : PagingAdapter<LocalMessage>() {
         }
 
         protected open fun applyTime(message: LocalMessage) {
-            time.text = TimeUtil.convertToRelativeReadableTime(time.context,
+            time.text = TimeUtils.convertToRelativeReadableTime(time.context,
                     message.time)
         }
 

@@ -14,7 +14,7 @@ import com.proxerme.app.helper.ServiceHelper
 import com.proxerme.app.helper.StorageHelper
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.manager.UserManager
-import com.proxerme.app.util.ErrorHandler
+import com.proxerme.app.util.ErrorUtils
 import com.proxerme.library.connection.ProxerException
 import com.proxerme.library.connection.messenger.entity.Conference
 import com.proxerme.library.connection.messenger.entity.Message
@@ -155,7 +155,7 @@ class ChatService : IntentService("ChatService") {
             EventBus.getDefault().post(ChatMessagesEvent(conferenceId,
                     insertedMessages.asReversed()))
         } catch(exception: ProxerException) {
-            throw LoadMoreMessagesException(ErrorHandler.getMessageForErrorCode(this, exception),
+            throw LoadMoreMessagesException(ErrorUtils.getMessageForErrorCode(this, exception),
                     conferenceId)
         }
     }
@@ -173,7 +173,7 @@ class ChatService : IntentService("ChatService") {
                     throw SendMessageException(result, it.conferenceId)
                 }
             } catch(exception: ProxerException) {
-                throw SendMessageException(ErrorHandler.getMessageForErrorCode(this, exception),
+                throw SendMessageException(ErrorUtils.getMessageForErrorCode(this, exception),
                         it.conferenceId)
             }
         }
@@ -212,7 +212,7 @@ class ChatService : IntentService("ChatService") {
 
             return changedConferences
         } catch (exception: ProxerException) {
-            throw FetchConferencesException(ErrorHandler.getMessageForErrorCode(this, exception))
+            throw FetchConferencesException(ErrorUtils.getMessageForErrorCode(this, exception))
         }
     }
 
@@ -263,7 +263,7 @@ class ChatService : IntentService("ChatService") {
                 }
             }
         } catch (exception: ProxerException) {
-            throw FetchMessagesException(ErrorHandler.getMessageForErrorCode(this, exception),
+            throw FetchMessagesException(ErrorUtils.getMessageForErrorCode(this, exception),
                     conference.id)
         }
 

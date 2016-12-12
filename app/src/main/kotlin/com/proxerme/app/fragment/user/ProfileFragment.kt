@@ -15,7 +15,7 @@ import com.proxerme.app.fragment.user.ProfileFragment.ProfileInput
 import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.framework.ListenableTask
-import com.proxerme.app.util.TimeUtil
+import com.proxerme.app.util.TimeUtils
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.user.entitiy.UserInfo
@@ -96,7 +96,7 @@ class ProfileFragment : SingleLoadingFragment<ProfileInput, UserInfo>() {
             statusContainer.visibility = View.GONE
         } else {
             statusText.text = Utils.buildClickableText(statusText.context, data.status + " - " +
-                    TimeUtil.convertToRelativeReadableTime(context, data.lastStatusChange),
+                    TimeUtils.convertToRelativeReadableTime(context, data.lastStatusChange),
                     Link.OnClickListener { link ->
                         showPage(HttpUrl.parse(link).newBuilder()
                                 .addQueryParameter("device", "mobile")

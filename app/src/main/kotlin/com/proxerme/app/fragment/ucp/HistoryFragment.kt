@@ -12,7 +12,7 @@ import com.proxerme.app.fragment.ucp.HistoryFragment.HistoryInput
 import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.framework.ListenableTask
-import com.proxerme.app.util.Utils
+import com.proxerme.app.util.DeviceUtils
 import com.proxerme.library.connection.ucp.entitiy.HistoryEntry
 import com.proxerme.library.connection.ucp.request.HistoryRequest
 
@@ -51,7 +51,7 @@ class HistoryFragment : PagedLoadingFragment<HistoryInput, HistoryEntry>() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        layoutManager = GridLayoutManager(context, Utils.calculateSpanAmount(activity) + 1)
+        layoutManager = GridLayoutManager(context, DeviceUtils.calculateSpanAmount(activity) + 1)
 
         return super.onCreateView(inflater, container, savedInstanceState)
     }

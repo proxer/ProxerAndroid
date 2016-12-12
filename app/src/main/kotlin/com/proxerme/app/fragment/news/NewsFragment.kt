@@ -15,7 +15,7 @@ import com.proxerme.app.helper.NotificationHelper
 import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.framework.ListenableTask
-import com.proxerme.app.util.Utils
+import com.proxerme.app.util.DeviceUtils
 import com.proxerme.library.connection.notifications.entitiy.News
 import com.proxerme.library.connection.notifications.request.NewsRequest
 import com.proxerme.library.info.ProxerUrlHolder
@@ -62,7 +62,7 @@ class NewsFragment : PagedLoadingFragment<PagedInput, News>() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        layoutManager = GridLayoutManager(context, Utils.calculateSpanAmount(activity))
+        layoutManager = GridLayoutManager(context, DeviceUtils.calculateSpanAmount(activity))
 
         return super.onCreateView(inflater, container, savedInstanceState)
     }

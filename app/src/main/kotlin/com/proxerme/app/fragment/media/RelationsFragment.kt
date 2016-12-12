@@ -13,7 +13,7 @@ import com.proxerme.app.fragment.framework.SingleLoadingFragment
 import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.framework.ListenableTask
-import com.proxerme.app.util.Utils
+import com.proxerme.app.util.DeviceUtils
 import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.info.entity.Relation
 import com.proxerme.library.connection.info.request.RelationRequest
@@ -66,7 +66,7 @@ class RelationsFragment : SingleLoadingFragment<String, Array<Relation>>() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        list.layoutManager = StaggeredGridLayoutManager(Utils.calculateSpanAmount(activity) + 1,
+        list.layoutManager = StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity) + 1,
                 StaggeredGridLayoutManager.VERTICAL)
         list.adapter = adapter
     }

@@ -12,7 +12,7 @@ import com.proxerme.app.fragment.user.UserMediaListFragment.UserMediaInput
 import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.framework.ListenableTask
-import com.proxerme.app.util.Utils
+import com.proxerme.app.util.DeviceUtils
 import com.proxerme.library.connection.user.entitiy.UserMediaListEntry
 import com.proxerme.library.connection.user.request.UserMediaListRequest
 import com.proxerme.library.parameters.CategoryParameter
@@ -157,7 +157,7 @@ class UserMediaListFragment : PagedLoadingFragment<UserMediaInput, UserMediaList
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        layoutManager = StaggeredGridLayoutManager(Utils.calculateSpanAmount(activity) + 1,
+        layoutManager = StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity) + 1,
                 StaggeredGridLayoutManager.VERTICAL)
 
         return super.onCreateView(inflater, container, savedInstanceState)

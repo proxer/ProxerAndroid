@@ -37,7 +37,7 @@ abstract class SingleLoadingFragment<I, T> : MainFragment() {
         context?.let {
             when (exception) {
                 is ProxerException -> {
-                    showError(ErrorHandler.getMessageForErrorCode(context, exception))
+                    showError(ErrorUtils.getMessageForErrorCode(context, exception))
                 }
                 is Validators.NotLoggedInException -> {
                     showError(getString(R.string.status_not_logged_in),

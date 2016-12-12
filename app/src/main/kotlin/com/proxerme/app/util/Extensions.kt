@@ -7,12 +7,16 @@ import android.content.Context
 import android.net.Uri
 import android.support.customtabs.CustomTabsIntent
 import android.support.v4.content.ContextCompat
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import com.proxerme.app.R
 import com.proxerme.app.activity.WebViewActivity
+import com.proxerme.app.adapter.framework.PagingAdapter
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
 
@@ -36,7 +40,7 @@ val Context.windowManager: WindowManager
 
 fun TextView.measureAndGetHeight(totalMarginDp: Float): Int {
     val widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(
-            Utils.getScreenWidth(context) - Utils.convertDpToPx(context, totalMarginDp),
+            DeviceUtils.getScreenWidth(context) - DeviceUtils.convertDpToPx(context, totalMarginDp),
             View.MeasureSpec.AT_MOST)
     val heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0,
             View.MeasureSpec.UNSPECIFIED)
@@ -60,4 +64,25 @@ fun CustomTabsHelperFragment.openHttpPage(activity: Activity, url: HttpUrl) {
             { activity, uri ->
                 WebViewActivity.navigateTo(activity, uri.toString())
             })
+}
+
+fun <T> PagingAdapter<T>.insertAndScrollUpIfNecessary(layoutManager: RecyclerView.LayoutManager,
+                                                      recyclerView: RecyclerView,
+                                                      items: Array<T>) {
+    val isFirstDifferent = this.items.firstOrNull() != items.firstOrNull()
+    val wasAtTop = when (layoutManager) {
+        is LinearLayoutManager -> layoutManager.findFirstVisibleItemPosition() == 0
+        is StaggeredGridLayoutManager -> {
+            layoutManager.findFirstVisibleItemPositions(null).contains(0)
+        }
+        else -> throw IllegalArgumentException("Unknown LayoutManager: $layoutManager")
+    }
+
+    insert(items)
+
+    if (wasAtTop && isFirstDifferent) {
+        recyclerView.post {
+            recyclerView.smoothScrollToPosition(0)
+        }
+    }
 }

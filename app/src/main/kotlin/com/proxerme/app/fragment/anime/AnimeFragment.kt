@@ -22,7 +22,7 @@ import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.StreamResolutionTask
 import com.proxerme.app.task.StreamResolutionTask.*
 import com.proxerme.app.task.framework.*
-import com.proxerme.app.util.ErrorHandler
+import com.proxerme.app.util.ErrorUtils
 import com.proxerme.app.util.Validators
 import com.proxerme.app.util.bindView
 import com.proxerme.app.view.MediaControlView
@@ -94,7 +94,7 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
                 Snackbar.make(root, R.string.error_stream_resolution, Snackbar.LENGTH_LONG).show()
             }
             is ProxerException -> {
-                Snackbar.make(root, ErrorHandler.getMessageForErrorCode(context, exception),
+                Snackbar.make(root, ErrorUtils.getMessageForErrorCode(context, exception),
                         Snackbar.LENGTH_LONG).show()
             }
             is IOException -> {

@@ -9,7 +9,7 @@ import org.joda.time.*
 
  * @author Ruben Gees
  */
-object TimeUtil {
+object TimeUtils {
 
     fun convertToRelativeReadableTime(context: Context, timestamp: Long): String {
         val time = DateTime(timestamp * 1000)

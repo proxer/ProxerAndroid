@@ -15,7 +15,7 @@ import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.framework.ListenableTask
 import com.proxerme.app.task.framework.ListeningTask
 import com.proxerme.app.task.framework.ZippedTask
-import com.proxerme.app.util.Utils
+import com.proxerme.app.util.DeviceUtils
 import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.user.entitiy.ToptenEntry
 import com.proxerme.library.connection.user.request.ToptenRequest
@@ -91,10 +91,12 @@ class ToptenFragment : SingleLoadingFragment<Pair<ToptenInput, ToptenInput>,
         super.onViewCreated(view, savedInstanceState)
 
         animeList.isNestedScrollingEnabled = false
-        animeList.layoutManager = GridLayoutManager(context, Utils.calculateSpanAmount(activity) + 1)
+        animeList.layoutManager = GridLayoutManager(context,
+                DeviceUtils.calculateSpanAmount(activity) + 1)
         animeList.adapter = animeAdapter
         mangaList.isNestedScrollingEnabled = false
-        mangaList.layoutManager = GridLayoutManager(context, Utils.calculateSpanAmount(activity) + 1)
+        mangaList.layoutManager = GridLayoutManager(context,
+                DeviceUtils.calculateSpanAmount(activity) + 1)
         mangaList.adapter = mangaAdapter
     }
 

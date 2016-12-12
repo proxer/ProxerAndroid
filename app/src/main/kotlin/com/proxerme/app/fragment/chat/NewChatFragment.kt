@@ -30,7 +30,11 @@ import com.proxerme.app.task.NewChatTask
 import com.proxerme.app.task.NewChatTask.NewChatInput
 import com.proxerme.app.task.framework.Task
 import com.proxerme.app.task.framework.ValidatingTask
-import com.proxerme.app.util.*
+import com.proxerme.app.util.ErrorUtils
+import com.proxerme.app.util.KotterKnife
+import com.proxerme.app.util.Validators
+import com.proxerme.app.util.bindView
+import com.proxerme.app.util.listener.OnTextListener
 import com.proxerme.library.connection.ProxerException
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import com.vanniktech.emoji.EmojiEditText
@@ -73,7 +77,7 @@ class NewChatFragment : MainFragment() {
         context?.let {
             when (exception) {
                 is ProxerException -> {
-                    Snackbar.make(root, ErrorHandler.getMessageForErrorCode(context, exception),
+                    Snackbar.make(root, ErrorUtils.getMessageForErrorCode(context, exception),
                             Snackbar.LENGTH_LONG).show()
                 }
                 is Validators.NotLoggedInException -> {
@@ -154,7 +158,7 @@ class NewChatFragment : MainFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if (isGroup) {
-            topicInput.addTextChangedListener(object : Utils.OnTextListener() {
+            topicInput.addTextChangedListener(object : OnTextListener() {
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                     topicInputContainer.isErrorEnabled = false
                     topicInputContainer.error = null
@@ -290,7 +294,7 @@ class NewChatFragment : MainFragment() {
                     as ImageButton
 
             input.setText(newParticipant)
-            input.addTextChangedListener(object : Utils.OnTextListener() {
+            input.addTextChangedListener(object : OnTextListener() {
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                     newParticipant = input.text.toString()
 

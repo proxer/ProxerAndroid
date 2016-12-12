@@ -16,8 +16,8 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
-import com.proxerme.app.util.TimeUtil
-import com.proxerme.app.util.Utils
+import com.proxerme.app.util.DeviceUtils
+import com.proxerme.app.util.TimeUtils
 import com.proxerme.app.util.bindView
 import com.proxerme.app.view.bbcode.BBCodeView
 import com.proxerme.library.connection.info.entity.Comment
@@ -129,7 +129,7 @@ class CommentAdapter : PagingAdapter<Comment>() {
                     item.ratingDetails.music)
             bindRatingRow(ratingOverallRow, ratingOverall, (item.rating.toFloat() / 2.0f).toInt())
 
-            time.text = TimeUtil.convertToRelativeReadableTime(time.context, item.time)
+            time.text = TimeUtils.convertToRelativeReadableTime(time.context, item.time)
             state.text = convertStateToText(item.state, item.episode)
 
             if (item.imageId.isBlank()) {
@@ -147,7 +147,7 @@ class CommentAdapter : PagingAdapter<Comment>() {
         }
 
         private fun bindExpanded(item: Comment) {
-            val maximumHeight = Utils.convertDpToPx(comment.context, 150f)
+            val maximumHeight = DeviceUtils.convertDpToPx(comment.context, 150f)
 
             if (comment.measureAndGetHeight(32f) <= maximumHeight) {
                 expand.visibility = View.GONE

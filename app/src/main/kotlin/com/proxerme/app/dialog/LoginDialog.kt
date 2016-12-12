@@ -17,8 +17,8 @@ import com.proxerme.app.R
 import com.proxerme.app.application.MainApplication
 import com.proxerme.app.event.LoginFailedEvent
 import com.proxerme.app.manager.UserManager
-import com.proxerme.app.util.ErrorHandler
-import com.proxerme.app.util.Utils
+import com.proxerme.app.util.ErrorUtils
+import com.proxerme.app.util.listener.OnTextListener
 import com.proxerme.library.connection.user.entitiy.User
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -121,7 +121,7 @@ class LoginDialog : DialogFragment() {
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLoginFailed(event: LoginFailedEvent) {
-        context.longToast(ErrorHandler.getMessageForErrorCode(context, event.exception))
+        context.longToast(ErrorUtils.getMessageForErrorCode(context, event.exception))
     }
 
     private fun initViews(): View {
@@ -151,13 +151,13 @@ class LoginDialog : DialogFragment() {
             false
         })
 
-        inputUsername.addTextChangedListener(object : Utils.OnTextListener() {
+        inputUsername.addTextChangedListener(object : OnTextListener() {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 resetError(usernameContainer)
             }
         })
 
-        inputPassword.addTextChangedListener(object : Utils.OnTextListener() {
+        inputPassword.addTextChangedListener(object : OnTextListener() {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 resetError(passwordContainer)
             }

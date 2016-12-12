@@ -15,7 +15,7 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.entitiy.LocalConference
-import com.proxerme.app.util.TimeUtil
+import com.proxerme.app.util.TimeUtils
 import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.messenger.entity.Conference
 import com.proxerme.library.info.ProxerUrlHolder
@@ -62,7 +62,7 @@ class ConferenceAdapter : PagingAdapter<LocalConference>() {
 
         override fun bind(item: LocalConference) {
             topic.text = item.topic
-            time.text = TimeUtil.convertToRelativeReadableTime(time.context,
+            time.text = TimeUtils.convertToRelativeReadableTime(time.context,
                     item.time)
             participants.text = participants.context.resources.getQuantityString(
                     R.plurals.item_conferences_participants, item.participantAmount,

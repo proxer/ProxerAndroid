@@ -48,7 +48,7 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
         context?.let {
             when (exception) {
                 is ProxerException -> {
-                    showError(ErrorHandler.getMessageForErrorCode(context, exception))
+                    showError(ErrorUtils.getMessageForErrorCode(context, exception))
                 }
                 is Validators.NotLoggedInException -> {
                     showError(getString(R.string.status_not_logged_in),
@@ -71,7 +71,7 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
     }
 
     protected val refreshSuccessCallback = { data: Array<T> ->
-        Utils.insertAndScrollUpIfNecessary(adapter, list.layoutManager, list, data)
+        adapter.insertAndScrollUpIfNecessary(list.layoutManager, list, data)
     }
 
     protected val refreshExceptionCallback = { exceptionResult: Exception ->
@@ -204,7 +204,7 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
 
     open protected fun showError(message: String, buttonMessage: String? = null,
                                  onButtonClickListener: View.OnClickListener? = null) {
-        Utils.showError(context, message, headerFooterAdapter,
+        ErrorUtils.showError(context, message, headerFooterAdapter,
                 buttonMessage = buttonMessage, parent = root,
                 onWebClickListener = Link.OnClickListener { link ->
                     showPage(HttpUrl.parse(link).newBuilder()

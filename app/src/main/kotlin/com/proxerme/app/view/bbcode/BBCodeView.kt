@@ -6,7 +6,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import com.proxerme.app.util.Utils
+import com.proxerme.app.util.DeviceUtils
 import java.util.*
 import kotlin.properties.Delegates
 
@@ -81,9 +81,8 @@ class BBCodeView : LinearLayout {
 
         setSpoilerStates(BooleanArray(spoilers.size, { true }).toList())
 
-        val widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(
-                Utils.getScreenWidth(context) - Utils.convertDpToPx(context, totalMarginDp),
-                View.MeasureSpec.AT_MOST)
+        val widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(DeviceUtils.getScreenWidth(context) -
+                DeviceUtils.convertDpToPx(context, totalMarginDp), View.MeasureSpec.AT_MOST)
         val heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(ViewGroup.LayoutParams.WRAP_CONTENT,
                 View.MeasureSpec.UNSPECIFIED)
 
