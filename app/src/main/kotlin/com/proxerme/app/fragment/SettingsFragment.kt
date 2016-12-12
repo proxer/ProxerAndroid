@@ -14,8 +14,10 @@ import com.proxerme.app.dialog.HentaiConfirmationDialog
 import com.proxerme.app.helper.PreferenceHelper
 import com.proxerme.app.helper.ServiceHelper
 import com.proxerme.app.interfaces.OnActivityListener
-import com.proxerme.app.util.Utils
+import com.proxerme.app.util.openHttpPage
 import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat
+import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
+import okhttp3.HttpUrl
 
 /**
  * TODO: Describe Class
@@ -26,18 +28,31 @@ class SettingsFragment : PreferenceFragmentCompat(), OnActivityListener,
         SharedPreferences.OnSharedPreferenceChangeListener {
 
     companion object {
-        private val LIBRARIES: Array<String> = arrayOf("glide", "jodatimeandroid", "hawk",
-                "materialdialogs", "eventbus", "circleimageview", "okhttp", "leakcanary",
+        private val LIBRARIES = arrayOf("glide", "jodatimeandroid", "hawk", "materialdialogs",
+                "eventbus", "circleimageview", "okhttp", "leakcanary",
                 "android_textview_linkbuilder", "androidflowlayout", "kotterknife")
-        private val EXCLUDED_LIBRARIES: Array<String> = arrayOf("fastadapter", "materialize")
-        private const val OPEN_SOURCE_LINK = "https://github.com/proxer/ProxerAndroid"
+        private val EXCLUDED_LIBRARIES = arrayOf("fastadapter", "materialize")
+        private val OPEN_SOURCE_LINK = HttpUrl.Builder()
+                .scheme("https")
+                .host("github.com")
+                .addPathSegment("proxer")
+                .addPathSegment("ProxerAndroid")
+                .build()
 
         fun newInstance(): SettingsFragment {
             return SettingsFragment()
         }
     }
 
+    private lateinit var customTabsHelper: CustomTabsHelperFragment
+
     private lateinit var hentaiPreference: TwoStatePreference
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        customTabsHelper = CustomTabsHelperFragment.attachTo(this)
+    }
 
     override fun onCreatePreferencesFix(bundle: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences)
@@ -59,7 +74,7 @@ class SettingsFragment : PreferenceFragmentCompat(), OnActivityListener,
         }
 
         findPreference(PreferenceHelper.PREFERENCE_OPEN_SOURCE).setOnPreferenceClickListener {
-            Utils.viewLink(context, OPEN_SOURCE_LINK)
+            showPage(OPEN_SOURCE_LINK)
 
             true
         }
@@ -118,6 +133,10 @@ class SettingsFragment : PreferenceFragmentCompat(), OnActivityListener,
                 activity.recreate()
             }
         }
+    }
+
+    fun showPage(url: HttpUrl) {
+        customTabsHelper.openHttpPage(activity, url)
     }
 
     private fun getAboutLibrariesActivityStyle(): Libs.ActivityStyle {

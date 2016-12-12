@@ -2,7 +2,6 @@ package com.proxerme.app.activity
 
 import android.app.Activity
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import com.proxerme.app.R
@@ -10,7 +9,7 @@ import com.proxerme.app.fragment.manga.MangaFragment
 import com.proxerme.app.util.bindView
 import org.jetbrains.anko.intentFor
 
-class MangaActivity : AppCompatActivity() {
+class MangaActivity : MainActivity() {
 
     companion object {
         private const val EXTRA_ID = "extra_id"

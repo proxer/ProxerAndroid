@@ -127,21 +127,21 @@ class MediaInfoFragment : SingleLoadingFragment<String, Entry>() {
         })
 
         buildBadgeView(genres, data.genres, { it }, { view, genre ->
-            (activity as MediaActivity).showPage(ProxerUrlHolder.getWikiUrl(genre))
+            showPage(ProxerUrlHolder.getWikiUrl(genre))
         }, genresTitle)
 
         buildTagsView(data)
         buildFskView(data.fsk)
 
         buildBadgeView(groups, data.subgroups, { it.name }, { view, subgroup ->
-            (activity as MediaActivity).showPage(ProxerUrlHolder.getSubgroupUrl(subgroup.id,
+            showPage(ProxerUrlHolder.getSubgroupUrl(subgroup.id,
                     ProxerUrlHolder.DEVICE_QUERY_PARAMETER_DEFAULT))
         }, groupsTitle)
 
         buildBadgeView(publishers, data.publishers, {
             getPublisherString(it)
         }, { view, publisher ->
-            (activity as MediaActivity).showPage(ProxerUrlHolder.getPublisherUrl(publisher.id,
+            showPage(ProxerUrlHolder.getPublisherUrl(publisher.id,
                     ProxerUrlHolder.DEVICE_QUERY_PARAMETER_DEFAULT))
         }, publishersTitle)
 

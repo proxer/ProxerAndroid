@@ -22,7 +22,6 @@ import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.framework.ListenableTask
 import com.proxerme.app.task.framework.Task
 import com.proxerme.app.task.framework.ValidatingTask
-import com.proxerme.app.util.Utils
 import com.proxerme.app.util.Validators
 import com.proxerme.app.util.bindView
 import com.proxerme.app.view.MediaControlView
@@ -152,8 +151,8 @@ class MangaFragment : SingleLoadingFragment<MangaInput, Chapter>() {
         pages.adapter = adapter
 
         header.onTranslatorGroupClickListener = {
-            Utils.viewLink(context, ProxerUrlHolder.getSubgroupUrl(it.id,
-                    ProxerUrlHolder.DEVICE_QUERY_PARAMETER_DEFAULT).toString())
+            showPage(ProxerUrlHolder.getSubgroupUrl(it.id,
+                    ProxerUrlHolder.DEVICE_QUERY_PARAMETER_DEFAULT))
         }
 
         header.onUploaderClickListener = {

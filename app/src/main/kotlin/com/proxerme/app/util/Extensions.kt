@@ -1,12 +1,20 @@
 package com.proxerme.app.util
 
+import android.app.Activity
 import android.app.AlarmManager
 import android.app.NotificationManager
 import android.content.Context
+import android.net.Uri
+import android.support.customtabs.CustomTabsIntent
+import android.support.v4.content.ContextCompat
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
+import com.proxerme.app.R
+import com.proxerme.app.activity.WebViewActivity
+import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
+import okhttp3.HttpUrl
 
 /**
  * TODO: Describe class
@@ -36,4 +44,20 @@ fun TextView.measureAndGetHeight(totalMarginDp: Float): Int {
     measure(widthMeasureSpec, heightMeasureSpec)
 
     return measuredHeight
+}
+
+fun CustomTabsHelperFragment.openHttpPage(activity: Activity, url: HttpUrl) {
+    val customTabsIntent = CustomTabsIntent.Builder(session)
+            .setToolbarColor(ContextCompat.getColor(context, R.color.colorPrimary))
+            .setSecondaryToolbarColor(ContextCompat.getColor(context,
+                    R.color.colorPrimaryDark))
+            .addDefaultShareMenuItem()
+            .enableUrlBarHiding()
+            .setShowTitle(true)
+            .build()
+
+    CustomTabsHelperFragment.open(activity, customTabsIntent, Uri.parse(url.toString()),
+            { activity, uri ->
+                WebViewActivity.navigateTo(activity, uri.toString())
+            })
 }

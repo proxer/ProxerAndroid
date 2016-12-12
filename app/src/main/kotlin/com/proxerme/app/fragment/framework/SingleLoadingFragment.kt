@@ -17,6 +17,7 @@ import com.proxerme.app.manager.UserManager
 import com.proxerme.app.task.framework.*
 import com.proxerme.app.util.*
 import com.proxerme.library.connection.ProxerException
+import okhttp3.HttpUrl
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -157,7 +158,9 @@ abstract class SingleLoadingFragment<I, T> : MainFragment() {
                                  onButtonClickListener: View.OnClickListener? = null) {
         errorText.text = Utils.buildClickableText(context, message,
                 onWebClickListener = Link.OnClickListener { link ->
-                    Utils.viewLink(context, link + "?device=mobile")
+                    showPage(HttpUrl.parse(link).newBuilder()
+                            .addQueryParameter("device", "mobile")
+                            .build())
                 })
 
         errorButton.text = when (buttonMessage) {

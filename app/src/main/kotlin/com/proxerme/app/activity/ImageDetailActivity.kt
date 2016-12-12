@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.ActivityOptionsCompat
-import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -24,7 +23,7 @@ import okhttp3.HttpUrl
 
  * @author Ruben Gees
  */
-class ImageDetailActivity : AppCompatActivity() {
+class ImageDetailActivity : MainActivity() {
 
     companion object {
         private const val EXTRA_URL = "extra_url"

@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.ViewPager
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import com.proxerme.app.R
@@ -16,7 +15,7 @@ import com.proxerme.app.fragment.ucp.UcpOverviewFragment
 import com.proxerme.app.util.bindView
 import org.jetbrains.anko.startActivity
 
-class UcpActivity : AppCompatActivity() {
+class UcpActivity : MainActivity() {
 
     companion object {
         fun navigateTo(context: Activity) {

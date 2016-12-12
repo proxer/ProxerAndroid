@@ -26,6 +26,7 @@ import com.proxerme.app.util.*
 import com.proxerme.app.util.listener.EndlessRecyclerOnScrollListener
 import com.proxerme.library.connection.ProxerException
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
+import okhttp3.HttpUrl
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -206,7 +207,9 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
         Utils.showError(context, message, headerFooterAdapter,
                 buttonMessage = buttonMessage, parent = root,
                 onWebClickListener = Link.OnClickListener { link ->
-                    Utils.viewLink(context, link + "?device=mobile")
+                    showPage(HttpUrl.parse(link).newBuilder()
+                            .addQueryParameter("device", "mobile")
+                            .build())
                 },
                 onButtonClickListener = onButtonClickListener ?: View.OnClickListener {
                     task.reset()

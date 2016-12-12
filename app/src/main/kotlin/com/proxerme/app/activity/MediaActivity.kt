@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.ViewPager
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.widget.ImageView
@@ -20,12 +19,10 @@ import com.proxerme.app.fragment.media.CommentFragment
 import com.proxerme.app.fragment.media.EpisodesFragment
 import com.proxerme.app.fragment.media.MediaInfoFragment
 import com.proxerme.app.fragment.media.RelationsFragment
-import com.proxerme.app.module.CustomTabsModule
 import com.proxerme.app.util.bindView
 import com.proxerme.library.info.ProxerUrlHolder
-import customtabs.CustomTabActivityHelper
 
-class MediaActivity : AppCompatActivity(), CustomTabsModule {
+class MediaActivity : MainActivity() {
 
     companion object {
         private const val EXTRA_ID = "extra_id"
@@ -40,8 +37,6 @@ class MediaActivity : AppCompatActivity(), CustomTabsModule {
                     })
         }
     }
-
-    override val customTabActivityHelper: CustomTabActivityHelper = CustomTabActivityHelper()
 
     private lateinit var id: String
     private var name: String? = null
@@ -88,22 +83,6 @@ class MediaActivity : AppCompatActivity(), CustomTabsModule {
 
             viewPager.currentItem = sectionToShow
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        try {
-            customTabActivityHelper.bindCustomTabsService(this)
-        } catch(ignored: Exception) {
-            // Workaround for crash if chrome is not installed
-        }
-    }
-
-    override fun onStop() {
-        customTabActivityHelper.unbindCustomTabsService(this)
-
-        super.onStop()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

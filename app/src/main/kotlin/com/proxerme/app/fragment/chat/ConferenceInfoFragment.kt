@@ -19,6 +19,7 @@ import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.messenger.entity.ConferenceInfoContainer
 import com.proxerme.library.connection.messenger.entity.ConferenceInfoUser
 import com.proxerme.library.connection.messenger.request.ConferenceInfoRequest
+import okhttp3.HttpUrl
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 
@@ -57,8 +58,11 @@ class ConferenceInfoFragment : SingleLoadingFragment<String, ConferenceInfoConta
         adapter = ConferenceParticipantAdapter()
         adapter.callback = object : ConferenceParticipantAdapterCallback() {
             override fun onItemClick(item: ConferenceInfoUser) {
-                UserActivity.navigateTo(activity, item.id, item.username,
-                        item.imageId)
+                UserActivity.navigateTo(activity, item.id, item.username, item.imageId)
+            }
+
+            override fun onStatusLinkClick(link: HttpUrl) {
+                showPage(link)
             }
         }
     }

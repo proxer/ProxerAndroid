@@ -33,6 +33,7 @@ import com.proxerme.app.util.bindView
 import com.proxerme.app.util.inputMethodManager
 import com.vanniktech.emoji.EmojiEditText
 import com.vanniktech.emoji.EmojiPopup
+import okhttp3.HttpUrl
 import org.jetbrains.anko.toast
 
 /**
@@ -130,13 +131,13 @@ class ChatFragment : PagedLoadingFragment<ChatInput, LocalMessage>() {
             }
         }
 
-        override fun onMessageLinkClick(link: String) {
-            Utils.viewLink(context, link)
+        override fun onMessageLinkClick(link: HttpUrl) {
+            showPage(link)
         }
 
-        override fun onMessageLinkLongClick(link: String) {
+        override fun onMessageLinkLongClick(link: HttpUrl) {
             Utils.setClipboardContent(activity, getString(R.string.fragment_chat_link_clip_title),
-                    link)
+                    link.toString())
 
             context.toast(R.string.clipboard_status)
         }

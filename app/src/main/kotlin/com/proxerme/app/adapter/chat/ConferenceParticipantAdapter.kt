@@ -18,6 +18,7 @@ import com.proxerme.app.util.Utils
 import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.messenger.entity.ConferenceInfoUser
 import com.proxerme.library.info.ProxerUrlHolder
+import okhttp3.HttpUrl
 
 /**
  * TODO: Describe class
@@ -78,7 +79,7 @@ class ConferenceParticipantAdapter : PagingAdapter<ConferenceInfoUser>() {
                 status.visibility = View.VISIBLE
                 status.text = Utils.buildClickableText(status.context, item.status,
                         onWebClickListener = Link.OnClickListener { link ->
-                            Utils.viewLink(status.context, link)
+                            callback?.onStatusLinkClick(HttpUrl.parse(link))
                         })
             }
 
@@ -99,6 +100,10 @@ class ConferenceParticipantAdapter : PagingAdapter<ConferenceInfoUser>() {
 
     abstract class ConferenceParticipantAdapterCallback {
         open fun onItemClick(item: ConferenceInfoUser) {
+
+        }
+
+        open fun onStatusLinkClick(link: HttpUrl) {
 
         }
     }

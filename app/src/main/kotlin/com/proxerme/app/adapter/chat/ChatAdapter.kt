@@ -21,6 +21,7 @@ import com.proxerme.app.util.Utils
 import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.user.entitiy.User
 import com.proxerme.library.parameters.ActionParameter
+import okhttp3.HttpUrl
 
 /**
  * TODO: Describe class
@@ -232,11 +233,11 @@ class ChatAdapter(val isGroup: Boolean) : PagingAdapter<LocalMessage>() {
 
         }
 
-        open fun onMessageLinkClick(link: String) {
+        open fun onMessageLinkClick(link: HttpUrl) {
 
         }
 
-        open fun onMessageLinkLongClick(link: String) {
+        open fun onMessageLinkLongClick(link: HttpUrl) {
 
         }
 
@@ -318,10 +319,10 @@ class ChatAdapter(val isGroup: Boolean) : PagingAdapter<LocalMessage>() {
         protected open fun applyMessage(message: LocalMessage) {
             text.text = Utils.buildClickableText(text.context, message.message,
                     onWebClickListener = Link.OnClickListener {
-                        callback?.onMessageLinkClick(it)
+                        callback?.onMessageLinkClick(HttpUrl.parse(it))
                     },
                     onWebLongClickListener = Link.OnLongClickListener {
-                        callback?.onMessageLinkLongClick(it)
+                        callback?.onMessageLinkLongClick(HttpUrl.parse(it))
                     },
                     onMentionsClickListener = Link.OnClickListener {
                         callback?.onMentionsClick(it.trim().substring(1))

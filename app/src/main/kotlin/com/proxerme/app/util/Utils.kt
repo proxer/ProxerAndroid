@@ -1,11 +1,12 @@
 package com.proxerme.app.util
 
 import android.app.Activity
-import android.content.*
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Point
-import android.net.Uri
 import android.os.Build
 import android.support.annotation.ColorRes
 import android.support.design.widget.Snackbar
@@ -35,7 +36,6 @@ import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.library.connection.ProxerException
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import org.jetbrains.anko.childrenSequence
-import org.jetbrains.anko.toast
 import java.util.concurrent.ExecutionException
 import java.util.regex.Pattern
 
@@ -263,20 +263,6 @@ object Utils {
         val clip = ClipData.newPlainText(label, content)
 
         clipboard.primaryClip = clip
-    }
-
-    fun viewLink(context: Context, link: String) {
-        var uri = Uri.parse(link)
-
-        if (uri.isRelative) {
-            uri = uri.buildUpon().scheme("http").build()
-        }
-
-        try {
-            context.startActivity(Intent(Intent.ACTION_VIEW, uri))
-        } catch (exception: ActivityNotFoundException) {
-            context.toast(R.string.link_error_not_found)
-        }
     }
 
     abstract class OnTextListener : TextWatcher {

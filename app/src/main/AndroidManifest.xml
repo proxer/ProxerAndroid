@@ -90,7 +90,7 @@
         <activity android:name=".activity.chat.ConferenceInfoActivity" />
         <activity android:name=".activity.MangaActivity" />
         <activity android:name=".activity.AnimeActivity" />
-        <activity android:name="customtabs.WebviewActivity" />
+        <activity android:name=".activity.WebViewActivity" />
 
         <service android:name="customtabs.KeepAliveService" />
         <service android:name=".service.NotificationService" />

@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import com.proxerme.app.R
 import com.proxerme.app.dialog.LoginDialog
@@ -33,14 +32,12 @@ import com.proxerme.app.helper.PreferenceHelper
 import com.proxerme.app.helper.StorageHelper
 import com.proxerme.app.interfaces.OnActivityListener
 import com.proxerme.app.manager.UserManager
-import com.proxerme.app.module.CustomTabsModule
 import com.proxerme.app.util.bindView
 import com.proxerme.library.info.ProxerUrlHolder
 import com.proxerme.library.parameters.CategoryParameter
 import com.rubengees.introduction.IntroductionActivity.OPTION_RESULT
 import com.rubengees.introduction.IntroductionBuilder
 import com.rubengees.introduction.entity.Option
-import customtabs.CustomTabActivityHelper
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -51,7 +48,7 @@ import org.jetbrains.anko.intentFor
  *
  * @author Ruben Gees
  */
-class DashboardActivity : AppCompatActivity(), CustomTabsModule {
+class DashboardActivity : MainActivity() {
 
     companion object {
         private const val STATE_TITLE = "activity_dashboard_title"
@@ -62,8 +59,6 @@ class DashboardActivity : AppCompatActivity(), CustomTabsModule {
             return context.intentFor<DashboardActivity>(EXTRA_DRAWER_ITEM to itemId)
         }
     }
-
-    override val customTabActivityHelper: CustomTabActivityHelper = CustomTabActivityHelper()
 
     private lateinit var drawer: MaterialDrawerHelper
     private var onActivityListener: OnActivityListener? = null
@@ -94,18 +89,11 @@ class DashboardActivity : AppCompatActivity(), CustomTabsModule {
     override fun onStart() {
         super.onStart()
 
-        try {
-            customTabActivityHelper.bindCustomTabsService(this)
-        } catch(ignored: Exception) {
-            // Workaround for crash if chrome is not installed
-        }
-
         EventBus.getDefault().register(this)
     }
 
     override fun onStop() {
         EventBus.getDefault().unregister(this)
-        customTabActivityHelper.unbindCustomTabsService(this)
 
         super.onStop()
     }

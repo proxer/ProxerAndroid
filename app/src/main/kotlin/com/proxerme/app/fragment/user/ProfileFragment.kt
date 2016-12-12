@@ -20,6 +20,7 @@ import com.proxerme.app.util.Utils
 import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.user.entitiy.UserInfo
 import com.proxerme.library.connection.user.request.UserInfoRequest
+import okhttp3.HttpUrl
 
 /**
  * TODO: Describe class
@@ -97,7 +98,9 @@ class ProfileFragment : SingleLoadingFragment<ProfileInput, UserInfo>() {
             statusText.text = Utils.buildClickableText(statusText.context, data.status + " - " +
                     TimeUtil.convertToRelativeReadableTime(context, data.lastStatusChange),
                     Link.OnClickListener { link ->
-                        Utils.viewLink(context, link + "?device=mobile")
+                        showPage(HttpUrl.parse(link).newBuilder()
+                                .addQueryParameter("device", "mobile")
+                                .build())
                     })
         }
     }

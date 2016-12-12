@@ -113,6 +113,7 @@ dependencies {
     compile 'com.devbrackets.android:exomedia:3.0.1'
 
     compile 'me.zhanghai.android.materialratingbar:library:1.0.2'
+    compile 'me.zhanghai.android.customtabshelper:library:1.0.3'
 
     compile 'com.github.proxer:ProxerLibAndroid:25ad96f994'
     compile 'com.github.rubengees:EasyHeaderFooterAdapter:1.0.4@aar'

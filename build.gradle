@@ -3,7 +3,7 @@ buildscript {
     ext.support_version = '25.0.1'
     ext.anko_version = '0.9'
     ext.leak_canary_version = '1.5'
-    ext.build_tools_version = '25.0.0'
+    ext.build_tools_version = '25.0.1'
 
     repositories {
         jcenter()

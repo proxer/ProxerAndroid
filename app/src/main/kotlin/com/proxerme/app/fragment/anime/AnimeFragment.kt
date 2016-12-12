@@ -23,7 +23,6 @@ import com.proxerme.app.task.StreamResolutionTask
 import com.proxerme.app.task.StreamResolutionTask.*
 import com.proxerme.app.task.framework.*
 import com.proxerme.app.util.ErrorHandler
-import com.proxerme.app.util.Utils
 import com.proxerme.app.util.Validators
 import com.proxerme.app.util.bindView
 import com.proxerme.app.view.MediaControlView
@@ -145,8 +144,8 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
 
             override fun onTranslatorGroupClick(item: Stream) {
                 item.subgroupId?.let {
-                    Utils.viewLink(context, ProxerUrlHolder.getSubgroupUrl(it,
-                            ProxerUrlHolder.DEVICE_QUERY_PARAMETER_DEFAULT).toString())
+                    showPage(ProxerUrlHolder.getSubgroupUrl(it,
+                            ProxerUrlHolder.DEVICE_QUERY_PARAMETER_DEFAULT))
                 }
             }
 

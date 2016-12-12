@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import com.proxerme.app.activity.DashboardActivity
 import com.proxerme.app.activity.ImageDetailActivity
 import com.proxerme.app.adapter.news.NewsAdapter
 import com.proxerme.app.adapter.news.NewsAdapter.NewsAdapterCallback
@@ -46,8 +45,7 @@ class NewsFragment : PagedLoadingFragment<PagedInput, News>() {
         adapter = NewsAdapter()
         adapter.callback = object : NewsAdapterCallback() {
             override fun onItemClick(item: News) {
-                (activity as DashboardActivity).showPage(ProxerUrlHolder.getNewsUrl(item.categoryId,
-                        item.threadId, "mobile"))
+                showPage(ProxerUrlHolder.getNewsUrl(item.categoryId, item.threadId, "mobile"))
             }
 
             override fun onNewsImageClick(view: ImageView, item: News) {
@@ -56,8 +54,7 @@ class NewsFragment : PagedLoadingFragment<PagedInput, News>() {
             }
 
             override fun onNewsExpanded(item: News) {
-                (activity as DashboardActivity)
-                        .setLikelyUrl(ProxerUrlHolder.getNewsUrl(item.categoryId,
+                setLikelyUrl(ProxerUrlHolder.getNewsUrl(item.categoryId,
                                 item.threadId, "mobile"))
             }
         }
