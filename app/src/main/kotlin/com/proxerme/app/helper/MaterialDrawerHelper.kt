@@ -18,7 +18,6 @@ import com.mikepenz.materialdrawer.model.ProfileSettingDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IProfile
 import com.proxerme.app.R
-import com.proxerme.app.interfaces.OnActivityListener
 import com.proxerme.app.manager.UserManager
 import com.proxerme.library.info.ProxerUrlHolder
 import java.util.*
@@ -32,8 +31,7 @@ import java.util.*
 class MaterialDrawerHelper(context: Activity, toolbar: Toolbar,
                            savedInstanceState: Bundle?,
                            private val itemClickCallback: (id: Long) -> Boolean = { false },
-                           private val accountClickCallback: (id: Long) -> Boolean = { false }) :
-        OnActivityListener {
+                           private val accountClickCallback: (id: Long) -> Boolean = { false }) {
 
     companion object {
         const val ITEM_NEWS = 0L
@@ -71,7 +69,13 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar,
 
     private var currentId: Long
 
-    override fun onBackPressed(): Boolean {
+    init {
+        header = buildAccountHeader(context, savedInstanceState)
+        drawer = buildDrawer(context, toolbar, header, savedInstanceState)
+        currentId = savedInstanceState?.getLong(STATE_CURRENT_DRAWER_ITEM_ID) ?: -1L
+    }
+
+    fun onBackPressed(): Boolean {
         if (isDrawerOpen()) {
             drawer.closeDrawer()
 
@@ -277,12 +281,6 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar,
                 }
             }
         }
-    }
-
-    init {
-        header = buildAccountHeader(context, savedInstanceState)
-        drawer = buildDrawer(context, toolbar, header, savedInstanceState)
-        currentId = savedInstanceState?.getLong(STATE_CURRENT_DRAWER_ITEM_ID) ?: -1L
     }
 
 }

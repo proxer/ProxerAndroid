@@ -114,12 +114,8 @@ class DashboardActivity : MainActivity() {
     }
 
     override fun onBackPressed() {
-        if (drawer.isDrawerOpen()) {
-            drawer.onBackPressed()
-        } else {
-            if (!drawer.onBackPressed()) {
-                super.onBackPressed()
-            }
+        if (!drawer.onBackPressed()) {
+            super.onBackPressed()
         }
     }
 
