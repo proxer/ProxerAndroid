@@ -26,7 +26,9 @@ object ErrorUtils {
             ProxerException.PROXER -> {
                 return exception.message ?: context.getString(R.string.error_unknown)
             }
+            ProxerException.TIMEOUT -> return context.getString(R.string.error_timeout)
             ProxerException.NETWORK -> return context.getString(R.string.error_network)
+            ProxerException.UNPARSABLE -> return context.getString(R.string.error_unparseable)
             else -> return context.getString(R.string.error_unknown)
         }
     }

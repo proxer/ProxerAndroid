@@ -3,6 +3,7 @@ package com.proxerme.app.stream.resolver
 import com.proxerme.app.application.MainApplication
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionException
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionResult
+import okhttp3.HttpUrl
 import okhttp3.Request
 
 /**
@@ -12,16 +13,15 @@ import okhttp3.Request
  */
 class DailyMotionStreamResolver : StreamResolver() {
 
-    override val name = "dailymotion"
+    override val name = "dailymotion.com"
 
     private val regex = Regex("\"qualities\":(\\{.+\\}\\]\\}),")
 
-    override fun resolve(url: String): StreamResolutionResult {
-        val fixedUrl = if (url.startsWith("//")) "http:" + url else url
+    override fun resolve(url: HttpUrl): StreamResolutionResult {
         val response = validateAndGetResult(MainApplication.proxerConnection.httpClient
                 .newCall(Request.Builder()
                         .get()
-                        .url(fixedUrl)
+                        .url(url)
                         .build()).execute())
 
         val qualitiesJson = regex.find(response)?.value
@@ -39,14 +39,15 @@ class DailyMotionStreamResolver : StreamResolver() {
 
                 qualityEntry.value.mapNotNull {
                     if (it["type"] == "video/mp4" && it["url"]?.isNotBlank() ?: false) {
-                        Pair(quality, it["url"])
+                        quality to it["url"]
                     } else {
                         null
                     }
                 }
             }?.flatten()?.sortedByDescending { it.first }
 
-            val result = mp4Links?.firstOrNull()?.second ?: throw StreamResolutionException()
+            val result = HttpUrl.parse(mp4Links?.firstOrNull()?.second)
+                    ?: throw StreamResolutionException()
 
             return StreamResolutionResult(result, "video/mp4")
         } else {

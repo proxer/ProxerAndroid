@@ -27,6 +27,7 @@ import com.proxerme.app.util.Validators
 import com.proxerme.app.util.bindView
 import com.proxerme.app.view.MediaControlView
 import com.proxerme.library.connection.ProxerException
+import com.proxerme.library.connection.ProxerException.UNPARSABLE
 import com.proxerme.library.connection.anime.entity.Stream
 import com.proxerme.library.connection.anime.request.LinkRequest
 import com.proxerme.library.connection.anime.request.StreamsRequest
@@ -34,7 +35,9 @@ import com.proxerme.library.connection.ucp.request.SetReminderRequest
 import com.proxerme.library.info.ProxerUrlHolder
 import com.proxerme.library.parameters.CategoryParameter
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
+import okhttp3.HttpUrl
 import java.io.IOException
+import java.net.SocketTimeoutException
 
 /**
  * TODO: Describe class
@@ -81,7 +84,7 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
 
     private val streamResolverSuccess = { result: StreamResolutionResult ->
         context.startActivity(Intent(Intent.ACTION_VIEW).apply {
-            setDataAndType(Uri.parse(result.url), result.mimeType)
+            setDataAndType(Uri.parse(result.url.toString()), result.mimeType)
         })
     }
 
@@ -97,10 +100,21 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
                 Snackbar.make(root, ErrorUtils.getMessageForErrorCode(context, exception),
                         Snackbar.LENGTH_LONG).show()
             }
+            is SocketTimeoutException -> {
+                Snackbar.make(root, R.string.error_timeout, Snackbar.LENGTH_LONG).show()
+            }
             is IOException -> {
-                Snackbar.make(root, R.string.error_io, Snackbar.LENGTH_LONG).show()
+                Snackbar.make(root, R.string.error_network, Snackbar.LENGTH_LONG).show()
             }
             else -> Snackbar.make(root, R.string.error_unknown, Snackbar.LENGTH_LONG).show()
+        }
+    }
+
+    private val urlTransform = { it: String ->
+        try {
+            HttpUrl.parse(if (it.startsWith("//")) "http:$it" else it)
+        } catch(exception: Exception) {
+            throw ProxerException(UNPARSABLE)
         }
     }
 
@@ -230,6 +244,10 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
         return ProxerLoadingTask({ StreamsRequest(it.id, it.episode, it.language) })
     }
 
+    override fun constructInput(): AnimeInput {
+        return AnimeInput(id, episode, language)
+    }
+
     private fun constructReminderTask(): Task<AnimeInput, Void?> {
         return ValidatingTask(ProxerLoadingTask({
             SetReminderRequest(it.id, it.episode, it.language, CategoryParameter.ANIME)
@@ -238,15 +256,12 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
 
     private fun constructStreamResolverTask(): Task<String, StreamResolutionResult> {
         return ListeningTask((StreamedTask(ProxerLoadingTask(::LinkRequest),
-                StreamResolutionTask())), streamResolverSuccess, streamResolverException).onStart {
+                StreamResolutionTask(), urlTransform)),
+                streamResolverSuccess, streamResolverException).onStart {
             setRefreshing(true)
         }.onFinish {
             updateRefreshing()
         }
-    }
-
-    override fun constructInput(): AnimeInput {
-        return AnimeInput(id, episode, language)
     }
 
     private fun switchEpisode(newEpisode: Int) {

@@ -20,7 +20,11 @@ class StreamedTask<I, MO, MI, O>(private val firstTask: Task<I, MO>,
 
     init {
         firstTask.successCallback = {
-            secondTask.execute(mapFunction.invoke(it))
+            try {
+                secondTask.execute(mapFunction.invoke(it))
+            } catch(exception: Exception) {
+                finishWithException(exception)
+            }
         }
 
         firstTask.exceptionCallback = {

@@ -4,6 +4,7 @@ import com.proxerme.app.application.MainApplication
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionException
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionResult
 import okhttp3.FormBody
+import okhttp3.HttpUrl
 import okhttp3.Request
 
 /**
@@ -13,12 +14,12 @@ import okhttp3.Request
  */
 class StreamcloudResolver : StreamResolver() {
 
-    override val name = "streamcloud"
+    override val name = "streamcloud.eu"
 
     private val fromRegex = Regex("<input.*?name=\"(.*?)\".*?value=\"(.*?)\">")
     private val fileRegex = Regex("file: \"(.+?)\",")
 
-    override fun resolve(url: String): StreamResolutionResult {
+    override fun resolve(url: HttpUrl): StreamResolutionResult {
         var response = MainApplication.proxerConnection.httpClient.newCall(Request.Builder()
                 .get()
                 .url(url)
@@ -35,8 +36,8 @@ class StreamcloudResolver : StreamResolver() {
                 .build())
                 .execute()
 
-        val result = fileRegex.find(validateAndGetResult(response))?.groupValues?.get(1)
-                ?: throw StreamResolutionException()
+        val result = HttpUrl.parse(fileRegex.find(validateAndGetResult(response))
+                ?.groupValues?.get(1)) ?: throw StreamResolutionException()
 
         return StreamResolutionResult(result, "video/mp4")
     }

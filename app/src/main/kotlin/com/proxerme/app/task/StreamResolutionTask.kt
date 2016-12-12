@@ -5,6 +5,7 @@ import android.os.Looper
 import com.proxerme.app.stream.StreamResolverFactory
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionResult
 import com.proxerme.app.task.framework.BaseListenableTask
+import okhttp3.HttpUrl
 import org.jetbrains.anko.doAsync
 import java.util.concurrent.Future
 
@@ -15,7 +16,7 @@ import java.util.concurrent.Future
  */
 class StreamResolutionTask(successCallback: ((StreamResolutionResult) -> Unit)? = null,
                            exceptionCallback: ((Exception) -> Unit)? = null) :
-        BaseListenableTask<String, StreamResolutionResult>(successCallback, exceptionCallback) {
+        BaseListenableTask<HttpUrl, StreamResolutionResult>(successCallback, exceptionCallback) {
 
     override val isWorking: Boolean
         get() = !(future?.isDone ?: true)
@@ -23,7 +24,7 @@ class StreamResolutionTask(successCallback: ((StreamResolutionResult) -> Unit)? 
     private val handler = Handler(Looper.getMainLooper())
     private var future: Future<Unit>? = null
 
-    override fun execute(input: String) {
+    override fun execute(input: HttpUrl) {
         start {
             future = doAsync {
                 try {
@@ -61,7 +62,7 @@ class StreamResolutionTask(successCallback: ((StreamResolutionResult) -> Unit)? 
         super.destroy()
     }
 
-    class StreamResolutionResult(val url: String, val mimeType: String)
+    class StreamResolutionResult(val url: HttpUrl, val mimeType: String)
     class NoResolverException : Exception()
     class StreamResolutionException : Exception()
 }

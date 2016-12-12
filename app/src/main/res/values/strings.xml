@@ -351,6 +351,7 @@
     <string name="item_stream_play">Abspielen</string>
     <string name="comment_rating_overall">Insgesamt</string>
     <string name="fragment_episodes_title">Episoden</string>
+    <string name="error_timeout">Der Server hat nicht rechtzeitig geantwortet. Versuche es später noch einmal</string>
 
     <plurals name="media_episode_count">
         <item quantity="one">Eine Episode</item>
