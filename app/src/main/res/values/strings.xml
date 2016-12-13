@@ -39,6 +39,8 @@
     <string name="error_refresh">Aktualisierung fehlgeschlagen</string>
     <string name="error_unsupported_hoster">Dieser Hoster wird nicht unterstützt</string>
     <string name="error_stream_resolution">Fehler beim Laden des Streams</string>
+    <string name="error_activity_not_found">Keine App zur Anzeige gefunden</string>
+    <string name="error_timeout">Der Server hat nicht rechtzeitig geantwortet. Versuche es später noch einmal</string>
     <plurals name="error_reminder_removal">
         <item quantity="one">Ein Lesezeichen konnte nicht gelöscht werden</item>
         <item quantity="other">%d Lesezeichen konnten nicht gelöscht werden</item>
@@ -125,6 +127,10 @@
 
     <string name="dialog_hentai_content">Dieser Bereich darf nur von Benutzern über 18 Jahren betreten werden! Eltern haften für ihre Kinder. Proxer.Me übernimmt keinerlei Haftung!</string>
     <string name="dialog_hentai_positive">Verstanden</string>
+
+    <string name="dialog_crunchyroll_title">Crunchyroll App</string>
+    <string name="dialog_crunchyroll_content">Zum Verwenden dieses Streams ist die Crunchyroll App nötig</string>
+    <string name="dialog_crunchyroll_positive">Installieren</string>
 
     <plurals name="item_conferences_participants">
         <item quantity="other">%d Teilnehmer</item>
@@ -351,7 +357,6 @@
     <string name="item_stream_play">Abspielen</string>
     <string name="comment_rating_overall">Insgesamt</string>
     <string name="fragment_episodes_title">Episoden</string>
-    <string name="error_timeout">Der Server hat nicht rechtzeitig geantwortet. Versuche es später noch einmal</string>
 
     <plurals name="media_episode_count">
         <item quantity="one">Eine Episode</item>

@@ -1,12 +1,18 @@
 package com.proxerme.app.task
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Handler
 import android.os.Looper
+import android.support.design.widget.Snackbar
+import android.support.v7.app.AppCompatActivity
+import com.proxerme.app.R
 import com.proxerme.app.stream.StreamResolverFactory
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionResult
 import com.proxerme.app.task.framework.BaseListenableTask
 import okhttp3.HttpUrl
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.find
 import java.util.concurrent.Future
 
 /**
@@ -62,7 +68,31 @@ class StreamResolutionTask(successCallback: ((StreamResolutionResult) -> Unit)? 
         super.destroy()
     }
 
-    class StreamResolutionResult(val url: HttpUrl, val mimeType: String)
+    class StreamResolutionResult {
+
+        private companion object {
+            private val defaultNotFoundAction: (AppCompatActivity) -> Unit = {
+                Snackbar.make(it.find(android.R.id.content), R.string.error_activity_not_found,
+                        Snackbar.LENGTH_LONG)
+            }
+        }
+
+        val intent: Intent
+        val notFoundAction: (AppCompatActivity) -> Unit
+
+        constructor(intent: Intent,
+                    notFoundAction: (AppCompatActivity) -> Unit = defaultNotFoundAction) {
+            this.intent = intent
+            this.notFoundAction = notFoundAction
+        }
+
+        constructor(uri: Uri, mimeType: String,
+                    notFoundAction: (AppCompatActivity) -> Unit = defaultNotFoundAction) {
+            this.intent = Intent(Intent.ACTION_VIEW).apply { setDataAndType(uri, mimeType) }
+            this.notFoundAction = notFoundAction
+        }
+    }
+
     class NoResolverException : Exception()
     class StreamResolutionException : Exception()
 }

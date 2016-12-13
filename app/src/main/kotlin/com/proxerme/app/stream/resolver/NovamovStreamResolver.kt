@@ -1,5 +1,6 @@
 package com.proxerme.app.stream.resolver
 
+import android.net.Uri
 import com.proxerme.app.application.MainApplication
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionException
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionResult
@@ -37,7 +38,7 @@ class NovamovStreamResolver : StreamResolver() {
                 .url("http://www.auroravid.to/api/player.api.php?file=%s&key=%s".format(file, fileKey))
                 .build()).execute()
 
-        val result = HttpUrl.parse(urlRegex.find(validateAndGetResult(apiResponse))
+        val result = Uri.parse(urlRegex.find(validateAndGetResult(apiResponse))
                 ?.groupValues?.get(1)) ?: throw StreamResolutionException()
 
         return StreamResolutionResult(result, "video/x-flv")

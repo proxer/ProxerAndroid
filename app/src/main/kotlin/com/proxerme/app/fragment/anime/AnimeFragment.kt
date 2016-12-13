@@ -1,7 +1,6 @@
 package com.proxerme.app.fragment.anime
 
-import android.content.Intent
-import android.net.Uri
+import android.content.ActivityNotFoundException
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
@@ -83,9 +82,11 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
     }
 
     private val streamResolverSuccess = { result: StreamResolutionResult ->
-        context.startActivity(Intent(Intent.ACTION_VIEW).apply {
-            setDataAndType(Uri.parse(result.url.toString()), result.mimeType)
-        })
+        try {
+            context.startActivity(result.intent)
+        } catch (exception: ActivityNotFoundException) {
+            result.notFoundAction.invoke(activity as AppCompatActivity)
+        }
     }
 
     private val streamResolverException = { exception: Exception ->
@@ -112,7 +113,11 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
 
     private val urlTransform = { it: String ->
         try {
-            HttpUrl.parse(if (it.startsWith("//")) "http:$it" else it)
+            HttpUrl.parse(when {
+                it.isBlank() -> throw ProxerException(UNPARSABLE)
+                it.startsWith("//") -> "http:$it"
+                else -> it
+            })
         } catch(exception: Exception) {
             throw ProxerException(UNPARSABLE)
         }

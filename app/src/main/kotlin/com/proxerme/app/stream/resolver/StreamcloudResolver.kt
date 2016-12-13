@@ -1,5 +1,6 @@
 package com.proxerme.app.stream.resolver
 
+import android.net.Uri
 import com.proxerme.app.application.MainApplication
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionException
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionResult
@@ -36,7 +37,7 @@ class StreamcloudResolver : StreamResolver() {
                 .build())
                 .execute()
 
-        val result = HttpUrl.parse(fileRegex.find(validateAndGetResult(response))
+        val result = Uri.parse(fileRegex.find(validateAndGetResult(response))
                 ?.groupValues?.get(1)) ?: throw StreamResolutionException()
 
         return StreamResolutionResult(result, "video/mp4")

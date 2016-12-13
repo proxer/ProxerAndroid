@@ -11,7 +11,8 @@ import okhttp3.HttpUrl
 object StreamResolverFactory {
 
     private val resolvers = arrayOf(Mp4UploadResolver(), StreamcloudResolver(),
-            DailyMotionStreamResolver(), NovamovStreamResolver(), ProxerProductStreamResolver())
+            DailyMotionStreamResolver(), NovamovStreamResolver(), ProxerProductStreamResolver(),
+            CrunchyrollResolver())
 
     fun getResolverFor(url: HttpUrl): StreamResolver? {
         return resolvers.firstOrNull { it.appliesTo(url) }

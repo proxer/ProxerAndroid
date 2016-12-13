@@ -1,5 +1,6 @@
 package com.proxerme.app.stream.resolver
 
+import android.net.Uri
 import com.proxerme.app.application.MainApplication
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionException
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionResult
@@ -46,7 +47,7 @@ class DailyMotionStreamResolver : StreamResolver() {
                 }
             }?.flatten()?.sortedByDescending { it.first }
 
-            val result = HttpUrl.parse(mp4Links?.firstOrNull()?.second)
+            val result = Uri.parse(mp4Links?.firstOrNull()?.second)
                     ?: throw StreamResolutionException()
 
             return StreamResolutionResult(result, "video/mp4")
