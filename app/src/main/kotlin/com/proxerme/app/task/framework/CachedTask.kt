@@ -7,10 +7,10 @@ import com.proxerme.app.task.framework.CachedTask.CacheStrategy
  *
  * @author Ruben Gees
  */
-class CachedTask<I, O>(private val task: Task<I, O>,
-                       cacheStrategy: CacheStrategy = CacheStrategy.FULL,
-                       successCallback: ((O) -> Unit)? = null,
-                       exceptionCallback: ((Exception) -> Unit)? = null) :
+class CachedTask<in I, O>(private val task: Task<I, O>,
+                          cacheStrategy: CacheStrategy = CacheStrategy.FULL,
+                          successCallback: ((O) -> Unit)? = null,
+                          exceptionCallback: ((Exception) -> Unit)? = null) :
         BaseTask<I, O>(successCallback, exceptionCallback) {
 
     override val isWorking: Boolean
@@ -28,20 +28,20 @@ class CachedTask<I, O>(private val task: Task<I, O>,
         task.successCallback = {
             cachedResult = if (shouldCachedResult) it else null
 
-            super.successCallback?.invoke(it)
+            finishSuccessful(it)
         }
 
         task.exceptionCallback = {
             cachedException = if (shouldCacheException) it else null
 
-            super.exceptionCallback?.invoke(it)
+            finishWithException(it)
         }
     }
 
     override fun execute(input: I) {
         if (shouldCachedResult) {
             cachedResult?.let {
-                successCallback?.invoke(it)
+                finishSuccessful(it)
 
                 return
             }
@@ -53,7 +53,7 @@ class CachedTask<I, O>(private val task: Task<I, O>,
 
         if (shouldCacheException) {
             cachedException?.let {
-                exceptionCallback?.invoke(it)
+                finishWithException(it)
 
                 return
             }

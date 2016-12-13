@@ -64,8 +64,8 @@ class ConferencesTask(successCallback: ((List<LocalConference>) -> Unit)? = null
 
     override fun destroy() {
         EventBus.getDefault().unregister(this)
-
         reset()
+
         super.destroy()
     }
 

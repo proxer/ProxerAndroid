@@ -5,9 +5,9 @@ package com.proxerme.app.task.framework
  *
  * @author Ruben Gees
  */
-class MappedTask<I, M, O>(private val task: Task<I, M>, private val mapFunction: (M) -> O,
-                          successCallback: ((O) -> Unit)? = null,
-                          exceptionCallback: ((Exception) -> Unit)? = null) :
+class FilteredTask<in I, O>(private val task: Task<I, O>, private val filterFunction: (O) -> O,
+                            successCallback: ((O) -> Unit)? = null,
+                            exceptionCallback: ((Exception) -> Unit)? = null) :
         BaseTask<I, O>(successCallback, exceptionCallback) {
 
     override val isWorking: Boolean
@@ -16,7 +16,7 @@ class MappedTask<I, M, O>(private val task: Task<I, M>, private val mapFunction:
     init {
         task.successCallback = {
             try {
-                finishSuccessful(mapFunction.invoke(it))
+                finishSuccessful(filterFunction.invoke(it))
             } catch(exception: Exception) {
                 finishWithException(exception)
             }
@@ -43,4 +43,5 @@ class MappedTask<I, M, O>(private val task: Task<I, M>, private val mapFunction:
         task.destroy()
         super.destroy()
     }
+
 }

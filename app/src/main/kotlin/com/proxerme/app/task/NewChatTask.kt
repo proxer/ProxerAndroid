@@ -60,6 +60,7 @@ class NewChatTask(private var contextResolver: (() -> Context)? = null,
 
     override fun cancel() {
         call?.cancel()
+
         call = null
         isWorking = false
     }

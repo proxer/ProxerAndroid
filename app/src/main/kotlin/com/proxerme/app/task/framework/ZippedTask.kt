@@ -5,11 +5,11 @@ package com.proxerme.app.task.framework
  *
  * @author Ruben Gees
  */
-class ZippedTask<I, I2, M, M2, O>(private val firstTask: Task<I, M>,
-                                  private val secondTask: Task<I2, M2>,
-                                  private val zipFunction: (M, M2) -> O,
-                                  successCallback: ((O) -> Unit)? = null,
-                                  exceptionCallback: ((Exception) -> Unit)? = null) :
+class ZippedTask<in I, in I2, M, M2, O>(private val firstTask: Task<I, M>,
+                                        private val secondTask: Task<I2, M2>,
+                                        private val zipFunction: (M, M2) -> O,
+                                        successCallback: ((O) -> Unit)? = null,
+                                        exceptionCallback: ((Exception) -> Unit)? = null) :
         BaseTask<Pair<I, I2>, O>(successCallback, exceptionCallback) {
 
     override val isWorking: Boolean
@@ -22,7 +22,7 @@ class ZippedTask<I, I2, M, M2, O>(private val firstTask: Task<I, M>,
         firstTask.successCallback = { result ->
             secondResult?.let {
                 finishSuccessful(zipFunction.invoke(result, it))
-                cancel()
+                reset()
 
                 return@let
             }
@@ -32,13 +32,13 @@ class ZippedTask<I, I2, M, M2, O>(private val firstTask: Task<I, M>,
 
         firstTask.exceptionCallback = {
             finishWithException(it)
-            cancel()
+            reset()
         }
 
         secondTask.successCallback = { result ->
             firstResult?.let {
                 finishSuccessful(zipFunction.invoke(it, result))
-                cancel()
+                reset()
 
                 return@let
             }
@@ -60,19 +60,20 @@ class ZippedTask<I, I2, M, M2, O>(private val firstTask: Task<I, M>,
     override fun cancel() {
         firstTask.cancel()
         secondTask.cancel()
-
-        firstResult = null
-        secondResult = null
     }
 
     override fun reset() {
         firstTask.reset()
         secondTask.reset()
+
+        firstResult = null
+        secondResult = null
     }
 
     override fun destroy() {
         firstTask.destroy()
         secondTask.destroy()
+
         super.destroy()
     }
 }
