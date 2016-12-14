@@ -55,7 +55,7 @@ class NewsFragment : PagedLoadingFragment<PagedInput, News>() {
 
             override fun onNewsExpanded(item: News) {
                 setLikelyUrl(ProxerUrlHolder.getNewsUrl(item.categoryId,
-                                item.threadId, "mobile"))
+                        item.threadId, "mobile"))
             }
         }
     }
