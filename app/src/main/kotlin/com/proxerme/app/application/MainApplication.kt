@@ -25,13 +25,14 @@ import com.squareup.leakcanary.RefWatcher
 import net.danlew.android.joda.JodaTimeAndroid
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
+import android.support.multidex.MultiDexApplication
 
 /**
  * TODO: Describe Class
  *
  * @author Ruben Gees
  */
-class MainApplication : Application() {
+class MainApplication : MultiDexApplication() {
 
     companion object {
 
@@ -66,7 +67,7 @@ class MainApplication : Application() {
     }
 
     override fun onTerminate() {
-        EventBus.getDefault().unregister(this)
+        EventBus.getDefault().unregister(this)andro
 
         super.onTerminate()
     }
