@@ -82,10 +82,14 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
     }
 
     private val streamResolverSuccess = { result: StreamResolutionResult ->
-        try {
-            context.startActivity(result.intent)
-        } catch (exception: ActivityNotFoundException) {
-            result.notFoundAction.invoke(activity as AppCompatActivity)
+        if (result.intent.type == "text/html") {
+            showPage(HttpUrl.parse(result.intent.data.toString()))
+        } else {
+            try {
+                context.startActivity(result.intent)
+            } catch (exception: ActivityNotFoundException) {
+                result.notFoundAction.invoke(activity as AppCompatActivity)
+            }
         }
     }
 

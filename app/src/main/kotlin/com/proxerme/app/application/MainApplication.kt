@@ -1,10 +1,10 @@
 package com.proxerme.app.application
 
-import android.app.Application
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.StrictMode
+import android.support.multidex.MultiDexApplication
 import android.support.v7.app.AppCompatDelegate
 import android.widget.ImageView
 import com.bumptech.glide.Glide
@@ -25,7 +25,6 @@ import com.squareup.leakcanary.RefWatcher
 import net.danlew.android.joda.JodaTimeAndroid
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
-import android.support.multidex.MultiDexApplication
 
 /**
  * TODO: Describe Class
@@ -67,7 +66,7 @@ class MainApplication : MultiDexApplication() {
     }
 
     override fun onTerminate() {
-        EventBus.getDefault().unregister(this)andro
+        EventBus.getDefault().unregister(this)
 
         super.onTerminate()
     }
