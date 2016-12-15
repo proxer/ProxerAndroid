@@ -40,10 +40,29 @@ abstract class SingleLoadingFragment<I, T> : MainFragment() {
                     showError(ErrorUtils.getMessageForErrorCode(context, exception))
                 }
                 is Validators.NotLoggedInException -> {
-                    showError(getString(R.string.status_not_logged_in),
-                            getString(R.string.module_login_login), View.OnClickListener {
-                        LoginDialog.show(activity as AppCompatActivity)
-                    })
+                    val message = when (UserManager.ongoingState) {
+                        UserManager.OngoingState.LOGGING_IN -> {
+                            getString(R.string.status_currently_logging_in)
+                        }
+                        UserManager.OngoingState.LOGGING_OUT -> {
+                            getString(R.string.status_currently_logging_out)
+                        }
+                        else -> getString(R.string.status_not_logged_in)
+                    }
+
+                    val buttonMessage = when (UserManager.ongoingState) {
+                        UserManager.OngoingState.NONE -> getString(R.string.module_login_login)
+                        else -> null
+                    }
+
+                    val buttonAction = when (UserManager.ongoingState) {
+                        UserManager.OngoingState.NONE -> View.OnClickListener {
+                            LoginDialog.show(activity as AppCompatActivity)
+                        }
+                        else -> null
+                    }
+
+                    showError(message, buttonMessage, buttonAction)
                 }
                 is Validators.HentaiConfirmationRequiredException -> {
                     showError(getString(R.string.error_hentai_confirmation_needed),
