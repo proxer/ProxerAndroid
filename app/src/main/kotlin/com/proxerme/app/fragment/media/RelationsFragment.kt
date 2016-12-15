@@ -86,7 +86,7 @@ class RelationsFragment : SingleLoadingFragment<String, Array<Relation>>() {
 
     override fun present(data: Array<Relation>) {
         if (data.isEmpty()) {
-            showError(getString(R.string.error_no_data_relations))
+            showError(getString(R.string.error_no_data_relations), null)
         } else {
             adapter.replace(data)
         }

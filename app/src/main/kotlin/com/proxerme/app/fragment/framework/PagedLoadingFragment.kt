@@ -43,6 +43,8 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
 
         adapter.append(data)
         showEmptyIfAppropriate()
+
+        onItemsInserted(data)
     }
 
     protected val exceptionCallback = { exception: Exception ->
@@ -74,6 +76,8 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
     protected val refreshSuccessCallback = { data: Array<T> ->
         adapter.insertAndScrollUpIfNecessary(list.layoutManager, list, data)
         showEmptyIfAppropriate()
+
+        onItemsInserted(data)
     }
 
     protected val refreshExceptionCallback = { exceptionResult: Exception ->
@@ -191,6 +195,10 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
         super.onDestroy()
     }
 
+    open protected fun onItemsInserted(items: Array<T>) {
+
+    }
+
     open protected fun clear() {
         task.reset()
         refreshTask.reset()
@@ -204,7 +212,7 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
         task.execute(constructInput(calculateNextPage()))
     }
 
-    open protected fun showError(message: String, buttonMessage: String? = null,
+    open protected fun showError(message: String, buttonMessage: String? = "",
                                  onButtonClickListener: View.OnClickListener? = null) {
         ErrorUtils.showError(context, message, headerFooterAdapter,
                 buttonMessage = buttonMessage, parent = root,
@@ -221,7 +229,7 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
 
     open protected fun showEmptyIfAppropriate() {
         if (hasReachedEnd && adapter.isEmpty()) {
-            showError(getEmptyString())
+            showError(getEmptyString(), null)
         }
     }
 

@@ -88,7 +88,7 @@ class EpisodesFragment : SingleLoadingFragment<String, Array<RichEpisode>>() {
 
     override fun present(data: Array<RichEpisode>) {
         if (data.isEmpty()) {
-            showError(getString(R.string.error_no_data_episodes))
+            showError(getString(R.string.error_no_data_episodes), null)
         } else {
             adapter.replace(data)
         }

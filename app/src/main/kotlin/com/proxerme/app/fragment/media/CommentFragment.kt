@@ -111,7 +111,7 @@ class CommentFragment : PagedLoadingFragment<CommentInput, Comment>() {
     }
 
     override fun getEmptyString(): String {
-        return getString(R.string.error_no_data_comments)
+        return getString(R.string.error_no_data_comments, null)
     }
 
     class CommentInput(page: Int, val id: String, val itemsOnPage: Int, val sortCriteria: String) :

@@ -151,7 +151,7 @@ abstract class SingleLoadingFragment<I, T> : MainFragment() {
         task.execute(constructInput())
     }
 
-    open protected fun showError(message: String, buttonMessage: String? = null,
+    open protected fun showError(message: String, buttonMessage: String? = "",
                                  onButtonClickListener: View.OnClickListener? = null) {
         contentContainer.visibility = View.GONE
         errorContainer.visibility = View.VISIBLE
@@ -163,15 +163,21 @@ abstract class SingleLoadingFragment<I, T> : MainFragment() {
                             .build())
                 })
 
-        errorButton.text = when (buttonMessage) {
-            null -> getString(R.string.error_retry)
-            else -> buttonMessage
-        }
+        when (buttonMessage) {
+            null -> errorButton.visibility = View.GONE
+            else -> {
+                errorButton.visibility = View.VISIBLE
+                errorButton.setOnClickListener(when (onButtonClickListener) {
+                    null -> View.OnClickListener { reset() }
+                    else -> onButtonClickListener
+                })
 
-        errorButton.setOnClickListener(when (onButtonClickListener) {
-            null -> View.OnClickListener { reset() }
-            else -> onButtonClickListener
-        })
+                when {
+                    buttonMessage.isBlank() -> errorButton.text = getString(R.string.error_retry)
+                    else -> errorButton.text = buttonMessage
+                }
+            }
+        }
     }
 
     @Suppress("unused")

@@ -34,7 +34,7 @@ object ErrorUtils {
     }
 
     fun showError(context: Context, message: CharSequence, adapter: EasyHeaderFooterAdapter,
-                  buttonMessage: String? = null, parent: ViewGroup? = null,
+                  buttonMessage: String? = "", parent: ViewGroup? = null,
                   onWebClickListener: Link.OnClickListener? = null,
                   onButtonClickListener: View.OnClickListener? = null) {
         val errorContainer = when {
@@ -50,9 +50,18 @@ object ErrorUtils {
         }
 
         errorContainer.find<Button>(R.id.errorButton).apply {
-            text = buttonMessage ?: context.getString(R.string.error_retry)
+            when (buttonMessage) {
+                null -> visibility = View.GONE
+                else -> {
+                    visibility = View.VISIBLE
+                    setOnClickListener(onButtonClickListener)
 
-            setOnClickListener(onButtonClickListener)
+                    when {
+                        buttonMessage.isBlank() -> text = context.getString(R.string.error_retry)
+                        else -> text = buttonMessage
+                    }
+                }
+            }
         }
 
         adapter.setFooter(errorContainer)

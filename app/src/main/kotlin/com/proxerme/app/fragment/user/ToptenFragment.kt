@@ -119,7 +119,7 @@ class ToptenFragment : SingleLoadingFragment<Pair<ToptenInput, ToptenInput>,
 
     override fun present(data: ZippedToptenResult) {
         if (data.animeEntries.isEmpty() && data.mangaEntries.isEmpty()) {
-            showError(getString(R.string.error_no_data_topten))
+            showError(getString(R.string.error_no_data_topten), null)
         } else {
             animeAdapter.replace(data.animeEntries)
             mangaAdapter.replace(data.mangaEntries)
