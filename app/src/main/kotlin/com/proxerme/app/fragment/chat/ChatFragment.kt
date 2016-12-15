@@ -232,6 +232,10 @@ class ChatFragment : PagedLoadingFragment<ChatInput, LocalMessage>() {
         return ChatInput(page, context)
     }
 
+    override fun getEmptyString(): String {
+        return getString(R.string.error_no_data_chat)
+    }
+
     private fun generateEmojiDrawable(iconicRes: IIcon): Drawable {
         return IconicsDrawable(context)
                 .icon(iconicRes)

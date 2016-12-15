@@ -87,7 +87,11 @@ class EpisodesFragment : SingleLoadingFragment<String, Array<RichEpisode>>() {
     }
 
     override fun present(data: Array<RichEpisode>) {
-        adapter.replace(data)
+        if (data.isEmpty()) {
+            showError(getString(R.string.error_no_data_episodes))
+        } else {
+            adapter.replace(data)
+        }
     }
 
     override fun constructTask(): ListenableTask<String, Array<RichEpisode>> {

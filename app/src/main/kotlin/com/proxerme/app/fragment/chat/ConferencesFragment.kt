@@ -114,6 +114,13 @@ class ConferencesFragment : SingleLoadingFragment<Context, List<LocalConference>
     }
 
     override fun present(data: List<LocalConference>) {
-        adapter.insertAndScrollUpIfNecessary(list.layoutManager, list, data.toTypedArray())
+        if (data.isEmpty()) {
+            showError(getString(R.string.error_no_data_conferences),
+                    getString(R.string.error_no_data_action_chat), View.OnClickListener {
+                NewChatActivity.navigateTo(activity)
+            })
+        } else {
+            adapter.insertAndScrollUpIfNecessary(list.layoutManager, list, data.toTypedArray())
+        }
     }
 }

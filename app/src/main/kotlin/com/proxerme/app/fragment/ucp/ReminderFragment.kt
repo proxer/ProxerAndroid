@@ -158,6 +158,10 @@ class ReminderFragment : PagedLoadingFragment<ReminderInput, Reminder>() {
         return ReminderInput(page, category, itemsOnPage)
     }
 
+    override fun getEmptyString(): String {
+        return getString(R.string.error_no_data_reminder)
+    }
+
     private fun constructRemovalTask(): Task<RemovalInput, Void> {
         return ValidatingTask(ProxerLoadingTask({
             DeleteReminderRequest(it.id)

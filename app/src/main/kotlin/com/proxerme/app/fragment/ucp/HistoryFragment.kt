@@ -5,6 +5,7 @@ import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.proxerme.app.R
 import com.proxerme.app.activity.MediaActivity
 import com.proxerme.app.adapter.ucp.HistoryAdapter
 import com.proxerme.app.fragment.framework.PagedLoadingFragment
@@ -62,6 +63,10 @@ class HistoryFragment : PagedLoadingFragment<HistoryInput, HistoryEntry>() {
 
     override fun constructInput(page: Int): HistoryInput {
         return HistoryInput(page, itemsOnPage)
+    }
+
+    override fun getEmptyString(): String {
+        return getString(R.string.error_no_data_history)
     }
 
     class HistoryInput(page: Int, val itemsOnPage: Int) : PagedInput(page)

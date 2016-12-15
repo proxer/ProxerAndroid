@@ -92,9 +92,6 @@ abstract class SingleLoadingFragment<I, T> : MainFragment() {
             errorContainer.visibility = View.GONE
         }.onSuccess {
             contentContainer.visibility = View.VISIBLE
-        }.onException {
-            contentContainer.visibility = View.GONE
-            errorContainer.visibility = View.VISIBLE
         }.onFinish {
             updateRefreshing()
         }
@@ -156,6 +153,9 @@ abstract class SingleLoadingFragment<I, T> : MainFragment() {
 
     open protected fun showError(message: String, buttonMessage: String? = null,
                                  onButtonClickListener: View.OnClickListener? = null) {
+        contentContainer.visibility = View.GONE
+        errorContainer.visibility = View.VISIBLE
+
         errorText.text = Utils.buildClickableText(context, message,
                 onWebClickListener = Link.OnClickListener { link ->
                     showPage(HttpUrl.parse(link).newBuilder()

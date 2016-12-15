@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import com.proxerme.app.R
 import com.proxerme.app.activity.ImageDetailActivity
 import com.proxerme.app.adapter.news.NewsAdapter
 import com.proxerme.app.adapter.news.NewsAdapter.NewsAdapterCallback
@@ -79,5 +80,9 @@ class NewsFragment : PagedLoadingFragment<PagedInput, News>() {
 
     override fun constructInput(page: Int): PagedInput {
         return PagedInput(page)
+    }
+
+    override fun getEmptyString(): String {
+        return getString(R.string.error_no_data_news)
     }
 }

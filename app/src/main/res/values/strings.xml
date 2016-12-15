@@ -358,6 +358,19 @@
     <string name="comment_rating_overall">Insgesamt</string>
     <string name="fragment_episodes_title">Episoden</string>
     <string name="error_no_data">Keine Daten</string>
+    <string name="error_no_data_conferences">Du hast noch keine Chats</string>
+    <string name="error_no_data_action_chat">Schreibe jemandem</string>
+    <string name="error_no_data_comments">Es gibt noch keine Kommentare</string>
+    <string name="error_no_data_episodes">Es gibt noch keine Episoden</string>
+    <string name="error_no_data_media_list">Keine Ergebnisse</string>
+    <string name="error_no_data_news">Derzeit sind keine News verfügbar</string>
+    <string name="error_no_data_history">Noch keine Einträge verfügbar</string>
+    <string name="error_no_data_reminder">Du hast noch nichts in deiner Watchlist</string>
+    <string name="error_no_data_user_media_list">Es gibt noch keine Einträge</string>
+    <string name="error_no_data_anime">Aktuell gibt es noch keine Streams</string>
+    <string name="error_no_data_chat">Diese Konferenz hat noch keine Nachrichten</string>
+    <string name="error_no_data_topten">Es wurde noch nichts in die Top 10 aufgenommen</string>
+    <string name="error_no_data_relations">Für dieses Werk gibt es keine Verbindungen</string>
 
     <plurals name="media_episode_count">
         <item quantity="one">Eine Episode</item>

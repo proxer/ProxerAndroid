@@ -5,6 +5,7 @@ import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
+import com.proxerme.app.R
 import com.proxerme.app.activity.MediaActivity
 import com.proxerme.app.adapter.user.ToptenAdapter
 import com.proxerme.app.fragment.framework.SingleLoadingFragment
@@ -117,8 +118,12 @@ class ToptenFragment : SingleLoadingFragment<Pair<ToptenInput, ToptenInput>,
     }
 
     override fun present(data: ZippedToptenResult) {
-        animeAdapter.replace(data.animeEntries)
-        mangaAdapter.replace(data.mangaEntries)
+        if (data.animeEntries.isEmpty() && data.mangaEntries.isEmpty()) {
+            showError(getString(R.string.error_no_data_topten))
+        } else {
+            animeAdapter.replace(data.animeEntries)
+            mangaAdapter.replace(data.mangaEntries)
+        }
 
         if (animeAdapter.isEmpty()) {
             animeContainer.visibility = View.GONE

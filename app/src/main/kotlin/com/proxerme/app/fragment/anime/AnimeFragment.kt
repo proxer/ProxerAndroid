@@ -221,9 +221,13 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
     }
 
     override fun present(data: Array<Stream>) {
-        header.setEpisodeInfo(totalEpisodes, episode)
-        streamAdapter.replace(data)
-        adapter.setHeader(header)
+        if (data.isEmpty()) {
+            showError(getString(R.string.error_no_data_anime))
+        } else {
+            header.setEpisodeInfo(totalEpisodes, episode)
+            streamAdapter.replace(data)
+            adapter.setHeader(header)
+        }
     }
 
     override fun clear() {

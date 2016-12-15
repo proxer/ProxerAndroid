@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import com.klinker.android.link_builder.Link
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
@@ -97,7 +96,6 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
     open protected val root: ViewGroup by bindView(R.id.root)
     open protected val progress: SwipeRefreshLayout by bindView(R.id.progress)
     open protected val list: RecyclerView by bindView(R.id.list)
-    open protected val empty: TextView by bindView(R.id.empty)
 
     protected lateinit var headerFooterAdapter: EasyHeaderFooterAdapter
 
@@ -223,8 +221,7 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
 
     open protected fun showEmptyIfAppropriate() {
         if (hasReachedEnd && adapter.isEmpty()) {
-            empty.visibility = View.VISIBLE
-            empty.text = getEmptyString()
+            showError(getEmptyString())
         }
     }
 
@@ -294,7 +291,6 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
     private fun internalConstructTask(): ListenableTask<I, Array<T>> {
         return constructTask().onStart {
             headerFooterAdapter.removeFooter()
-            empty.visibility = View.GONE
 
             setRefreshing(true)
         }.onFinish {
@@ -305,7 +301,6 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
     private fun internalConstructRefreshingTask(): ListenableTask<I, Array<T>> {
         return constructRefreshingTask().onStart {
             headerFooterAdapter.removeFooter()
-            empty.visibility = View.GONE
 
             setRefreshing(true)
         }.onFinish {

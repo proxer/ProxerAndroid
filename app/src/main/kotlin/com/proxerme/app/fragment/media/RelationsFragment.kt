@@ -85,7 +85,11 @@ class RelationsFragment : SingleLoadingFragment<String, Array<Relation>>() {
     }
 
     override fun present(data: Array<Relation>) {
-        adapter.replace(data)
+        if (data.isEmpty()) {
+            showError(getString(R.string.error_no_data_relations))
+        } else {
+            adapter.replace(data)
+        }
     }
 
     override fun constructTask(): ListenableTask<String, Array<Relation>> {
