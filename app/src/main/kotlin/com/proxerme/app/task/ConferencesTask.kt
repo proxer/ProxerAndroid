@@ -29,6 +29,8 @@ class ConferencesTask(successCallback: ((List<LocalConference>) -> Unit)? = null
     private val handler = Handler(Looper.getMainLooper())
     private var future: Future<Unit>? = null
 
+    private var hasLoaded = false
+
     init {
         EventBus.getDefault().register(this)
     }
@@ -36,17 +38,17 @@ class ConferencesTask(successCallback: ((List<LocalConference>) -> Unit)? = null
     override fun execute(input: Context) {
         start {
             if (StorageHelper.conferenceListEndReached) {
-                future = doAsync {
-                    try {
-                        val result = input.chatDatabase.getConferences()
+                hasLoaded = true
 
-                        handler.post {
-                            finishSuccessful(result)
-                        }
-                    } catch (exception: Exception) {
-                        handler.post {
-                            finishWithException(exception)
-                        }
+                future = doAsync(exceptionHandler = {
+                    handler.post {
+                        finishWithException(it as Exception)
+                    }
+                }) {
+                    val result = input.chatDatabase.getConferences()
+
+                    handler.post {
+                        finishSuccessful(result)
                     }
                 }
             }
@@ -72,6 +74,10 @@ class ConferencesTask(successCallback: ((List<LocalConference>) -> Unit)? = null
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onSynchronization(@Suppress("UNUSED_PARAMETER") event: ChatSynchronizationEvent) {
-        finishSuccessful(event.newEntryMap.keys.toList())
+        if (event.newEntryMap.isNotEmpty() || !hasLoaded) {
+            hasLoaded = true
+
+            finishSuccessful(event.newEntryMap.keys.toList())
+        }
     }
 }
