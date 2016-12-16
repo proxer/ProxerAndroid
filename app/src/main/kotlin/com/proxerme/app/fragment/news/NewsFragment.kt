@@ -13,6 +13,7 @@ import com.proxerme.app.adapter.news.NewsAdapter.NewsAdapterCallback
 import com.proxerme.app.fragment.framework.PagedLoadingFragment
 import com.proxerme.app.fragment.framework.PagedLoadingFragment.PagedInput
 import com.proxerme.app.helper.NotificationHelper
+import com.proxerme.app.helper.StorageHelper
 import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.framework.ListenableTask
@@ -84,5 +85,12 @@ class NewsFragment : PagedLoadingFragment<PagedInput, News>() {
 
     override fun getEmptyString(): String {
         return getString(R.string.error_no_data_news)
+    }
+
+    override fun onItemsInserted(items: Array<News>) {
+        if (items.isNotEmpty() && adapter.items.firstOrNull() == items.first()) {
+            StorageHelper.lastNewsTime = items.first().time
+            StorageHelper.newNews = 0
+        }
     }
 }
