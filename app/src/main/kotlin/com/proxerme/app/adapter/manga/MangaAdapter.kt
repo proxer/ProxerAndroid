@@ -1,20 +1,11 @@
 package com.proxerme.app.adapter.manga
 
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
-import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.util.DeviceUtils
-import com.proxerme.app.util.bindView
-import com.proxerme.library.connection.manga.entity.Page
-import com.proxerme.library.info.ProxerUrlHolder
 import view.TouchImageView
 
 /**
@@ -55,17 +46,8 @@ class MangaAdapter : PagingAdapter<Page>() {
                             .toString())
                     .asBitmap()
                     .override(width, height)
-                    .placeholder(generatePlaceholder(width, height))
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(image)
         }
-
-        private fun generatePlaceholder(width: Int, height: Int): Drawable {
-            return BitmapDrawable(itemView.context.resources,
-                    Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_4444).apply {
-                        eraseColor(ContextCompat.getColor(itemView.context, R.color.divider))
-                    })
-        }
     }
-
 }
