@@ -1,7 +1,7 @@
 buildscript {
     ext.kotlin_version = '1.0.6-eap-112'
     ext.support_version = '25.1.0'
-    ext.anko_version = '0.9'
+    ext.anko_version = '0.9.1'
     ext.leak_canary_version = '1.5'
     ext.build_tools_version = '25.0.1'
 
@@ -24,6 +24,7 @@ allprojects {
         maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
         maven { url "https://dl.bintray.com/drummer-aidan/maven" }
         maven { url "https://dl.bintray.com/kotlin/kotlin-eap" }
+        maven { url "http://dl.bintray.com/jetbrains/anko" }
     }
 }
 
