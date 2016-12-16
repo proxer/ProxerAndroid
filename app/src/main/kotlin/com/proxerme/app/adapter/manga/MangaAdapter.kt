@@ -3,9 +3,14 @@ package com.proxerme.app.adapter.manga
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.util.DeviceUtils
+import com.proxerme.app.util.bindView
+import com.proxerme.library.connection.manga.entity.Page
+import com.proxerme.library.info.ProxerUrlHolder
 import view.TouchImageView
 
 /**
