@@ -105,6 +105,12 @@ class ConferencesFragment : SingleLoadingFragment<Context, List<LocalConference>
         super.onDestroyView()
     }
 
+    override fun onDestroy() {
+        adapter.removeCallback()
+
+        super.onDestroy()
+    }
+
     override fun constructTask(): ListenableTask<Context, List<LocalConference>> {
         return ConferencesTask()
     }

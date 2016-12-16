@@ -79,7 +79,7 @@ class RelationsFragment : SingleLoadingFragment<String, Array<Relation>>() {
     }
 
     override fun onDestroy() {
-        adapter.callback = null
+        adapter.removeCallback()
 
         super.onDestroy()
     }

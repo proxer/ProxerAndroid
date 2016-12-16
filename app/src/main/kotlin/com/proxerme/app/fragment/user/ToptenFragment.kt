@@ -111,8 +111,8 @@ class ToptenFragment : SingleLoadingFragment<Pair<ToptenInput, ToptenInput>,
     }
 
     override fun onDestroy() {
-        animeAdapter.callback = null
-        mangaAdapter.callback = null
+        animeAdapter.removeCallback()
+        mangaAdapter.removeCallback()
 
         super.onDestroy()
     }
