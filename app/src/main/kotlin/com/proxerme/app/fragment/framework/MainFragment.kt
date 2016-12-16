@@ -1,11 +1,11 @@
 package com.proxerme.app.fragment.framework
 
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import com.proxerme.app.application.MainApplication
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.manager.UserManager
+import com.proxerme.app.util.androidUri
 import com.proxerme.app.util.openHttpPage
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
@@ -48,7 +48,7 @@ abstract class MainFragment : Fragment() {
     }
 
     fun setLikelyUrl(url: HttpUrl) {
-        customTabsHelper.mayLaunchUrl(Uri.parse(url.toString()), Bundle(), listOf())
+        customTabsHelper.mayLaunchUrl(url.androidUri(), Bundle(), listOf())
     }
 
     fun showPage(url: HttpUrl) {

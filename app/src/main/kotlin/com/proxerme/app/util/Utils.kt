@@ -4,7 +4,10 @@ import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
+import android.content.pm.ResolveInfo
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Build
 import android.support.annotation.ColorRes
 import android.support.v4.content.ContextCompat
@@ -15,8 +18,10 @@ import com.bumptech.glide.request.target.Target
 import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.LinkBuilder
 import com.proxerme.app.R
+import okhttp3.HttpUrl
 import java.util.concurrent.ExecutionException
 import java.util.regex.Pattern
+
 
 /**
  * Class which holds various util methods.
@@ -90,5 +95,30 @@ object Utils {
         val clip = ClipData.newPlainText(label, content)
 
         clipboard.primaryClip = clip
+    }
+
+    fun safelyParseUrl(url: String): HttpUrl {
+        return HttpUrl.parse(if (!url.startsWith("http://") && !url.startsWith("https://"))
+            "https://" + url else url)
+    }
+
+    fun getNativeAppPackage(context: Context, url: HttpUrl): Set<String> {
+        val browserActivityIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://www.generic.com"))
+        val genericResolvedList = extractPackageNames(context.packageManager
+                .queryIntentActivities(browserActivityIntent, 0))
+
+        val specializedActivityIntent = Intent(Intent.ACTION_VIEW, url.androidUri())
+        val resolvedSpecializedList = extractPackageNames(context.packageManager
+                .queryIntentActivities(specializedActivityIntent, 0))
+
+        resolvedSpecializedList.removeAll(genericResolvedList)
+
+        return resolvedSpecializedList
+    }
+
+    private fun extractPackageNames(resolveInfo: List<ResolveInfo>): MutableSet<String> {
+        return resolveInfo
+                .map { it.activityInfo.packageName }
+                .toMutableSet()
     }
 }

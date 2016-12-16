@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.AlarmManager
 import android.app.NotificationManager
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.support.customtabs.CustomTabsIntent
 import android.support.v4.content.ContextCompat
@@ -37,19 +38,23 @@ val Context.windowManager: WindowManager
     get() = getSystemService(Context.WINDOW_SERVICE) as WindowManager
 
 fun CustomTabsHelperFragment.openHttpPage(activity: Activity, url: HttpUrl) {
-    val customTabsIntent = CustomTabsIntent.Builder(session)
-            .setToolbarColor(ContextCompat.getColor(context, R.color.colorPrimary))
-            .setSecondaryToolbarColor(ContextCompat.getColor(context,
-                    R.color.colorPrimaryDark))
-            .addDefaultShareMenuItem()
-            .enableUrlBarHiding()
-            .setShowTitle(true)
-            .build()
+    if (Utils.getNativeAppPackage(activity, url).isEmpty()) {
+        val customTabsIntent = CustomTabsIntent.Builder(session)
+                .setToolbarColor(ContextCompat.getColor(context, R.color.colorPrimary))
+                .setSecondaryToolbarColor(ContextCompat.getColor(context,
+                        R.color.colorPrimaryDark))
+                .addDefaultShareMenuItem()
+                .enableUrlBarHiding()
+                .setShowTitle(true)
+                .build()
 
-    CustomTabsHelperFragment.open(activity, customTabsIntent, Uri.parse(url.toString()),
-            { activity, uri ->
-                WebViewActivity.navigateTo(activity, uri.toString())
-            })
+        CustomTabsHelperFragment.open(activity, customTabsIntent, Uri.parse(url.toString()),
+                { activity, uri ->
+                    WebViewActivity.navigateTo(activity, uri.toString())
+                })
+    } else {
+        activity.startActivity(Intent(Intent.ACTION_VIEW).setData(Uri.parse(url.toString())))
+    }
 }
 
 fun <T> PagingAdapter<T>.insertAndScrollUpIfNecessary(layoutManager: RecyclerView.LayoutManager,
@@ -71,4 +76,8 @@ fun <T> PagingAdapter<T>.insertAndScrollUpIfNecessary(layoutManager: RecyclerVie
             recyclerView.smoothScrollToPosition(0)
         }
     }
+}
+
+fun HttpUrl.androidUri(): Uri {
+    return Uri.parse(toString())
 }

@@ -1,7 +1,7 @@
 package com.proxerme.app.stream.resolver
 
-import android.net.Uri
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionResult
+import com.proxerme.app.util.androidUri
 import okhttp3.HttpUrl
 
 /**
@@ -18,6 +18,6 @@ class ProxerProductStreamResolver : StreamResolver() {
     }
 
     override fun resolve(url: HttpUrl): StreamResolutionResult {
-        return StreamResolutionResult(Uri.parse(url.toString()), "text/html")
+        return StreamResolutionResult(url.androidUri(), "text/html")
     }
 }

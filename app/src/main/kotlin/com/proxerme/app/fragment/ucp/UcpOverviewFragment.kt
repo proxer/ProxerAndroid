@@ -17,7 +17,6 @@ import com.proxerme.app.util.Utils
 import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.ucp.request.ListsumRequest
 import com.proxerme.library.info.ProxerUrlHolder
-import okhttp3.HttpUrl
 import org.jetbrains.anko.toast
 
 /**
@@ -71,7 +70,7 @@ class UcpOverviewFragment : SingleLoadingFragment<Unit, Int>() {
             profileLink.text = Utils.buildClickableText(context,
                     ProxerUrlHolder.getUserUrl(it.id, null).toString(),
                     onWebClickListener = Link.OnClickListener { link ->
-                        showPage(HttpUrl.parse(link))
+                        showPage(Utils.safelyParseUrl(link))
                     },
                     onWebLongClickListener = Link.OnLongClickListener { link ->
                         Utils.setClipboardContent(activity,

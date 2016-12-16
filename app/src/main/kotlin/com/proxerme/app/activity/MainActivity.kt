@@ -1,8 +1,8 @@
 package com.proxerme.app.activity
 
-import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.proxerme.app.util.androidUri
 import com.proxerme.app.util.openHttpPage
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
@@ -23,7 +23,7 @@ abstract class MainActivity : AppCompatActivity() {
     }
 
     fun setLikelyUrl(url: HttpUrl) {
-        customTabsHelper.mayLaunchUrl(Uri.parse(url.toString()), Bundle(), listOf())
+        customTabsHelper.mayLaunchUrl(url.androidUri(), Bundle(), listOf())
     }
 
     fun showPage(url: HttpUrl) {
