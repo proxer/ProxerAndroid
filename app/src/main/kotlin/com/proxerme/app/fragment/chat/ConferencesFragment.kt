@@ -123,4 +123,10 @@ class ConferencesFragment : SingleLoadingFragment<Context, List<LocalConference>
             adapter.insertAndScrollUpIfNecessary(list.layoutManager, list, data.toTypedArray())
         }
     }
+
+    override fun clear() {
+        super.clear()
+
+        adapter.clear()
+    }
 }
