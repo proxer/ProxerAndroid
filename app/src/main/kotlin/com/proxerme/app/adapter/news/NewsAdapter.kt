@@ -17,10 +17,10 @@ import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.util.DeviceUtils
 import com.proxerme.app.util.TimeUtils
 import com.proxerme.app.util.bindView
-import com.proxerme.app.util.measureAndGetHeight
 import com.proxerme.library.connection.notifications.entitiy.News
 import com.proxerme.library.info.ProxerUrlHolder
 import java.util.*
+
 
 /**
  * TODO: Describe Class
@@ -114,12 +114,6 @@ class NewsAdapter : PagingAdapter<News>() {
             time.text = TimeUtils.convertToRelativeReadableTime(time.context,
                     item.time)
 
-            if (description.measureAndGetHeight(14f) <= maximumHeight) {
-                expand.visibility = View.GONE
-            } else {
-                expand.visibility = View.VISIBLE
-            }
-
             if (expanded.containsKey(item.id)) {
                 description.maxHeight = Int.MAX_VALUE
 
@@ -128,6 +122,14 @@ class NewsAdapter : PagingAdapter<News>() {
                 description.maxHeight = maximumHeight
 
                 ViewCompat.animate(expand).rotation(0f)
+            }
+
+            description.post {
+                if (description.measuredHeight < maximumHeight) {
+                    expand.visibility = View.GONE
+                } else {
+                    expand.visibility = View.VISIBLE
+                }
             }
 
             Glide.with(image.context)

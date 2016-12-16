@@ -147,20 +147,12 @@ class CommentAdapter : PagingAdapter<Comment>() {
         }
 
         private fun bindExpanded(item: Comment) {
-            val maximumHeight = DeviceUtils.convertDpToPx(comment.context, 150f)
-
-            if (comment.measureAndGetHeight(32f) <= maximumHeight) {
-                expand.visibility = View.GONE
-            } else {
-                expand.visibility = View.VISIBLE
-            }
-
             if (expandedMap.get(item.id.toLong(), false)) {
                 comment.maxHeight = Int.MAX_VALUE
 
                 ViewCompat.animate(expand).rotation(ROTATION_HALF)
             } else {
-                comment.maxHeight = maximumHeight
+                comment.maxHeight = DeviceUtils.convertDpToPx(comment.context, 150f)
 
                 ViewCompat.animate(expand).rotation(0f)
             }

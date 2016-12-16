@@ -4,9 +4,7 @@ import android.content.Context
 import android.support.v7.widget.AppCompatTextView
 import android.util.AttributeSet
 import android.view.View
-import android.view.ViewGroup
 import android.widget.LinearLayout
-import com.proxerme.app.util.DeviceUtils
 import java.util.*
 import kotlin.properties.Delegates
 
@@ -18,18 +16,11 @@ import kotlin.properties.Delegates
 class BBCodeView : LinearLayout {
 
     var bbCode by Delegates.observable<String?>(null, { property, old, new ->
-        if (old != new) {
-            build()
-        }
+        build()
     })
 
     var maxHeight = Int.MAX_VALUE
-
-    var expanded by Delegates.observable(true, { property, old, new ->
-        if (old != new) {
-            invalidate()
-        }
-    })
+    var expanded = true
 
     var spoilerStateListener: ((spoilerStates: List<Boolean>) -> Unit)? = null
 
@@ -71,29 +62,6 @@ class BBCodeView : LinearLayout {
                 spoiler.expanded = if (states.lastIndex < index) false else states[index]
             }
         }
-    }
-
-    fun measureAndGetHeight(totalMarginDp: Float): Int {
-        val previousMaxHeight = maxHeight
-        val previousSpoilerStates = getSpoilerStates()
-
-        maxHeight = Int.MAX_VALUE
-
-        setSpoilerStates(BooleanArray(spoilers.size, { true }).toList())
-
-        val widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(DeviceUtils.getScreenWidth(context) -
-                DeviceUtils.convertDpToPx(context, totalMarginDp), View.MeasureSpec.AT_MOST)
-        val heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(ViewGroup.LayoutParams.WRAP_CONTENT,
-                View.MeasureSpec.UNSPECIFIED)
-
-        measure(widthMeasureSpec, heightMeasureSpec)
-
-        val result = measuredHeight
-
-        maxHeight = previousMaxHeight
-        setSpoilerStates(previousSpoilerStates)
-
-        return result
     }
 
     private fun build() {
