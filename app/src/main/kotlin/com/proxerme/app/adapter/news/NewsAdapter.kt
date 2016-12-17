@@ -90,10 +90,11 @@ class NewsAdapter : PagingAdapter<News>() {
                         expanded.remove(id)
                     } else {
                         expanded.put(id, true)
+
+                        callback?.onNewsExpanded(list[adapterPosition])
                     }
 
                     notifyItemChanged(adapterPosition)
-                    callback?.onNewsExpanded(list[adapterPosition])
                 }
             }
 
