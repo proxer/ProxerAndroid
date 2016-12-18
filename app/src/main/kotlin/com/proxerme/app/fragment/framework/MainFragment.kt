@@ -48,7 +48,7 @@ abstract class MainFragment : Fragment() {
     }
 
     fun setLikelyUrl(url: HttpUrl) {
-        customTabsHelper.mayLaunchUrl(url.androidUri(), Bundle(), listOf())
+        customTabsHelper.mayLaunchUrl(url.androidUri(), Bundle(), emptyList())
     }
 
     fun showPage(url: HttpUrl) {
