@@ -21,6 +21,9 @@ class ConferenceInfoActivity : AppCompatActivity() {
         }
     }
 
+    private val conference: LocalConference
+        get() = intent.getParcelableExtra(EXTRA_CONFERENCE)
+
     private val toolbar: Toolbar by bindView(R.id.toolbar)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,13 +33,11 @@ class ConferenceInfoActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        title = intent.getParcelableExtra<LocalConference>(EXTRA_CONFERENCE).topic
+        title = conference.topic
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction().replace(R.id.container,
-                    ConferenceInfoFragment.newInstance(intent
-                            .getParcelableExtra<LocalConference>(EXTRA_CONFERENCE).id)).commitNow()
+                    ConferenceInfoFragment.newInstance(conference.id)).commitNow()
         }
     }
 

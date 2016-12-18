@@ -29,6 +29,9 @@ class ChatActivity : AppCompatActivity() {
         }
     }
 
+    private val conference: LocalConference
+        get() = intent.getParcelableExtra(EXTRA_CONFERENCE)
+
     private val toolbar: Toolbar by bindView(R.id.toolbar)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,12 +41,9 @@ class ChatActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        title = intent.getParcelableExtra<LocalConference>(EXTRA_CONFERENCE).topic
+        title = conference.topic
 
         toolbar.setOnClickListener {
-            val conference = intent.getParcelableExtra<LocalConference>(EXTRA_CONFERENCE)
-
             if (conference.isGroup) {
                 ConferenceInfoActivity.navigateTo(this, conference)
             } else {
@@ -53,8 +53,7 @@ class ChatActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction().replace(R.id.container,
-                    ChatFragment.newInstance(intent.getParcelableExtra(EXTRA_CONFERENCE)))
-                    .commitNow()
+                    ChatFragment.newInstance(conference)).commitNow()
         }
     }
 

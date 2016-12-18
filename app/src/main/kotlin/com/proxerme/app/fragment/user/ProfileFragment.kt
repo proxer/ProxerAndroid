@@ -78,7 +78,7 @@ class ProfileFragment : SingleLoadingFragment<ProfileInput, UserInfo>() {
     }
 
     override fun present(data: UserInfo) {
-        (activity as ProfileActivity).setUserInfo(data)
+        (activity as ProfileActivity).updateUserInfo(data)
 
         val totalPoints = data.animePoints + data.mangaPoints + data.uploadPoints +
                 data.forumPoints + data.infoPoints + data.miscPoints

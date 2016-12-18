@@ -41,14 +41,15 @@ class ImageDetailActivity : MainActivity() {
         }
     }
 
+    private val url: String
+        get() = intent.getStringExtra(EXTRA_URL)
+
     private val root: ViewGroup by bindView(R.id.root)
     private val image: ImageView by bindView(R.id.image)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_image_detail)
-
-        val url = intent.getStringExtra(EXTRA_URL)
 
         supportPostponeEnterTransition()
         Glide.with(this)

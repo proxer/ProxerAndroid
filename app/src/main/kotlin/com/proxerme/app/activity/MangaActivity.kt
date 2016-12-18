@@ -30,8 +30,11 @@ class MangaActivity : MainActivity() {
     private val id: String
         get() = intent.getStringExtra(EXTRA_ID)
 
-    private val episode: Int
+    private var episode: Int
         get() = intent.getIntExtra(EXTRA_EPISODE, 1)
+        set(value) {
+            intent.putExtra(EXTRA_EPISODE, value)
+        }
 
     private val totalEpisodes: Int
         get() = intent.getIntExtra(EXTRA_TOTAL_EPISODES, 1)
@@ -68,9 +71,8 @@ class MangaActivity : MainActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun updateEpisode(episode: Int) {
-        intent.putExtra(EXTRA_EPISODE, episode)
-
+    fun updateEpisode(newEpisode: Int) {
+        episode = newEpisode
         title = getString(R.string.activity_manga_title, episode)
     }
 }

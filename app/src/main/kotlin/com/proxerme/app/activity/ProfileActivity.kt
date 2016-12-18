@@ -145,7 +145,7 @@ class ProfileActivity : MainActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun setUserInfo(userInfo: UserInfo) {
+    fun updateUserInfo(userInfo: UserInfo) {
         userId = userInfo.id
         username = userInfo.username
         imageId = userInfo.imageId

@@ -103,7 +103,7 @@ class MediaInfoFragment : SingleLoadingFragment<String, Entry>() {
     }
 
     override fun present(data: Entry) {
-        (activity as MediaActivity).setName(data.name)
+        (activity as MediaActivity).updateName(data.name)
 
         if (data.rating > 0) {
             rating.visibility = View.VISIBLE

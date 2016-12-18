@@ -28,16 +28,42 @@ class MediaActivity : MainActivity() {
     companion object {
         private const val EXTRA_ID = "extra_id"
         private const val EXTRA_NAME = "extra_name"
-        private const val STATE_NAME = "activity_media_name"
+
+        private const val SECTION_COMMENTS = "comments"
+        private const val SECTION_EPISODES = "episodes"
+        private const val SECTION_RELATIONS = "relation"
 
         fun navigateTo(context: Activity, id: String, name: String? = null) {
-            context.startActivity(context.intentFor<MediaActivity>(EXTRA_ID to id,
-                    EXTRA_NAME to name))
+            context.startActivity(context.intentFor<MediaActivity>(
+                    EXTRA_ID to id,
+                    EXTRA_NAME to name)
+            )
         }
     }
 
-    private lateinit var id: String
-    private var name: String? = null
+    private val id: String
+        get() = when (intent.action) {
+            Intent.ACTION_VIEW -> intent.data.pathSegments.getOrElse(1, { "-1" })
+            else -> intent.getStringExtra(EXTRA_ID)
+        }
+
+    private var name: String?
+        get() = intent.getStringExtra(EXTRA_NAME)
+        set(value) {
+            intent.putExtra(EXTRA_NAME, value)
+        }
+
+    private val itemToDisplay: Int
+        get() = when (intent.action) {
+            Intent.ACTION_VIEW -> when (intent.data.pathSegments.getOrNull(2)) {
+                SECTION_COMMENTS -> 1
+                SECTION_EPISODES -> 2
+                SECTION_RELATIONS -> 3
+                else -> 0
+            }
+            else -> 0
+        }
+
     private var sectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
 
     private val toolbar: Toolbar by bindView(R.id.toolbar)
@@ -52,32 +78,11 @@ class MediaActivity : MainActivity() {
         setContentView(R.layout.activity_media)
         setSupportActionBar(toolbar)
 
-        id = if (intent.action == Intent.ACTION_VIEW)
-            intent.data.pathSegments.getOrElse(1, { "-1" })
-        else {
-            intent.getStringExtra(EXTRA_ID)
-        }
-
-        if (savedInstanceState == null) {
-            name = intent.getStringExtra(EXTRA_NAME)
-        } else {
-            name = savedInstanceState.getString(STATE_NAME)
-        }
-
         setupToolbar()
         setupImage()
 
         if (savedInstanceState == null) {
-            viewPager.currentItem = if (intent.action == Intent.ACTION_VIEW) {
-                when (intent.data.pathSegments.getOrNull(2)) {
-                    "comments" -> 1
-                    "episodes" -> 2
-                    "relation" -> 3
-                    else -> 0
-                }
-            } else {
-                0
-            }
+            viewPager.currentItem = itemToDisplay
         }
     }
 
@@ -93,18 +98,9 @@ class MediaActivity : MainActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-        outState.putString(STATE_NAME, name)
-    }
-
-    fun setName(name: String) {
-        if (this.name == null) {
-            this.name = name
-
-            supportActionBar?.title = name
-        }
+    fun updateName(newName: String) {
+        name = newName
+        title = newName
     }
 
     private fun setupImage() {

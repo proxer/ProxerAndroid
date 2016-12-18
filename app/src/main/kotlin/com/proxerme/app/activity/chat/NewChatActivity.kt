@@ -26,6 +26,11 @@ class NewChatActivity : AppCompatActivity() {
         }
     }
 
+    private val initialParticipant: Participant?
+        get() = intent.getParcelableExtra(EXTRA_PARTICIPANT)
+    private val isGroup: Boolean
+        get() = intent.getBooleanExtra(EXTRA_IS_GROUP, false)
+
     private val toolbar: Toolbar by bindView(R.id.toolbar)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,17 +40,14 @@ class NewChatActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        if (intent.getBooleanExtra(EXTRA_IS_GROUP, false)) {
-            title = getString(R.string.action_new_group)
-        } else {
-            title = getString(R.string.action_new_chat)
+        title = when (isGroup) {
+            true -> getString(R.string.action_new_group)
+            false -> getString(R.string.action_new_chat)
         }
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction().replace(R.id.container,
-                    NewChatFragment.newInstance(intent.getParcelableExtra<Participant>(EXTRA_PARTICIPANT),
-                            intent.getBooleanExtra(EXTRA_IS_GROUP, false))).commitNow()
+                    NewChatFragment.newInstance(initialParticipant, isGroup)).commitNow()
         }
     }
 

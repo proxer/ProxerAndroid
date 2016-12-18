@@ -40,9 +40,9 @@ class WebViewActivity : AppCompatActivity() {
         webView.setWebViewClient(WebViewClient())
         webView.settings.javaScriptEnabled = true
 
-        title = url
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        title = url
 
         webView.loadUrl(url)
     }
