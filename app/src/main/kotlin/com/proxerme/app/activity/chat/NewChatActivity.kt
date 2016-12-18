@@ -19,16 +19,10 @@ class NewChatActivity : AppCompatActivity() {
 
         fun navigateTo(context: Activity, initialParticipant: Participant? = null,
                        isGroup: Boolean = false) {
-            if (initialParticipant == null) {
-                context.startActivity(context.intentFor<NewChatActivity>(
-                        EXTRA_IS_GROUP to isGroup
-                ))
-            } else {
-                context.startActivity(context.intentFor<NewChatActivity>(
-                        EXTRA_PARTICIPANT to initialParticipant,
-                        EXTRA_IS_GROUP to isGroup
-                ))
-            }
+            context.startActivity(context.intentFor<NewChatActivity>(
+                    EXTRA_PARTICIPANT to initialParticipant,
+                    EXTRA_IS_GROUP to isGroup
+            ))
         }
     }
 

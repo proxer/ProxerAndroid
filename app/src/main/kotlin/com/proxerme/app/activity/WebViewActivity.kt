@@ -10,7 +10,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.proxerme.app.R
 import com.proxerme.app.util.bindView
-import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.startActivity
 
 /**
  * This Activity is used as a fallback when there is no browser installed that supports
@@ -22,9 +22,7 @@ class WebViewActivity : AppCompatActivity() {
         private const val EXTRA_URL = "extra_url"
 
         fun navigateTo(context: Activity, url: String) {
-            context.startActivity(context.intentFor<WebViewActivity>(
-                    EXTRA_URL to url
-            ))
+            context.startActivity<WebViewActivity>(EXTRA_URL to url)
         }
     }
 

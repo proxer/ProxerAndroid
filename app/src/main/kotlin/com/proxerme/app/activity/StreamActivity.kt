@@ -37,6 +37,7 @@ class StreamActivity : MainActivity() {
                 toggleFullscreen(true)
             }
         })
+
         player.setOnPreparedListener {
             player.start()
         }

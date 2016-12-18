@@ -1,7 +1,6 @@
 package com.proxerme.app.activity
 
 import android.app.Activity
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.ActivityOptionsCompat
@@ -16,6 +15,7 @@ import com.bumptech.glide.request.target.Target
 import com.proxerme.app.R
 import com.proxerme.app.util.bindView
 import okhttp3.HttpUrl
+import org.jetbrains.anko.intentFor
 
 /**
  * An Activity which shows a image with an animation on Lollipop and higher.
@@ -28,14 +28,13 @@ class ImageDetailActivity : MainActivity() {
     companion object {
         private const val EXTRA_URL = "extra_url"
 
-        fun navigateTo(context: Activity, image: ImageView,
-                       url: HttpUrl) {
-            val intent = Intent(context, ImageDetailActivity::class.java)
-                    .apply { this.putExtra(EXTRA_URL, url.toString()) }
+        fun navigateTo(context: Activity, image: ImageView, url: HttpUrl) {
+            val intent = context.intentFor<ImageDetailActivity>(EXTRA_URL to url.toString())
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                context.startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        context, image, image.transitionName).toBundle())
+                context.startActivity(intent, ActivityOptionsCompat
+                        .makeSceneTransitionAnimation(context, image, image.transitionName)
+                        .toBundle())
             } else {
                 context.startActivity(intent)
             }

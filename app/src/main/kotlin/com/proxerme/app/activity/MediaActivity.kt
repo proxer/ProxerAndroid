@@ -21,6 +21,7 @@ import com.proxerme.app.fragment.media.MediaInfoFragment
 import com.proxerme.app.fragment.media.RelationsFragment
 import com.proxerme.app.util.bindView
 import com.proxerme.library.info.ProxerUrlHolder
+import org.jetbrains.anko.intentFor
 
 class MediaActivity : MainActivity() {
 
@@ -30,11 +31,8 @@ class MediaActivity : MainActivity() {
         private const val STATE_NAME = "activity_media_name"
 
         fun navigateTo(context: Activity, id: String, name: String? = null) {
-            context.startActivity(Intent(context, MediaActivity::class.java)
-                    .apply {
-                        this.putExtra(EXTRA_ID, id)
-                        this.putExtra(EXTRA_NAME, name)
-                    })
+            context.startActivity(context.intentFor<MediaActivity>(EXTRA_ID to id,
+                    EXTRA_NAME to name))
         }
     }
 

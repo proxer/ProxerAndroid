@@ -30,6 +30,7 @@ import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.user.entitiy.UserInfo
 import com.proxerme.library.info.ProxerUrlHolder
 import com.proxerme.library.parameters.CategoryParameter
+import org.jetbrains.anko.intentFor
 
 class UserActivity : MainActivity() {
 
@@ -45,14 +46,11 @@ class UserActivity : MainActivity() {
                 return
             }
 
-            val intent = Intent(context, UserActivity::class.java)
-                    .apply {
-                        this.putExtra(EXTRA_USER_ID, userId)
-                        this.putExtra(EXTRA_USERNAME, username)
-                        this.putExtra(EXTRA_IMAGE_ID, imageId)
-                    }
-
-            context.startActivity(intent)
+            context.startActivity(context.intentFor<UserActivity>(
+                    EXTRA_USER_ID to userId,
+                    EXTRA_USERNAME to username,
+                    EXTRA_IMAGE_ID to imageId
+            ))
         }
     }
 

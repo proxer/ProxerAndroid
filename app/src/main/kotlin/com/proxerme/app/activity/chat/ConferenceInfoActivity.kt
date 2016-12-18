@@ -9,7 +9,7 @@ import com.proxerme.app.R
 import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.fragment.chat.ConferenceInfoFragment
 import com.proxerme.app.util.bindView
-import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.startActivity
 
 class ConferenceInfoActivity : AppCompatActivity() {
 
@@ -17,8 +17,7 @@ class ConferenceInfoActivity : AppCompatActivity() {
         private const val EXTRA_CONFERENCE = "extra_conference"
 
         fun navigateTo(context: Activity, conference: LocalConference) {
-            context.startActivity(context
-                    .intentFor<ConferenceInfoActivity>(EXTRA_CONFERENCE to conference))
+            context.startActivity<ConferenceInfoActivity>(EXTRA_CONFERENCE to conference)
         }
     }
 

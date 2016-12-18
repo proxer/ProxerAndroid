@@ -7,7 +7,7 @@ import android.view.MenuItem
 import com.proxerme.app.R
 import com.proxerme.app.fragment.anime.AnimeFragment
 import com.proxerme.app.util.bindView
-import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.startActivity
 
 class AnimeActivity : MainActivity() {
 
@@ -19,12 +19,12 @@ class AnimeActivity : MainActivity() {
 
         fun navigateTo(context: Activity, id: String, episode: Int, totalEpisodes: Int,
                        language: String) {
-            context.startActivity(context.intentFor<AnimeActivity>(
+            context.startActivity<AnimeActivity>(
                     EXTRA_ID to id,
                     EXTRA_EPISODE to episode,
                     EXTRA_TOTAL_EPISODES to totalEpisodes,
                     EXTRA_LANGUAGE to language
-            ))
+            )
         }
     }
 
