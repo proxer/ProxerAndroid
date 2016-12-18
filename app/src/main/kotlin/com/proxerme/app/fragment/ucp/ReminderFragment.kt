@@ -55,7 +55,7 @@ class ReminderFragment : PagedLoadingFragment<ReminderInput, Reminder>() {
             is Validators.NotLoggedInException -> Snackbar.make(root, R.string.status_not_logged_in,
                     Snackbar.LENGTH_LONG).setAction(R.string.module_login_login, {
                 LoginDialog.show(activity as AppCompatActivity)
-            })
+            }).show()
             is ProxerException -> {
                 Snackbar.make(root,
                         ErrorUtils.getMessageForErrorCode(context, exception),

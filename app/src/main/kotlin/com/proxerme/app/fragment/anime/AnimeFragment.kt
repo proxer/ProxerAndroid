@@ -65,20 +65,22 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
     }
 
     private val reminderSuccess = { nothing: Void? ->
+        reminderEpisode = null
+
         Snackbar.make(root, R.string.fragment_set_reminder_success, Snackbar.LENGTH_LONG).show()
     }
 
     private val reminderException = { exception: Exception ->
+        reminderEpisode = null
+
         when (exception) {
             is Validators.NotLoggedInException -> Snackbar.make(root, R.string.status_not_logged_in,
                     Snackbar.LENGTH_LONG).setAction(R.string.module_login_login, {
                 LoginDialog.show(activity as AppCompatActivity)
-            })
+            }).show()
             else -> Snackbar.make(root, R.string.fragment_set_reminder_error,
                     Snackbar.LENGTH_LONG).show()
         }
-
-        Unit
     }
 
     private val streamResolverSuccess = { result: StreamResolutionResult ->
