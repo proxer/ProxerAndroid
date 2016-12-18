@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import com.proxerme.app.R
-import com.proxerme.app.activity.UserActivity
+import com.proxerme.app.activity.ProfileActivity
 import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.fragment.chat.ChatFragment
 import com.proxerme.app.util.bindView
@@ -47,7 +47,7 @@ class ChatActivity : AppCompatActivity() {
             if (conference.isGroup) {
                 ConferenceInfoActivity.navigateTo(this, conference)
             } else {
-                UserActivity.navigateTo(this, null, conference.topic, conference.imageId)
+                ProfileActivity.navigateTo(this, null, conference.topic, conference.imageId)
             }
         }
 

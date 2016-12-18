@@ -251,7 +251,7 @@ class DashboardActivity : MainActivity() {
 
             ACCOUNT_USER -> {
                 UserManager.user?.let {
-                    UserActivity.navigateTo(this, it.id, it.username, it.imageId)
+                    ProfileActivity.navigateTo(this, it.id, it.username, it.imageId)
                 }
 
                 return false

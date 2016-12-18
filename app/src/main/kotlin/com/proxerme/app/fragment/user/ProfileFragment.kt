@@ -9,7 +9,7 @@ import android.widget.TextView
 import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.TouchableMovementMethod
 import com.proxerme.app.R
-import com.proxerme.app.activity.UserActivity
+import com.proxerme.app.activity.ProfileActivity
 import com.proxerme.app.fragment.framework.SingleLoadingFragment
 import com.proxerme.app.fragment.user.ProfileFragment.ProfileInput
 import com.proxerme.app.manager.SectionManager.Section
@@ -78,7 +78,7 @@ class ProfileFragment : SingleLoadingFragment<ProfileInput, UserInfo>() {
     }
 
     override fun present(data: UserInfo) {
-        (activity as UserActivity).setUserInfo(data)
+        (activity as ProfileActivity).setUserInfo(data)
 
         val totalPoints = data.animePoints + data.mangaPoints + data.uploadPoints +
                 data.forumPoints + data.infoPoints + data.miscPoints

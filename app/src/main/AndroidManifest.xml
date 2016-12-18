@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.UserActivity"
+            android:name=".activity.ProfileActivity"
             android:parentActivityName=".activity.DashboardActivity"
             android:theme="@style/Theme.Translucent"
             tools:ignore="UnusedAttribute">
@@ -37,10 +37,21 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="http" />
-                <data android:scheme="https" />
-                <data android:host="proxer.me" />
-                <data android:pathPrefix="/user/" />
+                <data
+                    android:host="proxer.me"
+                    android:pathPrefix="/user/"
+                    android:scheme="http" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="proxer.me"
+                    android:pathPrefix="/user/"
+                    android:scheme="https" />
             </intent-filter>
         </activity>
         <activity
@@ -74,10 +85,21 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="http" />
-                <data android:scheme="https" />
-                <data android:host="proxer.me" />
-                <data android:pathPrefix="/info/" />
+                <data
+                    android:host="proxer.me"
+                    android:pathPrefix="/info/"
+                    android:scheme="http" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="proxer.me"
+                    android:pathPrefix="/info/"
+                    android:scheme="https" />
             </intent-filter>
         </activity>
         <activity

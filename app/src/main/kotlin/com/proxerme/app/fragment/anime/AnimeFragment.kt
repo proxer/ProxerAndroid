@@ -11,7 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.proxerme.app.R
 import com.proxerme.app.activity.AnimeActivity
-import com.proxerme.app.activity.UserActivity
+import com.proxerme.app.activity.ProfileActivity
 import com.proxerme.app.adapter.anime.StreamAdapter
 import com.proxerme.app.dialog.LoginDialog
 import com.proxerme.app.fragment.anime.AnimeFragment.AnimeInput
@@ -162,7 +162,7 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
 
         streamAdapter.callback = object : StreamAdapter.StreamAdapterCallback() {
             override fun onUploaderClick(item: Stream) {
-                UserActivity.navigateTo(activity, item.uploaderId, item.uploader)
+                ProfileActivity.navigateTo(activity, item.uploaderId, item.uploader)
             }
 
             override fun onTranslatorGroupClick(item: Stream) {

@@ -12,7 +12,7 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
 import com.proxerme.app.activity.MangaActivity
-import com.proxerme.app.activity.UserActivity
+import com.proxerme.app.activity.ProfileActivity
 import com.proxerme.app.adapter.manga.MangaAdapter
 import com.proxerme.app.dialog.LoginDialog
 import com.proxerme.app.fragment.framework.SingleLoadingFragment
@@ -156,7 +156,7 @@ class MangaFragment : SingleLoadingFragment<MangaInput, Chapter>() {
         }
 
         header.onUploaderClickListener = {
-            UserActivity.navigateTo(activity, it.id, it.name)
+            ProfileActivity.navigateTo(activity, it.id, it.name)
         }
 
         header.onReminderClickListener = {

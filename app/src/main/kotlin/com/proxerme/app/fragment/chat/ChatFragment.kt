@@ -13,7 +13,7 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
 import com.proxerme.app.R
-import com.proxerme.app.activity.UserActivity
+import com.proxerme.app.activity.ProfileActivity
 import com.proxerme.app.adapter.chat.ChatAdapter
 import com.proxerme.app.data.chatDatabase
 import com.proxerme.app.entitiy.LocalConference
@@ -113,7 +113,7 @@ class ChatFragment : PagedLoadingFragment<ChatInput, LocalMessage>() {
 
     private val adapterCallback = object : ChatAdapter.ChatAdapterCallback() {
         override fun onMessageTitleClick(message: LocalMessage) {
-            UserActivity.navigateTo(activity, message.userId, message.username)
+            ProfileActivity.navigateTo(activity, message.userId, message.username)
         }
 
         override fun onMessageSelection(count: Int) {
@@ -143,7 +143,7 @@ class ChatFragment : PagedLoadingFragment<ChatInput, LocalMessage>() {
         }
 
         override fun onMentionsClick(username: String) {
-            UserActivity.navigateTo(activity, username = username)
+            ProfileActivity.navigateTo(activity, username = username)
         }
     }
 

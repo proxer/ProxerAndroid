@@ -32,13 +32,15 @@ import com.proxerme.library.info.ProxerUrlHolder
 import com.proxerme.library.parameters.CategoryParameter
 import org.jetbrains.anko.intentFor
 
-class UserActivity : MainActivity() {
+class ProfileActivity : MainActivity() {
 
     companion object {
         private const val EXTRA_USER_ID = "extra_user_id"
         private const val EXTRA_USERNAME = "extra_username"
         private const val EXTRA_IMAGE_ID = "extra_image_id"
-        private const val STATE_IMAGE_ID = "activity_user_image_id"
+
+        private const val SECTION_ANIME = "anime"
+        private const val SECTION_MANGA = "manga"
 
         fun navigateTo(context: Activity, userId: String? = null, username: String? = null,
                        imageId: String? = null) {
@@ -46,7 +48,7 @@ class UserActivity : MainActivity() {
                 return
             }
 
-            context.startActivity(context.intentFor<UserActivity>(
+            context.startActivity(context.intentFor<ProfileActivity>(
                     EXTRA_USER_ID to userId,
                     EXTRA_USERNAME to username,
                     EXTRA_IMAGE_ID to imageId
@@ -54,9 +56,37 @@ class UserActivity : MainActivity() {
         }
     }
 
-    private var userId: String? = null
-    private var username: String? = null
-    private var imageId: String? = null
+    private var userId: String?
+        get() = when {
+            intent.action == Intent.ACTION_VIEW -> intent.data.pathSegments.getOrNull(1)
+            else -> intent.getStringExtra(EXTRA_USER_ID)
+        }
+        set(value) {
+            intent.putExtra(EXTRA_USER_ID, value)
+        }
+
+    private var username: String?
+        get() = intent.getStringExtra(EXTRA_USERNAME)
+        set(value) {
+            intent.putExtra(EXTRA_USERNAME, value)
+        }
+
+    private var imageId: String?
+        get() = intent.getStringExtra(EXTRA_IMAGE_ID)
+        set(value) {
+            intent.putExtra(EXTRA_IMAGE_ID, value)
+        }
+
+    private val itemToDisplay: Int
+        get() = when (intent.action) {
+            Intent.ACTION_VIEW -> when (intent.data.pathSegments.getOrNull(2)) {
+                SECTION_ANIME -> 2
+                SECTION_MANGA -> 3
+                else -> 0
+            }
+            else -> 0
+        }
+
     private var sectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
 
     private val toolbar: Toolbar by bindView(R.id.toolbar)
@@ -71,32 +101,10 @@ class UserActivity : MainActivity() {
         setContentView(R.layout.activity_user)
         setSupportActionBar(toolbar)
 
-        userId = if (intent.action == Intent.ACTION_VIEW) {
-            intent.data.pathSegments.getOrElse(1, { "-1" })
-        } else {
-            intent.getStringExtra(EXTRA_USER_ID)
-        }
-
-        username = intent.getStringExtra(EXTRA_USERNAME)
-
-        if (savedInstanceState == null) {
-            imageId = intent.getStringExtra(EXTRA_IMAGE_ID)
-        } else {
-            imageId = savedInstanceState.getString(STATE_IMAGE_ID)
-        }
-
         initViews()
 
         if (savedInstanceState == null) {
-            viewPager.currentItem = if (intent.action == Intent.ACTION_VIEW) {
-                when (intent.data.pathSegments.getOrNull(2)) {
-                    "anime" -> 2
-                    "manga" -> 3
-                    else -> 0
-                }
-            } else {
-                0
-            }
+            viewPager.currentItem = itemToDisplay
         }
     }
 
@@ -137,42 +145,27 @@ class UserActivity : MainActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-        outState.putString(STATE_IMAGE_ID, imageId)
-    }
-
     fun setUserInfo(userInfo: UserInfo) {
-        if (this.userId == null) {
-            this.userId = userInfo.id
-        }
+        userId = userInfo.id
+        username = userInfo.username
+        imageId = userInfo.imageId
 
-        if (this.username == null) {
-            this.username = userInfo.username
-
-            supportActionBar?.title = username
-        }
-
-        if (this.imageId == null) {
-            this.imageId = userInfo.imageId
-
-            loadImage()
-        }
+        title = username
+        loadImage()
     }
 
     private fun initViews() {
         viewPager.offscreenPageLimit = 3
         viewPager.adapter = sectionsPagerAdapter
 
+        title = username
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = username
         collapsingToolbar.isTitleEnabled = false
         tabs.setupWithViewPager(viewPager)
 
         profileImage.setOnClickListener {
             if (!imageId.isNullOrBlank()) {
-                ImageDetailActivity.navigateTo(this@UserActivity, it as ImageView,
+                ImageDetailActivity.navigateTo(this@ProfileActivity, it as ImageView,
                         ProxerUrlHolder.getUserImageUrl(imageId!!))
             }
         }

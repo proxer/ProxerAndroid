@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.*
 import com.proxerme.app.R
-import com.proxerme.app.activity.UserActivity
+import com.proxerme.app.activity.ProfileActivity
 import com.proxerme.app.adapter.media.CommentAdapter
 import com.proxerme.app.fragment.framework.PagedLoadingFragment
 import com.proxerme.app.fragment.media.CommentFragment.CommentInput
@@ -54,7 +54,7 @@ class CommentFragment : PagedLoadingFragment<CommentInput, Comment>() {
         adapter = CommentAdapter()
         adapter.callback = object : CommentAdapter.CommentAdapterCallback() {
             override fun onUserClick(item: Comment) {
-                UserActivity.navigateTo(activity, item.userId, item.username, item.imageId)
+                ProfileActivity.navigateTo(activity, item.userId, item.username, item.imageId)
             }
         }
 

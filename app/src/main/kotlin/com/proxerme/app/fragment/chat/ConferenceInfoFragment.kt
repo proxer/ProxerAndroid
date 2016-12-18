@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.proxerme.app.R
-import com.proxerme.app.activity.UserActivity
+import com.proxerme.app.activity.ProfileActivity
 import com.proxerme.app.adapter.chat.ConferenceParticipantAdapter
 import com.proxerme.app.adapter.chat.ConferenceParticipantAdapter.ConferenceParticipantAdapterCallback
 import com.proxerme.app.fragment.framework.SingleLoadingFragment
@@ -58,7 +58,7 @@ class ConferenceInfoFragment : SingleLoadingFragment<String, ConferenceInfoConta
         adapter = ConferenceParticipantAdapter()
         adapter.callback = object : ConferenceParticipantAdapterCallback() {
             override fun onItemClick(item: ConferenceInfoUser) {
-                UserActivity.navigateTo(activity, item.id, item.username, item.imageId)
+                ProfileActivity.navigateTo(activity, item.id, item.username, item.imageId)
             }
 
             override fun onStatusLinkClick(link: HttpUrl) {
