@@ -119,8 +119,8 @@ class MediaActivity : MainActivity() {
         viewPager.offscreenPageLimit = 3
         viewPager.adapter = sectionsPagerAdapter
 
+        title = name
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = name
         collapsingToolbar.isTitleEnabled = false
         tabs.setupWithViewPager(viewPager)
     }
