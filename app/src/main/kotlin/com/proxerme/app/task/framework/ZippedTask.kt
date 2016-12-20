@@ -31,6 +31,7 @@ class ZippedTask<in I, in I2, M, M2, O>(private val firstTask: Task<I, M>,
         }
 
         firstTask.exceptionCallback = {
+            cancel()
             finishWithException(it)
             reset()
         }
@@ -47,8 +48,9 @@ class ZippedTask<in I, in I2, M, M2, O>(private val firstTask: Task<I, M>,
         }
 
         secondTask.exceptionCallback = {
-            finishWithException(it)
             cancel()
+            finishWithException(it)
+            reset()
         }
     }
 
