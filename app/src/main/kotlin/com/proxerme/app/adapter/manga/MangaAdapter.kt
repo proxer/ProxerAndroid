@@ -1,17 +1,20 @@
 package com.proxerme.app.adapter.manga
 
+import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.drawable.GlideDrawable
+import com.bumptech.glide.request.animation.GlideAnimation
+import com.bumptech.glide.request.target.SimpleTarget
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.util.DeviceUtils
-import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.manga.entity.Page
 import com.proxerme.library.info.ProxerUrlHolder
-import view.TouchImageView
+import uk.co.senab.photoview.PhotoView
 
 /**
  * TODO: Describe class
@@ -37,22 +40,32 @@ class MangaAdapter : PagingAdapter<Page>() {
 
     inner class ViewHolder(itemView: View) : PagingViewHolder<Page>(itemView) {
 
-        private val image: TouchImageView by bindView(R.id.image)
-        private val placeholder: View by bindView(R.id.placeholder)
+        private val image: PhotoView
+            get() = itemView as PhotoView
+
+        init {
+            image.maximumScale = 2.0f
+        }
 
         override fun bind(item: Page) {
             val width = DeviceUtils.getScreenWidth(image.context)
             val height = (item.height * width.toFloat() / item.width.toFloat()).toInt()
 
-            placeholder.minimumHeight = height
+            image.setImageBitmap(null)
+            image.minimumHeight = height
 
             Glide.with(image.context)
                     .load(ProxerUrlHolder.getMangaPageUrl(server!!, entryId!!, id!!, item.name)
                             .toString())
-                    .asBitmap()
-                    .override(width, height)
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .into(image)
+                    .into(object : SimpleTarget<GlideDrawable>() {
+                        override fun onResourceReady(resource: GlideDrawable?,
+                                                     glideAnimation: GlideAnimation<in GlideDrawable>?) {
+                            image.setImageDrawable(resource)
+                            image.alpha = 0.2f
+                            image.animate().alpha(1.0f).start()
+                        }
+                    })
         }
     }
 }
