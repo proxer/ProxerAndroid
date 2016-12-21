@@ -7,6 +7,14 @@
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
     </style>
 
+    <style name="Theme.AppThemeNoBackground" parent="Base.Theme.AppTheme">
+        <item name="android:navigationBarColor">@color/colorPrimary</item>
+
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@null</item>
+    </style>
+
     <style name="Theme.Translucent" parent="Theme.AppTheme">
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>

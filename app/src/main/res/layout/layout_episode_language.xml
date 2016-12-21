@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:layout_weight="1"
     android:background="?attr/selectableItemBackground"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:ignore="Overdraw">
 
     <TextView
         android:id="@+id/language"

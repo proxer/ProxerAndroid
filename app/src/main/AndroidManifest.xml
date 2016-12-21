@@ -109,7 +109,7 @@
             android:name=".activity.StreamActivity"
             android:configChanges="orientation|keyboardHidden|screenLayout|screenSize"
             android:exported="true"
-            android:theme="@style/Base.Theme.AppTheme">
+            android:theme="@style/Theme.AppThemeNoBackground">
             <intent-filter tools:ignore="GoogleAppIndexingWarning">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -126,7 +126,6 @@
         <activity android:name=".activity.AnimeActivity" />
         <activity android:name=".activity.WebViewActivity" />
 
-        <service android:name="customtabs.KeepAliveService" />
         <service android:name=".service.NotificationService" />
         <service android:name=".service.ChatService" />
 

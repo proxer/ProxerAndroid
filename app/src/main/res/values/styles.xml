@@ -29,6 +29,11 @@
 
     <style name="Theme.AppTheme" parent="Base.Theme.AppTheme" />
 
+    <style name="Theme.AppThemeNoBackground" parent="Base.Theme.AppTheme">
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@null</item>
+    </style>
+
     <style name="Theme.Translucent" parent="Theme.AppTheme" />
 
 </resources>
