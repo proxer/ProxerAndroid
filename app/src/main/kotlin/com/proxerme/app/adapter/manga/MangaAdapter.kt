@@ -1,6 +1,5 @@
 package com.proxerme.app.adapter.manga
 
-import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,10 +41,6 @@ class MangaAdapter : PagingAdapter<Page>() {
 
         private val image: PhotoView
             get() = itemView as PhotoView
-
-        init {
-            image.maximumScale = 2.0f
-        }
 
         override fun bind(item: Page) {
             val width = DeviceUtils.getScreenWidth(image.context)
