@@ -8,7 +8,12 @@ import android.support.multidex.MultiDexApplication
 import android.support.v7.app.AppCompatDelegate
 import android.widget.ImageView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.integration.okhttp3.OkHttpUrlLoader
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.model.GenericLoaderFactory
+import com.bumptech.glide.load.model.GlideUrl
+import com.bumptech.glide.load.model.ModelLoader
+import com.bumptech.glide.load.model.ModelLoaderFactory
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
@@ -25,6 +30,7 @@ import com.squareup.leakcanary.RefWatcher
 import net.danlew.android.joda.JodaTimeAndroid
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
+import java.io.InputStream
 
 /**
  * TODO: Describe Class
@@ -80,6 +86,15 @@ class MainApplication : MultiDexApplication() {
     private fun initLibs() {
         JodaTimeAndroid.init(this)
         Hawk.init(this).build()
+        Glide.get(this).register(GlideUrl::class.java, InputStream::class.java,
+                object : ModelLoaderFactory<GlideUrl, InputStream> {
+                    override fun build(context: Context?, factories: GenericLoaderFactory?):
+                            ModelLoader<GlideUrl, InputStream> {
+                        return OkHttpUrlLoader(MainApplication.proxerConnection.httpClient)
+                    }
+
+                    override fun teardown() {}
+                })
         EventBus.builder().addIndex(EventBusIndex())
                 .logNoSubscriberMessages(false)
                 .sendNoSubscriberEvent(false)
