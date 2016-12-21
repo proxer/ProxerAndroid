@@ -124,7 +124,7 @@ class DashboardActivity : MainActivity() {
 
         if (requestCode == IntroductionBuilder.INTRODUCTION_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                for (option in data.getParcelableArrayListExtra<Option>(OPTION_RESULT)) {
+                data.getParcelableArrayListExtra<Option>(OPTION_RESULT).forEach { option ->
                     when (option.position) {
                         1 -> {
                             PreferenceHelper.setNewsNotificationsEnabled(this, option.isActivated)
