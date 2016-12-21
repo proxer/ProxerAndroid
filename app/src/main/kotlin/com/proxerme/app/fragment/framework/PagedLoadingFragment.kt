@@ -17,7 +17,6 @@ import com.proxerme.app.event.HentaiConfirmationEvent
 import com.proxerme.app.fragment.framework.PagedLoadingFragment.PagedInput
 import com.proxerme.app.helper.NotificationHelper
 import com.proxerme.app.manager.UserManager
-import com.proxerme.app.service.ChatService
 import com.proxerme.app.task.framework.CachedTask
 import com.proxerme.app.task.framework.ListenableTask
 import com.proxerme.app.task.framework.Task
@@ -176,8 +175,6 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
 
     override fun onStart() {
         super.onStart()
-
-        ChatService.synchronize(context)
 
         if (refreshLifecycle == RefreshLifecycle.START) {
             task.execute(constructInput(0))
