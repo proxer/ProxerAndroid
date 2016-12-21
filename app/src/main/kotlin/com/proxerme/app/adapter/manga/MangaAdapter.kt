@@ -46,8 +46,11 @@ class MangaAdapter : PagingAdapter<Page>() {
             val width = DeviceUtils.getScreenWidth(image.context)
             val height = (item.height * width.toFloat() / item.width.toFloat()).toInt()
 
-            image.setImageBitmap(null)
             image.minimumHeight = height
+            image.setImageBitmap(null)
+            image.post {
+                image.setScale(1.0f, false)
+            }
 
             Glide.with(image.context)
                     .load(ProxerUrlHolder.getMangaPageUrl(server!!, entryId!!, id!!, item.name)
