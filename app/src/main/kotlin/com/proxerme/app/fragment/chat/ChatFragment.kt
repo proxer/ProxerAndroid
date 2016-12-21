@@ -161,6 +161,12 @@ class ChatFragment : PagedLoadingFragment<ChatInput, LocalMessage>() {
         adapter.callback = adapterCallback
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        ChatService.synchronize(context)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         layoutManager = LinearLayoutManager(context)
