@@ -10,13 +10,10 @@ import android.widget.TextView
 import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.TouchableMovementMethod
 import com.proxerme.app.R
-import com.proxerme.app.dialog.HentaiConfirmationDialog
-import com.proxerme.app.dialog.LoginDialog
 import com.proxerme.app.event.HentaiConfirmationEvent
 import com.proxerme.app.manager.UserManager
 import com.proxerme.app.task.framework.*
 import com.proxerme.app.util.*
-import com.proxerme.library.connection.ProxerException
 import okhttp3.HttpUrl
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -34,48 +31,9 @@ abstract class SingleLoadingFragment<I, T> : MainFragment() {
     }
 
     private val exceptionCallback = { exception: Exception ->
-        context?.let {
-            when (exception) {
-                is ProxerException -> {
-                    showError(ErrorUtils.getMessageForErrorCode(context, exception))
-                }
-                is Validators.NotLoggedInException -> {
-                    val message = when (UserManager.ongoingState) {
-                        UserManager.OngoingState.LOGGING_IN -> {
-                            getString(R.string.status_currently_logging_in)
-                        }
-                        UserManager.OngoingState.LOGGING_OUT -> {
-                            getString(R.string.status_currently_logging_out)
-                        }
-                        else -> getString(R.string.status_not_logged_in)
-                    }
+        val action = ErrorUtils.handle(activity as AppCompatActivity, exception)
 
-                    val buttonMessage = when (UserManager.ongoingState) {
-                        UserManager.OngoingState.NONE -> getString(R.string.module_login_login)
-                        else -> null
-                    }
-
-                    val buttonAction = when (UserManager.ongoingState) {
-                        UserManager.OngoingState.NONE -> View.OnClickListener {
-                            LoginDialog.show(activity as AppCompatActivity)
-                        }
-                        else -> null
-                    }
-
-                    showError(message, buttonMessage, buttonAction)
-                }
-                is Validators.HentaiConfirmationRequiredException -> {
-                    showError(getString(R.string.error_hentai_confirmation_needed),
-                            getString(R.string.error_confirm),
-                            onButtonClickListener = View.OnClickListener {
-                                HentaiConfirmationDialog.show(activity as AppCompatActivity)
-                            })
-                }
-                else -> showError(context.getString(R.string.error_unknown))
-            }
-        }
-
-        Unit
+        showError(action.message, action.buttonMessage, action.buttonAction)
     }
 
     open protected val isSwipeToRefreshEnabled = false

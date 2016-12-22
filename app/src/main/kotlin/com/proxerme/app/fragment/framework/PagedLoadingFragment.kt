@@ -11,8 +11,6 @@ import android.view.ViewGroup
 import com.klinker.android.link_builder.Link
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
-import com.proxerme.app.dialog.HentaiConfirmationDialog
-import com.proxerme.app.dialog.LoginDialog
 import com.proxerme.app.event.HentaiConfirmationEvent
 import com.proxerme.app.fragment.framework.PagedLoadingFragment.PagedInput
 import com.proxerme.app.helper.NotificationHelper
@@ -23,7 +21,6 @@ import com.proxerme.app.task.framework.Task
 import com.proxerme.app.task.framework.ValidatingTask
 import com.proxerme.app.util.*
 import com.proxerme.app.util.listener.EndlessRecyclerOnScrollListener
-import com.proxerme.library.connection.ProxerException
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import okhttp3.HttpUrl
 import org.greenrobot.eventbus.EventBus
@@ -47,48 +44,9 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
     }
 
     protected val exceptionCallback = { exception: Exception ->
-        context?.let {
-            when (exception) {
-                is ProxerException -> {
-                    showError(ErrorUtils.getMessageForErrorCode(context, exception))
-                }
-                is Validators.NotLoggedInException -> {
-                    val message = when (UserManager.ongoingState) {
-                        UserManager.OngoingState.LOGGING_IN -> {
-                            getString(R.string.status_currently_logging_in)
-                        }
-                        UserManager.OngoingState.LOGGING_OUT -> {
-                            getString(R.string.status_currently_logging_out)
-                        }
-                        else -> getString(R.string.status_not_logged_in)
-                    }
+        val action = ErrorUtils.handle(activity as AppCompatActivity, exception)
 
-                    val buttonMessage = when (UserManager.ongoingState) {
-                        UserManager.OngoingState.NONE -> getString(R.string.module_login_login)
-                        else -> null
-                    }
-
-                    val buttonAction = when (UserManager.ongoingState) {
-                        UserManager.OngoingState.NONE -> View.OnClickListener {
-                            LoginDialog.show(activity as AppCompatActivity)
-                        }
-                        else -> null
-                    }
-
-                    showError(message, buttonMessage, buttonAction)
-                }
-                is Validators.HentaiConfirmationRequiredException -> {
-                    showError(getString(R.string.error_hentai_confirmation_needed),
-                            getString(R.string.error_confirm),
-                            onButtonClickListener = View.OnClickListener {
-                                HentaiConfirmationDialog.show(activity as AppCompatActivity)
-                            })
-                }
-                else -> showError(context.getString(R.string.error_unknown))
-            }
-        }
-
-        Unit
+        showError(action.message, action.buttonMessage, action.buttonAction)
     }
 
     protected val refreshSuccessCallback = { data: Array<T> ->
@@ -135,13 +93,21 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
         EventBus.getDefault().register(this)
 
         task = ValidatingTask(CachedTask(internalConstructTask(), cacheStrategy), {
-            Validators.validateLogin(isLoginRequired)
-            Validators.validateHentaiConfirmation(context, isHentaiConfirmationRequired)
+            if (isLoginRequired) {
+                Validators.validateLogin()
+            }
+            if (isHentaiConfirmationRequired) {
+                Validators.validateHentaiConfirmation(context)
+            }
         }, successCallback, exceptionCallback)
 
         refreshTask = ValidatingTask(internalConstructRefreshingTask(), {
-            Validators.validateLogin(isLoginRequired)
-            Validators.validateHentaiConfirmation(context, isHentaiConfirmationRequired)
+            if (isLoginRequired) {
+                Validators.validateLogin()
+            }
+            if (isHentaiConfirmationRequired) {
+                Validators.validateHentaiConfirmation(context)
+            }
         }, refreshSuccessCallback, refreshExceptionCallback)
 
         if (refreshLifecycle == RefreshLifecycle.CREATE) {

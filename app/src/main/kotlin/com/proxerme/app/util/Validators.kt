@@ -11,20 +11,16 @@ import com.proxerme.app.manager.UserManager
  */
 object Validators {
 
-    fun validateLogin(isLoginRequired: Boolean) {
-        if (isLoginRequired) {
-            if (UserManager.loginState != UserManager.LoginState.LOGGED_IN ||
-                    UserManager.ongoingState != UserManager.OngoingState.NONE) {
-                throw NotLoggedInException()
-            }
+    fun validateLogin() {
+        if (UserManager.loginState != UserManager.LoginState.LOGGED_IN ||
+                UserManager.ongoingState != UserManager.OngoingState.NONE) {
+            throw NotLoggedInException()
         }
     }
 
-    fun validateHentaiConfirmation(context: Context, isHentaiConfirmationRequired: Boolean) {
-        if (isHentaiConfirmationRequired) {
-            if (!PreferenceHelper.isHentaiAllowed(context)) {
-                throw HentaiConfirmationRequiredException()
-            }
+    fun validateHentaiConfirmation(context: Context) {
+        if (!PreferenceHelper.isHentaiAllowed(context)) {
+            throw HentaiConfirmationRequiredException()
         }
     }
 
