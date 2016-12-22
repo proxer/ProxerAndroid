@@ -144,18 +144,6 @@ class ChatDatabase(context: Context) :
         }
     }
 
-    fun insertOrUpdateConferences(items: Collection<Conference>): List<LocalConference> {
-        return use {
-            var result: List<LocalConference>? = null
-
-            transaction {
-                result = doInsertOrUpdateConferences(this, items)
-            }
-
-            result ?: throw SQLiteException()
-        }
-    }
-
     fun insertOrUpdateMessages(items: Collection<Message>): List<LocalMessage> {
         return use {
             var result: List<LocalMessage>? = null
@@ -237,12 +225,6 @@ class ChatDatabase(context: Context) :
                     .where("$COLUMN_CONFERENCE_IS_READ = 0")
                     .orderBy(COLUMN_CONFERENCE_ID, SqlOrderDirection.DESC)
                     .parseList(conferenceParser)
-        }
-    }
-
-    fun getConferenceAmount(): Long {
-        return use {
-            DatabaseUtils.queryNumEntries(this, TABLE_CONFERENCE)
         }
     }
 
