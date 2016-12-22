@@ -53,10 +53,12 @@
     <string name="fragment_manga_reminder_next_chapter">Lesezeichen: Nächstes Kapitel</string>
 
     <string name="fragment_anime_empty_subgoup">Keine angegeben</string>
-    <string name="fragment_anime_previous_chapter">Vorherige Episode</string>
-    <string name="fragment_anime_next_chapter">Nächste Episode</string>
-    <string name="fragment_anime_reminder_this_chapter">Lesezeichen: Diese Episode</string>
-    <string name="fragment_anime_reminder_next_chapter">Lesezeichen: Nächste Episode</string>
+    <string name="fragment_anime_previous_episode">Vorherige Episode</string>
+    <string name="fragment_anime_next_episode">Nächste Episode</string>
+    <string name="fragment_anime_reminder_this_episode">Lesezeichen: Diese Episode</string>
+    <string name="fragment_anime_reminder_next_episode">Lesezeichen: Nächste Episode</string>
+
+    <string name="finished_media">Abgeschlossen</string>
 
     <string name="preference_category_notifications_title">Benachrichtigungen</string>
     <string name="preference_category_info_title">Info</string>
@@ -68,8 +70,8 @@
     <string name="preference_licences_title">Lizenzen</string>
     <string name="preference_licences_summary">Bibliotheken die in diser App verwendet werden</string>
 
-    <string name="fragment_set_reminder_success">Lesezeichen wurde hinzugefügt und aktualisiert</string>
-    <string name="fragment_set_reminder_error">Lesezeichen konnte nicht aktualisiert werden</string>
+    <string name="fragment_set_reminder_success">Eintrag wurde aktualisiert</string>
+    <string name="fragment_set_reminder_error">Eintrag konnte nicht aktualisiert werden</string>
 
     <string name="about_description">Entwickler: Ruben Gees</string>
     <string name="about_libraries_title">Lizenzen</string>

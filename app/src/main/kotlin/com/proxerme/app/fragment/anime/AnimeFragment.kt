@@ -30,9 +30,11 @@ import com.proxerme.library.connection.ProxerException.UNPARSABLE
 import com.proxerme.library.connection.anime.entity.Stream
 import com.proxerme.library.connection.anime.request.LinkRequest
 import com.proxerme.library.connection.anime.request.StreamsRequest
+import com.proxerme.library.connection.info.request.SetUserInfoRequest
 import com.proxerme.library.connection.ucp.request.SetReminderRequest
 import com.proxerme.library.info.ProxerUrlHolder
 import com.proxerme.library.parameters.CategoryParameter
+import com.proxerme.library.parameters.ViewStateParameter
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import okhttp3.HttpUrl
 import java.io.IOException
@@ -65,14 +67,10 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
     }
 
     private val reminderSuccess = { nothing: Void? ->
-        reminderEpisode = null
-
         Snackbar.make(root, R.string.fragment_set_reminder_success, Snackbar.LENGTH_LONG).show()
     }
 
     private val reminderException = { exception: Exception ->
-        reminderEpisode = null
-
         when (exception) {
             is Validators.NotLoggedInException -> Snackbar.make(root, R.string.status_not_logged_in,
                     Snackbar.LENGTH_LONG).setAction(R.string.module_login_login, {
@@ -146,7 +144,6 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
     private lateinit var streamAdapter: StreamAdapter
     private lateinit var adapter: EasyHeaderFooterAdapter
 
-    private var reminderEpisode: Int? = null
     private val reminderTask = constructReminderTask()
 
     private val streamResolverTask = constructStreamResolverTask()
@@ -186,13 +183,14 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
         header = inflater.inflate(R.layout.item_media_header, container, false) as MediaControlView
 
         header.textResolver = object : MediaControlView.TextResourceResolver {
-            override fun next() = context.getString(R.string.fragment_anime_next_chapter)
-            override fun previous() = context.getString(R.string.fragment_anime_previous_chapter)
+            override fun finish() = context.getString(R.string.finished_media)
+            override fun next() = context.getString(R.string.fragment_anime_next_episode)
+            override fun previous() = context.getString(R.string.fragment_anime_previous_episode)
             override fun reminderThis() =
-                    context.getString(R.string.fragment_anime_reminder_this_chapter)
+                    context.getString(R.string.fragment_anime_reminder_this_episode)
 
             override fun reminderNext() =
-                    context.getString(R.string.fragment_anime_reminder_next_chapter)
+                    context.getString(R.string.fragment_anime_reminder_next_episode)
         }
 
         return inflater.inflate(R.layout.fragment_anime, container, false)
@@ -205,12 +203,11 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
         streams.adapter = adapter
 
         header.onReminderClickListener = {
-            if (it != reminderEpisode) {
-                reminderEpisode = it
+            reminderTask.execute(ReminderInput(id, it, language, false))
+        }
 
-                reminderTask.cancel()
-                reminderTask.execute(AnimeInput(id, reminderEpisode!!, language))
-            }
+        header.onFinishClickListener = {
+            reminderTask.execute(ReminderInput(id, it, language, true))
         }
 
         header.onSwitchClickListener = {
@@ -263,9 +260,13 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
         return AnimeInput(id, episode, language)
     }
 
-    private fun constructReminderTask(): Task<AnimeInput, Void?> {
+    private fun constructReminderTask(): Task<ReminderInput, Void?> {
         return ValidatingTask(ProxerLoadingTask({
-            SetReminderRequest(it.id, it.episode, it.language, CategoryParameter.ANIME)
+            if (it.isFinished) {
+                SetUserInfoRequest(it.id, ViewStateParameter.FINISHED)
+            } else {
+                SetReminderRequest(it.id, it.episode, it.language, CategoryParameter.ANIME)
+            }
         }), { Validators.validateLogin() }, reminderSuccess, reminderException)
     }
 
@@ -286,5 +287,7 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
         reset()
     }
 
-    class AnimeInput(val id: String, val episode: Int, val language: String)
+    open class AnimeInput(val id: String, val episode: Int, val language: String)
+    class ReminderInput(id: String, episode: Int, language: String, val isFinished: Boolean) :
+            AnimeInput(id, episode, language)
 }

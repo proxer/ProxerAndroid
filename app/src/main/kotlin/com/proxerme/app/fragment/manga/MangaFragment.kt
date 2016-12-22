@@ -25,11 +25,13 @@ import com.proxerme.app.task.framework.ValidatingTask
 import com.proxerme.app.util.Validators
 import com.proxerme.app.util.bindView
 import com.proxerme.app.view.MediaControlView
+import com.proxerme.library.connection.info.request.SetUserInfoRequest
 import com.proxerme.library.connection.manga.entity.Chapter
 import com.proxerme.library.connection.manga.request.ChapterRequest
 import com.proxerme.library.connection.ucp.request.SetReminderRequest
 import com.proxerme.library.info.ProxerUrlHolder
 import com.proxerme.library.parameters.CategoryParameter
+import com.proxerme.library.parameters.ViewStateParameter
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import org.jetbrains.anko.find
 import org.joda.time.DateTime
@@ -65,14 +67,10 @@ class MangaFragment : SingleLoadingFragment<MangaInput, Chapter>() {
     }
 
     private val reminderSuccess = { nothing: Void? ->
-        reminderEpisode = null
-
         Snackbar.make(root, R.string.fragment_set_reminder_success, Snackbar.LENGTH_LONG).show()
     }
 
     private val reminderException = { exception: Exception ->
-        reminderEpisode = null
-
         when (exception) {
             is Validators.NotLoggedInException -> Snackbar.make(root, R.string.status_not_logged_in,
                     Snackbar.LENGTH_LONG).setAction(R.string.module_login_login, {
@@ -98,7 +96,6 @@ class MangaFragment : SingleLoadingFragment<MangaInput, Chapter>() {
     private lateinit var adapter: EasyHeaderFooterAdapter
 
     private var reminderTask = constructReminderTask()
-    private var reminderEpisode: Int? = null
 
     private lateinit var header: MediaControlView
     private lateinit var footer: ViewGroup
@@ -124,6 +121,7 @@ class MangaFragment : SingleLoadingFragment<MangaInput, Chapter>() {
         scrollToTop = footer.find(R.id.scrollToTop)
 
         header.textResolver = object : MediaControlView.TextResourceResolver {
+            override fun finish() = context.getString(R.string.finished_media)
             override fun next() = context.getString(R.string.fragment_manga_next_chapter)
             override fun previous() = context.getString(R.string.fragment_manga_previous_chapter)
             override fun reminderThis() =
@@ -162,12 +160,11 @@ class MangaFragment : SingleLoadingFragment<MangaInput, Chapter>() {
         }
 
         header.onReminderClickListener = {
-            if (it != reminderEpisode) {
-                reminderEpisode = it
+            reminderTask.execute(ReminderInput(id, it, language, false))
+        }
 
-                reminderTask.cancel()
-                reminderTask.execute(MangaInput(id, reminderEpisode!!, language))
-            }
+        header.onFinishClickListener = {
+            reminderTask.execute(ReminderInput(id, it, language, true))
         }
 
         header.onSwitchClickListener = {
@@ -256,9 +253,13 @@ class MangaFragment : SingleLoadingFragment<MangaInput, Chapter>() {
         return ProxerLoadingTask({ ChapterRequest(it.id, it.episode, it.language) })
     }
 
-    private fun constructReminderTask(): Task<MangaInput, Void?> {
+    private fun constructReminderTask(): Task<ReminderInput, Void?> {
         return ValidatingTask(ProxerLoadingTask({
-            SetReminderRequest(it.id, it.episode, it.language, CategoryParameter.MANGA)
+            if (it.isFinished) {
+                SetUserInfoRequest(it.id, ViewStateParameter.FINISHED)
+            } else {
+                SetReminderRequest(it.id, it.episode, it.language, CategoryParameter.MANGA)
+            }
         }), { Validators.validateLogin() }, reminderSuccess, reminderException)
     }
 
@@ -288,5 +289,7 @@ class MangaFragment : SingleLoadingFragment<MangaInput, Chapter>() {
         }
     }
 
-    class MangaInput(val id: String, val episode: Int, val language: String)
+    open class MangaInput(val id: String, val episode: Int, val language: String)
+    class ReminderInput(id: String, episode: Int, language: String, val isFinished: Boolean) :
+            MangaInput(id, episode, language)
 }

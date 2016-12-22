@@ -8,10 +8,9 @@ package com.proxerme.app.task.framework
 class StreamedTask<in I, MO, MI, O>(private val firstTask: Task<I, MO>,
                                     private val secondTask: Task<MI, O>,
                                     private val mapFunction: (MO) -> MI = {
-                                     @Suppress("UNCHECKED_CAST")
-                                     it as MI
-                                 },
-                                    successCallback: ((O) -> Unit)? = null,
+                                        @Suppress("UNCHECKED_CAST")
+                                        it as MI
+                                    }, successCallback: ((O) -> Unit)? = null,
                                     exceptionCallback: ((Exception) -> Unit)? = null) :
         BaseTask<I, O>(successCallback, exceptionCallback) {
 

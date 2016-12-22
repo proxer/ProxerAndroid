@@ -110,8 +110,7 @@
                         android:layout_marginTop="4dp"
                         android:minLines="2"
                         android:textColor="@color/md_white_1000"
-                        android:theme="@style/ButtonTheme"
-                        android:visibility="gone" />
+                        android:theme="@style/ButtonTheme" />
                 </FrameLayout>
             </LinearLayout>
         </LinearLayout>

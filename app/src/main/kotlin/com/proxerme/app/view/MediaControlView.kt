@@ -27,9 +27,12 @@ class MediaControlView(context: Context?, attrs: AttributeSet?) : FrameLayout(co
     var onTranslatorGroupClickListener: ((TranslatorGroup) -> Unit)? = null
     var onSwitchClickListener: ((episode: Int) -> Unit)? = null
     var onReminderClickListener: ((episode: Int) -> Unit)? = null
+    var onFinishClickListener: ((episode: Int) -> Unit)? = null
 
-    var textResolver: TextResourceResolver?
+    var textResolver: TextResourceResolver? = null
         set(value) {
+            field = value
+
             if (value != null) {
                 previous.text = value.previous()
                 next.text = value.next()
@@ -37,7 +40,7 @@ class MediaControlView(context: Context?, attrs: AttributeSet?) : FrameLayout(co
                 reminderNext.text = value.reminderNext()
             }
         }
-        get() = null
+        get() = field
 
     private val uploaderRow: ViewGroup by bindView(R.id.uploaderRow)
     private val translatorRow: ViewGroup by bindView(R.id.translatorRow)
@@ -103,16 +106,22 @@ class MediaControlView(context: Context?, attrs: AttributeSet?) : FrameLayout(co
 
         if (currentEpisode >= totalEpisodes) {
             next.visibility = View.GONE
-            reminderNext.visibility = View.GONE
         } else {
             next.visibility = View.VISIBLE
             next.setOnClickListener {
                 onSwitchClickListener?.invoke(currentEpisode + 1)
             }
+        }
 
-            reminderNext.visibility = View.VISIBLE
-            reminderNext.setOnClickListener {
+        reminderNext.text = when {
+            currentEpisode < totalEpisodes -> textResolver?.reminderNext()
+            else -> textResolver?.finish()
+        }
+        reminderNext.setOnClickListener {
+            if (currentEpisode < totalEpisodes) {
                 onReminderClickListener?.invoke(currentEpisode + 1)
+            } else {
+                onFinishClickListener?.invoke(currentEpisode)
             }
         }
 
@@ -129,5 +138,6 @@ class MediaControlView(context: Context?, attrs: AttributeSet?) : FrameLayout(co
         fun previous(): String
         fun reminderThis(): String
         fun reminderNext(): String
+        fun finish(): String
     }
 }
