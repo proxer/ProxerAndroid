@@ -28,7 +28,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
 
     companion object {
         private val LIBRARIES = arrayOf("glide", "jodatimeandroid", "hawk", "materialdialogs",
-                "eventbus", "circleimageview", "okhttp", "leakcanary",
+                "eventbus", "circleimageview", "okhttp", "leakcanary", "anko", "moshi",
                 "android_textview_linkbuilder", "androidflowlayout", "kotterknife")
         private val EXCLUDED_LIBRARIES = arrayOf("fastadapter", "materialize")
         private val OPEN_SOURCE_LINK = HttpUrl.Builder()
