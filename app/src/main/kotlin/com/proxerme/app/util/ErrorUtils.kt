@@ -123,6 +123,6 @@ object ErrorUtils {
         }
     }
 
-    class ErrorAction(val message: String, val buttonMessage: String? = null,
+    class ErrorAction(val message: String, val buttonMessage: String? = "",
                       val buttonAction: View.OnClickListener? = null)
 }
