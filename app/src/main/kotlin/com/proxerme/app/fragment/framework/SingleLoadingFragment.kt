@@ -61,8 +61,12 @@ abstract class SingleLoadingFragment<I, T> : MainFragment() {
         EventBus.getDefault().register(this)
 
         task = ListeningTask(ValidatingTask(CachedTask(constructTask(), cacheStrategy), {
-            Validators.validateLogin(isLoginRequired)
-            Validators.validateHentaiConfirmation(context, isHentaiConfirmationRequired)
+            if (isLoginRequired) {
+                Validators.validateLogin()
+            }
+            if (isHentaiConfirmationRequired) {
+                Validators.validateHentaiConfirmation(context)
+            }
         }), successCallback, exceptionCallback).onStart {
             setRefreshing(true)
             contentContainer.visibility = View.GONE

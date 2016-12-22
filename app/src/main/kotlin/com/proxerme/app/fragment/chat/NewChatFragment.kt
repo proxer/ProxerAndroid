@@ -223,7 +223,7 @@ class NewChatFragment : MainFragment() {
         return ValidatingTask(NewChatTask({ context }).onStart {
             setRefreshing(true)
         }.onFinish { updateRefreshing() }, {
-            Validators.validateLogin(true)
+            Validators.validateLogin()
             validateInput()
         }, success, exception)
     }

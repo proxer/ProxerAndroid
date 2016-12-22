@@ -259,7 +259,7 @@ class MangaFragment : SingleLoadingFragment<MangaInput, Chapter>() {
     private fun constructReminderTask(): Task<MangaInput, Void?> {
         return ValidatingTask(ProxerLoadingTask({
             SetReminderRequest(it.id, it.episode, it.language, CategoryParameter.MANGA)
-        }), { Validators.validateLogin(true) }, reminderSuccess, reminderException)
+        }), { Validators.validateLogin() }, reminderSuccess, reminderException)
     }
 
     override fun constructInput(): MangaInput {

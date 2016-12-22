@@ -266,7 +266,7 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
     private fun constructReminderTask(): Task<AnimeInput, Void?> {
         return ValidatingTask(ProxerLoadingTask({
             SetReminderRequest(it.id, it.episode, it.language, CategoryParameter.ANIME)
-        }), { Validators.validateLogin(true) }, reminderSuccess, reminderException)
+        }), { Validators.validateLogin() }, reminderSuccess, reminderException)
     }
 
     private fun constructStreamResolverTask(): Task<String, StreamResolutionResult> {

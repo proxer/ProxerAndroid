@@ -165,7 +165,7 @@ class ReminderFragment : PagedLoadingFragment<ReminderInput, Reminder>() {
     private fun constructRemovalTask(): Task<RemovalInput, Void> {
         return ValidatingTask(ProxerLoadingTask({
             DeleteReminderRequest(it.id)
-        }), { Validators.validateLogin(true) }, removalSuccess, removalException)
+        }), { Validators.validateLogin() }, removalSuccess, removalException)
     }
 
     private fun processQueuedRemovals() {
