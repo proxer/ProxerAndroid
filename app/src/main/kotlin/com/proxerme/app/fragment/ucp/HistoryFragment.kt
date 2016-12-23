@@ -66,7 +66,7 @@ class HistoryFragment : PagedLoadingFragment<HistoryInput, HistoryEntry>() {
     }
 
     override fun getEmptyString(): String {
-        return getString(R.string.error_no_data_history, null)
+        return getString(R.string.error_no_data_history)
     }
 
     class HistoryInput(page: Int, val itemsOnPage: Int) : PagedInput(page)
