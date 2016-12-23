@@ -86,7 +86,7 @@ class ChatTask(private val id: String,
 
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onLoadMessages(@Suppress("UNUSED_PARAMETER") event: ChatMessagesEvent) {
+    fun onLoadMessages(event: ChatMessagesEvent) {
         successCallback?.let {
             if (event.messages.isNotEmpty()) {
                 finishSuccessful(event.messages.toTypedArray())
@@ -96,7 +96,7 @@ class ChatTask(private val id: String,
 
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onLoadMessagesFailed(@Suppress("UNUSED_PARAMETER") exception: LoadMoreMessagesException) {
+    fun onLoadMessagesFailed(exception: LoadMoreMessagesException) {
         exceptionCallback?.let {
             finishWithException(exception)
         }

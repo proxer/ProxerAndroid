@@ -21,7 +21,6 @@ import com.mikepenz.iconics.typeface.IIcon
 import com.proxerme.app.R
 import com.proxerme.app.activity.chat.ChatActivity
 import com.proxerme.app.adapter.chat.NewChatParticipantAdapter
-import com.proxerme.app.dialog.LoginDialog
 import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.entitiy.Participant
 import com.proxerme.app.fragment.framework.MainFragment
@@ -35,7 +34,6 @@ import com.proxerme.app.util.KotterKnife
 import com.proxerme.app.util.Validators
 import com.proxerme.app.util.bindView
 import com.proxerme.app.util.listener.OnTextListener
-import com.proxerme.library.connection.ProxerException
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import com.vanniktech.emoji.EmojiEditText
 import com.vanniktech.emoji.EmojiPopup
@@ -76,16 +74,6 @@ class NewChatFragment : MainFragment() {
     private val exception = { exception: Exception ->
         context?.let {
             when (exception) {
-                is ProxerException -> {
-                    Snackbar.make(root, ErrorUtils.getMessageForErrorCode(context, exception),
-                            Snackbar.LENGTH_LONG).show()
-                }
-                is Validators.NotLoggedInException -> {
-                    Snackbar.make(root, R.string.status_not_logged_in, Snackbar.LENGTH_LONG)
-                            .setAction(R.string.module_login_login, {
-                                LoginDialog.show(activity as AppCompatActivity)
-                            }).show()
-                }
                 is InvalidInputException -> {
                     exception.message?.let {
                         Snackbar.make(root, it, Snackbar.LENGTH_LONG).show()
@@ -95,7 +83,12 @@ class NewChatFragment : MainFragment() {
                     topicInputContainer.isErrorEnabled = true
                     topicInputContainer.error = context.getString(R.string.error_input_empty)
                 }
-                else -> Snackbar.make(root, R.string.error_unknown, Snackbar.LENGTH_LONG).show()
+                else -> {
+                    val action = ErrorUtils.handle(activity as AppCompatActivity, exception)
+
+                    Snackbar.make(root, action.message, Snackbar.LENGTH_LONG)
+                            .setAction(action.buttonMessage, action.buttonAction).show()
+                }
             }
         }
 

@@ -42,8 +42,8 @@
     <string name="error_activity_not_found">Keine App zur Anzeige gefunden</string>
     <string name="error_timeout">Der Server hat nicht rechtzeitig geantwortet. Versuche es später noch einmal</string>
     <plurals name="error_reminder_removal">
-        <item quantity="one">Ein Lesezeichen konnte nicht gelöscht werden</item>
-        <item quantity="other">%d Lesezeichen konnten nicht gelöscht werden</item>
+        <item quantity="one">Ein Lesezeichen konnte nicht gelöscht werden: %2$s</item>
+        <item quantity="other">%1$d Lesezeichen konnten nicht gelöscht werden: %2$s</item>
     </plurals>
 
     <string name="fragment_manga_empty_scangroup">Siehe Kapitelcredits</string>

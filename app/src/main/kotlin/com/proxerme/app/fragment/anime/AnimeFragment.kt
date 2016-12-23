@@ -37,8 +37,6 @@ import com.proxerme.library.parameters.CategoryParameter
 import com.proxerme.library.parameters.ViewStateParameter
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import okhttp3.HttpUrl
-import java.io.IOException
-import java.net.SocketTimeoutException
 
 /**
  * TODO: Describe class
@@ -98,17 +96,12 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
             is StreamResolutionException -> {
                 Snackbar.make(root, R.string.error_stream_resolution, Snackbar.LENGTH_LONG).show()
             }
-            is ProxerException -> {
-                Snackbar.make(root, ErrorUtils.getMessageForErrorCode(context, exception),
-                        Snackbar.LENGTH_LONG).show()
+            else -> {
+                val action = ErrorUtils.handle(activity as AppCompatActivity, exception)
+
+                Snackbar.make(root, action.message, Snackbar.LENGTH_LONG)
+                        .setAction(action.buttonMessage, action.buttonAction).show()
             }
-            is SocketTimeoutException -> {
-                Snackbar.make(root, R.string.error_timeout, Snackbar.LENGTH_LONG).show()
-            }
-            is IOException -> {
-                Snackbar.make(root, R.string.error_network, Snackbar.LENGTH_LONG).show()
-            }
-            else -> Snackbar.make(root, R.string.error_unknown, Snackbar.LENGTH_LONG).show()
         }
     }
 

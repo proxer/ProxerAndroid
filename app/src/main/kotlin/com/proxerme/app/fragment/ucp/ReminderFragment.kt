@@ -8,7 +8,6 @@ import android.view.*
 import com.proxerme.app.R
 import com.proxerme.app.activity.MediaActivity
 import com.proxerme.app.adapter.ucp.ReminderAdapter
-import com.proxerme.app.dialog.LoginDialog
 import com.proxerme.app.fragment.framework.PagedLoadingFragment
 import com.proxerme.app.fragment.ucp.ReminderFragment.ReminderInput
 import com.proxerme.app.manager.SectionManager.Section
@@ -19,7 +18,7 @@ import com.proxerme.app.task.framework.ValidatingTask
 import com.proxerme.app.util.DeviceUtils
 import com.proxerme.app.util.ErrorUtils
 import com.proxerme.app.util.Validators
-import com.proxerme.library.connection.ProxerException
+import com.proxerme.app.util.ViewUtils
 import com.proxerme.library.connection.ucp.entitiy.Reminder
 import com.proxerme.library.connection.ucp.request.DeleteReminderRequest
 import com.proxerme.library.connection.ucp.request.ReminderRequest
@@ -49,26 +48,13 @@ class ReminderFragment : PagedLoadingFragment<ReminderInput, Reminder>() {
 
     private val removalException = { exception: Exception ->
         val amount = adapter.itemsToRemove.size
+        val action = ErrorUtils.handle(activity as AppCompatActivity, exception)
+
         adapter.clearRemovalQueue()
 
-        when (exception) {
-            is Validators.NotLoggedInException -> Snackbar.make(root, R.string.status_not_logged_in,
-                    Snackbar.LENGTH_LONG).setAction(R.string.module_login_login, {
-                LoginDialog.show(activity as AppCompatActivity)
-            }).show()
-            is ProxerException -> {
-                Snackbar.make(root,
-                        ErrorUtils.getMessageForErrorCode(context, exception),
-                        Snackbar.LENGTH_LONG).show()
-            }
-            else -> {
-                Snackbar.make(root, context.resources
-                        .getQuantityString(R.plurals.error_reminder_removal, amount, amount),
-                        Snackbar.LENGTH_LONG).show()
-            }
-        }
-
-        Unit
+        ViewUtils.makeMultilineSnackbar(root, context.resources
+                .getQuantityString(R.plurals.error_reminder_removal, amount, amount, action.message),
+                Snackbar.LENGTH_LONG).setAction(action.buttonMessage, action.buttonAction).show()
     }
 
     override val section = Section.REMINDER

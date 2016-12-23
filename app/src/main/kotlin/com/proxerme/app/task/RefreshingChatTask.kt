@@ -51,7 +51,7 @@ class RefreshingChatTask(private val id: String,
 
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onSynchronization(@Suppress("UNUSED_PARAMETER") event: ChatSynchronizationEvent) {
+    fun onSynchronization(event: ChatSynchronizationEvent) {
         val relevantEntries = event.newEntryMap.entries.filter { it.key.id == id }
 
         if (relevantEntries.isNotEmpty()) {
