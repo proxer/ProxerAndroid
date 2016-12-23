@@ -373,6 +373,7 @@
     <string name="error_no_data_chat">Diese Konferenz hat noch keine Nachrichten</string>
     <string name="error_no_data_topten">Es wurde noch nichts in die Top 10 aufgenommen</string>
     <string name="error_no_data_relations">Für dieses Werk gibt es keine Verbindungen</string>
+    <string name="action_share">Teilen</string>
 
     <plurals name="media_episode_count">
         <item quantity="one">Eine Episode</item>

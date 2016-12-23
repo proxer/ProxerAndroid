@@ -8,8 +8,10 @@ import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
+import android.support.v4.app.ShareCompat
 import android.support.v4.view.ViewPager
 import android.support.v7.widget.Toolbar
+import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
 import com.bumptech.glide.Glide
@@ -86,8 +88,24 @@ class MediaActivity : MainActivity() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.activity_media, menu)
+
+        return super.onCreateOptionsMenu(menu)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.action_share -> {
+                ShareCompat.IntentBuilder
+                        .from(this)
+                        .setText("https://proxer.me/info/$id")
+                        .setType("text/plain")
+                        .setChooserTitle("Teilen über")
+                        .startChooser()
+
+                return true
+            }
             android.R.id.home -> {
                 finish()
 
