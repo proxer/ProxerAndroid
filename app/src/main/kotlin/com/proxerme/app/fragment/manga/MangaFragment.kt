@@ -14,7 +14,6 @@ import com.proxerme.app.R
 import com.proxerme.app.activity.MangaActivity
 import com.proxerme.app.activity.ProfileActivity
 import com.proxerme.app.adapter.manga.MangaAdapter
-import com.proxerme.app.dialog.LoginDialog
 import com.proxerme.app.fragment.framework.SingleLoadingFragment
 import com.proxerme.app.fragment.manga.MangaFragment.MangaInput
 import com.proxerme.app.manager.SectionManager
@@ -22,7 +21,9 @@ import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.framework.ListenableTask
 import com.proxerme.app.task.framework.Task
 import com.proxerme.app.task.framework.ValidatingTask
+import com.proxerme.app.util.ErrorUtils
 import com.proxerme.app.util.Validators
+import com.proxerme.app.util.ViewUtils
 import com.proxerme.app.util.bindView
 import com.proxerme.app.view.MediaControlView
 import com.proxerme.library.connection.info.request.SetUserInfoRequest
@@ -71,14 +72,11 @@ class MangaFragment : SingleLoadingFragment<MangaInput, Chapter>() {
     }
 
     private val reminderException = { exception: Exception ->
-        when (exception) {
-            is Validators.NotLoggedInException -> Snackbar.make(root, R.string.status_not_logged_in,
-                    Snackbar.LENGTH_LONG).setAction(R.string.module_login_login, {
-                LoginDialog.show(activity as AppCompatActivity)
-            }).show()
-            else -> Snackbar.make(root, R.string.fragment_set_reminder_error,
-                    Snackbar.LENGTH_LONG).show()
-        }
+        val action = ErrorUtils.handle(activity as AppCompatActivity, exception)
+
+        ViewUtils.makeMultilineSnackbar(root,
+                getString(R.string.fragment_set_reminder_error, action.message),
+                Snackbar.LENGTH_LONG).setAction(action.buttonMessage, action.buttonAction).show()
     }
 
     override val section = SectionManager.Section.MANGA

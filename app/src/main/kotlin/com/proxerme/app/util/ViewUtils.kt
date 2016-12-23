@@ -10,7 +10,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import cn.nekocode.badge.BadgeDrawable
 import com.proxerme.app.R
-import org.jetbrains.anko.childrenSequence
 
 /**
  * TODO: Describe class
@@ -23,11 +22,7 @@ object ViewUtils {
                               maxLines: Int = 5): Snackbar {
         return Snackbar.make(rootView, message, duration)
                 .apply {
-                    view.childrenSequence().forEach {
-                        if (it is TextView && it !is Button) {
-                            it.maxLines = maxLines
-                        }
-                    }
+                    view.findChild<TextView> { it is TextView && it !is Button }?.maxLines = maxLines
                 }
     }
 

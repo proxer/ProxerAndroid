@@ -11,6 +11,8 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
+import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import com.proxerme.app.R
@@ -80,4 +82,21 @@ fun <T> PagingAdapter<T>.insertAndScrollUpIfNecessary(layoutManager: RecyclerVie
 
 fun HttpUrl.androidUri(): Uri {
     return Uri.parse(toString())
+}
+
+fun <T : View> View.findChild(predicate: (View) -> Boolean): T? {
+    if (this !is ViewGroup) return null
+
+    for (i in 0 until childCount) {
+        if (predicate.invoke(getChildAt(i))) {
+            @Suppress("UNCHECKED_CAST")
+            return getChildAt(i) as T
+        }
+
+        getChildAt(i).findChild<T>(predicate)?.let {
+            return it
+        }
+    }
+
+    return null
 }

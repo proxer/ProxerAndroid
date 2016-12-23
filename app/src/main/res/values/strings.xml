@@ -71,7 +71,7 @@
     <string name="preference_licences_summary">Bibliotheken die in diser App verwendet werden</string>
 
     <string name="fragment_set_reminder_success">Eintrag wurde aktualisiert</string>
-    <string name="fragment_set_reminder_error">Eintrag konnte nicht aktualisiert werden</string>
+    <string name="fragment_set_reminder_error">Eintrag konnte nicht aktualisiert werden: %s</string>
 
     <string name="about_description">Entwickler: Ruben Gees</string>
     <string name="about_libraries_title">Lizenzen</string>
