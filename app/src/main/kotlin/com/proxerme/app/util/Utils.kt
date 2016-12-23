@@ -18,6 +18,7 @@ import com.bumptech.glide.request.target.Target
 import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.LinkBuilder
 import com.proxerme.app.R
+import com.proxerme.library.connection.ProxerException
 import okhttp3.HttpUrl
 import java.util.concurrent.ExecutionException
 import java.util.regex.Pattern
@@ -97,9 +98,13 @@ object Utils {
         clipboard.primaryClip = clip
     }
 
-    fun safelyParseUrl(url: String): HttpUrl {
-        return HttpUrl.parse(if (!url.startsWith("http://") && !url.startsWith("https://"))
-            "https://" + url else url)
+    fun parseAndFixUrl(url: String): HttpUrl {
+        return HttpUrl.parse(when {
+            url.isBlank() -> throw ProxerException(ProxerException.UNPARSABLE)
+            url.startsWith("//") -> "https:$url"
+            !url.startsWith("http://") && !url.startsWith("https://") -> "https://$url"
+            else -> url
+        })
     }
 
     fun getNativeAppPackage(context: Context, url: HttpUrl): Set<String> {

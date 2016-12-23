@@ -20,13 +20,8 @@ import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.StreamResolutionTask
 import com.proxerme.app.task.StreamResolutionTask.*
 import com.proxerme.app.task.framework.*
-import com.proxerme.app.util.ErrorUtils
-import com.proxerme.app.util.Validators
-import com.proxerme.app.util.ViewUtils
-import com.proxerme.app.util.bindView
+import com.proxerme.app.util.*
 import com.proxerme.app.view.MediaControlView
-import com.proxerme.library.connection.ProxerException
-import com.proxerme.library.connection.ProxerException.UNPARSABLE
 import com.proxerme.library.connection.anime.entity.Stream
 import com.proxerme.library.connection.anime.request.LinkRequest
 import com.proxerme.library.connection.anime.request.StreamsRequest
@@ -102,18 +97,6 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
                 Snackbar.make(root, action.message, Snackbar.LENGTH_LONG)
                         .setAction(action.buttonMessage, action.buttonAction).show()
             }
-        }
-    }
-
-    private val urlTransform = { it: String ->
-        try {
-            HttpUrl.parse(when {
-                it.isBlank() -> throw ProxerException(UNPARSABLE)
-                it.startsWith("//") -> "http:$it"
-                else -> it
-            })
-        } catch(exception: Exception) {
-            throw ProxerException(UNPARSABLE)
         }
     }
 
@@ -262,7 +245,7 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
 
     private fun constructStreamResolverTask(): Task<String, StreamResolutionResult> {
         return ListeningTask((StreamedTask(ProxerLoadingTask(::LinkRequest),
-                StreamResolutionTask(), urlTransform)),
+                StreamResolutionTask(), { Utils.parseAndFixUrl(it) })),
                 streamResolverSuccess, streamResolverException).onStart {
             setRefreshing(true)
         }.onFinish {

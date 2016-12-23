@@ -70,7 +70,7 @@ class UcpOverviewFragment : SingleLoadingFragment<Unit, Int>() {
             profileLink.text = Utils.buildClickableText(context,
                     ProxerUrlHolder.getUserUrl(it.id, null).toString(),
                     onWebClickListener = Link.OnClickListener { link ->
-                        showPage(Utils.safelyParseUrl(link))
+                        showPage(Utils.parseAndFixUrl(link))
                     },
                     onWebLongClickListener = Link.OnLongClickListener { link ->
                         Utils.setClipboardContent(activity,

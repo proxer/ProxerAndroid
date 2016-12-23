@@ -79,7 +79,7 @@ class ConferenceParticipantAdapter : PagingAdapter<ConferenceInfoUser>() {
                 status.visibility = View.VISIBLE
                 status.text = Utils.buildClickableText(status.context, item.status,
                         onWebClickListener = Link.OnClickListener { link ->
-                            callback?.onStatusLinkClick(Utils.safelyParseUrl(link))
+                            callback?.onStatusLinkClick(Utils.parseAndFixUrl(link))
                         })
             }
 

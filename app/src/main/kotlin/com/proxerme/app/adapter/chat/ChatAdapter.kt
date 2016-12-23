@@ -320,10 +320,10 @@ class ChatAdapter(val isGroup: Boolean) : PagingAdapter<LocalMessage>() {
         protected open fun applyMessage(message: LocalMessage) {
             text.text = Utils.buildClickableText(text.context, message.message,
                     onWebClickListener = Link.OnClickListener {
-                        callback?.onMessageLinkClick(Utils.safelyParseUrl(it))
+                        callback?.onMessageLinkClick(Utils.parseAndFixUrl(it))
                     },
                     onWebLongClickListener = Link.OnLongClickListener {
-                        callback?.onMessageLinkLongClick(Utils.safelyParseUrl(it))
+                        callback?.onMessageLinkLongClick(Utils.parseAndFixUrl(it))
                     },
                     onMentionsClickListener = Link.OnClickListener {
                         callback?.onMentionsClick(it.trim().substring(1))

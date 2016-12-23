@@ -50,12 +50,12 @@ fun CustomTabsHelperFragment.openHttpPage(activity: Activity, url: HttpUrl) {
                 .setShowTitle(true)
                 .build()
 
-        CustomTabsHelperFragment.open(activity, customTabsIntent, Uri.parse(url.toString()),
+        CustomTabsHelperFragment.open(activity, customTabsIntent, url.androidUri(),
                 { activity, uri ->
                     WebViewActivity.navigateTo(activity, uri.toString())
                 })
     } else {
-        activity.startActivity(Intent(Intent.ACTION_VIEW).setData(Uri.parse(url.toString())))
+        activity.startActivity(Intent(Intent.ACTION_VIEW).setData(url.androidUri()))
     }
 }
 
