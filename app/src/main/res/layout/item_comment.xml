@@ -24,18 +24,19 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/userContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:orientation="horizontal">
+                android:background="?attr/selectableItemBackground">
 
                 <com.proxerme.app.view.WidthAspectCircleImageView
                     android:id="@+id/userImage"
                     android:layout_width="32dp"
                     android:layout_height="0dp"
-                    android:layout_gravity="center_vertical"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
                     android:layout_marginBottom="8dp"
                     android:layout_marginEnd="4dp"
                     android:layout_marginLeft="8dp"
@@ -47,17 +48,49 @@
                     android:id="@+id/username"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
+                    android:layout_centerVertical="true"
                     android:layout_marginBottom="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginLeft="4dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginStart="4dp"
                     android:layout_marginTop="8dp"
+                    android:layout_toEndOf="@+id/userImage"
+                    android:layout_toLeftOf="@+id/upvoteIcon"
+                    android:layout_toRightOf="@+id/userImage"
+                    android:layout_toStartOf="@+id/upvoteIcon"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     tools:text="Username" />
 
-            </LinearLayout>
+                <ImageView
+                    android:id="@+id/upvoteIcon"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="2dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_toLeftOf="@+id/upvotes"
+                    android:layout_toStartOf="@+id/upvotes" />
+
+                <TextView
+                    android:id="@+id/upvotes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="8dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    tools:text="12" />
+            </RelativeLayout>
 
             <TableLayout
                 android:layout_width="match_parent"

@@ -64,6 +64,9 @@ class CommentAdapter : PagingAdapter<Comment>() {
         private val userImage: ImageView by bindView(R.id.userImage)
         private val username: TextView by bindView(R.id.username)
 
+        private val upvoteIcon: ImageView by bindView(R.id.upvoteIcon)
+        private val upvotes: TextView by bindView(R.id.upvotes)
+
         private val ratingOverallRow: ViewGroup by bindView(R.id.ratingOverallRow)
         private val ratingOverall: RatingBar by bindView(R.id.ratingOverall)
         private val ratingGenre: RatingBar by bindView(R.id.ratingGenre)
@@ -109,10 +112,17 @@ class CommentAdapter : PagingAdapter<Comment>() {
                     callback?.onUserClick(list[adapterPosition])
                 }
             }
+
+            upvoteIcon.setImageDrawable(IconicsDrawable(expand.context)
+                    .colorRes(R.color.icon)
+                    .sizeDp(ICON_SIZE)
+                    .paddingDp(ICON_PADDING)
+                    .icon(CommunityMaterial.Icon.cmd_thumb_up))
         }
 
         override fun bind(item: Comment) {
             username.text = item.username
+            upvotes.text = item.helpfulVotes.toString()
 
             bindComment(item)
             bindExpanded(item)
