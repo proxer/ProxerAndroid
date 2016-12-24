@@ -1,7 +1,7 @@
 package com.proxerme.app.fragment.news
 
 import android.os.Bundle
-import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,7 +38,7 @@ class NewsFragment : PagedLoadingFragment<PagedInput, News>() {
     override val section = Section.NEWS
     override val itemsOnPage = 15
 
-    override lateinit var layoutManager: GridLayoutManager
+    override lateinit var layoutManager: StaggeredGridLayoutManager
     override lateinit var adapter: NewsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,7 +64,8 @@ class NewsFragment : PagedLoadingFragment<PagedInput, News>() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        layoutManager = GridLayoutManager(context, DeviceUtils.calculateSpanAmount(activity))
+        layoutManager = StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity),
+                StaggeredGridLayoutManager.VERTICAL)
 
         return super.onCreateView(inflater, container, savedInstanceState)
     }
