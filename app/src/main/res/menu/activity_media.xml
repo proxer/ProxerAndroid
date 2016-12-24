@@ -7,4 +7,16 @@
         android:icon="@drawable/ic_action_share"
         android:title="@string/action_share"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_note"
+        android:icon="@drawable/ic_action_note"
+        android:title="@string/action_note"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_favor"
+        android:icon="@drawable/ic_action_favor"
+        android:title="@string/action_favor"
+        app:showAsAction="ifRoom" />
 </menu>

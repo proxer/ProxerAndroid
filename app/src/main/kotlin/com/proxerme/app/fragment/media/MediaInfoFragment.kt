@@ -34,9 +34,6 @@ class MediaInfoFragment : SingleLoadingFragment<String, Entry>() {
 
     companion object {
         private const val ARGUMENT_ID = "id"
-        private const val STATE_ENTRY = "state_entry"
-        private const val STATE_SHOW_UNRATED_TAGS = "state_unrated_tags"
-        private const val STATE_SHOW_SPOILER_TAGS = "state_spoiler_tags"
 
         fun newInstance(id: String): MediaInfoFragment {
             return MediaInfoFragment().apply {
@@ -52,8 +49,8 @@ class MediaInfoFragment : SingleLoadingFragment<String, Entry>() {
     private val id: String
         get() = arguments.getString(ARGUMENT_ID)
 
-    private var showUnratedTags: Boolean = false
-    private var showSpoilerTags: Boolean = false
+    private var showUnratedTags = false
+    private var showSpoilerTags = false
 
     private val root: ViewGroup by bindView(R.id.root)
 
@@ -87,7 +84,6 @@ class MediaInfoFragment : SingleLoadingFragment<String, Entry>() {
     private val publishers: FlowLayout by bindView(R.id.publishers)
     private val publishersTitle: TextView by bindView(R.id.publishersTitle)
     private val description: TextView by bindView(R.id.description)
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {

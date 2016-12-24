@@ -70,8 +70,8 @@
     <string name="preference_licences_title">Lizenzen</string>
     <string name="preference_licences_summary">Bibliotheken die in diser App verwendet werden</string>
 
-    <string name="fragment_set_reminder_success">Eintrag wurde aktualisiert</string>
-    <string name="fragment_set_reminder_error">Eintrag konnte nicht aktualisiert werden: %s</string>
+    <string name="fragment_set_user_info_success">Eintrag wurde aktualisiert</string>
+    <string name="fragment_set_user_info_error">Eintrag konnte nicht aktualisiert werden: %s</string>
 
     <string name="about_description">Entwickler: Ruben Gees</string>
     <string name="about_libraries_title">Lizenzen</string>
@@ -374,6 +374,8 @@
     <string name="error_no_data_topten">Es wurde noch nichts in die Top 10 aufgenommen</string>
     <string name="error_no_data_relations">Für dieses Werk gibt es keine Verbindungen</string>
     <string name="action_share">Teilen</string>
+    <string name="action_note">Vermerken</string>
+    <string name="action_favor">Favorisieren</string>
 
     <plurals name="media_episode_count">
         <item quantity="one">Eine Episode</item>
