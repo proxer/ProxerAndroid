@@ -11,6 +11,7 @@ import android.view.*
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
+import com.proxerme.app.activity.MainActivity
 import com.proxerme.app.activity.MangaActivity
 import com.proxerme.app.activity.ProfileActivity
 import com.proxerme.app.adapter.manga.MangaAdapter
@@ -72,7 +73,7 @@ class MangaFragment : SingleLoadingFragment<MangaInput, Chapter>() {
     }
 
     private val reminderException = { exception: Exception ->
-        val action = ErrorUtils.handle(activity as AppCompatActivity, exception)
+        val action = ErrorUtils.handle(activity as MainActivity, exception)
 
         ViewUtils.makeMultilineSnackbar(root,
                 getString(R.string.fragment_set_user_info_error, action.message),

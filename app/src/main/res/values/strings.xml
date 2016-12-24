@@ -33,10 +33,10 @@
     <string name="error_unparseable">Der Server hat beschädigte Daten gesendet. Versuche es erneut.</string>
     <string name="error_io">Es gab ein Speicherproblem. Versuche es erneut.</string>
     <string name="error_unknown">Ein unbekannter Fehler ist aufgetreten. Versuche es erneut.</string>
-    <string name="error_retry">Erneut versuchen</string>
+    <string name="error_action_retry">Erneut versuchen</string>
     <string name="error_confirm">Bestätigen</string>
     <string name="error_resolve">Dieser Hoster konnte nicht verarbeitet werden</string>
-    <string name="error_refresh">Aktualisierung fehlgeschlagen</string>
+    <string name="error_refresh">Aktualisierung fehlgeschlagen: %s</string>
     <string name="error_unsupported_hoster">Dieser Hoster wird nicht unterstützt</string>
     <string name="error_stream_resolution">Fehler beim Laden des Streams</string>
     <string name="error_activity_not_found">Keine App zur Anzeige gefunden</string>
@@ -164,7 +164,7 @@
     <string name="status_currently_logging_out">Du wirst abgemeldet…</string>
     <string name="status_not_logged_in">Du bist nicht angemeldet</string>
 
-    <string name="module_login_login">Anmelden</string>
+    <string name="error_action_login">Anmelden</string>
 
     <string name="action_copy">Kopieren</string>
 
@@ -376,6 +376,8 @@
     <string name="action_share">Teilen</string>
     <string name="action_note">Vermerken</string>
     <string name="action_favor">Favorisieren</string>
+    <string name="error_ip_blocked">Es wurden zu viele Anfragen gemacht</string>
+    <string name="error_action_captcha">Captcha</string>
 
     <plurals name="media_episode_count">
         <item quantity="one">Eine Episode</item>

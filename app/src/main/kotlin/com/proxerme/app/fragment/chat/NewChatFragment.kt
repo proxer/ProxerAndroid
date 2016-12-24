@@ -6,7 +6,6 @@ import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
 import android.support.design.widget.TextInputLayout
 import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -19,6 +18,7 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
 import com.proxerme.app.R
+import com.proxerme.app.activity.MainActivity
 import com.proxerme.app.activity.chat.ChatActivity
 import com.proxerme.app.adapter.chat.NewChatParticipantAdapter
 import com.proxerme.app.entitiy.LocalConference
@@ -84,7 +84,7 @@ class NewChatFragment : MainFragment() {
                     topicInputContainer.error = context.getString(R.string.error_input_empty)
                 }
                 else -> {
-                    val action = ErrorUtils.handle(activity as AppCompatActivity, exception)
+                    val action = ErrorUtils.handle(activity as MainActivity, exception)
 
                     Snackbar.make(root, action.message, Snackbar.LENGTH_LONG)
                             .setAction(action.buttonMessage, action.buttonAction).show()
@@ -164,8 +164,6 @@ class NewChatFragment : MainFragment() {
         emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_emoticon))
         emojiButton.setOnClickListener {
             emojiPopup.toggle()
-
-            root.viewTreeObserver.dispatchOnGlobalLayout()
         }
 
         sendButton.setOnClickListener {

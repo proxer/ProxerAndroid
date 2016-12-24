@@ -182,8 +182,6 @@ class ChatFragment : PagedLoadingFragment<ChatInput, LocalMessage>() {
         emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_emoticon))
         emojiButton.setOnClickListener {
             emojiPopup.toggle()
-
-            root.viewTreeObserver.dispatchOnGlobalLayout()
         }
 
         sendButton.setOnClickListener {

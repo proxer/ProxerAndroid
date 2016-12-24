@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.proxerme.app.R
 import com.proxerme.app.activity.AnimeActivity
+import com.proxerme.app.activity.MainActivity
 import com.proxerme.app.activity.ProfileActivity
 import com.proxerme.app.adapter.anime.StreamAdapter
 import com.proxerme.app.fragment.anime.AnimeFragment.AnimeInput
@@ -64,7 +65,7 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
     }
 
     private val reminderException = { exception: Exception ->
-        val action = ErrorUtils.handle(activity as AppCompatActivity, exception)
+        val action = ErrorUtils.handle(activity as MainActivity, exception)
 
         ViewUtils.makeMultilineSnackbar(root,
                 getString(R.string.fragment_set_user_info_error, action.message),
@@ -92,7 +93,7 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
                 Snackbar.make(root, R.string.error_stream_resolution, Snackbar.LENGTH_LONG).show()
             }
             else -> {
-                val action = ErrorUtils.handle(activity as AppCompatActivity, exception)
+                val action = ErrorUtils.handle(activity as MainActivity, exception)
 
                 Snackbar.make(root, action.message, Snackbar.LENGTH_LONG)
                         .setAction(action.buttonMessage, action.buttonAction).show()

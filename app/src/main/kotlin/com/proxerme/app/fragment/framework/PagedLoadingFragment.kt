@@ -3,14 +3,16 @@ package com.proxerme.app.fragment.framework
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.klinker.android.link_builder.Link
+import android.widget.Button
+import android.widget.TextView
 import com.proxerme.app.R
+import com.proxerme.app.activity.MainActivity
 import com.proxerme.app.adapter.framework.PagingAdapter
+import com.proxerme.app.event.CaptchaSolvedEvent
 import com.proxerme.app.event.HentaiConfirmationEvent
 import com.proxerme.app.fragment.framework.PagedLoadingFragment.PagedInput
 import com.proxerme.app.helper.NotificationHelper
@@ -22,10 +24,10 @@ import com.proxerme.app.task.framework.ValidatingTask
 import com.proxerme.app.util.*
 import com.proxerme.app.util.listener.EndlessRecyclerOnScrollListener
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
-import okhttp3.HttpUrl
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import org.jetbrains.anko.find
 
 /**
  * TODO: Describe class
@@ -44,7 +46,7 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
     }
 
     protected val exceptionCallback = { exception: Exception ->
-        val action = ErrorUtils.handle(activity as AppCompatActivity, exception)
+        val action = ErrorUtils.handle(activity as MainActivity, exception)
 
         showError(action.message, action.buttonMessage, action.buttonAction)
     }
@@ -56,8 +58,12 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
         onItemsInserted(data)
     }
 
-    protected val refreshExceptionCallback = { exceptionResult: Exception ->
-        Snackbar.make(root, getString(R.string.error_refresh), Snackbar.LENGTH_LONG).show()
+    protected val refreshExceptionCallback = { exception: Exception ->
+        val action = ErrorUtils.handle(activity as MainActivity, exception)
+
+        ViewUtils.makeMultilineSnackbar(root,
+                getString(R.string.error_refresh, action.message),
+                Snackbar.LENGTH_LONG).setAction(action.buttonMessage, action.buttonAction).show()
     }
 
     open protected val isSwipeToRefreshEnabled = true
@@ -196,17 +202,33 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
 
     open protected fun showError(message: String, buttonMessage: String? = "",
                                  onButtonClickListener: View.OnClickListener? = null) {
-        ErrorUtils.showError(context, message, headerFooterAdapter,
-                buttonMessage = buttonMessage, parent = root,
-                onWebClickListener = Link.OnClickListener { link ->
-                    showPage(HttpUrl.parse(link).newBuilder()
-                            .addQueryParameter("device", "mobile")
-                            .build())
-                },
-                onButtonClickListener = onButtonClickListener ?: View.OnClickListener {
-                    task.reset()
-                    task.execute(constructInput(calculateNextPage()))
-                })
+        val errorContainer = when {
+            headerFooterAdapter.innerAdapter.itemCount <= 0 -> {
+                LayoutInflater.from(context).inflate(R.layout.layout_error, root, false)
+            }
+            else -> LayoutInflater.from(context).inflate(R.layout.item_error, root, false)
+        }
+
+        errorContainer.find<TextView>(R.id.errorText).text = message
+        errorContainer.find<Button>(R.id.errorButton).apply {
+            when (buttonMessage) {
+                null -> visibility = View.GONE
+                else -> {
+                    visibility = View.VISIBLE
+                    setOnClickListener(onButtonClickListener ?: View.OnClickListener {
+                        task.reset()
+                        task.execute(constructInput(calculateNextPage()))
+                    })
+
+                    when {
+                        buttonMessage.isBlank() -> {
+                            text = context.getString(R.string.error_action_retry)
+                        }
+                        else -> text = buttonMessage
+                    }
+                }
+            }
+        }
     }
 
     open protected fun showEmptyIfAppropriate() {
@@ -243,6 +265,14 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
     fun onHentaiConfirmation(@Suppress("UNUSED_PARAMETER") event: HentaiConfirmationEvent) {
         if (isHentaiConfirmationRequired) {
             reset()
+        }
+    }
+
+    @Suppress("unused")
+    @Subscribe
+    fun onCaptchaSolved(@Suppress("UNUSED_PARAMETER") event: CaptchaSolvedEvent) {
+        if (!(activity as MainActivity).isPaused) {
+            task.reset()
         }
     }
 

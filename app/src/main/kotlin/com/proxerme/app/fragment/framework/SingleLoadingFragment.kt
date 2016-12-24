@@ -2,19 +2,21 @@ package com.proxerme.app.fragment.framework
 
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.TouchableMovementMethod
 import com.proxerme.app.R
+import com.proxerme.app.activity.MainActivity
+import com.proxerme.app.event.CaptchaSolvedEvent
 import com.proxerme.app.event.HentaiConfirmationEvent
 import com.proxerme.app.manager.UserManager
 import com.proxerme.app.task.framework.*
-import com.proxerme.app.util.*
-import okhttp3.HttpUrl
+import com.proxerme.app.util.ErrorUtils
+import com.proxerme.app.util.KotterKnife
+import com.proxerme.app.util.Validators
+import com.proxerme.app.util.bindView
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -31,7 +33,7 @@ abstract class SingleLoadingFragment<I, T> : MainFragment() {
     }
 
     private val exceptionCallback = { exception: Exception ->
-        val action = ErrorUtils.handle(activity as AppCompatActivity, exception)
+        val action = ErrorUtils.handle(activity as MainActivity, exception)
 
         showError(action.message, action.buttonMessage, action.buttonAction)
     }
@@ -136,13 +138,7 @@ abstract class SingleLoadingFragment<I, T> : MainFragment() {
                                  onButtonClickListener: View.OnClickListener? = null) {
         contentContainer.visibility = View.GONE
         errorContainer.visibility = View.VISIBLE
-
-        errorText.text = Utils.buildClickableText(context, message,
-                onWebClickListener = Link.OnClickListener { link ->
-                    showPage(HttpUrl.parse(link).newBuilder()
-                            .addQueryParameter("device", "mobile")
-                            .build())
-                })
+        errorText.text = message
 
         when (buttonMessage) {
             null -> errorButton.visibility = View.GONE
@@ -154,7 +150,9 @@ abstract class SingleLoadingFragment<I, T> : MainFragment() {
                 })
 
                 when {
-                    buttonMessage.isBlank() -> errorButton.text = getString(R.string.error_retry)
+                    buttonMessage.isBlank() -> {
+                        errorButton.text = getString(R.string.error_action_retry)
+                    }
                     else -> errorButton.text = buttonMessage
                 }
             }
@@ -185,6 +183,14 @@ abstract class SingleLoadingFragment<I, T> : MainFragment() {
     fun onHentaiConfirmation(@Suppress("UNUSED_PARAMETER") event: HentaiConfirmationEvent) {
         if (isHentaiConfirmationRequired) {
             reset()
+        }
+    }
+
+    @Suppress("unused")
+    @Subscribe
+    fun onCaptchaSolved(@Suppress("UNUSED_PARAMETER") event: CaptchaSolvedEvent) {
+        if (!(activity as MainActivity).isPaused) {
+            task.reset()
         }
     }
 

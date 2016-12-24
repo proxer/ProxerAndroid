@@ -2,10 +2,10 @@ package com.proxerme.app.fragment.ucp
 
 import android.os.Bundle
 import android.support.design.widget.Snackbar
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.*
 import com.proxerme.app.R
+import com.proxerme.app.activity.MainActivity
 import com.proxerme.app.activity.MediaActivity
 import com.proxerme.app.adapter.ucp.ReminderAdapter
 import com.proxerme.app.fragment.framework.PagedLoadingFragment
@@ -48,7 +48,7 @@ class ReminderFragment : PagedLoadingFragment<ReminderInput, Reminder>() {
 
     private val removalException = { exception: Exception ->
         val amount = adapter.itemsToRemove.size
-        val action = ErrorUtils.handle(activity as AppCompatActivity, exception)
+        val action = ErrorUtils.handle(activity as MainActivity, exception)
 
         adapter.clearRemovalQueue()
 

@@ -16,10 +16,24 @@ abstract class MainActivity : AppCompatActivity() {
 
     private lateinit var customTabsHelper: CustomTabsHelperFragment
 
+    var isPaused = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         customTabsHelper = CustomTabsHelperFragment.attachTo(this)
+    }
+
+    override fun onResume() {
+        isPaused = false
+
+        super.onResume()
+    }
+
+    override fun onPause() {
+        isPaused = true
+
+        super.onPause()
     }
 
     fun setLikelyUrl(url: HttpUrl) {
