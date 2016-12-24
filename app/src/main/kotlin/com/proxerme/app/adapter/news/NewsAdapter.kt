@@ -14,7 +14,6 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
-import com.proxerme.app.util.DeviceUtils
 import com.proxerme.app.util.TimeUtils
 import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.notifications.entitiy.News
@@ -106,27 +105,24 @@ class NewsAdapter : PagingAdapter<News>() {
         }
 
         override fun bind(item: News) {
-            val maximumHeight = DeviceUtils.convertDpToPx(description.context, 86f)
-
             title.text = item.subject
             description.text = item.description.trim()
-            description.maxHeight = Int.MAX_VALUE
             category.text = item.categoryTitle
             time.text = TimeUtils.convertToRelativeReadableTime(time.context,
                     item.time)
 
             if (expanded.containsKey(item.id)) {
-                description.maxHeight = Int.MAX_VALUE
+                description.maxLines = Int.MAX_VALUE
 
                 ViewCompat.animate(expand).rotation(ROTATION_HALF)
             } else {
-                description.maxHeight = maximumHeight
+                description.maxLines = 3
 
                 ViewCompat.animate(expand).rotation(0f)
             }
 
             description.post {
-                if (description.measuredHeight < maximumHeight) {
+                if (description.lineCount <= 3) {
                     expand.visibility = View.GONE
                 } else {
                     expand.visibility = View.VISIBLE
