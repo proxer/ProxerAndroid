@@ -18,6 +18,8 @@ class ProxerProductStreamResolver : StreamResolver() {
     }
 
     override fun resolve(url: HttpUrl): StreamResolutionResult {
-        return StreamResolutionResult(url.androidUri(), "text/html")
+        return StreamResolutionResult(url.newBuilder()
+                .addQueryParameter("device", "default")
+                .build().androidUri(), "text/html")
     }
 }
