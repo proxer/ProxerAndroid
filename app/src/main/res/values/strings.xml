@@ -1,24 +1,356 @@
 <resources>
+    <string name="about_description">Entwickler: Ruben Gees</string>
+    <string name="about_libraries_title">Lizenzen</string>
+
+    <string name="action_add_user">%1$s hat %2$s zur Konferenz hinzugefügt</string>
+    <string name="action_copy">Kopieren</string>
+    <string name="action_favor">Favorisieren</string>
+    <string name="action_filter_all_anime">Alles</string>
+    <string name="action_filter_all_manga">Alles</string>
+    <string name="action_filter_anime_series">Serien</string>
+    <string name="action_filter_doujin">Doujinshi</string>
+    <string name="action_filter_hentai">Hentai</string>
+    <string name="action_filter_hmanga">H-Manga</string>
+    <string name="action_filter_manga_series">Mangaserien</string>
+    <string name="action_filter_movies">Filme</string>
+    <string name="action_filter_one_shots">One-Shots</string>
+    <string name="action_filter_ova">OVA</string>
+    <string name="action_filter">Filter</string>
+    <string name="action_fullscreen">Vollbildmodus</string>
+    <string name="action_info">Info</string>
+    <string name="action_new_chat">Neuer Chat</string>
+    <string name="action_new_group_with_user">Neue Gruppe mit diesem Nutzer</string>
+    <string name="action_new_group">Neue Gruppe</string>
+    <string name="action_note">Vermerken</string>
+    <string name="action_remove_user">%1$s hat %2$s aus der Konferenz entfernt</string>
+    <string name="action_reply">Antworten</string>
+    <string name="action_search">Suchen</string>
+    <string name="action_send_message">Nachricht schreiben</string>
+    <string name="action_set_leader">%1$s hat %2$s als neuen Konferenzleiter bestimmt</string>
+    <string name="action_set_topic">%1$s hat den Konferenztitel in %2$s geändert</string>
+    <string name="action_share">Teilen</string>
+    <string name="action_sort_ascending">Aufsteigend</string>
+    <string name="action_sort_clicks">Nach Zugriffen</string>
+    <string name="action_sort_count">Nach Episoden</string>
+    <string name="action_sort_descending">Absteigend</string>
+    <string name="action_sort_name">Nach Name</string>
+    <string name="action_sort_rating">Nach Bewertungen</string>
+    <string name="action_sort_relevance">Nach Relevanz</string>
+    <string name="action_sort_state">Nach Status</string>
+    <string name="action_sort_time">Nach Datum</string>
+    <string name="action_sort">Sortierung</string>
+
+    <string name="activity_anime_title">Episode %d</string>
+    <string name="activity_manga_title">Kapitel %d</string>
+    <string name="activity_ucp_title">User-Control-Panel</string>
+
+    <string name="add_user">Nutzer hinzufügen</string>
+
     <string name="app_name">ProxerMe</string>
 
-    <string name="introduction_welcome_title">Willkommen!</string>
-    <string name="introduction_welcome_description">Ein paar Einstellungen und es geht los</string>
-    <string name="introduction_notifications_title">Benachrichtigungen</string>
+    <string name="clipboard_status">In die Zwischenablage kopiert</string>
+
+    <string name="comment_rating_animation">Animation/Bilder</string>
+    <string name="comment_rating_characters">Charaktere</string>
+    <string name="comment_rating_genre">Genre</string>
+    <string name="comment_rating_music">Musik</string>
+    <string name="comment_rating_overall">Insgesamt</string>
+    <string name="comment_rating_story">Story</string>
+    <string name="comment_state_cancelled">Abgebrochen (%d)</string>
+    <string name="comment_state_watched">Abgeschlossen</string>
+    <string name="comment_state_watching">Bei Episode %d</string>
+    <string name="comment_state_will_watch">Auf Warteliste</string>
+
+    <string name="dialog_cancel">Abbrechen</string>
+    <string name="dialog_crunchyroll_content">Zum Verwenden dieses Streams ist die Crunchyroll App nötig</string>
+    <string name="dialog_crunchyroll_positive">Installieren</string>
+    <string name="dialog_crunchyroll_title">Crunchyroll App</string>
+    <string name="dialog_hentai_content">Dieser Bereich darf nur von Benutzern über 18 Jahren betreten werden! Eltern haften für ihre Kinder. Proxer.Me übernimmt keinerlei Haftung!</string>
+    <string name="dialog_hentai_positive">Verstanden</string>
+    <string name="dialog_login_error_password">Bitte gib ein Passwort an</string>
+    <string name="dialog_login_error_username">Bitte gib einen Nutzernamen an</string>
+    <string name="dialog_login_password">Passwort</string>
+    <string name="dialog_login_positive">Anmelden</string>
+    <string name="dialog_login_remember">Merken</string>
+    <string name="dialog_login_title">Anmelden</string>
+    <string name="dialog_login_username">Nutzername</string>
+    <string name="dialog_logout_positive">Abmelden</string>
+    <string name="dialog_logout_title">Möchtest du dich abmelden?</string>
+    <string name="dialog_stream_resolver_title">Lade Stream…</string>
+
+    <string name="drawer_account_guest">Gast</string>
+    <string name="drawer_account_login">Anmelden</string>
+    <string name="drawer_account_logout">Abmelden</string>
+    <string name="drawer_account_ucp">User-Control-Panel</string>
+    <string name="drawer_item_anime">Anime</string>
+    <string name="drawer_item_chat">Chat</string>
+    <string name="drawer_item_donate">Spenden</string>
+    <string name="drawer_item_manga">Manga</string>
+    <string name="drawer_item_news">News</string>
+    <string name="drawer_item_reminder">Lesezeichen</string>
+    <string name="drawer_item_settings">Einstellungen</string>
+
+    <string name="error_action_captcha">Captcha</string>
+    <string name="error_action_login">Anmelden</string>
+    <string name="error_action_retry">Erneut versuchen</string>
+    <string name="error_activity_not_found">Keine App zur Anzeige gefunden</string>
+    <string name="error_confirm">Bestätigen</string>
+    <string name="error_duplicate_user">Diesen Nutzer hast du schon hinzugefügt</string>
+    <string name="error_hentai_confirmation_needed">Für diese Kategorie musst du bestätigen, dass du 18 jahre oder älter bist</string>
+    <string name="error_input_empty">Gib etwas ein</string>
+    <string name="error_io">Es gab ein Speicherproblem. Versuche es erneut.</string>
+    <string name="error_ip_blocked">Es wurden zu viele Anfragen gemacht</string>
+    <string name="error_network">Es gab ein Problem mit dem Netzwerk. Bitte überprüfe ob du verbunden bist.</string>
+    <string name="error_no_data_action_chat">Schreibe jemandem</string>
+    <string name="error_no_data_anime">Aktuell gibt es noch keine Streams</string>
+    <string name="error_no_data_chat">Diese Konferenz hat noch keine Nachrichten</string>
+    <string name="error_no_data_comments">Es gibt noch keine Kommentare</string>
+    <string name="error_no_data_conferences">Du hast noch keine Chats</string>
+    <string name="error_no_data_episodes">Es gibt noch keine Episoden</string>
+    <string name="error_no_data_history">Noch keine Einträge verfügbar</string>
+    <string name="error_no_data_media_list">Keine Ergebnisse</string>
+    <string name="error_no_data_news">Derzeit sind keine News verfügbar</string>
+    <string name="error_no_data_relations">Für dieses Werk gibt es keine Verbindungen</string>
+    <string name="error_no_data_reminder">Du hast noch nichts in deiner Watchlist</string>
+    <string name="error_no_data_topten">Es wurde noch nichts in die Top 10 aufgenommen</string>
+    <string name="error_no_data_user_media_list">Es gibt noch keine Einträge</string>
+    <string name="error_no_data">Keine Daten</string>
+    <string name="error_no_message">Gib eine Nachricht ein</string>
+    <string name="error_no_users">Füge mindestens einen Nutzer hinzu</string>
+    <string name="error_refresh">Aktualisierung fehlgeschlagen: %s</string>
+    <string name="error_resolve">Dieser Hoster konnte nicht verarbeitet werden</string>
+    <string name="error_stream_resolution">Fehler beim Laden des Streams</string>
+    <string name="error_timeout">Der Server hat nicht rechtzeitig geantwortet. Versuche es später noch einmal</string>
+    <string name="error_unknown">Ein unbekannter Fehler ist aufgetreten. Versuche es erneut.</string>
+    <string name="error_unparseable">Der Server hat beschädigte Daten gesendet. Versuche es erneut.</string>
+    <string name="error_unsupported_hoster">Dieser Hoster wird nicht unterstützt</string>
+
+    <string name="filter_all">Alles</string>
+    <string name="filter_anime">Anime</string>
+    <string name="filter_manga">Manga</string>
+
+    <string name="finished_media">Abgeschlossen</string>
+
+    <string name="fragment_anime_empty_subgoup">Keine angegeben</string>
+    <string name="fragment_anime_next_episode">Nächste Episode</string>
+    <string name="fragment_anime_previous_episode">Vorherige Episode</string>
+    <string name="fragment_anime_reminder_next_episode">Lesezeichen: Nächste Episode</string>
+    <string name="fragment_anime_reminder_this_episode">Lesezeichen: Diese Episode</string>
+    <string name="fragment_chat_clip_title">Chatverlauf</string>
+    <string name="fragment_chat_link_clip_title">Link</string>
+    <string name="fragment_chat_message">Tippe eine Nachricht</string>
+    <string name="fragment_chat_reply">"@%s "</string>
+    <string name="fragment_chat_send">Senden</string>
+    <string name="fragment_comments_title">Kommentare</string>
+    <string name="fragment_conference_info_info_title">Info</string>
+    <string name="fragment_conference_info_participants_title">Teilnehmer</string>
+    <string name="fragment_conference_info_time">Erstellt am %1$s um %2$s</string>
+    <string name="fragment_conferences">Chat</string>
+    <string name="fragment_episodes_title">Episoden</string>
+    <string name="fragment_history_title">Chronik</string>
+    <string name="fragment_manga_date">Datum</string>
+    <string name="fragment_manga_empty_scangroup">Siehe Kapitelcredits</string>
+    <string name="fragment_manga_next_chapter">Nächstes Kapitel</string>
+    <string name="fragment_manga_previous_chapter">Vorheriges Kapitel</string>
+    <string name="fragment_manga_reminder_next_chapter">Lesezeichen: Nächstes Kapitel</string>
+    <string name="fragment_manga_reminder_this_chapter">Lesezeichen: Dieses Kapitel</string>
+    <string name="fragment_manga_uploader">Uploader</string>
+    <string name="fragment_media_info_description">Beschreibung</string>
+    <string name="fragment_media_info_english_title">Englischer Titel</string>
+    <string name="fragment_media_info_fsk">FSK</string>
+    <string name="fragment_media_info_general">Allgemein</string>
+    <string name="fragment_media_info_genres">Genres</string>
+    <string name="fragment_media_info_german_title">Deutscher Titel</string>
+    <string name="fragment_media_info_groups">Gruppen</string>
+    <string name="fragment_media_info_japanese_title">Japanischer Titel</string>
+    <string name="fragment_media_info_license_title">Lizenz</string>
+    <string name="fragment_media_info_original_title">Original Titel</string>
+    <string name="fragment_media_info_publishers">Industrie</string>
+    <string name="fragment_media_info_season_title">Season</string>
+    <string name="fragment_media_info_status_title">Status</string>
+    <string name="fragment_media_info_tags">Tags</string>
+    <string name="fragment_media_info_title">Info</string>
+    <string name="fragment_media_list_anime_title">Anime</string>
+    <string name="fragment_media_list_manga_title">Manga</string>
+    <string name="fragment_media_season_autumn_end">Ende: Herbst %d</string>
+    <string name="fragment_media_season_autumn_start">Start: Herbst %d</string>
+    <string name="fragment_media_season_spring_end">Ende: Frühling %d</string>
+    <string name="fragment_media_season_spring_start">Start: Frühling %d</string>
+    <string name="fragment_media_season_summer_end">Ende: Sommer %d</string>
+    <string name="fragment_media_season_summer_start">Start: Sommer %d</string>
+    <string name="fragment_media_season_winter_end">Ende: Winter %d</string>
+    <string name="fragment_media_season_winter_start">Start: Winter %d</string>
+    <string name="fragment_news">News</string>
+    <string name="fragment_paging_retry">Erneut versuchen</string>
+    <string name="fragment_profile_points_anime">Anime</string>
+    <string name="fragment_profile_points_forum">Forum</string>
+    <string name="fragment_profile_points_info">Info</string>
+    <string name="fragment_profile_points_manga">Manga</string>
+    <string name="fragment_profile_points_miscellaneous">Verschiedenes</string>
+    <string name="fragment_profile_points_total">Insgesamt</string>
+    <string name="fragment_profile_points_uploads">Uploads</string>
+    <string name="fragment_profile_title">Profil</string>
+    <string name="fragment_relations_title">Verbindungen</string>
+    <string name="fragment_reminder">Lesezeichen</string>
+    <string name="fragment_set_user_info_error">Eintrag konnte nicht aktualisiert werden: %s</string>
+    <string name="fragment_set_user_info_success">Eintrag wurde aktualisiert</string>
+    <string name="fragment_settings">Einstellungen</string>
+    <string name="fragment_topten_anime">Anime</string>
+    <string name="fragment_topten_manga">Manga</string>
+    <string name="fragment_topten_title">Top 10</string>
+    <string name="fragment_ucp_overview_clip_title">Proxer Profillink</string>
+    <string name="fragment_ucp_overview_epsiode_counter_days">Tage</string>
+    <string name="fragment_ucp_overview_epsiode_counter_episodes">Episoden</string>
+    <string name="fragment_ucp_overview_epsiode_counter_hours">Stunden</string>
+    <string name="fragment_ucp_overview_epsiode_counter_minutes">Minuten</string>
+    <string name="fragment_ucp_overview_epsiode_counter">Episodencounter</string>
+    <string name="fragment_ucp_overview_general">Allgemein</string>
+    <string name="fragment_ucp_overview_profile_link">Profillink</string>
+    <string name="fragment_ucp_overview_title">Übersicht</string>
+    <string name="fragment_ucp_overview_user_id">User ID</string>
+    <string name="fragment_user_media_list_anime_title">Anime</string>
+    <string name="fragment_user_media_list_manga_title">Manga</string>
+
+    <string name="fsk_0_description">Dieser Anime ist für alle geeignet.</string>
+    <string name="fsk_12_description">Dieser Anime ist nicht für Personen unter 12 Jahren geeignet.</string>
+    <string name="fsk_16_description">Dieser Anime ist nicht für Personen unter 16 Jahren geeignet.</string>
+    <string name="fsk_18_description">Dieser Anime ist nicht für Personen unter 18 Jahren geeignet.</string>
+    <string name="fsk_6_description">Dieser Anime ist nicht für Personen unter 6 Jahren geeignet.</string>
+    <string name="fsk_bad_language_description">Dieser Anime beinhaltet vulgäre Ausdrücke.</string>
+    <string name="fsk_fear_description">Inhalt könnte verängstigend auf Kinder wirken.</string>
+    <string name="fsk_sex_description">Erotische Darstellungen und Nacktheit mit sexuellem Bezug und Sexdarstellungen.</string>
+    <string name="fsk_violence_description">Dieser Anime enthält Gewaltdarstellungen.</string>
+
+    <string name="hint_participant">Nutzername</string>
+    <string name="hint_topic">Thema</string>
+
+    <string name="history_entry_status">%1$d - %2$s</string>
+
+    <string name="interval_four_hours">Alle vier Stunden</string>
+    <string name="interval_half_hourly">Halbstündlich</string>
+    <string name="interval_hourly">Stündlich</string>
+    <string name="interval_two_hours">Alle zwei Stunden</string>
+
     <string name="introduction_notifications_description">Erhalte Benachrichtigungen</string>
+    <string name="introduction_notifications_title">Benachrichtigungen</string>
     <string name="introduction_skip">Überspringen</string>
+    <string name="introduction_welcome_description">Ein paar Einstellungen und es geht los</string>
+    <string name="introduction_welcome_title">Willkommen!</string>
+
+    <string name="item_stream_play">Abspielen</string>
+
+    <string name="link_error_not_found">Der Link konnte nicht geöffnet werden</string>
+
+    <string name="login_state_indicator_logged_in">Angemeldet</string>
+    <string name="login_state_indicator_logged_out">Abgemeldet</string>
+    <string name="login_state_indicator_logging_in">Anmeldung</string>
+    <string name="login_state_indicator_logging_out">Abmeldung</string>
+
+    <string name="media_license_licensed">Lizensiert</string>
+    <string name="media_license_non_licensed">Nicht Lizensiert</string>
+    <string name="media_license_unknown">Unbekannt</string>
+    <string name="media_state_airing">Airing</string>
+    <string name="media_state_cancelled_sub">Abgebrochener Sub</string>
+    <string name="media_state_cancelled">Abgebrochen</string>
+    <string name="media_state_finished">Abgeschlossen</string>
+    <string name="media_state_pre_airing">Nicht erschienen (Pre-Airing)</string>
+
+    <string name="notification_chat_title">Neue Nachrichten</string>
+    <string name="notification_news_title">News</string>
+
+    <string name="participants">Teilnehmer</string>
+
+    <string name="preference_category_design_title">Design</string>
+    <string name="preference_category_general_title">Allgemein</string>
+    <string name="preference_category_info_title">Info</string>
+    <string name="preference_category_notifications_title">Benachrichtigungen</string>
+    <string name="preference_hentai_summary_off">Hentai wird nicht angezeigt</string>
+    <string name="preference_hentai_summary_on">Hentai wird angezeigt</string>
+    <string name="preference_hentai_title">Hentai</string>
+    <string name="preference_licences_summary">Bibliotheken die in diser App verwendet werden</string>
+    <string name="preference_licences_title">Lizenzen</string>
+    <string name="preference_messages_notifications_title">Nachrichten</string>
+    <string name="preference_news_notifications_interval_title">News Update Intervall</string>
+    <string name="preference_news_notifications_title">News</string>
+    <string name="preference_notifications_summary_off">Erhalte keine Benachrichtigungen</string>
+    <string name="preference_notifications_summary_on">Erhalte Benachrichtigungen</string>
+    <string name="preference_open_source_summary">Sieh dir den Quellcode auf GitHub an</string>
+    <string name="preference_open_source_title">Open Source</string>
+    <string name="preference_theme_title">Thema</string>
+
+    <string name="reminder_episode">Episode %d</string>
+
+    <string name="spoiler_hide">Spoiler verstecken</string>
+    <string name="spoiler_show">Spoiler!</string>
+
+    <string name="status_currently_logging_in">Du wirst angemeldet…</string>
+    <string name="status_currently_logging_out">Du wirst abgemeldet…</string>
+    <string name="status_not_logged_in">Du bist nicht angemeldet</string>
+
+    <string name="tags_spoiler_hide">Spoiler Tags verstecken</string>
+    <string name="tags_spoiler_show">Spoiler Tags anzeigen</string>
+    <string name="tags_unrated_hide">Unbewertete Tags verstecken</string>
+    <string name="tags_unrated_show">Unbewertete Tags anzeigen</string>
+    <string name="theme_auto">Automatisch nach Tageszeit</string>
+
+    <string name="theme_dark">Dunkel</string>
+    <string name="theme_light">Hell</string>
+    <string name="theme_system">Systemeinstellung</string>
 
     <string name="time_a_moment_ago">Eben gerade</string>
-    <plurals name="time_minutes_ago">
-        <item quantity="one">"Vor einer Minute"</item>
-        <item quantity="other">"Vor %d Minuten"</item>
+
+    <string name="user_media_state_cancelled">Abgebrochen</string>
+    <string name="user_media_state_read">Gelesen</string>
+    <string name="user_media_state_reading">Am lesen</string>
+    <string name="user_media_state_watched">Geschaut</string>
+    <string name="user_media_state_watching">Am schauen</string>
+    <string name="user_media_state_will_read">Wird noch gelesen</string>
+    <string name="user_media_state_will_watch">Wird noch geschaut</string>
+    <string name="usernamefragment_ucp_overview_username">Username</string>
+
+    <string name="view_media_translatorgroup">Translator-Gruppe</string>
+
+    <plurals name="error_reminder_removal">
+        <item quantity="one">Ein Lesezeichen konnte nicht gelöscht werden: %2$s</item>
+        <item quantity="other">%1$d Lesezeichen konnten nicht gelöscht werden: %2$s</item>
+    </plurals>
+
+    <plurals name="item_conferences_participants">
+        <item quantity="other">%d Teilnehmer</item>
+    </plurals>
+
+    <plurals name="media_chapter_count">
+        <item quantity="one">Ein Kapitel</item>
+        <item quantity="other">%d Kapitel</item>
+    </plurals>
+    <plurals name="media_episode_count">
+        <item quantity="one">Eine Episode</item>
+        <item quantity="other">%d Episoden</item>
+    </plurals>
+
+    <plurals name="notification_chat_conference_amount">
+        <item quantity="one">in einem Chat</item>
+        <item quantity="other">in %d Chats</item>
+    </plurals>
+    <plurals name="notification_chat_message_amount">
+        <item quantity="one">Eine Nachricht</item>
+        <item quantity="other">%d Nachrichten</item>
+    </plurals>
+    <plurals name="notification_news_amount">
+        <item quantity="other">%d News</item>
+    </plurals>
+
+    <plurals name="time_days_ago">
+        <item quantity="one">"Gestern"</item>
+        <item quantity="other">"Vor %d Tagen"</item>
     </plurals>
     <plurals name="time_hours_ago">
         <item quantity="one">"Vor einer Stunde"</item>
         <item quantity="other">"Vor %d Stunden"</item>
     </plurals>
-    <plurals name="time_days_ago">
-        <item quantity="one">"Gestern"</item>
-        <item quantity="other">"Vor %d Tagen"</item>
+    <plurals name="time_minutes_ago">
+        <item quantity="one">"Vor einer Minute"</item>
+        <item quantity="other">"Vor %d Minuten"</item>
     </plurals>
     <plurals name="time_months_ago">
         <item quantity="one">"Vor einem Monat"</item>
@@ -27,365 +359,5 @@
     <plurals name="time_years_ago">
         <item quantity="one">"Vor einem Jahr"</item>
         <item quantity="other">"Vor %d Jahren"</item>
-    </plurals>
-
-    <string name="error_network">Es gab ein Problem mit dem Netzwerk. Bitte überprüfe ob du verbunden bist.</string>
-    <string name="error_unparseable">Der Server hat beschädigte Daten gesendet. Versuche es erneut.</string>
-    <string name="error_io">Es gab ein Speicherproblem. Versuche es erneut.</string>
-    <string name="error_unknown">Ein unbekannter Fehler ist aufgetreten. Versuche es erneut.</string>
-    <string name="error_action_retry">Erneut versuchen</string>
-    <string name="error_confirm">Bestätigen</string>
-    <string name="error_resolve">Dieser Hoster konnte nicht verarbeitet werden</string>
-    <string name="error_refresh">Aktualisierung fehlgeschlagen: %s</string>
-    <string name="error_unsupported_hoster">Dieser Hoster wird nicht unterstützt</string>
-    <string name="error_stream_resolution">Fehler beim Laden des Streams</string>
-    <string name="error_activity_not_found">Keine App zur Anzeige gefunden</string>
-    <string name="error_timeout">Der Server hat nicht rechtzeitig geantwortet. Versuche es später noch einmal</string>
-    <plurals name="error_reminder_removal">
-        <item quantity="one">Ein Lesezeichen konnte nicht gelöscht werden: %2$s</item>
-        <item quantity="other">%1$d Lesezeichen konnten nicht gelöscht werden: %2$s</item>
-    </plurals>
-
-    <string name="fragment_manga_empty_scangroup">Siehe Kapitelcredits</string>
-    <string name="fragment_manga_previous_chapter">Vorheriges Kapitel</string>
-    <string name="fragment_manga_next_chapter">Nächstes Kapitel</string>
-    <string name="fragment_manga_reminder_this_chapter">Lesezeichen: Dieses Kapitel</string>
-    <string name="fragment_manga_reminder_next_chapter">Lesezeichen: Nächstes Kapitel</string>
-
-    <string name="fragment_anime_empty_subgoup">Keine angegeben</string>
-    <string name="fragment_anime_previous_episode">Vorherige Episode</string>
-    <string name="fragment_anime_next_episode">Nächste Episode</string>
-    <string name="fragment_anime_reminder_this_episode">Lesezeichen: Diese Episode</string>
-    <string name="fragment_anime_reminder_next_episode">Lesezeichen: Nächste Episode</string>
-
-    <string name="finished_media">Abgeschlossen</string>
-
-    <string name="preference_category_notifications_title">Benachrichtigungen</string>
-    <string name="preference_category_info_title">Info</string>
-    <string name="preference_news_notifications_title">News</string>
-    <string name="preference_notifications_summary_on">Erhalte Benachrichtigungen</string>
-    <string name="preference_notifications_summary_off">Erhalte keine Benachrichtigungen</string>
-    <string name="preference_news_notifications_interval_title">News Update Intervall</string>
-    <string name="preference_messages_notifications_title">Nachrichten</string>
-    <string name="preference_licences_title">Lizenzen</string>
-    <string name="preference_licences_summary">Bibliotheken die in diser App verwendet werden</string>
-
-    <string name="fragment_set_user_info_success">Eintrag wurde aktualisiert</string>
-    <string name="fragment_set_user_info_error">Eintrag konnte nicht aktualisiert werden: %s</string>
-
-    <string name="about_description">Entwickler: Ruben Gees</string>
-    <string name="about_libraries_title">Lizenzen</string>
-
-    <string name="interval_half_hourly">Halbstündlich</string>
-    <string name="interval_hourly">Stündlich</string>
-    <string name="interval_two_hours">Alle zwei Stunden</string>
-    <string name="interval_four_hours">Alle vier Stunden</string>
-
-    <string name="fragment_profile_title">Profil</string>
-    <string name="fragment_profile_points_anime">Anime</string>
-    <string name="fragment_profile_points_manga">Manga</string>
-    <string name="fragment_profile_points_uploads">Uploads</string>
-    <string name="fragment_profile_points_forum">Forum</string>
-    <string name="fragment_profile_points_info">Info</string>
-    <string name="fragment_profile_points_miscellaneous">Verschiedenes</string>
-    <string name="fragment_profile_points_total">Insgesamt</string>
-
-    <string name="fragment_topten_title">Top 10</string>
-
-    <string name="fragment_paging_retry">Erneut versuchen</string>
-
-    <string name="fragment_media_info_title">Info</string>
-    <string name="fragment_comments_title">Kommentare</string>
-    <string name="fragment_relations_title">Verbindungen</string>
-
-    <string name="drawer_item_news">News</string>
-    <string name="drawer_item_chat">Chat</string>
-    <string name="drawer_item_reminder">Lesezeichen</string>
-    <string name="drawer_item_anime">Anime</string>
-    <string name="drawer_item_manga">Manga</string>
-    <string name="drawer_item_donate">Spenden</string>
-    <string name="drawer_item_settings">Einstellungen</string>
-    <string name="drawer_account_guest">Gast</string>
-    <string name="drawer_account_login">Anmelden</string>
-    <string name="drawer_account_logout">Abmelden</string>
-    <string name="drawer_account_ucp">User-Control-Panel</string>
-
-    <string name="dialog_cancel">Abbrechen</string>
-
-    <string name="error_hentai_confirmation_needed">Für diese Kategorie musst du bestätigen, dass du 18 jahre oder älter bist</string>
-
-    <string name="dialog_login_title">Anmelden</string>
-    <string name="dialog_login_positive">Anmelden</string>
-    <string name="dialog_login_error_username">Bitte gib einen Nutzernamen an</string>
-    <string name="dialog_login_error_password">Bitte gib ein Passwort an</string>
-    <string name="dialog_login_username">Nutzername</string>
-    <string name="dialog_login_password">Passwort</string>
-    <string name="dialog_login_remember">Merken</string>
-
-    <string name="dialog_logout_title">Möchtest du dich abmelden?</string>
-    <string name="dialog_logout_positive">Abmelden</string>
-
-    <string name="dialog_stream_resolver_title">Lade Stream…</string>
-
-    <string name="dialog_hentai_content">Dieser Bereich darf nur von Benutzern über 18 Jahren betreten werden! Eltern haften für ihre Kinder. Proxer.Me übernimmt keinerlei Haftung!</string>
-    <string name="dialog_hentai_positive">Verstanden</string>
-
-    <string name="dialog_crunchyroll_title">Crunchyroll App</string>
-    <string name="dialog_crunchyroll_content">Zum Verwenden dieses Streams ist die Crunchyroll App nötig</string>
-    <string name="dialog_crunchyroll_positive">Installieren</string>
-
-    <plurals name="item_conferences_participants">
-        <item quantity="other">%d Teilnehmer</item>
-    </plurals>
-
-    <string name="notification_news_title">News</string>
-    <plurals name="notification_news_amount">
-        <item quantity="other">%d News</item>
-    </plurals>
-
-    <string name="notification_chat_title">Neue Nachrichten</string>
-    <plurals name="notification_chat_message_amount">
-        <item quantity="one">Eine Nachricht</item>
-        <item quantity="other">%d Nachrichten</item>
-    </plurals>
-    <plurals name="notification_chat_conference_amount">
-        <item quantity="one">in einem Chat</item>
-        <item quantity="other">in %d Chats</item>
-    </plurals>
-
-    <string name="fragment_chat_message">Tippe eine Nachricht</string>
-    <string name="fragment_chat_send">Senden</string>
-    <string name="fragment_chat_reply">"@%s "</string>
-    <string name="fragment_chat_link_clip_title">Link</string>
-    <string name="fragment_chat_clip_title">Chatverlauf</string>
-    <string name="clipboard_status">In die Zwischenablage kopiert</string>
-
-    <string name="status_currently_logging_in">Du wirst angemeldet…</string>
-    <string name="status_currently_logging_out">Du wirst abgemeldet…</string>
-    <string name="status_not_logged_in">Du bist nicht angemeldet</string>
-
-    <string name="error_action_login">Anmelden</string>
-
-    <string name="action_copy">Kopieren</string>
-
-    <string name="fragment_settings">Einstellungen</string>
-
-    <string name="fragment_conferences">Chat</string>
-
-    <string name="fragment_news">News</string>
-
-    <string name="fragment_topten_anime">Anime</string>
-    <string name="fragment_topten_manga">Manga</string>
-
-    <string name="fragment_conference_info_time">Erstellt am %1$s um %2$s</string>
-
-    <string name="fragment_reminder">Lesezeichen</string>
-    <string name="reminder_episode">Episode %d</string>
-
-    <string name="link_error_not_found">Der Link konnte nicht geöffnet werden</string>
-
-    <string name="error_input_empty">Gib etwas ein</string>
-    <string name="error_no_users">Füge mindestens einen Nutzer hinzu</string>
-    <string name="error_duplicate_user">Diesen Nutzer hast du schon hinzugefügt</string>
-    <string name="error_no_message">Gib eine Nachricht ein</string>
-
-    <string name="fragment_user_media_list_anime_title">Anime</string>
-    <string name="fragment_user_media_list_manga_title">Manga</string>
-
-    <string name="fragment_media_list_anime_title">Anime</string>
-    <string name="fragment_media_list_manga_title">Manga</string>
-
-    <string name="user_media_state_watched">Geschaut</string>
-    <string name="user_media_state_watching">Am schauen</string>
-    <string name="user_media_state_will_watch">Wird noch geschaut</string>
-    <string name="user_media_state_read">Gelesen</string>
-    <string name="user_media_state_reading">Am lesen</string>
-    <string name="user_media_state_will_read">Wird noch gelesen</string>
-    <string name="user_media_state_cancelled">Abgebrochen</string>
-
-    <string name="action_sort">Sortierung</string>
-    <string name="action_sort_ascending">Aufsteigend</string>
-    <string name="action_sort_descending">Absteigend</string>
-    <string name="action_sort_name">Nach Name</string>
-    <string name="action_sort_state">Nach Status</string>
-    <string name="action_sort_relevance">Nach Relevanz</string>
-    <string name="action_sort_rating">Nach Bewertungen</string>
-    <string name="action_sort_clicks">Nach Zugriffen</string>
-    <string name="action_sort_count">Nach Episoden</string>
-    <string name="preference_theme_title">Thema</string>
-    <string name="preference_hentai_summary_off">Hentai wird nicht angezeigt</string>
-    <string name="preference_hentai_summary_on">Hentai wird angezeigt</string>
-    <string name="preference_hentai_title">Hentai</string>
-    <string name="preference_category_general_title">Allgemein</string>
-    <string name="preference_category_design_title">Design</string>
-    <string name="theme_system">Systemeinstellung</string>
-    <string name="theme_auto">Automatisch nach Tageszeit</string>
-    <string name="theme_dark">Dunkel</string>
-    <string name="theme_light">Hell</string>
-
-    <string name="action_add_user">%1$s hat %2$s zur Konferenz hinzugefügt</string>
-    <string name="action_remove_user">%1$s hat %2$s aus der Konferenz entfernt</string>
-    <string name="action_set_topic">%1$s hat den Konferenztitel in %2$s geändert</string>
-    <string name="action_set_leader">%1$s hat %2$s als neuen Konferenzleiter bestimmt</string>
-    <string name="action_info">Info</string>
-    <string name="fragment_conference_info_info_title">Info</string>
-    <string name="fragment_conference_info_participants_title">Teilnehmer</string>
-    <string name="action_reply">Antworten</string>
-
-    <string name="fragment_history_title">Chronik</string>
-
-    <string name="login_state_indicator_logging_in">Anmeldung</string>
-    <string name="login_state_indicator_logging_out">Abmeldung</string>
-    <string name="login_state_indicator_logged_in">Angemeldet</string>
-    <string name="login_state_indicator_logged_out">Abgemeldet</string>
-    <string name="action_send_message">Nachricht schreiben</string>
-    <string name="action_new_group_with_user">Neue Gruppe mit diesem Nutzer</string>
-    <string name="action_new_chat">Neuer Chat</string>
-    <string name="action_new_group">Neue Gruppe</string>
-    <string name="hint_topic">Thema</string>
-    <string name="participants">Teilnehmer</string>
-    <string name="add_user">Nutzer hinzufügen</string>
-    <string name="hint_participant">Nutzername</string>
-    <string name="activity_ucp_title">User-Control-Panel</string>
-
-    <string name="fragment_ucp_overview_title">Übersicht</string>
-    <string name="fragment_ucp_overview_clip_title">Proxer Profillink</string>
-
-    <string name="history_entry_status">%1$d - %2$s</string>
-    <string name="fragment_ucp_overview_general">Allgemein</string>
-    <string name="fragment_ucp_overview_profile_link">Profillink</string>
-    <string name="usernamefragment_ucp_overview_username">Username</string>
-    <string name="fragment_ucp_overview_user_id">User ID</string>
-    <string name="fragment_ucp_overview_epsiode_counter">Episodencounter</string>
-    <string name="fragment_ucp_overview_epsiode_counter_episodes">Episoden</string>
-    <string name="fragment_ucp_overview_epsiode_counter_minutes">Minuten</string>
-    <string name="fragment_ucp_overview_epsiode_counter_hours">Stunden</string>
-    <string name="fragment_ucp_overview_epsiode_counter_days">Tage</string>
-    <string name="preference_open_source_title">Open Source</string>
-    <string name="preference_open_source_summary">Sieh dir den Quellcode auf GitHub an</string>
-    <string name="action_filter_all_anime">Alles</string>
-    <string name="action_filter_anime_series">Serien</string>
-    <string name="action_filter_movies">Filme</string>
-    <string name="action_filter_ova">OVA</string>
-    <string name="action_filter_hentai">Hentai</string>
-    <string name="action_filter_all_manga">Alles</string>
-    <string name="action_filter_manga_series">Mangaserien</string>
-    <string name="action_filter_one_shots">One-Shots</string>
-    <string name="action_filter_doujin">Doujinshi</string>
-    <string name="action_filter_hmanga">H-Manga</string>
-    <string name="action_search">Suchen</string>
-    <string name="action_filter">Filter</string>
-    <string name="filter_manga">Manga</string>
-    <string name="filter_anime">Anime</string>
-    <string name="filter_all">Alles</string>
-
-    <string name="fragment_media_info_description">Beschreibung</string>
-    <string name="fragment_media_info_fsk">FSK</string>
-    <string name="fragment_media_info_genres">Genres</string>
-    <string name="fragment_media_info_japanese_title">Japanischer Titel</string>
-    <string name="fragment_media_info_english_title">Englischer Titel</string>
-    <string name="fragment_media_info_original_title">Original Titel</string>
-    <string name="fragment_media_info_general">Allgemein</string>
-    <string name="fragment_media_info_german_title">Deutscher Titel</string>
-    <string name="fragment_media_info_season_title">Season</string>
-    <string name="fragment_media_info_license_title">Lizenz</string>
-    <string name="fragment_media_info_status_title">Status</string>
-
-    <string name="fragment_media_season_winter_start">Start: Winter %d</string>
-    <string name="fragment_media_season_spring_start">Start: Frühling %d</string>
-    <string name="fragment_media_season_summer_start">Start: Sommer %d</string>
-    <string name="fragment_media_season_autumn_start">Start: Herbst %d</string>
-
-    <string name="fragment_media_season_winter_end">Ende: Winter %d</string>
-    <string name="fragment_media_season_spring_end">Ende: Frühling %d</string>
-    <string name="fragment_media_season_summer_end">Ende: Sommer %d</string>
-    <string name="fragment_media_season_autumn_end">Ende: Herbst %d</string>
-
-    <string name="media_state_pre_airing">Nicht erschienen (Pre-Airing)</string>
-    <string name="media_state_airing">Airing</string>
-    <string name="media_state_cancelled">Abgebrochen</string>
-    <string name="media_state_cancelled_sub">Abgebrochener Sub</string>
-    <string name="media_state_finished">Abgeschlossen</string>
-
-    <string name="comment_state_watched">Abgeschlossen</string>
-    <string name="comment_state_watching">Bei Episode %d</string>
-    <string name="comment_state_will_watch">Auf Warteliste</string>
-    <string name="comment_state_cancelled">Abgebrochen (%d)</string>
-
-    <string name="media_license_licensed">Lizensiert</string>
-    <string name="media_license_non_licensed">Nicht Lizensiert</string>
-    <string name="media_license_unknown">Unbekannt</string>
-
-    <string name="fsk_0_description">Dieser Anime ist für alle geeignet.</string>
-    <string name="fsk_6_description">Dieser Anime ist nicht für Personen unter 6 Jahren geeignet.</string>
-    <string name="fsk_12_description">Dieser Anime ist nicht für Personen unter 12 Jahren geeignet.</string>
-    <string name="fsk_16_description">Dieser Anime ist nicht für Personen unter 16 Jahren geeignet.</string>
-    <string name="fsk_18_description">Dieser Anime ist nicht für Personen unter 18 Jahren geeignet.</string>
-    <string name="fsk_bad_language_description">Dieser Anime beinhaltet vulgäre Ausdrücke.</string>
-    <string name="fsk_violence_description">Dieser Anime enthält Gewaltdarstellungen.</string>
-    <string name="fsk_fear_description">Inhalt könnte verängstigend auf Kinder wirken.</string>
-    <string name="fsk_sex_description">Erotische Darstellungen und Nacktheit mit sexuellem Bezug und Sexdarstellungen.</string>
-
-    <string name="tags_unrated_show">Unbewertete Tags anzeigen</string>
-    <string name="tags_unrated_hide">Unbewertete Tags verstecken</string>
-    <string name="tags_spoiler_show">Spoiler Tags anzeigen</string>
-    <string name="tags_spoiler_hide">Spoiler Tags verstecken</string>
-
-    <string name="activity_manga_title">Kapitel %d</string>
-    <string name="activity_anime_title">Episode %d</string>
-
-    <string name="fragment_media_info_groups">Gruppen</string>
-    <string name="fragment_media_info_publishers">Industrie</string>
-    <string name="fragment_media_info_tags">Tags</string>
-
-    <string name="comment_rating_genre">Genre</string>
-    <string name="comment_rating_story">Story</string>
-    <string name="comment_rating_animation">Animation/Bilder</string>
-    <string name="comment_rating_characters">Charaktere</string>
-    <string name="comment_rating_music">Musik</string>
-
-    <string name="action_sort_time">Nach Datum</string>
-
-    <string name="spoiler_show">Spoiler!</string>
-    <string name="spoiler_hide">Spoiler verstecken</string>
-
-    <string name="fragment_manga_uploader">Uploader</string>
-    <string name="fragment_manga_date">Datum</string>
-
-    <string name="view_media_translatorgroup">Translator-Gruppe</string>
-
-    <string name="action_fullscreen">Vollbildmodus</string>
-
-    <string name="item_stream_play">Abspielen</string>
-    <string name="comment_rating_overall">Insgesamt</string>
-    <string name="fragment_episodes_title">Episoden</string>
-    <string name="error_no_data">Keine Daten</string>
-    <string name="error_no_data_conferences">Du hast noch keine Chats</string>
-    <string name="error_no_data_action_chat">Schreibe jemandem</string>
-    <string name="error_no_data_comments">Es gibt noch keine Kommentare</string>
-    <string name="error_no_data_episodes">Es gibt noch keine Episoden</string>
-    <string name="error_no_data_media_list">Keine Ergebnisse</string>
-    <string name="error_no_data_news">Derzeit sind keine News verfügbar</string>
-    <string name="error_no_data_history">Noch keine Einträge verfügbar</string>
-    <string name="error_no_data_reminder">Du hast noch nichts in deiner Watchlist</string>
-    <string name="error_no_data_user_media_list">Es gibt noch keine Einträge</string>
-    <string name="error_no_data_anime">Aktuell gibt es noch keine Streams</string>
-    <string name="error_no_data_chat">Diese Konferenz hat noch keine Nachrichten</string>
-    <string name="error_no_data_topten">Es wurde noch nichts in die Top 10 aufgenommen</string>
-    <string name="error_no_data_relations">Für dieses Werk gibt es keine Verbindungen</string>
-    <string name="action_share">Teilen</string>
-    <string name="action_note">Vermerken</string>
-    <string name="action_favor">Favorisieren</string>
-    <string name="error_ip_blocked">Es wurden zu viele Anfragen gemacht</string>
-    <string name="error_action_captcha">Captcha</string>
-
-    <plurals name="media_episode_count">
-        <item quantity="one">Eine Episode</item>
-        <item quantity="other">%d Episoden</item>
-    </plurals>
-
-    <plurals name="media_chapter_count">
-        <item quantity="one">Ein Kapitel</item>
-        <item quantity="other">%d Kapitel</item>
     </plurals>
 </resources>
