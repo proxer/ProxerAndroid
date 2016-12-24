@@ -28,7 +28,9 @@ class FilteredTask<in I, O>(private val task: Task<I, O>, private val filterFunc
     }
 
     override fun execute(input: I) {
-        task.execute(input)
+        start {
+            task.execute(input)
+        }
     }
 
     override fun cancel() {
@@ -43,5 +45,4 @@ class FilteredTask<in I, O>(private val task: Task<I, O>, private val filterFunc
         task.destroy()
         super.destroy()
     }
-
 }

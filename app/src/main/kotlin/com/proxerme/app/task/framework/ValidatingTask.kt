@@ -30,16 +30,18 @@ class ValidatingTask<I, O>(private val task: Task<I, O>, private val validateFun
     }
 
     override fun execute(input: I) {
-        try {
-            validateFunction.invoke(input)
-        } catch (exception: Exception) {
-            exceptionCallback?.invoke(exception)
-            onExceptionCallback?.invoke()
+        start {
+            try {
+                validateFunction.invoke(input)
+            } catch (exception: Exception) {
+                exceptionCallback?.invoke(exception)
+                finishWithException(exception)
 
-            return
+                return@start
+            }
+
+            task.execute(input)
         }
-
-        task.execute(input)
     }
 
     override fun cancel() {

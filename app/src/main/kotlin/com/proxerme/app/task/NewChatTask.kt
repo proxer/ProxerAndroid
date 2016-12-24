@@ -35,8 +35,6 @@ class NewChatTask(private var contextResolver: (() -> Context)? = null,
     }
 
     override fun execute(input: NewChatInput) {
-        isWorking = true
-
         start {
             call = MainApplication.proxerConnection.execute(constructRequest(input), {
                 contextResolver?.invoke()?.let { ChatService.synchronize(it) }
@@ -44,18 +42,32 @@ class NewChatTask(private var contextResolver: (() -> Context)? = null,
                 val existingConference = contextResolver?.invoke()?.chatDatabase?.getConference(it)
 
                 if (existingConference != null) {
-                    isWorking = false
-
                     finishSuccessful(existingConference)
                 } else {
                     newConferenceId = it
                 }
             }, {
-                isWorking = false
-
                 finishWithException(it)
             })
         }
+    }
+
+    override fun start(action: () -> Unit) {
+        isWorking = true
+
+        super.start(action)
+    }
+
+    override fun finishSuccessful(result: LocalConference?) {
+        isWorking = false
+
+        super.finishSuccessful(result)
+    }
+
+    override fun finishWithException(result: Exception) {
+        isWorking = false
+
+        super.finishWithException(result)
     }
 
     override fun cancel() {
@@ -84,7 +96,6 @@ class NewChatTask(private var contextResolver: (() -> Context)? = null,
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onChatCreatedAndLoaded(@Suppress("UNUSED_PARAMETER") event: ChatSynchronizationEvent) {
         newConferenceId?.let {
-            isWorking = false
             newConferenceId = null
 
             finishSuccessful(contextResolver?.invoke()?.chatDatabase?.getConference(it))

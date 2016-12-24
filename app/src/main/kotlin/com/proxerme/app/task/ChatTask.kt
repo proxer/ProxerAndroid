@@ -87,19 +87,15 @@ class ChatTask(private val id: String,
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLoadMessages(event: ChatMessagesEvent) {
-        successCallback?.let {
-            if (event.messages.isNotEmpty()) {
-                finishSuccessful(event.messages.toTypedArray())
-            }
+        if (event.messages.isNotEmpty()) {
+            finishSuccessful(event.messages.toTypedArray())
         }
     }
 
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLoadMessagesFailed(exception: LoadMoreMessagesException) {
-        exceptionCallback?.let {
-            finishWithException(exception)
-        }
+        finishWithException(exception)
     }
 
     class ChatInput(page: Int, val context: Context) : PagedInput(page)

@@ -145,7 +145,6 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
             }
 
             override fun onWatchClick(item: Stream) {
-                streamResolverTask.cancel()
                 streamResolverTask.execute(item.id)
             }
         }

@@ -39,31 +39,33 @@ class CachedTask<in I, O>(private val task: Task<I, O>,
     }
 
     override fun execute(input: I) {
-        if (shouldCachedResult) {
-            cachedResult?.let {
-                finishSuccessful(it)
+        start {
+            if (shouldCachedResult) {
+                cachedResult?.let {
+                    finishSuccessful(it)
 
-                return
+                    return@start
+                }
+
+                if (isWorking) {
+                    return@start
+                }
             }
 
-            if (isWorking) {
-                return
+            if (shouldCacheException) {
+                cachedException?.let {
+                    finishWithException(it)
+
+                    return@start
+                }
+
+                if (isWorking) {
+                    return@start
+                }
             }
+
+            task.execute(input)
         }
-
-        if (shouldCacheException) {
-            cachedException?.let {
-                finishWithException(it)
-
-                return
-            }
-
-            if (isWorking) {
-                return
-            }
-        }
-
-        task.execute(input)
     }
 
     override fun cancel() {

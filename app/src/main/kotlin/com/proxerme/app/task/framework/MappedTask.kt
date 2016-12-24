@@ -28,7 +28,9 @@ class MappedTask<in I, M, O>(private val task: Task<I, M>, private val mapFuncti
     }
 
     override fun execute(input: I) {
-        task.execute(input)
+        start {
+            task.execute(input)
+        }
     }
 
     override fun cancel() {

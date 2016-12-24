@@ -26,6 +26,12 @@ abstract class BaseTask<in I, O>(override var successCallback: ((O) -> Unit)? = 
         task.execute(input)
     }
 
+    open protected fun start(action: () -> Unit) {
+        cancel()
+
+        action.invoke()
+    }
+
     open protected fun finishSuccessful(result: O) {
         successCallback?.invoke(result)
     }

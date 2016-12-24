@@ -55,8 +55,10 @@ class ZippedTask<in I, in I2, M, M2, O>(private val firstTask: Task<I, M>,
     }
 
     override fun execute(input: Pair<I, I2>) {
-        firstTask.execute(input.first)
-        secondTask.execute(input.second)
+        start {
+            firstTask.execute(input.first)
+            secondTask.execute(input.second)
+        }
     }
 
     override fun cancel() {

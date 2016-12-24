@@ -127,7 +127,7 @@ class ReminderFragment : PagedLoadingFragment<ReminderInput, Reminder>() {
     }
 
     override fun onDestroy() {
-        removalTask.cancel()
+        removalTask.destroy()
 
         super.onDestroy()
     }

@@ -42,7 +42,9 @@ abstract class BaseListenableTask<I, O>(successCallback: ((O) -> Unit)? = null,
         super.destroy()
     }
 
-    protected fun start(action: () -> Unit) {
+    override fun start(action: () -> Unit) {
+        cancel()
+
         onStartCallback?.invoke()
 
         action.invoke()

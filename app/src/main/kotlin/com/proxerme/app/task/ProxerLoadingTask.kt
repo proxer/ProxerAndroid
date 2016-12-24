@@ -21,8 +21,6 @@ class ProxerLoadingTask<I, O>(private var requestConstructor: (I) -> ProxerReque
     private var call: ProxerCall? = null
 
     override fun execute(input: I) {
-        cancel()
-
         start {
             call = MainApplication.proxerConnection.execute(requestConstructor.invoke(input), {
                 cancel()

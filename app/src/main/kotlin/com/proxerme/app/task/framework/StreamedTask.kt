@@ -40,7 +40,9 @@ class StreamedTask<in I, MO, MI, O>(private val firstTask: Task<I, MO>,
     }
 
     override fun execute(input: I) {
-        firstTask.execute(input)
+        start {
+            firstTask.execute(input)
+        }
     }
 
     override fun cancel() {
