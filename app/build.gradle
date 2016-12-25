@@ -5,15 +5,15 @@ apply plugin: "kotlin-kapt"
 android {
     compileSdkVersion 25
     buildToolsVersion "$build_tools_version"
+
     defaultConfig {
         applicationId 'com.proxerme.app'
         minSdkVersion 15
         targetSdkVersion 25
         versionCode 25
         versionName "0.7.1"
-        multiDexEnabled true
+
         vectorDrawables.useSupportLibrary = true
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
     signingConfigs {
@@ -33,19 +33,25 @@ android {
                     getFromSecrets("PROXER_API_KEY") + "\""
         }
 
+        debug {
+            minifyEnabled true
+            useProguard false
+            proguardFiles 'proguard-rules.pro'
+        }
         release {
             minifyEnabled true
             shrinkResources false
             zipAlignEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles 'proguard-rules.pro'
 
             if (shouldSign()) {
                 signingConfig signingConfigs.release
             } else {
-                logger.warn('This build will not be signed because it is missing the keystore info. ' +
-                        'Please add values for "RELEASE_STORE_FILE", "RELEASE_STORE_PASSWORD", ' +
-                        '"RELEASE_KEY_ALIAS" and "RELEASE_KEY_PASSWORD" to your secrets.properties' +
-                        ' file if you want the apk to be signed.')
+                logger.warn('This build will not be signed because it is missing the keystore' +
+                        ' info. Please add values for "RELEASE_STORE_FILE", ' +
+                        '"RELEASE_STORE_PASSWORD", "RELEASE_KEY_ALIAS" and ' +
+                        '"RELEASE_KEY_PASSWORD" to your secrets.properties file if you want the ' +
+                        'apk to be signed.')
             }
         }
     }
@@ -56,8 +62,6 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:multidex:1.0.1'
-
     compile "com.android.support:support-v4:$support_version"
     compile "com.android.support:support-v13:$support_version"
     compile "com.android.support:appcompat-v7:$support_version"
@@ -167,6 +171,8 @@ static def shouldSign() {
         return false
     }
 
-    return result.containsKey("RELEASE_STORE_FILE") && result.containsKey("RELEASE_STORE_PASSWORD") &&
-            result.containsKey("RELEASE_KEY_ALIAS") && result.containsKey("RELEASE_KEY_PASSWORD")
+    return result.containsKey("RELEASE_STORE_FILE") &&
+            result.containsKey("RELEASE_STORE_PASSWORD") &&
+            result.containsKey("RELEASE_KEY_ALIAS") &&
+            result.containsKey("RELEASE_KEY_PASSWORD")
 }

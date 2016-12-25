@@ -1,10 +1,10 @@
 package com.proxerme.app.application
 
+import android.app.Application
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.StrictMode
-import android.support.multidex.MultiDexApplication
 import android.support.v7.app.AppCompatDelegate
 import android.widget.ImageView
 import com.bumptech.glide.Glide
@@ -19,8 +19,6 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import com.orhanobut.hawk.Hawk
-import com.proxerme.app.BuildConfig
-import com.proxerme.app.EventBusIndex
 import com.proxerme.app.helper.PreferenceHelper
 import com.proxerme.app.manager.UserManager
 import com.proxerme.app.service.ChatService
@@ -37,7 +35,7 @@ import java.io.InputStream
  *
  * @author Ruben Gees
  */
-class MainApplication : MultiDexApplication() {
+class MainApplication : Application() {
 
     companion object {
 
