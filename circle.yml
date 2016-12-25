@@ -18,7 +18,7 @@ dependencies:
 
 test:
   override:
-    - ./gradlew lint assembleRelease -PdisablePreDex --console=plain
+    - ./gradlew build -PdisablePreDex --console=plain
   post:
     - mkdir -p $CIRCLE_TEST_REPORTS/lint
     - cp -r app/build/outputs/lint-results* $CIRCLE_TEST_REPORTS/lint
