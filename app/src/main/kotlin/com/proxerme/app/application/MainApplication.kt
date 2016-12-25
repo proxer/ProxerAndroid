@@ -19,6 +19,8 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import com.orhanobut.hawk.Hawk
+import com.proxerme.app.BuildConfig
+import com.proxerme.app.EventBusIndex
 import com.proxerme.app.helper.PreferenceHelper
 import com.proxerme.app.manager.UserManager
 import com.proxerme.app.service.ChatService
