@@ -17,14 +17,9 @@ dependencies:
     - ./gradlew dependencies --console=plain
 
 test:
-  pre:
-    - emulator -avd circleci-android22 -no-audio -no-window:
-        background: true
-        parallel: true
   override:
-    - ./gradlew lint assembleDebug assembleDebugAndroidTest -PdisablePreDex --console=plain
-    - circle-android wait-for-boot
-    - ./gradlew connectedAndroidTest -PdisablePreDex --console=plain
+    - ./gradlew lint assembleRelease -PdisablePreDex --console=plain
   post:
-    - cp -r app/build/outputs $CIRCLE_ARTIFACTS
-    - cp -r app/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
+    - mkdir -p $CIRCLE_TEST_REPORTS/lint
+    - cp -r app/build/outputs/lint-results* $CIRCLE_TEST_REPORTS/lint
+    - cp -r app/build/outputs/apk/* $CIRCLE_ARTIFACTS
