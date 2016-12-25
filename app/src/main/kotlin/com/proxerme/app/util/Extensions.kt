@@ -20,6 +20,7 @@ import com.proxerme.app.activity.WebViewActivity
 import com.proxerme.app.adapter.framework.PagingAdapter
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
+import uk.co.senab.photoview.PhotoView
 
 /**
  * TODO: Describe class
@@ -99,4 +100,12 @@ fun <T : View> View.findChild(predicate: (View) -> Boolean): T? {
     }
 
     return null
+}
+
+fun PhotoView.safelySetScale(scale: Float) {
+    try {
+        this.scale = scale
+    } catch (ignored: Exception) {
+
+    }
 }
