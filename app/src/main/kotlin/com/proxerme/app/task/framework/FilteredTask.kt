@@ -5,9 +5,10 @@ package com.proxerme.app.task.framework
  *
  * @author Ruben Gees
  */
-class FilteredTask<in I, O>(private val task: Task<I, O>, private val filterFunction: (O) -> O,
-                            successCallback: ((O) -> Unit)? = null,
-                            exceptionCallback: ((Exception) -> Unit)? = null) :
+class FilteredTask<I, O>(private val task: Task<I, O>,
+                         private val filterFunction: (O) -> O,
+                         successCallback: ((O) -> Unit)? = null,
+                         exceptionCallback: ((Exception) -> Unit)? = null) :
         BaseTask<I, O>(successCallback, exceptionCallback) {
 
     override val isWorking: Boolean
@@ -43,6 +44,13 @@ class FilteredTask<in I, O>(private val task: Task<I, O>, private val filterFunc
 
     override fun destroy() {
         task.destroy()
+
         super.destroy()
+    }
+
+    override fun onStart(callback: () -> Unit): BaseTask<I, O> {
+        task.onStart(callback)
+
+        return this
     }
 }

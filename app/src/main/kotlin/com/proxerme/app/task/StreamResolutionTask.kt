@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity
 import com.proxerme.app.R
 import com.proxerme.app.stream.StreamResolverFactory
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionResult
-import com.proxerme.app.task.framework.BaseListenableTask
+import com.proxerme.app.task.framework.BaseTask
 import okhttp3.HttpUrl
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.find
@@ -22,7 +22,7 @@ import java.util.concurrent.Future
  */
 class StreamResolutionTask(successCallback: ((StreamResolutionResult) -> Unit)? = null,
                            exceptionCallback: ((Exception) -> Unit)? = null) :
-        BaseListenableTask<HttpUrl, StreamResolutionResult>(successCallback, exceptionCallback) {
+        BaseTask<HttpUrl, StreamResolutionResult>(successCallback, exceptionCallback) {
 
     override val isWorking: Boolean
         get() = !(future?.isDone ?: true)

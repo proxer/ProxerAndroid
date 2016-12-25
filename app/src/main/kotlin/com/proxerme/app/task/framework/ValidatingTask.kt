@@ -5,15 +5,14 @@ package com.proxerme.app.task.framework
  *
  * @author Ruben Gees
  */
-class ValidatingTask<I, O>(private val task: Task<I, O>, private val validateFunction: (I) -> Unit,
+class ValidatingTask<I, O>(private val task: Task<I, O>,
+                           private val validationFunction: (I) -> Unit,
                            successCallback: ((O) -> Unit)? = null,
                            exceptionCallback: ((Exception) -> Unit)? = null) :
         BaseTask<I, O>(successCallback, exceptionCallback) {
 
     override val isWorking: Boolean
         get() = task.isWorking
-
-    private var onExceptionCallback: (() -> Unit)? = null
 
     init {
         task.successCallback = {
@@ -25,21 +24,16 @@ class ValidatingTask<I, O>(private val task: Task<I, O>, private val validateFun
         }
     }
 
-    fun onException(callback: () -> Unit): ValidatingTask<I, O> {
-        return this.apply { onExceptionCallback = callback }
-    }
-
     override fun execute(input: I) {
+        try {
+            validationFunction.invoke(input)
+        } catch (exception: Exception) {
+            finishWithException(exception)
+
+            return
+        }
+
         start {
-            try {
-                validateFunction.invoke(input)
-            } catch (exception: Exception) {
-                exceptionCallback?.invoke(exception)
-                finishWithException(exception)
-
-                return@start
-            }
-
             task.execute(input)
         }
     }
@@ -54,6 +48,13 @@ class ValidatingTask<I, O>(private val task: Task<I, O>, private val validateFun
 
     override fun destroy() {
         task.destroy()
+
         super.destroy()
+    }
+
+    override fun onStart(callback: () -> Unit): BaseTask<I, O> {
+        task.onStart(callback)
+
+        return this
     }
 }

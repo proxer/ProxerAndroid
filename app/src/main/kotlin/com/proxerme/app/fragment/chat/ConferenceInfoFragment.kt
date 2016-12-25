@@ -14,7 +14,7 @@ import com.proxerme.app.adapter.chat.ConferenceParticipantAdapter.ConferencePart
 import com.proxerme.app.fragment.framework.SingleLoadingFragment
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.task.ProxerLoadingTask
-import com.proxerme.app.task.framework.ListenableTask
+import com.proxerme.app.task.framework.Task
 import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.messenger.entity.ConferenceInfoContainer
 import com.proxerme.library.connection.messenger.entity.ConferenceInfoUser
@@ -92,7 +92,7 @@ class ConferenceInfoFragment : SingleLoadingFragment<String, ConferenceInfoConta
         adapter.clear()
     }
 
-    override fun constructTask(): ListenableTask<String, ConferenceInfoContainer> {
+    override fun constructTask(): Task<String, ConferenceInfoContainer> {
         return ProxerLoadingTask(::ConferenceInfoRequest)
     }
 

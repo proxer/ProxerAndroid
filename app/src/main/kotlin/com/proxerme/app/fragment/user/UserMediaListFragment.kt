@@ -11,7 +11,7 @@ import com.proxerme.app.fragment.framework.PagedLoadingFragment
 import com.proxerme.app.fragment.user.UserMediaListFragment.UserMediaInput
 import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.task.ProxerLoadingTask
-import com.proxerme.app.task.framework.ListenableTask
+import com.proxerme.app.task.framework.Task
 import com.proxerme.app.util.DeviceUtils
 import com.proxerme.library.connection.user.entitiy.UserMediaListEntry
 import com.proxerme.library.connection.user.request.UserMediaListRequest
@@ -163,7 +163,7 @@ class UserMediaListFragment : PagedLoadingFragment<UserMediaInput, UserMediaList
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
-    override fun constructTask(): ListenableTask<UserMediaInput, Array<UserMediaListEntry>> {
+    override fun constructTask(): Task<UserMediaInput, Array<UserMediaListEntry>> {
         return ProxerLoadingTask({
             UserMediaListRequest(it.userId, it.username, it.page)
                     .withCategory(it.category)

@@ -4,10 +4,10 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import com.proxerme.app.R
+import com.proxerme.app.activity.MainActivity
 import com.proxerme.app.activity.ProfileActivity
 import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.fragment.chat.ChatFragment
@@ -15,7 +15,7 @@ import com.proxerme.app.util.bindView
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.startActivity
 
-class ChatActivity : AppCompatActivity() {
+class ChatActivity : MainActivity() {
 
     companion object {
         private const val EXTRA_CONFERENCE = "extra_conference"

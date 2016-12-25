@@ -6,13 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import com.klinker.android.link_builder.TouchableMovementMethod
 import com.proxerme.app.R
 import com.proxerme.app.activity.MainActivity
 import com.proxerme.app.event.CaptchaSolvedEvent
 import com.proxerme.app.event.HentaiConfirmationEvent
 import com.proxerme.app.manager.UserManager
-import com.proxerme.app.task.framework.*
+import com.proxerme.app.task.framework.CachedTask
+import com.proxerme.app.task.framework.Task
+import com.proxerme.app.task.framework.ValidatingTask
 import com.proxerme.app.util.ErrorUtils
 import com.proxerme.app.util.KotterKnife
 import com.proxerme.app.util.Validators
@@ -43,7 +44,6 @@ abstract class SingleLoadingFragment<I, T> : MainFragment() {
     open protected val isHentaiConfirmationRequired = false
     open protected val cacheStrategy = CachedTask.CacheStrategy.FULL
 
-    open protected val refreshLifecycle = RefreshLifecycle.START
     open protected val isWorking: Boolean
         get() = task.isWorking
 
@@ -62,14 +62,14 @@ abstract class SingleLoadingFragment<I, T> : MainFragment() {
 
         EventBus.getDefault().register(this)
 
-        task = ListeningTask(ValidatingTask(CachedTask(constructTask(), cacheStrategy), {
+        task = ValidatingTask(CachedTask(constructTask(), cacheStrategy), {
             if (isLoginRequired) {
                 Validators.validateLogin()
             }
             if (isHentaiConfirmationRequired) {
                 Validators.validateHentaiConfirmation(context)
             }
-        }), successCallback, exceptionCallback).onStart {
+        }, successCallback, exceptionCallback).onStart {
             setRefreshing(true)
             contentContainer.visibility = View.GONE
             errorContainer.visibility = View.GONE
@@ -78,17 +78,12 @@ abstract class SingleLoadingFragment<I, T> : MainFragment() {
         }.onFinish {
             updateRefreshing()
         }
-
-        if (refreshLifecycle == RefreshLifecycle.CREATE) {
-            task.execute(constructInput())
-        }
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         progress.setColorSchemeResources(R.color.primary, R.color.accent)
-        errorText.movementMethod = TouchableMovementMethod.getInstance()
 
         contentContainer.visibility = View.GONE
         errorContainer.visibility = View.GONE
@@ -96,20 +91,10 @@ abstract class SingleLoadingFragment<I, T> : MainFragment() {
         updateRefreshing()
     }
 
-    override fun onStart() {
-        super.onStart()
-
-        if (refreshLifecycle == RefreshLifecycle.START) {
-            task.execute(constructInput())
-        }
-    }
-
     override fun onResume() {
         super.onResume()
 
-        if (refreshLifecycle == RefreshLifecycle.RESUME) {
-            task.execute(constructInput())
-        }
+        task.execute(constructInput())
     }
 
     override fun onDestroyView() {
@@ -120,6 +105,7 @@ abstract class SingleLoadingFragment<I, T> : MainFragment() {
 
     override fun onDestroy() {
         EventBus.getDefault().unregister(this)
+
         task.destroy()
 
         super.onDestroy()
@@ -131,6 +117,7 @@ abstract class SingleLoadingFragment<I, T> : MainFragment() {
 
     open protected fun reset() {
         clear()
+
         task.execute(constructInput())
     }
 
@@ -204,7 +191,7 @@ abstract class SingleLoadingFragment<I, T> : MainFragment() {
     }
 
     abstract fun present(data: T)
-    abstract fun constructTask(): ListenableTask<I, T>
+    abstract fun constructTask(): Task<I, T>
     abstract fun constructInput(): I
 
 }

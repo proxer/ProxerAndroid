@@ -13,8 +13,7 @@ import com.proxerme.app.fragment.user.ToptenFragment.ToptenInput
 import com.proxerme.app.fragment.user.ToptenFragment.ZippedToptenResult
 import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.task.ProxerLoadingTask
-import com.proxerme.app.task.framework.ListenableTask
-import com.proxerme.app.task.framework.ListeningTask
+import com.proxerme.app.task.framework.Task
 import com.proxerme.app.task.framework.ZippedTask
 import com.proxerme.app.util.DeviceUtils
 import com.proxerme.app.util.bindView
@@ -138,14 +137,13 @@ class ToptenFragment : SingleLoadingFragment<Pair<ToptenInput, ToptenInput>,
         }
     }
 
-    override fun constructTask(): ListenableTask<Pair<ToptenInput, ToptenInput>,
-            ZippedToptenResult> {
-        return ListeningTask(ZippedTask<ToptenInput, ToptenInput, Array<ToptenEntry>,
+    override fun constructTask(): Task<Pair<ToptenInput, ToptenInput>, ZippedToptenResult> {
+        return ZippedTask<ToptenInput, ToptenInput, Array<ToptenEntry>,
                 Array<ToptenEntry>, ZippedToptenResult>(
                 ProxerLoadingTask({ ToptenRequest(userId, username, ANIME) }),
                 ProxerLoadingTask({ ToptenRequest(userId, username, MANGA) }),
                 zipFunction = ::ZippedToptenResult
-        ))
+        )
     }
 
     override fun constructInput(): Pair<ToptenInput, ToptenInput> {

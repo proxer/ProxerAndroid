@@ -5,7 +5,7 @@ package com.proxerme.app.task.framework
  *
  * @author Ruben Gees
  */
-interface Task<in I, O> {
+interface Task<I, O> {
 
     val isWorking: Boolean
     var successCallback: ((O) -> Unit)?
@@ -16,4 +16,9 @@ interface Task<in I, O> {
     fun cancel()
     fun reset()
     fun destroy()
+
+    fun onStart(callback: () -> Unit): Task<I, O>
+    fun onSuccess(callback: () -> Unit): Task<I, O>
+    fun onException(callback: () -> Unit): Task<I, O>
+    fun onFinish(callback: () -> Unit): Task<I, O>
 }

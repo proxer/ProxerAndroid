@@ -10,7 +10,7 @@ import com.proxerme.app.fragment.framework.PagedLoadingFragment.PagedInput
 import com.proxerme.app.service.ChatService
 import com.proxerme.app.service.ChatService.LoadMoreMessagesException
 import com.proxerme.app.task.ChatTask.ChatInput
-import com.proxerme.app.task.framework.BaseListenableTask
+import com.proxerme.app.task.framework.BaseTask
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -23,9 +23,10 @@ import java.util.concurrent.Future
  * @author Ruben Gees
  */
 class ChatTask(private val id: String,
+               private var contextResolver: (() -> Context)? = null,
                successCallback: ((Array<LocalMessage>) -> Unit)? = null,
                exceptionCallback: ((Exception) -> Unit)? = null) :
-        BaseListenableTask<ChatInput, Array<LocalMessage>>(successCallback, exceptionCallback) {
+        BaseTask<ChatInput, Array<LocalMessage>>(successCallback, exceptionCallback) {
 
     override val isWorking: Boolean
         get() = !(future?.isDone ?: true) || ChatService.isLoadingMessages(id)
@@ -81,6 +82,7 @@ class ChatTask(private val id: String,
         EventBus.getDefault().unregister(this)
 
         reset()
+
         super.destroy()
     }
 

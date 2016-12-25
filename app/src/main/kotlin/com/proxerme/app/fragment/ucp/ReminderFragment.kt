@@ -12,7 +12,6 @@ import com.proxerme.app.fragment.framework.PagedLoadingFragment
 import com.proxerme.app.fragment.ucp.ReminderFragment.ReminderInput
 import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.task.ProxerLoadingTask
-import com.proxerme.app.task.framework.ListenableTask
 import com.proxerme.app.task.framework.Task
 import com.proxerme.app.task.framework.ValidatingTask
 import com.proxerme.app.util.DeviceUtils
@@ -132,7 +131,7 @@ class ReminderFragment : PagedLoadingFragment<ReminderInput, Reminder>() {
         super.onDestroy()
     }
 
-    override fun constructTask(): ListenableTask<ReminderInput, Array<Reminder>> {
+    override fun constructTask(): Task<ReminderInput, Array<Reminder>> {
         return ProxerLoadingTask({
             ReminderRequest(it.page)
                     .withCategory(it.category)

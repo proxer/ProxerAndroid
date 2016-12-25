@@ -8,7 +8,7 @@ import com.proxerme.app.entitiy.Participant
 import com.proxerme.app.event.ChatSynchronizationEvent
 import com.proxerme.app.service.ChatService
 import com.proxerme.app.task.NewChatTask.NewChatInput
-import com.proxerme.app.task.framework.BaseListenableTask
+import com.proxerme.app.task.framework.BaseTask
 import com.proxerme.library.connection.ProxerCall
 import com.proxerme.library.connection.messenger.request.NewConferenceRequest
 import org.greenrobot.eventbus.EventBus
@@ -23,7 +23,7 @@ import org.greenrobot.eventbus.ThreadMode
 class NewChatTask(private var contextResolver: (() -> Context)? = null,
                   successCallback: ((LocalConference?) -> Unit)? = null,
                   exceptionCallback: ((Exception) -> Unit)? = null) :
-        BaseListenableTask<NewChatInput, LocalConference?>(successCallback, exceptionCallback) {
+        BaseTask<NewChatInput, LocalConference?>(successCallback, exceptionCallback) {
 
     override var isWorking: Boolean = false
     private var newConferenceId: String? = null

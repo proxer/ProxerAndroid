@@ -16,7 +16,7 @@ import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.service.ChatService
 import com.proxerme.app.task.ConferencesTask
 import com.proxerme.app.task.framework.CachedTask
-import com.proxerme.app.task.framework.ListenableTask
+import com.proxerme.app.task.framework.Task
 import com.proxerme.app.util.DeviceUtils
 import com.proxerme.app.util.bindView
 import com.proxerme.app.util.insertAndScrollUpIfNecessary
@@ -38,7 +38,6 @@ class ConferencesFragment : SingleLoadingFragment<Context, List<LocalConference>
     override val isLoginRequired = true
     override val isSwipeToRefreshEnabled = false
     override val cacheStrategy = CachedTask.CacheStrategy.EXCEPTION
-    override val refreshLifecycle = RefreshLifecycle.RESUME
 
     private lateinit var adapter: ConferenceAdapter
 
@@ -111,7 +110,7 @@ class ConferencesFragment : SingleLoadingFragment<Context, List<LocalConference>
         super.onDestroy()
     }
 
-    override fun constructTask(): ListenableTask<Context, List<LocalConference>> {
+    override fun constructTask(): Task<Context, List<LocalConference>> {
         return ConferencesTask()
     }
 

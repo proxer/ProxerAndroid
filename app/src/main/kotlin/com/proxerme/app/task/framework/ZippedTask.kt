@@ -5,11 +5,11 @@ package com.proxerme.app.task.framework
  *
  * @author Ruben Gees
  */
-class ZippedTask<in I, in I2, M, M2, O>(private val firstTask: Task<I, M>,
-                                        private val secondTask: Task<I2, M2>,
-                                        private val zipFunction: (M, M2) -> O,
-                                        successCallback: ((O) -> Unit)? = null,
-                                        exceptionCallback: ((Exception) -> Unit)? = null) :
+class ZippedTask<I, I2, M, M2, O>(private val firstTask: Task<I, M>,
+                                  private val secondTask: Task<I2, M2>,
+                                  private val zipFunction: (M, M2) -> O,
+                                  successCallback: ((O) -> Unit)? = null,
+                                  exceptionCallback: ((Exception) -> Unit)? = null) :
         BaseTask<Pair<I, I2>, O>(successCallback, exceptionCallback) {
 
     override val isWorking: Boolean
@@ -79,5 +79,12 @@ class ZippedTask<in I, in I2, M, M2, O>(private val firstTask: Task<I, M>,
         secondTask.destroy()
 
         super.destroy()
+    }
+
+    override fun onStart(callback: () -> Unit): BaseTask<Pair<I, I2>, O> {
+        firstTask.onStart(callback)
+        secondTask.onStart(callback)
+
+        return this
     }
 }

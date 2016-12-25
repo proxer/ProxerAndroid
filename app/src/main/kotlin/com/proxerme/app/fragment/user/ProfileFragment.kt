@@ -14,7 +14,7 @@ import com.proxerme.app.fragment.framework.SingleLoadingFragment
 import com.proxerme.app.fragment.user.ProfileFragment.ProfileInput
 import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.task.ProxerLoadingTask
-import com.proxerme.app.task.framework.ListenableTask
+import com.proxerme.app.task.framework.Task
 import com.proxerme.app.util.TimeUtils
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.bindView
@@ -105,7 +105,7 @@ class ProfileFragment : SingleLoadingFragment<ProfileInput, UserInfo>() {
         }
     }
 
-    override fun constructTask(): ListenableTask<ProfileInput, UserInfo> {
+    override fun constructTask(): Task<ProfileInput, UserInfo> {
         return ProxerLoadingTask({ UserInfoRequest(userId, username) })
     }
 

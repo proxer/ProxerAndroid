@@ -15,10 +15,8 @@ import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.event.CaptchaSolvedEvent
 import com.proxerme.app.event.HentaiConfirmationEvent
 import com.proxerme.app.fragment.framework.PagedLoadingFragment.PagedInput
-import com.proxerme.app.helper.NotificationHelper
 import com.proxerme.app.manager.UserManager
 import com.proxerme.app.task.framework.CachedTask
-import com.proxerme.app.task.framework.ListenableTask
 import com.proxerme.app.task.framework.Task
 import com.proxerme.app.task.framework.ValidatingTask
 import com.proxerme.app.util.*
@@ -40,8 +38,8 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
         hasReachedEnd = data.size < itemsOnPage
 
         adapter.append(data)
-        showEmptyIfAppropriate()
 
+        showEmptyIfAppropriate()
         onItemsInserted(data)
     }
 
@@ -53,8 +51,8 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
 
     protected val refreshSuccessCallback = { data: Array<T> ->
         adapter.insertAndScrollUpIfNecessary(list.layoutManager, list, data)
-        showEmptyIfAppropriate()
 
+        showEmptyIfAppropriate()
         onItemsInserted(data)
     }
 
@@ -72,7 +70,6 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
     open protected val isHentaiConfirmationRequired = false
     open protected val cacheStrategy = CachedTask.CacheStrategy.FULL
 
-    open protected val refreshLifecycle = RefreshLifecycle.START
     open protected val isWorking: Boolean
         get() = task.isWorking || refreshTask.isWorking
 
@@ -98,26 +95,34 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
 
         EventBus.getDefault().register(this)
 
-        task = ValidatingTask(CachedTask(internalConstructTask(), cacheStrategy), {
+        task = ValidatingTask(CachedTask(constructTask(), cacheStrategy), {
             if (isLoginRequired) {
                 Validators.validateLogin()
             }
             if (isHentaiConfirmationRequired) {
                 Validators.validateHentaiConfirmation(context)
             }
-        }, successCallback, exceptionCallback)
+        }, successCallback, exceptionCallback).onStart {
+            headerFooterAdapter.removeFooter()
 
-        refreshTask = ValidatingTask(internalConstructRefreshingTask(), {
+            setRefreshing(true)
+        }.onFinish {
+            updateRefreshing()
+        }
+
+        refreshTask = ValidatingTask(constructRefreshingTask(), {
             if (isLoginRequired) {
                 Validators.validateLogin()
             }
             if (isHentaiConfirmationRequired) {
                 Validators.validateHentaiConfirmation(context)
             }
-        }, refreshSuccessCallback, refreshExceptionCallback)
+        }, refreshSuccessCallback, refreshExceptionCallback).onStart {
+            headerFooterAdapter.removeFooter()
 
-        if (refreshLifecycle == RefreshLifecycle.CREATE) {
-            task.execute(constructInput(0))
+            setRefreshing(true)
+        }.onFinish {
+            updateRefreshing()
         }
     }
 
@@ -145,22 +150,10 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
         updateRefreshing()
     }
 
-    override fun onStart() {
-        super.onStart()
-
-        if (refreshLifecycle == RefreshLifecycle.START) {
-            task.execute(constructInput(0))
-        }
-    }
-
     override fun onResume() {
         super.onResume()
 
-        NotificationHelper.cancelNotification(context, NotificationHelper.CHAT_NOTIFICATION)
-
-        if (refreshLifecycle == RefreshLifecycle.RESUME) {
-            task.execute(constructInput(0))
-        }
+        task.execute(constructInput(0))
     }
 
     override fun onDestroyView() {
@@ -197,6 +190,7 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
         hasReachedEnd = false
 
         clear()
+
         task.execute(constructInput(calculateNextPage()))
     }
 
@@ -229,6 +223,8 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
                 }
             }
         }
+
+        headerFooterAdapter.setFooter(errorContainer)
     }
 
     open protected fun showEmptyIfAppropriate() {
@@ -308,35 +304,11 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
         }
     }
 
-    private fun internalConstructTask(): ListenableTask<I, Array<T>> {
-        return constructTask().onStart {
-            headerFooterAdapter.removeFooter()
-
-            setRefreshing(true)
-        }.onFinish {
-            updateRefreshing()
-        }
-    }
-
-    private fun internalConstructRefreshingTask(): ListenableTask<I, Array<T>> {
-        return constructRefreshingTask().onStart {
-            headerFooterAdapter.removeFooter()
-
-            setRefreshing(true)
-        }.onFinish {
-            updateRefreshing()
-        }
-    }
-
-    abstract fun constructTask(): ListenableTask<I, Array<T>>
-    open protected fun constructRefreshingTask(): ListenableTask<I, Array<T>> {
-        return constructTask()
-    }
+    abstract fun constructTask(): Task<I, Array<T>>
+    open protected fun constructRefreshingTask() = constructTask()
 
     abstract fun constructInput(page: Int): I
-    open protected fun constructRefreshingInput(page: Int): I {
-        return constructInput(page)
-    }
+    open protected fun constructRefreshingInput(page: Int) = constructInput(page)
 
     open class PagedInput(val page: Int)
 }

@@ -7,10 +7,10 @@ import com.proxerme.app.task.framework.CachedTask.CacheStrategy
  *
  * @author Ruben Gees
  */
-class CachedTask<in I, O>(private val task: Task<I, O>,
-                          cacheStrategy: CacheStrategy = CacheStrategy.FULL,
-                          successCallback: ((O) -> Unit)? = null,
-                          exceptionCallback: ((Exception) -> Unit)? = null) :
+class CachedTask<I, O>(private val task: Task<I, O>,
+                       cacheStrategy: CacheStrategy = CacheStrategy.FULL,
+                       successCallback: ((O) -> Unit)? = null,
+                       exceptionCallback: ((Exception) -> Unit)? = null) :
         BaseTask<I, O>(successCallback, exceptionCallback) {
 
     override val isWorking: Boolean
@@ -39,31 +39,31 @@ class CachedTask<in I, O>(private val task: Task<I, O>,
     }
 
     override fun execute(input: I) {
+        if (shouldCachedResult) {
+            cachedResult?.let {
+                finishSuccessful(it)
+
+                return
+            }
+
+            if (isWorking) {
+                return
+            }
+        }
+
+        if (shouldCacheException) {
+            cachedException?.let {
+                finishWithException(it)
+
+                return
+            }
+
+            if (isWorking) {
+                return
+            }
+        }
+
         start {
-            if (shouldCachedResult) {
-                cachedResult?.let {
-                    finishSuccessful(it)
-
-                    return@start
-                }
-
-                if (isWorking) {
-                    return@start
-                }
-            }
-
-            if (shouldCacheException) {
-                cachedException?.let {
-                    finishWithException(it)
-
-                    return@start
-                }
-
-                if (isWorking) {
-                    return@start
-                }
-            }
-
             task.execute(input)
         }
     }
@@ -84,7 +84,14 @@ class CachedTask<in I, O>(private val task: Task<I, O>,
         cachedException = null
 
         task.destroy()
+
         super.destroy()
+    }
+
+    override fun onStart(callback: () -> Unit): BaseTask<I, O> {
+        task.onStart(callback)
+
+        return this
     }
 
     enum class CacheStrategy {FULL, RESULT, EXCEPTION }

@@ -19,7 +19,6 @@ import com.proxerme.app.fragment.framework.SingleLoadingFragment
 import com.proxerme.app.fragment.manga.MangaFragment.MangaInput
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.task.ProxerLoadingTask
-import com.proxerme.app.task.framework.ListenableTask
 import com.proxerme.app.task.framework.Task
 import com.proxerme.app.task.framework.ValidatingTask
 import com.proxerme.app.util.ErrorUtils
@@ -248,7 +247,7 @@ class MangaFragment : SingleLoadingFragment<MangaInput, Chapter>() {
         super.clear()
     }
 
-    override fun constructTask(): ListenableTask<MangaInput, Chapter> {
+    override fun constructTask(): Task<MangaInput, Chapter> {
         return ProxerLoadingTask({ ChapterRequest(it.id, it.episode, it.language) })
     }
 

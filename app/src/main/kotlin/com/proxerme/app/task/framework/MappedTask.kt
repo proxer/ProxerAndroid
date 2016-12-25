@@ -5,9 +5,10 @@ package com.proxerme.app.task.framework
  *
  * @author Ruben Gees
  */
-class MappedTask<in I, M, O>(private val task: Task<I, M>, private val mapFunction: (M) -> O,
-                             successCallback: ((O) -> Unit)? = null,
-                             exceptionCallback: ((Exception) -> Unit)? = null) :
+class MappedTask<I, M, O>(private val task: Task<I, M>,
+                          private val mapFunction: (M) -> O,
+                          successCallback: ((O) -> Unit)? = null,
+                          exceptionCallback: ((Exception) -> Unit)? = null) :
         BaseTask<I, O>(successCallback, exceptionCallback) {
 
     override val isWorking: Boolean
@@ -43,6 +44,13 @@ class MappedTask<in I, M, O>(private val task: Task<I, M>, private val mapFuncti
 
     override fun destroy() {
         task.destroy()
+
         super.destroy()
+    }
+
+    override fun onStart(callback: () -> Unit): BaseTask<I, O> {
+        task.onStart(callback)
+
+        return this
     }
 }

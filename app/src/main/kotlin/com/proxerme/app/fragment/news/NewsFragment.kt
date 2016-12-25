@@ -16,7 +16,7 @@ import com.proxerme.app.helper.NotificationHelper
 import com.proxerme.app.helper.StorageHelper
 import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.task.ProxerLoadingTask
-import com.proxerme.app.task.framework.ListenableTask
+import com.proxerme.app.task.framework.Task
 import com.proxerme.app.util.DeviceUtils
 import com.proxerme.library.connection.notifications.entitiy.News
 import com.proxerme.library.connection.notifications.request.NewsRequest
@@ -76,7 +76,7 @@ class NewsFragment : PagedLoadingFragment<PagedInput, News>() {
         NotificationHelper.cancelNotification(context, NotificationHelper.NEWS_NOTIFICATION)
     }
 
-    override fun constructTask(): ListenableTask<PagedInput, Array<News>> {
+    override fun constructTask(): Task<PagedInput, Array<News>> {
         return ProxerLoadingTask({ NewsRequest(it.page) })
     }
 

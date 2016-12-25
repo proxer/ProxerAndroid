@@ -20,7 +20,9 @@ import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.StreamResolutionTask
 import com.proxerme.app.task.StreamResolutionTask.*
-import com.proxerme.app.task.framework.*
+import com.proxerme.app.task.framework.StreamedTask
+import com.proxerme.app.task.framework.Task
+import com.proxerme.app.task.framework.ValidatingTask
 import com.proxerme.app.util.*
 import com.proxerme.app.view.MediaControlView
 import com.proxerme.library.connection.anime.entity.Stream
@@ -225,7 +227,7 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
         super.onDestroy()
     }
 
-    override fun constructTask(): ListenableTask<AnimeInput, Array<Stream>> {
+    override fun constructTask(): Task<AnimeInput, Array<Stream>> {
         return ProxerLoadingTask({ StreamsRequest(it.id, it.episode, it.language) })
     }
 
@@ -244,8 +246,8 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
     }
 
     private fun constructStreamResolverTask(): Task<String, StreamResolutionResult> {
-        return ListeningTask((StreamedTask(ProxerLoadingTask(::LinkRequest),
-                StreamResolutionTask(), { Utils.parseAndFixUrl(it) })),
+        return StreamedTask(ProxerLoadingTask(::LinkRequest),
+                StreamResolutionTask(), { Utils.parseAndFixUrl(it) },
                 streamResolverSuccess, streamResolverException).onStart {
             setRefreshing(true)
         }.onFinish {

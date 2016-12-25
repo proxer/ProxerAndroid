@@ -7,7 +7,7 @@ import com.proxerme.app.data.chatDatabase
 import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.event.ChatSynchronizationEvent
 import com.proxerme.app.helper.StorageHelper
-import com.proxerme.app.task.framework.BaseListenableTask
+import com.proxerme.app.task.framework.BaseTask
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -21,7 +21,7 @@ import java.util.concurrent.Future
  */
 class ConferencesTask(successCallback: ((List<LocalConference>) -> Unit)? = null,
                       exceptionCallback: ((Exception) -> Unit)? = null) :
-        BaseListenableTask<Context, List<LocalConference>>(successCallback, exceptionCallback) {
+        BaseTask<Context, List<LocalConference>>(successCallback, exceptionCallback) {
 
     override val isWorking: Boolean
         get() = !(future?.isDone ?: true)

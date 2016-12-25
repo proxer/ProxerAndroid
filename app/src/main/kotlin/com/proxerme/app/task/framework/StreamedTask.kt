@@ -5,13 +5,13 @@ package com.proxerme.app.task.framework
  *
  * @author Ruben Gees
  */
-class StreamedTask<in I, MO, MI, O>(private val firstTask: Task<I, MO>,
-                                    private val secondTask: Task<MI, O>,
-                                    private val mapFunction: (MO) -> MI = {
+class StreamedTask<I, MO, MI, O>(private val firstTask: Task<I, MO>,
+                                 private val secondTask: Task<MI, O>,
+                                 private val mapFunction: (MO) -> MI = {
                                         @Suppress("UNCHECKED_CAST")
                                         it as MI
                                     }, successCallback: ((O) -> Unit)? = null,
-                                    exceptionCallback: ((Exception) -> Unit)? = null) :
+                                 exceptionCallback: ((Exception) -> Unit)? = null) :
         BaseTask<I, O>(successCallback, exceptionCallback) {
 
     override val isWorking: Boolean
@@ -58,6 +58,14 @@ class StreamedTask<in I, MO, MI, O>(private val firstTask: Task<I, MO>,
     override fun destroy() {
         firstTask.destroy()
         secondTask.destroy()
+
         super.destroy()
+    }
+
+    override fun onStart(callback: () -> Unit): BaseTask<I, O> {
+        firstTask.onStart(callback)
+        secondTask.onStart(callback)
+
+        return this
     }
 }

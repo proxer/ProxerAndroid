@@ -1,7 +1,7 @@
 package com.proxerme.app.task
 
 import com.proxerme.app.application.MainApplication
-import com.proxerme.app.task.framework.BaseListenableTask
+import com.proxerme.app.task.framework.BaseTask
 import com.proxerme.library.connection.ProxerCall
 import com.proxerme.library.connection.ProxerRequest
 
@@ -13,7 +13,7 @@ import com.proxerme.library.connection.ProxerRequest
 class ProxerLoadingTask<I, O>(private var requestConstructor: (I) -> ProxerRequest<O>,
                               successCallback: ((O) -> Unit)? = null,
                               exceptionCallback: ((Exception) -> Unit)? = null) :
-        BaseListenableTask<I, O>(successCallback, exceptionCallback) {
+        BaseTask<I, O>(successCallback, exceptionCallback) {
 
     override val isWorking: Boolean
         get() = call != null

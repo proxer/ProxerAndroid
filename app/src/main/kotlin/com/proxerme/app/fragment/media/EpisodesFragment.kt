@@ -14,9 +14,8 @@ import com.proxerme.app.entitiy.RichEpisode
 import com.proxerme.app.fragment.framework.SingleLoadingFragment
 import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.task.ProxerLoadingTask
-import com.proxerme.app.task.framework.ListenableTask
-import com.proxerme.app.task.framework.ListeningTask
 import com.proxerme.app.task.framework.MappedTask
+import com.proxerme.app.task.framework.Task
 import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.info.entity.ListInfo
 import com.proxerme.library.connection.info.request.ListInfoRequest
@@ -94,14 +93,14 @@ class EpisodesFragment : SingleLoadingFragment<String, Array<RichEpisode>>() {
         }
     }
 
-    override fun constructTask(): ListenableTask<String, Array<RichEpisode>> {
-        return ListeningTask(MappedTask(ProxerLoadingTask<String, ListInfo>({
+    override fun constructTask(): Task<String, Array<RichEpisode>> {
+        return MappedTask(ProxerLoadingTask<String, ListInfo>({
             ListInfoRequest(it, 0).withLimit(Int.MAX_VALUE)
         }), { listInfo ->
             listInfo.episodes.groupBy { it.number }
                     .values.map { RichEpisode(listInfo.userState, listInfo.lastEpisode, it) }
                     .toTypedArray()
-        }))
+        })
     }
 
     override fun constructInput(): String {

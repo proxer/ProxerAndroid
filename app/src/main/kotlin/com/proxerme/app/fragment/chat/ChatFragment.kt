@@ -27,7 +27,7 @@ import com.proxerme.app.task.ChatTask
 import com.proxerme.app.task.ChatTask.ChatInput
 import com.proxerme.app.task.RefreshingChatTask
 import com.proxerme.app.task.framework.CachedTask
-import com.proxerme.app.task.framework.ListenableTask
+import com.proxerme.app.task.framework.Task
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.bindView
 import com.proxerme.app.util.inputMethodManager
@@ -63,7 +63,6 @@ class ChatFragment : PagedLoadingFragment<ChatInput, LocalMessage>() {
     override val isLoginRequired = true
     override val isSwipeToRefreshEnabled = false
     override val cacheStrategy = CachedTask.CacheStrategy.EXCEPTION
-    override val refreshLifecycle = RefreshLifecycle.RESUME
     override var hasReachedEnd: Boolean
         get() = StorageHelper.hasConferenceReachedEnd(conference.id)
         set(value) {
@@ -224,11 +223,11 @@ class ChatFragment : PagedLoadingFragment<ChatInput, LocalMessage>() {
         super.onDestroy()
     }
 
-    override fun constructTask(): ListenableTask<ChatInput, Array<LocalMessage>> {
+    override fun constructTask(): Task<ChatInput, Array<LocalMessage>> {
         return ChatTask(conference.id)
     }
 
-    override fun constructRefreshingTask(): ListenableTask<ChatInput, Array<LocalMessage>> {
+    override fun constructRefreshingTask(): Task<ChatInput, Array<LocalMessage>> {
         return RefreshingChatTask(conference.id, { context })
     }
 

@@ -5,7 +5,7 @@ import com.proxerme.app.data.chatDatabase
 import com.proxerme.app.entitiy.LocalMessage
 import com.proxerme.app.event.ChatSynchronizationEvent
 import com.proxerme.app.task.ChatTask.ChatInput
-import com.proxerme.app.task.framework.BaseListenableTask
+import com.proxerme.app.task.framework.BaseTask
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -19,7 +19,7 @@ class RefreshingChatTask(private val id: String,
                          private var contextResolver: (() -> Context)? = null,
                          successCallback: ((Array<LocalMessage>) -> Unit)? = null,
                          exceptionCallback: ((Exception) -> Unit)? = null) :
-        BaseListenableTask<ChatInput, Array<LocalMessage>>(successCallback, exceptionCallback) {
+        BaseTask<ChatInput, Array<LocalMessage>>(successCallback, exceptionCallback) {
 
     override val isWorking: Boolean
         get() = false
@@ -42,6 +42,7 @@ class RefreshingChatTask(private val id: String,
 
     override fun destroy() {
         EventBus.getDefault().unregister(this)
+
         reset()
 
         contextResolver = null

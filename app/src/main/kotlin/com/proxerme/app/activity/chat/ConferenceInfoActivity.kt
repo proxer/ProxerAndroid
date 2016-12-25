@@ -2,16 +2,16 @@ package com.proxerme.app.activity.chat
 
 import android.app.Activity
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import com.proxerme.app.R
+import com.proxerme.app.activity.MainActivity
 import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.fragment.chat.ConferenceInfoFragment
 import com.proxerme.app.util.bindView
 import org.jetbrains.anko.startActivity
 
-class ConferenceInfoActivity : AppCompatActivity() {
+class ConferenceInfoActivity : MainActivity() {
 
     companion object {
         private const val EXTRA_CONFERENCE = "extra_conference"

@@ -17,8 +17,9 @@ import java.io.IOException
 import java.net.SocketTimeoutException
 
 /**
- * A helper class, turning error codes into human-readable Strings.
-
+ * A helper class, turning error codes into human-readable Strings and producing appropriate actions
+ * from given Exceptions.
+ *
  * @author Ruben Gees
  */
 object ErrorUtils {
@@ -45,7 +46,7 @@ object ErrorUtils {
                 val message = getMessageForErrorCode(context, exception)
                 val buttonMessage = when (exception.proxerErrorCode) {
                     ProxerException.IP_BLOCKED -> context.getString(R.string.error_action_captcha)
-                    else -> null
+                    else -> ""
                 }
                 val buttonAction = when (exception.proxerErrorCode) {
                     ProxerException.IP_BLOCKED -> View.OnClickListener {
@@ -54,6 +55,7 @@ object ErrorUtils {
                                 .host("proxer.me")
                                 .addPathSegment("misc")
                                 .addPathSegment("captcha")
+                                .addQueryParameter("device", "mobile")
                                 .build())
 
                         EventBus.getDefault().post(CaptchaSolvedEvent())

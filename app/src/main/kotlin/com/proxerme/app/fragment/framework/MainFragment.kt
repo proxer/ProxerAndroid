@@ -54,6 +54,4 @@ abstract class MainFragment : Fragment() {
     fun showPage(url: HttpUrl) {
         customTabsHelper.openHttpPage(activity, url)
     }
-
-    enum class RefreshLifecycle {CREATE, START, RESUME }
 }
