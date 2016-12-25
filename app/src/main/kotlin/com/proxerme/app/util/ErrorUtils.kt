@@ -10,7 +10,7 @@ import com.proxerme.app.event.CaptchaSolvedEvent
 import com.proxerme.app.manager.UserManager
 import com.proxerme.app.service.ChatService
 import com.proxerme.library.connection.ProxerException
-import com.proxerme.library.connection.ProxerException.IP_BLOCKED
+import com.proxerme.library.connection.ProxerException.*
 import okhttp3.HttpUrl
 import org.greenrobot.eventbus.EventBus
 import java.io.IOException
@@ -30,6 +30,8 @@ object ErrorUtils {
             ProxerException.PROXER -> {
                 return when (exception.proxerErrorCode) {
                     IP_BLOCKED -> context.getString(R.string.error_ip_blocked)
+                    INFO_ENTRY_ALREADY_IN_LIST -> context.getString(R.string.error_already_in_list)
+                    INFO_EXCEEDED_ALLOWED_ENTRIES -> context.getString(R.string.error_favorites_full)
                     else -> exception.message ?: context.getString(R.string.error_unknown)
                 }
             }

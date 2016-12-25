@@ -94,8 +94,10 @@
     <string name="error_action_login">Anmelden</string>
     <string name="error_action_retry">Erneut versuchen</string>
     <string name="error_activity_not_found">Keine App zur Anzeige gefunden</string>
+    <string name="error_already_in_list">Es gibt bereits einen Eintrag in deiner Liste</string>
     <string name="error_confirm">Bestätigen</string>
     <string name="error_duplicate_user">Diesen Nutzer hast du schon hinzugefügt</string>
+    <string name="error_favorites_full">Deine Favoriten sind bereits voll</string>
     <string name="error_hentai_confirmation_needed">Für diese Kategorie musst du bestätigen, dass du 18 jahre oder älter bist</string>
     <string name="error_input_empty">Gib etwas ein</string>
     <string name="error_io">Es gab ein Speicherproblem. Versuche es erneut.</string>
