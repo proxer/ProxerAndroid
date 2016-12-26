@@ -15,6 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_margin="4dp"
+        android:drawablePadding="8dp"
         android:textAppearance="@android:style/TextAppearance.Medium"
         tools:text="engsub" />
 

@@ -311,6 +311,7 @@
     <string name="usernamefragment_ucp_overview_username">Username</string>
 
     <string name="view_media_translatorgroup">Translator-Gruppe</string>
+    <string name="item_episode_title">Episode %d</string>
 
     <plurals name="error_reminder_removal">
         <item quantity="one">Ein Lesezeichen konnte nicht gelöscht werden: %2$s</item>

@@ -14,6 +14,7 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.entitiy.RichEpisode
+import com.proxerme.app.util.Utils
 import com.proxerme.app.util.bindView
 import com.proxerme.library.info.ProxerUrlHolder
 import com.proxerme.library.parameters.LanguageParameter.Language
@@ -71,11 +72,8 @@ class EpisodeAdapter : PagingAdapter<RichEpisode>() {
         }
 
         override fun bind(item: RichEpisode) {
-            if (item.title == null) {
-                title.text = "Episode ${item.number}"
-            } else {
-                title.text = item.title
-            }
+            title.text = item.title ?: title.context
+                    .getString(R.string.item_episode_title, item.number)
 
             if (item.userState >= item.number) {
                 watched.visibility = View.VISIBLE
@@ -111,6 +109,13 @@ class EpisodeAdapter : PagingAdapter<RichEpisode>() {
                 val hosters = languageContainer.find<ViewGroup>(R.id.hosters)
 
                 language.text = languageEntry.key
+                language.setCompoundDrawablesWithIntrinsicBounds(when (
+                Utils.getLanguages(languageEntry.key).firstOrNull()) {
+                    Utils.Language.GERMAN -> R.drawable.ic_germany
+                    Utils.Language.ENGLISH -> R.drawable.ic_united_states
+                    else -> throw IllegalArgumentException("Unknown language: ${languageEntry.key}")
+                }, 0, 0, 0)
+
                 languageContainer.setOnClickListener {
                     if (adapterPosition != RecyclerView.NO_POSITION) {
                         callback?.onLanguageClick(languageEntry.key, item)
