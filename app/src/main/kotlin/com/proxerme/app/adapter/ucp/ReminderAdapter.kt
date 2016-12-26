@@ -13,6 +13,7 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
+import com.proxerme.app.util.Utils
 import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.ucp.entitiy.Reminder
 import com.proxerme.library.info.ProxerUrlHolder
@@ -52,7 +53,7 @@ class ReminderAdapter : PagingAdapter<Reminder>() {
         private val medium: TextView by bindView(R.id.medium)
         private val image: ImageView by bindView(R.id.image)
         private val episode: TextView by bindView(R.id.episode)
-        private val language: TextView by bindView(R.id.language)
+        private val language: ImageView by bindView(R.id.language)
         private val removeButton: ImageButton by bindView(R.id.removeButton)
 
         init {
@@ -79,7 +80,11 @@ class ReminderAdapter : PagingAdapter<Reminder>() {
             title.text = item.name
             medium.text = item.medium
             episode.text = episode.context.getString(R.string.reminder_episode, item.episode)
-            language.text = item.language
+            language.setImageResource(when (Utils.getLanguages(item.language).firstOrNull()) {
+                Utils.Language.ENGLISH -> R.drawable.ic_united_states
+                Utils.Language.GERMAN -> R.drawable.ic_germany
+                else -> throw IllegalArgumentException("Unknown language: ${item.language}")
+            })
 
             Glide.with(image.context)
                     .load(ProxerUrlHolder.getCoverImageUrl(item.entryId).toString())
