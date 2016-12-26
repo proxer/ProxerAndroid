@@ -18,6 +18,8 @@ import com.bumptech.glide.request.target.Target
 import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.LinkBuilder
 import com.proxerme.app.R
+import com.proxerme.app.util.Utils.Language.ENGLISH
+import com.proxerme.app.util.Utils.Language.GERMAN
 import com.proxerme.library.connection.ProxerException
 import okhttp3.HttpUrl
 import java.util.concurrent.ExecutionException
@@ -121,9 +123,21 @@ object Utils {
         return resolvedSpecializedList
     }
 
+    fun getLanguages(vararg items: String): List<Language> {
+        return items.map {
+            when (it) {
+                "engsub", "engdub", "en" -> ENGLISH
+                "gersub", "gerdub", "de" -> GERMAN
+                else -> null
+            }
+        }.filterNotNull()
+    }
+
     private fun extractPackageNames(resolveInfo: List<ResolveInfo>): MutableSet<String> {
         return resolveInfo
                 .map { it.activityInfo.packageName }
                 .toMutableSet()
     }
+
+    enum class Language { ENGLISH, GERMAN }
 }
