@@ -1,4 +1,4 @@
--optimizations !code/simplification/cast,!field/*,!class/merging/*
+-optimizations !field/*,!class/merging/*
 -optimizationpasses 100
 -allowaccessmodification
 -dontpreverify
