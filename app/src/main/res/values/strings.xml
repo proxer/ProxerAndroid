@@ -1,5 +1,5 @@
 <resources>
-    <string name="about_description">Entwickler: Ruben Gees</string>
+    <string name="about_description"><![CDATA[Entwickelt von <a href="https://www.github.com/rubengees">Ruben Gees</a><br><br>In dieser App werden Icons von <a href="http://www.freepik.com/">Freepik</a>, <a href="https://material.io/icons/">Google</a> und <a href="https://materialdesignicons.com/">weiteren Mitwirkenden</a> (Unter \"View the Contributors\") verwendet]]></string>
     <string name="about_libraries_title">Lizenzen</string>
 
     <string name="action_add_user">%1$s hat %2$s zur Konferenz hinzugefügt</string>
