@@ -71,3 +71,9 @@
 -keepclassmembers class com.facebook.android.crypto.keychain.SecureRandomFix$LinuxPRNGSecureRandom {
    public <init>(...);
 }
+-keepclassmembers class * implements com.google.android.exoplayer.extractor.Extractor {
+   public <init>(...);
+}
+-keepclassmembers class * implements com.google.android.exoplayer.text.SubtitleParser  {
+   public <init>(...);
+}
