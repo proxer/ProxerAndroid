@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.Build
 import android.os.StrictMode
 import android.support.v7.app.AppCompatDelegate
 import android.widget.ImageView
@@ -126,8 +127,15 @@ class MainApplication : Application() {
 
     private fun enableStrictModeForDebug() {
         if (BuildConfig.DEBUG) {
-            StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()
-                    .detectAll()
+            val threadPolicyBuilder = StrictMode.ThreadPolicy.Builder()
+                    .detectCustomSlowCalls()
+                    .detectNetwork()
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                threadPolicyBuilder.detectResourceMismatches()
+            }
+
+            StrictMode.setThreadPolicy(threadPolicyBuilder
                     .penaltyLog()
                     .penaltyDialog()
                     .build())
