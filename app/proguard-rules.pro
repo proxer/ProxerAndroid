@@ -66,3 +66,8 @@
 
 # Avoid crash of SearchView
 -keep class android.support.v7.widget.SearchView { *; }
+
+# Avoid crash on some emulators when running the debug variant
+-keepclassmembers class com.facebook.android.crypto.keychain.SecureRandomFix$LinuxPRNGSecureRandom {
+   public <init>(...);
+}
