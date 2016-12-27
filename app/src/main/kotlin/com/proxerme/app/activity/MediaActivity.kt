@@ -18,6 +18,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.h6ah4i.android.tablayouthelper.TabLayoutHelper
 import com.proxerme.app.R
 import com.proxerme.app.fragment.media.CommentFragment
 import com.proxerme.app.fragment.media.EpisodesFragment
@@ -173,7 +174,8 @@ class MediaActivity : MainActivity() {
         title = name
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         collapsingToolbar.isTitleEnabled = false
-        tabs.setupWithViewPager(viewPager)
+
+        TabLayoutHelper(tabs, viewPager).apply { isAutoAdjustTabModeEnabled = true }
     }
 
     private fun constructUserInfoTask(): Task<UserInfoInput, Void?> {

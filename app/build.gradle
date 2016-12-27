@@ -100,6 +100,8 @@ dependencies {
 
     compile 'de.hdodenhof:circleimageview:2.1.0'
 
+    compile 'com.h6ah4i.android.tablayouthelper:tablayouthelper:0.7.0'
+
     compile 'com.afollestad.material-dialogs:core:0.9.1.0'
 
     compile 'org.apmem.tools:layouts:1.10@aar'

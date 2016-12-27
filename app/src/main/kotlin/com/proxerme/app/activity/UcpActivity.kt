@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.ViewPager
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
+import com.h6ah4i.android.tablayouthelper.TabLayoutHelper
 import com.proxerme.app.R
 import com.proxerme.app.fragment.ucp.HistoryFragment
 import com.proxerme.app.fragment.ucp.UcpOverviewFragment
@@ -39,7 +40,8 @@ class UcpActivity : MainActivity() {
         title = getString(R.string.activity_ucp_title)
 
         viewPager.adapter = sectionsPagerAdapter
-        tabs.setupWithViewPager(viewPager)
+
+        TabLayoutHelper(tabs, viewPager).apply { isAutoAdjustTabModeEnabled = true }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

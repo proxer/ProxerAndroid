@@ -15,6 +15,7 @@ import android.view.MenuItem
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.h6ah4i.android.tablayouthelper.TabLayoutHelper
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
@@ -161,7 +162,8 @@ class ProfileActivity : MainActivity() {
         title = username
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         collapsingToolbar.isTitleEnabled = false
-        tabs.setupWithViewPager(viewPager)
+
+        TabLayoutHelper(tabs, viewPager).apply { isAutoAdjustTabModeEnabled = true }
 
         profileImage.setOnClickListener {
             if (!imageId.isNullOrBlank()) {
