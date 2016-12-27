@@ -12,6 +12,7 @@ import com.proxerme.app.adapter.media.RelationsAdapter
 import com.proxerme.app.fragment.framework.SingleLoadingFragment
 import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.task.ProxerLoadingTask
+import com.proxerme.app.task.framework.MappedTask
 import com.proxerme.app.task.framework.Task
 import com.proxerme.app.util.DeviceUtils
 import com.proxerme.app.util.bindView
@@ -93,7 +94,9 @@ class RelationsFragment : SingleLoadingFragment<String, Array<Relation>>() {
     }
 
     override fun constructTask(): Task<String, Array<Relation>> {
-        return ProxerLoadingTask(::RelationRequest)
+        return MappedTask(ProxerLoadingTask(::RelationRequest), {
+            it.filterNot { it.id == id }.sortedByDescending { it.clicks }.toTypedArray()
+        })
     }
 
     override fun constructInput(): String {
