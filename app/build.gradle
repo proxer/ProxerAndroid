@@ -85,7 +85,7 @@ dependencies {
     compile('com.mikepenz:materialdrawer:5.8.1@aar') {
         transitive = true
     }
-    compile 'com.mikepenz:iconics-core:2.8.1@aar'
+    compile 'com.mikepenz:iconics-core:2.8.2@aar'
     compile 'com.mikepenz:community-material-typeface:1.7.22.1@aar'
 
     compile 'net.danlew:android.joda:2.9.5.1'
