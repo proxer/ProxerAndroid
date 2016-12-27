@@ -7,12 +7,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.mikepenz.community_material_typeface_library.CommunityMaterial
+import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
+import com.proxerme.app.activity.MainActivity
 import com.proxerme.app.activity.MediaActivity
 import com.proxerme.app.fragment.framework.SingleLoadingFragment
 import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.framework.Task
+import com.proxerme.app.task.framework.ValidatingTask
+import com.proxerme.app.util.ErrorUtils
+import com.proxerme.app.util.Validators
 import com.proxerme.app.util.ViewUtils
 import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.info.entity.Entry
@@ -20,6 +26,7 @@ import com.proxerme.library.connection.info.entity.EntrySeason
 import com.proxerme.library.connection.info.entity.Publisher
 import com.proxerme.library.connection.info.entity.Synonym
 import com.proxerme.library.connection.info.request.EntryRequest
+import com.proxerme.library.connection.info.request.SetUserInfoRequest
 import com.proxerme.library.info.ProxerUrlHolder
 import com.proxerme.library.parameters.*
 import org.apmem.tools.layouts.FlowLayout
@@ -44,10 +51,24 @@ class MediaInfoFragment : SingleLoadingFragment<String, Entry>() {
         }
     }
 
+    private val userInfoSuccess = { nothing: Void? ->
+        Snackbar.make(root, R.string.fragment_set_user_info_success, Snackbar.LENGTH_LONG).show()
+    }
+
+    private val userInfoException = { exception: Exception ->
+        val action = ErrorUtils.handle(context as MainActivity, exception)
+
+        ViewUtils.makeMultilineSnackbar(root,
+                getString(R.string.fragment_set_user_info_error, action.message),
+                Snackbar.LENGTH_LONG).setAction(action.buttonMessage, action.buttonAction).show()
+    }
+
     override val section = Section.MEDIA_INFO
 
     private val id: String
         get() = arguments.getString(ARGUMENT_ID)
+
+    private val userInfoTask = constructUserInfoTask()
 
     private var showUnratedTags = false
     private var showSpoilerTags = false
@@ -83,11 +104,49 @@ class MediaInfoFragment : SingleLoadingFragment<String, Entry>() {
     private val groupsTitle: TextView by bindView(R.id.groupsTitle)
     private val publishers: FlowLayout by bindView(R.id.publishers)
     private val publishersTitle: TextView by bindView(R.id.publishersTitle)
+
+    private val noteContainer: ViewGroup by bindView(R.id.noteContainer)
+    private val note: ImageView by bindView(R.id.note)
+    private val favorContainer: ViewGroup by bindView(R.id.favorContainer)
+    private val favor: ImageView by bindView(R.id.favor)
+    private val finishContainer: ViewGroup by bindView(R.id.finishContainer)
+    private val finish: ImageView by bindView(R.id.finish)
+
     private val description: TextView by bindView(R.id.description)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_media_info, container, false)
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        note.setImageDrawable(IconicsDrawable(context, CommunityMaterial.Icon.cmd_clock)
+                .sizeDp(24)
+                .colorRes(R.color.icon))
+        favor.setImageDrawable(IconicsDrawable(context, CommunityMaterial.Icon.cmd_star)
+                .sizeDp(24)
+                .colorRes(R.color.icon))
+        finish.setImageDrawable(IconicsDrawable(context, CommunityMaterial.Icon.cmd_check)
+                .sizeDp(24)
+                .colorRes(R.color.icon))
+
+        noteContainer.setOnClickListener {
+            userInfoTask.execute(UserInfoInput(id, ViewStateParameter.WATCHLIST))
+        }
+        favorContainer.setOnClickListener {
+            userInfoTask.execute(UserInfoInput(id, ViewStateParameter.FAVOURITE))
+        }
+        finishContainer.setOnClickListener {
+            userInfoTask.execute(UserInfoInput(id, ViewStateParameter.FINISHED))
+        }
+    }
+
+    override fun onDestroy() {
+        userInfoTask.destroy()
+
+        super.onDestroy()
     }
 
     override fun constructTask(): Task<String, Entry> {
@@ -362,4 +421,12 @@ class MediaInfoFragment : SingleLoadingFragment<String, Entry>() {
             else -> throw IllegalArgumentException("Unknown season: ${season.season}")
         }
     }
+
+    private fun constructUserInfoTask(): Task<UserInfoInput, Void?> {
+        return ValidatingTask(ProxerLoadingTask({
+            SetUserInfoRequest(it.id, it.type)
+        }), { Validators.validateLogin() }, userInfoSuccess, userInfoException)
+    }
+
+    private class UserInfoInput(val id: String, @ViewStateParameter.ViewState val type: String)
 }

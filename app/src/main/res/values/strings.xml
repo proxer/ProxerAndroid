@@ -4,7 +4,6 @@
 
     <string name="action_add_user">%1$s hat %2$s zur Konferenz hinzugefügt</string>
     <string name="action_copy">Kopieren</string>
-    <string name="action_favor">Favorisieren</string>
     <string name="action_filter_all_anime">Alles</string>
     <string name="action_filter_all_manga">Alles</string>
     <string name="action_filter_anime_series">Serien</string>
@@ -21,7 +20,6 @@
     <string name="action_new_chat">Neuer Chat</string>
     <string name="action_new_group_with_user">Neue Gruppe mit diesem Nutzer</string>
     <string name="action_new_group">Neue Gruppe</string>
-    <string name="action_note">Vermerken</string>
     <string name="action_remove_user">%1$s hat %2$s aus der Konferenz entfernt</string>
     <string name="action_reply">Antworten</string>
     <string name="action_search">Suchen</string>
@@ -312,6 +310,10 @@
 
     <string name="view_media_translatorgroup">Translator-Gruppe</string>
     <string name="item_episode_title">Episode %d</string>
+    <string name="share_title">Teilen über</string>
+    <string name="fragment_media_info_note">Vermerken</string>
+    <string name="fragment_media_info_favor">Favorisieren</string>
+    <string name="fragment_media_info_finish">Abgeschlossen</string>
 
     <plurals name="error_reminder_removal">
         <item quantity="one">Ein Lesezeichen konnte nicht gelöscht werden: %2$s</item>

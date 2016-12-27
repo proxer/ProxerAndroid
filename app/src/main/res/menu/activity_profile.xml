@@ -12,5 +12,4 @@
         android:icon="@drawable/ic_new_group"
         android:title="@string/action_new_group_with_user"
         app:showAsAction="ifRoom" />
-
 </menu>

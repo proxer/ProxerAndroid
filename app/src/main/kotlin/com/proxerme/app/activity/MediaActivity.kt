@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.CollapsingToolbarLayout
-import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -14,7 +13,6 @@ import android.support.v4.view.ViewPager
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
-import android.view.ViewGroup
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -24,16 +22,8 @@ import com.proxerme.app.fragment.media.CommentFragment
 import com.proxerme.app.fragment.media.EpisodesFragment
 import com.proxerme.app.fragment.media.MediaInfoFragment
 import com.proxerme.app.fragment.media.RelationsFragment
-import com.proxerme.app.task.ProxerLoadingTask
-import com.proxerme.app.task.framework.Task
-import com.proxerme.app.task.framework.ValidatingTask
-import com.proxerme.app.util.ErrorUtils
-import com.proxerme.app.util.Validators
-import com.proxerme.app.util.ViewUtils
 import com.proxerme.app.util.bindView
-import com.proxerme.library.connection.info.request.SetUserInfoRequest
 import com.proxerme.library.info.ProxerUrlHolder
-import com.proxerme.library.parameters.ViewStateParameter.*
 import org.jetbrains.anko.intentFor
 
 class MediaActivity : MainActivity() {
@@ -52,18 +42,6 @@ class MediaActivity : MainActivity() {
                     EXTRA_NAME to name)
             )
         }
-    }
-
-    private val userInfoSuccess = { nothing: Void? ->
-        Snackbar.make(root, R.string.fragment_set_user_info_success, Snackbar.LENGTH_LONG).show()
-    }
-
-    private val userInfoException = { exception: Exception ->
-        val action = ErrorUtils.handle(this, exception)
-
-        ViewUtils.makeMultilineSnackbar(root,
-                getString(R.string.fragment_set_user_info_error, action.message),
-                Snackbar.LENGTH_LONG).setAction(action.buttonMessage, action.buttonAction).show()
     }
 
     private val id: String
@@ -89,11 +67,8 @@ class MediaActivity : MainActivity() {
             else -> 0
         }
 
-    private val userInfoTask = constructUserInfoTask()
-
     private var sectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
 
-    private val root: ViewGroup by bindView(R.id.root)
     private val toolbar: Toolbar by bindView(R.id.toolbar)
     private val collapsingToolbar: CollapsingToolbarLayout by bindView(R.id.collapsingToolbar)
     private val viewPager: ViewPager by bindView(R.id.viewPager)
@@ -127,13 +102,11 @@ class MediaActivity : MainActivity() {
                         .from(this)
                         .setText("https://proxer.me/info/$id")
                         .setType("text/plain")
-                        .setChooserTitle("Teilen über")
+                        .setChooserTitle(getString(R.string.share_title))
                         .startChooser()
 
                 return true
             }
-            R.id.action_note -> userInfoTask.execute(UserInfoInput(id, WATCHLIST))
-            R.id.action_favor -> userInfoTask.execute(UserInfoInput(id, FAVOURITE))
             android.R.id.home -> {
                 finish()
 
@@ -142,12 +115,6 @@ class MediaActivity : MainActivity() {
         }
 
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onDestroy() {
-        userInfoTask.destroy()
-
-        super.onDestroy()
     }
 
     fun updateName(newName: String) {
@@ -178,12 +145,6 @@ class MediaActivity : MainActivity() {
         TabLayoutHelper(tabs, viewPager).apply { isAutoAdjustTabModeEnabled = true }
     }
 
-    private fun constructUserInfoTask(): Task<UserInfoInput, Void?> {
-        return ValidatingTask(ProxerLoadingTask({
-            SetUserInfoRequest(it.id, it.type)
-        }), { Validators.validateLogin() }, userInfoSuccess, userInfoException)
-    }
-
     inner class SectionsPagerAdapter(fragmentManager: FragmentManager) :
             FragmentStatePagerAdapter(fragmentManager) {
 
@@ -209,6 +170,4 @@ class MediaActivity : MainActivity() {
             }
         }
     }
-
-    private class UserInfoInput(val id: String, @ViewState val type: String)
 }

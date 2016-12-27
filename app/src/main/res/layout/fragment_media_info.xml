@@ -373,6 +373,81 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="4dp" />
 
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:id="@+id/noteContainer"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:background="?attr/selectableItemBackground"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:padding="8dp">
+
+                                <ImageView
+                                    android:id="@+id/note"
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:layout_marginBottom="8dp" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/fragment_media_info_note"
+                                    android:textAppearance="?android:attr/textAppearanceSmall" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/favorContainer"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:background="?attr/selectableItemBackground"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:padding="8dp">
+
+                                <ImageView
+                                    android:id="@+id/favor"
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:layout_marginBottom="8dp" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/fragment_media_info_favor"
+                                    android:textAppearance="?android:attr/textAppearanceSmall" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/finishContainer"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:background="?attr/selectableItemBackground"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:padding="8dp">
+
+                                <ImageView
+                                    android:id="@+id/finish"
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:layout_marginBottom="8dp" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/fragment_media_info_finish"
+                                    android:textAppearance="?android:attr/textAppearanceSmall" />
+                            </LinearLayout>
+                        </LinearLayout>
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
 
