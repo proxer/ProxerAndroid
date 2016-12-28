@@ -138,8 +138,7 @@ class ToptenFragment : SingleLoadingFragment<Pair<ToptenInput, ToptenInput>,
     }
 
     override fun constructTask(): Task<Pair<ToptenInput, ToptenInput>, ZippedToptenResult> {
-        return ZippedTask<ToptenInput, ToptenInput, Array<ToptenEntry>,
-                Array<ToptenEntry>, ZippedToptenResult>(
+        return ZippedTask(
                 ProxerLoadingTask({ ToptenRequest(userId, username, ANIME) }),
                 ProxerLoadingTask({ ToptenRequest(userId, username, MANGA) }),
                 zipFunction = ::ZippedToptenResult
