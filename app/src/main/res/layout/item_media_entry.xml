@@ -61,17 +61,23 @@
                 android:textColor="@android:color/white"
                 tools:text="Animeserie" />
 
-            <me.zhanghai.android.materialratingbar.MaterialRatingBar
-                android:id="@+id/rating"
-                style="?attr/ratingBarStyleSmall"
+            <FrameLayout
+                android:id="@+id/ratingContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/medium"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
-                android:layout_marginTop="8dp"
-                android:isIndicator="true"
-                android:numStars="5" />
+                android:layout_marginTop="8dp">
+
+                <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                    android:id="@+id/rating"
+                    style="?attr/ratingBarStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:isIndicator="true"
+                    android:numStars="5" />
+            </FrameLayout>
 
             <TextView
                 android:id="@+id/episodes"
@@ -79,10 +85,10 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/rating"
-                android:layout_margin="8dp"
+                android:layout_below="@+id/ratingContainer"
                 android:layout_toLeftOf="@+id/languageContainer"
                 android:layout_toStartOf="@+id/languageContainer"
+                android:padding="8dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 tools:text="12 Episoden - Abgeschlossen" />
 
@@ -94,7 +100,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignTop="@+id/episodes"
-                android:layout_below="@+id/rating"
+                android:layout_below="@+id/ratingContainer"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp">
 
