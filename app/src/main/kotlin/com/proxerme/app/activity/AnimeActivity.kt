@@ -2,7 +2,9 @@ package com.proxerme.app.activity
 
 import android.app.Activity
 import android.os.Bundle
+import android.support.v4.app.ShareCompat
 import android.support.v7.widget.Toolbar
+import android.view.Menu
 import android.view.MenuItem
 import com.proxerme.app.R
 import com.proxerme.app.fragment.anime.AnimeFragment
@@ -60,8 +62,24 @@ class AnimeActivity : MainActivity() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.activity_manga, menu)
+
+        return super.onCreateOptionsMenu(menu)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.action_share -> {
+                ShareCompat.IntentBuilder
+                        .from(this)
+                        .setText("https://proxer.me/watch/$id/$episode/$language")
+                        .setType("text/plain")
+                        .setChooserTitle(getString(R.string.share_title))
+                        .startChooser()
+
+                return true
+            }
             android.R.id.home -> {
                 finish()
 
