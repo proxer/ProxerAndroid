@@ -143,6 +143,8 @@ class CommentAdapter : PagingAdapter<Comment>() {
             state.text = convertStateToText(item.state, item.episode)
 
             if (item.imageId.isBlank()) {
+                Glide.clear(userImage)
+
                 userImage.setImageDrawable(IconicsDrawable(userImage.context)
                         .icon(CommunityMaterial.Icon.cmd_account)
                         .sizeDp(96)

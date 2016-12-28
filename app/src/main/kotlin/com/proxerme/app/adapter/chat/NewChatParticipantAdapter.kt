@@ -81,6 +81,8 @@ class NewChatParticipantAdapter : RecyclerView.Adapter<NewChatParticipantAdapter
             username.text = participant.username
 
             if (participant.imageId.isBlank()) {
+                Glide.clear(image)
+
                 image.setImageDrawable(IconicsDrawable(image.context)
                         .icon(CommunityMaterial.Icon.cmd_account)
                         .sizeDp(96)

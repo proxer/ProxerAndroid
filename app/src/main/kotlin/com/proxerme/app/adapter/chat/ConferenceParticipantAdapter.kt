@@ -84,6 +84,8 @@ class ConferenceParticipantAdapter : PagingAdapter<ConferenceInfoUser>() {
             }
 
             if (item.imageId.isBlank()) {
+                Glide.clear(image)
+
                 image.setImageDrawable(IconicsDrawable(image.context)
                         .icon(CommunityMaterial.Icon.cmd_account)
                         .sizeDp(96)

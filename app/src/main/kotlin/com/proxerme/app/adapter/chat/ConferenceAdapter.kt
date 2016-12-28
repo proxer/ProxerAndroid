@@ -92,6 +92,8 @@ class ConferenceAdapter : PagingAdapter<LocalConference>() {
                     icon.icon(CommunityMaterial.Icon.cmd_account)
                 }
 
+                Glide.clear(image)
+
                 image.setImageDrawable(icon)
             } else {
                 Glide.with(image.context)
