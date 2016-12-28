@@ -11,6 +11,7 @@ import com.devbrackets.android.exomedia.listener.VideoControlsVisibilityListener
 import com.devbrackets.android.exomedia.ui.widget.EMVideoView
 import com.proxerme.app.R
 import com.proxerme.app.util.bindView
+import org.jetbrains.anko.longToast
 
 class StreamActivity : MainActivity() {
 
@@ -19,34 +20,41 @@ class StreamActivity : MainActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_stream)
 
-        setSupportActionBar(toolbar)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            setContentView(R.layout.activity_stream)
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title = null
+            setSupportActionBar(toolbar)
 
-        player.setBackgroundColor(ContextCompat.getColor(this, R.color.md_black_1000))
-        player.setVideoURI(intent.data)
-        player.videoControls?.setVisibilityListener(object : VideoControlsVisibilityListener {
-            override fun onControlsShown() {
-                toggleFullscreen(false)
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            title = null
+
+            player.setBackgroundColor(ContextCompat.getColor(this, R.color.md_black_1000))
+            player.setVideoURI(intent.data)
+            player.videoControls?.setVisibilityListener(object : VideoControlsVisibilityListener {
+                override fun onControlsShown() {
+                    toggleFullscreen(false)
+                }
+
+                override fun onControlsHidden() {
+                    toggleFullscreen(true)
+                }
+            })
+
+            player.setOnPreparedListener {
+                player.start()
             }
 
-            override fun onControlsHidden() {
-                toggleFullscreen(true)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
             }
-        })
 
-        player.setOnPreparedListener {
-            player.start()
+            toggleFullscreen(true)
+        } else {
+            longToast(getString(R.string.error_player_sdk_too_low))
+
+            finish()
         }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-        }
-
-        toggleFullscreen(true)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -68,7 +76,9 @@ class StreamActivity : MainActivity() {
     }
 
     override fun onDestroy() {
-        toggleFullscreen(false)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            toggleFullscreen(false)
+        }
 
         super.onDestroy()
     }
