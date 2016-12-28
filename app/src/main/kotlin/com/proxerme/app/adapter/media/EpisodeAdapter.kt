@@ -1,5 +1,6 @@
 package com.proxerme.app.adapter.media
 
+import android.support.v7.content.res.AppCompatResources
 import android.support.v7.widget.RecyclerView
 import android.util.SparseBooleanArray
 import android.view.LayoutInflater
@@ -108,13 +109,18 @@ class EpisodeAdapter : PagingAdapter<RichEpisode>() {
                 val language = languageContainer.find<TextView>(R.id.language)
                 val hosters = languageContainer.find<ViewGroup>(R.id.hosters)
 
+                val flag = AppCompatResources.getDrawable(language.context,
+                        when (Utils.getLanguages(languageEntry.key).firstOrNull()) {
+                            Utils.Language.GERMAN -> R.drawable.ic_germany
+                            Utils.Language.ENGLISH -> R.drawable.ic_united_states
+                            else -> {
+                                throw IllegalArgumentException("Unknown language: " +
+                                        languageEntry.key)
+                            }
+                        })
+
                 language.text = languageEntry.key
-                language.setCompoundDrawablesWithIntrinsicBounds(when (
-                Utils.getLanguages(languageEntry.key).firstOrNull()) {
-                    Utils.Language.GERMAN -> R.drawable.ic_germany
-                    Utils.Language.ENGLISH -> R.drawable.ic_united_states
-                    else -> throw IllegalArgumentException("Unknown language: ${languageEntry.key}")
-                }, 0, 0, 0)
+                language.setCompoundDrawablesWithIntrinsicBounds(flag, null, null, null)
 
                 languageContainer.setOnClickListener {
                     if (adapterPosition != RecyclerView.NO_POSITION) {
