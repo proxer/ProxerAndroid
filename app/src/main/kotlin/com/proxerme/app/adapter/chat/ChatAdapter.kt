@@ -337,7 +337,7 @@ class ChatAdapter(val isGroup: Boolean) : PagingAdapter<LocalMessage>() {
 
         protected open fun applySendStatus(message: LocalMessage) {
             if (message.id.toLong() < 0) {
-                text.setCompoundDrawables(null, null,
+                text.setCompoundDrawablesWithIntrinsicBounds(null, null,
                         IconicsDrawable(text.context)
                                 .icon(CommunityMaterial.Icon.cmd_clock)
                                 .sizeDp(24)

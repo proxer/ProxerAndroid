@@ -63,13 +63,13 @@ class ConferenceParticipantAdapter : PagingAdapter<ConferenceInfoUser>() {
             username.text = item.username
 
             if (item.id == leader) {
-                username.setCompoundDrawables(null, null, IconicsDrawable(username.context)
-                        .icon(CommunityMaterial.Icon.cmd_star)
-                        .sizeDp(32)
-                        .paddingDp(8)
-                        .colorRes(R.color.colorAccent), null)
+                username.setCompoundDrawablesWithIntrinsicBounds(null, null,
+                        IconicsDrawable(username.context)
+                                .icon(CommunityMaterial.Icon.cmd_star)
+                                .sizeDp(32)
+                                .paddingDp(8)
+                                .colorRes(R.color.colorAccent), null)
             } else {
-
                 username.setCompoundDrawables(null, null, null, null)
             }
 
