@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Base.Theme.AppTheme" parent="PreferenceFixTheme.DayNight.NoActionBar">
+    <style name="Base.Theme.AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
 
         <item name="windowActionModeOverlay">true</item>
         <item name="actionModeStyle">@style/ActionModeTheme</item>
+
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.Material</item>
+        <item name="asp_preferenceIconTint">?colorAccent</item>
+        <item name="asp_preferenceDialogIconTint">?asp_preferenceIconTint</item>
     </style>
 
     <style name="Theme.Transparent" parent="Base.Theme.AppTheme">

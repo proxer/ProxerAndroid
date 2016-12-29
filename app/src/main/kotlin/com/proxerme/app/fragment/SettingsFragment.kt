@@ -5,7 +5,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDelegate
-import android.support.v7.preference.TwoStatePreference
+import android.support.v7.preference.XpPreferenceFragment
 import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.LibsBuilder
 import com.proxerme.app.R
@@ -14,17 +14,17 @@ import com.proxerme.app.dialog.HentaiConfirmationDialog
 import com.proxerme.app.helper.PreferenceHelper
 import com.proxerme.app.helper.ServiceHelper
 import com.proxerme.app.util.openHttpPage
-import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
+import net.xpece.android.support.preference.TwoStatePreference
 import okhttp3.HttpUrl
+
 
 /**
  * TODO: Describe Class
  *
  * @author Ruben Gees
  */
-class SettingsFragment : PreferenceFragmentCompat(),
-        SharedPreferences.OnSharedPreferenceChangeListener {
+class SettingsFragment : XpPreferenceFragment(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     companion object {
         private val LIBRARIES = arrayOf("glide", "jodatimeandroid", "hawk", "materialdialogs",
@@ -53,7 +53,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
         customTabsHelper = CustomTabsHelperFragment.attachTo(this)
     }
 
-    override fun onCreatePreferencesFix(bundle: Bundle?, rootKey: String?) {
+    override fun onCreatePreferences2(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences)
 
         findPreference(PreferenceHelper.PREFERENCE_LICENCES).setOnPreferenceClickListener {

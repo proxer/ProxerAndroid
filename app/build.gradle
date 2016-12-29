@@ -70,14 +70,13 @@ dependencies {
     compile "com.android.support:design:$support_version"
     compile "com.android.support:customtabs:$support_version"
     compile "com.android.support:support-annotations:$support_version"
-    compile "com.android.support:preference-v14:$support_version"
     compile "com.android.support:preference-v7:$support_version"
 
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "org.jetbrains.anko:anko-common:$anko_version"
     compile "org.jetbrains.anko:anko-sqlite:$anko_version"
 
-    compile 'com.takisoft.fix:preference-v7:25.0.1.0'
+    compile 'net.xpece.android:support-preference:1.2.1'
 
     compile('com.mikepenz:aboutlibraries:5.9.1@aar') {
         transitive = true
