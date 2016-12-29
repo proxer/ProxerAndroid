@@ -19,7 +19,6 @@ import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import net.xpece.android.support.preference.TwoStatePreference
 import okhttp3.HttpUrl
 
-
 /**
  * TODO: Describe Class
  *
