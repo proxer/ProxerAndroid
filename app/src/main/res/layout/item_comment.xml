@@ -106,7 +106,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_margin="8dp"
                         android:text="@string/comment_rating_genre"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
 
                     <FrameLayout
                         android:layout_width="match_parent"
@@ -133,7 +133,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_margin="8dp"
                         android:text="@string/comment_rating_story"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
 
                     <FrameLayout
                         android:layout_width="match_parent"
@@ -160,7 +160,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_margin="8dp"
                         android:text="@string/comment_rating_animation"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
 
                     <FrameLayout
                         android:layout_width="match_parent"
@@ -187,7 +187,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_margin="8dp"
                         android:text="@string/comment_rating_characters"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
 
                     <FrameLayout
                         android:layout_width="match_parent"
@@ -214,7 +214,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_margin="8dp"
                         android:text="@string/comment_rating_music"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
 
                     <FrameLayout
                         android:layout_width="match_parent"
@@ -241,7 +241,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_margin="8dp"
                         android:text="@string/comment_rating_overall"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
 
                     <FrameLayout
                         android:layout_width="match_parent"

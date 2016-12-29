@@ -15,7 +15,7 @@
             android:focusableInTouchMode="true"
             android:padding="8dp"
             android:text="@string/fragment_manga_uploader"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
             android:id="@+id/uploader"
@@ -25,7 +25,7 @@
             android:background="?attr/selectableItemBackground"
             android:gravity="end"
             android:padding="8dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             tools:text="Ruby" />
     </TableRow>
 
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:padding="8dp"
             android:text="@string/view_media_translatorgroup"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
             android:id="@+id/translatorGroup"
@@ -46,7 +46,7 @@
             android:background="?attr/selectableItemBackground"
             android:gravity="end"
             android:padding="8dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             tools:text="See chapter credits" />
     </TableRow>
 
@@ -57,7 +57,7 @@
             android:layout_height="wrap_content"
             android:padding="8dp"
             android:text="@string/fragment_manga_date"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
             android:id="@+id/date"
@@ -67,7 +67,7 @@
             android:background="?attr/selectableItemBackground"
             android:gravity="end"
             android:padding="8dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             tools:text="30.12.2015" />
     </TableRow>
 

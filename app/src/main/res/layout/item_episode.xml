@@ -38,7 +38,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_margin="8dp"
                     android:layout_weight="1"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
                     tools:text="Episode 1" />
 
                 <ImageView

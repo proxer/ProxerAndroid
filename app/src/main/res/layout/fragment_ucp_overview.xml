@@ -136,7 +136,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_margin="8dp"
                                     android:text="@string/fragment_ucp_overview_epsiode_counter_episodes"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
                                 <TextView
                                     android:id="@+id/episodesRow"
@@ -144,7 +144,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_margin="8dp"
                                     android:gravity="end"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"
                                     tools:text="100" />
                             </TableRow>
 
@@ -155,7 +155,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_margin="8dp"
                                     android:text="@string/fragment_ucp_overview_epsiode_counter_minutes"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
                                 <TextView
                                     android:id="@+id/minutesRow"
@@ -163,7 +163,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_margin="8dp"
                                     android:gravity="end"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"
                                     tools:text="100" />
                             </TableRow>
 
@@ -174,7 +174,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_margin="8dp"
                                     android:text="@string/fragment_ucp_overview_epsiode_counter_hours"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
                                 <TextView
                                     android:id="@+id/hoursRow"
@@ -182,7 +182,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_margin="8dp"
                                     android:gravity="end"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"
                                     tools:text="100" />
                             </TableRow>
 
@@ -193,7 +193,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_margin="8dp"
                                     android:text="@string/fragment_ucp_overview_epsiode_counter_days"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
                                 <TextView
                                     android:id="@+id/daysRow"
@@ -201,7 +201,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_margin="8dp"
                                     android:gravity="end"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"
                                     tools:text="100" />
                             </TableRow>
 

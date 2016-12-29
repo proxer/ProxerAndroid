@@ -92,7 +92,7 @@
                                     android:layout_gravity="center_vertical"
                                     android:layout_margin="8dp"
                                     android:text="@string/fragment_media_info_original_title"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
                                 <TextView
                                     android:id="@+id/originalTitle"
@@ -101,7 +101,7 @@
                                     android:layout_gravity="center_vertical"
                                     android:layout_margin="8dp"
                                     android:gravity="end"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"
                                     android:textIsSelectable="true"
                                     tools:text="RE:Zero" />
                             </TableRow>
@@ -116,7 +116,7 @@
                                     android:layout_gravity="center_vertical"
                                     android:layout_margin="8dp"
                                     android:text="@string/fragment_media_info_english_title"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
                                 <TextView
                                     android:id="@+id/englishTitle"
@@ -125,7 +125,7 @@
                                     android:layout_gravity="center_vertical"
                                     android:layout_margin="8dp"
                                     android:gravity="end"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"
                                     android:textIsSelectable="true"
                                     tools:text="Sword Art Online" />
                             </TableRow>
@@ -140,7 +140,7 @@
                                     android:layout_gravity="center_vertical"
                                     android:layout_margin="8dp"
                                     android:text="@string/fragment_media_info_german_title"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
                                 <TextView
                                     android:id="@+id/germanTitle"
@@ -149,7 +149,7 @@
                                     android:layout_gravity="center_vertical"
                                     android:layout_margin="8dp"
                                     android:gravity="end"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"
                                     android:textIsSelectable="true"
                                     tools:text="Sword Art Online" />
                             </TableRow>
@@ -164,7 +164,7 @@
                                     android:layout_gravity="center_vertical"
                                     android:layout_margin="8dp"
                                     android:text="@string/fragment_media_info_japanese_title"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
                                 <TextView
                                     android:id="@+id/japaneseTitle"
@@ -173,7 +173,7 @@
                                     android:layout_gravity="center_vertical"
                                     android:layout_margin="8dp"
                                     android:gravity="end"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"
                                     android:textIsSelectable="true"
                                     tools:text="I can't type japanese symbols :D" />
                             </TableRow>
@@ -186,7 +186,7 @@
                                     android:layout_gravity="center_vertical"
                                     android:layout_margin="8dp"
                                     android:text="@string/fragment_media_info_season_title"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"
@@ -201,7 +201,7 @@
                                         android:layout_gravity="end"
                                         android:layout_margin="8dp"
                                         android:gravity="end"
-                                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                        android:textAppearance="?android:attr/textAppearanceMedium"
                                         tools:text="Start: Winter 2016" />
 
                                     <TextView
@@ -211,7 +211,7 @@
                                         android:layout_gravity="end"
                                         android:layout_margin="8dp"
                                         android:gravity="end"
-                                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                        android:textAppearance="?android:attr/textAppearanceMedium"
                                         tools:text="End: Summer 2016" />
 
                                 </LinearLayout>
@@ -225,7 +225,7 @@
                                     android:layout_gravity="center_vertical"
                                     android:layout_margin="8dp"
                                     android:text="@string/fragment_media_info_status_title"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
                                 <TextView
                                     android:id="@+id/status"
@@ -234,7 +234,7 @@
                                     android:layout_gravity="center_vertical"
                                     android:layout_margin="8dp"
                                     android:gravity="end"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"
                                     tools:text="Finished" />
                             </TableRow>
 
@@ -246,7 +246,7 @@
                                     android:layout_gravity="center_vertical"
                                     android:layout_margin="8dp"
                                     android:text="@string/fragment_media_info_license_title"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
                                 <TextView
                                     android:id="@+id/license"
@@ -255,7 +255,7 @@
                                     android:layout_gravity="center_vertical"
                                     android:layout_margin="8dp"
                                     android:gravity="end"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"
                                     tools:text="Licensed" />
                             </TableRow>
                         </TableLayout>

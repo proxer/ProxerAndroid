@@ -26,6 +26,5 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@null"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
-
     </FrameLayout>
 </RelativeLayout>
