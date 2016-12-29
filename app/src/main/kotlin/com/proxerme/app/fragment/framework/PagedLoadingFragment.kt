@@ -158,6 +158,8 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
 
     override fun onDestroyView() {
         headerFooterAdapter.removeFooter()
+        progress.setOnRefreshListener(null)
+        list.clearOnScrollListeners()
         list.adapter = null
         list.layoutManager = null
 
