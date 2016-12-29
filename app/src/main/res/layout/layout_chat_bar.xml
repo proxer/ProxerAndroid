@@ -40,6 +40,7 @@
             android:inputType="textMultiLine|textCapSentences|textAutoCorrect"
             android:maxLines="5"
             android:scrollbars="vertical"
+            android:textColorHint="?android:attr/textColorTertiary"
             app:emojiSize="26sp" />
 
         <android.support.design.widget.FloatingActionButton
