@@ -10,7 +10,10 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/preference_category_design_title">
+
+        <!--suppress AndroidUnknownAttribute -->
         <ListPreference
+            style="@style/Preference.Material.DialogPreference.ListPreference.SimpleMenu"
             android:defaultValue="0"
             android:entries="@array/theme_titles"
             android:entryValues="@array/theme_values"
@@ -25,7 +28,10 @@
             android:summaryOff="@string/preference_notifications_summary_off"
             android:summaryOn="@string/preference_notifications_summary_on"
             android:title="@string/preference_news_notifications_title" />
+
+        <!--suppress AndroidUnknownAttribute -->
         <ListPreference
+            style="@style/Preference.Material.DialogPreference.ListPreference.SimpleMenu"
             android:defaultValue="60"
             android:dependency="pref_news_notifications"
             android:entries="@array/news_notifications_interval_titles"

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDelegate
 import android.support.v7.preference.XpPreferenceFragment
+import android.view.View
 import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.LibsBuilder
 import com.proxerme.app.R
@@ -88,6 +89,12 @@ class SettingsFragment : XpPreferenceFragment(), SharedPreferences.OnSharedPrefe
 
             true
         }
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        listView.isFocusable = false
     }
 
     override fun onResume() {
