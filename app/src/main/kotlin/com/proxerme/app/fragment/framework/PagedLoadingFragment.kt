@@ -269,7 +269,7 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
     @Suppress("unused")
     @Subscribe
     fun onCaptchaSolved(@Suppress("UNUSED_PARAMETER") event: CaptchaSolvedEvent) {
-        if (!(activity as MainActivity).isPaused) {
+        if (!(activity as MainActivity).isPaused && headerFooterAdapter.hasFooter()) {
             task.reset()
         }
     }

@@ -176,7 +176,7 @@ abstract class SingleLoadingFragment<I, T> : MainFragment() {
     @Suppress("unused")
     @Subscribe
     fun onCaptchaSolved(@Suppress("UNUSED_PARAMETER") event: CaptchaSolvedEvent) {
-        if (!(activity as MainActivity).isPaused) {
+        if (!(activity as MainActivity).isPaused && errorContainer.visibility == View.VISIBLE) {
             task.reset()
         }
     }
