@@ -7,7 +7,7 @@ import android.support.design.widget.CollapsingToolbarLayout
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentStatePagerAdapter
+import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.ViewPager
 import android.support.v7.widget.Toolbar
 import android.view.Menu
@@ -191,7 +191,7 @@ class ProfileActivity : MainActivity() {
     }
 
     inner class SectionsPagerAdapter(fragmentManager: FragmentManager) :
-            FragmentStatePagerAdapter(fragmentManager) {
+            FragmentPagerAdapter(fragmentManager) {
 
         override fun getItem(position: Int): Fragment {
             return when (position) {
