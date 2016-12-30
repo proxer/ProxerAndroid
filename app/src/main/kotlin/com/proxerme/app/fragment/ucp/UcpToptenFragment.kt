@@ -38,10 +38,13 @@ class UcpToptenFragment : SingleLoadingFragment<Unit, ZippedUcpToptenResult>() {
     }
 
     private val removalSuccess = { nothing: Void? ->
-        present(ZippedUcpToptenResult(
-                animeAdapter.items.filterNot { it.id == itemToRemove?.id }.toTypedArray(),
-                mangaAdapter.items.filterNot { it.id == itemToRemove?.id }.toTypedArray()
-        ))
+        val newResult = ZippedUcpToptenResult(
+                animeAdapter.items.filterNot { it == itemToRemove }.toTypedArray(),
+                mangaAdapter.items.filterNot { it == itemToRemove }.toTypedArray()
+        )
+
+        cache.mutate { newResult }
+        present(newResult)
     }
 
     private val removalException = { exception: Exception ->

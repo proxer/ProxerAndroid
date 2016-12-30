@@ -50,7 +50,10 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
     }
 
     protected val refreshSuccessCallback = { data: Array<T> ->
-        adapter.insertAndScrollUpIfNecessary(list.layoutManager, list, data)
+        adapter.updateAndScrollUpIfNecessary(list.layoutManager, list, when (replaceOnRefresh) {
+            true -> { it: PagingAdapter<T> -> it.replace(data) }
+            false -> { it: PagingAdapter<T> -> it.insert(data) }
+        })
 
         showEmptyIfAppropriate()
         onItemsInserted(data)
@@ -65,7 +68,7 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
     }
 
     open protected val isSwipeToRefreshEnabled = true
-    open protected val resetOnRefresh = false
+    open protected val replaceOnRefresh = false
     open protected val isLoginRequired = false
     open protected val isHentaiConfirmationRequired = false
     open protected val cacheStrategy = CachedTask.CacheStrategy.FULL
@@ -74,6 +77,7 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
         get() = task.isWorking || refreshTask.isWorking
 
     protected lateinit var task: Task<I, Array<T>>
+    protected lateinit var cache: CachedTask<I, Array<T>>
     protected lateinit var refreshTask: Task<I, Array<T>>
 
     open protected val root: ViewGroup by bindView(R.id.root)
@@ -95,7 +99,8 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
 
         EventBus.getDefault().register(this)
 
-        task = ValidatingTask(CachedTask(constructTask(), cacheStrategy), {
+        cache = CachedTask(constructTask(), cacheStrategy)
+        task = ValidatingTask(cache, {
             if (isLoginRequired) {
                 Validators.validateLogin()
             }
@@ -137,11 +142,7 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
         progress.setColorSchemeResources(R.color.primary, R.color.accent)
         progress.setOnRefreshListener(when (isSwipeToRefreshEnabled) {
             true -> SwipeRefreshLayout.OnRefreshListener {
-                if (resetOnRefresh) {
-                    reset()
-                } else {
-                    refreshTask.execute(constructInput(0))
-                }
+                refreshTask.execute(constructInput(0))
             }
             false -> null
         })

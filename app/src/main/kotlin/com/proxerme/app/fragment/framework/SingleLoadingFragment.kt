@@ -48,6 +48,7 @@ abstract class SingleLoadingFragment<I, T> : MainFragment() {
         get() = task.isWorking
 
     protected lateinit var task: Task<I, T>
+    protected lateinit var cache: CachedTask<I, T>
 
     open protected val root: ViewGroup by bindView(R.id.root)
     open protected val progress: SwipeRefreshLayout by bindView(R.id.progress)
@@ -63,7 +64,8 @@ abstract class SingleLoadingFragment<I, T> : MainFragment() {
 
         EventBus.getDefault().register(this)
 
-        task = ValidatingTask(CachedTask(constructTask(), cacheStrategy), {
+        cache = CachedTask(constructTask(), cacheStrategy)
+        task = ValidatingTask(cache, {
             if (isLoginRequired) {
                 Validators.validateLogin()
             }

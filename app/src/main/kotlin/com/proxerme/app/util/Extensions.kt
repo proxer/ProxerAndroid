@@ -60,10 +60,10 @@ fun CustomTabsHelperFragment.openHttpPage(activity: Activity, url: HttpUrl) {
     }
 }
 
-fun <T> PagingAdapter<T>.insertAndScrollUpIfNecessary(layoutManager: RecyclerView.LayoutManager,
+fun <T> PagingAdapter<T>.updateAndScrollUpIfNecessary(layoutManager: RecyclerView.LayoutManager,
                                                       recyclerView: RecyclerView,
-                                                      items: Array<T>) {
-    val isFirstDifferent = this.items.firstOrNull() != items.firstOrNull()
+                                                      action: (it: PagingAdapter<T>) -> Unit) {
+    val previousFirstItem = this.items.firstOrNull()
     val wasAtTop = when (layoutManager) {
         is LinearLayoutManager -> layoutManager.findFirstVisibleItemPosition() == 0
         is StaggeredGridLayoutManager -> {
@@ -72,9 +72,9 @@ fun <T> PagingAdapter<T>.insertAndScrollUpIfNecessary(layoutManager: RecyclerVie
         else -> throw IllegalArgumentException("Unknown LayoutManager: $layoutManager")
     }
 
-    insert(items)
+    action.invoke(this)
 
-    if (wasAtTop && isFirstDifferent) {
+    if (wasAtTop && previousFirstItem != this.items.firstOrNull()) {
         recyclerView.post {
             recyclerView.smoothScrollToPosition(0)
         }

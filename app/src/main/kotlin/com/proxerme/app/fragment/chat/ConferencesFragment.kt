@@ -19,7 +19,7 @@ import com.proxerme.app.task.framework.CachedTask
 import com.proxerme.app.task.framework.Task
 import com.proxerme.app.util.DeviceUtils
 import com.proxerme.app.util.bindView
-import com.proxerme.app.util.insertAndScrollUpIfNecessary
+import com.proxerme.app.util.updateAndScrollUpIfNecessary
 
 /**
  * TODO: Describe class
@@ -125,7 +125,7 @@ class ConferencesFragment : SingleLoadingFragment<Context, List<LocalConference>
                 NewChatActivity.navigateTo(activity)
             })
         } else {
-            adapter.insertAndScrollUpIfNecessary(list.layoutManager, list, data.toTypedArray())
+            adapter.updateAndScrollUpIfNecessary(list.layoutManager, list, { it.insert(data) })
         }
     }
 

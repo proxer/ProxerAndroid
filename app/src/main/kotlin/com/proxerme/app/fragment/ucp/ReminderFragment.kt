@@ -39,6 +39,7 @@ class ReminderFragment : PagedLoadingFragment<ReminderInput, Reminder>() {
     private val removalSuccess = { nothing: Void? ->
         itemToRemove?.let {
             adapter.remove(it)
+            cache.mutate { data -> data?.filterNot { item -> item == it }?.toTypedArray() }
         }
 
         itemToRemove = null
@@ -56,7 +57,7 @@ class ReminderFragment : PagedLoadingFragment<ReminderInput, Reminder>() {
 
     override val section = Section.REMINDER
     override val itemsOnPage = 30
-    override val resetOnRefresh = true
+    override val replaceOnRefresh = true
     override val isLoginRequired = true
 
     override lateinit var layoutManager: StaggeredGridLayoutManager

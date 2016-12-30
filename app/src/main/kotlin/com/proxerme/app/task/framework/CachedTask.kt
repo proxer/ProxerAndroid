@@ -94,5 +94,9 @@ class CachedTask<I, O>(private val task: Task<I, O>,
         return this
     }
 
+    fun mutate(operation: (O?) -> O?) {
+        cachedResult = operation.invoke(cachedResult)
+    }
+
     enum class CacheStrategy {FULL, RESULT, EXCEPTION }
 }
