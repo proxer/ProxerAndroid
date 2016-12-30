@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
+import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.ViewPager
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
@@ -58,7 +58,7 @@ class UcpActivity : MainActivity() {
     }
 
     inner class SectionsPagerAdapter(fragmentManager: FragmentManager) :
-            FragmentPagerAdapter(fragmentManager) {
+            FragmentStatePagerAdapter(fragmentManager) {
 
         override fun getItem(position: Int): Fragment {
             return when (position) {
