@@ -44,6 +44,8 @@ class MediaListFragment : PagedLoadingFragment<MediaInput, MediaListEntry>() {
     override val section = Section.MEDIA_LIST
     override val itemsOnPage = 30
     override val isSwipeToRefreshEnabled = false
+    override val isLoginRequired: Boolean
+        get() = type == TypeParameter.HENTAI || type == TypeParameter.HMANGA
     override val isHentaiConfirmationRequired: Boolean
         get() = type == TypeParameter.HENTAI || type == TypeParameter.HMANGA
 
