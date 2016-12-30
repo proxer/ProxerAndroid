@@ -73,8 +73,6 @@ class MediaInfoFragment : SingleLoadingFragment<String, Entry>() {
     private var showUnratedTags = false
     private var showSpoilerTags = false
 
-    private val root: ViewGroup by bindView(R.id.root)
-
     private val rating: RatingBar by bindView(R.id.rating)
     private val ratingAmount: TextView by bindView(R.id.ratingAmount)
 

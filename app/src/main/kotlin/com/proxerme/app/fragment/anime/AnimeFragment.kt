@@ -126,7 +126,6 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
 
     private lateinit var header: MediaControlView
 
-    private val root: ViewGroup by bindView(R.id.root)
     private val streams: RecyclerView by bindView(R.id.streams)
 
     override fun onCreate(savedInstanceState: Bundle?) {

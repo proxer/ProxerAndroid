@@ -49,6 +49,7 @@ abstract class SingleLoadingFragment<I, T> : MainFragment() {
 
     protected lateinit var task: Task<I, T>
 
+    open protected val root: ViewGroup by bindView(R.id.root)
     open protected val progress: SwipeRefreshLayout by bindView(R.id.progress)
     open protected val contentContainer: ViewGroup by bindView(R.id.contentContainer)
     open protected val errorContainer: ViewGroup by bindView(R.id.errorContainer)

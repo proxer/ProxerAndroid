@@ -31,28 +31,26 @@ import com.proxerme.library.parameters.CategoryParameter
 class ReminderFragment : PagedLoadingFragment<ReminderInput, Reminder>() {
 
     companion object {
-
         fun newInstance(): ReminderFragment {
             return ReminderFragment()
         }
     }
 
     private val removalSuccess = { nothing: Void? ->
-        adapter.remove(adapter.itemsToRemove.first())
-
-        if (adapter.itemsToRemove.isNotEmpty()) {
-            processQueuedRemovals()
+        itemToRemove?.let {
+            adapter.remove(it)
         }
+
+        itemToRemove = null
     }
 
     private val removalException = { exception: Exception ->
-        val amount = adapter.itemsToRemove.size
+        itemToRemove = null
+
         val action = ErrorUtils.handle(activity as MainActivity, exception)
 
-        adapter.clearRemovalQueue()
-
-        ViewUtils.makeMultilineSnackbar(root, context.resources
-                .getQuantityString(R.plurals.error_reminder_removal, amount, amount, action.message),
+        ViewUtils.makeMultilineSnackbar(root,
+                context.getString(R.string.error_reminder_removal, action.message),
                 Snackbar.LENGTH_LONG).setAction(action.buttonMessage, action.buttonAction).show()
     }
 
@@ -67,7 +65,8 @@ class ReminderFragment : PagedLoadingFragment<ReminderInput, Reminder>() {
     @CategoryParameter.Category
     private var category: String? = null
 
-    private var removalTask: Task<RemovalInput, Void> = constructRemovalTask()
+    private var removalTask = constructRemovalTask()
+    private var itemToRemove: Reminder? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,8 +78,9 @@ class ReminderFragment : PagedLoadingFragment<ReminderInput, Reminder>() {
             }
 
             override fun onRemoveClick(item: Reminder) {
-                adapter.addItemToRemove(item)
-                processQueuedRemovals()
+                itemToRemove = item
+
+                removalTask.execute(item)
             }
         }
 
@@ -147,18 +147,11 @@ class ReminderFragment : PagedLoadingFragment<ReminderInput, Reminder>() {
         return getString(R.string.error_no_data_reminder)
     }
 
-    private fun constructRemovalTask(): Task<RemovalInput, Void> {
+    private fun constructRemovalTask(): Task<Reminder, Void> {
         return ValidatingTask(ProxerLoadingTask({
             DeleteReminderRequest(it.id)
         }), { Validators.validateLogin() }, removalSuccess, removalException)
     }
 
-    private fun processQueuedRemovals() {
-        if (!removalTask.isWorking) {
-            removalTask.execute(RemovalInput(adapter.itemsToRemove.first().id))
-        }
-    }
-
     class ReminderInput(page: Int, val category: String?, val itemsOnPage: Int) : PagedInput(page)
-    class RemovalInput(val id: String)
 }

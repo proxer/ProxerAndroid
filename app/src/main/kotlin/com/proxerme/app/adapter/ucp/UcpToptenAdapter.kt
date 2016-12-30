@@ -13,19 +13,18 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
-import com.proxerme.app.util.Utils
 import com.proxerme.app.util.bindView
-import com.proxerme.library.connection.ucp.entitiy.Reminder
+import com.proxerme.library.connection.ucp.entitiy.UcpToptenEntry
 import com.proxerme.library.info.ProxerUrlHolder
 
 /**
- * TODO: Describe Class
+ * TODO: Describe class
  *
  * @author Ruben Gees
  */
-class ReminderAdapter : PagingAdapter<Reminder>() {
+class UcpToptenAdapter : PagingAdapter<UcpToptenEntry>() {
 
-    var callback: ReminderAdapterCallback? = null
+    var callback: UcpToptenAdapterCallback? = null
 
     init {
         setHasStableIds(true)
@@ -33,22 +32,20 @@ class ReminderAdapter : PagingAdapter<Reminder>() {
 
     override fun getItemId(position: Int) = list[position].id.toLong()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagingViewHolder<Reminder> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
+            PagingViewHolder<UcpToptenEntry> {
         return ReminderViewHolder(LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_reminder, parent, false))
+                .inflate(R.layout.item_ucp_topten_entry, parent, false))
     }
 
     override fun removeCallback() {
         callback = null
     }
 
-    inner class ReminderViewHolder(itemView: View) : PagingViewHolder<Reminder>(itemView) {
+    inner class ReminderViewHolder(itemView: View) : PagingViewHolder<UcpToptenEntry>(itemView) {
 
         private val title: TextView by bindView(R.id.title)
-        private val medium: TextView by bindView(R.id.medium)
         private val image: ImageView by bindView(R.id.image)
-        private val episode: TextView by bindView(R.id.episode)
-        private val language: ImageView by bindView(R.id.language)
         private val removeButton: ImageButton by bindView(R.id.removeButton)
 
         init {
@@ -59,7 +56,7 @@ class ReminderAdapter : PagingAdapter<Reminder>() {
             }
 
             removeButton.setImageDrawable(IconicsDrawable(removeButton.context)
-                    .icon(CommunityMaterial.Icon.cmd_bookmark_remove)
+                    .icon(CommunityMaterial.Icon.cmd_star_off)
                     .colorRes(R.color.icon)
                     .sizeDp(48)
                     .paddingDp(12))
@@ -71,15 +68,8 @@ class ReminderAdapter : PagingAdapter<Reminder>() {
             }
         }
 
-        override fun bind(item: Reminder) {
+        override fun bind(item: UcpToptenEntry) {
             title.text = item.name
-            medium.text = item.medium
-            episode.text = episode.context.getString(R.string.reminder_episode, item.episode)
-            language.setImageResource(when (Utils.getLanguages(item.language).firstOrNull()) {
-                Utils.Language.ENGLISH -> R.drawable.ic_united_states
-                Utils.Language.GERMAN -> R.drawable.ic_germany
-                else -> throw IllegalArgumentException("Unknown language: ${item.language}")
-            })
 
             Glide.with(image.context)
                     .load(ProxerUrlHolder.getCoverImageUrl(item.entryId).toString())
@@ -88,15 +78,14 @@ class ReminderAdapter : PagingAdapter<Reminder>() {
         }
     }
 
-    abstract class ReminderAdapterCallback {
+    abstract class UcpToptenAdapterCallback {
 
-        open fun onItemClick(item: Reminder) {
-
-        }
-
-        open fun onRemoveClick(item: Reminder) {
+        open fun onItemClick(item: UcpToptenEntry) {
 
         }
 
+        open fun onRemoveClick(item: UcpToptenEntry) {
+
+        }
     }
 }

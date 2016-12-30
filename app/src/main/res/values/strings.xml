@@ -117,8 +117,11 @@
     <string name="error_no_data">Keine Daten</string>
     <string name="error_no_message">Gib eine Nachricht ein</string>
     <string name="error_no_users">Füge mindestens einen Nutzer hinzu</string>
+    <string name="error_player_sdk_too_low">Für diesen Player muss mindestens Android 4.1 (Jelly Bean) installiert sein. Bitte probiere einen anderen</string>
     <string name="error_refresh">Aktualisierung fehlgeschlagen: %s</string>
     <string name="error_resolve">Dieser Hoster konnte nicht verarbeitet werden</string>
+    <string name="error_topten_removal">Der Eintrag konnte nicht gelöscht werden: %s</string>
+    <string name="error_reminder_removal">Das Lesezeichen konnte nicht gelöscht werden: %s</string>
     <string name="error_stream_resolution">Fehler beim Laden des Streams</string>
     <string name="error_timeout">Der Server hat nicht rechtzeitig geantwortet. Versuche es später noch einmal</string>
     <string name="error_unknown">Ein unbekannter Fehler ist aufgetreten. Versuche es erneut.</string>
@@ -314,12 +317,7 @@
     <string name="fragment_media_info_note">Vermerken</string>
     <string name="fragment_media_info_favor">Favorisieren</string>
     <string name="fragment_media_info_finish">Abgeschlossen</string>
-    <string name="error_player_sdk_too_low">Für diesen Player muss mindestens Android 4.1 (Jelly Bean) installiert sein. Bitte probiere einen anderen</string>
-
-    <plurals name="error_reminder_removal">
-        <item quantity="one">Ein Lesezeichen konnte nicht gelöscht werden: %2$s</item>
-        <item quantity="other">%1$d Lesezeichen konnten nicht gelöscht werden: %2$s</item>
-    </plurals>
+    <string name="fragment_ucp_topten_title">Top 10</string>
 
     <plurals name="item_conferences_participants">
         <item quantity="other">%d Teilnehmer</item>

@@ -61,9 +61,7 @@ class UcpOverviewFragment : SingleLoadingFragment<Unit, Int>() {
         return ProxerLoadingTask({ ListsumRequest() })
     }
 
-    override fun constructInput() {
-        return Unit
-    }
+    override fun constructInput() {}
 
     override fun present(data: Int) {
         UserManager.user?.let {

@@ -100,7 +100,6 @@ class MangaFragment : SingleLoadingFragment<MangaInput, Chapter>() {
 
     private lateinit var scrollToTop: FloatingActionButton
 
-    private val root: ViewGroup by bindView(R.id.root)
     private val pages: RecyclerView by bindView(R.id.pages)
 
     override fun onCreate(savedInstanceState: Bundle?) {
