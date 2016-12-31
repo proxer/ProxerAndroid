@@ -1,6 +1,7 @@
 package com.proxerme.app.activity
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.ShareCompat
 import android.support.v7.widget.Toolbar
@@ -9,6 +10,7 @@ import android.view.MenuItem
 import com.proxerme.app.R
 import com.proxerme.app.fragment.manga.MangaFragment
 import com.proxerme.app.util.bindView
+import com.proxerme.library.parameters.SubDubLanguageParameter
 import org.jetbrains.anko.startActivity
 
 class MangaActivity : MainActivity() {
@@ -30,19 +32,36 @@ class MangaActivity : MainActivity() {
     }
 
     private val id: String
-        get() = intent.getStringExtra(EXTRA_ID)
+        get() = when {
+            intent.action == Intent.ACTION_VIEW -> intent.data.pathSegments.getOrElse(1, { "-1" })
+            else -> {
+                intent.getStringExtra(EXTRA_ID)
+            }
+        }
 
     private var episode: Int
-        get() = intent.getIntExtra(EXTRA_EPISODE, 1)
+        get() = when {
+            intent.action == Intent.ACTION_VIEW && !intent.hasExtra(EXTRA_EPISODE) -> try {
+                intent.data.pathSegments.getOrElse(2, { "1" }).toInt()
+            } catch (exception: NumberFormatException) {
+                1
+            }
+            else -> intent.getIntExtra(EXTRA_EPISODE, 1)
+        }
         set(value) {
             intent.putExtra(EXTRA_EPISODE, value)
         }
 
-    private val totalEpisodes: Int
-        get() = intent.getIntExtra(EXTRA_TOTAL_EPISODES, 1)
-
     private val language: String
-        get() = intent.getStringExtra(EXTRA_LANGUAGE)
+        get() = when {
+            intent.action == Intent.ACTION_VIEW -> {
+                intent.data.pathSegments.getOrElse(3, { SubDubLanguageParameter.ENGLISH_SUB })
+            }
+            else -> intent.getStringExtra(EXTRA_LANGUAGE)
+        }
+
+    private val totalEpisodes: Int
+        get() = intent.getIntExtra(EXTRA_TOTAL_EPISODES, -1)
 
     private val toolbar: Toolbar by bindView(R.id.toolbar)
 
