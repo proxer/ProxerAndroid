@@ -235,8 +235,11 @@ class AnimeFragment : SingleLoadingFragment<Pair<AnimeInput, String>, StreamInfo
     }
 
     override fun constructTask(): Task<Pair<AnimeInput, String>, StreamInfo> {
-        return ZippedTask(ProxerLoadingTask({ StreamsRequest(it.id, it.episode, it.language) }),
-                TotalEpisodesTask({ totalEpisodes }), ::StreamInfo)
+        return ZippedTask(
+                ProxerLoadingTask({ StreamsRequest(it.id, it.episode, it.language) }),
+                TotalEpisodesTask({ totalEpisodes }),
+                zipFunction = ::StreamInfo
+        )
     }
 
     override fun constructInput(): Pair<AnimeInput, String> {
