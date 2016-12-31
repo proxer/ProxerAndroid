@@ -21,8 +21,10 @@ class CachedTask<I, O>(private val task: Task<I, O>,
     private val shouldCacheException = cacheStrategy == CacheStrategy.FULL ||
             cacheStrategy == CacheStrategy.EXCEPTION
 
-    private var cachedResult: O? = null
-    private var cachedException: Exception? = null
+    var cachedResult: O? = null
+        private set
+    var cachedException: Exception? = null
+        private set
 
     init {
         task.successCallback = {
@@ -96,6 +98,15 @@ class CachedTask<I, O>(private val task: Task<I, O>,
 
     fun mutate(operation: (O?) -> O?) {
         cachedResult = operation.invoke(cachedResult)
+    }
+
+    fun clear(strategy: CacheStrategy) = when (strategy) {
+        CacheStrategy.FULL -> {
+            cachedResult = null
+            cachedException = null
+        }
+        CacheStrategy.RESULT -> cachedResult = null
+        CacheStrategy.EXCEPTION -> cachedException = null
     }
 
     enum class CacheStrategy {FULL, RESULT, EXCEPTION }

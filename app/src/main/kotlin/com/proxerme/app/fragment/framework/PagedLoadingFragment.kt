@@ -17,10 +17,12 @@ import com.proxerme.app.event.HentaiConfirmationEvent
 import com.proxerme.app.fragment.framework.PagedLoadingFragment.PagedInput
 import com.proxerme.app.manager.UserManager
 import com.proxerme.app.task.framework.CachedTask
+import com.proxerme.app.task.framework.CachedTask.CacheStrategy
 import com.proxerme.app.task.framework.Task
 import com.proxerme.app.task.framework.ValidatingTask
 import com.proxerme.app.util.*
 import com.proxerme.app.util.listener.EndlessRecyclerOnScrollListener
+import com.proxerme.library.connection.ProxerException
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -71,7 +73,7 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
     open protected val replaceOnRefresh = false
     open protected val isLoginRequired = false
     open protected val isHentaiConfirmationRequired = false
-    open protected val cacheStrategy = CachedTask.CacheStrategy.FULL
+    open protected val cacheStrategy = CacheStrategy.FULL
 
     open protected val isWorking: Boolean
         get() = task.isWorking || refreshTask.isWorking
@@ -270,8 +272,10 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
     @Suppress("unused")
     @Subscribe
     fun onCaptchaSolved(@Suppress("UNUSED_PARAMETER") event: CaptchaSolvedEvent) {
-        if (!(activity as MainActivity).isPaused && headerFooterAdapter.hasFooter()) {
-            task.reset()
+        cache.cachedException?.let {
+            if (it is ProxerException && it.proxerErrorCode == ProxerException.IP_BLOCKED) {
+                cache.clear(CacheStrategy.EXCEPTION)
+            }
         }
     }
 

@@ -18,6 +18,7 @@ import com.proxerme.app.util.ErrorUtils
 import com.proxerme.app.util.KotterKnife
 import com.proxerme.app.util.Validators
 import com.proxerme.app.util.bindView
+import com.proxerme.library.connection.ProxerException
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -179,8 +180,10 @@ abstract class SingleLoadingFragment<I, T> : MainFragment() {
     @Suppress("unused")
     @Subscribe
     fun onCaptchaSolved(@Suppress("UNUSED_PARAMETER") event: CaptchaSolvedEvent) {
-        if (!(activity as MainActivity).isPaused && errorContainer.visibility == View.VISIBLE) {
-            task.reset()
+        cache.cachedException?.let {
+            if (it is ProxerException && it.proxerErrorCode == ProxerException.IP_BLOCKED) {
+                cache.clear(CachedTask.CacheStrategy.EXCEPTION)
+            }
         }
     }
 
