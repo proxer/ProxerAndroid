@@ -26,6 +26,7 @@ import com.proxerme.app.helper.PreferenceHelper
 import com.proxerme.app.manager.UserManager
 import com.proxerme.app.service.ChatService
 import com.proxerme.library.connection.ProxerConnection
+import com.proxerme.library.connection.ProxerException.*
 import com.squareup.leakcanary.LeakCanary
 import com.squareup.leakcanary.RefWatcher
 import net.danlew.android.joda.JodaTimeAndroid
@@ -51,6 +52,14 @@ class MainApplication : Application() {
             private set
     }
 
+    private val loginErrorHandler = ProxerConnection.ErrorListener {
+        UserManager.notifyLoggedOut()
+
+        if (UserManager.user != null) {
+            UserManager.reLogin()
+        }
+    }
+
     override fun onCreate() {
         super.onCreate()
 
@@ -63,7 +72,12 @@ class MainApplication : Application() {
         refWatcher = LeakCanary.install(this)
         proxerConnection = ProxerConnection.Builder(BuildConfig.PROXER_API_KEY, this)
                 .withCustomUserAgent("$USER_AGENT/${BuildConfig.VERSION_NAME}")
-                .build()
+                .build().apply {
+            registerErrorListener(UCP_USER_NOT_LOGGED_IN, loginErrorHandler)
+            registerErrorListener(INFO_USER_NOT_LOGGED_IN, loginErrorHandler)
+            registerErrorListener(MESSAGES_USER_NOT_LOGGED_IN, loginErrorHandler)
+            registerErrorListener(NOTIFICATIONS_USER_NOT_LOGGED_IN, loginErrorHandler)
+        }
 
         initLibs()
         initDrawerImageLoader()
@@ -74,6 +88,7 @@ class MainApplication : Application() {
 
     override fun onTerminate() {
         EventBus.getDefault().unregister(this)
+        proxerConnection.unregisterAllErrorListeners()
 
         super.onTerminate()
     }

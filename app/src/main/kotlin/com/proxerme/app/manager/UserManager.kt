@@ -260,6 +260,15 @@ object UserManager {
         lock.unlock()
     }
 
+    fun notifyLoggedOut() {
+        lock.lock()
+
+        cancelAndClearRequests()
+        doLogout()
+
+        lock.unlock()
+    }
+
     private fun cancelAndClearRequests() {
         requests.forEach(ProxerCall::cancel)
 
