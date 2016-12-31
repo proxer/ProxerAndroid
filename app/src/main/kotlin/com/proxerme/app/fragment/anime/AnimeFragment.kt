@@ -15,14 +15,18 @@ import com.proxerme.app.activity.MainActivity
 import com.proxerme.app.activity.ProfileActivity
 import com.proxerme.app.adapter.anime.StreamAdapter
 import com.proxerme.app.fragment.anime.AnimeFragment.AnimeInput
+import com.proxerme.app.fragment.anime.AnimeFragment.StreamInfo
 import com.proxerme.app.fragment.framework.SingleLoadingFragment
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.StreamResolutionTask
 import com.proxerme.app.task.StreamResolutionTask.*
+import com.proxerme.app.task.TotalEpisodesTask
+import com.proxerme.app.task.TotalEpisodesTask.TotalEpisodesResult
 import com.proxerme.app.task.framework.StreamedTask
 import com.proxerme.app.task.framework.Task
 import com.proxerme.app.task.framework.ValidatingTask
+import com.proxerme.app.task.framework.ZippedTask
 import com.proxerme.app.util.*
 import com.proxerme.app.view.MediaControlView
 import com.proxerme.library.connection.anime.entity.Stream
@@ -41,7 +45,7 @@ import okhttp3.HttpUrl
  *
  * @author Ruben Gees
  */
-class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
+class AnimeFragment : SingleLoadingFragment<Pair<AnimeInput, String>, StreamInfo>() {
 
     companion object {
         private const val ARGUMENT_ID = "id"
@@ -49,14 +53,14 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
         private const val ARGUMENT_TOTAL_EPISODES = "total_episodes"
         private const val ARGUMENT_LANGUAGE = "language"
 
-        fun newInstance(id: String, episode: Int, totalEpisodes: Int, language: String):
+        fun newInstance(id: String, episode: Int, language: String, totalEpisodes: Int = -1):
                 AnimeFragment {
             return AnimeFragment().apply {
                 this.arguments = Bundle().apply {
                     this.putString(ARGUMENT_ID, id)
                     this.putInt(ARGUMENT_EPISODE, episode)
-                    this.putInt(ARGUMENT_TOTAL_EPISODES, totalEpisodes)
                     this.putString(ARGUMENT_LANGUAGE, language)
+                    this.putInt(ARGUMENT_TOTAL_EPISODES, totalEpisodes)
                 }
             }
         }
@@ -110,18 +114,20 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
 
     private val id: String
         get() = arguments.getString(ARGUMENT_ID)
-    private val totalEpisodes: Int
-        get() = arguments.getInt(ARGUMENT_TOTAL_EPISODES)
     private val episode: Int
         get() = arguments.getInt(ARGUMENT_EPISODE)
     private val language: String
         get() = arguments.getString(ARGUMENT_LANGUAGE)
+    private var totalEpisodes: Int
+        get() = arguments.getInt(ARGUMENT_TOTAL_EPISODES)
+        set(value) {
+            arguments.putInt(ARGUMENT_TOTAL_EPISODES, value)
+        }
 
     private lateinit var streamAdapter: StreamAdapter
     private lateinit var adapter: EasyHeaderFooterAdapter
 
     private val reminderTask = constructReminderTask()
-
     private val streamResolverTask = constructStreamResolverTask()
 
     private lateinit var header: MediaControlView
@@ -193,12 +199,14 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
         header.setDate(null)
     }
 
-    override fun present(data: Array<Stream>) {
-        if (data.isEmpty()) {
+    override fun present(data: StreamInfo) {
+        totalEpisodes = data.totalEpisodes.value
+
+        if (data.streams.isEmpty()) {
             showError(getString(R.string.error_no_data_anime), null)
         } else {
             header.setEpisodeInfo(totalEpisodes, episode)
-            streamAdapter.replace(data)
+            streamAdapter.replace(data.streams)
             adapter.setHeader(header)
         }
     }
@@ -226,12 +234,13 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
         super.onDestroy()
     }
 
-    override fun constructTask(): Task<AnimeInput, Array<Stream>> {
-        return ProxerLoadingTask({ StreamsRequest(it.id, it.episode, it.language) })
+    override fun constructTask(): Task<Pair<AnimeInput, String>, StreamInfo> {
+        return ZippedTask(ProxerLoadingTask({ StreamsRequest(it.id, it.episode, it.language) }),
+                TotalEpisodesTask({ totalEpisodes }), ::StreamInfo)
     }
 
-    override fun constructInput(): AnimeInput {
-        return AnimeInput(id, episode, language)
+    override fun constructInput(): Pair<AnimeInput, String> {
+        return AnimeInput(id, episode, language) to id
     }
 
     private fun constructReminderTask(): Task<ReminderInput, Void?> {
@@ -261,7 +270,9 @@ class AnimeFragment : SingleLoadingFragment<AnimeInput, Array<Stream>>() {
         reset()
     }
 
-    open class AnimeInput(val id: String, val episode: Int, val language: String)
-    class ReminderInput(id: String, episode: Int, language: String, val isFinished: Boolean) :
-            AnimeInput(id, episode, language)
+    class AnimeInput(val id: String, val episode: Int, val language: String)
+    class ReminderInput(val id: String, val episode: Int, val language: String,
+                        val isFinished: Boolean)
+
+    class StreamInfo(val streams: Array<Stream>, val totalEpisodes: TotalEpisodesResult)
 }

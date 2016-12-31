@@ -5,8 +5,9 @@ import android.support.design.widget.Snackbar
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.*
 import com.proxerme.app.R
+import com.proxerme.app.activity.AnimeActivity
 import com.proxerme.app.activity.MainActivity
-import com.proxerme.app.activity.MediaActivity
+import com.proxerme.app.activity.MangaActivity
 import com.proxerme.app.adapter.ucp.ReminderAdapter
 import com.proxerme.app.fragment.framework.PagedLoadingFragment
 import com.proxerme.app.fragment.ucp.ReminderFragment.ReminderInput
@@ -75,7 +76,12 @@ class ReminderFragment : PagedLoadingFragment<ReminderInput, Reminder>() {
         adapter = ReminderAdapter()
         adapter.callback = object : ReminderAdapter.ReminderAdapterCallback() {
             override fun onItemClick(item: Reminder) {
-                MediaActivity.navigateTo(activity, item.entryId, item.name)
+                when (item.category) {
+                    CategoryParameter.ANIME -> AnimeActivity.navigateTo(activity, item.entryId,
+                            item.episode, item.language)
+                    CategoryParameter.MANGA -> MangaActivity.navigateTo(activity, item.entryId,
+                            item.episode, item.language)
+                }
             }
 
             override fun onRemoveClick(item: Reminder) {

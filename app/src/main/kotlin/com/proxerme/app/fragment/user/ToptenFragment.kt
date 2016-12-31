@@ -27,8 +27,7 @@ import com.proxerme.library.parameters.CategoryParameter.MANGA
  *
  * @author Ruben Gees
  */
-class ToptenFragment : SingleLoadingFragment<Pair<ToptenInput, ToptenInput>,
-        ZippedToptenResult>() {
+class ToptenFragment : SingleLoadingFragment<Pair<ToptenInput, ToptenInput>, ZippedToptenResult>() {
 
     companion object {
         private const val ARGUMENT_USER_ID = "user_id"

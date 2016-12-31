@@ -56,11 +56,11 @@ class EpisodesFragment : SingleLoadingFragment<String, Array<RichEpisode>>() {
         adapter.callback = object : EpisodeAdapter.EpisodeAdapterCallback() {
             override fun onLanguageClick(language: String, episode: RichEpisode) {
                 if (episode.isAnime()) {
-                    AnimeActivity.navigateTo(activity, id, episode.number, episode.totalEpisodes,
-                            language)
+                    AnimeActivity.navigateTo(activity, id, episode.number, language,
+                            episode.totalEpisodes)
                 } else {
-                    MangaActivity.navigateTo(activity, id, episode.number, episode.totalEpisodes,
-                            language)
+                    MangaActivity.navigateTo(activity, id, episode.number, language,
+                            episode.totalEpisodes)
                 }
             }
         }

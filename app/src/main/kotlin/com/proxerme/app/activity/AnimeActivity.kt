@@ -19,13 +19,13 @@ class AnimeActivity : MainActivity() {
         private const val EXTRA_TOTAL_EPISODES = "extra_total_episodes"
         private const val EXTRA_LANGUAGE = "extra_language"
 
-        fun navigateTo(context: Activity, id: String, episode: Int, totalEpisodes: Int,
-                       language: String) {
+        fun navigateTo(context: Activity, id: String, episode: Int, language: String,
+                       totalEpisodes: Int = -1) {
             context.startActivity<AnimeActivity>(
                     EXTRA_ID to id,
                     EXTRA_EPISODE to episode,
-                    EXTRA_TOTAL_EPISODES to totalEpisodes,
-                    EXTRA_LANGUAGE to language
+                    EXTRA_LANGUAGE to language,
+                    EXTRA_TOTAL_EPISODES to totalEpisodes
             )
         }
     }
@@ -58,7 +58,7 @@ class AnimeActivity : MainActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction().replace(R.id.container,
-                    AnimeFragment.newInstance(id, episode, totalEpisodes, language)).commitNow()
+                    AnimeFragment.newInstance(id, episode, language, totalEpisodes)).commitNow()
         }
     }
 

@@ -16,11 +16,15 @@ import com.proxerme.app.activity.MangaActivity
 import com.proxerme.app.activity.ProfileActivity
 import com.proxerme.app.adapter.manga.MangaAdapter
 import com.proxerme.app.fragment.framework.SingleLoadingFragment
+import com.proxerme.app.fragment.manga.MangaFragment.ChapterInfo
 import com.proxerme.app.fragment.manga.MangaFragment.MangaInput
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.task.ProxerLoadingTask
+import com.proxerme.app.task.TotalEpisodesTask
+import com.proxerme.app.task.TotalEpisodesTask.TotalEpisodesResult
 import com.proxerme.app.task.framework.Task
 import com.proxerme.app.task.framework.ValidatingTask
+import com.proxerme.app.task.framework.ZippedTask
 import com.proxerme.app.util.ErrorUtils
 import com.proxerme.app.util.Validators
 import com.proxerme.app.util.ViewUtils
@@ -42,7 +46,7 @@ import org.joda.time.DateTime
  *
  * @author Ruben Gees
  */
-class MangaFragment : SingleLoadingFragment<MangaInput, Chapter>() {
+class MangaFragment : SingleLoadingFragment<Pair<MangaInput, String>, ChapterInfo>() {
 
     companion object {
 
@@ -54,14 +58,14 @@ class MangaFragment : SingleLoadingFragment<MangaInput, Chapter>() {
         private const val SCROLL_TO_TOP_ICON_SIZE = 56
         private const val SCROLL_TO_TOP_ICON_PADDING = 8
 
-        fun newInstance(id: String, episode: Int, totalEpisodes: Int, language: String):
+        fun newInstance(id: String, episode: Int, language: String, totalEpisodes: Int = -1):
                 MangaFragment {
             return MangaFragment().apply {
                 this.arguments = Bundle().apply {
                     this.putString(ARGUMENT_ID, id)
                     this.putInt(ARGUMENT_EPISODE, episode)
-                    this.putInt(ARGUMENT_TOTAL_EPISODES, totalEpisodes)
                     this.putString(ARGUMENT_LANGUAGE, language)
+                    this.putInt(ARGUMENT_TOTAL_EPISODES, totalEpisodes)
                 }
             }
         }
@@ -83,12 +87,13 @@ class MangaFragment : SingleLoadingFragment<MangaInput, Chapter>() {
 
     private val id: String
         get() = arguments.getString(ARGUMENT_ID)
-    private val totalEpisodes: Int
-        get() = arguments.getInt(ARGUMENT_TOTAL_EPISODES)
     private val episode: Int
         get() = arguments.getInt(ARGUMENT_EPISODE)
     private val language: String
         get() = arguments.getString(ARGUMENT_LANGUAGE)
+    private var totalEpisodes: Int
+        get() = arguments.getInt(ARGUMENT_TOTAL_EPISODES)
+        set(value) = arguments.putInt(ARGUMENT_TOTAL_EPISODES, value)
 
     private lateinit var mangaAdapter: MangaAdapter
     private lateinit var adapter: EasyHeaderFooterAdapter
@@ -215,17 +220,21 @@ class MangaFragment : SingleLoadingFragment<MangaInput, Chapter>() {
         super.onDestroy()
     }
 
-    override fun present(data: Chapter) {
-        header.setDate(DateTime(data.time * 1000))
+    override fun present(data: ChapterInfo) {
+        totalEpisodes = data.totalEpisodes.value
+
+        val chapter = data.chapter
+
+        header.setDate(DateTime(chapter.time * 1000))
         header.setEpisodeInfo(totalEpisodes, episode)
-        header.setUploader(MediaControlView.Uploader(data.uploaderId, data.uploader))
-        header.setTranslatorGroup(when (data.scangroupId == null || data.scangroup == null) {
+        header.setUploader(MediaControlView.Uploader(chapter.uploaderId, chapter.uploader))
+        header.setTranslatorGroup(when (chapter.scangroupId == null || chapter.scangroup == null) {
             true -> null
-            else -> MediaControlView.TranslatorGroup(data.scangroupId!!, data.scangroup!!)
+            else -> MediaControlView.TranslatorGroup(chapter.scangroupId!!, chapter.scangroup!!)
         })
 
-        data.scangroupId?.let { id ->
-            data.scangroup?.let { name ->
+        chapter.scangroupId?.let { id ->
+            chapter.scangroup?.let { name ->
                 header.setTranslatorGroup(MediaControlView.TranslatorGroup(id, name))
             }
         }
@@ -233,8 +242,8 @@ class MangaFragment : SingleLoadingFragment<MangaInput, Chapter>() {
         adapter.setHeader(header)
         adapter.setFooter(footer)
 
-        mangaAdapter.init(data.server, data.entryId, data.id)
-        mangaAdapter.replace(data.pages)
+        mangaAdapter.init(chapter.server, chapter.entryId, chapter.id)
+        mangaAdapter.replace(chapter.pages)
     }
 
     override fun clear() {
@@ -246,8 +255,12 @@ class MangaFragment : SingleLoadingFragment<MangaInput, Chapter>() {
         super.clear()
     }
 
-    override fun constructTask(): Task<MangaInput, Chapter> {
-        return ProxerLoadingTask({ ChapterRequest(it.id, it.episode, it.language) })
+    override fun constructTask(): Task<Pair<MangaInput, String>, ChapterInfo> {
+        return ZippedTask(
+                ProxerLoadingTask({ ChapterRequest(it.id, it.episode, it.language) }),
+                TotalEpisodesTask({ totalEpisodes }),
+                zipFunction = ::ChapterInfo
+        )
     }
 
     private fun constructReminderTask(): Task<ReminderInput, Void?> {
@@ -260,8 +273,8 @@ class MangaFragment : SingleLoadingFragment<MangaInput, Chapter>() {
         }), { Validators.validateLogin() }, reminderSuccess, reminderException)
     }
 
-    override fun constructInput(): MangaInput {
-        return MangaInput(id, episode, language)
+    override fun constructInput(): Pair<MangaInput, String> {
+        return MangaInput(id, episode, language) to id
     }
 
     private fun switchEpisode(newEpisode: Int) {
@@ -286,7 +299,9 @@ class MangaFragment : SingleLoadingFragment<MangaInput, Chapter>() {
         }
     }
 
-    open class MangaInput(val id: String, val episode: Int, val language: String)
-    class ReminderInput(id: String, episode: Int, language: String, val isFinished: Boolean) :
-            MangaInput(id, episode, language)
+    class MangaInput(val id: String, val episode: Int, val language: String)
+    class ReminderInput(val id: String, val episode: Int, val language: String,
+                        val isFinished: Boolean)
+
+    class ChapterInfo(val chapter: Chapter, val totalEpisodes: TotalEpisodesResult)
 }
