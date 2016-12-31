@@ -44,17 +44,23 @@ class UcpToptenFragment : SingleLoadingFragment<Unit, ZippedUcpToptenResult>() {
         )
 
         cache.mutate { newResult }
-        present(newResult)
+
+        if (view != null) {
+            present(newResult)
+        }
     }
 
     private val removalException = { exception: Exception ->
         itemToRemove = null
 
-        val action = ErrorUtils.handle(activity as MainActivity, exception)
+        if (view != null) {
+            val action = ErrorUtils.handle(activity as MainActivity, exception)
 
-        ViewUtils.makeMultilineSnackbar(root,
-                context.getString(R.string.error_topten_removal, action.message),
-                Snackbar.LENGTH_LONG).setAction(action.buttonMessage, action.buttonAction).show()
+            ViewUtils.makeMultilineSnackbar(root,
+                    context.getString(R.string.error_topten_removal, action.message),
+                    Snackbar.LENGTH_LONG).setAction(action.buttonMessage, action.buttonAction)
+                    .show()
+        }
     }
 
     override val section = Section.TOPTEN

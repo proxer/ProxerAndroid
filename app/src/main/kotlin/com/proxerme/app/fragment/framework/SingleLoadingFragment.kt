@@ -31,13 +31,17 @@ import org.greenrobot.eventbus.ThreadMode
 abstract class SingleLoadingFragment<I, T> : MainFragment() {
 
     private val successCallback = { data: T ->
-        present(data)
+        if (view != null) {
+            present(data)
+        }
     }
 
     private val exceptionCallback = { exception: Exception ->
-        val action = ErrorUtils.handle(activity as MainActivity, exception)
+        if (view != null) {
+            val action = ErrorUtils.handle(activity as MainActivity, exception)
 
-        showError(action.message, action.buttonMessage, action.buttonAction)
+            showError(action.message, action.buttonMessage, action.buttonAction)
+        }
     }
 
     open protected val isSwipeToRefreshEnabled = false
@@ -78,7 +82,9 @@ abstract class SingleLoadingFragment<I, T> : MainFragment() {
             contentContainer.visibility = View.GONE
             errorContainer.visibility = View.GONE
         }.onSuccess {
-            contentContainer.visibility = View.VISIBLE
+            if (view != null) {
+                contentContainer.visibility = View.VISIBLE
+            }
         }.onFinish {
             updateRefreshing()
         }
@@ -192,8 +198,10 @@ abstract class SingleLoadingFragment<I, T> : MainFragment() {
     }
 
     protected fun setRefreshing(enable: Boolean) {
-        progress.isEnabled = if (!enable) isSwipeToRefreshEnabled else true
-        progress.isRefreshing = enable
+        if (view != null) {
+            progress.isEnabled = if (!enable) isSwipeToRefreshEnabled else true
+            progress.isRefreshing = enable
+        }
     }
 
     abstract fun present(data: T)

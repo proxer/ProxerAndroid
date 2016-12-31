@@ -72,27 +72,27 @@ class NewChatFragment : MainFragment() {
     }
 
     private val exception = { exception: Exception ->
-        context?.let {
-            when (exception) {
-                is InvalidInputException -> {
-                    exception.message?.let {
-                        Snackbar.make(root, it, Snackbar.LENGTH_LONG).show()
+        if (view != null) {
+            context?.let {
+                when (exception) {
+                    is InvalidInputException -> {
+                        exception.message?.let {
+                            Snackbar.make(root, it, Snackbar.LENGTH_LONG).show()
+                        }
                     }
-                }
-                is TopicEmptyException -> {
-                    topicInputContainer.isErrorEnabled = true
-                    topicInputContainer.error = context.getString(R.string.error_input_empty)
-                }
-                else -> {
-                    val action = ErrorUtils.handle(activity as MainActivity, exception)
+                    is TopicEmptyException -> {
+                        topicInputContainer.isErrorEnabled = true
+                        topicInputContainer.error = context.getString(R.string.error_input_empty)
+                    }
+                    else -> {
+                        val action = ErrorUtils.handle(activity as MainActivity, exception)
 
-                    Snackbar.make(root, action.message, Snackbar.LENGTH_LONG)
-                            .setAction(action.buttonMessage, action.buttonAction).show()
+                        Snackbar.make(root, action.message, Snackbar.LENGTH_LONG)
+                                .setAction(action.buttonMessage, action.buttonAction).show()
+                    }
                 }
             }
         }
-
-        Unit
     }
 
     override val section = Section.NEW_CHAT

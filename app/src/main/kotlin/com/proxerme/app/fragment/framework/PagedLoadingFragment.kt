@@ -37,36 +37,44 @@ import org.jetbrains.anko.find
 abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput {
 
     protected val successCallback = { data: Array<T> ->
-        hasReachedEnd = data.size < itemsOnPage
+        if (view != null) {
+            hasReachedEnd = data.size < itemsOnPage
 
-        adapter.append(data)
+            adapter.append(data)
 
-        showEmptyIfAppropriate()
-        onItemsInserted(data)
+            showEmptyIfAppropriate()
+            onItemsInserted(data)
+        }
     }
 
     protected val exceptionCallback = { exception: Exception ->
-        val action = ErrorUtils.handle(activity as MainActivity, exception)
+        if (view != null) {
+            val action = ErrorUtils.handle(activity as MainActivity, exception)
 
-        showError(action.message, action.buttonMessage, action.buttonAction)
+            showError(action.message, action.buttonMessage, action.buttonAction)
+        }
     }
 
     protected val refreshSuccessCallback = { data: Array<T> ->
-        adapter.updateAndScrollUpIfNecessary(list.layoutManager, list, when (replaceOnRefresh) {
-            true -> { it: PagingAdapter<T> -> it.replace(data) }
-            false -> { it: PagingAdapter<T> -> it.insert(data) }
-        })
+        if (view != null) {
+            adapter.updateAndScrollUpIfNecessary(list.layoutManager, list, when (replaceOnRefresh) {
+                true -> { it: PagingAdapter<T> -> it.replace(data) }
+                false -> { it: PagingAdapter<T> -> it.insert(data) }
+            })
 
-        showEmptyIfAppropriate()
-        onItemsInserted(data)
+            showEmptyIfAppropriate()
+            onItemsInserted(data)
+        }
     }
 
     protected val refreshExceptionCallback = { exception: Exception ->
-        val action = ErrorUtils.handle(activity as MainActivity, exception)
+        if (view != null) {
+            val action = ErrorUtils.handle(activity as MainActivity, exception)
 
-        ViewUtils.makeMultilineSnackbar(root,
-                getString(R.string.error_refresh, action.message),
-                Snackbar.LENGTH_LONG).setAction(action.buttonMessage, action.buttonAction).show()
+            ViewUtils.makeMultilineSnackbar(root,
+                    getString(R.string.error_refresh, action.message),
+                    Snackbar.LENGTH_LONG).setAction(action.buttonMessage, action.buttonAction).show()
+        }
     }
 
     open protected val isSwipeToRefreshEnabled = true
@@ -280,8 +288,10 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
     }
 
     protected fun setRefreshing(enable: Boolean) {
-        progress.isEnabled = if (!enable) isSwipeToRefreshEnabled else true
-        progress.isRefreshing = enable
+        if (view != null) {
+            progress.isEnabled = if (!enable) isSwipeToRefreshEnabled else true
+            progress.isRefreshing = enable
+        }
     }
 
     protected fun updateRefreshing() {

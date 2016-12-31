@@ -67,42 +67,50 @@ class AnimeFragment : SingleLoadingFragment<Pair<AnimeInput, String>, StreamInfo
     }
 
     private val reminderSuccess = { nothing: Void? ->
-        Snackbar.make(root, R.string.fragment_set_user_info_success, Snackbar.LENGTH_LONG).show()
+        if (view != null) {
+            Snackbar.make(root, R.string.fragment_set_user_info_success, Snackbar.LENGTH_LONG).show()
+        }
     }
 
     private val reminderException = { exception: Exception ->
-        val action = ErrorUtils.handle(activity as MainActivity, exception)
+        if (view != null) {
+            val action = ErrorUtils.handle(activity as MainActivity, exception)
 
-        ViewUtils.makeMultilineSnackbar(root,
-                getString(R.string.fragment_set_user_info_error, action.message),
-                Snackbar.LENGTH_LONG).setAction(action.buttonMessage, action.buttonAction).show()
+            ViewUtils.makeMultilineSnackbar(root,
+                    getString(R.string.fragment_set_user_info_error, action.message),
+                    Snackbar.LENGTH_LONG).setAction(action.buttonMessage, action.buttonAction).show()
+        }
     }
 
     private val streamResolverSuccess = { result: StreamResolutionResult ->
-        if (result.intent.type == "text/html") {
-            showPage(HttpUrl.parse(result.intent.data.toString()))
-        } else {
-            try {
-                context.startActivity(result.intent)
-            } catch (exception: ActivityNotFoundException) {
-                result.notFoundAction.invoke(activity as AppCompatActivity)
+        if (view != null) {
+            if (result.intent.type == "text/html") {
+                showPage(HttpUrl.parse(result.intent.data.toString()))
+            } else {
+                try {
+                    context.startActivity(result.intent)
+                } catch (exception: ActivityNotFoundException) {
+                    result.notFoundAction.invoke(activity as AppCompatActivity)
+                }
             }
         }
     }
 
     private val streamResolverException = { exception: Exception ->
-        when (exception) {
-            is NoResolverException -> {
-                Snackbar.make(root, R.string.error_unsupported_hoster, Snackbar.LENGTH_LONG).show()
-            }
-            is StreamResolutionException -> {
-                Snackbar.make(root, R.string.error_stream_resolution, Snackbar.LENGTH_LONG).show()
-            }
-            else -> {
-                val action = ErrorUtils.handle(activity as MainActivity, exception)
+        if (view != null) {
+            when (exception) {
+                is NoResolverException -> {
+                    Snackbar.make(root, R.string.error_unsupported_hoster, Snackbar.LENGTH_LONG).show()
+                }
+                is StreamResolutionException -> {
+                    Snackbar.make(root, R.string.error_stream_resolution, Snackbar.LENGTH_LONG).show()
+                }
+                else -> {
+                    val action = ErrorUtils.handle(activity as MainActivity, exception)
 
-                Snackbar.make(root, action.message, Snackbar.LENGTH_LONG)
-                        .setAction(action.buttonMessage, action.buttonAction).show()
+                    Snackbar.make(root, action.message, Snackbar.LENGTH_LONG)
+                            .setAction(action.buttonMessage, action.buttonAction).show()
+                }
             }
         }
     }
