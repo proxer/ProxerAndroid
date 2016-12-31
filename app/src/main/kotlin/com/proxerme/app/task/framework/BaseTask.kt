@@ -46,6 +46,10 @@ abstract class BaseTask<I, O>(override var successCallback: ((O) -> Unit)? = nul
     open protected fun start(action: () -> Unit) {
         cancel()
 
+        startWithoutCancelling(action)
+    }
+
+    open protected fun startWithoutCancelling(action: () -> Unit) {
         onStartCallback?.invoke()
 
         action.invoke()

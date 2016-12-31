@@ -33,7 +33,7 @@ class ValidatingTask<I, O>(private val task: Task<I, O>,
             return
         }
 
-        start {
+        startWithoutCancelling {
             task.execute(input)
         }
     }
