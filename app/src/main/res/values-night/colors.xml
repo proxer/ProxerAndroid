@@ -16,4 +16,6 @@
     <color name="material_drawer_secondary_text">@android:color/secondary_text_dark</color>
     <color name="material_drawer_selected">@color/selected</color>
     <color name="material_drawer_divider">@color/divider</color>
+
+    <color name="emoji_background">@color/cardview_background</color>
 </resources>
