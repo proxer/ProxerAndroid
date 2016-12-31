@@ -18,9 +18,11 @@ import android.view.inputmethod.InputMethodManager
 import com.proxerme.app.R
 import com.proxerme.app.activity.WebViewActivity
 import com.proxerme.app.adapter.framework.PagingAdapter
+import com.proxerme.library.connection.manga.entity.Page
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
 import uk.co.senab.photoview.PhotoView
+import java.net.URLDecoder
 
 /**
  * TODO: Describe class
@@ -109,3 +111,10 @@ fun PhotoView.safelySetScale(scale: Float) {
 
     }
 }
+
+val Page.decodedName: String
+    get() = try {
+        URLDecoder.decode(name, "UTF-8")
+    } catch (exception: Exception) {
+        ""
+    }

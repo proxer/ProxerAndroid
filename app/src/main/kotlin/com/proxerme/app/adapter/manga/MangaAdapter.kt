@@ -12,6 +12,7 @@ import com.bumptech.glide.request.target.Target
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.util.DeviceUtils
+import com.proxerme.app.util.decodedName
 import com.proxerme.app.util.safelySetScale
 import com.proxerme.library.connection.manga.entity.Page
 import com.proxerme.library.info.ProxerUrlHolder
@@ -67,10 +68,11 @@ class MangaAdapter : PagingAdapter<Page>() {
             }
 
             Glide.with(image.context)
-                    .load(ProxerUrlHolder.getMangaPageUrl(server!!, entryId!!, id!!, item.name)
-                            .toString())
+                    .load(ProxerUrlHolder.getMangaPageUrl(server!!, entryId!!, id!!,
+                            item.decodedName).toString())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(target)
         }
     }
 }
+
