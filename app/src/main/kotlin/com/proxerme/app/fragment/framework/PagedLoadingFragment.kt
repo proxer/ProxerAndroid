@@ -62,6 +62,10 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
                 false -> { it: PagingAdapter<T> -> it.insert(data) }
             })
 
+            if (replaceOnRefresh) {
+                cache.mutate { data }
+            }
+
             showEmptyIfAppropriate()
             onItemsInserted(data)
         }
