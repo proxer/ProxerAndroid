@@ -42,6 +42,14 @@ class UcpToptenAdapter : PagingAdapter<UcpToptenEntry>() {
         callback = null
     }
 
+    override fun areItemsTheSame(oldItem: UcpToptenEntry, newItem: UcpToptenEntry): Boolean {
+        return oldItem.entryId == newItem.entryId
+    }
+
+    override fun areContentsTheSame(oldItem: UcpToptenEntry, newItem: UcpToptenEntry): Boolean {
+        return oldItem.id == newItem.id
+    }
+
     inner class ReminderViewHolder(itemView: View) : PagingViewHolder<UcpToptenEntry>(itemView) {
 
         private val title: TextView by bindView(R.id.title)
