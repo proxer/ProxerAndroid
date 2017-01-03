@@ -318,6 +318,9 @@
     <string name="fragment_media_info_favor">Favorisieren</string>
     <string name="fragment_media_info_finish">Abgeschlossen</string>
     <string name="fragment_ucp_topten_title">Top 10</string>
+    <string name="fragment_user_comment_title">Letzte Kommentare</string>
+    <string name="action_filter_anime">Anime</string>
+    <string name="action_filter_manga">Manga</string>
 
     <plurals name="item_conferences_participants">
         <item quantity="other">%d Teilnehmer</item>

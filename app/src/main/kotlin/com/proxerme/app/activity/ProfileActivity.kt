@@ -42,6 +42,7 @@ class ProfileActivity : MainActivity() {
 
         private const val SECTION_ANIME = "anime"
         private const val SECTION_MANGA = "manga"
+//        private const val SECTION_COMMENTS = "latestcomments"
 
         fun navigateTo(context: Activity, userId: String? = null, username: String? = null,
                        imageId: String? = null) {
@@ -83,6 +84,7 @@ class ProfileActivity : MainActivity() {
             Intent.ACTION_VIEW -> when (intent.data.pathSegments.getOrNull(2)) {
                 SECTION_ANIME -> 2
                 SECTION_MANGA -> 3
+//                SECTION_COMMENTS -> 4
                 else -> 0
             }
             else -> 0
@@ -199,11 +201,12 @@ class ProfileActivity : MainActivity() {
                 1 -> ToptenFragment.newInstance(userId, username)
                 2 -> UserMediaListFragment.newInstance(userId, username, CategoryParameter.ANIME)
                 3 -> UserMediaListFragment.newInstance(userId, username, CategoryParameter.MANGA)
+//                4 -> UserCommentFragment.newInstance(userId, username)
                 else -> throw RuntimeException("Unknown index passed")
             }
         }
 
-        override fun getCount() = 4
+        override fun getCount() = 5
 
         override fun getPageTitle(position: Int): CharSequence? {
             return when (position) {
@@ -211,6 +214,7 @@ class ProfileActivity : MainActivity() {
                 1 -> getString(R.string.fragment_topten_title)
                 2 -> getString(R.string.fragment_user_media_list_anime_title)
                 3 -> getString(R.string.fragment_user_media_list_manga_title)
+//                4 -> getString(R.string.fragment_user_comment_title)
                 else -> throw RuntimeException("Unknown index passed")
             }
         }
