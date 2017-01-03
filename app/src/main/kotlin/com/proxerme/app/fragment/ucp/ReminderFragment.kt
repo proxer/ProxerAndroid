@@ -44,6 +44,10 @@ class ReminderFragment : PagedLoadingFragment<ReminderInput, Reminder>() {
         }
 
         itemToRemove = null
+
+        if (view != null) {
+            showEmptyIfAppropriate()
+        }
     }
 
     private val removalException = { exception: Exception ->

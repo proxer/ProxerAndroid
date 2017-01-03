@@ -69,12 +69,6 @@ class UcpToptenFragment : SingleLoadingFragment<Unit, ZippedUcpToptenResult>() {
     private val removalTask = constructRemovalTask()
     private var itemToRemove: UcpToptenEntry? = null
 
-    private fun constructRemovalTask(): Task<UcpToptenEntry, Void?> {
-        return ValidatingTask(ProxerLoadingTask({
-            DeleteFavoriteRequest(it.id)
-        }), { Validators.validateLogin() }, removalSuccess, removalException)
-    }
-
     private lateinit var animeAdapter: UcpToptenAdapter
     private lateinit var mangaAdapter: UcpToptenAdapter
 
@@ -179,6 +173,12 @@ class UcpToptenFragment : SingleLoadingFragment<Unit, ZippedUcpToptenResult>() {
     }
 
     override fun constructInput() {}
+
+    private fun constructRemovalTask(): Task<UcpToptenEntry, Void?> {
+        return ValidatingTask(ProxerLoadingTask({
+            DeleteFavoriteRequest(it.id)
+        }), { Validators.validateLogin() }, removalSuccess, removalException)
+    }
 
     class ZippedUcpToptenResult(val animeEntries: Array<UcpToptenEntry>,
                                 val mangaEntries: Array<UcpToptenEntry>)
