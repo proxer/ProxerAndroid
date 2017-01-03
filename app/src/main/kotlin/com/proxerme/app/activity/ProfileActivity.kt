@@ -206,7 +206,7 @@ class ProfileActivity : MainActivity() {
             }
         }
 
-        override fun getCount() = 5
+        override fun getCount() = 4 // 5
 
         override fun getPageTitle(position: Int): CharSequence? {
             return when (position) {
