@@ -42,6 +42,14 @@ class ReminderAdapter : PagingAdapter<Reminder>() {
         callback = null
     }
 
+    override fun areItemsTheSame(oldItem: Reminder, newItem: Reminder): Boolean {
+        return oldItem.entryId == newItem.entryId
+    }
+
+    override fun areContentsTheSame(oldItem: Reminder, newItem: Reminder): Boolean {
+        return oldItem.id == newItem.id
+    }
+
     inner class ReminderViewHolder(itemView: View) : PagingViewHolder<Reminder>(itemView) {
 
         private val title: TextView by bindView(R.id.title)
