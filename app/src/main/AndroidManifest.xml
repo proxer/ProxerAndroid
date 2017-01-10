@@ -103,6 +103,15 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".activity.TranslatorGroupActivity"
+            android:parentActivityName=".activity.MediaActivity"
+            android:theme="@style/Theme.Translucent"
+            tools:ignore="UnusedAttribute">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.DashboardActivity" />
+        </activity>
+        <activity
             android:name=".activity.ImageDetailActivity"
             android:theme="@style/Theme.Transparent" />
         <activity

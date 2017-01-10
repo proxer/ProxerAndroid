@@ -12,6 +12,7 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
 import com.proxerme.app.activity.MainActivity
 import com.proxerme.app.activity.MediaActivity
+import com.proxerme.app.activity.TranslatorGroupActivity
 import com.proxerme.app.fragment.framework.SingleLoadingFragment
 import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.task.ProxerLoadingTask
@@ -23,7 +24,7 @@ import com.proxerme.app.util.ViewUtils
 import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.info.entity.Entry
 import com.proxerme.library.connection.info.entity.EntrySeason
-import com.proxerme.library.connection.info.entity.Publisher
+import com.proxerme.library.connection.info.entity.Industry
 import com.proxerme.library.connection.info.entity.Synonym
 import com.proxerme.library.connection.info.request.EntryRequest
 import com.proxerme.library.connection.info.request.SetUserInfoRequest
@@ -192,15 +193,12 @@ class MediaInfoFragment : SingleLoadingFragment<String, Entry>() {
         buildTagsView(data)
         buildFskView(data.fsk)
 
-        buildBadgeView(groups, data.subgroups, { it.name }, { view, subgroup ->
-            showPage(ProxerUrlHolder.getSubgroupUrl(subgroup.id,
-                    ProxerUrlHolder.DEVICE_QUERY_PARAMETER_DEFAULT))
+        buildBadgeView(groups, data.translatorGroups, { it.name }, { view, translatorGroup ->
+            TranslatorGroupActivity.navigateTo(activity, translatorGroup.id, translatorGroup.name)
         }, groupsTitle)
 
-        buildBadgeView(publishers, data.publishers, {
-            getPublisherString(it)
-        }, { view, publisher ->
-            showPage(ProxerUrlHolder.getPublisherUrl(publisher.id,
+        buildBadgeView(publishers, data.industries, { getPublisherString(it) }, { view, industry ->
+            showPage(ProxerUrlHolder.getPublisherUrl(industry.id,
                     ProxerUrlHolder.DEVICE_QUERY_PARAMETER_DEFAULT))
         }, publishersTitle)
 
@@ -379,8 +377,8 @@ class MediaInfoFragment : SingleLoadingFragment<String, Entry>() {
         }
     }
 
-    private fun getPublisherString(publisher: Publisher): String {
-        return "${publisher.name} (${publisher.type.capitalize()})"
+    private fun getPublisherString(industry: Industry): String {
+        return "${industry.name} (${industry.type.capitalize()})"
     }
 
     private fun getStateString(state: Int): String {

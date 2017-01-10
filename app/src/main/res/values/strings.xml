@@ -321,6 +321,9 @@
     <string name="fragment_user_comment_title">Letzte Kommentare</string>
     <string name="action_filter_anime">Anime</string>
     <string name="action_filter_manga">Manga</string>
+    <string name="fragment_translator_group_description">Beschreibung</string>
+    <string name="fragment_translator_group_language">Sprache</string>
+    <string name="fragment_translator_group_link">Link</string>
 
     <plurals name="item_conferences_participants">
         <item quantity="other">%d Teilnehmer</item>

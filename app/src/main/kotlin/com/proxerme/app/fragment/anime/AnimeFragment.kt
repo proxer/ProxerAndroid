@@ -154,8 +154,8 @@ class AnimeFragment : SingleLoadingFragment<Pair<AnimeInput, String>, StreamInfo
             }
 
             override fun onTranslatorGroupClick(item: Stream) {
-                item.subgroupId?.let {
-                    showPage(ProxerUrlHolder.getSubgroupUrl(it,
+                item.translatorGroup?.let {
+                    showPage(ProxerUrlHolder.getTranslatorGroupUrl(it,
                             ProxerUrlHolder.DEVICE_QUERY_PARAMETER_DEFAULT))
                 }
             }

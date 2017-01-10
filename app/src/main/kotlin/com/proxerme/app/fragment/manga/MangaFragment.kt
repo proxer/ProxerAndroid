@@ -159,7 +159,7 @@ class MangaFragment : SingleLoadingFragment<Pair<MangaInput, String>, ChapterInf
         pages.adapter = adapter
 
         header.onTranslatorGroupClickListener = {
-            showPage(ProxerUrlHolder.getSubgroupUrl(it.id,
+            showPage(ProxerUrlHolder.getTranslatorGroupUrl(it.id,
                     ProxerUrlHolder.DEVICE_QUERY_PARAMETER_DEFAULT))
         }
 

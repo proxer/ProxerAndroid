@@ -104,7 +104,7 @@ class StreamAdapter(private val getRealPosition: (Int) -> Int) : PagingAdapter<S
         override fun bind(item: Stream) {
             name.text = item.hosterName
             uploaderText.text = item.uploader
-            translatorGroup.text = item.subgroup ?:
+            translatorGroup.text = item.translatorGroup ?:
                     translatorGroup.context.getString(R.string.fragment_anime_empty_subgoup)
             dateText.text = DateTime(item.time * 1000).toString(DATE_PATTERN)
             if (expanded.get(item.id.toLong(), false)) {
