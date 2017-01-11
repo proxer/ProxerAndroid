@@ -324,6 +324,10 @@
     <string name="fragment_translator_group_description">Beschreibung</string>
     <string name="fragment_translator_group_language">Sprache</string>
     <string name="fragment_translator_group_link">Link</string>
+    <string name="fragment_industry_type">Typ</string>
+    <string name="fragment_industry_language">Sprache</string>
+    <string name="fragment_industry_link">Link</string>
+    <string name="fragment_industry_description">Beschreibung</string>
 
     <plurals name="item_conferences_participants">
         <item quantity="other">%d Teilnehmer</item>

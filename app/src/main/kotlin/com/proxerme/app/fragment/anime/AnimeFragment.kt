@@ -13,6 +13,7 @@ import com.proxerme.app.R
 import com.proxerme.app.activity.AnimeActivity
 import com.proxerme.app.activity.MainActivity
 import com.proxerme.app.activity.ProfileActivity
+import com.proxerme.app.activity.TranslatorGroupActivity
 import com.proxerme.app.adapter.anime.StreamAdapter
 import com.proxerme.app.fragment.anime.AnimeFragment.AnimeInput
 import com.proxerme.app.fragment.anime.AnimeFragment.StreamInfo
@@ -34,7 +35,6 @@ import com.proxerme.library.connection.anime.request.LinkRequest
 import com.proxerme.library.connection.anime.request.StreamsRequest
 import com.proxerme.library.connection.info.request.SetUserInfoRequest
 import com.proxerme.library.connection.ucp.request.SetReminderRequest
-import com.proxerme.library.info.ProxerUrlHolder
 import com.proxerme.library.parameters.CategoryParameter
 import com.proxerme.library.parameters.ViewStateParameter
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
@@ -154,9 +154,10 @@ class AnimeFragment : SingleLoadingFragment<Pair<AnimeInput, String>, StreamInfo
             }
 
             override fun onTranslatorGroupClick(item: Stream) {
-                item.translatorGroup?.let {
-                    showPage(ProxerUrlHolder.getTranslatorGroupUrl(it,
-                            ProxerUrlHolder.DEVICE_QUERY_PARAMETER_DEFAULT))
+                item.translatorGroupId?.let { id ->
+                    item.translatorGroup?.let { name ->
+                        TranslatorGroupActivity.navigateTo(activity, id, name)
+                    }
                 }
             }
 

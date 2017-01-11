@@ -9,7 +9,7 @@ import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.proxerme.app.R
-import com.proxerme.app.fragment.info.TranslatorGroupInfoFragment
+import com.proxerme.app.fragment.info.IndustryInfoFragment
 import com.proxerme.app.util.androidUri
 import com.proxerme.app.util.bindView
 import com.proxerme.library.info.ProxerUrlHolder
@@ -20,14 +20,14 @@ import org.jetbrains.anko.intentFor
  *
  * @author Ruben Gees
  */
-class TranslatorGroupActivity : MainActivity() {
+class IndustryActivity : MainActivity() {
 
     companion object {
         private const val EXTRA_ID = "extra_id"
         private const val EXTRA_NAME = "extra_name"
 
         fun navigateTo(context: Activity, id: String, name: String? = null) {
-            context.startActivity(context.intentFor<TranslatorGroupActivity>(
+            context.startActivity(context.intentFor<IndustryActivity>(
                     EXTRA_ID to id,
                     EXTRA_NAME to name)
             )
@@ -58,15 +58,15 @@ class TranslatorGroupActivity : MainActivity() {
         title = name
 
         image.setOnClickListener {
-            ImageDetailActivity.navigateTo(this@TranslatorGroupActivity, it as ImageView,
-                    ProxerUrlHolder.getTranslatorGroupImageUrl(id))
+            ImageDetailActivity.navigateTo(this@IndustryActivity, it as ImageView,
+                    ProxerUrlHolder.getIndustryImageUrl(id))
         }
 
         loadImage()
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction().replace(R.id.container,
-                    TranslatorGroupInfoFragment.newInstance(id)).commitNow()
+                    IndustryInfoFragment.newInstance(id)).commitNow()
         }
     }
 
@@ -89,7 +89,7 @@ class TranslatorGroupActivity : MainActivity() {
 
     private fun loadImage() {
         Glide.with(this)
-                .load(ProxerUrlHolder.getTranslatorGroupImageUrl(id).androidUri())
+                .load(ProxerUrlHolder.getIndustryImageUrl(id).androidUri())
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .into(image)
     }

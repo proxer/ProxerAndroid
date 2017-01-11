@@ -10,6 +10,7 @@ import android.widget.*
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
+import com.proxerme.app.activity.IndustryActivity
 import com.proxerme.app.activity.MainActivity
 import com.proxerme.app.activity.MediaActivity
 import com.proxerme.app.activity.TranslatorGroupActivity
@@ -23,8 +24,8 @@ import com.proxerme.app.util.Validators
 import com.proxerme.app.util.ViewUtils
 import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.info.entity.Entry
+import com.proxerme.library.connection.info.entity.EntryIndustry
 import com.proxerme.library.connection.info.entity.EntrySeason
-import com.proxerme.library.connection.info.entity.Industry
 import com.proxerme.library.connection.info.entity.Synonym
 import com.proxerme.library.connection.info.request.EntryRequest
 import com.proxerme.library.connection.info.request.SetUserInfoRequest
@@ -197,9 +198,8 @@ class MediaInfoFragment : SingleLoadingFragment<String, Entry>() {
             TranslatorGroupActivity.navigateTo(activity, translatorGroup.id, translatorGroup.name)
         }, groupsTitle)
 
-        buildBadgeView(publishers, data.industries, { getPublisherString(it) }, { view, industry ->
-            showPage(ProxerUrlHolder.getPublisherUrl(industry.id,
-                    ProxerUrlHolder.DEVICE_QUERY_PARAMETER_DEFAULT))
+        buildBadgeView(publishers, data.industries, { getIndustryString(it) }, { view, industry ->
+            IndustryActivity.navigateTo(activity, industry.id, industry.name)
         }, publishersTitle)
 
         description.text = data.description
@@ -377,8 +377,9 @@ class MediaInfoFragment : SingleLoadingFragment<String, Entry>() {
         }
     }
 
-    private fun getPublisherString(industry: Industry): String {
-        return "${industry.name} (${industry.type.capitalize()})"
+    private fun getIndustryString(industry: EntryIndustry): String {
+        return "${industry.name} (${industry.type.replace("_", " ").split(" ")
+                .map(String::capitalize).joinToString(separator = " ")})"
     }
 
     private fun getStateString(state: Int): String {

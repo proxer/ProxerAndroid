@@ -14,6 +14,7 @@ import com.proxerme.app.R
 import com.proxerme.app.activity.MainActivity
 import com.proxerme.app.activity.MangaActivity
 import com.proxerme.app.activity.ProfileActivity
+import com.proxerme.app.activity.TranslatorGroupActivity
 import com.proxerme.app.adapter.manga.MangaAdapter
 import com.proxerme.app.fragment.framework.SingleLoadingFragment
 import com.proxerme.app.fragment.manga.MangaFragment.ChapterInfo
@@ -34,7 +35,6 @@ import com.proxerme.library.connection.info.request.SetUserInfoRequest
 import com.proxerme.library.connection.manga.entity.Chapter
 import com.proxerme.library.connection.manga.request.ChapterRequest
 import com.proxerme.library.connection.ucp.request.SetReminderRequest
-import com.proxerme.library.info.ProxerUrlHolder
 import com.proxerme.library.parameters.CategoryParameter
 import com.proxerme.library.parameters.ViewStateParameter
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
@@ -159,8 +159,7 @@ class MangaFragment : SingleLoadingFragment<Pair<MangaInput, String>, ChapterInf
         pages.adapter = adapter
 
         header.onTranslatorGroupClickListener = {
-            showPage(ProxerUrlHolder.getTranslatorGroupUrl(it.id,
-                    ProxerUrlHolder.DEVICE_QUERY_PARAMETER_DEFAULT))
+            TranslatorGroupActivity.navigateTo(activity, it.id, it.name)
         }
 
         header.onUploaderClickListener = {

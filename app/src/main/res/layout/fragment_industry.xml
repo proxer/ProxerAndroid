@@ -46,7 +46,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:layout_margin="8dp"
-                                android:text="@string/fragment_translator_group_language"
+                                android:text="@string/fragment_industry_language"
                                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
                             <FrameLayout
@@ -63,6 +63,28 @@
                             </FrameLayout>
                         </TableRow>
 
+                        <TableRow android:id="@+id/typeRow">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_margin="8dp"
+                                android:text="@string/fragment_industry_type"
+                                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                            <TextView
+                                android:id="@+id/type"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_margin="8dp"
+                                android:gravity="end"
+                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                android:textIsSelectable="true"
+                                tools:text="Publisher" />
+                        </TableRow>
+
                         <TableRow android:id="@+id/linkRow">
 
                             <TextView
@@ -70,7 +92,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:layout_margin="8dp"
-                                android:text="@string/fragment_translator_group_link"
+                                android:text="@string/fragment_industry_link"
                                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
                             <TextView
@@ -108,7 +130,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="8dp"
-                            android:text="@string/fragment_translator_group_description"
+                            android:text="@string/fragment_industry_description"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="@color/colorAccent" />
 

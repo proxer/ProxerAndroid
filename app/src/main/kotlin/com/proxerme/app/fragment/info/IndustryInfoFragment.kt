@@ -9,14 +9,14 @@ import android.widget.TextView
 import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.TouchableMovementMethod
 import com.proxerme.app.R
-import com.proxerme.app.activity.TranslatorGroupActivity
+import com.proxerme.app.activity.IndustryActivity
 import com.proxerme.app.fragment.framework.SingleLoadingFragment
 import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.bindView
-import com.proxerme.library.connection.info.entity.TranslatorGroup
-import com.proxerme.library.connection.info.request.TranslatorGroupRequest
+import com.proxerme.library.connection.info.entity.Industry
+import com.proxerme.library.connection.info.request.IndustryRequest
 import com.proxerme.library.parameters.CountryParameter
 import org.jetbrains.anko.toast
 
@@ -25,13 +25,13 @@ import org.jetbrains.anko.toast
  *
  * @author Ruben Gees
  */
-class TranslatorGroupInfoFragment : SingleLoadingFragment<String, TranslatorGroup>() {
+class IndustryInfoFragment : SingleLoadingFragment<String, Industry>() {
 
     companion object {
         private const val ARGUMENT_ID = "id"
 
-        fun newInstance(id: String): TranslatorGroupInfoFragment {
-            return TranslatorGroupInfoFragment().apply {
+        fun newInstance(id: String): IndustryInfoFragment {
+            return IndustryInfoFragment().apply {
                 this.arguments = Bundle().apply {
                     this.putString(ARGUMENT_ID, id)
                 }
@@ -39,9 +39,10 @@ class TranslatorGroupInfoFragment : SingleLoadingFragment<String, TranslatorGrou
         }
     }
 
-    override val section = Section.TRANSLATOR_GROUP_INFO
+    override val section = Section.INDUSTRY_INFO
 
     private val language: ImageView by bindView(R.id.language)
+    private val type: TextView by bindView(R.id.type)
     private val link: TextView by bindView(R.id.link)
 
     private val descriptionContainer: ViewGroup by bindView(R.id.descriptionContainer)
@@ -52,7 +53,7 @@ class TranslatorGroupInfoFragment : SingleLoadingFragment<String, TranslatorGrou
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_translator_group, container, false)
+        return inflater.inflate(R.layout.fragment_industry, container, false)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -61,8 +62,8 @@ class TranslatorGroupInfoFragment : SingleLoadingFragment<String, TranslatorGrou
         link.movementMethod = TouchableMovementMethod.getInstance()
     }
 
-    override fun present(data: TranslatorGroup) {
-        (activity as TranslatorGroupActivity).updateName(data.name)
+    override fun present(data: Industry) {
+        (activity as IndustryActivity).updateName(data.name)
 
         language.setImageResource(when (data.country) {
             CountryParameter.ENGLISH -> R.drawable.ic_united_states
@@ -70,7 +71,9 @@ class TranslatorGroupInfoFragment : SingleLoadingFragment<String, TranslatorGrou
             CountryParameter.JAPANESE -> R.drawable.ic_japan
             else -> -1
         })
-
+        val test = data.type.replace("_", " ").split(" ")
+        type.text = data.type.replace("_", " ").split(" ").map(String::capitalize)
+                .joinToString(separator = " ")
         link.text = Utils.buildClickableText(context, data.link,
                 onWebClickListener = Link.OnClickListener { link ->
                     showPage(Utils.parseAndFixUrl(link))
@@ -90,6 +93,6 @@ class TranslatorGroupInfoFragment : SingleLoadingFragment<String, TranslatorGrou
         }
     }
 
-    override fun constructTask() = ProxerLoadingTask(::TranslatorGroupRequest)
+    override fun constructTask() = ProxerLoadingTask(::IndustryRequest)
     override fun constructInput() = id
 }
