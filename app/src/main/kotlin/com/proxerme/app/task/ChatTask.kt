@@ -89,7 +89,7 @@ class ChatTask(private val id: String,
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLoadMessages(event: ChatMessagesEvent) {
-        if (event.messages.isNotEmpty()) {
+        if (id == event.conferenceId && event.messages.isNotEmpty()) {
             finishSuccessful(event.messages.toTypedArray())
         }
     }
@@ -97,7 +97,9 @@ class ChatTask(private val id: String,
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLoadMessagesFailed(exception: LoadMoreMessagesException) {
-        finishWithException(exception)
+        if (id == exception.conferenceId) {
+            finishWithException(exception)
+        }
     }
 
     class ChatInput(page: Int, val context: Context) : PagedInput(page)

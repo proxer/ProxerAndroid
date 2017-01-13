@@ -64,11 +64,14 @@ class TranslatorGroupInfoFragment : SingleLoadingFragment<String, TranslatorGrou
     override fun present(data: TranslatorGroup) {
         (activity as TranslatorGroupActivity).updateName(data.name)
 
+        // TODO: Better icons
         language.setImageResource(when (data.country) {
             CountryParameter.ENGLISH -> R.drawable.ic_united_states
             CountryParameter.GERMAN -> R.drawable.ic_germany
             CountryParameter.JAPANESE -> R.drawable.ic_japan
-            else -> -1
+            CountryParameter.MISCELLANEOUS -> R.drawable.ic_proxer
+            "us" -> R.drawable.ic_united_states
+            else -> throw IllegalArgumentException("Unknown country: ${data.country}")
         })
 
         link.text = Utils.buildClickableText(context, data.link,
