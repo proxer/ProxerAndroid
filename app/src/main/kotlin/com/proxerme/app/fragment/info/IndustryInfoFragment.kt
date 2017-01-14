@@ -65,13 +65,13 @@ class IndustryInfoFragment : SingleLoadingFragment<String, Industry>() {
     override fun present(data: Industry) {
         (activity as IndustryActivity).updateName(data.name)
 
-        // TODO: Better icons
+        // TODO: Better icon for misc
         language.setImageResource(when (data.country) {
             CountryParameter.ENGLISH -> R.drawable.ic_united_states
+            CountryParameter.UNITED_STATES -> R.drawable.ic_united_states
             CountryParameter.GERMAN -> R.drawable.ic_germany
             CountryParameter.JAPANESE -> R.drawable.ic_japan
             CountryParameter.MISCELLANEOUS -> R.drawable.ic_proxer
-            "us" -> R.drawable.ic_united_states
             else -> throw IllegalArgumentException("Unknown country: ${data.country}")
         })
 
