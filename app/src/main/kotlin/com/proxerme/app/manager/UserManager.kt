@@ -28,16 +28,14 @@ object UserManager {
     var user: User? = StorageHelper.user
         private set
 
-    var loginState: LoginState by Delegates.observable(LoginState.LOGGED_OUT, { property, old,
-                                                                                new ->
+    var loginState: LoginState by Delegates.observable(LoginState.LOGGED_OUT, { _, old, new ->
         if (new != old) {
             EventBus.getDefault().post(new)
         }
     })
         private set
 
-    var ongoingState: OngoingState by Delegates.observable(OngoingState.NONE, { property, old,
-                                                                                new ->
+    var ongoingState: OngoingState by Delegates.observable(OngoingState.NONE, { _, old, new ->
         if (new != old) {
             EventBus.getDefault().post(new)
         }
@@ -227,25 +225,23 @@ object UserManager {
 
             cancelAndClearRequests()
 
-            requests.add(MainApplication.proxerConnection.execute(LogoutRequest(),
-                    { result ->
-                        lock.lock()
+            requests.add(MainApplication.proxerConnection.execute(LogoutRequest(), {
+                lock.lock()
 
-                        cancelAndClearRequests()
-                        removeUser()
-                        doLogout()
+                cancelAndClearRequests()
+                removeUser()
+                doLogout()
 
-                        lock.unlock()
-                    },
-                    { result ->
-                        lock.lock()
+                lock.unlock()
+            }, { result ->
+                lock.lock()
 
-                        ongoingState = OngoingState.NONE
+                ongoingState = OngoingState.NONE
 
-                        EventBus.getDefault().post(LogoutFailedEvent(result))
+                EventBus.getDefault().post(LogoutFailedEvent(result))
 
-                        lock.unlock()
-                    }))
+                lock.unlock()
+            }))
         }
 
         lock.unlock()

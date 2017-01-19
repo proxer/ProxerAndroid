@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity
 import com.afollestad.materialdialogs.MaterialDialog
 import com.proxerme.app.R
 
-
 /**
  * TODO: Describe class
  *
@@ -36,7 +35,7 @@ class CrunchyrollDialog : DialogFragment() {
                 .content(R.string.dialog_crunchyroll_content)
                 .positiveText(R.string.dialog_crunchyroll_positive)
                 .negativeText(R.string.dialog_cancel)
-                .onPositive({ materialDialog, dialogAction ->
+                .onPositive({ _, _ ->
                     val packageName = "com.crunchyroll.crunchyroid"
 
                     try {

@@ -328,6 +328,7 @@
     <string name="fragment_industry_language">Sprache</string>
     <string name="fragment_industry_link">Link</string>
     <string name="fragment_industry_description">Beschreibung</string>
+    <string name="fragment_media_info_rate_count">(%d)</string>
 
     <plurals name="item_conferences_participants">
         <item quantity="other">%d Teilnehmer</item>

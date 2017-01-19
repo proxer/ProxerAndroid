@@ -66,7 +66,7 @@ class AnimeFragment : SingleLoadingFragment<Pair<AnimeInput, String>, StreamInfo
         }
     }
 
-    private val reminderSuccess = { nothing: Void? ->
+    private val reminderSuccess = { _: Void? ->
         if (view != null) {
             Snackbar.make(root, R.string.fragment_set_user_info_success, Snackbar.LENGTH_LONG).show()
         }

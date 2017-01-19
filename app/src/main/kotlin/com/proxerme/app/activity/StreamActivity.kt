@@ -87,7 +87,7 @@ class StreamActivity : MainActivity() {
         window.decorView.systemUiVisibility = if (fullscreen) getFullscreenUiFlags() else
             SYSTEM_UI_FLAG_VISIBLE
         window.decorView.setOnSystemUiVisibilityChangeListener {
-            if (it and SYSTEM_UI_FLAG_FULLSCREEN === 0) {
+            if (it and SYSTEM_UI_FLAG_FULLSCREEN == 0) {
                 player.showControls()
             }
         }

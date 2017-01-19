@@ -1,6 +1,8 @@
 package com.proxerme.app.fragment.manga
 
+import android.annotation.TargetApi
 import android.os.Build
+import android.os.Build.VERSION_CODES.JELLY_BEAN
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
@@ -71,7 +73,7 @@ class MangaFragment : SingleLoadingFragment<Pair<MangaInput, String>, ChapterInf
         }
     }
 
-    private val reminderSuccess = { nothing: Void? ->
+    private val reminderSuccess = { _: Void? ->
         if (view != null) {
             Snackbar.make(root, R.string.fragment_set_user_info_success, Snackbar.LENGTH_LONG)
                     .show()
@@ -147,7 +149,7 @@ class MangaFragment : SingleLoadingFragment<Pair<MangaInput, String>, ChapterInf
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             activity.window.decorView.setOnSystemUiVisibilityChangeListener { visibility ->
-                if (visibility and View.SYSTEM_UI_FLAG_FULLSCREEN === View.VISIBLE) {
+                if (visibility and View.SYSTEM_UI_FLAG_FULLSCREEN == View.VISIBLE) {
                     (activity as AppCompatActivity).supportActionBar?.show()
                 } else {
                     (activity as AppCompatActivity).supportActionBar?.hide()
@@ -199,7 +201,7 @@ class MangaFragment : SingleLoadingFragment<Pair<MangaInput, String>, ChapterInf
         when (item.itemId) {
             R.id.fullscreen -> {
                 if (activity.window.decorView.systemUiVisibility and
-                        View.SYSTEM_UI_FLAG_FULLSCREEN === View.SYSTEM_UI_FLAG_FULLSCREEN) {
+                        View.SYSTEM_UI_FLAG_FULLSCREEN == View.SYSTEM_UI_FLAG_FULLSCREEN) {
                     showSystemUI()
                 } else {
                     hideSystemUI()
@@ -289,15 +291,16 @@ class MangaFragment : SingleLoadingFragment<Pair<MangaInput, String>, ChapterInf
         reset()
     }
 
+    @TargetApi(JELLY_BEAN)
     private fun showSystemUI() {
         activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
     }
 
+    @TargetApi(JELLY_BEAN)
     private fun hideSystemUI() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
-                    View.SYSTEM_UI_FLAG_FULLSCREEN or
-                    View.SYSTEM_UI_FLAG_IMMERSIVE
+                    View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_IMMERSIVE
         } else {
             activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LOW_PROFILE or
                     View.SYSTEM_UI_FLAG_FULLSCREEN

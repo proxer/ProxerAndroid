@@ -24,7 +24,7 @@ class BBSpoiler(val parent: ViewGroup) {
     private val decoration: ViewGroup
     private val container: ViewGroup
 
-    var expanded by Delegates.observable(false, { property, old, new ->
+    var expanded by Delegates.observable(false, { _, old, new ->
         handleExpanded()
 
         if (old != new) {

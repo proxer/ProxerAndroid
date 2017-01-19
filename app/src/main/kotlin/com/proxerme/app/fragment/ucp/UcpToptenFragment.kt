@@ -37,7 +37,7 @@ class UcpToptenFragment : SingleLoadingFragment<Unit, ZippedUcpToptenResult>() {
         }
     }
 
-    private val removalSuccess = { nothing: Void? ->
+    private val removalSuccess = { _: Void? ->
         val newResult = ZippedUcpToptenResult(
                 animeAdapter.items.filterNot { it == itemToRemove }.toTypedArray(),
                 mangaAdapter.items.filterNot { it == itemToRemove }.toTypedArray()

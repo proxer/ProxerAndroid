@@ -7,4 +7,4 @@ import com.proxerme.app.entitiy.LocalMessage
  *
  * @author Ruben Gees
  */
-class ChatMessagesEvent(val conferenceId: String = "", val messages: List<LocalMessage>)
+class ChatMessagesEvent(@Suppress("unused") val conferenceId: String = "", val messages: List<LocalMessage>)

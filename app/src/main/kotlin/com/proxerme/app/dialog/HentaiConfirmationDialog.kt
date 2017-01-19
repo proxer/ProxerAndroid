@@ -30,7 +30,7 @@ class HentaiConfirmationDialog : DialogFragment() {
                 .content(R.string.dialog_hentai_content)
                 .positiveText(R.string.dialog_hentai_positive)
                 .negativeText(R.string.dialog_cancel)
-                .onPositive { materialDialog, dialogAction ->
+                .onPositive { _, _ ->
                     PreferenceHelper.setHentaiAllowed(context, true)
 
                     EventBus.getDefault().post(HentaiConfirmationEvent())

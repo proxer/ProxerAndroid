@@ -41,7 +41,7 @@ class ChatTask(private val id: String,
 
     override fun execute(input: ChatInput) {
         start {
-            if (input.page === 0) {
+            if (input.page == 0) {
                 future = doAsync {
                     try {
                         input.context.chatDatabase.markAsRead(id)
@@ -103,5 +103,4 @@ class ChatTask(private val id: String,
     }
 
     class ChatInput(page: Int, val context: Context) : PagedInput(page)
-
 }

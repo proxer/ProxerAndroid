@@ -62,10 +62,10 @@ class LoginDialog : DialogFragment() {
                 .title(R.string.dialog_login_title)
                 .positiveText(R.string.dialog_login_positive)
                 .negativeText(R.string.dialog_cancel)
-                .onPositive({ materialDialog, dialogAction ->
+                .onPositive({ _, _ ->
                     login()
                 })
-                .onNegative({ materialDialog, dialogAction ->
+                .onNegative({ materialDialog, _ ->
                     materialDialog.cancel()
                 })
                 .customView(initViews(), true)
@@ -139,9 +139,7 @@ class LoginDialog : DialogFragment() {
             inputPassword.setText(it.password)
         }
 
-        inputPassword.setOnEditorActionListener(TextView.OnEditorActionListener {
-            v, actionId, event ->
-
+        inputPassword.setOnEditorActionListener(TextView.OnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_GO) {
                 login()
 

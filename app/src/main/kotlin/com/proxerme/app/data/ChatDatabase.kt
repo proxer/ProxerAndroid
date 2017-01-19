@@ -249,22 +249,6 @@ class ChatDatabase(context: Context) :
         }
     }
 
-    private fun doInsertOrUpdateConferences(db: SQLiteDatabase, items: Collection<Conference>):
-            List<LocalConference> {
-        return items.map {
-            val insertionValues = generateInsertionValues(it)
-            val updated = db.update(TABLE_CONFERENCE, *insertionValues)
-                    .where("$COLUMN_CONFERENCE_ID = ${it.id}").exec() > 0
-
-            if (updated) {
-                getConference(it.id) ?: throw SQLiteException("Could not find conference with " +
-                        "id ${it.id}")
-            } else {
-                it.toLocalConference(db.insertOrThrow(TABLE_CONFERENCE, *insertionValues))
-            }
-        }
-    }
-
     private fun doInsertOrUpdateMessages(db: SQLiteDatabase, items: Collection<Message>):
             List<LocalMessage> {
         return items.map {

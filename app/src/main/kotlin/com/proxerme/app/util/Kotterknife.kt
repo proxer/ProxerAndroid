@@ -115,7 +115,7 @@ private fun <T, V : View> required(id: Int, finder: T.(Int) -> View?)
 
 @Suppress("UNCHECKED_CAST")
 private fun <T, V : View> optional(id: Int, finder: T.(Int) -> View?)
-        = Lazy { t: T, desc -> t.finder(id) as V? }
+        = Lazy { t: T, _ -> t.finder(id) as V? }
 
 @Suppress("UNCHECKED_CAST")
 private fun <T, V : View> required(ids: IntArray, finder: T.(Int) -> View?)
@@ -123,7 +123,7 @@ private fun <T, V : View> required(ids: IntArray, finder: T.(Int) -> View?)
 
 @Suppress("UNCHECKED_CAST")
 private fun <T, V : View> optional(ids: IntArray, finder: T.(Int) -> View?)
-        = Lazy { t: T, desc -> ids.map { t.finder(it) as V? }.filterNotNull() }
+        = Lazy { t: T, _ -> ids.map { t.finder(it) as V? }.filterNotNull() }
 
 // Like Kotlin's lazy delegate but the initializer gets the target and metadata passed to it
 class Lazy<in T, out V>(private val initializer: (T, KProperty<*>) -> V) : ReadOnlyProperty<T, V> {

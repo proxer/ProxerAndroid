@@ -48,10 +48,10 @@ class LogoutDialog : DialogFragment() {
                 .title(R.string.dialog_logout_title)
                 .positiveText(R.string.dialog_logout_positive)
                 .negativeText(R.string.dialog_cancel)
-                .onPositive({ materialDialog, dialogAction ->
+                .onPositive({ _, _ ->
                     logout()
                 })
-                .onNegative({ materialDialog, dialogAction ->
+                .onNegative({ materialDialog, _ ->
                     materialDialog.cancel()
                 })
                 .customView(initViews(), true)

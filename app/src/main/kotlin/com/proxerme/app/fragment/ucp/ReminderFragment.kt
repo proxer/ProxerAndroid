@@ -37,7 +37,7 @@ class ReminderFragment : PagedLoadingFragment<ReminderInput, Reminder>() {
         }
     }
 
-    private val removalSuccess = { nothing: Void? ->
+    private val removalSuccess = { _: Void? ->
         itemToRemove?.let {
             adapter.remove(it)
             cache.mutate { data -> data?.filterNot { item -> item == it }?.toTypedArray() }

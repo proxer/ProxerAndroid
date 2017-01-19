@@ -79,7 +79,7 @@ class SettingsFragment : XpPreferenceFragment(), SharedPreferences.OnSharedPrefe
         }
 
         hentaiPreference = findPreference(PreferenceHelper.PREFERENCE_HENTAI) as TwoStatePreference
-        hentaiPreference.setOnPreferenceClickListener { preference ->
+        hentaiPreference.setOnPreferenceClickListener {
             if ((hentaiPreference).isChecked) {
                 hentaiPreference.isChecked = false
 

@@ -53,7 +53,7 @@ class MediaInfoFragment : SingleLoadingFragment<String, Entry>() {
         }
     }
 
-    private val userInfoSuccess = { nothing: Void? ->
+    private val userInfoSuccess = { _: Void? ->
         if (view != null) {
             Snackbar.make(root, R.string.fragment_set_user_info_success, Snackbar.LENGTH_LONG)
                     .show()
@@ -170,7 +170,7 @@ class MediaInfoFragment : SingleLoadingFragment<String, Entry>() {
             rating.visibility = View.VISIBLE
             rating.rating = data.rating / 2.0f
             ratingAmount.visibility = View.VISIBLE
-            ratingAmount.text = "(${data.rateCount})"
+            ratingAmount.text = getString(R.string.fragment_media_info_rate_count, data.rateCount)
         } else {
             rating.visibility = View.GONE
             ratingAmount.visibility = View.GONE
@@ -187,18 +187,18 @@ class MediaInfoFragment : SingleLoadingFragment<String, Entry>() {
             else -> throw InvalidParameterException("Unknown license: " + data.license)
         })
 
-        buildBadgeView(genres, data.genres, { it }, { view, genre ->
+        buildBadgeView(genres, data.genres, { it }, { _, genre ->
             showPage(ProxerUrlHolder.getWikiUrl(genre))
         }, genresTitle)
 
         buildTagsView(data)
         buildFskView(data.fsk)
 
-        buildBadgeView(groups, data.translatorGroups, { it.name }, { view, translatorGroup ->
+        buildBadgeView(groups, data.translatorGroups, { it.name }, { _, translatorGroup ->
             TranslatorGroupActivity.navigateTo(activity, translatorGroup.id, translatorGroup.name)
         }, groupsTitle)
 
-        buildBadgeView(publishers, data.industries, { getIndustryString(it) }, { view, industry ->
+        buildBadgeView(publishers, data.industries, { getIndustryString(it) }, { _, industry ->
             IndustryActivity.navigateTo(activity, industry.id, industry.name)
         }, publishersTitle)
 
@@ -285,7 +285,7 @@ class MediaInfoFragment : SingleLoadingFragment<String, Entry>() {
                     false
                 }
             }
-        }.toTypedArray(), { it.name }, { view, tag ->
+        }.toTypedArray(), { it.name }, { _, tag ->
             ViewUtils.makeMultilineSnackbar(root, tag.description, Snackbar.LENGTH_LONG).show()
         })
     }

@@ -15,7 +15,7 @@ import kotlin.properties.Delegates
  */
 class BBCodeView : LinearLayout {
 
-    var bbCode by Delegates.observable<String?>(null, { property, old, new ->
+    var bbCode by Delegates.observable<String?>(null, { _, _, _ ->
         build()
     })
 
