@@ -75,6 +75,10 @@ class AnimeActivity : MainActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         title = getString(R.string.activity_anime_title, episode)
 
+        toolbar.setOnClickListener {
+            MediaActivity.navigateTo(this, id)
+        }
+
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction().replace(R.id.container,
                     AnimeFragment.newInstance(id, episode, language, totalEpisodes)).commitNow()
