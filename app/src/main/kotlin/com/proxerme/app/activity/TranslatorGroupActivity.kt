@@ -3,7 +3,9 @@ package com.proxerme.app.activity
 import android.app.Activity
 import android.os.Bundle
 import android.support.design.widget.CollapsingToolbarLayout
+import android.support.v4.app.ShareCompat
 import android.support.v7.widget.Toolbar
+import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
 import com.bumptech.glide.Glide
@@ -70,8 +72,24 @@ class TranslatorGroupActivity : MainActivity() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.activity_industry, menu)
+
+        return super.onCreateOptionsMenu(menu)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.action_share -> {
+                ShareCompat.IntentBuilder
+                        .from(this)
+                        .setText("https://proxer.me/translatorgroups?id=$id")
+                        .setType("text/plain")
+                        .setChooserTitle(getString(R.string.share_title))
+                        .startChooser()
+
+                return true
+            }
             android.R.id.home -> {
                 finish()
 
