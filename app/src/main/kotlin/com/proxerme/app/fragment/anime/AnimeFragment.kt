@@ -128,9 +128,7 @@ class AnimeFragment : SingleLoadingFragment<Pair<AnimeInput, String>, StreamInfo
         get() = arguments.getString(ARGUMENT_LANGUAGE)
     private var totalEpisodes: Int
         get() = arguments.getInt(ARGUMENT_TOTAL_EPISODES)
-        set(value) {
-            arguments.putInt(ARGUMENT_TOTAL_EPISODES, value)
-        }
+        set(value) = arguments.putInt(ARGUMENT_TOTAL_EPISODES, value)
 
     private lateinit var streamAdapter: StreamAdapter
     private lateinit var adapter: EasyHeaderFooterAdapter

@@ -71,7 +71,6 @@ class ReminderFragment : PagedLoadingFragment<ReminderInput, Reminder>() {
     override lateinit var layoutManager: StaggeredGridLayoutManager
     override lateinit var adapter: ReminderAdapter
 
-    @CategoryParameter.Category
     private var category: String? = null
 
     private var removalTask = constructRemovalTask()

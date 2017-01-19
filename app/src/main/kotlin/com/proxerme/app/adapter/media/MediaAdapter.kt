@@ -16,7 +16,6 @@ import com.proxerme.app.util.Utils
 import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.list.entity.MediaListEntry
 import com.proxerme.library.info.ProxerUrlHolder
-import com.proxerme.library.parameters.CategoryParameter
 import com.proxerme.library.parameters.CategoryParameter.ANIME
 import com.proxerme.library.parameters.CategoryParameter.MANGA
 
@@ -25,8 +24,7 @@ import com.proxerme.library.parameters.CategoryParameter.MANGA
  *
  * @author Ruben Gees
  */
-class MediaAdapter(@CategoryParameter.Category private val category: String) :
-        PagingAdapter<MediaListEntry>() {
+class MediaAdapter(private val category: String) : PagingAdapter<MediaListEntry>() {
 
     var callback: MediaAdapterCallback? = null
 

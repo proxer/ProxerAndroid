@@ -27,7 +27,6 @@ import com.proxerme.library.connection.info.request.RelationRequest
 class RelationsFragment : SingleLoadingFragment<String, Array<Relation>>() {
 
     companion object {
-
         private const val ARGUMENT_ID = "id"
 
         fun newInstance(id: String): RelationsFragment {

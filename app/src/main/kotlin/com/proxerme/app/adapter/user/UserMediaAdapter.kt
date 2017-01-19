@@ -22,8 +22,7 @@ import com.proxerme.library.parameters.CommentStateParameter.*
  *
  * @author Ruben Gees
  */
-class UserMediaAdapter(@CategoryParameter.Category private val category: String) :
-        PagingAdapter<UserMediaListEntry>() {
+class UserMediaAdapter(private val category: String) : PagingAdapter<UserMediaListEntry>() {
 
     var callback: UserMediaAdapterCallback? = null
 

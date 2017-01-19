@@ -32,7 +32,7 @@ class MediaListFragment : PagedLoadingFragment<MediaInput, MediaListEntry>() {
 
         private const val ARGUMENT_CATEGORY = "category"
 
-        fun newInstance(@CategoryParameter.Category category: String): MediaListFragment {
+        fun newInstance(category: String): MediaListFragment {
             return MediaListFragment().apply {
                 this.arguments = Bundle().apply {
                     this.putString(ARGUMENT_CATEGORY, category)
@@ -49,13 +49,8 @@ class MediaListFragment : PagedLoadingFragment<MediaInput, MediaListEntry>() {
     override val isHentaiConfirmationRequired: Boolean
         get() = type == TypeParameter.HENTAI || type == TypeParameter.HMANGA
 
-    @CategoryParameter.Category
     private lateinit var category: String
-
-    @MediaSortParameter.MediaSortCriteria
     private lateinit var sortCriteria: String
-
-    @TypeParameter.Type
     private lateinit var type: String
 
     private var searchQuery: String? = null

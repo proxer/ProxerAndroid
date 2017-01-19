@@ -25,7 +25,6 @@ import com.proxerme.library.connection.ucp.request.HistoryRequest
 class HistoryFragment : PagedLoadingFragment<HistoryInput, HistoryEntry>() {
 
     companion object {
-
         fun newInstance(): HistoryFragment {
             return HistoryFragment()
         }

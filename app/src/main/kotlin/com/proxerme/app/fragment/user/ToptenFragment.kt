@@ -49,8 +49,13 @@ class ToptenFragment : SingleLoadingFragment<Pair<ToptenInput, ToptenInput>, Zip
 
     override val section = Section.TOPTEN
 
-    private var userId: String? = null
-    private var username: String? = null
+    private var userId: String?
+        get() = arguments.getString(ARGUMENT_USER_ID)
+        set(value) = arguments.putString(ARGUMENT_USER_ID, value)
+
+    private var username: String?
+        get() = arguments.getString(ARGUMENT_USER_NAME)
+        set(value) = arguments.putString(ARGUMENT_USER_NAME, value)
 
     private lateinit var animeAdapter: ToptenAdapter
     private lateinit var mangaAdapter: ToptenAdapter
@@ -62,9 +67,6 @@ class ToptenFragment : SingleLoadingFragment<Pair<ToptenInput, ToptenInput>, Zip
 
     override fun onCreate(savedInstanceState: android.os.Bundle?) {
         super.onCreate(savedInstanceState)
-
-        userId = arguments.getString(ToptenFragment.Companion.ARGUMENT_USER_ID)
-        username = arguments.getString(ToptenFragment.Companion.ARGUMENT_USER_NAME)
 
         animeAdapter = ToptenAdapter()
         animeAdapter.callback = object : ToptenAdapter.ToptenAdapterCallback() {

@@ -65,8 +65,7 @@ class ChatFragment : PagedLoadingFragment<ChatInput, LocalMessage>() {
     override val cacheStrategy = CachedTask.CacheStrategy.EXCEPTION
     override var hasReachedEnd: Boolean
         get() = StorageHelper.hasConferenceReachedEnd(conference.id)
-        set(value) {
-        }
+        set(value) {}
 
     override lateinit var layoutManager: LinearLayoutManager
     override lateinit var adapter: ChatAdapter

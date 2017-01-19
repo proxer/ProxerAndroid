@@ -91,8 +91,7 @@ class RelationsAdapter : PagingAdapter<Relation>() {
                     .into(image)
         }
 
-        private fun generateEpisodeCountDescription(context: Context,
-                                                    @CategoryParameter.Category category: String,
+        private fun generateEpisodeCountDescription(context: Context, category: String,
                                                     count: Int): String {
             return when (category) {
                 CategoryParameter.ANIME -> context.resources

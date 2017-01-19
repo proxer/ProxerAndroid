@@ -15,7 +15,6 @@ import com.proxerme.app.task.framework.Task
 import com.proxerme.app.util.DeviceUtils
 import com.proxerme.library.connection.user.entitiy.UserMediaListEntry
 import com.proxerme.library.connection.user.request.UserMediaListRequest
-import com.proxerme.library.parameters.CategoryParameter
 import com.proxerme.library.parameters.UserMediaSortParameter
 
 /**
@@ -26,14 +25,12 @@ import com.proxerme.library.parameters.UserMediaSortParameter
 class UserMediaListFragment : PagedLoadingFragment<UserMediaInput, UserMediaListEntry>() {
 
     companion object {
-
         private const val ARGUMENT_USER_ID = "user_id"
         private const val ARGUMENT_USER_NAME = "user_name"
         private const val ARGUMENT_CATEGORY = "category"
-        private const val ARGUMENT_SORT_CRITERIA = "sort_criteria"
 
         fun newInstance(userId: String? = null, userName: String? = null,
-                        @CategoryParameter.Category category: String): UserMediaListFragment {
+                        category: String): UserMediaListFragment {
             if (userId.isNullOrBlank() && userName.isNullOrBlank()) {
                 throw IllegalArgumentException("You must provide at least one of the arguments")
             }
@@ -59,9 +56,7 @@ class UserMediaListFragment : PagedLoadingFragment<UserMediaInput, UserMediaList
     private var category: String
         get() = arguments.getString(ARGUMENT_CATEGORY)
         set(value) = arguments.putString(ARGUMENT_CATEGORY, value)
-    private var sortCriteria: String
-        get() = arguments.getString(ARGUMENT_SORT_CRITERIA, UserMediaSortParameter.NAME_ASCENDING)
-        set(value) = arguments.putString(ARGUMENT_SORT_CRITERIA, value)
+    private var sortCriteria: String = UserMediaSortParameter.NAME_ASCENDING
 
     override lateinit var adapter: UserMediaAdapter
     override lateinit var layoutManager: StaggeredGridLayoutManager

@@ -431,5 +431,5 @@ class MediaInfoFragment : SingleLoadingFragment<String, Entry>() {
         }), { Validators.validateLogin() }, userInfoSuccess, userInfoException)
     }
 
-    private class UserInfoInput(val id: String, @ViewStateParameter.ViewState val type: String)
+    private class UserInfoInput(val id: String, val type: String)
 }
