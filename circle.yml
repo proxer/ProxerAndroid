@@ -20,6 +20,5 @@ test:
   override:
     - ./gradlew build -PdisablePreDex --console=plain
   post:
-    - mkdir -p $CIRCLE_TEST_REPORTS/lint
-    - cp -r app/build/outputs/lint-results* $CIRCLE_TEST_REPORTS/lint
+    - cp -r app/build/reports/* $CIRCLE_TEST_REPORTS
     - cp -r app/build/outputs/apk/* $CIRCLE_ARTIFACTS
