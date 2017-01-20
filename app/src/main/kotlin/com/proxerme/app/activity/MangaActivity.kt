@@ -32,7 +32,7 @@ class MangaActivity : MainActivity() {
         }
     }
 
-    private val id: String
+    val id: String
         get() = when {
             intent.action == Intent.ACTION_VIEW -> intent.data.pathSegments.getOrElse(1, { "-1" })
             else -> {
@@ -40,7 +40,7 @@ class MangaActivity : MainActivity() {
             }
         }
 
-    private var episode: Int
+    var episode: Int
         get() = when {
             intent.action == Intent.ACTION_VIEW && !intent.hasExtra(EXTRA_EPISODE) -> try {
                 intent.data.pathSegments.getOrElse(2, { "1" }).toInt()
@@ -53,7 +53,7 @@ class MangaActivity : MainActivity() {
             intent.putExtra(EXTRA_EPISODE, value)
         }
 
-    private val language: String
+    val language: String
         get() = when {
             intent.action == Intent.ACTION_VIEW -> {
                 intent.data.pathSegments.getOrElse(3, { SubDubLanguageParameter.ENGLISH_SUB })
@@ -61,7 +61,7 @@ class MangaActivity : MainActivity() {
             else -> intent.getStringExtra(EXTRA_LANGUAGE)
         }
 
-    private var entryInfo: EntryInfo
+    var entryInfo: EntryInfo
         get() = intent.getParcelableExtra(EXTRA_ENTRY_INFO)
         set(value) {
             intent.putExtra(EXTRA_ENTRY_INFO, value)
@@ -85,8 +85,7 @@ class MangaActivity : MainActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction().replace(R.id.container,
-                    MangaFragment.newInstance(id, episode, language, entryInfo.name,
-                            entryInfo.totalEpisodes)).commitNow()
+                    MangaFragment.newInstance()).commitNow()
         }
     }
 

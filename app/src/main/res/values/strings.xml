@@ -329,6 +329,8 @@
     <string name="fragment_industry_link">Link</string>
     <string name="fragment_industry_description">Beschreibung</string>
     <string name="fragment_media_info_rate_count">(%d)</string>
+    <string name="fragment_manga_not_available">Das Kapitel wurde noch nicht hochgeladen :/</string>
+    <string name="fragment_anime_not_available">Die Episode wurde noch nicht hochgeladen :/</string>
 
     <plurals name="item_conferences_participants">
         <item quantity="other">%d Teilnehmer</item>

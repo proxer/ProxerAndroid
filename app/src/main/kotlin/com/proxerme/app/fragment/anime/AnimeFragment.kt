@@ -30,6 +30,7 @@ import com.proxerme.app.task.framework.ValidatingTask
 import com.proxerme.app.task.framework.ZippedTask
 import com.proxerme.app.util.*
 import com.proxerme.app.view.MediaControlView
+import com.proxerme.library.connection.ProxerException
 import com.proxerme.library.connection.anime.entity.Stream
 import com.proxerme.library.connection.anime.request.LinkRequest
 import com.proxerme.library.connection.anime.request.StreamsRequest
@@ -48,21 +49,8 @@ import okhttp3.HttpUrl
 class AnimeFragment : SingleLoadingFragment<Pair<AnimeInput, String>, StreamInfo>() {
 
     companion object {
-        private const val ARGUMENT_ID = "id"
-        private const val ARGUMENT_EPISODE = "episode"
-        private const val ARGUMENT_LANGUAGE = "language"
-        private const val ARGUMENT_ENTRY_INFO = "entry_info"
-
-        fun newInstance(id: String, episode: Int, language: String, name: String? = null,
-                        totalEpisodes: Int? = null): AnimeFragment {
-            return AnimeFragment().apply {
-                this.arguments = Bundle().apply {
-                    this.putString(ARGUMENT_ID, id)
-                    this.putInt(ARGUMENT_EPISODE, episode)
-                    this.putString(ARGUMENT_LANGUAGE, language)
-                    this.putParcelable(ARGUMENT_ENTRY_INFO, EntryInfo(name, totalEpisodes))
-                }
-            }
+        fun newInstance(): AnimeFragment {
+            return AnimeFragment()
         }
     }
 
@@ -116,20 +104,26 @@ class AnimeFragment : SingleLoadingFragment<Pair<AnimeInput, String>, StreamInfo
     }
 
     override val section = SectionManager.Section.ANIME
-
     override val isWorking: Boolean
         get() = super.isWorking && streamResolverTask.isWorking
 
+    private val animeActivity
+        get() = activity as AnimeActivity
+
     private val id: String
-        get() = arguments.getString(ARGUMENT_ID)
+        get() = animeActivity.id
     private var episode: Int
-        get() = arguments.getInt(ARGUMENT_EPISODE)
-        set(value) = arguments.putInt(ARGUMENT_EPISODE, value)
+        get() = animeActivity.episode
+        set(value) {
+            animeActivity.episode = value
+        }
     private val language: String
-        get() = arguments.getString(ARGUMENT_LANGUAGE)
+        get() = animeActivity.language
     private var entryInfo: EntryInfo
-        get() = arguments.getParcelable(ARGUMENT_ENTRY_INFO)
-        set(value) = arguments.putParcelable(ARGUMENT_ENTRY_INFO, value)
+        get() = animeActivity.entryInfo
+        set(value) {
+            animeActivity.entryInfo = value
+        }
 
     private lateinit var streamAdapter: StreamAdapter
     private lateinit var adapter: EasyHeaderFooterAdapter
@@ -210,14 +204,34 @@ class AnimeFragment : SingleLoadingFragment<Pair<AnimeInput, String>, StreamInfo
     override fun present(data: StreamInfo) {
         entryInfo = data.entryInfo
 
-        (activity as AnimeActivity).update(episode, entryInfo)
-
         if (data.streams.isEmpty()) {
             showError(getString(R.string.error_no_data_anime), null)
         } else {
             header.setEpisodeInfo(entryInfo.totalEpisodes!!, episode)
             streamAdapter.replace(data.streams)
             adapter.setHeader(header)
+        }
+    }
+
+    override fun handleError(exception: Exception) {
+        if (exception is ZippedTask.PartialException) {
+            if (exception.data is EntryInfo) {
+                entryInfo = exception.data
+
+                header.setEpisodeInfo(entryInfo.totalEpisodes!!, episode)
+                adapter.setHeader(header)
+            }
+
+            if (exception.original is ProxerException &&
+                    exception.original.proxerErrorCode == ProxerException.ANIME_UNKNOWN_EPISODE) {
+                showError(getString(R.string.fragment_anime_not_available), null)
+
+                contentContainer.visibility = View.VISIBLE
+            } else {
+                super.handleError(exception)
+            }
+        } else {
+            super.handleError(exception)
         }
     }
 
@@ -248,7 +262,8 @@ class AnimeFragment : SingleLoadingFragment<Pair<AnimeInput, String>, StreamInfo
         return ZippedTask(
                 ProxerLoadingTask({ StreamsRequest(it.id, it.episode, it.language) }),
                 EntryInfoTask({ entryInfo }),
-                zipFunction = ::StreamInfo
+                zipFunction = ::StreamInfo,
+                awaitSecondResult = true
         )
     }
 
@@ -278,8 +293,6 @@ class AnimeFragment : SingleLoadingFragment<Pair<AnimeInput, String>, StreamInfo
 
     private fun switchEpisode(newEpisode: Int) {
         episode = newEpisode
-
-        (activity as AnimeActivity).update(newEpisode, entryInfo)
 
         reset()
     }

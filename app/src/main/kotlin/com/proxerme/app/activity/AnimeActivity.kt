@@ -33,20 +33,16 @@ class AnimeActivity : MainActivity() {
         }
     }
 
-    private val id: String
+    val id: String
         get() = when {
             intent.action == Intent.ACTION_VIEW -> intent.data.pathSegments.getOrElse(1, { "-1" })
-            else -> {
-                intent.getStringExtra(EXTRA_ID)
-            }
+            else -> intent.getStringExtra(EXTRA_ID)
         }
 
-    private var episode: Int
+    var episode: Int
         get() = when {
-            intent.action == Intent.ACTION_VIEW && !intent.hasExtra(EXTRA_EPISODE) -> try {
-                intent.data.pathSegments.getOrElse(2, { "1" }).toInt()
-            } catch (exception: NumberFormatException) {
-                1
+            intent.action == Intent.ACTION_VIEW && !intent.hasExtra(EXTRA_EPISODE) -> {
+                intent.data.pathSegments.getOrElse(2, { "1" }).toIntOrNull() ?: 1
             }
             else -> intent.getIntExtra(EXTRA_EPISODE, 1)
         }
@@ -54,7 +50,7 @@ class AnimeActivity : MainActivity() {
             intent.putExtra(EXTRA_EPISODE, value)
         }
 
-    private val language: String
+    val language: String
         get() = when {
             intent.action == Intent.ACTION_VIEW -> {
                 intent.data.pathSegments.getOrElse(3, { SubDubLanguageParameter.ENGLISH_SUB })
@@ -62,10 +58,12 @@ class AnimeActivity : MainActivity() {
             else -> intent.getStringExtra(EXTRA_LANGUAGE)
         }
 
-    private var entryInfo: EntryInfo
+    var entryInfo: EntryInfo
         get() = intent.getParcelableExtra(EXTRA_ENTRY_INFO)
         set(value) {
             intent.putExtra(EXTRA_ENTRY_INFO, value)
+
+            updateTitle()
         }
 
     private val toolbar: Toolbar by bindView(R.id.toolbar)
@@ -77,17 +75,15 @@ class AnimeActivity : MainActivity() {
         setSupportActionBar(toolbar)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title = getString(R.string.activity_anime_title, episode)
-        supportActionBar?.subtitle = entryInfo.name
-
         toolbar.setOnClickListener {
             MediaActivity.navigateTo(this, id, entryInfo.name)
         }
 
+        updateTitle()
+
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction().replace(R.id.container,
-                    AnimeFragment.newInstance(id, episode, language, entryInfo.name,
-                            entryInfo.totalEpisodes)).commitNow()
+                    AnimeFragment.newInstance()).commitNow()
         }
     }
 
@@ -119,11 +115,8 @@ class AnimeActivity : MainActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun update(newEpisode: Int, newInfo: EntryInfo) {
-        episode = newEpisode
-        entryInfo = newInfo
-
-        title = getString(R.string.activity_anime_title, newEpisode)
-        supportActionBar?.subtitle = newInfo.name
+    fun updateTitle() {
+        title = getString(R.string.activity_anime_title, episode)
+        supportActionBar?.subtitle = entryInfo.name
     }
 }

@@ -9,7 +9,9 @@ class ZippedTask<I, I2, M, M2, O>(private val firstTask: Task<I, M>,
                                   private val secondTask: Task<I2, M2>,
                                   private val zipFunction: (M, M2) -> O,
                                   successCallback: ((O) -> Unit)? = null,
-                                  exceptionCallback: ((Exception) -> Unit)? = null) :
+                                  exceptionCallback: ((Exception) -> Unit)? = null,
+                                  private val awaitFirstResult: Boolean = false,
+                                  private val awaitSecondResult: Boolean = false) :
         BaseTask<Pair<I, I2>, O>(successCallback, exceptionCallback) {
 
     override val isWorking: Boolean
@@ -18,39 +20,62 @@ class ZippedTask<I, I2, M, M2, O>(private val firstTask: Task<I, M>,
     private var firstResult: M? = null
     private var secondResult: M2? = null
 
+    private var firstError: Exception? = null
+    private var secondError: Exception? = null
+
     init {
-        firstTask.successCallback = { result ->
-            secondResult?.let {
-                finishSuccessful(zipFunction.invoke(result, it))
+        firstTask.successCallback = {
+            if (secondResult != null) {
+                finishSuccessful(zipFunction.invoke(it, secondResult!!))
                 reset()
-
-                return@let
+            } else if (secondError != null) {
+                finishWithException(PartialException(secondError!!, it!!))
+                reset()
+            } else {
+                firstResult = it
             }
-
-            firstResult = result
         }
 
         firstTask.exceptionCallback = {
-            cancel()
-            finishWithException(it)
-            reset()
+            if (awaitSecondResult) {
+                if (secondResult != null) {
+                    finishWithException(PartialException(it, secondResult!!))
+                    reset()
+                } else {
+                    firstError = it
+                }
+            } else {
+                cancel()
+                finishWithException(it)
+                reset()
+            }
         }
 
-        secondTask.successCallback = { result ->
-            firstResult?.let {
-                finishSuccessful(zipFunction.invoke(it, result))
+        secondTask.successCallback = {
+            if (firstResult != null) {
+                finishSuccessful(zipFunction.invoke(firstResult!!, it))
                 reset()
-
-                return@let
+            } else if (firstError != null) {
+                finishWithException(PartialException(firstError!!, it!!))
+                reset()
+            } else {
+                secondResult = it
             }
-
-            secondResult = result
         }
 
         secondTask.exceptionCallback = {
-            cancel()
-            finishWithException(it)
-            reset()
+            if (awaitFirstResult) {
+                if (firstResult != null) {
+                    finishWithException(PartialException(it, firstResult!!))
+                    reset()
+                } else {
+                    secondError = it
+                }
+            } else {
+                cancel()
+                finishWithException(it)
+                reset()
+            }
         }
     }
 
@@ -72,6 +97,8 @@ class ZippedTask<I, I2, M, M2, O>(private val firstTask: Task<I, M>,
 
         firstResult = null
         secondResult = null
+        firstError = null
+        secondError = null
     }
 
     override fun destroy() {
@@ -87,4 +114,6 @@ class ZippedTask<I, I2, M, M2, O>(private val firstTask: Task<I, M>,
 
         return this
     }
+
+    class PartialException(val original: Exception, val data: Any) : Exception()
 }

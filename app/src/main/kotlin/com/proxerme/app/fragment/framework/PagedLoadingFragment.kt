@@ -49,9 +49,7 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
 
     protected val exceptionCallback = { exception: Exception ->
         if (view != null) {
-            val action = ErrorUtils.handle(activity as MainActivity, exception)
-
-            showError(action.message, action.buttonMessage, action.buttonAction)
+            handleError(exception)
         }
     }
 
@@ -209,6 +207,12 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
         clear()
 
         task.execute(constructInput(calculateNextPage()))
+    }
+
+    open protected fun handleError(exception: Exception) {
+        val action = ErrorUtils.handle(activity as MainActivity, exception)
+
+        showError(action.message, action.buttonMessage, action.buttonAction)
     }
 
     open protected fun showError(message: String, buttonMessage: String? = "",

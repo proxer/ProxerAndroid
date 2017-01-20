@@ -33,6 +33,7 @@ import com.proxerme.app.util.Validators
 import com.proxerme.app.util.ViewUtils
 import com.proxerme.app.util.bindView
 import com.proxerme.app.view.MediaControlView
+import com.proxerme.library.connection.ProxerException
 import com.proxerme.library.connection.info.request.SetUserInfoRequest
 import com.proxerme.library.connection.manga.entity.Chapter
 import com.proxerme.library.connection.manga.request.ChapterRequest
@@ -51,25 +52,11 @@ import org.joda.time.DateTime
 class MangaFragment : SingleLoadingFragment<Pair<MangaInput, String>, ChapterInfo>() {
 
     companion object {
-
-        private const val ARGUMENT_ID = "id"
-        private const val ARGUMENT_EPISODE = "episode"
-        private const val ARGUMENT_LANGUAGE = "language"
-        private const val ARGUMENT_ENTRY_INFO = "entry_info"
-
         private const val SCROLL_TO_TOP_ICON_SIZE = 56
         private const val SCROLL_TO_TOP_ICON_PADDING = 8
 
-        fun newInstance(id: String, episode: Int, language: String, name: String? = null,
-                        totalEpisodes: Int? = null): MangaFragment {
-            return MangaFragment().apply {
-                this.arguments = Bundle().apply {
-                    this.putString(ARGUMENT_ID, id)
-                    this.putInt(ARGUMENT_EPISODE, episode)
-                    this.putString(ARGUMENT_LANGUAGE, language)
-                    this.putParcelable(ARGUMENT_ENTRY_INFO, EntryInfo(name, totalEpisodes))
-                }
-            }
+        fun newInstance(): MangaFragment {
+            return MangaFragment()
         }
     }
 
@@ -93,16 +80,23 @@ class MangaFragment : SingleLoadingFragment<Pair<MangaInput, String>, ChapterInf
 
     override val section = SectionManager.Section.MANGA
 
+    private val mangaActivity
+        get() = activity as MangaActivity
+
     private val id: String
-        get() = arguments.getString(ARGUMENT_ID)
+        get() = mangaActivity.id
     private var episode: Int
-        get() = arguments.getInt(ARGUMENT_EPISODE)
-        set(value) = arguments.putInt(ARGUMENT_EPISODE, value)
+        get() = mangaActivity.episode
+        set(value) {
+            mangaActivity.episode = value
+        }
     private val language: String
-        get() = arguments.getString(ARGUMENT_LANGUAGE)
+        get() = mangaActivity.language
     private var entryInfo: EntryInfo
-        get() = arguments.getParcelable(ARGUMENT_ENTRY_INFO)
-        set(value) = arguments.putParcelable(ARGUMENT_ENTRY_INFO, value)
+        get() = mangaActivity.entryInfo
+        set(value) {
+            mangaActivity.entryInfo = value
+        }
 
     private lateinit var mangaAdapter: MangaAdapter
     private lateinit var adapter: EasyHeaderFooterAdapter
@@ -231,8 +225,6 @@ class MangaFragment : SingleLoadingFragment<Pair<MangaInput, String>, ChapterInf
     override fun present(data: ChapterInfo) {
         entryInfo = data.entryInfo
 
-        (activity as MangaActivity).update(episode, entryInfo)
-
         val chapter = data.chapter
 
         header.setDate(DateTime(chapter.time * 1000))
@@ -256,6 +248,31 @@ class MangaFragment : SingleLoadingFragment<Pair<MangaInput, String>, ChapterInf
         mangaAdapter.replace(chapter.pages)
     }
 
+    override fun handleError(exception: Exception) {
+        if (exception is ZippedTask.PartialException) {
+            if (exception.data is EntryInfo) {
+                entryInfo = exception.data
+
+                header.setUploader(null)
+                header.setTranslatorGroup(null)
+                header.setDate(null)
+                header.setEpisodeInfo(entryInfo.totalEpisodes!!, episode)
+                adapter.setHeader(header)
+            }
+
+            if (exception.original is ProxerException &&
+                    exception.original.proxerErrorCode == ProxerException.MANGA_UNKNOWN_CHAPTER) {
+                showError(getString(R.string.fragment_manga_not_available), null)
+
+                contentContainer.visibility = View.VISIBLE
+            } else {
+                super.handleError(exception)
+            }
+        } else {
+            super.handleError(exception)
+        }
+    }
+
     override fun clear() {
         adapter.removeHeader()
         adapter.removeFooter()
@@ -269,7 +286,8 @@ class MangaFragment : SingleLoadingFragment<Pair<MangaInput, String>, ChapterInf
         return ZippedTask(
                 ProxerLoadingTask({ ChapterRequest(it.id, it.episode, it.language) }),
                 EntryInfoTask({ entryInfo }),
-                zipFunction = ::ChapterInfo
+                zipFunction = ::ChapterInfo,
+                awaitSecondResult = true
         )
     }
 
@@ -289,8 +307,6 @@ class MangaFragment : SingleLoadingFragment<Pair<MangaInput, String>, ChapterInf
 
     private fun switchEpisode(newEpisode: Int) {
         episode = newEpisode
-
-        (activity as MangaActivity).update(newEpisode, entryInfo)
 
         reset()
     }
