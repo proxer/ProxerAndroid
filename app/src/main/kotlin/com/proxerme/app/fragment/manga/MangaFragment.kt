@@ -18,13 +18,13 @@ import com.proxerme.app.activity.MangaActivity
 import com.proxerme.app.activity.ProfileActivity
 import com.proxerme.app.activity.TranslatorGroupActivity
 import com.proxerme.app.adapter.manga.MangaAdapter
+import com.proxerme.app.entitiy.EntryInfo
 import com.proxerme.app.fragment.framework.SingleLoadingFragment
 import com.proxerme.app.fragment.manga.MangaFragment.ChapterInfo
 import com.proxerme.app.fragment.manga.MangaFragment.MangaInput
 import com.proxerme.app.manager.SectionManager
+import com.proxerme.app.task.EntryInfoTask
 import com.proxerme.app.task.ProxerLoadingTask
-import com.proxerme.app.task.TotalEpisodesTask
-import com.proxerme.app.task.TotalEpisodesTask.TotalEpisodesResult
 import com.proxerme.app.task.framework.Task
 import com.proxerme.app.task.framework.ValidatingTask
 import com.proxerme.app.task.framework.ZippedTask
@@ -54,20 +54,20 @@ class MangaFragment : SingleLoadingFragment<Pair<MangaInput, String>, ChapterInf
 
         private const val ARGUMENT_ID = "id"
         private const val ARGUMENT_EPISODE = "episode"
-        private const val ARGUMENT_TOTAL_EPISODES = "total_episodes"
         private const val ARGUMENT_LANGUAGE = "language"
+        private const val ARGUMENT_ENTRY_INFO = "entry_info"
 
         private const val SCROLL_TO_TOP_ICON_SIZE = 56
         private const val SCROLL_TO_TOP_ICON_PADDING = 8
 
-        fun newInstance(id: String, episode: Int, language: String, totalEpisodes: Int = -1):
-                MangaFragment {
+        fun newInstance(id: String, episode: Int, language: String, name: String? = null,
+                        totalEpisodes: Int? = null): MangaFragment {
             return MangaFragment().apply {
                 this.arguments = Bundle().apply {
                     this.putString(ARGUMENT_ID, id)
                     this.putInt(ARGUMENT_EPISODE, episode)
                     this.putString(ARGUMENT_LANGUAGE, language)
-                    this.putInt(ARGUMENT_TOTAL_EPISODES, totalEpisodes)
+                    this.putParcelable(ARGUMENT_ENTRY_INFO, EntryInfo(name, totalEpisodes))
                 }
             }
         }
@@ -95,13 +95,14 @@ class MangaFragment : SingleLoadingFragment<Pair<MangaInput, String>, ChapterInf
 
     private val id: String
         get() = arguments.getString(ARGUMENT_ID)
-    private val episode: Int
+    private var episode: Int
         get() = arguments.getInt(ARGUMENT_EPISODE)
+        set(value) = arguments.putInt(ARGUMENT_EPISODE, value)
     private val language: String
         get() = arguments.getString(ARGUMENT_LANGUAGE)
-    private var totalEpisodes: Int
-        get() = arguments.getInt(ARGUMENT_TOTAL_EPISODES)
-        set(value) = arguments.putInt(ARGUMENT_TOTAL_EPISODES, value)
+    private var entryInfo: EntryInfo
+        get() = arguments.getParcelable(ARGUMENT_ENTRY_INFO)
+        set(value) = arguments.putParcelable(ARGUMENT_ENTRY_INFO, value)
 
     private lateinit var mangaAdapter: MangaAdapter
     private lateinit var adapter: EasyHeaderFooterAdapter
@@ -228,12 +229,14 @@ class MangaFragment : SingleLoadingFragment<Pair<MangaInput, String>, ChapterInf
     }
 
     override fun present(data: ChapterInfo) {
-        totalEpisodes = data.totalEpisodes.value
+        entryInfo = data.entryInfo
+
+        (activity as MangaActivity).update(episode, entryInfo)
 
         val chapter = data.chapter
 
         header.setDate(DateTime(chapter.time * 1000))
-        header.setEpisodeInfo(totalEpisodes, episode)
+        header.setEpisodeInfo(entryInfo.totalEpisodes!!, episode)
         header.setUploader(MediaControlView.Uploader(chapter.uploaderId, chapter.uploader))
         header.setTranslatorGroup(when (chapter.scangroupId == null || chapter.scangroup == null) {
             true -> null
@@ -265,7 +268,7 @@ class MangaFragment : SingleLoadingFragment<Pair<MangaInput, String>, ChapterInf
     override fun constructTask(): Task<Pair<MangaInput, String>, ChapterInfo> {
         return ZippedTask(
                 ProxerLoadingTask({ ChapterRequest(it.id, it.episode, it.language) }),
-                TotalEpisodesTask({ totalEpisodes }),
+                EntryInfoTask({ entryInfo }),
                 zipFunction = ::ChapterInfo
         )
     }
@@ -285,8 +288,9 @@ class MangaFragment : SingleLoadingFragment<Pair<MangaInput, String>, ChapterInf
     }
 
     private fun switchEpisode(newEpisode: Int) {
-        arguments.putInt(ARGUMENT_EPISODE, newEpisode)
-        (activity as MangaActivity).updateEpisode(newEpisode)
+        episode = newEpisode
+
+        (activity as MangaActivity).update(newEpisode, entryInfo)
 
         reset()
     }
@@ -311,5 +315,5 @@ class MangaFragment : SingleLoadingFragment<Pair<MangaInput, String>, ChapterInf
     class ReminderInput(val id: String, val episode: Int, val language: String,
                         val isFinished: Boolean)
 
-    class ChapterInfo(val chapter: Chapter, val totalEpisodes: TotalEpisodesResult)
+    class ChapterInfo(val chapter: Chapter, val entryInfo: EntryInfo)
 }

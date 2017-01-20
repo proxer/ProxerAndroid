@@ -50,9 +50,9 @@ class MediaActivity : MainActivity() {
             else -> intent.getStringExtra(EXTRA_ID)
         }
 
-    private var name: String?
+    var name: String?
         get() = intent.getStringExtra(EXTRA_NAME)
-        set(value) {
+        private set(value) {
             intent.putExtra(EXTRA_NAME, value)
         }
 

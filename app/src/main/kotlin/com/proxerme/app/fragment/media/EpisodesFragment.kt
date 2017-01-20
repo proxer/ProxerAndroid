@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import com.proxerme.app.R
 import com.proxerme.app.activity.AnimeActivity
 import com.proxerme.app.activity.MangaActivity
+import com.proxerme.app.activity.MediaActivity
 import com.proxerme.app.adapter.media.EpisodeAdapter
 import com.proxerme.app.entitiy.RichEpisode
 import com.proxerme.app.fragment.framework.SingleLoadingFragment
@@ -49,6 +50,9 @@ class EpisodesFragment : SingleLoadingFragment<String, Array<RichEpisode>>() {
     private val id: String
         get() = arguments.getString(ARGUMENT_ID)
 
+    private val name: String?
+        get() = (activity as MediaActivity).name
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -57,10 +61,10 @@ class EpisodesFragment : SingleLoadingFragment<String, Array<RichEpisode>>() {
             override fun onLanguageClick(language: String, episode: RichEpisode) {
                 if (episode.isAnime()) {
                     AnimeActivity.navigateTo(activity, id, episode.number, language,
-                            episode.totalEpisodes)
+                            name, episode.totalEpisodes)
                 } else {
                     MangaActivity.navigateTo(activity, id, episode.number, language,
-                            episode.totalEpisodes)
+                            name, episode.totalEpisodes)
                 }
             }
         }
