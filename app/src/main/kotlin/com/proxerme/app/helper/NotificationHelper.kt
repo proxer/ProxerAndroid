@@ -212,7 +212,9 @@ object NotificationHelper {
             PendingIntent {
         if (messages.size == 1) {
             return TaskStackBuilder.create(context)
-                    .addNextIntentWithParentStack(ChatActivity.getIntent(context,
+                    .addNextIntent(DashboardActivity.getSectionIntent(context,
+                            MaterialDrawerHelper.ITEM_CHAT))
+                    .addNextIntent(ChatActivity.getIntent(context,
                             messages.keys.first()))
                     .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
         } else {

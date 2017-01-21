@@ -24,13 +24,7 @@
         </activity>
         <activity
             android:name=".activity.ProfileActivity"
-            android:parentActivityName=".activity.DashboardActivity"
-            android:theme="@style/Theme.Translucent"
-            tools:ignore="UnusedAttribute">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.DashboardActivity" />
-
+            android:theme="@style/Theme.Translucent">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -54,31 +48,11 @@
                     android:scheme="https" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activity.chat.ChatActivity"
-            android:parentActivityName=".activity.DashboardActivity"
-            tools:ignore="UnusedAttribute">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.DashboardActivity" />
-        </activity>
-        <activity
-            android:name=".activity.UcpActivity"
-            android:parentActivityName=".activity.DashboardActivity"
-            tools:ignore="UnusedAttribute">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.DashboardActivity" />
-        </activity>
+        <activity android:name=".activity.chat.ChatActivity" />
+        <activity android:name=".activity.UcpActivity" />
         <activity
             android:name=".activity.MediaActivity"
-            android:parentActivityName=".activity.DashboardActivity"
-            android:theme="@style/Theme.Translucent"
-            tools:ignore="UnusedAttribute">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.DashboardActivity" />
-
+            android:theme="@style/Theme.Translucent">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -104,22 +78,10 @@
         </activity>
         <activity
             android:name=".activity.TranslatorGroupActivity"
-            android:parentActivityName=".activity.MediaActivity"
-            android:theme="@style/Theme.Translucent"
-            tools:ignore="UnusedAttribute">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.DashboardActivity" />
-        </activity>
+            android:theme="@style/Theme.Translucent" />
         <activity
             android:name=".activity.IndustryActivity"
-            android:parentActivityName=".activity.MediaActivity"
-            android:theme="@style/Theme.Translucent"
-            tools:ignore="UnusedAttribute">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.DashboardActivity" />
-        </activity>
+            android:theme="@style/Theme.Translucent" />
         <activity
             android:name=".activity.ImageDetailActivity"
             android:theme="@style/Theme.Transparent" />
