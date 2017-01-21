@@ -76,7 +76,8 @@ dependencies {
     compile "org.jetbrains.anko:anko-common:$anko_version"
     compile "org.jetbrains.anko:anko-sqlite:$anko_version"
 
-    compile 'net.xpece.android:support-preference:1.2.2'
+    compile "net.xpece.android:support-preference:$support_preference_version"
+    compile "net.xpece.android:support-spinner:$support_preference_version"
 
     compile('com.mikepenz:aboutlibraries:5.9.1@aar') {
         transitive = true
