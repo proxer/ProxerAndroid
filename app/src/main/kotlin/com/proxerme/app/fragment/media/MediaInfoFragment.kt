@@ -42,14 +42,8 @@ import java.security.InvalidParameterException
 class MediaInfoFragment : SingleLoadingFragment<String, Entry>() {
 
     companion object {
-        private const val ARGUMENT_ID = "id"
-
-        fun newInstance(id: String): MediaInfoFragment {
-            return MediaInfoFragment().apply {
-                this.arguments = Bundle().apply {
-                    this.putString(ARGUMENT_ID, id)
-                }
-            }
+        fun newInstance(): MediaInfoFragment {
+            return MediaInfoFragment()
         }
     }
 
@@ -73,8 +67,16 @@ class MediaInfoFragment : SingleLoadingFragment<String, Entry>() {
 
     override val section = Section.MEDIA_INFO
 
+    private val mediaActivity
+        get() = activity as MediaActivity
+
     private val id: String
-        get() = arguments.getString(ARGUMENT_ID)
+        get() = mediaActivity.id
+    private var name: String?
+        get() = mediaActivity.name
+        set(value) {
+            mediaActivity.name = value
+        }
 
     private val userInfoTask = constructUserInfoTask()
 
@@ -164,7 +166,7 @@ class MediaInfoFragment : SingleLoadingFragment<String, Entry>() {
     }
 
     override fun present(data: Entry) {
-        (activity as MediaActivity).updateName(data.name)
+        name = data.name
 
         if (data.rating > 0) {
             rating.visibility = View.VISIBLE

@@ -26,9 +26,9 @@ class NewChatActivity : MainActivity() {
         }
     }
 
-    private val initialParticipant: Participant?
+    val initialParticipant: Participant?
         get() = intent.getParcelableExtra(EXTRA_PARTICIPANT)
-    private val isGroup: Boolean
+    val isGroup: Boolean
         get() = intent.getBooleanExtra(EXTRA_IS_GROUP, false)
 
     private val toolbar: Toolbar by bindView(R.id.toolbar)
@@ -47,7 +47,7 @@ class NewChatActivity : MainActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction().replace(R.id.container,
-                    NewChatFragment.newInstance(initialParticipant, isGroup)).commitNow()
+                    NewChatFragment.newInstance()).commitNow()
         }
     }
 

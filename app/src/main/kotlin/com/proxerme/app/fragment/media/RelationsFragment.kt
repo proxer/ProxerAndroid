@@ -27,23 +27,20 @@ import com.proxerme.library.connection.info.request.RelationRequest
 class RelationsFragment : SingleLoadingFragment<String, Array<Relation>>() {
 
     companion object {
-        private const val ARGUMENT_ID = "id"
-
-        fun newInstance(id: String): RelationsFragment {
-            return RelationsFragment().apply {
-                this.arguments = Bundle().apply {
-                    this.putString(ARGUMENT_ID, id)
-                }
-            }
+        fun newInstance(): RelationsFragment {
+            return RelationsFragment()
         }
     }
 
     override val section = Section.RELATIONS
 
-    private val id: String
-        get() = arguments.getString(ARGUMENT_ID)
+    private val mediaActivity
+        get() = activity as MediaActivity
 
     private lateinit var adapter: RelationsAdapter
+
+    private val id: String
+        get() = mediaActivity.id
 
     private val list: RecyclerView by bindView(R.id.list)
 

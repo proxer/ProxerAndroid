@@ -29,7 +29,6 @@ import com.proxerme.library.parameters.TypeParameter
 class MediaListFragment : PagedLoadingFragment<MediaInput, MediaListEntry>() {
 
     companion object {
-
         private const val ARGUMENT_CATEGORY = "category"
 
         fun newInstance(category: String): MediaListFragment {
@@ -49,8 +48,12 @@ class MediaListFragment : PagedLoadingFragment<MediaInput, MediaListEntry>() {
     override val isHentaiConfirmationRequired: Boolean
         get() = type == TypeParameter.HENTAI || type == TypeParameter.HMANGA
 
-    private lateinit var category: String
-    private lateinit var sortCriteria: String
+    private var category: String
+        get() = arguments.getString(ARGUMENT_CATEGORY)
+        set(value) {
+            arguments.putString(ARGUMENT_CATEGORY, value)
+        }
+    private var sortCriteria = MediaSortParameter.RATING
     private lateinit var type: String
 
     private var searchQuery: String? = null
@@ -65,9 +68,6 @@ class MediaListFragment : PagedLoadingFragment<MediaInput, MediaListEntry>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        category = arguments.getString(ARGUMENT_CATEGORY)
-
-        sortCriteria = MediaSortParameter.RATING
         type = when (category) {
             CategoryParameter.ANIME -> TypeParameter.ALL_ANIME
             CategoryParameter.MANGA -> TypeParameter.ALL_MANGA

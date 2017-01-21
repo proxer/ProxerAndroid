@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.proxerme.app.R
 import com.proxerme.app.activity.ProfileActivity
+import com.proxerme.app.activity.chat.ConferenceInfoActivity
 import com.proxerme.app.adapter.chat.ConferenceParticipantAdapter
 import com.proxerme.app.adapter.chat.ConferenceParticipantAdapter.ConferenceParticipantAdapterCallback
 import com.proxerme.app.fragment.framework.SingleLoadingFragment
@@ -44,8 +45,11 @@ class ConferenceInfoFragment : SingleLoadingFragment<String, ConferenceInfoConta
 
     override val section = SectionManager.Section.CONFERENCE_INFO
 
-    private val conferenceId: String
-        get() = arguments.getString(CONFERENCE_ID_ARGUMENT)
+    private val conferenceInfoActivity
+        get() = activity as ConferenceInfoActivity
+
+    private val id: String
+        get() = conferenceInfoActivity.conference.id
 
     private lateinit var adapter: ConferenceParticipantAdapter
 
@@ -97,7 +101,7 @@ class ConferenceInfoFragment : SingleLoadingFragment<String, ConferenceInfoConta
     }
 
     override fun constructInput(): String {
-        return conferenceId
+        return id
     }
 
     override fun present(data: ConferenceInfoContainer) {

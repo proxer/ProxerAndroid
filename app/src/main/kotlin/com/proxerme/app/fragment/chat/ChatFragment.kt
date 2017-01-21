@@ -14,6 +14,7 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
 import com.proxerme.app.R
 import com.proxerme.app.activity.ProfileActivity
+import com.proxerme.app.activity.chat.ChatActivity
 import com.proxerme.app.adapter.chat.ChatAdapter
 import com.proxerme.app.data.chatDatabase
 import com.proxerme.app.entitiy.LocalConference
@@ -49,12 +50,8 @@ class ChatFragment : PagedLoadingFragment<ChatInput, LocalMessage>() {
         private const val ICON_SIZE = 32
         private const val ICON_PADDING = 6
 
-        fun newInstance(conference: LocalConference): ChatFragment {
-            return ChatFragment().apply {
-                this.arguments = Bundle().apply {
-                    this.putParcelable(ARGUMENT_CONFERENCE, conference)
-                }
-            }
+        fun newInstance(): ChatFragment {
+            return ChatFragment()
         }
     }
 
@@ -67,11 +64,14 @@ class ChatFragment : PagedLoadingFragment<ChatInput, LocalMessage>() {
         get() = StorageHelper.hasConferenceReachedEnd(conference.id)
         set(value) {}
 
+    private val chatActivity
+        get() = activity as ChatActivity
+
     override lateinit var layoutManager: LinearLayoutManager
     override lateinit var adapter: ChatAdapter
 
     private val conference: LocalConference
-        get() = arguments.getParcelable(ARGUMENT_CONFERENCE)
+        get() = chatActivity.conference
 
     private var actionMode: ActionMode? = null
 
@@ -261,7 +261,6 @@ class ChatFragment : PagedLoadingFragment<ChatInput, LocalMessage>() {
         messageInput.requestFocus()
 
         activity.inputMethodManager.showSoftInput(messageInput, InputMethodManager.SHOW_IMPLICIT)
-
         actionMode?.finish()
     }
 }

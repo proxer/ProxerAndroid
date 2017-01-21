@@ -30,32 +30,26 @@ import com.proxerme.library.parameters.CategoryParameter.MANGA
 class ToptenFragment : SingleLoadingFragment<Pair<ToptenInput, ToptenInput>, ZippedToptenResult>() {
 
     companion object {
-        private const val ARGUMENT_USER_ID = "user_id"
-        private const val ARGUMENT_USER_NAME = "user_name"
-
-        fun newInstance(userId: String? = null, userName: String? = null): ToptenFragment {
-            if (userId.isNullOrBlank() && userName.isNullOrBlank()) {
-                throw IllegalArgumentException("You must provide at least one of the arguments")
-            }
-
-            return ToptenFragment().apply {
-                this.arguments = android.os.Bundle().apply {
-                    this.putString(ToptenFragment.Companion.ARGUMENT_USER_ID, userId)
-                    this.putString(ToptenFragment.Companion.ARGUMENT_USER_NAME, userName)
-                }
-            }
+        fun newInstance(): ToptenFragment {
+            return ToptenFragment()
         }
     }
 
     override val section = Section.TOPTEN
 
-    private var userId: String?
-        get() = arguments.getString(ARGUMENT_USER_ID)
-        set(value) = arguments.putString(ARGUMENT_USER_ID, value)
+    private val profileActivity
+        get() = activity as com.proxerme.app.activity.ProfileActivity
 
+    private var userId: String?
+        get() = profileActivity.userId
+        set(value) {
+            profileActivity.userId = value
+        }
     private var username: String?
-        get() = arguments.getString(ARGUMENT_USER_NAME)
-        set(value) = arguments.putString(ARGUMENT_USER_NAME, value)
+        get() = profileActivity.username
+        set(value) {
+            profileActivity.username = value
+        }
 
     private lateinit var animeAdapter: ToptenAdapter
     private lateinit var mangaAdapter: ToptenAdapter

@@ -36,13 +36,15 @@ class IndustryActivity : MainActivity() {
         }
     }
 
-    private val id: String
+    val id: String
         get() = intent.getStringExtra(EXTRA_ID)
 
-    private var name: String?
+    var name: String?
         get() = intent.getStringExtra(EXTRA_NAME)
         set(value) {
             intent.putExtra(EXTRA_NAME, value)
+
+            title = value
         }
 
     private val toolbar: Toolbar by bindView(R.id.toolbar)
@@ -68,7 +70,7 @@ class IndustryActivity : MainActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction().replace(R.id.container,
-                    IndustryInfoFragment.newInstance(id)).commitNow()
+                    IndustryInfoFragment.newInstance()).commitNow()
         }
     }
 
@@ -98,11 +100,6 @@ class IndustryActivity : MainActivity() {
         }
 
         return super.onOptionsItemSelected(item)
-    }
-
-    fun updateName(newName: String) {
-        name = newName
-        title = newName
     }
 
     private fun loadImage() {

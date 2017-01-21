@@ -29,7 +29,7 @@ class ChatActivity : MainActivity() {
         }
     }
 
-    private val conference: LocalConference
+    val conference: LocalConference
         get() = intent.getParcelableExtra(EXTRA_CONFERENCE)
 
     private val toolbar: Toolbar by bindView(R.id.toolbar)
@@ -53,7 +53,7 @@ class ChatActivity : MainActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction().replace(R.id.container,
-                    ChatFragment.newInstance(conference)).commitNow()
+                    ChatFragment.newInstance()).commitNow()
         }
     }
 

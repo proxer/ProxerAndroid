@@ -36,13 +36,15 @@ class TranslatorGroupActivity : MainActivity() {
         }
     }
 
-    private val id: String
+    val id: String
         get() = intent.getStringExtra(EXTRA_ID)
 
-    private var name: String?
+    var name: String?
         get() = intent.getStringExtra(EXTRA_NAME)
         set(value) {
             intent.putExtra(EXTRA_NAME, value)
+
+            title = value
         }
 
     private val toolbar: Toolbar by bindView(R.id.toolbar)
@@ -68,7 +70,7 @@ class TranslatorGroupActivity : MainActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction().replace(R.id.container,
-                    TranslatorGroupInfoFragment.newInstance(id)).commitNow()
+                    TranslatorGroupInfoFragment.newInstance()).commitNow()
         }
     }
 
@@ -98,11 +100,6 @@ class TranslatorGroupActivity : MainActivity() {
         }
 
         return super.onOptionsItemSelected(item)
-    }
-
-    fun updateName(newName: String) {
-        name = newName
-        title = newName
     }
 
     private fun loadImage() {

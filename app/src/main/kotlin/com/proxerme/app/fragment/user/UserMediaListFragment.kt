@@ -5,6 +5,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.*
 import com.proxerme.app.R
 import com.proxerme.app.activity.MediaActivity
+import com.proxerme.app.activity.ProfileActivity
 import com.proxerme.app.adapter.user.UserMediaAdapter
 import com.proxerme.app.adapter.user.UserMediaAdapter.UserMediaAdapterCallback
 import com.proxerme.app.fragment.framework.PagedLoadingFragment
@@ -25,20 +26,11 @@ import com.proxerme.library.parameters.UserMediaSortParameter
 class UserMediaListFragment : PagedLoadingFragment<UserMediaInput, UserMediaListEntry>() {
 
     companion object {
-        private const val ARGUMENT_USER_ID = "user_id"
-        private const val ARGUMENT_USER_NAME = "user_name"
         private const val ARGUMENT_CATEGORY = "category"
 
-        fun newInstance(userId: String? = null, userName: String? = null,
-                        category: String): UserMediaListFragment {
-            if (userId.isNullOrBlank() && userName.isNullOrBlank()) {
-                throw IllegalArgumentException("You must provide at least one of the arguments")
-            }
-
+        fun newInstance(category: String): UserMediaListFragment {
             return UserMediaListFragment().apply {
                 this.arguments = Bundle().apply {
-                    this.putString(ARGUMENT_USER_ID, userId)
-                    this.putString(ARGUMENT_USER_NAME, userName)
                     this.putString(ARGUMENT_CATEGORY, category)
                 }
             }
@@ -49,10 +41,13 @@ class UserMediaListFragment : PagedLoadingFragment<UserMediaInput, UserMediaList
     override val itemsOnPage = 30
     override val isSwipeToRefreshEnabled = false
 
+    private val profileActivity
+        get() = activity as ProfileActivity
+
     private val userId: String?
-        get() = arguments.getString(ARGUMENT_USER_ID)
+        get() = profileActivity.userId
     private val username: String?
-        get() = arguments.getString(ARGUMENT_USER_NAME)
+        get() = profileActivity.username
     private var category: String
         get() = arguments.getString(ARGUMENT_CATEGORY)
         set(value) = arguments.putString(ARGUMENT_CATEGORY, value)

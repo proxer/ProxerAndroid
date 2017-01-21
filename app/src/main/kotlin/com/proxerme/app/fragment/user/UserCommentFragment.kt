@@ -23,35 +23,26 @@ import com.proxerme.library.parameters.CategoryParameter
 class UserCommentFragment : PagedLoadingFragment<UserCommentInput, Comment>() {
 
     companion object {
-        private const val ARGUMENT_USER_ID = "user_id"
-        private const val ARGUMENT_USER_NAME = "user_name"
-
-        fun newInstance(userId: String? = null, userName: String? = null): UserCommentFragment {
-            if (userId.isNullOrBlank() && userName.isNullOrBlank()) {
-                throw IllegalArgumentException("You must provide at least one of the arguments")
-            }
-
-            return UserCommentFragment().apply {
-                this.arguments = Bundle().apply {
-                    this.putString(ARGUMENT_USER_ID, userId)
-                    this.putString(ARGUMENT_USER_NAME, userName)
-                }
-            }
+        fun newInstance(): UserCommentFragment {
+            return UserCommentFragment()
         }
     }
 
     override val section = Section.COMMENTS
     override val itemsOnPage = 25
 
+    private val profileActivity
+        get() = activity as ProfileActivity
+
     private var category = CategoryParameter.ANIME
+
+    private val userId: String?
+        get() = profileActivity.userId
+    private val username: String?
+        get() = profileActivity.username
 
     override lateinit var adapter: CommentAdapter
     override lateinit var layoutManager: LinearLayoutManager
-
-    private val userId: String
-        get() = arguments.getString(ARGUMENT_USER_ID)
-    private val username: String
-        get() = arguments.getString(ARGUMENT_USER_NAME)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -44,7 +44,7 @@ class MediaActivity : MainActivity() {
         }
     }
 
-    private val id: String
+    val id: String
         get() = when (intent.action) {
             Intent.ACTION_VIEW -> intent.data.pathSegments.getOrElse(1, { "-1" })
             else -> intent.getStringExtra(EXTRA_ID)
@@ -52,8 +52,10 @@ class MediaActivity : MainActivity() {
 
     var name: String?
         get() = intent.getStringExtra(EXTRA_NAME)
-        private set(value) {
+        set(value) {
             intent.putExtra(EXTRA_NAME, value)
+
+            title = value
         }
 
     private val itemToDisplay: Int
@@ -117,11 +119,6 @@ class MediaActivity : MainActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun updateName(newName: String) {
-        name = newName
-        title = newName
-    }
-
     private fun setupImage() {
         coverImage.setOnClickListener {
             ImageDetailActivity.navigateTo(this@MediaActivity, it as ImageView,
@@ -149,10 +146,10 @@ class MediaActivity : MainActivity() {
 
         override fun getItem(position: Int): Fragment {
             return when (position) {
-                0 -> MediaInfoFragment.newInstance(id)
-                1 -> CommentFragment.newInstance(id)
-                2 -> EpisodesFragment.newInstance(id)
-                3 -> RelationsFragment.newInstance(id)
+                0 -> MediaInfoFragment.newInstance()
+                1 -> CommentFragment.newInstance()
+                2 -> EpisodesFragment.newInstance()
+                3 -> RelationsFragment.newInstance()
                 else -> throw RuntimeException("Unknown index passed")
             }
         }

@@ -28,18 +28,15 @@ import org.jetbrains.anko.toast
 class TranslatorGroupInfoFragment : SingleLoadingFragment<String, TranslatorGroup>() {
 
     companion object {
-        private const val ARGUMENT_ID = "id"
-
-        fun newInstance(id: String): TranslatorGroupInfoFragment {
-            return TranslatorGroupInfoFragment().apply {
-                this.arguments = Bundle().apply {
-                    this.putString(ARGUMENT_ID, id)
-                }
-            }
+        fun newInstance(): TranslatorGroupInfoFragment {
+            return TranslatorGroupInfoFragment()
         }
     }
 
     override val section = Section.TRANSLATOR_GROUP_INFO
+
+    private val translatorGroupActivity
+        get() = activity as TranslatorGroupActivity
 
     private val language: ImageView by bindView(R.id.language)
     private val link: TextView by bindView(R.id.link)
@@ -48,7 +45,12 @@ class TranslatorGroupInfoFragment : SingleLoadingFragment<String, TranslatorGrou
     private val description: TextView by bindView(R.id.description)
 
     private val id: String
-        get() = arguments.getString(ARGUMENT_ID)
+        get() = translatorGroupActivity.id
+    private var name: String?
+        get() = translatorGroupActivity.name
+        set(value) {
+            translatorGroupActivity.name = value
+        }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -62,7 +64,7 @@ class TranslatorGroupInfoFragment : SingleLoadingFragment<String, TranslatorGrou
     }
 
     override fun present(data: TranslatorGroup) {
-        (activity as TranslatorGroupActivity).updateName(data.name)
+        name = data.name
 
         // TODO: Better icon for misc
         language.setImageResource(when (data.country) {

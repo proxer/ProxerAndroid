@@ -25,10 +25,10 @@ import com.proxerme.app.data.chatDatabase
 import com.proxerme.app.entitiy.Participant
 import com.proxerme.app.fragment.user.ProfileFragment
 import com.proxerme.app.fragment.user.ToptenFragment
+import com.proxerme.app.fragment.user.UserCommentFragment
 import com.proxerme.app.fragment.user.UserMediaListFragment
 import com.proxerme.app.manager.UserManager
 import com.proxerme.app.util.bindView
-import com.proxerme.library.connection.user.entitiy.UserInfo
 import com.proxerme.library.info.ProxerUrlHolder
 import com.proxerme.library.parameters.CategoryParameter
 import org.jetbrains.anko.intentFor
@@ -42,7 +42,10 @@ class ProfileActivity : MainActivity() {
 
         private const val SECTION_ANIME = "anime"
         private const val SECTION_MANGA = "manga"
-//        private const val SECTION_COMMENTS = "latestcomments"
+        private const val SECTION_COMMENTS = "latestcomments"
+
+        private const val IMAGE_SIZE = 256
+        private const val IMAGE_PADDING = 32
 
         fun navigateTo(context: Activity, userId: String? = null, username: String? = null,
                        imageId: String? = null) {
@@ -58,7 +61,7 @@ class ProfileActivity : MainActivity() {
         }
     }
 
-    private var userId: String?
+    var userId: String?
         get() = when {
             intent.action == Intent.ACTION_VIEW -> intent.data.pathSegments.getOrNull(1)
             else -> intent.getStringExtra(EXTRA_USER_ID)
@@ -67,16 +70,24 @@ class ProfileActivity : MainActivity() {
             intent.putExtra(EXTRA_USER_ID, value)
         }
 
-    private var username: String?
+    var username: String?
         get() = intent.getStringExtra(EXTRA_USERNAME)
         set(value) {
             intent.putExtra(EXTRA_USERNAME, value)
+
+            title = value
         }
 
-    private var imageId: String?
+    var imageId: String?
         get() = intent.getStringExtra(EXTRA_IMAGE_ID)
         set(value) {
+            val changed = intent.getStringExtra(EXTRA_IMAGE_ID) != value
+
             intent.putExtra(EXTRA_IMAGE_ID, value)
+
+            if (changed) {
+                loadImage()
+            }
         }
 
     private val itemToDisplay: Int
@@ -84,7 +95,7 @@ class ProfileActivity : MainActivity() {
             Intent.ACTION_VIEW -> when (intent.data.pathSegments.getOrNull(2)) {
                 SECTION_ANIME -> 2
                 SECTION_MANGA -> 3
-//                SECTION_COMMENTS -> 4
+                SECTION_COMMENTS -> 4
                 else -> 0
             }
             else -> 0
@@ -148,15 +159,6 @@ class ProfileActivity : MainActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun updateUserInfo(userInfo: UserInfo) {
-        userId = userInfo.id
-        username = userInfo.username
-        imageId = userInfo.imageId
-
-        title = username
-        loadImage()
-    }
-
     private fun initViews() {
         viewPager.adapter = sectionsPagerAdapter
 
@@ -180,8 +182,8 @@ class ProfileActivity : MainActivity() {
         if (imageId.isNullOrBlank()) {
             profileImage.setImageDrawable(IconicsDrawable(profileImage.context)
                     .icon(CommunityMaterial.Icon.cmd_account)
-                    .sizeDp(256)
-                    .paddingDp(32)
+                    .sizeDp(IMAGE_SIZE)
+                    .paddingDp(IMAGE_PADDING)
                     .backgroundColorRes(R.color.colorPrimaryLight)
                     .colorRes(R.color.colorPrimary))
         } else {
@@ -197,16 +199,16 @@ class ProfileActivity : MainActivity() {
 
         override fun getItem(position: Int): Fragment {
             return when (position) {
-                0 -> ProfileFragment.newInstance(userId, username)
-                1 -> ToptenFragment.newInstance(userId, username)
-                2 -> UserMediaListFragment.newInstance(userId, username, CategoryParameter.ANIME)
-                3 -> UserMediaListFragment.newInstance(userId, username, CategoryParameter.MANGA)
-//                4 -> UserCommentFragment.newInstance(userId, username)
+                0 -> ProfileFragment.newInstance()
+                1 -> ToptenFragment.newInstance()
+                2 -> UserMediaListFragment.newInstance(CategoryParameter.ANIME)
+                3 -> UserMediaListFragment.newInstance(CategoryParameter.MANGA)
+                4 -> UserCommentFragment.newInstance()
                 else -> throw RuntimeException("Unknown index passed")
             }
         }
 
-        override fun getCount() = 4 // 5
+        override fun getCount() = 5
 
         override fun getPageTitle(position: Int): CharSequence? {
             return when (position) {
@@ -214,7 +216,7 @@ class ProfileActivity : MainActivity() {
                 1 -> getString(R.string.fragment_topten_title)
                 2 -> getString(R.string.fragment_user_media_list_anime_title)
                 3 -> getString(R.string.fragment_user_media_list_manga_title)
-//                4 -> getString(R.string.fragment_user_comment_title)
+                4 -> getString(R.string.fragment_user_comment_title)
                 else -> throw RuntimeException("Unknown index passed")
             }
         }

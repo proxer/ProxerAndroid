@@ -30,29 +30,20 @@ import okhttp3.HttpUrl
 class ProfileFragment : SingleLoadingFragment<ProfileInput, UserInfo>() {
 
     companion object {
-        private const val ARGUMENT_USER_ID = "user_id"
-        private const val ARGUMENT_USER_NAME = "user_name"
-
-        fun newInstance(userId: String? = null, userName: String? = null): ProfileFragment {
-            if (userId.isNullOrBlank() && userName.isNullOrBlank()) {
-                throw IllegalArgumentException("You must provide at least one of the arguments")
-            }
-
-            return ProfileFragment().apply {
-                this.arguments = Bundle().apply {
-                    this.putString(ARGUMENT_USER_ID, userId)
-                    this.putString(ARGUMENT_USER_NAME, userName)
-                }
-            }
+        fun newInstance(): ProfileFragment {
+            return ProfileFragment()
         }
     }
 
     override val section = Section.PROFILE
 
+    private val profileActivity
+        get() = activity as ProfileActivity
+
     private val userId: String?
-        get() = arguments.getString(ARGUMENT_USER_ID)
+        get() = profileActivity.userId
     private val username: String?
-        get() = arguments.getString(ARGUMENT_USER_NAME)
+        get() = profileActivity.username
 
     private val animePointsRow: TextView by bindView(R.id.animePointsRow)
     private val mangaPointsRow: TextView by bindView(R.id.mangaPointsRow)
@@ -78,7 +69,9 @@ class ProfileFragment : SingleLoadingFragment<ProfileInput, UserInfo>() {
     }
 
     override fun present(data: UserInfo) {
-        (activity as ProfileActivity).updateUserInfo(data)
+        profileActivity.userId = data.id
+        profileActivity.username = data.username
+        profileActivity.imageId = data.imageId
 
         val totalPoints = data.animePoints + data.mangaPoints + data.uploadPoints +
                 data.forumPoints + data.infoPoints + data.miscPoints

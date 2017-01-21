@@ -28,18 +28,15 @@ import org.jetbrains.anko.toast
 class IndustryInfoFragment : SingleLoadingFragment<String, Industry>() {
 
     companion object {
-        private const val ARGUMENT_ID = "id"
-
-        fun newInstance(id: String): IndustryInfoFragment {
-            return IndustryInfoFragment().apply {
-                this.arguments = Bundle().apply {
-                    this.putString(ARGUMENT_ID, id)
-                }
-            }
+        fun newInstance(): IndustryInfoFragment {
+            return IndustryInfoFragment()
         }
     }
 
     override val section = Section.INDUSTRY_INFO
+
+    private val industryActivity
+        get() = activity as IndustryActivity
 
     private val language: ImageView by bindView(R.id.language)
     private val type: TextView by bindView(R.id.type)
@@ -49,7 +46,12 @@ class IndustryInfoFragment : SingleLoadingFragment<String, Industry>() {
     private val description: TextView by bindView(R.id.description)
 
     private val id: String
-        get() = arguments.getString(ARGUMENT_ID)
+        get() = industryActivity.id
+    private var name: String?
+        get() = industryActivity.name
+        set(value) {
+            industryActivity.name = value
+        }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -63,7 +65,7 @@ class IndustryInfoFragment : SingleLoadingFragment<String, Industry>() {
     }
 
     override fun present(data: Industry) {
-        (activity as IndustryActivity).updateName(data.name)
+        name = data.name
 
         // TODO: Better icon for misc
         language.setImageResource(when (data.country) {

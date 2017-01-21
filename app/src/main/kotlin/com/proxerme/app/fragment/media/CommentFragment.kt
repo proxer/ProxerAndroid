@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.*
 import com.proxerme.app.R
+import com.proxerme.app.activity.MediaActivity
 import com.proxerme.app.activity.ProfileActivity
 import com.proxerme.app.adapter.media.CommentAdapter
 import com.proxerme.app.fragment.framework.PagedLoadingFragment
@@ -14,7 +15,6 @@ import com.proxerme.app.task.framework.Task
 import com.proxerme.library.connection.info.entity.Comment
 import com.proxerme.library.connection.info.request.CommentRequest
 import com.proxerme.library.parameters.CommentSortParameter
-import com.proxerme.library.parameters.CommentSortParameter.CommentSort
 
 /**
  * TODO: Describe class
@@ -24,29 +24,24 @@ import com.proxerme.library.parameters.CommentSortParameter.CommentSort
 class CommentFragment : PagedLoadingFragment<CommentInput, Comment>() {
 
     companion object {
-
-        private const val ARGUMENT_ID = "id"
-
-        fun newInstance(id: String): CommentFragment {
-            return CommentFragment().apply {
-                this.arguments = Bundle().apply {
-                    this.putString(ARGUMENT_ID, id)
-                }
-            }
+        fun newInstance(): CommentFragment {
+            return CommentFragment()
         }
     }
 
     override val section = Section.COMMENTS
     override val itemsOnPage = 15
 
-    @CommentSort
+    private val mediaActivity
+        get() = activity as MediaActivity
+
     private var sortCriteria = CommentSortParameter.RATING
 
     override lateinit var adapter: CommentAdapter
     override lateinit var layoutManager: LinearLayoutManager
 
     private val id: String
-        get() = arguments.getString(ARGUMENT_ID)
+        get() = mediaActivity.id
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

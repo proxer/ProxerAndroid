@@ -20,6 +20,7 @@ import com.mikepenz.iconics.typeface.IIcon
 import com.proxerme.app.R
 import com.proxerme.app.activity.MainActivity
 import com.proxerme.app.activity.chat.ChatActivity
+import com.proxerme.app.activity.chat.NewChatActivity
 import com.proxerme.app.adapter.chat.NewChatParticipantAdapter
 import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.entitiy.Participant
@@ -46,20 +47,11 @@ import com.vanniktech.emoji.EmojiPopup
 class NewChatFragment : MainFragment() {
 
     companion object {
-        private const val PARTICIPANT_ARGUMENT = "participant"
-        private const val IS_GROUP_ARGUMENT = "is_group"
-
         private const val ICON_SIZE = 32
         private const val ICON_PADDING = 8
 
-        fun newInstance(initialParticipant: Participant? = null,
-                        isGroup: Boolean = false): NewChatFragment {
-            return NewChatFragment().apply {
-                arguments = Bundle().apply {
-                    putParcelable(PARTICIPANT_ARGUMENT, initialParticipant)
-                    putBoolean(IS_GROUP_ARGUMENT, isGroup)
-                }
-            }
+        fun newInstance(): NewChatFragment {
+            return NewChatFragment()
         }
     }
 
@@ -97,13 +89,16 @@ class NewChatFragment : MainFragment() {
 
     override val section = Section.NEW_CHAT
 
+    private val newChatActivity
+        get() = activity as NewChatActivity
+
     private lateinit var adapter: NewChatParticipantAdapter
     private lateinit var headerFooterAdapter: EasyHeaderFooterAdapter
 
     private val isGroup: Boolean
-        get() = arguments.getBoolean(IS_GROUP_ARGUMENT)
+        get() = newChatActivity.isGroup
     private val initialParticipant: Participant?
-        get() = arguments.getParcelable(PARTICIPANT_ARGUMENT)
+        get() = newChatActivity.initialParticipant
 
     private var newParticipant: String? = null
 
@@ -263,8 +258,7 @@ class NewChatFragment : MainFragment() {
             }
 
             image.setImageDrawable(IconicsDrawable(image.context)
-                    .icon(if (arguments.getBoolean(IS_GROUP_ARGUMENT))
-                        CommunityMaterial.Icon.cmd_account_plus else
+                    .icon(if (isGroup) CommunityMaterial.Icon.cmd_account_plus else
                         CommunityMaterial.Icon.cmd_account_multiple_plus)
                     .sizeDp(96)
                     .paddingDp(16)

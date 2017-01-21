@@ -29,29 +29,25 @@ import com.proxerme.library.connection.info.request.ListInfoRequest
 class EpisodesFragment : SingleLoadingFragment<String, Array<RichEpisode>>() {
 
     companion object {
-        private const val ARGUMENT_ID = "id"
-
-        fun newInstance(id: String): EpisodesFragment {
-            return EpisodesFragment().apply {
-                this.arguments = Bundle().apply {
-                    this.putString(ARGUMENT_ID, id)
-                }
-            }
+        fun newInstance(): EpisodesFragment {
+            return EpisodesFragment()
         }
     }
 
     override val section = Section.EPISODES
     override val isSwipeToRefreshEnabled = false
 
+    private val mediaActivity
+        get() = activity as MediaActivity
+
     private lateinit var adapter: EpisodeAdapter
 
-    private val list: RecyclerView by bindView(R.id.list)
-
     private val id: String
-        get() = arguments.getString(ARGUMENT_ID)
-
+        get() = mediaActivity.id
     private val name: String?
-        get() = (activity as MediaActivity).name
+        get() = mediaActivity.name
+
+    private val list: RecyclerView by bindView(R.id.list)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

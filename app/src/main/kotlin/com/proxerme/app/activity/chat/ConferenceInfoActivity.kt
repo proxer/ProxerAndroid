@@ -21,7 +21,7 @@ class ConferenceInfoActivity : MainActivity() {
         }
     }
 
-    private val conference: LocalConference
+    val conference: LocalConference
         get() = intent.getParcelableExtra(EXTRA_CONFERENCE)
 
     private val toolbar: Toolbar by bindView(R.id.toolbar)
