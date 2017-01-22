@@ -59,7 +59,7 @@
                 android:paddingRight="8dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@android:color/white"
-                tools:text="Animeserie" />
+                tools:text="Animeseries" />
 
             <FrameLayout
                 android:id="@+id/ratingContainer"
@@ -90,7 +90,7 @@
                 android:layout_toStartOf="@+id/languageContainer"
                 android:padding="8dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                tools:text="12 Episoden - Abgeschlossen" />
+                tools:text="12 Episoden - Finished" />
 
             <LinearLayout
                 android:id="@+id/languageContainer"

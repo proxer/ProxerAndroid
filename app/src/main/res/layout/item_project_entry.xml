@@ -80,7 +80,7 @@
             </FrameLayout>
 
             <TextView
-                android:id="@+id/episodes"
+                android:id="@+id/status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -88,7 +88,7 @@
                 android:layout_below="@+id/ratingContainer"
                 android:padding="8dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                tools:text="12 Episoden - Abgeschlossen" />
+                tools:text="In progress" />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </FrameLayout>

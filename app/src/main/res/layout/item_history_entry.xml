@@ -59,7 +59,7 @@
                 android:paddingRight="8dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@android:color/white"
-                tools:text="Animeserie" />
+                tools:text="Animeseries" />
 
             <TextView
                 android:id="@+id/status"

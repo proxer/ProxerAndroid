@@ -331,6 +331,12 @@
     <string name="fragment_media_info_rate_count">(%d)</string>
     <string name="fragment_manga_not_available">Das Kapitel wurde noch nicht hochgeladen :/</string>
     <string name="fragment_anime_not_available">Die Episode wurde noch nicht hochgeladen :/</string>
+    <string name="project_type_unkown">Status unbekannt</string>
+    <string name="project_type_finished">Abgeschlossen</string>
+    <string name="project_type_in_work">In Arbeit</string>
+    <string name="project_type_planned">In Planung</string>
+    <string name="project_type_cancelled">Abgebrochen</string>
+    <string name="project_type_licenced">Lizensiert</string>
 
     <plurals name="item_conferences_participants">
         <item quantity="other">%d Teilnehmer</item>
