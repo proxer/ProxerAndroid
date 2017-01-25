@@ -77,3 +77,9 @@
 -keepclassmembers class * implements com.google.android.exoplayer.text.SubtitleParser  {
    public <init>(...);
 }
+-keepclassmembers class com.davemorrissey.labs.subscaleview.decoder.SkiaImageRegionDecoder {
+   public <init>(...);
+}
+-keepclassmembers class com.davemorrissey.labs.subscaleview.decoder.SkiaImageDecoder {
+   public <init>(...);
+}

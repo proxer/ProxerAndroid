@@ -4,19 +4,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.resource.drawable.GlideDrawable
 import com.bumptech.glide.request.animation.GlideAnimation
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.target.Target
+import com.davemorrissey.labs.subscaleview.ImageSource
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.util.DeviceUtils
 import com.proxerme.app.util.decodedName
-import com.proxerme.app.util.safelySetScale
 import com.proxerme.library.connection.manga.entity.Page
 import com.proxerme.library.info.ProxerUrlHolder
-import uk.co.senab.photoview.PhotoView
+import java.io.File
 
 /**
  * TODO: Describe class
@@ -42,36 +41,33 @@ class MangaAdapter : PagingAdapter<Page>() {
 
     inner class ViewHolder(itemView: View) : PagingViewHolder<Page>(itemView) {
 
-        private var target: Target<GlideDrawable>? = null
+        private var target: Target<File>? = null
 
-        private val image: PhotoView
-            get() = itemView as PhotoView
+        private val image: SubsamplingScaleImageView
+            get() = itemView as SubsamplingScaleImageView
 
         override fun bind(item: Page) {
             val width = DeviceUtils.getScreenWidth(image.context)
             val height = (item.height * width.toFloat() / item.width.toFloat()).toInt()
 
-            image.setImageDrawable(null)
+            image.recycle()
             image.layoutParams.height = height
-            image.safelySetScale(1.0f)
 
             target?.let {
                 Glide.clear(it)
             }
 
-            target = object : SimpleTarget<GlideDrawable>(width, height) {
-                override fun onResourceReady(resource: GlideDrawable?,
-                                             animation: GlideAnimation<in GlideDrawable>?) {
-                    image.setImageDrawable(resource)
-                    image.apply { alpha = 0.2f }.animate().alpha(1.0f).start()
+            target = object : SimpleTarget<File>() {
+                override fun onResourceReady(resource: File,
+                                             glideAnimation: GlideAnimation<in File>?) {
+                    image.setImage(ImageSource.uri(resource.path))
                 }
             }
 
             Glide.with(image.context)
                     .load(ProxerUrlHolder.getMangaPageUrl(server!!, entryId!!, id!!,
                             item.decodedName).toString())
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .into(target)
+                    .downloadOnly(target)
         }
     }
 }
