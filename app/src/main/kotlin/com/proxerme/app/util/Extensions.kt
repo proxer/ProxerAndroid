@@ -21,7 +21,6 @@ import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.library.connection.manga.entity.Page
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
-import uk.co.senab.photoview.PhotoView
 import java.net.URLDecoder
 
 /**
@@ -102,14 +101,6 @@ fun <T : View> View.findChild(predicate: (View) -> Boolean): T? {
     }
 
     return null
-}
-
-fun PhotoView.safelySetScale(scale: Float) {
-    try {
-        this.scale = scale
-    } catch (ignored: Exception) {
-
-    }
 }
 
 val Page.decodedName: String
