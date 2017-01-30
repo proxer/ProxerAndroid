@@ -123,7 +123,7 @@ class ProfileActivity : MainActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        if (UserManager.user == null || UserManager.user!!.username != username) {
+        if (UserManager.user == null || !UserManager.user!!.username.equals(username, true)) {
             menuInflater.inflate(R.menu.activity_profile, menu)
         }
 
