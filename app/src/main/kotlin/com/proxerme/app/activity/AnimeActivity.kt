@@ -48,6 +48,8 @@ class AnimeActivity : MainActivity() {
         }
         set(value) {
             intent.putExtra(EXTRA_EPISODE, value)
+
+            updateTitle()
         }
 
     val language: String
@@ -115,7 +117,7 @@ class AnimeActivity : MainActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun updateTitle() {
+    private fun updateTitle() {
         title = getString(R.string.activity_anime_title, episode)
         supportActionBar?.subtitle = entryInfo.name
     }

@@ -51,6 +51,8 @@ class MangaActivity : MainActivity() {
         }
         set(value) {
             intent.putExtra(EXTRA_EPISODE, value)
+
+            updateTitle()
         }
 
     val language: String
@@ -65,6 +67,8 @@ class MangaActivity : MainActivity() {
         get() = intent.getParcelableExtra(EXTRA_ENTRY_INFO) ?: EntryInfo(null, null)
         set(value) {
             intent.putExtra(EXTRA_ENTRY_INFO, value)
+
+            updateTitle()
         }
 
     private val toolbar: Toolbar by bindView(R.id.toolbar)
@@ -76,12 +80,11 @@ class MangaActivity : MainActivity() {
         setSupportActionBar(toolbar)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title = getString(R.string.activity_manga_title, episode)
-        supportActionBar?.subtitle = entryInfo.name
-
         toolbar.setOnClickListener {
             MediaActivity.navigateTo(this, id, entryInfo.name)
         }
+
+        updateTitle()
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction().replace(R.id.container,
@@ -117,11 +120,8 @@ class MangaActivity : MainActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun update(newEpisode: Int, newInfo: EntryInfo) {
-        episode = newEpisode
-        entryInfo = newInfo
-
-        title = getString(R.string.activity_anime_title, newEpisode)
-        supportActionBar?.subtitle = newInfo.name
+    private fun updateTitle() {
+        title = getString(R.string.activity_anime_title, episode)
+        supportActionBar?.subtitle = entryInfo.name
     }
 }
