@@ -21,7 +21,7 @@ import com.proxerme.library.info.ProxerUrlHolder
  *
  * @author Ruben Gees
  */
-class UserMediaAdapter(private val category: String) : PagingAdapter<UserMediaListEntry>() {
+class UserMediaAdapter : PagingAdapter<UserMediaListEntry>() {
 
     var callback: UserMediaAdapterCallback? = null
 

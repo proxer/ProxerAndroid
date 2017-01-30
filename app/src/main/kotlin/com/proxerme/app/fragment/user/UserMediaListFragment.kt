@@ -59,7 +59,7 @@ class UserMediaListFragment : PagedLoadingFragment<UserMediaInput, UserMediaList
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        adapter = UserMediaAdapter(category)
+        adapter = UserMediaAdapter()
         adapter.callback = object : UserMediaAdapterCallback() {
             override fun onItemClick(item: UserMediaListEntry) {
                 MediaActivity.navigateTo(activity, item.id, item.name)

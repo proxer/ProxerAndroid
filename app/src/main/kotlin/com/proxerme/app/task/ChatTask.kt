@@ -23,7 +23,6 @@ import java.util.concurrent.Future
  * @author Ruben Gees
  */
 class ChatTask(private val id: String,
-               private var contextResolver: (() -> Context)? = null,
                successCallback: ((Array<LocalMessage>) -> Unit)? = null,
                exceptionCallback: ((Exception) -> Unit)? = null) :
         BaseTask<ChatInput, Array<LocalMessage>>(successCallback, exceptionCallback) {
