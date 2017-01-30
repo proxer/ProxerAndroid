@@ -220,7 +220,7 @@ class MediaListFragment : PagedLoadingFragment<MediaInput, MediaListEntry>() {
         return MediaInput(page, searchQuery, type, sortCriteria, itemsOnPage)
     }
 
-    override fun getEmptyString(): String {
+    override fun getEmptyMessage(): String {
         return getString(R.string.error_no_data_media_list)
     }
 

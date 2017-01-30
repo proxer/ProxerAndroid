@@ -156,7 +156,7 @@ class ReminderFragment : PagedLoadingFragment<ReminderInput, Reminder>() {
         return ReminderInput(page, category, itemsOnPage)
     }
 
-    override fun getEmptyString(): String {
+    override fun getEmptyMessage(): String {
         return getString(R.string.error_no_data_reminder)
     }
 

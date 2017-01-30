@@ -232,7 +232,7 @@ class ChatFragment : PagedLoadingFragment<ChatInput, LocalMessage>() {
         return ChatInput(page, context)
     }
 
-    override fun getEmptyString(): String {
+    override fun getEmptyMessage(): String {
         return getString(R.string.error_no_data_chat)
     }
 

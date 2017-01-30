@@ -250,11 +250,11 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
 
     open protected fun showEmptyIfAppropriate() {
         if (hasReachedEnd && adapter.isEmpty()) {
-            showError(getEmptyString(), null)
+            showError(getEmptyMessage(), null)
         }
     }
 
-    open protected fun getEmptyString(): String {
+    open protected fun getEmptyMessage(): String {
         return getString(R.string.error_no_data)
     }
 

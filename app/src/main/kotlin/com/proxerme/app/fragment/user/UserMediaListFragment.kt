@@ -166,7 +166,7 @@ class UserMediaListFragment : PagedLoadingFragment<UserMediaInput, UserMediaList
         return UserMediaInput(page, userId, username, category, sortCriteria, itemsOnPage)
     }
 
-    override fun getEmptyString(): String {
+    override fun getEmptyMessage(): String {
         return getString(R.string.error_no_data_user_media_list)
     }
 

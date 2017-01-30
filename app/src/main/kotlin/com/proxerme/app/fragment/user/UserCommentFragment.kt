@@ -106,7 +106,7 @@ class UserCommentFragment : PagedLoadingFragment<UserCommentInput, Comment>() {
         return UserCommentInput(page, userId, username, itemsOnPage, category)
     }
 
-    override fun getEmptyString(): String {
+    override fun getEmptyMessage(): String {
         return getString(R.string.error_no_data_comments)
     }
 
