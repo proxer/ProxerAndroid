@@ -113,10 +113,7 @@ class EpisodeAdapter : PagingAdapter<RichEpisode>() {
                         when (Utils.getLanguages(languageEntry.key).firstOrNull()) {
                             Utils.Language.GERMAN -> R.drawable.ic_germany
                             Utils.Language.ENGLISH -> R.drawable.ic_united_states
-                            else -> {
-                                throw IllegalArgumentException("Unknown language: " +
-                                        languageEntry.key)
-                            }
+                            else -> R.drawable.ic_error
                         })
 
                 language.text = languageEntry.key

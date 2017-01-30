@@ -13,6 +13,7 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
+import com.proxerme.app.util.ParameterMapper
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.ucp.entitiy.Reminder
@@ -81,7 +82,7 @@ class ReminderAdapter : PagingAdapter<Reminder>() {
 
         override fun bind(item: Reminder) {
             title.text = item.name
-            medium.text = item.medium
+            medium.text = ParameterMapper.medium(medium.context, item.medium)
             episode.text = episode.context.getString(R.string.reminder_episode, item.episode)
             language.setImageResource(when (Utils.getLanguages(item.language).firstOrNull()) {
                 Utils.Language.ENGLISH -> R.drawable.ic_united_states

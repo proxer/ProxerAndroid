@@ -1,7 +1,6 @@
 package com.proxerme.app.fragment.user
 
 import android.os.Bundle
-import android.support.annotation.IntRange
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +14,7 @@ import com.proxerme.app.fragment.user.ProfileFragment.ProfileInput
 import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.framework.Task
+import com.proxerme.app.util.ParameterMapper
 import com.proxerme.app.util.TimeUtils
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.bindView
@@ -83,7 +83,7 @@ class ProfileFragment : SingleLoadingFragment<ProfileInput, UserInfo>() {
         infoPointsRow.text = data.infoPoints.toString()
         miscellaneousPointsRow.text = data.miscPoints.toString()
         totalPointsRow.text = totalPoints.toString()
-        rank.text = calculateRank(totalPoints)
+        rank.text = ParameterMapper.rank(context, totalPoints)
 
         if (data.status.isBlank()) {
             statusContainer.visibility = View.GONE
@@ -104,32 +104,6 @@ class ProfileFragment : SingleLoadingFragment<ProfileInput, UserInfo>() {
 
     override fun constructInput(): ProfileInput {
         return ProfileInput(userId, username)
-    }
-
-    private fun calculateRank(@IntRange(from = 0) points: Int): String {
-        when {
-            (points < 10) -> return "Schnupperninja"
-            (points < 100) -> return "Anwärter"
-            (points < 200) -> return "Akademie Schüler"
-            (points < 500) -> return "Genin"
-            (points < 700) -> return "Chunin"
-            (points < 1000) -> return "Jonin"
-            (points < 1500) -> return "Anbu"
-            (points < 2000) -> return "Spezial Anbu"
-            (points < 3000) -> return "Medizin Ninja"
-            (points < 4000) -> return "Sannin"
-            (points < 6000) -> return "Ninja Meister"
-            (points < 8000) -> return "Kage"
-            (points < 10000) -> return "Hokage"
-            (points < 11000) -> return "Otaku"
-            (points < 12000) -> return "Otaku no Senpai"
-            (points < 14000) -> return "Otaku no Sensei"
-            (points < 16000) -> return "Otaku no Shihan"
-            (points < 18000) -> return "Hikikomori"
-            (points < 20000) -> return "Halbgott"
-            (points > 20000) -> return "Kami-Sama"
-            else -> throw RuntimeException("No negative values allowed")
-        }
     }
 
     class ProfileInput(val userId: String?, val username: String?)

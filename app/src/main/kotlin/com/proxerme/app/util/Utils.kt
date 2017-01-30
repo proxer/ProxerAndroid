@@ -21,10 +21,11 @@ import com.proxerme.app.R
 import com.proxerme.app.util.Utils.Language.ENGLISH
 import com.proxerme.app.util.Utils.Language.GERMAN
 import com.proxerme.library.connection.ProxerException
+import com.proxerme.library.parameters.GeneralLanguageParameter
+import com.proxerme.library.parameters.SubDubLanguageParameter
 import okhttp3.HttpUrl
 import java.util.concurrent.ExecutionException
 import java.util.regex.Pattern
-
 
 /**
  * Class which holds various util methods.
@@ -126,8 +127,10 @@ object Utils {
     fun getLanguages(vararg items: String): List<Language> {
         return items.map {
             when (it) {
-                "engsub", "engdub", "en" -> ENGLISH
-                "gersub", "gerdub", "de" -> GERMAN
+                SubDubLanguageParameter.ENGLISH_SUB, SubDubLanguageParameter.ENGLISH_DUB,
+                GeneralLanguageParameter.ENGLISH -> ENGLISH
+                SubDubLanguageParameter.GERMAN_SUB, SubDubLanguageParameter.GERMAN_DUB,
+                GeneralLanguageParameter.GERMAN -> GERMAN
                 else -> null
             }
         }.filterNotNull()

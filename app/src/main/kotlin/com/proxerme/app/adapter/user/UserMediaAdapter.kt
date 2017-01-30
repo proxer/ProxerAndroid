@@ -11,11 +11,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
+import com.proxerme.app.util.ParameterMapper
 import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.user.entitiy.UserMediaListEntry
 import com.proxerme.library.info.ProxerUrlHolder
-import com.proxerme.library.parameters.CategoryParameter
-import com.proxerme.library.parameters.CommentStateParameter.*
 
 /**
  * TODO: Describe class
@@ -59,9 +58,10 @@ class UserMediaAdapter(private val category: String) : PagingAdapter<UserMediaLi
 
         override fun bind(item: UserMediaListEntry) {
             title.text = item.name
-            medium.text = item.medium
-            status.text = "${item.commentEpisode}/${item.episodeCount} - " +
-                    convertStateToText(item.commentState)
+            medium.text = ParameterMapper.medium(medium.context, item.medium)
+            status.text = ParameterMapper.commentState(status.context,
+                    ParameterMapper.mediumToCategory(item.medium) ?: "",
+                    item.commentState, item.commentEpisode)
 
             if (item.commentRating > 0) {
                 rating.visibility = View.VISIBLE
@@ -74,26 +74,6 @@ class UserMediaAdapter(private val category: String) : PagingAdapter<UserMediaLi
                     .load(ProxerUrlHolder.getCoverImageUrl(item.id).toString())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(image)
-        }
-
-        fun convertStateToText(@CommentState state: Int): String {
-            if (category == CategoryParameter.ANIME) {
-                return when (state) {
-                    WATCHED -> itemView.context.getString(R.string.user_media_state_watched)
-                    WATCHING -> itemView.context.getString(R.string.user_media_state_watching)
-                    WILL_WATCH -> itemView.context.getString(R.string.user_media_state_will_watch)
-                    CANCELLED -> itemView.context.getString(R.string.user_media_state_cancelled)
-                    else -> throw IllegalArgumentException("Illegal comment state: $state")
-                }
-            } else {
-                return when (state) {
-                    WATCHED -> itemView.context.getString(R.string.user_media_state_read)
-                    WATCHING -> itemView.context.getString(R.string.user_media_state_reading)
-                    WILL_WATCH -> itemView.context.getString(R.string.user_media_state_will_read)
-                    CANCELLED -> itemView.context.getString(R.string.user_media_state_cancelled)
-                    else -> throw IllegalArgumentException("Illegal comment state: $state")
-                }
-            }
         }
     }
 

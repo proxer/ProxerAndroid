@@ -1,6 +1,5 @@
 package com.proxerme.app.adapter.media
 
-import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -12,11 +11,11 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
+import com.proxerme.app.util.ParameterMapper
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.info.entity.Relation
 import com.proxerme.library.info.ProxerUrlHolder
-import com.proxerme.library.parameters.CategoryParameter
 
 /**
  * TODO: Describe class
@@ -62,8 +61,8 @@ class RelationsAdapter : PagingAdapter<Relation>() {
 
         override fun bind(item: Relation) {
             title.text = item.name
-            medium.text = item.medium
-            episodes.text = generateEpisodeCountDescription(episodes.context, item.category,
+            medium.text = ParameterMapper.medium(medium.context, item.medium)
+            episodes.text = ParameterMapper.mediaEpisodeCount(episodes.context, item.category,
                     item.episodeCount)
 
             val languages = Utils.getLanguages(*item.languages)
@@ -89,17 +88,6 @@ class RelationsAdapter : PagingAdapter<Relation>() {
                     .load(ProxerUrlHolder.getCoverImageUrl(item.id).toString())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(image)
-        }
-
-        private fun generateEpisodeCountDescription(context: Context, category: String,
-                                                    count: Int): String {
-            return when (category) {
-                CategoryParameter.ANIME -> context.resources
-                        .getQuantityString(R.plurals.media_episode_count, count, count)
-                CategoryParameter.MANGA -> context.resources
-                        .getQuantityString(R.plurals.media_chapter_count, count, count)
-                else -> throw RuntimeException("Category has an illegal value")
-            }
         }
     }
 

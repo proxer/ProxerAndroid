@@ -17,12 +17,12 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.util.DeviceUtils
+import com.proxerme.app.util.ParameterMapper
 import com.proxerme.app.util.TimeUtils
 import com.proxerme.app.util.bindView
 import com.proxerme.app.view.bbcode.BBCodeView
 import com.proxerme.library.connection.info.entity.Comment
 import com.proxerme.library.info.ProxerUrlHolder
-import com.proxerme.library.parameters.CommentStateParameter.*
 import java.util.*
 
 /**
@@ -140,7 +140,8 @@ class CommentAdapter : PagingAdapter<Comment>() {
             bindRatingRow(ratingOverallRow, ratingOverall, (item.rating.toFloat() / 2.0f).toInt())
 
             time.text = TimeUtils.convertToRelativeReadableTime(time.context, item.time)
-            state.text = convertStateToText(item.state, item.episode)
+            // TODO: Extend the API for data about the media
+            state.text = ParameterMapper.commentState(state.context, null, item.state, item.episode)
 
             if (item.imageId.isBlank()) {
                 Glide.clear(userImage)
@@ -186,16 +187,6 @@ class CommentAdapter : PagingAdapter<Comment>() {
             } else {
                 container.visibility = View.VISIBLE
                 ratingBar.rating = rating.toFloat()
-            }
-        }
-
-        fun convertStateToText(@CommentState state: Int, episode: Int): String {
-            return when (state) {
-                WATCHED -> itemView.context.getString(R.string.comment_state_watched)
-                WATCHING -> itemView.context.getString(R.string.comment_state_watching, episode)
-                WILL_WATCH -> itemView.context.getString(R.string.comment_state_will_watch)
-                CANCELLED -> itemView.context.getString(R.string.comment_state_cancelled, episode)
-                else -> throw IllegalArgumentException("Illegal comment state: $state")
             }
         }
     }

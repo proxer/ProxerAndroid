@@ -1,7 +1,6 @@
 package com.proxerme.app.fragment.media
 
 import android.os.Bundle
-import android.support.annotation.DrawableRes
 import android.support.design.widget.Snackbar
 import android.view.LayoutInflater
 import android.view.View
@@ -19,10 +18,7 @@ import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.framework.Task
 import com.proxerme.app.task.framework.ValidatingTask
-import com.proxerme.app.util.ErrorUtils
-import com.proxerme.app.util.Validators
-import com.proxerme.app.util.ViewUtils
-import com.proxerme.app.util.bindView
+import com.proxerme.app.util.*
 import com.proxerme.library.connection.info.entity.Entry
 import com.proxerme.library.connection.info.entity.EntryIndustry
 import com.proxerme.library.connection.info.entity.EntrySeason
@@ -30,9 +26,9 @@ import com.proxerme.library.connection.info.entity.Synonym
 import com.proxerme.library.connection.info.request.EntryRequest
 import com.proxerme.library.connection.info.request.SetUserInfoRequest
 import com.proxerme.library.info.ProxerUrlHolder
-import com.proxerme.library.parameters.*
+import com.proxerme.library.parameters.SynonymTypeParameter
+import com.proxerme.library.parameters.ViewStateParameter
 import org.apmem.tools.layouts.FlowLayout
-import java.security.InvalidParameterException
 
 /**
  * TODO: Describe class
@@ -181,13 +177,8 @@ class MediaInfoFragment : SingleLoadingFragment<String, Entry>() {
         buildSynonymsView(data.synonyms)
         buildSeasonsView(data.seasons)
 
-        status.text = getStateString(data.state)
-        license.text = getString(when (data.license) {
-            LicenseParameter.LICENSED -> R.string.media_license_licensed
-            LicenseParameter.NON_LICENSED -> R.string.media_license_non_licensed
-            LicenseParameter.UNKNOWN -> R.string.media_license_unknown
-            else -> throw InvalidParameterException("Unknown license: " + data.license)
-        })
+        status.text = ParameterMapper.mediaState(context, data.state)
+        license.text = ParameterMapper.licence(context, data.license)
 
         buildBadgeView(genres, data.genres, { it }, { _, genre ->
             showPage(ProxerUrlHolder.getWikiUrl(genre))
@@ -200,7 +191,7 @@ class MediaInfoFragment : SingleLoadingFragment<String, Entry>() {
             TranslatorGroupActivity.navigateTo(activity, translatorGroup.id, translatorGroup.name)
         }, groupsTitle)
 
-        buildBadgeView(publishers, data.industries, { getIndustryString(it) }, { _, industry ->
+        buildBadgeView(publishers, data.industries, { constructIndustryString(it) }, { _, industry ->
             IndustryActivity.navigateTo(activity, industry.id, industry.name)
         }, publishersTitle)
 
@@ -235,10 +226,10 @@ class MediaInfoFragment : SingleLoadingFragment<String, Entry>() {
 
     private fun buildSeasonsView(seasons: Array<EntrySeason>) {
         if (seasons.isNotEmpty()) {
-            seasonStart.text = getSeasonStartString(seasons[0])
+            seasonStart.text = ParameterMapper.seasonStart(context, seasons[0])
 
             if (seasons.size >= 2) {
-                seasonEnd.text = getSeasonEndString(seasons[1])
+                seasonEnd.text = ParameterMapper.seasonEnd(context, seasons[1])
             } else {
                 seasonEnd.visibility = View.GONE
             }
@@ -317,45 +308,15 @@ class MediaInfoFragment : SingleLoadingFragment<String, Entry>() {
                 val imageView = LayoutInflater.from(context).inflate(R.layout.item_badge,
                         fsk, false) as ImageView
 
-                imageView.setImageResource(getFskImage(fskEntry))
+                imageView.setImageDrawable(ParameterMapper.fskImage(context, fskEntry))
                 imageView.setOnClickListener {
-                    ViewUtils.makeMultilineSnackbar(root, getFskDescription(fskEntry),
+                    ViewUtils.makeMultilineSnackbar(root,
+                            ParameterMapper.fskDescription(context, fskEntry),
                             Snackbar.LENGTH_LONG).show()
                 }
 
                 fsk.addView(imageView)
             }
-        }
-    }
-
-    private fun getFskDescription(fsk: String): String {
-        return getString(when (fsk) {
-            FskParameter.FSK_0 -> R.string.fsk_0_description
-            FskParameter.FSK_6 -> R.string.fsk_6_description
-            FskParameter.FSK_12 -> R.string.fsk_12_description
-            FskParameter.FSK_16 -> R.string.fsk_16_description
-            FskParameter.FSK_18 -> R.string.fsk_18_description
-            FskParameter.BAD_LANGUAGE -> R.string.fsk_bad_language_description
-            FskParameter.FEAR -> R.string.fsk_fear_description
-            FskParameter.SEX -> R.string.fsk_sex_description
-            FskParameter.VIOLENCE -> R.string.fsk_violence_description
-            else -> throw IllegalArgumentException("Unknown fsk: $fsk")
-        })
-    }
-
-    @DrawableRes
-    private fun getFskImage(fsk: String): Int {
-        return when (fsk) {
-            FskParameter.FSK_0 -> R.drawable.ic_fsk0
-            FskParameter.FSK_6 -> R.drawable.ic_fsk6
-            FskParameter.FSK_12 -> R.drawable.ic_fsk12
-            FskParameter.FSK_16 -> R.drawable.ic_fsk16
-            FskParameter.FSK_18 -> R.drawable.ic_fsk18
-            FskParameter.BAD_LANGUAGE -> R.drawable.ic_bad_language
-            FskParameter.FEAR -> R.drawable.ic_fear
-            FskParameter.SEX -> R.drawable.ic_sex
-            FskParameter.VIOLENCE -> R.drawable.ic_violence
-            else -> throw IllegalArgumentException("Unknown fsk: $fsk")
         }
     }
 
@@ -379,52 +340,9 @@ class MediaInfoFragment : SingleLoadingFragment<String, Entry>() {
         }
     }
 
-    private fun getIndustryString(industry: EntryIndustry): String {
+    private fun constructIndustryString(industry: EntryIndustry): String {
         return "${industry.name} (${industry.type.replace("_", " ").split(" ")
                 .map(String::capitalize).joinToString(separator = " ")})"
-    }
-
-    private fun getStateString(state: Int): String {
-        return getString(when (state) {
-            StateParameter.PRE_AIRING -> R.string.media_state_pre_airing
-            StateParameter.AIRING -> R.string.media_state_airing
-            StateParameter.CANCELLED -> R.string.media_state_cancelled
-            StateParameter.CANCELLED_SUB -> R.string.media_state_cancelled_sub
-            StateParameter.FINISHED -> R.string.media_state_finished
-            else -> throw IllegalArgumentException("Unknown state: $state")
-        })
-    }
-
-    private fun getSeasonStartString(season: EntrySeason): String {
-        return when (season.season) {
-            SeasonParameter.WINTER -> getString(R.string.fragment_media_season_winter_start,
-                    season.year)
-            SeasonParameter.SPRING -> getString(R.string.fragment_media_season_spring_start,
-                    season.year)
-            SeasonParameter.SUMMER -> getString(R.string.fragment_media_season_summer_start,
-                    season.year)
-            SeasonParameter.AUTUMN -> getString(R.string.fragment_media_season_autumn_start,
-                    season.year)
-            SeasonParameter.UNSPECIFIED -> season.year.toString()
-            0 -> season.year.toString()
-            else -> throw IllegalArgumentException("Unknown season: ${season.season}")
-        }
-    }
-
-    private fun getSeasonEndString(season: EntrySeason): String {
-        return when (season.season) {
-            SeasonParameter.WINTER -> getString(R.string.fragment_media_season_winter_end,
-                    season.year)
-            SeasonParameter.SPRING -> getString(R.string.fragment_media_season_spring_end,
-                    season.year)
-            SeasonParameter.SUMMER -> getString(R.string.fragment_media_season_summer_end,
-                    season.year)
-            SeasonParameter.AUTUMN -> getString(R.string.fragment_media_season_autumn_end,
-                    season.year)
-            SeasonParameter.UNSPECIFIED -> season.year.toString()
-            0 -> season.year.toString()
-            else -> throw IllegalArgumentException("Unknown season: ${season.season}")
-        }
     }
 
     private fun constructUserInfoTask(): Task<UserInfoInput, Void?> {

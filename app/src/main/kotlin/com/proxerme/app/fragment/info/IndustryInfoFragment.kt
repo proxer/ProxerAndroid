@@ -13,11 +13,11 @@ import com.proxerme.app.activity.IndustryActivity
 import com.proxerme.app.fragment.framework.SingleLoadingFragment
 import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.task.ProxerLoadingTask
+import com.proxerme.app.util.ParameterMapper
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.info.entity.Industry
 import com.proxerme.library.connection.info.request.IndustryRequest
-import com.proxerme.library.parameters.CountryParameter
 import org.jetbrains.anko.toast
 
 /**
@@ -67,16 +67,7 @@ class IndustryInfoFragment : SingleLoadingFragment<String, Industry>() {
     override fun present(data: Industry) {
         name = data.name
 
-        // TODO: Better icon for misc
-        language.setImageResource(when (data.country) {
-            CountryParameter.ENGLISH -> R.drawable.ic_united_states
-            CountryParameter.UNITED_STATES -> R.drawable.ic_united_states
-            CountryParameter.GERMAN -> R.drawable.ic_germany
-            CountryParameter.JAPANESE -> R.drawable.ic_japan
-            CountryParameter.MISCELLANEOUS -> R.drawable.ic_proxer
-            else -> throw IllegalArgumentException("Unknown country: ${data.country}")
-        })
-
+        language.setImageDrawable(ParameterMapper.country(context, data.country))
         type.text = data.type.replace("_", " ").split(" ").map(String::capitalize)
                 .joinToString(separator = " ")
         link.text = Utils.buildClickableText(context, data.link,

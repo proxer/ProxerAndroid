@@ -1,6 +1,5 @@
 package com.proxerme.app.adapter.media
 
-import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -12,12 +11,11 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
+import com.proxerme.app.util.ParameterMapper
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.list.entity.MediaListEntry
 import com.proxerme.library.info.ProxerUrlHolder
-import com.proxerme.library.parameters.CategoryParameter.ANIME
-import com.proxerme.library.parameters.CategoryParameter.MANGA
 
 /**
  * TODO: Describe class
@@ -63,8 +61,9 @@ class MediaAdapter(private val category: String) : PagingAdapter<MediaListEntry>
 
         override fun bind(item: MediaListEntry) {
             title.text = item.name
-            medium.text = item.medium
-            episodes.text = generateEpisodeCountDescription(episodes.context, item.episodeCount)
+            medium.text = ParameterMapper.medium(medium.context, item.medium)
+            episodes.text = ParameterMapper.mediaEpisodeCount(episodes.context, category,
+                    item.episodeCount)
 
             val languages = Utils.getLanguages(*item.languages)
 
@@ -89,16 +88,6 @@ class MediaAdapter(private val category: String) : PagingAdapter<MediaListEntry>
                     .load(ProxerUrlHolder.getCoverImageUrl(item.id).toString())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(image)
-        }
-
-        private fun generateEpisodeCountDescription(context: Context, count: Int): String {
-            return when (category) {
-                ANIME -> context.resources
-                        .getQuantityString(R.plurals.media_episode_count, count, count)
-                MANGA -> context.resources
-                        .getQuantityString(R.plurals.media_chapter_count, count, count)
-                else -> throw RuntimeException("Category has an illegal value")
-            }
         }
     }
 

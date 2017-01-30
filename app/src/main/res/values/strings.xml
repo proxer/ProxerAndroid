@@ -54,10 +54,6 @@
     <string name="comment_rating_music">Musik</string>
     <string name="comment_rating_overall">Insgesamt</string>
     <string name="comment_rating_story">Story</string>
-    <string name="comment_state_cancelled">Abgebrochen (%d)</string>
-    <string name="comment_state_watched">Abgeschlossen</string>
-    <string name="comment_state_watching">Bei Episode %d</string>
-    <string name="comment_state_will_watch">Auf Warteliste</string>
 
     <string name="dialog_cancel">Abbrechen</string>
     <string name="dialog_crunchyroll_content">Zum Verwenden dieses Streams ist die Crunchyroll App nötig</string>
@@ -96,11 +92,11 @@
     <string name="error_confirm">Bestätigen</string>
     <string name="error_duplicate_user">Diesen Nutzer hast du schon hinzugefügt</string>
     <string name="error_favorites_full">Deine Favoriten sind bereits voll</string>
-    <string name="error_hentai_confirmation_needed">Für diese Kategorie musst du bestätigen, dass du 18 jahre oder älter bist</string>
+    <string name="error_hentai_confirmation_needed">Für diese Kategorie musst du bestätigen, dass du mindestens 18 Jahre alt bist</string>
     <string name="error_input_empty">Gib etwas ein</string>
-    <string name="error_io">Es gab ein Speicherproblem. Versuche es erneut.</string>
+    <string name="error_io">Es gab ein Speicherproblem. Versuche es erneut</string>
     <string name="error_ip_blocked">Es wurden zu viele Anfragen gemacht</string>
-    <string name="error_network">Es gab ein Problem mit dem Netzwerk. Bitte überprüfe ob du verbunden bist.</string>
+    <string name="error_network">Es gab ein Problem mit dem Netzwerk. Bitte überprüfe ob du verbunden bist</string>
     <string name="error_no_data_action_chat">Schreibe jemandem</string>
     <string name="error_no_data_anime">Aktuell gibt es noch keine Streams</string>
     <string name="error_no_data_chat">Diese Konferenz hat noch keine Nachrichten</string>
@@ -124,8 +120,8 @@
     <string name="error_reminder_removal">Das Lesezeichen konnte nicht gelöscht werden: %s</string>
     <string name="error_stream_resolution">Fehler beim Laden des Streams</string>
     <string name="error_timeout">Der Server hat nicht rechtzeitig geantwortet. Versuche es später noch einmal</string>
-    <string name="error_unknown">Ein unbekannter Fehler ist aufgetreten. Versuche es erneut.</string>
-    <string name="error_unparseable">Der Server hat beschädigte Daten gesendet. Versuche es erneut.</string>
+    <string name="error_unknown">Ein unbekannter Fehler ist aufgetreten. Versuche es erneut</string>
+    <string name="error_unparseable">Der Server hat beschädigte Daten gesendet. Versuche es erneut</string>
     <string name="error_unsupported_hoster">Dieser Hoster wird nicht unterstützt</string>
 
     <string name="filter_all">Alles</string>
@@ -249,8 +245,8 @@
     <string name="login_state_indicator_logging_in">Anmeldung</string>
     <string name="login_state_indicator_logging_out">Abmeldung</string>
 
-    <string name="media_license_licensed">Lizensiert</string>
-    <string name="media_license_non_licensed">Nicht Lizensiert</string>
+    <string name="media_license_licensed">Lizenziert</string>
+    <string name="media_license_non_licensed">Nicht lizenziert</string>
     <string name="media_license_unknown">Unbekannt</string>
     <string name="media_state_airing">Airing</string>
     <string name="media_state_cancelled_sub">Abgebrochener Sub</string>
@@ -270,7 +266,7 @@
     <string name="preference_hentai_summary_off">Hentai wird nicht angezeigt</string>
     <string name="preference_hentai_summary_on">Hentai wird angezeigt</string>
     <string name="preference_hentai_title">Hentai</string>
-    <string name="preference_licences_summary">Bibliotheken die in diser App verwendet werden</string>
+    <string name="preference_licences_summary">Bibliotheken, die in dieser App verwendet werden</string>
     <string name="preference_licences_title">Lizenzen</string>
     <string name="preference_messages_notifications_title">Nachrichten</string>
     <string name="preference_news_notifications_interval_title">News Update Intervall</string>
@@ -302,13 +298,13 @@
 
     <string name="time_a_moment_ago">Eben gerade</string>
 
-    <string name="user_media_state_cancelled">Abgebrochen</string>
-    <string name="user_media_state_read">Gelesen</string>
-    <string name="user_media_state_reading">Am lesen</string>
-    <string name="user_media_state_watched">Geschaut</string>
-    <string name="user_media_state_watching">Am schauen</string>
-    <string name="user_media_state_will_read">Wird noch gelesen</string>
-    <string name="user_media_state_will_watch">Wird noch geschaut</string>
+    <string name="user_media_state_cancelled">Abgebrochen (%d)</string>
+    <string name="user_media_state_read">Abgeschlossen</string>
+    <string name="user_media_state_reading">Am Lesen (%d)</string>
+    <string name="user_media_state_watched">Abgeschlossen</string>
+    <string name="user_media_state_watching">Am Schauen (%d)</string>
+    <string name="user_media_state_will_read">Wird noch Gelesen</string>
+    <string name="user_media_state_will_watch">Wird noch Geschaut</string>
     <string name="usernamefragment_ucp_overview_username">Username</string>
 
     <string name="view_media_translatorgroup">Translator-Gruppe</string>
@@ -337,6 +333,35 @@
     <string name="project_type_planned">In Planung</string>
     <string name="project_type_cancelled">Abgebrochen</string>
     <string name="project_type_licenced">Lizensiert</string>
+    <string name="error_unknown_parameter">Unbekannter Parameter: %s. Bitte informiere einen Techniker</string>
+    <string name="rank_10">Schnupperninja</string>
+    <string name="rank_100">Anwärter</string>
+    <string name="rank_200">Akademie Schüler</string>
+    <string name="rank_500">Genin</string>
+    <string name="rank_700">Chunin</string>
+    <string name="rank_1000">Jonin</string>
+    <string name="rank_1500">Anbu</string>
+    <string name="rank_2000">Spezial Anbu</string>
+    <string name="rank_3000">Medizin Ninja</string>
+    <string name="rank_4000">Sannin</string>
+    <string name="rank_6000">Ninja Meister</string>
+    <string name="rank_8000">Kage</string>
+    <string name="rank_10000">Hokage</string>
+    <string name="rank_11000">Otaku</string>
+    <string name="rank_12000">Otaku no Senpai</string>
+    <string name="rank_14000">Otaku no Sensei</string>
+    <string name="rank_16000">Otaku no Shihan</string>
+    <string name="rank_18000">Hikikomori</string>
+    <string name="rank_20000">Halbgott</string>
+    <string name="rank_kami_sama">Kami-Sama</string>
+    <string name="media_medium_anime_series">Animeserie</string>
+    <string name="media_medium_hentai">Hentai</string>
+    <string name="media_medium_movie">Film</string>
+    <string name="media_medium_ova">OVA</string>
+    <string name="media_medium_manga_series">Mangaserie</string>
+    <string name="media_medium_doujin">Doujinshi</string>
+    <string name="media_medium_h_manga">H-Manga</string>
+    <string name="media_medium_oneshot">One-Shot</string>
 
     <plurals name="item_conferences_participants">
         <item quantity="other">%d Teilnehmer</item>

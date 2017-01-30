@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
+import com.proxerme.app.util.ParameterMapper
 import com.proxerme.app.util.TimeUtils
 import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.ucp.entitiy.HistoryEntry
@@ -57,7 +58,7 @@ class HistoryAdapter : PagingAdapter<HistoryEntry>() {
 
         override fun bind(item: HistoryEntry) {
             title.text = item.name
-            medium.text = item.medium
+            medium.text = ParameterMapper.medium(medium.context, item.medium)
             status.text = status.context.getString(R.string.history_entry_status, item.episode,
                     TimeUtils.convertToRelativeReadableTime(status.context, item.time))
 
