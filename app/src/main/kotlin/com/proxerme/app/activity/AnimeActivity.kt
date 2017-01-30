@@ -59,7 +59,7 @@ class AnimeActivity : MainActivity() {
         }
 
     var entryInfo: EntryInfo
-        get() = intent.getParcelableExtra(EXTRA_ENTRY_INFO)
+        get() = intent.getParcelableExtra(EXTRA_ENTRY_INFO) ?: EntryInfo(null, null)
         set(value) {
             intent.putExtra(EXTRA_ENTRY_INFO, value)
 
