@@ -36,8 +36,10 @@ class ConferenceInfoActivity : MainActivity() {
         title = conference.topic
 
         if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction().replace(R.id.container,
-                    ConferenceInfoFragment.newInstance(conference.id)).commitNow()
+            supportFragmentManager.beginTransaction()
+                    .setAllowOptimization(true)
+                    .replace(R.id.container, ConferenceInfoFragment.newInstance(conference.id))
+                    .commitNow()
         }
     }
 

@@ -69,8 +69,10 @@ class TranslatorGroupActivity : MainActivity() {
         loadImage()
 
         if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction().replace(R.id.container,
-                    TranslatorGroupInfoFragment.newInstance()).commitNow()
+            supportFragmentManager.beginTransaction()
+                    .setAllowOptimization(true)
+                    .replace(R.id.container, TranslatorGroupInfoFragment.newInstance())
+                    .commitNow()
         }
     }
 

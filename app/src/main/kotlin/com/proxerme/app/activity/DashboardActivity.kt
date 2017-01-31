@@ -147,7 +147,9 @@ class DashboardActivity : MainActivity() {
 
     private fun setFragment(fragment: Fragment): Unit {
         appbar.setExpanded(true, true)
-        supportFragmentManager.beginTransaction().replace(R.id.container, fragment)
+        supportFragmentManager.beginTransaction()
+                .setAllowOptimization(true)
+                .replace(R.id.container, fragment)
                 .commitNow()
     }
 

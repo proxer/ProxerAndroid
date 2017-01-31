@@ -87,8 +87,10 @@ class MangaActivity : MainActivity() {
         updateTitle()
 
         if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction().replace(R.id.container,
-                    MangaFragment.newInstance()).commitNow()
+            supportFragmentManager.beginTransaction()
+                    .setAllowOptimization(true)
+                    .replace(R.id.container, MangaFragment.newInstance())
+                    .commitNow()
         }
     }
 
