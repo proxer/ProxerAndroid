@@ -30,6 +30,7 @@ class CommentFragment : PagedLoadingFragment<CommentInput, Comment>() {
     }
 
     override val section = Section.COMMENTS
+    override val isSwipeToRefreshEnabled = true
     override val itemsOnPage = 15
 
     private val mediaActivity

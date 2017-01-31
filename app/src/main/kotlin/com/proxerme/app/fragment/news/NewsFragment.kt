@@ -36,6 +36,7 @@ class NewsFragment : PagedLoadingFragment<PagedInput, News>() {
     }
 
     override val section = Section.NEWS
+    override val isSwipeToRefreshEnabled = true
     override val itemsOnPage = 15
 
     override lateinit var layoutManager: StaggeredGridLayoutManager

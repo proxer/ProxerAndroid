@@ -32,7 +32,6 @@ class HistoryFragment : PagedLoadingFragment<HistoryInput, HistoryEntry>() {
 
     override val section = Section.HISTORY
     override val itemsOnPage = 50
-    override val isSwipeToRefreshEnabled = false
     override val isLoginRequired = true
 
     override lateinit var adapter: HistoryAdapter

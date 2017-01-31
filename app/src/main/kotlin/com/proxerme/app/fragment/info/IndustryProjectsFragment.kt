@@ -30,7 +30,6 @@ class IndustryProjectsFragment : PagedLoadingFragment<IndustryProjectsInput, Pro
     }
 
     override val section = Section.INDUSTRY_PROJECTS
-    override val isSwipeToRefreshEnabled = false
     override val itemsOnPage = 30
 
     private val industryActivity

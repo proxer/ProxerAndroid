@@ -39,7 +39,6 @@ class UserMediaListFragment : PagedLoadingFragment<UserMediaInput, UserMediaList
 
     override val section = Section.USER_MEDIA_LIST
     override val itemsOnPage = 30
-    override val isSwipeToRefreshEnabled = false
 
     private val profileActivity
         get() = activity as ProfileActivity

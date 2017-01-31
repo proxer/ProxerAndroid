@@ -79,7 +79,7 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
         }
     }
 
-    open protected val isSwipeToRefreshEnabled = true
+    open protected val isSwipeToRefreshEnabled = false
     open protected val replaceOnRefresh = false
     open protected val isLoginRequired = false
     open protected val isHentaiConfirmationRequired = false

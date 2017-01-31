@@ -65,6 +65,7 @@ class ReminderFragment : PagedLoadingFragment<ReminderInput, Reminder>() {
 
     override val section = Section.REMINDER
     override val itemsOnPage = 30
+    override val isSwipeToRefreshEnabled = true
     override val replaceOnRefresh = true
     override val isLoginRequired = true
 
