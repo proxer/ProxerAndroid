@@ -1,6 +1,7 @@
 package com.proxerme.app.adapter.manga
 
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
@@ -12,6 +13,7 @@ import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.util.DeviceUtils
+import com.proxerme.app.util.bindView
 import com.proxerme.app.util.decodedName
 import com.proxerme.library.connection.manga.entity.Page
 import com.proxerme.library.info.ProxerUrlHolder
@@ -43,8 +45,26 @@ class MangaAdapter : PagingAdapter<Page>() {
 
         private var target: Target<File>? = null
 
-        private val image: SubsamplingScaleImageView
-            get() = itemView as SubsamplingScaleImageView
+        private val image: SubsamplingScaleImageView by bindView(R.id.image)
+
+        init {
+            image.setDoubleTapZoomDuration(200)
+
+            // Make scrolling smoother by hacking the SubsamplingScaleImageView to only receive
+            // touch events when zooming.
+            image.setOnTouchListener { _, event ->
+                if (event.action == MotionEvent.ACTION_MOVE && event.pointerCount == 1 &&
+                        image.scale == image.minScale) {
+                    image.parent.requestDisallowInterceptTouchEvent(true)
+                    itemView.onTouchEvent(event)
+                    image.parent.requestDisallowInterceptTouchEvent(false)
+
+                    true
+                } else {
+                    false
+                }
+            }
+        }
 
         override fun bind(item: Page) {
             val width = DeviceUtils.getScreenWidth(image.context)
