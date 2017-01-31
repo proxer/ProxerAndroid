@@ -95,12 +95,19 @@ class ChatAdapter(val isGroup: Boolean) : PagingAdapter<LocalMessage>() {
 
     override fun getItemId(position: Int): Long = list[position].localId
 
-    override fun insert(items: Iterable<LocalMessage>) {
-        if (items.firstOrNull()?.id != "-1") {
-            list.removeAll { it.id == "-1" }
+    override fun areItemsTheSame(oldItem: LocalMessage, newItem: LocalMessage): Boolean {
+        if ((oldItem.id == "-1" && newItem.id != "-1") ||
+                (oldItem.id != "-1" && newItem.id == "-1")) {
+            return oldItem.message == newItem.message && oldItem.userId == newItem.userId &&
+                    oldItem.action == newItem.action
+        } else {
+            return oldItem.localId == newItem.localId
         }
+    }
 
-        super.insert(items)
+    override fun areContentsTheSame(oldItem: LocalMessage, newItem: LocalMessage): Boolean {
+        return oldItem.message == newItem.message && oldItem.userId == newItem.userId &&
+                oldItem.action == newItem.action && oldItem.time == newItem.time
     }
 
     private fun getMarginsForPosition(position: Int): Pair<Int, Int> {

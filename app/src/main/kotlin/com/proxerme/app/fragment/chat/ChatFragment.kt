@@ -145,6 +145,7 @@ class ChatFragment : PagedLoadingFragment<ChatInput, LocalMessage>() {
     private lateinit var emojiPopup: EmojiPopup
 
     private val emojiButton: ImageButton by bindView(R.id.emojiButton)
+    private val inputContainer: ViewGroup by bindView(R.id.inputContainer)
     private val messageInput: EmojiEditText by bindView(R.id.messageInput)
     private val sendButton: FloatingActionButton by bindView(R.id.sendButton)
 
@@ -215,8 +216,22 @@ class ChatFragment : PagedLoadingFragment<ChatInput, LocalMessage>() {
 
     override fun onDestroy() {
         adapter.user = null
+        emojiPopup.dismiss()
 
         super.onDestroy()
+    }
+
+    override fun showError(message: String, buttonMessage: String?,
+                           onButtonClickListener: View.OnClickListener?) {
+        inputContainer.visibility = View.GONE
+
+        super.showError(message, buttonMessage, onButtonClickListener)
+    }
+
+    override fun hideError() {
+        inputContainer.visibility = View.VISIBLE
+
+        super.hideError()
     }
 
     override fun constructTask(): Task<ChatInput, Array<LocalMessage>> {

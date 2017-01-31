@@ -192,6 +192,7 @@ class NewChatFragment : MainFragment() {
 
     override fun onDestroy() {
         task.destroy()
+        emojiPopup.dismiss()
 
         super.onDestroy()
     }

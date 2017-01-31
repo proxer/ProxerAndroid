@@ -77,8 +77,9 @@ abstract class SingleLoadingFragment<I, T> : MainFragment() {
             }
         }, successCallback, exceptionCallback).onStart {
             setRefreshing(true)
+            hideError()
+
             contentContainer.visibility = View.GONE
-            errorContainer.visibility = View.GONE
         }.onSuccess {
             if (view != null) {
                 contentContainer.visibility = View.VISIBLE
@@ -92,7 +93,6 @@ abstract class SingleLoadingFragment<I, T> : MainFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         progress.setColorSchemeResources(R.color.primary, R.color.accent)
-
         contentContainer.visibility = View.GONE
         errorContainer.visibility = View.GONE
 
@@ -158,6 +158,10 @@ abstract class SingleLoadingFragment<I, T> : MainFragment() {
                 }
             }
         }
+    }
+
+    open protected fun hideError() {
+        errorContainer.visibility = View.GONE
     }
 
     @Suppress("unused")

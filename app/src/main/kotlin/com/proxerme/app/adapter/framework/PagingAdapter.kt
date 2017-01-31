@@ -27,8 +27,8 @@ abstract class PagingAdapter<T> : RecyclerView.Adapter<PagingAdapter.PagingViewH
     fun isEmpty() = list.isEmpty()
 
     open fun insert(items: Iterable<T>) {
-        doUpdates(items.plus(list.filterNot { oldItem ->
-            items.find { areItemsTheSame(oldItem, it) } != null
+        doUpdates(items.plus(list.filter { oldItem ->
+            items.find { areItemsTheSame(oldItem, it) } == null
         }))
     }
 
@@ -37,8 +37,8 @@ abstract class PagingAdapter<T> : RecyclerView.Adapter<PagingAdapter.PagingViewH
     }
 
     open fun append(items: Iterable<T>) {
-        doUpdates(list.filterNot { oldItem ->
-            items.find { areItemsTheSame(oldItem, it) } != null
+        doUpdates(list.filter { oldItem ->
+            items.find { areItemsTheSame(oldItem, it) } == null
         }.plus(items))
     }
 

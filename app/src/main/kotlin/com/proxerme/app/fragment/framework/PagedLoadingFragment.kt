@@ -120,7 +120,7 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
                 Validators.validateHentaiConfirmation(context)
             }
         }, successCallback, exceptionCallback).onStart {
-            headerFooterAdapter.removeFooter()
+            hideError()
 
             setRefreshing(true)
         }.onFinish {
@@ -246,6 +246,10 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
         }
 
         headerFooterAdapter.setFooter(errorContainer)
+    }
+
+    open protected fun hideError() {
+        headerFooterAdapter.removeFooter()
     }
 
     open protected fun showEmptyIfAppropriate() {
