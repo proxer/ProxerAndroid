@@ -14,7 +14,6 @@ import com.proxerme.app.helper.ServiceHelper
 import com.proxerme.app.helper.StorageHelper
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.manager.UserManager
-import com.proxerme.app.util.ErrorUtils
 import com.proxerme.library.connection.ProxerException
 import com.proxerme.library.connection.messenger.entity.Conference
 import com.proxerme.library.connection.messenger.entity.Message
@@ -100,12 +99,8 @@ class ChatService : IntentService("ChatService") {
                     }
                     else -> return
                 }
-            } catch(exception: ChatException) {
-                EventBus.getDefault().post(exception)
-            } catch(exception: ProxerException) {
-
             } catch (exception: Exception) {
-
+                EventBus.getDefault().post(exception)
             }
 
             when (intent.action) {
@@ -154,9 +149,8 @@ class ChatService : IntentService("ChatService") {
 
             EventBus.getDefault().post(ChatMessagesEvent(conferenceId,
                     insertedMessages.asReversed()))
-        } catch(exception: ProxerException) {
-            throw LoadMoreMessagesException(ErrorUtils.getMessageForErrorCode(this, exception),
-                    conferenceId)
+        } catch(exception: Exception) {
+            throw LoadMoreMessagesException(exception, conferenceId)
         }
     }
 
@@ -170,11 +164,11 @@ class ChatService : IntentService("ChatService") {
                 chatDatabase.markAsRead(it.conferenceId)
 
                 if (result != null) {
-                    throw SendMessageException(result, it.conferenceId)
+                    throw SendMessageException(ProxerException(ProxerException.PROXER, result),
+                            it.conferenceId)
                 }
-            } catch(exception: ProxerException) {
-                throw SendMessageException(ErrorUtils.getMessageForErrorCode(this, exception),
-                        it.conferenceId)
+            } catch(exception: Exception) {
+                throw SendMessageException(exception, it.conferenceId)
             }
         }
     }
@@ -211,8 +205,8 @@ class ChatService : IntentService("ChatService") {
             StorageHelper.conferenceListEndReached = true
 
             return changedConferences
-        } catch (exception: ProxerException) {
-            throw FetchConferencesException(ErrorUtils.getMessageForErrorCode(this, exception))
+        } catch (exception: Exception) {
+            throw FetchConferencesException(exception)
         }
     }
 
@@ -262,9 +256,8 @@ class ChatService : IntentService("ChatService") {
                     }
                 }
             }
-        } catch (exception: ProxerException) {
-            throw FetchMessagesException(ErrorUtils.getMessageForErrorCode(this, exception),
-                    conference.id)
+        } catch (exception: Exception) {
+            throw FetchMessagesException(exception, conference.id)
         }
 
         return newMessages
@@ -285,15 +278,16 @@ class ChatService : IntentService("ChatService") {
         NotificationHelper.showChatNotification(this, unreadMap)
     }
 
-    open class ChatException(message: String) : Exception(message)
+    open class ChatException(val innerException: Exception) : Exception()
+    class LoadMoreMessagesException(innerException: Exception, val conferenceId: String) :
+            ChatException(innerException)
 
-    class LoadMoreMessagesException(message: String, val conferenceId: String) :
-            ChatException(message)
+    class SendMessageException(innerException: Exception, val conferenceId: String) :
+            ChatException(innerException)
 
-    class SendMessageException(message: String, val conferenceId: String) : ChatException(message)
+    class FetchMessagesException(innerException: Exception, val conferenceId: String) :
+            ChatException(innerException)
 
-    class FetchMessagesException(message: String, val conferenceId: String) :
-            ChatException(message)
-
-    class FetchConferencesException(message: String) : ChatException(message)
+    class FetchConferencesException(innerException: Exception) :
+            ChatException(innerException)
 }

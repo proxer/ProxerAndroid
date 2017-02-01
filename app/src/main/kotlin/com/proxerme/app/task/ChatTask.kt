@@ -97,7 +97,7 @@ class ChatTask(private val id: String,
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLoadMessagesFailed(exception: LoadMoreMessagesException) {
         if (id == exception.conferenceId) {
-            finishWithException(exception)
+            finishWithException(exception.innerException)
         }
     }
 
