@@ -40,6 +40,7 @@ import com.proxerme.library.parameters.CategoryParameter
 import com.proxerme.library.parameters.ViewStateParameter
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import okhttp3.HttpUrl
+import java.io.IOException
 
 /**
  * TODO: Describe class
@@ -92,6 +93,9 @@ class AnimeFragment : SingleLoadingFragment<Pair<AnimeInput, String>, StreamInfo
                 }
                 is StreamResolutionException -> {
                     Snackbar.make(root, R.string.error_stream_resolution, Snackbar.LENGTH_LONG).show()
+                }
+                is IOException -> {
+                    Snackbar.make(root, R.string.error_network, Snackbar.LENGTH_LONG).show()
                 }
                 else -> {
                     val action = ErrorUtils.handle(activity as MainActivity, exception)

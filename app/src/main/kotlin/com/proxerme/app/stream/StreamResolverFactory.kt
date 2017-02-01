@@ -13,7 +13,7 @@ object StreamResolverFactory {
     private val resolvers = arrayOf(Mp4UploadResolver(), StreamcloudResolver(),
             DailyMotionStreamResolver(), NovamovStreamResolver(), ProxerProductStreamResolver(),
             CrunchyrollResolver(), AkibaPassResolver(), ViewsterResolver(), AnimeOnDemandResolver(),
-            ClipfishResolver(), DaisukiResolver(), AmazonPrimeVideoResolver(),
+            ClipfishResolver(), DaisukiResolver(), AmazonPrimeVideoResolver(), YouruploadResolver(),
             ProsiebenMAXXResolver(), YoutubeResolver(), VideoWeedStreamResolver())
 
     fun getResolverFor(url: HttpUrl): StreamResolver? {
