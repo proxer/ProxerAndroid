@@ -241,11 +241,10 @@ class ChatDatabase(context: Context) :
         val updated = db.update(TABLE_CONFERENCE, *insertionValues)
                 .where("$COLUMN_CONFERENCE_ID = ${item.id}").exec() > 0
 
-        return if (updated) {
-            getConference(item.id) ?: throw SQLiteException("Could not find conference with " +
-                    "id ${item.id}")
-        } else {
-            item.toLocalConference(db.insertOrThrow(TABLE_CONFERENCE, *insertionValues))
+        return when {
+            updated -> getConference(item.id) ?:
+                    throw SQLiteException("Could not find conference with id ${item.id}")
+            else -> item.toLocalConference(db.insertOrThrow(TABLE_CONFERENCE, *insertionValues))
         }
     }
 
@@ -257,11 +256,10 @@ class ChatDatabase(context: Context) :
                     .where("$COLUMN_MESSAGE_ID = ${it.id}")
                     .exec() > 0
 
-            if (updated) {
-                getMessage(it.id) ?: throw SQLiteException("Could not find message with i" +
-                        "d ${it.id}")
-            } else {
-                it.toLocalMessage(db.insertOrThrow(TABLE_MESSAGE, *insertionValues))
+            when {
+                updated -> getMessage(it.id) ?:
+                        throw SQLiteException("Could not find message with id ${it.id}")
+                else -> it.toLocalMessage(db.insertOrThrow(TABLE_MESSAGE, *insertionValues))
             }
         }
     }
