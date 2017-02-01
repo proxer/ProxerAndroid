@@ -12,6 +12,7 @@ import android.view.WindowManager
 import com.devbrackets.android.exomedia.listener.VideoControlsVisibilityListener
 import com.devbrackets.android.exomedia.ui.widget.EMVideoView
 import com.proxerme.app.R
+import com.proxerme.app.util.ViewUtils
 import com.proxerme.app.util.bindView
 import org.jetbrains.anko.longToast
 
@@ -63,12 +64,12 @@ class StreamActivity : MainActivity() {
         player.setBackgroundColor(ContextCompat.getColor(this, R.color.md_black_1000))
         player.setVideoURI(uri)
         player.setOnErrorListener {
-            Snackbar.make(root, R.string.error_unknown, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(R.string.error_action_retry, {
-                        player.reset()
-                        player.setVideoURI(uri)
-                        player.start()
-                    }).show()
+            ViewUtils.makeMultilineSnackbar(root, player.context.getString(R.string.error_unknown),
+                    Snackbar.LENGTH_INDEFINITE).setAction(R.string.error_action_retry, {
+                player.reset()
+                player.setVideoURI(uri)
+                player.start()
+            }).show()
 
             false
         }
