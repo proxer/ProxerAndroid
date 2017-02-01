@@ -1,5 +1,7 @@
 package com.proxerme.app.task.framework
 
+import com.proxerme.library.connection.ProxerException
+
 /**
  * TODO: Describe class
  *
@@ -26,7 +28,15 @@ class ZippedTask<I, I2, M, M2, O>(private val firstTask: Task<I, M>,
     init {
         firstTask.successCallback = {
             if (secondResult != null) {
-                finishSuccessful(zipFunction.invoke(it, secondResult!!))
+                try {
+                    finishSuccessful(zipFunction.invoke(it, secondResult!!))
+                } catch(exception: Exception) {
+                    when (exception) {
+                        is ProxerException -> finishWithException(exception)
+                        else -> finishWithException(ProxerException(ProxerException.UNPARSABLE))
+                    }
+                }
+
                 reset()
             } else if (secondError != null) {
                 finishWithException(PartialException(secondError!!, it!!))
@@ -53,7 +63,15 @@ class ZippedTask<I, I2, M, M2, O>(private val firstTask: Task<I, M>,
 
         secondTask.successCallback = {
             if (firstResult != null) {
-                finishSuccessful(zipFunction.invoke(firstResult!!, it))
+                try {
+                    finishSuccessful(zipFunction.invoke(firstResult!!, it))
+                } catch(exception: Exception) {
+                    when (exception) {
+                        is ProxerException -> finishWithException(exception)
+                        else -> finishWithException(ProxerException(ProxerException.UNPARSABLE))
+                    }
+                }
+
                 reset()
             } else if (firstError != null) {
                 finishWithException(PartialException(firstError!!, it!!))

@@ -1,5 +1,7 @@
 package com.proxerme.app.task.framework
 
+import com.proxerme.library.connection.ProxerException
+
 /**
  * TODO: Describe class
  *
@@ -22,7 +24,7 @@ class StreamedTask<I, MO, MI, O>(private val firstTask: Task<I, MO>,
             try {
                 secondTask.execute(mapFunction.invoke(it))
             } catch(exception: Exception) {
-                finishWithException(exception)
+                finishWithException(ProxerException(ProxerException.UNPARSABLE))
             }
         }
 

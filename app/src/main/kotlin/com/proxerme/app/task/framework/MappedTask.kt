@@ -1,5 +1,7 @@
 package com.proxerme.app.task.framework
 
+import com.proxerme.library.connection.ProxerException
+
 /**
  * TODO: Describe class
  *
@@ -19,7 +21,10 @@ class MappedTask<I, M, O>(private val task: Task<I, M>,
             try {
                 finishSuccessful(mapFunction.invoke(it))
             } catch(exception: Exception) {
-                finishWithException(exception)
+                when (exception) {
+                    is ProxerException -> finishWithException(exception)
+                    else -> finishWithException(ProxerException(ProxerException.UNPARSABLE))
+                }
             }
         }
 
