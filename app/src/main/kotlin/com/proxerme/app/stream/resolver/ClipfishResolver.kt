@@ -2,6 +2,7 @@ package com.proxerme.app.stream.resolver
 
 import android.content.Intent
 import android.net.Uri
+import com.proxerme.app.dialog.AppRequiredDialog
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionException
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionResult
 import okhttp3.HttpUrl
@@ -22,7 +23,8 @@ class ClipfishResolver : StreamResolver() {
                 ?: throw StreamResolutionException()
 
         return StreamResolutionResult(Intent(Intent.ACTION_VIEW,
-                Uri.parse("clipfish://video/$id?ref=proxer")))
-        // TODO: Not found action
+                Uri.parse("clipfish://video/$id?ref=proxer")), {
+            AppRequiredDialog.show(it, "Clipfish", "com.rtli.clipfish")
+        })
     }
 }

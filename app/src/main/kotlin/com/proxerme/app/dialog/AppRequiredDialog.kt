@@ -9,19 +9,30 @@ import android.support.v4.app.DialogFragment
 import android.support.v7.app.AppCompatActivity
 import com.afollestad.materialdialogs.MaterialDialog
 import com.proxerme.app.R
+import org.jetbrains.anko.bundleOf
 
 /**
  * TODO: Describe class
  *
  * @author Ruben Gees
  */
-class CrunchyrollDialog : DialogFragment() {
+class AppRequiredDialog : DialogFragment() {
 
     companion object {
-        fun show(activity: AppCompatActivity) {
-            CrunchyrollDialog().show(activity.supportFragmentManager, "dialog_crunchyroll")
+        private const val ARGUMENT_NAME = "name"
+        private const val ARGUMENT_PACKAGE_NAME = "packageName"
+
+        fun show(activity: AppCompatActivity, name: String, packageName: String) {
+            AppRequiredDialog().apply {
+                arguments = bundleOf(ARGUMENT_NAME to name, ARGUMENT_PACKAGE_NAME to packageName)
+            }.show(activity.supportFragmentManager, "dialog_crunchyroll")
         }
     }
+
+    private val name
+        get() = arguments.getString(ARGUMENT_NAME)
+    private val packageName
+        get() = arguments.getString(ARGUMENT_PACKAGE_NAME)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,13 +42,11 @@ class CrunchyrollDialog : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return MaterialDialog.Builder(context)
-                .title(R.string.dialog_crunchyroll_title)
-                .content(R.string.dialog_crunchyroll_content)
-                .positiveText(R.string.dialog_crunchyroll_positive)
+                .title(getString(R.string.dialog_app_required_title, name))
+                .content(getString(R.string.dialog_app_required_content, name))
+                .positiveText(R.string.dialog_app_required_positive)
                 .negativeText(R.string.dialog_cancel)
                 .onPositive({ _, _ ->
-                    val packageName = "com.crunchyroll.crunchyroid"
-
                     try {
                         context.startActivity(Intent(Intent.ACTION_VIEW,
                                 Uri.parse("market://details?id=$packageName")))

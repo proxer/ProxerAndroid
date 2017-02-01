@@ -56,9 +56,9 @@
     <string name="comment_rating_story">Story</string>
 
     <string name="dialog_cancel">Abbrechen</string>
-    <string name="dialog_crunchyroll_content">Zum Verwenden dieses Streams ist die Crunchyroll App nötig</string>
-    <string name="dialog_crunchyroll_positive">Installieren</string>
-    <string name="dialog_crunchyroll_title">Crunchyroll App</string>
+    <string name="dialog_app_required_content">Zum Verwenden dieses Streams ist die %s-App nötig</string>
+    <string name="dialog_app_required_positive">Installieren</string>
+    <string name="dialog_app_required_title">%s-App</string>
     <string name="dialog_hentai_content">Dieser Bereich darf nur von Benutzern über 18 Jahren betreten werden! Eltern haften für ihre Kinder. Proxer.Me übernimmt keinerlei Haftung!</string>
     <string name="dialog_hentai_positive">Verstanden</string>
     <string name="dialog_login_error_password">Bitte gib ein Passwort an</string>

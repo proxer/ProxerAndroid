@@ -2,7 +2,7 @@ package com.proxerme.app.stream.resolver
 
 import android.content.Intent
 import android.net.Uri
-import com.proxerme.app.dialog.CrunchyrollDialog
+import com.proxerme.app.dialog.AppRequiredDialog
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionException
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionResult
 import okhttp3.HttpUrl
@@ -23,6 +23,8 @@ class CrunchyrollResolver : StreamResolver() {
                 ?: throw StreamResolutionException()
 
         return StreamResolutionResult(Intent(Intent.ACTION_VIEW,
-                Uri.parse("crunchyroll://media/$id")), { CrunchyrollDialog.show(it) })
+                Uri.parse("crunchyroll://media/$id")), {
+            AppRequiredDialog.show(it, "Crunchyroll", "com.crunchyroll.crunchyroid")
+        })
     }
 }
