@@ -54,7 +54,7 @@ class IndustryActivity : MainActivity() {
             title = value
         }
 
-    private var sectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
+    private val sectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
 
     private val toolbar: Toolbar by bindView(R.id.toolbar)
     private val collapsingToolbar: CollapsingToolbarLayout by bindView(R.id.collapsingToolbar)
@@ -145,8 +145,8 @@ class IndustryActivity : MainActivity() {
 
         override fun getPageTitle(position: Int): CharSequence? {
             return when (position) {
-                0 -> "Info"
-                1 -> "Projekte"
+                0 -> getString(R.string.fragment_industry_info_title)
+                1 -> getString(R.string.fragment_industry_projects_title)
                 else -> throw RuntimeException("Unknown index passed")
             }
         }
