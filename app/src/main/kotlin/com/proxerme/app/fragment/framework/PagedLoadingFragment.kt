@@ -20,6 +20,7 @@ import com.proxerme.app.task.framework.CachedTask
 import com.proxerme.app.task.framework.CachedTask.CacheStrategy
 import com.proxerme.app.task.framework.Task
 import com.proxerme.app.task.framework.ValidatingTask
+import com.proxerme.app.task.framework.ZippedTask
 import com.proxerme.app.util.*
 import com.proxerme.app.util.listener.EndlessRecyclerOnScrollListener
 import com.proxerme.library.connection.ProxerException
@@ -293,8 +294,11 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
     @Subscribe
     fun onCaptchaSolved(@Suppress("UNUSED_PARAMETER") event: CaptchaSolvedEvent) {
         cache.cachedException?.let {
-            if (it is ProxerException && it.proxerErrorCode == ProxerException.IP_BLOCKED) {
-                cache.clear(CacheStrategy.EXCEPTION)
+            val exception = (it as? ZippedTask.PartialException)?.original ?: it
+
+            if (exception is ProxerException &&
+                    exception.proxerErrorCode == ProxerException.IP_BLOCKED) {
+                cache.clear(CachedTask.CacheStrategy.EXCEPTION)
             }
         }
     }

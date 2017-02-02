@@ -266,7 +266,7 @@ class MangaFragment : SingleLoadingFragment<Pair<MangaInput, String>, ChapterInf
 
                 contentContainer.visibility = View.VISIBLE
             } else {
-                super.handleError(exception)
+                super.handleError(exception.original)
             }
         } else {
             super.handleError(exception)

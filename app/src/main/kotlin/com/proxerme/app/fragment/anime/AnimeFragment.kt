@@ -232,7 +232,7 @@ class AnimeFragment : SingleLoadingFragment<Pair<AnimeInput, String>, StreamInfo
 
                 contentContainer.visibility = View.VISIBLE
             } else {
-                super.handleError(exception)
+                super.handleError(exception.original)
             }
         } else {
             super.handleError(exception)
