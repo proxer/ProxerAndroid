@@ -22,7 +22,6 @@ class YouruploadResolver : StreamResolver() {
 
     override fun resolve(url: HttpUrl): StreamResolutionResult {
         val response = MainApplication.proxerConnection.httpClient.newCall(Request.Builder()
-                .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)")
                 .get()
                 .url(url)
                 .build()).execute()
