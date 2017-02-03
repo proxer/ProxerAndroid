@@ -3,7 +3,6 @@ package com.proxerme.app.service
 import android.app.IntentService
 import android.content.Context
 import android.content.Intent
-import android.support.annotation.StringDef
 import com.proxerme.app.application.MainApplication
 import com.proxerme.app.event.NewsEvent
 import com.proxerme.app.helper.NotificationHelper
@@ -25,7 +24,7 @@ class NotificationService : IntentService(NotificationService.SERVICE_TITLE) {
         const val ACTION_LOAD_NEWS = "com.proxerme.app.service.action.LOAD_NEWS"
         private const val SERVICE_TITLE = "Notification Service"
 
-        fun load(context: Context, @NotificationAction action: String) {
+        fun load(context: Context, action: String) {
             context.startService(context.intentFor<NotificationService>().setAction(action))
         }
     }
@@ -61,9 +60,4 @@ class NotificationService : IntentService(NotificationService.SERVICE_TITLE) {
 
         }
     }
-
-    @Retention(AnnotationRetention.SOURCE)
-    @StringDef(ACTION_LOAD_NEWS)
-    annotation class NotificationAction
-
 }
