@@ -7,6 +7,7 @@ import com.proxerme.app.data.chatDatabase
 import com.proxerme.app.entitiy.LocalMessage
 import com.proxerme.app.event.ChatMessagesEvent
 import com.proxerme.app.fragment.framework.PagedLoadingFragment.PagedInput
+import com.proxerme.app.manager.UserManager
 import com.proxerme.app.service.ChatService
 import com.proxerme.app.service.ChatService.LoadMoreMessagesException
 import com.proxerme.app.task.ChatTask.ChatInput
@@ -88,7 +89,8 @@ class ChatTask(private val id: String,
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLoadMessages(event: ChatMessagesEvent) {
-        if (id == event.conferenceId && event.messages.isNotEmpty()) {
+        if (UserManager.loginState == UserManager.LoginState.LOGGED_IN && id == event.conferenceId
+                && event.messages.isNotEmpty()) {
             finishSuccessful(event.messages.toTypedArray())
         }
     }
@@ -96,7 +98,8 @@ class ChatTask(private val id: String,
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLoadMessagesFailed(exception: LoadMoreMessagesException) {
-        if (id == exception.conferenceId) {
+        if (UserManager.loginState == UserManager.LoginState.LOGGED_IN &&
+                id == exception.conferenceId) {
             finishWithException(exception.innerException)
         }
     }

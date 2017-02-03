@@ -4,6 +4,7 @@ import android.content.Context
 import com.proxerme.app.data.chatDatabase
 import com.proxerme.app.entitiy.LocalMessage
 import com.proxerme.app.event.ChatSynchronizationEvent
+import com.proxerme.app.manager.UserManager
 import com.proxerme.app.task.ChatTask.ChatInput
 import com.proxerme.app.task.framework.BaseTask
 import org.greenrobot.eventbus.EventBus
@@ -53,12 +54,14 @@ class RefreshingChatTask(private val id: String,
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onSynchronization(event: ChatSynchronizationEvent) {
-        val relevantEntries = event.newEntryMap.entries.filter { it.key.id == id }
+        if (UserManager.loginState == UserManager.LoginState.LOGGED_IN) {
+            val relevantEntries = event.newEntryMap.entries.filter { it.key.id == id }
 
-        if (relevantEntries.isNotEmpty()) {
-            contextResolver?.invoke()?.chatDatabase?.markAsRead(id)
+            if (relevantEntries.isNotEmpty()) {
+                contextResolver?.invoke()?.chatDatabase?.markAsRead(id)
 
-            finishSuccessful(relevantEntries.flatMap { it.value }.toTypedArray())
+                finishSuccessful(relevantEntries.flatMap { it.value }.toTypedArray())
+            }
         }
     }
 }

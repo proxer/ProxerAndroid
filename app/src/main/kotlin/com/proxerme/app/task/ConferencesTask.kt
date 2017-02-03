@@ -7,6 +7,7 @@ import com.proxerme.app.data.chatDatabase
 import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.event.ChatSynchronizationEvent
 import com.proxerme.app.helper.StorageHelper
+import com.proxerme.app.manager.UserManager
 import com.proxerme.app.task.framework.BaseTask
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -77,7 +78,9 @@ class ConferencesTask(successCallback: ((List<LocalConference>) -> Unit)? = null
         if (event.newEntryMap.isNotEmpty() || !hasLoaded) {
             hasLoaded = true
 
-            finishSuccessful(event.newEntryMap.keys.toList())
+            if (UserManager.loginState == UserManager.LoginState.LOGGED_IN) {
+                finishSuccessful(event.newEntryMap.keys.toList())
+            }
         }
     }
 }
