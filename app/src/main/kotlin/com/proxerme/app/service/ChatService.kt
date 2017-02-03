@@ -6,7 +6,6 @@ import android.content.Intent
 import com.proxerme.app.application.MainApplication
 import com.proxerme.app.data.chatDatabase
 import com.proxerme.app.entitiy.LocalConference
-import com.proxerme.app.entitiy.LocalMessage
 import com.proxerme.app.event.ChatMessagesEvent
 import com.proxerme.app.event.ChatSynchronizationEvent
 import com.proxerme.app.helper.NotificationHelper
@@ -22,7 +21,6 @@ import com.proxerme.library.connection.messenger.request.MessagesRequest
 import com.proxerme.library.connection.messenger.request.ModifyConferenceRequest
 import com.proxerme.library.connection.messenger.request.SendMessageRequest
 import org.greenrobot.eventbus.EventBus
-import org.jetbrains.anko.collections.forEachReversedByIndex
 import org.jetbrains.anko.intentFor
 import java.util.*
 
@@ -130,7 +128,7 @@ class ChatService : IntentService("ChatService") {
         if (SectionManager.currentSection != SectionManager.Section.CONFERENCES &&
                 SectionManager.currentSection != SectionManager.Section.CHAT &&
                 insertedMap.isNotEmpty()) {
-            showNotification()
+            showNotification(insertedMap.keys)
         }
     }
 
@@ -190,9 +188,8 @@ class ChatService : IntentService("ChatService") {
                 val fetchedConferences = MainApplication.proxerConnection
                         .executeSynchronized(ConferencesRequest(page))
 
-                changedConferences += fetchedConferences.takeWhile {
-                    it != chatDatabase.getConference(it.id)
-                            ?.toNonLocalConference()
+                changedConferences += fetchedConferences.filter {
+                    it != chatDatabase.getConference(it.id)?.toNonLocalConference()
                 }
 
                 if (changedConferences.size / (page + 1) < CONFERENCES_ON_PAGE) {
@@ -225,7 +222,7 @@ class ChatService : IntentService("ChatService") {
                             .executeSynchronized(MessagesRequest(conference.id, nextId)
                                     .withMarkAsRead(false))
 
-                    newMessages.addAll(fetchedMessages)
+                    newMessages += fetchedMessages
 
                     if (fetchedMessages.size < MESSAGES_ON_PAGE) {
                         StorageHelper.setConferenceReachedEnd(conference.id)
@@ -243,7 +240,7 @@ class ChatService : IntentService("ChatService") {
                             .executeSynchronized(MessagesRequest(conference.id, nextId)
                                     .withMarkAsRead(false))
 
-                    newMessages.addAll(fetchedMessages)
+                    newMessages += fetchedMessages
 
                     if (fetchedMessages.size < MESSAGES_ON_PAGE) {
                         StorageHelper.setConferenceReachedEnd(conference.id)
@@ -263,17 +260,13 @@ class ChatService : IntentService("ChatService") {
         return newMessages
     }
 
-    private fun showNotification() {
-        val unreadMap = HashMap<LocalConference, List<LocalMessage>>()
-
-        chatDatabase.getUnreadConferences().forEachReversedByIndex {
-            val unreadMessages = chatDatabase.getMostRecentMessages(it.id, it.unreadMessageAmount)
-                    .reversed()
-
-            if (unreadMessages.isNotEmpty()) {
-                unreadMap.put(it, unreadMessages)
-            }
-        }
+    private fun showNotification(changedConferences: Collection<LocalConference>) {
+        val unreadMap = chatDatabase.getUnreadConferences()
+                .plus(changedConferences)
+                .distinct()
+                .associate {
+                    it to chatDatabase.getMostRecentMessages(it.id, it.unreadMessageAmount).reversed()
+                }
 
         NotificationHelper.showChatNotification(this, unreadMap)
     }

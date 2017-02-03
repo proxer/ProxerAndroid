@@ -119,7 +119,7 @@ dependencies {
     compile 'me.zhanghai.android.materialratingbar:library:1.0.2'
     compile 'me.zhanghai.android.customtabshelper:library:1.0.3'
 
-    compile 'com.github.proxer:ProxerLibAndroid:6c36b79c99'
+    compile 'com.github.proxer:ProxerLibAndroid:6c4ca8396e'
     compile 'com.github.rubengees:EasyHeaderFooterAdapter:1.0.4@aar'
     compile('com.github.rubengees:introduction:1.3.7@aar') {
         transitive = true

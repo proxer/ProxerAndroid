@@ -3,7 +3,6 @@ package com.proxerme.app.helper
 import android.app.Notification
 import android.app.PendingIntent
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.Typeface
 import android.os.Build
 import android.support.v4.app.NotificationCompat.*
@@ -16,13 +15,13 @@ import android.text.SpannableString
 import android.text.style.StyleSpan
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
-import com.mikepenz.iconics.typeface.IIcon
 import com.proxerme.app.R
 import com.proxerme.app.activity.DashboardActivity
 import com.proxerme.app.activity.chat.ChatActivity
 import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.entitiy.LocalMessage
 import com.proxerme.app.helper.MaterialDrawerHelper.DrawerItem
+import com.proxerme.app.manager.UserManager
 import com.proxerme.app.receiver.DirectReplyReceiver
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.notificationManager
@@ -37,6 +36,8 @@ import com.proxerme.library.info.ProxerUrlHolder
  */
 object NotificationHelper {
 
+    private const val GROUP_CHAT = "chat"
+
     fun showNewsNotification(context: Context, news: Collection<News>) {
         if (news.isEmpty()) {
             context.notificationManager.cancel(NotificationType.NEWS.id)
@@ -44,6 +45,35 @@ object NotificationHelper {
             return
         }
 
+        context.notificationManager.notify(NotificationType.NEWS.id,
+                buildNewsNotification(context, news))
+    }
+
+    fun showChatNotification(context: Context, messages: Map<LocalConference, List<LocalMessage>>) {
+        if (messages.isEmpty()) {
+            context.notificationManager.cancel(NotificationType.CHAT.id)
+
+            return
+        }
+
+        messages.entries.map { (conference, messages) ->
+            conference.id.toInt() to when {
+                messages.isEmpty() -> null
+                else -> buildIndividualChatNotification(context, conference, messages)
+            }
+        }.plus(NotificationType.CHAT.id to buildChatSummaryNotification(context, messages)).forEach {
+            when (it.second) {
+                null -> context.notificationManager.cancel(it.first)
+                else -> context.notificationManager.notify(it.first, it.second)
+            }
+        }
+    }
+
+    fun cancelNotification(context: Context, type: NotificationType) {
+        context.notificationManager.cancel(type.id)
+    }
+
+    private fun buildNewsNotification(context: Context, news: Collection<News>): Notification {
         val builder = NotificationCompat.Builder(context)
         val newsAmount = context.resources.getQuantityString(R.plurals.notification_news_amount,
                 news.size, news.size)
@@ -51,8 +81,8 @@ object NotificationHelper {
         val title: String
         val content: String
 
-        when {
-            news.size == 1 -> {
+        when (news.size) {
+            1 -> {
                 val current = news.first()
 
                 title = current.subject.trim()
@@ -89,187 +119,128 @@ object NotificationHelper {
                 .setPriority(PRIORITY_LOW)
                 .setStyle(style)
 
-        context.notificationManager.notify(NotificationType.NEWS.id, builder.build())
+        return builder.build()
     }
 
-    fun showChatNotification(context: Context,
-                             messages: Map<LocalConference, List<LocalMessage>>) {
-        if (messages.isEmpty()) {
-            context.notificationManager.cancel(NotificationType.CHAT.id)
-
-            return
-        }
-
+    private fun buildChatSummaryNotification(context: Context,
+                                             messages: Map<LocalConference, List<LocalMessage>>): Notification {
         val messageAmount = messages.values.sumBy { it.size }
-        val title = buildTitle(context, messages, messageAmount)
-        val notificationBuilder = NotificationCompat.Builder(context)
+        val title = context.resources.getQuantityString(R.plurals.notification_chat_message_amount,
+                messageAmount, messageAmount) +
+                " " + context.resources.getQuantityString(R.plurals.notification_chat_conference_amount,
+                messages.size, messages.size)
+        val content = SpannableString(messages.keys.joinToString(", ", transform = { it.topic }))
+
+        val style = InboxStyle()
+                .setBigContentTitle(content)
+                .setSummaryText(title)
+                .apply {
+                    messages.forEach { entry ->
+                        entry.value.forEach {
+                            val sender = when {
+                                entry.key.isGroup -> "${entry.key.topic}: ${it.username} "
+                                else -> "${entry.key.topic}: "
+                            }
+
+                            addLine(SpannableString(sender + it.message).apply {
+                                setSpan(StyleSpan(Typeface.BOLD), 0, sender.length,
+                                        Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+                            })
+                        }
+                    }
+                }
+
+        val intent = TaskStackBuilder.create(context)
+                .addNextIntent(DashboardActivity.getSectionIntent(context, DrawerItem.CHAT))
+                .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+
+        return NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.ic_stat_proxer)
                 .setContentTitle(title)
-                .setContentText(buildText(context, messages, messageAmount))
-                .setLargeIcon(buildIconIfAppropriate(context, messages))
-                .setContentIntent(buildIntent(context, messages))
-                .setStyle(buildStyle(context, messages, title, messageAmount))
+                .setContentText(content)
+                .setStyle(style)
+                .setContentIntent(intent)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setColor(ContextCompat.getColor(context, R.color.primary))
+                .setPriority(PRIORITY_HIGH)
+                .setCategory(CATEGORY_MESSAGE)
+                .setGroup(GROUP_CHAT)
+                .setGroupSummary(true)
+                .setOnlyAlertOnce(true)
+                .setAutoCancel(true)
+                .build()
+    }
+
+    private fun buildIndividualChatNotification(context: Context, conference: LocalConference,
+                                                messages: List<LocalMessage>): Notification {
+        val content = context.resources.getQuantityString(R.plurals.notification_chat_message_amount,
+                messages.size, messages.size)
+        val icon = when {
+            conference.imageId.isNotBlank() -> Utils.getBitmapFromURL(context,
+                    ProxerUrlHolder.getUserImageUrl(conference.imageId).toString())
+            else -> IconicsDrawable(context, when (conference.isGroup) {
+                true -> CommunityMaterial.Icon.cmd_account_multiple
+                false -> CommunityMaterial.Icon.cmd_account
+            }).sizeDp(96).colorRes(R.color.colorPrimary).toBitmap()
+        }
+
+        val style = when (conference.isGroup) {
+            true -> MessagingStyle(UserManager.user!!.username)
+                    .setConversationTitle(conference.topic)
+                    .apply {
+                        messages.forEach {
+                            addMessage(it.message, it.time, it.username)
+                        }
+                    }
+            false -> InboxStyle()
+                    .setBigContentTitle(conference.topic)
+                    .setSummaryText(content)
+                    .apply {
+                        messages.forEach {
+                            addLine(it.message)
+                        }
+                    }
+        }
+
+        val intent = TaskStackBuilder.create(context)
+                .addNextIntent(DashboardActivity.getSectionIntent(context, DrawerItem.CHAT))
+                .addNextIntent(ChatActivity.getIntent(context, conference))
+                .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+
+        return NotificationCompat.Builder(context)
+                .setSmallIcon(R.drawable.ic_stat_proxer)
+                .setContentTitle(conference.topic)
+                .setContentText(content)
+                .setLargeIcon(icon)
+                .setStyle(style)
+                .setContentIntent(intent)
                 .setDefaults(Notification.DEFAULT_VIBRATE or Notification.DEFAULT_SOUND or
                         Notification.DEFAULT_LIGHTS)
                 .setColor(ContextCompat.getColor(context, R.color.primary))
                 .setPriority(PRIORITY_HIGH)
                 .setCategory(CATEGORY_MESSAGE)
+                .setGroup(GROUP_CHAT)
                 .setAutoCancel(true)
+                .apply {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        val remoteInput = RemoteInput.Builder(DirectReplyReceiver.EXTRA_REMOTE_REPLY)
+                                .setLabel(context.getString(R.string.action_answer))
+                                .build()
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && messages.size == 1) {
-            val remoteInput = RemoteInput.Builder(DirectReplyReceiver.EXTRA_REMOTE_REPLY)
-                    .setLabel("Antworten").build()
-            val replyIntent = PendingIntent.getBroadcast(context, messages.keys.first().id.toInt(),
-                    DirectReplyReceiver.getMessageReplyIntent(messages.keys.first().id),
-                    PendingIntent.FLAG_UPDATE_CURRENT)
-            val actionReplyByRemoteInput =
-                    Action.Builder(R.mipmap.ic_launcher, "Antworten", replyIntent)
-                            .addRemoteInput(remoteInput)
-                            .setAllowGeneratedReplies(true)
-                            .build()
+                        val replyIntent = PendingIntent.getBroadcast(context, conference.id.toInt(),
+                                DirectReplyReceiver.getMessageReplyIntent(conference.id),
+                                PendingIntent.FLAG_UPDATE_CURRENT)
 
-            notificationBuilder.addAction(actionReplyByRemoteInput)
-        }
+                        val actionReplyByRemoteInput = Action.Builder(R.mipmap.ic_launcher,
+                                context.getString(R.string.action_answer), replyIntent)
+                                .addRemoteInput(remoteInput)
+                                .setAllowGeneratedReplies(true)
+                                .build()
 
-        context.notificationManager.notify(NotificationType.CHAT.id, notificationBuilder.build())
-    }
-
-    fun cancelNotification(context: Context, type: NotificationType) {
-        context.notificationManager.cancel(type.id)
-    }
-
-    private fun buildTitle(context: Context, messages: Map<LocalConference, List<LocalMessage>>,
-                           messageAmount: Int): String {
-        val resources = context.resources
-
-        if (messages.size == 1) {
-            return messages.keys.first().topic
-        } else {
-            return resources.getQuantityString(R.plurals.notification_chat_message_amount,
-                    messageAmount, messageAmount) + " " +
-                    resources.getQuantityString(R.plurals.notification_chat_conference_amount,
-                            messages.size, messages.size)
-        }
-    }
-
-    private fun buildText(context: Context, messages: Map<LocalConference, List<LocalMessage>>,
-                          messageAmount: Int): SpannableString {
-        val resources = context.resources
-
-        if (messages.size == 1) {
-            if (messages.values.first().size == 1) {
-                return buildMessage(messages.keys.first(), messages.values.first().first(), false)
-            } else {
-                return SpannableString(resources
-                        .getQuantityString(R.plurals.notification_chat_message_amount,
-                                messageAmount, messageAmount))
-            }
-        } else {
-            return SpannableString(messages.keys.joinToString(", ", transform = { it.topic }))
-        }
-    }
-
-    private fun buildStyle(context: Context, messages: Map<LocalConference, List<LocalMessage>>,
-                           title: String, messageAmount: Int): Style {
-        val resources = context.resources
-
-        if (messages.size == 1) {
-            val summary = resources.getQuantityString(R.plurals.notification_chat_message_amount,
-                    messageAmount, messageAmount)
-
-            if (messages.values.first().size == 1) {
-                return BigTextStyle()
-                        .setBigContentTitle(title)
-                        .bigText(buildMessage(messages.keys.first(),
-                                messages.values.first().first(), false))
-                        .setSummaryText(summary)
-            } else {
-                return InboxStyle()
-                        .setBigContentTitle(title)
-                        .setSummaryText(summary)
-                        .apply {
-                            messages.forEach { entry ->
-                                entry.value.forEach {
-                                    addLine(buildMessage(entry.key, it, false))
-                                }
-                            }
-                        }
-            }
-        } else {
-            return InboxStyle()
-                    .setBigContentTitle(title)
-                    .apply {
-                        messages.forEach { entry ->
-                            entry.value.forEach {
-                                addLine(buildMessage(entry.key, it, true))
-                            }
-                        }
+                        addAction(actionReplyByRemoteInput)
                     }
-        }
-    }
-
-    private fun buildIntent(context: Context, messages: Map<LocalConference, List<LocalMessage>>):
-            PendingIntent {
-        if (messages.size == 1) {
-            return TaskStackBuilder.create(context)
-                    .addNextIntent(DashboardActivity.getSectionIntent(context, DrawerItem.CHAT))
-                    .addNextIntent(ChatActivity.getIntent(context,
-                            messages.keys.first()))
-                    .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
-        } else {
-            return PendingIntent.getActivity(context, 0,
-                    DashboardActivity.getSectionIntent(context, DrawerItem.CHAT),
-                    PendingIntent.FLAG_UPDATE_CURRENT)
-        }
-    }
-
-    private fun buildIconIfAppropriate(context: Context,
-                                       messages: Map<LocalConference, List<LocalMessage>>): Bitmap? {
-        if (messages.size == 1) {
-            if (messages.keys.first().imageId.isNotBlank()) {
-                return Utils.getBitmapFromURL(context,
-                        ProxerUrlHolder.getUserImageUrl(messages.keys.first().imageId).toString())
-            } else {
-                val icon: IIcon
-
-                if (messages.keys.first().isGroup) {
-                    icon = CommunityMaterial.Icon.cmd_account_multiple
-                } else {
-                    icon = CommunityMaterial.Icon.cmd_account
                 }
-
-                return IconicsDrawable(context, icon)
-                        .sizeDp(96)
-                        .colorRes(R.color.colorPrimary)
-                        .toBitmap()
-            }
-        } else {
-            return null
-        }
-    }
-
-    private fun buildMessage(conference: LocalConference, message: LocalMessage,
-                             insertTopic: Boolean): SpannableString {
-        val sender: String
-
-        if (conference.isGroup) {
-            if (insertTopic) {
-                sender = "${message.username} @ ${conference.topic} "
-            } else {
-                sender = "${message.username} "
-            }
-        } else {
-            if (insertTopic) {
-                sender = "${conference.topic} "
-            } else {
-                sender = ""
-            }
-        }
-
-        return SpannableString(sender + message.message).apply {
-            setSpan(StyleSpan(Typeface.BOLD), 0, sender.length,
-                    Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
-        }
+                .build()
     }
 
     enum class NotificationType(val id: Int) {

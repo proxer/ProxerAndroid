@@ -366,6 +366,7 @@
     <string name="fragment_translator_group_projects_title">Projekte</string>
     <string name="fragment_industry_info_title">Info</string>
     <string name="fragment_industry_projects_title">Projekte</string>
+    <string name="action_answer">Antworten</string>
 
     <plurals name="item_conferences_participants">
         <item quantity="other">%d Teilnehmer</item>
