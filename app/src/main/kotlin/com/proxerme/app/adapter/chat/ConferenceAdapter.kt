@@ -44,6 +44,27 @@ class ConferenceAdapter : PagingAdapter<LocalConference>() {
         callback = null
     }
 
+    override fun insert(items: Iterable<LocalConference>) {
+        doUpdates(items.plus(list.filter { oldItem ->
+            items.find { areItemsTheSame(oldItem, it) } == null
+        }).sortedByDescending { it.time })
+    }
+
+    override fun append(items: Iterable<LocalConference>) {
+        doUpdates(list.filter { oldItem ->
+            items.find { areItemsTheSame(oldItem, it) } == null
+        }.plus(items).sortedByDescending { it.time })
+    }
+
+    override fun areContentsTheSame(oldItem: LocalConference, newItem: LocalConference): Boolean {
+        return oldItem.topic == newItem.topic && oldItem.time == newItem.time &&
+                oldItem.participantAmount == newItem.participantAmount &&
+                oldItem.isReadLocal == newItem.isReadLocal &&
+                oldItem.unreadMessageAmount == newItem.unreadMessageAmount &&
+                oldItem.isGroup == newItem.isGroup &&
+                oldItem.imageId == newItem.imageId
+    }
+
     inner class ViewHolder(itemView: View) : PagingViewHolder<LocalConference>(itemView) {
 
         private val image: ImageView by bindView(R.id.image)
