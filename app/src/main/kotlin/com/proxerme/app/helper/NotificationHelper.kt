@@ -23,6 +23,7 @@ import com.proxerme.app.activity.DashboardActivity
 import com.proxerme.app.activity.chat.ChatActivity
 import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.entitiy.LocalMessage
+import com.proxerme.app.helper.MaterialDrawerHelper.DrawerItem
 import com.proxerme.app.receiver.DirectReplyReceiver
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.notificationManager
@@ -81,7 +82,7 @@ object NotificationHelper {
                 .setContentTitle(context.getString(R.string.notification_news_title))
                 .setContentText(newsAmount)
                 .setContentIntent(PendingIntent.getActivity(context, 0,
-                        DashboardActivity.getSectionIntent(context, MaterialDrawerHelper.ITEM_NEWS),
+                        DashboardActivity.getSectionIntent(context, DrawerItem.NEWS),
                         PendingIntent.FLAG_UPDATE_CURRENT))
                 .setColor(ContextCompat.getColor(context, R.color.primary))
                 .setPriority(PRIORITY_LOW)
@@ -211,14 +212,13 @@ object NotificationHelper {
             PendingIntent {
         if (messages.size == 1) {
             return TaskStackBuilder.create(context)
-                    .addNextIntent(DashboardActivity.getSectionIntent(context,
-                            MaterialDrawerHelper.ITEM_CHAT))
+                    .addNextIntent(DashboardActivity.getSectionIntent(context, DrawerItem.CHAT))
                     .addNextIntent(ChatActivity.getIntent(context,
                             messages.keys.first()))
                     .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
         } else {
             return PendingIntent.getActivity(context, 0,
-                    DashboardActivity.getSectionIntent(context, MaterialDrawerHelper.ITEM_CHAT),
+                    DashboardActivity.getSectionIntent(context, DrawerItem.CHAT),
                     PendingIntent.FLAG_UPDATE_CURRENT)
         }
     }

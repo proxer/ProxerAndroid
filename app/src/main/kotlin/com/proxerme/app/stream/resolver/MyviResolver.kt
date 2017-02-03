@@ -30,7 +30,7 @@ class MyviResolver : StreamResolver() {
     }
 
     private class SprutoResult(private val sprutoData: SprutoData) {
-        val url
+        val url: HttpUrl
             get() = HttpUrl.parse(sprutoData.playlist.first().video.first().url)
     }
 
