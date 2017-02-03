@@ -6,7 +6,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Typeface
 import android.os.Build
-import android.support.annotation.IntDef
 import android.support.v4.app.NotificationCompat.*
 import android.support.v4.app.RemoteInput
 import android.support.v4.app.TaskStackBuilder
@@ -38,12 +37,9 @@ import com.proxerme.library.info.ProxerUrlHolder
  */
 object NotificationHelper {
 
-    const val NEWS_NOTIFICATION = 13579111543343223L
-    const val CHAT_NOTIFICATION = 13579111341234234L
-
     fun showNewsNotification(context: Context, news: Collection<News>) {
         if (news.isEmpty()) {
-            context.notificationManager.cancel(NEWS_NOTIFICATION.toInt())
+            context.notificationManager.cancel(NotificationType.NEWS.id)
 
             return
         }
@@ -88,13 +84,13 @@ object NotificationHelper {
                 .setPriority(PRIORITY_LOW)
                 .setStyle(style)
 
-        context.notificationManager.notify(NEWS_NOTIFICATION.toInt(), builder.build())
+        context.notificationManager.notify(NotificationType.NEWS.id, builder.build())
     }
 
     fun showChatNotification(context: Context,
                              messages: Map<LocalConference, List<LocalMessage>>) {
         if (messages.isEmpty()) {
-            context.notificationManager.cancel(CHAT_NOTIFICATION.toInt())
+            context.notificationManager.cancel(NotificationType.CHAT.id)
 
             return
         }
@@ -130,12 +126,11 @@ object NotificationHelper {
             notificationBuilder.addAction(actionReplyByRemoteInput)
         }
 
-        context.notificationManager.notify(CHAT_NOTIFICATION.toInt(), notificationBuilder.build())
+        context.notificationManager.notify(NotificationType.CHAT.id, notificationBuilder.build())
     }
 
-    fun cancelNotification(context: Context, @NotificationId id: Long) {
-        (context.getSystemService(Context.NOTIFICATION_SERVICE) as android.app.NotificationManager)
-                .cancel(id.toInt())
+    fun cancelNotification(context: Context, type: NotificationType) {
+        context.notificationManager.cancel(type.id)
     }
 
     private fun buildTitle(context: Context, messages: Map<LocalConference, List<LocalMessage>>,
@@ -272,7 +267,8 @@ object NotificationHelper {
         }
     }
 
-    @Retention(AnnotationRetention.SOURCE)
-    @IntDef(NEWS_NOTIFICATION, CHAT_NOTIFICATION)
-    annotation class NotificationId
+    enum class NotificationType(val id: Int) {
+        NEWS(1357913213),
+        CHAT(1353513312)
+    }
 }

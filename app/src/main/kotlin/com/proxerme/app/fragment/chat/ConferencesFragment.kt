@@ -12,6 +12,7 @@ import com.proxerme.app.adapter.chat.ConferenceAdapter
 import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.fragment.framework.SingleLoadingFragment
 import com.proxerme.app.helper.NotificationHelper
+import com.proxerme.app.helper.NotificationHelper.NotificationType
 import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.service.ChatService
 import com.proxerme.app.task.ConferencesTask
@@ -65,7 +66,7 @@ class ConferencesFragment : SingleLoadingFragment<Context, List<LocalConference>
     override fun onResume() {
         super.onResume()
 
-        NotificationHelper.cancelNotification(context, NotificationHelper.CHAT_NOTIFICATION)
+        NotificationHelper.cancelNotification(context, NotificationType.CHAT)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,

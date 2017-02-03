@@ -13,6 +13,7 @@ import com.proxerme.app.adapter.news.NewsAdapter.NewsAdapterCallback
 import com.proxerme.app.fragment.framework.PagedLoadingFragment
 import com.proxerme.app.fragment.framework.PagedLoadingFragment.PagedInput
 import com.proxerme.app.helper.NotificationHelper
+import com.proxerme.app.helper.NotificationHelper.NotificationType
 import com.proxerme.app.helper.StorageHelper
 import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.task.ProxerLoadingTask
@@ -74,7 +75,7 @@ class NewsFragment : PagedLoadingFragment<PagedInput, News>() {
     override fun onResume() {
         super.onResume()
 
-        NotificationHelper.cancelNotification(context, NotificationHelper.NEWS_NOTIFICATION)
+        NotificationHelper.cancelNotification(context, NotificationType.NEWS)
     }
 
     override fun constructTask(): Task<PagedInput, Array<News>> {
