@@ -56,6 +56,10 @@ class ConferenceAdapter : PagingAdapter<LocalConference>() {
         }.plus(items).sortedByDescending { it.time })
     }
 
+    override fun areItemsTheSame(oldItem: LocalConference, newItem: LocalConference): Boolean {
+        return oldItem.id == newItem.id
+    }
+
     override fun areContentsTheSame(oldItem: LocalConference, newItem: LocalConference): Boolean {
         return oldItem.topic == newItem.topic && oldItem.time == newItem.time &&
                 oldItem.participantAmount == newItem.participantAmount &&
