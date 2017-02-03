@@ -45,38 +45,43 @@ object NotificationHelper {
         }
 
         val builder = NotificationCompat.Builder(context)
-        val newsAmount = context.resources.getQuantityString(
-                R.plurals.notification_news_amount, news.size, news.size)
+        val newsAmount = context.resources.getQuantityString(R.plurals.notification_news_amount,
+                news.size, news.size)
         val style: Style
+        val title: String
+        val content: String
 
         when {
             news.size == 1 -> {
                 val current = news.first()
-                val title = current.subject.trim()
-                val content = current.description.trim()
 
-                builder.setContentTitle(title)
-                builder.setContentText(content)
+                title = current.subject.trim()
+                content = current.description.trim()
 
                 style = BigTextStyle(builder)
                         .bigText(content)
                         .setBigContentTitle(title)
                         .setSummaryText(newsAmount)
             }
-            else -> style = InboxStyle().apply {
-                news.forEach {
-                    addLine(it.subject)
-                }
+            else -> {
+                title = context.getString(R.string.notification_news_title)
+                content = newsAmount
 
-                setBigContentTitle(context.getString(R.string.notification_news_title))
-                        .setSummaryText(newsAmount)
+                style = InboxStyle().apply {
+                    news.forEach {
+                        addLine(it.subject)
+                    }
+
+                    setBigContentTitle(context.getString(R.string.notification_news_title))
+                            .setSummaryText(newsAmount)
+                }
             }
         }
 
         builder.setAutoCancel(true)
                 .setSmallIcon(R.drawable.ic_stat_proxer)
-                .setContentTitle(context.getString(R.string.notification_news_title))
-                .setContentText(newsAmount)
+                .setContentTitle(title)
+                .setContentText(content)
                 .setContentIntent(PendingIntent.getActivity(context, 0,
                         DashboardActivity.getSectionIntent(context, DrawerItem.NEWS),
                         PendingIntent.FLAG_UPDATE_CURRENT))
