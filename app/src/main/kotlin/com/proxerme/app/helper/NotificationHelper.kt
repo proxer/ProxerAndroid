@@ -37,8 +37,8 @@ import com.proxerme.library.info.ProxerUrlHolder
  */
 object NotificationHelper {
 
-    const val NEWS_NOTIFICATION = 1423L
-    const val CHAT_NOTIFICATION = 1424L
+    const val NEWS_NOTIFICATION = 13579111543343223L
+    const val CHAT_NOTIFICATION = 13579111341234234L
 
     fun showNewsNotification(context: Context, news: Collection<News>) {
         if (news.isEmpty()) {
@@ -48,39 +48,38 @@ object NotificationHelper {
         }
 
         val builder = NotificationCompat.Builder(context)
-        val style: Style
-        val amount = context.resources.getQuantityString(
+        val newsAmount = context.resources.getQuantityString(
                 R.plurals.notification_news_amount, news.size, news.size)
+        val style: Style
 
-        if (news.size == 1) {
-            val current = news.first()
-            val title = current.subject.trim()
-            val content = current.description.trim()
+        when {
+            news.size == 1 -> {
+                val current = news.first()
+                val title = current.subject.trim()
+                val content = current.description.trim()
 
-            builder.setContentTitle(title)
-            builder.setContentText(content)
+                builder.setContentTitle(title)
+                builder.setContentText(content)
 
-            style = BigTextStyle(builder)
-                    .bigText(content)
-                    .setBigContentTitle(title)
-                    .setSummaryText(amount)
-        } else {
-            val inboxStyle = InboxStyle()
-
-            news.forEach {
-                inboxStyle.addLine(it.subject)
+                style = BigTextStyle(builder)
+                        .bigText(content)
+                        .setBigContentTitle(title)
+                        .setSummaryText(newsAmount)
             }
+            else -> style = InboxStyle().apply {
+                news.forEach {
+                    addLine(it.subject)
+                }
 
-            inboxStyle.setBigContentTitle(context.getString(R.string.notification_news_title))
-                    .setSummaryText(amount)
-
-            style = inboxStyle
+                setBigContentTitle(context.getString(R.string.notification_news_title))
+                        .setSummaryText(newsAmount)
+            }
         }
 
         builder.setAutoCancel(true)
                 .setSmallIcon(R.drawable.ic_stat_proxer)
                 .setContentTitle(context.getString(R.string.notification_news_title))
-                .setContentText(amount)
+                .setContentText(newsAmount)
                 .setContentIntent(PendingIntent.getActivity(context, 0,
                         DashboardActivity.getSectionIntent(context, MaterialDrawerHelper.ITEM_NEWS),
                         PendingIntent.FLAG_UPDATE_CURRENT))
