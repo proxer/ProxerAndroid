@@ -29,6 +29,8 @@ import com.proxerme.library.connection.ProxerConnection
 import com.proxerme.library.connection.ProxerException.*
 import com.squareup.leakcanary.LeakCanary
 import com.squareup.leakcanary.RefWatcher
+import com.vanniktech.emoji.EmojiManager
+import com.vanniktech.emoji.ios.IosEmojiProvider
 import net.danlew.android.joda.JodaTimeAndroid
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -100,6 +102,7 @@ class MainApplication : Application() {
     }
 
     private fun initLibs() {
+        EmojiManager.install(IosEmojiProvider())
         JodaTimeAndroid.init(this)
         Hawk.init(this).build()
         Glide.get(this).register(GlideUrl::class.java, InputStream::class.java,
