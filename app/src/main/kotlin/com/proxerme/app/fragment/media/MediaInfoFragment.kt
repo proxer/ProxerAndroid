@@ -79,6 +79,7 @@ class MediaInfoFragment : SingleLoadingFragment<String, Entry>() {
     private var showUnratedTags = false
     private var showSpoilerTags = false
 
+    private val ratingContainer: ViewGroup by bindView(R.id.ratingContainer)
     private val rating: RatingBar by bindView(R.id.rating)
     private val ratingAmount: TextView by bindView(R.id.ratingAmount)
 
@@ -165,12 +166,12 @@ class MediaInfoFragment : SingleLoadingFragment<String, Entry>() {
         name = data.name
 
         if (data.rating > 0) {
-            rating.visibility = View.VISIBLE
+            ratingContainer.visibility = View.VISIBLE
             rating.rating = data.rating / 2.0f
             ratingAmount.visibility = View.VISIBLE
             ratingAmount.text = getString(R.string.fragment_media_info_rate_count, data.rateCount)
         } else {
-            rating.visibility = View.GONE
+            ratingContainer.visibility = View.GONE
             ratingAmount.visibility = View.GONE
         }
 

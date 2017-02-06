@@ -46,6 +46,7 @@ class RelationsAdapter : PagingAdapter<Relation>() {
         private val title: TextView by bindView(R.id.title)
         private val medium: TextView by bindView(R.id.medium)
         private val image: ImageView by bindView(R.id.image)
+        private val ratingContainer: ViewGroup by bindView(R.id.ratingContainer)
         private val rating: RatingBar by bindView(R.id.rating)
         private val episodes: TextView by bindView(R.id.episodes)
         private val english: ImageView by bindView(R.id.english)
@@ -78,10 +79,10 @@ class RelationsAdapter : PagingAdapter<Relation>() {
             }
 
             if (item.rating > 0) {
-                rating.visibility = View.VISIBLE
+                ratingContainer.visibility = View.VISIBLE
                 rating.rating = item.rating / 2.0f
             } else {
-                rating.visibility = View.GONE
+                ratingContainer.visibility = View.GONE
             }
 
             Glide.with(image.context)

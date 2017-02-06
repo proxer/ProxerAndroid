@@ -67,16 +67,23 @@
                 android:layout_below="@+id/medium"
                 android:orientation="vertical">
 
-                <me.zhanghai.android.materialratingbar.MaterialRatingBar
-                    android:id="@+id/rating"
-                    style="?attr/ratingBarStyleSmall"
+                <FrameLayout
+                    android:id="@+id/ratingContainer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
-                    android:layout_marginTop="8dp"
-                    android:isIndicator="true"
-                    android:numStars="5" />
+                    android:layout_marginTop="8dp">
+
+                    <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                        android:id="@+id/rating"
+                        style="?attr/ratingBarStyleSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:isIndicator="true"
+                        android:numStars="5" />
+
+                </FrameLayout>
 
                 <TextView
                     android:id="@+id/status"

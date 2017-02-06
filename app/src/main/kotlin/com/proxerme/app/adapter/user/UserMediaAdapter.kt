@@ -46,6 +46,7 @@ class UserMediaAdapter : PagingAdapter<UserMediaListEntry>() {
         private val medium: TextView by bindView(R.id.medium)
         private val image: ImageView by bindView(R.id.image)
         private val status: TextView by bindView(R.id.status)
+        private val ratingContainer: ViewGroup by bindView(R.id.ratingContainer)
         private val rating: RatingBar by bindView(R.id.rating)
 
         init {
@@ -64,10 +65,10 @@ class UserMediaAdapter : PagingAdapter<UserMediaListEntry>() {
                     item.commentState, item.commentEpisode)
 
             if (item.commentRating > 0) {
-                rating.visibility = View.VISIBLE
+                ratingContainer.visibility = View.VISIBLE
                 rating.rating = item.commentRating.toFloat() / 2.0f
             } else {
-                rating.visibility = View.GONE
+                ratingContainer.visibility = View.GONE
             }
 
             Glide.with(image.context)
