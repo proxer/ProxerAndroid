@@ -39,23 +39,15 @@ object NotificationHelper {
     private const val GROUP_CHAT = "chat"
 
     fun showNewsNotification(context: Context, news: Collection<News>) {
-        if (news.isEmpty()) {
-            context.notificationManager.cancel(NotificationType.NEWS.id)
+        val notification = buildNewsNotification(context, news)
 
-            return
+        when (notification) {
+            null -> context.notificationManager.cancel(NotificationType.NEWS.id)
+            else -> context.notificationManager.notify(NotificationType.NEWS.id, notification)
         }
-
-        context.notificationManager.notify(NotificationType.NEWS.id,
-                buildNewsNotification(context, news))
     }
 
     fun showChatNotification(context: Context, messages: Map<LocalConference, List<LocalMessage>>) {
-        if (messages.isEmpty()) {
-            context.notificationManager.cancel(NotificationType.CHAT.id)
-
-            return
-        }
-
         messages.entries.map { (conference, messages) ->
             conference.id.toInt() to when {
                 messages.isEmpty() -> null
@@ -73,7 +65,11 @@ object NotificationHelper {
         context.notificationManager.cancel(type.id)
     }
 
-    private fun buildNewsNotification(context: Context, news: Collection<News>): Notification {
+    private fun buildNewsNotification(context: Context, news: Collection<News>): Notification? {
+        if (news.isEmpty()) {
+            return null
+        }
+
         val builder = NotificationCompat.Builder(context)
         val newsAmount = context.resources.getQuantityString(R.plurals.notification_news_amount,
                 news.size, news.size)
@@ -123,7 +119,11 @@ object NotificationHelper {
     }
 
     private fun buildChatSummaryNotification(context: Context,
-                                             messages: Map<LocalConference, List<LocalMessage>>): Notification {
+                                             messages: Map<LocalConference, List<LocalMessage>>): Notification? {
+        if (!messages.any { it.value.isNotEmpty() }) {
+            return null
+        }
+
         val messageAmount = messages.values.sumBy { it.size }
         val title = context.resources.getQuantityString(R.plurals.notification_chat_message_amount,
                 messageAmount, messageAmount) +
@@ -172,7 +172,11 @@ object NotificationHelper {
     }
 
     private fun buildIndividualChatNotification(context: Context, conference: LocalConference,
-                                                messages: List<LocalMessage>): Notification {
+                                                messages: List<LocalMessage>): Notification? {
+        if (messages.isEmpty()) {
+            return null
+        }
+
         val content = context.resources.getQuantityString(R.plurals.notification_chat_message_amount,
                 messages.size, messages.size)
         val icon = when {
