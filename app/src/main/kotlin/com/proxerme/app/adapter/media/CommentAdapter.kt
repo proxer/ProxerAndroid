@@ -127,17 +127,14 @@ class CommentAdapter : PagingAdapter<Comment>() {
             bindComment(item)
             bindExpanded(item)
 
-            bindRatingRow(ratingGenreRow, ratingGenre,
-                    item.ratingDetails.genre)
-            bindRatingRow(ratingStoryRow, ratingStory,
-                    item.ratingDetails.story)
+            bindRatingRow(ratingGenreRow, ratingGenre, item.ratingDetails.genre.toFloat())
+            bindRatingRow(ratingStoryRow, ratingStory, item.ratingDetails.story.toFloat())
             bindRatingRow(ratingAnimationRow, ratingAnimation,
-                    item.ratingDetails.animation)
+                    item.ratingDetails.animation.toFloat())
             bindRatingRow(ratingCharactersRow, ratingCharacters,
-                    item.ratingDetails.characters)
-            bindRatingRow(ratingMusicRow, ratingMusic,
-                    item.ratingDetails.music)
-            bindRatingRow(ratingOverallRow, ratingOverall, (item.rating.toFloat() / 2.0f).toInt())
+                    item.ratingDetails.characters.toFloat())
+            bindRatingRow(ratingMusicRow, ratingMusic, item.ratingDetails.music.toFloat())
+            bindRatingRow(ratingOverallRow, ratingOverall, item.rating.toFloat() / 2.0f)
 
             time.text = TimeUtils.convertToRelativeReadableTime(time.context, item.time)
             // TODO: Extend the API for data about the media
@@ -181,12 +178,12 @@ class CommentAdapter : PagingAdapter<Comment>() {
             comment.setSpoilerStates(spoilerStateMap[item.id])
         }
 
-        private fun bindRatingRow(container: ViewGroup, ratingBar: RatingBar, rating: Int) {
+        private fun bindRatingRow(container: ViewGroup, ratingBar: RatingBar, rating: Float) {
             if (rating <= 0) {
                 container.visibility = View.GONE
             } else {
                 container.visibility = View.VISIBLE
-                ratingBar.rating = rating.toFloat()
+                ratingBar.rating = rating
             }
         }
     }
