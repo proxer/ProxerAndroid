@@ -10,11 +10,9 @@
         <item name="actionModeStyle">@style/ActionModeTheme</item>
 
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.Material</item>
+
         <item name="asp_preferenceIconTint">?colorAccent</item>
         <item name="asp_preferenceDialogIconTint">?asp_preferenceIconTint</item>
-
-        <item name="mal_color_primary">@color/mal_text_primary</item>
-        <item name="mal_color_secondary">@color/mal_text_secondary</item>
     </style>
 
     <style name="Theme.Transparent" parent="Base.Theme.AppTheme">
