@@ -63,6 +63,7 @@ class RelationsFragment : SingleLoadingFragment<String, Array<Relation>>() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        list.setHasFixedSize(true)
         list.layoutManager = StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity) + 1,
                 StaggeredGridLayoutManager.VERTICAL)
         list.adapter = adapter

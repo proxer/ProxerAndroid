@@ -317,6 +317,7 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
     private fun setupList() {
         headerFooterAdapter = EasyHeaderFooterAdapter(adapter)
 
+        list.setHasFixedSize(true)
         list.layoutManager = layoutManager
         list.adapter = headerFooterAdapter
         list.addOnScrollListener(object : EndlessRecyclerOnScrollListener(layoutManager) {

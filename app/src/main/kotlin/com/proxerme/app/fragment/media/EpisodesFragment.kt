@@ -74,6 +74,7 @@ class EpisodesFragment : SingleLoadingFragment<String, Array<RichEpisode>>() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        list.setHasFixedSize(true)
         list.layoutManager = LinearLayoutManager(context)
         list.adapter = adapter
     }
