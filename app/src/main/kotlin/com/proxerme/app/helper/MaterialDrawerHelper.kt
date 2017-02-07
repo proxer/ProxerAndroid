@@ -201,6 +201,12 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar,
     private fun generateStickyDrawerItems(): ArrayList<IDrawerItem<*, *>> {
         return arrayListOf(
                 PrimaryDrawerItem()
+                        .withName(R.string.drawer_item_info)
+                        .withIcon(CommunityMaterial.Icon.cmd_information_outline)
+                        .withSelectedTextColorRes(R.color.colorAccent)
+                        .withSelectedIconColorRes(R.color.colorAccent)
+                        .withIdentifier(DrawerItem.INFO.id),
+                PrimaryDrawerItem()
                         .withName(R.string.drawer_item_donate)
                         .withIcon(CommunityMaterial.Icon.cmd_gift)
                         .withSelectedTextColorRes(R.color.colorAccent)
@@ -263,8 +269,9 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar,
         REMINDER(2L),
         ANIME(3L),
         MANGA(4L),
-        DONATE(10L),
-        SETTINGS(11L);
+        INFO(10L),
+        DONATE(11L),
+        SETTINGS(12L);
 
         companion object {
             fun fromOrNull(id: Long?) = values().firstOrNull { it.id == id }

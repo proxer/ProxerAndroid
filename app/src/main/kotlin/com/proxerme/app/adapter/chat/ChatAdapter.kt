@@ -361,7 +361,7 @@ class ChatAdapter(val isGroup: Boolean) : PagingAdapter<LocalMessage>() {
                         .getColorStateList(container.context, R.color.selected_card)
             } else {
                 container.cardBackgroundColor = ContextCompat
-                        .getColorStateList(container.context, R.color.cardview_background)
+                        .getColorStateList(container.context, R.color.background_card)
             }
         }
 

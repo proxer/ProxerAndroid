@@ -136,10 +136,9 @@ class ProfileActivity : MainActivity() {
                 if (username != null && imageId != null) {
                     val existingChat = chatDatabase.getChat(username!!)
 
-                    if (existingChat == null) {
-                        NewChatActivity.navigateTo(this, Participant(username!!, imageId!!))
-                    } else {
-                        ChatActivity.navigateTo(this, existingChat)
+                    when (existingChat) {
+                        null -> NewChatActivity.navigateTo(this, Participant(username!!, imageId!!))
+                        else -> ChatActivity.navigateTo(this, existingChat)
                     }
                 }
             }

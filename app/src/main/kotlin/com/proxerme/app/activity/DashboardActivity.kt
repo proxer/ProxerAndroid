@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar
 import com.proxerme.app.R
 import com.proxerme.app.dialog.LoginDialog
 import com.proxerme.app.dialog.LogoutDialog
+import com.proxerme.app.fragment.AboutFragment
 import com.proxerme.app.fragment.SettingsFragment
 import com.proxerme.app.fragment.chat.ConferencesFragment
 import com.proxerme.app.fragment.media.MediaListFragment
@@ -127,8 +128,8 @@ class DashboardActivity : MainActivity() {
         }
     }
 
-    private fun setFragment(fragment: Fragment, title: String) {
-        this.title = title
+    private fun setFragment(fragment: Fragment, title: Int) {
+        this.title = getString(title)
 
         setTitle(title)
         setFragment(fragment)
@@ -171,34 +172,39 @@ class DashboardActivity : MainActivity() {
     private fun onDrawerItemClick(item: DrawerItem): Boolean {
         when (item) {
             DrawerItem.NEWS -> {
-                setFragment(NewsFragment.newInstance(), getString(R.string.fragment_news))
+                setFragment(NewsFragment.newInstance(), R.string.fragment_news)
 
                 return false
             }
 
             DrawerItem.CHAT -> {
-                setFragment(ConferencesFragment.newInstance(),
-                        getString(R.string.fragment_conferences))
+                setFragment(ConferencesFragment.newInstance(), R.string.fragment_conferences)
 
                 return false
             }
 
             DrawerItem.REMINDER -> {
-                setFragment(ReminderFragment.newInstance(), getString(R.string.fragment_reminder))
+                setFragment(ReminderFragment.newInstance(), R.string.fragment_reminder)
 
                 return false
             }
 
             DrawerItem.ANIME -> {
                 setFragment(MediaListFragment.newInstance(CategoryParameter.ANIME),
-                        getString(R.string.fragment_media_list_anime_title))
+                        R.string.fragment_media_list_anime_title)
 
                 return false
             }
 
             DrawerItem.MANGA -> {
                 setFragment(MediaListFragment.newInstance(CategoryParameter.MANGA),
-                        getString(R.string.fragment_media_list_manga_title))
+                        R.string.fragment_media_list_manga_title)
+
+                return false
+            }
+
+            DrawerItem.INFO -> {
+                setFragment(AboutFragment.newInstance(), R.string.fragment_about_title)
 
                 return false
             }
@@ -210,7 +216,7 @@ class DashboardActivity : MainActivity() {
             }
 
             DrawerItem.SETTINGS -> {
-                setFragment(SettingsFragment.newInstance(), getString(R.string.fragment_settings))
+                setFragment(SettingsFragment.newInstance(), R.string.fragment_settings)
 
                 return false
             }

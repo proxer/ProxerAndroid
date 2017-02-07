@@ -1,7 +1,4 @@
 <resources>
-    <string name="about_description"><![CDATA[Entwickelt von <a href="https://www.github.com/rubengees">Ruben Gees</a><br><br>In dieser App werden Icons von <a href="http://www.freepik.com/">Freepik</a>, <a href="https://material.io/icons/">Google</a> und <a href="https://materialdesignicons.com/">weiteren Mitwirkenden</a> (Unter \"View the Contributors\") verwendet]]></string>
-    <string name="about_libraries_title">Lizenzen</string>
-
     <string name="action_add_user">%1$s hat %2$s zur Konferenz hinzugefügt</string>
     <string name="action_copy">Kopieren</string>
     <string name="action_filter_all_anime">Alles</string>
@@ -367,6 +364,24 @@
     <string name="fragment_industry_info_title">Info</string>
     <string name="fragment_industry_projects_title">Projekte</string>
     <string name="action_answer">Antworten</string>
+    <string name="drawer_item_info">Info</string>
+
+    <string name="about_info_version_title">Version</string>
+    <string name="about_info_licences_title">Lizenzen</string>
+    <string name="about_info_licences_description">Lizenzen von Bibliotheken, die in dieser App verwendet werden</string>
+    <string name="about_info_licences_activity_title">Lizenzen</string>
+    <string name="about_info_licences_activity_description"><![CDATA[In dieser App werden Icons von <a href="http://www.freepik.com/">Freepik</a>, <a href="https://material.io/icons/">Google</a> und <a href="https://materialdesignicons.com/">weiteren Mitwirkenden</a> (Unter \"View the Contributors\") verwendet.<br><br>Außerdem werden die folgenden Open Source Bibliotheken eingesetzt.]]></string>
+    <string name="about_info_source_code">Quellcode</string>
+    <string name="about_info_source_code_description">Sieh dir den Quellcode auf GitHub an</string>
+    <string name="about_support_title">Support</string>
+    <string name="about_support_forum_title">Forum</string>
+    <string name="about_support_forum_description">Berichte Fehler oder mache Verbesserungsvorschläge im Forum</string>
+    <string name="about_support_message_title">Nachricht</string>
+    <string name="about_support_message_description">Berichte Fehler oder mache Verbesserungsvorschläge per PN</string>
+    <string name="about_developer_title">Entwickler</string>
+    <string name="about_developer_github_title">GitHub</string>
+    <string name="about_developer_proxer_title">Proxer</string>
+    <string name="fragment_about_title">Info</string>
 
     <plurals name="item_conferences_participants">
         <item quantity="other">%d Teilnehmer</item>
