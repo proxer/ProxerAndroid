@@ -276,8 +276,6 @@
     <string name="spoiler_hide">Spoiler verstecken</string>
     <string name="spoiler_show">Spoiler!</string>
 
-    <string name="status_currently_logging_in">Du wirst angemeldet…</string>
-    <string name="status_currently_logging_out">Du wirst abgemeldet…</string>
     <string name="error_not_logged_in">Du bist nicht angemeldet</string>
 
     <string name="tags_spoiler_hide">Spoiler Tags verstecken</string>
