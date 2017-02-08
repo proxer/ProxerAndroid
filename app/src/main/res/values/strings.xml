@@ -281,7 +281,7 @@
 
     <string name="status_currently_logging_in">Du wirst angemeldet…</string>
     <string name="status_currently_logging_out">Du wirst abgemeldet…</string>
-    <string name="status_not_logged_in">Du bist nicht angemeldet</string>
+    <string name="error_not_logged_in">Du bist nicht angemeldet</string>
 
     <string name="tags_spoiler_hide">Spoiler Tags verstecken</string>
     <string name="tags_spoiler_show">Spoiler Tags anzeigen</string>

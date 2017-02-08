@@ -28,6 +28,7 @@ import com.proxerme.app.event.LogoutEvent
 import com.proxerme.app.helper.PreferenceHelper
 import com.proxerme.app.helper.StorageHelper
 import com.proxerme.app.service.ChatService
+import com.proxerme.app.util.ErrorUtils
 import com.proxerme.library.connection.ProxerConnection
 import com.proxerme.library.connection.ProxerException
 import com.proxerme.library.connection.ProxerRequest
@@ -78,11 +79,7 @@ class MainApplication : Application() {
                 return proxerConnection.executeSynchronized(request, StorageHelper.user?.loginToken)
             } catch (exception: ProxerException) {
                 when (exception.proxerErrorCode) {
-                    ProxerException.INVALID_TOKEN,
-                    ProxerException.INFO_USER_NOT_LOGGED_IN,
-                    ProxerException.NOTIFICATIONS_USER_NOT_LOGGED_IN,
-                    ProxerException.MESSAGES_USER_NOT_LOGGED_IN,
-                    ProxerException.UCP_USER_NOT_LOGGED_IN -> {
+                    in ErrorUtils.LOGIN_ERRORS -> {
                         val user = StorageHelper.user
 
                         if (user?.password != null) {

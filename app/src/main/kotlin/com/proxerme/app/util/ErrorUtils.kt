@@ -23,20 +23,24 @@ import java.net.SocketTimeoutException
  */
 object ErrorUtils {
 
+    val LOGIN_ERRORS = arrayOf(INVALID_TOKEN, INFO_USER_NOT_LOGGED_IN,
+            NOTIFICATIONS_USER_NOT_LOGGED_IN, MESSAGES_USER_NOT_LOGGED_IN, UCP_USER_NOT_LOGGED_IN)
+
     fun getMessageForErrorCode(context: Context,
                                exception: ProxerException): String {
         when (exception.errorCode) {
-            ProxerException.PROXER -> {
+            PROXER -> {
                 return when (exception.proxerErrorCode) {
                     IP_BLOCKED -> context.getString(R.string.error_ip_blocked)
                     INFO_ENTRY_ALREADY_IN_LIST -> context.getString(R.string.error_already_in_list)
                     INFO_EXCEEDED_ALLOWED_ENTRIES -> context.getString(R.string.error_favorites_full)
+                    in LOGIN_ERRORS -> context.getString(R.string.error_not_logged_in)
                     else -> exception.message ?: context.getString(R.string.error_unknown)
                 }
             }
-            ProxerException.TIMEOUT -> return context.getString(R.string.error_timeout)
-            ProxerException.NETWORK -> return context.getString(R.string.error_network)
-            ProxerException.UNPARSABLE -> return context.getString(R.string.error_unparseable)
+            TIMEOUT -> return context.getString(R.string.error_timeout)
+            NETWORK -> return context.getString(R.string.error_network)
+            UNPARSABLE -> return context.getString(R.string.error_unparseable)
             else -> return context.getString(R.string.error_unknown)
         }
     }
@@ -46,11 +50,12 @@ object ErrorUtils {
             is ProxerException -> {
                 val message = getMessageForErrorCode(context, exception)
                 val buttonMessage = when (exception.proxerErrorCode) {
-                    ProxerException.IP_BLOCKED -> context.getString(R.string.error_action_captcha)
+                    IP_BLOCKED -> context.getString(R.string.error_action_captcha)
+                    in ErrorUtils.LOGIN_ERRORS -> context.getString(R.string.error_action_login)
                     else -> ""
                 }
                 val buttonAction = when (exception.proxerErrorCode) {
-                    ProxerException.IP_BLOCKED -> View.OnClickListener {
+                    IP_BLOCKED -> View.OnClickListener {
                         context.showPage(HttpUrl.Builder()
                                 .scheme("https")
                                 .host("proxer.me")
@@ -61,13 +66,16 @@ object ErrorUtils {
 
                         EventBus.getDefault().post(CaptchaSolvedEvent())
                     }
+                    in ErrorUtils.LOGIN_ERRORS -> View.OnClickListener {
+                        LoginDialog.show(context)
+                    }
                     else -> null
                 }
 
                 return ErrorAction(message, buttonMessage, buttonAction)
             }
             is Validators.NotLoggedInException -> {
-                val message = context.getString(R.string.status_not_logged_in)
+                val message = context.getString(R.string.error_not_logged_in)
                 val buttonMessage = context.getString(R.string.error_action_login)
                 val buttonAction = View.OnClickListener {
                     LoginDialog.show(context)
