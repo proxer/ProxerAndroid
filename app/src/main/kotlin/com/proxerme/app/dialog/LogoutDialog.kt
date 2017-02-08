@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ProgressBar
 import com.afollestad.materialdialogs.MaterialDialog
 import com.proxerme.app.R
@@ -14,6 +13,8 @@ import com.proxerme.app.event.LogoutEvent
 import com.proxerme.app.helper.StorageHelper
 import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.util.ErrorUtils
+import com.proxerme.app.util.KotterKnife
+import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.ProxerException
 import com.proxerme.library.connection.user.request.LogoutRequest
 import org.greenrobot.eventbus.EventBus
@@ -47,15 +48,14 @@ class LogoutDialog : DialogFragment() {
             context.longToast(R.string.error_unknown)
         }
 
-        if(view != null){
+        if (dialog != null) {
             handleVisibility()
         }
     }
 
     private lateinit var task: ProxerLoadingTask<Unit, Void?>
 
-    private lateinit var root: ViewGroup
-    private lateinit var progress: ProgressBar
+    private val progress: ProgressBar by bindView(R.id.progress)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,19 +72,30 @@ class LogoutDialog : DialogFragment() {
                 .positiveText(R.string.dialog_logout_positive)
                 .negativeText(R.string.dialog_cancel)
                 .onPositive({ _, _ ->
-                    logout()
+                    if (!task.isWorking) {
+                        task.execute(Unit)
+
+                        handleVisibility()
+                    }
                 })
                 .onNegative({ materialDialog, _ ->
                     materialDialog.cancel()
                 })
-                .customView(initViews(), true)
+                .customView(R.layout.dialog_progress, true)
                 .build()
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onStart() {
+        super.onStart()
 
         handleVisibility()
+    }
+
+    override fun onDestroyView() {
+        dialog?.setDismissMessage(null)
+        KotterKnife.reset(this)
+
+        super.onDestroyView()
     }
 
     override fun onDestroy() {
@@ -95,34 +106,10 @@ class LogoutDialog : DialogFragment() {
         MainApplication.refWatcher.watch(this)
     }
 
-    override fun onDestroyView() {
-        if (dialog != null && retainInstance) {
-            dialog.setDismissMessage(null)
-        }
-
-        super.onDestroyView()
-    }
-
-    private fun initViews(): View {
-        root = View.inflate(context, R.layout.dialog_progress, null) as ViewGroup
-        progress = root.findViewById(R.id.progress) as ProgressBar
-
-        return root
-    }
-
     private fun handleVisibility() {
-        if (task.isWorking) {
-            progress.visibility = View.VISIBLE
-        } else {
-            progress.visibility = View.GONE
-        }
-    }
-
-    private fun logout() {
-        if (!task.isWorking) {
-            task.execute(Unit)
-
-            handleVisibility()
+        progress.visibility = when (task.isWorking) {
+            true -> View.VISIBLE
+            false -> View.GONE
         }
     }
 }

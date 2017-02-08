@@ -20,6 +20,8 @@ import com.proxerme.app.event.LoginEvent
 import com.proxerme.app.helper.StorageHelper
 import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.util.ErrorUtils
+import com.proxerme.app.util.KotterKnife
+import com.proxerme.app.util.bindView
 import com.proxerme.app.util.listener.OnTextListener
 import com.proxerme.library.connection.ProxerException
 import com.proxerme.library.connection.user.entitiy.User
@@ -61,19 +63,20 @@ class LoginDialog : DialogFragment() {
             context.longToast(R.string.error_unknown)
         }
 
-        handleVisibility()
+        if (dialog != null) {
+            handleVisibility()
+        }
     }
 
     private lateinit var task: ProxerLoadingTask<LoginInput, User>
 
-    private lateinit var root: ViewGroup
-    private lateinit var inputUsername: TextInputEditText
-    private lateinit var inputPassword: TextInputEditText
-    private lateinit var usernameContainer: TextInputLayout
-    private lateinit var passwordContainer: TextInputLayout
-    private lateinit var remember: CheckBox
-    private lateinit var inputContainer: ViewGroup
-    private lateinit var progress: ProgressBar
+    private val inputUsername: TextInputEditText by bindView(R.id.inputUsername)
+    private val inputPassword: TextInputEditText by bindView(R.id.inputPassword)
+    private val usernameContainer: TextInputLayout by bindView(R.id.usernameContainer)
+    private val passwordContainer: TextInputLayout by bindView(R.id.passwordContainer)
+    private val remember: CheckBox by bindView(R.id.remember)
+    private val inputContainer: ViewGroup by bindView(R.id.inputContainer)
+    private val progress: ProgressBar by bindView(R.id.progress)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,41 +99,12 @@ class LoginDialog : DialogFragment() {
                 .onNegative({ materialDialog, _ ->
                     materialDialog.cancel()
                 })
-                .customView(initViews(), true)
+                .customView(R.layout.dialog_login, true)
                 .build()
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        handleVisibility()
-    }
-
-    override fun onDestroy() {
-        task.destroy()
-
-        super.onDestroy()
-
-        MainApplication.refWatcher.watch(this)
-    }
-
-    override fun onDestroyView() {
-        if (dialog != null && retainInstance) {
-            dialog.setDismissMessage(null)
-        }
-
-        super.onDestroyView()
-    }
-
-    private fun initViews(): View {
-        root = View.inflate(context, R.layout.dialog_login, null) as ViewGroup
-        inputUsername = root.findViewById(R.id.inputUsername) as TextInputEditText
-        inputPassword = root.findViewById(R.id.inputPassword) as TextInputEditText
-        usernameContainer = root.findViewById(R.id.usernameContainer) as TextInputLayout
-        passwordContainer = root.findViewById(R.id.passwordContainer) as TextInputLayout
-        remember = root.findViewById(R.id.remember) as CheckBox
-        inputContainer = root.findViewById(R.id.inputContainer) as ViewGroup
-        progress = root.findViewById(R.id.progress) as ProgressBar
+    override fun onStart() {
+        super.onStart()
 
         StorageHelper.user?.let {
             inputUsername.setText(it.username)
@@ -159,7 +133,22 @@ class LoginDialog : DialogFragment() {
             }
         })
 
-        return root
+        handleVisibility()
+    }
+
+    override fun onDestroy() {
+        task.destroy()
+
+        super.onDestroy()
+
+        MainApplication.refWatcher.watch(this)
+    }
+
+    override fun onDestroyView() {
+        dialog?.setDismissMessage(null)
+        KotterKnife.reset(this)
+
+        super.onDestroyView()
     }
 
     private fun login() {
