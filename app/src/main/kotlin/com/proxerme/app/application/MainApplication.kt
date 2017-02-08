@@ -22,19 +22,29 @@ import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import com.orhanobut.hawk.Hawk
 import com.proxerme.app.BuildConfig
 import com.proxerme.app.EventBusIndex
+import com.proxerme.app.entitiy.LocalUser
+import com.proxerme.app.event.LoginEvent
+import com.proxerme.app.event.LogoutEvent
 import com.proxerme.app.helper.PreferenceHelper
-import com.proxerme.app.manager.UserManager
+import com.proxerme.app.helper.StorageHelper
 import com.proxerme.app.service.ChatService
 import com.proxerme.library.connection.ProxerConnection
-import com.proxerme.library.connection.ProxerException.*
+import com.proxerme.library.connection.ProxerException
+import com.proxerme.library.connection.ProxerRequest
+import com.proxerme.library.connection.user.request.LoginRequest
 import com.squareup.leakcanary.LeakCanary
 import com.squareup.leakcanary.RefWatcher
+import com.squareup.moshi.Moshi
 import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.ios.IosEmojiProvider
 import net.danlew.android.joda.JodaTimeAndroid
+import okhttp3.OkHttpClient
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 import java.io.InputStream
+import java.util.concurrent.Future
 
 /**
  * TODO: Describe Class
@@ -44,21 +54,67 @@ import java.io.InputStream
 class MainApplication : Application() {
 
     companion object {
+        private const val USER_AGENT = "ProxerAndroid/${BuildConfig.VERSION_NAME}"
 
-        private const val USER_AGENT = "ProxerAndroid"
-
-        lateinit var proxerConnection: ProxerConnection
-            private set
+        private lateinit var proxerConnection: ProxerConnection
 
         lateinit var refWatcher: RefWatcher
             private set
-    }
 
-    private val loginErrorHandler = ProxerConnection.ErrorListener {
-        UserManager.notifyLoggedOut()
+        val httpClient: OkHttpClient
+            get() = proxerConnection.httpClient
 
-        if (UserManager.user != null) {
-            UserManager.reLogin()
+        val moshi: Moshi
+            get() = proxerConnection.moshi
+
+        fun <T> exec(request: ProxerRequest<T>, callback: (T) -> Unit,
+                     errorCallback: (ProxerException) -> Unit): ProxerTokenCall<T> {
+            return ProxerTokenCall(request, callback, errorCallback)
+        }
+
+        @Throws(ProxerException::class)
+        fun <T> execSync(request: ProxerRequest<T>): T {
+            try {
+                return proxerConnection.executeSynchronized(request, StorageHelper.user?.loginToken)
+            } catch (exception: ProxerException) {
+                when (exception.proxerErrorCode) {
+                    ProxerException.INVALID_TOKEN,
+                    ProxerException.INFO_USER_NOT_LOGGED_IN,
+                    ProxerException.NOTIFICATIONS_USER_NOT_LOGGED_IN,
+                    ProxerException.MESSAGES_USER_NOT_LOGGED_IN,
+                    ProxerException.UCP_USER_NOT_LOGGED_IN -> {
+                        val user = StorageHelper.user
+
+                        if (user?.password != null) {
+                            val result = try {
+                                proxerConnection.executeSynchronized(LoginRequest(user.username,
+                                        user.password))
+                            } catch (exception: ProxerException) {
+                                when (exception.proxerErrorCode){
+                                     ProxerException.LOGIN_INVALID_CREDENTIALS,
+                                     ProxerException.LOGIN_MISSING_CREDENTIALS-> {
+                                         StorageHelper.user = null
+
+                                         EventBus.getDefault().post(LogoutEvent())
+                                     }
+                                }
+
+                                throw exception
+                            }
+
+                            StorageHelper.user = LocalUser(user.username, user.password,
+                                    result.id, result.imageId, result.loginToken)
+
+                            EventBus.getDefault().post(LoginEvent())
+
+                            return proxerConnection.executeSynchronized(request, result.loginToken)
+                        } else {
+                            throw exception
+                        }
+                    }
+                    else -> throw exception
+                }
+            }
         }
     }
 
@@ -72,14 +128,9 @@ class MainApplication : Application() {
         AppCompatDelegate.setDefaultNightMode(PreferenceHelper.getNightMode(this))
 
         refWatcher = LeakCanary.install(this)
-        proxerConnection = ProxerConnection.Builder(BuildConfig.PROXER_API_KEY, this)
-                .withCustomUserAgent("$USER_AGENT/${BuildConfig.VERSION_NAME}")
-                .build().apply {
-            registerErrorListener(UCP_USER_NOT_LOGGED_IN, loginErrorHandler)
-            registerErrorListener(INFO_USER_NOT_LOGGED_IN, loginErrorHandler)
-            registerErrorListener(MESSAGES_USER_NOT_LOGGED_IN, loginErrorHandler)
-            registerErrorListener(NOTIFICATIONS_USER_NOT_LOGGED_IN, loginErrorHandler)
-        }
+        proxerConnection = ProxerConnection.Builder(BuildConfig.PROXER_API_KEY)
+                .withCustomUserAgent(USER_AGENT)
+                .build()
 
         initLibs()
         initDrawerImageLoader()
@@ -90,14 +141,19 @@ class MainApplication : Application() {
 
     override fun onTerminate() {
         EventBus.getDefault().unregister(this)
-        proxerConnection.unregisterAllErrorListeners()
 
         super.onTerminate()
     }
 
     @Suppress("unused")
     @Subscribe
-    fun onLoginStateChanged(@Suppress("UNUSED_PARAMETER") state: UserManager.LoginState) {
+    fun onLogin(@Suppress("UNUSED_PARAMETER") event: LoginEvent) {
+        ChatService.synchronize(this)
+    }
+
+    @Suppress("unused")
+    @Subscribe
+    fun onLogout(@Suppress("UNUSED_PARAMETER") event: LogoutEvent) {
         ChatService.synchronize(this)
     }
 
@@ -161,6 +217,32 @@ class MainApplication : Application() {
                     .detectAll()
                     .penaltyLog()
                     .build())
+        }
+    }
+
+    class ProxerTokenCall<T>(request: ProxerRequest<T>, callback: (T) -> Unit,
+                             errorCallback: (ProxerException) -> Unit) {
+
+        private val task: Future<Unit>
+
+        init {
+            task = doAsync {
+                try {
+                    val result = execSync(request)
+
+                    uiThread {
+                        callback.invoke(result)
+                    }
+                } catch(exception: ProxerException) {
+                    uiThread {
+                        errorCallback.invoke(exception)
+                    }
+                }
+            }
+        }
+
+        fun cancel() {
+            task.cancel(true)
         }
     }
 }

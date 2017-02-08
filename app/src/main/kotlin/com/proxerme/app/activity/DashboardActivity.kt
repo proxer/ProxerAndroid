@@ -9,6 +9,8 @@ import android.support.v7.widget.Toolbar
 import com.proxerme.app.R
 import com.proxerme.app.dialog.LoginDialog
 import com.proxerme.app.dialog.LogoutDialog
+import com.proxerme.app.event.LoginEvent
+import com.proxerme.app.event.LogoutEvent
 import com.proxerme.app.fragment.AboutFragment
 import com.proxerme.app.fragment.SettingsFragment
 import com.proxerme.app.fragment.chat.ConferencesFragment
@@ -21,7 +23,6 @@ import com.proxerme.app.helper.MaterialDrawerHelper.AccountItem
 import com.proxerme.app.helper.MaterialDrawerHelper.DrawerItem
 import com.proxerme.app.helper.PreferenceHelper
 import com.proxerme.app.helper.StorageHelper
-import com.proxerme.app.manager.UserManager
 import com.proxerme.app.util.bindView
 import com.proxerme.library.info.ProxerUrlHolder
 import com.proxerme.library.parameters.CategoryParameter
@@ -145,13 +146,13 @@ class DashboardActivity : MainActivity() {
 
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onLoginStateChanged(@Suppress("UNUSED_PARAMETER") newState: UserManager.LoginState) {
+    fun onLogin(@Suppress("UNUSED_PARAMETER") event: LoginEvent) {
         drawer.refreshHeader(this)
     }
 
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onOngoingStateChanged(@Suppress("UNUSED_PARAMETER") newState: UserManager.OngoingState) {
+    fun onLogout(@Suppress("UNUSED_PARAMETER") event: LogoutEvent) {
         drawer.refreshHeader(this)
     }
 
@@ -244,7 +245,7 @@ class DashboardActivity : MainActivity() {
             }
 
             AccountItem.USER -> {
-                UserManager.user?.let {
+                StorageHelper.user?.let {
                     ProfileActivity.navigateTo(this, it.id, it.username, it.imageId)
                 }
 

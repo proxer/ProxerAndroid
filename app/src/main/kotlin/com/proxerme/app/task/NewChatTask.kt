@@ -2,6 +2,7 @@ package com.proxerme.app.task
 
 import android.content.Context
 import com.proxerme.app.application.MainApplication
+import com.proxerme.app.application.MainApplication.ProxerTokenCall
 import com.proxerme.app.data.chatDatabase
 import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.entitiy.Participant
@@ -9,7 +10,6 @@ import com.proxerme.app.event.ChatSynchronizationEvent
 import com.proxerme.app.service.ChatService
 import com.proxerme.app.task.NewChatTask.NewChatInput
 import com.proxerme.app.task.framework.BaseTask
-import com.proxerme.library.connection.ProxerCall
 import com.proxerme.library.connection.messenger.request.NewConferenceRequest
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -28,7 +28,7 @@ class NewChatTask(private var contextResolver: (() -> Context)? = null,
     override var isWorking: Boolean = false
     private var newConferenceId: String? = null
 
-    private var call: ProxerCall? = null
+    private var call: ProxerTokenCall<String>? = null
 
     init {
         EventBus.getDefault().register(this)
@@ -36,7 +36,7 @@ class NewChatTask(private var contextResolver: (() -> Context)? = null,
 
     override fun execute(input: NewChatInput) {
         start {
-            call = MainApplication.proxerConnection.execute(constructRequest(input), {
+            call = MainApplication.exec(constructRequest(input), {
                 contextResolver?.invoke()?.let { ChatService.synchronize(it) }
 
                 val existingConference = contextResolver?.invoke()?.chatDatabase?.getConference(it)

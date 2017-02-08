@@ -22,7 +22,6 @@ import com.proxerme.app.entitiy.LocalMessage
 import com.proxerme.app.fragment.framework.PagedLoadingFragment
 import com.proxerme.app.helper.StorageHelper
 import com.proxerme.app.manager.SectionManager
-import com.proxerme.app.manager.UserManager
 import com.proxerme.app.service.ChatService
 import com.proxerme.app.task.ChatTask
 import com.proxerme.app.task.ChatTask.ChatInput
@@ -153,7 +152,7 @@ class ChatFragment : PagedLoadingFragment<ChatInput, LocalMessage>() {
         super.onCreate(savedInstanceState)
 
         adapter = ChatAdapter(conference.isGroup)
-        adapter.user = UserManager.user
+        adapter.user = StorageHelper.user
         adapter.callback = adapterCallback
     }
 
@@ -182,9 +181,10 @@ class ChatFragment : PagedLoadingFragment<ChatInput, LocalMessage>() {
 
         sendButton.setOnClickListener {
             val text = messageInput.text.toString().trim()
+            val user = StorageHelper.user
 
-            if (!text.isEmpty()) {
-                adapter.insert(arrayOf(context.chatDatabase.insertMessageToSend(StorageHelper.user!!,
+            if (!text.isEmpty() && user != null) {
+                adapter.insert(arrayOf(context.chatDatabase.insertMessageToSend(user,
                         conference.id, text)))
 
                 if (!ChatService.isSynchronizing) {

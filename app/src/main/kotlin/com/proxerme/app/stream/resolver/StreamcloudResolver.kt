@@ -21,7 +21,7 @@ class StreamcloudResolver : StreamResolver() {
     private val fileRegex = Regex("file: \"(.+?)\",")
 
     override fun resolve(url: HttpUrl): StreamResolutionResult {
-        var response = MainApplication.proxerConnection.httpClient.newCall(Request.Builder()
+        var response = MainApplication.httpClient.newCall(Request.Builder()
                 .get()
                 .url(url)
                 .build()).execute()
@@ -31,7 +31,7 @@ class StreamcloudResolver : StreamResolver() {
             formValues.add(i.groupValues[1], i.groupValues[2].replace("download1", "download2"))
         }
 
-        response = MainApplication.proxerConnection.httpClient.newCall(Request.Builder()
+        response = MainApplication.httpClient.newCall(Request.Builder()
                 .post(formValues.build())
                 .url(url)
                 .build())

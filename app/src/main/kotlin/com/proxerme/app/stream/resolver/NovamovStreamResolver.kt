@@ -20,7 +20,7 @@ class NovamovStreamResolver : StreamResolver() {
     private val urlRegex = Regex("url=(.*?)&title")
 
     override fun resolve(url: HttpUrl): StreamResolutionResult {
-        val response = MainApplication.proxerConnection.httpClient.newCall(Request.Builder()
+        val response = MainApplication.httpClient.newCall(Request.Builder()
                 .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)")
                 .get()
                 .url(url)
@@ -33,7 +33,7 @@ class NovamovStreamResolver : StreamResolver() {
             throw StreamResolutionException()
         }
 
-        val apiResponse = MainApplication.proxerConnection.httpClient.newCall(Request.Builder()
+        val apiResponse = MainApplication.httpClient.newCall(Request.Builder()
                 .get()
                 .url("http://www.auroravid.to/api/player.api.php?file=%s&key=%s".format(file, fileKey))
                 .build()).execute()

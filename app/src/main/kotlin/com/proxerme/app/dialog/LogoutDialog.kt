@@ -10,12 +10,13 @@ import android.widget.ProgressBar
 import com.afollestad.materialdialogs.MaterialDialog
 import com.proxerme.app.R
 import com.proxerme.app.application.MainApplication
-import com.proxerme.app.event.LogoutFailedEvent
-import com.proxerme.app.manager.UserManager
+import com.proxerme.app.event.LogoutEvent
+import com.proxerme.app.helper.StorageHelper
+import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.util.ErrorUtils
+import com.proxerme.library.connection.ProxerException
+import com.proxerme.library.connection.user.request.LogoutRequest
 import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.longToast
 
 /**
@@ -31,6 +32,28 @@ class LogoutDialog : DialogFragment() {
         }
     }
 
+    private val successCallback = { _: Void? ->
+        StorageHelper.user = null
+
+        EventBus.getDefault().post(LogoutEvent())
+
+        dismiss()
+    }
+
+    private val exceptionCallback = { exception: Exception ->
+        if (exception is ProxerException) {
+            context.longToast(ErrorUtils.getMessageForErrorCode(context, exception))
+        } else {
+            context.longToast(R.string.error_unknown)
+        }
+
+        if(view != null){
+            handleVisibility()
+        }
+    }
+
+    private lateinit var task: ProxerLoadingTask<Unit, Void?>
+
     private lateinit var root: ViewGroup
     private lateinit var progress: ProgressBar
 
@@ -39,7 +62,7 @@ class LogoutDialog : DialogFragment() {
 
         retainInstance = true
 
-        EventBus.getDefault().register(this)
+        task = ProxerLoadingTask({ LogoutRequest() }, successCallback, exceptionCallback)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -61,19 +84,11 @@ class LogoutDialog : DialogFragment() {
     override fun onResume() {
         super.onResume()
 
-        if (UserManager.user == null) {
-            dismiss()
-        } else {
-            handleVisibility()
-        }
+        handleVisibility()
     }
 
     override fun onDestroy() {
-        EventBus.getDefault().unregister(this)
-
-        if (activity != null && !activity.isChangingConfigurations) {
-            UserManager.cancel()
-        }
+        task.destroy()
 
         super.onDestroy()
 
@@ -88,28 +103,6 @@ class LogoutDialog : DialogFragment() {
         super.onDestroyView()
     }
 
-    @Suppress("unused")
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onLoginStateChanged(@Suppress("UNUSED_PARAMETER") state: UserManager.LoginState) {
-        if (UserManager.user == null) {
-            dismiss()
-        } else {
-            handleVisibility()
-        }
-    }
-
-    @Suppress("unused")
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onOngoingStateChanged(@Suppress("UNUSED_PARAMETER") state: UserManager.OngoingState) {
-        handleVisibility()
-    }
-
-    @Suppress("unused")
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onLoginFailed(event: LogoutFailedEvent) {
-        context.longToast(ErrorUtils.getMessageForErrorCode(context, event.exception))
-    }
-
     private fun initViews(): View {
         root = View.inflate(context, R.layout.dialog_progress, null) as ViewGroup
         progress = root.findViewById(R.id.progress) as ProgressBar
@@ -118,7 +111,7 @@ class LogoutDialog : DialogFragment() {
     }
 
     private fun handleVisibility() {
-        if (UserManager.ongoingState == UserManager.OngoingState.LOGGING_OUT) {
+        if (task.isWorking) {
             progress.visibility = View.VISIBLE
         } else {
             progress.visibility = View.GONE
@@ -126,8 +119,10 @@ class LogoutDialog : DialogFragment() {
     }
 
     private fun logout() {
-        if (UserManager.ongoingState != UserManager.OngoingState.LOGGING_OUT) {
-            UserManager.logout()
+        if (!task.isWorking) {
+            task.execute(Unit)
+
+            handleVisibility()
         }
     }
 }

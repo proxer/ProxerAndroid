@@ -42,10 +42,9 @@ class NotificationService : IntentService(NotificationService.SERVICE_TITLE) {
             val lastTime = StorageHelper.lastNewsTime
 
             if (lastTime != null) {
-                val result = MainApplication.proxerConnection.executeSynchronized(NewsRequest(0))
-                        .filter {
-                            it.time > lastTime
-                        }
+                val result = MainApplication.execSync(NewsRequest(0)).filter {
+                    it.time > lastTime
+                }
 
                 if (result.size > StorageHelper.newNews) {
                     if (SectionManager.currentSection == SectionManager.Section.NEWS) {

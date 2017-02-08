@@ -1,8 +1,7 @@
 package com.proxerme.app.helper
 
-import android.support.annotation.IntRange
 import com.orhanobut.hawk.Hawk
-import com.proxerme.library.connection.user.entitiy.User
+import com.proxerme.app.entitiy.LocalUser
 import java.util.*
 
 /**
@@ -13,13 +12,9 @@ import java.util.*
 object StorageHelper {
 
     const private val STORAGE_CHAT_NOTIFICATIONS_INTERVAL = "storage_chat_notifications_interval"
-    const private val STORAGE_USER_IMAGE_ID = "storage_user_image_id"
     const private val STORAGE_FIRST_START = "storage_first_start"
+    const private val STORAGE_USER = "storage_user"
     const private val STORAGE_NEWS_LAST_TIME = "storage_news_last_time"
-    const private val STORAGE_USER_USERNAME = "storage_user_username"
-    const private val STORAGE_USER_PASSWORD = "storage_user_password"
-    const private val STORAGE_USER_ID = "storage_user_id"
-    const private val STORAGE_LAST_LOGIN_TIME = "storage_last_login"
     const private val STORAGE_NEW_NEWS = "storage_new_news"
     const private val STORAGE_CONFERENCE_LIST_END_REACHED = "storage_conference_list_end_reached"
     const private val STORAGE_CONFERENCE_END_REACHED_MAP = "storage_conference_end_reached_map"
@@ -34,48 +29,20 @@ object StorageHelper {
             Hawk.put(STORAGE_FIRST_START, false)
         }
 
-    var user: User?
-        get() {
-            val username: String? = Hawk.get(STORAGE_USER_USERNAME)
-            val password: String? = Hawk.get(STORAGE_USER_PASSWORD)
-            val id: String? = Hawk.get(STORAGE_USER_ID)
-            val imageId: String? = Hawk.get(STORAGE_USER_IMAGE_ID)
-
-            if (username == null || password == null || id == null || imageId == null) {
-                return null
-            } else {
-                return User(username, password, id, imageId)
-            }
-        }
+    var user: LocalUser?
+        get() = Hawk.get(STORAGE_USER)
         set(value) {
             if (value == null) {
-                Hawk.delete(STORAGE_USER_USERNAME)
-                Hawk.delete(STORAGE_USER_PASSWORD)
-                Hawk.delete(STORAGE_USER_ID)
-                Hawk.delete(STORAGE_USER_IMAGE_ID)
+                Hawk.delete(STORAGE_USER)
             } else {
-                Hawk.put(STORAGE_USER_USERNAME, value.username)
-                Hawk.put(STORAGE_USER_PASSWORD, value.password)
-                Hawk.put(STORAGE_USER_ID, value.id)
-                Hawk.put(STORAGE_USER_IMAGE_ID, value.imageId)
+                Hawk.put(STORAGE_USER, value)
             }
         }
 
     var chatInterval: Long
-        @IntRange(from = 5)
         get() = Hawk.get(STORAGE_CHAT_NOTIFICATIONS_INTERVAL, DEFAULT_CHAT_INTERVAL)
         set(chatInterval) {
             Hawk.put(STORAGE_CHAT_NOTIFICATIONS_INTERVAL, chatInterval)
-        }
-
-    var lastLoginTime: Long?
-        get() = Hawk.get(STORAGE_LAST_LOGIN_TIME, null)
-        set(lastLoginTime) {
-            if (lastLoginTime == null) {
-                Hawk.delete(STORAGE_LAST_LOGIN_TIME)
-            } else {
-                Hawk.put(STORAGE_LAST_LOGIN_TIME, lastLoginTime)
-            }
         }
 
     var lastNewsTime: Long?

@@ -15,14 +15,16 @@ import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.proxerme.app.R
 import com.proxerme.app.application.MainApplication
-import com.proxerme.app.event.LoginFailedEvent
-import com.proxerme.app.manager.UserManager
+import com.proxerme.app.entitiy.LocalUser
+import com.proxerme.app.event.LoginEvent
+import com.proxerme.app.helper.StorageHelper
+import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.util.ErrorUtils
 import com.proxerme.app.util.listener.OnTextListener
+import com.proxerme.library.connection.ProxerException
 import com.proxerme.library.connection.user.entitiy.User
+import com.proxerme.library.connection.user.request.LoginRequest
 import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.longToast
 
 /**
@@ -39,6 +41,31 @@ class LoginDialog : DialogFragment() {
         }
     }
 
+    private val successCallback = { it: User ->
+        val username = inputUsername.text.toString()
+        val password = inputPassword.text.toString()
+        val savePassword = remember.isChecked
+
+        StorageHelper.user = LocalUser(username, if (savePassword) password else null, it.id,
+                it.imageId, it.loginToken)
+
+        EventBus.getDefault().post(LoginEvent())
+
+        dismiss()
+    }
+
+    private val exceptionCallback = { exception: Exception ->
+        if (exception is ProxerException) {
+            context.longToast(ErrorUtils.getMessageForErrorCode(context, exception))
+        } else {
+            context.longToast(R.string.error_unknown)
+        }
+
+        handleVisibility()
+    }
+
+    private lateinit var task: ProxerLoadingTask<LoginInput, User>
+
     private lateinit var root: ViewGroup
     private lateinit var inputUsername: TextInputEditText
     private lateinit var inputPassword: TextInputEditText
@@ -53,7 +80,8 @@ class LoginDialog : DialogFragment() {
 
         retainInstance = true
 
-        EventBus.getDefault().register(this)
+        task = ProxerLoadingTask({ LoginRequest(it.username, it.password) }, successCallback,
+                exceptionCallback)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -75,19 +103,11 @@ class LoginDialog : DialogFragment() {
     override fun onResume() {
         super.onResume()
 
-        if (UserManager.loginState == UserManager.LoginState.LOGGED_IN) {
-            dismiss()
-        } else {
-            handleVisibility()
-        }
+        handleVisibility()
     }
 
     override fun onDestroy() {
-        EventBus.getDefault().unregister(this)
-
-        if (activity != null && !activity.isChangingConfigurations) {
-            UserManager.cancel()
-        }
+        task.destroy()
 
         super.onDestroy()
 
@@ -102,28 +122,6 @@ class LoginDialog : DialogFragment() {
         super.onDestroyView()
     }
 
-    @Suppress("unused")
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onLoginStateChanged(state: UserManager.LoginState) {
-        if (state == UserManager.LoginState.LOGGED_IN) {
-            dismiss()
-        } else {
-            handleVisibility()
-        }
-    }
-
-    @Suppress("unused")
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onOngoingStateChanged(@Suppress("UNUSED_PARAMETER") state: UserManager.OngoingState) {
-        handleVisibility()
-    }
-
-    @Suppress("unused")
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onLoginFailed(event: LoginFailedEvent) {
-        context.longToast(ErrorUtils.getMessageForErrorCode(context, event.exception))
-    }
-
     private fun initViews(): View {
         root = View.inflate(context, R.layout.dialog_login, null) as ViewGroup
         inputUsername = root.findViewById(R.id.inputUsername) as TextInputEditText
@@ -134,7 +132,7 @@ class LoginDialog : DialogFragment() {
         inputContainer = root.findViewById(R.id.inputContainer) as ViewGroup
         progress = root.findViewById(R.id.progress) as ProgressBar
 
-        UserManager.user?.let {
+        StorageHelper.user?.let {
             inputUsername.setText(it.username)
             inputPassword.setText(it.password)
         }
@@ -165,23 +163,20 @@ class LoginDialog : DialogFragment() {
     }
 
     private fun login() {
-        if (UserManager.ongoingState != UserManager.OngoingState.LOGGING_IN) {
+        if (!task.isWorking) {
             val username = inputUsername.text.toString()
             val password = inputPassword.text.toString()
 
             if (checkInput(username, password)) {
-                val remember: UserManager.SaveOption =
-                        if (remember.isChecked) UserManager.SaveOption.SAVE
-                        else UserManager.SaveOption.DONT_SAVE
-                handleVisibility()
+                task.execute(LoginInput(username, password))
 
-                UserManager.login(User(username, password), remember)
+                handleVisibility()
             }
         }
     }
 
     private fun handleVisibility() {
-        if (UserManager.ongoingState == UserManager.OngoingState.LOGGING_IN) {
+        if (task.isWorking) {
             inputContainer.visibility = View.INVISIBLE
             progress.visibility = View.VISIBLE
         } else {
@@ -217,4 +212,6 @@ class LoginDialog : DialogFragment() {
         container.error = null
         container.isErrorEnabled = false
     }
+
+    private class LoginInput(val username: String, val password: String)
 }

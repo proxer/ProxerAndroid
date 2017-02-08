@@ -19,7 +19,7 @@ class DailyMotionStreamResolver : StreamResolver() {
     private val regex = Regex("\"qualities\":(\\{.+\\}\\]\\}),")
 
     override fun resolve(url: HttpUrl): StreamResolutionResult {
-        val response = validateAndGetResult(MainApplication.proxerConnection.httpClient
+        val response = validateAndGetResult(MainApplication.httpClient
                 .newCall(Request.Builder()
                         .get()
                         .url(url)
@@ -28,7 +28,7 @@ class DailyMotionStreamResolver : StreamResolver() {
         val qualitiesJson = regex.find(response)?.value
 
         if (qualitiesJson != null) {
-            val qualityMap = MainApplication.proxerConnection.moshi.adapter(QualityMap::class.java)
+            val qualityMap = MainApplication.moshi.adapter(QualityMap::class.java)
                     .fromJson("{${qualitiesJson.trimEnd(',')}}")
 
             val mp4Links = qualityMap.qualities?.mapNotNull { qualityEntry ->

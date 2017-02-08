@@ -14,8 +14,9 @@ import com.proxerme.app.activity.MainActivity
 import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.event.CaptchaSolvedEvent
 import com.proxerme.app.event.HentaiConfirmationEvent
+import com.proxerme.app.event.LoginEvent
+import com.proxerme.app.event.LogoutEvent
 import com.proxerme.app.fragment.framework.PagedLoadingFragment.PagedInput
-import com.proxerme.app.manager.UserManager
 import com.proxerme.app.task.framework.CachedTask
 import com.proxerme.app.task.framework.CachedTask.CacheStrategy
 import com.proxerme.app.task.framework.Task
@@ -265,7 +266,7 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
 
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onLoginStateChanged(@Suppress("UNUSED_PARAMETER") loginState: UserManager.LoginState) {
+    fun onLogin(@Suppress("UNUSED_PARAMETER") event: LoginEvent) {
         if (isLoginRequired) {
             reset()
         }
@@ -273,7 +274,7 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
 
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onOngoingStateChanged(@Suppress("UNUSED_PARAMETER") ongoingState: UserManager.OngoingState) {
+    fun onLogout(@Suppress("UNUSED_PARAMETER") event: LogoutEvent) {
         if (isLoginRequired) {
             reset()
         }

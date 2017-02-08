@@ -4,10 +4,7 @@ import android.content.Context
 import android.database.DatabaseUtils
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
-import com.proxerme.app.entitiy.LocalConference
-import com.proxerme.app.entitiy.LocalMessage
-import com.proxerme.app.entitiy.toLocalConference
-import com.proxerme.app.entitiy.toLocalMessage
+import com.proxerme.app.entitiy.*
 import com.proxerme.library.connection.messenger.entity.Conference
 import com.proxerme.library.connection.messenger.entity.Message
 import com.proxerme.library.connection.user.entitiy.User
@@ -156,7 +153,7 @@ class ChatDatabase(context: Context) :
         }
     }
 
-    fun insertMessageToSend(user: User, conferenceId: String, message: String): LocalMessage {
+    fun insertMessageToSend(user: LocalUser, conferenceId: String, message: String): LocalMessage {
         return use {
             var result: LocalMessage? = null
 

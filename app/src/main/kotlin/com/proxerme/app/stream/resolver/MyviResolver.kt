@@ -18,12 +18,12 @@ class MyviResolver : StreamResolver() {
     override val name = "myvi.ru"
 
     override fun resolve(url: HttpUrl): StreamResolutionResult {
-        val response = MainApplication.proxerConnection.httpClient.newCall(Request.Builder()
+        val response = MainApplication.httpClient.newCall(Request.Builder()
                 .get()
                 .url("http://myvi.ru/player/api/Video/Get/${url.pathSegments().last()}?sig")
                 .build()).execute()
 
-        val resultUrl = MainApplication.proxerConnection.moshi.adapter(SprutoResult::class.java)
+        val resultUrl = MainApplication.moshi.adapter(SprutoResult::class.java)
                 .fromJson(validateAndGetResult(response)).url
 
         return StreamResolutionResult(resultUrl.androidUri(), "video/mp4")

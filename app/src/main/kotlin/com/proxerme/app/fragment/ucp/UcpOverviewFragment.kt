@@ -1,6 +1,7 @@
 package com.proxerme.app.fragment.ucp
 
 import android.os.Bundle
+import android.os.UserManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,8 +10,8 @@ import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.TouchableMovementMethod
 import com.proxerme.app.R
 import com.proxerme.app.fragment.framework.SingleLoadingFragment
+import com.proxerme.app.helper.StorageHelper
 import com.proxerme.app.manager.SectionManager.Section
-import com.proxerme.app.manager.UserManager
 import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.framework.Task
 import com.proxerme.app.util.Utils
@@ -64,7 +65,7 @@ class UcpOverviewFragment : SingleLoadingFragment<Unit, Int>() {
     override fun constructInput() {}
 
     override fun present(data: Int) {
-        UserManager.user?.let {
+        StorageHelper.user?.let {
             profileLink.text = Utils.buildClickableText(context,
                     ProxerUrlHolder.getUserUrl(it.id, null).toString(),
                     onWebClickListener = Link.OnClickListener { link ->
@@ -76,6 +77,7 @@ class UcpOverviewFragment : SingleLoadingFragment<Unit, Int>() {
 
                         context.toast(R.string.clipboard_status)
                     })
+
             username.text = it.username
             userId.text = it.id
 
