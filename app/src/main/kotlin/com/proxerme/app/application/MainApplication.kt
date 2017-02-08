@@ -109,6 +109,10 @@ class MainApplication : Application() {
 
                             return proxerConnection.executeSynchronized(request, result.loginToken)
                         } else {
+                            StorageHelper.user = null
+
+                            EventBus.getDefault().post(LogoutEvent())
+
                             throw exception
                         }
                     }

@@ -157,6 +157,10 @@ class LoginDialog : DialogFragment() {
             val password = inputPassword.text.toString()
 
             if (checkInput(username, password)) {
+                // This is important to avoid sending broken login tokens and making it impossible
+                // to login again
+                StorageHelper.user = null
+
                 task.execute(LoginInput(username, password))
 
                 handleVisibility()
