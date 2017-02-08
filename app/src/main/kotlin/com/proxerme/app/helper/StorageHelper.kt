@@ -11,17 +11,17 @@ import java.util.*
  */
 object StorageHelper {
 
-    const private val FIRST_START = "first_start"
-    const private val USER = "user"
-    const private val NEWS_LAST_TIME = "news_last_time"
-    const private val NEW_NEWS = "new_news"
-    const private val CONFERENCE_LIST_END_REACHED = "conference_list_end_reached"
-    const private val CONFERENCE_END_REACHED_MAP = "conference_end_reached_map"
-    const private val CHAT_NOTIFICATIONS_INTERVAL = "chat_notifications_interval"
+    private const val FIRST_START = "first_start"
+    private const val USER = "user"
+    private const val NEWS_LAST_TIME = "news_last_time"
+    private const val NEW_NEWS = "new_news"
+    private const val CONFERENCE_LIST_END_REACHED = "conference_list_end_reached"
+    private const val CONFERENCE_END_REACHED_MAP = "conference_end_reached_map"
+    private const val CHAT_NOTIFICATIONS_INTERVAL = "chat_notifications_interval"
 
-    const private val MAX_CHAT_POLLING_INTERVAL = 850L
-    const private val DEFAULT_CHAT_INTERVAL = 5L
-    const private val CHAT_INTERVAL_MULTIPLICAND = 1.5
+    private const val MAX_CHAT_POLLING_INTERVAL = 850L
+    private const val DEFAULT_CHAT_INTERVAL = 5L
+    private const val CHAT_INTERVAL_MULTIPLICAND = 1.5
 
     var firstStart: Boolean
         get() = Hawk.get(FIRST_START, true)
