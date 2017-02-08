@@ -21,8 +21,5 @@
     <color name="material_drawer_selected">@color/selected</color>
     <color name="material_drawer_divider">@color/divider</color>
 
-    <color name="mal_text_primary">#FFFFFF</color>
-    <color name="mal_text_secondary">#B4FFFFFF</color>
-
     <color name="emoji_background">@color/background_card</color>
 </resources>

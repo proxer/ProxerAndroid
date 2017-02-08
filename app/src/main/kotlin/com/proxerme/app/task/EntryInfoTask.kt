@@ -1,9 +1,10 @@
 package com.proxerme.app.task
 
 import com.proxerme.app.application.MainApplication
+import com.proxerme.app.application.MainApplication.ProxerTokenCall
 import com.proxerme.app.entitiy.EntryInfo
 import com.proxerme.app.task.framework.BaseTask
-import com.proxerme.library.connection.ProxerCall
+import com.proxerme.library.connection.info.entity.EntryCore
 import com.proxerme.library.connection.info.request.EntryCoreRequest
 
 /**
@@ -19,7 +20,7 @@ class EntryInfoTask(private val entryInfoCallback: () -> EntryInfo,
     override val isWorking: Boolean
         get() = call != null
 
-    private var call: ProxerCall? = null
+    private var call: ProxerTokenCall<EntryCore>? = null
 
     override fun execute(input: String) {
         val knownInfo = entryInfoCallback.invoke()
@@ -28,7 +29,7 @@ class EntryInfoTask(private val entryInfoCallback: () -> EntryInfo,
             finishSuccessful(knownInfo)
         } else {
             start {
-                call = MainApplication.proxerConnection.execute(EntryCoreRequest(input), {
+                call = MainApplication.exec(EntryCoreRequest(input), {
                     cancel()
 
                     finishSuccessful(EntryInfo(it.name, it.episodeAmount))

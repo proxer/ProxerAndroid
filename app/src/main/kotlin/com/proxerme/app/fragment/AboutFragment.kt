@@ -92,6 +92,15 @@ class AboutFragment : MaterialAboutFragment() {
                 .build()
     }
 
+    override fun getTheme(): Int {
+        return when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+            Configuration.UI_MODE_NIGHT_NO -> THEME_LIGHT
+            Configuration.UI_MODE_NIGHT_YES -> THEME_DARK
+            Configuration.UI_MODE_NIGHT_UNDEFINED -> THEME_LIGHT
+            else -> throw RuntimeException("Unknown mode")
+        }
+    }
+
     fun showPage(url: HttpUrl) {
         customTabsHelper.openHttpPage(activity, url)
     }

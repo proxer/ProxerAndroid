@@ -21,7 +21,7 @@ class Mp4UploadResolver : StreamResolver() {
 
     @Throws(IOException::class)
     override fun resolve(url: HttpUrl): StreamResolutionResult {
-        val response = MainApplication.proxerConnection.httpClient.newCall(Request.Builder()
+        val response = MainApplication.httpClient.newCall(Request.Builder()
                 .get()
                 .url(url)
                 .build()).execute()

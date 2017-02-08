@@ -7,7 +7,6 @@ import com.proxerme.app.activity.MainActivity
 import com.proxerme.app.dialog.HentaiConfirmationDialog
 import com.proxerme.app.dialog.LoginDialog
 import com.proxerme.app.event.CaptchaSolvedEvent
-import com.proxerme.app.manager.UserManager
 import com.proxerme.app.service.ChatService
 import com.proxerme.library.connection.ProxerException
 import com.proxerme.library.connection.ProxerException.*
@@ -68,26 +67,10 @@ object ErrorUtils {
                 return ErrorAction(message, buttonMessage, buttonAction)
             }
             is Validators.NotLoggedInException -> {
-                val message = when (UserManager.ongoingState) {
-                    UserManager.OngoingState.LOGGING_IN -> {
-                        context.getString(R.string.status_currently_logging_in)
-                    }
-                    UserManager.OngoingState.LOGGING_OUT -> {
-                        context.getString(R.string.status_currently_logging_out)
-                    }
-                    else -> context.getString(R.string.status_not_logged_in)
-                }
-
-                val buttonMessage = when (UserManager.ongoingState) {
-                    UserManager.OngoingState.NONE -> context.getString(R.string.error_action_login)
-                    else -> null
-                }
-
-                val buttonAction = when (UserManager.ongoingState) {
-                    UserManager.OngoingState.NONE -> View.OnClickListener {
-                        LoginDialog.show(context)
-                    }
-                    else -> null
+                val message = context.getString(R.string.status_not_logged_in)
+                val buttonMessage = context.getString(R.string.error_action_login)
+                val buttonAction = View.OnClickListener {
+                    LoginDialog.show(context)
                 }
 
                 return ErrorAction(message, buttonMessage, buttonAction)

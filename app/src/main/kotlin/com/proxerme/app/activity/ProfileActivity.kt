@@ -27,7 +27,7 @@ import com.proxerme.app.fragment.user.ProfileFragment
 import com.proxerme.app.fragment.user.ToptenFragment
 import com.proxerme.app.fragment.user.UserCommentFragment
 import com.proxerme.app.fragment.user.UserMediaListFragment
-import com.proxerme.app.manager.UserManager
+import com.proxerme.app.helper.StorageHelper
 import com.proxerme.app.util.bindView
 import com.proxerme.library.info.ProxerUrlHolder
 import com.proxerme.library.parameters.CategoryParameter
@@ -123,7 +123,9 @@ class ProfileActivity : MainActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        if (UserManager.user == null || !UserManager.user!!.username.equals(username, true)) {
+        val user = StorageHelper.user
+
+        if (user == null || !user.username.equals(username, true)) {
             menuInflater.inflate(R.menu.activity_profile, menu)
         }
 

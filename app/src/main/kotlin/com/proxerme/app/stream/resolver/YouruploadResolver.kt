@@ -21,7 +21,7 @@ class YouruploadResolver : StreamResolver() {
     private val regex = Regex("file: '(.*?)'")
 
     override fun resolve(url: HttpUrl): StreamResolutionResult {
-        val response = MainApplication.proxerConnection.httpClient.newCall(Request.Builder()
+        val response = MainApplication.httpClient.newCall(Request.Builder()
                 .get()
                 .url(url)
                 .build()).execute()
@@ -32,7 +32,7 @@ class YouruploadResolver : StreamResolver() {
             throw StreamResolutionTask.StreamResolutionException()
         }
 
-        val apiResponse = MainApplication.proxerConnection.httpClient.newCall(Request.Builder()
+        val apiResponse = MainApplication.httpClient.newCall(Request.Builder()
                 .header("Referer", url.toString())
                 .head()
                 .url(HttpUrl.parse("http://yourupload.com$file"))

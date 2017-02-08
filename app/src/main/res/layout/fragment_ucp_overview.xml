@@ -46,10 +46,12 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:padding="8dp"
+                            android:paddingBottom="4dp"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:paddingTop="4dp"
                             android:text="@string/fragment_ucp_overview_profile_link"
-                            android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:textColor="@color/colorAccent" />
+                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
                         <TextView
                             android:id="@+id/profileLink"
@@ -58,16 +60,18 @@
                             android:paddingBottom="8dp"
                             android:paddingLeft="8dp"
                             android:paddingRight="8dp"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
                             tools:text="https://link.com?id=123" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:padding="8dp"
+                            android:paddingBottom="4dp"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:paddingTop="4dp"
                             android:text="@string/usernamefragment_ucp_overview_username"
-                            android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:textColor="@color/colorAccent" />
+                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
                         <TextView
                             android:id="@+id/username"
@@ -76,17 +80,19 @@
                             android:paddingBottom="8dp"
                             android:paddingLeft="8dp"
                             android:paddingRight="8dp"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
                             android:textIsSelectable="true"
                             tools:text="Username" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:padding="8dp"
+                            android:paddingBottom="4dp"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:paddingTop="4dp"
                             android:text="@string/fragment_ucp_overview_user_id"
-                            android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:textColor="@color/colorAccent" />
+                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
                         <TextView
                             android:id="@+id/userId"
@@ -95,7 +101,7 @@
                             android:paddingBottom="8dp"
                             android:paddingLeft="8dp"
                             android:paddingRight="8dp"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
                             android:textIsSelectable="true"
                             tools:text="123456" />
                     </LinearLayout>

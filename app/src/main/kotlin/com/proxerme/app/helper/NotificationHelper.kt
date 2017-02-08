@@ -21,13 +21,11 @@ import com.proxerme.app.activity.chat.ChatActivity
 import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.entitiy.LocalMessage
 import com.proxerme.app.helper.MaterialDrawerHelper.DrawerItem
-import com.proxerme.app.manager.UserManager
 import com.proxerme.app.receiver.DirectReplyReceiver
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.notificationManager
 import com.proxerme.library.connection.notifications.entitiy.News
 import com.proxerme.library.info.ProxerUrlHolder
-
 
 /**
  * A helper class for displaying notifications.
@@ -173,7 +171,9 @@ object NotificationHelper {
 
     private fun buildIndividualChatNotification(context: Context, conference: LocalConference,
                                                 messages: List<LocalMessage>): Notification? {
-        if (messages.isEmpty()) {
+        val user = StorageHelper.user
+
+        if (messages.isEmpty() || user == null) {
             return null
         }
 
@@ -189,7 +189,7 @@ object NotificationHelper {
         }
 
         val style = when (conference.isGroup) {
-            true -> MessagingStyle(UserManager.user!!.username)
+            true -> MessagingStyle(user.username)
                     .setConversationTitle(conference.topic)
                     .apply {
                         messages.forEach {

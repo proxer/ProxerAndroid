@@ -6,7 +6,7 @@ import android.content.Intent
 import android.support.v4.app.RemoteInput
 import com.proxerme.app.BuildConfig
 import com.proxerme.app.data.chatDatabase
-import com.proxerme.app.manager.UserManager
+import com.proxerme.app.helper.StorageHelper
 import com.proxerme.app.service.ChatService
 
 /**
@@ -30,9 +30,10 @@ class DirectReplyReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         if (REPLY_ACTION == intent.action) {
-            if (UserManager.user != null) {
-                context.chatDatabase.insertMessageToSend(UserManager.user!!,
-                        intent.getStringExtra(EXTRA_CONFERENCE_ID), getMessageText(intent))
+            StorageHelper.user?.let {
+                val id = intent.getStringExtra(EXTRA_CONFERENCE_ID)
+
+                context.chatDatabase.insertMessageToSend(it, id, getMessageText(intent))
 
                 ChatService.synchronize(context)
             }
@@ -44,5 +45,4 @@ class DirectReplyReceiver : BroadcastReceiver() {
                 .getCharSequence(EXTRA_REMOTE_REPLY)
                 .toString()
     }
-
 }

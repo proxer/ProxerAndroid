@@ -1,8 +1,7 @@
 package com.proxerme.app.helper
 
-import android.support.annotation.IntRange
 import com.orhanobut.hawk.Hawk
-import com.proxerme.library.connection.user.entitiy.User
+import com.proxerme.app.entitiy.LocalUser
 import java.util.*
 
 /**
@@ -12,121 +11,89 @@ import java.util.*
  */
 object StorageHelper {
 
-    const private val STORAGE_CHAT_NOTIFICATIONS_INTERVAL = "storage_chat_notifications_interval"
-    const private val STORAGE_USER_IMAGE_ID = "storage_user_image_id"
-    const private val STORAGE_FIRST_START = "storage_first_start"
-    const private val STORAGE_NEWS_LAST_TIME = "storage_news_last_time"
-    const private val STORAGE_USER_USERNAME = "storage_user_username"
-    const private val STORAGE_USER_PASSWORD = "storage_user_password"
-    const private val STORAGE_USER_ID = "storage_user_id"
-    const private val STORAGE_LAST_LOGIN_TIME = "storage_last_login"
-    const private val STORAGE_NEW_NEWS = "storage_new_news"
-    const private val STORAGE_CONFERENCE_LIST_END_REACHED = "storage_conference_list_end_reached"
-    const private val STORAGE_CONFERENCE_END_REACHED_MAP = "storage_conference_end_reached_map"
+    private const val FIRST_START = "first_start"
+    private const val USER = "user"
+    private const val NEWS_LAST_TIME = "news_last_time"
+    private const val NEW_NEWS = "new_news"
+    private const val CONFERENCE_LIST_END_REACHED = "conference_list_end_reached"
+    private const val CONFERENCE_END_REACHED_MAP = "conference_end_reached_map"
+    private const val CHAT_NOTIFICATIONS_INTERVAL = "chat_notifications_interval"
 
-    const private val MAX_CHAT_POLLING_INTERVAL = 850L
-    const private val DEFAULT_CHAT_INTERVAL = 5L
-    const private val CHAT_INTERVAL_MULTIPLICAND = 1.5
+    private const val MAX_CHAT_POLLING_INTERVAL = 850L
+    private const val DEFAULT_CHAT_INTERVAL = 5L
+    private const val CHAT_INTERVAL_MULTIPLICAND = 1.5
 
     var firstStart: Boolean
-        get() = Hawk.get(STORAGE_FIRST_START, true)
+        get() = Hawk.get(FIRST_START, true)
         set(firstStart) {
-            Hawk.put(STORAGE_FIRST_START, false)
+            Hawk.put(FIRST_START, false)
         }
 
-    var user: User?
-        get() {
-            val username: String? = Hawk.get(STORAGE_USER_USERNAME)
-            val password: String? = Hawk.get(STORAGE_USER_PASSWORD)
-            val id: String? = Hawk.get(STORAGE_USER_ID)
-            val imageId: String? = Hawk.get(STORAGE_USER_IMAGE_ID)
-
-            if (username == null || password == null || id == null || imageId == null) {
-                return null
-            } else {
-                return User(username, password, id, imageId)
-            }
-        }
+    var user: LocalUser?
+        get() = Hawk.get(USER)
         set(value) {
             if (value == null) {
-                Hawk.delete(STORAGE_USER_USERNAME)
-                Hawk.delete(STORAGE_USER_PASSWORD)
-                Hawk.delete(STORAGE_USER_ID)
-                Hawk.delete(STORAGE_USER_IMAGE_ID)
+                Hawk.delete(USER)
             } else {
-                Hawk.put(STORAGE_USER_USERNAME, value.username)
-                Hawk.put(STORAGE_USER_PASSWORD, value.password)
-                Hawk.put(STORAGE_USER_ID, value.id)
-                Hawk.put(STORAGE_USER_IMAGE_ID, value.imageId)
+                Hawk.put(USER, value)
             }
         }
 
     var chatInterval: Long
-        @IntRange(from = 5)
-        get() = Hawk.get(STORAGE_CHAT_NOTIFICATIONS_INTERVAL, DEFAULT_CHAT_INTERVAL)
+        get() = Hawk.get(CHAT_NOTIFICATIONS_INTERVAL, DEFAULT_CHAT_INTERVAL)
         set(chatInterval) {
-            Hawk.put(STORAGE_CHAT_NOTIFICATIONS_INTERVAL, chatInterval)
-        }
-
-    var lastLoginTime: Long?
-        get() = Hawk.get(STORAGE_LAST_LOGIN_TIME, null)
-        set(lastLoginTime) {
-            if (lastLoginTime == null) {
-                Hawk.delete(STORAGE_LAST_LOGIN_TIME)
-            } else {
-                Hawk.put(STORAGE_LAST_LOGIN_TIME, lastLoginTime)
-            }
+            Hawk.put(CHAT_NOTIFICATIONS_INTERVAL, chatInterval)
         }
 
     var lastNewsTime: Long?
-        get() = Hawk.get(STORAGE_NEWS_LAST_TIME, null)
+        get() = Hawk.get(NEWS_LAST_TIME, null)
         set(lastNewsTime) {
             if (lastNewsTime == null) {
-                Hawk.delete(STORAGE_NEWS_LAST_TIME)
+                Hawk.delete(NEWS_LAST_TIME)
             } else {
-                Hawk.put(STORAGE_NEWS_LAST_TIME, lastNewsTime)
+                Hawk.put(NEWS_LAST_TIME, lastNewsTime)
             }
         }
 
     var newNews: Int
-        get() = Hawk.get(STORAGE_NEW_NEWS, 0)
+        get() = Hawk.get(NEW_NEWS, 0)
         set(newNews) {
-            Hawk.put(STORAGE_NEW_NEWS, newNews)
+            Hawk.put(NEW_NEWS, newNews)
         }
 
     var conferenceListEndReached: Boolean
-        get() = Hawk.get(STORAGE_CONFERENCE_LIST_END_REACHED, false)
+        get() = Hawk.get(CONFERENCE_LIST_END_REACHED, false)
         set(hasReachedEnd) {
-            Hawk.put(STORAGE_CONFERENCE_LIST_END_REACHED, hasReachedEnd)
+            Hawk.put(CONFERENCE_LIST_END_REACHED, hasReachedEnd)
         }
 
     fun hasConferenceReachedEnd(conferenceId: String): Boolean {
-        return Hawk.get<Map<String, Boolean>>(STORAGE_CONFERENCE_END_REACHED_MAP, HashMap())
+        return Hawk.get<Map<String, Boolean>>(CONFERENCE_END_REACHED_MAP, HashMap())
                 .getOrElse(conferenceId, { false })
     }
 
     fun setConferenceReachedEnd(conferenceId: String) {
-        val map: MutableMap<String, Boolean> = Hawk.get(STORAGE_CONFERENCE_END_REACHED_MAP,
+        val map: MutableMap<String, Boolean> = Hawk.get(CONFERENCE_END_REACHED_MAP,
                 HashMap<String, Boolean>())
 
         map.put(conferenceId, true)
 
-        Hawk.put(STORAGE_CONFERENCE_END_REACHED_MAP, map)
+        Hawk.put(CONFERENCE_END_REACHED_MAP, map)
     }
 
     fun resetConferenceReachedEndMap() {
-        Hawk.put(STORAGE_CONFERENCE_END_REACHED_MAP, HashMap<String, Boolean>())
+        Hawk.put(CONFERENCE_END_REACHED_MAP, HashMap<String, Boolean>())
     }
 
     fun incrementChatInterval() {
         val interval = chatInterval
 
         if (interval <= MAX_CHAT_POLLING_INTERVAL) {
-            Hawk.put(STORAGE_CHAT_NOTIFICATIONS_INTERVAL, interval * CHAT_INTERVAL_MULTIPLICAND)
+            Hawk.put(CHAT_NOTIFICATIONS_INTERVAL, interval * CHAT_INTERVAL_MULTIPLICAND)
         }
     }
 
     fun resetChatInterval() {
-        Hawk.put(STORAGE_CHAT_NOTIFICATIONS_INTERVAL, DEFAULT_CHAT_INTERVAL)
+        Hawk.put(CHAT_NOTIFICATIONS_INTERVAL, DEFAULT_CHAT_INTERVAL)
     }
 }

@@ -1,7 +1,6 @@
 package com.proxerme.app.helper
 
 import android.app.Activity
-import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.view.View
@@ -17,7 +16,6 @@ import com.mikepenz.materialdrawer.model.ProfileSettingDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IProfile
 import com.proxerme.app.R
-import com.proxerme.app.manager.UserManager
 import com.proxerme.library.info.ProxerUrlHolder
 import java.util.*
 
@@ -26,7 +24,6 @@ import java.util.*
  *
  * @author Ruben Gees
  */
-
 class MaterialDrawerHelper(context: Activity, toolbar: Toolbar,
                            savedInstanceState: Bundle?,
                            private val itemClickCallback: (id: DrawerItem) -> Boolean = { false },
@@ -95,10 +92,10 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar,
     }
 
     private fun generateAccountItems(context: Activity): List<IProfile<*>> {
-        val user = UserManager.user
+        val user = StorageHelper.user
 
-        if (user == null) {
-            return arrayListOf(
+        when (user) {
+            null -> return arrayListOf(
                     ProfileDrawerItem()
                             .withName(context.getString(R.string.drawer_account_guest))
                             .withIcon(R.mipmap.ic_launcher)
@@ -109,11 +106,10 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar,
                             .withIcon(CommunityMaterial.Icon.cmd_account_key)
                             .withIconTinted(true)
                             .withIdentifier(AccountItem.LOGIN.id))
-        } else {
-            return arrayListOf(
+            else -> return arrayListOf(
                     ProfileDrawerItem()
                             .withName(user.username)
-                            .withEmail(getTextForLoginState(context))
+                            .withEmail(context.getString(R.string.login_state_indicator_logged_in))
                             .withIcon(ProxerUrlHolder.getUserImageUrl(user.imageId).toString())
                             .withSelectedTextColorRes(R.color.colorAccent)
                             .withIdentifier(AccountItem.USER.id),
@@ -239,28 +235,6 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar,
     @Suppress("UNUSED_PARAMETER")
     private fun onAccountItemClick(view: View?, profile: IProfile<*>, current: Boolean): Boolean {
         return accountClickCallback.invoke(AccountItem.fromOrDefault(profile.identifier))
-    }
-
-    private fun getTextForLoginState(context: Context): String {
-        return when (UserManager.ongoingState) {
-            UserManager.OngoingState.LOGGING_IN -> {
-                context.getString(R.string.login_state_indicator_logging_in)
-            }
-
-            UserManager.OngoingState.LOGGING_OUT -> {
-                context.getString(R.string.login_state_indicator_logging_out)
-            }
-
-            UserManager.OngoingState.NONE -> when (UserManager.loginState) {
-                UserManager.LoginState.LOGGED_IN -> {
-                    context.getString(R.string.login_state_indicator_logged_in)
-                }
-
-                UserManager.LoginState.LOGGED_OUT -> {
-                    context.getString(R.string.login_state_indicator_logged_out)
-                }
-            }
-        }
     }
 
     enum class DrawerItem(val id: Long) {

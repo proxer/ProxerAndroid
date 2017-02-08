@@ -10,7 +10,7 @@ import android.view.View.*
 import android.view.ViewGroup
 import android.view.WindowManager
 import com.devbrackets.android.exomedia.listener.VideoControlsVisibilityListener
-import com.devbrackets.android.exomedia.ui.widget.EMVideoView
+import com.devbrackets.android.exomedia.ui.widget.VideoView
 import com.proxerme.app.R
 import com.proxerme.app.util.ViewUtils
 import com.proxerme.app.util.bindView
@@ -23,7 +23,7 @@ class StreamActivity : MainActivity() {
 
     private val root: ViewGroup by bindView(R.id.root)
     private val toolbar: Toolbar by bindView(R.id.toolbar)
-    private val player: EMVideoView by bindView(R.id.player)
+    private val player: VideoView by bindView(R.id.player)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

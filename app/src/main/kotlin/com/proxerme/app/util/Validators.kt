@@ -2,7 +2,7 @@ package com.proxerme.app.util
 
 import android.content.Context
 import com.proxerme.app.helper.PreferenceHelper
-import com.proxerme.app.manager.UserManager
+import com.proxerme.app.helper.StorageHelper
 
 /**
  * TODO: Describe class
@@ -12,8 +12,7 @@ import com.proxerme.app.manager.UserManager
 object Validators {
 
     fun validateLogin() {
-        if (UserManager.loginState != UserManager.LoginState.LOGGED_IN ||
-                UserManager.ongoingState != UserManager.OngoingState.NONE) {
+        if (StorageHelper.user == null) {
             throw NotLoggedInException()
         }
     }

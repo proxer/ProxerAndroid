@@ -16,11 +16,11 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.entitiy.LocalMessage
+import com.proxerme.app.entitiy.LocalUser
 import com.proxerme.app.util.DeviceUtils
 import com.proxerme.app.util.TimeUtils
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.bindView
-import com.proxerme.library.connection.user.entitiy.User
 import com.proxerme.library.parameters.ActionParameter
 import okhttp3.HttpUrl
 
@@ -43,7 +43,7 @@ class ChatAdapter(val isGroup: Boolean) : PagingAdapter<LocalMessage>() {
         private const val TYPE_ACTION = 8
     }
 
-    var user: User? = null
+    var user: LocalUser? = null
 
     private val selectedMap = LongSparseArray<Boolean>()
     private val showingTimeMap = LongSparseArray<Boolean>()
