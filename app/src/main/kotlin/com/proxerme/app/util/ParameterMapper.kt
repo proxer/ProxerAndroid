@@ -163,9 +163,9 @@ object ParameterMapper {
                 else -> context.getString(R.string.user_media_state_watching, episode)
             }
             WILL_WATCH -> return when (category) {
-                ANIME -> context.getString(R.string.user_media_state_watched)
-                MANGA -> context.getString(R.string.user_media_state_read)
-                else -> context.getString(R.string.user_media_state_watched)
+                ANIME -> context.getString(R.string.user_media_state_will_watch)
+                MANGA -> context.getString(R.string.user_media_state_will_read)
+                else -> context.getString(R.string.user_media_state_will_watch)
             }
             CANCELLED -> context.getString(R.string.user_media_state_cancelled, episode)
             else -> context.getString(R.string.error_unknown_parameter, state.toString())
