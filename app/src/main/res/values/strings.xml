@@ -62,7 +62,7 @@
     <string name="dialog_login_error_username">Bitte gib einen Nutzernamen an</string>
     <string name="dialog_login_password">Passwort</string>
     <string name="dialog_login_positive">Anmelden</string>
-    <string name="dialog_login_remember">Merken</string>
+    <string name="dialog_login_remember">Passwort speichern</string>
     <string name="dialog_login_title">Anmelden</string>
     <string name="dialog_login_username">Nutzername</string>
     <string name="dialog_logout_positive">Abmelden</string>
@@ -238,9 +238,6 @@
     <string name="link_error_not_found">Der Link konnte nicht geöffnet werden</string>
 
     <string name="login_state_indicator_logged_in">Angemeldet</string>
-    <string name="login_state_indicator_logged_out">Abgemeldet</string>
-    <string name="login_state_indicator_logging_in">Anmeldung</string>
-    <string name="login_state_indicator_logging_out">Abmeldung</string>
 
     <string name="media_license_licensed">Lizenziert</string>
     <string name="media_license_non_licensed">Nicht lizenziert</string>

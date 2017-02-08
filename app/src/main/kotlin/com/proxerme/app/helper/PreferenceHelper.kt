@@ -14,12 +14,10 @@ import android.support.v7.app.AppCompatDelegate
 object PreferenceHelper {
 
     const val PREFERENCE_HENTAI = "pref_hentai"
-    const val PREFERENCE_LICENCES = "pref_licences"
     const val PREFERENCE_NEWS_NOTIFICATIONS = "pref_news_notifications"
     const val PREFERENCE_NEWS_NOTIFICATIONS_INTERVAL = "pref_news_notifications_interval"
     const val PREFERENCE_NIGHT_MODE = "pref_theme"
-    const val PREFERENCE_OPEN_SOURCE = "pref_open_source"
-    const private val DEFAULT_NEWS_NOTIFICATIONS_INTERVAL = "60"
+    private const val DEFAULT_NEWS_NOTIFICATIONS_INTERVAL = "60"
 
     fun isHentaiAllowed(context: Context) =
             getDefaultSharedPreferences(context).getBoolean(PREFERENCE_HENTAI, false)

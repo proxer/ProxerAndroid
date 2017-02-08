@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteException
 import com.proxerme.app.entitiy.*
 import com.proxerme.library.connection.messenger.entity.Conference
 import com.proxerme.library.connection.messenger.entity.Message
-import com.proxerme.library.connection.user.entitiy.User
 import org.jetbrains.anko.db.*
 import org.joda.time.DateTime
 import java.util.*
