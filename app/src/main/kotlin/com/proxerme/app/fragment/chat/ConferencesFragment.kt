@@ -126,6 +126,8 @@ class ConferencesFragment : SingleLoadingFragment<Context, List<LocalConference>
                 NewChatActivity.navigateTo(activity)
             })
         } else {
+            hideError()
+
             adapter.updateAndScrollUpIfNecessary(list.layoutManager, list, { it.insert(data) })
         }
     }
