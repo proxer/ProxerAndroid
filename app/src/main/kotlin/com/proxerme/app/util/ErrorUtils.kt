@@ -23,7 +23,7 @@ import java.net.SocketTimeoutException
  */
 object ErrorUtils {
 
-    val LOGIN_ERRORS = arrayOf(INVALID_TOKEN, INFO_USER_NOT_LOGGED_IN,
+    val NOT_LOGGED_IN_ERRORS = arrayOf(INVALID_TOKEN, INFO_USER_NOT_LOGGED_IN,
             NOTIFICATIONS_USER_NOT_LOGGED_IN, MESSAGES_USER_NOT_LOGGED_IN, UCP_USER_NOT_LOGGED_IN)
 
     fun getMessageForErrorCode(context: Context,
@@ -34,7 +34,7 @@ object ErrorUtils {
                     IP_BLOCKED -> context.getString(R.string.error_ip_blocked)
                     INFO_ENTRY_ALREADY_IN_LIST -> context.getString(R.string.error_already_in_list)
                     INFO_EXCEEDED_ALLOWED_ENTRIES -> context.getString(R.string.error_favorites_full)
-                    in LOGIN_ERRORS -> context.getString(R.string.error_not_logged_in)
+                    in NOT_LOGGED_IN_ERRORS -> context.getString(R.string.error_not_logged_in)
                     else -> exception.message ?: context.getString(R.string.error_unknown)
                 }
             }
@@ -51,7 +51,9 @@ object ErrorUtils {
                 val message = getMessageForErrorCode(context, exception)
                 val buttonMessage = when (exception.proxerErrorCode) {
                     IP_BLOCKED -> context.getString(R.string.error_action_captcha)
-                    in ErrorUtils.LOGIN_ERRORS -> context.getString(R.string.error_action_login)
+                    in ErrorUtils.NOT_LOGGED_IN_ERRORS -> {
+                        context.getString(R.string.error_action_login)
+                    }
                     else -> ""
                 }
                 val buttonAction = when (exception.proxerErrorCode) {
@@ -66,7 +68,7 @@ object ErrorUtils {
 
                         EventBus.getDefault().post(CaptchaSolvedEvent())
                     }
-                    in ErrorUtils.LOGIN_ERRORS -> View.OnClickListener {
+                    in ErrorUtils.NOT_LOGGED_IN_ERRORS -> View.OnClickListener {
                         LoginDialog.show(context)
                     }
                     else -> null

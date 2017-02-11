@@ -29,6 +29,7 @@ import com.proxerme.app.helper.PreferenceHelper
 import com.proxerme.app.helper.StorageHelper
 import com.proxerme.app.service.ChatService
 import com.proxerme.app.util.ErrorUtils
+import com.proxerme.library.connection.ProxerCall
 import com.proxerme.library.connection.ProxerConnection
 import com.proxerme.library.connection.ProxerException
 import com.proxerme.library.connection.ProxerRequest
@@ -42,10 +43,7 @@ import net.danlew.android.joda.JodaTimeAndroid
 import okhttp3.OkHttpClient
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.uiThread
 import java.io.InputStream
-import java.util.concurrent.Future
 
 /**
  * TODO: Describe Class
@@ -79,7 +77,7 @@ class MainApplication : Application() {
                 return proxerConnection.executeSynchronized(request, StorageHelper.user?.loginToken)
             } catch (exception: ProxerException) {
                 when (exception.proxerErrorCode) {
-                    in ErrorUtils.LOGIN_ERRORS -> {
+                    in ErrorUtils.NOT_LOGGED_IN_ERRORS -> {
                         val user = StorageHelper.user
 
                         if (user?.password != null) {
@@ -87,13 +85,13 @@ class MainApplication : Application() {
                                 proxerConnection.executeSynchronized(LoginRequest(user.username,
                                         user.password))
                             } catch (exception: ProxerException) {
-                                when (exception.proxerErrorCode){
-                                     ProxerException.LOGIN_INVALID_CREDENTIALS,
-                                     ProxerException.LOGIN_MISSING_CREDENTIALS-> {
-                                         StorageHelper.user = null
+                                when (exception.proxerErrorCode) {
+                                    ProxerException.LOGIN_INVALID_CREDENTIALS,
+                                    ProxerException.LOGIN_MISSING_CREDENTIALS -> {
+                                        StorageHelper.user = null
 
-                                         EventBus.getDefault().post(LogoutEvent())
-                                     }
+                                        EventBus.getDefault().post(LogoutEvent())
+                                    }
                                 }
 
                                 throw exception
@@ -224,26 +222,65 @@ class MainApplication : Application() {
     class ProxerTokenCall<T>(request: ProxerRequest<T>, callback: (T) -> Unit,
                              errorCallback: (ProxerException) -> Unit) {
 
-        private val task: Future<Unit>
+        private val calls = ArrayList<ProxerCall>(3)
+        private var cancelled = false
 
         init {
-            task = doAsync {
-                try {
-                    val result = execSync(request)
+            calls += proxerConnection.execute(request, StorageHelper.user?.loginToken, callback, {
+                when (it.proxerErrorCode) {
+                    in ErrorUtils.NOT_LOGGED_IN_ERRORS -> {
+                        if (!cancelled) {
+                            val user = StorageHelper.user
 
-                    uiThread {
-                        callback.invoke(result)
+                            if (user?.password != null) {
+                                calls += proxerConnection.execute(LoginRequest(user.username,
+                                        user.password), {
+                                    if (!cancelled) {
+                                        StorageHelper.user = LocalUser(user.username, user.password,
+                                                it.id, it.imageId, it.loginToken)
+
+                                        EventBus.getDefault().post(LoginEvent())
+
+                                        calls += proxerConnection.execute(request, it.loginToken,
+                                                callback, errorCallback)
+                                    }
+                                }, {
+                                    if (!cancelled) {
+                                        when (it.proxerErrorCode) {
+                                            ProxerException.LOGIN_INVALID_CREDENTIALS,
+                                            ProxerException.LOGIN_MISSING_CREDENTIALS -> {
+                                                StorageHelper.user = null
+
+                                                EventBus.getDefault().post(LogoutEvent())
+                                            }
+                                        }
+
+                                        errorCallback.invoke(it)
+                                    }
+                                })
+                            } else {
+                                StorageHelper.user = null
+
+                                EventBus.getDefault().post(LogoutEvent())
+
+                                errorCallback.invoke(it)
+                            }
+                        }
                     }
-                } catch(exception: ProxerException) {
-                    uiThread {
-                        errorCallback.invoke(exception)
+                    else -> {
+                        if (!cancelled) {
+                            errorCallback.invoke(it)
+                        }
                     }
                 }
-            }
+            })
         }
 
         fun cancel() {
-            task.cancel(true)
+            cancelled = true
+
+            calls.forEach { it.cancel() }
+            calls.clear()
         }
     }
 }
