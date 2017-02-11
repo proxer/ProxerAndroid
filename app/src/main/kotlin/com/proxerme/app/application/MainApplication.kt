@@ -223,6 +223,8 @@ class MainApplication : Application() {
                              errorCallback: (ProxerException) -> Unit) {
 
         private val calls = ArrayList<ProxerCall>(3)
+
+        @Volatile
         private var cancelled = false
 
         init {
