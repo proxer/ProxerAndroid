@@ -1,8 +1,7 @@
 package com.proxerme.app.fragment.manga
 
-import android.annotation.TargetApi
+import android.annotation.SuppressLint
 import android.os.Build
-import android.os.Build.VERSION_CODES.JELLY_BEAN
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
@@ -265,11 +264,20 @@ class MangaFragment : SingleLoadingFragment<Pair<MangaInput, String>, ChapterInf
                 showError(getString(R.string.fragment_manga_not_available), null)
 
                 contentContainer.visibility = View.VISIBLE
+                errorContainer.post {
+                    errorContainer.y = ((root.height - header.height) / 2f + header.height) +
+                            (errorText.layoutParams as ViewGroup.MarginLayoutParams).topMargin -
+                            errorContainer.height
+                }
             } else {
                 super.handleError(exception.original)
+
+                errorContainer.translationY = 0f
             }
         } else {
             super.handleError(exception)
+
+            errorContainer.translationY = 0f
         }
     }
 
@@ -311,12 +319,12 @@ class MangaFragment : SingleLoadingFragment<Pair<MangaInput, String>, ChapterInf
         reset()
     }
 
-    @TargetApi(JELLY_BEAN)
+    @SuppressLint("InlinedApi")
     private fun showSystemUI() {
         activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
     }
 
-    @TargetApi(JELLY_BEAN)
+    @SuppressLint("InlinedApi")
     private fun hideSystemUI() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or

@@ -231,11 +231,20 @@ class AnimeFragment : SingleLoadingFragment<Pair<AnimeInput, String>, StreamInfo
                 showError(getString(R.string.fragment_anime_not_available), null)
 
                 contentContainer.visibility = View.VISIBLE
+                errorContainer.post {
+                    errorContainer.y = ((root.height - header.height) / 2f + header.height) +
+                            (errorText.layoutParams as ViewGroup.MarginLayoutParams).topMargin -
+                            errorContainer.height
+                }
             } else {
                 super.handleError(exception.original)
+
+                errorContainer.translationY = 0f
             }
         } else {
             super.handleError(exception)
+
+            errorContainer.translationY = 0f
         }
     }
 
