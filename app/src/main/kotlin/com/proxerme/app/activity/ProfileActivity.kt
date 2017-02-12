@@ -3,16 +3,19 @@ package com.proxerme.app.activity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CollapsingToolbarLayout
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
+import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
+import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.h6ah4i.android.tablayouthelper.TabLayoutHelper
@@ -31,6 +34,7 @@ import com.proxerme.app.helper.StorageHelper
 import com.proxerme.app.util.bindView
 import com.proxerme.library.info.ProxerUrlHolder
 import com.proxerme.library.parameters.CategoryParameter
+import org.jetbrains.anko.applyRecursively
 import org.jetbrains.anko.intentFor
 
 class ProfileActivity : MainActivity() {
@@ -104,6 +108,7 @@ class ProfileActivity : MainActivity() {
     private var sectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
 
     private val toolbar: Toolbar by bindView(R.id.toolbar)
+    private val appbar: AppBarLayout by bindView(R.id.appbar)
     private val collapsingToolbar: CollapsingToolbarLayout by bindView(R.id.collapsingToolbar)
     private val viewPager: ViewPager by bindView(R.id.viewPager)
     private val profileImage: ImageView by bindView(R.id.profileImage)
@@ -166,6 +171,23 @@ class ProfileActivity : MainActivity() {
         title = username
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         collapsingToolbar.isTitleEnabled = false
+
+        appbar.addOnOffsetChangedListener { _, verticalOffset ->
+            val shadowNeeded = collapsingToolbar.height + verticalOffset >
+                    collapsingToolbar.scrimVisibleHeightTrigger
+
+            listOf(tabs, toolbar).forEach {
+                it.applyRecursively {
+                    if (it is TextView) {
+                        when (shadowNeeded) {
+                            true -> it.setShadowLayer(1f, 1f, 1f,
+                                    ContextCompat.getColor(this, R.color.md_black_1000))
+                            false -> it.setShadowLayer(0f, 0f, 0f, 0)
+                        }
+                    }
+                }
+            }
+        }
 
         TabLayoutHelper(tabs, viewPager).apply { isAutoAdjustTabModeEnabled = true }
 
