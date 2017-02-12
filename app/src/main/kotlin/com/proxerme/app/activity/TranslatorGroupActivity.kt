@@ -134,7 +134,7 @@ class TranslatorGroupActivity : MainActivity() {
                 it.applyRecursively {
                     if (it is TextView) {
                         when (shadowNeeded) {
-                            true -> it.setShadowLayer(1f, 1f, 1f,
+                            true -> it.setShadowLayer(2f, 0f, 0f,
                                     ContextCompat.getColor(this, R.color.md_black_1000))
                             false -> it.setShadowLayer(0f, 0f, 0f, 0)
                         }
