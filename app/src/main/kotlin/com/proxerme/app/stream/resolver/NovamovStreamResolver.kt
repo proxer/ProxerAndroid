@@ -27,10 +27,11 @@ class NovamovStreamResolver : StreamResolver() {
                 .build()).execute()
 
         val regexResult = keyRegex.find(validateAndGetResult(response))
-        val file = regexResult?.groupValues?.get(1)
-        val fileKey = regexResult?.groupValues?.get(2)
+                ?: throw StreamResolutionException()
+        val file = regexResult.groupValues[1]
+        val fileKey = regexResult.groupValues[2]
 
-        if (file?.isBlank() ?: true || fileKey?.isBlank() ?: true) {
+        if (file.isBlank() || fileKey.isBlank()) {
             throw StreamResolutionException()
         }
 

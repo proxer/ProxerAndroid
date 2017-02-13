@@ -280,7 +280,9 @@ class AnimeFragment : SingleLoadingFragment<Pair<AnimeInput, String>, StreamInfo
 
     override fun constructTask(): Task<Pair<AnimeInput, String>, StreamInfo> {
         return ZippedTask(
-                ProxerLoadingTask({ StreamsRequest(it.id, it.episode, it.language) }),
+                ProxerLoadingTask({
+                    StreamsRequest(it.id, it.episode, it.language).withIncludeProxerStreams(true)
+                }),
                 EntryInfoTask({ entryInfo }),
                 zipFunction = ::StreamInfo,
                 awaitSecondResult = true

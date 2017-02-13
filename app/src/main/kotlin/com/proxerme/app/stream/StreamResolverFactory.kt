@@ -13,7 +13,8 @@ object StreamResolverFactory {
             DailyMotionStreamResolver(), NovamovStreamResolver(), CrunchyrollResolver(),
             AkibaPassResolver(), ViewsterResolver(), AnimeOnDemandResolver(), ClipfishResolver(),
             DaisukiResolver(), AmazonPrimeVideoResolver(), YourUploadResolver(), CodeResolver(),
-            ProsiebenMAXXResolver(), YoutubeResolver(), VideoWeedStreamResolver())
+            ProsiebenMAXXResolver(), YoutubeResolver(), VideoWeedStreamResolver(),
+            ProxerStreamResolver())
 
     fun getResolverFor(name: String): StreamResolver? {
         return resolvers.firstOrNull { it.appliesTo(name) }
