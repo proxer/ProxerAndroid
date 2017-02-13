@@ -6,7 +6,6 @@ import android.content.Context
 import android.os.SystemClock
 import com.proxerme.app.receiver.ChatReceiver
 import com.proxerme.app.receiver.NotificationReceiver
-import com.proxerme.app.service.NotificationService
 import com.proxerme.app.util.alarmManager
 import org.jetbrains.anko.intentFor
 
@@ -28,15 +27,13 @@ object ServiceHelper {
 
             context.alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                     SystemClock.elapsedRealtime() + interval, interval,
-                    PendingIntent.getBroadcast(context, 0, context.intentFor<NotificationReceiver>()
-                            .setAction(NotificationService.ACTION_LOAD_NEWS), 0))
+                    PendingIntent.getBroadcast(context, 0, context.intentFor<NotificationReceiver>(), 0))
         }
     }
 
     fun cancelNewsRetrieval(context: Context) {
         context.alarmManager.cancel(PendingIntent.getBroadcast(context, 0,
-                context.intentFor<NotificationReceiver>()
-                        .setAction(NotificationService.ACTION_LOAD_NEWS), 0))
+                context.intentFor<NotificationReceiver>(), 0))
     }
 
     fun retrieveChatLater(context: Context) {

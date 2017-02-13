@@ -11,7 +11,11 @@ import com.proxerme.app.event.ChatSynchronizationEvent
 import com.proxerme.app.helper.NotificationHelper
 import com.proxerme.app.helper.ServiceHelper
 import com.proxerme.app.helper.StorageHelper
+import com.proxerme.app.helper.StorageHelper.DEFAULT_CHAT_INTERVAL
+import com.proxerme.app.helper.StorageHelper.LOW_CHAT_INTERVAL
 import com.proxerme.app.manager.SectionManager
+import com.proxerme.app.manager.SectionManager.Section.CHAT
+import com.proxerme.app.manager.SectionManager.Section.CONFERENCES
 import com.proxerme.library.connection.ProxerException
 import com.proxerme.library.connection.messenger.entity.Conference
 import com.proxerme.library.connection.messenger.entity.Message
@@ -39,8 +43,12 @@ class ChatService : IntentService("ChatService") {
         const val CONFERENCES_ON_PAGE = 48
         const val MESSAGES_ON_PAGE = 30
 
+        var isSynchronizationQueued = false
+            private set
+
         var isSynchronizing = false
             private set
+
         private val isLoadingMessagesMap = HashMap<String, Boolean>()
 
         fun isLoadingMessages(conferenceId: String): Boolean {
@@ -48,73 +56,84 @@ class ChatService : IntentService("ChatService") {
         }
 
         fun synchronize(context: Context) {
-            ServiceHelper.cancelChatRetrieval(context)
+            if (!isSynchronizationQueued) {
+                isSynchronizationQueued = true
 
-            context.startService(context.intentFor<ChatService>().setAction(ACTION_SYNCHRONIZE))
+                context.startService(context.intentFor<ChatService>().setAction(ACTION_SYNCHRONIZE))
+            }
         }
 
         fun loadMoreMessages(context: Context, conferenceId: String) {
-            context.startService(context.intentFor<ChatService>(EXTRA_CONFERENCE_ID to conferenceId)
-                    .setAction(ACTION_LOAD_MESSAGES))
+            if (!isLoadingMessages(conferenceId)) {
+                context.startService(context.intentFor<ChatService>(EXTRA_CONFERENCE_ID to conferenceId)
+                        .setAction(ACTION_LOAD_MESSAGES))
+            }
         }
 
-        fun reschedule(context: Context) {
-            when (SectionManager.currentSection) {
-                SectionManager.Section.CHAT -> StorageHelper.chatInterval = 3
-                SectionManager.Section.CONFERENCES -> StorageHelper.chatInterval = 10
-                else -> StorageHelper.incrementChatInterval()
+        fun reschedule(context: Context, changes: Boolean = false) {
+            when (changes) {
+                true -> StorageHelper.chatInterval = LOW_CHAT_INTERVAL
+                false -> when {
+                    SectionManager.isSectionResumed(CHAT) -> {
+                        StorageHelper.chatInterval = LOW_CHAT_INTERVAL
+                    }
+                    SectionManager.isSectionResumed(CONFERENCES) -> {
+                        StorageHelper.chatInterval = DEFAULT_CHAT_INTERVAL
+                    }
+                    else -> StorageHelper.incrementChatInterval()
+                }
             }
 
             ServiceHelper.retrieveChatLater(context)
         }
     }
 
-    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+    override fun onHandleIntent(intent: Intent) {
         when (intent.action) {
-            ACTION_SYNCHRONIZE -> isSynchronizing = true
+            ACTION_SYNCHRONIZE -> {
+                isSynchronizationQueued = false
+                isSynchronizing = true
+            }
             ACTION_LOAD_MESSAGES -> {
                 isLoadingMessagesMap.put(intent.getStringExtra(EXTRA_CONFERENCE_ID), true)
             }
         }
 
-        return super.onStartCommand(intent, flags, startId)
-    }
-
-    override fun onHandleIntent(intent: Intent) {
-        val user = StorageHelper.user
-
-        if (user == null) {
+        if (StorageHelper.user == null) {
             chatDatabase.clear()
             StorageHelper.conferenceListEndReached = false
             StorageHelper.resetConferenceReachedEndMap()
-        } else {
-            try {
-                when (intent.action) {
-                    ACTION_SYNCHRONIZE -> doSynchronize()
-                    ACTION_LOAD_MESSAGES -> {
-                        doLoadMessages(intent.getStringExtra(EXTRA_CONFERENCE_ID))
-                    }
-                    else -> return
-                }
-            } catch (exception: Exception) {
-                EventBus.getDefault().post(exception)
-            }
 
+            isSynchronizing = false
+        } else {
             when (intent.action) {
                 ACTION_SYNCHRONIZE -> {
+                    val changes = try {
+                        doSynchronize()
+                    } catch (exception: Exception) {
+                        EventBus.getDefault().post(exception)
+
+                        false
+                    }
+
                     isSynchronizing = false
 
-                    reschedule(this@ChatService)
+                    reschedule(this@ChatService, changes)
                 }
                 ACTION_LOAD_MESSAGES -> {
+                    try {
+                        doLoadMessages(intent.getStringExtra(EXTRA_CONFERENCE_ID))
+                    } catch (exception: Exception) {
+                        EventBus.getDefault().post(exception)
+                    }
+
                     isLoadingMessagesMap.remove(intent.getStringExtra(EXTRA_CONFERENCE_ID))
                 }
-                else -> return
             }
         }
     }
 
-    private fun doSynchronize() {
+    private fun doSynchronize(): Boolean {
         sendMessages()
         markConferencesAsRead()
 
@@ -124,18 +143,19 @@ class ChatService : IntentService("ChatService") {
 
         EventBus.getDefault().post(ChatSynchronizationEvent(insertedMap))
 
-        if (SectionManager.currentSection != SectionManager.Section.CONFERENCES &&
-                SectionManager.currentSection != SectionManager.Section.CHAT &&
-                insertedMap.isNotEmpty()) {
+        if (!SectionManager.isSectionResumed(CONFERENCES) && !SectionManager.isSectionResumed(CHAT)
+                && insertedMap.isNotEmpty()) {
             showNotification(insertedMap.keys)
         }
+
+        return insertedMap.isNotEmpty()
     }
 
     private fun doLoadMessages(conferenceId: String) {
-        try {
+        return try {
             val idToLoadFrom = chatDatabase.getOldestMessage(conferenceId)?.id ?: "0"
             val newMessages = MainApplication.execSync(MessagesRequest(conferenceId, idToLoadFrom)
-                            .withMarkAsRead(false)).toList()
+                    .withMarkAsRead(false)).toList()
 
             val insertedMessages = chatDatabase.insertOrUpdateMessages(newMessages)
 

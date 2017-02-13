@@ -8,6 +8,7 @@ import com.proxerme.app.event.NewsEvent
 import com.proxerme.app.helper.NotificationHelper
 import com.proxerme.app.helper.StorageHelper
 import com.proxerme.app.manager.SectionManager
+import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.library.connection.notifications.request.NewsRequest
 import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.intentFor
@@ -21,7 +22,6 @@ import org.jetbrains.anko.intentFor
 class NotificationService : IntentService(NotificationService.SERVICE_TITLE) {
 
     companion object {
-        const val ACTION_LOAD_NEWS = "com.proxerme.app.service.action.LOAD_NEWS"
         private const val SERVICE_TITLE = "Notification Service"
 
         fun load(context: Context, action: String) {
@@ -30,14 +30,6 @@ class NotificationService : IntentService(NotificationService.SERVICE_TITLE) {
     }
 
     override fun onHandleIntent(intent: Intent?) {
-        intent?.run {
-            if (ACTION_LOAD_NEWS == action) {
-                handleActionLoadNews()
-            }
-        }
-    }
-
-    private fun handleActionLoadNews() {
         try {
             val lastTime = StorageHelper.lastNewsTime
 
@@ -47,7 +39,7 @@ class NotificationService : IntentService(NotificationService.SERVICE_TITLE) {
                 }
 
                 if (result.size > StorageHelper.newNews) {
-                    if (SectionManager.currentSection == SectionManager.Section.NEWS) {
+                    if (SectionManager.isSectionResumed(Section.NEWS)) {
                         EventBus.getDefault().post(NewsEvent(result))
                     } else {
                         NotificationHelper.showNewsNotification(this, result)

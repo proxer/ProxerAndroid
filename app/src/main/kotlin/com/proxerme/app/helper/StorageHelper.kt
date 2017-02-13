@@ -20,8 +20,10 @@ object StorageHelper {
     private const val CHAT_NOTIFICATIONS_INTERVAL = "chat_notifications_interval"
 
     private const val MAX_CHAT_POLLING_INTERVAL = 850L
-    private const val DEFAULT_CHAT_INTERVAL = 5L
     private const val CHAT_INTERVAL_MULTIPLICAND = 1.5
+
+    const val LOW_CHAT_INTERVAL = 3L
+    const val DEFAULT_CHAT_INTERVAL = 10L
 
     var firstStart: Boolean
         get() = Hawk.get(FIRST_START, true)
@@ -89,11 +91,7 @@ object StorageHelper {
         val interval = chatInterval
 
         if (interval <= MAX_CHAT_POLLING_INTERVAL) {
-            Hawk.put(CHAT_NOTIFICATIONS_INTERVAL, interval * CHAT_INTERVAL_MULTIPLICAND)
+            Hawk.put(CHAT_NOTIFICATIONS_INTERVAL, (interval * CHAT_INTERVAL_MULTIPLICAND).toLong())
         }
-    }
-
-    fun resetChatInterval() {
-        Hawk.put(CHAT_NOTIFICATIONS_INTERVAL, DEFAULT_CHAT_INTERVAL)
     }
 }

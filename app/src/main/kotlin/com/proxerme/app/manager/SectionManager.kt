@@ -1,9 +1,5 @@
 package com.proxerme.app.manager
 
-import com.proxerme.app.event.SectionChangedEvent
-import org.greenrobot.eventbus.EventBus
-import kotlin.properties.Delegates
-
 /**
  * TODO: Describe class
  *
@@ -17,7 +13,9 @@ object SectionManager {
         INDUSTRY_PROJECTS
     }
 
-    var currentSection: Section by Delegates.observable(Section.NONE, { _, _, new ->
-        EventBus.getDefault().post(SectionChangedEvent(new))
-    })
+    private val resumedSections = ArrayList<Section>()
+
+    fun notifySectionResumed(section: Section) = resumedSections.add(section)
+    fun notifySectionPaused(section: Section) = resumedSections.remove(section)
+    fun isSectionResumed(section: Section) = resumedSections.contains(section)
 }

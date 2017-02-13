@@ -13,8 +13,6 @@ import com.proxerme.app.service.ChatService
 class ChatReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
-        if (!ChatService.isSynchronizing) {
-            ChatService.synchronize(context)
-        }
+        ChatService.synchronize(context)
     }
 }

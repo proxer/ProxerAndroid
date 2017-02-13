@@ -57,16 +57,11 @@ class ConferencesFragment : SingleLoadingFragment<Context, List<LocalConference>
         setHasOptionsMenu(true)
     }
 
-    override fun onStart() {
-        super.onStart()
-
-        ChatService.synchronize(context)
-    }
-
     override fun onResume() {
         super.onResume()
 
         NotificationHelper.cancelNotification(context, NotificationType.CHAT)
+        ChatService.synchronize(context)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,

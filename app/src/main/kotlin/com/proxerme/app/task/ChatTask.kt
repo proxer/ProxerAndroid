@@ -48,9 +48,7 @@ class ChatTask(private val id: String,
                         val result = input.context.chatDatabase.getMessages(id)
 
                         if (result.isEmpty()) {
-                            if (!ChatService.isLoadingMessages(id)) {
-                                ChatService.loadMoreMessages(input.context, id)
-                            }
+                            ChatService.loadMoreMessages(input.context, id)
                         } else {
                             handler.post {
                                 finishSuccessful(result.toTypedArray())
@@ -62,7 +60,7 @@ class ChatTask(private val id: String,
                         }
                     }
                 }
-            } else if (!ChatService.isLoadingMessages(id)) {
+            } else {
                 ChatService.loadMoreMessages(input.context, id)
             }
         }

@@ -29,13 +29,13 @@ abstract class MainFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        SectionManager.currentSection = section
+        SectionManager.notifySectionResumed(section)
     }
 
     override fun onPause() {
         super.onPause()
 
-        SectionManager.currentSection = SectionManager.Section.NONE
+        SectionManager.notifySectionPaused(section)
     }
 
     override fun onDestroy() {

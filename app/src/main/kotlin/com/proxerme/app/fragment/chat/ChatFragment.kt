@@ -156,8 +156,8 @@ class ChatFragment : PagedLoadingFragment<ChatInput, LocalMessage>() {
         adapter.callback = adapterCallback
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onResume() {
+        super.onResume()
 
         ChatService.synchronize(context)
     }
@@ -187,9 +187,7 @@ class ChatFragment : PagedLoadingFragment<ChatInput, LocalMessage>() {
                 adapter.insert(arrayOf(context.chatDatabase.insertMessageToSend(user,
                         conference.id, text)))
 
-                if (!ChatService.isSynchronizing) {
-                    ChatService.synchronize(context)
-                }
+                ChatService.synchronize(context)
 
                 list.post { list.scrollToPosition(0) }
             }
