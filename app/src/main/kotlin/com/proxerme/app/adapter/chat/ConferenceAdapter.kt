@@ -45,19 +45,19 @@ class ConferenceAdapter : PagingAdapter<LocalConference>() {
     }
 
     override fun insert(items: Iterable<LocalConference>) {
-        doUpdates(items.plus(list.filter { oldItem ->
-            items.find { areItemsTheSame(oldItem, it) } == null
+        doUpdates(items.plus(list.filterNot { oldItem ->
+            items.any { areItemsTheSame(oldItem, it) }
         }).sortedByDescending { it.time })
     }
 
     override fun append(items: Iterable<LocalConference>) {
-        doUpdates(list.filter { oldItem ->
-            items.find { areItemsTheSame(oldItem, it) } == null
+        doUpdates(list.filterNot { oldItem ->
+            items.any { areItemsTheSame(oldItem, it) }
         }.plus(items).sortedByDescending { it.time })
     }
 
     override fun areItemsTheSame(oldItem: LocalConference, newItem: LocalConference): Boolean {
-        return oldItem.id == newItem.id
+        return oldItem.localId == newItem.localId
     }
 
     override fun areContentsTheSame(oldItem: LocalConference, newItem: LocalConference): Boolean {

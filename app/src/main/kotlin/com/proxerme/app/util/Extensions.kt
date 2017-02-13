@@ -76,9 +76,9 @@ fun <T> PagingAdapter<T>.updateAndScrollUpIfNecessary(layoutManager: RecyclerVie
     action.invoke(this)
 
     if (wasAtTop && previousFirstItem != this.items.firstOrNull()) {
-        recyclerView.post {
+        recyclerView.postDelayed({
             recyclerView.smoothScrollToPosition(0)
-        }
+        }, 50)
     }
 }
 
