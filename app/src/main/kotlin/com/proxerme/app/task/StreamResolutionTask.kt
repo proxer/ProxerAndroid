@@ -7,10 +7,10 @@ import android.os.Looper
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import com.proxerme.app.R
+import com.proxerme.app.fragment.anime.AnimeFragment.StreamResolverInput
 import com.proxerme.app.stream.StreamResolverFactory
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionResult
 import com.proxerme.app.task.framework.BaseTask
-import okhttp3.HttpUrl
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.find
 import java.util.concurrent.Future
@@ -22,7 +22,8 @@ import java.util.concurrent.Future
  */
 class StreamResolutionTask(successCallback: ((StreamResolutionResult) -> Unit)? = null,
                            exceptionCallback: ((Exception) -> Unit)? = null) :
-        BaseTask<HttpUrl, StreamResolutionResult>(successCallback, exceptionCallback) {
+        BaseTask<Pair<StreamResolverInput, String>, StreamResolutionResult>(successCallback,
+                exceptionCallback) {
 
     override val isWorking: Boolean
         get() = !(future?.isDone ?: true)
@@ -30,22 +31,22 @@ class StreamResolutionTask(successCallback: ((StreamResolutionResult) -> Unit)? 
     private val handler = Handler(Looper.getMainLooper())
     private var future: Future<Unit>? = null
 
-    override fun execute(input: HttpUrl) {
+    override fun execute(input: Pair<StreamResolverInput, String>) {
         start {
             future = doAsync {
                 try {
-                    val result = StreamResolverFactory.getResolverFor(input)?.resolve(input)
-                            ?: throw NoResolverException()
-
-                    cancel()
+                    val result = StreamResolverFactory.getResolverFor(input.first.name)
+                            ?.resolve(input.second) ?: throw NoResolverException()
 
                     handler.post {
+                        cancel()
+
                         finishSuccessful(result)
                     }
                 } catch (exception: Exception) {
-                    cancel()
-
                     handler.post {
+                        cancel()
+
                         finishWithException(exception)
                     }
                 }
@@ -70,7 +71,9 @@ class StreamResolutionTask(successCallback: ((StreamResolutionResult) -> Unit)? 
 
     class StreamResolutionResult {
 
-        private companion object {
+        companion object {
+            const val MESSAGE = "extra_message"
+
             private val defaultNotFoundAction: (AppCompatActivity) -> Unit = {
                 Snackbar.make(it.find(android.R.id.content), R.string.error_activity_not_found,
                         Snackbar.LENGTH_LONG)

@@ -1,7 +1,6 @@
 package com.proxerme.app.stream
 
 import com.proxerme.app.stream.resolver.*
-import okhttp3.HttpUrl
 
 /**
  * TODO: Describe class
@@ -11,12 +10,12 @@ import okhttp3.HttpUrl
 object StreamResolverFactory {
 
     private val resolvers = arrayOf(Mp4UploadResolver(), StreamcloudResolver(),
-            DailyMotionStreamResolver(), NovamovStreamResolver(), ProxerProductStreamResolver(),
-            CrunchyrollResolver(), AkibaPassResolver(), ViewsterResolver(), AnimeOnDemandResolver(),
-            ClipfishResolver(), DaisukiResolver(), AmazonPrimeVideoResolver(), YouruploadResolver(),
+            DailyMotionStreamResolver(), NovamovStreamResolver(), CrunchyrollResolver(),
+            AkibaPassResolver(), ViewsterResolver(), AnimeOnDemandResolver(), ClipfishResolver(),
+            DaisukiResolver(), AmazonPrimeVideoResolver(), YourUploadResolver(), CodeResolver(),
             ProsiebenMAXXResolver(), YoutubeResolver(), VideoWeedStreamResolver())
 
-    fun getResolverFor(url: HttpUrl): StreamResolver? {
-        return resolvers.firstOrNull { it.appliesTo(url) }
+    fun getResolverFor(name: String): StreamResolver? {
+        return resolvers.firstOrNull { it.appliesTo(name) }
     }
 }

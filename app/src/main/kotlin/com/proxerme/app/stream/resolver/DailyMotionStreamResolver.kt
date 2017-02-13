@@ -2,9 +2,9 @@ package com.proxerme.app.stream.resolver
 
 import android.net.Uri
 import com.proxerme.app.application.MainApplication
+import com.proxerme.app.stream.StreamResolver
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionException
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionResult
-import okhttp3.HttpUrl
 import okhttp3.Request
 
 /**
@@ -14,11 +14,11 @@ import okhttp3.Request
  */
 class DailyMotionStreamResolver : StreamResolver() {
 
-    override val name = "dailymotion.com"
+    override val name = "Daily Motion"
 
     private val regex = Regex("\"qualities\":(\\{.+\\}\\]\\}),")
 
-    override fun resolve(url: HttpUrl): StreamResolutionResult {
+    override fun resolve(url: String): StreamResolutionResult {
         val response = validateAndGetResult(MainApplication.httpClient
                 .newCall(Request.Builder()
                         .get()

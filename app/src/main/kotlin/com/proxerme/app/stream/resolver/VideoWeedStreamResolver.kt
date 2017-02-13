@@ -2,9 +2,9 @@ package com.proxerme.app.stream.resolver
 
 import android.net.Uri
 import com.proxerme.app.application.MainApplication
+import com.proxerme.app.stream.StreamResolver
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionException
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionResult
-import okhttp3.HttpUrl
 import okhttp3.Request
 
 /**
@@ -14,17 +14,18 @@ import okhttp3.Request
  */
 class VideoWeedStreamResolver : StreamResolver() {
 
-    override val name = "videoweed.es"
+    override val name = "VideoWeed"
 
     private val keyRegex = Regex("fkz=\"(.*?)\".*file=\"(.*?)\"", RegexOption.DOT_MATCHES_ALL)
     private val urlRegex = Regex("url=(.*?)&title")
 
-    override fun resolve(url: HttpUrl): StreamResolutionResult {
+    override fun resolve(url: String): StreamResolutionResult {
         val response = MainApplication.httpClient.newCall(Request.Builder()
                 .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)")
                 .get()
                 .url(url)
                 .build()).execute()
+
         val regexResult = keyRegex.find(validateAndGetResult(response))
         val file = regexResult?.groupValues?.get(2)
         val fileKey = regexResult?.groupValues?.get(1)

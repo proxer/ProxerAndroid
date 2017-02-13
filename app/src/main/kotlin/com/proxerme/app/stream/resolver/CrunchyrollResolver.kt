@@ -3,9 +3,9 @@ package com.proxerme.app.stream.resolver
 import android.content.Intent
 import android.net.Uri
 import com.proxerme.app.dialog.AppRequiredDialog
+import com.proxerme.app.stream.StreamResolver
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionException
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionResult
-import okhttp3.HttpUrl
 
 /**
  * TODO: Describe class
@@ -14,12 +14,12 @@ import okhttp3.HttpUrl
  */
 class CrunchyrollResolver : StreamResolver() {
 
-    override val name = "crunchyroll.com"
+    override val name = "Crunchyroll"
 
     private val regex = Regex("media_id=(\\d+)")
 
-    override fun resolve(url: HttpUrl): StreamResolutionResult {
-        val id = regex.find(url.toString())?.groupValues?.get(1)
+    override fun resolve(url: String): StreamResolutionResult {
+        val id = regex.find(url)?.groupValues?.get(1)
                 ?: throw StreamResolutionException()
 
         return StreamResolutionResult(Intent(Intent.ACTION_VIEW,

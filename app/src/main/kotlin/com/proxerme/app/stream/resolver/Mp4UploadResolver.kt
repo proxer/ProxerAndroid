@@ -2,9 +2,9 @@ package com.proxerme.app.stream.resolver
 
 import android.net.Uri
 import com.proxerme.app.application.MainApplication
+import com.proxerme.app.stream.StreamResolver
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionException
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionResult
-import okhttp3.HttpUrl
 import okhttp3.Request
 import java.io.IOException
 
@@ -15,12 +15,12 @@ import java.io.IOException
  */
 class Mp4UploadResolver : StreamResolver() {
 
-    override val name = "mp4upload.com"
+    override val name = "MP4Upload"
 
     private val regex = Regex("\"file\": \"(.+)\"")
 
     @Throws(IOException::class)
-    override fun resolve(url: HttpUrl): StreamResolutionResult {
+    override fun resolve(url: String): StreamResolutionResult {
         val response = MainApplication.httpClient.newCall(Request.Builder()
                 .get()
                 .url(url)

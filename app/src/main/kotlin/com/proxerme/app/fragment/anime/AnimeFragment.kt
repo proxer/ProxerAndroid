@@ -1,6 +1,7 @@
 package com.proxerme.app.fragment.anime
 
 import android.content.ActivityNotFoundException
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
@@ -24,11 +25,11 @@ import com.proxerme.app.task.EntryInfoTask
 import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.StreamResolutionTask
 import com.proxerme.app.task.StreamResolutionTask.*
-import com.proxerme.app.task.framework.StreamedTask
-import com.proxerme.app.task.framework.Task
-import com.proxerme.app.task.framework.ValidatingTask
-import com.proxerme.app.task.framework.ZippedTask
-import com.proxerme.app.util.*
+import com.proxerme.app.task.framework.*
+import com.proxerme.app.util.ErrorUtils
+import com.proxerme.app.util.Validators
+import com.proxerme.app.util.ViewUtils
+import com.proxerme.app.util.bindView
 import com.proxerme.app.view.MediaControlView
 import com.proxerme.library.connection.ProxerException
 import com.proxerme.library.connection.anime.entity.Stream
@@ -73,14 +74,20 @@ class AnimeFragment : SingleLoadingFragment<Pair<AnimeInput, String>, StreamInfo
 
     private val streamResolverSuccess = { result: StreamResolutionResult ->
         if (view != null) {
-            if (result.intent.type == "text/html") {
-                showPage(HttpUrl.parse(result.intent.data.toString()))
-            } else {
-                try {
-                    context.startActivity(result.intent)
-                } catch (exception: ActivityNotFoundException) {
-                    result.notFoundAction.invoke(activity as AppCompatActivity)
+            if (result.intent.action == Intent.ACTION_VIEW) {
+                if (result.intent.type == "text/html") {
+                    showPage(HttpUrl.parse(result.intent.data.toString()))
+                } else {
+                    try {
+                        context.startActivity(result.intent)
+                    } catch (exception: ActivityNotFoundException) {
+                        result.notFoundAction.invoke(activity as AppCompatActivity)
+                    }
                 }
+            } else {
+                ViewUtils.makeMultilineSnackbar(root,
+                        result.intent.getStringExtra(StreamResolutionResult.MESSAGE),
+                        Snackbar.LENGTH_LONG).show()
             }
         }
     }
@@ -159,7 +166,7 @@ class AnimeFragment : SingleLoadingFragment<Pair<AnimeInput, String>, StreamInfo
             }
 
             override fun onWatchClick(item: Stream) {
-                streamResolverTask.execute(item.id)
+                streamResolverTask.execute(StreamResolverInput(item.hosterName, item.id))
             }
         }
     }
@@ -294,9 +301,11 @@ class AnimeFragment : SingleLoadingFragment<Pair<AnimeInput, String>, StreamInfo
         }), { Validators.validateLogin() }, reminderSuccess, reminderException)
     }
 
-    private fun constructStreamResolverTask(): Task<String, StreamResolutionResult> {
-        return StreamedTask(ProxerLoadingTask(::LinkRequest),
-                StreamResolutionTask(), { Utils.parseAndFixUrl(it) },
+    private fun constructStreamResolverTask(): Task<StreamResolverInput, StreamResolutionResult> {
+        return ValidatingTask(StreamedTask(
+                InputEchoTask(ProxerLoadingTask<StreamResolverInput, String>({ LinkRequest(it.id) })),
+                StreamResolutionTask()
+        ), { Validators.validateResolverExists(it.name) },
                 streamResolverSuccess, streamResolverException).onStart {
             setRefreshing(true)
         }.onFinish {
@@ -313,6 +322,8 @@ class AnimeFragment : SingleLoadingFragment<Pair<AnimeInput, String>, StreamInfo
     class AnimeInput(val id: String, val episode: Int, val language: String)
     class ReminderInput(val id: String, val episode: Int, val language: String,
                         val isFinished: Boolean)
+
+    class StreamResolverInput(val name: String, val id: String)
 
     class StreamInfo(val streams: Array<Stream>, val entryInfo: EntryInfo)
 }

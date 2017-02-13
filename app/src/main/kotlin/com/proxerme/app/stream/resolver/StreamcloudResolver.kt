@@ -2,10 +2,10 @@ package com.proxerme.app.stream.resolver
 
 import android.net.Uri
 import com.proxerme.app.application.MainApplication
+import com.proxerme.app.stream.StreamResolver
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionException
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionResult
 import okhttp3.FormBody
-import okhttp3.HttpUrl
 import okhttp3.Request
 
 /**
@@ -15,16 +15,17 @@ import okhttp3.Request
  */
 class StreamcloudResolver : StreamResolver() {
 
-    override val name = "streamcloud.eu"
+    override val name = "Streamcloud"
 
     private val fromRegex = Regex("<input.*?name=\"(.*?)\".*?value=\"(.*?)\">")
     private val fileRegex = Regex("file: \"(.+?)\",")
 
-    override fun resolve(url: HttpUrl): StreamResolutionResult {
+    override fun resolve(url: String): StreamResolutionResult {
         var response = MainApplication.httpClient.newCall(Request.Builder()
                 .get()
                 .url(url)
                 .build()).execute()
+
         val formValues = FormBody.Builder()
 
         for (i in fromRegex.findAll(validateAndGetResult(response))) {
