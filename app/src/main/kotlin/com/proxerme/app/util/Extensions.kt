@@ -32,9 +32,6 @@ import java.net.URLDecoder
 val Context.inputMethodManager: InputMethodManager
     get() = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
-val Context.notificationManager: NotificationManager
-    get() = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
 val Context.alarmManager: AlarmManager
     get() = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 

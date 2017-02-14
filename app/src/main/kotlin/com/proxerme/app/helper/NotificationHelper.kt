@@ -6,6 +6,7 @@ import android.content.Context
 import android.graphics.Typeface
 import android.os.Build
 import android.support.v4.app.NotificationCompat.*
+import android.support.v4.app.NotificationManagerCompat
 import android.support.v4.app.RemoteInput
 import android.support.v4.app.TaskStackBuilder
 import android.support.v4.content.ContextCompat
@@ -23,7 +24,6 @@ import com.proxerme.app.entitiy.LocalMessage
 import com.proxerme.app.helper.MaterialDrawerHelper.DrawerItem
 import com.proxerme.app.receiver.DirectReplyReceiver
 import com.proxerme.app.util.Utils
-import com.proxerme.app.util.notificationManager
 import com.proxerme.library.connection.notifications.entitiy.News
 import com.proxerme.library.info.ProxerUrlHolder
 
@@ -40,8 +40,8 @@ object NotificationHelper {
         val notification = buildNewsNotification(context, news)
 
         when (notification) {
-            null -> context.notificationManager.cancel(NotificationType.NEWS.id)
-            else -> context.notificationManager.notify(NotificationType.NEWS.id, notification)
+            null -> NotificationManagerCompat.from(context).cancel(NotificationType.NEWS.id)
+            else -> NotificationManagerCompat.from(context).notify(NotificationType.NEWS.id, notification)
         }
     }
 
@@ -53,14 +53,14 @@ object NotificationHelper {
             }
         }.plus(NotificationType.CHAT.id to buildChatSummaryNotification(context, messages)).forEach {
             when (it.second) {
-                null -> context.notificationManager.cancel(it.first)
-                else -> context.notificationManager.notify(it.first, it.second)
+                null -> NotificationManagerCompat.from(context).cancel(it.first)
+                else -> NotificationManagerCompat.from(context).notify(it.first, it.second)
             }
         }
     }
 
     fun cancelNotification(context: Context, type: NotificationType) {
-        context.notificationManager.cancel(type.id)
+        NotificationManagerCompat.from(context).cancel(type.id)
     }
 
     private fun buildNewsNotification(context: Context, news: Collection<News>): Notification? {
@@ -110,6 +110,7 @@ object NotificationHelper {
                         DashboardActivity.getSectionIntent(context, DrawerItem.NEWS),
                         PendingIntent.FLAG_UPDATE_CURRENT))
                 .setColor(ContextCompat.getColor(context, R.color.primary))
+                .setOnlyAlertOnce(true)
                 .setPriority(PRIORITY_LOW)
                 .setStyle(style)
 
@@ -225,6 +226,7 @@ object NotificationHelper {
                 .setCategory(CATEGORY_MESSAGE)
                 .setGroup(GROUP_CHAT)
                 .setAutoCancel(true)
+                .setOnlyAlertOnce(true)
                 .apply {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         val remoteInput = RemoteInput.Builder(DirectReplyReceiver.EXTRA_REMOTE_REPLY)
