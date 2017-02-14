@@ -46,12 +46,13 @@ object NotificationHelper {
     }
 
     fun showChatNotification(context: Context, messages: Map<LocalConference, List<LocalMessage>>) {
-        messages.entries.map { (conference, messages) ->
-            conference.id.toInt() to when {
-                messages.isEmpty() -> null
-                else -> buildIndividualChatNotification(context, conference, messages)
-            }
-        }.plus(NotificationType.CHAT.id to buildChatSummaryNotification(context, messages)).forEach {
+        listOf(NotificationType.CHAT.id to buildChatSummaryNotification(context, messages))
+                .plus(messages.entries.map { (conference, messages) ->
+                    conference.id.toInt() to when {
+                        messages.isEmpty() -> null
+                        else -> buildIndividualChatNotification(context, conference, messages)
+                    }
+                }).forEach {
             when (it.second) {
                 null -> NotificationManagerCompat.from(context).cancel(it.first)
                 else -> NotificationManagerCompat.from(context).notify(it.first, it.second)
@@ -165,7 +166,6 @@ object NotificationHelper {
                 .setCategory(CATEGORY_MESSAGE)
                 .setGroup(GROUP_CHAT)
                 .setGroupSummary(true)
-                .setOnlyAlertOnce(true)
                 .setAutoCancel(true)
                 .build()
     }
