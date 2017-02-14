@@ -52,6 +52,8 @@
     <string name="comment_rating_overall">Insgesamt</string>
     <string name="comment_rating_story">Story</string>
 
+    <string name="shortcut_disabled_message">Diese Verknüpung ist nicht mehr Verfügbar</string>
+
     <string name="dialog_cancel">Abbrechen</string>
     <string name="dialog_app_required_content">Zum Verwenden dieses Streams ist die %s-App nötig</string>
     <string name="dialog_app_required_positive">Installieren</string>

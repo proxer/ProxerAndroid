@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:targetApi="n_mr1">
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_news"
+        android:shortcutDisabledMessage="@string/shortcut_disabled_message"
+        android:shortcutId="news"
+        android:shortcutLongLabel="@string/drawer_item_news"
+        android:shortcutShortLabel="@string/drawer_item_news">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="0"
+            android:targetClass="com.proxerme.app.activity.DashboardActivity"
+            android:targetPackage="com.proxerme.app" />
+    </shortcut>
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_chat"
+        android:shortcutDisabledMessage="@string/shortcut_disabled_message"
+        android:shortcutId="chat"
+        android:shortcutLongLabel="@string/drawer_item_chat"
+        android:shortcutShortLabel="@string/drawer_item_chat">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="1"
+            android:targetClass="com.proxerme.app.activity.DashboardActivity"
+            android:targetPackage="com.proxerme.app" />
+    </shortcut>
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_reminder"
+        android:shortcutDisabledMessage="@string/shortcut_disabled_message"
+        android:shortcutId="reminder"
+        android:shortcutLongLabel="@string/drawer_item_reminder"
+        android:shortcutShortLabel="@string/drawer_item_reminder">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="2"
+            android:targetClass="com.proxerme.app.activity.DashboardActivity"
+            android:targetPackage="com.proxerme.app" />
+    </shortcut>
+</shortcuts>

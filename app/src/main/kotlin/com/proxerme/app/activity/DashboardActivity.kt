@@ -166,8 +166,11 @@ class DashboardActivity : MainActivity() {
         }
     }
 
-    private fun getItemToLoad(): DrawerItem {
-        return DrawerItem.fromOrDefault(intent.getLongExtra(EXTRA_DRAWER_ITEM, DrawerItem.NEWS.id))
+    private fun getItemToLoad() = when (intent.action == Intent.ACTION_VIEW) {
+        true -> DrawerItem.fromOrDefault(intent.dataString.toLongOrNull())
+        false -> {
+            DrawerItem.fromOrDefault(intent.getLongExtra(EXTRA_DRAWER_ITEM, DrawerItem.NEWS.id))
+        }
     }
 
     private fun onDrawerItemClick(item: DrawerItem): Boolean {
