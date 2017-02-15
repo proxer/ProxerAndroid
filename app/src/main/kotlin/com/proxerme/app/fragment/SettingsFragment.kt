@@ -22,11 +22,35 @@ import net.xpece.android.support.preference.TwoStatePreference
  *
  * @author Ruben Gees
  */
-class SettingsFragment : XpPreferenceFragment(), SharedPreferences.OnSharedPreferenceChangeListener {
+class SettingsFragment : XpPreferenceFragment() {
 
     companion object {
         fun newInstance(): SettingsFragment {
             return SettingsFragment()
+        }
+    }
+
+    private val onSharedPreferenceChangedListener = { _: SharedPreferences, key: String ->
+        when (key) {
+            PREFERENCE_NEWS_NOTIFICATIONS -> {
+                ServiceHelper.retrieveNewsLater(context)
+            }
+
+            PREFERENCE_NEWS_NOTIFICATIONS_INTERVAL -> {
+                ServiceHelper.retrieveNewsLater(context)
+            }
+
+            PREFERENCE_HENTAI -> {
+                if (PreferenceHelper.isHentaiAllowed(context)) {
+                    (findPreference(PREFERENCE_HENTAI) as TwoStatePreference).isChecked = true
+                }
+            }
+
+            PREFERENCE_NIGHT_MODE -> {
+                AppCompatDelegate.setDefaultNightMode(PreferenceHelper.getNightMode(context))
+
+                activity.recreate()
+            }
         }
     }
 
@@ -55,11 +79,13 @@ class SettingsFragment : XpPreferenceFragment(), SharedPreferences.OnSharedPrefe
     override fun onResume() {
         super.onResume()
 
-        preferenceManager.sharedPreferences.registerOnSharedPreferenceChangeListener(this)
+        preferenceManager.sharedPreferences
+                .registerOnSharedPreferenceChangeListener(onSharedPreferenceChangedListener)
     }
 
     override fun onPause() {
-        preferenceManager.sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
+        preferenceManager.sharedPreferences
+                .unregisterOnSharedPreferenceChangeListener(onSharedPreferenceChangedListener)
 
         super.onPause()
     }
@@ -68,29 +94,5 @@ class SettingsFragment : XpPreferenceFragment(), SharedPreferences.OnSharedPrefe
         super.onDestroy()
 
         MainApplication.refWatcher.watch(this)
-    }
-
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
-        when (key) {
-            PREFERENCE_NEWS_NOTIFICATIONS -> {
-                ServiceHelper.retrieveNewsLater(context)
-            }
-
-            PREFERENCE_NEWS_NOTIFICATIONS_INTERVAL -> {
-                ServiceHelper.retrieveNewsLater(context)
-            }
-
-            PREFERENCE_HENTAI -> {
-                if (PreferenceHelper.isHentaiAllowed(context)) {
-                    (findPreference(PREFERENCE_HENTAI) as TwoStatePreference).isChecked = true
-                }
-            }
-
-            PREFERENCE_NIGHT_MODE -> {
-                AppCompatDelegate.setDefaultNightMode(PreferenceHelper.getNightMode(context))
-
-                activity.recreate()
-            }
-        }
     }
 }
