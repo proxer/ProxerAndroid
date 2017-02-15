@@ -272,6 +272,7 @@
     <string name="preference_open_source_summary">Sieh dir den Quellcode auf GitHub an</string>
     <string name="preference_open_source_title">Open Source</string>
     <string name="preference_theme_title">Thema</string>
+    <string name="preference_start_page_title">Startseite</string>
 
     <string name="reminder_episode">Episode %d</string>
 

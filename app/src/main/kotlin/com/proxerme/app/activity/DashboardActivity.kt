@@ -166,12 +166,10 @@ class DashboardActivity : MainActivity() {
         }
     }
 
-    private fun getItemToLoad() = when (intent.action == Intent.ACTION_VIEW) {
-        true -> DrawerItem.fromOrDefault(intent.dataString.toLongOrNull())
-        false -> {
-            DrawerItem.fromOrDefault(intent.getLongExtra(EXTRA_DRAWER_ITEM, DrawerItem.NEWS.id))
-        }
-    }
+    private fun getItemToLoad() = DrawerItem.fromOrDefault(when (intent.action == Intent.ACTION_VIEW) {
+        true -> intent.dataString.toLongOrNull()
+        false -> intent.getLongExtra(EXTRA_DRAWER_ITEM, PreferenceHelper.getStartPage(this).id)
+    })
 
     private fun onDrawerItemClick(item: DrawerItem): Boolean {
         when (item) {

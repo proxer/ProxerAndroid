@@ -49,12 +49,16 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar,
             drawer.closeDrawer()
 
             return true
-        } else if (currentItem != DrawerItem.NEWS) {
-            select(DrawerItem.NEWS)
-
-            return true
         } else {
-            return false
+            val startPage = PreferenceHelper.getStartPage(drawer.drawerLayout.context)
+
+            if (currentItem != startPage) {
+                select(startPage)
+
+                return true
+            } else {
+                return false
+            }
         }
     }
 

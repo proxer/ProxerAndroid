@@ -27,4 +27,20 @@
         <item>2</item>
         <item>3</item>
     </string-array>
+
+    <string-array name="start_page_titles">
+        <item>@string/drawer_item_news</item>
+        <item>@string/drawer_item_chat</item>
+        <item>@string/drawer_item_reminder</item>
+        <item>@string/drawer_item_anime</item>
+        <item>@string/drawer_item_manga</item>
+    </string-array>
+
+    <string-array name="start_page_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
 </resources>

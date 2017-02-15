@@ -2,7 +2,6 @@ package com.proxerme.app.helper
 
 import android.content.Context
 import android.content.SharedPreferences
-
 import android.preference.PreferenceManager.getDefaultSharedPreferences
 import android.support.v7.app.AppCompatDelegate
 
@@ -14,13 +13,19 @@ import android.support.v7.app.AppCompatDelegate
 object PreferenceHelper {
 
     const val PREFERENCE_HENTAI = "pref_hentai"
+    const val PREFERENCE_START_PAGE = "pref_start_page"
     const val PREFERENCE_NEWS_NOTIFICATIONS = "pref_news_notifications"
     const val PREFERENCE_NEWS_NOTIFICATIONS_INTERVAL = "pref_news_notifications_interval"
     const val PREFERENCE_NIGHT_MODE = "pref_theme"
+
     private const val DEFAULT_NEWS_NOTIFICATIONS_INTERVAL = "60"
 
     fun isHentaiAllowed(context: Context) =
             getDefaultSharedPreferences(context).getBoolean(PREFERENCE_HENTAI, false)
+
+    fun getStartPage(context: Context) = MaterialDrawerHelper.DrawerItem
+            .fromOrDefault(getDefaultSharedPreferences(context).getString(PREFERENCE_START_PAGE, "0")
+                    .toLongOrNull())
 
     fun areNewsNotificationsEnabled(context: Context) =
             getDefaultSharedPreferences(context).getBoolean(PREFERENCE_NEWS_NOTIFICATIONS, false)

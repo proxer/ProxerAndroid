@@ -7,6 +7,16 @@
             android:summaryOff="@string/preference_hentai_summary_off"
             android:summaryOn="@string/preference_hentai_summary_on"
             android:title="@string/preference_hentai_title" />
+
+        <!--suppress AndroidUnknownAttribute -->
+        <ListPreference
+            style="@style/Preference.Material.DialogPreference.ListPreference.SimpleMenu"
+            android:defaultValue="0"
+            android:entries="@array/start_page_titles"
+            android:entryValues="@array/start_page_values"
+            android:key="pref_start_page"
+            android:summary="%s"
+            android:title="@string/preference_start_page_title" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/preference_category_design_title">
