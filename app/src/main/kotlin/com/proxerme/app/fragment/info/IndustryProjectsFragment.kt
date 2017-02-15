@@ -5,6 +5,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.proxerme.app.R
 import com.proxerme.app.activity.MediaActivity
 import com.proxerme.app.adapter.info.ProjectAdapter
 import com.proxerme.app.fragment.framework.PagedLoadingFragment
@@ -66,6 +67,10 @@ class IndustryProjectsFragment : PagedLoadingFragment<IndustryProjectsInput, Pro
 
     override fun constructInput(page: Int): IndustryProjectsInput {
         return IndustryProjectsInput(page, id)
+    }
+
+    override fun getEmptyMessage(): String {
+        return getString(R.string.error_no_data_projects)
     }
 
     class IndustryProjectsInput(page: Int, val id: String) : PagedInput(page)

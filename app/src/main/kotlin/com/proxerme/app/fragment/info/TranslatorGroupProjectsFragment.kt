@@ -5,6 +5,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.proxerme.app.R
 import com.proxerme.app.activity.MediaActivity
 import com.proxerme.app.activity.TranslatorGroupActivity
 import com.proxerme.app.adapter.info.ProjectAdapter
@@ -69,6 +70,10 @@ class TranslatorGroupProjectsFragment : PagedLoadingFragment<TranslatorGroupProj
 
     override fun constructInput(page: Int): TranslatorGroupProjectsInput {
         return TranslatorGroupProjectsInput(page, id)
+    }
+
+    override fun getEmptyMessage(): String {
+        return getString(R.string.error_no_data_projects)
     }
 
     class TranslatorGroupProjectsInput(page: Int, val id: String) : PagedInput(page)
