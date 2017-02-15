@@ -75,10 +75,10 @@ dependencies {
     compile "org.jetbrains.anko:anko-common:$anko_version"
     compile "org.jetbrains.anko:anko-sqlite:$anko_version"
 
-    compile "net.xpece.android:support-preference:$support_preference_version"
-    compile "net.xpece.android:support-spinner:$support_preference_version"
+    compile "net.xpece.android:support-preference:1.2.5"
+    compile "net.xpece.android:support-spinner:1.2.4"
 
-    compile('com.mikepenz:aboutlibraries:5.9.1@aar') {
+    compile('com.mikepenz:aboutlibraries:5.9.2@aar') {
         transitive = true
     }
     compile('com.mikepenz:materialdrawer:5.8.1@aar') {

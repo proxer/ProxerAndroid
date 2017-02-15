@@ -1,7 +1,6 @@
 buildscript {
     ext.kotlin_version = '1.1.0-beta-38'
     ext.support_version = '25.1.1'
-    ext.support_preference_version = '1.2.4'
     ext.anko_version = '0.9.1a'
     ext.leak_canary_version = '1.5'
     ext.build_tools_version = '25.0.2'
