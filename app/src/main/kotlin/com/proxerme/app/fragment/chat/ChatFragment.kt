@@ -156,8 +156,8 @@ class ChatFragment : PagedLoadingFragment<ChatInput, LocalMessage>() {
         adapter.callback = adapterCallback
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onStart() {
+        super.onStart()
 
         ChatService.synchronize(context)
     }
