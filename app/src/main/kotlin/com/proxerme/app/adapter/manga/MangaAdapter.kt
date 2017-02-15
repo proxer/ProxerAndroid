@@ -80,7 +80,12 @@ class MangaAdapter : PagingAdapter<Page>() {
             target = object : SimpleTarget<File>() {
                 override fun onResourceReady(resource: File,
                                              glideAnimation: GlideAnimation<in File>?) {
+                    val animationTime = image.context.resources
+                            .getInteger(android.R.integer.config_mediumAnimTime)
+
                     image.setImage(ImageSource.uri(resource.path))
+                    image.apply { alpha = 0.2f }.animate().alpha(1.0f)
+                            .setDuration(animationTime.toLong()).start()
                 }
             }
 
