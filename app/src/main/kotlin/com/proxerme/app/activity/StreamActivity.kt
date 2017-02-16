@@ -1,15 +1,14 @@
 package com.proxerme.app.activity
 
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.Toolbar
-import android.view.MenuItem
-import android.view.View.*
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.*
 import com.devbrackets.android.exomedia.listener.VideoControlsVisibilityListener
+import com.devbrackets.android.exomedia.ui.widget.VideoControls.*
 import com.devbrackets.android.exomedia.ui.widget.VideoView
 import com.proxerme.app.R
 import com.proxerme.app.util.ViewUtils
@@ -62,6 +61,7 @@ class StreamActivity : MainActivity() {
 
     private fun setupPlayer() {
         player.setBackgroundColor(ContextCompat.getColor(this, R.color.md_black_1000))
+        player.setOnTouchListener(TouchListener(this))
         player.setVideoURI(uri)
         player.setOnErrorListener {
             ViewUtils.makeMultilineSnackbar(root, player.context.getString(R.string.error_unknown),
@@ -125,5 +125,32 @@ class StreamActivity : MainActivity() {
         }
 
         return flags
+    }
+
+    private inner class TouchListener(context: Context) : GestureDetector.SimpleOnGestureListener(),
+            View.OnTouchListener {
+
+        private val gestureDetector = GestureDetector(context, this)
+
+        override fun onTouch(v: View, event: MotionEvent): Boolean {
+            gestureDetector.onTouchEvent(event)
+
+            return true
+        }
+
+        override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
+            when (player.videoControls?.isShown ?: false) {
+                true -> player.videoControls?.hideDelayed(0)
+                false -> {
+                    player.videoControls?.show()
+
+                    if (player.isPlaying) {
+                        player.videoControls?.hideDelayed(DEFAULT_CONTROL_HIDE_DELAY.toLong())
+                    }
+                }
+            }
+
+            return true
+        }
     }
 }
