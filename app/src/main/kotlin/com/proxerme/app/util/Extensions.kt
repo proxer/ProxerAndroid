@@ -2,7 +2,6 @@ package com.proxerme.app.util
 
 import android.app.Activity
 import android.app.AlarmManager
-import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri

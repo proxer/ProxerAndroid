@@ -31,9 +31,17 @@ class LocalMessage : Message, Parcelable {
         this.localId = source.readLong()
     }
 
+    override fun describeContents() = 0
+
+    override fun writeToParcel(dest: Parcel, flags: Int) {
+        super.writeToParcel(dest, flags)
+
+        dest.writeLong(localId)
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other?.javaClass != javaClass) return false
+        if (other?.let { it::class.java } != this::class.java) return false
         if (!super.equals(other)) return false
 
         other as LocalMessage
@@ -47,14 +55,6 @@ class LocalMessage : Message, Parcelable {
         var result = super.hashCode()
         result = 31 * result + localId.hashCode()
         return result
-    }
-
-    override fun describeContents() = 0
-
-    override fun writeToParcel(dest: Parcel, flags: Int) {
-        super.writeToParcel(dest, flags)
-
-        dest.writeLong(localId)
     }
 }
 
