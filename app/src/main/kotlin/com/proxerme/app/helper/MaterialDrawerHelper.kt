@@ -5,10 +5,10 @@ import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.view.View
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
-import com.mikepenz.materialdrawer.AccountHeader
-import com.mikepenz.materialdrawer.AccountHeaderBuilder
-import com.mikepenz.materialdrawer.Drawer
-import com.mikepenz.materialdrawer.DrawerBuilder
+import com.mikepenz.crossfader.Crossfader
+import com.mikepenz.crossfader.util.UIUtils
+import com.mikepenz.crossfader.view.GmailStyleCrossFadeSlidingPaneLayout
+import com.mikepenz.materialdrawer.*
 import com.mikepenz.materialdrawer.holder.BadgeStyle
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem
@@ -16,6 +16,7 @@ import com.mikepenz.materialdrawer.model.ProfileSettingDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IProfile
 import com.proxerme.app.R
+import com.proxerme.app.util.CrossfadeWrapper
 import com.proxerme.library.info.ProxerUrlHolder
 import java.util.*
 
@@ -35,12 +36,25 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar,
 
     private val header: AccountHeader
     private val drawer: Drawer
+    //Only available if the device is a tablet
+    private val miniDrawer: MiniDrawer?
+    private val crossfader: Crossfader<*>?
 
     private var currentItem: DrawerItem? = null
 
     init {
         header = buildAccountHeader(context, savedInstanceState)
         drawer = buildDrawer(context, toolbar, header, savedInstanceState)
+        if (ScreenHelper.isTablet(context)) {
+            miniDrawer = drawer.miniDrawer
+            crossfader = buildCrossfader(context, drawer, miniDrawer, savedInstanceState)
+            miniDrawer.withCrossFader(CrossfadeWrapper(crossfader!!))
+            crossfader.getCrossFadeSlidingPaneLayout().setShadowResourceLeft(R.drawable.material_drawer_shadow_left)
+        } else {
+            miniDrawer = null
+            crossfader = null
+        }
+
         currentItem = DrawerItem.fromOrNull(savedInstanceState?.getLong(STATE_CURRENT_DRAWER_ITEM_ID))
     }
 
@@ -133,7 +147,7 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar,
 
     private fun buildDrawer(context: Activity, toolbar: Toolbar, accountHeader: AccountHeader,
                             savedInstanceState: Bundle?): Drawer {
-        return DrawerBuilder(context)
+        var drawer = DrawerBuilder(context)
                 .withToolbar(toolbar)
                 .withAccountHeader(accountHeader)
                 .withDrawerItems(generateDrawerItems())
@@ -144,7 +158,21 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar,
                 .withShowDrawerOnFirstLaunch(true)
                 .withActionBarDrawerToggleAnimated(true)
                 .withTranslucentStatusBar(true)
+                .withGenerateMiniDrawer(ScreenHelper.isTablet(context))
                 .withSavedInstance(savedInstanceState)
+
+        return if (ScreenHelper.isTablet(context)) drawer.buildView() else drawer.build()
+    }
+
+    private fun buildCrossfader(context: Activity, drawer: Drawer, miniDrawer: MiniDrawer,
+                                savedInstanceState: Bundle?): Crossfader<*>? {
+        return Crossfader<GmailStyleCrossFadeSlidingPaneLayout>()
+                .withCanSlide(true)
+                .withContent(context.findViewById(R.id.crossfade_content))
+                .withFirst(drawer.slider, Math.round(UIUtils.convertDpToPixel(300f, context)))
+                .withSecond(miniDrawer.build(context), Math.round(UIUtils.convertDpToPixel(72f, context)))
+                .withSavedInstance(savedInstanceState)
+                .withGmailStyleSwiping()
                 .build()
     }
 
