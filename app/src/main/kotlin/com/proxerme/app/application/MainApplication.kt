@@ -15,6 +15,10 @@ import com.bumptech.glide.load.model.GenericLoaderFactory
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.model.ModelLoader
 import com.bumptech.glide.load.model.ModelLoaderFactory
+import com.devbrackets.android.exomedia.ExoMedia
+import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory
+import com.google.android.exoplayer2.upstream.DataSource
+import com.google.android.exoplayer2.upstream.TransferListener
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
@@ -160,6 +164,12 @@ class MainApplication : Application() {
         EmojiManager.install(IosEmojiProvider())
         JodaTimeAndroid.init(this)
         Hawk.init(this).build()
+        ExoMedia.setHttpDataSourceFactoryProvider(ExoMedia.HttpDataSourceFactoryProvider {
+            userAgent: String, listener: TransferListener<in DataSource>? ->
+
+            OkHttpDataSourceFactory(httpClient, userAgent, listener)
+        })
+
         Glide.get(this).register(GlideUrl::class.java, InputStream::class.java,
                 object : ModelLoaderFactory<GlideUrl, InputStream> {
                     override fun build(context: Context?, factories: GenericLoaderFactory?):
@@ -169,6 +179,7 @@ class MainApplication : Application() {
 
                     override fun teardown() {}
                 })
+
         EventBus.builder().addIndex(EventBusIndex())
                 .logNoSubscriberMessages(false)
                 .sendNoSubscriberEvent(false)

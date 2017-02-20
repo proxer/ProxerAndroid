@@ -115,7 +115,8 @@ dependencies {
 
     compile 'com.vanniktech:emoji-ios:0.4.0'
 
-    compile 'com.devbrackets.android:exomedia:4.0.0-preview1'
+    compile 'com.devbrackets.android:exomedia:4.0.0-preview2'
+    compile 'com.google.android.exoplayer:extension-okhttp:r2.2.0'
 
     compile 'me.zhanghai.android.materialratingbar:library:1.0.2'
     compile 'me.zhanghai.android.customtabshelper:library:1.0.3'
