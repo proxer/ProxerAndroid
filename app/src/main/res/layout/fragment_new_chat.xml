@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
@@ -59,7 +60,7 @@
                                     android:layout_height="wrap_content"
                                     android:hint="@string/hint_topic"
                                     android:inputType="text"
-                                    android:maxLines="1" />
+                                    android:maxLines="1"/>
 
                             </android.support.design.widget.TextInputLayout>
                         </LinearLayout>
@@ -88,12 +89,12 @@
                                 android:padding="8dp"
                                 android:text="@string/participants"
                                 android:textAppearance="?android:attr/textAppearanceMedium"
-                                android:textColor="@color/colorAccent" />
+                                android:textColor="@color/colorAccent"/>
 
                             <android.support.v7.widget.RecyclerView
                                 android:id="@+id/participantList"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content" />
+                                android:layout_height="wrap_content"/>
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
 
@@ -107,7 +108,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_margin="4dp" />
+            android:layout_margin="4dp"/>
 
     </RelativeLayout>
 

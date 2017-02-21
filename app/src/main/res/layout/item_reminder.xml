@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:context="com.proxerme.app.adapter.ucp.ReminderAdapter">
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             tools:context="com.proxerme.app.adapter.ucp.ReminderAdapter">
 
     <android.support.v7.widget.CardView
         android:id="@+id/root"
@@ -31,7 +31,7 @@
                 android:scaleType="centerCrop"
                 android:transitionName="image"
                 app:aspect="1.25"
-                tools:ignore="UnusedAttribute" />
+                tools:ignore="UnusedAttribute"/>
 
             <TextView
                 android:id="@+id/title"
@@ -45,7 +45,7 @@
                 android:padding="8dp"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@android:color/white"
-                tools:text="Some title" />
+                tools:text="Some title"/>
 
             <TextView
                 android:id="@+id/medium"
@@ -59,7 +59,7 @@
                 android:paddingRight="8dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@android:color/white"
-                tools:text="Animeserie" />
+                tools:text="Animeserie"/>
 
             <TextView
                 android:id="@+id/episode"
@@ -72,7 +72,7 @@
                 android:layout_toStartOf="@+id/language"
                 android:padding="8dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                tools:text="Episode 12" />
+                tools:text="Episode 12"/>
 
             <ImageView
                 android:id="@+id/language"
@@ -84,7 +84,7 @@
                 android:layout_alignTop="@+id/episode"
                 android:layout_below="@+id/medium"
                 android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp" />
+                android:layout_marginRight="8dp"/>
 
             <ImageButton
                 android:id="@+id/removeButton"
@@ -92,7 +92,7 @@
                 android:layout_height="48dp"
                 android:layout_below="@+id/episode"
                 android:layout_centerHorizontal="true"
-                android:background="?attr/selectableItemBackgroundBorderless" />
+                android:background="?attr/selectableItemBackgroundBorderless"/>
 
         </RelativeLayout>
     </android.support.v7.widget.CardView>

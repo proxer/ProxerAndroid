@@ -1,4 +1,5 @@
 <resources>
+
     <string name="action_add_user">%1$s hat %2$s zur Konferenz hinzugefügt</string>
     <string name="action_copy">Kopieren</string>
     <string name="action_filter_all_anime">Alles</string>
@@ -55,10 +56,13 @@
     <string name="shortcut_disabled_message">Diese Verknüpung ist nicht mehr Verfügbar</string>
 
     <string name="dialog_cancel">Abbrechen</string>
-    <string name="dialog_app_required_content">Zum Verwenden dieses Streams ist die %s-App nötig</string>
+    <string name="dialog_app_required_content">Zum Verwenden dieses Streams ist die %s-App nötig
+    </string>
     <string name="dialog_app_required_positive">Installieren</string>
     <string name="dialog_app_required_title">%s-App</string>
-    <string name="dialog_hentai_content">Dieser Bereich darf nur von Benutzern über 18 Jahren betreten werden! Eltern haften für ihre Kinder. Proxer.Me übernimmt keinerlei Haftung!</string>
+    <string name="dialog_hentai_content">Dieser Bereich darf nur von Benutzern über 18 Jahren
+        betreten werden! Eltern haften für ihre Kinder. Proxer.Me übernimmt keinerlei Haftung!
+    </string>
     <string name="dialog_hentai_positive">Verstanden</string>
     <string name="dialog_login_error_password">Bitte gib ein Passwort an</string>
     <string name="dialog_login_error_username">Bitte gib einen Nutzernamen an</string>
@@ -91,11 +95,15 @@
     <string name="error_confirm">Bestätigen</string>
     <string name="error_duplicate_user">Diesen Nutzer hast du schon hinzugefügt</string>
     <string name="error_favorites_full">Deine Favoriten sind bereits voll</string>
-    <string name="error_hentai_confirmation_needed">Für diese Kategorie musst du bestätigen, dass du mindestens 18 Jahre alt bist</string>
+    <string name="error_hentai_confirmation_needed">Für diese Kategorie musst du bestätigen, dass du
+        mindestens 18 Jahre alt bist
+    </string>
     <string name="error_input_empty">Gib etwas ein</string>
     <string name="error_io">Es gab ein Speicherproblem. Versuche es erneut</string>
     <string name="error_ip_blocked">Es wurden zu viele Anfragen gemacht</string>
-    <string name="error_network">Es gab ein Problem mit dem Netzwerk. Bitte überprüfe ob du verbunden bist</string>
+    <string name="error_network">Es gab ein Problem mit dem Netzwerk. Bitte überprüfe ob du
+        verbunden bist
+    </string>
     <string name="error_no_data_action_chat">Schreibe jemandem</string>
     <string name="error_no_data_anime">Aktuell gibt es noch keine Streams</string>
     <string name="error_no_data_chat">Diese Konferenz hat noch keine Nachrichten</string>
@@ -112,15 +120,20 @@
     <string name="error_no_data">Keine Daten</string>
     <string name="error_no_message">Gib eine Nachricht ein</string>
     <string name="error_no_users">Füge mindestens einen Nutzer hinzu</string>
-    <string name="error_player_sdk_too_low">Für diesen Player muss mindestens Android 4.1 (Jelly Bean) installiert sein. Bitte probiere einen anderen</string>
+    <string name="error_player_sdk_too_low">Für diesen Player muss mindestens Android 4.1 (Jelly
+        Bean) installiert sein. Bitte probiere einen anderen
+    </string>
     <string name="error_refresh">Aktualisierung fehlgeschlagen: %s</string>
     <string name="error_resolve">Dieser Hoster konnte nicht verarbeitet werden</string>
     <string name="error_topten_removal">Der Eintrag konnte nicht gelöscht werden: %s</string>
     <string name="error_reminder_removal">Das Lesezeichen konnte nicht gelöscht werden: %s</string>
     <string name="error_stream_resolution">Fehler beim Laden des Streams</string>
-    <string name="error_timeout">Der Server hat nicht rechtzeitig geantwortet. Versuche es später noch einmal</string>
+    <string name="error_timeout">Der Server hat nicht rechtzeitig geantwortet. Versuche es später
+        noch einmal
+    </string>
     <string name="error_unknown">Ein unbekannter Fehler ist aufgetreten. Versuche es erneut</string>
-    <string name="error_unparseable">Der Server hat beschädigte Daten gesendet. Versuche es erneut</string>
+    <string name="error_unparseable">Der Server hat beschädigte Daten gesendet. Versuche es erneut
+    </string>
     <string name="error_unsupported_hoster">Dieser Hoster wird nicht unterstützt</string>
 
     <string name="filter_all">Alles</string>
@@ -190,7 +203,8 @@
     <string name="fragment_profile_title">Profil</string>
     <string name="fragment_relations_title">Verbindungen</string>
     <string name="fragment_reminder">Lesezeichen</string>
-    <string name="fragment_set_user_info_error">Eintrag konnte nicht aktualisiert werden: %s</string>
+    <string name="fragment_set_user_info_error">Eintrag konnte nicht aktualisiert werden: %s
+    </string>
     <string name="fragment_set_user_info_success">Eintrag wurde aktualisiert</string>
     <string name="fragment_settings">Einstellungen</string>
     <string name="fragment_topten_anime">Anime</string>
@@ -210,13 +224,22 @@
     <string name="fragment_user_media_list_manga_title">Manga</string>
 
     <string name="fsk_0_description">Dieser Anime ist für alle geeignet.</string>
-    <string name="fsk_12_description">Dieser Anime ist nicht für Personen unter 12 Jahren geeignet.</string>
-    <string name="fsk_16_description">Dieser Anime ist nicht für Personen unter 16 Jahren geeignet.</string>
-    <string name="fsk_18_description">Dieser Anime ist nicht für Personen unter 18 Jahren geeignet.</string>
-    <string name="fsk_6_description">Dieser Anime ist nicht für Personen unter 6 Jahren geeignet.</string>
+    <string name="fsk_12_description">Dieser Anime ist nicht für Personen unter 12 Jahren
+        geeignet.
+    </string>
+    <string name="fsk_16_description">Dieser Anime ist nicht für Personen unter 16 Jahren
+        geeignet.
+    </string>
+    <string name="fsk_18_description">Dieser Anime ist nicht für Personen unter 18 Jahren
+        geeignet.
+    </string>
+    <string name="fsk_6_description">Dieser Anime ist nicht für Personen unter 6 Jahren geeignet.
+    </string>
     <string name="fsk_bad_language_description">Dieser Anime beinhaltet vulgäre Ausdrücke.</string>
     <string name="fsk_fear_description">Inhalt könnte verängstigend auf Kinder wirken.</string>
-    <string name="fsk_sex_description">Erotische Darstellungen und Nacktheit mit sexuellem Bezug und Sexdarstellungen.</string>
+    <string name="fsk_sex_description">Erotische Darstellungen und Nacktheit mit sexuellem Bezug und
+        Sexdarstellungen.
+    </string>
     <string name="fsk_violence_description">Dieser Anime enthält Gewaltdarstellungen.</string>
 
     <string name="hint_participant">Nutzername</string>
@@ -262,7 +285,8 @@
     <string name="preference_hentai_summary_off">Hentai wird nicht angezeigt</string>
     <string name="preference_hentai_summary_on">Hentai wird angezeigt</string>
     <string name="preference_hentai_title">Hentai</string>
-    <string name="preference_licences_summary">Bibliotheken, die in dieser App verwendet werden</string>
+    <string name="preference_licences_summary">Bibliotheken, die in dieser App verwendet werden
+    </string>
     <string name="preference_licences_title">Lizenzen</string>
     <string name="preference_messages_notifications_title">Nachrichten</string>
     <string name="preference_news_notifications_interval_title">News Update Intervall</string>
@@ -328,7 +352,9 @@
     <string name="project_type_planned">In Planung</string>
     <string name="project_type_cancelled">Abgebrochen</string>
     <string name="project_type_licenced">Lizensiert</string>
-    <string name="error_unknown_parameter">Unbekannter Parameter: %s. Bitte informiere einen Techniker</string>
+    <string name="error_unknown_parameter">Unbekannter Parameter: %s. Bitte informiere einen
+        Techniker
+    </string>
     <string name="rank_10">Schnupperninja</string>
     <string name="rank_100">Anwärter</string>
     <string name="rank_200">Akademie Schüler</string>
@@ -366,16 +392,23 @@
 
     <string name="about_info_version_title">Version</string>
     <string name="about_info_licences_title">Lizenzen</string>
-    <string name="about_info_licences_description">Lizenzen von Bibliotheken, die in dieser App verwendet werden</string>
+    <string name="about_info_licences_description">Lizenzen von Bibliotheken, die in dieser App
+        verwendet werden
+    </string>
     <string name="about_info_licences_activity_title">Lizenzen</string>
-    <string name="about_info_licences_activity_description"><![CDATA[In dieser App werden Icons von <a href="http://www.freepik.com/">Freepik</a>, <a href="https://material.io/icons/">Google</a> und <a href="https://materialdesignicons.com/">weiteren Mitwirkenden</a> (Unter \"View the Contributors\") verwendet.<br><br>Außerdem werden die folgenden Open Source Bibliotheken eingesetzt.]]></string>
+    <string name="about_info_licences_activity_description">
+        <![CDATA[In dieser App werden Icons von <a href="http://www.freepik.com/">Freepik</a>, <a href="https://material.io/icons/">Google</a> und <a href="https://materialdesignicons.com/">weiteren Mitwirkenden</a> (Unter \"View the Contributors\") verwendet.<br><br>Außerdem werden die folgenden Open Source Bibliotheken eingesetzt.]]></string>
     <string name="about_info_source_code">Quellcode</string>
     <string name="about_info_source_code_description">Sieh dir den Quellcode auf GitHub an</string>
     <string name="about_support_title">Support</string>
     <string name="about_support_forum_title">Forum</string>
-    <string name="about_support_forum_description">Berichte Fehler oder mache Verbesserungsvorschläge im Forum</string>
+    <string name="about_support_forum_description">Berichte Fehler oder mache
+        Verbesserungsvorschläge im Forum
+    </string>
     <string name="about_support_message_title">Nachricht</string>
-    <string name="about_support_message_description">Berichte Fehler oder mache Verbesserungsvorschläge per PN</string>
+    <string name="about_support_message_description">Berichte Fehler oder mache
+        Verbesserungsvorschläge per PN
+    </string>
     <string name="about_developer_title">Entwickler</string>
     <string name="about_developer_github_title">GitHub</string>
     <string name="about_developer_proxer_title">Proxer</string>
@@ -427,4 +460,5 @@
         <item quantity="one">"Vor einem Jahr"</item>
         <item quantity="other">"Vor %d Jahren"</item>
     </plurals>
+
 </resources>

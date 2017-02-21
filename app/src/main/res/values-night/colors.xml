@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <color name="colorAccent">#C21414</color>
     <color name="colorBackground">#303030</color>
 
@@ -22,4 +23,5 @@
     <color name="material_drawer_divider">@color/divider</color>
 
     <color name="emoji_background">@color/background_card</color>
+
 </resources>

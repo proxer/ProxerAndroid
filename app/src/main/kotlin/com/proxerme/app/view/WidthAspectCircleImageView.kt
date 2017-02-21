@@ -32,7 +32,7 @@ class WidthAspectCircleImageView : CircleImageView {
     }
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) :
-    super(context, attrs, defStyleAttr) {
+            super(context, attrs, defStyleAttr) {
         val attributes = context.obtainStyledAttributes(attrs, R.styleable.WidthAspectCircleImageView)
 
         aspect = attributes.getFloat(R.styleable.WidthAspectImageView_aspect,

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:context="com.proxerme.app.adapter.chat.NewChatParticipantAdapter">
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             tools:context="com.proxerme.app.adapter.chat.NewChatParticipantAdapter">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -27,7 +27,7 @@
                 android:layout_height="match_parent"
                 android:hint="@string/hint_participant"
                 android:inputType="text"
-                android:maxLines="1" />
+                android:maxLines="1"/>
         </android.support.design.widget.TextInputLayout>
 
         <ImageButton
@@ -37,7 +37,7 @@
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/accept"
             android:layout_toStartOf="@+id/accept"
-            android:background="?attr/selectableItemBackgroundBorderless" />
+            android:background="?attr/selectableItemBackgroundBorderless"/>
 
         <ImageButton
             android:id="@+id/accept"
@@ -46,6 +46,6 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:background="?attr/selectableItemBackgroundBorderless" />
+            android:background="?attr/selectableItemBackgroundBorderless"/>
     </RelativeLayout>
 </FrameLayout>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:context="com.proxerme.app.adapter.news.NewsAdapter">
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             tools:context="com.proxerme.app.adapter.news.NewsAdapter">
 
     <android.support.v7.widget.CardView
         android:id="@+id/root"
@@ -36,7 +36,7 @@
                     android:scaleType="centerCrop"
                     android:transitionName="image"
                     app:aspect="0.75"
-                    tools:ignore="UnusedAttribute" />
+                    tools:ignore="UnusedAttribute"/>
 
                 <TextView
                     android:id="@+id/title"
@@ -48,7 +48,7 @@
                     android:padding="8dp"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@android:color/white"
-                    tools:text="Some title" />
+                    tools:text="Some title"/>
 
             </RelativeLayout>
 
@@ -61,7 +61,7 @@
                 tools:text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
                 diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
                 sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
-                clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet." />
+                clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."/>
 
             <ImageButton
                 android:id="@+id/expand"
@@ -70,7 +70,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="4dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"/>
 
             <View
                 android:layout_width="match_parent"
@@ -78,7 +78,7 @@
                 android:layout_marginLeft="6dp"
                 android:layout_marginRight="6dp"
                 android:layout_marginTop="4dp"
-                android:background="@color/divider" />
+                android:background="@color/divider"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -95,7 +95,7 @@
                     android:layout_weight="4"
                     android:gravity="start"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    tools:text="Two days ago" />
+                    tools:text="Two days ago"/>
 
                 <TextView
                     android:id="@+id/category"
@@ -106,7 +106,7 @@
                     android:layout_weight="6"
                     android:gravity="end"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    tools:text="Anime and Managa" />
+                    tools:text="Anime and Managa"/>
             </LinearLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+      xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/sort"
@@ -13,10 +13,10 @@
                 android:checkableBehavior="single">
                 <item
                     android:id="@+id/ascending"
-                    android:title="@string/action_sort_ascending" />
+                    android:title="@string/action_sort_ascending"/>
                 <item
                     android:id="@+id/descending"
-                    android:title="@string/action_sort_descending" />
+                    android:title="@string/action_sort_descending"/>
             </group>
             <group
                 android:id="@+id/groupCriteria"
@@ -24,11 +24,11 @@
                 <item
                     android:id="@+id/name"
                     android:title="@string/action_sort_name"
-                    app:showAsAction="never" />
+                    app:showAsAction="never"/>
                 <item
                     android:id="@+id/state"
                     android:title="@string/action_sort_state"
-                    app:showAsAction="never" />
+                    app:showAsAction="never"/>
             </group>
         </menu>
     </item>

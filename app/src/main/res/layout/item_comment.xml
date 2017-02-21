@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:context="com.proxerme.app.adapter.media.CommentAdapter">
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             tools:context="com.proxerme.app.adapter.media.CommentAdapter">
 
     <android.support.v7.widget.CardView
         android:id="@+id/root"
@@ -42,7 +42,7 @@
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="4dp"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp" />
+                    android:layout_marginTop="8dp"/>
 
                 <TextView
                     android:id="@+id/username"
@@ -60,7 +60,7 @@
                     android:layout_toRightOf="@+id/userImage"
                     android:layout_toStartOf="@+id/upvoteIcon"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    tools:text="Username" />
+                    tools:text="Username"/>
 
                 <ImageView
                     android:id="@+id/upvoteIcon"
@@ -73,7 +73,7 @@
                     android:layout_marginStart="4dp"
                     android:layout_marginTop="8dp"
                     android:layout_toLeftOf="@+id/upvotes"
-                    android:layout_toStartOf="@+id/upvotes" />
+                    android:layout_toStartOf="@+id/upvotes"/>
 
                 <TextView
                     android:id="@+id/upvotes"
@@ -89,7 +89,7 @@
                     android:layout_marginStart="2dp"
                     android:layout_marginTop="8dp"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    tools:text="12" />
+                    tools:text="12"/>
             </RelativeLayout>
 
             <TableLayout
@@ -106,7 +106,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_margin="8dp"
                         android:text="@string/comment_rating_genre"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                        android:textAppearance="?android:attr/textAppearanceMedium"/>
 
                     <FrameLayout
                         android:layout_width="match_parent"
@@ -121,7 +121,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
                             android:isIndicator="true"
-                            android:numStars="5" />
+                            android:numStars="5"/>
                     </FrameLayout>
                 </TableRow>
 
@@ -133,7 +133,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_margin="8dp"
                         android:text="@string/comment_rating_story"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                        android:textAppearance="?android:attr/textAppearanceMedium"/>
 
                     <FrameLayout
                         android:layout_width="match_parent"
@@ -148,7 +148,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
                             android:isIndicator="true"
-                            android:numStars="5" />
+                            android:numStars="5"/>
                     </FrameLayout>
                 </TableRow>
 
@@ -160,7 +160,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_margin="8dp"
                         android:text="@string/comment_rating_animation"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                        android:textAppearance="?android:attr/textAppearanceMedium"/>
 
                     <FrameLayout
                         android:layout_width="match_parent"
@@ -175,7 +175,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
                             android:isIndicator="true"
-                            android:numStars="5" />
+                            android:numStars="5"/>
                     </FrameLayout>
                 </TableRow>
 
@@ -187,7 +187,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_margin="8dp"
                         android:text="@string/comment_rating_characters"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                        android:textAppearance="?android:attr/textAppearanceMedium"/>
 
                     <FrameLayout
                         android:layout_width="match_parent"
@@ -202,7 +202,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
                             android:isIndicator="true"
-                            android:numStars="5" />
+                            android:numStars="5"/>
                     </FrameLayout>
                 </TableRow>
 
@@ -214,7 +214,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_margin="8dp"
                         android:text="@string/comment_rating_music"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                        android:textAppearance="?android:attr/textAppearanceMedium"/>
 
                     <FrameLayout
                         android:layout_width="match_parent"
@@ -229,7 +229,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
                             android:isIndicator="true"
-                            android:numStars="5" />
+                            android:numStars="5"/>
                     </FrameLayout>
                 </TableRow>
 
@@ -241,7 +241,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_margin="8dp"
                         android:text="@string/comment_rating_overall"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                        android:textAppearance="?android:attr/textAppearanceMedium"/>
 
                     <FrameLayout
                         android:layout_width="match_parent"
@@ -256,7 +256,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
                             android:isIndicator="true"
-                            android:numStars="5" />
+                            android:numStars="5"/>
                     </FrameLayout>
                 </TableRow>
             </TableLayout>
@@ -269,7 +269,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginTop="4dp"
-                android:orientation="vertical" />
+                android:orientation="vertical"/>
 
             <ImageButton
                 android:id="@+id/expand"
@@ -278,7 +278,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="4dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"/>
 
             <View
                 android:layout_width="match_parent"
@@ -286,7 +286,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginTop="4dp"
-                android:background="@color/divider" />
+                android:background="@color/divider"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -303,7 +303,7 @@
                     android:layout_weight="4"
                     android:gravity="start"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    tools:text="Two days ago" />
+                    tools:text="Two days ago"/>
 
                 <TextView
                     android:id="@+id/state"
@@ -314,7 +314,7 @@
                     android:layout_weight="6"
                     android:gravity="end"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    tools:text="Finished" />
+                    tools:text="Finished"/>
             </LinearLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>
