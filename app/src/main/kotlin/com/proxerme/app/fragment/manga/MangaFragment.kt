@@ -11,7 +11,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.*
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
-import com.proxerme.app.R
 import com.proxerme.app.activity.MainActivity
 import com.proxerme.app.activity.MangaActivity
 import com.proxerme.app.activity.ProfileActivity
@@ -41,7 +40,9 @@ import com.proxerme.library.parameters.CategoryParameter
 import com.proxerme.library.parameters.ViewStateParameter
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import org.jetbrains.anko.find
-import org.joda.time.DateTime
+import org.threeten.bp.Instant
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.ZoneId
 
 /**
  * TODO: Describe class
@@ -226,8 +227,8 @@ class MangaFragment : SingleLoadingFragment<Pair<MangaInput, String>, ChapterInf
 
         val chapter = data.chapter
 
-        header.setDate(DateTime(chapter.time * 1000))
         header.setEpisodeInfo(entryInfo.totalEpisodes!!, episode)
+        header.setDateTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(chapter.time), ZoneId.systemDefault()))
         header.setUploader(MediaControlView.Uploader(chapter.uploaderId, chapter.uploader))
         header.setTranslatorGroup(when (chapter.scangroupId == null || chapter.scangroup == null) {
             true -> null
@@ -254,7 +255,7 @@ class MangaFragment : SingleLoadingFragment<Pair<MangaInput, String>, ChapterInf
 
                 header.setUploader(null)
                 header.setTranslatorGroup(null)
-                header.setDate(null)
+                header.setDateTime(null)
                 header.setEpisodeInfo(entryInfo.totalEpisodes!!, episode)
                 adapter.setHeader(header)
             }

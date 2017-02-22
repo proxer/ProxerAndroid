@@ -90,7 +90,7 @@ dependencies {
 
     compile 'com.github.daniel-stoneuk:material-about-library:1.7.1'
 
-    compile 'net.danlew:android.joda:2.9.5.1'
+    compile 'com.jakewharton.threetenabp:threetenabp:1.0.5'
 
     compile 'com.orhanobut:hawk:2.0.1'
 

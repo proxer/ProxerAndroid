@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.proxerme.app.R
 import com.proxerme.app.activity.AnimeActivity
 import com.proxerme.app.activity.MainActivity
 import com.proxerme.app.activity.ProfileActivity
@@ -209,7 +208,7 @@ class AnimeFragment : SingleLoadingFragment<Pair<AnimeInput, String>, StreamInfo
 
         header.setUploader(null)
         header.setTranslatorGroup(null)
-        header.setDate(null)
+        header.setDateTime(null)
     }
 
     override fun present(data: StreamInfo) {

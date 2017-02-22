@@ -19,13 +19,12 @@ import com.devbrackets.android.exomedia.ExoMedia
 import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.TransferListener
+import com.jakewharton.threetenabp.AndroidThreeTen
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import com.orhanobut.hawk.Hawk
-import com.proxerme.app.BuildConfig
-import com.proxerme.app.EventBusIndex
 import com.proxerme.app.entitiy.LocalUser
 import com.proxerme.app.event.LoginEvent
 import com.proxerme.app.event.LogoutEvent
@@ -43,7 +42,6 @@ import com.squareup.leakcanary.RefWatcher
 import com.squareup.moshi.Moshi
 import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.ios.IosEmojiProvider
-import net.danlew.android.joda.JodaTimeAndroid
 import okhttp3.OkHttpClient
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -162,7 +160,7 @@ class MainApplication : Application() {
 
     private fun initLibs() {
         EmojiManager.install(IosEmojiProvider())
-        JodaTimeAndroid.init(this)
+        AndroidThreeTen.init(this)
         Hawk.init(this).build()
         ExoMedia.setHttpDataSourceFactoryProvider(ExoMedia.HttpDataSourceFactoryProvider {
             userAgent: String, listener: TransferListener<in DataSource>? ->

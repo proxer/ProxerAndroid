@@ -1,8 +1,11 @@
 package com.proxerme.app.util
 
 import android.content.Context
-import com.proxerme.app.R
-import org.joda.time.*
+import org.threeten.bp.Instant
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.Period
+import org.threeten.bp.ZoneId
+import org.threeten.bp.temporal.ChronoUnit
 
 /**
  * A helper class to convert a unix timestamp to a human-readable String.
@@ -12,22 +15,18 @@ import org.joda.time.*
 object TimeUtils {
 
     fun convertToRelativeReadableTime(context: Context, timestamp: Long): String {
-        val time = DateTime(timestamp * 1000)
-        val currentTime = DateTime.now()
+        val dateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(timestamp), ZoneId.systemDefault())
+        val now = LocalDateTime.now()
 
-        val yearsBetween = Years.yearsBetween(time, currentTime).years
+        val period = Period.between(dateTime.toLocalDate(), now.toLocalDate())
 
-        if (yearsBetween <= 0) {
-            val mothsBetween = Months.monthsBetween(time, currentTime).months
-
-            if (mothsBetween <= 0) {
-                val daysBetween = Days.daysBetween(time, currentTime).days
-
-                if (daysBetween <= 0) {
-                    val hoursBetween = Hours.hoursBetween(time, currentTime).hours
+        if (period.years <= 0) {
+            if (period.months <= 0) {
+                if (period.days <= 0) {
+                    val hoursBetween = ChronoUnit.HOURS.between(dateTime, now).toInt()
 
                     if (hoursBetween <= 0) {
-                        val minutesBetween = Minutes.minutesBetween(time, currentTime).minutes
+                        val minutesBetween = ChronoUnit.MINUTES.between(dateTime, now).toInt()
 
                         if (minutesBetween <= 0) {
                             return context.getString(R.string.time_a_moment_ago)
@@ -41,15 +40,15 @@ object TimeUtils {
                     }
                 } else {
                     return context.resources.getQuantityString(R.plurals.time_days_ago,
-                            daysBetween, daysBetween)
+                            period.days, period.days)
                 }
             } else {
                 return context.resources.getQuantityString(R.plurals.time_months_ago,
-                        mothsBetween, mothsBetween)
+                        period.months, period.months)
             }
         } else {
             return context.resources.getQuantityString(R.plurals.time_years_ago,
-                    yearsBetween, yearsBetween)
+                    period.years, period.years)
         }
     }
 
