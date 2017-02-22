@@ -1,10 +1,10 @@
 package com.proxerme.app.stream.resolver
 
 import android.net.Uri
-import com.proxerme.app.application.MainApplication
 import com.proxerme.app.stream.StreamResolver
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionException
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionResult
+import com.proxerme.app.util.ProxerConnectionWrapper
 import okhttp3.FormBody
 import okhttp3.Request
 
@@ -21,7 +21,7 @@ class StreamcloudResolver : StreamResolver() {
     private val fileRegex = Regex("file: \"(.+?)\",")
 
     override fun resolve(url: String): StreamResolutionResult {
-        var response = MainApplication.httpClient.newCall(Request.Builder()
+        var response = ProxerConnectionWrapper.httpClient.newCall(Request.Builder()
                 .get()
                 .url(url)
                 .build()).execute()
@@ -32,7 +32,7 @@ class StreamcloudResolver : StreamResolver() {
             formValues.add(i.groupValues[1], i.groupValues[2].replace("download1", "download2"))
         }
 
-        response = MainApplication.httpClient.newCall(Request.Builder()
+        response = ProxerConnectionWrapper.httpClient.newCall(Request.Builder()
                 .post(formValues.build())
                 .url(url)
                 .build())

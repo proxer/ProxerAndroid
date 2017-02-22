@@ -27,24 +27,16 @@ import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import com.orhanobut.hawk.Hawk
 import com.proxerme.app.BuildConfig
 import com.proxerme.app.EventBusIndex
-import com.proxerme.app.entitiy.LocalUser
 import com.proxerme.app.event.LoginEvent
 import com.proxerme.app.event.LogoutEvent
 import com.proxerme.app.helper.PreferenceHelper
-import com.proxerme.app.helper.StorageHelper
 import com.proxerme.app.service.ChatService
-import com.proxerme.app.util.ErrorUtils
-import com.proxerme.library.connection.ProxerCall
-import com.proxerme.library.connection.ProxerConnection
-import com.proxerme.library.connection.ProxerException
-import com.proxerme.library.connection.ProxerRequest
-import com.proxerme.library.connection.user.request.LoginRequest
+import com.proxerme.app.util.ProxerConnectionWrapper
+import com.proxerme.app.util.ProxerConnectionWrapper.httpClient
 import com.squareup.leakcanary.LeakCanary
 import com.squareup.leakcanary.RefWatcher
-import com.squareup.moshi.Moshi
 import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.ios.IosEmojiProvider
-import okhttp3.OkHttpClient
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import java.io.InputStream
@@ -57,68 +49,8 @@ import java.io.InputStream
 class MainApplication : Application() {
 
     companion object {
-        private const val USER_AGENT = "ProxerAndroid/${BuildConfig.VERSION_NAME}"
-
-        private lateinit var proxerConnection: ProxerConnection
-
         lateinit var refWatcher: RefWatcher
             private set
-
-        val httpClient: OkHttpClient
-            get() = proxerConnection.httpClient
-
-        val moshi: Moshi
-            get() = proxerConnection.moshi
-
-        fun <T> exec(request: ProxerRequest<T>, callback: (T) -> Unit,
-                     errorCallback: (ProxerException) -> Unit): ProxerTokenCall<T> {
-            return ProxerTokenCall(request, callback, errorCallback)
-        }
-
-        @Throws(ProxerException::class)
-        fun <T> execSync(request: ProxerRequest<T>): T {
-            try {
-                return proxerConnection.executeSynchronized(request, StorageHelper.user?.loginToken)
-            } catch (exception: ProxerException) {
-                when (exception.proxerErrorCode) {
-                    in ErrorUtils.NOT_LOGGED_IN_ERRORS -> {
-                        val user = StorageHelper.user
-
-                        if (user?.password != null) {
-                            val result = try {
-                                proxerConnection.executeSynchronized(LoginRequest(user.username,
-                                        user.password))
-                            } catch (exception: ProxerException) {
-                                when (exception.proxerErrorCode) {
-                                    ProxerException.LOGIN_INVALID_CREDENTIALS,
-                                    ProxerException.LOGIN_MISSING_CREDENTIALS -> {
-                                        StorageHelper.user = null
-
-                                        EventBus.getDefault().post(LogoutEvent())
-                                    }
-                                }
-
-                                throw exception
-                            }
-
-                            StorageHelper.user = LocalUser(user.username, user.password,
-                                    result.id, result.imageId, result.loginToken)
-
-                            EventBus.getDefault().post(LoginEvent())
-
-                            return proxerConnection.executeSynchronized(request, result.loginToken)
-                        } else {
-                            StorageHelper.user = null
-
-                            EventBus.getDefault().post(LogoutEvent())
-
-                            throw exception
-                        }
-                    }
-                    else -> throw exception
-                }
-            }
-        }
     }
 
     override fun onCreate() {
@@ -131,9 +63,6 @@ class MainApplication : Application() {
         AppCompatDelegate.setDefaultNightMode(PreferenceHelper.getNightMode(this))
 
         refWatcher = LeakCanary.install(this)
-        proxerConnection = ProxerConnection.Builder(BuildConfig.PROXER_API_KEY)
-                .withCustomUserAgent(USER_AGENT)
-                .build()
 
         initLibs()
         initDrawerImageLoader()
@@ -174,7 +103,7 @@ class MainApplication : Application() {
                 object : ModelLoaderFactory<GlideUrl, InputStream> {
                     override fun build(context: Context?, factories: GenericLoaderFactory?):
                             ModelLoader<GlideUrl, InputStream> {
-                        return OkHttpUrlLoader(MainApplication.proxerConnection.httpClient)
+                        return OkHttpUrlLoader(ProxerConnectionWrapper.httpClient)
                     }
 
                     override fun teardown() {}
@@ -227,73 +156,6 @@ class MainApplication : Application() {
                     .detectAll()
                     .penaltyLog()
                     .build())
-        }
-    }
-
-    class ProxerTokenCall<T>(request: ProxerRequest<T>, callback: (T) -> Unit,
-                             errorCallback: (ProxerException) -> Unit) {
-
-        private val calls = ArrayList<ProxerCall>(3)
-
-        @Volatile
-        private var cancelled = false
-
-        init {
-            calls += proxerConnection.execute(request, StorageHelper.user?.loginToken, callback, {
-                when (it.proxerErrorCode) {
-                    in ErrorUtils.NOT_LOGGED_IN_ERRORS -> {
-                        if (!cancelled) {
-                            val user = StorageHelper.user
-
-                            if (user?.password != null) {
-                                calls += proxerConnection.execute(LoginRequest(user.username,
-                                        user.password), {
-                                    if (!cancelled) {
-                                        StorageHelper.user = LocalUser(user.username, user.password,
-                                                it.id, it.imageId, it.loginToken)
-
-                                        EventBus.getDefault().post(LoginEvent())
-
-                                        calls += proxerConnection.execute(request, it.loginToken,
-                                                callback, errorCallback)
-                                    }
-                                }, {
-                                    if (!cancelled) {
-                                        when (it.proxerErrorCode) {
-                                            ProxerException.LOGIN_INVALID_CREDENTIALS,
-                                            ProxerException.LOGIN_MISSING_CREDENTIALS -> {
-                                                StorageHelper.user = null
-
-                                                EventBus.getDefault().post(LogoutEvent())
-                                            }
-                                        }
-
-                                        errorCallback.invoke(it)
-                                    }
-                                })
-                            } else {
-                                StorageHelper.user = null
-
-                                EventBus.getDefault().post(LogoutEvent())
-
-                                errorCallback.invoke(it)
-                            }
-                        }
-                    }
-                    else -> {
-                        if (!cancelled) {
-                            errorCallback.invoke(it)
-                        }
-                    }
-                }
-            })
-        }
-
-        fun cancel() {
-            cancelled = true
-
-            calls.forEach { it.cancel() }
-            calls.clear()
         }
     }
 }

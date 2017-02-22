@@ -3,7 +3,6 @@ package com.proxerme.app.service
 import android.app.IntentService
 import android.content.Context
 import android.content.Intent
-import com.proxerme.app.application.MainApplication
 import com.proxerme.app.data.chatDatabase
 import com.proxerme.app.entitiy.LocalConference
 import com.proxerme.app.event.ChatMessagesEvent
@@ -16,6 +15,7 @@ import com.proxerme.app.helper.StorageHelper.LOW_CHAT_INTERVAL
 import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.manager.SectionManager.Section.CHAT
 import com.proxerme.app.manager.SectionManager.Section.CONFERENCES
+import com.proxerme.app.util.ProxerConnectionWrapper
 import com.proxerme.library.connection.ProxerException
 import com.proxerme.library.connection.messenger.entity.Conference
 import com.proxerme.library.connection.messenger.entity.Message
@@ -154,7 +154,7 @@ class ChatService : IntentService("ChatService") {
     private fun doLoadMessages(conferenceId: String) {
         return try {
             val idToLoadFrom = chatDatabase.getOldestMessage(conferenceId)?.id ?: "0"
-            val newMessages = MainApplication.execSync(MessagesRequest(conferenceId, idToLoadFrom)
+            val newMessages = ProxerConnectionWrapper.execSync(MessagesRequest(conferenceId, idToLoadFrom)
                     .withMarkAsRead(false)).toList()
 
             val insertedMessages = chatDatabase.insertOrUpdateMessages(newMessages)
@@ -173,7 +173,7 @@ class ChatService : IntentService("ChatService") {
     private fun sendMessages() {
         chatDatabase.getMessagesToSend().forEach {
             try {
-                val result = MainApplication.execSync(SendMessageRequest(it.conferenceId, it.message))
+                val result = ProxerConnectionWrapper.execSync(SendMessageRequest(it.conferenceId, it.message))
 
                 chatDatabase.removeMessageToSend(it.localId)
                 chatDatabase.markAsRead(it.conferenceId)
@@ -190,7 +190,7 @@ class ChatService : IntentService("ChatService") {
 
     private fun markConferencesAsRead() {
         chatDatabase.getConferencesToMark().forEach {
-            MainApplication.execSync(ModifyConferenceRequest(it.id, ModifyConferenceRequest.READ))
+            ProxerConnectionWrapper.execSync(ModifyConferenceRequest(it.id, ModifyConferenceRequest.READ))
         }
     }
 
@@ -200,7 +200,7 @@ class ChatService : IntentService("ChatService") {
             var page = 0
 
             while (true) {
-                val fetchedConferences = MainApplication.execSync(ConferencesRequest(page))
+                val fetchedConferences = ProxerConnectionWrapper.execSync(ConferencesRequest(page))
 
                 changedConferences += fetchedConferences.filter {
                     it != chatDatabase.getConference(it.id)?.toNonLocalConference()
@@ -232,7 +232,7 @@ class ChatService : IntentService("ChatService") {
 
             if (mostRecentMessage == null) {
                 while (existingUnreadMessageAmount < conference.unreadMessageAmount) {
-                    val fetchedMessages = MainApplication.execSync(
+                    val fetchedMessages = ProxerConnectionWrapper.execSync(
                             MessagesRequest(conference.id, nextId).withMarkAsRead(false))
 
                     newMessages += fetchedMessages
@@ -249,7 +249,7 @@ class ChatService : IntentService("ChatService") {
             } else {
                 while (mostRecentMessage!!.time < conference.time ||
                         existingUnreadMessageAmount < conference.unreadMessageAmount) {
-                    val fetchedMessages = MainApplication.execSync(
+                    val fetchedMessages = ProxerConnectionWrapper.execSync(
                             MessagesRequest(conference.id, nextId).withMarkAsRead(false))
 
                     newMessages += fetchedMessages
