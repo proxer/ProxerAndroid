@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.proxerme.app.R
 import com.proxerme.app.activity.ProfileActivity
 import com.proxerme.app.activity.chat.ConferenceInfoActivity
 import com.proxerme.app.adapter.chat.ConferenceParticipantAdapter

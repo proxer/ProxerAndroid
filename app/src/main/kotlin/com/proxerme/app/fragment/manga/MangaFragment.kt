@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.*
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
+import com.proxerme.app.R
 import com.proxerme.app.activity.MainActivity
 import com.proxerme.app.activity.MangaActivity
 import com.proxerme.app.activity.ProfileActivity

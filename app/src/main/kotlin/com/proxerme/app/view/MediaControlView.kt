@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
+import com.proxerme.app.R
 import com.proxerme.app.util.bindView
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter

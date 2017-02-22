@@ -25,6 +25,8 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import com.orhanobut.hawk.Hawk
+import com.proxerme.app.BuildConfig
+import com.proxerme.app.EventBusIndex
 import com.proxerme.app.entitiy.LocalUser
 import com.proxerme.app.event.LoginEvent
 import com.proxerme.app.event.LogoutEvent
