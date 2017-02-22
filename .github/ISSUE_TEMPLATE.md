@@ -1,7 +1,7 @@
 **Please check if you are running the latest version and have deleted the app data upon an update if noted in the changelog. Also check for existing Issues. Delete this line when submitting the Issue.**
 
-I am using version: X.X.X<br>
-My device (if relevant) is: X<br>
+I am using version: X.X.X
+My device (if relevant) is: X
 It runs `Android` version (if relevant): X.X.X
 
 #### This is what happens:
