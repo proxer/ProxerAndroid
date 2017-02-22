@@ -15,7 +15,7 @@
         <item name="asp_preferenceDialogIconTint">?asp_preferenceIconTint</item>
     </style>
 
-    <style name="Theme.Transparent" parent="Base.Theme.AppTheme">
+    <style name="Theme.Transparent" parent="Theme.AppTheme">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowContentOverlay">@null</item>
