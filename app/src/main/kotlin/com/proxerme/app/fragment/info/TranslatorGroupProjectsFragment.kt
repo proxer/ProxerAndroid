@@ -15,8 +15,10 @@ import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.framework.Task
 import com.proxerme.app.util.DeviceUtils
+import com.proxerme.app.util.ParameterMapper
 import com.proxerme.library.connection.list.entity.ProjectListEntry
 import com.proxerme.library.connection.list.request.TranslatorGroupProjectsRequest
+import com.proxerme.library.parameters.CategoryParameter
 
 /**
  * TODO: Describe class
@@ -49,7 +51,8 @@ class TranslatorGroupProjectsFragment : PagedLoadingFragment<TranslatorGroupProj
         adapter = ProjectAdapter()
         adapter.callback = object : ProjectAdapter.ProjectAdapterCallback() {
             override fun onItemClick(item: ProjectListEntry) {
-                MediaActivity.navigateTo(activity, item.id, item.name)
+                MediaActivity.navigateTo(activity, item.id, item.name,
+                        ParameterMapper.mediumToCategory(item.medium) ?: CategoryParameter.ANIME)
             }
         }
     }

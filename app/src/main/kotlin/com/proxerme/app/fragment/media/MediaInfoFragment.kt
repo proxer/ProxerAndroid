@@ -68,10 +68,17 @@ class MediaInfoFragment : SingleLoadingFragment<String, Entry>() {
 
     private val id: String
         get() = mediaActivity.id
+
     private var name: String?
         get() = mediaActivity.name
         set(value) {
             mediaActivity.name = value
+        }
+
+    private var category: String
+        get() = mediaActivity.category
+        set(value) {
+            mediaActivity.category = value
         }
 
     private val userInfoTask = constructUserInfoTask()
@@ -164,6 +171,7 @@ class MediaInfoFragment : SingleLoadingFragment<String, Entry>() {
 
     override fun present(data: Entry) {
         name = data.name
+        category = data.category
 
         if (data.rating > 0) {
             ratingContainer.visibility = View.VISIBLE

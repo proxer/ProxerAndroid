@@ -50,7 +50,7 @@ class RelationsFragment : SingleLoadingFragment<String, Array<Relation>>() {
         adapter = RelationsAdapter()
         adapter.callback = object : RelationsAdapter.RelationsAdapterCallback() {
             override fun onItemClick(item: Relation) {
-                MediaActivity.navigateTo(activity, item.id, item.name)
+                MediaActivity.navigateTo(activity, item.id, item.name, item.category)
             }
         }
     }

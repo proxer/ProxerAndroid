@@ -65,14 +65,14 @@ class ToptenFragment : SingleLoadingFragment<Pair<ToptenInput, ToptenInput>, Zip
         animeAdapter = ToptenAdapter()
         animeAdapter.callback = object : ToptenAdapter.ToptenAdapterCallback() {
             override fun onItemClick(item: ToptenEntry) {
-                MediaActivity.navigateTo(activity, item.id, item.name)
+                MediaActivity.navigateTo(activity, item.id, item.name, item.category)
             }
         }
 
         mangaAdapter = ToptenAdapter()
         mangaAdapter.callback = object : ToptenAdapter.ToptenAdapterCallback() {
             override fun onItemClick(item: ToptenEntry) {
-                MediaActivity.navigateTo(activity, item.id, item.name)
+                MediaActivity.navigateTo(activity, item.id, item.name, item.category)
             }
         }
     }

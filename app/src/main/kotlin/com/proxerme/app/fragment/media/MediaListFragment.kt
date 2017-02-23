@@ -15,6 +15,7 @@ import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.framework.Task
 import com.proxerme.app.util.DeviceUtils
+import com.proxerme.app.util.ParameterMapper
 import com.proxerme.library.connection.list.entity.MediaListEntry
 import com.proxerme.library.connection.list.request.MediaSearchRequest
 import com.proxerme.library.parameters.CategoryParameter
@@ -76,7 +77,8 @@ class MediaListFragment : PagedLoadingFragment<MediaInput, MediaListEntry>() {
         adapter = MediaAdapter(category)
         adapter.callback = object : MediaAdapterCallback() {
             override fun onItemClick(item: MediaListEntry) {
-                MediaActivity.navigateTo(activity, item.id, item.name)
+                MediaActivity.navigateTo(activity, item.id, item.name,
+                        ParameterMapper.mediumToCategory(item.medium) ?: CategoryParameter.ANIME)
             }
         }
 

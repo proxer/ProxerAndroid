@@ -25,8 +25,10 @@ import com.proxerme.app.fragment.media.CommentFragment
 import com.proxerme.app.fragment.media.EpisodesFragment
 import com.proxerme.app.fragment.media.MediaInfoFragment
 import com.proxerme.app.fragment.media.RelationsFragment
+import com.proxerme.app.util.ParameterMapper
 import com.proxerme.app.util.bindView
 import com.proxerme.library.info.ProxerUrlHolder
+import com.proxerme.library.parameters.CategoryParameter
 import org.jetbrains.anko.applyRecursively
 import org.jetbrains.anko.intentFor
 
@@ -35,15 +37,18 @@ class MediaActivity : MainActivity() {
     companion object {
         private const val EXTRA_ID = "extra_id"
         private const val EXTRA_NAME = "extra_name"
+        private const val EXTRA_CATEGORY = "extra_category"
 
         private const val SECTION_COMMENTS = "comments"
         private const val SECTION_EPISODES = "episodes"
         private const val SECTION_RELATIONS = "relation"
 
-        fun navigateTo(context: Activity, id: String, name: String? = null) {
+        fun navigateTo(context: Activity, id: String, name: String? = null,
+                       category: String = CategoryParameter.ANIME) {
             context.startActivity(context.intentFor<MediaActivity>(
                     EXTRA_ID to id,
-                    EXTRA_NAME to name)
+                    EXTRA_NAME to name,
+                    EXTRA_CATEGORY to category)
             )
         }
     }
@@ -60,6 +65,14 @@ class MediaActivity : MainActivity() {
             intent.putExtra(EXTRA_NAME, value)
 
             title = value
+        }
+
+    var category: String
+        get() = intent.getStringExtra(EXTRA_CATEGORY)
+        set(value) {
+            intent.putExtra(EXTRA_CATEGORY, category)
+
+            sectionsPagerAdapter.updateEpisodesTitle(value)
         }
 
     private val itemToDisplay: Int
@@ -182,10 +195,14 @@ class MediaActivity : MainActivity() {
             return when (position) {
                 0 -> getString(R.string.fragment_media_info_title)
                 1 -> getString(R.string.fragment_comments_title)
-                2 -> getString(R.string.fragment_episodes_title)
+                2 -> ParameterMapper.categoryEpisodesTitle(this@MediaActivity, category)
                 3 -> getString(R.string.fragment_relations_title)
                 else -> throw RuntimeException("Unknown index passed")
             }
+        }
+
+        fun updateEpisodesTitle(category: String) {
+            tabs.getTabAt(2)?.text = ParameterMapper.categoryEpisodesTitle(this@MediaActivity, category)
         }
     }
 }

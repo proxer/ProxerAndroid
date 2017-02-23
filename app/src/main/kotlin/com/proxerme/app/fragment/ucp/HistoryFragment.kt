@@ -43,7 +43,7 @@ class HistoryFragment : PagedLoadingFragment<HistoryInput, HistoryEntry>() {
         adapter = HistoryAdapter()
         adapter.callback = object : HistoryAdapter.HistoryAdapterCallback() {
             override fun onItemClick(item: HistoryEntry) {
-                MediaActivity.navigateTo(activity, item.id, item.name)
+                MediaActivity.navigateTo(activity, item.id, item.name, item.category)
             }
         }
     }

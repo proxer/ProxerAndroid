@@ -83,7 +83,7 @@ class UcpToptenFragment : SingleLoadingFragment<Unit, ZippedUcpToptenResult>() {
         animeAdapter = UcpToptenAdapter()
         animeAdapter.callback = object : UcpToptenAdapter.UcpToptenAdapterCallback() {
             override fun onItemClick(item: UcpToptenEntry) {
-                MediaActivity.navigateTo(activity, item.entryId, item.name)
+                MediaActivity.navigateTo(activity, item.entryId, item.name, item.category)
             }
 
             override fun onRemoveClick(item: UcpToptenEntry) {
@@ -96,7 +96,7 @@ class UcpToptenFragment : SingleLoadingFragment<Unit, ZippedUcpToptenResult>() {
         mangaAdapter = UcpToptenAdapter()
         mangaAdapter.callback = object : UcpToptenAdapter.UcpToptenAdapterCallback() {
             override fun onItemClick(item: UcpToptenEntry) {
-                MediaActivity.navigateTo(activity, item.entryId, item.name)
+                MediaActivity.navigateTo(activity, item.entryId, item.name, item.category)
             }
 
             override fun onRemoveClick(item: UcpToptenEntry) {
