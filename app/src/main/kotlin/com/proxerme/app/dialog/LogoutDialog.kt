@@ -43,7 +43,7 @@ class LogoutDialog : DialogFragment() {
 
     private val exceptionCallback = { exception: Exception ->
         if (exception is ProxerException) {
-            context.longToast(ErrorUtils.getMessageForErrorCode(context, exception))
+            context.longToast(ErrorUtils.getMessageForErrorCode(exception))
         } else {
             context.longToast(R.string.error_unknown)
         }

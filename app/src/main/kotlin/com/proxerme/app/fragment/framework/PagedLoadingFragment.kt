@@ -1,7 +1,7 @@
 package com.proxerme.app.fragment.framework
 
 import android.os.Bundle
-import android.support.design.widget.Snackbar
+import android.support.design.widget.Snackbar.LENGTH_LONG
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -22,7 +22,14 @@ import com.proxerme.app.task.framework.CachedTask.CacheStrategy
 import com.proxerme.app.task.framework.Task
 import com.proxerme.app.task.framework.ValidatingTask
 import com.proxerme.app.task.framework.ZippedTask
-import com.proxerme.app.util.*
+import com.proxerme.app.util.ErrorUtils
+import com.proxerme.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_DEFAULT
+import com.proxerme.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
+import com.proxerme.app.util.KotterKnife
+import com.proxerme.app.util.Validators
+import com.proxerme.app.util.bindView
+import com.proxerme.app.util.extension.multilineSnackbar
+import com.proxerme.app.util.extension.updateAndScrollUpIfNecessary
 import com.proxerme.app.util.listener.EndlessRecyclerOnScrollListener
 import com.proxerme.library.connection.ProxerException
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
@@ -42,6 +49,8 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
         if (view != null) {
             hasReachedEnd = data.size < itemsOnPage
 
+            hideError()
+
             adapter.append(data)
 
             showEmptyIfAppropriate()
@@ -57,6 +66,8 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
 
     protected val refreshSuccessCallback = { data: Array<T> ->
         if (view != null) {
+            hideError()
+
             adapter.updateAndScrollUpIfNecessary(list.layoutManager, list, when (replaceOnRefresh) {
                 true -> { it: PagingAdapter<T> -> it.replace(data) }
                 false -> { it: PagingAdapter<T> -> it.insert(data) }
@@ -75,9 +86,8 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
         if (view != null) {
             val action = ErrorUtils.handle(activity as MainActivity, exception)
 
-            ViewUtils.makeMultilineSnackbar(root,
-                    getString(R.string.error_refresh, action.message),
-                    Snackbar.LENGTH_LONG).setAction(action.buttonMessage, action.buttonAction).show()
+            multilineSnackbar(root, getString(R.string.error_refresh, getString(action.message)),
+                    LENGTH_LONG, action.buttonMessage, action.buttonAction)
         }
     }
 
@@ -137,8 +147,6 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
                 Validators.validateHentaiConfirmation(context)
             }
         }, refreshSuccessCallback, refreshExceptionCallback).onStart {
-            headerFooterAdapter.removeFooter()
-
             setRefreshing(true)
         }.onFinish {
             updateRefreshing()
@@ -217,7 +225,7 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
         showError(action.message, action.buttonMessage, action.buttonAction)
     }
 
-    open protected fun showError(message: String, buttonMessage: String? = "",
+    open protected fun showError(message: Int, buttonMessage: Int = ACTION_MESSAGE_DEFAULT,
                                  onButtonClickListener: View.OnClickListener? = null) {
         val errorContainer = when {
             headerFooterAdapter.innerAdapter.itemCount <= 0 -> {
@@ -226,25 +234,23 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
             else -> LayoutInflater.from(context).inflate(R.layout.item_error, root, false)
         }
 
-        errorContainer.find<TextView>(R.id.errorText).text = message
+        errorContainer.find<TextView>(R.id.errorText).text = getString(message)
         errorContainer.find<Button>(R.id.errorButton).apply {
-            when (buttonMessage) {
-                null -> visibility = View.GONE
-                else -> {
-                    visibility = View.VISIBLE
-                    setOnClickListener(onButtonClickListener ?: View.OnClickListener {
-                        task.reset()
-                        task.execute(constructInput(calculateNextPage()))
-                    })
-
-                    when {
-                        buttonMessage.isBlank() -> {
-                            text = context.getString(R.string.error_action_retry)
-                        }
-                        else -> text = buttonMessage
-                    }
-                }
+            text = when (buttonMessage) {
+                ACTION_MESSAGE_DEFAULT -> getString(R.string.error_action_retry)
+                ACTION_MESSAGE_HIDE -> null
+                else -> getString(buttonMessage)
             }
+
+            visibility = when (buttonMessage) {
+                ACTION_MESSAGE_HIDE -> View.GONE
+                else -> View.VISIBLE
+            }
+
+            setOnClickListener(onButtonClickListener ?: View.OnClickListener {
+                task.reset()
+                task.execute(constructInput(calculateNextPage()))
+            })
         }
 
         headerFooterAdapter.setFooter(errorContainer)
@@ -256,12 +262,12 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
 
     open protected fun showEmptyIfAppropriate() {
         if (hasReachedEnd && adapter.isEmpty()) {
-            showError(getEmptyMessage(), null)
+            showError(getEmptyMessage(), ACTION_MESSAGE_HIDE)
         }
     }
 
-    open protected fun getEmptyMessage(): String {
-        return getString(R.string.error_no_data)
+    open protected fun getEmptyMessage(): Int {
+        return R.string.error_no_data
     }
 
     @Suppress("unused")

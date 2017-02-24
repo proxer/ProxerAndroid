@@ -415,6 +415,7 @@
     <string name="fragment_about_title">Info</string>
     <string name="error_no_data_projects">Es gibt noch keine Projekte</string>
     <string name="fragment_episodes_manga_title">Kapitel</string>
+    <string name="error_video_deleted">Das Video ist nicht mehr verfügbar</string>
 
     <plurals name="item_conferences_participants">
         <item quantity="other">%d Teilnehmer</item>

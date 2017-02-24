@@ -1,13 +1,10 @@
 package com.proxerme.app.util
 
-import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
-import android.widget.TextView
 import cn.nekocode.badge.BadgeDrawable
 import com.proxerme.app.R
 
@@ -17,14 +14,6 @@ import com.proxerme.app.R
  * @author Ruben Gees
  */
 object ViewUtils {
-
-    fun makeMultilineSnackbar(rootView: View, message: CharSequence, duration: Int,
-                              maxLines: Int = 5): Snackbar {
-        return Snackbar.make(rootView, message, duration)
-                .apply {
-                    view.findChild<TextView> { it is TextView && it !is Button }?.maxLines = maxLines
-                }
-    }
 
     fun <T> populateBadgeView(badgeContainer: ViewGroup, items: Array<T>,
                               transform: (T) -> String,

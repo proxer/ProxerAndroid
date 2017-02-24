@@ -4,13 +4,13 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import com.proxerme.app.R
 import com.proxerme.app.fragment.anime.AnimeFragment.StreamResolverInput
 import com.proxerme.app.stream.StreamResolverFactory
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionResult
 import com.proxerme.app.task.framework.BaseTask
+import com.proxerme.app.util.extension.snackbar
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.find
 import java.util.concurrent.Future
@@ -72,11 +72,11 @@ class StreamResolutionTask(successCallback: ((StreamResolutionResult) -> Unit)? 
     class StreamResolutionResult {
 
         companion object {
+            const val ACTION_SHOW_MESSAGE = "android.intent.action.SHOW_MESSAGE"
             const val MESSAGE = "extra_message"
 
             private val defaultNotFoundAction: (AppCompatActivity) -> Unit = {
-                Snackbar.make(it.find(android.R.id.content), R.string.error_activity_not_found,
-                        Snackbar.LENGTH_LONG)
+                it.snackbar(it.find(android.R.id.content), R.string.error_activity_not_found)
             }
         }
 
@@ -93,6 +93,11 @@ class StreamResolutionTask(successCallback: ((StreamResolutionResult) -> Unit)? 
                     notFoundAction: (AppCompatActivity) -> Unit = defaultNotFoundAction) {
             this.intent = Intent(Intent.ACTION_VIEW).apply { setDataAndType(uri, mimeType) }
             this.notFoundAction = notFoundAction
+        }
+
+        constructor(message: String) {
+            this.intent = Intent(ACTION_SHOW_MESSAGE).apply { putExtra(MESSAGE, message) }
+            this.notFoundAction = defaultNotFoundAction
         }
     }
 

@@ -1,7 +1,7 @@
 package com.proxerme.app.fragment.media
 
 import android.os.Bundle
-import android.support.design.widget.Snackbar
+import android.support.design.widget.Snackbar.LENGTH_LONG
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +19,8 @@ import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.framework.Task
 import com.proxerme.app.task.framework.ValidatingTask
 import com.proxerme.app.util.*
+import com.proxerme.app.util.extension.multilineSnackbar
+import com.proxerme.app.util.extension.snackbar
 import com.proxerme.library.connection.info.entity.Entry
 import com.proxerme.library.connection.info.entity.EntryIndustry
 import com.proxerme.library.connection.info.entity.EntrySeason
@@ -45,8 +47,7 @@ class MediaInfoFragment : SingleLoadingFragment<String, Entry>() {
 
     private val userInfoSuccess = { _: Void? ->
         if (view != null) {
-            Snackbar.make(root, R.string.fragment_set_user_info_success, Snackbar.LENGTH_LONG)
-                    .show()
+            snackbar(root, R.string.fragment_set_user_info_success)
         }
     }
 
@@ -54,10 +55,9 @@ class MediaInfoFragment : SingleLoadingFragment<String, Entry>() {
         if (view != null) {
             val action = ErrorUtils.handle(context as MainActivity, exception)
 
-            ViewUtils.makeMultilineSnackbar(root,
-                    getString(R.string.fragment_set_user_info_error, action.message),
-                    Snackbar.LENGTH_LONG).setAction(action.buttonMessage, action.buttonAction)
-                    .show()
+            multilineSnackbar(root,
+                    getString(R.string.fragment_set_user_info_error, getString(action.message)),
+                    LENGTH_LONG, action.buttonMessage, action.buttonAction)
         }
     }
 
@@ -288,7 +288,7 @@ class MediaInfoFragment : SingleLoadingFragment<String, Entry>() {
                 }
             }
         }.toTypedArray(), { it.name }, { _, tag ->
-            ViewUtils.makeMultilineSnackbar(root, tag.description, Snackbar.LENGTH_LONG).show()
+            multilineSnackbar(root, tag.description)
         })
     }
 
@@ -319,9 +319,7 @@ class MediaInfoFragment : SingleLoadingFragment<String, Entry>() {
 
                 imageView.setImageDrawable(ParameterMapper.fskImage(context, fskEntry))
                 imageView.setOnClickListener {
-                    ViewUtils.makeMultilineSnackbar(root,
-                            ParameterMapper.fskDescription(context, fskEntry),
-                            Snackbar.LENGTH_LONG).show()
+                    multilineSnackbar(root, ParameterMapper.fskDescription(context, fskEntry))
                 }
 
                 fsk.addView(imageView)

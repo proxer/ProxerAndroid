@@ -15,6 +15,7 @@ import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.framework.MappedTask
 import com.proxerme.app.task.framework.Task
 import com.proxerme.app.util.DeviceUtils
+import com.proxerme.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.info.entity.Relation
 import com.proxerme.library.connection.info.request.RelationRequest
@@ -84,7 +85,7 @@ class RelationsFragment : SingleLoadingFragment<String, Array<Relation>>() {
 
     override fun present(data: Array<Relation>) {
         if (data.isEmpty()) {
-            showError(getString(R.string.error_no_data_relations), null)
+            showError(R.string.error_no_data_relations, ACTION_MESSAGE_HIDE)
         } else {
             adapter.replace(data)
         }

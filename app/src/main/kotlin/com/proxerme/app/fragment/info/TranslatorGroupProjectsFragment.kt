@@ -75,8 +75,8 @@ class TranslatorGroupProjectsFragment : PagedLoadingFragment<TranslatorGroupProj
         return TranslatorGroupProjectsInput(page, id)
     }
 
-    override fun getEmptyMessage(): String {
-        return getString(R.string.error_no_data_projects)
+    override fun getEmptyMessage(): Int {
+        return R.string.error_no_data_projects
     }
 
     class TranslatorGroupProjectsInput(page: Int, val id: String) : PagedInput(page)

@@ -16,6 +16,7 @@ import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.framework.Task
 import com.proxerme.app.task.framework.ZippedTask
 import com.proxerme.app.util.DeviceUtils
+import com.proxerme.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.user.entitiy.ToptenEntry
 import com.proxerme.library.connection.user.request.ToptenRequest
@@ -113,7 +114,7 @@ class ToptenFragment : SingleLoadingFragment<Pair<ToptenInput, ToptenInput>, Zip
 
     override fun present(data: ZippedToptenResult) {
         if (data.animeEntries.isEmpty() && data.mangaEntries.isEmpty()) {
-            showError(getString(R.string.error_no_data_topten), null)
+            showError(R.string.error_no_data_topten, ACTION_MESSAGE_HIDE)
         } else {
             animeAdapter.replace(data.animeEntries)
             mangaAdapter.replace(data.mangaEntries)

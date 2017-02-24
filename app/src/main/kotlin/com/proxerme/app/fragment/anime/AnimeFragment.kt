@@ -3,7 +3,7 @@ package com.proxerme.app.fragment.anime
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
+import android.support.design.widget.Snackbar.LENGTH_LONG
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -27,9 +27,11 @@ import com.proxerme.app.task.StreamResolutionTask
 import com.proxerme.app.task.StreamResolutionTask.*
 import com.proxerme.app.task.framework.*
 import com.proxerme.app.util.ErrorUtils
+import com.proxerme.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import com.proxerme.app.util.Validators
-import com.proxerme.app.util.ViewUtils
 import com.proxerme.app.util.bindView
+import com.proxerme.app.util.extension.multilineSnackbar
+import com.proxerme.app.util.extension.snackbar
 import com.proxerme.app.view.MediaControlView
 import com.proxerme.library.connection.ProxerException
 import com.proxerme.library.connection.anime.entity.Stream
@@ -58,7 +60,7 @@ class AnimeFragment : SingleLoadingFragment<Pair<AnimeInput, String>, StreamInfo
 
     private val reminderSuccess = { _: Void? ->
         if (view != null) {
-            Snackbar.make(root, R.string.fragment_set_user_info_success, Snackbar.LENGTH_LONG).show()
+            snackbar(root, R.string.fragment_set_user_info_success)
         }
     }
 
@@ -66,9 +68,9 @@ class AnimeFragment : SingleLoadingFragment<Pair<AnimeInput, String>, StreamInfo
         if (view != null) {
             val action = ErrorUtils.handle(activity as MainActivity, exception)
 
-            ViewUtils.makeMultilineSnackbar(root,
-                    getString(R.string.fragment_set_user_info_error, action.message),
-                    Snackbar.LENGTH_LONG).setAction(action.buttonMessage, action.buttonAction).show()
+            multilineSnackbar(root,
+                    getString(R.string.fragment_set_user_info_error, getString(action.message)),
+                    LENGTH_LONG, action.buttonMessage, action.buttonAction)
         }
     }
 
@@ -85,9 +87,7 @@ class AnimeFragment : SingleLoadingFragment<Pair<AnimeInput, String>, StreamInfo
                     }
                 }
             } else {
-                ViewUtils.makeMultilineSnackbar(root,
-                        result.intent.getStringExtra(StreamResolutionResult.MESSAGE),
-                        Snackbar.LENGTH_LONG).show()
+                multilineSnackbar(root, result.intent.getStringExtra(StreamResolutionResult.MESSAGE))
             }
         }
     }
@@ -96,19 +96,19 @@ class AnimeFragment : SingleLoadingFragment<Pair<AnimeInput, String>, StreamInfo
         if (view != null) {
             when (exception) {
                 is NoResolverException -> {
-                    Snackbar.make(root, R.string.error_unsupported_hoster, Snackbar.LENGTH_LONG).show()
+                    snackbar(root, R.string.error_unsupported_hoster)
                 }
                 is StreamResolutionException -> {
-                    Snackbar.make(root, R.string.error_stream_resolution, Snackbar.LENGTH_LONG).show()
+                    snackbar(root, R.string.error_stream_resolution)
                 }
                 is IOException -> {
-                    Snackbar.make(root, R.string.error_network, Snackbar.LENGTH_LONG).show()
+                    snackbar(root, R.string.error_network)
                 }
                 else -> {
                     val action = ErrorUtils.handle(activity as MainActivity, exception)
 
-                    Snackbar.make(root, action.message, Snackbar.LENGTH_LONG)
-                            .setAction(action.buttonMessage, action.buttonAction).show()
+                    multilineSnackbar(root, action.message, LENGTH_LONG, action.buttonMessage,
+                            action.buttonAction)
                 }
             }
         }
@@ -216,7 +216,7 @@ class AnimeFragment : SingleLoadingFragment<Pair<AnimeInput, String>, StreamInfo
         entryInfo = data.entryInfo
 
         if (data.streams.isEmpty()) {
-            showError(getString(R.string.error_no_data_anime), null)
+            showError(R.string.error_no_data_anime, ACTION_MESSAGE_HIDE)
         } else {
             header.setEpisodeInfo(entryInfo.totalEpisodes!!, episode)
             streamAdapter.replace(data.streams)
@@ -235,7 +235,7 @@ class AnimeFragment : SingleLoadingFragment<Pair<AnimeInput, String>, StreamInfo
 
             if (exception.original is ProxerException &&
                     exception.original.proxerErrorCode == ProxerException.ANIME_UNKNOWN_EPISODE) {
-                showError(getString(R.string.fragment_anime_not_available), null)
+                showError(R.string.fragment_anime_not_available, ACTION_MESSAGE_HIDE)
 
                 contentContainer.visibility = View.VISIBLE
                 errorContainer.post {

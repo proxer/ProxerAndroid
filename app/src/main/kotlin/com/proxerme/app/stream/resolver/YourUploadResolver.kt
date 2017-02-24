@@ -4,7 +4,7 @@ import com.proxerme.app.stream.StreamResolver
 import com.proxerme.app.task.StreamResolutionTask
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionResult
 import com.proxerme.app.util.ProxerConnectionWrapper
-import com.proxerme.app.util.androidUri
+import com.proxerme.app.util.extension.androidUri
 import okhttp3.HttpUrl
 import okhttp3.Request
 import okhttp3.Response

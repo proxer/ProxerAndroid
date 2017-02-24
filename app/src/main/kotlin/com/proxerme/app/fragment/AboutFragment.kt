@@ -22,7 +22,7 @@ import com.proxerme.app.activity.chat.NewChatActivity
 import com.proxerme.app.application.MainApplication
 import com.proxerme.app.data.chatDatabase
 import com.proxerme.app.entitiy.Participant
-import com.proxerme.app.util.openHttpPage
+import com.proxerme.app.util.extension.openHttpPage
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
 

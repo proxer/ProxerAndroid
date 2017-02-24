@@ -3,16 +3,17 @@ package com.proxerme.app.activity
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
-import android.support.design.widget.Snackbar
+import android.support.design.widget.Snackbar.LENGTH_INDEFINITE
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.Toolbar
 import android.view.*
 import com.devbrackets.android.exomedia.listener.VideoControlsVisibilityListener
 import com.devbrackets.android.exomedia.ui.widget.VideoControls.*
 import com.devbrackets.android.exomedia.ui.widget.VideoView
+import com.google.android.exoplayer2.upstream.HttpDataSource
 import com.proxerme.app.R
-import com.proxerme.app.util.ViewUtils
 import com.proxerme.app.util.bindView
+import com.proxerme.app.util.extension.multilineSnackbar
 import org.jetbrains.anko.longToast
 
 class StreamActivity : MainActivity() {
@@ -64,12 +65,19 @@ class StreamActivity : MainActivity() {
         player.setOnTouchListener(TouchListener(this))
         player.setVideoURI(uri)
         player.setOnErrorListener {
-            ViewUtils.makeMultilineSnackbar(root, player.context.getString(R.string.error_unknown),
-                    Snackbar.LENGTH_INDEFINITE).setAction(R.string.error_action_retry, {
-                player.reset()
-                player.setVideoURI(uri)
-                player.start()
-            }).show()
+            val errorMessage = when {
+                (it.cause as? HttpDataSource.InvalidResponseCodeException)?.responseCode == 404 -> {
+                    R.string.error_video_deleted
+                }
+                else -> R.string.error_unknown
+            }
+
+            multilineSnackbar(root, errorMessage, LENGTH_INDEFINITE, R.string.error_action_retry,
+                    View.OnClickListener {
+                        player.reset()
+                        player.setVideoURI(uri)
+                        player.start()
+                    })
 
             false
         }

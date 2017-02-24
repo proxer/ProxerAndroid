@@ -72,8 +72,8 @@ class IndustryProjectsFragment : PagedLoadingFragment<IndustryProjectsInput, Pro
         return IndustryProjectsInput(page, id)
     }
 
-    override fun getEmptyMessage(): String {
-        return getString(R.string.error_no_data_projects)
+    override fun getEmptyMessage(): Int {
+        return R.string.error_no_data_projects
     }
 
     class IndustryProjectsInput(page: Int, val id: String) : PagedInput(page)

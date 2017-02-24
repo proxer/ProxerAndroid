@@ -20,6 +20,7 @@ import com.klinker.android.link_builder.LinkBuilder
 import com.proxerme.app.R
 import com.proxerme.app.util.Utils.Language.ENGLISH
 import com.proxerme.app.util.Utils.Language.GERMAN
+import com.proxerme.app.util.extension.androidUri
 import com.proxerme.library.connection.ProxerException
 import com.proxerme.library.parameters.GeneralLanguageParameter
 import com.proxerme.library.parameters.SubDubLanguageParameter

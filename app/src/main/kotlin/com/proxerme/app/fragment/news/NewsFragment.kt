@@ -86,8 +86,8 @@ class NewsFragment : PagedLoadingFragment<PagedInput, News>() {
         return PagedInput(page)
     }
 
-    override fun getEmptyMessage(): String {
-        return getString(R.string.error_no_data_news)
+    override fun getEmptyMessage(): Int {
+        return R.string.error_no_data_news
     }
 
     override fun onItemsInserted(items: Array<News>) {

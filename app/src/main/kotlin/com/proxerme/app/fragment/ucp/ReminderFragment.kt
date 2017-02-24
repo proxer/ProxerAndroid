@@ -1,7 +1,7 @@
 package com.proxerme.app.fragment.ucp
 
 import android.os.Bundle
-import android.support.design.widget.Snackbar
+import android.support.design.widget.Snackbar.LENGTH_LONG
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.*
 import com.proxerme.app.R
@@ -18,7 +18,7 @@ import com.proxerme.app.task.framework.ValidatingTask
 import com.proxerme.app.util.DeviceUtils
 import com.proxerme.app.util.ErrorUtils
 import com.proxerme.app.util.Validators
-import com.proxerme.app.util.ViewUtils
+import com.proxerme.app.util.extension.multilineSnackbar
 import com.proxerme.library.connection.ucp.entitiy.Reminder
 import com.proxerme.library.connection.ucp.request.DeleteReminderRequest
 import com.proxerme.library.connection.ucp.request.ReminderRequest
@@ -56,10 +56,9 @@ class ReminderFragment : PagedLoadingFragment<ReminderInput, Reminder>() {
         if (view != null) {
             val action = ErrorUtils.handle(activity as MainActivity, exception)
 
-            ViewUtils.makeMultilineSnackbar(root,
-                    context.getString(R.string.error_reminder_removal, action.message),
-                    Snackbar.LENGTH_LONG).setAction(action.buttonMessage, action.buttonAction)
-                    .show()
+            multilineSnackbar(root,
+                    getString(R.string.error_reminder_removal, getString(action.message)),
+                    LENGTH_LONG, action.buttonMessage, action.buttonAction)
         }
     }
 
@@ -157,8 +156,8 @@ class ReminderFragment : PagedLoadingFragment<ReminderInput, Reminder>() {
         return ReminderInput(page, category, itemsOnPage)
     }
 
-    override fun getEmptyMessage(): String {
-        return getString(R.string.error_no_data_reminder)
+    override fun getEmptyMessage(): Int {
+        return R.string.error_no_data_reminder
     }
 
     private fun constructRemovalTask(): Task<Reminder, Void> {
