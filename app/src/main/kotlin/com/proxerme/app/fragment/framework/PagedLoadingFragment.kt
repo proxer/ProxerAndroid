@@ -228,6 +228,7 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
     open protected fun showError(message: Int, buttonMessage: Int = ACTION_MESSAGE_DEFAULT,
                                  onButtonClickListener: View.OnClickListener? = null) {
         val errorContainer = when {
+            headerFooterAdapter.hasFooter() -> headerFooterAdapter.footer!!
             headerFooterAdapter.innerAdapter.itemCount <= 0 -> {
                 LayoutInflater.from(context).inflate(R.layout.layout_error, root, false)
             }
@@ -253,7 +254,7 @@ abstract class PagedLoadingFragment<I, T> : MainFragment() where I : PagedInput 
             })
         }
 
-        headerFooterAdapter.setFooter(errorContainer)
+        headerFooterAdapter.footer = errorContainer
     }
 
     open protected fun hideError() {
