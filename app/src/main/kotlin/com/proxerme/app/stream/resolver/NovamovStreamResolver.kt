@@ -41,7 +41,7 @@ class NovamovStreamResolver : StreamResolver() {
                 .build()).execute()
 
         val result = Uri.parse(urlRegex.find(validateAndGetResult(apiResponse))
-                ?.groupValues?.get(1)) ?: throw StreamResolutionException()
+                ?.groupValues?.get(1) ?: throw StreamResolutionException())
 
         return StreamResolutionResult(result, "video/x-flv")
     }

@@ -127,7 +127,7 @@
     <string name="error_resolve">Dieser Hoster konnte nicht verarbeitet werden</string>
     <string name="error_topten_removal">Der Eintrag konnte nicht gelöscht werden: %s</string>
     <string name="error_reminder_removal">Das Lesezeichen konnte nicht gelöscht werden: %s</string>
-    <string name="error_stream_resolution">Fehler beim Laden des Streams</string>
+    <string name="error_stream_resolution">Fehler beim Laden des Streams. Das Video ist eventuell nicht mehr verfügbar</string>
     <string name="error_timeout">Der Server hat nicht rechtzeitig geantwortet. Versuche es später
         noch einmal
     </string>

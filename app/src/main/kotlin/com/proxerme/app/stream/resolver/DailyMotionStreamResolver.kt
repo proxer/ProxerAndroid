@@ -47,8 +47,8 @@ class DailyMotionStreamResolver : StreamResolver() {
                 }
             }?.flatten()?.sortedByDescending { it.first }
 
-            val result = Uri.parse(mp4Links?.firstOrNull()?.second)
-                    ?: throw StreamResolutionException()
+            val result = Uri.parse(mp4Links?.firstOrNull()?.second
+                    ?: throw StreamResolutionException())
 
             return StreamResolutionResult(result, "video/mp4")
         } else {

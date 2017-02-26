@@ -26,8 +26,8 @@ class Mp4UploadResolver : StreamResolver() {
                 .url(url)
                 .build()).execute()
 
-        val result = Uri.parse(regex.find(validateAndGetResult(response))?.groupValues?.get(1))
-                ?: throw StreamResolutionException()
+        val result = Uri.parse(regex.find(validateAndGetResult(response))?.groupValues?.get(1)
+                ?: throw StreamResolutionException())
 
         return StreamResolutionResult(result, "video/mp4")
     }

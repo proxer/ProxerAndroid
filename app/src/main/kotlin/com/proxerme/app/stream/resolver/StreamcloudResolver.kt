@@ -39,7 +39,7 @@ class StreamcloudResolver : StreamResolver() {
                 .execute()
 
         val result = Uri.parse(fileRegex.find(validateAndGetResult(response))
-                ?.groupValues?.get(1)) ?: throw StreamResolutionException()
+                ?.groupValues?.get(1) ?: throw StreamResolutionException())
 
         return StreamResolutionResult(result, "video/mp4")
     }
