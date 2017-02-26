@@ -1,12 +1,13 @@
 package com.proxerme.app.util
 
 import android.view.View
-import com.proxerme.app.R
+import com.google.android.exoplayer2.upstream.HttpDataSource
 import com.proxerme.app.activity.MainActivity
 import com.proxerme.app.dialog.HentaiConfirmationDialog
 import com.proxerme.app.dialog.LoginDialog
 import com.proxerme.app.event.CaptchaSolvedEvent
 import com.proxerme.app.service.ChatService
+import com.proxerme.app.task.StreamResolutionTask
 import com.proxerme.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_DEFAULT
 import com.proxerme.library.connection.ProxerException
 import com.proxerme.library.connection.ProxerException.*
@@ -23,31 +24,60 @@ import java.net.SocketTimeoutException
  */
 object ErrorUtils {
 
+    val API_ERRORS = arrayOf(UNKNOWN_API, API_REMOVED, UNKNOWN_API_CLASS, UNKNOWN_API_FUNCTION,
+            FUNCTION_BLOCKED)
+    val LOGIN_ERRORS = arrayOf(LOGIN_ALREADY_LOGGED_IN, LOGIN_DIFFERENT_USER_ALREADY_LOGGED_IN,
+            LOGIN_MISSING_CREDENTIALS)
+    val INVALID_USER_ERRORS = arrayOf(USERINFO_INVALID_ID, UCP_INVALID_ID)
+    val INVALID_CATEGORY_ERRORS = arrayOf(UCP_INVALID_CATEGORY, LIST_UNKNOWN_CATEGORY)
+    val INVALID_MEDIA_ERRORS = arrayOf(INFO_INVALID_ID, MEDIA_UNKNOWN_ENTRY)
     val NOT_LOGGED_IN_ERRORS = arrayOf(INVALID_TOKEN, INFO_USER_NOT_LOGGED_IN,
             NOTIFICATIONS_USER_NOT_LOGGED_IN, MESSAGES_USER_NOT_LOGGED_IN, UCP_USER_NOT_LOGGED_IN)
 
-    fun getMessageForErrorCode(exception: ProxerException): Int {
-        when (exception.errorCode) {
+    fun getMessageForProxerException(exception: ProxerException): Int {
+        return when (exception.errorCode) {
             PROXER -> {
-                return when (exception.proxerErrorCode) {
+                when (exception.proxerErrorCode) {
                     IP_BLOCKED -> R.string.error_ip_blocked
+                    NEWS -> R.string.error_news
+                    LOGIN_INVALID_CREDENTIALS -> R.string.error_login_invalid_credentials
+                    INFO_INVALID_TYPE -> R.string.error_invalid_type
                     INFO_ENTRY_ALREADY_IN_LIST -> R.string.error_already_in_list
                     INFO_EXCEEDED_ALLOWED_ENTRIES -> R.string.error_favorites_full
+                    USER_ACCESS_DENIED -> R.string.error_access_denied
+                    LIST_UNKNOWN_MEDIUM -> R.string.error_invalid_medium
+                    MEDIA_UNKNOWN_STYLE -> R.string.error_invalid_style
+                    MANGA_UNKNOWN_CHAPTER -> R.string.error_manga_not_available
+                    ANIME_UNKNOWN_EPISODE -> R.string.error_anime_not_available
+                    ANIME_UNKNOWN_STREAM -> R.string.error_anime_stream_not_available
+                    UCP_UNKNOWN_EPISODE -> R.string.error_episode_does_not_exist
+                    MESSAGES_INVALID_CONFERENCE -> R.string.error_invalid_conference
+                    MESSAGES_MISSING_REPORT_INPUT -> R.string.error_invalid_report_input
+                    MESSAGES_INVALID_MESSAGE -> R.string.error_invalid_message
+                    MESSAGES_INVALID_USER -> R.string.error_invalid_user
+                    MESSAGES_MAXIMUM_USERS_EXCEEDED -> R.string.error_maximum_users_exceeded
+                    MESSAGES_INVALID_TOPIC -> R.string.error_invalid_topic
+                    MESSAGES_MISSING_USER -> R.string.error_missing_user
+                    in API_ERRORS -> R.string.error_api
+                    in LOGIN_ERRORS -> R.string.error_login
+                    in INVALID_USER_ERRORS -> R.string.error_user_does_not_exist
+                    in INVALID_CATEGORY_ERRORS -> R.string.error_invalid_category
+                    in INVALID_MEDIA_ERRORS -> R.string.error_media_does_not_exist
                     in NOT_LOGGED_IN_ERRORS -> R.string.error_not_logged_in
                     else -> R.string.error_unknown
                 }
             }
-            TIMEOUT -> return R.string.error_timeout
-            NETWORK -> return R.string.error_network
-            UNPARSABLE -> return R.string.error_unparseable
-            else -> return R.string.error_unknown
+            TIMEOUT -> R.string.error_timeout
+            NETWORK -> R.string.error_network
+            UNPARSABLE -> R.string.error_unparseable
+            else -> R.string.error_unknown
         }
     }
 
     fun handle(context: MainActivity, exception: Exception): ErrorAction {
-        when (exception) {
+        return when (exception) {
             is ProxerException -> {
-                val message = getMessageForErrorCode(exception)
+                val message = getMessageForProxerException(exception)
                 val buttonMessage = when (exception.proxerErrorCode) {
                     IP_BLOCKED -> R.string.error_action_captcha
                     in ErrorUtils.NOT_LOGGED_IN_ERRORS -> {
@@ -73,7 +103,7 @@ object ErrorUtils {
                     else -> null
                 }
 
-                return ErrorAction(message, buttonMessage, buttonAction)
+                ErrorAction(message, buttonMessage, buttonAction)
             }
             is Validators.NotLoggedInException -> {
                 val message = R.string.error_not_logged_in
@@ -82,24 +112,37 @@ object ErrorUtils {
                     LoginDialog.show(context)
                 }
 
-                return ErrorAction(message, buttonMessage, buttonAction)
+                ErrorAction(message, buttonMessage, buttonAction)
             }
             is Validators.HentaiConfirmationRequiredException -> {
-                return ErrorAction(R.string.error_hentai_confirmation_needed, R.string.error_confirm,
+                ErrorAction(R.string.error_hentai_confirmation_needed, R.string.error_confirm,
                         View.OnClickListener {
                             HentaiConfirmationDialog.show(context)
                         })
             }
             is SocketTimeoutException -> {
-                return ErrorAction(R.string.error_timeout)
+                ErrorAction(R.string.error_timeout)
             }
             is IOException -> {
-                return ErrorAction(R.string.error_network)
+                ErrorAction(R.string.error_network)
             }
             is ChatService.ChatException -> {
-                return handle(context, exception.innerException)
+                handle(context, exception.innerException)
             }
-            else -> return ErrorAction(R.string.error_unknown)
+            is StreamResolutionTask.NoResolverException -> {
+                ErrorAction(R.string.error_unsupported_hoster)
+            }
+            is StreamResolutionTask.StreamResolutionException -> {
+                ErrorAction(R.string.error_stream_resolution)
+            }
+            is HttpDataSource.InvalidResponseCodeException -> {
+                ErrorAction(when (exception.responseCode) {
+                    404 -> R.string.error_video_deleted
+                    in 400 until 600 -> R.string.error_video_unknown
+                    else -> R.string.error_unknown
+                })
+            }
+            else -> ErrorAction(R.string.error_unknown)
         }
     }
 

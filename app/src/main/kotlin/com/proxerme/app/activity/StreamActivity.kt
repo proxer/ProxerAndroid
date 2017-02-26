@@ -10,8 +10,7 @@ import android.view.*
 import com.devbrackets.android.exomedia.listener.VideoControlsVisibilityListener
 import com.devbrackets.android.exomedia.ui.widget.VideoControls.*
 import com.devbrackets.android.exomedia.ui.widget.VideoView
-import com.google.android.exoplayer2.upstream.HttpDataSource
-import com.proxerme.app.R
+import com.proxerme.app.util.ErrorUtils
 import com.proxerme.app.util.bindView
 import com.proxerme.app.util.extension.multilineSnackbar
 import org.jetbrains.anko.longToast
@@ -36,7 +35,7 @@ class StreamActivity : MainActivity() {
 
             toggleFullscreen(true)
         } else {
-            longToast(getString(R.string.error_player_sdk_too_low))
+            longToast(R.string.error_player_sdk_too_low)
 
             finish()
         }
@@ -65,14 +64,9 @@ class StreamActivity : MainActivity() {
         player.setOnTouchListener(TouchListener(this))
         player.setVideoURI(uri)
         player.setOnErrorListener {
-            val errorMessage = when {
-                (it.cause as? HttpDataSource.InvalidResponseCodeException)?.responseCode == 404 -> {
-                    R.string.error_video_deleted
-                }
-                else -> R.string.error_unknown
-            }
+            val action = ErrorUtils.handle(this, it)
 
-            multilineSnackbar(root, errorMessage, LENGTH_INDEFINITE, R.string.error_action_retry,
+            multilineSnackbar(root, action.message, LENGTH_INDEFINITE, R.string.error_action_retry,
                     View.OnClickListener {
                         player.reset()
                         player.setVideoURI(uri)

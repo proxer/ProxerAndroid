@@ -11,7 +11,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.*
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
-import com.proxerme.app.R
 import com.proxerme.app.activity.MainActivity
 import com.proxerme.app.activity.MangaActivity
 import com.proxerme.app.activity.ProfileActivity
@@ -242,8 +241,8 @@ class MangaFragment : SingleLoadingFragment<Pair<MangaInput, String>, ChapterInf
             }
         }
 
-        adapter.setHeader(header)
-        adapter.setFooter(footer)
+        adapter.header = header
+        adapter.footer = footer
 
         mangaAdapter.init(chapter.server, chapter.entryId, chapter.id)
         mangaAdapter.replace(chapter.pages)
@@ -258,12 +257,12 @@ class MangaFragment : SingleLoadingFragment<Pair<MangaInput, String>, ChapterInf
                 header.setTranslatorGroup(null)
                 header.setDateTime(null)
                 header.setEpisodeInfo(entryInfo.totalEpisodes!!, episode)
-                adapter.setHeader(header)
+                adapter.header = header
             }
 
             if (exception.original is ProxerException &&
                     exception.original.proxerErrorCode == ProxerException.MANGA_UNKNOWN_CHAPTER) {
-                showError(R.string.fragment_manga_not_available, ACTION_MESSAGE_HIDE)
+                showError(R.string.error_manga_not_available, ACTION_MESSAGE_HIDE)
 
                 contentContainer.visibility = View.VISIBLE
                 errorContainer.post {

@@ -135,6 +135,30 @@
     <string name="error_unparseable">Der Server hat beschädigte Daten gesendet. Versuche es erneut
     </string>
     <string name="error_unsupported_hoster">Dieser Hoster wird nicht unterstützt</string>
+    <string name="error_video_deleted">Das Video ist nicht mehr verfügbar</string>
+    <string name="error_api">Es gab ein Problem mit der Proxer Schnittstelle. Bitte Informiere einen Techniker</string>
+    <string name="error_news">Fehler beim Abrufen der News. Versuche es erneut</string>
+    <string name="error_login_invalid_credentials">Der Benutzername oder das Passwort ist falsch</string>
+    <string name="error_login">Es hab ein Problem beim Login</string>
+    <string name="error_user_does_not_exist">Dieser Nutzer existiert nicht</string>
+    <string name="error_invalid_category">Unbekannte Kategorie</string>
+    <string name="error_media_does_not_exist">Dieses Werk existiert nicht</string>
+    <string name="error_invalid_type">Unbekannter Typ</string>
+    <string name="error_access_denied">Der Zugriff auf diese Information wurde verweigert. Eventuell musst du dich anmelden</string>
+    <string name="error_invalid_medium">Unbekanntes Medium</string>
+    <string name="error_invalid_style">Unbekannter Stil</string>
+    <string name="error_anime_stream_not_available">Dieser Stream ist nicht mehr verfügbar</string>
+    <string name="error_episode_does_not_exist">Diese Episode existiert nicht</string>
+    <string name="error_invalid_conference">Ungültige Konferenz</string>
+    <string name="error_invalid_report_input">Ungültiger Meldegrund</string>
+    <string name="error_invalid_message">Ungültige Nachricht</string>
+    <string name="error_invalid_user">Ungültiger Nutzer</string>
+    <string name="error_maximum_users_exceeded">Die maximale Anzahl an Nutzern in dieser Konferenz ist erreicht</string>
+    <string name="error_invalid_topic">Ungültiges Thema</string>
+    <string name="error_missing_user">Es muss mindestens ein gültiger Nutzer der Konferenz hinzugefügt werden</string>
+    <string name="error_not_logged_in">Du bist nicht angemeldet</string>
+    <string name="error_manga_not_available">Das Kapitel wurde noch nicht hochgeladen :/</string>
+    <string name="error_anime_not_available">Die Episode wurde noch nicht hochgeladen :/</string>
 
     <string name="filter_all">Alles</string>
     <string name="filter_anime">Anime</string>
@@ -285,8 +309,7 @@
     <string name="preference_hentai_summary_off">Hentai wird nicht angezeigt</string>
     <string name="preference_hentai_summary_on">Hentai wird angezeigt</string>
     <string name="preference_hentai_title">Hentai</string>
-    <string name="preference_licences_summary">Bibliotheken, die in dieser App verwendet werden
-    </string>
+    <string name="preference_licences_summary">Bibliotheken, die in dieser App verwendet werden</string>
     <string name="preference_licences_title">Lizenzen</string>
     <string name="preference_messages_notifications_title">Nachrichten</string>
     <string name="preference_news_notifications_interval_title">News Update Intervall</string>
@@ -302,8 +325,6 @@
 
     <string name="spoiler_hide">Spoiler verstecken</string>
     <string name="spoiler_show">Spoiler!</string>
-
-    <string name="error_not_logged_in">Du bist nicht angemeldet</string>
 
     <string name="tags_spoiler_hide">Spoiler Tags verstecken</string>
     <string name="tags_spoiler_show">Spoiler Tags anzeigen</string>
@@ -344,8 +365,6 @@
     <string name="fragment_industry_link">Link</string>
     <string name="fragment_industry_description">Beschreibung</string>
     <string name="fragment_media_info_rate_count">(%d)</string>
-    <string name="fragment_manga_not_available">Das Kapitel wurde noch nicht hochgeladen :/</string>
-    <string name="fragment_anime_not_available">Die Episode wurde noch nicht hochgeladen :/</string>
     <string name="project_type_unkown">Status unbekannt</string>
     <string name="project_type_finished">Abgeschlossen</string>
     <string name="project_type_in_work">In Arbeit</string>
@@ -415,7 +434,7 @@
     <string name="fragment_about_title">Info</string>
     <string name="error_no_data_projects">Es gibt noch keine Projekte</string>
     <string name="fragment_episodes_manga_title">Kapitel</string>
-    <string name="error_video_deleted">Das Video ist nicht mehr verfügbar</string>
+    <string name="error_video_unknown">Es gab ein unbekanntes Problem mit dem Hoster. Versuche es später erneut</string>
 
     <plurals name="item_conferences_participants">
         <item quantity="other">%d Teilnehmer</item>

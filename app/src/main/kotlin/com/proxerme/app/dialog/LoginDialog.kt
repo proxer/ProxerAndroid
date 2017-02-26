@@ -13,7 +13,7 @@ import android.widget.CheckBox
 import android.widget.ProgressBar
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
-import com.proxerme.app.R
+import com.proxerme.app.activity.MainActivity
 import com.proxerme.app.application.MainApplication
 import com.proxerme.app.entitiy.LocalUser
 import com.proxerme.app.event.LoginEvent
@@ -23,7 +23,6 @@ import com.proxerme.app.util.ErrorUtils
 import com.proxerme.app.util.KotterKnife
 import com.proxerme.app.util.bindView
 import com.proxerme.app.util.listener.OnTextListener
-import com.proxerme.library.connection.ProxerException
 import com.proxerme.library.connection.user.entitiy.User
 import com.proxerme.library.connection.user.request.LoginRequest
 import org.greenrobot.eventbus.EventBus
@@ -57,11 +56,9 @@ class LoginDialog : DialogFragment() {
     }
 
     private val exceptionCallback = { exception: Exception ->
-        if (exception is ProxerException) {
-            context.longToast(ErrorUtils.getMessageForErrorCode(exception))
-        } else {
-            context.longToast(R.string.error_unknown)
-        }
+        val action = ErrorUtils.handle(activity as MainActivity, exception)
+
+        context.longToast(action.message)
 
         if (dialog != null) {
             handleVisibility()

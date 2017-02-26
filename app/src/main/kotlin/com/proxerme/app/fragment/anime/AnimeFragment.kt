@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.proxerme.app.R
 import com.proxerme.app.activity.AnimeActivity
 import com.proxerme.app.activity.MainActivity
 import com.proxerme.app.activity.ProfileActivity
@@ -24,7 +23,7 @@ import com.proxerme.app.manager.SectionManager
 import com.proxerme.app.task.EntryInfoTask
 import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.StreamResolutionTask
-import com.proxerme.app.task.StreamResolutionTask.*
+import com.proxerme.app.task.StreamResolutionTask.StreamResolutionResult
 import com.proxerme.app.task.framework.*
 import com.proxerme.app.util.ErrorUtils
 import com.proxerme.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
@@ -43,7 +42,6 @@ import com.proxerme.library.parameters.CategoryParameter
 import com.proxerme.library.parameters.ViewStateParameter
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import okhttp3.HttpUrl
-import java.io.IOException
 
 /**
  * TODO: Describe class
@@ -94,23 +92,10 @@ class AnimeFragment : SingleLoadingFragment<Pair<AnimeInput, String>, StreamInfo
 
     private val streamResolverException = { exception: Exception ->
         if (view != null) {
-            when (exception) {
-                is NoResolverException -> {
-                    snackbar(root, R.string.error_unsupported_hoster)
-                }
-                is StreamResolutionException -> {
-                    snackbar(root, R.string.error_stream_resolution)
-                }
-                is IOException -> {
-                    snackbar(root, R.string.error_network)
-                }
-                else -> {
-                    val action = ErrorUtils.handle(activity as MainActivity, exception)
+            val action = ErrorUtils.handle(activity as MainActivity, exception)
 
-                    multilineSnackbar(root, action.message, LENGTH_LONG, action.buttonMessage,
-                            action.buttonAction)
-                }
-            }
+            multilineSnackbar(root, action.message, LENGTH_LONG, action.buttonMessage,
+                    action.buttonAction)
         }
     }
 
@@ -220,7 +205,7 @@ class AnimeFragment : SingleLoadingFragment<Pair<AnimeInput, String>, StreamInfo
         } else {
             header.setEpisodeInfo(entryInfo.totalEpisodes!!, episode)
             streamAdapter.replace(data.streams)
-            adapter.setHeader(header)
+            adapter.header = header
         }
     }
 
@@ -230,12 +215,12 @@ class AnimeFragment : SingleLoadingFragment<Pair<AnimeInput, String>, StreamInfo
                 entryInfo = exception.data
 
                 header.setEpisodeInfo(entryInfo.totalEpisodes!!, episode)
-                adapter.setHeader(header)
+                adapter.header = header
             }
 
             if (exception.original is ProxerException &&
                     exception.original.proxerErrorCode == ProxerException.ANIME_UNKNOWN_EPISODE) {
-                showError(R.string.fragment_anime_not_available, ACTION_MESSAGE_HIDE)
+                showError(R.string.error_anime_not_available, ACTION_MESSAGE_HIDE)
 
                 contentContainer.visibility = View.VISIBLE
                 errorContainer.post {
