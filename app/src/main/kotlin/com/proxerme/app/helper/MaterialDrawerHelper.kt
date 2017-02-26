@@ -46,7 +46,7 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar,
         header = buildAccountHeader(context, savedInstanceState)
         drawer = buildDrawer(context, toolbar, header, savedInstanceState)
         if (ScreenHelper.isTablet(context)) {
-            miniDrawer = drawer.miniDrawer
+            miniDrawer = drawer.miniDrawer.withIncludeSecondaryDrawerItems(true)
             crossfader = buildCrossfader(context, drawer, miniDrawer, savedInstanceState)
             miniDrawer.withCrossFader(CrossfadeWrapper(crossfader!!))
             crossfader.getCrossFadeSlidingPaneLayout().setShadowResourceLeft(R.drawable.material_drawer_shadow_left)
@@ -156,7 +156,6 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar,
                     onDrawerItemClick(view, id, item)
                 }
                 .withShowDrawerOnFirstLaunch(true)
-                .withActionBarDrawerToggleAnimated(true)
                 .withTranslucentStatusBar(true)
                 .withGenerateMiniDrawer(ScreenHelper.isTablet(context))
                 .withSavedInstance(savedInstanceState)
@@ -167,12 +166,10 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar,
     private fun buildCrossfader(context: Activity, drawer: Drawer, miniDrawer: MiniDrawer,
                                 savedInstanceState: Bundle?): Crossfader<*>? {
         return Crossfader<GmailStyleCrossFadeSlidingPaneLayout>()
-                .withCanSlide(true)
                 .withContent(context.findViewById(R.id.crossfade_content))
                 .withFirst(drawer.slider, Math.round(UIUtils.convertDpToPixel(300f, context)))
                 .withSecond(miniDrawer.build(context), Math.round(UIUtils.convertDpToPixel(72f, context)))
                 .withSavedInstance(savedInstanceState)
-                .withGmailStyleSwiping()
                 .build()
     }
 
