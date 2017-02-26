@@ -13,6 +13,7 @@ import android.widget.CheckBox
 import android.widget.ProgressBar
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
+import com.proxerme.app.R
 import com.proxerme.app.activity.MainActivity
 import com.proxerme.app.application.MainApplication
 import com.proxerme.app.entitiy.LocalUser

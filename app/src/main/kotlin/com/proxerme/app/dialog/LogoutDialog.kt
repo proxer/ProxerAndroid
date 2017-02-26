@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.ProgressBar
 import com.afollestad.materialdialogs.MaterialDialog
+import com.proxerme.app.R
 import com.proxerme.app.activity.MainActivity
 import com.proxerme.app.application.MainApplication
 import com.proxerme.app.event.LogoutEvent

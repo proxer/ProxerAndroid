@@ -10,6 +10,7 @@ import android.view.*
 import com.devbrackets.android.exomedia.listener.VideoControlsVisibilityListener
 import com.devbrackets.android.exomedia.ui.widget.VideoControls.*
 import com.devbrackets.android.exomedia.ui.widget.VideoView
+import com.proxerme.app.R
 import com.proxerme.app.util.ErrorUtils
 import com.proxerme.app.util.bindView
 import com.proxerme.app.util.extension.multilineSnackbar

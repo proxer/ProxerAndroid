@@ -2,6 +2,7 @@ package com.proxerme.app.util
 
 import android.view.View
 import com.google.android.exoplayer2.upstream.HttpDataSource
+import com.proxerme.app.R
 import com.proxerme.app.activity.MainActivity
 import com.proxerme.app.dialog.HentaiConfirmationDialog
 import com.proxerme.app.dialog.LoginDialog
