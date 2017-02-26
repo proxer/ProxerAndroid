@@ -3,7 +3,7 @@ package com.proxerme.app.fragment.chat
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
-import android.support.design.widget.Snackbar
+import android.support.design.widget.Snackbar.LENGTH_LONG
 import android.support.design.widget.TextInputLayout
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
@@ -34,6 +34,7 @@ import com.proxerme.app.util.ErrorUtils
 import com.proxerme.app.util.KotterKnife
 import com.proxerme.app.util.Validators
 import com.proxerme.app.util.bindView
+import com.proxerme.app.util.extension.snackbar
 import com.proxerme.app.util.listener.OnTextListener
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import com.vanniktech.emoji.EmojiEditText
@@ -69,7 +70,7 @@ class NewChatFragment : MainFragment() {
                 when (exception) {
                     is InvalidInputException -> {
                         exception.message?.let {
-                            Snackbar.make(root, it, Snackbar.LENGTH_LONG).show()
+                            snackbar(root, it)
                         }
                     }
                     is TopicEmptyException -> {
@@ -79,8 +80,8 @@ class NewChatFragment : MainFragment() {
                     else -> {
                         val action = ErrorUtils.handle(activity as MainActivity, exception)
 
-                        Snackbar.make(root, action.message, Snackbar.LENGTH_LONG)
-                                .setAction(action.buttonMessage, action.buttonAction).show()
+                        snackbar(root, action.message, LENGTH_LONG, action.buttonMessage,
+                                action.buttonAction)
                     }
                 }
             }

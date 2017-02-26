@@ -45,14 +45,9 @@ class LocalConference : Conference, Parcelable {
         dest.writeInt(if (isReadLocal) 1 else 0)
     }
 
-    fun toNonLocalConference(): Conference {
-        return Conference(id, topic, customTopic, participantAmount, imageType, imageId, isGroup,
-                isRead, time, unreadMessageAmount, lastReadMessageId)
-    }
-
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other?.javaClass != javaClass) return false
+        if (other?.let { it::class.java } != this::class.java) return false
         if (!super.equals(other)) return false
 
         other as LocalConference
@@ -68,6 +63,11 @@ class LocalConference : Conference, Parcelable {
         result = 31 * result + localId.hashCode()
         result = 31 * result + isReadLocal.hashCode()
         return result
+    }
+
+    fun toNonLocalConference(): Conference {
+        return Conference(id, topic, customTopic, participantAmount, imageType, imageId, isGroup,
+                isRead, time, unreadMessageAmount, lastReadMessageId)
     }
 }
 

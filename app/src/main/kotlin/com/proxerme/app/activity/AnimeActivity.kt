@@ -11,6 +11,7 @@ import com.proxerme.app.R
 import com.proxerme.app.entitiy.EntryInfo
 import com.proxerme.app.fragment.anime.AnimeFragment
 import com.proxerme.app.util.bindView
+import com.proxerme.library.parameters.CategoryParameter
 import com.proxerme.library.parameters.SubDubLanguageParameter
 import org.jetbrains.anko.startActivity
 
@@ -78,7 +79,7 @@ class AnimeActivity : MainActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toolbar.setOnClickListener {
-            MediaActivity.navigateTo(this, id, entryInfo.name)
+            MediaActivity.navigateTo(this, id, entryInfo.name, CategoryParameter.ANIME)
         }
 
         updateTitle()

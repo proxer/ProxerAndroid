@@ -1,9 +1,8 @@
-package com.proxerme.app.util
+@file:Suppress("NOTHING_TO_INLINE")
+
+package com.proxerme.app.util.extension
 
 import android.app.Activity
-import android.app.AlarmManager
-import android.app.NotificationManager
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.support.customtabs.CustomTabsIntent
@@ -13,30 +12,14 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
-import android.view.inputmethod.InputMethodManager
 import com.proxerme.app.R
 import com.proxerme.app.activity.WebViewActivity
 import com.proxerme.app.adapter.framework.PagingAdapter
+import com.proxerme.app.util.Utils
 import com.proxerme.library.connection.manga.entity.Page
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
 import java.net.URLDecoder
-
-/**
- * TODO: Describe class
- *
- * @author Ruben Gees
- */
-
-val Context.inputMethodManager: InputMethodManager
-    get() = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-
-val Context.alarmManager: AlarmManager
-    get() = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
-val Context.windowManager: WindowManager
-    get() = getSystemService(Context.WINDOW_SERVICE) as WindowManager
 
 fun CustomTabsHelperFragment.openHttpPage(activity: Activity, url: HttpUrl) {
     if (Utils.getNativeAppPackage(activity, url).isEmpty()) {
@@ -79,7 +62,7 @@ fun <T> PagingAdapter<T>.updateAndScrollUpIfNecessary(layoutManager: RecyclerVie
     }
 }
 
-fun HttpUrl.androidUri(): Uri {
+inline fun HttpUrl.androidUri(): Uri {
     return Uri.parse(toString())
 }
 
@@ -100,7 +83,7 @@ fun <T : View> View.findChild(predicate: (View) -> Boolean): T? {
     return null
 }
 
-val Page.decodedName: String
+inline val Page.decodedName: String
     get() = try {
         URLDecoder.decode(name, "UTF-8")
     } catch (exception: Exception) {

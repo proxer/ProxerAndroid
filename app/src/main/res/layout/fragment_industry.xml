@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.proxerme.app.fragment.ucp.UcpOverviewFragment">
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="com.proxerme.app.fragment.ucp.UcpOverviewFragment">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/progress"
@@ -47,7 +47,7 @@
                                 android:layout_gravity="center_vertical"
                                 android:layout_margin="8dp"
                                 android:text="@string/fragment_industry_language"
-                                android:textAppearance="?android:attr/textAppearanceMedium" />
+                                android:textAppearance="?android:attr/textAppearanceMedium"/>
 
                             <FrameLayout
                                 android:layout_width="match_parent"
@@ -58,7 +58,7 @@
                                     android:id="@+id/language"
                                     android:layout_width="22dp"
                                     android:layout_height="match_parent"
-                                    android:layout_gravity="center_vertical|end" />
+                                    android:layout_gravity="center_vertical|end"/>
 
                             </FrameLayout>
                         </TableRow>
@@ -71,7 +71,7 @@
                                 android:layout_gravity="center_vertical"
                                 android:layout_margin="8dp"
                                 android:text="@string/fragment_industry_type"
-                                android:textAppearance="?android:attr/textAppearanceMedium" />
+                                android:textAppearance="?android:attr/textAppearanceMedium"/>
 
                             <TextView
                                 android:id="@+id/type"
@@ -82,7 +82,7 @@
                                 android:gravity="end"
                                 android:textAppearance="?android:attr/textAppearanceMedium"
                                 android:textIsSelectable="true"
-                                tools:text="Publisher" />
+                                tools:text="Publisher"/>
                         </TableRow>
 
                         <TableRow android:id="@+id/linkRow">
@@ -93,7 +93,7 @@
                                 android:layout_gravity="center_vertical"
                                 android:layout_margin="8dp"
                                 android:text="@string/fragment_industry_link"
-                                android:textAppearance="?android:attr/textAppearanceMedium" />
+                                android:textAppearance="?android:attr/textAppearanceMedium"/>
 
                             <TextView
                                 android:id="@+id/link"
@@ -104,7 +104,7 @@
                                 android:gravity="end"
                                 android:textAppearance="?android:attr/textAppearanceMedium"
                                 android:textIsSelectable="true"
-                                tools:text="https://somewhere.com" />
+                                tools:text="https://somewhere.com"/>
                         </TableRow>
                     </TableLayout>
                 </android.support.v7.widget.CardView>
@@ -132,7 +132,7 @@
                             android:padding="8dp"
                             android:text="@string/fragment_industry_description"
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="@color/colorAccent" />
+                            android:textColor="@color/colorAccent"/>
 
                         <TextView
                             android:id="@+id/description"
@@ -140,7 +140,7 @@
                             android:layout_height="wrap_content"
                             android:padding="8dp"
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textIsSelectable="true" />
+                            android:textIsSelectable="true"/>
                     </LinearLayout>
 
                 </android.support.v7.widget.CardView>
@@ -149,6 +149,6 @@
         </android.support.v4.widget.NestedScrollView>
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <include layout="@layout/layout_error" />
+    <include layout="@layout/layout_error"/>
 
 </FrameLayout>

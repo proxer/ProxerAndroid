@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:context="com.proxerme.app.adapter.chat.ConferenceAdapter">
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             tools:context="com.proxerme.app.adapter.chat.ConferenceAdapter">
 
     <android.support.v7.widget.CardView
         android:id="@+id/container"
@@ -33,7 +33,7 @@
                 android:padding="8dp"
                 android:scaleType="centerCrop"
                 android:transitionName="image"
-                tools:ignore="UnusedAttribute" />
+                tools:ignore="UnusedAttribute"/>
 
             <TextView
                 android:id="@+id/topic"
@@ -47,7 +47,7 @@
                 android:paddingRight="8dp"
                 android:paddingTop="8dp"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                tools:text="Title" />
+                tools:text="Title"/>
 
             <ImageView
                 android:id="@+id/newMessages"
@@ -58,7 +58,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignTop="@+id/topic"
                 android:layout_marginLeft="4dp"
-                android:layout_marginStart="4dp" />
+                android:layout_marginStart="4dp"/>
 
             <TextView
                 android:id="@+id/time"
@@ -73,7 +73,7 @@
                 android:gravity="center_vertical"
                 android:padding="8dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                tools:text="Two days ago" />
+                tools:text="Two days ago"/>
 
             <TextView
                 android:id="@+id/participants"
@@ -86,7 +86,7 @@
                 android:gravity="center_vertical"
                 android:padding="8dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                tools:text="5 Participants" />
+                tools:text="5 Participants"/>
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </FrameLayout>

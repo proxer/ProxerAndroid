@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:context="com.proxerme.app.adapter.user.UserMediaAdapter">
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             tools:context="com.proxerme.app.adapter.user.UserMediaAdapter">
 
     <android.support.v7.widget.CardView
         android:id="@+id/root"
@@ -31,7 +31,7 @@
                 android:scaleType="centerCrop"
                 android:transitionName="image"
                 app:aspect="1.25"
-                tools:ignore="UnusedAttribute" />
+                tools:ignore="UnusedAttribute"/>
 
             <TextView
                 android:id="@+id/title"
@@ -45,7 +45,7 @@
                 android:padding="8dp"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@android:color/white"
-                tools:text="Some title" />
+                tools:text="Some title"/>
 
             <TextView
                 android:id="@+id/medium"
@@ -59,7 +59,7 @@
                 android:paddingRight="8dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@android:color/white"
-                tools:text="Animeseries" />
+                tools:text="Animeseries"/>
 
             <FrameLayout
                 android:id="@+id/ratingContainer"
@@ -76,7 +76,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:isIndicator="true"
-                    android:numStars="5" />
+                    android:numStars="5"/>
             </FrameLayout>
 
             <TextView
@@ -90,7 +90,7 @@
                 android:layout_toStartOf="@+id/languageContainer"
                 android:padding="8dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                tools:text="12 Episoden - Finished" />
+                tools:text="12 Episoden - Finished"/>
 
             <LinearLayout
                 android:id="@+id/languageContainer"
@@ -110,7 +110,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginEnd="2dp"
                     android:layout_marginRight="2dp"
-                    app:srcCompat="@drawable/ic_germany" />
+                    app:srcCompat="@drawable/ic_germany"/>
 
                 <ImageView
                     android:id="@+id/english"
@@ -118,7 +118,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="2dp"
                     android:layout_marginStart="2dp"
-                    app:srcCompat="@drawable/ic_united_states" />
+                    app:srcCompat="@drawable/ic_united_states"/>
 
             </LinearLayout>
         </RelativeLayout>

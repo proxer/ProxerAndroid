@@ -1,7 +1,7 @@
 package com.proxerme.app.fragment.ucp
 
 import android.os.Bundle
-import android.support.design.widget.Snackbar
+import android.support.design.widget.Snackbar.LENGTH_LONG
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -18,7 +18,12 @@ import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.framework.MappedTask
 import com.proxerme.app.task.framework.Task
 import com.proxerme.app.task.framework.ValidatingTask
-import com.proxerme.app.util.*
+import com.proxerme.app.util.DeviceUtils
+import com.proxerme.app.util.ErrorUtils
+import com.proxerme.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
+import com.proxerme.app.util.Validators
+import com.proxerme.app.util.bindView
+import com.proxerme.app.util.extension.multilineSnackbar
 import com.proxerme.library.connection.ucp.entitiy.UcpToptenEntry
 import com.proxerme.library.connection.ucp.request.DeleteFavoriteRequest
 import com.proxerme.library.connection.ucp.request.UcpToptenRequest
@@ -56,10 +61,9 @@ class UcpToptenFragment : SingleLoadingFragment<Unit, ZippedUcpToptenResult>() {
         if (view != null) {
             val action = ErrorUtils.handle(activity as MainActivity, exception)
 
-            ViewUtils.makeMultilineSnackbar(root,
-                    context.getString(R.string.error_topten_removal, action.message),
-                    Snackbar.LENGTH_LONG).setAction(action.buttonMessage, action.buttonAction)
-                    .show()
+            multilineSnackbar(root,
+                    getString(R.string.error_topten_removal, getString(action.message)),
+                    LENGTH_LONG, action.buttonMessage, action.buttonAction)
         }
     }
 
@@ -83,7 +87,7 @@ class UcpToptenFragment : SingleLoadingFragment<Unit, ZippedUcpToptenResult>() {
         animeAdapter = UcpToptenAdapter()
         animeAdapter.callback = object : UcpToptenAdapter.UcpToptenAdapterCallback() {
             override fun onItemClick(item: UcpToptenEntry) {
-                MediaActivity.navigateTo(activity, item.entryId, item.name)
+                MediaActivity.navigateTo(activity, item.entryId, item.name, item.category)
             }
 
             override fun onRemoveClick(item: UcpToptenEntry) {
@@ -96,7 +100,7 @@ class UcpToptenFragment : SingleLoadingFragment<Unit, ZippedUcpToptenResult>() {
         mangaAdapter = UcpToptenAdapter()
         mangaAdapter.callback = object : UcpToptenAdapter.UcpToptenAdapterCallback() {
             override fun onItemClick(item: UcpToptenEntry) {
-                MediaActivity.navigateTo(activity, item.entryId, item.name)
+                MediaActivity.navigateTo(activity, item.entryId, item.name, item.category)
             }
 
             override fun onRemoveClick(item: UcpToptenEntry) {
@@ -144,7 +148,7 @@ class UcpToptenFragment : SingleLoadingFragment<Unit, ZippedUcpToptenResult>() {
 
     override fun present(data: ZippedUcpToptenResult) {
         if (data.animeEntries.isEmpty() && data.mangaEntries.isEmpty()) {
-            showError(getString(R.string.error_no_data_topten), null)
+            showError(R.string.error_no_data_topten, ACTION_MESSAGE_HIDE)
         } else {
             animeAdapter.replace(data.animeEntries)
             mangaAdapter.replace(data.mangaEntries)

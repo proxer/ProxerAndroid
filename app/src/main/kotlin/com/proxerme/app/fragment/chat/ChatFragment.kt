@@ -30,7 +30,7 @@ import com.proxerme.app.task.framework.CachedTask
 import com.proxerme.app.task.framework.Task
 import com.proxerme.app.util.Utils
 import com.proxerme.app.util.bindView
-import com.proxerme.app.util.inputMethodManager
+import com.proxerme.app.util.extension.inputMethodManager
 import com.vanniktech.emoji.EmojiEditText
 import com.vanniktech.emoji.EmojiPopup
 import okhttp3.HttpUrl
@@ -219,7 +219,7 @@ class ChatFragment : PagedLoadingFragment<ChatInput, LocalMessage>() {
         super.onDestroy()
     }
 
-    override fun showError(message: String, buttonMessage: String?,
+    override fun showError(message: Int, buttonMessage: Int,
                            onButtonClickListener: View.OnClickListener?) {
         inputContainer.visibility = View.GONE
 
@@ -244,8 +244,8 @@ class ChatFragment : PagedLoadingFragment<ChatInput, LocalMessage>() {
         return ChatInput(page, context)
     }
 
-    override fun getEmptyMessage(): String {
-        return getString(R.string.error_no_data_chat)
+    override fun getEmptyMessage(): Int {
+        return R.string.error_no_data_chat
     }
 
     private fun generateEmojiDrawable(iconicRes: IIcon): Drawable {

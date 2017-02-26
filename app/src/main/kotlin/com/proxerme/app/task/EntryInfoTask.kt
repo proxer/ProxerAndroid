@@ -1,9 +1,9 @@
 package com.proxerme.app.task
 
-import com.proxerme.app.application.MainApplication
-import com.proxerme.app.application.MainApplication.ProxerTokenCall
 import com.proxerme.app.entitiy.EntryInfo
 import com.proxerme.app.task.framework.BaseTask
+import com.proxerme.app.util.ProxerConnectionWrapper
+import com.proxerme.app.util.ProxerConnectionWrapper.ProxerTokenCall
 import com.proxerme.library.connection.info.entity.EntryCore
 import com.proxerme.library.connection.info.request.EntryCoreRequest
 
@@ -29,7 +29,7 @@ class EntryInfoTask(private val entryInfoCallback: () -> EntryInfo,
             finishSuccessful(knownInfo)
         } else {
             start {
-                call = MainApplication.exec(EntryCoreRequest(input), {
+                call = ProxerConnectionWrapper.exec(EntryCoreRequest(input), {
                     cancel()
 
                     finishSuccessful(EntryInfo(it.name, it.episodeAmount))

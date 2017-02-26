@@ -15,6 +15,7 @@ import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.framework.Task
 import com.proxerme.app.util.DeviceUtils
+import com.proxerme.app.util.ParameterMapper
 import com.proxerme.library.connection.list.entity.MediaListEntry
 import com.proxerme.library.connection.list.request.MediaSearchRequest
 import com.proxerme.library.parameters.CategoryParameter
@@ -76,7 +77,8 @@ class MediaListFragment : PagedLoadingFragment<MediaInput, MediaListEntry>() {
         adapter = MediaAdapter(category)
         adapter.callback = object : MediaAdapterCallback() {
             override fun onItemClick(item: MediaListEntry) {
-                MediaActivity.navigateTo(activity, item.id, item.name)
+                MediaActivity.navigateTo(activity, item.id, item.name,
+                        ParameterMapper.mediumToCategory(item.medium) ?: CategoryParameter.ANIME)
             }
         }
 
@@ -219,8 +221,8 @@ class MediaListFragment : PagedLoadingFragment<MediaInput, MediaListEntry>() {
         return MediaInput(page, searchQuery, type, sortCriteria, itemsOnPage)
     }
 
-    override fun getEmptyMessage(): String {
-        return getString(R.string.error_no_data_media_list)
+    override fun getEmptyMessage(): Int {
+        return R.string.error_no_data_media_list
     }
 
     class MediaInput(page: Int, val searchQuery: String?, val type: String,

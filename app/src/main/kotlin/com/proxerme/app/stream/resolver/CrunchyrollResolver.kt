@@ -19,8 +19,7 @@ class CrunchyrollResolver : StreamResolver() {
     private val regex = Regex("media_id=(\\d+)")
 
     override fun resolve(url: String): StreamResolutionResult {
-        val id = regex.find(url)?.groupValues?.get(1)
-                ?: throw StreamResolutionException()
+        val id = regex.find(url)?.groupValues?.get(1) ?: throw StreamResolutionException()
 
         return StreamResolutionResult(Intent(Intent.ACTION_VIEW,
                 Uri.parse("crunchyroll://media/$id")), {

@@ -21,8 +21,10 @@ import com.proxerme.library.connection.messenger.entity.ConferenceInfoContainer
 import com.proxerme.library.connection.messenger.entity.ConferenceInfoUser
 import com.proxerme.library.connection.messenger.request.ConferenceInfoRequest
 import okhttp3.HttpUrl
-import org.joda.time.DateTime
-import org.joda.time.format.DateTimeFormat
+import org.threeten.bp.Instant
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.ZoneId
+import org.threeten.bp.format.DateTimeFormatter
 
 /**
  * TODO: Describe class
@@ -105,12 +107,12 @@ class ConferenceInfoFragment : SingleLoadingFragment<String, ConferenceInfoConta
     }
 
     override fun present(data: ConferenceInfoContainer) {
-        val dateTime = DateTime(data.conferenceInfo.firstMessageTime * 1000)
-        val creationDate = dateTime.toString(DateTimeFormat.forPattern("dd.MM.yyyy"))
-        val creationTime = dateTime.toString(DateTimeFormat.forPattern("HH:mm"))
+        val instant = Instant.ofEpochSecond(data.conferenceInfo.firstMessageTime)
 
-        time.text = getString(R.string.fragment_conference_info_time, creationDate,
-                creationTime)
+        val creationDate = DateTimeFormatter.ofPattern("dd.MM.yyyy").format(LocalDateTime.ofInstant(instant, ZoneId.systemDefault()))
+        val creationTime = DateTimeFormatter.ofPattern("HH:mm").format(LocalDateTime.ofInstant(instant, ZoneId.systemDefault()))
+
+        time.text = getString(R.string.fragment_conference_info_time, creationDate, creationTime)
 
         adapter.leader = data.conferenceInfo.leaderId
         adapter.replace(data.participants)

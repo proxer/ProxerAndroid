@@ -198,6 +198,14 @@ object ParameterMapper {
         }, it)
     }
 
+    fun categoryEpisodesTitle(context: Context, it: String): String {
+        return getSafeString(context, when (it) {
+            CategoryParameter.ANIME -> R.string.fragment_episodes_anime_title
+            CategoryParameter.MANGA -> R.string.fragment_episodes_manga_title
+            else -> null
+        }, it)
+    }
+
     fun mediumToCategory(medium: String): String? {
         return when (medium) {
             ANIMESERIES, HENTAI, MOVIE, OVA -> ANIME

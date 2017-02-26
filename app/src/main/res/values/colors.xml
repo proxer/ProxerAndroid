@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <color name="colorPrimary">#8A0E0E</color>
     <color name="colorPrimaryDark">#6B0908</color>
     <color name="colorPrimaryLight">#CE1A1A</color>
@@ -21,4 +22,5 @@
 
     <color name="emoji_icons">@color/icon</color>
     <color name="emoji_divider">@color/divider</color>
+
 </resources>

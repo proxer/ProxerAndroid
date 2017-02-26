@@ -8,7 +8,7 @@ import com.proxerme.app.entitiy.*
 import com.proxerme.library.connection.messenger.entity.Conference
 import com.proxerme.library.connection.messenger.entity.Message
 import org.jetbrains.anko.db.*
-import org.joda.time.DateTime
+import org.threeten.bp.Instant
 import java.util.*
 
 /**
@@ -157,6 +157,7 @@ class ChatDatabase(context: Context) :
             var result: LocalMessage? = null
 
             transaction {
+                val time = Instant.now().epochSecond
                 val id = this.insertOrThrow(ChatDatabase.TABLE_MESSAGE,
                         COLUMN_MESSAGE_ID to "-1",
                         COLUMN_MESSAGE_CONFERENCE_ID to conferenceId,
@@ -164,11 +165,11 @@ class ChatDatabase(context: Context) :
                         COLUMN_MESSAGE_USER_NAME to user.username,
                         COLUMN_MESSAGE_MESSAGE to message,
                         COLUMN_MESSAGE_ACTION to "",
-                        COLUMN_MESSAGE_TIME to DateTime.now().millis / 1000L,
+                        COLUMN_MESSAGE_TIME to time,
                         COLUMN_MESSAGE_DEVICE to "mobile")
 
                 result = LocalMessage(id, "-1", conferenceId, user.id, user.username, message, "",
-                        DateTime.now().millis / 1000L, "mobile")
+                        time, "mobile")
             }
 
             result ?: throw SQLiteException()

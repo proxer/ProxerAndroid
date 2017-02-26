@@ -1,8 +1,8 @@
 package com.proxerme.app.task
 
-import com.proxerme.app.application.MainApplication
-import com.proxerme.app.application.MainApplication.ProxerTokenCall
 import com.proxerme.app.task.framework.BaseTask
+import com.proxerme.app.util.ProxerConnectionWrapper
+import com.proxerme.app.util.ProxerConnectionWrapper.ProxerTokenCall
 import com.proxerme.library.connection.ProxerRequest
 
 /**
@@ -22,7 +22,7 @@ class ProxerLoadingTask<I, O>(private var requestConstructor: (I) -> ProxerReque
 
     override fun execute(input: I) {
         start {
-            call = MainApplication.exec(requestConstructor.invoke(input), {
+            call = ProxerConnectionWrapper.exec(requestConstructor.invoke(input), {
                 cancel()
 
                 finishSuccessful(it)

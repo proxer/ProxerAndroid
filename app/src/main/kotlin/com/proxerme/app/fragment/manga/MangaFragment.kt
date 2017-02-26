@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
-import android.support.design.widget.Snackbar
+import android.support.design.widget.Snackbar.LENGTH_LONG
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -28,9 +28,11 @@ import com.proxerme.app.task.framework.Task
 import com.proxerme.app.task.framework.ValidatingTask
 import com.proxerme.app.task.framework.ZippedTask
 import com.proxerme.app.util.ErrorUtils
+import com.proxerme.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import com.proxerme.app.util.Validators
-import com.proxerme.app.util.ViewUtils
 import com.proxerme.app.util.bindView
+import com.proxerme.app.util.extension.multilineSnackbar
+import com.proxerme.app.util.extension.snackbar
 import com.proxerme.app.view.MediaControlView
 import com.proxerme.library.connection.ProxerException
 import com.proxerme.library.connection.info.request.SetUserInfoRequest
@@ -41,7 +43,9 @@ import com.proxerme.library.parameters.CategoryParameter
 import com.proxerme.library.parameters.ViewStateParameter
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import org.jetbrains.anko.find
-import org.joda.time.DateTime
+import org.threeten.bp.Instant
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.ZoneId
 
 /**
  * TODO: Describe class
@@ -61,8 +65,7 @@ class MangaFragment : SingleLoadingFragment<Pair<MangaInput, String>, ChapterInf
 
     private val reminderSuccess = { _: Void? ->
         if (view != null) {
-            Snackbar.make(root, R.string.fragment_set_user_info_success, Snackbar.LENGTH_LONG)
-                    .show()
+            snackbar(root, R.string.fragment_set_user_info_success, LENGTH_LONG)
         }
     }
 
@@ -70,10 +73,9 @@ class MangaFragment : SingleLoadingFragment<Pair<MangaInput, String>, ChapterInf
         if (view != null) {
             val action = ErrorUtils.handle(activity as MainActivity, exception)
 
-            ViewUtils.makeMultilineSnackbar(root,
-                    getString(R.string.fragment_set_user_info_error, action.message),
-                    Snackbar.LENGTH_LONG).setAction(action.buttonMessage, action.buttonAction)
-                    .show()
+            multilineSnackbar(root,
+                    getString(R.string.fragment_set_user_info_error, getString(action.message)),
+                    LENGTH_LONG, action.buttonMessage, action.buttonAction)
         }
     }
 
@@ -226,8 +228,8 @@ class MangaFragment : SingleLoadingFragment<Pair<MangaInput, String>, ChapterInf
 
         val chapter = data.chapter
 
-        header.setDate(DateTime(chapter.time * 1000))
         header.setEpisodeInfo(entryInfo.totalEpisodes!!, episode)
+        header.setDateTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(chapter.time), ZoneId.systemDefault()))
         header.setUploader(MediaControlView.Uploader(chapter.uploaderId, chapter.uploader))
         header.setTranslatorGroup(when (chapter.scangroupId == null || chapter.scangroup == null) {
             true -> null
@@ -240,8 +242,8 @@ class MangaFragment : SingleLoadingFragment<Pair<MangaInput, String>, ChapterInf
             }
         }
 
-        adapter.setHeader(header)
-        adapter.setFooter(footer)
+        adapter.header = header
+        adapter.footer = footer
 
         mangaAdapter.init(chapter.server, chapter.entryId, chapter.id)
         mangaAdapter.replace(chapter.pages)
@@ -254,14 +256,14 @@ class MangaFragment : SingleLoadingFragment<Pair<MangaInput, String>, ChapterInf
 
                 header.setUploader(null)
                 header.setTranslatorGroup(null)
-                header.setDate(null)
+                header.setDateTime(null)
                 header.setEpisodeInfo(entryInfo.totalEpisodes!!, episode)
-                adapter.setHeader(header)
+                adapter.header = header
             }
 
             if (exception.original is ProxerException &&
                     exception.original.proxerErrorCode == ProxerException.MANGA_UNKNOWN_CHAPTER) {
-                showError(getString(R.string.fragment_manga_not_available), null)
+                showError(R.string.error_manga_not_available, ACTION_MESSAGE_HIDE)
 
                 contentContainer.visibility = View.VISIBLE
                 errorContainer.post {

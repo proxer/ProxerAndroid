@@ -17,6 +17,7 @@ import com.proxerme.app.task.framework.Task
 import com.proxerme.app.task.framework.ValidatingTask
 import com.proxerme.app.task.framework.ZippedTask
 import com.proxerme.app.util.ErrorUtils
+import com.proxerme.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_DEFAULT
 import com.proxerme.app.util.KotterKnife
 import com.proxerme.app.util.Validators
 import com.proxerme.app.util.bindView
@@ -34,6 +35,7 @@ abstract class SingleLoadingFragment<I, T> : MainFragment() {
 
     private val successCallback = { data: T ->
         if (view != null) {
+            hideError()
             present(data)
         }
     }
@@ -137,29 +139,27 @@ abstract class SingleLoadingFragment<I, T> : MainFragment() {
         showError(action.message, action.buttonMessage, action.buttonAction)
     }
 
-    open protected fun showError(message: String, buttonMessage: String? = "",
+    open protected fun showError(message: Int, buttonMessage: Int = ACTION_MESSAGE_DEFAULT,
                                  onButtonClickListener: View.OnClickListener? = null) {
         contentContainer.visibility = View.GONE
         errorContainer.visibility = View.VISIBLE
-        errorText.text = message
+        errorText.text = getString(message)
 
-        when (buttonMessage) {
-            null -> errorButton.visibility = View.GONE
-            else -> {
-                errorButton.visibility = View.VISIBLE
-                errorButton.setOnClickListener(when (onButtonClickListener) {
-                    null -> View.OnClickListener { reset() }
-                    else -> onButtonClickListener
-                })
-
-                when {
-                    buttonMessage.isBlank() -> {
-                        errorButton.text = getString(R.string.error_action_retry)
-                    }
-                    else -> errorButton.text = buttonMessage
-                }
-            }
+        errorButton.text = when (buttonMessage) {
+            ACTION_MESSAGE_DEFAULT -> getString(R.string.error_action_retry)
+            ErrorUtils.ErrorAction.ACTION_MESSAGE_HIDE -> null
+            else -> getString(buttonMessage)
         }
+
+        errorButton.visibility = when (buttonMessage) {
+            ErrorUtils.ErrorAction.ACTION_MESSAGE_HIDE -> View.GONE
+            else -> View.VISIBLE
+        }
+
+        errorButton.setOnClickListener(onButtonClickListener ?: View.OnClickListener {
+            task.reset()
+            task.execute(constructInput())
+        })
     }
 
     open protected fun hideError() {

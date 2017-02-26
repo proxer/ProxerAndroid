@@ -14,7 +14,7 @@ import com.proxerme.app.R
 import com.proxerme.app.adapter.framework.PagingAdapter
 import com.proxerme.app.util.DeviceUtils
 import com.proxerme.app.util.bindView
-import com.proxerme.app.util.decodedName
+import com.proxerme.app.util.extension.decodedName
 import com.proxerme.library.connection.manga.entity.Page
 import com.proxerme.library.info.ProxerUrlHolder
 import java.io.File

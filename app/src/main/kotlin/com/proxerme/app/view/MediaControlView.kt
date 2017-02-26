@@ -10,7 +10,8 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import com.proxerme.app.R
 import com.proxerme.app.util.bindView
-import org.joda.time.DateTime
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.format.DateTimeFormatter
 
 /**
  * TODO: Describe class
@@ -20,7 +21,7 @@ import org.joda.time.DateTime
 class MediaControlView(context: Context?, attrs: AttributeSet?) : FrameLayout(context, attrs) {
 
     private companion object {
-        private const val DATE_PATTERN = "dd.MM.yyyy"
+        private val DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy")
     }
 
     var onUploaderClickListener: ((Uploader) -> Unit)? = null
@@ -85,12 +86,12 @@ class MediaControlView(context: Context?, attrs: AttributeSet?) : FrameLayout(co
         }
     }
 
-    fun setDate(date: DateTime?) {
-        if (date == null) {
+    fun setDateTime(dateTime: LocalDateTime?) {
+        if (dateTime == null) {
             dateRow.visibility = View.GONE
         } else {
             dateRow.visibility = View.VISIBLE
-            dateText.text = date.toString(DATE_PATTERN)
+            dateText.text = DATE_TIME_FORMATTER.format(dateTime)
         }
     }
 

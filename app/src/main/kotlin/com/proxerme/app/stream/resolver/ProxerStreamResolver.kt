@@ -1,10 +1,10 @@
 package com.proxerme.app.stream.resolver
 
 import android.net.Uri
-import com.proxerme.app.application.MainApplication
 import com.proxerme.app.stream.StreamResolver
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionException
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionResult
+import com.proxerme.app.util.ProxerConnectionWrapper
 import okhttp3.Request
 
 /**
@@ -19,7 +19,7 @@ class ProxerStreamResolver : StreamResolver() {
     private val regex = Regex("<source type=\"(.*?)\" src=\"(.*?)\">")
 
     override fun resolve(url: String): StreamResolutionResult {
-        val response = MainApplication.httpClient.newCall(Request.Builder()
+        val response = ProxerConnectionWrapper.httpClient.newCall(Request.Builder()
                 .get()
                 .url(url)
                 .build()).execute()

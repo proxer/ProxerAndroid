@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
@@ -44,7 +45,7 @@
                             android:padding="8dp"
                             android:text="@string/fragment_media_info_general"
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="@color/colorAccent" />
+                            android:textColor="@color/colorAccent"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -64,7 +65,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:isIndicator="true"
-                                    android:numStars="5" />
+                                    android:numStars="5"/>
 
                             </FrameLayout>
 
@@ -80,7 +81,7 @@
                                 android:layout_marginTop="8dp"
                                 android:gravity="center_vertical"
                                 android:textAppearance="?android:attr/textAppearanceSmall"
-                                tools:text="(12910)" />
+                                tools:text="(12910)"/>
                         </LinearLayout>
 
                         <TableLayout
@@ -99,7 +100,7 @@
                                     android:layout_gravity="center_vertical"
                                     android:layout_margin="8dp"
                                     android:text="@string/fragment_media_info_original_title"
-                                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                                    android:textAppearance="?android:attr/textAppearanceMedium"/>
 
                                 <TextView
                                     android:id="@+id/originalTitle"
@@ -110,7 +111,7 @@
                                     android:gravity="end"
                                     android:textAppearance="?android:attr/textAppearanceMedium"
                                     android:textIsSelectable="true"
-                                    tools:text="RE:Zero" />
+                                    tools:text="RE:Zero"/>
                             </TableRow>
 
                             <TableRow
@@ -123,7 +124,7 @@
                                     android:layout_gravity="center_vertical"
                                     android:layout_margin="8dp"
                                     android:text="@string/fragment_media_info_english_title"
-                                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                                    android:textAppearance="?android:attr/textAppearanceMedium"/>
 
                                 <TextView
                                     android:id="@+id/englishTitle"
@@ -134,7 +135,7 @@
                                     android:gravity="end"
                                     android:textAppearance="?android:attr/textAppearanceMedium"
                                     android:textIsSelectable="true"
-                                    tools:text="Sword Art Online" />
+                                    tools:text="Sword Art Online"/>
                             </TableRow>
 
                             <TableRow
@@ -147,7 +148,7 @@
                                     android:layout_gravity="center_vertical"
                                     android:layout_margin="8dp"
                                     android:text="@string/fragment_media_info_german_title"
-                                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                                    android:textAppearance="?android:attr/textAppearanceMedium"/>
 
                                 <TextView
                                     android:id="@+id/germanTitle"
@@ -158,7 +159,7 @@
                                     android:gravity="end"
                                     android:textAppearance="?android:attr/textAppearanceMedium"
                                     android:textIsSelectable="true"
-                                    tools:text="Sword Art Online" />
+                                    tools:text="Sword Art Online"/>
                             </TableRow>
 
                             <TableRow
@@ -171,7 +172,7 @@
                                     android:layout_gravity="center_vertical"
                                     android:layout_margin="8dp"
                                     android:text="@string/fragment_media_info_japanese_title"
-                                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                                    android:textAppearance="?android:attr/textAppearanceMedium"/>
 
                                 <TextView
                                     android:id="@+id/japaneseTitle"
@@ -182,7 +183,7 @@
                                     android:gravity="end"
                                     android:textAppearance="?android:attr/textAppearanceMedium"
                                     android:textIsSelectable="true"
-                                    tools:text="I can't type japanese symbols :D" />
+                                    tools:text="I can't type japanese symbols :D"/>
                             </TableRow>
 
                             <TableRow android:id="@+id/seasonsRow">
@@ -193,7 +194,7 @@
                                     android:layout_gravity="center_vertical"
                                     android:layout_margin="8dp"
                                     android:text="@string/fragment_media_info_season_title"
-                                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                                    android:textAppearance="?android:attr/textAppearanceMedium"/>
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"
@@ -209,7 +210,7 @@
                                         android:layout_margin="8dp"
                                         android:gravity="end"
                                         android:textAppearance="?android:attr/textAppearanceMedium"
-                                        tools:text="Start: Winter 2016" />
+                                        tools:text="Start: Winter 2016"/>
 
                                     <TextView
                                         android:id="@+id/seasonEnd"
@@ -219,7 +220,7 @@
                                         android:layout_margin="8dp"
                                         android:gravity="end"
                                         android:textAppearance="?android:attr/textAppearanceMedium"
-                                        tools:text="End: Summer 2016" />
+                                        tools:text="End: Summer 2016"/>
 
                                 </LinearLayout>
                             </TableRow>
@@ -232,7 +233,7 @@
                                     android:layout_gravity="center_vertical"
                                     android:layout_margin="8dp"
                                     android:text="@string/fragment_media_info_status_title"
-                                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                                    android:textAppearance="?android:attr/textAppearanceMedium"/>
 
                                 <TextView
                                     android:id="@+id/status"
@@ -242,7 +243,7 @@
                                     android:layout_margin="8dp"
                                     android:gravity="end"
                                     android:textAppearance="?android:attr/textAppearanceMedium"
-                                    tools:text="Finished" />
+                                    tools:text="Finished"/>
                             </TableRow>
 
                             <TableRow android:id="@+id/licenseRow">
@@ -253,7 +254,7 @@
                                     android:layout_gravity="center_vertical"
                                     android:layout_margin="8dp"
                                     android:text="@string/fragment_media_info_license_title"
-                                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                                    android:textAppearance="?android:attr/textAppearanceMedium"/>
 
                                 <TextView
                                     android:id="@+id/license"
@@ -263,7 +264,7 @@
                                     android:layout_margin="8dp"
                                     android:gravity="end"
                                     android:textAppearance="?android:attr/textAppearanceMedium"
-                                    tools:text="Licensed" />
+                                    tools:text="Licensed"/>
                             </TableRow>
                         </TableLayout>
 
@@ -274,13 +275,13 @@
                             android:padding="8dp"
                             android:text="@string/fragment_media_info_genres"
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="@color/colorAccent" />
+                            android:textColor="@color/colorAccent"/>
 
                         <org.apmem.tools.layouts.FlowLayout
                             android:id="@+id/genres"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_margin="4dp" />
+                            android:layout_margin="4dp"/>
 
                         <TextView
                             android:id="@+id/tagsTitle"
@@ -289,13 +290,13 @@
                             android:padding="8dp"
                             android:text="@string/fragment_media_info_tags"
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="@color/colorAccent" />
+                            android:textColor="@color/colorAccent"/>
 
                         <org.apmem.tools.layouts.FlowLayout
                             android:id="@+id/tags"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_margin="4dp" />
+                            android:layout_margin="4dp"/>
 
                         <LinearLayout
                             style="?android:buttonBarStyle"
@@ -317,7 +318,7 @@
                                 android:layout_marginStart="8dp"
                                 android:layout_marginTop="4dp"
                                 android:layout_weight="1"
-                                android:textColor="@color/colorAccent" />
+                                android:textColor="@color/colorAccent"/>
 
                             <Button
                                 android:id="@+id/spoilerTagsButton"
@@ -332,7 +333,7 @@
                                 android:layout_marginStart="4dp"
                                 android:layout_marginTop="4dp"
                                 android:layout_weight="1"
-                                android:textColor="@color/colorAccent" />
+                                android:textColor="@color/colorAccent"/>
                         </LinearLayout>
 
                         <TextView
@@ -342,13 +343,13 @@
                             android:padding="8dp"
                             android:text="@string/fragment_media_info_fsk"
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="@color/colorAccent" />
+                            android:textColor="@color/colorAccent"/>
 
                         <org.apmem.tools.layouts.FlowLayout
                             android:id="@+id/fsk"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_margin="4dp" />
+                            android:layout_margin="4dp"/>
 
                         <TextView
                             android:id="@+id/groupsTitle"
@@ -357,13 +358,13 @@
                             android:padding="8dp"
                             android:text="@string/fragment_media_info_groups"
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="@color/colorAccent" />
+                            android:textColor="@color/colorAccent"/>
 
                         <org.apmem.tools.layouts.FlowLayout
                             android:id="@+id/groups"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_margin="4dp" />
+                            android:layout_margin="4dp"/>
 
                         <TextView
                             android:id="@+id/publishersTitle"
@@ -372,13 +373,13 @@
                             android:padding="8dp"
                             android:text="@string/fragment_media_info_publishers"
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="@color/colorAccent" />
+                            android:textColor="@color/colorAccent"/>
 
                         <org.apmem.tools.layouts.FlowLayout
                             android:id="@+id/publishers"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_margin="4dp" />
+                            android:layout_margin="4dp"/>
 
                         <View
                             android:layout_width="match_parent"
@@ -386,7 +387,7 @@
                             android:layout_marginLeft="8dp"
                             android:layout_marginRight="8dp"
                             android:layout_marginTop="8dp"
-                            android:background="@color/divider" />
+                            android:background="@color/divider"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -408,13 +409,13 @@
                                     android:id="@+id/note"
                                     android:layout_width="24dp"
                                     android:layout_height="24dp"
-                                    android:layout_marginBottom="8dp" />
+                                    android:layout_marginBottom="8dp"/>
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/fragment_media_info_note"
-                                    android:textAppearance="?android:attr/textAppearanceSmall" />
+                                    android:textAppearance="?android:attr/textAppearanceSmall"/>
                             </LinearLayout>
 
                             <LinearLayout
@@ -431,13 +432,13 @@
                                     android:id="@+id/favor"
                                     android:layout_width="24dp"
                                     android:layout_height="24dp"
-                                    android:layout_marginBottom="8dp" />
+                                    android:layout_marginBottom="8dp"/>
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/fragment_media_info_favor"
-                                    android:textAppearance="?android:attr/textAppearanceSmall" />
+                                    android:textAppearance="?android:attr/textAppearanceSmall"/>
                             </LinearLayout>
 
                             <LinearLayout
@@ -454,13 +455,13 @@
                                     android:id="@+id/finish"
                                     android:layout_width="24dp"
                                     android:layout_height="24dp"
-                                    android:layout_marginBottom="8dp" />
+                                    android:layout_marginBottom="8dp"/>
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/fragment_media_info_finish"
-                                    android:textAppearance="?android:attr/textAppearanceSmall" />
+                                    android:textAppearance="?android:attr/textAppearanceSmall"/>
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
@@ -487,7 +488,7 @@
                             android:padding="8dp"
                             android:text="@string/fragment_media_info_description"
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="@color/colorAccent" />
+                            android:textColor="@color/colorAccent"/>
 
                         <TextView
                             android:id="@+id/description"
@@ -495,13 +496,13 @@
                             android:layout_height="wrap_content"
                             android:padding="8dp"
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textIsSelectable="true" />
+                            android:textIsSelectable="true"/>
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <include layout="@layout/layout_error" />
+    <include layout="@layout/layout_error"/>
 
 </android.support.design.widget.CoordinatorLayout>

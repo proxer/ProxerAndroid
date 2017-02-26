@@ -1,9 +1,9 @@
 package com.proxerme.app.stream.resolver
 
-import com.proxerme.app.application.MainApplication
 import com.proxerme.app.stream.StreamResolver
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionResult
-import com.proxerme.app.util.androidUri
+import com.proxerme.app.util.ProxerConnectionWrapper
+import com.proxerme.app.util.extension.androidUri
 import okhttp3.HttpUrl
 import okhttp3.Request
 
@@ -19,12 +19,12 @@ class MyviResolver : StreamResolver() {
     override val name = "Myvi"
 
     override fun resolve(url: String): StreamResolutionResult {
-        val response = MainApplication.httpClient.newCall(Request.Builder()
+        val response = ProxerConnectionWrapper.httpClient.newCall(Request.Builder()
                 .get()
                 .url("http://myvi.ru/player/api/Video/Get/${HttpUrl.parse(url).pathSegments().last()}?sig")
                 .build()).execute()
 
-        val resultUrl = MainApplication.moshi.adapter(SprutoResult::class.java)
+        val resultUrl = ProxerConnectionWrapper.moshi.adapter(SprutoResult::class.java)
                 .fromJson(validateAndGetResult(response)).url
 
         return StreamResolutionResult(resultUrl.androidUri(), "video/mp4")

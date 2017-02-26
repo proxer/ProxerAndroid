@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.ProgressBar
 import com.afollestad.materialdialogs.MaterialDialog
 import com.proxerme.app.R
+import com.proxerme.app.activity.MainActivity
 import com.proxerme.app.application.MainApplication
 import com.proxerme.app.event.LogoutEvent
 import com.proxerme.app.helper.StorageHelper
@@ -15,7 +16,6 @@ import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.util.ErrorUtils
 import com.proxerme.app.util.KotterKnife
 import com.proxerme.app.util.bindView
-import com.proxerme.library.connection.ProxerException
 import com.proxerme.library.connection.user.request.LogoutRequest
 import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.longToast
@@ -42,11 +42,9 @@ class LogoutDialog : DialogFragment() {
     }
 
     private val exceptionCallback = { exception: Exception ->
-        if (exception is ProxerException) {
-            context.longToast(ErrorUtils.getMessageForErrorCode(context, exception))
-        } else {
-            context.longToast(R.string.error_unknown)
-        }
+        val action = ErrorUtils.handle(activity as MainActivity, exception)
+
+        context.longToast(action.message)
 
         if (dialog != null) {
             handleVisibility()

@@ -20,7 +20,7 @@ import com.proxerme.app.task.framework.CachedTask
 import com.proxerme.app.task.framework.Task
 import com.proxerme.app.util.DeviceUtils
 import com.proxerme.app.util.bindView
-import com.proxerme.app.util.updateAndScrollUpIfNecessary
+import com.proxerme.app.util.extension.updateAndScrollUpIfNecessary
 
 /**
  * TODO: Describe class
@@ -121,13 +121,11 @@ class ConferencesFragment : SingleLoadingFragment<Context, List<LocalConference>
 
     override fun present(data: List<LocalConference>) {
         if (data.isEmpty()) {
-            showError(getString(R.string.error_no_data_conferences),
-                    getString(R.string.error_no_data_action_chat), View.OnClickListener {
-                NewChatActivity.navigateTo(activity)
-            })
+            showError(R.string.error_no_data_conferences, R.string.error_no_data_action_chat,
+                    View.OnClickListener {
+                        NewChatActivity.navigateTo(activity)
+                    })
         } else {
-            hideError()
-
             adapter.updateAndScrollUpIfNecessary(list.layoutManager, list, { it.insert(data) })
         }
     }

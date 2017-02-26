@@ -10,8 +10,8 @@ android {
         applicationId 'com.proxerme.app'
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 27
-        versionName "0.8.0"
+        versionCode 28
+        versionName "0.8.1"
 
         vectorDrawables.useSupportLibrary = true
     }
@@ -67,6 +67,7 @@ dependencies {
     compile "com.android.support:recyclerview-v7:$support_version"
     compile "com.android.support:cardview-v7:$support_version"
     compile "com.android.support:design:$support_version"
+    compile "com.android.support:animated-vector-drawable:$support_version"
     compile "com.android.support:customtabs:$support_version"
     compile "com.android.support:support-annotations:$support_version"
     compile "com.android.support:preference-v7:$support_version"
@@ -79,10 +80,10 @@ dependencies {
     compile "net.xpece.android:support-preference:1.2.5"
     compile "net.xpece.android:support-spinner:1.2.4"
 
-    compile('com.mikepenz:aboutlibraries:5.9.2@aar') {
+    compile('com.mikepenz:aboutlibraries:5.9.3@aar') {
         transitive = true
     }
-    compile('com.mikepenz:materialdrawer:5.8.1@aar') {
+    compile('com.mikepenz:materialdrawer:5.8.2@aar') {
         transitive = true
     }
     compile 'com.mikepenz:iconics-core:2.8.2@aar'
@@ -91,7 +92,7 @@ dependencies {
 
     compile 'com.github.daniel-stoneuk:material-about-library:1.7.1'
 
-    compile 'net.danlew:android.joda:2.9.5.1'
+    compile 'com.jakewharton.threetenabp:threetenabp:1.0.5'
 
     compile 'com.orhanobut:hawk:2.0.1'
 
@@ -115,16 +116,17 @@ dependencies {
 
     compile 'com.github.nekocode:Badge:1.6.2'
 
-    compile 'com.vanniktech:emoji-ios:0.4.0'
+    compile 'com.vanniktech:emoji-ios:0.5.0-SNAPSHOT'
 
-    compile 'com.devbrackets.android:exomedia:4.0.0-preview1'
+    compile 'com.devbrackets.android:exomedia:4.0.0-preview2'
+    compile 'com.google.android.exoplayer:extension-okhttp:r2.2.0'
 
     compile 'me.zhanghai.android.materialratingbar:library:1.0.2'
     compile 'me.zhanghai.android.customtabshelper:library:1.0.3'
 
     compile 'com.github.proxer:ProxerLibAndroid:f8462482bc'
-    compile 'com.github.rubengees:EasyHeaderFooterAdapter:1.0.4@aar'
-    compile('com.github.rubengees:introduction:1.3.7@aar') {
+    compile 'com.github.rubengees:EasyHeaderFooterAdapter:1.0.5@aar'
+    compile('com.github.rubengees:introduction:1.3.9@aar') {
         transitive = true
     }
 

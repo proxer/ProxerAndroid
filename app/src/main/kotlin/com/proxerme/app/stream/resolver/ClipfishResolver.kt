@@ -19,8 +19,7 @@ class ClipfishResolver : StreamResolver() {
     private val regex = Regex("video/(\\d+)?")
 
     override fun resolve(url: String): StreamResolutionResult {
-        val id = regex.find(url)?.groupValues?.get(1)
-                ?: throw StreamResolutionException()
+        val id = regex.find(url)?.groupValues?.get(1) ?: throw StreamResolutionException()
 
         return StreamResolutionResult(Intent(Intent.ACTION_VIEW,
                 Uri.parse("clipfish://video/$id?ref=proxer")), {

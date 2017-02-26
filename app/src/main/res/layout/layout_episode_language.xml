@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/languageContainer"
-    android:layout_width="0dp"
-    android:layout_height="match_parent"
-    android:layout_weight="1"
-    android:background="?attr/selectableItemBackground"
-    android:orientation="vertical"
-    tools:ignore="Overdraw">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/languageContainer"
+              android:layout_width="0dp"
+              android:layout_height="match_parent"
+              android:layout_weight="1"
+              android:background="?attr/selectableItemBackground"
+              android:orientation="vertical"
+              tools:ignore="Overdraw">
 
     <TextView
         android:id="@+id/language"
@@ -17,13 +17,13 @@
         android:layout_margin="4dp"
         android:drawablePadding="8dp"
         android:textAppearance="@android:style/TextAppearance.Medium"
-        tools:text="engsub" />
+        tools:text="engsub"/>
 
     <org.apmem.tools.layouts.FlowLayout
         android:id="@+id/hosters"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
-        android:gravity="center" />
+        android:gravity="center"/>
 
 </LinearLayout>

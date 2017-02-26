@@ -1,10 +1,10 @@
 package com.proxerme.app.stream.resolver
 
-import com.proxerme.app.application.MainApplication
 import com.proxerme.app.stream.StreamResolver
 import com.proxerme.app.task.StreamResolutionTask
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionResult
-import com.proxerme.app.util.androidUri
+import com.proxerme.app.util.ProxerConnectionWrapper
+import com.proxerme.app.util.extension.androidUri
 import okhttp3.HttpUrl
 import okhttp3.Request
 import okhttp3.Response
@@ -22,7 +22,7 @@ class YourUploadResolver : StreamResolver() {
     private val regex = Regex("file: '(.*?)'")
 
     override fun resolve(url: String): StreamResolutionResult {
-        val response = MainApplication.httpClient.newCall(Request.Builder()
+        val response = ProxerConnectionWrapper.httpClient.newCall(Request.Builder()
                 .get()
                 .url(url)
                 .build()).execute()
@@ -34,7 +34,7 @@ class YourUploadResolver : StreamResolver() {
             throw StreamResolutionTask.StreamResolutionException()
         }
 
-        val apiResponse = MainApplication.httpClient.newCall(Request.Builder()
+        val apiResponse = ProxerConnectionWrapper.httpClient.newCall(Request.Builder()
                 .header("Referer", url)
                 .head()
                 .url(HttpUrl.parse("http://yourupload.com$file"))

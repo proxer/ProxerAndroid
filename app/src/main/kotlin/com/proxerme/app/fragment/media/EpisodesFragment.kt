@@ -17,6 +17,7 @@ import com.proxerme.app.manager.SectionManager.Section
 import com.proxerme.app.task.ProxerLoadingTask
 import com.proxerme.app.task.framework.MappedTask
 import com.proxerme.app.task.framework.Task
+import com.proxerme.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import com.proxerme.app.util.bindView
 import com.proxerme.library.connection.info.entity.ListInfo
 import com.proxerme.library.connection.info.request.ListInfoRequest
@@ -88,7 +89,7 @@ class EpisodesFragment : SingleLoadingFragment<String, Array<RichEpisode>>() {
 
     override fun present(data: Array<RichEpisode>) {
         if (data.isEmpty()) {
-            showError(getString(R.string.error_no_data_episodes), null)
+            showError(R.string.error_no_data_episodes, ACTION_MESSAGE_HIDE)
         } else {
             adapter.replace(data)
         }

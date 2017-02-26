@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:foreground="?android:attr/selectableItemBackground"
-    tools:context="com.proxerme.app.adapter.chat.ConferenceParticipantAdapter">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:foreground="?android:attr/selectableItemBackground"
+                tools:context="com.proxerme.app.adapter.chat.ConferenceParticipantAdapter">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/image"
@@ -16,7 +16,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerVertical="true"
         android:padding="8dp"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -37,7 +37,7 @@
             android:paddingRight="8dp"
             android:paddingTop="8dp"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            tools:text="Ruby" />
+            tools:text="Ruby"/>
 
         <com.klinker.android.link_builder.LinkConsumableTextView
             android:id="@+id/status"
@@ -49,7 +49,7 @@
             android:paddingRight="8dp"
             android:paddingTop="2dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            tools:text="This is a status" />
+            tools:text="This is a status"/>
 
     </LinearLayout>
 </RelativeLayout>

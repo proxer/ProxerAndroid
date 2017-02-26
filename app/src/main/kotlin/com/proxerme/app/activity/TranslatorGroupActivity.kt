@@ -22,8 +22,8 @@ import com.h6ah4i.android.tablayouthelper.TabLayoutHelper
 import com.proxerme.app.R
 import com.proxerme.app.fragment.info.TranslatorGroupInfoFragment
 import com.proxerme.app.fragment.info.TranslatorGroupProjectsFragment
-import com.proxerme.app.util.androidUri
 import com.proxerme.app.util.bindView
+import com.proxerme.app.util.extension.androidUri
 import com.proxerme.library.info.ProxerUrlHolder
 import org.jetbrains.anko.applyRecursively
 import org.jetbrains.anko.intentFor

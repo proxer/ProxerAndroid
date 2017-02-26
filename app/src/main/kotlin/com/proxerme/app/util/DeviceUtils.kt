@@ -6,6 +6,7 @@ import android.content.res.Configuration
 import android.graphics.Point
 import android.os.Build
 import android.util.DisplayMetrics
+import com.proxerme.app.util.extension.windowManager
 
 /**
  * TODO: Describe class

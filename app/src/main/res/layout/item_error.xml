@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
 
     <TextView
         android:id="@+id/errorText"
@@ -17,7 +17,7 @@
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textIsSelectable="true"
-        tools:text="There was a problem" />
+        tools:text="There was a problem"/>
 
     <Button
         android:id="@+id/errorButton"
@@ -30,5 +30,5 @@
         android:layout_marginTop="8dp"
         android:text="@string/fragment_paging_retry"
         android:textColor="@color/md_white_1000"
-        android:theme="@style/ButtonTheme" />
+        android:theme="@style/ButtonTheme"/>
 </LinearLayout>

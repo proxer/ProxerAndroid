@@ -6,7 +6,7 @@
             android:key="pref_hentai"
             android:summaryOff="@string/preference_hentai_summary_off"
             android:summaryOn="@string/preference_hentai_summary_on"
-            android:title="@string/preference_hentai_title" />
+            android:title="@string/preference_hentai_title"/>
 
         <!--suppress AndroidUnknownAttribute -->
         <ListPreference
@@ -16,7 +16,7 @@
             android:entryValues="@array/start_page_values"
             android:key="pref_start_page"
             android:summary="%s"
-            android:title="@string/preference_start_page_title" />
+            android:title="@string/preference_start_page_title"/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/preference_category_design_title">
@@ -29,7 +29,7 @@
             android:entryValues="@array/theme_values"
             android:key="pref_theme"
             android:summary="%s"
-            android:title="@string/preference_theme_title" />
+            android:title="@string/preference_theme_title"/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/preference_category_notifications_title">
@@ -37,7 +37,7 @@
             android:key="pref_news_notifications"
             android:summaryOff="@string/preference_notifications_summary_off"
             android:summaryOn="@string/preference_notifications_summary_on"
-            android:title="@string/preference_news_notifications_title" />
+            android:title="@string/preference_news_notifications_title"/>
 
         <!--suppress AndroidUnknownAttribute -->
         <ListPreference
@@ -48,6 +48,6 @@
             android:entryValues="@array/news_notifications_interval_values"
             android:key="pref_news_notifications_interval"
             android:summary="%s"
-            android:title="@string/preference_news_notifications_interval_title" />
+            android:title="@string/preference_news_notifications_interval_title"/>
     </PreferenceCategory>
 </PreferenceScreen>

@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import com.proxerme.app.application.MainApplication
 import com.proxerme.app.manager.SectionManager
-import com.proxerme.app.util.androidUri
-import com.proxerme.app.util.openHttpPage
+import com.proxerme.app.util.extension.androidUri
+import com.proxerme.app.util.extension.openHttpPage
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
 
