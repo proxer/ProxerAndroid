@@ -18,7 +18,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile
 import com.proxerme.app.R
 import com.proxerme.app.util.CrossfadeWrapper
 import com.proxerme.library.info.ProxerUrlHolder
-import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * TODO: Describe class
@@ -40,6 +40,7 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar,
     private val miniDrawer: MiniDrawer?
     private val crossfader: Crossfader<*>?
 
+    private var stickyItemIds : Array<DrawerItem> = arrayOf()
     private var currentItem: DrawerItem? = null
 
     init {
@@ -148,11 +149,15 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar,
 
     private fun buildDrawer(context: Activity, toolbar: Toolbar, accountHeader: AccountHeader,
                             savedInstanceState: Bundle?): Drawer {
-        var drawer = DrawerBuilder(context)
+        val stickyDrawerItems = generateStickyDrawerItems()
+        this.stickyItemIds = stickyDrawerItems.mapNotNull { DrawerItem.fromOrNull(it.identifier) }
+                .toTypedArray()
+
+        val drawer = DrawerBuilder(context)
                 .withToolbar(toolbar)
                 .withAccountHeader(accountHeader)
                 .withDrawerItems(generateDrawerItems())
-                .withStickyDrawerItems(generateStickyDrawerItems())
+                .withStickyDrawerItems(stickyDrawerItems)
                 .withOnDrawerItemClickListener { view, id, item ->
                     onDrawerItemClick(view, id, item)
                 }
@@ -254,6 +259,11 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar,
 
             if (item.isSelectable) {
                 currentItem = newItem
+
+                if(miniDrawer != null && newItem in this.stickyItemIds) {
+                    //TODO: Use something more efficient
+                    miniDrawer.createItems()
+                }
             }
 
             return itemClickCallback.invoke(newItem)
