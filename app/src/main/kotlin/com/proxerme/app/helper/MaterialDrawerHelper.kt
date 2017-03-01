@@ -94,6 +94,7 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar,
     fun refreshHeader(context: Activity) {
         header.profiles = generateAccountItems(context)
         drawer.recyclerView.adapter.notifyDataSetChanged()
+        miniDrawer?.createItems()
     }
 
     private fun buildAccountHeader(context: Activity, savedInstanceState: Bundle?): AccountHeader {
