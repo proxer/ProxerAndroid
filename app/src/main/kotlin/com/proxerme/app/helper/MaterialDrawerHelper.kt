@@ -269,8 +269,7 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar,
                 currentItem = newItem
 
                 if(miniDrawer != null && newItem in this.stickyItemIds) {
-                    //TODO: Use something more efficient
-                    miniDrawer.createItems()
+                    miniDrawer.adapter.deselect()
                 }
             }
 
