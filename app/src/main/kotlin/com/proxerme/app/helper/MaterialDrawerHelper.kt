@@ -60,12 +60,18 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar,
     }
 
     fun onBackPressed(): Boolean {
-        if (isDrawerOpen()) {
+        if(crossfader?.isCrossFaded() ?: false) {
+            crossfader?.crossFade()
+
+            return true
+        } else if (isDrawerOpen()) {
             drawer.closeDrawer()
 
             return true
         } else {
-            val startPage = PreferenceHelper.getStartPage(drawer.drawerLayout.context)
+            //DrawerLayout is only null if the device is a tablet (and has a crossfader)
+            val startPage = PreferenceHelper.getStartPage(drawer.drawerLayout?.context
+                    ?: crossfader!!.getCrossFadeSlidingPaneLayout()!!.context)
 
             if (currentItem != startPage) {
                 select(startPage)
@@ -82,6 +88,7 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar,
 
         header.saveInstanceState(outState)
         drawer.saveInstanceState(outState)
+        crossfader?.saveInstanceState(outState)
     }
 
     fun isDrawerOpen(): Boolean {
@@ -90,6 +97,7 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar,
 
     fun select(item: DrawerItem) {
         drawer.setSelection(item.id)
+        miniDrawer?.setSelection(item.id)
     }
 
     fun refreshHeader(context: Activity) {
