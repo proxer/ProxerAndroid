@@ -131,7 +131,7 @@ class MainApplication : Application() {
                 Glide.clear(imageView)
             }
 
-            override fun placeholder(context: Context, tag: String): Drawable? {
+            override fun placeholder(context: Context, tag: String?): Drawable? {
                 return IconicsDrawable(context, CommunityMaterial.Icon.cmd_account)
                         .colorRes(android.R.color.white)
             }

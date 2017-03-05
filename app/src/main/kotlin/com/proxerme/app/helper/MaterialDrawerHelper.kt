@@ -5,10 +5,10 @@ import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.view.View
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
-import com.mikepenz.materialdrawer.AccountHeader
-import com.mikepenz.materialdrawer.AccountHeaderBuilder
-import com.mikepenz.materialdrawer.Drawer
-import com.mikepenz.materialdrawer.DrawerBuilder
+import com.mikepenz.crossfader.Crossfader
+import com.mikepenz.crossfader.util.UIUtils
+import com.mikepenz.crossfader.view.GmailStyleCrossFadeSlidingPaneLayout
+import com.mikepenz.materialdrawer.*
 import com.mikepenz.materialdrawer.holder.BadgeStyle
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem
@@ -16,8 +16,9 @@ import com.mikepenz.materialdrawer.model.ProfileSettingDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IProfile
 import com.proxerme.app.R
+import com.proxerme.app.util.CrossfadeWrapper
+import com.proxerme.app.util.DeviceUtils
 import com.proxerme.library.info.ProxerUrlHolder
-import java.util.*
 
 /**
  * TODO: Describe class
@@ -30,27 +31,47 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar,
                            private val accountClickCallback: (id: AccountItem) -> Boolean = { false }) {
 
     companion object {
+        private const val CROSSFADER_FIRST_DRAWER_DP: Float = 300f
+        private const val CROSSFADER_SECOND_DRAWER_DP: Float = 72f
         private const val STATE_CURRENT_DRAWER_ITEM_ID = "material_drawer_helper_current_id"
     }
 
     private val header: AccountHeader
     private val drawer: Drawer
 
+    private var miniDrawer: MiniDrawer?
+    private var crossfader: Crossfader<*>?
+
     private var currentItem: DrawerItem? = null
 
     init {
         header = buildAccountHeader(context, savedInstanceState)
         drawer = buildDrawer(context, toolbar, header, savedInstanceState)
+
+        val tabletDrawer = buildTabletDrawer(context, drawer, savedInstanceState)
+        miniDrawer = tabletDrawer.first
+        crossfader = tabletDrawer.second
+
         currentItem = DrawerItem.fromOrNull(savedInstanceState?.getLong(STATE_CURRENT_DRAWER_ITEM_ID))
     }
 
     fun onBackPressed(): Boolean {
-        if (isDrawerOpen()) {
+        if (crossfader?.isCrossFaded() ?: false) {
+            crossfader?.crossFade()
+
+            return true
+        } else if (isDrawerOpen()) {
             drawer.closeDrawer()
 
             return true
         } else {
-            val startPage = PreferenceHelper.getStartPage(drawer.drawerLayout.context)
+            val context = when {
+                drawer.drawerLayout != null -> drawer.drawerLayout.context
+                crossfader != null -> crossfader?.getCrossFadeSlidingPaneLayout()?.context
+                else -> null
+            } ?: return false
+
+            val startPage = PreferenceHelper.getStartPage(context)
 
             if (currentItem != startPage) {
                 select(startPage)
@@ -67,6 +88,7 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar,
 
         header.saveInstanceState(outState)
         drawer.saveInstanceState(outState)
+        crossfader?.saveInstanceState(outState)
     }
 
     fun isDrawerOpen(): Boolean {
@@ -75,11 +97,13 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar,
 
     fun select(item: DrawerItem) {
         drawer.setSelection(item.id)
+        miniDrawer?.setSelection(item.id)
     }
 
     fun refreshHeader(context: Activity) {
         header.profiles = generateAccountItems(context)
         drawer.recyclerView.adapter.notifyDataSetChanged()
+        miniDrawer?.createItems()
     }
 
     private fun buildAccountHeader(context: Activity, savedInstanceState: Bundle?): AccountHeader {
@@ -133,7 +157,7 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar,
 
     private fun buildDrawer(context: Activity, toolbar: Toolbar, accountHeader: AccountHeader,
                             savedInstanceState: Bundle?): Drawer {
-        return DrawerBuilder(context)
+        val builder = DrawerBuilder(context)
                 .withToolbar(toolbar)
                 .withAccountHeader(accountHeader)
                 .withDrawerItems(generateDrawerItems())
@@ -142,8 +166,36 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar,
                     onDrawerItemClick(view, id, item)
                 }
                 .withShowDrawerOnFirstLaunch(true)
-                .withActionBarDrawerToggleAnimated(true)
                 .withTranslucentStatusBar(true)
+                .withGenerateMiniDrawer(DeviceUtils.isTablet(context))
+                .withSavedInstance(savedInstanceState)
+
+        return if (DeviceUtils.isTablet(context)) builder.buildView() else builder.build()
+    }
+
+    private fun buildTabletDrawer(context: Activity, drawer: Drawer, savedInstanceState: Bundle?):
+            Pair<MiniDrawer?, Crossfader<*>?> {
+        if (DeviceUtils.isTablet(context)) {
+            val miniDrawer = drawer.miniDrawer.withIncludeSecondaryDrawerItems(true)
+            val crossfader = buildCrossfader(context, drawer, miniDrawer, savedInstanceState)
+
+            miniDrawer.withCrossFader(CrossfadeWrapper(crossfader))
+            crossfader.getCrossFadeSlidingPaneLayout()?.setShadowResourceLeft(R.drawable.material_drawer_shadow_left)
+
+            return miniDrawer to crossfader
+        }
+
+        return null to null
+    }
+
+    private fun buildCrossfader(context: Activity, drawer: Drawer, miniDrawer: MiniDrawer,
+                                savedInstanceState: Bundle?): Crossfader<*> {
+        return Crossfader<GmailStyleCrossFadeSlidingPaneLayout>()
+                .withContent(context.findViewById(R.id.drawerRoot))
+                .withFirst(drawer.slider,
+                        Math.round(UIUtils.convertDpToPixel(CROSSFADER_FIRST_DRAWER_DP, context)))
+                .withSecond(miniDrawer.build(context),
+                        Math.round(UIUtils.convertDpToPixel(CROSSFADER_SECOND_DRAWER_DP, context)))
                 .withSavedInstance(savedInstanceState)
                 .build()
     }
@@ -221,6 +273,12 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar,
                         .withIdentifier(DrawerItem.SETTINGS.id))
     }
 
+    private fun getStickyItemIds(): Array<DrawerItem> {
+        return generateStickyDrawerItems()
+                .mapNotNull { DrawerItem.fromOrNull(it.identifier) }
+                .toTypedArray()
+    }
+
     @Suppress("UNUSED_PARAMETER")
     private fun onDrawerItemClick(view: View?, id: Int, item: IDrawerItem<*, *>): Boolean {
         if (item.identifier != currentItem?.id) {
@@ -228,6 +286,10 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar,
 
             if (item.isSelectable) {
                 currentItem = newItem
+
+                if (miniDrawer != null && newItem in getStickyItemIds()) {
+                    miniDrawer?.adapter?.deselect()
+                }
             }
 
             return itemClickCallback.invoke(newItem)
