@@ -42,7 +42,6 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar,
     private var miniDrawer: MiniDrawer?
     private var crossfader: Crossfader<*>?
 
-    private var stickyItemIds: Array<DrawerItem> = arrayOf()
     private var currentItem: DrawerItem? = null
 
     init {
@@ -158,16 +157,11 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar,
 
     private fun buildDrawer(context: Activity, toolbar: Toolbar, accountHeader: AccountHeader,
                             savedInstanceState: Bundle?): Drawer {
-        val stickyDrawerItems = generateStickyDrawerItems()
-        this.stickyItemIds = stickyDrawerItems
-                .mapNotNull { DrawerItem.fromOrNull(it.identifier) }
-                .toTypedArray()
-
         val builder = DrawerBuilder(context)
                 .withToolbar(toolbar)
                 .withAccountHeader(accountHeader)
                 .withDrawerItems(generateDrawerItems())
-                .withStickyDrawerItems(stickyDrawerItems)
+                .withStickyDrawerItems(generateStickyDrawerItems())
                 .withOnDrawerItemClickListener { view, id, item ->
                     onDrawerItemClick(view, id, item)
                 }
@@ -184,13 +178,14 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar,
         if (DeviceUtils.isTablet(context)) {
             val miniDrawer = drawer.miniDrawer.withIncludeSecondaryDrawerItems(true)
             val crossfader = buildCrossfader(context, drawer, miniDrawer, savedInstanceState)
+
             miniDrawer.withCrossFader(CrossfadeWrapper(crossfader))
             crossfader.getCrossFadeSlidingPaneLayout()?.setShadowResourceLeft(R.drawable.material_drawer_shadow_left)
 
-            return Pair(miniDrawer, crossfader)
+            return miniDrawer to crossfader
         }
 
-        return Pair(null, null)
+        return null to null
     }
 
     private fun buildCrossfader(context: Activity, drawer: Drawer, miniDrawer: MiniDrawer,
@@ -278,6 +273,12 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar,
                         .withIdentifier(DrawerItem.SETTINGS.id))
     }
 
+    private fun getStickyItemIds(): Array<DrawerItem> {
+        return generateStickyDrawerItems()
+                .mapNotNull { DrawerItem.fromOrNull(it.identifier) }
+                .toTypedArray()
+    }
+
     @Suppress("UNUSED_PARAMETER")
     private fun onDrawerItemClick(view: View?, id: Int, item: IDrawerItem<*, *>): Boolean {
         if (item.identifier != currentItem?.id) {
@@ -286,7 +287,7 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar,
             if (item.isSelectable) {
                 currentItem = newItem
 
-                if (miniDrawer != null && newItem in this.stickyItemIds) {
+                if (miniDrawer != null && newItem in getStickyItemIds()) {
                     miniDrawer?.adapter?.deselect()
                 }
             }
