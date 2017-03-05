@@ -188,9 +188,9 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar,
             crossfader.getCrossFadeSlidingPaneLayout()?.setShadowResourceLeft(R.drawable.material_drawer_shadow_left)
 
             return Pair(miniDrawer, crossfader)
-        } else {
-            return Pair(null, null)
         }
+
+        return Pair(null, null)
     }
 
     private fun buildCrossfader(context: Activity, drawer: Drawer, miniDrawer: MiniDrawer,
