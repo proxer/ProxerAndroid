@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.1.0-rc-91'
+    ext.kotlin_version = '1.1.0'
     ext.support_version = '25.2.0'
     ext.anko_version = '0.9.1a'
     ext.leak_canary_version = '1.5'
@@ -7,7 +7,6 @@ buildscript {
 
     repositories {
         jcenter()
-        maven { url "https://dl.bintray.com/kotlin/kotlin-eap-1.1" }
     }
 
     dependencies {
@@ -21,7 +20,6 @@ allprojects {
         mavenCentral()
         jcenter()
         maven { url "https://jitpack.io" }
-        maven { url "https://dl.bintray.com/kotlin/kotlin-eap-1.1" }
         maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
     }
 }
@@ -40,4 +38,8 @@ subprojects {
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.4.1'
 }

@@ -191,7 +191,7 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar,
     private fun buildCrossfader(context: Activity, drawer: Drawer, miniDrawer: MiniDrawer,
                                 savedInstanceState: Bundle?): Crossfader<*> {
         return Crossfader<GmailStyleCrossFadeSlidingPaneLayout>()
-                .withContent(context.findViewById(R.id.drawerRoot))
+                .withContent(context.findViewById(R.id.root))
                 .withFirst(drawer.slider,
                         Math.round(UIUtils.convertDpToPixel(CROSSFADER_FIRST_DRAWER_DP, context)))
                 .withSecond(miniDrawer.build(context),

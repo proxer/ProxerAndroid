@@ -15,7 +15,7 @@ import com.proxerme.app.util.extension.windowManager
  */
 object DeviceUtils {
 
-    private const val MINIMUM_DIAGONAL_INCHES = 7
+    private const val MINIMUM_DIAGONAL_INCHES = 6.5
 
     fun isTablet(context: Activity): Boolean {
         val metrics = DisplayMetrics()
