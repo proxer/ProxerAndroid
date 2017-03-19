@@ -5,6 +5,7 @@ import android.os.Parcelable
 import android.support.design.widget.Snackbar
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +17,9 @@ import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.activity.MainActivity
 import me.proxer.app.adapter.base.PagingAdapter
+import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils
+import me.proxer.app.util.MarginDecoration
 import me.proxer.app.util.extension.bindView
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.listener.EndlessRecyclerOnScrollListener
@@ -33,6 +36,9 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
 
     open protected val shouldReplaceOnRefresh = false
     open protected var hasReachedEnd = false
+
+    open protected val spanCount
+        get() = DeviceUtils.calculateSpanAmount(activity)
 
     override val isWorking: Boolean
         get() = task.isWorking || refreshTask.isWorking
@@ -58,7 +64,7 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
     }
 
     protected lateinit var adapter: EasyHeaderFooterAdapter
-    abstract protected val layoutManager: RecyclerView.LayoutManager
+    protected lateinit var layoutManager: StaggeredGridLayoutManager
     abstract protected val innerAdapter: PagingAdapter<O>
     abstract protected val itemsOnPage: Int
 
@@ -70,6 +76,7 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
         super.onCreate(savedInstanceState)
 
         adapter = EasyHeaderFooterAdapter(innerAdapter)
+        layoutManager = StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL)
         listState = savedInstanceState?.getParcelable(LIST_STATE)
     }
 
@@ -92,6 +99,12 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
         super.onSaveInstanceState(outState)
 
         outState.putParcelable(LIST_STATE, layoutManager.onSaveInstanceState())
+    }
+
+    override fun onDestroyView() {
+        innerAdapter.destroy()
+
+        super.onDestroyView()
     }
 
     override fun onSuccess(result: List<O>) {
@@ -145,11 +158,6 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
             else -> LayoutInflater.from(context).inflate(R.layout.layout_error, root, false)
         }
 
-        errorContainer.layoutParams.height = when (adapter.itemCount <= 0) {
-            true -> ViewGroup.LayoutParams.MATCH_PARENT
-            false -> ViewGroup.LayoutParams.WRAP_CONTENT
-        }
-
         errorContainer.find<TextView>(R.id.errorText).text = getString(message)
         errorContainer.find<Button>(R.id.errorButton).apply {
             text = when (buttonMessage) {
@@ -168,7 +176,14 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
             })
         }
 
-        adapter.footer = errorContainer
+        list.post {
+            errorContainer.layoutParams.height = when (innerAdapter.itemCount <= 0) {
+                true -> list.height - list.paddingTop - list.paddingBottom
+                false -> ViewGroup.LayoutParams.WRAP_CONTENT
+            }
+
+            adapter.footer = errorContainer
+        }
     }
 
     override fun hideError() {
@@ -189,9 +204,11 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
     }
 
     private fun setupList() {
-        list.setHasFixedSize(true)
         list.layoutManager = layoutManager
         list.adapter = adapter
+        list.addItemDecoration(MarginDecoration(context, layoutManager.spanCount))
+
+        list.setHasFixedSize(true)
         list.addOnScrollListener(object : EndlessRecyclerOnScrollListener(layoutManager) {
             override fun onLoadMore() {
                 if (!hasReachedEnd && !adapter.hasFooter() && !isWorking) {

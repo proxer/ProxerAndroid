@@ -23,13 +23,37 @@
     <string name="error_parsing">Der Server hat beschädigte Daten gesendet. Versuche es erneut</string>
     <string name="error_unknown">Ein unbekannter Fehler ist aufgetreten. Versuche es erneut</string>
 
+    <string name="error_login_credentials">Falsches Password ode falscher Nutzername</string>
+    <string name="error_already_in_list">Es gibt bereits einen Eintrag in deiner Liste</string>
+    <string name="error_list_full">Deine Liste ist voll</string>
+    <string name="error_insufficient_permissions">Diese Information wurde vom Benutzer nicht freigegeben, eventuell
+        musst du dich anmelden</string>
+    <string name="error_invalid_chapter">Dieses Kapitel wurde noch nicht hochgeladen :/</string>
+    <string name="error_invalid_episode">Diese Episode wurde noch nicht hochgeladen</string>
+    <string name="error_invalid_input">Ungültige Eingabe</string>
+    <string name="error_cant_add_user_to_conference">Dieser Nutzer existiert nicht oder kann der Konferenz nicht
+        hinzugefügt werden</string>
+    <string name="error_conference_full">Es können keine weiteren Nutzer zur Konferenz hinzugefügt werden, da sie voll
+        ist</string>
+    <string name="error_invalid_topic">Ungültiges Thema</string>
+    <string name="error_account_expired">Der Account ist abgelaufen</string>
+    <string name="error_account_blocked">Der Account wurde geblockt</string>
+    <string name="error_api">Die Schnittstelle hat einen Fehler gemeldet. Bitte informiere einen Techniker</string>
+    <string name="error_maintenance">Proxer wird grade gewartet. Probiere es später noch einmal</string>
+    <string name="error_client">Die App hat fehlerhafte Daten geschickt. Bitte informiere einen Techniker</string>
+    <string name="error_invalid_id">Der Eintrag existiert nicht (mehr)</string>
+    <string name="error_unsupported_code">Diese Fehler wird nicht unterstützt. Bitte informiere einen Techniker</string>
+
     <string name="error_login">Du bist nicht angemeldet</string>
+    <string name="error_captcha">Es wurden zu viele Anfragen gemacht</string>
+    <string name="error_hentai_confirmation_needed">Für diese Kategorie musst du bestätigen, dass du mindestens 18
+        Jahre alt bist</string>
+    <string name="error_refresh">Aktualisierung fehlgeschlagen: %s</string>
 
     <string name="error_action_retry">Erneut versuchen</string>
     <string name="error_action_captcha">Captcha</string>
     <string name="error_action_login">Anmelden</string>
-
-    <string name="error_refresh">Aktualisierung fehlgeschlagen: %s</string>
+    <string name="error_action_confirm">Bestätigen</string>
 
     <string name="dialog_cancel">Abbrechen</string>
 
@@ -42,6 +66,10 @@
 
     <string name="dialog_logout_title">Möchtest du dich abmelden?</string>
     <string name="dialog_logout_positive">Abmelden</string>
+
+    <string name="dialog_hentai_content">Dieser Bereich darf nur von Benutzern über 18 Jahren betreten werden! Eltern
+        haften für ihre Kinder. Proxer.Me übernimmt keinerlei Haftung!</string>
+    <string name="dialog_hentai_positive">Verstanden</string>
 
     <string name="fragment_ucp_overview_clip_title">Proxer Profillink</string>
     <string name="fragment_ucp_overview_username">Nutzername</string>
@@ -95,24 +123,6 @@
     <string name="shortcut_disabled_message">Diese Verknüpung ist nicht mehr verfügbar</string>
 
     <string name="time_a_moment_ago">Eben gerade</string>
-    <string name="error_captcha">Es wurden zu viele Anfragen gemacht</string>
-    <string name="error_login_credentials">Falsches Password ode falscher Nutzername</string>
-    <string name="error_already_in_list">Es gibt bereits einen Eintrag in deiner Liste</string>
-    <string name="error_list_full">Deine Liste ist voll</string>
-    <string name="error_insufficient_permissions">Diese Information wurde vom Benutzer nicht freigegeben, eventuell musst du dich anmelden</string>
-    <string name="error_invalid_chapter">Dieses Kapitel wurde noch nicht hochgeladen :/</string>
-    <string name="error_invalid_episode">Diese Episode wurde noch nicht hochgeladen</string>
-    <string name="error_invalid_input">Ungültige Eingabe</string>
-    <string name="error_cant_add_user_to_conference">Dieser Nutzer existiert nicht oder kann der Konferenz nicht hinzugefügt werden</string>
-    <string name="error_conference_full">Es können keine weiteren Nutzer zur Konferenz hinzugefügt werden, da sie voll ist</string>
-    <string name="error_invalid_topic">Ungültiges Thema</string>
-    <string name="error_account_expired">Der Account ist abgelaufen</string>
-    <string name="error_account_blocked">Der Account wurde geblockt</string>
-    <string name="error_api">Die Schnittstelle hat einen Fehler gemeldet. Bitte informiere einen Techniker</string>
-    <string name="error_maintenance">Proxer wird grade gewartet. Probiere es später noch einmal</string>
-    <string name="error_client">Die App hat fehlerhafte Daten geschickt. Bitte informiere einen Techniker</string>
-    <string name="error_invalid_id">Der Eintrag existiert nicht (mehr)</string>
-    <string name="error_unsupported_code">Diese Fehler wird nicht unterstützt. Bitte informiere einen Techniker</string>
     <plurals name="time_days_ago">
         <item quantity="one">"Gestern"</item>
         <item quantity="other">"Vor %d Tagen"</item>

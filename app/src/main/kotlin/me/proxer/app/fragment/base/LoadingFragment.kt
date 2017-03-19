@@ -15,6 +15,7 @@ import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.activity.MainActivity
 import me.proxer.app.event.CaptchaSolvedEvent
+import me.proxer.app.event.HentaiConfirmationEvent
 import me.proxer.app.event.LoginEvent
 import me.proxer.app.event.LogoutEvent
 import me.proxer.app.util.ErrorUtils
@@ -43,6 +44,8 @@ abstract class LoadingFragment<I, O> : MainFragment() {
                 .validateBefore { validate() }
                 .bindToLifecycle(this)
                 .onInnerStart {
+                    hideError()
+                    hideContent()
                     setProgressVisible(true)
                 }
                 .onSuccess {
@@ -84,8 +87,8 @@ abstract class LoadingFragment<I, O> : MainFragment() {
         setProgressVisible(isWorking)
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onStart() {
+        super.onStart()
 
         task.execute(constructInput())
     }
@@ -108,6 +111,17 @@ abstract class LoadingFragment<I, O> : MainFragment() {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLogout(@Suppress("UNUSED_PARAMETER") event: LogoutEvent) {
         if (isLoginRequired) {
+            task.freshExecute(constructInput())
+        }
+    }
+
+    /**
+     * ( ͡° ͜ʖ ͡°)
+     */
+    @Suppress("unused")
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onHentaiConfirmation(@Suppress("UNUSED_PARAMETER") event: HentaiConfirmationEvent) {
+        if (isHentaiConfirmationRequired) {
             task.freshExecute(constructInput())
         }
     }

@@ -60,6 +60,7 @@ abstract class PagingAdapter<T> : RecyclerView.Adapter<PagingAdapter.PagingViewH
     }
 
     open protected fun areContentsTheSame(oldItem: T, newItem: T) = oldItem == newItem
+    open fun destroy() {}
 
     protected fun doUpdates(newList: List<T>) {
         val result = DiffUtil.calculateDiff(object : DiffUtil.Callback() {

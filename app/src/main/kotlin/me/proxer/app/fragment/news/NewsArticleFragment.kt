@@ -1,8 +1,6 @@
 package me.proxer.app.fragment.news
 
 import android.os.Bundle
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.StaggeredGridLayoutManager
 import android.widget.ImageView
 import com.proxerme.library.api.ProxerCall
 import com.proxerme.library.entitiy.notifications.NewsArticle
@@ -13,13 +11,13 @@ import me.proxer.app.adapter.news.NewsArticleAdapter
 import me.proxer.app.adapter.news.NewsArticleAdapter.NewsAdapterCallback
 import me.proxer.app.fragment.base.PagedLoadingFragment
 import me.proxer.app.task.ProxerTask
-import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.api
 
 /**
  * @author Ruben Gees
  */
 class NewsArticleFragment : PagedLoadingFragment<ProxerCall<List<NewsArticle>>, NewsArticle>() {
+
     companion object {
         fun newInstance(): NewsArticleFragment {
             return NewsArticleFragment()
@@ -30,13 +28,9 @@ class NewsArticleFragment : PagedLoadingFragment<ProxerCall<List<NewsArticle>>, 
     override val itemsOnPage = 15
 
     override val innerAdapter = NewsArticleAdapter()
-    override lateinit var layoutManager: RecyclerView.LayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        layoutManager = StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity),
-                StaggeredGridLayoutManager.VERTICAL)
 
         innerAdapter.callback = object : NewsAdapterCallback {
             override fun onNewsArticleClick(item: NewsArticle) {

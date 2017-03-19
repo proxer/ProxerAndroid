@@ -9,6 +9,7 @@ import com.proxerme.library.util.ProxerUrls
 import com.rubengees.ktask.util.PartialTaskException
 import me.proxer.app.R
 import me.proxer.app.activity.MainActivity
+import me.proxer.app.dialog.HentaiConfirmationDialog
 import me.proxer.app.dialog.LoginDialog
 import me.proxer.app.event.CaptchaSolvedEvent
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_DEFAULT
@@ -111,12 +112,12 @@ object ErrorUtils {
 
                 ErrorAction(message, buttonMessage, buttonAction)
             }
-//            is Validators.HentaiConfirmationRequiredException -> {
-//                ErrorAction(R.string.error_hentai_confirmation_needed, R.string.error_action_confirm,
-//                        View.OnClickListener {
-//                            HentaiConfirmationDialog.show(context)
-//                        })
-//            }
+            is Validators.HentaiConfirmationRequiredException -> {
+                ErrorAction(R.string.error_hentai_confirmation_needed, R.string.error_action_confirm,
+                        View.OnClickListener {
+                            HentaiConfirmationDialog.show(context)
+                        })
+            }
 //            is ChatService.ChatException -> {
 //                handle(context, error.innerException)
 //            }
