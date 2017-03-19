@@ -50,6 +50,8 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
                 }
                 .bindToLifecycle(this, "${javaClass.simpleName}refreshTask")
                 .onInnerStart {
+                    hideError()
+                    hideContent()
                     setProgressVisible(true)
                 }
                 .onSuccess {
@@ -126,22 +128,27 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
         when (shouldReplaceOnRefresh) {
             true -> {
                 innerAdapter.insert(result)
-                cache.mutate { result }
             }
             false -> {
                 innerAdapter.replace(result)
             }
         }
 
+        cache.mutate { innerAdapter.list }
+
         hideError()
         showContent()
     }
 
     open protected fun onRefreshError(error: Throwable) {
-        val action = ErrorUtils.handle(activity as MainActivity, error)
+        if (innerAdapter.itemCount <= 0) {
+            onError(error)
+        } else {
+            val action = ErrorUtils.handle(activity as MainActivity, error)
 
-        multilineSnackbar(root, getString(R.string.error_refresh, getString(action.message)), Snackbar.LENGTH_LONG,
-                action.buttonMessage, action.buttonAction)
+            multilineSnackbar(root, getString(R.string.error_refresh, getString(action.message)), Snackbar.LENGTH_LONG,
+                    action.buttonMessage, action.buttonAction)
+        }
     }
 
     override fun showContent() {
