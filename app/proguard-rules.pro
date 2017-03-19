@@ -65,6 +65,12 @@
 # OkHttp/Okio
 -dontwarn okio.**
 
+# Retrofit
+-dontnote retrofit2.Platform
+-dontwarn retrofit2.Platform$Java8
+-keepattributes Signature
+-keepattributes Exceptions
+
 # ProxerLib
 -keep public enum com.proxerme.library.enums.** {
     **[] $VALUES;
