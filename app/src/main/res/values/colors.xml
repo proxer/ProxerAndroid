@@ -5,22 +5,14 @@
     <color name="colorPrimaryDark">#6B0908</color>
     <color name="colorPrimaryLight">#CE1A1A</color>
     <color name="colorAccent">#8A0E0E</color>
-    <color name="colorBackground">#FAFAFA</color>
+    <color name="background">#FAFAFA</color>
 
-    <color name="transparent_50">#7F000000</color>
+    <color name="half_transparent">#7F000000</color>
 
     <color name="divider">#1F000000</color>
     <color name="icon">#61000000</color>
     <color name="selected">#E8E8E8</color>
 
-    <color name="selected_card">#E8E8E8</color>
-    <color name="colorLink">@color/accent</color>
-    <color name="background_card">@color/cardview_light_background</color>
-
-    <color name="about_libraries_card_dark">@color/background_card</color>
+    <color name="about_libraries_card_dark">@color/cardview_light_background</color>
     <color name="about_libraries_dividerLight_openSource_dark">@color/divider</color>
-
-    <color name="emoji_icons">@color/icon</color>
-    <color name="emoji_divider">@color/divider</color>
-
 </resources>

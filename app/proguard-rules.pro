@@ -56,8 +56,20 @@
     public *;
 }
 
+# Moshi
+-keepclassmembers class ** {
+    @com.squareup.moshi.FromJson *;
+    @com.squareup.moshi.ToJson *;
+}
+
 # OkHttp/Okio
 -dontwarn okio.**
+
+# ProxerLib
+-keep public enum com.proxerme.library.enums.** {
+    **[] $VALUES;
+    public *;
+}
 
 # Avoid crash of SearchView
 -keep class android.support.v7.widget.SearchView { *; }

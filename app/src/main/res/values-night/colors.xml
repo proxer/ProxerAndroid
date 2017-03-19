@@ -1,27 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="colorAccent">#C21414</color>
-    <color name="colorBackground">#303030</color>
+    <color name="accent">#C21414</color>
+    <color name="background">#303030</color>
 
-    <color name="textColorPrimary">@android:color/primary_text_dark</color>
-    <color name="textColorSecondary">@android:color/secondary_text_dark</color>
-    <color name="textColorTertiary">@android:color/tertiary_text_dark</color>
+    <color name="text_primary">@android:color/primary_text_dark</color>
+    <color name="text_secondary">@android:color/secondary_text_dark</color>
+    <color name="text_tertiary">@android:color/tertiary_text_dark</color>
 
     <color name="divider">#1FFFFFFF</color>
     <color name="icon">#7FFFFFFF</color>
     <color name="selected">#4A4A4A</color>
 
-    <color name="selected_card">#636363</color>
-    <color name="background_card">@color/cardview_dark_background</color>
-
-    <color name="material_drawer_background">@color/colorBackground</color>
-    <color name="material_drawer_primary_text">@color/textColorPrimary</color>
+    <color name="material_drawer_background">@color/background</color>
+    <color name="material_drawer_primary_text">@color/text_primary</color>
     <color name="material_drawer_primary_icon">@color/icon</color>
-    <color name="material_drawer_secondary_text">@color/textColorTertiary</color>
+    <color name="material_drawer_secondary_text">@color/text_tertiary</color>
     <color name="material_drawer_selected">@color/selected</color>
     <color name="material_drawer_divider">@color/divider</color>
-
-    <color name="emoji_background">@color/background_card</color>
-
 </resources>

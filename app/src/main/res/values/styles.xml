@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Base.Theme.AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    <style name="Base.Theme.App" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
 
         <item name="windowActionModeOverlay">true</item>
-        <item name="actionModeStyle">@style/ActionModeTheme</item>
+        <item name="actionModeStyle">@style/Widget.App.ActionMode</item>
 
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.Material</item>
 
@@ -15,30 +15,24 @@
         <item name="asp_preferenceDialogIconTint">?asp_preferenceIconTint</item>
     </style>
 
-    <style name="Theme.Transparent" parent="Theme.AppTheme">
+    <style name="Theme.App.Transparent" parent="Theme.App">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
-    <style name="ButtonTheme" parent="Widget.AppCompat.Button.Colored">
+    <style name="Widget.App.Button" parent="Widget.AppCompat.Button.Colored">
         <item name="colorButtonNormal">@color/accent</item>
     </style>
 
-    <style name="ActionModeTheme" parent="@style/Widget.AppCompat.ActionMode">
+    <style name="Widget.App.ActionMode" parent="@style/Widget.AppCompat.ActionMode">
         <item name="background">@color/primary_light</item>
     </style>
 
-    <style name="MenuOverlay" parent="@style/ThemeOverlay.AppCompat.Light"/>
+    <style name="ThemeOverlay.App" parent="@style/ThemeOverlay.AppCompat.Light"/>
 
-    <style name="Theme.AppTheme" parent="Base.Theme.AppTheme"/>
+    <style name="Theme.App" parent="Base.Theme.App"/>
 
-    <style name="Theme.AppThemeNoBackground" parent="Base.Theme.AppTheme">
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowBackground">@null</item>
-    </style>
-
-    <style name="Theme.Translucent" parent="Theme.AppTheme"/>
-
+    <style name="Theme.App.Translucent" parent="Theme.App"/>
 </resources>

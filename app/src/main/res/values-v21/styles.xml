@@ -1,22 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.AppTheme" parent="Base.Theme.AppTheme">
+    <style name="Theme.App" parent="Base.Theme.App">
         <item name="android:navigationBarColor">@color/colorPrimary</item>
 
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
     </style>
 
-    <style name="Theme.AppThemeNoBackground" parent="Base.Theme.AppTheme">
-        <item name="android:navigationBarColor">@color/colorPrimary</item>
-
-        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowBackground">@null</item>
-    </style>
-
-    <style name="Theme.Translucent" parent="Theme.AppTheme">
+    <style name="Theme.App.Translucent" parent="Theme.App">
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
-
 </resources>
