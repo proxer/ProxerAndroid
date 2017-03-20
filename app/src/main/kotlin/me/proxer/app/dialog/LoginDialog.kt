@@ -18,7 +18,7 @@ import me.proxer.app.R
 import me.proxer.app.activity.MainActivity
 import me.proxer.app.dialog.base.MainDialog
 import me.proxer.app.entity.LocalUser
-import me.proxer.app.event.LoginEvent
+import me.proxer.app.event.UserChangedEvent
 import me.proxer.app.helper.StorageHelper
 import me.proxer.app.task.ProxerTask
 import me.proxer.app.util.ErrorUtils
@@ -48,7 +48,7 @@ class LoginDialog : MainDialog() {
                 .onSuccess {
                     StorageHelper.user = LocalUser(it.id, username.text.trim().toString(), it.image)
 
-                    EventBus.getDefault().post(LoginEvent())
+                    EventBus.getDefault().post(UserChangedEvent())
 
                     dismiss()
                 }

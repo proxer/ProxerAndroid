@@ -14,8 +14,7 @@ import com.rubengees.introduction.entity.Option
 import me.proxer.app.R
 import me.proxer.app.dialog.LoginDialog
 import me.proxer.app.dialog.LogoutDialog
-import me.proxer.app.event.LoginEvent
-import me.proxer.app.event.LogoutEvent
+import me.proxer.app.event.UserChangedEvent
 import me.proxer.app.fragment.AboutFragment
 import me.proxer.app.fragment.SettingsFragment
 import me.proxer.app.fragment.media.MediaListFragment
@@ -135,13 +134,7 @@ class DashboardActivity : MainActivity() {
 
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onLogin(@Suppress("UNUSED_PARAMETER") event: LoginEvent) {
-        drawer.refreshHeader(this)
-    }
-
-    @Suppress("unused")
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onLogout(@Suppress("UNUSED_PARAMETER") event: LogoutEvent) {
+    fun onUserChanged(@Suppress("UNUSED_PARAMETER") event: UserChangedEvent) {
         drawer.refreshHeader(this)
     }
 

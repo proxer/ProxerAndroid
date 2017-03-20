@@ -34,6 +34,8 @@ import com.squareup.moshi.Moshi
 import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.ios.IosEmojiProvider
 import me.proxer.app.BuildConfig
+import me.proxer.app.event.LoginEvent
+import me.proxer.app.event.LogoutEvent
 import me.proxer.app.helper.PreferenceHelper
 import me.proxer.app.helper.StorageHelper
 import okhttp3.OkHttpClient
@@ -79,7 +81,16 @@ class MainApplication : Application() {
                 .loginTokenManager(object : LoginTokenManager {
                     override fun provide() = StorageHelper.loginToken
                     override fun persist(loginToken: String?) {
+                        val existingLoginToken = StorageHelper.loginToken
+
                         StorageHelper.loginToken = loginToken
+
+                        if (existingLoginToken != loginToken) {
+                            when (loginToken) {
+                                null -> EventBus.getDefault().post(LogoutEvent())
+                                else -> EventBus.getDefault().post(LoginEvent())
+                            }
+                        }
                     }
                 }).build()
 

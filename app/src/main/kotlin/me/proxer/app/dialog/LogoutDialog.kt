@@ -11,7 +11,7 @@ import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.activity.MainActivity
 import me.proxer.app.dialog.base.MainDialog
-import me.proxer.app.event.LogoutEvent
+import me.proxer.app.event.UserChangedEvent
 import me.proxer.app.helper.StorageHelper
 import me.proxer.app.task.ProxerTask
 import me.proxer.app.util.ErrorUtils
@@ -40,7 +40,7 @@ class LogoutDialog : MainDialog() {
                 .onSuccess {
                     StorageHelper.user = null
 
-                    EventBus.getDefault().post(LogoutEvent())
+                    EventBus.getDefault().post(UserChangedEvent())
 
                     dismiss()
                 }
