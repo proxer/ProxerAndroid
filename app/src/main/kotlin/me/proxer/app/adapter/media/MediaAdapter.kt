@@ -8,14 +8,14 @@ import android.widget.RatingBar
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.proxerme.library.entitiy.list.MediaListEntry
-import com.proxerme.library.enums.Category
-import com.proxerme.library.enums.Language
-import com.proxerme.library.util.ProxerUrls
 import me.proxer.app.R
 import me.proxer.app.adapter.base.PagingAdapter
 import me.proxer.app.util.EnumMapper
 import me.proxer.app.util.extension.bindView
+import me.proxer.library.entitiy.list.MediaListEntry
+import me.proxer.library.enums.Category
+import me.proxer.library.enums.Language
+import me.proxer.library.util.ProxerUrls
 
 /**
  * @author Ruben Gees

@@ -2,16 +2,16 @@ package me.proxer.app.fragment.news
 
 import android.os.Bundle
 import android.widget.ImageView
-import com.proxerme.library.api.ProxerCall
-import com.proxerme.library.entitiy.notifications.NewsArticle
-import com.proxerme.library.enums.Device
-import com.proxerme.library.util.ProxerUrls
 import me.proxer.app.activity.ImageDetailActivity
 import me.proxer.app.adapter.news.NewsArticleAdapter
 import me.proxer.app.adapter.news.NewsArticleAdapter.NewsAdapterCallback
 import me.proxer.app.fragment.base.PagedLoadingFragment
 import me.proxer.app.task.ProxerTask
 import me.proxer.app.util.extension.api
+import me.proxer.library.api.ProxerCall
+import me.proxer.library.entitiy.notifications.NewsArticle
+import me.proxer.library.enums.Device
+import me.proxer.library.util.ProxerUrls
 
 /**
  * @author Ruben Gees

@@ -14,10 +14,10 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import com.mikepenz.materialdrawer.model.ProfileSettingDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IProfile
-import com.proxerme.library.util.ProxerUrls
 import me.proxer.app.R
 import me.proxer.app.util.CrossfadeWrapper
 import me.proxer.app.util.DeviceUtils
+import me.proxer.library.util.ProxerUrls
 
 /**
  * @author Ruben Gees

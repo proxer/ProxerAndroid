@@ -7,8 +7,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.TouchableMovementMethod
-import com.proxerme.library.api.ProxerCall
-import com.proxerme.library.util.ProxerUrls
 import me.proxer.app.R
 import me.proxer.app.fragment.base.LoadingFragment
 import me.proxer.app.helper.StorageHelper
@@ -17,6 +15,8 @@ import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.api
 import me.proxer.app.util.extension.bindView
 import me.proxer.app.util.extension.snackbar
+import me.proxer.library.api.ProxerCall
+import me.proxer.library.util.ProxerUrls
 import okhttp3.HttpUrl
 
 /**

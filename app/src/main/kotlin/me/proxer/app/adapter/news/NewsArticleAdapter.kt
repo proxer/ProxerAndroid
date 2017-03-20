@@ -11,12 +11,12 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
-import com.proxerme.library.entitiy.notifications.NewsArticle
-import com.proxerme.library.util.ProxerUrls
 import me.proxer.app.R
 import me.proxer.app.adapter.base.PagingAdapter
 import me.proxer.app.util.TimeUtils
 import me.proxer.app.util.extension.bindView
+import me.proxer.library.entitiy.notifications.NewsArticle
+import me.proxer.library.util.ProxerUrls
 import java.util.*
 
 /**

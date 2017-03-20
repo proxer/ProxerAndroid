@@ -1,10 +1,10 @@
 package me.proxer.app.util
 
 import android.content.Context
-import com.proxerme.library.enums.Language
-import com.proxerme.library.enums.MediaLanguage
-import com.proxerme.library.enums.Medium
 import me.proxer.app.R
+import me.proxer.library.enums.Language
+import me.proxer.library.enums.MediaLanguage
+import me.proxer.library.enums.Medium
 
 /**
  * @author Ruben Gees

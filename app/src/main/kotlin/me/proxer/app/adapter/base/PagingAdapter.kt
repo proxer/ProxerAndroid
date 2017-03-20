@@ -3,7 +3,7 @@ package me.proxer.app.adapter.base
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import com.proxerme.library.entitiy.ProxerIdItem
+import me.proxer.library.entitiy.ProxerIdItem
 import java.util.*
 
 /**

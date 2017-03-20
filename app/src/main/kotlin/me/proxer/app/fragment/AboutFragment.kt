@@ -15,11 +15,11 @@ import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.LibsBuilder
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
-import com.proxerme.library.enums.Device
-import com.proxerme.library.util.ProxerUrls
 import me.proxer.app.R
 import me.proxer.app.application.MainApplication
 import me.proxer.app.util.extension.openHttpPage
+import me.proxer.library.enums.Device
+import me.proxer.library.util.ProxerUrls
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
 

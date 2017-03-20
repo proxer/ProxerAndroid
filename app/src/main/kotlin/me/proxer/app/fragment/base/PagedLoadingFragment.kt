@@ -75,15 +75,19 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
 
     open protected val list: RecyclerView by bindView(R.id.list)
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        adapter = EasyHeaderFooterAdapter(innerAdapter)
+        layoutManager = StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL)
+        listState = savedInstanceState?.getParcelable(LIST_STATE)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_paging, container, false)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        adapter = EasyHeaderFooterAdapter(innerAdapter)
-        layoutManager = StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL)
-        listState = savedInstanceState?.getParcelable(LIST_STATE)
-
         super.onViewCreated(view, savedInstanceState)
 
         progress.setOnRefreshListener(when (isSwipeToRefreshEnabled) {
@@ -206,12 +210,9 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
     override fun constructInput() = constructPagedInput(calculateNextPage())
     abstract protected fun constructPagedInput(page: Int): I
 
-    private fun calculateNextPage(): Int {
-        if (innerAdapter.isEmpty()) {
-            return 0
-        } else {
-            return innerAdapter.itemCount / itemsOnPage
-        }
+    private fun calculateNextPage() = when {
+        innerAdapter.isEmpty() -> 0
+        else -> innerAdapter.itemCount / itemsOnPage
     }
 
     private fun setupList() {

@@ -11,7 +11,6 @@ import android.view.inputmethod.EditorInfo
 import android.widget.ProgressBar
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
-import com.proxerme.library.entitiy.user.User
 import com.rubengees.ktask.android.bindToLifecycle
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
@@ -25,6 +24,7 @@ import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.extension.api
 import me.proxer.app.util.extension.bindView
 import me.proxer.app.util.listener.OnTextListener
+import me.proxer.library.entitiy.user.User
 import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.longToast
 

@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import com.proxerme.library.api.ProxerException
 import com.rubengees.ktask.android.bindToLifecycle
 import com.rubengees.ktask.base.BranchTask
 import com.rubengees.ktask.base.Task
@@ -21,6 +20,7 @@ import me.proxer.app.event.LogoutEvent
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
 import me.proxer.app.util.extension.bindView
+import me.proxer.library.api.ProxerException
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode

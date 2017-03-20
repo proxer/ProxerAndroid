@@ -1,11 +1,6 @@
 package me.proxer.app.util
 
 import android.view.View
-import com.proxerme.library.api.ProxerException
-import com.proxerme.library.api.ProxerException.ErrorType.*
-import com.proxerme.library.api.ProxerException.ServerErrorType.*
-import com.proxerme.library.enums.Device
-import com.proxerme.library.util.ProxerUrls
 import com.rubengees.ktask.util.PartialTaskException
 import me.proxer.app.R
 import me.proxer.app.activity.MainActivity
@@ -13,6 +8,11 @@ import me.proxer.app.dialog.HentaiConfirmationDialog
 import me.proxer.app.dialog.LoginDialog
 import me.proxer.app.event.CaptchaSolvedEvent
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_DEFAULT
+import me.proxer.library.api.ProxerException
+import me.proxer.library.api.ProxerException.ErrorType.*
+import me.proxer.library.api.ProxerException.ServerErrorType.*
+import me.proxer.library.enums.Device
+import me.proxer.library.util.ProxerUrls
 import org.greenrobot.eventbus.EventBus
 import java.io.IOException
 import java.net.SocketTimeoutException

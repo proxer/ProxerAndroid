@@ -26,8 +26,6 @@ import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import com.orhanobut.hawk.Hawk
 import com.proxerme.app.EventBusIndex
-import com.proxerme.library.api.LoginTokenManager
-import com.proxerme.library.api.ProxerApi
 import com.squareup.leakcanary.LeakCanary
 import com.squareup.leakcanary.RefWatcher
 import com.squareup.moshi.Moshi
@@ -38,6 +36,8 @@ import me.proxer.app.event.LoginEvent
 import me.proxer.app.event.LogoutEvent
 import me.proxer.app.helper.PreferenceHelper
 import me.proxer.app.helper.StorageHelper
+import me.proxer.library.api.LoginTokenManager
+import me.proxer.library.api.ProxerApi
 import okhttp3.OkHttpClient
 import org.greenrobot.eventbus.EventBus
 import java.io.InputStream

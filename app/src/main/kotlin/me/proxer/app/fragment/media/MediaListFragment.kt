@@ -6,16 +6,16 @@ import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import com.proxerme.library.api.ProxerCall
-import com.proxerme.library.entitiy.list.MediaListEntry
-import com.proxerme.library.enums.Category
-import com.proxerme.library.enums.MediaSearchSortCriteria
-import com.proxerme.library.enums.MediaType
 import me.proxer.app.R
 import me.proxer.app.adapter.media.MediaAdapter
 import me.proxer.app.fragment.base.PagedLoadingFragment
 import me.proxer.app.task.ProxerTask
 import me.proxer.app.util.extension.api
+import me.proxer.library.api.ProxerCall
+import me.proxer.library.entitiy.list.MediaListEntry
+import me.proxer.library.enums.Category
+import me.proxer.library.enums.MediaSearchSortCriteria
+import me.proxer.library.enums.MediaType
 
 /**
  * @author Ruben Gees
@@ -23,14 +23,16 @@ import me.proxer.app.util.extension.api
 class MediaListFragment : PagedLoadingFragment<ProxerCall<List<MediaListEntry>>, MediaListEntry>() {
 
     companion object {
-        private const val ARGUMENT_CATEGORY = "category"
-        private const val SEARCH_QUERY_STATE = "search_query"
-        private const val HAS_SEARCHED_STATE = "has_searched"
+        private const val CATEGORY_ARGUMENT = "category"
+        private const val SORT_CRITERIA_ARGUMENT = "sort_criteria"
+        private const val TYPE_ARGUMENT = "type"
+        private const val SEARCH_QUERY_ARGUMENT = "search_query"
+        private const val HAS_SEARCHED_ARGUMENT = "has_searched"
 
         fun newInstance(category: Category): MediaListFragment {
             return MediaListFragment().apply {
                 this.arguments = Bundle().apply {
-                    this.putSerializable(ARGUMENT_CATEGORY, category)
+                    this.putSerializable(CATEGORY_ARGUMENT, category)
                 }
             }
         }
@@ -45,16 +47,33 @@ class MediaListFragment : PagedLoadingFragment<ProxerCall<List<MediaListEntry>>,
         get() = super.spanCount + 1
 
     private val category: Category
-        get() = arguments.getSerializable(ARGUMENT_CATEGORY) as Category
+        get() = arguments.getSerializable(CATEGORY_ARGUMENT) as Category
 
-    private var sortCriteria = MediaSearchSortCriteria.RATING
-    private lateinit var type: MediaType
+    private var sortCriteria: MediaSearchSortCriteria
+        get() = arguments.getSerializable(SORT_CRITERIA_ARGUMENT) as? MediaSearchSortCriteria
+                ?: MediaSearchSortCriteria.RATING
+        set(value) = arguments.putSerializable(SORT_CRITERIA_ARGUMENT, value)
 
-    private var searchQuery: String? = null
-    private var hasSearched = false
+    private var type: MediaType
+        get() = arguments.getSerializable(TYPE_ARGUMENT) as? MediaType ?: when (category) {
+            Category.ANIME -> MediaType.ALL_ANIME
+            Category.MANGA -> MediaType.ALL_MANGA
+            else -> throw IllegalArgumentException("Unknown value for category")
+        }
+        set(value) = arguments.putSerializable(TYPE_ARGUMENT, value)
 
-    override lateinit var innerAdapter: MediaAdapter
+    private var searchQuery: String?
+        get() = arguments.getString(SEARCH_QUERY_ARGUMENT)
+        set(value) = arguments.putString(SEARCH_QUERY_ARGUMENT, value)
+
+    private var hasSearched: Boolean
+        get() = arguments.getBoolean(HAS_SEARCHED_ARGUMENT, false)
+        set(value) = arguments.putBoolean(HAS_SEARCHED_ARGUMENT, value)
+
     override val itemsOnPage = 30
+    override val innerAdapter by lazy {
+        MediaAdapter(category)
+    }
 
     private lateinit var searchItem: MenuItem
     private lateinit var searchView: SearchView
@@ -62,22 +81,12 @@ class MediaListFragment : PagedLoadingFragment<ProxerCall<List<MediaListEntry>>,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        type = when (category) {
-            Category.ANIME -> MediaType.ALL_ANIME
-            Category.MANGA -> MediaType.ALL_MANGA
-            else -> throw IllegalArgumentException("Unknown value for category")
-        }
-
-        innerAdapter = MediaAdapter(category)
         innerAdapter.callback = object : MediaAdapter.MediaAdapterCallback {
             override fun onMediaClick(item: MediaListEntry) {
 //                MediaActivity.navigateTo(activity, item.id, item.name,
 //                        ParameterMapper.mediumToCategory(item.medium) ?: CategoryParameter.ANIME)
             }
         }
-
-        searchQuery = savedInstanceState?.getString(SEARCH_QUERY_STATE)
-        hasSearched = savedInstanceState?.getBoolean(HAS_SEARCHED_STATE) ?: false
 
         setHasOptionsMenu(true)
     }
@@ -189,13 +198,6 @@ class MediaListFragment : PagedLoadingFragment<ProxerCall<List<MediaListEntry>>,
         }
 
         return true
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-        outState.putString(SEARCH_QUERY_STATE, searchQuery)
-        outState.putBoolean(HAS_SEARCHED_STATE, hasSearched)
     }
 
     override fun onDestroyView() {

@@ -1,7 +1,7 @@
 package me.proxer.app.task
 
-import com.proxerme.library.api.ProxerCall
 import com.rubengees.ktask.base.LeafTask
+import me.proxer.library.api.ProxerCall
 
 /**
  * @author Ruben Gees
