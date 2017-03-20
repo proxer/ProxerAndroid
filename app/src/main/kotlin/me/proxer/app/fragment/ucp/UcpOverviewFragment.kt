@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.TouchableMovementMethod
 import com.proxerme.library.api.ProxerCall
 import com.proxerme.library.util.ProxerUrls
@@ -12,12 +13,13 @@ import me.proxer.app.R
 import me.proxer.app.fragment.base.LoadingFragment
 import me.proxer.app.helper.StorageHelper
 import me.proxer.app.task.ProxerTask
+import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.api
 import me.proxer.app.util.extension.bindView
+import me.proxer.app.util.extension.snackbar
+import okhttp3.HttpUrl
 
 /**
- * TODO: Describe class
- *
  * @author Ruben Gees
  */
 class UcpOverviewFragment : LoadingFragment<ProxerCall<Int>, Int>() {
@@ -55,23 +57,21 @@ class UcpOverviewFragment : LoadingFragment<ProxerCall<Int>, Int>() {
     override fun onSuccess(result: Int) {
         super.onSuccess(result)
 
-        StorageHelper.user?.let {
-            profileLink.text = ProxerUrls.userWeb(it.id).toString()
+        val user = StorageHelper.user
 
-//                    Utils.buildClickableText(context,
-//                    ProxerUrlHolder.getUserUrl(it.id, null).toString(),
-//                    onWebClickListener = Link.OnClickListener { link ->
-//                        showPage(Utils.parseAndFixUrl(link))
-//                    },
-//                    onWebLongClickListener = Link.OnLongClickListener { link ->
-//                        Utils.setClipboardContent(activity,
-//                                getString(R.string.fragment_ucp_overview_clip_title), link)
-//
-//                        context.toast(R.string.clipboard_status)
-//                    })
+        if (user != null) {
+            profileLink.text = Utils.buildClickableText(context, ProxerUrls.userWeb(user.id).toString(),
+                    onWebClickListener = Link.OnClickListener {
+                        showPage(HttpUrl.parse(it))
+                    },
+                    onWebLongClickListener = Link.OnLongClickListener {
+                        Utils.setClipboardContent(activity, getString(R.string.fragment_ucp_overview_clip_title), it)
 
-            username.text = it.name
-            userId.text = it.id
+                        snackbar(root, R.string.clipboard_status)
+                    })
+
+            username.text = user.name
+            userId.text = user.id
 
             episodesRow.text = result.toString()
 

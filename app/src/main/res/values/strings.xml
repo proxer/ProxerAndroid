@@ -164,6 +164,8 @@
 
     <string name="shortcut_disabled_message">Diese Verknüpung ist nicht mehr verfügbar</string>
 
+    <string name="clipboard_status">In die Zwischenablage kopiert</string>
+
     <string name="time_a_moment_ago">Eben gerade</string>
     <plurals name="time_days_ago">
         <item quantity="one">"Gestern"</item>

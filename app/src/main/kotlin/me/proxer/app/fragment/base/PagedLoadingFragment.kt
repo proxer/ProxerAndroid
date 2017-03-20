@@ -82,7 +82,6 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         adapter = EasyHeaderFooterAdapter(innerAdapter)
         layoutManager = StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL)
-        layoutManager.gapStrategy
         listState = savedInstanceState?.getParcelable(LIST_STATE)
 
         super.onViewCreated(view, savedInstanceState)

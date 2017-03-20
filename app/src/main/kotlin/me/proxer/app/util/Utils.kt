@@ -15,6 +15,9 @@ import android.util.Patterns
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.Target
+import com.klinker.android.link_builder.Link
+import com.klinker.android.link_builder.LinkBuilder
+import me.proxer.app.R
 import me.proxer.app.util.extension.androidUri
 import okhttp3.HttpUrl
 import java.util.regex.Pattern
@@ -50,37 +53,37 @@ object Utils {
         }
     }
 
-//    fun buildClickableText(context: Context, text: CharSequence,
-//                           onWebClickListener: Link.OnClickListener? = null,
-//                           onWebLongClickListener: Link.OnLongClickListener? = null,
-//                           onMentionsClickListener: Link.OnClickListener? = null,
-//                           onMentionsLongClickListener: Link.OnLongClickListener? = null): CharSequence {
-//        val builder = LinkBuilder.from(context, text.toString())
-//
-//        if (onWebClickListener != null || onWebLongClickListener != null) {
-//            builder.addLink(Link(WEB_REGEX)
-//                    .setTextColor(ContextCompat.getColor(context, R.color.colorLink))
-//                    .setUnderlined(false)
-//                    .setOnClickListener(onWebClickListener)
-//                    .setOnLongClickListener(onWebLongClickListener))
-//        }
-//
-//        if (onMentionsClickListener != null || onMentionsLongClickListener != null) {
-//            builder.addLink(Link(MENTIONS_REGEX)
-//                    .setTextColor(ContextCompat.getColor(context, R.color.colorLink))
-//                    .setUnderlined(false)
-//                    .setOnClickListener(onMentionsClickListener)
-//                    .setOnLongClickListener(onMentionsLongClickListener))
-//        }
-//
-//        var result = builder.build()
-//
-//        if (result == null) {
-//            result = text
-//        }
-//
-//        return result
-//    }
+    fun buildClickableText(context: Context, text: CharSequence,
+                           onWebClickListener: Link.OnClickListener? = null,
+                           onWebLongClickListener: Link.OnLongClickListener? = null,
+                           onMentionsClickListener: Link.OnClickListener? = null,
+                           onMentionsLongClickListener: Link.OnLongClickListener? = null): CharSequence {
+        val builder = LinkBuilder.from(context, text.toString())
+
+        if (onWebClickListener != null || onWebLongClickListener != null) {
+            builder.addLink(Link(WEB_REGEX)
+                    .setTextColor(ContextCompat.getColor(context, R.color.link))
+                    .setUnderlined(false)
+                    .setOnClickListener(onWebClickListener)
+                    .setOnLongClickListener(onWebLongClickListener))
+        }
+
+        if (onMentionsClickListener != null || onMentionsLongClickListener != null) {
+            builder.addLink(Link(MENTIONS_REGEX)
+                    .setTextColor(ContextCompat.getColor(context, R.color.link))
+                    .setUnderlined(false)
+                    .setOnClickListener(onMentionsClickListener)
+                    .setOnLongClickListener(onMentionsLongClickListener))
+        }
+
+        var result = builder.build()
+
+        if (result == null) {
+            result = text
+        }
+
+        return result
+    }
 
     fun setClipboardContent(activity: Activity, label: String, content: String) {
         val clipboard = activity.getSystemService(Context.CLIPBOARD_SERVICE)
