@@ -71,6 +71,10 @@
 -keepattributes Signature
 -keepattributes Exceptions
 
+-keepclasseswithmembers class * {
+    @retrofit2.http.* <methods>;
+}
+
 # ProxerLib
 -keep public enum com.proxerme.library.enums.** {
     **[] $VALUES;
