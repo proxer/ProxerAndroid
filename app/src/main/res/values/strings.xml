@@ -55,6 +55,24 @@
     <string name="error_action_login">Anmelden</string>
     <string name="error_action_confirm">Bestätigen</string>
 
+    <string name="medium_anime_series">Animeserie</string>
+    <string name="medium_hentai">Hentai</string>
+    <string name="medium_movie">Film</string>
+    <string name="medium_ova">OVA</string>
+    <string name="medium_manga_series">Mangaserie</string>
+    <string name="medium_doujin">Doujinshi</string>
+    <string name="medium_h_manga">H-Manga</string>
+    <string name="medium_oneshot">One-Shot</string>
+
+    <plurals name="media_chapter_count">
+        <item quantity="one">Ein Kapitel</item>
+        <item quantity="other">%d Kapitel</item>
+    </plurals>
+    <plurals name="media_episode_count">
+        <item quantity="one">Eine Episode</item>
+        <item quantity="other">%d Episoden</item>
+    </plurals>
+
     <string name="dialog_cancel">Abbrechen</string>
 
     <string name="dialog_login_title">Anmelden</string>
@@ -119,6 +137,30 @@
     <string name="introduction_welcome_title">Willkommen!</string>
     <string name="introduction_welcome_description">Ein paar Einstellungen und es geht los</string>
     <string name="introduction_skip">Überspringen</string>
+
+    <string name="action_search">Suchen</string>
+    <string name="action_filter">Filter</string>
+    <string name="action_sort">Sortierung</string>
+
+    <string name="action_filter_all">Alles</string>
+    <string name="action_filter_anime_series">Serien</string>
+    <string name="action_filter_doujin">Doujinshi</string>
+    <string name="action_filter_hentai">Hentai</string>
+    <string name="action_filter_hmanga">H-Manga</string>
+    <string name="action_filter_manga_series">Mangaserien</string>
+    <string name="action_filter_movies">Filme</string>
+    <string name="action_filter_one_shots">One-Shots</string>
+    <string name="action_filter_ova">OVA</string>
+
+    <string name="action_sort_ascending">Aufsteigend</string>
+    <string name="action_sort_clicks">Nach Zugriffen</string>
+    <string name="action_sort_count">Nach Episoden</string>
+    <string name="action_sort_descending">Absteigend</string>
+    <string name="action_sort_name">Nach Name</string>
+    <string name="action_sort_rating">Nach Bewertungen</string>
+    <string name="action_sort_relevance">Nach Relevanz</string>
+    <string name="action_sort_state">Nach Status</string>
+    <string name="action_sort_time">Nach Datum</string>
 
     <string name="shortcut_disabled_message">Diese Verknüpung ist nicht mehr verfügbar</string>
 

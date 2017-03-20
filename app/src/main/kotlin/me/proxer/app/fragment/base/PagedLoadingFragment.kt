@@ -67,6 +67,7 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
 
     protected lateinit var adapter: EasyHeaderFooterAdapter
     protected lateinit var layoutManager: StaggeredGridLayoutManager
+
     abstract protected val innerAdapter: PagingAdapter<O>
     abstract protected val itemsOnPage: Int
 
@@ -74,19 +75,16 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
 
     open protected val list: RecyclerView by bindView(R.id.list)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        adapter = EasyHeaderFooterAdapter(innerAdapter)
-        layoutManager = StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL)
-        listState = savedInstanceState?.getParcelable(LIST_STATE)
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_paging, container, false)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        adapter = EasyHeaderFooterAdapter(innerAdapter)
+        layoutManager = StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL)
+        layoutManager.gapStrategy
+        listState = savedInstanceState?.getParcelable(LIST_STATE)
+
         super.onViewCreated(view, savedInstanceState)
 
         progress.setOnRefreshListener(when (isSwipeToRefreshEnabled) {
@@ -105,6 +103,7 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
 
     override fun onDestroyView() {
         innerAdapter.destroy()
+        progress.setOnRefreshListener(null)
 
         super.onDestroyView()
     }
@@ -195,6 +194,12 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
 
     override fun hideError() {
         adapter.removeFooter()
+    }
+
+    open protected fun freshLoad() {
+        innerAdapter.clear()
+
+        task.freshExecute(constructPagedInput(0))
     }
 
     open protected fun constructRefreshTask() = constructTask()

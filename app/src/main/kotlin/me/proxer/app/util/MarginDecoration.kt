@@ -3,6 +3,7 @@ package me.proxer.app.util
 import android.content.Context
 import android.graphics.Rect
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
 import me.proxer.app.R
 
@@ -12,6 +13,7 @@ class MarginDecoration(context: Context, private val columns: Int) : RecyclerVie
 
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State?) {
         val position = parent.getChildLayoutPosition(view)
+        val spanIndex = (view.layoutParams as StaggeredGridLayoutManager.LayoutParams).spanIndex
         val itemCount = parent.adapter.itemCount
 
         val isAtTop = position - columns < 0
@@ -26,8 +28,8 @@ class MarginDecoration(context: Context, private val columns: Int) : RecyclerVie
         }
 
         if (columns > 1) {
-            val isLeft = position == 0 || position % columns == 0
-            val isRight = position == itemCount - 1 || (position + 1) % columns == 0
+            val isLeft = spanIndex == 0
+            val isRight = spanIndex == columns - 1
 
             if (!isLeft) {
                 outRect.left = margin

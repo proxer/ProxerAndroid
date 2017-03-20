@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/filter"
+        android:icon="@drawable/ic_action_filter"
+        android:title="@string/action_filter"
+        app:showAsAction="ifRoom">
+
+        <menu>
+            <group
+                android:id="@+id/filterAnime"
+                android:checkableBehavior="single">
+
+                <item
+                    android:id="@+id/all_anime"
+                    android:title="@string/action_filter_all"
+                    app:showAsAction="never"/>
+
+                <item
+                    android:id="@+id/animeseries"
+                    android:title="@string/action_filter_anime_series"
+                    app:showAsAction="never"/>
+
+                <item
+                    android:id="@+id/movies"
+                    android:title="@string/action_filter_movies"
+                    app:showAsAction="never"/>
+
+                <item
+                    android:id="@+id/ova"
+                    android:title="@string/action_filter_ova"
+                    app:showAsAction="never"/>
+
+                <item
+                    android:id="@+id/hentai"
+                    android:title="@string/action_filter_hentai"
+                    app:showAsAction="never"/>
+
+            </group>
+
+            <group
+                android:id="@+id/filterManga"
+                android:checkableBehavior="single">
+
+                <item
+                    android:id="@+id/all_manga"
+                    android:title="@string/action_filter_all"
+                    app:showAsAction="never"/>
+
+                <item
+                    android:id="@+id/mangaseries"
+                    android:title="@string/action_filter_manga_series"
+                    app:showAsAction="never"/>
+
+                <item
+                    android:id="@+id/oneshot"
+                    android:title="@string/action_filter_one_shots"
+                    app:showAsAction="never"/>
+
+                <item
+                    android:id="@+id/doujin"
+                    android:title="@string/action_filter_doujin"
+                    app:showAsAction="never"/>
+
+                <item
+                    android:id="@+id/hmanga"
+                    android:title="@string/action_filter_hmanga"
+                    app:showAsAction="never"/>
+
+            </group>
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/sort"
+        android:icon="@drawable/ic_action_sort"
+        android:title="@string/action_sort"
+        app:showAsAction="ifRoom">
+        <menu>
+            <group
+                android:id="@+id/sortCriteria"
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/rating"
+                    android:title="@string/action_sort_rating"
+                    app:showAsAction="never"/>
+                <item
+                    android:id="@+id/clicks"
+                    android:title="@string/action_sort_clicks"
+                    app:showAsAction="never"/>
+                <item
+                    android:id="@+id/episodeAmount"
+                    android:title="@string/action_sort_count"
+                    app:showAsAction="never"/>
+                <item
+                    android:id="@+id/name"
+                    android:title="@string/action_sort_name"
+                    app:showAsAction="never"/>
+            </group>
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/search"
+        android:icon="@drawable/ic_action_search"
+        android:title="@string/action_search"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="always|collapseActionView"/>
+</menu>

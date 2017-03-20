@@ -20,14 +20,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
+            <me.proxer.app.view.WidthAspectImageView
                 android:id="@+id/image"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:scaleType="centerCrop"
                 android:transitionName="image"
-                tools:ignore="ContentDescription,UnusedAttribute"/>
+                app:aspect="0.75"
+                tools:ignore="UnusedAttribute"/>
 
             <TextView
                 android:id="@+id/title"

@@ -10,7 +10,6 @@ import com.rubengees.ktask.android.bindToLifecycle
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.activity.MainActivity
-import me.proxer.app.application.MainApplication
 import me.proxer.app.dialog.base.MainDialog
 import me.proxer.app.event.LogoutEvent
 import me.proxer.app.helper.StorageHelper
@@ -77,12 +76,6 @@ class LogoutDialog : MainDialog() {
         super.onResume()
 
         setProgressVisible(task.isWorking)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        MainApplication.refWatcher.watch(this)
     }
 
     private fun setProgressVisible(visible: Boolean) {

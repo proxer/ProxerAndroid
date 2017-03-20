@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.Toolbar
+import com.proxerme.library.enums.Category
 import com.proxerme.library.enums.Device
 import com.proxerme.library.util.ProxerUrls
 import com.rubengees.introduction.IntroductionActivity.OPTION_RESULT
@@ -17,6 +18,7 @@ import me.proxer.app.event.LoginEvent
 import me.proxer.app.event.LogoutEvent
 import me.proxer.app.fragment.AboutFragment
 import me.proxer.app.fragment.SettingsFragment
+import me.proxer.app.fragment.media.MediaListFragment
 import me.proxer.app.fragment.news.NewsArticleFragment
 import me.proxer.app.helper.IntroductionHelper
 import me.proxer.app.helper.MaterialDrawerHelper
@@ -179,15 +181,13 @@ class DashboardActivity : MainActivity() {
             }
 
             DrawerItem.ANIME -> {
-//                setFragment(MediaListFragment.newInstance(CategoryParameter.ANIME),
-//                        R.string.fragment_media_list_anime_title)
+                setFragment(MediaListFragment.newInstance(Category.ANIME), R.string.section_anime)
 
                 return false
             }
 
             DrawerItem.MANGA -> {
-//                setFragment(MediaListFragment.newInstance(CategoryParameter.MANGA),
-//                        R.string.fragment_media_list_manga_title)
+                setFragment(MediaListFragment.newInstance(Category.MANGA), R.string.section_manga)
 
                 return false
             }
