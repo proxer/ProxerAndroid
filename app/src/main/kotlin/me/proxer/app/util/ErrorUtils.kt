@@ -7,6 +7,7 @@ import me.proxer.app.activity.MainActivity
 import me.proxer.app.dialog.HentaiConfirmationDialog
 import me.proxer.app.dialog.LoginDialog
 import me.proxer.app.event.CaptchaSolvedEvent
+import me.proxer.app.task.PagedTask
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_DEFAULT
 import me.proxer.library.api.ProxerException
 import me.proxer.library.api.ProxerException.ErrorType.*
@@ -71,19 +72,25 @@ object ErrorUtils {
     }
 
     fun getInnermostError(error: Throwable): Throwable {
-        return (error as? PartialTaskException)?.innerError ?: error
+        return when (error) {
+            is PartialTaskException -> error.innerError
+            is PagedTask.PagedException -> error.innerError
+            else -> error
+        }
     }
 
     fun handle(context: MainActivity, error: Throwable): ErrorAction {
-        return when (error) {
+        val innermostError = getInnermostError(error)
+
+        return when (innermostError) {
             is ProxerException -> {
-                val message = getMessageForProxerException(error)
-                val buttonMessage = when (error.serverErrorType) {
+                val message = getMessageForProxerException(innermostError)
+                val buttonMessage = when (innermostError.serverErrorType) {
                     IP_BLOCKED -> R.string.error_action_captcha
                     in LOGIN_ERRORS -> R.string.error_action_login
                     else -> ACTION_MESSAGE_DEFAULT
                 }
-                val buttonAction = when (error.serverErrorType) {
+                val buttonAction = when (innermostError.serverErrorType) {
                     IP_BLOCKED -> View.OnClickListener {
                         context.showPage(ProxerUrls.captchaWeb(Device.MOBILE))
 

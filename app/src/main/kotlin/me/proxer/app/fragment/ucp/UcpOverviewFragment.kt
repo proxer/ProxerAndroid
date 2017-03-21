@@ -25,7 +25,7 @@ import okhttp3.HttpUrl
 class UcpOverviewFragment : LoadingFragment<ProxerCall<Int>, Int>() {
 
     companion object {
-        private const val FORMAT = "%.1f"
+        private const val DATE_FORMAT = "%.1f"
 
         fun newInstance(): UcpOverviewFragment {
             return UcpOverviewFragment()
@@ -80,8 +80,8 @@ class UcpOverviewFragment : LoadingFragment<ProxerCall<Int>, Int>() {
             val days = hours / 24f
 
             minutesRow.text = minutes.toString()
-            hoursRow.text = FORMAT.format(hours)
-            daysRow.text = FORMAT.format(days)
+            hoursRow.text = DATE_FORMAT.format(hours)
+            daysRow.text = DATE_FORMAT.format(days)
         }
     }
 

@@ -46,8 +46,7 @@ class MediaListFragment : PagedLoadingFragment<ProxerCall<List<MediaListEntry>>,
     override val spanCount: Int
         get() = super.spanCount + 1
 
-    private val category: Category
-        get() = arguments.getSerializable(CATEGORY_ARGUMENT) as Category
+    private val category: Category get() = arguments.getSerializable(CATEGORY_ARGUMENT) as Category
 
     private var sortCriteria: MediaSearchSortCriteria
         get() = arguments.getSerializable(SORT_CRITERIA_ARGUMENT) as? MediaSearchSortCriteria
@@ -207,14 +206,12 @@ class MediaListFragment : PagedLoadingFragment<ProxerCall<List<MediaListEntry>>,
         super.onDestroyView()
     }
 
-    override fun constructTask() = ProxerTask<List<MediaListEntry>>()
-    override fun constructPagedInput(page: Int): ProxerCall<List<MediaListEntry>> {
-        return api.list().mediaSearch()
-                .page(page)
-                .limit(itemsOnPage)
-                .name(searchQuery)
-                .type(type)
-                .sort(sortCriteria)
-                .build()
-    }
+    override fun constructPagedTask() = ProxerTask<List<MediaListEntry>>()
+    override fun constructPagedInput(page: Int) = api.list().mediaSearch()
+            .page(page)
+            .limit(itemsOnPage)
+            .name(searchQuery)
+            .type(type)
+            .sort(sortCriteria)
+            .build()
 }

@@ -6,10 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import com.rubengees.ktask.android.AndroidLifecycleTask
 import com.rubengees.ktask.android.bindToLifecycle
-import com.rubengees.ktask.base.BranchTask
 import com.rubengees.ktask.base.Task
-import com.rubengees.ktask.operation.CacheTask
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.activity.MainActivity
@@ -33,14 +32,39 @@ abstract class LoadingFragment<I, O> : MainFragment() {
     open protected val isSwipeToRefreshEnabled = false
     open protected val isLoginRequired = false
     open protected val isHentaiConfirmationRequired = false
-    open protected val cacheStrategy = CacheTask.CacheStrategy.FULL
 
-    open protected val isWorking: Boolean
-        get() = task.isWorking
+    open protected val isWorking: Boolean get() = task.isWorking
 
-    protected val task by lazy {
-        TaskBuilder.task(constructTask())
-                .cache(cacheStrategy)
+    protected lateinit var task: AndroidLifecycleTask<I, O>
+
+    @Suppress("UNCHECKED_CAST")
+    protected val state by lazy {
+        val existing = childFragmentManager.findFragmentByTag("${javaClass.simpleName}state")
+
+        if (existing is StateFragment<*>) {
+            existing as StateFragment<O>
+        } else {
+            val new = StateFragment<O>()
+
+            childFragmentManager.beginTransaction()
+                    .add(new, "${javaClass.simpleName}state")
+                    .commitNow()
+
+            new
+        }
+    }
+
+    open protected val root: ViewGroup by bindView(R.id.root)
+    open protected val progress: SwipeRefreshLayout by bindView(R.id.progress)
+    open protected val contentContainer: ViewGroup by bindView(R.id.contentContainer)
+    open protected val errorContainer: ViewGroup by bindView(R.id.errorContainer)
+    open protected val errorText: TextView by bindView(R.id.errorText)
+    open protected val errorButton: Button by bindView(R.id.errorButton)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        task = TaskBuilder.task(constructTask())
                 .validateBefore { validate() }
                 .bindToLifecycle(this)
                 .onInnerStart {
@@ -58,21 +82,6 @@ abstract class LoadingFragment<I, O> : MainFragment() {
                     setProgressVisible(isWorking)
                 }
                 .build()
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    protected val cache
-        get() = (task.innerTask as BranchTask<*, *, *, *>).innerTask as CacheTask<I, O>
-
-    open protected val root: ViewGroup by bindView(R.id.root)
-    open protected val progress: SwipeRefreshLayout by bindView(R.id.progress)
-    open protected val contentContainer: ViewGroup by bindView(R.id.contentContainer)
-    open protected val errorContainer: ViewGroup by bindView(R.id.errorContainer)
-    open protected val errorText: TextView by bindView(R.id.errorText)
-    open protected val errorButton: Button by bindView(R.id.errorButton)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
         EventBus.getDefault().register(this)
     }
@@ -82,15 +91,30 @@ abstract class LoadingFragment<I, O> : MainFragment() {
 
         progress.setColorSchemeResources(R.color.primary, R.color.accent)
 
-        hideContent()
-        hideError()
+        if (isWorking) {
+            hideContent()
+            hideError()
+        }
+
         setProgressVisible(isWorking)
+
+        if (savedInstanceState != null) {
+            state.data?.let {
+                onSuccess(it)
+            }
+
+            state.error?.let {
+                onError(it)
+            }
+        }
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
 
-        task.execute(constructInput())
+        if (savedInstanceState == null) {
+            task.execute(constructInput())
+        }
     }
 
     override fun onDestroy() {
@@ -103,7 +127,7 @@ abstract class LoadingFragment<I, O> : MainFragment() {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLogin(@Suppress("UNUSED_PARAMETER") event: LoginEvent) {
         if (isLoginRequired) {
-            task.freshExecute(constructInput())
+            freshLoad()
         }
     }
 
@@ -111,7 +135,7 @@ abstract class LoadingFragment<I, O> : MainFragment() {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLogout(@Suppress("UNUSED_PARAMETER") event: LogoutEvent) {
         if (isLoginRequired) {
-            task.freshExecute(constructInput())
+            freshLoad()
         }
     }
 
@@ -122,18 +146,18 @@ abstract class LoadingFragment<I, O> : MainFragment() {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onHentaiConfirmation(@Suppress("UNUSED_PARAMETER") event: HentaiConfirmationEvent) {
         if (isHentaiConfirmationRequired) {
-            task.freshExecute(constructInput())
+            freshLoad()
         }
     }
 
     @Suppress("unused")
     @Subscribe
     fun onCaptchaSolved(@Suppress("UNUSED_PARAMETER") event: CaptchaSolvedEvent) {
-        cache.cachedError?.let {
+        state.error?.let {
             val error = ErrorUtils.getInnermostError(it)
 
             if (error is ProxerException && error.serverErrorType == ProxerException.ServerErrorType.IP_BLOCKED) {
-                cache.clear(CacheTask.CacheStrategy.ERROR)
+                state.error = null
             }
         }
     }
@@ -151,11 +175,17 @@ abstract class LoadingFragment<I, O> : MainFragment() {
     open protected fun onSuccess(result: O) {
         hideError()
         showContent()
+
+        saveResultToState(result)
+        removeErrorFromState(result)
     }
 
     open protected fun onError(error: Throwable) {
         hideContent()
         handleError(error)
+
+        saveErrorToState(error)
+        removeResultFromState(error)
     }
 
     open protected fun handleError(error: Throwable) {
@@ -200,6 +230,28 @@ abstract class LoadingFragment<I, O> : MainFragment() {
     open protected fun setProgressVisible(visible: Boolean) {
         progress.isEnabled = if (!visible) isSwipeToRefreshEnabled else true
         progress.isRefreshing = visible
+    }
+
+    open fun saveResultToState(result: O) {
+        state.data = result
+    }
+
+    open fun saveErrorToState(error: Throwable) {
+        state.error = error
+    }
+
+    open protected fun removeResultFromState(error: Throwable) {
+        state.data = null
+    }
+
+    open protected fun removeErrorFromState(result: O) {
+        state.error = null
+    }
+
+    open fun freshLoad() {
+        state.clear()
+
+        task.freshExecute(constructInput())
     }
 
     abstract protected fun constructTask(): Task<I, O>
