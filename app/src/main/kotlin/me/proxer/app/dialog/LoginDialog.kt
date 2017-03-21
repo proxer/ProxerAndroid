@@ -85,14 +85,6 @@ class LoginDialog : MainDialog() {
                 .build()
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        if (savedInstanceState == null) {
-            username.setText(StorageHelper.user?.name)
-        }
-    }
-
     override fun onStart() {
         super.onStart()
 
