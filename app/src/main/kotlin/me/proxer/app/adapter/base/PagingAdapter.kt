@@ -2,6 +2,7 @@ package me.proxer.app.adapter.base
 
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
 import me.proxer.library.entitiy.ProxerIdItem
 import java.util.*
@@ -13,6 +14,20 @@ abstract class PagingAdapter<T> : RecyclerView.Adapter<PagingAdapter.PagingViewH
 
     var list = ArrayList<T>()
         protected set
+
+    var recyclerView: RecyclerView? = null
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView?) {
+        super.onAttachedToRecyclerView(recyclerView)
+
+        this.recyclerView = recyclerView
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView?) {
+        this.recyclerView = null
+
+        super.onDetachedFromRecyclerView(recyclerView)
+    }
 
     override fun onBindViewHolder(holder: PagingViewHolder<T>, position: Int) {
         holder.bind(list[position])
@@ -60,9 +75,13 @@ abstract class PagingAdapter<T> : RecyclerView.Adapter<PagingAdapter.PagingViewH
     }
 
     open protected fun areContentsTheSame(oldItem: T, newItem: T) = oldItem == newItem
+
     open fun destroy() {}
 
     protected fun doUpdates(newList: List<T>) {
+        val previousFirstItem = list.firstOrNull()
+        val wasAtTop = (recyclerView?.layoutManager as StaggeredGridLayoutManager?)?.findFirstVisibleItemPositions(null)
+                ?.contains(0) ?: false
         val result = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
 
             override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int)
@@ -79,6 +98,16 @@ abstract class PagingAdapter<T> : RecyclerView.Adapter<PagingAdapter.PagingViewH
         list.addAll(newList)
 
         result.dispatchUpdatesTo(this)
+
+        if (wasAtTop && previousFirstItem != list.firstOrNull()) {
+            recyclerView?.postDelayed({
+                recyclerView?.smoothScrollToPosition(0)
+            }, 50)
+        }
+
+        recyclerView?.postDelayed({
+            recyclerView?.invalidateItemDecorations()
+        }, 500)
     }
 
     abstract class PagingViewHolder<in T>(itemView: View) : RecyclerView.ViewHolder(itemView) {

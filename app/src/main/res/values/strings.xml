@@ -55,6 +55,8 @@
     <string name="error_action_login">Anmelden</string>
     <string name="error_action_confirm">Bestätigen</string>
 
+    <string name="error_bookmark_removal">Das Lesezeichen konnte nicht gelöscht werden: %s</string>
+
     <string name="medium_anime_series">Animeserie</string>
     <string name="medium_hentai">Hentai</string>
     <string name="medium_movie">Film</string>
@@ -151,6 +153,8 @@
     <string name="action_filter_movies">Filme</string>
     <string name="action_filter_one_shots">One-Shots</string>
     <string name="action_filter_ova">OVA</string>
+    <string name="action_filter_anime">Anime</string>
+    <string name="action_filter_manga">Manga</string>
 
     <string name="action_sort_ascending">Aufsteigend</string>
     <string name="action_sort_clicks">Nach Zugriffen</string>
@@ -161,6 +165,8 @@
     <string name="action_sort_relevance">Nach Relevanz</string>
     <string name="action_sort_state">Nach Status</string>
     <string name="action_sort_time">Nach Datum</string>
+
+    <string name="bookmark_episode">Episode %d</string>
 
     <string name="shortcut_disabled_message">Diese Verknüpung ist nicht mehr verfügbar</string>
 

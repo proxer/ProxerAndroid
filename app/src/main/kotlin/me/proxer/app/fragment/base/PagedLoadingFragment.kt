@@ -141,13 +141,19 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<Pair<Int, I>, Pair<I
             })
         }
 
-        list.post {
-            errorContainer.layoutParams.height = when (innerAdapter.itemCount <= 0) {
-                true -> list.height - list.paddingTop - list.paddingBottom
-                false -> ViewGroup.LayoutParams.WRAP_CONTENT
-            }
+        errorContainer.layoutParams.height = when (innerAdapter.itemCount <= 0) {
+            true -> ViewGroup.LayoutParams.MATCH_PARENT
+            false -> ViewGroup.LayoutParams.WRAP_CONTENT
+        }
 
-            adapter.footer = errorContainer
+        adapter.footer = errorContainer
+
+        if (innerAdapter.itemCount <= 0) {
+            list.post {
+                errorContainer.layoutParams.height = errorContainer.height - list.paddingTop - list.paddingTop
+
+                adapter.footer = errorContainer
+            }
         }
     }
 

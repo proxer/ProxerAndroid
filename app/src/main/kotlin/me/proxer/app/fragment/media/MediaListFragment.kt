@@ -31,7 +31,7 @@ class MediaListFragment : PagedLoadingFragment<ProxerCall<List<MediaListEntry>>,
 
         fun newInstance(category: Category): MediaListFragment {
             return MediaListFragment().apply {
-                this.arguments = Bundle().apply {
+                arguments = Bundle().apply {
                     this.putSerializable(CATEGORY_ARGUMENT, category)
                 }
             }

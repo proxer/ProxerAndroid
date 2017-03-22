@@ -17,6 +17,7 @@ import me.proxer.app.fragment.AboutFragment
 import me.proxer.app.fragment.SettingsFragment
 import me.proxer.app.fragment.media.MediaListFragment
 import me.proxer.app.fragment.news.NewsArticleFragment
+import me.proxer.app.fragment.ucp.BookmarksFragment
 import me.proxer.app.helper.IntroductionHelper
 import me.proxer.app.helper.MaterialDrawerHelper
 import me.proxer.app.helper.MaterialDrawerHelper.AccountItem
@@ -175,7 +176,7 @@ class DashboardActivity : MainActivity() {
             }
 
             DrawerItem.BOOKMARKS -> {
-//                setFragment(ReminderFragment.newInstance(), R.string.fragment_reminder)
+                setFragment(BookmarksFragment.newInstance(), R.string.section_bookmarks)
 
                 return false
             }

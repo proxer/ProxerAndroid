@@ -128,6 +128,14 @@ abstract class LoadingFragment<I, O> : MainFragment() {
     fun onLogin(@Suppress("UNUSED_PARAMETER") event: LoginEvent) {
         if (isLoginRequired) {
             freshLoad()
+        } else {
+            val currentError = state.error
+
+            if (currentError is ProxerException) {
+                if (currentError.serverErrorType in ErrorUtils.LOGIN_ERRORS) {
+                    freshLoad()
+                }
+            }
         }
     }
 
@@ -158,6 +166,8 @@ abstract class LoadingFragment<I, O> : MainFragment() {
 
             if (error is ProxerException && error.serverErrorType == ProxerException.ServerErrorType.IP_BLOCKED) {
                 state.error = null
+
+                hideError()
             }
         }
     }
