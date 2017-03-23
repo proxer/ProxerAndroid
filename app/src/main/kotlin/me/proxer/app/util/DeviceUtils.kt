@@ -9,8 +9,6 @@ import android.util.DisplayMetrics
 import me.proxer.app.util.extension.windowManager
 
 /**
- * TODO: Describe class
- *
  * @author Ruben Gees
  */
 object DeviceUtils {

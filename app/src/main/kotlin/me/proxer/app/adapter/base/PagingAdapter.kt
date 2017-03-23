@@ -10,7 +10,9 @@ import java.util.*
 /**
  * @author Ruben Gees
  */
-abstract class PagingAdapter<T> : RecyclerView.Adapter<PagingAdapter.PagingViewHolder<T>>() {
+abstract class PagingAdapter<T> : RecyclerView.Adapter<PagingAdapter<T>.PagingViewHolder<T>>() {
+
+    var positionResolver = PositionResolver()
 
     var list = ArrayList<T>()
         protected set
@@ -110,7 +112,7 @@ abstract class PagingAdapter<T> : RecyclerView.Adapter<PagingAdapter.PagingViewH
         }, 500)
     }
 
-    abstract class PagingViewHolder<in T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner abstract class PagingViewHolder<in T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         open fun bind(item: T) {
 
@@ -118,8 +120,12 @@ abstract class PagingAdapter<T> : RecyclerView.Adapter<PagingAdapter.PagingViewH
 
         protected fun withSafeAdapterPosition(action: (Int) -> Unit) {
             if (adapterPosition != RecyclerView.NO_POSITION) {
-                action.invoke(adapterPosition)
+                action.invoke(positionResolver.resolveRealPosition(adapterPosition))
             }
         }
+    }
+
+    open class PositionResolver {
+        open fun resolveRealPosition(position: Int) = position
     }
 }

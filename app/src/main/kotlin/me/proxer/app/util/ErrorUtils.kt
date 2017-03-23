@@ -7,7 +7,6 @@ import me.proxer.app.activity.MainActivity
 import me.proxer.app.dialog.HentaiConfirmationDialog
 import me.proxer.app.dialog.LoginDialog
 import me.proxer.app.event.CaptchaSolvedEvent
-import me.proxer.app.task.PagedTask
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_DEFAULT
 import me.proxer.library.api.ProxerException
 import me.proxer.library.api.ProxerException.ErrorType.*
@@ -42,6 +41,7 @@ object ErrorUtils {
             SERVER -> {
                 when (error.serverErrorType) {
                     IP_BLOCKED -> R.string.error_captcha
+                    INVALID_TOKEN -> R.string.error_invalid_token
                     LOGIN_INVALID_CREDENTIALS -> R.string.error_login_credentials
                     INFO_ENTRY_ALREADY_IN_LIST -> R.string.error_already_in_list
                     INFO_EXCEEDED_MAXIMUM_ENTRIES -> R.string.error_list_full
@@ -74,7 +74,6 @@ object ErrorUtils {
     fun getInnermostError(error: Throwable): Throwable {
         return when (error) {
             is PartialTaskException -> error.innerError
-            is PagedTask.PagedException -> error.innerError
             else -> error
         }
     }

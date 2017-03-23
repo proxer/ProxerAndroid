@@ -44,13 +44,11 @@ abstract class LoadingFragment<I, O> : MainFragment() {
         if (existing is StateFragment<*>) {
             existing as StateFragment<O>
         } else {
-            val new = StateFragment<O>()
-
-            childFragmentManager.beginTransaction()
-                    .add(new, "${javaClass.simpleName}state")
-                    .commitNow()
-
-            new
+            StateFragment<O>().apply {
+                this@LoadingFragment.childFragmentManager.beginTransaction()
+                        .add(this, "${this@LoadingFragment.javaClass.simpleName}state")
+                        .commitNow()
+            }
         }
     }
 
@@ -66,7 +64,7 @@ abstract class LoadingFragment<I, O> : MainFragment() {
 
         task = TaskBuilder.task(constructTask())
                 .validateBefore { validate() }
-                .bindToLifecycle(this)
+                .bindToLifecycle(this, "${javaClass.simpleName}load")
                 .onInnerStart {
                     hideError()
                     hideContent()
@@ -89,15 +87,6 @@ abstract class LoadingFragment<I, O> : MainFragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        progress.setColorSchemeResources(R.color.primary, R.color.accent)
-
-        if (isWorking) {
-            hideContent()
-            hideError()
-        }
-
-        setProgressVisible(isWorking)
-
         if (savedInstanceState != null) {
             state.data?.let {
                 onSuccess(it)
@@ -107,6 +96,15 @@ abstract class LoadingFragment<I, O> : MainFragment() {
                 onError(it)
             }
         }
+
+        progress.setColorSchemeResources(R.color.primary, R.color.accent)
+
+        if (isWorking) {
+            hideContent()
+            hideError()
+        }
+
+        setProgressVisible(isWorking)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -129,10 +127,12 @@ abstract class LoadingFragment<I, O> : MainFragment() {
         if (isLoginRequired) {
             freshLoad()
         } else {
-            val currentError = state.error
+            state.error?.let {
+                val error = ErrorUtils.getInnermostError(it)
 
-            if (currentError is ProxerException) {
-                if (currentError.serverErrorType in ErrorUtils.LOGIN_ERRORS) {
+                // This may happen if the login token is invalid and we require the user to login on pages, that would
+                // not require a login normally.
+                if (error is ProxerException && error.serverErrorType in ErrorUtils.LOGIN_ERRORS) {
                     freshLoad()
                 }
             }
@@ -187,7 +187,7 @@ abstract class LoadingFragment<I, O> : MainFragment() {
         showContent()
 
         saveResultToState(result)
-        removeErrorFromState(result)
+        removeErrorFromState()
     }
 
     open protected fun onError(error: Throwable) {
@@ -195,13 +195,21 @@ abstract class LoadingFragment<I, O> : MainFragment() {
         handleError(error)
 
         saveErrorToState(error)
-        removeResultFromState(error)
+        removeResultFromState()
     }
 
     open protected fun handleError(error: Throwable) {
         val action = ErrorUtils.handle(activity as MainActivity, error)
 
         showError(action.message, action.buttonMessage, action.buttonAction)
+    }
+
+    open protected fun showContent() {
+        contentContainer.visibility = View.VISIBLE
+    }
+
+    open protected fun hideContent() {
+        contentContainer.visibility = View.GONE
     }
 
     open protected fun showError(message: Int, buttonMessage: Int = ErrorUtils.ErrorAction.ACTION_MESSAGE_DEFAULT,
@@ -221,7 +229,7 @@ abstract class LoadingFragment<I, O> : MainFragment() {
         }
 
         errorButton.setOnClickListener(onButtonClickListener ?: View.OnClickListener {
-            task.freshExecute(constructInput())
+            freshLoad()
         })
     }
 
@@ -229,36 +237,28 @@ abstract class LoadingFragment<I, O> : MainFragment() {
         errorContainer.visibility = View.GONE
     }
 
-    open protected fun showContent() {
-        contentContainer.visibility = View.VISIBLE
-    }
-
-    open protected fun hideContent() {
-        contentContainer.visibility = View.GONE
-    }
-
     open protected fun setProgressVisible(visible: Boolean) {
         progress.isEnabled = if (!visible) isSwipeToRefreshEnabled else true
         progress.isRefreshing = visible
     }
 
-    open fun saveResultToState(result: O) {
+    open protected fun saveResultToState(result: O) {
         state.data = result
     }
 
-    open fun saveErrorToState(error: Throwable) {
+    open protected fun saveErrorToState(error: Throwable) {
         state.error = error
     }
 
-    open protected fun removeResultFromState(error: Throwable) {
+    open protected fun removeResultFromState() {
         state.data = null
     }
 
-    open protected fun removeErrorFromState(result: O) {
+    open protected fun removeErrorFromState() {
         state.error = null
     }
 
-    open fun freshLoad() {
+    open protected fun freshLoad() {
         state.clear()
 
         task.freshExecute(constructInput())

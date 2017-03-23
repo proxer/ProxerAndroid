@@ -11,30 +11,33 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
-import com.rubengees.ktask.base.Task
+import com.rubengees.ktask.android.AndroidLifecycleTask
+import com.rubengees.ktask.android.bindToLifecycle
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.activity.MainActivity
 import me.proxer.app.adapter.base.PagingAdapter
-import me.proxer.app.task.PagedTask
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.MarginDecoration
 import me.proxer.app.util.extension.bindView
 import me.proxer.app.util.extension.multilineSnackbar
-import me.proxer.app.util.extension.paged
 import me.proxer.app.util.listener.EndlessRecyclerOnScrollListener
 import org.jetbrains.anko.find
 
 /**
  * @author Ruben Gees
  */
-abstract class PagedLoadingFragment<I, O> : LoadingFragment<Pair<Int, I>, Pair<Int, List<O>>>() {
+abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
 
     open protected val shouldReplaceOnRefresh = false
     open protected var hasReachedEnd = false
 
     open protected val spanCount get() = DeviceUtils.calculateSpanAmount(activity)
+
+    override val isWorking get() = super.isWorking || refreshTask.isWorking
+
+    protected lateinit var refreshTask: AndroidLifecycleTask<I, List<O>>
 
     protected lateinit var adapter: EasyHeaderFooterAdapter
     protected lateinit var layoutManager: StaggeredGridLayoutManager
@@ -47,8 +50,31 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<Pair<Int, I>, Pair<I
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        refreshTask = TaskBuilder.task(constructRefreshTask())
+                .validateBefore { validateRefresh() }
+                .bindToLifecycle(this, "${javaClass.simpleName}refresh")
+                .onInnerStart {
+                    hideError()
+                    hideContent()
+                    setProgressVisible(true)
+                }
+                .onSuccess {
+                    onRefreshSuccess(it)
+                }
+                .onError {
+                    onRefreshError(it)
+                }
+                .onFinish {
+                    setProgressVisible(isWorking)
+                }
+                .build()
+
         adapter = EasyHeaderFooterAdapter(innerAdapter)
         layoutManager = StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL)
+
+        innerAdapter.positionResolver = object : PagingAdapter.PositionResolver() {
+            override fun resolveRealPosition(position: Int) = adapter.getRealPosition(position)
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -59,7 +85,7 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<Pair<Int, I>, Pair<I
         super.onViewCreated(view, savedInstanceState)
 
         progress.setOnRefreshListener(when (isSwipeToRefreshEnabled) {
-            true -> SwipeRefreshLayout.OnRefreshListener { task.freshExecute(0 to constructPagedInput(0)) }
+            true -> SwipeRefreshLayout.OnRefreshListener { refreshTask.forceExecute(constructPagedInput(0)) }
             false -> null
         })
 
@@ -69,43 +95,40 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<Pair<Int, I>, Pair<I
     override fun onDestroyView() {
         innerAdapter.destroy()
         progress.setOnRefreshListener(null)
+        list.clearOnScrollListeners()
 
         super.onDestroyView()
     }
 
-    override fun onSuccess(result: Pair<Int, List<O>>) {
-        hasReachedEnd = result.second.size < itemsOnPage
+    override fun onSuccess(result: List<O>) {
+        hasReachedEnd = result.size < itemsOnPage
 
-        when (result.first) {
-            0 -> when (shouldReplaceOnRefresh) {
-                true -> {
-                    innerAdapter.insert(result.second)
-                }
-                false -> {
-                    innerAdapter.replace(result.second)
-                }
-            }
-            else -> innerAdapter.append(result.second)
-        }
+        innerAdapter.append(result)
 
         super.onSuccess(result)
     }
 
-    override fun onError(error: Throwable) {
-        if (error is PagedTask.PagedException) {
-            if (error.page > 0 || innerAdapter.itemCount <= 0) {
-                super.onError(error)
-            } else {
-                val action = ErrorUtils.handle(activity as MainActivity, error)
-
-                multilineSnackbar(root, getString(R.string.error_refresh, getString(action.message)),
-                        Snackbar.LENGTH_LONG, action.buttonMessage, action.buttonAction)
+    open protected fun onRefreshSuccess(result: List<O>) {
+        when (shouldReplaceOnRefresh) {
+            true -> {
+                innerAdapter.insert(result)
             }
-        } else {
-            val action = ErrorUtils.handle(activity as MainActivity, error)
+            false -> {
+                innerAdapter.replace(result)
+            }
+        }
 
-            multilineSnackbar(root, getString(action.message), Snackbar.LENGTH_LONG, action.buttonMessage,
-                    action.buttonAction)
+        hideError()
+        showContent()
+
+        saveResultToState(result)
+    }
+
+    open protected fun onRefreshError(error: Throwable) {
+        if (innerAdapter.itemCount <= 0) {
+            super.onError(error)
+        } else {
+            handleRefreshError(error)
         }
     }
 
@@ -115,6 +138,13 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<Pair<Int, I>, Pair<I
 
     override fun hideContent() {
         // Don't do anything here, we want to keep showing the current content.
+    }
+
+    open protected fun handleRefreshError(error: Throwable) {
+        ErrorUtils.handle(activity as MainActivity, error).let {
+            multilineSnackbar(root, getString(R.string.error_refresh, getString(it.message)),
+                    Snackbar.LENGTH_LONG, it.buttonMessage, it.buttonAction)
+        }
     }
 
     override fun showError(message: Int, buttonMessage: Int, onButtonClickListener: View.OnClickListener?) {
@@ -149,10 +179,10 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<Pair<Int, I>, Pair<I
         adapter.footer = errorContainer
 
         if (innerAdapter.itemCount <= 0) {
-            list.post {
-                errorContainer.layoutParams.height = errorContainer.height - list.paddingTop - list.paddingTop
+            errorContainer.post {
+                errorContainer.layoutParams.height = errorContainer.height - list.paddingTop - list.paddingBottom
 
-                adapter.footer = errorContainer
+                adapter.notifyItemChanged(adapter.itemCount)
             }
         }
     }
@@ -161,18 +191,12 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<Pair<Int, I>, Pair<I
         adapter.removeFooter()
     }
 
-    override fun saveResultToState(result: Pair<Int, List<O>>) {
-        state.data = 0 to innerAdapter.list
+    override fun saveResultToState(result: List<O>) {
+        state.data = innerAdapter.list
     }
 
-    override fun removeResultFromState(error: Throwable) {
+    override fun removeResultFromState() {
         // We do not want to remove already loaded results here.
-    }
-
-    override fun removeErrorFromState(result: Pair<Int, List<O>>) {
-        if (result.first > 0) {
-            state.error = null
-        }
     }
 
     override fun freshLoad() {
@@ -181,15 +205,10 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<Pair<Int, I>, Pair<I
         super.freshLoad()
     }
 
-    override fun constructTask() = TaskBuilder.task(constructPagedTask())
-            .paged()
-            .build()
+    open protected fun validateRefresh() = validate()
+    open protected fun constructRefreshTask() = constructTask()
 
-    override fun constructInput() = calculateNextPage().run {
-        this to constructPagedInput(this)
-    }
-
-    abstract protected fun constructPagedTask(): Task<I, List<O>>
+    override fun constructInput() = calculateNextPage().run { constructPagedInput(this) }
     abstract protected fun constructPagedInput(page: Int): I
 
     private fun calculateNextPage() = when {
@@ -206,7 +225,7 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<Pair<Int, I>, Pair<I
         list.addOnScrollListener(object : EndlessRecyclerOnScrollListener(layoutManager) {
             override fun onLoadMore() {
                 if (!hasReachedEnd && !adapter.hasFooter() && !isWorking) {
-                    task.freshExecute(constructInput())
+                    task.forceExecute(constructInput())
                 }
             }
         })

@@ -23,6 +23,8 @@
     <string name="error_parsing">Der Server hat beschädigte Daten gesendet. Versuche es erneut</string>
     <string name="error_unknown">Ein unbekannter Fehler ist aufgetreten. Versuche es erneut</string>
 
+    <string name="error_invalid_token">Du wurdest zu deiner Sicherheit automatisch abgemeldet. Melde dich erneut an
+    </string>
     <string name="error_login_credentials">Falsches Password ode falscher Nutzername</string>
     <string name="error_already_in_list">Es gibt bereits einen Eintrag in deiner Liste</string>
     <string name="error_list_full">Deine Liste ist voll</string>
@@ -118,7 +120,8 @@
 
     <string name="about_info_version_title">Version</string>
     <string name="about_info_licences_title">Lizenzen</string>
-    <string name="about_info_licences_description">Lizenzen von Bibliotheken, die in dieser App verwendet werden</string>
+    <string name="about_info_licences_description">Lizenzen von Bibliotheken, die in dieser App verwendet werden
+    </string>
     <string name="about_info_licences_activity_title">Lizenzen</string>
     <string name="about_info_licences_activity_description">
         <![CDATA[In dieser App werden Icons von <a href="http://www.freepik.com/">Freepik</a>,

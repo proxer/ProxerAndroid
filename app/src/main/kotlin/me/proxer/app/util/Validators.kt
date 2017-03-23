@@ -5,8 +5,6 @@ import me.proxer.app.helper.PreferenceHelper
 import me.proxer.app.helper.StorageHelper
 
 /**
- * TODO: Describe class
- *
  * @author Ruben Gees
  */
 object Validators {

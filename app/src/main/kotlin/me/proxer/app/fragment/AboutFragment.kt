@@ -24,8 +24,6 @@ import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
 
 /**
- * TODO: Describe class
- *
  * @author Ruben Gees
  */
 class AboutFragment : MaterialAboutFragment() {

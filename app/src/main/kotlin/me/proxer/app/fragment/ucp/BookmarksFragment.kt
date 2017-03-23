@@ -126,7 +126,7 @@ class BookmarksFragment : PagedLoadingFragment<ProxerCall<List<Bookmark>>, Bookm
         return super.onOptionsItemSelected(item)
     }
 
-    override fun constructPagedTask() = ProxerTask<List<Bookmark>>()
+    override fun constructTask() = ProxerTask<List<Bookmark>>()
     override fun constructPagedInput(page: Int) = api.ucp().bookmarks()
             .category(category)
             .page(page)

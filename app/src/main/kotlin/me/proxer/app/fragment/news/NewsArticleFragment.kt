@@ -47,7 +47,7 @@ class NewsArticleFragment : PagedLoadingFragment<ProxerCall<List<NewsArticle>>, 
         }
     }
 
-    override fun constructPagedTask() = ProxerTask<List<NewsArticle>>()
+    override fun constructTask() = ProxerTask<List<NewsArticle>>()
     override fun constructPagedInput(page: Int) = api.notifications().news()
             .page(page)
             .limit(itemsOnPage)

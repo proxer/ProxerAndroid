@@ -206,7 +206,7 @@ class MediaListFragment : PagedLoadingFragment<ProxerCall<List<MediaListEntry>>,
         super.onDestroyView()
     }
 
-    override fun constructPagedTask() = ProxerTask<List<MediaListEntry>>()
+    override fun constructTask() = ProxerTask<List<MediaListEntry>>()
     override fun constructPagedInput(page: Int) = api.list().mediaSearch()
             .page(page)
             .limit(itemsOnPage)

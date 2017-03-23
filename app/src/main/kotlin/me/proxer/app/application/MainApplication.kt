@@ -7,13 +7,13 @@ import android.net.Uri
 import android.os.Build
 import android.os.StrictMode
 import android.support.v7.app.AppCompatDelegate
+import android.util.Log
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.integration.okhttp3.OkHttpUrlLoader
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.model.GenericLoaderFactory
 import com.bumptech.glide.load.model.GlideUrl
-import com.bumptech.glide.load.model.ModelLoader
 import com.bumptech.glide.load.model.ModelLoaderFactory
 import com.devbrackets.android.exomedia.ExoMedia
 import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory
@@ -39,6 +39,7 @@ import me.proxer.app.helper.StorageHelper
 import me.proxer.library.api.LoginTokenManager
 import me.proxer.library.api.ProxerApi
 import okhttp3.OkHttpClient
+import okio.Buffer
 import org.greenrobot.eventbus.EventBus
 import java.io.InputStream
 
@@ -72,8 +73,31 @@ class MainApplication : Application() {
 
         AppCompatDelegate.setDefaultNightMode(PreferenceHelper.getNightMode(this))
 
+        refWatcher = LeakCanary.install(this)
+
+        initApi()
+        initLibs()
+        initDrawerImageLoader()
+        enableStrictModeForDebug()
+    }
+
+    private fun initApi() {
         moshi = Moshi.Builder().build()
-        client = OkHttpClient.Builder().build()
+        client = OkHttpClient.Builder().apply {
+            if (BuildConfig.DEBUG) {
+                addInterceptor {
+                    it.proceed(it.request().apply {
+                        val bodyContent = if (body() == null) null else newBuilder().build().let {
+                            Buffer().apply { it.body().writeTo(this) }.readUtf8()
+                        }
+
+                        Log.i("ProxerAndroid", "Requesting ${url()} with method ${method()}" +
+                                if (bodyContent == null) "." else if (bodyContent.isBlank()) " and a blank body."
+                                else " and body \"$bodyContent\".")
+                    })
+                }
+            }
+        }.build()
         api = ProxerApi.Builder(BuildConfig.PROXER_API_KEY)
                 .moshi(moshi)
                 .client(client)
@@ -93,18 +117,13 @@ class MainApplication : Application() {
                         }
                     }
                 }).build()
-
-        refWatcher = LeakCanary.install(this)
-
-        initLibs()
-        initDrawerImageLoader()
-        enableStrictModeForDebug()
     }
 
     private fun initLibs() {
         EmojiManager.install(IosEmojiProvider())
         AndroidThreeTen.init(this)
         Hawk.init(this).build()
+
         ExoMedia.setHttpDataSourceFactoryProvider(ExoMedia.HttpDataSourceFactoryProvider {
             userAgent: String, listener: TransferListener<in DataSource>? ->
 
@@ -113,11 +132,7 @@ class MainApplication : Application() {
 
         Glide.get(this).register(GlideUrl::class.java, InputStream::class.java,
                 object : ModelLoaderFactory<GlideUrl, InputStream> {
-                    override fun build(context: Context?, factory: GenericLoaderFactory?):
-                            ModelLoader<GlideUrl, InputStream> {
-                        return OkHttpUrlLoader(client)
-                    }
-
+                    override fun build(context: Context?, factory: GenericLoaderFactory?) = OkHttpUrlLoader(client)
                     override fun teardown() {}
                 })
 
@@ -138,9 +153,7 @@ class MainApplication : Application() {
                         .into(imageView)
             }
 
-            override fun cancel(imageView: ImageView) {
-                Glide.clear(imageView)
-            }
+            override fun cancel(imageView: ImageView) = Glide.clear(imageView)
 
             override fun placeholder(context: Context, tag: String?): Drawable? {
                 return IconicsDrawable(context, CommunityMaterial.Icon.cmd_account).colorRes(android.R.color.white)
@@ -149,23 +162,21 @@ class MainApplication : Application() {
     }
 
     private fun enableStrictModeForDebug() {
-        if (BuildConfig.DEBUG) {
-            val threadPolicyBuilder = StrictMode.ThreadPolicy.Builder()
-                    .detectCustomSlowCalls()
-                    .detectNetwork()
+        StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()
+                .detectCustomSlowCalls()
+                .detectNetwork()
+                .apply {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        detectResourceMismatches()
+                    }
+                }
+                .penaltyLog()
+                .penaltyDialog()
+                .build())
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                threadPolicyBuilder.detectResourceMismatches()
-            }
-
-            StrictMode.setThreadPolicy(threadPolicyBuilder
-                    .penaltyLog()
-                    .penaltyDialog()
-                    .build())
-            StrictMode.setVmPolicy(StrictMode.VmPolicy.Builder()
-                    .detectAll()
-                    .penaltyLog()
-                    .build())
-        }
+        StrictMode.setVmPolicy(StrictMode.VmPolicy.Builder()
+                .detectAll()
+                .penaltyLog()
+                .build())
     }
 }

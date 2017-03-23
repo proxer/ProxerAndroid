@@ -7,8 +7,6 @@ import com.rubengees.introduction.entity.Slide
 import me.proxer.app.R
 
 /**
- * TODO: Describe Class
- *
  * @author Ruben Gees
  */
 class IntroductionHelper(activity: Activity) {
