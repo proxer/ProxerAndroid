@@ -61,6 +61,18 @@ android {
     }
 }
 
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        ModuleVersionSelector requested = details.requested
+
+        if (requested.group == 'com.android.support') {
+            if (!requested.name.startsWith("multidex")) {
+                details.useVersion '25.3.0'
+            }
+        }
+    }
+}
+
 dependencies {
     compile "com.android.support:support-v4:$support_version"
     compile "com.android.support:support-v13:$support_version"
@@ -77,8 +89,8 @@ dependencies {
     compile "org.jetbrains.anko:anko-common:$anko_version"
     compile "org.jetbrains.anko:anko-sqlite:$anko_version"
 
-    compile "net.xpece.android:support-preference:1.2.5"
-    compile "net.xpece.android:support-spinner:1.2.4"
+    compile "net.xpece.android:support-preference:1.2.7"
+    compile "net.xpece.android:support-spinner:1.2.7"
 
     compile('com.mikepenz:aboutlibraries:5.9.3@aar') {
         transitive = true
