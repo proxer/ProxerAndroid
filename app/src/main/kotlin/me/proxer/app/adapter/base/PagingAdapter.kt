@@ -68,7 +68,9 @@ abstract class PagingAdapter<T> : RecyclerView.Adapter<PagingAdapter<T>.PagingVi
     }
 
     open fun clear() {
-        doUpdates(ArrayList<T>(0))
+        list.clear()
+
+        notifyDataSetChanged()
     }
 
     open protected fun areItemsTheSame(oldItem: T, newItem: T) = when {
@@ -81,9 +83,10 @@ abstract class PagingAdapter<T> : RecyclerView.Adapter<PagingAdapter<T>.PagingVi
     open fun destroy() {}
 
     protected fun doUpdates(newList: List<T>) {
-        val previousFirstItem = list.firstOrNull()
-        val wasAtTop = (recyclerView?.layoutManager as StaggeredGridLayoutManager?)?.findFirstVisibleItemPositions(null)
-                ?.contains(0) ?: false
+        val wasEmpty = list.isEmpty()
+        val wasAtFirstPosition = (recyclerView?.layoutManager as StaggeredGridLayoutManager?)
+                ?.findFirstVisibleItemPositions(null)?.contains(0) ?: false
+
         val result = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
 
             override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int)
@@ -102,9 +105,12 @@ abstract class PagingAdapter<T> : RecyclerView.Adapter<PagingAdapter<T>.PagingVi
         result.dispatchUpdatesTo(this)
 
         if (newList.isNotEmpty()) {
-            if (wasAtTop && previousFirstItem != list.firstOrNull()) {
+            if (wasEmpty || wasAtFirstPosition) {
                 recyclerView?.postDelayed({
-                    recyclerView?.smoothScrollToPosition(0)
+                    when {
+                        wasEmpty -> recyclerView?.scrollToPosition(0)
+                        wasAtFirstPosition -> recyclerView?.smoothScrollToPosition(0)
+                    }
                 }, 50)
             }
 

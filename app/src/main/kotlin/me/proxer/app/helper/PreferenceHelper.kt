@@ -13,19 +13,18 @@ import me.proxer.app.helper.MaterialDrawerHelper
  */
 object PreferenceHelper {
 
-    const val PREFERENCE_HENTAI = "pref_hentai"
+    const val PREFERENCE_AGE = "pref_age_confirmation"
     const val PREFERENCE_START_PAGE = "pref_start_page"
-    const val PREFERENCE_NEWS_NOTIFICATIONS = "pref_news_notifications"
-    const val PREFERENCE_NEWS_NOTIFICATIONS_INTERVAL = "pref_news_notifications_interval"
     const val PREFERENCE_NIGHT_MODE = "pref_theme"
 
-    fun isHentaiAllowed(context: Context) = getDefaultSharedPreferences(context).getBoolean(PREFERENCE_HENTAI, false)
+    fun isAgeRestrictedMediaAllowed(context: Context)
+            = getDefaultSharedPreferences(context).getBoolean(PREFERENCE_AGE, false)
 
     fun getStartPage(context: Context) = MaterialDrawerHelper.DrawerItem
             .fromOrDefault(getDefaultSharedPreferences(context).getString(PREFERENCE_START_PAGE, "0").toLongOrNull())
 
-    fun setHentaiAllowed(context: Context, isAllowed: Boolean) = getDefaultSharedPreferences(context).edit()
-            .putBoolean(PREFERENCE_HENTAI, isAllowed).apply()
+    fun setAgeRestrictedMediaAllowed(context: Context, isAllowed: Boolean)
+            = getDefaultSharedPreferences(context).edit().putBoolean(PREFERENCE_AGE, isAllowed).apply()
 
     @AppCompatDelegate.NightMode
     fun getNightMode(context: Context): Int {

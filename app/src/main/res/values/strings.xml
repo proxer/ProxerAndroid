@@ -48,7 +48,7 @@
 
     <string name="error_login">Du bist nicht angemeldet</string>
     <string name="error_captcha">Es wurden zu viele Anfragen gemacht</string>
-    <string name="error_hentai_confirmation_needed">Für diese Kategorie musst du bestätigen, dass du mindestens 18
+    <string name="error_age_confirmation_needed">Für diese Kategorie musst du bestätigen, dass du mindestens 18
         Jahre alt bist</string>
     <string name="error_refresh">Aktualisierung fehlgeschlagen: %s</string>
 
@@ -89,9 +89,9 @@
     <string name="dialog_logout_title">Möchtest du dich abmelden?</string>
     <string name="dialog_logout_positive">Abmelden</string>
 
-    <string name="dialog_hentai_content">Dieser Bereich darf nur von Benutzern über 18 Jahren betreten werden! Eltern
+    <string name="dialog_age_confirmation_content">Dieser Bereich darf nur von Benutzern über 18 Jahren betreten werden! Eltern
         haften für ihre Kinder. Proxer.Me übernimmt keinerlei Haftung!</string>
-    <string name="dialog_hentai_positive">Verstanden</string>
+    <string name="dialog_age_confirmation_positive">Verstanden</string>
 
     <string name="fragment_ucp_overview_clip_title">Proxer Profillink</string>
     <string name="fragment_ucp_overview_username">Nutzername</string>
@@ -106,9 +106,9 @@
     <string name="fragment_ucp_overview_user_id">User ID</string>
 
     <string name="preference_category_general_title">Allgemein</string>
-    <string name="preference_hentai_title">Hentai</string>
-    <string name="preference_hentai_summary_off">Hentai wird nicht angezeigt</string>
-    <string name="preference_hentai_summary_on">Hentai wird angezeigt</string>
+    <string name="preference_age_confirmation_title">Altersbeschränkte Inhalte</string>
+    <string name="preference_age_confirmation_summary_off">Altersbeschränkte Inhalte werden nicht angezeigt</string>
+    <string name="preference_age_confirmation_summary_on">Altersbeschränkte Inhalte werden angezeigt</string>
     <string name="preference_start_page_title">Startseite</string>
 
     <string name="preference_category_design_title">Design</string>

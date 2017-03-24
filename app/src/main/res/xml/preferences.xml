@@ -3,10 +3,10 @@
     <PreferenceCategory android:title="@string/preference_category_general_title">
         <SwitchPreference
             android:defaultValue="false"
-            android:key="pref_hentai"
-            android:summaryOff="@string/preference_hentai_summary_off"
-            android:summaryOn="@string/preference_hentai_summary_on"
-            android:title="@string/preference_hentai_title"/>
+            android:key="pref_age_confirmation"
+            android:summaryOff="@string/preference_age_confirmation_summary_off"
+            android:summaryOn="@string/preference_age_confirmation_summary_on"
+            android:title="@string/preference_age_confirmation_title" />
 
         <!--suppress AndroidUnknownAttribute -->
         <ListPreference

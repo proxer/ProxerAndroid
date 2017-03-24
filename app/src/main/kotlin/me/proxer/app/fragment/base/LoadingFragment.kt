@@ -12,7 +12,7 @@ import com.rubengees.ktask.base.Task
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.activity.MainActivity
-import me.proxer.app.event.HentaiConfirmationEvent
+import me.proxer.app.event.AgeConfirmationEvent
 import me.proxer.app.event.LoginEvent
 import me.proxer.app.event.LogoutEvent
 import me.proxer.app.util.ErrorUtils
@@ -37,7 +37,7 @@ abstract class LoadingFragment<I, O> : MainFragment() {
 
     open protected val isSwipeToRefreshEnabled = false
     open protected val isLoginRequired = false
-    open protected val isHentaiConfirmationRequired = false
+    open protected val isAgeConfirmationRequired = false
 
     open protected val isWorking: Boolean get() = task.isWorking
 
@@ -173,13 +173,10 @@ abstract class LoadingFragment<I, O> : MainFragment() {
         }
     }
 
-    /**
-     * ( ͡° ͜ʖ ͡°)
-     */
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onHentaiConfirmation(@Suppress("UNUSED_PARAMETER") event: HentaiConfirmationEvent) {
-        if (isHentaiConfirmationRequired) {
+    fun onAgeConfirmation(@Suppress("UNUSED_PARAMETER") event: AgeConfirmationEvent) {
+        if (isAgeConfirmationRequired) {
             freshLoad()
         }
     }
@@ -189,8 +186,8 @@ abstract class LoadingFragment<I, O> : MainFragment() {
             Validators.validateLogin()
         }
 
-        if (isHentaiConfirmationRequired) {
-            Validators.validateHentaiConfirmation(context)
+        if (isAgeConfirmationRequired) {
+            Validators.validateAgeConfirmation(context)
         }
     }
 

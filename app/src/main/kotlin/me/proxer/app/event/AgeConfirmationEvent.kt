@@ -3,4 +3,4 @@ package me.proxer.app.event
 /**
  * @author Ruben Gees
  */
-class HentaiConfirmationEvent
+class AgeConfirmationEvent

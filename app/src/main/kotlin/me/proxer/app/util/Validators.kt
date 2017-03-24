@@ -15,8 +15,8 @@ object Validators {
         }
     }
 
-    fun validateHentaiConfirmation(context: Context) {
-        if (!PreferenceHelper.isHentaiAllowed(context)) {
+    fun validateAgeConfirmation(context: Context) {
+        if (!PreferenceHelper.isAgeRestrictedMediaAllowed(context)) {
             throw HentaiConfirmationRequiredException()
         }
     }

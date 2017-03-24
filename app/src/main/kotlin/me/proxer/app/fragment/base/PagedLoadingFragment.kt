@@ -202,7 +202,6 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
 
     override fun freshLoad() {
         innerAdapter.clear()
-        layoutManager.scrollToPosition(0)
 
         super.freshLoad()
     }
