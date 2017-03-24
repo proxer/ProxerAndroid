@@ -18,9 +18,11 @@ class ProxerTask<O> : LeafTask<ProxerCall<O>, O>() {
             call = input
 
             try {
-                finishSuccessful(input.execute().apply {
-                    internalCancel()
-                })
+                val result = input.execute()
+
+                internalCancel()
+
+                finishSuccessful(result)
             } catch(error: Throwable) {
                 internalCancel()
 
