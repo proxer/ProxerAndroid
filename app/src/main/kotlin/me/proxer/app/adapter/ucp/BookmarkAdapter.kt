@@ -1,5 +1,7 @@
 package me.proxer.app.adapter.ucp
 
+import android.graphics.drawable.ColorDrawable
+import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,6 +55,7 @@ class BookmarkAdapter : PagingAdapter<Bookmark>() {
         private val medium: TextView by bindView(R.id.medium)
         private val image: ImageView by bindView(R.id.image)
         private val episode: TextView by bindView(R.id.episode)
+        private val availability: ImageView by bindView(R.id.availability)
         private val language: ImageView by bindView(R.id.language)
         private val remove: ImageButton by bindView(R.id.remove)
 
@@ -80,6 +83,11 @@ class BookmarkAdapter : PagingAdapter<Bookmark>() {
             title.text = item.name
             medium.text = EnumMapper.mediumToString(medium.context, item.medium)
             episode.text = episode.context.getString(R.string.bookmark_episode, item.episode)
+            availability.setImageDrawable(ColorDrawable(ContextCompat.getColor(availability.context,
+                    when (item.isAvailable) {
+                        true -> R.color.md_green_500
+                        false -> R.color.md_red_500
+                    })))
 
             language.setImageResource(when (EnumMapper.mediaLanguageToGeneralLanguage(item.language)) {
                 Language.GERMAN -> R.drawable.ic_germany

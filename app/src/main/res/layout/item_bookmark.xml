@@ -39,7 +39,7 @@
                 android:gravity="center"
                 android:maxLines="3"
                 android:padding="8dp"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@android:color/white"
                 tools:text="Some title" />
 
@@ -53,31 +53,48 @@
                 android:paddingBottom="8dp"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
-                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="@android:color/white"
                 tools:text="Animeserie" />
 
-            <TextView
-                android:id="@+id/episode"
+            <LinearLayout
+                android:id="@+id/episodeContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/medium"
+                android:layout_margin="8dp"
                 android:layout_toLeftOf="@+id/language"
-                android:layout_toStartOf="@+id/language"
-                android:padding="8dp"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                tools:text="Episode 12" />
+                android:layout_toStartOf="@+id/language">
+
+                <TextView
+                    android:id="@+id/episode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="2dp"
+                    android:layout_marginRight="2dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    tools:text="Episode 12" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/availability"
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginStart="2dp" />
+            </LinearLayout>
 
             <ImageView
                 android:id="@+id/language"
                 android:layout_width="16dp"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/episode"
+                android:layout_alignBottom="@+id/episodeContainer"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_alignTop="@+id/episode"
+                android:layout_alignTop="@+id/episodeContainer"
                 android:layout_below="@+id/medium"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp" />
@@ -86,7 +103,7 @@
                 android:id="@+id/remove"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:layout_below="@+id/episode"
+                android:layout_below="@+id/episodeContainer"
                 android:layout_centerHorizontal="true"
                 android:background="?attr/selectableItemBackgroundBorderless" />
 
