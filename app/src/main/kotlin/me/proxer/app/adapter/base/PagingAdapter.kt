@@ -80,7 +80,9 @@ abstract class PagingAdapter<T> : RecyclerView.Adapter<PagingAdapter<T>.PagingVi
 
     open protected fun areContentsTheSame(oldItem: T, newItem: T) = oldItem == newItem
 
-    open fun destroy() {}
+    open fun destroy() {
+        positionResolver = PositionResolver()
+    }
 
     protected fun doUpdates(newList: List<T>) {
         val wasEmpty = list.isEmpty()
