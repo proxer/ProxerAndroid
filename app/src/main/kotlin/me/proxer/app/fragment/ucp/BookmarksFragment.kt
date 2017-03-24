@@ -12,12 +12,12 @@ import me.proxer.app.R
 import me.proxer.app.activity.MainActivity
 import me.proxer.app.adapter.ucp.BookmarkAdapter
 import me.proxer.app.fragment.base.PagedLoadingFragment
-import me.proxer.app.task.ProxerTask
+import me.proxer.app.task.asyncProxerTask
+import me.proxer.app.task.proxerTask
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
 import me.proxer.app.util.extension.api
 import me.proxer.app.util.extension.multilineSnackbar
-import me.proxer.app.util.extension.proxerTask
 import me.proxer.library.api.ProxerCall
 import me.proxer.library.entitiy.ucp.Bookmark
 import me.proxer.library.enums.Category
@@ -126,7 +126,7 @@ class BookmarksFragment : PagedLoadingFragment<ProxerCall<List<Bookmark>>, Bookm
         return super.onOptionsItemSelected(item)
     }
 
-    override fun constructTask() = ProxerTask<List<Bookmark>>()
+    override fun constructTask() = TaskBuilder.asyncProxerTask<List<Bookmark>>().build()
     override fun constructPagedInput(page: Int) = api.ucp().bookmarks()
             .category(category)
             .page(page)

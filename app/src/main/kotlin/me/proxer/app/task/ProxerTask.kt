@@ -17,19 +17,25 @@ class ProxerTask<O> : LeafTask<ProxerCall<O>, O>() {
         start {
             call = input
 
-            input.enqueue({
-                cancel()
+            try {
+                finishSuccessful(input.execute().apply {
+                    internalCancel()
+                })
+            } catch(error: Throwable) {
+                internalCancel()
 
-                finishSuccessful(it)
-            }, {
-                cancel()
-
-                finishWithError(it)
-            })
+                finishWithError(error)
+            }
         }
     }
 
     override fun cancel() {
+        super.cancel()
+
+        internalCancel()
+    }
+
+    private fun internalCancel() {
         call?.cancel()
         call = null
     }

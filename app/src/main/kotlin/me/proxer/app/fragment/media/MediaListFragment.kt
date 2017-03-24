@@ -6,10 +6,11 @@ import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.adapter.media.MediaAdapter
 import me.proxer.app.fragment.base.PagedLoadingFragment
-import me.proxer.app.task.ProxerTask
+import me.proxer.app.task.asyncProxerTask
 import me.proxer.app.util.extension.api
 import me.proxer.library.api.ProxerCall
 import me.proxer.library.entitiy.list.MediaListEntry
@@ -206,7 +207,7 @@ class MediaListFragment : PagedLoadingFragment<ProxerCall<List<MediaListEntry>>,
         super.onDestroyView()
     }
 
-    override fun constructTask() = ProxerTask<List<MediaListEntry>>()
+    override fun constructTask() = TaskBuilder.asyncProxerTask<List<MediaListEntry>>().build()
     override fun constructPagedInput(page: Int) = api.list().mediaSearch()
             .page(page)
             .limit(itemsOnPage)

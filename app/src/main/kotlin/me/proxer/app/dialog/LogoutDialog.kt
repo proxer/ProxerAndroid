@@ -13,7 +13,7 @@ import me.proxer.app.activity.MainActivity
 import me.proxer.app.dialog.base.MainDialog
 import me.proxer.app.event.UserChangedEvent
 import me.proxer.app.helper.StorageHelper
-import me.proxer.app.task.ProxerTask
+import me.proxer.app.task.asyncProxerTask
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.extension.api
 import me.proxer.app.util.extension.bindView
@@ -32,7 +32,7 @@ class LogoutDialog : MainDialog() {
     }
 
     private val task by lazy {
-        TaskBuilder.task(ProxerTask<Void?>())
+        TaskBuilder.asyncProxerTask<Void?>()
                 .bindToLifecycle(this)
                 .onInnerStart {
                     setProgressVisible(true)

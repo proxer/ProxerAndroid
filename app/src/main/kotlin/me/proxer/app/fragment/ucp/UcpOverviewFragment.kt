@@ -7,10 +7,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.TouchableMovementMethod
+import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.fragment.base.LoadingFragment
 import me.proxer.app.helper.StorageHelper
-import me.proxer.app.task.ProxerTask
+import me.proxer.app.task.asyncProxerTask
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.api
 import me.proxer.app.util.extension.bindView
@@ -85,6 +86,6 @@ class UcpOverviewFragment : LoadingFragment<ProxerCall<Int>, Int>() {
         }
     }
 
-    override fun constructTask() = ProxerTask<Int>()
+    override fun constructTask() = TaskBuilder.asyncProxerTask<Int>().build()
     override fun constructInput() = api.ucp().watchedEpisodes().build()
 }
