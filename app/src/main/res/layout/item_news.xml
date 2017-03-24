@@ -38,7 +38,7 @@
                 android:background="@color/half_transparent"
                 android:gravity="center"
                 android:padding="8dp"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@android:color/white"
                 tools:text="Some title"/>
 
@@ -49,7 +49,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             tools:text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
                 diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
                 sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet

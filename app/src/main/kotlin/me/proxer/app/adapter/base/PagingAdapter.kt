@@ -101,15 +101,17 @@ abstract class PagingAdapter<T> : RecyclerView.Adapter<PagingAdapter<T>.PagingVi
 
         result.dispatchUpdatesTo(this)
 
-        if (wasAtTop && previousFirstItem != list.firstOrNull()) {
-            recyclerView?.postDelayed({
-                recyclerView?.smoothScrollToPosition(0)
-            }, 50)
-        }
+        if (newList.isNotEmpty()) {
+            if (wasAtTop && previousFirstItem != list.firstOrNull()) {
+                recyclerView?.postDelayed({
+                    recyclerView?.smoothScrollToPosition(0)
+                }, 50)
+            }
 
-        recyclerView?.postDelayed({
-            recyclerView?.invalidateItemDecorations()
-        }, 500)
+            recyclerView?.postDelayed({
+                recyclerView?.invalidateItemDecorations()
+            }, 500)
+        }
     }
 
     inner abstract class PagingViewHolder<in T>(itemView: View) : RecyclerView.ViewHolder(itemView) {

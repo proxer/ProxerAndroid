@@ -6,14 +6,10 @@ import me.proxer.app.R
 import me.proxer.app.activity.MainActivity
 import me.proxer.app.dialog.HentaiConfirmationDialog
 import me.proxer.app.dialog.LoginDialog
-import me.proxer.app.event.CaptchaSolvedEvent
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_DEFAULT
 import me.proxer.library.api.ProxerException
 import me.proxer.library.api.ProxerException.ErrorType.*
 import me.proxer.library.api.ProxerException.ServerErrorType.*
-import me.proxer.library.enums.Device
-import me.proxer.library.util.ProxerUrls
-import org.greenrobot.eventbus.EventBus
 import java.io.IOException
 import java.net.SocketTimeoutException
 
@@ -90,11 +86,6 @@ object ErrorUtils {
                     else -> ACTION_MESSAGE_DEFAULT
                 }
                 val buttonAction = when (innermostError.serverErrorType) {
-                    IP_BLOCKED -> View.OnClickListener {
-                        context.showPage(ProxerUrls.captchaWeb(Device.MOBILE))
-
-                        EventBus.getDefault().post(CaptchaSolvedEvent())
-                    }
                     in LOGIN_ERRORS -> View.OnClickListener {
                         LoginDialog.show(context)
                     }

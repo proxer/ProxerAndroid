@@ -12,14 +12,16 @@ import com.rubengees.ktask.base.Task
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.activity.MainActivity
-import me.proxer.app.event.CaptchaSolvedEvent
 import me.proxer.app.event.HentaiConfirmationEvent
 import me.proxer.app.event.LoginEvent
 import me.proxer.app.event.LogoutEvent
 import me.proxer.app.util.ErrorUtils
+import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.Validators
 import me.proxer.app.util.extension.bindView
 import me.proxer.library.api.ProxerException
+import me.proxer.library.enums.Device
+import me.proxer.library.util.ProxerUrls
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -28,6 +30,10 @@ import org.greenrobot.eventbus.ThreadMode
  * @author Ruben Gees
  */
 abstract class LoadingFragment<I, O> : MainFragment() {
+
+    private companion object {
+        private const val SOLVING_CAPTCHA_STATE = "solving_captcha"
+    }
 
     open protected val isSwipeToRefreshEnabled = false
     open protected val isLoginRequired = false
@@ -51,6 +57,8 @@ abstract class LoadingFragment<I, O> : MainFragment() {
             }
         }
     }
+
+    protected var isSolvingCaptcha = false
 
     open protected val root: ViewGroup by bindView(R.id.root)
     open protected val progress: SwipeRefreshLayout by bindView(R.id.progress)
@@ -80,6 +88,8 @@ abstract class LoadingFragment<I, O> : MainFragment() {
                     setProgressVisible(isWorking)
                 }
                 .build()
+
+        isSolvingCaptcha = savedInstanceState?.getBoolean(SOLVING_CAPTCHA_STATE) ?: false
 
         EventBus.getDefault().register(this)
     }
@@ -111,8 +121,24 @@ abstract class LoadingFragment<I, O> : MainFragment() {
         super.onActivityCreated(savedInstanceState)
 
         if (savedInstanceState == null) {
-            task.execute(constructInput())
+            freshLoad()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if (isSolvingCaptcha) {
+            isSolvingCaptcha = false
+
+            freshLoad()
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        outState.putBoolean(SOLVING_CAPTCHA_STATE, isSolvingCaptcha)
     }
 
     override fun onDestroy() {
@@ -158,20 +184,6 @@ abstract class LoadingFragment<I, O> : MainFragment() {
         }
     }
 
-    @Suppress("unused")
-    @Subscribe
-    fun onCaptchaSolved(@Suppress("UNUSED_PARAMETER") event: CaptchaSolvedEvent) {
-        state.error?.let {
-            val error = ErrorUtils.getInnermostError(it)
-
-            if (error is ProxerException && error.serverErrorType == ProxerException.ServerErrorType.IP_BLOCKED) {
-                state.error = null
-
-                hideError()
-            }
-        }
-    }
-
     open protected fun validate() {
         if (isLoginRequired) {
             Validators.validateLogin()
@@ -192,16 +204,22 @@ abstract class LoadingFragment<I, O> : MainFragment() {
 
     open protected fun onError(error: Throwable) {
         hideContent()
-        handleError(error)
+        showError(handleError(error))
 
         saveErrorToState(error)
         removeResultFromState()
     }
 
-    open protected fun handleError(error: Throwable) {
-        val action = ErrorUtils.handle(activity as MainActivity, error)
+    open protected fun handleError(error: Throwable): ErrorAction {
+        if (error is ProxerException && error.serverErrorType == ProxerException.ServerErrorType.IP_BLOCKED) {
+            return ErrorAction(R.string.error_captcha, R.string.error_action_captcha, View.OnClickListener {
+                isSolvingCaptcha = true
 
-        showError(action.message, action.buttonMessage, action.buttonAction)
+                showPage(ProxerUrls.captchaWeb(Device.MOBILE))
+            })
+        } else {
+            return ErrorUtils.handle(activity as MainActivity, error)
+        }
     }
 
     open protected fun showContent() {
@@ -212,23 +230,27 @@ abstract class LoadingFragment<I, O> : MainFragment() {
         contentContainer.visibility = View.GONE
     }
 
-    open protected fun showError(message: Int, buttonMessage: Int = ErrorUtils.ErrorAction.ACTION_MESSAGE_DEFAULT,
-                                 onButtonClickListener: View.OnClickListener? = null) {
+    protected fun showError(action: ErrorAction) {
+        showError(action.message, action.buttonMessage, action.buttonAction)
+    }
+
+    open protected fun showError(message: Int, buttonMessage: Int = ErrorAction.ACTION_MESSAGE_DEFAULT,
+                                 buttonAction: View.OnClickListener? = null) {
         errorContainer.visibility = View.VISIBLE
         errorText.text = getString(message)
 
         errorButton.text = when (buttonMessage) {
-            ErrorUtils.ErrorAction.ACTION_MESSAGE_DEFAULT -> getString(R.string.error_action_retry)
-            ErrorUtils.ErrorAction.ACTION_MESSAGE_HIDE -> null
+            ErrorAction.ACTION_MESSAGE_DEFAULT -> getString(R.string.error_action_retry)
+            ErrorAction.ACTION_MESSAGE_HIDE -> null
             else -> getString(buttonMessage)
         }
 
         errorButton.visibility = when (buttonMessage) {
-            ErrorUtils.ErrorAction.ACTION_MESSAGE_HIDE -> View.GONE
+            ErrorAction.ACTION_MESSAGE_HIDE -> View.GONE
             else -> View.VISIBLE
         }
 
-        errorButton.setOnClickListener(onButtonClickListener ?: View.OnClickListener {
+        errorButton.setOnClickListener(buttonAction ?: View.OnClickListener {
             freshLoad()
         })
     }

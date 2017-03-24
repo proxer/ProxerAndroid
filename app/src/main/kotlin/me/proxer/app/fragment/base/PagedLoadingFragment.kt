@@ -15,10 +15,9 @@ import com.rubengees.ktask.android.AndroidLifecycleTask
 import com.rubengees.ktask.android.bindToLifecycle
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
-import me.proxer.app.activity.MainActivity
 import me.proxer.app.adapter.base.PagingAdapter
 import me.proxer.app.util.DeviceUtils
-import me.proxer.app.util.ErrorUtils
+import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.MarginDecoration
 import me.proxer.app.util.extension.bindView
 import me.proxer.app.util.extension.multilineSnackbar
@@ -128,7 +127,7 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
         if (innerAdapter.itemCount <= 0) {
             super.onError(error)
         } else {
-            handleRefreshError(error)
+            showRefreshError(handleError(error))
         }
     }
 
@@ -140,14 +139,7 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
         // Don't do anything here, we want to keep showing the current content.
     }
 
-    open protected fun handleRefreshError(error: Throwable) {
-        ErrorUtils.handle(activity as MainActivity, error).let {
-            multilineSnackbar(root, getString(R.string.error_refresh, getString(it.message)),
-                    Snackbar.LENGTH_LONG, it.buttonMessage, it.buttonAction)
-        }
-    }
-
-    override fun showError(message: Int, buttonMessage: Int, onButtonClickListener: View.OnClickListener?) {
+    override fun showError(message: Int, buttonMessage: Int, buttonAction: View.OnClickListener?) {
         val errorContainer = when {
             adapter.hasFooter() -> adapter.footer!!
             else -> LayoutInflater.from(context).inflate(R.layout.layout_error, root, false)
@@ -156,17 +148,17 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
         errorContainer.find<TextView>(R.id.errorText).text = getString(message)
         errorContainer.find<Button>(R.id.errorButton).apply {
             text = when (buttonMessage) {
-                ErrorUtils.ErrorAction.ACTION_MESSAGE_DEFAULT -> getString(R.string.error_action_retry)
-                ErrorUtils.ErrorAction.ACTION_MESSAGE_HIDE -> null
+                ErrorAction.ACTION_MESSAGE_DEFAULT -> getString(R.string.error_action_retry)
+                ErrorAction.ACTION_MESSAGE_HIDE -> null
                 else -> getString(buttonMessage)
             }
 
             visibility = when (buttonMessage) {
-                ErrorUtils.ErrorAction.ACTION_MESSAGE_HIDE -> View.GONE
+                ErrorAction.ACTION_MESSAGE_HIDE -> View.GONE
                 else -> View.VISIBLE
             }
 
-            setOnClickListener(onButtonClickListener ?: View.OnClickListener {
+            setOnClickListener(buttonAction ?: View.OnClickListener {
                 task.freshExecute(constructInput())
             })
         }
@@ -191,6 +183,15 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
         adapter.removeFooter()
     }
 
+    protected fun showRefreshError(action: ErrorAction) {
+        showRefreshError(action.message, action.buttonMessage, action.buttonAction)
+    }
+
+    open protected fun showRefreshError(message: Int, buttonMessage: Int, buttonAction: View.OnClickListener?) {
+        multilineSnackbar(root, getString(R.string.error_refresh, getString(message)),
+                Snackbar.LENGTH_LONG, buttonMessage, buttonAction)
+    }
+
     override fun saveResultToState(result: List<O>) {
         state.data = innerAdapter.list
     }
@@ -201,6 +202,7 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
 
     override fun freshLoad() {
         innerAdapter.clear()
+        layoutManager.scrollToPosition(0)
 
         super.freshLoad()
     }
