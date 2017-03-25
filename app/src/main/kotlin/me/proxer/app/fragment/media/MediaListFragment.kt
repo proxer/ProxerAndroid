@@ -116,6 +116,7 @@ class MediaListFragment : PagedLoadingFragment<ProxerCall<List<MediaListEntry>>,
             MediaType.OVA -> filterSubMenu.findItem(R.id.ova).isChecked = true
             MediaType.HENTAI -> filterSubMenu.findItem(R.id.hentai).isChecked = true
             MediaType.ALL_MANGA -> filterSubMenu.findItem(R.id.all_manga).isChecked = true
+            MediaType.MANGASERIES -> filterSubMenu.findItem(R.id.mangaseries).isChecked = true
             MediaType.ONESHOT -> filterSubMenu.findItem(R.id.oneshot).isChecked = true
             MediaType.DOUJIN -> filterSubMenu.findItem(R.id.doujin).isChecked = true
             MediaType.HMANGA -> filterSubMenu.findItem(R.id.hmanga).isChecked = true
@@ -185,6 +186,7 @@ class MediaListFragment : PagedLoadingFragment<ProxerCall<List<MediaListEntry>>,
             R.id.ova -> type = MediaType.OVA
             R.id.hentai -> type = MediaType.HENTAI
             R.id.all_manga -> type = MediaType.ALL_MANGA
+            R.id.mangaseries -> type = MediaType.MANGASERIES
             R.id.oneshot -> type = MediaType.ONESHOT
             R.id.doujin -> type = MediaType.DOUJIN
             R.id.hmanga -> type = MediaType.HMANGA
