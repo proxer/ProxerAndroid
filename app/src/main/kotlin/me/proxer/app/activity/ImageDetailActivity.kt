@@ -29,8 +29,8 @@ class ImageDetailActivity : MainActivity() {
             val intent = context.intentFor<ImageDetailActivity>(URL_EXTRA to url.toString())
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                context.startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation(context, image,
-                        image.transitionName).toBundle())
+                context.startActivity(intent, ActivityOptionsCompat
+                        .makeSceneTransitionAnimation(context, image, image.transitionName).toBundle())
             } else {
                 context.startActivity(intent)
             }
@@ -46,7 +46,7 @@ class ImageDetailActivity : MainActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(me.proxer.app.R.layout.activity_image_detail)
+        setContentView(R.layout.activity_image_detail)
         supportPostponeEnterTransition()
 
         Glide.with(this)

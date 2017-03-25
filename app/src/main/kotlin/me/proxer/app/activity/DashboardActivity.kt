@@ -234,11 +234,11 @@ class DashboardActivity : MainActivity() {
             }
 
             AccountItem.USER -> {
-//                StorageHelper.user?.let {
-//                    ProfileActivity.navigateTo(this, it.id, it.username, it.imageId)
-//                }
+                StorageHelper.user?.let {
+                    ProfileActivity.navigateTo(this, it.id, it.name, it.image)
+                }
 
-                return false
+                return true
             }
 
             AccountItem.UCP -> {

@@ -18,6 +18,8 @@
 
     <string name="section_ucp_overview">Übersicht</string>
 
+    <string name="section_profile">Profil</string>
+
     <string name="error_timeout">Der Server hat nicht rechtzeitig geantwortet. Versuche es später noch einmal</string>
     <string name="error_io">Es gab ein Problem bei der Datenübertragung. Versuche es erneut</string>
     <string name="error_parsing">Der Server hat beschädigte Daten gesendet. Versuche es erneut</string>
@@ -105,6 +107,14 @@
     <string name="fragment_ucp_overview_title">Übersicht</string>
     <string name="fragment_ucp_overview_user_id">User ID</string>
 
+    <string name="fragment_profile_points_anime">Anime</string>
+    <string name="fragment_profile_points_forum">Forum</string>
+    <string name="fragment_profile_points_info">Info</string>
+    <string name="fragment_profile_points_manga">Manga</string>
+    <string name="fragment_profile_points_miscellaneous">Verschiedenes</string>
+    <string name="fragment_profile_points_total">Insgesamt</string>
+    <string name="fragment_profile_points_uploads">Uploads</string>
+
     <string name="preference_category_general_title">Allgemein</string>
     <string name="preference_age_confirmation_title">Altersbeschränkte Inhalte</string>
     <string name="preference_age_confirmation_summary_off">Altersbeschränkte Inhalte werden nicht angezeigt</string>
@@ -168,6 +178,32 @@
     <string name="action_sort_relevance">Nach Relevanz</string>
     <string name="action_sort_state">Nach Status</string>
     <string name="action_sort_time">Nach Datum</string>
+
+    <string name="action_send_message">Nachricht schreiben</string>
+    <string name="action_new_chat">Neuer Chat</string>
+    <string name="action_new_group_with_user">Neue Gruppe mit diesem Nutzer</string>
+    <string name="action_new_group">Neue Gruppe</string>
+
+    <string name="rank_10">Schnupperninja</string>
+    <string name="rank_100">Anwärter</string>
+    <string name="rank_200">Akademie Schüler</string>
+    <string name="rank_500">Genin</string>
+    <string name="rank_700">Chunin</string>
+    <string name="rank_1000">Jonin</string>
+    <string name="rank_1500">Anbu</string>
+    <string name="rank_2000">Spezial Anbu</string>
+    <string name="rank_3000">Medizin Ninja</string>
+    <string name="rank_4000">Sannin</string>
+    <string name="rank_6000">Ninja Meister</string>
+    <string name="rank_8000">Kage</string>
+    <string name="rank_10000">Hokage</string>
+    <string name="rank_11000">Otaku</string>
+    <string name="rank_12000">Otaku no Senpai</string>
+    <string name="rank_14000">Otaku no Sensei</string>
+    <string name="rank_16000">Otaku no Shihan</string>
+    <string name="rank_18000">Hikikomori</string>
+    <string name="rank_20000">Halbgott</string>
+    <string name="rank_kami_sama">Kami-Sama</string>
 
     <string name="bookmark_episode">Episode %d</string>
 

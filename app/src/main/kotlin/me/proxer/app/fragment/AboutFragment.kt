@@ -16,6 +16,7 @@ import com.mikepenz.aboutlibraries.LibsBuilder
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
+import me.proxer.app.activity.ProfileActivity
 import me.proxer.app.application.MainApplication
 import me.proxer.app.util.extension.openHttpPage
 import me.proxer.library.enums.Device
@@ -45,7 +46,6 @@ class AboutFragment : MaterialAboutFragment() {
 
         private const val DEVELOPER_PROXER_NAME = "RubyGee"
         private const val DEVELOPER_PROXER_ID = "121658"
-        private const val DEVELOPER_PROXER_IMAGE = "121658_cEBC8F.png"
         private const val DEVELOPER_GITHUB_NAME = "rubengees"
 
         fun newInstance(): AboutFragment {
@@ -174,8 +174,7 @@ class AboutFragment : MaterialAboutFragment() {
                             setColorFilter(ContextCompat.getColor(context, R.color.icon), PorterDuff.Mode.SRC_IN)
                         })
                         .setOnClickListener {
-                            //                            ProfileActivity.navigateTo(activity, DEVELOPER_PROXER_ID,
-//                                    DEVELOPER_PROXER_NAME, DEVELOPER_PROXER_IMAGE)
+                            ProfileActivity.navigateTo(activity, DEVELOPER_PROXER_ID, DEVELOPER_PROXER_NAME, null)
                         }.build()
         )
     }
