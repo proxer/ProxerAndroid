@@ -44,6 +44,9 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
     abstract protected val innerAdapter: PagingAdapter<O>
     abstract protected val itemsOnPage: Int
 
+    private var verticalListPadding: Int = 0
+    private var horizontalListPadding: Int = 0
+
     open protected val list: RecyclerView by bindView(R.id.list)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,6 +77,9 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
         innerAdapter.positionResolver = object : PagingAdapter.PositionResolver() {
             override fun resolveRealPosition(position: Int) = adapter.getRealPosition(position)
         }
+
+        verticalListPadding = context.resources.getDimensionPixelSize(R.dimen.activity_vertical_margin)
+        horizontalListPadding = context.resources.getDimensionPixelSize(R.dimen.activity_horizontal_margin)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -132,7 +138,7 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
     }
 
     override fun showContent() {
-        // Don't do anything here, we don't hide the current content when loading.
+        list.setPadding(horizontalListPadding, verticalListPadding, horizontalListPadding, verticalListPadding)
     }
 
     override fun hideContent() {
@@ -171,11 +177,9 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
         adapter.footer = errorContainer
 
         if (innerAdapter.itemCount <= 0) {
-            errorContainer.post {
-                errorContainer.layoutParams.height = errorContainer.height - list.paddingTop - list.paddingBottom
-
-                adapter.notifyItemChanged(adapter.itemCount)
-            }
+            list.setPadding(horizontalListPadding, 0, horizontalListPadding, 0)
+        } else {
+            list.setPadding(horizontalListPadding, verticalListPadding, horizontalListPadding, verticalListPadding)
         }
     }
 
