@@ -25,6 +25,7 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import com.orhanobut.hawk.Hawk
+import com.orhanobut.hawk.Parser
 import com.squareup.leakcanary.LeakCanary
 import com.squareup.leakcanary.RefWatcher
 import com.squareup.moshi.Moshi
@@ -42,6 +43,7 @@ import okhttp3.OkHttpClient
 import okio.Buffer
 import org.greenrobot.eventbus.EventBus
 import java.io.InputStream
+import java.lang.reflect.Type
 
 /**
  * @author Ruben Gees
@@ -122,7 +124,10 @@ class MainApplication : Application() {
     private fun initLibs() {
         EmojiManager.install(IosEmojiProvider())
         AndroidThreeTen.init(this)
-        Hawk.init(this).build()
+        Hawk.init(this).setParser(object : Parser {
+            override fun <T : Any?> fromJson(content: String?, type: Type) = moshi.adapter<T>(type).fromJson(content)
+            override fun toJson(body: Any) = moshi.adapter(body.javaClass).toJson(body)
+        }).build()
 
         ExoMedia.setHttpDataSourceFactoryProvider(ExoMedia.HttpDataSourceFactoryProvider {
             userAgent: String, listener: TransferListener<in DataSource>? ->
