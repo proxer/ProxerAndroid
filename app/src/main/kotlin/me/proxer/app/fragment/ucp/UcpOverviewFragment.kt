@@ -29,7 +29,9 @@ class UcpOverviewFragment : LoadingFragment<ProxerCall<Int>, Int>() {
         private const val DATE_FORMAT = "%.1f"
 
         fun newInstance(): UcpOverviewFragment {
-            return UcpOverviewFragment()
+            return UcpOverviewFragment().apply {
+                arguments = Bundle()
+            }
         }
     }
 

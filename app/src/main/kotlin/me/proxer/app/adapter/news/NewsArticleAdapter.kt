@@ -43,6 +43,8 @@ class NewsArticleAdapter : PagingAdapter<NewsArticle>() {
     }
 
     override fun destroy() {
+        super.destroy()
+
         callback = null
     }
 

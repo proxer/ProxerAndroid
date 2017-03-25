@@ -33,6 +33,8 @@ class MediaAdapter(private val category: Category) : PagingAdapter<MediaListEntr
     }
 
     override fun destroy() {
+        super.destroy()
+
         callback = null
     }
 

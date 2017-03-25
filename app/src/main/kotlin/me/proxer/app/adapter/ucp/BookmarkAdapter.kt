@@ -38,6 +38,8 @@ class BookmarkAdapter : PagingAdapter<Bookmark>() {
     }
 
     override fun destroy() {
+        super.destroy()
+
         callback = null
     }
 

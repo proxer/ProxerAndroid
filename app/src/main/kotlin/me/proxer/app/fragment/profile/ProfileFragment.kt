@@ -64,8 +64,6 @@ class ProfileFragment : LoadingFragment<ProxerCall<UserInfo>, UserInfo>() {
     }
 
     override fun onSuccess(result: UserInfo) {
-        super.onSuccess(result)
-
         profileActivity.userId = result.id
         profileActivity.username = result.username
         profileActivity.image = result.image
@@ -93,6 +91,8 @@ class ProfileFragment : LoadingFragment<ProxerCall<UserInfo>, UserInfo>() {
                         showPage(HttpUrl.parse(it))
                     })
         }
+
+        super.onSuccess(result)
     }
 
     override fun constructTask() = TaskBuilder.asyncProxerTask<UserInfo>().build()

@@ -3,6 +3,7 @@ package me.proxer.app.fragment.news
 import android.os.Bundle
 import android.widget.ImageView
 import com.rubengees.ktask.util.TaskBuilder
+import me.proxer.app.R
 import me.proxer.app.activity.ImageDetailActivity
 import me.proxer.app.adapter.news.NewsArticleAdapter
 import me.proxer.app.adapter.news.NewsArticleAdapter.NewsAdapterCallback
@@ -21,12 +22,15 @@ class NewsArticleFragment : PagedLoadingFragment<ProxerCall<List<NewsArticle>>, 
 
     companion object {
         fun newInstance(): NewsArticleFragment {
-            return NewsArticleFragment()
+            return NewsArticleFragment().apply {
+                arguments = Bundle()
+            }
         }
     }
 
     override val isSwipeToRefreshEnabled = true
     override val itemsOnPage = 15
+    override val noDataMessage = R.string.error_no_data_news
 
     override val innerAdapter = NewsArticleAdapter()
 

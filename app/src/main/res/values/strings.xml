@@ -18,7 +18,8 @@
 
     <string name="section_ucp_overview">Übersicht</string>
 
-    <string name="section_profile">Profil</string>
+    <string name="section_profile_info">Profil</string>
+    <string name="section_top_ten">Favoriten</string>
 
     <string name="error_timeout">Der Server hat nicht rechtzeitig geantwortet. Versuche es später noch einmal</string>
     <string name="error_io">Es gab ein Problem bei der Datenübertragung. Versuche es erneut</string>
@@ -53,6 +54,12 @@
     <string name="error_age_confirmation_needed">Für diese Kategorie musst du bestätigen, dass du mindestens 18
         Jahre alt bist</string>
     <string name="error_refresh">Aktualisierung fehlgeschlagen: %s</string>
+
+    <string name="error_no_data">Keine Daten</string>
+    <string name="error_no_data_news">Derzeit sind keine News verfügbar</string>
+    <string name="error_no_data_bookmarks">Du hast noch nichts in deiner Watchlist</string>
+    <string name="error_no_data_media_list">Keine Ergebnisse</string>
+    <string name="error_no_data_top_ten">Es wurde noch nichts in die Top 10 aufgenommen</string>
 
     <string name="error_action_retry">Erneut versuchen</string>
     <string name="error_action_captcha">Captcha</string>
@@ -114,6 +121,9 @@
     <string name="fragment_profile_points_miscellaneous">Verschiedenes</string>
     <string name="fragment_profile_points_total">Insgesamt</string>
     <string name="fragment_profile_points_uploads">Uploads</string>
+
+    <string name="fragment_topten_anime">Anime</string>
+    <string name="fragment_topten_manga">Manga</string>
 
     <string name="preference_category_general_title">Allgemein</string>
     <string name="preference_age_confirmation_title">Altersbeschränkte Inhalte</string>

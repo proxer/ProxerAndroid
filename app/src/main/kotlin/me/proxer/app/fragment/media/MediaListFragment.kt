@@ -44,10 +44,11 @@ class MediaListFragment : PagedLoadingFragment<ProxerCall<List<MediaListEntry>>,
     override val isAgeConfirmationRequired: Boolean
         get() = type == MediaType.HENTAI || type == MediaType.HMANGA
 
-    override val spanCount: Int
-        get() = super.spanCount + 1
+    override val spanCount get() = super.spanCount + 1
+    override val noDataMessage = R.string.error_no_data_media_list
 
-    private val category: Category get() = arguments.getSerializable(CATEGORY_ARGUMENT) as Category
+    private val category
+        get() = arguments.getSerializable(CATEGORY_ARGUMENT) as Category
 
     private var sortCriteria: MediaSearchSortCriteria
         get() = arguments.getSerializable(SORT_CRITERIA_ARGUMENT) as? MediaSearchSortCriteria

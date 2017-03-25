@@ -6,6 +6,7 @@ import android.content.res.Configuration
 import android.graphics.Point
 import android.os.Build
 import android.util.DisplayMetrics
+import me.proxer.app.R
 import me.proxer.app.util.extension.windowManager
 
 /**
@@ -26,22 +27,20 @@ object DeviceUtils {
         return diagonalInches >= MINIMUM_DIAGONAL_INCHES
     }
 
-    fun convertDpToPx(context: Context, dp: Float): Int {
-        return (dp * (context.resources.displayMetrics.densityDpi.toFloat() /
-                DisplayMetrics.DENSITY_DEFAULT)).toInt()
-    }
+    fun convertDpToPx(context: Context, dp: Float) = (dp * (context.resources.displayMetrics.densityDpi.toFloat() /
+            DisplayMetrics.DENSITY_DEFAULT)).toInt()
 
-    fun convertSpToPx(context: Context, sp: Float): Float {
-        return sp * context.resources.displayMetrics.scaledDensity + 0.5f
-    }
+    fun convertSpToPx(context: Context, sp: Float) = sp * context.resources.displayMetrics.scaledDensity + 0.5f
 
-    fun getScreenWidth(context: Context): Int {
-        return Point().apply { context.windowManager.defaultDisplay.getSize(this) }.x
-    }
+    fun getScreenWidth(context: Context) = Point().apply { context.windowManager.defaultDisplay.getSize(this) }.x
 
-    fun isLandscape(context: Context): Boolean {
-        return context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-    }
+    fun getVerticalMargin(context: Context) = context.resources.getDimensionPixelSize(R.dimen.activity_vertical_margin)
+
+    fun getHorizontalMargin(context: Context)
+            = context.resources.getDimensionPixelSize(R.dimen.activity_horizontal_margin)
+
+    fun isLandscape(context: Context)
+            = context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     fun calculateSpanAmount(activity: Activity): Int {
         var result = 1
@@ -62,5 +61,4 @@ object DeviceUtils {
 
         return result
     }
-
 }

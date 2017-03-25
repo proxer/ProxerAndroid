@@ -1,6 +1,8 @@
 package me.proxer.app.adapter.base
 
 import android.support.v7.util.DiffUtil
+import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
@@ -86,8 +88,7 @@ abstract class PagingAdapter<T> : RecyclerView.Adapter<PagingAdapter<T>.PagingVi
 
     protected fun doUpdates(newList: List<T>) {
         val wasEmpty = list.isEmpty()
-        val wasAtFirstPosition = (recyclerView?.layoutManager as StaggeredGridLayoutManager?)
-                ?.findFirstVisibleItemPositions(null)?.contains(0) ?: false
+        val wasAtFirstPosition = isAtFirstPosition()
 
         val result = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
 
@@ -119,6 +120,17 @@ abstract class PagingAdapter<T> : RecyclerView.Adapter<PagingAdapter<T>.PagingVi
             recyclerView?.postDelayed({
                 recyclerView?.invalidateItemDecorations()
             }, 500)
+        }
+    }
+
+    private fun isAtFirstPosition(): Boolean {
+        val safeLayoutManager = recyclerView?.layoutManager
+
+        return when (safeLayoutManager) {
+            is StaggeredGridLayoutManager -> safeLayoutManager.findFirstCompletelyVisibleItemPositions(null).contains(0)
+            is GridLayoutManager -> safeLayoutManager.findFirstCompletelyVisibleItemPosition() == 0
+            is LinearLayoutManager -> safeLayoutManager.findFirstCompletelyVisibleItemPosition() == 0
+            else -> false
         }
     }
 

@@ -28,6 +28,7 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
 import me.proxer.app.fragment.profile.ProfileFragment
+import me.proxer.app.fragment.profile.ToptenFragment
 import me.proxer.app.helper.StorageHelper
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.bindView
@@ -231,19 +232,19 @@ class ProfileActivity : MainActivity() {
         override fun getItem(position: Int): Fragment {
             return when (position) {
                 0 -> ProfileFragment.newInstance()
-//                1 -> ToptenFragment.newInstance()
+                1 -> ToptenFragment.newInstance()
 //                2 -> UserMediaListFragment.newInstance(CategoryParameter.ANIME)
 //                3 -> UserMediaListFragment.newInstance(CategoryParameter.MANGA)
                 else -> throw RuntimeException("Unknown index passed")
             }
         }
 
-        override fun getCount() = 1 // 4
+        override fun getCount() = 2 // 4
 
         override fun getPageTitle(position: Int): CharSequence? {
             return when (position) {
-                0 -> getString(R.string.section_profile)
-//                1 -> getString(R.string.fragment_topten_title)
+                0 -> getString(R.string.section_profile_info)
+                1 -> getString(R.string.section_top_ten)
 //                2 -> getString(R.string.fragment_user_media_list_anime_title)
 //                3 -> getString(R.string.fragment_user_media_list_manga_title)
                 else -> throw RuntimeException("Unknown index passed")

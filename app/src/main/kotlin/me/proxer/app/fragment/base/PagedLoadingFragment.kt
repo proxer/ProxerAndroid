@@ -33,6 +33,7 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
     open protected var hasReachedEnd = false
 
     open protected val spanCount get() = DeviceUtils.calculateSpanAmount(activity)
+    open protected val noDataMessage get() = R.string.error_no_data
 
     override val isWorking get() = super.isWorking || refreshTask.isWorking
 
@@ -43,9 +44,6 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
 
     abstract protected val innerAdapter: PagingAdapter<O>
     abstract protected val itemsOnPage: Int
-
-    private var verticalListPadding: Int = 0
-    private var horizontalListPadding: Int = 0
 
     open protected val list: RecyclerView by bindView(R.id.list)
 
@@ -77,9 +75,6 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
         innerAdapter.positionResolver = object : PagingAdapter.PositionResolver() {
             override fun resolveRealPosition(position: Int) = adapter.getRealPosition(position)
         }
-
-        verticalListPadding = context.resources.getDimensionPixelSize(R.dimen.activity_vertical_margin)
-        horizontalListPadding = context.resources.getDimensionPixelSize(R.dimen.activity_horizontal_margin)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -138,7 +133,8 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
     }
 
     override fun showContent() {
-        list.setPadding(horizontalListPadding, verticalListPadding, horizontalListPadding, verticalListPadding)
+        updateListPadding()
+        showEmptyIfNecessary()
     }
 
     override fun hideContent() {
@@ -176,11 +172,7 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
 
         adapter.footer = errorContainer
 
-        if (innerAdapter.itemCount <= 0) {
-            list.setPadding(horizontalListPadding, 0, horizontalListPadding, 0)
-        } else {
-            list.setPadding(horizontalListPadding, verticalListPadding, horizontalListPadding, verticalListPadding)
-        }
+        updateListPadding()
     }
 
     override fun hideError() {
@@ -210,6 +202,12 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
         super.freshLoad()
     }
 
+    open protected fun showEmptyIfNecessary() {
+        if (innerAdapter.itemCount <= 0) {
+            showError(noDataMessage, ErrorAction.ACTION_MESSAGE_HIDE)
+        }
+    }
+
     open protected fun validateRefresh() = validate()
     open protected fun constructRefreshTask() = constructTask()
 
@@ -234,5 +232,17 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
                 }
             }
         })
+    }
+
+    private fun updateListPadding() {
+        val horizontalPadding = DeviceUtils.getHorizontalMargin(context)
+
+        if (innerAdapter.itemCount <= 0) {
+            list.setPadding(horizontalPadding, 0, horizontalPadding, 0)
+        } else {
+            val verticalPadding = DeviceUtils.getVerticalMargin(context)
+
+            list.setPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
+        }
     }
 }
