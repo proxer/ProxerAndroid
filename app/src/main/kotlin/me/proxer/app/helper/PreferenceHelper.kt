@@ -13,22 +13,22 @@ import me.proxer.app.helper.MaterialDrawerHelper
  */
 object PreferenceHelper {
 
-    const val PREFERENCE_AGE = "pref_age_confirmation"
-    const val PREFERENCE_START_PAGE = "pref_start_page"
-    const val PREFERENCE_NIGHT_MODE = "pref_theme"
+    const val AGE_CONFIRMATION = "age_confirmation"
+    const val START_PAGE = "start_page"
+    const val THEME = "theme"
 
     fun isAgeRestrictedMediaAllowed(context: Context)
-            = getDefaultSharedPreferences(context).getBoolean(PREFERENCE_AGE, false)
+            = getDefaultSharedPreferences(context).getBoolean(AGE_CONFIRMATION, false)
 
     fun getStartPage(context: Context) = MaterialDrawerHelper.DrawerItem
-            .fromOrDefault(getDefaultSharedPreferences(context).getString(PREFERENCE_START_PAGE, "0").toLongOrNull())
+            .fromOrDefault(getDefaultSharedPreferences(context).getString(START_PAGE, "0").toLongOrNull())
 
     fun setAgeRestrictedMediaAllowed(context: Context, isAllowed: Boolean)
-            = getDefaultSharedPreferences(context).edit().putBoolean(PREFERENCE_AGE, isAllowed).apply()
+            = getDefaultSharedPreferences(context).edit().putBoolean(AGE_CONFIRMATION, isAllowed).apply()
 
     @AppCompatDelegate.NightMode
     fun getNightMode(context: Context): Int {
-        return when (getDefaultSharedPreferences(context).getString(PREFERENCE_NIGHT_MODE, "0")) {
+        return when (getDefaultSharedPreferences(context).getString(THEME, "0")) {
             "0" -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
             "1" -> AppCompatDelegate.MODE_NIGHT_AUTO
             "2" -> AppCompatDelegate.MODE_NIGHT_YES

@@ -35,7 +35,7 @@ class LoginDialog : MainDialog() {
 
     companion object {
         fun show(activity: AppCompatActivity) {
-            LoginDialog().show(activity.supportFragmentManager, "dialog_login")
+            LoginDialog().show(activity.supportFragmentManager, "login_dialog")
         }
     }
 

@@ -32,7 +32,7 @@ import org.greenrobot.eventbus.ThreadMode
 abstract class LoadingFragment<I, O> : MainFragment() {
 
     private companion object {
-        private const val SOLVING_CAPTCHA_STATE = "solving_captcha"
+        private const val IS_SOLVING_CAPTCHA_STATE = "is_solving_captcha"
     }
 
     open protected val isSwipeToRefreshEnabled = false
@@ -89,7 +89,7 @@ abstract class LoadingFragment<I, O> : MainFragment() {
                 }
                 .build()
 
-        isSolvingCaptcha = savedInstanceState?.getBoolean(SOLVING_CAPTCHA_STATE) ?: false
+        isSolvingCaptcha = savedInstanceState?.getBoolean(IS_SOLVING_CAPTCHA_STATE) ?: false
 
         EventBus.getDefault().register(this)
     }
@@ -138,7 +138,7 @@ abstract class LoadingFragment<I, O> : MainFragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        outState.putBoolean(SOLVING_CAPTCHA_STATE, isSolvingCaptcha)
+        outState.putBoolean(IS_SOLVING_CAPTCHA_STATE, isSolvingCaptcha)
     }
 
     override fun onDestroy() {

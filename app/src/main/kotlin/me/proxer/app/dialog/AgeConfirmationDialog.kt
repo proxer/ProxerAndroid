@@ -17,7 +17,7 @@ class AgeConfirmationDialog : MainDialog() {
 
     companion object {
         fun show(activity: AppCompatActivity) {
-            AgeConfirmationDialog().show(activity.supportFragmentManager, "dialog_age_confirmation")
+            AgeConfirmationDialog().show(activity.supportFragmentManager, "age_confirmation_dialog")
         }
     }
 

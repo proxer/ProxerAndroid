@@ -10,8 +10,8 @@ import me.proxer.app.R
 import me.proxer.app.application.MainApplication
 import me.proxer.app.dialog.AgeConfirmationDialog
 import me.proxer.app.helper.PreferenceHelper
-import me.proxer.app.helper.PreferenceHelper.PREFERENCE_AGE
-import me.proxer.app.helper.PreferenceHelper.PREFERENCE_NIGHT_MODE
+import me.proxer.app.helper.PreferenceHelper.AGE_CONFIRMATION
+import me.proxer.app.helper.PreferenceHelper.THEME
 import net.xpece.android.support.preference.TwoStatePreference
 
 /**
@@ -28,7 +28,7 @@ class SettingsFragment : XpPreferenceFragment(), SharedPreferences.OnSharedPrefe
     override fun onCreatePreferences2(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences)
 
-        findPreference(PREFERENCE_AGE).setOnPreferenceClickListener {
+        findPreference(AGE_CONFIRMATION).setOnPreferenceClickListener {
             it as TwoStatePreference
 
             if (it.isChecked) {
@@ -67,13 +67,13 @@ class SettingsFragment : XpPreferenceFragment(), SharedPreferences.OnSharedPrefe
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         when (key) {
-            PREFERENCE_AGE -> {
+            AGE_CONFIRMATION -> {
                 if (PreferenceHelper.isAgeRestrictedMediaAllowed(context)) {
-                    (findPreference(PREFERENCE_AGE) as TwoStatePreference).isChecked = true
+                    (findPreference(AGE_CONFIRMATION) as TwoStatePreference).isChecked = true
                 }
             }
 
-            PREFERENCE_NIGHT_MODE -> {
+            THEME -> {
                 AppCompatDelegate.setDefaultNightMode(PreferenceHelper.getNightMode(context))
 
                 activity.recreate()

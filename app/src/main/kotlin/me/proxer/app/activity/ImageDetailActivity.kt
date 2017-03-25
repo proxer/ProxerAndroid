@@ -23,10 +23,10 @@ import org.jetbrains.anko.intentFor
 class ImageDetailActivity : MainActivity() {
 
     companion object {
-        private const val EXTRA_URL = "extra_url"
+        private const val URL_EXTRA = "url"
 
         fun navigateTo(context: Activity, image: ImageView, url: HttpUrl) {
-            val intent = context.intentFor<ImageDetailActivity>(EXTRA_URL to url.toString())
+            val intent = context.intentFor<ImageDetailActivity>(URL_EXTRA to url.toString())
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 context.startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation(context, image,
@@ -38,7 +38,7 @@ class ImageDetailActivity : MainActivity() {
     }
 
     private val url: String
-        get() = intent.getStringExtra(EXTRA_URL)
+        get() = intent.getStringExtra(URL_EXTRA)
 
     private val root: ViewGroup by bindView(R.id.root)
     private val image: ImageView by bindView(R.id.image)

@@ -39,11 +39,11 @@ import org.jetbrains.anko.intentFor
 class DashboardActivity : MainActivity() {
 
     companion object {
-        private const val STATE_TITLE = "activity_dashboard_title"
-        private const val EXTRA_DRAWER_ITEM = "extra_drawer_item"
+        private const val TITLE_STATE = "title"
+        private const val SECTION_EXTRA = "section"
 
-        fun getSectionIntent(context: Context, item: DrawerItem): Intent {
-            return context.intentFor<DashboardActivity>(EXTRA_DRAWER_ITEM to item.id)
+        fun getSectionIntent(context: Context, section: DrawerItem): Intent {
+            return context.intentFor<DashboardActivity>(SECTION_EXTRA to section.id)
         }
     }
 
@@ -84,7 +84,7 @@ class DashboardActivity : MainActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        outState.putCharSequence(STATE_TITLE, title)
+        outState.putCharSequence(TITLE_STATE, title)
         drawer.saveInstanceState(outState)
     }
 
@@ -92,7 +92,7 @@ class DashboardActivity : MainActivity() {
         super.onRestoreInstanceState(savedInstanceState)
 
         if (savedInstanceState != null) {
-            title = savedInstanceState.getString(STATE_TITLE)
+            title = savedInstanceState.getString(TITLE_STATE)
         }
     }
 
@@ -158,7 +158,7 @@ class DashboardActivity : MainActivity() {
 
     private fun getItemToLoad() = DrawerItem.fromOrDefault(when (intent.action == Intent.ACTION_VIEW) {
         true -> intent.dataString.toLongOrNull()
-        false -> intent.getLongExtra(EXTRA_DRAWER_ITEM, PreferenceHelper.getStartPage(this).id)
+        false -> intent.getLongExtra(SECTION_EXTRA, PreferenceHelper.getStartPage(this).id)
     })
 
     private fun onDrawerItemClick(item: DrawerItem): Boolean {

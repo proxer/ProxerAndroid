@@ -27,9 +27,9 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar, savedInstanceSta
                            private val accountClickCallback: (id: AccountItem) -> Boolean = { false }) {
 
     companion object {
-        private const val CROSSFADER_FIRST_DRAWER_DP: Float = 300f
-        private const val CROSSFADER_SECOND_DRAWER_DP: Float = 72f
-        private const val STATE_CURRENT_DRAWER_ITEM_ID = "material_drawer_helper_current_id"
+        private const val DRAWER_SIZE: Float = 300f
+        private const val MINI_DRAWER_SIZE: Float = 72f
+        private const val CURRENT_DRAWER_ID_STATE = "current_id"
     }
 
     private val header: AccountHeader
@@ -48,7 +48,7 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar, savedInstanceSta
         miniDrawer = tabletDrawer.first
         crossfader = tabletDrawer.second
 
-        currentItem = DrawerItem.fromOrNull(savedInstanceState?.getLong(STATE_CURRENT_DRAWER_ITEM_ID))
+        currentItem = DrawerItem.fromOrNull(savedInstanceState?.getLong(CURRENT_DRAWER_ID_STATE))
     }
 
     fun onBackPressed(): Boolean {
@@ -80,7 +80,7 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar, savedInstanceSta
     }
 
     fun saveInstanceState(outState: Bundle) {
-        outState.putLong(STATE_CURRENT_DRAWER_ITEM_ID, currentItem?.id ?: DrawerItem.NEWS.id)
+        outState.putLong(CURRENT_DRAWER_ID_STATE, currentItem?.id ?: DrawerItem.NEWS.id)
 
         header.saveInstanceState(outState)
         drawer.saveInstanceState(outState)
@@ -189,8 +189,8 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar, savedInstanceSta
                                 savedInstanceState: Bundle?): Crossfader<*> {
         return Crossfader<GmailStyleCrossFadeSlidingPaneLayout>()
                 .withContent(context.findViewById(R.id.root))
-                .withFirst(drawer.slider, DeviceUtils.convertDpToPx(context, CROSSFADER_FIRST_DRAWER_DP))
-                .withSecond(miniDrawer.build(context), DeviceUtils.convertDpToPx(context, CROSSFADER_SECOND_DRAWER_DP))
+                .withFirst(drawer.slider, DeviceUtils.convertDpToPx(context, DRAWER_SIZE))
+                .withSecond(miniDrawer.build(context), DeviceUtils.convertDpToPx(context, MINI_DRAWER_SIZE))
                 .withSavedInstance(savedInstanceState)
                 .build()
     }

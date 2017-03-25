@@ -27,7 +27,7 @@ class LogoutDialog : MainDialog() {
 
     companion object {
         fun show(activity: FragmentActivity) {
-            LogoutDialog().show(activity.supportFragmentManager, "dialog_logout")
+            LogoutDialog().show(activity.supportFragmentManager, "logout_dialog")
         }
     }
 
