@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import butterknife.bindView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
@@ -16,6 +15,7 @@ import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
 import me.proxer.app.adapter.base.PagingAdapter
 import me.proxer.app.util.EnumMapper
+import me.proxer.app.util.extension.bindView
 import me.proxer.library.entitiy.ucp.Bookmark
 import me.proxer.library.enums.Language
 import me.proxer.library.util.ProxerUrls

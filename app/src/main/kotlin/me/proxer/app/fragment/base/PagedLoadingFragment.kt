@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import butterknife.bindView
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import com.rubengees.ktask.android.AndroidLifecycleTask
 import com.rubengees.ktask.android.bindToLifecycle
@@ -20,6 +19,7 @@ import me.proxer.app.adapter.base.PagingAdapter
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.MarginDecoration
+import me.proxer.app.util.extension.bindView
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.listener.EndlessRecyclerOnScrollListener
 import org.jetbrains.anko.find

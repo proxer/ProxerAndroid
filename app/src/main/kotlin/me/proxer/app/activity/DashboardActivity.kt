@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.Toolbar
-import butterknife.bindView
 import com.rubengees.introduction.IntroductionActivity.OPTION_RESULT
 import com.rubengees.introduction.IntroductionBuilder
 import com.rubengees.introduction.entity.Option
@@ -25,6 +24,7 @@ import me.proxer.app.helper.MaterialDrawerHelper.AccountItem
 import me.proxer.app.helper.MaterialDrawerHelper.DrawerItem
 import me.proxer.app.helper.PreferenceHelper
 import me.proxer.app.helper.StorageHelper
+import me.proxer.app.util.extension.bindView
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls

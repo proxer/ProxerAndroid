@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import butterknife.bindView
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.adapter.profile.ToptenAdapter
@@ -17,6 +16,7 @@ import me.proxer.app.task.asyncProxerTask
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.MarginDecoration
+import me.proxer.app.util.extension.bindView
 import me.proxer.library.api.ProxerCall
 import me.proxer.library.entitiy.user.TopTenEntry
 import me.proxer.library.enums.Category

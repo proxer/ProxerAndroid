@@ -7,13 +7,13 @@ import android.support.v4.app.ActivityOptionsCompat
 import android.view.MenuItem
 import android.view.ViewGroup
 import android.widget.ImageView
-import butterknife.bindView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.GlideDrawable
 import com.bumptech.glide.request.animation.GlideAnimation
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget
 import me.proxer.app.R
+import me.proxer.app.util.extension.bindView
 import okhttp3.HttpUrl
 import org.jetbrains.anko.intentFor
 

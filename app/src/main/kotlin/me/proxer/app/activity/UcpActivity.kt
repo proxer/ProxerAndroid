@@ -9,10 +9,10 @@ import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.ViewPager
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
-import butterknife.bindView
 import com.h6ah4i.android.tablayouthelper.TabLayoutHelper
 import me.proxer.app.R
 import me.proxer.app.fragment.ucp.UcpOverviewFragment
+import me.proxer.app.util.extension.bindView
 import org.jetbrains.anko.startActivity
 
 class UcpActivity : MainActivity() {

@@ -1,16 +1,113 @@
-buildscript {
-    ext.kotlin_version = '1.1.1'
-    ext.support_version = '25.3.0'
-    ext.anko_version = '0.9.1a'
-    ext.leak_canary_version = '1.5'
-    ext.build_tools_version = '25.0.2'
+ext {
+    preDexLibs = !project.hasProperty('disablePreDex')
 
+    version = '0.9.0'
+    versionCode = 29
+    minSdkVersion = 15
+    targetSdkVersion = 25
+    compileSdkVersion = 25
+    buildToolsVersion = '25.0.2'
+
+    // Frameworks and code only libraries
+    kotlinVersion = '1.1.1'
+    ankoVersion = '0.10.0-beta-2'
+    ankoSqliteVersion = '0.9.1a'
+    supportLibraryVersion = '25.3.0'
+    supportPreferenceVersion = '1.2.7'
+    eventBusVersion = '3.0.0'
+    eventBusAnnotationVersion = '3.0.1'
+    proxerLibVersion = 'new-architecture-SNAPSHOT'
+    ktaskVersion = '0.2.2'
+
+    // UI components
+    aboutLibrariesVersion = '5.9.4'
+    materialDrawerVersion = '5.8.2'
+    iconicsVersion = '2.8.2'
+    communityMaterialTypefaceVersion = '1.8.36.1'
+    crossfaderVersion = '1.5.0'
+    materialAboutVersion = '1.8.1'
+    subsamplingScaleImageViewVersion = '3.6.0'
+    circleImageViewVersion = '2.1.0'
+    tabLayoutHelperVersion = '0.8.0'
+    materialDialogsVersion = '0.9.4.2'
+    flexboxVersion = '0.2.6'
+    badgeVersion = '1.6.2'
+    emojiIosVersion = '0.5.0-SNAPSHOT'
+    exomediaVersion = '4.0.0-preview3'
+    exoplayerIntegrationVersion = 'r2.3.1'
+    materialProgressBarVersion = '1.3.0'
+    materialRatingBarVersion = '1.0.2'
+    customtasbHelperVersion = '1.0.3'
+    introductionVersion = '1.3.9'
+
+    // Utils
+    threetenVersion = '1.0.5'
+    kotterknifeVersion = '0.1.0-SNAPSHOT'
+    hawkVersion = '2.0.1'
+    glideVersion = '3.7.0'
+    glideIntegrationVersion = '1.4.0'
+    linkBuilderVersion = '1.5.2'
+    easyHeaderFooterAdapterVersion = 'master-SNAPSHOT'
+
+    // Debugging
+    leakCanaryVersion = '1.5'
+
+    deps = [
+            kotlinStdlib             : "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
+            anko                     : "org.jetbrains.anko:anko-common:$ankoVersion",
+            ankoSqlite               : "org.jetbrains.anko:anko-sqlite:$ankoSqliteVersion",
+            supportAppCompat         : "com.android.support:appcompat-v7:$supportLibraryVersion",
+            supportRecyclerView      : "com.android.support:recyclerview-v7:$supportLibraryVersion",
+            supportCardView          : "com.android.support:cardview-v7:$supportLibraryVersion",
+            supportDesign            : "com.android.support:design:$supportLibraryVersion",
+            supportCustomtabs        : "com.android.support:customtabs:$supportLibraryVersion",
+            supportPreference        : "net.xpece.android:support-preference:$supportPreferenceVersion",
+            supportPreferenceSpinner : "net.xpece.android:support-spinner:$supportPreferenceVersion",
+            eventBus                 : "org.greenrobot:eventbus:$eventBusVersion",
+            eventBusAnnotation       : "org.greenrobot:eventbus-annotation-processor:$eventBusAnnotationVersion",
+            proxerLib                : "com.github.proxer:ProxerLibAndroid:$proxerLibVersion",
+            ktask                    : "com.github.rubengees.ktask:ktask:$ktaskVersion",
+            ktaskAndroid             : "com.github.rubengees.ktask:ktask-android:$ktaskVersion",
+
+            aboutLibraries           : "com.mikepenz:aboutlibraries:$aboutLibrariesVersion@aar",
+            materialDrawer           : "com.mikepenz:materialdrawer:$materialDrawerVersion@aar",
+            iconics                  : "com.mikepenz:iconics-core:$iconicsVersion@aar",
+            communityMaterialTypeface: "com.mikepenz:community-material-typeface:$communityMaterialTypefaceVersion@aar",
+            crossfader               : "com.mikepenz:crossfader:$crossfaderVersion@aar",
+            materialAbout            : "com.github.daniel-stoneuk:material-about-library:$materialAboutVersion",
+            subsamplingScaleImageView: "com.davemorrissey.labs:subsampling-scale-image-view:$subsamplingScaleImageViewVersion",
+            circleImageView          : "de.hdodenhof:circleimageview:$circleImageViewVersion",
+            tabLayoutHelper          : "com.h6ah4i.android.tablayouthelper:tablayouthelper:$tabLayoutHelperVersion",
+            materialDialogs          : "com.afollestad.material-dialogs:core:$materialDialogsVersion",
+            flexbox                  : "com.google.android:flexbox:$flexboxVersion",
+            badge                    : "com.github.nekocode:Badge:$badgeVersion",
+            emojiIos                 : "com.vanniktech:emoji-ios:$emojiIosVersion",
+            exomedia                 : "com.devbrackets.android:exomedia:$exomediaVersion",
+            exoplayerIntegration     : "com.google.android.exoplayer:extension-okhttp:$exoplayerIntegrationVersion",
+            materialProgressBar      : "me.zhanghai.android.materialprogressbar:library:$materialProgressBarVersion",
+            materialRatingBar        : "me.zhanghai.android.materialratingbar:library:$materialRatingBarVersion",
+            customtabsHelper         : "me.zhanghai.android.customtabshelper:library:$customtasbHelperVersion",
+            introduction             : "com.github.rubengees:introduction:$introductionVersion",
+
+            threeten                 : "com.jakewharton.threetenabp:threetenabp:$threetenVersion",
+            hawk                     : "com.orhanobut:hawk:$hawkVersion",
+            glide                    : "com.github.bumptech.glide:glide:$glideVersion",
+            glideIntegration         : "com.github.bumptech.glide:okhttp3-integration:$glideIntegrationVersion@aar",
+            linkBuilder              : "com.klinkerapps:link_builder:$linkBuilderVersion",
+            easyHeaderFooterAdapter  : "com.github.rubengees:EasyHeaderFooterAdapter:$easyHeaderFooterAdapterVersion",
+
+            leakCanary               : "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion",
+            leakCanaryNoOp           : "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
+    ]
+}
+
+buildscript {
     repositories {
         jcenter()
     }
 
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.1.1"
         classpath 'com.android.tools.build:gradle:2.3.0'
     }
 }
@@ -24,13 +121,12 @@ allprojects {
     }
 }
 
-project.ext.preDexLibs = !project.hasProperty('disablePreDex')
-
 subprojects {
+    def appPlugin = "com.android.build.gradle.AppPlugin"
+    def libraryPlugin = "com.android.build.gradle.LibraryPlugin"
+
     project.plugins.whenPluginAdded { plugin ->
-        if ("com.android.build.gradle.AppPlugin" == plugin.class.name) {
-            project.android.dexOptions.preDexLibraries = rootProject.ext.preDexLibs
-        } else if ("com.android.build.gradle.LibraryPlugin" == plugin.class.name) {
+        if (appPlugin == plugin.class.name || libraryPlugin == plugin.class.name) {
             project.android.dexOptions.preDexLibraries = rootProject.ext.preDexLibs
         }
     }

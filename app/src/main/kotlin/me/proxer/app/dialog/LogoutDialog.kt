@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.support.v4.app.FragmentActivity
 import android.view.View
 import android.widget.ProgressBar
-import butterknife.bindView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.rubengees.ktask.android.bindToLifecycle
 import com.rubengees.ktask.util.TaskBuilder
@@ -17,6 +16,7 @@ import me.proxer.app.event.UserChangedEvent
 import me.proxer.app.helper.StorageHelper
 import me.proxer.app.task.asyncProxerTask
 import me.proxer.app.util.ErrorUtils
+import me.proxer.app.util.extension.bindView
 import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.longToast
 

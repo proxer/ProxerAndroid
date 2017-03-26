@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import butterknife.bindView
 import com.rubengees.ktask.android.AndroidLifecycleTask
 import com.rubengees.ktask.android.bindToLifecycle
 import com.rubengees.ktask.base.Task
@@ -19,6 +18,7 @@ import me.proxer.app.event.LogoutEvent
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.Validators
+import me.proxer.app.util.extension.bindView
 import me.proxer.library.api.ProxerException
 import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls

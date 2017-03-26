@@ -1,17 +1,17 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: "kotlin-kapt"
+apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "$build_tools_version"
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         applicationId 'me.proxer.app'
-        minSdkVersion 15
-        targetSdkVersion 25
-        versionCode 28
-        versionName "0.8.1"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.version
 
         vectorDrawables.useSupportLibrary = true
     }
@@ -29,7 +29,7 @@ android {
 
     buildTypes {
         applicationVariants.all { variant ->
-            variant.buildConfigField "String", "PROXER_API_KEY", "\"" + getFromSecrets("PROXER_API_KEY") + "\""
+            variant.buildConfigField "String", "PROXER_API_KEY", "\"${getFromSecrets("PROXER_API_KEY")}\""
         }
 
         debug {
@@ -59,82 +59,51 @@ android {
 }
 
 dependencies {
-    compile "com.android.support:support-v4:$support_version"
-    compile "com.android.support:support-v13:$support_version"
-    compile "com.android.support:appcompat-v7:$support_version"
-    compile "com.android.support:recyclerview-v7:$support_version"
-    compile "com.android.support:cardview-v7:$support_version"
-    compile "com.android.support:design:$support_version"
-    compile "com.android.support:animated-vector-drawable:$support_version"
-    compile "com.android.support:customtabs:$support_version"
-    compile "com.android.support:support-annotations:$support_version"
-    compile "com.android.support:preference-v7:$support_version"
+    compile deps.kotlinStdlib
+    compile deps.anko
+    compile deps.ankoSqlite
+    compile deps.supportAppCompat
+    compile deps.supportRecyclerView
+    compile deps.supportCardView
+    compile deps.supportDesign
+    compile deps.supportCustomtabs
+    compile deps.supportPreference
+    compile deps.supportPreferenceSpinner
+    compile deps.eventBus
+    compile deps.proxerLib
+    compile deps.ktask
+    compile deps.ktaskAndroid
+    kapt deps.eventBusAnnotation
 
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile "org.jetbrains.anko:anko-common:$anko_version"
-    compile "org.jetbrains.anko:anko-sqlite:$anko_version"
+    compile(deps.aboutLibraries) { transitive = true }
+    compile(deps.materialDrawer) { transitive = true }
+    compile deps.iconics
+    compile deps.communityMaterialTypeface
+    compile deps.crossfader
+    compile deps.materialAbout
+    compile deps.subsamplingScaleImageView
+    compile deps.circleImageView
+    compile deps.tabLayoutHelper
+    compile deps.materialDialogs
+    compile deps.flexbox
+    compile deps.badge
+    compile deps.emojiIos
+    compile deps.exomedia
+    compile deps.exoplayerIntegration
+    compile deps.materialProgressBar
+    compile deps.materialRatingBar
+    compile deps.customtabsHelper
+    compile deps.introduction
 
-    compile "net.xpece.android:support-preference:1.2.7"
-    compile "net.xpece.android:support-spinner:1.2.7"
+    compile deps.threeten
+    compile(deps.hawk) { exclude module: 'gson' }
+    compile deps.glide
+    compile deps.glideIntegration
+    compile deps.linkBuilder
+    compile deps.easyHeaderFooterAdapter
 
-    compile('com.mikepenz:aboutlibraries:5.9.4@aar') {
-        transitive = true
-    }
-    compile('com.mikepenz:materialdrawer:5.8.2@aar') {
-        transitive = true
-    }
-    compile 'com.mikepenz:iconics-core:2.8.2@aar'
-    compile 'com.mikepenz:community-material-typeface:1.7.22.1@aar'
-    compile "com.mikepenz:crossfader:1.5.0@aar"
-
-    compile 'com.github.daniel-stoneuk:material-about-library:1.8.1'
-
-    compile 'com.jakewharton.threetenabp:threetenabp:1.0.5'
-    compile 'com.jakewharton:kotterknife:0.1.0-SNAPSHOT'
-
-    compile('com.orhanobut:hawk:2.0.1') {
-        exclude module: 'gson'
-    }
-
-    compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'com.github.bumptech.glide:okhttp3-integration:1.4.0@aar'
-
-    compile 'com.davemorrissey.labs:subsampling-scale-image-view:3.6.0'
-
-    compile 'org.greenrobot:eventbus:3.0.0'
-    kapt 'org.greenrobot:eventbus-annotation-processor:3.0.1'
-
-    compile 'de.hdodenhof:circleimageview:2.1.0'
-
-    compile 'com.h6ah4i.android.tablayouthelper:tablayouthelper:0.7.0'
-
-    compile 'com.afollestad.material-dialogs:core:0.9.4.2'
-
-    compile 'org.apmem.tools:layouts:1.10@aar'
-
-    compile 'com.klinkerapps:link_builder:1.3.3'
-
-    compile 'com.github.nekocode:Badge:1.6.2'
-
-    compile 'com.vanniktech:emoji-ios:0.5.0-SNAPSHOT'
-
-    compile 'com.devbrackets.android:exomedia:4.0.0-preview3'
-    compile 'com.google.android.exoplayer:extension-okhttp:r2.3.1'
-
-    compile 'me.zhanghai.android.materialratingbar:library:1.0.2'
-    compile 'me.zhanghai.android.customtabshelper:library:1.0.3'
-
-    compile 'com.github.proxer:ProxerLibAndroid:new-architecture-SNAPSHOT'
-
-    compile 'com.github.rubengees.ktask:ktask:-SNAPSHOT'
-    compile 'com.github.rubengees.ktask:ktask-android:-SNAPSHOT'
-    compile 'com.github.rubengees:EasyHeaderFooterAdapter:-SNAPSHOT'
-    compile('com.github.rubengees:introduction:1.3.9@aar') {
-        transitive = true
-    }
-
-    debugCompile "com.squareup.leakcanary:leakcanary-android:$leak_canary_version"
-    releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leak_canary_version"
+    debugCompile deps.leakCanary
+    releaseCompile deps.leakCanaryNoOp
 }
 
 kapt {
@@ -175,8 +144,6 @@ static shouldSign() {
         return false
     }
 
-    return result.containsKey("RELEASE_STORE_FILE") &&
-            result.containsKey("RELEASE_STORE_PASSWORD") &&
-            result.containsKey("RELEASE_KEY_ALIAS") &&
-            result.containsKey("RELEASE_KEY_PASSWORD")
+    return result.containsKey("RELEASE_STORE_FILE") && result.containsKey("RELEASE_STORE_PASSWORD") &&
+            result.containsKey("RELEASE_KEY_ALIAS") && result.containsKey("RELEASE_KEY_PASSWORD")
 }
