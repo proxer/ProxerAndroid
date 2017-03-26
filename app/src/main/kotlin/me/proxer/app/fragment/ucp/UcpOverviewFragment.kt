@@ -10,6 +10,7 @@ import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.TouchableMovementMethod
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
+import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.fragment.base.LoadingFragment
 import me.proxer.app.helper.StorageHelper
 import me.proxer.app.task.asyncProxerTask

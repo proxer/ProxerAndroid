@@ -11,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import me.proxer.app.R
 import me.proxer.app.activity.WebViewActivity
-import me.proxer.app.application.MainApplication
 import me.proxer.app.util.Utils
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
@@ -22,9 +21,6 @@ import okhttp3.HttpUrl
 //    } catch (exception: Exception) {
 //        ""
 //    }
-
-inline val api
-    get() = MainApplication.api
 
 fun CustomTabsHelperFragment.openHttpPage(activity: Activity, url: HttpUrl) {
     if (Utils.getNativeAppPackage(activity, url).isEmpty()) {

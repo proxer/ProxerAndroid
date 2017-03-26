@@ -9,6 +9,7 @@ import android.view.MenuItem
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.adapter.media.MediaAdapter
+import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.fragment.base.PagedLoadingFragment
 import me.proxer.app.task.asyncProxerTask
 import me.proxer.library.api.ProxerCall

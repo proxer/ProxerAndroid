@@ -10,6 +10,7 @@ import butterknife.bindView
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.adapter.profile.ToptenAdapter
+import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.fragment.base.LoadingFragment
 import me.proxer.app.fragment.profile.ToptenFragment.ZippedTopTenResult
 import me.proxer.app.task.asyncProxerTask

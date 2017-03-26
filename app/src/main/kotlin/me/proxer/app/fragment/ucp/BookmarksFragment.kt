@@ -11,6 +11,7 @@ import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.activity.MainActivity
 import me.proxer.app.adapter.ucp.BookmarkAdapter
+import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.fragment.base.PagedLoadingFragment
 import me.proxer.app.task.asyncProxerTask
 import me.proxer.app.util.ErrorUtils
