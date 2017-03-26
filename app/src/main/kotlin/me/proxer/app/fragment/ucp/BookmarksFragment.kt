@@ -13,7 +13,6 @@ import me.proxer.app.activity.MainActivity
 import me.proxer.app.adapter.ucp.BookmarkAdapter
 import me.proxer.app.fragment.base.PagedLoadingFragment
 import me.proxer.app.task.asyncProxerTask
-import me.proxer.app.task.proxerTask
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
 import me.proxer.app.util.extension.api
@@ -56,7 +55,7 @@ class BookmarksFragment : PagedLoadingFragment<ProxerCall<List<Bookmark>>, Bookm
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        removalTask = TaskBuilder.proxerTask<Void?>()
+        removalTask = TaskBuilder.asyncProxerTask<Void?>()
                 .validateBefore {
                     Validators.validateLogin()
                 }
