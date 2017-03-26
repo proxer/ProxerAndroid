@@ -1,7 +1,6 @@
 package me.proxer.app.adapter.base
 
 import android.support.v7.util.DiffUtil
-import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
@@ -111,7 +110,7 @@ abstract class PagingAdapter<T> : RecyclerView.Adapter<PagingAdapter<T>.PagingVi
             if (wasEmpty || wasAtFirstPosition) {
                 recyclerView?.postDelayed({
                     when {
-                        wasEmpty -> recyclerView?.scrollToPosition(0)
+                        wasEmpty -> scrollToTop()
                         wasAtFirstPosition -> recyclerView?.smoothScrollToPosition(0)
                     }
                 }, 50)
@@ -128,9 +127,17 @@ abstract class PagingAdapter<T> : RecyclerView.Adapter<PagingAdapter<T>.PagingVi
 
         return when (safeLayoutManager) {
             is StaggeredGridLayoutManager -> safeLayoutManager.findFirstCompletelyVisibleItemPositions(null).contains(0)
-            is GridLayoutManager -> safeLayoutManager.findFirstCompletelyVisibleItemPosition() == 0
             is LinearLayoutManager -> safeLayoutManager.findFirstCompletelyVisibleItemPosition() == 0
             else -> false
+        }
+    }
+
+    private fun scrollToTop() {
+        val safeLayoutManager = recyclerView?.layoutManager
+
+        when (safeLayoutManager) {
+            is StaggeredGridLayoutManager -> safeLayoutManager.scrollToPositionWithOffset(0, 0)
+            is LinearLayoutManager -> safeLayoutManager.scrollToPositionWithOffset(0, 0)
         }
     }
 
