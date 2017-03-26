@@ -15,7 +15,6 @@ import me.proxer.app.fragment.base.PagedLoadingFragment
 import me.proxer.app.task.asyncProxerTask
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
-import me.proxer.app.util.extension.api
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.library.api.ProxerCall
 import me.proxer.library.entitiy.ucp.Bookmark

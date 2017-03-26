@@ -14,7 +14,7 @@ abstract class EndlessRecyclerOnScrollListener(private val layoutManager:
                                                RecyclerView.LayoutManager) : OnScrollListener() {
 
     private companion object {
-        const val VISIBLE_THRESHOLD = 5
+        private const val VISIBLE_THRESHOLD = 5
     }
 
     private var lastScroll = 0L

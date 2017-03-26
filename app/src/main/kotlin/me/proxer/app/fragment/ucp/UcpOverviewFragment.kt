@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import butterknife.bindView
 import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.TouchableMovementMethod
 import com.rubengees.ktask.util.TaskBuilder
@@ -13,8 +14,6 @@ import me.proxer.app.fragment.base.LoadingFragment
 import me.proxer.app.helper.StorageHelper
 import me.proxer.app.task.asyncProxerTask
 import me.proxer.app.util.Utils
-import me.proxer.app.util.extension.api
-import me.proxer.app.util.extension.bindView
 import me.proxer.app.util.extension.snackbar
 import me.proxer.library.api.ProxerCall
 import me.proxer.library.util.ProxerUrls

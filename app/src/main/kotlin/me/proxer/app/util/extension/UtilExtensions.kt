@@ -23,7 +23,7 @@ import okhttp3.HttpUrl
 //        ""
 //    }
 
-inline val Any.api
+inline val api
     get() = MainApplication.api
 
 fun CustomTabsHelperFragment.openHttpPage(activity: Activity, url: HttpUrl) {
@@ -45,27 +45,6 @@ fun CustomTabsHelperFragment.openHttpPage(activity: Activity, url: HttpUrl) {
         activity.startActivity(Intent(Intent.ACTION_VIEW).setData(url.androidUri()))
     }
 }
-
-//fun <T> PagingAdapter<T>.updateAndScrollUpIfNecessary(layoutManager: RecyclerView.LayoutManager,
-//                                                      recyclerView: RecyclerView,
-//                                                      action: (it: PagingAdapter<T>) -> Unit) {
-//    val previousFirstItem = this.items.firstOrNull()
-//    val wasAtTop = when (layoutManager) {
-//        is LinearLayoutManager -> layoutManager.findFirstVisibleItemPosition() == 0
-//        is StaggeredGridLayoutManager -> {
-//            layoutManager.findFirstVisibleItemPositions(null).contains(0)
-//        }
-//        else -> throw IllegalArgumentException("Unknown LayoutManager: $layoutManager")
-//    }
-//
-//    action.invoke(this)
-//
-//    if (wasAtTop && previousFirstItem != this.items.firstOrNull()) {
-//        recyclerView.postDelayed({
-//            recyclerView.smoothScrollToPosition(0)
-//        }, 50)
-//    }
-//}
 
 inline fun HttpUrl.androidUri(): Uri {
     return Uri.parse(toString())

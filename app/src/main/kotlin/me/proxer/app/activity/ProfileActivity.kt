@@ -18,6 +18,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
+import butterknife.bindView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.GlideDrawable
@@ -31,7 +32,6 @@ import me.proxer.app.fragment.profile.ProfileFragment
 import me.proxer.app.fragment.profile.ToptenFragment
 import me.proxer.app.helper.StorageHelper
 import me.proxer.app.util.DeviceUtils
-import me.proxer.app.util.extension.bindView
 import me.proxer.library.util.ProxerUrls
 import org.jetbrains.anko.applyRecursively
 import org.jetbrains.anko.intentFor

@@ -40,7 +40,7 @@ object Utils {
         }
     }
 
-    fun getBitmapFromURL(context: Context, url: String): Bitmap? {
+    fun getBitmapFromUrl(context: Context, url: String): Bitmap? {
         try {
             return Glide.with(context)
                     .load(url)
@@ -107,23 +107,9 @@ object Utils {
         return resolvedSpecializedList
     }
 
-//    fun getLanguages(vararg items: String): List<Language> {
-//        return items.map {
-//            when (it) {
-//                SubDubLanguageParameter.ENGLISH_SUB, SubDubLanguageParameter.ENGLISH_DUB,
-//                GeneralLanguageParameter.ENGLISH -> ENGLISH
-//                SubDubLanguageParameter.GERMAN_SUB, SubDubLanguageParameter.GERMAN_DUB,
-//                GeneralLanguageParameter.GERMAN -> GERMAN
-//                else -> null
-//            }
-//        }.filterNotNull()
-//    }
-
     private fun extractPackageNames(resolveInfo: List<ResolveInfo>): MutableSet<String> {
         return resolveInfo
                 .map { it.activityInfo.packageName }
                 .toMutableSet()
     }
-
-    enum class Language { ENGLISH, GERMAN }
 }

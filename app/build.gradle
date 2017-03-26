@@ -90,6 +90,7 @@ dependencies {
     compile 'com.github.daniel-stoneuk:material-about-library:1.8.1'
 
     compile 'com.jakewharton.threetenabp:threetenabp:1.0.5'
+    compile 'com.jakewharton:kotterknife:0.1.0-SNAPSHOT'
 
     compile('com.orhanobut:hawk:2.0.1') {
         exclude module: 'gson'

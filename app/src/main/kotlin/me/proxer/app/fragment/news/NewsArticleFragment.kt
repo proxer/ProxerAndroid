@@ -9,7 +9,6 @@ import me.proxer.app.adapter.news.NewsArticleAdapter
 import me.proxer.app.adapter.news.NewsArticleAdapter.NewsAdapterCallback
 import me.proxer.app.fragment.base.PagedLoadingFragment
 import me.proxer.app.task.asyncProxerTask
-import me.proxer.app.util.extension.api
 import me.proxer.library.api.ProxerCall
 import me.proxer.library.entitiy.notifications.NewsArticle
 import me.proxer.library.enums.Device

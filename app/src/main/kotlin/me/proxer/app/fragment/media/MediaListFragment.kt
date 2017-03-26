@@ -11,7 +11,6 @@ import me.proxer.app.R
 import me.proxer.app.adapter.media.MediaAdapter
 import me.proxer.app.fragment.base.PagedLoadingFragment
 import me.proxer.app.task.asyncProxerTask
-import me.proxer.app.util.extension.api
 import me.proxer.library.api.ProxerCall
 import me.proxer.library.entitiy.list.MediaListEntry
 import me.proxer.library.enums.Category
