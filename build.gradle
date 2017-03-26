@@ -37,7 +37,7 @@ ext {
     exoplayerIntegrationVersion = 'r2.3.1'
     materialProgressBarVersion = '1.3.0'
     materialRatingBarVersion = '1.0.2'
-    customtasbHelperVersion = '1.0.3'
+    customtabsHelperVersion = '1.0.3'
     introductionVersion = '1.3.9'
 
     // Utils
@@ -86,7 +86,7 @@ ext {
             exoplayerIntegration     : "com.google.android.exoplayer:extension-okhttp:$exoplayerIntegrationVersion",
             materialProgressBar      : "me.zhanghai.android.materialprogressbar:library:$materialProgressBarVersion",
             materialRatingBar        : "me.zhanghai.android.materialratingbar:library:$materialRatingBarVersion",
-            customtabsHelper         : "me.zhanghai.android.customtabshelper:library:$customtasbHelperVersion",
+            customtabsHelper         : "me.zhanghai.android.customtabshelper:library:$customtabsHelperVersion",
             introduction             : "com.github.rubengees:introduction:$introductionVersion",
 
             threeten                 : "com.jakewharton.threetenabp:threetenabp:$threetenVersion",
