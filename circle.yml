@@ -18,7 +18,7 @@ dependencies:
 
 test:
   override:
-    - ./gradlew build -PdisablePreDex --console=plain
+    - ./gradlew build -PdisablePreDex -Pkotlin.incremental=false --console=plain
   post:
     - cp -r app/build/reports/* $CIRCLE_TEST_REPORTS
     - cp -r app/build/outputs/apk/* $CIRCLE_ARTIFACTS
