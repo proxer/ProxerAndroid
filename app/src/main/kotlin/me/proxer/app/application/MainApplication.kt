@@ -7,7 +7,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.StrictMode
 import android.support.v7.app.AppCompatDelegate
-import android.util.Log
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.integration.okhttp3.OkHttpUrlLoader
@@ -39,8 +38,8 @@ import me.proxer.app.helper.PreferenceHelper
 import me.proxer.app.helper.StorageHelper
 import me.proxer.library.api.LoginTokenManager
 import me.proxer.library.api.ProxerApi
+import me.proxer.library.api.ProxerApi.Builder.LoggingStrategy
 import okhttp3.OkHttpClient
-import okio.Buffer
 import org.greenrobot.eventbus.EventBus
 import java.io.InputStream
 import java.lang.reflect.Type
@@ -53,11 +52,11 @@ class MainApplication : Application() {
     companion object {
         private const val USER_AGENT = "ProxerAndroid/${BuildConfig.VERSION_NAME}"
 
-        lateinit var moshi: Moshi
-            private set
+        val moshi: Moshi
+            get() = api.moshi()
 
-        lateinit var client: OkHttpClient
-            private set
+        val client: OkHttpClient
+            get() = api.client()
 
         lateinit var api: ProxerApi
             private set
@@ -84,26 +83,9 @@ class MainApplication : Application() {
     }
 
     private fun initApi() {
-        moshi = Moshi.Builder().build()
-        client = OkHttpClient.Builder().apply {
-            if (BuildConfig.DEBUG) {
-                addInterceptor {
-                    it.proceed(it.request().apply {
-                        val bodyContent = if (body() == null) null else newBuilder().build().let {
-                            Buffer().apply { it.body().writeTo(this) }.readUtf8()
-                        }
-
-                        Log.i("ProxerAndroid", "Requesting ${url()} with method ${method()}" +
-                                if (bodyContent == null) "." else if (bodyContent.isBlank()) " and a blank body."
-                                else " and body \"$bodyContent\".")
-                    })
-                }
-            }
-        }.build()
         api = ProxerApi.Builder(BuildConfig.PROXER_API_KEY)
-                .moshi(moshi)
-                .client(client)
                 .userAgent(USER_AGENT)
+                .loggingStrategy(if (BuildConfig.DEBUG) LoggingStrategy.ALL else LoggingStrategy.NONE)
                 .loginTokenManager(object : LoginTokenManager {
                     override fun provide() = StorageHelper.loginToken
                     override fun persist(loginToken: String?) {
