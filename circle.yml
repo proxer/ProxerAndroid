@@ -14,7 +14,7 @@ dependencies:
     - echo y | android update sdk --no-ui --all --filter "tools"
     - echo y | android update sdk --no-ui --all --filter "platform-tools"
   override:
-    - ./gradlew dependencies --console=plain
+    - ./gradlew dependencies -Pkotlin.incremental=false --console=plain
 
 test:
   override:
