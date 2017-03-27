@@ -30,9 +30,9 @@
         <item name="background">@color/primary_light</item>
     </style>
 
-    <style name="ThemeOverlay.App" parent="@style/ThemeOverlay.AppCompat.Light"/>
+    <style name="ThemeOverlay.App" parent="@style/ThemeOverlay.AppCompat.Light" />
 
-    <style name="Theme.App" parent="Base.Theme.App"/>
+    <style name="Theme.App" parent="Base.Theme.App" />
 
-    <style name="Theme.App.Translucent" parent="Theme.App"/>
+    <style name="Theme.App.Translucent" parent="Theme.App" />
 </resources>

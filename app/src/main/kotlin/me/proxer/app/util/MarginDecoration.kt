@@ -32,45 +32,31 @@ class MarginDecoration(context: Context, private val spanCount: Int) : RecyclerV
         val itemCount = parent.adapter.itemCount
 
         val isAtTop = position - spanCount < 0
-        val isAtBottom = isAtBottom(itemCount, position)
+        val isAtBottom = position >= itemCount - spanCount
 
-        if (!isAtTop) {
-            outRect.top = margin
-        } else {
-            outRect.top = 0
+        when (isAtTop) {
+            true -> outRect.top = 0
+            false -> outRect.top = margin
         }
 
-        if (!isAtBottom) {
-            outRect.bottom = margin
-        } else {
-            outRect.bottom = 0
+        when (isAtBottom) {
+            true -> outRect.bottom = 0
+            false -> outRect.bottom = margin
         }
 
         if (spanCount > 1) {
-            if (spanIndex == 0) {
-                outRect.left = 0
-                outRect.right = largeMargin
-
-                return
+            outRect.left = when (spanIndex) {
+                0 -> 0
+                spanCount - 1 -> largeMargin
+                1, spanCount - 2 -> smallMargin
+                else -> margin
             }
 
-            if (spanIndex == spanCount - 1) {
-                outRect.left = largeMargin
-                outRect.right = 0
-
-                return
-            }
-
-            if (spanIndex == 1) {
-                outRect.left = smallMargin
-            } else {
-                outRect.left = margin
-            }
-
-            if (spanIndex == spanCount - 2) {
-                outRect.right = smallMargin
-            } else {
-                outRect.right = margin
+            outRect.right = when (spanIndex) {
+                0 -> largeMargin
+                spanCount - 1 -> 0
+                1, spanCount - 2 -> smallMargin
+                else -> margin
             }
         } else {
             outRect.left = 0
@@ -82,11 +68,5 @@ class MarginDecoration(context: Context, private val spanCount: Int) : RecyclerV
         is StaggeredGridLayoutManager.LayoutParams -> layoutParams.spanIndex
         is GridLayoutManager.LayoutParams -> layoutParams.spanIndex
         else -> 1
-    }
-
-    private fun isAtBottom(itemCount: Int, position: Int): Boolean {
-        val result = position >= itemCount - spanCount
-
-        return result
     }
 }

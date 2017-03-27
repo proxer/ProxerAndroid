@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shortcuts xmlns:android="http://schemas.android.com/apk/res/android"
-           xmlns:tools="http://schemas.android.com/tools"
-           tools:targetApi="n_mr1">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:targetApi="n_mr1">
 
     <shortcut
         android:enabled="true"
@@ -14,7 +14,7 @@
             android:action="android.intent.action.VIEW"
             android:data="0"
             android:targetClass="me.proxer.app.activity.DashboardActivity"
-            android:targetPackage="me.proxer.app"/>
+            android:targetPackage="me.proxer.app" />
     </shortcut>
     <shortcut
         android:enabled="true"
@@ -27,7 +27,7 @@
             android:action="android.intent.action.VIEW"
             android:data="1"
             android:targetClass="me.proxer.app.activity.DashboardActivity"
-            android:targetPackage="me.proxer.app"/>
+            android:targetPackage="me.proxer.app" />
     </shortcut>
     <shortcut
         android:enabled="true"
@@ -40,6 +40,6 @@
             android:action="android.intent.action.VIEW"
             android:data="2"
             android:targetClass="me.proxer.app.activity.DashboardActivity"
-            android:targetPackage="me.proxer.app"/>
+            android:targetPackage="me.proxer.app" />
     </shortcut>
 </shortcuts>

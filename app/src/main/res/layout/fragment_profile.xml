@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context=".fragment.profile.ProfileFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.profile.ProfileFragment">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/progress"
@@ -53,7 +53,7 @@
                                     android:layout_gravity="center_vertical"
                                     android:layout_margin="8dp"
                                     android:text="@string/fragment_profile_points_anime"
-                                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+                                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
                                 <TextView
                                     android:id="@+id/animePointsRow"
@@ -63,7 +63,7 @@
                                     android:layout_margin="8dp"
                                     android:gravity="end"
                                     android:textAppearance="?android:attr/textAppearanceMedium"
-                                    tools:text="100"/>
+                                    tools:text="100" />
                             </TableRow>
 
                             <TableRow>
@@ -74,7 +74,7 @@
                                     android:layout_gravity="center_vertical"
                                     android:layout_margin="8dp"
                                     android:text="@string/fragment_profile_points_manga"
-                                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+                                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
                                 <TextView
                                     android:id="@+id/mangaPointsRow"
@@ -84,7 +84,7 @@
                                     android:layout_margin="8dp"
                                     android:gravity="end"
                                     android:textAppearance="?android:attr/textAppearanceMedium"
-                                    tools:text="100"/>
+                                    tools:text="100" />
                             </TableRow>
 
                             <TableRow>
@@ -95,7 +95,7 @@
                                     android:layout_gravity="center_vertical"
                                     android:layout_margin="8dp"
                                     android:text="@string/fragment_profile_points_uploads"
-                                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+                                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
                                 <TextView
                                     android:id="@+id/uploadPointsRow"
@@ -105,7 +105,7 @@
                                     android:layout_margin="8dp"
                                     android:gravity="end"
                                     android:textAppearance="?android:attr/textAppearanceMedium"
-                                    tools:text="100"/>
+                                    tools:text="100" />
                             </TableRow>
 
                             <TableRow>
@@ -116,7 +116,7 @@
                                     android:layout_gravity="center_vertical"
                                     android:layout_margin="8dp"
                                     android:text="@string/fragment_profile_points_forum"
-                                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+                                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
                                 <TextView
                                     android:id="@+id/forumPointsRow"
@@ -126,7 +126,7 @@
                                     android:layout_margin="8dp"
                                     android:gravity="end"
                                     android:textAppearance="?android:attr/textAppearanceMedium"
-                                    tools:text="100"/>
+                                    tools:text="100" />
                             </TableRow>
 
                             <TableRow>
@@ -137,7 +137,7 @@
                                     android:layout_gravity="center_vertical"
                                     android:layout_margin="8dp"
                                     android:text="@string/fragment_profile_points_info"
-                                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+                                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
                                 <TextView
                                     android:id="@+id/infoPointsRow"
@@ -147,7 +147,7 @@
                                     android:layout_margin="8dp"
                                     android:gravity="end"
                                     android:textAppearance="?android:attr/textAppearanceMedium"
-                                    tools:text="100"/>
+                                    tools:text="100" />
                             </TableRow>
 
                             <TableRow>
@@ -158,7 +158,7 @@
                                     android:layout_gravity="center_vertical"
                                     android:layout_margin="8dp"
                                     android:text="@string/fragment_profile_points_miscellaneous"
-                                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+                                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
                                 <TextView
                                     android:id="@+id/miscellaneousPointsRow"
@@ -168,7 +168,7 @@
                                     android:layout_margin="8dp"
                                     android:gravity="end"
                                     android:textAppearance="?android:attr/textAppearanceMedium"
-                                    tools:text="100"/>
+                                    tools:text="100" />
                             </TableRow>
 
                             <View
@@ -176,7 +176,7 @@
                                 android:layout_height="1dp"
                                 android:layout_marginLeft="8dp"
                                 android:layout_marginRight="8dp"
-                                android:background="@color/divider"/>
+                                android:background="@color/divider" />
 
                             <TableRow>
 
@@ -185,7 +185,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_margin="8dp"
                                     android:text="@string/fragment_profile_points_total"
-                                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+                                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
                                 <TextView
                                     android:id="@+id/totalPointsRow"
@@ -194,7 +194,7 @@
                                     android:layout_margin="8dp"
                                     android:gravity="end"
                                     android:textAppearance="?android:attr/textAppearanceMedium"
-                                    tools:text="500"/>
+                                    tools:text="500" />
                             </TableRow>
                         </TableLayout>
 
@@ -206,7 +206,7 @@
                             android:layout_margin="16dp"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="@color/colorAccent"
-                            tools:text="Kage"/>
+                            tools:text="Kage" />
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
 
@@ -225,13 +225,13 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
                         android:textAppearance="?android:attr/textAppearanceMedium"
-                        tools:text="This is a test: https://github.com/proxer/ProxerAndroid - 2 days ago"/>
+                        tools:text="This is a test: https://github.com/proxer/ProxerAndroid - 2 days ago" />
                 </android.support.v7.widget.CardView>
             </LinearLayout>
 
         </android.support.v4.widget.NestedScrollView>
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <include layout="@layout/layout_error"/>
+    <include layout="@layout/layout_error" />
 
 </FrameLayout>

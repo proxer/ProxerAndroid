@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:id="@+id/root"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context=".fragment.profile.ToptenFragment">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.profile.ToptenFragment">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/progress"
@@ -38,12 +38,12 @@
                         android:layout_marginTop="@dimen/activity_vertical_margin"
                         android:text="@string/fragment_topten_anime"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textColor="@color/colorAccent"/>
+                        android:textColor="@color/colorAccent" />
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/animeList"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -59,16 +59,16 @@
                         android:layout_marginTop="@dimen/activity_vertical_margin"
                         android:text="@string/fragment_topten_manga"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textColor="@color/colorAccent"/>
+                        android:textColor="@color/colorAccent" />
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/mangaList"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <include layout="@layout/layout_error"/>
+    <include layout="@layout/layout_error" />
 </FrameLayout>

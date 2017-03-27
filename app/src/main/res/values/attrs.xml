@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <attr name="aspect" format="float"/>
+    <attr name="aspect" format="float" />
 
     <declare-styleable name="WidthAspectImageView">
-        <attr name="aspect"/>
+        <attr name="aspect" />
     </declare-styleable>
 
     <declare-styleable name="WidthAspectCircleImageView">
-        <attr name="aspect"/>
+        <attr name="aspect" />
     </declare-styleable>
 
 </resources>
