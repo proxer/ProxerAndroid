@@ -15,7 +15,6 @@ import me.proxer.app.fragment.profile.ToptenFragment.ZippedTopTenResult
 import me.proxer.app.task.asyncProxerTask
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
-import me.proxer.app.util.MarginDecoration
 import me.proxer.app.util.extension.bindView
 import me.proxer.library.api.ProxerCall
 import me.proxer.library.entitiy.user.TopTenEntry
@@ -79,13 +78,11 @@ class ToptenFragment : LoadingFragment<Pair<ProxerCall<List<TopTenEntry>>, Proxe
         val spanCount = DeviceUtils.calculateSpanAmount(activity) + 1
 
         animeList.setHasFixedSize(true)
-        animeList.addItemDecoration(MarginDecoration(context, spanCount))
         animeList.isNestedScrollingEnabled = false
         animeList.layoutManager = GridLayoutManager(context, spanCount)
         animeList.adapter = animeAdapter
 
         mangaList.setHasFixedSize(true)
-        animeList.addItemDecoration(MarginDecoration(context, spanCount))
         mangaList.isNestedScrollingEnabled = false
         mangaList.layoutManager = GridLayoutManager(context, spanCount)
         mangaList.adapter = mangaAdapter

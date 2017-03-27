@@ -1,7 +1,9 @@
 <resources>
 
-    <dimen name="activity_horizontal_margin">12dp</dimen>
-    <dimen name="activity_vertical_margin">12dp</dimen>
+    <dimen name="screen_horizontal_margin">12dp</dimen>
+    <dimen name="screen_vertical_margin">12dp</dimen>
+    <dimen name="screen_horizontal_margin_with_items">8dp</dimen>
+    <dimen name="screen_vertical_margin_with_items">8dp</dimen>
     <dimen name="item_margin">4dp</dimen>
     <dimen name="header_image_height">256dp</dimen>
 </resources>

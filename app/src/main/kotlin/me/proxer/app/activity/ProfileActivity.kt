@@ -160,7 +160,7 @@ class ProfileActivity : MainActivity() {
 //                            isGroup = true)
 //                }
             }
-            R.id.home -> {
+            android.R.id.home -> {
                 finish()
 
                 return true

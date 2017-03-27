@@ -18,7 +18,6 @@ import me.proxer.app.R
 import me.proxer.app.adapter.base.PagingAdapter
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
-import me.proxer.app.util.MarginDecoration
 import me.proxer.app.util.extension.bindView
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.listener.EndlessRecyclerOnScrollListener
@@ -222,7 +221,6 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
     private fun setupList() {
         list.layoutManager = layoutManager
         list.adapter = adapter
-        list.addItemDecoration(MarginDecoration(context, layoutManager.spanCount))
 
         list.setHasFixedSize(true)
         list.addOnScrollListener(object : EndlessRecyclerOnScrollListener(layoutManager) {
@@ -235,11 +233,10 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
     }
 
     private fun updateListPadding() {
-        val horizontalPadding = DeviceUtils.getHorizontalMargin(context)
-
         if (innerAdapter.itemCount <= 0) {
-            list.setPadding(horizontalPadding, 0, horizontalPadding, 0)
+            list.setPadding(0, 0, 0, 0)
         } else {
+            val horizontalPadding = DeviceUtils.getHorizontalMargin(context)
             val verticalPadding = DeviceUtils.getVerticalMargin(context)
 
             list.setPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)

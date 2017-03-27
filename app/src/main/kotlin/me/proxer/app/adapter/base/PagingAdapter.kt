@@ -115,10 +115,6 @@ abstract class PagingAdapter<T> : RecyclerView.Adapter<PagingAdapter<T>.PagingVi
                     }
                 }, 50)
             }
-
-            recyclerView?.postDelayed({
-                recyclerView?.invalidateItemDecorations()
-            }, 500)
         }
     }
 
