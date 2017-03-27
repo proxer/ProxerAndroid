@@ -63,12 +63,15 @@ dependencies {
     compile deps.anko
     compile deps.ankoSqlite
     compile deps.supportAppCompat
+    compile deps.supportV13
     compile deps.supportRecyclerView
     compile deps.supportCardView
     compile deps.supportDesign
+    compile deps.supportAnimatedVectorDrawable
     compile deps.supportCustomtabs
     compile deps.supportPreference
-    compile deps.supportPreferenceSpinner
+    compile deps.supportPreferenceFix
+    compile deps.supportPreferenceFixSpinner
     compile deps.eventBus
     compile deps.proxerLib
     compile deps.ktask
