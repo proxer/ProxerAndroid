@@ -6,6 +6,7 @@ import com.proxerme.app.dialog.AppRequiredDialog
 import com.proxerme.app.stream.StreamResolver
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionException
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionResult
+import okhttp3.HttpUrl
 
 /**
  * TODO: Describe class
@@ -18,11 +19,10 @@ class ClipfishResolver : StreamResolver() {
 
     private val regex = Regex("video/(\\d+)?")
 
-    override fun resolve(url: String): StreamResolutionResult {
-        val id = regex.find(url)?.groupValues?.get(1) ?: throw StreamResolutionException()
+    override fun resolve(url: HttpUrl): StreamResolutionResult {
+        val id = regex.find(url.toString())?.groupValues?.get(1) ?: throw StreamResolutionException()
 
-        return StreamResolutionResult(Intent(Intent.ACTION_VIEW,
-                Uri.parse("clipfish://video/$id?ref=proxer")), {
+        return StreamResolutionResult(Intent(Intent.ACTION_VIEW, Uri.parse("clipfish://video/$id?ref=proxer")), {
             AppRequiredDialog.show(it, "Clipfish", "com.rtli.clipfish")
         })
     }

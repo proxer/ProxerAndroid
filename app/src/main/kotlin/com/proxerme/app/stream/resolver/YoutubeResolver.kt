@@ -1,8 +1,9 @@
 package com.proxerme.app.stream.resolver
 
-import android.net.Uri
 import com.proxerme.app.stream.StreamResolver
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionResult
+import com.proxerme.app.util.extension.androidUri
+import okhttp3.HttpUrl
 
 /**
  * TODO: Describe class
@@ -13,7 +14,7 @@ class YoutubeResolver : StreamResolver() {
 
     override val name = "YouTube"
 
-    override fun resolve(url: String): StreamResolutionResult {
-        return StreamResolutionResult(Uri.parse(url), "text/html")
+    override fun resolve(url: HttpUrl): StreamResolutionResult {
+        return StreamResolutionResult(url.androidUri(), "text/html")
     }
 }

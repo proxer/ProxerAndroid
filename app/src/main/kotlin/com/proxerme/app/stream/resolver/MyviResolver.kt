@@ -18,10 +18,10 @@ class MyviResolver : StreamResolver() {
 
     override val name = "Myvi"
 
-    override fun resolve(url: String): StreamResolutionResult {
+    override fun resolve(url: HttpUrl): StreamResolutionResult {
         val response = ProxerConnectionWrapper.httpClient.newCall(Request.Builder()
                 .get()
-                .url("http://myvi.ru/player/api/Video/Get/${HttpUrl.parse(url).pathSegments().last()}?sig")
+                .url("http://myvi.ru/player/api/Video/Get/${url.pathSegments().last()}?sig")
                 .build()).execute()
 
         val resultUrl = ProxerConnectionWrapper.moshi.adapter(SprutoResult::class.java)

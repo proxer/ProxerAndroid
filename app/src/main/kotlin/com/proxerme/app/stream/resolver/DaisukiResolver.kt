@@ -3,6 +3,7 @@ package com.proxerme.app.stream.resolver
 import android.net.Uri
 import com.proxerme.app.stream.StreamResolver
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionResult
+import okhttp3.HttpUrl
 
 /**
  * Resolver for the Daisuki hoster. Currently it only redirects to the homepage as the app does not
@@ -14,7 +15,7 @@ class DaisukiResolver : StreamResolver() {
 
     override val name = "Daisuki"
 
-    override fun resolve(url: String): StreamResolutionResult {
+    override fun resolve(url: HttpUrl): StreamResolutionResult {
         return StreamResolutionResult(Uri.parse("http://daisuki.net"), "text/html")
     }
 }

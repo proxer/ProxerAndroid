@@ -10,6 +10,7 @@ import com.proxerme.app.fragment.anime.AnimeFragment.StreamResolverInput
 import com.proxerme.app.stream.StreamResolverFactory
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionResult
 import com.proxerme.app.task.framework.BaseTask
+import com.proxerme.app.util.Utils
 import com.proxerme.app.util.extension.snackbar
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.find
@@ -36,7 +37,7 @@ class StreamResolutionTask(successCallback: ((StreamResolutionResult) -> Unit)? 
             future = doAsync {
                 try {
                     val result = StreamResolverFactory.getResolverFor(input.first.name)
-                            ?.resolve(input.second) ?: throw NoResolverException()
+                            ?.resolve(Utils.parseAndFixUrl(input.second)) ?: throw NoResolverException()
 
                     handler.post {
                         cancel()

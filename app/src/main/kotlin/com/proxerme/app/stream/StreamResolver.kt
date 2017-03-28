@@ -1,6 +1,7 @@
 package com.proxerme.app.stream
 
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionResult
+import okhttp3.HttpUrl
 import okhttp3.Response
 import java.io.IOException
 
@@ -14,7 +15,7 @@ abstract class StreamResolver {
     abstract val name: String
 
     open fun appliesTo(name: String) = name.contains(this.name, ignoreCase = true)
-    abstract fun resolve(url: String): StreamResolutionResult
+    abstract fun resolve(url: HttpUrl): StreamResolutionResult
 
     @Throws(IOException::class)
     protected fun validateAndGetResult(response: Response): String {

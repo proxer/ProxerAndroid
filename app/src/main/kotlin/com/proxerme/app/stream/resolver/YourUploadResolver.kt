@@ -21,7 +21,7 @@ class YourUploadResolver : StreamResolver() {
 
     private val regex = Regex("file: '(.*?)'")
 
-    override fun resolve(url: String): StreamResolutionResult {
+    override fun resolve(url: HttpUrl): StreamResolutionResult {
         val response = ProxerConnectionWrapper.httpClient.newCall(Request.Builder()
                 .get()
                 .url(url)
@@ -35,7 +35,7 @@ class YourUploadResolver : StreamResolver() {
         }
 
         val apiResponse = ProxerConnectionWrapper.httpClient.newCall(Request.Builder()
-                .header("Referer", url)
+                .header("Referer", url.toString())
                 .head()
                 .url(HttpUrl.parse("http://yourupload.com$file"))
                 .build()).execute()

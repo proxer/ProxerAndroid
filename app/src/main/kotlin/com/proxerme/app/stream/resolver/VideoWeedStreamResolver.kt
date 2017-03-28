@@ -5,6 +5,7 @@ import com.proxerme.app.stream.StreamResolver
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionException
 import com.proxerme.app.task.StreamResolutionTask.StreamResolutionResult
 import com.proxerme.app.util.ProxerConnectionWrapper
+import okhttp3.HttpUrl
 import okhttp3.Request
 
 /**
@@ -19,7 +20,7 @@ class VideoWeedStreamResolver : StreamResolver() {
     private val keyRegex = Regex("fkz=\"(.*?)\".*file=\"(.*?)\"", RegexOption.DOT_MATCHES_ALL)
     private val urlRegex = Regex("url=(.*?)&title")
 
-    override fun resolve(url: String): StreamResolutionResult {
+    override fun resolve(url: HttpUrl): StreamResolutionResult {
         val response = ProxerConnectionWrapper.httpClient.newCall(Request.Builder()
                 .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)")
                 .get()
