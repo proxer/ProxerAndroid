@@ -11,12 +11,17 @@ import android.widget.*
 import com.google.android.flexbox.FlexboxLayout
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
+import com.rubengees.ktask.android.AndroidLifecycleTask
+import com.rubengees.ktask.android.bindToLifecycle
+import com.rubengees.ktask.util.TaskBuilder
 import fisk.chipcloud.ChipCloud
 import fisk.chipcloud.ChipCloudConfig
 import me.proxer.app.R
 import me.proxer.app.activity.MainActivity
+import me.proxer.app.activity.MediaActivity
 import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.fragment.base.LoadingFragment
+import me.proxer.app.task.asyncProxerTask
 import me.proxer.app.util.EnumMapper
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
@@ -48,7 +53,7 @@ class MediaInfoFragment : LoadingFragment<ProxerCall<Entry>, Entry>() {
     }
 
     private val mediaActivity
-        get() = activity as me.proxer.app.activity.MediaActivity
+        get() = activity as MediaActivity
 
     private val id: String
         get() = mediaActivity.id
@@ -73,7 +78,7 @@ class MediaInfoFragment : LoadingFragment<ProxerCall<Entry>, Entry>() {
         get() = arguments.getBoolean(SHOW_SPOILER_TAGS_ARGUMENT, false)
         set(value) = arguments.putBoolean(SHOW_SPOILER_TAGS_ARGUMENT, value)
 
-    private lateinit var userInfoTask: ValidatingTask<ProxerCall<Void?>, Void?>
+    private lateinit var userInfoTask: AndroidLifecycleTask<ProxerCall<Void?>, Void?>
 
     private val ratingContainer: ViewGroup by bindView(R.id.ratingContainer)
     private val rating: RatingBar by bindView(R.id.rating)

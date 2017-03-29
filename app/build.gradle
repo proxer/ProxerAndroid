@@ -74,7 +74,6 @@ dependencies {
     compile deps.supportPreferenceFixSpinner
     compile deps.eventBus
     compile deps.proxerLib
-    compile deps.ktask
     compile deps.ktaskAndroid
     kapt deps.eventBusAnnotation
 

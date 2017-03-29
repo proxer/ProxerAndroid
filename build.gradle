@@ -69,7 +69,6 @@ ext {
             eventBus                     : "org.greenrobot:eventbus:$eventBusVersion",
             eventBusAnnotation           : "org.greenrobot:eventbus-annotation-processor:$eventBusAnnotationVersion",
             proxerLib                    : "com.github.proxer:ProxerLibAndroid:$proxerLibVersion",
-            ktask                        : "com.github.rubengees.ktask:ktask:$ktaskVersion",
             ktaskAndroid                 : "com.github.rubengees.ktask:ktask-android:$ktaskVersion",
 
             aboutLibraries               : "com.mikepenz:aboutlibraries:$aboutLibrariesVersion@aar",
