@@ -12,33 +12,34 @@ import android.view.ViewGroup
 import me.proxer.app.R
 import me.proxer.app.activity.WebViewActivity
 import me.proxer.app.util.Utils
+import me.proxer.library.entitiy.manga.Page
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
+import java.net.URLDecoder
 
-//inline val Page.decodedName: String
-//    get() = try {
-//        URLDecoder.decode(name, "UTF-8")
-//    } catch (exception: Exception) {
-//        ""
-//    }
+inline val Page.decodedName: String
+    get() = try {
+        URLDecoder.decode(name, "UTF-8")
+    } catch (error: Throwable) {
+        ""
+    }
 
 fun CustomTabsHelperFragment.openHttpPage(activity: Activity, url: HttpUrl) {
-    if (Utils.getNativeAppPackage(activity, url).isEmpty()) {
-        val customTabsIntent = CustomTabsIntent.Builder(session)
-                .setToolbarColor(ContextCompat.getColor(context, R.color.colorPrimary))
-                .setSecondaryToolbarColor(ContextCompat.getColor(context,
-                        R.color.colorPrimaryDark))
-                .addDefaultShareMenuItem()
-                .enableUrlBarHiding()
-                .setShowTitle(true)
-                .build()
-
-        CustomTabsHelperFragment.open(activity, customTabsIntent, url.androidUri(),
-                { activity, uri ->
+    when (Utils.getNativeAppPackage(activity, url).isEmpty()) {
+        true -> {
+            CustomTabsIntent.Builder(session)
+                    .setToolbarColor(ContextCompat.getColor(context, R.color.colorPrimary))
+                    .setSecondaryToolbarColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
+                    .addDefaultShareMenuItem()
+                    .enableUrlBarHiding()
+                    .setShowTitle(true)
+                    .build().let {
+                CustomTabsHelperFragment.open(activity, it, url.androidUri(), { activity, uri ->
                     WebViewActivity.navigateTo(activity, uri.toString())
                 })
-    } else {
-        activity.startActivity(Intent(Intent.ACTION_VIEW).setData(url.androidUri()))
+            }
+        }
+        false -> activity.startActivity(Intent(Intent.ACTION_VIEW).setData(url.androidUri()))
     }
 }
 
@@ -47,7 +48,9 @@ inline fun HttpUrl.androidUri(): Uri {
 }
 
 fun <T : View> View.findChild(predicate: (View) -> Boolean): T? {
-    if (this !is ViewGroup) return null
+    if (this !is ViewGroup) {
+        return null
+    }
 
     for (i in 0 until childCount) {
         if (predicate.invoke(getChildAt(i))) {
@@ -55,7 +58,7 @@ fun <T : View> View.findChild(predicate: (View) -> Boolean): T? {
             return getChildAt(i) as T
         }
 
-        getChildAt(i).findChild<T>(predicate)?.let {
+        return getChildAt(i).findChild<T>(predicate)?.let {
             return it
         }
     }

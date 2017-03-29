@@ -14,8 +14,9 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
 import me.proxer.app.adapter.base.PagingAdapter
-import me.proxer.app.util.EnumMapper
 import me.proxer.app.util.extension.bindView
+import me.proxer.app.util.extension.toAppString
+import me.proxer.app.util.extension.toGeneralLanguage
 import me.proxer.library.entitiy.ucp.Bookmark
 import me.proxer.library.enums.Language
 import me.proxer.library.util.ProxerUrls
@@ -83,7 +84,7 @@ class BookmarkAdapter : PagingAdapter<Bookmark>() {
 
         override fun bind(item: Bookmark) {
             title.text = item.name
-            medium.text = EnumMapper.mediumToString(medium.context, item.medium)
+            medium.text = item.medium.toAppString(medium.context)
             episode.text = episode.context.getString(R.string.bookmark_episode, item.episode)
             availability.setImageDrawable(ColorDrawable(ContextCompat.getColor(availability.context,
                     when (item.isAvailable) {
@@ -91,7 +92,7 @@ class BookmarkAdapter : PagingAdapter<Bookmark>() {
                         false -> R.color.md_red_500
                     })))
 
-            language.setImageResource(when (EnumMapper.mediaLanguageToGeneralLanguage(item.language)) {
+            language.setImageResource(when (item.language.toGeneralLanguage()) {
                 Language.GERMAN -> R.drawable.ic_germany
                 Language.ENGLISH -> R.drawable.ic_united_states
             })

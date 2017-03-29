@@ -13,7 +13,7 @@ import me.proxer.app.adapter.media.MediaAdapter
 import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.fragment.base.PagedLoadingFragment
 import me.proxer.app.task.asyncProxerTask
-import me.proxer.app.util.EnumMapper
+import me.proxer.app.util.extension.toCategory
 import me.proxer.library.api.ProxerCall
 import me.proxer.library.entitiy.list.MediaListEntry
 import me.proxer.library.enums.Category
@@ -86,7 +86,7 @@ class MediaListFragment : PagedLoadingFragment<ProxerCall<List<MediaListEntry>>,
 
         innerAdapter.callback = object : MediaAdapter.MediaAdapterCallback {
             override fun onMediaClick(item: MediaListEntry) {
-                MediaActivity.navigateTo(activity, item.id, item.name, EnumMapper.mediumToCategory(item.medium))
+                MediaActivity.navigateTo(activity, item.id, item.name, item.medium.toCategory())
             }
         }
 

@@ -10,8 +10,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import me.proxer.app.R
 import me.proxer.app.adapter.base.PagingAdapter
-import me.proxer.app.util.EnumMapper
 import me.proxer.app.util.extension.bindView
+import me.proxer.app.util.extension.toAppString
+import me.proxer.app.util.extension.toGeneralLanguage
 import me.proxer.library.entitiy.list.MediaListEntry
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.Language
@@ -59,13 +60,13 @@ class MediaAdapter(private val category: Category) : PagingAdapter<MediaListEntr
 
         override fun bind(item: MediaListEntry) {
             title.text = item.name
-            medium.text = EnumMapper.mediumToString(medium.context, item.medium)
+            medium.text = item.medium.toAppString(medium.context)
             episodes.text = episodes.resources.getQuantityString(when (category) {
                 Category.ANIME -> R.plurals.media_episode_count
                 Category.MANGA -> R.plurals.media_chapter_count
             }, item.episodeAmount, item.episodeAmount)
 
-            val generalLanguages = item.languages.map { EnumMapper.mediaLanguageToGeneralLanguage(it) }.distinct()
+            val generalLanguages = item.languages.map { it.toGeneralLanguage() }.distinct()
 
             english.visibility = when (generalLanguages.contains(Language.ENGLISH)) {
                 true -> View.VISIBLE

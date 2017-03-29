@@ -22,12 +22,9 @@ import me.proxer.app.activity.MediaActivity
 import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.fragment.base.LoadingFragment
 import me.proxer.app.task.asyncProxerTask
-import me.proxer.app.util.EnumMapper
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
-import me.proxer.app.util.extension.bindView
-import me.proxer.app.util.extension.multilineSnackbar
-import me.proxer.app.util.extension.snackbar
+import me.proxer.app.util.extension.*
 import me.proxer.library.api.ProxerCall
 import me.proxer.library.entitiy.info.Entry
 import me.proxer.library.enums.Category
@@ -233,10 +230,10 @@ class MediaInfoFragment : LoadingFragment<ProxerCall<Entry>, Entry>() {
             val seasonStartView = tableRow.findViewById(R.id.seasonStart) as TextView
             val seasonEndView = tableRow.findViewById(R.id.seasonEnd) as TextView
 
-            seasonStartView.text = EnumMapper.seasonStartToString(context, seasons[0])
+            seasonStartView.text = seasons[0].toAppStringStart(context)
 
             if (seasons.size >= 2) {
-                seasonEndView.text = EnumMapper.seasonEndToString(context, seasons[1])
+                seasonEndView.text = seasons[1].toAppStringEnd(context)
             } else {
                 seasonEndView.visibility = View.GONE
             }
@@ -247,12 +244,12 @@ class MediaInfoFragment : LoadingFragment<ProxerCall<Entry>, Entry>() {
 
     private fun bindStatus(result: Entry) {
         infoTable.addView(constructInfoTableRow(context.getString(R.string.fragment_media_info_status_title),
-                EnumMapper.mediaStateToString(context, result.state)))
+                result.state.toAppString(context)))
     }
 
     private fun bindLicense(result: Entry) {
         infoTable.addView(constructInfoTableRow(context.getString(R.string.fragment_media_info_license_title),
-                EnumMapper.licenseToString(context, result.license)))
+                result.license.toAppString(context)))
     }
 
     private fun constructInfoTableRow(title: String, content: String): View {
@@ -337,9 +334,9 @@ class MediaInfoFragment : LoadingFragment<ProxerCall<Entry>, Entry>() {
                 val image = LayoutInflater.from(context)
                         .inflate(R.layout.layout_image, fskConstraints, false) as ImageView
 
-                image.setImageDrawable(EnumMapper.fskConstraintToDrawable(context, constraint))
+                image.setImageDrawable(constraint.toAppDrawable(context))
                 image.setOnClickListener {
-                    multilineSnackbar(root, EnumMapper.fskConstraintToString(context, constraint))
+                    multilineSnackbar(root, constraint.toAppStringDescription(context))
                 }
 
                 fskConstraints.addView(image)
