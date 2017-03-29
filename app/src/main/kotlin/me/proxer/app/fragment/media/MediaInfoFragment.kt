@@ -11,16 +11,12 @@ import android.widget.*
 import com.google.android.flexbox.FlexboxLayout
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
-import com.rubengees.ktask.android.bindToLifecycle
-import com.rubengees.ktask.operation.ValidatingTask
-import com.rubengees.ktask.util.TaskBuilder
 import fisk.chipcloud.ChipCloud
 import fisk.chipcloud.ChipCloudConfig
 import me.proxer.app.R
 import me.proxer.app.activity.MainActivity
 import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.fragment.base.LoadingFragment
-import me.proxer.app.task.asyncProxerTask
 import me.proxer.app.util.EnumMapper
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
@@ -111,10 +107,8 @@ class MediaInfoFragment : LoadingFragment<ProxerCall<Entry>, Entry>() {
         super.onCreate(savedInstanceState)
 
         userInfoTask = TaskBuilder.asyncProxerTask<Void?>()
+                .validateBefore { Validators.validateLogin() }
                 .bindToLifecycle(this)
-                .validateBefore {
-                    Validators.validateLogin()
-                }
                 .onSuccess {
                     snackbar(root, R.string.fragment_media_info_set_user_info_success)
                 }
