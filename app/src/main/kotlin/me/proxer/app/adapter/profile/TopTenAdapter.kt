@@ -24,8 +24,9 @@ class TopTenAdapter : PagingAdapter<TopTenEntry>() {
         setHasStableIds(true)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-            ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_top_ten_entry, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_top_ten_entry, parent, false))
+    }
 
     override fun destroy() {
         super.destroy()
@@ -57,8 +58,6 @@ class TopTenAdapter : PagingAdapter<TopTenEntry>() {
     }
 
     interface TopTenAdapterCallback {
-        fun onTopTenEntryClick(view: View, item: TopTenEntry) {
-
-        }
+        fun onTopTenEntryClick(view: View, item: TopTenEntry) {}
     }
 }

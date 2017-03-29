@@ -32,7 +32,7 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
     open protected var hasReachedEnd = false
 
     open protected val spanCount get() = DeviceUtils.calculateSpanAmount(activity)
-    open protected val noDataMessage get() = R.string.error_no_data
+    open protected val emptyResultMessage get() = R.string.error_no_data
 
     override val isWorking get() = super.isWorking || refreshTask.isWorking
 
@@ -203,7 +203,7 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
 
     open protected fun showEmptyIfNecessary() {
         if (innerAdapter.itemCount <= 0) {
-            showError(noDataMessage, ErrorAction.ACTION_MESSAGE_HIDE)
+            showError(emptyResultMessage, ErrorAction.ACTION_MESSAGE_HIDE)
         }
     }
 

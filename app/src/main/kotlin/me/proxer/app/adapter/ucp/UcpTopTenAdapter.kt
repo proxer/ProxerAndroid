@@ -77,14 +77,8 @@ class UcpTopTenAdapter : PagingAdapter<UcpTopTenEntry>() {
         }
     }
 
-    abstract class UcpToptenAdapterCallback {
-
-        open fun onItemClick(view: View, item: UcpTopTenEntry) {
-
-        }
-
-        open fun onRemoveClick(item: UcpTopTenEntry) {
-
-        }
+    interface UcpToptenAdapterCallback {
+        fun onItemClick(view: View, item: UcpTopTenEntry) {}
+        fun onRemoveClick(item: UcpTopTenEntry) {}
     }
 }

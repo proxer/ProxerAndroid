@@ -125,16 +125,8 @@ class NewsArticleAdapter : PagingAdapter<NewsArticle>() {
     }
 
     interface NewsAdapterCallback {
-        fun onNewsArticleClick(item: NewsArticle) {
-
-        }
-
-        fun onNewsArticleImageClick(view: ImageView, item: NewsArticle) {
-
-        }
-
-        fun onNewsArticleExpansion(item: NewsArticle) {
-
-        }
+        fun onNewsArticleClick(item: NewsArticle) {}
+        fun onNewsArticleImageClick(view: ImageView, item: NewsArticle) {}
+        fun onNewsArticleExpansion(item: NewsArticle) {}
     }
 }

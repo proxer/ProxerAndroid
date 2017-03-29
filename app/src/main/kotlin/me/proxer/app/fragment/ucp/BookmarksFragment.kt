@@ -40,7 +40,7 @@ class BookmarksFragment : PagedLoadingFragment<ProxerCall<List<Bookmark>>, Bookm
     override val isSwipeToRefreshEnabled = true
     override val shouldReplaceOnRefresh = true
     override val itemsOnPage = 30
-    override val noDataMessage = R.string.error_no_data_bookmarks
+    override val emptyResultMessage = R.string.error_no_data_bookmarks
     override val spanCount get() = super.spanCount + 1
 
     override val innerAdapter = BookmarkAdapter()

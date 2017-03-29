@@ -86,7 +86,7 @@ class UcpTopTenFragment : LoadingFragment<ProxerCall<List<UcpTopTenEntry>>, List
                 }.build()
 
         animeAdapter = UcpTopTenAdapter()
-        animeAdapter.callback = object : UcpTopTenAdapter.UcpToptenAdapterCallback() {
+        animeAdapter.callback = object : UcpTopTenAdapter.UcpToptenAdapterCallback {
             override fun onItemClick(view: View, item: UcpTopTenEntry) {
                 val imageView = view.findViewById(R.id.image) as ImageView
 
@@ -102,7 +102,7 @@ class UcpTopTenFragment : LoadingFragment<ProxerCall<List<UcpTopTenEntry>>, List
         }
 
         mangaAdapter = UcpTopTenAdapter()
-        mangaAdapter.callback = object : UcpTopTenAdapter.UcpToptenAdapterCallback() {
+        mangaAdapter.callback = object : UcpTopTenAdapter.UcpToptenAdapterCallback {
             override fun onItemClick(view: View, item: UcpTopTenEntry) {
                 val imageView = view.findViewById(R.id.image) as ImageView
 

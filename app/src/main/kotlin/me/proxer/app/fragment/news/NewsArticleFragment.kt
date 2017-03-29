@@ -30,7 +30,7 @@ class NewsArticleFragment : PagedLoadingFragment<ProxerCall<List<NewsArticle>>, 
 
     override val isSwipeToRefreshEnabled = true
     override val itemsOnPage = 15
-    override val noDataMessage = R.string.error_no_data_news
+    override val emptyResultMessage = R.string.error_no_data_news
 
     override val innerAdapter = NewsArticleAdapter()
 

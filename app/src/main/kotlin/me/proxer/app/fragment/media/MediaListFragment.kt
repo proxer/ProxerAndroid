@@ -49,7 +49,7 @@ class MediaListFragment : PagedLoadingFragment<ProxerCall<List<MediaListEntry>>,
         get() = type == MediaType.HENTAI || type == MediaType.HMANGA
 
     override val spanCount get() = super.spanCount + 1
-    override val noDataMessage = R.string.error_no_data_media_list
+    override val emptyResultMessage = R.string.error_no_data_media_list
 
     private val category
         get() = arguments.getSerializable(CATEGORY_ARGUMENT) as Category

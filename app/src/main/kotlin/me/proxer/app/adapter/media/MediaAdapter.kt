@@ -93,8 +93,6 @@ class MediaAdapter(private val category: Category) : PagingAdapter<MediaListEntr
     }
 
     interface MediaAdapterCallback {
-        fun onMediaClick(view: View, item: MediaListEntry) {
-
-        }
+        fun onMediaClick(view: View, item: MediaListEntry) {}
     }
 }

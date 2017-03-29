@@ -105,13 +105,7 @@ class BookmarkAdapter : PagingAdapter<Bookmark>() {
     }
 
     interface BookmarkAdapterCallback {
-
-        fun onBookmarkClick(item: Bookmark) {
-
-        }
-
-        fun onBookmarkRemoval(item: Bookmark) {
-
-        }
+        fun onBookmarkClick(item: Bookmark) {}
+        fun onBookmarkRemoval(item: Bookmark) {}
     }
 }

@@ -138,9 +138,7 @@ abstract class PagingAdapter<T> : RecyclerView.Adapter<PagingAdapter<T>.PagingVi
 
     inner abstract class PagingViewHolder<in T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        open fun bind(item: T) {
-
-        }
+        open fun bind(item: T) {}
 
         protected fun withSafeAdapterPosition(action: (Int) -> Unit) {
             if (adapterPosition != RecyclerView.NO_POSITION) {
