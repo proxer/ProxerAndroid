@@ -51,9 +51,9 @@ class MediaAdapter(private val category: Category) : PagingAdapter<MediaListEntr
         private val german: ImageView by bindView(R.id.german)
 
         init {
-            itemView.setOnClickListener {
+            itemView.setOnClickListener { view ->
                 withSafeAdapterPosition {
-                    callback?.onMediaClick(list[it])
+                    callback?.onMediaClick(view, list[it])
                 }
             }
         }
@@ -93,7 +93,7 @@ class MediaAdapter(private val category: Category) : PagingAdapter<MediaListEntr
     }
 
     interface MediaAdapterCallback {
-        fun onMediaClick(item: MediaListEntry) {
+        fun onMediaClick(view: View, item: MediaListEntry) {
 
         }
     }

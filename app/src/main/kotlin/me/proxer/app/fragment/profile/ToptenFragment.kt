@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.activity.MediaActivity
@@ -56,15 +57,21 @@ class ToptenFragment : LoadingFragment<Pair<ProxerCall<List<TopTenEntry>>, Proxe
 
         animeAdapter = ToptenAdapter()
         animeAdapter.callback = object : ToptenAdapter.TopTenAdapterCallback {
-            override fun onTopTenEntryClick(item: TopTenEntry) {
-                MediaActivity.navigateTo(activity, item.id, item.name, item.category)
+            override fun onTopTenEntryClick(view: View, item: TopTenEntry) {
+                val imageView = view.findViewById(R.id.image) as ImageView
+
+                MediaActivity.navigateTo(activity, item.id, item.name, item.category,
+                        if (imageView.drawable != null) imageView else null)
             }
         }
 
         mangaAdapter = ToptenAdapter()
         mangaAdapter.callback = object : ToptenAdapter.TopTenAdapterCallback {
-            override fun onTopTenEntryClick(item: TopTenEntry) {
-                MediaActivity.navigateTo(activity, item.id, item.name, item.category)
+            override fun onTopTenEntryClick(view: View, item: TopTenEntry) {
+                val imageView = view.findViewById(R.id.image) as ImageView
+
+                MediaActivity.navigateTo(activity, item.id, item.name, item.category,
+                        if (imageView.drawable != null) imageView else null)
             }
         }
     }

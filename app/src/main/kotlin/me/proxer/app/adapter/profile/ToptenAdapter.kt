@@ -41,9 +41,9 @@ class ToptenAdapter : PagingAdapter<TopTenEntry>() {
         private val title: TextView by bindView(R.id.title)
 
         init {
-            itemView.setOnClickListener {
+            itemView.setOnClickListener { view ->
                 withSafeAdapterPosition {
-                    callback?.onTopTenEntryClick(list[it])
+                    callback?.onTopTenEntryClick(view, list[it])
                 }
             }
         }
@@ -59,7 +59,7 @@ class ToptenAdapter : PagingAdapter<TopTenEntry>() {
     }
 
     interface TopTenAdapterCallback {
-        fun onTopTenEntryClick(item: TopTenEntry) {
+        fun onTopTenEntryClick(view: View, item: TopTenEntry) {
 
         }
     }

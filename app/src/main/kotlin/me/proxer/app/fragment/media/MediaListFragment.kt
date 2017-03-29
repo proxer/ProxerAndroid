@@ -6,6 +6,8 @@ import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
+import android.widget.ImageView
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.activity.MediaActivity
@@ -85,8 +87,11 @@ class MediaListFragment : PagedLoadingFragment<ProxerCall<List<MediaListEntry>>,
         super.onCreate(savedInstanceState)
 
         innerAdapter.callback = object : MediaAdapter.MediaAdapterCallback {
-            override fun onMediaClick(item: MediaListEntry) {
-                MediaActivity.navigateTo(activity, item.id, item.name, item.medium.toCategory())
+            override fun onMediaClick(view: View, item: MediaListEntry) {
+                val imageView = view.findViewById(R.id.image) as ImageView
+
+                MediaActivity.navigateTo(activity, item.id, item.name, item.medium.toCategory(),
+                        if (imageView.drawable != null) imageView else null)
             }
         }
 

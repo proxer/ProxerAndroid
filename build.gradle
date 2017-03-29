@@ -82,7 +82,7 @@ ext {
             tabLayoutHelper              : "com.h6ah4i.android.tablayouthelper:tablayouthelper:$tabLayoutHelperVersion",
             materialDialogs              : "com.afollestad.material-dialogs:core:$materialDialogsVersion",
             flexbox                      : "com.google.android:flexbox:$flexboxVersion",
-            chipCloud                        : "com.github.fiskurgit:ChipCloud:$chipCloudVersion",
+            chipCloud                    : "com.github.fiskurgit:ChipCloud:$chipCloudVersion",
             emojiIos                     : "com.vanniktech:emoji-ios:$emojiIosVersion",
             exomedia                     : "com.devbrackets.android:exomedia:$exomediaVersion",
             exoplayerIntegration         : "com.google.android.exoplayer:extension-okhttp:$exoplayerIntegrationVersion",

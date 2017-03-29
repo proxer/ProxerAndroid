@@ -2,14 +2,12 @@ package me.proxer.app.activity
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CollapsingToolbarLayout
 import android.support.design.widget.TabLayout
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
-import android.support.v4.app.ShareCompat
+import android.support.v4.app.*
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
 import android.support.v7.widget.Toolbar
@@ -19,6 +17,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.drawable.GlideDrawable
+import com.bumptech.glide.request.animation.GlideAnimation
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget
 import com.h6ah4i.android.tablayouthelper.TabLayoutHelper
 import me.proxer.app.R
 import me.proxer.app.fragment.media.MediaInfoFragment
@@ -42,12 +43,20 @@ class MediaActivity : MainActivity() {
         private const val EPISODES_SUB_SECTION = "episodes"
         private const val RELATIONS_SUB_SECTION = "relation"
 
-        fun navigateTo(context: Activity, id: String, name: String? = null, category: Category = Category.ANIME) {
-            context.startActivity(context.intentFor<MediaActivity>(
+        fun navigateTo(context: Activity, id: String, name: String? = null, category: Category = Category.ANIME,
+                       imageView: ImageView? = null) {
+            val intent = context.intentFor<MediaActivity>(
                     ID_EXTRA to id,
                     NAME_EXTRA to name,
-                    CATEGORY_EXTRA to category)
+                    CATEGORY_EXTRA to category
             )
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && imageView != null) {
+                context.startActivity(intent, ActivityOptionsCompat
+                        .makeSceneTransitionAnimation(context, imageView, imageView.transitionName).toBundle())
+            } else {
+                context.startActivity(intent)
+            }
         }
     }
 
@@ -98,6 +107,7 @@ class MediaActivity : MainActivity() {
 
         setContentView(R.layout.activity_image_tabs)
         setSupportActionBar(toolbar)
+        supportPostponeEnterTransition()
 
         setupToolbar()
         setupImage()
@@ -145,7 +155,14 @@ class MediaActivity : MainActivity() {
         Glide.with(this)
                 .load(ProxerUrls.entryImage(id).toString())
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .into(coverImage)
+                .into(object : GlideDrawableImageViewTarget(coverImage) {
+                    override fun onResourceReady(resource: GlideDrawable?,
+                                                 animation: GlideAnimation<in GlideDrawable>?) {
+                        super.onResourceReady(resource, animation)
+
+                        supportStartPostponedEnterTransition()
+                    }
+                })
     }
 
     private fun setupToolbar() {
