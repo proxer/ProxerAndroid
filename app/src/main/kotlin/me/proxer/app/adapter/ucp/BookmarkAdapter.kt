@@ -32,7 +32,7 @@ class BookmarkAdapter : PagingAdapter<Bookmark>() {
         setHasStableIds(true)
     }
 
-    override fun getItemId(position: Int) = list[position].id.toLong()
+    override fun getItemId(position: Int) = internalList[position].id.toLong()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagingViewHolder<Bookmark> {
         return ReminderViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_bookmark, parent, false))
@@ -65,7 +65,7 @@ class BookmarkAdapter : PagingAdapter<Bookmark>() {
         init {
             itemView.setOnClickListener {
                 withSafeAdapterPosition {
-                    callback?.onBookmarkClick(list[it])
+                    callback?.onBookmarkClick(internalList[it])
                 }
             }
 
@@ -77,7 +77,7 @@ class BookmarkAdapter : PagingAdapter<Bookmark>() {
 
             remove.setOnClickListener {
                 withSafeAdapterPosition {
-                    callback?.onBookmarkRemoval(list[it])
+                    callback?.onBookmarkRemoval(internalList[it])
                 }
             }
         }

@@ -60,7 +60,7 @@ class NewsArticleAdapter : PagingAdapter<NewsArticle>() {
         init {
             itemView.setOnClickListener {
                 withSafeAdapterPosition {
-                    callback?.onNewsArticleClick(list[it])
+                    callback?.onNewsArticleClick(internalList[it])
                 }
             }
 
@@ -72,14 +72,14 @@ class NewsArticleAdapter : PagingAdapter<NewsArticle>() {
 
             expand.setOnClickListener {
                 withSafeAdapterPosition {
-                    val id = list[it].id
+                    val id = internalList[it].id
 
                     if (expansionMap.containsKey(id)) {
                         expansionMap.remove(id)
                     } else {
                         expansionMap.put(id, true)
 
-                        callback?.onNewsArticleExpansion(list[it])
+                        callback?.onNewsArticleExpansion(internalList[it])
                     }
 
                     notifyItemChanged(it)
@@ -88,7 +88,7 @@ class NewsArticleAdapter : PagingAdapter<NewsArticle>() {
 
             image.setOnClickListener { view ->
                 withSafeAdapterPosition {
-                    callback?.onNewsArticleImageClick(view as ImageView, list[it])
+                    callback?.onNewsArticleImageClick(view as ImageView, internalList[it])
                 }
             }
         }

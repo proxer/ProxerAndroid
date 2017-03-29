@@ -14,11 +14,9 @@ import me.proxer.library.entitiy.user.TopTenEntry
 import me.proxer.library.util.ProxerUrls
 
 /**
- * TODO: Describe class
- *
  * @author Ruben Gees
  */
-class ToptenAdapter : PagingAdapter<TopTenEntry>() {
+class TopTenAdapter : PagingAdapter<TopTenEntry>() {
 
     var callback: TopTenAdapterCallback? = null
 
@@ -27,7 +25,7 @@ class ToptenAdapter : PagingAdapter<TopTenEntry>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-            ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_topten_entry, parent, false))
+            ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_top_ten_entry, parent, false))
 
     override fun destroy() {
         super.destroy()
@@ -43,7 +41,7 @@ class ToptenAdapter : PagingAdapter<TopTenEntry>() {
         init {
             itemView.setOnClickListener { view ->
                 withSafeAdapterPosition {
-                    callback?.onTopTenEntryClick(view, list[it])
+                    callback?.onTopTenEntryClick(view, internalList[it])
                 }
             }
         }

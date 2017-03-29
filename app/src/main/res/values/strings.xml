@@ -17,6 +17,7 @@
     <string name="section_settings">Einstellungen</string>
 
     <string name="section_ucp_overview">Übersicht</string>
+    <string name="section_ucp_top_ten">Favoriten</string>
 
     <string name="section_profile_info">Profil</string>
     <string name="section_top_ten">Favoriten</string>
@@ -68,7 +69,8 @@
     <string name="error_action_login">Anmelden</string>
     <string name="error_action_confirm">Bestätigen</string>
 
-    <string name="error_bookmark_removal">Das Lesezeichen konnte nicht gelöscht werden: %s</string>
+    <string name="error_bookmark_removal">Das Lesezeichen konnte nicht entfernt werden: %s</string>
+    <string name="error_topten_entry_removal">Der Eintrag konnte nicht entfernt werden: %s</string>
 
     <string name="medium_anime_series">Animeserie</string>
     <string name="medium_hentai">Hentai</string>

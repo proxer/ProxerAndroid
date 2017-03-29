@@ -6,19 +6,18 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
 import me.proxer.library.entitiy.ProxerIdItem
-import java.util.*
 
 /**
  * @author Ruben Gees
  */
 abstract class PagingAdapter<T> : RecyclerView.Adapter<PagingAdapter<T>.PagingViewHolder<T>>() {
 
+    val list: List<T> get() = ArrayList(internalList)
+
     var positionResolver = PositionResolver()
-
-    var list = ArrayList<T>()
-        protected set
-
     var recyclerView: RecyclerView? = null
+
+    protected var internalList = ArrayList<T>()
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView?) {
         super.onAttachedToRecyclerView(recyclerView)
@@ -33,29 +32,29 @@ abstract class PagingAdapter<T> : RecyclerView.Adapter<PagingAdapter<T>.PagingVi
     }
 
     override fun onBindViewHolder(holder: PagingViewHolder<T>, position: Int) {
-        holder.bind(list[position])
+        holder.bind(internalList[position])
     }
 
     override fun getItemId(position: Int): Long {
         if (hasStableIds()) {
-            return (list[position] as ProxerIdItem).id.toLong()
+            return (internalList[position] as ProxerIdItem).id.toLong()
         } else {
             return super.getItemId(position)
         }
     }
 
-    override fun getItemCount() = list.size
+    override fun getItemCount() = internalList.size
 
-    fun isEmpty() = list.isEmpty()
+    fun isEmpty() = internalList.isEmpty()
 
     open fun insert(items: Iterable<T>) {
-        doUpdates(items.plus(list.filter { oldItem ->
+        doUpdates(items.plus(internalList.filter { oldItem ->
             items.find { areItemsTheSame(oldItem, it) } == null
         }))
     }
 
     open fun append(items: Iterable<T>) {
-        doUpdates(list.filter { oldItem ->
+        doUpdates(internalList.filter { oldItem ->
             items.find { areItemsTheSame(oldItem, it) } == null
         }.plus(items))
     }
@@ -65,11 +64,11 @@ abstract class PagingAdapter<T> : RecyclerView.Adapter<PagingAdapter<T>.PagingVi
     }
 
     open fun remove(item: T) {
-        doUpdates(list.minus(item))
+        doUpdates(internalList.minus(item))
     }
 
     open fun clear() {
-        list.clear()
+        internalList.clear()
 
         notifyDataSetChanged()
     }
@@ -86,23 +85,23 @@ abstract class PagingAdapter<T> : RecyclerView.Adapter<PagingAdapter<T>.PagingVi
     }
 
     protected fun doUpdates(newList: List<T>) {
-        val wasEmpty = list.isEmpty()
+        val wasEmpty = internalList.isEmpty()
         val wasAtFirstPosition = isAtFirstPosition()
 
         val result = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
 
             override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int)
-                    = areItemsTheSame(list[oldItemPosition], newList[newItemPosition])
+                    = areItemsTheSame(internalList[oldItemPosition], newList[newItemPosition])
 
             override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int)
-                    = areContentsTheSame(list[oldItemPosition], newList[newItemPosition])
+                    = areContentsTheSame(internalList[oldItemPosition], newList[newItemPosition])
 
-            override fun getOldListSize() = list.size
+            override fun getOldListSize() = internalList.size
             override fun getNewListSize() = newList.size
         })
 
-        list.clear()
-        list.addAll(newList)
+        internalList.clear()
+        internalList.addAll(newList)
 
         result.dispatchUpdatesTo(this)
 

@@ -4,7 +4,7 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.profile.ToptenFragment">
+    tools:context=".fragment.profile.TopTenFragment">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/progress"
@@ -20,6 +20,8 @@
                 android:id="@+id/contentContainer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:orientation="vertical"
                 android:paddingBottom="@dimen/screen_vertical_margin_with_items"
                 android:paddingLeft="@dimen/screen_horizontal_margin_with_items"

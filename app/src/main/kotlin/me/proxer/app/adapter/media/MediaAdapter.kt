@@ -53,7 +53,7 @@ class MediaAdapter(private val category: Category) : PagingAdapter<MediaListEntr
         init {
             itemView.setOnClickListener { view ->
                 withSafeAdapterPosition {
-                    callback?.onMediaClick(view, list[it])
+                    callback?.onMediaClick(view, internalList[it])
                 }
             }
         }

@@ -10,10 +10,10 @@ import android.widget.ImageView
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.activity.MediaActivity
-import me.proxer.app.adapter.profile.ToptenAdapter
+import me.proxer.app.adapter.profile.TopTenAdapter
 import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.fragment.base.LoadingFragment
-import me.proxer.app.fragment.profile.ToptenFragment.ZippedTopTenResult
+import me.proxer.app.fragment.profile.TopTenFragment.ZippedTopTenResult
 import me.proxer.app.task.asyncProxerTask
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
@@ -25,12 +25,12 @@ import me.proxer.library.enums.Category
 /**
  * @author Ruben Gees
  */
-class ToptenFragment : LoadingFragment<Pair<ProxerCall<List<TopTenEntry>>, ProxerCall<List<TopTenEntry>>>,
+class TopTenFragment : LoadingFragment<Pair<ProxerCall<List<TopTenEntry>>, ProxerCall<List<TopTenEntry>>>,
         ZippedTopTenResult>() {
 
     companion object {
-        fun newInstance(): ToptenFragment {
-            return ToptenFragment().apply {
+        fun newInstance(): TopTenFragment {
+            return TopTenFragment().apply {
                 arguments = Bundle()
             }
         }
@@ -44,8 +44,8 @@ class ToptenFragment : LoadingFragment<Pair<ProxerCall<List<TopTenEntry>>, Proxe
     private val username: String?
         get() = profileActivity.username
 
-    private lateinit var animeAdapter: ToptenAdapter
-    private lateinit var mangaAdapter: ToptenAdapter
+    private lateinit var animeAdapter: TopTenAdapter
+    private lateinit var mangaAdapter: TopTenAdapter
 
     private val animeContainer: ViewGroup by bindView(R.id.animeContainer)
     private val mangaContainer: ViewGroup by bindView(R.id.mangaContainer)
@@ -55,8 +55,8 @@ class ToptenFragment : LoadingFragment<Pair<ProxerCall<List<TopTenEntry>>, Proxe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        animeAdapter = ToptenAdapter()
-        animeAdapter.callback = object : ToptenAdapter.TopTenAdapterCallback {
+        animeAdapter = TopTenAdapter()
+        animeAdapter.callback = object : TopTenAdapter.TopTenAdapterCallback {
             override fun onTopTenEntryClick(view: View, item: TopTenEntry) {
                 val imageView = view.findViewById(R.id.image) as ImageView
 
@@ -65,8 +65,8 @@ class ToptenFragment : LoadingFragment<Pair<ProxerCall<List<TopTenEntry>>, Proxe
             }
         }
 
-        mangaAdapter = ToptenAdapter()
-        mangaAdapter.callback = object : ToptenAdapter.TopTenAdapterCallback {
+        mangaAdapter = TopTenAdapter()
+        mangaAdapter.callback = object : TopTenAdapter.TopTenAdapterCallback {
             override fun onTopTenEntryClick(view: View, item: TopTenEntry) {
                 val imageView = view.findViewById(R.id.image) as ImageView
 
@@ -78,7 +78,7 @@ class ToptenFragment : LoadingFragment<Pair<ProxerCall<List<TopTenEntry>>, Proxe
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_topten, container, false)
+        return inflater.inflate(R.layout.fragment_top_ten, container, false)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {

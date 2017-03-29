@@ -63,6 +63,8 @@ class BookmarksFragment : PagedLoadingFragment<ProxerCall<List<Bookmark>>, Bookm
                 .onSuccess {
                     innerAdapter.remove(removalQueue.first())
                     removalQueue.remove(removalQueue.first())
+
+                    saveResultToState(innerAdapter.list)
                 }
                 .onError {
                     removalQueue.clear()

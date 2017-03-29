@@ -9,6 +9,7 @@ import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.TouchableMovementMethod
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
+import me.proxer.app.activity.ProfileActivity
 import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.fragment.base.LoadingFragment
 import me.proxer.app.task.asyncProxerTask
@@ -33,7 +34,7 @@ class ProfileFragment : LoadingFragment<ProxerCall<UserInfo>, UserInfo>() {
     }
 
     private val profileActivity
-        get() = activity as me.proxer.app.activity.ProfileActivity
+        get() = activity as ProfileActivity
 
     private val userId: String?
         get() = profileActivity.userId

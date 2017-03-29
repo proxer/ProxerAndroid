@@ -12,6 +12,7 @@ import android.view.MenuItem
 import com.h6ah4i.android.tablayouthelper.TabLayoutHelper
 import me.proxer.app.R
 import me.proxer.app.fragment.ucp.UcpOverviewFragment
+import me.proxer.app.fragment.ucp.UcpTopTenFragment
 import me.proxer.app.util.extension.bindView
 import org.jetbrains.anko.startActivity
 
@@ -61,18 +62,18 @@ class UcpActivity : MainActivity() {
         override fun getItem(position: Int): Fragment {
             return when (position) {
                 0 -> UcpOverviewFragment.newInstance()
-//                1 -> UcpToptenFragment.newInstance()
+                1 -> UcpTopTenFragment.newInstance()
 //                2 -> HistoryFragment.newInstance()
                 else -> throw RuntimeException("Unknown index passed")
             }
         }
 
-        override fun getCount() = 1 //3
+        override fun getCount() = 2 //3
 
         override fun getPageTitle(position: Int): CharSequence? {
             return when (position) {
                 0 -> getString(R.string.section_ucp_overview)
-//                1 -> getString(R.string.fragment_ucp_topten_title)
+                1 -> getString(R.string.section_ucp_top_ten)
 //                2 -> getString(R.string.fragment_history_title)
                 else -> throw RuntimeException("Unknown index passed")
             }

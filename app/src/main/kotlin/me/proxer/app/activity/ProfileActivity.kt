@@ -28,7 +28,7 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
 import me.proxer.app.fragment.profile.ProfileFragment
-import me.proxer.app.fragment.profile.ToptenFragment
+import me.proxer.app.fragment.profile.TopTenFragment
 import me.proxer.app.helper.StorageHelper
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.bindView
@@ -232,7 +232,7 @@ class ProfileActivity : MainActivity() {
         override fun getItem(position: Int): Fragment {
             return when (position) {
                 0 -> ProfileFragment.newInstance()
-                1 -> ToptenFragment.newInstance()
+                1 -> TopTenFragment.newInstance()
 //                2 -> UserMediaListFragment.newInstance(CategoryParameter.ANIME)
 //                3 -> UserMediaListFragment.newInstance(CategoryParameter.MANGA)
                 else -> throw RuntimeException("Unknown index passed")
