@@ -108,16 +108,14 @@ class ToptenFragment : LoadingFragment<Pair<ProxerCall<List<TopTenEntry>>, Proxe
         animeAdapter.replace(result.animeEntries)
         mangaAdapter.replace(result.mangaEntries)
 
-        if (animeAdapter.isEmpty()) {
-            animeContainer.visibility = View.GONE
-        } else {
-            animeContainer.visibility = View.VISIBLE
+        when (animeAdapter.isEmpty()) {
+            true -> animeContainer.visibility = View.GONE
+            false -> animeContainer.visibility = View.VISIBLE
         }
 
-        if (mangaAdapter.isEmpty()) {
-            mangaContainer.visibility = View.GONE
-        } else {
-            mangaContainer.visibility = View.VISIBLE
+        when (mangaAdapter.isEmpty()) {
+            true -> mangaContainer.visibility = View.GONE
+            false -> mangaContainer.visibility = View.VISIBLE
         }
 
         super.onSuccess(result)
