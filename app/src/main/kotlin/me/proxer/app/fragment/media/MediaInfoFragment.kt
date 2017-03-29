@@ -31,6 +31,7 @@ import me.proxer.library.enums.Category
 import me.proxer.library.enums.SynonymType
 import me.proxer.library.util.ProxerUrls
 import me.proxer.library.util.ProxerUtils
+import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.childrenSequence
 
 /**
@@ -44,7 +45,7 @@ class MediaInfoFragment : LoadingFragment<ProxerCall<Entry>, Entry>() {
 
         fun newInstance(): MediaInfoFragment {
             return MediaInfoFragment().apply {
-                arguments = Bundle()
+                arguments = bundleOf()
             }
         }
     }

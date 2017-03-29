@@ -21,6 +21,7 @@ import me.proxer.app.util.extension.bindView
 import me.proxer.library.api.ProxerCall
 import me.proxer.library.entitiy.user.TopTenEntry
 import me.proxer.library.enums.Category
+import org.jetbrains.anko.bundleOf
 
 /**
  * @author Ruben Gees
@@ -31,7 +32,7 @@ class TopTenFragment : LoadingFragment<Pair<ProxerCall<List<TopTenEntry>>, Proxe
     companion object {
         fun newInstance(): TopTenFragment {
             return TopTenFragment().apply {
-                arguments = Bundle()
+                arguments = bundleOf()
             }
         }
     }

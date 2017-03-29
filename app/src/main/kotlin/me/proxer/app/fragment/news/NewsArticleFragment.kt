@@ -14,6 +14,7 @@ import me.proxer.library.api.ProxerCall
 import me.proxer.library.entitiy.notifications.NewsArticle
 import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
+import org.jetbrains.anko.bundleOf
 
 /**
  * @author Ruben Gees
@@ -23,7 +24,7 @@ class NewsArticleFragment : PagedLoadingFragment<ProxerCall<List<NewsArticle>>, 
     companion object {
         fun newInstance(): NewsArticleFragment {
             return NewsArticleFragment().apply {
-                arguments = Bundle()
+                arguments = bundleOf()
             }
         }
     }

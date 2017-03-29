@@ -20,6 +20,7 @@ import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.library.api.ProxerCall
 import me.proxer.library.entitiy.ucp.Bookmark
 import me.proxer.library.enums.Category
+import org.jetbrains.anko.bundleOf
 
 /**
  * @author Ruben Gees
@@ -31,7 +32,7 @@ class BookmarksFragment : PagedLoadingFragment<ProxerCall<List<Bookmark>>, Bookm
 
         fun newInstance(): BookmarksFragment {
             return BookmarksFragment().apply {
-                arguments = Bundle()
+                arguments = bundleOf()
             }
         }
     }

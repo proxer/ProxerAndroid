@@ -12,6 +12,7 @@ import me.proxer.app.fragment.base.PagedLoadingFragment
 import me.proxer.app.task.asyncProxerTask
 import me.proxer.library.api.ProxerCall
 import me.proxer.library.entitiy.ucp.UcpHistoryEntry
+import org.jetbrains.anko.bundleOf
 
 /**
  * @author Ruben Gees
@@ -21,7 +22,7 @@ class HistoryFragment : PagedLoadingFragment<ProxerCall<List<UcpHistoryEntry>>, 
     companion object {
         fun newInstance(): HistoryFragment {
             return HistoryFragment().apply {
-                arguments = Bundle()
+                arguments = bundleOf()
             }
         }
     }

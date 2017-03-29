@@ -19,6 +19,7 @@ import me.proxer.app.util.extension.bindView
 import me.proxer.library.api.ProxerCall
 import me.proxer.library.entitiy.user.UserInfo
 import okhttp3.HttpUrl
+import org.jetbrains.anko.bundleOf
 
 /**
  * @author Ruben Gees
@@ -28,7 +29,7 @@ class ProfileFragment : LoadingFragment<ProxerCall<UserInfo>, UserInfo>() {
     companion object {
         fun newInstance(): ProfileFragment {
             return ProfileFragment().apply {
-                arguments = Bundle()
+                arguments = bundleOf()
             }
         }
     }

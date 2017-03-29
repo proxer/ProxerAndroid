@@ -26,6 +26,7 @@ import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.library.api.ProxerCall
 import me.proxer.library.entitiy.ucp.UcpTopTenEntry
 import me.proxer.library.enums.Category
+import org.jetbrains.anko.bundleOf
 
 /**
  * @author Ruben Gees
@@ -35,7 +36,7 @@ class UcpTopTenFragment : LoadingFragment<ProxerCall<List<UcpTopTenEntry>>, List
     companion object {
         fun newInstance(): UcpTopTenFragment {
             return UcpTopTenFragment().apply {
-                arguments = Bundle()
+                arguments = bundleOf()
             }
         }
     }

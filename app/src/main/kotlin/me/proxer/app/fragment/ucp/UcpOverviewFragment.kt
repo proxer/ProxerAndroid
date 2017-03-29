@@ -19,6 +19,7 @@ import me.proxer.app.util.extension.snackbar
 import me.proxer.library.api.ProxerCall
 import me.proxer.library.util.ProxerUrls
 import okhttp3.HttpUrl
+import org.jetbrains.anko.bundleOf
 
 /**
  * @author Ruben Gees
@@ -30,7 +31,7 @@ class UcpOverviewFragment : LoadingFragment<ProxerCall<Int>, Int>() {
 
         fun newInstance(): UcpOverviewFragment {
             return UcpOverviewFragment().apply {
-                arguments = Bundle()
+                arguments = bundleOf()
             }
         }
     }

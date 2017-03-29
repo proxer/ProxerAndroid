@@ -21,6 +21,7 @@ import me.proxer.library.entitiy.list.MediaListEntry
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.MediaSearchSortCriteria
 import me.proxer.library.enums.MediaType
+import org.jetbrains.anko.bundleOf
 
 /**
  * @author Ruben Gees
@@ -36,9 +37,7 @@ class MediaListFragment : PagedLoadingFragment<ProxerCall<List<MediaListEntry>>,
 
         fun newInstance(category: Category): MediaListFragment {
             return MediaListFragment().apply {
-                arguments = Bundle().apply {
-                    this.putSerializable(CATEGORY_ARGUMENT, category)
-                }
+                arguments = bundleOf(CATEGORY_ARGUMENT to category)
             }
         }
     }
