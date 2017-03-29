@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
+import me.proxer.app.activity.MediaActivity
 import me.proxer.app.adapter.profile.ToptenAdapter
 import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.fragment.base.LoadingFragment
@@ -23,7 +24,8 @@ import me.proxer.library.enums.Category
 /**
  * @author Ruben Gees
  */
-class ToptenFragment : LoadingFragment<Pair<ProxerCall<List<TopTenEntry>>, ProxerCall<List<TopTenEntry>>>, ZippedTopTenResult>() {
+class ToptenFragment : LoadingFragment<Pair<ProxerCall<List<TopTenEntry>>, ProxerCall<List<TopTenEntry>>>,
+        ZippedTopTenResult>() {
 
     companion object {
         fun newInstance(): ToptenFragment {
@@ -55,14 +57,14 @@ class ToptenFragment : LoadingFragment<Pair<ProxerCall<List<TopTenEntry>>, Proxe
         animeAdapter = ToptenAdapter()
         animeAdapter.callback = object : ToptenAdapter.TopTenAdapterCallback {
             override fun onTopTenEntryClick(item: TopTenEntry) {
-//                MediaActivity.navigateTo(activity, item.id, item.name, item.category)
+                MediaActivity.navigateTo(activity, item.id, item.name, item.category)
             }
         }
 
         mangaAdapter = ToptenAdapter()
         mangaAdapter.callback = object : ToptenAdapter.TopTenAdapterCallback {
             override fun onTopTenEntryClick(item: TopTenEntry) {
-//                MediaActivity.navigateTo(activity, item.id, item.name, item.category)
+                MediaActivity.navigateTo(activity, item.id, item.name, item.category)
             }
         }
     }
@@ -132,6 +134,5 @@ class ToptenFragment : LoadingFragment<Pair<ProxerCall<List<TopTenEntry>>, Proxe
             .category(Category.MANGA)
             .build()
 
-    class ZippedTopTenResult(val animeEntries: List<TopTenEntry>,
-                             val mangaEntries: List<TopTenEntry>)
+    class ZippedTopTenResult(val animeEntries: List<TopTenEntry>, val mangaEntries: List<TopTenEntry>)
 }

@@ -89,7 +89,7 @@ dependencies {
     compile deps.tabLayoutHelper
     compile deps.materialDialogs
     compile deps.flexbox
-    compile deps.badge
+    compile deps.chipCloud
     compile deps.emojiIos
     compile deps.exomedia
     compile deps.exoplayerIntegration

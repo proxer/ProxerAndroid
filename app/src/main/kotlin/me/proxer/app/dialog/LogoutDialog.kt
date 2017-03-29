@@ -45,9 +45,9 @@ class LogoutDialog : MainDialog() {
                     dismiss()
                 }
                 .onError {
-                    val action = ErrorUtils.handle(activity as MainActivity, it)
-
-                    context.longToast(action.message)
+                    ErrorUtils.handle(activity as MainActivity, it).let {
+                        context.longToast(it.message)
+                    }
                 }
                 .onFinish {
                     setProgressVisible(false)

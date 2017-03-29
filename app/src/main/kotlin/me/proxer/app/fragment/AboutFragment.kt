@@ -100,21 +100,20 @@ class AboutFragment : MaterialAboutFragment() {
                                 .colorRes(R.color.icon),
                         getString(R.string.about_info_version_title), false),
                 MaterialAboutActionItem.Builder()
-                        .text(R.string.about_info_licences_title)
-                        .subText(R.string.about_info_licences_description)
+                        .text(R.string.about_info_licenses_title)
+                        .subText(R.string.about_info_licenses_description)
                         .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_clipboard_text)
                                 .colorRes(R.color.icon))
                         .setOnClickListener {
                             LibsBuilder().withAutoDetect(false)
                                     .withAboutVersionShown(false)
                                     .withAboutIconShown(false)
-                                    .withAboutDescription(getString(R.string
-                                            .about_info_licences_activity_description))
+                                    .withAboutDescription(getString(R.string.about_info_licenses_activity_description))
                                     .withLibraries(*LIBRARIES)
                                     .withExcludedLibraries(*EXCLUDED_LIBRARIES)
                                     .withFields(R.string::class.java.fields)
                                     .withActivityStyle(getAboutLibrariesActivityStyle())
-                                    .withActivityTitle(getString(R.string.about_info_licences_activity_title))
+                                    .withActivityTitle(getString(R.string.about_info_licenses_activity_title))
                                     .start(context)
                         }.build(),
                 MaterialAboutActionItem.Builder()

@@ -10,6 +10,8 @@ import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_DEFAUL
 import me.proxer.library.api.ProxerException
 import me.proxer.library.api.ProxerException.ErrorType.*
 import me.proxer.library.api.ProxerException.ServerErrorType.*
+import me.proxer.library.enums.Device
+import me.proxer.library.util.ProxerUrls
 import java.io.IOException
 import java.net.SocketTimeoutException
 
@@ -86,6 +88,9 @@ object ErrorUtils {
                     else -> ACTION_MESSAGE_DEFAULT
                 }
                 val buttonAction = when (innermostError.serverErrorType) {
+                    IP_BLOCKED -> View.OnClickListener {
+                        context.showPage(ProxerUrls.captchaWeb(Device.MOBILE))
+                    }
                     in LOGIN_ERRORS -> View.OnClickListener {
                         LoginDialog.show(context)
                     }

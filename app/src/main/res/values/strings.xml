@@ -21,6 +21,8 @@
     <string name="section_profile_info">Profil</string>
     <string name="section_top_ten">Favoriten</string>
 
+    <string name="section_media_info">Info</string>
+
     <string name="error_timeout">Der Server hat nicht rechtzeitig geantwortet. Versuche es später noch einmal</string>
     <string name="error_io">Es gab ein Problem bei der Datenübertragung. Versuche es erneut</string>
     <string name="error_parsing">Der Server hat beschädigte Daten gesendet. Versuche es erneut</string>
@@ -77,6 +79,36 @@
     <string name="medium_h_manga">H-Manga</string>
     <string name="medium_oneshot">One-Shot</string>
 
+    <string name="season_autumn_end">Ende: Herbst %d</string>
+    <string name="season_autumn_start">Start: Herbst %d</string>
+    <string name="season_spring_end">Ende: Frühling %d</string>
+    <string name="season_spring_start">Start: Frühling %d</string>
+    <string name="season_summer_end">Ende: Sommer %d</string>
+    <string name="season_summer_start">Start: Sommer %d</string>
+    <string name="season_winter_end">Ende: Winter %d</string>
+    <string name="season_winter_start">Start: Winter %d</string>
+
+    <string name="media_state_airing">Airing</string>
+    <string name="media_state_cancelled_sub">Abgebrochener Sub</string>
+    <string name="media_state_cancelled">Abgebrochen</string>
+    <string name="media_state_finished">Abgeschlossen</string>
+    <string name="media_state_pre_airing">Nicht erschienen (Pre-Airing)</string>
+    <string name="fsk_0_description">Dieser Anime ist für alle geeignet.</string>
+
+    <string name="fsk_12_description">Dieser Anime ist nicht für Personen unter 12 Jahren geeignet.</string>
+    <string name="fsk_16_description">Dieser Anime ist nicht für Personen unter 16 Jahren geeignet.</string>
+    <string name="fsk_18_description">Dieser Anime ist nicht für Personen unter 18 Jahren geeignet.</string>
+    <string name="fsk_6_description">Dieser Anime ist nicht für Personen unter 6 Jahren geeignet.</string>
+    <string name="fsk_bad_language_description">Dieser Anime beinhaltet vulgäre Ausdrücke.</string>
+    <string name="fsk_fear_description">Inhalt könnte verängstigend auf Kinder wirken.</string>
+    <string name="fsk_violence_description">Dieser Anime enthält Gewaltdarstellungen.</string>
+    <string name="fsk_sex_description">Erotische Darstellungen und Nacktheit mit sexuellem Bezug und Sexdarstellungen.
+    </string>
+
+    <string name="license_licensed">Lizenziert</string>
+    <string name="license_not_licensed">Nicht lizenziert</string>
+    <string name="license_unknown">Unbekannt</string>
+
     <plurals name="media_chapter_count">
         <item quantity="one">Ein Kapitel</item>
         <item quantity="other">%d Kapitel</item>
@@ -122,6 +154,32 @@
     <string name="fragment_profile_points_total">Insgesamt</string>
     <string name="fragment_profile_points_uploads">Uploads</string>
 
+    <string name="fragment_media_info_description">Beschreibung</string>
+    <string name="fragment_media_info_fsk_constraints">FSK</string>
+    <string name="fragment_media_info_general">Allgemein</string>
+    <string name="fragment_media_info_genres">Genres</string>
+    <string name="fragment_media_info_translator_groups">Gruppen</string>
+    <string name="fragment_media_info_original_title">Original Titel</string>
+    <string name="fragment_media_info_alternative_title">Alternativer Titel</string>
+    <string name="fragment_media_info_german_title">Deutscher Titel</string>
+    <string name="fragment_media_info_english_title">Englischer Titel</string>
+    <string name="fragment_media_info_japanese_title">Japanischer Titel</string>
+    <string name="fragment_media_info_license_title">Lizenz</string>
+    <string name="fragment_media_info_industries">Industrie</string>
+    <string name="fragment_media_info_season_title">Season</string>
+    <string name="fragment_media_info_status_title">Status</string>
+    <string name="fragment_media_info_tags">Tags</string>
+    <string name="fragment_media_info_note">Vermerken</string>
+    <string name="fragment_media_info_favor">Favorisieren</string>
+    <string name="fragment_media_info_finish">Abgeschlossen</string>
+    <string name="fragment_media_info_rate_count">(%d)</string>
+    <string name="fragment_media_info_tags_spoiler_hide">Spoiler Tags verstecken</string>
+    <string name="fragment_media_info_tags_spoiler_show">Spoiler Tags anzeigen</string>
+    <string name="fragment_media_info_tags_unrated_hide">Unbewertete Tags verstecken</string>
+    <string name="fragment_media_info_tags_unrated_show">Unbewertete Tags anzeigen</string>
+    <string name="fragment_media_info_set_user_info_error">Eintrag konnte nicht aktualisiert werden: %s</string>
+    <string name="fragment_media_info_set_user_info_success">Eintrag wurde aktualisiert</string>
+
     <string name="fragment_topten_anime">Anime</string>
     <string name="fragment_topten_manga">Manga</string>
 
@@ -139,11 +197,11 @@
     <string name="preference_theme_light">Hell</string>
 
     <string name="about_info_version_title">Version</string>
-    <string name="about_info_licences_title">Lizenzen</string>
-    <string name="about_info_licences_description">Lizenzen von Bibliotheken, die in dieser App verwendet werden
+    <string name="about_info_licenses_title">Lizenzen</string>
+    <string name="about_info_licenses_description">Lizenzen von Bibliotheken, die in dieser App verwendet werden
     </string>
-    <string name="about_info_licences_activity_title">Lizenzen</string>
-    <string name="about_info_licences_activity_description">
+    <string name="about_info_licenses_activity_title">Lizenzen</string>
+    <string name="about_info_licenses_activity_description">
         <![CDATA[In dieser App werden Icons von <a href="http://www.freepik.com/">Freepik</a>,
         <a href="https://material.io/icons/">Google</a> und <a href="https://materialdesignicons.com/">weiteren
         Mitwirkenden</a> (Unter \"View the Contributors\") verwendet.<br><br>Außerdem werden die folgenden Open
@@ -166,6 +224,7 @@
     <string name="action_search">Suchen</string>
     <string name="action_filter">Filter</string>
     <string name="action_sort">Sortierung</string>
+    <string name="action_share">Teilen</string>
 
     <string name="action_filter_all">Alles</string>
     <string name="action_filter_anime_series">Serien</string>
@@ -216,6 +275,8 @@
     <string name="rank_kami_sama">Kami-Sama</string>
 
     <string name="bookmark_episode">Episode %d</string>
+
+    <string name="share_title">Teilen über</string>
 
     <string name="shortcut_disabled_message">Diese Verknüpung ist nicht mehr verfügbar</string>
 

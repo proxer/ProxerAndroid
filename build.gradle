@@ -3,7 +3,7 @@ ext {
 
     version = '0.9.0'
     versionCode = 29
-    minSdkVersion = 15
+    minSdkVersion = 16
     targetSdkVersion = 25
     compileSdkVersion = 25
     buildToolsVersion = '25.0.2'
@@ -31,7 +31,7 @@ ext {
     tabLayoutHelperVersion = '0.8.0'
     materialDialogsVersion = '0.9.4.2'
     flexboxVersion = '0.2.6'
-    badgeVersion = '1.6.2'
+    chipCloudVersion = '3.0.3'
     emojiIosVersion = '0.5.0-SNAPSHOT'
     exomediaVersion = '4.0.0-preview3'
     exoplayerIntegrationVersion = 'r2.3.1'
@@ -83,7 +83,7 @@ ext {
             tabLayoutHelper              : "com.h6ah4i.android.tablayouthelper:tablayouthelper:$tabLayoutHelperVersion",
             materialDialogs              : "com.afollestad.material-dialogs:core:$materialDialogsVersion",
             flexbox                      : "com.google.android:flexbox:$flexboxVersion",
-            badge                        : "com.github.nekocode:Badge:$badgeVersion",
+            chipCloud                        : "com.github.fiskurgit:ChipCloud:$chipCloudVersion",
             emojiIos                     : "com.vanniktech:emoji-ios:$emojiIosVersion",
             exomedia                     : "com.devbrackets.android:exomedia:$exomediaVersion",
             exoplayerIntegration         : "com.google.android.exoplayer:extension-okhttp:$exoplayerIntegrationVersion",
