@@ -3,6 +3,7 @@ package me.proxer.app.fragment.base
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import me.proxer.app.application.MainApplication
+import me.proxer.app.util.extension.KotterKnife
 import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.openHttpPage
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
@@ -19,6 +20,12 @@ abstract class MainFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         customTabsHelper = CustomTabsHelperFragment.attachTo(this)
+    }
+
+    override fun onDestroyView() {
+        KotterKnife.reset(this)
+
+        super.onDestroyView()
     }
 
     override fun onDestroy() {

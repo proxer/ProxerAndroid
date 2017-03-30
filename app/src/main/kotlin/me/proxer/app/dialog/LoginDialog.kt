@@ -85,10 +85,13 @@ class LoginDialog : MainDialog() {
                 .build()
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
 
-        username.setText(StorageHelper.user?.name)
+        if (savedInstanceState == null) {
+            username.setText(StorageHelper.user?.name)
+        }
+
         password.setOnEditorActionListener(TextView.OnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_GO) {
                 login()
@@ -124,8 +127,7 @@ class LoginDialog : MainDialog() {
             val password = password.text.trim().toString()
 
             if (validateInput(username, password)) {
-                // This is important to avoid sending broken login tokens and making it impossible
-                // to login again.
+                // This is important to avoid sending broken login tokens and making it impossible to login again.
                 StorageHelper.loginToken = null
 
                 task.execute(api.user().login(username, password).build())

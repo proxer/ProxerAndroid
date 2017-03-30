@@ -23,6 +23,7 @@ import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
+import org.jetbrains.anko.bundleOf
 
 /**
  * @author Ruben Gees
@@ -49,7 +50,9 @@ class AboutFragment : MaterialAboutFragment() {
         private const val DEVELOPER_GITHUB_NAME = "rubengees"
 
         fun newInstance(): AboutFragment {
-            return AboutFragment()
+            return AboutFragment().apply {
+                arguments = bundleOf()
+            }
         }
     }
 

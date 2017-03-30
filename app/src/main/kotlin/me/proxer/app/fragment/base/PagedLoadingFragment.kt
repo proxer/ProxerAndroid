@@ -91,14 +91,6 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
         setupList()
     }
 
-    override fun onDestroyView() {
-        innerAdapter.destroy()
-        progress.setOnRefreshListener(null)
-        list.clearOnScrollListeners()
-
-        super.onDestroyView()
-    }
-
     override fun onSuccess(result: List<O>) {
         hasReachedEnd = result.size < itemsOnPage
 

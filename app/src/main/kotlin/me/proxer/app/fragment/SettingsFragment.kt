@@ -13,6 +13,7 @@ import me.proxer.app.helper.PreferenceHelper
 import me.proxer.app.helper.PreferenceHelper.AGE_CONFIRMATION
 import me.proxer.app.helper.PreferenceHelper.THEME
 import net.xpece.android.support.preference.TwoStatePreference
+import org.jetbrains.anko.bundleOf
 
 /**
  * @author Ruben Gees
@@ -21,7 +22,9 @@ class SettingsFragment : XpPreferenceFragment(), SharedPreferences.OnSharedPrefe
 
     companion object {
         fun newInstance(): SettingsFragment {
-            return SettingsFragment()
+            return SettingsFragment().apply {
+                arguments = bundleOf()
+            }
         }
     }
 

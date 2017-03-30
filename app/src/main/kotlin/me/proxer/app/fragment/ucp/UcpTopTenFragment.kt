@@ -140,13 +140,6 @@ class UcpTopTenFragment : LoadingFragment<ProxerCall<List<UcpTopTenEntry>>, List
         mangaList.adapter = mangaAdapter
     }
 
-    override fun onDestroyView() {
-        animeAdapter.destroy()
-        mangaAdapter.destroy()
-
-        super.onDestroyView()
-    }
-
     override fun onSuccess(result: List<UcpTopTenEntry>) {
         super.onSuccess(result)
 

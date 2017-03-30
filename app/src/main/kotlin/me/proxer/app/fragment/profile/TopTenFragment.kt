@@ -98,13 +98,6 @@ class TopTenFragment : LoadingFragment<Pair<ProxerCall<List<TopTenEntry>>, Proxe
         mangaList.adapter = mangaAdapter
     }
 
-    override fun onDestroyView() {
-        animeAdapter.destroy()
-        mangaAdapter.destroy()
-
-        super.onDestroyView()
-    }
-
     override fun onSuccess(result: ZippedTopTenResult) {
         animeAdapter.replace(result.animeEntries)
         mangaAdapter.replace(result.mangaEntries)

@@ -57,8 +57,7 @@ class UcpActivity : MainActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    inner class SectionsPagerAdapter(fragmentManager: FragmentManager) :
-            FragmentPagerAdapter(fragmentManager) {
+    inner class SectionsPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {
 
         override fun getItem(position: Int): Fragment {
             return when (position) {

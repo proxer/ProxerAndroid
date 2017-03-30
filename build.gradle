@@ -17,7 +17,7 @@ ext {
     eventBusVersion = '3.0.0'
     eventBusAnnotationVersion = '3.0.1'
     proxerLibVersion = 'new-architecture-SNAPSHOT'
-    ktaskVersion = '0.2.3'
+    ktaskVersion = '0.2.4'
 
     // UI components
     aboutLibrariesVersion = '5.9.4'
