@@ -146,7 +146,7 @@ class AboutFragment : MaterialAboutFragment() {
                         .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_email)
                                 .colorRes(R.color.icon))
                         .setOnClickListener {
-                            //                            val existingChat = context.chatDatabase.getChat(DEVELOPER_PROXER_NAME)
+                            // val existingChat = context.chatDatabase.getChat(DEVELOPER_PROXER_NAME)
 //
 //                            when (existingChat) {
 //                                null -> {
