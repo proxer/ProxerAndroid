@@ -22,6 +22,7 @@ import me.proxer.library.enums.Category
 import me.proxer.library.enums.MediaSearchSortCriteria
 import me.proxer.library.enums.MediaType
 import org.jetbrains.anko.bundleOf
+import org.jetbrains.anko.find
 
 /**
  * @author Ruben Gees
@@ -87,7 +88,7 @@ class MediaListFragment : PagedLoadingFragment<ProxerCall<List<MediaListEntry>>,
 
         innerAdapter.callback = object : MediaAdapter.MediaAdapterCallback {
             override fun onMediaClick(view: View, item: MediaListEntry) {
-                val imageView = view.findViewById(R.id.image) as ImageView
+                val imageView = view.find<ImageView>(R.id.image)
 
                 MediaActivity.navigateTo(activity, item.id, item.name, item.medium.toCategory(),
                         if (imageView.drawable != null) imageView else null)

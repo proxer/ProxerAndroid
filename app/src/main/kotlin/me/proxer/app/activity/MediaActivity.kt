@@ -22,8 +22,10 @@ import com.bumptech.glide.request.animation.GlideAnimation
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget
 import com.h6ah4i.android.tablayouthelper.TabLayoutHelper
 import me.proxer.app.R
+import me.proxer.app.fragment.media.EpisodesFragment
 import me.proxer.app.fragment.media.MediaInfoFragment
 import me.proxer.app.util.extension.bindView
+import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.library.enums.Category
 import me.proxer.library.util.ProxerUrls
 import org.jetbrains.anko.applyRecursively
@@ -79,7 +81,7 @@ class MediaActivity : MainActivity() {
         set(value) {
             intent.putExtra(CATEGORY_EXTRA, category)
 
-//            sectionsPagerAdapter.updateEpisodesTitle(value)
+            sectionsPagerAdapter.updateEpisodesTitle(value)
         }
 
     private val itemToDisplay: Int
@@ -197,26 +199,27 @@ class MediaActivity : MainActivity() {
             return when (position) {
                 0 -> MediaInfoFragment.newInstance()
 //                1 -> CommentFragment.newInstance()
-//                2 -> EpisodesFragment.newInstance()
+                1 -> EpisodesFragment.newInstance()
 //                3 -> RelationsFragment.newInstance()
                 else -> throw RuntimeException("Unknown index passed")
             }
         }
 
-        override fun getCount() = 1 // 4
+        override fun getCount() = 2 // 4
 
         override fun getPageTitle(position: Int): CharSequence? {
             return when (position) {
                 0 -> getString(R.string.section_media_info)
 //                1 -> getString(R.string.fragment_comments_title)
-//                2 -> ParameterMapper.categoryEpisodesTitle(this@MediaActivity, category)
+                1 -> category.toEpisodeAppString(this@MediaActivity)
 //                3 -> getString(R.string.fragment_relations_title)
                 else -> throw RuntimeException("Unknown index passed")
             }
         }
 
-//        fun updateEpisodesTitle(category: String) {
-//            tabs.getTabAt(2)?.text = ParameterMapper.categoryEpisodesTitle(this@MediaActivity, category)
-//        }
+        fun updateEpisodesTitle(category: Category) {
+            // TODO: Change to 1
+            tabs.getTabAt(1)?.text = category.toEpisodeAppString(this@MediaActivity)
+        }
     }
 }

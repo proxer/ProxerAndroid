@@ -13,6 +13,7 @@ import me.proxer.app.task.asyncProxerTask
 import me.proxer.library.api.ProxerCall
 import me.proxer.library.entitiy.ucp.UcpHistoryEntry
 import org.jetbrains.anko.bundleOf
+import org.jetbrains.anko.find
 
 /**
  * @author Ruben Gees
@@ -39,7 +40,7 @@ class HistoryFragment : PagedLoadingFragment<ProxerCall<List<UcpHistoryEntry>>, 
 
         innerAdapter.callback = object : HistoryAdapter.HistoryAdapterCallback {
             override fun onItemClick(view: View, item: UcpHistoryEntry) {
-                val imageView = view.findViewById(R.id.image) as ImageView
+                val imageView = view.find<ImageView>(R.id.image)
 
                 MediaActivity.navigateTo(activity, item.id, item.name, item.category,
                         if (imageView.drawable != null) imageView else null)

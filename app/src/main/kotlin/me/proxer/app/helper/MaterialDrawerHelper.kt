@@ -4,6 +4,7 @@ import android.app.Activity
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.view.View
+import android.view.ViewGroup
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.crossfader.Crossfader
 import com.mikepenz.crossfader.view.GmailStyleCrossFadeSlidingPaneLayout
@@ -18,6 +19,7 @@ import me.proxer.app.R
 import me.proxer.app.util.CrossfadeWrapper
 import me.proxer.app.util.DeviceUtils
 import me.proxer.library.util.ProxerUrls
+import org.jetbrains.anko.find
 
 /**
  * @author Ruben Gees
@@ -188,7 +190,7 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar, savedInstanceSta
     private fun buildCrossfader(context: Activity, drawer: Drawer, miniDrawer: MiniDrawer,
                                 savedInstanceState: Bundle?): Crossfader<*> {
         return Crossfader<GmailStyleCrossFadeSlidingPaneLayout>()
-                .withContent(context.findViewById(R.id.root))
+                .withContent(context.find<ViewGroup>(R.id.root))
                 .withFirst(drawer.slider, DeviceUtils.convertDpToPx(context, DRAWER_SIZE))
                 .withSecond(miniDrawer.build(context), DeviceUtils.convertDpToPx(context, MINI_DRAWER_SIZE))
                 .withSavedInstance(savedInstanceState)

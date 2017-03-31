@@ -207,7 +207,7 @@
                             android:layout_height="wrap_content"
                             android:padding="8dp"
                             android:text="@string/fragment_media_info_industries"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                             android:textColor="@color/colorAccent" />
 
                         <com.google.android.flexbox.FlexboxLayout

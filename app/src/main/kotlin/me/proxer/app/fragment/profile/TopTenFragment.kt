@@ -22,6 +22,7 @@ import me.proxer.library.api.ProxerCall
 import me.proxer.library.entitiy.user.TopTenEntry
 import me.proxer.library.enums.Category
 import org.jetbrains.anko.bundleOf
+import org.jetbrains.anko.find
 
 /**
  * @author Ruben Gees
@@ -45,8 +46,8 @@ class TopTenFragment : LoadingFragment<Pair<ProxerCall<List<TopTenEntry>>, Proxe
     private val username: String?
         get() = profileActivity.username
 
-    private lateinit var animeAdapter: TopTenAdapter
-    private lateinit var mangaAdapter: TopTenAdapter
+    private val animeAdapter = TopTenAdapter()
+    private val mangaAdapter = TopTenAdapter()
 
     private val animeContainer: ViewGroup by bindView(R.id.animeContainer)
     private val mangaContainer: ViewGroup by bindView(R.id.mangaContainer)
@@ -56,20 +57,18 @@ class TopTenFragment : LoadingFragment<Pair<ProxerCall<List<TopTenEntry>>, Proxe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        animeAdapter = TopTenAdapter()
         animeAdapter.callback = object : TopTenAdapter.TopTenAdapterCallback {
             override fun onTopTenEntryClick(view: View, item: TopTenEntry) {
-                val imageView = view.findViewById(R.id.image) as ImageView
+                val imageView = view.find<ImageView>(R.id.image)
 
                 MediaActivity.navigateTo(activity, item.id, item.name, item.category,
                         if (imageView.drawable != null) imageView else null)
             }
         }
 
-        mangaAdapter = TopTenAdapter()
         mangaAdapter.callback = object : TopTenAdapter.TopTenAdapterCallback {
             override fun onTopTenEntryClick(view: View, item: TopTenEntry) {
-                val imageView = view.findViewById(R.id.image) as ImageView
+                val imageView = view.find<ImageView>(R.id.image)
 
                 MediaActivity.navigateTo(activity, item.id, item.name, item.category,
                         if (imageView.drawable != null) imageView else null)

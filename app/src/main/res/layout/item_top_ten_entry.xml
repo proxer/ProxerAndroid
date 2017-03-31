@@ -40,7 +40,7 @@
                 android:gravity="center"
                 android:maxLines="3"
                 android:padding="8dp"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@android:color/white"
                 tools:text="Some title" />
         </RelativeLayout>

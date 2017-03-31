@@ -85,7 +85,7 @@
                             android:paddingBottom="8dp"
                             android:paddingLeft="8dp"
                             android:paddingRight="8dp"
-                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small"
                             android:textIsSelectable="true"
                             tools:text="Username" />
 
@@ -106,7 +106,7 @@
                             android:paddingBottom="8dp"
                             android:paddingLeft="8dp"
                             android:paddingRight="8dp"
-                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small"
                             android:textIsSelectable="true"
                             tools:text="123456" />
                     </LinearLayout>
@@ -130,7 +130,7 @@
                             android:layout_height="wrap_content"
                             android:padding="8dp"
                             android:text="@string/fragment_ucp_overview_epsiode_counter"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                             android:textColor="@color/colorAccent" />
 
                         <TableLayout
@@ -145,7 +145,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_margin="8dp"
                                     android:text="@string/fragment_ucp_overview_epsiode_counter_episodes"
-                                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
                                 <TextView
                                     android:id="@+id/episodesRow"
@@ -153,7 +153,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_margin="8dp"
                                     android:gravity="end"
-                                    android:textAppearance="?android:attr/textAppearanceMedium"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                                     tools:text="100" />
                             </TableRow>
 
@@ -164,7 +164,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_margin="8dp"
                                     android:text="@string/fragment_ucp_overview_epsiode_counter_minutes"
-                                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
                                 <TextView
                                     android:id="@+id/minutesRow"
@@ -172,7 +172,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_margin="8dp"
                                     android:gravity="end"
-                                    android:textAppearance="?android:attr/textAppearanceMedium"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                                     tools:text="100" />
                             </TableRow>
 
@@ -183,7 +183,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_margin="8dp"
                                     android:text="@string/fragment_ucp_overview_epsiode_counter_hours"
-                                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
                                 <TextView
                                     android:id="@+id/hoursRow"
@@ -191,7 +191,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_margin="8dp"
                                     android:gravity="end"
-                                    android:textAppearance="?android:attr/textAppearanceMedium"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                                     tools:text="100" />
                             </TableRow>
 
@@ -202,7 +202,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_margin="8dp"
                                     android:text="@string/fragment_ucp_overview_epsiode_counter_days"
-                                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
                                 <TextView
                                     android:id="@+id/daysRow"
@@ -210,7 +210,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_margin="8dp"
                                     android:gravity="end"
-                                    android:textAppearance="?android:attr/textAppearanceMedium"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                                     tools:text="100" />
                             </TableRow>
                         </TableLayout>

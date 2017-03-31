@@ -27,6 +27,13 @@ fun MediaLanguage.toGeneralLanguage(): Language {
     }
 }
 
+fun Language.toAppDrawable(context: Context): Drawable {
+    return when (this) {
+        Language.GERMAN -> AppCompatResources.getDrawable(context, R.drawable.ic_germany)
+        Language.ENGLISH -> AppCompatResources.getDrawable(context, R.drawable.ic_united_states)
+    } ?: throw NullPointerException("Could not resolve Drawable for language: $this")
+}
+
 fun Medium.toCategory(): Category {
     return when (this) {
         Medium.ANIMESERIES, Medium.MOVIE, Medium.OVA, Medium.HENTAI -> Category.ANIME
@@ -34,7 +41,20 @@ fun Medium.toCategory(): Category {
     }
 }
 
-fun EntrySeasonInfo.toAppStringStart(context: Context): String {
+fun Category.toEpisodeAppString(context: Context, number: Int? = null): String {
+    return when (number) {
+        null -> context.getString(when (this) {
+            Category.ANIME -> R.string.category_anime_episodes_title
+            Category.MANGA -> R.string.category_manga_episodes_title
+        })
+        else -> context.getString(when (this) {
+            Category.ANIME -> R.string.category_anime_episode_number
+            Category.MANGA -> R.string.category_manga_episode_number
+        }, number)
+    }
+}
+
+fun EntrySeasonInfo.toStartAppString(context: Context): String {
     return when (season) {
         Season.WINTER -> context.getString(R.string.season_winter_start, year)
         Season.SPRING -> context.getString(R.string.season_spring_start, year)
@@ -45,7 +65,7 @@ fun EntrySeasonInfo.toAppStringStart(context: Context): String {
     }
 }
 
-fun EntrySeasonInfo.toAppStringEnd(context: Context): String {
+fun EntrySeasonInfo.toEndAppString(context: Context): String {
     return when (season) {
         Season.WINTER -> context.getString(R.string.season_winter_end, year)
         Season.SPRING -> context.getString(R.string.season_spring_end, year)

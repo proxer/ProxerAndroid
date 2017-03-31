@@ -73,7 +73,8 @@ dependencies {
     compile deps.supportPreferenceFix
     compile deps.supportPreferenceFixSpinner
     compile deps.eventBus
-    compile deps.proxerLib
+    // TODO: Remove changing once stable
+    compile(deps.proxerLib) { changing = true }
     compile deps.ktaskAndroid
     kapt deps.eventBusAnnotation
 

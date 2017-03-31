@@ -33,6 +33,7 @@ import me.proxer.library.util.ProxerUrls
 import me.proxer.library.util.ProxerUtils
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.childrenSequence
+import org.jetbrains.anko.find
 
 /**
  * @author Ruben Gees
@@ -228,13 +229,13 @@ class MediaInfoFragment : LoadingFragment<ProxerCall<Entry>, Entry>() {
 
         if (seasons.isNotEmpty()) {
             val tableRow = LayoutInflater.from(context).inflate(R.layout.layout_media_info_seasons_row, infoTable, false)
-            val seasonStartView = tableRow.findViewById(R.id.seasonStart) as TextView
-            val seasonEndView = tableRow.findViewById(R.id.seasonEnd) as TextView
+            val seasonStartView = tableRow.find<TextView>(R.id.seasonStart)
+            val seasonEndView = tableRow.find<TextView>(R.id.seasonEnd)
 
-            seasonStartView.text = seasons[0].toAppStringStart(context)
+            seasonStartView.text = seasons[0].toStartAppString(context)
 
             if (seasons.size >= 2) {
-                seasonEndView.text = seasons[1].toAppStringEnd(context)
+                seasonEndView.text = seasons[1].toEndAppString(context)
             } else {
                 seasonEndView.visibility = View.GONE
             }
@@ -255,8 +256,8 @@ class MediaInfoFragment : LoadingFragment<ProxerCall<Entry>, Entry>() {
 
     private fun constructInfoTableRow(title: String, content: String): View {
         val tableRow = LayoutInflater.from(context).inflate(R.layout.layout_media_info_row, infoTable, false)
-        val titleView = tableRow.findViewById(R.id.title) as TextView
-        val contentView = tableRow.findViewById(R.id.content) as TextView
+        val titleView = tableRow.find<TextView>(R.id.title)
+        val contentView = tableRow.find<TextView>(R.id.content)
 
         titleView.text = title
         contentView.text = content

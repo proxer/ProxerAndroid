@@ -27,6 +27,7 @@ import me.proxer.library.api.ProxerCall
 import me.proxer.library.entitiy.ucp.UcpTopTenEntry
 import me.proxer.library.enums.Category
 import org.jetbrains.anko.bundleOf
+import org.jetbrains.anko.find
 
 /**
  * @author Ruben Gees
@@ -43,8 +44,8 @@ class UcpTopTenFragment : LoadingFragment<ProxerCall<List<UcpTopTenEntry>>, List
 
     override val isLoginRequired = true
 
-    private lateinit var animeAdapter: UcpTopTenAdapter
-    private lateinit var mangaAdapter: UcpTopTenAdapter
+    private val animeAdapter = UcpTopTenAdapter()
+    private val mangaAdapter = UcpTopTenAdapter()
 
     private lateinit var removalTask: AndroidLifecycleTask<ProxerCall<Void?>, Void?>
     private val removalQueue = LinkedHashSet<UcpTopTenEntry>()
@@ -86,10 +87,9 @@ class UcpTopTenFragment : LoadingFragment<ProxerCall<List<UcpTopTenEntry>>, List
                     removeEntriesFromQueue()
                 }.build()
 
-        animeAdapter = UcpTopTenAdapter()
         animeAdapter.callback = object : UcpTopTenAdapter.UcpToptenAdapterCallback {
             override fun onItemClick(view: View, item: UcpTopTenEntry) {
-                val imageView = view.findViewById(R.id.image) as ImageView
+                val imageView = view.find<ImageView>(R.id.image)
 
                 MediaActivity.navigateTo(activity, item.entryId, item.name, item.category,
                         if (imageView.drawable != null) imageView else null)
@@ -102,10 +102,9 @@ class UcpTopTenFragment : LoadingFragment<ProxerCall<List<UcpTopTenEntry>>, List
             }
         }
 
-        mangaAdapter = UcpTopTenAdapter()
         mangaAdapter.callback = object : UcpTopTenAdapter.UcpToptenAdapterCallback {
             override fun onItemClick(view: View, item: UcpTopTenEntry) {
-                val imageView = view.findViewById(R.id.image) as ImageView
+                val imageView = view.find<ImageView>(R.id.image)
 
                 MediaActivity.navigateTo(activity, item.entryId, item.name, item.category,
                         if (imageView.drawable != null) imageView else null)
@@ -141,8 +140,6 @@ class UcpTopTenFragment : LoadingFragment<ProxerCall<List<UcpTopTenEntry>>, List
     }
 
     override fun onSuccess(result: List<UcpTopTenEntry>) {
-        super.onSuccess(result)
-
         val animeList = result.filter { it.category == Category.ANIME }
         val mangaList = result.filter { it.category == Category.MANGA }
 
