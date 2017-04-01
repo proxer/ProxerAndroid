@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable
 import android.support.v7.content.res.AppCompatResources
 import me.proxer.app.R
 import me.proxer.library.entitiy.info.EntrySeasonInfo
+import me.proxer.library.entitiy.info.Synonym
 import me.proxer.library.enums.*
 
 fun Medium.toAppString(context: Context): String? {
@@ -52,6 +53,17 @@ fun Category.toEpisodeAppString(context: Context, number: Int? = null): String {
             Category.MANGA -> R.string.category_manga_episode_number
         }, number)
     }
+}
+
+fun Synonym.toTypeAppString(context: Context): String {
+    return context.getString(when (this.type) {
+        SynonymType.ORIGINAL -> R.string.synonym_original_type
+        SynonymType.ENGLISH -> R.string.synonym_english_type
+        SynonymType.GERMAN -> R.string.synonym_german_type
+        SynonymType.JAPANESE -> R.string.synonym_japanese_type
+        SynonymType.KOREAN -> R.string.synonym_korean_type
+        SynonymType.ORIGINAL_ALTERNATIVE -> R.string.synonym_alternative_type
+    })
 }
 
 fun EntrySeasonInfo.toStartAppString(context: Context): String {

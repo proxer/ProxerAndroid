@@ -99,8 +99,8 @@
     <string name="media_state_cancelled">Abgebrochen</string>
     <string name="media_state_finished">Abgeschlossen</string>
     <string name="media_state_pre_airing">Nicht erschienen (Pre-Airing)</string>
-    <string name="fsk_0_description">Dieser Anime ist für alle geeignet.</string>
 
+    <string name="fsk_0_description">Dieser Anime ist für alle geeignet.</string>
     <string name="fsk_12_description">Dieser Anime ist nicht für Personen unter 12 Jahren geeignet.</string>
     <string name="fsk_16_description">Dieser Anime ist nicht für Personen unter 16 Jahren geeignet.</string>
     <string name="fsk_18_description">Dieser Anime ist nicht für Personen unter 18 Jahren geeignet.</string>
@@ -110,6 +110,13 @@
     <string name="fsk_violence_description">Dieser Anime enthält Gewaltdarstellungen.</string>
     <string name="fsk_sex_description">Erotische Darstellungen und Nacktheit mit sexuellem Bezug und Sexdarstellungen.
     </string>
+
+    <string name="synonym_original_type">Original Titel</string>
+    <string name="synonym_english_type">Englischer Titel</string>
+    <string name="synonym_german_type">Deutscher Titel</string>
+    <string name="synonym_japanese_type">Japanischer Titel</string>
+    <string name="synonym_korean_type">Koreanischer Titel</string>
+    <string name="synonym_alternative_type">Alternativer Titel</string>
 
     <string name="license_licensed">Lizenziert</string>
     <string name="license_not_licensed">Nicht lizenziert</string>
@@ -165,11 +172,6 @@
     <string name="fragment_media_info_general">Allgemein</string>
     <string name="fragment_media_info_genres">Genres</string>
     <string name="fragment_media_info_translator_groups">Gruppen</string>
-    <string name="fragment_media_info_original_title">Original Titel</string>
-    <string name="fragment_media_info_alternative_title">Alternativer Titel</string>
-    <string name="fragment_media_info_german_title">Deutscher Titel</string>
-    <string name="fragment_media_info_english_title">Englischer Titel</string>
-    <string name="fragment_media_info_japanese_title">Japanischer Titel</string>
     <string name="fragment_media_info_license_title">Lizenz</string>
     <string name="fragment_media_info_industries">Industrie</string>
     <string name="fragment_media_info_season_title">Season</string>

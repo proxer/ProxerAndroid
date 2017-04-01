@@ -28,7 +28,6 @@ import me.proxer.app.util.extension.*
 import me.proxer.library.api.ProxerCall
 import me.proxer.library.entitiy.info.Entry
 import me.proxer.library.enums.Category
-import me.proxer.library.enums.SynonymType
 import me.proxer.library.util.ProxerUrls
 import me.proxer.library.util.ProxerUtils
 import org.jetbrains.anko.bundleOf
@@ -212,15 +211,7 @@ class MediaInfoFragment : LoadingFragment<ProxerCall<Entry>, Entry>() {
 
     private fun bindSynonyms(result: Entry) {
         result.synonyms.forEach {
-            val title = context.getString(when (it.type) {
-                SynonymType.ORIGINAL -> R.string.fragment_media_info_original_title
-                SynonymType.ENGLISH -> R.string.fragment_media_info_english_title
-                SynonymType.GERMAN -> R.string.fragment_media_info_german_title
-                SynonymType.JAPANESE -> R.string.fragment_media_info_japanese_title
-                SynonymType.ORIGINAL_ALTERNATIVE -> R.string.fragment_media_info_alternative_title
-            })
-
-            infoTable.addView(constructInfoTableRow(title, it.name))
+            infoTable.addView(constructInfoTableRow(it.toTypeAppString(context), it.name))
         }
     }
 
