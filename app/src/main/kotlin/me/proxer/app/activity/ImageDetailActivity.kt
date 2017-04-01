@@ -1,9 +1,8 @@
 package me.proxer.app.activity
 
 import android.app.Activity
-import android.os.Build
 import android.os.Bundle
-import android.support.v4.app.ActivityOptionsCompat
+import android.support.v4.view.ViewCompat
 import android.view.MenuItem
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -13,6 +12,8 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable
 import com.bumptech.glide.request.animation.GlideAnimation
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget
 import me.proxer.app.R
+import me.proxer.app.activity.base.MainActivity
+import me.proxer.app.util.ActivityUtils
 import me.proxer.app.util.extension.bindView
 import okhttp3.HttpUrl
 import org.jetbrains.anko.intentFor
@@ -25,14 +26,9 @@ class ImageDetailActivity : MainActivity() {
     companion object {
         private const val URL_EXTRA = "url"
 
-        fun navigateTo(context: Activity, image: ImageView, url: HttpUrl) {
-            val intent = context.intentFor<ImageDetailActivity>(URL_EXTRA to url.toString())
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                context.startActivity(intent, ActivityOptionsCompat
-                        .makeSceneTransitionAnimation(context, image, image.transitionName).toBundle())
-            } else {
-                context.startActivity(intent)
+        fun navigateTo(context: Activity, url: HttpUrl, imageView: ImageView? = null) {
+            context.intentFor<ImageDetailActivity>(URL_EXTRA to url.toString()).let {
+                ActivityUtils.navigateToWithImageTransition(it, context, imageView)
             }
         }
     }
@@ -48,6 +44,8 @@ class ImageDetailActivity : MainActivity() {
 
         setContentView(R.layout.activity_image_detail)
         supportPostponeEnterTransition()
+
+        ViewCompat.setTransitionName(image, ActivityUtils.getTransitionName(this))
 
         Glide.with(this)
                 .load(url)

@@ -3,7 +3,7 @@ package me.proxer.app.util
 import android.view.View
 import com.rubengees.ktask.util.PartialTaskException
 import me.proxer.app.R
-import me.proxer.app.activity.MainActivity
+import me.proxer.app.activity.base.MainActivity
 import me.proxer.app.dialog.AgeConfirmationDialog
 import me.proxer.app.dialog.LoginDialog
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_DEFAULT

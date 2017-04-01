@@ -1,5 +1,6 @@
 package me.proxer.app.adapter.ucp
 
+import android.support.v4.view.ViewCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -57,6 +58,8 @@ class HistoryAdapter : PagingAdapter<UcpHistoryEntry>() {
         }
 
         override fun bind(item: UcpHistoryEntry) {
+            ViewCompat.setTransitionName(image, "history_${item.id}")
+
             title.text = item.name
             medium.text = item.medium.toAppString(medium.context)
             status.text = status.context.getString(R.string.fragment_history_entry_status, item.episode,

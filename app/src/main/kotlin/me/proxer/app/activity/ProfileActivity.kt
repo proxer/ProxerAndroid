@@ -2,44 +2,28 @@ package me.proxer.app.activity
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Build
-import android.os.Bundle
-import android.support.design.widget.AppBarLayout
-import android.support.design.widget.CollapsingToolbarLayout
-import android.support.design.widget.TabLayout
-import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import android.support.v4.content.ContextCompat
-import android.support.v4.view.ViewPager
-import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
-import android.widget.TextView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.resource.drawable.GlideDrawable
-import com.bumptech.glide.request.animation.GlideAnimation
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget
-import com.h6ah4i.android.tablayouthelper.TabLayoutHelper
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
+import me.proxer.app.activity.base.ImageTabsActivity
 import me.proxer.app.fragment.profile.ProfileFragment
 import me.proxer.app.fragment.profile.TopTenFragment
 import me.proxer.app.helper.StorageHelper
+import me.proxer.app.util.ActivityUtils
 import me.proxer.app.util.DeviceUtils
-import me.proxer.app.util.extension.bindView
 import me.proxer.library.util.ProxerUrls
-import org.jetbrains.anko.applyRecursively
 import org.jetbrains.anko.intentFor
 
 /**
  * @author Ruben Gees
  */
-class ProfileActivity : MainActivity() {
+class ProfileActivity : ImageTabsActivity() {
 
     companion object {
         private const val USER_ID_EXTRA = "user_id"
@@ -55,18 +39,11 @@ class ProfileActivity : MainActivity() {
                 return
             }
 
-            val intent = context.intentFor<ProfileActivity>(
+            context.intentFor<ProfileActivity>(
                     USER_ID_EXTRA to userId,
                     USERNAME_EXTRA to username,
                     IMAGE_ID_EXTRA to image
-            )
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !image.isNullOrBlank() && imageView != null) {
-                context.startActivity(intent, ActivityOptionsCompat
-                        .makeSceneTransitionAnimation(context, imageView, imageView.transitionName).toBundle())
-            } else {
-                context.startActivity(intent)
-            }
+            ).let { ActivityUtils.navigateToWithImageTransition(it, context, imageView) }
         }
     }
 
@@ -90,16 +67,17 @@ class ProfileActivity : MainActivity() {
     var image: String?
         get() = intent.getStringExtra(IMAGE_ID_EXTRA)
         set(value) {
-            val changed = intent.getStringExtra(IMAGE_ID_EXTRA) != value
-
             intent.putExtra(IMAGE_ID_EXTRA, value)
 
-            if (changed) {
-                loadImage()
-            }
+            loadImage()
         }
 
-    private val itemToDisplay: Int
+    override val sectionsPagerAdapter by lazy { SectionsPagerAdapter(supportFragmentManager) }
+
+    override val headerImageUrl
+        get() = if (image == null) null else ProxerUrls.userImage(image!!)
+
+    override val itemToDisplay: Int
         get() = when (intent.action) {
             Intent.ACTION_VIEW -> when (intent.data.pathSegments.getOrNull(2)) {
                 ANIME_SUB_SECTION -> 2
@@ -109,33 +87,10 @@ class ProfileActivity : MainActivity() {
             else -> 0
         }
 
-    private var sectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
-
-    private val toolbar: Toolbar by bindView(R.id.toolbar)
-    private val appbar: AppBarLayout by bindView(R.id.appbar)
-    private val collapsingToolbar: CollapsingToolbarLayout by bindView(R.id.collapsingToolbar)
-    private val viewPager: ViewPager by bindView(R.id.viewPager)
-    private val profileImage: ImageView by bindView(R.id.image)
-    private val tabs: TabLayout by bindView(R.id.tabs)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        setContentView(R.layout.activity_image_tabs)
-        setSupportActionBar(toolbar)
-        supportPostponeEnterTransition()
-
-        initViews()
-
-        if (savedInstanceState == null) {
-            viewPager.currentItem = itemToDisplay
-        }
-    }
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val user = StorageHelper.user
 
-        if (user == null || !user.name.equals(username, true)) {
+        if (user == null || (user.id != userId && !user.name.equals(username, true))) {
             menuInflater.inflate(R.menu.activity_profile, menu)
         }
 
@@ -153,76 +108,38 @@ class ProfileActivity : MainActivity() {
 //                        else -> ChatActivity.navigateTo(this, existingChat)
 //                    }
 //                }
+
+//                return true
             }
             R.id.new_group -> {
 //                if (username != null && image != null) {
 //                    NewChatActivity.navigateTo(this, Participant(username!!, image!!),
 //                            isGroup = true)
 //                }
-            }
-            android.R.id.home -> {
-                finish()
-
-                return true
+//
+//                return true
             }
         }
 
         return super.onOptionsItemSelected(item)
     }
 
-    private fun initViews() {
-        viewPager.adapter = sectionsPagerAdapter
+    override fun setupToolbar() {
+        super.setupToolbar()
 
         title = username
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        collapsingToolbar.isTitleEnabled = false
-
-        appbar.addOnOffsetChangedListener { _, verticalOffset ->
-            val shadowNeeded = collapsingToolbar.height + verticalOffset > collapsingToolbar.scrimVisibleHeightTrigger
-
-            listOf(tabs, toolbar).forEach {
-                it.applyRecursively {
-                    if (it is TextView) {
-                        when (shadowNeeded) {
-                            true -> it.setShadowLayer(3f, 0f, 0f, ContextCompat.getColor(this, android.R.color.black))
-                            false -> it.setShadowLayer(0f, 0f, 0f, 0)
-                        }
-                    }
-                }
-            }
-        }
-
-        TabLayoutHelper(tabs, viewPager).apply { isAutoAdjustTabModeEnabled = true }
-
-        profileImage.setOnClickListener {
-            if (!image.isNullOrBlank()) {
-                ImageDetailActivity.navigateTo(this@ProfileActivity, it as ImageView, ProxerUrls.userImage(image!!))
-            }
-        }
-
-        loadImage()
     }
 
-    private fun loadImage() {
-        if (image.isNullOrBlank()) {
-            profileImage.setImageDrawable(IconicsDrawable(profileImage.context)
+    override fun loadEmptyImage() {
+        // If the image is not null, it means the user has none set. If it is null, it means we just have'nt loaded it
+        // yet.
+        if (image != null) {
+            headerImage.setImageDrawable(IconicsDrawable(headerImage.context)
                     .icon(CommunityMaterial.Icon.cmd_account)
                     .sizeDp((DeviceUtils.getScreenWidth(this) * 0.75).toInt())
                     .paddingDp(32)
                     .backgroundColorRes(R.color.colorPrimaryLight)
                     .colorRes(R.color.colorPrimary))
-        } else {
-            Glide.with(this)
-                    .load(ProxerUrls.userImage(image!!).toString())
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .into(object : GlideDrawableImageViewTarget(profileImage) {
-                        override fun onResourceReady(resource: GlideDrawable?,
-                                                     animation: GlideAnimation<in GlideDrawable>?) {
-                            super.onResourceReady(resource, animation)
-
-                            supportStartPostponedEnterTransition()
-                        }
-                    })
         }
     }
 

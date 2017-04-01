@@ -11,7 +11,7 @@ import com.rubengees.ktask.android.bindToLifecycle
 import com.rubengees.ktask.base.Task
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
-import me.proxer.app.activity.MainActivity
+import me.proxer.app.activity.base.MainActivity
 import me.proxer.app.event.AgeConfirmationEvent
 import me.proxer.app.event.LoginEvent
 import me.proxer.app.event.LogoutEvent

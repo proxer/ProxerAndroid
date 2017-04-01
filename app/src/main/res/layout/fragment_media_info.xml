@@ -27,7 +27,8 @@
                 android:paddingBottom="@dimen/screen_vertical_margin"
                 android:paddingLeft="@dimen/screen_horizontal_margin"
                 android:paddingRight="@dimen/screen_horizontal_margin"
-                android:paddingTop="@dimen/screen_vertical_margin">
+                android:paddingTop="@dimen/screen_vertical_margin"
+                android:visibility="gone">
 
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"

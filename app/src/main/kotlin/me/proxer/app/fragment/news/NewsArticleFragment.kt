@@ -45,7 +45,7 @@ class NewsArticleFragment : PagedLoadingFragment<ProxerCall<List<NewsArticle>>, 
 
             override fun onNewsArticleImageClick(view: ImageView, item: NewsArticle) {
                 if (view.drawable != null) {
-                    ImageDetailActivity.navigateTo(activity, view, ProxerUrls.newsImage(item.id, item.image))
+                    ImageDetailActivity.navigateTo(activity, ProxerUrls.newsImage(item.id, item.image), view)
                 }
             }
 

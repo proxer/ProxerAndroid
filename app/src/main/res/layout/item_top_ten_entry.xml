@@ -26,7 +26,6 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:scaleType="centerCrop"
-                android:transitionName="image"
                 app:aspect="1.25"
                 tools:ignore="UnusedAttribute" />
 

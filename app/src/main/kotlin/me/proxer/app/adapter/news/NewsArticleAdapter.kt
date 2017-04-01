@@ -94,6 +94,8 @@ class NewsArticleAdapter : PagingAdapter<NewsArticle>() {
         }
 
         override fun bind(item: NewsArticle) {
+            ViewCompat.setTransitionName(image, "news_${item.id}")
+
             title.text = item.subject
             description.text = item.description.trim()
             category.text = item.category

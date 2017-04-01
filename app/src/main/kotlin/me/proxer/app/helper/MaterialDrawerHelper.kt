@@ -25,8 +25,8 @@ import org.jetbrains.anko.find
  * @author Ruben Gees
  */
 class MaterialDrawerHelper(context: Activity, toolbar: Toolbar, savedInstanceState: Bundle?,
-                           private val itemClickCallback: (id: DrawerItem) -> Boolean = { false },
-                           private val accountClickCallback: (id: AccountItem) -> Boolean = { false }) {
+                           private val itemClickCallback: (id: DrawerItem) -> Boolean,
+                           private val accountClickCallback: (view: View, id: AccountItem) -> Boolean) {
 
     companion object {
         private const val DRAWER_SIZE: Float = 300f
@@ -37,8 +37,8 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar, savedInstanceSta
     private val header: AccountHeader
     private val drawer: Drawer
 
-    private var miniDrawer: MiniDrawer?
-    private var crossfader: Crossfader<*>?
+    private var miniDrawer: MiniDrawer? = null
+    private var crossfader: Crossfader<*>? = null
 
     private var currentItem: DrawerItem? = null
 
@@ -46,9 +46,10 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar, savedInstanceSta
         header = buildAccountHeader(context, savedInstanceState)
         drawer = buildDrawer(context, toolbar, header, savedInstanceState)
 
-        val tabletDrawer = buildTabletDrawer(context, drawer, savedInstanceState)
-        miniDrawer = tabletDrawer.first
-        crossfader = tabletDrawer.second
+        buildTabletDrawer(context, drawer, savedInstanceState).let {
+            miniDrawer = it.first
+            crossfader = it.second
+        }
 
         currentItem = DrawerItem.fromOrNull(savedInstanceState?.getLong(CURRENT_DRAWER_ID_STATE))
     }
@@ -99,9 +100,9 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar, savedInstanceSta
     }
 
     fun refreshHeader(context: Activity) {
-        header.profiles = generateAccountItems(context)
-        drawer.recyclerView.adapter.notifyDataSetChanged()
-        miniDrawer?.createItems()
+//        header.profiles = generateAccountItems(context)
+//        drawer.recyclerView.adapter.notifyDataSetChanged()
+//        miniDrawer?.createItems()
     }
 
     private fun buildAccountHeader(context: Activity, savedInstanceState: Bundle?): AccountHeader {
@@ -296,8 +297,8 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar, savedInstanceSta
     }
 
     @Suppress("UNUSED_PARAMETER")
-    private fun onAccountItemClick(view: View?, profile: IProfile<*>, current: Boolean): Boolean {
-        return accountClickCallback.invoke(AccountItem.fromOrDefault(profile.identifier))
+    private fun onAccountItemClick(view: View, profile: IProfile<*>, current: Boolean): Boolean {
+        return accountClickCallback.invoke(view, AccountItem.fromOrDefault(profile.identifier))
     }
 
     enum class DrawerItem(val id: Long) {

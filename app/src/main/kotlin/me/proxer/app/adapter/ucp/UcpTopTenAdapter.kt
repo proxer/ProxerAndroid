@@ -1,5 +1,6 @@
 package me.proxer.app.adapter.ucp
 
+import android.support.v4.view.ViewCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -68,6 +69,8 @@ class UcpTopTenAdapter : PagingAdapter<UcpTopTenEntry>() {
         }
 
         override fun bind(item: UcpTopTenEntry) {
+            ViewCompat.setTransitionName(image, "ucp_top_ten_${item.id}")
+
             title.text = item.name
 
             Glide.with(image.context)

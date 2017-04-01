@@ -1,5 +1,6 @@
 package me.proxer.app.adapter.media
 
+import android.support.v4.view.ViewCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -59,6 +60,8 @@ class MediaAdapter(private val category: Category) : PagingAdapter<MediaListEntr
         }
 
         override fun bind(item: MediaListEntry) {
+            ViewCompat.setTransitionName(image, "media_${item.id}")
+
             title.text = item.name
             medium.text = item.medium.toAppString(medium.context)
             episodes.text = episodes.resources.getQuantityString(when (category) {

@@ -2,39 +2,27 @@ package me.proxer.app.activity
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Build
-import android.os.Bundle
-import android.support.design.widget.AppBarLayout
-import android.support.design.widget.CollapsingToolbarLayout
-import android.support.design.widget.TabLayout
-import android.support.v4.app.*
-import android.support.v4.content.ContextCompat
-import android.support.v4.view.ViewPager
-import android.support.v7.widget.Toolbar
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
+import android.support.v4.app.FragmentPagerAdapter
+import android.support.v4.app.ShareCompat
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
-import android.widget.TextView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.resource.drawable.GlideDrawable
-import com.bumptech.glide.request.animation.GlideAnimation
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget
-import com.h6ah4i.android.tablayouthelper.TabLayoutHelper
 import me.proxer.app.R
+import me.proxer.app.activity.base.ImageTabsActivity
 import me.proxer.app.fragment.media.EpisodesFragment
 import me.proxer.app.fragment.media.MediaInfoFragment
-import me.proxer.app.util.extension.bindView
+import me.proxer.app.util.ActivityUtils
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.library.enums.Category
 import me.proxer.library.util.ProxerUrls
-import org.jetbrains.anko.applyRecursively
 import org.jetbrains.anko.intentFor
 
 /**
  * @author Ruben Gees
  */
-class MediaActivity : MainActivity() {
+class MediaActivity : ImageTabsActivity() {
 
     companion object {
         private const val ID_EXTRA = "id"
@@ -47,18 +35,11 @@ class MediaActivity : MainActivity() {
 
         fun navigateTo(context: Activity, id: String, name: String? = null, category: Category = Category.ANIME,
                        imageView: ImageView? = null) {
-            val intent = context.intentFor<MediaActivity>(
+            context.intentFor<MediaActivity>(
                     ID_EXTRA to id,
                     NAME_EXTRA to name,
                     CATEGORY_EXTRA to category
-            )
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && imageView != null) {
-                context.startActivity(intent, ActivityOptionsCompat
-                        .makeSceneTransitionAnimation(context, imageView, imageView.transitionName).toBundle())
-            } else {
-                context.startActivity(intent)
-            }
+            ).let { ActivityUtils.navigateToWithImageTransition(it, context, imageView) }
         }
     }
 
@@ -84,7 +65,10 @@ class MediaActivity : MainActivity() {
             sectionsPagerAdapter.updateEpisodesTitle(value)
         }
 
-    private val itemToDisplay: Int
+    override val headerImageUrl by lazy { ProxerUrls.entryImage(id) }
+    override val sectionsPagerAdapter by lazy { SectionsPagerAdapter(supportFragmentManager) }
+
+    override val itemToDisplay: Int
         get() = when (intent.action) {
             Intent.ACTION_VIEW -> when (intent.data.pathSegments.getOrNull(2)) {
                 COMMENTS_SUB_SECTION -> 1
@@ -94,30 +78,6 @@ class MediaActivity : MainActivity() {
             }
             else -> 0
         }
-
-    private var sectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
-
-    private val toolbar: Toolbar by bindView(R.id.toolbar)
-    private val appbar: AppBarLayout by bindView(R.id.appbar)
-    private val collapsingToolbar: CollapsingToolbarLayout by bindView(R.id.collapsingToolbar)
-    private val viewPager: ViewPager by bindView(R.id.viewPager)
-    private val coverImage: ImageView by bindView(R.id.image)
-    private val tabs: TabLayout by bindView(R.id.tabs)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        setContentView(R.layout.activity_image_tabs)
-        setSupportActionBar(toolbar)
-        supportPostponeEnterTransition()
-
-        setupToolbar()
-        setupImage()
-
-        if (savedInstanceState == null) {
-            viewPager.currentItem = itemToDisplay
-        }
-    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.activity_media, menu)
@@ -137,60 +97,15 @@ class MediaActivity : MainActivity() {
 
                 return true
             }
-            android.R.id.home -> {
-                finish()
-
-                return true
-            }
         }
 
         return super.onOptionsItemSelected(item)
     }
 
-    private fun setupImage() {
-        coverImage.setOnClickListener {
-            if (coverImage.drawable != null) {
-                ImageDetailActivity.navigateTo(this@MediaActivity, it as ImageView, ProxerUrls.entryImage(id))
-            }
-        }
-
-        Glide.with(this)
-                .load(ProxerUrls.entryImage(id).toString())
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .into(object : GlideDrawableImageViewTarget(coverImage) {
-                    override fun onResourceReady(resource: GlideDrawable?,
-                                                 animation: GlideAnimation<in GlideDrawable>?) {
-                        super.onResourceReady(resource, animation)
-
-                        supportStartPostponedEnterTransition()
-                    }
-                })
-    }
-
-    private fun setupToolbar() {
-        viewPager.adapter = sectionsPagerAdapter
+    override fun setupToolbar() {
+        super.setupToolbar()
 
         title = name
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        collapsingToolbar.isTitleEnabled = false
-
-        appbar.addOnOffsetChangedListener { _, verticalOffset ->
-            val shadowNeeded = collapsingToolbar.height + verticalOffset >
-                    collapsingToolbar.scrimVisibleHeightTrigger
-
-            listOf(tabs, toolbar).forEach {
-                it.applyRecursively {
-                    if (it is TextView) {
-                        when (shadowNeeded) {
-                            true -> it.setShadowLayer(3f, 0f, 0f, ContextCompat.getColor(this, android.R.color.black))
-                            false -> it.setShadowLayer(0f, 0f, 0f, 0)
-                        }
-                    }
-                }
-            }
-        }
-
-        TabLayoutHelper(tabs, viewPager).apply { isAutoAdjustTabModeEnabled = true }
     }
 
     inner class SectionsPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {

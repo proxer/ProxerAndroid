@@ -1,4 +1,4 @@
-package me.proxer.app.activity
+package me.proxer.app.activity.base
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity

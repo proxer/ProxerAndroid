@@ -14,7 +14,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.rubengees.ktask.android.bindToLifecycle
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
-import me.proxer.app.activity.MainActivity
+import me.proxer.app.activity.base.MainActivity
 import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.dialog.base.MainDialog
 import me.proxer.app.entity.LocalUser
@@ -23,7 +23,7 @@ import me.proxer.app.helper.StorageHelper
 import me.proxer.app.task.asyncProxerTask
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.extension.bindView
-import me.proxer.app.util.listener.OnTextListener
+import me.proxer.app.util.listener.TextWatcherWrapper
 import me.proxer.library.entitiy.user.User
 import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.longToast
@@ -102,13 +102,13 @@ class LoginDialog : MainDialog() {
             false
         })
 
-        username.addTextChangedListener(object : OnTextListener() {
+        username.addTextChangedListener(object : TextWatcherWrapper {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 resetError(usernameContainer)
             }
         })
 
-        password.addTextChangedListener(object : OnTextListener() {
+        password.addTextChangedListener(object : TextWatcherWrapper {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 resetError(passwordContainer)
             }

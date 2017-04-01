@@ -4,11 +4,15 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.view.ViewCompat
 import android.support.v7.widget.Toolbar
+import android.view.View
+import android.widget.ImageView
 import com.rubengees.introduction.IntroductionActivity.OPTION_RESULT
 import com.rubengees.introduction.IntroductionBuilder
 import com.rubengees.introduction.entity.Option
 import me.proxer.app.R
+import me.proxer.app.activity.base.MainActivity
 import me.proxer.app.dialog.LoginDialog
 import me.proxer.app.dialog.LogoutDialog
 import me.proxer.app.event.LogoutEvent
@@ -58,7 +62,7 @@ class DashboardActivity : MainActivity() {
         setSupportActionBar(toolbar)
 
         drawer = MaterialDrawerHelper(this, toolbar, savedInstanceState,
-                { onDrawerItemClick(it) }, { onAccountItemClick(it) })
+                { onDrawerItemClick(it) }, { view, item -> onAccountItemClick(view, item) })
 
         displayFirstPage(savedInstanceState)
     }
@@ -213,7 +217,7 @@ class DashboardActivity : MainActivity() {
         }
     }
 
-    private fun onAccountItemClick(item: AccountItem): Boolean {
+    private fun onAccountItemClick(view: View, item: AccountItem): Boolean {
         when (item) {
             AccountItem.GUEST -> {
                 LoginDialog.show(this)
@@ -235,10 +239,17 @@ class DashboardActivity : MainActivity() {
 
             AccountItem.USER -> {
                 StorageHelper.user?.let {
-                    ProfileActivity.navigateTo(this, it.id, it.name, it.image)
+                    val viewToUse = when (view) {
+                        is ImageView -> view.apply { ViewCompat.setTransitionName(this, "profile_image") }
+                        else -> null
+                    }
+
+                    ProfileActivity.navigateTo(this, it.id, it.name, it.image, viewToUse)
+
+                    return viewToUse != null
                 }
 
-                return true
+                return false
             }
 
             AccountItem.UCP -> {

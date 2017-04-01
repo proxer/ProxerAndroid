@@ -9,7 +9,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.rubengees.ktask.android.bindToLifecycle
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
-import me.proxer.app.activity.MainActivity
+import me.proxer.app.activity.base.MainActivity
 import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.dialog.base.MainDialog
 import me.proxer.app.event.UserChangedEvent

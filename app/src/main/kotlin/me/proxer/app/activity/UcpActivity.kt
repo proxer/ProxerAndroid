@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import com.h6ah4i.android.tablayouthelper.TabLayoutHelper
 import me.proxer.app.R
+import me.proxer.app.activity.base.MainActivity
 import me.proxer.app.fragment.ucp.HistoryFragment
 import me.proxer.app.fragment.ucp.UcpOverviewFragment
 import me.proxer.app.fragment.ucp.UcpTopTenFragment

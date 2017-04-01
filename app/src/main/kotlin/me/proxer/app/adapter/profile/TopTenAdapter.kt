@@ -1,5 +1,6 @@
 package me.proxer.app.adapter.profile
 
+import android.support.v4.view.ViewCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,6 +49,8 @@ class TopTenAdapter : PagingAdapter<TopTenEntry>() {
         }
 
         override fun bind(item: TopTenEntry) {
+            ViewCompat.setTransitionName(image, "top_ten_${item.id}")
+
             title.text = item.name
 
             Glide.with(image.context)
