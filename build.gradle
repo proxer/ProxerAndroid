@@ -6,10 +6,10 @@ ext {
     minSdkVersion = 16
     targetSdkVersion = 25
     compileSdkVersion = 25
-    buildToolsVersion = '25.0.2'
+    buildToolsVersion = '26-rc1'
 
     // Frameworks and code only libraries
-    kotlinVersion = '1.1.1'
+    kotlinVersion = '1.1.2-eap-44'
     ankoVersion = '0.10.0-beta-2'
     ankoSqliteVersion = '0.9.1a'
     supportLibraryVersion = '25.3.1'
@@ -20,8 +20,8 @@ ext {
     ktaskVersion = '0.2.8'
 
     // UI components
-    aboutLibrariesVersion = '5.9.4'
-    materialDrawerVersion = '5.8.3'
+    aboutLibrariesVersion = '5.9.5'
+    materialDrawerVersion = '5.9.0'
     iconicsVersion = '2.8.2'
     communityMaterialTypefaceVersion = '1.8.36.1'
     crossfaderVersion = '1.5.0'
@@ -106,11 +106,12 @@ ext {
 buildscript {
     repositories {
         jcenter()
+        maven { url "https://dl.bintray.com/kotlin/kotlin-eap-1.1" }
     }
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.1.1"
-        classpath 'com.android.tools.build:gradle:2.3.0'
+        classpath 'com.android.tools.build:gradle:2.4.0-alpha5'
     }
 }
 
@@ -120,6 +121,7 @@ allprojects {
         jcenter()
         maven { url "https://jitpack.io" }
         maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+        maven { url "https://dl.bintray.com/kotlin/kotlin-eap-1.1" }
     }
 }
 

@@ -109,6 +109,7 @@ class AboutFragment : MaterialAboutFragment() {
                                 .colorRes(R.color.icon))
                         .setOnClickListener {
                             LibsBuilder().withAutoDetect(false)
+                                    .withShowLoadingProgress(false)
                                     .withAboutVersionShown(false)
                                     .withAboutIconShown(false)
                                     .withAboutDescription(getString(R.string.about_info_licenses_activity_description))
