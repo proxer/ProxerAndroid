@@ -35,7 +35,7 @@ class BookmarkAdapter : PagingAdapter<Bookmark>() {
     override fun getItemId(position: Int) = internalList[position].id.toLong()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagingViewHolder<Bookmark> {
-        return ReminderViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_bookmark, parent, false))
+        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_bookmark, parent, false))
     }
 
     override fun destroy() {
@@ -52,7 +52,7 @@ class BookmarkAdapter : PagingAdapter<Bookmark>() {
         return oldItem.id == newItem.id
     }
 
-    inner class ReminderViewHolder(itemView: View) : PagingViewHolder<Bookmark>(itemView) {
+    inner class ViewHolder(itemView: View) : PagingViewHolder<Bookmark>(itemView) {
 
         private val title: TextView by bindView(R.id.title)
         private val medium: TextView by bindView(R.id.medium)

@@ -17,11 +17,11 @@ ext {
     eventBusVersion = '3.0.0'
     eventBusAnnotationVersion = '3.0.1'
     proxerLibVersion = 'new-architecture-SNAPSHOT'
-    ktaskVersion = '0.2.4'
+    ktaskVersion = '0.2.8'
 
     // UI components
     aboutLibrariesVersion = '5.9.4'
-    materialDrawerVersion = '5.8.2'
+    materialDrawerVersion = '5.8.3'
     iconicsVersion = '2.8.2'
     communityMaterialTypefaceVersion = '1.8.36.1'
     crossfaderVersion = '1.5.0'
@@ -110,7 +110,7 @@ buildscript {
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.1.1"
-        classpath 'com.android.tools.build:gradle:2.4.0-alpha3'
+        classpath 'com.android.tools.build:gradle:2.3.0'
     }
 }
 

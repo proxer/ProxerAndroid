@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
+import me.proxer.app.activity.AnimeActivity
 import me.proxer.app.activity.MediaActivity
 import me.proxer.app.adapter.media.EpisodeAdapter
 import me.proxer.app.application.MainApplication.Companion.api
@@ -16,6 +17,7 @@ import me.proxer.app.fragment.base.LoadingFragment
 import me.proxer.app.task.asyncProxerTask
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.extension.bindView
+import me.proxer.app.util.extension.toAnimeLanguage
 import me.proxer.library.api.ProxerCall
 import me.proxer.library.entitiy.info.EpisodeInfo
 import me.proxer.library.enums.Category
@@ -23,8 +25,6 @@ import me.proxer.library.enums.MediaLanguage
 import org.jetbrains.anko.bundleOf
 
 /**
- * TODO: Describe class
- *
  * @author Ruben Gees
  */
 class EpisodesFragment : LoadingFragment<ProxerCall<EpisodeInfo>, List<EpisodeRow>>() {
@@ -60,12 +60,11 @@ class EpisodesFragment : LoadingFragment<ProxerCall<EpisodeInfo>, List<EpisodeRo
             override fun onLanguageClick(language: MediaLanguage, episode: EpisodeRow) {
                 when (episode.category) {
                     Category.ANIME -> {
-//                        AnimeActivity.navigateTo(activity, id, episode.number, language,
-//                                name, episode.totalEpisodes)
+                        AnimeActivity.navigateTo(activity, id, episode.number, language.toAnimeLanguage(), name,
+                                episode.totalEpisodes)
                     }
                     Category.MANGA -> {
-//                        MangaActivity.navigateTo(activity, id, episode.number, language,
-//                                name, episode.totalEpisodes)
+//                        MangaActivity.navigateTo(activity, id, episode.number, language, name, episode.episodeAmount)
                     }
                 }
             }

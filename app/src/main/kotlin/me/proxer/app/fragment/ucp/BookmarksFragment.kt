@@ -9,6 +9,7 @@ import com.rubengees.ktask.android.AndroidLifecycleTask
 import com.rubengees.ktask.android.bindToLifecycle
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
+import me.proxer.app.activity.AnimeActivity
 import me.proxer.app.activity.base.MainActivity
 import me.proxer.app.adapter.ucp.BookmarkAdapter
 import me.proxer.app.application.MainApplication.Companion.api
@@ -17,6 +18,7 @@ import me.proxer.app.task.asyncProxerTask
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
 import me.proxer.app.util.extension.multilineSnackbar
+import me.proxer.app.util.extension.toAnimeLanguage
 import me.proxer.library.api.ProxerCall
 import me.proxer.library.entitiy.ucp.Bookmark
 import me.proxer.library.enums.Category
@@ -60,7 +62,7 @@ class BookmarksFragment : PagedLoadingFragment<ProxerCall<List<Bookmark>>, Bookm
                 .validateBefore {
                     Validators.validateLogin()
                 }
-                .bindToLifecycle(this, "${javaClass}RemovalTask")
+                .bindToLifecycle(this, "${javaClass}_removal_task")
                 .onSuccess {
                     innerAdapter.remove(removalQueue.first())
                     removalQueue.remove(removalQueue.first())
@@ -81,12 +83,14 @@ class BookmarksFragment : PagedLoadingFragment<ProxerCall<List<Bookmark>>, Bookm
 
         innerAdapter.callback = object : BookmarkAdapter.BookmarkAdapterCallback {
             override fun onBookmarkClick(item: Bookmark) {
-//                when (item.category) {
-//                    Category.ANIME -> AnimeActivity.navigateTo(activity, item.entryId,
-//                            item.episode, item.language)
-//                    Category.MANGA -> MangaActivity.navigateTo(activity, item.entryId,
-//                            item.episode, item.language)
-//                }
+                when (item.category) {
+                    Category.ANIME -> AnimeActivity.navigateTo(activity, item.entryId,
+                            item.episode, item.language.toAnimeLanguage())
+                    Category.MANGA -> {
+//                        MangaActivity.navigateTo(activity, item.entryId,
+//                                item.episode, item.language)
+                    }
+                }
             }
 
             override fun onBookmarkRemoval(item: Bookmark) {

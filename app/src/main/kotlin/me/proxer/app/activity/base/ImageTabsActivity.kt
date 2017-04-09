@@ -8,6 +8,7 @@ import android.support.design.widget.CollapsingToolbarLayout
 import android.support.design.widget.TabLayout
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.PagerAdapter
+import android.support.v4.view.ViewCompat
 import android.support.v4.view.ViewPager
 import android.support.v7.widget.Toolbar
 import android.transition.Transition
@@ -112,6 +113,10 @@ abstract class ImageTabsActivity : MainActivity() {
             val safeHeaderImageUrl = headerImageUrl
 
             if (headerImage.drawable != null && safeHeaderImageUrl != null) {
+                if (ViewCompat.getTransitionName(it) == null) {
+                    ViewCompat.setTransitionName(it, "header")
+                }
+
                 ImageDetailActivity.navigateTo(this@ImageTabsActivity, safeHeaderImageUrl, it as ImageView)
             }
         }

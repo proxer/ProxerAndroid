@@ -17,8 +17,6 @@ import me.proxer.library.entitiy.ucp.UcpHistoryEntry
 import me.proxer.library.util.ProxerUrls
 
 /**
- * TODO: Describe class
- *
  * @author Ruben Gees
  */
 class HistoryAdapter : PagingAdapter<UcpHistoryEntry>() {
@@ -32,8 +30,7 @@ class HistoryAdapter : PagingAdapter<UcpHistoryEntry>() {
     override fun getItemId(position: Int) = list[position].id.toLong()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagingViewHolder<UcpHistoryEntry> {
-        return HistoryViewHolder(LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_history_entry, parent, false))
+        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_history_entry, parent, false))
     }
 
     override fun destroy() {
@@ -42,7 +39,7 @@ class HistoryAdapter : PagingAdapter<UcpHistoryEntry>() {
         callback = null
     }
 
-    inner class HistoryViewHolder(itemView: View) : PagingViewHolder<UcpHistoryEntry>(itemView) {
+    inner class ViewHolder(itemView: View) : PagingViewHolder<UcpHistoryEntry>(itemView) {
 
         private val title: TextView by bindView(R.id.title)
         private val medium: TextView by bindView(R.id.medium)

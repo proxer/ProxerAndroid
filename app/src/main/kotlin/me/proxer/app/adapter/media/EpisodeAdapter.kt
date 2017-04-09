@@ -108,7 +108,7 @@ class EpisodeAdapter : PagingAdapter<EpisodeRow>() {
 
                 languageContainer.setOnClickListener {
                     withSafeAdapterPosition {
-                        callback?.onLanguageClick(language, list[index])
+                        callback?.onLanguageClick(language, list[it])
                     }
                 }
 

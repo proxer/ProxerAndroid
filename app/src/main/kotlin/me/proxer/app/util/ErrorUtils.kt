@@ -6,6 +6,7 @@ import me.proxer.app.R
 import me.proxer.app.activity.base.MainActivity
 import me.proxer.app.dialog.AgeConfirmationDialog
 import me.proxer.app.dialog.LoginDialog
+import me.proxer.app.task.stream.StreamResolutionTask
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_DEFAULT
 import me.proxer.library.api.ProxerException
 import me.proxer.library.api.ProxerException.ErrorType.*
@@ -123,12 +124,12 @@ object ErrorUtils {
 //            is ChatService.ChatException -> {
 //                handle(context, error.innerException)
 //            }
-//            is StreamResolutionTask.NoResolverException -> {
-//                ErrorAction(R.string.error_unsupported_hoster)
-//            }
-//            is StreamResolutionTask.StreamResolutionException -> {
-//                ErrorAction(R.string.error_stream_resolution)
-//            }
+            is StreamResolutionTask.NoResolverException -> {
+                ErrorAction(R.string.error_unsupported_hoster)
+            }
+            is StreamResolutionTask.StreamResolutionException -> {
+                ErrorAction(R.string.error_stream_resolution)
+            }
 //            is HttpDataSource.InvalidResponseCodeException -> {
 //                ErrorAction(when (error.responseCode) {
 //                    404 -> R.string.error_video_deleted

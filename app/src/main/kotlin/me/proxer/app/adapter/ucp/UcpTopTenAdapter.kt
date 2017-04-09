@@ -32,8 +32,7 @@ class UcpTopTenAdapter : PagingAdapter<UcpTopTenEntry>() {
     override fun getItemId(position: Int) = internalList[position].id.toLong()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagingViewHolder<UcpTopTenEntry> {
-        return ReminderViewHolder(LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_ucp_top_ten_entry, parent, false))
+        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_ucp_top_ten_entry, parent, false))
     }
 
     override fun destroy() {
@@ -42,7 +41,7 @@ class UcpTopTenAdapter : PagingAdapter<UcpTopTenEntry>() {
         callback = null
     }
 
-    inner class ReminderViewHolder(itemView: View) : PagingViewHolder<UcpTopTenEntry>(itemView) {
+    inner class ViewHolder(itemView: View) : PagingViewHolder<UcpTopTenEntry>(itemView) {
 
         private val title: TextView by bindView(R.id.title)
         private val image: ImageView by bindView(R.id.image)

@@ -62,7 +62,7 @@ class UcpTopTenFragment : LoadingFragment<ProxerCall<List<UcpTopTenEntry>>, List
                 .validateBefore {
                     Validators.validateLogin()
                 }
-                .bindToLifecycle(this, "${javaClass}RemovalTask")
+                .bindToLifecycle(this, "${javaClass}_removal_task")
                 .onSuccess {
                     removalQueue.first().let {
                         when (it.category) {

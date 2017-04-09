@@ -31,9 +31,9 @@
     </shortcut>
     <shortcut
         android:enabled="true"
-        android:icon="@drawable/ic_shortcut_reminder"
+        android:icon="@drawable/ic_shortcut_bookmarks"
         android:shortcutDisabledMessage="@string/shortcut_disabled_message"
-        android:shortcutId="reminder"
+        android:shortcutId="bookmarks"
         android:shortcutLongLabel="@string/section_bookmarks"
         android:shortcutShortLabel="@string/section_bookmarks">
         <intent

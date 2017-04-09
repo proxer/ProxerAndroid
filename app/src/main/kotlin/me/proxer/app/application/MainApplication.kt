@@ -50,7 +50,7 @@ import java.lang.reflect.Type
 class MainApplication : Application() {
 
     companion object {
-        private const val USER_AGENT = "ProxerAndroid/${BuildConfig.VERSION_NAME}"
+        const val USER_AGENT = "ProxerAndroid/${BuildConfig.VERSION_NAME}"
 
         val moshi: Moshi
             get() = api.moshi()

@@ -15,7 +15,7 @@ import java.util.*
 object TimeUtils {
 
     fun convertToRelativeReadableTime(context: Context, date: Date): String {
-        val dateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(date.time), ZoneId.systemDefault())
+        val dateTime = convertToDateTime(date)
         val now = LocalDateTime.now()
 
         val period = Period.between(dateTime.toLocalDate(), now.toLocalDate())
@@ -50,5 +50,9 @@ object TimeUtils {
             return context.resources.getQuantityString(R.plurals.time_years_ago,
                     period.years, period.years)
         }
+    }
+
+    fun convertToDateTime(date: Date): LocalDateTime {
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(date.time), ZoneId.systemDefault())
     }
 }

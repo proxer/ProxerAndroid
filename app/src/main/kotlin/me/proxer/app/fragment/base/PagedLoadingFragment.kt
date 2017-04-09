@@ -51,7 +51,7 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
 
         refreshTask = TaskBuilder.task(constructRefreshTask())
                 .validateBefore { validateRefresh() }
-                .bindToLifecycle(this, "${javaClass.simpleName}refresh")
+                .bindToLifecycle(this, "${javaClass.simpleName}_refresh_task")
                 .onInnerStart {
                     hideError()
                     hideContent()
@@ -161,6 +161,7 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
             false -> ViewGroup.LayoutParams.WRAP_CONTENT
         }
 
+        errorContainer.visibility = View.VISIBLE
         adapter.footer = errorContainer
 
         updateListPadding()

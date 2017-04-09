@@ -19,6 +19,7 @@ import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.LinkBuilder
 import me.proxer.app.R
 import me.proxer.app.util.extension.androidUri
+import me.proxer.library.api.ProxerException
 import okhttp3.HttpUrl
 import java.util.regex.Pattern
 
@@ -83,6 +84,13 @@ object Utils {
         }
 
         return result
+    }
+
+    fun parseAndFixUrl(url: String): HttpUrl {
+        return HttpUrl.parse(when {
+            url.startsWith("//") -> "http://$url"
+            else -> url
+        }) ?: throw ProxerException(ProxerException.ErrorType.PARSING)
     }
 
     fun setClipboardContent(activity: Activity, label: String, content: String) {

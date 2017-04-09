@@ -3,8 +3,6 @@ package me.proxer.app.util.listener
 import android.transition.Transition
 
 /**
- * TODO: Describe class
- *
  * @author Ruben Gees
  */
 interface TransitionListenerWrapper : Transition.TransitionListener {

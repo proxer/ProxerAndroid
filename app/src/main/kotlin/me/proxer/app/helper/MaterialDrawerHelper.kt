@@ -20,6 +20,7 @@ import me.proxer.app.util.CrossfadeWrapper
 import me.proxer.app.util.DeviceUtils
 import me.proxer.library.util.ProxerUrls
 import org.jetbrains.anko.find
+import java.util.*
 
 /**
  * @author Ruben Gees
@@ -100,9 +101,9 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar, savedInstanceSta
     }
 
     fun refreshHeader(context: Activity) {
-//        header.profiles = generateAccountItems(context)
-//        drawer.recyclerView.adapter.notifyDataSetChanged()
-//        miniDrawer?.createItems()
+        header.profiles = generateAccountItems(context)
+        drawer.recyclerView.adapter.notifyDataSetChanged()
+        miniDrawer?.createItems()
     }
 
     private fun buildAccountHeader(context: Activity, savedInstanceState: Bundle?): AccountHeader {

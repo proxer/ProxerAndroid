@@ -113,12 +113,12 @@ class MediaInfoFragment : LoadingFragment<ProxerCall<Entry>, Entry>() {
                 .validateBefore { Validators.validateLogin() }
                 .bindToLifecycle(this)
                 .onSuccess {
-                    snackbar(root, R.string.fragment_media_info_set_user_info_success)
+                    snackbar(root, R.string.fragment_set_user_info_success)
                 }
                 .onError {
                     ErrorUtils.handle(context as MainActivity, it).let {
                         multilineSnackbar(root,
-                                getString(R.string.fragment_media_info_set_user_info_error, getString(it.message)),
+                                getString(R.string.fragment_set_user_info_error, getString(it.message)),
                                 Snackbar.LENGTH_LONG, it.buttonMessage, it.buttonAction)
                     }
                 }

@@ -80,7 +80,7 @@ class MediaActivity : ImageTabsActivity() {
         }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.activity_media, menu)
+        menuInflater.inflate(R.menu.activity_share, menu)
 
         return super.onCreateOptionsMenu(menu)
     }

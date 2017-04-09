@@ -28,6 +28,26 @@ fun MediaLanguage.toGeneralLanguage(): Language {
     }
 }
 
+fun MediaLanguage.toAnimeLanguage(): AnimeLanguage {
+    return when (this) {
+        MediaLanguage.GERMAN -> AnimeLanguage.GERMAN_SUB
+        MediaLanguage.ENGLISH -> AnimeLanguage.ENGLISH_SUB
+        MediaLanguage.GERMAN_SUB -> AnimeLanguage.GERMAN_SUB
+        MediaLanguage.GERMAN_DUB -> AnimeLanguage.GERMAN_DUB
+        MediaLanguage.ENGLISH_SUB -> AnimeLanguage.ENGLISH_SUB
+        MediaLanguage.ENGLISH_DUB -> AnimeLanguage.ENGLISH_DUB
+    }
+}
+
+fun AnimeLanguage.toMediaLanguage(): MediaLanguage {
+    return when (this) {
+        AnimeLanguage.GERMAN_SUB -> MediaLanguage.GERMAN_SUB
+        AnimeLanguage.GERMAN_DUB -> MediaLanguage.GERMAN_DUB
+        AnimeLanguage.ENGLISH_SUB -> MediaLanguage.ENGLISH_SUB
+        AnimeLanguage.ENGLISH_DUB -> MediaLanguage.ENGLISH_DUB
+    }
+}
+
 fun Language.toAppDrawable(context: Context): Drawable {
     return when (this) {
         Language.GERMAN -> AppCompatResources.getDrawable(context, R.drawable.ic_germany)

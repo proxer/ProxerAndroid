@@ -7,8 +7,6 @@ import me.proxer.library.enums.Category
 import me.proxer.library.enums.MediaLanguage
 
 /**
- * TODO: Describe class
- *
  * @author Ruben Gees
  */
 class EpisodeRow(val category: Category, val userProgress: Int, val totalEpisodes: Int, episodes: List<Episode>) {

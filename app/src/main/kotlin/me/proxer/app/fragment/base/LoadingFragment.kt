@@ -64,6 +64,7 @@ abstract class LoadingFragment<I, O> : MainFragment() {
     open protected val progress: SwipeRefreshLayout by bindView(R.id.progress)
     open protected val contentContainer: ViewGroup by bindView(R.id.contentContainer)
     open protected val errorContainer: ViewGroup by bindView(R.id.errorContainer)
+    open protected val errorInnerContainer: ViewGroup by bindView(R.id.errorInnerContainer)
     open protected val errorText: TextView by bindView(R.id.errorText)
     open protected val errorButton: Button by bindView(R.id.errorButton)
 
@@ -72,7 +73,7 @@ abstract class LoadingFragment<I, O> : MainFragment() {
 
         task = TaskBuilder.task(constructTask())
                 .validateBefore { validate() }
-                .bindToLifecycle(this, "${javaClass.simpleName}load")
+                .bindToLifecycle(this, "${javaClass.simpleName}_load_task")
                 .onInnerStart {
                     hideError()
                     hideContent()
@@ -107,7 +108,7 @@ abstract class LoadingFragment<I, O> : MainFragment() {
             }
         }
 
-        progress.setColorSchemeResources(R.color.primary, R.color.accent)
+        progress.setColorSchemeResources(R.color.primary, R.color.colorAccent)
 
         if (isWorking) {
             hideContent()

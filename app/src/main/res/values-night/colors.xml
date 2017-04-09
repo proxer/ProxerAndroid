@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="accent">#C21414</color>
+    <color name="colorAccent">#C21414</color>
     <color name="background">#303030</color>
 
     <color name="text_primary">@android:color/primary_text_dark</color>
