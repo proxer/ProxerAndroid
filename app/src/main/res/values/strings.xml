@@ -63,6 +63,9 @@
     <string name="error_stream_resolution">Fehler beim Laden des Streams. Das Video ist eventuell nicht mehr verfügbar
     </string>
 
+    <string name="error_video_deleted">Das Video ist nicht mehr verfügbar</string>
+    <string name="error_video_unknown">Es gab ein unbekanntes Problem mit dem Hoster. Versuche es später erneut</string>
+
     <string name="error_no_data">Keine Daten</string>
     <string name="error_no_data_news">Derzeit sind keine News verfügbar</string>
     <string name="error_no_data_bookmarks">Du hast noch nichts in deiner Watchlist</string>

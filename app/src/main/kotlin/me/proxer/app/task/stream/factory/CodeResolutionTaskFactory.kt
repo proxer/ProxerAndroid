@@ -10,7 +10,7 @@ import me.proxer.app.task.stream.StreamResolutionTask.StreamResolutionResult
 class CodeResolutionTaskFactory : HosterResolutionTaskFactory() {
 
     override val name = "Code"
-    override val supports = { name: String -> name.contains(this.name, false) || name.contains("Nachricht", false) }
+    override val supports = { name: String -> name.contains(this.name, true) || name.contains("Nachricht", true) }
     override fun create() = TaskBuilder.task(CodeTask()).build()
 
     class CodeTask : WorkerTask<String, StreamResolutionResult>() {

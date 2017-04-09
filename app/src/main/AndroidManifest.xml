@@ -15,6 +15,7 @@
         android:supportsRtl="false"
         android:theme="@style/Theme.App"
         tools:ignore="UnusedAttribute">
+
         <activity android:name=".activity.DashboardActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,6 +26,7 @@
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
         </activity>
+
         <activity
             android:name=".activity.ProfileActivity"
             android:theme="@style/Theme.App.Translucent">
@@ -51,8 +53,11 @@
                     android:scheme="https" />
             </intent-filter>
         </activity>
+
         <!--<activity android:name=".activity.chat.ChatActivity"/>-->
+
         <activity android:name=".activity.UcpActivity" />
+
         <activity
             android:name=".activity.MediaActivity"
             android:theme="@style/Theme.App.Translucent">
@@ -79,30 +84,31 @@
                     android:scheme="https" />
             </intent-filter>
         </activity>
+
         <!--<activity-->
         <!--android:name=".activity.TranslatorGroupActivity"-->
         <!--android:theme="@style/Theme.Translucent"/>-->
         <!--<activity-->
         <!--android:name=".activity.IndustryActivity"-->
         <!--android:theme="@style/Theme.Translucent"/>-->
+
         <activity
             android:name=".activity.ImageDetailActivity"
             android:theme="@style/Theme.App.Transparent" />
-        <!--<activity-->
-        <!--android:name=".activity.StreamActivity"-->
-        <!--android:configChanges="orientation|keyboardHidden|screenLayout|screenSize"-->
-        <!--android:exported="true"-->
-        <!--android:theme="@style/Theme.AppThemeNoBackground">-->
-        <!--<intent-filter tools:ignore="GoogleAppIndexingWarning">-->
-        <!--<action android:name="android.intent.action.VIEW"/>-->
-        <!--<category android:name="android.intent.category.DEFAULT"/>-->
 
-        <!--<data android:scheme="http"/>-->
-        <!--<data android:scheme="https"/>-->
-        <!--<data android:mimeType="video/mp4"/>-->
-        <!--<data android:mimeType="video/x-flv"/>-->
-        <!--</intent-filter>-->
-        <!--</activity>-->
+        <activity
+            android:name=".activity.StreamActivity"
+            android:configChanges="orientation|keyboardHidden|screenLayout|screenSize">
+            <intent-filter tools:ignore="GoogleAppIndexingWarning">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:mimeType="video/*" />
+            </intent-filter>
+        </activity>
+
         <!--<activity android:name=".activity.chat.NewChatActivity"/>-->
         <!--<activity android:name=".activity.chat.ConferenceInfoActivity"/>-->
         <!--<activity android:name=".activity.MangaActivity">-->
@@ -151,6 +157,7 @@
         <!--android:scheme="https"/>-->
         <!--</intent-filter>-->
         <!--</activity>-->
+
         <activity android:name=".activity.AnimeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -175,6 +182,7 @@
                     android:scheme="https" />
             </intent-filter>
         </activity>
+
         <activity android:name=".activity.WebViewActivity" />
 
         <!--<service android:name=".service.NotificationService"/>-->

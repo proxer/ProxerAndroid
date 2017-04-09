@@ -14,6 +14,7 @@ import me.proxer.app.task.stream.StreamResolutionTask.StreamResolutionResult
 class CrunchyrollResolutionTaskFactory : HosterResolutionTaskFactory() {
 
     override val name = "Crunchyroll"
+    override val supports = { name: String -> name.startsWith(this.name, true) }
     override fun create() = TaskBuilder.task(CrunchyrollTask()).build()
 
     class CrunchyrollTask : WorkerTask<String, StreamResolutionResult>() {

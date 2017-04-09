@@ -1,6 +1,7 @@
 package me.proxer.app.util
 
 import android.view.View
+import com.google.android.exoplayer2.upstream.HttpDataSource
 import com.rubengees.ktask.util.PartialTaskException
 import me.proxer.app.R
 import me.proxer.app.activity.base.MainActivity
@@ -130,13 +131,13 @@ object ErrorUtils {
             is StreamResolutionTask.StreamResolutionException -> {
                 ErrorAction(R.string.error_stream_resolution)
             }
-//            is HttpDataSource.InvalidResponseCodeException -> {
-//                ErrorAction(when (error.responseCode) {
-//                    404 -> R.string.error_video_deleted
-//                    in 400 until 600 -> R.string.error_video_unknown
-//                    else -> R.string.error_unknown
-//                })
-//            }
+            is HttpDataSource.InvalidResponseCodeException -> {
+                ErrorAction(when (innermostError.responseCode) {
+                    404 -> R.string.error_video_deleted
+                    in 400 until 600 -> R.string.error_video_unknown
+                    else -> R.string.error_unknown
+                })
+            }
             else -> ErrorAction(R.string.error_unknown)
         }
     }
