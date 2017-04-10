@@ -98,14 +98,15 @@ abstract class LoadingFragment<I, O> : MainFragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (savedInstanceState != null) {
-            state.data?.let {
-                onSuccess(it)
-            }
+        val data = state.data
+        val error = state.error
 
-            state.error?.let {
-                onError(it)
-            }
+        data?.let {
+            onSuccess(it)
+        }
+
+        error?.let {
+            onError(it)
         }
 
         progress.setColorSchemeResources(R.color.primary, R.color.colorAccent)
@@ -118,20 +119,14 @@ abstract class LoadingFragment<I, O> : MainFragment() {
         setProgressVisible(isWorking)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        if (savedInstanceState == null) {
-            freshLoad()
-        }
-    }
-
     override fun onResume() {
         super.onResume()
 
         if (isSolvingCaptcha) {
             isSolvingCaptcha = false
 
+            freshLoad()
+        } else if (state.data == null && state.error == null && !isWorking) {
             freshLoad()
         }
     }
