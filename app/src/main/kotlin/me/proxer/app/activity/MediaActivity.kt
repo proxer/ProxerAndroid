@@ -33,7 +33,7 @@ class MediaActivity : ImageTabsActivity() {
         private const val EPISODES_SUB_SECTION = "episodes"
         private const val RELATIONS_SUB_SECTION = "relation"
 
-        fun navigateTo(context: Activity, id: String, name: String? = null, category: Category = Category.ANIME,
+        fun navigateTo(context: Activity, id: String, name: String? = null, category: Category? = null,
                        imageView: ImageView? = null) {
             context.intentFor<MediaActivity>(
                     ID_EXTRA to id,
@@ -57,12 +57,14 @@ class MediaActivity : ImageTabsActivity() {
             title = value
         }
 
-    var category: Category
-        get() = intent.getSerializableExtra(CATEGORY_EXTRA) as Category
+    var category: Category?
+        get() = intent.getSerializableExtra(CATEGORY_EXTRA) as Category?
         set(value) {
             intent.putExtra(CATEGORY_EXTRA, category)
 
-            sectionsPagerAdapter.updateEpisodesTitle(value)
+            value?.let {
+                sectionsPagerAdapter.updateEpisodesTitle(value)
+            }
         }
 
     override val headerImageUrl by lazy { ProxerUrls.entryImage(id) }
@@ -126,14 +128,15 @@ class MediaActivity : ImageTabsActivity() {
             return when (position) {
                 0 -> getString(R.string.section_media_info)
 //                1 -> getString(R.string.fragment_comments_title)
-                1 -> category.toEpisodeAppString(this@MediaActivity)
+                1 -> category?.toEpisodeAppString(this@MediaActivity)
+                        ?: getString(R.string.category_anime_episodes_title)
 //                3 -> getString(R.string.fragment_relations_title)
                 else -> throw RuntimeException("Unknown index passed")
             }
         }
 
         fun updateEpisodesTitle(category: Category) {
-            // TODO: Change to 1
+            // TODO: Change to 2
             tabs.getTabAt(1)?.text = category.toEpisodeAppString(this@MediaActivity)
         }
     }
