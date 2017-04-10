@@ -67,13 +67,6 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
                     setProgressVisible(isWorking)
                 }
                 .build()
-
-        adapter = EasyHeaderFooterAdapter(innerAdapter)
-        layoutManager = StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL)
-
-        innerAdapter.positionResolver = object : PagingAdapter.PositionResolver() {
-            override fun resolveRealPosition(position: Int) = adapter.getRealPosition(position)
-        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -81,7 +74,16 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        adapter = EasyHeaderFooterAdapter(innerAdapter)
+        layoutManager = StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL)
+
+        // We need to call this here to make sure the adapters are present, but not attached yet so the position gets
+        // restored automatically.
         super.onViewCreated(view, savedInstanceState)
+
+        innerAdapter.positionResolver = object : PagingAdapter.PositionResolver() {
+            override fun resolveRealPosition(position: Int) = adapter.getRealPosition(position)
+        }
 
         progress.setOnRefreshListener(when (isSwipeToRefreshEnabled) {
             true -> SwipeRefreshLayout.OnRefreshListener { refreshTask.forceExecute(constructPagedInput(0)) }

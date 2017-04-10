@@ -28,6 +28,10 @@ class MangaAdapter : PagingAdapter<Page>() {
     private lateinit var entryId: String
     private lateinit var id: String
 
+    init {
+        setHasStableIds(true)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagingViewHolder<Page> {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_manga_page, parent, false))
     }

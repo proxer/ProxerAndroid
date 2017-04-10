@@ -44,13 +44,13 @@ class EpisodesFragment : LoadingFragment<ProxerCall<EpisodeInfo>, List<EpisodeRo
     private val mediaActivity
         get() = activity as MediaActivity
 
-    private val adapter = EpisodeAdapter()
+    private lateinit var adapter: EpisodeAdapter
 
     private val id: String
         get() = mediaActivity.id
     private val name: String?
         get() = mediaActivity.name
-    private val category: Category
+    private val category: Category?
         get() = mediaActivity.category
 
     private val list: RecyclerView by bindView(R.id.list)
@@ -58,6 +58,7 @@ class EpisodesFragment : LoadingFragment<ProxerCall<EpisodeInfo>, List<EpisodeRo
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        adapter = EpisodeAdapter(savedInstanceState)
         adapter.callback = object : EpisodeAdapter.EpisodeAdapterCallback() {
             override fun onLanguageClick(language: MediaLanguage, episode: EpisodeRow) {
                 when (episode.category) {
@@ -87,6 +88,12 @@ class EpisodesFragment : LoadingFragment<ProxerCall<EpisodeInfo>, List<EpisodeRo
         list.adapter = adapter
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        adapter.saveInstanceState(outState)
+    }
+
     override fun onSuccess(result: List<EpisodeRow>) {
         adapter.replace(result)
 
@@ -98,7 +105,7 @@ class EpisodesFragment : LoadingFragment<ProxerCall<EpisodeInfo>, List<EpisodeRo
 
         if (adapter.isEmpty()) {
             showError(when (category) {
-                Category.ANIME -> R.string.error_no_data_episodes
+                Category.ANIME, null -> R.string.error_no_data_episodes
                 Category.MANGA -> R.string.error_no_data_chapters
             }, ErrorUtils.ErrorAction.ACTION_MESSAGE_HIDE)
         }

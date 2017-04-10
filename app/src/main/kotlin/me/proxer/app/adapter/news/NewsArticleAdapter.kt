@@ -1,5 +1,6 @@
 package me.proxer.app.adapter.news
 
+import android.os.Bundle
 import android.support.v4.view.ViewCompat
 import android.view.LayoutInflater
 import android.view.View
@@ -13,22 +14,31 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
 import me.proxer.app.adapter.base.PagingAdapter
+import me.proxer.app.util.ParcelableStringBooleanMap
 import me.proxer.app.util.TimeUtils
 import me.proxer.app.util.extension.bindView
 import me.proxer.library.entitiy.notifications.NewsArticle
 import me.proxer.library.util.ProxerUrls
-import java.util.*
 
 /**
  * @author Ruben Gees
  */
-class NewsArticleAdapter : PagingAdapter<NewsArticle>() {
+class NewsArticleAdapter(savedInstanceState: Bundle?) : PagingAdapter<NewsArticle>() {
 
-    private val expansionMap = HashMap<String, Boolean>()
+    private companion object {
+        private const val EXPANDED_STATE = "news_expanded"
+    }
+
+    private val expanded: ParcelableStringBooleanMap
 
     var callback: NewsAdapterCallback? = null
 
     init {
+        expanded = when (savedInstanceState) {
+            null -> ParcelableStringBooleanMap()
+            else -> savedInstanceState.getParcelable(EXPANDED_STATE)
+        }
+
         setHasStableIds(true)
     }
 
@@ -46,6 +56,10 @@ class NewsArticleAdapter : PagingAdapter<NewsArticle>() {
         super.destroy()
 
         callback = null
+    }
+
+    fun saveInstanceState(outState: Bundle) {
+        outState.putParcelable(EXPANDED_STATE, expanded)
     }
 
     inner class ViewHolder(itemView: View) : PagingViewHolder<NewsArticle>(itemView) {
@@ -74,10 +88,10 @@ class NewsArticleAdapter : PagingAdapter<NewsArticle>() {
                 withSafeAdapterPosition {
                     val id = internalList[it].id
 
-                    if (expansionMap.containsKey(id)) {
-                        expansionMap.remove(id)
+                    if (expanded.getOrDefault(id, false)) {
+                        expanded.remove(id)
                     } else {
-                        expansionMap.put(id, true)
+                        expanded.put(id, true)
 
                         callback?.onNewsArticleExpansion(internalList[it])
                     }
@@ -101,7 +115,7 @@ class NewsArticleAdapter : PagingAdapter<NewsArticle>() {
             category.text = item.category
             time.text = TimeUtils.convertToRelativeReadableTime(time.context, item.date)
 
-            if (expansionMap.containsKey(item.id)) {
+            if (expanded.getOrDefault(item.id, false)) {
                 description.maxLines = Int.MAX_VALUE
 
                 ViewCompat.animate(expand).rotation(180f)

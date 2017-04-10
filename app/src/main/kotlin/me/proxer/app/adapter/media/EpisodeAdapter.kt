@@ -1,6 +1,6 @@
 package me.proxer.app.adapter.media
 
-import android.util.SparseBooleanArray
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +14,7 @@ import me.proxer.app.R
 import me.proxer.app.adapter.base.PagingAdapter
 import me.proxer.app.entity.EpisodeRow
 import me.proxer.app.util.DeviceUtils
+import me.proxer.app.util.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.bindView
 import me.proxer.app.util.extension.toAppDrawable
 import me.proxer.app.util.extension.toEpisodeAppString
@@ -28,11 +29,28 @@ import org.jetbrains.anko.forEachChildWithIndex
 /**
  * @author Ruben Gees
  */
-class EpisodeAdapter : PagingAdapter<EpisodeRow>() {
+class EpisodeAdapter(savedInstanceState: Bundle?) : PagingAdapter<EpisodeRow>() {
 
-    private val expanded = SparseBooleanArray()
+    private companion object {
+        private const val EXPANDED_STATE = "episode_expanded"
+    }
+
+    private val expanded: ParcelableStringBooleanMap
 
     var callback: EpisodeAdapterCallback? = null
+
+    init {
+        expanded = when (savedInstanceState) {
+            null -> ParcelableStringBooleanMap()
+            else -> savedInstanceState.getParcelable(EXPANDED_STATE)
+        }
+
+        setHasStableIds(true)
+    }
+
+    override fun getItemId(position: Int): Long {
+        return list[position].number.toLong()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagingViewHolder<EpisodeRow> {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_episode, parent, false))
@@ -42,6 +60,10 @@ class EpisodeAdapter : PagingAdapter<EpisodeRow>() {
         super.destroy()
 
         callback = null
+    }
+
+    fun saveInstanceState(outState: Bundle) {
+        outState.putParcelable(EXPANDED_STATE, expanded)
     }
 
     inner class ViewHolder(itemView: View) : PagingViewHolder<EpisodeRow>(itemView) {
@@ -54,10 +76,10 @@ class EpisodeAdapter : PagingAdapter<EpisodeRow>() {
         init {
             titleContainer.setOnClickListener {
                 withSafeAdapterPosition {
-                    val number = list[it].number
+                    val number = list[it].number.toString()
 
-                    if (expanded.get(number)) {
-                        expanded.delete(number)
+                    if (expanded.getOrDefault(number, false)) {
+                        expanded.remove(number)
                     } else {
                         expanded.put(number, true)
                     }
@@ -81,7 +103,7 @@ class EpisodeAdapter : PagingAdapter<EpisodeRow>() {
                 watched.visibility = View.INVISIBLE
             }
 
-            if (expanded.get(item.number)) {
+            if (expanded.getOrDefault(item.number.toString(), false)) {
                 languages.visibility = View.VISIBLE
             } else {
                 languages.visibility = View.GONE

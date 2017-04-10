@@ -92,8 +92,8 @@ class AnimeFragment : LoadingFragment<Pair<ProxerCall<List<Stream>>, ProxerCall<
             animeActivity.episodeAmount = value
         }
 
-    private val innerAdapter = StreamAdapter()
-    private val adapter = EasyHeaderFooterAdapter(innerAdapter)
+    private lateinit var innerAdapter: StreamAdapter
+    private lateinit var adapter: EasyHeaderFooterAdapter
 
     private lateinit var bookmarkTask: AndroidLifecycleTask<ProxerCall<Void?>, Void?>
     private lateinit var streamTask: AndroidLifecycleTask<StreamResolutionInput, StreamResolutionResult>
@@ -104,6 +104,9 @@ class AnimeFragment : LoadingFragment<Pair<ProxerCall<List<Stream>>, ProxerCall<
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        innerAdapter = StreamAdapter(savedInstanceState)
+        adapter = EasyHeaderFooterAdapter(innerAdapter)
 
         bookmarkTask = TaskBuilder.asyncProxerTask<Void?>()
                 .validateBefore {
@@ -226,6 +229,12 @@ class AnimeFragment : LoadingFragment<Pair<ProxerCall<List<Stream>>, ProxerCall<
                 bookmarkTask.forceExecute(api.info().markAsFinished(id).build())
             }
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        innerAdapter.saveInstanceState(outState)
     }
 
     override fun freshLoad() {

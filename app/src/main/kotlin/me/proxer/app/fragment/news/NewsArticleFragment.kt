@@ -33,11 +33,12 @@ class NewsArticleFragment : PagedLoadingFragment<ProxerCall<List<NewsArticle>>, 
     override val itemsOnPage = 15
     override val emptyResultMessage = R.string.error_no_data_news
 
-    override val innerAdapter = NewsArticleAdapter()
+    override lateinit var innerAdapter: NewsArticleAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        innerAdapter = NewsArticleAdapter(savedInstanceState)
         innerAdapter.callback = object : NewsAdapterCallback {
             override fun onNewsArticleClick(item: NewsArticle) {
                 showPage(ProxerUrls.newsWeb(item.categoryId, item.threadId, Device.MOBILE))
@@ -53,6 +54,12 @@ class NewsArticleFragment : PagedLoadingFragment<ProxerCall<List<NewsArticle>>, 
                 setLikelyUrl(ProxerUrls.newsWeb(item.categoryId, item.threadId, Device.MOBILE))
             }
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        innerAdapter.saveInstanceState(outState)
     }
 
     override fun constructTask() = TaskBuilder.asyncProxerTask<List<NewsArticle>>().build()

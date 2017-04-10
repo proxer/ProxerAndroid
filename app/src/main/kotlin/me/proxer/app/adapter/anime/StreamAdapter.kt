@@ -1,6 +1,6 @@
 package me.proxer.app.adapter.anime
 
-import android.support.v4.util.LongSparseArray
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +13,7 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
 import me.proxer.app.adapter.base.PagingAdapter
+import me.proxer.app.util.ParcelableStringBooleanMap
 import me.proxer.app.util.TimeUtils
 import me.proxer.app.util.extension.bindView
 import me.proxer.library.entitiy.anime.Stream
@@ -22,18 +23,25 @@ import org.threeten.bp.format.DateTimeFormatter
 /**
  * @author Ruben Gees
  */
-class StreamAdapter : PagingAdapter<Stream>() {
+class StreamAdapter(savedInstanceState: Bundle?) : PagingAdapter<Stream>() {
 
     private companion object {
+        private const val EXPANDED_STATE = "stream_expanded"
         private val DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-
-        private const val ICON_SIZE = 28
-        private const val ICON_PADDING = 8
     }
 
     var callback: StreamAdapterCallback? = null
 
-    private val expanded = LongSparseArray<Boolean>()
+    private val expanded: ParcelableStringBooleanMap
+
+    init {
+        expanded = when (savedInstanceState) {
+            null -> ParcelableStringBooleanMap()
+            else -> savedInstanceState.getParcelable(EXPANDED_STATE)
+        }
+
+        setHasStableIds(true)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagingViewHolder<Stream> {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_stream, parent, false))
@@ -43,6 +51,10 @@ class StreamAdapter : PagingAdapter<Stream>() {
         super.destroy()
 
         callback = null
+    }
+
+    fun saveInstanceState(outState: Bundle) {
+        outState.putParcelable(EXPANDED_STATE, expanded)
     }
 
     inner class ViewHolder(itemView: View) : PagingViewHolder<Stream>(itemView) {
@@ -61,12 +73,12 @@ class StreamAdapter : PagingAdapter<Stream>() {
         init {
             nameContainer.setOnClickListener {
                 withSafeAdapterPosition {
-                    val number = list[it].id.toLong()
+                    val id = list[it].id
 
-                    if (expanded.get(number, false)) {
-                        expanded.delete(number)
+                    if (expanded.getOrDefault(id, false)) {
+                        expanded.remove(id)
                     } else {
-                        expanded.put(number, true)
+                        expanded.put(id, true)
                     }
 
                     notifyItemChanged(it)
@@ -93,8 +105,8 @@ class StreamAdapter : PagingAdapter<Stream>() {
 
             play.setCompoundDrawablesWithIntrinsicBounds(IconicsDrawable(play.context)
                     .icon(CommunityMaterial.Icon.cmd_play)
-                    .sizeDp(ICON_SIZE)
-                    .paddingDp(ICON_PADDING)
+                    .sizeDp(28)
+                    .paddingDp(8)
                     .colorRes(android.R.color.white), null, null, null)
         }
 
@@ -106,7 +118,7 @@ class StreamAdapter : PagingAdapter<Stream>() {
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(image)
 
-            if (expanded.get(item.id.toLong(), false)) {
+            if (expanded.getOrDefault(item.id, false)) {
                 uploadInfoContainer.visibility = View.VISIBLE
             } else {
                 uploadInfoContainer.visibility = View.GONE

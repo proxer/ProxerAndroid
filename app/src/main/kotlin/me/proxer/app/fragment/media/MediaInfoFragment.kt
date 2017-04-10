@@ -62,7 +62,7 @@ class MediaInfoFragment : LoadingFragment<ProxerCall<Entry>, Entry>() {
             mediaActivity.name = value
         }
 
-    private var category: Category
+    private var category: Category?
         get() = mediaActivity.category
         set(value) {
             mediaActivity.category = value
