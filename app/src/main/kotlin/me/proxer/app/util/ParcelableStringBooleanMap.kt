@@ -43,7 +43,7 @@ class ParcelableStringBooleanMap : AbstractMap<String, Boolean>, Parcelable {
 
     override fun containsKey(key: String) = internalMap.containsKey(key)
     override fun containsValue(value: Boolean) = internalMap.containsValue(value)
-    override fun get(key: String) = internalMap[key]
+    override fun get(key: String) = internalMap[key] ?: false
     override fun isEmpty() = internalMap.isEmpty()
 
     override fun describeContents() = 0

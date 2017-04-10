@@ -75,7 +75,7 @@ class StreamAdapter(savedInstanceState: Bundle?) : PagingAdapter<Stream>() {
                 withSafeAdapterPosition {
                     val id = list[it].id
 
-                    if (expanded.getOrDefault(id, false)) {
+                    if (expanded.get(id)) {
                         expanded.remove(id)
                     } else {
                         expanded.put(id, true)
@@ -118,7 +118,7 @@ class StreamAdapter(savedInstanceState: Bundle?) : PagingAdapter<Stream>() {
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(image)
 
-            if (expanded.getOrDefault(item.id, false)) {
+            if (expanded.get(item.id)) {
                 uploadInfoContainer.visibility = View.VISIBLE
             } else {
                 uploadInfoContainer.visibility = View.GONE

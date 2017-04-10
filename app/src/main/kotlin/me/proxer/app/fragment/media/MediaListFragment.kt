@@ -1,6 +1,7 @@
 package me.proxer.app.fragment.media
 
 import android.os.Bundle
+import android.support.transition.TransitionManager
 import android.support.v4.view.MenuItemCompat
 import android.support.v7.widget.SearchView
 import android.view.Menu
@@ -159,6 +160,8 @@ class MediaListFragment : PagedLoadingFragment<ProxerCall<List<MediaListEntry>>,
         MenuItemCompat.setOnActionExpandListener(searchItem,
                 object : MenuItemCompat.OnActionExpandListener {
                     override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+                        TransitionManager.beginDelayedTransition(activity.find(R.id.toolbar))
+
                         return true
                     }
 
@@ -170,6 +173,8 @@ class MediaListFragment : PagedLoadingFragment<ProxerCall<List<MediaListEntry>>,
 
                             freshLoad()
                         }
+
+                        TransitionManager.beginDelayedTransition(activity.find(R.id.toolbar))
 
                         return true
                     }
