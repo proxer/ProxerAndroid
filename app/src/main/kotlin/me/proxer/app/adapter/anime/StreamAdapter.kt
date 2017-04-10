@@ -116,7 +116,7 @@ class StreamAdapter : PagingAdapter<Stream>() {
 
             uploaderText.text = item.uploaderName
             translatorGroup.text = item.translatorGroupName ?:
-                    translatorGroup.context.getString(R.string.fragment_anime_empty_subgoup)
+                    translatorGroup.context.getString(R.string.fragment_anime_empty_subgroup)
 
             dateText.text = DATE_TIME_FORMATTER.format(TimeUtils.convertToDateTime(item.date))
         }

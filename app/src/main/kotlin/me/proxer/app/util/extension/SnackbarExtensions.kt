@@ -13,8 +13,9 @@ import me.proxer.app.R
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_DEFAULT
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
+import org.jetbrains.anko.applyRecursively
 
-inline fun Activity.snackbar(root: View, message: String, duration: Int = LENGTH_LONG,
+inline fun Activity.snackbar(root: View, message: CharSequence, duration: Int = LENGTH_LONG,
                              actionMessage: Int = ACTION_MESSAGE_DEFAULT,
                              actionCallback: View.OnClickListener? = null): Snackbar {
     return Snackbar.make(root, message, duration).apply {
@@ -38,12 +39,16 @@ inline fun Activity.snackbar(root: View, action: ErrorAction, duration: Int = LE
     return snackbar(root, action.message, duration, action.buttonMessage, action.buttonAction)
 }
 
-inline fun Activity.multilineSnackbar(root: View, message: String, duration: Int = LENGTH_LONG,
+inline fun Activity.multilineSnackbar(root: View, message: CharSequence, duration: Int = LENGTH_LONG,
                                       actionMessage: Int = ACTION_MESSAGE_DEFAULT,
                                       actionCallback: View.OnClickListener? = null,
                                       maxLines: Int = 5): Snackbar {
     return snackbar(root, message, duration, actionMessage, actionCallback).apply {
-        view.findChild<TextView> { it is TextView && it !is Button }?.maxLines = maxLines
+        view.applyRecursively {
+            if (it is TextView && it !is Button) {
+                it.maxLines = maxLines
+            }
+        }
     }
 }
 
@@ -59,7 +64,7 @@ inline fun Activity.multilineSnackbar(root: View, action: ErrorAction, duration:
     return multilineSnackbar(root, action.message, duration, action.buttonMessage, action.buttonAction, maxLines)
 }
 
-inline fun Fragment.snackbar(root: View, message: String, duration: Int = LENGTH_LONG,
+inline fun Fragment.snackbar(root: View, message: CharSequence, duration: Int = LENGTH_LONG,
                              actionMessage: Int = ACTION_MESSAGE_DEFAULT,
                              actionCallback: View.OnClickListener? = null): Snackbar {
     return activity.snackbar(root, message, duration, actionMessage, actionCallback)
@@ -75,7 +80,7 @@ inline fun Fragment.snackbar(root: View, action: ErrorAction, duration: Int = LE
     return snackbar(root, action.message, duration, action.buttonMessage, action.buttonAction)
 }
 
-inline fun Fragment.multilineSnackbar(root: View, message: String, duration: Int = LENGTH_LONG,
+inline fun Fragment.multilineSnackbar(root: View, message: CharSequence, duration: Int = LENGTH_LONG,
                                       actionMessage: Int = ACTION_MESSAGE_DEFAULT,
                                       actionCallback: View.OnClickListener? = null,
                                       maxLines: Int = 5): Snackbar {

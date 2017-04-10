@@ -209,7 +209,11 @@ abstract class LoadingFragment<I, O> : MainFragment() {
     }
 
     open protected fun handleError(error: Throwable): ErrorAction {
-        if (error is ProxerException && error.serverErrorType == ProxerException.ServerErrorType.IP_BLOCKED) {
+        val innermostError = ErrorUtils.getInnermostError(error)
+        val isIpBlockedError = innermostError is ProxerException &&
+                innermostError.serverErrorType == ProxerException.ServerErrorType.IP_BLOCKED
+
+        if (isIpBlockedError) {
             return ErrorAction(R.string.error_captcha, R.string.error_action_captcha, View.OnClickListener {
                 isSolvingCaptcha = true
 

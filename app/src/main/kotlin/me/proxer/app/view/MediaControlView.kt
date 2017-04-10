@@ -10,7 +10,6 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import me.proxer.app.R
 import me.proxer.app.util.extension.bindView
-import me.proxer.library.entitiy.info.TranslatorGroup
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 
@@ -52,6 +51,10 @@ class MediaControlView(context: Context?, attrs: AttributeSet?) : FrameLayout(co
 
     init {
         LayoutInflater.from(context).inflate(R.layout.view_media_control, this, true)
+
+        setUploader(null)
+        setDateTime(null)
+        setTranslatorGroup(null)
     }
 
     fun setUploader(uploader: Uploader?) {
@@ -69,7 +72,7 @@ class MediaControlView(context: Context?, attrs: AttributeSet?) : FrameLayout(co
         }
     }
 
-    fun setTranslatorGroup(group: TranslatorGroup?) {
+    fun setTranslatorGroup(group: SimpleTranslatorGroup?) {
         if (group == null) {
             translatorRow.visibility = View.GONE
 
@@ -93,7 +96,7 @@ class MediaControlView(context: Context?, attrs: AttributeSet?) : FrameLayout(co
         }
     }
 
-    fun setEpisodeInfo(totalEpisodes: Int, currentEpisode: Int) {
+    fun setEpisodeInfo(episodeAmount: Int, currentEpisode: Int) {
         if (currentEpisode <= 1) {
             previous.visibility = View.GONE
         } else {
@@ -104,7 +107,7 @@ class MediaControlView(context: Context?, attrs: AttributeSet?) : FrameLayout(co
             }
         }
 
-        if (currentEpisode >= totalEpisodes) {
+        if (currentEpisode >= episodeAmount) {
             next.visibility = View.GONE
         } else {
             next.visibility = View.VISIBLE
@@ -115,12 +118,12 @@ class MediaControlView(context: Context?, attrs: AttributeSet?) : FrameLayout(co
         }
 
         bookmarkNext.text = when {
-            currentEpisode < totalEpisodes -> textResolver?.bookmarkNext()
+            currentEpisode < episodeAmount -> textResolver?.bookmarkNext()
             else -> bookmarkNext.context.getString(R.string.view_media_control_finish)
         }
 
         bookmarkNext.setOnClickListener {
-            if (currentEpisode < totalEpisodes) {
+            if (currentEpisode < episodeAmount) {
                 callback?.onSetBookmarkClick(currentEpisode + 1)
             } else {
                 callback?.onFinishClick(currentEpisode)
@@ -133,6 +136,7 @@ class MediaControlView(context: Context?, attrs: AttributeSet?) : FrameLayout(co
     }
 
     class Uploader(val id: String, val name: String)
+    class SimpleTranslatorGroup(val id: String, val name: String)
 
     interface TextResourceResolver {
         fun next(): String
@@ -143,7 +147,7 @@ class MediaControlView(context: Context?, attrs: AttributeSet?) : FrameLayout(co
 
     interface MediaControlViewCallback {
         fun onUploaderClick(uploader: Uploader) {}
-        fun onTranslatorGroupClick(group: TranslatorGroup) {}
+        fun onTranslatorGroupClick(group: SimpleTranslatorGroup) {}
         fun onSwitchEpisodeClick(newEpisode: Int) {}
         fun onSetBookmarkClick(episode: Int) {}
         fun onFinishClick(episode: Int) {}

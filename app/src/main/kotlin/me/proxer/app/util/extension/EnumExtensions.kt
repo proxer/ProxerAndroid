@@ -39,6 +39,13 @@ fun MediaLanguage.toAnimeLanguage(): AnimeLanguage {
     }
 }
 
+fun Language.toMediaLanguage(): MediaLanguage {
+    return when (this) {
+        Language.GERMAN -> MediaLanguage.GERMAN
+        Language.ENGLISH -> MediaLanguage.ENGLISH
+    }
+}
+
 fun AnimeLanguage.toMediaLanguage(): MediaLanguage {
     return when (this) {
         AnimeLanguage.GERMAN_SUB -> MediaLanguage.GERMAN_SUB

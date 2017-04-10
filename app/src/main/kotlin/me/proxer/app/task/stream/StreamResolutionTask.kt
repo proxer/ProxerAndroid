@@ -122,7 +122,9 @@ class StreamResolutionTask : BaseTask<StreamResolutionInput, StreamResolutionRes
         constructor(uri: Uri, mimeType: String, notFoundAction: (AppCompatActivity) -> Unit = defaultNotFoundAction) :
                 this(Intent(Intent.ACTION_VIEW).apply { setDataAndType(uri, mimeType) }, notFoundAction)
 
-        constructor(message: String) : this(Intent(ACTION_SHOW_MESSAGE).apply { putExtra(MESSAGE_EXTRA, message) })
+        constructor(message: CharSequence) : this(Intent(ACTION_SHOW_MESSAGE).apply {
+            putExtra(MESSAGE_EXTRA, message)
+        })
     }
 
     class NoResolverException : Exception()

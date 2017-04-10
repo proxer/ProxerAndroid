@@ -79,6 +79,9 @@ private class Lazy<in T, out V>(private val initializer: (T, KProperty<*>) -> V)
                 var currentAdapter = safeValue.adapter
 
                 if (currentAdapter is EasyHeaderFooterAdapter) {
+                    currentAdapter.removeHeader()
+                    currentAdapter.removeFooter()
+
                     currentAdapter = currentAdapter.innerAdapter
                 }
 

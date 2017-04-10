@@ -7,8 +7,6 @@ import android.content.Intent
 import android.net.Uri
 import android.support.customtabs.CustomTabsIntent
 import android.support.v4.content.ContextCompat
-import android.view.View
-import android.view.ViewGroup
 import me.proxer.app.R
 import me.proxer.app.activity.WebViewActivity
 import me.proxer.app.util.Utils
@@ -45,23 +43,4 @@ fun CustomTabsHelperFragment.openHttpPage(activity: Activity, url: HttpUrl) {
 
 inline fun HttpUrl.androidUri(): Uri {
     return Uri.parse(toString())
-}
-
-fun <T : View> View.findChild(predicate: (View) -> Boolean): T? {
-    if (this !is ViewGroup) {
-        return null
-    }
-
-    for (i in 0 until childCount) {
-        if (predicate.invoke(getChildAt(i))) {
-            @Suppress("UNCHECKED_CAST")
-            return getChildAt(i) as T
-        }
-
-        return getChildAt(i).findChild<T>(predicate)?.let {
-            return it
-        }
-    }
-
-    return null
 }

@@ -206,12 +206,17 @@
 
     <string name="fragment_history_entry_status">%1$d - %2$s</string>
 
-    <string name="fragment_anime_empty_subgoup">Keine angegeben</string>
+    <string name="fragment_anime_empty_subgroup">Keine angegeben</string>
     <string name="fragment_anime_next_episode">Nächste Episode</string>
     <string name="fragment_anime_previous_episode">Vorherige Episode</string>
     <string name="fragment_anime_bookmark_next_episode">Lesezeichen: Nächste Episode</string>
     <string name="fragment_anime_bookmark_this_episode">Lesezeichen: Diese Episode</string>
     <string name="fragment_anime_stream_play">Abspielen</string>
+
+    <string name="fragment_manga_next_chapter">Nächstes Kapitel</string>
+    <string name="fragment_manga_previous_chapter">Vorheriges Kapitel</string>
+    <string name="fragment_manga_bookmark_next_chapter">Lesezeichen: Nächstes Kapitel</string>
+    <string name="fragment_manga_bookmark_this_chapter">Lesezeichen: Dieses Kapitel</string>
 
     <string name="view_media_control_uploader">Uploader</string>
     <string name="view_media_control_translator_group">Translator-Gruppe</string>
@@ -293,6 +298,8 @@
     <string name="action_new_chat">Neuer Chat</string>
     <string name="action_new_group_with_user">Neue Gruppe mit diesem Nutzer</string>
     <string name="action_new_group">Neue Gruppe</string>
+
+    <string name="action_fullscreen">Vollbildmodus</string>
 
     <string name="rank_10">Schnupperninja</string>
     <string name="rank_100">Anwärter</string>

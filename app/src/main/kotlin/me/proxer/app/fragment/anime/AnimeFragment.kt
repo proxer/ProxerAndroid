@@ -7,9 +7,12 @@ import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import com.rubengees.ktask.android.AndroidLifecycleTask
 import com.rubengees.ktask.android.bindToLifecycle
@@ -43,6 +46,7 @@ import me.proxer.library.entitiy.info.EntryCore
 import me.proxer.library.enums.AnimeLanguage
 import me.proxer.library.enums.Category
 import okhttp3.HttpUrl
+import org.jetbrains.anko.applyRecursively
 import org.jetbrains.anko.bundleOf
 
 /**
@@ -145,7 +149,14 @@ class AnimeFragment : LoadingFragment<Pair<ProxerCall<List<Stream>>, ProxerCall<
                             }
                         }
                     } else {
-                        multilineSnackbar(root, it.intent.getStringExtra(StreamResolutionResult.MESSAGE_EXTRA))
+                        multilineSnackbar(root, it.intent.getCharSequenceExtra(StreamResolutionResult.MESSAGE_EXTRA))
+                                .apply {
+                                    view.applyRecursively {
+                                        if (it is TextView && it !is Button) {
+                                            it.movementMethod = LinkMovementMethod.getInstance()
+                                        }
+                                    }
+                                }
                     }
                 }
                 .onError {
@@ -215,10 +226,6 @@ class AnimeFragment : LoadingFragment<Pair<ProxerCall<List<Stream>>, ProxerCall<
                 bookmarkTask.forceExecute(api.info().markAsFinished(id).build())
             }
         }
-
-        header.setUploader(null)
-        header.setTranslatorGroup(null)
-        header.setDateTime(null)
     }
 
     override fun freshLoad() {
@@ -270,10 +277,14 @@ class AnimeFragment : LoadingFragment<Pair<ProxerCall<List<Stream>>, ProxerCall<
 
         if (adapter.hasHeader()) {
             contentContainer.visibility = View.VISIBLE
+            errorContainer.visibility = View.INVISIBLE
+
             errorInnerContainer.post {
-                errorInnerContainer.y = ((root.height - header.height) / 2f + header.height) +
-                        (errorText.layoutParams as ViewGroup.MarginLayoutParams).topMargin -
-                        errorInnerContainer.height
+                val newCenter = root.height / 2f + header.height / 2f
+                val containerCenterCorrection = errorInnerContainer.height / 2f
+
+                errorInnerContainer.y = newCenter - containerCenterCorrection
+                errorContainer.visibility = View.VISIBLE
             }
         } else {
             errorContainer.translationY = 0f
@@ -282,7 +293,7 @@ class AnimeFragment : LoadingFragment<Pair<ProxerCall<List<Stream>>, ProxerCall<
 
     override fun constructTask() = TaskBuilder.asyncProxerTask<List<Stream>>()
             .parallelWith(TaskBuilder.asyncProxerTask<EntryCore>().cache(CacheTask.CacheStrategy.RESULT),
-                    zipFunction = { streams, info -> StreamInfo(streams, info.name, streams.size) },
+                    zipFunction = { streams, info -> StreamInfo(streams, info.name, info.episodeAmount) },
                     awaitRightResultOnError = true).build()
 
     override fun constructInput() = api.anime()

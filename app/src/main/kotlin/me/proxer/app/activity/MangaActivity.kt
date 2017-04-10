@@ -9,18 +9,15 @@ import android.view.Menu
 import android.view.MenuItem
 import me.proxer.app.R
 import me.proxer.app.activity.base.MainActivity
-import me.proxer.app.fragment.anime.AnimeFragment
+import me.proxer.app.fragment.manga.MangaFragment
 import me.proxer.app.util.extension.bindView
 import me.proxer.app.util.extension.toEpisodeAppString
-import me.proxer.library.enums.AnimeLanguage
 import me.proxer.library.enums.Category
+import me.proxer.library.enums.Language
 import me.proxer.library.util.ProxerUtils
 import org.jetbrains.anko.intentFor
 
-/**
- * @author Ruben Gees
- */
-class AnimeActivity : MainActivity() {
+class MangaActivity : MainActivity() {
 
     companion object {
         private const val ID_EXTRA = "id"
@@ -29,9 +26,9 @@ class AnimeActivity : MainActivity() {
         private const val NAME_EXTRA = "name"
         private const val EPISODE_AMOUNT_EXTRA = "episode_amount"
 
-        fun navigateTo(context: Activity, id: String, episode: Int, language: AnimeLanguage,
+        fun navigateTo(context: Activity, id: String, episode: Int, language: Language,
                        name: String? = null, episodeAmount: Int? = null) {
-            context.startActivity(context.intentFor<AnimeActivity>(
+            context.startActivity(context.intentFor<MangaActivity>(
                     ID_EXTRA to id,
                     EPISODE_EXTRA to episode,
                     LANGUAGE_EXTRA to language,
@@ -60,13 +57,13 @@ class AnimeActivity : MainActivity() {
             updateTitle()
         }
 
-    val language: AnimeLanguage
+    val language: Language
         get() = when {
             intent.action == Intent.ACTION_VIEW -> {
-                ProxerUtils.toApiEnum(AnimeLanguage::class.java, intent.data.pathSegments.getOrElse(3, { "" }))
-                        ?: AnimeLanguage.ENGLISH_SUB
+                ProxerUtils.toApiEnum(Language::class.java, intent.data.pathSegments.getOrElse(3, { "" }))
+                        ?: Language.ENGLISH
             }
-            else -> intent.getSerializableExtra(LANGUAGE_EXTRA) as AnimeLanguage
+            else -> intent.getSerializableExtra(LANGUAGE_EXTRA) as Language
         }
 
     var name: String?
@@ -101,13 +98,19 @@ class AnimeActivity : MainActivity() {
         setContentView(R.layout.activity_default)
         setSupportActionBar(toolbar)
 
-        setupToolbar()
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        toolbar.setOnClickListener {
+            name?.let {
+                MediaActivity.navigateTo(this, id, name, Category.MANGA)
+            }
+        }
+
         updateTitle()
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                     .setAllowOptimization(true)
-                    .replace(R.id.container, AnimeFragment.newInstance())
+                    .replace(R.id.container, MangaFragment.newInstance())
                     .commitNow()
         }
     }
@@ -123,7 +126,7 @@ class AnimeActivity : MainActivity() {
             R.id.action_share -> {
                 ShareCompat.IntentBuilder
                         .from(this)
-                        .setText("https://proxer.me/watch/$id/$episode/${ProxerUtils.getApiEnumName(language)}")
+                        .setText("https://proxer.me/chapter/$id/$episode/${ProxerUtils.getApiEnumName(language)}")
                         .setType("text/plain")
                         .setChooserTitle(getString(R.string.share_title))
                         .startChooser()
@@ -140,17 +143,8 @@ class AnimeActivity : MainActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun setupToolbar() {
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        toolbar.setOnClickListener {
-            name?.let {
-                MediaActivity.navigateTo(this, id, it, Category.ANIME)
-            }
-        }
-    }
-
     private fun updateTitle() {
-        title = Category.ANIME.toEpisodeAppString(this, episode)
+        title = Category.MANGA.toEpisodeAppString(this, episode)
         supportActionBar?.subtitle = name
     }
 }

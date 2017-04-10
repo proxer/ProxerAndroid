@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.activity.AnimeActivity
+import me.proxer.app.activity.MangaActivity
 import me.proxer.app.activity.MediaActivity
 import me.proxer.app.adapter.media.EpisodeAdapter
 import me.proxer.app.application.MainApplication.Companion.api
@@ -18,6 +19,7 @@ import me.proxer.app.task.asyncProxerTask
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.extension.bindView
 import me.proxer.app.util.extension.toAnimeLanguage
+import me.proxer.app.util.extension.toGeneralLanguage
 import me.proxer.library.api.ProxerCall
 import me.proxer.library.entitiy.info.EpisodeInfo
 import me.proxer.library.enums.Category
@@ -61,10 +63,11 @@ class EpisodesFragment : LoadingFragment<ProxerCall<EpisodeInfo>, List<EpisodeRo
                 when (episode.category) {
                     Category.ANIME -> {
                         AnimeActivity.navigateTo(activity, id, episode.number, language.toAnimeLanguage(), name,
-                                episode.totalEpisodes)
+                                episode.episodeAmount)
                     }
                     Category.MANGA -> {
-//                        MangaActivity.navigateTo(activity, id, episode.number, language, name, episode.episodeAmount)
+                        MangaActivity.navigateTo(activity, id, episode.number, language.toGeneralLanguage(), name,
+                                episode.episodeAmount)
                     }
                 }
             }

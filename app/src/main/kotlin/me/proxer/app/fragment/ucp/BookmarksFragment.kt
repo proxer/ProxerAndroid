@@ -10,6 +10,7 @@ import com.rubengees.ktask.android.bindToLifecycle
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.activity.AnimeActivity
+import me.proxer.app.activity.MangaActivity
 import me.proxer.app.activity.base.MainActivity
 import me.proxer.app.adapter.ucp.BookmarkAdapter
 import me.proxer.app.application.MainApplication.Companion.api
@@ -19,6 +20,7 @@ import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.toAnimeLanguage
+import me.proxer.app.util.extension.toGeneralLanguage
 import me.proxer.library.api.ProxerCall
 import me.proxer.library.entitiy.ucp.Bookmark
 import me.proxer.library.enums.Category
@@ -85,11 +87,9 @@ class BookmarksFragment : PagedLoadingFragment<ProxerCall<List<Bookmark>>, Bookm
             override fun onBookmarkClick(item: Bookmark) {
                 when (item.category) {
                     Category.ANIME -> AnimeActivity.navigateTo(activity, item.entryId,
-                            item.episode, item.language.toAnimeLanguage())
-                    Category.MANGA -> {
-//                        MangaActivity.navigateTo(activity, item.entryId,
-//                                item.episode, item.language)
-                    }
+                            item.episode, item.language.toAnimeLanguage(), item.name)
+                    Category.MANGA -> MangaActivity.navigateTo(activity, item.entryId,
+                            item.episode, item.language.toGeneralLanguage(), item.name)
                 }
             }
 
