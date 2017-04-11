@@ -24,6 +24,7 @@
     <string name="section_top_ten">Favoriten</string>
 
     <string name="section_media_info">Info</string>
+    <string name="section_relations">Verbindungen</string>
 
     <string name="section_industry_info">Info</string>
     <string name="section_industry_projects">Projekte</string>
@@ -81,7 +82,8 @@
     <string name="error_no_data_episodes">Es sind (noch) keine Episoden verfügbar</string>
     <string name="error_no_data_chapters">Es sind (noch) keine Kapitel verfügbar</string>
     <string name="error_no_data_anime">Aktuell gibt es noch keine Streams</string>
-    <string name="error_no_projects">Es gibt noch keine Projekte</string>
+    <string name="error_no_data_relations">Für dieses Werk gibt es keine Verbindungen</string>
+    <string name="error_no_data_projects">Es gibt noch keine Projekte</string>
 
     <string name="error_action_retry">Erneut versuchen</string>
     <string name="error_action_captcha">Captcha</string>

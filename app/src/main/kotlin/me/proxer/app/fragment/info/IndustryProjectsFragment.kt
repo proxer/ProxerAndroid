@@ -34,7 +34,7 @@ class IndustryProjectsFragment : PagedLoadingFragment<ProxerCall<List<IndustryPr
     }
 
     override val itemsOnPage = 30
-    override val emptyResultMessage = R.string.error_no_projects
+    override val emptyResultMessage = R.string.error_no_data_projects
     override val spanCount get() = super.spanCount + 1
 
     private val industryActivity

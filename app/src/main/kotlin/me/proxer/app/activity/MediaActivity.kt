@@ -13,6 +13,7 @@ import me.proxer.app.R
 import me.proxer.app.activity.base.ImageTabsActivity
 import me.proxer.app.fragment.media.EpisodesFragment
 import me.proxer.app.fragment.media.MediaInfoFragment
+import me.proxer.app.fragment.media.RelationsFragment
 import me.proxer.app.util.ActivityUtils
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.library.enums.Category
@@ -117,12 +118,12 @@ class MediaActivity : ImageTabsActivity() {
                 0 -> MediaInfoFragment.newInstance()
 //                1 -> CommentFragment.newInstance()
                 1 -> EpisodesFragment.newInstance()
-//                3 -> RelationsFragment.newInstance()
+                2 -> RelationsFragment.newInstance()
                 else -> throw RuntimeException("Unknown index passed")
             }
         }
 
-        override fun getCount() = 2 // 4
+        override fun getCount() = 3 // 4
 
         override fun getPageTitle(position: Int): CharSequence? {
             return when (position) {
@@ -130,7 +131,7 @@ class MediaActivity : ImageTabsActivity() {
 //                1 -> getString(R.string.fragment_comments_title)
                 1 -> category?.toEpisodeAppString(this@MediaActivity)
                         ?: getString(R.string.category_anime_episodes_title)
-//                3 -> getString(R.string.fragment_relations_title)
+                2 -> getString(R.string.section_relations)
                 else -> throw RuntimeException("Unknown index passed")
             }
         }
