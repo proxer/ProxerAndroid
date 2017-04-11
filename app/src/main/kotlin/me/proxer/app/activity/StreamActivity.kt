@@ -1,12 +1,14 @@
 package me.proxer.app.activity
 
-import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.Snackbar.LENGTH_INDEFINITE
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.Toolbar
-import android.view.*
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import com.devbrackets.android.exomedia.listener.VideoControlsVisibilityListener
 import com.devbrackets.android.exomedia.ui.widget.VideoControls.*
 import com.devbrackets.android.exomedia.ui.widget.VideoView
@@ -56,7 +58,6 @@ class StreamActivity : MainActivity() {
 
     private fun setupPlayer() {
         player.setBackgroundColor(ContextCompat.getColor(this, android.R.color.black))
-        player.setOnTouchListener(TouchListener(this))
         player.setVideoURI(uri)
         player.setOnErrorListener {
             ErrorUtils.handle(this, it).let {
@@ -115,32 +116,5 @@ class StreamActivity : MainActivity() {
         return SYSTEM_UI_FLAG_LOW_PROFILE or SYSTEM_UI_FLAG_HIDE_NAVIGATION or SYSTEM_UI_FLAG_LAYOUT_STABLE or
                 SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
                 SYSTEM_UI_FLAG_FULLSCREEN or SYSTEM_UI_FLAG_HIDE_NAVIGATION
-    }
-
-    private inner class TouchListener(context: Context) : GestureDetector.SimpleOnGestureListener(),
-            View.OnTouchListener {
-
-        private val gestureDetector = GestureDetector(context, this)
-
-        override fun onTouch(v: View, event: MotionEvent): Boolean {
-            gestureDetector.onTouchEvent(event)
-
-            return true
-        }
-
-        override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
-            when (player.videoControls?.isShown ?: false) {
-                true -> player.videoControls?.hideDelayed(0)
-                false -> {
-                    player.videoControls?.show()
-
-                    if (player.isPlaying) {
-                        player.videoControls?.hideDelayed(DEFAULT_CONTROL_HIDE_DELAY.toLong())
-                    }
-                }
-            }
-
-            return true
-        }
     }
 }
