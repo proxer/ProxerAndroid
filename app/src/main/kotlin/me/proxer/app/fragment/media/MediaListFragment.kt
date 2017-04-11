@@ -77,9 +77,7 @@ class MediaListFragment : PagedLoadingFragment<ProxerCall<List<MediaListEntry>>,
         set(value) = arguments.putBoolean(HAS_SEARCHED_ARGUMENT, value)
 
     override val itemsOnPage = 30
-    override val innerAdapter by lazy {
-        MediaAdapter(category)
-    }
+    override val innerAdapter by lazy { MediaAdapter(category) }
 
     private lateinit var searchItem: MenuItem
     private lateinit var searchView: SearchView

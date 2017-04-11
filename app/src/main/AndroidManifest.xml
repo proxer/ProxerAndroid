@@ -85,12 +85,13 @@
             </intent-filter>
         </activity>
 
-        <!--<activity-->
-        <!--android:name=".activity.TranslatorGroupActivity"-->
-        <!--android:theme="@style/Theme.Translucent"/>-->
-        <!--<activity-->
-        <!--android:name=".activity.IndustryActivity"-->
-        <!--android:theme="@style/Theme.Translucent"/>-->
+        <activity
+            android:name=".activity.TranslatorGroupActivity"
+            android:theme="@style/Theme.App.Translucent" />
+
+        <activity
+            android:name=".activity.IndustryActivity"
+            android:theme="@style/Theme.App.Translucent" />
 
         <activity
             android:name=".activity.ImageDetailActivity"

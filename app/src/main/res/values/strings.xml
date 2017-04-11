@@ -25,6 +25,12 @@
 
     <string name="section_media_info">Info</string>
 
+    <string name="section_industry_info">Info</string>
+    <string name="section_industry_projects">Projekte</string>
+
+    <string name="section_translator_group_info">Info</string>
+    <string name="section_translator_group_projects">Projekte</string>
+
     <string name="error_timeout">Der Server hat nicht rechtzeitig geantwortet. Versuche es später noch einmal</string>
     <string name="error_io">Es gab ein Problem bei der Datenübertragung. Versuche es erneut</string>
     <string name="error_parsing">Der Server hat beschädigte Daten gesendet. Versuche es erneut</string>
@@ -75,6 +81,7 @@
     <string name="error_no_data_episodes">Es sind (noch) keine Episoden verfügbar</string>
     <string name="error_no_data_chapters">Es sind (noch) keine Kapitel verfügbar</string>
     <string name="error_no_data_anime">Aktuell gibt es noch keine Streams</string>
+    <string name="error_no_projects">Es gibt noch keine Projekte</string>
 
     <string name="error_action_retry">Erneut versuchen</string>
     <string name="error_action_captcha">Captcha</string>
@@ -160,7 +167,6 @@
     <string name="dialog_app_required_positive">Installieren</string>
     <string name="dialog_app_required_title">%s-App</string>
 
-    <string name="fragment_ucp_overview_clip_title">Proxer Profillink</string>
     <string name="fragment_ucp_overview_username">Nutzername</string>
     <string name="fragment_ucp_overview_epsiode_counter_days">Tage</string>
     <string name="fragment_ucp_overview_epsiode_counter_episodes">Episoden</string>
@@ -169,7 +175,6 @@
     <string name="fragment_ucp_overview_epsiode_counter">Episodencounter</string>
     <string name="fragment_ucp_overview_general">Allgemein</string>
     <string name="fragment_ucp_overview_profile_link">Profillink</string>
-    <string name="fragment_ucp_overview_title">Übersicht</string>
     <string name="fragment_ucp_overview_user_id">User ID</string>
 
     <string name="fragment_profile_points_anime">Anime</string>
@@ -217,6 +222,15 @@
     <string name="fragment_manga_previous_chapter">Vorheriges Kapitel</string>
     <string name="fragment_manga_bookmark_next_chapter">Lesezeichen: Nächstes Kapitel</string>
     <string name="fragment_manga_bookmark_this_chapter">Lesezeichen: Dieses Kapitel</string>
+
+    <string name="fragment_translator_group_description">Beschreibung</string>
+    <string name="fragment_translator_group_language">Sprache</string>
+    <string name="fragment_translator_group_link">Link</string>
+
+    <string name="fragment_industry_type">Typ</string>
+    <string name="fragment_industry_language">Sprache</string>
+    <string name="fragment_industry_link">Link</string>
+    <string name="fragment_industry_description">Beschreibung</string>
 
     <string name="view_media_control_uploader">Uploader</string>
     <string name="view_media_control_translator_group">Translator-Gruppe</string>
@@ -328,6 +342,7 @@
 
     <string name="shortcut_disabled_message">Diese Verknüpung ist nicht mehr verfügbar</string>
 
+    <string name="clipboard_title">Proxer Zwischenablage</string>
     <string name="clipboard_status">In die Zwischenablage kopiert</string>
 
     <string name="time_a_moment_ago">Eben gerade</string>

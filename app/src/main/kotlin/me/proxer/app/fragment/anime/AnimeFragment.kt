@@ -22,6 +22,7 @@ import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.activity.AnimeActivity
 import me.proxer.app.activity.ProfileActivity
+import me.proxer.app.activity.TranslatorGroupActivity
 import me.proxer.app.activity.base.MainActivity
 import me.proxer.app.adapter.anime.StreamAdapter
 import me.proxer.app.adapter.base.PagingAdapter
@@ -182,11 +183,11 @@ class AnimeFragment : LoadingFragment<Pair<ProxerCall<List<Stream>>, ProxerCall<
             }
 
             override fun onTranslatorGroupClick(item: Stream) {
-//                item.translatorGroupId?.let { id ->
-//                    item.translatorGroup?.let { name ->
-//                        TranslatorGroupActivity.navigateTo(activity, id, name)
-//                    }
-//                }
+                item.translatorGroupId?.let { id ->
+                    item.translatorGroupName?.let { name ->
+                        TranslatorGroupActivity.navigateTo(activity, id, name)
+                    }
+                }
             }
 
             override fun onWatchClick(item: Stream) {

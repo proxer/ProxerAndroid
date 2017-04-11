@@ -69,7 +69,7 @@ class UcpOverviewFragment : LoadingFragment<ProxerCall<Int>, Int>() {
                         showPage(HttpUrl.parse(it))
                     },
                     onWebLongClickListener = Link.OnLongClickListener {
-                        Utils.setClipboardContent(activity, getString(R.string.fragment_ucp_overview_clip_title), it)
+                        Utils.setClipboardContent(activity, getString(R.string.clipboard_title), it)
 
                         snackbar(root, R.string.clipboard_status)
                     })

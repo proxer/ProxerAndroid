@@ -56,10 +56,21 @@ fun AnimeLanguage.toMediaLanguage(): MediaLanguage {
 }
 
 fun Language.toAppDrawable(context: Context): Drawable {
-    return when (this) {
-        Language.GERMAN -> AppCompatResources.getDrawable(context, R.drawable.ic_germany)
-        Language.ENGLISH -> AppCompatResources.getDrawable(context, R.drawable.ic_united_states)
-    } ?: throw NullPointerException("Could not resolve Drawable for language: $this")
+    return AppCompatResources.getDrawable(context, when (this) {
+        Language.GERMAN -> R.drawable.ic_germany
+        Language.ENGLISH -> R.drawable.ic_united_states
+    }) ?: throw NullPointerException("Could not resolve Drawable for language: $this")
+}
+
+fun Country.toAppDrawable(context: Context): Drawable {
+    return AppCompatResources.getDrawable(context, when (this) {
+        Country.GERMANY -> R.drawable.ic_germany
+        Country.ENGLAND -> R.drawable.ic_united_states
+        Country.UNITED_STATES -> R.drawable.ic_united_states
+        Country.JAPAN -> R.drawable.ic_japan
+        Country.KOREA -> R.drawable.ic_korea
+        Country.OTHER -> R.drawable.ic_united_nations
+    }) ?: throw NullPointerException("Could not resolve Drawable for country: $this")
 }
 
 fun Medium.toCategory(): Category {

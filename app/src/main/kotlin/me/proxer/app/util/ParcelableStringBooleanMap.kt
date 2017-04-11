@@ -56,6 +56,6 @@ class ParcelableStringBooleanMap : AbstractMap<String, Boolean>, Parcelable {
         }
     }
 
-    fun put(key: String, value: Boolean) = internalMap.put(key, true)
+    fun put(key: String, value: Boolean) = internalMap.put(key, value)
     fun remove(key: String) = internalMap.remove(key)
 }

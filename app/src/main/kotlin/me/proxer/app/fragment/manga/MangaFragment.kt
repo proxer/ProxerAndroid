@@ -20,6 +20,7 @@ import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.activity.MangaActivity
 import me.proxer.app.activity.ProfileActivity
+import me.proxer.app.activity.TranslatorGroupActivity
 import me.proxer.app.activity.base.MainActivity
 import me.proxer.app.adapter.base.PagingAdapter
 import me.proxer.app.adapter.manga.MangaAdapter
@@ -164,7 +165,7 @@ class MangaFragment : LoadingFragment<Pair<ProxerCall<Chapter>, ProxerCall<Entry
             }
 
             override fun onTranslatorGroupClick(group: SimpleTranslatorGroup) {
-                // TranslatorGroupActivity.navigateTo(activity, it.id, it.name)
+                TranslatorGroupActivity.navigateTo(activity, group.id, group.name)
             }
 
             override fun onSwitchEpisodeClick(newEpisode: Int) {

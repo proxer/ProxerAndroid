@@ -17,7 +17,9 @@ import com.rubengees.ktask.util.TaskBuilder
 import fisk.chipcloud.ChipCloud
 import fisk.chipcloud.ChipCloudConfig
 import me.proxer.app.R
+import me.proxer.app.activity.IndustryActivity
 import me.proxer.app.activity.MediaActivity
+import me.proxer.app.activity.TranslatorGroupActivity
 import me.proxer.app.activity.base.MainActivity
 import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.fragment.base.LoadingFragment
@@ -345,7 +347,7 @@ class MediaInfoFragment : LoadingFragment<ProxerCall<Entry>, Entry>() {
             bindChips(translatorGroups, result.translatorGroups, mapFunction = {
                 it.name
             }, onClick = {
-                // TranslatorGroupActivity.navigateTo(activity, translatorGroup.id, translatorGroup.name)
+                TranslatorGroupActivity.navigateTo(activity, it.id, it.name)
             })
         }
     }
@@ -359,7 +361,7 @@ class MediaInfoFragment : LoadingFragment<ProxerCall<Entry>, Entry>() {
                 "${it.name} (${ProxerUtils.getApiEnumName(it.type).replace("_", " ").split(" ")
                         .map(String::capitalize).joinToString(separator = " ")})"
             }, onClick = {
-                // IndustryActivity.navigateTo(activity, industry.id, industry.name)
+                IndustryActivity.navigateTo(activity, it.id, it.name)
             })
         }
     }
