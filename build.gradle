@@ -111,7 +111,7 @@ buildscript {
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.1.2-eap-69"
-        classpath 'com.android.tools.build:gradle:2.4.0-alpha5'
+        classpath 'com.android.tools.build:gradle:2.4.0-alpha6'
     }
 }
 
@@ -141,5 +141,5 @@ task clean(type: Delete) {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '3.4.1'
+    gradleVersion = '3.5'
 }
