@@ -75,7 +75,7 @@ class ProfileActivity : ImageTabsActivity() {
     override val sectionsPagerAdapter by lazy { SectionsPagerAdapter(supportFragmentManager) }
 
     override val headerImageUrl
-        get() = if (image == null) null else ProxerUrls.userImage(image!!)
+        get() = if (image.isNullOrBlank()) null else ProxerUrls.userImage(image!!)
 
     override val itemToDisplay: Int
         get() = when (intent.action) {
