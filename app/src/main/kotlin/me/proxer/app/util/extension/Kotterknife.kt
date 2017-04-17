@@ -27,16 +27,27 @@ fun <V : View> Fragment.bindView(id: Int): ReadOnlyProperty<Fragment, V> = requi
 fun <V : View> ViewHolder.bindView(id: Int): ReadOnlyProperty<ViewHolder, V> = required(id, viewFinder)
 fun <V : View> DialogFragment.bindView(id: Int): ReadOnlyProperty<DialogFragment, V> = required(id, viewFinder)
 
+@Suppress("unused")
 private val View.viewFinder: View.(Int) -> View?
     get() = { findViewById(it) }
+
+@Suppress("unused")
 private val Activity.viewFinder: Activity.(Int) -> View?
     get() = { findViewById(it) }
+
+@Suppress("unused")
 private val Dialog.viewFinder: Dialog.(Int) -> View?
     get() = { findViewById(it) }
+
+@Suppress("unused")
 private val Fragment.viewFinder: Fragment.(Int) -> View?
     get() = { view!!.findViewById(it) }
+
+@Suppress("unused")
 private val ViewHolder.viewFinder: ViewHolder.(Int) -> View?
     get() = { itemView.findViewById(it) }
+
+@Suppress("unused")
 private val DialogFragment.viewFinder: DialogFragment.(Int) -> View?
     get() = { dialog.findViewById(it) }
 

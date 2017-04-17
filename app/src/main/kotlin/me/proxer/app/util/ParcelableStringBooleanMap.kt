@@ -11,6 +11,7 @@ class ParcelableStringBooleanMap : Parcelable {
     companion object {
         private const val ZERO_BYTE: Byte = 0
 
+        @Suppress("unused")
         @JvmStatic val CREATOR = object : Parcelable.Creator<ParcelableStringBooleanMap> {
             override fun createFromParcel(source: Parcel): ParcelableStringBooleanMap {
                 return ParcelableStringBooleanMap(source)
@@ -26,7 +27,7 @@ class ParcelableStringBooleanMap : Parcelable {
 
     constructor() : super()
     internal constructor(source: Parcel) {
-        for (i in 0 until source.readInt()) {
+        (0 until source.readInt()).forEach {
             put(source.readString(), source.readByte() != ZERO_BYTE)
         }
     }
@@ -43,5 +44,5 @@ class ParcelableStringBooleanMap : Parcelable {
 
     fun put(key: String, value: Boolean) = internalMap.put(key, value)
     fun remove(key: String) = internalMap.remove(key)
-    operator fun get(key: String) = internalMap.get(key)
+    operator fun get(key: String) = internalMap[key]
 }

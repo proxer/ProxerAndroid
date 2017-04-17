@@ -7,6 +7,7 @@ import me.proxer.app.application.MainApplication.Companion.moshi
 import me.proxer.app.task.stream.LinkResolutionTask
 import me.proxer.app.task.stream.StreamResolutionTask.StreamResolutionException
 import me.proxer.app.task.stream.StreamResolutionTask.StreamResolutionResult
+import java.util.regex.Pattern.quote
 
 /**
  * @author Ruben Gees
@@ -21,7 +22,7 @@ class DailymotionResolutionTaskFactory : HosterResolutionTaskFactory() {
     class DailymotionTask : WorkerTask<String, StreamResolutionResult>() {
 
         private companion object {
-            private val regex = Regex("\"qualities\":(\\{.+\\}\\]\\}),")
+            private val regex = Regex("\"qualities\":(${quote("{")}.+${quote("}")}${quote("]")}${quote("}")}),")
         }
 
         override fun work(input: String): StreamResolutionResult {

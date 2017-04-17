@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager.getDefaultSharedPreferences
 import android.support.v7.app.AppCompatDelegate
-import me.proxer.app.helper.MaterialDrawerHelper
 
 /**
  * A helper class, which gives access to the [SharedPreferences].

@@ -34,5 +34,9 @@
 
     <style name="Theme.App" parent="Base.Theme.App" />
 
+    <style name="Theme.App.Black" parent="Theme.App">
+        <item name="android:windowBackground">@android:color/black</item>
+    </style>
+
     <style name="Theme.App.Translucent" parent="Theme.App" />
 </resources>

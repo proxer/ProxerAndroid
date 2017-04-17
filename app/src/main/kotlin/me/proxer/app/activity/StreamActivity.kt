@@ -53,7 +53,7 @@ class StreamActivity : MainActivity() {
     public override fun onStop() {
         player.pause()
 
-        super.onPause()
+        super.onStop()
     }
 
     private fun setupPlayer() {

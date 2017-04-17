@@ -14,8 +14,8 @@ import okhttp3.HttpUrl
 class VideoWeedResolutionTaskFactory : HosterResolutionTaskFactory() {
 
     private companion object {
-        private val urlTransformation = { input: Pair<String, String> ->
-            HttpUrl.parse("http://www.bitvid.to/api/player.api.php?file=%s&key=%s".format(input.first, input.second))
+        private val urlTransformation: (Pair<String, String>) -> HttpUrl = { (first, second) ->
+            HttpUrl.parse("http://www.bitvid.to/api/player.api.php?file=%s&key=%s".format(first, second))
         }
     }
 

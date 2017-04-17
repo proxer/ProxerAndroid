@@ -34,7 +34,7 @@ class YourUploadResolutionTaskFactory : HosterResolutionTaskFactory() {
 
         override fun work(input: String): String {
             val regexResult = regex.find(input) ?: throw StreamResolutionException()
-            val file = regexResult.groupValues.get(1)
+            val file = regexResult.groupValues[1]
 
             if (file.isBlank()) {
                 throw StreamResolutionException()

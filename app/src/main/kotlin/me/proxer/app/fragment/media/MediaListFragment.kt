@@ -105,7 +105,7 @@ class MediaListFragment : PagedLoadingFragment<ProxerCall<List<MediaListEntry>>,
             MediaSearchSortCriteria.CLICKS -> menu.findItem(R.id.clicks).isChecked = true
             MediaSearchSortCriteria.EPISODE_AMOUNT -> menu.findItem(R.id.episodeAmount).isChecked = true
             MediaSearchSortCriteria.NAME -> menu.findItem(R.id.name).isChecked = true
-            else -> throw IllegalArgumentException("Unsupported sort criteria: ${sortCriteria}")
+            else -> throw IllegalArgumentException("Unsupported sort criteria: $sortCriteria")
         }
 
         val filterSubMenu = menu.findItem(R.id.filter).subMenu
@@ -126,7 +126,7 @@ class MediaListFragment : PagedLoadingFragment<ProxerCall<List<MediaListEntry>>,
             MediaType.ONESHOT -> filterSubMenu.findItem(R.id.oneshot).isChecked = true
             MediaType.DOUJIN -> filterSubMenu.findItem(R.id.doujin).isChecked = true
             MediaType.HMANGA -> filterSubMenu.findItem(R.id.hmanga).isChecked = true
-            else -> throw IllegalArgumentException("Unsupported type: ${type}")
+            else -> throw IllegalArgumentException("Unsupported type: $type")
         }
 
         searchItem = menu.findItem(R.id.search)

@@ -228,6 +228,8 @@ class CommentAdapter(savedInstanceState: Bundle?) : PagingAdapter<Comment>() {
     internal class ParcelableSpoilerStateMap : Parcelable {
 
         companion object {
+
+            @Suppress("unused")
             @JvmStatic val CREATOR = object : Parcelable.Creator<ParcelableSpoilerStateMap> {
                 override fun createFromParcel(source: Parcel): ParcelableSpoilerStateMap {
                     return ParcelableSpoilerStateMap(source)
@@ -259,6 +261,6 @@ class CommentAdapter(savedInstanceState: Bundle?) : PagingAdapter<Comment>() {
         }
 
         fun put(key: String, value: SparseBooleanArray) = internalMap.put(key, value)
-        operator fun get(key: String) = internalMap.get(key)
+        operator fun get(key: String) = internalMap[key]
     }
 }
