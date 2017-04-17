@@ -24,6 +24,7 @@
     <string name="section_top_ten">Favoriten</string>
 
     <string name="section_media_info">Info</string>
+    <string name="section_comments">Kommentare</string>
     <string name="section_relations">Verbindungen</string>
 
     <string name="section_industry_info">Info</string>
@@ -84,6 +85,7 @@
     <string name="error_no_data_anime">Aktuell gibt es noch keine Streams</string>
     <string name="error_no_data_relations">Für dieses Werk gibt es keine Verbindungen</string>
     <string name="error_no_data_projects">Es gibt noch keine Projekte</string>
+    <string name="error_no_data_comments">Es gibt noch keine Kommentare</string>
 
     <string name="error_action_retry">Erneut versuchen</string>
     <string name="error_action_captcha">Captcha</string>
@@ -117,6 +119,14 @@
     <string name="media_state_cancelled">Abgebrochen</string>
     <string name="media_state_finished">Abgeschlossen</string>
     <string name="media_state_pre_airing">Nicht erschienen (Pre-Airing)</string>
+
+    <string name="user_media_progress_watching">Am Schauen (%d)</string>
+    <string name="user_media_progress_reading">Am Lesen (%d)</string>
+    <string name="user_media_progress_watched">Abgeschlossen</string>
+    <string name="user_media_progress_read">Abgeschlossen</string>
+    <string name="user_media_progress_will_watch">Wird noch Geschaut</string>
+    <string name="user_media_progress_will_read">Wird noch Gelesen</string>
+    <string name="user_media_progress_cancelled">Abgebrochen (%d)</string>
 
     <string name="fsk_0_description">Dieser Anime ist für alle geeignet.</string>
     <string name="fsk_12_description">Dieser Anime ist nicht für Personen unter 12 Jahren geeignet.</string>
@@ -234,10 +244,20 @@
     <string name="fragment_industry_link">Link</string>
     <string name="fragment_industry_description">Beschreibung</string>
 
+    <string name="fragment_comment_rating_animation">Animation/Bilder</string>
+    <string name="fragment_comment_rating_characters">Charaktere</string>
+    <string name="fragment_comment_rating_genre">Genre</string>
+    <string name="fragment_comment_rating_music">Musik</string>
+    <string name="fragment_comment_rating_overall">Insgesamt</string>
+    <string name="fragment_comment_rating_story">Story</string>
+
     <string name="view_media_control_uploader">Uploader</string>
     <string name="view_media_control_translator_group">Translator-Gruppe</string>
     <string name="view_media_control_date">Datum</string>
     <string name="view_media_control_finish">Abgeschlossen</string>
+
+    <string name="view_bbcode_hide_spoiler">Spoiler verstecken</string>
+    <string name="view_bbcode_show_spoiler">Spoiler!</string>
 
     <string name="category_anime_episodes_title">Episoden</string>
     <string name="category_manga_episodes_title">Kapitel</string>

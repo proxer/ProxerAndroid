@@ -11,6 +11,7 @@ import android.view.MenuItem
 import android.widget.ImageView
 import me.proxer.app.R
 import me.proxer.app.activity.base.ImageTabsActivity
+import me.proxer.app.fragment.media.CommentsFragment
 import me.proxer.app.fragment.media.EpisodesFragment
 import me.proxer.app.fragment.media.MediaInfoFragment
 import me.proxer.app.fragment.media.RelationsFragment
@@ -116,29 +117,28 @@ class MediaActivity : ImageTabsActivity() {
         override fun getItem(position: Int): Fragment {
             return when (position) {
                 0 -> MediaInfoFragment.newInstance()
-//                1 -> CommentFragment.newInstance()
-                1 -> EpisodesFragment.newInstance()
-                2 -> RelationsFragment.newInstance()
+                1 -> CommentsFragment.newInstance()
+                2 -> EpisodesFragment.newInstance()
+                3 -> RelationsFragment.newInstance()
                 else -> throw RuntimeException("Unknown index passed")
             }
         }
 
-        override fun getCount() = 3 // 4
+        override fun getCount() = 4
 
         override fun getPageTitle(position: Int): CharSequence? {
             return when (position) {
                 0 -> getString(R.string.section_media_info)
-//                1 -> getString(R.string.fragment_comments_title)
-                1 -> category?.toEpisodeAppString(this@MediaActivity)
+                1 -> getString(R.string.section_comments)
+                2 -> category?.toEpisodeAppString(this@MediaActivity)
                         ?: getString(R.string.category_anime_episodes_title)
-                2 -> getString(R.string.section_relations)
+                3 -> getString(R.string.section_relations)
                 else -> throw RuntimeException("Unknown index passed")
             }
         }
 
         fun updateEpisodesTitle(category: Category) {
-            // TODO: Change to 2
-            tabs.getTabAt(1)?.text = category.toEpisodeAppString(this@MediaActivity)
+            tabs.getTabAt(2)?.text = category.toEpisodeAppString(this@MediaActivity)
         }
     }
 }

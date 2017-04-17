@@ -78,7 +78,7 @@ class EpisodeAdapter(savedInstanceState: Bundle?) : PagingAdapter<EpisodeRow>() 
                 withSafeAdapterPosition {
                     val number = list[it].number.toString()
 
-                    if (expanded.get(number)) {
+                    if (expanded[number] ?: false) {
                         expanded.remove(number)
                     } else {
                         expanded.put(number, true)
@@ -103,7 +103,7 @@ class EpisodeAdapter(savedInstanceState: Bundle?) : PagingAdapter<EpisodeRow>() 
                 watched.visibility = View.INVISIBLE
             }
 
-            if (expanded.get(item.number.toString())) {
+            if (expanded[item.number.toString()] ?: false) {
                 languages.visibility = View.VISIBLE
             } else {
                 languages.visibility = View.GONE

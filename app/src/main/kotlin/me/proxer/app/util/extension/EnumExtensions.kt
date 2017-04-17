@@ -93,6 +93,25 @@ fun Category.toEpisodeAppString(context: Context, number: Int? = null): String {
     }
 }
 
+fun UserMediaProgress.toEpisodeAppString(context: Context, episode: Int = 1,
+                                         category: Category = Category.ANIME): String {
+    return when (this) {
+        UserMediaProgress.WATCHED -> context.getString(when (category) {
+            Category.ANIME -> R.string.user_media_progress_watched
+            Category.MANGA -> R.string.user_media_progress_read
+        })
+        UserMediaProgress.WATCHING -> context.getString(when (category) {
+            Category.ANIME -> R.string.user_media_progress_watching
+            Category.MANGA -> R.string.user_media_progress_reading
+        }, episode)
+        UserMediaProgress.WILL_WATCH -> context.getString(when (category) {
+            Category.ANIME -> R.string.user_media_progress_will_watch
+            Category.MANGA -> R.string.user_media_progress_will_read
+        })
+        UserMediaProgress.CANCELLED -> context.getString(R.string.user_media_progress_cancelled, episode)
+    }
+}
+
 fun Synonym.toTypeAppString(context: Context): String {
     return context.getString(when (this.type) {
         SynonymType.ORIGINAL -> R.string.synonym_original_type

@@ -10,12 +10,8 @@ import android.support.v7.widget.StaggeredGridLayoutManager
 
  * @author Ruben Gees
  */
-abstract class EndlessRecyclerOnScrollListener(private val layoutManager:
-                                               RecyclerView.LayoutManager) : OnScrollListener() {
-
-    private companion object {
-        private const val VISIBLE_THRESHOLD = 5
-    }
+abstract class EndlessRecyclerOnScrollListener(private val layoutManager: RecyclerView.LayoutManager,
+                                               private val visibleThreshold: Int = 5) : OnScrollListener() {
 
     private var lastScroll = 0L
 
@@ -25,20 +21,20 @@ abstract class EndlessRecyclerOnScrollListener(private val layoutManager:
             val totalItemCount = layoutManager.itemCount
             var pastVisibleItems = 0
 
-            if (layoutManager is StaggeredGridLayoutManager) {
-                val firstVisibleItems = IntArray(layoutManager.spanCount)
+            when (layoutManager) {
+                is StaggeredGridLayoutManager -> {
+                    val firstVisibleItems = IntArray(layoutManager.spanCount).apply {
+                        layoutManager.findFirstVisibleItemPositions(this)
+                    }
 
-                layoutManager.findFirstVisibleItemPositions(firstVisibleItems)
-
-                if (firstVisibleItems.isNotEmpty()) {
-                    pastVisibleItems = firstVisibleItems[0]
+                    if (firstVisibleItems.isNotEmpty()) {
+                        pastVisibleItems = firstVisibleItems[0]
+                    }
                 }
-            } else if (layoutManager is LinearLayoutManager) {
-                pastVisibleItems = layoutManager.findFirstVisibleItemPosition()
+                is LinearLayoutManager -> pastVisibleItems = layoutManager.findFirstVisibleItemPosition()
             }
 
-            if (totalItemCount > 0 && visibleItemCount + pastVisibleItems >=
-                    totalItemCount - VISIBLE_THRESHOLD) {
+            if (totalItemCount > 0 && visibleItemCount + pastVisibleItems >= totalItemCount - visibleThreshold) {
                 onLoadMore()
             }
 

@@ -33,6 +33,7 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
 
     open protected val spanCount get() = DeviceUtils.calculateSpanAmount(activity)
     open protected val emptyResultMessage get() = R.string.error_no_data
+    open protected val pagingThreshold = 5
 
     override val isWorking get() = super.isWorking || refreshTask.isWorking
 
@@ -218,7 +219,7 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
         list.adapter = adapter
 
         list.setHasFixedSize(true)
-        list.addOnScrollListener(object : EndlessRecyclerOnScrollListener(layoutManager) {
+        list.addOnScrollListener(object : EndlessRecyclerOnScrollListener(layoutManager, pagingThreshold) {
             override fun onLoadMore() {
                 if (!hasReachedEnd && !adapter.hasFooter() && !isWorking) {
                     task.forceExecute(constructInput())

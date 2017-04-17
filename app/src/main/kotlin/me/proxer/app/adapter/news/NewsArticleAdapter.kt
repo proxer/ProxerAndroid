@@ -88,7 +88,7 @@ class NewsArticleAdapter(savedInstanceState: Bundle?) : PagingAdapter<NewsArticl
                 withSafeAdapterPosition {
                     val id = internalList[it].id
 
-                    if (expanded.get(id)) {
+                    if (expanded[id] ?: false) {
                         expanded.remove(id)
                     } else {
                         expanded.put(id, true)
@@ -115,7 +115,7 @@ class NewsArticleAdapter(savedInstanceState: Bundle?) : PagingAdapter<NewsArticl
             category.text = item.category
             time.text = TimeUtils.convertToRelativeReadableTime(time.context, item.date)
 
-            if (expanded.get(item.id)) {
+            if (expanded[item.id] ?: false) {
                 description.maxLines = Int.MAX_VALUE
 
                 ViewCompat.animate(expand).rotation(180f)
