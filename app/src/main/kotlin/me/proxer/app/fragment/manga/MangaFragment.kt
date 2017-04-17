@@ -136,8 +136,8 @@ class MangaFragment : LoadingFragment<Pair<ProxerCall<Chapter>, ProxerCall<Entry
         header.textResolver = object : MediaControlView.TextResourceResolver {
             override fun next() = context.getString(R.string.fragment_manga_next_chapter)
             override fun previous() = context.getString(R.string.fragment_manga_previous_chapter)
-            override fun bookmarkThis() = context.getString(R.string.fragment_manga_bookmark_next_chapter)
-            override fun bookmarkNext() = context.getString(R.string.fragment_manga_bookmark_this_chapter)
+            override fun bookmarkThis() = context.getString(R.string.fragment_manga_bookmark_this_chapter)
+            override fun bookmarkNext() = context.getString(R.string.fragment_manga_bookmark_next_chapter)
         }
 
         return inflater.inflate(R.layout.fragment_manga, container, false)
