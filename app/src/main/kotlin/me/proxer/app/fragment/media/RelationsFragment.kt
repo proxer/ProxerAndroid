@@ -45,8 +45,12 @@ class RelationsFragment : LoadingFragment<ProxerCall<List<Relation>>, List<Relat
 
     private val list: RecyclerView by bindView(R.id.list)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        return inflater.inflate(R.layout.fragment_relations, container, false)
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         adapter.callback = object : RelationsAdapter.RelationsAdapterCallback {
             override fun onRelationClick(view: View, item: Relation) {
@@ -56,14 +60,6 @@ class RelationsFragment : LoadingFragment<ProxerCall<List<Relation>>, List<Relat
                         if (imageView.drawable != null) imageView else null)
             }
         }
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_relations, container, false)
-    }
-
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
         list.setHasFixedSize(true)
         list.layoutManager = StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity) + 1,

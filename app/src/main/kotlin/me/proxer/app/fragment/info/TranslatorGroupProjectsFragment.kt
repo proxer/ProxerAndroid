@@ -8,7 +8,6 @@ import me.proxer.app.R
 import me.proxer.app.activity.MediaActivity
 import me.proxer.app.activity.TranslatorGroupActivity
 import me.proxer.app.adapter.info.TranslatorGroupProjectAdapter
-import me.proxer.app.adapter.info.TranslatorGroupProjectAdapter.TranslatorGroupProjectAdapterCallback
 import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.fragment.base.PagedLoadingFragment
 import me.proxer.app.helper.PreferenceHelper
@@ -46,10 +45,10 @@ class TranslatorGroupProjectsFragment : PagedLoadingFragment<ProxerCall<List<Tra
 
     override val innerAdapter = TranslatorGroupProjectAdapter()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        innerAdapter.callback = object : TranslatorGroupProjectAdapterCallback {
+        innerAdapter.callback = object : TranslatorGroupProjectAdapter.TranslatorGroupProjectAdapterCallback {
             override fun onProjectClick(view: View, item: TranslatorGroupProject) {
                 val imageView = view.find<ImageView>(R.id.image)
 

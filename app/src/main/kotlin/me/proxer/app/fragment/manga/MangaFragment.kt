@@ -115,10 +115,6 @@ class MangaFragment : LoadingFragment<Pair<ProxerCall<Chapter>, ProxerCall<Entry
                 }
                 .build()
 
-        innerAdapter.positionResolver = object : PagingAdapter.PositionResolver() {
-            override fun resolveRealPosition(position: Int) = adapter.getRealPosition(position)
-        }
-
         setHasOptionsMenu(true)
     }
 
@@ -154,6 +150,10 @@ class MangaFragment : LoadingFragment<Pair<ProxerCall<Chapter>, ProxerCall<Entry
                     (activity as AppCompatActivity).supportActionBar?.hide()
                 }
             }
+        }
+
+        innerAdapter.positionResolver = object : PagingAdapter.PositionResolver() {
+            override fun resolveRealPosition(position: Int) = adapter.getRealPosition(position)
         }
 
         list.layoutManager = LinearLayoutManager(context)

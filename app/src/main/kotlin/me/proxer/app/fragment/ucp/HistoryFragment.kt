@@ -35,8 +35,8 @@ class HistoryFragment : PagedLoadingFragment<ProxerCall<List<UcpHistoryEntry>>, 
 
     override val innerAdapter = HistoryAdapter()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         innerAdapter.callback = object : HistoryAdapter.HistoryAdapterCallback {
             override fun onItemClick(view: View, item: UcpHistoryEntry) {

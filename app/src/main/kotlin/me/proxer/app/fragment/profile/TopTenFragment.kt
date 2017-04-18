@@ -55,28 +55,6 @@ class TopTenFragment : LoadingFragment<Pair<ProxerCall<List<TopTenEntry>>, Proxe
     private val animeList: RecyclerView by bindView(R.id.animeList)
     private val mangaList: RecyclerView by bindView(R.id.mangaList)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        animeAdapter.callback = object : TopTenAdapter.TopTenAdapterCallback {
-            override fun onTopTenEntryClick(view: View, item: TopTenEntry) {
-                val imageView = view.find<ImageView>(R.id.image)
-
-                MediaActivity.navigateTo(activity, item.id, item.name, item.category,
-                        if (imageView.drawable != null) imageView else null)
-            }
-        }
-
-        mangaAdapter.callback = object : TopTenAdapter.TopTenAdapterCallback {
-            override fun onTopTenEntryClick(view: View, item: TopTenEntry) {
-                val imageView = view.find<ImageView>(R.id.image)
-
-                MediaActivity.navigateTo(activity, item.id, item.name, item.category,
-                        if (imageView.drawable != null) imageView else null)
-            }
-        }
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_top_ten, container, false)
     }
@@ -85,6 +63,9 @@ class TopTenFragment : LoadingFragment<Pair<ProxerCall<List<TopTenEntry>>, Proxe
         super.onViewCreated(view, savedInstanceState)
 
         val spanCount = DeviceUtils.calculateSpanAmount(activity) + 1
+
+        animeAdapter.callback = TopTenCallback()
+        mangaAdapter.callback = TopTenCallback()
 
         animeList.setHasFixedSize(true)
         animeList.isNestedScrollingEnabled = false
@@ -133,4 +114,13 @@ class TopTenFragment : LoadingFragment<Pair<ProxerCall<List<TopTenEntry>>, Proxe
             .build()
 
     class ZippedTopTenResult(val animeEntries: List<TopTenEntry>, val mangaEntries: List<TopTenEntry>)
+
+    private inner class TopTenCallback : TopTenAdapter.TopTenAdapterCallback {
+        override fun onTopTenEntryClick(view: View, item: TopTenEntry) {
+            val imageView = view.find<ImageView>(R.id.image)
+
+            MediaActivity.navigateTo(activity, item.id, item.name, item.category,
+                    if (imageView.drawable != null) imageView else null)
+        }
+    }
 }

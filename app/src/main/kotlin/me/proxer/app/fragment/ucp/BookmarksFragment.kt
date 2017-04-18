@@ -5,6 +5,7 @@ import android.support.design.widget.Snackbar
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
 import com.rubengees.ktask.android.AndroidLifecycleTask
 import com.rubengees.ktask.android.bindToLifecycle
 import com.rubengees.ktask.util.TaskBuilder
@@ -44,9 +45,9 @@ class BookmarksFragment : PagedLoadingFragment<ProxerCall<List<Bookmark>>, Bookm
     override val isLoginRequired = true
     override val isSwipeToRefreshEnabled = true
     override val shouldReplaceOnRefresh = true
-    override val itemsOnPage = 30
     override val emptyResultMessage = R.string.error_no_data_bookmarks
     override val spanCount get() = super.spanCount + 1
+    override val itemsOnPage = 30
 
     override val innerAdapter = BookmarkAdapter()
 
@@ -83,6 +84,12 @@ class BookmarksFragment : PagedLoadingFragment<ProxerCall<List<Bookmark>>, Bookm
                     removeBookmarksFromQueue()
                 }.build()
 
+        setHasOptionsMenu(true)
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         innerAdapter.callback = object : BookmarkAdapter.BookmarkAdapterCallback {
             override fun onBookmarkClick(item: Bookmark) {
                 when (item.category) {
@@ -99,8 +106,6 @@ class BookmarksFragment : PagedLoadingFragment<ProxerCall<List<Bookmark>>, Bookm
                 removeBookmarksFromQueue()
             }
         }
-
-        setHasOptionsMenu(true)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

@@ -8,7 +8,6 @@ import me.proxer.app.R
 import me.proxer.app.activity.IndustryActivity
 import me.proxer.app.activity.MediaActivity
 import me.proxer.app.adapter.info.IndustryProjectAdapter
-import me.proxer.app.adapter.info.IndustryProjectAdapter.IndustryProjectAdapterCallback
 import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.fragment.base.PagedLoadingFragment
 import me.proxer.app.helper.PreferenceHelper
@@ -45,10 +44,10 @@ class IndustryProjectsFragment : PagedLoadingFragment<ProxerCall<List<IndustryPr
 
     override val innerAdapter = IndustryProjectAdapter()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        innerAdapter.callback = object : IndustryProjectAdapterCallback {
+        innerAdapter.callback = object : IndustryProjectAdapter.IndustryProjectAdapterCallback {
             override fun onProjectClick(view: View, item: IndustryProject) {
                 val imageView = view.find<ImageView>(R.id.image)
 

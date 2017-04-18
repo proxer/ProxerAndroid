@@ -172,6 +172,23 @@ class AnimeFragment : LoadingFragment<Pair<ProxerCall<List<Stream>>, ProxerCall<
                     setProgressVisible(isWorking)
                 }
                 .build()
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        header = inflater.inflate(R.layout.layout_media_control, container, false) as MediaControlView
+
+        header.textResolver = object : MediaControlView.TextResourceResolver {
+            override fun next() = context.getString(R.string.fragment_anime_next_episode)
+            override fun previous() = context.getString(R.string.fragment_anime_previous_episode)
+            override fun bookmarkThis() = context.getString(R.string.fragment_anime_bookmark_this_episode)
+            override fun bookmarkNext() = context.getString(R.string.fragment_anime_bookmark_next_episode)
+        }
+
+        return inflater.inflate(R.layout.fragment_anime, container, false)
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         innerAdapter.positionResolver = object : PagingAdapter.PositionResolver() {
             override fun resolveRealPosition(position: Int) = adapter.getRealPosition(position)
@@ -194,23 +211,6 @@ class AnimeFragment : LoadingFragment<Pair<ProxerCall<List<Stream>>, ProxerCall<
                 streamTask.forceExecute(StreamResolutionInput(item.hosterName, item.id))
             }
         }
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        header = inflater.inflate(R.layout.layout_media_control, container, false) as MediaControlView
-
-        header.textResolver = object : MediaControlView.TextResourceResolver {
-            override fun next() = context.getString(R.string.fragment_anime_next_episode)
-            override fun previous() = context.getString(R.string.fragment_anime_previous_episode)
-            override fun bookmarkThis() = context.getString(R.string.fragment_anime_bookmark_this_episode)
-            override fun bookmarkNext() = context.getString(R.string.fragment_anime_bookmark_next_episode)
-        }
-
-        return inflater.inflate(R.layout.fragment_anime, container, false)
-    }
-
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
         list.layoutManager = LinearLayoutManager(context)
         list.adapter = adapter

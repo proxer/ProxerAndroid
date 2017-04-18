@@ -58,6 +58,13 @@ class CommentsFragment : PagedLoadingFragment<ProxerCall<List<Comment>>, Comment
         super.onCreate(savedInstanceState)
 
         innerAdapter = CommentAdapter(savedInstanceState)
+
+        setHasOptionsMenu(true)
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         innerAdapter.callback = object : CommentAdapter.CommentAdapterCallback {
             override fun onUserClick(view: View, item: Comment) {
                 val imageView = view.find<ImageView>(R.id.userImage)
@@ -66,8 +73,6 @@ class CommentsFragment : PagedLoadingFragment<ProxerCall<List<Comment>>, Comment
                         if (imageView.drawable != null && item.image.isNotBlank()) imageView else null)
             }
         }
-
-        setHasOptionsMenu(true)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

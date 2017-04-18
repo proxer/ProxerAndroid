@@ -1,6 +1,7 @@
 package me.proxer.app.fragment.news
 
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageView
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
@@ -39,6 +40,11 @@ class NewsArticleFragment : PagedLoadingFragment<ProxerCall<List<NewsArticle>>, 
         super.onCreate(savedInstanceState)
 
         innerAdapter = NewsArticleAdapter(savedInstanceState)
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         innerAdapter.callback = object : NewsAdapterCallback {
             override fun onNewsArticleClick(item: NewsArticle) {
                 showPage(ProxerUrls.newsWeb(item.categoryId, item.threadId, Device.MOBILE))

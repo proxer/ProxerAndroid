@@ -59,6 +59,16 @@ class EpisodesFragment : LoadingFragment<ProxerCall<EpisodeInfo>, List<EpisodeRo
         super.onCreate(savedInstanceState)
 
         adapter = EpisodeAdapter(savedInstanceState)
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View {
+        return inflater.inflate(R.layout.fragment_episodes, container, false)
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         adapter.callback = object : EpisodeAdapter.EpisodeAdapterCallback() {
             override fun onLanguageClick(language: MediaLanguage, episode: EpisodeRow) {
                 when (episode.category) {
@@ -73,15 +83,6 @@ class EpisodesFragment : LoadingFragment<ProxerCall<EpisodeInfo>, List<EpisodeRo
                 }
             }
         }
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_episodes, container, false)
-    }
-
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
         list.setHasFixedSize(true)
         list.layoutManager = LinearLayoutManager(context)

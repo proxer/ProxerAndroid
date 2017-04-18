@@ -86,36 +86,6 @@ class UcpTopTenFragment : LoadingFragment<ProxerCall<List<UcpTopTenEntry>>, List
                 .onFinish {
                     removeEntriesFromQueue()
                 }.build()
-
-        animeAdapter.callback = object : UcpTopTenAdapter.UcpToptenAdapterCallback {
-            override fun onItemClick(view: View, item: UcpTopTenEntry) {
-                val imageView = view.find<ImageView>(R.id.image)
-
-                MediaActivity.navigateTo(activity, item.entryId, item.name, item.category,
-                        if (imageView.drawable != null) imageView else null)
-            }
-
-            override fun onRemoveClick(item: UcpTopTenEntry) {
-                removalQueue.add(item)
-
-                removeEntriesFromQueue()
-            }
-        }
-
-        mangaAdapter.callback = object : UcpTopTenAdapter.UcpToptenAdapterCallback {
-            override fun onItemClick(view: View, item: UcpTopTenEntry) {
-                val imageView = view.find<ImageView>(R.id.image)
-
-                MediaActivity.navigateTo(activity, item.entryId, item.name, item.category,
-                        if (imageView.drawable != null) imageView else null)
-            }
-
-            override fun onRemoveClick(item: UcpTopTenEntry) {
-                removalQueue.add(item)
-
-                removeEntriesFromQueue()
-            }
-        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -127,6 +97,9 @@ class UcpTopTenFragment : LoadingFragment<ProxerCall<List<UcpTopTenEntry>>, List
         super.onViewCreated(view, savedInstanceState)
 
         val spanCount = DeviceUtils.calculateSpanAmount(activity) + 1
+
+        animeAdapter.callback = UcpTopTenCallback()
+        mangaAdapter.callback = UcpTopTenCallback()
 
         animeList.setHasFixedSize(true)
         animeList.isNestedScrollingEnabled = false
@@ -173,6 +146,21 @@ class UcpTopTenFragment : LoadingFragment<ProxerCall<List<UcpTopTenEntry>>, List
     private fun removeEntriesFromQueue() {
         if (removalQueue.isNotEmpty()) {
             removalTask.execute(api.ucp().deleteFavorite(removalQueue.first().id).build())
+        }
+    }
+
+    private inner class UcpTopTenCallback : UcpTopTenAdapter.UcpToptenAdapterCallback {
+        override fun onItemClick(view: View, item: UcpTopTenEntry) {
+            val imageView = view.find<ImageView>(R.id.image)
+
+            MediaActivity.navigateTo(activity, item.entryId, item.name, item.category,
+                    if (imageView.drawable != null) imageView else null)
+        }
+
+        override fun onRemoveClick(item: UcpTopTenEntry) {
+            removalQueue.add(item)
+
+            removeEntriesFromQueue()
         }
     }
 }
