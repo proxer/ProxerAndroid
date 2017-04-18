@@ -157,15 +157,21 @@ class CommentAdapter(savedInstanceState: Bundle?) : PagingAdapter<Comment>() {
             comment.spoilerStateListener = { states, hasBeenExpanded ->
                 spoilerStates.put(item.id, states)
 
-                if (!(expanded[item.id] ?: false) && hasBeenExpanded) {
-                    expanded.put(item.id, true)
+                if (hasBeenExpanded) {
+                    if (!(expanded[item.id] ?: false)) {
+                        expanded.put(item.id, true)
 
-                    comment.maxHeight = Int.MAX_VALUE
+                        comment.maxHeight = Int.MAX_VALUE
+                        comment.post {
+                            bindExpandButton(maxHeight)
+                        }
+
+                        ViewCompat.animate(expand).rotation(180f)
+                    }
+                } else {
                     comment.post {
                         bindExpandButton(maxHeight)
                     }
-
-                    ViewCompat.animate(expand).rotation(180f)
                 }
             }
 
