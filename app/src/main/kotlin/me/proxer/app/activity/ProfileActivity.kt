@@ -14,9 +14,11 @@ import me.proxer.app.R
 import me.proxer.app.activity.base.ImageTabsActivity
 import me.proxer.app.fragment.profile.ProfileFragment
 import me.proxer.app.fragment.profile.TopTenFragment
+import me.proxer.app.fragment.profile.UserMediaListFragment
 import me.proxer.app.helper.StorageHelper
 import me.proxer.app.util.ActivityUtils
 import me.proxer.app.util.DeviceUtils
+import me.proxer.library.enums.Category
 import me.proxer.library.util.ProxerUrls
 import org.jetbrains.anko.intentFor
 
@@ -149,20 +151,20 @@ class ProfileActivity : ImageTabsActivity() {
             return when (position) {
                 0 -> ProfileFragment.newInstance()
                 1 -> TopTenFragment.newInstance()
-//                2 -> UserMediaListFragment.newInstance(CategoryParameter.ANIME)
-//                3 -> UserMediaListFragment.newInstance(CategoryParameter.MANGA)
+                2 -> UserMediaListFragment.newInstance(Category.ANIME)
+                3 -> UserMediaListFragment.newInstance(Category.MANGA)
                 else -> throw RuntimeException("Unknown index passed")
             }
         }
 
-        override fun getCount() = 2 // 4
+        override fun getCount() = 4
 
         override fun getPageTitle(position: Int): CharSequence? {
             return when (position) {
                 0 -> getString(R.string.section_profile_info)
                 1 -> getString(R.string.section_top_ten)
-//                2 -> getString(R.string.fragment_user_media_list_anime_title)
-//                3 -> getString(R.string.fragment_user_media_list_manga_title)
+                2 -> getString(R.string.section_user_media_list_anime)
+                3 -> getString(R.string.section_user_media_list_manga)
                 else -> throw RuntimeException("Unknown index passed")
             }
         }

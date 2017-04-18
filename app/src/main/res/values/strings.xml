@@ -22,6 +22,8 @@
 
     <string name="section_profile_info">Profil</string>
     <string name="section_top_ten">Favoriten</string>
+    <string name="section_user_media_list_anime">Anime</string>
+    <string name="section_user_media_list_manga">Manga</string>
 
     <string name="section_media_info">Info</string>
     <string name="section_comments">Kommentare</string>
@@ -86,6 +88,7 @@
     <string name="error_no_data_relations">Für dieses Werk gibt es keine Verbindungen</string>
     <string name="error_no_data_projects">Es gibt noch keine Projekte</string>
     <string name="error_no_data_comments">Es gibt noch keine Kommentare</string>
+    <string name="error_no_data_user_media_list">Es gibt noch keine Einträge</string>
 
     <string name="error_action_retry">Erneut versuchen</string>
     <string name="error_action_captcha">Captcha</string>
