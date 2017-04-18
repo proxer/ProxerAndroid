@@ -10,13 +10,13 @@ import com.mikepenz.crossfader.Crossfader
 import com.mikepenz.crossfader.view.GmailStyleCrossFadeSlidingPaneLayout
 import com.mikepenz.materialdrawer.*
 import com.mikepenz.materialdrawer.holder.BadgeStyle
+import com.mikepenz.materialdrawer.interfaces.ICrossfader
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import com.mikepenz.materialdrawer.model.ProfileSettingDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IProfile
 import me.proxer.app.R
-import me.proxer.app.util.CrossfadeWrapper
 import me.proxer.app.util.DeviceUtils
 import me.proxer.library.util.ProxerUrls
 import org.jetbrains.anko.find
@@ -329,5 +329,10 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar, savedInstanceSta
             fun fromOrNull(id: Long?) = values().firstOrNull { it.id == id }
             fun fromOrDefault(id: Long?) = fromOrNull(id) ?: USER
         }
+    }
+
+    private class CrossfadeWrapper(private val crossfader: Crossfader<*>) : ICrossfader {
+        override fun crossfade() = crossfader.crossFade()
+        override fun isCrossfaded() = crossfader.isCrossFaded()
     }
 }
