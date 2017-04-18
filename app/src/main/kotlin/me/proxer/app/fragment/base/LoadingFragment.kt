@@ -13,6 +13,7 @@ import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.activity.base.MainActivity
 import me.proxer.app.event.AgeConfirmationEvent
+import me.proxer.app.event.CaptchaSolvedEvent
 import me.proxer.app.event.LoginEvent
 import me.proxer.app.event.LogoutEvent
 import me.proxer.app.util.ErrorUtils
@@ -125,7 +126,7 @@ abstract class LoadingFragment<I, O> : MainFragment() {
         if (isSolvingCaptcha) {
             isSolvingCaptcha = false
 
-            freshLoad()
+            EventBus.getDefault().post(CaptchaSolvedEvent())
         } else if (state.data == null && state.error == null && !isWorking) {
             freshLoad()
         }
@@ -174,6 +175,18 @@ abstract class LoadingFragment<I, O> : MainFragment() {
     fun onAgeConfirmation(@Suppress("UNUSED_PARAMETER") event: AgeConfirmationEvent) {
         if (isAgeConfirmationRequired) {
             freshLoad()
+        }
+    }
+
+    @Suppress("unused")
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onCaptchaSolver(@Suppress("UNUSED_PARAMETER") event: CaptchaSolvedEvent) {
+        state.error?.let {
+            val error = ErrorUtils.getInnermostError(it)
+
+            if (error is ProxerException && error.serverErrorType == ProxerException.ServerErrorType.IP_BLOCKED) {
+                freshLoad()
+            }
         }
     }
 
