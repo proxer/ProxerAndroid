@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.design.widget.TextInputEditText
 import android.support.design.widget.TextInputLayout
 import android.support.v7.app.AppCompatActivity
+import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
@@ -24,6 +25,8 @@ import me.proxer.app.task.asyncProxerTask
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.extension.bindView
 import me.proxer.app.util.listener.TextWatcherWrapper
+import me.proxer.library.api.ProxerException
+import me.proxer.library.api.ProxerException.ServerErrorType
 import me.proxer.library.entitiy.user.User
 import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.longToast
@@ -49,12 +52,25 @@ class LoginDialog : MainDialog() {
                     StorageHelper.loginToken = it.loginToken
                     StorageHelper.user = LocalUser(it.id, username.text.trim().toString(), it.image)
 
+                    if (secret.text.isBlank()) {
+                        StorageHelper.isTwoFactorAuthenticationEnabled = false
+                    }
+
                     EventBus.getDefault().post(LoginEvent())
 
                     dismiss()
                 }
                 .onError {
-                    context.longToast(ErrorUtils.handle(activity as MainActivity, it).message)
+                    if (it is ProxerException && it.serverErrorType == ServerErrorType.USER_2FA_SECRET_REQUIRED) {
+                        StorageHelper.isTwoFactorAuthenticationEnabled = true
+
+                        enableSecretInput()
+                        secret.requestFocus()
+
+                        context.longToast(R.string.error_login_two_factor_authentication)
+                    } else {
+                        context.longToast(ErrorUtils.handle(activity as MainActivity, it).message)
+                    }
 
                     setProgressVisible(false)
                 }
@@ -65,6 +81,7 @@ class LoginDialog : MainDialog() {
 
     private val username: TextInputEditText by bindView(R.id.username)
     private val password: TextInputEditText by bindView(R.id.password)
+    private val secret: TextInputEditText by bindView(R.id.secret)
     private val usernameContainer: TextInputLayout by bindView(R.id.usernameContainer)
     private val passwordContainer: TextInputLayout by bindView(R.id.passwordContainer)
     private val inputContainer: ViewGroup by bindView(R.id.inputContainer)
@@ -93,15 +110,11 @@ class LoginDialog : MainDialog() {
             username.setText(StorageHelper.user?.name)
         }
 
-        password.setOnEditorActionListener(TextView.OnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_GO) {
-                login()
-
-                return@OnEditorActionListener true
-            }
-
-            false
-        })
+        if (StorageHelper.isTwoFactorAuthenticationEnabled) {
+            enableSecretInput()
+        } else {
+            password.setOnEditorActionListener(OnGoEditorActionListener())
+        }
 
         username.addTextChangedListener(object : TextWatcherWrapper {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
@@ -131,7 +144,15 @@ class LoginDialog : MainDialog() {
                 // This is important to avoid sending broken login tokens and making it impossible to login again.
                 StorageHelper.loginToken = null
 
-                task.execute(api.user().login(username, password).build())
+                task.execute(api.user().login(username, password)
+                        .apply {
+                            secret.text.toString().let {
+                                if (it.isNotBlank()) {
+                                    secretKey(it)
+                                }
+                            }
+                        }
+                        .build())
             }
         }
     }
@@ -165,5 +186,22 @@ class LoginDialog : MainDialog() {
     private fun resetError(container: TextInputLayout) {
         container.error = null
         container.isErrorEnabled = false
+    }
+
+    private fun enableSecretInput() {
+        secret.visibility = View.VISIBLE
+        password.imeOptions = EditorInfo.IME_ACTION_NEXT
+        secret.setOnEditorActionListener(OnGoEditorActionListener())
+    }
+
+    private inner class OnGoEditorActionListener : TextView.OnEditorActionListener {
+        override fun onEditorAction(view: TextView?, actionId: Int, event: KeyEvent?) = when (actionId) {
+            EditorInfo.IME_ACTION_GO -> {
+                login()
+
+                true
+            }
+            else -> false
+        }
     }
 }

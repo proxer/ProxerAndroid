@@ -120,7 +120,7 @@ class DashboardActivity : MainActivity() {
                 }
             }
 
-            StorageHelper.firstStart = true
+            StorageHelper.isFirstStart = true
             displayFirstPage(null)
         }
     }
@@ -152,7 +152,7 @@ class DashboardActivity : MainActivity() {
 
     private fun displayFirstPage(savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
-            if (StorageHelper.firstStart) {
+            if (StorageHelper.isFirstStart) {
                 IntroductionHelper(this)
             } else {
                 drawer.select(getItemToLoad())

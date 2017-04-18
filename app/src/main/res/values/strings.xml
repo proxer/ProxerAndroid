@@ -43,6 +43,8 @@
     <string name="error_invalid_token">Du wurdest zu deiner Sicherheit automatisch abgemeldet. Melde dich erneut an
     </string>
     <string name="error_login_credentials">Falsches Password ode falscher Nutzername</string>
+    <string name="error_login_two_factor_authentication">Bitte gebe deinen Geheimschlüssel der
+        Zwei-Faktor-Authentifizierung ein!</string>
     <string name="error_already_in_list">Es gibt bereits einen Eintrag in deiner Liste</string>
     <string name="error_list_full">Deine Liste ist voll</string>
     <string name="error_insufficient_permissions">Diese Information wurde vom Benutzer nicht freigegeben, eventuell
@@ -168,6 +170,7 @@
     <string name="dialog_login_positive">Anmelden</string>
     <string name="dialog_login_password_hint">Passwort</string>
     <string name="dialog_login_username_hint">Nutzername</string>
+    <string name="dialog_login_secret_hint">Secret Key</string>
     <string name="dialog_login_error_password">Bitte gib ein Passwort an</string>
     <string name="dialog_login_error_username">Bitte gib einen Nutzernamen an</string>
 

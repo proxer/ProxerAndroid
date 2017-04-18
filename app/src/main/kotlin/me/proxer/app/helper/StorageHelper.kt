@@ -13,11 +13,12 @@ object StorageHelper {
     private const val FIRST_START = "first_start"
     private const val USER = "user"
     private const val LOGIN_TOKEN = "login_token"
+    private const val TWO_FACTOR_AUTHENTICATION = "two_factor_authentication"
 
-    var firstStart: Boolean
+    var isFirstStart: Boolean
         get() = Hawk.get(FIRST_START, true)
-        set(firstStart) {
-            Hawk.put(FIRST_START, false)
+        set(value) {
+            Hawk.put(FIRST_START, value)
         }
 
     var user: LocalUser?
@@ -44,5 +45,11 @@ object StorageHelper {
                 null -> Hawk.delete(LOGIN_TOKEN)
                 else -> Hawk.put(LOGIN_TOKEN, value)
             }
+        }
+
+    var isTwoFactorAuthenticationEnabled: Boolean
+        get() = Hawk.get(TWO_FACTOR_AUTHENTICATION, false)
+        set(value) {
+            Hawk.put(TWO_FACTOR_AUTHENTICATION, value)
         }
 }
