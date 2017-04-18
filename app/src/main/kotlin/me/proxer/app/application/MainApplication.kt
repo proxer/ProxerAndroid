@@ -32,7 +32,6 @@ import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.ios.IosEmojiProvider
 import me.proxer.app.BuildConfig
 import me.proxer.app.EventBusIndex
-import me.proxer.app.event.LoginEvent
 import me.proxer.app.event.LogoutEvent
 import me.proxer.app.helper.PreferenceHelper
 import me.proxer.app.helper.StorageHelper
@@ -86,21 +85,8 @@ class MainApplication : Application() {
         api = ProxerApi.Builder(BuildConfig.PROXER_API_KEY)
                 .userAgent(USER_AGENT)
                 .loggingStrategy(if (BuildConfig.DEBUG) LoggingStrategy.ALL else LoggingStrategy.NONE)
-                .loginTokenManager(object : LoginTokenManager {
-                    override fun provide() = StorageHelper.loginToken
-                    override fun persist(loginToken: String?) {
-                        val existingLoginToken = StorageHelper.loginToken
-
-                        StorageHelper.loginToken = loginToken
-
-                        if (existingLoginToken != loginToken) {
-                            when (loginToken) {
-                                null -> EventBus.getDefault().post(LogoutEvent())
-                                else -> EventBus.getDefault().post(LoginEvent())
-                            }
-                        }
-                    }
-                }).build()
+                .loginTokenManager(ProxerLoginTokenManager())
+                .build()
     }
 
     private fun initLibs() {
@@ -165,5 +151,25 @@ class MainApplication : Application() {
                 .detectAll()
                 .penaltyLog()
                 .build())
+    }
+
+    private class ProxerLoginTokenManager : LoginTokenManager {
+        override fun provide() = StorageHelper.loginToken
+        override fun persist(loginToken: String?) {
+            when (loginToken) {
+                null -> {
+                    if (StorageHelper.loginToken != loginToken) {
+                        StorageHelper.loginToken = null
+                        StorageHelper.user = null
+
+                        EventBus.getDefault().post(LogoutEvent())
+                    }
+                }
+                else -> {
+                    // Don't do anything in case the token is not null. We save the token manually in the
+                    // LoginDialog.
+                }
+            }
+        }
     }
 }

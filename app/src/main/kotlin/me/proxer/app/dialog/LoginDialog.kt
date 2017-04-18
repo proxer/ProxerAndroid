@@ -18,7 +18,7 @@ import me.proxer.app.activity.base.MainActivity
 import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.dialog.base.MainDialog
 import me.proxer.app.entity.LocalUser
-import me.proxer.app.event.UserChangedEvent
+import me.proxer.app.event.LoginEvent
 import me.proxer.app.helper.StorageHelper
 import me.proxer.app.task.asyncProxerTask
 import me.proxer.app.util.ErrorUtils
@@ -46,9 +46,10 @@ class LoginDialog : MainDialog() {
                     setProgressVisible(true)
                 }
                 .onSuccess {
+                    StorageHelper.loginToken = it.loginToken
                     StorageHelper.user = LocalUser(it.id, username.text.trim().toString(), it.image)
 
-                    EventBus.getDefault().post(UserChangedEvent())
+                    EventBus.getDefault().post(LoginEvent())
 
                     dismiss()
                 }

@@ -15,8 +15,8 @@ import me.proxer.app.R
 import me.proxer.app.activity.base.MainActivity
 import me.proxer.app.dialog.LoginDialog
 import me.proxer.app.dialog.LogoutDialog
+import me.proxer.app.event.LoginEvent
 import me.proxer.app.event.LogoutEvent
-import me.proxer.app.event.UserChangedEvent
 import me.proxer.app.fragment.AboutFragment
 import me.proxer.app.fragment.SettingsFragment
 import me.proxer.app.fragment.media.MediaListFragment
@@ -140,7 +140,7 @@ class DashboardActivity : MainActivity() {
 
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onUserChanged(@Suppress("UNUSED_PARAMETER") event: UserChangedEvent) {
+    fun onUserChanged(@Suppress("UNUSED_PARAMETER") event: LoginEvent) {
         drawer.refreshHeader(this)
     }
 

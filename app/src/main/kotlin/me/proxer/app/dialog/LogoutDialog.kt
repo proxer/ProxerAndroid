@@ -12,12 +12,9 @@ import me.proxer.app.R
 import me.proxer.app.activity.base.MainActivity
 import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.dialog.base.MainDialog
-import me.proxer.app.event.UserChangedEvent
-import me.proxer.app.helper.StorageHelper
 import me.proxer.app.task.asyncProxerTask
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.extension.bindView
-import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.longToast
 
 /**
@@ -38,10 +35,6 @@ class LogoutDialog : MainDialog() {
                     setProgressVisible(true)
                 }
                 .onSuccess {
-                    StorageHelper.user = null
-
-                    EventBus.getDefault().post(UserChangedEvent())
-
                     dismiss()
                 }
                 .onError {
