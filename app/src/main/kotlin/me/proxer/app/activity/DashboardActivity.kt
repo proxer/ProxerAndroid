@@ -10,7 +10,7 @@ import android.view.View
 import android.widget.ImageView
 import com.rubengees.introduction.IntroductionActivity.OPTION_RESULT
 import com.rubengees.introduction.IntroductionBuilder
-import com.rubengees.introduction.entity.Option
+import com.rubengees.introduction.Option
 import me.proxer.app.R
 import me.proxer.app.activity.base.MainActivity
 import me.proxer.app.dialog.LoginDialog

@@ -3,8 +3,8 @@ package me.proxer.app.helper
 import android.app.Activity
 import android.content.Context
 import com.rubengees.introduction.IntroductionBuilder
-import com.rubengees.introduction.entity.Option
-import com.rubengees.introduction.entity.Slide
+import com.rubengees.introduction.Option
+import com.rubengees.introduction.Slide
 import me.proxer.app.R
 
 /**

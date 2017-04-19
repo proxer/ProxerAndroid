@@ -319,7 +319,8 @@
     <string name="introduction_welcome_title">Willkommen!</string>
     <string name="introduction_welcome_description">Ein paar Einstellungen und es geht los</string>
     <string name="introduction_notifications_title">Benachrichtigungen</string>
-    <string name="introduction_notifications_description">Erhalte Benachrichtigungen</string>
+    <string name="introduction_notifications_description">Erhalte Benachrichtigungen zu News und deinem
+        Accoount</string>
     <string name="introduction_skip">Überspringen</string>
 
     <string name="action_search">Suchen</string>
