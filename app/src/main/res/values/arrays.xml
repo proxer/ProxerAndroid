@@ -30,4 +30,16 @@
         <item>3</item>
         <item>4</item>
     </string-array>
+
+    <string-array name="notifications_interval_titles">
+        <item>@string/interval_often</item>
+        <item>@string/interval_moderate</item>
+        <item>@string/interval_seldom</item>
+    </string-array>
+
+    <string-array name="notifications_interval_values">
+        <item>30</item>
+        <item>120</item>
+        <item>480</item>
+    </string-array>
 </resources>

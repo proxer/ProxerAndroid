@@ -11,7 +11,10 @@ import me.proxer.app.application.MainApplication
 import me.proxer.app.dialog.AgeConfirmationDialog
 import me.proxer.app.helper.PreferenceHelper
 import me.proxer.app.helper.PreferenceHelper.AGE_CONFIRMATION
+import me.proxer.app.helper.PreferenceHelper.NOTIFICATIONS
+import me.proxer.app.helper.PreferenceHelper.NOTIFICATIONS_INTERVAL
 import me.proxer.app.helper.PreferenceHelper.THEME
+import me.proxer.app.job.NotificationsJob
 import net.xpece.android.support.preference.TwoStatePreference
 import org.jetbrains.anko.bundleOf
 
@@ -80,6 +83,14 @@ class SettingsFragment : XpPreferenceFragment(), SharedPreferences.OnSharedPrefe
                 AppCompatDelegate.setDefaultNightMode(PreferenceHelper.getNightMode(context))
 
                 activity.recreate()
+            }
+
+            NOTIFICATIONS -> {
+                NotificationsJob.scheduleIfPossible(context)
+            }
+
+            NOTIFICATIONS_INTERVAL -> {
+                NotificationsJob.scheduleIfPossible(context)
             }
         }
     }

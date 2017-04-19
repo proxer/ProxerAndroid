@@ -15,6 +15,7 @@ import com.bumptech.glide.load.model.GenericLoaderFactory
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.model.ModelLoaderFactory
 import com.devbrackets.android.exomedia.ExoMedia
+import com.evernote.android.job.JobManager
 import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.TransferListener
@@ -35,6 +36,7 @@ import me.proxer.app.EventBusIndex
 import me.proxer.app.event.LogoutEvent
 import me.proxer.app.helper.PreferenceHelper
 import me.proxer.app.helper.StorageHelper
+import me.proxer.app.job.NotificationsJob
 import me.proxer.library.api.LoginTokenManager
 import me.proxer.library.api.ProxerApi
 import me.proxer.library.api.ProxerApi.Builder.LoggingStrategy
@@ -108,6 +110,13 @@ class MainApplication : Application() {
                     override fun build(context: Context?, factory: GenericLoaderFactory?) = OkHttpUrlLoader(client)
                     override fun teardown() {}
                 })
+
+        JobManager.create(this).addJobCreator {
+            when (it) {
+                NotificationsJob.TAG -> NotificationsJob()
+                else -> null
+            }
+        }
 
         EventBus.builder().addIndex(EventBusIndex())
                 .logNoSubscriberMessages(false)

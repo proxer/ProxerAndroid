@@ -10,6 +10,7 @@ import me.proxer.app.adapter.news.NewsArticleAdapter
 import me.proxer.app.adapter.news.NewsArticleAdapter.NewsAdapterCallback
 import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.fragment.base.PagedLoadingFragment
+import me.proxer.app.helper.StorageHelper
 import me.proxer.app.task.asyncProxerTask
 import me.proxer.library.api.ProxerCall
 import me.proxer.library.entitiy.notifications.NewsArticle
@@ -66,6 +67,14 @@ class NewsArticleFragment : PagedLoadingFragment<ProxerCall<List<NewsArticle>>, 
         super.onSaveInstanceState(outState)
 
         innerAdapter.saveInstanceState(outState)
+    }
+
+    override fun insert(items: List<NewsArticle>) {
+        super.insert(items)
+
+        items.firstOrNull()?.date?.let {
+            StorageHelper.lastNewsTime = it
+        }
     }
 
     override fun constructTask() = TaskBuilder.asyncProxerTask<List<NewsArticle>>().build()

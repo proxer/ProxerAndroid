@@ -28,6 +28,7 @@ import me.proxer.app.helper.MaterialDrawerHelper.AccountItem
 import me.proxer.app.helper.MaterialDrawerHelper.DrawerItem
 import me.proxer.app.helper.PreferenceHelper
 import me.proxer.app.helper.StorageHelper
+import me.proxer.app.job.NotificationsJob
 import me.proxer.app.util.extension.bindView
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.Device
@@ -114,13 +115,14 @@ class DashboardActivity : MainActivity() {
                 data.getParcelableArrayListExtra<Option>(OPTION_RESULT).forEach { option ->
                     when (option.position) {
                         1 -> {
-//                            PreferenceHelper.setNewsNotificationsEnabled(this, option.isActivated)
+                            PreferenceHelper.setNotificationsEnabled(this, option.isActivated)
+                            NotificationsJob.schedule(this)
                         }
                     }
                 }
             }
 
-            StorageHelper.isFirstStart = true
+            StorageHelper.isFirstStart = false
             displayFirstPage(null)
         }
     }

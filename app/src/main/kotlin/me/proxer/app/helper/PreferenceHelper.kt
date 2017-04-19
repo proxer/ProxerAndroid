@@ -14,6 +14,8 @@ object PreferenceHelper {
 
     const val AGE_CONFIRMATION = "age_confirmation"
     const val START_PAGE = "start_page"
+    const val NOTIFICATIONS = "notifications"
+    const val NOTIFICATIONS_INTERVAL = "notifications_interval"
     const val THEME = "theme"
 
     fun isAgeRestrictedMediaAllowed(context: Context)
@@ -22,8 +24,17 @@ object PreferenceHelper {
     fun getStartPage(context: Context) = MaterialDrawerHelper.DrawerItem
             .fromOrDefault(getDefaultSharedPreferences(context).getString(START_PAGE, "0").toLongOrNull())
 
-    fun setAgeRestrictedMediaAllowed(context: Context, isAllowed: Boolean)
-            = getDefaultSharedPreferences(context).edit().putBoolean(AGE_CONFIRMATION, isAllowed).apply()
+    fun setAgeRestrictedMediaAllowed(context: Context, allowed: Boolean)
+            = getDefaultSharedPreferences(context).edit().putBoolean(AGE_CONFIRMATION, allowed).apply()
+
+    fun areNotificationsEnabled(context: Context)
+            = getDefaultSharedPreferences(context).getBoolean(NOTIFICATIONS, false)
+
+    fun setNotificationsEnabled(context: Context, enabled: Boolean)
+            = getDefaultSharedPreferences(context).edit().putBoolean(NOTIFICATIONS, enabled).apply()
+
+    fun getNotificationsInterval(context: Context)
+            = getDefaultSharedPreferences(context).getString(NOTIFICATIONS_INTERVAL, "30").toLong()
 
     @AppCompatDelegate.NightMode
     fun getNightMode(context: Context): Int {

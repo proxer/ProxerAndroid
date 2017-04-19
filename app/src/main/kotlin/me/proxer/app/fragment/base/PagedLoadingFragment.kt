@@ -97,7 +97,7 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
     override fun onSuccess(result: List<O>) {
         hasReachedEnd = result.size < itemsOnPage
 
-        innerAdapter.append(result)
+        append(result)
 
         super.onSuccess(result)
     }
@@ -105,10 +105,10 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
     open protected fun onRefreshSuccess(result: List<O>) {
         when (shouldReplaceOnRefresh) {
             true -> {
-                innerAdapter.insert(result)
+                insert(result)
             }
             false -> {
-                innerAdapter.replace(result)
+                replace(result)
             }
         }
 
@@ -201,6 +201,18 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
         if (innerAdapter.itemCount <= 0) {
             showError(emptyResultMessage, ErrorAction.ACTION_MESSAGE_HIDE)
         }
+    }
+
+    open protected fun insert(items: List<O>) {
+        innerAdapter.insert(items)
+    }
+
+    open protected fun append(items: List<O>) {
+        innerAdapter.append(items)
+    }
+
+    open protected fun replace(items: List<O>) {
+        innerAdapter.replace(items)
     }
 
     open protected fun validateRefresh() = validate()

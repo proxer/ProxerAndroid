@@ -3,6 +3,7 @@ package me.proxer.app.helper
 import android.app.Activity
 import android.content.Context
 import com.rubengees.introduction.IntroductionBuilder
+import com.rubengees.introduction.entity.Option
 import com.rubengees.introduction.entity.Slide
 import me.proxer.app.R
 
@@ -16,7 +17,11 @@ class IntroductionHelper(activity: Activity) {
                 Slide().withTitle(R.string.introduction_welcome_title)
                         .withColorResource(R.color.primary)
                         .withImage(R.drawable.ic_proxer)
-                        .withDescription(R.string.introduction_welcome_description)
+                        .withDescription(R.string.introduction_welcome_description),
+                Slide().withTitle(R.string.introduction_notifications_title)
+                        .withColorResource(R.color.colorAccent)
+                        .withImage(R.drawable.ic_notifications)
+                        .withOption(Option(context.getString(R.string.introduction_notifications_description), false))
         )
     }
 

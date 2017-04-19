@@ -265,6 +265,11 @@
     <string name="view_bbcode_hide_spoiler">Spoiler verstecken</string>
     <string name="view_bbcode_show_spoiler">Spoiler!</string>
 
+    <string name="notification_news_title">News</string>
+    <plurals name="notification_news_amount">
+        <item quantity="other">%d News</item>
+    </plurals>
+
     <string name="category_anime_episodes_title">Episoden</string>
     <string name="category_manga_episodes_title">Kapitel</string>
 
@@ -283,6 +288,12 @@
     <string name="preference_theme_auto">Automatisch nach Tageszeit</string>
     <string name="preference_theme_dark">Dunkel</string>
     <string name="preference_theme_light">Hell</string>
+
+    <string name="preference_category_notifications_title">Benachrichtigungen</string>
+    <string name="preference_notifications_title">Allgemeine Benachrichtigungen</string>
+    <string name="preference_notifications_summary_off">Benachrichtigungen sind nicht aktiviert</string>
+    <string name="preference_notifications_summary_on">Benachrichtigungen sind aktiviert</string>
+    <string name="preference_notifications_interval_title">Aktualisierungshäufigkeit</string>
 
     <string name="about_info_version_title">Version</string>
     <string name="about_info_licenses_title">Lizenzen</string>
@@ -307,6 +318,8 @@
 
     <string name="introduction_welcome_title">Willkommen!</string>
     <string name="introduction_welcome_description">Ein paar Einstellungen und es geht los</string>
+    <string name="introduction_notifications_title">Benachrichtigungen</string>
+    <string name="introduction_notifications_description">Erhalte Benachrichtigungen</string>
     <string name="introduction_skip">Überspringen</string>
 
     <string name="action_search">Suchen</string>
@@ -372,6 +385,10 @@
 
     <string name="clipboard_title">Proxer Zwischenablage</string>
     <string name="clipboard_status">In die Zwischenablage kopiert</string>
+
+    <string name="interval_often">Oft (Alle 30 Minuten)</string>
+    <string name="interval_moderate">Moderat (Alle 2 Stunden)</string>
+    <string name="interval_seldom">Selten (Alle 8 Stunden)</string>
 
     <string name="time_a_moment_ago">Eben gerade</string>
     <plurals name="time_days_ago">
