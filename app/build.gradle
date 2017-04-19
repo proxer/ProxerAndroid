@@ -72,7 +72,9 @@ dependencies {
     compile deps.supportPreference
     compile deps.supportPreferenceFix
     compile deps.supportPreferenceFixSpinner
+    compile deps.playServicesGcm
     compile deps.eventBus
+    compile deps.androidJob
     compile deps.proxerLib
     compile deps.ktaskAndroid
     kapt deps.eventBusAnnotation

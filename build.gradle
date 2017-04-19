@@ -14,8 +14,10 @@ ext {
     ankoSqliteVersion = '0.9.1a'
     supportLibraryVersion = '25.3.1'
     supportPreferenceVersion = '1.2.7'
+    playServicesVersion = '10.2.1'
     eventBusVersion = '3.0.0'
     eventBusAnnotationVersion = '3.0.1'
+    androidJobVersion = '1.1.9'
     proxerLibVersion = 'new-architecture-SNAPSHOT'
     ktaskVersion = '0.2.10'
 
@@ -66,8 +68,10 @@ ext {
             supportPreference            : "com.android.support:preference-v7:$supportLibraryVersion",
             supportPreferenceFix         : "net.xpece.android:support-preference:$supportPreferenceVersion",
             supportPreferenceFixSpinner  : "net.xpece.android:support-spinner:$supportPreferenceVersion",
+            playServicesGcm              : "com.google.android.gms:play-services-gcm:$playServicesVersion",
             eventBus                     : "org.greenrobot:eventbus:$eventBusVersion",
             eventBusAnnotation           : "org.greenrobot:eventbus-annotation-processor:$eventBusAnnotationVersion",
+            androidJob                   : "com.evernote:android-job:$androidJobVersion",
             proxerLib                    : "com.github.proxer:ProxerLibAndroid:$proxerLibVersion",
             ktaskAndroid                 : "com.github.rubengees.ktask:ktask-android:$ktaskVersion",
 
