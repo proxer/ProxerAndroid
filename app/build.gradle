@@ -61,7 +61,6 @@ android {
 dependencies {
     compile deps.kotlinStdlib
     compile deps.anko
-    compile deps.ankoSqlite
     compile deps.supportAppCompat
     compile deps.supportV13
     compile deps.supportRecyclerView
@@ -105,6 +104,8 @@ dependencies {
     compile deps.glideIntegration
     compile deps.linkBuilder
     compile deps.easyHeaderFooterAdapter
+    compile deps.dbFlow
+    kapt deps.dbFlowAnnotation
 
     debugCompile deps.leakCanary
     releaseCompile deps.leakCanaryNoOp

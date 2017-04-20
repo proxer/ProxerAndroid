@@ -97,7 +97,11 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
     override fun onSuccess(result: List<O>) {
         hasReachedEnd = result.size < itemsOnPage
 
-        append(result)
+        if (innerAdapter.list.isNotEmpty()) {
+            append(result)
+        } else {
+            insert(result)
+        }
 
         super.onSuccess(result)
     }

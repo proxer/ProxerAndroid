@@ -11,7 +11,6 @@ ext {
     // Frameworks and code only libraries
     kotlinVersion = '1.1.2-eap-73'
     ankoVersion = '0.10.0-beta-2'
-    ankoSqliteVersion = '0.9.1a'
     supportLibraryVersion = '25.3.1'
     supportPreferenceVersion = '1.2.7'
     playServicesVersion = '10.2.1'
@@ -50,6 +49,7 @@ ext {
     glideIntegrationVersion = '1.4.0'
     linkBuilderVersion = '1.5.2'
     easyHeaderFooterAdapterVersion = 'master-SNAPSHOT'
+    dbFlowVersion = '4.0.0-beta7'
 
     // Debugging
     leakCanaryVersion = '1.5'
@@ -57,7 +57,6 @@ ext {
     deps = [
             kotlinStdlib                 : "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
             anko                         : "org.jetbrains.anko:anko-common:$ankoVersion",
-            ankoSqlite                   : "org.jetbrains.anko:anko-sqlite:$ankoSqliteVersion",
             supportAppCompat             : "com.android.support:appcompat-v7:$supportLibraryVersion",
             supportV13                   : "com.android.support:support-v13:$supportLibraryVersion",
             supportRecyclerView          : "com.android.support:recyclerview-v7:$supportLibraryVersion",
@@ -101,6 +100,8 @@ ext {
             glideIntegration             : "com.github.bumptech.glide:okhttp3-integration:$glideIntegrationVersion@aar",
             linkBuilder                  : "com.klinkerapps:link_builder:$linkBuilderVersion",
             easyHeaderFooterAdapter      : "com.github.rubengees:EasyHeaderFooterAdapter:$easyHeaderFooterAdapterVersion",
+            dbFlow                       : "com.github.Raizlabs.DBFlow:dbflow:$dbFlowVersion",
+            dbFlowAnnotation             : "com.github.Raizlabs.DBFlow:dbflow-processor:$dbFlowVersion",
 
             leakCanary                   : "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion",
             leakCanaryNoOp               : "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
