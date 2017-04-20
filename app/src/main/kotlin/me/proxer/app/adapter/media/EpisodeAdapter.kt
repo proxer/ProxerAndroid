@@ -56,6 +56,8 @@ class EpisodeAdapter(savedInstanceState: Bundle?) : PagingAdapter<EpisodeRow>() 
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_episode, parent, false))
     }
 
+    override fun areItemsTheSame(oldItem: EpisodeRow, newItem: EpisodeRow) = oldItem.number == newItem.number
+
     override fun destroy() {
         super.destroy()
 
