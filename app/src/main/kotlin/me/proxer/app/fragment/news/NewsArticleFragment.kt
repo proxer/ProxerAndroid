@@ -24,6 +24,9 @@ import org.jetbrains.anko.bundleOf
 class NewsArticleFragment : PagedLoadingFragment<ProxerCall<List<NewsArticle>>, NewsArticle>() {
 
     companion object {
+        var isActive: Boolean = false
+            private set
+
         fun newInstance(): NewsArticleFragment {
             return NewsArticleFragment().apply {
                 arguments = bundleOf()
@@ -61,6 +64,18 @@ class NewsArticleFragment : PagedLoadingFragment<ProxerCall<List<NewsArticle>>, 
                 setLikelyUrl(ProxerUrls.newsWeb(item.categoryId, item.threadId, Device.MOBILE))
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        isActive = true
+    }
+
+    override fun onPause() {
+        isActive = true
+
+        super.onPause()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

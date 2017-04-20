@@ -5,6 +5,7 @@ import com.evernote.android.job.Job
 import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
 import me.proxer.app.application.MainApplication.Companion.api
+import me.proxer.app.fragment.news.NewsArticleFragment
 import me.proxer.app.helper.NotificationHelper
 import me.proxer.app.helper.PreferenceHelper
 import me.proxer.app.helper.StorageHelper
@@ -44,16 +45,18 @@ class NotificationsJob : Job() {
 
     override fun onRunJob(params: Params?): Result {
         try {
-            val lastNewsTime = StorageHelper.lastNewsTime.time
-            val newNews = api.notifications().news().build().execute().takeWhile {
-                it.date.time > lastNewsTime
-            }
+            if (!NewsArticleFragment.isActive) {
+                val lastNewsTime = StorageHelper.lastNewsTime.time
+                val newNews = api.notifications().news().build().execute().takeWhile {
+                    it.date.time > lastNewsTime
+                }
 
-            newNews.firstOrNull()?.date?.let {
-                StorageHelper.lastNewsTime = it
-            }
+                newNews.firstOrNull()?.date?.let {
+                    StorageHelper.lastNewsTime = it
+                }
 
-            NotificationHelper.showOrUpdateNewsNotification(context, newNews)
+                NotificationHelper.showOrUpdateNewsNotification(context, newNews)
+            }
 
             return Result.SUCCESS
         } catch(error: Throwable) {
