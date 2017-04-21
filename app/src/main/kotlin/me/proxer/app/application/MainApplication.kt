@@ -26,7 +26,6 @@ import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import com.orhanobut.hawk.Hawk
 import com.orhanobut.hawk.Parser
-import com.raizlabs.android.dbflow.config.FlowManager
 import com.squareup.leakcanary.LeakCanary
 import com.squareup.leakcanary.RefWatcher
 import com.squareup.moshi.Moshi
@@ -95,7 +94,6 @@ class MainApplication : Application() {
     private fun initLibs() {
         EmojiManager.install(IosEmojiProvider())
         AndroidThreeTen.init(this)
-        FlowManager.init(this)
         Hawk.init(this).setParser(object : Parser {
             override fun <T : Any?> fromJson(content: String?, type: Type) = moshi.adapter<T>(type).fromJson(content)
             override fun toJson(body: Any) = moshi.adapter(body.javaClass).toJson(body)

@@ -84,9 +84,6 @@
     public *;
 }
 
-# DBFlow
--keep class * extends com.raizlabs.android.dbflow.config.DatabaseHolder { *; }
-
 # Avoid crash of SearchView
 -keep class android.support.v7.widget.SearchView { *; }
 
@@ -94,19 +91,15 @@
 -keepclassmembers class com.facebook.android.crypto.keychain.SecureRandomFix$LinuxPRNGSecureRandom {
    public <init>(...);
 }
-
 -keepclassmembers class * implements com.google.android.exoplayer.extractor.Extractor {
    public <init>(...);
 }
-
 -keepclassmembers class * implements com.google.android.exoplayer.text.SubtitleParser  {
    public <init>(...);
 }
-
 -keepclassmembers class com.davemorrissey.labs.subscaleview.decoder.SkiaImageRegionDecoder {
    public <init>(...);
 }
-
 -keepclassmembers class com.davemorrissey.labs.subscaleview.decoder.SkiaImageDecoder {
    public <init>(...);
 }
