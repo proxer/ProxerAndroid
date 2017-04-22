@@ -116,7 +116,7 @@ class DashboardActivity : MainActivity() {
                     when (option.position) {
                         1 -> {
                             PreferenceHelper.setNotificationsEnabled(this, option.isActivated)
-                            NotificationsJob.schedule(this)
+                            NotificationsJob.scheduleIfPossible(this)
                         }
                     }
                 }

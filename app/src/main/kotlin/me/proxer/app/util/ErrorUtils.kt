@@ -2,6 +2,7 @@ package me.proxer.app.util
 
 import android.view.View
 import com.google.android.exoplayer2.upstream.HttpDataSource
+import com.rubengees.ktask.util.FullTaskException
 import com.rubengees.ktask.util.PartialTaskException
 import me.proxer.app.R
 import me.proxer.app.activity.base.MainActivity
@@ -73,6 +74,7 @@ object ErrorUtils {
 
     fun getInnermostError(error: Throwable): Throwable {
         return when (error) {
+            is FullTaskException -> error.firstInnerError
             is PartialTaskException -> error.innerError
             else -> error
         }

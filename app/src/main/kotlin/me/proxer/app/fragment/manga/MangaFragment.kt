@@ -14,7 +14,6 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import com.rubengees.ktask.android.AndroidLifecycleTask
 import com.rubengees.ktask.android.bindToLifecycle
-import com.rubengees.ktask.operation.CacheTask
 import com.rubengees.ktask.util.PartialTaskException
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
@@ -25,8 +24,10 @@ import me.proxer.app.activity.base.MainActivity
 import me.proxer.app.adapter.base.PagingAdapter
 import me.proxer.app.adapter.manga.MangaAdapter
 import me.proxer.app.application.MainApplication.Companion.api
+import me.proxer.app.entity.MangaChapterInfo
+import me.proxer.app.entity.MangaInput
 import me.proxer.app.fragment.base.LoadingFragment
-import me.proxer.app.fragment.manga.MangaFragment.ChapterInfo
+import me.proxer.app.task.MangaTask
 import me.proxer.app.task.asyncProxerTask
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.TimeUtils
@@ -40,7 +41,6 @@ import me.proxer.app.view.MediaControlView.SimpleTranslatorGroup
 import me.proxer.app.view.MediaControlView.Uploader
 import me.proxer.library.api.ProxerCall
 import me.proxer.library.entitiy.info.EntryCore
-import me.proxer.library.entitiy.manga.Chapter
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.Language
 import org.jetbrains.anko.bundleOf
@@ -49,7 +49,7 @@ import org.jetbrains.anko.find
 /**
  * @author Ruben Gees
  */
-class MangaFragment : LoadingFragment<Pair<ProxerCall<Chapter>, ProxerCall<EntryCore>>, ChapterInfo>() {
+class MangaFragment : LoadingFragment<MangaInput, MangaChapterInfo>() {
 
     companion object {
         fun newInstance(): MangaFragment {
@@ -226,7 +226,7 @@ class MangaFragment : LoadingFragment<Pair<ProxerCall<Chapter>, ProxerCall<Entry
         task.forceExecute(constructInput())
     }
 
-    override fun onSuccess(result: ChapterInfo) {
+    override fun onSuccess(result: MangaChapterInfo) {
         episodeAmount = result.episodeAmount
         name = result.name
 
@@ -288,15 +288,10 @@ class MangaFragment : LoadingFragment<Pair<ProxerCall<Chapter>, ProxerCall<Entry
         }
     }
 
-    override fun constructTask() = TaskBuilder.asyncProxerTask<Chapter>()
-            .parallelWith(TaskBuilder.asyncProxerTask<EntryCore>().cache(CacheTask.CacheStrategy.RESULT),
-                    zipFunction = { chapter, info -> ChapterInfo(chapter, info.name, info.episodeAmount) },
-                    awaitRightResultOnError = true).build()
-
-    override fun constructInput() = api.manga()
-            .chapter(id, episode, language)
-            .build() to api.info()
-            .entryCore(id).build()
+    override fun constructInput() = MangaInput(id, episode, language)
+    override fun constructTask() = TaskBuilder.task(MangaTask())
+            .async()
+            .build()
 
     private fun switchEpisode(newEpisode: Int) {
         episode = newEpisode
@@ -319,6 +314,4 @@ class MangaFragment : LoadingFragment<Pair<ProxerCall<Chapter>, ProxerCall<Entry
                     View.SYSTEM_UI_FLAG_FULLSCREEN
         }
     }
-
-    class ChapterInfo(val chapter: Chapter, val name: String, val episodeAmount: Int)
 }

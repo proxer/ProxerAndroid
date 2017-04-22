@@ -8,20 +8,26 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.evernote.android.job.JobManager
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
 import me.proxer.app.adapter.base.PagingAdapter
+import me.proxer.app.application.MainApplication.Companion.mangaDb
 import me.proxer.app.entity.EpisodeRow
+import me.proxer.app.job.LocalMangaJob
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.bindView
 import me.proxer.app.util.extension.toAppDrawable
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.app.util.extension.toGeneralLanguage
+import me.proxer.library.enums.Category
+import me.proxer.library.enums.Language
 import me.proxer.library.enums.MediaLanguage
 import me.proxer.library.util.ProxerUrls
 import me.proxer.library.util.ProxerUtils
+import me.zhanghai.android.materialprogressbar.MaterialProgressBar
 import org.jetbrains.anko.collections.forEachWithIndex
 import org.jetbrains.anko.find
 import org.jetbrains.anko.forEachChildWithIndex
@@ -29,7 +35,7 @@ import org.jetbrains.anko.forEachChildWithIndex
 /**
  * @author Ruben Gees
  */
-class EpisodeAdapter(savedInstanceState: Bundle?) : PagingAdapter<EpisodeRow>() {
+class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?) : PagingAdapter<EpisodeRow>() {
 
     private companion object {
         private const val EXPANDED_STATE = "episode_expanded"
@@ -125,6 +131,8 @@ class EpisodeAdapter(savedInstanceState: Bundle?) : PagingAdapter<EpisodeRow>() 
                 val languageContainer = languages.getChildAt(index)
                 val languageView = languageContainer.find<TextView>(R.id.language)
                 val hostersView = languageContainer.find<ViewGroup>(R.id.hosters)
+                val download = languageContainer.find<ImageView>(R.id.download)
+                val downloadProgress = languageContainer.find<MaterialProgressBar>(R.id.downloadProgress)
 
                 languageView.text = ProxerUtils.getApiEnumName(language)
                 languageView.setCompoundDrawablesWithIntrinsicBounds(language.toGeneralLanguage()
@@ -136,34 +144,81 @@ class EpisodeAdapter(savedInstanceState: Bundle?) : PagingAdapter<EpisodeRow>() 
                     }
                 }
 
-                if (hosterImages == null || hosterImages.isEmpty()) {
-                    hostersView.removeAllViews()
-                    hostersView.visibility = View.GONE
+                bindDownload(item.category, item.number, language, download, downloadProgress)
+                bindHosterImages(hosterImages, hostersView)
+            }
+        }
+
+        private fun bindDownload(category: Category, episode: Int, language: MediaLanguage, download: ImageView,
+                                 downloadProgress: MaterialProgressBar) {
+            if (category == Category.MANGA) {
+                if (mangaDb.find(entryId, episode, language.toGeneralLanguage()) != null) {
+                    val icon = IconicsDrawable(download.context, CommunityMaterial.Icon.cmd_cloud_check)
+                            .colorRes(R.color.icon)
+                            .sizeDp(32)
+
+                    downloadProgress.visibility = View.GONE
+                    download.visibility = View.VISIBLE
+                    download.setImageDrawable(icon)
+                    download.setOnClickListener(null)
                 } else {
-                    hostersView.visibility = View.VISIBLE
+                    if (isLocalMangaJobScheduledOrRunning(entryId, episode, language.toGeneralLanguage())) {
+                        downloadProgress.visibility = View.VISIBLE
+                        download.visibility = View.GONE
+                        download.setOnClickListener(null)
+                    } else {
+                        val icon = IconicsDrawable(download.context, CommunityMaterial.Icon.cmd_download)
+                                .colorRes(R.color.icon)
+                                .sizeDp(32)
 
-                    if (hostersView.childCount != hosterImages.size) {
-                        hostersView.removeAllViews()
+                        downloadProgress.visibility = View.GONE
+                        download.visibility = View.VISIBLE
+                        download.setImageDrawable(icon)
+                        download.setOnClickListener {
+                            LocalMangaJob.schedule(entryId, episode, language.toGeneralLanguage())
 
-                        for (i in 0 until hosterImages.size) {
-                            val imageView = LayoutInflater.from(hostersView.context)
-                                    .inflate(R.layout.layout_image, hostersView, false).apply {
-                                layoutParams.width = DeviceUtils.convertDpToPx(hostersView.context, 28f)
-                                layoutParams.height = DeviceUtils.convertDpToPx(hostersView.context, 28f)
-                            }
-
-                            hostersView.addView(imageView)
+                            bindDownload(category, episode, language, download, downloadProgress)
                         }
-                    }
-
-                    hostersView.forEachChildWithIndex { index, imageView ->
-                        Glide.with(imageView.context)
-                                .load(ProxerUrls.hosterImage(hosterImages[index]).toString())
-                                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                                .into(imageView as ImageView)
                     }
                 }
             }
+        }
+
+        private fun bindHosterImages(hosterImages: List<String>?, hostersView: ViewGroup) {
+            if (hosterImages == null || hosterImages.isEmpty()) {
+                hostersView.removeAllViews()
+                hostersView.visibility = View.GONE
+            } else {
+                hostersView.visibility = View.VISIBLE
+
+                if (hostersView.childCount != hosterImages.size) {
+                    hostersView.removeAllViews()
+
+                    for (i in 0 until hosterImages.size) {
+                        val imageView = LayoutInflater.from(hostersView.context)
+                                .inflate(R.layout.layout_image, hostersView, false).apply {
+                            layoutParams.width = DeviceUtils.convertDpToPx(hostersView.context, 28f)
+                            layoutParams.height = DeviceUtils.convertDpToPx(hostersView.context, 28f)
+                        }
+
+                        hostersView.addView(imageView)
+                    }
+                }
+
+                hostersView.forEachChildWithIndex { index, imageView ->
+                    Glide.with(imageView.context)
+                            .load(ProxerUrls.hosterImage(hosterImages[index]).toString())
+                            .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                            .into(imageView as ImageView)
+                }
+            }
+        }
+
+        private fun isLocalMangaJobScheduledOrRunning(id: String, episode: Int, language: Language): Boolean {
+            val tag = LocalMangaJob.constructTag(id, episode, language)
+
+            return JobManager.instance().allJobRequests.find { it.tag == tag } != null ||
+                    JobManager.instance().allJobs.find { it is LocalMangaJob && it.isJobFor(tag) } != null
         }
     }
 

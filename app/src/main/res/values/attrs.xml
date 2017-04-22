@@ -7,7 +7,7 @@
         <attr name="aspect" />
     </declare-styleable>
 
-    <declare-styleable name="WidthAspectCircleImageView">
+    <declare-styleable name="HeightAspectImageView">
         <attr name="aspect" />
     </declare-styleable>
 

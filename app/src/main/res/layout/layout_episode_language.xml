@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/languageContainer"
@@ -7,26 +7,53 @@
     android:layout_height="match_parent"
     android:layout_weight="1"
     android:background="?attr/selectableItemBackground"
-    android:orientation="vertical"
-    tools:ignore="Overdraw">
+    tools:ignore="Overdraw"
+    tools:layout_width="match_parent">
 
     <TextView
         android:id="@+id/language"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
         android:layout_margin="4dp"
         android:drawablePadding="8dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         tools:text="engsub" />
 
+    <me.proxer.app.view.HeightAspectImageView
+        android:id="@+id/download"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/language"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="6dp"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <me.zhanghai.android.materialprogressbar.MaterialProgressBar
+        android:id="@+id/downloadProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/language"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
     <com.google.android.flexbox.FlexboxLayout
         android:id="@+id/hosters"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/language"
         android:layout_margin="4dp"
         app:alignItems="center"
         app:flexWrap="wrap"
         app:justifyContent="center" />
 
-</LinearLayout>
+</RelativeLayout>

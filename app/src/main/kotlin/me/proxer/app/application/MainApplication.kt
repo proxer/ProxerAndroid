@@ -33,9 +33,11 @@ import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.ios.IosEmojiProvider
 import me.proxer.app.BuildConfig
 import me.proxer.app.EventBusIndex
+import me.proxer.app.data.LocalMangaDatabase
 import me.proxer.app.event.LogoutEvent
 import me.proxer.app.helper.PreferenceHelper
 import me.proxer.app.helper.StorageHelper
+import me.proxer.app.job.LocalMangaJob
 import me.proxer.app.job.NotificationsJob
 import me.proxer.library.api.LoginTokenManager
 import me.proxer.library.api.ProxerApi
@@ -62,6 +64,9 @@ class MainApplication : Application() {
         lateinit var api: ProxerApi
             private set
 
+        lateinit var mangaDb: LocalMangaDatabase
+            private set
+
         lateinit var refWatcher: RefWatcher
             private set
     }
@@ -75,6 +80,7 @@ class MainApplication : Application() {
 
         AppCompatDelegate.setDefaultNightMode(PreferenceHelper.getNightMode(this))
 
+        mangaDb = LocalMangaDatabase(this)
         refWatcher = LeakCanary.install(this)
 
         initApi()
@@ -112,8 +118,9 @@ class MainApplication : Application() {
                 })
 
         JobManager.create(this).addJobCreator {
-            when (it) {
-                NotificationsJob.TAG -> NotificationsJob()
+            when {
+                it == NotificationsJob.TAG -> NotificationsJob()
+                it.startsWith(LocalMangaJob.TAG) -> LocalMangaJob()
                 else -> null
             }
         }

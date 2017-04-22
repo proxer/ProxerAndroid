@@ -48,8 +48,10 @@ class EpisodesFragment : LoadingFragment<ProxerCall<EpisodeInfo>, List<EpisodeRo
 
     private val id: String
         get() = mediaActivity.id
+
     private val name: String?
         get() = mediaActivity.name
+
     private val category: Category?
         get() = mediaActivity.category
 
@@ -58,7 +60,7 @@ class EpisodesFragment : LoadingFragment<ProxerCall<EpisodeInfo>, List<EpisodeRo
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        adapter = EpisodeAdapter(savedInstanceState)
+        adapter = EpisodeAdapter(id, savedInstanceState)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
