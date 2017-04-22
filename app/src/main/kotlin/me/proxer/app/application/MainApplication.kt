@@ -170,12 +170,11 @@ class MainApplication : Application() {
     }
 
     private class ProxerLoginTokenManager : LoginTokenManager {
-        override fun provide() = StorageHelper.loginToken
+        override fun provide() = StorageHelper.user?.token
         override fun persist(loginToken: String?) {
             when (loginToken) {
                 null -> {
-                    if (StorageHelper.loginToken != loginToken) {
-                        StorageHelper.loginToken = null
+                    if (StorageHelper.user?.token != loginToken) {
                         StorageHelper.user = null
 
                         EventBus.getDefault().post(LogoutEvent())

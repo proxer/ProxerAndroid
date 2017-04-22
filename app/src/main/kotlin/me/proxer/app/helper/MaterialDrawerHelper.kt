@@ -120,10 +120,9 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar, savedInstanceSta
     }
 
     private fun generateAccountItems(context: Activity): List<IProfile<*>> {
-        val loginToken = StorageHelper.loginToken
         val user = StorageHelper.user
 
-        when (loginToken) {
+        when (user) {
             null -> return arrayListOf(
                     ProfileDrawerItem()
                             .withName(context.getString(R.string.section_guest))
@@ -137,9 +136,9 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar, savedInstanceSta
                             .withIdentifier(AccountItem.LOGIN.id))
             else -> return arrayListOf(
                     ProfileDrawerItem()
-                            .withName(user?.name)
+                            .withName(user.name)
                             .withEmail(context.getString(R.string.section_user_subtitle))
-                            .withIcon(ProxerUrls.userImage(user?.image ?: "").toString())
+                            .withIcon(ProxerUrls.userImage(user.image).toString())
                             .withSelectedTextColorRes(R.color.colorAccent)
                             .withIdentifier(AccountItem.USER.id),
                     ProfileSettingDrawerItem()

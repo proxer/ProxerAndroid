@@ -49,8 +49,7 @@ class LoginDialog : MainDialog() {
                     setProgressVisible(true)
                 }
                 .onSuccess {
-                    StorageHelper.loginToken = it.loginToken
-                    StorageHelper.user = LocalUser(it.id, username.text.trim().toString(), it.image)
+                    StorageHelper.user = LocalUser(it.loginToken, it.id, username.text.trim().toString(), it.image)
 
                     if (secret.text.isBlank()) {
                         StorageHelper.isTwoFactorAuthenticationEnabled = false
@@ -142,7 +141,7 @@ class LoginDialog : MainDialog() {
 
             if (validateInput(username, password)) {
                 // This is important to avoid sending broken login tokens and making it impossible to login again.
-                StorageHelper.loginToken = null
+                StorageHelper.user = null
 
                 task.execute(api.user().login(username, password)
                         .apply {

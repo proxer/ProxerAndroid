@@ -13,7 +13,6 @@ object StorageHelper {
 
     private const val FIRST_START = "first_start"
     private const val USER = "user"
-    private const val LOGIN_TOKEN = "login_token"
     private const val TWO_FACTOR_AUTHENTICATION = "two_factor_authentication"
     private const val LAST_NEWS_DATE = "last_news_time"
 
@@ -29,23 +28,10 @@ object StorageHelper {
             when (value) {
                 null -> {
                     Hawk.delete(USER)
-
-
                 }
                 else -> {
                     Hawk.put(USER, value)
-
-
                 }
-            }
-        }
-
-    var loginToken: String?
-        get() = Hawk.get(LOGIN_TOKEN)
-        set(value) {
-            when (value) {
-                null -> Hawk.delete(LOGIN_TOKEN)
-                else -> Hawk.put(LOGIN_TOKEN, value)
             }
         }
 

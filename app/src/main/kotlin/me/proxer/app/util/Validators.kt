@@ -11,7 +11,7 @@ import me.proxer.app.task.stream.StreamResolutionTask
 object Validators {
 
     fun validateLogin() {
-        if (StorageHelper.loginToken == null) {
+        if (StorageHelper.user == null) {
             throw NotLoggedInException()
         }
     }

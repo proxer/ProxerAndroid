@@ -59,7 +59,7 @@ class IndustryProjectsFragment : PagedLoadingFragment<ProxerCall<List<IndustryPr
 
     override fun constructTask() = TaskBuilder.asyncProxerTask<List<IndustryProject>>().build()
     override fun constructPagedInput(page: Int) = api.list().industryProjectList(id)
-            .includeHentai(PreferenceHelper.isAgeRestrictedMediaAllowed(context) && StorageHelper.loginToken != null)
+            .includeHentai(PreferenceHelper.isAgeRestrictedMediaAllowed(context) && StorageHelper.user != null)
             .page(page)
             .limit(itemsOnPage)
             .build()
