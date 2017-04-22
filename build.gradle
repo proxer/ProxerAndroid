@@ -114,7 +114,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.1.2-eap-73"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.1.2-eap-77"
         classpath 'com.android.tools.build:gradle:2.4.0-alpha6'
     }
 }

@@ -71,7 +71,7 @@ class EpisodesFragment : LoadingFragment<ProxerCall<EpisodeInfo>, List<EpisodeRo
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter.callback = object : EpisodeAdapter.EpisodeAdapterCallback() {
+        adapter.callback = object : EpisodeAdapter.EpisodeAdapterCallback {
             override fun onLanguageClick(language: MediaLanguage, episode: EpisodeRow) {
                 when (episode.category) {
                     Category.ANIME -> {

@@ -15,6 +15,7 @@ import me.proxer.app.R
 import me.proxer.app.adapter.base.PagingAdapter
 import me.proxer.app.application.MainApplication.Companion.mangaDb
 import me.proxer.app.entity.EpisodeRow
+import me.proxer.app.event.LocalMangaJobFinishedEvent
 import me.proxer.app.job.LocalMangaJob
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ParcelableStringBooleanMap
@@ -28,6 +29,9 @@ import me.proxer.library.enums.MediaLanguage
 import me.proxer.library.util.ProxerUrls
 import me.proxer.library.util.ProxerUtils
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.collections.forEachWithIndex
 import org.jetbrains.anko.find
 import org.jetbrains.anko.forEachChildWithIndex
@@ -52,6 +56,14 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?) :
         }
 
         setHasStableIds(true)
+    }
+
+    override fun onViewAttachedToWindow(holder: PagingViewHolder<EpisodeRow>) {
+        EventBus.getDefault().register(holder)
+    }
+
+    override fun onViewDetachedFromWindow(holder: PagingViewHolder<EpisodeRow>) {
+        EventBus.getDefault().unregister(holder)
     }
 
     override fun getItemId(position: Int): Long {
@@ -149,6 +161,26 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?) :
             }
         }
 
+        @Suppress("unused")
+        @Subscribe(threadMode = ThreadMode.MAIN)
+        fun onLocalMangaJobFinished(event: LocalMangaJobFinishedEvent) {
+            withSafeAdapterPosition {
+                if (event.id == entryId && event.episode == list[it].number) {
+                    notifyItemChanged(it)
+                }
+            }
+        }
+
+        @Suppress("unused")
+        @Subscribe(threadMode = ThreadMode.MAIN)
+        fun onLocalMangaJobFailed(event: LocalMangaJobFinishedEvent) {
+            withSafeAdapterPosition {
+                if (event.id == entryId && event.episode == list[it].number) {
+                    notifyItemChanged(it)
+                }
+            }
+        }
+
         private fun bindDownload(category: Category, episode: Int, language: MediaLanguage, download: ImageView,
                                  downloadProgress: MaterialProgressBar) {
             if (category == Category.MANGA) {
@@ -163,9 +195,13 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?) :
                     download.setOnClickListener(null)
                 } else {
                     if (isLocalMangaJobScheduledOrRunning(entryId, episode, language.toGeneralLanguage())) {
-                        downloadProgress.visibility = View.VISIBLE
                         download.visibility = View.GONE
-                        download.setOnClickListener(null)
+                        downloadProgress.visibility = View.VISIBLE
+                        downloadProgress.setOnClickListener {
+                            LocalMangaJob.cancel(entryId, episode, language.toGeneralLanguage())
+
+                            bindDownload(category, episode, language, download, downloadProgress)
+                        }
                     } else {
                         val icon = IconicsDrawable(download.context, CommunityMaterial.Icon.cmd_download)
                                 .colorRes(R.color.icon)
@@ -215,16 +251,19 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?) :
         }
 
         private fun isLocalMangaJobScheduledOrRunning(id: String, episode: Int, language: Language): Boolean {
-            val tag = LocalMangaJob.constructTag(id, episode, language)
+            val isScheduled = JobManager.instance().allJobRequests.find {
+                it.tag == LocalMangaJob.constructTag(id, episode, language)
+            } != null
 
-            return JobManager.instance().allJobRequests.find { it.tag == tag } != null ||
-                    JobManager.instance().allJobs.find { it is LocalMangaJob && it.isJobFor(tag) } != null
+            val isRunning = JobManager.instance().allJobs.find {
+                it is LocalMangaJob && it.isJobFor(id, episode, language) && !it.isCanceledPublic()
+            } != null
+
+            return isScheduled || isRunning
         }
     }
 
-    abstract class EpisodeAdapterCallback {
-        open fun onLanguageClick(language: MediaLanguage, episode: EpisodeRow) {
-
-        }
+    interface EpisodeAdapterCallback {
+        fun onLanguageClick(language: MediaLanguage, episode: EpisodeRow) {}
     }
 }
