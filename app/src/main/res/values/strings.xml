@@ -272,6 +272,9 @@
         <item quantity="other">%d News</item>
     </plurals>
 
+    <string name="notification_manga_download_error_title">Fehler beim Manga Download</string>
+    <string name="notification_manga_download_error_content">Ein Kapitel konnte nicht heruntergeladen werden</string>
+
     <string name="category_anime_episodes_title">Episoden</string>
     <string name="category_manga_episodes_title">Kapitel</string>
 

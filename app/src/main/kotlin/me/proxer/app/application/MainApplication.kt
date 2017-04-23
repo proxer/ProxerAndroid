@@ -98,13 +98,15 @@ class MainApplication : Application() {
         JobManager.instance().allJobRequests.filter {
             it.tag.startsWith(LocalMangaJob.TAG)
         }.forEach {
-            it.cancelAndEdit()
+            JobManager.instance().cancelAllForTag(it.tag)
         }
 
         JobManager.instance().allJobs.filter {
             it is LocalMangaJob
         }.forEach {
-            it.cancel()
+            it as LocalMangaJob
+
+            JobManager.instance().cancelAllForTag(LocalMangaJob.constructTag(it.id, it.episode, it.language))
         }
 
         mangaDb.clear()

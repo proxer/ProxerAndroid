@@ -9,6 +9,8 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.NotificationCompat
 import me.proxer.app.R
 import me.proxer.app.activity.DashboardActivity
+import me.proxer.app.fragment.media.EpisodesFragment
+import me.proxer.app.fragment.news.NewsArticleFragment
 import me.proxer.app.helper.MaterialDrawerHelper.DrawerItem
 import me.proxer.library.entitiy.notifications.NewsArticle
 
@@ -18,11 +20,27 @@ import me.proxer.library.entitiy.notifications.NewsArticle
 object NotificationHelper {
 
     fun showOrUpdateNewsNotification(context: Context, news: Collection<NewsArticle>) {
-        val notification = buildNewsNotification(context, news)
+        if (!NewsArticleFragment.isActive) {
+            val notification = buildNewsNotification(context, news)
 
-        when (notification) {
-            null -> cancelNotification(context, NotificationType.NEWS)
-            else -> NotificationManagerCompat.from(context).notify(NotificationType.NEWS.id, notification)
+            when (notification) {
+                null -> cancelNotification(context, NotificationType.NEWS)
+                else -> NotificationManagerCompat.from(context).notify(NotificationType.NEWS.id, notification)
+            }
+        }
+    }
+
+    fun showMangaDownloadErrorNotification(context: Context) {
+        if (!EpisodesFragment.isActive) {
+            NotificationManagerCompat.from(context)
+                    .notify(NotificationType.MANGA_DOWNLOAD_ERROR.id, NotificationCompat.Builder(context)
+                            .setContentTitle(context.getString(R.string.notification_manga_download_error_title))
+                            .setContentText(context.getString(R.string.notification_manga_download_error_content))
+                            .setColor(ContextCompat.getColor(context, R.color.primary))
+                            .setSmallIcon(R.drawable.ic_stat_proxer)
+                            .setPriority(PRIORITY_LOW)
+                            .setAutoCancel(true)
+                            .build())
         }
     }
 
@@ -68,7 +86,7 @@ object NotificationHelper {
             }
         }
 
-        builder.setAutoCancel(true)
+        return builder.setAutoCancel(true)
                 .setSmallIcon(R.drawable.ic_stat_proxer)
                 .setContentTitle(title)
                 .setContentText(content)
@@ -76,14 +94,14 @@ object NotificationHelper {
                         DashboardActivity.getSectionIntent(context, DrawerItem.NEWS),
                         PendingIntent.FLAG_UPDATE_CURRENT))
                 .setColor(ContextCompat.getColor(context, R.color.primary))
-                .setOnlyAlertOnce(true)
                 .setPriority(PRIORITY_LOW)
+                .setOnlyAlertOnce(true)
                 .setStyle(style)
-
-        return builder.build()
+                .build()
     }
 
     enum class NotificationType(val id: Int) {
-        NEWS(1357913213)
+        NEWS(1357913213),
+        MANGA_DOWNLOAD_ERROR(479239223)
     }
 }

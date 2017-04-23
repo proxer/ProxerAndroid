@@ -8,6 +8,7 @@ import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.application.MainApplication.Companion.mangaDb
 import me.proxer.app.event.LocalMangaJobFailedEvent
 import me.proxer.app.event.LocalMangaJobFinishedEvent
+import me.proxer.app.helper.NotificationHelper
 import me.proxer.app.util.Utils
 import me.proxer.library.enums.Language
 import me.proxer.library.util.ProxerUrls
@@ -90,6 +91,7 @@ class LocalMangaJob : Job() {
             return Result.SUCCESS
         } catch (error: Throwable) {
             EventBus.getDefault().post(LocalMangaJobFailedEvent(id, episode, language))
+            NotificationHelper.showMangaDownloadErrorNotification(context)
 
             return Result.FAILURE
         }

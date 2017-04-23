@@ -32,6 +32,9 @@ import org.jetbrains.anko.bundleOf
 class EpisodesFragment : LoadingFragment<ProxerCall<EpisodeInfo>, List<EpisodeRow>>() {
 
     companion object {
+        var isActive: Boolean = false
+            private set
+
         fun newInstance(): EpisodesFragment {
             return EpisodesFragment().apply {
                 arguments = bundleOf()
@@ -61,6 +64,18 @@ class EpisodesFragment : LoadingFragment<ProxerCall<EpisodeInfo>, List<EpisodeRo
         super.onCreate(savedInstanceState)
 
         adapter = EpisodeAdapter(id, savedInstanceState)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        isActive = true
+    }
+
+    override fun onPause() {
+        isActive = true
+
+        super.onPause()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

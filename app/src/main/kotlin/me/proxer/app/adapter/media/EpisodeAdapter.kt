@@ -16,6 +16,7 @@ import me.proxer.app.R
 import me.proxer.app.adapter.base.PagingAdapter
 import me.proxer.app.application.MainApplication.Companion.mangaDb
 import me.proxer.app.entity.EpisodeRow
+import me.proxer.app.event.LocalMangaJobFailedEvent
 import me.proxer.app.event.LocalMangaJobFinishedEvent
 import me.proxer.app.event.LoginEvent
 import me.proxer.app.event.LogoutEvent
@@ -206,7 +207,7 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?) :
 
         @Suppress("unused")
         @Subscribe(threadMode = ThreadMode.MAIN)
-        fun onLocalMangaJobFailed(event: LocalMangaJobFinishedEvent) {
+        fun onLocalMangaJobFailed(event: LocalMangaJobFailedEvent) {
             withSafeAdapterPosition {
                 if (event.id == entryId && event.episode == list[it].number) {
                     notifyItemChanged(it)

@@ -10,6 +10,8 @@ import me.proxer.app.adapter.news.NewsArticleAdapter
 import me.proxer.app.adapter.news.NewsArticleAdapter.NewsAdapterCallback
 import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.fragment.base.PagedLoadingFragment
+import me.proxer.app.helper.NotificationHelper
+import me.proxer.app.helper.NotificationHelper.NotificationType
 import me.proxer.app.helper.StorageHelper
 import me.proxer.app.task.asyncProxerTask
 import me.proxer.library.api.ProxerCall
@@ -44,6 +46,8 @@ class NewsArticleFragment : PagedLoadingFragment<ProxerCall<List<NewsArticle>>, 
         super.onCreate(savedInstanceState)
 
         innerAdapter = NewsArticleAdapter(savedInstanceState)
+
+        NotificationHelper.cancelNotification(context, NotificationType.NEWS)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
