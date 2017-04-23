@@ -6,7 +6,6 @@ import com.evernote.android.job.JobRequest
 import com.evernote.android.job.util.support.PersistableBundleCompat
 import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.application.MainApplication.Companion.mangaDb
-import me.proxer.app.entity.MangaChapterInfo
 import me.proxer.app.event.LocalMangaJobFailedEvent
 import me.proxer.app.event.LocalMangaJobFinishedEvent
 import me.proxer.app.util.Utils
@@ -67,22 +66,24 @@ class LocalMangaJob : Job() {
 
     override fun onRunJob(params: Params): Result {
         try {
-            val entryInfo = api.info().entryCore(id).build().execute()
-            val chapterInfo = MangaChapterInfo(api.manga().chapter(id, episode, language).build().execute(),
-                    entryInfo.name, entryInfo.episodeAmount)
+            if (mangaDb.findEntry(id) == null) {
+                mangaDb.insertEntry(api.info().entryCore(id).build().execute())
+            }
 
-            for (it in chapterInfo.chapter.pages) {
+            val chapter = api.manga().chapter(id, episode, language).build().execute()
+
+            for (it in chapter.pages) {
                 if (isCanceled) {
                     EventBus.getDefault().post(LocalMangaJobFailedEvent(id, episode, language))
 
                     return Result.FAILURE
                 }
 
-                Utils.getBitmapFromUrl(context, ProxerUrls.mangaPageImage(chapterInfo.chapter.server, id,
-                        chapterInfo.chapter.id, it.name).toString()) ?: throw RuntimeException("Page download failed")
+                Utils.getBitmapFromUrl(context, ProxerUrls.mangaPageImage(chapter.server, id,
+                        chapter.id, it.name).toString()) ?: throw RuntimeException("Page download failed")
             }
 
-            mangaDb.insert(chapterInfo, episode, language)
+            mangaDb.insertChapter(chapter, episode, language)
 
             EventBus.getDefault().post(LocalMangaJobFinishedEvent(id, episode, language))
 

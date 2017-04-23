@@ -9,11 +9,8 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.crossfader.Crossfader
 import com.mikepenz.crossfader.view.GmailStyleCrossFadeSlidingPaneLayout
 import com.mikepenz.materialdrawer.*
-import com.mikepenz.materialdrawer.holder.BadgeStyle
 import com.mikepenz.materialdrawer.interfaces.ICrossfader
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
-import com.mikepenz.materialdrawer.model.ProfileDrawerItem
-import com.mikepenz.materialdrawer.model.ProfileSettingDrawerItem
+import com.mikepenz.materialdrawer.model.*
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IProfile
 import me.proxer.app.R
@@ -165,6 +162,7 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar, savedInstanceSta
                 .withOnDrawerItemClickListener { view, id, item ->
                     onDrawerItemClick(view, id, item)
                 }
+                .withPositionBasedStateManagement(false)
                 .withShowDrawerOnFirstLaunch(true)
                 .withTranslucentStatusBar(true)
                 .withGenerateMiniDrawer(DeviceUtils.isTablet(context))
@@ -175,6 +173,7 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar, savedInstanceSta
 
     private fun buildTabletDrawer(context: Activity, drawer: Drawer, savedInstanceState: Bundle?):
             Pair<MiniDrawer?, Crossfader<*>?> {
+
         if (DeviceUtils.isTablet(context)) {
             val miniDrawer = drawer.miniDrawer.withIncludeSecondaryDrawerItems(true)
             val crossfader = buildCrossfader(context, drawer, miniDrawer, savedInstanceState)
@@ -205,46 +204,46 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar, savedInstanceSta
                         .withIcon(CommunityMaterial.Icon.cmd_newspaper)
                         .withSelectedTextColorRes(R.color.colorAccent)
                         .withSelectedIconColorRes(R.color.colorAccent)
-                        .withBadgeStyle(BadgeStyle()
-                                .withColorRes(R.color.colorAccent)
-                                .withTextColorRes(android.R.color.white))
                         .withIdentifier(DrawerItem.NEWS.id),
                 PrimaryDrawerItem()
                         .withName(R.string.section_chat)
                         .withIcon(CommunityMaterial.Icon.cmd_message_text)
                         .withSelectedTextColorRes(R.color.colorAccent)
                         .withSelectedIconColorRes(R.color.colorAccent)
-                        .withBadgeStyle(BadgeStyle()
-                                .withColorRes(R.color.colorAccent)
-                                .withTextColorRes(android.R.color.white))
                         .withIdentifier(DrawerItem.CHAT.id),
                 PrimaryDrawerItem()
                         .withName(R.string.section_bookmarks)
                         .withIcon(CommunityMaterial.Icon.cmd_bookmark)
                         .withSelectedTextColorRes(R.color.colorAccent)
                         .withSelectedIconColorRes(R.color.colorAccent)
-                        .withBadgeStyle(BadgeStyle()
-                                .withColorRes(R.color.colorAccent)
-                                .withTextColorRes(android.R.color.white))
                         .withIdentifier(DrawerItem.BOOKMARKS.id),
                 PrimaryDrawerItem()
                         .withName(R.string.section_anime)
                         .withIcon(CommunityMaterial.Icon.cmd_television)
                         .withSelectedTextColorRes(R.color.colorAccent)
                         .withSelectedIconColorRes(R.color.colorAccent)
-                        .withBadgeStyle(BadgeStyle()
-                                .withColorRes(R.color.colorAccent)
-                                .withTextColorRes(android.R.color.white))
                         .withIdentifier(DrawerItem.ANIME.id),
-                PrimaryDrawerItem()
+                ExpandableDrawerItem()
                         .withName(R.string.section_manga)
                         .withIcon(CommunityMaterial.Icon.cmd_book_open_variant)
-                        .withSelectedTextColorRes(R.color.colorAccent)
-                        .withSelectedIconColorRes(R.color.colorAccent)
-                        .withBadgeStyle(BadgeStyle()
-                                .withColorRes(R.color.colorAccent)
-                                .withTextColorRes(android.R.color.white))
-                        .withIdentifier(DrawerItem.MANGA.id)
+                        .withArrowColorRes(R.color.icon)
+                        .withSelectable(false)
+                        .withSubItems(
+                                SecondaryDrawerItem()
+                                        .withLevel(2)
+                                        .withName(R.string.section_manga_list)
+                                        .withIcon(CommunityMaterial.Icon.cmd_view_list)
+                                        .withSelectedTextColorRes(R.color.colorAccent)
+                                        .withSelectedIconColorRes(R.color.colorAccent)
+                                        .withIdentifier(DrawerItem.MANGA.id),
+                                SecondaryDrawerItem()
+                                        .withLevel(2)
+                                        .withName(R.string.section_manga_local)
+                                        .withIcon(CommunityMaterial.Icon.cmd_cloud_download)
+                                        .withSelectedTextColorRes(R.color.colorAccent)
+                                        .withSelectedIconColorRes(R.color.colorAccent)
+                                        .withIdentifier(DrawerItem.MANGA_LOCAL.id)
+                        )
         )
     }
 
@@ -280,7 +279,7 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar, savedInstanceSta
     @Suppress("UNUSED_PARAMETER")
     private fun onDrawerItemClick(view: View?, id: Int, item: IDrawerItem<*, *>): Boolean {
         if (item.identifier != currentItem?.id) {
-            val newItem = DrawerItem.fromOrDefault(item.identifier)
+            val newItem = DrawerItem.fromOrNull(item.identifier) ?: return false
 
             if (item.isSelectable) {
                 currentItem = newItem
@@ -307,6 +306,7 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar, savedInstanceSta
         BOOKMARKS(2L),
         ANIME(3L),
         MANGA(4L),
+        MANGA_LOCAL(5L),
         INFO(10L),
         DONATE(11L),
         SETTINGS(12L);

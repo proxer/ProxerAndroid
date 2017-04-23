@@ -14,6 +14,8 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import com.rubengees.ktask.android.AndroidLifecycleTask
 import com.rubengees.ktask.android.bindToLifecycle
+import com.rubengees.ktask.base.Task
+import com.rubengees.ktask.operation.CacheTask
 import com.rubengees.ktask.util.PartialTaskException
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
@@ -23,12 +25,15 @@ import me.proxer.app.activity.TranslatorGroupActivity
 import me.proxer.app.activity.base.MainActivity
 import me.proxer.app.adapter.base.PagingAdapter
 import me.proxer.app.adapter.manga.MangaAdapter
+import me.proxer.app.application.MainApplication
 import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.entity.MangaChapterInfo
 import me.proxer.app.entity.MangaInput
 import me.proxer.app.fragment.base.LoadingFragment
-import me.proxer.app.task.MangaTask
 import me.proxer.app.task.asyncProxerTask
+import me.proxer.app.task.manga.LocalMangaChapterTask
+import me.proxer.app.task.manga.LocalMangaEntryTask
+import me.proxer.app.task.proxerTask
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.TimeUtils
 import me.proxer.app.util.Validators
@@ -41,6 +46,7 @@ import me.proxer.app.view.MediaControlView.SimpleTranslatorGroup
 import me.proxer.app.view.MediaControlView.Uploader
 import me.proxer.library.api.ProxerCall
 import me.proxer.library.entitiy.info.EntryCore
+import me.proxer.library.entitiy.manga.Chapter
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.Language
 import org.jetbrains.anko.bundleOf
@@ -289,9 +295,31 @@ class MangaFragment : LoadingFragment<MangaInput, MangaChapterInfo>() {
     }
 
     override fun constructInput() = MangaInput(id, episode, language)
-    override fun constructTask() = TaskBuilder.task(MangaTask())
-            .async()
-            .build()
+    override fun constructTask(): Task<MangaInput, MangaChapterInfo> {
+        val proxerEntryCoreTask = TaskBuilder.proxerTask<EntryCore>().mapInput<String> {
+            MainApplication.api.info()
+                    .entryCore(it)
+                    .build()
+        }.build()
+
+        val proxerChapterTask = TaskBuilder.proxerTask<Chapter>().mapInput<MangaInput> {
+            MainApplication.api.manga()
+                    .chapter(it.id, it.episode, it.language)
+                    .build()
+        }.build()
+
+        return TaskBuilder.attemptTask(LocalMangaChapterTask(), proxerChapterTask)
+                .async()
+                .parallelWith(
+                        TaskBuilder.attemptTask(LocalMangaEntryTask(), proxerEntryCoreTask)
+                                .cache(CacheTask.CacheStrategy.RESULT)
+                                .async(),
+                        zipFunction = { chapter, entry -> MangaChapterInfo(chapter, entry.name, entry.episodeAmount) },
+                        awaitLeftResultOnError = true
+                )
+                .mapInput<MangaInput> { it to it.id }
+                .build()
+    }
 
     private fun switchEpisode(newEpisode: Int) {
         episode = newEpisode

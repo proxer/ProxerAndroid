@@ -44,6 +44,7 @@ import me.proxer.library.api.ProxerApi
 import me.proxer.library.api.ProxerApi.Builder.LoggingStrategy
 import okhttp3.OkHttpClient
 import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 import java.io.InputStream
 import java.lang.reflect.Type
 
@@ -87,6 +88,26 @@ class MainApplication : Application() {
         initLibs()
         initDrawerImageLoader()
         enableStrictModeForDebug()
+
+        EventBus.getDefault().register(this)
+    }
+
+    @Suppress("unused")
+    @Subscribe
+    fun onLogout(@Suppress("UNUSED_PARAMETER") event: LogoutEvent) {
+        JobManager.instance().allJobRequests.filter {
+            it.tag.startsWith(LocalMangaJob.TAG)
+        }.forEach {
+            it.cancelAndEdit()
+        }
+
+        JobManager.instance().allJobs.filter {
+            it is LocalMangaJob
+        }.forEach {
+            it.cancel()
+        }
+
+        mangaDb.clear()
     }
 
     private fun initApi() {

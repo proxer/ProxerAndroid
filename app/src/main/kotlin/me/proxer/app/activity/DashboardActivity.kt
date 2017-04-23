@@ -199,6 +199,12 @@ class DashboardActivity : MainActivity() {
                 return false
             }
 
+            DrawerItem.MANGA_LOCAL -> {
+
+
+                return false
+            }
+
             DrawerItem.INFO -> {
                 setFragment(AboutFragment.newInstance(), R.string.section_info)
 

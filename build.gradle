@@ -19,7 +19,7 @@ ext {
     eventBusAnnotationVersion = '3.0.1'
     androidJobVersion = '1.1.9'
     proxerLibVersion = 'new-architecture-SNAPSHOT'
-    ktaskVersion = '0.2.10'
+    ktaskVersion = '0.3.1'
 
     // UI components
     aboutLibrariesVersion = '5.9.5'

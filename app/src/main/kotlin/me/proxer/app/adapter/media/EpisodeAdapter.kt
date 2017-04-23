@@ -1,6 +1,7 @@
 package me.proxer.app.adapter.media
 
 import android.os.Bundle
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,9 @@ import me.proxer.app.adapter.base.PagingAdapter
 import me.proxer.app.application.MainApplication.Companion.mangaDb
 import me.proxer.app.entity.EpisodeRow
 import me.proxer.app.event.LocalMangaJobFinishedEvent
+import me.proxer.app.event.LoginEvent
+import me.proxer.app.event.LogoutEvent
+import me.proxer.app.helper.StorageHelper
 import me.proxer.app.job.LocalMangaJob
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ParcelableStringBooleanMap
@@ -46,6 +50,7 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?) :
     }
 
     private val expanded: ParcelableStringBooleanMap
+    private var isLoggedIn = StorageHelper.user != null
 
     var callback: EpisodeAdapterCallback? = null
 
@@ -56,6 +61,18 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?) :
         }
 
         setHasStableIds(true)
+    }
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView?) {
+        super.onAttachedToRecyclerView(recyclerView)
+
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView?) {
+        super.onDetachedFromRecyclerView(recyclerView)
+
+        EventBus.getDefault().unregister(this)
     }
 
     override fun onViewAttachedToWindow(holder: PagingViewHolder<EpisodeRow>) {
@@ -84,6 +101,22 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?) :
 
     fun saveInstanceState(outState: Bundle) {
         outState.putParcelable(EXPANDED_STATE, expanded)
+    }
+
+    @Suppress("unused")
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onLogin(@Suppress("UNUSED_PARAMETER") event: LoginEvent) {
+        isLoggedIn = true
+
+        notifyDataSetChanged()
+    }
+
+    @Suppress("unused")
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onLogout(@Suppress("UNUSED_PARAMETER") event: LogoutEvent) {
+        isLoggedIn = false
+
+        notifyDataSetChanged()
     }
 
     inner class ViewHolder(itemView: View) : PagingViewHolder<EpisodeRow>(itemView) {
@@ -183,8 +216,8 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?) :
 
         private fun bindDownload(category: Category, episode: Int, language: MediaLanguage, download: ImageView,
                                  downloadProgress: MaterialProgressBar) {
-            if (category == Category.MANGA) {
-                if (mangaDb.find(entryId, episode, language.toGeneralLanguage()) != null) {
+            if (category == Category.MANGA && isLoggedIn) {
+                if (mangaDb.findChapterByEntryId(entryId, episode, language.toGeneralLanguage()) != null) {
                     val icon = IconicsDrawable(download.context, CommunityMaterial.Icon.cmd_cloud_check)
                             .colorRes(R.color.icon)
                             .sizeDp(32)

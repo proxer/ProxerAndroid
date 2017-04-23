@@ -2,10 +2,10 @@ package me.proxer.app.data
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
-import me.proxer.app.entity.MangaChapterInfo
+import me.proxer.library.entitiy.info.EntryCore
 import me.proxer.library.entitiy.manga.Chapter
 import me.proxer.library.entitiy.manga.Page
-import me.proxer.library.enums.Language
+import me.proxer.library.enums.*
 import me.proxer.library.util.ProxerUtils
 import org.jetbrains.anko.db.*
 import java.util.*
@@ -19,15 +19,19 @@ class LocalMangaDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DA
         private const val DATABASE_NAME = "manga.db"
         private const val DATABASE_VERSION = 1
 
+        private const val ENTRY_TABLE = "entry"
         private const val CHAPTER_TABLE = "chapter"
         private const val PAGE_TABLE = "page"
+
+        private const val ENTRY_ID_COLUMN = "id"
+        private const val ENTRY_NAME_COLUMN = "name"
+        private const val ENTRY_EPISODE_AMOUNT_COLUMN = "episode_amount"
 
         private const val CHAPTER_LOCAL_ID_COLUMN = "_id"
         private const val CHAPTER_ID_COLUMN = "id"
         private const val CHAPTER_EPISODE_COLUMN = "episode"
         private const val CHAPTER_LANGUAGE_COLUMN = "language"
         private const val CHAPTER_ENTRY_ID_COLUMN = "entry_id"
-        private const val CHAPTER_ENTRY_NAME_COLUMN = "entry_name"
         private const val CHAPTER_TITLE_COLUMN = "title"
         private const val CHAPTER_UPLOADER_ID_COLUMN = "uploader_id"
         private const val CHAPTER_UPLOADER_NAME_COLUMN = "uploader_name"
@@ -35,7 +39,6 @@ class LocalMangaDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DA
         private const val CHAPTER_SCAN_GROUP_ID_COLUMN = "scan_group_id"
         private const val CHAPTER_SCAN_GROUP_NAME_COLUMN = "scan_group_name"
         private const val CHAPTER_SERVER_COLUMN = "server"
-        private const val CHAPTER_EPISODE_AMOUNT_COLUMN = "episode_amount"
 
         private const val PAGE_LOCAL_ID_COLUMN = "_id"
         private const val PAGE_NAME_COLUMN = "name"
@@ -43,16 +46,21 @@ class LocalMangaDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DA
         private const val PAGE_WIDTH_COLUMN = "width"
         private const val PAGE_CHAPTER_ID_COLUMN = "chapter_id"
 
+        private val entryParser = rowParser { id: String, name: String, episodeAmount: Int ->
+            EntryCore(id, name, emptySet(), emptySet(), "", Medium.ANIMESERIES, episodeAmount, MediaState.AIRING,
+                    0, 0, 0, Category.ANIME, License.UNKNOWN)
+        }
+
         private val chapterParser = rowParser { localId: Long, id: String, episode: Int, language: String,
-                                                entryId: String, entryName: String, title: String, uploaderId: String,
+                                                entryId: String, title: String, uploaderId: String,
                                                 uploaderName: String, date: Long, scanGroupId: String?,
-                                                scanGroupName: String?, server: String, episodeAmount: Int ->
+                                                scanGroupName: String?, server: String ->
 
             val parsedLanguage = ProxerUtils.toApiEnum(Language::class.java, language) ?:
                     throw IllegalArgumentException("Unknown value for language: $language")
 
-            IntermediateChapter(localId, id, episode, parsedLanguage, entryId, entryName, title, uploaderId,
-                    uploaderName, Date(date), scanGroupId, scanGroupName, server, episodeAmount)
+            LocalChapter(localId, id, episode, parsedLanguage, entryId, title, uploaderId, uploaderName, Date(date),
+                    scanGroupId, scanGroupName, server)
         }
 
         private val pageParser = rowParser { _: Long, name: String, height: Int, width: Int, _: Long ->
@@ -61,13 +69,17 @@ class LocalMangaDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DA
     }
 
     override fun onCreate(db: SQLiteDatabase) {
+        db.createTable(ENTRY_TABLE, true,
+                ENTRY_ID_COLUMN to TEXT + PRIMARY_KEY + UNIQUE + NOT_NULL,
+                ENTRY_NAME_COLUMN to TEXT + NOT_NULL,
+                ENTRY_EPISODE_AMOUNT_COLUMN to INTEGER + NOT_NULL)
+
         db.createTable(CHAPTER_TABLE, true,
                 CHAPTER_LOCAL_ID_COLUMN to INTEGER + PRIMARY_KEY + UNIQUE + NOT_NULL,
                 CHAPTER_ID_COLUMN to TEXT + NOT_NULL,
                 CHAPTER_EPISODE_COLUMN to INTEGER + NOT_NULL,
                 CHAPTER_LANGUAGE_COLUMN to TEXT + NOT_NULL,
                 CHAPTER_ENTRY_ID_COLUMN to TEXT + NOT_NULL,
-                CHAPTER_ENTRY_NAME_COLUMN to TEXT + NOT_NULL,
                 CHAPTER_TITLE_COLUMN to TEXT + NOT_NULL,
                 CHAPTER_UPLOADER_ID_COLUMN to TEXT + NOT_NULL,
                 CHAPTER_UPLOADER_NAME_COLUMN to TEXT + NOT_NULL,
@@ -75,7 +87,7 @@ class LocalMangaDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DA
                 CHAPTER_SCAN_GROUP_ID_COLUMN to TEXT,
                 CHAPTER_SCAN_GROUP_NAME_COLUMN to TEXT,
                 CHAPTER_SERVER_COLUMN to TEXT + NOT_NULL,
-                CHAPTER_EPISODE_AMOUNT_COLUMN to INTEGER + NOT_NULL)
+                FOREIGN_KEY(CHAPTER_ENTRY_ID_COLUMN, ENTRY_TABLE, ENTRY_ID_COLUMN))
 
         db.createTable(PAGE_TABLE, true,
                 PAGE_LOCAL_ID_COLUMN to INTEGER + PRIMARY_KEY + AUTOINCREMENT + NOT_NULL,
@@ -90,26 +102,35 @@ class LocalMangaDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DA
         // Not needed yet.
     }
 
-    fun insert(chapterInfo: MangaChapterInfo, episode: Int, language: Language) {
+    fun insertEntry(entry: EntryCore) {
         use {
-            if (find(chapterInfo.chapter.entryId, episode, language) == null) {
+            if (findEntry(entry.id) == null) {
+                insertOrThrow(ENTRY_TABLE,
+                        ENTRY_ID_COLUMN to entry.id,
+                        ENTRY_NAME_COLUMN to entry.name,
+                        ENTRY_EPISODE_AMOUNT_COLUMN to entry.episodeAmount)
+            }
+        }
+    }
+
+    fun insertChapter(chapter: Chapter, episode: Int, language: Language) {
+        use {
+            if (findChapter(chapter.id, episode, language) == null) {
                 transaction {
                     val id = insertOrThrow(CHAPTER_TABLE,
-                            CHAPTER_ID_COLUMN to chapterInfo.chapter.id,
+                            CHAPTER_ID_COLUMN to chapter.id,
                             CHAPTER_EPISODE_COLUMN to episode,
                             CHAPTER_LANGUAGE_COLUMN to ProxerUtils.getApiEnumName(language),
-                            CHAPTER_ENTRY_ID_COLUMN to chapterInfo.chapter.entryId,
-                            CHAPTER_ENTRY_NAME_COLUMN to chapterInfo.name,
-                            CHAPTER_TITLE_COLUMN to chapterInfo.chapter.title,
-                            CHAPTER_UPLOADER_ID_COLUMN to chapterInfo.chapter.uploaderId,
-                            CHAPTER_UPLOADER_NAME_COLUMN to chapterInfo.chapter.uploaderName,
-                            CHAPTER_DATE_COLUMN to chapterInfo.chapter.date.time,
-                            CHAPTER_SCAN_GROUP_ID_COLUMN to chapterInfo.chapter.scanGroupId,
-                            CHAPTER_SCAN_GROUP_NAME_COLUMN to chapterInfo.chapter.scanGroupName,
-                            CHAPTER_SERVER_COLUMN to chapterInfo.chapter.server,
-                            CHAPTER_EPISODE_AMOUNT_COLUMN to chapterInfo.episodeAmount)
+                            CHAPTER_ENTRY_ID_COLUMN to chapter.entryId,
+                            CHAPTER_TITLE_COLUMN to chapter.title,
+                            CHAPTER_UPLOADER_ID_COLUMN to chapter.uploaderId,
+                            CHAPTER_UPLOADER_NAME_COLUMN to chapter.uploaderName,
+                            CHAPTER_DATE_COLUMN to chapter.date.time,
+                            CHAPTER_SCAN_GROUP_ID_COLUMN to chapter.scanGroupId,
+                            CHAPTER_SCAN_GROUP_NAME_COLUMN to chapter.scanGroupName,
+                            CHAPTER_SERVER_COLUMN to chapter.server)
 
-                    chapterInfo.chapter.pages.forEach {
+                    chapter.pages.forEach {
                         replaceOrThrow(PAGE_TABLE,
                                 PAGE_NAME_COLUMN to it.name,
                                 PAGE_WIDTH_COLUMN to it.width,
@@ -121,7 +142,30 @@ class LocalMangaDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DA
         }
     }
 
-    fun find(entryId: String, episode: Int, language: Language): MangaChapterInfo? {
+    fun findEntry(id: String): EntryCore? {
+        return use {
+            select(ENTRY_TABLE)
+                    .where("$ENTRY_ID_COLUMN = \"$id\"")
+                    .parseOpt(entryParser)
+        }
+    }
+
+    fun findChapter(id: String, episode: Int, language: Language): Chapter? {
+        return use {
+            val chapter = select(CHAPTER_TABLE)
+                    .where("$CHAPTER_ID_COLUMN = \"$id\" and $CHAPTER_EPISODE_COLUMN = $episode " +
+                            "and $CHAPTER_LANGUAGE_COLUMN = \"${ProxerUtils.getApiEnumName(language)}\"")
+                    .parseOpt(chapterParser)
+
+            if (chapter != null) {
+                findNonLocalChapter(chapter)
+            } else {
+                null
+            }
+        }
+    }
+
+    fun findChapterByEntryId(entryId: String, episode: Int, language: Language): Chapter? {
         return use {
             val chapter = select(CHAPTER_TABLE)
                     .where("$CHAPTER_ENTRY_ID_COLUMN = \"$entryId\" and $CHAPTER_EPISODE_COLUMN = $episode " +
@@ -129,22 +173,37 @@ class LocalMangaDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DA
                     .parseOpt(chapterParser)
 
             if (chapter != null) {
-                val pages = select(PAGE_TABLE)
-                        .where("$PAGE_CHAPTER_ID_COLUMN = ${chapter.localId}")
-                        .parseList(pageParser)
-
-                MangaChapterInfo(chapter.toNonLocalChapter(pages), chapter.entryName, chapter.episodeAmount)
+                findNonLocalChapter(chapter)
             } else {
                 null
             }
         }
     }
 
-    private data class IntermediateChapter(val localId: Long, val id: String, val episode: Int, val language: Language,
-                                           val entryId: String, val entryName: String, val title: String,
-                                           val uploaderId: String, val uploaderName: String, val date: Date,
-                                           val scanGroupId: String?, val scanGroupName: String?, val server: String,
-                                           val episodeAmount: Int) {
+    fun clear() {
+        use {
+            transaction {
+                delete(ENTRY_TABLE)
+                delete(CHAPTER_TABLE)
+                delete(PAGE_TABLE)
+            }
+        }
+    }
+
+    private fun findNonLocalChapter(chapter: LocalChapter): Chapter? {
+        return use {
+            val pages = select(PAGE_TABLE)
+                    .where("$PAGE_CHAPTER_ID_COLUMN = ${chapter.localId}")
+                    .parseList(pageParser)
+
+            chapter.toNonLocalChapter(pages)
+        }
+    }
+
+    private data class LocalChapter(val localId: Long, val id: String, val episode: Int, val language: Language,
+                                    val entryId: String, val title: String, val uploaderId: String,
+                                    val uploaderName: String, val date: Date, val scanGroupId: String?,
+                                    val scanGroupName: String?, val server: String) {
 
         fun toNonLocalChapter(pages: List<Page>): Chapter {
             return Chapter(id, entryId, title, uploaderId, uploaderName, date, scanGroupId, scanGroupName,
