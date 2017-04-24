@@ -39,7 +39,7 @@
                 android:gravity="center"
                 android:maxLines="3"
                 android:padding="8dp"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@android:color/white"
                 tools:text="Some title" />
 
@@ -53,7 +53,7 @@
                 android:paddingBottom="8dp"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
-                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="@android:color/white"
                 tools:text="Animeserie" />
 
@@ -83,7 +83,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/ratingContainer"
                 android:padding="8dp"
-                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 tools:text="In progress" />
         </RelativeLayout>
     </android.support.v7.widget.CardView>

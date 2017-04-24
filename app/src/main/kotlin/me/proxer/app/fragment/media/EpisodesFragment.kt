@@ -115,7 +115,8 @@ class EpisodesFragment : LoadingFragment<ProxerCall<EpisodeInfo>, List<EpisodeRo
 
     override fun constructTask() = TaskBuilder.asyncProxerTask<EpisodeInfo>()
             .map { info ->
-                info.episodes.groupBy { it.number }
+                info.episodes
+                        .groupBy { it.number }
                         .map { EpisodeRow(info.category, info.userProgress, info.lastEpisode, it.value) }
             }.build()
 

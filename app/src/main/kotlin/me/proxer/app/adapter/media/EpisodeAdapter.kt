@@ -9,7 +9,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.evernote.android.job.JobManager
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
@@ -29,7 +28,6 @@ import me.proxer.app.util.extension.toAppDrawable
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.app.util.extension.toGeneralLanguage
 import me.proxer.library.enums.Category
-import me.proxer.library.enums.Language
 import me.proxer.library.enums.MediaLanguage
 import me.proxer.library.util.ProxerUrls
 import me.proxer.library.util.ProxerUtils
@@ -240,7 +238,7 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?) :
                             download.setOnClickListener(null)
                         }
                     } else {
-                        if (isLocalMangaJobScheduledOrRunning(entryId, episode, language.toGeneralLanguage())) {
+                        if (LocalMangaJob.isScheduledOrRunning(entryId, episode, language.toGeneralLanguage())) {
                             uiThread {
                                 download.visibility = View.GONE
                                 downloadProgress.visibility = View.VISIBLE
@@ -299,18 +297,6 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?) :
                             .into(imageView as ImageView)
                 }
             }
-        }
-
-        private fun isLocalMangaJobScheduledOrRunning(id: String, episode: Int, language: Language): Boolean {
-            val isScheduled = JobManager.instance().allJobRequests.find {
-                it.tag == LocalMangaJob.constructTag(id, episode, language)
-            } != null
-
-            val isRunning = JobManager.instance().allJobs.find {
-                it is LocalMangaJob && it.isJobFor(id, episode, language) && !it.isCanceledPublic() && !it.isFinished
-            } != null
-
-            return isScheduled || isRunning
         }
     }
 

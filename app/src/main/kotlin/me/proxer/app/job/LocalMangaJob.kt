@@ -1,5 +1,7 @@
 package me.proxer.app.job
 
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.Target
 import com.evernote.android.job.Job
 import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
@@ -9,7 +11,6 @@ import me.proxer.app.application.MainApplication.Companion.mangaDb
 import me.proxer.app.event.LocalMangaJobFailedEvent
 import me.proxer.app.event.LocalMangaJobFinishedEvent
 import me.proxer.app.helper.NotificationHelper
-import me.proxer.app.util.Utils
 import me.proxer.library.enums.Language
 import me.proxer.library.util.ProxerUrls
 import me.proxer.library.util.ProxerUtils
@@ -26,7 +27,6 @@ class LocalMangaJob : Job() {
         private const val ID_EXTRA = "id"
         private const val EPISODE_EXTRA = "episode"
         private const val LANGUAGE_EXTRA = "language"
-        private const val THIRTY_MINUTES = 1000L * 60 * 30
 
         fun schedule(id: String, episode: Int, language: Language) {
             val extras = PersistableBundleCompat().apply {
@@ -38,7 +38,7 @@ class LocalMangaJob : Job() {
             JobRequest.Builder(constructTag(id, episode, language))
                     .setExtras(extras)
                     .setRequiredNetworkType(JobRequest.NetworkType.UNMETERED)
-                    .setExecutionWindow(1L, THIRTY_MINUTES)
+                    .setExecutionWindow(1L, 100L)
                     .setRequirementsEnforced(true)
                     .setUpdateCurrent(true)
                     .setPersisted(true)
@@ -56,6 +56,18 @@ class LocalMangaJob : Job() {
                     .plus(JobManager.instance().allJobs.filter { it is LocalMangaJob }.map {
                         (it as LocalMangaJob).let { constructTag(it.id, it.episode, it.language) }
                     }).forEach { JobManager.instance().cancelAllForTag(it) }
+        }
+
+        fun isScheduledOrRunning(id: String, episode: Int, language: Language): Boolean {
+            val isScheduled = JobManager.instance().allJobRequests.find {
+                it.tag == constructTag(id, episode, language)
+            } != null
+
+            val isRunning = JobManager.instance().allJobs.find {
+                it is LocalMangaJob && it.isJobFor(id, episode, language) && !it.isCanceled && !it.isFinished
+            } != null
+
+            return isScheduled || isRunning
         }
 
         fun constructTag(id: String, episode: Int, language: Language): String {
@@ -88,8 +100,10 @@ class LocalMangaJob : Job() {
                     return Result.FAILURE
                 }
 
-                Utils.getBitmapFromUrl(context, ProxerUrls.mangaPageImage(chapter.server, id,
-                        chapter.id, it.name).toString()) ?: throw RuntimeException("Page download failed")
+                Glide.with(context)
+                        .load(ProxerUrls.mangaPageImage(chapter.server, id, chapter.id, it.name).toString())
+                        .downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+                        .get()
             }
 
             mangaDb.insertChapter(chapter, episode, language)
@@ -105,11 +119,7 @@ class LocalMangaJob : Job() {
         }
     }
 
-    fun isJobFor(id: String, episode: Int, language: Language): Boolean {
+    private fun isJobFor(id: String, episode: Int, language: Language): Boolean {
         return this.id == id && this.episode == episode && this.language == language
-    }
-
-    fun isCanceledPublic(): Boolean {
-        return isCanceled
     }
 }
