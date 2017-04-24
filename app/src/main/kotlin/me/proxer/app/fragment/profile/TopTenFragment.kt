@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import com.bumptech.glide.Glide
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.activity.MediaActivity
@@ -47,8 +48,8 @@ class TopTenFragment : LoadingFragment<Pair<ProxerCall<List<TopTenEntry>>, Proxe
     private val username: String?
         get() = profileActivity.username
 
-    private val animeAdapter = TopTenAdapter()
-    private val mangaAdapter = TopTenAdapter()
+    private val animeAdapter by lazy { TopTenAdapter(Glide.with(this)) }
+    private val mangaAdapter by lazy { TopTenAdapter(Glide.with(this)) }
 
     private val animeContainer: ViewGroup by bindView(R.id.animeContainer)
     private val mangaContainer: ViewGroup by bindView(R.id.mangaContainer)

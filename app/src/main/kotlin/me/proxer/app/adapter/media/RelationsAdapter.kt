@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
-import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import me.proxer.app.R
 import me.proxer.app.adapter.base.PagingAdapter
@@ -22,7 +22,7 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-class RelationsAdapter : PagingAdapter<Relation>() {
+class RelationsAdapter(private val glide: RequestManager) : PagingAdapter<Relation>() {
 
     var callback: RelationsAdapterCallback? = null
 
@@ -30,7 +30,7 @@ class RelationsAdapter : PagingAdapter<Relation>() {
         setHasStableIds(true)
     }
 
-    override fun getItemId(position: Int) = list[position].id.toLong()
+    override fun getItemId(position: Int) = internalList[position].id.toLong()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagingViewHolder<Relation> {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_media_entry, parent, false))
@@ -56,7 +56,7 @@ class RelationsAdapter : PagingAdapter<Relation>() {
         init {
             itemView.setOnClickListener { view ->
                 withSafeAdapterPosition {
-                    callback?.onRelationClick(view, list[adapterPosition])
+                    callback?.onRelationClick(view, internalList[adapterPosition])
                 }
             }
         }
@@ -90,8 +90,7 @@ class RelationsAdapter : PagingAdapter<Relation>() {
                 ratingContainer.visibility = View.GONE
             }
 
-            Glide.with(image.context)
-                    .load(ProxerUrls.entryImage(item.id).toString())
+            glide.load(ProxerUrls.entryImage(item.id).toString())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(image)
         }

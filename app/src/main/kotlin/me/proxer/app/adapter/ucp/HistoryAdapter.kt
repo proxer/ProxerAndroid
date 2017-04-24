@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import me.proxer.app.R
 import me.proxer.app.adapter.base.PagingAdapter
@@ -19,7 +19,7 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-class HistoryAdapter : PagingAdapter<UcpHistoryEntry>() {
+class HistoryAdapter(private val glide: RequestManager) : PagingAdapter<UcpHistoryEntry>() {
 
     var callback: HistoryAdapterCallback? = null
 
@@ -27,7 +27,7 @@ class HistoryAdapter : PagingAdapter<UcpHistoryEntry>() {
         setHasStableIds(false)
     }
 
-    override fun getItemId(position: Int) = list[position].id.toLong()
+    override fun getItemId(position: Int) = internalList[position].id.toLong()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagingViewHolder<UcpHistoryEntry> {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_history_entry, parent, false))
@@ -49,7 +49,7 @@ class HistoryAdapter : PagingAdapter<UcpHistoryEntry>() {
         init {
             itemView.setOnClickListener { view ->
                 withSafeAdapterPosition {
-                    callback?.onItemClick(view, list[it])
+                    callback?.onItemClick(view, internalList[it])
                 }
             }
         }
@@ -62,8 +62,7 @@ class HistoryAdapter : PagingAdapter<UcpHistoryEntry>() {
             status.text = status.context.getString(R.string.fragment_history_entry_status, item.episode,
                     TimeUtils.convertToRelativeReadableTime(status.context, item.date))
 
-            Glide.with(image.context)
-                    .load(ProxerUrls.entryImage(item.id).toString())
+            glide.load(ProxerUrls.entryImage(item.id).toString())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(image)
         }

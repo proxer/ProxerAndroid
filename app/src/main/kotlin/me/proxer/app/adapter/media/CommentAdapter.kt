@@ -55,7 +55,7 @@ class CommentAdapter(savedInstanceState: Bundle?) : PagingAdapter<Comment>() {
         setHasStableIds(true)
     }
 
-    override fun getItemId(position: Int) = list[position].id.toLong()
+    override fun getItemId(position: Int) = internalList[position].id.toLong()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagingViewHolder<Comment> {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_comment, parent, false))
@@ -109,7 +109,7 @@ class CommentAdapter(savedInstanceState: Bundle?) : PagingAdapter<Comment>() {
 
             expand.setOnClickListener {
                 withSafeAdapterPosition {
-                    val id = list[it].id
+                    val id = internalList[it].id
 
                     if (expanded[id] ?: false) {
                         expanded.remove(id)
@@ -123,7 +123,7 @@ class CommentAdapter(savedInstanceState: Bundle?) : PagingAdapter<Comment>() {
 
             userContainer.setOnClickListener { view ->
                 withSafeAdapterPosition {
-                    callback?.onUserClick(view, list[it])
+                    callback?.onUserClick(view, internalList[it])
                 }
             }
 

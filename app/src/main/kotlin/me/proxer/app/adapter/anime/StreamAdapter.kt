@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
@@ -23,7 +23,7 @@ import org.threeten.bp.format.DateTimeFormatter
 /**
  * @author Ruben Gees
  */
-class StreamAdapter(savedInstanceState: Bundle?) : PagingAdapter<Stream>() {
+class StreamAdapter(savedInstanceState: Bundle?, private val glide: RequestManager) : PagingAdapter<Stream>() {
 
     private companion object {
         private const val EXPANDED_STATE = "stream_expanded"
@@ -73,7 +73,7 @@ class StreamAdapter(savedInstanceState: Bundle?) : PagingAdapter<Stream>() {
         init {
             nameContainer.setOnClickListener {
                 withSafeAdapterPosition {
-                    val id = list[it].id
+                    val id = internalList[it].id
 
                     if (expanded[id] ?: false) {
                         expanded.remove(id)
@@ -87,19 +87,19 @@ class StreamAdapter(savedInstanceState: Bundle?) : PagingAdapter<Stream>() {
 
             uploaderText.setOnClickListener {
                 withSafeAdapterPosition {
-                    callback?.onUploaderClick(list[it])
+                    callback?.onUploaderClick(internalList[it])
                 }
             }
 
             translatorGroup.setOnClickListener {
                 withSafeAdapterPosition {
-                    callback?.onTranslatorGroupClick(list[it])
+                    callback?.onTranslatorGroupClick(internalList[it])
                 }
             }
 
             play.setOnClickListener {
                 withSafeAdapterPosition {
-                    callback?.onWatchClick(list[it])
+                    callback?.onWatchClick(internalList[it])
                 }
             }
 
@@ -113,8 +113,7 @@ class StreamAdapter(savedInstanceState: Bundle?) : PagingAdapter<Stream>() {
         override fun bind(item: Stream) {
             name.text = item.hosterName
 
-            Glide.with(image.context)
-                    .load(ProxerUrls.hosterImage(item.image).toString())
+            glide.load(ProxerUrls.hosterImage(item.image).toString())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(image)
 
@@ -135,16 +134,8 @@ class StreamAdapter(savedInstanceState: Bundle?) : PagingAdapter<Stream>() {
     }
 
     interface StreamAdapterCallback {
-        fun onUploaderClick(item: Stream) {
-
-        }
-
-        fun onTranslatorGroupClick(item: Stream) {
-
-        }
-
-        fun onWatchClick(item: Stream) {
-
-        }
+        fun onUploaderClick(item: Stream) {}
+        fun onTranslatorGroupClick(item: Stream) {}
+        fun onWatchClick(item: Stream) {}
     }
 }

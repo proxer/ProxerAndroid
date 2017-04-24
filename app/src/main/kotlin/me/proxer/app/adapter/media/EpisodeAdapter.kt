@@ -88,7 +88,7 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?) :
     }
 
     override fun getItemId(position: Int): Long {
-        return list[position].number.toLong()
+        return internalList[position].number.toLong()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagingViewHolder<EpisodeRow> {
@@ -133,7 +133,7 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?) :
         init {
             titleContainer.setOnClickListener {
                 withSafeAdapterPosition {
-                    val number = list[it].number.toString()
+                    val number = internalList[it].number.toString()
 
                     if (expanded[number] ?: false) {
                         expanded.remove(number)
@@ -189,7 +189,7 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?) :
 
                 languageContainer.setOnClickListener {
                     withSafeAdapterPosition {
-                        callback?.onLanguageClick(language, list[it])
+                        callback?.onLanguageClick(language, internalList[it])
                     }
                 }
 
@@ -202,7 +202,7 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?) :
         @Subscribe(threadMode = ThreadMode.MAIN)
         fun onLocalMangaJobFinished(event: LocalMangaJobFinishedEvent) {
             withSafeAdapterPosition {
-                if (event.id == entryId && event.episode == list[it].number) {
+                if (event.id == entryId && event.episode == internalList[it].number) {
                     notifyItemChanged(it)
                 }
             }
@@ -212,7 +212,7 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?) :
         @Subscribe(threadMode = ThreadMode.MAIN)
         fun onLocalMangaJobFailed(event: LocalMangaJobFailedEvent) {
             withSafeAdapterPosition {
-                if (event.id == entryId && event.episode == list[it].number) {
+                if (event.id == entryId && event.episode == internalList[it].number) {
                     notifyItemChanged(it)
                 }
             }

@@ -9,6 +9,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
+import com.bumptech.glide.Glide
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.activity.MediaActivity
@@ -77,7 +78,7 @@ class MediaListFragment : PagedLoadingFragment<ProxerCall<List<MediaListEntry>>,
         set(value) = arguments.putBoolean(HAS_SEARCHED_ARGUMENT, value)
 
     override val itemsOnPage = 30
-    override val innerAdapter by lazy { MediaAdapter(category) }
+    override val innerAdapter by lazy { MediaAdapter(category, Glide.with(this)) }
 
     private lateinit var searchItem: MenuItem
     private lateinit var searchView: SearchView

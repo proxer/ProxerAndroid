@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.*
+import com.bumptech.glide.Glide
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
@@ -98,8 +99,8 @@ class MangaFragment : LoadingFragment<MangaInput, MangaChapterInfo>() {
             mangaActivity.episodeAmount = value
         }
 
-    private val innerAdapter = MangaAdapter()
-    private val adapter = EasyHeaderFooterAdapter(innerAdapter)
+    private val innerAdapter by lazy { MangaAdapter(Glide.with(this)) }
+    private val adapter by lazy { EasyHeaderFooterAdapter(innerAdapter) }
 
     private lateinit var bookmarkTask: AndroidLifecycleTask<ProxerCall<Void?>, Void?>
 

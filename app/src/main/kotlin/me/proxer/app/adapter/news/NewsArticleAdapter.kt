@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
@@ -23,7 +23,8 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-class NewsArticleAdapter(savedInstanceState: Bundle?) : PagingAdapter<NewsArticle>() {
+class NewsArticleAdapter(savedInstanceState: Bundle?, private val glide: RequestManager) :
+        PagingAdapter<NewsArticle>() {
 
     private companion object {
         private const val EXPANDED_STATE = "news_expanded"
@@ -133,8 +134,7 @@ class NewsArticleAdapter(savedInstanceState: Bundle?) : PagingAdapter<NewsArticl
                 }
             }
 
-            Glide.with(image.context)
-                    .load(ProxerUrls.newsImage(item.id, item.image).toString())
+            glide.load(ProxerUrls.newsImage(item.id, item.image).toString())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(image)
         }

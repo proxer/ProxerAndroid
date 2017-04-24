@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import com.bumptech.glide.Glide
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.activity.MangaActivity
@@ -46,7 +47,7 @@ class LocalMangaFragment : LoadingFragment<Unit, List<CompleteLocalMangaEntry>>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        adapter = LocalMangaAdapter(savedInstanceState)
+        adapter = LocalMangaAdapter(savedInstanceState, Glide.with(this))
         adapter.callback = object : LocalMangaAdapter.LocalMangaAdapterCallback {
             override fun onChapterClick(entry: EntryCore, chapter: LocalMangaChapter) {
                 MangaActivity.navigateTo(activity, entry.id, chapter.episode, chapter.language, chapter.title,

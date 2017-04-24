@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
-import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import me.proxer.app.R
 import me.proxer.app.adapter.base.PagingAdapter
@@ -18,7 +18,7 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-class TranslatorGroupProjectAdapter : PagingAdapter<TranslatorGroupProject>() {
+class TranslatorGroupProjectAdapter(private val glide: RequestManager) : PagingAdapter<TranslatorGroupProject>() {
 
     var callback: TranslatorGroupProjectAdapterCallback? = null
 
@@ -48,7 +48,7 @@ class TranslatorGroupProjectAdapter : PagingAdapter<TranslatorGroupProject>() {
         init {
             itemView.setOnClickListener { view ->
                 withSafeAdapterPosition {
-                    callback?.onProjectClick(view, list[it])
+                    callback?.onProjectClick(view, internalList[it])
                 }
             }
         }
@@ -65,8 +65,7 @@ class TranslatorGroupProjectAdapter : PagingAdapter<TranslatorGroupProject>() {
                 ratingContainer.visibility = View.GONE
             }
 
-            Glide.with(image.context)
-                    .load(ProxerUrls.entryImage(item.id).toString())
+            glide.load(ProxerUrls.entryImage(item.id).toString())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(image)
         }

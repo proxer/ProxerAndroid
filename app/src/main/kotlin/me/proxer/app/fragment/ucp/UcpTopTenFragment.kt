@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import com.bumptech.glide.Glide
 import com.rubengees.ktask.android.AndroidLifecycleTask
 import com.rubengees.ktask.android.bindToLifecycle
 import com.rubengees.ktask.util.TaskBuilder
@@ -44,8 +45,8 @@ class UcpTopTenFragment : LoadingFragment<ProxerCall<List<UcpTopTenEntry>>, List
 
     override val isLoginRequired = true
 
-    private val animeAdapter = UcpTopTenAdapter()
-    private val mangaAdapter = UcpTopTenAdapter()
+    private val animeAdapter by lazy { UcpTopTenAdapter(Glide.with(this)) }
+    private val mangaAdapter by lazy { UcpTopTenAdapter(Glide.with(this)) }
 
     private lateinit var removalTask: AndroidLifecycleTask<ProxerCall<Void?>, Void?>
     private val removalQueue = LinkedHashSet<UcpTopTenEntry>()
