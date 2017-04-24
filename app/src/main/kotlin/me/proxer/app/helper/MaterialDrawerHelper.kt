@@ -242,7 +242,7 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar, savedInstanceSta
                                         .withIcon(CommunityMaterial.Icon.cmd_cloud_download)
                                         .withSelectedTextColorRes(R.color.colorAccent)
                                         .withSelectedIconColorRes(R.color.colorAccent)
-                                        .withIdentifier(DrawerItem.MANGA_LOCAL.id)
+                                        .withIdentifier(DrawerItem.LOCAL_MANGA.id)
                         )
         )
     }
@@ -306,7 +306,7 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar, savedInstanceSta
         BOOKMARKS(2L),
         ANIME(3L),
         MANGA(4L),
-        MANGA_LOCAL(5L),
+        LOCAL_MANGA(5L),
         INFO(10L),
         DONATE(11L),
         SETTINGS(12L);

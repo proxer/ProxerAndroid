@@ -23,15 +23,17 @@ class MangaActivity : MainActivity() {
         private const val ID_EXTRA = "id"
         private const val EPISODE_EXTRA = "episode"
         private const val LANGUAGE_EXTRA = "language"
+        private const val CHAPTER_TITLE_EXTRA = "chapter_title"
         private const val NAME_EXTRA = "name"
         private const val EPISODE_AMOUNT_EXTRA = "episode_amount"
 
-        fun navigateTo(context: Activity, id: String, episode: Int, language: Language,
+        fun navigateTo(context: Activity, id: String, episode: Int, language: Language, chapterTitle: String?,
                        name: String? = null, episodeAmount: Int? = null) {
             context.startActivity(context.intentFor<MangaActivity>(
                     ID_EXTRA to id,
                     EPISODE_EXTRA to episode,
                     LANGUAGE_EXTRA to language,
+                    CHAPTER_TITLE_EXTRA to chapterTitle,
                     NAME_EXTRA to name,
                     EPISODE_AMOUNT_EXTRA to episodeAmount
             ))
@@ -64,6 +66,14 @@ class MangaActivity : MainActivity() {
                         ?: Language.ENGLISH
             }
             else -> intent.getSerializableExtra(LANGUAGE_EXTRA) as Language
+        }
+
+    var chapterTitle: String?
+        get() = intent.getStringExtra(CHAPTER_TITLE_EXTRA)
+        set(value) {
+            intent.putExtra(CHAPTER_TITLE_EXTRA, value)
+
+            updateTitle()
         }
 
     var name: String?
@@ -144,7 +154,12 @@ class MangaActivity : MainActivity() {
     }
 
     private fun updateTitle() {
-        title = Category.MANGA.toEpisodeAppString(this, episode)
+        if (chapterTitle != null) {
+            title = chapterTitle
+        } else {
+            title = Category.MANGA.toEpisodeAppString(this, episode)
+        }
+
         supportActionBar?.subtitle = name
     }
 }

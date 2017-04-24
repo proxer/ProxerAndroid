@@ -95,20 +95,7 @@ class MainApplication : Application() {
     @Suppress("unused")
     @Subscribe
     fun onLogout(@Suppress("UNUSED_PARAMETER") event: LogoutEvent) {
-        JobManager.instance().allJobRequests.filter {
-            it.tag.startsWith(LocalMangaJob.TAG)
-        }.forEach {
-            JobManager.instance().cancelAllForTag(it.tag)
-        }
-
-        JobManager.instance().allJobs.filter {
-            it is LocalMangaJob
-        }.forEach {
-            it as LocalMangaJob
-
-            JobManager.instance().cancelAllForTag(LocalMangaJob.constructTag(it.id, it.episode, it.language))
-        }
-
+        LocalMangaJob.cancelAll()
         mangaDb.clear()
     }
 

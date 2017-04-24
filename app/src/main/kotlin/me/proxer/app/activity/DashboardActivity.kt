@@ -19,6 +19,7 @@ import me.proxer.app.event.LoginEvent
 import me.proxer.app.event.LogoutEvent
 import me.proxer.app.fragment.AboutFragment
 import me.proxer.app.fragment.SettingsFragment
+import me.proxer.app.fragment.manga.LocalMangaFragment
 import me.proxer.app.fragment.media.MediaListFragment
 import me.proxer.app.fragment.news.NewsArticleFragment
 import me.proxer.app.fragment.ucp.BookmarksFragment
@@ -199,8 +200,8 @@ class DashboardActivity : MainActivity() {
                 return false
             }
 
-            DrawerItem.MANGA_LOCAL -> {
-
+            DrawerItem.LOCAL_MANGA -> {
+                setFragment(LocalMangaFragment.newInstance(), R.string.section_local_manga)
 
                 return false
             }

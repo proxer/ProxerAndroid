@@ -38,8 +38,11 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.collections.forEachWithIndex
+import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.find
 import org.jetbrains.anko.forEachChildWithIndex
+import org.jetbrains.anko.uiThread
+import java.util.concurrent.Future
 
 /**
  * @author Ruben Gees
@@ -217,37 +220,51 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?) :
 
         private fun bindDownload(category: Category, episode: Int, language: MediaLanguage, download: ImageView,
                                  downloadProgress: MaterialProgressBar) {
+            download.tag.let {
+                if (it is Future<*>) {
+                    it.cancel(true)
+                }
+            }
+
             if (category == Category.MANGA && isLoggedIn) {
-                if (mangaDb.findChapterByEntryId(entryId, episode, language.toGeneralLanguage()) != null) {
-                    val icon = IconicsDrawable(download.context, CommunityMaterial.Icon.cmd_cloud_check)
-                            .colorRes(R.color.icon)
-                            .sizeDp(32)
-
-                    downloadProgress.visibility = View.GONE
-                    download.visibility = View.VISIBLE
-                    download.setImageDrawable(icon)
-                    download.setOnClickListener(null)
-                } else {
-                    if (isLocalMangaJobScheduledOrRunning(entryId, episode, language.toGeneralLanguage())) {
-                        download.visibility = View.GONE
-                        downloadProgress.visibility = View.VISIBLE
-                        downloadProgress.setOnClickListener {
-                            LocalMangaJob.cancel(entryId, episode, language.toGeneralLanguage())
-
-                            bindDownload(category, episode, language, download, downloadProgress)
-                        }
-                    } else {
-                        val icon = IconicsDrawable(download.context, CommunityMaterial.Icon.cmd_download)
+                download.tag = doAsync {
+                    if (mangaDb.findChapterByEntryId(entryId, episode, language.toGeneralLanguage()) != null) {
+                        val icon = IconicsDrawable(download.context, CommunityMaterial.Icon.cmd_cloud_check)
                                 .colorRes(R.color.icon)
                                 .sizeDp(32)
 
-                        downloadProgress.visibility = View.GONE
-                        download.visibility = View.VISIBLE
-                        download.setImageDrawable(icon)
-                        download.setOnClickListener {
-                            LocalMangaJob.schedule(entryId, episode, language.toGeneralLanguage())
+                        uiThread {
+                            downloadProgress.visibility = View.GONE
+                            download.visibility = View.VISIBLE
+                            download.setImageDrawable(icon)
+                            download.setOnClickListener(null)
+                        }
+                    } else {
+                        if (isLocalMangaJobScheduledOrRunning(entryId, episode, language.toGeneralLanguage())) {
+                            uiThread {
+                                download.visibility = View.GONE
+                                downloadProgress.visibility = View.VISIBLE
+                                downloadProgress.setOnClickListener {
+                                    LocalMangaJob.cancel(entryId, episode, language.toGeneralLanguage())
 
-                            bindDownload(category, episode, language, download, downloadProgress)
+                                    bindDownload(category, episode, language, download, downloadProgress)
+                                }
+                            }
+                        } else {
+                            val icon = IconicsDrawable(download.context, CommunityMaterial.Icon.cmd_download)
+                                    .colorRes(R.color.icon)
+                                    .sizeDp(32)
+
+                            uiThread {
+                                downloadProgress.visibility = View.GONE
+                                download.visibility = View.VISIBLE
+                                download.setImageDrawable(icon)
+                                download.setOnClickListener {
+                                    LocalMangaJob.schedule(entryId, episode, language.toGeneralLanguage())
+
+                                    bindDownload(category, episode, language, download, downloadProgress)
+                                }
+                            }
                         }
                     }
                 }
@@ -290,7 +307,7 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?) :
             } != null
 
             val isRunning = JobManager.instance().allJobs.find {
-                it is LocalMangaJob && it.isJobFor(id, episode, language) && !it.isCanceledPublic()
+                it is LocalMangaJob && it.isJobFor(id, episode, language) && !it.isCanceledPublic() && !it.isFinished
             } != null
 
             return isScheduled || isRunning

@@ -32,9 +32,6 @@ import org.jetbrains.anko.bundleOf
 class EpisodesFragment : LoadingFragment<ProxerCall<EpisodeInfo>, List<EpisodeRow>>() {
 
     companion object {
-        var isActive: Boolean = false
-            private set
-
         fun newInstance(): EpisodesFragment {
             return EpisodesFragment().apply {
                 arguments = bundleOf()
@@ -66,18 +63,6 @@ class EpisodesFragment : LoadingFragment<ProxerCall<EpisodeInfo>, List<EpisodeRo
         adapter = EpisodeAdapter(id, savedInstanceState)
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        isActive = true
-    }
-
-    override fun onPause() {
-        isActive = true
-
-        super.onPause()
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_episodes, container, false)
     }
@@ -93,8 +78,8 @@ class EpisodesFragment : LoadingFragment<ProxerCall<EpisodeInfo>, List<EpisodeRo
                                 episode.episodeAmount)
                     }
                     Category.MANGA -> {
-                        MangaActivity.navigateTo(activity, id, episode.number, language.toGeneralLanguage(), name,
-                                episode.episodeAmount)
+                        MangaActivity.navigateTo(activity, id, episode.number, language.toGeneralLanguage(),
+                                episode.title, name, episode.episodeAmount)
                     }
                 }
             }

@@ -76,8 +76,15 @@ class MangaFragment : LoadingFragment<MangaInput, MangaChapterInfo>() {
         set(value) {
             mangaActivity.episode = value
         }
+
     private val language: Language
         get() = mangaActivity.language
+
+    private var chapterTitle: String?
+        get() = mangaActivity.chapterTitle
+        set(value) {
+            mangaActivity.chapterTitle = value
+        }
 
     private var name: String?
         get() = mangaActivity.name
@@ -233,6 +240,7 @@ class MangaFragment : LoadingFragment<MangaInput, MangaChapterInfo>() {
     }
 
     override fun onSuccess(result: MangaChapterInfo) {
+        chapterTitle = result.chapter.title
         episodeAmount = result.episodeAmount
         name = result.name
 
@@ -253,6 +261,12 @@ class MangaFragment : LoadingFragment<MangaInput, MangaChapterInfo>() {
         innerAdapter.replace(result.chapter.pages)
 
         super.onSuccess(result)
+    }
+
+    override fun onError(error: Throwable) {
+        super.onError(error)
+
+        chapterTitle = null
     }
 
     override fun handleError(error: Throwable): ErrorUtils.ErrorAction {

@@ -6,6 +6,7 @@
     <string name="section_chat">Chat</string>
     <string name="section_donate">Spenden</string>
     <string name="section_manga">Manga</string>
+    <string name="section_local_manga">Heruntergeladene Manga</string>
     <string name="section_manga_list">Liste</string>
     <string name="section_manga_local">Heruntergeladen</string>
     <string name="section_news">News</string>
@@ -68,6 +69,7 @@
     <string name="error_unsupported_code">Diese Fehler wird nicht unterstützt. Bitte informiere einen Techniker</string>
 
     <string name="error_login">Du bist nicht angemeldet</string>
+    <string name="error_login_required">Für diesen Bereich musst du dich anmelden</string>
     <string name="error_captcha">Es wurden zu viele Anfragen gemacht</string>
     <string name="error_age_confirmation_needed">Für diese Kategorie musst du bestätigen, dass du mindestens 18
         Jahre alt bist</string>
@@ -93,6 +95,7 @@
     <string name="error_no_data_projects">Es gibt noch keine Projekte</string>
     <string name="error_no_data_comments">Es gibt noch keine Kommentare</string>
     <string name="error_no_data_user_media_list">Es gibt noch keine Einträge</string>
+    <string name="error_no_data_local_manga">Du hast noch keine Manga heruntergeladen</string>
 
     <string name="error_action_retry">Erneut versuchen</string>
     <string name="error_action_captcha">Captcha</string>

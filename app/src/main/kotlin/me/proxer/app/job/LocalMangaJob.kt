@@ -50,6 +50,14 @@ class LocalMangaJob : Job() {
             JobManager.instance().cancelAllForTag(constructTag(id, episode, language))
         }
 
+        fun cancelAll() {
+            JobManager.instance().allJobRequests.filter { it.tag.startsWith(LocalMangaJob.TAG) }
+                    .map { it.tag }
+                    .plus(JobManager.instance().allJobs.filter { it is LocalMangaJob }.map {
+                        (it as LocalMangaJob).let { constructTag(it.id, it.episode, it.language) }
+                    }).forEach { JobManager.instance().cancelAllForTag(it) }
+        }
+
         fun constructTag(id: String, episode: Int, language: Language): String {
             return "${TAG}_${id}_${episode}_${ProxerUtils.getApiEnumName(language)}"
         }
@@ -91,7 +99,7 @@ class LocalMangaJob : Job() {
             return Result.SUCCESS
         } catch (error: Throwable) {
             EventBus.getDefault().post(LocalMangaJobFailedEvent(id, episode, language))
-            NotificationHelper.showMangaDownloadErrorNotification(context)
+            NotificationHelper.showMangaDownloadErrorNotification(context, error)
 
             return Result.FAILURE
         }

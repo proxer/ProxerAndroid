@@ -110,7 +110,7 @@ object ErrorUtils {
                 ErrorAction(R.string.error_io)
             }
             is Validators.NotLoggedInException -> {
-                val message = R.string.error_login
+                val message = R.string.error_login_required
                 val buttonMessage = R.string.error_action_login
                 val buttonAction = View.OnClickListener {
                     LoginDialog.show(context)

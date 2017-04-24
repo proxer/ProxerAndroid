@@ -2,6 +2,8 @@ package me.proxer.app.data
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import me.proxer.app.entity.LocalMangaChapter
+import me.proxer.app.util.extension.CompleteLocalMangaEntry
 import me.proxer.library.entitiy.info.EntryCore
 import me.proxer.library.entitiy.manga.Chapter
 import me.proxer.library.entitiy.manga.Page
@@ -59,7 +61,7 @@ class LocalMangaDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DA
             val parsedLanguage = ProxerUtils.toApiEnum(Language::class.java, language) ?:
                     throw IllegalArgumentException("Unknown value for language: $language")
 
-            LocalChapter(localId, id, episode, parsedLanguage, entryId, title, uploaderId, uploaderName, Date(date),
+            LocalMangaChapter(localId, id, episode, parsedLanguage, entryId, title, uploaderId, uploaderName, Date(date),
                     scanGroupId, scanGroupName, server)
         }
 
@@ -157,11 +159,7 @@ class LocalMangaDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DA
                             "and $CHAPTER_LANGUAGE_COLUMN = \"${ProxerUtils.getApiEnumName(language)}\"")
                     .parseOpt(chapterParser)
 
-            if (chapter != null) {
-                findNonLocalChapter(chapter)
-            } else {
-                null
-            }
+            chapter?.toNonLocalChapter(findPagesForChapter(chapter))
         }
     }
 
@@ -172,11 +170,22 @@ class LocalMangaDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DA
                             "and $CHAPTER_LANGUAGE_COLUMN = \"${ProxerUtils.getApiEnumName(language)}\"")
                     .parseOpt(chapterParser)
 
-            if (chapter != null) {
-                findNonLocalChapter(chapter)
-            } else {
-                null
-            }
+            chapter?.toNonLocalChapter(findPagesForChapter(chapter))
+        }
+    }
+
+    fun getAll(): List<CompleteLocalMangaEntry> {
+        return use {
+            val entries = select(ENTRY_TABLE)
+                    .parseList(entryParser)
+                    .reversed()
+
+            entries.associate {
+                it to select(CHAPTER_TABLE)
+                        .where("$CHAPTER_ENTRY_ID_COLUMN = \"${it.id}\"")
+                        .parseList(chapterParser)
+                        .sortedBy { it.episode }
+            }.filterNot { it.value.isEmpty() }.toList()
         }
     }
 
@@ -190,24 +199,11 @@ class LocalMangaDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DA
         }
     }
 
-    private fun findNonLocalChapter(chapter: LocalChapter): Chapter? {
+    private fun findPagesForChapter(chapter: LocalMangaChapter): List<Page> {
         return use {
-            val pages = select(PAGE_TABLE)
+            select(PAGE_TABLE)
                     .where("$PAGE_CHAPTER_ID_COLUMN = ${chapter.localId}")
                     .parseList(pageParser)
-
-            chapter.toNonLocalChapter(pages)
-        }
-    }
-
-    private data class LocalChapter(val localId: Long, val id: String, val episode: Int, val language: Language,
-                                    val entryId: String, val title: String, val uploaderId: String,
-                                    val uploaderName: String, val date: Date, val scanGroupId: String?,
-                                    val scanGroupName: String?, val server: String) {
-
-        fun toNonLocalChapter(pages: List<Page>): Chapter {
-            return Chapter(id, entryId, title, uploaderId, uploaderName, date, scanGroupId, scanGroupName,
-                    server, pages)
         }
     }
 }

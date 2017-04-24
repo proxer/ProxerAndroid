@@ -9,9 +9,10 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.NotificationCompat
 import me.proxer.app.R
 import me.proxer.app.activity.DashboardActivity
-import me.proxer.app.fragment.media.EpisodesFragment
 import me.proxer.app.fragment.news.NewsArticleFragment
 import me.proxer.app.helper.MaterialDrawerHelper.DrawerItem
+import me.proxer.app.util.ErrorUtils
+import me.proxer.library.api.ProxerException
 import me.proxer.library.entitiy.notifications.NewsArticle
 
 /**
@@ -30,18 +31,21 @@ object NotificationHelper {
         }
     }
 
-    fun showMangaDownloadErrorNotification(context: Context) {
-        if (!EpisodesFragment.isActive) {
-            NotificationManagerCompat.from(context)
-                    .notify(NotificationType.MANGA_DOWNLOAD_ERROR.id, NotificationCompat.Builder(context)
-                            .setContentTitle(context.getString(R.string.notification_manga_download_error_title))
-                            .setContentText(context.getString(R.string.notification_manga_download_error_content))
-                            .setColor(ContextCompat.getColor(context, R.color.primary))
-                            .setSmallIcon(R.drawable.ic_stat_proxer)
-                            .setPriority(PRIORITY_LOW)
-                            .setAutoCancel(true)
-                            .build())
-        }
+    fun showMangaDownloadErrorNotification(context: Context, error: Throwable) {
+        val message = context.getString(when (error) {
+            is ProxerException -> ErrorUtils.getMessageForProxerException(error)
+            else -> R.string.notification_manga_download_error_content
+        })
+
+        NotificationManagerCompat.from(context)
+                .notify(NotificationType.MANGA_DOWNLOAD_ERROR.id, NotificationCompat.Builder(context)
+                        .setContentTitle(context.getString(R.string.notification_manga_download_error_title))
+                        .setContentText(message)
+                        .setColor(ContextCompat.getColor(context, R.color.primary))
+                        .setSmallIcon(R.drawable.ic_stat_proxer)
+                        .setPriority(PRIORITY_LOW)
+                        .setAutoCancel(true)
+                        .build())
     }
 
     fun cancelNotification(context: Context, type: NotificationType) {
