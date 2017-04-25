@@ -1,6 +1,7 @@
 package me.proxer.app.data
 
 import android.content.Context
+import android.database.DatabaseUtils
 import android.database.sqlite.SQLiteDatabase
 import me.proxer.app.entity.LocalMangaChapter
 import me.proxer.app.util.extension.CompleteLocalMangaEntry
@@ -106,7 +107,7 @@ class LocalMangaDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DA
 
     fun insertEntry(entry: EntryCore) {
         use {
-            if (findEntry(entry.id) == null) {
+            if (!containsEntry(entry.id)) {
                 insertOrThrow(ENTRY_TABLE,
                         ENTRY_ID_COLUMN to entry.id,
                         ENTRY_NAME_COLUMN to entry.name,
@@ -117,7 +118,12 @@ class LocalMangaDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DA
 
     fun insertChapter(chapter: Chapter, episode: Int, language: Language) {
         use {
-            if (findChapter(chapter.id, episode, language) == null) {
+            val existingChapterCount = DatabaseUtils.queryNumEntries(this, CHAPTER_TABLE,
+                    "$CHAPTER_ID_COLUMN = \"${chapter.id}\" " +
+                            "and $CHAPTER_EPISODE_COLUMN = $episode " +
+                            "and $CHAPTER_LANGUAGE_COLUMN = \"${ProxerUtils.getApiEnumName(language)}\"")
+
+            if (existingChapterCount <= 0) {
                 transaction {
                     val id = insertOrThrow(CHAPTER_TABLE,
                             CHAPTER_ID_COLUMN to chapter.id,
@@ -152,18 +158,7 @@ class LocalMangaDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DA
         }
     }
 
-    fun findChapter(id: String, episode: Int, language: Language): Chapter? {
-        return use {
-            val chapter = select(CHAPTER_TABLE)
-                    .where("$CHAPTER_ID_COLUMN = \"$id\" and $CHAPTER_EPISODE_COLUMN = $episode " +
-                            "and $CHAPTER_LANGUAGE_COLUMN = \"${ProxerUtils.getApiEnumName(language)}\"")
-                    .parseOpt(chapterParser)
-
-            chapter?.toNonLocalChapter(findPagesForChapter(chapter))
-        }
-    }
-
-    fun findChapterByEntryId(entryId: String, episode: Int, language: Language): Chapter? {
+    fun findChapter(entryId: String, episode: Int, language: Language): Chapter? {
         return use {
             val chapter = select(CHAPTER_TABLE)
                     .where("$CHAPTER_ENTRY_ID_COLUMN = \"$entryId\" and $CHAPTER_EPISODE_COLUMN = $episode " +
@@ -186,6 +181,35 @@ class LocalMangaDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DA
                         .parseList(chapterParser)
                         .sortedBy { it.episode }
             }.filterNot { it.value.isEmpty() }.toList()
+        }
+    }
+
+    fun containsEntry(id: String): Boolean {
+        return use {
+            DatabaseUtils.queryNumEntries(this, ENTRY_TABLE, "$ENTRY_ID_COLUMN = \"$id\"") > 0
+        }
+    }
+
+    fun containsChapter(entryId: String, episode: Int, language: Language): Boolean {
+        return use {
+            DatabaseUtils.queryNumEntries(this, CHAPTER_TABLE,
+                    "$CHAPTER_ENTRY_ID_COLUMN = \"$entryId\" " +
+                            "and $CHAPTER_EPISODE_COLUMN = $episode " +
+                            "and $CHAPTER_LANGUAGE_COLUMN = \"${ProxerUtils.getApiEnumName(language)}\"") > 0
+        }
+    }
+
+    fun removeChapter(entry: EntryCore, chapter: LocalMangaChapter) {
+        use {
+            transaction {
+                delete(CHAPTER_TABLE, "$CHAPTER_LOCAL_ID_COLUMN = ${chapter.localId}")
+                delete(PAGE_TABLE, "$PAGE_CHAPTER_ID_COLUMN = ${chapter.id}")
+
+                if (DatabaseUtils.queryNumEntries(this, CHAPTER_TABLE,
+                        "$CHAPTER_ENTRY_ID_COLUMN = \"${entry.id}\"") <= 0) {
+                    delete(ENTRY_TABLE, "$ENTRY_ID_COLUMN = \"${entry.id}\"")
+                }
+            }
         }
     }
 

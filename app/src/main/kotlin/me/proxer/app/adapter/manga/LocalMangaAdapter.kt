@@ -13,7 +13,7 @@ import com.bumptech.glide.RequestManager
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import me.proxer.app.R
 import me.proxer.app.adapter.base.PagingAdapter
-import me.proxer.app.adapter.manga.LocalMangaEntryAdapter.LocalMangaEntryAdapterCallback
+import me.proxer.app.adapter.manga.LocalMangaChapterAdapter.LocalMangaChapterAdapterCallback
 import me.proxer.app.entity.LocalMangaChapter
 import me.proxer.app.util.PaddingDividerItemDecoration
 import me.proxer.app.util.ParcelableStringBooleanMap
@@ -48,6 +48,9 @@ class LocalMangaAdapter(savedInstanceState: Bundle?, private val glide: RequestM
 
     override fun getItemId(position: Int) = internalList[position].first.id.toLong()
 
+    override fun areItemsTheSame(oldItem: CompleteLocalMangaEntry, newItem: CompleteLocalMangaEntry)
+            = oldItem.first.id == newItem.first.id
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int)
             = ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_local_manga, parent, false))
 
@@ -55,7 +58,7 @@ class LocalMangaAdapter(savedInstanceState: Bundle?, private val glide: RequestM
         super.onViewAttachedToWindow(holder)
 
         if (holder is ViewHolder) {
-            holder.adapter.callback = object : LocalMangaEntryAdapterCallback {
+            holder.adapter.callback = object : LocalMangaChapterAdapterCallback {
                 override fun onChapterClick(chapter: LocalMangaChapter) = holder.adapterPosition.let {
                     if (it != RecyclerView.NO_POSITION) {
                         this@LocalMangaAdapter.callback?.onChapterClick(internalList[it].first, chapter)
@@ -89,8 +92,8 @@ class LocalMangaAdapter(savedInstanceState: Bundle?, private val glide: RequestM
 
     inner class ViewHolder(itemView: View) : PagingViewHolder<CompleteLocalMangaEntry>(itemView) {
 
-        internal val adapter: LocalMangaEntryAdapter
-            get() = chapters.adapter as LocalMangaEntryAdapter
+        internal val adapter: LocalMangaChapterAdapter
+            get() = chapters.adapter as LocalMangaChapterAdapter
 
         private val image: ImageView by bindView(R.id.image)
         private val title: TextView by bindView(R.id.title)
@@ -120,7 +123,7 @@ class LocalMangaAdapter(savedInstanceState: Bundle?, private val glide: RequestM
             }
 
             chapters.isNestedScrollingEnabled = false
-            chapters.adapter = LocalMangaEntryAdapter()
+            chapters.adapter = LocalMangaChapterAdapter()
             chapters.layoutManager = LinearLayoutManager(itemView.context)
             chapters.addItemDecoration(PaddingDividerItemDecoration(chapters.context, 4f))
         }

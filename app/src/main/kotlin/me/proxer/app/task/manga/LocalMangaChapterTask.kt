@@ -9,6 +9,6 @@ import me.proxer.library.entitiy.manga.Chapter
  * @author Ruben Gees
  */
 class LocalMangaChapterTask : WorkerTask<MangaInput, Chapter>() {
-    override fun work(input: MangaInput) = mangaDb.findChapterByEntryId(input.id, input.episode, input.language)
+    override fun work(input: MangaInput) = mangaDb.findChapter(input.id, input.episode, input.language)
             ?: throw RuntimeException("No entry found")
 }

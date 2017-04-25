@@ -54,7 +54,7 @@ class LogoutDialog : MainDialog() {
                 .autoDismiss(false)
                 .title(R.string.dialog_logout_title)
                 .positiveText(R.string.dialog_logout_positive)
-                .negativeText(R.string.dialog_cancel)
+                .negativeText(R.string.cancel)
                 .onPositive({ _, _ ->
                     task.execute(api.user().logout().build())
                 })

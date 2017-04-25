@@ -25,7 +25,7 @@ class AgeConfirmationDialog : MainDialog() {
         return MaterialDialog.Builder(context)
                 .content(R.string.dialog_age_confirmation_content)
                 .positiveText(R.string.dialog_age_confirmation_positive)
-                .negativeText(R.string.dialog_cancel)
+                .negativeText(R.string.cancel)
                 .onPositive { _, _ ->
                     PreferenceHelper.setAgeRestrictedMediaAllowed(context, true)
 

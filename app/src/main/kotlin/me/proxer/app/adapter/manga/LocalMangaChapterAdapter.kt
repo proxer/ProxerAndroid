@@ -17,13 +17,13 @@ import me.proxer.library.enums.Category
 /**
  * @author Ruben Gees
  */
-internal class LocalMangaEntryAdapter : PagingAdapter<LocalMangaChapter>() {
+internal class LocalMangaChapterAdapter : PagingAdapter<LocalMangaChapter>() {
 
     init {
         setHasStableIds(true)
     }
 
-    var callback: LocalMangaEntryAdapterCallback? = null
+    var callback: LocalMangaChapterAdapterCallback? = null
 
     override fun getItemId(position: Int) = internalList[position].episode.toLong()
 
@@ -70,7 +70,7 @@ internal class LocalMangaEntryAdapter : PagingAdapter<LocalMangaChapter>() {
         }
     }
 
-    interface LocalMangaEntryAdapterCallback {
+    interface LocalMangaChapterAdapterCallback {
         fun onChapterClick(chapter: LocalMangaChapter) {}
         fun onDeleteClick(chapter: LocalMangaChapter) {}
     }

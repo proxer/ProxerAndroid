@@ -200,7 +200,7 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?) :
         @Subscribe(threadMode = ThreadMode.MAIN)
         fun onLocalMangaJobFinished(event: LocalMangaJobFinishedEvent) {
             withSafeAdapterPosition {
-                if (event.id == entryId && event.episode == internalList[it].number) {
+                if (event.entryId == entryId && event.episode == internalList[it].number) {
                     notifyItemChanged(it)
                 }
             }
@@ -226,7 +226,7 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?) :
 
             if (category == Category.MANGA && isLoggedIn) {
                 download.tag = doAsync {
-                    if (mangaDb.findChapterByEntryId(entryId, episode, language.toGeneralLanguage()) != null) {
+                    if (mangaDb.containsChapter(entryId, episode, language.toGeneralLanguage())) {
                         val icon = IconicsDrawable(download.context, CommunityMaterial.Icon.cmd_cloud_check)
                                 .colorRes(R.color.icon)
                                 .sizeDp(32)

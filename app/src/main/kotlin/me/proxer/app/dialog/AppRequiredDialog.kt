@@ -35,7 +35,7 @@ class AppRequiredDialog : MainDialog() {
                 .title(getString(R.string.dialog_app_required_title, name))
                 .content(getString(R.string.dialog_app_required_content, name))
                 .positiveText(R.string.dialog_app_required_positive)
-                .negativeText(R.string.dialog_cancel)
+                .negativeText(R.string.cancel)
                 .onPositive({ _, _ ->
                     try {
                         context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$packageName")))

@@ -104,6 +104,7 @@
 
     <string name="error_bookmark_removal">Das Lesezeichen konnte nicht entfernt werden: %s</string>
     <string name="error_topten_entry_removal">Der Eintrag konnte nicht entfernt werden: %s</string>
+    <string name="error_local_manga_removal">Der Manga konnte nicht entfernt werden: %s</string>
     <string name="error_activity_not_found">Keine App zur Anzeige gefunden</string>
 
     <string name="medium_anime_series">Animeserie</string>
@@ -169,7 +170,7 @@
         <item quantity="other">%d Episoden</item>
     </plurals>
 
-    <string name="dialog_cancel">Abbrechen</string>
+    <string name="cancel">Abbrechen</string>
 
     <string name="dialog_login_title">Anmelden</string>
     <string name="dialog_login_positive">Anmelden</string>
@@ -240,6 +241,16 @@
     <string name="fragment_anime_bookmark_next_episode">Lesezeichen: Nächste Episode</string>
     <string name="fragment_anime_bookmark_this_episode">Lesezeichen: Diese Episode</string>
     <string name="fragment_anime_stream_play">Abspielen</string>
+
+    <plurals name="fragment_local_manga_chapters_downloading">
+        <item quantity="one">Ein Kapitel wird heruntergeladen</item>
+        <item quantity="other">%d Kapitel werden heruntergeladen</item>
+    </plurals>
+
+    <plurals name="fragment_local_manga_chapters_scheduled">
+        <item quantity="one">Ein Kapitel ist zum Herunterladen eingereiht</item>
+        <item quantity="other">%d Kapitel sind zum Herunterladen eingereiht</item>
+    </plurals>
 
     <string name="fragment_manga_next_chapter">Nächstes Kapitel</string>
     <string name="fragment_manga_previous_chapter">Vorheriges Kapitel</string>

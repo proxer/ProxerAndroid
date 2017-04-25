@@ -91,7 +91,7 @@ class LoginDialog : MainDialog() {
                 .autoDismiss(false)
                 .title(R.string.dialog_login_title)
                 .positiveText(R.string.dialog_login_positive)
-                .negativeText(R.string.dialog_cancel)
+                .negativeText(R.string.cancel)
                 .onPositive({ _, _ ->
                     login()
                 })
