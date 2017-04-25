@@ -34,6 +34,7 @@ class IndustryProjectAdapter(private val glide: RequestManager) : PagingAdapter<
         super.destroy()
 
         callback = null
+        glide.onDestroy()
     }
 
     inner class ViewHolder(itemView: View) : PagingViewHolder<IndustryProject>(itemView) {

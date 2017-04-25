@@ -57,6 +57,7 @@ class NewsArticleAdapter(savedInstanceState: Bundle?, private val glide: Request
         super.destroy()
 
         callback = null
+        glide.onDestroy()
     }
 
     fun saveInstanceState(outState: Bundle) {

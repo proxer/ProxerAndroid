@@ -38,6 +38,7 @@ class MediaAdapter(private val category: Category, private val glide: RequestMan
         super.destroy()
 
         callback = null
+        glide.onDestroy()
     }
 
     inner class ViewHolder(itemView: View) : PagingViewHolder<MediaListEntry>(itemView) {

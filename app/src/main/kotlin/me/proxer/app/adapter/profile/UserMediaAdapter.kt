@@ -39,6 +39,7 @@ class UserMediaAdapter(private val glide: RequestManager) : PagingAdapter<UserMe
         super.destroy()
 
         callback = null
+        glide.onDestroy()
     }
 
     inner class ViewHolder(itemView: View) : PagingViewHolder<UserMediaListEntry>(itemView) {

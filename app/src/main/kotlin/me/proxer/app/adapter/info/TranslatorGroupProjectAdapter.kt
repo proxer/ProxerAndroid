@@ -34,6 +34,7 @@ class TranslatorGroupProjectAdapter(private val glide: RequestManager) : PagingA
         super.destroy()
 
         callback = null
+        glide.onDestroy()
     }
 
     inner class ViewHolder(itemView: View) : PagingViewHolder<TranslatorGroupProject>(itemView) {

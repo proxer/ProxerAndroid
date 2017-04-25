@@ -37,6 +37,7 @@ class HistoryAdapter(private val glide: RequestManager) : PagingAdapter<UcpHisto
         super.destroy()
 
         callback = null
+        glide.onDestroy()
     }
 
     inner class ViewHolder(itemView: View) : PagingViewHolder<UcpHistoryEntry>(itemView) {

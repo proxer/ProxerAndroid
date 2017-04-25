@@ -39,6 +39,7 @@ class UcpTopTenAdapter(private val glide: RequestManager) : PagingAdapter<UcpTop
         super.destroy()
 
         callback = null
+        glide.onDestroy()
     }
 
     inner class ViewHolder(itemView: View) : PagingViewHolder<UcpTopTenEntry>(itemView) {

@@ -16,6 +16,7 @@ import me.proxer.app.R
 import me.proxer.app.adapter.base.PagingAdapter
 import me.proxer.app.util.extension.bindView
 import me.proxer.app.util.extension.toAppString
+import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.app.util.extension.toGeneralLanguage
 import me.proxer.library.entitiy.ucp.Bookmark
 import me.proxer.library.enums.Language
@@ -42,6 +43,7 @@ class BookmarkAdapter(private val glide: RequestManager) : PagingAdapter<Bookmar
         super.destroy()
 
         callback = null
+        glide.onDestroy()
     }
 
     override fun areItemsTheSame(oldItem: Bookmark, newItem: Bookmark): Boolean {
@@ -85,7 +87,7 @@ class BookmarkAdapter(private val glide: RequestManager) : PagingAdapter<Bookmar
         override fun bind(item: Bookmark) {
             title.text = item.name
             medium.text = item.medium.toAppString(medium.context)
-            episode.text = episode.context.getString(R.string.bookmark_episode, item.episode)
+            episode.text = item.category.toEpisodeAppString(episode.context, item.episode)
             availability.setImageDrawable(ColorDrawable(ContextCompat.getColor(availability.context,
                     when (item.isAvailable) {
                         true -> R.color.md_green_500

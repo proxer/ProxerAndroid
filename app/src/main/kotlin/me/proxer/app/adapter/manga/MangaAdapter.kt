@@ -33,6 +33,12 @@ class MangaAdapter(private val glide: RequestManager) : PagingAdapter<Page>() {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_manga_page, parent, false))
     }
 
+    override fun destroy() {
+        super.destroy()
+
+        glide.onDestroy()
+    }
+
     fun init(server: String, entryId: String, id: String) {
         this.server = server
         this.entryId = entryId

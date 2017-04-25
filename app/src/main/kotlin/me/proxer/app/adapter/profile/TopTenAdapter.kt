@@ -33,6 +33,7 @@ class TopTenAdapter(private val glide: RequestManager) : PagingAdapter<TopTenEnt
         super.destroy()
 
         callback = null
+        glide.onDestroy()
     }
 
     inner class ViewHolder(itemView: View) : PagingViewHolder<TopTenEntry>(itemView) {

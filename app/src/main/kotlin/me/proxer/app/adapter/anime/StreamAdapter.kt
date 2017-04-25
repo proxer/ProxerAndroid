@@ -51,6 +51,7 @@ class StreamAdapter(savedInstanceState: Bundle?, private val glide: RequestManag
         super.destroy()
 
         callback = null
+        glide.onDestroy()
     }
 
     fun saveInstanceState(outState: Bundle) {

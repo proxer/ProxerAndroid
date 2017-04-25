@@ -40,6 +40,7 @@ class RelationsAdapter(private val glide: RequestManager) : PagingAdapter<Relati
         super.destroy()
 
         callback = null
+        glide.onDestroy()
     }
 
     inner class ViewHolder(itemView: View) : PagingViewHolder<Relation>(itemView) {

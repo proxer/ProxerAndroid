@@ -84,6 +84,7 @@ class LocalMangaAdapter(savedInstanceState: Bundle?, private val glide: RequestM
         super.destroy()
 
         callback = null
+        glide.onDestroy()
     }
 
     fun saveInstanceState(outState: Bundle) {
