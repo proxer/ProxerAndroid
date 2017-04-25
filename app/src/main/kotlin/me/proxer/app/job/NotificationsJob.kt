@@ -68,7 +68,7 @@ class NotificationsJob : Job() {
                         .limit(15)
                         .build()
                         .execute()
-                        .takeWhile { it.id > lastNewsId })
+                        .takeWhile { it.id.toLong() > lastNewsId.toLong() })
 
                 page++
             }
