@@ -22,8 +22,8 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
-    <style name="Widget.App.Button" parent="Widget.AppCompat.Button.Colored">
-        <item name="colorButtonNormal">@color/colorAccent</item>
+    <style name="Theme.App.Black" parent="Theme.App">
+        <item name="android:windowBackground">@android:color/black</item>
     </style>
 
     <style name="Widget.App.ActionMode" parent="@style/Widget.AppCompat.ActionMode">
@@ -31,12 +31,7 @@
     </style>
 
     <style name="ThemeOverlay.App" parent="@style/ThemeOverlay.AppCompat.Light" />
-
     <style name="Theme.App" parent="Base.Theme.App" />
-
-    <style name="Theme.App.Black" parent="Theme.App">
-        <item name="android:windowBackground">@android:color/black</item>
-    </style>
-
     <style name="Theme.App.Translucent" parent="Theme.App" />
+
 </resources>

@@ -30,6 +30,7 @@
 
                     <Button
                         android:id="@+id/previous"
+                        style="@style/Widget.AppCompat.Button.Colored"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="start"
@@ -39,7 +40,6 @@
                         android:layout_marginTop="8dp"
                         android:minLines="2"
                         android:textColor="@android:color/white"
-                        android:theme="@style/Widget.App.Button"
                         android:visibility="gone" />
                 </FrameLayout>
 
@@ -51,6 +51,7 @@
 
                     <Button
                         android:id="@+id/next"
+                        style="@style/Widget.AppCompat.Button.Colored"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
@@ -60,7 +61,6 @@
                         android:layout_marginTop="8dp"
                         android:minLines="2"
                         android:textColor="@android:color/white"
-                        android:theme="@style/Widget.App.Button"
                         android:visibility="gone" />
                 </FrameLayout>
             </LinearLayout>
@@ -78,6 +78,7 @@
 
                     <Button
                         android:id="@+id/bookmarkThis"
+                        style="@style/Widget.AppCompat.Button.Colored"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="start"
@@ -86,8 +87,7 @@
                         android:layout_marginRight="8dp"
                         android:layout_marginTop="4dp"
                         android:minLines="2"
-                        android:textColor="@android:color/white"
-                        android:theme="@style/Widget.App.Button" />
+                        android:textColor="@android:color/white" />
                 </FrameLayout>
 
                 <FrameLayout
@@ -98,6 +98,7 @@
 
                     <Button
                         android:id="@+id/bookmarkNext"
+                        style="@style/Widget.AppCompat.Button.Colored"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
@@ -106,8 +107,7 @@
                         android:layout_marginRight="8dp"
                         android:layout_marginTop="4dp"
                         android:minLines="2"
-                        android:textColor="@android:color/white"
-                        android:theme="@style/Widget.App.Button" />
+                        android:textColor="@android:color/white" />
                 </FrameLayout>
             </LinearLayout>
         </LinearLayout>
