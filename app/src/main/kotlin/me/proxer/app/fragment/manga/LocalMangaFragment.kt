@@ -50,6 +50,8 @@ import java.util.concurrent.Future
 class LocalMangaFragment : LoadingFragment<Unit, List<CompleteLocalMangaEntry>>() {
 
     companion object {
+        private const val SEARCH_QUERY_ARGUMENT = "search_query"
+
         fun newInstance(): LocalMangaFragment {
             return LocalMangaFragment().apply {
                 arguments = bundleOf()
@@ -67,6 +69,13 @@ class LocalMangaFragment : LoadingFragment<Unit, List<CompleteLocalMangaEntry>>(
     private lateinit var header: ViewGroup
     private lateinit var headerText: TextView
     private lateinit var headerCancel: Button
+
+    private lateinit var searchItem: MenuItem
+    private lateinit var searchView: SearchView
+
+    private var searchQuery: String
+        get() = arguments.getString(SEARCH_QUERY_ARGUMENT, "")
+        set(value) = arguments.putString(SEARCH_QUERY_ARGUMENT, value)
 
     private val list: RecyclerView by bindView(R.id.list)
 
@@ -119,6 +128,13 @@ class LocalMangaFragment : LoadingFragment<Unit, List<CompleteLocalMangaEntry>>(
         updateMangaJobState()
     }
 
+    override fun onDestroyView() {
+        searchView.setOnQueryTextListener(null)
+        MenuItemCompat.setOnActionExpandListener(searchItem, null)
+
+        super.onDestroyView()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         header = inflater.inflate(R.layout.layout_local_manga_header, container, false) as ViewGroup
         headerText = header.find(R.id.text)
@@ -149,8 +165,14 @@ class LocalMangaFragment : LoadingFragment<Unit, List<CompleteLocalMangaEntry>>(
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.fragment_local_manga, menu)
 
-        val searchItem = menu.findItem(R.id.search)
-        val searchView = searchItem.actionView as SearchView
+        searchItem = menu.findItem(R.id.search)
+        searchView = searchItem.actionView as SearchView
+
+        if (searchQuery.isNotEmpty()) {
+            searchItem.expandActionView()
+            searchView.setQuery(searchQuery, false)
+            searchView.clearFocus()
+        }
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
@@ -158,13 +180,9 @@ class LocalMangaFragment : LoadingFragment<Unit, List<CompleteLocalMangaEntry>>(
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                state.data?.let {
-                    if (newText.isNotEmpty()) {
-                        innerAdapter.replace(it.filter { it.first.name.contains(newText, true) })
-                    } else {
-                        innerAdapter.replace(it)
-                    }
-                }
+                searchQuery = newText
+
+                freshLoad()
 
                 return false
             }
@@ -178,9 +196,9 @@ class LocalMangaFragment : LoadingFragment<Unit, List<CompleteLocalMangaEntry>>(
             }
 
             override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
-                state.data?.let {
-                    innerAdapter.replace(it)
-                }
+                searchQuery = ""
+
+                freshLoad()
 
                 TransitionManager.beginDelayedTransition(activity.find(R.id.toolbar))
 
@@ -210,13 +228,20 @@ class LocalMangaFragment : LoadingFragment<Unit, List<CompleteLocalMangaEntry>>(
     override fun showContent() {
         super.showContent()
 
-        if (innerAdapter.isEmpty()) {
-            showError(R.string.error_no_data_local_manga, ErrorUtils.ErrorAction.ACTION_MESSAGE_HIDE)
+        if (innerAdapter.isEmpty() && !adapter.hasHeader()) {
+            if (searchQuery.isEmpty()) {
+                showError(R.string.error_no_data_local_manga, ErrorUtils.ErrorAction.ACTION_MESSAGE_HIDE)
+            } else {
+                showError(R.string.error_no_data_search, ErrorUtils.ErrorAction.ACTION_MESSAGE_HIDE)
+            }
+        } else {
+            hideError()
         }
     }
 
     override fun constructInput() = Unit
     override fun constructTask() = TaskBuilder.task(LocalMangaListTask())
+            .map { it.filter { searchQuery.isEmpty() || it.first.name.contains(searchQuery, true) } }
             .async()
             .build()
 
@@ -270,6 +295,8 @@ class LocalMangaFragment : LoadingFragment<Unit, List<CompleteLocalMangaEntry>>(
                 } else {
                     adapter.header = null
                 }
+
+                showContent()
             }
         }
     }

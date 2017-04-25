@@ -49,8 +49,9 @@ class MediaListFragment : PagedLoadingFragment<ProxerCall<List<MediaListEntry>>,
     override val isAgeConfirmationRequired: Boolean
         get() = type == MediaType.HENTAI || type == MediaType.HMANGA
 
+    override val itemsOnPage = 30
     override val spanCount get() = super.spanCount + 1
-    override val emptyResultMessage = R.string.error_no_data_media_list
+    override val emptyResultMessage = R.string.error_no_data_search
 
     private val category
         get() = arguments.getSerializable(CATEGORY_ARGUMENT) as Category
@@ -68,15 +69,14 @@ class MediaListFragment : PagedLoadingFragment<ProxerCall<List<MediaListEntry>>,
         }
         set(value) = arguments.putSerializable(TYPE_ARGUMENT, value)
 
-    private var searchQuery: String?
-        get() = arguments.getString(SEARCH_QUERY_ARGUMENT)
+    private var searchQuery: String
+        get() = arguments.getString(SEARCH_QUERY_ARGUMENT, "")
         set(value) = arguments.putString(SEARCH_QUERY_ARGUMENT, value)
 
     private var hasSearched: Boolean
         get() = arguments.getBoolean(HAS_SEARCHED_ARGUMENT, false)
         set(value) = arguments.putBoolean(HAS_SEARCHED_ARGUMENT, value)
 
-    override val itemsOnPage = 30
     override val innerAdapter by lazy { MediaAdapter(category) }
 
     private lateinit var searchItem: MenuItem
@@ -136,14 +136,14 @@ class MediaListFragment : PagedLoadingFragment<ProxerCall<List<MediaListEntry>>,
         searchItem = menu.findItem(R.id.search)
         searchView = searchItem.actionView as SearchView
 
-        if (searchQuery != null) {
+        if (searchQuery.isNotEmpty()) {
             searchItem.expandActionView()
             searchView.setQuery(searchQuery, false)
             searchView.clearFocus()
         }
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
+            override fun onQueryTextSubmit(query: String): Boolean {
                 hasSearched = true
 
                 searchView.clearFocus()
@@ -152,7 +152,7 @@ class MediaListFragment : PagedLoadingFragment<ProxerCall<List<MediaListEntry>>,
                 return true
             }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
+            override fun onQueryTextChange(newText: String): Boolean {
                 searchQuery = newText
 
                 return false
@@ -167,7 +167,7 @@ class MediaListFragment : PagedLoadingFragment<ProxerCall<List<MediaListEntry>>,
                     }
 
                     override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
-                        searchQuery = null
+                        searchQuery = ""
 
                         if (hasSearched) {
                             hasSearched = false
