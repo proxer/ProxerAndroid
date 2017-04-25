@@ -41,7 +41,7 @@ object NotificationHelper {
                 }))
     }
 
-    fun showNewsFetchErrorNotification(context: Context, error: Throwable) {
+    fun showNewsErrorNotification(context: Context, error: Throwable) {
         showErrorNotification(context, NEWS_ERROR.id,
                 context.getString(R.string.notification_news_error_title),
                 context.getString(when (error) {

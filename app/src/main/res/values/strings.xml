@@ -7,8 +7,6 @@
     <string name="section_donate">Spenden</string>
     <string name="section_manga">Manga</string>
     <string name="section_local_manga">Heruntergeladene Manga</string>
-    <string name="section_manga_list">Liste</string>
-    <string name="section_manga_local">Heruntergeladen</string>
     <string name="section_news">News</string>
     <string name="section_bookmarks">Lesezeichen</string>
     <string name="section_guest">Gast</string>

@@ -48,7 +48,7 @@ class NotificationsJob : Job() {
         try {
             fetchNews(context)
         } catch (error: Throwable) {
-            NotificationHelper.showNewsFetchErrorNotification(context, error)
+            NotificationHelper.showNewsErrorNotification(context, error)
         }
 
         // TODO: Implement new general notifications API.

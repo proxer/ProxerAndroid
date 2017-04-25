@@ -194,7 +194,7 @@ class DashboardActivity : MainActivity() {
                 return false
             }
 
-            DrawerItem.MANGA_LIST -> {
+            DrawerItem.MANGA -> {
                 setFragment(MediaListFragment.newInstance(Category.MANGA), R.string.section_manga)
 
                 return false

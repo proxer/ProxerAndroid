@@ -10,7 +10,9 @@ import com.mikepenz.crossfader.Crossfader
 import com.mikepenz.crossfader.view.GmailStyleCrossFadeSlidingPaneLayout
 import com.mikepenz.materialdrawer.*
 import com.mikepenz.materialdrawer.interfaces.ICrossfader
-import com.mikepenz.materialdrawer.model.*
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem
+import com.mikepenz.materialdrawer.model.ProfileSettingDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IProfile
 import me.proxer.app.R
@@ -27,8 +29,6 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar, savedInstanceSta
                            private val accountClickCallback: (view: View, id: AccountItem) -> Boolean) {
 
     companion object {
-        private const val EXPANDABLE_ITEM_MANGA_ID = 1000L
-
         private const val CURRENT_ID_STATE = "current_id"
     }
 
@@ -93,11 +93,6 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar, savedInstanceSta
     }
 
     fun select(item: DrawerItem) {
-        // We need to manually expand ExpandableDrawerItems before setting the selection.
-        if (item == DrawerItem.LOCAL_MANGA || item == DrawerItem.MANGA_LIST) {
-            drawer.adapter.expand(drawer.getPosition(EXPANDABLE_ITEM_MANGA_ID))
-        }
-
         drawer.setSelection(item.id)
         miniDrawer?.setSelection(item.id)
     }
@@ -228,28 +223,18 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar, savedInstanceSta
                         .withSelectedTextColorRes(R.color.colorAccent)
                         .withSelectedIconColorRes(R.color.colorAccent)
                         .withIdentifier(DrawerItem.ANIME.id),
-                ExpandableDrawerItem()
+                PrimaryDrawerItem()
                         .withName(R.string.section_manga)
-                        .withIcon(CommunityMaterial.Icon.cmd_book_open_variant)
-                        .withIdentifier(EXPANDABLE_ITEM_MANGA_ID)
-                        .withArrowColorRes(R.color.icon)
-                        .withSelectable(false)
-                        .withSubItems(
-                                SecondaryDrawerItem()
-                                        .withLevel(2)
-                                        .withName(R.string.section_manga_list)
-                                        .withIcon(CommunityMaterial.Icon.cmd_view_list)
-                                        .withSelectedTextColorRes(R.color.colorAccent)
-                                        .withSelectedIconColorRes(R.color.colorAccent)
-                                        .withIdentifier(DrawerItem.MANGA_LIST.id),
-                                SecondaryDrawerItem()
-                                        .withLevel(2)
-                                        .withName(R.string.section_manga_local)
-                                        .withIcon(CommunityMaterial.Icon.cmd_cloud_download)
-                                        .withSelectedTextColorRes(R.color.colorAccent)
-                                        .withSelectedIconColorRes(R.color.colorAccent)
-                                        .withIdentifier(DrawerItem.LOCAL_MANGA.id)
-                        )
+                        .withIcon(CommunityMaterial.Icon.cmd_view_list)
+                        .withSelectedTextColorRes(R.color.colorAccent)
+                        .withSelectedIconColorRes(R.color.colorAccent)
+                        .withIdentifier(DrawerItem.MANGA.id),
+                PrimaryDrawerItem()
+                        .withName(R.string.section_local_manga)
+                        .withIcon(CommunityMaterial.Icon.cmd_cloud_download)
+                        .withSelectedTextColorRes(R.color.colorAccent)
+                        .withSelectedIconColorRes(R.color.colorAccent)
+                        .withIdentifier(DrawerItem.LOCAL_MANGA.id)
         )
     }
 
@@ -311,7 +296,7 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar, savedInstanceSta
         CHAT(1L),
         BOOKMARKS(2L),
         ANIME(3L),
-        MANGA_LIST(4L),
+        MANGA(4L),
         LOCAL_MANGA(5L),
         INFO(10L),
         DONATE(11L),
