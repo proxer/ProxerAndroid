@@ -9,6 +9,7 @@ import me.proxer.app.fragment.news.NewsArticleFragment
 import me.proxer.app.helper.NotificationHelper
 import me.proxer.app.helper.PreferenceHelper
 import me.proxer.app.helper.StorageHelper
+import me.proxer.library.entitiy.notifications.NewsArticle
 
 /**
  * @author Ruben Gees
@@ -45,22 +46,38 @@ class NotificationsJob : Job() {
 
     override fun onRunJob(params: Params?): Result {
         try {
-            if (!NewsArticleFragment.isActive) {
-                val lastNewsTime = StorageHelper.lastNewsTime.time
-                val newNews = api.notifications().news().build().execute().takeWhile {
-                    it.date.time > lastNewsTime
-                }
+            fetchNews(context)
+        } catch (error: Throwable) {
+            NotificationHelper.showNewsFetchErrorNotification(context, error)
+        }
 
-                newNews.firstOrNull()?.date?.let {
-                    StorageHelper.lastNewsTime = it
-                }
+        // TODO: Implement new general notifications API.
 
-                NotificationHelper.showOrUpdateNewsNotification(context, newNews)
+        return Result.SUCCESS
+    }
+
+    private fun fetchNews(context: Context) {
+        if (!NewsArticleFragment.isActive) {
+            val lastNewsId = StorageHelper.lastNewsId
+            val newNews = mutableListOf<NewsArticle>()
+            var page = 0
+
+            while (page == 0 || newNews.size % (15 * page) == 0) {
+                newNews.addAll(api.notifications().news()
+                        .page(page)
+                        .limit(15)
+                        .build()
+                        .execute()
+                        .takeWhile { it.id > lastNewsId })
+
+                page++
             }
 
-            return Result.SUCCESS
-        } catch(error: Throwable) {
-            return Result.FAILURE
+            newNews.firstOrNull()?.id?.let {
+                StorageHelper.lastNewsId = it
+            }
+
+            NotificationHelper.showOrUpdateNewsNotification(context, newNews)
         }
     }
 }

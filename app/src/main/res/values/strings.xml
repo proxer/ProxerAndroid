@@ -286,6 +286,8 @@
         <item quantity="other">%d News</item>
     </plurals>
 
+    <string name="notification_news_error_title">Fehler beim Abrufen der News</string>
+    <string name="notification_news_error_content">Ein unbekannter Fehler ist aufgetreten</string>
     <string name="notification_manga_download_error_title">Fehler beim Manga Download</string>
     <string name="notification_manga_download_error_content">Ein Kapitel konnte nicht heruntergeladen werden</string>
 

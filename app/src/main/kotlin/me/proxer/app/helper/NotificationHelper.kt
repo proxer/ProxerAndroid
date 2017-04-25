@@ -11,6 +11,7 @@ import me.proxer.app.R
 import me.proxer.app.activity.DashboardActivity
 import me.proxer.app.fragment.news.NewsArticleFragment
 import me.proxer.app.helper.MaterialDrawerHelper.DrawerItem
+import me.proxer.app.helper.NotificationHelper.NotificationType.*
 import me.proxer.app.util.ErrorUtils
 import me.proxer.library.api.ProxerException
 import me.proxer.library.entitiy.notifications.NewsArticle
@@ -25,27 +26,28 @@ object NotificationHelper {
             val notification = buildNewsNotification(context, news)
 
             when (notification) {
-                null -> cancelNotification(context, NotificationType.NEWS)
-                else -> NotificationManagerCompat.from(context).notify(NotificationType.NEWS.id, notification)
+                null -> cancelNotification(context, NEWS)
+                else -> NotificationManagerCompat.from(context).notify(NEWS.id, notification)
             }
         }
     }
 
     fun showMangaDownloadErrorNotification(context: Context, error: Throwable) {
-        val message = context.getString(when (error) {
-            is ProxerException -> ErrorUtils.getMessageForProxerException(error)
-            else -> R.string.notification_manga_download_error_content
-        })
+        showErrorNotification(context, MANGA_DOWNLOAD_ERROR.id,
+                context.getString(R.string.notification_manga_download_error_title),
+                context.getString(when (error) {
+                    is ProxerException -> ErrorUtils.getMessageForProxerException(error)
+                    else -> R.string.notification_manga_download_error_content
+                }))
+    }
 
-        NotificationManagerCompat.from(context)
-                .notify(NotificationType.MANGA_DOWNLOAD_ERROR.id, NotificationCompat.Builder(context)
-                        .setContentTitle(context.getString(R.string.notification_manga_download_error_title))
-                        .setContentText(message)
-                        .setColor(ContextCompat.getColor(context, R.color.primary))
-                        .setSmallIcon(R.drawable.ic_stat_proxer)
-                        .setPriority(PRIORITY_LOW)
-                        .setAutoCancel(true)
-                        .build())
+    fun showNewsFetchErrorNotification(context: Context, error: Throwable) {
+        showErrorNotification(context, NEWS_ERROR.id,
+                context.getString(R.string.notification_news_error_title),
+                context.getString(when (error) {
+                    is ProxerException -> ErrorUtils.getMessageForProxerException(error)
+                    else -> R.string.notification_news_error_content
+                }))
     }
 
     fun cancelNotification(context: Context, type: NotificationType) {
@@ -104,8 +106,20 @@ object NotificationHelper {
                 .build()
     }
 
+    private fun showErrorNotification(context: Context, id: Int, title: String, content: String) {
+        NotificationManagerCompat.from(context).notify(id, NotificationCompat.Builder(context)
+                .setContentTitle(title)
+                .setContentText(content)
+                .setColor(ContextCompat.getColor(context, R.color.primary))
+                .setSmallIcon(R.drawable.ic_stat_proxer)
+                .setPriority(PRIORITY_LOW)
+                .setAutoCancel(true)
+                .build())
+    }
+
     enum class NotificationType(val id: Int) {
         NEWS(1357913213),
+        NEWS_ERROR(472347289),
         MANGA_DOWNLOAD_ERROR(479239223)
     }
 }

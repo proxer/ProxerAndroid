@@ -92,8 +92,8 @@ class NewsArticleFragment : PagedLoadingFragment<ProxerCall<List<NewsArticle>>, 
     override fun insert(items: List<NewsArticle>) {
         super.insert(items)
 
-        items.firstOrNull()?.date?.let {
-            StorageHelper.lastNewsTime = it
+        items.firstOrNull()?.id?.let {
+            StorageHelper.lastNewsId = it
         }
     }
 

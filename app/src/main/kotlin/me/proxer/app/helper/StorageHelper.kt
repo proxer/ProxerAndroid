@@ -2,7 +2,6 @@ package me.proxer.app.helper
 
 import com.orhanobut.hawk.Hawk
 import me.proxer.app.entity.LocalUser
-import java.util.*
 
 /**
  * A helper class, giving access to the storage.
@@ -14,7 +13,7 @@ object StorageHelper {
     private const val FIRST_START = "first_start"
     private const val USER = "user"
     private const val TWO_FACTOR_AUTHENTICATION = "two_factor_authentication"
-    private const val LAST_NEWS_DATE = "last_news_time"
+    private const val LAST_NEWS_ID = "last_news_id"
 
     var isFirstStart: Boolean
         get() = Hawk.get(FIRST_START, true)
@@ -41,9 +40,9 @@ object StorageHelper {
             Hawk.put(TWO_FACTOR_AUTHENTICATION, value)
         }
 
-    var lastNewsTime: Date
-        get() = Date(Hawk.get(LAST_NEWS_DATE, 0L))
+    var lastNewsId: String
+        get() = Hawk.get(LAST_NEWS_ID, "")
         set(value) {
-            Hawk.put(LAST_NEWS_DATE, value.time)
+            Hawk.put(LAST_NEWS_ID, value)
         }
 }
