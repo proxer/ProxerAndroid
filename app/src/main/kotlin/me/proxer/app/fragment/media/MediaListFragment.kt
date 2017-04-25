@@ -160,8 +160,7 @@ class MediaListFragment : PagedLoadingFragment<ProxerCall<List<MediaListEntry>>,
             }
         })
 
-        MenuItemCompat.setOnActionExpandListener(searchItem,
-                object : MenuItemCompat.OnActionExpandListener {
+        MenuItemCompat.setOnActionExpandListener(searchItem, object : MenuItemCompat.OnActionExpandListener {
                     override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
                         TransitionManager.beginDelayedTransition(activity.find(R.id.toolbar))
 

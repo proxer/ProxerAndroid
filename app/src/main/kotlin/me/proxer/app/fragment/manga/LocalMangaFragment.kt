@@ -2,11 +2,12 @@ package me.proxer.app.fragment.manga
 
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.transition.TransitionManager
+import android.support.v4.view.MenuItemCompat
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.SearchView
 import android.support.v7.widget.StaggeredGridLayoutManager
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -109,6 +110,8 @@ class LocalMangaFragment : LoadingFragment<Unit, List<CompleteLocalMangaEntry>>(
                 removalTask.execute(entry to chapter)
             }
         }
+
+        setHasOptionsMenu(true)
     }
 
     override fun onResume() {
@@ -142,6 +145,51 @@ class LocalMangaFragment : LoadingFragment<Unit, List<CompleteLocalMangaEntry>>(
                 }
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.fragment_local_manga, menu)
+
+        val searchItem = menu.findItem(R.id.search)
+        val searchView = searchItem.actionView as SearchView
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                state.data?.let {
+                    if (newText.isNotEmpty()) {
+                        innerAdapter.replace(it.filter { it.first.name.contains(newText, true) })
+                    } else {
+                        innerAdapter.replace(it)
+                    }
+                }
+
+                return false
+            }
+        })
+
+        MenuItemCompat.setOnActionExpandListener(searchItem, object : MenuItemCompat.OnActionExpandListener {
+            override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+                TransitionManager.beginDelayedTransition(activity.find(R.id.toolbar))
+
+                return true
+            }
+
+            override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+                state.data?.let {
+                    innerAdapter.replace(it)
+                }
+
+                TransitionManager.beginDelayedTransition(activity.find(R.id.toolbar))
+
+                return true
+            }
+        })
+
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

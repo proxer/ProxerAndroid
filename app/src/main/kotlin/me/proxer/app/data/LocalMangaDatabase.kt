@@ -203,7 +203,7 @@ class LocalMangaDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DA
         use {
             transaction {
                 delete(CHAPTER_TABLE, "$CHAPTER_LOCAL_ID_COLUMN = ${chapter.localId}")
-                delete(PAGE_TABLE, "$PAGE_CHAPTER_ID_COLUMN = ${chapter.id}")
+                delete(PAGE_TABLE, "$PAGE_CHAPTER_ID_COLUMN = ${chapter.localId}")
 
                 if (DatabaseUtils.queryNumEntries(this, CHAPTER_TABLE,
                         "$CHAPTER_ENTRY_ID_COLUMN = \"${entry.id}\"") <= 0) {
