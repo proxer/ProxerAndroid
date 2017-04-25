@@ -3,7 +3,6 @@ package me.proxer.app.fragment.info
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
-import com.bumptech.glide.Glide
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.activity.MediaActivity
@@ -44,7 +43,7 @@ class TranslatorGroupProjectsFragment : PagedLoadingFragment<ProxerCall<List<Tra
     private val id: String
         get() = translatorGroupActivity.id
 
-    override val innerAdapter by lazy { TranslatorGroupProjectAdapter(Glide.with(this)) }
+    override val innerAdapter by lazy { TranslatorGroupProjectAdapter() }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

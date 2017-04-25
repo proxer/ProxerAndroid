@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.RequestManager
+import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
@@ -21,7 +21,7 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-class UcpTopTenAdapter(private val glide: RequestManager) : PagingAdapter<UcpTopTenEntry>() {
+class UcpTopTenAdapter : PagingAdapter<UcpTopTenEntry>() {
 
     var callback: UcpToptenAdapterCallback? = null
 
@@ -39,7 +39,6 @@ class UcpTopTenAdapter(private val glide: RequestManager) : PagingAdapter<UcpTop
         super.destroy()
 
         callback = null
-        glide.onDestroy()
     }
 
     inner class ViewHolder(itemView: View) : PagingViewHolder<UcpTopTenEntry>(itemView) {
@@ -73,7 +72,8 @@ class UcpTopTenAdapter(private val glide: RequestManager) : PagingAdapter<UcpTop
 
             title.text = item.name
 
-            glide.load(ProxerUrls.entryImage(item.entryId).toString())
+            Glide.with(image.context)
+                    .load(ProxerUrls.entryImage(item.entryId).toString())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(image)
         }

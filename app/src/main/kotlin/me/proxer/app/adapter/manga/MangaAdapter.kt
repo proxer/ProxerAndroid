@@ -5,7 +5,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
-import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.animation.GlideAnimation
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.target.Target
@@ -23,7 +22,7 @@ import java.io.File
 /**
  * @author Ruben Gees
  */
-class MangaAdapter(private val glide: RequestManager) : PagingAdapter<Page>() {
+class MangaAdapter : PagingAdapter<Page>() {
 
     private lateinit var server: String
     private lateinit var entryId: String
@@ -31,12 +30,6 @@ class MangaAdapter(private val glide: RequestManager) : PagingAdapter<Page>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagingViewHolder<Page> {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_manga_page, parent, false))
-    }
-
-    override fun destroy() {
-        super.destroy()
-
-        glide.onDestroy()
     }
 
     fun init(server: String, entryId: String, id: String) {
@@ -92,7 +85,8 @@ class MangaAdapter(private val glide: RequestManager) : PagingAdapter<Page>() {
                 }
             }
 
-            glide.load(ProxerUrls.mangaPageImage(server, entryId, id, item.decodedName).toString())
+            Glide.with(image.context)
+                    .load(ProxerUrls.mangaPageImage(server, entryId, id, item.decodedName).toString())
                     .downloadOnly(target)
         }
     }

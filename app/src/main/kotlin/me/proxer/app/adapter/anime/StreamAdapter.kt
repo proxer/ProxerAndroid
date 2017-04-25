@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.RequestManager
+import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
@@ -23,7 +23,7 @@ import org.threeten.bp.format.DateTimeFormatter
 /**
  * @author Ruben Gees
  */
-class StreamAdapter(savedInstanceState: Bundle?, private val glide: RequestManager) : PagingAdapter<Stream>() {
+class StreamAdapter(savedInstanceState: Bundle?) : PagingAdapter<Stream>() {
 
     private companion object {
         private const val EXPANDED_STATE = "stream_expanded"
@@ -51,7 +51,6 @@ class StreamAdapter(savedInstanceState: Bundle?, private val glide: RequestManag
         super.destroy()
 
         callback = null
-        glide.onDestroy()
     }
 
     fun saveInstanceState(outState: Bundle) {
@@ -114,7 +113,8 @@ class StreamAdapter(savedInstanceState: Bundle?, private val glide: RequestManag
         override fun bind(item: Stream) {
             name.text = item.hosterName
 
-            glide.load(ProxerUrls.hosterImage(item.image).toString())
+            Glide.with(image.context)
+                    .load(ProxerUrls.hosterImage(item.image).toString())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(image)
 

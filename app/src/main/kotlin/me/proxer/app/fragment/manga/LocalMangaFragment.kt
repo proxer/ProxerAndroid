@@ -11,7 +11,6 @@ import android.view.*
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.Glide
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import com.rubengees.ktask.android.AndroidLifecycleTask
 import com.rubengees.ktask.android.bindToLifecycle
@@ -86,7 +85,7 @@ class LocalMangaFragment : LoadingFragment<Unit, List<CompleteLocalMangaEntry>>(
                     }
                 }.build()
 
-        innerAdapter = LocalMangaAdapter(savedInstanceState, Glide.with(this))
+        innerAdapter = LocalMangaAdapter(savedInstanceState)
         adapter = EasyHeaderFooterAdapter(innerAdapter)
 
         innerAdapter.positionResolver = object : PagingAdapter.PositionResolver() {

@@ -3,7 +3,6 @@ package me.proxer.app.fragment.info
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
-import com.bumptech.glide.Glide
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.activity.IndustryActivity
@@ -43,7 +42,7 @@ class IndustryProjectsFragment : PagedLoadingFragment<ProxerCall<List<IndustryPr
     private val id: String
         get() = industryActivity.id
 
-    override val innerAdapter by lazy { IndustryProjectAdapter(Glide.with(this)) }
+    override val innerAdapter by lazy { IndustryProjectAdapter() }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

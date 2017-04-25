@@ -13,7 +13,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import com.bumptech.glide.Glide
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import com.rubengees.ktask.android.AndroidLifecycleTask
 import com.rubengees.ktask.android.bindToLifecycle
@@ -107,7 +106,7 @@ class AnimeFragment : LoadingFragment<Pair<ProxerCall<List<Stream>>, ProxerCall<
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        innerAdapter = StreamAdapter(savedInstanceState, Glide.with(this))
+        innerAdapter = StreamAdapter(savedInstanceState)
         adapter = EasyHeaderFooterAdapter(innerAdapter)
 
         bookmarkTask = TaskBuilder.asyncProxerTask<Void?>()

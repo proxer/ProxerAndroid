@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.RequestManager
+import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import me.proxer.app.R
 import me.proxer.app.adapter.base.PagingAdapter
@@ -26,8 +26,7 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-class LocalMangaAdapter(savedInstanceState: Bundle?, private val glide: RequestManager) :
-        PagingAdapter<CompleteLocalMangaEntry>() {
+class LocalMangaAdapter(savedInstanceState: Bundle?) : PagingAdapter<CompleteLocalMangaEntry>() {
 
     private companion object {
         private const val EXPANDED_STATE = "local_manga_expanded"
@@ -84,7 +83,6 @@ class LocalMangaAdapter(savedInstanceState: Bundle?, private val glide: RequestM
         super.destroy()
 
         callback = null
-        glide.onDestroy()
     }
 
     fun saveInstanceState(outState: Bundle) {
@@ -142,7 +140,8 @@ class LocalMangaAdapter(savedInstanceState: Bundle?, private val glide: RequestM
                 adapter.clear()
             }
 
-            glide.load(ProxerUrls.entryImage(item.first.id).toString())
+            Glide.with(image.context)
+                    .load(ProxerUrls.entryImage(item.first.id).toString())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(image)
         }

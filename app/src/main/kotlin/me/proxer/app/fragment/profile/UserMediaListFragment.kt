@@ -3,7 +3,6 @@ package me.proxer.app.fragment.profile
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
-import com.bumptech.glide.Glide
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.activity.MediaActivity
@@ -50,7 +49,7 @@ class UserMediaListFragment : PagedLoadingFragment<ProxerCall<List<UserMediaList
     private val category: Category
         get() = arguments.getSerializable(CATEGORY_ARGUMENT) as Category
 
-    override val innerAdapter by lazy { UserMediaAdapter(Glide.with(this)) }
+    override val innerAdapter by lazy { UserMediaAdapter() }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

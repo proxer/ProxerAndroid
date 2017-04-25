@@ -6,7 +6,6 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import com.bumptech.glide.Glide
 import com.rubengees.ktask.android.AndroidLifecycleTask
 import com.rubengees.ktask.android.bindToLifecycle
 import com.rubengees.ktask.util.TaskBuilder
@@ -50,7 +49,7 @@ class BookmarksFragment : PagedLoadingFragment<ProxerCall<List<Bookmark>>, Bookm
     override val spanCount get() = super.spanCount + 1
     override val itemsOnPage = 30
 
-    override val innerAdapter by lazy { BookmarkAdapter(Glide.with(this)) }
+    override val innerAdapter by lazy { BookmarkAdapter() }
 
     private lateinit var removalTask: AndroidLifecycleTask<ProxerCall<Void?>, Void?>
     private val removalQueue = LinkedHashSet<Bookmark>()

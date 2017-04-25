@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import com.bumptech.glide.Glide
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.activity.MediaActivity
@@ -42,7 +41,7 @@ class RelationsFragment : LoadingFragment<ProxerCall<List<Relation>>, List<Relat
     private val id: String
         get() = mediaActivity.id
 
-    private val adapter by lazy { RelationsAdapter(Glide.with(this)) }
+    private val adapter by lazy { RelationsAdapter() }
 
     private val list: RecyclerView by bindView(R.id.list)
 

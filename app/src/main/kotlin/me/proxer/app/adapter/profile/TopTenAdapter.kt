@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.RequestManager
+import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import me.proxer.app.R
 import me.proxer.app.adapter.base.PagingAdapter
@@ -17,7 +17,7 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-class TopTenAdapter(private val glide: RequestManager) : PagingAdapter<TopTenEntry>() {
+class TopTenAdapter : PagingAdapter<TopTenEntry>() {
 
     var callback: TopTenAdapterCallback? = null
 
@@ -33,7 +33,6 @@ class TopTenAdapter(private val glide: RequestManager) : PagingAdapter<TopTenEnt
         super.destroy()
 
         callback = null
-        glide.onDestroy()
     }
 
     inner class ViewHolder(itemView: View) : PagingViewHolder<TopTenEntry>(itemView) {
@@ -54,7 +53,8 @@ class TopTenAdapter(private val glide: RequestManager) : PagingAdapter<TopTenEnt
 
             title.text = item.name
 
-            glide.load(ProxerUrls.entryImage(item.id).toString())
+            Glide.with(image.context)
+                    .load(ProxerUrls.entryImage(item.id).toString())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(image)
         }

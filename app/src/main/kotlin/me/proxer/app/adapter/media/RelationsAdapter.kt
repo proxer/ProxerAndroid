@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
-import com.bumptech.glide.RequestManager
+import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import me.proxer.app.R
 import me.proxer.app.adapter.base.PagingAdapter
@@ -22,7 +22,7 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-class RelationsAdapter(private val glide: RequestManager) : PagingAdapter<Relation>() {
+class RelationsAdapter : PagingAdapter<Relation>() {
 
     var callback: RelationsAdapterCallback? = null
 
@@ -40,7 +40,6 @@ class RelationsAdapter(private val glide: RequestManager) : PagingAdapter<Relati
         super.destroy()
 
         callback = null
-        glide.onDestroy()
     }
 
     inner class ViewHolder(itemView: View) : PagingViewHolder<Relation>(itemView) {
@@ -91,7 +90,8 @@ class RelationsAdapter(private val glide: RequestManager) : PagingAdapter<Relati
                 ratingContainer.visibility = View.GONE
             }
 
-            glide.load(ProxerUrls.entryImage(item.id).toString())
+            Glide.with(image.context)
+                    .load(ProxerUrls.entryImage(item.id).toString())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(image)
         }

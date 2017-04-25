@@ -3,7 +3,6 @@ package me.proxer.app.fragment.news
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
-import com.bumptech.glide.Glide
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.activity.ImageDetailActivity
@@ -46,7 +45,7 @@ class NewsArticleFragment : PagedLoadingFragment<ProxerCall<List<NewsArticle>>, 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        innerAdapter = NewsArticleAdapter(savedInstanceState, Glide.with(this))
+        innerAdapter = NewsArticleAdapter(savedInstanceState)
 
         NotificationHelper.cancelNotification(context, NotificationType.NEWS)
     }

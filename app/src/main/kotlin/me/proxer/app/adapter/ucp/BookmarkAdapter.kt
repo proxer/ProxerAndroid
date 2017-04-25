@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.RequestManager
+import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
@@ -25,7 +25,7 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-class BookmarkAdapter(private val glide: RequestManager) : PagingAdapter<Bookmark>() {
+class BookmarkAdapter : PagingAdapter<Bookmark>() {
 
     var callback: BookmarkAdapterCallback? = null
 
@@ -43,7 +43,6 @@ class BookmarkAdapter(private val glide: RequestManager) : PagingAdapter<Bookmar
         super.destroy()
 
         callback = null
-        glide.onDestroy()
     }
 
     override fun areItemsTheSame(oldItem: Bookmark, newItem: Bookmark): Boolean {
@@ -99,7 +98,8 @@ class BookmarkAdapter(private val glide: RequestManager) : PagingAdapter<Bookmar
                 Language.ENGLISH -> R.drawable.ic_united_states
             })
 
-            glide.load(ProxerUrls.entryImage(item.entryId).toString())
+            Glide.with(image.context)
+                    .load(ProxerUrls.entryImage(item.entryId).toString())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(image)
         }

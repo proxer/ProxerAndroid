@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
-import com.bumptech.glide.RequestManager
+import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import me.proxer.app.R
 import me.proxer.app.adapter.base.PagingAdapter
@@ -21,7 +21,7 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-class UserMediaAdapter(private val glide: RequestManager) : PagingAdapter<UserMediaListEntry>() {
+class UserMediaAdapter : PagingAdapter<UserMediaListEntry>() {
 
     var callback: UserMediaAdapterCallback? = null
 
@@ -39,7 +39,6 @@ class UserMediaAdapter(private val glide: RequestManager) : PagingAdapter<UserMe
         super.destroy()
 
         callback = null
-        glide.onDestroy()
     }
 
     inner class ViewHolder(itemView: View) : PagingViewHolder<UserMediaListEntry>(itemView) {
@@ -73,7 +72,8 @@ class UserMediaAdapter(private val glide: RequestManager) : PagingAdapter<UserMe
                 ratingContainer.visibility = View.GONE
             }
 
-            glide.load(ProxerUrls.entryImage(item.id).toString())
+            Glide.with(image.context)
+                    .load(ProxerUrls.entryImage(item.id).toString())
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(image)
         }
