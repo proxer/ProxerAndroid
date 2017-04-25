@@ -27,9 +27,9 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar, savedInstanceSta
                            private val accountClickCallback: (view: View, id: AccountItem) -> Boolean) {
 
     companion object {
-        private const val DRAWER_SIZE: Float = 300f
-        private const val MINI_DRAWER_SIZE: Float = 72f
-        private const val CURRENT_DRAWER_ID_STATE = "current_id"
+        private const val EXPANDABLE_ITEM_MANGA_ID = 1000L
+
+        private const val CURRENT_ID_STATE = "current_id"
     }
 
     private val header: AccountHeader
@@ -49,7 +49,7 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar, savedInstanceSta
             crossfader = it.second
         }
 
-        currentItem = DrawerItem.fromOrNull(savedInstanceState?.getLong(CURRENT_DRAWER_ID_STATE))
+        currentItem = DrawerItem.fromOrNull(savedInstanceState?.getLong(CURRENT_ID_STATE))
     }
 
     fun onBackPressed(): Boolean {
@@ -81,7 +81,7 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar, savedInstanceSta
     }
 
     fun saveInstanceState(outState: Bundle) {
-        outState.putLong(CURRENT_DRAWER_ID_STATE, currentItem?.id ?: DrawerItem.NEWS.id)
+        outState.putLong(CURRENT_ID_STATE, currentItem?.id ?: DrawerItem.NEWS.id)
 
         header.saveInstanceState(outState)
         drawer.saveInstanceState(outState)
@@ -93,6 +93,11 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar, savedInstanceSta
     }
 
     fun select(item: DrawerItem) {
+        // We need to manually expand ExpandableDrawerItems before setting the selection.
+        if (item == DrawerItem.LOCAL_MANGA || item == DrawerItem.MANGA_LIST) {
+            drawer.adapter.expand(drawer.getPosition(EXPANDABLE_ITEM_MANGA_ID))
+        }
+
         drawer.setSelection(item.id)
         miniDrawer?.setSelection(item.id)
     }
@@ -191,8 +196,8 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar, savedInstanceSta
                                 savedInstanceState: Bundle?): Crossfader<*> {
         return Crossfader<GmailStyleCrossFadeSlidingPaneLayout>()
                 .withContent(context.find<ViewGroup>(R.id.root))
-                .withFirst(drawer.slider, DeviceUtils.convertDpToPx(context, DRAWER_SIZE))
-                .withSecond(miniDrawer.build(context), DeviceUtils.convertDpToPx(context, MINI_DRAWER_SIZE))
+                .withFirst(drawer.slider, DeviceUtils.convertDpToPx(context, 300f))
+                .withSecond(miniDrawer.build(context), DeviceUtils.convertDpToPx(context, 72f))
                 .withSavedInstance(savedInstanceState)
                 .build()
     }
@@ -226,6 +231,7 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar, savedInstanceSta
                 ExpandableDrawerItem()
                         .withName(R.string.section_manga)
                         .withIcon(CommunityMaterial.Icon.cmd_book_open_variant)
+                        .withIdentifier(EXPANDABLE_ITEM_MANGA_ID)
                         .withArrowColorRes(R.color.icon)
                         .withSelectable(false)
                         .withSubItems(
@@ -235,7 +241,7 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar, savedInstanceSta
                                         .withIcon(CommunityMaterial.Icon.cmd_view_list)
                                         .withSelectedTextColorRes(R.color.colorAccent)
                                         .withSelectedIconColorRes(R.color.colorAccent)
-                                        .withIdentifier(DrawerItem.MANGA.id),
+                                        .withIdentifier(DrawerItem.MANGA_LIST.id),
                                 SecondaryDrawerItem()
                                         .withLevel(2)
                                         .withName(R.string.section_manga_local)
@@ -305,7 +311,7 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar, savedInstanceSta
         CHAT(1L),
         BOOKMARKS(2L),
         ANIME(3L),
-        MANGA(4L),
+        MANGA_LIST(4L),
         LOCAL_MANGA(5L),
         INFO(10L),
         DONATE(11L),

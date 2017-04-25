@@ -194,7 +194,7 @@ class DashboardActivity : MainActivity() {
                 return false
             }
 
-            DrawerItem.MANGA -> {
+            DrawerItem.MANGA_LIST -> {
                 setFragment(MediaListFragment.newInstance(Category.MANGA), R.string.section_manga)
 
                 return false
@@ -223,6 +223,8 @@ class DashboardActivity : MainActivity() {
 
                 return false
             }
+
+            else -> return false
         }
     }
 
