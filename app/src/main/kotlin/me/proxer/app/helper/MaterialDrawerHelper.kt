@@ -225,7 +225,7 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar, savedInstanceSta
                         .withIdentifier(DrawerItem.ANIME.id),
                 PrimaryDrawerItem()
                         .withName(R.string.section_manga)
-                        .withIcon(CommunityMaterial.Icon.cmd_view_list)
+                        .withIcon(CommunityMaterial.Icon.cmd_book_open_page_variant)
                         .withSelectedTextColorRes(R.color.colorAccent)
                         .withSelectedIconColorRes(R.color.colorAccent)
                         .withIdentifier(DrawerItem.MANGA.id),
