@@ -6,7 +6,7 @@ ext {
     minSdkVersion = 16
     targetSdkVersion = 25
     compileSdkVersion = 25
-    buildToolsVersion = '25.0.2'
+    buildToolsVersion = '25.0.3'
 
     // Frameworks and code only libraries
     kotlinVersion = '1.1.2'
@@ -52,7 +52,7 @@ ext {
     easyHeaderFooterAdapterVersion = 'master-SNAPSHOT'
 
     // Debugging
-    leakCanaryVersion = '1.5'
+    leakCanaryVersion = '1.5.1'
 
     deps = [
             kotlinStdlib                 : "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
