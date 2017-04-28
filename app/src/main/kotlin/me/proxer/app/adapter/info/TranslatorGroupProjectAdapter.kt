@@ -1,5 +1,6 @@
 package me.proxer.app.adapter.info
 
+import android.support.v4.view.ViewCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -54,6 +55,8 @@ class TranslatorGroupProjectAdapter : PagingAdapter<TranslatorGroupProject>() {
         }
 
         override fun bind(item: TranslatorGroupProject) {
+            ViewCompat.setTransitionName(image, "translator_group_project_${item.id}")
+
             title.text = item.name
             medium.text = item.medium.toAppString(medium.context)
             status.text = item.state.toAppString(status.context)

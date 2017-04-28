@@ -9,7 +9,7 @@ ext {
     buildToolsVersion = '25.0.3'
 
     // Frameworks and code only libraries
-    kotlinVersion = '1.1.2'
+    kotlinVersion = '1.1.2-2'
     ankoVersion = '0.10.0-beta-2'
     ankoSqliteVersion = '0.9.1a'
     supportLibraryVersion = '25.3.1'
@@ -114,7 +114,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.1.2"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.1.2-2"
         classpath 'com.android.tools.build:gradle:2.4.0-alpha6'
     }
 }
