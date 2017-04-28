@@ -46,8 +46,6 @@ class NewsArticleFragment : PagedLoadingFragment<ProxerCall<List<NewsArticle>>, 
         super.onCreate(savedInstanceState)
 
         innerAdapter = NewsArticleAdapter(savedInstanceState)
-
-        NotificationHelper.cancelNotification(context, NotificationType.NEWS)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -74,10 +72,12 @@ class NewsArticleFragment : PagedLoadingFragment<ProxerCall<List<NewsArticle>>, 
         super.onResume()
 
         isActive = true
+
+        NotificationHelper.cancelNotification(context, NotificationType.NEWS)
     }
 
     override fun onPause() {
-        isActive = true
+        isActive = false
 
         super.onPause()
     }
@@ -91,8 +91,8 @@ class NewsArticleFragment : PagedLoadingFragment<ProxerCall<List<NewsArticle>>, 
     override fun insert(items: List<NewsArticle>) {
         super.insert(items)
 
-        items.firstOrNull()?.id?.let {
-            StorageHelper.lastNewsId = it
+        items.firstOrNull()?.date?.let {
+            StorageHelper.lastNewsDate = it
         }
     }
 
