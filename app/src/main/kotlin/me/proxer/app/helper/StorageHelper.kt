@@ -41,7 +41,7 @@ object StorageHelper {
         }
 
     var lastNewsId: String
-        get() = Hawk.get(LAST_NEWS_ID, "")
+        get() = Hawk.get(LAST_NEWS_ID, "0")
         set(value) {
             Hawk.put(LAST_NEWS_ID, value)
         }

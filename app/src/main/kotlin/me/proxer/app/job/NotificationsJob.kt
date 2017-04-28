@@ -9,7 +9,6 @@ import me.proxer.app.fragment.news.NewsArticleFragment
 import me.proxer.app.helper.NotificationHelper
 import me.proxer.app.helper.PreferenceHelper
 import me.proxer.app.helper.StorageHelper
-import me.proxer.library.entitiy.notifications.NewsArticle
 
 /**
  * @author Ruben Gees
@@ -59,19 +58,12 @@ class NotificationsJob : Job() {
     private fun fetchNews(context: Context) {
         if (!NewsArticleFragment.isActive) {
             val lastNewsId = StorageHelper.lastNewsId
-            val newNews = mutableListOf<NewsArticle>()
-            var page = 0
-
-            while (page == 0 || newNews.size % (15 * page) == 0) {
-                newNews.addAll(api.notifications().news()
-                        .page(page)
-                        .limit(15)
-                        .build()
-                        .execute()
-                        .takeWhile { it.id.toLong() > lastNewsId.toLong() })
-
-                page++
-            }
+            val newNews = api.notifications().news()
+                    .page(0)
+                    .limit(15)
+                    .build()
+                    .execute()
+                    .filter { it.id.toLong() > lastNewsId.toLong() }
 
             newNews.firstOrNull()?.id?.let {
                 StorageHelper.lastNewsId = it
