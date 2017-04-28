@@ -23,14 +23,10 @@ import me.proxer.app.helper.StorageHelper
 import me.proxer.app.job.LocalMangaJob
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ParcelableStringBooleanMap
-import me.proxer.app.util.extension.bindView
-import me.proxer.app.util.extension.toAppDrawable
-import me.proxer.app.util.extension.toEpisodeAppString
-import me.proxer.app.util.extension.toGeneralLanguage
+import me.proxer.app.util.extension.*
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.MediaLanguage
 import me.proxer.library.util.ProxerUrls
-import me.proxer.library.util.ProxerUtils
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -181,7 +177,7 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?) :
                 val download = languageContainer.find<ImageView>(R.id.download)
                 val downloadProgress = languageContainer.find<MaterialProgressBar>(R.id.downloadProgress)
 
-                languageView.text = ProxerUtils.getApiEnumName(language)
+                languageView.text = language.toAppString(languageView.context)
                 languageView.setCompoundDrawablesWithIntrinsicBounds(language.toGeneralLanguage()
                         .toAppDrawable(languageView.context), null, null, null)
 

@@ -14,12 +14,8 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
 import me.proxer.app.adapter.base.PagingAdapter
-import me.proxer.app.util.extension.bindView
-import me.proxer.app.util.extension.toAppString
-import me.proxer.app.util.extension.toEpisodeAppString
-import me.proxer.app.util.extension.toGeneralLanguage
+import me.proxer.app.util.extension.*
 import me.proxer.library.entitiy.ucp.Bookmark
-import me.proxer.library.enums.Language
 import me.proxer.library.util.ProxerUrls
 
 /**
@@ -93,10 +89,7 @@ class BookmarkAdapter : PagingAdapter<Bookmark>() {
                         false -> R.color.md_red_500
                     })))
 
-            language.setImageResource(when (item.language.toGeneralLanguage()) {
-                Language.GERMAN -> R.drawable.ic_germany
-                Language.ENGLISH -> R.drawable.ic_united_states
-            })
+            language.setImageDrawable(item.language.toGeneralLanguage().toAppDrawable(language.context))
 
             Glide.with(image.context)
                     .load(ProxerUrls.entryImage(item.entryId).toString())

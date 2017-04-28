@@ -25,17 +25,17 @@ fun MediaLanguage.toGeneralLanguage(): Language {
     return when (this) {
         MediaLanguage.GERMAN, MediaLanguage.GERMAN_SUB, MediaLanguage.GERMAN_DUB -> Language.GERMAN
         MediaLanguage.ENGLISH, MediaLanguage.ENGLISH_SUB, MediaLanguage.ENGLISH_DUB -> Language.ENGLISH
+        MediaLanguage.OTHER -> Language.OTHER
     }
 }
 
 fun MediaLanguage.toAnimeLanguage(): AnimeLanguage {
     return when (this) {
-        MediaLanguage.GERMAN -> AnimeLanguage.GERMAN_SUB
-        MediaLanguage.ENGLISH -> AnimeLanguage.ENGLISH_SUB
-        MediaLanguage.GERMAN_SUB -> AnimeLanguage.GERMAN_SUB
+        MediaLanguage.GERMAN, MediaLanguage.GERMAN_SUB -> AnimeLanguage.GERMAN_SUB
+        MediaLanguage.ENGLISH, MediaLanguage.ENGLISH_SUB -> AnimeLanguage.ENGLISH_SUB
         MediaLanguage.GERMAN_DUB -> AnimeLanguage.GERMAN_DUB
-        MediaLanguage.ENGLISH_SUB -> AnimeLanguage.ENGLISH_SUB
         MediaLanguage.ENGLISH_DUB -> AnimeLanguage.ENGLISH_DUB
+        MediaLanguage.OTHER -> AnimeLanguage.OTHER
     }
 }
 
@@ -43,6 +43,7 @@ fun Language.toMediaLanguage(): MediaLanguage {
     return when (this) {
         Language.GERMAN -> MediaLanguage.GERMAN
         Language.ENGLISH -> MediaLanguage.ENGLISH
+        Language.OTHER -> MediaLanguage.OTHER
     }
 }
 
@@ -52,6 +53,7 @@ fun AnimeLanguage.toMediaLanguage(): MediaLanguage {
         AnimeLanguage.GERMAN_DUB -> MediaLanguage.GERMAN_DUB
         AnimeLanguage.ENGLISH_SUB -> MediaLanguage.ENGLISH_SUB
         AnimeLanguage.ENGLISH_DUB -> MediaLanguage.ENGLISH_DUB
+        AnimeLanguage.OTHER -> MediaLanguage.OTHER
     }
 }
 
@@ -59,7 +61,20 @@ fun Language.toAppDrawable(context: Context): Drawable {
     return AppCompatResources.getDrawable(context, when (this) {
         Language.GERMAN -> R.drawable.ic_germany
         Language.ENGLISH -> R.drawable.ic_united_states
+        Language.OTHER -> R.drawable.ic_united_nations
     }) ?: throw NullPointerException("Could not resolve Drawable for language: $this")
+}
+
+fun MediaLanguage.toAppString(context: Context): String {
+    return context.getString(when (this) {
+        MediaLanguage.GERMAN -> R.string.language_german
+        MediaLanguage.ENGLISH -> R.string.language_english
+        MediaLanguage.GERMAN_SUB -> R.string.language_german_sub
+        MediaLanguage.GERMAN_DUB -> R.string.language_german_dub
+        MediaLanguage.ENGLISH_SUB -> R.string.language_english_sub
+        MediaLanguage.ENGLISH_DUB -> R.string.language_english_dub
+        MediaLanguage.OTHER -> R.string.language_other
+    })
 }
 
 fun Country.toAppDrawable(context: Context): Drawable {
@@ -69,6 +84,7 @@ fun Country.toAppDrawable(context: Context): Drawable {
         Country.UNITED_STATES -> R.drawable.ic_united_states
         Country.JAPAN -> R.drawable.ic_japan
         Country.KOREA -> R.drawable.ic_korea
+        Country.CHINA -> R.drawable.ic_china
         Country.OTHER -> R.drawable.ic_united_nations
     }) ?: throw NullPointerException("Could not resolve Drawable for country: $this")
 }

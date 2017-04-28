@@ -114,6 +114,14 @@
     <string name="medium_h_manga">H-Manga</string>
     <string name="medium_oneshot">One-Shot</string>
 
+    <string name="language_german">Deutsch</string>
+    <string name="language_english">Englisch</string>
+    <string name="language_german_sub">GerSub</string>
+    <string name="language_german_dub">GerDub</string>
+    <string name="language_english_sub">EngSub</string>
+    <string name="language_english_dub">EngDub</string>
+    <string name="language_other">Verschiedenes</string>
+
     <string name="season_autumn_end">Ende: Herbst %d</string>
     <string name="season_autumn_start">Start: Herbst %d</string>
     <string name="season_spring_end">Ende: Frühling %d</string>
