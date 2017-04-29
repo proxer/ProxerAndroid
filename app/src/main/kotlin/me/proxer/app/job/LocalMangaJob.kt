@@ -1,16 +1,19 @@
 package me.proxer.app.job
 
+import android.content.Context
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.Target
 import com.evernote.android.job.Job
 import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
+import com.evernote.android.job.JobRequest.NetworkType
 import com.evernote.android.job.util.support.PersistableBundleCompat
 import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.application.MainApplication.Companion.mangaDb
 import me.proxer.app.event.LocalMangaJobFailedEvent
 import me.proxer.app.event.LocalMangaJobFinishedEvent
 import me.proxer.app.helper.NotificationHelper
+import me.proxer.app.helper.PreferenceHelper
 import me.proxer.app.util.extension.decodedName
 import me.proxer.library.enums.Language
 import me.proxer.library.util.ProxerUrls
@@ -29,7 +32,8 @@ class LocalMangaJob : Job() {
         private const val EPISODE_EXTRA = "episode"
         private const val LANGUAGE_EXTRA = "language"
 
-        fun schedule(entryId: String, episode: Int, language: Language) {
+        fun schedule(context: Context, entryId: String, episode: Int, language: Language) {
+            val unmeteredRequired = PreferenceHelper.isUnmeteredNetworkRequiredForMangaDownload(context)
             val extras = PersistableBundleCompat().apply {
                 putString(ENTRY_ID_EXTRA, entryId)
                 putInt(EPISODE_EXTRA, episode)
@@ -38,7 +42,7 @@ class LocalMangaJob : Job() {
 
             JobRequest.Builder(constructTag(entryId, episode, language))
                     .setExtras(extras)
-                    .setRequiredNetworkType(JobRequest.NetworkType.UNMETERED)
+                    .setRequiredNetworkType(if (unmeteredRequired) NetworkType.UNMETERED else NetworkType.CONNECTED)
                     .setExecutionWindow(1L, 100L)
                     .setRequirementsEnforced(true)
                     .setUpdateCurrent(true)

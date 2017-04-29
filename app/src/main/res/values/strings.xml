@@ -316,6 +316,11 @@
     <string name="preference_theme_dark">Dunkel</string>
     <string name="preference_theme_light">Hell</string>
 
+    <string name="preference_category_manga_title">Manga</string>
+    <string name="preference_manga_unmetered_title">Nur über WLAN herunterladen</string>
+    <string name="preference_manga_unmetered_summary_off">Manga werden immer heruntergeladen</string>
+    <string name="preference_manga_unmetered_summary_on">Manga werden nur über WLAN heruntergeladen</string>
+
     <string name="preference_category_notifications_title">Benachrichtigungen</string>
     <string name="preference_notifications_title">Allgemeine Benachrichtigungen</string>
     <string name="preference_notifications_summary_off">Benachrichtigungen sind nicht aktiviert</string>

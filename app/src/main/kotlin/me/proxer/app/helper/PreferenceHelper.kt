@@ -14,9 +14,10 @@ object PreferenceHelper {
 
     const val AGE_CONFIRMATION = "age_confirmation"
     const val START_PAGE = "start_page"
+    const val THEME = "theme"
     const val NOTIFICATIONS = "notifications"
     const val NOTIFICATIONS_INTERVAL = "notifications_interval"
-    const val THEME = "theme"
+    const val MANGA_WLAN = "manga_unmetered_required"
 
     fun isAgeRestrictedMediaAllowed(context: Context)
             = getDefaultSharedPreferences(context).getBoolean(AGE_CONFIRMATION, false)
@@ -35,6 +36,9 @@ object PreferenceHelper {
 
     fun getNotificationsInterval(context: Context)
             = getDefaultSharedPreferences(context).getString(NOTIFICATIONS_INTERVAL, "30").toLong()
+
+    fun isUnmeteredNetworkRequiredForMangaDownload(context: Context)
+            = getDefaultSharedPreferences(context).getBoolean(MANGA_WLAN, true)
 
     @AppCompatDelegate.NightMode
     fun getNightMode(context: Context): Int {

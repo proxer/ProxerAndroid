@@ -254,7 +254,7 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?) :
                                 download.visibility = View.VISIBLE
                                 download.setImageDrawable(icon)
                                 download.setOnClickListener {
-                                    LocalMangaJob.schedule(entryId, episode, language.toGeneralLanguage())
+                                    LocalMangaJob.schedule(it.context, entryId, episode, language.toGeneralLanguage())
 
                                     bindDownload(category, episode, language, download, downloadProgress)
                                 }
