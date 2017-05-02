@@ -50,8 +50,9 @@ object NotificationHelper {
                 }))
     }
 
-    fun cancelNotification(context: Context, type: NotificationType) {
-        NotificationManagerCompat.from(context).cancel(type.id)
+    fun cancelNewsNotification(context: Context) {
+        cancelNotification(context, NEWS)
+        cancelNotification(context, NEWS_ERROR)
     }
 
     private fun buildNewsNotification(context: Context, news: Collection<NewsArticle>): Notification? {
@@ -117,7 +118,11 @@ object NotificationHelper {
                 .build())
     }
 
-    enum class NotificationType(val id: Int) {
+    private fun cancelNotification(context: Context, type: NotificationType) {
+        NotificationManagerCompat.from(context).cancel(type.id)
+    }
+
+    internal enum class NotificationType(val id: Int) {
         NEWS(1357913213),
         NEWS_ERROR(472347289),
         MANGA_DOWNLOAD_ERROR(479239223)
