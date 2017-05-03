@@ -2,6 +2,7 @@ package me.proxer.app.adapter.ucp
 
 import android.graphics.drawable.ColorDrawable
 import android.support.v4.content.ContextCompat
+import android.support.v4.view.ViewCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -66,6 +67,14 @@ class BookmarkAdapter : PagingAdapter<Bookmark>() {
                 }
             }
 
+            itemView.setOnLongClickListener { view ->
+                withSafeAdapterPosition {
+                    callback?.onBookmarkLongClick(view, internalList[it])
+                }
+
+                true
+            }
+
             remove.setImageDrawable(IconicsDrawable(remove.context)
                     .icon(CommunityMaterial.Icon.cmd_bookmark_remove)
                     .colorRes(R.color.icon)
@@ -80,6 +89,8 @@ class BookmarkAdapter : PagingAdapter<Bookmark>() {
         }
 
         override fun bind(item: Bookmark) {
+            ViewCompat.setTransitionName(image, "bookmark_${item.id}")
+
             title.text = item.name
             medium.text = item.medium.toAppString(medium.context)
             episode.text = item.category.toEpisodeAppString(episode.context, item.episode)
@@ -100,6 +111,7 @@ class BookmarkAdapter : PagingAdapter<Bookmark>() {
 
     interface BookmarkAdapterCallback {
         fun onBookmarkClick(item: Bookmark) {}
+        fun onBookmarkLongClick(view: View, item: Bookmark) {}
         fun onBookmarkRemoval(item: Bookmark) {}
     }
 }

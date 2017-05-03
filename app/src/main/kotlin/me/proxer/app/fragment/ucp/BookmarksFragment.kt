@@ -6,12 +6,14 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.widget.ImageView
 import com.rubengees.ktask.android.AndroidLifecycleTask
 import com.rubengees.ktask.android.bindToLifecycle
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.activity.AnimeActivity
 import me.proxer.app.activity.MangaActivity
+import me.proxer.app.activity.MediaActivity
 import me.proxer.app.activity.base.MainActivity
 import me.proxer.app.adapter.ucp.BookmarkAdapter
 import me.proxer.app.application.MainApplication.Companion.api
@@ -26,6 +28,7 @@ import me.proxer.library.api.ProxerCall
 import me.proxer.library.entitiy.ucp.Bookmark
 import me.proxer.library.enums.Category
 import org.jetbrains.anko.bundleOf
+import org.jetbrains.anko.find
 
 /**
  * @author Ruben Gees
@@ -98,6 +101,13 @@ class BookmarksFragment : PagedLoadingFragment<ProxerCall<List<Bookmark>>, Bookm
                     Category.MANGA -> MangaActivity.navigateTo(activity, item.entryId,
                             item.episode, item.language.toGeneralLanguage(), null, item.name)
                 }
+            }
+
+            override fun onBookmarkLongClick(view: View, item: Bookmark) {
+                val imageView = view.find<ImageView>(R.id.image)
+
+                MediaActivity.navigateTo(activity, item.entryId, item.name, item.category,
+                        if (imageView.drawable != null) imageView else null)
             }
 
             override fun onBookmarkRemoval(item: Bookmark) {
