@@ -6,15 +6,11 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ResolveInfo
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.support.annotation.ColorRes
 import android.support.v4.content.ContextCompat
 import android.util.Patterns
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.target.Target
 import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.LinkBuilder
 import me.proxer.app.R
@@ -38,19 +34,6 @@ object Utils {
             activity?.apply {
                 window?.statusBarColor = ContextCompat.getColor(activity, color)
             }
-        }
-    }
-
-    fun getBitmapFromUrl(context: Context, url: String): Bitmap? {
-        try {
-            return Glide.with(context)
-                    .load(url)
-                    .asBitmap()
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .into(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-                    .get()
-        } catch (ignored: Throwable) {
-            return null
         }
     }
 

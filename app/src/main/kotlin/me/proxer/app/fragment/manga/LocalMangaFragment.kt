@@ -31,6 +31,7 @@ import me.proxer.app.job.LocalMangaJob
 import me.proxer.app.task.manga.LocalMangaListTask
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils
+import me.proxer.app.util.MangaUtils
 import me.proxer.app.util.extension.CompleteLocalMangaEntry
 import me.proxer.app.util.extension.bindView
 import me.proxer.app.util.extension.multilineSnackbar
@@ -42,6 +43,7 @@ import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.find
 import org.jetbrains.anko.uiThread
+import java.io.File
 import java.util.concurrent.Future
 
 /**
@@ -61,7 +63,7 @@ class LocalMangaFragment : LoadingFragment<Unit, List<CompleteLocalMangaEntry>>(
 
     override val isLoginRequired = true
 
-    private lateinit var removalTask: AndroidLifecycleTask<Pair<EntryCore, LocalMangaChapter>, Unit>
+    private lateinit var removalTask: AndroidLifecycleTask<ChapterRemovalInput, Unit>
 
     private lateinit var innerAdapter: LocalMangaAdapter
     private lateinit var adapter: EasyHeaderFooterAdapter
@@ -115,7 +117,7 @@ class LocalMangaFragment : LoadingFragment<Unit, List<CompleteLocalMangaEntry>>(
             }
 
             override fun onDeleteClick(entry: EntryCore, chapter: LocalMangaChapter) {
-                removalTask.execute(entry to chapter)
+                removalTask.execute(ChapterRemovalInput(context.filesDir, entry, chapter))
             }
         }
 
@@ -301,7 +303,13 @@ class LocalMangaFragment : LoadingFragment<Unit, List<CompleteLocalMangaEntry>>(
         }
     }
 
-    private class ChapterRemovalTask : WorkerTask<Pair<EntryCore, LocalMangaChapter>, Unit>() {
-        override fun work(input: Pair<EntryCore, LocalMangaChapter>) = mangaDb.removeChapter(input.first, input.second)
+    internal class ChapterRemovalTask : WorkerTask<ChapterRemovalInput, Unit>() {
+        override fun work(input: ChapterRemovalInput) {
+            mangaDb.removeChapter(input.entry, input.chapter)
+
+            MangaUtils.deletePages(input.filesDir, input.entry.id, input.chapter.id)
+        }
     }
+
+    internal class ChapterRemovalInput(val filesDir: File, val entry: EntryCore, val chapter: LocalMangaChapter)
 }

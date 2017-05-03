@@ -1,8 +1,6 @@
 package me.proxer.app.job
 
 import android.content.Context
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.Target
 import com.evernote.android.job.Job
 import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
@@ -14,11 +12,12 @@ import me.proxer.app.event.LocalMangaJobFailedEvent
 import me.proxer.app.event.LocalMangaJobFinishedEvent
 import me.proxer.app.helper.NotificationHelper
 import me.proxer.app.helper.PreferenceHelper
+import me.proxer.app.util.MangaUtils
 import me.proxer.app.util.extension.decodedName
 import me.proxer.library.enums.Language
-import me.proxer.library.util.ProxerUrls
 import me.proxer.library.util.ProxerUtils
 import org.greenrobot.eventbus.EventBus
+
 
 /**
  * @author Ruben Gees
@@ -108,10 +107,7 @@ class LocalMangaJob : Job() {
                     return Result.FAILURE
                 }
 
-                Glide.with(context)
-                        .load(ProxerUrls.mangaPageImage(chapter.server, entryId, chapter.id, it.decodedName).toString())
-                        .downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-                        .get()
+                MangaUtils.downloadPage(context.filesDir, chapter.server, entryId, chapter.id, it.decodedName)
             }
 
             mangaDb.insertChapter(chapter, episode, language)

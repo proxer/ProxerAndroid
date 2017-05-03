@@ -4,20 +4,18 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.animation.GlideAnimation
-import com.bumptech.glide.request.target.SimpleTarget
-import com.bumptech.glide.request.target.Target
 import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import me.proxer.app.R
 import me.proxer.app.adapter.base.PagingAdapter
 import me.proxer.app.util.DeviceUtils
+import me.proxer.app.util.MangaUtils
 import me.proxer.app.util.extension.bindView
 import me.proxer.app.util.extension.decodedName
 import me.proxer.library.entitiy.manga.Page
-import me.proxer.library.util.ProxerUrls
-import java.io.File
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
+import java.util.concurrent.Future
 
 /**
  * @author Ruben Gees
@@ -40,10 +38,12 @@ class MangaAdapter : PagingAdapter<Page>() {
 
     inner class ViewHolder(itemView: View) : PagingViewHolder<Page>(itemView) {
 
-        private var target: Target<File>? = null
+        private val animationTime = itemView.context.resources.getInteger(android.R.integer.config_mediumAnimTime)
+
         private val image: SubsamplingScaleImageView by bindView(R.id.image)
 
         init {
+
             image.setDoubleTapZoomDuration(200)
 
             // Make scrolling smoother by hacking the SubsamplingScaleImageView to only receive touch events
@@ -71,23 +71,26 @@ class MangaAdapter : PagingAdapter<Page>() {
             image.recycle()
             image.layoutParams.height = height
 
-            target?.let {
-                Glide.clear(it)
-            }
-
-            target = object : SimpleTarget<File>() {
-                override fun onResourceReady(resource: File, glideAnimation: GlideAnimation<in File>?) {
-                    val animationTime = image.context.resources.getInteger(android.R.integer.config_mediumAnimTime)
-
-                    image.setImage(ImageSource.uri(resource.path))
-                    image.apply { alpha = 0.2f }.animate().alpha(1.0f)
-                            .setDuration(animationTime.toLong()).start()
+            image.tag?.let {
+                if (it is Future<*>) {
+                    it.cancel(true)
                 }
             }
 
-            Glide.with(image.context)
-                    .load(ProxerUrls.mangaPageImage(server, entryId, id, item.decodedName).toString())
-                    .downloadOnly(target)
+            image.tag = doAsync(exceptionHandler = {
+                // Ignore
+            }) {
+                val file = MangaUtils.downloadPage(image.context.filesDir, server, entryId, id, item.decodedName)
+
+                uiThread {
+                    image.setImage(ImageSource.uri(file.path))
+                    image.apply { alpha = 0.2f }
+                            .animate()
+                            .alpha(1.0f)
+                            .setDuration(animationTime.toLong())
+                            .start()
+                }
+            }
         }
     }
 }

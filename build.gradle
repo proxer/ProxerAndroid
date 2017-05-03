@@ -22,9 +22,9 @@ ext {
     ktaskVersion = '0.3.1'
 
     // UI components
-    aboutLibrariesVersion = '5.9.5'
+    aboutLibrariesVersion = '5.9.6'
     materialDrawerVersion = '5.9.0'
-    iconicsVersion = '2.8.3'
+    iconicsVersion = '2.8.4'
     communityMaterialTypefaceVersion = '1.8.36.1'
     crossfaderVersion = '1.5.0'
     materialAboutVersion = '1.8.2'
@@ -46,7 +46,7 @@ ext {
     threetenVersion = '1.0.5'
     kotterknifeVersion = '0.1.0-SNAPSHOT'
     hawkVersion = '2.0.1'
-    glideVersion = '3.7.0'
+    glideVersion = '3.8.0'
     glideIntegrationVersion = '1.4.0'
     linkBuilderVersion = '1.5.2'
     easyHeaderFooterAdapterVersion = 'master-SNAPSHOT'
