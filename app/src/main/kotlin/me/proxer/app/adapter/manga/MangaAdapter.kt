@@ -38,13 +38,13 @@ class MangaAdapter : PagingAdapter<Page>() {
 
     inner class ViewHolder(itemView: View) : PagingViewHolder<Page>(itemView) {
 
-        private val animationTime = itemView.context.resources.getInteger(android.R.integer.config_mediumAnimTime)
+        private val shortAnimationTime = itemView.context.resources.getInteger(android.R.integer.config_shortAnimTime)
+        private val mediumAnimationTime = itemView.context.resources.getInteger(android.R.integer.config_mediumAnimTime)
 
         private val image: SubsamplingScaleImageView by bindView(R.id.image)
 
         init {
-
-            image.setDoubleTapZoomDuration(200)
+            image.setDoubleTapZoomDuration(shortAnimationTime)
 
             // Make scrolling smoother by hacking the SubsamplingScaleImageView to only receive touch events
             // when zooming.
@@ -87,7 +87,7 @@ class MangaAdapter : PagingAdapter<Page>() {
                     image.apply { alpha = 0.2f }
                             .animate()
                             .alpha(1.0f)
-                            .setDuration(animationTime.toLong())
+                            .setDuration(mediumAnimationTime.toLong())
                             .start()
                 }
             }
