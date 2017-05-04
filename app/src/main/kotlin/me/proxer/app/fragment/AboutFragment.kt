@@ -107,7 +107,7 @@ class AboutFragment : MaterialAboutFragment() {
                         .subText(R.string.about_info_licenses_description)
                         .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_clipboard_text)
                                 .colorRes(R.color.icon))
-                        .setOnClickListener {
+                        .setOnClickAction {
                             LibsBuilder().withAutoDetect(false)
                                     .withShowLoadingProgress(false)
                                     .withAboutVersionShown(false)
@@ -125,7 +125,7 @@ class AboutFragment : MaterialAboutFragment() {
                         .subText(R.string.about_info_source_code_description)
                         .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_code_braces)
                                 .colorRes(R.color.icon))
-                        .setOnClickListener {
+                        .setOnClickAction {
                             showPage(REPOSITORY_LINK)
                         }.build()
         )
@@ -138,7 +138,7 @@ class AboutFragment : MaterialAboutFragment() {
                         .subText(R.string.about_support_forum_description)
                         .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_forum)
                                 .colorRes(R.color.icon))
-                        .setOnClickListener {
+                        .setOnClickAction {
                             showPage(SUPPORT_LINK)
                         }.build(),
                 MaterialAboutActionItem.Builder()
@@ -146,7 +146,7 @@ class AboutFragment : MaterialAboutFragment() {
                         .subText(R.string.about_support_message_description)
                         .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_email)
                                 .colorRes(R.color.icon))
-                        .setOnClickListener {
+                        .setOnClickAction {
                             // val existingChat = context.chatDatabase.getChat(DEVELOPER_PROXER_NAME)
 //
 //                            when (existingChat) {
@@ -167,7 +167,7 @@ class AboutFragment : MaterialAboutFragment() {
                         .subText(DEVELOPER_GITHUB_NAME)
                         .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_github_circle)
                                 .colorRes(R.color.icon))
-                        .setOnClickListener {
+                        .setOnClickAction {
                             showPage(HttpUrl.parse("https://github.com/$DEVELOPER_GITHUB_NAME"))
                         }.build(),
                 MaterialAboutActionItem.Builder()
@@ -176,7 +176,7 @@ class AboutFragment : MaterialAboutFragment() {
                         .icon(ContextCompat.getDrawable(context, R.drawable.ic_stat_proxer).apply {
                             setColorFilter(ContextCompat.getColor(context, R.color.icon), PorterDuff.Mode.SRC_IN)
                         })
-                        .setOnClickListener {
+                        .setOnClickAction {
                             ProfileActivity.navigateTo(activity, DEVELOPER_PROXER_ID, DEVELOPER_PROXER_NAME, null)
                         }.build()
         )

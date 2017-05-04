@@ -14,20 +14,20 @@ ext {
     ankoSqliteVersion = '0.9.1a'
     supportLibraryVersion = '25.3.1'
     supportPreferenceVersion = '1.2.7'
-    playServicesVersion = '10.2.1'
+    playServicesVersion = '10.2.4'
     eventBusVersion = '3.0.0'
     eventBusAnnotationVersion = '3.0.1'
     androidJobVersion = '1.1.10-SNAPSHOT'
     proxerLibVersion = 'new-architecture-SNAPSHOT'
-    ktaskVersion = '0.3.1'
+    ktaskVersion = '0.3.2'
 
     // UI components
     aboutLibrariesVersion = '5.9.6'
-    materialDrawerVersion = '5.9.0'
+    materialDrawerVersion = '5.9.1'
     iconicsVersion = '2.8.4'
     communityMaterialTypefaceVersion = '1.8.36.1'
     crossfaderVersion = '1.5.0'
-    materialAboutVersion = '1.8.2'
+    materialAboutVersion = '1.9.0'
     subsamplingScaleImageViewVersion = '3.6.0'
     circleImageViewVersion = '2.1.0'
     tabLayoutHelperVersion = '0.8.0'
@@ -50,6 +50,7 @@ ext {
     glideIntegrationVersion = '1.4.0'
     linkBuilderVersion = '1.5.2'
     easyHeaderFooterAdapterVersion = 'master-SNAPSHOT'
+    strictModeCompatVersion = "25.0.0"
 
     // Debugging
     leakCanaryVersion = '1.5.1'
@@ -101,6 +102,7 @@ ext {
             glideIntegration             : "com.github.bumptech.glide:okhttp3-integration:$glideIntegrationVersion@aar",
             linkBuilder                  : "com.klinkerapps:link_builder:$linkBuilderVersion",
             easyHeaderFooterAdapter      : "com.github.rubengees:EasyHeaderFooterAdapter:$easyHeaderFooterAdapterVersion",
+            strictModeCompat             : "com.kirich1409:strict-mode-compat:$strictModeCompatVersion",
 
             leakCanary                   : "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion",
             leakCanaryNoOp               : "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"

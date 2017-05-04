@@ -6,6 +6,7 @@ import com.rubengees.ktask.util.WorkerTask
 import me.proxer.app.task.stream.LinkResolutionTask
 import me.proxer.app.task.stream.StreamResolutionTask.StreamResolutionException
 import me.proxer.app.task.stream.StreamResolutionTask.StreamResolutionResult
+import me.proxer.app.util.Utils.GENERIC_USER_AGENT
 import okhttp3.HttpUrl
 
 /**
@@ -21,7 +22,7 @@ class AuravidResolutionTaskFactory : HosterResolutionTaskFactory() {
     }
 
     override val name = "Auroravid/Novamov"
-    override fun create() = TaskBuilder.task(LinkResolutionTask<String>("Mozilla/5.0 (Windows NT 10.0; Win64; x64)"))
+    override fun create() = TaskBuilder.task(LinkResolutionTask<String>(GENERIC_USER_AGENT))
             .then(AuravidTask())
             .then(LinkResolutionTask(urlTransformation = urlTransformation))
             .then(AuravidApiTask())

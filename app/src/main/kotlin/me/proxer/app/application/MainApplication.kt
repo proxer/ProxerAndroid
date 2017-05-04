@@ -4,8 +4,6 @@ import android.app.Application
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.net.Uri
-import android.os.Build
-import android.os.StrictMode
 import android.support.v7.app.AppCompatDelegate
 import android.widget.ImageView
 import com.bumptech.glide.Glide
@@ -20,6 +18,7 @@ import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.TransferListener
 import com.jakewharton.threetenabp.AndroidThreeTen
+import com.kirillr.strictmodehelper.StrictModeCompat
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
@@ -37,6 +36,7 @@ import me.proxer.app.helper.PreferenceHelper
 import me.proxer.app.helper.StorageHelper
 import me.proxer.app.job.LocalMangaJob
 import me.proxer.app.job.NotificationsJob
+import me.proxer.app.util.Utils.GENERIC_USER_AGENT
 import me.proxer.library.api.LoginTokenManager
 import me.proxer.library.api.ProxerApi
 import me.proxer.library.api.ProxerApi.Builder.LoggingStrategy
@@ -87,7 +87,6 @@ class MainApplication : Application() {
 
         initApi()
         initLibs()
-        initDrawerImageLoader()
         enableStrictModeForDebug()
 
         EventBus.getDefault().register(this)
@@ -113,9 +112,9 @@ class MainApplication : Application() {
         AndroidThreeTen.init(this)
 
         ExoMedia.setHttpDataSourceFactoryProvider(ExoMedia.HttpDataSourceFactoryProvider {
-            userAgent: String, listener: TransferListener<in DataSource>? ->
+            _: String, listener: TransferListener<in DataSource>? ->
 
-            OkHttpDataSourceFactory(client, userAgent, listener)
+            OkHttpDataSourceFactory(client, GENERIC_USER_AGENT, listener)
         })
 
         Glide.get(this).register(GlideUrl::class.java, InputStream::class.java,
@@ -132,48 +131,29 @@ class MainApplication : Application() {
             }
         }
 
+        DrawerImageLoader.init(ConcreteDrawerImageLoader())
+
         EventBus.builder().addIndex(EventBusIndex())
                 .logNoSubscriberMessages(false)
                 .sendNoSubscriberEvent(false)
                 .installDefaultEventBus()
     }
 
-    private fun initDrawerImageLoader() {
-        DrawerImageLoader.init(object : AbstractDrawerImageLoader() {
-            override fun set(imageView: ImageView, uri: Uri?, placeholder: Drawable?, tag: String?) {
-                Glide.with(imageView.context)
-                        .load(uri)
-                        .placeholder(placeholder)
-                        .centerCrop()
-                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                        .into(imageView)
-            }
-
-            override fun cancel(imageView: ImageView) = Glide.clear(imageView)
-
-            override fun placeholder(context: Context, tag: String?): Drawable? {
-                return IconicsDrawable(context, CommunityMaterial.Icon.cmd_account).colorRes(android.R.color.white)
-            }
-        })
-    }
-
     private fun enableStrictModeForDebug() {
-        StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()
-                .detectCustomSlowCalls()
-                .detectNetwork()
-                .apply {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        detectResourceMismatches()
-                    }
-                }
-                .penaltyLog()
-                .penaltyDialog()
-                .build())
+        if (BuildConfig.DEBUG) {
+            val threadPolicy = StrictModeCompat.ThreadPolicy.Builder()
+                    .detectNetwork()
+                    .detectAll()
+                    .penaltyLog()
+                    .build()
 
-        StrictMode.setVmPolicy(StrictMode.VmPolicy.Builder()
-                .detectAll()
-                .penaltyLog()
-                .build())
+            val vmPolicy = StrictModeCompat.VmPolicy.Builder()
+                    .detectAll()
+                    .penaltyLog()
+                    .build()
+
+            StrictModeCompat.setPolicies(threadPolicy, vmPolicy)
+        }
     }
 
     private class ProxerLoginTokenManager : LoginTokenManager {
@@ -192,6 +172,23 @@ class MainApplication : Application() {
                     // LoginDialog.
                 }
             }
+        }
+    }
+
+    private class ConcreteDrawerImageLoader : AbstractDrawerImageLoader() {
+        override fun set(imageView: ImageView, uri: Uri?, placeholder: Drawable?, tag: String?) {
+            Glide.with(imageView.context)
+                    .load(uri)
+                    .placeholder(placeholder)
+                    .centerCrop()
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .into(imageView)
+        }
+
+        override fun cancel(imageView: ImageView) = Glide.clear(imageView)
+
+        override fun placeholder(context: Context, tag: String?): Drawable? {
+            return IconicsDrawable(context, CommunityMaterial.Icon.cmd_account).colorRes(android.R.color.white)
         }
     }
 }

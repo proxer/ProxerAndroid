@@ -26,6 +26,8 @@ import java.util.regex.Pattern
  */
 object Utils {
 
+    const val GENERIC_USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+
     private val WEB_REGEX = Patterns.WEB_URL
     private val MENTIONS_REGEX = Pattern.compile("(@[a-zA-Z0-9_]+)")
 

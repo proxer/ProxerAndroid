@@ -6,6 +6,7 @@ import com.rubengees.ktask.util.WorkerTask
 import me.proxer.app.task.stream.LinkResolutionTask
 import me.proxer.app.task.stream.StreamResolutionTask.StreamResolutionException
 import me.proxer.app.task.stream.StreamResolutionTask.StreamResolutionResult
+import me.proxer.app.util.Utils.GENERIC_USER_AGENT
 import okhttp3.HttpUrl
 
 /**
@@ -20,7 +21,7 @@ class VideoWeedResolutionTaskFactory : HosterResolutionTaskFactory() {
     }
 
     override val name = "VideoWeed"
-    override fun create() = TaskBuilder.task(LinkResolutionTask<String>("Mozilla/5.0 (Windows NT 10.0; Win64; x64)"))
+    override fun create() = TaskBuilder.task(LinkResolutionTask<String>(GENERIC_USER_AGENT))
             .then(VideoWeedTask())
             .then(LinkResolutionTask(urlTransformation = urlTransformation))
             .then(VideoWeedApiTask())
