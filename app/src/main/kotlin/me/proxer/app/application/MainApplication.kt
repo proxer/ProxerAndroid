@@ -149,7 +149,6 @@ class MainApplication : Application() {
     private fun enableStrictModeForDebug() {
         if (BuildConfig.DEBUG) {
             val threadPolicy = StrictModeCompat.ThreadPolicy.Builder()
-                    .detectNetwork()
                     .detectAll()
                     .penaltyLog()
                     .build()
