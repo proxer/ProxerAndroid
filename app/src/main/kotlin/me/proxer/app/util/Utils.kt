@@ -1,8 +1,6 @@
 package me.proxer.app.util
 
 import android.app.Activity
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ResolveInfo
@@ -20,8 +18,6 @@ import okhttp3.HttpUrl
 import java.util.regex.Pattern
 
 /**
- * Class which holds various util methods.
-
  * @author Ruben Gees
  */
 object Utils {
@@ -76,14 +72,6 @@ object Utils {
             url.startsWith("//") -> "http://$url"
             else -> url
         }) ?: throw ProxerException(ProxerException.ErrorType.PARSING)
-    }
-
-    fun setClipboardContent(activity: Activity, label: String, content: String) {
-        val clipboard = activity.getSystemService(Context.CLIPBOARD_SERVICE)
-                as ClipboardManager
-        val clip = ClipData.newPlainText(label, content)
-
-        clipboard.primaryClip = clip
     }
 
     fun getNativeAppPackage(context: Context, url: HttpUrl): Set<String> {

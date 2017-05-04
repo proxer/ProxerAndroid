@@ -1,5 +1,6 @@
 package me.proxer.app.fragment.ucp
 
+import android.content.ClipData
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,7 @@ import me.proxer.app.helper.StorageHelper
 import me.proxer.app.task.asyncProxerTask
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.bindView
+import me.proxer.app.util.extension.clipboardManager
 import me.proxer.app.util.extension.snackbar
 import me.proxer.library.api.ProxerCall
 import me.proxer.library.util.ProxerUrls
@@ -69,8 +71,9 @@ class UcpOverviewFragment : LoadingFragment<ProxerCall<Int>, Int>() {
                         showPage(HttpUrl.parse(it))
                     },
                     onWebLongClickListener = Link.OnLongClickListener {
-                        Utils.setClipboardContent(activity, getString(R.string.clipboard_title), it)
+                        val title = getString(R.string.clipboard_title)
 
+                        context.clipboardManager.primaryClip = ClipData.newPlainText(title, it)
                         snackbar(root, R.string.clipboard_status)
                     })
 
