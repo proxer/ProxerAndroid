@@ -58,16 +58,12 @@ class LocalMangaAdapter(savedInstanceState: Bundle?) : PagingAdapter<CompleteLoc
 
         if (holder is ViewHolder) {
             holder.adapter.callback = object : LocalMangaChapterAdapterCallback {
-                override fun onChapterClick(chapter: LocalMangaChapter) = holder.adapterPosition.let {
-                    if (it != RecyclerView.NO_POSITION) {
-                        this@LocalMangaAdapter.callback?.onChapterClick(internalList[it].first, chapter)
-                    }
+                override fun onChapterClick(chapter: LocalMangaChapter) = holder.withSafeAdapterPosition {
+                    this@LocalMangaAdapter.callback?.onChapterClick(internalList[it].first, chapter)
                 }
 
-                override fun onDeleteClick(chapter: LocalMangaChapter) = holder.adapterPosition.let {
-                    if (it != RecyclerView.NO_POSITION) {
-                        this@LocalMangaAdapter.callback?.onDeleteClick(internalList[it].first, chapter)
-                    }
+                override fun onDeleteClick(chapter: LocalMangaChapter) = holder.withSafeAdapterPosition {
+                    this@LocalMangaAdapter.callback?.onDeleteClick(internalList[it].first, chapter)
                 }
             }
         }

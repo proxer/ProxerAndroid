@@ -36,6 +36,7 @@ import me.proxer.app.helper.PreferenceHelper
 import me.proxer.app.helper.StorageHelper
 import me.proxer.app.job.LocalMangaJob
 import me.proxer.app.job.NotificationsJob
+import me.proxer.app.util.MangaUtils
 import me.proxer.app.util.Utils.GENERIC_USER_AGENT
 import me.proxer.library.api.LoginTokenManager
 import me.proxer.library.api.ProxerApi
@@ -43,6 +44,7 @@ import me.proxer.library.api.ProxerApi.Builder.LoggingStrategy
 import okhttp3.OkHttpClient
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
+import org.jetbrains.anko.doAsync
 import java.io.InputStream
 
 /**
@@ -95,8 +97,13 @@ class MainApplication : Application() {
     @Suppress("unused")
     @Subscribe
     fun onLogout(@Suppress("UNUSED_PARAMETER") event: LogoutEvent) {
-        LocalMangaJob.cancelAll()
-        mangaDb.clear()
+        doAsync {
+            LocalMangaJob.cancelAll()
+
+            mangaDb.clear()
+
+            MangaUtils.deleteAllChapters(filesDir)
+        }
     }
 
     private fun initApi() {

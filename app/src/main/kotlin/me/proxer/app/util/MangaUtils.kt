@@ -63,4 +63,9 @@ object MangaUtils {
     fun deletePages(filesDir: File, entryId: String, chapterId: String) {
         File("$filesDir/manga/$entryId/$chapterId").deleteRecursively()
     }
+
+    @Throws(IOException::class)
+    fun deleteAllChapters(filesDir: File) {
+        File("$filesDir/manga").deleteRecursively()
+    }
 }

@@ -140,7 +140,7 @@ abstract class PagingAdapter<T> : RecyclerView.Adapter<PagingAdapter<T>.PagingVi
 
         open fun bind(item: T) {}
 
-        protected fun withSafeAdapterPosition(action: (Int) -> Unit) {
+        internal fun withSafeAdapterPosition(action: (Int) -> Unit) {
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 action.invoke(positionResolver.resolveRealPosition(adapterPosition))
             }

@@ -1,5 +1,6 @@
 package me.proxer.app.fragment.manga
 
+import android.content.res.Resources
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.transition.TransitionManager
@@ -42,9 +43,7 @@ import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.find
-import org.jetbrains.anko.uiThread
 import java.io.File
-import java.util.concurrent.Future
 
 /**
  * @author Ruben Gees
@@ -64,6 +63,7 @@ class LocalMangaFragment : LoadingFragment<Unit, List<CompleteLocalMangaEntry>>(
     override val isLoginRequired = true
 
     private lateinit var removalTask: AndroidLifecycleTask<ChapterRemovalInput, Unit>
+    private lateinit var jobStateUpdateTask: AndroidLifecycleTask<Resources, String>
 
     private lateinit var innerAdapter: LocalMangaAdapter
     private lateinit var adapter: EasyHeaderFooterAdapter
@@ -85,6 +85,8 @@ class LocalMangaFragment : LoadingFragment<Unit, List<CompleteLocalMangaEntry>>(
         super.onCreate(savedInstanceState)
 
         removalTask = TaskBuilder.task(ChapterRemovalTask())
+                .async()
+                .validateBefore { validate() }
                 .bindToLifecycle(this, "${javaClass}_removal_task")
                 .onSuccess {
                     freshLoad()
@@ -95,6 +97,23 @@ class LocalMangaFragment : LoadingFragment<Unit, List<CompleteLocalMangaEntry>>(
                                 Snackbar.LENGTH_LONG, it.buttonMessage, it.buttonAction)
                     }
                 }.build()
+
+        jobStateUpdateTask = TaskBuilder.task(JobStateUpdateTask())
+                .async()
+                .validateBefore { validate() }
+                .bindToLifecycle(this, "${javaClass}_job_state_update_task")
+                .onSuccess {
+                    if (it.isNotEmpty()) {
+                        headerText.text = it
+
+                        adapter.header = header
+                    } else {
+                        adapter.header = null
+                    }
+
+                    showContent()
+                }
+                .build()
 
         innerAdapter = LocalMangaAdapter(savedInstanceState)
         adapter = EasyHeaderFooterAdapter(innerAdapter)
@@ -127,7 +146,7 @@ class LocalMangaFragment : LoadingFragment<Unit, List<CompleteLocalMangaEntry>>(
     override fun onResume() {
         super.onResume()
 
-        updateMangaJobState()
+        jobStateUpdateTask.forceExecute(context.resources)
     }
 
     override fun onDestroyView() {
@@ -157,9 +176,7 @@ class LocalMangaFragment : LoadingFragment<Unit, List<CompleteLocalMangaEntry>>(
             doAsync {
                 LocalMangaJob.cancelAll()
 
-                uiThread {
-                    updateMangaJobState()
-                }
+                jobStateUpdateTask.forceExecute(context.resources)
             }
         }
     }
@@ -217,14 +234,21 @@ class LocalMangaFragment : LoadingFragment<Unit, List<CompleteLocalMangaEntry>>(
         innerAdapter.saveInstanceState(outState)
     }
 
-    override fun hideContent() {
-        // Don't do anything here, we want to keep showing the current content.
-    }
-
     override fun onSuccess(result: List<CompleteLocalMangaEntry>) {
         innerAdapter.replace(result)
 
         super.onSuccess(result)
+    }
+
+    override fun onError(error: Throwable) {
+        super.onError(error)
+
+        innerAdapter.clear()
+        contentContainer.visibility = View.GONE
+    }
+
+    override fun hideContent() {
+        // Don't do anything here, we want to keep showing the current content.
     }
 
     override fun showContent() {
@@ -250,57 +274,14 @@ class LocalMangaFragment : LoadingFragment<Unit, List<CompleteLocalMangaEntry>>(
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLocalMangaJobFinished(@Suppress("UNUSED_PARAMETER") event: LocalMangaJobFinishedEvent) {
-        updateMangaJobState()
+        jobStateUpdateTask.forceExecute(context.resources)
         freshLoad()
     }
 
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLocalMangaJobFailed(@Suppress("UNUSED_PARAMETER") event: LocalMangaJobFailedEvent) {
-        updateMangaJobState()
-    }
-
-    private fun updateMangaJobState() {
-        header.tag.let {
-            if (it is Future<*>) {
-                it.cancel(true)
-            }
-        }
-
-        header.tag = doAsync {
-            val runningJobs = LocalMangaJob.countRunningJobs()
-            val scheduledJobs = LocalMangaJob.countScheduledJobs()
-            var message = ""
-
-            message += when (runningJobs > 0) {
-                true -> context.resources.getQuantityString(R.plurals.fragment_local_manga_chapters_downloading,
-                        runningJobs, runningJobs)
-                false -> ""
-            }
-
-            message += when (runningJobs > 0 && scheduledJobs > 0) {
-                true -> "; "
-                false -> ""
-            }
-
-            message += when (scheduledJobs > 0) {
-                true -> context.resources.getQuantityString(R.plurals.fragment_local_manga_chapters_scheduled,
-                        scheduledJobs, scheduledJobs)
-                false -> ""
-            }
-
-            uiThread {
-                if (message.isNotEmpty()) {
-                    headerText.text = message
-
-                    adapter.header = header
-                } else {
-                    adapter.header = null
-                }
-
-                showContent()
-            }
-        }
+        jobStateUpdateTask.forceExecute(context.resources)
     }
 
     internal class ChapterRemovalTask : WorkerTask<ChapterRemovalInput, Unit>() {
@@ -308,6 +289,33 @@ class LocalMangaFragment : LoadingFragment<Unit, List<CompleteLocalMangaEntry>>(
             mangaDb.removeChapter(input.entry, input.chapter)
 
             MangaUtils.deletePages(input.filesDir, input.entry.id, input.chapter.id)
+        }
+    }
+
+    internal class JobStateUpdateTask : WorkerTask<Resources, String>() {
+        override fun work(input: Resources): String {
+            val runningJobs = LocalMangaJob.countRunningJobs()
+            val scheduledJobs = LocalMangaJob.countScheduledJobs()
+            var message = ""
+
+            message += when (runningJobs > 0) {
+                true -> input.getQuantityString(R.plurals.fragment_local_manga_chapters_downloading,
+                        runningJobs, runningJobs)
+                false -> ""
+            }
+
+            message += when (runningJobs > 0 && scheduledJobs > 0) {
+                true -> "\n"
+                false -> ""
+            }
+
+            message += when (scheduledJobs > 0) {
+                true -> input.getQuantityString(R.plurals.fragment_local_manga_chapters_scheduled,
+                        scheduledJobs, scheduledJobs)
+                false -> ""
+            }
+
+            return message
         }
     }
 
