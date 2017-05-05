@@ -40,6 +40,10 @@
             android:summaryOff="@string/preference_manga_unmetered_summary_off"
             android:summaryOn="@string/preference_manga_unmetered_summary_on"
             android:title="@string/preference_manga_unmetered_title" />
+
+        <Preference
+            android:key="manga_clean"
+            android:title="@string/preference_manga_clean" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/preference_category_notifications_title">

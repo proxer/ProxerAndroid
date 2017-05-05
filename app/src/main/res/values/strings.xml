@@ -193,9 +193,12 @@
         Eltern haften für ihre Kinder. Proxer.Me übernimmt keinerlei Haftung!</string>
     <string name="dialog_age_confirmation_positive">Verstanden</string>
 
+    <string name="dialog_app_required_title">%s-App</string>
     <string name="dialog_app_required_content">Zum Verwenden dieses Streams ist die %s-App nötig</string>
     <string name="dialog_app_required_positive">Installieren</string>
-    <string name="dialog_app_required_title">%s-App</string>
+
+    <string name="dialog_clean_manga_content">Sollen alle heruntergeladenen Kapitel und Seiten gelöscht werden? Das betrifft auch zwischengespeicherte Seiten.</string>
+    <string name="dialog_clean_manga_positive">Alles löschen</string>
 
     <string name="fragment_ucp_overview_username">Nutzername</string>
     <string name="fragment_ucp_overview_epsiode_counter_days">Tage</string>
@@ -318,6 +321,7 @@
     <string name="preference_manga_unmetered_title">Nur über WLAN herunterladen</string>
     <string name="preference_manga_unmetered_summary_off">Manga werden immer heruntergeladen</string>
     <string name="preference_manga_unmetered_summary_on">Manga werden nur über WLAN heruntergeladen</string>
+    <string name="preference_manga_clean">Heruntergeladenen Daten löschen</string>
 
     <string name="preference_category_notifications_title">Benachrichtigungen</string>
     <string name="preference_notifications_title">Allgemeine Benachrichtigungen</string>

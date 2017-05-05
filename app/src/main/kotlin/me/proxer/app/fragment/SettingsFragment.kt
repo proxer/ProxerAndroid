@@ -9,8 +9,10 @@ import android.view.View
 import me.proxer.app.R
 import me.proxer.app.application.MainApplication
 import me.proxer.app.dialog.AgeConfirmationDialog
+import me.proxer.app.dialog.CleanMangaDialog
 import me.proxer.app.helper.PreferenceHelper
 import me.proxer.app.helper.PreferenceHelper.AGE_CONFIRMATION
+import me.proxer.app.helper.PreferenceHelper.MANGA_CLEAN
 import me.proxer.app.helper.PreferenceHelper.NOTIFICATIONS
 import me.proxer.app.helper.PreferenceHelper.NOTIFICATIONS_INTERVAL
 import me.proxer.app.helper.PreferenceHelper.THEME
@@ -42,6 +44,12 @@ class SettingsFragment : XpPreferenceFragment(), SharedPreferences.OnSharedPrefe
 
                 AgeConfirmationDialog.show(activity as AppCompatActivity)
             }
+
+            true
+        }
+
+        findPreference(MANGA_CLEAN).setOnPreferenceClickListener {
+            CleanMangaDialog.show(activity as AppCompatActivity)
 
             true
         }

@@ -99,9 +99,7 @@ class MainApplication : Application() {
     fun onLogout(@Suppress("UNUSED_PARAMETER") event: LogoutEvent) {
         doAsync {
             LocalMangaJob.cancelAll()
-
             mangaDb.clear()
-
             MangaUtils.deleteAllChapters(filesDir)
         }
     }

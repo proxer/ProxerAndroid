@@ -18,6 +18,7 @@ object PreferenceHelper {
     const val NOTIFICATIONS = "notifications"
     const val NOTIFICATIONS_INTERVAL = "notifications_interval"
     const val MANGA_WLAN = "manga_unmetered_required"
+    const val MANGA_CLEAN = "manga_clean"
 
     fun isAgeRestrictedMediaAllowed(context: Context)
             = getDefaultSharedPreferences(context).getBoolean(AGE_CONFIRMATION, false)
