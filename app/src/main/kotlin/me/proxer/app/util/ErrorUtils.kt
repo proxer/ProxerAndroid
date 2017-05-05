@@ -10,6 +10,8 @@ import me.proxer.app.dialog.AgeConfirmationDialog
 import me.proxer.app.dialog.LoginDialog
 import me.proxer.app.task.stream.StreamResolutionTask
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_DEFAULT
+import me.proxer.app.util.Validators.HentaiConfirmationRequiredException
+import me.proxer.app.util.Validators.NotLoggedInException
 import me.proxer.library.api.ProxerException
 import me.proxer.library.api.ProxerException.ErrorType.*
 import me.proxer.library.api.ProxerException.ServerErrorType.*
@@ -36,6 +38,42 @@ object ErrorUtils {
             UCP_INVALID_EPISODE, MESSAGES_INVALID_CONFERENCE, LIST_INVALID_ID)
     val UNSUPPORTED_ERRORS = arrayOf(CHAT_INVALID_ROOM, CHAT_INVALID_PERMISSIONS, CHAT_INVALID_MESSAGE,
             CHAT_LOGIN_REQUIRED, USER)
+
+    fun getMessage(error: Throwable): Int {
+        val innermostError = getInnermostError(error)
+
+        return when (innermostError) {
+            is ProxerException -> {
+                getMessageForProxerException(innermostError)
+            }
+            is SocketTimeoutException -> {
+                R.string.error_timeout
+            }
+            is IOException -> {
+                R.string.error_io
+            }
+            is NotLoggedInException -> {
+                R.string.error_login_required
+            }
+            is HentaiConfirmationRequiredException -> {
+                R.string.error_age_confirmation_needed
+            }
+            is StreamResolutionTask.NoResolverException -> {
+                R.string.error_unsupported_hoster
+            }
+            is StreamResolutionTask.StreamResolutionException -> {
+                R.string.error_stream_resolution
+            }
+            is HttpDataSource.InvalidResponseCodeException -> {
+                when (innermostError.responseCode) {
+                    404 -> R.string.error_video_deleted
+                    in 400 until 600 -> R.string.error_video_unknown
+                    else -> R.string.error_unknown
+                }
+            }
+            else -> R.string.error_unknown
+        }
+    }
 
     fun getMessageForProxerException(error: ProxerException): Int {
         return when (error.errorType) {
@@ -76,72 +114,46 @@ object ErrorUtils {
         return when (error) {
             is FullTaskException -> error.firstInnerError
             is PartialTaskException -> error.innerError
+//            is ChatService.ChatException -> error.innerError
             else -> error
         }
     }
 
     fun handle(context: MainActivity, error: Throwable): ErrorAction {
         val innermostError = getInnermostError(error)
+        val errorMessage = getMessage(innermostError)
 
-        return when (innermostError) {
-            is ProxerException -> {
-                val message = getMessageForProxerException(innermostError)
-                val buttonMessage = when (innermostError.serverErrorType) {
-                    IP_BLOCKED -> R.string.error_action_captcha
-                    in LOGIN_ERRORS -> R.string.error_action_login
-                    else -> ACTION_MESSAGE_DEFAULT
-                }
-                val buttonAction = when (innermostError.serverErrorType) {
-                    IP_BLOCKED -> View.OnClickListener {
-                        context.showPage(ProxerUrls.captchaWeb(Device.MOBILE))
-                    }
-                    in LOGIN_ERRORS -> View.OnClickListener {
-                        LoginDialog.show(context)
-                    }
-                    else -> null
-                }
+        val buttonMessage = when (innermostError) {
+            is ProxerException -> when (innermostError.serverErrorType) {
+                IP_BLOCKED -> R.string.error_action_captcha
+                in LOGIN_ERRORS -> R.string.error_action_login
+                else -> ACTION_MESSAGE_DEFAULT
+            }
+            is NotLoggedInException -> R.string.error_action_login
+            is HentaiConfirmationRequiredException -> R.string.error_action_confirm
+            else -> ACTION_MESSAGE_DEFAULT
+        }
 
-                ErrorAction(message, buttonMessage, buttonAction)
-            }
-            is SocketTimeoutException -> {
-                ErrorAction(R.string.error_timeout)
-            }
-            is IOException -> {
-                ErrorAction(R.string.error_io)
-            }
-            is Validators.NotLoggedInException -> {
-                val message = R.string.error_login_required
-                val buttonMessage = R.string.error_action_login
-                val buttonAction = View.OnClickListener {
+        val buttonAction = when (innermostError) {
+            is ProxerException -> when (innermostError.serverErrorType) {
+                IP_BLOCKED -> View.OnClickListener {
+                    context.showPage(ProxerUrls.captchaWeb(Device.MOBILE))
+                }
+                in LOGIN_ERRORS -> View.OnClickListener {
                     LoginDialog.show(context)
                 }
-
-                ErrorAction(message, buttonMessage, buttonAction)
+                else -> null
             }
-            is Validators.HentaiConfirmationRequiredException -> {
-                ErrorAction(R.string.error_age_confirmation_needed, R.string.error_action_confirm,
-                        View.OnClickListener {
-                            AgeConfirmationDialog.show(context)
-                        })
+            is NotLoggedInException -> View.OnClickListener {
+                LoginDialog.show(context)
             }
-//            is ChatService.ChatException -> {
-//                handle(context, error.innerException)
-//            }
-            is StreamResolutionTask.NoResolverException -> {
-                ErrorAction(R.string.error_unsupported_hoster)
+            is HentaiConfirmationRequiredException -> View.OnClickListener {
+                AgeConfirmationDialog.show(context)
             }
-            is StreamResolutionTask.StreamResolutionException -> {
-                ErrorAction(R.string.error_stream_resolution)
-            }
-            is HttpDataSource.InvalidResponseCodeException -> {
-                ErrorAction(when (innermostError.responseCode) {
-                    404 -> R.string.error_video_deleted
-                    in 400 until 600 -> R.string.error_video_unknown
-                    else -> R.string.error_unknown
-                })
-            }
-            else -> ErrorAction(R.string.error_unknown)
+            else -> null
         }
+
+        return ErrorAction(errorMessage, buttonMessage, buttonAction)
     }
 
     class ErrorAction(val message: Int, val buttonMessage: Int = ACTION_MESSAGE_DEFAULT,

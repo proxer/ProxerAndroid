@@ -13,7 +13,6 @@ import me.proxer.app.fragment.news.NewsArticleFragment
 import me.proxer.app.helper.MaterialDrawerHelper.DrawerItem
 import me.proxer.app.helper.NotificationHelper.NotificationType.*
 import me.proxer.app.util.ErrorUtils
-import me.proxer.library.api.ProxerException
 import me.proxer.library.entitiy.notifications.NewsArticle
 
 /**
@@ -35,19 +34,13 @@ object NotificationHelper {
     fun showMangaDownloadErrorNotification(context: Context, error: Throwable) {
         showErrorNotification(context, MANGA_DOWNLOAD_ERROR.id,
                 context.getString(R.string.notification_manga_download_error_title),
-                context.getString(when (error) {
-                    is ProxerException -> ErrorUtils.getMessageForProxerException(error)
-                    else -> R.string.notification_manga_download_error_content
-                }))
+                context.getString(ErrorUtils.getMessage(error)))
     }
 
     fun showNewsErrorNotification(context: Context, error: Throwable) {
         showErrorNotification(context, NEWS_ERROR.id,
                 context.getString(R.string.notification_news_error_title),
-                context.getString(when (error) {
-                    is ProxerException -> ErrorUtils.getMessageForProxerException(error)
-                    else -> R.string.notification_news_error_content
-                }))
+                context.getString(ErrorUtils.getMessage(error)))
     }
 
     fun cancelNewsNotification(context: Context) {
