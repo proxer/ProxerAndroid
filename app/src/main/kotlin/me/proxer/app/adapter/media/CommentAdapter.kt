@@ -24,12 +24,15 @@ import me.proxer.app.util.extension.bindView
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.app.view.bbcode.BBCodeView
 import me.proxer.library.entitiy.info.Comment
+import me.proxer.library.enums.Category
 import me.proxer.library.util.ProxerUrls
+import java.util.*
 
 /**
  * @author Ruben Gees
  */
-class CommentAdapter(savedInstanceState: Bundle?) : PagingAdapter<Comment>() {
+class CommentAdapter(savedInstanceState: Bundle?, categoryCallback: () -> Category = { Category.ANIME }) :
+        PagingAdapter<Comment>() {
 
     private companion object {
         private const val EXPANDED_STATE = "comments_expanded"
@@ -38,6 +41,8 @@ class CommentAdapter(savedInstanceState: Bundle?) : PagingAdapter<Comment>() {
 
     private val expanded: ParcelableStringBooleanMap
     private val spoilerStates: ParcelableSpoilerStateMap
+
+    private var categoryCallback: (() -> Category)? = categoryCallback
 
     var callback: CommentAdapterCallback? = null
 
@@ -64,6 +69,7 @@ class CommentAdapter(savedInstanceState: Bundle?) : PagingAdapter<Comment>() {
     override fun destroy() {
         super.destroy()
 
+        categoryCallback = null
         callback = null
     }
 
@@ -151,7 +157,8 @@ class CommentAdapter(savedInstanceState: Bundle?) : PagingAdapter<Comment>() {
 
             comment.text = item.content
             time.text = TimeUtils.convertToRelativeReadableTime(time.context, item.date)
-            progress.text = item.mediaProgress.toEpisodeAppString(progress.context, item.episode)
+            progress.text = item.mediaProgress.toEpisodeAppString(progress.context, item.episode,
+                    categoryCallback?.invoke() ?: Category.ANIME)
 
             comment.spoilerStates = spoilerStates[item.id] ?: SparseBooleanArray(0)
             comment.spoilerStateListener = { states, hasBeenExpanded ->

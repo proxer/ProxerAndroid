@@ -16,6 +16,7 @@ import me.proxer.app.fragment.base.PagedLoadingFragment
 import me.proxer.app.task.asyncProxerTask
 import me.proxer.library.api.ProxerCall
 import me.proxer.library.entitiy.info.Comment
+import me.proxer.library.enums.Category
 import me.proxer.library.enums.CommentSortCriteria
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.find
@@ -47,6 +48,9 @@ class CommentsFragment : PagedLoadingFragment<ProxerCall<List<Comment>>, Comment
     private val id: String
         get() = mediaActivity.id
 
+    private val category: Category?
+        get() = mediaActivity.category
+
     private var sortCriteria: CommentSortCriteria
         get() = arguments.getSerializable(SORT_CRITERIA_ARGUMENT) as? CommentSortCriteria
                 ?: CommentSortCriteria.RATING
@@ -57,7 +61,7 @@ class CommentsFragment : PagedLoadingFragment<ProxerCall<List<Comment>>, Comment
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        innerAdapter = CommentAdapter(savedInstanceState)
+        innerAdapter = CommentAdapter(savedInstanceState, { category ?: Category.ANIME })
 
         setHasOptionsMenu(true)
     }
