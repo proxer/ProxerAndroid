@@ -55,6 +55,8 @@ android {
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
+        debug.java.srcDirs += 'src/debug/kotlin'
+        release.java.srcDirs += 'src/release/kotlin'
     }
 }
 
@@ -77,7 +79,7 @@ dependencies {
     compile deps.androidJob
     compile deps.proxerLib
     compile deps.ktaskAndroid
-    kapt deps.eventBusAnnotation
+    kaptRelease deps.eventBusAnnotation
 
     compile(deps.aboutLibraries) { transitive = true }
     compile(deps.materialDrawer) { transitive = true }

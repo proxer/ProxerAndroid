@@ -29,7 +29,6 @@ import com.squareup.moshi.Moshi
 import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.ios.IosEmojiProvider
 import me.proxer.app.BuildConfig
-import me.proxer.app.EventBusIndex
 import me.proxer.app.data.LocalMangaDatabase
 import me.proxer.app.event.LogoutEvent
 import me.proxer.app.helper.PreferenceHelper
@@ -91,6 +90,7 @@ class MainApplication : Application() {
         initLibs()
         enableStrictModeForDebug()
 
+        KaptStub.initLibs()
         EventBus.getDefault().register(this)
     }
 
@@ -137,11 +137,6 @@ class MainApplication : Application() {
         }
 
         DrawerImageLoader.init(ConcreteDrawerImageLoader())
-
-        EventBus.builder().addIndex(EventBusIndex())
-                .logNoSubscriberMessages(false)
-                .sendNoSubscriberEvent(false)
-                .installDefaultEventBus()
     }
 
     private fun enableStrictModeForDebug() {
