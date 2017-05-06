@@ -186,7 +186,8 @@
     <string name="dialog_login_error_password">Bitte gib ein Passwort an</string>
     <string name="dialog_login_error_username">Bitte gib einen Nutzernamen an</string>
 
-    <string name="dialog_logout_title">Möchtest du dich abmelden?</string>
+    <string name="dialog_logout_content">Möchtest du dich abmelden? Dabei werden alle heruntergeladenen Manga und
+        Chats gelöscht und du hast keinen Zugriff mehr auf einige Bereiche.</string>
     <string name="dialog_logout_positive">Abmelden</string>
 
     <string name="dialog_age_confirmation_content">Dieser Bereich darf nur von Benutzern über 18 Jahren betreten werden!

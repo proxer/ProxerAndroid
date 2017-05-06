@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v4.app.FragmentActivity
 import android.view.View
 import android.widget.ProgressBar
+import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.rubengees.ktask.android.bindToLifecycle
 import com.rubengees.ktask.util.TaskBuilder
@@ -47,12 +48,12 @@ class LogoutDialog : MainDialog() {
                 }.build()
     }
 
+    private val content: TextView by bindView(R.id.content)
     private val progress: ProgressBar by bindView(R.id.progress)
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return MaterialDialog.Builder(context)
                 .autoDismiss(false)
-                .title(R.string.dialog_logout_title)
                 .positiveText(R.string.dialog_logout_positive)
                 .negativeText(R.string.cancel)
                 .onPositive({ _, _ ->
@@ -61,7 +62,7 @@ class LogoutDialog : MainDialog() {
                 .onNegative({ _, _ ->
                     dismiss()
                 })
-                .customView(R.layout.dialog_progress, true)
+                .customView(R.layout.dialog_logout, true)
                 .build()
     }
 
@@ -75,6 +76,11 @@ class LogoutDialog : MainDialog() {
         progress.visibility = when (visible) {
             true -> View.VISIBLE
             false -> View.GONE
+        }
+
+        content.visibility = when (visible) {
+            true -> View.GONE
+            false -> View.VISIBLE
         }
     }
 }
