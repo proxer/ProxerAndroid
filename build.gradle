@@ -17,7 +17,7 @@ ext {
     playServicesVersion = '10.2.4'
     eventBusVersion = '3.0.0'
     eventBusAnnotationVersion = '3.0.1'
-    androidJobVersion = '1.1.10-SNAPSHOT'
+    androidJobVersion = '1.1.10'
     proxerLibVersion = 'new-architecture-SNAPSHOT'
     ktaskVersion = '0.3.2'
 
@@ -49,7 +49,7 @@ ext {
     glideVersion = '3.8.0'
     glideIntegrationVersion = '1.4.0'
     linkBuilderVersion = '1.5.2'
-    easyHeaderFooterAdapterVersion = 'master-SNAPSHOT'
+    easyHeaderFooterAdapterVersion = '1.0.6'
     strictModeCompatVersion = "25.0.0"
 
     // Debugging
