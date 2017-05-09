@@ -31,7 +31,7 @@ ext {
     subsamplingScaleImageViewVersion = '3.6.0'
     circleImageViewVersion = '2.1.0'
     tabLayoutHelperVersion = '0.8.0'
-    materialDialogsVersion = '0.9.4.3'
+    materialDialogsVersion = '0.9.4.4'
     flexboxVersion = '0.2.6'
     chipCloudVersion = '3.0.3'
     emojiIosVersion = '0.5.0-SNAPSHOT'
