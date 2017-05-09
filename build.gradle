@@ -25,7 +25,7 @@ ext {
     aboutLibrariesVersion = '5.9.6'
     materialDrawerVersion = '5.9.1'
     iconicsVersion = '2.8.4'
-    communityMaterialTypefaceVersion = '1.8.36.1'
+    communityMaterialTypefaceVersion = '1.9.32.1'
     crossfaderVersion = '1.5.0'
     materialAboutVersion = '1.9.0'
     subsamplingScaleImageViewVersion = '3.6.0'
