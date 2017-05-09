@@ -116,11 +116,15 @@ class LocalMangaJob : Job() {
 
             return Result.SUCCESS
         } catch (error: Throwable) {
-            EventBus.getDefault().post(LocalMangaJobFailedEvent(entryId, episode, language))
+            if (params.failureCount <= 1) {
+                return Result.RESCHEDULE
+            } else {
+                EventBus.getDefault().post(LocalMangaJobFailedEvent(entryId, episode, language))
 
-            NotificationHelper.showMangaDownloadErrorNotification(context, error)
+                NotificationHelper.showMangaDownloadErrorNotification(context, error)
 
-            return Result.FAILURE
+                return Result.FAILURE
+            }
         }
     }
 
