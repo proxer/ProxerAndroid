@@ -2,13 +2,12 @@ package me.proxer.app.activity
 
 import android.os.Build
 import android.os.Bundle
-import android.support.design.widget.Snackbar.LENGTH_INDEFINITE
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import android.view.WindowManager
+import com.afollestad.materialdialogs.MaterialDialog
 import com.devbrackets.android.exomedia.listener.VideoControlsVisibilityListener
 import com.devbrackets.android.exomedia.ui.widget.VideoControls.*
 import com.devbrackets.android.exomedia.ui.widget.VideoView
@@ -16,14 +15,15 @@ import me.proxer.app.R
 import me.proxer.app.activity.base.MainActivity
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.extension.bindView
-import me.proxer.app.util.extension.multilineSnackbar
+
 
 class StreamActivity : MainActivity() {
 
     private val uri
         get() = intent.data
 
-    private val root: ViewGroup by bindView(R.id.root)
+    private var pausedInOnStop = false
+
     private val toolbar: Toolbar by bindView(R.id.toolbar)
     private val player: VideoView by bindView(R.id.player)
 
@@ -32,10 +32,35 @@ class StreamActivity : MainActivity() {
 
         setContentView(R.layout.activity_stream)
 
+        setupUi()
         setupToolbar()
         setupPlayer()
+    }
 
-        toggleFullscreen(true)
+    override fun onStart() {
+        super.onStart()
+
+        if (pausedInOnStop) {
+            player.start()
+
+            pausedInOnStop = false
+        }
+    }
+
+    override fun onStop() {
+        if (player.isPlaying) {
+            pausedInOnStop = true
+
+            player.pause()
+        }
+
+        super.onStop()
+    }
+
+    override fun onDestroy() {
+        toggleFullscreen(false)
+
+        super.onDestroy()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -50,23 +75,52 @@ class StreamActivity : MainActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    public override fun onStop() {
-        player.pause()
+    private fun setupUi() {
+        window.decorView?.let {
+            it.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
 
-        super.onStop()
+            it.setOnSystemUiVisibilityChangeListener { visibility ->
+                if (visibility and View.SYSTEM_UI_FLAG_FULLSCREEN == 0) {
+                    player.showControls()
+
+                    toolbar.postDelayed({
+                        toolbar.visibility = View.VISIBLE
+                    }, 50)
+                } else {
+                    toolbar.postDelayed({
+                        toolbar.visibility = View.GONE
+                    }, 50)
+                }
+            }
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        }
     }
 
     private fun setupPlayer() {
         player.setBackgroundColor(ContextCompat.getColor(this, android.R.color.black))
         player.setVideoURI(uri)
+
         player.setOnErrorListener {
             ErrorUtils.handle(this, it).let {
-                multilineSnackbar(root, it.message, LENGTH_INDEFINITE, R.string.error_action_retry,
-                        View.OnClickListener {
+                MaterialDialog.Builder(this)
+                        .content(it.message)
+                        .positiveText(R.string.error_action_retry)
+                        .negativeText(R.string.error_action_finish)
+                        .onPositive { _, _ ->
                             player.reset()
                             player.setVideoURI(uri)
-                            player.start()
-                        })
+                        }
+                        .onNegative { _, _ ->
+                            finish()
+                        }
+                        .cancelListener {
+                            finish()
+                        }
+                        .show()
             }
 
             false
@@ -74,12 +128,10 @@ class StreamActivity : MainActivity() {
 
         player.videoControls?.setVisibilityListener(object : VideoControlsVisibilityListener {
             override fun onControlsShown() {
-                toggleFullscreen(false)
+                // Nothing to do here.
             }
 
-            override fun onControlsHidden() {
-                toggleFullscreen(true)
-            }
+            override fun onControlsHidden() = toggleFullscreen(true)
         })
 
         player.setOnPreparedListener {
@@ -92,29 +144,16 @@ class StreamActivity : MainActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         title = null
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-        }
     }
 
     private fun toggleFullscreen(fullscreen: Boolean) {
-        window.decorView.systemUiVisibility = if (fullscreen) getFullscreenUiFlags() else SYSTEM_UI_FLAG_VISIBLE
-        window.decorView.setOnSystemUiVisibilityChangeListener {
-            if (it and SYSTEM_UI_FLAG_FULLSCREEN == 0) {
-                player.showControls()
+        window.decorView.systemUiVisibility = when {
+            fullscreen -> {
+                SYSTEM_UI_FLAG_LOW_PROFILE or SYSTEM_UI_FLAG_HIDE_NAVIGATION or SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                        SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+                        SYSTEM_UI_FLAG_FULLSCREEN or SYSTEM_UI_FLAG_HIDE_NAVIGATION
             }
+            else -> SYSTEM_UI_FLAG_VISIBLE
         }
-
-        toolbar.visibility = when (fullscreen) {
-            true -> GONE
-            false -> VISIBLE
-        }
-    }
-
-    private fun getFullscreenUiFlags(): Int {
-        return SYSTEM_UI_FLAG_LOW_PROFILE or SYSTEM_UI_FLAG_HIDE_NAVIGATION or SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-                SYSTEM_UI_FLAG_FULLSCREEN or SYSTEM_UI_FLAG_HIDE_NAVIGATION
     }
 }

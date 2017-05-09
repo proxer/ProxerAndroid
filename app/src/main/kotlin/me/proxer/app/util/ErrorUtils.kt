@@ -1,6 +1,7 @@
 package me.proxer.app.util
 
 import android.view.View
+import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.upstream.HttpDataSource
 import com.rubengees.ktask.util.FullTaskException
 import com.rubengees.ktask.util.PartialTaskException
@@ -49,6 +50,13 @@ object ErrorUtils {
             is SocketTimeoutException -> {
                 R.string.error_timeout
             }
+            is HttpDataSource.InvalidResponseCodeException -> {
+                when (innermostError.responseCode) {
+                    404 -> R.string.error_video_deleted
+                    in 400 until 600 -> R.string.error_video_unknown
+                    else -> R.string.error_unknown
+                }
+            }
             is IOException -> {
                 R.string.error_io
             }
@@ -63,13 +71,6 @@ object ErrorUtils {
             }
             is StreamResolutionTask.StreamResolutionException -> {
                 R.string.error_stream_resolution
-            }
-            is HttpDataSource.InvalidResponseCodeException -> {
-                when (innermostError.responseCode) {
-                    404 -> R.string.error_video_deleted
-                    in 400 until 600 -> R.string.error_video_unknown
-                    else -> R.string.error_unknown
-                }
             }
             else -> R.string.error_unknown
         }
@@ -115,6 +116,7 @@ object ErrorUtils {
             is FullTaskException -> error.firstInnerError
             is PartialTaskException -> error.innerError
 //            is ChatService.ChatException -> error.innerError
+            is ExoPlaybackException -> error.cause ?: Exception()
             else -> error
         }
     }

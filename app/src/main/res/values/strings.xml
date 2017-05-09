@@ -96,6 +96,7 @@
     <string name="error_no_data_search">Es wurde nichts gefunden, das den Kriterien entspricht</string>
 
     <string name="error_action_retry">Erneut versuchen</string>
+    <string name="error_action_finish">Beenden</string>
     <string name="error_action_captcha">Captcha</string>
     <string name="error_action_login">Anmelden</string>
     <string name="error_action_confirm">Bestätigen</string>
