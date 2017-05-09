@@ -60,7 +60,7 @@ class NotificationsJob : Job() {
             val lastNewsDate = StorageHelper.lastNewsDate
             val newNews = api.notifications().news()
                     .page(0)
-                    .limit(30)
+                    .limit(100)
                     .build()
                     .execute()
                     .filter { it.date.after(lastNewsDate) }
