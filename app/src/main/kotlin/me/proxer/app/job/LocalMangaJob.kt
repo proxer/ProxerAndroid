@@ -39,10 +39,13 @@ class LocalMangaJob : Job() {
                 putString(LANGUAGE_EXTRA, ProxerUtils.getApiEnumName(language))
             }
 
+            val startTime = countRunningJobs() * 3000L + 1L
+            val endTime = startTime + 100L
+
             JobRequest.Builder(constructTag(entryId, episode, language))
                     .setExtras(extras)
                     .setRequiredNetworkType(if (unmeteredRequired) NetworkType.UNMETERED else NetworkType.CONNECTED)
-                    .setExecutionWindow(1L, 100L)
+                    .setExecutionWindow(startTime, endTime)
                     .setRequirementsEnforced(true)
                     .setUpdateCurrent(true)
                     .setPersisted(true)
