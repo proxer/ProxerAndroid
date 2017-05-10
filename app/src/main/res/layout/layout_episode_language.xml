@@ -45,6 +45,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/download"
+        android:layout_margin="6dp"
         android:visibility="invisible"
         app:mpb_useIntrinsicPadding="false"
         tools:visibility="visible" />
