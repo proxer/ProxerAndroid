@@ -228,7 +228,7 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?) :
                                 .sizeDp(32)
 
                         uiThread {
-                            downloadProgress.visibility = View.GONE
+                            downloadProgress.visibility = View.INVISIBLE
                             download.visibility = View.VISIBLE
                             download.setImageDrawable(icon)
                             download.setOnClickListener(null)
@@ -236,7 +236,7 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?) :
                     } else {
                         if (LocalMangaJob.isScheduledOrRunning(entryId, episode, language.toGeneralLanguage())) {
                             uiThread {
-                                download.visibility = View.GONE
+                                download.visibility = View.INVISIBLE
                                 downloadProgress.visibility = View.VISIBLE
                                 downloadProgress.setOnClickListener {
                                     LocalMangaJob.cancel(entryId, episode, language.toGeneralLanguage())
@@ -250,7 +250,7 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?) :
                                     .sizeDp(32)
 
                             uiThread {
-                                downloadProgress.visibility = View.GONE
+                                downloadProgress.visibility = View.INVISIBLE
                                 download.visibility = View.VISIBLE
                                 download.setImageDrawable(icon)
                                 download.setOnClickListener {

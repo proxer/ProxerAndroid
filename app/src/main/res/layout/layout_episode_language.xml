@@ -32,7 +32,7 @@
         android:layout_alignParentTop="true"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:padding="6dp"
-        android:visibility="gone"
+        android:visibility="invisible"
         tools:visibility="visible" />
 
     <me.zhanghai.android.materialprogressbar.MaterialProgressBar
@@ -40,10 +40,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/language"
+        android:layout_alignLeft="@+id/download"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:visibility="gone"
+        android:layout_alignStart="@+id/download"
+        android:visibility="invisible"
+        app:mpb_useIntrinsicPadding="false"
         tools:visibility="visible" />
 
     <com.google.android.flexbox.FlexboxLayout
