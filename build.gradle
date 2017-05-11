@@ -17,7 +17,7 @@ ext {
     playServicesVersion = '10.2.4'
     eventBusVersion = '3.0.0'
     eventBusAnnotationVersion = '3.0.1'
-    androidJobVersion = '1.1.10'
+    androidJobVersion = '1.1.11-SNAPSHOT'
     proxerLibVersion = 'new-architecture-SNAPSHOT'
     ktaskVersion = '0.3.2'
 
