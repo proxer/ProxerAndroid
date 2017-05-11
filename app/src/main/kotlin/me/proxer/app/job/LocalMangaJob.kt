@@ -39,7 +39,7 @@ class LocalMangaJob : Job() {
                 putString(LANGUAGE_EXTRA, ProxerUtils.getApiEnumName(language))
             }
 
-            val startTime = countRunningJobs() * 3000L + 1L
+            val startTime = countRunningJobs() * 6000L + 1L
             val endTime = startTime + 100L
 
             JobRequest.Builder(constructTag(entryId, episode, language))

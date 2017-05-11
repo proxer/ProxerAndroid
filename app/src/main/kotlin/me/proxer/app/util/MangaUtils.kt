@@ -3,7 +3,6 @@ package me.proxer.app.util
 import me.proxer.app.application.MainApplication
 import me.proxer.library.util.ProxerUrls
 import okhttp3.Request
-import okhttp3.ResponseBody
 import okio.Okio
 import java.io.File
 import java.io.IOException
@@ -23,7 +22,6 @@ object MangaUtils {
         return synchronized(locks.getOrPut(lockKey, { Any() }), {
             val url = ProxerUrls.mangaPageImage(server, entryId, chapterId, name)
             val file = File("$filesDir/manga/$entryId/$chapterId/${url.toString().hashCode()}.0")
-            var body: ResponseBody? = null
 
             try {
                 if (file.exists()) {
@@ -33,17 +31,16 @@ object MangaUtils {
                     file.createNewFile()
                 }
 
-                body = MainApplication.client.newCall(Request.Builder().url(url).build()).execute().let {
+                MainApplication.client.newCall(Request.Builder().url(url).build()).execute().let {
                     if (!it.isSuccessful) {
                         throw IOException()
                     } else {
                         it.body()
                     }
-                }
-
-                Okio.buffer(Okio.sink(file)).let {
-                    it.writeAll(body?.source())
-                    it.close()
+                }.use { body ->
+                    Okio.buffer(Okio.sink(file)).use { fileBuffer ->
+                        fileBuffer.writeAll(body.source())
+                    }
                 }
 
                 file
@@ -52,8 +49,6 @@ object MangaUtils {
 
                 throw error
             } finally {
-                body?.close()
-
                 locks.remove(lockKey)
             }
         })
