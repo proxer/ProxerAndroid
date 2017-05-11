@@ -37,6 +37,7 @@ import me.proxer.library.util.ProxerUrls
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.intentFor
 
 /**
@@ -116,8 +117,10 @@ class DashboardActivity : MainActivity() {
                 data.getParcelableArrayListExtra<Option>(OPTION_RESULT).forEach { option ->
                     when (option.position) {
                         1 -> {
-                            PreferenceHelper.setNotificationsEnabled(this, option.isActivated)
-                            NotificationsJob.scheduleIfPossible(this)
+                            doAsync {
+                                PreferenceHelper.setNotificationsEnabled(this@DashboardActivity, option.isActivated)
+                                NotificationsJob.scheduleIfPossible(this@DashboardActivity)
+                            }
                         }
                     }
                 }

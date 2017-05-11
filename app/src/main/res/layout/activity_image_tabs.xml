@@ -30,7 +30,7 @@
                 android:scaleType="centerCrop"
                 app:layout_collapseMode="parallax"
                 app:layout_collapseParallaxMultiplier="0.7"
-                tools:ignore="UnusedAttribute" />
+                tools:ignore="ContentDescription,UnusedAttribute" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"

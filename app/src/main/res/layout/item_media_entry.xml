@@ -106,7 +106,8 @@
                     android:layout_height="match_parent"
                     android:layout_marginEnd="2dp"
                     android:layout_marginRight="2dp"
-                    app:srcCompat="@drawable/ic_germany" />
+                    app:srcCompat="@drawable/ic_germany"
+                    tools:ignore="ContentDescription" />
 
                 <ImageView
                     android:id="@+id/english"
@@ -114,7 +115,8 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="2dp"
                     android:layout_marginStart="2dp"
-                    app:srcCompat="@drawable/ic_united_states" />
+                    app:srcCompat="@drawable/ic_united_states"
+                    tools:ignore="ContentDescription" />
 
             </LinearLayout>
         </RelativeLayout>

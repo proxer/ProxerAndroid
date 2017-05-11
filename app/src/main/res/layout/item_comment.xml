@@ -70,7 +70,8 @@
                     android:layout_marginStart="4dp"
                     android:layout_marginTop="8dp"
                     android:layout_toLeftOf="@+id/upvotes"
-                    android:layout_toStartOf="@+id/upvotes" />
+                    android:layout_toStartOf="@+id/upvotes"
+                    tools:ignore="ContentDescription" />
 
                 <TextView
                     android:id="@+id/upvotes"
@@ -274,7 +275,8 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="4dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"
+                tools:ignore="ContentDescription" />
 
             <View
                 android:layout_width="match_parent"

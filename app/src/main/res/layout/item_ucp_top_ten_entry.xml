@@ -49,7 +49,8 @@
                 android:layout_height="48dp"
                 android:layout_below="@+id/title"
                 android:layout_centerHorizontal="true"
-                android:background="?attr/selectableItemBackgroundBorderless" />
+                android:background="?attr/selectableItemBackgroundBorderless"
+                tools:ignore="ContentDescription" />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </FrameLayout>

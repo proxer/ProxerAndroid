@@ -34,7 +34,8 @@
                     android:layout_width="64dp"
                     android:layout_height="64dp"
                     android:layout_gravity="center_vertical"
-                    android:padding="8dp" />
+                    android:padding="8dp"
+                    tools:ignore="ContentDescription" />
 
                 <TextView
                     android:id="@+id/name"

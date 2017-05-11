@@ -19,6 +19,7 @@ import me.proxer.app.helper.PreferenceHelper.THEME
 import me.proxer.app.job.NotificationsJob
 import net.xpece.android.support.preference.TwoStatePreference
 import org.jetbrains.anko.bundleOf
+import org.jetbrains.anko.doAsync
 
 /**
  * @author Ruben Gees
@@ -94,11 +95,15 @@ class SettingsFragment : XpPreferenceFragment(), SharedPreferences.OnSharedPrefe
             }
 
             NOTIFICATIONS -> {
-                NotificationsJob.scheduleIfPossible(context)
+                doAsync {
+                    NotificationsJob.scheduleIfPossible(context)
+                }
             }
 
             NOTIFICATIONS_INTERVAL -> {
-                NotificationsJob.scheduleIfPossible(context)
+                doAsync {
+                    NotificationsJob.scheduleIfPossible(context)
+                }
             }
         }
     }
