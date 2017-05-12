@@ -35,7 +35,7 @@ ext {
     flexboxVersion = '0.2.6'
     chipCloudVersion = '3.0.3'
     emojiIosVersion = '0.5.0-SNAPSHOT'
-    exomediaVersion = '4.0.0'
+    exomediaVersion = '4.0.1'
     exoplayerVersion = 'r2.4.0'
     materialProgressBarVersion = '1.4.1'
     materialRatingBarVersion = '1.0.2'
