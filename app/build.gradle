@@ -105,10 +105,12 @@ dependencies {
     compile(deps.hawk) { exclude module: 'gson' }
     compile deps.glide
     compile deps.glideIntegration
+    compile deps.okHttp
+    compile deps.okio
     compile deps.linkBuilder
     compile deps.easyHeaderFooterAdapter
-    compile deps.strictModeCompat
 
+    compile deps.strictModeCompat
     debugCompile deps.leakCanary
     releaseCompile deps.leakCanaryNoOp
 }

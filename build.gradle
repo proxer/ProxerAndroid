@@ -48,11 +48,13 @@ ext {
     hawkVersion = '2.0.1'
     glideVersion = '3.8.0'
     glideIntegrationVersion = '1.4.0'
+    okHttpVersion = '3.7.0'
+    okioVersion = '1.13.0'
     linkBuilderVersion = '1.5.2'
     easyHeaderFooterAdapterVersion = '1.0.6'
-    strictModeCompatVersion = "25.0.0"
 
     // Debugging
+    strictModeCompatVersion = "25.0.0"
     leakCanaryVersion = '1.5.1'
 
     deps = [
@@ -100,10 +102,12 @@ ext {
             hawk                         : "com.orhanobut:hawk:$hawkVersion",
             glide                        : "com.github.bumptech.glide:glide:$glideVersion",
             glideIntegration             : "com.github.bumptech.glide:okhttp3-integration:$glideIntegrationVersion@aar",
+            okHttp                       : "com.squareup.okhttp3:okhttp:$okHttpVersion",
+            okio                         : "com.squareup.okio:okio:$okioVersion",
             linkBuilder                  : "com.klinkerapps:link_builder:$linkBuilderVersion",
             easyHeaderFooterAdapter      : "com.github.rubengees:EasyHeaderFooterAdapter:$easyHeaderFooterAdapterVersion",
-            strictModeCompat             : "com.kirich1409:strict-mode-compat:$strictModeCompatVersion",
 
+            strictModeCompat             : "com.kirich1409:strict-mode-compat:$strictModeCompatVersion",
             leakCanary                   : "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion",
             leakCanaryNoOp               : "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
     ]
