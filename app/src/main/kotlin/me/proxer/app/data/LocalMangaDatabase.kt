@@ -199,6 +199,12 @@ class LocalMangaDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DA
         }
     }
 
+    fun containsChapter(id: String): Boolean {
+        return use {
+            DatabaseUtils.queryNumEntries(this, CHAPTER_TABLE, "$CHAPTER_ID_COLUMN = \"$id\"") > 0
+        }
+    }
+
     fun removeChapter(entry: EntryCore, chapter: LocalMangaChapter) {
         use {
             transaction {

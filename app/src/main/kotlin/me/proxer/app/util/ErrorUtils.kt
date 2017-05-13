@@ -3,8 +3,8 @@ package me.proxer.app.util
 import android.view.View
 import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.upstream.HttpDataSource
-import com.rubengees.ktask.util.FullTaskException
-import com.rubengees.ktask.util.PartialTaskException
+import com.rubengees.ktask.base.MultiBranchTask.FullTaskException
+import com.rubengees.ktask.base.MultiBranchTask.PartialTaskException
 import me.proxer.app.R
 import me.proxer.app.activity.base.MainActivity
 import me.proxer.app.dialog.AgeConfirmationDialog

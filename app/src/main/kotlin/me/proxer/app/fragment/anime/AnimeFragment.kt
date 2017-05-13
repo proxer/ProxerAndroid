@@ -16,8 +16,8 @@ import android.widget.TextView
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import com.rubengees.ktask.android.AndroidLifecycleTask
 import com.rubengees.ktask.android.bindToLifecycle
+import com.rubengees.ktask.base.MultiBranchTask.PartialTaskException
 import com.rubengees.ktask.operation.CacheTask
-import com.rubengees.ktask.util.PartialTaskException
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.activity.AnimeActivity
@@ -301,8 +301,8 @@ class AnimeFragment : LoadingFragment<Pair<ProxerCall<List<Stream>>, ProxerCall<
         }
     }
 
-    override fun constructTask() = TaskBuilder.asyncProxerTask<List<Stream>>()
-            .parallelWith(TaskBuilder.asyncProxerTask<EntryCore>().cache(CacheTask.CacheStrategy.RESULT),
+    override fun constructTask() = TaskBuilder.proxerTask<List<Stream>>()
+            .parallelWith(TaskBuilder.proxerTask<EntryCore>().cache(CacheTask.CacheStrategy.RESULT),
                     zipFunction = { streams, info -> StreamInfo(streams, info.name, info.episodeAmount) },
                     awaitRightResultOnError = true).build()
 

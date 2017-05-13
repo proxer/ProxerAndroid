@@ -14,7 +14,7 @@ import me.proxer.app.adapter.profile.TopTenAdapter
 import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.fragment.base.LoadingFragment
 import me.proxer.app.fragment.profile.TopTenFragment.ZippedTopTenResult
-import me.proxer.app.task.asyncProxerTask
+import me.proxer.app.task.proxerTask
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.extension.bindView
@@ -103,8 +103,8 @@ class TopTenFragment : LoadingFragment<Pair<ProxerCall<List<TopTenEntry>>, Proxe
         }
     }
 
-    override fun constructTask() = TaskBuilder.asyncProxerTask<List<TopTenEntry>>()
-            .parallelWith(TaskBuilder.asyncProxerTask<List<TopTenEntry>>(), ::ZippedTopTenResult)
+    override fun constructTask() = TaskBuilder.proxerTask<List<TopTenEntry>>()
+            .parallelWith(TaskBuilder.proxerTask<List<TopTenEntry>>(), ::ZippedTopTenResult)
             .build()
 
     override fun constructInput() = api.user().topTen(userId, username)
