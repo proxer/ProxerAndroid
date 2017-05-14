@@ -5,6 +5,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
+import me.proxer.app.util.extension.KotterKnife
 import me.proxer.library.entitiy.ProxerIdItem
 
 /**
@@ -29,6 +30,12 @@ abstract class PagingAdapter<T> : RecyclerView.Adapter<PagingAdapter<T>.PagingVi
         this.recyclerView = null
 
         super.onDetachedFromRecyclerView(recyclerView)
+    }
+
+    override fun onViewDetachedFromWindow(holder: PagingViewHolder<T>?) {
+        holder?.let {
+            KotterKnife.reset(it)
+        }
     }
 
     override fun onBindViewHolder(holder: PagingViewHolder<T>, position: Int) {

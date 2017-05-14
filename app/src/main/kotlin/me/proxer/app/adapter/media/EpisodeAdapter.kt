@@ -73,12 +73,16 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?) :
         EventBus.getDefault().unregister(this)
     }
 
-    override fun onViewAttachedToWindow(holder: PagingViewHolder<EpisodeRow>) {
+    override fun onViewAttachedToWindow(holder: PagingViewHolder<EpisodeRow>?) {
+        super.onViewAttachedToWindow(holder)
+
         EventBus.getDefault().register(holder)
     }
 
-    override fun onViewDetachedFromWindow(holder: PagingViewHolder<EpisodeRow>) {
+    override fun onViewDetachedFromWindow(holder: PagingViewHolder<EpisodeRow>?) {
         EventBus.getDefault().unregister(holder)
+
+        super.onViewDetachedFromWindow(holder)
     }
 
     override fun getItemId(position: Int): Long {

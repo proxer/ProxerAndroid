@@ -69,12 +69,6 @@ class LocalMangaAdapter(savedInstanceState: Bundle?) : PagingAdapter<CompleteLoc
         }
     }
 
-    override fun onViewDetachedFromWindow(holder: PagingViewHolder<CompleteLocalMangaEntry>?) {
-        if (holder is ViewHolder) {
-            holder.adapter.destroy()
-        }
-    }
-
     override fun destroy() {
         super.destroy()
 

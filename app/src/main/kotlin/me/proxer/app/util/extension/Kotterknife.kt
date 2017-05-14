@@ -11,6 +11,7 @@ import android.view.View
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import me.proxer.app.adapter.base.PagingAdapter
 import java.util.*
+import java.util.concurrent.Future
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
@@ -106,6 +107,15 @@ private class Lazy<in T, out V>(private val initializer: (T, KProperty<*>) -> V)
             }
             is SwipeRefreshLayout -> {
                 safeValue.setOnRefreshListener(null)
+            }
+            is View -> {
+                val safeTag = safeValue.tag
+
+                if (safeTag is Future<*>) {
+                    safeTag.cancel(true)
+                }
+
+                safeValue.tag = null
             }
         }
     }
