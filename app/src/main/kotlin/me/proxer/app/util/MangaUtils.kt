@@ -84,8 +84,8 @@ object MangaUtils {
             var overallSize = 0L
 
             File("$filesDir/manga").list()?.forEach { entryDirectoryName ->
-                if (!mangaDb.containsChapter(entryDirectoryName)) {
-                    File("$filesDir/manga/$entryDirectoryName").list()?.forEach { chapterDirectoryName ->
+                File("$filesDir/manga/$entryDirectoryName").list()?.forEach { chapterDirectoryName ->
+                    if (!mangaDb.containsChapter(chapterDirectoryName)) {
                         val chapterDirectory = File("$filesDir/manga/$entryDirectoryName/$chapterDirectoryName")
                         var size = 0L
 
