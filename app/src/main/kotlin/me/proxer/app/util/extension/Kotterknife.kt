@@ -61,7 +61,7 @@ private fun <T, V : View> required(id: Int, finder: T.(Int) -> View?)
 
 // Like Kotlin's lazy delegate but the initializer gets the target and metadata passed to it.
 // Also automatically destroys (removes leaking instances) the view on a call to [reset].
-private class Lazy<in T, out V>(private val initializer: (T, KProperty<*>) -> V) : ReadOnlyProperty<T, V> {
+private class Lazy<in T, out V : View>(private val initializer: (T, KProperty<*>) -> V) : ReadOnlyProperty<T, V> {
     private object EMPTY
 
     private var value: Any? = EMPTY
@@ -86,6 +86,16 @@ private class Lazy<in T, out V>(private val initializer: (T, KProperty<*>) -> V)
     private fun destroy() {
         val safeValue = value
 
+        if (safeValue is View) {
+            val safeTag = safeValue.tag
+
+            if (safeTag is Future<*>) {
+                safeTag.cancel(true)
+            }
+
+            safeValue.tag = null
+        }
+
         when (safeValue) {
             is RecyclerView -> {
                 var currentAdapter = safeValue.adapter
@@ -107,15 +117,6 @@ private class Lazy<in T, out V>(private val initializer: (T, KProperty<*>) -> V)
             }
             is SwipeRefreshLayout -> {
                 safeValue.setOnRefreshListener(null)
-            }
-            is View -> {
-                val safeTag = safeValue.tag
-
-                if (safeTag is Future<*>) {
-                    safeTag.cancel(true)
-                }
-
-                safeValue.tag = null
             }
         }
     }

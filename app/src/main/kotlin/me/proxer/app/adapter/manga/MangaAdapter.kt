@@ -77,18 +77,19 @@ class MangaAdapter : PagingAdapter<Page>() {
                 }
             }
 
-            image.tag = doAsync(exceptionHandler = {
-                // Ignore
-            }) {
-                val file = MangaUtils.downloadPage(image.context.filesDir, server, entryId, id, item.decodedName)
+            image.tag = doAsync {
+                try {
+                    val file = MangaUtils.downloadPage(image.context.filesDir, server, entryId, id, item.decodedName)
 
-                uiThread {
-                    image.setImage(ImageSource.uri(file.path))
-                    image.apply { alpha = 0.2f }
-                            .animate()
-                            .alpha(1.0f)
-                            .setDuration(mediumAnimationTime.toLong())
-                            .start()
+                    uiThread {
+                        image.setImage(ImageSource.uri(file.path))
+                        image.apply { alpha = 0.2f }
+                                .animate()
+                                .alpha(1.0f)
+                                .setDuration(mediumAnimationTime.toLong())
+                                .start()
+                    }
+                } catch (ignored: Throwable) {
                 }
             }
         }
