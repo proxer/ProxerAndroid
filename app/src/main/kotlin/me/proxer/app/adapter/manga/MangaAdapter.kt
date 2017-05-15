@@ -1,5 +1,6 @@
 package me.proxer.app.adapter.manga
 
+import android.graphics.PointF
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -59,7 +60,6 @@ class MangaAdapter : PagingAdapter<Page>() {
 
         init {
             image.setDoubleTapZoomDuration(shortAnimationTime)
-            image.setMinimumScaleType(SubsamplingScaleImageView.SCALE_TYPE_CENTER_CROP)
 
             // Make scrolling smoother by hacking the SubsamplingScaleImageView to only receive touch events
             // when zooming.
@@ -85,11 +85,13 @@ class MangaAdapter : PagingAdapter<Page>() {
 
             image.recycle()
             image.layoutParams.height = height
+            image.maxScale = width.toFloat() / item.width.toFloat() * 2f
             image.tag = TaskBuilder.task(MangaPageDownloadTask(image.context.filesDir))
                     .async()
                     .onSuccess {
                         image.post {
                             image.setImage(ImageSource.uri(it.path))
+                            image.setScaleAndCenter(0.2f, PointF(0f, 0f))
                             image.apply { alpha = 0.2f }
                                     .animate()
                                     .alpha(1.0f)

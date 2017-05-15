@@ -167,8 +167,7 @@ class MainApplication : Application() {
                     }
                 }
                 else -> {
-                    // Don't do anything in case the token is not null. We save the token manually in the
-                    // LoginDialog.
+                    // Don't do anything in case the token is not null. We save the token manually in the LoginDialog.
                 }
             }
         }
