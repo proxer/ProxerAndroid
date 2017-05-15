@@ -90,7 +90,7 @@ class ProfileFragment : LoadingFragment<ProxerCall<UserInfo>, UserInfo>() {
 
             statusText.text = Utils.buildClickableText(statusText.context, rawText,
                     onWebClickListener = Link.OnClickListener {
-                        showPage(HttpUrl.parse(it))
+                        HttpUrl.parse(it)?.let { showPage(it) }
                     })
         }
 

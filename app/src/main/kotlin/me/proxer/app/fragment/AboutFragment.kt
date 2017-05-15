@@ -168,7 +168,8 @@ class AboutFragment : MaterialAboutFragment() {
                         .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_github_circle)
                                 .colorRes(R.color.icon))
                         .setOnClickAction {
-                            showPage(HttpUrl.parse("https://github.com/$DEVELOPER_GITHUB_NAME"))
+                            showPage(HttpUrl.parse("https://github.com/$DEVELOPER_GITHUB_NAME")
+                                    ?: throw NullPointerException())
                         }.build(),
                 MaterialAboutActionItem.Builder()
                         .text(getString(R.string.about_developer_proxer_title))

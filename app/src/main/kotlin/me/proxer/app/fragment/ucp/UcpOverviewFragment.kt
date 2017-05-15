@@ -68,7 +68,7 @@ class UcpOverviewFragment : LoadingFragment<ProxerCall<Int>, Int>() {
         if (user != null) {
             profileLink.text = Utils.buildClickableText(context, ProxerUrls.userWeb(user.id).toString(),
                     onWebClickListener = Link.OnClickListener {
-                        showPage(HttpUrl.parse(it))
+                        HttpUrl.parse(it)?.let { showPage(it) }
                     },
                     onWebLongClickListener = Link.OnLongClickListener {
                         val title = getString(R.string.clipboard_title)

@@ -28,7 +28,7 @@ class DailymotionResolutionTaskFactory : HosterResolutionTaskFactory() {
         override fun work(input: String): StreamResolutionResult {
             val qualitiesJson = regex.find(input)?.value ?: throw StreamResolutionException()
             val qualityMap = moshi.adapter(QualityMap::class.java).fromJson("{${qualitiesJson.trimEnd(',')}}")
-            val mp4Links = qualityMap.qualities?.mapNotNull { qualityEntry ->
+            val mp4Links = qualityMap?.qualities?.mapNotNull { qualityEntry ->
                 val quality = try {
                     qualityEntry.key.toInt()
                 } catch (exception: NumberFormatException) {

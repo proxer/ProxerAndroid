@@ -17,7 +17,7 @@ class AuravidResolutionTaskFactory : HosterResolutionTaskFactory() {
     private companion object {
         private val urlTransformation: (Pair<String, String>) -> HttpUrl = { (first, second) ->
             HttpUrl.parse("http://www.auroravid.to/api/player.api.php?file=%s&key=%s"
-                    .format(first, second))
+                    .format(first, second)) ?: throw NullPointerException()
         }
     }
 

@@ -18,6 +18,7 @@ class MyviResolutionTaskFactory : HosterResolutionTaskFactory() {
     private companion object {
         private val urlTransformation = { url: String ->
             HttpUrl.parse("http://myvi.ru/player/api/Video/Get/${Utils.parseAndFixUrl(url).pathSegments().last()}?sig")
+                    ?: throw NullPointerException()
         }
     }
 
@@ -29,7 +30,7 @@ class MyviResolutionTaskFactory : HosterResolutionTaskFactory() {
     class MyviTask : WorkerTask<String, StreamResolutionResult>() {
 
         override fun work(input: String): StreamResolutionResult {
-            val resultUrl = moshi.adapter(SprutoResult::class.java).fromJson(input).url
+            val resultUrl = moshi.adapter(SprutoResult::class.java).fromJson(input)?.url
                     ?: throw  StreamResolutionException()
 
             return StreamResolutionResult(resultUrl.androidUri(), "video/mp4")

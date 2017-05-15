@@ -17,6 +17,7 @@ class VideoWeedResolutionTaskFactory : HosterResolutionTaskFactory() {
     private companion object {
         private val urlTransformation: (Pair<String, String>) -> HttpUrl = { (first, second) ->
             HttpUrl.parse("http://www.bitvid.to/api/player.api.php?file=%s&key=%s".format(first, second))
+                    ?: throw NullPointerException()
         }
     }
 

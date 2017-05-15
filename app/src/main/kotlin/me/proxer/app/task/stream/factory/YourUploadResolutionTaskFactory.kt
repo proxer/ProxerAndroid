@@ -61,11 +61,11 @@ class YourUploadResolutionTaskFactory : HosterResolutionTaskFactory() {
 
                 try {
                     val response = call?.execute() ?: throw NullPointerException("call cannot be null")
-                    val url = response.networkResponse().request().url()
+                    val url = response.networkResponse()?.request()?.url()
 
                     internalCancel()
 
-                    if (response.isSuccessful) {
+                    if (response.isSuccessful && url != null) {
                         finishSuccessful(StreamResolutionResult(url.androidUri(), "video/mp4"))
                     } else {
                         finishWithError(IOException())

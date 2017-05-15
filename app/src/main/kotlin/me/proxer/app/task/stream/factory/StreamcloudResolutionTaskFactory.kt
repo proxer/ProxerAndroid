@@ -69,12 +69,12 @@ class StreamcloudResolutionTaskFactory : HosterResolutionTaskFactory() {
                 try {
                     val response = call?.execute() ?: throw NullPointerException("call cannot be null")
                     val body = response.body()
-                    val content = body.string()
+                    val content = body?.string()
 
                     internalCancel()
-                    body.close()
+                    body?.close()
 
-                    if (response.isSuccessful) {
+                    if (response.isSuccessful && content != null) {
                         finishSuccessful(content)
                     } else {
                         finishWithError(IOException())

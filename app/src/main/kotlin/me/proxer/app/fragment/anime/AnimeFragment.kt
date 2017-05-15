@@ -144,7 +144,7 @@ class AnimeFragment : LoadingFragment<Pair<ProxerCall<List<Stream>>, ProxerCall<
                 .onSuccess {
                     if (it.intent.action == Intent.ACTION_VIEW) {
                         if (it.intent.type == "text/html") {
-                            showPage(HttpUrl.parse(it.intent.data.toString()))
+                            showPage(HttpUrl.parse(it.intent.data.toString()) ?: throw NullPointerException())
                         } else {
                             try {
                                 context.startActivity(it.intent)

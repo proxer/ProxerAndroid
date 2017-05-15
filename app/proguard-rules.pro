@@ -67,6 +67,8 @@
 
 # OkHttp/Okio
 -dontwarn okio.**
+-dontwarn javax.annotation.Nullable
+-dontwarn javax.annotation.ParametersAreNonnullByDefault
 
 # Retrofit
 -dontnote retrofit2.Platform
