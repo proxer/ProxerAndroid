@@ -6,16 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
+import com.rubengees.ktask.base.Task
+import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.adapter.base.PagingAdapter
+import me.proxer.app.task.manga.MangaPageDownloadTask
+import me.proxer.app.task.manga.MangaPageDownloadTask.MangaPageDownloadTaskInput
 import me.proxer.app.util.DeviceUtils
-import me.proxer.app.util.MangaUtils
 import me.proxer.app.util.extension.bindView
 import me.proxer.app.util.extension.decodedName
 import me.proxer.library.entitiy.manga.Page
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.uiThread
-import java.util.concurrent.Future
 
 /**
  * @author Ruben Gees
@@ -36,15 +36,30 @@ class MangaAdapter : PagingAdapter<Page>() {
         this.id = id
     }
 
+    override fun onViewDetachedFromWindow(holder: PagingViewHolder<Page>?) {
+        super.onViewDetachedFromWindow(holder)
+
+        if (holder is ViewHolder) {
+            holder.image.tag?.let {
+                if (it is Task<*, *>) {
+                    it.destroy()
+                }
+            }
+
+            holder.image.tag = null
+        }
+    }
+
     inner class ViewHolder(itemView: View) : PagingViewHolder<Page>(itemView) {
 
         private val shortAnimationTime = itemView.context.resources.getInteger(android.R.integer.config_shortAnimTime)
         private val mediumAnimationTime = itemView.context.resources.getInteger(android.R.integer.config_mediumAnimTime)
 
-        private val image: SubsamplingScaleImageView by bindView(R.id.image)
+        internal val image: SubsamplingScaleImageView by bindView(R.id.image)
 
         init {
             image.setDoubleTapZoomDuration(shortAnimationTime)
+            image.setMinimumScaleType(SubsamplingScaleImageView.SCALE_TYPE_CENTER_CROP)
 
             // Make scrolling smoother by hacking the SubsamplingScaleImageView to only receive touch events
             // when zooming.
@@ -70,28 +85,22 @@ class MangaAdapter : PagingAdapter<Page>() {
 
             image.recycle()
             image.layoutParams.height = height
-
-            image.tag?.let {
-                if (it is Future<*>) {
-                    it.cancel(true)
-                }
-            }
-
-            image.tag = doAsync {
-                try {
-                    val file = MangaUtils.downloadPage(image.context.filesDir, server, entryId, id, item.decodedName)
-
-                    uiThread {
-                        image.setImage(ImageSource.uri(file.path))
-                        image.apply { alpha = 0.2f }
-                                .animate()
-                                .alpha(1.0f)
-                                .setDuration(mediumAnimationTime.toLong())
-                                .start()
+            image.tag = TaskBuilder.task(MangaPageDownloadTask(image.context.filesDir))
+                    .async()
+                    .onSuccess {
+                        image.post {
+                            image.setImage(ImageSource.uri(it.path))
+                            image.apply { alpha = 0.2f }
+                                    .animate()
+                                    .alpha(1.0f)
+                                    .setDuration(mediumAnimationTime.toLong())
+                                    .start()
+                        }
                     }
-                } catch (ignored: Throwable) {
-                }
-            }
+                    .build()
+                    .apply {
+                        forceExecute(MangaPageDownloadTaskInput(server, entryId, id, item.decodedName))
+                    }
         }
     }
 }

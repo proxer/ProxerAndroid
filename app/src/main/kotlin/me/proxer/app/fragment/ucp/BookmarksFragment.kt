@@ -74,6 +74,7 @@ class BookmarksFragment : PagedLoadingFragment<ProxerCall<List<Bookmark>>, Bookm
                     removalQueue.remove(removalQueue.first())
 
                     saveResultToState(innerAdapter.list)
+                    removeBookmarksFromQueue()
                 }
                 .onError {
                     removalQueue.clear()
@@ -82,9 +83,6 @@ class BookmarksFragment : PagedLoadingFragment<ProxerCall<List<Bookmark>>, Bookm
                         multilineSnackbar(root, getString(R.string.error_bookmark_removal, getString(it.message)),
                                 Snackbar.LENGTH_LONG, it.buttonMessage, it.buttonAction)
                     }
-                }
-                .onFinish {
-                    removeBookmarksFromQueue()
                 }.build()
 
         setHasOptionsMenu(true)

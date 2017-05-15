@@ -23,16 +23,16 @@ import me.proxer.app.activity.MediaActivity
 import me.proxer.app.activity.base.MainActivity
 import me.proxer.app.adapter.base.PagingAdapter
 import me.proxer.app.adapter.manga.LocalMangaAdapter
-import me.proxer.app.application.MainApplication.Companion.mangaDb
 import me.proxer.app.entity.LocalMangaChapter
 import me.proxer.app.event.LocalMangaJobFailedEvent
 import me.proxer.app.event.LocalMangaJobFinishedEvent
 import me.proxer.app.fragment.base.LoadingFragment
 import me.proxer.app.job.LocalMangaJob
 import me.proxer.app.task.manga.LocalMangaListTask
+import me.proxer.app.task.manga.MangaChapterRemovalTask
+import me.proxer.app.task.manga.MangaChapterRemovalTask.MangaChapterRemovalTaskInput
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils
-import me.proxer.app.util.MangaUtils
 import me.proxer.app.util.extension.CompleteLocalMangaEntry
 import me.proxer.app.util.extension.bindView
 import me.proxer.app.util.extension.multilineSnackbar
@@ -43,7 +43,6 @@ import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.find
-import java.io.File
 
 /**
  * @author Ruben Gees
@@ -62,7 +61,7 @@ class LocalMangaFragment : LoadingFragment<Unit, List<CompleteLocalMangaEntry>>(
 
     override val isLoginRequired = true
 
-    private lateinit var removalTask: AndroidLifecycleTask<ChapterRemovalInput, Unit>
+    private lateinit var removalTask: AndroidLifecycleTask<MangaChapterRemovalTaskInput, Unit>
     private lateinit var jobStateUpdateTask: AndroidLifecycleTask<Resources, String>
 
     private lateinit var innerAdapter: LocalMangaAdapter
@@ -84,7 +83,7 @@ class LocalMangaFragment : LoadingFragment<Unit, List<CompleteLocalMangaEntry>>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        removalTask = TaskBuilder.task(ChapterRemovalTask())
+        removalTask = TaskBuilder.task(MangaChapterRemovalTask(context.filesDir))
                 .async()
                 .validateBefore { validate() }
                 .bindToLifecycle(this, "${javaClass}_removal_task")
@@ -136,7 +135,7 @@ class LocalMangaFragment : LoadingFragment<Unit, List<CompleteLocalMangaEntry>>(
             }
 
             override fun onDeleteClick(entry: EntryCore, chapter: LocalMangaChapter) {
-                removalTask.execute(ChapterRemovalInput(context.filesDir, entry, chapter))
+                removalTask.execute(MangaChapterRemovalTaskInput(entry, chapter))
             }
         }
 
@@ -284,14 +283,6 @@ class LocalMangaFragment : LoadingFragment<Unit, List<CompleteLocalMangaEntry>>(
         jobStateUpdateTask.forceExecute(context.resources)
     }
 
-    internal class ChapterRemovalTask : WorkerTask<ChapterRemovalInput, Unit>() {
-        override fun work(input: ChapterRemovalInput) {
-            mangaDb.removeChapter(input.entry, input.chapter)
-
-            MangaUtils.deletePages(input.filesDir, input.entry.id, input.chapter.id)
-        }
-    }
-
     internal class JobStateUpdateTask : WorkerTask<Resources, String>() {
         override fun work(input: Resources): String {
             val runningJobs = LocalMangaJob.countRunningJobs()
@@ -318,6 +309,4 @@ class LocalMangaFragment : LoadingFragment<Unit, List<CompleteLocalMangaEntry>>(
             return message
         }
     }
-
-    internal class ChapterRemovalInput(val filesDir: File, val entry: EntryCore, val chapter: LocalMangaChapter)
 }

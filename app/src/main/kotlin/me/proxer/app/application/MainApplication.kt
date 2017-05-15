@@ -35,7 +35,7 @@ import me.proxer.app.helper.PreferenceHelper
 import me.proxer.app.helper.StorageHelper
 import me.proxer.app.job.LocalMangaJob
 import me.proxer.app.job.NotificationsJob
-import me.proxer.app.util.MangaUtils
+import me.proxer.app.task.manga.MangaRemovalTask
 import me.proxer.app.util.Utils.GENERIC_USER_AGENT
 import me.proxer.library.api.LoginTokenManager
 import me.proxer.library.api.ProxerApi
@@ -100,7 +100,7 @@ class MainApplication : Application() {
         doAsync {
             LocalMangaJob.cancelAll()
             mangaDb.clear()
-            MangaUtils.deleteAllChapters(filesDir)
+            MangaRemovalTask(filesDir).execute(Unit)
         }
     }
 

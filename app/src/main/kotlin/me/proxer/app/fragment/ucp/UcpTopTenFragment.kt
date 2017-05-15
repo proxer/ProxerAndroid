@@ -74,6 +74,7 @@ class UcpTopTenFragment : LoadingFragment<ProxerCall<List<UcpTopTenEntry>>, List
                     }
 
                     saveResultToState(animeAdapter.list.plus(mangaAdapter.list))
+                    removeEntriesFromQueue()
                 }
                 .onError {
                     removalQueue.clear()
@@ -82,9 +83,6 @@ class UcpTopTenFragment : LoadingFragment<ProxerCall<List<UcpTopTenEntry>>, List
                         multilineSnackbar(root, getString(R.string.error_topten_entry_removal, getString(it.message)),
                                 Snackbar.LENGTH_LONG, it.buttonMessage, it.buttonAction)
                     }
-                }
-                .onFinish {
-                    removeEntriesFromQueue()
                 }.build()
     }
 

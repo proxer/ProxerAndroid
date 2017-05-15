@@ -12,7 +12,8 @@ import me.proxer.app.event.LocalMangaJobFailedEvent
 import me.proxer.app.event.LocalMangaJobFinishedEvent
 import me.proxer.app.helper.NotificationHelper
 import me.proxer.app.helper.PreferenceHelper
-import me.proxer.app.util.MangaUtils
+import me.proxer.app.task.manga.MangaPageDownloadTask
+import me.proxer.app.task.manga.MangaPageDownloadTask.MangaPageDownloadTaskInput
 import me.proxer.app.util.extension.decodedName
 import me.proxer.library.enums.Language
 import me.proxer.library.util.ProxerUtils
@@ -104,13 +105,15 @@ class LocalMangaJob : Job() {
             }
 
             val chapter = api.manga().chapter(entryId, episode, language).build().execute()
+            val downloadTask = MangaPageDownloadTask(context.filesDir)
 
             for (it in chapter.pages) {
                 if (isCanceled) {
                     return Result.FAILURE
                 }
 
-                MangaUtils.downloadPage(context.filesDir, chapter.server, entryId, chapter.id, it.decodedName)
+                downloadTask.serialExecute(MangaPageDownloadTaskInput(chapter.server, entryId,
+                        chapter.id, it.decodedName))
             }
 
             mangaDb.insertChapter(chapter, episode, language)

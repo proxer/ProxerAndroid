@@ -8,7 +8,5 @@ import me.proxer.app.util.extension.CompleteLocalMangaEntry
  * @author Ruben Gees
  */
 class LocalMangaListTask : WorkerTask<Unit, List<CompleteLocalMangaEntry>>() {
-    override fun work(input: Unit): List<CompleteLocalMangaEntry> {
-        return mangaDb.getAll()
-    }
+    override fun work(input: Unit) = mangaDb.getAll()
 }

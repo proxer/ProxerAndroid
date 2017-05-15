@@ -8,7 +8,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import me.proxer.app.R
 import me.proxer.app.application.MainApplication
 import me.proxer.app.job.LocalMangaJob
-import me.proxer.app.util.MangaUtils
+import me.proxer.app.task.manga.MangaRemovalTask
 import org.jetbrains.anko.doAsync
 
 /**
@@ -28,10 +28,12 @@ class CleanMangaDialog : DialogFragment() {
                 .positiveText(R.string.dialog_clean_manga_positive)
                 .negativeText(R.string.cancel)
                 .onPositive { _, _ ->
+                    val filesDir = context.filesDir
+
                     doAsync {
                         LocalMangaJob.cancelAll()
                         MainApplication.mangaDb.clear()
-                        MangaUtils.deleteAllChapters(context.filesDir)
+                        MangaRemovalTask(filesDir).execute(Unit)
                     }
                 }
                 .build()

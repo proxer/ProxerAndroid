@@ -18,7 +18,6 @@ import com.rubengees.ktask.base.MultiBranchTask.PartialTaskException
 import com.rubengees.ktask.base.Task
 import com.rubengees.ktask.operation.CacheTask
 import com.rubengees.ktask.util.TaskBuilder
-import com.rubengees.ktask.util.WorkerTask
 import me.proxer.app.R
 import me.proxer.app.activity.MangaActivity
 import me.proxer.app.activity.ProfileActivity
@@ -34,9 +33,9 @@ import me.proxer.app.fragment.base.LoadingFragment
 import me.proxer.app.task.asyncProxerTask
 import me.proxer.app.task.manga.LocalMangaChapterTask
 import me.proxer.app.task.manga.LocalMangaEntryTask
+import me.proxer.app.task.manga.MangaCleanTask
 import me.proxer.app.task.proxerTask
 import me.proxer.app.util.ErrorUtils
-import me.proxer.app.util.MangaUtils
 import me.proxer.app.util.TimeUtils
 import me.proxer.app.util.Validators
 import me.proxer.app.util.extension.bindView
@@ -53,7 +52,6 @@ import me.proxer.library.enums.Category
 import me.proxer.library.enums.Language
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.find
-import java.io.File
 
 /**
  * @author Ruben Gees
@@ -329,12 +327,12 @@ class MangaFragment : LoadingFragment<MangaInput, MangaChapterInfo>() {
         val localEntryTask = TaskBuilder.attemptTask(LocalMangaEntryTask(), proxerEntryCoreTask)
                 .cache(CacheTask.CacheStrategy.RESULT)
 
-        val chapterTask = localChapterTask.parallelWith(localEntryTask, zipFunction = { chapter, entry ->
+        val mangaTask = localChapterTask.parallelWith(localEntryTask, zipFunction = { chapter, entry ->
             MangaChapterInfo(chapter, entry.name, entry.episodeAmount)
         }, awaitLeftResultOnError = true)
 
-        return TaskBuilder.task(CleanTask(context.filesDir))
-                .then(chapterTask.mapInput<MangaInput> { it to it.id })
+        return TaskBuilder.task(MangaCleanTask(context.filesDir))
+                .then(mangaTask.mapInput<MangaInput> { it to it.id })
                 .async()
                 .build()
     }
@@ -358,14 +356,6 @@ class MangaFragment : LoadingFragment<MangaInput, MangaChapterInfo>() {
         } else {
             activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LOW_PROFILE or
                     View.SYSTEM_UI_FLAG_FULLSCREEN
-        }
-    }
-
-    private class CleanTask(private val filesDir: File) : WorkerTask<MangaInput, MangaInput>() {
-        override fun work(input: MangaInput): MangaInput {
-            MangaUtils.clean(filesDir)
-
-            return input
         }
     }
 }

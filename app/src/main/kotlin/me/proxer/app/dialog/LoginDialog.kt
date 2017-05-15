@@ -73,8 +73,6 @@ class LoginDialog : MainDialog() {
 
                     setProgressVisible(false)
                 }
-                .onFinish {
-                }
                 .build()
     }
 

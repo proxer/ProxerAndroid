@@ -80,9 +80,9 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?) :
     }
 
     override fun onViewDetachedFromWindow(holder: PagingViewHolder<EpisodeRow>?) {
-        EventBus.getDefault().unregister(holder)
-
         super.onViewDetachedFromWindow(holder)
+
+        EventBus.getDefault().unregister(holder)
     }
 
     override fun getItemId(position: Int): Long {
