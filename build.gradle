@@ -19,7 +19,7 @@ ext {
     eventBusAnnotationVersion = '3.0.1'
     androidJobVersion = '1.1.11-SNAPSHOT'
     proxerLibVersion = 'new-architecture-SNAPSHOT'
-    ktaskVersion = '-SNAPSHOT'
+    ktaskVersion = '0.3.4'
 
     // UI components
     aboutLibrariesVersion = '5.9.6'
@@ -47,7 +47,7 @@ ext {
     kotterknifeVersion = '0.1.0-SNAPSHOT'
     hawkVersion = '2.0.1'
     glideVersion = '3.8.0'
-    glideIntegrationVersion = '1.4.0'
+    glideIntegrationVersion = '1.5.0'
     okHttpVersion = '3.7.0'
     okioVersion = '1.13.0'
     linkBuilderVersion = '1.5.2'
