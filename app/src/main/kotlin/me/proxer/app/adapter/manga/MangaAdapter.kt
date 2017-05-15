@@ -31,24 +31,28 @@ class MangaAdapter : PagingAdapter<Page>() {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_manga_page, parent, false))
     }
 
+    override fun onViewDetachedFromWindow(holder: PagingViewHolder<Page>?) {
+        super.onViewDetachedFromWindow(holder)
+
+        if (holder is ViewHolder) {
+            destroyDownloadTask(holder)
+        }
+    }
+
     fun init(server: String, entryId: String, id: String) {
         this.server = server
         this.entryId = entryId
         this.id = id
     }
 
-    override fun onViewDetachedFromWindow(holder: PagingViewHolder<Page>?) {
-        super.onViewDetachedFromWindow(holder)
-
-        if (holder is ViewHolder) {
-            holder.image.tag?.let {
-                if (it is Task<*, *>) {
-                    it.destroy()
-                }
+    private fun destroyDownloadTask(holder: ViewHolder) {
+        holder.image.tag?.let {
+            if (it is Task<*, *>) {
+                it.destroy()
             }
-
-            holder.image.tag = null
         }
+
+        holder.image.tag = null
     }
 
     inner class ViewHolder(itemView: View) : PagingViewHolder<Page>(itemView) {
@@ -82,10 +86,14 @@ class MangaAdapter : PagingAdapter<Page>() {
         override fun bind(item: Page) {
             val width = DeviceUtils.getScreenWidth(image.context)
             val height = (item.height * width.toFloat() / item.width.toFloat()).toInt()
+            val scale = width.toFloat() / item.width.toFloat() * 2f
+
+            destroyDownloadTask(this)
 
             image.recycle()
+            image.setDoubleTapZoomScale(scale)
             image.layoutParams.height = height
-            image.maxScale = width.toFloat() / item.width.toFloat() * 2f
+            image.maxScale = scale
             image.tag = TaskBuilder.task(MangaPageDownloadTask(image.context.filesDir))
                     .async()
                     .onSuccess {
