@@ -14,6 +14,7 @@ data class LocalConference(val localId: Long, val id: String, val topic: String,
                            val lastReadMessageId: String) : Parcelable {
 
     companion object {
+        @Suppress("unused")
         @JvmField val CREATOR: Parcelable.Creator<LocalConference> = object : Parcelable.Creator<LocalConference> {
             override fun createFromParcel(source: Parcel): LocalConference = LocalConference(source)
             override fun newArray(size: Int): Array<LocalConference?> = arrayOfNulls(size)

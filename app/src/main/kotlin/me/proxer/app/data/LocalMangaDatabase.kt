@@ -153,7 +153,7 @@ class LocalMangaDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DA
     fun findEntry(id: String): EntryCore? {
         return use {
             select(ENTRY_TABLE)
-                    .where("$ENTRY_ID_COLUMN = \"$id\"")
+                    .whereArgs("$ENTRY_ID_COLUMN = \"$id\"")
                     .parseOpt(entryParser)
         }
     }
@@ -161,7 +161,7 @@ class LocalMangaDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DA
     fun findChapter(entryId: String, episode: Int, language: Language): Chapter? {
         return use {
             val chapter = select(CHAPTER_TABLE)
-                    .where("$CHAPTER_ENTRY_ID_COLUMN = \"$entryId\" and $CHAPTER_EPISODE_COLUMN = $episode " +
+                    .whereArgs("$CHAPTER_ENTRY_ID_COLUMN = \"$entryId\" and $CHAPTER_EPISODE_COLUMN = $episode " +
                             "and $CHAPTER_LANGUAGE_COLUMN = \"${ProxerUtils.getApiEnumName(language)}\"")
                     .parseOpt(chapterParser)
 
@@ -177,7 +177,7 @@ class LocalMangaDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DA
 
             entries.associate {
                 it to select(CHAPTER_TABLE)
-                        .where("$CHAPTER_ENTRY_ID_COLUMN = \"${it.id}\"")
+                        .whereArgs("$CHAPTER_ENTRY_ID_COLUMN = \"${it.id}\"")
                         .parseList(chapterParser)
                         .sortedBy { it.episode }
             }.filterNot { it.value.isEmpty() }.toList()
@@ -232,7 +232,7 @@ class LocalMangaDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DA
     private fun findPagesForChapter(chapter: LocalMangaChapter): List<Page> {
         return use {
             select(PAGE_TABLE)
-                    .where("$PAGE_CHAPTER_ID_COLUMN = ${chapter.localId}")
+                    .whereArgs("$PAGE_CHAPTER_ID_COLUMN = ${chapter.localId}")
                     .parseList(pageParser)
         }
     }

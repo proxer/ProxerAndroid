@@ -122,12 +122,12 @@ class ChatDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DATABASE
             val result = ArrayList<LocalMessage>()
 
             result.addAll(this.select(MESSAGE_TABLE)
-                    .where("($MESSAGE_CONFERENCE_ID_COLUMN = $conferenceId) and ($MESSAGE_ID_COLUMN != -1)")
+                    .whereArgs("($MESSAGE_CONFERENCE_ID_COLUMN = $conferenceId) and ($MESSAGE_ID_COLUMN != -1)")
                     .orderBy(MESSAGE_ID_COLUMN, SqlOrderDirection.DESC)
                     .parseList(messageParser))
 
             result.addAll(0, this.select(MESSAGE_TABLE)
-                    .where("($MESSAGE_CONFERENCE_ID_COLUMN = $conferenceId) and ($MESSAGE_ID_COLUMN = -1)")
+                    .whereArgs("($MESSAGE_CONFERENCE_ID_COLUMN = $conferenceId) and ($MESSAGE_ID_COLUMN = -1)")
                     .orderBy(MESSAGE_DATE_COLUMN, SqlOrderDirection.DESC)
                     .parseList(messageParser))
 
@@ -188,7 +188,7 @@ class ChatDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DATABASE
     fun getMessagesToSend(): List<LocalMessage> {
         return use {
             this.select(MESSAGE_TABLE)
-                    .where("$MESSAGE_ID_COLUMN = -1")
+                    .whereArgs("$MESSAGE_ID_COLUMN = -1")
                     .orderBy(MESSAGE_LOCAL_ID_COLUMN, SqlOrderDirection.ASC)
                     .parseList(messageParser)
         }
@@ -212,7 +212,7 @@ class ChatDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DATABASE
     fun getConference(id: String): LocalConference? {
         return use {
             this.select(CONFERENCE_TABLE)
-                    .where("$CONFERENCE_ID_COLUMN = $id")
+                    .whereArgs("$CONFERENCE_ID_COLUMN = $id")
                     .parseOpt(conferenceParser)
         }
     }
@@ -220,7 +220,7 @@ class ChatDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DATABASE
     fun getMessage(id: String): LocalMessage? {
         return use {
             this.select(MESSAGE_TABLE)
-                    .where("$MESSAGE_ID_COLUMN = $id")
+                    .whereArgs("$MESSAGE_ID_COLUMN = $id")
                     .parseOpt(messageParser)
         }
     }
@@ -228,7 +228,7 @@ class ChatDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DATABASE
     fun getUnreadConferences(): List<LocalConference> {
         return use {
             this.select(CONFERENCE_TABLE)
-                    .where("$CONFERENCE_IS_READ_COLUMN = 0")
+                    .whereArgs("$CONFERENCE_IS_READ_COLUMN = 0")
                     .orderBy(CONFERENCE_ID_COLUMN, SqlOrderDirection.DESC)
                     .parseList(conferenceParser)
         }
@@ -244,7 +244,7 @@ class ChatDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DATABASE
     fun getOldestMessage(conferenceId: String): LocalMessage? {
         return use {
             this.select(MESSAGE_TABLE)
-                    .where("($MESSAGE_CONFERENCE_ID_COLUMN = $conferenceId) and ($MESSAGE_ID_COLUMN != -1)")
+                    .whereArgs("($MESSAGE_CONFERENCE_ID_COLUMN = $conferenceId) and ($MESSAGE_ID_COLUMN != -1)")
                     .orderBy(MESSAGE_ID_COLUMN, SqlOrderDirection.ASC)
                     .limit(1)
                     .parseOpt(messageParser)
@@ -254,7 +254,7 @@ class ChatDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DATABASE
     fun getMostRecentMessage(conferenceId: String): LocalMessage? {
         return use {
             this.select(MESSAGE_TABLE)
-                    .where("($MESSAGE_CONFERENCE_ID_COLUMN = $conferenceId) and ($MESSAGE_ID_COLUMN != -1)")
+                    .whereArgs("($MESSAGE_CONFERENCE_ID_COLUMN = $conferenceId) and ($MESSAGE_ID_COLUMN != -1)")
                     .orderBy(MESSAGE_ID_COLUMN, SqlOrderDirection.DESC)
                     .limit(1)
                     .parseOpt(messageParser)
@@ -264,7 +264,7 @@ class ChatDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DATABASE
     fun getMostRecentMessages(conferenceId: String, amount: Int): List<LocalMessage> {
         return use {
             this.select(MESSAGE_TABLE)
-                    .where("($MESSAGE_CONFERENCE_ID_COLUMN = $conferenceId) and ($MESSAGE_ID_COLUMN != -1)")
+                    .whereArgs("($MESSAGE_CONFERENCE_ID_COLUMN = $conferenceId) and ($MESSAGE_ID_COLUMN != -1)")
                     .orderBy(MESSAGE_ID_COLUMN, SqlOrderDirection.DESC)
                     .limit(amount)
                     .parseList(messageParser)
@@ -274,7 +274,7 @@ class ChatDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DATABASE
     fun getChat(username: String): LocalConference? {
         return use {
             this.select(CONFERENCE_TABLE)
-                    .where("($CONFERENCE_TOPIC_COLUMN = '$username') and ($CONFERENCE_IS_GROUP_COLUMN = 0)")
+                    .whereArgs("($CONFERENCE_TOPIC_COLUMN = '$username') and ($CONFERENCE_IS_GROUP_COLUMN = 0)")
                     .parseOpt(conferenceParser)
         }
     }
@@ -282,7 +282,7 @@ class ChatDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DATABASE
     fun getConferencesToMark(): List<LocalConference> {
         return use {
             this.select(CONFERENCE_TABLE)
-                    .where("($CONFERENCE_LOCAL_IS_READ_COLUMN = 1) and ($CONFERENCE_IS_READ_COLUMN = 0)")
+                    .whereArgs("($CONFERENCE_LOCAL_IS_READ_COLUMN = 1) and ($CONFERENCE_IS_READ_COLUMN = 0)")
                     .parseList(conferenceParser)
         }
     }
@@ -291,7 +291,7 @@ class ChatDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DATABASE
         use {
             transaction {
                 this.update(CONFERENCE_TABLE, CONFERENCE_LOCAL_IS_READ_COLUMN to 1)
-                        .where("$CONFERENCE_ID_COLUMN = $conferenceId")
+                        .whereArgs("$CONFERENCE_ID_COLUMN = $conferenceId")
                         .exec()
             }
         }
@@ -300,7 +300,7 @@ class ChatDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DATABASE
     private fun doInsertOrUpdateConference(db: SQLiteDatabase, item: Conference): LocalConference {
         val insertionValues = generateInsertionValues(item)
         val updated = db.update(CONFERENCE_TABLE, *insertionValues)
-                .where("$CONFERENCE_ID_COLUMN = ${item.id}").exec() > 0
+                .whereArgs("$CONFERENCE_ID_COLUMN = ${item.id}").exec() > 0
 
         return when {
             updated -> getConference(item.id) ?: throw SQLiteException("Could not find conference with id ${item.id}")
@@ -312,7 +312,7 @@ class ChatDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DATABASE
         return items.map {
             val insertionValues = generateInsertionValues(it)
             val updated = db.update(MESSAGE_TABLE, *insertionValues)
-                    .where("$MESSAGE_ID_COLUMN = ${it.id}")
+                    .whereArgs("$MESSAGE_ID_COLUMN = ${it.id}")
                     .exec() > 0
 
             when (updated) {
