@@ -6,7 +6,7 @@ machine:
 
 dependencies:
   pre:
-    - echo y | android update sdk --no-ui --all --filter "build-tools-26.0.0.2"
+    - sdkmanager --channel=3 "build-tools;26.0.0-rc2"
   override:
     - ./gradlew dependencies --console=plain
 
