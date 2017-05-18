@@ -68,7 +68,9 @@ abstract class ImageTabsActivity : MainActivity() {
                 override fun onTransitionEnd(transition: Transition?) {
                     window.sharedElementEnterTransition.removeListener(this)
 
-                    setupContent(savedInstanceState)
+                    viewPager.postDelayed({
+                        setupContent(savedInstanceState)
+                    }, 50)
                 }
             })
         } else {
