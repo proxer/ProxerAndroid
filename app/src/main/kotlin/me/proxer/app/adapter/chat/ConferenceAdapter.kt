@@ -98,27 +98,25 @@ class ConferenceAdapter : PagingAdapter<LocalConference>() {
                         }
             }
 
-            item.image.let {
-                if (it == null || it.isBlank()) {
-                    val icon = IconicsDrawable(image.context)
-                            .sizeDp(96)
-                            .paddingDp(16)
-                            .colorRes(R.color.colorAccent)
+            if (item.image.isBlank()) {
+                val icon = IconicsDrawable(image.context)
+                        .sizeDp(96)
+                        .paddingDp(16)
+                        .colorRes(R.color.colorAccent)
 
-                    if (item.isGroup) {
-                        icon.icon(CommunityMaterial.Icon.cmd_account_multiple)
-                    } else {
-                        icon.icon(CommunityMaterial.Icon.cmd_account)
-                    }
-
-                    Glide.clear(image)
-                    image.setImageDrawable(icon)
+                if (item.isGroup) {
+                    icon.icon(CommunityMaterial.Icon.cmd_account_multiple)
                 } else {
-                    Glide.with(image.context)
-                            .load(ProxerUrls.userImage(it).toString())
-                            .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                            .into(image)
+                    icon.icon(CommunityMaterial.Icon.cmd_account)
                 }
+
+                Glide.clear(image)
+                image.setImageDrawable(icon)
+            } else {
+                Glide.with(image.context)
+                        .load(ProxerUrls.userImage(item.image).toString())
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .into(image)
             }
         }
     }
