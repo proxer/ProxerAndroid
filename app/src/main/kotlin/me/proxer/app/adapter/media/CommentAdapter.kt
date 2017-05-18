@@ -16,7 +16,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
-import me.proxer.app.adapter.base.PagingAdapter
+import me.proxer.app.adapter.base.BaseAdapter
 import me.proxer.app.application.GlideRequests
 import me.proxer.app.util.ParcelableStringBooleanMap
 import me.proxer.app.util.TimeUtils
@@ -32,7 +32,7 @@ import java.util.*
  * @author Ruben Gees
  */
 class CommentAdapter(savedInstanceState: Bundle?, categoryCallback: () -> Category = { Category.ANIME },
-                     private val glide: GlideRequests) : PagingAdapter<Comment>() {
+                     private val glide: GlideRequests) : BaseAdapter<Comment>() {
 
     private companion object {
         private const val EXPANDED_STATE = "comments_expanded"

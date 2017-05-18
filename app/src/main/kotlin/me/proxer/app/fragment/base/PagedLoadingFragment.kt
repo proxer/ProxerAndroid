@@ -15,7 +15,7 @@ import com.rubengees.ktask.android.AndroidLifecycleTask
 import com.rubengees.ktask.android.bindToLifecycle
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
-import me.proxer.app.adapter.base.PagingAdapter
+import me.proxer.app.adapter.base.BaseAdapter
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.extension.bindView
@@ -42,7 +42,7 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
     protected lateinit var adapter: EasyHeaderFooterAdapter
     protected lateinit var layoutManager: StaggeredGridLayoutManager
 
-    abstract protected val innerAdapter: PagingAdapter<O>
+    abstract protected val innerAdapter: BaseAdapter<O>
     abstract protected val itemsOnPage: Int
 
     open protected val list: RecyclerView by bindView(R.id.list)
@@ -82,7 +82,7 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
         // restored automatically.
         super.onViewCreated(view, savedInstanceState)
 
-        innerAdapter.positionResolver = object : PagingAdapter.PositionResolver() {
+        innerAdapter.positionResolver = object : BaseAdapter.PositionResolver() {
             override fun resolveRealPosition(position: Int) = adapter.getRealPosition(position)
         }
 

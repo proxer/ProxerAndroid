@@ -13,7 +13,7 @@ import com.mikepenz.iconics.IconicsDrawable
 import fisk.chipcloud.ChipCloud
 import fisk.chipcloud.ChipCloudConfig
 import me.proxer.app.R
-import me.proxer.app.adapter.base.PagingAdapter
+import me.proxer.app.adapter.base.BaseAdapter
 import me.proxer.app.application.GlideRequests
 import me.proxer.app.entity.chat.LocalConference
 import me.proxer.app.util.TimeUtils
@@ -23,7 +23,7 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-class ConferenceAdapter(private val glide: GlideRequests) : PagingAdapter<LocalConference>() {
+class ConferenceAdapter(private val glide: GlideRequests) : BaseAdapter<LocalConference>() {
 
     var callback: ConferenceAdapterCallback? = null
 

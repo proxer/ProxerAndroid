@@ -12,7 +12,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
-import me.proxer.app.adapter.base.PagingAdapter
+import me.proxer.app.adapter.base.BaseAdapter
 import me.proxer.app.application.GlideRequests
 import me.proxer.app.util.extension.bindView
 import me.proxer.library.entitiy.ucp.UcpTopTenEntry
@@ -21,7 +21,7 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-class UcpTopTenAdapter(private val glide: GlideRequests) : PagingAdapter<UcpTopTenEntry>() {
+class UcpTopTenAdapter(private val glide: GlideRequests) : BaseAdapter<UcpTopTenEntry>() {
 
     var callback: UcpToptenAdapterCallback? = null
 

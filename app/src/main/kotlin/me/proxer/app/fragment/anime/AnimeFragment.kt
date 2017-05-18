@@ -25,7 +25,7 @@ import me.proxer.app.activity.ProfileActivity
 import me.proxer.app.activity.TranslatorGroupActivity
 import me.proxer.app.activity.base.MainActivity
 import me.proxer.app.adapter.anime.StreamAdapter
-import me.proxer.app.adapter.base.PagingAdapter
+import me.proxer.app.adapter.base.BaseAdapter
 import me.proxer.app.application.GlideApp
 import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.fragment.anime.AnimeFragment.StreamInfo
@@ -191,7 +191,7 @@ class AnimeFragment : LoadingFragment<Pair<ProxerCall<List<Stream>>, ProxerCall<
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        innerAdapter.positionResolver = object : PagingAdapter.PositionResolver() {
+        innerAdapter.positionResolver = object : BaseAdapter.PositionResolver() {
             override fun resolveRealPosition(position: Int) = adapter.getRealPosition(position)
         }
 

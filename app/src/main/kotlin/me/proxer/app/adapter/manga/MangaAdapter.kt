@@ -11,7 +11,7 @@ import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.rubengees.ktask.base.Task
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
-import me.proxer.app.adapter.base.PagingAdapter
+import me.proxer.app.adapter.base.BaseAdapter
 import me.proxer.app.task.manga.MangaPageDownloadTask
 import me.proxer.app.task.manga.MangaPageDownloadTask.MangaPageDownloadTaskInput
 import me.proxer.app.util.DeviceUtils
@@ -22,7 +22,7 @@ import me.proxer.library.entitiy.manga.Page
 /**
  * @author Ruben Gees
  */
-class MangaAdapter : PagingAdapter<Page>() {
+class MangaAdapter : BaseAdapter<Page>() {
 
     private lateinit var server: String
     private lateinit var entryId: String

@@ -11,7 +11,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
-import me.proxer.app.adapter.base.PagingAdapter
+import me.proxer.app.adapter.base.BaseAdapter
 import me.proxer.app.application.GlideRequests
 import me.proxer.app.util.ParcelableStringBooleanMap
 import me.proxer.app.util.TimeUtils
@@ -23,7 +23,7 @@ import org.threeten.bp.format.DateTimeFormatter
 /**
  * @author Ruben Gees
  */
-class StreamAdapter(savedInstanceState: Bundle?, private val glide: GlideRequests) : PagingAdapter<Stream>() {
+class StreamAdapter(savedInstanceState: Bundle?, private val glide: GlideRequests) : BaseAdapter<Stream>() {
 
     private companion object {
         private const val EXPANDED_STATE = "stream_expanded"

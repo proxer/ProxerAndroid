@@ -9,7 +9,7 @@ import android.widget.RatingBar
 import android.widget.TextView
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import me.proxer.app.R
-import me.proxer.app.adapter.base.PagingAdapter
+import me.proxer.app.adapter.base.BaseAdapter
 import me.proxer.app.application.GlideRequests
 import me.proxer.app.util.extension.bindView
 import me.proxer.app.util.extension.toAppString
@@ -19,7 +19,7 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-class TranslatorGroupProjectAdapter(private val glide: GlideRequests) : PagingAdapter<TranslatorGroupProject>() {
+class TranslatorGroupProjectAdapter(private val glide: GlideRequests) : BaseAdapter<TranslatorGroupProject>() {
 
     var callback: TranslatorGroupProjectAdapterCallback? = null
 

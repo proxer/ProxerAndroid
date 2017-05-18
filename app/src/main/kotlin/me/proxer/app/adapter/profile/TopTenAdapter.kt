@@ -8,7 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import me.proxer.app.R
-import me.proxer.app.adapter.base.PagingAdapter
+import me.proxer.app.adapter.base.BaseAdapter
 import me.proxer.app.application.GlideRequests
 import me.proxer.app.util.extension.bindView
 import me.proxer.library.entitiy.user.TopTenEntry
@@ -17,7 +17,7 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-class TopTenAdapter(private val glide: GlideRequests) : PagingAdapter<TopTenEntry>() {
+class TopTenAdapter(private val glide: GlideRequests) : BaseAdapter<TopTenEntry>() {
 
     var callback: TopTenAdapterCallback? = null
 

@@ -23,7 +23,7 @@ import me.proxer.app.activity.MangaActivity
 import me.proxer.app.activity.ProfileActivity
 import me.proxer.app.activity.TranslatorGroupActivity
 import me.proxer.app.activity.base.MainActivity
-import me.proxer.app.adapter.base.PagingAdapter
+import me.proxer.app.adapter.base.BaseAdapter
 import me.proxer.app.adapter.manga.MangaAdapter
 import me.proxer.app.application.MainApplication
 import me.proxer.app.application.MainApplication.Companion.api
@@ -166,7 +166,7 @@ class MangaFragment : LoadingFragment<MangaInput, MangaChapterInfo>() {
             }
         }
 
-        innerAdapter.positionResolver = object : PagingAdapter.PositionResolver() {
+        innerAdapter.positionResolver = object : BaseAdapter.PositionResolver() {
             override fun resolveRealPosition(position: Int) = adapter.getRealPosition(position)
         }
 

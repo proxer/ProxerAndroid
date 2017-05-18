@@ -11,7 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import me.proxer.app.R
-import me.proxer.app.adapter.base.PagingAdapter
+import me.proxer.app.adapter.base.BaseAdapter
 import me.proxer.app.adapter.manga.LocalMangaChapterAdapter.LocalMangaChapterAdapterCallback
 import me.proxer.app.application.GlideRequests
 import me.proxer.app.entity.manga.LocalMangaChapter
@@ -27,7 +27,7 @@ import me.proxer.library.util.ProxerUrls
  * @author Ruben Gees
  */
 class LocalMangaAdapter(savedInstanceState: Bundle?, private val glide: GlideRequests) :
-        PagingAdapter<CompleteLocalMangaEntry>() {
+        BaseAdapter<CompleteLocalMangaEntry>() {
 
     private companion object {
         private const val EXPANDED_STATE = "local_manga_expanded"

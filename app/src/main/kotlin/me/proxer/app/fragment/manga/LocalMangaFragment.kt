@@ -21,7 +21,7 @@ import me.proxer.app.R
 import me.proxer.app.activity.MangaActivity
 import me.proxer.app.activity.MediaActivity
 import me.proxer.app.activity.base.MainActivity
-import me.proxer.app.adapter.base.PagingAdapter
+import me.proxer.app.adapter.base.BaseAdapter
 import me.proxer.app.adapter.manga.LocalMangaAdapter
 import me.proxer.app.application.GlideApp
 import me.proxer.app.entity.manga.LocalMangaChapter
@@ -119,7 +119,7 @@ class LocalMangaFragment : LoadingFragment<Unit, List<CompleteLocalMangaEntry>>(
         innerAdapter = LocalMangaAdapter(savedInstanceState, GlideApp.with(this))
         adapter = EasyHeaderFooterAdapter(innerAdapter)
 
-        innerAdapter.positionResolver = object : PagingAdapter.PositionResolver() {
+        innerAdapter.positionResolver = object : BaseAdapter.PositionResolver() {
             override fun resolveRealPosition(position: Int) = adapter.getRealPosition(position)
         }
 

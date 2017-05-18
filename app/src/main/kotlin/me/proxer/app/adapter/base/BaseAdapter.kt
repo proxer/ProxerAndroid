@@ -10,7 +10,7 @@ import me.proxer.library.entitiy.ProxerIdItem
 /**
  * @author Ruben Gees
  */
-abstract class PagingAdapter<T> : RecyclerView.Adapter<PagingAdapter<T>.PagingViewHolder<T>>() {
+abstract class BaseAdapter<T> : RecyclerView.Adapter<BaseAdapter<T>.PagingViewHolder<T>>() {
 
     val list: List<T> get() = ArrayList(internalList)
 

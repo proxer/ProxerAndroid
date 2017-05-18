@@ -9,7 +9,7 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.RecyclerView.ViewHolder
 import android.view.View
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
-import me.proxer.app.adapter.base.PagingAdapter
+import me.proxer.app.adapter.base.BaseAdapter
 import java.util.*
 import java.util.concurrent.Future
 import kotlin.properties.ReadOnlyProperty
@@ -107,7 +107,7 @@ private class Lazy<in T, out V : View>(private val initializer: (T, KProperty<*>
                     currentAdapter = currentAdapter.innerAdapter
                 }
 
-                if (currentAdapter is PagingAdapter<*>) {
+                if (currentAdapter is BaseAdapter<*>) {
                     currentAdapter.destroy()
                 }
 
