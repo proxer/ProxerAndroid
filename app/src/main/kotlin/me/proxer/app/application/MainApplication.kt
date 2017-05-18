@@ -7,11 +7,7 @@ import android.net.Uri
 import android.support.v7.app.AppCompatDelegate
 import android.widget.ImageView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.integration.okhttp3.OkHttpUrlLoader
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.model.GenericLoaderFactory
-import com.bumptech.glide.load.model.GlideUrl
-import com.bumptech.glide.load.model.ModelLoaderFactory
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.devbrackets.android.exomedia.ExoMedia
 import com.evernote.android.job.JobManager
 import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory
@@ -29,6 +25,7 @@ import com.squareup.moshi.Moshi
 import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.ios.IosEmojiProvider
 import me.proxer.app.BuildConfig
+import me.proxer.app.EventBusIndex
 import me.proxer.app.data.ChatDatabase
 import me.proxer.app.data.LocalMangaDatabase
 import me.proxer.app.event.LoginEvent
@@ -47,7 +44,6 @@ import okhttp3.OkHttpClient
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.jetbrains.anko.doAsync
-import java.io.InputStream
 
 /**
  * @author Ruben Gees
@@ -97,7 +93,6 @@ class MainApplication : Application() {
         initLibs()
         enableStrictModeForDebug()
 
-        KaptStub.initLibs()
         EventBus.getDefault().register(this)
     }
 
@@ -139,17 +134,20 @@ class MainApplication : Application() {
         EmojiManager.install(IosEmojiProvider())
         AndroidThreeTen.init(this)
 
+        EventBus.builder().addIndex(EventBusIndex())
+                .apply {
+                    if (!BuildConfig.DEBUG) {
+                        logNoSubscriberMessages(false)
+                        sendNoSubscriberEvent(false)
+                    }
+                }
+                .installDefaultEventBus()
+
         ExoMedia.setHttpDataSourceFactoryProvider(ExoMedia.HttpDataSourceFactoryProvider {
             _: String, listener: TransferListener<in DataSource>? ->
 
             OkHttpDataSourceFactory(client, GENERIC_USER_AGENT, listener)
         })
-
-        Glide.get(this).register(GlideUrl::class.java, InputStream::class.java,
-                object : ModelLoaderFactory<GlideUrl, InputStream> {
-                    override fun build(context: Context?, factory: GenericLoaderFactory?) = OkHttpUrlLoader(client)
-                    override fun teardown() {}
-                })
 
         JobManager.create(this).addJobCreator {
             when {
@@ -199,15 +197,15 @@ class MainApplication : Application() {
 
     private class ConcreteDrawerImageLoader : AbstractDrawerImageLoader() {
         override fun set(imageView: ImageView, uri: Uri?, placeholder: Drawable?, tag: String?) {
-            Glide.with(imageView.context)
+            GlideApp.with(imageView.context)
                     .load(uri)
-                    .placeholder(placeholder)
                     .centerCrop()
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .placeholder(placeholder)
+                    .transition(DrawableTransitionOptions.withCrossFade())
                     .into(imageView)
         }
 
-        override fun cancel(imageView: ImageView) = Glide.clear(imageView)
+        override fun cancel(imageView: ImageView) = Glide.with(imageView.context).clear(imageView)
 
         override fun placeholder(context: Context, tag: String?): Drawable? {
             return IconicsDrawable(context, CommunityMaterial.Icon.cmd_account).colorRes(android.R.color.white)

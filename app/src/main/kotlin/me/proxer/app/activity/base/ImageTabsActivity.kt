@@ -1,6 +1,7 @@
 package me.proxer.app.activity.base
 
 import android.annotation.TargetApi
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
@@ -15,14 +16,11 @@ import android.transition.Transition
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.resource.drawable.GlideDrawable
-import com.bumptech.glide.request.animation.GlideAnimation
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget
+import com.bumptech.glide.request.target.ImageViewTarget
 import com.h6ah4i.android.tablayouthelper.TabLayoutHelper
 import me.proxer.app.R
 import me.proxer.app.activity.ImageDetailActivity
+import me.proxer.app.application.GlideApp
 import me.proxer.app.util.ActivityUtils
 import me.proxer.app.util.extension.bindView
 import me.proxer.app.util.listener.TransitionListenerWrapper
@@ -71,10 +69,6 @@ abstract class ImageTabsActivity : MainActivity() {
                     window.sharedElementEnterTransition.removeListener(this)
 
                     setupContent(savedInstanceState)
-
-                    // We need to invalidate the ImageView once the transition is finished, as either a bug in Glide
-                    // or the Android framework is causing the image to be moved a bit sometimes.
-                    headerImage.post { headerImage.invalidate() }
                 }
             })
         } else {
@@ -122,20 +116,21 @@ abstract class ImageTabsActivity : MainActivity() {
         }
     }
 
-    open protected fun loadImage() {
+    open protected fun loadImage(animate: Boolean = true) {
         if (headerImageUrl == null) {
             loadEmptyImage()
+
             supportStartPostponedEnterTransition()
         } else {
-            Glide.with(this)
+            GlideApp.with(this)
                     .load(headerImageUrl.toString())
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .into(object : GlideDrawableImageViewTarget(headerImage) {
-                        override fun onResourceReady(resource: GlideDrawable?,
-                                                     animation: GlideAnimation<in GlideDrawable>?) {
-                            super.onResourceReady(resource, animation)
+                    .into(object : ImageViewTarget<Drawable>(headerImage) {
+                        override fun setResource(resource: Drawable?) {
+                            headerImage.setImageDrawable(resource)
 
-                            supportStartPostponedEnterTransition()
+                            if (resource != null) {
+                                supportStartPostponedEnterTransition()
+                            }
                         }
                     })
         }

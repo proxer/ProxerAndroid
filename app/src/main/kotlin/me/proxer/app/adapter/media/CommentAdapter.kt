@@ -13,11 +13,12 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
 import me.proxer.app.adapter.base.PagingAdapter
+import me.proxer.app.application.GlideApp
 import me.proxer.app.util.ParcelableStringBooleanMap
 import me.proxer.app.util.TimeUtils
 import me.proxer.app.util.extension.bindView
@@ -218,7 +219,7 @@ class CommentAdapter(savedInstanceState: Bundle?, categoryCallback: () -> Catego
 
         private fun bindImage(item: Comment) {
             if (item.image.isBlank()) {
-                Glide.clear(userImage)
+                Glide.with(userImage).clear(userImage)
 
                 userImage.setImageDrawable(IconicsDrawable(userImage.context)
                         .icon(CommunityMaterial.Icon.cmd_account)
@@ -226,9 +227,9 @@ class CommentAdapter(savedInstanceState: Bundle?, categoryCallback: () -> Catego
                         .paddingDp(16)
                         .colorRes(R.color.colorAccent))
             } else {
-                Glide.with(userImage.context)
+                GlideApp.with(userImage.context)
                         .load(ProxerUrls.userImage(item.image).toString())
-                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .transition(DrawableTransitionOptions.withCrossFade())
                         .into(userImage)
             }
         }

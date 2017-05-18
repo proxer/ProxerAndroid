@@ -7,12 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
 import me.proxer.app.adapter.base.PagingAdapter
+import me.proxer.app.application.GlideApp
 import me.proxer.app.application.MainApplication.Companion.mangaDb
 import me.proxer.app.entity.EpisodeRow
 import me.proxer.app.event.LocalMangaJobFailedEvent
@@ -288,9 +288,9 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?) :
                 }
 
                 hostersView.forEachChildWithIndex { index, imageView ->
-                    Glide.with(imageView.context)
+                    GlideApp.with(imageView.context)
                             .load(ProxerUrls.hosterImage(hosterImages[index]).toString())
-                            .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                            .transition(DrawableTransitionOptions.withCrossFade())
                             .into(imageView as ImageView)
                 }
             }

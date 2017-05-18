@@ -10,12 +10,11 @@ import android.os.Build
 import android.support.annotation.ColorRes
 import android.support.v4.content.ContextCompat
 import android.util.Patterns
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.Target
 import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.LinkBuilder
 import me.proxer.app.R
+import me.proxer.app.application.GlideApp
 import me.proxer.app.util.extension.androidUri
 import me.proxer.library.api.ProxerException
 import okhttp3.HttpUrl
@@ -41,11 +40,10 @@ object Utils {
 
     fun getBitmapFromUrl(context: Context, url: String): Bitmap? {
         try {
-            return Glide.with(context)
-                    .load(url)
+            return GlideApp.with(context)
                     .asBitmap()
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .into(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+                    .load(url)
+                    .submit(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
                     .get()
         } catch (ignored: Throwable) {
             return null

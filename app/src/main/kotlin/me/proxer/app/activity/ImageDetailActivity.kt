@@ -1,18 +1,16 @@
 package me.proxer.app.activity
 
 import android.app.Activity
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v4.view.ViewCompat
 import android.view.MenuItem
 import android.view.ViewGroup
 import android.widget.ImageView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.resource.drawable.GlideDrawable
-import com.bumptech.glide.request.animation.GlideAnimation
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget
+import com.bumptech.glide.request.target.ImageViewTarget
 import me.proxer.app.R
 import me.proxer.app.activity.base.MainActivity
+import me.proxer.app.application.GlideApp
 import me.proxer.app.util.ActivityUtils
 import me.proxer.app.util.extension.bindView
 import okhttp3.HttpUrl
@@ -47,15 +45,15 @@ class ImageDetailActivity : MainActivity() {
 
         ViewCompat.setTransitionName(image, ActivityUtils.getTransitionName(this))
 
-        Glide.with(this)
+        GlideApp.with(this)
                 .load(url)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .into(object : GlideDrawableImageViewTarget(image) {
-                    override fun onResourceReady(resource: GlideDrawable?,
-                                                 animation: GlideAnimation<in GlideDrawable>?) {
-                        super.onResourceReady(resource, animation)
+                .into(object : ImageViewTarget<Drawable>(image) {
+                    override fun setResource(resource: Drawable?) {
+                        image.setImageDrawable(resource)
 
-                        supportStartPostponedEnterTransition()
+                        if (resource != null) {
+                            supportStartPostponedEnterTransition()
+                        }
                     }
                 })
 

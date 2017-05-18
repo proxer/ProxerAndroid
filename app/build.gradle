@@ -79,7 +79,7 @@ dependencies {
     implementation deps.androidJob
     implementation deps.proxerLib
     implementation deps.ktaskAndroid
-    kaptRelease deps.eventBusAnnotation
+    kapt deps.eventBusAnnotation
 
     implementation(deps.aboutLibraries) { transitive = true }
     implementation(deps.materialDrawer) { transitive = true }
@@ -104,11 +104,12 @@ dependencies {
     implementation deps.threeten
     implementation(deps.hawk) { exclude module: 'gson' }
     implementation deps.glide
-    implementation deps.glideIntegration
+    implementation deps.glideOkHttp
     implementation deps.okHttp
     implementation deps.okio
     implementation deps.linkBuilder
     implementation deps.easyHeaderFooterAdapter
+    kapt deps.glideCompiler
 
     implementation deps.strictModeCompat
     debugImplementation deps.leakCanary

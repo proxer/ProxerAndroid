@@ -6,10 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import me.proxer.app.R
 import me.proxer.app.adapter.base.PagingAdapter
+import me.proxer.app.application.GlideApp
 import me.proxer.app.util.TimeUtils
 import me.proxer.app.util.extension.bindView
 import me.proxer.app.util.extension.toAppString
@@ -62,9 +62,9 @@ class HistoryAdapter : PagingAdapter<UcpHistoryEntry>() {
             status.text = status.context.getString(R.string.fragment_history_entry_status, item.episode,
                     TimeUtils.convertToRelativeReadableTime(status.context, item.date))
 
-            Glide.with(image.context)
+            GlideApp.with(image.context)
                     .load(ProxerUrls.entryImage(item.id).toString())
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .transition(DrawableTransitionOptions.withCrossFade())
                     .into(image)
         }
     }
