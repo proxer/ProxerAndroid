@@ -7,7 +7,8 @@
     android:background="?attr/selectableItemBackground"
     android:orientation="horizontal"
     android:padding="@dimen/item_margin"
-    tools:context=".adapter.manga.LocalMangaChapterAdapter">
+    tools:context=".adapter.manga.LocalMangaChapterAdapter"
+    tools:ignore="Overdraw">
 
     <TextView
         android:id="@+id/title"
@@ -25,6 +26,6 @@
         android:layout_gravity="end|center_vertical"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:padding="2dp"
-        tools:src="@drawable/ic_japan"
-        tools:ignore="ContentDescription" />
+        tools:ignore="ContentDescription"
+        tools:src="@drawable/ic_japan" />
 </LinearLayout>
