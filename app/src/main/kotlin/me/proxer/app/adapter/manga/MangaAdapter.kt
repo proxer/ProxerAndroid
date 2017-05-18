@@ -1,5 +1,6 @@
 package me.proxer.app.adapter.manga
 
+import android.annotation.SuppressLint
 import android.graphics.PointF
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -31,11 +32,16 @@ class MangaAdapter : PagingAdapter<Page>() {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_manga_page, parent, false))
     }
 
-    override fun onViewDetachedFromWindow(holder: PagingViewHolder<Page>?) {
-        super.onViewDetachedFromWindow(holder)
-
+    override fun onViewRecycled(holder: PagingViewHolder<Page>?) {
         if (holder is ViewHolder) {
-            destroyDownloadTask(holder)
+            holder.image.recycle()
+            holder.image.tag?.let {
+                if (it is Task<*, *>) {
+                    it.destroy()
+                }
+            }
+
+            holder.image.tag = null
         }
     }
 
@@ -43,16 +49,6 @@ class MangaAdapter : PagingAdapter<Page>() {
         this.server = server
         this.entryId = entryId
         this.id = id
-    }
-
-    private fun destroyDownloadTask(holder: ViewHolder) {
-        holder.image.tag?.let {
-            if (it is Task<*, *>) {
-                it.destroy()
-            }
-        }
-
-        holder.image.tag = null
     }
 
     inner class ViewHolder(itemView: View) : PagingViewHolder<Page>(itemView) {
@@ -65,30 +61,13 @@ class MangaAdapter : PagingAdapter<Page>() {
         init {
             image.setDoubleTapZoomDuration(shortAnimationTime)
 
-            // Make scrolling smoother by hacking the SubsamplingScaleImageView to only receive touch events
-            // when zooming.
-            image.setOnTouchListener { _, event ->
-                val shouldInterceptEvent = event.action == MotionEvent.ACTION_MOVE && event.pointerCount == 1 &&
-                        image.scale == image.minScale
-
-                if (shouldInterceptEvent) {
-                    image.parent.requestDisallowInterceptTouchEvent(true)
-                    itemView.onTouchEvent(event)
-                    image.parent.requestDisallowInterceptTouchEvent(false)
-
-                    true
-                } else {
-                    false
-                }
-            }
+            applySmoothScrollHack()
         }
 
         override fun bind(item: Page) {
             val width = DeviceUtils.getScreenWidth(image.context)
             val height = (item.height * width.toFloat() / item.width.toFloat()).toInt()
             val scale = width.toFloat() / item.width.toFloat() * 2f
-
-            destroyDownloadTask(this)
 
             image.recycle()
             image.setDoubleTapZoomScale(scale)
@@ -111,6 +90,27 @@ class MangaAdapter : PagingAdapter<Page>() {
                     .apply {
                         forceExecute(MangaPageDownloadTaskInput(server, entryId, id, item.decodedName))
                     }
+        }
+
+        /**
+         * Make scrolling smoother by hacking the SubsamplingScaleImageView to only receive touch events when zooming.
+         */
+        @SuppressLint("ClickableViewAccessibility")
+        private fun applySmoothScrollHack() {
+            image.setOnTouchListener { _, event ->
+                val shouldInterceptEvent = event.action == MotionEvent.ACTION_MOVE && event.pointerCount == 1 &&
+                        image.scale == image.minScale
+
+                if (shouldInterceptEvent) {
+                    image.parent.requestDisallowInterceptTouchEvent(true)
+                    itemView.onTouchEvent(event)
+                    image.parent.requestDisallowInterceptTouchEvent(false)
+
+                    true
+                } else {
+                    false
+                }
+            }
         }
     }
 }

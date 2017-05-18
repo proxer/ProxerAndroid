@@ -7,6 +7,7 @@ import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.activity.MediaActivity
 import me.proxer.app.adapter.ucp.HistoryAdapter
+import me.proxer.app.application.GlideApp
 import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.fragment.base.PagedLoadingFragment
 import me.proxer.app.task.asyncProxerTask
@@ -33,7 +34,7 @@ class HistoryFragment : PagedLoadingFragment<ProxerCall<List<UcpHistoryEntry>>, 
     override val emptyResultMessage = R.string.error_no_data_history
     override val spanCount get() = super.spanCount + 1
 
-    override val innerAdapter by lazy { HistoryAdapter() }
+    override val innerAdapter by lazy { HistoryAdapter(GlideApp.with(this)) }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

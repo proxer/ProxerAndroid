@@ -11,6 +11,7 @@ import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.activity.MediaActivity
 import me.proxer.app.adapter.profile.TopTenAdapter
+import me.proxer.app.application.GlideApp
 import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.fragment.base.LoadingFragment
 import me.proxer.app.fragment.profile.TopTenFragment.ZippedTopTenResult
@@ -47,8 +48,8 @@ class TopTenFragment : LoadingFragment<Pair<ProxerCall<List<TopTenEntry>>, Proxe
     private val username: String?
         get() = profileActivity.username
 
-    private val animeAdapter by lazy { TopTenAdapter() }
-    private val mangaAdapter by lazy { TopTenAdapter() }
+    private val animeAdapter by lazy { TopTenAdapter(GlideApp.with(this)) }
+    private val mangaAdapter by lazy { TopTenAdapter(GlideApp.with(this)) }
 
     private val animeContainer: ViewGroup by bindView(R.id.animeContainer)
     private val mangaContainer: ViewGroup by bindView(R.id.mangaContainer)

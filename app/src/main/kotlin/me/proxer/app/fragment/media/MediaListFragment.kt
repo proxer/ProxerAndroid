@@ -13,6 +13,7 @@ import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.activity.MediaActivity
 import me.proxer.app.adapter.media.MediaAdapter
+import me.proxer.app.application.GlideApp
 import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.fragment.base.PagedLoadingFragment
 import me.proxer.app.task.asyncProxerTask
@@ -77,7 +78,7 @@ class MediaListFragment : PagedLoadingFragment<ProxerCall<List<MediaListEntry>>,
         get() = arguments.getBoolean(HAS_SEARCHED_ARGUMENT, false)
         set(value) = arguments.putBoolean(HAS_SEARCHED_ARGUMENT, value)
 
-    override val innerAdapter by lazy { MediaAdapter(category) }
+    override val innerAdapter by lazy { MediaAdapter(category, GlideApp.with(this)) }
 
     private lateinit var searchItem: MenuItem
     private lateinit var searchView: SearchView
@@ -160,26 +161,26 @@ class MediaListFragment : PagedLoadingFragment<ProxerCall<List<MediaListEntry>>,
         })
 
         MenuItemCompat.setOnActionExpandListener(searchItem, object : MenuItemCompat.OnActionExpandListener {
-                    override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
-                        TransitionManager.beginDelayedTransition(activity.find(R.id.toolbar))
+            override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+                TransitionManager.beginDelayedTransition(activity.find(R.id.toolbar))
 
-                        return true
-                    }
+                return true
+            }
 
-                    override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
-                        searchQuery = ""
+            override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+                searchQuery = ""
 
-                        if (hasSearched) {
-                            hasSearched = false
+                if (hasSearched) {
+                    hasSearched = false
 
-                            freshLoad()
-                        }
+                    freshLoad()
+                }
 
-                        TransitionManager.beginDelayedTransition(activity.find(R.id.toolbar))
+                TransitionManager.beginDelayedTransition(activity.find(R.id.toolbar))
 
-                        return true
-                    }
-                })
+                return true
+            }
+        })
 
         super.onCreateOptionsMenu(menu, inflater)
     }

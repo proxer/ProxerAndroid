@@ -10,7 +10,7 @@ import android.widget.TextView
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import me.proxer.app.R
 import me.proxer.app.adapter.base.PagingAdapter
-import me.proxer.app.application.GlideApp
+import me.proxer.app.application.GlideRequests
 import me.proxer.app.util.extension.bindView
 import me.proxer.app.util.extension.toAppString
 import me.proxer.app.util.extension.toGeneralLanguage
@@ -22,7 +22,7 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-class RelationsAdapter : PagingAdapter<Relation>() {
+class RelationsAdapter(private val glide: GlideRequests) : PagingAdapter<Relation>() {
 
     var callback: RelationsAdapterCallback? = null
 
@@ -36,6 +36,12 @@ class RelationsAdapter : PagingAdapter<Relation>() {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_media_entry, parent, false))
     }
 
+    override fun onViewRecycled(holder: PagingViewHolder<Relation>) {
+        if (holder is ViewHolder) {
+            glide.clear(holder.image)
+        }
+    }
+
     override fun destroy() {
         super.destroy()
 
@@ -44,14 +50,14 @@ class RelationsAdapter : PagingAdapter<Relation>() {
 
     inner class ViewHolder(itemView: View) : PagingViewHolder<Relation>(itemView) {
 
-        private val title: TextView by bindView(R.id.title)
-        private val medium: TextView by bindView(R.id.medium)
-        private val image: ImageView by bindView(R.id.image)
-        private val ratingContainer: ViewGroup by bindView(R.id.ratingContainer)
-        private val rating: RatingBar by bindView(R.id.rating)
-        private val episodes: TextView by bindView(R.id.episodes)
-        private val english: ImageView by bindView(R.id.english)
-        private val german: ImageView by bindView(R.id.german)
+        internal val title: TextView by bindView(R.id.title)
+        internal val medium: TextView by bindView(R.id.medium)
+        internal val image: ImageView by bindView(R.id.image)
+        internal val ratingContainer: ViewGroup by bindView(R.id.ratingContainer)
+        internal val rating: RatingBar by bindView(R.id.rating)
+        internal val episodes: TextView by bindView(R.id.episodes)
+        internal val english: ImageView by bindView(R.id.english)
+        internal val german: ImageView by bindView(R.id.german)
 
         init {
             itemView.setOnClickListener { view ->
@@ -90,8 +96,7 @@ class RelationsAdapter : PagingAdapter<Relation>() {
                 ratingContainer.visibility = View.GONE
             }
 
-            GlideApp.with(image.context)
-                    .load(ProxerUrls.entryImage(item.id).toString())
+            glide.load(ProxerUrls.entryImage(item.id).toString())
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(image)
         }

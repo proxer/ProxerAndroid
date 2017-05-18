@@ -14,7 +14,7 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
 import me.proxer.app.adapter.base.PagingAdapter
-import me.proxer.app.application.GlideApp
+import me.proxer.app.application.GlideRequests
 import me.proxer.app.util.extension.*
 import me.proxer.library.entitiy.ucp.Bookmark
 import me.proxer.library.util.ProxerUrls
@@ -22,7 +22,7 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-class BookmarkAdapter : PagingAdapter<Bookmark>() {
+class BookmarkAdapter(private val glide: GlideRequests) : PagingAdapter<Bookmark>() {
 
     var callback: BookmarkAdapterCallback? = null
 
@@ -34,6 +34,12 @@ class BookmarkAdapter : PagingAdapter<Bookmark>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagingViewHolder<Bookmark> {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_bookmark, parent, false))
+    }
+
+    override fun onViewRecycled(holder: PagingViewHolder<Bookmark>) {
+        if (holder is ViewHolder) {
+            glide.clear(holder.image)
+        }
     }
 
     override fun destroy() {
@@ -52,13 +58,13 @@ class BookmarkAdapter : PagingAdapter<Bookmark>() {
 
     inner class ViewHolder(itemView: View) : PagingViewHolder<Bookmark>(itemView) {
 
-        private val title: TextView by bindView(R.id.title)
-        private val medium: TextView by bindView(R.id.medium)
-        private val image: ImageView by bindView(R.id.image)
-        private val episode: TextView by bindView(R.id.episode)
-        private val availability: ImageView by bindView(R.id.availability)
-        private val language: ImageView by bindView(R.id.language)
-        private val remove: ImageButton by bindView(R.id.remove)
+        internal val title: TextView by bindView(R.id.title)
+        internal val medium: TextView by bindView(R.id.medium)
+        internal val image: ImageView by bindView(R.id.image)
+        internal val episode: TextView by bindView(R.id.episode)
+        internal val availability: ImageView by bindView(R.id.availability)
+        internal val language: ImageView by bindView(R.id.language)
+        internal val remove: ImageButton by bindView(R.id.remove)
 
         init {
             itemView.setOnClickListener {
@@ -102,8 +108,7 @@ class BookmarkAdapter : PagingAdapter<Bookmark>() {
 
             language.setImageDrawable(item.language.toGeneralLanguage().toAppDrawable(language.context))
 
-            GlideApp.with(image.context)
-                    .load(ProxerUrls.entryImage(item.entryId).toString())
+            glide.load(ProxerUrls.entryImage(item.entryId).toString())
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(image)
         }

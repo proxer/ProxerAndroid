@@ -9,7 +9,7 @@ import android.widget.TextView
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import me.proxer.app.R
 import me.proxer.app.adapter.base.PagingAdapter
-import me.proxer.app.application.GlideApp
+import me.proxer.app.application.GlideRequests
 import me.proxer.app.util.extension.bindView
 import me.proxer.library.entitiy.user.TopTenEntry
 import me.proxer.library.util.ProxerUrls
@@ -17,7 +17,7 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-class TopTenAdapter : PagingAdapter<TopTenEntry>() {
+class TopTenAdapter(private val glide: GlideRequests) : PagingAdapter<TopTenEntry>() {
 
     var callback: TopTenAdapterCallback? = null
 
@@ -29,6 +29,12 @@ class TopTenAdapter : PagingAdapter<TopTenEntry>() {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_top_ten_entry, parent, false))
     }
 
+    override fun onViewRecycled(holder: PagingViewHolder<TopTenEntry>) {
+        if (holder is ViewHolder) {
+            glide.clear(holder.image)
+        }
+    }
+
     override fun destroy() {
         super.destroy()
 
@@ -37,8 +43,8 @@ class TopTenAdapter : PagingAdapter<TopTenEntry>() {
 
     inner class ViewHolder(itemView: View) : PagingViewHolder<TopTenEntry>(itemView) {
 
-        private val image: ImageView by bindView(R.id.image)
-        private val title: TextView by bindView(R.id.title)
+        internal val image: ImageView by bindView(R.id.image)
+        internal val title: TextView by bindView(R.id.title)
 
         init {
             itemView.setOnClickListener { view ->
@@ -53,8 +59,7 @@ class TopTenAdapter : PagingAdapter<TopTenEntry>() {
 
             title.text = item.name
 
-            GlideApp.with(image.context)
-                    .load(ProxerUrls.entryImage(item.id).toString())
+            glide.load(ProxerUrls.entryImage(item.id).toString())
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(image)
         }

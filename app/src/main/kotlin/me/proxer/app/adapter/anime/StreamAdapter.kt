@@ -12,7 +12,7 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
 import me.proxer.app.adapter.base.PagingAdapter
-import me.proxer.app.application.GlideApp
+import me.proxer.app.application.GlideRequests
 import me.proxer.app.util.ParcelableStringBooleanMap
 import me.proxer.app.util.TimeUtils
 import me.proxer.app.util.extension.bindView
@@ -23,7 +23,7 @@ import org.threeten.bp.format.DateTimeFormatter
 /**
  * @author Ruben Gees
  */
-class StreamAdapter(savedInstanceState: Bundle?) : PagingAdapter<Stream>() {
+class StreamAdapter(savedInstanceState: Bundle?, private val glide: GlideRequests) : PagingAdapter<Stream>() {
 
     private companion object {
         private const val EXPANDED_STATE = "stream_expanded"
@@ -47,6 +47,12 @@ class StreamAdapter(savedInstanceState: Bundle?) : PagingAdapter<Stream>() {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_stream, parent, false))
     }
 
+    override fun onViewRecycled(holder: PagingViewHolder<Stream>) {
+        if (holder is ViewHolder) {
+            glide.clear(holder.image)
+        }
+    }
+
     override fun destroy() {
         super.destroy()
 
@@ -59,16 +65,16 @@ class StreamAdapter(savedInstanceState: Bundle?) : PagingAdapter<Stream>() {
 
     inner class ViewHolder(itemView: View) : PagingViewHolder<Stream>(itemView) {
 
-        private val nameContainer: ViewGroup by bindView(R.id.nameContainer)
-        private val name: TextView by bindView(R.id.name)
-        private val image: ImageView by bindView(R.id.image)
+        internal val nameContainer: ViewGroup by bindView(R.id.nameContainer)
+        internal val name: TextView by bindView(R.id.name)
+        internal val image: ImageView by bindView(R.id.image)
 
-        private val uploadInfoContainer: ViewGroup by bindView(R.id.uploadInfoContainer)
-        private val uploaderText: TextView by bindView(R.id.uploader)
-        private val translatorGroup: TextView by bindView(R.id.translatorGroup)
-        private val dateText: TextView by bindView(R.id.date)
+        internal val uploadInfoContainer: ViewGroup by bindView(R.id.uploadInfoContainer)
+        internal val uploaderText: TextView by bindView(R.id.uploader)
+        internal val translatorGroup: TextView by bindView(R.id.translatorGroup)
+        internal val dateText: TextView by bindView(R.id.date)
 
-        private val play: Button by bindView(R.id.play)
+        internal val play: Button by bindView(R.id.play)
 
         init {
             nameContainer.setOnClickListener {
@@ -113,8 +119,7 @@ class StreamAdapter(savedInstanceState: Bundle?) : PagingAdapter<Stream>() {
         override fun bind(item: Stream) {
             name.text = item.hosterName
 
-            GlideApp.with(image.context)
-                    .load(ProxerUrls.hosterImage(item.image).toString())
+            glide.load(ProxerUrls.hosterImage(item.image).toString())
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(image)
 

@@ -10,7 +10,7 @@ import android.widget.TextView
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import me.proxer.app.R
 import me.proxer.app.adapter.base.PagingAdapter
-import me.proxer.app.application.GlideApp
+import me.proxer.app.application.GlideRequests
 import me.proxer.app.util.extension.bindView
 import me.proxer.app.util.extension.toAppString
 import me.proxer.app.util.extension.toCategory
@@ -21,7 +21,7 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-class UserMediaAdapter : PagingAdapter<UserMediaListEntry>() {
+class UserMediaAdapter(private val glide: GlideRequests) : PagingAdapter<UserMediaListEntry>() {
 
     var callback: UserMediaAdapterCallback? = null
 
@@ -35,6 +35,12 @@ class UserMediaAdapter : PagingAdapter<UserMediaListEntry>() {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_user_media_entry, parent, false))
     }
 
+    override fun onViewRecycled(holder: PagingViewHolder<UserMediaListEntry>) {
+        if (holder is ViewHolder) {
+            glide.clear(holder.image)
+        }
+    }
+
     override fun destroy() {
         super.destroy()
 
@@ -43,12 +49,12 @@ class UserMediaAdapter : PagingAdapter<UserMediaListEntry>() {
 
     inner class ViewHolder(itemView: View) : PagingViewHolder<UserMediaListEntry>(itemView) {
 
-        private val title: TextView by bindView(R.id.title)
-        private val medium: TextView by bindView(R.id.medium)
-        private val image: ImageView by bindView(R.id.image)
-        private val status: TextView by bindView(R.id.status)
-        private val ratingContainer: ViewGroup by bindView(R.id.ratingContainer)
-        private val rating: RatingBar by bindView(R.id.rating)
+        internal val title: TextView by bindView(R.id.title)
+        internal val medium: TextView by bindView(R.id.medium)
+        internal val image: ImageView by bindView(R.id.image)
+        internal val status: TextView by bindView(R.id.status)
+        internal val ratingContainer: ViewGroup by bindView(R.id.ratingContainer)
+        internal val rating: RatingBar by bindView(R.id.rating)
 
         init {
             itemView.setOnClickListener { view ->
@@ -72,8 +78,7 @@ class UserMediaAdapter : PagingAdapter<UserMediaListEntry>() {
                 ratingContainer.visibility = View.GONE
             }
 
-            GlideApp.with(image.context)
-                    .load(ProxerUrls.entryImage(item.id).toString())
+            glide.load(ProxerUrls.entryImage(item.id).toString())
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(image)
         }

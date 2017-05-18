@@ -16,6 +16,7 @@ import me.proxer.app.activity.MangaActivity
 import me.proxer.app.activity.MediaActivity
 import me.proxer.app.activity.base.MainActivity
 import me.proxer.app.adapter.ucp.BookmarkAdapter
+import me.proxer.app.application.GlideApp
 import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.fragment.base.PagedLoadingFragment
 import me.proxer.app.task.asyncProxerTask
@@ -52,7 +53,7 @@ class BookmarksFragment : PagedLoadingFragment<ProxerCall<List<Bookmark>>, Bookm
     override val spanCount get() = super.spanCount + 1
     override val itemsOnPage = 30
 
-    override val innerAdapter by lazy { BookmarkAdapter() }
+    override val innerAdapter by lazy { BookmarkAdapter(GlideApp.with(this)) }
 
     private lateinit var removalTask: AndroidLifecycleTask<ProxerCall<Void?>, Void?>
     private val removalQueue = LinkedHashSet<Bookmark>()

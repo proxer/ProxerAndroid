@@ -12,6 +12,7 @@ import me.proxer.app.activity.AnimeActivity
 import me.proxer.app.activity.MangaActivity
 import me.proxer.app.activity.MediaActivity
 import me.proxer.app.adapter.media.EpisodeAdapter
+import me.proxer.app.application.GlideApp
 import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.entity.EpisodeRow
 import me.proxer.app.fragment.base.LoadingFragment
@@ -60,7 +61,7 @@ class EpisodesFragment : LoadingFragment<ProxerCall<EpisodeInfo>, List<EpisodeRo
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        adapter = EpisodeAdapter(id, savedInstanceState)
+        adapter = EpisodeAdapter(id, savedInstanceState, GlideApp.with(this))
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

@@ -13,7 +13,7 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
 import me.proxer.app.adapter.base.PagingAdapter
-import me.proxer.app.application.GlideApp
+import me.proxer.app.application.GlideRequests
 import me.proxer.app.util.extension.bindView
 import me.proxer.library.entitiy.ucp.UcpTopTenEntry
 import me.proxer.library.util.ProxerUrls
@@ -21,7 +21,7 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-class UcpTopTenAdapter : PagingAdapter<UcpTopTenEntry>() {
+class UcpTopTenAdapter(private val glide: GlideRequests) : PagingAdapter<UcpTopTenEntry>() {
 
     var callback: UcpToptenAdapterCallback? = null
 
@@ -35,6 +35,12 @@ class UcpTopTenAdapter : PagingAdapter<UcpTopTenEntry>() {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_ucp_top_ten_entry, parent, false))
     }
 
+    override fun onViewRecycled(holder: PagingViewHolder<UcpTopTenEntry>) {
+        if (holder is ViewHolder) {
+            glide.clear(holder.image)
+        }
+    }
+
     override fun destroy() {
         super.destroy()
 
@@ -43,9 +49,9 @@ class UcpTopTenAdapter : PagingAdapter<UcpTopTenEntry>() {
 
     inner class ViewHolder(itemView: View) : PagingViewHolder<UcpTopTenEntry>(itemView) {
 
-        private val title: TextView by bindView(R.id.title)
-        private val image: ImageView by bindView(R.id.image)
-        private val removeButton: ImageButton by bindView(R.id.removeButton)
+        internal val title: TextView by bindView(R.id.title)
+        internal val image: ImageView by bindView(R.id.image)
+        internal val removeButton: ImageButton by bindView(R.id.removeButton)
 
         init {
             itemView.setOnClickListener { view ->
@@ -72,8 +78,7 @@ class UcpTopTenAdapter : PagingAdapter<UcpTopTenEntry>() {
 
             title.text = item.name
 
-            GlideApp.with(image.context)
-                    .load(ProxerUrls.entryImage(item.entryId).toString())
+            glide.load(ProxerUrls.entryImage(item.entryId).toString())
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(image)
         }

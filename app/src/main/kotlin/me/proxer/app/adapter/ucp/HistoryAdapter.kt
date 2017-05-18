@@ -9,7 +9,7 @@ import android.widget.TextView
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import me.proxer.app.R
 import me.proxer.app.adapter.base.PagingAdapter
-import me.proxer.app.application.GlideApp
+import me.proxer.app.application.GlideRequests
 import me.proxer.app.util.TimeUtils
 import me.proxer.app.util.extension.bindView
 import me.proxer.app.util.extension.toAppString
@@ -19,7 +19,7 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-class HistoryAdapter : PagingAdapter<UcpHistoryEntry>() {
+class HistoryAdapter(private val glide: GlideRequests) : PagingAdapter<UcpHistoryEntry>() {
 
     var callback: HistoryAdapterCallback? = null
 
@@ -33,6 +33,12 @@ class HistoryAdapter : PagingAdapter<UcpHistoryEntry>() {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_history_entry, parent, false))
     }
 
+    override fun onViewRecycled(holder: PagingViewHolder<UcpHistoryEntry>) {
+        if (holder is ViewHolder) {
+            glide.clear(holder.image)
+        }
+    }
+
     override fun destroy() {
         super.destroy()
 
@@ -41,10 +47,10 @@ class HistoryAdapter : PagingAdapter<UcpHistoryEntry>() {
 
     inner class ViewHolder(itemView: View) : PagingViewHolder<UcpHistoryEntry>(itemView) {
 
-        private val title: TextView by bindView(R.id.title)
-        private val medium: TextView by bindView(R.id.medium)
-        private val image: ImageView by bindView(R.id.image)
-        private val status: TextView by bindView(R.id.status)
+        internal val title: TextView by bindView(R.id.title)
+        internal val medium: TextView by bindView(R.id.medium)
+        internal val image: ImageView by bindView(R.id.image)
+        internal val status: TextView by bindView(R.id.status)
 
         init {
             itemView.setOnClickListener { view ->
@@ -62,8 +68,7 @@ class HistoryAdapter : PagingAdapter<UcpHistoryEntry>() {
             status.text = status.context.getString(R.string.fragment_history_entry_status, item.episode,
                     TimeUtils.convertToRelativeReadableTime(status.context, item.date))
 
-            GlideApp.with(image.context)
-                    .load(ProxerUrls.entryImage(item.id).toString())
+            glide.load(ProxerUrls.entryImage(item.id).toString())
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(image)
         }

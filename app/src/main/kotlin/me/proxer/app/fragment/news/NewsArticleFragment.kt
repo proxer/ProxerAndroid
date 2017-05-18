@@ -8,6 +8,7 @@ import me.proxer.app.R
 import me.proxer.app.activity.ImageDetailActivity
 import me.proxer.app.adapter.news.NewsArticleAdapter
 import me.proxer.app.adapter.news.NewsArticleAdapter.NewsAdapterCallback
+import me.proxer.app.application.GlideApp
 import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.fragment.base.PagedLoadingFragment
 import me.proxer.app.helper.NotificationHelper
@@ -44,7 +45,7 @@ class NewsArticleFragment : PagedLoadingFragment<ProxerCall<List<NewsArticle>>, 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        innerAdapter = NewsArticleAdapter(savedInstanceState)
+        innerAdapter = NewsArticleAdapter(savedInstanceState, GlideApp.with(this))
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {

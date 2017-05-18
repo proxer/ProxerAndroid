@@ -13,7 +13,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import me.proxer.app.R
 import me.proxer.app.adapter.base.PagingAdapter
 import me.proxer.app.adapter.manga.LocalMangaChapterAdapter.LocalMangaChapterAdapterCallback
-import me.proxer.app.application.GlideApp
+import me.proxer.app.application.GlideRequests
 import me.proxer.app.entity.manga.LocalMangaChapter
 import me.proxer.app.util.PaddingDividerItemDecoration
 import me.proxer.app.util.ParcelableStringBooleanMap
@@ -26,7 +26,8 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-class LocalMangaAdapter(savedInstanceState: Bundle?) : PagingAdapter<CompleteLocalMangaEntry>() {
+class LocalMangaAdapter(savedInstanceState: Bundle?, private val glide: GlideRequests) :
+        PagingAdapter<CompleteLocalMangaEntry>() {
 
     private companion object {
         private const val EXPANDED_STATE = "local_manga_expanded"
@@ -46,6 +47,12 @@ class LocalMangaAdapter(savedInstanceState: Bundle?) : PagingAdapter<CompleteLoc
     }
 
     override fun getItemId(position: Int) = internalList[position].first.id.toLong()
+
+    override fun onViewRecycled(holder: PagingViewHolder<CompleteLocalMangaEntry>) {
+        if (holder is ViewHolder) {
+            glide.clear(holder.image)
+        }
+    }
 
     override fun areItemsTheSame(oldItem: CompleteLocalMangaEntry, newItem: CompleteLocalMangaEntry)
             = oldItem.first.id == newItem.first.id
@@ -92,9 +99,9 @@ class LocalMangaAdapter(savedInstanceState: Bundle?) : PagingAdapter<CompleteLoc
         internal val adapter: LocalMangaChapterAdapter
             get() = chapters.adapter as LocalMangaChapterAdapter
 
-        private val image: ImageView by bindView(R.id.image)
-        private val title: TextView by bindView(R.id.title)
-        private val chapters: RecyclerView by bindView(R.id.chapters)
+        internal val image: ImageView by bindView(R.id.image)
+        internal val title: TextView by bindView(R.id.title)
+        internal val chapters: RecyclerView by bindView(R.id.chapters)
 
         init {
             itemView.setOnClickListener {
@@ -138,8 +145,7 @@ class LocalMangaAdapter(savedInstanceState: Bundle?) : PagingAdapter<CompleteLoc
                 adapter.clear()
             }
 
-            GlideApp.with(image.context)
-                    .load(ProxerUrls.entryImage(item.first.id).toString())
+            glide.load(ProxerUrls.entryImage(item.first.id).toString())
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(image)
         }

@@ -19,11 +19,11 @@ import me.proxer.library.enums.Category
  */
 internal class LocalMangaChapterAdapter : PagingAdapter<LocalMangaChapter>() {
 
+    var callback: LocalMangaChapterAdapterCallback? = null
+
     init {
         setHasStableIds(true)
     }
-
-    var callback: LocalMangaChapterAdapterCallback? = null
 
     override fun getItemId(position: Int) = internalList[position].episode.toLong()
 
@@ -41,8 +41,8 @@ internal class LocalMangaChapterAdapter : PagingAdapter<LocalMangaChapter>() {
 
     inner class ViewHolder(itemView: View) : PagingViewHolder<LocalMangaChapter>(itemView) {
 
-        private val title: TextView by bindView(R.id.title)
-        private val delete: ImageView by bindView(R.id.delete)
+        internal val title: TextView by bindView(R.id.title)
+        internal val delete: ImageView by bindView(R.id.delete)
 
         init {
             itemView.setOnClickListener {

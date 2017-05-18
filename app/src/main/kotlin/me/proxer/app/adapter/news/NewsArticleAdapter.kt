@@ -13,7 +13,7 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
 import me.proxer.app.adapter.base.PagingAdapter
-import me.proxer.app.application.GlideApp
+import me.proxer.app.application.GlideRequests
 import me.proxer.app.util.ParcelableStringBooleanMap
 import me.proxer.app.util.TimeUtils
 import me.proxer.app.util.extension.bindView
@@ -23,7 +23,7 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-class NewsArticleAdapter(savedInstanceState: Bundle?) : PagingAdapter<NewsArticle>() {
+class NewsArticleAdapter(savedInstanceState: Bundle?, private val glide: GlideRequests) : PagingAdapter<NewsArticle>() {
 
     private companion object {
         private const val EXPANDED_STATE = "news_expanded"
@@ -46,6 +46,12 @@ class NewsArticleAdapter(savedInstanceState: Bundle?) : PagingAdapter<NewsArticl
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_news, parent, false))
     }
 
+    override fun onViewRecycled(holder: PagingViewHolder<NewsArticle>) {
+        if (holder is ViewHolder) {
+            glide.clear(holder.image)
+        }
+    }
+
     override fun areContentsTheSame(oldItem: NewsArticle, newItem: NewsArticle): Boolean {
         return oldItem.date == newItem.date && oldItem.category == newItem.category &&
                 oldItem.image == newItem.image && oldItem.subject == newItem.subject &&
@@ -64,12 +70,12 @@ class NewsArticleAdapter(savedInstanceState: Bundle?) : PagingAdapter<NewsArticl
 
     inner class ViewHolder(itemView: View) : PagingViewHolder<NewsArticle>(itemView) {
 
-        private val expand: ImageButton by bindView(R.id.expand)
-        private val description: TextView by bindView(R.id.description)
-        private val image: ImageView by bindView(R.id.image)
-        private val title: TextView by bindView(R.id.title)
-        private val category: TextView by bindView(R.id.category)
-        private val time: TextView by bindView(R.id.time)
+        internal val expand: ImageButton by bindView(R.id.expand)
+        internal val description: TextView by bindView(R.id.description)
+        internal val image: ImageView by bindView(R.id.image)
+        internal val title: TextView by bindView(R.id.title)
+        internal val category: TextView by bindView(R.id.category)
+        internal val time: TextView by bindView(R.id.time)
 
         init {
             itemView.setOnClickListener {
@@ -133,8 +139,7 @@ class NewsArticleAdapter(savedInstanceState: Bundle?) : PagingAdapter<NewsArticl
                 }
             }
 
-            GlideApp.with(image.context)
-                    .load(ProxerUrls.newsImage(item.id, item.image).toString())
+            glide.load(ProxerUrls.newsImage(item.id, item.image).toString())
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(image)
         }

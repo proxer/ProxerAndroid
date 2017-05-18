@@ -12,7 +12,7 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
 import me.proxer.app.adapter.base.PagingAdapter
-import me.proxer.app.application.GlideApp
+import me.proxer.app.application.GlideRequests
 import me.proxer.app.application.MainApplication.Companion.mangaDb
 import me.proxer.app.entity.EpisodeRow
 import me.proxer.app.event.LocalMangaJobFailedEvent
@@ -37,7 +37,8 @@ import java.util.concurrent.Future
 /**
  * @author Ruben Gees
  */
-class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?) : PagingAdapter<EpisodeRow>() {
+class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?, private val glide: GlideRequests) :
+        PagingAdapter<EpisodeRow>() {
 
     private companion object {
         private const val EXPANDED_STATE = "episode_expanded"
@@ -55,6 +56,14 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?) :
         }
 
         setHasStableIds(true)
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagingViewHolder<EpisodeRow> {
+        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_episode, parent, false))
+    }
+
+    override fun getItemId(position: Int): Long {
+        return internalList[position].number.toLong()
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView?) {
@@ -81,12 +90,14 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?) :
         EventBus.getDefault().unregister(holder)
     }
 
-    override fun getItemId(position: Int): Long {
-        return internalList[position].number.toLong()
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagingViewHolder<EpisodeRow> {
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_episode, parent, false))
+    override fun onViewRecycled(holder: PagingViewHolder<EpisodeRow>?) {
+        if (holder is ViewHolder) {
+            holder.languages.applyRecursively {
+                if (it is ImageView) {
+                    glide.clear(it)
+                }
+            }
+        }
     }
 
     override fun areItemsTheSame(oldItem: EpisodeRow, newItem: EpisodeRow) = oldItem.number == newItem.number
@@ -119,10 +130,10 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?) :
 
     inner class ViewHolder(itemView: View) : PagingViewHolder<EpisodeRow>(itemView) {
 
-        private val title: TextView by bindView(R.id.title)
-        private val titleContainer: ViewGroup by bindView(R.id.titleContainer)
-        private val watched: ImageView by bindView(R.id.watched)
-        private val languages: ViewGroup by bindView(R.id.languages)
+        internal val title: TextView by bindView(R.id.title)
+        internal val titleContainer: ViewGroup by bindView(R.id.titleContainer)
+        internal val watched: ImageView by bindView(R.id.watched)
+        internal val languages: ViewGroup by bindView(R.id.languages)
 
         init {
             titleContainer.setOnClickListener {
@@ -214,14 +225,14 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?) :
 
         private fun bindDownload(category: Category, episode: Int, language: MediaLanguage, download: ImageView,
                                  downloadProgress: MaterialProgressBar) {
-            download.tag.let {
+            downloadProgress.tag.let {
                 if (it is Future<*>) {
                     it.cancel(true)
                 }
             }
 
             if (category == Category.MANGA && isLoggedIn) {
-                download.tag = doAsync {
+                downloadProgress.tag = doAsync {
                     if (mangaDb.containsChapter(entryId, episode, language.toGeneralLanguage())) {
                         val icon = IconicsDrawable(download.context, CommunityMaterial.Icon.cmd_cloud_check)
                                 .colorRes(R.color.icon)
@@ -288,8 +299,7 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?) :
                 }
 
                 hostersView.forEachChildWithIndex { index, imageView ->
-                    GlideApp.with(imageView.context)
-                            .load(ProxerUrls.hosterImage(hosterImages[index]).toString())
+                    glide.load(ProxerUrls.hosterImage(hosterImages[index]).toString())
                             .transition(DrawableTransitionOptions.withCrossFade())
                             .into(imageView as ImageView)
                 }

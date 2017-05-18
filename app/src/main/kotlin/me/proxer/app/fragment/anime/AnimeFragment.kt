@@ -26,6 +26,7 @@ import me.proxer.app.activity.TranslatorGroupActivity
 import me.proxer.app.activity.base.MainActivity
 import me.proxer.app.adapter.anime.StreamAdapter
 import me.proxer.app.adapter.base.PagingAdapter
+import me.proxer.app.application.GlideApp
 import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.fragment.anime.AnimeFragment.StreamInfo
 import me.proxer.app.fragment.base.LoadingFragment
@@ -106,7 +107,7 @@ class AnimeFragment : LoadingFragment<Pair<ProxerCall<List<Stream>>, ProxerCall<
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        innerAdapter = StreamAdapter(savedInstanceState)
+        innerAdapter = StreamAdapter(savedInstanceState, GlideApp.with(this))
         adapter = EasyHeaderFooterAdapter(innerAdapter)
 
         bookmarkTask = TaskBuilder.asyncProxerTask<Void?>()

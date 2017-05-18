@@ -14,7 +14,7 @@ import fisk.chipcloud.ChipCloud
 import fisk.chipcloud.ChipCloudConfig
 import me.proxer.app.R
 import me.proxer.app.adapter.base.PagingAdapter
-import me.proxer.app.application.GlideApp
+import me.proxer.app.application.GlideRequests
 import me.proxer.app.entity.chat.LocalConference
 import me.proxer.app.util.TimeUtils
 import me.proxer.app.util.extension.bindView
@@ -23,7 +23,7 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-class ConferenceAdapter : PagingAdapter<LocalConference>() {
+class ConferenceAdapter(private val glide: GlideRequests) : PagingAdapter<LocalConference>() {
 
     var callback: ConferenceAdapterCallback? = null
 
@@ -33,6 +33,12 @@ class ConferenceAdapter : PagingAdapter<LocalConference>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_conference, parent, false))
+    }
+
+    override fun onViewRecycled(holder: PagingViewHolder<LocalConference>) {
+        if (holder is ViewHolder) {
+            glide.clear(holder.image)
+        }
     }
 
     override fun getItemId(position: Int): Long = list[position].localId
@@ -61,11 +67,11 @@ class ConferenceAdapter : PagingAdapter<LocalConference>() {
 
     inner class ViewHolder(itemView: View) : PagingViewHolder<LocalConference>(itemView) {
 
-        private val image: ImageView by bindView(R.id.image)
-        private val topic: TextView by bindView(R.id.topic)
-        private val newMessages: ViewGroup by bindView(R.id.newMessages)
-        private val time: TextView by bindView(R.id.time)
-        private val participants: TextView by bindView(R.id.participants)
+        internal val image: ImageView by bindView(R.id.image)
+        internal val topic: TextView by bindView(R.id.topic)
+        internal val newMessages: ViewGroup by bindView(R.id.newMessages)
+        internal val time: TextView by bindView(R.id.time)
+        internal val participants: TextView by bindView(R.id.participants)
 
         init {
             itemView.setOnClickListener {
@@ -110,11 +116,9 @@ class ConferenceAdapter : PagingAdapter<LocalConference>() {
                     icon.icon(CommunityMaterial.Icon.cmd_account)
                 }
 
-                GlideApp.with(image.context).clear(image)
                 image.setImageDrawable(icon)
             } else {
-                GlideApp.with(image.context)
-                        .load(ProxerUrls.userImage(item.image).toString())
+                glide.load(ProxerUrls.userImage(item.image).toString())
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(image)
             }

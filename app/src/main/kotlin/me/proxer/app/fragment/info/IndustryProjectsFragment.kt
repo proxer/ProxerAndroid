@@ -8,6 +8,7 @@ import me.proxer.app.R
 import me.proxer.app.activity.IndustryActivity
 import me.proxer.app.activity.MediaActivity
 import me.proxer.app.adapter.info.IndustryProjectAdapter
+import me.proxer.app.application.GlideApp
 import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.fragment.base.PagedLoadingFragment
 import me.proxer.app.helper.PreferenceHelper
@@ -42,7 +43,7 @@ class IndustryProjectsFragment : PagedLoadingFragment<ProxerCall<List<IndustryPr
     private val id: String
         get() = industryActivity.id
 
-    override val innerAdapter by lazy { IndustryProjectAdapter() }
+    override val innerAdapter by lazy { IndustryProjectAdapter(GlideApp.with(this)) }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

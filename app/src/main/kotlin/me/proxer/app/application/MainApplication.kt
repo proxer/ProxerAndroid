@@ -6,7 +6,6 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.support.v7.app.AppCompatDelegate
 import android.widget.ImageView
-import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.devbrackets.android.exomedia.ExoMedia
 import com.evernote.android.job.JobManager
@@ -205,7 +204,7 @@ class MainApplication : Application() {
                     .into(imageView)
         }
 
-        override fun cancel(imageView: ImageView) = Glide.with(imageView.context).clear(imageView)
+        override fun cancel(imageView: ImageView) = GlideApp.with(imageView.context).clear(imageView)
 
         override fun placeholder(context: Context, tag: String?): Drawable? {
             return IconicsDrawable(context, CommunityMaterial.Icon.cmd_account).colorRes(android.R.color.white)

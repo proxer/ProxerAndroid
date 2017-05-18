@@ -49,7 +49,7 @@ ext {
     okHttpVersion = '3.8.0'
     okioVersion = '1.13.0'
     linkBuilderVersion = '1.5.2'
-    easyHeaderFooterAdapterVersion = '1.0.6'
+    easyHeaderFooterAdapterVersion = '-SNAPSHOT'
 
     // Debugging
     strictModeCompatVersion = "25.0.0"

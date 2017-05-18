@@ -11,6 +11,7 @@ import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.activity.MediaActivity
 import me.proxer.app.adapter.media.RelationsAdapter
+import me.proxer.app.application.GlideApp
 import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.fragment.base.LoadingFragment
 import me.proxer.app.task.asyncProxerTask
@@ -41,7 +42,7 @@ class RelationsFragment : LoadingFragment<ProxerCall<List<Relation>>, List<Relat
     private val id: String
         get() = mediaActivity.id
 
-    private val adapter by lazy { RelationsAdapter() }
+    private val adapter by lazy { RelationsAdapter(GlideApp.with(this)) }
 
     private val list: RecyclerView by bindView(R.id.list)
 

@@ -15,6 +15,7 @@ import me.proxer.app.R
 import me.proxer.app.activity.MediaActivity
 import me.proxer.app.activity.base.MainActivity
 import me.proxer.app.adapter.ucp.UcpTopTenAdapter
+import me.proxer.app.application.GlideApp
 import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.fragment.base.LoadingFragment
 import me.proxer.app.task.asyncProxerTask
@@ -44,8 +45,8 @@ class UcpTopTenFragment : LoadingFragment<ProxerCall<List<UcpTopTenEntry>>, List
 
     override val isLoginRequired = true
 
-    private val animeAdapter by lazy { UcpTopTenAdapter() }
-    private val mangaAdapter by lazy { UcpTopTenAdapter() }
+    private val animeAdapter by lazy { UcpTopTenAdapter(GlideApp.with(this)) }
+    private val mangaAdapter by lazy { UcpTopTenAdapter(GlideApp.with(this)) }
 
     private lateinit var removalTask: AndroidLifecycleTask<ProxerCall<Void?>, Void?>
     private val removalQueue = LinkedHashSet<UcpTopTenEntry>()

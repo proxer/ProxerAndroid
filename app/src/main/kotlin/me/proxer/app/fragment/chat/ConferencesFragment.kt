@@ -7,6 +7,7 @@ import android.view.*
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.adapter.chat.ConferenceAdapter
+import me.proxer.app.application.GlideApp
 import me.proxer.app.entity.chat.LocalConference
 import me.proxer.app.fragment.base.LoadingFragment
 import me.proxer.app.helper.NotificationHelper
@@ -35,7 +36,7 @@ class ConferencesFragment : LoadingFragment<Unit, List<LocalConference>>() {
     override val isLoginRequired = true
     override val shouldRefreshAlways = true
 
-    private val adapter by lazy { ConferenceAdapter() }
+    private val adapter by lazy { ConferenceAdapter(GlideApp.with(this)) }
 
     private val list: RecyclerView by bindView(R.id.list)
 

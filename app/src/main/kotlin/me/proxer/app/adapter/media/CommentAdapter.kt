@@ -12,13 +12,12 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
-import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
 import me.proxer.app.adapter.base.PagingAdapter
-import me.proxer.app.application.GlideApp
+import me.proxer.app.application.GlideRequests
 import me.proxer.app.util.ParcelableStringBooleanMap
 import me.proxer.app.util.TimeUtils
 import me.proxer.app.util.extension.bindView
@@ -32,8 +31,8 @@ import java.util.*
 /**
  * @author Ruben Gees
  */
-class CommentAdapter(savedInstanceState: Bundle?, categoryCallback: () -> Category = { Category.ANIME }) :
-        PagingAdapter<Comment>() {
+class CommentAdapter(savedInstanceState: Bundle?, categoryCallback: () -> Category = { Category.ANIME },
+                     private val glide: GlideRequests) : PagingAdapter<Comment>() {
 
     private companion object {
         private const val EXPANDED_STATE = "comments_expanded"
@@ -67,6 +66,12 @@ class CommentAdapter(savedInstanceState: Bundle?, categoryCallback: () -> Catego
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_comment, parent, false))
     }
 
+    override fun onViewRecycled(holder: PagingViewHolder<Comment>) {
+        if (holder is ViewHolder) {
+            glide.clear(holder.userImage)
+        }
+    }
+
     override fun destroy() {
         super.destroy()
 
@@ -81,31 +86,31 @@ class CommentAdapter(savedInstanceState: Bundle?, categoryCallback: () -> Catego
 
     inner class ViewHolder(itemView: View) : PagingViewHolder<Comment>(itemView) {
 
-        private val userContainer: ViewGroup by bindView(R.id.userContainer)
-        private val userImage: ImageView by bindView(R.id.userImage)
-        private val username: TextView by bindView(R.id.username)
+        internal val userContainer: ViewGroup by bindView(R.id.userContainer)
+        internal val userImage: ImageView by bindView(R.id.userImage)
+        internal val username: TextView by bindView(R.id.username)
 
-        private val upvoteIcon: ImageView by bindView(R.id.upvoteIcon)
-        private val upvotes: TextView by bindView(R.id.upvotes)
+        internal val upvoteIcon: ImageView by bindView(R.id.upvoteIcon)
+        internal val upvotes: TextView by bindView(R.id.upvotes)
 
-        private val ratingOverallRow: ViewGroup by bindView(R.id.ratingOverallRow)
-        private val ratingOverall: RatingBar by bindView(R.id.ratingOverall)
-        private val ratingGenre: RatingBar by bindView(R.id.ratingGenre)
-        private val ratingGenreRow: ViewGroup by bindView(R.id.ratingGenreRow)
-        private val ratingStory: RatingBar by bindView(R.id.ratingStory)
-        private val ratingStoryRow: ViewGroup by bindView(R.id.ratingStoryRow)
-        private val ratingAnimation: RatingBar by bindView(R.id.ratingAnimation)
-        private val ratingAnimationRow: ViewGroup by bindView(R.id.ratingAnimationRow)
-        private val ratingCharacters: RatingBar by bindView(R.id.ratingCharacters)
-        private val ratingCharactersRow: ViewGroup by bindView(R.id.ratingCharactersRow)
-        private val ratingMusic: RatingBar by bindView(R.id.ratingMusic)
-        private val ratingMusicRow: ViewGroup by bindView(R.id.ratingMusicRow)
+        internal val ratingOverallRow: ViewGroup by bindView(R.id.ratingOverallRow)
+        internal val ratingOverall: RatingBar by bindView(R.id.ratingOverall)
+        internal val ratingGenre: RatingBar by bindView(R.id.ratingGenre)
+        internal val ratingGenreRow: ViewGroup by bindView(R.id.ratingGenreRow)
+        internal val ratingStory: RatingBar by bindView(R.id.ratingStory)
+        internal val ratingStoryRow: ViewGroup by bindView(R.id.ratingStoryRow)
+        internal val ratingAnimation: RatingBar by bindView(R.id.ratingAnimation)
+        internal val ratingAnimationRow: ViewGroup by bindView(R.id.ratingAnimationRow)
+        internal val ratingCharacters: RatingBar by bindView(R.id.ratingCharacters)
+        internal val ratingCharactersRow: ViewGroup by bindView(R.id.ratingCharactersRow)
+        internal val ratingMusic: RatingBar by bindView(R.id.ratingMusic)
+        internal val ratingMusicRow: ViewGroup by bindView(R.id.ratingMusicRow)
 
-        private val comment: BBCodeView by bindView(R.id.comment)
-        private val expand: ImageButton by bindView(R.id.expand)
+        internal val comment: BBCodeView by bindView(R.id.comment)
+        internal val expand: ImageButton by bindView(R.id.expand)
 
-        private val time: TextView by bindView(R.id.time)
-        private val progress: TextView by bindView(R.id.progress)
+        internal val time: TextView by bindView(R.id.time)
+        internal val progress: TextView by bindView(R.id.progress)
 
         init {
             expand.setImageDrawable(IconicsDrawable(expand.context)
@@ -219,16 +224,13 @@ class CommentAdapter(savedInstanceState: Bundle?, categoryCallback: () -> Catego
 
         private fun bindImage(item: Comment) {
             if (item.image.isBlank()) {
-                Glide.with(userImage).clear(userImage)
-
                 userImage.setImageDrawable(IconicsDrawable(userImage.context)
                         .icon(CommunityMaterial.Icon.cmd_account)
                         .sizeDp(96)
                         .paddingDp(16)
                         .colorRes(R.color.colorAccent))
             } else {
-                GlideApp.with(userImage.context)
-                        .load(ProxerUrls.userImage(item.image).toString())
+                glide.load(ProxerUrls.userImage(item.image).toString())
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(userImage)
             }

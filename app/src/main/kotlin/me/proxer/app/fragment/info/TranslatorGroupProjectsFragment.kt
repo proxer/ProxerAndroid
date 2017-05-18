@@ -8,6 +8,7 @@ import me.proxer.app.R
 import me.proxer.app.activity.MediaActivity
 import me.proxer.app.activity.TranslatorGroupActivity
 import me.proxer.app.adapter.info.TranslatorGroupProjectAdapter
+import me.proxer.app.application.GlideApp
 import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.fragment.base.PagedLoadingFragment
 import me.proxer.app.helper.PreferenceHelper
@@ -43,7 +44,7 @@ class TranslatorGroupProjectsFragment : PagedLoadingFragment<ProxerCall<List<Tra
     private val id: String
         get() = translatorGroupActivity.id
 
-    override val innerAdapter by lazy { TranslatorGroupProjectAdapter() }
+    override val innerAdapter by lazy { TranslatorGroupProjectAdapter(GlideApp.with(this)) }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
