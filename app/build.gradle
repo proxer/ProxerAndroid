@@ -61,58 +61,58 @@ android {
 }
 
 dependencies {
-    compile deps.kotlinStdlib
-    compile deps.anko
-    compile deps.ankoSqlite
-    compile deps.supportAppCompat
-    compile deps.supportV13
-    compile deps.supportRecyclerView
-    compile deps.supportCardView
-    compile deps.supportDesign
-    compile deps.supportAnimatedVectorDrawable
-    compile deps.supportCustomtabs
-    compile deps.supportPreference
-    compile deps.supportPreferenceFix
-    compile deps.supportPreferenceFixSpinner
-    compile deps.playServicesGcm
-    compile deps.eventBus
-    compile deps.androidJob
-    compile deps.proxerLib
-    compile deps.ktaskAndroid
+    implementation deps.kotlinStdlib
+    implementation deps.anko
+    implementation deps.ankoSqlite
+    implementation deps.supportAppCompat
+    implementation deps.supportV13
+    implementation deps.supportRecyclerView
+    implementation deps.supportCardView
+    implementation deps.supportDesign
+    implementation deps.supportAnimatedVectorDrawable
+    implementation deps.supportCustomtabs
+    implementation deps.supportPreference
+    implementation deps.supportPreferenceFix
+    implementation deps.supportPreferenceFixSpinner
+    implementation deps.playServicesGcm
+    implementation deps.eventBus
+    implementation deps.androidJob
+    implementation deps.proxerLib
+    implementation deps.ktaskAndroid
     kaptRelease deps.eventBusAnnotation
 
-    compile(deps.aboutLibraries) { transitive = true }
-    compile(deps.materialDrawer) { transitive = true }
-    compile deps.iconics
-    compile deps.communityMaterialTypeface
-    compile deps.crossfader
-    compile deps.materialAbout
-    compile deps.subsamplingScaleImageView
-    compile deps.circleImageView
-    compile deps.tabLayoutHelper
-    compile deps.materialDialogs
-    compile deps.flexbox
-    compile deps.chipCloud
-    compile deps.emojiIos
-    compile deps.exomedia
-    compile deps.exoplayerIntegration
-    compile deps.materialProgressBar
-    compile deps.materialRatingBar
-    compile deps.customtabsHelper
-    compile deps.introduction
+    implementation(deps.aboutLibraries) { transitive = true }
+    implementation(deps.materialDrawer) { transitive = true }
+    implementation deps.iconics
+    implementation deps.communityMaterialTypeface
+    implementation deps.crossfader
+    implementation deps.materialAbout
+    implementation deps.subsamplingScaleImageView
+    implementation deps.circleImageView
+    implementation deps.tabLayoutHelper
+    implementation deps.materialDialogs
+    implementation deps.flexbox
+    implementation deps.chipCloud
+    implementation deps.emojiIos
+    implementation deps.exomedia
+    implementation deps.exoplayerIntegration
+    implementation deps.materialProgressBar
+    implementation deps.materialRatingBar
+    implementation deps.customtabsHelper
+    implementation deps.introduction
 
-    compile deps.threeten
-    compile(deps.hawk) { exclude module: 'gson' }
-    compile deps.glide
-    compile deps.glideIntegration
-    compile deps.okHttp
-    compile deps.okio
-    compile deps.linkBuilder
-    compile deps.easyHeaderFooterAdapter
+    implementation deps.threeten
+    implementation(deps.hawk) { exclude module: 'gson' }
+    implementation deps.glide
+    implementation deps.glideIntegration
+    implementation deps.okHttp
+    implementation deps.okio
+    implementation deps.linkBuilder
+    implementation deps.easyHeaderFooterAdapter
 
-    compile deps.strictModeCompat
-    debugCompile deps.leakCanary
-    releaseCompile deps.leakCanaryNoOp
+    implementation deps.strictModeCompat
+    debugImplementation deps.leakCanary
+    releaseImplementation deps.leakCanaryNoOp
 }
 
 kapt {

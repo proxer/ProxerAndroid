@@ -18,6 +18,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile
 import me.proxer.app.R
 import me.proxer.app.util.DeviceUtils
 import me.proxer.library.util.ProxerUrls
+import org.jetbrains.anko.dip
 import org.jetbrains.anko.find
 import java.util.*
 
@@ -191,8 +192,8 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar, savedInstanceSta
                                 savedInstanceState: Bundle?): Crossfader<*> {
         return Crossfader<GmailStyleCrossFadeSlidingPaneLayout>()
                 .withContent(context.find<ViewGroup>(R.id.root))
-                .withFirst(drawer.slider, DeviceUtils.convertDpToPx(context, 300f))
-                .withSecond(miniDrawer.build(context), DeviceUtils.convertDpToPx(context, 72f))
+                .withFirst(drawer.slider, context.dip(300))
+                .withSecond(miniDrawer.build(context), context.dip(72))
                 .withSavedInstance(savedInstanceState)
                 .build()
     }

@@ -21,7 +21,6 @@ import me.proxer.app.event.LoginEvent
 import me.proxer.app.event.LogoutEvent
 import me.proxer.app.helper.StorageHelper
 import me.proxer.app.job.LocalMangaJob
-import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.*
 import me.proxer.library.enums.Category
@@ -31,11 +30,8 @@ import me.zhanghai.android.materialprogressbar.MaterialProgressBar
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import org.jetbrains.anko.*
 import org.jetbrains.anko.collections.forEachWithIndex
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.find
-import org.jetbrains.anko.forEachChildWithIndex
-import org.jetbrains.anko.uiThread
 import java.util.concurrent.Future
 
 /**
@@ -281,10 +277,10 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?) :
                     hostersView.removeAllViews()
 
                     for (i in 0 until hosterImages.size) {
-                        val imageView = LayoutInflater.from(hostersView.context)
-                                .inflate(R.layout.layout_image, hostersView, false).apply {
-                            layoutParams.width = DeviceUtils.convertDpToPx(hostersView.context, 28f)
-                            layoutParams.height = DeviceUtils.convertDpToPx(hostersView.context, 28f)
+                        val inflater = LayoutInflater.from(hostersView.context)
+                        val imageView = inflater.inflate(R.layout.layout_image, hostersView, false).apply {
+                            layoutParams.width = dip(28)
+                            layoutParams.height = dip(28)
                         }
 
                         hostersView.addView(imageView)

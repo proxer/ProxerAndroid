@@ -26,9 +26,6 @@ object DeviceUtils {
         return diagonalInches >= MINIMUM_DIAGONAL_INCHES
     }
 
-    fun convertDpToPx(context: Context, dp: Float) = (dp * (context.resources.displayMetrics.densityDpi.toFloat() /
-            DisplayMetrics.DENSITY_DEFAULT)).toInt()
-
     fun getScreenWidth(context: Context) = Point().apply { context.windowManager.defaultDisplay.getSize(this) }.x
 
     fun getVerticalMargin(context: Context, withItems: Boolean = true) = context.resources

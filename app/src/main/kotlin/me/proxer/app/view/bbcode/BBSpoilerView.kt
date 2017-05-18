@@ -13,7 +13,7 @@ import android.widget.LinearLayout
 import android.widget.LinearLayout.LayoutParams.MATCH_PARENT
 import android.widget.LinearLayout.LayoutParams.WRAP_CONTENT
 import me.proxer.app.R
-import me.proxer.app.util.DeviceUtils
+import org.jetbrains.anko.dip
 import kotlin.properties.Delegates
 
 
@@ -35,8 +35,8 @@ class BBSpoilerView @JvmOverloads constructor(
     internal val container = LinearLayout(context)
 
     init {
-        val fourDp = DeviceUtils.convertDpToPx(context, 4f)
-        val twoDp = DeviceUtils.convertDpToPx(context, 2f)
+        val fourDip = dip(4)
+        val twoDip = dip(2f)
 
         orientation = VERTICAL
 
@@ -47,7 +47,7 @@ class BBSpoilerView @JvmOverloads constructor(
         TextViewCompat.setTextAppearance(toggle, R.style.TextAppearance_AppCompat_Medium)
         toggle.setTextColor(ContextCompat.getColor(context, R.color.colorAccent))
         toggle.setBackgroundResource(selectableItemBackground.resourceId)
-        toggle.setPadding(fourDp, twoDp, fourDp, twoDp)
+        toggle.setPadding(fourDip, twoDip, fourDip, twoDip)
         toggle.setOnClickListener {
             expanded = !expanded
 
@@ -58,11 +58,11 @@ class BBSpoilerView @JvmOverloads constructor(
         space.setBackgroundColor(ContextCompat.getColor(context, R.color.divider))
         container.orientation = VERTICAL
 
-        decoration.addView(space, LinearLayout.LayoutParams(twoDp, MATCH_PARENT).apply {
+        decoration.addView(space, LinearLayout.LayoutParams(twoDip, MATCH_PARENT).apply {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                marginEnd = fourDp
+                marginEnd = fourDip
             } else {
-                rightMargin = fourDp
+                rightMargin = fourDip
             }
         })
         decoration.addView(container, LayoutParams(WRAP_CONTENT, WRAP_CONTENT))
@@ -71,7 +71,7 @@ class BBSpoilerView @JvmOverloads constructor(
             gravity = Gravity.CENTER_HORIZONTAL
         })
         addView(decoration, LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
-            topMargin = fourDp
+            topMargin = fourDip
         })
 
         handleExpanded()

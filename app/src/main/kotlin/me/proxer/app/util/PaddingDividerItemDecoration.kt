@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.support.v7.widget.RecyclerView
+import org.jetbrains.anko.dip
 
 /**
  * Stolen from here: http://stackoverflow.com/a/41547051/4279995.
@@ -15,7 +16,7 @@ class PaddingDividerItemDecoration(context: Context, paddingDp: Float) : Recycle
     }
 
     private val divider: Drawable
-    private val padding: Int
+    private val padding: Int = context.dip(paddingDp)
 
     init {
         val styledAttributes = context.obtainStyledAttributes(ATTRS)
@@ -23,8 +24,6 @@ class PaddingDividerItemDecoration(context: Context, paddingDp: Float) : Recycle
         divider = styledAttributes.getDrawable(0)
 
         styledAttributes.recycle()
-
-        padding = DeviceUtils.convertDpToPx(context, paddingDp)
     }
 
     override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State?) {

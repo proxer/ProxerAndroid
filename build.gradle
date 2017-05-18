@@ -6,12 +6,11 @@ ext {
     minSdkVersion = 16
     targetSdkVersion = 25
     compileSdkVersion = 25
-    buildToolsVersion = '25.0.3'
+    buildToolsVersion = '26-rc2'
 
     // Frameworks and code only libraries
-    kotlinVersion = '1.1.2-3'
-    ankoVersion = '0.10.0-beta-2'
-    ankoSqliteVersion = '0.9.1a'
+    kotlinVersion = '1.1.2-4'
+    ankoVersion = '0.10.0'
     supportLibraryVersion = '25.3.1'
     supportPreferenceVersion = '1.2.7'
     playServicesVersion = '10.2.4'
@@ -59,8 +58,8 @@ ext {
 
     deps = [
             kotlinStdlib                 : "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
-            anko                         : "org.jetbrains.anko:anko-common:$ankoVersion",
-            ankoSqlite                   : "org.jetbrains.anko:anko-sqlite:$ankoSqliteVersion",
+            anko                         : "org.jetbrains.anko:anko-commons:$ankoVersion",
+            ankoSqlite                   : "org.jetbrains.anko:anko-sqlite:$ankoVersion",
             supportAppCompat             : "com.android.support:appcompat-v7:$supportLibraryVersion",
             supportV13                   : "com.android.support:support-v13:$supportLibraryVersion",
             supportRecyclerView          : "com.android.support:recyclerview-v7:$supportLibraryVersion",
@@ -116,12 +115,13 @@ ext {
 buildscript {
     repositories {
         jcenter()
+        maven { url "https://maven.google.com" }
         maven { url "https://dl.bintray.com/kotlin/kotlin-eap-1.1" }
     }
 
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.1.2-3"
-        classpath 'com.android.tools.build:gradle:2.4.0-alpha7'
+        classpath 'com.android.tools.build:gradle:3.0.0-alpha1'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.1.2-4"
     }
 }
 
@@ -130,8 +130,9 @@ allprojects {
         jcenter()
         mavenCentral()
         maven { url "https://jitpack.io" }
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+        maven { url "https://maven.google.com" }
         maven { url "https://dl.bintray.com/kotlin/kotlin-eap-1.1" }
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
     }
 }
 
@@ -151,5 +152,5 @@ task clean(type: Delete) {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '3.5'
+    gradleVersion = '4.0-milestone-1'
 }
