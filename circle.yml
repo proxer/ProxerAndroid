@@ -6,7 +6,7 @@ machine:
 
 dependencies:
   pre:
-    - sdkmanager --channel=3 "build-tools;26.0.0-rc2"
+    - $ANDROID_HOME/tools/bin/sdkmanager --channel=3 "build-tools;26.0.0-rc2"
   override:
     - ./gradlew dependencies --console=plain
 
