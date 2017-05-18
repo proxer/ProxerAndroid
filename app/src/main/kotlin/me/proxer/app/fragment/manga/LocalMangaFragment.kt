@@ -26,6 +26,7 @@ import me.proxer.app.adapter.manga.LocalMangaAdapter
 import me.proxer.app.entity.manga.LocalMangaChapter
 import me.proxer.app.event.LocalMangaJobFailedEvent
 import me.proxer.app.event.LocalMangaJobFinishedEvent
+import me.proxer.app.event.LocalMangaJobStartedEvent
 import me.proxer.app.fragment.base.LoadingFragment
 import me.proxer.app.job.LocalMangaJob
 import me.proxer.app.task.manga.LocalMangaListTask
@@ -269,6 +270,13 @@ class LocalMangaFragment : LoadingFragment<Unit, List<CompleteLocalMangaEntry>>(
             .map { it.filter { searchQuery.isEmpty() || it.first.name.contains(searchQuery, true) } }
             .async()
             .build()
+
+    @Suppress("unused")
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onLocalMangaJobStarted(@Suppress("UNUSED_PARAMETER") event: LocalMangaJobStartedEvent) {
+        jobStateUpdateTask.forceExecute(context.resources)
+        freshLoad()
+    }
 
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)

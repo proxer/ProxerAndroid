@@ -10,6 +10,7 @@ import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.application.MainApplication.Companion.mangaDb
 import me.proxer.app.event.LocalMangaJobFailedEvent
 import me.proxer.app.event.LocalMangaJobFinishedEvent
+import me.proxer.app.event.LocalMangaJobStartedEvent
 import me.proxer.app.helper.NotificationHelper
 import me.proxer.app.helper.PreferenceHelper
 import me.proxer.app.helper.StorageHelper
@@ -104,6 +105,8 @@ class LocalMangaJob : Job() {
         }
 
         try {
+            EventBus.getDefault().post(LocalMangaJobStartedEvent())
+
             if (!mangaDb.containsEntry(entryId)) {
                 mangaDb.insertEntry(api.info().entryCore(entryId).build().execute())
             }
