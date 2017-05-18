@@ -19,6 +19,7 @@ import me.proxer.app.event.LoginEvent
 import me.proxer.app.event.LogoutEvent
 import me.proxer.app.fragment.AboutFragment
 import me.proxer.app.fragment.SettingsFragment
+import me.proxer.app.fragment.chat.ConferencesFragment
 import me.proxer.app.fragment.manga.LocalMangaFragment
 import me.proxer.app.fragment.media.MediaListFragment
 import me.proxer.app.fragment.news.NewsArticleFragment
@@ -180,7 +181,7 @@ class DashboardActivity : MainActivity() {
             }
 
             DrawerItem.CHAT -> {
-//                setFragment(ConferencesFragment.newInstance(), R.string.fragment_conferences)
+                setFragment(ConferencesFragment.newInstance(), R.string.section_chat)
 
                 return false
             }

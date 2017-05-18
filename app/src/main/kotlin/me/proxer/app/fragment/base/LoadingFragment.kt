@@ -39,6 +39,7 @@ abstract class LoadingFragment<I, O> : MainFragment() {
     open protected val isSwipeToRefreshEnabled = false
     open protected val isLoginRequired = false
     open protected val isAgeConfirmationRequired = false
+    open protected val shouldRefreshAlways = false
 
     open protected val isWorking: Boolean get() = task.isWorking
 
@@ -127,7 +128,7 @@ abstract class LoadingFragment<I, O> : MainFragment() {
             isSolvingCaptcha = false
 
             EventBus.getDefault().post(CaptchaSolvedEvent())
-        } else if (state.data == null && state.error == null && !isWorking) {
+        } else if (!isWorking && (shouldRefreshAlways || (state.data == null && state.error == null))) {
             freshLoad()
         }
     }

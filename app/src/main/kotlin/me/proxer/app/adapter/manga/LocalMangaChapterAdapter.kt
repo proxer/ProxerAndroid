@@ -9,7 +9,7 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
 import me.proxer.app.adapter.base.PagingAdapter
-import me.proxer.app.entity.LocalMangaChapter
+import me.proxer.app.entity.manga.LocalMangaChapter
 import me.proxer.app.util.extension.bindView
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.library.enums.Category

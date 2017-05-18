@@ -27,8 +27,8 @@ import me.proxer.app.adapter.base.PagingAdapter
 import me.proxer.app.adapter.manga.MangaAdapter
 import me.proxer.app.application.MainApplication
 import me.proxer.app.application.MainApplication.Companion.api
-import me.proxer.app.entity.MangaChapterInfo
-import me.proxer.app.entity.MangaInput
+import me.proxer.app.entity.manga.MangaChapterInfo
+import me.proxer.app.entity.manga.MangaInput
 import me.proxer.app.fragment.base.LoadingFragment
 import me.proxer.app.task.asyncProxerTask
 import me.proxer.app.task.manga.LocalMangaChapterTask

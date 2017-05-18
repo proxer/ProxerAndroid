@@ -1,4 +1,4 @@
-package me.proxer.app.entity
+package me.proxer.app.entity.manga
 
 import me.proxer.library.entitiy.manga.Chapter
 import me.proxer.library.entitiy.manga.Page

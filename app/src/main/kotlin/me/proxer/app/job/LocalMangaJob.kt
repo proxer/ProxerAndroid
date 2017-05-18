@@ -12,13 +12,13 @@ import me.proxer.app.event.LocalMangaJobFailedEvent
 import me.proxer.app.event.LocalMangaJobFinishedEvent
 import me.proxer.app.helper.NotificationHelper
 import me.proxer.app.helper.PreferenceHelper
+import me.proxer.app.helper.StorageHelper
 import me.proxer.app.task.manga.MangaPageDownloadTask
 import me.proxer.app.task.manga.MangaPageDownloadTask.MangaPageDownloadTaskInput
 import me.proxer.app.util.extension.decodedName
 import me.proxer.library.enums.Language
 import me.proxer.library.util.ProxerUtils
 import org.greenrobot.eventbus.EventBus
-
 
 /**
  * @author Ruben Gees
@@ -99,6 +99,10 @@ class LocalMangaJob : Job() {
                 ?: throw IllegalArgumentException("No extras passed")
 
     override fun onRunJob(params: Params): Result {
+        if (StorageHelper.user == null) {
+            return Result.FAILURE
+        }
+
         try {
             if (!mangaDb.containsEntry(entryId)) {
                 mangaDb.insertEntry(api.info().entryCore(entryId).build().execute())

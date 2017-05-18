@@ -9,7 +9,7 @@ import android.support.customtabs.CustomTabsIntent
 import android.support.v4.content.ContextCompat
 import me.proxer.app.R
 import me.proxer.app.activity.WebViewActivity
-import me.proxer.app.entity.LocalMangaChapter
+import me.proxer.app.entity.manga.LocalMangaChapter
 import me.proxer.app.util.Utils
 import me.proxer.library.entitiy.info.EntryCore
 import me.proxer.library.entitiy.manga.Page

@@ -29,10 +29,13 @@ import com.squareup.moshi.Moshi
 import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.ios.IosEmojiProvider
 import me.proxer.app.BuildConfig
+import me.proxer.app.data.ChatDatabase
 import me.proxer.app.data.LocalMangaDatabase
+import me.proxer.app.event.LoginEvent
 import me.proxer.app.event.LogoutEvent
 import me.proxer.app.helper.PreferenceHelper
 import me.proxer.app.helper.StorageHelper
+import me.proxer.app.job.ChatJob
 import me.proxer.app.job.LocalMangaJob
 import me.proxer.app.job.NotificationsJob
 import me.proxer.app.task.manga.MangaRemovalTask
@@ -63,6 +66,9 @@ class MainApplication : Application() {
         lateinit var api: ProxerApi
             private set
 
+        lateinit var chatDb: ChatDatabase
+            private set
+
         lateinit var mangaDb: LocalMangaDatabase
             private set
 
@@ -82,6 +88,7 @@ class MainApplication : Application() {
 
         AppCompatDelegate.setDefaultNightMode(PreferenceHelper.getNightMode(this))
 
+        chatDb = ChatDatabase(this)
         mangaDb = LocalMangaDatabase(this)
         refWatcher = LeakCanary.install(this)
         globalContext = this
@@ -96,10 +103,26 @@ class MainApplication : Application() {
 
     @Suppress("unused")
     @Subscribe
+    fun onLogin(@Suppress("UNUSED_PARAMETER") event: LoginEvent) {
+        doAsync {
+            ChatJob.schedule()
+        }
+    }
+
+    @Suppress("unused")
+    @Subscribe
     fun onLogout(@Suppress("UNUSED_PARAMETER") event: LogoutEvent) {
         doAsync {
+            ChatJob.cancel()
             LocalMangaJob.cancelAll()
+
+            StorageHelper.hasConferenceListReachedEnd = false
+            StorageHelper.resetConferenceReachedEnd()
+            StorageHelper.resetChatInterval()
+
+            chatDb.clear()
             mangaDb.clear()
+
             MangaRemovalTask(filesDir).execute(Unit)
         }
     }
@@ -130,6 +153,7 @@ class MainApplication : Application() {
 
         JobManager.create(this).addJobCreator {
             when {
+                it == ChatJob.TAG -> ChatJob()
                 it == NotificationsJob.TAG -> NotificationsJob()
                 it.startsWith(LocalMangaJob.TAG) -> LocalMangaJob()
                 else -> null

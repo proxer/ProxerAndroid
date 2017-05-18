@@ -2,7 +2,7 @@ package me.proxer.app.task.manga
 
 import com.rubengees.ktask.util.WorkerTask
 import me.proxer.app.application.MainApplication
-import me.proxer.app.entity.LocalMangaChapter
+import me.proxer.app.entity.manga.LocalMangaChapter
 import me.proxer.app.task.manga.MangaChapterRemovalTask.MangaChapterRemovalTaskInput
 import me.proxer.library.entitiy.info.EntryCore
 import java.io.File

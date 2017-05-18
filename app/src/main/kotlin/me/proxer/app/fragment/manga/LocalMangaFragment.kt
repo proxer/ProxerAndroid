@@ -23,7 +23,7 @@ import me.proxer.app.activity.MediaActivity
 import me.proxer.app.activity.base.MainActivity
 import me.proxer.app.adapter.base.PagingAdapter
 import me.proxer.app.adapter.manga.LocalMangaAdapter
-import me.proxer.app.entity.LocalMangaChapter
+import me.proxer.app.entity.manga.LocalMangaChapter
 import me.proxer.app.event.LocalMangaJobFailedEvent
 import me.proxer.app.event.LocalMangaJobFinishedEvent
 import me.proxer.app.fragment.base.LoadingFragment

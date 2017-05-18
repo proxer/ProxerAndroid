@@ -267,9 +267,9 @@ class MediaInfoFragment : LoadingFragment<ProxerCall<Entry>, Entry>() {
         }
 
         bindChips(genres, result.genres.toList(), mapFunction = {
-            ProxerUtils.getApiEnumName(it)
+            ProxerUtils.getApiEnumName(it) ?: throw NullPointerException()
         }, onClick = {
-            showPage(ProxerUrls.wikiWeb(ProxerUtils.getApiEnumName(it)))
+            showPage(ProxerUrls.wikiWeb(ProxerUtils.getApiEnumName(it) ?: throw NullPointerException()))
         })
     }
 
@@ -358,8 +358,10 @@ class MediaInfoFragment : LoadingFragment<ProxerCall<Entry>, Entry>() {
             industries.visibility = View.GONE
         } else {
             bindChips(industries, result.industries, mapFunction = {
-                "${it.name} (${ProxerUtils.getApiEnumName(it.type).replace("_", " ").split(" ")
-                        .map(String::capitalize).joinToString(separator = " ")})"
+                val type = ProxerUtils.getApiEnumName(it.type)?.replace("_", " ")?.split(" ")
+                        ?.map(String::capitalize)?.joinToString(separator = " ") ?: throw NullPointerException()
+
+                "${it.name} ($type)"
             }, onClick = {
                 IndustryActivity.navigateTo(activity, it.id, it.name)
             })

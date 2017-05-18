@@ -94,12 +94,14 @@
     <string name="error_no_data_user_media_list">Es gibt noch keine Einträge</string>
     <string name="error_no_data_local_manga">Du hast noch keine Manga heruntergeladen</string>
     <string name="error_no_data_search">Es wurde nichts gefunden, das den Kriterien entspricht</string>
+    <string name="error_no_data_conferences">Du hast noch keine Chats</string>
 
     <string name="error_action_retry">Erneut versuchen</string>
     <string name="error_action_finish">Beenden</string>
     <string name="error_action_captcha">Captcha</string>
     <string name="error_action_login">Anmelden</string>
     <string name="error_action_confirm">Bestätigen</string>
+    <string name="error_action_new_chat">Schreibe jemandem</string>
 
     <string name="error_bookmark_removal">Das Lesezeichen konnte nicht entfernt werden: %s</string>
     <string name="error_topten_entry_removal">Der Eintrag konnte nicht entfernt werden: %s</string>
@@ -284,6 +286,10 @@
     <string name="fragment_comment_rating_overall">Insgesamt</string>
     <string name="fragment_comment_rating_story">Story</string>
 
+    <plurals name="fragment_conference_participants">
+        <item quantity="other">%d Teilnehmer</item>
+    </plurals>
+
     <string name="view_media_control_uploader">Uploader</string>
     <string name="view_media_control_translator_group">Translator-Gruppe</string>
     <string name="view_media_control_date">Datum</string>
@@ -295,6 +301,16 @@
     <string name="notification_news_title">News</string>
     <plurals name="notification_news_amount">
         <item quantity="other">%d News</item>
+    </plurals>
+
+    <string name="notification_chat_title">Neue Nachrichten</string>
+    <plurals name="notification_chat_conference_amount">
+        <item quantity="one">in einem Chat</item>
+        <item quantity="other">in %d Chats</item>
+    </plurals>
+    <plurals name="notification_chat_message_amount">
+        <item quantity="one">Eine Nachricht</item>
+        <item quantity="other">%d Nachrichten</item>
     </plurals>
 
     <string name="notification_news_error_title">Fehler beim Abrufen der News</string>
@@ -363,6 +379,7 @@
     <string name="action_filter">Filter</string>
     <string name="action_sort">Sortierung</string>
     <string name="action_share">Teilen</string>
+    <string name="action_answer">Antworten</string>
 
     <string name="action_filter_all">Alles</string>
     <string name="action_filter_anime_series">Serien</string>

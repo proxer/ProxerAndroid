@@ -192,23 +192,13 @@
 
         <activity android:name=".activity.WebViewActivity" />
 
-        <!--<service android:name=".service.NotificationService"/>-->
-        <!--<service android:name=".service.ChatService"/>-->
-
-        <!--<receiver android:name=".receiver.NotificationReceiver"/>-->
-        <!--<receiver android:name=".receiver.ChatReceiver"/>-->
-        <!--<receiver-->
-        <!--android:name=".receiver.DirectReplyReceiver"-->
-        <!--android:exported="false">-->
-        <!--<intent-filter>-->
-        <!--<action android:name="com.proxerme.app.ACTION_MESSAGE_REPLY"/>-->
-        <!--</intent-filter>-->
-        <!--</receiver>-->
-        <!--<receiver android:name=".receiver.BootReceiver">-->
-        <!--<intent-filter>-->
-        <!--<action android:name="android.intent.action.BOOT_COMPLETED"/>-->
-        <!--</intent-filter>-->
-        <!--</receiver>-->
+        <receiver
+            android:name=".receiver.DirectReplyReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="me.proxer.app.ACTION_MESSAGE_REPLY" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

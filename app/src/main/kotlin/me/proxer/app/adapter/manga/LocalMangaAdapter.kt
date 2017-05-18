@@ -14,7 +14,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import me.proxer.app.R
 import me.proxer.app.adapter.base.PagingAdapter
 import me.proxer.app.adapter.manga.LocalMangaChapterAdapter.LocalMangaChapterAdapterCallback
-import me.proxer.app.entity.LocalMangaChapter
+import me.proxer.app.entity.manga.LocalMangaChapter
 import me.proxer.app.util.PaddingDividerItemDecoration
 import me.proxer.app.util.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.CompleteLocalMangaEntry

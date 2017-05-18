@@ -3,7 +3,7 @@ package me.proxer.app.data
 import android.content.Context
 import android.database.DatabaseUtils
 import android.database.sqlite.SQLiteDatabase
-import me.proxer.app.entity.LocalMangaChapter
+import me.proxer.app.entity.manga.LocalMangaChapter
 import me.proxer.app.util.extension.CompleteLocalMangaEntry
 import me.proxer.library.entitiy.info.EntryCore
 import me.proxer.library.entitiy.manga.Chapter
@@ -101,7 +101,7 @@ class LocalMangaDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DA
                 FOREIGN_KEY(PAGE_CHAPTER_ID_COLUMN, CHAPTER_TABLE, CHAPTER_LOCAL_ID_COLUMN))
     }
 
-    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         // Not needed yet.
     }
 
