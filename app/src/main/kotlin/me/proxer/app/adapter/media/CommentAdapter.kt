@@ -232,6 +232,7 @@ class CommentAdapter(savedInstanceState: Bundle?, categoryCallback: () -> Catego
             } else {
                 glide.load(ProxerUrls.userImage(item.image).toString())
                         .transition(DrawableTransitionOptions.withCrossFade())
+                        .circleCrop()
                         .into(userImage)
             }
         }

@@ -28,7 +28,6 @@ ext {
     crossfaderVersion = '1.5.0'
     materialAboutVersion = '1.9.0'
     subsamplingScaleImageViewVersion = '3.6.0'
-    circleImageViewVersion = '2.1.0'
     tabLayoutHelperVersion = '0.8.0'
     materialDialogsVersion = '0.9.4.4'
     flexboxVersion = '0.2.6'
@@ -83,7 +82,6 @@ ext {
             crossfader                   : "com.mikepenz:crossfader:$crossfaderVersion@aar",
             materialAbout                : "com.github.daniel-stoneuk:material-about-library:$materialAboutVersion",
             subsamplingScaleImageView    : "com.davemorrissey.labs:subsampling-scale-image-view:$subsamplingScaleImageViewVersion",
-            circleImageView              : "de.hdodenhof:circleimageview:$circleImageViewVersion",
             tabLayoutHelper              : "com.h6ah4i.android.tablayouthelper:tablayouthelper:$tabLayoutHelperVersion",
             materialDialogs              : "com.afollestad.material-dialogs:core:$materialDialogsVersion",
             flexbox                      : "com.google.android:flexbox:$flexboxVersion",

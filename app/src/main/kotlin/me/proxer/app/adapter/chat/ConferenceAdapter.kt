@@ -120,6 +120,7 @@ class ConferenceAdapter(private val glide: GlideRequests) : PagingAdapter<LocalC
             } else {
                 glide.load(ProxerUrls.userImage(item.image).toString())
                         .transition(DrawableTransitionOptions.withCrossFade())
+                        .circleCrop()
                         .into(image)
             }
         }

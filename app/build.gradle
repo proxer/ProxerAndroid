@@ -87,7 +87,6 @@ dependencies {
     implementation deps.crossfader
     implementation deps.materialAbout
     implementation deps.subsamplingScaleImageView
-    implementation deps.circleImageView
     implementation deps.tabLayoutHelper
     implementation deps.materialDialogs
     implementation deps.flexbox

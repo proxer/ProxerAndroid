@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground">
 
-                <de.hdodenhof.circleimageview.CircleImageView
+                <ImageView
                     android:id="@+id/userImage"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
