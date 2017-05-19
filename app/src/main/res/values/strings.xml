@@ -303,7 +303,6 @@
         <item quantity="other">%d News</item>
     </plurals>
 
-    <string name="notification_chat_title">Neue Nachrichten</string>
     <plurals name="notification_chat_conference_amount">
         <item quantity="one">in einem Chat</item>
         <item quantity="other">in %d Chats</item>

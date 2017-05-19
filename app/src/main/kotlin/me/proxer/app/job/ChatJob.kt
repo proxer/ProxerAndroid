@@ -226,5 +226,5 @@ class ChatJob : Job() {
         NotificationHelper.showOrUpdateChatNotification(context, unreadMap)
     }
 
-    class ChatException(val innerException: Exception) : Exception()
+    class ChatException(val innerError: Exception) : Exception()
 }

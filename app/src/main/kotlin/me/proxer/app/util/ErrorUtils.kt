@@ -9,6 +9,7 @@ import me.proxer.app.R
 import me.proxer.app.activity.base.MainActivity
 import me.proxer.app.dialog.AgeConfirmationDialog
 import me.proxer.app.dialog.LoginDialog
+import me.proxer.app.job.ChatJob.ChatException
 import me.proxer.app.task.stream.StreamResolutionTask
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_DEFAULT
 import me.proxer.app.util.Validators.HentaiConfirmationRequiredException
@@ -115,7 +116,7 @@ object ErrorUtils {
         return when (error) {
             is FullTaskException -> error.firstInnerError
             is PartialTaskException -> error.innerError
-//            is ChatService.ChatException -> error.innerError
+            is ChatException -> error.innerError
             is ExoPlaybackException -> error.cause ?: Exception()
             else -> error
         }
