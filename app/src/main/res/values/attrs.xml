@@ -7,8 +7,4 @@
         <attr name="aspect" />
     </declare-styleable>
 
-    <declare-styleable name="HeightAspectImageView">
-        <attr name="aspect" />
-    </declare-styleable>
-
 </resources>

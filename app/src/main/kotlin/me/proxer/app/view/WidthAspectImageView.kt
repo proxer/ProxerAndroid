@@ -10,7 +10,9 @@ import me.proxer.app.R
 
  * @author Ruben Gees
  */
-class WidthAspectImageView : AppCompatImageView {
+class WidthAspectImageView @JvmOverloads constructor(
+        context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+) : AppCompatImageView(context, attrs, defStyleAttr) {
 
     companion object {
         private val DEFAULT_ASPECT = 1f
@@ -18,28 +20,20 @@ class WidthAspectImageView : AppCompatImageView {
 
     var aspect: Float
 
-    constructor(context: Context?) : super(context) {
-        aspect = DEFAULT_ASPECT
-    }
+    init {
+        if (attrs == null) {
+            aspect = DEFAULT_ASPECT
+        } else {
+            val attributes = context.obtainStyledAttributes(attrs, R.styleable.WidthAspectImageView)
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        val attributes = context.obtainStyledAttributes(attrs, R.styleable.WidthAspectImageView)
+            aspect = attributes.getFloat(R.styleable.WidthAspectImageView_aspect, DEFAULT_ASPECT)
 
-        aspect = attributes.getFloat(R.styleable.WidthAspectImageView_aspect, DEFAULT_ASPECT)
-
-        attributes.recycle()
-    }
-
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        val attributes = context.obtainStyledAttributes(attrs, R.styleable.WidthAspectImageView)
-
-        aspect = attributes.getFloat(R.styleable.WidthAspectImageView_aspect, DEFAULT_ASPECT)
-
-        attributes.recycle()
+            attributes.recycle()
+        }
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        super.onMeasure(widthMeasureSpec, widthMeasureSpec)
 
         setMeasuredDimension(measuredWidth, (measuredWidth * aspect).toInt())
     }
