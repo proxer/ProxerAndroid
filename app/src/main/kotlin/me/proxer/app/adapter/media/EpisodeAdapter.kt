@@ -185,6 +185,7 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?, p
                 val languageContainer = languages.getChildAt(index)
                 val languageView = languageContainer.find<TextView>(R.id.language)
                 val hostersView = languageContainer.find<ViewGroup>(R.id.hosters)
+                val downloadContainer = languageContainer.find<ViewGroup>(R.id.downloadContainer)
                 val download = languageContainer.find<ImageView>(R.id.download)
                 val downloadProgress = languageContainer.find<MaterialProgressBar>(R.id.downloadProgress)
 
@@ -196,6 +197,10 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?, p
                     withSafeAdapterPosition {
                         callback?.onLanguageClick(language, internalList[it])
                     }
+                }
+
+                downloadContainer.post {
+                    downloadContainer.layoutParams.width = downloadContainer.height
                 }
 
                 bindDownload(item.category, item.number, language, download, downloadProgress)

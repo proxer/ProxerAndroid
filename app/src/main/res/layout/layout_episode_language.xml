@@ -16,39 +16,44 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal"
-        android:layout_margin="4dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
         android:drawablePadding="8dp"
+        android:gravity="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         tools:text="engsub" />
 
-    <me.proxer.app.view.HeightAspectImageView
-        android:id="@+id/download"
+    <FrameLayout
+        android:id="@+id/downloadContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/language"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:padding="6dp"
-        android:visibility="invisible"
-        tools:visibility="visible" />
+        android:layout_alignTop="@+id/language"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:padding="1dp">
 
-    <me.zhanghai.android.materialprogressbar.MaterialProgressBar
-        android:id="@+id/downloadProgress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/language"
-        android:layout_alignLeft="@+id/download"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/download"
-        android:layout_margin="6dp"
-        android:visibility="invisible"
-        app:mpb_useIntrinsicPadding="false"
-        tools:visibility="visible" />
+        <ImageView
+            android:id="@+id/download"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:visibility="invisible"
+            tools:visibility="visible" />
+
+        <me.zhanghai.android.materialprogressbar.MaterialProgressBar
+            android:id="@+id/downloadProgress"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:visibility="invisible"
+            app:mpb_useIntrinsicPadding="false"
+            tools:visibility="visible" />
+
+    </FrameLayout>
 
     <com.google.android.flexbox.FlexboxLayout
         android:id="@+id/hosters"
@@ -59,5 +64,10 @@
         app:alignItems="center"
         app:flexWrap="wrap"
         app:justifyContent="center" />
+
+    <android.support.v4.widget.Space
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:layout_below="@+id/hosters" />
 
 </RelativeLayout>
