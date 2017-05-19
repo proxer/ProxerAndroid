@@ -329,7 +329,7 @@ class MangaFragment : LoadingFragment<MangaInput, MangaChapterInfo>() {
 
         val mangaTask = localChapterTask.parallelWith(localEntryTask, zipFunction = { chapter, entry ->
             MangaChapterInfo(chapter, entry.name, entry.episodeAmount)
-        }, awaitLeftResultOnError = true)
+        }, awaitRightResultOnError = true)
 
         return TaskBuilder.task(MangaCleanTask(context.filesDir))
                 .then(mangaTask.mapInput<MangaInput> { it to it.id })
