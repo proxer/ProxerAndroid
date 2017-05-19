@@ -31,7 +31,6 @@ ext {
     tabLayoutHelperVersion = '0.8.0'
     materialDialogsVersion = '0.9.4.4'
     flexboxVersion = '0.2.6'
-    chipCloudVersion = '3.0.3'
     emojiIosVersion = '0.5.0-SNAPSHOT'
     exomediaVersion = '4.0.1'
     exoplayerVersion = 'r2.4.0'
@@ -39,6 +38,7 @@ ext {
     materialRatingBarVersion = '1.0.2'
     customtabsHelperVersion = '1.0.3'
     introductionVersion = '1.4.0'
+    materialBadgeViewVersion = '-SNAPSHOT'
 
     // Utils
     threetenVersion = '1.0.5'
@@ -86,7 +86,6 @@ ext {
             tabLayoutHelper              : "com.h6ah4i.android.tablayouthelper:tablayouthelper:$tabLayoutHelperVersion",
             materialDialogs              : "com.afollestad.material-dialogs:core:$materialDialogsVersion",
             flexbox                      : "com.google.android:flexbox:$flexboxVersion",
-            chipCloud                    : "com.github.fiskurgit:ChipCloud:$chipCloudVersion",
             emojiIos                     : "com.vanniktech:emoji-ios:$emojiIosVersion",
             exomedia                     : "com.devbrackets.android:exomedia:$exomediaVersion",
             exoplayerIntegration         : "com.google.android.exoplayer:extension-okhttp:$exoplayerVersion",
@@ -94,6 +93,7 @@ ext {
             materialRatingBar            : "me.zhanghai.android.materialratingbar:library:$materialRatingBarVersion",
             customtabsHelper             : "me.zhanghai.android.customtabshelper:library:$customtabsHelperVersion",
             introduction                 : "com.github.rubengees:introduction:$introductionVersion",
+            materialBadgeView            : "com.github.matrixxun:MaterialBadgeTextView:$materialBadgeViewVersion",
 
             threeten                     : "com.jakewharton.threetenabp:threetenabp:$threetenVersion",
             hawk                         : "com.orhanobut:hawk:$hawkVersion",

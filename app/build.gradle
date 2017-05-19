@@ -90,7 +90,6 @@ dependencies {
     implementation deps.tabLayoutHelper
     implementation deps.materialDialogs
     implementation deps.flexbox
-    implementation deps.chipCloud
     implementation deps.emojiIos
     implementation deps.exomedia
     implementation deps.exoplayerIntegration
@@ -98,6 +97,7 @@ dependencies {
     implementation deps.materialRatingBar
     implementation deps.customtabsHelper
     implementation deps.introduction
+    implementation deps.materialBadgeView
 
     implementation deps.threeten
     implementation(deps.hawk) { exclude module: 'gson' }

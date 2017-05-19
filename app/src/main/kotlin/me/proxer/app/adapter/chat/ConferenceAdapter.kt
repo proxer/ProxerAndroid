@@ -1,6 +1,5 @@
 package me.proxer.app.adapter.chat
 
-import android.graphics.Typeface
 import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
@@ -8,10 +7,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.matrixxun.starry.badgetextview.MaterialBadgeTextView
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
-import fisk.chipcloud.ChipCloud
-import fisk.chipcloud.ChipCloudConfig
 import me.proxer.app.R
 import me.proxer.app.adapter.base.BaseAdapter
 import me.proxer.app.application.GlideRequests
@@ -69,7 +67,7 @@ class ConferenceAdapter(private val glide: GlideRequests) : BaseAdapter<LocalCon
 
         internal val image: ImageView by bindView(R.id.image)
         internal val topic: TextView by bindView(R.id.topic)
-        internal val newMessages: ViewGroup by bindView(R.id.newMessages)
+        internal val newMessages: MaterialBadgeTextView by bindView(R.id.newMessages)
         internal val time: TextView by bindView(R.id.time)
         internal val participants: TextView by bindView(R.id.participants)
 
@@ -79,6 +77,8 @@ class ConferenceAdapter(private val glide: GlideRequests) : BaseAdapter<LocalCon
                     callback?.onConferenceClick(internalList[it])
                 }
             }
+
+            newMessages.setBackgroundColor(ContextCompat.getColor(newMessages.context, R.color.colorAccent))
         }
 
         override fun bind(item: LocalConference) {
@@ -89,19 +89,10 @@ class ConferenceAdapter(private val glide: GlideRequests) : BaseAdapter<LocalCon
 
             if (item.localIsRead) {
                 newMessages.visibility = View.GONE
-
-                newMessages.removeAllViews()
             } else {
                 newMessages.visibility = View.VISIBLE
 
-                ChipCloud(newMessages.context, newMessages, ChipCloudConfig()
-                        .uncheckedChipColor(ContextCompat.getColor(newMessages.context, R.color.colorAccent))
-                        .uncheckedTextColor(ContextCompat.getColor(newMessages.context, android.R.color.white))
-                        .selectMode(ChipCloud.SelectMode.none)
-                        .typeface(Typeface.DEFAULT_BOLD))
-                        .apply {
-                            addChip(item.unreadMessageAmount)
-                        }
+                newMessages.setBadgeCount(item.unreadMessageAmount)
             }
 
             if (item.image.isBlank()) {

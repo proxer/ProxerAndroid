@@ -1,6 +1,5 @@
 package me.proxer.app.fragment.media
 
-import android.graphics.Typeface
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
@@ -14,8 +13,6 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.rubengees.ktask.android.AndroidLifecycleTask
 import com.rubengees.ktask.android.bindToLifecycle
 import com.rubengees.ktask.util.TaskBuilder
-import fisk.chipcloud.ChipCloud
-import fisk.chipcloud.ChipCloudConfig
 import me.proxer.app.R
 import me.proxer.app.activity.IndustryActivity
 import me.proxer.app.activity.MediaActivity
@@ -33,7 +30,6 @@ import me.proxer.library.enums.Category
 import me.proxer.library.util.ProxerUrls
 import me.proxer.library.util.ProxerUtils
 import org.jetbrains.anko.bundleOf
-import org.jetbrains.anko.childrenSequence
 import org.jetbrains.anko.find
 
 /**
@@ -370,21 +366,16 @@ class MediaInfoFragment : LoadingFragment<ProxerCall<Entry>, Entry>() {
 
     private fun <T> bindChips(layout: FlexboxLayout, items: List<T>, mapFunction: (T) -> String = { it.toString() },
                               onClick: ((T) -> Unit)? = null) {
-        ChipCloud(context, layout, ChipCloudConfig()
-                .uncheckedChipColor(ContextCompat.getColor(context, R.color.colorAccent))
-                .uncheckedTextColor(ContextCompat.getColor(context, android.R.color.white))
-                .selectMode(ChipCloud.SelectMode.none)
-                .typeface(Typeface.DEFAULT_BOLD)
-                .useInsetPadding(true))
-                .apply { addChips(items.map(mapFunction)) }
-                .also {
-                    if (onClick != null) {
-                        layout.childrenSequence().forEachIndexed { index, view ->
-                            view.setOnClickListener {
-                                onClick.invoke(items[index])
-                            }
-                        }
-                    }
-                }
+        items.map(mapFunction).forEachIndexed { index, it ->
+            val badge = LayoutInflater.from(layout.context).inflate(R.layout.view_badge, layout, false) as TextView
+
+            badge.text = it
+            badge.setBackgroundColor(ContextCompat.getColor(badge.context, R.color.colorAccent))
+            badge.setOnClickListener {
+                onClick?.invoke(items[index])
+            }
+
+            layout.addView(badge)
+        }
     }
 }
