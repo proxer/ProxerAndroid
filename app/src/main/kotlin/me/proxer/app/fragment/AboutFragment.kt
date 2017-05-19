@@ -31,9 +31,9 @@ import org.jetbrains.anko.bundleOf
 class AboutFragment : MaterialAboutFragment() {
 
     companion object {
-        private val LIBRARIES = arrayOf("glide", "jodatimeandroid", "hawk", "materialdialogs",
-                "eventbus", "circleimageview", "okhttp", "leakcanary", "anko", "moshi",
-                "android_textview_linkbuilder", "androidflowlayout", "kotterknife")
+        private val LIBRARIES = arrayOf("glide", "hawk", "materialdialogs",
+                "eventbus", "okhttp", "leakcanary", "anko", "moshi",
+                "android_textview_linkbuilder", "kotterknife")
         private val EXCLUDED_LIBRARIES = arrayOf("fastadapter", "materialize")
 
         private val REPOSITORY_LINK = HttpUrl.Builder()

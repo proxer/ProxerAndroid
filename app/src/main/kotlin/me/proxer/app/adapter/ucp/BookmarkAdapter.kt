@@ -1,8 +1,7 @@
 package me.proxer.app.adapter.ucp
 
-import android.graphics.drawable.ColorDrawable
-import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
+import android.support.v7.content.res.AppCompatResources
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,6 +37,7 @@ class BookmarkAdapter(private val glide: GlideRequests) : BaseAdapter<Bookmark>(
 
     override fun onViewRecycled(holder: BaseViewHolder<Bookmark>) {
         if (holder is ViewHolder) {
+            glide.clear(holder.availability)
             glide.clear(holder.image)
         }
     }
@@ -100,11 +100,10 @@ class BookmarkAdapter(private val glide: GlideRequests) : BaseAdapter<Bookmark>(
             title.text = item.name
             medium.text = item.medium.toAppString(medium.context)
             episode.text = item.category.toEpisodeAppString(episode.context, item.episode)
-            availability.setImageDrawable(ColorDrawable(ContextCompat.getColor(availability.context,
-                    when (item.isAvailable) {
-                        true -> R.color.md_green_500
-                        false -> R.color.md_red_500
-                    })))
+            availability.setImageDrawable(AppCompatResources.getDrawable(availability.context, when (item.isAvailable) {
+                true -> R.drawable.ic_circle_green
+                false -> R.drawable.ic_circle_red
+            }))
 
             language.setImageDrawable(item.language.toGeneralLanguage().toAppDrawable(language.context))
 

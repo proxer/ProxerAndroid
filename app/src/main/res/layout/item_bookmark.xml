@@ -78,7 +78,7 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     tools:text="Episode 12" />
 
-                <de.hdodenhof.circleimageview.CircleImageView
+                <ImageView
                     android:id="@+id/availability"
                     android:layout_width="8dp"
                     android:layout_height="8dp"
