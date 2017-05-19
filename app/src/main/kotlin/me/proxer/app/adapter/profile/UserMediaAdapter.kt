@@ -31,11 +31,11 @@ class UserMediaAdapter(private val glide: GlideRequests) : BaseAdapter<UserMedia
 
     override fun getItemId(position: Int) = internalList[position].id.toLong()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<UserMediaListEntry> {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_user_media_entry, parent, false))
     }
 
-    override fun onViewRecycled(holder: PagingViewHolder<UserMediaListEntry>) {
+    override fun onViewRecycled(holder: BaseViewHolder<UserMediaListEntry>) {
         if (holder is ViewHolder) {
             glide.clear(holder.image)
         }
@@ -47,7 +47,7 @@ class UserMediaAdapter(private val glide: GlideRequests) : BaseAdapter<UserMedia
         callback = null
     }
 
-    inner class ViewHolder(itemView: View) : PagingViewHolder<UserMediaListEntry>(itemView) {
+    internal inner class ViewHolder(itemView: View) : BaseViewHolder<UserMediaListEntry>(itemView) {
 
         internal val title: TextView by bindView(R.id.title)
         internal val medium: TextView by bindView(R.id.medium)

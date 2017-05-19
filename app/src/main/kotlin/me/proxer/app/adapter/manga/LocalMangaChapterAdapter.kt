@@ -39,7 +39,7 @@ internal class LocalMangaChapterAdapter : BaseAdapter<LocalMangaChapter>() {
         callback = null
     }
 
-    inner class ViewHolder(itemView: View) : PagingViewHolder<LocalMangaChapter>(itemView) {
+    internal inner class ViewHolder(itemView: View) : BaseViewHolder<LocalMangaChapter>(itemView) {
 
         internal val title: TextView by bindView(R.id.title)
         internal val delete: ImageView by bindView(R.id.delete)

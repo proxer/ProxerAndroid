@@ -31,11 +31,11 @@ class ConferenceAdapter(private val glide: GlideRequests) : BaseAdapter<LocalCon
         setHasStableIds(true)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<LocalConference> {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_conference, parent, false))
     }
 
-    override fun onViewRecycled(holder: PagingViewHolder<LocalConference>) {
+    override fun onViewRecycled(holder: BaseViewHolder<LocalConference>) {
         if (holder is ViewHolder) {
             glide.clear(holder.image)
         }
@@ -65,7 +65,7 @@ class ConferenceAdapter(private val glide: GlideRequests) : BaseAdapter<LocalCon
         return oldItem.localId == newItem.localId
     }
 
-    inner class ViewHolder(itemView: View) : PagingViewHolder<LocalConference>(itemView) {
+    internal inner class ViewHolder(itemView: View) : BaseViewHolder<LocalConference>(itemView) {
 
         internal val image: ImageView by bindView(R.id.image)
         internal val topic: TextView by bindView(R.id.topic)

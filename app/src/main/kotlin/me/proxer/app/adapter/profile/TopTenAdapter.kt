@@ -25,11 +25,11 @@ class TopTenAdapter(private val glide: GlideRequests) : BaseAdapter<TopTenEntry>
         setHasStableIds(true)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<TopTenEntry> {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_top_ten_entry, parent, false))
     }
 
-    override fun onViewRecycled(holder: PagingViewHolder<TopTenEntry>) {
+    override fun onViewRecycled(holder: BaseViewHolder<TopTenEntry>) {
         if (holder is ViewHolder) {
             glide.clear(holder.image)
         }
@@ -41,7 +41,7 @@ class TopTenAdapter(private val glide: GlideRequests) : BaseAdapter<TopTenEntry>
         callback = null
     }
 
-    inner class ViewHolder(itemView: View) : PagingViewHolder<TopTenEntry>(itemView) {
+    internal inner class ViewHolder(itemView: View) : BaseViewHolder<TopTenEntry>(itemView) {
 
         internal val image: ImageView by bindView(R.id.image)
         internal val title: TextView by bindView(R.id.title)

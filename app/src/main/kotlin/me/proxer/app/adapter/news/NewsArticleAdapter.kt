@@ -42,11 +42,11 @@ class NewsArticleAdapter(savedInstanceState: Bundle?, private val glide: GlideRe
         setHasStableIds(true)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder? {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<NewsArticle> {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_news, parent, false))
     }
 
-    override fun onViewRecycled(holder: PagingViewHolder<NewsArticle>) {
+    override fun onViewRecycled(holder: BaseViewHolder<NewsArticle>) {
         if (holder is ViewHolder) {
             glide.clear(holder.image)
         }
@@ -68,7 +68,7 @@ class NewsArticleAdapter(savedInstanceState: Bundle?, private val glide: GlideRe
         outState.putParcelable(EXPANDED_STATE, expanded)
     }
 
-    inner class ViewHolder(itemView: View) : PagingViewHolder<NewsArticle>(itemView) {
+    internal inner class ViewHolder(itemView: View) : BaseViewHolder<NewsArticle>(itemView) {
 
         internal val expand: ImageButton by bindView(R.id.expand)
         internal val description: TextView by bindView(R.id.description)

@@ -28,11 +28,11 @@ class MangaAdapter : BaseAdapter<Page>() {
     private lateinit var entryId: String
     private lateinit var id: String
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagingViewHolder<Page> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<Page> {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_manga_page, parent, false))
     }
 
-    override fun onViewRecycled(holder: PagingViewHolder<Page>?) {
+    override fun onViewRecycled(holder: BaseViewHolder<Page>?) {
         if (holder is ViewHolder) {
             holder.image.recycle()
             holder.image.tag?.let {
@@ -51,7 +51,7 @@ class MangaAdapter : BaseAdapter<Page>() {
         this.id = id
     }
 
-    inner class ViewHolder(itemView: View) : PagingViewHolder<Page>(itemView) {
+    internal inner class ViewHolder(itemView: View) : BaseViewHolder<Page>(itemView) {
 
         private val shortAnimationTime = itemView.context.resources.getInteger(android.R.integer.config_shortAnimTime)
         private val mediumAnimationTime = itemView.context.resources.getInteger(android.R.integer.config_mediumAnimTime)

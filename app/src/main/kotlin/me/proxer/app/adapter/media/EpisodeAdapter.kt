@@ -58,7 +58,7 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?, p
         setHasStableIds(true)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagingViewHolder<EpisodeRow> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<EpisodeRow> {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_episode, parent, false))
     }
 
@@ -78,19 +78,19 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?, p
         EventBus.getDefault().unregister(this)
     }
 
-    override fun onViewAttachedToWindow(holder: PagingViewHolder<EpisodeRow>?) {
+    override fun onViewAttachedToWindow(holder: BaseViewHolder<EpisodeRow>?) {
         super.onViewAttachedToWindow(holder)
 
         EventBus.getDefault().register(holder)
     }
 
-    override fun onViewDetachedFromWindow(holder: PagingViewHolder<EpisodeRow>?) {
+    override fun onViewDetachedFromWindow(holder: BaseViewHolder<EpisodeRow>?) {
         super.onViewDetachedFromWindow(holder)
 
         EventBus.getDefault().unregister(holder)
     }
 
-    override fun onViewRecycled(holder: PagingViewHolder<EpisodeRow>?) {
+    override fun onViewRecycled(holder: BaseViewHolder<EpisodeRow>?) {
         if (holder is ViewHolder) {
             holder.languages.applyRecursively {
                 if (it is ImageView) {
@@ -128,7 +128,7 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?, p
         notifyDataSetChanged()
     }
 
-    inner class ViewHolder(itemView: View) : PagingViewHolder<EpisodeRow>(itemView) {
+    internal inner class ViewHolder(itemView: View) : BaseViewHolder<EpisodeRow>(itemView) {
 
         internal val title: TextView by bindView(R.id.title)
         internal val titleContainer: ViewGroup by bindView(R.id.titleContainer)

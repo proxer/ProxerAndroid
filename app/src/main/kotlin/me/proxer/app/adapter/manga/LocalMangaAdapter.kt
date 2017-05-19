@@ -48,7 +48,7 @@ class LocalMangaAdapter(savedInstanceState: Bundle?, private val glide: GlideReq
 
     override fun getItemId(position: Int) = internalList[position].first.id.toLong()
 
-    override fun onViewRecycled(holder: PagingViewHolder<CompleteLocalMangaEntry>) {
+    override fun onViewRecycled(holder: BaseViewHolder<CompleteLocalMangaEntry>) {
         if (holder is ViewHolder) {
             glide.clear(holder.image)
         }
@@ -57,10 +57,10 @@ class LocalMangaAdapter(savedInstanceState: Bundle?, private val glide: GlideReq
     override fun areItemsTheSame(oldItem: CompleteLocalMangaEntry, newItem: CompleteLocalMangaEntry)
             = oldItem.first.id == newItem.first.id
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<CompleteLocalMangaEntry>
             = ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_local_manga, parent, false))
 
-    override fun onViewAttachedToWindow(holder: PagingViewHolder<CompleteLocalMangaEntry>) {
+    override fun onViewAttachedToWindow(holder: BaseViewHolder<CompleteLocalMangaEntry>) {
         super.onViewAttachedToWindow(holder)
 
         if (holder is ViewHolder) {
@@ -76,7 +76,7 @@ class LocalMangaAdapter(savedInstanceState: Bundle?, private val glide: GlideReq
         }
     }
 
-    override fun onViewDetachedFromWindow(holder: PagingViewHolder<CompleteLocalMangaEntry>?) {
+    override fun onViewDetachedFromWindow(holder: BaseViewHolder<CompleteLocalMangaEntry>?) {
         super.onViewDetachedFromWindow(holder)
 
         if (holder is ViewHolder) {
@@ -94,7 +94,7 @@ class LocalMangaAdapter(savedInstanceState: Bundle?, private val glide: GlideReq
         outState.putParcelable(EXPANDED_STATE, expanded)
     }
 
-    inner class ViewHolder(itemView: View) : PagingViewHolder<CompleteLocalMangaEntry>(itemView) {
+    internal inner class ViewHolder(itemView: View) : BaseViewHolder<CompleteLocalMangaEntry>(itemView) {
 
         internal val adapter: LocalMangaChapterAdapter
             get() = chapters.adapter as LocalMangaChapterAdapter

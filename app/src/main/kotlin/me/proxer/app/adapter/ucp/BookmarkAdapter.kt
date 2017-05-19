@@ -32,11 +32,11 @@ class BookmarkAdapter(private val glide: GlideRequests) : BaseAdapter<Bookmark>(
 
     override fun getItemId(position: Int) = internalList[position].id.toLong()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagingViewHolder<Bookmark> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<Bookmark> {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_bookmark, parent, false))
     }
 
-    override fun onViewRecycled(holder: PagingViewHolder<Bookmark>) {
+    override fun onViewRecycled(holder: BaseViewHolder<Bookmark>) {
         if (holder is ViewHolder) {
             glide.clear(holder.image)
         }
@@ -56,7 +56,7 @@ class BookmarkAdapter(private val glide: GlideRequests) : BaseAdapter<Bookmark>(
         return oldItem.id == newItem.id
     }
 
-    inner class ViewHolder(itemView: View) : PagingViewHolder<Bookmark>(itemView) {
+    internal inner class ViewHolder(itemView: View) : BaseViewHolder<Bookmark>(itemView) {
 
         internal val title: TextView by bindView(R.id.title)
         internal val medium: TextView by bindView(R.id.medium)

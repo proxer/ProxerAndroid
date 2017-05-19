@@ -29,11 +29,11 @@ class HistoryAdapter(private val glide: GlideRequests) : BaseAdapter<UcpHistoryE
 
     override fun getItemId(position: Int) = internalList[position].id.toLong()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagingViewHolder<UcpHistoryEntry> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<UcpHistoryEntry> {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_history_entry, parent, false))
     }
 
-    override fun onViewRecycled(holder: PagingViewHolder<UcpHistoryEntry>) {
+    override fun onViewRecycled(holder: BaseViewHolder<UcpHistoryEntry>) {
         if (holder is ViewHolder) {
             glide.clear(holder.image)
         }
@@ -45,7 +45,7 @@ class HistoryAdapter(private val glide: GlideRequests) : BaseAdapter<UcpHistoryE
         callback = null
     }
 
-    inner class ViewHolder(itemView: View) : PagingViewHolder<UcpHistoryEntry>(itemView) {
+    internal inner class ViewHolder(itemView: View) : BaseViewHolder<UcpHistoryEntry>(itemView) {
 
         internal val title: TextView by bindView(R.id.title)
         internal val medium: TextView by bindView(R.id.medium)

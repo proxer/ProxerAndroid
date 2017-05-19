@@ -32,11 +32,11 @@ class RelationsAdapter(private val glide: GlideRequests) : BaseAdapter<Relation>
 
     override fun getItemId(position: Int) = internalList[position].id.toLong()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagingViewHolder<Relation> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<Relation> {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_media_entry, parent, false))
     }
 
-    override fun onViewRecycled(holder: PagingViewHolder<Relation>) {
+    override fun onViewRecycled(holder: BaseViewHolder<Relation>) {
         if (holder is ViewHolder) {
             glide.clear(holder.image)
         }
@@ -48,7 +48,7 @@ class RelationsAdapter(private val glide: GlideRequests) : BaseAdapter<Relation>
         callback = null
     }
 
-    inner class ViewHolder(itemView: View) : PagingViewHolder<Relation>(itemView) {
+    internal inner class ViewHolder(itemView: View) : BaseViewHolder<Relation>(itemView) {
 
         internal val title: TextView by bindView(R.id.title)
         internal val medium: TextView by bindView(R.id.medium)

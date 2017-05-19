@@ -10,7 +10,7 @@ import me.proxer.library.entitiy.ProxerIdItem
 /**
  * @author Ruben Gees
  */
-abstract class BaseAdapter<T> : RecyclerView.Adapter<BaseAdapter<T>.PagingViewHolder<T>>() {
+abstract class BaseAdapter<T> : RecyclerView.Adapter<BaseAdapter<T>.BaseViewHolder<T>>() {
 
     val list: List<T> get() = ArrayList(internalList)
 
@@ -31,7 +31,7 @@ abstract class BaseAdapter<T> : RecyclerView.Adapter<BaseAdapter<T>.PagingViewHo
         super.onDetachedFromRecyclerView(recyclerView)
     }
 
-    override fun onBindViewHolder(holder: PagingViewHolder<T>, position: Int) {
+    override fun onBindViewHolder(holder: BaseViewHolder<T>, position: Int) {
         holder.bind(internalList[position])
     }
 
@@ -136,7 +136,7 @@ abstract class BaseAdapter<T> : RecyclerView.Adapter<BaseAdapter<T>.PagingViewHo
         }
     }
 
-    inner abstract class PagingViewHolder<in T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner abstract class BaseViewHolder<in T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         open fun bind(item: T) {}
 

@@ -27,11 +27,11 @@ class IndustryProjectAdapter(private val glide: GlideRequests) : BaseAdapter<Ind
         setHasStableIds(true)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<IndustryProject> {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_project, parent, false))
     }
 
-    override fun onViewRecycled(holder: PagingViewHolder<IndustryProject>) {
+    override fun onViewRecycled(holder: BaseViewHolder<IndustryProject>) {
         if (holder is ViewHolder) {
             glide.clear(holder.image)
         }
@@ -43,7 +43,7 @@ class IndustryProjectAdapter(private val glide: GlideRequests) : BaseAdapter<Ind
         callback = null
     }
 
-    inner class ViewHolder(itemView: View) : PagingViewHolder<IndustryProject>(itemView) {
+    internal inner class ViewHolder(itemView: View) : BaseViewHolder<IndustryProject>(itemView) {
 
         internal val title: TextView by bindView(R.id.title)
         internal val medium: TextView by bindView(R.id.medium)

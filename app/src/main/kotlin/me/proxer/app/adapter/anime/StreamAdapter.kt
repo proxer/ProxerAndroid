@@ -43,11 +43,11 @@ class StreamAdapter(savedInstanceState: Bundle?, private val glide: GlideRequest
         setHasStableIds(true)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagingViewHolder<Stream> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<Stream> {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_stream, parent, false))
     }
 
-    override fun onViewRecycled(holder: PagingViewHolder<Stream>) {
+    override fun onViewRecycled(holder: BaseViewHolder<Stream>) {
         if (holder is ViewHolder) {
             glide.clear(holder.image)
         }
@@ -63,7 +63,7 @@ class StreamAdapter(savedInstanceState: Bundle?, private val glide: GlideRequest
         outState.putParcelable(EXPANDED_STATE, expanded)
     }
 
-    inner class ViewHolder(itemView: View) : PagingViewHolder<Stream>(itemView) {
+    internal inner class ViewHolder(itemView: View) : BaseViewHolder<Stream>(itemView) {
 
         internal val nameContainer: ViewGroup by bindView(R.id.nameContainer)
         internal val name: TextView by bindView(R.id.name)

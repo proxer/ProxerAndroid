@@ -62,11 +62,11 @@ class CommentAdapter(savedInstanceState: Bundle?, categoryCallback: () -> Catego
 
     override fun getItemId(position: Int) = internalList[position].id.toLong()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagingViewHolder<Comment> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<Comment> {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_comment, parent, false))
     }
 
-    override fun onViewRecycled(holder: PagingViewHolder<Comment>) {
+    override fun onViewRecycled(holder: BaseViewHolder<Comment>) {
         if (holder is ViewHolder) {
             glide.clear(holder.userImage)
         }
@@ -84,7 +84,7 @@ class CommentAdapter(savedInstanceState: Bundle?, categoryCallback: () -> Catego
         outState.putParcelable(SPOILER_STATES_STATE, spoilerStates)
     }
 
-    inner class ViewHolder(itemView: View) : PagingViewHolder<Comment>(itemView) {
+    internal inner class ViewHolder(itemView: View) : BaseViewHolder<Comment>(itemView) {
 
         internal val userContainer: ViewGroup by bindView(R.id.userContainer)
         internal val userImage: ImageView by bindView(R.id.userImage)

@@ -31,11 +31,11 @@ class UcpTopTenAdapter(private val glide: GlideRequests) : BaseAdapter<UcpTopTen
 
     override fun getItemId(position: Int) = internalList[position].id.toLong()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagingViewHolder<UcpTopTenEntry> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<UcpTopTenEntry> {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_ucp_top_ten_entry, parent, false))
     }
 
-    override fun onViewRecycled(holder: PagingViewHolder<UcpTopTenEntry>) {
+    override fun onViewRecycled(holder: BaseViewHolder<UcpTopTenEntry>) {
         if (holder is ViewHolder) {
             glide.clear(holder.image)
         }
@@ -47,7 +47,7 @@ class UcpTopTenAdapter(private val glide: GlideRequests) : BaseAdapter<UcpTopTen
         callback = null
     }
 
-    inner class ViewHolder(itemView: View) : PagingViewHolder<UcpTopTenEntry>(itemView) {
+    internal inner class ViewHolder(itemView: View) : BaseViewHolder<UcpTopTenEntry>(itemView) {
 
         internal val title: TextView by bindView(R.id.title)
         internal val image: ImageView by bindView(R.id.image)

@@ -30,11 +30,11 @@ class MediaAdapter(private val category: Category, private val glide: GlideReque
         setHasStableIds(true)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<MediaListEntry> {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_media_entry, parent, false))
     }
 
-    override fun onViewRecycled(holder: PagingViewHolder<MediaListEntry>) {
+    override fun onViewRecycled(holder: BaseViewHolder<MediaListEntry>) {
         if (holder is ViewHolder) {
             glide.clear(holder.image)
         }
@@ -46,7 +46,7 @@ class MediaAdapter(private val category: Category, private val glide: GlideReque
         callback = null
     }
 
-    inner class ViewHolder(itemView: View) : PagingViewHolder<MediaListEntry>(itemView) {
+    internal inner class ViewHolder(itemView: View) : BaseViewHolder<MediaListEntry>(itemView) {
 
         internal val title: TextView by bindView(R.id.title)
         internal val medium: TextView by bindView(R.id.medium)

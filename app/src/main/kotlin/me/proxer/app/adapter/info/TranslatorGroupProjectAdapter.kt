@@ -27,11 +27,11 @@ class TranslatorGroupProjectAdapter(private val glide: GlideRequests) : BaseAdap
         setHasStableIds(true)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<TranslatorGroupProject> {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_project, parent, false))
     }
 
-    override fun onViewRecycled(holder: PagingViewHolder<TranslatorGroupProject>) {
+    override fun onViewRecycled(holder: BaseViewHolder<TranslatorGroupProject>) {
         if (holder is ViewHolder) {
             glide.clear(holder.image)
         }
@@ -43,7 +43,7 @@ class TranslatorGroupProjectAdapter(private val glide: GlideRequests) : BaseAdap
         callback = null
     }
 
-    inner class ViewHolder(itemView: View) : PagingViewHolder<TranslatorGroupProject>(itemView) {
+    internal inner class ViewHolder(itemView: View) : BaseViewHolder<TranslatorGroupProject>(itemView) {
 
         internal val title: TextView by bindView(R.id.title)
         internal val medium: TextView by bindView(R.id.medium)
