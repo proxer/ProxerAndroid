@@ -49,6 +49,7 @@ ext {
     okioVersion = '1.13.0'
     linkBuilderVersion = '1.5.2'
     easyHeaderFooterAdapterVersion = '-SNAPSHOT'
+    jsr305Version = '3.0.2'
 
     // Debugging
     strictModeCompatVersion = "25.0.0"
@@ -103,6 +104,7 @@ ext {
             okio                         : "com.squareup.okio:okio:$okioVersion",
             linkBuilder                  : "com.klinkerapps:link_builder:$linkBuilderVersion",
             easyHeaderFooterAdapter      : "com.github.rubengees:EasyHeaderFooterAdapter:$easyHeaderFooterAdapterVersion",
+            jsr305                       : "com.google.code.findbugs:jsr305:$jsr305Version",
 
             strictModeCompat             : "com.kirich1409:strict-mode-compat:$strictModeCompatVersion",
             leakCanary                   : "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion",

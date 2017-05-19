@@ -67,9 +67,6 @@
 
 # OkHttp/Okio
 -dontwarn okio.**
--dontwarn javax.annotation.Nullable
--dontwarn javax.annotation.ParametersAreNonnullByDefault
--dontwarn javax.annotation.concurrent.GuardedBy
 
 # Retrofit
 -dontnote retrofit2.Platform
