@@ -7,9 +7,7 @@
 -dontskipnonpubliclibraryclasses
 -verbose
 
--keepattributes *Annotation*
--keep public class com.google.vending.licensing.ILicensingService
--keep public class com.android.vending.licensing.ILicensingService
+-keepattributes *Annotation*,Signature,InnerClasses,EnclosingMethod
 
 # For native methods, see http://proguard.sourceforge.net/manual/examples.html#native
 -keepclasseswithmembernames class * {
@@ -37,23 +35,44 @@
     public static <fields>;
 }
 
+# Preserve annotated Javascript interface methods.
+-keepclassmembers class * {
+    @android.webkit.JavascriptInterface <methods>;
+}
+
 # The support library contains references to newer platform versions.
 # Don't warn about those in case this app is linking against an older
 # platform version. We know about them, and they are safe.
+-dontnote android.support.**
 -dontwarn android.support.**
+
+# Understand the @Keep support annotation.
+-keep class android.support.annotation.Keep
+-keep @android.support.annotation.Keep class * {*;}
+
+-keepclasseswithmembers class * {
+    @android.support.annotation.Keep <methods>;
+}
+
+-keepclasseswithmembers class * {
+    @android.support.annotation.Keep <fields>;
+}
+
+-keepclasseswithmembers class * {
+    @android.support.annotation.Keep <init>(...);
+}
 
 # EventBus
 -keepclassmembers class ** {
     @org.greenrobot.eventbus.Subscribe <methods>;
 }
-
 -keep enum org.greenrobot.eventbus.ThreadMode { *; }
 
 # Glide
--keep public class * extends com.bumptech.glide.AppGlideModule
+-keep public class * implements com.bumptech.glide.module.GlideModule
 -keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
-    **[] $VALUES;
-    public *;
+  **[] $VALUES;
+  public *;
 }
 
 # Moshi
@@ -71,8 +90,6 @@
 # Retrofit
 -dontnote retrofit2.Platform
 -dontwarn retrofit2.Platform$Java8
--keepattributes Signature
--keepattributes Exceptions
 
 -keepclasseswithmembers class * {
     @retrofit2.http.* <methods>;
@@ -91,15 +108,11 @@
 -keepclassmembers class com.facebook.android.crypto.keychain.SecureRandomFix$LinuxPRNGSecureRandom {
    public <init>(...);
 }
--keepclassmembers class * implements com.google.android.exoplayer.extractor.Extractor {
-   public <init>(...);
-}
--keepclassmembers class * implements com.google.android.exoplayer.text.SubtitleParser  {
-   public <init>(...);
-}
+
 -keepclassmembers class com.davemorrissey.labs.subscaleview.decoder.SkiaImageRegionDecoder {
    public <init>(...);
 }
+
 -keepclassmembers class com.davemorrissey.labs.subscaleview.decoder.SkiaImageDecoder {
    public <init>(...);
 }
