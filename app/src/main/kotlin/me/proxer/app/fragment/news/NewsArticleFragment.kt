@@ -1,6 +1,7 @@
 package me.proxer.app.fragment.news
 
 import android.os.Bundle
+import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
 import android.widget.ImageView
 import com.rubengees.ktask.util.TaskBuilder
@@ -14,6 +15,7 @@ import me.proxer.app.fragment.base.PagedLoadingFragment
 import me.proxer.app.helper.NotificationHelper
 import me.proxer.app.helper.StorageHelper
 import me.proxer.app.task.asyncProxerTask
+import me.proxer.app.util.DeviceUtils
 import me.proxer.library.api.ProxerCall
 import me.proxer.library.entitiy.notifications.NewsArticle
 import me.proxer.library.enums.Device
@@ -40,6 +42,9 @@ class NewsArticleFragment : PagedLoadingFragment<ProxerCall<List<NewsArticle>>, 
     override val itemsOnPage = 15
     override val emptyResultMessage = R.string.error_no_data_news
 
+    override val layoutManager by lazy {
+        StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity), StaggeredGridLayoutManager.VERTICAL)
+    }
     override lateinit var innerAdapter: NewsArticleAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {

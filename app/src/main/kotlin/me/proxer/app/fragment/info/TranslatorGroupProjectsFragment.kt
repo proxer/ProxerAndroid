@@ -1,6 +1,7 @@
 package me.proxer.app.fragment.info
 
 import android.os.Bundle
+import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
 import android.widget.ImageView
 import com.rubengees.ktask.util.TaskBuilder
@@ -14,6 +15,7 @@ import me.proxer.app.fragment.base.PagedLoadingFragment
 import me.proxer.app.helper.PreferenceHelper
 import me.proxer.app.helper.StorageHelper
 import me.proxer.app.task.asyncProxerTask
+import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.toCategory
 import me.proxer.library.api.ProxerCall
 import me.proxer.library.entitiy.list.TranslatorGroupProject
@@ -36,7 +38,6 @@ class TranslatorGroupProjectsFragment : PagedLoadingFragment<ProxerCall<List<Tra
 
     override val itemsOnPage = 30
     override val emptyResultMessage = R.string.error_no_data_projects
-    override val spanCount get() = super.spanCount + 1
 
     private val translatorGroupActivity
         get() = activity as TranslatorGroupActivity
@@ -44,6 +45,9 @@ class TranslatorGroupProjectsFragment : PagedLoadingFragment<ProxerCall<List<Tra
     private val id: String
         get() = translatorGroupActivity.id
 
+    override val layoutManager by lazy {
+        StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity) + 1, StaggeredGridLayoutManager.VERTICAL)
+    }
     override val innerAdapter by lazy { TranslatorGroupProjectAdapter(GlideApp.with(this)) }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {

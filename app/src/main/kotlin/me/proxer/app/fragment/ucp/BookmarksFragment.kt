@@ -2,6 +2,7 @@ package me.proxer.app.fragment.ucp
 
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -20,6 +21,7 @@ import me.proxer.app.application.GlideApp
 import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.fragment.base.PagedLoadingFragment
 import me.proxer.app.task.asyncProxerTask
+import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
 import me.proxer.app.util.extension.multilineSnackbar
@@ -50,9 +52,11 @@ class BookmarksFragment : PagedLoadingFragment<ProxerCall<List<Bookmark>>, Bookm
     override val isSwipeToRefreshEnabled = true
     override val shouldReplaceOnRefresh = true
     override val emptyResultMessage = R.string.error_no_data_bookmarks
-    override val spanCount get() = super.spanCount + 1
     override val itemsOnPage = 30
 
+    override val layoutManager by lazy {
+        StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity) + 1, StaggeredGridLayoutManager.VERTICAL)
+    }
     override val innerAdapter by lazy { BookmarkAdapter(GlideApp.with(this)) }
 
     private lateinit var removalTask: AndroidLifecycleTask<ProxerCall<Void?>, Void?>

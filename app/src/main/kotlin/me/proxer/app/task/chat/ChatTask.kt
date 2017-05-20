@@ -4,32 +4,41 @@ import com.rubengees.ktask.base.LeafTask
 import com.rubengees.ktask.base.Task
 import me.proxer.app.application.MainApplication.Companion.chatDb
 import me.proxer.app.entity.chat.LocalConference
+import me.proxer.app.entity.chat.LocalMessage
 import me.proxer.app.event.ChatErrorEvent
-import me.proxer.app.event.ChatSynchronizationEvent
-import me.proxer.app.helper.StorageHelper
+import me.proxer.app.event.ChatMessageEvent
+import me.proxer.app.job.ChatJob
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 
 /**
  * @author Ruben Gees
  */
-class ConferencesTask : LeafTask<Unit, List<LocalConference>>() {
+class ChatTask(private val id: String) : LeafTask<Int, Pair<LocalConference, List<LocalMessage>>>() {
 
     override var isWorking = false
 
-    override fun execute(input: Unit) {
+    override fun execute(input: Int) {
         start {
             isWorking = true
 
             safelyRegister()
 
             try {
-                if (StorageHelper.hasConferenceListReachedEnd) {
-                    chatDb.getAllConferences().let {
-                        isWorking = false
+                if (input == 0) {
+                    chatDb.getAllMessages(id).let { messages ->
+                        chatDb.getConference(id).let {
+                            if (messages.isEmpty() && !it.isLoadedFully) {
+                                ChatJob.scheduleMessageLoad(id)
+                            } else {
+                                isWorking = false
 
-                        finishSuccessful(it)
+                                finishSuccessful(it to messages)
+                            }
+                        }
                     }
+                } else {
+                    ChatJob.scheduleMessageLoad(id)
                 }
             } catch (error: Throwable) {
                 finishWithError(error)
@@ -37,7 +46,7 @@ class ConferencesTask : LeafTask<Unit, List<LocalConference>>() {
         }
     }
 
-    override fun restoreCallbacks(from: Task<Unit, List<LocalConference>>) {
+    override fun restoreCallbacks(from: Task<Int, Pair<LocalConference, List<LocalMessage>>>) {
         super.restoreCallbacks(from)
 
         safelyRegister()
@@ -57,11 +66,11 @@ class ConferencesTask : LeafTask<Unit, List<LocalConference>>() {
 
     @Suppress("unused")
     @Subscribe
-    fun onChatSynchronization(event: ChatSynchronizationEvent) {
+    fun onChatSynchronization(event: ChatMessageEvent) {
         isWorking = false
 
-        if (event.data.isNotEmpty()) {
-            finishSuccessful(event.data.keys.toList())
+        if (event.conference.id == id) {
+            finishSuccessful(event.conference to event.messages)
         }
     }
 

@@ -43,6 +43,7 @@ class ChatDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DATABASE
         private const val CONFERENCE_LAST_READ_MESSAGE_ID_COLUMN = "last_read_message_id"
         private const val CONFERENCE_IMAGE_COLUMN = "image"
         private const val CONFERENCE_IMAGE_TYPE_COLUMN = "image_type"
+        private const val CONFERENCE_IS_LOADED_FULLY = "is_loaded_fully"
 
         private const val MESSAGE_LOCAL_ID_COLUMN = "_id"
         private const val MESSAGE_ID_COLUMN = "id"
@@ -58,10 +59,12 @@ class ChatDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DATABASE
     private val conferenceParser = rowParser { localId: Long, id: String, topic: String, customTopic: String,
                                                participantAmount: Int, image: String, imageType: String, isGroup: Int,
                                                localIsRead: Int, isRead: Int, lastMessageDate: Long,
-                                               unreadMessageAmount: Int, lastReadMessageId: String ->
+                                               unreadMessageAmount: Int, lastReadMessageId: String,
+                                               isLoadedFully: Int ->
 
         LocalConference(localId, id, topic, customTopic, participantAmount, image, imageType, isGroup == 1,
-                localIsRead == 1, isRead == 1, Date(lastMessageDate), unreadMessageAmount, lastReadMessageId)
+                localIsRead == 1, isRead == 1, Date(lastMessageDate), unreadMessageAmount, lastReadMessageId,
+                isLoadedFully == 1)
     }
 
     private val messageParser = rowParser { localId: Long, id: String, conferenceId: String, userId: String,
@@ -90,7 +93,8 @@ class ChatDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DATABASE
                 CONFERENCE_IS_READ_COLUMN to INTEGER + NOT_NULL,
                 CONFERENCE_LAST_MESSAGE_DATE_COLUMN to INTEGER + NOT_NULL,
                 CONFERENCE_UNREAD_MESSAGE_AMOUNT_COLUMN to INTEGER + NOT_NULL,
-                CONFERENCE_LAST_READ_MESSAGE_ID_COLUMN to TEXT + NOT_NULL)
+                CONFERENCE_LAST_READ_MESSAGE_ID_COLUMN to TEXT + NOT_NULL,
+                CONFERENCE_IS_LOADED_FULLY to INTEGER + NOT_NULL)
 
         db.createTable(MESSAGE_TABLE, true,
                 MESSAGE_LOCAL_ID_COLUMN to INTEGER + PRIMARY_KEY + UNIQUE + NOT_NULL,
@@ -135,7 +139,9 @@ class ChatDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DATABASE
         }
     }
 
-    fun insertOrUpdate(conferenceMap: Map<Conference, List<Message>>): Map<LocalConference, List<LocalMessage>> {
+    fun insertOrUpdate(conferenceMap: Map<Pair<Conference, Boolean>, List<Message>>):
+            Map<LocalConference, List<LocalMessage>> {
+
         return use {
             val result = LinkedHashMap<LocalConference, List<LocalMessage>>()
 
@@ -209,7 +215,7 @@ class ChatDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DATABASE
         }
     }
 
-    fun getConference(id: String): LocalConference? {
+    fun findConference(id: String): LocalConference? {
         return use {
             this.select(CONFERENCE_TABLE)
                     .whereArgs("$CONFERENCE_ID_COLUMN = $id")
@@ -217,12 +223,20 @@ class ChatDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DATABASE
         }
     }
 
-    fun getMessage(id: String): LocalMessage? {
+    fun getConference(id: String): LocalConference {
+        return findConference(id) ?: throw SQLiteException()
+    }
+
+    fun findMessage(id: String): LocalMessage? {
         return use {
             this.select(MESSAGE_TABLE)
                     .whereArgs("$MESSAGE_ID_COLUMN = $id")
                     .parseOpt(messageParser)
         }
+    }
+
+    fun getMessage(id: String): LocalMessage {
+        return findMessage(id) ?: throw SQLiteException()
     }
 
     fun getUnreadConferences(): List<LocalConference> {
@@ -279,7 +293,7 @@ class ChatDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DATABASE
         }
     }
 
-    fun getConferencesToMark(): List<LocalConference> {
+    fun getConferencesToMarkAsRead(): List<LocalConference> {
         return use {
             this.select(CONFERENCE_TABLE)
                     .whereArgs("($CONFERENCE_LOCAL_IS_READ_COLUMN = 1) and ($CONFERENCE_IS_READ_COLUMN = 0)")
@@ -297,14 +311,31 @@ class ChatDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DATABASE
         }
     }
 
-    private fun doInsertOrUpdateConference(db: SQLiteDatabase, item: Conference): LocalConference {
-        val insertionValues = generateInsertionValues(item)
+    fun markConferenceAsFullyLoaded(conferenceId: String): LocalConference {
+        return use {
+            var result: LocalConference? = null
+
+            transaction {
+                this.update(CONFERENCE_TABLE, CONFERENCE_IS_LOADED_FULLY to 1)
+                        .whereArgs("$CONFERENCE_ID_COLUMN = $conferenceId")
+                        .exec()
+
+                result = getConference(conferenceId)
+            }
+
+            result ?: throw SQLiteException()
+        }
+    }
+
+    private fun doInsertOrUpdateConference(db: SQLiteDatabase, item: Pair<Conference, Boolean>): LocalConference {
+        val (conference, loadedFully) = item
+        val insertionValues = generateInsertionValues(conference, loadedFully)
         val updated = db.update(CONFERENCE_TABLE, *insertionValues)
-                .whereArgs("$CONFERENCE_ID_COLUMN = ${item.id}").exec() > 0
+                .whereArgs("$CONFERENCE_ID_COLUMN = ${conference.id}").exec() > 0
 
         return when {
-            updated -> getConference(item.id) ?: throw SQLiteException("Could not find conference with id ${item.id}")
-            else -> item.toLocalConference(db.insertOrThrow(CONFERENCE_TABLE, *insertionValues))
+            updated -> getConference(conference.id)
+            else -> conference.toLocalConference(db.insertOrThrow(CONFERENCE_TABLE, *insertionValues), loadedFully)
         }
     }
 
@@ -316,7 +347,7 @@ class ChatDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DATABASE
                     .exec() > 0
 
             when (updated) {
-                true -> getMessage(it.id) ?: throw SQLiteException("Could not find message with id ${it.id}")
+                true -> getMessage(it.id)
                 false -> it.toLocalMessage(db.insertOrThrow(MESSAGE_TABLE, *insertionValues))
             }
         }
@@ -333,7 +364,7 @@ class ChatDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DATABASE
                 MESSAGE_DEVICE_COLUMN to ProxerUtils.getApiEnumName(message.device))
     }
 
-    private fun generateInsertionValues(conference: Conference): Array<Pair<String, Any?>> {
+    private fun generateInsertionValues(conference: Conference, loadedFully: Boolean): Array<Pair<String, Any?>> {
         return arrayOf(CONFERENCE_ID_COLUMN to conference.id,
                 CONFERENCE_TOPIC_COLUMN to conference.topic,
                 CONFERENCE_CUSTOM_TOPIC_COLUMN to conference.customTopic,
@@ -345,6 +376,7 @@ class ChatDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DATABASE
                 CONFERENCE_IS_READ_COLUMN to if (conference.isRead) 1 else 0,
                 CONFERENCE_LAST_MESSAGE_DATE_COLUMN to conference.date.time,
                 CONFERENCE_UNREAD_MESSAGE_AMOUNT_COLUMN to conference.unreadMessageAmount,
-                CONFERENCE_LAST_READ_MESSAGE_ID_COLUMN to conference.lastReadMessageId)
+                CONFERENCE_LAST_READ_MESSAGE_ID_COLUMN to conference.lastReadMessageId,
+                CONFERENCE_IS_LOADED_FULLY to if (loadedFully) 1 else 0)
     }
 }

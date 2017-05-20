@@ -11,7 +11,7 @@ import java.util.*
 data class LocalConference(val localId: Long, val id: String, val topic: String, val customTopic: String,
                            val participantAmount: Int, val image: String, val imageType: String, val isGroup: Boolean,
                            val localIsRead: Boolean, val isRead: Boolean, val date: Date, val unreadMessageAmount: Int,
-                           val lastReadMessageId: String) : Parcelable {
+                           val lastReadMessageId: String, val isLoadedFully: Boolean) : Parcelable {
 
     companion object {
         @Suppress("unused")
@@ -29,12 +29,13 @@ data class LocalConference(val localId: Long, val id: String, val topic: String,
             source.readInt(),
             source.readString(),
             source.readString(),
-            1 == source.readInt(),
-            1 == source.readInt(),
-            1 == source.readInt(),
+            source.readInt() == 1,
+            source.readInt() == 1,
+            source.readInt() == 1,
             source.readSerializable() as Date,
             source.readInt(),
-            source.readString()
+            source.readString(),
+            source.readInt() == 1
     )
 
     override fun describeContents() = 0
@@ -53,6 +54,7 @@ data class LocalConference(val localId: Long, val id: String, val topic: String,
         dest.writeSerializable(date)
         dest.writeInt(unreadMessageAmount)
         dest.writeString(lastReadMessageId)
+        dest.writeInt(if (isLoadedFully) 1 else 0)
     }
 
     fun toNonLocalConference(): Conference {
@@ -61,7 +63,7 @@ data class LocalConference(val localId: Long, val id: String, val topic: String,
     }
 }
 
-fun Conference.toLocalConference(localId: Long): LocalConference {
+fun Conference.toLocalConference(localId: Long, loadedFully: Boolean): LocalConference {
     return LocalConference(localId, id, topic, customTopic, participantAmount, image, imageType, isGroup,
-            isRead, isRead, date, unreadMessageAmount, lastReadMessageId)
+            isRead, isRead, date, unreadMessageAmount, lastReadMessageId, loadedFully)
 }

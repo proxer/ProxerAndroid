@@ -4,11 +4,14 @@ import android.content.Context
 import com.evernote.android.job.Job
 import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
+import com.evernote.android.job.util.support.PersistableBundleCompat
 import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.application.MainApplication.Companion.chatDb
 import me.proxer.app.entity.chat.LocalConference
 import me.proxer.app.event.ChatErrorEvent
-import me.proxer.app.event.ChatEvent
+import me.proxer.app.event.ChatMessageEvent
+import me.proxer.app.event.ChatSynchronizationEvent
+import me.proxer.app.fragment.chat.ChatFragment
 import me.proxer.app.fragment.chat.ConferencesFragment
 import me.proxer.app.helper.NotificationHelper
 import me.proxer.app.helper.StorageHelper
@@ -26,11 +29,17 @@ class ChatJob : Job() {
     companion object {
         const val TAG = "chat_job"
 
-        private const val CONFERENCES_ON_PAGE = 48
-        private const val MESSAGES_ON_PAGE = 30
+        const val CONFERENCES_ON_PAGE = 48
+        const val MESSAGES_ON_PAGE = 30
 
-        fun schedule() {
+        private const val CONFERENCE_ID_EXTRA = "conference_id"
+
+        fun scheduleSynchronization() {
             doSchedule(1L, 100L)
+        }
+
+        fun scheduleMessageLoad(conferenceId: String) {
+            doSchedule(1L, 100L, conferenceId)
         }
 
         fun cancel() {
@@ -42,11 +51,11 @@ class ChatJob : Job() {
         } != null
 
         private fun reschedule() {
-            /* if (ChatFragment.isActive) {
+            if (ChatFragment.isActive) {
                 StorageHelper.resetChatInterval()
 
                 doSchedule(3_000L, 4_000L)
-            } else */ if (ConferencesFragment.isActive) {
+            } else if (ConferencesFragment.isActive) {
                 StorageHelper.resetChatInterval()
 
                 doSchedule(10_000L, 12_000L)
@@ -59,17 +68,25 @@ class ChatJob : Job() {
             }
         }
 
-        private fun doSchedule(startTime: Long, endTime: Long) {
+        private fun doSchedule(startTime: Long, endTime: Long, conferenceId: String? = null) {
             JobRequest.Builder(TAG)
                     .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
                     .setExecutionWindow(startTime, endTime)
                     .setRequirementsEnforced(true)
                     .setUpdateCurrent(true)
                     .setPersisted(true)
+                    .setExtras(PersistableBundleCompat().apply {
+                        if (conferenceId != null) {
+                            putString(CONFERENCE_ID_EXTRA, conferenceId)
+                        }
+                    })
                     .build()
                     .schedule()
         }
     }
+
+    private val conferenceId: String?
+        get() = params.extras.getString(CONFERENCE_ID_EXTRA, null)
 
     override fun onRunJob(params: Params): Result {
         if (StorageHelper.user == null) {
@@ -77,17 +94,37 @@ class ChatJob : Job() {
         }
 
         try {
-            sendMessages()
-            markConferencesAsRead()
+            if (conferenceId == null) {
+                sendMessages()
+                markConferencesAsRead()
 
-            val insertedMap = chatDb.insertOrUpdate(fetchConferences().associate {
-                it to fetchMessages(it).asReversed()
-            })
+                val insertedMap = chatDb.insertOrUpdate(fetchConferences().associate { conference ->
+                    fetchNewMessages(conference).let { conference to it.second to it.first }
+                })
 
-            EventBus.getDefault().post(ChatEvent(insertedMap))
+                EventBus.getDefault().post(ChatSynchronizationEvent(insertedMap))
 
-            if (!ConferencesFragment.isActive /* && !ChatFragment.isActive */ && insertedMap.isNotEmpty()) {
-                showNotification(context, insertedMap.keys)
+                if (!ConferencesFragment.isActive && !ChatFragment.isActive && insertedMap.isNotEmpty()) {
+                    showNotification(context, insertedMap.keys)
+                }
+            } else {
+                conferenceId?.let {
+                    val fetchedMessages = api.messenger().messages()
+                            .conferenceId(it)
+                            .messageId(chatDb.getOldestMessage(it)?.id ?: "0")
+                            .markAsRead(false)
+                            .build()
+                            .execute()
+                            .asReversed()
+
+                    val insertedMessages = chatDb.insertOrUpdateMessages(fetchedMessages)
+                    val conference = when {
+                        fetchedMessages.size < MESSAGES_ON_PAGE -> chatDb.markConferenceAsFullyLoaded(it)
+                        else -> chatDb.getConference(it)
+                    }
+
+                    EventBus.getDefault().post(ChatMessageEvent(conference, insertedMessages))
+                }
             }
         } catch(error: ChatException) {
             EventBus.getDefault().post(ChatErrorEvent(error))
@@ -106,12 +143,12 @@ class ChatJob : Job() {
                         .build()
                         .execute()
 
-                chatDb.removeMessageToSend(it.localId)
-                chatDb.markAsRead(it.conferenceId)
-
                 if (result != null) {
                     throw ChatException(ProxerException(ProxerException.ErrorType.UNKNOWN))
                 }
+
+                chatDb.removeMessageToSend(it.localId)
+                chatDb.markAsRead(it.conferenceId)
             } catch(exception: Exception) {
                 throw ChatException(exception)
             }
@@ -119,7 +156,7 @@ class ChatJob : Job() {
     }
 
     private fun markConferencesAsRead() {
-        chatDb.getConferencesToMark().forEach {
+        chatDb.getConferencesToMarkAsRead().forEach {
             api.messenger().markConferenceAsRead(it.id)
                     .build()
                     .execute()
@@ -138,7 +175,7 @@ class ChatJob : Job() {
                         .execute()
 
                 changedConferences += fetchedConferences.filter {
-                    it != chatDb.getConference(it.id)?.toNonLocalConference()
+                    it != chatDb.findConference(it.id)?.toNonLocalConference()
                 }
 
                 if (changedConferences.size / (page + 1) < CONFERENCES_ON_PAGE) {
@@ -156,7 +193,7 @@ class ChatJob : Job() {
         }
     }
 
-    private fun fetchMessages(conference: Conference): List<Message> {
+    private fun fetchNewMessages(conference: Conference): Pair<List<Message>, Boolean> {
         val newMessages = ArrayList<Message>()
 
         try {
@@ -176,9 +213,7 @@ class ChatJob : Job() {
                     newMessages += fetchedMessages
 
                     if (fetchedMessages.size < MESSAGES_ON_PAGE) {
-                        StorageHelper.setConferenceReachedEnd(conference.id)
-
-                        break
+                        return newMessages to true
                     } else {
                         existingUnreadMessageAmount += fetchedMessages.size
                         nextId = fetchedMessages.first().id
@@ -198,9 +233,7 @@ class ChatJob : Job() {
                     newMessages += fetchedMessages
 
                     if (fetchedMessages.size < MESSAGES_ON_PAGE) {
-                        StorageHelper.setConferenceReachedEnd(conference.id)
-
-                        break
+                        return newMessages to true
                     } else {
                         existingUnreadMessageAmount += fetchedMessages.size
                         mostRecentMessage = fetchedMessages.last()
@@ -212,7 +245,7 @@ class ChatJob : Job() {
             throw ChatException(exception)
         }
 
-        return newMessages
+        return newMessages to false
     }
 
     private fun showNotification(context: Context, changedConferences: Collection<LocalConference>) {
@@ -220,7 +253,7 @@ class ChatJob : Job() {
                 .plus(changedConferences)
                 .distinct()
                 .associate {
-                    it to chatDb.getMostRecentMessages(it.id, it.unreadMessageAmount).reversed()
+                    it to chatDb.getMostRecentMessages(it.id, it.unreadMessageAmount).asReversed()
                 }
 
         NotificationHelper.showOrUpdateChatNotification(context, unreadMap)

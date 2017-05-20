@@ -6,6 +6,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.*
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
+import me.proxer.app.activity.ChatActivity
 import me.proxer.app.adapter.chat.ConferenceAdapter
 import me.proxer.app.application.GlideApp
 import me.proxer.app.entity.chat.LocalConference
@@ -54,7 +55,7 @@ class ConferencesFragment : LoadingFragment<Unit, List<LocalConference>>() {
         NotificationHelper.cancelChatNotification(context)
 
         if (!ChatJob.isRunning()) {
-            ChatJob.schedule()
+            ChatJob.scheduleSynchronization()
         }
     }
 
@@ -88,7 +89,7 @@ class ConferencesFragment : LoadingFragment<Unit, List<LocalConference>>() {
 
         adapter.callback = object : ConferenceAdapter.ConferenceAdapterCallback {
             override fun onConferenceClick(item: LocalConference) {
-                // TODO
+                ChatActivity.navigateTo(activity, item)
             }
         }
 

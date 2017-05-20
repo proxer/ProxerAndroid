@@ -34,7 +34,7 @@ class DirectReplyReceiver : BroadcastReceiver() {
                     chatDb.insertMessageToSend(user, it, getMessageText(intent))
                 }
 
-                ChatJob.schedule()
+                ChatJob.scheduleSynchronization()
             }
         }
     }

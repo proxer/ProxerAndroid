@@ -99,7 +99,7 @@ class MainApplication : Application() {
     @Subscribe
     fun onLogin(@Suppress("UNUSED_PARAMETER") event: LoginEvent) {
         doAsync {
-            ChatJob.schedule()
+            ChatJob.scheduleSynchronization()
         }
     }
 
@@ -111,7 +111,6 @@ class MainApplication : Application() {
             LocalMangaJob.cancelAll()
 
             StorageHelper.hasConferenceListReachedEnd = false
-            StorageHelper.resetConferenceReachedEnd()
             StorageHelper.resetChatInterval()
 
             chatDb.clear()

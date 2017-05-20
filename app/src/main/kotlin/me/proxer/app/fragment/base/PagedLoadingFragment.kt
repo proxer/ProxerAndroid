@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,7 +30,6 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
     open protected val shouldReplaceOnRefresh = false
     open protected var hasReachedEnd = false
 
-    open protected val spanCount get() = DeviceUtils.calculateSpanAmount(activity)
     open protected val emptyResultMessage get() = R.string.error_no_data
     open protected val pagingThreshold = 5
 
@@ -40,8 +38,8 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
     protected lateinit var refreshTask: AndroidLifecycleTask<I, List<O>>
 
     protected lateinit var adapter: EasyHeaderFooterAdapter
-    protected lateinit var layoutManager: StaggeredGridLayoutManager
 
+    abstract protected val layoutManager: RecyclerView.LayoutManager
     abstract protected val innerAdapter: BaseAdapter<O>
     abstract protected val itemsOnPage: Int
 
@@ -76,7 +74,6 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         adapter = EasyHeaderFooterAdapter(innerAdapter)
-        layoutManager = StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL)
 
         // We need to call this here to make sure the adapters are present, but not attached yet so the position gets
         // restored automatically.

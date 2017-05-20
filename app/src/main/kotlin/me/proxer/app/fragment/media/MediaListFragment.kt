@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.transition.TransitionManager
 import android.support.v4.view.MenuItemCompat
 import android.support.v7.widget.SearchView
+import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -17,6 +18,7 @@ import me.proxer.app.application.GlideApp
 import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.fragment.base.PagedLoadingFragment
 import me.proxer.app.task.asyncProxerTask
+import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.toCategory
 import me.proxer.library.api.ProxerCall
 import me.proxer.library.entitiy.list.MediaListEntry
@@ -51,7 +53,6 @@ class MediaListFragment : PagedLoadingFragment<ProxerCall<List<MediaListEntry>>,
         get() = type == MediaType.HENTAI || type == MediaType.HMANGA
 
     override val itemsOnPage = 30
-    override val spanCount get() = super.spanCount + 1
     override val emptyResultMessage = R.string.error_no_data_search
 
     private val category
@@ -78,6 +79,9 @@ class MediaListFragment : PagedLoadingFragment<ProxerCall<List<MediaListEntry>>,
         get() = arguments.getBoolean(HAS_SEARCHED_ARGUMENT, false)
         set(value) = arguments.putBoolean(HAS_SEARCHED_ARGUMENT, value)
 
+    override val layoutManager by lazy {
+        StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity) + 1, StaggeredGridLayoutManager.VERTICAL)
+    }
     override val innerAdapter by lazy { MediaAdapter(category, GlideApp.with(this)) }
 
     private lateinit var searchItem: MenuItem

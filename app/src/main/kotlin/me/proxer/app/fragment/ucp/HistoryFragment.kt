@@ -1,6 +1,7 @@
 package me.proxer.app.fragment.ucp
 
 import android.os.Bundle
+import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
 import android.widget.ImageView
 import com.rubengees.ktask.util.TaskBuilder
@@ -11,6 +12,7 @@ import me.proxer.app.application.GlideApp
 import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.fragment.base.PagedLoadingFragment
 import me.proxer.app.task.asyncProxerTask
+import me.proxer.app.util.DeviceUtils
 import me.proxer.library.api.ProxerCall
 import me.proxer.library.entitiy.ucp.UcpHistoryEntry
 import org.jetbrains.anko.bundleOf
@@ -32,8 +34,10 @@ class HistoryFragment : PagedLoadingFragment<ProxerCall<List<UcpHistoryEntry>>, 
     override val itemsOnPage = 50
     override val isLoginRequired = true
     override val emptyResultMessage = R.string.error_no_data_history
-    override val spanCount get() = super.spanCount + 1
 
+    override val layoutManager by lazy {
+        StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity) + 1, StaggeredGridLayoutManager.VERTICAL)
+    }
     override val innerAdapter by lazy { HistoryAdapter(GlideApp.with(this)) }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {

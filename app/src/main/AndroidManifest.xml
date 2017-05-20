@@ -58,7 +58,7 @@
             </intent-filter>
         </activity>
 
-        <!--<activity android:name=".activity.chat.ChatActivity"/>-->
+        <activity android:name=".activity.ChatActivity" />
 
         <activity android:name=".activity.UcpActivity" />
 

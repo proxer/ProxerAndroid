@@ -1,6 +1,7 @@
 package me.proxer.app.fragment.media
 
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -39,7 +40,6 @@ class CommentsFragment : PagedLoadingFragment<ProxerCall<List<Comment>>, Comment
 
     override val emptyResultMessage = R.string.error_no_data_comments
     override val isSwipeToRefreshEnabled = true
-    override val spanCount: Int get() = 1
     override val pagingThreshold = 3
     override val itemsOnPage = 10
 
@@ -57,6 +57,7 @@ class CommentsFragment : PagedLoadingFragment<ProxerCall<List<Comment>>, Comment
                 ?: CommentSortCriteria.RATING
         set(value) = arguments.putSerializable(SORT_CRITERIA_ARGUMENT, value)
 
+    override val layoutManager by lazy { LinearLayoutManager(context) }
     override lateinit var innerAdapter: CommentAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {

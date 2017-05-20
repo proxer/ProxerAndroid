@@ -95,6 +95,7 @@
     <string name="error_no_data_local_manga">Du hast noch keine Manga heruntergeladen</string>
     <string name="error_no_data_search">Es wurde nichts gefunden, das den Kriterien entspricht</string>
     <string name="error_no_data_conferences">Du hast noch keine Chats</string>
+    <string name="error_no_data_chat">Diese Konferenz hat noch keine Nachrichten</string>
 
     <string name="error_action_retry">Erneut versuchen</string>
     <string name="error_action_finish">Beenden</string>
@@ -290,6 +291,12 @@
         <item quantity="other">%d Teilnehmer</item>
     </plurals>
 
+    <string name="fragment_chat_clip_title">Chatverlauf</string>
+    <string name="fragment_chat_link_clip_title">Link</string>
+    <string name="fragment_chat_message">Tippe eine Nachricht</string>
+    <string name="fragment_chat_reply">"@%s "</string>
+    <string name="fragment_chat_send">Senden</string>
+
     <string name="view_media_control_uploader">Uploader</string>
     <string name="view_media_control_translator_group">Translator-Gruppe</string>
     <string name="view_media_control_date">Datum</string>
@@ -379,6 +386,8 @@
     <string name="action_sort">Sortierung</string>
     <string name="action_share">Teilen</string>
     <string name="action_answer">Antworten</string>
+    <string name="action_copy">Kopieren</string>
+    <string name="action_reply">Antworten</string>
 
     <string name="action_filter_all">Alles</string>
     <string name="action_filter_anime_series">Serien</string>
@@ -406,6 +415,11 @@
     <string name="action_new_chat">Neuer Chat</string>
     <string name="action_new_group_with_user">Neue Gruppe mit diesem Nutzer</string>
     <string name="action_new_group">Neue Gruppe</string>
+
+    <string name="action_conference_add_user">%1$s hat %2$s zur Konferenz hinzugefügt</string>
+    <string name="action_conference_remove_user">%1$s hat %2$s aus der Konferenz entfernt</string>
+    <string name="action_conference_set_leader">%1$s hat %2$s als neuen Konferenzleiter bestimmt</string>
+    <string name="action_conference_set_topic">%1$s hat den Konferenztitel in %2$s geändert</string>
 
     <string name="action_fullscreen">Vollbildmodus</string>
 
