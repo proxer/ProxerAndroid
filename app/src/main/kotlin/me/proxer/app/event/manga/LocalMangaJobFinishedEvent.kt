@@ -1,4 +1,4 @@
-package me.proxer.app.event
+package me.proxer.app.event.manga
 
 import me.proxer.library.enums.Language
 

@@ -7,10 +7,10 @@ import com.evernote.android.job.JobRequest
 import com.evernote.android.job.util.support.PersistableBundleCompat
 import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.application.MainApplication.Companion.chatDb
-import me.proxer.app.entity.chat.LocalConference
-import me.proxer.app.event.ChatErrorEvent
-import me.proxer.app.event.ChatMessageEvent
-import me.proxer.app.event.ChatSynchronizationEvent
+import me.proxer.app.entity.chat.*
+import me.proxer.app.event.chat.ChatErrorEvent
+import me.proxer.app.event.chat.ChatMessageEvent
+import me.proxer.app.event.chat.ChatSynchronizationEvent
 import me.proxer.app.fragment.chat.ChatFragment
 import me.proxer.app.fragment.chat.ConferencesFragment
 import me.proxer.app.helper.NotificationHelper
@@ -50,8 +50,8 @@ class ChatJob : Job() {
             it is ChatJob && !it.isCanceled && !it.isFinished
         } != null
 
-        private fun reschedule() {
-            if (ChatFragment.isActive) {
+        private fun reschedule(changes: Boolean = false) {
+            if (changes || ChatFragment.isActive) {
                 StorageHelper.resetChatInterval()
 
                 doSchedule(3_000L, 4_000L)
@@ -93,65 +93,60 @@ class ChatJob : Job() {
             return Result.FAILURE
         }
 
-        try {
-            if (conferenceId == null) {
+        val changes = when (conferenceId) {
+            null -> try {
                 sendMessages()
                 markConferencesAsRead()
 
-                val insertedMap = chatDb.insertOrUpdate(fetchConferences().associate { conference ->
-                    fetchNewMessages(conference).let { conference to it.second to it.first }
+                val insertedItems = chatDb.insertOrUpdateConferencesWithMessages(fetchConferences().map {
+                    fetchNewMessages(it).let { container ->
+                        ConferenceAssociation(it.toMetaConference(container.isFullyLoaded), container.messages)
+                    }
                 })
 
-                EventBus.getDefault().post(ChatSynchronizationEvent(insertedMap))
+                EventBus.getDefault().post(ChatSynchronizationEvent(insertedItems))
 
-                if (!ConferencesFragment.isActive && !ChatFragment.isActive && insertedMap.isNotEmpty()) {
-                    showNotification(context, insertedMap.keys)
+                if (!ConferencesFragment.isActive && !ChatFragment.isActive && insertedItems.isNotEmpty()) {
+                    showNotification(context, insertedItems.map { it.conference })
                 }
-            } else {
-                conferenceId?.let {
-                    val fetchedMessages = api.messenger().messages()
-                            .conferenceId(it)
-                            .messageId(chatDb.getOldestMessage(it)?.id ?: "0")
-                            .markAsRead(false)
-                            .build()
-                            .execute()
-                            .asReversed()
 
-                    val insertedMessages = chatDb.insertOrUpdateMessages(fetchedMessages)
-                    val conference = when {
-                        fetchedMessages.size < MESSAGES_ON_PAGE -> chatDb.markConferenceAsFullyLoaded(it)
-                        else -> chatDb.getConference(it)
-                    }
+                insertedItems.isNotEmpty()
+            } catch (error: Throwable) {
+                EventBus.getDefault().post(ChatErrorEvent(ChatSynchronizationException(error)))
 
-                    EventBus.getDefault().post(ChatMessageEvent(conference, insertedMessages))
-                }
+                false
             }
-        } catch(error: ChatException) {
-            EventBus.getDefault().post(ChatErrorEvent(error))
-        } catch (ignored: Throwable) {
+            else -> {
+                try {
+                    fetchMoreMessagesAndInsert(conferenceId!!).let {
+                        EventBus.getDefault().post(ChatMessageEvent(it))
+                    }
+                } catch (error: Throwable) {
+                    EventBus.getDefault().post(ChatErrorEvent(ChatMessageException(error)))
+                }
+
+                false
+            }
         }
 
-        reschedule()
+        reschedule(changes)
 
         return Result.SUCCESS
     }
 
     private fun sendMessages() {
         chatDb.getMessagesToSend().forEach {
-            try {
-                val result = api.messenger().sendMessage(it.conferenceId, it.message)
-                        .build()
-                        .execute()
+            val result = api.messenger().sendMessage(it.conferenceId, it.message)
+                    .build()
+                    .execute()
 
-                if (result != null) {
-                    throw ChatException(ProxerException(ProxerException.ErrorType.UNKNOWN))
-                }
-
-                chatDb.removeMessageToSend(it.localId)
-                chatDb.markAsRead(it.conferenceId)
-            } catch(exception: Exception) {
-                throw ChatException(exception)
+            // Per documentation: The api may return some String in case something was wrong.
+            if (result != null) {
+                throw ChatException(ProxerException(ProxerException.ErrorType.UNKNOWN))
             }
+
+            chatDb.removeMessageToSend(it.localId)
+            chatDb.markAsRead(it.conferenceId)
         }
     }
 
@@ -164,88 +159,97 @@ class ChatJob : Job() {
     }
 
     private fun fetchConferences(): Collection<Conference> {
-        try {
-            val changedConferences = LinkedHashSet<Conference>()
-            var page = 0
+        val changedConferences = LinkedHashSet<Conference>()
+        var page = 0
 
-            while (true) {
-                val fetchedConferences = api.messenger().conferences()
-                        .page(page)
+        while (true) {
+            val fetchedConferences = api.messenger().conferences()
+                    .page(page)
+                    .build()
+                    .execute()
+
+            changedConferences += fetchedConferences.filter {
+                it != chatDb.findConference(it.id)?.toNonLocalConference()
+            }
+
+            if (changedConferences.size / (page + 1) < CONFERENCES_ON_PAGE) {
+                break
+            } else {
+                page++
+            }
+        }
+
+        StorageHelper.hasConferenceListReachedEnd = true
+
+        return changedConferences
+    }
+
+    private fun fetchNewMessages(conference: Conference): MetaMessageContainer {
+        val newMessages = ArrayList<Message>()
+        var existingUnreadMessageAmount = chatDb.getUnreadMessageAmount(conference.id, conference.lastReadMessageId)
+        var mostRecentMessage = chatDb.getMostRecentMessage(conference.id)?.toNonLocalMessage()
+        var nextId = "0"
+
+        if (mostRecentMessage == null) {
+            while (existingUnreadMessageAmount < conference.unreadMessageAmount) {
+                val fetchedMessages = api.messenger().messages()
+                        .conferenceId(conference.id)
+                        .messageId(nextId)
+                        .markAsRead(false)
                         .build()
                         .execute()
 
-                changedConferences += fetchedConferences.filter {
-                    it != chatDb.findConference(it.id)?.toNonLocalConference()
-                }
+                newMessages += fetchedMessages
 
-                if (changedConferences.size / (page + 1) < CONFERENCES_ON_PAGE) {
-                    break
+                if (fetchedMessages.size < MESSAGES_ON_PAGE) {
+                    return MetaMessageContainer(newMessages, true)
                 } else {
-                    page++
+                    existingUnreadMessageAmount += fetchedMessages.size
+                    nextId = fetchedMessages.first().id
                 }
             }
+        } else {
+            while (mostRecentMessage!!.date < conference.date ||
+                    existingUnreadMessageAmount < conference.unreadMessageAmount) {
 
-            StorageHelper.hasConferenceListReachedEnd = true
+                val fetchedMessages = api.messenger().messages()
+                        .conferenceId(conference.id)
+                        .messageId(nextId)
+                        .markAsRead(false)
+                        .build()
+                        .execute()
 
-            return changedConferences
-        } catch (exception: Exception) {
-            throw ChatException(exception)
+                newMessages += fetchedMessages
+
+                if (fetchedMessages.size < MESSAGES_ON_PAGE) {
+                    return MetaMessageContainer(newMessages, true)
+                } else {
+                    existingUnreadMessageAmount += fetchedMessages.size
+                    mostRecentMessage = fetchedMessages.last()
+                    nextId = fetchedMessages.first().id
+                }
+            }
         }
+
+        return MetaMessageContainer(newMessages)
     }
 
-    private fun fetchNewMessages(conference: Conference): Pair<List<Message>, Boolean> {
-        val newMessages = ArrayList<Message>()
+    private fun fetchMoreMessagesAndInsert(conferenceId: String): LocalConferenceAssociation {
+        val fetchedMessages = api.messenger().messages()
+                .conferenceId(conferenceId)
+                .messageId(chatDb.findOldestMessage(conferenceId)?.id ?: "0")
+                .markAsRead(false)
+                .build()
+                .execute()
+                .asReversed()
 
-        try {
-            var existingUnreadMessageAmount = chatDb.getUnreadMessageAmount(conference.id, conference.lastReadMessageId)
-            var mostRecentMessage = chatDb.getMostRecentMessage(conference.id)?.toNonLocalMessage()
-            var nextId = "0"
-
-            if (mostRecentMessage == null) {
-                while (existingUnreadMessageAmount < conference.unreadMessageAmount) {
-                    val fetchedMessages = api.messenger().messages()
-                            .conferenceId(conference.id)
-                            .messageId(nextId)
-                            .markAsRead(false)
-                            .build()
-                            .execute()
-
-                    newMessages += fetchedMessages
-
-                    if (fetchedMessages.size < MESSAGES_ON_PAGE) {
-                        return newMessages to true
-                    } else {
-                        existingUnreadMessageAmount += fetchedMessages.size
-                        nextId = fetchedMessages.first().id
-                    }
-                }
-            } else {
-                while (mostRecentMessage!!.date < conference.date ||
-                        existingUnreadMessageAmount < conference.unreadMessageAmount) {
-
-                    val fetchedMessages = api.messenger().messages()
-                            .conferenceId(conference.id)
-                            .messageId(nextId)
-                            .markAsRead(false)
-                            .build()
-                            .execute()
-
-                    newMessages += fetchedMessages
-
-                    if (fetchedMessages.size < MESSAGES_ON_PAGE) {
-                        return newMessages to true
-                    } else {
-                        existingUnreadMessageAmount += fetchedMessages.size
-                        mostRecentMessage = fetchedMessages.last()
-                        nextId = fetchedMessages.first().id
-                    }
-                }
-            }
-        } catch (exception: Exception) {
-            throw ChatException(exception)
+        val insertedMessages = chatDb.insertOrUpdateMessages(fetchedMessages)
+        val conference = when {
+            fetchedMessages.size < MESSAGES_ON_PAGE -> chatDb.markConferenceAsFullyLoadedAndGet(conferenceId)
+            else -> chatDb.getConference(conferenceId)
         }
 
-        return newMessages to false
+        return LocalConferenceAssociation(conference, insertedMessages)
     }
 
     private fun showNotification(context: Context, changedConferences: Collection<LocalConference>) {
@@ -259,5 +263,7 @@ class ChatJob : Job() {
         NotificationHelper.showOrUpdateChatNotification(context, unreadMap)
     }
 
-    class ChatException(val innerError: Exception) : Exception()
+    open class ChatException(val innerError: Throwable) : Exception()
+    class ChatSynchronizationException(innerError: Throwable) : ChatException(innerError)
+    class ChatMessageException(innerError: Throwable) : ChatException(innerError)
 }

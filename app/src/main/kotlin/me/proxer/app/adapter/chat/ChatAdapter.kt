@@ -395,7 +395,7 @@ class ChatAdapter(val isGroup: Boolean) : BaseAdapter<LocalMessage>() {
     private enum class MessageType(val type: Int) {
         INNER(0), SINGLE(1), TOP(2), BOTTOM(3),
         SELF_INNER(4), SELF_SINGLE(5), SELF_TOP(6), SELF_BOTTOM(7),
-        ACTION(7);
+        ACTION(8);
 
         companion object {
             fun from(type: Int) = values().firstOrNull { it.type == type }

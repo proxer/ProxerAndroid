@@ -25,9 +25,9 @@ import me.proxer.app.adapter.base.BaseAdapter
 import me.proxer.app.adapter.manga.LocalMangaAdapter
 import me.proxer.app.application.GlideApp
 import me.proxer.app.entity.manga.LocalMangaChapter
-import me.proxer.app.event.LocalMangaJobFailedEvent
-import me.proxer.app.event.LocalMangaJobFinishedEvent
-import me.proxer.app.event.LocalMangaJobStartedEvent
+import me.proxer.app.event.manga.LocalMangaJobFailedEvent
+import me.proxer.app.event.manga.LocalMangaJobFinishedEvent
+import me.proxer.app.event.manga.LocalMangaJobStartedEvent
 import me.proxer.app.fragment.base.LoadingFragment
 import me.proxer.app.job.LocalMangaJob
 import me.proxer.app.task.manga.LocalMangaListTask

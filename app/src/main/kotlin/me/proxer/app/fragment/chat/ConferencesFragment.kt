@@ -100,7 +100,7 @@ class ConferencesFragment : LoadingFragment<Unit, List<LocalConference>>() {
     }
 
     override fun onSuccess(result: List<LocalConference>) {
-        adapter.replace(result)
+        adapter.insert(result)
 
         super.onSuccess(result)
     }

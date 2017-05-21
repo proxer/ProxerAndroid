@@ -63,7 +63,7 @@ data class LocalConference(val localId: Long, val id: String, val topic: String,
     }
 }
 
-fun Conference.toLocalConference(localId: Long, loadedFully: Boolean): LocalConference {
+fun Conference.toLocalConference(localId: Long, isLoadedFully: Boolean): LocalConference {
     return LocalConference(localId, id, topic, customTopic, participantAmount, image, imageType, isGroup,
-            isRead, isRead, date, unreadMessageAmount, lastReadMessageId, loadedFully)
+            isRead, isRead, date, unreadMessageAmount, lastReadMessageId, isLoadedFully)
 }

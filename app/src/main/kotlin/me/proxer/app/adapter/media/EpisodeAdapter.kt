@@ -15,10 +15,10 @@ import me.proxer.app.adapter.base.BaseAdapter
 import me.proxer.app.application.GlideRequests
 import me.proxer.app.application.MainApplication.Companion.mangaDb
 import me.proxer.app.entity.EpisodeRow
-import me.proxer.app.event.LocalMangaJobFailedEvent
-import me.proxer.app.event.LocalMangaJobFinishedEvent
 import me.proxer.app.event.LoginEvent
 import me.proxer.app.event.LogoutEvent
+import me.proxer.app.event.manga.LocalMangaJobFailedEvent
+import me.proxer.app.event.manga.LocalMangaJobFinishedEvent
 import me.proxer.app.helper.StorageHelper
 import me.proxer.app.job.LocalMangaJob
 import me.proxer.app.util.ParcelableStringBooleanMap

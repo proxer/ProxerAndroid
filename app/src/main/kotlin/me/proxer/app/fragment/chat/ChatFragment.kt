@@ -4,7 +4,6 @@ import android.content.ClipData
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.view.ActionMode
 import android.support.v7.widget.LinearLayoutManager
 import android.view.*
@@ -26,6 +25,7 @@ import me.proxer.app.entity.chat.LocalMessage
 import me.proxer.app.fragment.base.PagedLoadingFragment
 import me.proxer.app.helper.StorageHelper
 import me.proxer.app.job.ChatJob
+import me.proxer.app.task.chat.ChatRefreshTask
 import me.proxer.app.task.chat.ChatTask
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.bindView
@@ -117,7 +117,7 @@ class ChatFragment : PagedLoadingFragment<Int, LocalMessage>() {
         override fun onMessageSelection(count: Int) {
             if (count > 0) {
                 if (actionMode == null) {
-                    actionMode = (activity as AppCompatActivity).startSupportActionMode(actionModeCallback)
+                    actionMode = chatActivity.startSupportActionMode(actionModeCallback)
                     actionMode?.title = count.toString()
                 } else {
                     actionMode?.title = count.toString()
@@ -167,6 +167,9 @@ class ChatFragment : PagedLoadingFragment<Int, LocalMessage>() {
 
         innerAdapter.user = StorageHelper.user
         innerAdapter.callback = adapterCallback
+
+        // Does not actually do anything, just registers the EventBus.
+        refreshTask.forceExecute(0)
     }
 
     override fun onResume() {
@@ -236,9 +239,17 @@ class ChatFragment : PagedLoadingFragment<Int, LocalMessage>() {
     override fun constructTask() = TaskBuilder.task(ChatTask(conference.id))
             .async()
             .map {
-                conference = it.first
+                conference = it.conference
 
-                it.second
+                it.messages
+            }
+            .build()
+
+    override fun constructRefreshTask() = TaskBuilder.task(ChatRefreshTask(conference.id))
+            .map {
+                conference = it.conference
+
+                it.messages
             }
             .build()
 

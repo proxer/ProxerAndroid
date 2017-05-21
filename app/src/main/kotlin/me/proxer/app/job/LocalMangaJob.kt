@@ -8,9 +8,9 @@ import com.evernote.android.job.JobRequest.NetworkType
 import com.evernote.android.job.util.support.PersistableBundleCompat
 import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.application.MainApplication.Companion.mangaDb
-import me.proxer.app.event.LocalMangaJobFailedEvent
-import me.proxer.app.event.LocalMangaJobFinishedEvent
-import me.proxer.app.event.LocalMangaJobStartedEvent
+import me.proxer.app.event.manga.LocalMangaJobFailedEvent
+import me.proxer.app.event.manga.LocalMangaJobFinishedEvent
+import me.proxer.app.event.manga.LocalMangaJobStartedEvent
 import me.proxer.app.helper.NotificationHelper
 import me.proxer.app.helper.PreferenceHelper
 import me.proxer.app.helper.StorageHelper

@@ -106,10 +106,10 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
     open protected fun onRefreshSuccess(result: List<O>) {
         when (shouldReplaceOnRefresh) {
             true -> {
-                insert(result)
+                replace(result)
             }
             false -> {
-                replace(result)
+                insert(result)
             }
         }
 

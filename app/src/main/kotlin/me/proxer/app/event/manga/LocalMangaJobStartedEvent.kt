@@ -1,4 +1,4 @@
-package me.proxer.app.event
+package me.proxer.app.event.manga
 
 /**
  * @author Ruben Gees
