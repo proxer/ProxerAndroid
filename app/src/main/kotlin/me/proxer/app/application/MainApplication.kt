@@ -29,6 +29,7 @@ import me.proxer.app.data.ChatDatabase
 import me.proxer.app.data.LocalMangaDatabase
 import me.proxer.app.event.LoginEvent
 import me.proxer.app.event.LogoutEvent
+import me.proxer.app.helper.NotificationHelper
 import me.proxer.app.helper.PreferenceHelper
 import me.proxer.app.helper.StorageHelper
 import me.proxer.app.job.ChatJob
@@ -109,6 +110,8 @@ class MainApplication : Application() {
         doAsync {
             ChatJob.cancel()
             LocalMangaJob.cancelAll()
+
+            NotificationHelper.cancelChatNotification(this@MainApplication)
 
             StorageHelper.areConferencesSynchronized = false
             StorageHelper.resetChatInterval()

@@ -261,7 +261,7 @@ class ChatFragment : PagedLoadingFragment<Int, LocalMessage>() {
     override fun freshLoad() {
         state.clear()
 
-        task.freshExecute(constructInput())
+        task.freshExecute(0)
     }
 
     override fun constructTask() = TaskBuilder.task(ChatTask(conference.id))
