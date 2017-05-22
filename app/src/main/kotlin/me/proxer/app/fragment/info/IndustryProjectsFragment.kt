@@ -47,6 +47,7 @@ class IndustryProjectsFragment : PagedLoadingFragment<ProxerCall<List<IndustryPr
     override val layoutManager by lazy {
         StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity) + 1, StaggeredGridLayoutManager.VERTICAL)
     }
+
     override val innerAdapter by lazy { IndustryProjectAdapter(GlideApp.with(this)) }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {

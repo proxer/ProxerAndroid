@@ -45,6 +45,7 @@ class NewsArticleFragment : PagedLoadingFragment<ProxerCall<List<NewsArticle>>, 
     override val layoutManager by lazy {
         StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity), StaggeredGridLayoutManager.VERTICAL)
     }
+
     override lateinit var innerAdapter: NewsArticleAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -82,6 +82,7 @@ class MediaListFragment : PagedLoadingFragment<ProxerCall<List<MediaListEntry>>,
     override val layoutManager by lazy {
         StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity) + 1, StaggeredGridLayoutManager.VERTICAL)
     }
+
     override val innerAdapter by lazy { MediaAdapter(category, GlideApp.with(this)) }
 
     private lateinit var searchItem: MenuItem

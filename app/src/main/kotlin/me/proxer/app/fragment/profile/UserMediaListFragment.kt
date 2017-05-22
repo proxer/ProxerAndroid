@@ -55,6 +55,7 @@ class UserMediaListFragment : PagedLoadingFragment<ProxerCall<List<UserMediaList
     override val layoutManager by lazy {
         StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity) + 1, StaggeredGridLayoutManager.VERTICAL)
     }
+
     override val innerAdapter by lazy { UserMediaAdapter(GlideApp.with(this)) }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {

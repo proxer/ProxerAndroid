@@ -48,6 +48,7 @@ class TranslatorGroupProjectsFragment : PagedLoadingFragment<ProxerCall<List<Tra
     override val layoutManager by lazy {
         StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity) + 1, StaggeredGridLayoutManager.VERTICAL)
     }
+
     override val innerAdapter by lazy { TranslatorGroupProjectAdapter(GlideApp.with(this)) }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
