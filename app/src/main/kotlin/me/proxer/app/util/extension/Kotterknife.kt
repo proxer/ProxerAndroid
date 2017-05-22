@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.RecyclerView.ViewHolder
 import android.view.View
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
-import me.proxer.app.adapter.base.BaseAdapter
 import java.util.*
 import java.util.concurrent.Future
 import kotlin.properties.ReadOnlyProperty
@@ -98,17 +97,11 @@ private class Lazy<in T, out V : View>(private val initializer: (T, KProperty<*>
 
         when (safeValue) {
             is RecyclerView -> {
-                var currentAdapter = safeValue.adapter
+                val currentAdapter = safeValue.adapter
 
                 if (currentAdapter is EasyHeaderFooterAdapter) {
                     currentAdapter.removeHeader()
                     currentAdapter.removeFooter()
-
-                    currentAdapter = currentAdapter.innerAdapter
-                }
-
-                if (currentAdapter is BaseAdapter<*>) {
-                    currentAdapter.destroy()
                 }
 
                 safeValue.clearOnScrollListeners()

@@ -175,6 +175,12 @@ class AnimeFragment : LoadingFragment<Pair<ProxerCall<List<Stream>>, ProxerCall<
                 .build()
     }
 
+    override fun onDestroy() {
+        innerAdapter.destroy()
+
+        super.onDestroy()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         header = inflater.inflate(R.layout.layout_media_control, container, false) as MediaControlView
 

@@ -6,12 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.matrixxun.starry.badgetextview.MaterialBadgeTextView
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
-import me.proxer.app.adapter.base.BaseAdapter
+import me.proxer.app.adapter.base.BaseGlideAdapter
 import me.proxer.app.application.GlideRequests
 import me.proxer.app.entity.chat.LocalConference
 import me.proxer.app.util.TimeUtils
@@ -21,7 +20,7 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-class ConferenceAdapter(private val glide: GlideRequests) : BaseAdapter<LocalConference>() {
+class ConferenceAdapter(glide: GlideRequests) : BaseGlideAdapter<LocalConference>(glide) {
 
     var callback: ConferenceAdapterCallback? = null
 
@@ -35,7 +34,7 @@ class ConferenceAdapter(private val glide: GlideRequests) : BaseAdapter<LocalCon
 
     override fun onViewRecycled(holder: BaseViewHolder<LocalConference>) {
         if (holder is ViewHolder) {
-            glide.clear(holder.image)
+            clearImage(holder.image)
         }
     }
 
@@ -109,10 +108,7 @@ class ConferenceAdapter(private val glide: GlideRequests) : BaseAdapter<LocalCon
 
                 image.setImageDrawable(icon)
             } else {
-                glide.load(ProxerUrls.userImage(item.image).toString())
-                        .transition(DrawableTransitionOptions.withCrossFade())
-                        .circleCrop()
-                        .into(image)
+                loadImage(image, ProxerUrls.userImage(item.image), circleCrop = true)
             }
         }
     }

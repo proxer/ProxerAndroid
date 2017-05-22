@@ -57,6 +57,7 @@ class BookmarksFragment : PagedLoadingFragment<ProxerCall<List<Bookmark>>, Bookm
     override val layoutManager by lazy {
         StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity) + 1, StaggeredGridLayoutManager.VERTICAL)
     }
+
     override val innerAdapter by lazy { BookmarkAdapter(GlideApp.with(this)) }
 
     private lateinit var removalTask: AndroidLifecycleTask<ProxerCall<Void?>, Void?>
@@ -91,6 +92,12 @@ class BookmarksFragment : PagedLoadingFragment<ProxerCall<List<Bookmark>>, Bookm
                 }.build()
 
         setHasOptionsMenu(true)
+    }
+
+    override fun onDestroy() {
+        innerAdapter.destroy()
+
+        super.onDestroy()
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {

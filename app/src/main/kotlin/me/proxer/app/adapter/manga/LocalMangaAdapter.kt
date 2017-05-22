@@ -9,9 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import me.proxer.app.R
-import me.proxer.app.adapter.base.BaseAdapter
+import me.proxer.app.adapter.base.BaseGlideAdapter
 import me.proxer.app.adapter.manga.LocalMangaChapterAdapter.LocalMangaChapterAdapterCallback
 import me.proxer.app.application.GlideRequests
 import me.proxer.app.entity.manga.LocalMangaChapter
@@ -26,8 +25,8 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-class LocalMangaAdapter(savedInstanceState: Bundle?, private val glide: GlideRequests) :
-        BaseAdapter<CompleteLocalMangaEntry>() {
+class LocalMangaAdapter(savedInstanceState: Bundle?, glide: GlideRequests) :
+        BaseGlideAdapter<CompleteLocalMangaEntry>(glide) {
 
     private companion object {
         private const val EXPANDED_STATE = "local_manga_expanded"
@@ -50,7 +49,7 @@ class LocalMangaAdapter(savedInstanceState: Bundle?, private val glide: GlideReq
 
     override fun onViewRecycled(holder: BaseViewHolder<CompleteLocalMangaEntry>) {
         if (holder is ViewHolder) {
-            glide.clear(holder.image)
+            clearImage(holder.image)
         }
     }
 
@@ -145,9 +144,7 @@ class LocalMangaAdapter(savedInstanceState: Bundle?, private val glide: GlideReq
                 adapter.clear()
             }
 
-            glide.load(ProxerUrls.entryImage(item.first.id).toString())
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .into(image)
+            loadImage(image, ProxerUrls.entryImage(item.first.id))
         }
     }
 

@@ -8,11 +8,10 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
-import me.proxer.app.adapter.base.BaseAdapter
+import me.proxer.app.adapter.base.BaseGlideAdapter
 import me.proxer.app.application.GlideRequests
 import me.proxer.app.util.extension.bindView
 import me.proxer.library.entitiy.ucp.UcpTopTenEntry
@@ -21,7 +20,7 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-class UcpTopTenAdapter(private val glide: GlideRequests) : BaseAdapter<UcpTopTenEntry>() {
+class UcpTopTenAdapter(glide: GlideRequests) : BaseGlideAdapter<UcpTopTenEntry>(glide) {
 
     var callback: UcpToptenAdapterCallback? = null
 
@@ -37,7 +36,7 @@ class UcpTopTenAdapter(private val glide: GlideRequests) : BaseAdapter<UcpTopTen
 
     override fun onViewRecycled(holder: BaseViewHolder<UcpTopTenEntry>) {
         if (holder is ViewHolder) {
-            glide.clear(holder.image)
+            clearImage(holder.image)
         }
     }
 
@@ -78,9 +77,7 @@ class UcpTopTenAdapter(private val glide: GlideRequests) : BaseAdapter<UcpTopTen
 
             title.text = item.name
 
-            glide.load(ProxerUrls.entryImage(item.entryId).toString())
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .into(image)
+            loadImage(image, ProxerUrls.entryImage(item.entryId))
         }
     }
 

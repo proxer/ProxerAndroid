@@ -7,11 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
-import me.proxer.app.adapter.base.BaseAdapter
+import me.proxer.app.adapter.base.BaseGlideAdapter
 import me.proxer.app.application.GlideRequests
 import me.proxer.app.application.MainApplication.Companion.mangaDb
 import me.proxer.app.entity.EpisodeRow
@@ -37,8 +36,8 @@ import java.util.concurrent.Future
 /**
  * @author Ruben Gees
  */
-class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?, private val glide: GlideRequests) :
-        BaseAdapter<EpisodeRow>() {
+class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?, glide: GlideRequests) :
+        BaseGlideAdapter<EpisodeRow>(glide) {
 
     private companion object {
         private const val EXPANDED_STATE = "episode_expanded"
@@ -94,7 +93,7 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?, p
         if (holder is ViewHolder) {
             holder.languages.applyRecursively {
                 if (it is ImageView) {
-                    glide.clear(it)
+                    clearImage(it)
                 }
             }
         }
@@ -304,9 +303,7 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?, p
                 }
 
                 hostersView.forEachChildWithIndex { index, imageView ->
-                    glide.load(ProxerUrls.hosterImage(hosterImages[index]).toString())
-                            .transition(DrawableTransitionOptions.withCrossFade())
-                            .into(imageView as ImageView)
+                    loadImage(imageView as ImageView, ProxerUrls.hosterImage(hosterImages[index]))
                 }
             }
         }

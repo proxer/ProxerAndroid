@@ -132,6 +132,12 @@ class MangaFragment : LoadingFragment<MangaInput, MangaChapterInfo>() {
         setHasOptionsMenu(true)
     }
 
+    override fun onDestroy() {
+        innerAdapter.destroy()
+
+        super.onDestroy()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         header = inflater.inflate(R.layout.layout_media_control, container, false) as MediaControlView
         footer = inflater.inflate(R.layout.layout_manga_footer, container, false) as ViewGroup

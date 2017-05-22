@@ -65,6 +65,12 @@ class ConferencesFragment : LoadingFragment<Unit, List<LocalConference>>() {
         super.onPause()
     }
 
+    override fun onDestroy() {
+        adapter.destroy()
+
+        super.onDestroy()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_conferences, container, false)
     }

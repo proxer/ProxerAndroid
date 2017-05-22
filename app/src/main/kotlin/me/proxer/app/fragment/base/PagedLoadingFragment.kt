@@ -68,6 +68,12 @@ abstract class PagedLoadingFragment<I, O> : LoadingFragment<I, List<O>>() {
                 .build()
     }
 
+    override fun onDestroy() {
+        innerAdapter.destroy()
+
+        super.onDestroy()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_paging, container, false)
     }

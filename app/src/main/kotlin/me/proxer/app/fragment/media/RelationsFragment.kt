@@ -46,6 +46,12 @@ class RelationsFragment : LoadingFragment<ProxerCall<List<Relation>>, List<Relat
 
     private val list: RecyclerView by bindView(R.id.list)
 
+    override fun onDestroy() {
+        adapter.destroy()
+
+        super.onDestroy()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_relations, container, false)
     }

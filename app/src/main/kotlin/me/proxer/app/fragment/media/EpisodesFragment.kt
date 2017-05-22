@@ -45,8 +45,6 @@ class EpisodesFragment : LoadingFragment<ProxerCall<EpisodeInfo>, List<EpisodeRo
     private val mediaActivity
         get() = activity as MediaActivity
 
-    private lateinit var adapter: EpisodeAdapter
-
     private val id: String
         get() = mediaActivity.id
 
@@ -56,12 +54,20 @@ class EpisodesFragment : LoadingFragment<ProxerCall<EpisodeInfo>, List<EpisodeRo
     private val category: Category?
         get() = mediaActivity.category
 
+    private lateinit var adapter: EpisodeAdapter
+
     private val list: RecyclerView by bindView(R.id.list)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         adapter = EpisodeAdapter(id, savedInstanceState, GlideApp.with(this))
+    }
+
+    override fun onDestroy() {
+        adapter.destroy()
+
+        super.onDestroy()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

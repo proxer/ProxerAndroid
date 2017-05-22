@@ -39,6 +39,7 @@ class ProfileFragment : LoadingFragment<ProxerCall<UserInfo>, UserInfo>() {
 
     private val userId: String?
         get() = profileActivity.userId
+
     private val username: String?
         get() = profileActivity.username
 

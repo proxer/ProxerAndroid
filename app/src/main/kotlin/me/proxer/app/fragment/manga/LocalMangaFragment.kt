@@ -157,6 +157,12 @@ class LocalMangaFragment : LoadingFragment<Unit, List<CompleteLocalMangaEntry>>(
         super.onDestroyView()
     }
 
+    override fun onDestroy() {
+        innerAdapter.destroy()
+
+        super.onDestroy()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         header = inflater.inflate(R.layout.layout_local_manga_header, container, false) as ViewGroup
         headerText = header.find(R.id.text)

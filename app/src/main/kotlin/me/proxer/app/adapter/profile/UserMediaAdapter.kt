@@ -7,9 +7,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import me.proxer.app.R
-import me.proxer.app.adapter.base.BaseAdapter
+import me.proxer.app.adapter.base.BaseGlideAdapter
 import me.proxer.app.application.GlideRequests
 import me.proxer.app.util.extension.bindView
 import me.proxer.app.util.extension.toAppString
@@ -21,7 +20,7 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-class UserMediaAdapter(private val glide: GlideRequests) : BaseAdapter<UserMediaListEntry>() {
+class UserMediaAdapter(glide: GlideRequests) : BaseGlideAdapter<UserMediaListEntry>(glide) {
 
     var callback: UserMediaAdapterCallback? = null
 
@@ -37,7 +36,7 @@ class UserMediaAdapter(private val glide: GlideRequests) : BaseAdapter<UserMedia
 
     override fun onViewRecycled(holder: BaseViewHolder<UserMediaListEntry>) {
         if (holder is ViewHolder) {
-            glide.clear(holder.image)
+            clearImage(holder.image)
         }
     }
 
@@ -78,9 +77,7 @@ class UserMediaAdapter(private val glide: GlideRequests) : BaseAdapter<UserMedia
                 ratingContainer.visibility = View.GONE
             }
 
-            glide.load(ProxerUrls.entryImage(item.id).toString())
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .into(image)
+            loadImage(image, ProxerUrls.entryImage(item.id))
         }
     }
 

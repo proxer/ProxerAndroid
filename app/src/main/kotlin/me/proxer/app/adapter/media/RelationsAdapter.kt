@@ -7,9 +7,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import me.proxer.app.R
-import me.proxer.app.adapter.base.BaseAdapter
+import me.proxer.app.adapter.base.BaseGlideAdapter
 import me.proxer.app.application.GlideRequests
 import me.proxer.app.util.extension.bindView
 import me.proxer.app.util.extension.toAppString
@@ -22,7 +21,7 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-class RelationsAdapter(private val glide: GlideRequests) : BaseAdapter<Relation>() {
+class RelationsAdapter(glide: GlideRequests) : BaseGlideAdapter<Relation>(glide) {
 
     var callback: RelationsAdapterCallback? = null
 
@@ -38,7 +37,7 @@ class RelationsAdapter(private val glide: GlideRequests) : BaseAdapter<Relation>
 
     override fun onViewRecycled(holder: BaseViewHolder<Relation>) {
         if (holder is ViewHolder) {
-            glide.clear(holder.image)
+            clearImage(holder.image)
         }
     }
 
@@ -96,9 +95,7 @@ class RelationsAdapter(private val glide: GlideRequests) : BaseAdapter<Relation>
                 ratingContainer.visibility = View.GONE
             }
 
-            glide.load(ProxerUrls.entryImage(item.id).toString())
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .into(image)
+            loadImage(image, ProxerUrls.entryImage(item.id))
         }
     }
 

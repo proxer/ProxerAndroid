@@ -56,6 +56,13 @@ class TopTenFragment : LoadingFragment<Pair<ProxerCall<List<TopTenEntry>>, Proxe
     private val animeList: RecyclerView by bindView(R.id.animeList)
     private val mangaList: RecyclerView by bindView(R.id.mangaList)
 
+    override fun onDestroy() {
+        animeAdapter.destroy()
+        mangaAdapter.destroy()
+
+        super.onDestroy()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_top_ten, container, false)
     }

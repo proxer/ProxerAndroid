@@ -12,11 +12,10 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
-import me.proxer.app.adapter.base.BaseAdapter
+import me.proxer.app.adapter.base.BaseGlideAdapter
 import me.proxer.app.application.GlideRequests
 import me.proxer.app.util.ParcelableStringBooleanMap
 import me.proxer.app.util.TimeUtils
@@ -32,7 +31,7 @@ import java.util.*
  * @author Ruben Gees
  */
 class CommentAdapter(savedInstanceState: Bundle?, categoryCallback: () -> Category = { Category.ANIME },
-                     private val glide: GlideRequests) : BaseAdapter<Comment>() {
+                     glide: GlideRequests) : BaseGlideAdapter<Comment>(glide) {
 
     private companion object {
         private const val EXPANDED_STATE = "comments_expanded"
@@ -68,7 +67,7 @@ class CommentAdapter(savedInstanceState: Bundle?, categoryCallback: () -> Catego
 
     override fun onViewRecycled(holder: BaseViewHolder<Comment>) {
         if (holder is ViewHolder) {
-            glide.clear(holder.userImage)
+            clearImage(holder.userImage)
         }
     }
 
@@ -230,10 +229,7 @@ class CommentAdapter(savedInstanceState: Bundle?, categoryCallback: () -> Catego
                         .paddingDp(16)
                         .colorRes(R.color.colorAccent))
             } else {
-                glide.load(ProxerUrls.userImage(item.image).toString())
-                        .transition(DrawableTransitionOptions.withCrossFade())
-                        .circleCrop()
-                        .into(userImage)
+                loadImage(userImage, ProxerUrls.userImage(item.image), circleCrop = true)
             }
         }
     }

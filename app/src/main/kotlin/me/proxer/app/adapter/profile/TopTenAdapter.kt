@@ -6,9 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import me.proxer.app.R
-import me.proxer.app.adapter.base.BaseAdapter
+import me.proxer.app.adapter.base.BaseGlideAdapter
 import me.proxer.app.application.GlideRequests
 import me.proxer.app.util.extension.bindView
 import me.proxer.library.entitiy.user.TopTenEntry
@@ -17,7 +16,7 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-class TopTenAdapter(private val glide: GlideRequests) : BaseAdapter<TopTenEntry>() {
+class TopTenAdapter(glide: GlideRequests) : BaseGlideAdapter<TopTenEntry>(glide) {
 
     var callback: TopTenAdapterCallback? = null
 
@@ -31,7 +30,7 @@ class TopTenAdapter(private val glide: GlideRequests) : BaseAdapter<TopTenEntry>
 
     override fun onViewRecycled(holder: BaseViewHolder<TopTenEntry>) {
         if (holder is ViewHolder) {
-            glide.clear(holder.image)
+            clearImage(holder.image)
         }
     }
 
@@ -59,9 +58,7 @@ class TopTenAdapter(private val glide: GlideRequests) : BaseAdapter<TopTenEntry>
 
             title.text = item.name
 
-            glide.load(ProxerUrls.entryImage(item.id).toString())
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .into(image)
+            loadImage(image, ProxerUrls.entryImage(item.id))
         }
     }
 

@@ -7,11 +7,10 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
-import me.proxer.app.adapter.base.BaseAdapter
+import me.proxer.app.adapter.base.BaseGlideAdapter
 import me.proxer.app.application.GlideRequests
 import me.proxer.app.util.ParcelableStringBooleanMap
 import me.proxer.app.util.TimeUtils
@@ -23,7 +22,7 @@ import org.threeten.bp.format.DateTimeFormatter
 /**
  * @author Ruben Gees
  */
-class StreamAdapter(savedInstanceState: Bundle?, private val glide: GlideRequests) : BaseAdapter<Stream>() {
+class StreamAdapter(savedInstanceState: Bundle?, glide: GlideRequests) : BaseGlideAdapter<Stream>(glide) {
 
     private companion object {
         private const val EXPANDED_STATE = "stream_expanded"
@@ -49,7 +48,7 @@ class StreamAdapter(savedInstanceState: Bundle?, private val glide: GlideRequest
 
     override fun onViewRecycled(holder: BaseViewHolder<Stream>) {
         if (holder is ViewHolder) {
-            glide.clear(holder.image)
+            clearImage(holder.image)
         }
     }
 
@@ -119,9 +118,7 @@ class StreamAdapter(savedInstanceState: Bundle?, private val glide: GlideRequest
         override fun bind(item: Stream) {
             name.text = item.hosterName
 
-            glide.load(ProxerUrls.hosterImage(item.image).toString())
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .into(image)
+            loadImage(image, ProxerUrls.hosterImage(item.image))
 
             if (expanded[item.id] ?: false) {
                 uploadInfoContainer.visibility = View.VISIBLE
