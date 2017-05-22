@@ -2,7 +2,6 @@
 <resources>
 
     <color name="colorAccent">#C21414</color>
-    <color name="background">#303030</color>
 
     <color name="text_primary">@android:color/primary_text_dark</color>
     <color name="text_secondary">@android:color/secondary_text_dark</color>
@@ -10,12 +9,16 @@
 
     <color name="divider">#1FFFFFFF</color>
     <color name="icon">#7FFFFFFF</color>
-    <color name="selected">#4A4A4A</color>
+    <color name="selected">#5C5C5C</color>
 
-    <color name="material_drawer_background">@color/background</color>
+    <color name="card_background">@color/cardview_dark_background</color>
+
+    <color name="material_drawer_background">#303030</color>
     <color name="material_drawer_primary_text">@color/text_primary</color>
     <color name="material_drawer_primary_icon">@color/icon</color>
     <color name="material_drawer_secondary_text">@color/text_tertiary</color>
     <color name="material_drawer_selected">@color/selected</color>
     <color name="material_drawer_divider">@color/divider</color>
+
+    <color name="emoji_background">@color/card_background</color>
 </resources>

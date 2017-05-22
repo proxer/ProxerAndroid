@@ -22,7 +22,7 @@ class ConferencesTask : EventBusTask<Unit, List<LocalConference>>() {
             safelyRegister()
 
             try {
-                if (StorageHelper.hasConferenceListReachedEnd) {
+                if (StorageHelper.areConferencesSynchronized) {
                     chatDb.getAllConferences().let {
                         isWorking = false
 
@@ -33,6 +33,10 @@ class ConferencesTask : EventBusTask<Unit, List<LocalConference>>() {
                 finishWithError(error)
             }
         }
+    }
+
+    override fun cancel() {
+        isWorking = false
     }
 
     @Suppress("unused")
@@ -49,9 +53,11 @@ class ConferencesTask : EventBusTask<Unit, List<LocalConference>>() {
     @Suppress("unused")
     @Subscribe
     fun onChatSynchronizationFailed(event: ChatErrorEvent) {
-        isCancelled = false
-        isWorking = false
+        if (isWorking) {
+            isCancelled = false
+            isWorking = false
 
-        finishWithError(event.error)
+            finishWithError(event.error)
+        }
     }
 }

@@ -27,7 +27,7 @@ class ChatTask(private val id: String) : EventBusTask<Int, LocalConferenceAssoci
                     chatDb.markAsRead(id)
                     chatDb.getAllMessages(id).let { messages ->
                         chatDb.getConference(id).let {
-                            if (messages.isEmpty() && !it.isLoadedFully) {
+                            if (messages.isEmpty() && !it.isFullyLoaded) {
                                 ChatJob.scheduleMessageLoad(id)
                             } else {
                                 isWorking = false
@@ -43,6 +43,10 @@ class ChatTask(private val id: String) : EventBusTask<Int, LocalConferenceAssoci
                 finishWithError(error)
             }
         }
+    }
+
+    override fun cancel() {
+        isWorking = false
     }
 
     @Suppress("unused")

@@ -16,14 +16,17 @@ import com.mikepenz.aboutlibraries.LibsBuilder
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
+import me.proxer.app.activity.ChatActivity
 import me.proxer.app.activity.ProfileActivity
 import me.proxer.app.application.MainApplication
+import me.proxer.app.application.MainApplication.Companion.chatDb
 import me.proxer.app.util.extension.openHttpPage
 import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
 import org.jetbrains.anko.bundleOf
+import org.jetbrains.anko.doAsync
 
 /**
  * @author Ruben Gees
@@ -147,15 +150,17 @@ class AboutFragment : MaterialAboutFragment() {
                         .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_email)
                                 .colorRes(R.color.icon))
                         .setOnClickAction {
-                            // val existingChat = context.chatDatabase.getChat(DEVELOPER_PROXER_NAME)
-//
-//                            when (existingChat) {
-//                                null -> {
-//                                    NewChatActivity.navigateTo(activity, Participant(
-//                                            DEVELOPER_PROXER_NAME, DEVELOPER_PROXER_IMAGE))
-//                                }
-//                                else -> ChatActivity.navigateTo(activity, existingChat)
-//                            }
+                            doAsync {
+                                val existingChat = chatDb.findConferenceForUser(DEVELOPER_PROXER_NAME)
+
+                                when (existingChat) {
+                                    null -> {
+//                                        NewChatActivity.navigateTo(activity, Participant(
+//                                                DEVELOPER_PROXER_NAME, DEVELOPER_PROXER_IMAGE))
+                                    }
+                                    else -> weakRef.get()?.let { ChatActivity.navigateTo(it.activity, existingChat) }
+                                }
+                            }
                         }.build()
         )
     }

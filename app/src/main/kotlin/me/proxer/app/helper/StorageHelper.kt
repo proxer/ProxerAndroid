@@ -20,7 +20,7 @@ object StorageHelper {
     private const val TWO_FACTOR_AUTHENTICATION = "two_factor_authentication"
     private const val LAST_NEWS_DATE = "last_news_date"
     private const val CHAT_INTERVAL = "chat_interval"
-    private const val CONFERENCE_LIST_REACHED_END = "conference_list_reached_end"
+    private const val CONFERENCES_SYNCHRONIZED = "conferences_synchronized"
 
     private const val DEFAULT_CHAT_INTERVAL = 10_000L
     private const val MAX_CHAT_INTERVAL = 850_000L
@@ -83,16 +83,16 @@ object StorageHelper {
             return Hawk.get(CHAT_INTERVAL, DEFAULT_CHAT_INTERVAL)
         }
 
-    var hasConferenceListReachedEnd: Boolean
+    var areConferencesSynchronized: Boolean
         get() {
             ensureInit()
 
-            return Hawk.get(CONFERENCE_LIST_REACHED_END, false)
+            return Hawk.get(CONFERENCES_SYNCHRONIZED, false)
         }
         set(value) {
             ensureInit()
 
-            Hawk.put(CONFERENCE_LIST_REACHED_END, value)
+            Hawk.put(CONFERENCES_SYNCHRONIZED, value)
         }
 
     fun incrementChatInterval() {

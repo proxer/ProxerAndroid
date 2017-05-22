@@ -1,7 +1,7 @@
 package me.proxer.app.adapter.chat
 
+import android.os.Bundle
 import android.support.v4.content.ContextCompat
-import android.support.v4.util.LongSparseArray
 import android.support.v7.widget.CardView
 import android.view.LayoutInflater
 import android.view.View
@@ -15,31 +15,50 @@ import me.proxer.app.R
 import me.proxer.app.adapter.base.BaseAdapter
 import me.proxer.app.entity.LocalUser
 import me.proxer.app.entity.chat.LocalMessage
+import me.proxer.app.util.ParcelableStringBooleanMap
 import me.proxer.app.util.TimeUtils
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.bindView
 import me.proxer.library.enums.MessageAction
 import okhttp3.HttpUrl
+import org.jetbrains.anko.collections.forEachReversedByIndex
 import org.jetbrains.anko.dip
 
 /**
  * @author Ruben Gees
  */
-class ChatAdapter(val isGroup: Boolean) : BaseAdapter<LocalMessage>() {
+class ChatAdapter(savedInstanceState: Bundle?, val isGroup: Boolean) : BaseAdapter<LocalMessage>() {
+
+    private companion object {
+        private const val SELECTED_STATE = "chat_selected"
+        private const val SHOWING_TIME_STATE = "chat_showing_time"
+        private const val SELECTING_STATE = "chat_selecting"
+    }
 
     var user: LocalUser? = null
-
-    private val selectedMap = LongSparseArray<Boolean>()
-    private val showingTimeMap = LongSparseArray<Boolean>()
-
     var callback: ChatAdapterCallback? = null
+
+    val selectedItems: List<LocalMessage>
+        get() = internalList.filter { selected[it.localId.toString()] ?: false }.sortedBy { it.date }
+
+    private val selected: ParcelableStringBooleanMap
+    private val showingTime: ParcelableStringBooleanMap
 
     private var selecting = false
 
-    val selectedItems: List<LocalMessage>
-        get() = list.filter { selectedMap.get(it.localId, false) }.sortedBy { it.date }
-
     init {
+        selected = when (savedInstanceState) {
+            null -> ParcelableStringBooleanMap()
+            else -> savedInstanceState.getParcelable(SELECTED_STATE)
+        }
+
+        showingTime = when (savedInstanceState) {
+            null -> ParcelableStringBooleanMap()
+            else -> savedInstanceState.getParcelable(SHOWING_TIME_STATE)
+        }
+
+        selecting = savedInstanceState?.getBoolean(SELECTING_STATE) ?: false
+
         setHasStableIds(true)
     }
 
@@ -73,14 +92,9 @@ class ChatAdapter(val isGroup: Boolean) : BaseAdapter<LocalMessage>() {
         holder.bind(internalList[position], context.dip(margins.first), context.dip(margins.second))
     }
 
-    override fun getItemId(position: Int): Long = list[position].localId
+    override fun getItemId(position: Int): Long = internalList[position].id.toLong()
 
-    override fun areItemsTheSame(oldItem: LocalMessage, newItem: LocalMessage) = when {
-        oldItem.id == "-1" && newItem.id != "-1" || oldItem.id != "-1" && newItem.id == "-1" -> {
-            oldItem.message == newItem.message && oldItem.userId == newItem.userId && oldItem.action == newItem.action
-        }
-        else -> oldItem.localId == newItem.localId
-    }
+    override fun areItemsTheSame(oldItem: LocalMessage, newItem: LocalMessage) = oldItem.id == newItem.id
 
     override fun areContentsTheSame(oldItem: LocalMessage, newItem: LocalMessage): Boolean {
         return oldItem.message == newItem.message && oldItem.userId == newItem.userId &&
@@ -88,8 +102,8 @@ class ChatAdapter(val isGroup: Boolean) : BaseAdapter<LocalMessage>() {
     }
 
     override fun getItemViewType(position: Int): Int {
-        var result: Int
         val current = internalList[position]
+        var result: Int
 
         if (current.action != MessageAction.NONE) {
             result = MessageType.ACTION.type
@@ -147,13 +161,50 @@ class ChatAdapter(val isGroup: Boolean) : BaseAdapter<LocalMessage>() {
         callback = null
     }
 
+    @Synchronized
+    override fun insert(items: Iterable<LocalMessage>) {
+        val currentItems = items.toMutableList()
+        val synchronizedItems = mutableListOf<LocalMessage>()
+        val nonSynchronizedItems = mutableListOf<LocalMessage>()
+
+        internalList.forEachReversedByIndex {
+            if (it.id.toLong() >= 0) {
+                synchronizedItems += it
+            } else {
+                val existingItemPosition = currentItems.indexOfFirst { new ->
+                    it.userId == new.userId && it.action == new.action && it.message == new.message
+                }
+
+                if (existingItemPosition >= 0) {
+                    currentItems.removeAt(existingItemPosition)
+                } else {
+                    nonSynchronizedItems += it
+                }
+            }
+        }
+
+        items.forEach {
+            if (it.id.toLong() >= 0) {
+                synchronizedItems += it
+            } else {
+                nonSynchronizedItems += it
+            }
+        }
+
+        val test2 = 2
+        val test = test2
+
+        doUpdates(nonSynchronizedItems.sortedBy { it.id.toLong() }
+                .plus(synchronizedItems.sortedByDescending { it.id.toLong() }))
+    }
+
     override fun clear() {
         super.clear()
 
-        showingTimeMap.clear()
+        showingTime.clear()
         clearSelection()
 
-        if (selectedMap.size() > 0) {
+        if (selected.size > 0) {
             callback?.onMessageSelection(0)
         }
     }
@@ -161,8 +212,14 @@ class ChatAdapter(val isGroup: Boolean) : BaseAdapter<LocalMessage>() {
     fun clearSelection() {
         selecting = false
 
-        selectedMap.clear()
+        selected.clear()
         notifyDataSetChanged()
+    }
+
+    fun saveInstanceState(outState: Bundle) {
+        outState.putParcelable(SELECTED_STATE, selected)
+        outState.putParcelable(SHOWING_TIME_STATE, showingTime)
+        outState.putBoolean(SELECTING_STATE, selecting)
     }
 
     private fun getMarginsForPosition(position: Int): Pair<Int, Int> {
@@ -192,7 +249,7 @@ class ChatAdapter(val isGroup: Boolean) : BaseAdapter<LocalMessage>() {
             }
         }
 
-        return marginTop to marginBottom
+        return marginTop to if (position == 0) 0 else marginBottom
     }
 
     interface ChatAdapterCallback {
@@ -227,25 +284,26 @@ class ChatAdapter(val isGroup: Boolean) : BaseAdapter<LocalMessage>() {
 
         open protected fun onContainerClick(v: View) {
             withSafeAdapterPosition {
-                val current = list[adapterPosition]
+                val current = internalList[it]
+                val id = current.localId.toString()
 
                 if (selecting) {
-                    if (selectedMap.get(current.localId, false)) {
-                        selectedMap.remove(current.localId)
+                    if (selected[id] ?: false) {
+                        selected.remove(id)
 
-                        if (selectedMap.size() <= 0) {
+                        if (selected.size <= 0) {
                             selecting = false
                         }
                     } else {
-                        selectedMap.put(current.localId, true)
+                        selected.put(id, true)
                     }
 
-                    callback?.onMessageSelection(selectedMap.size())
+                    callback?.onMessageSelection(selected.size)
                 } else {
-                    if (showingTimeMap.get(current.localId, false)) {
-                        showingTimeMap.remove(current.localId)
+                    if (showingTime[id] ?: false) {
+                        showingTime.remove(id)
                     } else {
-                        showingTimeMap.put(current.localId, true)
+                        showingTime.put(id, true)
                     }
                 }
 
@@ -258,14 +316,14 @@ class ChatAdapter(val isGroup: Boolean) : BaseAdapter<LocalMessage>() {
 
             withSafeAdapterPosition {
                 val current = internalList[it]
+                val id = current.localId.toString()
 
                 if (!selecting) {
                     selecting = true
+                    selected.put(id, true)
 
-                    selectedMap.put(current.localId, true)
                     notifyDataSetChanged()
-
-                    callback?.onMessageSelection(selectedMap.size())
+                    callback?.onMessageSelection(selected.size)
 
                     consumed = true
                 }
@@ -275,12 +333,12 @@ class ChatAdapter(val isGroup: Boolean) : BaseAdapter<LocalMessage>() {
         }
 
         protected open fun applyMessage(message: LocalMessage) {
-            text.text = Utils.buildClickableText(text.context, message.message,
+            text.text = Utils.buildClickableText(text.context, message.message.trim(),
                     onWebClickListener = Link.OnClickListener {
-                        HttpUrl.parse(it)?.let { callback?.onMessageLinkClick(it) }
+                        callback?.onMessageLinkClick(Utils.parseAndFixUrl(it))
                     },
                     onWebLongClickListener = Link.OnLongClickListener {
-                        HttpUrl.parse(it)?.let { callback?.onMessageLinkLongClick(it) }
+                        callback?.onMessageLinkLongClick(Utils.parseAndFixUrl(it))
                     },
                     onMentionsClickListener = Link.OnClickListener {
                         callback?.onMentionsClick(it.trim().substring(1))
@@ -304,15 +362,14 @@ class ChatAdapter(val isGroup: Boolean) : BaseAdapter<LocalMessage>() {
         }
 
         protected open fun applySelection(message: LocalMessage) {
-            if (selectedMap.get(message.localId, false)) {
-                container.cardBackgroundColor = ContextCompat.getColorStateList(container.context, R.color.selected)
-            } else {
-                container.cardBackgroundColor = ContextCompat.getColorStateList(container.context, R.color.background)
-            }
+            container.cardBackgroundColor = ContextCompat.getColorStateList(container.context, when {
+                selected[message.localId.toString()] ?: false -> R.color.selected
+                else -> R.color.card_background
+            })
         }
 
         protected open fun applyTimeVisibility(message: LocalMessage) {
-            if (showingTimeMap.get(message.localId, false)) {
+            if (showingTime[message.localId.toString()] ?: false) {
                 time.visibility = View.VISIBLE
             } else {
                 time.visibility = View.GONE
@@ -353,15 +410,16 @@ class ChatAdapter(val isGroup: Boolean) : BaseAdapter<LocalMessage>() {
         override fun onContainerClick(v: View) {
             withSafeAdapterPosition {
                 val current = internalList[it]
+                val id = current.localId.toString()
 
-                if (showingTimeMap.get(current.localId, false)) {
+                if (showingTime[id] ?: false) {
                     time.visibility = View.GONE
 
-                    showingTimeMap.remove(current.localId)
+                    showingTime.remove(id)
                 } else {
                     time.visibility = View.VISIBLE
 
-                    showingTimeMap.put(current.localId, true)
+                    showingTime.put(id, true)
                 }
             }
         }

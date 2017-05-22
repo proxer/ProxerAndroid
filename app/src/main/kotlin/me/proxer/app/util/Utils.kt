@@ -84,8 +84,9 @@ object Utils {
 
     fun parseAndFixUrl(url: String): HttpUrl {
         return HttpUrl.parse(when {
-            url.startsWith("//") -> "http://$url"
-            else -> url
+            url.startsWith("http://") || url.startsWith("https://") -> url
+            url.startsWith("//") -> "http:$url"
+            else -> "http://$url"
         }) ?: throw ProxerException(ProxerException.ErrorType.PARSING)
     }
 

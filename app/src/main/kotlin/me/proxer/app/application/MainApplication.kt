@@ -110,7 +110,7 @@ class MainApplication : Application() {
             ChatJob.cancel()
             LocalMangaJob.cancelAll()
 
-            StorageHelper.hasConferenceListReachedEnd = false
+            StorageHelper.areConferencesSynchronized = false
             StorageHelper.resetChatInterval()
 
             chatDb.clear()

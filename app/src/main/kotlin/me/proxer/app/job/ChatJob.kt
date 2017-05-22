@@ -15,7 +15,6 @@ import me.proxer.app.fragment.chat.ChatFragment
 import me.proxer.app.fragment.chat.ConferencesFragment
 import me.proxer.app.helper.NotificationHelper
 import me.proxer.app.helper.StorageHelper
-import me.proxer.library.api.ProxerException
 import me.proxer.library.entitiy.messenger.Conference
 import me.proxer.library.entitiy.messenger.Message
 import org.greenrobot.eventbus.EventBus
@@ -70,7 +69,11 @@ class ChatJob : Job() {
 
         private fun doSchedule(startTime: Long, endTime: Long, conferenceId: String? = null) {
             JobRequest.Builder(TAG)
-                    .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
+                    .apply {
+                        if (startTime != 1L) {
+                            setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
+                        }
+                    }
                     .setExecutionWindow(startTime, endTime)
                     .setRequirementsEnforced(true)
                     .setUpdateCurrent(true)
@@ -100,11 +103,18 @@ class ChatJob : Job() {
 
                 val insertedItems = chatDb.insertOrUpdateConferencesWithMessages(fetchConferences().map {
                     fetchNewMessages(it).let { container ->
-                        ConferenceAssociation(it.toMetaConference(container.isFullyLoaded), container.messages)
+                        val existingConference = chatDb.findConference(it.id)
+                        val isFullyLoaded = container.isFullyLoaded || existingConference?.isFullyLoaded ?: false
+
+                        ConferenceAssociation(it.toMetaConference(isFullyLoaded), container.messages.asReversed())
                     }
                 })
 
-                EventBus.getDefault().post(ChatSynchronizationEvent(insertedItems))
+                StorageHelper.areConferencesSynchronized = true
+
+                if (insertedItems.isNotEmpty()) {
+                    EventBus.getDefault().post(ChatSynchronizationEvent(insertedItems))
+                }
 
                 if (!ConferencesFragment.isActive && !ChatFragment.isActive && insertedItems.isNotEmpty()) {
                     showNotification(context, insertedItems.map { it.conference })
@@ -140,13 +150,13 @@ class ChatJob : Job() {
                     .build()
                     .execute()
 
-            // Per documentation: The api may return some String in case something was wrong.
-            if (result != null) {
-                throw ChatException(ProxerException(ProxerException.ErrorType.UNKNOWN))
-            }
-
             chatDb.removeMessageToSend(it.localId)
             chatDb.markAsRead(it.conferenceId)
+
+            // Per documentation: The api may return some String in case something was wrong.
+            if (result != null) {
+                throw ChatSendMessageException(it.id)
+            }
         }
     }
 
@@ -179,15 +189,14 @@ class ChatJob : Job() {
             }
         }
 
-        StorageHelper.hasConferenceListReachedEnd = true
-
         return changedConferences
     }
 
     private fun fetchNewMessages(conference: Conference): MetaMessageContainer {
-        val newMessages = ArrayList<Message>()
+        val mostRecentMessage = chatDb.getMostRecentMessage(conference.id)?.toNonLocalMessage()
+        val newMessages = mutableListOf<Message>()
+
         var existingUnreadMessageAmount = chatDb.getUnreadMessageAmount(conference.id, conference.lastReadMessageId)
-        var mostRecentMessage = chatDb.getMostRecentMessage(conference.id)?.toNonLocalMessage()
         var nextId = "0"
 
         if (mostRecentMessage == null) {
@@ -208,8 +217,13 @@ class ChatJob : Job() {
                     nextId = fetchedMessages.first().id
                 }
             }
+
+            return MetaMessageContainer(newMessages)
         } else {
-            while (mostRecentMessage!!.date < conference.date ||
+            val mostRecentMessageIdBeforeUpdate = mostRecentMessage.id.toLong()
+            var currentMessage: Message = mostRecentMessage
+
+            while (currentMessage.date < conference.date ||
                     existingUnreadMessageAmount < conference.unreadMessageAmount) {
 
                 val fetchedMessages = api.messenger().messages()
@@ -219,19 +233,23 @@ class ChatJob : Job() {
                         .build()
                         .execute()
 
-                newMessages += fetchedMessages
+                newMessages.addAll(fetchedMessages)
 
                 if (fetchedMessages.size < MESSAGES_ON_PAGE) {
-                    return MetaMessageContainer(newMessages, true)
+                    return MetaMessageContainer(newMessages.filter {
+                        it.id.toLong() > mostRecentMessageIdBeforeUpdate
+                    }, true)
                 } else {
                     existingUnreadMessageAmount += fetchedMessages.size
-                    mostRecentMessage = fetchedMessages.last()
+                    currentMessage = fetchedMessages.last()
                     nextId = fetchedMessages.first().id
                 }
             }
-        }
 
-        return MetaMessageContainer(newMessages)
+            return MetaMessageContainer(newMessages.filter {
+                it.id.toLong() > mostRecentMessageIdBeforeUpdate
+            })
+        }
     }
 
     private fun fetchMoreMessagesAndInsert(conferenceId: String): LocalConferenceAssociation {
@@ -266,4 +284,5 @@ class ChatJob : Job() {
     open class ChatException(val innerError: Throwable) : Exception()
     class ChatSynchronizationException(innerError: Throwable) : ChatException(innerError)
     class ChatMessageException(innerError: Throwable) : ChatException(innerError)
+    class ChatSendMessageException(val id: String) : Exception()
 }

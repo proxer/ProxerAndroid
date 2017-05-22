@@ -48,7 +48,7 @@ class ConferenceAdapter(private val glide: GlideRequests) : BaseAdapter<LocalCon
     }
 
     override fun insert(items: Iterable<LocalConference>) {
-        doUpdates(items.plus(list.filterNot { oldItem ->
+        doUpdates(items.plus(internalList.filterNot { oldItem ->
             items.any { areItemsTheSame(oldItem, it) }
         }).sortedByDescending { it.date })
     }

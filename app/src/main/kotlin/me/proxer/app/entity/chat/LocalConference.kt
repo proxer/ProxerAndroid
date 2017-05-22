@@ -11,7 +11,7 @@ import java.util.*
 data class LocalConference(val localId: Long, val id: String, val topic: String, val customTopic: String,
                            val participantAmount: Int, val image: String, val imageType: String, val isGroup: Boolean,
                            val localIsRead: Boolean, val isRead: Boolean, val date: Date, val unreadMessageAmount: Int,
-                           val lastReadMessageId: String, val isLoadedFully: Boolean) : Parcelable {
+                           val lastReadMessageId: String, val isFullyLoaded: Boolean) : Parcelable {
 
     companion object {
         @Suppress("unused")
@@ -54,7 +54,7 @@ data class LocalConference(val localId: Long, val id: String, val topic: String,
         dest.writeSerializable(date)
         dest.writeInt(unreadMessageAmount)
         dest.writeString(lastReadMessageId)
-        dest.writeInt(if (isLoadedFully) 1 else 0)
+        dest.writeInt(if (isFullyLoaded) 1 else 0)
     }
 
     fun toNonLocalConference(): Conference {
@@ -63,7 +63,7 @@ data class LocalConference(val localId: Long, val id: String, val topic: String,
     }
 }
 
-fun Conference.toLocalConference(localId: Long, isLoadedFully: Boolean): LocalConference {
+fun Conference.toLocalConference(localId: Long, isFullyLoaded: Boolean): LocalConference {
     return LocalConference(localId, id, topic, customTopic, participantAmount, image, imageType, isGroup,
-            isRead, isRead, date, unreadMessageAmount, lastReadMessageId, isLoadedFully)
+            isRead, isRead, date, unreadMessageAmount, lastReadMessageId, isFullyLoaded)
 }

@@ -23,6 +23,9 @@ class ParcelableStringBooleanMap : Parcelable {
         }
     }
 
+    val size: Int
+        get() = internalMap.size
+
     private val internalMap = LinkedHashMap<String, Boolean>()
 
     constructor() : super()
@@ -42,7 +45,9 @@ class ParcelableStringBooleanMap : Parcelable {
         }
     }
 
+    operator fun get(key: String) = internalMap[key]
+
     fun put(key: String, value: Boolean) = internalMap.put(key, value)
     fun remove(key: String) = internalMap.remove(key)
-    operator fun get(key: String) = internalMap[key]
+    fun clear() = internalMap.clear()
 }

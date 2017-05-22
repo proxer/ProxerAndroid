@@ -17,6 +17,7 @@ import android.text.style.StyleSpan
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
+import me.proxer.app.activity.ChatActivity
 import me.proxer.app.activity.DashboardActivity
 import me.proxer.app.entity.chat.LocalConference
 import me.proxer.app.entity.chat.LocalMessage
@@ -228,7 +229,7 @@ object NotificationHelper {
 
         val intent = TaskStackBuilder.create(context)
                 .addNextIntent(DashboardActivity.getSectionIntent(context, DrawerItem.CHAT))
-//                .addNextIntent(ChatActivity.getIntent(context, conference))
+                .addNextIntent(ChatActivity.getIntent(context, conference))
                 .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
 
         return NotificationCompat.Builder(context)

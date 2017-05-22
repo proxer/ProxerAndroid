@@ -67,6 +67,10 @@ abstract class BaseAdapter<T> : RecyclerView.Adapter<BaseAdapter<T>.BaseViewHold
         doUpdates(internalList.minus(item))
     }
 
+    open fun remove(id: Long) {
+        doUpdates(internalList.filterIndexed { index, _ -> getItemId(index) != id })
+    }
+
     open fun clear() {
         internalList.clear()
 

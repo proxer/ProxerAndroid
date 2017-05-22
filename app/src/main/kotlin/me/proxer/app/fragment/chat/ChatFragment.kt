@@ -54,16 +54,17 @@ class ChatFragment : PagedLoadingFragment<Int, LocalMessage>() {
 
     override val itemsOnPage = ChatJob.MESSAGES_ON_PAGE
     override val isLoginRequired = true
+    override val shouldRefreshAlways = true
     override val emptyResultMessage = R.string.error_no_data_chat
     override var hasReachedEnd: Boolean
-        get() = conference.isLoadedFully
+        get() = conference.isFullyLoaded
         set(value) {}
-
-    private val chatActivity
-        get() = activity as ChatActivity
 
     override val layoutManager by lazy { LinearLayoutManager(context).apply { reverseLayout = true } }
     override lateinit var innerAdapter: ChatAdapter
+
+    private val chatActivity
+        get() = activity as ChatActivity
 
     private var conference: LocalConference
         get() = chatActivity.conference
@@ -144,6 +145,12 @@ class ChatFragment : PagedLoadingFragment<Int, LocalMessage>() {
         }
     }
 
+    private val chatErrorCallback = object : ChatRefreshTask.ChatErrorCallback {
+        override fun messageSendFailed(id: String) {
+            innerAdapter.remove(id.toLong())
+        }
+    }
+
     private val emojiPopup by lazy {
         EmojiPopup.Builder.fromRootView(root)
                 .setOnEmojiPopupShownListener {
@@ -155,6 +162,8 @@ class ChatFragment : PagedLoadingFragment<Int, LocalMessage>() {
                 .build(messageInput)
     }
 
+    private var isFirstStart = true
+
     private val emojiButton: ImageButton by bindView(R.id.emojiButton)
     private val inputContainer: ViewGroup by bindView(R.id.inputContainer)
     private val messageInput: EmojiEditText by bindView(R.id.messageInput)
@@ -163,13 +172,16 @@ class ChatFragment : PagedLoadingFragment<Int, LocalMessage>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        innerAdapter = ChatAdapter(conference.isGroup)
+        innerAdapter = ChatAdapter(savedInstanceState, conference.isGroup)
 
         innerAdapter.user = StorageHelper.user
         innerAdapter.callback = adapterCallback
 
         // Does not actually do anything, just registers the EventBus.
         refreshTask.forceExecute(0)
+
+        // Hack for avoiding the ChatJob to run on first start. The job library does not handle rapid scheduling well.
+        isFirstStart = savedInstanceState == null
     }
 
     override fun onResume() {
@@ -177,7 +189,7 @@ class ChatFragment : PagedLoadingFragment<Int, LocalMessage>() {
 
         isActive = true
 
-        if (!ChatJob.isRunning()) {
+        if (!isFirstStart && !ChatJob.isRunning()) {
             ChatJob.scheduleSynchronization()
         }
     }
@@ -208,7 +220,9 @@ class ChatFragment : PagedLoadingFragment<Int, LocalMessage>() {
                 doAsync {
                     innerAdapter.insert(listOf(chatDb.insertMessageToSend(user, conference.id, text)))
 
-                    ChatJob.scheduleSynchronization()
+                    if (!ChatJob.isRunning()) {
+                        ChatJob.scheduleSynchronization()
+                    }
 
                     list.post { list.scrollToPosition(0) }
                 }
@@ -224,16 +238,30 @@ class ChatFragment : PagedLoadingFragment<Int, LocalMessage>() {
         }
     }
 
-    override fun showError(message: Int, buttonMessage: Int, buttonAction: View.OnClickListener?) {
-        inputContainer.visibility = View.GONE
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
 
-        super.showError(message, buttonMessage, buttonAction)
+        innerAdapter.saveInstanceState(outState)
     }
 
-    override fun hideError() {
-        inputContainer.visibility = View.VISIBLE
+    override fun showContent() {
+        super.showContent()
 
-        super.hideError()
+        inputContainer.visibility = View.VISIBLE
+    }
+
+    override fun hideContent() {
+        super.hideContent()
+
+        if (innerAdapter.isEmpty()) {
+            inputContainer.visibility = View.GONE
+        }
+    }
+
+    override fun freshLoad() {
+        state.clear()
+
+        task.freshExecute(constructInput())
     }
 
     override fun constructTask() = TaskBuilder.task(ChatTask(conference.id))
@@ -245,7 +273,7 @@ class ChatFragment : PagedLoadingFragment<Int, LocalMessage>() {
             }
             .build()
 
-    override fun constructRefreshTask() = TaskBuilder.task(ChatRefreshTask(conference.id))
+    override fun constructRefreshTask() = TaskBuilder.task(ChatRefreshTask(conference.id, chatErrorCallback))
             .map {
                 conference = it.conference
 

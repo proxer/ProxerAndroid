@@ -12,6 +12,7 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
 import me.proxer.app.activity.base.ImageTabsActivity
+import me.proxer.app.application.MainApplication.Companion.chatDb
 import me.proxer.app.fragment.profile.ProfileFragment
 import me.proxer.app.fragment.profile.TopTenFragment
 import me.proxer.app.fragment.profile.UserMediaListFragment
@@ -20,6 +21,7 @@ import me.proxer.app.util.ActivityUtils
 import me.proxer.app.util.DeviceUtils
 import me.proxer.library.enums.Category
 import me.proxer.library.util.ProxerUrls
+import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.intentFor
 
 /**
@@ -102,16 +104,20 @@ class ProfileActivity : ImageTabsActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.new_chat -> {
-//                if (username != null && image != null) {
-//                    val existingChat = chatDatabase.getChat(username!!)
-//
-//                    when (existingChat) {
-//                        null -> NewChatActivity.navigateTo(this, Participant(username!!, image!!))
-//                        else -> ChatActivity.navigateTo(this, existingChat)
-//                    }
-//                }
+                if (username != null && image != null) {
+                    doAsync {
+                        val existingChat = chatDb.findConferenceForUser(username!!)
 
-//                return true
+                        when (existingChat) {
+                            null -> {
+//                                NewChatActivity.navigateTo(this, Participant(username!!, image!!))
+                            }
+                            else -> weakRef.get()?.let { ChatActivity.navigateTo(it, existingChat) }
+                        }
+                    }
+                }
+
+                return true
             }
             R.id.new_group -> {
 //                if (username != null && image != null) {
