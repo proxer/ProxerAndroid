@@ -191,9 +191,6 @@ class ChatAdapter(savedInstanceState: Bundle?, val isGroup: Boolean) : BaseAdapt
             }
         }
 
-        val test2 = 2
-        val test = test2
-
         doUpdates(nonSynchronizedItems.sortedBy { it.id.toLong() }
                 .plus(synchronizedItems.sortedByDescending { it.id.toLong() }))
     }
