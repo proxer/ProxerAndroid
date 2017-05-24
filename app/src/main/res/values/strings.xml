@@ -43,7 +43,7 @@
 
     <string name="error_invalid_token">Du wurdest zu deiner Sicherheit automatisch abgemeldet. Melde dich erneut an
     </string>
-    <string name="error_login_credentials">Falsches Password ode falscher Nutzername</string>
+    <string name="error_login_credentials">Falsches Passwort oder falscher Nutzername</string>
     <string name="error_login_two_factor_authentication">Bitte gebe deinen Geheimschlüssel der
         Zwei-Faktor-Authentifizierung ein!</string>
     <string name="error_already_in_list">Es gibt bereits einen Eintrag in deiner Liste</string>
