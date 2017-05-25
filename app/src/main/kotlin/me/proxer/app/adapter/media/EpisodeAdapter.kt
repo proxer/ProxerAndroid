@@ -198,11 +198,7 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?, g
                     }
                 }
 
-                downloadContainer.post {
-                    downloadContainer.layoutParams.width = downloadContainer.height
-                }
-
-                bindDownload(item.category, item.number, language, download, downloadProgress)
+                bindDownload(item.category, item.number, language, downloadContainer, download, downloadProgress)
                 bindHosterImages(hosterImages, hostersView)
             }
         }
@@ -227,7 +223,8 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?, g
             }
         }
 
-        private fun bindDownload(category: Category, episode: Int, language: MediaLanguage, download: ImageView,
+        private fun bindDownload(category: Category, episode: Int, language: MediaLanguage,
+                                 downloadContainer: ViewGroup, download: ImageView,
                                  downloadProgress: MaterialProgressBar) {
             downloadProgress.tag.let {
                 if (it is Future<*>) {
@@ -243,6 +240,7 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?, g
                                 .sizeDp(32)
 
                         uiThread {
+                            downloadContainer.visibility = View.VISIBLE
                             downloadProgress.visibility = View.INVISIBLE
                             download.visibility = View.VISIBLE
                             download.setImageDrawable(icon)
@@ -255,29 +253,35 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?, g
 
                         if (LocalMangaJob.isScheduledOrRunning(entryId, episode, language.toGeneralLanguage())) {
                             uiThread {
+                                downloadContainer.visibility = View.VISIBLE
                                 download.visibility = View.INVISIBLE
                                 downloadProgress.visibility = View.VISIBLE
                                 download.setImageDrawable(icon)
                                 downloadProgress.setOnClickListener {
                                     LocalMangaJob.cancel(entryId, episode, language.toGeneralLanguage())
 
-                                    bindDownload(category, episode, language, download, downloadProgress)
+                                    bindDownload(category, episode, language, downloadContainer,
+                                            download, downloadProgress)
                                 }
                             }
                         } else {
                             uiThread {
+                                downloadContainer.visibility = View.VISIBLE
                                 downloadProgress.visibility = View.INVISIBLE
                                 download.visibility = View.VISIBLE
                                 download.setImageDrawable(icon)
                                 download.setOnClickListener {
                                     LocalMangaJob.schedule(it.context, entryId, episode, language.toGeneralLanguage())
 
-                                    bindDownload(category, episode, language, download, downloadProgress)
+                                    bindDownload(category, episode, language, downloadContainer,
+                                            download, downloadProgress)
                                 }
                             }
                         }
                     }
                 }
+            } else {
+                downloadContainer.visibility = View.GONE
             }
         }
 
