@@ -116,7 +116,8 @@
         </activity>
 
         <!--<activity android:name=".activity.chat.NewChatActivity"/>-->
-        <!--<activity android:name=".activity.chat.ConferenceInfoActivity"/>-->
+
+        <activity android:name=".activity.ConferenceInfoActivity" />
 
         <activity android:name=".activity.MangaActivity">
             <intent-filter>

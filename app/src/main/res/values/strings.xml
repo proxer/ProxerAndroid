@@ -297,6 +297,10 @@
     <string name="fragment_chat_reply">"@%s "</string>
     <string name="fragment_chat_send">Senden</string>
 
+    <string name="fragment_conference_info_info_title">Info</string>
+    <string name="fragment_conference_info_participants_title">Teilnehmer</string>
+    <string name="fragment_conference_info_time">Erstellt am %1$s um %2$s</string>
+
     <string name="view_media_control_uploader">Uploader</string>
     <string name="view_media_control_translator_group">Translator-Gruppe</string>
     <string name="view_media_control_date">Datum</string>

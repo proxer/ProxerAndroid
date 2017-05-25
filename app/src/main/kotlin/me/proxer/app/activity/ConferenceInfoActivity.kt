@@ -1,38 +1,28 @@
 package me.proxer.app.activity
 
 import android.app.Activity
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import me.proxer.app.R
 import me.proxer.app.activity.base.MainActivity
 import me.proxer.app.entity.chat.LocalConference
-import me.proxer.app.fragment.chat.ChatFragment
+import me.proxer.app.fragment.chat.ConferenceInfoFragment
 import me.proxer.app.util.extension.bindView
-import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.startActivity
 
-class ChatActivity : MainActivity() {
+class ConferenceInfoActivity : MainActivity() {
 
     companion object {
         private const val CONFERENCE_EXTRA = "conference"
 
         fun navigateTo(context: Activity, conference: LocalConference) {
-            context.startActivity<ChatActivity>(CONFERENCE_EXTRA to conference)
-        }
-
-        fun getIntent(context: Context, conference: LocalConference): Intent {
-            return context.intentFor<ChatActivity>(CONFERENCE_EXTRA to conference)
+            context.startActivity<ConferenceInfoActivity>(CONFERENCE_EXTRA to conference)
         }
     }
 
-    var conference: LocalConference
+    val conference: LocalConference
         get() = intent.getParcelableExtra(CONFERENCE_EXTRA)
-        set(value) {
-            intent.putExtra(CONFERENCE_EXTRA, value)
-        }
 
     private val toolbar: Toolbar by bindView(R.id.toolbar)
 
@@ -44,18 +34,11 @@ class ChatActivity : MainActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         title = conference.topic
-        toolbar.setOnClickListener {
-            if (conference.isGroup) {
-                ConferenceInfoActivity.navigateTo(this, conference)
-            } else {
-                ProfileActivity.navigateTo(this, null, conference.topic, conference.image)
-            }
-        }
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                     .setAllowOptimization(true)
-                    .replace(R.id.container, ChatFragment.newInstance())
+                    .replace(R.id.container, ConferenceInfoFragment.newInstance())
                     .commitNow()
         }
     }
