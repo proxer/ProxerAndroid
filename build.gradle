@@ -23,7 +23,7 @@ ext {
     // UI components
     aboutLibrariesVersion = '5.9.6'
     materialDrawerVersion = '5.9.1'
-    iconicsVersion = '2.8.4'
+    iconicsVersion = '2.8.5'
     communityMaterialTypefaceVersion = '1.9.32.1'
     crossfaderVersion = '1.5.0'
     materialAboutVersion = '1.9.0'
