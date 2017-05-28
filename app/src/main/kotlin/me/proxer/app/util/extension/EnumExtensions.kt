@@ -135,6 +135,7 @@ fun Synonym.toTypeAppString(context: Context): String {
         SynonymType.GERMAN -> R.string.synonym_german_type
         SynonymType.JAPANESE -> R.string.synonym_japanese_type
         SynonymType.KOREAN -> R.string.synonym_korean_type
+        SynonymType.CHINESE -> R.string.synonym_chinese_type
         SynonymType.ORIGINAL_ALTERNATIVE -> R.string.synonym_alternative_type
     })
 }

@@ -165,6 +165,7 @@
     <string name="synonym_german_type">Deutscher Titel</string>
     <string name="synonym_japanese_type">Japanischer Titel</string>
     <string name="synonym_korean_type">Koreanischer Titel</string>
+    <string name="synonym_chinese_type">Chinesischer Titel</string>
     <string name="synonym_alternative_type">Alternativer Titel</string>
 
     <string name="license_licensed">Lizenziert</string>
