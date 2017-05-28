@@ -120,7 +120,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0-alpha1'
+        classpath 'com.android.tools.build:gradle:3.0.0-alpha2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.1.2-4"
     }
 }
