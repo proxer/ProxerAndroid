@@ -4,7 +4,10 @@
 
     <item
         android:id="@+id/action_share"
-        android:icon="@drawable/ic_action_share"
         android:title="@string/action_share"
+        app:iiv_color="@android:color/white"
+        app:iiv_icon="cmd_share_variant"
+        app:iiv_padding="2dp"
+        app:iiv_size="24dp"
         app:showAsAction="ifRoom" />
 </menu>

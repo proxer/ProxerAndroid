@@ -12,6 +12,7 @@ import android.widget.ImageButton
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
+import com.mikepenz.iconics.utils.IconicsMenuInflatorUtil
 import com.rubengees.ktask.util.TaskBuilder
 import com.vanniktech.emoji.EmojiEditText
 import com.vanniktech.emoji.EmojiPopup
@@ -96,7 +97,7 @@ class ChatFragment : PagedLoadingFragment<Int, LocalMessage>() {
         }
 
         override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
-            mode.menuInflater.inflate(R.menu.fragment_chat_cab, menu)
+            IconicsMenuInflatorUtil.inflate(mode.menuInflater, context, R.menu.fragment_chat_cab, menu, true)
 
             return true
         }

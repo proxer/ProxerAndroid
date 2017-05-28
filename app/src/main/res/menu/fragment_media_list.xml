@@ -4,8 +4,11 @@
 
     <item
         android:id="@+id/filter"
-        android:icon="@drawable/ic_action_filter"
         android:title="@string/action_filter"
+        app:iiv_color="@android:color/white"
+        app:iiv_icon="cmd_filter_variant"
+        app:iiv_padding="2dp"
+        app:iiv_size="24dp"
         app:showAsAction="ifRoom">
 
         <menu>
@@ -75,8 +78,11 @@
 
     <item
         android:id="@+id/sort"
-        android:icon="@drawable/ic_action_sort"
         android:title="@string/action_sort"
+        app:iiv_color="@android:color/white"
+        app:iiv_icon="cmd_sort"
+        app:iiv_padding="2dp"
+        app:iiv_size="24dp"
         app:showAsAction="ifRoom">
         <menu>
             <group
@@ -104,8 +110,11 @@
 
     <item
         android:id="@+id/search"
-        android:icon="@drawable/ic_action_search"
         android:title="@string/action_search"
         app:actionViewClass="android.support.v7.widget.SearchView"
+        app:iiv_color="@android:color/white"
+        app:iiv_icon="cmd_magnify"
+        app:iiv_padding="2dp"
+        app:iiv_size="24dp"
         app:showAsAction="always|collapseActionView" />
 </menu>

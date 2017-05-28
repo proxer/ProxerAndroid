@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.*
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
+import com.mikepenz.iconics.utils.IconicsMenuInflatorUtil
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import com.rubengees.ktask.android.AndroidLifecycleTask
 import com.rubengees.ktask.android.bindToLifecycle
@@ -215,7 +216,7 @@ class MangaFragment : LoadingFragment<MangaInput, MangaChapterInfo>() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater) {
-        inflater.inflate(R.menu.fragment_manga, menu)
+        IconicsMenuInflatorUtil.inflate(inflater, context, R.menu.fragment_manga, menu, true)
 
         super.onCreateOptionsMenu(menu, inflater)
     }

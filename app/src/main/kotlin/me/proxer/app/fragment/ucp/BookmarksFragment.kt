@@ -8,6 +8,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
+import com.mikepenz.iconics.utils.IconicsMenuInflatorUtil
 import com.rubengees.ktask.android.AndroidLifecycleTask
 import com.rubengees.ktask.android.bindToLifecycle
 import com.rubengees.ktask.util.TaskBuilder
@@ -129,7 +130,7 @@ class BookmarksFragment : PagedLoadingFragment<ProxerCall<List<Bookmark>>, Bookm
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.fragment_bookmarks, menu)
+        IconicsMenuInflatorUtil.inflate(inflater, context, R.menu.fragment_bookmarks, menu, true)
 
         when (category) {
             Category.ANIME -> menu.findItem(R.id.anime).isChecked = true

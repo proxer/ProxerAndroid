@@ -160,7 +160,7 @@ class DashboardActivity : MainActivity() {
     private fun displayFirstPage(savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
             if (StorageHelper.isFirstStart) {
-                IntroductionHelper(this)
+                IntroductionHelper.introduce(this)
             } else {
                 drawer.select(getItemToLoad())
             }

@@ -4,13 +4,19 @@
 
     <item
         android:id="@+id/copy"
-        android:icon="@drawable/ic_action_copy"
         android:title="@string/action_copy"
+        app:iiv_color="@android:color/white"
+        app:iiv_icon="cmd_content_copy"
+        app:iiv_padding="2dp"
+        app:iiv_size="24dp"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/reply"
-        android:icon="@drawable/ic_action_reply"
         android:title="@string/action_reply"
+        app:iiv_color="@android:color/white"
+        app:iiv_icon="cmd_reply"
+        app:iiv_padding="2dp"
+        app:iiv_size="24dp"
         app:showAsAction="ifRoom" />
 </menu>

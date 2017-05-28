@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.widget.ImageView
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
+import com.mikepenz.iconics.utils.IconicsMenuInflatorUtil
 import me.proxer.app.R
 import me.proxer.app.activity.base.ImageTabsActivity
 import me.proxer.app.application.MainApplication.Companion.chatDb
@@ -95,7 +96,7 @@ class ProfileActivity : ImageTabsActivity() {
         val user = StorageHelper.user
 
         if (user == null || (user.id != userId && !user.name.equals(username, true))) {
-            menuInflater.inflate(R.menu.activity_profile, menu)
+            IconicsMenuInflatorUtil.inflate(menuInflater, this, R.menu.activity_profile, menu, true)
         }
 
         return super.onCreateOptionsMenu(menu)

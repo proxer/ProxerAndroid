@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.*
+import com.mikepenz.iconics.utils.IconicsMenuInflatorUtil
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.activity.ChatActivity
@@ -76,7 +77,7 @@ class ConferencesFragment : LoadingFragment<Unit, List<LocalConference>>() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater) {
-        inflater.inflate(R.menu.fragment_conferences, menu)
+        IconicsMenuInflatorUtil.inflate(inflater, context, R.menu.fragment_conferences, menu, true)
 
         super.onCreateOptionsMenu(menu, inflater)
     }

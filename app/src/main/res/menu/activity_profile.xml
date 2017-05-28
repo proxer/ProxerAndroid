@@ -4,12 +4,19 @@
 
     <item
         android:id="@+id/new_chat"
-        android:icon="@drawable/ic_action_new_chat"
         android:title="@string/action_send_message"
+        app:iiv_color="@android:color/white"
+        app:iiv_icon="cmd_message_text"
+        app:iiv_padding="2dp"
+        app:iiv_size="24dp"
         app:showAsAction="ifRoom" />
+
     <item
         android:id="@+id/new_group"
-        android:icon="@drawable/ic_action_new_group"
         android:title="@string/action_new_group_with_user"
+        app:iiv_color="@android:color/white"
+        app:iiv_icon="cmd_account_multiple_plus"
+        app:iiv_padding="2dp"
+        app:iiv_size="24dp"
         app:showAsAction="ifRoom" />
 </menu>
