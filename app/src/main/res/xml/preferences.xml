@@ -24,7 +24,7 @@
         <!--suppress AndroidUnknownAttribute -->
         <ListPreference
             style="@style/Preference.Material.DialogPreference.ListPreference.SimpleMenu"
-            android:defaultValue="0"
+            android:defaultValue="2"
             android:entries="@array/theme_titles"
             android:entryValues="@array/theme_values"
             android:key="theme"

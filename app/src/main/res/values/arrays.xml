@@ -2,7 +2,6 @@
 <resources>
 
     <string-array name="theme_titles">
-        <item>@string/preference_theme_system</item>
         <item>@string/preference_theme_auto</item>
         <item>@string/preference_theme_dark</item>
         <item>@string/preference_theme_light</item>
@@ -12,7 +11,6 @@
         <item>0</item>
         <item>1</item>
         <item>2</item>
-        <item>3</item>
     </string-array>
 
     <string-array name="start_page_titles">

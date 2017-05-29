@@ -43,11 +43,10 @@ object PreferenceHelper {
 
     @AppCompatDelegate.NightMode
     fun getNightMode(context: Context): Int {
-        return when (getDefaultSharedPreferences(context).getString(THEME, "0")) {
-            "0" -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-            "1" -> AppCompatDelegate.MODE_NIGHT_AUTO
-            "2" -> AppCompatDelegate.MODE_NIGHT_YES
-            "3" -> AppCompatDelegate.MODE_NIGHT_NO
+        return when (getDefaultSharedPreferences(context).getString(THEME, "2")) {
+            "0" -> AppCompatDelegate.MODE_NIGHT_AUTO
+            "1" -> AppCompatDelegate.MODE_NIGHT_YES
+            "2" -> AppCompatDelegate.MODE_NIGHT_NO
             else -> throw RuntimeException("Invalid value")
         }
     }
