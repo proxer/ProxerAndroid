@@ -7,8 +7,6 @@ import com.klinker.android.link_builder.TouchableMovementMethod
 import com.vanniktech.emoji.EmojiTextView
 
 /**
- * TODO: Describe class
- *
  * @author Ruben Gees
  */
 class LinkConsumableEmojiTextView : EmojiTextView {
@@ -19,13 +17,13 @@ class LinkConsumableEmojiTextView : EmojiTextView {
     override fun onTouchEvent(event: MotionEvent): Boolean {
         super.onTouchEvent(event)
 
-        val movementMethod = movementMethod
+        movementMethod.let {
+            if (it is TouchableMovementMethod) {
+                val span = it.pressedSpan
 
-        if (movementMethod is TouchableMovementMethod) {
-            val span = movementMethod.pressedSpan
-
-            if (span != null) {
-                return true
+                if (span != null) {
+                    return true
+                }
             }
         }
 

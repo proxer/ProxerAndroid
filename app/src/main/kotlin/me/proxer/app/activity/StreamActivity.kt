@@ -8,9 +8,12 @@ import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
 import com.afollestad.materialdialogs.MaterialDialog
+import com.devbrackets.android.exomedia.listener.VideoControlsButtonListener
 import com.devbrackets.android.exomedia.listener.VideoControlsVisibilityListener
 import com.devbrackets.android.exomedia.ui.widget.VideoControls.*
 import com.devbrackets.android.exomedia.ui.widget.VideoView
+import com.mikepenz.community_material_typeface_library.CommunityMaterial
+import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
 import me.proxer.app.activity.base.MainActivity
 import me.proxer.app.util.ErrorUtils
@@ -102,7 +105,41 @@ class StreamActivity : MainActivity() {
 
     private fun setupPlayer() {
         player.setBackgroundColor(ContextCompat.getColor(this, android.R.color.black))
-        player.setVideoURI(uri)
+
+        player.videoControls?.let {
+            it.setNextDrawable(IconicsDrawable(this, CommunityMaterial.Icon.cmd_fast_forward)
+                    .colorRes(android.R.color.white)
+                    .sizeDp(24))
+            it.setPreviousDrawable(IconicsDrawable(this, CommunityMaterial.Icon.cmd_rewind)
+                    .colorRes(android.R.color.white)
+                    .sizeDp(24))
+
+            it.setNextButtonRemoved(false)
+            it.setPreviousButtonRemoved(false)
+            it.setButtonListener(object : VideoControlsButtonListener {
+                override fun onPlayPauseClicked() = false
+                override fun onRewindClicked() = false
+                override fun onFastForwardClicked() = false
+
+                override fun onNextClicked() = when (player.currentPosition + 15000L >= player.duration) {
+                    true -> player.seekTo(player.duration)
+                    false -> player.seekTo(player.currentPosition + 15000L)
+                }.run { true }
+
+                override fun onPreviousClicked() = when (player.currentPosition - 15000L <= 0L) {
+                    true -> player.seekTo(0L)
+                    false -> player.seekTo(player.currentPosition - 15000L)
+                }.run { true }
+            })
+
+            it.setVisibilityListener(object : VideoControlsVisibilityListener {
+                override fun onControlsShown() {
+                    // Nothing to do here.
+                }
+
+                override fun onControlsHidden() = toggleFullscreen(true)
+            })
+        }
 
         player.setOnErrorListener {
             ErrorUtils.handle(this, it).let {
@@ -126,17 +163,11 @@ class StreamActivity : MainActivity() {
             false
         }
 
-        player.videoControls?.setVisibilityListener(object : VideoControlsVisibilityListener {
-            override fun onControlsShown() {
-                // Nothing to do here.
-            }
-
-            override fun onControlsHidden() = toggleFullscreen(true)
-        })
-
         player.setOnPreparedListener {
             player.start()
         }
+
+        player.setVideoURI(uri)
     }
 
     private fun setupToolbar() {

@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <string name="app_name">ProxerMe</string>
 
@@ -452,10 +452,12 @@
     <string name="share_title">Teilen über</string>
 
     <string name="share_media">Sieh dir %1$s auf Proxer.Me, deiner Anime und Manga Community an: %2$s</string>
-    <string name="share_anime">Schau dir Folge %1$d von %2$s auf Proxer.Me, deiner Anime und Manga Community
-        an: %3$s</string>
-    <string name="share_manga">Lies Kapitel %1$d von %2$s auf Proxer.Me, deiner Anime und Manga Community: %3$s</string>
-    <string name="share_manga_title">Lies %1$s von %2$s auf Proxer.Me, deiner Anime und Manga Community: %3$s</string>
+    <string name="share_anime" tools:ignore="PluralsCandidate">Schau dir Folge %1$d von %2$s auf Proxer.Me, deiner Anime
+        und Manga Community an: %3$s</string>
+    <string name="share_manga" tools:ignore="PluralsCandidate">Lies Kapitel %1$d von %2$s auf Proxer.Me, deiner Anime
+        und Manga Community: %3$s</string>
+    <string name="share_manga_title" tools:ignore="PluralsCandidate">Lies %1$s von %2$s auf Proxer.Me, deiner Anime und
+        Manga Community: %3$s</string>
     <string name="share_industry">Schau dir die Industrie %1$s auf Proxer.Me, deiner Anime und Manga Community
         an: %2$s</string>
     <string name="share_translator_group">Schau dir die Gruppe %1$s auf Proxer.Me, deiner Anime und Manga Community
