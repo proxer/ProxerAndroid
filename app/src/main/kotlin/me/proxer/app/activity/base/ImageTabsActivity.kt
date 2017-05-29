@@ -150,7 +150,7 @@ abstract class ImageTabsActivity : MainActivity() {
                 it.applyRecursively {
                     if (it is TextView) {
                         when (isHeaderImageVisible) {
-                            true -> it.setShadowLayer(3f, 0f, 0f, ContextCompat.getColor(this, android.R.color.black))
+                            true -> it.setShadowLayer(4f, 0f, 0f, ContextCompat.getColor(this, android.R.color.black))
                             false -> it.setShadowLayer(0f, 0f, 0f, 0)
                         }
                     }
