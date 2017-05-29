@@ -122,12 +122,16 @@ class AnimeActivity : MainActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_share -> {
-                ShareCompat.IntentBuilder
-                        .from(this)
-                        .setText("https://proxer.me/watch/$id/$episode/${ProxerUtils.getApiEnumName(language)}")
-                        .setType("text/plain")
-                        .setChooserTitle(getString(R.string.share_title))
-                        .startChooser()
+                name?.let {
+                    val link = "https://proxer.me/watch/$id/$episode/${ProxerUtils.getApiEnumName(language)}"
+
+                    ShareCompat.IntentBuilder
+                            .from(this)
+                            .setText(getString(R.string.share_anime, episode, it, link))
+                            .setType("text/plain")
+                            .setChooserTitle(getString(R.string.share_title))
+                            .startChooser()
+                }
 
                 return true
             }

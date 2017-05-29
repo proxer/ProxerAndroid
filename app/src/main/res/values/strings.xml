@@ -203,7 +203,8 @@
     <string name="dialog_app_required_content">Zum Verwenden dieses Streams ist die %s-App nötig</string>
     <string name="dialog_app_required_positive">Installieren</string>
 
-    <string name="dialog_clean_manga_content">Sollen alle heruntergeladenen Kapitel und Seiten gelöscht werden? Das betrifft auch zwischengespeicherte Seiten.</string>
+    <string name="dialog_clean_manga_content">Sollen alle heruntergeladenen Kapitel und Seiten gelöscht werden? Das
+        betrifft auch zwischengespeicherte Seiten.</string>
     <string name="dialog_clean_manga_positive">Alles löschen</string>
 
     <string name="fragment_ucp_overview_username">Nutzername</string>
@@ -450,6 +451,16 @@
     <string name="rank_kami_sama">Kami-Sama</string>
 
     <string name="share_title">Teilen über</string>
+
+    <string name="share_media">Sieh dir %1$s auf Proxer.Me, deiner Anime und Manga Community an: %2$s</string>
+    <string name="share_anime">Schau dir Folge %1$d von %2$s auf Proxer.Me, deiner Anime und Manga Community
+        an: %3$s</string>
+    <string name="share_manga">Lies Kapitel %1$d von %2$s auf Proxer.Me, deiner Anime und Manga Community: %3$s</string>
+    <string name="share_manga_title">Lies %1$s von %2$s auf Proxer.Me, deiner Anime und Manga Community: %3$s</string>
+    <string name="share_industry">Schau dir die Industrie %1$s auf Proxer.Me, deiner Anime und Manga Community
+        an: %2$s</string>
+    <string name="share_translator_group">Schau dir die Gruppe %1$s auf Proxer.Me, deiner Anime und Manga Community
+        an: %2$s</string>
 
     <string name="shortcut_disabled_message">Diese Verknüpung ist nicht mehr verfügbar</string>
 

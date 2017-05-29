@@ -135,12 +135,22 @@ class MangaActivity : MainActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_share -> {
-                ShareCompat.IntentBuilder
-                        .from(this)
-                        .setText("https://proxer.me/chapter/$id/$episode/${ProxerUtils.getApiEnumName(language)}")
-                        .setType("text/plain")
-                        .setChooserTitle(getString(R.string.share_title))
-                        .startChooser()
+                name?.let {
+                    val link = "https://proxer.me/chapter/$id/$episode/${ProxerUtils.getApiEnumName(language)}"
+                    val text = chapterTitle.let { title ->
+                        when {
+                            title.isNullOrBlank() -> getString(R.string.share_manga, episode, it, link)
+                            else -> getString(R.string.share_manga_title, title, it, link)
+                        }
+                    }
+
+                    ShareCompat.IntentBuilder
+                            .from(this)
+                            .setText(text)
+                            .setType("text/plain")
+                            .setChooserTitle(getString(R.string.share_title))
+                            .startChooser()
+                }
 
                 return true
             }

@@ -93,12 +93,16 @@ class MediaActivity : ImageTabsActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_share -> {
-                ShareCompat.IntentBuilder
-                        .from(this)
-                        .setText("https://proxer.me/info/$id")
-                        .setType("text/plain")
-                        .setChooserTitle(getString(R.string.share_title))
-                        .startChooser()
+                name?.let {
+                    val link = "https://proxer.me/info/$id"
+
+                    ShareCompat.IntentBuilder
+                            .from(this)
+                            .setText(getString(R.string.share_media, it, link))
+                            .setType("text/plain")
+                            .setChooserTitle(getString(R.string.share_title))
+                            .startChooser()
+                }
 
                 return true
             }
