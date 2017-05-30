@@ -41,7 +41,11 @@ class MangaPageDownloadTask(private val filesDir: File) : LeafTask<MangaPageDown
                                 throw(RuntimeException())
                             }
 
-                            call = MainApplication.client.newCall(Request.Builder().url(url).build())
+                            call = MainApplication.client.newCall(Request.Builder()
+                                    .header("Accept-Encoding", "identity")
+                                    .url(url)
+                                    .build())
+
                             call?.execute()?.let {
                                 if (it.isSuccessful) {
                                     val body = it.body() ?: throw IOException()
