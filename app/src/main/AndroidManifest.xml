@@ -103,8 +103,7 @@
 
         <activity
             android:name=".activity.StreamActivity"
-            android:configChanges="orientation|keyboardHidden|screenLayout|screenSize"
-            android:theme="@style/Theme.App.Black">
+            android:configChanges="orientation|keyboardHidden|screenLayout|screenSize">
             <intent-filter tools:ignore="AppLinkUrlError">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />

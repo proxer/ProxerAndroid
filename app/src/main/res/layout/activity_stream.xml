@@ -5,6 +5,7 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/black"
     tools:context=".activity.StreamActivity">
 
     <RelativeLayout
@@ -28,7 +29,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="@null"
+                android:background="@drawable/exomedia_default_controls_text_background"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
         </FrameLayout>
     </RelativeLayout>

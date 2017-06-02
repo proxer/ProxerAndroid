@@ -2,7 +2,6 @@ package me.proxer.app.activity
 
 import android.os.Build
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
@@ -104,8 +103,6 @@ class StreamActivity : MainActivity() {
     }
 
     private fun setupPlayer() {
-        player.setBackgroundColor(ContextCompat.getColor(this, android.R.color.black))
-
         player.videoControls?.let {
             it.setNextDrawable(IconicsDrawable(this, CommunityMaterial.Icon.cmd_fast_forward)
                     .colorRes(android.R.color.white)

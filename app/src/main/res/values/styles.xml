@@ -22,10 +22,6 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
-    <style name="Theme.App.Black" parent="Theme.App">
-        <item name="android:windowBackground">@android:color/black</item>
-    </style>
-
     <style name="Widget.App.ActionMode" parent="@style/Widget.AppCompat.ActionMode">
         <item name="background">@color/colorPrimaryLight</item>
     </style>
