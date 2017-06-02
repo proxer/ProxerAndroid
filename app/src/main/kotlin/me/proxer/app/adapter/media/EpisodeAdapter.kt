@@ -198,8 +198,9 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?, g
                     }
                 }
 
-                bindDownload(item.category, item.number, language, downloadContainer, download, downloadProgress)
                 bindHosterImages(hosterImages, hostersView)
+                bindDownload(item.category, item.number, language, downloadContainer, download,
+                        downloadProgress)
             }
         }
 
@@ -233,51 +234,52 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?, g
             }
 
             if (category == Category.MANGA && isLoggedIn) {
+
                 downloadProgress.tag = doAsync {
-                    if (mangaDb.containsChapter(entryId, episode, language.toGeneralLanguage())) {
-                        val icon = IconicsDrawable(download.context, CommunityMaterial.Icon.cmd_cloud_check)
-                                .colorRes(R.color.icon)
-                                .sizeDp(32)
+                    val containsChapter = mangaDb.containsChapter(entryId, episode, language.toGeneralLanguage())
+                    val isScheduledOrRunning = LocalMangaJob.isScheduledOrRunning(entryId, episode,
+                            language.toGeneralLanguage())
 
-                        uiThread {
-                            downloadContainer.visibility = View.VISIBLE
-                            downloadProgress.visibility = View.INVISIBLE
-                            download.visibility = View.VISIBLE
-                            download.setImageDrawable(icon)
-                            download.setOnClickListener(null)
+                    val progressVisibility = when (isScheduledOrRunning) {
+                        true -> View.VISIBLE
+                        false -> View.INVISIBLE
+                    }
+
+                    val downloadVisibility = when (isScheduledOrRunning) {
+                        true -> View.INVISIBLE
+                        false -> View.VISIBLE
+                    }
+
+                    val icon = IconicsDrawable(download.context, when (containsChapter) {
+                        true -> CommunityMaterial.Icon.cmd_cloud_check
+                        false -> CommunityMaterial.Icon.cmd_download
+                    }).colorRes(R.color.icon).sizeDp(32)
+
+                    val downloadClickListener = when (containsChapter) {
+                        true -> null
+                        false -> View.OnClickListener {
+                            LocalMangaJob.schedule(it.context, entryId, episode, language.toGeneralLanguage())
+
+                            bindDownload(category, episode, language, downloadContainer, download, downloadProgress)
                         }
-                    } else {
-                        val icon = IconicsDrawable(download.context, CommunityMaterial.Icon.cmd_download)
-                                .colorRes(R.color.icon)
-                                .sizeDp(32)
+                    }
 
-                        if (LocalMangaJob.isScheduledOrRunning(entryId, episode, language.toGeneralLanguage())) {
-                            uiThread {
-                                downloadContainer.visibility = View.VISIBLE
-                                download.visibility = View.INVISIBLE
-                                downloadProgress.visibility = View.VISIBLE
-                                download.setImageDrawable(icon)
-                                downloadProgress.setOnClickListener {
-                                    LocalMangaJob.cancel(entryId, episode, language.toGeneralLanguage())
+                    val downloadProgressClickListener = when (isScheduledOrRunning) {
+                        true -> View.OnClickListener { _: View ->
+                            LocalMangaJob.cancel(entryId, episode, language.toGeneralLanguage())
 
-                                    bindDownload(category, episode, language, downloadContainer,
-                                            download, downloadProgress)
-                                }
-                            }
-                        } else {
-                            uiThread {
-                                downloadContainer.visibility = View.VISIBLE
-                                downloadProgress.visibility = View.INVISIBLE
-                                download.visibility = View.VISIBLE
-                                download.setImageDrawable(icon)
-                                download.setOnClickListener {
-                                    LocalMangaJob.schedule(it.context, entryId, episode, language.toGeneralLanguage())
-
-                                    bindDownload(category, episode, language, downloadContainer,
-                                            download, downloadProgress)
-                                }
-                            }
+                            bindDownload(category, episode, language, downloadContainer, download, downloadProgress)
                         }
+                        false -> null
+                    }
+
+                    uiThread {
+                        downloadContainer.visibility = View.VISIBLE
+                        downloadProgress.visibility = progressVisibility
+                        download.visibility = downloadVisibility
+                        download.setImageDrawable(icon)
+                        download.setOnClickListener(downloadClickListener)
+                        downloadProgress.setOnClickListener(downloadProgressClickListener)
                     }
                 }
             } else {
@@ -288,6 +290,7 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?, g
         private fun bindHosterImages(hosterImages: List<String>?, hostersView: ViewGroup) {
             if (hosterImages == null || hosterImages.isEmpty()) {
                 hostersView.removeAllViews()
+
                 hostersView.visibility = View.GONE
             } else {
                 hostersView.visibility = View.VISIBLE
