@@ -112,7 +112,6 @@ dependencies {
     implementation deps.okio
     implementation deps.linkBuilder
     implementation deps.easyHeaderFooterAdapter
-    implementation deps.jsr305
     kapt deps.glideCompiler
 
     implementation deps.strictModeCompat

@@ -1,5 +1,5 @@
 -optimizations !field/*,!class/merging/*
--optimizationpasses 100
+-optimizationpasses 10
 -allowaccessmodification
 -dontpreverify
 
@@ -28,17 +28,22 @@
 }
 
 -keepclassmembers class * implements android.os.Parcelable {
-  public static final android.os.Parcelable$Creator CREATOR;
+    public static final android.os.Parcelable$Creator CREATOR;
 }
 
--keepclassmembers class **.R$* {
-    public static <fields>;
+-keepclasseswithmembers class **.R$* {
+    <fields>;
 }
 
 # Preserve annotated Javascript interface methods.
 -keepclassmembers class * {
     @android.webkit.JavascriptInterface <methods>;
 }
+
+# Suppress warnings about duplicate classes.
+-dontnote android.net.http.*
+-dontnote org.apache.commons.codec.**
+-dontnote org.apache.http.**
 
 # The support library contains references to newer platform versions.
 # Don't warn about those in case this app is linking against an older
@@ -48,7 +53,7 @@
 
 # Understand the @Keep support annotation.
 -keep class android.support.annotation.Keep
--keep @android.support.annotation.Keep class * {*;}
+-keep @android.support.annotation.Keep class * { *; }
 
 -keepclasseswithmembers class * {
     @android.support.annotation.Keep <methods>;
@@ -63,17 +68,18 @@
 }
 
 # EventBus
+-keep enum org.greenrobot.eventbus.ThreadMode { *; }
+
 -keepclassmembers class ** {
     @org.greenrobot.eventbus.Subscribe <methods>;
 }
--keep enum org.greenrobot.eventbus.ThreadMode { *; }
 
 # Glide
--keep public class * implements com.bumptech.glide.module.GlideModule
--keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
-  **[] $VALUES;
-  public *;
-}
+-keep public class * extends com.bumptech.glide.module.AppGlideModule
+-keep class com.bumptech.glide.GeneratedAppGlideModuleImpl
+
+# Iconics
+-keepclassmembernames enum * implements com.mikepenz.iconics.typeface.IIcon { *; }
 
 # Moshi
 -keepclassmembers class ** {
@@ -81,17 +87,20 @@
     @com.squareup.moshi.ToJson *;
 }
 
-# We use a custom parser for Hawk and exclude the Gson dependency
+# We use a custom parser for Hawk and exclude the Gson dependency.
 -dontwarn com.orhanobut.hawk.**
 
-# OkHttp/Okio
+# OkHttp/Okio/Retrofit
 -dontwarn okio.**
-
-# Retrofit
+-dontwarn javax.annotation.**
 -dontnote retrofit2.Platform
 -dontwarn retrofit2.Platform$Java8
 
 -keepclasseswithmembers class * {
+    @retrofit2.http.* <methods>;
+}
+
+-keepclasseswithmembers interface * {
     @retrofit2.http.* <methods>;
 }
 
