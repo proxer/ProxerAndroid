@@ -17,6 +17,7 @@ import me.proxer.app.R
 import me.proxer.app.application.GlideApp
 import me.proxer.app.util.extension.androidUri
 import me.proxer.library.api.ProxerException
+import me.proxer.library.util.ProxerUrls
 import okhttp3.HttpUrl
 import java.util.regex.Pattern
 
@@ -83,11 +84,24 @@ object Utils {
     }
 
     fun parseAndFixUrl(url: String): HttpUrl {
-        return HttpUrl.parse(when {
-            url.startsWith("http://") || url.startsWith("https://") -> url
-            url.startsWith("//") -> "http:$url"
-            else -> "http://$url"
-        }) ?: throw ProxerException(ProxerException.ErrorType.PARSING)
+        return if (url.startsWith("http://") || url.startsWith("https://")) {
+            HttpUrl.parse(url)
+        } else {
+            HttpUrl.parse(when {
+                url.startsWith("//") -> "http:$url"
+                else -> "http://$url"
+            })?.let {
+                when (isEligibleForHttps(it)) {
+                    true -> it.newBuilder().scheme("https").build()
+                    false -> it
+                }
+            }
+        } ?: throw ProxerException(ProxerException.ErrorType.PARSING)
+    }
+
+    fun isEligibleForHttps(url: HttpUrl) = when {
+        ProxerUrls.hasProxerHost(url) -> true
+        else -> false
     }
 
     fun getNativeAppPackage(context: Context, url: HttpUrl): Set<String> {

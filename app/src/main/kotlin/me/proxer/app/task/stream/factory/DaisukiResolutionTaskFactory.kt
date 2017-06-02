@@ -14,6 +14,6 @@ class DaisukiResolutionTaskFactory : HosterResolutionTaskFactory() {
     override fun create() = TaskBuilder.task(DaisukiTask()).build()
 
     class DaisukiTask : WorkerTask<String, StreamResolutionResult>() {
-        override fun work(input: String) = StreamResolutionResult(Uri.parse("http://daisuki.net"), "text/html")
+        override fun work(input: String) = StreamResolutionResult(Uri.parse("https://daisuki.net"), "text/html")
     }
 }
