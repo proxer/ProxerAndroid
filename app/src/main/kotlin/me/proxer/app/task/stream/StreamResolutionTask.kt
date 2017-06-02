@@ -23,7 +23,7 @@ class StreamResolutionTask : BaseTask<StreamResolutionInput, StreamResolutionRes
                 AmazonPrimeVideoResolutionTaskFactory(), AnimeOnDemandResolutionTaskFactory(),
                 AuravidResolutionTaskFactory(), ClipfishResolutionTaskFactory(), CodeResolutionTaskFactory(),
                 CrunchyrollResolutionTaskFactory(), DailymotionResolutionTaskFactory(), DaisukiResolutionTaskFactory(),
-                Mp4UploadResolutionTaskFactory(), ProsiebenMAXXResolutionTaskFactory(),
+                Mp4UploadResolutionTaskFactory(), MyviResolutionTaskFactory(), ProsiebenMAXXResolutionTaskFactory(),
                 ProxerStreamResolutionTaskFactory(), StreamcloudResolutionTaskFactory(),
                 VideoWeedResolutionTaskFactory(), ViewsterResolutionTaskFactory(), YourUploadResolutionTaskFactory(),
                 YouTubeResolutionTaskFactory())

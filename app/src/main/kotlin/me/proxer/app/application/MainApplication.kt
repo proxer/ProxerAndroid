@@ -36,6 +36,7 @@ import me.proxer.app.job.ChatJob
 import me.proxer.app.job.LocalMangaJob
 import me.proxer.app.job.NotificationsJob
 import me.proxer.app.task.manga.MangaRemovalTask
+import me.proxer.app.util.NonPersistentCookieJar
 import me.proxer.app.util.Utils.GENERIC_USER_AGENT
 import me.proxer.library.api.LoginTokenManager
 import me.proxer.library.api.ProxerApi
@@ -126,6 +127,7 @@ class MainApplication : Application() {
     private fun initApi() {
         api = ProxerApi.Builder(BuildConfig.PROXER_API_KEY)
                 .userAgent(USER_AGENT)
+                .client(OkHttpClient.Builder().cookieJar(NonPersistentCookieJar()).build())
                 .loggingStrategy(if (BuildConfig.DEBUG) LoggingStrategy.ALL else LoggingStrategy.NONE)
                 .loginTokenManager(ProxerLoginTokenManager())
                 .build()
