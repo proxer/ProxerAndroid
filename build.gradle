@@ -37,7 +37,7 @@ ext {
     materialProgressBarVersion = '1.4.1'
     materialRatingBarVersion = '1.0.2'
     customtabsHelperVersion = '1.0.3'
-    introductionVersion = '1.4.0'
+    introductionVersion = '1.4.1'
     materialBadgeViewVersion = '-SNAPSHOT'
 
     // Utils
@@ -47,7 +47,7 @@ ext {
     okHttpVersion = '3.8.0'
     okioVersion = '1.13.0'
     linkBuilderVersion = '1.5.2'
-    easyHeaderFooterAdapterVersion = '-SNAPSHOT'
+    easyHeaderFooterAdapterVersion = '2.0.0'
 
     // Debugging
     strictModeCompatVersion = "25.0.0"
@@ -101,7 +101,7 @@ ext {
             okHttp                       : "com.squareup.okhttp3:okhttp:$okHttpVersion",
             okio                         : "com.squareup.okio:okio:$okioVersion",
             linkBuilder                  : "com.klinkerapps:link_builder:$linkBuilderVersion",
-            easyHeaderFooterAdapter      : "com.github.rubengees:EasyHeaderFooterAdapter:$easyHeaderFooterAdapterVersion",
+            easyHeaderFooterAdapter      : "com.github.rubengees:easy-header-footer-adapter:$easyHeaderFooterAdapterVersion",
 
             strictModeCompat             : "com.kirich1409:strict-mode-compat:$strictModeCompatVersion",
             leakCanary                   : "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion",
@@ -117,7 +117,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0-alpha2'
+        classpath 'com.android.tools.build:gradle:3.0.0-alpha3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.1.2-4"
     }
 }

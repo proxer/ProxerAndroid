@@ -7,7 +7,9 @@ machine:
 dependencies:
   pre:
     - echo y | android update sdk --no-ui --filter "tools"
+    - echo y | $ANDROID_HOME/tools/bin/sdkmanager "platform-tools"
     - echo y | $ANDROID_HOME/tools/bin/sdkmanager --channel=3 "build-tools;26.0.0-rc2"
+    - echo y | $ANDROID_HOME/tools/bin/sdkmanager "platforms;android-25"
     - echo y | $ANDROID_HOME/tools/bin/sdkmanager "extras;google;m2repository"
   override:
     - ./gradlew dependencies --console=plain
