@@ -86,7 +86,7 @@ ext {
             flexbox                      : "com.google.android:flexbox:$flexboxVersion",
             emojiIos                     : "com.vanniktech:emoji-ios:$emojiIosVersion",
             exomedia                     : "com.devbrackets.android:exomedia:$exomediaVersion",
-            exoplayer                    : "com.google.android.exoplayer:exoplayer:$exoplayerVersion",
+            exoplayer                    : "com.google.android.exoplayer:exoplayer-core:$exoplayerVersion",
             exoplayerHls                 : "com.google.android.exoplayer:exoplayer-hls:$exoplayerVersion",
             exoplayerIntegration         : "com.google.android.exoplayer:extension-okhttp:$exoplayerVersion",
             materialProgressBar          : "me.zhanghai.android.materialprogressbar:library:$materialProgressBarVersion",

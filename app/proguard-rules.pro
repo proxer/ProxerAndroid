@@ -90,7 +90,13 @@
 }
 
 # We use a custom parser for Hawk and exclude the Gson dependency.
--dontwarn com.orhanobut.hawk.**
+-dontwarn com.orhanobut.hawk.HawkBuilder
+-dontwarn com.orhanobut.hawk.HawkConverter**
+-dontwarn com.orhanobut.hawk.GsonParser
+
+# We exclude unused modules of ExoPlayer.
+-dontwarn com.devbrackets.android.exomedia.core.source.builder.SsMediaSourceBuilder
+-dontwarn com.devbrackets.android.exomedia.core.source.builder.DashMediaSourceBuilder
 
 # OkHttp/Okio/Retrofit
 -dontwarn okio.**
