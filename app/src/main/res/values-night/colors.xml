@@ -17,7 +17,7 @@
     <color name="material_drawer_primary_text">@color/text_primary</color>
     <color name="material_drawer_primary_icon">@color/icon</color>
     <color name="material_drawer_secondary_text">@color/text_tertiary</color>
-    <color name="material_drawer_selected">@color/selected</color>
+    <color name="material_drawer_selected">#FF424242</color>
     <color name="material_drawer_divider">@color/divider</color>
 
     <color name="emoji_background">@color/card_background</color>
