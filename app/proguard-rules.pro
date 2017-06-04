@@ -32,7 +32,7 @@
 }
 
 -keepclasseswithmembers class **.R$* {
-    <fields>;
+    public static final int define_*;
 }
 
 # Preserve annotated Javascript interface methods.

@@ -33,7 +33,7 @@ ext {
     flexboxVersion = '0.2.6'
     emojiIosVersion = '0.5.0-SNAPSHOT'
     exomediaVersion = '4.0.2'
-    exoplayerVersion = 'r2.4.0'
+    exoplayerVersion = 'r2.4.1'
     materialProgressBarVersion = '1.4.1'
     materialRatingBarVersion = '1.0.2'
     customtabsHelperVersion = '1.0.3'
@@ -86,6 +86,8 @@ ext {
             flexbox                      : "com.google.android:flexbox:$flexboxVersion",
             emojiIos                     : "com.vanniktech:emoji-ios:$emojiIosVersion",
             exomedia                     : "com.devbrackets.android:exomedia:$exomediaVersion",
+            exoplayer                    : "com.google.android.exoplayer:exoplayer:$exoplayerVersion",
+            exoplayerHls                 : "com.google.android.exoplayer:exoplayer-hls:$exoplayerVersion",
             exoplayerIntegration         : "com.google.android.exoplayer:extension-okhttp:$exoplayerVersion",
             materialProgressBar          : "me.zhanghai.android.materialprogressbar:library:$materialProgressBarVersion",
             materialRatingBar            : "me.zhanghai.android.materialratingbar:library:$materialRatingBarVersion",

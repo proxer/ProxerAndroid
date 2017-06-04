@@ -18,7 +18,7 @@ android {
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.version
 
-        vectorDrawables.useSupportLibrary = true
+        vectorDrawables.useSupportLibrary true
     }
 
     signingConfigs {
@@ -55,6 +55,14 @@ android {
                         '"RELEASE_KEY_PASSWORD" to your secrets.properties file if you want the apk to be signed.')
             }
         }
+    }
+
+    packagingOptions {
+        exclude  'error_prone/Annotations.gwt.xml'
+        exclude  'third_party/java_src/error_prone/project/annotations/Annotations.gwt.xml'
+        exclude  'third_party/java_src/error_prone/project/annotations/Google_internal.gwt.xml'
+        exclude  'jsr305_annotations/Jsr305_annotations.gwt.xml'
+        exclude  'build-data.properties'
     }
 
     sourceSets {
@@ -96,7 +104,12 @@ dependencies {
     implementation deps.materialDialogs
     implementation deps.flexbox
     implementation deps.emojiIos
-    implementation deps.exomedia
+    implementation(deps.exomedia) {
+        exclude module: 'exoplayer-dash'
+        exclude module: 'exoplayer-smoothstreaming'
+    }
+    implementation deps.exoplayer
+    implementation deps.exoplayerHls
     implementation deps.exoplayerIntegration
     implementation deps.materialProgressBar
     implementation deps.materialRatingBar
