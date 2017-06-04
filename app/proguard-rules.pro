@@ -27,10 +27,12 @@
     public static ** valueOf(java.lang.String);
 }
 
+# Keep Parcelable implementations.
 -keepclassmembers class * implements android.os.Parcelable {
     public static final android.os.Parcelable$Creator CREATOR;
 }
 
+# Keep fields in R which are accessed through reflection.
 -keepclasseswithmembers class **.R$* {
     public static final int define_*;
 }
