@@ -96,6 +96,7 @@
 
 # We exclude unused modules of ExoPlayer.
 -dontwarn com.devbrackets.android.exomedia.core.source.builder.SsMediaSourceBuilder
+-dontwarn com.devbrackets.android.exomedia.core.source.builder.HlsMediaSourceBuilder
 -dontwarn com.devbrackets.android.exomedia.core.source.builder.DashMediaSourceBuilder
 
 # OkHttp/Okio/Retrofit

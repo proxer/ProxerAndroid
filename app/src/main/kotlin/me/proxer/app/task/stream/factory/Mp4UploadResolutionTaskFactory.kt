@@ -11,7 +11,6 @@ import okhttp3.FormBody
 import okhttp3.HttpUrl
 import okhttp3.Request
 import java.io.IOException
-import java.lang.Exception
 import java.util.regex.Pattern
 
 /**
@@ -62,7 +61,7 @@ class Mp4UploadResolutionTaskFactory : HosterResolutionTaskFactory() {
                 } catch (error: Throwable) {
                     internalCancel()
 
-                    finishWithError(error as Exception)
+                    finishWithError(error)
                 }
             }
         }

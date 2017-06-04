@@ -105,11 +105,11 @@ dependencies {
     implementation deps.flexbox
     implementation deps.emojiIos
     implementation(deps.exomedia) {
+        exclude module: 'exoplayer-hls'
         exclude module: 'exoplayer-dash'
         exclude module: 'exoplayer-smoothstreaming'
     }
     implementation deps.exoplayer
-    implementation deps.exoplayerHls
     implementation deps.exoplayerIntegration
     implementation deps.materialProgressBar
     implementation deps.materialRatingBar

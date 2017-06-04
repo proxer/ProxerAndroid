@@ -12,7 +12,6 @@ import okhttp3.Call
 import okhttp3.FormBody
 import okhttp3.Request
 import java.io.IOException
-import java.lang.Exception
 
 /**
  * @author Ruben Gees
@@ -82,7 +81,7 @@ class StreamcloudResolutionTaskFactory : HosterResolutionTaskFactory() {
                 } catch (error: Throwable) {
                     internalCancel()
 
-                    finishWithError(error as Exception)
+                    finishWithError(error)
                 }
             }
         }

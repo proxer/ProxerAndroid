@@ -12,7 +12,6 @@ import okhttp3.Call
 import okhttp3.HttpUrl
 import okhttp3.Request
 import java.io.IOException
-import java.lang.Exception
 
 /**
  * @author Ruben Gees
@@ -73,7 +72,7 @@ class YourUploadResolutionTaskFactory : HosterResolutionTaskFactory() {
                 } catch (error: Throwable) {
                     internalCancel()
 
-                    finishWithError(error as Exception)
+                    finishWithError(error)
                 }
             }
         }
