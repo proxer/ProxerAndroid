@@ -6,6 +6,10 @@
     <color name="colorPrimaryLight">#CE1A1A</color>
     <color name="colorAccent">#8A0E0E</color>
 
+    <color name="textColorPrimary">@android:color/primary_text_light</color>
+    <color name="textColorSecondary">@android:color/secondary_text_light</color>
+    <color name="textColorTertiary">@android:color/tertiary_text_light</color>
+
     <color name="half_transparent">#7F000000</color>
 
     <color name="divider">#1F000000</color>

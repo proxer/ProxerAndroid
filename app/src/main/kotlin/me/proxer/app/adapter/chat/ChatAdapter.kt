@@ -268,6 +268,7 @@ class ChatAdapter(savedInstanceState: Bundle?, val isGroup: Boolean) : BaseAdapt
             root.setOnClickListener { onContainerClick(it) }
             root.setOnLongClickListener { onContainerLongClick(it) }
             text.movementMethod = TouchableMovementMethod.getInstance()
+            text.setTextColor(ContextCompat.getColor(text.context, R.color.textColorPrimary))
         }
 
         open fun bind(message: LocalMessage, marginTop: Int, marginBottom: Int) {
