@@ -98,6 +98,8 @@ class AboutFragment : MaterialAboutFragment() {
         }
     }
 
+    override fun shouldAnimate() = false
+
     private fun buildInfoItems(): List<MaterialAboutItem> {
         return listOf(
                 ConvenienceBuilder.createAppTitleItem(context),
