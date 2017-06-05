@@ -122,6 +122,12 @@ class ConferencesFragment : LoadingFragment<Unit, List<LocalConference>>() {
         }
     }
 
+    override fun hideContent() {
+        adapter.clear()
+
+        super.hideContent()
+    }
+
     override fun constructInput() = Unit
     override fun constructTask() = TaskBuilder.task(ConferencesTask())
             .async()
