@@ -19,6 +19,7 @@ android {
         versionName rootProject.ext.version
 
         vectorDrawables.useSupportLibrary true
+        resConfigs "de"
     }
 
     signingConfigs {
