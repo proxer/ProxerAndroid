@@ -58,10 +58,9 @@ android {
     }
 
     packagingOptions {
-        exclude  'error_prone/Annotations.gwt.xml'
-        exclude  'third_party/java_src/error_prone/project/annotations/Annotations.gwt.xml'
-        exclude  'third_party/java_src/error_prone/project/annotations/Google_internal.gwt.xml'
-        exclude  'jsr305_annotations/Jsr305_annotations.gwt.xml'
+        exclude '**/*.kotlin_builtins'
+        exclude '**/*.kotlin_module'
+        exclude  '**/*.gwt.*'
         exclude  'build-data.properties'
     }
 
