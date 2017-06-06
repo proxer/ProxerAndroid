@@ -92,18 +92,6 @@ class BookmarksFragment : PagedLoadingFragment<ProxerCall<List<Bookmark>>, Bookm
                     }
                 }.build()
 
-        setHasOptionsMenu(true)
-    }
-
-    override fun onDestroy() {
-        innerAdapter.destroy()
-
-        super.onDestroy()
-    }
-
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
         innerAdapter.callback = object : BookmarkAdapter.BookmarkAdapterCallback {
             override fun onBookmarkClick(item: Bookmark) {
                 when (item.category) {
@@ -127,6 +115,14 @@ class BookmarksFragment : PagedLoadingFragment<ProxerCall<List<Bookmark>>, Bookm
                 removeBookmarksFromQueue()
             }
         }
+
+        setHasOptionsMenu(true)
+    }
+
+    override fun onDestroy() {
+        innerAdapter.destroy()
+
+        super.onDestroy()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

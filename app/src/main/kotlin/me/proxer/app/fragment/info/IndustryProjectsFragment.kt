@@ -50,8 +50,8 @@ class IndustryProjectsFragment : PagedLoadingFragment<ProxerCall<List<IndustryPr
 
     override val innerAdapter by lazy { IndustryProjectAdapter(GlideApp.with(this)) }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
         innerAdapter.callback = object : IndustryProjectAdapter.IndustryProjectAdapterCallback {
             override fun onProjectClick(view: View, item: IndustryProject) {

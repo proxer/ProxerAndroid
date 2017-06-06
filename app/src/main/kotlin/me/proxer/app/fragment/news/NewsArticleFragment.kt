@@ -52,11 +52,6 @@ class NewsArticleFragment : PagedLoadingFragment<ProxerCall<List<NewsArticle>>, 
         super.onCreate(savedInstanceState)
 
         innerAdapter = NewsArticleAdapter(savedInstanceState, GlideApp.with(this))
-    }
-
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
         innerAdapter.callback = object : NewsAdapterCallback {
             override fun onNewsArticleClick(item: NewsArticle) {
                 showPage(ProxerUrls.newsWeb(item.categoryId, item.threadId, Device.MOBILE))

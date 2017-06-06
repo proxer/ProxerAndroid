@@ -92,12 +92,6 @@ class MediaListFragment : PagedLoadingFragment<ProxerCall<List<MediaListEntry>>,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setHasOptionsMenu(true)
-    }
-
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
         innerAdapter.callback = object : MediaAdapter.MediaAdapterCallback {
             override fun onMediaClick(view: View, item: MediaListEntry) {
                 val imageView = view.find<ImageView>(R.id.image)
@@ -106,6 +100,8 @@ class MediaListFragment : PagedLoadingFragment<ProxerCall<List<MediaListEntry>>,
                         if (imageView.drawable != null) imageView else null)
             }
         }
+
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

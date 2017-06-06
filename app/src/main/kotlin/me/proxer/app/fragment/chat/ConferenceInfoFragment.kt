@@ -51,12 +51,8 @@ class ConferenceInfoFragment : LoadingFragment<ProxerCall<ConferenceInfo>, Confe
     private val time: TextView by bindView(R.id.time)
     private val list: RecyclerView by bindView(R.id.participantList)
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_conference_info, container, false)
-    }
-
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
         adapter.callback = object : ConferenceParticipantAdapterCallback {
             override fun onParticipantClick(view: View, item: ConferenceParticipant) {
@@ -70,6 +66,14 @@ class ConferenceInfoFragment : LoadingFragment<ProxerCall<ConferenceInfo>, Confe
                 showPage(link)
             }
         }
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        return inflater.inflate(R.layout.fragment_conference_info, container, false)
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         list.isNestedScrollingEnabled = false
         list.layoutManager = LinearLayoutManager(context)

@@ -58,8 +58,8 @@ class UserMediaListFragment : PagedLoadingFragment<ProxerCall<List<UserMediaList
 
     override val innerAdapter by lazy { UserMediaAdapter(GlideApp.with(this)) }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
         innerAdapter.callback = object : UserMediaAdapter.UserMediaAdapterCallback {
             override fun onMediaClick(view: View, item: UserMediaListEntry) {

@@ -46,6 +46,19 @@ class RelationsFragment : LoadingFragment<ProxerCall<List<Relation>>, List<Relat
 
     private val list: RecyclerView by bindView(R.id.list)
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        adapter.callback = object : RelationsAdapter.RelationsAdapterCallback {
+            override fun onRelationClick(view: View, item: Relation) {
+                val imageView = view.find<ImageView>(R.id.image)
+
+                MediaActivity.navigateTo(activity, item.id, item.name, item.category,
+                        if (imageView.drawable != null) imageView else null)
+            }
+        }
+    }
+
     override fun onDestroy() {
         adapter.destroy()
 
@@ -58,15 +71,6 @@ class RelationsFragment : LoadingFragment<ProxerCall<List<Relation>>, List<Relat
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        adapter.callback = object : RelationsAdapter.RelationsAdapterCallback {
-            override fun onRelationClick(view: View, item: Relation) {
-                val imageView = view.find<ImageView>(R.id.image)
-
-                MediaActivity.navigateTo(activity, item.id, item.name, item.category,
-                        if (imageView.drawable != null) imageView else null)
-            }
-        }
 
         list.setHasFixedSize(true)
         list.layoutManager = StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity) + 1,

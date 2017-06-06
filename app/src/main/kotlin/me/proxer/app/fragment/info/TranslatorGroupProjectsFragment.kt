@@ -51,8 +51,8 @@ class TranslatorGroupProjectsFragment : PagedLoadingFragment<ProxerCall<List<Tra
 
     override val innerAdapter by lazy { TranslatorGroupProjectAdapter(GlideApp.with(this)) }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
         innerAdapter.callback = object : TranslatorGroupProjectAdapter.TranslatorGroupProjectAdapterCallback {
             override fun onProjectClick(view: View, item: TranslatorGroupProject) {

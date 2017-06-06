@@ -41,8 +41,8 @@ class HistoryFragment : PagedLoadingFragment<ProxerCall<List<UcpHistoryEntry>>, 
 
     override val innerAdapter by lazy { HistoryAdapter(GlideApp.with(this)) }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
         innerAdapter.callback = object : HistoryAdapter.HistoryAdapterCallback {
             override fun onItemClick(view: View, item: UcpHistoryEntry) {

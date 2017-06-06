@@ -48,13 +48,11 @@ class MangaPageDownloadTask(private val filesDir: File) : LeafTask<MangaPageDown
 
                             call?.execute()?.let {
                                 if (it.isSuccessful) {
-                                    val body = it.body() ?: throw IOException()
-
-                                    body.use { body ->
+                                    it.body()?.use { theBody ->
                                         Okio.buffer(Okio.sink(file)).use { fileBuffer ->
-                                            fileBuffer.writeAll(body.source())
+                                            fileBuffer.writeAll(theBody.source())
                                         }
-                                    }
+                                    } ?: throw IOException()
 
                                     internalCancel()
                                     finishSuccessful(file)
