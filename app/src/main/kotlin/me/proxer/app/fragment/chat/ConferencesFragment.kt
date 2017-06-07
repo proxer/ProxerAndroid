@@ -8,6 +8,7 @@ import com.mikepenz.iconics.utils.IconicsMenuInflatorUtil
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.activity.ChatActivity
+import me.proxer.app.activity.NewChatActivity
 import me.proxer.app.adapter.chat.ConferenceAdapter
 import me.proxer.app.application.GlideApp
 import me.proxer.app.entity.chat.LocalConference
@@ -84,8 +85,8 @@ class ConferencesFragment : LoadingFragment<Unit, List<LocalConference>>() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-//            R.id.new_chat -> NewChatActivity.navigateTo(activity)
-//            R.id.new_group -> NewChatActivity.navigateTo(activity, isGroup = true)
+            R.id.new_chat -> NewChatActivity.navigateTo(activity, false)
+            R.id.new_group -> NewChatActivity.navigateTo(activity, true)
         }
 
         return super.onOptionsItemSelected(item)
@@ -117,7 +118,7 @@ class ConferencesFragment : LoadingFragment<Unit, List<LocalConference>>() {
 
         if (adapter.isEmpty()) {
             showError(R.string.error_no_data_conferences, R.string.error_action_new_chat, View.OnClickListener {
-                // NewChatActivity.navigateTo(activity)
+                NewChatActivity.navigateTo(activity)
             })
         }
     }

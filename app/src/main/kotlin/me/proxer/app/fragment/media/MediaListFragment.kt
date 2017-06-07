@@ -50,6 +50,7 @@ class MediaListFragment : PagedLoadingFragment<ProxerCall<List<MediaListEntry>>,
 
     override val isLoginRequired: Boolean
         get() = type == MediaType.HENTAI || type == MediaType.HMANGA
+
     override val isAgeConfirmationRequired: Boolean
         get() = type == MediaType.HENTAI || type == MediaType.HMANGA
 

@@ -53,11 +53,13 @@ class LocalMangaAdapter(savedInstanceState: Bundle?, glide: GlideRequests) :
         }
     }
 
-    override fun areItemsTheSame(oldItem: CompleteLocalMangaEntry, newItem: CompleteLocalMangaEntry)
-            = oldItem.first.id == newItem.first.id
+    override fun areItemsTheSame(oldItem: CompleteLocalMangaEntry, newItem: CompleteLocalMangaEntry): Boolean {
+        return oldItem.first.id == newItem.first.id
+    }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<CompleteLocalMangaEntry>
-            = ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_local_manga, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<CompleteLocalMangaEntry> {
+        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_local_manga, parent, false))
+    }
 
     override fun onViewAttachedToWindow(holder: BaseViewHolder<CompleteLocalMangaEntry>) {
         super.onViewAttachedToWindow(holder)

@@ -114,7 +114,7 @@
             </intent-filter>
         </activity>
 
-        <!--<activity android:name=".activity.chat.NewChatActivity"/>-->
+        <activity android:name=".activity.NewChatActivity" />
 
         <activity android:name=".activity.ConferenceInfoActivity" />
 

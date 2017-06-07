@@ -77,6 +77,11 @@
     <string name="error_stream_resolution">Fehler beim Laden des Streams. Das Video ist eventuell nicht mehr verfügbar
     </string>
 
+    <string name="error_input_empty">Gib etwas ein</string>
+    <string name="error_duplicate_participant">Diesen Teilnehmer hast du schon hinzugefügt</string>
+    <string name="error_missing_message">Gib eine Nachricht ein</string>
+    <string name="error_missing_participants">Füge mindestens einen Teilnehmer hinzu</string>
+
     <string name="error_video_deleted">Das Video ist nicht mehr verfügbar</string>
     <string name="error_video_unknown">Es gab ein unbekanntes Problem mit dem Hoster. Versuche es später erneut</string>
 
@@ -302,6 +307,11 @@
     <string name="fragment_conference_info_info_title">Info</string>
     <string name="fragment_conference_info_participants_title">Teilnehmer</string>
     <string name="fragment_conference_info_time">Erstellt am %1$s um %2$s</string>
+
+    <string name="fragment_new_chat_participants">Teilnehmer</string>
+    <string name="fragment_new_chat_topic_hint">Thema</string>
+    <string name="fragment_new_chat_add_participant">Teilnehmer hinzufügen</string>
+    <string name="fragment_new_chat_add_participant_hint">Nutzername</string>
 
     <string name="view_media_control_uploader">Uploader</string>
     <string name="view_media_control_translator_group">Translator-Gruppe</string>

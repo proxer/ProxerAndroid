@@ -17,7 +17,7 @@ abstract class BaseAdapter<T> : RecyclerView.Adapter<BaseAdapter<T>.BaseViewHold
     var positionResolver = PositionResolver()
     var recyclerView: RecyclerView? = null
 
-    protected var internalList = ArrayList<T>()
+    protected val internalList = ArrayList<T>()
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView?) {
         super.onAttachedToRecyclerView(recyclerView)

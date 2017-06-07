@@ -17,9 +17,11 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
 import me.proxer.app.activity.ChatActivity
+import me.proxer.app.activity.NewChatActivity
 import me.proxer.app.activity.ProfileActivity
 import me.proxer.app.application.MainApplication
 import me.proxer.app.application.MainApplication.Companion.chatDb
+import me.proxer.app.entity.chat.Participant
 import me.proxer.app.util.extension.openHttpPage
 import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
@@ -157,8 +159,7 @@ class AboutFragment : MaterialAboutFragment() {
 
                                 when (existingChat) {
                                     null -> {
-//                                        NewChatActivity.navigateTo(activity, Participant(
-//                                                DEVELOPER_PROXER_NAME, DEVELOPER_PROXER_IMAGE))
+                                        NewChatActivity.navigateTo(activity, false, Participant(DEVELOPER_PROXER_NAME))
                                     }
                                     else -> weakRef.get()?.let { ChatActivity.navigateTo(it.activity, existingChat) }
                                 }

@@ -14,6 +14,7 @@ import com.mikepenz.iconics.utils.IconicsMenuInflatorUtil
 import me.proxer.app.R
 import me.proxer.app.activity.base.ImageTabsActivity
 import me.proxer.app.application.MainApplication.Companion.chatDb
+import me.proxer.app.entity.chat.Participant
 import me.proxer.app.fragment.profile.ProfileFragment
 import me.proxer.app.fragment.profile.TopTenFragment
 import me.proxer.app.fragment.profile.UserMediaListFragment
@@ -105,15 +106,19 @@ class ProfileActivity : ImageTabsActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.new_chat -> {
-                if (username != null && image != null) {
-                    doAsync {
-                        val existingChat = chatDb.findConferenceForUser(username!!)
+                username?.let { safeUsername ->
+                    image?.let { safeImage ->
+                        doAsync {
+                            val existingChat = chatDb.findConferenceForUser(safeUsername)
 
-                        when (existingChat) {
-                            null -> {
-//                                NewChatActivity.navigateTo(this, Participant(username!!, image!!))
+                            when (existingChat) {
+                                null -> {
+                                    weakRef.get()?.let {
+                                        NewChatActivity.navigateTo(it, false, Participant(safeUsername, safeImage))
+                                    }
+                                }
+                                else -> weakRef.get()?.let { ChatActivity.navigateTo(it, existingChat) }
                             }
-                            else -> weakRef.get()?.let { ChatActivity.navigateTo(it, existingChat) }
                         }
                     }
                 }
@@ -121,12 +126,13 @@ class ProfileActivity : ImageTabsActivity() {
                 return true
             }
             R.id.new_group -> {
-//                if (username != null && image != null) {
-//                    NewChatActivity.navigateTo(this, Participant(username!!, image!!),
-//                            isGroup = true)
-//                }
-//
-//                return true
+                username?.let { safeUsername ->
+                    image?.let { safeImage ->
+                        NewChatActivity.navigateTo(this, true, Participant(safeUsername, safeImage))
+                    }
+                }
+
+                return true
             }
         }
 
