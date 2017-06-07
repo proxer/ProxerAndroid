@@ -169,16 +169,14 @@ object NotificationHelper {
                     }
                 }
 
-        val intent = TaskStackBuilder.create(context)
-                .addNextIntent(DashboardActivity.getSectionIntent(context, DrawerItem.CHAT))
-                .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
-
         return NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.ic_stat_proxer)
                 .setContentTitle(title)
                 .setContentText(content)
                 .setStyle(style)
-                .setContentIntent(intent)
+                .setContentIntent(TaskStackBuilder.create(context)
+                        .addNextIntent(DashboardActivity.getSectionIntent(context, DrawerItem.CHAT))
+                        .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT))
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setColor(ContextCompat.getColor(context, R.color.primary))
                 .setPriority(PRIORITY_HIGH)
@@ -197,34 +195,42 @@ object NotificationHelper {
             return null
         }
 
-        val content = context.resources.getQuantityString(R.plurals.notification_chat_message_amount,
-                messages.size, messages.size)
+        val amount = messages.size
+        val content = context.resources.getQuantityString(R.plurals.notification_chat_message_amount, amount, amount)
 
         val icon = when {
             conference.image.isNotBlank() -> Utils.getBitmapFromUrl(context,
                     ProxerUrls.userImage(conference.image).toString())
+
             else -> IconicsDrawable(context, when (conference.isGroup) {
                 true -> CommunityMaterial.Icon.cmd_account_multiple
                 false -> CommunityMaterial.Icon.cmd_account
             }).sizeDp(96).colorRes(R.color.colorPrimary).toBitmap()
         }
 
-        val style = when (conference.isGroup) {
-            true -> MessagingStyle(user.name)
-                    .setConversationTitle(conference.topic)
-                    .apply {
-                        messages.forEach {
-                            addMessage(it.message, it.date.time, it.username)
-                        }
-                    }
-            false -> InboxStyle()
+        val style = when (amount) {
+            1 -> BigTextStyle()
                     .setBigContentTitle(conference.topic)
                     .setSummaryText(content)
-                    .apply {
-                        messages.forEach {
-                            addLine(it.message)
+                    .bigText(messages.first().message)
+
+            else -> when (conference.isGroup) {
+                true -> MessagingStyle(user.name)
+                        .setConversationTitle(conference.topic)
+                        .apply {
+                            messages.forEach {
+                                addMessage(it.message, it.date.time, it.username)
+                            }
                         }
-                    }
+                false -> InboxStyle()
+                        .setBigContentTitle(conference.topic)
+                        .setSummaryText(content)
+                        .apply {
+                            messages.forEach {
+                                addLine(it.message)
+                            }
+                        }
+            }
         }
 
         val intent = TaskStackBuilder.create(context)
