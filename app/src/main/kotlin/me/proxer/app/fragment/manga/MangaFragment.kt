@@ -3,14 +3,11 @@ package me.proxer.app.fragment.manga
 import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.*
-import com.mikepenz.community_material_typeface_library.CommunityMaterial
-import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.utils.IconicsMenuInflatorUtil
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import com.rubengees.ktask.android.AndroidLifecycleTask
@@ -52,7 +49,6 @@ import me.proxer.library.entitiy.manga.Chapter
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.Language
 import org.jetbrains.anko.bundleOf
-import org.jetbrains.anko.find
 
 /**
  * @author Ruben Gees
@@ -100,15 +96,45 @@ class MangaFragment : LoadingFragment<MangaInput, MangaChapterInfo>() {
             mangaActivity.episodeAmount = value
         }
 
+    private val mediaControlTextResolver = object : MediaControlView.TextResourceResolver {
+        override fun next() = context.getString(R.string.fragment_manga_next_chapter)
+        override fun previous() = context.getString(R.string.fragment_manga_previous_chapter)
+        override fun bookmarkThis() = context.getString(R.string.fragment_manga_bookmark_this_chapter)
+        override fun bookmarkNext() = context.getString(R.string.fragment_manga_bookmark_next_chapter)
+    }
+
+    private val mediaControlCallback = object : MediaControlView.MediaControlViewCallback {
+        override fun onUploaderClick(uploader: Uploader) {
+            ProfileActivity.navigateTo(activity, uploader.id, uploader.name)
+        }
+
+        override fun onTranslatorGroupClick(group: SimpleTranslatorGroup) {
+            TranslatorGroupActivity.navigateTo(activity, group.id, group.name)
+        }
+
+        override fun onSwitchEpisodeClick(newEpisode: Int) {
+            switchEpisode(newEpisode)
+        }
+
+        override fun onSetBookmarkClick(episode: Int) {
+            bookmarkTask.forceExecute(api.ucp()
+                    .setBookmark(id, episode, language.toMediaLanguage(), Category.MANGA)
+                    .build())
+        }
+
+        override fun onFinishClick(episode: Int) {
+            bookmarkTask.forceExecute(api.info().markAsFinished(id).build())
+        }
+    }
+
     private val innerAdapter by lazy { MangaAdapter() }
     private val adapter by lazy { EasyHeaderFooterAdapter(innerAdapter) }
 
     private lateinit var bookmarkTask: AndroidLifecycleTask<ProxerCall<Void?>, Void?>
 
     private lateinit var header: MediaControlView
-    private lateinit var footer: ViewGroup
+    private lateinit var footer: MediaControlView
 
-    private lateinit var scrollToTop: FloatingActionButton
     private val list: RecyclerView by bindView(R.id.list)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -140,21 +166,23 @@ class MangaFragment : LoadingFragment<MangaInput, MangaChapterInfo>() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        header = inflater.inflate(R.layout.layout_media_control, container, false) as MediaControlView
-        footer = inflater.inflate(R.layout.layout_manga_footer, container, false) as ViewGroup
-        scrollToTop = footer.find(R.id.scrollToTop)
-
         val horizontalMargin = context.resources.getDimensionPixelSize(R.dimen.screen_horizontal_margin_with_items)
         val verticalMargin = context.resources.getDimensionPixelSize(R.dimen.screen_vertical_margin_with_items)
 
-        (header.layoutParams as ViewGroup.MarginLayoutParams).setMargins(horizontalMargin, verticalMargin,
-                horizontalMargin, verticalMargin)
+        header = (inflater.inflate(R.layout.layout_media_control, container, false) as MediaControlView).apply {
+            textResolver = mediaControlTextResolver
+            callback = mediaControlCallback
 
-        header.textResolver = object : MediaControlView.TextResourceResolver {
-            override fun next() = context.getString(R.string.fragment_manga_next_chapter)
-            override fun previous() = context.getString(R.string.fragment_manga_previous_chapter)
-            override fun bookmarkThis() = context.getString(R.string.fragment_manga_bookmark_this_chapter)
-            override fun bookmarkNext() = context.getString(R.string.fragment_manga_bookmark_next_chapter)
+            (layoutParams as ViewGroup.MarginLayoutParams).setMargins(horizontalMargin, verticalMargin,
+                    horizontalMargin, verticalMargin)
+        }
+
+        footer = (inflater.inflate(R.layout.layout_media_control, container, false) as MediaControlView).apply {
+            textResolver = mediaControlTextResolver
+            callback = mediaControlCallback
+
+            (layoutParams as ViewGroup.MarginLayoutParams).setMargins(horizontalMargin, verticalMargin,
+                    horizontalMargin, verticalMargin)
         }
 
         return inflater.inflate(R.layout.fragment_manga, container, false)
@@ -179,40 +207,6 @@ class MangaFragment : LoadingFragment<MangaInput, MangaChapterInfo>() {
 
         list.layoutManager = LinearLayoutManager(context)
         list.adapter = adapter
-
-        header.callback = object : MediaControlView.MediaControlViewCallback {
-            override fun onUploaderClick(uploader: Uploader) {
-                ProfileActivity.navigateTo(activity, uploader.id, uploader.name)
-            }
-
-            override fun onTranslatorGroupClick(group: SimpleTranslatorGroup) {
-                TranslatorGroupActivity.navigateTo(activity, group.id, group.name)
-            }
-
-            override fun onSwitchEpisodeClick(newEpisode: Int) {
-                switchEpisode(newEpisode)
-            }
-
-            override fun onSetBookmarkClick(episode: Int) {
-                bookmarkTask.forceExecute(api.ucp()
-                        .setBookmark(id, episode, language.toMediaLanguage(), Category.MANGA)
-                        .build())
-            }
-
-            override fun onFinishClick(episode: Int) {
-                bookmarkTask.forceExecute(api.info().markAsFinished(id).build())
-            }
-        }
-
-        scrollToTop.setImageDrawable(IconicsDrawable(context)
-                .icon(CommunityMaterial.Icon.cmd_chevron_up)
-                .sizeDp(56)
-                .paddingDp(8)
-                .colorRes(android.R.color.white))
-
-        scrollToTop.setOnClickListener {
-            list.scrollToPosition(0)
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater) {
@@ -255,6 +249,8 @@ class MangaFragment : LoadingFragment<MangaInput, MangaChapterInfo>() {
         header.setEpisodeInfo(result.episodeAmount, episode)
         header.setDateTime(TimeUtils.convertToDateTime(result.chapter.date))
         header.setUploader(Uploader(result.chapter.uploaderId, result.chapter.uploaderName))
+
+        footer.setEpisodeInfo(result.episodeAmount, episode)
 
         result.chapter.scanGroupId?.let { id ->
             result.chapter.scanGroupName?.let { name ->

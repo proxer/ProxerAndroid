@@ -61,9 +61,6 @@ class ChatFragment : PagedLoadingFragment<Int, LocalMessage>() {
         get() = conference.isFullyLoaded
         set(value) {}
 
-    override val layoutManager by lazy { LinearLayoutManager(context).apply { reverseLayout = true } }
-    override lateinit var innerAdapter: ChatAdapter
-
     private val chatActivity
         get() = activity as ChatActivity
 
@@ -162,6 +159,9 @@ class ChatFragment : PagedLoadingFragment<Int, LocalMessage>() {
                 }
                 .build(messageInput)
     }
+
+    override val layoutManager by lazy { LinearLayoutManager(context).apply { reverseLayout = true } }
+    override lateinit var innerAdapter: ChatAdapter
 
     private var isFirstStart = true
 
