@@ -11,7 +11,7 @@ import android.support.v4.app.RemoteInput
 import android.support.v4.app.TaskStackBuilder
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.NotificationCompat
-import android.text.Spannable
+import android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
 import android.text.SpannableString
 import android.text.style.StyleSpan
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
@@ -163,7 +163,7 @@ object NotificationHelper {
                             }
 
                             addLine(SpannableString(sender + it.message).apply {
-                                setSpan(StyleSpan(Typeface.BOLD), 0, sender.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                setSpan(StyleSpan(Typeface.BOLD), 0, sender.length, SPAN_EXCLUSIVE_EXCLUSIVE)
                             })
                         }
                     }
@@ -209,10 +209,20 @@ object NotificationHelper {
         }
 
         val style = when (amount) {
-            1 -> BigTextStyle()
-                    .setBigContentTitle(conference.topic)
-                    .setSummaryText(content)
-                    .bigText(messages.first().message)
+            1 -> {
+                val username = messages.first().username
+                val message = messages.first().message
+
+                BigTextStyle()
+                        .setBigContentTitle(conference.topic)
+                        .setSummaryText(content)
+                        .bigText(when (conference.isGroup) {
+                            true -> SpannableString("$username $message").apply {
+                                setSpan(StyleSpan(Typeface.BOLD), 0, username.length, SPAN_EXCLUSIVE_EXCLUSIVE)
+                            }
+                            false -> message
+                        })
+            }
 
             else -> when (conference.isGroup) {
                 true -> MessagingStyle(user.name)
