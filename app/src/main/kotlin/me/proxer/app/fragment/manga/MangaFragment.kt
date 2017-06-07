@@ -33,6 +33,7 @@ import me.proxer.app.task.manga.LocalMangaChapterTask
 import me.proxer.app.task.manga.LocalMangaEntryTask
 import me.proxer.app.task.manga.MangaCleanTask
 import me.proxer.app.task.proxerTask
+import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.TimeUtils
 import me.proxer.app.util.Validators
@@ -166,8 +167,8 @@ class MangaFragment : LoadingFragment<MangaInput, MangaChapterInfo>() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val horizontalMargin = context.resources.getDimensionPixelSize(R.dimen.screen_horizontal_margin_with_items)
-        val verticalMargin = context.resources.getDimensionPixelSize(R.dimen.screen_vertical_margin_with_items)
+        val horizontalMargin = DeviceUtils.getHorizontalMargin(context, true)
+        val verticalMargin = DeviceUtils.getVerticalMargin(context, true)
 
         header = (inflater.inflate(R.layout.layout_media_control, container, false) as MediaControlView).apply {
             textResolver = mediaControlTextResolver

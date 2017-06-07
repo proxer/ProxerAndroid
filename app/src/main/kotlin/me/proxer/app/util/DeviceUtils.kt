@@ -3,6 +3,7 @@ package me.proxer.app.util
 import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
+import android.content.res.Resources
 import android.graphics.Point
 import android.os.Build
 import android.util.DisplayMetrics
@@ -40,8 +41,7 @@ object DeviceUtils {
                 false -> R.dimen.screen_horizontal_margin
             })
 
-    fun isLandscape(context: Context)
-            = context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+    fun isLandscape(resources: Resources) = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     fun calculateSpanAmount(activity: Activity): Int {
         var result = 1
@@ -50,7 +50,7 @@ object DeviceUtils {
             result++
         }
 
-        if (isLandscape(activity)) {
+        if (isLandscape(activity.resources)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 if (!activity.isInMultiWindowMode) {
                     result++

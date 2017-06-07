@@ -148,7 +148,7 @@ class LocalMangaFragment : LoadingFragment<Unit, List<CompleteLocalMangaEntry>>(
     override fun onResume() {
         super.onResume()
 
-        jobStateUpdateTask.forceExecute(context.resources)
+        jobStateUpdateTask.forceExecute(resources)
     }
 
     override fun onDestroyView() {
@@ -184,7 +184,7 @@ class LocalMangaFragment : LoadingFragment<Unit, List<CompleteLocalMangaEntry>>(
             doAsync {
                 LocalMangaJob.cancelAll()
 
-                jobStateUpdateTask.forceExecute(context.resources)
+                jobStateUpdateTask.forceExecute(resources)
             }
         }
     }
@@ -282,21 +282,21 @@ class LocalMangaFragment : LoadingFragment<Unit, List<CompleteLocalMangaEntry>>(
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLocalMangaJobStarted(@Suppress("UNUSED_PARAMETER") event: LocalMangaJobStartedEvent) {
-        jobStateUpdateTask.forceExecute(context.resources)
+        jobStateUpdateTask.forceExecute(resources)
         freshLoad()
     }
 
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLocalMangaJobFinished(@Suppress("UNUSED_PARAMETER") event: LocalMangaJobFinishedEvent) {
-        jobStateUpdateTask.forceExecute(context.resources)
+        jobStateUpdateTask.forceExecute(resources)
         freshLoad()
     }
 
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLocalMangaJobFailed(@Suppress("UNUSED_PARAMETER") event: LocalMangaJobFailedEvent) {
-        jobStateUpdateTask.forceExecute(context.resources)
+        jobStateUpdateTask.forceExecute(resources)
     }
 
     internal class JobStateUpdateTask : WorkerTask<Resources, String>() {

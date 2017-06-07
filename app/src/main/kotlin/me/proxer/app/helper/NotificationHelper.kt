@@ -139,17 +139,20 @@ object NotificationHelper {
     private fun buildChatSummaryNotification(context: Context,
                                              conferenceMap: Map<LocalConference, List<LocalMessage>>): Notification? {
 
-        val filteredConferenceMap = conferenceMap.filter { it.value.isNotEmpty() }
-        if (filteredConferenceMap.isEmpty()) {
-            return null
+        val filteredConferenceMap = conferenceMap.filter { it.value.isNotEmpty() }.apply {
+            if (isEmpty()) {
+                return null
+            }
         }
 
         val messageAmount = filteredConferenceMap.values.sumBy { it.size }
-        val title = context.resources.getQuantityString(R.plurals.notification_chat_message_amount,
-                messageAmount, messageAmount) +
-                " " + context.resources.getQuantityString(R.plurals.notification_chat_conference_amount,
-                filteredConferenceMap.size, filteredConferenceMap.size)
+        val conferenceAmount = filteredConferenceMap.size
+        val messageAmountText = context.resources.getQuantityString(R.plurals.notification_chat_message_amount,
+                messageAmount, messageAmount)
+        val conferenceAmountText = context.resources.getQuantityString(R.plurals.notification_chat_conference_amount,
+                conferenceAmount, conferenceAmount)
 
+        val title = "$messageAmountText $conferenceAmountText"
         val content = SpannableString(filteredConferenceMap.keys.joinToString(", ", transform = { it.topic }))
         val style = InboxStyle()
                 .setBigContentTitle(content)

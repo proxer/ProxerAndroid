@@ -19,8 +19,9 @@ object TimeUtils {
         val now = LocalDateTime.now()
 
         val period = Period.between(dateTime.toLocalDate(), now.toLocalDate())
+        val resources = context.resources
 
-        if (period.years <= 0) {
+        return if (period.years <= 0) {
             if (period.months <= 0) {
                 if (period.days <= 0) {
                     val hoursBetween = ChronoUnit.HOURS.between(dateTime, now).toInt()
@@ -29,26 +30,21 @@ object TimeUtils {
                         val minutesBetween = ChronoUnit.MINUTES.between(dateTime, now).toInt()
 
                         if (minutesBetween <= 0) {
-                            return context.getString(R.string.time_a_moment_ago)
+                            context.getString(R.string.time_a_moment_ago)
                         } else {
-                            return context.resources.getQuantityString(R.plurals.time_minutes_ago,
-                                    minutesBetween, minutesBetween)
+                            resources.getQuantityString(R.plurals.time_minutes_ago, minutesBetween, minutesBetween)
                         }
                     } else {
-                        return context.resources.getQuantityString(R.plurals.time_hours_ago,
-                                hoursBetween, hoursBetween)
+                        resources.getQuantityString(R.plurals.time_hours_ago, hoursBetween, hoursBetween)
                     }
                 } else {
-                    return context.resources.getQuantityString(R.plurals.time_days_ago,
-                            period.days, period.days)
+                    resources.getQuantityString(R.plurals.time_days_ago, period.days, period.days)
                 }
             } else {
-                return context.resources.getQuantityString(R.plurals.time_months_ago,
-                        period.months, period.months)
+                resources.getQuantityString(R.plurals.time_months_ago, period.months, period.months)
             }
         } else {
-            return context.resources.getQuantityString(R.plurals.time_years_ago,
-                    period.years, period.years)
+            resources.getQuantityString(R.plurals.time_years_ago, period.years, period.years)
         }
     }
 
