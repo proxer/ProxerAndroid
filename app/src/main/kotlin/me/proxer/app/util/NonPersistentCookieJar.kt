@@ -11,9 +11,14 @@ class NonPersistentCookieJar : CookieJar {
 
     private val cookieStore = LinkedHashSet<Cookie>()
 
+    /**
+     * We actually don't use cookies, only the myvi stream resolver requires them.
+     */
     @Synchronized
     override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
-        cookieStore.addAll(cookies)
+        cookieStore.addAll(cookies.filter {
+            it.domain() == "myvi.ru"
+        })
     }
 
     @Synchronized
