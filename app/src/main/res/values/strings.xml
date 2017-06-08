@@ -55,6 +55,8 @@
     <string name="error_invalid_input">Ungültige Eingabe</string>
     <string name="error_cant_add_user_to_conference">Dieser Nutzer existiert nicht oder kann der Konferenz nicht
         hinzugefügt werden</string>
+    <string name="error_invalid_users_for_conference">Es muss mindestens ein existierender Teilnehmer angegeben werden
+    </string>
     <string name="error_conference_full">Es können keine weiteren Nutzer zur Konferenz hinzugefügt werden, da sie voll
         ist</string>
     <string name="error_invalid_topic">Ungültiges Thema</string>

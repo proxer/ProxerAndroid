@@ -2,7 +2,6 @@ package me.proxer.app.fragment.chat
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.os.Parcel
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar.LENGTH_LONG
 import android.support.design.widget.TextInputLayout
@@ -22,7 +21,6 @@ import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import com.rubengees.ktask.android.AndroidLifecycleTask
 import com.rubengees.ktask.android.bindToLifecycle
 import com.rubengees.ktask.util.TaskBuilder
-import com.rubengees.ktask.util.WorkerTask
 import com.vanniktech.emoji.EmojiEditText
 import com.vanniktech.emoji.EmojiPopup
 import me.proxer.app.R
@@ -35,6 +33,7 @@ import me.proxer.app.application.GlideApp
 import me.proxer.app.entity.chat.LocalConference
 import me.proxer.app.entity.chat.Participant
 import me.proxer.app.fragment.base.MainFragment
+import me.proxer.app.task.chat.NewChatAwaitTask
 import me.proxer.app.task.chat.NewChatInputConstructionTask
 import me.proxer.app.task.chat.NewChatInputConstructionTask.NewChatTaskInput
 import me.proxer.app.task.proxerTask
@@ -102,7 +101,8 @@ class NewChatFragment : MainFragment() {
 
         task = TaskBuilder.task(NewChatInputConstructionTask())
                 .then(TaskBuilder.proxerTask<NewChatTaskInput>())
-                .then(ToDoTask())
+                .then(NewChatAwaitTask())
+                .async()
                 .validateBefore {
                     Validators.validateLogin()
                     Validators.validateNewChatInput(context, it)
@@ -154,15 +154,6 @@ class NewChatFragment : MainFragment() {
             initialParticipant?.let {
                 innerAdapter.insert(listOf(it))
             }
-        }
-    }
-
-    /**
-     * TODO
-     */
-    private class ToDoTask : WorkerTask<String, LocalConference>() {
-        override fun work(input: String): LocalConference {
-            return LocalConference(Parcel.obtain())
         }
     }
 
