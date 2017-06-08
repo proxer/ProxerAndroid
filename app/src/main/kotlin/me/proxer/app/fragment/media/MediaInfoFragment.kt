@@ -250,6 +250,7 @@ class MediaInfoFragment : LoadingFragment<ProxerCall<Entry>, Entry>() {
 
         titleView.text = title
         contentView.text = content
+        contentView.isSaveEnabled = false
 
         return tableRow
     }
