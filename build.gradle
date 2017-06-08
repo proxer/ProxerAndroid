@@ -149,5 +149,5 @@ task clean(type: Delete) {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.0-rc-1'
+    gradleVersion = '4.0-rc-2'
 }
