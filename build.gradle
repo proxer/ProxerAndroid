@@ -13,7 +13,7 @@ ext {
     ankoVersion = '0.10.0'
     supportLibraryVersion = '25.3.1'
     supportPreferenceVersion = '1.2.7'
-    playServicesVersion = '10.2.6'
+    playServicesVersion = '11.0.0'
     eventBusVersion = '3.0.0'
     eventBusAnnotationVersion = '3.0.1'
     androidJobVersion = '1.1.11'
