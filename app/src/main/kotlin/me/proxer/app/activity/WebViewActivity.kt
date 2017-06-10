@@ -36,7 +36,7 @@ class WebViewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_web_view)
 
-        webView.setWebViewClient(WebViewClient())
+        webView.webViewClient = WebViewClient()
         webView.settings.javaScriptEnabled = true
 
         setSupportActionBar(toolbar)

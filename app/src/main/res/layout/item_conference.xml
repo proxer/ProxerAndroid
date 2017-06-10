@@ -29,7 +29,7 @@
                 android:layout_centerVertical="true"
                 android:padding="8dp"
                 android:scaleType="centerCrop"
-                tools:ignore="UnusedAttribute" />
+                tools:ignore="ContentDescription,UnusedAttribute" />
 
             <TextView
                 android:id="@+id/topic"

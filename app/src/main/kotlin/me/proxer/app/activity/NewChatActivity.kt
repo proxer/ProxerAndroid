@@ -47,7 +47,6 @@ class NewChatActivity : MainActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .setAllowOptimization(true)
                     .replace(R.id.container, NewChatFragment.newInstance())
                     .commitNow()
         }

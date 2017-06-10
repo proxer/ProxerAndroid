@@ -5,7 +5,6 @@ package me.proxer.app.util.extension
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
-import android.support.customtabs.CustomTabsCallback
 import android.support.customtabs.CustomTabsIntent
 import android.support.v4.content.ContextCompat
 import me.proxer.app.R
@@ -16,7 +15,6 @@ import me.proxer.library.entitiy.info.EntryCore
 import me.proxer.library.entitiy.manga.Page
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
-import org.chromium.customtabsclient.CustomTabsActivityHelper
 import java.net.URLDecoder
 
 inline val Page.decodedName: String

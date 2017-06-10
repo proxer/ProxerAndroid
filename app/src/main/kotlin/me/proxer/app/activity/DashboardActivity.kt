@@ -140,7 +140,6 @@ class DashboardActivity : MainActivity() {
 
     private fun setFragment(fragment: Fragment): Unit {
         supportFragmentManager.beginTransaction()
-                .setAllowOptimization(true)
                 .replace(R.id.container, fragment)
                 .commitNow()
     }

@@ -37,7 +37,6 @@ class ConferenceInfoActivity : MainActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .setAllowOptimization(true)
                     .replace(R.id.container, ConferenceInfoFragment.newInstance())
                     .commitNow()
         }

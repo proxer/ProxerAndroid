@@ -2,7 +2,6 @@ package me.proxer.app.fragment.news
 
 import android.os.Bundle
 import android.support.v7.widget.StaggeredGridLayoutManager
-import android.view.View
 import android.widget.ImageView
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R

@@ -33,7 +33,8 @@
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/accept"
         android:layout_toStartOf="@+id/accept"
-        android:background="?attr/selectableItemBackgroundBorderless" />
+        android:background="?attr/selectableItemBackgroundBorderless"
+        tools:ignore="ContentDescription" />
 
     <ImageButton
         android:id="@+id/accept"
@@ -42,5 +43,6 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:background="?attr/selectableItemBackgroundBorderless" />
+        android:background="?attr/selectableItemBackgroundBorderless"
+        tools:ignore="ContentDescription" />
 </RelativeLayout>
