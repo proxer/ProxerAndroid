@@ -245,6 +245,12 @@ class ChatFragment : PagedLoadingFragment<Int, LocalMessage>() {
         innerAdapter.saveInstanceState(outState)
     }
 
+    override fun onDestroyView() {
+        emojiPopup.dismiss()
+
+        super.onDestroyView()
+    }
+
     override fun showContent() {
         super.showContent()
 

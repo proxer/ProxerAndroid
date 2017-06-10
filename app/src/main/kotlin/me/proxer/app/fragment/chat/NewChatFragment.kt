@@ -271,6 +271,12 @@ class NewChatFragment : MainFragment() {
         setProgressVisible(task.isWorking)
     }
 
+    override fun onDestroyView() {
+        emojiPopup.dismiss()
+
+        super.onDestroyView()
+    }
+
     private fun setProgressVisible(enable: Boolean) {
         progress.isEnabled = enable
         progress.isRefreshing = enable
