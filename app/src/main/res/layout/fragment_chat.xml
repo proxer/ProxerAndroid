@@ -41,8 +41,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="@dimen/item_margin"
-            android:layout_marginLeft="@dimen/screen_horizontal_margin"
-            android:layout_marginRight="@dimen/screen_horizontal_margin"
+            android:layout_marginLeft="@dimen/item_margin"
+            android:layout_marginRight="@dimen/item_margin"
             android:layout_marginTop="@dimen/item_margin" />
 
     </RelativeLayout>
