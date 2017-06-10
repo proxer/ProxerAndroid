@@ -151,11 +151,11 @@ class LocalMangaFragment : LoadingFragment<Unit, List<CompleteLocalMangaEntry>>(
         jobStateUpdateTask.forceExecute(resources)
     }
 
-    override fun onDestroyView() {
+    override fun onDestroyOptionsMenu() {
         searchView.setOnQueryTextListener(null)
         MenuItemCompat.setOnActionExpandListener(searchItem, null)
 
-        super.onDestroyView()
+        super.onDestroyOptionsMenu()
     }
 
     override fun onDestroy() {

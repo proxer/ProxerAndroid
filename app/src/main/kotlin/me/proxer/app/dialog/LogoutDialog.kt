@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
+import com.rubengees.ktask.android.AndroidLifecycleTask
 import com.rubengees.ktask.android.bindToLifecycle
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
@@ -16,6 +17,7 @@ import me.proxer.app.dialog.base.MainDialog
 import me.proxer.app.task.asyncProxerTask
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.extension.bindView
+import me.proxer.library.api.ProxerCall
 import org.jetbrains.anko.longToast
 
 /**
@@ -29,8 +31,15 @@ class LogoutDialog : MainDialog() {
         }
     }
 
-    private val task by lazy {
-        TaskBuilder.asyncProxerTask<Void?>()
+    private lateinit var task: AndroidLifecycleTask<ProxerCall<Void?>, Void?>
+
+    private val content: TextView by bindView(R.id.content)
+    private val progress: ProgressBar by bindView(R.id.progress)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        task = TaskBuilder.asyncProxerTask<Void?>()
                 .bindToLifecycle(this)
                 .onInnerStart {
                     setProgressVisible(true)
@@ -47,9 +56,6 @@ class LogoutDialog : MainDialog() {
                     setProgressVisible(false)
                 }.build()
     }
-
-    private val content: TextView by bindView(R.id.content)
-    private val progress: ProgressBar by bindView(R.id.progress)
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return MaterialDialog.Builder(context)

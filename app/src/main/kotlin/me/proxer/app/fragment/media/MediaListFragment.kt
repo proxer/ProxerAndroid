@@ -219,11 +219,11 @@ class MediaListFragment : PagedLoadingFragment<ProxerCall<List<MediaListEntry>>,
         return true
     }
 
-    override fun onDestroyView() {
+    override fun onDestroyOptionsMenu() {
         searchView.setOnQueryTextListener(null)
         MenuItemCompat.setOnActionExpandListener(searchItem, null)
 
-        super.onDestroyView()
+        super.onDestroyOptionsMenu()
     }
 
     override fun constructTask() = TaskBuilder.asyncProxerTask<List<MediaListEntry>>().build()

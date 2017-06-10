@@ -12,6 +12,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.ProgressBar
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
+import com.rubengees.ktask.android.AndroidLifecycleTask
 import com.rubengees.ktask.android.bindToLifecycle
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
@@ -25,6 +26,7 @@ import me.proxer.app.task.asyncProxerTask
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.extension.bindView
 import me.proxer.app.util.listener.TextWatcherWrapper
+import me.proxer.library.api.ProxerCall
 import me.proxer.library.api.ProxerException
 import me.proxer.library.api.ProxerException.ServerErrorType
 import me.proxer.library.entitiy.user.User
@@ -42,8 +44,20 @@ class LoginDialog : MainDialog() {
         }
     }
 
-    private val task by lazy {
-        TaskBuilder.asyncProxerTask<User>()
+    private lateinit var task: AndroidLifecycleTask<ProxerCall<User>, User>
+
+    private val username: TextInputEditText by bindView(R.id.username)
+    private val password: TextInputEditText by bindView(R.id.password)
+    private val secret: TextInputEditText by bindView(R.id.secret)
+    private val usernameContainer: TextInputLayout by bindView(R.id.usernameContainer)
+    private val passwordContainer: TextInputLayout by bindView(R.id.passwordContainer)
+    private val inputContainer: ViewGroup by bindView(R.id.inputContainer)
+    private val progress: ProgressBar by bindView(R.id.progress)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        task = TaskBuilder.asyncProxerTask<User>()
                 .bindToLifecycle(this)
                 .onInnerStart {
                     setProgressVisible(true)
@@ -75,14 +89,6 @@ class LoginDialog : MainDialog() {
                 }
                 .build()
     }
-
-    private val username: TextInputEditText by bindView(R.id.username)
-    private val password: TextInputEditText by bindView(R.id.password)
-    private val secret: TextInputEditText by bindView(R.id.secret)
-    private val usernameContainer: TextInputLayout by bindView(R.id.usernameContainer)
-    private val passwordContainer: TextInputLayout by bindView(R.id.passwordContainer)
-    private val inputContainer: ViewGroup by bindView(R.id.inputContainer)
-    private val progress: ProgressBar by bindView(R.id.progress)
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return MaterialDialog.Builder(context)
