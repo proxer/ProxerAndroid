@@ -15,6 +15,12 @@
         <item name="asp_preferenceDialogIconTint">?asp_preferenceIconTint</item>
     </style>
 
+    <style name="Theme.App.AboutFragment" parent="Theme.Mal.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
     <style name="Theme.App.Transparent" parent="Theme.App">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
