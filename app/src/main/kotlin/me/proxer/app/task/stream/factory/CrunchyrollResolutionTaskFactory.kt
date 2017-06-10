@@ -20,11 +20,16 @@ class CrunchyrollResolutionTaskFactory : HosterResolutionTaskFactory() {
     class CrunchyrollTask : WorkerTask<String, StreamResolutionResult>() {
 
         private companion object {
-            private val regex = Regex("media_id=(\\d+)")
+            private val regex = Regex("proxer-(.*$)", RegexOption.DOT_MATCHES_ALL)
         }
 
         override fun work(input: String): StreamResolutionResult {
-            val id = regex.find(input)?.groupValues?.get(1) ?: throw StreamResolutionException()
+            val regexResult = regex.find(input) ?: throw StreamResolutionException()
+            val id = regexResult.groupValues[1]
+
+            if (id.isBlank()) {
+                throw StreamResolutionException()
+            }
 
             return StreamResolutionResult(Intent(Intent.ACTION_VIEW, Uri.parse("crunchyroll://media/$id")), {
                 AppRequiredDialog.show(it, "Crunchyroll", "com.crunchyroll.crunchyroid")
