@@ -84,6 +84,7 @@ class MainApplication : Application() {
         }
 
         AppCompatDelegate.setDefaultNightMode(PreferenceHelper.getNightMode(this))
+        NotificationHelper.createNotificationChannels(this)
 
         chatDb = ChatDatabase(this)
         mangaDb = LocalMangaDatabase(this)

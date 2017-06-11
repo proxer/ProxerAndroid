@@ -1,6 +1,8 @@
 package me.proxer.app.helper
 
 import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.graphics.Typeface
@@ -23,7 +25,6 @@ import me.proxer.app.entity.chat.LocalConference
 import me.proxer.app.entity.chat.LocalMessage
 import me.proxer.app.fragment.news.NewsArticleFragment
 import me.proxer.app.helper.MaterialDrawerHelper.DrawerItem
-import me.proxer.app.helper.NotificationHelper.NotificationType.*
 import me.proxer.app.receiver.DirectReplyReceiver
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Utils
@@ -37,25 +38,56 @@ object NotificationHelper {
 
     private const val GROUP_CHAT = "chat"
 
+    private const val CHANNEL_ACCOUNT = "proxer_account"
+    private const val CHANNEL_CHAT = "proxer_chat"
+    private const val CHANNEL_ERRORS = "proxer_errors"
+
+    private const val TYPE_NEWS = 1357913213
+    private const val TYPE_NEWS_ERROR = 472347289
+    private const val TYPE_CHAT = 782373275
+    private const val TYPE_MANGA_DOWNLOAD_ERROR = 479239223
+
+    fun createNotificationChannels(context: Context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+            val accountTitle = context.getString(R.string.notification_channel_account)
+            val chatTitle = context.getString(R.string.notification_channel_chat)
+            val errorsTitle = context.getString(R.string.notification_channel_errors)
+
+            notificationManager.createNotificationChannels(listOf(
+                    NotificationChannel(CHANNEL_ACCOUNT, accountTitle, NotificationManager.IMPORTANCE_DEFAULT).apply {
+                        description = context.getString(R.string.notification_channel_account_description)
+                    },
+                    NotificationChannel(CHANNEL_CHAT, chatTitle, NotificationManager.IMPORTANCE_HIGH).apply {
+                        description = context.getString(R.string.notification_channel_chat_description)
+                    },
+                    NotificationChannel(CHANNEL_ERRORS, errorsTitle, NotificationManager.IMPORTANCE_LOW).apply {
+                        description = context.getString(R.string.notification_channel_errors_description)
+                    }
+            ))
+        }
+    }
+
     fun showOrUpdateNewsNotification(context: Context, news: Collection<NewsArticle>) {
         if (!NewsArticleFragment.isActive) {
             val notification = buildNewsNotification(context, news)
 
             when (notification) {
-                null -> cancelNotification(context, NEWS)
-                else -> NotificationManagerCompat.from(context).notify(NEWS.id, notification)
+                null -> NotificationManagerCompat.from(context).cancel(TYPE_NEWS)
+                else -> NotificationManagerCompat.from(context).notify(TYPE_NEWS, notification)
             }
         }
     }
 
     fun showNewsErrorNotification(context: Context, error: Throwable) {
-        showErrorNotification(context, NEWS_ERROR.id,
+        showErrorNotification(context, TYPE_NEWS,
                 context.getString(R.string.notification_news_error_title),
                 context.getString(ErrorUtils.getMessage(error)))
     }
 
     fun showOrUpdateChatNotification(context: Context, conferenceMap: Map<LocalConference, List<LocalMessage>>) {
-        listOf(NotificationType.CHAT.id to buildChatSummaryNotification(context, conferenceMap))
+        listOf(TYPE_CHAT to buildChatSummaryNotification(context, conferenceMap))
                 .plus(conferenceMap.entries.map { (conference, messages) ->
                     conference.id.toInt() to when {
                         messages.isEmpty() -> null
@@ -70,18 +102,18 @@ object NotificationHelper {
     }
 
     fun showMangaDownloadErrorNotification(context: Context, error: Throwable) {
-        showErrorNotification(context, MANGA_DOWNLOAD_ERROR.id,
+        showErrorNotification(context, TYPE_MANGA_DOWNLOAD_ERROR,
                 context.getString(R.string.notification_manga_download_error_title),
                 context.getString(ErrorUtils.getMessage(error)))
     }
 
     fun cancelNewsNotification(context: Context) {
-        cancelNotification(context, NEWS)
-        cancelNotification(context, NEWS_ERROR)
+        NotificationManagerCompat.from(context).cancel(TYPE_NEWS)
+        NotificationManagerCompat.from(context).cancel(TYPE_NEWS_ERROR)
     }
 
     fun cancelChatNotification(context: Context) {
-        cancelNotification(context, CHAT)
+        NotificationManagerCompat.from(context).cancel(TYPE_CHAT)
     }
 
     private fun buildNewsNotification(context: Context, news: Collection<NewsArticle>): Notification? {
@@ -130,8 +162,9 @@ object NotificationHelper {
                         DashboardActivity.getSectionIntent(context, DrawerItem.NEWS),
                         PendingIntent.FLAG_UPDATE_CURRENT))
                 .setColor(ContextCompat.getColor(context, R.color.primary))
-                .setPriority(PRIORITY_LOW)
-                .setOnlyAlertOnce(true)
+                .setPriority(PRIORITY_DEFAULT)
+                .setChannelId(CHANNEL_ACCOUNT)
+                .setNumber(news.size)
                 .setStyle(style)
                 .build()
     }
@@ -182,8 +215,10 @@ object NotificationHelper {
                         .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT))
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setColor(ContextCompat.getColor(context, R.color.primary))
-                .setPriority(PRIORITY_HIGH)
                 .setCategory(CATEGORY_MESSAGE)
+                .setPriority(PRIORITY_HIGH)
+                .setChannelId(CHANNEL_CHAT)
+                .setNumber(conferenceAmount)
                 .setGroup(GROUP_CHAT)
                 .setGroupSummary(true)
                 .setAutoCancel(true)
@@ -262,6 +297,7 @@ object NotificationHelper {
                 .setColor(ContextCompat.getColor(context, R.color.primary))
                 .setPriority(PRIORITY_HIGH)
                 .setCategory(CATEGORY_MESSAGE)
+                .setChannelId(CHANNEL_CHAT)
                 .setGroup(GROUP_CHAT)
                 .setAutoCancel(true)
                 .setOnlyAlertOnce(true)
@@ -293,19 +329,9 @@ object NotificationHelper {
                 .setContentText(content)
                 .setColor(ContextCompat.getColor(context, R.color.primary))
                 .setSmallIcon(R.drawable.ic_stat_proxer)
+                .setChannelId(CHANNEL_ERRORS)
                 .setPriority(PRIORITY_LOW)
                 .setAutoCancel(true)
                 .build())
-    }
-
-    private fun cancelNotification(context: Context, type: NotificationType) {
-        NotificationManagerCompat.from(context).cancel(type.id)
-    }
-
-    internal enum class NotificationType(val id: Int) {
-        NEWS(1357913213),
-        NEWS_ERROR(472347289),
-        CHAT(782373275),
-        MANGA_DOWNLOAD_ERROR(479239223)
     }
 }
