@@ -32,6 +32,21 @@
                 app:layout_collapseParallaxMultiplier="0.7"
                 tools:ignore="ContentDescription,UnusedAttribute" />
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/image_tabs_text_protection_scrim_top_size"
+                android:layout_gravity="top"
+                android:background="@drawable/text_protection_scrim_top"
+                android:fitsSystemWindows="true"
+                app:layout_collapseMode="pin" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/image_tabs_text_protection_scrim_bottom_size"
+                android:layout_gravity="bottom"
+                android:background="@drawable/text_protection_scrim_bottom"
+                android:fitsSystemWindows="true" />
+
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
