@@ -98,8 +98,8 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar, savedInstanceSta
         miniDrawer?.setSelection(item.id)
     }
 
-    fun refreshHeader(context: Activity) {
-        header.profiles = generateAccountItems(context)
+    fun refreshHeader() {
+        header.profiles = generateAccountItems()
         drawer.recyclerView.adapter.notifyDataSetChanged()
         miniDrawer?.createItems()
     }
@@ -113,41 +113,39 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar, savedInstanceSta
                     onAccountItemClick(view, profile, current)
                 }
                 .withSavedInstance(savedInstanceState)
-                .withProfiles(generateAccountItems(context))
+                .withProfiles(generateAccountItems())
                 .build()
     }
 
-    private fun generateAccountItems(context: Activity): List<IProfile<*>> {
+    private fun generateAccountItems(): List<IProfile<*>> {
         val user = StorageHelper.user
 
         when (user) {
             null -> return arrayListOf(
                     ProfileDrawerItem()
-                            .withName(context.getString(R.string.section_guest))
+                            .withName(R.string.section_guest)
                             .withIcon(R.mipmap.ic_launcher)
                             .withSelectedTextColorRes(R.color.colorAccent)
                             .withIdentifier(AccountItem.GUEST.id),
                     ProfileSettingDrawerItem()
-                            .withName(context.getString(R.string.section_login))
+                            .withName(R.string.section_login)
                             .withIcon(CommunityMaterial.Icon.cmd_account_key)
-                            .withIconTinted(true)
-                            .withIdentifier(AccountItem.LOGIN.id))
+                            .withIdentifier(AccountItem.LOGIN.id)
+            )
             else -> return arrayListOf(
                     ProfileDrawerItem()
                             .withName(user.name)
-                            .withEmail(context.getString(R.string.section_user_subtitle))
+                            .withEmail(R.string.section_user_subtitle)
                             .withIcon(ProxerUrls.userImage(user.image).toString())
                             .withSelectedTextColorRes(R.color.colorAccent)
                             .withIdentifier(AccountItem.USER.id),
                     ProfileSettingDrawerItem()
-                            .withName(context.getString(R.string.section_ucp))
+                            .withName(R.string.section_ucp)
                             .withIcon(CommunityMaterial.Icon.cmd_account_key)
-                            .withIconTinted(true)
                             .withIdentifier(AccountItem.UCP.id),
                     ProfileSettingDrawerItem()
-                            .withName(context.getString(R.string.section_logout))
+                            .withName(R.string.section_logout)
                             .withIcon(CommunityMaterial.Icon.cmd_account_remove)
-                            .withIconTinted(true)
                             .withIdentifier(AccountItem.LOGOUT.id)
             )
         }
@@ -259,7 +257,8 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar, savedInstanceSta
                         .withIcon(CommunityMaterial.Icon.cmd_settings)
                         .withSelectedTextColorRes(R.color.colorAccent)
                         .withSelectedIconColorRes(R.color.colorAccent)
-                        .withIdentifier(DrawerItem.SETTINGS.id))
+                        .withIdentifier(DrawerItem.SETTINGS.id)
+        )
     }
 
     private fun getStickyItemIds(): Array<DrawerItem> {

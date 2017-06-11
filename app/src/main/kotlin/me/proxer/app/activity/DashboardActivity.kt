@@ -74,7 +74,7 @@ class DashboardActivity : MainActivity() {
     override fun onResume() {
         super.onResume()
 
-        drawer.refreshHeader(this)
+        drawer.refreshHeader()
     }
 
     override fun onStart() {
@@ -147,13 +147,13 @@ class DashboardActivity : MainActivity() {
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onUserChanged(@Suppress("UNUSED_PARAMETER") event: LoginEvent) {
-        drawer.refreshHeader(this)
+        drawer.refreshHeader()
     }
 
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLogout(@Suppress("UNUSED_PARAMETER") event: LogoutEvent) {
-        drawer.refreshHeader(this)
+        drawer.refreshHeader()
     }
 
     private fun displayFirstPage(savedInstanceState: Bundle?) {
