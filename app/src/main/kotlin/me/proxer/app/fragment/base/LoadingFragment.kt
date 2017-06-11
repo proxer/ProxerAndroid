@@ -147,7 +147,7 @@ abstract class LoadingFragment<I, O> : MainFragment() {
 
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onLogin(@Suppress("UNUSED_PARAMETER") event: LoginEvent) {
+    open fun onLogin(@Suppress("UNUSED_PARAMETER") event: LoginEvent) {
         if (isLoginRequired) {
             freshLoad()
         } else {
@@ -165,7 +165,7 @@ abstract class LoadingFragment<I, O> : MainFragment() {
 
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onLogout(@Suppress("UNUSED_PARAMETER") event: LogoutEvent) {
+    open fun onLogout(@Suppress("UNUSED_PARAMETER") event: LogoutEvent) {
         if (isLoginRequired) {
             freshLoad()
         }
@@ -173,7 +173,7 @@ abstract class LoadingFragment<I, O> : MainFragment() {
 
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onAgeConfirmation(@Suppress("UNUSED_PARAMETER") event: AgeConfirmationEvent) {
+    open fun onAgeConfirmation(@Suppress("UNUSED_PARAMETER") event: AgeConfirmationEvent) {
         if (isAgeConfirmationRequired) {
             freshLoad()
         }
@@ -181,7 +181,7 @@ abstract class LoadingFragment<I, O> : MainFragment() {
 
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onCaptchaSolver(@Suppress("UNUSED_PARAMETER") event: CaptchaSolvedEvent) {
+    open fun onCaptchaSolved(@Suppress("UNUSED_PARAMETER") event: CaptchaSolvedEvent) {
         state.error?.let {
             val error = ErrorUtils.getInnermostError(it)
 

@@ -12,6 +12,7 @@ import me.proxer.app.activity.NewChatActivity
 import me.proxer.app.adapter.chat.ConferenceAdapter
 import me.proxer.app.application.GlideApp
 import me.proxer.app.entity.chat.LocalConference
+import me.proxer.app.event.LogoutEvent
 import me.proxer.app.fragment.base.LoadingFragment
 import me.proxer.app.helper.NotificationHelper
 import me.proxer.app.job.ChatJob
@@ -123,10 +124,10 @@ class ConferencesFragment : LoadingFragment<Unit, List<LocalConference>>() {
         }
     }
 
-    override fun hideContent() {
+    override fun onLogout(event: LogoutEvent) {
         adapter.clear()
 
-        super.hideContent()
+        super.onLogout(event)
     }
 
     override fun constructInput() = Unit
