@@ -6,6 +6,7 @@ machine:
 
 dependencies:
   pre:
+    - touch $HOME/.android/repositories.cfg
     - echo y | android update sdk --no-ui --filter "tools"
     - echo y | $ANDROID_HOME/tools/bin/sdkmanager "platform-tools"
     - echo y | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;26.0.0"
