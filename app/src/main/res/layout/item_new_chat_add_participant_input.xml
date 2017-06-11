@@ -22,6 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="@string/fragment_new_chat_add_participant_hint"
+            android:imeOptions="actionNext"
             android:inputType="text"
             android:maxLines="1" />
     </android.support.design.widget.TextInputLayout>

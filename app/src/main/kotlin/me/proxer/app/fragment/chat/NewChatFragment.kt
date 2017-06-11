@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -96,6 +97,26 @@ class NewChatFragment : MainFragment() {
     private val messageInput: EmojiEditText by bindView(R.id.messageInput)
     private val sendButton: FloatingActionButton by bindView(R.id.sendButton)
 
+    private val addParticipantImage by lazy {
+        addParticipantFooter.find<ImageView>(R.id.image)
+    }
+
+    private val participantInputContainer by lazy {
+        addParticipantInputFooter.find<TextInputLayout>(R.id.participantInputContainer)
+    }
+
+    private val participantInput by lazy {
+        addParticipantInputFooter.find<EditText>(R.id.participantInput)
+    }
+
+    private val acceptParticipant by lazy {
+        addParticipantInputFooter.find<ImageButton>(R.id.accept)
+    }
+
+    private val cancelParticipant by lazy {
+        addParticipantInputFooter.find<ImageButton>(R.id.cancel)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -166,69 +187,56 @@ class NewChatFragment : MainFragment() {
             adapter.footer = addParticipantInputFooter
         }
 
-        addParticipantFooter.find<ImageView>(R.id.image).setImageDrawable(IconicsDrawable(context)
+        addParticipantImage.setImageDrawable(IconicsDrawable(context)
                 .icon(if (isGroup) CommunityMaterial.Icon.cmd_account_plus else
                     CommunityMaterial.Icon.cmd_account_multiple_plus)
                 .sizeDp(96)
                 .paddingDp(16)
                 .colorRes(R.color.icon))
 
-        val inputContainer = addParticipantInputFooter.find<TextInputLayout>(R.id.participantInputContainer)
-        val input = addParticipantInputFooter.find<EditText>(R.id.participantInput).apply {
-            addTextChangedListener(object : TextWatcherWrapper {
-                override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                    inputContainer.error = null
-                    inputContainer.isErrorEnabled = false
+        participantInput.addTextChangedListener(object : TextWatcherWrapper {
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                participantInputContainer.error = null
+                participantInputContainer.isErrorEnabled = false
+            }
+        })
+
+        participantInput.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                if (addUser()) {
+                    messageInput.requestFocus()
                 }
-            })
 
-            requestFocus()
-        }
-
-        addParticipantInputFooter.find<ImageButton>(R.id.accept).apply {
-            setImageDrawable(IconicsDrawable(context)
-                    .icon(CommunityMaterial.Icon.cmd_check)
-                    .sizeDp(48)
-                    .paddingDp(16)
-                    .colorRes(R.color.icon))
-
-            setOnClickListener {
-                input.text.toString().let {
-                    when {
-                        it.isBlank() -> {
-                            inputContainer.isErrorEnabled = true
-                            inputContainer.error = context.getString(R.string.error_input_empty)
-                        }
-                        innerAdapter.contains(it) -> {
-                            inputContainer.isErrorEnabled = true
-                            inputContainer.error = context.getString(R.string.error_duplicate_participant)
-                        }
-                        else -> {
-                            innerAdapter.append(listOf(Participant(it, "")))
-
-                            input.text.clear()
-
-                            if (!isGroup && innerAdapter.itemCount >= 1) {
-                                adapter.removeFooter()
-                            }
-                        }
-                    }
-                }
+                true
+            } else {
+                false
             }
         }
 
-        addParticipantInputFooter.find<ImageButton>(R.id.cancel).apply {
-            setImageDrawable(IconicsDrawable(context)
-                    .icon(CommunityMaterial.Icon.cmd_close)
-                    .sizeDp(48)
-                    .paddingDp(16)
-                    .colorRes(R.color.icon))
+        acceptParticipant.setImageDrawable(IconicsDrawable(context)
+                .icon(CommunityMaterial.Icon.cmd_check)
+                .sizeDp(48)
+                .paddingDp(16)
+                .colorRes(R.color.icon))
 
-            setOnClickListener {
-                input.text.clear()
-
-                adapter.footer = addParticipantFooter
+        acceptParticipant.setOnClickListener {
+            if (addUser()) {
+                messageInput.requestFocus()
             }
+        }
+
+        cancelParticipant.setImageDrawable(IconicsDrawable(context)
+                .icon(CommunityMaterial.Icon.cmd_close)
+                .sizeDp(48)
+                .paddingDp(16)
+                .colorRes(R.color.icon))
+
+        cancelParticipant.setOnClickListener {
+            participantInput.text.clear()
+
+            adapter.footer = addParticipantFooter
+
+            messageInput.requestFocus()
         }
 
         adapter.footer = addParticipantFooter
@@ -246,6 +254,22 @@ class NewChatFragment : MainFragment() {
                     topicInputContainer.error = null
                 }
             })
+
+            topicInput.setOnEditorActionListener { _, actionId, _ ->
+                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                    if (innerAdapter.isEmpty()) {
+                        adapter.footer = addParticipantInputFooter
+
+                        participantInput.requestFocus()
+                    } else {
+                        messageInput.requestFocus()
+                    }
+
+                    true
+                } else {
+                    false
+                }
+            }
         } else {
             topicContainer.visibility = View.GONE
         }
@@ -275,6 +299,38 @@ class NewChatFragment : MainFragment() {
         emojiPopup.dismiss()
 
         super.onDestroyView()
+    }
+
+    private fun addUser(): Boolean {
+        return participantInput.text.toString().let {
+            when {
+                it.isBlank() -> {
+                    participantInputContainer.isErrorEnabled = true
+                    participantInputContainer.error = context.getString(R.string.error_input_empty)
+
+                    false
+                }
+                innerAdapter.contains(it) -> {
+                    participantInputContainer.isErrorEnabled = true
+                    participantInputContainer.error = context.getString(R.string.error_duplicate_participant)
+
+                    false
+                }
+                else -> {
+                    innerAdapter.append(listOf(Participant(it, "")))
+
+                    participantInput.text.clear()
+
+                    if (!isGroup && innerAdapter.itemCount >= 1) {
+                        adapter.removeFooter()
+
+                        true
+                    } else {
+                        false
+                    }
+                }
+            }
+        }
     }
 
     private fun setProgressVisible(enable: Boolean) {
