@@ -5,6 +5,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.graphics.Typeface
 import android.os.Build
 import android.support.v4.app.NotificationCompat.*
@@ -28,7 +29,10 @@ import me.proxer.app.helper.MaterialDrawerHelper.DrawerItem
 import me.proxer.app.receiver.DirectReplyReceiver
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Utils
+import me.proxer.app.util.extension.androidUri
+import me.proxer.library.api.ProxerException
 import me.proxer.library.entitiy.notifications.NewsArticle
+import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
 
 /**
@@ -102,9 +106,22 @@ object NotificationHelper {
     }
 
     fun showMangaDownloadErrorNotification(context: Context, error: Throwable) {
+        val innermostError = ErrorUtils.getInnermostError(error)
+        val isIpBlockedError = innermostError is ProxerException &&
+                innermostError.serverErrorType == ProxerException.ServerErrorType.IP_BLOCKED
+
+        val intent = when {
+            isIpBlockedError -> {
+                PendingIntent.getActivity(context, 0, Intent(Intent.ACTION_VIEW).apply {
+                    data = ProxerUrls.captchaWeb(Device.MOBILE).androidUri()
+                }, 0)
+            }
+            else -> null
+        }
+
         showErrorNotification(context, TYPE_MANGA_DOWNLOAD_ERROR,
                 context.getString(R.string.notification_manga_download_error_title),
-                context.getString(ErrorUtils.getMessage(error)))
+                context.getString(ErrorUtils.getMessage(innermostError)), intent)
     }
 
     fun cancelNewsNotification(context: Context) {
@@ -323,7 +340,8 @@ object NotificationHelper {
                 .build()
     }
 
-    private fun showErrorNotification(context: Context, id: Int, title: String, content: String) {
+    private fun showErrorNotification(context: Context, id: Int, title: String, content: String,
+                                      intent: PendingIntent? = null) {
         NotificationManagerCompat.from(context).notify(id, NotificationCompat.Builder(context)
                 .setContentTitle(title)
                 .setContentText(content)
@@ -331,6 +349,7 @@ object NotificationHelper {
                 .setSmallIcon(R.drawable.ic_stat_proxer)
                 .setChannelId(CHANNEL_ERRORS)
                 .setPriority(PRIORITY_LOW)
+                .setContentIntent(intent)
                 .setAutoCancel(true)
                 .build())
     }
