@@ -38,7 +38,7 @@
 
         <activity
             android:name=".activity.ProfileActivity"
-            android:theme="@style/Theme.App.Translucent">
+            android:theme="@style/Theme.App.Translucent.StatusBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -69,7 +69,7 @@
 
         <activity
             android:name=".activity.MediaActivity"
-            android:theme="@style/Theme.App.Translucent">
+            android:theme="@style/Theme.App.Translucent.StatusBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -96,11 +96,11 @@
 
         <activity
             android:name=".activity.TranslatorGroupActivity"
-            android:theme="@style/Theme.App.Translucent" />
+            android:theme="@style/Theme.App.Translucent.StatusBar" />
 
         <activity
             android:name=".activity.IndustryActivity"
-            android:theme="@style/Theme.App.Translucent" />
+            android:theme="@style/Theme.App.Translucent.StatusBar" />
 
         <activity
             android:name=".activity.ImageDetailActivity"
@@ -108,7 +108,8 @@
 
         <activity
             android:name=".activity.StreamActivity"
-            android:configChanges="orientation|keyboardHidden|screenLayout|screenSize">
+            android:configChanges="orientation|keyboardHidden|screenLayout|screenSize"
+            android:theme="@style/Theme.App.Translucent.NavigationBar">
             <intent-filter tools:ignore="AppLinkUrlError">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
