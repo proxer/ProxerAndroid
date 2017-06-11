@@ -12,6 +12,7 @@
     <application
         android:name=".application.MainApplication"
         android:allowBackup="true"
+        android:appCategory="social"
         android:extractNativeLibs="false"
         android:fullBackupContent="@xml/backup_config"
         android:icon="@mipmap/ic_launcher"
@@ -19,6 +20,10 @@
         android:supportsRtl="false"
         android:theme="@style/Theme.App"
         tools:ignore="UnusedAttribute">
+
+        <meta-data
+            android:name="android.webkit.WebView.EnableSafeBrowsing"
+            android:value="true" />
 
         <activity android:name=".activity.DashboardActivity">
             <intent-filter>
