@@ -12,6 +12,7 @@ dependencies:
     - echo y | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;26.0.0"
     - echo y | $ANDROID_HOME/tools/bin/sdkmanager "platforms;android-26"
     - echo y | $ANDROID_HOME/tools/bin/sdkmanager "extras;google;m2repository"
+    - echo y | $ANDROID_HOME/tools/bin/sdkmanager "extras;android;m2repository"
   override:
     - ./gradlew dependencies --console=plain
 
