@@ -1,14 +1,14 @@
 package me.proxer.app.fragment.manga
 
-import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.*
-import com.mikepenz.iconics.utils.IconicsMenuInflatorUtil
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import com.rubengees.ktask.android.AndroidLifecycleTask
 import com.rubengees.ktask.android.bindToLifecycle
@@ -157,7 +157,7 @@ class MangaFragment : LoadingFragment<MangaInput, MangaChapterInfo>() {
                 }
                 .build()
 
-        setHasOptionsMenu(true)
+        activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LOW_PROFILE
     }
 
     override fun onDestroy() {
@@ -208,29 +208,6 @@ class MangaFragment : LoadingFragment<MangaInput, MangaChapterInfo>() {
 
         list.layoutManager = LinearLayoutManager(context)
         list.adapter = adapter
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater) {
-        IconicsMenuInflatorUtil.inflate(inflater, context, R.menu.fragment_manga, menu, true)
-
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.fullscreen -> {
-                val isFullscreen = activity.window.decorView.systemUiVisibility and
-                        View.SYSTEM_UI_FLAG_FULLSCREEN == View.SYSTEM_UI_FLAG_FULLSCREEN
-
-                if (isFullscreen) {
-                    showSystemUI()
-                } else {
-                    hideSystemUI()
-                }
-            }
-        }
-
-        return super.onOptionsItemSelected(item)
     }
 
     override fun freshLoad() {
@@ -345,21 +322,5 @@ class MangaFragment : LoadingFragment<MangaInput, MangaChapterInfo>() {
         episode = newEpisode
 
         freshLoad()
-    }
-
-    @SuppressLint("InlinedApi")
-    private fun showSystemUI() {
-        activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-    }
-
-    @SuppressLint("InlinedApi")
-    private fun hideSystemUI() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
-                    View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_IMMERSIVE
-        } else {
-            activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LOW_PROFILE or
-                    View.SYSTEM_UI_FLAG_FULLSCREEN
-        }
     }
 }

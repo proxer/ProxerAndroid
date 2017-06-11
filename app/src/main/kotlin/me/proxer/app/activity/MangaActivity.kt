@@ -106,7 +106,7 @@ class MangaActivity : MainActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_default)
+        setContentView(R.layout.activity_manga)
         setSupportActionBar(toolbar)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
