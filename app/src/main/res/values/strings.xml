@@ -323,10 +323,10 @@
     <string name="view_bbcode_hide_spoiler">Spoiler verstecken</string>
     <string name="view_bbcode_show_spoiler">Spoiler!</string>
 
-    <string name="notification_channel_account_description">News und alles zu deinem Account</string>
+    <string name="notification_channel_profile_description">News und alles zu deinem Profil</string>
     <string name="notification_channel_chat_description">Private Chat-Nachrichten und Konferenzen</string>
     <string name="notification_channel_errors_description">Problem- und Fehlermeldungen</string>
-    <string name="notification_channel_account">Account</string>
+    <string name="notification_channel_profile">Profil</string>
     <string name="notification_channel_chat">Chat</string>
     <string name="notification_channel_errors">Probleme</string>
 

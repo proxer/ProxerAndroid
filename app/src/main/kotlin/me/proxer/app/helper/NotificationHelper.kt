@@ -38,7 +38,7 @@ object NotificationHelper {
 
     private const val GROUP_CHAT = "chat"
 
-    private const val CHANNEL_ACCOUNT = "proxer_account"
+    private const val CHANNEL_PROFILE = "proxer_profile"
     private const val CHANNEL_CHAT = "proxer_chat"
     private const val CHANNEL_ERRORS = "proxer_errors"
 
@@ -51,13 +51,13 @@ object NotificationHelper {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-            val accountTitle = context.getString(R.string.notification_channel_account)
+            val profileTitle = context.getString(R.string.notification_channel_profile)
             val chatTitle = context.getString(R.string.notification_channel_chat)
             val errorsTitle = context.getString(R.string.notification_channel_errors)
 
             notificationManager.createNotificationChannels(listOf(
-                    NotificationChannel(CHANNEL_ACCOUNT, accountTitle, NotificationManager.IMPORTANCE_DEFAULT).apply {
-                        description = context.getString(R.string.notification_channel_account_description)
+                    NotificationChannel(CHANNEL_PROFILE, profileTitle, NotificationManager.IMPORTANCE_DEFAULT).apply {
+                        description = context.getString(R.string.notification_channel_profile_description)
                     },
                     NotificationChannel(CHANNEL_CHAT, chatTitle, NotificationManager.IMPORTANCE_HIGH).apply {
                         description = context.getString(R.string.notification_channel_chat_description)
@@ -163,7 +163,7 @@ object NotificationHelper {
                         PendingIntent.FLAG_UPDATE_CURRENT))
                 .setColor(ContextCompat.getColor(context, R.color.primary))
                 .setPriority(PRIORITY_DEFAULT)
-                .setChannelId(CHANNEL_ACCOUNT)
+                .setChannelId(CHANNEL_PROFILE)
                 .setNumber(news.size)
                 .setStyle(style)
                 .build()
