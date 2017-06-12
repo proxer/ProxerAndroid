@@ -152,14 +152,16 @@ class MainApplication : Application() {
             OkHttpDataSourceFactory(client, GENERIC_USER_AGENT, listener)
         })
 
-        JobManager.create(this).addJobCreator {
-            when {
-                it == ChatJob.TAG -> ChatJob()
-                it == NotificationsJob.TAG -> NotificationsJob()
-                it.startsWith(LocalMangaJob.TAG) -> LocalMangaJob()
-                else -> null
-            }
-        }
+        JobManager.create(this)
+                .apply { config.isVerbose = BuildConfig.DEBUG }
+                .addJobCreator {
+                    when {
+                        it == ChatJob.TAG -> ChatJob()
+                        it == NotificationsJob.TAG -> NotificationsJob()
+                        it.startsWith(LocalMangaJob.TAG) -> LocalMangaJob()
+                        else -> null
+                    }
+                }
 
         DrawerImageLoader.init(ConcreteDrawerImageLoader())
     }

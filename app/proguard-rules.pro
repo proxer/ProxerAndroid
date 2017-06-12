@@ -69,6 +69,16 @@
     @android.support.annotation.Keep <init>(...);
 }
 
+# Remove all kinds of logging.
+-assumenosideeffects class android.util.Log {
+    public static int d(...);
+    public static int v(...);
+    public static int i(...);
+    public static int w(...);
+    public static int e(...);
+    public static int wtf(...);
+}
+
 # EventBus
 -keep enum org.greenrobot.eventbus.ThreadMode { *; }
 
