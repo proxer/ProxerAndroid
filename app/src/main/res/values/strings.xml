@@ -300,10 +300,8 @@
     </plurals>
 
     <string name="fragment_chat_clip_title">Chatverlauf</string>
-    <string name="fragment_chat_link_clip_title">Link</string>
     <string name="fragment_chat_message">Tippe eine Nachricht</string>
     <string name="fragment_chat_reply">"@%s "</string>
-    <string name="fragment_chat_send">Senden</string>
 
     <string name="fragment_conference_info_info_title">Info</string>
     <string name="fragment_conference_info_participants_title">Teilnehmer</string>
@@ -424,14 +422,10 @@
     <string name="action_filter_anime">Anime</string>
     <string name="action_filter_manga">Manga</string>
 
-    <string name="action_sort_ascending">Aufsteigend</string>
     <string name="action_sort_clicks">Nach Zugriffen</string>
     <string name="action_sort_count">Nach Episoden</string>
-    <string name="action_sort_descending">Absteigend</string>
     <string name="action_sort_name">Nach Name</string>
     <string name="action_sort_rating">Nach Bewertungen</string>
-    <string name="action_sort_relevance">Nach Relevanz</string>
-    <string name="action_sort_state">Nach Status</string>
     <string name="action_sort_time">Nach Datum</string>
 
     <string name="action_send_message">Nachricht schreiben</string>
@@ -443,8 +437,6 @@
     <string name="action_conference_remove_user">%1$s hat %2$s aus der Konferenz entfernt</string>
     <string name="action_conference_set_leader">%1$s hat %2$s als neuen Konferenzleiter bestimmt</string>
     <string name="action_conference_set_topic">%1$s hat den Konferenztitel in %2$s geändert</string>
-
-    <string name="action_fullscreen">Vollbildmodus</string>
 
     <string name="rank_10">Schnupperninja</string>
     <string name="rank_100">Anwärter</string>

@@ -17,16 +17,6 @@ class LinkConsumableEmojiTextView : EmojiTextView {
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         super.onTouchEvent(event)
 
-        return internalOnTouchEvent()
-    }
-
-    override fun performClick(): Boolean {
-        super.performClick()
-
-        return internalOnTouchEvent()
-    }
-
-    private fun internalOnTouchEvent(): Boolean {
         movementMethod.let {
             if (it is TouchableMovementMethod) {
                 val span = it.pressedSpan
