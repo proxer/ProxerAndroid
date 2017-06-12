@@ -96,7 +96,7 @@ class MangaAdapter : BaseAdapter<Page>() {
          * Make scrolling smoother by hacking the SubsamplingScaleImageView to only receive touch events when zooming.
          */
         private fun applySmoothScrollHack() {
-            image.setOnTouchListener { view, event ->
+            image.setOnTouchListener { _, event ->
                 val shouldInterceptEvent = event.action == MotionEvent.ACTION_MOVE && event.pointerCount == 1 &&
                         image.scale == image.minScale
 

@@ -3,8 +3,6 @@
 
     <style name="Theme.App" parent="Base.Theme.App">
         <item name="android:navigationBarColor">@color/colorPrimary</item>
-
-        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
     </style>
 
     <style name="Theme.App.Translucent" parent="Theme.App">

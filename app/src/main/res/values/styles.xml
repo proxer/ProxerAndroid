@@ -38,6 +38,4 @@
 
     <style name="Theme.App.Translucent" parent="Theme.App" />
 
-    <style name="Theme.App.Translucent.NavigationBar" parent="Theme.App" />
-
 </resources>
