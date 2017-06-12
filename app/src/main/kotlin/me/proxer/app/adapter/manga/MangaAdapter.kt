@@ -1,6 +1,5 @@
 package me.proxer.app.adapter.manga
 
-import android.annotation.SuppressLint
 import android.graphics.PointF
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -95,7 +94,6 @@ class MangaAdapter : BaseAdapter<Page>() {
         /**
          * Make scrolling smoother by hacking the SubsamplingScaleImageView to only receive touch events when zooming.
          */
-        @SuppressLint("ClickableViewAccessibility")
         private fun applySmoothScrollHack() {
             image.setOnTouchListener { _, event ->
                 val shouldInterceptEvent = event.action == MotionEvent.ACTION_MOVE && event.pointerCount == 1 &&

@@ -156,8 +156,6 @@ class MangaFragment : LoadingFragment<MangaInput, MangaChapterInfo>() {
                     }
                 }
                 .build()
-
-        activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LOW_PROFILE
     }
 
     override fun onDestroy() {
@@ -241,6 +239,8 @@ class MangaFragment : LoadingFragment<MangaInput, MangaChapterInfo>() {
 
         innerAdapter.init(result.chapter.server, result.chapter.entryId, result.chapter.id)
         innerAdapter.replace(result.chapter.pages)
+
+        activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LOW_PROFILE
 
         super.onSuccess(result)
     }
