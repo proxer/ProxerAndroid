@@ -16,7 +16,6 @@ import com.mikepenz.iconics.utils.IconicsMenuInflatorUtil
 import com.rubengees.ktask.util.TaskBuilder
 import com.vanniktech.emoji.EmojiEditText
 import com.vanniktech.emoji.EmojiPopup
-import me.proxer.app.R
 import me.proxer.app.activity.ChatActivity
 import me.proxer.app.activity.ProfileActivity
 import me.proxer.app.adapter.chat.ChatAdapter
@@ -24,6 +23,7 @@ import me.proxer.app.application.MainApplication.Companion.chatDb
 import me.proxer.app.entity.chat.LocalConference
 import me.proxer.app.entity.chat.LocalMessage
 import me.proxer.app.fragment.base.PagedLoadingFragment
+import me.proxer.app.helper.NotificationHelper
 import me.proxer.app.helper.StorageHelper
 import me.proxer.app.job.ChatJob
 import me.proxer.app.task.chat.ChatRefreshTask
@@ -189,6 +189,8 @@ class ChatFragment : PagedLoadingFragment<Int, LocalMessage>() {
         super.onResume()
 
         isActive = true
+
+        NotificationHelper.cancelChatNotification(context)
 
         if (!isFirstStart && !ChatJob.isRunning()) {
             ChatJob.scheduleSynchronization()
