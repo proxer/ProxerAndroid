@@ -119,9 +119,8 @@ class MainApplication : Application() {
             StorageHelper.resetChatInterval()
 
             chatDb.clear()
-            mangaDb.clear()
 
-            MangaRemovalTask(filesDir).execute(Unit)
+            MangaRemovalTask().execute(Unit)
         }
     }
 

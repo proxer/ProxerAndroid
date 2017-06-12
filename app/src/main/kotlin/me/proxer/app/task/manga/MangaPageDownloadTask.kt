@@ -2,6 +2,7 @@ package me.proxer.app.task.manga
 
 import com.rubengees.ktask.base.LeafTask
 import me.proxer.app.application.MainApplication
+import me.proxer.app.application.MainApplication.Companion.globalContext
 import me.proxer.app.task.manga.MangaPageDownloadTask.MangaPageDownloadTaskInput
 import me.proxer.library.util.ProxerUrls
 import okhttp3.Call
@@ -14,7 +15,7 @@ import kotlin.concurrent.read
 /**
  * @author Ruben Gees
  */
-class MangaPageDownloadTask(private val filesDir: File) : LeafTask<MangaPageDownloadTaskInput, File>() {
+class MangaPageDownloadTask(private val isLocal: Boolean) : LeafTask<MangaPageDownloadTaskInput, File>() {
 
     override val isWorking: Boolean
         get() = call != null
@@ -23,12 +24,15 @@ class MangaPageDownloadTask(private val filesDir: File) : LeafTask<MangaPageDown
 
     override fun execute(input: MangaPageDownloadTaskInput) {
         start {
-            MangaLockHolder.cleanLock.read {
+            val directory = if (isLocal) globalContext.filesDir else globalContext.cacheDir
+            val lock = if (isLocal) MangaLockHolder.localLock else MangaLockHolder.cacheLock
+
+            lock.read {
                 val lockKey = Triple(input.entryId, input.chapterId, input.name)
 
                 synchronized(MangaLockHolder.pageLocks.getOrPut(lockKey, { Any() }), {
                     val url = ProxerUrls.mangaPageImage(input.server, input.entryId, input.chapterId, input.name)
-                    val file = File("$filesDir/manga/${input.entryId}/${input.chapterId}/${url.hashCode()}.0")
+                    val file = File("$directory/manga/${input.entryId}/${input.chapterId}/${url.hashCode()}.0")
 
                     try {
                         if (file.exists()) {

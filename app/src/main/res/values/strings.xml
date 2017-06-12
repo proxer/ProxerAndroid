@@ -210,8 +210,7 @@
     <string name="dialog_app_required_content">Zum Verwenden dieses Streams ist die %s-App nötig</string>
     <string name="dialog_app_required_positive">Installieren</string>
 
-    <string name="dialog_clean_manga_content">Sollen alle heruntergeladenen Kapitel und Seiten gelöscht werden? Das
-        betrifft auch zwischengespeicherte Seiten.</string>
+    <string name="dialog_clean_manga_content">Sollen alle heruntergeladenen Kapitel und Seiten gelöscht werden?</string>
     <string name="dialog_clean_manga_positive">Alles löschen</string>
 
     <string name="fragment_ucp_overview_username">Nutzername</string>

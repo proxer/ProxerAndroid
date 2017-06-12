@@ -26,6 +26,7 @@ class MangaAdapter : BaseAdapter<Page>() {
     private lateinit var server: String
     private lateinit var entryId: String
     private lateinit var id: String
+    private var isLocal: Boolean = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<Page> {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_manga_page, parent, false))
@@ -44,10 +45,11 @@ class MangaAdapter : BaseAdapter<Page>() {
         }
     }
 
-    fun init(server: String, entryId: String, id: String) {
+    fun init(server: String, entryId: String, id: String, isLocal: Boolean) {
         this.server = server
         this.entryId = entryId
         this.id = id
+        this.isLocal = isLocal
     }
 
     internal inner class ViewHolder(itemView: View) : BaseViewHolder<Page>(itemView) {
@@ -68,11 +70,10 @@ class MangaAdapter : BaseAdapter<Page>() {
             val height = (item.height * width.toFloat() / item.width.toFloat()).toInt()
             val scale = width.toFloat() / item.width.toFloat() * 2f
 
-            image.recycle()
             image.setDoubleTapZoomScale(scale)
             image.layoutParams.height = height
             image.maxScale = scale
-            image.tag = TaskBuilder.task(MangaPageDownloadTask(image.context.filesDir))
+            image.tag = TaskBuilder.task(MangaPageDownloadTask(isLocal))
                     .async()
                     .onSuccess {
                         image.post {
@@ -95,7 +96,7 @@ class MangaAdapter : BaseAdapter<Page>() {
          * Make scrolling smoother by hacking the SubsamplingScaleImageView to only receive touch events when zooming.
          */
         private fun applySmoothScrollHack() {
-            image.setOnTouchListener { _, event ->
+            image.setOnTouchListener { view, event ->
                 val shouldInterceptEvent = event.action == MotionEvent.ACTION_MOVE && event.pointerCount == 1 &&
                         image.scale == image.minScale
 

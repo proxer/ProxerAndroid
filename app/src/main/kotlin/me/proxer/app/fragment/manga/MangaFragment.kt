@@ -25,6 +25,7 @@ import me.proxer.app.adapter.base.BaseAdapter
 import me.proxer.app.adapter.manga.MangaAdapter
 import me.proxer.app.application.MainApplication
 import me.proxer.app.application.MainApplication.Companion.api
+import me.proxer.app.application.MainApplication.Companion.mangaDb
 import me.proxer.app.entity.manga.MangaChapterInfo
 import me.proxer.app.entity.manga.MangaInput
 import me.proxer.app.fragment.base.LoadingFragment
@@ -237,7 +238,7 @@ class MangaFragment : LoadingFragment<MangaInput, MangaChapterInfo>() {
         adapter.header = header
         adapter.footer = footer
 
-        innerAdapter.init(result.chapter.server, result.chapter.entryId, result.chapter.id)
+        innerAdapter.init(result.chapter.server, result.chapter.entryId, result.chapter.id, result.isLocal)
         innerAdapter.replace(result.chapter.pages)
 
         activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LOW_PROFILE
@@ -309,10 +310,10 @@ class MangaFragment : LoadingFragment<MangaInput, MangaChapterInfo>() {
                 .cache(CacheTask.CacheStrategy.RESULT)
 
         val mangaTask = localChapterTask.parallelWith(localEntryTask, zipFunction = { chapter, entry ->
-            MangaChapterInfo(chapter, entry.name, entry.episodeAmount)
+            MangaChapterInfo(chapter, entry.name, entry.episodeAmount, mangaDb.containsChapter(chapter.id))
         }, awaitRightResultOnError = true)
 
-        return TaskBuilder.task(MangaCleanTask(context.filesDir))
+        return TaskBuilder.task(MangaCleanTask())
                 .then(mangaTask.mapInput<MangaInput> { it to it.id })
                 .async()
                 .build()

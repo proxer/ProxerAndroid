@@ -85,7 +85,7 @@ class LocalMangaFragment : LoadingFragment<Unit, List<CompleteLocalMangaEntry>>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        removalTask = TaskBuilder.task(MangaChapterRemovalTask(context.filesDir))
+        removalTask = TaskBuilder.task(MangaChapterRemovalTask())
                 .async()
                 .validateBefore { validate() }
                 .bindToLifecycle(this, "${javaClass}_removal_task")

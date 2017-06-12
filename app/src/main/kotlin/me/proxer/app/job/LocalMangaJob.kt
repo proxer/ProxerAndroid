@@ -112,7 +112,7 @@ class LocalMangaJob : Job() {
             }
 
             val chapter = api.manga().chapter(entryId, episode, language).build().execute()
-            val downloadTask = MangaPageDownloadTask(context.filesDir)
+            val downloadTask = MangaPageDownloadTask(isLocal = true)
 
             for (it in chapter.pages) {
                 if (isCanceled) {

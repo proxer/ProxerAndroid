@@ -8,6 +8,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock
  */
 internal object MangaLockHolder {
 
-    internal val cleanLock = ReentrantReadWriteLock()
+    internal val cacheLock = ReentrantReadWriteLock()
+    internal val localLock = ReentrantReadWriteLock()
     internal val pageLocks = ConcurrentHashMap<Triple<String, String, String>, Any>()
 }
