@@ -7,12 +7,8 @@
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
     </style>
 
-    <style name="Theme.App.Translucent.StatusBar" parent="Theme.App">
+    <style name="Theme.App.Translucent" parent="Theme.App">
         <item name="android:statusBarColor">@android:color/transparent</item>
-    </style>
-
-    <style name="Theme.App.Translucent.NavigationBar" parent="Theme.App">
-        <item name="android:navigationBarColor">@android:color/transparent</item>
     </style>
 
 </resources>
