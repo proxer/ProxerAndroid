@@ -39,6 +39,14 @@ object Utils {
         }
     }
 
+    fun setNaviagtionBarColorIfPossible(activity: Activity?, @ColorRes color: Int) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            activity?.apply {
+                window?.navigationBarColor = ContextCompat.getColor(activity, color)
+            }
+        }
+    }
+
     fun getBitmapFromUrl(context: Context, url: String): Bitmap? {
         try {
             return GlideApp.with(context)

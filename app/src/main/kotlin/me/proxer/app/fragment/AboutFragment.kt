@@ -1,10 +1,12 @@
 package me.proxer.app.fragment
 
+import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.view.View
 import com.danielstone.materialaboutlibrary.ConvenienceBuilder
 import com.danielstone.materialaboutlibrary.MaterialAboutFragment
 import com.danielstone.materialaboutlibrary.items.MaterialAboutActionItem
@@ -13,6 +15,7 @@ import com.danielstone.materialaboutlibrary.model.MaterialAboutCard
 import com.danielstone.materialaboutlibrary.model.MaterialAboutList
 import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.LibsBuilder
+import com.mikepenz.aboutlibraries.LibsConfiguration
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
@@ -22,6 +25,7 @@ import me.proxer.app.activity.ProfileActivity
 import me.proxer.app.application.MainApplication
 import me.proxer.app.application.MainApplication.Companion.chatDb
 import me.proxer.app.entity.chat.Participant
+import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.openHttpPage
 import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
@@ -36,10 +40,9 @@ import org.jetbrains.anko.doAsync
 class AboutFragment : MaterialAboutFragment() {
 
     companion object {
-        private val LIBRARIES = arrayOf("glide", "hawk", "materialdialogs",
-                "eventbus", "okhttp", "leakcanary", "anko", "moshi",
-                "android_textview_linkbuilder", "kotterknife")
-        private val EXCLUDED_LIBRARIES = arrayOf("fastadapter", "materialize")
+        private val LIBRARIES = arrayOf("anko", "eventbus", "android_job", "materialdialogs", "hawk", "glide", "okhttp",
+                "android_textview_linkbuilder", "leakcanary", "retrofit", "moshi")
+        private val EXCLUDED_LIBRARIES = arrayOf("fastadapter", "materialize", "crossfader")
 
         private val REPOSITORY_LINK = HttpUrl.Builder()
                 .scheme("https")
@@ -116,6 +119,12 @@ class AboutFragment : MaterialAboutFragment() {
                                     .withExcludedLibraries(*EXCLUDED_LIBRARIES)
                                     .withFields(R.string::class.java.fields)
                                     .withActivityStyle(getAboutLibrariesActivityStyle())
+                                    .withUiListener(object : LibsConfiguration.LibsUIListener {
+                                        override fun preOnCreateView(view: View) = view
+                                        override fun postOnCreateView(view: View) = view.apply {
+                                            Utils.setNaviagtionBarColorIfPossible(context as Activity, R.color.primary)
+                                        }
+                                    })
                                     .withActivityTitle(getString(R.string.about_info_licenses_activity_title))
                                     .start(context)
                         }.build(),
