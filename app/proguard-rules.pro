@@ -134,3 +134,8 @@
 -keepclassmembers class com.davemorrissey.labs.subscaleview.decoder.SkiaImageDecoder {
    public <init>(...);
 }
+
+# Fix weird errors related to the new Android toolchain
+# TODO: Check if it works now from time to time.
+-dontwarn android.content.ServiceConnection$$CC
+-dontwarn android.widget.Adapter$$CC
