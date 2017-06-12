@@ -114,7 +114,7 @@
 }
 
 # ProxerLib
--keep public enum me.proxer.library.enums.** {
+-keep enum me.proxer.library.** {
     **[] $VALUES;
     public *;
 }
