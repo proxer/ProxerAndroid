@@ -19,6 +19,4 @@
     <color name="material_drawer_secondary_text">@color/textColorTertiary</color>
     <color name="material_drawer_selected">#FF424242</color>
     <color name="material_drawer_divider">@color/divider</color>
-
-    <color name="emoji_background">@color/card_background</color>
 </resources>

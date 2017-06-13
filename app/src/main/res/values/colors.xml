@@ -23,9 +23,10 @@
 
     <color name="card_background">@color/cardview_light_background</color>
 
-    <color name="about_libraries_card_dark">@color/cardview_light_background</color>
+    <color name="about_libraries_card_dark">@color/cardview_dark_background</color>
     <color name="about_libraries_dividerLight_openSource_dark">@color/divider</color>
 
     <color name="emoji_icons">@color/icon</color>
     <color name="emoji_divider">@color/divider</color>
+    <color name="emoji_background">@color/card_background</color>
 </resources>
