@@ -101,7 +101,7 @@ class MangaActivity : MainActivity() {
             }
         }
 
-    private val toolbar: Toolbar by bindView(R.id.toolbar)
+    val toolbar: Toolbar by bindView(R.id.toolbar)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

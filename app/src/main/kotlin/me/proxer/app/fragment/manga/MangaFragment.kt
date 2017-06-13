@@ -2,6 +2,9 @@ package me.proxer.app.fragment.manga
 
 import android.os.Build
 import android.os.Bundle
+import android.support.design.widget.AppBarLayout
+import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
+import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -217,6 +220,22 @@ class MangaFragment : LoadingFragment<MangaInput, MangaChapterInfo>() {
         state.clear()
 
         task.forceExecute(constructInput())
+    }
+
+    override fun hideContent() {
+        super.hideContent()
+
+        (mangaActivity.toolbar.layoutParams as AppBarLayout.LayoutParams).apply {
+            scrollFlags = 0
+        }
+    }
+
+    override fun showContent() {
+        super.showContent()
+
+        (mangaActivity.toolbar.layoutParams as AppBarLayout.LayoutParams).apply {
+            scrollFlags = SCROLL_FLAG_SCROLL or SCROLL_FLAG_ENTER_ALWAYS
+        }
     }
 
     override fun onSuccess(result: MangaChapterInfo) {
