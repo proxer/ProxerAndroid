@@ -137,6 +137,7 @@ class MangaFragment : LoadingFragment<MangaInput, MangaChapterInfo>() {
     private lateinit var header: MediaControlView
     private lateinit var footer: MediaControlView
 
+    private val androidRoot by lazy { activity.findViewById<ViewGroup>(android.R.id.content) }
     private val list: RecyclerView by bindView(R.id.list)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -148,11 +149,11 @@ class MangaFragment : LoadingFragment<MangaInput, MangaChapterInfo>() {
                 }
                 .bindToLifecycle(this, "${javaClass}_bookmark_task")
                 .onSuccess {
-                    snackbar(root, R.string.fragment_set_user_info_success)
+                    snackbar(androidRoot, R.string.fragment_set_user_info_success)
                 }
                 .onError { it ->
                     ErrorUtils.handle(activity as MainActivity, it).let {
-                        multilineSnackbar(root, getString(R.string.fragment_set_user_info_error,
+                        multilineSnackbar(androidRoot, getString(R.string.fragment_set_user_info_error,
                                 getString(it.message)), Snackbar.LENGTH_LONG, it.buttonMessage, it.buttonAction)
                     }
                 }
