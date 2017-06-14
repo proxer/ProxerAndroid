@@ -97,7 +97,7 @@ class BookmarkAdapter(glide: GlideRequests) : BaseGlideAdapter<Bookmark>(glide) 
 
             title.text = item.name
             medium.text = item.medium.toAppString(medium.context)
-            episode.text = item.category.toEpisodeAppString(episode.context, item.episode)
+            episode.text = item.chapterName ?: item.category.toEpisodeAppString(episode.context, item.episode)
             availability.setImageDrawable(AppCompatResources.getDrawable(availability.context, when (item.isAvailable) {
                 true -> R.drawable.ic_circle_green
                 false -> R.drawable.ic_circle_red

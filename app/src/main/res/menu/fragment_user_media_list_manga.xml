@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/filter"
+        android:title="@string/action_filter"
+        app:iiv_color="@android:color/white"
+        app:iiv_icon="cmd_filter_variant"
+        app:iiv_padding="2dp"
+        app:iiv_size="24dp"
+        app:showAsAction="ifRoom">
+
+        <menu>
+            <group android:checkableBehavior="single">
+
+                <item
+                    android:id="@+id/watching"
+                    android:title="@string/media_filter_reading"
+                    app:showAsAction="never" />
+
+                <item
+                    android:id="@+id/watched"
+                    android:title="@string/media_filter_finished"
+                    app:showAsAction="never" />
+
+                <item
+                    android:id="@+id/will_watch"
+                    android:title="@string/media_filter_will_read"
+                    app:showAsAction="never" />
+
+                <item
+                    android:id="@+id/cancelled"
+                    android:title="@string/media_filter_cancelled"
+                    app:showAsAction="never" />
+            </group>
+        </menu>
+    </item>
+</menu>

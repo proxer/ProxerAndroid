@@ -98,7 +98,7 @@ class BookmarksFragment : PagedLoadingFragment<ProxerCall<List<Bookmark>>, Bookm
                     Category.ANIME -> AnimeActivity.navigateTo(activity, item.entryId,
                             item.episode, item.language.toAnimeLanguage(), item.name)
                     Category.MANGA -> MangaActivity.navigateTo(activity, item.entryId,
-                            item.episode, item.language.toGeneralLanguage(), null, item.name)
+                            item.episode, item.language.toGeneralLanguage(), item.chapterName, item.name)
                 }
             }
 

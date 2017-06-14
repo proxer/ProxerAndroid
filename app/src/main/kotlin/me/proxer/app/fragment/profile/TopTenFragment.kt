@@ -15,6 +15,8 @@ import me.proxer.app.application.GlideApp
 import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.fragment.base.LoadingFragment
 import me.proxer.app.fragment.profile.TopTenFragment.ZippedTopTenResult
+import me.proxer.app.helper.PreferenceHelper
+import me.proxer.app.helper.StorageHelper
 import me.proxer.app.task.proxerTask
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
@@ -115,11 +117,17 @@ class TopTenFragment : LoadingFragment<Pair<ProxerCall<List<TopTenEntry>>, Proxe
             .parallelWith(TaskBuilder.proxerTask<List<TopTenEntry>>(), ::ZippedTopTenResult)
             .build()
 
-    override fun constructInput() = api.user().topTen(userId, username)
-            .category(Category.ANIME)
-            .build() to api.user().topTen(userId, username)
-            .category(Category.MANGA)
-            .build()
+    override fun constructInput(): Pair<ProxerCall<List<TopTenEntry>>, ProxerCall<List<TopTenEntry>>> {
+        val includeHentai = PreferenceHelper.isAgeRestrictedMediaAllowed(context) && StorageHelper.user != null
+
+        return api.user().topTen(userId, username)
+                .includeHentai(includeHentai)
+                .category(Category.ANIME)
+                .build() to api.user().topTen(userId, username)
+                .includeHentai(includeHentai)
+                .category(Category.MANGA)
+                .build()
+    }
 
     class ZippedTopTenResult(val animeEntries: List<TopTenEntry>, val mangaEntries: List<TopTenEntry>)
 

@@ -14,6 +14,8 @@ import me.proxer.app.adapter.media.RelationsAdapter
 import me.proxer.app.application.GlideApp
 import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.fragment.base.LoadingFragment
+import me.proxer.app.helper.PreferenceHelper
+import me.proxer.app.helper.StorageHelper
 import me.proxer.app.task.asyncProxerTask
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
@@ -92,7 +94,10 @@ class RelationsFragment : LoadingFragment<ProxerCall<List<Relation>>, List<Relat
         }
     }
 
-    override fun constructInput() = api.info().relations(id).build()
+    override fun constructInput() = api.info().relations(id)
+            .includeHentai(PreferenceHelper.isAgeRestrictedMediaAllowed(context) && StorageHelper.user != null)
+            .build()
+
     override fun constructTask() = TaskBuilder.asyncProxerTask<List<Relation>>()
             .map { it.filterNot { it.id == id }.sortedByDescending { it.clicks } }
             .build()
