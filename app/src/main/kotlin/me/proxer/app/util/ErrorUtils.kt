@@ -108,6 +108,7 @@ object ErrorUtils {
             TIMEOUT -> R.string.error_timeout
             IO -> R.string.error_io
             PARSING -> R.string.error_parsing
+            CANCELLED -> R.string.error_unknown
             UNKNOWN -> R.string.error_unknown
         }
     }

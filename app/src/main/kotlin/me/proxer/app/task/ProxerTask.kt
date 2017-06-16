@@ -2,6 +2,8 @@ package me.proxer.app.task
 
 import com.rubengees.ktask.base.LeafTask
 import me.proxer.library.api.ProxerCall
+import me.proxer.library.api.ProxerException
+import me.proxer.library.api.ProxerException.ErrorType
 
 /**
  * @author Ruben Gees
@@ -26,7 +28,9 @@ class ProxerTask<O> : LeafTask<ProxerCall<O>, O>() {
             } catch(error: Throwable) {
                 internalCancel()
 
-                finishWithError(error)
+                if (error !is ProxerException || error.errorType != ErrorType.CANCELLED) {
+                    finishWithError(error)
+                }
             }
         }
     }
