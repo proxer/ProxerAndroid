@@ -95,10 +95,7 @@ class UserMediaListFragment : PagedLoadingFragment<ProxerCall<List<UserMediaList
             UserMediaListFilterType.WATCHED -> menu.findItem(R.id.watched).isChecked = true
             UserMediaListFilterType.WILL_WATCH -> menu.findItem(R.id.will_watch).isChecked = true
             UserMediaListFilterType.CANCELLED -> menu.findItem(R.id.cancelled).isChecked = true
-            null -> {
-                // Nothing to do.
-            }
-            else -> throw IllegalArgumentException("Unsupported filter: $filter")
+            null -> menu.findItem(R.id.all).isChecked = true
         }
 
         super.onCreateOptionsMenu(menu, inflater)
@@ -112,7 +109,7 @@ class UserMediaListFragment : PagedLoadingFragment<ProxerCall<List<UserMediaList
             R.id.watched -> filter = UserMediaListFilterType.WATCHED
             R.id.will_watch -> filter = UserMediaListFilterType.WILL_WATCH
             R.id.cancelled -> filter = UserMediaListFilterType.CANCELLED
-            else -> return false
+            R.id.all -> filter = null
         }
 
         if (previousFilter != filter) {

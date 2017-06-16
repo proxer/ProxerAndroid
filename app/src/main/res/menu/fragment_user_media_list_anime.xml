@@ -15,6 +15,11 @@
             <group android:checkableBehavior="single">
 
                 <item
+                    android:id="@+id/all"
+                    android:title="@string/media_filter_all"
+                    app:showAsAction="never" />
+
+                <item
                     android:id="@+id/watching"
                     android:title="@string/media_filter_watching"
                     app:showAsAction="never" />

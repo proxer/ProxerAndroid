@@ -148,6 +148,7 @@
     <string name="media_state_finished">Abgeschlossen</string>
     <string name="media_state_pre_airing">Nicht erschienen (Pre-Airing)</string>
 
+    <string name="media_filter_all">Alles</string>
     <string name="media_filter_cancelled">Abgebrochen</string>
     <string name="media_filter_finished">Abgeschlossen</string>
     <string name="media_filter_watching">Am Schauen</string>
