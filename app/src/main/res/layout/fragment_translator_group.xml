@@ -85,7 +85,6 @@
                                 android:layout_margin="8dp"
                                 android:gravity="end"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                                android:textIsSelectable="true"
                                 tools:text="https://somewhere.com" />
                         </TableRow>
                     </TableLayout>

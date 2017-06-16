@@ -209,7 +209,7 @@ class MediaInfoFragment : LoadingFragment<ProxerCall<Entry>, Entry>() {
 
     private fun bindSynonyms(result: Entry) {
         result.synonyms.forEach {
-            infoTable.addView(constructInfoTableRow(it.toTypeAppString(context), it.name))
+            infoTable.addView(constructInfoTableRow(it.toTypeAppString(context), it.name, true))
         }
     }
 
@@ -243,7 +243,7 @@ class MediaInfoFragment : LoadingFragment<ProxerCall<Entry>, Entry>() {
                 result.license.toAppString(context)))
     }
 
-    private fun constructInfoTableRow(title: String, content: String): View {
+    private fun constructInfoTableRow(title: String, content: String, isSelectable: Boolean = false): View {
         val tableRow = LayoutInflater.from(context).inflate(R.layout.layout_media_info_row, infoTable, false)
         val titleView = tableRow.find<TextView>(R.id.title)
         val contentView = tableRow.find<TextView>(R.id.content)
@@ -251,6 +251,7 @@ class MediaInfoFragment : LoadingFragment<ProxerCall<Entry>, Entry>() {
         titleView.text = title
         contentView.text = content
         contentView.isSaveEnabled = false
+        contentView.setTextIsSelectable(isSelectable)
 
         return tableRow
     }
