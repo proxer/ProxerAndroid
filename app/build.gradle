@@ -61,8 +61,8 @@ android {
     packagingOptions {
         exclude '**/*.kotlin_builtins'
         exclude '**/*.kotlin_module'
-        exclude  '**/*.gwt.*'
-        exclude  'build-data.properties'
+        exclude '**/*.gwt.*'
+        exclude 'build-data.properties'
     }
 
     sourceSets {
@@ -80,6 +80,7 @@ dependencies {
     implementation deps.supportV13
     implementation deps.supportRecyclerView
     implementation deps.supportCardView
+    implementation deps.supportGridLayout
     implementation deps.supportDesign
     implementation deps.supportAnimatedVectorDrawable
     implementation deps.supportCustomtabs

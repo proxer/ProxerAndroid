@@ -18,101 +18,62 @@
 
             <include layout="@layout/layout_upload_info" />
 
-            <LinearLayout
+            <android.support.v7.widget.GridLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:baselineAligned="false">
+                android:padding="4dp"
+                app:columnCount="2"
+                app:orientation="horizontal">
 
-                <FrameLayout
-                    android:layout_width="match_parent"
+                <Button
+                    android:id="@+id/previous"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1">
+                    android:minLines="2"
+                    android:textColor="@android:color/white"
+                    android:visibility="gone"
+                    app:layout_columnWeight="1"
+                    app:layout_gravity="fill"
+                    app:layout_rowWeight="1"
+                    tools:visibility="visible" />
 
-                    <Button
-                        android:id="@+id/previous"
-                        style="@style/Widget.AppCompat.Button.Colored"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:layout_marginBottom="4dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
-                        android:layout_marginTop="8dp"
-                        android:minLines="2"
-                        android:textColor="@android:color/white"
-                        android:visibility="gone"
-                        tools:visibility="visible" />
-                </FrameLayout>
-
-                <FrameLayout
-                    android:layout_width="match_parent"
+                <Button
+                    android:id="@+id/next"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1">
+                    android:minLines="2"
+                    android:textColor="@android:color/white"
+                    android:visibility="gone"
+                    app:layout_columnWeight="1"
+                    app:layout_gravity="fill"
+                    app:layout_rowWeight="1"
+                    tools:visibility="visible" />
 
-                    <Button
-                        android:id="@+id/next"
-                        style="@style/Widget.AppCompat.Button.Colored"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:layout_marginBottom="4dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
-                        android:layout_marginTop="8dp"
-                        android:minLines="2"
-                        android:textColor="@android:color/white"
-                        android:visibility="gone"
-                        tools:visibility="visible" />
-                </FrameLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:baselineAligned="false">
-
-                <FrameLayout
-                    android:layout_width="match_parent"
+                <Button
+                    android:id="@+id/bookmarkThis"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1">
+                    android:minLines="2"
+                    android:textColor="@android:color/white"
+                    app:layout_columnWeight="1"
+                    app:layout_gravity="fill"
+                    app:layout_rowWeight="1" />
 
-                    <Button
-                        android:id="@+id/bookmarkThis"
-                        style="@style/Widget.AppCompat.Button.Colored"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
-                        android:layout_marginTop="4dp"
-                        android:minLines="2"
-                        android:textColor="@android:color/white" />
-                </FrameLayout>
-
-                <FrameLayout
-                    android:layout_width="match_parent"
+                <Button
+                    android:id="@+id/bookmarkNext"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1">
+                    android:minLines="2"
+                    android:textColor="@android:color/white"
+                    app:layout_columnWeight="1"
+                    app:layout_gravity="fill"
+                    app:layout_rowWeight="1" />
 
-                    <Button
-                        android:id="@+id/bookmarkNext"
-                        style="@style/Widget.AppCompat.Button.Colored"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
-                        android:layout_marginTop="4dp"
-                        android:minLines="2"
-                        android:textColor="@android:color/white" />
-                </FrameLayout>
-            </LinearLayout>
+            </android.support.v7.widget.GridLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </merge>
