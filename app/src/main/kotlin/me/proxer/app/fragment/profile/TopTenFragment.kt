@@ -77,12 +77,10 @@ class TopTenFragment : LoadingFragment<Pair<ProxerCall<List<TopTenEntry>>, Proxe
         animeAdapter.callback = TopTenCallback()
         mangaAdapter.callback = TopTenCallback()
 
-        animeList.setHasFixedSize(true)
         animeList.isNestedScrollingEnabled = false
         animeList.layoutManager = GridLayoutManager(context, spanCount)
         animeList.adapter = animeAdapter
 
-        mangaList.setHasFixedSize(true)
         mangaList.isNestedScrollingEnabled = false
         mangaList.layoutManager = GridLayoutManager(context, spanCount)
         mangaList.adapter = mangaAdapter

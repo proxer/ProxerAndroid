@@ -74,7 +74,7 @@ class UcpTopTenFragment : LoadingFragment<ProxerCall<List<UcpTopTenEntry>>, List
                         removalQueue.remove(it)
                     }
 
-                    saveResultToState(animeAdapter.list.plus(mangaAdapter.list))
+                    onSuccess(animeAdapter.list.plus(mangaAdapter.list))
                     removeEntriesFromQueue()
                 }
                 .onError {
@@ -107,12 +107,10 @@ class UcpTopTenFragment : LoadingFragment<ProxerCall<List<UcpTopTenEntry>>, List
         animeAdapter.callback = UcpTopTenCallback()
         mangaAdapter.callback = UcpTopTenCallback()
 
-        animeList.setHasFixedSize(true)
         animeList.isNestedScrollingEnabled = false
         animeList.layoutManager = GridLayoutManager(context, spanCount)
         animeList.adapter = animeAdapter
 
-        mangaList.setHasFixedSize(true)
         mangaList.isNestedScrollingEnabled = false
         mangaList.layoutManager = GridLayoutManager(context, spanCount)
         mangaList.adapter = mangaAdapter
