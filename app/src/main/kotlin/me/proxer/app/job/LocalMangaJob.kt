@@ -17,6 +17,8 @@ import me.proxer.app.helper.StorageHelper
 import me.proxer.app.task.manga.MangaPageDownloadTask
 import me.proxer.app.task.manga.MangaPageDownloadTask.MangaPageDownloadTaskInput
 import me.proxer.app.util.extension.decodedName
+import me.proxer.library.api.ProxerException
+import me.proxer.library.api.ProxerException.ServerErrorType
 import me.proxer.library.enums.Language
 import me.proxer.library.util.ProxerUtils
 import org.greenrobot.eventbus.EventBus
@@ -33,6 +35,10 @@ class LocalMangaJob : Job() {
         private const val EPISODE_EXTRA = "episode"
         private const val LANGUAGE_EXTRA = "language"
 
+        private val lock = Any()
+        private var lastTime = 0L
+        private var ongoing = 0
+
         fun schedule(context: Context, entryId: String, episode: Int, language: Language) {
             val unmeteredRequired = PreferenceHelper.isUnmeteredNetworkRequiredForMangaDownload(context)
             val extras = PersistableBundleCompat().apply {
@@ -41,13 +47,11 @@ class LocalMangaJob : Job() {
                 putString(LANGUAGE_EXTRA, ProxerUtils.getApiEnumName(language))
             }
 
-            val startTime = (countRunningJobs() + countScheduledJobs()) * 4000L + 1L
-            val endTime = startTime + 100L
-
             JobRequest.Builder(constructTag(entryId, episode, language))
                     .setExtras(extras)
                     .setRequiredNetworkType(if (unmeteredRequired) NetworkType.UNMETERED else NetworkType.CONNECTED)
-                    .setExecutionWindow(startTime, endTime)
+                    .setBackoffCriteria(15000, JobRequest.BackoffPolicy.LINEAR)
+                    .setExecutionWindow(1L, 100L)
                     .setRequirementsEnforced(true)
                     .setUpdateCurrent(true)
                     .setPersisted(true)
@@ -104,6 +108,17 @@ class LocalMangaJob : Job() {
             return Result.FAILURE
         }
 
+        synchronized(lock, {
+            if (System.currentTimeMillis() > lastTime + 30 * 1000 && ongoing == 0) {
+                lastTime = System.currentTimeMillis()
+                ongoing += 1
+            } else if (ongoing <= 7) {
+                ongoing++
+            } else {
+                return Result.RESCHEDULE
+            }
+        })
+
         try {
             EventBus.getDefault().post(LocalMangaJobStartedEvent())
 
@@ -129,15 +144,19 @@ class LocalMangaJob : Job() {
 
             return Result.SUCCESS
         } catch (error: Throwable) {
-            if (params.failureCount <= 1) {
-                return Result.RESCHEDULE
-            } else {
+            val isIpBlockedError = error is ProxerException && error.serverErrorType == ServerErrorType.IP_BLOCKED
+
+            if (isIpBlockedError || params.failureCount >= 1) {
                 EventBus.getDefault().post(LocalMangaJobFailedEvent(entryId, episode, language))
 
                 NotificationHelper.showMangaDownloadErrorNotification(context, error)
 
                 return Result.FAILURE
+            } else {
+                return Result.RESCHEDULE
             }
+        } finally {
+            ongoing--
         }
     }
 
