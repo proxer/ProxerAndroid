@@ -60,7 +60,6 @@ class BookmarkAdapter(glide: GlideRequests) : BaseGlideAdapter<Bookmark>(glide) 
         internal val medium: TextView by bindView(R.id.medium)
         internal val image: ImageView by bindView(R.id.image)
         internal val episode: TextView by bindView(R.id.episode)
-        internal val availability: ImageView by bindView(R.id.availability)
         internal val language: ImageView by bindView(R.id.language)
         internal val remove: ImageButton by bindView(R.id.remove)
 
@@ -95,15 +94,18 @@ class BookmarkAdapter(glide: GlideRequests) : BaseGlideAdapter<Bookmark>(glide) 
         override fun bind(item: Bookmark) {
             ViewCompat.setTransitionName(image, "bookmark_${item.id}")
 
+            val availabilityIndicator = AppCompatResources.getDrawable(episode.context, when (item.isAvailable) {
+                true -> R.drawable.ic_circle_green
+                false -> R.drawable.ic_circle_red
+            })
+
             title.text = item.name
             medium.text = item.medium.toAppString(medium.context)
             episode.text = item.chapterName ?: item.category.toEpisodeAppString(episode.context, item.episode)
-            availability.setImageDrawable(AppCompatResources.getDrawable(availability.context, when (item.isAvailable) {
-                true -> R.drawable.ic_circle_green
-                false -> R.drawable.ic_circle_red
-            }))
 
+            episode.setCompoundDrawablesWithIntrinsicBounds(null, null, availabilityIndicator, null)
             language.setImageDrawable(item.language.toGeneralLanguage().toAppDrawable(language.context))
+
             loadImage(image, ProxerUrls.entryImage(item.entryId))
         }
     }
