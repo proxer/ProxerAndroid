@@ -21,7 +21,7 @@
             <android.support.v7.widget.GridLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="4dp"
+                android:padding="@dimen/item_margin"
                 app:columnCount="2"
                 app:orientation="horizontal">
 
