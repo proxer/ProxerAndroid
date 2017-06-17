@@ -26,7 +26,7 @@ ext {
     iconicsVersion = '2.8.6'
     communityMaterialTypefaceVersion = '1.9.32.1'
     crossfaderVersion = '1.5.0'
-    materialAboutVersion = '5c7de58590'
+    materialAboutVersion = '2.1.0'
     subsamplingScaleImageViewVersion = '3.6.0'
     tabLayoutHelperVersion = '0.8.0'
     materialDialogsVersion = '0.9.4.5'
