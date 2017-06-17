@@ -3,6 +3,8 @@ package me.proxer.app.util.extension
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.support.v7.content.res.AppCompatResources
+import com.mikepenz.community_material_typeface_library.CommunityMaterial
+import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
 import me.proxer.library.entitiy.info.EntrySeasonInfo
 import me.proxer.library.entitiy.info.Synonym
@@ -107,6 +109,18 @@ fun Category.toEpisodeAppString(context: Context, number: Int? = null): String {
             Category.MANGA -> R.string.category_manga_episode_number
         }, number)
     }
+}
+
+fun MediaState.toAppDrawable(context: Context): Drawable {
+    return IconicsDrawable(context)
+            .colorRes(R.color.icon)
+            .icon(when (this) {
+                MediaState.PRE_AIRING -> CommunityMaterial.Icon.cmd_radio_tower
+                MediaState.FINISHED -> CommunityMaterial.Icon.cmd_book
+                MediaState.AIRING -> CommunityMaterial.Icon.cmd_book_open_variant
+                MediaState.CANCELLED -> CommunityMaterial.Icon.cmd_close
+                MediaState.CANCELLED_SUB -> CommunityMaterial.Icon.cmd_close
+            })
 }
 
 fun UserMediaProgress.toEpisodeAppString(context: Context, episode: Int = 1,

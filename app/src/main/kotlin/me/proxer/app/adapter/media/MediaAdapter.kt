@@ -6,11 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RatingBar
+import android.widget.RelativeLayout
 import android.widget.TextView
 import me.proxer.app.R
 import me.proxer.app.adapter.base.BaseGlideAdapter
 import me.proxer.app.application.GlideRequests
 import me.proxer.app.util.extension.bindView
+import me.proxer.app.util.extension.toAppDrawable
 import me.proxer.app.util.extension.toAppString
 import me.proxer.app.util.extension.toGeneralLanguage
 import me.proxer.library.entitiy.list.MediaListEntry
@@ -52,6 +54,7 @@ class MediaAdapter(private val category: Category, glide: GlideRequests) : BaseG
         internal val image: ImageView by bindView(R.id.image)
         internal val ratingContainer: ViewGroup by bindView(R.id.ratingContainer)
         internal val rating: RatingBar by bindView(R.id.rating)
+        internal val state: ImageView by bindView(R.id.state)
         internal val episodes: TextView by bindView(R.id.episodes)
         internal val english: ImageView by bindView(R.id.english)
         internal val german: ImageView by bindView(R.id.german)
@@ -89,9 +92,21 @@ class MediaAdapter(private val category: Category, glide: GlideRequests) : BaseG
             if (item.rating > 0) {
                 ratingContainer.visibility = View.VISIBLE
                 rating.rating = item.rating / 2.0f
+
+                (episodes.layoutParams as RelativeLayout.LayoutParams).apply {
+                    addRule(RelativeLayout.ALIGN_BOTTOM, 0)
+                    addRule(RelativeLayout.BELOW, R.id.state)
+                }
             } else {
                 ratingContainer.visibility = View.GONE
+
+                (episodes.layoutParams as RelativeLayout.LayoutParams).apply {
+                    addRule(RelativeLayout.ALIGN_BOTTOM, R.id.languageContainer)
+                    addRule(RelativeLayout.BELOW, R.id.medium)
+                }
             }
+
+            state.setImageDrawable(item.state.toAppDrawable(state.context))
 
             loadImage(image, ProxerUrls.entryImage(item.id))
         }

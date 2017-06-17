@@ -27,7 +27,9 @@
                 android:layout_alignParentTop="true"
                 android:scaleType="centerCrop"
                 app:aspect="1.25"
-                tools:ignore="UnusedAttribute" />
+                tools:ignore="UnusedAttribute"
+                tools:layout_height="200dp"
+                tools:src="@drawable/emoji_ios_1f1ef_1f1f5" />
 
             <TextView
                 android:id="@+id/title"
@@ -59,12 +61,15 @@
 
             <FrameLayout
                 android:id="@+id/ratingContainer"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/medium"
+                android:layout_alignBottom="@+id/state"
+                android:layout_alignTop="@+id/state"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
-                android:layout_marginTop="8dp">
+                android:layout_toLeftOf="@+id/state"
+                android:layout_toStartOf="@+id/state"
+                android:gravity="center_vertical|start">
 
                 <me.zhanghai.android.materialratingbar.MaterialRatingBar
                     android:id="@+id/rating"
@@ -75,15 +80,28 @@
                     android:numStars="5" />
             </FrameLayout>
 
+            <ImageView
+                android:id="@+id/state"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/medium"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
+                tools:ignore="ContentDescription" />
+
             <TextView
                 android:id="@+id/episodes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/ratingContainer"
+                android:layout_below="@+id/state"
                 android:layout_toLeftOf="@+id/languageContainer"
                 android:layout_toStartOf="@+id/languageContainer"
+                android:gravity="center_vertical"
                 android:padding="8dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 tools:text="12 Episodes - Finished" />
@@ -92,13 +110,12 @@
                 android:id="@+id/languageContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/episodes"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_alignTop="@+id/episodes"
-                android:layout_below="@+id/ratingContainer"
+                android:layout_below="@+id/state"
                 android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp">
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp">
 
                 <ImageView
                     android:id="@+id/german"
