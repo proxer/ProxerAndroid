@@ -6,5 +6,4 @@
     <declare-styleable name="WidthAspectImageView">
         <attr name="aspect" />
     </declare-styleable>
-
 </resources>

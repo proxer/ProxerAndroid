@@ -1,4 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <bool name="is_tablet">false</bool>
 
     <dimen name="screen_horizontal_margin">12dp</dimen>
     <dimen name="screen_vertical_margin">12dp</dimen>

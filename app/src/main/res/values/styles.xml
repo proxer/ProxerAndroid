@@ -37,5 +37,4 @@
     <style name="Theme.App" parent="Base.Theme.App" />
 
     <style name="Theme.App.Translucent" parent="Theme.App" />
-
 </resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="image_tabs_header_size">384dp</dimen>
+    <dimen name="image_tabs_text_protection_scrim_top_size">138dp</dimen>
+    <dimen name="image_tabs_text_protection_scrim_bottom_size">96dp</dimen>
+</resources>

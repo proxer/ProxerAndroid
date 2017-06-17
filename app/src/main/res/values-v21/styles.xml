@@ -8,5 +8,4 @@
     <style name="Theme.App.Translucent" parent="Theme.App">
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
-
 </resources>

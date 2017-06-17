@@ -6,7 +6,6 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Point
 import android.os.Build
-import android.util.DisplayMetrics
 import me.proxer.app.R
 import me.proxer.app.util.extension.windowManager
 
@@ -15,17 +14,7 @@ import me.proxer.app.util.extension.windowManager
  */
 object DeviceUtils {
 
-    private const val MINIMUM_DIAGONAL_INCHES = 6.5
-
-    fun isTablet(context: Activity): Boolean {
-        val metrics = DisplayMetrics().apply { context.windowManager.defaultDisplay.getMetrics(this) }
-
-        val yInches = metrics.heightPixels / metrics.ydpi
-        val xInches = metrics.widthPixels / metrics.xdpi
-        val diagonalInches = Math.sqrt((xInches * xInches + yInches * yInches).toDouble())
-
-        return diagonalInches >= MINIMUM_DIAGONAL_INCHES
-    }
+    fun isTablet(context: Context) = context.resources.getBoolean(R.bool.is_tablet)
 
     fun getScreenWidth(context: Context) = Point().apply { context.windowManager.defaultDisplay.getSize(this) }.x
 

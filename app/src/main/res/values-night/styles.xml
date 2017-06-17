@@ -8,5 +8,4 @@
     </style>
 
     <style name="ThemeOverlay.App" parent="@style/ThemeOverlay.AppCompat.Dark" />
-
 </resources>

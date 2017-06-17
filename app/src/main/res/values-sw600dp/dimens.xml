@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <bool name="is_tablet">true</bool>
+
+    <dimen name="screen_horizontal_margin">16dp</dimen>
+    <dimen name="screen_vertical_margin">16dp</dimen>
+    <dimen name="screen_horizontal_margin_with_items">8dp</dimen>
+    <dimen name="screen_vertical_margin_with_items">8dp</dimen>
+
+    <dimen name="item_margin">8dp</dimen>
+
+    <dimen name="image_tabs_header_size">512dp</dimen>
+    <dimen name="image_tabs_text_protection_scrim_top_size">184dp</dimen>
+    <dimen name="image_tabs_text_protection_scrim_bottom_size">128dp</dimen>
+</resources>
