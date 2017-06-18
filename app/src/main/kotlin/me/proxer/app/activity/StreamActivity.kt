@@ -13,7 +13,6 @@ import com.devbrackets.android.exomedia.ui.widget.VideoControls.*
 import com.devbrackets.android.exomedia.ui.widget.VideoView
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
-import me.proxer.app.R
 import me.proxer.app.activity.base.MainActivity
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.extension.bindView
@@ -161,10 +160,8 @@ class StreamActivity : MainActivity() {
             false
         }
 
-        if (savedInstanceState == null) {
-            player.setOnPreparedListener {
-                player.start()
-            }
+        player.setOnPreparedListener {
+            player.start()
         }
 
         player.setVideoURI(uri)
