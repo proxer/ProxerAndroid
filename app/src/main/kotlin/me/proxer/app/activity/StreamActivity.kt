@@ -36,7 +36,7 @@ class StreamActivity : MainActivity() {
 
         setupUi()
         setupToolbar()
-        setupPlayer()
+        setupPlayer(savedInstanceState)
     }
 
     override fun onStart() {
@@ -103,7 +103,7 @@ class StreamActivity : MainActivity() {
         }
     }
 
-    private fun setupPlayer() {
+    private fun setupPlayer(savedInstanceState: Bundle?) {
         player.videoControls?.let {
             it.setNextDrawable(IconicsDrawable(this, CommunityMaterial.Icon.cmd_fast_forward)
                     .colorRes(android.R.color.white)
@@ -161,8 +161,10 @@ class StreamActivity : MainActivity() {
             false
         }
 
-        player.setOnPreparedListener {
-            player.start()
+        if (savedInstanceState == null) {
+            player.setOnPreparedListener {
+                player.start()
+            }
         }
 
         player.setVideoURI(uri)
