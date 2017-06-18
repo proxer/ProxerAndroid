@@ -1,6 +1,8 @@
 package me.proxer.app.adapter.manga
 
 import android.graphics.PointF
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -59,6 +61,8 @@ class MangaAdapter : BaseAdapter<Page>() {
 
         internal val image: SubsamplingScaleImageView by bindView(R.id.image)
 
+        private val handler = Handler(Looper.getMainLooper())
+
         init {
             image.setDoubleTapZoomDuration(shortAnimationTime)
 
@@ -76,7 +80,7 @@ class MangaAdapter : BaseAdapter<Page>() {
             image.tag = TaskBuilder.task(MangaPageDownloadTask(isLocal))
                     .async()
                     .onSuccess {
-                        image.post {
+                        handler.post {
                             image.setImage(ImageSource.uri(it.path))
                             image.setScaleAndCenter(0.2f, PointF(0f, 0f))
                             image.apply { alpha = 0.2f }
