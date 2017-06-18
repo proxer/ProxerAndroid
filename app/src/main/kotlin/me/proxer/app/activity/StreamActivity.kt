@@ -13,10 +13,10 @@ import com.devbrackets.android.exomedia.ui.widget.VideoControls.*
 import com.devbrackets.android.exomedia.ui.widget.VideoView
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
+import me.proxer.app.R
 import me.proxer.app.activity.base.MainActivity
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.extension.bindView
-
 
 class StreamActivity : MainActivity() {
 
@@ -35,7 +35,7 @@ class StreamActivity : MainActivity() {
 
         setupUi()
         setupToolbar()
-        setupPlayer(savedInstanceState)
+        setupPlayer()
     }
 
     override fun onStart() {
@@ -102,7 +102,7 @@ class StreamActivity : MainActivity() {
         }
     }
 
-    private fun setupPlayer(savedInstanceState: Bundle?) {
+    private fun setupPlayer() {
         player.videoControls?.let {
             it.setNextDrawable(IconicsDrawable(this, CommunityMaterial.Icon.cmd_fast_forward)
                     .colorRes(android.R.color.white)
