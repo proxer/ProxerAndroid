@@ -2,6 +2,8 @@ package me.proxer.app.activity
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ShortcutManager
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewCompat
@@ -49,6 +51,10 @@ class DashboardActivity : MainActivity() {
     companion object {
         private const val TITLE_STATE = "title"
         private const val SECTION_EXTRA = "section"
+
+        private const val SHORTCUT_NEWS = "news"
+        private const val SHORTCUT_CHAT = "chat"
+        private const val SHORTCUT_BOOKMARKS = "bookmarks"
 
         fun getSectionIntent(context: Context, section: DrawerItem): Intent {
             return context.intentFor<DashboardActivity>(SECTION_EXTRA to section.id)
@@ -167,7 +173,16 @@ class DashboardActivity : MainActivity() {
     }
 
     private fun getItemToLoad() = DrawerItem.fromOrDefault(when (intent.action == Intent.ACTION_VIEW) {
-        true -> intent.dataString.toLongOrNull()
+        true -> intent.dataString.toLongOrNull().apply {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+                getSystemService(ShortcutManager::class.java).reportShortcutUsed(when (this) {
+                    0L -> SHORTCUT_NEWS
+                    1L -> SHORTCUT_CHAT
+                    2L -> SHORTCUT_BOOKMARKS
+                    else -> null
+                })
+            }
+        }
         false -> intent.getLongExtra(SECTION_EXTRA, PreferenceHelper.getStartPage(this).id)
     })
 
