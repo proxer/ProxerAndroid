@@ -109,10 +109,10 @@ class LocalMangaJob : Job() {
         }
 
         synchronized(lock, {
-            if (System.currentTimeMillis() > lastTime + 30 * 1000 && ongoing == 0) {
+            if (System.currentTimeMillis() > lastTime + 40 * 1000) {
                 lastTime = System.currentTimeMillis()
-                ongoing += 1
-            } else if (ongoing <= 7) {
+                ongoing = 1
+            } else if (ongoing <= 6) {
                 ongoing++
             } else {
                 return Result.RESCHEDULE
@@ -155,8 +155,6 @@ class LocalMangaJob : Job() {
             } else {
                 return Result.RESCHEDULE
             }
-        } finally {
-            ongoing--
         }
     }
 
