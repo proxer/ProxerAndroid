@@ -54,6 +54,7 @@ import me.proxer.library.entitiy.manga.Chapter
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.Language
 import org.jetbrains.anko.bundleOf
+import org.jetbrains.anko.find
 
 /**
  * @author Ruben Gees
@@ -140,7 +141,7 @@ class MangaFragment : LoadingFragment<MangaInput, MangaChapterInfo>() {
     private lateinit var header: MediaControlView
     private lateinit var footer: MediaControlView
 
-    private val androidRoot by lazy { activity.findViewById<ViewGroup>(android.R.id.content) }
+    private val androidRoot by lazy<ViewGroup> { activity.find(android.R.id.content) }
     private val list: RecyclerView by bindView(R.id.list)
 
     override fun onCreate(savedInstanceState: Bundle?) {
