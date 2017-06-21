@@ -4,6 +4,7 @@ import com.rubengees.ktask.base.LeafTask
 import me.proxer.app.application.MainApplication
 import me.proxer.app.application.MainApplication.Companion.globalContext
 import me.proxer.app.task.manga.MangaPageDownloadTask.MangaPageDownloadTaskInput
+import me.proxer.app.util.extension.lock
 import me.proxer.library.util.ProxerUrls
 import okhttp3.Call
 import okhttp3.Request
@@ -45,23 +46,25 @@ class MangaPageDownloadTask(private val isLocal: Boolean) : LeafTask<MangaPageDo
                                 throw(RuntimeException())
                             }
 
-                            call = MainApplication.client.newCall(Request.Builder()
-                                    .header("Accept-Encoding", "identity")
-                                    .url(url)
-                                    .build())
+                            MangaLockHolder.pageConcurrencyLock.lock {
+                                call = MainApplication.client.newCall(Request.Builder()
+                                        .header("Accept-Encoding", "identity")
+                                        .url(url)
+                                        .build())
 
-                            call?.execute()?.let {
-                                if (it.isSuccessful) {
-                                    it.body()?.use { theBody ->
-                                        Okio.buffer(Okio.sink(file)).use { fileBuffer ->
-                                            fileBuffer.writeAll(theBody.source())
-                                        }
-                                    } ?: throw IOException()
+                                call?.execute()?.let {
+                                    if (it.isSuccessful) {
+                                        it.body()?.use { theBody ->
+                                            Okio.buffer(Okio.sink(file)).use { fileBuffer ->
+                                                fileBuffer.writeAll(theBody.source())
+                                            }
+                                        } ?: throw IOException()
 
-                                    internalCancel()
-                                    finishSuccessful(file)
-                                } else {
-                                    throw IOException()
+                                        internalCancel()
+                                        finishSuccessful(file)
+                                    } else {
+                                        throw IOException()
+                                    }
                                 }
                             }
                         }

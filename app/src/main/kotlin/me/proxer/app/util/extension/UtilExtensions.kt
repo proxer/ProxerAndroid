@@ -16,6 +16,7 @@ import me.proxer.library.entitiy.manga.Page
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
 import java.net.URLDecoder
+import java.util.concurrent.Semaphore
 
 inline val Page.decodedName: String
     get() = try {
@@ -46,6 +47,16 @@ fun CustomTabsHelperFragment.openHttpPage(activity: Activity, url: HttpUrl) {
 
 inline fun HttpUrl.androidUri(): Uri {
     return Uri.parse(toString())
+}
+
+inline fun <T> Semaphore.lock(action: () -> T): T {
+    acquire()
+
+    return try {
+        action()
+    } finally {
+        release()
+    }
 }
 
 typealias CompleteLocalMangaEntry = Pair<EntryCore, List<LocalMangaChapter>>
