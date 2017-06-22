@@ -44,7 +44,7 @@ ext {
     threetenVersion = '1.0.5'
     hawkVersion = '2.0.1'
     glideVersion = '4.0.0-SNAPSHOT'
-    okHttpVersion = '3.8.0'
+    okHttpVersion = '3.8.1'
     okioVersion = '1.13.0'
     linkBuilderVersion = '1.5.2'
     easyHeaderFooterAdapterVersion = '2.0.0'
