@@ -1,4 +1,4 @@
-package me.proxer.app.util
+package me.proxer.app.util.compat
 
 import android.os.Build
 import android.text.Html

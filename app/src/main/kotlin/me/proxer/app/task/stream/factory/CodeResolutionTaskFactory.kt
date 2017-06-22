@@ -3,7 +3,7 @@ package me.proxer.app.task.stream.factory
 import com.rubengees.ktask.util.TaskBuilder
 import com.rubengees.ktask.util.WorkerTask
 import me.proxer.app.task.stream.StreamResolutionTask.StreamResolutionResult
-import me.proxer.app.util.HtmlCompat
+import me.proxer.app.util.compat.HtmlCompat
 
 /**
  * @author Ruben Gees

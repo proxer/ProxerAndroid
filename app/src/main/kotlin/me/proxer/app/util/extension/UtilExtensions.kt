@@ -3,7 +3,9 @@
 package me.proxer.app.util.extension
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.support.customtabs.CustomTabsIntent
 import android.support.v4.content.ContextCompat
@@ -43,6 +45,15 @@ fun CustomTabsHelperFragment.openHttpPage(activity: Activity, url: HttpUrl) {
         }
         false -> activity.startActivity(Intent(Intent.ACTION_VIEW).setData(url.androidUri()))
     }
+}
+
+inline fun Context.getDrawableFromAttrs(resource: Int): Drawable {
+    val styledAttributes = obtainStyledAttributes(intArrayOf(resource))
+    val result = styledAttributes.getDrawable(0)
+
+    styledAttributes.recycle()
+
+    return result
 }
 
 inline fun HttpUrl.androidUri(): Uri {

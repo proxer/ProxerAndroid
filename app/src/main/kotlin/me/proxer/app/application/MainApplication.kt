@@ -36,8 +36,8 @@ import me.proxer.app.job.ChatJob
 import me.proxer.app.job.LocalMangaJob
 import me.proxer.app.job.NotificationsJob
 import me.proxer.app.task.manga.MangaRemovalTask
-import me.proxer.app.util.NonPersistentCookieJar
 import me.proxer.app.util.Utils.GENERIC_USER_AGENT
+import me.proxer.app.util.data.NonPersistentCookieJar
 import me.proxer.library.api.LoginTokenManager
 import me.proxer.library.api.ProxerApi
 import me.proxer.library.api.ProxerApi.Builder.LoggingStrategy

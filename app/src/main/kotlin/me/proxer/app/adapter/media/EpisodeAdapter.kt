@@ -20,7 +20,7 @@ import me.proxer.app.event.manga.LocalMangaJobFailedEvent
 import me.proxer.app.event.manga.LocalMangaJobFinishedEvent
 import me.proxer.app.helper.StorageHelper
 import me.proxer.app.job.LocalMangaJob
-import me.proxer.app.util.ParcelableStringBooleanMap
+import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.*
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.MediaLanguage

@@ -1,23 +1,20 @@
-package me.proxer.app.util
-
-import android.os.Parcel
-import android.os.Parcelable
+package me.proxer.app.util.data
 
 /**
  * @author Ruben Gees
  */
-class ParcelableStringBooleanMap : Parcelable {
+class ParcelableStringBooleanMap : android.os.Parcelable {
 
     companion object {
         private const val ZERO_BYTE: Byte = 0
 
         @Suppress("unused")
-        @JvmStatic val CREATOR = object : Parcelable.Creator<ParcelableStringBooleanMap> {
-            override fun createFromParcel(source: Parcel): ParcelableStringBooleanMap {
-                return ParcelableStringBooleanMap(source)
+        @JvmStatic val CREATOR = object : android.os.Parcelable.Creator<ParcelableStringBooleanMap> {
+            override fun createFromParcel(source: android.os.Parcel): me.proxer.app.util.data.ParcelableStringBooleanMap {
+                return me.proxer.app.util.data.ParcelableStringBooleanMap(source)
             }
 
-            override fun newArray(size: Int): Array<ParcelableStringBooleanMap?> {
+            override fun newArray(size: Int): Array<me.proxer.app.util.data.ParcelableStringBooleanMap?> {
                 return arrayOfNulls(size)
             }
         }
@@ -29,14 +26,14 @@ class ParcelableStringBooleanMap : Parcelable {
     private val internalMap = LinkedHashMap<String, Boolean>()
 
     constructor() : super()
-    internal constructor(source: Parcel) {
+    internal constructor(source: android.os.Parcel) {
         (0 until source.readInt()).forEach {
-            put(source.readString(), source.readByte() != ZERO_BYTE)
+            put(source.readString(), source.readByte() != me.proxer.app.util.data.ParcelableStringBooleanMap.Companion.ZERO_BYTE)
         }
     }
 
     override fun describeContents() = 0
-    override fun writeToParcel(dest: Parcel, flags: Int) {
+    override fun writeToParcel(dest: android.os.Parcel, flags: Int) {
         dest.writeInt(internalMap.size)
 
         internalMap.entries.forEach {

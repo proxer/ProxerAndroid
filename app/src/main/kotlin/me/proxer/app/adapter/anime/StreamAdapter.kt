@@ -12,8 +12,8 @@ import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
 import me.proxer.app.adapter.base.BaseGlideAdapter
 import me.proxer.app.application.GlideRequests
-import me.proxer.app.util.ParcelableStringBooleanMap
 import me.proxer.app.util.TimeUtils
+import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.bindView
 import me.proxer.library.entitiy.anime.Stream
 import me.proxer.library.util.ProxerUrls

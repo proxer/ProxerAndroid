@@ -14,10 +14,10 @@ import me.proxer.app.adapter.base.BaseGlideAdapter
 import me.proxer.app.adapter.manga.LocalMangaChapterAdapter.LocalMangaChapterAdapterCallback
 import me.proxer.app.application.GlideRequests
 import me.proxer.app.entity.manga.LocalMangaChapter
-import me.proxer.app.util.PaddingDividerItemDecoration
-import me.proxer.app.util.ParcelableStringBooleanMap
+import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.CompleteLocalMangaEntry
 import me.proxer.app.util.extension.bindView
+import me.proxer.app.util.view.PaddingDividerItemDecoration
 import me.proxer.library.entitiy.info.EntryCore
 import me.proxer.library.util.ProxerUrls
 

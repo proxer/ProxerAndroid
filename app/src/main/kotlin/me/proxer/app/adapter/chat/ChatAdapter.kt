@@ -15,9 +15,9 @@ import me.proxer.app.R
 import me.proxer.app.adapter.base.BaseAdapter
 import me.proxer.app.entity.LocalUser
 import me.proxer.app.entity.chat.LocalMessage
-import me.proxer.app.util.ParcelableStringBooleanMap
 import me.proxer.app.util.TimeUtils
 import me.proxer.app.util.Utils
+import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.bindView
 import me.proxer.library.enums.MessageAction
 import okhttp3.HttpUrl

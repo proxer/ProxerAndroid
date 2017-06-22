@@ -1,8 +1,6 @@
 package me.proxer.app.adapter.media
 
 import android.os.Bundle
-import android.os.Parcel
-import android.os.Parcelable
 import android.support.v4.view.ViewCompat
 import android.util.SparseBooleanArray
 import android.view.LayoutInflater
@@ -17,15 +15,15 @@ import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
 import me.proxer.app.adapter.base.BaseGlideAdapter
 import me.proxer.app.application.GlideRequests
-import me.proxer.app.util.ParcelableStringBooleanMap
 import me.proxer.app.util.TimeUtils
+import me.proxer.app.util.data.ParcelableStringBooleanArrayMap
+import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.bindView
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.app.view.bbcode.BBCodeView
 import me.proxer.library.entitiy.info.Comment
 import me.proxer.library.enums.Category
 import me.proxer.library.util.ProxerUrls
-import java.util.*
 
 /**
  * @author Ruben Gees
@@ -39,7 +37,7 @@ class CommentAdapter(savedInstanceState: Bundle?, categoryCallback: () -> Catego
     }
 
     private val expanded: ParcelableStringBooleanMap
-    private val spoilerStates: ParcelableSpoilerStateMap
+    private val spoilerStates: ParcelableStringBooleanArrayMap
 
     private var categoryCallback: (() -> Category)? = categoryCallback
 
@@ -52,7 +50,7 @@ class CommentAdapter(savedInstanceState: Bundle?, categoryCallback: () -> Catego
         }
 
         spoilerStates = when (savedInstanceState) {
-            null -> ParcelableSpoilerStateMap()
+            null -> ParcelableStringBooleanArrayMap()
             else -> savedInstanceState.getParcelable(SPOILER_STATES_STATE)
         }
 
@@ -236,44 +234,5 @@ class CommentAdapter(savedInstanceState: Bundle?, categoryCallback: () -> Catego
 
     interface CommentAdapterCallback {
         fun onUserClick(view: View, item: Comment) {}
-    }
-
-    internal class ParcelableSpoilerStateMap : Parcelable {
-
-        companion object {
-
-            @Suppress("unused")
-            @JvmStatic val CREATOR = object : Parcelable.Creator<ParcelableSpoilerStateMap> {
-                override fun createFromParcel(source: Parcel): ParcelableSpoilerStateMap {
-                    return ParcelableSpoilerStateMap(source)
-                }
-
-                override fun newArray(size: Int): Array<ParcelableSpoilerStateMap?> {
-                    return arrayOfNulls(size)
-                }
-            }
-        }
-
-        private val internalMap = LinkedHashMap<String, SparseBooleanArray>()
-
-        constructor() : super()
-        internal constructor(source: Parcel) {
-            (0 until source.readInt()).forEach {
-                internalMap.put(source.readString(), source.readSparseBooleanArray())
-            }
-        }
-
-        override fun describeContents() = 0
-        override fun writeToParcel(dest: Parcel, flags: Int) {
-            dest.writeInt(internalMap.size)
-
-            internalMap.entries.forEach {
-                dest.writeString(it.key)
-                dest.writeSparseBooleanArray(it.value)
-            }
-        }
-
-        fun put(key: String, value: SparseBooleanArray) = internalMap.put(key, value)
-        operator fun get(key: String) = internalMap[key]
     }
 }
