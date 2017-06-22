@@ -13,7 +13,6 @@
 
         <menu>
             <group android:checkableBehavior="single">
-
                 <item
                     android:id="@+id/all"
                     android:title="@string/media_filter_all"

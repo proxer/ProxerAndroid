@@ -10,6 +10,7 @@ import android.widget.ImageView
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.activity.MediaActivity
+import me.proxer.app.activity.ProfileActivity
 import me.proxer.app.adapter.profile.TopTenAdapter
 import me.proxer.app.application.GlideApp
 import me.proxer.app.application.MainApplication.Companion.api
@@ -42,7 +43,7 @@ class TopTenFragment : LoadingFragment<Pair<ProxerCall<List<TopTenEntry>>, Proxe
     }
 
     private val profileActivity
-        get() = activity as me.proxer.app.activity.ProfileActivity
+        get() = activity as ProfileActivity
 
     private val userId: String?
         get() = profileActivity.userId

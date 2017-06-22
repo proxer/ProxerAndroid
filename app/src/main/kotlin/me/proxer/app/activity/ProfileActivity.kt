@@ -17,6 +17,7 @@ import me.proxer.app.application.MainApplication.Companion.chatDb
 import me.proxer.app.entity.chat.Participant
 import me.proxer.app.fragment.profile.ProfileFragment
 import me.proxer.app.fragment.profile.TopTenFragment
+import me.proxer.app.fragment.profile.UserCommentsFragment
 import me.proxer.app.fragment.profile.UserMediaListFragment
 import me.proxer.app.helper.StorageHelper
 import me.proxer.app.util.ActivityUtils
@@ -166,11 +167,12 @@ class ProfileActivity : ImageTabsActivity() {
                 1 -> TopTenFragment.newInstance()
                 2 -> UserMediaListFragment.newInstance(Category.ANIME)
                 3 -> UserMediaListFragment.newInstance(Category.MANGA)
+                4 -> UserCommentsFragment.newInstance()
                 else -> throw RuntimeException("Unknown index passed")
             }
         }
 
-        override fun getCount() = 4
+        override fun getCount() = 5
 
         override fun getPageTitle(position: Int): CharSequence? {
             return when (position) {
@@ -178,6 +180,7 @@ class ProfileActivity : ImageTabsActivity() {
                 1 -> getString(R.string.section_top_ten)
                 2 -> getString(R.string.section_user_media_list_anime)
                 3 -> getString(R.string.section_user_media_list_manga)
+                4 -> getString(R.string.section_user_comments)
                 else -> throw RuntimeException("Unknown index passed")
             }
         }

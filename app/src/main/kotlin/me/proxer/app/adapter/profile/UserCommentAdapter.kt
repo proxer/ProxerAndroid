@@ -1,4 +1,4 @@
-package me.proxer.app.adapter.media
+package me.proxer.app.adapter.profile
 
 import android.os.Bundle
 import android.support.v4.view.ViewCompat
@@ -13,35 +13,29 @@ import android.widget.TextView
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
-import me.proxer.app.adapter.base.BaseGlideAdapter
-import me.proxer.app.application.GlideRequests
+import me.proxer.app.adapter.base.BaseAdapter
 import me.proxer.app.util.TimeUtils
 import me.proxer.app.util.data.ParcelableStringBooleanArrayMap
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.bindView
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.app.view.bbcode.BBCodeView
-import me.proxer.library.entitiy.info.Comment
-import me.proxer.library.enums.Category
-import me.proxer.library.util.ProxerUrls
+import me.proxer.library.entitiy.user.UserComment
 
 /**
  * @author Ruben Gees
  */
-class CommentAdapter(savedInstanceState: Bundle?, categoryCallback: () -> Category = { Category.ANIME },
-                     glide: GlideRequests) : BaseGlideAdapter<Comment>(glide) {
+class UserCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<UserComment>() {
 
     private companion object {
-        private const val EXPANDED_STATE = "comments_expanded"
-        private const val SPOILER_STATES_STATE = "comments_spoiler_states"
+        private const val EXPANDED_STATE = "user_comments_expanded"
+        private const val SPOILER_STATES_STATE = "user_comments_spoiler_states"
     }
 
     private val expanded: ParcelableStringBooleanMap
     private val spoilerStates: ParcelableStringBooleanArrayMap
 
-    private var categoryCallback: (() -> Category)? = categoryCallback
-
-    var callback: CommentAdapterCallback? = null
+    var callback: UserCommentAdapterCallback? = null
 
     init {
         expanded = when (savedInstanceState) {
@@ -59,20 +53,13 @@ class CommentAdapter(savedInstanceState: Bundle?, categoryCallback: () -> Catego
 
     override fun getItemId(position: Int) = internalList[position].id.toLong()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<Comment> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<UserComment> {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_comment, parent, false))
-    }
-
-    override fun onViewRecycled(holder: BaseViewHolder<Comment>) {
-        if (holder is ViewHolder) {
-            clearImage(holder.image)
-        }
     }
 
     override fun destroy() {
         super.destroy()
 
-        categoryCallback = null
         callback = null
     }
 
@@ -81,7 +68,7 @@ class CommentAdapter(savedInstanceState: Bundle?, categoryCallback: () -> Catego
         outState.putParcelable(SPOILER_STATES_STATE, spoilerStates)
     }
 
-    internal inner class ViewHolder(itemView: View) : BaseViewHolder<Comment>(itemView) {
+    internal inner class ViewHolder(itemView: View) : BaseViewHolder<UserComment>(itemView) {
 
         internal val titleContainer: ViewGroup by bindView(R.id.titleContainer)
         internal val image: ImageView by bindView(R.id.image)
@@ -110,6 +97,8 @@ class CommentAdapter(savedInstanceState: Bundle?, categoryCallback: () -> Catego
         internal val progress: TextView by bindView(R.id.progress)
 
         init {
+            image.visibility = View.GONE
+
             expand.setImageDrawable(IconicsDrawable(expand.context)
                     .colorRes(R.color.icon)
                     .sizeDp(32)
@@ -130,9 +119,9 @@ class CommentAdapter(savedInstanceState: Bundle?, categoryCallback: () -> Catego
                 }
             }
 
-            titleContainer.setOnClickListener { view ->
+            titleContainer.setOnClickListener {
                 withSafeAdapterPosition {
-                    callback?.onUserClick(view, internalList[it])
+                    callback?.onTitleClick(internalList[it])
                 }
             }
 
@@ -143,12 +132,12 @@ class CommentAdapter(savedInstanceState: Bundle?, categoryCallback: () -> Catego
                     .icon(CommunityMaterial.Icon.cmd_thumb_up))
         }
 
-        override fun bind(item: Comment) {
+        override fun bind(item: UserComment) {
             val maxHeight = comment.context.resources.displayMetrics.heightPixels / 4
 
             ViewCompat.setTransitionName(image, "comment_${item.id}")
 
-            title.text = item.author
+            title.text = item.entryName
             upvotes.text = item.helpfulVotes.toString()
 
             bindRatingRow(ratingGenreRow, ratingGenre, item.ratingDetails.genre.toFloat())
@@ -160,8 +149,7 @@ class CommentAdapter(savedInstanceState: Bundle?, categoryCallback: () -> Catego
 
             comment.text = item.content
             time.text = TimeUtils.convertToRelativeReadableTime(time.context, item.date)
-            progress.text = item.mediaProgress.toEpisodeAppString(progress.context, item.episode,
-                    categoryCallback?.invoke() ?: Category.ANIME)
+            progress.text = item.mediaProgress.toEpisodeAppString(progress.context, item.episode, item.category)
 
             comment.spoilerStates = spoilerStates[item.id] ?: SparseBooleanArray(0)
             comment.spoilerStateListener = { states, hasBeenExpanded ->
@@ -198,8 +186,6 @@ class CommentAdapter(savedInstanceState: Bundle?, categoryCallback: () -> Catego
             comment.post {
                 bindExpandButton(maxHeight)
             }
-
-            bindImage(item)
         }
 
         private fun bindRatingRow(container: ViewGroup, ratingBar: RatingBar, rating: Float) {
@@ -218,21 +204,9 @@ class CommentAdapter(savedInstanceState: Bundle?, categoryCallback: () -> Catego
                 expand.visibility = View.VISIBLE
             }
         }
-
-        private fun bindImage(item: Comment) {
-            if (item.image.isBlank()) {
-                image.setImageDrawable(IconicsDrawable(image.context)
-                        .icon(CommunityMaterial.Icon.cmd_account)
-                        .sizeDp(96)
-                        .paddingDp(16)
-                        .colorRes(R.color.colorAccent))
-            } else {
-                loadImage(image, ProxerUrls.userImage(item.image), circleCrop = true)
-            }
-        }
     }
 
-    interface CommentAdapterCallback {
-        fun onUserClick(view: View, item: Comment) {}
+    interface UserCommentAdapterCallback {
+        fun onTitleClick(item: UserComment) {}
     }
 }

@@ -26,6 +26,7 @@
     <string name="section_top_ten">Favoriten</string>
     <string name="section_user_media_list_anime">Anime</string>
     <string name="section_user_media_list_manga">Manga</string>
+    <string name="section_user_comments">Kommentare</string>
 
     <string name="section_media_info">Info</string>
     <string name="section_comments">Kommentare</string>

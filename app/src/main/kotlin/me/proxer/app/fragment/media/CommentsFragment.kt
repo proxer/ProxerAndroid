@@ -54,8 +54,7 @@ class CommentsFragment : PagedLoadingFragment<ProxerCall<List<Comment>>, Comment
         get() = mediaActivity.category
 
     private var sortCriteria: CommentSortCriteria
-        get() = arguments.getSerializable(SORT_CRITERIA_ARGUMENT) as? CommentSortCriteria
-                ?: CommentSortCriteria.RATING
+        get() = arguments.getSerializable(SORT_CRITERIA_ARGUMENT) as? CommentSortCriteria ?: CommentSortCriteria.RATING
         set(value) = arguments.putSerializable(SORT_CRITERIA_ARGUMENT, value)
 
     override val layoutManager by lazy { LinearLayoutManager(context) }
@@ -67,7 +66,7 @@ class CommentsFragment : PagedLoadingFragment<ProxerCall<List<Comment>>, Comment
         innerAdapter = CommentAdapter(savedInstanceState, { category ?: Category.ANIME }, GlideApp.with(this))
         innerAdapter.callback = object : CommentAdapter.CommentAdapterCallback {
             override fun onUserClick(view: View, item: Comment) {
-                val imageView = view.find<ImageView>(R.id.userImage)
+                val imageView = view.find<ImageView>(R.id.image)
 
                 ProfileActivity.navigateTo(activity, item.authorId, item.author, item.image,
                         if (imageView.drawable != null && item.image.isNotBlank()) imageView else null)
