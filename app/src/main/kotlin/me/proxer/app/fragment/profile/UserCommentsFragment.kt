@@ -69,7 +69,7 @@ class UserCommentsFragment : PagedLoadingFragment<ProxerCall<List<UserComment>>,
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        IconicsMenuInflatorUtil.inflate(inflater, context, R.menu.fragment_bookmarks, menu, true)
+        IconicsMenuInflatorUtil.inflate(inflater, context, R.menu.fragment_user_comments, menu, true)
 
         when (category) {
             Category.ANIME -> menu.findItem(R.id.anime).isChecked = true
