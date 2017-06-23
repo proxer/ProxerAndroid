@@ -73,4 +73,4 @@ highly on it and it implements most of the available API.
 
 A guide for contribution can be found [here](.github/CONTRIBUTING.md).
 
-- [@InfiniteSoul](https://github.com/InfiniteSoul) for implementing a persistent Drawer for tablets.
+- [@InfiniteSoul](https://github.com/InfiniteSoul) for implementing a persistent Drawer for tablets and UI improvements
