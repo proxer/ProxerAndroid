@@ -130,10 +130,7 @@ class StreamActivity : MainActivity() {
             })
 
             it.setVisibilityListener(object : VideoControlsVisibilityListener {
-                override fun onControlsShown() {
-                    // Nothing to do here.
-                }
-
+                override fun onControlsShown() = Unit
                 override fun onControlsHidden() = toggleFullscreen(true)
             })
         }
