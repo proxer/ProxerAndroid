@@ -227,7 +227,9 @@ class CommentAdapter(savedInstanceState: Bundle?, categoryCallback: () -> Catego
                         .paddingDp(16)
                         .colorRes(R.color.colorAccent))
             } else {
-                loadImage(image, ProxerUrls.userImage(item.image), circleCrop = true)
+                loadImage(image, ProxerUrls.userImage(item.image), {
+                    it.circleCrop()
+                })
             }
         }
     }

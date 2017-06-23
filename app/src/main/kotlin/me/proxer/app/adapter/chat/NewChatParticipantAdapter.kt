@@ -86,7 +86,9 @@ class NewChatParticipantAdapter(savedInstanceState: Bundle?, glide: GlideRequest
                         .paddingDp(16)
                         .colorRes(R.color.colorAccent))
             } else {
-                loadImage(image, ProxerUrls.userImage(item.image), true)
+                loadImage(image, ProxerUrls.userImage(item.image), {
+                    it.circleCrop()
+                })
             }
         }
     }

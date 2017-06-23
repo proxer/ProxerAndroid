@@ -108,7 +108,9 @@ class ConferenceAdapter(glide: GlideRequests) : BaseGlideAdapter<LocalConference
 
                 image.setImageDrawable(icon)
             } else {
-                loadImage(image, ProxerUrls.userImage(item.image), circleCrop = true)
+                loadImage(image, ProxerUrls.userImage(item.image), {
+                    it.circleCrop()
+                })
             }
         }
     }

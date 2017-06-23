@@ -1,5 +1,6 @@
 package me.proxer.app.adapter.ucp
 
+import android.graphics.drawable.Drawable
 import android.support.v4.view.ViewCompat
 import android.support.v7.content.res.AppCompatResources
 import android.view.LayoutInflater
@@ -12,8 +13,10 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
 import me.proxer.app.adapter.base.BaseGlideAdapter
+import me.proxer.app.application.GlideRequest
 import me.proxer.app.application.GlideRequests
 import me.proxer.app.util.extension.*
+import me.proxer.app.util.view.GlideGrayscaleTransformation
 import me.proxer.library.entitiy.ucp.Bookmark
 import me.proxer.library.util.ProxerUrls
 
@@ -21,6 +24,12 @@ import me.proxer.library.util.ProxerUrls
  * @author Ruben Gees
  */
 class BookmarkAdapter(glide: GlideRequests) : BaseGlideAdapter<Bookmark>(glide) {
+
+    companion object {
+        private val grayscaleTransformationAdjustment = { it: GlideRequest<Drawable> ->
+            it.transform(GlideGrayscaleTransformation())
+        }
+    }
 
     var callback: BookmarkAdapterCallback? = null
 
@@ -106,7 +115,8 @@ class BookmarkAdapter(glide: GlideRequests) : BaseGlideAdapter<Bookmark>(glide) 
             episode.setCompoundDrawablesWithIntrinsicBounds(null, null, availabilityIndicator, null)
             language.setImageDrawable(item.language.toGeneralLanguage().toAppDrawable(language.context))
 
-            loadImage(image, ProxerUrls.entryImage(item.entryId))
+            loadImage(image, ProxerUrls.entryImage(item.entryId),
+                    if (item.isAvailable) null else grayscaleTransformationAdjustment)
         }
     }
 
