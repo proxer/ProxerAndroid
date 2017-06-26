@@ -14,6 +14,7 @@ import me.proxer.app.event.chat.ChatSynchronizationEvent
 import me.proxer.app.fragment.chat.ChatFragment
 import me.proxer.app.fragment.chat.ConferencesFragment
 import me.proxer.app.helper.NotificationHelper
+import me.proxer.app.helper.PreferenceHelper
 import me.proxer.app.helper.StorageHelper
 import me.proxer.library.entitiy.messenger.Conference
 import me.proxer.library.entitiy.messenger.Message
@@ -33,6 +34,14 @@ class ChatJob : Job() {
 
         private const val CONFERENCE_ID_EXTRA = "conference_id"
 
+        fun scheduleSynchronizationIfPossible(context: Context) {
+            if (canSchedule(context)) {
+                scheduleSynchronization()
+            } else {
+                cancel()
+            }
+        }
+
         fun scheduleSynchronization() {
             doSchedule(1L, 100L)
         }
@@ -49,20 +58,22 @@ class ChatJob : Job() {
             it is ChatJob && !it.isCanceled && !it.isFinished
         } != null
 
-        private fun reschedule(changes: Boolean = false) {
-            if (changes || ChatFragment.isActive) {
-                StorageHelper.resetChatInterval()
+        private fun reschedule(context: Context, changes: Boolean = false) {
+            if (canSchedule(context)) {
+                if (changes || ChatFragment.isActive) {
+                    StorageHelper.resetChatInterval()
 
-                doSchedule(3_000L, 4_000L)
-            } else if (ConferencesFragment.isActive) {
-                StorageHelper.resetChatInterval()
+                    doSchedule(3_000L, 4_000L)
+                } else if (ConferencesFragment.isActive) {
+                    StorageHelper.resetChatInterval()
 
-                doSchedule(10_000L, 12_000L)
-            } else {
-                StorageHelper.incrementChatInterval()
+                    doSchedule(10_000L, 12_000L)
+                } else {
+                    StorageHelper.incrementChatInterval()
 
-                StorageHelper.chatInterval.let {
-                    doSchedule(it, it * 2L)
+                    StorageHelper.chatInterval.let {
+                        doSchedule(it, it * 2L)
+                    }
                 }
             }
         }
@@ -86,6 +97,9 @@ class ChatJob : Job() {
                     .build()
                     .schedule()
         }
+
+        private fun canSchedule(context: Context) = PreferenceHelper.areChatNotificationsEnabled(context) ||
+                ConferencesFragment.isActive || ChatFragment.isActive
     }
 
     private val conferenceId: String?
@@ -116,7 +130,8 @@ class ChatJob : Job() {
                     EventBus.getDefault().post(ChatSynchronizationEvent(insertedItems))
                 }
 
-                if (!ConferencesFragment.isActive && !ChatFragment.isActive && insertedItems.isNotEmpty()) {
+                if (PreferenceHelper.areNewsNotificationsEnabled(context) && !ConferencesFragment.isActive &&
+                        !ChatFragment.isActive && insertedItems.isNotEmpty()) {
                     showNotification(context, insertedItems.map { it.conference })
                 }
 
@@ -139,7 +154,7 @@ class ChatJob : Job() {
             }
         }
 
-        reschedule(changes)
+        reschedule(context, changes)
 
         return Result.SUCCESS
     }

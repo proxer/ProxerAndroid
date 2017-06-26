@@ -379,7 +379,9 @@
     <string name="preference_manga_clean">Heruntergeladenen Daten löschen</string>
 
     <string name="preference_category_notifications_title">Benachrichtigungen</string>
-    <string name="preference_notifications_title">Allgemeine Benachrichtigungen</string>
+    <string name="preference_notifications_news_title">News</string>
+    <string name="preference_notifications_account_title">Account</string>
+    <string name="preference_notifications_chat_title">Chat</string>
     <string name="preference_notifications_summary_off">Benachrichtigungen sind nicht aktiviert</string>
     <string name="preference_notifications_summary_on">Benachrichtigungen sind aktiviert</string>
     <string name="preference_notifications_interval_title">Aktualisierungshäufigkeit</string>

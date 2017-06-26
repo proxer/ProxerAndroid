@@ -19,7 +19,10 @@ class NotificationsJob : Job() {
         const val TAG = "notifications_job"
 
         fun scheduleIfPossible(context: Context) {
-            if (PreferenceHelper.areNotificationsEnabled(context)) {
+            val areNotificationsEnabled = PreferenceHelper.areNewsNotificationsEnabled(context) ||
+                    PreferenceHelper.areAccountNotificationsEnabled(context)
+
+            if (areNotificationsEnabled) {
                 schedule(context)
             } else {
                 cancel()
@@ -44,15 +47,19 @@ class NotificationsJob : Job() {
     }
 
     override fun onRunJob(params: Params?): Result {
-        try {
-            fetchNews(context)
-        } catch (error: Throwable) {
-            NotificationHelper.showNewsErrorNotification(context, error)
+        if (PreferenceHelper.areNewsNotificationsEnabled(context)) {
+            try {
+                fetchNews(context)
+            } catch (error: Throwable) {
+                NotificationHelper.showNewsErrorNotification(context, error)
 
-            return Result.FAILURE
+                return Result.FAILURE
+            }
         }
 
-        // TODO: Implement new general notifications API.
+        if (PreferenceHelper.areAccountNotificationsEnabled(context)) {
+            // TODO: Implement new general notifications API.
+        }
 
         return Result.SUCCESS
     }

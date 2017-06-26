@@ -124,8 +124,10 @@ class DashboardActivity : MainActivity() {
                 data.getParcelableArrayListExtra<Option>(OPTION_RESULT).forEach { option ->
                     when (option.position) {
                         1 -> {
+                            PreferenceHelper.setNewsNotificationsEnabled(this@DashboardActivity, option.isActivated)
+                            PreferenceHelper.setAccountNotificationsEnabled(this@DashboardActivity, option.isActivated)
+
                             doAsync {
-                                PreferenceHelper.setNotificationsEnabled(this@DashboardActivity, option.isActivated)
                                 NotificationsJob.scheduleIfPossible(this@DashboardActivity)
                             }
                         }

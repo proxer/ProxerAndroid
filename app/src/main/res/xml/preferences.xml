@@ -51,16 +51,29 @@
 
         <SwitchPreference
             android:defaultValue="false"
-            android:key="notifications"
+            android:key="notifications_news"
             android:summaryOff="@string/preference_notifications_summary_off"
             android:summaryOn="@string/preference_notifications_summary_on"
-            android:title="@string/preference_notifications_title" />
+            android:title="@string/preference_notifications_news_title" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="notifications_account"
+            android:summaryOff="@string/preference_notifications_summary_off"
+            android:summaryOn="@string/preference_notifications_summary_on"
+            android:title="@string/preference_notifications_account_title" />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="notifications_chat"
+            android:summaryOff="@string/preference_notifications_summary_off"
+            android:summaryOn="@string/preference_notifications_summary_on"
+            android:title="@string/preference_notifications_chat_title" />
 
         <!--suppress AndroidUnknownAttribute -->
         <ListPreference
             style="@style/Preference.Material.DialogPreference.ListPreference.SimpleMenu"
-            android:defaultValue="120"
-            android:dependency="notifications"
+            android:defaultValue="4"
             android:entries="@array/notifications_interval_titles"
             android:entryValues="@array/notifications_interval_values"
             android:key="notifications_interval"

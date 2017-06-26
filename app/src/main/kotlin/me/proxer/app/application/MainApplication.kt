@@ -102,7 +102,9 @@ class MainApplication : Application() {
     @Subscribe
     fun onLogin(@Suppress("UNUSED_PARAMETER") event: LoginEvent) {
         doAsync {
-            ChatJob.scheduleSynchronization()
+            weakRef.get()?.let {
+                ChatJob.scheduleSynchronizationIfPossible(it)
+            }
         }
     }
 
@@ -113,7 +115,9 @@ class MainApplication : Application() {
             ChatJob.cancel()
             LocalMangaJob.cancelAll()
 
-            NotificationHelper.cancelChatNotification(this@MainApplication)
+            weakRef.get()?.let {
+                NotificationHelper.cancelChatNotification(it)
+            }
 
             StorageHelper.areConferencesSynchronized = false
             StorageHelper.resetChatInterval()

@@ -13,9 +13,12 @@ import me.proxer.app.dialog.CleanMangaDialog
 import me.proxer.app.helper.PreferenceHelper
 import me.proxer.app.helper.PreferenceHelper.AGE_CONFIRMATION
 import me.proxer.app.helper.PreferenceHelper.MANGA_CLEAN
-import me.proxer.app.helper.PreferenceHelper.NOTIFICATIONS
+import me.proxer.app.helper.PreferenceHelper.NOTIFICATIONS_ACCOUNT
+import me.proxer.app.helper.PreferenceHelper.NOTIFICATIONS_CHAT
 import me.proxer.app.helper.PreferenceHelper.NOTIFICATIONS_INTERVAL
+import me.proxer.app.helper.PreferenceHelper.NOTIFICATIONS_NEWS
 import me.proxer.app.helper.PreferenceHelper.THEME
+import me.proxer.app.job.ChatJob
 import me.proxer.app.job.NotificationsJob
 import net.xpece.android.support.preference.TwoStatePreference
 import org.jetbrains.anko.bundleOf
@@ -54,6 +57,8 @@ class SettingsFragment : XpPreferenceFragment(), SharedPreferences.OnSharedPrefe
 
             true
         }
+
+        updateIntervalNotification()
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -94,17 +99,31 @@ class SettingsFragment : XpPreferenceFragment(), SharedPreferences.OnSharedPrefe
                 activity.recreate()
             }
 
-            NOTIFICATIONS -> {
+            NOTIFICATIONS_NEWS, NOTIFICATIONS_ACCOUNT -> {
+                updateIntervalNotification()
+
                 doAsync {
                     NotificationsJob.scheduleIfPossible(context)
+                }
+            }
+
+            NOTIFICATIONS_CHAT -> {
+                doAsync {
+                    ChatJob.scheduleSynchronizationIfPossible(context)
                 }
             }
 
             NOTIFICATIONS_INTERVAL -> {
                 doAsync {
                     NotificationsJob.scheduleIfPossible(context)
+                    ChatJob.scheduleSynchronizationIfPossible(context)
                 }
             }
         }
+    }
+
+    private fun updateIntervalNotification() {
+        findPreference(NOTIFICATIONS_INTERVAL).isEnabled = PreferenceHelper.areNewsNotificationsEnabled(context) ||
+                PreferenceHelper.areAccountNotificationsEnabled(context)
     }
 }
