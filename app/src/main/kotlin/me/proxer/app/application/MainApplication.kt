@@ -104,6 +104,7 @@ class MainApplication : Application() {
         doAsync {
             weakRef.get()?.let {
                 ChatJob.scheduleSynchronizationIfPossible(it)
+                NotificationsJob.scheduleIfPossible(it)
             }
         }
     }
