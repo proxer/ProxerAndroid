@@ -10,10 +10,10 @@ import me.proxer.app.task.stream.StreamResolutionTask.StreamResolutionResult
  */
 class DaisukiResolutionTaskFactory : HosterResolutionTaskFactory() {
 
-    override val name = "Daisuki"
+    override val name = "Daisuki.Net"
     override fun create() = TaskBuilder.task(DaisukiTask()).build()
 
     class DaisukiTask : WorkerTask<String, StreamResolutionResult>() {
-        override fun work(input: String) = StreamResolutionResult(Uri.parse("https://daisuki.net"), "text/html")
+        override fun work(input: String) = StreamResolutionResult(Uri.parse("http://daisuki.net"), "text/html")
     }
 }
