@@ -22,18 +22,18 @@ ext {
 
     // UI components
     aboutLibrariesVersion = '5.9.6'
-    materialDrawerVersion = '5.9.3'
-    iconicsVersion = '2.8.7'
+    materialDrawerVersion = '5.9.4'
+    iconicsVersion = '2.8.8'
     communityMaterialTypefaceVersion = '1.9.32.1'
     crossfaderVersion = '1.5.0'
     materialAboutVersion = '2.1.0'
     subsamplingScaleImageViewVersion = '3.6.0'
     tabLayoutHelperVersion = '0.8.0'
     materialDialogsVersion = '0.9.4.5'
-    flexboxVersion = '0.2.7'
+    flexboxVersion = '0.3.0'
     emojiIosVersion = '0.5.0-SNAPSHOT'
     exomediaVersion = '4.0.2'
-    exoplayerVersion = 'r2.4.2'
+    exoplayerVersion = 'r2.4.3'
     materialProgressBarVersion = '1.4.1'
     materialRatingBarVersion = '1.0.2'
     customtabsHelperVersion = '1.0.3'
@@ -150,5 +150,5 @@ task clean(type: Delete) {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.0'
+    gradleVersion = '4.1-milestone-1'
 }
