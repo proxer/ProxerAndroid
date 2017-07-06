@@ -25,6 +25,7 @@ import me.proxer.app.helper.StorageHelper
 import me.proxer.app.helper.notification.NotificationHelper.CHAT_CHANNEL
 import me.proxer.app.receiver.DirectReplyReceiver
 import me.proxer.app.util.Utils
+import me.proxer.app.util.extension.getQuantityString
 import me.proxer.library.util.ProxerUrls
 
 /**
@@ -65,10 +66,9 @@ object ChatNotificationHelper {
 
         val messageAmount = filteredConferenceMap.values.sumBy { it.size }
         val conferenceAmount = filteredConferenceMap.size
-        val messageAmountText = context.resources.getQuantityString(R.plurals.notification_chat_message_amount,
-                messageAmount, messageAmount)
-        val conferenceAmountText = context.resources.getQuantityString(R.plurals.notification_chat_conference_amount,
-                conferenceAmount, conferenceAmount)
+        val messageAmountText = context.getQuantityString(R.plurals.notification_chat_message_amount, messageAmount)
+        val conferenceAmountText = context.getQuantityString(R.plurals.notification_chat_conference_amount,
+                conferenceAmount)
 
         val title = "$messageAmountText $conferenceAmountText"
         val content = SpannableString(filteredConferenceMap.keys.joinToString(", ", transform = { it.topic }))
@@ -118,7 +118,7 @@ object ChatNotificationHelper {
         }
 
         val amount = messages.size
-        val content = context.resources.getQuantityString(R.plurals.notification_chat_message_amount, amount, amount)
+        val content = context.getQuantityString(R.plurals.notification_chat_message_amount, amount)
 
         val icon = when {
             conference.image.isNotBlank() -> Utils.getBitmapFromUrl(context,

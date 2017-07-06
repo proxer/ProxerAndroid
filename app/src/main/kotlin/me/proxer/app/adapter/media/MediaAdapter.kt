@@ -11,10 +11,7 @@ import android.widget.TextView
 import me.proxer.app.R
 import me.proxer.app.adapter.base.BaseGlideAdapter
 import me.proxer.app.application.GlideRequests
-import me.proxer.app.util.extension.bindView
-import me.proxer.app.util.extension.toAppDrawable
-import me.proxer.app.util.extension.toAppString
-import me.proxer.app.util.extension.toGeneralLanguage
+import me.proxer.app.util.extension.*
 import me.proxer.library.entitiy.list.MediaListEntry
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.Language
@@ -72,10 +69,10 @@ class MediaAdapter(private val category: Category, glide: GlideRequests) : BaseG
 
             title.text = item.name
             medium.text = item.medium.toAppString(medium.context)
-            episodes.text = episodes.resources.getQuantityString(when (category) {
+            episodes.text = episodes.context.getQuantityString(when (category) {
                 Category.ANIME -> R.plurals.media_episode_count
                 Category.MANGA -> R.plurals.media_chapter_count
-            }, item.episodeAmount, item.episodeAmount)
+            }, item.episodeAmount)
 
             val generalLanguages = item.languages.map { it.toGeneralLanguage() }.distinct()
 

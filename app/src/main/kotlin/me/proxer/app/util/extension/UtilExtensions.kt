@@ -56,6 +56,10 @@ inline fun Context.getDrawableFromAttrs(resource: Int): Drawable {
     return result
 }
 
+inline fun Context.getQuantityString(id: Int, quantity: Int): String {
+    return this.resources.getQuantityString(id, quantity, quantity)
+}
+
 inline fun HttpUrl.androidUri(): Uri {
     return Uri.parse(toString())
 }

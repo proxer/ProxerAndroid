@@ -2,6 +2,7 @@ package me.proxer.app.util
 
 import android.content.Context
 import me.proxer.app.R
+import me.proxer.app.util.extension.getQuantityString
 import org.threeten.bp.Instant
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.Period
@@ -19,7 +20,6 @@ object TimeUtils {
         val now = LocalDateTime.now()
 
         val period = Period.between(dateTime.toLocalDate(), now.toLocalDate())
-        val resources = context.resources
 
         return if (period.years <= 0) {
             if (period.months <= 0) {
@@ -32,19 +32,19 @@ object TimeUtils {
                         if (minutesBetween <= 0) {
                             context.getString(R.string.time_a_moment_ago)
                         } else {
-                            resources.getQuantityString(R.plurals.time_minutes_ago, minutesBetween, minutesBetween)
+                            context.getQuantityString(R.plurals.time_minutes_ago, minutesBetween)
                         }
                     } else {
-                        resources.getQuantityString(R.plurals.time_hours_ago, hoursBetween, hoursBetween)
+                        context.getQuantityString(R.plurals.time_hours_ago, hoursBetween)
                     }
                 } else {
-                    resources.getQuantityString(R.plurals.time_days_ago, period.days, period.days)
+                    context.getQuantityString(R.plurals.time_days_ago, period.days)
                 }
             } else {
-                resources.getQuantityString(R.plurals.time_months_ago, period.months, period.months)
+                context.getQuantityString(R.plurals.time_months_ago, period.months)
             }
         } else {
-            resources.getQuantityString(R.plurals.time_years_ago, period.years, period.years)
+            context.getQuantityString(R.plurals.time_years_ago, period.years)
         }
     }
 

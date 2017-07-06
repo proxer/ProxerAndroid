@@ -15,6 +15,7 @@ import me.proxer.app.application.GlideRequests
 import me.proxer.app.entity.chat.LocalConference
 import me.proxer.app.util.TimeUtils
 import me.proxer.app.util.extension.bindView
+import me.proxer.app.util.extension.getQuantityString
 import me.proxer.library.util.ProxerUrls
 
 /**
@@ -83,8 +84,8 @@ class ConferenceAdapter(glide: GlideRequests) : BaseGlideAdapter<LocalConference
         override fun bind(item: LocalConference) {
             topic.text = item.topic
             time.text = TimeUtils.convertToRelativeReadableTime(time.context, item.date)
-            participants.text = participants.context.resources.getQuantityString(
-                    R.plurals.fragment_conference_participants, item.participantAmount, item.participantAmount)
+            participants.text = participants.context.getQuantityString(R.plurals.fragment_conference_participants,
+                    item.participantAmount)
 
             if (item.localIsRead) {
                 newMessages.visibility = View.GONE
