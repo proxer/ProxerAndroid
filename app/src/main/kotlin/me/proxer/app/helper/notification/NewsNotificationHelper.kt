@@ -11,7 +11,6 @@ import me.proxer.app.activity.DashboardActivity
 import me.proxer.app.fragment.news.NewsArticleFragment
 import me.proxer.app.helper.MaterialDrawerHelper.DrawerItem
 import me.proxer.app.helper.notification.NotificationHelper.NEWS_CHANNEL
-import me.proxer.app.helper.notification.NotificationHelper.PROFILE_CHANNEL
 import me.proxer.app.util.ErrorUtils
 import me.proxer.library.entitiy.notifications.NewsArticle
 
@@ -52,7 +51,7 @@ object NewsNotificationHelper {
             return null
         }
 
-        val builder = NotificationCompat.Builder(context, PROFILE_CHANNEL)
+        val builder = NotificationCompat.Builder(context, NEWS_CHANNEL)
         val newsAmount = context.resources.getQuantityString(R.plurals.notification_news_amount, news.size, news.size)
         val style: NotificationCompat.Style
         val title: String

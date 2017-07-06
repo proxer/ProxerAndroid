@@ -6,7 +6,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.os.Build
 import android.support.v4.app.NotificationCompat
-import android.support.v4.app.NotificationCompat.PRIORITY_LOW
 import android.support.v4.app.NotificationManagerCompat
 import android.support.v4.content.ContextCompat
 import me.proxer.app.R
@@ -53,7 +52,7 @@ object NotificationHelper {
                 .setContentText(content)
                 .setColor(ContextCompat.getColor(context, R.color.primary))
                 .setSmallIcon(R.drawable.ic_stat_proxer)
-                .setPriority(PRIORITY_LOW)
+                .setPriority(NotificationCompat.PRIORITY_LOW)
                 .setContentIntent(intent)
                 .setAutoCancel(true)
                 .build())

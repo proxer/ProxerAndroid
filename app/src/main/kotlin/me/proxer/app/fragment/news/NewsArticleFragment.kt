@@ -12,7 +12,7 @@ import me.proxer.app.application.GlideApp
 import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.fragment.base.PagedLoadingFragment
 import me.proxer.app.helper.StorageHelper
-import me.proxer.app.helper.notification.ChatNotificationHelper
+import me.proxer.app.helper.notification.NewsNotificationHelper
 import me.proxer.app.task.asyncProxerTask
 import me.proxer.app.util.DeviceUtils
 import me.proxer.library.api.ProxerCall
@@ -73,7 +73,7 @@ class NewsArticleFragment : PagedLoadingFragment<ProxerCall<List<NewsArticle>>, 
 
         isActive = true
 
-        ChatNotificationHelper.cancel(context)
+        NewsNotificationHelper.cancel(context)
     }
 
     override fun onPause() {

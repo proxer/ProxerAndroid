@@ -130,7 +130,7 @@ class ChatJob : Job() {
                     EventBus.getDefault().post(ChatSynchronizationEvent(insertedItems))
                 }
 
-                if (PreferenceHelper.areNewsNotificationsEnabled(context) && !ConferencesFragment.isActive &&
+                if (PreferenceHelper.areChatNotificationsEnabled(context) && !ConferencesFragment.isActive &&
                         !ChatFragment.isActive && insertedItems.isNotEmpty()) {
                     showNotification(context, insertedItems.map { it.conference })
                 }

@@ -177,13 +177,12 @@ object ChatNotificationHelper {
                 .setLargeIcon(icon)
                 .setStyle(style)
                 .setContentIntent(intent)
-                .setDefaults(Notification.DEFAULT_VIBRATE or Notification.DEFAULT_SOUND or Notification.DEFAULT_LIGHTS)
+                .setDefaults(0)
                 .setColor(ContextCompat.getColor(context, R.color.primary))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                 .setGroup(GROUP)
                 .setAutoCancel(true)
-                .setOnlyAlertOnce(true)
                 .apply {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         val remoteInput = RemoteInput.Builder(DirectReplyReceiver.REMOTE_REPLY_EXTRA)
