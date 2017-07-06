@@ -11,9 +11,9 @@ import me.proxer.app.application.MainApplication.Companion.mangaDb
 import me.proxer.app.event.manga.LocalMangaJobFailedEvent
 import me.proxer.app.event.manga.LocalMangaJobFinishedEvent
 import me.proxer.app.event.manga.LocalMangaJobStartedEvent
-import me.proxer.app.helper.NotificationHelper
 import me.proxer.app.helper.PreferenceHelper
 import me.proxer.app.helper.StorageHelper
+import me.proxer.app.helper.notification.MangaNotificationHelper
 import me.proxer.app.task.manga.MangaPageDownloadTask
 import me.proxer.app.task.manga.MangaPageDownloadTask.MangaPageDownloadTaskInput
 import me.proxer.app.util.extension.decodedName
@@ -149,7 +149,7 @@ class LocalMangaJob : Job() {
             if (isIpBlockedError || params.failureCount >= 1) {
                 EventBus.getDefault().post(LocalMangaJobFailedEvent(entryId, episode, language))
 
-                NotificationHelper.showMangaDownloadErrorNotification(context, error)
+                MangaNotificationHelper.showError(context, error)
 
                 return Result.FAILURE
             } else {

@@ -1,5 +1,6 @@
 package me.proxer.app.util.extension
 
+import android.app.NotificationManager
 import android.content.ClipboardManager
 import android.content.Context
 import android.view.WindowManager
@@ -13,3 +14,6 @@ inline val Context.windowManager: WindowManager
 
 inline val Context.clipboardManager: ClipboardManager
     get() = this.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+
+inline val Context.notificationManager: NotificationManager
+    get() = this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

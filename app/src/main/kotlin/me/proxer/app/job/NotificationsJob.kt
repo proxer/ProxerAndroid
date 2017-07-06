@@ -6,9 +6,9 @@ import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
 import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.fragment.news.NewsArticleFragment
-import me.proxer.app.helper.NotificationHelper
 import me.proxer.app.helper.PreferenceHelper
 import me.proxer.app.helper.StorageHelper
+import me.proxer.app.helper.notification.NewsNotificationHelper
 
 /**
  * @author Ruben Gees
@@ -51,7 +51,7 @@ class NotificationsJob : Job() {
             try {
                 fetchNews(context)
             } catch (error: Throwable) {
-                NotificationHelper.showNewsErrorNotification(context, error)
+                NewsNotificationHelper.showError(context, error)
 
                 return Result.FAILURE
             }
@@ -79,7 +79,7 @@ class NotificationsJob : Job() {
                 StorageHelper.lastNewsDate = it
             }
 
-            NotificationHelper.showOrUpdateNewsNotification(context, newNews)
+            NewsNotificationHelper.showOrUpdate(context, newNews)
         }
     }
 }

@@ -330,12 +330,15 @@
     <string name="view_bbcode_hide_spoiler">Spoiler verstecken</string>
     <string name="view_bbcode_show_spoiler">Spoiler!</string>
 
-    <string name="notification_channel_profile_description">News und alles zu deinem Profil</string>
-    <string name="notification_channel_chat_description">Private Chat-Nachrichten und Konferenzen</string>
-    <string name="notification_channel_errors_description">Problem- und Fehlermeldungen</string>
+    <string name="notification_channel_news">News</string>
     <string name="notification_channel_profile">Profil</string>
     <string name="notification_channel_chat">Chat</string>
-    <string name="notification_channel_errors">Probleme</string>
+    <string name="notification_channel_manga">Manga</string>
+
+    <string name="notification_channel_news_description">Aktuelle News</string>
+    <string name="notification_channel_profile_description">Alles zu deinem Profil</string>
+    <string name="notification_channel_chat_description">Private Chat-Nachrichten und Konferenzen</string>
+    <string name="notification_channel_manga_description">Informationen zum Manga-Download</string>
 
     <string name="notification_news_title">News</string>
     <plurals name="notification_news_amount">

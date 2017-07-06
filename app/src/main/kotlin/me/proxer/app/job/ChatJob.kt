@@ -13,9 +13,9 @@ import me.proxer.app.event.chat.ChatMessageEvent
 import me.proxer.app.event.chat.ChatSynchronizationEvent
 import me.proxer.app.fragment.chat.ChatFragment
 import me.proxer.app.fragment.chat.ConferencesFragment
-import me.proxer.app.helper.NotificationHelper
 import me.proxer.app.helper.PreferenceHelper
 import me.proxer.app.helper.StorageHelper
+import me.proxer.app.helper.notification.ChatNotificationHelper
 import me.proxer.library.entitiy.messenger.Conference
 import me.proxer.library.entitiy.messenger.Message
 import org.greenrobot.eventbus.EventBus
@@ -293,7 +293,7 @@ class ChatJob : Job() {
                     it to chatDb.getMostRecentMessages(it.id, it.unreadMessageAmount).asReversed()
                 }
 
-        NotificationHelper.showOrUpdateChatNotification(context, unreadMap)
+        ChatNotificationHelper.showOrUpdate(context, unreadMap)
     }
 
     open class ChatException(val innerError: Throwable) : Exception()

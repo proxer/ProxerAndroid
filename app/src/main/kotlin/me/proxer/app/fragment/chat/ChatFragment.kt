@@ -24,8 +24,8 @@ import me.proxer.app.application.MainApplication.Companion.chatDb
 import me.proxer.app.entity.chat.LocalConference
 import me.proxer.app.entity.chat.LocalMessage
 import me.proxer.app.fragment.base.PagedLoadingFragment
-import me.proxer.app.helper.NotificationHelper
 import me.proxer.app.helper.StorageHelper
+import me.proxer.app.helper.notification.ChatNotificationHelper
 import me.proxer.app.job.ChatJob
 import me.proxer.app.task.chat.ChatRefreshTask
 import me.proxer.app.task.chat.ChatTask
@@ -191,7 +191,7 @@ class ChatFragment : PagedLoadingFragment<Int, LocalMessage>() {
 
         isActive = true
 
-        NotificationHelper.cancelChatNotification(context)
+        ChatNotificationHelper.cancel(context)
 
         if (!isFirstStart && !ChatJob.isRunning()) {
             ChatJob.scheduleSynchronization()

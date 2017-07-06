@@ -14,7 +14,7 @@ import me.proxer.app.application.GlideApp
 import me.proxer.app.entity.chat.LocalConference
 import me.proxer.app.event.LogoutEvent
 import me.proxer.app.fragment.base.LoadingFragment
-import me.proxer.app.helper.NotificationHelper
+import me.proxer.app.helper.notification.ChatNotificationHelper
 import me.proxer.app.job.ChatJob
 import me.proxer.app.task.chat.ConferencesTask
 import me.proxer.app.util.DeviceUtils
@@ -55,7 +55,7 @@ class ConferencesFragment : LoadingFragment<Unit, List<LocalConference>>() {
 
         isActive = true
 
-        NotificationHelper.cancelChatNotification(context)
+        ChatNotificationHelper.cancel(context)
 
         if (!ChatJob.isRunning()) {
             ChatJob.scheduleSynchronization()

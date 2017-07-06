@@ -29,9 +29,10 @@ import me.proxer.app.data.ChatDatabase
 import me.proxer.app.data.LocalMangaDatabase
 import me.proxer.app.event.LoginEvent
 import me.proxer.app.event.LogoutEvent
-import me.proxer.app.helper.NotificationHelper
 import me.proxer.app.helper.PreferenceHelper
 import me.proxer.app.helper.StorageHelper
+import me.proxer.app.helper.notification.ChatNotificationHelper
+import me.proxer.app.helper.notification.NotificationHelper
 import me.proxer.app.job.ChatJob
 import me.proxer.app.job.LocalMangaJob
 import me.proxer.app.job.NotificationsJob
@@ -117,7 +118,7 @@ class MainApplication : Application() {
             LocalMangaJob.cancelAll()
 
             weakRef.get()?.let {
-                NotificationHelper.cancelChatNotification(it)
+                ChatNotificationHelper.cancel(it)
             }
 
             StorageHelper.areConferencesSynchronized = false
