@@ -98,6 +98,12 @@ class BookmarkAdapter(glide: GlideRequests) : BaseGlideAdapter<Bookmark>(glide) 
                     callback?.onBookmarkRemoval(internalList[it])
                 }
             }
+
+            remove.setOnLongClickListener {
+                it.toastBelow(R.string.fragment_bookmarks_delete_hint)
+
+                true
+            }
         }
 
         override fun bind(item: Bookmark) {

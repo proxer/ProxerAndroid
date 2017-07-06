@@ -233,6 +233,10 @@
     <string name="fragment_ucp_overview_profile_link">Profillink</string>
     <string name="fragment_ucp_overview_user_id">User ID</string>
 
+    <string name="fragment_ucp_topten_delete_hint">Diesen Eintrag löschen</string>
+
+    <string name="fragment_bookmarks_delete_hint">Löschen</string>
+
     <string name="fragment_profile_points_anime">Anime</string>
     <string name="fragment_profile_points_forum">Forum</string>
     <string name="fragment_profile_points_info">Info</string>
@@ -274,6 +278,8 @@
     <string name="fragment_anime_bookmark_this_episode">Lesezeichen: Diese Episode</string>
     <string name="fragment_anime_stream_play">Abspielen</string>
 
+    <string name="fragment_local_manga_delete_hint">Dieses Kapitel löschen</string>
+
     <plurals name="fragment_local_manga_chapters_downloading">
         <item quantity="one">Ein Kapitel wird heruntergeladen</item>
         <item quantity="other">%d Kapitel werden heruntergeladen</item>
@@ -283,6 +289,8 @@
         <item quantity="one">Ein Kapitel ist zum Herunterladen eingereiht</item>
         <item quantity="other">%d Kapitel sind zum Herunterladen eingereiht</item>
     </plurals>
+
+    <string name="fragment_episode_download_hint">Dieses Kapitel herunterladen</string>
 
     <string name="fragment_manga_next_chapter">Nächstes Kapitel</string>
     <string name="fragment_manga_previous_chapter">Vorheriges Kapitel</string>

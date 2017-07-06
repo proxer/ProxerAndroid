@@ -5,10 +5,15 @@ package me.proxer.app.util.extension
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.support.customtabs.CustomTabsIntent
 import android.support.v4.content.ContextCompat
+import android.view.Gravity
+import android.view.View
+import android.view.View.MeasureSpec
+import android.widget.Toast
 import me.proxer.app.R
 import me.proxer.app.activity.WebViewActivity
 import me.proxer.app.entity.manga.LocalMangaChapter
@@ -17,6 +22,7 @@ import me.proxer.library.entitiy.info.EntryCore
 import me.proxer.library.entitiy.manga.Page
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
+import org.jetbrains.anko.dip
 import java.net.URLDecoder
 import java.util.concurrent.Semaphore
 
@@ -45,6 +51,24 @@ fun CustomTabsHelperFragment.openHttpPage(activity: Activity, url: HttpUrl) {
         }
         false -> activity.startActivity(Intent(Intent.ACTION_VIEW).setData(url.androidUri()))
     }
+}
+
+fun View.toastBelow(message: Int) {
+    Toast.makeText(context, message, Toast.LENGTH_SHORT).apply {
+        MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED).let { view.measure(it, it) }
+
+        val windowVisibleDisplayFrame = Rect().apply {
+            (context as Activity).window.decorView.getWindowVisibleDisplayFrame(this)
+        }
+
+        val viewLocation = IntArray(2).apply { getLocationInWindow(this) }
+        val viewLeft = viewLocation[0] - windowVisibleDisplayFrame.left
+        val viewTop = viewLocation[1] - windowVisibleDisplayFrame.top
+        val toastX = viewLeft + (width - view.measuredWidth) / 2
+        val toastY = viewTop + height + dip(4)
+
+        setGravity(Gravity.START or Gravity.TOP, toastX, toastY)
+    }.show()
 }
 
 inline fun Context.getDrawableFromAttrs(resource: Int): Drawable {

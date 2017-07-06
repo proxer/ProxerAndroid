@@ -12,6 +12,7 @@ import me.proxer.app.adapter.base.BaseAdapter
 import me.proxer.app.entity.manga.LocalMangaChapter
 import me.proxer.app.util.extension.bindView
 import me.proxer.app.util.extension.toEpisodeAppString
+import me.proxer.app.util.extension.toastBelow
 import me.proxer.library.enums.Category
 
 /**
@@ -59,6 +60,12 @@ internal class LocalMangaChapterAdapter : BaseAdapter<LocalMangaChapter>() {
                 withSafeAdapterPosition {
                     callback?.onDeleteClick(internalList[it])
                 }
+            }
+
+            delete.setOnLongClickListener {
+                it.toastBelow(R.string.fragment_local_manga_delete_hint)
+
+                true
             }
         }
 

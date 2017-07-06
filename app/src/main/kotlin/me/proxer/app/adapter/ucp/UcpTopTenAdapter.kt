@@ -14,6 +14,7 @@ import me.proxer.app.R
 import me.proxer.app.adapter.base.BaseGlideAdapter
 import me.proxer.app.application.GlideRequests
 import me.proxer.app.util.extension.bindView
+import me.proxer.app.util.extension.toastBelow
 import me.proxer.library.entitiy.ucp.UcpTopTenEntry
 import me.proxer.library.util.ProxerUrls
 
@@ -69,6 +70,12 @@ class UcpTopTenAdapter(glide: GlideRequests) : BaseGlideAdapter<UcpTopTenEntry>(
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     callback?.onRemoveClick(internalList[adapterPosition])
                 }
+            }
+
+            removeButton.setOnLongClickListener {
+                it.toastBelow(R.string.fragment_ucp_topten_delete_hint)
+
+                true
             }
         }
 

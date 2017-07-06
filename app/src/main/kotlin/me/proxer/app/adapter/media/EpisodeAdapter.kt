@@ -234,7 +234,6 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?, g
             }
 
             if (category == Category.MANGA && isLoggedIn) {
-
                 downloadProgress.tag = doAsync {
                     val containsChapter = mangaDb.containsChapter(entryId, episode, language.toGeneralLanguage())
                     val isScheduledOrRunning = LocalMangaJob.isScheduledOrRunning(entryId, episode,
@@ -264,6 +263,15 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?, g
                         }
                     }
 
+                    val downloadLongClickListener = when (containsChapter) {
+                        true -> null
+                        false -> View.OnLongClickListener {
+                            download.toastBelow(R.string.fragment_episode_download_hint)
+
+                            true
+                        }
+                    }
+
                     val downloadProgressClickListener = when (isScheduledOrRunning) {
                         true -> View.OnClickListener { _: View ->
                             LocalMangaJob.cancel(entryId, episode, language.toGeneralLanguage())
@@ -279,6 +287,7 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?, g
                         download.visibility = downloadVisibility
                         download.setImageDrawable(icon)
                         download.setOnClickListener(downloadClickListener)
+                        download.setOnLongClickListener(downloadLongClickListener)
                         downloadProgress.setOnClickListener(downloadProgressClickListener)
                     }
                 }
