@@ -291,6 +291,7 @@
     </plurals>
 
     <string name="fragment_episode_download_hint">Dieses Kapitel herunterladen</string>
+    <string name="fragment_episode_already_downloaded_hint">Dieses Kapitel ist Offline verfügbar</string>
 
     <string name="fragment_manga_next_chapter">Nächstes Kapitel</string>
     <string name="fragment_manga_previous_chapter">Vorheriges Kapitel</string>

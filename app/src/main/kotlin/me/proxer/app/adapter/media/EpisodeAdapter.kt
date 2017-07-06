@@ -199,8 +199,7 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?, g
                 }
 
                 bindHosterImages(hosterImages, hostersView)
-                bindDownload(item.category, item.number, language, downloadContainer, download,
-                        downloadProgress)
+                bindDownload(item.category, item.number, language, downloadContainer, download, downloadProgress)
             }
         }
 
@@ -221,78 +220,6 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?, g
                 if (event.id == entryId && event.episode == internalList[it].number) {
                     notifyItemChanged(it)
                 }
-            }
-        }
-
-        private fun bindDownload(category: Category, episode: Int, language: MediaLanguage,
-                                 downloadContainer: ViewGroup, download: ImageView,
-                                 downloadProgress: MaterialProgressBar) {
-            downloadProgress.tag.let {
-                if (it is Future<*>) {
-                    it.cancel(true)
-                }
-            }
-
-            if (category == Category.MANGA && isLoggedIn) {
-                downloadProgress.tag = doAsync {
-                    val containsChapter = mangaDb.containsChapter(entryId, episode, language.toGeneralLanguage())
-                    val isScheduledOrRunning = LocalMangaJob.isScheduledOrRunning(entryId, episode,
-                            language.toGeneralLanguage())
-
-                    val progressVisibility = when (isScheduledOrRunning) {
-                        true -> View.VISIBLE
-                        false -> View.INVISIBLE
-                    }
-
-                    val downloadVisibility = when (isScheduledOrRunning) {
-                        true -> View.INVISIBLE
-                        false -> View.VISIBLE
-                    }
-
-                    val icon = IconicsDrawable(download.context, when (containsChapter) {
-                        true -> CommunityMaterial.Icon.cmd_cloud_check
-                        false -> CommunityMaterial.Icon.cmd_download
-                    }).colorRes(R.color.icon).sizeDp(32)
-
-                    val downloadClickListener = when (containsChapter) {
-                        true -> null
-                        false -> View.OnClickListener {
-                            LocalMangaJob.schedule(it.context, entryId, episode, language.toGeneralLanguage())
-
-                            bindDownload(category, episode, language, downloadContainer, download, downloadProgress)
-                        }
-                    }
-
-                    val downloadLongClickListener = when (containsChapter) {
-                        true -> null
-                        false -> View.OnLongClickListener {
-                            download.toastBelow(R.string.fragment_episode_download_hint)
-
-                            true
-                        }
-                    }
-
-                    val downloadProgressClickListener = when (isScheduledOrRunning) {
-                        true -> View.OnClickListener { _: View ->
-                            LocalMangaJob.cancel(entryId, episode, language.toGeneralLanguage())
-
-                            bindDownload(category, episode, language, downloadContainer, download, downloadProgress)
-                        }
-                        false -> null
-                    }
-
-                    uiThread {
-                        downloadContainer.visibility = View.VISIBLE
-                        downloadProgress.visibility = progressVisibility
-                        download.visibility = downloadVisibility
-                        download.setImageDrawable(icon)
-                        download.setOnClickListener(downloadClickListener)
-                        download.setOnLongClickListener(downloadLongClickListener)
-                        downloadProgress.setOnClickListener(downloadProgressClickListener)
-                    }
-                }
-            } else {
-                downloadContainer.visibility = View.GONE
             }
         }
 
@@ -321,6 +248,93 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?, g
                 hostersView.forEachChildWithIndex { index, imageView ->
                     loadImage(imageView as ImageView, ProxerUrls.hosterImage(hosterImages[index]))
                 }
+            }
+        }
+
+        private fun bindDownload(category: Category, episode: Int, language: MediaLanguage,
+                                 downloadContainer: ViewGroup, download: ImageView,
+                                 downloadProgress: MaterialProgressBar) {
+
+            downloadProgress.tag.let {
+                if (it is Future<*>) {
+                    it.cancel(true)
+                }
+            }
+
+            if (category == Category.MANGA && isLoggedIn) {
+                download.setOnClickListener {
+                    doAsync {
+                        if (mangaDb.containsChapter(entryId, episode, language.toGeneralLanguage())) {
+                            uiThread {
+                                download.toastBelow(R.string.fragment_episode_already_downloaded_hint)
+                            }
+                        } else {
+                            LocalMangaJob.schedule(it.context, entryId, episode, language.toGeneralLanguage())
+
+                            uiThread {
+                                download.visibility = View.INVISIBLE
+                                downloadProgress.visibility = View.VISIBLE
+                            }
+                        }
+                    }
+                }
+
+                download.setOnLongClickListener {
+                    doAsync {
+                        if (mangaDb.containsChapter(entryId, episode, language.toGeneralLanguage())) {
+                            uiThread {
+                                download.toastBelow(R.string.fragment_episode_already_downloaded_hint)
+                            }
+                        } else {
+                            uiThread {
+                                download.toastBelow(R.string.fragment_episode_download_hint)
+                            }
+                        }
+                    }
+
+                    true
+                }
+
+                downloadProgress.setOnClickListener { _: View ->
+                    doAsync {
+                        LocalMangaJob.cancel(entryId, episode, language.toGeneralLanguage())
+
+                        uiThread {
+                            download.visibility = View.VISIBLE
+                            downloadProgress.visibility = View.INVISIBLE
+                        }
+                    }
+                }
+
+                downloadProgress.tag = doAsync {
+                    val containsChapter = mangaDb.containsChapter(entryId, episode, language.toGeneralLanguage())
+                    val isScheduledOrRunning = LocalMangaJob.isScheduledOrRunning(entryId, episode,
+                            language.toGeneralLanguage())
+
+                    val progressVisibility = when (isScheduledOrRunning) {
+                        true -> View.VISIBLE
+                        false -> View.INVISIBLE
+                    }
+
+                    val downloadVisibility = when (isScheduledOrRunning) {
+                        true -> View.INVISIBLE
+                        false -> View.VISIBLE
+                    }
+
+                    val icon = IconicsDrawable(download.context, when (containsChapter) {
+                        true -> CommunityMaterial.Icon.cmd_cloud_check
+                        false -> CommunityMaterial.Icon.cmd_download
+                    }).colorRes(R.color.icon).sizeDp(32)
+
+                    uiThread {
+                        downloadContainer.visibility = View.VISIBLE
+                        downloadProgress.visibility = progressVisibility
+                        download.visibility = downloadVisibility
+                        download.setImageDrawable(icon)
+                    }
+                }
+            } else {
+                downloadContainer.visibility = View.GONE
             }
         }
     }
