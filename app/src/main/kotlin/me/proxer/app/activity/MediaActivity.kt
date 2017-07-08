@@ -9,7 +9,7 @@ import android.support.v4.app.ShareCompat
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
-import com.mikepenz.iconics.utils.IconicsMenuInflatorUtil
+import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import me.proxer.app.R
 import me.proxer.app.activity.base.ImageTabsActivity
 import me.proxer.app.fragment.media.CommentsFragment
@@ -85,7 +85,7 @@ class MediaActivity : ImageTabsActivity() {
         }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        IconicsMenuInflatorUtil.inflate(menuInflater, this, R.menu.activity_share, menu, true)
+        IconicsMenuInflaterUtil.inflate(menuInflater, this, R.menu.activity_share, menu, true)
 
         return super.onCreateOptionsMenu(menu)
     }

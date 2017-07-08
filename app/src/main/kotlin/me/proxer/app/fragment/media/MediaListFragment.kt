@@ -9,7 +9,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
-import com.mikepenz.iconics.utils.IconicsMenuInflatorUtil
+import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.activity.MediaActivity
@@ -105,7 +105,7 @@ class MediaListFragment : PagedLoadingFragment<ProxerCall<List<MediaListEntry>>,
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        IconicsMenuInflatorUtil.inflate(inflater, context, R.menu.fragment_media_list, menu, true)
+        IconicsMenuInflaterUtil.inflate(inflater, context, R.menu.fragment_media_list, menu, true)
 
         when (sortCriteria) {
             MediaSearchSortCriteria.RATING -> menu.findItem(R.id.rating).isChecked = true

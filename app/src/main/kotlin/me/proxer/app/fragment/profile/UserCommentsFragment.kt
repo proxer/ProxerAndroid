@@ -5,7 +5,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import com.mikepenz.iconics.utils.IconicsMenuInflatorUtil
+import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.activity.MediaActivity
@@ -69,7 +69,7 @@ class UserCommentsFragment : PagedLoadingFragment<ProxerCall<List<UserComment>>,
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        IconicsMenuInflatorUtil.inflate(inflater, context, R.menu.fragment_user_comments, menu, true)
+        IconicsMenuInflaterUtil.inflate(inflater, context, R.menu.fragment_user_comments, menu, true)
 
         when (category) {
             Category.ANIME -> menu.findItem(R.id.anime).isChecked = true

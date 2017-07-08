@@ -11,7 +11,7 @@ import android.view.*
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import com.mikepenz.iconics.utils.IconicsMenuInflatorUtil
+import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import com.rubengees.ktask.android.AndroidLifecycleTask
 import com.rubengees.ktask.android.bindToLifecycle
@@ -189,7 +189,7 @@ class LocalMangaFragment : LoadingFragment<Unit, List<CompleteLocalMangaEntry>>(
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        IconicsMenuInflatorUtil.inflate(inflater, context, R.menu.fragment_local_manga, menu, true)
+        IconicsMenuInflaterUtil.inflate(inflater, context, R.menu.fragment_local_manga, menu, true)
 
         searchItem = menu.findItem(R.id.search)
         searchView = searchItem.actionView as SearchView

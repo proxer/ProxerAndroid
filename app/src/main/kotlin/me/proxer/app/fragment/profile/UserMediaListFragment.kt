@@ -7,7 +7,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
-import com.mikepenz.iconics.utils.IconicsMenuInflatorUtil
+import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.rubengees.ktask.util.TaskBuilder
 import me.proxer.app.R
 import me.proxer.app.activity.MediaActivity
@@ -85,7 +85,7 @@ class UserMediaListFragment : PagedLoadingFragment<ProxerCall<List<UserMediaList
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        IconicsMenuInflatorUtil.inflate(inflater, context, when (category) {
+        IconicsMenuInflaterUtil.inflate(inflater, context, when (category) {
             Category.ANIME -> R.menu.fragment_user_media_list_anime
             Category.MANGA -> R.menu.fragment_user_media_list_manga
         }, menu, true)

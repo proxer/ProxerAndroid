@@ -7,7 +7,7 @@ import android.support.v4.app.ShareCompat
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
-import com.mikepenz.iconics.utils.IconicsMenuInflatorUtil
+import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import me.proxer.app.R
 import me.proxer.app.activity.base.MainActivity
 import me.proxer.app.fragment.anime.AnimeFragment
@@ -113,7 +113,7 @@ class AnimeActivity : MainActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        IconicsMenuInflatorUtil.inflate(menuInflater, this, R.menu.activity_share, menu, true)
+        IconicsMenuInflaterUtil.inflate(menuInflater, this, R.menu.activity_share, menu, true)
 
         return super.onCreateOptionsMenu(menu)
     }

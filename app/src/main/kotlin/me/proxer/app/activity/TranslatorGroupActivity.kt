@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.app.ShareCompat
 import android.view.Menu
 import android.view.MenuItem
-import com.mikepenz.iconics.utils.IconicsMenuInflatorUtil
+import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import me.proxer.app.R
 import me.proxer.app.activity.base.ImageTabsActivity
 import me.proxer.app.fragment.info.TranslatorGroupInfoFragment
@@ -47,7 +47,7 @@ class TranslatorGroupActivity : ImageTabsActivity() {
     override val sectionsPagerAdapter by lazy { SectionsPagerAdapter(supportFragmentManager) }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        IconicsMenuInflatorUtil.inflate(menuInflater, this, R.menu.activity_share, menu, true)
+        IconicsMenuInflaterUtil.inflate(menuInflater, this, R.menu.activity_share, menu, true)
 
         return super.onCreateOptionsMenu(menu)
     }
