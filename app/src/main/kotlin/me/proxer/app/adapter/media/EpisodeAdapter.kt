@@ -90,11 +90,9 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?, g
     }
 
     override fun onViewRecycled(holder: BaseViewHolder<EpisodeRow>?) {
-        if (holder is ViewHolder) {
-            holder.languages.applyRecursively {
-                if (it is ImageView) {
-                    clearImage(it)
-                }
+        (holder as? ViewHolder)?.languages?.applyRecursively {
+            if (it is ImageView) {
+                clearImage(it)
             }
         }
     }
@@ -256,9 +254,7 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?, g
                                  downloadProgress: MaterialProgressBar) {
 
             downloadProgress.tag.let {
-                if (it is Future<*>) {
-                    it.cancel(true)
-                }
+                (it as? Future<*>)?.cancel(true)
             }
 
             if (category == Category.MANGA && isLoggedIn) {

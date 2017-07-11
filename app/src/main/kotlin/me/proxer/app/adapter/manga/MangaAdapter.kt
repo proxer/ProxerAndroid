@@ -37,12 +37,8 @@ class MangaAdapter : BaseAdapter<Page>() {
     override fun onViewRecycled(holder: BaseViewHolder<Page>?) {
         if (holder is ViewHolder) {
             holder.image.recycle()
-            holder.image.tag?.let {
-                if (it is Task<*, *>) {
-                    it.destroy()
-                }
-            }
 
+            (holder.image.tag as? Task<*, *>)?.destroy()
             holder.image.tag = null
         }
     }

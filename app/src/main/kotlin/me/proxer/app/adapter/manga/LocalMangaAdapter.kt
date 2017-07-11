@@ -80,9 +80,7 @@ class LocalMangaAdapter(savedInstanceState: Bundle?, glide: GlideRequests) :
     override fun onViewDetachedFromWindow(holder: BaseViewHolder<CompleteLocalMangaEntry>?) {
         super.onViewDetachedFromWindow(holder)
 
-        if (holder is ViewHolder) {
-            holder.adapter.destroy()
-        }
+        (holder as? ViewHolder)?.adapter?.destroy()
     }
 
     override fun destroy() {

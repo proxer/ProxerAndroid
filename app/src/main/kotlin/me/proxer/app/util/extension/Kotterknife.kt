@@ -86,11 +86,7 @@ private class Lazy<in T, out V : View>(private val initializer: (T, KProperty<*>
         val safeValue = value
 
         if (safeValue is View) {
-            val safeTag = safeValue.tag
-
-            if (safeTag is Future<*>) {
-                safeTag.cancel(true)
-            }
+            (safeValue.tag as? Future<*>)?.cancel(true)
 
             safeValue.tag = null
         }
