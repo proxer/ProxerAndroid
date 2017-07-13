@@ -108,8 +108,8 @@ class ChatAdapter(savedInstanceState: Bundle?, val isGroup: Boolean) : BaseAdapt
         if (current.action != MessageAction.NONE) {
             result = MessageType.ACTION.type
         } else {
-            if (position - 1 < 0) {
-                result = if (position + 1 >= itemCount) {
+            when {
+                position - 1 < 0 -> result = if (position + 1 >= itemCount) {
                     MessageType.SINGLE.type // The item is the only one
                 } else {
                     val next = internalList[position + 1]
@@ -120,29 +120,31 @@ class ChatAdapter(savedInstanceState: Bundle?, val isGroup: Boolean) : BaseAdapt
                         MessageType.SINGLE.type // The item is the bottommost item and doesn't have an item from the same user above
                     }
                 }
-            } else if (position + 1 >= itemCount) {
-                val previous = internalList[position - 1]
+                position + 1 >= itemCount -> {
+                    val previous = internalList[position - 1]
 
-                result = if (previous.userId == current.userId && previous.action == MessageAction.NONE) {
-                    MessageType.TOP.type // The item is the topmost item and has an item from the same user beneath
-                } else {
-                    MessageType.SINGLE.type // The item is the topmost item and doesn't have an item from the same user beneath
-                }
-            } else {
-                val previous = internalList[position - 1]
-                val next = internalList[position + 1]
-
-                result = if (previous.userId == current.userId && previous.action == MessageAction.NONE) {
-                    if (next.userId == current.userId && next.action == MessageAction.NONE) {
-                        MessageType.INNER.type // The item is in between two other items from the same user
+                    result = if (previous.userId == current.userId && previous.action == MessageAction.NONE) {
+                        MessageType.TOP.type // The item is the topmost item and has an item from the same user beneath
                     } else {
-                        MessageType.TOP.type // The item has an item from the same user beneath but not above
+                        MessageType.SINGLE.type // The item is the topmost item and doesn't have an item from the same user beneath
                     }
-                } else {
-                    if (next.userId == current.userId && next.action == MessageAction.NONE) {
-                        MessageType.BOTTOM.type // The item has an item from the same user above but not beneath
+                }
+                else -> {
+                    val previous = internalList[position - 1]
+                    val next = internalList[position + 1]
+
+                    result = if (previous.userId == current.userId && previous.action == MessageAction.NONE) {
+                        if (next.userId == current.userId && next.action == MessageAction.NONE) {
+                            MessageType.INNER.type // The item is in between two other items from the same user
+                        } else {
+                            MessageType.TOP.type // The item has an item from the same user beneath but not above
+                        }
                     } else {
-                        MessageType.SINGLE.type  // The item stands alone
+                        if (next.userId == current.userId && next.action == MessageAction.NONE) {
+                            MessageType.BOTTOM.type // The item has an item from the same user above but not beneath
+                        } else {
+                            MessageType.SINGLE.type  // The item stands alone
+                        }
                     }
                 }
             }
