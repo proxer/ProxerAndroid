@@ -152,9 +152,7 @@ class MainApplication : Application() {
                 }
                 .installDefaultEventBus()
 
-        ExoMedia.setHttpDataSourceFactoryProvider(ExoMedia.HttpDataSourceFactoryProvider {
-            _: String, listener: TransferListener<in DataSource>? ->
-
+        ExoMedia.setHttpDataSourceFactoryProvider({ _: String, listener: TransferListener<in DataSource>? ->
             OkHttpDataSourceFactory(client, GENERIC_USER_AGENT, listener)
         })
 

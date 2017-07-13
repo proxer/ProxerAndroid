@@ -70,8 +70,10 @@ class IndustryInfoFragment : LoadingFragment<ProxerCall<Industry>, Industry>() {
     override fun onSuccess(result: Industry) {
         name = result.name
         language.setImageDrawable(result.country.toAppDrawable(context))
-        type.text = ProxerUtils.getApiEnumName(result.type)?.replace("_", " ")?.split(" ")?.map(String::capitalize)
-                ?.joinToString(separator = " ") ?: throw NullPointerException()
+        type.text = ProxerUtils.getApiEnumName(result.type)
+                ?.replace("_", " ")
+                ?.split(" ")
+                ?.joinToString(separator = " ", transform = String::capitalize) ?: throw NullPointerException()
 
         if (result.link?.toString().isNullOrBlank()) {
             linkRow.visibility = View.GONE

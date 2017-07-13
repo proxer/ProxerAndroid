@@ -146,7 +146,7 @@ class DashboardActivity : MainActivity() {
         setFragment(fragment)
     }
 
-    private fun setFragment(fragment: Fragment): Unit {
+    private fun setFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
                 .replace(R.id.container, fragment)
                 .commitNow()

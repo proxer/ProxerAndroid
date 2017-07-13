@@ -45,7 +45,7 @@ class ChatRefreshTask(private val id: String, chatErrorCallback: ChatErrorCallba
     @Suppress("unused")
     @Subscribe
     fun onChatSynchronization(event: ChatSynchronizationEvent) {
-        event.items.filter { it.conference.id == id }.firstOrNull()?.let {
+        event.items.firstOrNull { it.conference.id == id }?.let {
             isCancelled = false
 
             chatDb.markAsRead(id)

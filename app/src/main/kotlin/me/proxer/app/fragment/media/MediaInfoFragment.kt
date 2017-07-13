@@ -356,8 +356,10 @@ class MediaInfoFragment : LoadingFragment<ProxerCall<Entry>, Entry>() {
             industries.visibility = View.GONE
         } else {
             bindChips(industries, result.industries, mapFunction = {
-                val type = ProxerUtils.getApiEnumName(it.type)?.replace("_", " ")?.split(" ")
-                        ?.map(String::capitalize)?.joinToString(separator = " ") ?: throw NullPointerException()
+                val type = ProxerUtils.getApiEnumName(it.type)
+                        ?.replace("_", " ")
+                        ?.split(" ")
+                        ?.joinToString(separator = " ", transform = String::capitalize) ?: throw NullPointerException()
 
                 "${it.name} ($type)"
             }, onClick = {

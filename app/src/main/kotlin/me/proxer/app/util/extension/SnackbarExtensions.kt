@@ -60,11 +60,6 @@ inline fun Activity.multilineSnackbar(root: View, message: Int, duration: Int = 
     return multilineSnackbar(root, getString(message), duration, actionMessage, actionCallback, maxLines)
 }
 
-inline fun Activity.multilineSnackbar(root: View, action: ErrorAction, duration: Int = LENGTH_LONG,
-                                      maxLines: Int = 5): Snackbar {
-    return multilineSnackbar(root, action.message, duration, action.buttonMessage, action.buttonAction, maxLines)
-}
-
 inline fun Fragment.snackbar(root: View, message: CharSequence, duration: Int = LENGTH_LONG,
                              actionMessage: Int = ACTION_MESSAGE_DEFAULT,
                              actionCallback: View.OnClickListener? = null): Snackbar {
@@ -95,7 +90,3 @@ inline fun Fragment.multilineSnackbar(root: View, message: Int, duration: Int = 
     return activity.multilineSnackbar(root, message, duration, actionMessage, actionCallback, maxLines)
 }
 
-inline fun Fragment.multilineSnackbar(root: View, action: ErrorAction, duration: Int = LENGTH_LONG,
-                                      maxLines: Int = 5): Snackbar {
-    return multilineSnackbar(root, action.message, duration, action.buttonMessage, action.buttonAction, maxLines)
-}

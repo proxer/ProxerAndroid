@@ -113,7 +113,7 @@ class TopTenFragment : LoadingFragment<Pair<ProxerCall<List<TopTenEntry>>, Proxe
     }
 
     override fun constructTask() = TaskBuilder.proxerTask<List<TopTenEntry>>()
-            .parallelWith(TaskBuilder.proxerTask<List<TopTenEntry>>(), ::ZippedTopTenResult)
+            .parallelWith(TaskBuilder.proxerTask(), ::ZippedTopTenResult)
             .build()
 
     override fun constructInput(): Pair<ProxerCall<List<TopTenEntry>>, ProxerCall<List<TopTenEntry>>> {
