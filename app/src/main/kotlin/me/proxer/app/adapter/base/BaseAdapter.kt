@@ -125,8 +125,8 @@ abstract class BaseAdapter<T> : RecyclerView.Adapter<BaseAdapter<T>.BaseViewHold
         val safeLayoutManager = recyclerView?.layoutManager
 
         return when (safeLayoutManager) {
-            is StaggeredGridLayoutManager -> safeLayoutManager.findFirstCompletelyVisibleItemPositions(null).contains(0)
-            is LinearLayoutManager -> safeLayoutManager.findFirstCompletelyVisibleItemPosition() == 0
+            is StaggeredGridLayoutManager -> safeLayoutManager.findFirstVisibleItemPositions(null).contains(0)
+            is LinearLayoutManager -> safeLayoutManager.findFirstVisibleItemPosition() == 0
             else -> false
         }
     }
