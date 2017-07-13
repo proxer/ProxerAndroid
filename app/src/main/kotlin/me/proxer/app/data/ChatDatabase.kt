@@ -170,10 +170,10 @@ class ChatDatabase(context: Context) : ManagedSQLiteOpenHelper(context, DATABASE
                     val candidate = this.select(MESSAGE_TABLE, "min($MESSAGE_ID_COLUMN)")
                             .parseOpt(rowParser { value: String -> value.toLong() }) ?: -1
 
-                    if (candidate < 0) {
-                        nextMessageToSendId = candidate
+                    nextMessageToSendId = if (candidate < 0) {
+                        candidate
                     } else {
-                        nextMessageToSendId = -1L
+                        -1L
                     }
                 }
 

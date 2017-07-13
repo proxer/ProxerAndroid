@@ -160,21 +160,22 @@ internal object BBTokenizer {
 
         internal class ColorTokenRule : BBTokenRule() {
 
-            override fun isStart(segment: String): Int {
-                if (segment.length >= 15 && segment.startsWith("[COLOR=", true)) {
-                    if (segment.elementAt(7) == '"') {
-                        return if (segment.length >= 17 && segment.elementAt(8) == '#'
+            override fun isStart(segment: String) = when {
+                segment.length >= 15 && segment.startsWith("[COLOR=", true) -> when {
+                    segment.elementAt(7) == '"' -> when {
+                        segment.length >= 17 && segment.elementAt(8) == '#'
                                 && segment.subSequence(9, 15).all { it.isDigit() || it in 'a'..'f' || it in 'A'..'F' }
-                                && segment.elementAt(15) == '"' && segment.elementAt(16) == ']') 17 else 0
-                    } else if (segment.elementAt(7) == '#') {
-                        return if (segment.subSequence(8, 14).all { it.isDigit() || it in 'a'..'f' || it in 'A'..'F' }
-                                && segment.elementAt(14) == ']') 15 else 0
-                    } else {
-                        return 0
+                                && segment.elementAt(15) == '"' && segment.elementAt(16) == ']' -> 17
+                        else -> 0
                     }
-                } else {
-                    return 0
+                    segment.elementAt(7) == '#' -> when {
+                        segment.subSequence(8, 14).all { it.isDigit() || it in 'a'..'f' || it in 'A'..'F' }
+                                && segment.elementAt(14) == ']' -> 15
+                        else -> 0
+                    }
+                    else -> 0
                 }
+                else -> 0
             }
 
             override fun isEnd(segment: String) = if (segment.startsWith("[/COLOR]", true)) 8 else 0

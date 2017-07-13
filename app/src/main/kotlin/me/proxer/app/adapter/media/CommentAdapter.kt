@@ -120,7 +120,7 @@ class CommentAdapter(savedInstanceState: Bundle?, categoryCallback: () -> Catego
                 withSafeAdapterPosition {
                     val id = internalList[it].id
 
-                    if (expanded[id] ?: false) {
+                    if (expanded[id] == true) {
                         expanded.remove(id)
                     } else {
                         expanded.put(id, true)
@@ -168,7 +168,7 @@ class CommentAdapter(savedInstanceState: Bundle?, categoryCallback: () -> Catego
                 spoilerStates.put(item.id, states)
 
                 if (hasBeenExpanded) {
-                    if (!(expanded[item.id] ?: false)) {
+                    if (expanded[item.id] != true) {
                         expanded.put(item.id, true)
 
                         comment.maxHeight = Int.MAX_VALUE
@@ -185,7 +185,7 @@ class CommentAdapter(savedInstanceState: Bundle?, categoryCallback: () -> Catego
                 }
             }
 
-            if (expanded[item.id] ?: false) {
+            if (expanded[item.id] == true) {
                 comment.maxHeight = Int.MAX_VALUE
 
                 ViewCompat.animate(expand).rotation(180f)

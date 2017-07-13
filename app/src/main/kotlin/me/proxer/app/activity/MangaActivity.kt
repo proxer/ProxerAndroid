@@ -87,10 +87,10 @@ class MangaActivity : MainActivity() {
 
     var episodeAmount: Int?
         get() {
-            if (intent.hasExtra(EPISODE_AMOUNT_EXTRA)) {
-                return intent.getIntExtra(EPISODE_AMOUNT_EXTRA, 1)
+            return if (intent.hasExtra(EPISODE_AMOUNT_EXTRA)) {
+                intent.getIntExtra(EPISODE_AMOUNT_EXTRA, 1)
             } else {
-                return null
+                null
             }
         }
         set(value) {
@@ -164,12 +164,7 @@ class MangaActivity : MainActivity() {
     }
 
     private fun updateTitle() {
-        if (chapterTitle != null) {
-            title = chapterTitle
-        } else {
-            title = Category.MANGA.toEpisodeAppString(this, episode)
-        }
-
+        title = chapterTitle ?: Category.MANGA.toEpisodeAppString(this, episode)
         supportActionBar?.subtitle = name
     }
 }

@@ -118,7 +118,7 @@ class ChatJob : Job() {
                 val insertedItems = chatDb.insertOrUpdateConferencesWithMessages(fetchConferences().map {
                     fetchNewMessages(it).let { container ->
                         val existingConference = chatDb.findConference(it.id)
-                        val isFullyLoaded = container.isFullyLoaded || existingConference?.isFullyLoaded ?: false
+                        val isFullyLoaded = container.isFullyLoaded || existingConference?.isFullyLoaded == true
 
                         ConferenceAssociation(it.toMetaConference(isFullyLoaded), container.messages.asReversed())
                     }

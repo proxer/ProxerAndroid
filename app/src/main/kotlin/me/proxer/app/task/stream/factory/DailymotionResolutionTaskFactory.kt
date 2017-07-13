@@ -36,7 +36,7 @@ class DailymotionResolutionTaskFactory : HosterResolutionTaskFactory() {
                 }
 
                 qualityEntry.value.mapNotNull {
-                    if (it["type"] == "video/mp4" && it["url"]?.isNotBlank() ?: false) {
+                    if (it["type"] == "video/mp4" && it["url"]?.isNotBlank() == true) {
                         quality to it["url"]
                     } else {
                         null

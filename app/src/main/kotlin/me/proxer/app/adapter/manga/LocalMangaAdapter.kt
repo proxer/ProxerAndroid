@@ -107,7 +107,7 @@ class LocalMangaAdapter(savedInstanceState: Bundle?, glide: GlideRequests) :
                 withSafeAdapterPosition {
                     val id = internalList[it].first.id
 
-                    if (expanded[id] ?: false) {
+                    if (expanded[id] == true) {
                         expanded.remove(id)
                     } else {
                         expanded.put(id, true)
@@ -136,7 +136,7 @@ class LocalMangaAdapter(savedInstanceState: Bundle?, glide: GlideRequests) :
 
             title.text = item.first.name
 
-            if (expanded[item.first.id] ?: false) {
+            if (expanded[item.first.id] == true) {
                 chapters.visibility = View.VISIBLE
                 adapter.replace(item.second)
             } else {

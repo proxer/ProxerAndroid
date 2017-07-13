@@ -22,14 +22,16 @@ class EpisodeRow(val category: Category, val userProgress: Int, val episodeAmoun
 
         this.number = episodes.first().number
 
-        if (episodes.first() is MangaEpisode) {
-            this.title = (episodes.first() as MangaEpisode).title
-            this.languageHosterList = episodes.map { it.language to null }
-        } else if (episodes.first() is AnimeEpisode) {
-            this.title = null
-            this.languageHosterList = episodes.map { it.language to (it as AnimeEpisode).hosterImages }
-        } else {
-            throw IllegalArgumentException("Unknown type: ${episodes.first().javaClass}")
+        when {
+            episodes.first() is MangaEpisode -> {
+                this.title = (episodes.first() as MangaEpisode).title
+                this.languageHosterList = episodes.map { it.language to null }
+            }
+            episodes.first() is AnimeEpisode -> {
+                this.title = null
+                this.languageHosterList = episodes.map { it.language to (it as AnimeEpisode).hosterImages }
+            }
+            else -> throw IllegalArgumentException("Unknown type: ${episodes.first().javaClass}")
         }
     }
 }

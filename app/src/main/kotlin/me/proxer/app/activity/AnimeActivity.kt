@@ -80,10 +80,10 @@ class AnimeActivity : MainActivity() {
 
     var episodeAmount: Int?
         get() {
-            if (intent.hasExtra(EPISODE_AMOUNT_EXTRA)) {
-                return intent.getIntExtra(EPISODE_AMOUNT_EXTRA, 1)
+            return if (intent.hasExtra(EPISODE_AMOUNT_EXTRA)) {
+                intent.getIntExtra(EPISODE_AMOUNT_EXTRA, 1)
             } else {
-                return null
+                null
             }
         }
         set(value) {

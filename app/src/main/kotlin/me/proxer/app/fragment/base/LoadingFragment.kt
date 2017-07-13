@@ -92,7 +92,7 @@ abstract class LoadingFragment<I, O> : MainFragment() {
                 }
                 .build()
 
-        isSolvingCaptcha = savedInstanceState?.getBoolean(IS_SOLVING_CAPTCHA_STATE) ?: false
+        isSolvingCaptcha = savedInstanceState?.getBoolean(IS_SOLVING_CAPTCHA_STATE) == true
 
         EventBus.getDefault().register(this)
     }
@@ -222,14 +222,14 @@ abstract class LoadingFragment<I, O> : MainFragment() {
         val isIpBlockedError = innermostError is ProxerException &&
                 innermostError.serverErrorType == ProxerException.ServerErrorType.IP_BLOCKED
 
-        if (isIpBlockedError) {
-            return ErrorAction(R.string.error_captcha, R.string.error_action_captcha, View.OnClickListener {
+        return if (isIpBlockedError) {
+            ErrorAction(R.string.error_captcha, R.string.error_action_captcha, View.OnClickListener {
                 isSolvingCaptcha = true
 
                 showPage(ProxerUrls.captchaWeb(Device.MOBILE))
             })
         } else {
-            return ErrorUtils.handle(activity as MainActivity, error)
+            ErrorUtils.handle(activity as MainActivity, error)
         }
     }
 

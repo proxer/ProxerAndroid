@@ -90,9 +90,9 @@ class CommentsFragment : PagedLoadingFragment<ProxerCall<List<Comment>>, Comment
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val previousCriteria = sortCriteria
 
-        when (item.itemId) {
-            R.id.rating -> sortCriteria = CommentSortCriteria.RATING
-            R.id.time -> sortCriteria = CommentSortCriteria.TIME
+        sortCriteria = when (item.itemId) {
+            R.id.rating -> CommentSortCriteria.RATING
+            R.id.time -> CommentSortCriteria.TIME
             else -> return false
         }
 

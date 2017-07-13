@@ -39,7 +39,7 @@ class ChatAdapter(savedInstanceState: Bundle?, val isGroup: Boolean) : BaseAdapt
     var callback: ChatAdapterCallback? = null
 
     val selectedItems: List<LocalMessage>
-        get() = internalList.filter { selected[it.localId.toString()] ?: false }.sortedBy { it.date }
+        get() = internalList.filter { selected[it.localId.toString()] == true }.sortedBy { it.date }
 
     private val selected: ParcelableStringBooleanMap
     private val showingTime: ParcelableStringBooleanMap
@@ -57,7 +57,7 @@ class ChatAdapter(savedInstanceState: Bundle?, val isGroup: Boolean) : BaseAdapt
             else -> savedInstanceState.getParcelable(SHOWING_TIME_STATE)
         }
 
-        selecting = savedInstanceState?.getBoolean(SELECTING_STATE) ?: false
+        selecting = savedInstanceState?.getBoolean(SELECTING_STATE) == true
 
         setHasStableIds(true)
     }
@@ -109,40 +109,40 @@ class ChatAdapter(savedInstanceState: Bundle?, val isGroup: Boolean) : BaseAdapt
             result = MessageType.ACTION.type
         } else {
             if (position - 1 < 0) {
-                if (position + 1 >= itemCount) {
-                    result = MessageType.SINGLE.type // The item is the only one
+                result = if (position + 1 >= itemCount) {
+                    MessageType.SINGLE.type // The item is the only one
                 } else {
                     val next = internalList[position + 1]
 
                     if (next.userId == current.userId && next.action == MessageAction.NONE) {
-                        result = MessageType.BOTTOM.type // The item is the bottommost item and has an item from the same user above
+                        MessageType.BOTTOM.type // The item is the bottommost item and has an item from the same user above
                     } else {
-                        result = MessageType.SINGLE.type // The item is the bottommost item and doesn't have an item from the same user above
+                        MessageType.SINGLE.type // The item is the bottommost item and doesn't have an item from the same user above
                     }
                 }
             } else if (position + 1 >= itemCount) {
                 val previous = internalList[position - 1]
 
-                if (previous.userId == current.userId && previous.action == MessageAction.NONE) {
-                    result = MessageType.TOP.type // The item is the topmost item and has an item from the same user beneath
+                result = if (previous.userId == current.userId && previous.action == MessageAction.NONE) {
+                    MessageType.TOP.type // The item is the topmost item and has an item from the same user beneath
                 } else {
-                    result = MessageType.SINGLE.type // The item is the topmost item and doesn't have an item from the same user beneath
+                    MessageType.SINGLE.type // The item is the topmost item and doesn't have an item from the same user beneath
                 }
             } else {
                 val previous = internalList[position - 1]
                 val next = internalList[position + 1]
 
-                if (previous.userId == current.userId && previous.action == MessageAction.NONE) {
+                result = if (previous.userId == current.userId && previous.action == MessageAction.NONE) {
                     if (next.userId == current.userId && next.action == MessageAction.NONE) {
-                        result = MessageType.INNER.type // The item is in between two other items from the same user
+                        MessageType.INNER.type // The item is in between two other items from the same user
                     } else {
-                        result = MessageType.TOP.type // The item has an item from the same user beneath but not above
+                        MessageType.TOP.type // The item has an item from the same user beneath but not above
                     }
                 } else {
                     if (next.userId == current.userId && next.action == MessageAction.NONE) {
-                        result = MessageType.BOTTOM.type // The item has an item from the same user above but not beneath
+                        MessageType.BOTTOM.type // The item has an item from the same user above but not beneath
                     } else {
-                        result = MessageType.SINGLE.type  // The item stands alone
+                        MessageType.SINGLE.type  // The item stands alone
                     }
                 }
             }
@@ -286,7 +286,7 @@ class ChatAdapter(savedInstanceState: Bundle?, val isGroup: Boolean) : BaseAdapt
                 val id = current.localId.toString()
 
                 if (selecting) {
-                    if (selected[id] ?: false) {
+                    if (selected[id] == true) {
                         selected.remove(id)
 
                         if (selected.size <= 0) {
@@ -298,7 +298,7 @@ class ChatAdapter(savedInstanceState: Bundle?, val isGroup: Boolean) : BaseAdapt
 
                     callback?.onMessageSelection(selected.size)
                 } else {
-                    if (showingTime[id] ?: false) {
+                    if (showingTime[id] == true) {
                         showingTime.remove(id)
                     } else {
                         showingTime.put(id, true)
@@ -361,13 +361,13 @@ class ChatAdapter(savedInstanceState: Bundle?, val isGroup: Boolean) : BaseAdapt
 
         protected open fun applySelection(message: LocalMessage) {
             container.cardBackgroundColor = ContextCompat.getColorStateList(container.context, when {
-                selected[message.localId.toString()] ?: false -> R.color.selected
+                selected[message.localId.toString()] == true -> R.color.selected
                 else -> R.color.card_background
             })
         }
 
         protected open fun applyTimeVisibility(message: LocalMessage) {
-            if (showingTime[message.localId.toString()] ?: false) {
+            if (showingTime[message.localId.toString()] == true) {
                 time.visibility = View.VISIBLE
             } else {
                 time.visibility = View.GONE
@@ -410,7 +410,7 @@ class ChatAdapter(savedInstanceState: Bundle?, val isGroup: Boolean) : BaseAdapt
                 val current = internalList[it]
                 val id = current.localId.toString()
 
-                if (showingTime[id] ?: false) {
+                if (showingTime[id] == true) {
                     time.visibility = View.GONE
 
                     showingTime.remove(id)

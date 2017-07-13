@@ -137,7 +137,7 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?, g
                 withSafeAdapterPosition {
                     val number = internalList[it].number.toString()
 
-                    if (expanded[number] ?: false) {
+                    if (expanded[number] == true) {
                         expanded.remove(number)
                     } else {
                         expanded.put(number, true)
@@ -162,7 +162,7 @@ class EpisodeAdapter(private val entryId: String, savedInstanceState: Bundle?, g
                 watched.visibility = View.INVISIBLE
             }
 
-            if (expanded[item.number.toString()] ?: false) {
+            if (expanded[item.number.toString()] == true) {
                 languages.visibility = View.VISIBLE
             } else {
                 languages.visibility = View.GONE

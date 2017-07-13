@@ -109,13 +109,13 @@ class LocalMangaJob : Job() {
         }
 
         synchronized(lock, {
-            if (System.currentTimeMillis() > lastTime + 40 * 1000) {
-                lastTime = System.currentTimeMillis()
-                ongoing = 1
-            } else if (ongoing <= 6) {
-                ongoing++
-            } else {
-                return Result.RESCHEDULE
+            when {
+                System.currentTimeMillis() > lastTime + 40 * 1000 -> {
+                    lastTime = System.currentTimeMillis()
+                    ongoing = 1
+                }
+                ongoing <= 6 -> ongoing++
+                else -> return Result.RESCHEDULE
             }
         })
 
@@ -146,14 +146,14 @@ class LocalMangaJob : Job() {
         } catch (error: Throwable) {
             val isIpBlockedError = error is ProxerException && error.serverErrorType == ServerErrorType.IP_BLOCKED
 
-            if (isIpBlockedError || params.failureCount >= 1) {
+            return if (isIpBlockedError || params.failureCount >= 1) {
                 EventBus.getDefault().post(LocalMangaJobFailedEvent(entryId, episode, language))
 
                 MangaNotificationHelper.showError(context, error)
 
-                return Result.FAILURE
+                Result.FAILURE
             } else {
-                return Result.RESCHEDULE
+                Result.RESCHEDULE
             }
         }
     }

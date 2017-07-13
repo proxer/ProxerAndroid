@@ -35,12 +35,10 @@ abstract class BaseAdapter<T> : RecyclerView.Adapter<BaseAdapter<T>.BaseViewHold
         holder.bind(internalList[position])
     }
 
-    override fun getItemId(position: Int): Long {
-        if (hasStableIds()) {
-            return (internalList[position] as ProxerIdItem).id.toLong()
-        } else {
-            return super.getItemId(position)
-        }
+    override fun getItemId(position: Int) = if (hasStableIds()) {
+        (internalList[position] as ProxerIdItem).id.toLong()
+    } else {
+        super.getItemId(position)
     }
 
     override fun getItemCount() = internalList.size

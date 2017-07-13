@@ -54,7 +54,7 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar, savedInstanceSta
     }
 
     fun onBackPressed(): Boolean {
-        if (crossfader?.isCrossFaded() ?: false) {
+        if (crossfader?.isCrossFaded() == true) {
             crossfader?.crossFade()
 
             return true
@@ -71,12 +71,12 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar, savedInstanceSta
 
             val startPage = PreferenceHelper.getStartPage(context)
 
-            if (currentItem != startPage) {
+            return if (currentItem != startPage) {
                 select(startPage)
 
-                return true
+                true
             } else {
-                return false
+                false
             }
         }
     }

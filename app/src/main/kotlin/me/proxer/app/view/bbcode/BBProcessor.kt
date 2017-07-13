@@ -270,32 +270,32 @@ internal object BBProcessor {
                 private const val ALT_TRIM_PATTERN = "\n"
             }
 
-            fun trimStart(): Boolean {
-                if (text.startsWith(TRIM_PATTERN)) {
+            fun trimStart() = when {
+                text.startsWith(TRIM_PATTERN) -> {
                     text.delete(0, TRIM_PATTERN.length)
 
-                    return true
-                } else if (text.startsWith(ALT_TRIM_PATTERN)) {
+                    true
+                }
+                text.startsWith(ALT_TRIM_PATTERN) -> {
                     text.delete(0, ALT_TRIM_PATTERN.length)
 
-                    return true
-                } else {
-                    return false
+                    true
                 }
+                else -> false
             }
 
-            fun trimEnd(): Boolean {
-                if (text.endsWith(TRIM_PATTERN)) {
+            fun trimEnd() = when {
+                text.endsWith(TRIM_PATTERN) -> {
                     text.delete(text.length - TRIM_PATTERN.length, text.length)
 
-                    return true
-                } else if (text.startsWith(ALT_TRIM_PATTERN)) {
+                    true
+                }
+                text.startsWith(ALT_TRIM_PATTERN) -> {
                     text.delete(text.length - ALT_TRIM_PATTERN.length, text.length)
 
-                    return true
-                } else {
-                    return false
+                    true
                 }
+                else -> false
             }
         }
 

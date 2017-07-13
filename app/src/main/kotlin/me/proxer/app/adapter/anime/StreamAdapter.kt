@@ -80,7 +80,7 @@ class StreamAdapter(savedInstanceState: Bundle?, glide: GlideRequests) : BaseGli
                 withSafeAdapterPosition {
                     val id = internalList[it].id
 
-                    if (expanded[id] ?: false) {
+                    if (expanded[id] == true) {
                         expanded.remove(id)
                     } else {
                         expanded.put(id, true)
@@ -120,7 +120,7 @@ class StreamAdapter(savedInstanceState: Bundle?, glide: GlideRequests) : BaseGli
 
             loadImage(image, ProxerUrls.hosterImage(item.image))
 
-            if (expanded[item.id] ?: false) {
+            if (expanded[item.id] == true) {
                 uploadInfoContainer.visibility = View.VISIBLE
             } else {
                 uploadInfoContainer.visibility = View.GONE

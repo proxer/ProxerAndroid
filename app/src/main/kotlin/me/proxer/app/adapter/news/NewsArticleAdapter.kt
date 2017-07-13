@@ -93,7 +93,7 @@ class NewsArticleAdapter(savedInstanceState: Bundle?, glide: GlideRequests) : Ba
                 withSafeAdapterPosition {
                     val id = internalList[it].id
 
-                    if (expanded[id] ?: false) {
+                    if (expanded[id] == true) {
                         expanded.remove(id)
                     } else {
                         expanded.put(id, true)
@@ -120,7 +120,7 @@ class NewsArticleAdapter(savedInstanceState: Bundle?, glide: GlideRequests) : Ba
             category.text = item.category
             time.text = TimeUtils.convertToRelativeReadableTime(time.context, item.date)
 
-            if (expanded[item.id] ?: false) {
+            if (expanded[item.id] == true) {
                 description.maxLines = Int.MAX_VALUE
 
                 ViewCompat.animate(expand).rotation(180f)

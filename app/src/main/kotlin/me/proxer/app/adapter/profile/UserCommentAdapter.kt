@@ -109,7 +109,7 @@ class UserCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<UserComment>
                 withSafeAdapterPosition {
                     val id = internalList[it].id
 
-                    if (expanded[id] ?: false) {
+                    if (expanded[id] == true) {
                         expanded.remove(id)
                     } else {
                         expanded.put(id, true)
@@ -156,7 +156,7 @@ class UserCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<UserComment>
                 spoilerStates.put(item.id, states)
 
                 if (hasBeenExpanded) {
-                    if (!(expanded[item.id] ?: false)) {
+                    if (expanded[item.id] != true) {
                         expanded.put(item.id, true)
 
                         comment.maxHeight = Int.MAX_VALUE
@@ -173,7 +173,7 @@ class UserCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<UserComment>
                 }
             }
 
-            if (expanded[item.id] ?: false) {
+            if (expanded[item.id] == true) {
                 comment.maxHeight = Int.MAX_VALUE
 
                 ViewCompat.animate(expand).rotation(180f)
