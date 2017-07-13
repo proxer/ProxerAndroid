@@ -1,7 +1,19 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <lint>
+    <!-- Lint seems to not properly support the new adaptive icons. -->
+    <issue id="IconXmlAndPng">
+        <ignore path="src/main/res/**/ic_launcher.*" />
+    </issue>
+
+    <!-- Needed for Okio and Retrofit. -->
     <issue id="InvalidPackage" severity="error">
         <ignore regexp=".*okio.*" />
         <ignore regexp=".*retrofit.*" />
+    </issue>
+
+    <!-- Ignore accessibility issues we do not care about and can't ignore in the code. -->
+    <issue id="ClickableViewAccessibility">
+        <ignore regexp="LinkConsumableEmojiTextView.kt" />
+        <ignore regexp="MangaAdapter.kt" />
     </issue>
 </lint>

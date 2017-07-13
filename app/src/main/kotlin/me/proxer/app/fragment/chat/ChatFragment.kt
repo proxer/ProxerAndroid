@@ -151,7 +151,7 @@ class ChatFragment : PagedLoadingFragment<Int, LocalMessage>() {
     }
 
     private val emojiPopup by lazy {
-        EmojiPopup.Builder.fromRootView(root)
+        val popup = EmojiPopup.Builder.fromRootView(root)
                 .setOnEmojiPopupShownListener {
                     emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_keyboard))
                 }
@@ -159,6 +159,8 @@ class ChatFragment : PagedLoadingFragment<Int, LocalMessage>() {
                     emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_emoticon))
                 }
                 .build(messageInput)
+
+        popup
     }
 
     override val layoutManager by lazy { LinearLayoutManager(context).apply { reverseLayout = true } }
