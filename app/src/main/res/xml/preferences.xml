@@ -73,7 +73,7 @@
         <!--suppress AndroidUnknownAttribute -->
         <ListPreference
             style="@style/Preference.Material.DialogPreference.ListPreference.SimpleMenu"
-            android:defaultValue="4"
+            android:defaultValue="120"
             android:entries="@array/notifications_interval_titles"
             android:entryValues="@array/notifications_interval_values"
             android:key="notifications_interval"
