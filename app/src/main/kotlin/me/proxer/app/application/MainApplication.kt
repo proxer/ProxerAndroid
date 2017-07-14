@@ -31,7 +31,9 @@ import me.proxer.app.event.LoginEvent
 import me.proxer.app.event.LogoutEvent
 import me.proxer.app.helper.PreferenceHelper
 import me.proxer.app.helper.StorageHelper
+import me.proxer.app.helper.notification.AccountNotificationHelper
 import me.proxer.app.helper.notification.ChatNotificationHelper
+import me.proxer.app.helper.notification.MangaNotificationHelper
 import me.proxer.app.helper.notification.NotificationHelper
 import me.proxer.app.job.ChatJob
 import me.proxer.app.job.LocalMangaJob
@@ -118,7 +120,9 @@ class MainApplication : Application() {
             LocalMangaJob.cancelAll()
 
             weakRef.get()?.let {
+                AccountNotificationHelper.cancel(it)
                 ChatNotificationHelper.cancel(it)
+                MangaNotificationHelper.cancel(it)
             }
 
             StorageHelper.areConferencesSynchronized = false

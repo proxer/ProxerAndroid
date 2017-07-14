@@ -98,4 +98,5 @@ inline fun <T> Semaphore.lock(action: () -> T): T {
     }
 }
 
+typealias ProxerNotification = me.proxer.library.entitiy.notifications.Notification
 typealias CompleteLocalMangaEntry = Pair<EntryCore, List<LocalMangaChapter>>

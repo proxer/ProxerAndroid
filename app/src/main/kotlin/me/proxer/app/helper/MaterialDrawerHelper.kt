@@ -144,6 +144,10 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar, savedInstanceSta
                             .withSelectedTextColorRes(R.color.colorAccent)
                             .withIdentifier(AccountItem.USER.id),
                     ProfileSettingDrawerItem()
+                            .withName(R.string.section_notifications)
+                            .withIcon(CommunityMaterial.Icon.cmd_bell_outline)
+                            .withIdentifier(AccountItem.NOTIFICATIONS.id),
+                    ProfileSettingDrawerItem()
                             .withName(R.string.section_ucp)
                             .withIcon(CommunityMaterial.Icon.cmd_account_key)
                             .withIdentifier(AccountItem.UCP.id),
@@ -317,7 +321,8 @@ class MaterialDrawerHelper(context: Activity, toolbar: Toolbar, savedInstanceSta
         LOGIN(101L),
         USER(102L),
         LOGOUT(103L),
-        UCP(104L);
+        NOTIFICATIONS(104L),
+        UCP(105L);
 
         companion object {
             fun fromOrNull(id: Long?) = values().firstOrNull { it.id == id }

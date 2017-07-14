@@ -35,7 +35,7 @@ object NewsNotificationHelper {
     }
 
     fun showError(context: Context, error: Throwable) {
-        NotificationHelper.showErrorNotification(context, ID, NEWS_CHANNEL,
+        NotificationHelper.showErrorNotification(context, ERROR_ID, NEWS_CHANNEL,
                 context.getString(R.string.notification_news_error_title),
                 context.getString(ErrorUtils.getMessage(error)))
     }
@@ -80,7 +80,7 @@ object NewsNotificationHelper {
                     }
 
                     setBigContentTitle(context.getString(R.string.notification_news_title))
-                            .setSummaryText(newsAmount)
+                    setSummaryText(newsAmount)
                 }
             }
         }

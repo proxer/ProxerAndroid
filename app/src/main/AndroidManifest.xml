@@ -65,6 +65,8 @@
 
         <activity android:name=".activity.ChatActivity" />
 
+        <activity android:name=".activity.NotificationActivity" />
+
         <activity android:name=".activity.UcpActivity" />
 
         <activity

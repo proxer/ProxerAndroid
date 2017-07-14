@@ -3,6 +3,7 @@ package me.proxer.app.helper.notification
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.support.v4.app.NotificationManagerCompat
 import me.proxer.app.R
 import me.proxer.app.helper.notification.NotificationHelper.MANGA_CHANNEL
 import me.proxer.app.util.ErrorUtils
@@ -35,5 +36,9 @@ object MangaNotificationHelper {
         NotificationHelper.showErrorNotification(context, ERROR_ID, MANGA_CHANNEL,
                 context.getString(R.string.notification_manga_download_error_title),
                 context.getString(ErrorUtils.getMessage(innermostError)), intent)
+    }
+
+    fun cancel(context: Context) {
+        NotificationManagerCompat.from(context).cancel(ERROR_ID)
     }
 }

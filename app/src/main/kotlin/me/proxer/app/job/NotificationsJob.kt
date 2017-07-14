@@ -8,6 +8,7 @@ import me.proxer.app.application.MainApplication.Companion.api
 import me.proxer.app.fragment.news.NewsArticleFragment
 import me.proxer.app.helper.PreferenceHelper
 import me.proxer.app.helper.StorageHelper
+import me.proxer.app.helper.notification.AccountNotificationHelper
 import me.proxer.app.helper.notification.NewsNotificationHelper
 
 /**
@@ -58,7 +59,13 @@ class NotificationsJob : Job() {
         }
 
         if (PreferenceHelper.areAccountNotificationsEnabled(context)) {
-            // TODO: Implement new general notifications API.
+            try {
+                fetchAccountNotifications(context)
+            } catch (error: Throwable) {
+                AccountNotificationHelper.showError(context, error)
+
+                return Result.FAILURE
+            }
         }
 
         return Result.SUCCESS
@@ -80,6 +87,26 @@ class NotificationsJob : Job() {
             }
 
             NewsNotificationHelper.showOrUpdate(context, newNews)
+        }
+    }
+
+    private fun fetchAccountNotifications(context: Context) {
+        val user = StorageHelper.user
+
+        if (user != null) {
+            val notificationInfo = api.notifications().notificationInfo().build().execute()
+            val newNotifications = when (notificationInfo.notifications == 0) {
+                true -> emptyList()
+                false -> api.notifications().notifications()
+                        .limit(notificationInfo.notifications)
+                        .markAsRead(true)
+                        .build()
+                        .execute()
+            }
+
+            AccountNotificationHelper.showOrUpdate(context, newNotifications)
+        } else {
+            AccountNotificationHelper.cancel(context)
         }
     }
 }

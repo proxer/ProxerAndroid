@@ -18,6 +18,8 @@
     <string name="section_info">Info</string>
     <string name="section_settings">Einstellungen</string>
 
+    <string name="section_notifications">Benachrichtigungen</string>
+
     <string name="section_ucp_overview">Übersicht</string>
     <string name="section_ucp_top_ten">Favoriten</string>
     <string name="section_ucp_history">Chronik</string>
@@ -91,6 +93,7 @@
 
     <string name="error_no_data">Keine Daten</string>
     <string name="error_no_data_news">Derzeit sind keine News verfügbar</string>
+    <string name="error_no_data_notifications">Derzeit gibt es keine Benachrichtigungen</string>
     <string name="error_no_data_bookmarks">Du hast noch nichts in deiner Watchlist</string>
     <string name="error_no_data_top_ten">Es wurde noch nichts in die Top 10 aufgenommen</string>
     <string name="error_no_data_history">Noch keine Einträge verfügbar</string>
@@ -363,7 +366,14 @@
         <item quantity="other">%d Nachrichten</item>
     </plurals>
 
+    <string name="notification_account_title">Account Benachrichtigung</string>
+    <plurals name="notification_account_amount">
+        <item quantity="one">Eine Benachrichtigung</item>
+        <item quantity="other">%d Benachrichtigungen</item>
+    </plurals>
+
     <string name="notification_news_error_title">Fehler beim Abrufen der News</string>
+    <string name="notification_account_error_title">Fehler beim Abrufen der Benachrichtigungen</string>
     <string name="notification_manga_download_error_title">Fehler beim Manga Download</string>
 
     <string name="category_anime_episodes_title">Episoden</string>

@@ -283,6 +283,12 @@ class DashboardActivity : MainActivity() {
                 return false
             }
 
+            AccountItem.NOTIFICATIONS -> {
+                NotificationActivity.navigateTo(this)
+
+                return false
+            }
+
             AccountItem.UCP -> {
                 UcpActivity.navigateTo(this)
 
