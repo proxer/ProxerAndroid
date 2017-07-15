@@ -24,5 +24,5 @@ jobs:
           path: app/build/reports
           destination: reports
       - store_artifacts:
-          path: app/build/outputs/apk
+          path: app/build/outputs/apk/**/*.apk
           destination: apk
