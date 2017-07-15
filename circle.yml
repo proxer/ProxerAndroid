@@ -24,5 +24,8 @@ jobs:
           path: app/build/reports
           destination: reports
       - store_artifacts:
-          path: app/build/outputs/apk/**/*.apk
+          path: app/build/outputs/apk/debug/app-debug.apk
+          destination: apk
+      - store_artifacts:
+          path: app/build/outputs/apk/debug/app-release-unsigned.apk
           destination: apk
