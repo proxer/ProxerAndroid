@@ -19,7 +19,7 @@ jobs:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
       - run:
           name: Run Build
-          command: ./gradlew clean build -PdisablePreDex --console=plain
+          command: ./gradlew build -PdisablePreDex --console=plain
       - store_artifacts:
           path: app/build/reports
           destination: reports
