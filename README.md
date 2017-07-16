@@ -2,7 +2,7 @@
 
 ### What is this?
 
-This is a client for the german Anime & Manga page [ProxerMe](https://proxer.me/).<br>
+This is a client for the german Anime & Manga page [Proxer.Me](https://proxer.me/).<br>
 It features the most important functionalities including an anime player for various hosters and languages, a mobile-friendly vertical manga reader, offline synchronized chat, offline manga and much more.
 
 ### How to use it?
