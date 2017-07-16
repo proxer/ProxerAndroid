@@ -11,15 +11,12 @@ jobs:
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
       - run:
-          name: Download Dependencies
-          command: ./gradlew androidDependencies --console=plain
+          name: Run Build
+          command: ./gradlew build -PdisablePreDex --console=plain
       - save_cache:
           paths:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
-      - run:
-          name: Run Build
-          command: ./gradlew build -PdisablePreDex --console=plain
       - store_artifacts:
           path: app/build/reports
           destination: reports
