@@ -68,23 +68,23 @@ gradlew.bat assembleDebug
 
 ### Screenshots
 
-      News        |       Anime List        |       Manga List
+|      News       |       Anime List        |       Manga List      |
 :---------------: | :---------------------: | :---------------------:
 ![](art/news.png) | ![](art/anime-list.png) | ![](art/manga-list.png)
 
-      Media Detail        |    Manga Reader    |       Offline Manga
+|      Media Detail       |    Manga Reader    |       Offline Manga      |
 :-----------------------: | :----------------: | :------------------------:
 ![](art/media-detail.png) | ![](art/manga.png) | ![](art/offline-manga.png)
 
-    Anime Stream List      |      Anime Player
+|    Anime Stream List     |      Anime Player     |
 :------------------------: | :---------------------:
 ![](art/anime-streams.png) | ![](art/anime-play.png)
 
-  Instant Chat    |       Conference List        |      Conference Detail
+|  Instant Chat   |       Conference List        |      Conference Detail     |
 :---------------: | :--------------------------: | :--------------------------:
 ![](art/chat.png) | ![](art/conference-list.png) | ![](art/conference-info.png)
 
-      Profile        | Profile Settings |       Profile History
+|      Profile       | Profile Settings |       Profile History      |
 :------------------: | :--------------: | :--------------------------:
 ![](art/profile.png) | ![](art/ucp.png) | ![](art/profile-history.png)
 
