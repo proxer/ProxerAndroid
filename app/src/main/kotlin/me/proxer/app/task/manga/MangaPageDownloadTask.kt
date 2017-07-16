@@ -48,7 +48,6 @@ class MangaPageDownloadTask(private val isLocal: Boolean) : LeafTask<MangaPageDo
 
                             MangaLockHolder.pageConcurrencyLock.lock {
                                 call = MainApplication.client.newCall(Request.Builder()
-                                        .header("Accept-Encoding", "identity")
                                         .url(url)
                                         .build())
 
