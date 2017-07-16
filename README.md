@@ -1,15 +1,15 @@
 # Proxer.Me Android [![Latest Release](https://img.shields.io/github/release/proxer/ProxerAndroid.svg)](https://github.com/proxer/ProxerAndroid/releases/latest) [![Build status](https://circleci.com/gh/proxer/ProxerAndroid.svg?style=shield)](https://circleci.com/gh/proxer/ProxerAndroid)
 
-## What is this?
+### What is this?
 
 This is a client for the german Anime & Manga page [ProxerMe](https://proxer.me/).<br>
 It features the most important functionalities including an anime player for various hosters and languages, a mobile-friendly vertical manga reader, offline synchronized chat, offline manga and much more.
 
-## How to use it?
+### How to use it?
 
 Build the project and install it on your device or download the [latest release](https://github.com/proxer/ProxerAndroid/releases) and install it on your device.
 
-### Building yourself
+#### Building yourself
 
 Assuming that you know how to use [Git](https://git-scm.com/), have the [Android SDK](https://developer.android.com/sdk/index.html) and the [Java SDK](http://www.oracle.com/technetwork/java/javase/overview/index.html) installed, run the following commands:
 
@@ -66,7 +66,7 @@ If you want to build the app for testing purposes in the `debug` variant, you ca
 gradlew.bat assembleDebug
 ```
 
-## Screenshots
+### Screenshots
 
 |       News        |       Anime List        |       Manga List        |
 | :---------------: | :---------------------: | :---------------------: |
@@ -88,7 +88,7 @@ gradlew.bat assembleDebug
 | :------------------: | :--------------: | :--------------------------: |
 | ![](art/profile.png) | ![](art/ucp.png) | ![](art/profile-history.png) |
 
-## Contributions and contributors
+### Contributions and contributors
 
 A guide for contribution can be found [here](.github/CONTRIBUTING.md).
 
