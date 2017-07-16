@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/delete_all"
+        android:title="@string/action_delete_all"
+        app:iiv_color="@android:color/white"
+        app:iiv_icon="cmd_delete"
+        app:iiv_padding="2dp"
+        app:iiv_size="24dp"
+        app:showAsAction="ifRoom" />
+</menu>
