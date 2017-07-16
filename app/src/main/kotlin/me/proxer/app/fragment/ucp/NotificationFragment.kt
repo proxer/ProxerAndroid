@@ -61,17 +61,14 @@ class NotificationFragment : PagedLoadingFragment<ProxerCall<List<ProxerNotifica
                 .onSuccess {
                     if (removalQueue.isEmpty()) {
                         innerAdapter.clear()
-
-                        showContent()
-                        saveResultToState(emptyList())
                     } else {
                         innerAdapter.remove(removalQueue.first())
                         removalQueue.remove(removalQueue.first())
-
-                        showContent()
-                        saveResultToState(innerAdapter.list)
-                        deleteNotificationsFromQueue()
                     }
+
+                    saveResultToState(innerAdapter.list)
+                    deleteNotificationsFromQueue()
+                    showContent()
                 }
                 .onError {
                     removalQueue.clear()
