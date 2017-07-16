@@ -103,7 +103,7 @@ class NotificationFragment : PagedLoadingFragment<ProxerCall<List<ProxerNotifica
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.delete_all -> {
-                if (!task.isWorking) {
+                if (!innerAdapter.isEmpty() && !task.isWorking) {
                     removalQueue.clear()
                     removalTask.freshExecute(api.notifications().deleteAllNotifications().build())
                 }
