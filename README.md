@@ -29,10 +29,10 @@ Before building, you have to [generate a key](https://developer.android.com/stud
 Add these fields to your `secrets.properties` file:
 
 ```
-RELEASE_STORE_FILE=/path/to/the/keystore
-RELEASE_STORE_PASSWORD=theKeystorePassword
-RELEASE_KEY_ALIAS=theAlias
-RELEASE_KEY_PASSWORD=thePasswordForThatAlias
+RELEASE_STORE_FILE = /path/to/the/keystore
+RELEASE_STORE_PASSWORD = theKeystorePassword
+RELEASE_KEY_ALIAS = theAlias
+RELEASE_KEY_PASSWORD = thePasswordForThatAlias
 ```
 
 After that, you can build the app by running:
