@@ -4,13 +4,9 @@ import android.app.Activity
 import android.app.Dialog
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.Fragment
-import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.RecyclerView.ViewHolder
 import android.view.View
-import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import java.util.*
-import java.util.concurrent.Future
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
@@ -77,37 +73,7 @@ private class Lazy<in T, out V : View>(private val initializer: (T, KProperty<*>
     }
 
     fun reset() {
-        destroy()
-
         value = EMPTY
-    }
-
-    private fun destroy() {
-        val safeValue = value
-
-        if (safeValue is View) {
-            (safeValue.tag as? Future<*>)?.cancel(true)
-
-            safeValue.tag = null
-        }
-
-        when (safeValue) {
-            is RecyclerView -> {
-                val currentAdapter = safeValue.adapter
-
-                if (currentAdapter is EasyHeaderFooterAdapter) {
-                    currentAdapter.removeHeader()
-                    currentAdapter.removeFooter()
-                }
-
-                safeValue.clearOnScrollListeners()
-                safeValue.layoutManager = null
-                safeValue.adapter = null
-            }
-            is SwipeRefreshLayout -> {
-                safeValue.setOnRefreshListener(null)
-            }
-        }
     }
 }
 

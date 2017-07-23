@@ -1,25 +1,29 @@
 package me.proxer.app.util.data
 
+import okhttp3.Cookie
+import okhttp3.CookieJar
+import okhttp3.HttpUrl
+
 /**
  * @author Ruben Gees
  */
-class NonPersistentCookieJar : okhttp3.CookieJar {
+class NonPersistentCookieJar : CookieJar {
 
-    private val cookieStore = LinkedHashSet<okhttp3.Cookie>()
+    private val cookieStore = LinkedHashSet<Cookie>()
 
     /**
      * We actually don't use cookies, only the myvi stream resolver requires them.
      */
     @Synchronized
-    override fun saveFromResponse(url: okhttp3.HttpUrl, cookies: List<okhttp3.Cookie>) {
+    override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
         cookieStore.addAll(cookies.filter {
             it.domain() == "myvi.ru"
         })
     }
 
     @Synchronized
-    override fun loadForRequest(url: okhttp3.HttpUrl): List<okhttp3.Cookie> {
-        val matchingCookies = ArrayList<okhttp3.Cookie>()
+    override fun loadForRequest(url: HttpUrl): List<Cookie> {
+        val matchingCookies = ArrayList<Cookie>()
 
         cookieStore.iterator().let {
             while (it.hasNext()) {

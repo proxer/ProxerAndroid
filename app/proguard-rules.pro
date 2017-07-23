@@ -79,13 +79,6 @@
     public static int wtf(...);
 }
 
-# EventBus
--keep enum org.greenrobot.eventbus.ThreadMode { *; }
-
--keepclassmembers class ** {
-    @org.greenrobot.eventbus.Subscribe <methods>;
-}
-
 # Glide
 -keep public class * extends com.bumptech.glide.module.AppGlideModule
 -keep class com.bumptech.glide.GeneratedAppGlideModuleImpl

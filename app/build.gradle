@@ -67,15 +67,12 @@ android {
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
-        debug.java.srcDirs += 'src/debug/kotlin'
-        release.java.srcDirs += 'src/release/kotlin'
     }
 }
 
 dependencies {
     implementation deps.kotlinStdlib
     implementation deps.anko
-    implementation deps.ankoSqlite
     implementation deps.supportAppCompat
     implementation deps.supportV13
     implementation deps.supportRecyclerView
@@ -87,15 +84,22 @@ dependencies {
     implementation deps.supportPreference
     implementation deps.supportPreferenceFix
     implementation deps.supportPreferenceFixSpinner
+    implementation deps.architectureLifecycle
     implementation deps.playServicesGcm
-    implementation deps.eventBus
     implementation deps.androidJob
     implementation deps.proxerLib
-    implementation deps.ktaskAndroid
-    kapt deps.eventBusAnnotation
+    kapt deps.architectureLifecycleCompiler
+
+    implementation deps.rxJava
+    implementation deps.rxAndroid
+    implementation deps.rxBinding
+    implementation deps.rxBindingV4
+    implementation deps.rxBindingRecyclerView
+    implementation deps.rxLifecycle
 
     implementation(deps.aboutLibraries) { transitive = true }
     implementation(deps.materialDrawer) { transitive = true }
+    implementation deps.materialDrawerKotlin
     implementation deps.iconics
     implementation deps.iconicsViews
     implementation deps.communityMaterialTypeface
@@ -132,12 +136,6 @@ dependencies {
     implementation deps.strictModeCompat
     debugImplementation deps.leakCanary
     releaseImplementation deps.leakCanaryNoOp
-}
-
-kapt {
-    arguments {
-        arg('eventBusIndex', 'me.proxer.app.EventBusIndex')
-    }
 }
 
 static getFromSecrets(String key) {

@@ -13,7 +13,7 @@
         <intent
             android:action="android.intent.action.VIEW"
             android:data="0"
-            android:targetClass="me.proxer.app.activity.DashboardActivity"
+            android:targetClass="me.proxer.app.MainActivity"
             android:targetPackage="me.proxer.app" />
     </shortcut>
     <shortcut
@@ -26,7 +26,7 @@
         <intent
             android:action="android.intent.action.VIEW"
             android:data="1"
-            android:targetClass="me.proxer.app.activity.DashboardActivity"
+            android:targetClass="me.proxer.app.MainActivity"
             android:targetPackage="me.proxer.app" />
     </shortcut>
     <shortcut
@@ -39,7 +39,7 @@
         <intent
             android:action="android.intent.action.VIEW"
             android:data="2"
-            android:targetClass="me.proxer.app.activity.DashboardActivity"
+            android:targetClass="me.proxer.app.MainActivity"
             android:targetPackage="me.proxer.app" />
     </shortcut>
 </shortcuts>

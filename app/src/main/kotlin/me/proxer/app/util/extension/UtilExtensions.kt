@@ -13,45 +13,80 @@ import android.support.v4.content.ContextCompat
 import android.view.Gravity
 import android.view.View
 import android.view.View.MeasureSpec
+import android.widget.ImageView
 import android.widget.Toast
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import me.proxer.app.GlideRequests
 import me.proxer.app.R
-import me.proxer.app.activity.WebViewActivity
-import me.proxer.app.entity.manga.LocalMangaChapter
 import me.proxer.app.util.Utils
-import me.proxer.library.entitiy.info.EntryCore
-import me.proxer.library.entitiy.manga.Page
+import me.proxer.app.web.WebViewActivity
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
 import org.jetbrains.anko.dip
-import java.net.URLDecoder
+import org.threeten.bp.Instant
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.Period
+import org.threeten.bp.ZoneId
+import org.threeten.bp.temporal.ChronoUnit
+import java.util.*
 import java.util.concurrent.Semaphore
 
-inline val Page.decodedName: String
-    get() = try {
-        URLDecoder.decode(name, "UTF-8")
-    } catch (error: Throwable) {
-        ""
-    }
+inline fun <T> Semaphore.lock(action: () -> T): T {
+    acquire()
 
-fun CustomTabsHelperFragment.openHttpPage(activity: Activity, url: HttpUrl) {
-    when (Utils.getNativeAppPackage(activity, url).isEmpty()) {
-        true -> {
-            CustomTabsIntent.Builder(session)
-                    .setToolbarColor(ContextCompat.getColor(context, R.color.colorPrimary))
-                    .setSecondaryToolbarColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
-                    .addDefaultShareMenuItem()
-                    .enableUrlBarHiding()
-                    .setShowTitle(true)
-                    .build()
-                    .let {
-                        CustomTabsHelperFragment.open(activity, it, url.androidUri(), { context, uri ->
-                            WebViewActivity.navigateTo(context, uri.toString())
-                        })
-                    }
-        }
-        false -> activity.startActivity(Intent(Intent.ACTION_VIEW).setData(url.androidUri()))
+    return try {
+        action()
+    } finally {
+        release()
     }
 }
+
+fun Date.convertToRelativeReadableTime(context: Context): String {
+    val dateTime = convertToDateTime()
+    val now = LocalDateTime.now()
+    val period = Period.between(dateTime.toLocalDate(), now.toLocalDate())
+
+    return if (period.years <= 0) {
+        if (period.months <= 0) {
+            if (period.days <= 0) {
+                val hoursBetween = ChronoUnit.HOURS.between(dateTime, now).toInt()
+
+                if (hoursBetween <= 0) {
+                    val minutesBetween = ChronoUnit.MINUTES.between(dateTime, now).toInt()
+
+                    if (minutesBetween <= 0) {
+                        context.getString(R.string.time_a_moment_ago)
+                    } else {
+                        context.getQuantityString(R.plurals.time_minutes_ago, minutesBetween)
+                    }
+                } else {
+                    context.getQuantityString(R.plurals.time_hours_ago, hoursBetween)
+                }
+            } else {
+                context.getQuantityString(R.plurals.time_days_ago, period.days)
+            }
+        } else {
+            context.getQuantityString(R.plurals.time_months_ago, period.months)
+        }
+    } else {
+        context.getQuantityString(R.plurals.time_years_ago, period.years)
+    }
+}
+
+fun Date.convertToDateTime(): LocalDateTime = LocalDateTime
+        .ofInstant(Instant.ofEpochMilli(time), ZoneId.systemDefault())
+
+inline fun Context.getDrawableFromAttrs(resource: Int): Drawable {
+    val styledAttributes = obtainStyledAttributes(intArrayOf(resource))
+    val result = styledAttributes.getDrawable(0)
+
+    styledAttributes.recycle()
+
+    return result
+}
+
+inline fun Context.getQuantityString(id: Int, quantity: Int): String = resources
+        .getQuantityString(id, quantity, quantity)
 
 fun View.toastBelow(message: Int) {
     Toast.makeText(context, message, Toast.LENGTH_SHORT).apply {
@@ -71,32 +106,28 @@ fun View.toastBelow(message: Int) {
     }.show()
 }
 
-inline fun Context.getDrawableFromAttrs(resource: Int): Drawable {
-    val styledAttributes = obtainStyledAttributes(intArrayOf(resource))
-    val result = styledAttributes.getDrawable(0)
-
-    styledAttributes.recycle()
-
-    return result
-}
-
-inline fun Context.getQuantityString(id: Int, quantity: Int): String {
-    return this.resources.getQuantityString(id, quantity, quantity)
-}
-
-inline fun HttpUrl.androidUri(): Uri {
-    return Uri.parse(toString())
-}
-
-inline fun <T> Semaphore.lock(action: () -> T): T {
-    acquire()
-
-    return try {
-        action()
-    } finally {
-        release()
+fun CustomTabsHelperFragment.openHttpPage(activity: Activity, url: HttpUrl) {
+    when (Utils.getNativeAppPackage(activity, url).isEmpty()) {
+        true -> {
+            CustomTabsIntent.Builder(session)
+                    .setToolbarColor(ContextCompat.getColor(activity, R.color.colorPrimary))
+                    .setSecondaryToolbarColor(ContextCompat.getColor(activity, R.color.colorPrimaryDark))
+                    .addDefaultShareMenuItem()
+                    .enableUrlBarHiding()
+                    .setShowTitle(true)
+                    .build()
+                    .let {
+                        CustomTabsHelperFragment.open(activity, it, url.androidUri(), { context, uri ->
+                            WebViewActivity.navigateTo(context, uri.toString())
+                        })
+                    }
+        }
+        false -> activity.startActivity(Intent(Intent.ACTION_VIEW).setData(url.androidUri()))
     }
 }
 
-typealias ProxerNotification = me.proxer.library.entitiy.notifications.Notification
-typealias CompleteLocalMangaEntry = Pair<EntryCore, List<LocalMangaChapter>>
+inline fun GlideRequests.defaultLoad(view: ImageView, url: HttpUrl) = load(url.toString())
+        .transition(DrawableTransitionOptions.withCrossFade())
+        .into(view)
+
+inline fun HttpUrl.androidUri(): Uri = Uri.parse(toString())

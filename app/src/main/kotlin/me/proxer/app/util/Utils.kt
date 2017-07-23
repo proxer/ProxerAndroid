@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ResolveInfo
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.support.annotation.ColorRes
@@ -13,10 +12,11 @@ import android.util.Patterns
 import com.bumptech.glide.request.target.Target
 import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.LinkBuilder
+import me.proxer.app.GlideApp
 import me.proxer.app.R
-import me.proxer.app.application.GlideApp
 import me.proxer.app.util.extension.androidUri
 import me.proxer.library.api.ProxerException
+import me.proxer.library.api.ProxerException.ErrorType
 import me.proxer.library.util.ProxerUrls
 import okhttp3.HttpUrl
 import java.util.regex.Pattern
@@ -25,8 +25,6 @@ import java.util.regex.Pattern
  * @author Ruben Gees
  */
 object Utils {
-
-    const val GENERIC_USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
 
     private val WEB_REGEX = Patterns.WEB_URL
     private val MENTIONS_REGEX = Pattern.compile("(@[a-zA-Z0-9_-]+)")
@@ -39,7 +37,7 @@ object Utils {
         }
     }
 
-    fun setNaviagtionBarColorIfPossible(activity: Activity?, @ColorRes color: Int) {
+    fun setNavigationBarColorIfPossible(activity: Activity?, @ColorRes color: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             activity?.apply {
                 window?.navigationBarColor = ContextCompat.getColor(activity, color)
@@ -47,23 +45,23 @@ object Utils {
         }
     }
 
-    fun getBitmapFromUrl(context: Context, url: String): Bitmap? {
-        try {
-            return GlideApp.with(context)
-                    .asBitmap()
-                    .load(url)
-                    .submit(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-                    .get()
-        } catch (ignored: Throwable) {
-            return null
-        }
+    fun getBitmapFromUrl(context: Context, url: HttpUrl) = try {
+        GlideApp.with(context)
+                .asBitmap()
+                .load(url)
+                .submit(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+                .get()
+    } catch (ignored: Throwable) {
+        null
     }
 
-    fun buildClickableText(context: Context, text: CharSequence,
-                           onWebClickListener: Link.OnClickListener? = null,
-                           onWebLongClickListener: Link.OnLongClickListener? = null,
-                           onMentionsClickListener: Link.OnClickListener? = null,
-                           onMentionsLongClickListener: Link.OnLongClickListener? = null): CharSequence {
+    fun buildClickableText(
+            context: Context, text: CharSequence,
+            onWebClickListener: Link.OnClickListener? = null,
+            onWebLongClickListener: Link.OnLongClickListener? = null,
+            onMentionsClickListener: Link.OnClickListener? = null,
+            onMentionsLongClickListener: Link.OnLongClickListener? = null
+    ): CharSequence {
         val builder = LinkBuilder.from(context, text.toString())
 
         if (onWebClickListener != null || onWebLongClickListener != null) {
@@ -91,26 +89,18 @@ object Utils {
         return result
     }
 
-    fun parseAndFixUrl(url: String): HttpUrl {
-        return if (url.startsWith("http://") || url.startsWith("https://")) {
-            HttpUrl.parse(url)
-        } else {
-            HttpUrl.parse(when {
-                url.startsWith("//") -> "http:$url"
-                else -> "http://$url"
-            })?.let {
-                when (isEligibleForHttps(it)) {
-                    true -> it.newBuilder().scheme("https").build()
-                    false -> it
-                }
+    fun parseAndFixUrl(url: String) = when {
+        url.startsWith("http://") || url.startsWith("https://") -> HttpUrl.parse(url)
+        else -> HttpUrl.parse(when {
+            url.startsWith("//") -> "http:$url"
+            else -> "http://$url"
+        })?.let {
+            when (isEligibleForHttps(it)) {
+                true -> it.newBuilder().scheme("https").build()
+                false -> it
             }
-        } ?: throw ProxerException(ProxerException.ErrorType.PARSING)
-    }
-
-    fun isEligibleForHttps(url: HttpUrl) = when {
-        ProxerUrls.hasProxerHost(url) -> true
-        else -> false
-    }
+        }
+    } ?: throw ProxerException(ErrorType.PARSING)
 
     fun getNativeAppPackage(context: Context, url: HttpUrl): Set<String> {
         val browserActivityIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://www.generic.com"))
@@ -126,9 +116,12 @@ object Utils {
         return resolvedSpecializedList
     }
 
-    private fun extractPackageNames(resolveInfo: List<ResolveInfo>): MutableSet<String> {
-        return resolveInfo
-                .map { it.activityInfo.packageName }
-                .toMutableSet()
+    private fun isEligibleForHttps(url: HttpUrl) = when {
+        ProxerUrls.hasProxerHost(url) -> true
+        else -> false
     }
+
+    private fun extractPackageNames(resolveInfo: List<ResolveInfo>) = resolveInfo
+            .map { it.activityInfo.packageName }
+            .toMutableSet()
 }
