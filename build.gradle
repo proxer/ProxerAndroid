@@ -17,7 +17,7 @@ ext {
     eventBusVersion = '3.0.0'
     eventBusAnnotationVersion = '3.0.1'
     androidJobVersion = '1.1.11'
-    proxerLibVersion = '-SNAPSHOT'
+    proxerLibVersion = 'master-SNAPSHOT'
     ktaskVersion = '0.4.1'
 
     // UI components
@@ -38,7 +38,7 @@ ext {
     materialRatingBarVersion = '1.0.2'
     customtabsHelperVersion = '1.0.3'
     introductionVersion = '1.4.1'
-    materialBadgeViewVersion = '-SNAPSHOT'
+    materialBadgeViewVersion = 'master-SNAPSHOT'
 
     // Utils
     threetenVersion = '1.0.5'
