@@ -21,9 +21,9 @@ ext {
     ktaskVersion = '0.4.1'
 
     // UI components
-    aboutLibrariesVersion = '5.9.6'
+    aboutLibrariesVersion = '5.9.7'
     materialDrawerVersion = '5.9.4'
-    iconicsVersion = '2.8.9'
+    iconicsVersion = '2.9.0'
     communityMaterialTypefaceVersion = '1.9.32.1'
     crossfaderVersion = '1.5.0'
     materialAboutVersion = '2.1.0'
@@ -46,7 +46,7 @@ ext {
     glideVersion = '4.0.0-SNAPSHOT'
     okHttpVersion = '3.8.1'
     okioVersion = '1.13.0'
-    linkBuilderVersion = '1.5.2'
+    linkBuilderVersion = '1.6.1'
     easyHeaderFooterAdapterVersion = '2.0.0'
 
     // Debugging
@@ -78,6 +78,7 @@ ext {
             aboutLibraries               : "com.mikepenz:aboutlibraries:$aboutLibrariesVersion@aar",
             materialDrawer               : "com.mikepenz:materialdrawer:$materialDrawerVersion@aar",
             iconics                      : "com.mikepenz:iconics-core:$iconicsVersion@aar",
+            iconicsViews                 : "com.mikepenz:iconics-views:$iconicsVersion@aar",
             communityMaterialTypeface    : "com.mikepenz:community-material-typeface:$communityMaterialTypefaceVersion@aar",
             crossfader                   : "com.mikepenz:crossfader:$crossfaderVersion@aar",
             materialAbout                : "com.github.daniel-stoneuk:material-about-library:$materialAboutVersion",
