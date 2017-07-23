@@ -22,7 +22,7 @@ buildscript {
         proxerLibVersion = 'master-SNAPSHOT'
 
         // RxJava
-        rxJavaVersion = '2.1.0'
+        rxJavaVersion = '2.1.2'
         rxAndroidVersion = '2.0.1'
         rxBindingVersion = '2.0.0'
         rxLifecycleVersion = '2.1.0'
