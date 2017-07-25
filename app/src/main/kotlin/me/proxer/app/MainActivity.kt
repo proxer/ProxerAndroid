@@ -7,10 +7,17 @@ import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.Toolbar
+import com.github.florent37.rxsharedpreferences.RxBus
 import com.rubengees.introduction.IntroductionActivity.OPTION_RESULT
 import com.rubengees.introduction.IntroductionBuilder
 import com.rubengees.introduction.Option
 import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import me.proxer.app.auth.LoginDialog
+import me.proxer.app.auth.LogoutDialog
+import me.proxer.app.auth.ProxerLoginTokenManager.Companion.LOGIN_EVENT
+import me.proxer.app.auth.ProxerLoginTokenManager.Companion.LOGOUT_EVENT
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.news.NewsFragment
 import me.proxer.app.util.IntroductionHelper
@@ -60,6 +67,11 @@ class MainActivity : BaseActivity() {
                     .bindToLifecycle(this@MainActivity)
                     .subscribe { handleAccountItemClick(it) }
         }
+
+        RxBus.getDefault().let { Observable.merge(listOf(it.onEvent(LOGIN_EVENT), it.onEvent(LOGOUT_EVENT))) }
+                .bindToLifecycle(this)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { drawer.refreshHeader() }
 
         displayFirstPage(savedInstanceState)
     }
@@ -163,8 +175,8 @@ class MainActivity : BaseActivity() {
 
     private fun handleAccountItemClick(item: AccountItem) {
         when (item) {
-            AccountItem.GUEST, AccountItem.LOGIN -> Unit // LoginDialog.show(this)
-            AccountItem.LOGOUT -> Unit //  LogoutDialog.show(this)
+            AccountItem.GUEST, AccountItem.LOGIN -> LoginDialog.show(this)
+            AccountItem.LOGOUT -> LogoutDialog.show(this)
             AccountItem.USER -> StorageHelper.user?.let {
                 //                val viewToUse = when (view) {
 //                    is ImageView -> view.apply { ViewCompat.setTransitionName(this, "profile_image") }

@@ -39,6 +39,7 @@ abstract class BaseViewModel<T>(application: Application) : AndroidViewModel(app
         disposable = loadSingle
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { isLoading.value = true }
+                .doAfterTerminate { isLoading.value = false }
                 .subscribe({
                     data.value = it
                     error.value = null

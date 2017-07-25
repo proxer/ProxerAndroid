@@ -96,6 +96,7 @@ dependencies {
     implementation deps.rxBindingV4
     implementation deps.rxBindingRecyclerView
     implementation deps.rxLifecycle
+    implementation deps.rxBus
 
     implementation(deps.aboutLibraries) { transitive = true }
     implementation(deps.materialDrawer) { transitive = true }
@@ -131,6 +132,7 @@ dependencies {
     implementation deps.okio
     implementation deps.linkBuilder
     implementation deps.easyHeaderFooterAdapter
+    implementation deps.kOptional
     kapt deps.glideCompiler
 
     implementation deps.strictModeCompat

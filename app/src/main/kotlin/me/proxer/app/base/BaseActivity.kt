@@ -14,7 +14,7 @@ import okhttp3.HttpUrl
  */
 abstract class BaseActivity : AppCompatActivity(), LifecycleRegistryOwner {
 
-    private val lifecycleRegistry = LifecycleRegistry(this)
+    private val lifecycleRegistry by lazy { LifecycleRegistry(this) }
     private val customTabsHelper by lazy { CustomTabsHelperFragment.attachTo(this) }
 
     fun setLikelyUrl(url: HttpUrl) {

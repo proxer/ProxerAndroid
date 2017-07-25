@@ -74,6 +74,7 @@ object ErrorUtils {
                 MESSAGES_MISSING_USER -> R.string.error_invalid_users_for_conference
                 MESSAGES_EXCEEDED_MAXIMUM_USERS -> R.string.error_conference_full
                 MESSAGES_INVALID_TOPIC -> R.string.error_invalid_topic
+                USER_2FA_SECRET_REQUIRED -> R.string.error_login_two_factor_authentication
                 USER_ACCOUNT_EXPIRED -> R.string.error_account_expired
                 USER_ACCOUNT_BLOCKED -> R.string.error_account_blocked
                 in API_ERRORS -> R.string.error_api

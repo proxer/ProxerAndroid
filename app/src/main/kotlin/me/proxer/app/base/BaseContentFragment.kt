@@ -1,8 +1,10 @@
 package me.proxer.app.base
 
+import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
+import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -10,7 +12,9 @@ import android.widget.TextView
 import com.jakewharton.rxbinding2.support.v4.widget.RxSwipeRefreshLayout
 import com.jakewharton.rxbinding2.view.RxView
 import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
+import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindUntilEvent
 import me.proxer.app.R
+import me.proxer.app.auth.LoginDialog
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction
 import me.proxer.app.util.extension.bindView
@@ -87,11 +91,11 @@ abstract class BaseContentFragment<T> : BaseFragment() {
         }
 
         RxView.clicks(errorButton)
-                .bindToLifecycle(this)
+                .bindUntilEvent(this, Lifecycle.Event.ON_DESTROY)
                 .subscribe {
                     when (action.buttonAction) {
                         ButtonAction.CAPTCHA -> showPage(ProxerUrls.captchaWeb(Device.MOBILE))
-                        ButtonAction.LOGIN -> Unit // LoginDialog.show(this)
+                        ButtonAction.LOGIN -> LoginDialog.show(activity as AppCompatActivity)
                         null -> {
                             viewModel.error.value = null
                             viewModel.loadIfPossible()

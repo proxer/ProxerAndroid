@@ -3,6 +3,7 @@ package me.proxer.app.base
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -16,6 +17,7 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.R
+import me.proxer.app.auth.LoginDialog
 import me.proxer.app.base.BaseAdapter.ContainerPositionResolver
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction
@@ -61,7 +63,7 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
             it?.let {
                 multilineSnackbar(root, it.message, Snackbar.LENGTH_LONG, it.buttonMessage, when (it.buttonAction) {
                     ButtonAction.CAPTCHA -> View.OnClickListener { showPage(ProxerUrls.captchaWeb(Device.MOBILE)) }
-                    ButtonAction.LOGIN -> View.OnClickListener { /* LoginDialog.show(this) */ }
+                    ButtonAction.LOGIN -> View.OnClickListener { LoginDialog.show(activity as AppCompatActivity) }
                     null -> View.OnClickListener { viewModel.refresh() }
                 })
 

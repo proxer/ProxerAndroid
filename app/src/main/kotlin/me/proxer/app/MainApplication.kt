@@ -21,6 +21,7 @@ import com.squareup.leakcanary.RefWatcher
 import com.squareup.moshi.Moshi
 import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.ios.IosEmojiProvider
+import me.proxer.app.auth.ProxerLoginTokenManager
 import me.proxer.app.util.data.NonPersistentCookieJar
 import me.proxer.library.api.ProxerApi
 import me.proxer.library.api.ProxerApi.Builder.LoggingStrategy
@@ -73,7 +74,7 @@ class MainApplication : Application() {
                 .userAgent(USER_AGENT)
                 .client(OkHttpClient.Builder().cookieJar(NonPersistentCookieJar()).build())
                 .loggingStrategy(if (BuildConfig.DEBUG) LoggingStrategy.ALL else LoggingStrategy.NONE)
-//                .loginTokenManager(ProxerLoginTokenManager())
+                .loginTokenManager(ProxerLoginTokenManager())
                 .build()
     }
 
