@@ -78,8 +78,8 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
         contentContainer.visibility = View.VISIBLE
 
         recyclerView.setHasFixedSize(true)
-        recyclerView.adapter = adapter
         recyclerView.layoutManager = layoutManager
+        recyclerView.adapter = adapter
 
         RxRecyclerViewUtil.endScrolls(recyclerView, 5)
                 .bindToLifecycle(this)
