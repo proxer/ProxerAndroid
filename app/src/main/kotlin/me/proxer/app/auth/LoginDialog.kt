@@ -14,12 +14,13 @@ import android.view.inputmethod.EditorInfo
 import android.widget.ProgressBar
 import com.afollestad.materialdialogs.MaterialDialog
 import com.github.florent37.rxsharedpreferences.RxBus
-import com.jakewharton.rxbinding2.widget.RxTextView
+import com.jakewharton.rxbinding2.widget.editorActionEvents
+import com.jakewharton.rxbinding2.widget.textChanges
 import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
+import io.reactivex.functions.Predicate
 import me.proxer.app.R
 import me.proxer.app.auth.ProxerLoginTokenManager.Companion.LOGIN_EVENT
 import me.proxer.app.base.BaseDialog
-import me.proxer.app.entity.LocalUser
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.bindView
 import org.jetbrains.anko.longToast
@@ -61,14 +62,14 @@ class LoginDialog : BaseDialog() {
         super.onActivityCreated(savedInstanceState)
 
         listOf(password, secret).forEach {
-            RxTextView.editorActionEvents(it, { it.actionId() == EditorInfo.IME_ACTION_GO })
-                    .filter { it.actionId() == EditorInfo.IME_ACTION_GO }
+            it.editorActionEvents(Predicate { event -> event.actionId() == EditorInfo.IME_ACTION_GO })
+                    .filter { event -> event.actionId() == EditorInfo.IME_ACTION_GO }
                     .bindToLifecycle(this)
                     .subscribe { validateAndLogin() }
         }
 
         listOf(username to usernameContainer, password to passwordContainer).forEach { (input, container) ->
-            RxTextView.textChanges(input)
+            input.textChanges()
                     .skipInitialValue()
                     .bindToLifecycle(this)
                     .subscribe { setError(container, null) }

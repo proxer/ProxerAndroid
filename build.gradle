@@ -85,9 +85,9 @@ buildscript {
 
                 rxJava                       : "io.reactivex.rxjava2:rxjava:$rxJavaVersion",
                 rxAndroid                    : "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion",
-                rxBinding                    : "com.jakewharton.rxbinding2:rxbinding:$rxBindingVersion",
-                rxBindingV4                  : "com.jakewharton.rxbinding2:rxbinding-support-v4:$rxBindingVersion",
-                rxBindingRecyclerView        : "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:$rxBindingVersion",
+                rxBinding                    : "com.jakewharton.rxbinding2:rxbinding-kotlin:$rxBindingVersion",
+                rxBindingV4                  : "com.jakewharton.rxbinding2:rxbinding-support-v4-kotlin:$rxBindingVersion",
+                rxBindingRecyclerView        : "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7-kotlin:$rxBindingVersion",
                 rxLifecycle                  : "com.trello.rxlifecycle2:rxlifecycle-android-lifecycle-kotlin:$rxLifecycleVersion",
                 rxBus                        : "com.github.florent37:rxbus:$rxBusVersion",
 

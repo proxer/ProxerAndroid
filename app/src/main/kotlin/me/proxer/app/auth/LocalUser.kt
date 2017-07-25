@@ -1,4 +1,4 @@
-package me.proxer.app.entity
+package me.proxer.app.auth
 
 /**
  * @author Ruben Gees

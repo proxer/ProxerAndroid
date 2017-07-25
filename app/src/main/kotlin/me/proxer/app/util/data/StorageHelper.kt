@@ -4,7 +4,7 @@ import com.orhanobut.hawk.Hawk
 import com.orhanobut.hawk.Parser
 import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.MainApplication.Companion.moshi
-import me.proxer.app.entity.LocalUser
+import me.proxer.app.auth.LocalUser
 import java.lang.reflect.Type
 import java.util.*
 

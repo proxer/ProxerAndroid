@@ -21,8 +21,8 @@ import me.proxer.app.auth.LoginDialog
 import me.proxer.app.base.BaseAdapter.ContainerPositionResolver
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction
-import me.proxer.app.util.RxRecyclerViewUtil
 import me.proxer.app.util.extension.bindView
+import me.proxer.app.util.extension.endScrolls
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
@@ -81,7 +81,7 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = adapter
 
-        RxRecyclerViewUtil.endScrolls(recyclerView, 5)
+        recyclerView.endScrolls()
                 .bindToLifecycle(this)
                 .throttleFirst(300, TimeUnit.MILLISECONDS)
                 .subscribe { viewModel.loadIfPossible() }

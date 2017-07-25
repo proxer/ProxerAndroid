@@ -12,7 +12,7 @@ import me.proxer.library.entitiy.ProxerIdItem
  */
 abstract class PagedViewModel<T>(application: Application) : BaseViewModel<List<T>>(application) {
 
-    abstract protected val itemsOnPage: Int
+    abstract val itemsOnPage: Int
 
     val refreshError = MutableLiveData<ErrorAction?>()
 

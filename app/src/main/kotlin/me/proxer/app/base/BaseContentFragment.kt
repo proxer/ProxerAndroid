@@ -9,8 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import com.jakewharton.rxbinding2.support.v4.widget.RxSwipeRefreshLayout
-import com.jakewharton.rxbinding2.view.RxView
+import com.jakewharton.rxbinding2.support.v4.widget.refreshes
+import com.jakewharton.rxbinding2.view.clicks
 import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
 import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindUntilEvent
 import me.proxer.app.R
@@ -40,7 +40,7 @@ abstract class BaseContentFragment<T> : BaseFragment() {
 
         progress.setColorSchemeResources(R.color.colorPrimary)
 
-        RxSwipeRefreshLayout.refreshes(progress)
+        progress.refreshes()
                 .bindToLifecycle(this)
                 .subscribe { viewModel.refresh() }
 
@@ -90,7 +90,7 @@ abstract class BaseContentFragment<T> : BaseFragment() {
             else -> View.VISIBLE
         }
 
-        RxView.clicks(errorButton)
+        errorButton.clicks()
                 .bindUntilEvent(this, Lifecycle.Event.ON_DESTROY)
                 .subscribe {
                     when (action.buttonAction) {
