@@ -24,7 +24,10 @@ class NewsFragment : PagedContentFragment<NewsArticle>() {
         }
     }
 
-    override val viewModel by lazy { ViewModelProviders.of(this).get(NewsViewModel::class.java) }
+    override val viewModel: NewsViewModel by lazy {
+        ViewModelProviders.of(this).get(NewsViewModel::class.java)
+    }
+
     override val layoutManager by lazy { GridLayoutManager(context, DeviceUtils.calculateSpanAmount(activity)) }
     override lateinit var innerAdapter: NewsAdapter
 

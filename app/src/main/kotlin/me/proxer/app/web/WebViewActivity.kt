@@ -8,8 +8,8 @@ import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import butterknife.bindView
 import me.proxer.app.R
-import me.proxer.app.util.extension.bindView
 import org.jetbrains.anko.startActivity
 
 /**
@@ -20,9 +20,7 @@ class WebViewActivity : AppCompatActivity() {
     companion object {
         private const val URL_EXTRA = "url"
 
-        fun navigateTo(context: Activity, url: String) {
-            context.startActivity<WebViewActivity>(URL_EXTRA to url)
-        }
+        fun navigateTo(context: Activity, url: String) = context.startActivity<WebViewActivity>(URL_EXTRA to url)
     }
 
     private val url: String

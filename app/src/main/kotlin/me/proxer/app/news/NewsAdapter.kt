@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import butterknife.bindView
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import io.reactivex.subjects.PublishSubject
@@ -18,7 +19,6 @@ import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.ViewItem
-import me.proxer.app.util.extension.bindView
 import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.defaultLoad
 import me.proxer.library.entitiy.notifications.NewsArticle
@@ -49,24 +49,20 @@ class NewsAdapter(savedInstanceState: Bundle?, private val glide: GlideRequests)
         setHasStableIds(true)
     }
 
-    override fun onViewRecycled(holder: ViewHolder) {
-        glide.clear(holder.image)
-    }
+    override fun onViewRecycled(holder: ViewHolder) = glide.clear(holder.image)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(LayoutInflater.from(parent.context)
             .inflate(R.layout.item_news, parent, false))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(data[position])
 
-    override fun areContentsTheSame(oldItem: NewsArticle, newItem: NewsArticle): Boolean {
-        return oldItem.date == newItem.date && oldItem.category == newItem.category &&
-                oldItem.image == newItem.image && oldItem.subject == newItem.subject &&
-                oldItem.description == newItem.description
-    }
+    override fun areContentsTheSame(oldItem: NewsArticle, newItem: NewsArticle) = oldItem.date == newItem.date
+            && oldItem.category == newItem.category
+            && oldItem.image == newItem.image
+            && oldItem.subject == newItem.subject
+            && oldItem.description == newItem.description
 
-    override fun saveInstanceState(outState: Bundle) {
-        outState.putParcelable(EXPANDED_STATE, expansionMap)
-    }
+    override fun saveInstanceState(outState: Bundle) = outState.putParcelable(EXPANDED_STATE, expansionMap)
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 

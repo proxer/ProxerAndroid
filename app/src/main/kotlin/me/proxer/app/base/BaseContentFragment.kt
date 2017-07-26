@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import butterknife.bindView
 import com.jakewharton.rxbinding2.support.v4.widget.refreshes
 import com.jakewharton.rxbinding2.view.clicks
 import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
@@ -17,7 +18,6 @@ import me.proxer.app.R
 import me.proxer.app.auth.LoginDialog
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction
-import me.proxer.app.util.extension.bindView
 import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
 

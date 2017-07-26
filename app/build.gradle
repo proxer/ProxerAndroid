@@ -133,6 +133,7 @@ dependencies {
     implementation deps.linkBuilder
     implementation deps.easyHeaderFooterAdapter
     implementation deps.kOptional
+    implementation deps.kotterknife
     kapt deps.glideCompiler
 
     implementation deps.strictModeCompat

@@ -11,7 +11,7 @@ import me.proxer.library.entitiy.manga.Page
 import me.proxer.library.enums.*
 import java.net.URLDecoder
 
-fun Medium.toAppString(context: Context) = context.getString(when (this) {
+fun Medium.toAppString(context: Context): String = context.getString(when (this) {
     Medium.ANIMESERIES -> R.string.medium_anime_series
     Medium.HENTAI -> R.string.medium_hentai
     Medium.MOVIE -> R.string.medium_movie
@@ -56,7 +56,7 @@ fun Language.toAppDrawable(context: Context) = AppCompatResources.getDrawable(co
     Language.OTHER -> R.drawable.ic_united_nations
 }) ?: throw NullPointerException("Could not resolve Drawable for language: $this")
 
-fun MediaLanguage.toAppString(context: Context) = context.getString(when (this) {
+fun MediaLanguage.toAppString(context: Context): String = context.getString(when (this) {
     MediaLanguage.GERMAN -> R.string.language_german
     MediaLanguage.ENGLISH -> R.string.language_english
     MediaLanguage.GERMAN_SUB -> R.string.language_german_sub
@@ -81,7 +81,7 @@ fun Medium.toCategory() = when (this) {
     Medium.MANGASERIES, Medium.ONESHOT, Medium.DOUJIN, Medium.HMANGA -> Category.MANGA
 }
 
-fun Category.toEpisodeAppString(context: Context, number: Int? = null) = when (number) {
+fun Category.toEpisodeAppString(context: Context, number: Int? = null): String = when (number) {
     null -> context.getString(when (this) {
         Category.ANIME -> R.string.category_anime_episodes_title
         Category.MANGA -> R.string.category_manga_episodes_title
@@ -92,7 +92,7 @@ fun Category.toEpisodeAppString(context: Context, number: Int? = null) = when (n
     }, number)
 }
 
-fun MediaState.toAppDrawable(context: Context) = IconicsDrawable(context)
+fun MediaState.toAppDrawable(context: Context): IconicsDrawable = IconicsDrawable(context)
         .colorRes(R.color.icon)
         .icon(when (this) {
             MediaState.PRE_AIRING -> CommunityMaterial.Icon.cmd_radio_tower
@@ -103,7 +103,7 @@ fun MediaState.toAppDrawable(context: Context) = IconicsDrawable(context)
         })
 
 fun UserMediaProgress.toEpisodeAppString(context: Context, episode: Int = 1,
-                                         category: Category = Category.ANIME) = when (this) {
+                                         category: Category = Category.ANIME): String = when (this) {
     UserMediaProgress.WATCHED -> context.getString(when (category) {
         Category.ANIME -> R.string.user_media_progress_watched
         Category.MANGA -> R.string.user_media_progress_read
@@ -119,7 +119,7 @@ fun UserMediaProgress.toEpisodeAppString(context: Context, episode: Int = 1,
     UserMediaProgress.CANCELLED -> context.getString(R.string.user_media_progress_cancelled, episode)
 }
 
-fun Synonym.toTypeAppString(context: Context) = context.getString(when (this.type) {
+fun Synonym.toTypeAppString(context: Context): String = context.getString(when (this.type) {
     SynonymType.ORIGINAL -> R.string.synonym_original_type
     SynonymType.ENGLISH -> R.string.synonym_english_type
     SynonymType.GERMAN -> R.string.synonym_german_type
@@ -129,7 +129,7 @@ fun Synonym.toTypeAppString(context: Context) = context.getString(when (this.typ
     SynonymType.ORIGINAL_ALTERNATIVE -> R.string.synonym_alternative_type
 })
 
-fun EntrySeasonInfo.toStartAppString(context: Context) = when (season) {
+fun EntrySeasonInfo.toStartAppString(context: Context): String = when (season) {
     Season.WINTER -> context.getString(R.string.season_winter_start, year)
     Season.SPRING -> context.getString(R.string.season_spring_start, year)
     Season.SUMMER -> context.getString(R.string.season_summer_start, year)
@@ -138,7 +138,7 @@ fun EntrySeasonInfo.toStartAppString(context: Context) = when (season) {
     Season.UNSPECIFIED_ALT -> year.toString()
 }
 
-fun EntrySeasonInfo.toEndAppString(context: Context) = when (season) {
+fun EntrySeasonInfo.toEndAppString(context: Context): String = when (season) {
     Season.WINTER -> context.getString(R.string.season_winter_end, year)
     Season.SPRING -> context.getString(R.string.season_spring_end, year)
     Season.SUMMER -> context.getString(R.string.season_summer_end, year)
@@ -147,7 +147,7 @@ fun EntrySeasonInfo.toEndAppString(context: Context) = when (season) {
     Season.UNSPECIFIED_ALT -> year.toString()
 }
 
-fun MediaState.toAppString(context: Context) = context.getString(when (this) {
+fun MediaState.toAppString(context: Context): String = context.getString(when (this) {
     MediaState.PRE_AIRING -> R.string.media_state_pre_airing
     MediaState.AIRING -> R.string.media_state_airing
     MediaState.CANCELLED -> R.string.media_state_cancelled
@@ -155,13 +155,13 @@ fun MediaState.toAppString(context: Context) = context.getString(when (this) {
     MediaState.FINISHED -> R.string.media_state_finished
 })
 
-fun License.toAppString(context: Context) = context.getString(when (this) {
+fun License.toAppString(context: Context): String = context.getString(when (this) {
     License.LICENSED -> R.string.license_licensed
     License.NOT_LICENSED -> R.string.license_not_licensed
     License.UNKNOWN -> R.string.license_unknown
 })
 
-fun FskConstraint.toAppStringDescription(context: Context) = context.getString(when (this) {
+fun FskConstraint.toAppStringDescription(context: Context): String = context.getString(when (this) {
     FskConstraint.FSK_0 -> R.string.fsk_0_description
     FskConstraint.FSK_6 -> R.string.fsk_6_description
     FskConstraint.FSK_12 -> R.string.fsk_12_description

@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.widget.ProgressBar
+import butterknife.bindView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.github.florent37.rxsharedpreferences.RxBus
 import com.jakewharton.rxbinding2.widget.editorActionEvents
@@ -22,7 +23,6 @@ import me.proxer.app.R
 import me.proxer.app.auth.ProxerLoginTokenManager.Companion.LOGIN_EVENT
 import me.proxer.app.base.BaseDialog
 import me.proxer.app.util.data.StorageHelper
-import me.proxer.app.util.extension.bindView
 import org.jetbrains.anko.longToast
 
 /**
@@ -31,9 +31,7 @@ import org.jetbrains.anko.longToast
 class LoginDialog : BaseDialog() {
 
     companion object {
-        fun show(activity: AppCompatActivity) {
-            LoginDialog().show(activity.supportFragmentManager, "login_dialog")
-        }
+        fun show(activity: AppCompatActivity) = LoginDialog().show(activity.supportFragmentManager, "login_dialog")
     }
 
     private val viewModel by lazy { ViewModelProviders.of(this).get(LoginViewModel::class.java) }
@@ -46,17 +44,15 @@ class LoginDialog : BaseDialog() {
     private val inputContainer: ViewGroup by bindView(R.id.inputContainer)
     private val progress: ProgressBar by bindView(R.id.progress)
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return MaterialDialog.Builder(context)
-                .autoDismiss(false)
-                .title(R.string.dialog_login_title)
-                .positiveText(R.string.dialog_login_positive)
-                .negativeText(R.string.cancel)
-                .onPositive({ _, _ -> validateAndLogin() })
-                .onNegative({ _, _ -> dismiss() })
-                .customView(R.layout.dialog_login, true)
-                .build()
-    }
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialDialog.Builder(context)
+            .autoDismiss(false)
+            .title(R.string.dialog_login_title)
+            .positiveText(R.string.dialog_login_positive)
+            .negativeText(R.string.cancel)
+            .onPositive({ _, _ -> validateAndLogin() })
+            .onNegative({ _, _ -> dismiss() })
+            .customView(R.layout.dialog_login, true)
+            .build()
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

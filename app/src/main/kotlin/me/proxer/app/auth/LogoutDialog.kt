@@ -8,10 +8,10 @@ import android.support.v4.app.FragmentActivity
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
+import butterknife.bindView
 import com.afollestad.materialdialogs.MaterialDialog
 import me.proxer.app.R
 import me.proxer.app.base.BaseDialog
-import me.proxer.app.util.extension.bindView
 import org.jetbrains.anko.longToast
 
 /**
@@ -20,9 +20,7 @@ import org.jetbrains.anko.longToast
 class LogoutDialog : BaseDialog() {
 
     companion object {
-        fun show(activity: FragmentActivity) {
-            LogoutDialog().show(activity.supportFragmentManager, "logout_dialog")
-        }
+        fun show(activity: FragmentActivity) = LogoutDialog().show(activity.supportFragmentManager, "logout_dialog")
     }
 
     private val viewModel by lazy { ViewModelProviders.of(this).get(LogoutViewModel::class.java) }
@@ -30,16 +28,14 @@ class LogoutDialog : BaseDialog() {
     private val content: TextView by bindView(R.id.content)
     private val progress: ProgressBar by bindView(R.id.progress)
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return MaterialDialog.Builder(context)
-                .autoDismiss(false)
-                .positiveText(R.string.dialog_logout_positive)
-                .negativeText(R.string.cancel)
-                .onPositive({ _, _ -> viewModel.logout() })
-                .onNegative({ _, _ -> dismiss() })
-                .customView(R.layout.dialog_logout, true)
-                .build()
-    }
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialDialog.Builder(context)
+            .autoDismiss(false)
+            .positiveText(R.string.dialog_logout_positive)
+            .negativeText(R.string.cancel)
+            .onPositive({ _, _ -> viewModel.logout() })
+            .onNegative({ _, _ -> dismiss() })
+            .customView(R.layout.dialog_logout, true)
+            .build()
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

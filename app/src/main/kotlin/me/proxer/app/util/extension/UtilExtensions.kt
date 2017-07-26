@@ -16,6 +16,7 @@ import android.view.View.MeasureSpec
 import android.widget.ImageView
 import android.widget.Toast
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.bumptech.glide.request.target.Target
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.util.Utils
@@ -23,12 +24,6 @@ import me.proxer.app.web.WebViewActivity
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
 import org.jetbrains.anko.dip
-import org.threeten.bp.Instant
-import org.threeten.bp.LocalDateTime
-import org.threeten.bp.Period
-import org.threeten.bp.ZoneId
-import org.threeten.bp.temporal.ChronoUnit
-import java.util.*
 import java.util.concurrent.Semaphore
 
 inline fun <T> Semaphore.lock(action: () -> T): T {
@@ -40,41 +35,6 @@ inline fun <T> Semaphore.lock(action: () -> T): T {
         release()
     }
 }
-
-fun Date.convertToRelativeReadableTime(context: Context): String {
-    val dateTime = convertToDateTime()
-    val now = LocalDateTime.now()
-    val period = Period.between(dateTime.toLocalDate(), now.toLocalDate())
-
-    return if (period.years <= 0) {
-        if (period.months <= 0) {
-            if (period.days <= 0) {
-                val hoursBetween = ChronoUnit.HOURS.between(dateTime, now).toInt()
-
-                if (hoursBetween <= 0) {
-                    val minutesBetween = ChronoUnit.MINUTES.between(dateTime, now).toInt()
-
-                    if (minutesBetween <= 0) {
-                        context.getString(R.string.time_a_moment_ago)
-                    } else {
-                        context.getQuantityString(R.plurals.time_minutes_ago, minutesBetween)
-                    }
-                } else {
-                    context.getQuantityString(R.plurals.time_hours_ago, hoursBetween)
-                }
-            } else {
-                context.getQuantityString(R.plurals.time_days_ago, period.days)
-            }
-        } else {
-            context.getQuantityString(R.plurals.time_months_ago, period.months)
-        }
-    } else {
-        context.getQuantityString(R.plurals.time_years_ago, period.years)
-    }
-}
-
-fun Date.convertToDateTime(): LocalDateTime = LocalDateTime
-        .ofInstant(Instant.ofEpochMilli(time), ZoneId.systemDefault())
 
 inline fun Context.getDrawableFromAttrs(resource: Int): Drawable {
     val styledAttributes = obtainStyledAttributes(intArrayOf(resource))
@@ -88,23 +48,21 @@ inline fun Context.getDrawableFromAttrs(resource: Int): Drawable {
 inline fun Context.getQuantityString(id: Int, quantity: Int): String = resources
         .getQuantityString(id, quantity, quantity)
 
-fun View.toastBelow(message: Int) {
-    Toast.makeText(context, message, Toast.LENGTH_SHORT).apply {
-        MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED).let { view.measure(it, it) }
+fun View.toastBelow(message: Int) = Toast.makeText(context, message, Toast.LENGTH_SHORT).apply {
+    MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED).let { view.measure(it, it) }
 
-        val windowVisibleDisplayFrame = Rect().apply {
-            (context as Activity).window.decorView.getWindowVisibleDisplayFrame(this)
-        }
+    val windowVisibleDisplayFrame = Rect().apply {
+        (context as Activity).window.decorView.getWindowVisibleDisplayFrame(this)
+    }
 
-        val viewLocation = IntArray(2).apply { getLocationInWindow(this) }
-        val viewLeft = viewLocation[0] - windowVisibleDisplayFrame.left
-        val viewTop = viewLocation[1] - windowVisibleDisplayFrame.top
-        val toastX = viewLeft + (width - view.measuredWidth) / 2
-        val toastY = viewTop + height + dip(4)
+    val viewLocation = IntArray(2).apply { getLocationInWindow(this) }
+    val viewLeft = viewLocation[0] - windowVisibleDisplayFrame.left
+    val viewTop = viewLocation[1] - windowVisibleDisplayFrame.top
+    val toastX = viewLeft + (width - view.measuredWidth) / 2
+    val toastY = viewTop + height + dip(4)
 
-        setGravity(Gravity.START or Gravity.TOP, toastX, toastY)
-    }.show()
-}
+    setGravity(Gravity.START or Gravity.TOP, toastX, toastY)
+}.show()
 
 fun CustomTabsHelperFragment.openHttpPage(activity: Activity, url: HttpUrl) {
     when (Utils.getNativeAppPackage(activity, url).isEmpty()) {
@@ -126,7 +84,7 @@ fun CustomTabsHelperFragment.openHttpPage(activity: Activity, url: HttpUrl) {
     }
 }
 
-inline fun GlideRequests.defaultLoad(view: ImageView, url: HttpUrl) = load(url.toString())
+inline fun GlideRequests.defaultLoad(view: ImageView, url: HttpUrl): Target<Drawable> = load(url.toString())
         .transition(DrawableTransitionOptions.withCrossFade())
         .into(view)
 

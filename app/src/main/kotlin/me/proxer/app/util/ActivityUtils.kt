@@ -24,5 +24,5 @@ object ActivityUtils {
         }
     }
 
-    fun getTransitionName(context: Activity) = context.intent.getStringExtra(TRANSITION_NAME_EXTRA)
+    fun getTransitionName(context: Activity): String? = context.intent.getStringExtra(TRANSITION_NAME_EXTRA)
 }

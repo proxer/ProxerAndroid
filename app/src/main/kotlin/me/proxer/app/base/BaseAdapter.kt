@@ -45,11 +45,9 @@ abstract class BaseAdapter<T, VH : RecyclerView.ViewHolder> : RecyclerView.Adapt
 
     open protected fun areContentsTheSame(oldItem: T, newItem: T) = oldItem == newItem
 
-    protected fun withSafeAdapterPosition(holder: VH, action: (Int) -> Unit) {
-        holder.adapterPosition.let {
-            if (it != RecyclerView.NO_POSITION) {
-                action(positionResolver.resolve(it))
-            }
+    protected fun withSafeAdapterPosition(holder: VH, action: (Int) -> Unit) = holder.adapterPosition.let {
+        if (it != RecyclerView.NO_POSITION) {
+            action(positionResolver.resolve(it))
         }
     }
 

@@ -27,8 +27,8 @@ import org.jetbrains.anko.find
  */
 class MaterialDrawerWrapper(context: Activity, toolbar: Toolbar, savedInstanceState: Bundle?) {
 
-    val itemClickSubject = PublishSubject.create<DrawerItem>()
-    val accountClickSubject = PublishSubject.create<AccountItem>()
+    val itemClickSubject: PublishSubject<DrawerItem> = PublishSubject.create<DrawerItem>()
+    val accountClickSubject: PublishSubject<AccountItem> = PublishSubject.create<AccountItem>()
 
     private val header: AccountHeader
     private val drawer: Drawer
@@ -249,12 +249,10 @@ class MaterialDrawerWrapper(context: Activity, toolbar: Toolbar, savedInstanceSt
         it.shouldKeepOpen
     }
 
-    private fun onAccountItemClick(profile: IProfile<*>): Boolean {
-        return AccountItem.fromOrDefault(profile.identifier).let {
-            accountClickSubject.onNext(it)
+    private fun onAccountItemClick(profile: IProfile<*>) = AccountItem.fromOrDefault(profile.identifier).let {
+        accountClickSubject.onNext(it)
 
-            it.shouldKeepOpen
-        }
+        it.shouldKeepOpen
     }
 
     private fun getStickyItemIds() = drawer.footerAdapter.adapterItems

@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.Toolbar
+import butterknife.bindView
 import com.github.florent37.rxsharedpreferences.RxBus
 import com.rubengees.introduction.IntroductionActivity.OPTION_RESULT
 import com.rubengees.introduction.IntroductionBuilder
@@ -26,7 +27,6 @@ import me.proxer.app.util.MaterialDrawerWrapper.AccountItem
 import me.proxer.app.util.MaterialDrawerWrapper.DrawerItem
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
-import me.proxer.app.util.extension.bindView
 import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
 import org.jetbrains.anko.intentFor
@@ -129,11 +129,9 @@ class MainActivity : BaseActivity() {
         setFragment(fragment)
     }
 
-    private fun setFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction()
-                .replace(R.id.container, fragment)
-                .commitNow()
-    }
+    private fun setFragment(fragment: Fragment) = supportFragmentManager.beginTransaction()
+            .replace(R.id.container, fragment)
+            .commitNow()
 
     private fun displayFirstPage(savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
@@ -159,26 +157,23 @@ class MainActivity : BaseActivity() {
         false -> intent.getLongExtra(SECTION_EXTRA, PreferenceHelper.getStartPage(this).id)
     })
 
-    private fun handleDrawerItemClick(item: DrawerItem) {
-        when (item) {
-            DrawerItem.NEWS -> setFragment(NewsFragment.newInstance(), R.string.section_news)
-            DrawerItem.CHAT -> Unit //setFragment(ConferencesFragment.newInstance(), R.string.section_chat)
-            DrawerItem.BOOKMARKS -> Unit //setFragment(BookmarksFragment.newInstance(), R.string.section_bookmarks)
-            DrawerItem.ANIME -> Unit // setFragment(MediaListFragment.newInstance(Category.ANIME), R.string.section_anime)
-            DrawerItem.MANGA -> Unit // setFragment(MediaListFragment.newInstance(Category.MANGA), R.string.section_manga)
-            DrawerItem.LOCAL_MANGA -> Unit // setFragment(LocalMangaFragment.newInstance(), R.string.section_local_manga)
-            DrawerItem.INFO -> Unit // setFragment(AboutFragment.newInstance(), R.string.section_info)
-            DrawerItem.DONATE -> showPage(ProxerUrls.donateWeb(Device.DEFAULT))
-            DrawerItem.SETTINGS -> Unit // setFragment(SettingsFragment.newInstance(), R.string.section_settings)
-        }
+    private fun handleDrawerItemClick(item: DrawerItem) = when (item) {
+        DrawerItem.NEWS -> setFragment(NewsFragment.newInstance(), R.string.section_news)
+        DrawerItem.CHAT -> Unit //setFragment(ConferencesFragment.newInstance(), R.string.section_chat)
+        DrawerItem.BOOKMARKS -> Unit //setFragment(BookmarksFragment.newInstance(), R.string.section_bookmarks)
+        DrawerItem.ANIME -> Unit // setFragment(MediaListFragment.newInstance(Category.ANIME), R.string.section_anime)
+        DrawerItem.MANGA -> Unit // setFragment(MediaListFragment.newInstance(Category.MANGA), R.string.section_manga)
+        DrawerItem.LOCAL_MANGA -> Unit // setFragment(LocalMangaFragment.newInstance(), R.string.section_local_manga)
+        DrawerItem.INFO -> Unit // setFragment(AboutFragment.newInstance(), R.string.section_info)
+        DrawerItem.DONATE -> showPage(ProxerUrls.donateWeb(Device.DEFAULT))
+        DrawerItem.SETTINGS -> Unit // setFragment(SettingsFragment.newInstance(), R.string.section_settings)
     }
 
-    private fun handleAccountItemClick(item: AccountItem) {
-        when (item) {
-            AccountItem.GUEST, AccountItem.LOGIN -> LoginDialog.show(this)
-            AccountItem.LOGOUT -> LogoutDialog.show(this)
-            AccountItem.USER -> StorageHelper.user?.let {
-                //                val viewToUse = when (view) {
+    private fun handleAccountItemClick(item: AccountItem) = when (item) {
+        AccountItem.GUEST, AccountItem.LOGIN -> LoginDialog.show(this)
+        AccountItem.LOGOUT -> LogoutDialog.show(this)
+        AccountItem.USER -> StorageHelper.user?.let {
+            //                val viewToUse = when (view) {
 //                    is ImageView -> view.apply { ViewCompat.setTransitionName(this, "profile_image") }
 //                    else -> null
 //                }
@@ -186,9 +181,8 @@ class MainActivity : BaseActivity() {
 //                ProfileActivity.navigateTo(this, it.id, it.name, it.image, viewToUse)
 //
 //                return viewToUse != null
-            }
-            AccountItem.NOTIFICATIONS -> Unit //  NotificationActivity.navigateTo(this)
-            AccountItem.UCP -> Unit // UcpActivity.navigateTo(this)
         }
+        AccountItem.NOTIFICATIONS -> Unit //  NotificationActivity.navigateTo(this)
+        AccountItem.UCP -> Unit // UcpActivity.navigateTo(this)
     }
 }

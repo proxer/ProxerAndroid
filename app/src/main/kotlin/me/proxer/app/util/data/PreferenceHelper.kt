@@ -51,12 +51,10 @@ object PreferenceHelper {
             = getDefaultSharedPreferences(context).getBoolean(MANGA_WLAN, true)
 
     @AppCompatDelegate.NightMode
-    fun getNightMode(context: Context): Int {
-        return when (getDefaultSharedPreferences(context).getString(THEME, "2")) {
-            "0" -> AppCompatDelegate.MODE_NIGHT_AUTO
-            "1" -> AppCompatDelegate.MODE_NIGHT_YES
-            "2" -> AppCompatDelegate.MODE_NIGHT_NO
-            else -> throw RuntimeException("Invalid value")
-        }
+    fun getNightMode(context: Context) = when (getDefaultSharedPreferences(context).getString(THEME, "2")) {
+        "0" -> AppCompatDelegate.MODE_NIGHT_AUTO
+        "1" -> AppCompatDelegate.MODE_NIGHT_YES
+        "2" -> AppCompatDelegate.MODE_NIGHT_NO
+        else -> throw RuntimeException("Invalid value")
     }
 }

@@ -21,11 +21,6 @@ abstract class BaseFragment : LifecycleFragment() {
         refWatcher.watch(this)
     }
 
-    fun setLikelyUrl(url: HttpUrl) {
-        customTabsHelper.mayLaunchUrl(url.androidUri(), Bundle(), emptyList())
-    }
-
-    fun showPage(url: HttpUrl) {
-        customTabsHelper.openHttpPage(activity, url)
-    }
+    fun setLikelyUrl(url: HttpUrl) = customTabsHelper.mayLaunchUrl(url.androidUri(), Bundle(), emptyList())
+    fun showPage(url: HttpUrl) = customTabsHelper.openHttpPage(activity, url)
 }

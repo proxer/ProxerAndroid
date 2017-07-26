@@ -17,13 +17,8 @@ abstract class BaseActivity : AppCompatActivity(), LifecycleRegistryOwner {
     private val lifecycleRegistry by lazy { LifecycleRegistry(this) }
     private val customTabsHelper by lazy { CustomTabsHelperFragment.attachTo(this) }
 
-    fun setLikelyUrl(url: HttpUrl) {
-        customTabsHelper.mayLaunchUrl(url.androidUri(), Bundle(), emptyList())
-    }
-
-    fun showPage(url: HttpUrl) {
-        customTabsHelper.openHttpPage(this, url)
-    }
+    fun setLikelyUrl(url: HttpUrl) = customTabsHelper.mayLaunchUrl(url.androidUri(), Bundle(), emptyList())
+    fun showPage(url: HttpUrl) = customTabsHelper.openHttpPage(this, url)
 
     override fun getLifecycle() = lifecycleRegistry
 }

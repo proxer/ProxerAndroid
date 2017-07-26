@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import butterknife.bindView
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
 import io.reactivex.Single
@@ -21,7 +22,6 @@ import me.proxer.app.auth.LoginDialog
 import me.proxer.app.base.BaseAdapter.ContainerPositionResolver
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction
-import me.proxer.app.util.extension.bindView
 import me.proxer.app.util.extension.endScrolls
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.library.enums.Device
