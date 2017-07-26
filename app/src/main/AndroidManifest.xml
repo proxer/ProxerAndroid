@@ -105,9 +105,9 @@
         <!--android:name=".activity.IndustryActivity"-->
         <!--android:theme="@style/Theme.App.Translucent" />-->
 
-        <!--<activity-->
-        <!--android:name=".activity.ImageDetailActivity"-->
-        <!--android:theme="@style/Theme.App.Transparent" />-->
+        <activity
+            android:name=".view.ImageDetailActivity"
+            android:theme="@style/Theme.App.Transparent" />
 
         <!--<activity-->
         <!--android:name=".activity.StreamActivity"-->
@@ -198,7 +198,7 @@
         <!--</intent-filter>-->
         <!--</activity>-->
 
-        <activity android:name=".web.WebViewActivity" />
+        <activity android:name=".view.WebViewActivity" />
 
         <!--<receiver-->
         <!--android:name=".receiver.DirectReplyReceiver"-->

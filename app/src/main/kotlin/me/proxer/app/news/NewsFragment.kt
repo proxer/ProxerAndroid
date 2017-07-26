@@ -2,13 +2,13 @@ package me.proxer.app.news
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v7.widget.GridLayoutManager
 import android.view.View
 import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
 import me.proxer.app.GlideApp
 import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.util.DeviceUtils
+import me.proxer.app.view.ImageDetailActivity
 import me.proxer.library.entitiy.notifications.NewsArticle
 import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
@@ -50,6 +50,8 @@ class NewsFragment : PagedContentFragment<NewsArticle>() {
 
         innerAdapter.imageClickSubject
                 .bindToLifecycle(this)
-                .subscribe { Snackbar.make(root, "Image Clicked! ${it.second.subject}", Snackbar.LENGTH_SHORT).show() }
+                .subscribe { (view, article) ->
+                    ImageDetailActivity.navigateTo(activity, ProxerUrls.newsImage(article.id, article.image), view)
+                }
     }
 }

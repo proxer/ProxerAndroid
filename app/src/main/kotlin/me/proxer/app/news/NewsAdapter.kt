@@ -18,7 +18,6 @@ import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.util.data.ParcelableStringBooleanMap
-import me.proxer.app.util.extension.ViewItem
 import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.defaultLoad
 import me.proxer.library.entitiy.notifications.NewsArticle
@@ -36,7 +35,8 @@ class NewsAdapter(savedInstanceState: Bundle?, private val glide: GlideRequests)
 
     val clickSubject: PublishSubject<NewsArticle> = PublishSubject.create<NewsArticle>()
     val expansionSubject: PublishSubject<NewsArticle> = PublishSubject.create<NewsArticle>()
-    val imageClickSubject: PublishSubject<ViewItem<NewsArticle>> = PublishSubject.create<ViewItem<NewsArticle>>()
+    val imageClickSubject: PublishSubject<Pair<ImageView, NewsArticle>> =
+            PublishSubject.create<Pair<ImageView, NewsArticle>>()
 
     private val expansionMap: ParcelableStringBooleanMap
 
@@ -82,7 +82,7 @@ class NewsAdapter(savedInstanceState: Bundle?, private val glide: GlideRequests)
 
             image.setOnClickListener { view ->
                 withSafeAdapterPosition(this) {
-                    imageClickSubject.onNext(view to data[it])
+                    imageClickSubject.onNext(view as ImageView to data[it])
                 }
             }
 
