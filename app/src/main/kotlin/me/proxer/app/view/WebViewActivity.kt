@@ -8,7 +8,7 @@ import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import butterknife.bindView
+import kotterknife.bindView
 import me.proxer.app.R
 import org.jetbrains.anko.startActivity
 

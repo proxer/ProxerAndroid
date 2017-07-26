@@ -12,13 +12,13 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.widget.ProgressBar
-import butterknife.bindView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.github.florent37.rxsharedpreferences.RxBus
 import com.jakewharton.rxbinding2.widget.editorActionEvents
 import com.jakewharton.rxbinding2.widget.textChanges
 import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
 import io.reactivex.functions.Predicate
+import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.auth.ProxerLoginTokenManager.Companion.LOGIN_EVENT
 import me.proxer.app.base.BaseDialog

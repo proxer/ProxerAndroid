@@ -11,12 +11,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import butterknife.bindView
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.auth.LoginDialog
 import me.proxer.app.base.BaseAdapter.ContainerPositionResolver

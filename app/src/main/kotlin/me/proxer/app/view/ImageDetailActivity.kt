@@ -6,10 +6,10 @@ import android.os.Bundle
 import android.support.v4.view.ViewCompat
 import android.view.ViewGroup
 import android.widget.ImageView
-import butterknife.bindView
 import com.bumptech.glide.request.target.ImageViewTarget
 import com.jakewharton.rxbinding2.view.clicks
 import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
+import kotterknife.bindView
 import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.BaseActivity

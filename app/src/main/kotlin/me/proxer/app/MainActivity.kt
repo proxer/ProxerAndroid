@@ -7,7 +7,6 @@ import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.Toolbar
-import butterknife.bindView
 import com.github.florent37.rxsharedpreferences.RxBus
 import com.rubengees.introduction.IntroductionActivity.OPTION_RESULT
 import com.rubengees.introduction.IntroductionBuilder
@@ -15,6 +14,7 @@ import com.rubengees.introduction.Option
 import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import kotterknife.bindView
 import me.proxer.app.auth.LoginDialog
 import me.proxer.app.auth.LogoutDialog
 import me.proxer.app.auth.ProxerLoginTokenManager.Companion.LOGIN_EVENT

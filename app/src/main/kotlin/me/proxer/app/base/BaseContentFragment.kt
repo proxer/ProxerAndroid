@@ -9,11 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import butterknife.bindView
 import com.jakewharton.rxbinding2.support.v4.widget.refreshes
 import com.jakewharton.rxbinding2.view.clicks
 import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
 import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindUntilEvent
+import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.auth.LoginDialog
 import me.proxer.app.util.ErrorUtils.ErrorAction

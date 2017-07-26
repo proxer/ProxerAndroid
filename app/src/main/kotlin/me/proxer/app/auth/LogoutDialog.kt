@@ -8,8 +8,8 @@ import android.support.v4.app.FragmentActivity
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
-import butterknife.bindView
 import com.afollestad.materialdialogs.MaterialDialog
+import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseDialog
 import org.jetbrains.anko.longToast
