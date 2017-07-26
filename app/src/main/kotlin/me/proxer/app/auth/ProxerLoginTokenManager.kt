@@ -1,6 +1,6 @@
 package me.proxer.app.auth
 
-import com.github.florent37.rxsharedpreferences.RxBus
+import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.library.api.LoginTokenManager
 
@@ -18,7 +18,7 @@ class ProxerLoginTokenManager : LoginTokenManager {
                 if (StorageHelper.user?.token != loginToken) {
                     StorageHelper.user = null
 
-                    RxBus.getDefault().post(LOGOUT_EVENT)
+                    bus.post(LOGOUT_EVENT)
                 }
             }
             else -> Unit /* Don't do anything in case the token is not null. We save the token

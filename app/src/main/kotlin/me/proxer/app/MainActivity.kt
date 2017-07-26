@@ -7,7 +7,6 @@ import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.Toolbar
-import com.github.florent37.rxsharedpreferences.RxBus
 import com.rubengees.introduction.IntroductionActivity.OPTION_RESULT
 import com.rubengees.introduction.IntroductionBuilder
 import com.rubengees.introduction.Option
@@ -15,6 +14,7 @@ import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotterknife.bindView
+import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.auth.LoginDialog
 import me.proxer.app.auth.LogoutDialog
 import me.proxer.app.auth.ProxerLoginTokenManager.Companion.LOGIN_EVENT
@@ -68,7 +68,7 @@ class MainActivity : BaseActivity() {
                     .subscribe { handleAccountItemClick(it) }
         }
 
-        RxBus.getDefault().let { Observable.merge(listOf(it.onEvent(LOGIN_EVENT), it.onEvent(LOGOUT_EVENT))) }
+        Observable.merge(listOf(bus.observeMessages(LOGIN_EVENT), bus.observeMessages(LOGOUT_EVENT)))
                 .observeOn(AndroidSchedulers.mainThread())
                 .bindToLifecycle(this)
                 .subscribe { drawer.refreshHeader() }

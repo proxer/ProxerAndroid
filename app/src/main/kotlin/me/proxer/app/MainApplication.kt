@@ -16,6 +16,7 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
+import com.rubengees.rxbus.RxBus
 import com.squareup.leakcanary.LeakCanary
 import com.squareup.leakcanary.RefWatcher
 import com.squareup.moshi.Moshi
@@ -35,6 +36,8 @@ class MainApplication : Application() {
     companion object {
         const val USER_AGENT = "ProxerAndroid/${BuildConfig.VERSION_NAME}"
         const val GENERIC_USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+
+        val bus = RxBus()
 
         val moshi: Moshi
             get() = api.moshi()

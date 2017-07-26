@@ -100,7 +100,6 @@ dependencies {
 
     implementation(deps.aboutLibraries) { transitive = true }
     implementation(deps.materialDrawer) { transitive = true }
-    implementation deps.materialDrawerKotlin
     implementation deps.iconics
     implementation deps.iconicsViews
     implementation deps.communityMaterialTypeface
