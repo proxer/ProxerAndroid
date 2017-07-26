@@ -45,7 +45,11 @@ class LogoutDialog : BaseDialog() {
         })
 
         viewModel.error.observe(this, Observer {
-            it?.let { context.longToast(it.message) }
+            it?.let {
+                viewModel.error.value = null
+
+                context.longToast(it.message)
+            }
         })
 
         viewModel.isLoading.observe(this, Observer {

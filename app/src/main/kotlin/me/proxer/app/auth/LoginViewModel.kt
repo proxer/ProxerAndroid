@@ -47,7 +47,10 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                     .toSingle()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnSubscribe { isLoading.value = true }
+                    .doOnSubscribe {
+                        error.value = null
+                        isLoading.value = true
+                    }
                     .doAfterTerminate { isLoading.value = false }
                     .subscribe({
                         data.value = it

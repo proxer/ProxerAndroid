@@ -41,18 +41,22 @@ abstract class PagedViewModel<T>(application: Application) : BaseViewModel<List<
                     }
                 }
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe { isLoading.value = true }
+                .doOnSubscribe {
+                    refreshError.value = null
+                    error.value = null
+                    isLoading.value = true
+                }
                 .doAfterSuccess { newData ->
                     hasReachedEnd = newData.size < itemsOnPage
                 }
                 .doAfterTerminate {
-                    isLoading.value = false
                     page = data.value?.size?.div(itemsOnPage) ?: 0
+                    isLoading.value = false
                 }
                 .subscribe({
-                    data.value = it
-                    error.value = null
                     refreshError.value = null
+                    error.value = null
+                    data.value = it
                 }, {
                     if (page == 0 && data.value?.size ?: 0 > 0) {
                         refreshError.value = ErrorUtils.handle(it)

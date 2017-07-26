@@ -38,11 +38,14 @@ abstract class BaseViewModel<T>(application: Application) : AndroidViewModel(app
         disposable?.dispose()
         disposable = loadSingle
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe { isLoading.value = true }
+                .doOnSubscribe {
+                    error.value = null
+                    isLoading.value = true
+                }
                 .doAfterTerminate { isLoading.value = false }
                 .subscribe({
-                    data.value = it
                     error.value = null
+                    data.value = it
                 }, {
                     data.value = null
                     error.value = ErrorUtils.handle(it)

@@ -63,7 +63,7 @@ abstract class BaseContentFragment<T> : BaseFragment() {
         })
 
         if (savedInstanceState == null) {
-            viewModel.loadIfPossible()
+            viewModel.load()
         }
     }
 
@@ -96,10 +96,7 @@ abstract class BaseContentFragment<T> : BaseFragment() {
                     when (action.buttonAction) {
                         ButtonAction.CAPTCHA -> showPage(ProxerUrls.captchaWeb(Device.MOBILE))
                         ButtonAction.LOGIN -> LoginDialog.show(activity as AppCompatActivity)
-                        null -> {
-                            viewModel.error.value = null
-                            viewModel.loadIfPossible()
-                        }
+                        null -> viewModel.load()
                     }
                 }
     }
