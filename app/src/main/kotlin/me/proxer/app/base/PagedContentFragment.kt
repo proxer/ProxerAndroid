@@ -82,8 +82,8 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
         recyclerView.adapter = adapter
 
         recyclerView.endScrolls()
-                .bindToLifecycle(this)
                 .throttleFirst(300, TimeUnit.MILLISECONDS)
+                .bindToLifecycle(this)
                 .subscribe { viewModel.loadIfPossible() }
     }
 
@@ -101,9 +101,9 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
             innerAdapter.notifyItemRangeInserted(0, data.size)
         } else {
             Single.fromCallable { DiffUtil.calculateDiff(innerAdapter.provideDiffUtilCallback(data)) }
-                    .bindToLifecycle(this)
                     .subscribeOn(Schedulers.computation())
                     .observeOn(AndroidSchedulers.mainThread())
+                    .bindToLifecycle(this)
                     .subscribe { it: DiffUtil.DiffResult ->
                         innerAdapter.swapData(data)
 

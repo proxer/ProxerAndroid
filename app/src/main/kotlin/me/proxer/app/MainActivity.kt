@@ -69,8 +69,8 @@ class MainActivity : BaseActivity() {
         }
 
         RxBus.getDefault().let { Observable.merge(listOf(it.onEvent(LOGIN_EVENT), it.onEvent(LOGOUT_EVENT))) }
-                .bindToLifecycle(this)
                 .observeOn(AndroidSchedulers.mainThread())
+                .bindToLifecycle(this)
                 .subscribe { drawer.refreshHeader() }
 
         displayFirstPage(savedInstanceState)
