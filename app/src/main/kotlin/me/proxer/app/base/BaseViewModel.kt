@@ -3,14 +3,13 @@ package me.proxer.app.base
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MutableLiveData
-import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.extension.toSingle
-import me.proxer.library.api.ProxerCall
+import me.proxer.library.api.Endpoint
 
 /**
  * @author Ruben Gees
@@ -22,10 +21,8 @@ abstract class BaseViewModel<T>(application: Application) : AndroidViewModel(app
     val isLoading = MutableLiveData<Boolean?>()
 
     protected var disposable: Disposable? = null
-    protected val loadSingle: Single<T>
-        get() = constructApiCall()
-                .toSingle()
-                .subscribeOn(Schedulers.io())
+
+    abstract val endpoint: Endpoint<T>
 
     override fun onCleared() {
         disposable?.dispose()
@@ -36,7 +33,9 @@ abstract class BaseViewModel<T>(application: Application) : AndroidViewModel(app
 
     open fun load() {
         disposable?.dispose()
-        disposable = loadSingle
+        disposable = endpoint.build()
+                .toSingle()
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
                     error.value = null
@@ -58,14 +57,5 @@ abstract class BaseViewModel<T>(application: Application) : AndroidViewModel(app
         }
     }
 
-    open fun reload() {
-        data.value = null
-        error.value = null
-
-        load()
-    }
-
     open fun refresh() = load()
-
-    abstract fun constructApiCall(): ProxerCall<T>
 }

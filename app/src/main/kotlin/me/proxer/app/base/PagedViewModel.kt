@@ -3,8 +3,11 @@ package me.proxer.app.base
 import android.app.Application
 import android.arch.lifecycle.MutableLiveData
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
+import me.proxer.app.util.extension.toSingle
+import me.proxer.library.api.PagingEndpoint
 import me.proxer.library.entitiy.ProxerIdItem
 
 /**
@@ -12,19 +15,39 @@ import me.proxer.library.entitiy.ProxerIdItem
  */
 abstract class PagedViewModel<T>(application: Application) : BaseViewModel<List<T>>(application) {
 
-    abstract val itemsOnPage: Int
-
     val refreshError = MutableLiveData<ErrorAction?>()
 
-    var hasReachedEnd = false
-        protected set
+    private var hasReachedEnd = false
 
-    var page = 0
-        protected set
+    override abstract val endpoint: PagingEndpoint<List<T>>
+    abstract val itemsOnPage: Int
 
     override fun load() {
+        load(data.value?.size?.div(itemsOnPage) ?: 0)
+    }
+
+    override fun loadIfPossible() {
+        if (!hasReachedEnd) {
+            super.loadIfPossible()
+        }
+    }
+
+    override fun refresh() {
+        load(0)
+    }
+
+    open protected fun areItemsTheSame(old: T, new: T) = when {
+        old is ProxerIdItem && new is ProxerIdItem -> old.id == new.id
+        else -> old == new
+    }
+
+    private fun load(page: Int) {
         disposable?.dispose()
-        disposable = loadSingle
+        disposable = endpoint
+                .page(page)
+                .build()
+                .toSingle()
+                .subscribeOn(Schedulers.io())
                 .map { newData ->
                     data.value.let { existingData ->
                         when (existingData) {
@@ -50,7 +73,6 @@ abstract class PagedViewModel<T>(application: Application) : BaseViewModel<List<
                     hasReachedEnd = newData.size < itemsOnPage
                 }
                 .doAfterTerminate {
-                    page = data.value?.size?.div(itemsOnPage) ?: 0
                     isLoading.value = false
                 }
                 .subscribe({
@@ -64,22 +86,5 @@ abstract class PagedViewModel<T>(application: Application) : BaseViewModel<List<
                         error.value = ErrorUtils.handle(it)
                     }
                 })
-    }
-
-    override fun loadIfPossible() {
-        if (!hasReachedEnd) {
-            super.loadIfPossible()
-        }
-    }
-
-    override fun refresh() {
-        page = 0
-
-        load()
-    }
-
-    open protected fun areItemsTheSame(old: T, new: T) = when {
-        old is ProxerIdItem && new is ProxerIdItem -> old.id == new.id
-        else -> old == new
     }
 }

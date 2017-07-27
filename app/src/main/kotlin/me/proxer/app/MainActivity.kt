@@ -20,6 +20,7 @@ import me.proxer.app.auth.LogoutDialog
 import me.proxer.app.auth.ProxerLoginTokenManager.Companion.LOGIN_EVENT
 import me.proxer.app.auth.ProxerLoginTokenManager.Companion.LOGOUT_EVENT
 import me.proxer.app.base.BaseActivity
+import me.proxer.app.media.MediaListFragment
 import me.proxer.app.news.NewsFragment
 import me.proxer.app.util.IntroductionHelper
 import me.proxer.app.util.MaterialDrawerWrapper
@@ -27,6 +28,7 @@ import me.proxer.app.util.MaterialDrawerWrapper.AccountItem
 import me.proxer.app.util.MaterialDrawerWrapper.DrawerItem
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
+import me.proxer.library.enums.Category
 import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
 import org.jetbrains.anko.intentFor
@@ -161,8 +163,8 @@ class MainActivity : BaseActivity() {
         DrawerItem.NEWS -> setFragment(NewsFragment.newInstance(), R.string.section_news)
         DrawerItem.CHAT -> Unit //setFragment(ConferencesFragment.newInstance(), R.string.section_chat)
         DrawerItem.BOOKMARKS -> Unit //setFragment(BookmarksFragment.newInstance(), R.string.section_bookmarks)
-        DrawerItem.ANIME -> Unit // setFragment(MediaListFragment.newInstance(Category.ANIME), R.string.section_anime)
-        DrawerItem.MANGA -> Unit // setFragment(MediaListFragment.newInstance(Category.MANGA), R.string.section_manga)
+        DrawerItem.ANIME -> setFragment(MediaListFragment.newInstance(Category.ANIME), R.string.section_anime)
+        DrawerItem.MANGA -> setFragment(MediaListFragment.newInstance(Category.MANGA), R.string.section_manga)
         DrawerItem.LOCAL_MANGA -> Unit // setFragment(LocalMangaFragment.newInstance(), R.string.section_local_manga)
         DrawerItem.INFO -> Unit // setFragment(AboutFragment.newInstance(), R.string.section_info)
         DrawerItem.DONATE -> showPage(ProxerUrls.donateWeb(Device.DEFAULT))

@@ -49,12 +49,11 @@ class NewsAdapter(savedInstanceState: Bundle?, private val glide: GlideRequests)
         setHasStableIds(true)
     }
 
-    override fun onViewRecycled(holder: ViewHolder) = glide.clear(holder.image)
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(LayoutInflater.from(parent.context)
             .inflate(R.layout.item_news, parent, false))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(data[position])
+    override fun onViewRecycled(holder: ViewHolder) = glide.clear(holder.image)
 
     override fun areContentsTheSame(oldItem: NewsArticle, newItem: NewsArticle) = oldItem.date == newItem.date
             && oldItem.category == newItem.category

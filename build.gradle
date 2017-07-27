@@ -26,7 +26,7 @@ buildscript {
         rxAndroidVersion = '2.0.1'
         rxBindingVersion = '2.0.0'
         rxLifecycleVersion = '2.1.0'
-        rxBusVersion = '88fcd0a93e'
+        rxBusVersion = 'master-SNAPSHOT'
 
         // UI components
         aboutLibrariesVersion = '5.9.7'
@@ -87,6 +87,7 @@ buildscript {
                 rxAndroid                    : "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion",
                 rxBinding                    : "com.jakewharton.rxbinding2:rxbinding-kotlin:$rxBindingVersion",
                 rxBindingV4                  : "com.jakewharton.rxbinding2:rxbinding-support-v4-kotlin:$rxBindingVersion",
+                rxBindingV7                  : "com.jakewharton.rxbinding2:rxbinding-appcompat-v7-kotlin:$rxBindingVersion",
                 rxBindingRecyclerView        : "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7-kotlin:$rxBindingVersion",
                 rxLifecycle                  : "com.trello.rxlifecycle2:rxlifecycle-android-lifecycle-kotlin:$rxLifecycleVersion",
                 rxBus                        : "com.github.rubengees:rxbus:$rxBusVersion",

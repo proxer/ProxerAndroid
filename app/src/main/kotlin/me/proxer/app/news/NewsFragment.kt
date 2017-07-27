@@ -28,7 +28,10 @@ class NewsFragment : PagedContentFragment<NewsArticle>() {
         ViewModelProviders.of(this).get(NewsViewModel::class.java)
     }
 
-    override val layoutManager by lazy { GridLayoutManager(context, DeviceUtils.calculateSpanAmount(activity)) }
+    override val layoutManager by lazy {
+        GridLayoutManager(context, DeviceUtils.calculateSpanAmount(activity))
+    }
+
     override lateinit var innerAdapter: NewsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
