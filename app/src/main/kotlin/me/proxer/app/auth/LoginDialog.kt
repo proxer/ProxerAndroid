@@ -20,7 +20,6 @@ import io.reactivex.functions.Predicate
 import kotterknife.bindView
 import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.R
-import me.proxer.app.auth.ProxerLoginTokenManager.Companion.LOGIN_EVENT
 import me.proxer.app.base.BaseDialog
 import me.proxer.app.util.data.StorageHelper
 import org.jetbrains.anko.longToast
@@ -76,7 +75,7 @@ class LoginDialog : BaseDialog() {
                 StorageHelper.user = LocalUser(it.loginToken, it.id, username.text.trim().toString(), it.image)
                 StorageHelper.isTwoFactorAuthenticationEnabled = secret.text.isNotBlank()
 
-                bus.post(LOGIN_EVENT)
+                bus.post(LoginEvent())
 
                 dismiss()
             }

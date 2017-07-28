@@ -6,11 +6,6 @@ import me.proxer.library.api.LoginTokenManager
 
 class ProxerLoginTokenManager : LoginTokenManager {
 
-    companion object {
-        const val LOGIN_EVENT = "login"
-        const val LOGOUT_EVENT = "logout"
-    }
-
     override fun provide() = StorageHelper.user?.token
     override fun persist(loginToken: String?) {
         when (loginToken) {
@@ -18,7 +13,7 @@ class ProxerLoginTokenManager : LoginTokenManager {
                 if (StorageHelper.user?.token != loginToken) {
                     StorageHelper.user = null
 
-                    bus.post(LOGOUT_EVENT)
+                    bus.post(LogoutEvent())
                 }
             }
             else -> Unit /* Don't do anything in case the token is not null. We save the token

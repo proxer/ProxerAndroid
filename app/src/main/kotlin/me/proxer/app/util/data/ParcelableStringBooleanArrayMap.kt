@@ -13,7 +13,8 @@ class ParcelableStringBooleanArrayMap : Parcelable {
     companion object {
 
         @Suppress("unused")
-        @JvmStatic val CREATOR = object : Parcelable.Creator<ParcelableStringBooleanArrayMap> {
+        @JvmField
+        val CREATOR = object : Parcelable.Creator<ParcelableStringBooleanArrayMap> {
             override fun createFromParcel(source: Parcel) = ParcelableStringBooleanArrayMap(source)
             override fun newArray(size: Int) = arrayOfNulls<ParcelableStringBooleanArrayMap?>(size)
         }

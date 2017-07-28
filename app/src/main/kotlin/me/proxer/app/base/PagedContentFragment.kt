@@ -20,6 +20,7 @@ import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.auth.LoginDialog
 import me.proxer.app.base.BaseAdapter.ContainerPositionResolver
+import me.proxer.app.settings.AgeConfirmationDialog
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction
 import me.proxer.app.util.extension.endScrolls
@@ -36,11 +37,16 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
 
     override abstract val viewModel: PagedViewModel<T>
 
+    override val isSwipeToRefreshEnabled = true
+
     private lateinit var adapter: EasyHeaderFooterAdapter
     abstract protected val layoutManager: RecyclerView.LayoutManager
     abstract protected val innerAdapter: BaseAdapter<T, *>
 
     open protected val recyclerView: RecyclerView by bindView(R.id.recyclerView)
+
+    override val contentContainer: ViewGroup
+        get() = recyclerView
 
     override val errorContainer: ViewGroup
         get() = adapter.footer as ViewGroup
@@ -64,6 +70,7 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
                 multilineSnackbar(root, it.message, Snackbar.LENGTH_LONG, it.buttonMessage, when (it.buttonAction) {
                     ButtonAction.CAPTCHA -> View.OnClickListener { showPage(ProxerUrls.captchaWeb(Device.MOBILE)) }
                     ButtonAction.LOGIN -> View.OnClickListener { LoginDialog.show(activity as AppCompatActivity) }
+                    ButtonAction.AGE_CONFIRMATION -> View.OnClickListener { AgeConfirmationDialog.show(activity as AppCompatActivity) }
                     null -> View.OnClickListener { viewModel.refresh() }
                 })
 
@@ -94,8 +101,6 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
     }
 
     override fun showData(data: List<T>) {
-        super.showData(data)
-
         if (innerAdapter.isEmpty()) {
             innerAdapter.swapData(data)
             innerAdapter.notifyItemRangeInserted(0, data.size)
@@ -110,9 +115,16 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
                         it.dispatchUpdatesTo(adapter)
                     }
         }
+
+        super.showData(data)
     }
 
-    override fun hideData() = Unit
+    override fun hideData() {
+        innerAdapter.itemCount.let {
+            innerAdapter.clear()
+            innerAdapter.notifyItemRangeRemoved(0, it)
+        }
+    }
 
     override fun showError(action: ErrorAction) {
         if (adapter.footer == null) {

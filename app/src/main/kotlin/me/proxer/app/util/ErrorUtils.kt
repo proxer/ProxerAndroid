@@ -5,6 +5,8 @@ import com.google.android.exoplayer2.upstream.HttpDataSource
 import me.proxer.app.R
 import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_DEFAULT
+import me.proxer.app.util.Validators.AgeConfirmationRequiredException
+import me.proxer.app.util.Validators.NotLoggedInException
 import me.proxer.library.api.ProxerException
 import me.proxer.library.api.ProxerException.ErrorType.*
 import me.proxer.library.api.ProxerException.ServerErrorType.*
@@ -41,12 +43,8 @@ object ErrorUtils {
                 in 400 until 600 -> R.string.error_video_unknown
                 else -> R.string.error_unknown
             }
-//            is NotLoggedInException -> {
-//                R.string.error_login_required
-//            }
-//            is HentaiConfirmationRequiredException -> {
-//                R.string.error_age_confirmation_needed
-//            }
+            is NotLoggedInException -> R.string.error_login_required
+            is AgeConfirmationRequiredException -> R.string.error_age_confirmation_needed
 //            is StreamResolutionTask.NoResolverException -> {
 //                R.string.error_unsupported_hoster
 //            }
@@ -111,8 +109,8 @@ object ErrorUtils {
                 in LOGIN_ERRORS -> R.string.error_action_login
                 else -> ACTION_MESSAGE_DEFAULT
             }
-//            is NotLoggedInException -> R.string.error_action_login
-//            is HentaiConfirmationRequiredException -> R.string.error_action_confirm
+            is NotLoggedInException -> R.string.error_action_login
+            is AgeConfirmationRequiredException -> R.string.error_action_confirm
             else -> ACTION_MESSAGE_DEFAULT
         }
 
@@ -122,12 +120,8 @@ object ErrorUtils {
                 in LOGIN_ERRORS -> ButtonAction.LOGIN
                 else -> null
             }
-//            is NotLoggedInException -> View.OnClickListener {
-//                LoginDialog.show(context)
-//            }
-//            is HentaiConfirmationRequiredException -> View.OnClickListener {
-//                AgeConfirmationDialog.show(context)
-//            }
+            is NotLoggedInException -> ButtonAction.LOGIN
+            is AgeConfirmationRequiredException -> ButtonAction.AGE_CONFIRMATION
             else -> null
         }
 
@@ -143,7 +137,7 @@ object ErrorUtils {
         }
 
         enum class ButtonAction {
-            CAPTCHA, LOGIN
+            CAPTCHA, LOGIN, AGE_CONFIRMATION
         }
     }
 }

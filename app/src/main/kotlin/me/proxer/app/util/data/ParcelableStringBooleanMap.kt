@@ -12,7 +12,8 @@ class ParcelableStringBooleanMap : Parcelable {
         private const val ZERO_BYTE: Byte = 0
 
         @Suppress("unused")
-        @JvmStatic val CREATOR = object : Parcelable.Creator<ParcelableStringBooleanMap> {
+        @JvmField
+        val CREATOR = object : Parcelable.Creator<ParcelableStringBooleanMap> {
             override fun createFromParcel(source: Parcel) = ParcelableStringBooleanMap(source)
             override fun newArray(size: Int) = arrayOfNulls<ParcelableStringBooleanMap?>(size)
         }

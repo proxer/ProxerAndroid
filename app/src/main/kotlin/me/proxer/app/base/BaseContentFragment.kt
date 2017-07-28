@@ -16,6 +16,7 @@ import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindUntilEvent
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.auth.LoginDialog
+import me.proxer.app.settings.AgeConfirmationDialog
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction
 import me.proxer.library.enums.Device
@@ -28,6 +29,8 @@ abstract class BaseContentFragment<T> : BaseFragment() {
 
     abstract protected val viewModel: BaseViewModel<T>
 
+    open protected val isSwipeToRefreshEnabled = false
+
     open protected val root: ViewGroup by bindView(R.id.root)
     open protected val contentContainer: ViewGroup by bindView(R.id.contentContainer)
     open protected val errorContainer: ViewGroup by bindView(R.id.errorContainer)
@@ -39,6 +42,7 @@ abstract class BaseContentFragment<T> : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         progress.setColorSchemeResources(R.color.colorPrimary)
+        progress.isEnabled = isSwipeToRefreshEnabled
 
         progress.refreshes()
                 .bindToLifecycle(this)
@@ -59,10 +63,11 @@ abstract class BaseContentFragment<T> : BaseFragment() {
         })
 
         viewModel.isLoading.observe(this, Observer {
+            progress.isEnabled = it == true || isSwipeToRefreshEnabled
             progress.isRefreshing = it == true
         })
 
-        if (savedInstanceState == null) {
+        if (viewModel.isLoading.value != true && viewModel.data.value == null && viewModel.error.value == null) {
             viewModel.load()
         }
     }
@@ -96,6 +101,7 @@ abstract class BaseContentFragment<T> : BaseFragment() {
                     when (action.buttonAction) {
                         ButtonAction.CAPTCHA -> showPage(ProxerUrls.captchaWeb(Device.MOBILE))
                         ButtonAction.LOGIN -> LoginDialog.show(activity as AppCompatActivity)
+                        ButtonAction.AGE_CONFIRMATION -> AgeConfirmationDialog.show(activity as AppCompatActivity)
                         null -> viewModel.load()
                     }
                 }

@@ -3,7 +3,7 @@ package me.proxer.app.news
 import android.app.Application
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.base.PagedViewModel
-import me.proxer.library.api.PagingEndpoint
+import me.proxer.library.api.PagingLimitEndpoint
 import me.proxer.library.entitiy.notifications.NewsArticle
 
 /**
@@ -12,8 +12,7 @@ import me.proxer.library.entitiy.notifications.NewsArticle
 class NewsViewModel(application: Application) : PagedViewModel<NewsArticle>(application) {
 
     override val itemsOnPage = 15
-    override val endpoint: PagingEndpoint<List<NewsArticle>>
+    override val endpoint: PagingLimitEndpoint<List<NewsArticle>>
         get() = api.notifications()
                 .news()
-                .limit(itemsOnPage)
 }

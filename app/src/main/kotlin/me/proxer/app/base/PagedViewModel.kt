@@ -6,8 +6,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
-import me.proxer.app.util.extension.toSingle
-import me.proxer.library.api.PagingEndpoint
+import me.proxer.app.util.extension.buildSingle
+import me.proxer.library.api.PagingLimitEndpoint
 import me.proxer.library.entitiy.ProxerIdItem
 
 /**
@@ -19,7 +19,7 @@ abstract class PagedViewModel<T>(application: Application) : BaseViewModel<List<
 
     private var hasReachedEnd = false
 
-    override abstract val endpoint: PagingEndpoint<List<T>>
+    override abstract val endpoint: PagingLimitEndpoint<List<T>>
     abstract val itemsOnPage: Int
 
     override fun load() {
@@ -36,18 +36,25 @@ abstract class PagedViewModel<T>(application: Application) : BaseViewModel<List<
         load(0)
     }
 
+    override fun reload() {
+        refreshError.value = null
+
+        super.reload()
+    }
+
     open protected fun areItemsTheSame(old: T, new: T) = when {
         old is ProxerIdItem && new is ProxerIdItem -> old.id == new.id
         else -> old == new
     }
 
-    private fun load(page: Int) {
+    open protected fun load(page: Int) {
         disposable?.dispose()
         disposable = endpoint
                 .page(page)
-                .build()
-                .toSingle()
+                .limit(itemsOnPage)
+                .buildSingle()
                 .subscribeOn(Schedulers.io())
+                .map { it.apply { validate() } }
                 .map { newData ->
                     data.value.let { existingData ->
                         when (existingData) {

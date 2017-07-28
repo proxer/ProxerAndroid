@@ -9,7 +9,7 @@ import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.StorageHelper
-import me.proxer.app.util.extension.toSingle
+import me.proxer.app.util.extension.buildSingle
 import me.proxer.library.api.ProxerException
 import me.proxer.library.api.ProxerException.ServerErrorType
 import me.proxer.library.entitiy.user.User
@@ -43,8 +43,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
             disposable = MainApplication.api.user()
                     .login(username, password)
                     .secretKey(secretKey)
-                    .build()
-                    .toSingle()
+                    .buildSingle()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnSubscribe {

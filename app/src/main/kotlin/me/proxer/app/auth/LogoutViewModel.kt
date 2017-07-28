@@ -8,7 +8,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication
 import me.proxer.app.util.ErrorUtils
-import me.proxer.app.util.extension.toOptionalSingle
+import me.proxer.app.util.extension.buildOptionalSingle
 
 /**
  * @author Ruben Gees
@@ -33,8 +33,7 @@ class LogoutViewModel(application: Application) : AndroidViewModel(application) 
             disposable?.dispose()
             disposable = MainApplication.api.user()
                     .logout()
-                    .build()
-                    .toOptionalSingle()
+                    .buildOptionalSingle()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnSubscribe {

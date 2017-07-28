@@ -10,7 +10,7 @@ buildscript {
         buildToolsVersion = '26.0.0'
 
         androidPluginVersion = '3.0.0-alpha8'
-        kotlinVersion = '1.1.4-eap-33'
+        kotlinVersion = '1.1.4-eap-54'
 
         // Frameworks and code only libraries
         ankoVersion = '0.10.1'
@@ -19,7 +19,7 @@ buildscript {
         architectureComponentsVersion = '1.0.0-alpha5'
         playServicesVersion = '11.0.4'
         androidJobVersion = '1.1.11'
-        proxerLibVersion = 'master-SNAPSHOT'
+        proxerLibVersion = '2fa14abc63'
 
         // RxJava
         rxJavaVersion = '2.1.2'
@@ -40,7 +40,7 @@ buildscript {
         materialDialogsVersion = '0.9.4.5'
         flexboxVersion = '0.3.0'
         emojiIosVersion = '0.6.0-SNAPSHOT'
-        exomediaVersion = '4.0.2'
+        exomediaVersion = '4.0.3'
         exoplayerVersion = 'r2.4.3'
         materialProgressBarVersion = '1.4.1'
         materialRatingBarVersion = '1.0.2'

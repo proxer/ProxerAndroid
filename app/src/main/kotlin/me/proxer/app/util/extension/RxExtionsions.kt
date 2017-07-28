@@ -12,17 +12,19 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.internal.disposables.DisposableContainer
-import me.proxer.library.api.ProxerCall
+import me.proxer.library.api.Endpoint
 
 /**
  * @author Ruben Gees
  */
 
-inline fun <T> ProxerCall<T>.toSingle(): Single<T> = Single.create<T> { emitter ->
-    emitter.setCancellable { cancel() }
+inline fun <T> Endpoint<T>.buildSingle(): Single<T> = Single.create<T> { emitter ->
+    val call = build()
+
+    emitter.setCancellable { call.cancel() }
 
     try {
-        emitter.onSuccess(execute())
+        emitter.onSuccess(call.execute())
     } catch (error: Throwable) {
         if (!emitter.isDisposed) {
             emitter.onError(error)
@@ -30,11 +32,13 @@ inline fun <T> ProxerCall<T>.toSingle(): Single<T> = Single.create<T> { emitter 
     }
 }
 
-inline fun <T : Any> ProxerCall<T>.toOptionalSingle(): Single<Optional<T>> = Single.create<Optional<T>> { emitter ->
-    emitter.setCancellable { cancel() }
+inline fun <T : Any> Endpoint<T>.buildOptionalSingle(): Single<Optional<T>> = Single.create<Optional<T>> { emitter ->
+    val call = build()
+
+    emitter.setCancellable { call.cancel() }
 
     try {
-        emitter.onSuccess(execute().toOptional())
+        emitter.onSuccess(call.execute().toOptional())
     } catch (error: Throwable) {
         if (!emitter.isDisposed) {
             emitter.onError(error)

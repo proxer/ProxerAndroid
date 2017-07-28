@@ -25,6 +25,10 @@ abstract class BaseAdapter<T, VH : RecyclerView.ViewHolder> : RecyclerView.Adapt
 
     fun isEmpty() = data.isEmpty()
 
+    fun clear() {
+        data = emptyList()
+    }
+
     fun swapData(newData: List<T>) {
         data = ArrayList(newData)
     }

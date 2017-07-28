@@ -16,9 +16,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import kotterknife.bindView
 import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.auth.LoginDialog
+import me.proxer.app.auth.LoginEvent
 import me.proxer.app.auth.LogoutDialog
-import me.proxer.app.auth.ProxerLoginTokenManager.Companion.LOGIN_EVENT
-import me.proxer.app.auth.ProxerLoginTokenManager.Companion.LOGOUT_EVENT
+import me.proxer.app.auth.LogoutEvent
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.media.MediaListFragment
 import me.proxer.app.news.NewsFragment
@@ -70,7 +70,7 @@ class MainActivity : BaseActivity() {
                     .subscribe { handleAccountItemClick(it) }
         }
 
-        Observable.merge(listOf(bus.observeMessages(LOGIN_EVENT), bus.observeMessages(LOGOUT_EVENT)))
+        Observable.merge(bus.observe(LoginEvent::class.java), bus.observe(LogoutEvent::class.java))
                 .observeOn(AndroidSchedulers.mainThread())
                 .bindToLifecycle(this)
                 .subscribe { drawer.refreshHeader() }

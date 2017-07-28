@@ -3,12 +3,10 @@ package me.proxer.app.media
 import android.app.Application
 import me.proxer.app.MainApplication
 import me.proxer.app.base.PagedViewModel
-import me.proxer.library.api.PagingEndpoint
+import me.proxer.library.api.PagingLimitEndpoint
 import me.proxer.library.entitiy.list.MediaListEntry
 import me.proxer.library.enums.MediaSearchSortCriteria
-import me.proxer.library.enums.MediaSearchSortCriteria.RATING
 import me.proxer.library.enums.MediaType
-import kotlin.properties.Delegates.observable
 
 /**
  * @author Ruben Gees
@@ -16,26 +14,45 @@ import kotlin.properties.Delegates.observable
 class MediaListViewModel(application: Application) : PagedViewModel<MediaListEntry>(application) {
 
     override val itemsOnPage = 30
-    override val endpoint: PagingEndpoint<List<MediaListEntry>>
+
+    override val isLoginRequired: Boolean
+        get() = type == MediaType.HENTAI || type == MediaType.HMANGA
+
+    override val isAgeConfirmationRequired: Boolean
+        get() = isLoginRequired
+
+    override val endpoint: PagingLimitEndpoint<List<MediaListEntry>>
         get() = MainApplication.api.list()
                 .mediaSearch()
-                .limit(itemsOnPage)
+                .sort(sortCriteria)
+                .name(searchQuery)
+                .type(type)
 
-    var searchQuery by observable<String?>(null, { _, old, new ->
-        if (old != new) {
-            load()
-        }
-    })
+    private var sortCriteria: MediaSearchSortCriteria = MediaSearchSortCriteria.RATING
+    private var type: MediaType = MediaType.ALL
+    private var searchQuery: String? = null
 
-    var type by observable<MediaType>(MediaType.ALL_ANIME, { _, old, new ->
-        if (old != new) {
-            load()
-        }
-    })
+    fun setSortCriteria(value: MediaSearchSortCriteria, trigger: Boolean = true) {
+        if (sortCriteria != value) {
+            sortCriteria = value
 
-    var sortCriteria by observable<MediaSearchSortCriteria>(RATING, { _, old, new ->
-        if (old != new) {
-            load()
+            if (trigger) reload()
         }
-    })
+    }
+
+    fun setType(value: MediaType, trigger: Boolean = true) {
+        if (type != value) {
+            type = value
+
+            if (trigger) reload()
+        }
+    }
+
+    fun setSearchQuery(value: String?, trigger: Boolean = true) {
+        if (searchQuery != value) {
+            searchQuery = value
+
+            if (trigger) reload()
+        }
+    }
 }
