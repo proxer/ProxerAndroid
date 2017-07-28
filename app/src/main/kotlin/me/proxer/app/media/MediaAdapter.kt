@@ -19,6 +19,7 @@ import me.proxer.library.entitiy.list.MediaListEntry
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.Language
 import me.proxer.library.util.ProxerUrls
+import org.jetbrains.anko.below
 
 /**
  * @author Ruben Gees
@@ -69,33 +70,27 @@ class MediaAdapter(private val category: Category, private val glide: GlideReque
                 Category.MANGA -> R.plurals.media_chapter_count
             }, item.episodeAmount)
 
-            val generalLanguages = item.languages.map { it.toGeneralLanguage() }.distinct()
+            item.languages.map { it.toGeneralLanguage() }.distinct().let { generalLanguages ->
+                english.visibility = when (generalLanguages.contains(Language.ENGLISH)) {
+                    true -> View.VISIBLE
+                    false -> View.GONE
+                }
 
-            english.visibility = when (generalLanguages.contains(Language.ENGLISH)) {
-                true -> View.VISIBLE
-                false -> View.GONE
-            }
-
-            german.visibility = when (generalLanguages.contains(Language.GERMAN)) {
-                true -> View.VISIBLE
-                false -> View.GONE
+                german.visibility = when (generalLanguages.contains(Language.GERMAN)) {
+                    true -> View.VISIBLE
+                    false -> View.GONE
+                }
             }
 
             if (item.rating > 0) {
                 ratingContainer.visibility = View.VISIBLE
                 rating.rating = item.rating / 2.0f
 
-                (episodes.layoutParams as RelativeLayout.LayoutParams).apply {
-                    addRule(RelativeLayout.ALIGN_BOTTOM, 0)
-                    addRule(RelativeLayout.BELOW, R.id.state)
-                }
+                (episodes.layoutParams as RelativeLayout.LayoutParams).below(R.id.state)
             } else {
                 ratingContainer.visibility = View.GONE
 
-                (episodes.layoutParams as RelativeLayout.LayoutParams).apply {
-                    addRule(RelativeLayout.ALIGN_BOTTOM, R.id.languageContainer)
-                    addRule(RelativeLayout.BELOW, R.id.medium)
-                }
+                (episodes.layoutParams as RelativeLayout.LayoutParams).below(R.id.medium)
             }
 
             state.setImageDrawable(item.state.toAppDrawable(state.context))

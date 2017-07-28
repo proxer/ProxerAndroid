@@ -28,8 +28,8 @@ class MediaListViewModel(application: Application) : PagedViewModel<MediaListEnt
                 .name(searchQuery)
                 .type(type)
 
-    private var sortCriteria: MediaSearchSortCriteria = MediaSearchSortCriteria.RATING
-    private var type: MediaType = MediaType.ALL
+    private var sortCriteria = MediaSearchSortCriteria.RATING
+    private var type = MediaType.ALL
     private var searchQuery: String? = null
 
     fun setSortCriteria(value: MediaSearchSortCriteria, trigger: Boolean = true) {
