@@ -17,6 +17,8 @@ import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
+import me.proxer.app.info.industry.IndustryActivity
+import me.proxer.app.info.translatorgroup.TranslatorGroupActivity
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.extension.*
 import me.proxer.library.entitiy.info.Entry
@@ -337,11 +339,8 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
             translatorGroupsTitle.visibility = View.GONE
             translatorGroups.visibility = View.GONE
         } else {
-            bindChips(translatorGroups, result.translatorGroups, mapFunction = {
-                it.name
-            }, onClick = {
-                // TranslatorGroupActivity.navigateTo(activity, it.id, it.name)
-            })
+            bindChips(translatorGroups, result.translatorGroups, mapFunction = { it.name },
+                    onClick = { TranslatorGroupActivity.navigateTo(activity, it.id, it.name) })
         }
     }
 
@@ -357,9 +356,7 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
                         ?.joinToString(separator = " ", transform = String::capitalize) ?: throw NullPointerException()
 
                 "${it.name} ($type)"
-            }, onClick = {
-                // IndustryActivity.navigateTo(activity, it.id, it.name)
-            })
+            }, onClick = { IndustryActivity.navigateTo(activity, it.id, it.name) })
         }
     }
 
