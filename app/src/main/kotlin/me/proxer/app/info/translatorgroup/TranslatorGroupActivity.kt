@@ -83,7 +83,7 @@ class TranslatorGroupActivity : ImageTabsActivity() {
 
         override fun getItem(position: Int) = when (position) {
             0 -> TranslatorGroupInfoFragment.newInstance()
-            1 -> TranslatorGroupProjectsFragment.newInstance()
+            1 -> TranslatorGroupProjectFragment.newInstance()
             else -> throw RuntimeException("Unknown index passed")
         }
 

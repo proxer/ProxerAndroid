@@ -19,10 +19,10 @@ import org.jetbrains.anko.bundleOf
 /**
  * @author Ruben Gees
  */
-class TranslatorGroupProjectsFragment : PagedContentFragment<TranslatorGroupProject>() {
+class TranslatorGroupProjectFragment : PagedContentFragment<TranslatorGroupProject>() {
 
     companion object {
-        fun newInstance() = TranslatorGroupProjectsFragment().apply {
+        fun newInstance() = TranslatorGroupProjectFragment().apply {
             arguments = bundleOf()
         }
     }
