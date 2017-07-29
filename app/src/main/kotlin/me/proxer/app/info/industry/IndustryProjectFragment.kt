@@ -27,6 +27,7 @@ class IndustryProjectFragment : PagedContentFragment<IndustryProject>() {
     }
 
     override val emptyDataMessage = R.string.error_no_data_projects
+    override val isSwipeToRefreshEnabled = false
 
     override val viewModel: IndustryProjectViewModel by lazy {
         ViewModelProviders.of(this).get(IndustryProjectViewModel::class.java).apply { industryId = id }

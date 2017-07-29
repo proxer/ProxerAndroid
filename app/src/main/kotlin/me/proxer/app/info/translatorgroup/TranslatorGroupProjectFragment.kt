@@ -28,6 +28,7 @@ class TranslatorGroupProjectFragment : PagedContentFragment<TranslatorGroupProje
     }
 
     override val emptyDataMessage = R.string.error_no_data_projects
+    override val isSwipeToRefreshEnabled = false
 
     override val viewModel: TranslatorGroupProjectViewModel by lazy {
         ViewModelProviders.of(this).get(TranslatorGroupProjectViewModel::class.java)
