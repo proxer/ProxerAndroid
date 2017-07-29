@@ -1,4 +1,4 @@
-package me.proxer.app.media
+package me.proxer.app.media.list
 
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.RecyclerView

@@ -1,7 +1,9 @@
 package me.proxer.app.profile.bookmark
 
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.support.v7.widget.StaggeredGridLayoutManager.VERTICAL
 import android.support.v7.widget.Toolbar
@@ -14,7 +16,9 @@ import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
 import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
+import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.DeviceUtils
+import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.library.entitiy.ucp.Bookmark
 import me.proxer.library.enums.Category
 import org.jetbrains.anko.bundleOf
@@ -59,6 +63,15 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
 
         innerAdapter = BookmarkAdapter(GlideApp.with(this))
 
+        viewModel.itemRemovalError.observe(this, Observer {
+            it?.let {
+                multilineSnackbar(root, getString(R.string.fragment_set_user_info_error, getString(it.message)),
+                        Snackbar.LENGTH_LONG, it.buttonMessage, it.buttonAction?.toClickListener(hostingActivity))
+
+                viewModel.itemRemovalError.value = null
+            }
+        })
+
         setHasOptionsMenu(true)
     }
 
@@ -74,7 +87,8 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
         innerAdapter.longClickSubject
                 .bindToLifecycle(this)
                 .subscribe { (view, bookmark) ->
-                    // TODO
+                    MediaActivity.navigateTo(activity, bookmark.entryId, bookmark.name, bookmark.category,
+                            if (view.drawable != null) view else null)
                 }
 
         innerAdapter.removeClickSubject

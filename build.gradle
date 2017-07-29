@@ -19,7 +19,7 @@ buildscript {
         architectureComponentsVersion = '1.0.0-alpha7'
         playServicesVersion = '11.0.4'
         androidJobVersion = '1.1.11'
-        proxerLibVersion = '2fa14abc63'
+        proxerLibVersion = '89e922a965'
 
         // RxJava
         rxJavaVersion = '2.1.2'
@@ -60,7 +60,7 @@ buildscript {
         kotterknifeVersion = '1.0'
 
         // Debugging
-        strictModeCompatVersion = "26.0.0"
+        strictModeCompatVersion = "26.0.2"
         leakCanaryVersion = '1.5.1'
 
         deps = [

@@ -1,8 +1,12 @@
 package me.proxer.app.util
 
+import android.view.View
 import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.upstream.HttpDataSource
 import me.proxer.app.R
+import me.proxer.app.auth.LoginDialog
+import me.proxer.app.base.BaseActivity
+import me.proxer.app.settings.AgeConfirmationDialog
 import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_DEFAULT
 import me.proxer.app.util.Validators.AgeConfirmationRequiredException
@@ -10,6 +14,8 @@ import me.proxer.app.util.Validators.NotLoggedInException
 import me.proxer.library.api.ProxerException
 import me.proxer.library.api.ProxerException.ErrorType.*
 import me.proxer.library.api.ProxerException.ServerErrorType.*
+import me.proxer.library.enums.Device
+import me.proxer.library.util.ProxerUrls
 import java.io.IOException
 import java.net.SocketTimeoutException
 
@@ -137,7 +143,13 @@ object ErrorUtils {
         }
 
         enum class ButtonAction {
-            CAPTCHA, LOGIN, AGE_CONFIRMATION
+            CAPTCHA, LOGIN, AGE_CONFIRMATION;
+
+            fun toClickListener(activity: BaseActivity) = when (this) {
+                CAPTCHA -> View.OnClickListener { activity.showPage(ProxerUrls.captchaWeb(Device.MOBILE)) }
+                LOGIN -> View.OnClickListener { LoginDialog.show(activity) }
+                AGE_CONFIRMATION -> View.OnClickListener { AgeConfirmationDialog.show(activity) }
+            }
         }
     }
 }

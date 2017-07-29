@@ -17,16 +17,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotterknife.bindView
 import me.proxer.app.R
-import me.proxer.app.auth.LoginDialog
 import me.proxer.app.base.BaseAdapter.ContainerPositionResolver
-import me.proxer.app.settings.AgeConfirmationDialog
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
-import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction
 import me.proxer.app.util.extension.endScrolls
 import me.proxer.app.util.extension.multilineSnackbar
-import me.proxer.library.enums.Device
-import me.proxer.library.util.ProxerUrls
 import org.jetbrains.anko.find
 import java.util.concurrent.TimeUnit
 
@@ -70,12 +65,8 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
 
         viewModel.refreshError.observe(this, Observer {
             it?.let {
-                multilineSnackbar(root, it.message, Snackbar.LENGTH_LONG, it.buttonMessage, when (it.buttonAction) {
-                    ButtonAction.CAPTCHA -> View.OnClickListener { showPage(ProxerUrls.captchaWeb(Device.MOBILE)) }
-                    ButtonAction.LOGIN -> View.OnClickListener { LoginDialog.show(hostingActivity) }
-                    ButtonAction.AGE_CONFIRMATION -> View.OnClickListener { AgeConfirmationDialog.show(hostingActivity) }
-                    null -> View.OnClickListener { viewModel.refresh() }
-                })
+                multilineSnackbar(root, it.message, Snackbar.LENGTH_LONG, it.buttonMessage,
+                        it.buttonAction?.toClickListener(hostingActivity))
 
                 viewModel.refreshError.value = null
             }

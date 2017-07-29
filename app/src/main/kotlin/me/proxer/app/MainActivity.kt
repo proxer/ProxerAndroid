@@ -20,7 +20,7 @@ import me.proxer.app.auth.LoginEvent
 import me.proxer.app.auth.LogoutDialog
 import me.proxer.app.auth.LogoutEvent
 import me.proxer.app.base.BaseActivity
-import me.proxer.app.media.MediaListFragment
+import me.proxer.app.media.list.MediaListFragment
 import me.proxer.app.news.NewsFragment
 import me.proxer.app.profile.bookmark.BookmarkFragment
 import me.proxer.app.util.IntroductionHelper

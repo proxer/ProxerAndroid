@@ -1,4 +1,4 @@
-package me.proxer.app.media
+package me.proxer.app.media.list
 
 import android.app.Application
 import me.proxer.app.MainApplication

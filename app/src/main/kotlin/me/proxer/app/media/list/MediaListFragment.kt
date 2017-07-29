@@ -1,4 +1,4 @@
-package me.proxer.app.media
+package me.proxer.app.media.list
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -18,7 +18,9 @@ import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
 import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
+import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.DeviceUtils
+import me.proxer.app.util.extension.toCategory
 import me.proxer.library.entitiy.list.MediaListEntry
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.MediaSearchSortCriteria
@@ -105,8 +107,9 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
 
         innerAdapter.clickSubject
                 .bindToLifecycle(this)
-                .subscribe {
-                    // TODO
+                .subscribe { (view, entry) ->
+                    MediaActivity.navigateTo(activity, entry.id, entry.name, entry.medium.toCategory(),
+                            if (view.drawable != null) view else null)
                 }
 
         toolbar.itemClicks()

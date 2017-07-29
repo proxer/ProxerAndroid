@@ -14,12 +14,7 @@ import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
 import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindUntilEvent
 import kotterknife.bindView
 import me.proxer.app.R
-import me.proxer.app.auth.LoginDialog
-import me.proxer.app.settings.AgeConfirmationDialog
 import me.proxer.app.util.ErrorUtils.ErrorAction
-import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction
-import me.proxer.library.enums.Device
-import me.proxer.library.util.ProxerUrls
 
 /**
  * @author Ruben Gees
@@ -97,12 +92,7 @@ abstract class BaseContentFragment<T> : BaseFragment() {
         errorButton.clicks()
                 .bindUntilEvent(this, Lifecycle.Event.ON_DESTROY)
                 .subscribe {
-                    when (action.buttonAction) {
-                        ButtonAction.CAPTCHA -> showPage(ProxerUrls.captchaWeb(Device.MOBILE))
-                        ButtonAction.LOGIN -> LoginDialog.show(hostingActivity)
-                        ButtonAction.AGE_CONFIRMATION -> AgeConfirmationDialog.show(hostingActivity)
-                        null -> viewModel.load()
-                    }
+                    action.buttonAction?.toClickListener(hostingActivity)?.onClick(errorButton) ?: viewModel.load()
                 }
     }
 

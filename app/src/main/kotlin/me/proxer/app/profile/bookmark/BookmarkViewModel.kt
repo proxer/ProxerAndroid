@@ -1,11 +1,13 @@
 package me.proxer.app.profile.bookmark
 
 import android.app.Application
+import android.arch.lifecycle.MutableLiveData
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication
 import me.proxer.app.base.PagedViewModel
+import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.UniqueQueue
 import me.proxer.app.util.extension.buildOptionalSingle
 import me.proxer.library.api.PagingLimitEndpoint
@@ -24,6 +26,8 @@ class BookmarkViewModel(application: Application) : PagedViewModel<Bookmark>(app
         get() = MainApplication.api.ucp()
                 .bookmarks()
                 .category(category)
+
+    val itemRemovalError = MutableLiveData<ErrorUtils.ErrorAction?>()
 
     private var category: Category? = null
 
@@ -68,6 +72,8 @@ class BookmarkViewModel(application: Application) : PagedViewModel<Bookmark>(app
                         doItemRemoval()
                     }, {
                         removalQueue.clear()
+
+                        itemRemovalError.value = ErrorUtils.handle(it)
                     })
         }
     }

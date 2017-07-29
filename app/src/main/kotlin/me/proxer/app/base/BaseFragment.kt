@@ -1,7 +1,6 @@
 package me.proxer.app.base
 
 import android.arch.lifecycle.LifecycleFragment
-import me.proxer.app.MainActivity
 import me.proxer.app.MainApplication.Companion.refWatcher
 import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.openHttpPage
@@ -16,8 +15,8 @@ abstract class BaseFragment : LifecycleFragment() {
 
     private val customTabsHelper by lazy { CustomTabsHelperFragment.attachTo(this) }
 
-    open protected val hostingActivity: MainActivity
-        get() = activity as MainActivity
+    open protected val hostingActivity: BaseActivity
+        get() = activity as BaseActivity
 
     override fun onDestroy() {
         super.onDestroy()
