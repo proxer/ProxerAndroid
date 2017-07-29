@@ -49,7 +49,7 @@ class TranslatorGroupProjectAdapter(private val glide: GlideRequests)
         internal val status: TextView by bindView(R.id.status)
 
         init {
-            itemView.setOnClickListener { view ->
+            itemView.setOnClickListener {
                 withSafeAdapterPosition(this) {
                     clickSubject.onNext(image to data[it])
                 }
