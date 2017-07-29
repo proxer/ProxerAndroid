@@ -55,6 +55,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                         data.value = it
                     }, {
                         if (it is ProxerException && it.serverErrorType == ServerErrorType.USER_2FA_SECRET_REQUIRED) {
+                            StorageHelper.isTwoFactorAuthenticationEnabled = true
                             isTwoFactorAuthenticationEnabled.value = true
                         }
 

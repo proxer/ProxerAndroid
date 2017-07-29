@@ -55,11 +55,11 @@ class NewsAdapter(savedInstanceState: Bundle?, private val glide: GlideRequests)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(data[position])
     override fun onViewRecycled(holder: ViewHolder) = glide.clear(holder.image)
 
-    override fun areContentsTheSame(oldItem: NewsArticle, newItem: NewsArticle) = oldItem.date == newItem.date
-            && oldItem.category == newItem.category
-            && oldItem.image == newItem.image
-            && oldItem.subject == newItem.subject
-            && oldItem.description == newItem.description
+    override fun areContentsTheSame(old: NewsArticle, new: NewsArticle) = old.date == new.date
+            && old.category == new.category
+            && old.image == new.image
+            && old.subject == new.subject
+            && old.description == new.description
 
     override fun saveInstanceState(outState: Bundle) = outState.putParcelable(EXPANDED_STATE, expansionMap)
 

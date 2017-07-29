@@ -3,7 +3,6 @@ package me.proxer.app.base
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.design.widget.Snackbar
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -21,6 +20,7 @@ import me.proxer.app.R
 import me.proxer.app.auth.LoginDialog
 import me.proxer.app.base.BaseAdapter.ContainerPositionResolver
 import me.proxer.app.settings.AgeConfirmationDialog
+import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction
 import me.proxer.app.util.extension.endScrolls
@@ -38,6 +38,9 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
     override abstract val viewModel: PagedViewModel<T>
 
     override val isSwipeToRefreshEnabled = true
+
+    open protected val emptyDataMessage get() = R.string.error_no_data
+    open protected val pagingThreshold = 5
 
     private lateinit var adapter: EasyHeaderFooterAdapter
     abstract protected val layoutManager: RecyclerView.LayoutManager
@@ -69,8 +72,8 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
             it?.let {
                 multilineSnackbar(root, it.message, Snackbar.LENGTH_LONG, it.buttonMessage, when (it.buttonAction) {
                     ButtonAction.CAPTCHA -> View.OnClickListener { showPage(ProxerUrls.captchaWeb(Device.MOBILE)) }
-                    ButtonAction.LOGIN -> View.OnClickListener { LoginDialog.show(activity as AppCompatActivity) }
-                    ButtonAction.AGE_CONFIRMATION -> View.OnClickListener { AgeConfirmationDialog.show(activity as AppCompatActivity) }
+                    ButtonAction.LOGIN -> View.OnClickListener { LoginDialog.show(hostingActivity) }
+                    ButtonAction.AGE_CONFIRMATION -> View.OnClickListener { AgeConfirmationDialog.show(hostingActivity) }
                     null -> View.OnClickListener { viewModel.refresh() }
                 })
 
@@ -78,20 +81,16 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
             }
         })
 
-        // We need to call this here to make sure the adapters are present, but not attached yet so the position gets
-        // restored automatically.
-        super.onViewCreated(view, savedInstanceState)
-
-        contentContainer.visibility = View.VISIBLE
-
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = adapter
 
-        recyclerView.endScrolls()
+        recyclerView.endScrolls(pagingThreshold)
                 .throttleFirst(300, TimeUnit.MILLISECONDS)
                 .bindToLifecycle(this)
                 .subscribe { viewModel.loadIfPossible() }
+
+        super.onViewCreated(view, savedInstanceState)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -101,11 +100,16 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
     }
 
     override fun showData(data: List<T>) {
-        if (innerAdapter.isEmpty()) {
-            innerAdapter.swapData(data)
-            innerAdapter.notifyItemRangeInserted(0, data.size)
-        } else {
-            Single.fromCallable { DiffUtil.calculateDiff(innerAdapter.provideDiffUtilCallback(data)) }
+        when {
+            data.isEmpty() -> {
+                hideData()
+                showError(ErrorAction(emptyDataMessage, ErrorAction.ACTION_MESSAGE_HIDE))
+            }
+            innerAdapter.isEmpty() -> {
+                innerAdapter.swapData(data)
+                innerAdapter.notifyItemRangeInserted(0, data.size)
+            }
+            else -> Single.fromCallable { DiffUtil.calculateDiff(innerAdapter.provideDiffUtilCallback(data)) }
                     .subscribeOn(Schedulers.computation())
                     .observeOn(AndroidSchedulers.mainThread())
                     .bindToLifecycle(this)
@@ -116,7 +120,7 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
                     }
         }
 
-        super.showData(data)
+        updateRecyclerViewPadding()
     }
 
     override fun hideData() {
@@ -136,10 +140,22 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
             }
         }
 
+        updateRecyclerViewPadding()
+
         super.showError(action)
     }
 
     override fun hideError() {
         adapter.footer = null
+    }
+
+    private fun updateRecyclerViewPadding() = when (innerAdapter.itemCount <= 0) {
+        true -> recyclerView.setPadding(0, 0, 0, 0)
+        false -> {
+            val horizontalPadding = DeviceUtils.getHorizontalMargin(context)
+            val verticalPadding = DeviceUtils.getVerticalMargin(context)
+
+            recyclerView.setPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
+        }
     }
 }

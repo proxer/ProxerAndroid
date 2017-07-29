@@ -53,7 +53,7 @@ class MediaAdapter(private val category: Category, private val glide: GlideReque
         internal val german: ImageView by bindView(R.id.german)
 
         init {
-            itemView.setOnClickListener { view ->
+            itemView.setOnClickListener {
                 withSafeAdapterPosition(this) {
                     clickSubject.onNext(image to data[it])
                 }

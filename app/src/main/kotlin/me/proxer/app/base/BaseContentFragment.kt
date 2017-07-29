@@ -4,7 +4,6 @@ import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -48,17 +47,17 @@ abstract class BaseContentFragment<T> : BaseFragment() {
                 .bindToLifecycle(this)
                 .subscribe { viewModel.refresh() }
 
-        viewModel.data.observe(this, Observer {
-            when (it) {
-                null -> hideData()
-                else -> showData(it)
-            }
-        })
-
         viewModel.error.observe(this, Observer {
             when (it) {
                 null -> hideError()
                 else -> showError(it)
+            }
+        })
+
+        viewModel.data.observe(this, Observer {
+            when (it) {
+                null -> hideData()
+                else -> showData(it)
             }
         })
 
@@ -100,8 +99,8 @@ abstract class BaseContentFragment<T> : BaseFragment() {
                 .subscribe {
                     when (action.buttonAction) {
                         ButtonAction.CAPTCHA -> showPage(ProxerUrls.captchaWeb(Device.MOBILE))
-                        ButtonAction.LOGIN -> LoginDialog.show(activity as AppCompatActivity)
-                        ButtonAction.AGE_CONFIRMATION -> AgeConfirmationDialog.show(activity as AppCompatActivity)
+                        ButtonAction.LOGIN -> LoginDialog.show(hostingActivity)
+                        ButtonAction.AGE_CONFIRMATION -> AgeConfirmationDialog.show(hostingActivity)
                         null -> viewModel.load()
                     }
                 }
