@@ -10,9 +10,9 @@ import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
-import com.jakewharton.rxbinding2.support.v4.view.actionViewEvents
 import com.jakewharton.rxbinding2.support.v7.widget.itemClicks
 import com.jakewharton.rxbinding2.support.v7.widget.queryTextChangeEvents
+import com.jakewharton.rxbinding2.view.actionViewEvents
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
 import me.proxer.app.GlideApp
@@ -186,6 +186,8 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
                     .subscribe {
                         if (it.isSubmitted) {
                             searchQuery = it.queryText().toString()
+
+                            searchView.clearFocus()
                         }
                     }
 

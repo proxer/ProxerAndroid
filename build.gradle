@@ -20,7 +20,7 @@ buildscript {
         architectureComponentsVersion = '1.0.0-alpha7'
         playServicesVersion = '11.0.4'
         androidJobVersion = '1.1.11'
-        proxerLibVersion = '89e922a965'
+        proxerLibVersion = '1eab2312c1'
 
         // RxJava
         rxJavaVersion = '2.1.2'
