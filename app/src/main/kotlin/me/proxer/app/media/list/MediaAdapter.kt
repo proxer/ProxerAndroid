@@ -86,11 +86,17 @@ class MediaAdapter(private val category: Category, private val glide: GlideReque
                 ratingContainer.visibility = View.VISIBLE
                 rating.rating = item.rating / 2.0f
 
-                (episodes.layoutParams as RelativeLayout.LayoutParams).below(R.id.state)
+                (episodes.layoutParams as RelativeLayout.LayoutParams).apply {
+                    addRule(RelativeLayout.ALIGN_BOTTOM, 0)
+                    below(R.id.state)
+                }
             } else {
                 ratingContainer.visibility = View.GONE
 
-                (episodes.layoutParams as RelativeLayout.LayoutParams).below(R.id.medium)
+                (episodes.layoutParams as RelativeLayout.LayoutParams).apply {
+                    addRule(RelativeLayout.ALIGN_BOTTOM, R.id.languageContainer)
+                    below(R.id.medium)
+                }
             }
 
             state.setImageDrawable(item.state.toAppDrawable(state.context))
