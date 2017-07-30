@@ -1,5 +1,6 @@
 package me.proxer.app.media.list
 
+import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.transition.TransitionManager
@@ -15,6 +16,7 @@ import com.jakewharton.rxbinding2.support.v7.widget.queryTextChangeEvents
 import com.jakewharton.rxbinding2.view.actionViewEvents
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
+import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindUntilEvent
 import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
@@ -172,7 +174,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
             val searchView = searchItem.actionView as SearchView
 
             searchItem.actionViewEvents()
-                    .bindToLifecycle(this)
+                    .bindUntilEvent(this, Lifecycle.Event.ON_DESTROY)
                     .subscribe {
                         if (it.menuItem().isActionViewExpanded) {
                             searchQuery = null
@@ -182,7 +184,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
                     }
 
             searchView.queryTextChangeEvents()
-                    .bindToLifecycle(this)
+                    .bindUntilEvent(this, Lifecycle.Event.ON_DESTROY)
                     .subscribe {
                         if (it.isSubmitted) {
                             searchQuery = it.queryText().toString()
