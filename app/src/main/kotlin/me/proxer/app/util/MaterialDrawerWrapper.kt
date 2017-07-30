@@ -37,7 +37,8 @@ class MaterialDrawerWrapper(context: Activity, toolbar: Toolbar, savedInstanceSt
     private val crossfader: Crossfader<*>?
 
     private val currentItem: DrawerItem
-        get() = DrawerItem.fromOrDefault(drawer.currentSelection)
+        get() = DrawerItem.fromOrNull(drawer.currentSelection)
+                ?: getStickyItemIds()[drawer.currentStickyFooterSelectedPosition]
 
     init {
         header = buildAccountHeader(context, savedInstanceState)
@@ -242,6 +243,8 @@ class MaterialDrawerWrapper(context: Activity, toolbar: Toolbar, savedInstanceSt
     private fun onDrawerItemClick(item: IDrawerItem<*, *>) = DrawerItem.fromOrDefault(item.identifier).let {
         if (it in getStickyItemIds()) {
             miniDrawer?.adapter?.deselect()
+
+            if (!it.shouldKeepOpen) crossfader?.crossFade()
         }
 
         itemClickSubject.onNext(it)
@@ -255,8 +258,7 @@ class MaterialDrawerWrapper(context: Activity, toolbar: Toolbar, savedInstanceSt
         it.shouldKeepOpen
     }
 
-    private fun getStickyItemIds() = drawer.footerAdapter.adapterItems
-            .mapNotNull { DrawerItem.fromOrNull(it.identifier) }
+    private fun getStickyItemIds() = DrawerItem.values().filter { it.id >= 10L }
 
     enum class DrawerItem(val id: Long, val shouldKeepOpen: Boolean) {
         NEWS(0L, false),
