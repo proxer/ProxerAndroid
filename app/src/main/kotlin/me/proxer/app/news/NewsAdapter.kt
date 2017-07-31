@@ -33,10 +33,9 @@ class NewsAdapter(savedInstanceState: Bundle?, private val glide: GlideRequests)
         private const val EXPANDED_STATE = "news_expansion_map"
     }
 
-    val clickSubject: PublishSubject<NewsArticle> = PublishSubject.create<NewsArticle>()
-    val expansionSubject: PublishSubject<NewsArticle> = PublishSubject.create<NewsArticle>()
-    val imageClickSubject: PublishSubject<Pair<ImageView, NewsArticle>> =
-            PublishSubject.create<Pair<ImageView, NewsArticle>>()
+    val clickSubject: PublishSubject<NewsArticle> = PublishSubject.create()
+    val expansionSubject: PublishSubject<NewsArticle> = PublishSubject.create()
+    val imageClickSubject: PublishSubject<Pair<ImageView, NewsArticle>> = PublishSubject.create()
 
     private val expansionMap: ParcelableStringBooleanMap
 

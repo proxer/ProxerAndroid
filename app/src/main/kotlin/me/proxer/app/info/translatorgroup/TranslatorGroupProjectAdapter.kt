@@ -1,4 +1,4 @@
-package me.proxer.app.info
+package me.proxer.app.info.translatorgroup
 
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.RecyclerView
@@ -13,7 +13,7 @@ import kotterknife.bindView
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
-import me.proxer.app.info.TranslatorGroupProjectAdapter.ViewHolder
+import me.proxer.app.info.translatorgroup.TranslatorGroupProjectAdapter.ViewHolder
 import me.proxer.app.util.extension.defaultLoad
 import me.proxer.app.util.extension.toAppString
 import me.proxer.library.entitiy.list.TranslatorGroupProject
@@ -25,8 +25,7 @@ import me.proxer.library.util.ProxerUrls
 class TranslatorGroupProjectAdapter(private val glide: GlideRequests)
     : BaseAdapter<TranslatorGroupProject, ViewHolder>() {
 
-    val clickSubject: PublishSubject<Pair<ImageView, TranslatorGroupProject>> =
-            PublishSubject.create<Pair<ImageView, TranslatorGroupProject>>()
+    val clickSubject: PublishSubject<Pair<ImageView, TranslatorGroupProject>> = PublishSubject.create()
 
     init {
         setHasStableIds(true)

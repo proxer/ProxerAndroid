@@ -28,8 +28,8 @@ import org.jetbrains.anko.find
  */
 class MaterialDrawerWrapper(context: Activity, toolbar: Toolbar, savedInstanceState: Bundle?) {
 
-    val itemClickSubject: PublishSubject<DrawerItem> = PublishSubject.create<DrawerItem>()
-    val accountClickSubject: PublishSubject<AccountItem> = PublishSubject.create<AccountItem>()
+    val itemClickSubject: PublishSubject<DrawerItem> = PublishSubject.create()
+    val accountClickSubject: PublishSubject<AccountItem> = PublishSubject.create()
 
     val profileImageView by lazy { drawer.header.findViewById<ImageView>(R.id.material_drawer_account_header_current) }
 

@@ -27,8 +27,7 @@ import org.jetbrains.anko.below
 class MediaAdapter(private val category: Category, private val glide: GlideRequests)
     : BaseAdapter<MediaListEntry, MediaAdapter.ViewHolder>() {
 
-    val clickSubject: PublishSubject<Pair<ImageView, MediaListEntry>> =
-            PublishSubject.create<Pair<ImageView, MediaListEntry>>()
+    val clickSubject: PublishSubject<Pair<ImageView, MediaListEntry>> = PublishSubject.create()
 
     init {
         setHasStableIds(true)

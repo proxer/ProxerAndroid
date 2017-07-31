@@ -27,9 +27,9 @@ import me.proxer.library.util.ProxerUrls
  */
 class BookmarkAdapter(private val glide: GlideRequests) : BaseAdapter<Bookmark, BookmarkAdapter.ViewHolder>() {
 
-    val clickSubject: PublishSubject<Bookmark> = PublishSubject.create<Bookmark>()
-    val longClickSubject: PublishSubject<Pair<ImageView, Bookmark>> = PublishSubject.create<Pair<ImageView, Bookmark>>()
-    val removeClickSubject: PublishSubject<Bookmark> = PublishSubject.create<Bookmark>()
+    val clickSubject: PublishSubject<Bookmark> = PublishSubject.create()
+    val longClickSubject: PublishSubject<Pair<ImageView, Bookmark>> = PublishSubject.create()
+    val removeClickSubject: PublishSubject<Bookmark> = PublishSubject.create()
 
     init {
         setHasStableIds(true)

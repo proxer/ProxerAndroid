@@ -24,8 +24,7 @@ import me.proxer.library.util.ProxerUrls
  */
 class IndustryProjectAdapter(private val glide: GlideRequests) : BaseAdapter<IndustryProject, ViewHolder>() {
 
-    val clickSubject: PublishSubject<Pair<ImageView, IndustryProject>> =
-            PublishSubject.create<Pair<ImageView, IndustryProject>>()
+    val clickSubject: PublishSubject<Pair<ImageView, IndustryProject>> = PublishSubject.create()
 
     init {
         setHasStableIds(true)

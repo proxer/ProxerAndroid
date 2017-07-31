@@ -43,8 +43,7 @@ class CommentAdapter(savedInstanceState: Bundle?, private val glide: GlideReques
     private val expanded: ParcelableStringBooleanMap
     private val spoilerStates: ParcelableStringBooleanArrayMap
 
-    val profileClickSubject: PublishSubject<Pair<ImageView, Comment>> =
-            PublishSubject.create<Pair<ImageView, Comment>>()
+    val profileClickSubject: PublishSubject<Pair<ImageView, Comment>> = PublishSubject.create()
 
     var categoryCallback: (() -> Category?)? = null
 
