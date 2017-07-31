@@ -1,4 +1,4 @@
-package me.proxer.app.profile.bookmark
+package me.proxer.app.ucp.bookmark
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -9,8 +9,8 @@ import android.support.v7.widget.StaggeredGridLayoutManager.VERTICAL
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
-import com.jakewharton.rxbinding2.support.v7.widget.itemClicks
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
 import me.proxer.app.GlideApp
@@ -96,18 +96,6 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
                 .subscribe {
                     viewModel.addItemToRemove(it)
                 }
-
-        toolbar.itemClicks()
-                .bindToLifecycle(this)
-                .subscribe {
-                    when (it.itemId) {
-                        R.id.anime -> category = Category.ANIME
-                        R.id.manga -> category = Category.MANGA
-                        R.id.all -> category = null
-                    }
-
-                    it.isChecked = true
-                }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -118,5 +106,17 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
             Category.MANGA -> menu.findItem(R.id.manga).isChecked = true
             else -> menu.findItem(R.id.all).isChecked = true
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.anime -> category = Category.ANIME
+            R.id.manga -> category = Category.MANGA
+            R.id.all -> category = null
+        }
+
+        item.isChecked = true
+
+        return super.onOptionsItemSelected(item)
     }
 }

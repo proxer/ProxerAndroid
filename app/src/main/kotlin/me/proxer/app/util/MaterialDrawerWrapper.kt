@@ -4,6 +4,7 @@ import android.app.Activity
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.view.ViewGroup
+import android.widget.ImageView
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.crossfader.Crossfader
 import com.mikepenz.crossfader.view.GmailStyleCrossFadeSlidingPaneLayout
@@ -29,6 +30,8 @@ class MaterialDrawerWrapper(context: Activity, toolbar: Toolbar, savedInstanceSt
 
     val itemClickSubject: PublishSubject<DrawerItem> = PublishSubject.create<DrawerItem>()
     val accountClickSubject: PublishSubject<AccountItem> = PublishSubject.create<AccountItem>()
+
+    val profileImageView by lazy { drawer.header.findViewById<ImageView>(R.id.material_drawer_account_header_current) }
 
     private val header: AccountHeader
     private val drawer: Drawer

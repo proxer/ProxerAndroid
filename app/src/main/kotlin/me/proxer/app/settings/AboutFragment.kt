@@ -19,6 +19,7 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.MainApplication
 import me.proxer.app.R
+import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.openHttpPage
 import me.proxer.library.enums.Device
@@ -172,7 +173,7 @@ class AboutFragment : MaterialAboutFragment() {
                             setColorFilter(ContextCompat.getColor(context, R.color.icon), PorterDuff.Mode.SRC_IN)
                         })
                         .setOnClickAction {
-                            //                            ProfileActivity.navigateTo(activity, DEVELOPER_PROXER_ID, DEVELOPER_PROXER_NAME, null)
+                            ProfileActivity.navigateTo(activity, DEVELOPER_PROXER_ID, DEVELOPER_PROXER_NAME, null)
                         }.build()
         )
     }

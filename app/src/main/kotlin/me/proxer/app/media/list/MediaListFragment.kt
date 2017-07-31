@@ -10,8 +10,8 @@ import android.support.v7.widget.StaggeredGridLayoutManager.VERTICAL
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
-import com.jakewharton.rxbinding2.support.v7.widget.itemClicks
 import com.jakewharton.rxbinding2.support.v7.widget.queryTextChangeEvents
 import com.jakewharton.rxbinding2.view.actionViewEvents
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
@@ -113,29 +113,6 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
                     MediaActivity.navigateTo(activity, entry.id, entry.name, entry.medium.toCategory(),
                             if (view.drawable != null) view else null)
                 }
-
-        toolbar.itemClicks()
-                .bindToLifecycle(this)
-                .subscribe {
-                    when (it.itemId) {
-                        R.id.rating -> sortCriteria = MediaSearchSortCriteria.RATING
-                        R.id.clicks -> sortCriteria = MediaSearchSortCriteria.CLICKS
-                        R.id.episodeAmount -> sortCriteria = MediaSearchSortCriteria.EPISODE_AMOUNT
-                        R.id.name -> sortCriteria = MediaSearchSortCriteria.NAME
-                        R.id.all_anime -> type = MediaType.ALL_ANIME
-                        R.id.animeseries -> type = MediaType.ANIMESERIES
-                        R.id.movies -> type = MediaType.MOVIE
-                        R.id.ova -> type = MediaType.OVA
-                        R.id.hentai -> type = MediaType.HENTAI
-                        R.id.all_manga -> type = MediaType.ALL_MANGA
-                        R.id.mangaseries -> type = MediaType.MANGASERIES
-                        R.id.oneshot -> type = MediaType.ONESHOT
-                        R.id.doujin -> type = MediaType.DOUJIN
-                        R.id.hmanga -> type = MediaType.HMANGA
-                    }
-
-                    it.isChecked = true
-                }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -199,5 +176,28 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
                 searchView.clearFocus()
             }
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.rating -> sortCriteria = MediaSearchSortCriteria.RATING
+            R.id.clicks -> sortCriteria = MediaSearchSortCriteria.CLICKS
+            R.id.episodeAmount -> sortCriteria = MediaSearchSortCriteria.EPISODE_AMOUNT
+            R.id.name -> sortCriteria = MediaSearchSortCriteria.NAME
+            R.id.all_anime -> type = MediaType.ALL_ANIME
+            R.id.animeseries -> type = MediaType.ANIMESERIES
+            R.id.movies -> type = MediaType.MOVIE
+            R.id.ova -> type = MediaType.OVA
+            R.id.hentai -> type = MediaType.HENTAI
+            R.id.all_manga -> type = MediaType.ALL_MANGA
+            R.id.mangaseries -> type = MediaType.MANGASERIES
+            R.id.oneshot -> type = MediaType.ONESHOT
+            R.id.doujin -> type = MediaType.DOUJIN
+            R.id.hmanga -> type = MediaType.HMANGA
+        }
+
+        item.isChecked = true
+
+        return super.onOptionsItemSelected(item)
     }
 }

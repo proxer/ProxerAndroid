@@ -97,6 +97,7 @@ dependencies {
     implementation deps.rxBinding
     implementation deps.rxBindingV4
     implementation deps.rxBindingV7
+    implementation deps.rxBindingDesign
     implementation deps.rxBindingRecyclerView
     implementation deps.rxLifecycle
     implementation deps.rxBus

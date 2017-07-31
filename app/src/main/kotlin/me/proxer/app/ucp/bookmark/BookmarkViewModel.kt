@@ -1,4 +1,4 @@
-package me.proxer.app.profile.bookmark
+package me.proxer.app.ucp.bookmark
 
 import android.app.Application
 import android.arch.lifecycle.MutableLiveData

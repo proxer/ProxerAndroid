@@ -6,6 +6,7 @@ import android.content.pm.ShortcutManager
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.view.ViewCompat
 import android.support.v7.widget.Toolbar
 import com.rubengees.introduction.IntroductionActivity.OPTION_RESULT
 import com.rubengees.introduction.IntroductionBuilder
@@ -22,9 +23,10 @@ import me.proxer.app.auth.LogoutEvent
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.media.list.MediaListFragment
 import me.proxer.app.news.NewsFragment
-import me.proxer.app.profile.bookmark.BookmarkFragment
+import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.settings.AboutFragment
 import me.proxer.app.settings.SettingsFragment
+import me.proxer.app.ucp.bookmark.BookmarkFragment
 import me.proxer.app.util.IntroductionHelper
 import me.proxer.app.util.MaterialDrawerWrapper
 import me.proxer.app.util.MaterialDrawerWrapper.AccountItem
@@ -73,7 +75,7 @@ class MainActivity : BaseActivity() {
                     .subscribe { handleAccountItemClick(it) }
         }
 
-        Observable.merge(bus.observe(LoginEvent::class.java), bus.observe(LogoutEvent::class.java))
+        Observable.merge(bus.register(LoginEvent::class.java), bus.register(LogoutEvent::class.java))
                 .observeOn(AndroidSchedulers.mainThread())
                 .bindToLifecycle(this)
                 .subscribe { drawer.refreshHeader() }
@@ -178,14 +180,12 @@ class MainActivity : BaseActivity() {
         AccountItem.GUEST, AccountItem.LOGIN -> LoginDialog.show(this)
         AccountItem.LOGOUT -> LogoutDialog.show(this)
         AccountItem.USER -> StorageHelper.user?.let {
-            //                val viewToUse = when (view) {
-//                    is ImageView -> view.apply { ViewCompat.setTransitionName(this, "profile_image") }
-//                    else -> null
-//                }
-//
-//                ProfileActivity.navigateTo(this, it.id, it.name, it.image, viewToUse)
-//
-//                return viewToUse != null
+            drawer.profileImageView.let { view ->
+                ViewCompat.setTransitionName(view, "profile_image")
+
+                ProfileActivity.navigateTo(this, it.id, it.name, it.image,
+                        if (view.drawable != null) view else null)
+            }
         }
         AccountItem.NOTIFICATIONS -> Unit //  NotificationActivity.navigateTo(this)
         AccountItem.UCP -> Unit // UcpActivity.navigateTo(this)

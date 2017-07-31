@@ -2,15 +2,13 @@ package me.proxer.app.media
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Bundle
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.app.ShareCompat
 import android.view.Menu
+import android.view.MenuItem
 import android.widget.ImageView
-import com.jakewharton.rxbinding2.support.v7.widget.itemClicks
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
-import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
 import me.proxer.app.R
 import me.proxer.app.base.ImageTabsActivity
 import me.proxer.app.media.comment.CommentFragment
@@ -83,31 +81,27 @@ class MediaActivity : ImageTabsActivity() {
             else -> 0
         }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        toolbar.itemClicks()
-                .bindToLifecycle(this)
-                .subscribe {
-                    when (it.itemId) {
-                        R.id.action_share -> {
-                            name?.let {
-                                ShareCompat.IntentBuilder
-                                        .from(this)
-                                        .setText(getString(R.string.share_media, it, "https://proxer.me/info/$id"))
-                                        .setType("text/plain")
-                                        .setChooserTitle(getString(R.string.share_title))
-                                        .startChooser()
-                            }
-                        }
-                    }
-                }
-    }
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         IconicsMenuInflaterUtil.inflate(menuInflater, this, R.menu.activity_share, menu, true)
 
         return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_share -> {
+                name?.let {
+                    ShareCompat.IntentBuilder
+                            .from(this)
+                            .setText(getString(R.string.share_media, it, "https://proxer.me/info/$id"))
+                            .setType("text/plain")
+                            .setChooserTitle(getString(R.string.share_title))
+                            .startChooser()
+                }
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     override fun setupToolbar() {

@@ -33,7 +33,7 @@ buildscript {
         aboutLibrariesVersion = '5.9.7'
         materialDrawerVersion = '5.9.5'
         iconicsVersion = '2.9.0'
-        communityMaterialTypefaceVersion = '1.9.32.1'
+        communityMaterialTypefaceVersion = '1.9.32.2'
         crossfaderVersion = '1.5.0'
         materialAboutVersion = '2.2.1'
         subsamplingScaleImageViewVersion = '3.6.0'
@@ -57,7 +57,7 @@ buildscript {
         okioVersion = '1.13.0'
         linkBuilderVersion = '1.6.1'
         easyHeaderFooterAdapterVersion = '2.0.0'
-        kOptionalVersion = '1.1.0'
+        kOptionalVersion = '1.2.0'
         kotterknifeVersion = '1.0'
 
         // Debugging
@@ -89,6 +89,7 @@ buildscript {
                 rxBinding                    : "com.jakewharton.rxbinding2:rxbinding-kotlin:$rxBindingVersion",
                 rxBindingV4                  : "com.jakewharton.rxbinding2:rxbinding-support-v4-kotlin:$rxBindingVersion",
                 rxBindingV7                  : "com.jakewharton.rxbinding2:rxbinding-appcompat-v7-kotlin:$rxBindingVersion",
+                rxBindingDesign              : "com.jakewharton.rxbinding2:rxbinding-design-kotlin:$rxBindingVersion",
                 rxBindingRecyclerView        : "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7-kotlin:$rxBindingVersion",
                 rxLifecycle                  : "com.trello.rxlifecycle2:rxlifecycle-android-lifecycle-kotlin:$rxLifecycleVersion",
                 rxBus                        : "com.github.rubengees:rxbus:$rxBusVersion",

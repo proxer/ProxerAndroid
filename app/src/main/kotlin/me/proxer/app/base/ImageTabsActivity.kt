@@ -17,6 +17,7 @@ import android.view.MenuItem
 import android.widget.ImageView
 import com.bumptech.glide.request.target.ImageViewTarget
 import com.h6ah4i.android.tablayouthelper.TabLayoutHelper
+import com.jakewharton.rxbinding2.support.design.widget.offsetChanges
 import com.jakewharton.rxbinding2.view.clicks
 import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
 import kotterknife.bindView
@@ -143,10 +144,11 @@ abstract class ImageTabsActivity : BaseActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         collapsingToolbar.isTitleEnabled = false
 
-        appbar.addOnOffsetChangedListener { _, verticalOffset ->
-            isHeaderImageVisible = collapsingToolbar.height + verticalOffset >
-                    collapsingToolbar.scrimVisibleHeightTrigger
-        }
+        appbar.offsetChanges()
+                .bindToLifecycle(this)
+                .subscribe {
+                    isHeaderImageVisible = collapsingToolbar.height + it > collapsingToolbar.scrimVisibleHeightTrigger
+                }
     }
 
     open protected fun setupContent(savedInstanceState: Bundle?) {
@@ -159,7 +161,7 @@ abstract class ImageTabsActivity : BaseActivity() {
         TabLayoutHelper(tabs, viewPager).apply { isAutoAdjustTabModeEnabled = true }
     }
 
-    open protected fun loadEmptyImage() {}
+    open protected fun loadEmptyImage() = Unit
 
     private fun isEnterTransitionPossible(savedInstanceState: Bundle?): Boolean {
         return savedInstanceState == null && ActivityUtils.getTransitionName(this) != null

@@ -6,14 +6,15 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
-import com.jakewharton.rxbinding2.support.v7.widget.itemClicks
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
 import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.media.MediaActivity
+import me.proxer.app.profile.ProfileActivity
 import me.proxer.library.entitiy.info.Comment
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.CommentSortCriteria
@@ -86,19 +87,8 @@ class CommentFragment : PagedContentFragment<Comment>() {
         innerAdapter.profileClickSubject
                 .bindToLifecycle(this)
                 .subscribe { (view, comment) ->
-                    //                    ProfileActivity.navigateTo(activity, comment.authorId, comment.author, comment.image,
-//                            if (view.drawable != null && comment.image.isNotBlank()) view else null)
-                }
-
-        toolbar.itemClicks()
-                .bindToLifecycle(this)
-                .subscribe {
-                    when (it.itemId) {
-                        R.id.rating -> sortCriteria = CommentSortCriteria.RATING
-                        R.id.time -> sortCriteria = CommentSortCriteria.TIME
-                    }
-
-                    it.isChecked = true
+                    ProfileActivity.navigateTo(activity, comment.authorId, comment.author, comment.image,
+                            if (view.drawable != null && comment.image.isNotBlank()) view else null)
                 }
     }
 
@@ -111,6 +101,17 @@ class CommentFragment : PagedContentFragment<Comment>() {
         }
 
         super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.rating -> sortCriteria = CommentSortCriteria.RATING
+            R.id.time -> sortCriteria = CommentSortCriteria.TIME
+        }
+
+        item.isChecked = true
+
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

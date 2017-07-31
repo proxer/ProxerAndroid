@@ -38,11 +38,11 @@ abstract class BaseViewModel<T>(application: Application) : AndroidViewModel(app
     private val ageConfirmationDisposable: Disposable
 
     init {
-        loginDisposable = Observable.merge(bus.observe(LoginEvent::class.java), bus.observe(LogoutEvent::class.java))
+        loginDisposable = Observable.merge(bus.register(LoginEvent::class.java), bus.register(LogoutEvent::class.java))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { if (isLoginRequired) reload() }
 
-        ageConfirmationDisposable = bus.observe(AgeConfirmationEvent::class.java)
+        ageConfirmationDisposable = bus.register(AgeConfirmationEvent::class.java)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { if (isAgeConfirmationRequired) reload() }
     }
