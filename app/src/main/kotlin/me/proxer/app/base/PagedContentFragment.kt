@@ -4,7 +4,9 @@ import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.util.DiffUtil
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -106,6 +108,15 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
             innerAdapter.isEmpty() -> {
                 innerAdapter.swapData(data)
                 innerAdapter.notifyItemRangeInserted(0, data.size)
+
+                recyclerView.postDelayed({
+                    layoutManager.let {
+                        when (it) {
+                            is StaggeredGridLayoutManager -> it.scrollToPositionWithOffset(0, 0)
+                            is LinearLayoutManager -> it.scrollToPositionWithOffset(0, 0)
+                        }
+                    }
+                }, 50)
             }
             else -> Single.fromCallable { DiffUtil.calculateDiff(innerAdapter.provideDiffUtilCallback(data)) }
                     .subscribeOn(Schedulers.computation())
