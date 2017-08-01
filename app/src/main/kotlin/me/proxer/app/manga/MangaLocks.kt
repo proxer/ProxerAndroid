@@ -12,5 +12,5 @@ object MangaLocks {
     internal val cacheLock = ReentrantReadWriteLock()
     internal val localLock = ReentrantReadWriteLock()
     internal val pageConcurrencyLock = Semaphore(3, false)
-    internal val pageLocks = ConcurrentHashMap<Triple<String, String, String>, Unit>()
+    internal val pageLocks = ConcurrentHashMap<Triple<String, String, String>, Any>()
 }

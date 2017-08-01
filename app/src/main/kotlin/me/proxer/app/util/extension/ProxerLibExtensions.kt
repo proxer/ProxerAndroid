@@ -5,8 +5,13 @@ import android.support.v7.content.res.AppCompatResources
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
+import me.proxer.app.manga.local.LocalEntryCore
+import me.proxer.app.manga.local.LocalMangaChapter
+import me.proxer.app.manga.local.LocalMangaPage
+import me.proxer.library.entitiy.info.EntryCore
 import me.proxer.library.entitiy.info.EntrySeasonInfo
 import me.proxer.library.entitiy.info.Synonym
+import me.proxer.library.entitiy.manga.Chapter
 import me.proxer.library.entitiy.manga.Page
 import me.proxer.library.enums.*
 import java.net.URLDecoder
@@ -191,3 +196,11 @@ inline val Page.decodedName: String
     } catch (error: Throwable) {
         ""
     }
+
+fun EntryCore.toLocalEntryCore() = LocalEntryCore(id.toLong(), name, genres, fskConstraints, description, medium,
+        episodeAmount, state, ratingSum, ratingAmount, clicks, category, license)
+
+fun Chapter.toLocalChapter(episode: Int, language: Language) = LocalMangaChapter(id.toLong(), episode, language,
+        entryId, title, uploaderId, uploaderName, date, scanGroupId, scanGroupName, server)
+
+fun Page.toLocalPage(id: Long = 0, chapterId: Long) = LocalMangaPage(id, name, height, width, chapterId)

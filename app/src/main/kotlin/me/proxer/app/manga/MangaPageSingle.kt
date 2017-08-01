@@ -32,7 +32,7 @@ class MangaPageSingle(context: Context, private val isLocal: Boolean, private va
         lock.read {
             val lockKey = Triple(input.entryId, input.chapterId, input.name)
 
-            synchronized(MangaLocks.pageLocks.getOrPut(lockKey, { Unit }), {
+            synchronized(MangaLocks.pageLocks.getOrPut(lockKey, { Any() }), {
                 val url = ProxerUrls.mangaPageImage(input.server, input.entryId, input.chapterId, input.name)
                 val file = File("$directory/manga/${input.entryId}/${input.chapterId}/${url.hashCode()}.0")
 

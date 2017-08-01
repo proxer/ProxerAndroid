@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="@dimen/item_margin"
-    tools:context=".adapter.media.EpisodeAdapter">
+    tools:context=".media.episode.EpisodeAdapter">
 
     <android.support.v7.widget.CardView
         android:id="@+id/container"

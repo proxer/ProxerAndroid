@@ -200,6 +200,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         innerAdapter.server = data.chapter.server
         innerAdapter.entryId = data.chapter.entryId
         innerAdapter.id = data.chapter.id
+        innerAdapter.isLocal = data.isLocal
 
         innerAdapter.swapData(data.chapter.pages)
 

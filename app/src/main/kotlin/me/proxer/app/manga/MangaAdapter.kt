@@ -15,6 +15,7 @@ import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.manga.MangaAdapter.ViewHolder
+import me.proxer.app.manga.MangaPageSingle.Input
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.decodedName
 import me.proxer.library.entitiy.manga.Page
@@ -33,9 +34,7 @@ class MangaAdapter : BaseAdapter<Page, ViewHolder>() {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_manga_page, parent, false))
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(data[position])
-    }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(data[position])
 
     override fun onViewRecycled(holder: ViewHolder) {
         holder.image.recycle()
@@ -70,7 +69,7 @@ class MangaAdapter : BaseAdapter<Page, ViewHolder>() {
             image.setDoubleTapZoomScale(scale)
             image.layoutParams.height = height
             image.maxScale = scale
-            image.tag = MangaPageSingle(image.context, isLocal, MangaPageSingle.Input(server, entryId, id, item.decodedName))
+            image.tag = MangaPageSingle(image.context, isLocal, Input(server, entryId, id, item.decodedName))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({

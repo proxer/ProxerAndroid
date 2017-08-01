@@ -1,12 +1,15 @@
 package me.proxer.app
 
 import android.app.Application
+import android.arch.persistence.room.Room
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.support.v7.app.AppCompatDelegate
 import android.widget.ImageView
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.devbrackets.android.exomedia.ExoMedia
+import com.evernote.android.job.JobManager
 import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.TransferListener
@@ -23,7 +26,11 @@ import com.squareup.moshi.Moshi
 import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.ios.IosEmojiProvider
 import me.proxer.app.auth.ProxerLoginTokenManager
+import me.proxer.app.manga.local.LocalMangaDao
+import me.proxer.app.manga.local.LocalMangaDatabase
+import me.proxer.app.manga.local.LocalMangaJob
 import me.proxer.app.util.data.NonPersistentCookieJar
+import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.library.api.ProxerApi
 import me.proxer.library.api.ProxerApi.Builder.LoggingStrategy
 import okhttp3.OkHttpClient
@@ -48,6 +55,9 @@ class MainApplication : Application() {
         lateinit var api: ProxerApi
             private set
 
+        lateinit var mangaDao: LocalMangaDao
+            private set
+
         lateinit var globalContext: MainApplication
             private set
 
@@ -62,7 +72,9 @@ class MainApplication : Application() {
             return
         }
 
-//        AppCompatDelegate.setDefaultNightMode(PreferenceHelper.getNightMode(this))
+        AppCompatDelegate.setDefaultNightMode(PreferenceHelper.getNightMode(this))
+
+        mangaDao = Room.databaseBuilder(this, LocalMangaDatabase::class.java, "manga.db").build().dao()
 
         refWatcher = LeakCanary.install(this)
         globalContext = this
@@ -88,6 +100,17 @@ class MainApplication : Application() {
         ExoMedia.setHttpDataSourceFactoryProvider({ _: String, listener: TransferListener<in DataSource>? ->
             OkHttpDataSourceFactory(client, GENERIC_USER_AGENT, listener)
         })
+
+        JobManager.create(this)
+                .apply { config.isVerbose = BuildConfig.DEBUG }
+                .addJobCreator {
+                    when {
+//                        it == ChatJob.TAG -> ChatJob()
+//                        it == NotificationsJob.TAG -> NotificationsJob()
+                        it.startsWith(LocalMangaJob.TAG) -> LocalMangaJob()
+                        else -> null
+                    }
+                }
 
         DrawerImageLoader.init(ConcreteDrawerImageLoader())
     }

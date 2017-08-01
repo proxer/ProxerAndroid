@@ -4,16 +4,15 @@ import android.app.Application
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication
 import me.proxer.app.MainApplication.Companion.api
+import me.proxer.app.MainApplication.Companion.mangaDao
 import me.proxer.app.base.BaseViewModel
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.extension.buildPartialErrorSingle
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.library.entitiy.info.EntryCore
-import me.proxer.library.entitiy.manga.Chapter
 import me.proxer.library.enums.Language
 
 /**
@@ -26,7 +25,7 @@ class MangaViewModel(application: Application) : BaseViewModel<MangaChapterInfo>
 
     private var episode = 0
 
-    private val entrySingle by lazy { MainApplication.api.info().entryCore(entryId).buildSingle().cache() }
+    private val entrySingle by lazy { localEntrySingle().onErrorResumeNext(remoteEntrySingle()).cache() }
 
     private var disposable: Disposable? = null
 
@@ -39,12 +38,7 @@ class MangaViewModel(application: Application) : BaseViewModel<MangaChapterInfo>
 
     override fun load() {
         entrySingle
-                .flatMap {
-                    val mangaSingle = api.manga().chapter(entryId, episode, language).buildPartialErrorSingle(it)
-
-                    Single.zip<EntryCore, Chapter, MangaChapterInfo>(Single.just(it), mangaSingle,
-                            BiFunction { entry, chapter -> MangaChapterInfo(chapter, entry.name, entry.episodeAmount) })
-                }
+                .flatMap { localChapterSingle(it).onErrorResumeNext(remoteChapterSingle(it)) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
@@ -68,4 +62,21 @@ class MangaViewModel(application: Application) : BaseViewModel<MangaChapterInfo>
             if (trigger) reload()
         }
     }
+
+    private fun localEntrySingle() = Single.fromCallable {
+        mangaDao.findEntry(entryId.toLong())?.toNonLocalEntryCore() ?: throw RuntimeException()
+    }
+
+    private fun localChapterSingle(entry: EntryCore) = Single.fromCallable {
+        val chapter = mangaDao.findChapter(entryId.toLong(), episode, language) ?: throw RuntimeException()
+        val nonLocalChapter = chapter.toNonLocalChapter(mangaDao.getPages(chapter.id).map { it.toNonLocalPage() })
+
+        MangaChapterInfo(nonLocalChapter, entry.name, entry.episodeAmount, true)
+    }
+
+    private fun remoteEntrySingle() = MainApplication.api.info().entryCore(entryId).buildSingle()
+
+    private fun remoteChapterSingle(entry: EntryCore) = api.manga().chapter(entryId, episode, language)
+            .buildPartialErrorSingle(entry)
+            .map { MangaChapterInfo(it, entry.name, entry.episodeAmount, false) }
 }

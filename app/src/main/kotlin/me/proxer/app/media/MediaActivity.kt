@@ -12,6 +12,7 @@ import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import me.proxer.app.R
 import me.proxer.app.base.ImageTabsActivity
 import me.proxer.app.media.comment.CommentFragment
+import me.proxer.app.media.episode.EpisodeFragment
 import me.proxer.app.media.info.MediaInfoFragment
 import me.proxer.app.util.ActivityUtils
 import me.proxer.app.util.extension.toEpisodeAppString
@@ -115,18 +116,18 @@ class MediaActivity : ImageTabsActivity() {
         override fun getItem(position: Int) = when (position) {
             0 -> MediaInfoFragment.newInstance()
             1 -> CommentFragment.newInstance()
-//                2 -> EpisodesFragment.newInstance()
+            2 -> EpisodeFragment.newInstance()
 //                3 -> RelationsFragment.newInstance()
             else -> throw RuntimeException("Unknown index passed")
         }
 
-        override fun getCount() = 2
+        override fun getCount() = 3
 
         override fun getPageTitle(position: Int): String = when (position) {
             0 -> getString(R.string.section_media_info)
             1 -> getString(R.string.section_comments)
-//                2 -> category?.toEpisodeAppString(this@MediaActivity)
-//                        ?: getString(R.string.category_anime_episodes_title)
+            2 -> category?.toEpisodeAppString(this@MediaActivity)
+                    ?: getString(R.string.category_anime_episodes_title)
 //                3 -> getString(R.string.section_relations)
             else -> throw RuntimeException("Unknown index passed")
         }

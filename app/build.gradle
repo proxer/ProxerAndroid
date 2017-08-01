@@ -87,10 +87,12 @@ dependencies {
     implementation deps.supportPreferenceFix
     implementation deps.supportPreferenceFixSpinner
     implementation deps.architectureLifecycle
+    implementation deps.room
     implementation deps.playServicesGcm
     implementation deps.androidJob
     implementation deps.proxerLib
     kapt deps.architectureLifecycleCompiler
+    kapt deps.roomCompiler
 
     implementation deps.rxJava
     implementation deps.rxAndroid

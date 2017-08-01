@@ -80,6 +80,8 @@ buildscript {
                 supportPreferenceFixSpinner  : "net.xpece.android:support-spinner:$supportPreferenceVersion",
                 architectureLifecycle        : "android.arch.lifecycle:extensions:$architectureComponentsVersion",
                 architectureLifecycleCompiler: "android.arch.lifecycle:compiler:$architectureComponentsVersion",
+                room                         : "android.arch.persistence.room:runtime:$architectureComponentsVersion",
+                roomCompiler                 : "android.arch.persistence.room:compiler:$architectureComponentsVersion",
                 playServicesGcm              : "com.google.android.gms:play-services-gcm:$playServicesVersion",
                 androidJob                   : "com.evernote:android-job:$androidJobVersion",
                 proxerLib                    : "com.github.proxer:ProxerLibJava:$proxerLibVersion",
