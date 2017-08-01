@@ -27,7 +27,7 @@ import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.settings.AboutFragment
 import me.proxer.app.settings.SettingsFragment
 import me.proxer.app.ucp.bookmark.BookmarkFragment
-import me.proxer.app.util.IntroductionHelper
+import me.proxer.app.util.IntroductionWrapper
 import me.proxer.app.util.MaterialDrawerWrapper
 import me.proxer.app.util.MaterialDrawerWrapper.AccountItem
 import me.proxer.app.util.MaterialDrawerWrapper.DrawerItem
@@ -143,7 +143,7 @@ class MainActivity : BaseActivity() {
     private fun displayFirstPage(savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
             if (StorageHelper.isFirstStart) {
-                IntroductionHelper.introduce(this)
+                IntroductionWrapper.introduce(this)
             } else {
                 drawer.select(getItemToLoad())
             }

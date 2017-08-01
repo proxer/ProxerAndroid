@@ -9,6 +9,7 @@ import com.evernote.android.job.util.support.PersistableBundleCompat
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.MainApplication.Companion.mangaDao
+import me.proxer.app.manga.MangaNotifications
 import me.proxer.app.manga.MangaPageSingle
 import me.proxer.app.manga.MangaPageSingle.Input
 import me.proxer.app.util.data.PreferenceHelper
@@ -124,14 +125,19 @@ class LocalMangaJob : Job() {
 
             val chapter = api.manga().chapter(entryId, episode, language).build().execute()
             val pages = chapter.pages.map { it.toLocalPage(chapterId = chapter.id.toLong()) }
+            var error: Throwable? = null
 
             for (it in chapter.pages) {
+                if (error != null) {
+                    throw error
+                }
+
                 if (isCanceled) {
                     return Result.FAILURE
                 }
 
                 MangaPageSingle(context, true, Input(chapter.server, entryId, chapter.id, it.decodedName))
-                        .subscribe()
+                        .subscribe({}, { error = it })
             }
 
             mangaDao.insertChapter(chapter.toLocalChapter(episode, language), pages)
@@ -144,7 +150,7 @@ class LocalMangaJob : Job() {
             return if (isIpBlockedError || params.failureCount >= 1) {
                 bus.post(FailedEvent(entryId, episode, language))
 
-//                MangaNotificationHelper.showError(context, error)
+                MangaNotifications.showError(context, error)
 
                 Result.FAILURE
             } else {

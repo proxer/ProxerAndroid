@@ -29,6 +29,7 @@ import me.proxer.app.auth.ProxerLoginTokenManager
 import me.proxer.app.manga.local.LocalMangaDao
 import me.proxer.app.manga.local.LocalMangaDatabase
 import me.proxer.app.manga.local.LocalMangaJob
+import me.proxer.app.util.NotificationUtils
 import me.proxer.app.util.data.NonPersistentCookieJar
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.library.api.ProxerApi
@@ -73,6 +74,7 @@ class MainApplication : Application() {
         }
 
         AppCompatDelegate.setDefaultNightMode(PreferenceHelper.getNightMode(this))
+        NotificationUtils.createNotificationChannels(this)
 
         mangaDao = Room.databaseBuilder(this, LocalMangaDatabase::class.java, "manga.db").build().dao()
 

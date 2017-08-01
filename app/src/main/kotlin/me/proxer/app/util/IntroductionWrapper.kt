@@ -16,7 +16,7 @@ import me.proxer.app.R
 /**
  * @author Ruben Gees
  */
-object IntroductionHelper {
+object IntroductionWrapper {
 
     fun introduce(activity: Activity) = IntroductionBuilder(activity)
             .withSlides(generateSlides(activity))
