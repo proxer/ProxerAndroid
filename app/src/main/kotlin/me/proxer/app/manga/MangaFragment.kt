@@ -99,7 +99,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
 
     private val androidRoot by lazy { activity.findViewById<ViewGroup>(android.R.id.content) }
     private val toolbar by lazy { activity.findViewById<Toolbar>(R.id.toolbar) }
-    private val recyclerView: RecyclerView by bindView(R.id.list)
+    private val recyclerView: RecyclerView by bindView(R.id.recyclerView)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

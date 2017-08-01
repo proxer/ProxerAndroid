@@ -50,7 +50,7 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
 
     private lateinit var adapter: EpisodeAdapter
 
-    private val recyclerView: RecyclerView by bindView(R.id.list)
+    private val recyclerView: RecyclerView by bindView(R.id.recyclerView)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +59,7 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_episodes, container, false)
+        return inflater.inflate(R.layout.fragment_episode, container, false)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
