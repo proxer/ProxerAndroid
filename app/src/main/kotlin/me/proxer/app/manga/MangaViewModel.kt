@@ -1,6 +1,7 @@
 package me.proxer.app.manga
 
 import android.app.Application
+import android.arch.lifecycle.MutableLiveData
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -10,15 +11,23 @@ import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.MainApplication.Companion.mangaDao
 import me.proxer.app.base.BaseViewModel
 import me.proxer.app.util.ErrorUtils
+import me.proxer.app.util.Validators
+import me.proxer.app.util.extension.buildOptionalSingle
 import me.proxer.app.util.extension.buildPartialErrorSingle
 import me.proxer.app.util.extension.buildSingle
+import me.proxer.app.util.extension.toMediaLanguage
+import me.proxer.library.api.Endpoint
 import me.proxer.library.entitiy.info.EntryCore
+import me.proxer.library.enums.Category
 import me.proxer.library.enums.Language
 
 /**
  * @author Ruben Gees
  */
 class MangaViewModel(application: Application) : BaseViewModel<MangaChapterInfo>(application) {
+
+    val bookmarkData = MutableLiveData<Unit?>()
+    val bookmarkError = MutableLiveData<ErrorUtils.ErrorAction?>()
 
     lateinit var entryId: String
     lateinit var language: Language
@@ -28,10 +37,14 @@ class MangaViewModel(application: Application) : BaseViewModel<MangaChapterInfo>
     private val entrySingle by lazy { localEntrySingle().onErrorResumeNext(remoteEntrySingle()).cache() }
 
     private var disposable: Disposable? = null
+    private var bookmarkDisposable: Disposable? = null
 
     override fun onCleared() {
         disposable?.dispose()
+        bookmarkDisposable?.dispose()
+
         disposable = null
+        bookmarkDisposable = null
 
         super.onCleared()
     }
@@ -63,6 +76,10 @@ class MangaViewModel(application: Application) : BaseViewModel<MangaChapterInfo>
         }
     }
 
+    fun markAsFinished() = updateUserState(api.info().markAsFinished(entryId))
+    fun bookmark(episode: Int) = updateUserState(api.ucp().setBookmark(entryId, episode, language.toMediaLanguage(),
+            Category.MANGA))
+
     private fun localEntrySingle() = Single.fromCallable {
         mangaDao.findEntry(entryId.toLong())?.toNonLocalEntryCore() ?: throw RuntimeException()
     }
@@ -79,4 +96,20 @@ class MangaViewModel(application: Application) : BaseViewModel<MangaChapterInfo>
     private fun remoteChapterSingle(entry: EntryCore) = api.manga().chapter(entryId, episode, language)
             .buildPartialErrorSingle(entry)
             .map { MangaChapterInfo(it, entry.name, entry.episodeAmount, false) }
+
+    private fun updateUserState(endpoint: Endpoint<Void>) {
+        bookmarkDisposable?.dispose()
+        bookmarkDisposable = endpoint
+                .buildOptionalSingle()
+                .subscribeOn(Schedulers.io())
+                .flatMap { Single.fromCallable { it.apply { Validators.validateLogin() } } }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    bookmarkError.value = null
+                    bookmarkData.value = Unit
+                }, {
+                    bookmarkData.value = null
+                    bookmarkError.value = ErrorUtils.handle(it)
+                })
+    }
 }

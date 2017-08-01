@@ -1,11 +1,13 @@
 package me.proxer.app.manga
 
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
 import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
+import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -25,6 +27,8 @@ import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.extension.convertToDateTime
+import me.proxer.app.util.extension.multilineSnackbar
+import me.proxer.app.util.extension.snackbar
 import me.proxer.app.view.MediaControlView
 import me.proxer.app.view.MediaControlView.SimpleTranslatorGroup
 import me.proxer.app.view.MediaControlView.Uploader
@@ -144,11 +148,11 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
 
         Observable.merge(header.bookmarkSetSubject, footer.bookmarkSetSubject)
                 .bindToLifecycle(this@MangaFragment)
-                .subscribe { /* TODO */ }
+                .subscribe { viewModel.bookmark(it) }
 
         Observable.merge(header.finishClickSubject, footer.finishClickSubject)
                 .bindToLifecycle(this@MangaFragment)
-                .subscribe { /* TODO */ }
+                .subscribe { viewModel.markAsFinished() }
 
         return inflater.inflate(R.layout.fragment_manga, container, false)
     }
@@ -165,6 +169,23 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
                 }
             }
         }
+
+        viewModel.bookmarkData.observe(this, Observer {
+            it?.let {
+                snackbar(androidRoot, R.string.fragment_set_user_info_success)
+
+                viewModel.bookmarkData.value = null
+            }
+        })
+
+        viewModel.bookmarkError.observe(this, Observer {
+            it?.let {
+                multilineSnackbar(root, getString(R.string.fragment_set_user_info_error, getString(it.message)),
+                        Snackbar.LENGTH_LONG, it.buttonMessage, it.buttonAction?.toClickListener(hostingActivity))
+
+                viewModel.bookmarkError.value = null
+            }
+        })
 
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(context)
