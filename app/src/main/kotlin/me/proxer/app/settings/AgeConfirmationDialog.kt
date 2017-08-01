@@ -4,7 +4,7 @@ import android.app.Dialog
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.afollestad.materialdialogs.MaterialDialog
-import me.proxer.app.MainApplication
+import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.R
 import me.proxer.app.base.BaseDialog
 import me.proxer.app.util.data.PreferenceHelper
@@ -27,7 +27,7 @@ class AgeConfirmationDialog : BaseDialog() {
                 .onPositive { _, _ ->
                     PreferenceHelper.setAgeRestrictedMediaAllowed(context, true)
 
-                    MainApplication.bus.post(AgeConfirmationEvent())
+                    bus.post(AgeConfirmationEvent())
                 }
                 .build()
     }

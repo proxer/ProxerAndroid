@@ -1,7 +1,7 @@
 package me.proxer.app.media.comment
 
 import android.app.Application
-import me.proxer.app.MainApplication
+import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.base.PagedContentViewModel
 import me.proxer.library.api.PagingLimitEndpoint
 import me.proxer.library.entitiy.info.Comment
@@ -15,8 +15,7 @@ class CommentViewModel(application: Application) : PagedContentViewModel<Comment
     override val itemsOnPage = 10
 
     override val endpoint: PagingLimitEndpoint<List<Comment>>
-        get() = MainApplication.api.info()
-                .comments(entryId)
+        get() = api.info().comments(entryId)
                 .sort(sortCriteria)
 
     lateinit var entryId: String

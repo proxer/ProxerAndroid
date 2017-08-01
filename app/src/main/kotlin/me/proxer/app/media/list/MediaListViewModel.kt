@@ -1,7 +1,7 @@
 package me.proxer.app.media.list
 
 import android.app.Application
-import me.proxer.app.MainApplication
+import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.base.PagedContentViewModel
 import me.proxer.library.api.PagingLimitEndpoint
 import me.proxer.library.entitiy.list.MediaListEntry
@@ -22,8 +22,7 @@ class MediaListViewModel(application: Application) : PagedContentViewModel<Media
         get() = isLoginRequired
 
     override val endpoint: PagingLimitEndpoint<List<MediaListEntry>>
-        get() = MainApplication.api.list()
-                .mediaSearch()
+        get() = api.list().mediaSearch()
                 .sort(sortCriteria)
                 .name(searchQuery)
                 .type(type)

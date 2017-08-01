@@ -6,7 +6,7 @@ import android.arch.lifecycle.MutableLiveData
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import me.proxer.app.MainApplication
+import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.auth.LoginEvent
 import me.proxer.app.auth.LogoutEvent
 import me.proxer.app.settings.AgeConfirmationEvent
@@ -29,11 +29,11 @@ abstract class BaseViewModel<T>(application: Application) : AndroidViewModel(app
     private val ageConfirmationDisposable: Disposable
 
     init {
-        loginDisposable = Observable.merge(MainApplication.bus.register(LoginEvent::class.java), MainApplication.bus.register(LogoutEvent::class.java))
+        loginDisposable = Observable.merge(bus.register(LoginEvent::class.java), bus.register(LogoutEvent::class.java))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { if (isLoginRequired) reload() }
 
-        ageConfirmationDisposable = MainApplication.bus.register(AgeConfirmationEvent::class.java)
+        ageConfirmationDisposable = bus.register(AgeConfirmationEvent::class.java)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { if (isAgeConfirmationRequired) reload() }
     }

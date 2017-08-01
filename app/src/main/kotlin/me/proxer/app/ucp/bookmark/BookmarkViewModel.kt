@@ -5,7 +5,7 @@ import android.arch.lifecycle.MutableLiveData
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import me.proxer.app.MainApplication
+import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.base.PagedContentViewModel
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.UniqueQueue
@@ -23,9 +23,7 @@ class BookmarkViewModel(application: Application) : PagedContentViewModel<Bookma
     override val isLoginRequired = true
 
     override val endpoint: PagingLimitEndpoint<List<Bookmark>>
-        get() = MainApplication.api.ucp()
-                .bookmarks()
-                .category(category)
+        get() = api.ucp().bookmarks().category(category)
 
     val itemRemovalError = MutableLiveData<ErrorUtils.ErrorAction?>()
 
@@ -61,8 +59,7 @@ class BookmarkViewModel(application: Application) : PagedContentViewModel<Bookma
         removalDisposable?.dispose()
 
         removalQueue.poll()?.let { item ->
-            removalDisposable = MainApplication.api.ucp()
-                    .deleteBookmark(item.id)
+            removalDisposable = api.ucp().deleteBookmark(item.id)
                     .buildOptionalSingle()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())

@@ -6,7 +6,7 @@ import android.arch.lifecycle.MutableLiveData
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import me.proxer.app.MainApplication
+import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.extension.buildOptionalSingle
 
@@ -31,8 +31,7 @@ class LogoutViewModel(application: Application) : AndroidViewModel(application) 
     fun logout() {
         if (isLoading.value != true) {
             disposable?.dispose()
-            disposable = MainApplication.api.user()
-                    .logout()
+            disposable = api.user().logout()
                     .buildOptionalSingle()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())

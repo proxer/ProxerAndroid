@@ -6,7 +6,7 @@ import android.arch.lifecycle.MutableLiveData
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import me.proxer.app.MainApplication
+import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.buildSingle
@@ -40,8 +40,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     fun login(username: String, password: String, secretKey: String?) {
         if (isLoading.value != true) {
             disposable?.dispose()
-            disposable = MainApplication.api.user()
-                    .login(username, password)
+            disposable = api.user().login(username, password)
                     .secretKey(secretKey)
                     .buildSingle()
                     .subscribeOn(Schedulers.io())

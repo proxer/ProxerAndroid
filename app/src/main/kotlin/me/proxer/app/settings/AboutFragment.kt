@@ -17,7 +17,7 @@ import com.mikepenz.aboutlibraries.LibsBuilder
 import com.mikepenz.aboutlibraries.LibsConfiguration
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
-import me.proxer.app.MainApplication
+import me.proxer.app.MainApplication.Companion.refWatcher
 import me.proxer.app.R
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.Utils
@@ -63,7 +63,7 @@ class AboutFragment : MaterialAboutFragment() {
     override fun onDestroy() {
         super.onDestroy()
 
-        MainApplication.refWatcher.watch(this)
+        refWatcher.watch(this)
     }
 
     override fun getMaterialAboutList(context: Context): MaterialAboutList {

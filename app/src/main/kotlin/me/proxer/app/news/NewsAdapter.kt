@@ -1,6 +1,5 @@
 package me.proxer.app.news
 
-import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.RecyclerView
@@ -101,7 +100,7 @@ class NewsAdapter(savedInstanceState: Bundle?, private val glide: GlideRequests)
             }
 
             expand.setImageDrawable(IconicsDrawable(expand.context)
-                    .color(Color.parseColor("#61000000"))
+                    .colorRes(R.color.icon)
                     .sizeDp(32)
                     .paddingDp(8)
                     .icon(CommunityMaterial.Icon.cmd_chevron_down))

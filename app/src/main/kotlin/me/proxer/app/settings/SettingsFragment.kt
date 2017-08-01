@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDelegate
 import android.support.v7.preference.XpPreferenceFragment
 import android.view.View
-import me.proxer.app.MainApplication
+import me.proxer.app.MainApplication.Companion.refWatcher
 import me.proxer.app.R
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.PreferenceHelper.AGE_CONFIRMATION
@@ -76,7 +76,7 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
     override fun onDestroy() {
         super.onDestroy()
 
-        MainApplication.refWatcher.watch(this)
+        refWatcher.watch(this)
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {

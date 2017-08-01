@@ -4,7 +4,7 @@ import android.app.Application
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import me.proxer.app.MainApplication
+import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.base.BaseViewModel
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.extension.buildSingle
@@ -27,7 +27,7 @@ class EpisodeViewModel(application: Application) : BaseViewModel<List<EpisodeRow
 
     override fun load() {
         disposable?.dispose()
-        disposable = MainApplication.api.info().episodeInfo(entryId)
+        disposable = api.info().episodeInfo(entryId)
                 .limit(Int.MAX_VALUE)
                 .buildSingle()
                 .map { info ->
