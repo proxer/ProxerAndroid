@@ -50,7 +50,7 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
 
     private lateinit var adapter: EpisodeAdapter
 
-    private val list: RecyclerView by bindView(R.id.list)
+    private val recyclerView: RecyclerView by bindView(R.id.list)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,9 +80,16 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
                     }
                 }
 
-        list.setHasFixedSize(true)
-        list.layoutManager = LinearLayoutManager(context)
-        list.adapter = adapter
+        recyclerView.setHasFixedSize(true)
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.adapter = adapter
+    }
+
+    override fun onDestroyView() {
+        recyclerView.layoutManager = null
+        recyclerView.adapter = null
+
+        super.onDestroyView()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

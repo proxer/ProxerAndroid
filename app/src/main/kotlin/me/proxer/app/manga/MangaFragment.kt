@@ -171,6 +171,13 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         recyclerView.adapter = adapter
     }
 
+    override fun onDestroyView() {
+        recyclerView.adapter = null
+        recyclerView.layoutManager = null
+
+        super.onDestroyView()
+    }
+
     override fun showData(data: MangaChapterInfo) {
         super.showData(data)
 

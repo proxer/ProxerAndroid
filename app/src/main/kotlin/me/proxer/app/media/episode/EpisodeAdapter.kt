@@ -186,8 +186,7 @@ class EpisodeAdapter(savedInstanceState: Bundle?, private val entryId: String, p
         fun registerBus() {
             jobDisposable = Observable.merge(
                     bus.register(LocalMangaJob.FinishedEvent::class.java),
-                    bus.register(LocalMangaJob.FailedEvent::class.java)
-            )
+                    bus.register(LocalMangaJob.FailedEvent::class.java))
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe { event ->
                         withSafeAdapterPosition(this) {
