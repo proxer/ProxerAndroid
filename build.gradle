@@ -9,7 +9,7 @@ buildscript {
         compileSdkVersion = 26
         buildToolsVersion = '26.0.0'
 
-        androidPluginVersion = '3.0.0-alpha8'
+        androidPluginVersion = '3.0.0-alpha9'
         kotlinVersion = '1.1.4-eap-54'
         gradleVersionsPluginVersion = '0.15.0'
 
@@ -17,7 +17,7 @@ buildscript {
         ankoVersion = '0.10.1'
         supportLibraryVersion = '26.0.0'
         supportPreferenceVersion = '1.2.7'
-        architectureComponentsVersion = '1.0.0-alpha7'
+        architectureComponentsVersion = '1.0.0-alpha8'
         playServicesVersion = '11.0.4'
         androidJobVersion = '1.1.11'
         proxerLibVersion = '1eab2312c1'
@@ -37,12 +37,12 @@ buildscript {
         crossfaderVersion = '1.5.0'
         materialAboutVersion = '2.2.1'
         subsamplingScaleImageViewVersion = '3.6.0'
-        tabLayoutHelperVersion = '0.8.0'
+        tabLayoutHelperVersion = '0.9.0'
         materialDialogsVersion = '0.9.4.5'
         flexboxVersion = '0.3.0'
-        emojiIosVersion = '0.6.0-SNAPSHOT'
+        emojiIosVersion = '0.5.1'
         exomediaVersion = '4.0.3'
-        exoplayerVersion = 'r2.4.3'
+        exoplayerVersion = 'r2.4.4'
         materialProgressBarVersion = '1.4.1'
         materialRatingBarVersion = '1.0.2'
         customtabsHelperVersion = '1.0.3'
@@ -52,7 +52,7 @@ buildscript {
         // Utils
         threetenVersion = '1.0.5'
         hawkVersion = '2.0.1'
-        glideVersion = '4.0.0-SNAPSHOT'
+        glideVersion = '4.0.0'
         okHttpVersion = '3.9.0-SNAPSHOT'
         okioVersion = '1.13.0'
         linkBuilderVersion = '1.6.1'
