@@ -125,52 +125,52 @@
 
         <!--<activity android:name=".activity.ConferenceInfoActivity" />-->
 
-        <!--<activity android:name=".activity.MangaActivity">-->
-        <!--<intent-filter>-->
-        <!--<action android:name="android.intent.action.VIEW" />-->
+        <activity android:name=".manga.MangaActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
-        <!--<category android:name="android.intent.category.DEFAULT" />-->
-        <!--<category android:name="android.intent.category.BROWSABLE" />-->
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
-        <!--<data-->
-        <!--android:host="proxer.me"-->
-        <!--android:pathPrefix="/chapter/"-->
-        <!--android:scheme="http" />-->
-        <!--</intent-filter>-->
-        <!--<intent-filter>-->
-        <!--<action android:name="android.intent.action.VIEW" />-->
+                <data
+                    android:host="proxer.me"
+                    android:pathPrefix="/chapter/"
+                    android:scheme="http" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
-        <!--<category android:name="android.intent.category.DEFAULT" />-->
-        <!--<category android:name="android.intent.category.BROWSABLE" />-->
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
-        <!--<data-->
-        <!--android:host="proxer.me"-->
-        <!--android:pathPrefix="/chapter/"-->
-        <!--android:scheme="https" />-->
-        <!--</intent-filter>-->
-        <!--<intent-filter>-->
-        <!--<action android:name="android.intent.action.VIEW" />-->
+                <data
+                    android:host="proxer.me"
+                    android:pathPrefix="/chapter/"
+                    android:scheme="https" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
-        <!--<category android:name="android.intent.category.DEFAULT" />-->
-        <!--<category android:name="android.intent.category.BROWSABLE" />-->
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
-        <!--<data-->
-        <!--android:host="proxer.me"-->
-        <!--android:pathPrefix="/read/"-->
-        <!--android:scheme="http" />-->
-        <!--</intent-filter>-->
-        <!--<intent-filter>-->
-        <!--<action android:name="android.intent.action.VIEW" />-->
+                <data
+                    android:host="proxer.me"
+                    android:pathPrefix="/read/"
+                    android:scheme="http" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
-        <!--<category android:name="android.intent.category.DEFAULT" />-->
-        <!--<category android:name="android.intent.category.BROWSABLE" />-->
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
-        <!--<data-->
-        <!--android:host="proxer.me"-->
-        <!--android:pathPrefix="/read/"-->
-        <!--android:scheme="https" />-->
-        <!--</intent-filter>-->
-        <!--</activity>-->
+                <data
+                    android:host="proxer.me"
+                    android:pathPrefix="/read/"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
 
         <!--<activity android:name=".activity.AnimeActivity">-->
         <!--<intent-filter>-->

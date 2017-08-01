@@ -37,9 +37,9 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
     open protected val emptyDataMessage get() = R.string.error_no_data
     open protected val pagingThreshold = 5
 
-    private lateinit var adapter: EasyHeaderFooterAdapter
     abstract protected val layoutManager: RecyclerView.LayoutManager
     abstract protected val innerAdapter: BaseAdapter<T, *>
+    private lateinit var adapter: EasyHeaderFooterAdapter
 
     open protected val recyclerView: RecyclerView by bindView(R.id.recyclerView)
 

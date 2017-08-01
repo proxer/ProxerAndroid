@@ -2,7 +2,7 @@ package me.proxer.app.media.comment
 
 import android.app.Application
 import me.proxer.app.MainApplication
-import me.proxer.app.base.PagedViewModel
+import me.proxer.app.base.PagedContentViewModel
 import me.proxer.library.api.PagingLimitEndpoint
 import me.proxer.library.entitiy.info.Comment
 import me.proxer.library.enums.CommentSortCriteria
@@ -10,7 +10,7 @@ import me.proxer.library.enums.CommentSortCriteria
 /**
  * @author Ruben Gees
  */
-class CommentViewModel(application: Application) : PagedViewModel<Comment>(application) {
+class CommentViewModel(application: Application) : PagedContentViewModel<Comment>(application) {
 
     override val itemsOnPage = 10
 

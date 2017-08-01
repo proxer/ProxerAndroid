@@ -27,7 +27,7 @@ buildscript {
         rxAndroidVersion = '2.0.1'
         rxBindingVersion = '2.0.0'
         rxLifecycleVersion = '2.1.0'
-        rxBusVersion = 'master-SNAPSHOT'
+        rxBusVersion = '1.0.0'
 
         // UI components
         aboutLibrariesVersion = '5.9.7'
@@ -53,7 +53,7 @@ buildscript {
         threetenVersion = '1.0.5'
         hawkVersion = '2.0.1'
         glideVersion = '4.0.0-SNAPSHOT'
-        okHttpVersion = '3.8.1'
+        okHttpVersion = '3.9.0-SNAPSHOT'
         okioVersion = '1.13.0'
         linkBuilderVersion = '1.6.1'
         easyHeaderFooterAdapterVersion = '2.0.0'

@@ -99,7 +99,7 @@ object ErrorUtils {
 
     fun getInnermostError(error: Throwable) = when (error) {
 //            is FullTaskException -> error.firstInnerError
-//            is PartialTaskException -> error.innerError
+//            is PartialException -> error.innerError
 //            is ChatException -> error.innerError
         is ExoPlaybackException -> error.cause ?: Exception()
         else -> error
@@ -152,4 +152,6 @@ object ErrorUtils {
             }
         }
     }
+
+    class PartialException(val innerError: Throwable, val partialResult: Any?) : Exception()
 }

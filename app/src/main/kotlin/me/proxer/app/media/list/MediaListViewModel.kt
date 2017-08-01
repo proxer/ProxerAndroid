@@ -2,7 +2,7 @@ package me.proxer.app.media.list
 
 import android.app.Application
 import me.proxer.app.MainApplication
-import me.proxer.app.base.PagedViewModel
+import me.proxer.app.base.PagedContentViewModel
 import me.proxer.library.api.PagingLimitEndpoint
 import me.proxer.library.entitiy.list.MediaListEntry
 import me.proxer.library.enums.MediaSearchSortCriteria
@@ -11,7 +11,7 @@ import me.proxer.library.enums.MediaType
 /**
  * @author Ruben Gees
  */
-class MediaListViewModel(application: Application) : PagedViewModel<MediaListEntry>(application) {
+class MediaListViewModel(application: Application) : PagedContentViewModel<MediaListEntry>(application) {
 
     override val itemsOnPage = 30
 

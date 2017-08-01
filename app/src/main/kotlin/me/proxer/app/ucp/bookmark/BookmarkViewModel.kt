@@ -6,7 +6,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication
-import me.proxer.app.base.PagedViewModel
+import me.proxer.app.base.PagedContentViewModel
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.UniqueQueue
 import me.proxer.app.util.extension.buildOptionalSingle
@@ -17,7 +17,7 @@ import me.proxer.library.enums.Category
 /**
  * @author Ruben Gees
  */
-class BookmarkViewModel(application: Application) : PagedViewModel<Bookmark>(application) {
+class BookmarkViewModel(application: Application) : PagedContentViewModel<Bookmark>(application) {
 
     override val itemsOnPage = 30
     override val isLoginRequired = true

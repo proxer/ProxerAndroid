@@ -8,7 +8,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication
 import me.proxer.app.MainApplication.Companion.api
-import me.proxer.app.base.BaseViewModel
+import me.proxer.app.base.BaseContentViewModel
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.Validators
@@ -19,7 +19,7 @@ import me.proxer.library.entitiy.info.Entry
 /**
  * @author Ruben Gees
  */
-class MediaInfoViewModel(application: Application) : BaseViewModel<Entry>(application) {
+class MediaInfoViewModel(application: Application) : BaseContentViewModel<Entry>(application) {
 
     override val endpoint: Endpoint<Entry>
         get() = MainApplication.api.info()

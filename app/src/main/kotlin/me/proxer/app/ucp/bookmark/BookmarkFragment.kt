@@ -16,9 +16,11 @@ import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
 import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
+import me.proxer.app.manga.MangaActivity
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.multilineSnackbar
+import me.proxer.app.util.extension.toGeneralLanguage
 import me.proxer.library.entitiy.ucp.Bookmark
 import me.proxer.library.enums.Category
 import org.jetbrains.anko.bundleOf
@@ -81,7 +83,11 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
         innerAdapter.clickSubject
                 .bindToLifecycle(this)
                 .subscribe {
-                    // TODO
+                    when (it.category) {
+                        Category.ANIME -> TODO()
+                        Category.MANGA -> MangaActivity.navigateTo(activity, it.entryId, it.episode,
+                                it.language.toGeneralLanguage(), it.chapterName, it.name)
+                    }
                 }
 
         innerAdapter.longClickSubject

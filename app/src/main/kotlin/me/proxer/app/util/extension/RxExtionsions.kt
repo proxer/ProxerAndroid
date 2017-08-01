@@ -12,6 +12,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.internal.disposables.DisposableContainer
+import me.proxer.app.util.ErrorUtils.PartialException
 import me.proxer.library.api.Endpoint
 
 /**
@@ -42,6 +43,20 @@ inline fun <T : Any> Endpoint<T>.buildOptionalSingle(): Single<Optional<T>> = Si
     } catch (error: Throwable) {
         if (!emitter.isDisposed) {
             emitter.onError(error)
+        }
+    }
+}
+
+inline fun <I : Any, T : Any> Endpoint<T>.buildPartialErrorSingle(input: I) = Single.create<T> { emitter ->
+    val call = build()
+
+    emitter.setCancellable { call.cancel() }
+
+    try {
+        emitter.onSuccess(call.execute())
+    } catch (error: Throwable) {
+        if (!emitter.isDisposed) {
+            emitter.onError(PartialException(error, input))
         }
     }
 }
