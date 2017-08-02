@@ -27,9 +27,9 @@ abstract class BaseContentViewModel<T>(application: Application) : BaseViewModel
 
     override fun load() {
         disposable?.dispose()
-        disposable = endpoint.buildSingle()
+        disposable = Single.fromCallable { validate() }
+                .flatMap { endpoint.buildSingle() }
                 .subscribeOn(Schedulers.io())
-                .flatMap { Single.fromCallable { it.apply { validate() } } }
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
                     error.value = null

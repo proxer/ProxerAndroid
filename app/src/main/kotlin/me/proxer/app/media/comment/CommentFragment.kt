@@ -3,11 +3,9 @@ package me.proxer.app.media.comment
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.view.View
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
 import me.proxer.app.GlideApp
@@ -62,13 +60,17 @@ class CommentFragment : PagedContentFragment<Comment>() {
 
     override lateinit var innerAdapter: CommentAdapter
 
-    private val toolbar by lazy { activity.findViewById<Toolbar>(R.id.toolbar) }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         innerAdapter = CommentAdapter(savedInstanceState, GlideApp.with(this))
         innerAdapter.categoryCallback = { category }
+        innerAdapter.profileClickSubject
+                .bindToLifecycle(this)
+                .subscribe { (view, comment) ->
+                    ProfileActivity.navigateTo(activity, comment.authorId, comment.author, comment.image,
+                            if (view.drawable != null && comment.image.isNotBlank()) view else null)
+                }
 
         viewModel.setSortCriteria(sortCriteria, false)
 
@@ -79,17 +81,6 @@ class CommentFragment : PagedContentFragment<Comment>() {
         innerAdapter.categoryCallback = null
 
         super.onDestroy()
-    }
-
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        innerAdapter.profileClickSubject
-                .bindToLifecycle(this)
-                .subscribe { (view, comment) ->
-                    ProfileActivity.navigateTo(activity, comment.authorId, comment.author, comment.image,
-                            if (view.drawable != null && comment.image.isNotBlank()) view else null)
-                }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

@@ -64,21 +64,6 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
 
         innerAdapter = BookmarkAdapter(GlideApp.with(this))
 
-        viewModel.itemRemovalError.observe(this, Observer {
-            it?.let {
-                multilineSnackbar(root, getString(R.string.fragment_set_user_info_error, getString(it.message)),
-                        Snackbar.LENGTH_LONG, it.buttonMessage, it.buttonAction?.toClickListener(hostingActivity))
-
-                viewModel.itemRemovalError.value = null
-            }
-        })
-
-        setHasOptionsMenu(true)
-    }
-
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
         innerAdapter.clickSubject
                 .bindToLifecycle(this)
                 .subscribe {
@@ -102,6 +87,21 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
                 .subscribe {
                     viewModel.addItemToRemove(it)
                 }
+
+        setHasOptionsMenu(true)
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel.itemRemovalError.observe(this, Observer {
+            it?.let {
+                multilineSnackbar(root, getString(R.string.fragment_set_user_info_error, getString(it.message)),
+                        Snackbar.LENGTH_LONG, it.buttonMessage, it.buttonAction?.toClickListener(hostingActivity))
+
+                viewModel.itemRemovalError.value = null
+            }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

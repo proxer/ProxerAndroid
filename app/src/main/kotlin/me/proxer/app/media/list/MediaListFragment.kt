@@ -11,7 +11,6 @@ import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.view.View
 import com.jakewharton.rxbinding2.support.v7.widget.queryTextChangeEvents
 import com.jakewharton.rxbinding2.view.actionViewEvents
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
@@ -96,23 +95,18 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
         super.onCreate(savedInstanceState)
 
         innerAdapter = MediaAdapter(category, GlideApp.with(this))
-
-        viewModel.setSortCriteria(sortCriteria, false)
-        viewModel.setType(type, false)
-        viewModel.setSearchQuery(searchQuery, false)
-
-        setHasOptionsMenu(true)
-    }
-
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
         innerAdapter.clickSubject
                 .bindToLifecycle(this)
                 .subscribe { (view, entry) ->
                     MediaActivity.navigateTo(activity, entry.id, entry.name, entry.medium.toCategory(),
                             if (view.drawable != null) view else null)
                 }
+
+        viewModel.setSortCriteria(sortCriteria, false)
+        viewModel.setType(type, false)
+        viewModel.setSearchQuery(searchQuery, false)
+
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

@@ -1,6 +1,7 @@
 package me.proxer.app.base
 
 import android.app.Application
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -32,12 +33,12 @@ abstract class PagedContentViewModel<T>(application: Application) : PagedViewMod
 
     override fun load(page: Int) {
         disposable?.dispose()
-        disposable = endpoint
-                .page(page)
-                .limit(itemsOnPage)
-                .buildSingle()
+        disposable = Single.fromCallable { validate() }
+                .flatMap { endpoint.page(page).limit(itemsOnPage).buildSingle() }
                 .subscribeOn(Schedulers.io())
-                .map { it.apply { validate() } }
+                .observeOn(AndroidSchedulers.mainThread())
+                .doAfterSuccess { newData -> hasReachedEnd = newData.size < itemsOnPage }
+                .observeOn(Schedulers.io())
                 .map { newData ->
                     data.value.let { existingData ->
                         when (existingData) {
@@ -58,9 +59,6 @@ abstract class PagedContentViewModel<T>(application: Application) : PagedViewMod
                     refreshError.value = null
                     error.value = null
                     isLoading.value = true
-                }
-                .doAfterSuccess { newData ->
-                    hasReachedEnd = newData.size < itemsOnPage
                 }
                 .doAfterTerminate {
                     isLoading.value = false
