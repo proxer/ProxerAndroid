@@ -51,6 +51,9 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
     override val errorContainer: ViewGroup
         get() = adapter.footer as ViewGroup
 
+    override val errorInnerContainer: ViewGroup
+        get() = errorContainer.find(R.id.errorInnerContainer)
+
     override val errorText: TextView
         get() = errorContainer.find(R.id.errorText)
 

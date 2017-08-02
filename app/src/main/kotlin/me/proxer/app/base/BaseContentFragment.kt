@@ -28,6 +28,7 @@ abstract class BaseContentFragment<T> : BaseFragment() {
     open protected val root: ViewGroup by bindView(R.id.root)
     open protected val contentContainer: ViewGroup by bindView(R.id.contentContainer)
     open protected val errorContainer: ViewGroup by bindView(R.id.errorContainer)
+    open protected val errorInnerContainer: ViewGroup by bindView(R.id.errorInnerContainer)
     open protected val errorText: TextView by bindView(R.id.errorText)
     open protected val errorButton: Button by bindView(R.id.errorButton)
     open protected val progress: SwipeRefreshLayout by bindView(R.id.progress)

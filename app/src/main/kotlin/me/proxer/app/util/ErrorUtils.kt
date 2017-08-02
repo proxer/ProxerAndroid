@@ -98,8 +98,7 @@ object ErrorUtils {
     }
 
     fun getInnermostError(error: Throwable) = when (error) {
-//            is FullTaskException -> error.firstInnerError
-//            is PartialException -> error.innerError
+        is PartialException -> error.innerError
 //            is ChatException -> error.innerError
         is ExoPlaybackException -> error.cause ?: Exception()
         else -> error
@@ -131,11 +130,11 @@ object ErrorUtils {
             else -> null
         }
 
-        return ErrorAction(errorMessage, buttonMessage, buttonAction)
+        return ErrorAction(errorMessage, buttonMessage, buttonAction, (error as? PartialException)?.partialResult)
     }
 
     class ErrorAction(val message: Int, val buttonMessage: Int = ACTION_MESSAGE_DEFAULT,
-                      val buttonAction: ButtonAction? = null) {
+                      val buttonAction: ButtonAction? = null, val partialData: Any? = null) {
 
         companion object {
             const val ACTION_MESSAGE_DEFAULT = -1

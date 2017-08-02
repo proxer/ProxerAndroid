@@ -32,6 +32,7 @@ import me.proxer.app.util.extension.snackbar
 import me.proxer.app.view.MediaControlView
 import me.proxer.app.view.MediaControlView.SimpleTranslatorGroup
 import me.proxer.app.view.MediaControlView.Uploader
+import me.proxer.library.entitiy.info.EntryCore
 import me.proxer.library.enums.Language
 import org.jetbrains.anko.bundleOf
 
@@ -253,5 +254,34 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         super.showError(action)
 
         chapterTitle = null
+
+        action.partialData?.let {
+            if (it is EntryCore) {
+                episodeAmount = it.episodeAmount
+                name = it.name
+
+                header.setEpisodeInfo(it.episodeAmount, episode)
+                header.setTranslatorGroup(null)
+                header.setUploader(null)
+                header.setDateTime(null)
+
+                adapter.header = header
+            }
+        }
+
+        if (adapter.header != null) {
+            contentContainer.visibility = View.VISIBLE
+            errorContainer.visibility = View.INVISIBLE
+
+            errorInnerContainer.post {
+                val newCenter = root.height / 2f + header.height / 2f
+                val containerCenterCorrection = errorInnerContainer.height / 2f
+
+                errorInnerContainer.y = newCenter - containerCenterCorrection
+                errorContainer.visibility = View.VISIBLE
+            }
+        } else {
+            errorContainer.translationY = 0f
+        }
     }
 }
