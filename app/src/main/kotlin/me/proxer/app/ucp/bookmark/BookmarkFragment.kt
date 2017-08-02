@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.support.v7.widget.StaggeredGridLayoutManager.VERTICAL
-import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -15,11 +14,13 @@ import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
 import me.proxer.app.GlideApp
 import me.proxer.app.R
+import me.proxer.app.anime.AnimeActivity
 import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.manga.MangaActivity
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.multilineSnackbar
+import me.proxer.app.util.extension.toAnimeLanguage
 import me.proxer.app.util.extension.toGeneralLanguage
 import me.proxer.library.entitiy.ucp.Bookmark
 import me.proxer.library.enums.Category
@@ -58,8 +59,6 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
             viewModel.setCategory(value)
         }
 
-    private val toolbar by lazy { activity.findViewById<Toolbar>(R.id.toolbar) }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -84,7 +83,8 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
                 .bindToLifecycle(this)
                 .subscribe {
                     when (it.category) {
-                        Category.ANIME -> TODO()
+                        Category.ANIME -> AnimeActivity.navigateTo(activity, it.entryId, it.episode,
+                                it.language.toAnimeLanguage(), it.name)
                         Category.MANGA -> MangaActivity.navigateTo(activity, it.entryId, it.episode,
                                 it.language.toGeneralLanguage(), it.chapterName, it.name)
                     }

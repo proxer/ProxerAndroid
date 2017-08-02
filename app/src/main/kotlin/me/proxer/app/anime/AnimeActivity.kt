@@ -1,4 +1,4 @@
-package me.proxer.app.manga
+package me.proxer.app.anime
 
 import android.app.Activity
 import android.content.Intent
@@ -15,28 +15,29 @@ import me.proxer.app.R
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.extension.toEpisodeAppString
+import me.proxer.library.enums.AnimeLanguage
 import me.proxer.library.enums.Category
-import me.proxer.library.enums.Language
 import me.proxer.library.util.ProxerUtils
 import org.jetbrains.anko.intentFor
 
-class MangaActivity : BaseActivity() {
+/**
+ * @author Ruben Gees
+ */
+class AnimeActivity : BaseActivity() {
 
     companion object {
         private const val ID_EXTRA = "id"
         private const val EPISODE_EXTRA = "episode"
         private const val LANGUAGE_EXTRA = "language"
-        private const val CHAPTER_TITLE_EXTRA = "chapter_title"
         private const val NAME_EXTRA = "name"
         private const val EPISODE_AMOUNT_EXTRA = "episode_amount"
 
-        fun navigateTo(context: Activity, id: String, episode: Int, language: Language, chapterTitle: String?,
+        fun navigateTo(context: Activity, id: String, episode: Int, language: AnimeLanguage,
                        name: String? = null, episodeAmount: Int? = null) {
-            context.startActivity(context.intentFor<MangaActivity>(
+            context.startActivity(context.intentFor<AnimeActivity>(
                     ID_EXTRA to id,
                     EPISODE_EXTRA to episode,
                     LANGUAGE_EXTRA to language,
-                    CHAPTER_TITLE_EXTRA to chapterTitle,
                     NAME_EXTRA to name,
                     EPISODE_AMOUNT_EXTRA to episodeAmount
             ))
@@ -44,8 +45,8 @@ class MangaActivity : BaseActivity() {
     }
 
     val id: String
-        get() = when {
-            intent.action == Intent.ACTION_VIEW -> intent.data.pathSegments.getOrElse(1, { "-1" })
+        get() = when (intent.action) {
+            Intent.ACTION_VIEW -> intent.data.pathSegments.getOrElse(1, { "-1" })
             else -> intent.getStringExtra(ID_EXTRA)
         }
 
@@ -62,21 +63,13 @@ class MangaActivity : BaseActivity() {
             updateTitle()
         }
 
-    val language: Language
-        get() = when {
-            intent.action == Intent.ACTION_VIEW -> {
-                ProxerUtils.toApiEnum(Language::class.java, intent.data.pathSegments.getOrElse(3, { "" }))
-                        ?: Language.ENGLISH
+    val language: AnimeLanguage
+        get() = when (intent.action) {
+            Intent.ACTION_VIEW -> {
+                ProxerUtils.toApiEnum(AnimeLanguage::class.java, intent.data.pathSegments.getOrElse(3, { "" }))
+                        ?: AnimeLanguage.ENGLISH_SUB
             }
-            else -> intent.getSerializableExtra(LANGUAGE_EXTRA) as Language
-        }
-
-    var chapterTitle: String?
-        get() = intent.getStringExtra(CHAPTER_TITLE_EXTRA)
-        set(value) {
-            intent.putExtra(CHAPTER_TITLE_EXTRA, value)
-
-            updateTitle()
+            else -> intent.getSerializableExtra(LANGUAGE_EXTRA) as AnimeLanguage
         }
 
     var name: String?
@@ -88,14 +81,15 @@ class MangaActivity : BaseActivity() {
         }
 
     var episodeAmount: Int?
-        get() = when {
-            intent.hasExtra(EPISODE_AMOUNT_EXTRA) -> intent.getIntExtra(EPISODE_AMOUNT_EXTRA, 1)
-            else -> null
+        get() = when (intent.hasExtra(EPISODE_AMOUNT_EXTRA)) {
+            true -> intent.getIntExtra(EPISODE_AMOUNT_EXTRA, 1)
+            false -> null
         }
         set(value) {
-            when (value) {
-                null -> intent.extras.remove(EPISODE_AMOUNT_EXTRA)
-                else -> intent.putExtra(EPISODE_AMOUNT_EXTRA, value)
+            if (value == null) {
+                intent.extras.remove(EPISODE_AMOUNT_EXTRA)
+            } else {
+                intent.putExtra(EPISODE_AMOUNT_EXTRA, value)
             }
         }
 
@@ -104,7 +98,7 @@ class MangaActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_manga)
+        setContentView(R.layout.activity_default)
         setSupportActionBar(toolbar)
 
         setupToolbar()
@@ -112,7 +106,7 @@ class MangaActivity : BaseActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, MangaFragment.newInstance())
+//                    .replace(R.id.container, AnimeFragment.newInstance())
                     .commitNow()
         }
     }
@@ -127,17 +121,11 @@ class MangaActivity : BaseActivity() {
         when (item.itemId) {
             R.id.action_share -> {
                 name?.let {
-                    val link = "https://proxer.me/chapter/$id/$episode/${ProxerUtils.getApiEnumName(language)}"
-                    val text = chapterTitle.let { title ->
-                        when {
-                            title.isNullOrBlank() -> getString(R.string.share_manga, episode, it, link)
-                            else -> getString(R.string.share_manga_title, title, it, link)
-                        }
-                    }
+                    val link = "https://proxer.me/watch/$id/$episode/${ProxerUtils.getApiEnumName(language)}"
 
                     ShareCompat.IntentBuilder
                             .from(this)
-                            .setText(text)
+                            .setText(getString(R.string.share_anime, episode, it, link))
                             .setType("text/plain")
                             .setChooserTitle(getString(R.string.share_title))
                             .startChooser()
@@ -161,13 +149,13 @@ class MangaActivity : BaseActivity() {
                 .bindToLifecycle(this)
                 .subscribe {
                     name?.let {
-                        MediaActivity.navigateTo(this, id, name, Category.MANGA)
+                        MediaActivity.navigateTo(this, id, it, Category.ANIME)
                     }
                 }
     }
 
     private fun updateTitle() {
-        title = chapterTitle ?: Category.MANGA.toEpisodeAppString(this, episode)
+        title = Category.ANIME.toEpisodeAppString(this, episode)
         supportActionBar?.subtitle = name
     }
 }

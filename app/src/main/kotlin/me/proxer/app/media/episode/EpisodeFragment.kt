@@ -11,10 +11,12 @@ import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
 import kotterknife.bindView
 import me.proxer.app.GlideApp
 import me.proxer.app.R
+import me.proxer.app.anime.AnimeActivity
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.manga.MangaActivity
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.ErrorUtils
+import me.proxer.app.util.extension.toAnimeLanguage
 import me.proxer.app.util.extension.toGeneralLanguage
 import me.proxer.library.enums.Category
 import org.jetbrains.anko.bundleOf
@@ -69,14 +71,10 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
                 .bindToLifecycle(this)
                 .subscribe { (language, episode) ->
                     when (episode.category) {
-                        Category.ANIME -> {
-//                            AnimeActivity.navigateTo(activity, id, episode.number, language.toAnimeLanguage(), name,
-//                                    episode.episodeAmount)
-                        }
-                        Category.MANGA -> {
-                            MangaActivity.navigateTo(activity, id, episode.number, language.toGeneralLanguage(),
-                                    episode.title, name, episode.episodeAmount)
-                        }
+                        Category.ANIME -> AnimeActivity.navigateTo(activity, id, episode.number,
+                                language.toAnimeLanguage(), name, episode.episodeAmount)
+                        Category.MANGA -> MangaActivity.navigateTo(activity, id, episode.number,
+                                language.toGeneralLanguage(), episode.title, name, episode.episodeAmount)
                     }
                 }
 

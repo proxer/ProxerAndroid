@@ -172,30 +172,30 @@
             </intent-filter>
         </activity>
 
-        <!--<activity android:name=".activity.AnimeActivity">-->
-        <!--<intent-filter>-->
-        <!--<action android:name="android.intent.action.VIEW" />-->
+        <activity android:name=".anime.AnimeActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
-        <!--<category android:name="android.intent.category.DEFAULT" />-->
-        <!--<category android:name="android.intent.category.BROWSABLE" />-->
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
-        <!--<data-->
-        <!--android:host="proxer.me"-->
-        <!--android:pathPrefix="/watch/"-->
-        <!--android:scheme="http" />-->
-        <!--</intent-filter>-->
-        <!--<intent-filter>-->
-        <!--<action android:name="android.intent.action.VIEW" />-->
+                <data
+                    android:host="proxer.me"
+                    android:pathPrefix="/watch/"
+                    android:scheme="http" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
-        <!--<category android:name="android.intent.category.DEFAULT" />-->
-        <!--<category android:name="android.intent.category.BROWSABLE" />-->
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
-        <!--<data-->
-        <!--android:host="proxer.me"-->
-        <!--android:pathPrefix="/watch/"-->
-        <!--android:scheme="https" />-->
-        <!--</intent-filter>-->
-        <!--</activity>-->
+                <data
+                    android:host="proxer.me"
+                    android:pathPrefix="/watch/"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
 
         <activity android:name=".view.WebViewActivity" />
 
