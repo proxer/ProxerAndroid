@@ -49,7 +49,7 @@
 
             </LinearLayout>
 
-            <ImageButton
+            <me.proxer.app.view.InfoImageButton
                 android:id="@+id/delete"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
@@ -57,7 +57,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                tools:ignore="ContentDescription" />
+                android:contentDescription="@string/fragment_notification_delete_content_description" />
 
         </RelativeLayout>
     </android.support.v7.widget.CardView>

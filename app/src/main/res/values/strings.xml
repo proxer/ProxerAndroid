@@ -237,9 +237,9 @@
     <string name="fragment_ucp_overview_profile_link">Profillink</string>
     <string name="fragment_ucp_overview_user_id">User ID</string>
 
-    <string name="fragment_ucp_topten_delete_hint">Diesen Eintrag löschen</string>
+    <string name="fragment_ucp_topten_delete_content_description">Diesen Eintrag löschen</string>
 
-    <string name="fragment_bookmarks_delete_hint">Löschen</string>
+    <string name="fragment_bookmark_delete_content_description">Löschen</string>
 
     <string name="fragment_profile_points_anime">Anime</string>
     <string name="fragment_profile_points_forum">Forum</string>
@@ -282,7 +282,7 @@
     <string name="fragment_anime_bookmark_this_episode">Lesezeichen: Diese Episode</string>
     <string name="fragment_anime_stream_play">Abspielen</string>
 
-    <string name="fragment_local_manga_delete_hint">Dieses Kapitel löschen</string>
+    <string name="fragment_local_manga_delete_content_description">Dieses Kapitel löschen</string>
 
     <plurals name="fragment_local_manga_chapters_downloading">
         <item quantity="one">Ein Kapitel wird heruntergeladen</item>
@@ -334,6 +334,9 @@
     <string name="fragment_new_chat_topic_hint">Thema</string>
     <string name="fragment_new_chat_add_participant">Teilnehmer hinzufügen</string>
     <string name="fragment_new_chat_add_participant_hint">Nutzername</string>
+    <string name="fragment_new_chat_delete_description">Entfernen</string>
+    <string name="fragment_new_chat_cancel_content_description">Abbrechen</string>
+    <string name="fragment_new_chat_accept_description">Akzeptieren</string>
 
     <string name="view_media_control_uploader">Uploader</string>
     <string name="view_media_control_translator_group">Translator-Gruppe</string>
@@ -342,6 +345,8 @@
 
     <string name="view_bbcode_hide_spoiler">Spoiler verstecken</string>
     <string name="view_bbcode_show_spoiler">Spoiler!</string>
+
+    <string name="layout_chat_bar_emoji_content_description">Emoji Auswahl</string>
 
     <string name="notification_channel_news">News</string>
     <string name="notification_channel_profile">Profil</string>
@@ -470,7 +475,7 @@
     <string name="action_new_group">Neue Gruppe</string>
 
     <string name="action_conference_add_user">%1$s hat %2$s zur Konferenz hinzugefügt</string>
-    <string name="action_conference_remove_user">%1$s hat %2$s aus der Konferenz entfernt</string>
+    <string name="action_conference_delete_user">%1$s hat %2$s aus der Konferenz entfernt</string>
     <string name="action_conference_set_leader">%1$s hat %2$s als neuen Konferenzleiter bestimmt</string>
     <string name="action_conference_set_topic">%1$s hat den Konferenztitel in %2$s geändert</string>
 
@@ -519,6 +524,7 @@
     <string name="interval_seldom">Selten (Alle 8 Stunden)</string>
 
     <string name="time_a_moment_ago">Eben gerade</string>
+    <string name="fragment_notification_delete_content_description">Löschen</string>
     <plurals name="time_days_ago">
         <item quantity="one">"Gestern"</item>
         <item quantity="other">"Vor %d Tagen"</item>

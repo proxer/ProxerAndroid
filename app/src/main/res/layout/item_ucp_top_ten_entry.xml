@@ -43,14 +43,14 @@
                 android:textColor="@android:color/white"
                 tools:text="Some title" />
 
-            <ImageButton
-                android:id="@+id/removeButton"
+            <me.proxer.app.view.InfoImageButton
+                android:id="@+id/deleteButton"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_below="@+id/title"
                 android:layout_centerHorizontal="true"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                tools:ignore="ContentDescription" />
+                android:contentDescription="@string/fragment_ucp_topten_delete_content_description" />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </FrameLayout>

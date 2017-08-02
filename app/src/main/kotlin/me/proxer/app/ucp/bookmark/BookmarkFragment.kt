@@ -82,7 +82,7 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
                             if (view.drawable != null) view else null)
                 }
 
-        innerAdapter.removeClickSubject
+        innerAdapter.deleteClickSubject
                 .bindToLifecycle(this)
                 .subscribe {
                     viewModel.addItemToRemove(it)

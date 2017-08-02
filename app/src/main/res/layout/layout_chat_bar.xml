@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="1dp"
@@ -14,7 +13,7 @@
         android:orientation="horizontal"
         android:weightSum="1">
 
-        <ImageButton
+        <me.proxer.app.view.InfoImageButton
             android:id="@+id/emojiButton"
             android:layout_width="32dp"
             android:layout_height="32dp"
@@ -22,7 +21,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            tools:ignore="ContentDescription" />
+            android:contentDescription="@string/layout_chat_bar_emoji_content_description" />
 
         <com.vanniktech.emoji.EmojiEditText
             android:id="@+id/messageInput"

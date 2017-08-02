@@ -17,7 +17,10 @@ import kotterknife.bindView
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
-import me.proxer.app.util.extension.*
+import me.proxer.app.util.extension.toAppDrawable
+import me.proxer.app.util.extension.toAppString
+import me.proxer.app.util.extension.toEpisodeAppString
+import me.proxer.app.util.extension.toGeneralLanguage
 import me.proxer.app.util.view.GlideGrayscaleTransformation
 import me.proxer.library.entitiy.ucp.Bookmark
 import me.proxer.library.util.ProxerUrls
@@ -29,7 +32,7 @@ class BookmarkAdapter(private val glide: GlideRequests) : BaseAdapter<Bookmark, 
 
     val clickSubject: PublishSubject<Bookmark> = PublishSubject.create()
     val longClickSubject: PublishSubject<Pair<ImageView, Bookmark>> = PublishSubject.create()
-    val removeClickSubject: PublishSubject<Bookmark> = PublishSubject.create()
+    val deleteClickSubject: PublishSubject<Bookmark> = PublishSubject.create()
 
     init {
         setHasStableIds(true)
@@ -52,7 +55,7 @@ class BookmarkAdapter(private val glide: GlideRequests) : BaseAdapter<Bookmark, 
         internal val image: ImageView by bindView(R.id.image)
         internal val episode: TextView by bindView(R.id.episode)
         internal val language: ImageView by bindView(R.id.language)
-        internal val remove: ImageButton by bindView(R.id.remove)
+        internal val delete: ImageButton by bindView(R.id.delete)
 
         init {
             itemView.setOnClickListener {
@@ -69,19 +72,13 @@ class BookmarkAdapter(private val glide: GlideRequests) : BaseAdapter<Bookmark, 
                 true
             }
 
-            remove.setOnClickListener {
+            delete.setOnClickListener {
                 withSafeAdapterPosition(this) {
-                    removeClickSubject.onNext(data[it])
+                    deleteClickSubject.onNext(data[it])
                 }
             }
 
-            remove.setOnLongClickListener {
-                it.toastBelow(R.string.fragment_bookmarks_delete_hint)
-
-                true
-            }
-
-            remove.setImageDrawable(IconicsDrawable(remove.context)
+            delete.setImageDrawable(IconicsDrawable(delete.context)
                     .icon(CommunityMaterial.Icon.cmd_bookmark_remove)
                     .colorRes(R.color.icon)
                     .sizeDp(48)

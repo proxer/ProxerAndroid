@@ -19,12 +19,13 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         tools:text="Chapter 2" />
 
-    <ImageButton
+    <me.proxer.app.view.InfoImageButton
         android:id="@+id/delete"
         android:layout_width="22dp"
         android:layout_height="22dp"
         android:layout_gravity="end|center_vertical"
         android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/fragment_local_manga_delete_content_description"
         android:padding="2dp"
         tools:ignore="ContentDescription"
         tools:src="@drawable/ic_japan" />

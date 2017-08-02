@@ -27,7 +27,7 @@
             android:maxLines="1" />
     </android.support.design.widget.TextInputLayout>
 
-    <ImageButton
+    <me.proxer.app.view.InfoImageButton
         android:id="@+id/cancel"
         android:layout_width="48dp"
         android:layout_height="48dp"
@@ -35,9 +35,9 @@
         android:layout_toLeftOf="@+id/accept"
         android:layout_toStartOf="@+id/accept"
         android:background="?attr/selectableItemBackgroundBorderless"
-        tools:ignore="ContentDescription" />
+        android:contentDescription="@string/fragment_new_chat_cancel_content_description" />
 
-    <ImageButton
+    <me.proxer.app.view.InfoImageButton
         android:id="@+id/accept"
         android:layout_width="48dp"
         android:layout_height="48dp"
@@ -45,5 +45,6 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/fragment_new_chat_accept_description"
         tools:ignore="ContentDescription" />
 </RelativeLayout>

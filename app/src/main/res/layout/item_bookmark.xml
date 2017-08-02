@@ -94,14 +94,14 @@
                 android:layout_marginRight="8dp"
                 tools:ignore="ContentDescription" />
 
-            <ImageButton
-                android:id="@+id/remove"
+            <me.proxer.app.view.InfoImageButton
+                android:id="@+id/delete"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_below="@+id/episodeContainer"
                 android:layout_centerHorizontal="true"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                tools:ignore="ContentDescription" />
+                android:contentDescription="@string/fragment_bookmark_delete_content_description" />
 
         </RelativeLayout>
     </android.support.v7.widget.CardView>

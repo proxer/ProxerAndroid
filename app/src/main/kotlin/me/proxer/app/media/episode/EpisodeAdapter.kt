@@ -2,6 +2,7 @@ package me.proxer.app.media.episode
 
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.TooltipCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -247,37 +248,19 @@ class EpisodeAdapter(savedInstanceState: Bundle?, private val entryId: String, p
                 language.toGeneralLanguage().let { generalLanguage ->
                     download.setOnClickListener {
                         constructChapterCheckSingle(entryId, episode, generalLanguage)
-                                .map { exists ->
+                                .doOnSuccess { exists ->
                                     if (!exists) {
-                                        LocalMangaJob.schedule(it.context, entryId, episode, generalLanguage)
+                                        LocalMangaJob.schedule(download.context, entryId, episode, generalLanguage)
                                     }
-
-                                    exists
                                 }
                                 .subscribeOn(Schedulers.newThread())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe { exists: Boolean ->
-                                    if (exists) {
-                                        download.toastBelow(R.string.fragment_episode_already_downloaded_hint)
-                                    } else {
+                                    if (!exists) {
                                         download.visibility = View.INVISIBLE
                                         downloadProgress.visibility = View.VISIBLE
                                     }
                                 }
-                    }
-
-                    download.setOnLongClickListener {
-                        constructChapterCheckSingle(entryId, episode, generalLanguage)
-                                .subscribeOn(Schedulers.newThread())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe { exists: Boolean ->
-                                    when (exists) {
-                                        true -> download.toastBelow(R.string.fragment_episode_already_downloaded_hint)
-                                        false -> download.toastBelow(R.string.fragment_episode_download_hint)
-                                    }
-                                }
-
-                        true
                     }
 
                     downloadProgress.setOnClickListener {
@@ -309,6 +292,13 @@ class EpisodeAdapter(savedInstanceState: Bundle?, private val entryId: String, p
                                     true -> CommunityMaterial.Icon.cmd_cloud_check
                                     false -> CommunityMaterial.Icon.cmd_download
                                 }).colorRes(R.color.icon).sizeDp(32)
+
+                                when (containsChapter) {
+                                    true -> TooltipCompat.setTooltipText(download, download.context
+                                            .getString(R.string.fragment_episode_already_downloaded_hint))
+                                    false -> TooltipCompat.setTooltipText(download, download.context
+                                            .getString(R.string.fragment_episode_download_hint))
+                                }
 
                                 downloadContainer.visibility = View.VISIBLE
                                 downloadProgress.visibility = progressVisibility
