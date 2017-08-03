@@ -2,7 +2,9 @@ package me.proxer.app.anime.resolver
 
 import android.net.Uri
 import io.reactivex.Single
-import me.proxer.app.MainApplication
+import me.proxer.app.MainApplication.Companion.USER_AGENT
+import me.proxer.app.MainApplication.Companion.api
+import me.proxer.app.MainApplication.Companion.client
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.toBodySingle
@@ -19,13 +21,13 @@ class ProxerStreamResolver : StreamResolver() {
 
     override val name = "Proxer-Stream"
 
-    override fun resolve(id: String): Single<StreamResolutionResult> = MainApplication.api.anime().link(id)
+    override fun resolve(id: String): Single<StreamResolutionResult> = api.anime().link(id)
             .buildSingle()
             .flatMap { url ->
-                MainApplication.client.newCall(Request.Builder()
+                client.newCall(Request.Builder()
                         .get()
                         .url(Utils.parseAndFixUrl(url))
-                        .addHeader("User-Agent", MainApplication.USER_AGENT)
+                        .addHeader("User-Agent", USER_AGENT)
                         .build())
                         .toBodySingle()
                         .map {

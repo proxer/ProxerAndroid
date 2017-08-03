@@ -4,7 +4,7 @@ import android.content.Context
 import io.reactivex.Single
 import io.reactivex.SingleObserver
 import io.reactivex.disposables.Disposable
-import me.proxer.app.MainApplication
+import me.proxer.app.MainApplication.Companion.client
 import me.proxer.app.util.extension.lock
 import me.proxer.library.util.ProxerUrls
 import okhttp3.Call
@@ -48,7 +48,7 @@ class MangaPageSingle(context: Context, private val isLocal: Boolean, private va
                         }
 
                         MangaLocks.pageConcurrencyLock.lock {
-                            call = MainApplication.client.newCall(Request.Builder()
+                            call = client.newCall(Request.Builder()
                                     .url(url)
                                     .build())
 

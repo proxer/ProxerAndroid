@@ -3,7 +3,10 @@ package me.proxer.app.anime.resolver
 import android.content.Intent
 import android.net.Uri
 import io.reactivex.Single
-import me.proxer.app.MainApplication
+import me.proxer.app.MainApplication.Companion.USER_AGENT
+import me.proxer.app.MainApplication.Companion.api
+import me.proxer.app.MainApplication.Companion.client
+import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.anime.AppRequiredException
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.buildSingle
@@ -26,16 +29,16 @@ class CrunchyrollStreamResolver : StreamResolver() {
     override fun supports(name: String) = name.startsWith(this.name, true)
     override fun resolve(id: String): Single<StreamResolutionResult> = Single
             .fromCallable {
-                if (!Utils.isPackageInstalled(MainApplication.globalContext.packageManager, CRUNCHYROLL_PACKAGE)) {
+                if (!Utils.isPackageInstalled(globalContext.packageManager, CRUNCHYROLL_PACKAGE)) {
                     throw AppRequiredException(name, CRUNCHYROLL_PACKAGE)
                 }
             }
-            .flatMap { MainApplication.api.anime().link(id).buildSingle() }
+            .flatMap { api.anime().link(id).buildSingle() }
             .flatMap { url ->
-                MainApplication.client.newCall(Request.Builder()
+                client.newCall(Request.Builder()
                         .get()
                         .url(Utils.parseAndFixUrl(url))
-                        .addHeader("User-Agent", MainApplication.USER_AGENT)
+                        .addHeader("User-Agent", USER_AGENT)
                         .build())
                         .toBodySingle()
                         .map {
