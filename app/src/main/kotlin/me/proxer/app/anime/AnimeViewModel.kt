@@ -15,10 +15,7 @@ import me.proxer.app.base.BaseViewModel
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.Validators
-import me.proxer.app.util.extension.buildOptionalSingle
-import me.proxer.app.util.extension.buildSingle
-import me.proxer.app.util.extension.toAnimeStreamInfo
-import me.proxer.app.util.extension.toMediaLanguage
+import me.proxer.app.util.extension.*
 import me.proxer.library.api.Endpoint
 import me.proxer.library.entitiy.anime.Stream
 import me.proxer.library.entitiy.info.EntryCore
@@ -43,22 +40,14 @@ class AnimeViewModel(application: Application) : BaseViewModel<AnimeStreamInfo>(
     private var cachedEntryCore: EntryCore? = null
 
     private val dataSingle
-        get() = Single.zip(entrySingle, streamSingle, BiFunction { entry: EntryCore, streams: List<Stream> ->
-            AnimeStreamInfo(entry.name, entry.episodeAmount, streams.map {
-                it.toAnimeStreamInfo(StreamResolverFactory.resolverFor(it.hosterName) != null)
-            })
-        })
-
-    private val entrySingle
-        get() = when (cachedEntryCore != null) {
-            true -> Single.just(cachedEntryCore)
-            false -> api.info().entryCore(entryId).buildSingle()
-        }.doOnSuccess { cachedEntryCore = it }
-
-    private val streamSingle
-        get() = api.anime().streams(entryId, episode, language)
-                .includeProxerStreams(true)
-                .buildSingle()
+        get() = entrySingle().flatMap {
+            Single.zip(Single.just(it), streamSingle(it),
+                    BiFunction<EntryCore, List<Stream>, AnimeStreamInfo> { entry, streams ->
+                        AnimeStreamInfo(entry.name, entry.episodeAmount, streams.map {
+                            it.toAnimeStreamInfo(StreamResolverFactory.resolverFor(it.hosterName) != null)
+                        })
+                    })
+        }
 
     private var disposable: Disposable? = null
     private var resolverDisposable: Disposable? = null
@@ -125,6 +114,15 @@ class AnimeViewModel(application: Application) : BaseViewModel<AnimeStreamInfo>(
     fun markAsFinished() = updateUserState(api.info().markAsFinished(entryId))
     fun bookmark(episode: Int) = updateUserState(api.ucp().setBookmark(entryId, episode, language.toMediaLanguage(),
             Category.ANIME))
+
+    private fun entrySingle() = when (cachedEntryCore != null) {
+        true -> Single.just(cachedEntryCore)
+        false -> api.info().entryCore(entryId).buildSingle()
+    }.doOnSuccess { cachedEntryCore = it }
+
+    private fun streamSingle(entry: EntryCore) = api.anime().streams(entryId, episode, language)
+            .includeProxerStreams(true)
+            .buildPartialErrorSingle(entry)
 
     private fun updateUserState(endpoint: Endpoint<Void>) {
         bookmarkDisposable?.dispose()

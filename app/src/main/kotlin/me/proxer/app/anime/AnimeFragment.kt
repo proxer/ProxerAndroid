@@ -27,6 +27,7 @@ import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.snackbar
 import me.proxer.app.view.MediaControlView
+import me.proxer.library.entitiy.info.EntryCore
 import me.proxer.library.enums.AnimeLanguage
 import okhttp3.HttpUrl
 import org.jetbrains.anko.applyRecursively
@@ -206,6 +207,15 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
         innerAdapter.saveInstanceState(outState)
     }
 
+    override fun hideData() {
+        super.hideData()
+
+        innerAdapter.clear()
+        innerAdapter.notifyDataSetChanged()
+
+        adapter.header = null
+    }
+
     override fun showData(data: AnimeStreamInfo) {
         super.showData(data)
 
@@ -218,6 +228,35 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
 
         if (data.streams.isEmpty()) {
             showError(ErrorAction(R.string.error_no_data_anime, ErrorAction.ACTION_MESSAGE_HIDE))
+        }
+    }
+
+    override fun showError(action: ErrorAction) {
+        super.showError(action)
+
+        action.partialData?.let {
+            if (it is EntryCore) {
+                episodeAmount = it.episodeAmount
+                name = it.name
+
+                header.setEpisodeInfo(it.episodeAmount, episode)
+                adapter.header = header
+            }
+        }
+
+        if (adapter.header != null) {
+            contentContainer.visibility = View.VISIBLE
+            errorContainer.visibility = View.INVISIBLE
+
+            errorInnerContainer.post {
+                val newCenter = root.height / 2f + header.height / 2f
+                val containerCenterCorrection = errorInnerContainer.height / 2f
+
+                errorInnerContainer.y = newCenter - containerCenterCorrection
+                errorContainer.visibility = View.VISIBLE
+            }
+        } else {
+            errorContainer.translationY = 0f
         }
     }
 }

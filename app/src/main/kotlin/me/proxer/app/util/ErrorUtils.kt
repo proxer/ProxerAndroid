@@ -126,7 +126,7 @@ object ErrorUtils {
             else -> null
         }
 
-        return ErrorAction(errorMessage, buttonMessage, buttonAction, (error as? PartialException))
+        return ErrorAction(errorMessage, buttonMessage, buttonAction, (error as? PartialException)?.partialData)
     }
 
     open class ErrorAction(val message: Int, val buttonMessage: Int = ACTION_MESSAGE_DEFAULT,
@@ -148,5 +148,5 @@ object ErrorUtils {
         }
     }
 
-    class PartialException(val innerError: Throwable, val partialResult: Any?) : Exception()
+    class PartialException(val innerError: Throwable, val partialData: Any?) : Exception()
 }
