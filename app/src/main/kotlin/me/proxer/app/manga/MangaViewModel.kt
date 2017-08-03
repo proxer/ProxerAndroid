@@ -98,10 +98,9 @@ class MangaViewModel(application: Application) : BaseViewModel<MangaChapterInfo>
 
     private fun updateUserState(endpoint: Endpoint<Void>) {
         bookmarkDisposable?.dispose()
-        bookmarkDisposable = endpoint
-                .buildOptionalSingle()
+        bookmarkDisposable = Single.fromCallable { Validators.validateLogin() }
+                .flatMap { endpoint.buildOptionalSingle() }
                 .subscribeOn(Schedulers.io())
-                .flatMap { Single.fromCallable { it.apply { Validators.validateLogin() } } }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     bookmarkError.value = null
