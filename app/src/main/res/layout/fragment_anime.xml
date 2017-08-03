@@ -4,7 +4,7 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.anime.AnimeFragment">
+    tools:context=".anime.AnimeFragment">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/progress"

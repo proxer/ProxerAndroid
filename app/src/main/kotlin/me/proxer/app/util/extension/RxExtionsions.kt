@@ -14,12 +14,14 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.internal.disposables.DisposableContainer
 import me.proxer.app.util.ErrorUtils.PartialException
 import me.proxer.library.api.Endpoint
+import okhttp3.Call
+import java.io.IOException
 
 /**
  * @author Ruben Gees
  */
 
-inline fun <T> Endpoint<T>.buildSingle(): Single<T> = Single.create<T> { emitter ->
+fun <T> Endpoint<T>.buildSingle(): Single<T> = Single.create { emitter ->
     val call = build()
 
     emitter.setCancellable { call.cancel() }
@@ -33,7 +35,7 @@ inline fun <T> Endpoint<T>.buildSingle(): Single<T> = Single.create<T> { emitter
     }
 }
 
-inline fun <T : Any> Endpoint<T>.buildOptionalSingle(): Single<Optional<T>> = Single.create<Optional<T>> { emitter ->
+fun <T : Any> Endpoint<T>.buildOptionalSingle(): Single<Optional<T>> = Single.create { emitter ->
     val call = build()
 
     emitter.setCancellable { call.cancel() }
@@ -47,7 +49,7 @@ inline fun <T : Any> Endpoint<T>.buildOptionalSingle(): Single<Optional<T>> = Si
     }
 }
 
-inline fun <I : Any, T : Any> Endpoint<T>.buildPartialErrorSingle(input: I) = Single.create<T> { emitter ->
+fun <I : Any, T : Any> Endpoint<T>.buildPartialErrorSingle(input: I): Single<T> = Single.create { emitter ->
     val call = build()
 
     emitter.setCancellable { call.cancel() }
@@ -57,6 +59,30 @@ inline fun <I : Any, T : Any> Endpoint<T>.buildPartialErrorSingle(input: I) = Si
     } catch (error: Throwable) {
         if (!emitter.isDisposed) {
             emitter.onError(PartialException(error, input))
+        }
+    }
+}
+
+fun Call.toBodySingle(): Single<String> = Single.create { emitter ->
+    emitter.setCancellable { cancel() }
+
+    try {
+        val result = execute()
+
+        if (result.isSuccessful) {
+            val body = result.body()
+
+            if (body != null) {
+                emitter.onSuccess(body.string())
+            } else {
+                emitter.onError(IOException())
+            }
+        } else {
+            emitter.onError(IOException())
+        }
+    } catch (error: Throwable) {
+        if (!emitter.isDisposed) {
+            emitter.onError(error)
         }
     }
 }

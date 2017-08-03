@@ -4,6 +4,7 @@ import android.view.View
 import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.upstream.HttpDataSource
 import me.proxer.app.R
+import me.proxer.app.anime.resolver.StreamResolutionException
 import me.proxer.app.auth.LoginDialog
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.settings.AgeConfirmationDialog
@@ -51,12 +52,7 @@ object ErrorUtils {
             }
             is NotLoggedInException -> R.string.error_login_required
             is AgeConfirmationRequiredException -> R.string.error_age_confirmation_needed
-//            is StreamResolutionTask.NoResolverException -> {
-//                R.string.error_unsupported_hoster
-//            }
-//            is StreamResolutionTask.StreamResolutionException -> {
-//                R.string.error_stream_resolution
-//            }
+            is StreamResolutionException -> R.string.error_stream_resolution
             else -> R.string.error_unknown
         }
     }
@@ -130,11 +126,11 @@ object ErrorUtils {
             else -> null
         }
 
-        return ErrorAction(errorMessage, buttonMessage, buttonAction, (error as? PartialException)?.partialResult)
+        return ErrorAction(errorMessage, buttonMessage, buttonAction, (error as? PartialException))
     }
 
-    class ErrorAction(val message: Int, val buttonMessage: Int = ACTION_MESSAGE_DEFAULT,
-                      val buttonAction: ButtonAction? = null, val partialData: Any? = null) {
+    open class ErrorAction(val message: Int, val buttonMessage: Int = ACTION_MESSAGE_DEFAULT,
+                           val buttonAction: ButtonAction? = null, val partialData: Any? = null) {
 
         companion object {
             const val ACTION_MESSAGE_DEFAULT = -1

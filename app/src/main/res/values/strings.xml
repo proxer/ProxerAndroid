@@ -79,7 +79,7 @@
         Jahre alt bist</string>
     <string name="error_refresh">Aktualisierung fehlgeschlagen: %s</string>
 
-    <string name="error_unsupported_hoster">Dieser Hoster wird nicht unterstützt</string>
+    <string name="error_unsupported_hoster">Dieser Hoster wird\nnicht unterstützt</string>
     <string name="error_stream_resolution">Fehler beim Laden des Streams. Das Video ist eventuell nicht mehr verfügbar
     </string>
 

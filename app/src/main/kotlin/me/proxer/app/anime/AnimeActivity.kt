@@ -106,7 +106,7 @@ class AnimeActivity : BaseActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-//                    .replace(R.id.container, AnimeFragment.newInstance())
+                    .replace(R.id.container, AnimeFragment.newInstance())
                     .commitNow()
         }
     }

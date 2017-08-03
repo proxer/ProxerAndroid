@@ -3,6 +3,7 @@ package me.proxer.app.util
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.net.Uri
 import android.os.Build
@@ -20,6 +21,7 @@ import me.proxer.library.api.ProxerException.ErrorType
 import me.proxer.library.util.ProxerUrls
 import okhttp3.HttpUrl
 import java.util.regex.Pattern
+
 
 /**
  * @author Ruben Gees
@@ -101,6 +103,14 @@ object Utils {
             }
         }
     } ?: throw ProxerException(ErrorType.PARSING)
+
+    fun isPackageInstalled(packageManager: PackageManager, packageName: String): Boolean {
+        return try {
+            packageManager.getApplicationInfo(packageName, 0).enabled
+        } catch (error: PackageManager.NameNotFoundException) {
+            false
+        }
+    }
 
     fun getNativeAppPackage(context: Context, url: HttpUrl): Set<String> {
         val browserActivityIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://www.generic.com"))

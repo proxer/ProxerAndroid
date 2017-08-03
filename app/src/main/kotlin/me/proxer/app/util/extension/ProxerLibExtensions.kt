@@ -5,9 +5,11 @@ import android.support.v7.content.res.AppCompatResources
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
+import me.proxer.app.anime.AnimeStream
 import me.proxer.app.manga.local.LocalEntryCore
 import me.proxer.app.manga.local.LocalMangaChapter
 import me.proxer.app.manga.local.LocalMangaPage
+import me.proxer.library.entitiy.anime.Stream
 import me.proxer.library.entitiy.info.EntryCore
 import me.proxer.library.entitiy.info.EntrySeasonInfo
 import me.proxer.library.entitiy.info.Synonym
@@ -204,3 +206,6 @@ fun Chapter.toLocalChapter(episode: Int, language: Language) = LocalMangaChapter
         entryId, title, uploaderId, uploaderName, date, scanGroupId, scanGroupName, server)
 
 fun Page.toLocalPage(id: Long = 0, chapterId: Long) = LocalMangaPage(id, name, height, width, chapterId)
+
+fun Stream.toAnimeStreamInfo(isSupported: Boolean) = AnimeStream(id, hoster, hosterName, image, uploaderId,
+        uploaderName, date, translatorGroupId, translatorGroupName, isSupported)
