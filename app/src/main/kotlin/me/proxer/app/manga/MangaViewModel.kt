@@ -32,8 +32,7 @@ class MangaViewModel(application: Application) : BaseViewModel<MangaChapterInfo>
     lateinit var language: Language
 
     private var episode = 0
-
-    private val entrySingle by lazy { localEntrySingle().onErrorResumeNext(remoteEntrySingle()).cache() }
+    private var cachedEntryCore: EntryCore? = null
 
     private var disposable: Disposable? = null
     private var bookmarkDisposable: Disposable? = null
@@ -49,7 +48,7 @@ class MangaViewModel(application: Application) : BaseViewModel<MangaChapterInfo>
     }
 
     override fun load() {
-        entrySingle
+        localEntrySingle().onErrorResumeNext(remoteEntrySingle())
                 .flatMap { localChapterSingle(it).onErrorResumeNext(remoteChapterSingle(it)) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -79,8 +78,11 @@ class MangaViewModel(application: Application) : BaseViewModel<MangaChapterInfo>
     fun bookmark(episode: Int) = updateUserState(api.ucp().setBookmark(entryId, episode, language.toMediaLanguage(),
             Category.MANGA))
 
-    private fun localEntrySingle() = Single.fromCallable {
-        mangaDao.findEntry(entryId.toLong())?.toNonLocalEntryCore() ?: throw RuntimeException()
+    private fun localEntrySingle() = when (cachedEntryCore != null) {
+        true -> Single.just(cachedEntryCore)
+        false -> Single.fromCallable {
+            mangaDao.findEntry(entryId.toLong())?.toNonLocalEntryCore() ?: throw RuntimeException()
+        }.doOnSuccess { cachedEntryCore = it }
     }
 
     private fun localChapterSingle(entry: EntryCore) = Single.fromCallable {

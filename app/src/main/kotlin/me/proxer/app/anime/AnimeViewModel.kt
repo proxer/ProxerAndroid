@@ -40,6 +40,7 @@ class AnimeViewModel(application: Application) : BaseViewModel<AnimeStreamInfo>(
     lateinit var language: AnimeLanguage
 
     private var episode = 0
+    private var cachedEntryCore: EntryCore? = null
 
     private val dataSingle
         get() = Single.zip(entrySingle, streamSingle, BiFunction { entry: EntryCore, streams: List<Stream> ->
@@ -48,7 +49,11 @@ class AnimeViewModel(application: Application) : BaseViewModel<AnimeStreamInfo>(
             })
         })
 
-    private val entrySingle by lazy { api.info().entryCore(entryId).buildSingle().cache() }
+    private val entrySingle
+        get() = when (cachedEntryCore != null) {
+            true -> Single.just(cachedEntryCore)
+            false -> api.info().entryCore(entryId).buildSingle()
+        }.doOnSuccess { cachedEntryCore = it }
 
     private val streamSingle
         get() = api.anime().streams(entryId, episode, language)
