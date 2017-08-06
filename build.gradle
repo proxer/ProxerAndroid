@@ -10,7 +10,7 @@ buildscript {
         buildToolsVersion = '26.0.0'
 
         androidPluginVersion = '3.0.0-alpha9'
-        kotlinVersion = '1.1.4-eap-54'
+        kotlinVersion = '1.1.4-eap-69'
         gradleVersionsPluginVersion = '0.15.0'
 
         // Frameworks and code only libraries
