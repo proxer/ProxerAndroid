@@ -20,6 +20,8 @@ abstract class PagedViewModel<T>(application: Application) : BaseViewModel<List<
     abstract protected val itemsOnPage: Int
 
     override fun load() {
+        val currentPage = page
+
         dataDisposable?.dispose()
         dataDisposable = dataSingle
                 .doAfterSuccess { newData -> hasReachedEnd = newData.size < itemsOnPage }
@@ -27,7 +29,7 @@ abstract class PagedViewModel<T>(application: Application) : BaseViewModel<List<
                     data.value.let { existingData ->
                         when (existingData) {
                             null -> newData
-                            else -> when (page) {
+                            else -> when (currentPage) {
                                 0 -> newData + existingData.filter { item ->
                                     newData.find { oldItem -> areItemsTheSame(oldItem, item) } == null
                                 }
@@ -45,16 +47,14 @@ abstract class PagedViewModel<T>(application: Application) : BaseViewModel<List<
                     error.value = null
                     isLoading.value = true
                 }
-                .doAfterSuccess { data.value?.size?.div(itemsOnPage) ?: 0 }
-                .doAfterTerminate {
-                    isLoading.value = false
-                }
+                .doAfterTerminate { page = data.value?.size?.div(itemsOnPage) ?: 0 }
+                .doAfterTerminate { isLoading.value = false }
                 .subscribe({
                     refreshError.value = null
                     error.value = null
                     data.value = it
                 }, {
-                    if (page == 0 && data.value?.size ?: 0 > 0) {
+                    if (currentPage == 0 && data.value?.size ?: 0 > 0) {
                         refreshError.value = ErrorUtils.handle(it)
                     } else {
                         error.value = ErrorUtils.handle(it)
