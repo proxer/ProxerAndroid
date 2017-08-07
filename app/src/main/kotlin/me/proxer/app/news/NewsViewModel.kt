@@ -12,7 +12,7 @@ import me.proxer.library.entitiy.notifications.NewsArticle
 class NewsViewModel(application: Application) : PagedContentViewModel<NewsArticle>(application) {
 
     override val itemsOnPage = 15
+
     override val endpoint: PagingLimitEndpoint<List<NewsArticle>>
-        get() = api.notifications()
-                .news()
+        get() = api.notifications().news()
 }

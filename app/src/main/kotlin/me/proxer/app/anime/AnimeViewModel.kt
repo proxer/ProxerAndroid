@@ -27,6 +27,16 @@ import me.proxer.library.enums.Category
  */
 class AnimeViewModel(application: Application) : BaseViewModel<AnimeStreamInfo>(application) {
 
+    override val dataSingle: Single<AnimeStreamInfo>
+        get() = entrySingle().flatMap {
+            Single.zip(Single.just(it), streamSingle(it),
+                    BiFunction<EntryCore, List<Stream>, AnimeStreamInfo> { entry, streams ->
+                        AnimeStreamInfo(entry.name, entry.episodeAmount, streams.map {
+                            it.toAnimeStreamInfo(StreamResolverFactory.resolverFor(it.hosterName) != null)
+                        })
+                    })
+        }
+
     val resolutionResult = MutableLiveData<StreamResolutionResult>()
     val resolutionError = MutableLiveData<ErrorAction>()
 
@@ -39,26 +49,13 @@ class AnimeViewModel(application: Application) : BaseViewModel<AnimeStreamInfo>(
     private var episode = 0
     private var cachedEntryCore: EntryCore? = null
 
-    private val dataSingle
-        get() = entrySingle().flatMap {
-            Single.zip(Single.just(it), streamSingle(it),
-                    BiFunction<EntryCore, List<Stream>, AnimeStreamInfo> { entry, streams ->
-                        AnimeStreamInfo(entry.name, entry.episodeAmount, streams.map {
-                            it.toAnimeStreamInfo(StreamResolverFactory.resolverFor(it.hosterName) != null)
-                        })
-                    })
-        }
-
-    private var disposable: Disposable? = null
     private var resolverDisposable: Disposable? = null
     private var bookmarkDisposable: Disposable? = null
 
     override fun onCleared() {
-        disposable?.dispose()
         resolverDisposable?.dispose()
         bookmarkDisposable?.dispose()
 
-        disposable = null
         resolverDisposable = null
         bookmarkDisposable = null
 
@@ -66,22 +63,9 @@ class AnimeViewModel(application: Application) : BaseViewModel<AnimeStreamInfo>(
     }
 
     override fun load() {
-        disposable?.dispose()
         resolverDisposable?.dispose()
-        dataSingle.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe {
-                    error.value = null
-                    isLoading.value = true
-                }
-                .doAfterTerminate { isLoading.value = false }
-                .subscribe({
-                    error.value = null
-                    data.value = it
-                }, {
-                    data.value = null
-                    error.value = ErrorUtils.handle(it)
-                })
+
+        super.load()
     }
 
     fun resolve(name: String, id: String) {

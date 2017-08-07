@@ -24,23 +24,23 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     val isLoading = MutableLiveData<Boolean?>()
     val isTwoFactorAuthenticationEnabled = MutableLiveData<Boolean?>()
 
-    private var disposable: Disposable? = null
+    private var dataDisposable: Disposable? = null
 
     init {
         isTwoFactorAuthenticationEnabled.value = StorageHelper.isTwoFactorAuthenticationEnabled
     }
 
     override fun onCleared() {
-        disposable?.dispose()
-        disposable = null
+        dataDisposable?.dispose()
+        dataDisposable = null
 
         super.onCleared()
     }
 
     fun login(username: String, password: String, secretKey: String?) {
         if (isLoading.value != true) {
-            disposable?.dispose()
-            disposable = api.user().login(username, password)
+            dataDisposable?.dispose()
+            dataDisposable = api.user().login(username, password)
                     .secretKey(secretKey)
                     .buildSingle()
                     .subscribeOn(Schedulers.io())

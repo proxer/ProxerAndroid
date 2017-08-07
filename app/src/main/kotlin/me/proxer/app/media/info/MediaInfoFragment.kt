@@ -26,7 +26,6 @@ import me.proxer.library.enums.Category
 import me.proxer.library.util.ProxerUrls
 import me.proxer.library.util.ProxerUtils
 import org.jetbrains.anko.bundleOf
-import org.jetbrains.anko.find
 
 /**
  * @author Ruben Gees
@@ -215,8 +214,8 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
 
         if (seasons.isNotEmpty()) {
             val tableRow = LayoutInflater.from(context).inflate(R.layout.layout_media_info_seasons_row, infoTable, false)
-            val seasonStartView = tableRow.find<TextView>(R.id.seasonStart)
-            val seasonEndView = tableRow.find<TextView>(R.id.seasonEnd)
+            val seasonStartView = tableRow.findViewById<TextView>(R.id.seasonStart)
+            val seasonEndView = tableRow.findViewById<TextView>(R.id.seasonEnd)
 
             seasonStartView.text = seasons[0].toStartAppString(context)
 
@@ -242,8 +241,8 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
 
     private fun constructInfoTableRow(title: String, content: String, isSelectable: Boolean = false): View {
         val tableRow = LayoutInflater.from(context).inflate(R.layout.layout_media_info_row, infoTable, false)
-        val titleView = tableRow.find<TextView>(R.id.title)
-        val contentView = tableRow.find<TextView>(R.id.content)
+        val titleView = tableRow.findViewById<TextView>(R.id.title)
+        val contentView = tableRow.findViewById<TextView>(R.id.content)
 
         titleView.text = title
         contentView.text = content

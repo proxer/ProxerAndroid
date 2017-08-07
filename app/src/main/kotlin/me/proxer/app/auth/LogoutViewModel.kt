@@ -19,19 +19,19 @@ class LogoutViewModel(application: Application) : AndroidViewModel(application) 
     val error = MutableLiveData<ErrorUtils.ErrorAction?>()
     val isLoading = MutableLiveData<Boolean?>()
 
-    private var disposable: Disposable? = null
+    private var dataDisposable: Disposable? = null
 
     override fun onCleared() {
-        disposable?.dispose()
-        disposable = null
+        dataDisposable?.dispose()
+        dataDisposable = null
 
         super.onCleared()
     }
 
     fun logout() {
         if (isLoading.value != true) {
-            disposable?.dispose()
-            disposable = api.user().logout()
+            dataDisposable?.dispose()
+            dataDisposable = api.user().logout()
                     .buildOptionalSingle()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())

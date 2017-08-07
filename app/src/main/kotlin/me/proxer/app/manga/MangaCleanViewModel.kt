@@ -20,18 +20,18 @@ class MangaCleanViewModel(application: Application?) : AndroidViewModel(applicat
 
     val data = MutableLiveData<Unit>()
 
-    private var disposable: Disposable? = null
+    private var dataDisposable: Disposable? = null
 
     override fun onCleared() {
-        disposable?.dispose()
-        disposable = null
+        dataDisposable?.dispose()
+        dataDisposable = null
 
         super.onCleared()
     }
 
     fun clean() {
-        disposable?.dispose()
-        disposable = Completable
+        dataDisposable?.dispose()
+        dataDisposable = Completable
                 .fromAction {
                     LocalMangaJob.cancelAll()
 

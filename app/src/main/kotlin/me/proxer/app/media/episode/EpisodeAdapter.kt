@@ -37,7 +37,6 @@ import me.zhanghai.android.materialprogressbar.MaterialProgressBar
 import org.jetbrains.anko.applyRecursively
 import org.jetbrains.anko.collections.forEachWithIndex
 import org.jetbrains.anko.dip
-import org.jetbrains.anko.find
 import org.jetbrains.anko.forEachChildWithIndex
 
 /**
@@ -163,11 +162,11 @@ class EpisodeAdapter(savedInstanceState: Bundle?, private val entryId: String, p
 
             item.languageHosterList.forEachWithIndex { index, (language, hosterImages) ->
                 val languageContainer = languages.getChildAt(index)
-                val languageView = languageContainer.find<TextView>(R.id.language)
-                val hostersView = languageContainer.find<ViewGroup>(R.id.hosters)
-                val downloadContainer = languageContainer.find<ViewGroup>(R.id.downloadContainer)
-                val download = languageContainer.find<ImageView>(R.id.download)
-                val downloadProgress = languageContainer.find<MaterialProgressBar>(R.id.downloadProgress)
+                val languageView = languageContainer.findViewById<TextView>(R.id.language)
+                val hostersView = languageContainer.findViewById<ViewGroup>(R.id.hosters)
+                val downloadContainer = languageContainer.findViewById<ViewGroup>(R.id.downloadContainer)
+                val download = languageContainer.findViewById<ImageView>(R.id.download)
+                val downloadProgress = languageContainer.findViewById<MaterialProgressBar>(R.id.downloadProgress)
 
                 languageView.text = language.toAppString(languageView.context)
                 languageView.setCompoundDrawablesWithIntrinsicBounds(language.toGeneralLanguage()

@@ -33,6 +33,11 @@ class MangaViewModel(application: Application) : BaseViewModel<MangaChapterInfo>
         private const val MAX_CACHE_SIZE = 1024L * 1024L * 256L
     }
 
+    override val dataSingle: Single<MangaChapterInfo>
+        get() = cleanCompletable()
+                .andThen(entrySingle())
+                .flatMap { localChapterSingle(it).onErrorResumeNext(remoteChapterSingle(it)) }
+
     val bookmarkData = MutableLiveData<Unit?>()
     val bookmarkError = MutableLiveData<ErrorUtils.ErrorAction?>()
 
@@ -42,37 +47,13 @@ class MangaViewModel(application: Application) : BaseViewModel<MangaChapterInfo>
     private var episode = 0
     private var cachedEntryCore: EntryCore? = null
 
-    private var disposable: Disposable? = null
     private var bookmarkDisposable: Disposable? = null
 
     override fun onCleared() {
-        disposable?.dispose()
-        bookmarkDisposable?.dispose()
 
-        disposable = null
         bookmarkDisposable = null
 
         super.onCleared()
-    }
-
-    override fun load() {
-        cleanSingle()
-                .andThen(entrySingle())
-                .flatMap { localChapterSingle(it).onErrorResumeNext(remoteChapterSingle(it)) }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe {
-                    error.value = null
-                    isLoading.value = true
-                }
-                .doAfterTerminate { isLoading.value = false }
-                .subscribe({
-                    error.value = null
-                    data.value = it
-                }, {
-                    data.value = null
-                    error.value = ErrorUtils.handle(it)
-                })
     }
 
     fun setEpisode(value: Int, trigger: Boolean = true) {
@@ -87,9 +68,9 @@ class MangaViewModel(application: Application) : BaseViewModel<MangaChapterInfo>
     fun bookmark(episode: Int) = updateUserState(api.ucp().setBookmark(entryId, episode, language.toMediaLanguage(),
             Category.MANGA))
 
-    private fun cleanSingle() = Completable.fromAction {
+    private fun cleanCompletable() = Completable.fromAction {
         MangaLocks.cacheLock.write {
-            val localDataInfos = arrayListOf<LocalDataInfo>()
+            val localDataInfoList = arrayListOf<LocalDataInfo>()
             val cacheDir = globalContext.cacheDir
             var overallSize = 0L
 
@@ -105,13 +86,13 @@ class MangaViewModel(application: Application) : BaseViewModel<MangaChapterInfo>
                         }
                     }
 
-                    localDataInfos += LocalDataInfo(entryDirectoryName, chapterDirectoryName,
+                    localDataInfoList += LocalDataInfo(entryDirectoryName, chapterDirectoryName,
                             chapterDirectory.lastModified(), size)
                 }
             }
 
             while (overallSize >= MAX_CACHE_SIZE) {
-                localDataInfos.minBy { it.lastModification }?.let {
+                localDataInfoList.minBy { it.lastModification }?.let {
                     File("$cacheDir/manga/${it.entryId}/${it.chapterId}").deleteRecursively()
 
                     overallSize -= it.size
@@ -129,14 +110,15 @@ class MangaViewModel(application: Application) : BaseViewModel<MangaChapterInfo>
         mangaDao.findEntry(entryId.toLong())?.toNonLocalEntryCore() ?: throw RuntimeException()
     }.doOnSuccess { cachedEntryCore = it }
 
+    private fun remoteEntrySingle() = api.info().entryCore(entryId).buildSingle()
+
     private fun localChapterSingle(entry: EntryCore) = Single.fromCallable {
         val chapter = mangaDao.findChapter(entryId.toLong(), episode, language) ?: throw RuntimeException()
-        val nonLocalChapter = chapter.toNonLocalChapter(mangaDao.getPagesForChapter(chapter.id).map { it.toNonLocalPage() })
+        val nonLocalChapter = chapter.toNonLocalChapter(mangaDao.getPagesForChapter(chapter.id)
+                .map { it.toNonLocalPage() })
 
         MangaChapterInfo(nonLocalChapter, entry.name, entry.episodeAmount, true)
     }
-
-    private fun remoteEntrySingle() = api.info().entryCore(entryId).buildSingle()
 
     private fun remoteChapterSingle(entry: EntryCore) = api.manga().chapter(entryId, episode, language)
             .buildPartialErrorSingle(entry)

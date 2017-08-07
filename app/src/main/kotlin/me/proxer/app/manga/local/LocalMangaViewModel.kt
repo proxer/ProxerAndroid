@@ -7,7 +7,6 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.bus
@@ -17,7 +16,6 @@ import me.proxer.app.MainApplication.Companion.mangaDatabase
 import me.proxer.app.R
 import me.proxer.app.base.BaseViewModel
 import me.proxer.app.manga.MangaLocks
-import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
 import me.proxer.app.util.extension.CompleteLocalMangaEntry
 import me.proxer.app.util.extension.getQuantityString
@@ -32,18 +30,32 @@ class LocalMangaViewModel(application: Application) : BaseViewModel<List<Complet
 
     override val isLoginRequired = true
 
+    override val dataSingle: Single<List<CompleteLocalMangaEntry>>
+        get() = Single.fromCallable { Validators.validateLogin() }
+                .map {
+                    mangaDao.getEntries()
+                            .associate { it.toNonLocalEntryCore() to mangaDao.getChaptersForEntry(it.id) }
+                            .filter { (entry, chapters) ->
+                                chapters.isNotEmpty() && searchQuery.let {
+                                    when {
+                                        it != null && it.isNotBlank() -> entry.name.contains(it, true)
+                                        else -> true
+                                    }
+                                }
+                            }
+                            .toList()
+                }
+
     val jobInfo = MutableLiveData<String>()
 
     private var searchQuery: String? = null
 
-    private var disposable: Disposable? = null
     private var deletionDisposable: Disposable? = null
-    private val jobInfoDisposables = CompositeDisposable()
 
     init {
         updateJobInfo()
 
-        jobInfoDisposables + Observable
+        disposables + Observable
                 .merge(
                         bus.register(LocalMangaJob.StartedEvent::class.java),
                         bus.register(LocalMangaJob.FinishedEvent::class.java)
@@ -54,54 +66,16 @@ class LocalMangaViewModel(application: Application) : BaseViewModel<List<Complet
                     reload()
                 }
 
-        jobInfoDisposables + bus.register(LocalMangaJob.FailedEvent::class.java)
+        disposables + bus.register(LocalMangaJob.FailedEvent::class.java)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { updateJobInfo() }
     }
 
     override fun onCleared() {
-        disposable?.dispose()
         deletionDisposable?.dispose()
-        jobInfoDisposables.dispose()
-
-        disposable = null
         deletionDisposable = null
 
         super.onCleared()
-    }
-
-    override fun load() {
-        disposable?.dispose()
-        disposable = Single.fromCallable { Validators.validateLogin() }
-                .map {
-                    mangaDao.getEntries()
-                            .associate { it.toNonLocalEntryCore() to mangaDao.getChaptersForEntry(it.id) }
-                            .filter { (_, chapters) -> chapters.isNotEmpty() }
-                            .filter { (entry, _) ->
-                                searchQuery.let {
-                                    when {
-                                        it != null && it.isNotBlank() -> entry.name.contains(it, true)
-                                        else -> true
-                                    }
-                                }
-                            }
-                            .toList()
-                }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe {
-                    error.value = null
-                    data.value = null
-                    isLoading.value = true
-                }
-                .doAfterTerminate { isLoading.value = false }
-                .subscribe({
-                    error.value = null
-                    data.value = it
-                }, {
-                    data.value = null
-                    error.value = ErrorUtils.handle(it)
-                })
     }
 
     fun setSearchQuery(value: String?, trigger: Boolean = true) {
@@ -127,7 +101,7 @@ class LocalMangaViewModel(application: Application) : BaseViewModel<List<Complet
                 .subscribe { reload() }
     }
 
-    fun updateJobInfo() = jobInfoDisposables + Single
+    fun updateJobInfo() = disposables + Single
             .fromCallable {
                 val runningJobs = LocalMangaJob.countRunningJobs()
                 val scheduledJobs = LocalMangaJob.countScheduledJobs()

@@ -24,7 +24,6 @@ import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.extension.endScrolls
 import me.proxer.app.util.extension.multilineSnackbar
-import org.jetbrains.anko.find
 import java.util.concurrent.TimeUnit
 
 /**
@@ -52,13 +51,13 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
         get() = adapter.footer as ViewGroup
 
     override val errorInnerContainer: ViewGroup
-        get() = errorContainer.find(R.id.errorInnerContainer)
+        get() = errorContainer.findViewById(R.id.errorInnerContainer)
 
     override val errorText: TextView
-        get() = errorContainer.find(R.id.errorText)
+        get() = errorContainer.findViewById(R.id.errorText)
 
     override val errorButton: Button
-        get() = errorContainer.find(R.id.errorButton)
+        get() = errorContainer.findViewById(R.id.errorButton)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_paged, container, false)

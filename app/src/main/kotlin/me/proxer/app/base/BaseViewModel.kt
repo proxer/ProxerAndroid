@@ -4,14 +4,18 @@ import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MutableLiveData
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.auth.LoginEvent
 import me.proxer.app.auth.LogoutEvent
 import me.proxer.app.settings.AgeConfirmationEvent
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
+import me.proxer.app.util.extension.plus
 
 /**
  * @author Ruben Gees
@@ -25,27 +29,49 @@ abstract class BaseViewModel<T>(application: Application) : AndroidViewModel(app
     open protected val isLoginRequired = false
     open protected val isAgeConfirmationRequired = false
 
-    private val loginDisposable: Disposable
-    private val ageConfirmationDisposable: Disposable
+    protected var dataDisposable: Disposable? = null
+    protected val disposables = CompositeDisposable()
+
+    abstract protected val dataSingle: Single<T>
 
     init {
-        loginDisposable = Observable.merge(bus.register(LoginEvent::class.java), bus.register(LogoutEvent::class.java))
+        disposables + Observable.merge(bus.register(LoginEvent::class.java), bus.register(LogoutEvent::class.java))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { if (isLoginRequired) reload() }
 
-        ageConfirmationDisposable = bus.register(AgeConfirmationEvent::class.java)
+        disposables + bus.register(AgeConfirmationEvent::class.java)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { if (isAgeConfirmationRequired) reload() }
     }
 
     override fun onCleared() {
-        loginDisposable.dispose()
-        ageConfirmationDisposable.dispose()
+        dataDisposable?.dispose()
+        disposables.dispose()
+
+        dataDisposable = null
 
         super.onCleared()
     }
 
-    open fun load() = Unit
+    open fun load() {
+        dataDisposable?.dispose()
+        dataDisposable = dataSingle
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe {
+                    isLoading.value = true
+                    error.value = null
+                    data.value = null
+                }
+                .doAfterTerminate { isLoading.value = false }
+                .subscribe({
+                    error.value = null
+                    data.value = it
+                }, {
+                    data.value = null
+                    error.value = ErrorUtils.handle(it)
+                })
+    }
 
     open fun loadIfPossible() {
         if (isLoading.value != true && error.value == null) {
