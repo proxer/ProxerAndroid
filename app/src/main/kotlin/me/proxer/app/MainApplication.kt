@@ -25,7 +25,11 @@ import com.squareup.leakcanary.RefWatcher
 import com.squareup.moshi.Moshi
 import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.ios.IosEmojiProvider
+import io.reactivex.schedulers.Schedulers
+import me.proxer.app.auth.LogoutEvent
 import me.proxer.app.auth.ProxerLoginTokenManager
+import me.proxer.app.manga.MangaLocks
+import me.proxer.app.manga.MangaNotifications
 import me.proxer.app.manga.local.LocalMangaDao
 import me.proxer.app.manga.local.LocalMangaDatabase
 import me.proxer.app.manga.local.LocalMangaJob
@@ -35,6 +39,8 @@ import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.library.api.ProxerApi
 import me.proxer.library.api.ProxerApi.Builder.LoggingStrategy
 import okhttp3.OkHttpClient
+import java.io.File
+import kotlin.concurrent.write
 
 /**
  * @author Ruben Gees
@@ -53,10 +59,13 @@ class MainApplication : Application() {
         val client: OkHttpClient
             get() = api.client()
 
+        val mangaDao: LocalMangaDao
+            get() = mangaDatabase.dao()
+
         lateinit var api: ProxerApi
             private set
 
-        lateinit var mangaDao: LocalMangaDao
+        lateinit var mangaDatabase: LocalMangaDatabase
             private set
 
         lateinit var globalContext: MainApplication
@@ -76,14 +85,31 @@ class MainApplication : Application() {
         AppCompatDelegate.setDefaultNightMode(PreferenceHelper.getNightMode(this))
         NotificationUtils.createNotificationChannels(this)
 
-        mangaDao = Room.databaseBuilder(this, LocalMangaDatabase::class.java, "manga.db").build().dao()
+        mangaDatabase = Room.databaseBuilder(this, LocalMangaDatabase::class.java, "manga.db").build()
 
         refWatcher = LeakCanary.install(this)
         globalContext = this
 
+        initBus()
         initApi()
         initLibs()
         enableStrictModeForDebug()
+    }
+
+    private fun initBus() {
+        bus.register(LogoutEvent::class.java)
+                .subscribeOn(Schedulers.io())
+                .subscribe {
+                    MangaNotifications.cancel(this)
+
+                    LocalMangaJob.cancelAll()
+
+                    mangaDatabase.clear()
+
+                    MangaLocks.localLock.write {
+                        File("${globalContext.filesDir}/manga").deleteRecursively()
+                    }
+                }
     }
 
     private fun initApi() {

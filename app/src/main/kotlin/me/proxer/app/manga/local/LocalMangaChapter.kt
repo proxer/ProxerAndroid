@@ -18,10 +18,10 @@ import java.util.*
         childColumns = arrayOf("entryId")
 )), indices = arrayOf(Index(value = "entryId")))
 data class LocalMangaChapter(@PrimaryKey(autoGenerate = true) val id: Long = 0, val episode: Int,
-                             val language: Language, val entryId: String, val title: String, val uploaderId: String,
+                             val language: Language, val entryId: Long, val title: String, val uploaderId: String,
                              val uploaderName: String, val date: Date, val scanGroupId: String?,
                              val scanGroupName: String?, val server: String) {
 
-    fun toNonLocalChapter(pages: List<Page>) = Chapter(id.toString(), entryId, title, uploaderId, uploaderName, date,
-            scanGroupId, scanGroupName, server, pages)
+    fun toNonLocalChapter(pages: List<Page>) = Chapter(id.toString(), entryId.toString(), title, uploaderId,
+            uploaderName, date, scanGroupId, scanGroupName, server, pages)
 }

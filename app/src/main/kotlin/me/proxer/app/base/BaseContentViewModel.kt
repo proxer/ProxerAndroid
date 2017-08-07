@@ -33,6 +33,7 @@ abstract class BaseContentViewModel<T>(application: Application) : BaseViewModel
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
                     error.value = null
+                    data.value = null
                     isLoading.value = true
                 }
                 .doAfterTerminate { isLoading.value = false }

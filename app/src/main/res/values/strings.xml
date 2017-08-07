@@ -404,7 +404,7 @@
     <string name="preference_manga_unmetered_title">Nur über WLAN herunterladen</string>
     <string name="preference_manga_unmetered_summary_off">Manga werden immer heruntergeladen</string>
     <string name="preference_manga_unmetered_summary_on">Manga werden nur über WLAN heruntergeladen</string>
-    <string name="preference_manga_clean">Heruntergeladenen Daten löschen</string>
+    <string name="preference_manga_clean">Heruntergeladene Daten löschen</string>
 
     <string name="preference_category_notifications_title">Benachrichtigungen</string>
     <string name="preference_notifications_news_title">News</string>

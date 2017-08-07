@@ -313,6 +313,6 @@ class EpisodeAdapter(savedInstanceState: Bundle?, private val entryId: String, p
     }
 
     private fun constructChapterCheckSingle(entryId: String, episode: Int, language: Language) = Single.fromCallable {
-        mangaDao.countChaptersForEntry(entryId.toLong(), episode, language) > 0
+        mangaDao.countSpecificChaptersForEntry(entryId.toLong(), episode, language) > 0
     }
 }

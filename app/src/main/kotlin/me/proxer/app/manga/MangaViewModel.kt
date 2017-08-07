@@ -2,11 +2,13 @@ package me.proxer.app.manga
 
 import android.app.Application
 import android.arch.lifecycle.MutableLiveData
+import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.api
+import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.MainApplication.Companion.mangaDao
 import me.proxer.app.base.BaseViewModel
 import me.proxer.app.util.ErrorUtils
@@ -19,11 +21,17 @@ import me.proxer.library.api.Endpoint
 import me.proxer.library.entitiy.info.EntryCore
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.Language
+import java.io.File
+import kotlin.concurrent.write
 
 /**
  * @author Ruben Gees
  */
 class MangaViewModel(application: Application) : BaseViewModel<MangaChapterInfo>(application) {
+
+    private companion object {
+        private const val MAX_CACHE_SIZE = 1024L * 1024L * 256L
+    }
 
     val bookmarkData = MutableLiveData<Unit?>()
     val bookmarkError = MutableLiveData<ErrorUtils.ErrorAction?>()
@@ -48,7 +56,8 @@ class MangaViewModel(application: Application) : BaseViewModel<MangaChapterInfo>
     }
 
     override fun load() {
-        localEntrySingle().onErrorResumeNext(remoteEntrySingle())
+        cleanSingle()
+                .andThen(entrySingle())
                 .flatMap { localChapterSingle(it).onErrorResumeNext(remoteChapterSingle(it)) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -78,16 +87,51 @@ class MangaViewModel(application: Application) : BaseViewModel<MangaChapterInfo>
     fun bookmark(episode: Int) = updateUserState(api.ucp().setBookmark(entryId, episode, language.toMediaLanguage(),
             Category.MANGA))
 
-    private fun localEntrySingle() = when (cachedEntryCore != null) {
-        true -> Single.just(cachedEntryCore)
-        false -> Single.fromCallable {
-            mangaDao.findEntry(entryId.toLong())?.toNonLocalEntryCore() ?: throw RuntimeException()
-        }.doOnSuccess { cachedEntryCore = it }
+    private fun cleanSingle() = Completable.fromAction {
+        MangaLocks.cacheLock.write {
+            val localDataInfos = arrayListOf<LocalDataInfo>()
+            val cacheDir = globalContext.cacheDir
+            var overallSize = 0L
+
+            File("$cacheDir/manga").list()?.forEach { entryDirectoryName ->
+                File("$cacheDir/manga/$entryDirectoryName").list()?.forEach { chapterDirectoryName ->
+                    val chapterDirectory = File("$cacheDir/manga/$entryDirectoryName/$chapterDirectoryName")
+                    var size = 0L
+
+                    chapterDirectory.walkTopDown().forEach {
+                        if (it.isFile) {
+                            size += it.length()
+                            overallSize += size
+                        }
+                    }
+
+                    localDataInfos += LocalDataInfo(entryDirectoryName, chapterDirectoryName,
+                            chapterDirectory.lastModified(), size)
+                }
+            }
+
+            while (overallSize >= MAX_CACHE_SIZE) {
+                localDataInfos.minBy { it.lastModification }?.let {
+                    File("$cacheDir/manga/${it.entryId}/${it.chapterId}").deleteRecursively()
+
+                    overallSize -= it.size
+                }
+            }
+        }
     }
+
+    private fun entrySingle() = when (cachedEntryCore != null) {
+        true -> Single.just(cachedEntryCore)
+        false -> localEntrySingle().onErrorResumeNext(remoteEntrySingle())
+    }
+
+    private fun localEntrySingle() = Single.fromCallable {
+        mangaDao.findEntry(entryId.toLong())?.toNonLocalEntryCore() ?: throw RuntimeException()
+    }.doOnSuccess { cachedEntryCore = it }
 
     private fun localChapterSingle(entry: EntryCore) = Single.fromCallable {
         val chapter = mangaDao.findChapter(entryId.toLong(), episode, language) ?: throw RuntimeException()
-        val nonLocalChapter = chapter.toNonLocalChapter(mangaDao.getPages(chapter.id).map { it.toNonLocalPage() })
+        val nonLocalChapter = chapter.toNonLocalChapter(mangaDao.getPagesForChapter(chapter.id).map { it.toNonLocalPage() })
 
         MangaChapterInfo(nonLocalChapter, entry.name, entry.episodeAmount, true)
     }
@@ -112,4 +156,6 @@ class MangaViewModel(application: Application) : BaseViewModel<MangaChapterInfo>
                     bookmarkError.value = ErrorUtils.handle(it)
                 })
     }
+
+    private class LocalDataInfo(val entryId: String, val chapterId: String, val lastModification: Long, val size: Long)
 }

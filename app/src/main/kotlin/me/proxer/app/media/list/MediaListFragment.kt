@@ -155,6 +155,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
                     }
 
             searchView.queryTextChangeEvents()
+                    .skipInitialValue()
                     .bindUntilEvent(this, Lifecycle.Event.ON_DESTROY)
                     .subscribe {
                         if (it.isSubmitted) {

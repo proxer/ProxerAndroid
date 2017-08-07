@@ -122,7 +122,7 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
                 }, 50)
             }
             else -> Single.fromCallable { DiffUtil.calculateDiff(innerAdapter.provideDiffUtilCallback(data)) }
-                    .subscribeOn(Schedulers.computation())
+                    .subscribeOn(Schedulers.single())
                     .observeOn(AndroidSchedulers.mainThread())
                     .bindToLifecycle(this)
                     .subscribe { it: DiffUtil.DiffResult ->

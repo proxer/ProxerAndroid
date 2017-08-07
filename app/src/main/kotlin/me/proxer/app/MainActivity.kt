@@ -21,6 +21,7 @@ import me.proxer.app.auth.LoginEvent
 import me.proxer.app.auth.LogoutDialog
 import me.proxer.app.auth.LogoutEvent
 import me.proxer.app.base.BaseActivity
+import me.proxer.app.manga.local.LocalMangaFragment
 import me.proxer.app.media.list.MediaListFragment
 import me.proxer.app.news.NewsFragment
 import me.proxer.app.profile.ProfileActivity
@@ -170,7 +171,7 @@ class MainActivity : BaseActivity() {
         DrawerItem.BOOKMARKS -> setFragment(BookmarkFragment.newInstance(), R.string.section_bookmarks)
         DrawerItem.ANIME -> setFragment(MediaListFragment.newInstance(Category.ANIME), R.string.section_anime)
         DrawerItem.MANGA -> setFragment(MediaListFragment.newInstance(Category.MANGA), R.string.section_manga)
-        DrawerItem.LOCAL_MANGA -> Unit // setFragment(LocalMangaFragment.newInstance(), R.string.section_local_manga)
+        DrawerItem.LOCAL_MANGA -> setFragment(LocalMangaFragment.newInstance(), R.string.section_local_manga)
         DrawerItem.INFO -> setFragment(AboutFragment.newInstance(), R.string.section_info)
         DrawerItem.DONATE -> showPage(ProxerUrls.donateWeb(Device.DEFAULT))
         DrawerItem.SETTINGS -> setFragment(SettingsFragment.newInstance(), R.string.section_settings)

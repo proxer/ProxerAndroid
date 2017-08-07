@@ -9,6 +9,7 @@ import android.support.v7.preference.XpPreferenceFragment
 import android.view.View
 import me.proxer.app.MainApplication.Companion.refWatcher
 import me.proxer.app.R
+import me.proxer.app.manga.MangaCleanDialog
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.PreferenceHelper.AGE_CONFIRMATION
 import me.proxer.app.util.data.PreferenceHelper.MANGA_CLEAN
@@ -47,7 +48,7 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
         }
 
         findPreference(MANGA_CLEAN).setOnPreferenceClickListener {
-            //            CleanMangaDialog.show(activity as AppCompatActivity)
+            MangaCleanDialog.show(activity as AppCompatActivity)
 
             true
         }

@@ -140,7 +140,7 @@ class LocalMangaJob : Job() {
                         .subscribe({}, { error = it })
             }
 
-            mangaDao.insertChapter(chapter.toLocalChapter(episode, language), pages)
+            mangaDao.insertChapterAndPages(chapter.toLocalChapter(episode, language), pages)
             bus.post(FinishedEvent(entryId, episode, language))
 
             return Result.SUCCESS

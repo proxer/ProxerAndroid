@@ -203,7 +203,7 @@ fun EntryCore.toLocalEntryCore() = LocalEntryCore(id.toLong(), name, genres, fsk
         episodeAmount, state, ratingSum, ratingAmount, clicks, category, license)
 
 fun Chapter.toLocalChapter(episode: Int, language: Language) = LocalMangaChapter(id.toLong(), episode, language,
-        entryId, title, uploaderId, uploaderName, date, scanGroupId, scanGroupName, server)
+        entryId.toLong(), title, uploaderId, uploaderName, date, scanGroupId, scanGroupName, server)
 
 fun Page.toLocalPage(id: Long = 0, chapterId: Long) = LocalMangaPage(id, name, height, width, chapterId)
 

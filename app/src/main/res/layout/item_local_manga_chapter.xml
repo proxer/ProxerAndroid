@@ -7,7 +7,7 @@
     android:background="?attr/selectableItemBackground"
     android:orientation="horizontal"
     android:padding="@dimen/item_margin"
-    tools:context=".adapter.manga.LocalMangaChapterAdapter"
+    tools:context=".manga.local.LocalMangaChapterAdapter"
     tools:ignore="Overdraw">
 
     <TextView
