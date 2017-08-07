@@ -11,7 +11,9 @@ buildscript {
 
         androidPluginVersion = '3.0.0-alpha9'
         kotlinVersion = '1.1.4-eap-69'
+
         gradleVersionsPluginVersion = '0.15.0'
+        androidCommandPluginVersion = '1.7.1'
 
         // Frameworks and code only libraries
         ankoVersion = '0.10.1'
@@ -144,7 +146,9 @@ buildscript {
     dependencies {
         classpath "com.android.tools.build:gradle:$androidPluginVersion"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+
         classpath "com.github.ben-manes:gradle-versions-plugin:$gradleVersionsPluginVersion"
+        classpath "com.novoda:gradle-android-command-plugin:$androidCommandPluginVersion"
     }
 }
 
