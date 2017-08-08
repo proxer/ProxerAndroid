@@ -54,7 +54,6 @@ class LocalMangaJob : Job() {
                     .setExecutionWindow(1L, 100L)
                     .setRequirementsEnforced(true)
                     .setUpdateCurrent(true)
-                    .setPersisted(true)
                     .build()
                     .schedule()
         }

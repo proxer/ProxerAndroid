@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatDelegate
 import android.widget.ImageView
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.devbrackets.android.exomedia.ExoMedia
+import com.evernote.android.job.JobConfig
 import com.evernote.android.job.JobManager
 import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory
 import com.google.android.exoplayer2.upstream.DataSource
@@ -129,16 +130,15 @@ class MainApplication : Application() {
             OkHttpDataSourceFactory(client, GENERIC_USER_AGENT, listener)
         })
 
-        JobManager.create(this)
-                .apply { config.isVerbose = BuildConfig.DEBUG }
-                .addJobCreator {
-                    when {
-//                        it == ChatJob.TAG -> ChatJob()
-//                        it == NotificationsJob.TAG -> NotificationsJob()
-                        it.startsWith(LocalMangaJob.TAG) -> LocalMangaJob()
-                        else -> null
-                    }
-                }
+        JobConfig.setLogcatEnabled(BuildConfig.DEBUG)
+        JobManager.create(this).addJobCreator {
+            when {
+//                it == ChatJob.TAG -> ChatJob()
+//                it == NotificationsJob.TAG -> NotificationsJob()
+                it.startsWith(LocalMangaJob.TAG) -> LocalMangaJob()
+                else -> null
+            }
+        }
 
         DrawerImageLoader.init(ConcreteDrawerImageLoader())
     }

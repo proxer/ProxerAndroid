@@ -21,8 +21,8 @@ buildscript {
         supportPreferenceVersion = '1.2.7'
         architectureComponentsVersion = '1.0.0-alpha8'
         playServicesVersion = '11.0.4'
-        androidJobVersion = '1.1.11'
-        proxerLibVersion = '1eab2312c1'
+        androidJobVersion = '1.2.0-alpha3'
+        proxerLibVersion = '3.2.0'
 
         // RxJava
         rxJavaVersion = '2.1.2'
@@ -58,7 +58,7 @@ buildscript {
         okHttpVersion = '3.9.0-SNAPSHOT'
         okioVersion = '1.13.0'
         linkBuilderVersion = '1.6.1'
-        easyHeaderFooterAdapterVersion = '2.0.0'
+        easyHeaderFooterAdapterVersion = '3.0.0'
         kOptionalVersion = '1.2.0'
         kotterknifeVersion = '1.0'
 
