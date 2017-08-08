@@ -1,4 +1,4 @@
-package me.proxer.app.anime.stream
+package me.proxer.app.anime
 
 import android.os.Build
 import android.os.Bundle

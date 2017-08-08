@@ -109,7 +109,7 @@
             android:theme="@style/Theme.App.Transparent" />
 
         <activity
-            android:name=".anime.stream.StreamActivity"
+            android:name=".anime.StreamActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode">
             <intent-filter tools:ignore="AppLinkUrlError">
                 <action android:name="android.intent.action.VIEW" />

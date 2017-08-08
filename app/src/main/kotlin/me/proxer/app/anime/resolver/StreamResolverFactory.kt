@@ -5,7 +5,9 @@ package me.proxer.app.anime.resolver
  */
 object StreamResolverFactory {
 
-    private val resolvers = arrayOf(CrunchyrollStreamResolver(), ProxerStreamResolver())
+    private val resolvers = arrayOf(AkibaPassStreamResolver(), AmazonPrimeVideoStreamResolver(),
+            AnimeOnDemandStreamResolver(), AuravidStreamResolver(), ClipfishStreamResolver(), CodeStreamResolver(),
+            CrunchyrollStreamResolver(), DailymotionStreamResolver(), ProxerStreamResolver())
 
     fun resolverFor(name: String) = resolvers.find { it.supports(name) }
 }
