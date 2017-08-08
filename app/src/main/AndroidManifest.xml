@@ -108,18 +108,18 @@
             android:name=".view.ImageDetailActivity"
             android:theme="@style/Theme.App.Transparent" />
 
-        <!--<activity-->
-        <!--android:name=".activity.StreamActivity"-->
-        <!--android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode">-->
-        <!--<intent-filter tools:ignore="AppLinkUrlError">-->
-        <!--<action android:name="android.intent.action.VIEW" />-->
-        <!--<category android:name="android.intent.category.DEFAULT" />-->
+        <activity
+            android:name=".anime.stream.StreamActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode">
+            <intent-filter tools:ignore="AppLinkUrlError">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
 
-        <!--<data android:scheme="http" />-->
-        <!--<data android:scheme="https" />-->
-        <!--<data android:mimeType="video/*" />-->
-        <!--</intent-filter>-->
-        <!--</activity>-->
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:mimeType="video/*" />
+            </intent-filter>
+        </activity>
 
         <!--<activity android:name=".activity.NewChatActivity" />-->
 
