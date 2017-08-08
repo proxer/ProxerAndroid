@@ -121,7 +121,10 @@ class LocalMangaJob : Job() {
 
         try {
             bus.post(StartedEvent())
-            mangaDao.insertEntry(api.info().entryCore(entryId).build().execute().toLocalEntryCore())
+
+            if (mangaDao.countEntries(entryId.toLong()) <= 0) {
+                mangaDao.insertEntry(api.info().entryCore(entryId).build().execute().toLocalEntryCore())
+            }
 
             val chapter = api.manga().chapter(entryId, episode, language).build().execute()
             val pages = chapter.pages.map { it.toLocalPage(chapterId = chapter.id.toLong()) }
