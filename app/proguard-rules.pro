@@ -120,6 +120,9 @@
     @retrofit2.http.* <methods>;
 }
 
+# Work around weird Proguard bug
+-keep class okhttp3.internal.publicsuffix.PublicSuffixDatabase
+
 # ProxerLib
 -keep enum me.proxer.library.** {
     **[] $VALUES;
@@ -141,8 +144,3 @@
 -keepclassmembers class com.davemorrissey.labs.subscaleview.decoder.SkiaImageDecoder {
    public <init>(...);
 }
-
-# Fix weird errors related to the new Android toolchain
-# TODO: Check if it works now from time to time.
--dontwarn android.content.ServiceConnection$$CC
--dontwarn android.widget.Adapter$$CC
