@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
 import me.proxer.app.GlideApp
@@ -63,18 +64,25 @@ class CommentFragment : PagedContentFragment<Comment>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        innerAdapter = CommentAdapter(savedInstanceState, GlideApp.with(this))
+        innerAdapter = CommentAdapter(savedInstanceState)
+
+        viewModel.setSortCriteria(sortCriteria, false)
+
+        setHasOptionsMenu(true)
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        innerAdapter.glide = GlideApp.with(this)
         innerAdapter.categoryCallback = { category }
+
         innerAdapter.profileClickSubject
                 .bindToLifecycle(this)
                 .subscribe { (view, comment) ->
                     ProfileActivity.navigateTo(activity, comment.authorId, comment.author, comment.image,
                             if (view.drawable != null && comment.image.isNotBlank()) view else null)
                 }
-
-        viewModel.setSortCriteria(sortCriteria, false)
-
-        setHasOptionsMenu(true)
     }
 
     override fun onDestroy() {

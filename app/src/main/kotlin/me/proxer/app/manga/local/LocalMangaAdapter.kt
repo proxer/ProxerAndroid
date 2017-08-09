@@ -26,13 +26,13 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-class LocalMangaAdapter(savedInstanceState: Bundle?, private val glide: GlideRequests)
-    : BaseAdapter<CompleteLocalMangaEntry, ViewHolder>() {
+class LocalMangaAdapter(savedInstanceState: Bundle?) : BaseAdapter<CompleteLocalMangaEntry, ViewHolder>() {
 
     private companion object {
         private const val EXPANDED_STATE = "local_manga_expanded"
     }
 
+    var glide: GlideRequests? = null
     val clickSubject: PublishSubject<Pair<EntryCore, LocalMangaChapter>> = PublishSubject.create()
     val longClickSubject: PublishSubject<Pair<ImageView, EntryCore>> = PublishSubject.create()
     val deleteClickSubject: PublishSubject<Pair<EntryCore, LocalMangaChapter>> = PublishSubject.create()
@@ -55,11 +55,17 @@ class LocalMangaAdapter(savedInstanceState: Bundle?, private val glide: GlideReq
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(data[position])
     override fun getItemId(position: Int) = data[position].first.id.toLong()
 
+    override fun onViewRecycled(holder: ViewHolder) {
+        glide?.clear(holder.image)
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView?) {
+        glide = null
+    }
+
     override fun areItemsTheSame(old: CompleteLocalMangaEntry, new: CompleteLocalMangaEntry): Boolean {
         return old.first.id == new.first.id
     }
-
-    override fun onViewRecycled(holder: ViewHolder) = glide.clear(holder.image)
 
     override fun onViewAttachedToWindow(holder: ViewHolder) {
         super.onViewAttachedToWindow(holder)
@@ -136,7 +142,7 @@ class LocalMangaAdapter(savedInstanceState: Bundle?, private val glide: GlideReq
                 adapter.clear()
             }
 
-            glide.defaultLoad(image, ProxerUrls.entryImage(item.first.id))
+            glide?.defaultLoad(image, ProxerUrls.entryImage(item.first.id))
         }
     }
 }

@@ -22,8 +22,9 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-class IndustryProjectAdapter(private val glide: GlideRequests) : BaseAdapter<IndustryProject, ViewHolder>() {
+class IndustryProjectAdapter : BaseAdapter<IndustryProject, ViewHolder>() {
 
+    var glide: GlideRequests? = null
     val clickSubject: PublishSubject<Pair<ImageView, IndustryProject>> = PublishSubject.create()
 
     init {
@@ -35,7 +36,14 @@ class IndustryProjectAdapter(private val glide: GlideRequests) : BaseAdapter<Ind
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(data[position])
-    override fun onViewRecycled(holder: ViewHolder) = glide.clear(holder.image)
+
+    override fun onViewRecycled(holder: ViewHolder) {
+        glide?.clear(holder.image)
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView?) {
+        glide = null
+    }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -68,7 +76,7 @@ class IndustryProjectAdapter(private val glide: GlideRequests) : BaseAdapter<Ind
                 ratingContainer.visibility = View.GONE
             }
 
-            glide.defaultLoad(image, ProxerUrls.entryImage(item.id))
+            glide?.defaultLoad(image, ProxerUrls.entryImage(item.id))
         }
     }
 }

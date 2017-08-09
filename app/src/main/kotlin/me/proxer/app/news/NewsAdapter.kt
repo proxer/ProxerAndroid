@@ -25,13 +25,13 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-class NewsAdapter(savedInstanceState: Bundle?, private val glide: GlideRequests)
-    : BaseAdapter<NewsArticle, NewsAdapter.ViewHolder>() {
+class NewsAdapter(savedInstanceState: Bundle?) : BaseAdapter<NewsArticle, NewsAdapter.ViewHolder>() {
 
     private companion object {
         private const val EXPANDED_STATE = "news_expansion_map"
     }
 
+    var glide: GlideRequests? = null
     val clickSubject: PublishSubject<NewsArticle> = PublishSubject.create()
     val expansionSubject: PublishSubject<NewsArticle> = PublishSubject.create()
     val imageClickSubject: PublishSubject<Pair<ImageView, NewsArticle>> = PublishSubject.create()
@@ -51,7 +51,14 @@ class NewsAdapter(savedInstanceState: Bundle?, private val glide: GlideRequests)
             .inflate(R.layout.item_news, parent, false))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(data[position])
-    override fun onViewRecycled(holder: ViewHolder) = glide.clear(holder.image)
+
+    override fun onViewRecycled(holder: ViewHolder) {
+        glide?.clear(holder.image)
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView?) {
+        glide = null
+    }
 
     override fun areContentsTheSame(old: NewsArticle, new: NewsArticle) = old.date == new.date
             && old.category == new.category
@@ -132,7 +139,7 @@ class NewsAdapter(savedInstanceState: Bundle?, private val glide: GlideRequests)
                 }
             }
 
-            glide.defaultLoad(image, ProxerUrls.newsImage(item.id, item.image))
+            glide?.defaultLoad(image, ProxerUrls.newsImage(item.id, item.image))
         }
     }
 }

@@ -62,7 +62,15 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        innerAdapter = BookmarkAdapter(GlideApp.with(this))
+        innerAdapter = BookmarkAdapter()
+
+        setHasOptionsMenu(true)
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        innerAdapter.glide = GlideApp.with(this)
 
         innerAdapter.clickSubject
                 .bindToLifecycle(this)
@@ -87,12 +95,6 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
                 .subscribe {
                     viewModel.addItemToRemove(it)
                 }
-
-        setHasOptionsMenu(true)
-    }
-
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
         viewModel.itemRemovalError.observe(this, Observer {
             it?.let {

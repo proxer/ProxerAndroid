@@ -24,9 +24,9 @@ import org.jetbrains.anko.below
 /**
  * @author Ruben Gees
  */
-class MediaAdapter(private val category: Category, private val glide: GlideRequests)
-    : BaseAdapter<MediaListEntry, MediaAdapter.ViewHolder>() {
+class MediaAdapter(private val category: Category) : BaseAdapter<MediaListEntry, MediaAdapter.ViewHolder>() {
 
+    var glide: GlideRequests? = null
     val clickSubject: PublishSubject<Pair<ImageView, MediaListEntry>> = PublishSubject.create()
 
     init {
@@ -37,7 +37,14 @@ class MediaAdapter(private val category: Category, private val glide: GlideReque
             .inflate(R.layout.item_media_entry, parent, false))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(data[position])
-    override fun onViewRecycled(holder: ViewHolder) = glide.clear(holder.image)
+
+    override fun onViewRecycled(holder: ViewHolder) {
+        glide?.clear(holder.image)
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView?) {
+        glide = null
+    }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -99,7 +106,7 @@ class MediaAdapter(private val category: Category, private val glide: GlideReque
             }
 
             state.setImageDrawable(item.state.toAppDrawable(state.context))
-            glide.defaultLoad(image, ProxerUrls.entryImage(item.id))
+            glide?.defaultLoad(image, ProxerUrls.entryImage(item.id))
         }
     }
 }

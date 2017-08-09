@@ -42,13 +42,13 @@ import org.jetbrains.anko.forEachChildWithIndex
 /**
  * @author Ruben Gees
  */
-class EpisodeAdapter(savedInstanceState: Bundle?, private val entryId: String, private val glide: GlideRequests)
-    : BaseAdapter<EpisodeRow, ViewHolder>() {
+class EpisodeAdapter(savedInstanceState: Bundle?, private val entryId: String) : BaseAdapter<EpisodeRow, ViewHolder>() {
 
     private companion object {
         private const val EXPANDED_STATE = "episode_expanded"
     }
 
+    var glide: GlideRequests? = null
     val languageClickSubject: PublishSubject<Pair<MediaLanguage, EpisodeRow>> = PublishSubject.create()
 
     private val expanded: ParcelableStringBooleanMap
@@ -89,6 +89,7 @@ class EpisodeAdapter(savedInstanceState: Bundle?, private val entryId: String, p
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView?) {
         busDisposable?.dispose()
         busDisposable = null
+        glide = null
     }
 
     override fun onViewAttachedToWindow(holder: ViewHolder) = holder.registerBus()
@@ -97,7 +98,7 @@ class EpisodeAdapter(savedInstanceState: Bundle?, private val entryId: String, p
     override fun onViewRecycled(holder: ViewHolder) {
         holder.languages.applyRecursively {
             if (it is ImageView) {
-                glide.clear(it)
+                glide?.clear(it)
             }
         }
     }
@@ -231,7 +232,7 @@ class EpisodeAdapter(savedInstanceState: Bundle?, private val entryId: String, p
                 }
 
                 hostersView.forEachChildWithIndex { index, imageView ->
-                    glide.defaultLoad(imageView as ImageView, ProxerUrls.hosterImage(hosterImages[index]))
+                    glide?.defaultLoad(imageView as ImageView, ProxerUrls.hosterImage(hosterImages[index]))
                 }
             }
         }

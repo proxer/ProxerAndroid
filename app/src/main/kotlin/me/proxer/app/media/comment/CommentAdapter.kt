@@ -32,20 +32,19 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-class CommentAdapter(savedInstanceState: Bundle?, private val glide: GlideRequests)
-    : BaseAdapter<Comment, ViewHolder>() {
+class CommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<Comment, ViewHolder>() {
 
     private companion object {
         private const val EXPANDED_STATE = "comments_expanded"
         private const val SPOILER_STATES_STATE = "comments_spoiler_states"
     }
 
+    var glide: GlideRequests? = null
+    val profileClickSubject: PublishSubject<Pair<ImageView, Comment>> = PublishSubject.create()
+    var categoryCallback: (() -> Category?)? = null
+
     private val expanded: ParcelableStringBooleanMap
     private val spoilerStates: ParcelableStringBooleanArrayMap
-
-    val profileClickSubject: PublishSubject<Pair<ImageView, Comment>> = PublishSubject.create()
-
-    var categoryCallback: (() -> Category?)? = null
 
     init {
         expanded = when (savedInstanceState) {
@@ -66,7 +65,14 @@ class CommentAdapter(savedInstanceState: Bundle?, private val glide: GlideReques
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(data[position])
-    override fun onViewRecycled(holder: ViewHolder) = glide.clear(holder.image)
+
+    override fun onViewRecycled(holder: ViewHolder) {
+        glide?.clear(holder.image)
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView?) {
+        glide = null
+    }
 
     override fun saveInstanceState(outState: Bundle) {
         outState.putParcelable(EXPANDED_STATE, expanded)
@@ -215,10 +221,10 @@ class CommentAdapter(savedInstanceState: Bundle?, private val glide: GlideReques
                         .paddingDp(16)
                         .colorRes(R.color.colorAccent))
             } else {
-                glide.load(ProxerUrls.userImage(item.image).toString())
-                        .transition(DrawableTransitionOptions.withCrossFade())
-                        .circleCrop()
-                        .into(image)
+                glide?.load(ProxerUrls.userImage(item.image).toString())
+                        ?.transition(DrawableTransitionOptions.withCrossFade())
+                        ?.circleCrop()
+                        ?.into(image)
             }
         }
     }

@@ -28,8 +28,9 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-class BookmarkAdapter(private val glide: GlideRequests) : BaseAdapter<Bookmark, BookmarkAdapter.ViewHolder>() {
+class BookmarkAdapter : BaseAdapter<Bookmark, BookmarkAdapter.ViewHolder>() {
 
+    var glide: GlideRequests? = null
     val clickSubject: PublishSubject<Bookmark> = PublishSubject.create()
     val longClickSubject: PublishSubject<Pair<ImageView, Bookmark>> = PublishSubject.create()
     val deleteClickSubject: PublishSubject<Bookmark> = PublishSubject.create()
@@ -43,7 +44,14 @@ class BookmarkAdapter(private val glide: GlideRequests) : BaseAdapter<Bookmark, 
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(data[position])
-    override fun onViewRecycled(holder: ViewHolder) = glide.clear(holder.image)
+
+    override fun onViewRecycled(holder: ViewHolder) {
+        glide?.clear(holder.image)
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView?) {
+        glide = null
+    }
 
     override fun areItemsTheSame(old: Bookmark, new: Bookmark) = old.entryId == new.entryId
     override fun areContentsTheSame(old: Bookmark, new: Bookmark) = old.id == new.id
@@ -100,14 +108,14 @@ class BookmarkAdapter(private val glide: GlideRequests) : BaseAdapter<Bookmark, 
             episode.setCompoundDrawablesWithIntrinsicBounds(null, null, availabilityIndicator, null)
             language.setImageDrawable(item.language.toGeneralLanguage().toAppDrawable(language.context))
 
-            glide.load(ProxerUrls.entryImage(item.entryId).toString())
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .apply {
+            glide?.load(ProxerUrls.entryImage(item.entryId).toString())
+                    ?.transition(DrawableTransitionOptions.withCrossFade())
+                    ?.apply {
                         if (!item.isAvailable) {
                             transform(GlideGrayscaleTransformation())
                         }
                     }
-                    .into(image)
+                    ?.into(image)
         }
     }
 }
