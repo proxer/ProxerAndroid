@@ -39,7 +39,5 @@ object MangaNotifications {
                 context.getString(ErrorUtils.getMessage(innermostError)), intent)
     }
 
-    fun cancel(context: Context) {
-        NotificationManagerCompat.from(context).cancel(ERROR_ID)
-    }
+    fun cancel(context: Context) = NotificationManagerCompat.from(context).cancel(ERROR_ID)
 }

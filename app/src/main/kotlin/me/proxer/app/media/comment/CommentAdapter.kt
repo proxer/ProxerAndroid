@@ -194,21 +194,17 @@ class CommentAdapter(savedInstanceState: Bundle?, private val glide: GlideReques
             bindImage(item)
         }
 
-        private fun bindRatingRow(container: ViewGroup, ratingBar: RatingBar, rating: Float) {
-            if (rating <= 0) {
-                container.visibility = View.GONE
-            } else {
-                container.visibility = View.VISIBLE
-                ratingBar.rating = rating
-            }
+        private fun bindRatingRow(container: ViewGroup, ratingBar: RatingBar, rating: Float) = if (rating <= 0) {
+            container.visibility = View.GONE
+        } else {
+            container.visibility = View.VISIBLE
+            ratingBar.rating = rating
         }
 
-        private fun bindExpandButton(maxHeight: Int) {
-            if (comment.height < maxHeight) {
-                expand.visibility = View.GONE
-            } else {
-                expand.visibility = View.VISIBLE
-            }
+        private fun bindExpandButton(maxHeight: Int) = if (comment.height < maxHeight) {
+            expand.visibility = View.GONE
+        } else {
+            expand.visibility = View.VISIBLE
         }
 
         private fun bindImage(item: Comment) {

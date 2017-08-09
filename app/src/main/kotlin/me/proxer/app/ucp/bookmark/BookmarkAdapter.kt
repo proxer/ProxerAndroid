@@ -21,7 +21,7 @@ import me.proxer.app.util.extension.toAppDrawable
 import me.proxer.app.util.extension.toAppString
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.app.util.extension.toGeneralLanguage
-import me.proxer.app.util.view.GlideGrayscaleTransformation
+import me.proxer.app.view.GlideGrayscaleTransformation
 import me.proxer.library.entitiy.ucp.Bookmark
 import me.proxer.library.util.ProxerUrls
 

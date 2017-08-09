@@ -22,37 +22,37 @@ import me.proxer.library.enums.Medium;
 public class LocalEntryCore {
 
     @PrimaryKey(autoGenerate = true)
-    private long id;
+    private final long id;
 
     @NotNull
-    private String name;
+    private final String name;
 
     @NotNull
-    private Set<Genre> genres;
+    private final Set<Genre> genres;
 
     @NotNull
-    private Set<FskConstraint> fskConstraints;
+    private final Set<FskConstraint> fskConstraints;
 
     @NotNull
-    private String description;
+    private final String description;
 
     @NotNull
-    private Medium medium;
+    private final Medium medium;
 
-    private int episodeAmount;
-
-    @NotNull
-    private MediaState state;
-
-    private int ratingSum;
-    private int ratingAmount;
-    private int clicks;
+    private final int episodeAmount;
 
     @NotNull
-    private Category category;
+    private final MediaState state;
+
+    private final int ratingSum;
+    private final int ratingAmount;
+    private final int clicks;
 
     @NotNull
-    private License license;
+    private final Category category;
+
+    @NotNull
+    private final License license;
 
     public LocalEntryCore(long id, @NotNull String name, @NotNull Set<Genre> genres,
                           @NotNull Set<FskConstraint> fskConstraints, @NotNull String description,

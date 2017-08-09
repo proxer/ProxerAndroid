@@ -22,14 +22,12 @@ class MangaCleanDialog : BaseDialog() {
 
     private val viewModel by lazy { ViewModelProviders.of(this).get(MangaCleanViewModel::class.java) }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return MaterialDialog.Builder(context)
-                .content(R.string.dialog_clean_manga_content)
-                .positiveText(R.string.dialog_clean_manga_positive)
-                .negativeText(R.string.cancel)
-                .onPositive { _, _ -> viewModel.clean() }
-                .build()
-    }
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialDialog.Builder(context)
+            .content(R.string.dialog_clean_manga_content)
+            .positiveText(R.string.dialog_clean_manga_positive)
+            .negativeText(R.string.cancel)
+            .onPositive { _, _ -> viewModel.clean() }
+            .build()
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

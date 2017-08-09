@@ -36,10 +36,8 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
         private const val SHOW_UNRATED_TAGS_ARGUMENT = "show_unrated_tags"
         private const val SHOW_SPOILER_TAGS_ARGUMENT = "show_spoiler_tags"
 
-        fun newInstance(): MediaInfoFragment {
-            return MediaInfoFragment().apply {
-                arguments = bundleOf()
-            }
+        fun newInstance() = MediaInfoFragment().apply {
+            arguments = bundleOf()
         }
     }
 
@@ -191,22 +189,18 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
         description.text = data.description
     }
 
-    private fun bindRating(result: Entry) {
-        if (result.rating > 0) {
-            ratingContainer.visibility = View.VISIBLE
-            rating.rating = result.rating / 2.0f
-            ratingAmount.visibility = View.VISIBLE
-            ratingAmount.text = getString(R.string.fragment_media_info_rate_count, result.ratingAmount)
-        } else {
-            ratingContainer.visibility = View.GONE
-            ratingAmount.visibility = View.GONE
-        }
+    private fun bindRating(result: Entry) = if (result.rating > 0) {
+        ratingContainer.visibility = View.VISIBLE
+        rating.rating = result.rating / 2.0f
+        ratingAmount.visibility = View.VISIBLE
+        ratingAmount.text = getString(R.string.fragment_media_info_rate_count, result.ratingAmount)
+    } else {
+        ratingContainer.visibility = View.GONE
+        ratingAmount.visibility = View.GONE
     }
 
-    private fun bindSynonyms(result: Entry) {
-        result.synonyms.forEach {
-            infoTable.addView(constructInfoTableRow(it.toTypeAppString(context), it.name, true))
-        }
+    private fun bindSynonyms(result: Entry) = result.synonyms.forEach {
+        infoTable.addView(constructInfoTableRow(it.toTypeAppString(context), it.name, true))
     }
 
     private fun bindSeasons(result: Entry) {
@@ -314,49 +308,43 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
         })
     }
 
-    private fun bindFskConstraints(result: Entry) {
-        if (result.fskConstraints.isEmpty()) {
-            fskConstraintsTitle.visibility = View.GONE
-            fskConstraints.visibility = View.GONE
-        } else {
-            result.fskConstraints.forEach { constraint ->
-                val image = LayoutInflater.from(context)
-                        .inflate(R.layout.layout_image, fskConstraints, false) as ImageView
+    private fun bindFskConstraints(result: Entry) = if (result.fskConstraints.isEmpty()) {
+        fskConstraintsTitle.visibility = View.GONE
+        fskConstraints.visibility = View.GONE
+    } else {
+        result.fskConstraints.forEach { constraint ->
+            val image = LayoutInflater.from(context)
+                    .inflate(R.layout.layout_image, fskConstraints, false) as ImageView
 
-                image.setImageDrawable(constraint.toAppDrawable(context))
-                image.setOnClickListener {
-                    multilineSnackbar(root, constraint.toAppStringDescription(context))
-                }
-
-                fskConstraints.addView(image)
+            image.setImageDrawable(constraint.toAppDrawable(context))
+            image.setOnClickListener {
+                multilineSnackbar(root, constraint.toAppStringDescription(context))
             }
+
+            fskConstraints.addView(image)
         }
     }
 
-    private fun bindTranslatorGroups(result: Entry) {
-        if (result.translatorGroups.isEmpty()) {
-            translatorGroupsTitle.visibility = View.GONE
-            translatorGroups.visibility = View.GONE
-        } else {
-            bindChips(translatorGroups, result.translatorGroups, mapFunction = { it.name },
-                    onClick = { TranslatorGroupActivity.navigateTo(activity, it.id, it.name) })
-        }
+    private fun bindTranslatorGroups(result: Entry) = if (result.translatorGroups.isEmpty()) {
+        translatorGroupsTitle.visibility = View.GONE
+        translatorGroups.visibility = View.GONE
+    } else {
+        bindChips(translatorGroups, result.translatorGroups, mapFunction = { it.name },
+                onClick = { TranslatorGroupActivity.navigateTo(activity, it.id, it.name) })
     }
 
-    private fun bindIndustries(result: Entry) {
-        if (result.industries.isEmpty()) {
-            industriesTitle.visibility = View.GONE
-            industries.visibility = View.GONE
-        } else {
-            bindChips(industries, result.industries, mapFunction = {
-                val type = ProxerUtils.getApiEnumName(it.type)
-                        ?.replace("_", " ")
-                        ?.split(" ")
-                        ?.joinToString(separator = " ", transform = String::capitalize) ?: throw NullPointerException()
+    private fun bindIndustries(result: Entry) = if (result.industries.isEmpty()) {
+        industriesTitle.visibility = View.GONE
+        industries.visibility = View.GONE
+    } else {
+        bindChips(industries, result.industries, mapFunction = {
+            val type = ProxerUtils.getApiEnumName(it.type)
+                    ?.replace("_", " ")
+                    ?.split(" ")
+                    ?.joinToString(separator = " ", transform = String::capitalize) ?: throw NullPointerException()
 
-                "${it.name} ($type)"
-            }, onClick = { IndustryActivity.navigateTo(activity, it.id, it.name) })
-        }
+            "${it.name} ($type)"
+        }, onClick = { IndustryActivity.navigateTo(activity, it.id, it.name) })
     }
 
     private fun <T> bindChips(layout: FlexboxLayout, items: List<T>, mapFunction: (T) -> String = { it.toString() },

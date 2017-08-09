@@ -81,9 +81,7 @@ class LocalMangaAdapter(savedInstanceState: Bundle?, private val glide: GlideReq
         holder.adapter.callback = null
     }
 
-    override fun saveInstanceState(outState: Bundle) {
-        outState.putParcelable(EXPANDED_STATE, expanded)
-    }
+    override fun saveInstanceState(outState: Bundle) = outState.putParcelable(EXPANDED_STATE, expanded)
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 

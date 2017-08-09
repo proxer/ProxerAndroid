@@ -65,7 +65,7 @@ class AboutFragment : MaterialAboutFragment() {
         refWatcher.watch(this)
     }
 
-    override fun getMaterialAboutList(context: Context) = MaterialAboutList.Builder()
+    override fun getMaterialAboutList(context: Context): MaterialAboutList = MaterialAboutList.Builder()
             .addCard(MaterialAboutCard.Builder()
                     .apply { buildInfoItems().forEach { addItem(it) } }
                     .build())
@@ -155,7 +155,7 @@ class AboutFragment : MaterialAboutFragment() {
                     .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_github_circle)
                             .colorRes(R.color.icon))
                     .setOnClickAction {
-                        showPage(HttpUrl.parse("https://github.com/${DEVELOPER_GITHUB_NAME}")
+                        showPage(HttpUrl.parse("https://github.com/$DEVELOPER_GITHUB_NAME")
                                 ?: throw NullPointerException())
                     }.build(),
             MaterialAboutActionItem.Builder()

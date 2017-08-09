@@ -40,9 +40,7 @@ class MangaAdapter : BaseAdapter<Page, ViewHolder>() {
         holder.image.recycle()
 
         holder.image.tag.let {
-            if (it is Disposable) {
-                it.dispose()
-            }
+            (it as? Disposable)?.dispose()
         }
 
         holder.image.tag = null
@@ -88,20 +86,18 @@ class MangaAdapter : BaseAdapter<Page, ViewHolder>() {
         /**
          * Make scrolling smoother by hacking the SubsamplingScaleImageView to only receive touch events when zooming.
          */
-        private fun applySmoothScrollHack() {
-            image.setOnTouchListener { _, event ->
-                val shouldInterceptEvent = event.action == MotionEvent.ACTION_MOVE && event.pointerCount == 1 &&
-                        image.scale == image.minScale
+        private fun applySmoothScrollHack() = image.setOnTouchListener { _, event ->
+            val shouldInterceptEvent = event.action == MotionEvent.ACTION_MOVE && event.pointerCount == 1 &&
+                    image.scale == image.minScale
 
-                if (shouldInterceptEvent) {
-                    image.parent.requestDisallowInterceptTouchEvent(true)
-                    itemView.onTouchEvent(event)
-                    image.parent.requestDisallowInterceptTouchEvent(false)
+            if (shouldInterceptEvent) {
+                image.parent.requestDisallowInterceptTouchEvent(true)
+                itemView.onTouchEvent(event)
+                image.parent.requestDisallowInterceptTouchEvent(false)
 
-                    true
-                } else {
-                    false
-                }
+                true
+            } else {
+                false
             }
         }
     }

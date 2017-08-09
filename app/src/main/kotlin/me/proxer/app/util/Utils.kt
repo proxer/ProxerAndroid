@@ -104,12 +104,10 @@ object Utils {
         }
     } ?: throw ProxerException(ErrorType.PARSING)
 
-    fun isPackageInstalled(packageManager: PackageManager, packageName: String): Boolean {
-        return try {
-            packageManager.getApplicationInfo(packageName, 0).enabled
-        } catch (error: PackageManager.NameNotFoundException) {
-            false
-        }
+    fun isPackageInstalled(packageManager: PackageManager, packageName: String) = try {
+        packageManager.getApplicationInfo(packageName, 0).enabled
+    } catch (error: PackageManager.NameNotFoundException) {
+        false
     }
 
     fun getNativeAppPackage(context: Context, url: HttpUrl): Set<String> {

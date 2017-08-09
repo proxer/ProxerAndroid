@@ -78,11 +78,9 @@ abstract class ImageTabsActivity : BaseActivity() {
         }
     }
 
-    override fun onBackPressed() {
-        when (isHeaderImageVisible) {
-            true -> super.onBackPressed()
-            false -> finish()
-        }
+    override fun onBackPressed() = when (isHeaderImageVisible) {
+        true -> super.onBackPressed()
+        false -> finish()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

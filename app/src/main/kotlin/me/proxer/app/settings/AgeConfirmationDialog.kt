@@ -19,16 +19,14 @@ class AgeConfirmationDialog : BaseDialog() {
                 .show(activity.supportFragmentManager, "age_confirmation_dialog")
     }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return MaterialDialog.Builder(context)
-                .content(R.string.dialog_age_confirmation_content)
-                .positiveText(R.string.dialog_age_confirmation_positive)
-                .negativeText(R.string.cancel)
-                .onPositive { _, _ ->
-                    PreferenceHelper.setAgeRestrictedMediaAllowed(context, true)
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialDialog.Builder(context)
+            .content(R.string.dialog_age_confirmation_content)
+            .positiveText(R.string.dialog_age_confirmation_positive)
+            .negativeText(R.string.cancel)
+            .onPositive { _, _ ->
+                PreferenceHelper.setAgeRestrictedMediaAllowed(context, true)
 
-                    bus.post(AgeConfirmationEvent())
-                }
-                .build()
-    }
+                bus.post(AgeConfirmationEvent())
+            }
+            .build()
 }

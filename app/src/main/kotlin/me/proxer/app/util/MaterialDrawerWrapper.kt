@@ -29,7 +29,9 @@ class MaterialDrawerWrapper(context: Activity, toolbar: Toolbar, savedInstanceSt
     val itemClickSubject: PublishSubject<DrawerItem> = PublishSubject.create()
     val accountClickSubject: PublishSubject<AccountItem> = PublishSubject.create()
 
-    val profileImageView by lazy { drawer.header.findViewById<ImageView>(R.id.material_drawer_account_header_current) }
+    val profileImageView: ImageView by lazy {
+        drawer.header.findViewById<ImageView>(R.id.material_drawer_account_header_current)
+    }
 
     private val header: AccountHeader
     private val drawer: Drawer

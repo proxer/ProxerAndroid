@@ -80,10 +80,8 @@ class BBSpoilerView @JvmOverloads constructor(
         handleExpansion()
     }
 
-    fun addViews(views: Iterable<View>) {
-        views.forEach {
-            container.addView(it)
-        }
+    fun addViews(views: Iterable<View>) = views.forEach {
+        container.addView(it)
     }
 
     private fun handleExpansion() {

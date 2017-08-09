@@ -63,43 +63,37 @@ class MediaControlView(context: Context?, attrs: AttributeSet?) : FrameLayout(co
         setTranslatorGroup(null)
     }
 
-    fun setUploader(uploader: Uploader?) {
-        if (uploader == null) {
-            uploaderRow.visibility = View.GONE
+    fun setUploader(uploader: Uploader?) = if (uploader == null) {
+        uploaderRow.visibility = View.GONE
 
-            uploaderText.setOnClickListener(null)
-        } else {
-            uploaderRow.visibility = View.VISIBLE
-            uploaderText.text = uploader.name
+        uploaderText.setOnClickListener(null)
+    } else {
+        uploaderRow.visibility = View.VISIBLE
+        uploaderText.text = uploader.name
 
-            uploaderText.setOnClickListener {
-                uploaderClickSubject.onNext(uploader)
-            }
+        uploaderText.setOnClickListener {
+            uploaderClickSubject.onNext(uploader)
         }
     }
 
-    fun setTranslatorGroup(group: SimpleTranslatorGroup?) {
-        if (group == null) {
-            translatorRow.visibility = View.GONE
+    fun setTranslatorGroup(group: SimpleTranslatorGroup?) = if (group == null) {
+        translatorRow.visibility = View.GONE
 
-            translatorGroupText.setOnClickListener(null)
-        } else {
-            translatorRow.visibility = View.VISIBLE
-            translatorGroupText.text = group.name
+        translatorGroupText.setOnClickListener(null)
+    } else {
+        translatorRow.visibility = View.VISIBLE
+        translatorGroupText.text = group.name
 
-            translatorGroupText.setOnClickListener {
-                translatorGroupClickSubject.onNext(group)
-            }
+        translatorGroupText.setOnClickListener {
+            translatorGroupClickSubject.onNext(group)
         }
     }
 
-    fun setDateTime(dateTime: LocalDateTime?) {
-        if (dateTime == null) {
-            dateRow.visibility = View.GONE
-        } else {
-            dateRow.visibility = View.VISIBLE
-            dateText.text = DATE_TIME_FORMATTER.format(dateTime)
-        }
+    fun setDateTime(dateTime: LocalDateTime?) = if (dateTime == null) {
+        dateRow.visibility = View.GONE
+    } else {
+        dateRow.visibility = View.VISIBLE
+        dateText.text = DATE_TIME_FORMATTER.format(dateTime)
     }
 
     fun setEpisodeInfo(episodeAmount: Int, currentEpisode: Int) {

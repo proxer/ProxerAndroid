@@ -62,13 +62,12 @@ class LocalMangaJob : Job() {
             JobManager.instance().cancelAllForTag(constructTag(entryId, episode, language))
         }
 
-        fun cancelAll() {
-            JobManager.instance().allJobRequests.filter { it.tag.startsWith(TAG) }
-                    .map { it.tag }
-                    .plus(JobManager.instance().allJobs.filter { it is LocalMangaJob }.map {
-                        (it as LocalMangaJob).let { constructTag(it.entryId, it.episode, it.language) }
-                    }).forEach { JobManager.instance().cancelAllForTag(it) }
-        }
+        fun cancelAll() = JobManager.instance().allJobRequests.filter { it.tag.startsWith(TAG) }
+                .map { it.tag }
+                .plus(JobManager.instance().allJobs.filter { it is LocalMangaJob }.map {
+                    (it as LocalMangaJob).let { constructTag(it.entryId, it.episode, it.language) }
+                })
+                .forEach { JobManager.instance().cancelAllForTag(it) }
 
         fun isScheduledOrRunning(entryId: String, episode: Int, language: Language): Boolean {
             val isScheduled = JobManager.instance().allJobRequests.find {

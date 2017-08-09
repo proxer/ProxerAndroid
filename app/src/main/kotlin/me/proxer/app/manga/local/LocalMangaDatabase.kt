@@ -9,7 +9,7 @@ import me.proxer.app.util.RoomJavaConverters
 /**
  * @author Ruben Gees
  */
-@Database(entities = arrayOf(LocalEntryCore::class, LocalMangaChapter::class, LocalMangaPage::class), version = 1,
+@Database(entities = [(LocalEntryCore::class), (LocalMangaChapter::class), (LocalMangaPage::class)], version = 1,
         exportSchema = false)
 @TypeConverters(RoomConverters::class, RoomJavaConverters::class)
 abstract class LocalMangaDatabase : RoomDatabase() {

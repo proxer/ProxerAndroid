@@ -134,11 +134,9 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
         updateRecyclerViewPadding()
     }
 
-    override fun hideData() {
-        innerAdapter.itemCount.let {
-            innerAdapter.clear()
-            innerAdapter.notifyItemRangeRemoved(0, it)
-        }
+    override fun hideData() = innerAdapter.itemCount.let {
+        innerAdapter.clear()
+        innerAdapter.notifyItemRangeRemoved(0, it)
     }
 
     override fun showError(action: ErrorAction) {

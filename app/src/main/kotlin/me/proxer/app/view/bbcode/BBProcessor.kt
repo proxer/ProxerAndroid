@@ -20,9 +20,7 @@ import java.util.*
  */
 internal object BBProcessor {
 
-    internal fun process(tree: BBToken): List<BBElement> {
-        return trimElements(mergeFittingElements(processWithStyle(tree, BBStyle())))
-    }
+    internal fun process(tree: BBToken) = trimElements(mergeFittingElements(processWithStyle(tree, BBStyle())))
 
     /**
      * (•_•)

@@ -12,7 +12,7 @@ buildscript {
         buildToolsVersion = '26.0.1'
 
         androidPluginVersion = '3.0.0-alpha9'
-        kotlinVersion = '1.1.4-eap-69'
+        kotlinVersion = '1.2-M2'
 
         gradleVersionsPluginVersion = '0.15.0'
         androidCommandPluginVersion = '1.7.1'
@@ -142,7 +142,7 @@ buildscript {
     repositories {
         jcenter()
         google()
-        maven { url "https://dl.bintray.com/kotlin/kotlin-eap-1.1" }
+        maven { url "http://dl.bintray.com/kotlin/kotlin-eap-1.2" }
     }
 
     dependencies {
@@ -159,7 +159,7 @@ allprojects {
         jcenter()
         google()
         maven { url "https://jitpack.io" }
-        maven { url "https://dl.bintray.com/kotlin/kotlin-eap-1.1" }
+        maven { url "http://dl.bintray.com/kotlin/kotlin-eap-1.2" }
         maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
     }
 }

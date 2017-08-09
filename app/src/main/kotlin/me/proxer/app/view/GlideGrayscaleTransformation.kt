@@ -1,4 +1,4 @@
-package me.proxer.app.util.view
+package me.proxer.app.view
 
 import android.graphics.*
 import com.bumptech.glide.load.Key
@@ -14,7 +14,7 @@ import java.security.MessageDigest
 class GlideGrayscaleTransformation : BitmapTransformation() {
 
     companion object {
-        private val ID = "me.proxer.app.util.view.GlideGrayscaleTransformation"
+        private val ID = "me.proxer.app.view.GlideGrayscaleTransformation"
         private val ID_BYTES = ID.toByteArray(Key.CHARSET)
 
         private val saturation = ColorMatrix().apply {
@@ -30,9 +30,7 @@ class GlideGrayscaleTransformation : BitmapTransformation() {
         Canvas(this).drawBitmap(this, 0f, 0f, paint)
     }
 
-    override fun updateDiskCacheKey(messageDigest: MessageDigest) {
-        messageDigest.update(ID_BYTES)
-    }
+    override fun updateDiskCacheKey(messageDigest: MessageDigest) = messageDigest.update(ID_BYTES)
 
     override fun equals(other: Any?) = other is GlideGrayscaleTransformation
     override fun hashCode() = ID.hashCode()
