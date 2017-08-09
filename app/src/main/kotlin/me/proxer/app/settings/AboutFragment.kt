@@ -33,10 +33,13 @@ import org.jetbrains.anko.bundleOf
 class AboutFragment : MaterialAboutFragment() {
 
     companion object {
-        private val LIBRARIES = arrayOf("anko", "eventbus", "android_job", "materialdialogs", "hawk", "glide", "okhttp",
-                "android_textview_linkbuilder", "leakcanary", "retrofit", "moshi")
+        private val LIBRARIES = arrayOf("android_job", "android_textview_linkbuilder", "anko", "customtabshelper",
+                "exomedia", "exoplayer", "flexboxlayout", "glide", "hawk", "kotterknife", "leakcanary",
+                "materialbadgetextview", "materialdialogs", "materialprogressbar", "materialratingbar", "moshi",
+                "okhttp", "retrofit", "rxandroid", "rxbinding", "rxlifecylce", "rxjava", "subsamplingscaleimageview",
+                "tablayouthelper")
 
-        private val EXCLUDED_LIBRARIES = arrayOf("fastadapter", "materialize", "crossfader")
+        private val EXCLUDED_LIBRARIES = arrayOf("fastadapter", "materialize")
 
         private val REPOSITORY_LINK = HttpUrl.Builder()
                 .scheme("https")
@@ -176,6 +179,6 @@ class AboutFragment : MaterialAboutFragment() {
                 Configuration.UI_MODE_NIGHT_NO -> Libs.ActivityStyle.LIGHT_DARK_TOOLBAR
                 Configuration.UI_MODE_NIGHT_YES -> Libs.ActivityStyle.DARK
                 Configuration.UI_MODE_NIGHT_UNDEFINED -> Libs.ActivityStyle.LIGHT_DARK_TOOLBAR
-                else -> throw RuntimeException("Unknown mode")
+                else -> throw IllegalArgumentException("Unknown mode")
             }
 }
