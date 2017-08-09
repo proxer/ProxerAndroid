@@ -2,12 +2,14 @@ buildscript {
     ext {
         preDexLibs = !project.hasProperty('disablePreDex')
 
-        version = '0.10.0'
-        versionCode = 33
+        versionMajor = 0
+        versionMinor = 10
+        versionPatch = 0
+
         minSdkVersion = 16
         targetSdkVersion = 26
         compileSdkVersion = 26
-        buildToolsVersion = '26.0.0'
+        buildToolsVersion = '26.0.1'
 
         androidPluginVersion = '3.0.0-alpha9'
         kotlinVersion = '1.1.4-eap-69'
@@ -17,7 +19,7 @@ buildscript {
 
         // Frameworks and code only libraries
         ankoVersion = '0.10.1'
-        supportLibraryVersion = '26.0.0'
+        supportLibraryVersion = '26.0.1'
         supportPreferenceVersion = '1.2.7'
         architectureComponentsVersion = '1.0.0-alpha8'
         playServicesVersion = '11.0.4'

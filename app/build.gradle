@@ -18,8 +18,8 @@ android {
         applicationId 'me.proxer.app'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode rootProject.ext.versionCode
-        versionName rootProject.ext.version
+        versionCode rootProject.ext.versionMajor * 10000 + rootProject.ext.versionMinor * 1000 + rootProject.ext.versionPatch * 100
+        versionName "${rootProject.ext.versionMajor}.${rootProject.ext.versionMinor}.${rootProject.ext.versionPatch}"
 
         vectorDrawables.useSupportLibrary true
         resConfigs "de"
@@ -65,6 +65,7 @@ android {
         exclude '**/*.kotlin_builtins'
         exclude '**/*.kotlin_module'
         exclude '**/*.gwt.*'
+        exclude '**/rxjava.properties'
         exclude 'build-data.properties'
     }
 
