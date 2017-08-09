@@ -2,6 +2,7 @@ package me.proxer.app.anime.resolver
 
 import android.net.Uri
 import io.reactivex.Single
+import me.proxer.app.MainApplication.Companion.GENERIC_USER_AGENT
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.MainApplication.Companion.client
 import me.proxer.app.MainApplication.Companion.moshi
@@ -28,33 +29,34 @@ class DailymotionStreamResolver : StreamResolver() {
                 client.newCall(Request.Builder()
                         .get()
                         .url(Utils.parseAndFixUrl(url))
+                        .addHeader("User-Agent", GENERIC_USER_AGENT)
                         .build())
                         .toBodySingle()
-                        .map {
-                            val qualitiesJson = regex.find(it)?.value ?: throw StreamResolutionException()
-                            val qualityMap = moshi.adapter(QualityMap::class.java)
-                                    .fromJson("{${qualitiesJson.trimEnd(',')}}")
+            }
+            .map {
+                val qualitiesJson = regex.find(it)?.value ?: throw StreamResolutionException()
+                val qualityMap = moshi.adapter(QualityMap::class.java)
+                        .fromJson("{${qualitiesJson.trimEnd(',')}}")
 
-                            val mp4Links = qualityMap?.qualities?.mapNotNull { qualityEntry ->
-                                val quality = try {
-                                    qualityEntry.key.toInt()
-                                } catch (exception: NumberFormatException) {
-                                    return@mapNotNull null
-                                }
+                val mp4Links = qualityMap?.qualities?.mapNotNull { qualityEntry ->
+                    val quality = try {
+                        qualityEntry.key.toInt()
+                    } catch (exception: NumberFormatException) {
+                        return@mapNotNull null
+                    }
 
-                                qualityEntry.value.mapNotNull {
-                                    if (it["type"] == "video/mp4" && it["url"]?.isNotBlank() == true) {
-                                        quality to it["url"]
-                                    } else {
-                                        null
-                                    }
-                                }
-                            }?.flatten()?.sortedByDescending { it.first }
-
-                            Uri.parse(mp4Links?.firstOrNull()?.second ?: throw StreamResolutionException()).let {
-                                StreamResolutionResult(it, "video/mp4")
-                            }
+                    qualityEntry.value.mapNotNull {
+                        if (it["type"] == "video/mp4" && it["url"]?.isNotBlank() == true) {
+                            quality to it["url"]
+                        } else {
+                            null
                         }
+                    }
+                }?.flatten()?.sortedByDescending { it.first }
+
+                Uri.parse(mp4Links?.firstOrNull()?.second ?: throw StreamResolutionException()).let {
+                    StreamResolutionResult(it, "video/mp4")
+                }
             }
 
     private class QualityMap(val qualities: Map<String, Array<Map<String, String>>>?)

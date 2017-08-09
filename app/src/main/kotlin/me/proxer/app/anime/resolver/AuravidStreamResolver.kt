@@ -30,16 +30,16 @@ class AuravidStreamResolver : StreamResolver() {
                         .addHeader("User-Agent", GENERIC_USER_AGENT)
                         .build())
                         .toBodySingle()
-                        .map {
-                            val regexResult = regex.find(it) ?: throw StreamResolutionException()
-                            val source = regexResult.groupValues[1]
-                            val type = regexResult.groupValues[2]
+            }
+            .map {
+                val regexResult = regex.find(it) ?: throw StreamResolutionException()
+                val source = regexResult.groupValues[1]
+                val type = regexResult.groupValues[2]
 
-                            if (source.isBlank() || type.isBlank()) {
-                                throw StreamResolutionException()
-                            }
+                if (source.isBlank() || type.isBlank()) {
+                    throw StreamResolutionException()
+                }
 
-                            StreamResolutionResult(Uri.parse(source), type)
-                        }
+                StreamResolutionResult(Uri.parse(source), type)
             }
 }

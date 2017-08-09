@@ -39,15 +39,15 @@ class ClipfishStreamResolver : StreamResolver() {
                         .addHeader("User-Agent", USER_AGENT)
                         .build())
                         .toBodySingle()
-                        .map {
-                            val mediaId = regex.find(it)?.groupValues?.get(1) ?: throw StreamResolutionException()
+            }
+            .map {
+                val mediaId = regex.find(it)?.groupValues?.get(1) ?: throw StreamResolutionException()
 
-                            if (mediaId.isBlank()) {
-                                throw StreamResolutionException()
-                            }
+                if (mediaId.isBlank()) {
+                    throw StreamResolutionException()
+                }
 
-                            StreamResolutionResult(Intent(Intent.ACTION_VIEW,
-                                    Uri.parse("clipfish://video/$id?ref=proxer")))
-                        }
+                StreamResolutionResult(Intent(Intent.ACTION_VIEW,
+                        Uri.parse("clipfish://video/$id?ref=proxer")))
             }
 }

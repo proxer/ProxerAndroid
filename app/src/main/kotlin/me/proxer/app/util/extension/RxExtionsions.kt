@@ -15,6 +15,7 @@ import io.reactivex.internal.disposables.DisposableContainer
 import me.proxer.app.util.ErrorUtils.PartialException
 import me.proxer.library.api.Endpoint
 import okhttp3.Call
+import okhttp3.Response
 import java.io.IOException
 
 /**
@@ -59,6 +60,26 @@ fun <I : Any, T : Any> Endpoint<T>.buildPartialErrorSingle(input: I): Single<T> 
     } catch (error: Throwable) {
         if (!emitter.isDisposed) {
             emitter.onError(PartialException(error, input))
+        }
+    }
+}
+
+fun Call.toSingle(): Single<Response> = Single.create { emitter ->
+    emitter.setCancellable { cancel() }
+
+    try {
+        val result = execute()
+
+        result.body()?.close()
+
+        if (result.isSuccessful) {
+            emitter.onSuccess(result)
+        } else {
+            emitter.onError(IOException())
+        }
+    } catch (error: Throwable) {
+        if (!emitter.isDisposed) {
+            emitter.onError(error)
         }
     }
 }

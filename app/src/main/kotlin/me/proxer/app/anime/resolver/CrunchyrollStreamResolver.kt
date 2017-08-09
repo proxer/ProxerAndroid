@@ -41,16 +41,16 @@ class CrunchyrollStreamResolver : StreamResolver() {
                         .addHeader("User-Agent", USER_AGENT)
                         .build())
                         .toBodySingle()
-                        .map {
-                            val regexResult = regex.find(it) ?: throw StreamResolutionException()
-                            val mediaId = regexResult.groupValues[1]
+            }
+            .map {
+                val regexResult = regex.find(it) ?: throw StreamResolutionException()
+                val mediaId = regexResult.groupValues[1]
 
-                            if (mediaId.isBlank()) {
-                                throw StreamResolutionException()
-                            }
+                if (mediaId.isBlank()) {
+                    throw StreamResolutionException()
+                }
 
-                            StreamResolutionResult(Intent(Intent.ACTION_VIEW,
-                                    Uri.parse("crunchyroll://media/$mediaId")))
-                        }
+                StreamResolutionResult(Intent(Intent.ACTION_VIEW,
+                        Uri.parse("crunchyroll://media/$mediaId")))
             }
 }
