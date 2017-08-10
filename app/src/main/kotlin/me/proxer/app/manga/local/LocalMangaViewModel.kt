@@ -8,6 +8,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.toFlowable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.MainApplication.Companion.globalContext
@@ -32,9 +33,9 @@ class LocalMangaViewModel(application: Application) : BaseViewModel<List<Complet
 
     override val dataSingle: Single<List<CompleteLocalMangaEntry>>
         get() = Single.fromCallable { Validators.validateLogin() }
-                .map {
-                    mangaDao.getEntries()
-                            .associate { it.toNonLocalEntryCore() to mangaDao.getChaptersForEntry(it.id) }
+                .flatMap {
+                    mangaDao.getEntries().toFlowable()
+                            .map { it.toNonLocalEntryCore() to mangaDao.getChaptersForEntry(it.id) }
                             .filter { (entry, chapters) ->
                                 chapters.isNotEmpty() && searchQuery.let {
                                     when {

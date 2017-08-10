@@ -5,7 +5,7 @@ import android.arch.lifecycle.MutableLiveData
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.functions.BiFunction
+import io.reactivex.rxkotlin.Singles
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.anime.resolver.StreamResolutionException
@@ -17,7 +17,6 @@ import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.Validators
 import me.proxer.app.util.extension.*
 import me.proxer.library.api.Endpoint
-import me.proxer.library.entitiy.anime.Stream
 import me.proxer.library.entitiy.info.EntryCore
 import me.proxer.library.enums.AnimeLanguage
 import me.proxer.library.enums.Category
@@ -29,12 +28,11 @@ class AnimeViewModel(application: Application) : BaseViewModel<AnimeStreamInfo>(
 
     override val dataSingle: Single<AnimeStreamInfo>
         get() = entrySingle().flatMap {
-            Single.zip(Single.just(it), streamSingle(it),
-                    BiFunction<EntryCore, List<Stream>, AnimeStreamInfo> { entry, streams ->
-                        AnimeStreamInfo(entry.name, entry.episodeAmount, streams.map {
-                            it.toAnimeStreamInfo(StreamResolverFactory.resolverFor(it.hosterName) != null)
-                        })
-                    })
+            Singles.zip(Single.just(it), streamSingle(it), { entry, streams ->
+                AnimeStreamInfo(entry.name, entry.episodeAmount, streams.map {
+                    it.toAnimeStreamInfo(StreamResolverFactory.resolverFor(it.hosterName) != null)
+                })
+            })
         }
 
     val resolutionResult = MutableLiveData<StreamResolutionResult>()
