@@ -13,13 +13,20 @@ import com.jakewharton.rxbinding2.view.clicks
 import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
 import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindUntilEvent
 import kotterknife.bindView
+import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.R
 import me.proxer.app.util.ErrorUtils.ErrorAction
+import me.proxer.library.enums.Device
+import me.proxer.library.util.ProxerUrls
 
 /**
  * @author Ruben Gees
  */
 abstract class BaseContentFragment<T> : BaseFragment() {
+
+    private companion object {
+        private const val IS_SOLVING_CAPTCHA_ARGUMENT = "is_solving_chaptcha"
+    }
 
     abstract protected val viewModel: BaseViewModel<T>
 
@@ -32,6 +39,12 @@ abstract class BaseContentFragment<T> : BaseFragment() {
     open protected val errorText: TextView by bindView(R.id.errorText)
     open protected val errorButton: Button by bindView(R.id.errorButton)
     open protected val progress: SwipeRefreshLayout by bindView(R.id.progress)
+
+    private var isSolvingCaptcha: Boolean
+        get() = arguments.getBoolean(IS_SOLVING_CAPTCHA_ARGUMENT, false)
+        set(value) {
+            arguments.putBoolean(IS_SOLVING_CAPTCHA_ARGUMENT, value)
+        }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -67,6 +80,16 @@ abstract class BaseContentFragment<T> : BaseFragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        if (isSolvingCaptcha) {
+            isSolvingCaptcha = false
+
+            bus.post(CaptchaSolvedEvent())
+        }
+    }
+
     open protected fun showData(data: T) {
         contentContainer.visibility = View.VISIBLE
     }
@@ -93,7 +116,15 @@ abstract class BaseContentFragment<T> : BaseFragment() {
         errorButton.clicks()
                 .bindUntilEvent(this, Lifecycle.Event.ON_DESTROY)
                 .subscribe {
-                    action.buttonAction?.toClickListener(hostingActivity)?.onClick(errorButton) ?: viewModel.load()
+                    when (action.message == R.string.error_captcha) {
+                        true -> {
+                            isSolvingCaptcha = true
+
+                            showPage(ProxerUrls.captchaWeb(Device.MOBILE))
+                        }
+                        false -> action.buttonAction?.toClickListener(hostingActivity)?.onClick(errorButton)
+                                ?: viewModel.load()
+                    }
                 }
     }
 

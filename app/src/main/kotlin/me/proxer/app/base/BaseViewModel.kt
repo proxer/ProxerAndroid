@@ -10,6 +10,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.bus
+import me.proxer.app.R
 import me.proxer.app.auth.LoginEvent
 import me.proxer.app.auth.LogoutEvent
 import me.proxer.app.settings.AgeConfirmationEvent
@@ -42,6 +43,14 @@ abstract class BaseViewModel<T>(application: Application) : AndroidViewModel(app
         disposables + bus.register(AgeConfirmationEvent::class.java)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { if (isAgeConfirmationRequired) reload() }
+
+        disposables + bus.register(CaptchaSolvedEvent::class.java)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    if (error.value?.message == R.string.error_captcha) {
+                        reload()
+                    }
+                }
     }
 
     override fun onCleared() {
