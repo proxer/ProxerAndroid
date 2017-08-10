@@ -37,7 +37,8 @@ buildscript {
         // UI components
         aboutLibrariesVersion = '5.9.7'
         materialDrawerVersion = '5.9.5'
-        iconicsVersion = '2.9.0'
+        iconicsVersion = '2.9.1'
+        iconicsViewsVersion = '2.9.2'
         communityMaterialTypefaceVersion = '1.9.32.2'
         crossfaderVersion = '1.5.0'
         materialAboutVersion = '2.2.1'
@@ -105,7 +106,7 @@ buildscript {
                 aboutLibraries               : "com.mikepenz:aboutlibraries:$aboutLibrariesVersion@aar",
                 materialDrawer               : "com.mikepenz:materialdrawer:$materialDrawerVersion@aar",
                 iconics                      : "com.mikepenz:iconics-core:$iconicsVersion@aar",
-                iconicsViews                 : "com.mikepenz:iconics-views:$iconicsVersion@aar",
+                iconicsViews                 : "com.mikepenz:iconics-views:$iconicsViewsVersion@aar",
                 communityMaterialTypeface    : "com.mikepenz:community-material-typeface:$communityMaterialTypefaceVersion@aar",
                 crossfader                   : "com.mikepenz:crossfader:$crossfaderVersion@aar",
                 materialAbout                : "com.github.daniel-stoneuk:material-about-library:$materialAboutVersion",
