@@ -59,13 +59,15 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
     override val errorButton: Button
         get() = errorContainer.findViewById(R.id.errorButton)
 
+    // This is an ugly hack, but I can't figure out another way around RecyclerView's bugs.
+    private var firstData = true
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_paged, container, false)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        adapter = EasyHeaderFooterAdapter(innerAdapter)
-        innerAdapter.positionResolver = ContainerPositionResolver(adapter)
+        super.onViewCreated(view, savedInstanceState)
 
         viewModel.refreshError.observe(this, Observer {
             it?.let {
@@ -73,6 +75,9 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
                         it.buttonAction?.toClickListener(hostingActivity))
             }
         })
+
+        adapter = EasyHeaderFooterAdapter(innerAdapter)
+        innerAdapter.positionResolver = ContainerPositionResolver(adapter)
 
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = layoutManager
@@ -82,8 +87,6 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
                 .throttleFirst(300, TimeUnit.MILLISECONDS)
                 .bindToLifecycle(this)
                 .subscribe { viewModel.loadIfPossible() }
-
-        super.onViewCreated(view, savedInstanceState)
     }
 
     override fun onDestroyView() {
@@ -100,36 +103,42 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
     }
 
     override fun showData(data: List<T>) {
+        updateRecyclerViewPadding()
+
         when {
-            data.isEmpty() -> {
-                hideData()
-                showError(ErrorAction(emptyDataMessage, ErrorAction.ACTION_MESSAGE_HIDE))
-            }
             innerAdapter.isEmpty() -> {
                 innerAdapter.swapData(data)
                 innerAdapter.notifyItemRangeInserted(0, data.size)
 
-                recyclerView.postDelayed({
-                    layoutManager.let {
-                        when (it) {
-                            is StaggeredGridLayoutManager -> it.scrollToPositionWithOffset(0, 0)
-                            is LinearLayoutManager -> it.scrollToPositionWithOffset(0, 0)
-                        }
-                    }
-                }, 50)
+                if (!firstData) {
+                    recyclerView.postDelayed({
+                        scrollToTop()
+                    }, 50)
+                }
+
+                firstData = false
             }
             else -> Single.fromCallable { DiffUtil.calculateDiff(innerAdapter.provideDiffUtilCallback(data)) }
                     .subscribeOn(Schedulers.single())
                     .observeOn(AndroidSchedulers.mainThread())
                     .bindToLifecycle(this)
                     .subscribe { it: DiffUtil.DiffResult ->
-                        innerAdapter.swapData(data)
+                        val wasAtFirstPosition = isAtTop()
 
-                        it.dispatchUpdatesTo(adapter)
+                        innerAdapter.swapData(data)
+                        it.dispatchUpdatesTo(innerAdapter)
+
+                        if (data.isEmpty()) {
+                            showError(ErrorAction(emptyDataMessage, ErrorAction.ACTION_MESSAGE_HIDE))
+                        } else {
+                            if (wasAtFirstPosition) {
+                                recyclerView.postDelayed({
+                                    recyclerView.smoothScrollToPosition(0)
+                                }, 50)
+                            }
+                        }
                     }
         }
-
-        updateRecyclerViewPadding()
     }
 
     override fun hideData() = innerAdapter.itemCount.let {
@@ -156,13 +165,28 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
         adapter.footer = null
     }
 
-    private fun updateRecyclerViewPadding() = when (innerAdapter.itemCount <= 0) {
+    private fun updateRecyclerViewPadding() = when (adapter.footer != null) {
         true -> recyclerView.setPadding(0, 0, 0, 0)
         false -> {
             val horizontalPadding = DeviceUtils.getHorizontalMargin(context)
             val verticalPadding = DeviceUtils.getVerticalMargin(context)
 
             recyclerView.setPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
+        }
+    }
+
+    private fun isAtTop() = recyclerView.layoutManager.let {
+        when (it) {
+            is StaggeredGridLayoutManager -> it.findFirstCompletelyVisibleItemPositions(null).contains(0)
+            is LinearLayoutManager -> it.findFirstCompletelyVisibleItemPosition() == 0
+            else -> false
+        }
+    }
+
+    private fun scrollToTop() = recyclerView.layoutManager.let {
+        when (it) {
+            is StaggeredGridLayoutManager -> it.scrollToPositionWithOffset(0, 0)
+            is LinearLayoutManager -> it.scrollToPositionWithOffset(0, 0)
         }
     }
 }
