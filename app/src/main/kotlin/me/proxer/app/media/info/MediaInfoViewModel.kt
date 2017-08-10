@@ -1,7 +1,6 @@
 package me.proxer.app.media.info
 
 import android.app.Application
-import android.arch.lifecycle.MutableLiveData
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -11,6 +10,7 @@ import me.proxer.app.base.BaseContentViewModel
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.Validators
+import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.extension.buildOptionalSingle
 import me.proxer.library.api.Endpoint
 import me.proxer.library.entitiy.info.Entry
@@ -23,8 +23,8 @@ class MediaInfoViewModel(application: Application) : BaseContentViewModel<Entry>
     override val endpoint: Endpoint<Entry>
         get() = api.info().entry(entryId)
 
-    val userInfoUpdateData = MutableLiveData<Unit?>()
-    val userInfoUpdateError = MutableLiveData<ErrorAction?>()
+    val userInfoUpdateData = ResettingMutableLiveData<Unit?>()
+    val userInfoUpdateError = ResettingMutableLiveData<ErrorAction?>()
 
     lateinit var entryId: String
 

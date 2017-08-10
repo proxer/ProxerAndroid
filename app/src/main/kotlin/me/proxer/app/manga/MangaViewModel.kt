@@ -1,7 +1,6 @@
 package me.proxer.app.manga
 
 import android.app.Application
-import android.arch.lifecycle.MutableLiveData
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -13,6 +12,7 @@ import me.proxer.app.MainApplication.Companion.mangaDao
 import me.proxer.app.base.BaseViewModel
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
+import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.extension.buildOptionalSingle
 import me.proxer.app.util.extension.buildPartialErrorSingle
 import me.proxer.app.util.extension.buildSingle
@@ -38,8 +38,8 @@ class MangaViewModel(application: Application) : BaseViewModel<MangaChapterInfo>
                 .andThen(entrySingle())
                 .flatMap { localChapterSingle(it).onErrorResumeNext(remoteChapterSingle(it)) }
 
-    val bookmarkData = MutableLiveData<Unit?>()
-    val bookmarkError = MutableLiveData<ErrorUtils.ErrorAction?>()
+    val bookmarkData = ResettingMutableLiveData<Unit?>()
+    val bookmarkError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
 
     lateinit var entryId: String
     lateinit var language: Language

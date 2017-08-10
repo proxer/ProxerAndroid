@@ -1,4 +1,4 @@
-package me.proxer.app.util
+package me.proxer.app.util.wrapper
 
 import android.app.Activity
 import android.content.Context

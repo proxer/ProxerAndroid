@@ -1,13 +1,13 @@
 package me.proxer.app.ucp.bookmark
 
 import android.app.Application
-import android.arch.lifecycle.MutableLiveData
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.base.PagedContentViewModel
 import me.proxer.app.util.ErrorUtils
+import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.data.UniqueQueue
 import me.proxer.app.util.extension.buildOptionalSingle
 import me.proxer.library.api.PagingLimitEndpoint
@@ -25,7 +25,7 @@ class BookmarkViewModel(application: Application) : PagedContentViewModel<Bookma
     override val endpoint: PagingLimitEndpoint<List<Bookmark>>
         get() = api.ucp().bookmarks().category(category)
 
-    val itemRemovalError = MutableLiveData<ErrorUtils.ErrorAction?>()
+    val itemRemovalError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
 
     private var category: Category? = null
 

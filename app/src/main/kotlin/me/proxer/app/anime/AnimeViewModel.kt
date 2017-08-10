@@ -1,7 +1,6 @@
 package me.proxer.app.anime
 
 import android.app.Application
-import android.arch.lifecycle.MutableLiveData
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -15,6 +14,7 @@ import me.proxer.app.base.BaseViewModel
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.Validators
+import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.extension.*
 import me.proxer.library.api.Endpoint
 import me.proxer.library.entitiy.info.EntryCore
@@ -35,11 +35,11 @@ class AnimeViewModel(application: Application) : BaseViewModel<AnimeStreamInfo>(
             })
         }
 
-    val resolutionResult = MutableLiveData<StreamResolutionResult>()
-    val resolutionError = MutableLiveData<ErrorAction>()
+    val resolutionResult = ResettingMutableLiveData<StreamResolutionResult>()
+    val resolutionError = ResettingMutableLiveData<ErrorAction>()
 
-    val bookmarkData = MutableLiveData<Unit?>()
-    val bookmarkError = MutableLiveData<ErrorUtils.ErrorAction?>()
+    val bookmarkData = ResettingMutableLiveData<Unit?>()
+    val bookmarkError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
 
     lateinit var entryId: String
     lateinit var language: AnimeLanguage

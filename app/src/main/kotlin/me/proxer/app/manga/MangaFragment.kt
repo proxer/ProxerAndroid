@@ -174,8 +174,6 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         viewModel.bookmarkData.observe(this, Observer {
             it?.let {
                 snackbar(androidRoot, R.string.fragment_set_user_info_success)
-
-                viewModel.bookmarkData.value = null
             }
         })
 
@@ -183,8 +181,6 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
             it?.let {
                 multilineSnackbar(root, getString(R.string.fragment_set_user_info_error, getString(it.message)),
                         Snackbar.LENGTH_LONG, it.buttonMessage, it.buttonAction?.toClickListener(hostingActivity))
-
-                viewModel.bookmarkError.value = null
             }
         })
 

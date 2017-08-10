@@ -28,12 +28,12 @@ import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.settings.AboutFragment
 import me.proxer.app.settings.SettingsFragment
 import me.proxer.app.ucp.bookmark.BookmarkFragment
-import me.proxer.app.util.IntroductionWrapper
-import me.proxer.app.util.MaterialDrawerWrapper
-import me.proxer.app.util.MaterialDrawerWrapper.AccountItem
-import me.proxer.app.util.MaterialDrawerWrapper.DrawerItem
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.wrapper.IntroductionWrapper
+import me.proxer.app.util.wrapper.MaterialDrawerWrapper
+import me.proxer.app.util.wrapper.MaterialDrawerWrapper.AccountItem
+import me.proxer.app.util.wrapper.MaterialDrawerWrapper.DrawerItem
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls

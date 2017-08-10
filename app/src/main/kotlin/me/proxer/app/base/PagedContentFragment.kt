@@ -71,8 +71,6 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
             it?.let {
                 multilineSnackbar(root, it.message, Snackbar.LENGTH_LONG, it.buttonMessage,
                         it.buttonAction?.toClickListener(hostingActivity))
-
-                viewModel.refreshError.value = null
             }
         })
 

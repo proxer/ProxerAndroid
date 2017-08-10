@@ -1,4 +1,4 @@
-package me.proxer.app.util
+package me.proxer.app.util.converter
 
 import android.arch.persistence.room.TypeConverter
 import me.proxer.library.enums.*

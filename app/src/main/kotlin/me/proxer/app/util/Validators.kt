@@ -21,12 +21,6 @@ object Validators {
         }
     }
 
-//    fun validateHosterSupported(name: String) {
-//        if (!StreamResolutionTask.isSupported(name)) {
-//            throw StreamResolutionTask.NoResolverException()
-//        }
-//    }
-
 //    fun validateNewChatInput(context: Context, input: NewChatTaskInput) {
 //        if (input.isGroup && input.topic.isBlank()) {
 //            throw TopicEmptyException()

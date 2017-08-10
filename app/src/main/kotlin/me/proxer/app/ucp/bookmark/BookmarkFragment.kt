@@ -100,8 +100,6 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
             it?.let {
                 multilineSnackbar(root, getString(R.string.fragment_set_user_info_error, getString(it.message)),
                         Snackbar.LENGTH_LONG, it.buttonMessage, it.buttonAction?.toClickListener(hostingActivity))
-
-                viewModel.itemRemovalError.value = null
             }
         })
     }

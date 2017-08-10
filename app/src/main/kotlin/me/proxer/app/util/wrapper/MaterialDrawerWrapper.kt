@@ -1,4 +1,4 @@
-package me.proxer.app.util
+package me.proxer.app.util.wrapper
 
 import android.app.Activity
 import android.os.Bundle
@@ -16,6 +16,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IProfile
 import io.reactivex.subjects.PublishSubject
 import me.proxer.app.R
+import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.library.util.ProxerUrls

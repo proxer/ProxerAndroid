@@ -162,8 +162,6 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
                                 }
                             }
                 }
-
-                viewModel.resolutionResult.value = null
             }
         })
 
@@ -174,16 +172,12 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
                     else -> multilineSnackbar(root, it.message, Snackbar.LENGTH_LONG, it.buttonMessage,
                             it.buttonAction?.toClickListener(hostingActivity))
                 }
-
-                viewModel.resolutionError.value = null
             }
         })
 
         viewModel.bookmarkData.observe(this, Observer {
             it?.let {
                 snackbar(root, R.string.fragment_set_user_info_success)
-
-                viewModel.bookmarkData.value = null
             }
         })
 
@@ -191,8 +185,6 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
             it?.let {
                 multilineSnackbar(root, getString(R.string.fragment_set_user_info_error, getString(it.message)),
                         Snackbar.LENGTH_LONG, it.buttonMessage, it.buttonAction?.toClickListener(hostingActivity))
-
-                viewModel.bookmarkError.value = null
             }
         })
 

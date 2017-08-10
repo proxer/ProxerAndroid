@@ -109,8 +109,6 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
         viewModel.userInfoUpdateData.observe(this, Observer {
             it?.let {
                 snackbar(root, R.string.fragment_set_user_info_success)
-
-                viewModel.userInfoUpdateData.value = null
             }
         })
 
@@ -118,8 +116,6 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
             it?.let {
                 multilineSnackbar(root, getString(R.string.fragment_set_user_info_error, getString(it.message)),
                         Snackbar.LENGTH_LONG, it.buttonMessage, it.buttonAction?.toClickListener(hostingActivity))
-
-                viewModel.userInfoUpdateError.value = null
             }
         })
 
