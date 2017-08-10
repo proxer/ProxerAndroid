@@ -67,7 +67,7 @@ buildscript {
 
         // Debugging
         strictModeCompatVersion = "26.0.2"
-        leakCanaryVersion = '1.5.1'
+        leakCanaryVersion = '1.5.2'
 
         deps = [
                 kotlinStdlib                 : "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
