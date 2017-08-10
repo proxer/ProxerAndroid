@@ -10,6 +10,7 @@ import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.util.DeviceUtils
+import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.app.view.ImageDetailActivity
 import me.proxer.library.entitiy.notifications.NewsArticle
 import me.proxer.library.enums.Device
@@ -29,11 +30,11 @@ class NewsFragment : PagedContentFragment<NewsArticle>() {
 
     override val emptyDataMessage = R.string.error_no_data_news
 
-    override val viewModel: NewsViewModel by lazy {
+    override val viewModel: NewsViewModel by unsafeLazy {
         ViewModelProviders.of(this).get(NewsViewModel::class.java)
     }
 
-    override val layoutManager by lazy {
+    override val layoutManager by unsafeLazy {
         StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity), VERTICAL)
     }
 

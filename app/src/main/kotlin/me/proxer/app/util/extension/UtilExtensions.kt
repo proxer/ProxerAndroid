@@ -20,6 +20,8 @@ import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
 import java.util.concurrent.Semaphore
 
+inline fun <T> unsafeLazy(noinline initializer: () -> T) = lazy(LazyThreadSafetyMode.NONE, initializer)
+
 inline fun <T> Semaphore.lock(action: () -> T): T {
     acquire()
 

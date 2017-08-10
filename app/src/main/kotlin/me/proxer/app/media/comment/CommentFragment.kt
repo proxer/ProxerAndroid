@@ -14,6 +14,7 @@ import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.profile.ProfileActivity
+import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entitiy.info.Comment
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.CommentSortCriteria
@@ -36,7 +37,7 @@ class CommentFragment : PagedContentFragment<Comment>() {
     override val isSwipeToRefreshEnabled = true
     override val pagingThreshold = 3
 
-    override val viewModel: CommentViewModel by lazy {
+    override val viewModel: CommentViewModel by unsafeLazy {
         ViewModelProviders.of(this).get(CommentViewModel::class.java).apply { entryId = id }
     }
 
@@ -57,7 +58,7 @@ class CommentFragment : PagedContentFragment<Comment>() {
             viewModel.setSortCriteria(value)
         }
 
-    override val layoutManager by lazy { LinearLayoutManager(context) }
+    override val layoutManager by unsafeLazy { LinearLayoutManager(context) }
 
     override lateinit var innerAdapter: CommentAdapter
 

@@ -18,6 +18,7 @@ import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.extension.toAnimeLanguage
 import me.proxer.app.util.extension.toGeneralLanguage
+import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Category
 import org.jetbrains.anko.bundleOf
 
@@ -34,7 +35,7 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
 
     override val isSwipeToRefreshEnabled = false
 
-    override val viewModel: EpisodeViewModel by lazy {
+    override val viewModel: EpisodeViewModel by unsafeLazy {
         ViewModelProviders.of(this).get(EpisodeViewModel::class.java).apply { entryId = id }
     }
 

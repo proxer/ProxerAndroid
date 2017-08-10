@@ -29,6 +29,7 @@ import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.extension.convertToDateTime
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.snackbar
+import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.app.view.MediaControlView
 import me.proxer.app.view.MediaControlView.SimpleTranslatorGroup
 import me.proxer.app.view.MediaControlView.Uploader
@@ -50,7 +51,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
     override val hostingActivity: MangaActivity
         get() = activity as MangaActivity
 
-    override val viewModel: MangaViewModel by lazy {
+    override val viewModel: MangaViewModel by unsafeLazy {
         ViewModelProviders.of(this).get(MangaViewModel::class.java).apply {
             entryId = this@MangaFragment.id
             language = this@MangaFragment.language
@@ -102,8 +103,8 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
     private lateinit var header: MediaControlView
     private lateinit var footer: MediaControlView
 
-    private val androidRoot by lazy { activity.findViewById<ViewGroup>(android.R.id.content) }
-    private val toolbar by lazy { activity.findViewById<Toolbar>(R.id.toolbar) }
+    private val androidRoot by unsafeLazy { activity.findViewById<ViewGroup>(android.R.id.content) }
+    private val toolbar by unsafeLazy { activity.findViewById<Toolbar>(R.id.toolbar) }
     private val recyclerView: RecyclerView by bindView(R.id.recyclerView)
 
     override fun onCreate(savedInstanceState: Bundle?) {

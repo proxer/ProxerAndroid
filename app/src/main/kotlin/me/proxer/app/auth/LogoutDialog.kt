@@ -12,6 +12,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseDialog
+import me.proxer.app.util.extension.unsafeLazy
 import org.jetbrains.anko.longToast
 
 /**
@@ -23,7 +24,7 @@ class LogoutDialog : BaseDialog() {
         fun show(activity: FragmentActivity) = LogoutDialog().show(activity.supportFragmentManager, "logout_dialog")
     }
 
-    private val viewModel by lazy { ViewModelProviders.of(this).get(LogoutViewModel::class.java) }
+    private val viewModel by unsafeLazy { ViewModelProviders.of(this).get(LogoutViewModel::class.java) }
 
     private val content: TextView by bindView(R.id.content)
     private val progress: ProgressBar by bindView(R.id.progress)

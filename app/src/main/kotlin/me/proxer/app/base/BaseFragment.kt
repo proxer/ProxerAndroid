@@ -1,6 +1,7 @@
 package me.proxer.app.base
 
 import android.arch.lifecycle.LifecycleFragment
+import android.os.Bundle
 import kotterknife.KotterKnife
 import me.proxer.app.MainApplication.Companion.refWatcher
 import me.proxer.app.util.extension.androidUri
@@ -14,10 +15,16 @@ import org.jetbrains.anko.bundleOf
  */
 abstract class BaseFragment : LifecycleFragment() {
 
-    private val customTabsHelper by lazy { CustomTabsHelperFragment.attachTo(this) }
+    private lateinit var customTabsHelper: CustomTabsHelperFragment
 
     open protected val hostingActivity: BaseActivity
         get() = activity as BaseActivity
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        customTabsHelper = CustomTabsHelperFragment.attachTo(this)
+    }
 
     override fun onDestroyView() {
         KotterKnife.reset(this)

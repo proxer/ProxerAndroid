@@ -28,6 +28,7 @@ import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.extension.CompleteLocalMangaEntry
+import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Category
 import org.jetbrains.anko.bundleOf
 
@@ -44,7 +45,7 @@ class LocalMangaFragment : BaseContentFragment<List<CompleteLocalMangaEntry>>() 
         }
     }
 
-    override val viewModel: LocalMangaViewModel by lazy {
+    override val viewModel: LocalMangaViewModel by unsafeLazy {
         ViewModelProviders.of(this).get(LocalMangaViewModel::class.java)
     }
 
@@ -58,7 +59,7 @@ class LocalMangaFragment : BaseContentFragment<List<CompleteLocalMangaEntry>>() 
             viewModel.setSearchQuery(value)
         }
 
-    private val toolbar by lazy { activity.findViewById<Toolbar>(R.id.toolbar) }
+    private val toolbar by unsafeLazy { activity.findViewById<Toolbar>(R.id.toolbar) }
     private val jobInfoContainer: ViewGroup by bindView(R.id.jobInfoContainer)
     private val jobInfoText: TextView by bindView(R.id.jobInfoText)
     private val jobInfoCancel: Button by bindView(R.id.jobInfoCancel)

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.PorterDuff
+import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.view.View
 import com.danielstone.materialaboutlibrary.ConvenienceBuilder
@@ -60,7 +61,13 @@ class AboutFragment : MaterialAboutFragment() {
         }
     }
 
-    private val customTabsHelper by lazy { CustomTabsHelperFragment.attachTo(this) }
+    private lateinit var customTabsHelper: CustomTabsHelperFragment
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        customTabsHelper = CustomTabsHelperFragment.attachTo(this)
+    }
 
     override fun onDestroy() {
         super.onDestroy()

@@ -16,6 +16,7 @@ import me.proxer.app.profile.info.ProfileInfoFragment
 import me.proxer.app.util.ActivityUtils
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.util.ProxerUrls
 import org.jetbrains.anko.intentFor
 
@@ -71,7 +72,7 @@ class ProfileActivity : ImageTabsActivity() {
             loadImage()
         }
 
-    override val sectionsPagerAdapter by lazy { SectionsPagerAdapter(supportFragmentManager) }
+    override val sectionsPagerAdapter by unsafeLazy { SectionsPagerAdapter(supportFragmentManager) }
 
     override val headerImageUrl
         get() = if (image.isNullOrBlank()) null else ProxerUrls.userImage(image!!)

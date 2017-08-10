@@ -16,6 +16,7 @@ import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.clipboardManager
 import me.proxer.app.util.extension.toAppDrawable
+import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entitiy.info.Industry
 import me.proxer.library.util.ProxerUtils
 import org.jetbrains.anko.bundleOf
@@ -32,7 +33,7 @@ class IndustryInfoFragment : BaseContentFragment<Industry>() {
         }
     }
 
-    override val viewModel: IndustryInfoViewModel by lazy {
+    override val viewModel: IndustryInfoViewModel by unsafeLazy {
         ViewModelProviders.of(this).get(IndustryInfoViewModel::class.java).apply { industryId = id }
     }
 

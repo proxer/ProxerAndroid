@@ -26,6 +26,7 @@ import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.snackbar
+import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.app.view.MediaControlView
 import me.proxer.library.entitiy.info.EntryCore
 import me.proxer.library.enums.AnimeLanguage
@@ -47,7 +48,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
     private val animeActivity
         get() = activity as AnimeActivity
 
-    override val viewModel: AnimeViewModel by lazy {
+    override val viewModel: AnimeViewModel by unsafeLazy {
         ViewModelProviders.of(this).get(AnimeViewModel::class.java).apply {
             entryId = this@AnimeFragment.id
             language = this@AnimeFragment.language

@@ -22,6 +22,7 @@ import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.R
 import me.proxer.app.base.BaseDialog
 import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.extension.unsafeLazy
 import org.jetbrains.anko.longToast
 
 /**
@@ -33,7 +34,7 @@ class LoginDialog : BaseDialog() {
         fun show(activity: AppCompatActivity) = LoginDialog().show(activity.supportFragmentManager, "login_dialog")
     }
 
-    private val viewModel by lazy { ViewModelProviders.of(this).get(LoginViewModel::class.java) }
+    private val viewModel by unsafeLazy { ViewModelProviders.of(this).get(LoginViewModel::class.java) }
 
     private val username: TextInputEditText by bindView(R.id.username)
     private val password: TextInputEditText by bindView(R.id.password)

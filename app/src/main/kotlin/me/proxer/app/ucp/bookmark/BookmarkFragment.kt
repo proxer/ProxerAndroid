@@ -22,6 +22,7 @@ import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.toAnimeLanguage
 import me.proxer.app.util.extension.toGeneralLanguage
+import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entitiy.ucp.Bookmark
 import me.proxer.library.enums.Category
 import org.jetbrains.anko.bundleOf
@@ -41,11 +42,11 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
 
     override val emptyDataMessage = R.string.error_no_data_bookmark
 
-    override val viewModel: BookmarkViewModel by lazy {
+    override val viewModel: BookmarkViewModel by unsafeLazy {
         ViewModelProviders.of(this).get(BookmarkViewModel::class.java)
     }
 
-    override val layoutManager by lazy {
+    override val layoutManager by unsafeLazy {
         StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity) + 1, VERTICAL)
     }
 

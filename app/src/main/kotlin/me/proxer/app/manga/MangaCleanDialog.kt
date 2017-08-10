@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity
 import com.afollestad.materialdialogs.MaterialDialog
 import me.proxer.app.R
 import me.proxer.app.base.BaseDialog
+import me.proxer.app.util.extension.unsafeLazy
 
 /**
  * @author Ruben Gees
@@ -20,7 +21,7 @@ class MangaCleanDialog : BaseDialog() {
         }
     }
 
-    private val viewModel by lazy { ViewModelProviders.of(this).get(MangaCleanViewModel::class.java) }
+    private val viewModel by unsafeLazy { ViewModelProviders.of(this).get(MangaCleanViewModel::class.java) }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialDialog.Builder(context)
             .content(R.string.dialog_clean_manga_content)

@@ -19,6 +19,7 @@ import me.proxer.app.R
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.util.ProxerUrls
 import org.jetbrains.anko.dip
 
@@ -30,7 +31,7 @@ class MaterialDrawerWrapper(context: Activity, toolbar: Toolbar, savedInstanceSt
     val itemClickSubject: PublishSubject<DrawerItem> = PublishSubject.create()
     val accountClickSubject: PublishSubject<AccountItem> = PublishSubject.create()
 
-    val profileImageView: ImageView by lazy {
+    val profileImageView: ImageView by unsafeLazy {
         drawer.header.findViewById<ImageView>(R.id.material_drawer_account_header_current)
     }
 

@@ -16,6 +16,7 @@ import me.proxer.app.media.episode.EpisodeFragment
 import me.proxer.app.media.info.MediaInfoFragment
 import me.proxer.app.util.ActivityUtils
 import me.proxer.app.util.extension.toEpisodeAppString
+import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Category
 import me.proxer.library.util.ProxerUrls
 import org.jetbrains.anko.intentFor
@@ -68,8 +69,8 @@ class MediaActivity : ImageTabsActivity() {
             }
         }
 
-    override val headerImageUrl by lazy { ProxerUrls.entryImage(id) }
-    override val sectionsPagerAdapter by lazy { SectionsPagerAdapter(supportFragmentManager) }
+    override val headerImageUrl by unsafeLazy { ProxerUrls.entryImage(id) }
+    override val sectionsPagerAdapter by unsafeLazy { SectionsPagerAdapter(supportFragmentManager) }
 
     override val itemToDisplay: Int
         get() = when (intent.action) {

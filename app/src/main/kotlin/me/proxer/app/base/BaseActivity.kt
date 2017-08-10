@@ -18,9 +18,6 @@ abstract class BaseActivity : AppCompatActivity(), LifecycleRegistryOwner {
     private lateinit var lifecycleRegistry: LifecycleRegistry
     private lateinit var customTabsHelper: CustomTabsHelperFragment
 
-    fun setLikelyUrl(url: HttpUrl) = customTabsHelper.mayLaunchUrl(url.androidUri(), bundleOf(), emptyList())
-    fun showPage(url: HttpUrl) = customTabsHelper.openHttpPage(this, url)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -29,4 +26,7 @@ abstract class BaseActivity : AppCompatActivity(), LifecycleRegistryOwner {
     }
 
     override fun getLifecycle() = lifecycleRegistry
+
+    fun setLikelyUrl(url: HttpUrl) = customTabsHelper.mayLaunchUrl(url.androidUri(), bundleOf(), emptyList())
+    fun showPage(url: HttpUrl) = customTabsHelper.openHttpPage(this, url)
 }

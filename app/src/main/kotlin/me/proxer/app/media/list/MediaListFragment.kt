@@ -23,6 +23,7 @@ import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.toCategory
+import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entitiy.list.MediaListEntry
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.MediaSearchSortCriteria
@@ -48,11 +49,11 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
     override val isSwipeToRefreshEnabled = false
     override val emptyDataMessage = R.string.error_no_data_search
 
-    override val viewModel: MediaListViewModel by lazy {
+    override val viewModel: MediaListViewModel by unsafeLazy {
         ViewModelProviders.of(this).get(MediaListViewModel::class.java)
     }
 
-    override val layoutManager by lazy {
+    override val layoutManager by unsafeLazy {
         StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity) + 1, VERTICAL)
     }
 
@@ -90,7 +91,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
             viewModel.setSearchQuery(value)
         }
 
-    private val toolbar by lazy { activity.findViewById<Toolbar>(R.id.toolbar) }
+    private val toolbar by unsafeLazy { activity.findViewById<Toolbar>(R.id.toolbar) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -16,6 +16,7 @@ import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.clipboardManager
 import me.proxer.app.util.extension.toAppDrawable
+import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entitiy.info.TranslatorGroup
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.toast
@@ -31,7 +32,7 @@ class TranslatorGroupInfoFragment : BaseContentFragment<TranslatorGroup>() {
         }
     }
 
-    override val viewModel: TranslatorGroupInfoViewModel by lazy {
+    override val viewModel: TranslatorGroupInfoViewModel by unsafeLazy {
         ViewModelProviders.of(this).get(TranslatorGroupInfoViewModel::class.java)
                 .apply { translatorGroupId = id }
     }

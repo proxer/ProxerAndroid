@@ -14,6 +14,7 @@ import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.convertToRelativeReadableTime
+import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entitiy.user.UserInfo
 import okhttp3.HttpUrl
 import org.jetbrains.anko.bundleOf
@@ -32,7 +33,7 @@ class ProfileInfoFragment : BaseContentFragment<UserInfo>() {
     override val hostingActivity: ProfileActivity
         get() = activity as ProfileActivity
 
-    override val viewModel: ProfileInfoViewModel by lazy {
+    override val viewModel: ProfileInfoViewModel by unsafeLazy {
         ViewModelProviders.of(this).get(ProfileInfoViewModel::class.java).apply {
             userId = this@ProfileInfoFragment.userId
             username = this@ProfileInfoFragment.username

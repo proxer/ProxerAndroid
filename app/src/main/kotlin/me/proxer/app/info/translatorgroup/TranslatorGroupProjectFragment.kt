@@ -12,6 +12,7 @@ import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.toCategory
+import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entitiy.list.TranslatorGroupProject
 import org.jetbrains.anko.bundleOf
 
@@ -29,7 +30,7 @@ class TranslatorGroupProjectFragment : PagedContentFragment<TranslatorGroupProje
     override val emptyDataMessage = R.string.error_no_data_projects
     override val isSwipeToRefreshEnabled = false
 
-    override val viewModel: TranslatorGroupProjectViewModel by lazy {
+    override val viewModel: TranslatorGroupProjectViewModel by unsafeLazy {
         ViewModelProviders.of(this).get(TranslatorGroupProjectViewModel::class.java)
                 .apply { translatorGroupId = id }
     }
@@ -40,7 +41,7 @@ class TranslatorGroupProjectFragment : PagedContentFragment<TranslatorGroupProje
     private val id: String
         get() = hostingActivity.id
 
-    override val layoutManager by lazy {
+    override val layoutManager by unsafeLazy {
         StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity) + 1, VERTICAL)
     }
 

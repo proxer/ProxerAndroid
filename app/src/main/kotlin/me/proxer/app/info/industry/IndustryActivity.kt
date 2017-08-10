@@ -9,6 +9,7 @@ import android.view.MenuItem
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import me.proxer.app.R
 import me.proxer.app.base.ImageTabsActivity
+import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.util.ProxerUrls
 import org.jetbrains.anko.intentFor
 
@@ -40,8 +41,8 @@ class IndustryActivity : ImageTabsActivity() {
             title = value
         }
 
-    override val headerImageUrl by lazy { ProxerUrls.industryImage(id) }
-    override val sectionsPagerAdapter by lazy { SectionsPagerAdapter(supportFragmentManager) }
+    override val headerImageUrl by unsafeLazy { ProxerUrls.industryImage(id) }
+    override val sectionsPagerAdapter by unsafeLazy { SectionsPagerAdapter(supportFragmentManager) }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         IconicsMenuInflaterUtil.inflate(menuInflater, this, R.menu.activity_share, menu, true)

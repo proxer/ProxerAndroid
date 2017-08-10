@@ -12,6 +12,7 @@ import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.toCategory
+import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entitiy.list.IndustryProject
 import org.jetbrains.anko.bundleOf
 
@@ -29,7 +30,7 @@ class IndustryProjectFragment : PagedContentFragment<IndustryProject>() {
     override val emptyDataMessage = R.string.error_no_data_projects
     override val isSwipeToRefreshEnabled = false
 
-    override val viewModel: IndustryProjectViewModel by lazy {
+    override val viewModel: IndustryProjectViewModel by unsafeLazy {
         ViewModelProviders.of(this).get(IndustryProjectViewModel::class.java).apply { industryId = id }
     }
 
@@ -39,7 +40,7 @@ class IndustryProjectFragment : PagedContentFragment<IndustryProject>() {
     private val id: String
         get() = industryActivity.id
 
-    override val layoutManager by lazy {
+    override val layoutManager by unsafeLazy {
         StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity) + 1, VERTICAL)
     }
 
