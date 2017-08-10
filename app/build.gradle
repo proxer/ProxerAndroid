@@ -97,6 +97,7 @@ dependencies {
     kapt deps.roomCompiler
 
     implementation deps.rxJava
+    implementation deps.rxKotlin
     implementation deps.rxAndroid
     implementation deps.rxBinding
     implementation deps.rxBindingV4

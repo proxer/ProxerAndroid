@@ -40,7 +40,7 @@ class Mp4UploadStreamResolver : StreamResolver() {
                 client.newCall(Request.Builder()
                         .post(FormBody.Builder().add("op", "download2").add("id", mediaId).build())
                         .url(HttpUrl.parse("https://mp4upload.com/$mediaId"))
-                        .addHeader("User-Agent", GENERIC_USER_AGENT)
+                        .header("User-Agent", GENERIC_USER_AGENT)
                         .build())
                         .toSingle()
             }

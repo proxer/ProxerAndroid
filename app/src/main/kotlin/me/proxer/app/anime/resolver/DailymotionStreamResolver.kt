@@ -29,7 +29,7 @@ class DailymotionStreamResolver : StreamResolver() {
                 client.newCall(Request.Builder()
                         .get()
                         .url(Utils.parseAndFixUrl(url))
-                        .addHeader("User-Agent", GENERIC_USER_AGENT)
+                        .header("User-Agent", GENERIC_USER_AGENT)
                         .build())
                         .toBodySingle()
             }

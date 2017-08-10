@@ -13,13 +13,13 @@ import okhttp3.Request
 /**
  * @author Ruben Gees
  */
-class AuravidStreamResolver : StreamResolver() {
+class VideoweedStreamResolver : StreamResolver() {
 
     private companion object {
-        private val regex = Regex("<source type=\"(.*?)\" src=\"(.*?)\">", RegexOption.DOT_MATCHES_ALL)
+        private val regex = Regex("<source src=\"(.*?)\" type=\'(.*?)\'", RegexOption.DOT_MATCHES_ALL)
     }
 
-    override val name = "Auroravid/Novamov"
+    override val name = "VideoWeed"
 
     override fun resolve(id: String): Single<StreamResolutionResult> = api.anime().link(id)
             .buildSingle()
