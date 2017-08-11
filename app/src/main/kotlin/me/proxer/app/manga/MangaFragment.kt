@@ -103,7 +103,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
     private lateinit var header: MediaControlView
     private lateinit var footer: MediaControlView
 
-    private val androidRoot by unsafeLazy { activity.findViewById<ViewGroup>(android.R.id.content) }
+    private val activityRoot by unsafeLazy { activity.findViewById<ViewGroup>(R.id.root) }
     private val toolbar by unsafeLazy { activity.findViewById<Toolbar>(R.id.toolbar) }
     private val recyclerView: RecyclerView by bindView(R.id.recyclerView)
 
@@ -174,7 +174,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
 
         viewModel.bookmarkData.observe(this, Observer {
             it?.let {
-                snackbar(androidRoot, R.string.fragment_set_user_info_success)
+                snackbar(activityRoot, R.string.fragment_set_user_info_success)
             }
         })
 
@@ -229,6 +229,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         innerAdapter.isLocal = data.isLocal
 
         innerAdapter.swapData(data.chapter.pages)
+        innerAdapter.notifyItemRangeInserted(0, data.chapter.pages.size)
 
         activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LOW_PROFILE
     }
@@ -240,8 +241,10 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
             scrollFlags = SCROLL_FLAG_SCROLL or SCROLL_FLAG_ENTER_ALWAYS
         }
 
-        innerAdapter.clear()
-        innerAdapter.notifyDataSetChanged()
+        innerAdapter.itemCount.let {
+            innerAdapter.clear()
+            innerAdapter.notifyItemRangeRemoved(0, it)
+        }
 
         adapter.header = null
         adapter.footer = null
