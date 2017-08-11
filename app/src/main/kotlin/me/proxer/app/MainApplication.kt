@@ -35,7 +35,6 @@ import me.proxer.app.manga.local.LocalMangaDao
 import me.proxer.app.manga.local.LocalMangaDatabase
 import me.proxer.app.manga.local.LocalMangaJob
 import me.proxer.app.util.NotificationUtils
-import me.proxer.app.util.data.NonPersistentCookieJar
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.library.api.ProxerApi
 import me.proxer.library.api.ProxerApi.Builder.LoggingStrategy
@@ -116,7 +115,6 @@ class MainApplication : Application() {
     private fun initApi() {
         api = ProxerApi.Builder(BuildConfig.PROXER_API_KEY)
                 .userAgent(USER_AGENT)
-                .client(OkHttpClient.Builder().cookieJar(NonPersistentCookieJar()).build())
                 .loggingStrategy(if (BuildConfig.DEBUG) LoggingStrategy.ALL else LoggingStrategy.NONE)
                 .loginTokenManager(ProxerLoginTokenManager())
                 .build()
