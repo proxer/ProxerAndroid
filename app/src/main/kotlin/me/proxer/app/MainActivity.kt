@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.Toolbar
+import android.view.ViewGroup
 import com.rubengees.introduction.IntroductionActivity.OPTION_RESULT
 import com.rubengees.introduction.IntroductionBuilder
 import com.rubengees.introduction.Option
@@ -58,6 +59,7 @@ class MainActivity : BaseActivity() {
 
     private lateinit var drawer: MaterialDrawerWrapper
 
+    private val root: ViewGroup by bindView(R.id.root)
     private val toolbar: Toolbar by bindView(R.id.toolbar)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,6 +67,7 @@ class MainActivity : BaseActivity() {
 
         setContentView(R.layout.activity_default)
         setSupportActionBar(toolbar)
+        supportPostponeEnterTransition()
 
         drawer = MaterialDrawerWrapper(this, toolbar, savedInstanceState).apply {
             itemClickSubject
@@ -82,6 +85,10 @@ class MainActivity : BaseActivity() {
                 .subscribe { drawer.refreshHeader() }
 
         displayFirstPage(savedInstanceState)
+
+        root.postDelayed({
+            supportStartPostponedEnterTransition()
+        }, 50)
     }
 
     override fun onResume() {
