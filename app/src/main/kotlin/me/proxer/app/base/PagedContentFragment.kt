@@ -110,15 +110,19 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
                 innerAdapter.swapData(data)
                 innerAdapter.notifyItemRangeInserted(0, data.size)
 
-                if (!firstData) {
-                    recyclerView.let {
-                        it.postDelayed({
-                            scrollToTop()
-                        }, 50)
+                if (data.isEmpty()) {
+                    showError(ErrorAction(emptyDataMessage, ErrorAction.ACTION_MESSAGE_HIDE))
+                } else {
+                    if (!firstData) {
+                        recyclerView.let {
+                            it.postDelayed({
+                                scrollToTop()
+                            }, 50)
+                        }
                     }
-                }
 
-                firstData = false
+                    firstData = false
+                }
             }
             else -> Single.fromCallable { DiffUtil.calculateDiff(innerAdapter.provideDiffUtilCallback(data)) }
                     .subscribeOn(Schedulers.single())
