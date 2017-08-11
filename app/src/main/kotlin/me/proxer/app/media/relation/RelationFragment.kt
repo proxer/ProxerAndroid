@@ -89,4 +89,13 @@ class RelationFragment : BaseContentFragment<List<Relation>>() {
             showError(ErrorAction(R.string.error_no_data_relations, ErrorAction.ACTION_MESSAGE_HIDE))
         }
     }
+
+    override fun hideData() {
+        adapter.itemCount.let {
+            adapter.clear()
+            adapter.notifyItemRangeRemoved(0, it)
+        }
+
+        super.hideData()
+    }
 }

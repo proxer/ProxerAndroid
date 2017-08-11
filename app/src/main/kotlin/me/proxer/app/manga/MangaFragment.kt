@@ -235,8 +235,6 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
     }
 
     override fun hideData() {
-        super.hideData()
-
         (toolbar.layoutParams as AppBarLayout.LayoutParams).apply {
             scrollFlags = SCROLL_FLAG_SCROLL or SCROLL_FLAG_ENTER_ALWAYS
         }
@@ -248,6 +246,8 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
 
         adapter.header = null
         adapter.footer = null
+
+        super.hideData()
     }
 
     override fun showError(action: ErrorUtils.ErrorAction) {

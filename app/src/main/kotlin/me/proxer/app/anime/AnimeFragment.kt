@@ -201,12 +201,12 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
     }
 
     override fun hideData() {
-        super.hideData()
-
         innerAdapter.clear()
         innerAdapter.notifyDataSetChanged()
 
         adapter.header = null
+
+        super.hideData()
     }
 
     override fun showData(data: AnimeStreamInfo) {
