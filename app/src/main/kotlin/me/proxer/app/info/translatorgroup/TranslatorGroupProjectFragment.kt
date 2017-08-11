@@ -51,12 +51,6 @@ class TranslatorGroupProjectFragment : PagedContentFragment<TranslatorGroupProje
         super.onCreate(savedInstanceState)
 
         innerAdapter = TranslatorGroupProjectAdapter()
-    }
-
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        innerAdapter.glide = GlideApp.with(this)
 
         innerAdapter.clickSubject
                 .bindToLifecycle(this)
@@ -64,5 +58,11 @@ class TranslatorGroupProjectFragment : PagedContentFragment<TranslatorGroupProje
                     MediaActivity.navigateTo(activity, translatorGroup.id, translatorGroup.name,
                             translatorGroup.medium.toCategory(), if (view.drawable != null) view else null)
                 }
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        innerAdapter.glide = GlideApp.with(this)
     }
 }

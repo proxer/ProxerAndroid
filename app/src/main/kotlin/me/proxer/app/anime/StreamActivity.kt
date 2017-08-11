@@ -86,16 +86,18 @@ class StreamActivity : BaseActivity() {
             it.systemUiVisibilityChanges()
                     .bindToLifecycle(this)
                     .subscribe { visibility ->
-                        if (visibility and View.SYSTEM_UI_FLAG_FULLSCREEN == 0) {
-                            player.showControls()
+                        toolbar.let {
+                            if (visibility and View.SYSTEM_UI_FLAG_FULLSCREEN == 0) {
+                                player.showControls()
 
-                            toolbar.postDelayed({
-                                toolbar.visibility = View.VISIBLE
-                            }, 50)
-                        } else {
-                            toolbar.postDelayed({
-                                toolbar.visibility = View.GONE
-                            }, 50)
+                                it.postDelayed({
+                                    it.visibility = View.VISIBLE
+                                }, 50)
+                            } else {
+                                it.postDelayed({
+                                    it.visibility = View.GONE
+                                }, 50)
+                            }
                         }
                     }
         }

@@ -70,18 +70,6 @@ class LocalMangaFragment : BaseContentFragment<List<CompleteLocalMangaEntry>>() 
 
         adapter = LocalMangaAdapter(savedInstanceState)
 
-        setHasOptionsMenu(true)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_local_manga, container, false)
-    }
-
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        adapter.glide = GlideApp.with(this)
-
         adapter.clickSubject
                 .bindToLifecycle(this)
                 .subscribe { (entry, chapter) ->
@@ -100,6 +88,18 @@ class LocalMangaFragment : BaseContentFragment<List<CompleteLocalMangaEntry>>() 
                 .subscribeOn(Schedulers.io())
                 .bindToLifecycle(this)
                 .subscribe { (_, chapter) -> viewModel.deleteChapter(chapter) }
+
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_local_manga, container, false)
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        adapter.glide = GlideApp.with(this)
 
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity) + 1,

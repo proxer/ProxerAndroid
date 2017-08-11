@@ -67,6 +67,13 @@ class CommentFragment : PagedContentFragment<Comment>() {
 
         innerAdapter = CommentAdapter(savedInstanceState)
 
+        innerAdapter.profileClickSubject
+                .bindToLifecycle(this)
+                .subscribe { (view, comment) ->
+                    ProfileActivity.navigateTo(activity, comment.authorId, comment.author, comment.image,
+                            if (view.drawable != null && comment.image.isNotBlank()) view else null)
+                }
+
         viewModel.setSortCriteria(sortCriteria, false)
 
         setHasOptionsMenu(true)
@@ -77,13 +84,6 @@ class CommentFragment : PagedContentFragment<Comment>() {
 
         innerAdapter.glide = GlideApp.with(this)
         innerAdapter.categoryCallback = { category }
-
-        innerAdapter.profileClickSubject
-                .bindToLifecycle(this)
-                .subscribe { (view, comment) ->
-                    ProfileActivity.navigateTo(activity, comment.authorId, comment.author, comment.image,
-                            if (view.drawable != null && comment.image.isNotBlank()) view else null)
-                }
     }
 
     override fun onDestroy() {

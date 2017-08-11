@@ -44,12 +44,6 @@ class NewsFragment : PagedContentFragment<NewsArticle>() {
         super.onCreate(savedInstanceState)
 
         innerAdapter = NewsAdapter(savedInstanceState)
-    }
-
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        innerAdapter.glide = GlideApp.with(this@NewsFragment)
 
         innerAdapter.clickSubject
                 .bindToLifecycle(this)
@@ -64,5 +58,11 @@ class NewsFragment : PagedContentFragment<NewsArticle>() {
                 .subscribe { (view, article) ->
                     ImageDetailActivity.navigateTo(activity, ProxerUrls.newsImage(article.id, article.image), view)
                 }
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        innerAdapter.glide = GlideApp.with(this@NewsFragment)
     }
 }

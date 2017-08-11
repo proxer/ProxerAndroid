@@ -113,6 +113,8 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         innerAdapter = MangaAdapter()
         adapter = EasyHeaderFooterAdapter(innerAdapter)
 
+        innerAdapter.positionResolver = ContainerPositionResolver(adapter)
+
         viewModel.setEpisode(episode, false)
     }
 
@@ -169,8 +171,6 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
                 }
             }
         }
-
-        innerAdapter.positionResolver = ContainerPositionResolver(adapter)
 
         viewModel.bookmarkData.observe(this, Observer {
             it?.let {

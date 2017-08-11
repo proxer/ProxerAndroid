@@ -98,6 +98,13 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
 
         innerAdapter = MediaAdapter(category)
 
+        innerAdapter.clickSubject
+                .bindToLifecycle(this)
+                .subscribe { (view, entry) ->
+                    MediaActivity.navigateTo(activity, entry.id, entry.name, entry.medium.toCategory(),
+                            if (view.drawable != null) view else null)
+                }
+
         viewModel.setSortCriteria(sortCriteria, false)
         viewModel.setType(type, false)
         viewModel.setSearchQuery(searchQuery, false)
@@ -109,13 +116,6 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
         super.onViewCreated(view, savedInstanceState)
 
         innerAdapter.glide = GlideApp.with(this)
-
-        innerAdapter.clickSubject
-                .bindToLifecycle(this)
-                .subscribe { (view, entry) ->
-                    MediaActivity.navigateTo(activity, entry.id, entry.name, entry.medium.toCategory(),
-                            if (view.drawable != null) view else null)
-                }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

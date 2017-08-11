@@ -59,16 +59,6 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
         super.onCreate(savedInstanceState)
 
         adapter = EpisodeAdapter(savedInstanceState, id)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_episode, container, false)
-    }
-
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        adapter.glide = GlideApp.with(this)
 
         adapter.languageClickSubject
                 .bindToLifecycle(this)
@@ -80,6 +70,16 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
                                 language.toGeneralLanguage(), episode.title, name, episode.episodeAmount)
                     }
                 }
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        return inflater.inflate(R.layout.fragment_episode, container, false)
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        adapter.glide = GlideApp.with(this)
 
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(context)

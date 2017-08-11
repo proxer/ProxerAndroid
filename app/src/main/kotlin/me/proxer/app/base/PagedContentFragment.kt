@@ -111,9 +111,11 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
                 innerAdapter.notifyItemRangeInserted(0, data.size)
 
                 if (!firstData) {
-                    recyclerView.postDelayed({
-                        scrollToTop()
-                    }, 50)
+                    recyclerView.let {
+                        it.postDelayed({
+                            scrollToTop()
+                        }, 50)
+                    }
                 }
 
                 firstData = false
@@ -132,9 +134,11 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
                             showError(ErrorAction(emptyDataMessage, ErrorAction.ACTION_MESSAGE_HIDE))
                         } else {
                             if (wasAtFirstPosition) {
-                                recyclerView.postDelayed({
-                                    recyclerView.smoothScrollToPosition(0)
-                                }, 50)
+                                recyclerView.let {
+                                    it.postDelayed({
+                                        it.smoothScrollToPosition(0)
+                                    }, 50)
+                                }
                             }
                         }
                     }

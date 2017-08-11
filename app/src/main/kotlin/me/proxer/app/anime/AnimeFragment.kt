@@ -94,6 +94,26 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
         innerAdapter = AnimeAdapter(savedInstanceState, GlideApp.with(this))
         adapter = EasyHeaderFooterAdapter(innerAdapter)
 
+        innerAdapter.positionResolver = BaseAdapter.ContainerPositionResolver(adapter)
+
+        innerAdapter.uploaderClickSubject
+                .bindToLifecycle(this)
+                .subscribe { ProfileActivity.navigateTo(activity, it.uploaderId, it.uploaderName) }
+
+        innerAdapter.translatorGroupClickSubject
+                .bindToLifecycle(this)
+                .subscribe {
+                    it.translatorGroupId?.let { id ->
+                        it.translatorGroupName?.let { name ->
+                            TranslatorGroupActivity.navigateTo(activity, id, name)
+                        }
+                    }
+                }
+
+        innerAdapter.playClickSubject
+                .bindToLifecycle(this)
+                .subscribe { viewModel.resolve(it.hosterName, it.id) }
+
         viewModel.setEpisode(episode, false)
     }
 
@@ -124,26 +144,6 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        innerAdapter.positionResolver = BaseAdapter.ContainerPositionResolver(adapter)
-
-        innerAdapter.uploaderClickSubject
-                .bindToLifecycle(this)
-                .subscribe { ProfileActivity.navigateTo(activity, it.uploaderId, it.uploaderName) }
-
-        innerAdapter.translatorGroupClickSubject
-                .bindToLifecycle(this)
-                .subscribe {
-                    it.translatorGroupId?.let { id ->
-                        it.translatorGroupName?.let { name ->
-                            TranslatorGroupActivity.navigateTo(activity, id, name)
-                        }
-                    }
-                }
-
-        innerAdapter.playClickSubject
-                .bindToLifecycle(this)
-                .subscribe { viewModel.resolve(it.hosterName, it.id) }
 
         viewModel.resolutionResult.observe(this, Observer {
             it?.let {
@@ -216,8 +216,10 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
         name = data.name
 
         header.setEpisodeInfo(data.episodeAmount, episode)
-        innerAdapter.swapData(data.streams)
         adapter.header = header
+
+        innerAdapter.swapData(data.streams)
+        innerAdapter.notifyItemRangeInserted(0, data.streams.size)
 
         if (data.streams.isEmpty()) {
             showError(ErrorAction(R.string.error_no_data_anime, ErrorAction.ACTION_MESSAGE_HIDE))

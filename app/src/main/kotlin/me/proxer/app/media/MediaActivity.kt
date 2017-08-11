@@ -14,6 +14,7 @@ import me.proxer.app.base.ImageTabsActivity
 import me.proxer.app.media.comment.CommentFragment
 import me.proxer.app.media.episode.EpisodeFragment
 import me.proxer.app.media.info.MediaInfoFragment
+import me.proxer.app.media.relation.RelationFragment
 import me.proxer.app.util.ActivityUtils
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.app.util.extension.unsafeLazy
@@ -118,18 +119,18 @@ class MediaActivity : ImageTabsActivity() {
             0 -> MediaInfoFragment.newInstance()
             1 -> CommentFragment.newInstance()
             2 -> EpisodeFragment.newInstance()
-//                3 -> RelationsFragment.newInstance()
+            3 -> RelationFragment.newInstance()
             else -> throw RuntimeException("Unknown index passed")
         }
 
-        override fun getCount() = 3
+        override fun getCount() = 4
 
         override fun getPageTitle(position: Int): String = when (position) {
             0 -> getString(R.string.section_media_info)
             1 -> getString(R.string.section_comments)
             2 -> category?.toEpisodeAppString(this@MediaActivity)
                     ?: getString(R.string.category_anime_episodes_title)
-//                3 -> getString(R.string.section_relations)
+            3 -> getString(R.string.section_relations)
             else -> throw RuntimeException("Unknown index passed")
         }
 
