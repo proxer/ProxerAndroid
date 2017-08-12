@@ -39,6 +39,14 @@ class BookmarkViewModel(application: Application) : PagedContentViewModel<Bookma
         super.onCleared()
     }
 
+    override fun load() {
+        if (page == 0) {
+            data.value = null
+        }
+
+        super.load()
+    }
+
     override fun refresh() = reload()
 
     fun setCategory(value: Category?, trigger: Boolean = true) {

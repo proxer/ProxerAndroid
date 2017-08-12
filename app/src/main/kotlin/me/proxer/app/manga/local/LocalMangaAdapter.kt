@@ -134,12 +134,11 @@ class LocalMangaAdapter(savedInstanceState: Bundle?) : BaseAdapter<CompleteLocal
             if (expanded[item.first.id] == true) {
                 chapters.visibility = View.VISIBLE
 
-                adapter.swapData(item.second)
-                adapter.notifyDataSetChanged()
+                adapter.swapDataAndNotifyChange(item.second)
             } else {
                 chapters.visibility = View.GONE
 
-                adapter.clear()
+                adapter.clearAndNotifyRemoval()
             }
 
             glide?.defaultLoad(image, ProxerUrls.entryImage(item.first.id))

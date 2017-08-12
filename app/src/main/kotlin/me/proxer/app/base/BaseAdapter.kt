@@ -5,7 +5,6 @@ import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import me.proxer.library.entitiy.ProxerIdItem
-import java.util.*
 
 /**
  * @author Ruben Gees
@@ -25,12 +24,42 @@ abstract class BaseAdapter<T, VH : RecyclerView.ViewHolder> : RecyclerView.Adapt
 
     fun isEmpty() = data.isEmpty()
 
-    fun clear() {
+    fun clearWithoutNotification() {
         data = emptyList()
     }
 
-    fun swapData(newData: List<T>) {
+    fun clearAndNotifyRemoval() = itemCount.let {
+        data = emptyList()
+
+        notifyItemRangeRemoved(0, it)
+    }
+
+    fun clearAndNotifyChange() {
+        data = emptyList()
+
+        notifyDataSetChanged()
+    }
+
+    fun swapDataWithoutNotification(newData: List<T>) {
         data = ArrayList(newData)
+    }
+
+    fun swapDataAndNotifyInsertion(newData: List<T>) {
+        data = ArrayList(newData)
+
+        notifyItemRangeInserted(0, newData.size)
+    }
+
+    fun swapDataAndNotifyChange(newData: List<T>) {
+        data = ArrayList(newData)
+
+        notifyDataSetChanged()
+    }
+
+    fun swapDataAndNotifyWithDiffResult(newData: List<T>, diffResult: DiffUtil.DiffResult) {
+        data = ArrayList(newData)
+
+        diffResult.dispatchUpdatesTo(this)
     }
 
     fun provideDiffUtilCallback(newData: List<T>) = object : DiffUtil.Callback() {

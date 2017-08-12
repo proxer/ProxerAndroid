@@ -181,10 +181,7 @@ class LocalMangaFragment : BaseContentFragment<List<CompleteLocalMangaEntry>>() 
 
         when {
             data.isEmpty() -> {
-                adapter.itemCount.let {
-                    adapter.clear()
-                    adapter.notifyItemRangeRemoved(0, it)
-                }
+                adapter.clearAndNotifyRemoval()
 
                 if (searchQuery.isNullOrBlank()) {
                     showError(ErrorAction(R.string.error_no_data_local_manga, ErrorAction.ACTION_MESSAGE_HIDE))
@@ -193,8 +190,7 @@ class LocalMangaFragment : BaseContentFragment<List<CompleteLocalMangaEntry>>() 
                 }
             }
             else -> {
-                adapter.swapData(data)
-                adapter.notifyDataSetChanged()
+                adapter.swapDataAndNotifyChange(data)
             }
         }
     }

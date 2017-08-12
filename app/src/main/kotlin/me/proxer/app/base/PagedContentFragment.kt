@@ -107,8 +107,7 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
 
         when {
             innerAdapter.isEmpty() -> {
-                innerAdapter.swapData(data)
-                innerAdapter.notifyItemRangeInserted(0, data.size)
+                innerAdapter.swapDataAndNotifyInsertion(data)
 
                 if (data.isEmpty()) {
                     showError(ErrorAction(emptyDataMessage, ErrorAction.ACTION_MESSAGE_HIDE))
@@ -131,8 +130,7 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
                     .subscribe { it: DiffUtil.DiffResult ->
                         val wasAtFirstPosition = isAtTop()
 
-                        innerAdapter.swapData(data)
-                        it.dispatchUpdatesTo(innerAdapter)
+                        innerAdapter.swapDataAndNotifyWithDiffResult(data, it)
 
                         if (data.isEmpty()) {
                             showError(ErrorAction(emptyDataMessage, ErrorAction.ACTION_MESSAGE_HIDE))
@@ -149,10 +147,7 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
         }
     }
 
-    override fun hideData() = innerAdapter.itemCount.let {
-        innerAdapter.clear()
-        innerAdapter.notifyItemRangeRemoved(0, it)
-    }
+    override fun hideData() = innerAdapter.clearAndNotifyRemoval()
 
     override fun showError(action: ErrorAction) {
         if (adapter.footer == null) {
@@ -183,7 +178,7 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
         }
     }
 
-    private fun isAtTop() = recyclerView.layoutManager.let {
+    private fun isAtTop() = layoutManager.let {
         when (it) {
             is StaggeredGridLayoutManager -> it.findFirstCompletelyVisibleItemPositions(null).contains(0)
             is LinearLayoutManager -> it.findFirstCompletelyVisibleItemPosition() == 0
@@ -191,7 +186,7 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
         }
     }
 
-    private fun scrollToTop() = recyclerView.layoutManager.let {
+    private fun scrollToTop() = layoutManager.let {
         when (it) {
             is StaggeredGridLayoutManager -> it.scrollToPositionWithOffset(0, 0)
             is LinearLayoutManager -> it.scrollToPositionWithOffset(0, 0)

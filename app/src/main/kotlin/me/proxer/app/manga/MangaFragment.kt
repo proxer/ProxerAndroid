@@ -191,8 +191,8 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
     }
 
     override fun onDestroyView() {
-        recyclerView.adapter = null
         recyclerView.layoutManager = null
+        recyclerView.adapter = null
 
         super.onDestroyView()
     }
@@ -228,8 +228,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         innerAdapter.id = data.chapter.id
         innerAdapter.isLocal = data.isLocal
 
-        innerAdapter.swapData(data.chapter.pages)
-        innerAdapter.notifyItemRangeInserted(0, data.chapter.pages.size)
+        innerAdapter.swapDataAndNotifyInsertion(data.chapter.pages)
 
         activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LOW_PROFILE
     }
@@ -239,11 +238,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
             scrollFlags = SCROLL_FLAG_SCROLL or SCROLL_FLAG_ENTER_ALWAYS
         }
 
-        innerAdapter.itemCount.let {
-            innerAdapter.clear()
-            innerAdapter.notifyItemRangeRemoved(0, it)
-        }
-
+        innerAdapter.clearAndNotifyChange()
         adapter.header = null
         adapter.footer = null
 

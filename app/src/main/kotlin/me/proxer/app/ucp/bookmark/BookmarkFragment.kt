@@ -19,6 +19,7 @@ import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.manga.MangaActivity
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.DeviceUtils
+import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.toAnimeLanguage
 import me.proxer.app.util.extension.toGeneralLanguage
@@ -125,5 +126,13 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
         item.isChecked = true
 
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun hideData() = Unit
+
+    override fun showError(action: ErrorUtils.ErrorAction) {
+        innerAdapter.clearAndNotifyRemoval()
+
+        super.showError(action)
     }
 }

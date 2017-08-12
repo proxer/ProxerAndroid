@@ -108,8 +108,8 @@ class TopTenFragment : BaseContentFragment<ZippedTopTenResult>() {
     override fun showData(data: ZippedTopTenResult) {
         super.showData(data)
 
-        animeAdapter.swapData(data.animeEntries)
-        mangaAdapter.swapData(data.mangaEntries)
+        animeAdapter.swapDataAndNotifyInsertion(data.animeEntries)
+        mangaAdapter.swapDataAndNotifyInsertion(data.mangaEntries)
 
         when (animeAdapter.isEmpty()) {
             true -> animeContainer.visibility = View.GONE
@@ -124,6 +124,13 @@ class TopTenFragment : BaseContentFragment<ZippedTopTenResult>() {
         if (animeAdapter.isEmpty() && mangaAdapter.isEmpty()) {
             showError(ErrorAction(R.string.error_no_data_top_ten, ErrorAction.ACTION_MESSAGE_HIDE))
         }
+    }
+
+    override fun hideData() {
+        animeAdapter.clearAndNotifyRemoval()
+        mangaAdapter.clearAndNotifyRemoval()
+
+        super.hideData()
     }
 
     class ZippedTopTenResult(val animeEntries: List<TopTenEntry>, val mangaEntries: List<TopTenEntry>)
