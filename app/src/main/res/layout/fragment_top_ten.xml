@@ -4,7 +4,7 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.profile.TopTenFragment">
+    tools:context=".profile.topten.TopTenFragment">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/progress"
@@ -46,7 +46,7 @@
                         android:textColor="@color/colorAccent" />
 
                     <android.support.v7.widget.RecyclerView
-                        android:id="@+id/animeList"
+                        android:id="@+id/animeRecyclerView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
@@ -69,7 +69,7 @@
                         android:textColor="@color/colorAccent" />
 
                     <android.support.v7.widget.RecyclerView
-                        android:id="@+id/mangaList"
+                        android:id="@+id/mangaRecyclerView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </LinearLayout>

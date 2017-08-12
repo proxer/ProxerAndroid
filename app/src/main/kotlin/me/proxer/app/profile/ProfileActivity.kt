@@ -13,6 +13,7 @@ import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import me.proxer.app.R
 import me.proxer.app.base.ImageTabsActivity
 import me.proxer.app.profile.info.ProfileInfoFragment
+import me.proxer.app.profile.topten.TopTenFragment
 import me.proxer.app.util.ActivityUtils
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.data.StorageHelper
@@ -150,14 +151,14 @@ class ProfileActivity : ImageTabsActivity() {
 
         override fun getItem(position: Int) = when (position) {
             0 -> ProfileInfoFragment.newInstance()
-//                1 -> TopTenFragment.newInstance()
+            1 -> TopTenFragment.newInstance()
 //                2 -> UserMediaListFragment.newInstance(Category.ANIME)
 //                3 -> UserMediaListFragment.newInstance(Category.MANGA)
 //                4 -> UserCommentsFragment.newInstance()
             else -> throw RuntimeException("Unknown index passed")
         }
 
-        override fun getCount() = 1
+        override fun getCount() = 2
 
         override fun getPageTitle(position: Int): String = when (position) {
             0 -> getString(R.string.section_profile_info)
