@@ -47,6 +47,10 @@ class StreamActivity : BaseActivity() {
             player.start()
 
             pausedInOnStop = false
+        } else {
+            player.setOnPreparedListener {
+                player.start()
+            }
         }
     }
 
@@ -55,6 +59,8 @@ class StreamActivity : BaseActivity() {
             pausedInOnStop = true
 
             player.pause()
+        } else {
+            player.setOnPreparedListener(null)
         }
 
         super.onStop()
@@ -161,10 +167,6 @@ class StreamActivity : BaseActivity() {
             }
 
             false
-        }
-
-        player.setOnPreparedListener {
-            player.start()
         }
 
         player.setVideoURI(uri)
