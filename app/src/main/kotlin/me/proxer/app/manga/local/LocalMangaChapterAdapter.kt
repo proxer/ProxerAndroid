@@ -61,7 +61,7 @@ internal class LocalMangaChapterAdapter : BaseAdapter<LocalMangaChapter, ViewHol
 
         fun bind(item: LocalMangaChapter) {
             title.text = when {
-                item.title.isNotBlank() -> item.title
+                item.title.isNotBlank() -> item.title.trim()
                 else -> Category.MANGA.toEpisodeAppString(title.context, item.episode)
             }
         }
