@@ -1,4 +1,4 @@
-package me.proxer.app.ucp.bookmark
+package me.proxer.app.bookmark
 
 import android.app.Application
 import io.reactivex.android.schedulers.AndroidSchedulers

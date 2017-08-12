@@ -22,13 +22,13 @@ import me.proxer.app.auth.LoginEvent
 import me.proxer.app.auth.LogoutDialog
 import me.proxer.app.auth.LogoutEvent
 import me.proxer.app.base.BaseActivity
+import me.proxer.app.bookmark.BookmarkFragment
 import me.proxer.app.manga.local.LocalMangaFragment
 import me.proxer.app.media.list.MediaListFragment
 import me.proxer.app.news.NewsFragment
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.settings.AboutFragment
 import me.proxer.app.settings.SettingsFragment
-import me.proxer.app.ucp.bookmark.BookmarkFragment
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.wrapper.IntroductionWrapper

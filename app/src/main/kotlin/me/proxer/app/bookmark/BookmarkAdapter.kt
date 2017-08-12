@@ -1,4 +1,4 @@
-package me.proxer.app.ucp.bookmark
+package me.proxer.app.bookmark
 
 import android.support.v4.view.ViewCompat
 import android.support.v7.content.res.AppCompatResources

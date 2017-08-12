@@ -1,4 +1,4 @@
-package me.proxer.app.ucp.bookmark
+package me.proxer.app.bookmark
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
