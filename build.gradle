@@ -11,7 +11,7 @@ buildscript {
         compileSdkVersion = 26
         buildToolsVersion = '26.0.1'
 
-        androidPluginVersion = '3.0.0-beta1'
+        androidPluginVersion = '3.0.0-beta2'
         kotlinVersion = '1.2-M2'
 
         gradleVersionsPluginVersion = '0.15.0'
