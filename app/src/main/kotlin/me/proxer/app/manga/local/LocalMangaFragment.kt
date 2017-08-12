@@ -59,6 +59,9 @@ class LocalMangaFragment : BaseContentFragment<List<CompleteLocalMangaEntry>>() 
             viewModel.setSearchQuery(value)
         }
 
+    override val contentContainer: ViewGroup
+        get() = recyclerView
+
     private val toolbar by unsafeLazy { activity.findViewById<Toolbar>(R.id.toolbar) }
     private val jobInfoContainer: ViewGroup by bindView(R.id.jobInfoContainer)
     private val jobInfoText: TextView by bindView(R.id.jobInfoText)

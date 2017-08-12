@@ -53,6 +53,9 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
 
     private lateinit var adapter: EpisodeAdapter
 
+    override val contentContainer: ViewGroup
+        get() = recyclerView
+
     private val recyclerView: RecyclerView by bindView(R.id.recyclerView)
 
     override fun onCreate(savedInstanceState: Bundle?) {

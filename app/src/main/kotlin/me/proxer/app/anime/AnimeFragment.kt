@@ -86,6 +86,9 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
 
     private lateinit var header: MediaControlView
 
+    override val contentContainer: ViewGroup
+        get() = recyclerView
+
     private val recyclerView: RecyclerView by bindView(R.id.recyclerView)
 
     override fun onCreate(savedInstanceState: Bundle?) {

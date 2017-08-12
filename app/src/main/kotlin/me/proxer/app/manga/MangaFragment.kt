@@ -103,6 +103,9 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
     private lateinit var header: MediaControlView
     private lateinit var footer: MediaControlView
 
+    override val contentContainer: ViewGroup
+        get() = recyclerView
+
     private val activityRoot by unsafeLazy { activity.findViewById<ViewGroup>(R.id.root) }
     private val toolbar by unsafeLazy { activity.findViewById<Toolbar>(R.id.toolbar) }
     private val recyclerView: RecyclerView by bindView(R.id.recyclerView)

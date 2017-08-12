@@ -42,6 +42,9 @@ class RelationFragment : BaseContentFragment<List<Relation>>() {
 
     private lateinit var adapter: RelationAdapter
 
+    override val contentContainer: ViewGroup
+        get() = recyclerView
+
     private val recyclerView: RecyclerView by bindView(R.id.recyclerView)
 
     override fun onCreate(savedInstanceState: Bundle?) {
