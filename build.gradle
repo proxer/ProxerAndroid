@@ -44,7 +44,7 @@ buildscript {
         materialAboutVersion = '2.2.1'
         subsamplingScaleImageViewVersion = '3.6.0'
         tabLayoutHelperVersion = '0.9.0'
-        materialDialogsVersion = '0.9.4.5'
+        materialDialogsVersion = '0.9.4.6'
         flexboxVersion = '0.3.0'
         emojiIosVersion = '0.5.1'
         exomediaVersion = '2b55a23bc0'
