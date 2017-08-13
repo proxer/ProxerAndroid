@@ -20,9 +20,7 @@ import org.jetbrains.anko.startActivity
 class UcpActivity : BaseActivity() {
 
     companion object {
-        fun navigateTo(context: Activity) {
-            context.startActivity<UcpActivity>()
-        }
+        fun navigateTo(context: Activity) = context.startActivity<UcpActivity>()
     }
 
     private var sectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
@@ -72,7 +70,7 @@ class UcpActivity : BaseActivity() {
 
         override fun getCount() = 3
 
-        override fun getPageTitle(position: Int) = when (position) {
+        override fun getPageTitle(position: Int): String = when (position) {
             0 -> getString(R.string.section_ucp_overview)
             1 -> getString(R.string.section_ucp_top_ten)
             2 -> getString(R.string.section_ucp_history)

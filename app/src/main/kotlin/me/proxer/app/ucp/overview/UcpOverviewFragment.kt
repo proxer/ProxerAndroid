@@ -60,8 +60,8 @@ class UcpOverviewFragment : BaseContentFragment<Int>() {
     override fun showData(data: Int) {
         super.showData(data)
 
-        StorageHelper.user?.let { user ->
-            profileLink.text = Utils.buildClickableText(context, ProxerUrls.userWeb(user.id).toString(),
+        StorageHelper.user?.let { (_, id, name) ->
+            profileLink.text = Utils.buildClickableText(context, ProxerUrls.userWeb(id).toString(),
                     onWebClickListener = Link.OnClickListener {
                         HttpUrl.parse(it)?.let { showPage(it) }
                     },
@@ -72,8 +72,8 @@ class UcpOverviewFragment : BaseContentFragment<Int>() {
                         snackbar(root, R.string.clipboard_status)
                     })
 
-            username.text = user.name
-            userId.text = user.id
+            username.text = name
+            userId.text = id
 
             episodesRow.text = data.toString()
 
