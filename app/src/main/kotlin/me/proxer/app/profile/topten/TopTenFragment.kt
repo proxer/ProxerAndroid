@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
 import io.reactivex.Observable
 import kotterknife.bindView
-import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.media.MediaActivity
@@ -64,6 +63,13 @@ class TopTenFragment : BaseContentFragment<ZippedTopTenResult>() {
 
         animeAdapter = TopTenAdapter()
         mangaAdapter = TopTenAdapter()
+
+        Observable.merge(animeAdapter.clickSubject, mangaAdapter.clickSubject)
+                .bindToLifecycle(this)
+                .subscribe { (view, item) ->
+                    MediaActivity.navigateTo(activity, item.id, item.name, item.category,
+                            if (view.drawable != null) view else null)
+                }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -75,13 +81,6 @@ class TopTenFragment : BaseContentFragment<ZippedTopTenResult>() {
 
         animeAdapter.glide = GlideApp.with(this)
         mangaAdapter.glide = GlideApp.with(this)
-
-        Observable.merge(animeAdapter.clickSubject, mangaAdapter.clickSubject)
-                .bindToLifecycle(this)
-                .subscribe { (view, item) ->
-                    MediaActivity.navigateTo(activity, item.id, item.name, item.category,
-                            if (view.drawable != null) view else null)
-                }
 
         val spanCount = DeviceUtils.calculateSpanAmount(activity) + 1
 
