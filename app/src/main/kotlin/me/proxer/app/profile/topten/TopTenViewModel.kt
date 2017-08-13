@@ -29,7 +29,6 @@ class TopTenViewModel(application: Application) : BaseViewModel<TopTenFragment.Z
             )
         }
 
-
     var userId: String? = null
     var username: String? = null
 
