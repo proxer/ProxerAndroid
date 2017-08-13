@@ -60,7 +60,7 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
         get() = errorContainer.findViewById(R.id.errorButton)
 
     // This is an ugly hack, but I can't figure out another way around RecyclerView's bugs.
-    private var firstData = true
+    private var isFirstData = true
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_paged, container, false)
@@ -112,7 +112,7 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
                 if (data.isEmpty()) {
                     showError(ErrorAction(emptyDataMessage, ErrorAction.ACTION_MESSAGE_HIDE))
                 } else {
-                    if (!firstData) {
+                    if (!isFirstData) {
                         recyclerView.let {
                             it.postDelayed({
                                 scrollToTop()
@@ -120,7 +120,7 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
                         }
                     }
 
-                    firstData = false
+                    isFirstData = false
                 }
             }
             else -> Single.fromCallable { DiffUtil.calculateDiff(innerAdapter.provideDiffUtilCallback(data)) }

@@ -120,10 +120,7 @@ class OpenloadStreamResolver : StreamResolver() {
             }
 
     private class OpenLoadClient : WebViewClient() {
-
-        override fun onPageFinished(view: WebView, url: String) {
-            view.loadUrl(extractionCode)
-        }
+        override fun onPageFinished(view: WebView, url: String) = view.loadUrl(extractionCode)
     }
 
     private class OpenLoadJavaScriptInterface(private val emitter: SingleEmitter<StreamResolutionResult>) {

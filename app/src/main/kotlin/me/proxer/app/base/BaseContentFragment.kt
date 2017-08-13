@@ -42,9 +42,7 @@ abstract class BaseContentFragment<T> : BaseFragment() {
 
     private var isSolvingCaptcha: Boolean
         get() = arguments.getBoolean(IS_SOLVING_CAPTCHA_ARGUMENT, false)
-        set(value) {
-            arguments.putBoolean(IS_SOLVING_CAPTCHA_ARGUMENT, value)
-        }
+        set(value) = arguments.putBoolean(IS_SOLVING_CAPTCHA_ARGUMENT, value)
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

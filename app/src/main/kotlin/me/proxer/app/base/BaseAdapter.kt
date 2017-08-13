@@ -40,10 +40,6 @@ abstract class BaseAdapter<T, VH : RecyclerView.ViewHolder> : RecyclerView.Adapt
         notifyDataSetChanged()
     }
 
-    fun swapDataWithoutNotification(newData: List<T>) {
-        data = ArrayList(newData)
-    }
-
     fun swapDataAndNotifyInsertion(newData: List<T>) {
         data = ArrayList(newData)
 

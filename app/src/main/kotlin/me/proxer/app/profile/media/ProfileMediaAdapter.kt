@@ -57,7 +57,7 @@ class ProfileMediaAdapter : BaseAdapter<UserMediaListEntry, ViewHolder>() {
         internal val rating: RatingBar by bindView(R.id.rating)
 
         init {
-            itemView.setOnClickListener { view ->
+            itemView.setOnClickListener {
                 withSafeAdapterPosition(this) {
                     clickSubject.onNext(image to data[it])
                 }
