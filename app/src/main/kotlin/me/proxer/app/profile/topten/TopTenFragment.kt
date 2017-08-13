@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
 import io.reactivex.Observable
 import kotterknife.bindView
+import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.media.MediaActivity
