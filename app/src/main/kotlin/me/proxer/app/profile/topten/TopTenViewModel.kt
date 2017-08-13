@@ -6,17 +6,19 @@ import io.reactivex.rxkotlin.Singles
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.base.BaseViewModel
+import me.proxer.app.profile.topten.TopTenViewModel.ZippedTopTenResult
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.buildSingle
+import me.proxer.library.entitiy.user.TopTenEntry
 import me.proxer.library.enums.Category
 
 /**
  * @author Ruben Gees
  */
-class TopTenViewModel(application: Application) : BaseViewModel<TopTenFragment.ZippedTopTenResult>(application) {
+class TopTenViewModel(application: Application) : BaseViewModel<ZippedTopTenResult>(application) {
 
-    override val dataSingle: Single<TopTenFragment.ZippedTopTenResult>
+    override val dataSingle: Single<ZippedTopTenResult>
         get() {
             val includeHentai = PreferenceHelper.isAgeRestrictedMediaAllowed(globalContext) && StorageHelper.user != null
 
@@ -24,7 +26,7 @@ class TopTenViewModel(application: Application) : BaseViewModel<TopTenFragment.Z
                     partialSingle(includeHentai, Category.ANIME),
                     partialSingle(includeHentai, Category.MANGA),
                     { animeEntries, mangaEntries ->
-                        TopTenFragment.ZippedTopTenResult(animeEntries, mangaEntries)
+                        ZippedTopTenResult(animeEntries, mangaEntries)
                     }
             )
         }
@@ -36,4 +38,6 @@ class TopTenViewModel(application: Application) : BaseViewModel<TopTenFragment.Z
             .includeHentai(includeHentai)
             .category(category)
             .buildSingle()
+
+    class ZippedTopTenResult(val animeEntries: List<TopTenEntry>, val mangaEntries: List<TopTenEntry>)
 }

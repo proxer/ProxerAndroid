@@ -14,6 +14,7 @@ import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.ucp.overview.UcpOverviewFragment
+import me.proxer.app.ucp.topten.UcpTopTenFragment
 import org.jetbrains.anko.startActivity
 
 class UcpActivity : BaseActivity() {
@@ -65,13 +66,13 @@ class UcpActivity : BaseActivity() {
         override fun getItem(position: Int): Fragment {
             return when (position) {
                 0 -> UcpOverviewFragment.newInstance()
-//                1 -> UcpTopTenFragment.newInstance()
+                1 -> UcpTopTenFragment.newInstance()
 //                2 -> HistoryFragment.newInstance()
                 else -> throw RuntimeException("Unknown index passed")
             }
         }
 
-        override fun getCount() = 1
+        override fun getCount() = 2
 
         override fun getPageTitle(position: Int): CharSequence? {
             return when (position) {

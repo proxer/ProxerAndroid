@@ -1,7 +1,9 @@
-package me.proxer.app.profile.topten
+package me.proxer.app.ucp.topten
 
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -14,45 +16,30 @@ import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.media.MediaActivity
-import me.proxer.app.profile.ProfileActivity
-import me.proxer.app.profile.topten.TopTenViewModel.ZippedTopTenResult
+import me.proxer.app.ucp.topten.UcpTopTenViewModel.ZippedTopTenResult
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
+import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.unsafeLazy
 import org.jetbrains.anko.bundleOf
 
 /**
  * @author Ruben Gees
  */
-class TopTenFragment : BaseContentFragment<ZippedTopTenResult>() {
+class UcpTopTenFragment : BaseContentFragment<ZippedTopTenResult>() {
 
     companion object {
-        fun newInstance() = TopTenFragment().apply {
+        fun newInstance() = UcpTopTenFragment().apply {
             arguments = bundleOf()
         }
     }
 
-    override val viewModel: TopTenViewModel by unsafeLazy {
-        ViewModelProviders.of(this).get(TopTenViewModel::class.java).apply {
-            userId = this@TopTenFragment.userId
-            username = this@TopTenFragment.username
-        }
+    override val viewModel: UcpTopTenViewModel by unsafeLazy {
+        ViewModelProviders.of(this).get(UcpTopTenViewModel::class.java)
     }
 
-    override val hostingActivity: ProfileActivity
-        get() = activity as ProfileActivity
-
-    private val profileActivity
-        get() = activity as ProfileActivity
-
-    private val userId: String?
-        get() = profileActivity.userId
-
-    private val username: String?
-        get() = profileActivity.username
-
-    private lateinit var animeAdapter: TopTenAdapter
-    private lateinit var mangaAdapter: TopTenAdapter
+    private lateinit var animeAdapter: UcpTopTenAdapter
+    private lateinit var mangaAdapter: UcpTopTenAdapter
 
     private val animeContainer: ViewGroup by bindView(R.id.animeContainer)
     private val mangaContainer: ViewGroup by bindView(R.id.mangaContainer)
@@ -62,28 +49,40 @@ class TopTenFragment : BaseContentFragment<ZippedTopTenResult>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        animeAdapter = TopTenAdapter()
-        mangaAdapter = TopTenAdapter()
+        animeAdapter = UcpTopTenAdapter()
+        mangaAdapter = UcpTopTenAdapter()
+
+        Observable.merge(animeAdapter.clickSubject, mangaAdapter.clickSubject)
+                .bindToLifecycle(this)
+                .subscribe { (view, item) ->
+                    MediaActivity.navigateTo(activity, item.entryId, item.name, item.category,
+                            if (view.drawable != null) view else null)
+                }
+
+        Observable.merge(animeAdapter.deleteSubject, mangaAdapter.deleteSubject)
+                .bindToLifecycle(this)
+                .subscribe { viewModel.addItemToRemove(it) }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_top_ten, container, false)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val spanCount = DeviceUtils.calculateSpanAmount(activity) + 1
+
         animeAdapter.glide = GlideApp.with(this)
         mangaAdapter.glide = GlideApp.with(this)
 
-        Observable.merge(animeAdapter.clickSubject, mangaAdapter.clickSubject)
-                .bindToLifecycle(this)
-                .subscribe { (view, item) ->
-                    MediaActivity.navigateTo(activity, item.id, item.name, item.category,
-                            if (view.drawable != null) view else null)
-                }
-
-        val spanCount = DeviceUtils.calculateSpanAmount(activity) + 1
+        viewModel.itemRemovalError.observe(this, Observer {
+            it?.let {
+                multilineSnackbar(root, getString(R.string.error_topten_entry_removal, getString(it.message)),
+                        Snackbar.LENGTH_LONG, it.buttonMessage, it.buttonAction?.toClickListener(hostingActivity))
+            }
+        })
 
         animeRecyclerView.isNestedScrollingEnabled = false
         animeRecyclerView.layoutManager = GridLayoutManager(context, spanCount)
@@ -94,21 +93,11 @@ class TopTenFragment : BaseContentFragment<ZippedTopTenResult>() {
         mangaRecyclerView.adapter = mangaAdapter
     }
 
-    override fun onDestroyView() {
-        animeRecyclerView.layoutManager = null
-        animeRecyclerView.adapter = null
-
-        mangaRecyclerView.layoutManager = null
-        mangaRecyclerView.adapter = null
-
-        super.onDestroyView()
-    }
-
     override fun showData(data: ZippedTopTenResult) {
         super.showData(data)
 
-        animeAdapter.swapDataAndNotifyInsertion(data.animeEntries)
-        mangaAdapter.swapDataAndNotifyInsertion(data.mangaEntries)
+        animeAdapter.swapDataAndNotifyChange(data.animeEntries)
+        mangaAdapter.swapDataAndNotifyChange(data.mangaEntries)
 
         when (animeAdapter.isEmpty()) {
             true -> animeContainer.visibility = View.GONE
