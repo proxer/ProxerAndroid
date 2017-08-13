@@ -29,6 +29,7 @@ import me.proxer.app.news.NewsFragment
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.settings.AboutFragment
 import me.proxer.app.settings.SettingsFragment
+import me.proxer.app.ucp.UcpActivity
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.wrapper.IntroductionWrapper
@@ -196,6 +197,6 @@ class MainActivity : BaseActivity() {
             }
         }
         AccountItem.NOTIFICATIONS -> Unit //  NotificationActivity.navigateTo(this)
-        AccountItem.UCP -> Unit // UcpActivity.navigateTo(this)
+        AccountItem.UCP -> UcpActivity.navigateTo(this)
     }
 }

@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ucp.overview.UcpOverviewFragment">
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/progress"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:id="@+id/contentContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/screen_vertical_margin"
+                android:paddingLeft="@dimen/screen_horizontal_margin"
+                android:paddingRight="@dimen/screen_horizontal_margin"
+                android:paddingTop="@dimen/screen_vertical_margin"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/item_margin"
+                    app:cardCornerRadius="1dp"
+                    app:cardElevation="2dp"
+                    app:cardUseCompatPadding="true">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text="@string/fragment_ucp_overview_general"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="@color/colorAccent" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="4dp"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:paddingTop="4dp"
+                            android:text="@string/fragment_ucp_overview_profile_link"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+                        <TextView
+                            android:id="@+id/profileLink"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="8dp"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                            tools:text="https://link.com?id=123" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="4dp"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:paddingTop="4dp"
+                            android:text="@string/fragment_ucp_overview_username"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+                        <TextView
+                            android:id="@+id/username"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="8dp"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                            android:textIsSelectable="true"
+                            tools:text="Username" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="4dp"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:paddingTop="4dp"
+                            android:text="@string/fragment_ucp_overview_user_id"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+                        <TextView
+                            android:id="@+id/userId"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="8dp"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                            android:textIsSelectable="true"
+                            tools:text="123456" />
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/item_margin"
+                    app:cardCornerRadius="1dp"
+                    app:cardElevation="2dp"
+                    app:cardUseCompatPadding="true">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text="@string/fragment_ucp_overview_epsiode_counter"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="@color/colorAccent" />
+
+                        <TableLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:stretchColumns="0">
+
+                            <TableRow>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="8dp"
+                                    android:text="@string/fragment_ucp_overview_epsiode_counter_episodes"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                                <TextView
+                                    android:id="@+id/episodesRow"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="8dp"
+                                    android:gravity="end"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    tools:text="100" />
+                            </TableRow>
+
+                            <TableRow>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="8dp"
+                                    android:text="@string/fragment_ucp_overview_epsiode_counter_minutes"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                                <TextView
+                                    android:id="@+id/minutesRow"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="8dp"
+                                    android:gravity="end"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    tools:text="100" />
+                            </TableRow>
+
+                            <TableRow>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="8dp"
+                                    android:text="@string/fragment_ucp_overview_epsiode_counter_hours"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                                <TextView
+                                    android:id="@+id/hoursRow"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="8dp"
+                                    android:gravity="end"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    tools:text="100" />
+                            </TableRow>
+
+                            <TableRow>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="8dp"
+                                    android:text="@string/fragment_ucp_overview_epsiode_counter_days"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                                <TextView
+                                    android:id="@+id/daysRow"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="8dp"
+                                    android:gravity="end"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    tools:text="100" />
+                            </TableRow>
+                        </TableLayout>
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <include layout="@layout/layout_error" />
+</FrameLayout>

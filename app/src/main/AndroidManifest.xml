@@ -67,7 +67,11 @@
 
         <!--<activity android:name=".activity.NotificationActivity" />-->
 
-        <!--<activity android:name=".activity.UcpActivity" />-->
+        <!--<activity android:name=".activity.NewChatActivity" />-->
+
+        <!--<activity android:name=".activity.ConferenceInfoActivity" />-->
+
+        <activity android:name=".ucp.UcpActivity" />
 
         <activity
             android:name=".media.MediaActivity"
@@ -120,10 +124,6 @@
                 <data android:mimeType="video/*" />
             </intent-filter>
         </activity>
-
-        <!--<activity android:name=".activity.NewChatActivity" />-->
-
-        <!--<activity android:name=".activity.ConferenceInfoActivity" />-->
 
         <activity android:name=".manga.MangaActivity">
             <intent-filter>

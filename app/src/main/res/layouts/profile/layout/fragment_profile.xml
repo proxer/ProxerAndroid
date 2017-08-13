@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".profile.info.ProfileInfoFragment">
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/progress"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:id="@+id/contentContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/screen_vertical_margin"
+                android:paddingLeft="@dimen/screen_horizontal_margin"
+                android:paddingRight="@dimen/screen_horizontal_margin"
+                android:paddingTop="@dimen/screen_vertical_margin"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/item_margin"
+                    app:cardCornerRadius="1dp"
+                    app:cardElevation="2dp"
+                    app:cardUseCompatPadding="true">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TableLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:shrinkColumns="1"
+                            android:stretchColumns="0">
+
+                            <TableRow>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_margin="8dp"
+                                    android:text="@string/fragment_profile_points_anime"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                                <TextView
+                                    android:id="@+id/animePointsRow"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_margin="8dp"
+                                    android:gravity="end"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    tools:text="100" />
+                            </TableRow>
+
+                            <TableRow>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_margin="8dp"
+                                    android:text="@string/fragment_profile_points_manga"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                                <TextView
+                                    android:id="@+id/mangaPointsRow"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_margin="8dp"
+                                    android:gravity="end"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    tools:text="100" />
+                            </TableRow>
+
+                            <TableRow>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_margin="8dp"
+                                    android:text="@string/fragment_profile_points_uploads"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                                <TextView
+                                    android:id="@+id/uploadPointsRow"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_margin="8dp"
+                                    android:gravity="end"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    tools:text="100" />
+                            </TableRow>
+
+                            <TableRow>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_margin="8dp"
+                                    android:text="@string/fragment_profile_points_forum"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                                <TextView
+                                    android:id="@+id/forumPointsRow"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_margin="8dp"
+                                    android:gravity="end"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    tools:text="100" />
+                            </TableRow>
+
+                            <TableRow>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_margin="8dp"
+                                    android:text="@string/fragment_profile_points_info"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                                <TextView
+                                    android:id="@+id/infoPointsRow"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_margin="8dp"
+                                    android:gravity="end"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    tools:text="100" />
+                            </TableRow>
+
+                            <TableRow>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_margin="8dp"
+                                    android:text="@string/fragment_profile_points_miscellaneous"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                                <TextView
+                                    android:id="@+id/miscellaneousPointsRow"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_margin="8dp"
+                                    android:gravity="end"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    tools:text="100" />
+                            </TableRow>
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginLeft="8dp"
+                                android:layout_marginRight="8dp"
+                                android:background="@color/divider" />
+
+                            <TableRow>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="8dp"
+                                    android:text="@string/fragment_profile_points_total"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                                <TextView
+                                    android:id="@+id/totalPointsRow"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="8dp"
+                                    android:gravity="end"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    tools:text="500" />
+                            </TableRow>
+                        </TableLayout>
+
+                        <TextView
+                            android:id="@+id/rank"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="16dp"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="@color/colorAccent"
+                            tools:text="Kage" />
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/statusContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/item_margin"
+                    app:cardCornerRadius="1dp"
+                    app:cardElevation="2dp"
+                    app:cardUseCompatPadding="true">
+
+                    <com.klinker.android.link_builder.LinkConsumableTextView
+                        android:id="@+id/statusText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        tools:text="This is a test: https://github.com/proxer/ProxerAndroid - 2 days ago" />
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+
+        </android.support.v4.widget.NestedScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <include layout="@layout/layout_error" />
+
+</FrameLayout>

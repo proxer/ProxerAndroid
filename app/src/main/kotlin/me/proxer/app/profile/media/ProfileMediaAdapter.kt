@@ -34,7 +34,7 @@ class ProfileMediaAdapter : BaseAdapter<UserMediaListEntry, ViewHolder>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_user_media_entry, parent, false))
+        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_profile_media_entry, parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(data[position])

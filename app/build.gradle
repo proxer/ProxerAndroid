@@ -1,3 +1,5 @@
+import groovy.io.FileType
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
@@ -70,7 +72,10 @@ android {
     }
 
     sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
+        main {
+            java.srcDirs += 'src/main/kotlin'
+            res.srcDirs = getResSrcDirs()
+        }
     }
 }
 
@@ -147,6 +152,16 @@ dependencies {
     implementation deps.strictModeCompat
     debugImplementation deps.leakCanary
     releaseImplementation deps.leakCanaryNoOp
+}
+
+static getResSrcDirs() {
+    List<String> result = ['src/main/res']
+
+    new File('app/src/main/res/layouts/').eachFile(FileType.DIRECTORIES) {
+        result.add("src/main/res/layouts/${it.name}")
+    }
+
+    return result
 }
 
 static getFromSecrets(String key) {
