@@ -3,7 +3,6 @@ package me.proxer.app.ucp
 import android.app.Activity
 import android.os.Bundle
 import android.support.design.widget.TabLayout
-import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.ViewPager
@@ -13,6 +12,7 @@ import com.h6ah4i.android.tablayouthelper.TabLayoutHelper
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseActivity
+import me.proxer.app.ucp.history.HistoryFragment
 import me.proxer.app.ucp.overview.UcpOverviewFragment
 import me.proxer.app.ucp.topten.UcpTopTenFragment
 import org.jetbrains.anko.startActivity
@@ -63,24 +63,20 @@ class UcpActivity : BaseActivity() {
 
     inner class SectionsPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {
 
-        override fun getItem(position: Int): Fragment {
-            return when (position) {
-                0 -> UcpOverviewFragment.newInstance()
-                1 -> UcpTopTenFragment.newInstance()
-//                2 -> HistoryFragment.newInstance()
-                else -> throw RuntimeException("Unknown index passed")
-            }
+        override fun getItem(position: Int) = when (position) {
+            0 -> UcpOverviewFragment.newInstance()
+            1 -> UcpTopTenFragment.newInstance()
+            2 -> HistoryFragment.newInstance()
+            else -> throw RuntimeException("Unknown index passed")
         }
 
-        override fun getCount() = 2
+        override fun getCount() = 3
 
-        override fun getPageTitle(position: Int): CharSequence? {
-            return when (position) {
-                0 -> getString(R.string.section_ucp_overview)
-                1 -> getString(R.string.section_ucp_top_ten)
-                2 -> getString(R.string.section_ucp_history)
-                else -> throw RuntimeException("Unknown index passed")
-            }
+        override fun getPageTitle(position: Int) = when (position) {
+            0 -> getString(R.string.section_ucp_overview)
+            1 -> getString(R.string.section_ucp_top_ten)
+            2 -> getString(R.string.section_ucp_history)
+            else -> throw RuntimeException("Unknown index passed")
         }
     }
 }

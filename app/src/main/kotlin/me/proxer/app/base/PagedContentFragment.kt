@@ -168,7 +168,7 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
         adapter.footer = null
     }
 
-    private fun updateRecyclerViewPadding() = when (adapter.footer != null) {
+    private fun updateRecyclerViewPadding() = when (innerAdapter.itemCount <= 0 && adapter.footer != null) {
         true -> recyclerView.setPadding(0, 0, 0, 0)
         false -> {
             val horizontalPadding = DeviceUtils.getHorizontalMargin(context)
