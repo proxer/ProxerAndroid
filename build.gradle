@@ -47,7 +47,7 @@ buildscript {
         materialDialogsVersion = '0.9.4.6'
         flexboxVersion = '0.3.0'
         emojiIosVersion = '0.5.1'
-        exomediaVersion = '2b55a23bc0'
+        exomediaVersion = 'dff7b531bb'
         exoplayerVersion = 'r2.5.1'
         materialProgressBarVersion = '1.4.1'
         materialRatingBarVersion = '1.0.2'

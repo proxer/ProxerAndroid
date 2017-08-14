@@ -12,8 +12,6 @@ import com.devbrackets.android.exomedia.ExoMedia
 import com.evernote.android.job.JobConfig
 import com.evernote.android.job.JobManager
 import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory
-import com.google.android.exoplayer2.upstream.DataSource
-import com.google.android.exoplayer2.upstream.TransferListener
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.kirillr.strictmodehelper.StrictModeCompat
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
@@ -125,9 +123,9 @@ class MainApplication : Application() {
         EmojiManager.install(IosEmojiProvider())
         AndroidThreeTen.init(this)
 
-        ExoMedia.setHttpDataSourceFactoryProvider({ _: String, listener: TransferListener<in DataSource>? ->
+        ExoMedia.setDataSourceFactoryProvider { _, listener ->
             OkHttpDataSourceFactory(client, GENERIC_USER_AGENT, listener)
-        })
+        }
 
         JobConfig.setLogcatEnabled(BuildConfig.DEBUG)
         JobManager.create(this).addJobCreator {
