@@ -110,7 +110,7 @@ class OpenloadStreamResolver : StreamResolver() {
                         webView.setWillNotDraw(true)
                         webView.webViewClient = OpenLoadClient()
                         webView.addJavascriptInterface(OpenLoadJavaScriptInterface(emitter), callbackName)
-                        webView.loadDataWithBaseURL("", it, "text/html", "UTF-8", null)
+                        webView.loadDataWithBaseURL("https://openload.co", it, "text/html", "UTF-8", null)
                     } catch (error: Throwable) {
                         if (!emitter.isDisposed) {
                             emitter.onError(error)
