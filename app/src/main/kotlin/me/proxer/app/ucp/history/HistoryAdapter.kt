@@ -53,7 +53,7 @@ class HistoryAdapter : BaseAdapter<UcpHistoryEntry, ViewHolder>() {
         internal val status: TextView by bindView(R.id.status)
 
         init {
-            itemView.setOnClickListener { view ->
+            itemView.setOnClickListener {
                 withSafeAdapterPosition(this) {
                     clickSubject.onNext(image to data[it])
                 }
