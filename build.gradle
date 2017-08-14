@@ -32,7 +32,7 @@ buildscript {
         rxAndroidVersion = '2.0.1'
         rxBindingVersion = '2.0.0'
         rxLifecycleVersion = '2.1.0'
-        rxBusVersion = '1.0.0'
+        rxBusVersion = '2.0.0'
 
         // UI components
         aboutLibrariesVersion = '5.9.7'

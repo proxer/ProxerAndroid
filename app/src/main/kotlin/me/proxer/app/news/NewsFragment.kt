@@ -65,4 +65,10 @@ class NewsFragment : PagedContentFragment<NewsArticle>() {
 
         innerAdapter.glide = GlideApp.with(this@NewsFragment)
     }
+
+    override fun onResume() {
+        super.onResume()
+
+        NewsNotifications.cancel(context)
+    }
 }

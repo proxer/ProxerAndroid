@@ -13,6 +13,7 @@ import com.rubengees.introduction.IntroductionActivity.OPTION_RESULT
 import com.rubengees.introduction.IntroductionBuilder
 import com.rubengees.introduction.Option
 import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
+import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotterknife.bindView
@@ -26,6 +27,7 @@ import me.proxer.app.bookmark.BookmarkFragment
 import me.proxer.app.manga.local.LocalMangaFragment
 import me.proxer.app.media.list.MediaListFragment
 import me.proxer.app.news.NewsFragment
+import me.proxer.app.notification.NotificationJob
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.settings.AboutFragment
 import me.proxer.app.settings.SettingsFragment
@@ -129,6 +131,10 @@ class MainActivity : BaseActivity() {
                         1 -> {
                             PreferenceHelper.setNewsNotificationsEnabled(this@MainActivity, option.isActivated)
                             PreferenceHelper.setAccountNotificationsEnabled(this@MainActivity, option.isActivated)
+
+                            Completable.fromAction { NotificationJob.scheduleIfPossible(this) }
+                                    .bindToLifecycle<Unit>(this)
+                                    .subscribe()
                         }
                     }
                 }
@@ -175,7 +181,7 @@ class MainActivity : BaseActivity() {
 
     private fun handleDrawerItemClick(item: DrawerItem) = when (item) {
         DrawerItem.NEWS -> setFragment(NewsFragment.newInstance(), R.string.section_news)
-        DrawerItem.CHAT -> Unit //setFragment(ConferencesFragment.newInstance(), R.string.section_chat)
+        DrawerItem.CHAT -> Unit // setFragment(ConferencesFragment.newInstance(), R.string.section_chat)
         DrawerItem.BOOKMARKS -> setFragment(BookmarkFragment.newInstance(), R.string.section_bookmarks)
         DrawerItem.ANIME -> setFragment(MediaListFragment.newInstance(Category.ANIME), R.string.section_anime)
         DrawerItem.MANGA -> setFragment(MediaListFragment.newInstance(Category.MANGA), R.string.section_manga)
@@ -196,7 +202,7 @@ class MainActivity : BaseActivity() {
                         if (view.drawable != null) view else null)
             }
         }
-        AccountItem.NOTIFICATIONS -> Unit //  NotificationActivity.navigateTo(this)
+        AccountItem.NOTIFICATIONS -> Unit // NotificationActivity.navigateTo(this)
         AccountItem.UCP -> UcpActivity.navigateTo(this)
     }
 }

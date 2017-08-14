@@ -10,6 +10,7 @@ import android.view.View
 import me.proxer.app.MainApplication.Companion.refWatcher
 import me.proxer.app.R
 import me.proxer.app.manga.MangaCleanDialog
+import me.proxer.app.notification.NotificationJob
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.PreferenceHelper.AGE_CONFIRMATION
 import me.proxer.app.util.data.PreferenceHelper.MANGA_CLEAN
@@ -97,7 +98,7 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
             NOTIFICATIONS_NEWS, NOTIFICATIONS_ACCOUNT -> {
                 updateIntervalNotification()
 
-//                NotificationsJob.scheduleIfPossible(context)
+                NotificationJob.scheduleIfPossible(context)
             }
 
             NOTIFICATIONS_CHAT -> {
@@ -105,7 +106,7 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
             }
 
             NOTIFICATIONS_INTERVAL -> {
-//                NotificationsJob.scheduleIfPossible(context)
+                NotificationJob.scheduleIfPossible(context)
 //                ChatJob.scheduleSynchronizationIfPossible(context)
             }
         }

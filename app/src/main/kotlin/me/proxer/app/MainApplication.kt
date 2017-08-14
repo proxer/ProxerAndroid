@@ -34,6 +34,7 @@ import me.proxer.app.manga.MangaNotifications
 import me.proxer.app.manga.local.LocalMangaDao
 import me.proxer.app.manga.local.LocalMangaDatabase
 import me.proxer.app.manga.local.LocalMangaJob
+import me.proxer.app.notification.NotificationJob
 import me.proxer.app.util.NotificationUtils
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.library.api.ProxerApi
@@ -132,7 +133,7 @@ class MainApplication : Application() {
         JobManager.create(this).addJobCreator {
             when {
 //                it == ChatJob.TAG -> ChatJob()
-//                it == NotificationsJob.TAG -> NotificationsJob()
+                it == NotificationJob.TAG -> NotificationJob()
                 it.startsWith(LocalMangaJob.TAG) -> LocalMangaJob()
                 else -> null
             }
