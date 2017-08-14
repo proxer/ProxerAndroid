@@ -129,7 +129,9 @@ class OpenloadStreamResolver : StreamResolver() {
         @JavascriptInterface
         fun call(url: String?, mimeType: String?) {
             if (url == null || url.isBlank() || mimeType == null || mimeType.isBlank()) {
-                emitter.onError(StreamResolutionException())
+                if (!emitter.isDisposed) {
+                    emitter.onError(StreamResolutionException())
+                }
             } else {
                 emitter.onSuccess(StreamResolutionResult(Uri.parse(url), mimeType))
             }
