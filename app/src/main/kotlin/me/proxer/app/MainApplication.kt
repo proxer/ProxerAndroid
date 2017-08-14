@@ -25,6 +25,7 @@ import com.squareup.moshi.Moshi
 import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.ios.IosEmojiProvider
 import io.reactivex.schedulers.Schedulers
+import me.proxer.app.auth.LoginEvent
 import me.proxer.app.auth.LogoutEvent
 import me.proxer.app.auth.ProxerLoginTokenManager
 import me.proxer.app.manga.MangaLocks
@@ -97,6 +98,12 @@ class MainApplication : Application() {
     }
 
     private fun initBus() {
+        bus.register(LoginEvent::class.java)
+                .subscribeOn(Schedulers.io())
+                .subscribe {
+                    NotificationJob.scheduleIfPossible(this)
+                }
+
         bus.register(LogoutEvent::class.java)
                 .subscribeOn(Schedulers.io())
                 .subscribe {
