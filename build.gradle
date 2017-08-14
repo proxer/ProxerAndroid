@@ -22,7 +22,7 @@ buildscript {
         supportLibraryVersion = '26.0.1'
         supportPreferenceVersion = '1.2.7'
         architectureComponentsVersion = '1.0.0-alpha8'
-        playServicesVersion = '11.0.4'
+        playServicesVersion = '11.2.0'
         androidJobVersion = '1.2.0-alpha3'
         proxerLibVersion = '3.2.0'
 

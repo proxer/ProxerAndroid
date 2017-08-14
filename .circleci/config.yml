@@ -6,9 +6,6 @@ jobs:
       - image: circleci/android:api-26-alpha
     steps:
       - checkout
-      - run:
-          name: Update Google Repository
-          command: sdkmanager "extras;google;m2repository"
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
       - run:
