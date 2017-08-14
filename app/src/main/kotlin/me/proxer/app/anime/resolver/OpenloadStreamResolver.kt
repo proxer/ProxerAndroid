@@ -8,7 +8,6 @@ import android.webkit.WebViewClient
 import io.reactivex.Single
 import io.reactivex.SingleEmitter
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.rxkotlin.toObservable
 import me.proxer.app.MainApplication.Companion.GENERIC_USER_AGENT
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.MainApplication.Companion.client
@@ -18,7 +17,6 @@ import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.toBodySingle
 import okhttp3.Request
 import java.util.concurrent.TimeUnit
-import java.util.regex.Pattern.quote
 
 /**
  * @author Ruben Gees
@@ -41,9 +39,6 @@ class OpenloadStreamResolver : StreamResolver() {
                 "var mimeType = fileType ? \"video/\" + fileType : \"\";" +
 
                 "$callbackName.call(streamUrl, mimeType);"
-
-        private val regex = Regex("<script src=\"(/assets/js/.*?${quote(".")}js?)\"></script>",
-                RegexOption.DOT_MATCHES_ALL)
     }
 
     override val name = "Openload.Co"
@@ -58,31 +53,6 @@ class OpenloadStreamResolver : StreamResolver() {
                         .header("User-Agent", GENERIC_USER_AGENT)
                         .build())
                         .toBodySingle()
-            }
-            .flatMap { page ->
-                val regexResults = regex.findAll(page)
-                var result = page
-
-                regexResults
-                        .toObservable()
-                        .map { it.groups[1] ?: throw StreamResolutionException() }
-                        .map { if (it.value.isNotBlank()) it.value else throw StreamResolutionException() }
-                        .flatMap { scriptUrl ->
-                            client.newCall(Request.Builder()
-                                    .get()
-                                    .url(Utils.parseAndFixUrl("https://openload.co$scriptUrl"))
-                                    .header("User-Agent", GENERIC_USER_AGENT)
-                                    .build())
-                                    .toBodySingle()
-                                    .toObservable()
-                                    .map { scriptUrl to it }
-                        }
-                        .doOnNext { (scriptUrl, script) ->
-                            result = result.replaceFirst("<script src=\"$scriptUrl\"></script>",
-                                    "<script>$script</script>")
-                        }
-                        .toList()
-                        .map { result }
             }
             .observeOn(AndroidSchedulers.mainThread())
             .flatMap {
@@ -99,7 +69,7 @@ class OpenloadStreamResolver : StreamResolver() {
                             }
                         }
 
-                        webSettings.blockNetworkLoads = true
+                        webSettings.blockNetworkImage = true
                         webSettings.javaScriptEnabled = true
                         webSettings.allowContentAccess = false
                         webSettings.allowFileAccess = false
