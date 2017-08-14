@@ -25,16 +25,16 @@ class BookmarkViewModel(application: Application) : PagedContentViewModel<Bookma
     override val endpoint: PagingLimitEndpoint<List<Bookmark>>
         get() = api.ucp().bookmarks().category(category)
 
-    val itemRemovalError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
+    val itemDeletionError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
 
     private var category: Category? = null
 
-    private val removalQueue = UniqueQueue<Bookmark>()
-    private var removalDisposable: Disposable? = null
+    private val deletionQueue = UniqueQueue<Bookmark>()
+    private var deletionDisposable: Disposable? = null
 
     override fun onCleared() {
-        removalDisposable?.dispose()
-        removalDisposable = null
+        deletionDisposable?.dispose()
+        deletionDisposable = null
 
         super.onCleared()
     }
@@ -57,28 +57,30 @@ class BookmarkViewModel(application: Application) : PagedContentViewModel<Bookma
         }
     }
 
-    fun addItemToRemove(item: Bookmark) {
-        removalQueue.add(item)
+    fun addItemToDelete(item: Bookmark) {
+        deletionQueue.add(item)
 
-        doItemRemoval()
+        if (deletionDisposable?.isDisposed != false) {
+            doItemDeletion()
+        }
     }
 
-    private fun doItemRemoval() {
-        removalDisposable?.dispose()
+    private fun doItemDeletion() {
+        deletionDisposable?.dispose()
 
-        removalQueue.poll()?.let { item ->
-            removalDisposable = api.ucp().deleteBookmark(item.id)
+        deletionQueue.poll()?.let { item ->
+            deletionDisposable = api.ucp().deleteBookmark(item.id)
                     .buildOptionalSingle()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
                         data.value = data.value?.filterNot { it == item }
 
-                        doItemRemoval()
+                        doItemDeletion()
                     }, {
-                        removalQueue.clear()
+                        deletionQueue.clear()
 
-                        itemRemovalError.value = ErrorUtils.handle(it)
+                        itemDeletionError.value = ErrorUtils.handle(it)
                     })
         }
     }

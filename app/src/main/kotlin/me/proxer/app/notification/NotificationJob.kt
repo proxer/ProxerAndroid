@@ -10,6 +10,7 @@ import me.proxer.app.news.NewsNotificationEvent
 import me.proxer.app.news.NewsNotifications
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
+import me.proxer.library.entitiy.notifications.NotificationInfo
 
 /**
  * @author Ruben Gees
@@ -46,35 +47,38 @@ class NotificationJob : Job() {
         }
     }
 
-    override fun onRunJob(params: Params?): Result {
-        if (PreferenceHelper.areNewsNotificationsEnabled(context)) {
-            try {
-                fetchNews(context)
-            } catch (error: Throwable) {
-                NewsNotifications.showError(context, error)
+    override fun onRunJob(params: Params): Result {
+        try {
+            val notificationInfo = when (StorageHelper.user != null) {
+                true -> api.notifications().notificationInfo().build().execute()
+                false -> null
+            }
 
-                return Result.FAILURE
+            if (PreferenceHelper.areNewsNotificationsEnabled(context)) {
+                fetchNews(context, notificationInfo)
+            }
+
+            if (PreferenceHelper.areAccountNotificationsEnabled(context) && notificationInfo != null) {
+                fetchAccountNotifications(context, notificationInfo)
+            }
+        } catch (error: Throwable) {
+            return if (params.failureCount >= 1) {
+                AccountNotifications.showError(context, error)
+
+                Result.FAILURE
+            } else {
+                Result.RESCHEDULE
             }
         }
-
-//        if (PreferenceHelper.areAccountNotificationsEnabled(context)) {
-//            try {
-//                fetchAccountNotifications(context)
-//            } catch (error: Throwable) {
-//                AccountNotificationHelper.showError(context, error)
-//
-//                return Result.FAILURE
-//            }
-//        }
 
         return Result.SUCCESS
     }
 
-    private fun fetchNews(context: Context) {
+    private fun fetchNews(context: Context, notificationInfo: NotificationInfo?) {
         val lastNewsDate = StorageHelper.lastNewsDate
         val newNews = api.notifications().news()
                 .page(0)
-                .limit(100)
+                .limit(notificationInfo?.news ?: 100)
                 .build()
                 .execute()
                 .filter { it.date.after(lastNewsDate) }
@@ -84,28 +88,22 @@ class NotificationJob : Job() {
             StorageHelper.lastNewsDate = it
         }
 
-        if (!bus.post(NewsNotificationEvent(newNews))) {
+        if (!bus.post(NewsNotificationEvent())) {
             NewsNotifications.showOrUpdate(context, newNews)
         }
     }
 
-//    private fun fetchAccountNotifications(context: Context) {
-//        val user = StorageHelper.user
-//
-//        if (user != null) {
-//            val notificationInfo = api.notifications().notificationInfo().build().execute()
-//            val newNotifications = when (notificationInfo.notifications == 0) {
-//                true -> emptyList()
-//                false -> api.notifications().notifications()
-//                        .limit(notificationInfo.notifications)
-//                        .markAsRead(true)
-//                        .build()
-//                        .execute()
-//            }
-//
-//            AccountNotificationHelper.showOrUpdate(context, newNotifications)
-//        } else {
-//            AccountNotificationHelper.cancel(context)
-//        }
-//    }
+    private fun fetchAccountNotifications(context: Context, notificationInfo: NotificationInfo) {
+        val newNotifications = when (notificationInfo.notifications == 0) {
+            true -> emptyList()
+            false -> api.notifications().notifications()
+                    .limit(notificationInfo.notifications)
+                    .build()
+                    .execute()
+        }
+
+        if (!bus.post(AccountNotificationEvent())) {
+            AccountNotifications.showOrUpdate(context, newNotifications)
+        }
+    }
 }

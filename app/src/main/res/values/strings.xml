@@ -378,7 +378,6 @@
         <item quantity="other">%d Benachrichtigungen</item>
     </plurals>
 
-    <string name="notification_news_error_title">Fehler beim Abrufen der News</string>
     <string name="notification_account_error_title">Fehler beim Abrufen der Benachrichtigungen</string>
     <string name="notification_manga_download_error_title">Fehler beim Manga Download</string>
 

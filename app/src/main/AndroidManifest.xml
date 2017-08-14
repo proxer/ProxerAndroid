@@ -63,9 +63,9 @@
             </intent-filter>
         </activity>
 
-        <!--<activity android:name=".activity.ChatActivity" />-->
+        <activity android:name=".notification.NotificationActivity" />
 
-        <!--<activity android:name=".activity.NotificationActivity" />-->
+        <!--<activity android:name=".activity.ChatActivity" />-->
 
         <!--<activity android:name=".activity.NewChatActivity" />-->
 
@@ -198,6 +198,10 @@
         </activity>
 
         <activity android:name=".view.WebViewActivity" />
+
+        <receiver
+            android:name=".notification.AccountNotificationDeletionReceiver"
+            android:exported="false" />
 
         <!--<receiver-->
         <!--android:name=".receiver.DirectReplyReceiver"-->

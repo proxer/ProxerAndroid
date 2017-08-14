@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDelegate
 import android.support.v7.preference.XpPreferenceFragment
 import android.view.View
+import io.reactivex.Completable
 import me.proxer.app.MainApplication.Companion.refWatcher
 import me.proxer.app.R
 import me.proxer.app.manga.MangaCleanDialog
@@ -98,16 +99,18 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
             NOTIFICATIONS_NEWS, NOTIFICATIONS_ACCOUNT -> {
                 updateIntervalNotification()
 
-                NotificationJob.scheduleIfPossible(context)
+                Completable.fromAction { NotificationJob.scheduleIfPossible(context) }.subscribe()
             }
 
             NOTIFICATIONS_CHAT -> {
-//                ChatJob.scheduleSynchronizationIfPossible(context)
+//               Completable.fromAction { ChatJob.scheduleSynchronizationIfPossible(context) }.subscribe()
             }
 
             NOTIFICATIONS_INTERVAL -> {
-                NotificationJob.scheduleIfPossible(context)
-//                ChatJob.scheduleSynchronizationIfPossible(context)
+                Completable.fromAction {
+                    NotificationJob.scheduleIfPossible(context)
+//                    ChatJob.scheduleSynchronizationIfPossible(context)
+                }.subscribe()
             }
         }
     }

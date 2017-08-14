@@ -8,8 +8,6 @@ import android.support.v4.app.NotificationManagerCompat
 import android.support.v4.content.ContextCompat
 import me.proxer.app.MainActivity
 import me.proxer.app.R
-import me.proxer.app.util.ErrorUtils
-import me.proxer.app.util.NotificationUtils
 import me.proxer.app.util.NotificationUtils.NEWS_CHANNEL
 import me.proxer.app.util.extension.getQuantityString
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper.DrawerItem
@@ -21,7 +19,6 @@ import me.proxer.library.entitiy.notifications.NewsArticle
 object NewsNotifications {
 
     private const val ID = 1357913213
-    private const val ERROR_ID = 472347289
 
     fun showOrUpdate(context: Context, news: Collection<NewsArticle>) {
         val notification = buildNewsNotification(context, news)
@@ -32,18 +29,7 @@ object NewsNotifications {
         }
     }
 
-    fun showError(context: Context, error: Throwable) {
-        NotificationUtils.showErrorNotification(context, ERROR_ID, NEWS_CHANNEL,
-                context.getString(R.string.notification_news_error_title),
-                context.getString(ErrorUtils.getMessage(error)))
-    }
-
-    fun cancel(context: Context) {
-        NotificationManagerCompat.from(context).let {
-            it.cancel(ID)
-            it.cancel(ERROR_ID)
-        }
-    }
+    fun cancel(context: Context) = NotificationManagerCompat.from(context).cancel(ID)
 
     private fun buildNewsNotification(context: Context, news: Collection<NewsArticle>): Notification? {
         if (news.isEmpty()) {

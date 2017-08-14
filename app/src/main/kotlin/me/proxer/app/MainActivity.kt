@@ -27,6 +27,7 @@ import me.proxer.app.bookmark.BookmarkFragment
 import me.proxer.app.manga.local.LocalMangaFragment
 import me.proxer.app.media.list.MediaListFragment
 import me.proxer.app.news.NewsFragment
+import me.proxer.app.notification.NotificationActivity
 import me.proxer.app.notification.NotificationJob
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.settings.AboutFragment
@@ -202,7 +203,7 @@ class MainActivity : BaseActivity() {
                         if (view.drawable != null) view else null)
             }
         }
-        AccountItem.NOTIFICATIONS -> Unit // NotificationActivity.navigateTo(this)
+        AccountItem.NOTIFICATIONS -> NotificationActivity.navigateTo(this)
         AccountItem.UCP -> UcpActivity.navigateTo(this)
     }
 }

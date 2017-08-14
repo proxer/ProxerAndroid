@@ -87,7 +87,7 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
         innerAdapter.deleteClickSubject
                 .bindToLifecycle(this)
                 .subscribe {
-                    viewModel.addItemToRemove(it)
+                    viewModel.addItemToDelete(it)
                 }
 
         setHasOptionsMenu(true)
@@ -98,7 +98,7 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
 
         innerAdapter.glide = GlideApp.with(this)
 
-        viewModel.itemRemovalError.observe(this, Observer {
+        viewModel.itemDeletionError.observe(this, Observer {
             it?.let {
                 multilineSnackbar(root, getString(R.string.fragment_set_user_info_error, getString(it.message)),
                         Snackbar.LENGTH_LONG, it.buttonMessage, it.buttonAction?.toClickListener(hostingActivity))

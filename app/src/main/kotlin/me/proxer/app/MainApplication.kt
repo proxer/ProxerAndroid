@@ -32,6 +32,7 @@ import me.proxer.app.manga.MangaNotifications
 import me.proxer.app.manga.local.LocalMangaDao
 import me.proxer.app.manga.local.LocalMangaDatabase
 import me.proxer.app.manga.local.LocalMangaJob
+import me.proxer.app.notification.AccountNotifications
 import me.proxer.app.notification.NotificationJob
 import me.proxer.app.util.NotificationUtils
 import me.proxer.app.util.data.PreferenceHelper
@@ -99,6 +100,7 @@ class MainApplication : Application() {
         bus.register(LogoutEvent::class.java)
                 .subscribeOn(Schedulers.io())
                 .subscribe {
+                    AccountNotifications.cancel(this)
                     MangaNotifications.cancel(this)
 
                     LocalMangaJob.cancelAll()

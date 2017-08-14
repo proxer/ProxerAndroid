@@ -61,7 +61,7 @@ class UcpTopTenFragment : BaseContentFragment<ZippedTopTenResult>() {
 
         Observable.merge(animeAdapter.deleteSubject, mangaAdapter.deleteSubject)
                 .bindToLifecycle(this)
-                .subscribe { viewModel.addItemToRemove(it) }
+                .subscribe { viewModel.addItemToDelete(it) }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -77,7 +77,7 @@ class UcpTopTenFragment : BaseContentFragment<ZippedTopTenResult>() {
         animeAdapter.glide = GlideApp.with(this)
         mangaAdapter.glide = GlideApp.with(this)
 
-        viewModel.itemRemovalError.observe(this, Observer {
+        viewModel.itemDeletionError.observe(this, Observer {
             it?.let {
                 multilineSnackbar(root, getString(R.string.error_topten_entry_removal, getString(it.message)),
                         Snackbar.LENGTH_LONG, it.buttonMessage, it.buttonAction?.toClickListener(hostingActivity))

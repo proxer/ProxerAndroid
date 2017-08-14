@@ -33,29 +33,31 @@ class UcpTopTenViewModel(application: Application) : BaseViewModel<ZippedTopTenR
                     ZippedTopTenResult(animeList, mangaList)
                 }
 
-    val itemRemovalError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
+    val itemDeletionError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
 
-    private val removalQueue = UniqueQueue<UcpTopTenEntry>()
-    private var removalDisposable: Disposable? = null
+    private val deletionQueue = UniqueQueue<UcpTopTenEntry>()
+    private var deletionDisposable: Disposable? = null
 
     override fun onCleared() {
-        removalDisposable?.dispose()
-        removalDisposable = null
+        deletionDisposable?.dispose()
+        deletionDisposable = null
 
         super.onCleared()
     }
 
-    fun addItemToRemove(item: UcpTopTenEntry) {
-        removalQueue.add(item)
+    fun addItemToDelete(item: UcpTopTenEntry) {
+        deletionQueue.add(item)
 
-        doItemRemoval()
+        if (deletionDisposable?.isDisposed != false) {
+            doItemDeletion()
+        }
     }
 
-    private fun doItemRemoval() {
-        removalDisposable?.dispose()
+    private fun doItemDeletion() {
+        deletionDisposable?.dispose()
 
-        removalQueue.poll()?.let { item ->
-            removalDisposable = api.ucp().deleteFavorite(item.id)
+        deletionQueue.poll()?.let { item ->
+            deletionDisposable = api.ucp().deleteFavorite(item.id)
                     .buildOptionalSingle()
                     .map {
                         data.value.let { currentData ->
@@ -74,11 +76,11 @@ class UcpTopTenViewModel(application: Application) : BaseViewModel<ZippedTopTenR
                     .subscribe({
                         data.value = it
 
-                        doItemRemoval()
+                        doItemDeletion()
                     }, {
-                        removalQueue.clear()
+                        deletionQueue.clear()
 
-                        itemRemovalError.value = ErrorUtils.handle(it)
+                        itemDeletionError.value = ErrorUtils.handle(it)
                     })
         }
     }

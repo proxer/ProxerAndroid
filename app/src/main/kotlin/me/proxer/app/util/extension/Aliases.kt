@@ -8,3 +8,4 @@ import me.proxer.library.entitiy.info.EntryCore
  */
 
 typealias CompleteLocalMangaEntry = Pair<EntryCore, List<LocalMangaChapter>>
+typealias ProxerNotification = me.proxer.library.entitiy.notifications.Notification
