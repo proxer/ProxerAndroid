@@ -2,10 +2,10 @@ package me.proxer.app.news
 
 import android.app.Application
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.rxkotlin.plusAssign
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.base.PagedContentViewModel
-import me.proxer.app.util.extension.plus
 import me.proxer.library.api.PagingLimitEndpoint
 import me.proxer.library.entitiy.notifications.NewsArticle
 
@@ -20,7 +20,7 @@ class NewsViewModel(application: Application) : PagedContentViewModel<NewsArticl
         get() = api.notifications().news()
 
     init {
-        disposables + bus.register(NewsNotificationEvent::class.java)
+        disposables += bus.register(NewsNotificationEvent::class.java)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     if (isLoading.value != true) {

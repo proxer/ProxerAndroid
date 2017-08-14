@@ -8,6 +8,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.toFlowable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.bus
@@ -20,7 +21,6 @@ import me.proxer.app.manga.MangaLocks
 import me.proxer.app.util.Validators
 import me.proxer.app.util.extension.CompleteLocalMangaEntry
 import me.proxer.app.util.extension.getQuantityString
-import me.proxer.app.util.extension.plus
 import java.io.File
 import kotlin.concurrent.write
 
@@ -56,7 +56,7 @@ class LocalMangaViewModel(application: Application) : BaseViewModel<List<Complet
     init {
         updateJobInfo()
 
-        disposables + Observable
+        disposables += Observable
                 .merge(
                         bus.register(LocalMangaJob.StartedEvent::class.java),
                         bus.register(LocalMangaJob.FinishedEvent::class.java)
@@ -67,7 +67,7 @@ class LocalMangaViewModel(application: Application) : BaseViewModel<List<Complet
                     reload()
                 }
 
-        disposables + bus.register(LocalMangaJob.FailedEvent::class.java)
+        disposables += bus.register(LocalMangaJob.FailedEvent::class.java)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { updateJobInfo() }
     }
@@ -102,32 +102,34 @@ class LocalMangaViewModel(application: Application) : BaseViewModel<List<Complet
                 .subscribe { reload() }
     }
 
-    fun updateJobInfo() = disposables + Single
-            .fromCallable {
-                val runningJobs = LocalMangaJob.countRunningJobs()
-                val scheduledJobs = LocalMangaJob.countScheduledJobs()
-                var message = ""
+    fun updateJobInfo() {
+        disposables += Single
+                .fromCallable {
+                    val runningJobs = LocalMangaJob.countRunningJobs()
+                    val scheduledJobs = LocalMangaJob.countScheduledJobs()
+                    var message = ""
 
-                message += when (runningJobs > 0) {
-                    true -> globalContext.getQuantityString(R.plurals.fragment_local_manga_chapters_downloading,
-                            runningJobs)
-                    false -> ""
+                    message += when (runningJobs > 0) {
+                        true -> globalContext.getQuantityString(R.plurals.fragment_local_manga_chapters_downloading,
+                                runningJobs)
+                        false -> ""
+                    }
+
+                    message += when (runningJobs > 0 && scheduledJobs > 0) {
+                        true -> "\n"
+                        false -> ""
+                    }
+
+                    message += when (scheduledJobs > 0) {
+                        true -> globalContext.getQuantityString(R.plurals.fragment_local_manga_chapters_scheduled,
+                                scheduledJobs)
+                        false -> ""
+                    }
+
+                    (if (message.isBlank()) null else message).toOptional()
                 }
-
-                message += when (runningJobs > 0 && scheduledJobs > 0) {
-                    true -> "\n"
-                    false -> ""
-                }
-
-                message += when (scheduledJobs > 0) {
-                    true -> globalContext.getQuantityString(R.plurals.fragment_local_manga_chapters_scheduled,
-                            scheduledJobs)
-                    false -> ""
-                }
-
-                (if (message.isBlank()) null else message).toOptional()
-            }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { value -> jobInfo.value = value.toNullable() }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { value -> jobInfo.value = value.toNullable() }
+    }
 }

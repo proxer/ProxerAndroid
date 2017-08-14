@@ -8,6 +8,7 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.R
@@ -16,7 +17,6 @@ import me.proxer.app.auth.LogoutEvent
 import me.proxer.app.settings.AgeConfirmationEvent
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
-import me.proxer.app.util.extension.plus
 
 /**
  * @author Ruben Gees
@@ -36,15 +36,15 @@ abstract class BaseViewModel<T>(application: Application) : AndroidViewModel(app
     abstract protected val dataSingle: Single<T>
 
     init {
-        disposables + Observable.merge(bus.register(LoginEvent::class.java), bus.register(LogoutEvent::class.java))
+        disposables += Observable.merge(bus.register(LoginEvent::class.java), bus.register(LogoutEvent::class.java))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { if (isLoginRequired) reload() }
 
-        disposables + bus.register(AgeConfirmationEvent::class.java)
+        disposables += bus.register(AgeConfirmationEvent::class.java)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { if (isAgeConfirmationRequired) reload() }
 
-        disposables + bus.register(CaptchaSolvedEvent::class.java)
+        disposables += bus.register(CaptchaSolvedEvent::class.java)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     if (error.value?.message == R.string.error_captcha) {

@@ -10,8 +10,6 @@ import com.gojuno.koptional.toOptional
 import com.jakewharton.rxbinding2.support.v7.widget.scrollEvents
 import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.disposables.Disposable
-import io.reactivex.internal.disposables.DisposableContainer
 import me.proxer.app.util.ErrorUtils.PartialException
 import me.proxer.library.api.Endpoint
 import okhttp3.Call
@@ -112,10 +110,6 @@ fun Call.toBodySingle(): Single<String> = Single.create { emitter ->
             emitter.onError(error)
         }
     }
-}
-
-operator fun DisposableContainer.plus(disposable: Disposable) {
-    add(disposable)
 }
 
 fun RecyclerView.endScrolls(threshold: Int = 5): Observable<Unit> = scrollEvents()
