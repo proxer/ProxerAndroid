@@ -78,6 +78,7 @@ object NewsNotifications {
                         PendingIntent.FLAG_UPDATE_CURRENT))
                 .setColor(ContextCompat.getColor(context, R.color.primary))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setOnlyAlertOnce(true)
                 .setNumber(news.size)
                 .setStyle(style)
                 .build()

@@ -84,12 +84,10 @@ class NotificationJob : Job() {
                 .filter { it.date.after(lastNewsDate) }
                 .sortedByDescending { it.date }
 
-        newNews.firstOrNull()?.date?.let {
-            StorageHelper.lastNewsDate = it
-        }
-
-        if (!bus.post(NewsNotificationEvent())) {
-            NewsNotifications.showOrUpdate(context, newNews)
+        newNews.firstOrNull()?.date.let {
+            if (it != lastNewsDate && !bus.post(NewsNotificationEvent())) {
+                NewsNotifications.showOrUpdate(context, newNews)
+            }
         }
     }
 

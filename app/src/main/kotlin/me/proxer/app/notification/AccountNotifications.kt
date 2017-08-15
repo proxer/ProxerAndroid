@@ -98,6 +98,7 @@ object AccountNotifications {
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setCategory(NotificationCompat.CATEGORY_SOCIAL)
                 .setNumber(notifications.size)
+                .setOnlyAlertOnce(true)
                 .setStyle(style)
                 .build()
     }
