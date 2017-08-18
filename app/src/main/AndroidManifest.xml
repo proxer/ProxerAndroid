@@ -65,7 +65,7 @@
 
         <activity android:name=".notification.NotificationActivity" />
 
-        <!--<activity android:name=".activity.ChatActivity" />-->
+        <activity android:name=".chat.ChatActivity" />
 
         <!--<activity android:name=".activity.NewChatActivity" />-->
 
@@ -203,13 +203,12 @@
             android:name=".notification.AccountNotificationDeletionReceiver"
             android:exported="false" />
 
-        <!--<receiver-->
-        <!--android:name=".receiver.DirectReplyReceiver"-->
-        <!--android:exported="false">-->
-        <!--<intent-filter>-->
-        <!--<action android:name="me.proxer.app.ACTION_MESSAGE_REPLY" />-->
-        <!--</intent-filter>-->
-        <!--</receiver>-->
+        <receiver
+            android:name=".chat.sync.DirectReplyReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="me.proxer.app.ACTION_MESSAGE_REPLY" />
+            </intent-filter>
+        </receiver>
     </application>
-
 </manifest>

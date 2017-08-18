@@ -24,6 +24,7 @@ import me.proxer.app.auth.LogoutDialog
 import me.proxer.app.auth.LogoutEvent
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.bookmark.BookmarkFragment
+import me.proxer.app.chat.conference.ConferenceFragment
 import me.proxer.app.manga.local.LocalMangaFragment
 import me.proxer.app.media.list.MediaListFragment
 import me.proxer.app.news.NewsFragment
@@ -182,7 +183,7 @@ class MainActivity : BaseActivity() {
 
     private fun handleDrawerItemClick(item: DrawerItem) = when (item) {
         DrawerItem.NEWS -> setFragment(NewsFragment.newInstance(), R.string.section_news)
-        DrawerItem.CHAT -> Unit // setFragment(ConferencesFragment.newInstance(), R.string.section_chat)
+        DrawerItem.CHAT -> setFragment(ConferenceFragment.newInstance(), R.string.section_chat)
         DrawerItem.BOOKMARKS -> setFragment(BookmarkFragment.newInstance(), R.string.section_bookmarks)
         DrawerItem.ANIME -> setFragment(MediaListFragment.newInstance(Category.ANIME), R.string.section_anime)
         DrawerItem.MANGA -> setFragment(MediaListFragment.newInstance(Category.MANGA), R.string.section_manga)

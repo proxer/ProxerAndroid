@@ -21,39 +21,42 @@ abstract class BaseAdapter<T, VH : RecyclerView.ViewHolder> : RecyclerView.Adapt
     }
 
     override fun getItemCount() = data.size
+    open fun isEmpty() = data.isEmpty()
 
-    fun isEmpty() = data.isEmpty()
-
-    fun clearWithoutNotification() {
+    open fun clear() {
         data = emptyList()
     }
 
     fun clearAndNotifyRemoval() = itemCount.let {
-        data = emptyList()
+        clear()
 
         notifyItemRangeRemoved(0, it)
     }
 
     fun clearAndNotifyChange() {
-        data = emptyList()
+        clear()
 
         notifyDataSetChanged()
     }
 
-    fun swapDataAndNotifyInsertion(newData: List<T>) {
+    open fun swapData(newData: List<T>) {
         data = ArrayList(newData)
+    }
+
+    fun swapDataAndNotifyInsertion(newData: List<T>) {
+        swapData(newData)
 
         notifyItemRangeInserted(0, newData.size)
     }
 
     fun swapDataAndNotifyChange(newData: List<T>) {
-        data = ArrayList(newData)
+        swapData(newData)
 
         notifyDataSetChanged()
     }
 
     fun swapDataAndNotifyWithDiffResult(newData: List<T>, diffResult: DiffUtil.DiffResult) {
-        data = ArrayList(newData)
+        swapData(newData)
 
         diffResult.dispatchUpdatesTo(this)
     }

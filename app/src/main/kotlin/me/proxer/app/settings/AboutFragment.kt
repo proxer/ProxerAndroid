@@ -17,8 +17,11 @@ import com.mikepenz.aboutlibraries.LibsBuilder
 import com.mikepenz.aboutlibraries.LibsConfiguration
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
+import io.reactivex.Completable
+import me.proxer.app.MainApplication.Companion.chatDao
 import me.proxer.app.MainApplication.Companion.refWatcher
 import me.proxer.app.R
+import me.proxer.app.chat.ChatActivity
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.openHttpPage
@@ -147,14 +150,16 @@ class AboutFragment : MaterialAboutFragment() {
                     .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_email)
                             .colorRes(R.color.icon))
                     .setOnClickAction {
-                        //                            val existingChat = chatDb.findConferenceForUser(DEVELOPER_PROXER_NAME)
-//
-//                            when (existingChat) {
-//                                null -> {
+                        Completable.fromAction {
+                            val existingConference = chatDao.findConferenceForUser(DEVELOPER_PROXER_NAME)
+
+                            when (existingConference) {
+                                null -> {
 //                                    NewChatActivity.navigateTo(activity, false, Participant(DEVELOPER_PROXER_NAME))
-//                                }
-//                                else -> weakRef.get()?.let { ChatActivity.navigateTo(it.activity, existingChat) }
-//                            }
+                                }
+                                else -> ChatActivity.navigateTo(activity, existingConference)
+                            }
+                        }
                     }.build()
     )
 

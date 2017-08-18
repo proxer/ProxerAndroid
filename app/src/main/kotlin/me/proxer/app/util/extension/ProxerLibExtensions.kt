@@ -6,6 +6,8 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
 import me.proxer.app.anime.AnimeStream
+import me.proxer.app.chat.LocalConference
+import me.proxer.app.chat.LocalMessage
 import me.proxer.app.manga.local.LocalEntryCore
 import me.proxer.app.manga.local.LocalMangaChapter
 import me.proxer.app.manga.local.LocalMangaPage
@@ -15,6 +17,8 @@ import me.proxer.library.entitiy.info.EntrySeasonInfo
 import me.proxer.library.entitiy.info.Synonym
 import me.proxer.library.entitiy.manga.Chapter
 import me.proxer.library.entitiy.manga.Page
+import me.proxer.library.entitiy.messenger.Conference
+import me.proxer.library.entitiy.messenger.Message
 import me.proxer.library.enums.*
 import java.net.URLDecoder
 
@@ -209,3 +213,10 @@ fun Page.toLocalPage(id: Long = 0, chapterId: Long) = LocalMangaPage(id, name, h
 
 fun Stream.toAnimeStreamInfo(isSupported: Boolean) = AnimeStream(id, hoster, hosterName, image, uploaderId,
         uploaderName, date, translatorGroupId, translatorGroupName, isSupported)
+
+fun Conference.toLocalConference(isFullyLoaded: Boolean) = LocalConference(id.toLong(), topic,
+        customTopic, participantAmount, image, imageType, isGroup, isRead, isRead, date, unreadMessageAmount,
+        lastReadMessageId, isFullyLoaded)
+
+fun Message.toLocalMessage() = LocalMessage(id.toLong(), conferenceId.toLong(), userId, username, message, action,
+        date, device)

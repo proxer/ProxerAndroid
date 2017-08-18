@@ -28,6 +28,10 @@ import io.reactivex.schedulers.Schedulers
 import me.proxer.app.auth.LoginEvent
 import me.proxer.app.auth.LogoutEvent
 import me.proxer.app.auth.ProxerLoginTokenManager
+import me.proxer.app.chat.sync.ChatDao
+import me.proxer.app.chat.sync.ChatDatabase
+import me.proxer.app.chat.sync.ChatJob
+import me.proxer.app.chat.sync.ChatNotifications
 import me.proxer.app.manga.MangaLocks
 import me.proxer.app.manga.MangaNotifications
 import me.proxer.app.manga.local.LocalMangaDao
@@ -37,6 +41,7 @@ import me.proxer.app.notification.AccountNotifications
 import me.proxer.app.notification.NotificationJob
 import me.proxer.app.util.NotificationUtils
 import me.proxer.app.util.data.PreferenceHelper
+import me.proxer.app.util.data.StorageHelper
 import me.proxer.library.api.ProxerApi
 import me.proxer.library.api.ProxerApi.Builder.LoggingStrategy
 import okhttp3.OkHttpClient
@@ -60,10 +65,16 @@ class MainApplication : Application() {
         val client: OkHttpClient
             get() = api.client()
 
+        val chatDao: ChatDao
+            get() = chatDatabase.dao()
+
         val mangaDao: LocalMangaDao
             get() = mangaDatabase.dao()
 
         lateinit var api: ProxerApi
+            private set
+
+        lateinit var chatDatabase: ChatDatabase
             private set
 
         lateinit var mangaDatabase: LocalMangaDatabase
@@ -86,6 +97,7 @@ class MainApplication : Application() {
         AppCompatDelegate.setDefaultNightMode(PreferenceHelper.getNightMode(this))
         NotificationUtils.createNotificationChannels(this)
 
+        chatDatabase = Room.databaseBuilder(this, ChatDatabase::class.java, "chat.db").build()
         mangaDatabase = Room.databaseBuilder(this, LocalMangaDatabase::class.java, "manga.db").build()
 
         refWatcher = LeakCanary.install(this)
@@ -101,6 +113,7 @@ class MainApplication : Application() {
         bus.register(LoginEvent::class.java)
                 .subscribeOn(Schedulers.io())
                 .subscribe {
+                    ChatJob.scheduleSynchronizationIfPossible(this)
                     NotificationJob.scheduleIfPossible(this)
                 }
 
@@ -109,10 +122,16 @@ class MainApplication : Application() {
                 .subscribe {
                     AccountNotifications.cancel(this)
                     MangaNotifications.cancel(this)
+                    ChatNotifications.cancel(this)
 
+                    ChatJob.cancel()
                     LocalMangaJob.cancelAll()
 
+                    StorageHelper.areConferencesSynchronized = false
+                    StorageHelper.resetChatInterval()
+
                     mangaDatabase.clear()
+                    chatDatabase.clear()
 
                     MangaLocks.localLock.write {
                         File("${globalContext.filesDir}/manga").deleteRecursively()
@@ -139,7 +158,7 @@ class MainApplication : Application() {
         JobConfig.setLogcatEnabled(BuildConfig.DEBUG)
         JobManager.create(this).addJobCreator {
             when {
-//                it == ChatJob.TAG -> ChatJob()
+                it == ChatJob.TAG -> ChatJob()
                 it == NotificationJob.TAG -> NotificationJob()
                 it.startsWith(LocalMangaJob.TAG) -> LocalMangaJob()
                 else -> null

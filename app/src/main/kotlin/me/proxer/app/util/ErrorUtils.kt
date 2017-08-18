@@ -7,6 +7,7 @@ import me.proxer.app.R
 import me.proxer.app.anime.resolver.StreamResolutionException
 import me.proxer.app.auth.LoginDialog
 import me.proxer.app.base.BaseActivity
+import me.proxer.app.chat.sync.ChatJob.ChatException
 import me.proxer.app.settings.AgeConfirmationDialog
 import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_DEFAULT
@@ -95,7 +96,7 @@ object ErrorUtils {
 
     fun getInnermostError(error: Throwable) = when (error) {
         is PartialException -> error.innerError
-//            is ChatException -> error.innerError
+        is ChatException -> error.innerError
         is ExoPlaybackException -> error.cause ?: Exception()
         else -> error
     }

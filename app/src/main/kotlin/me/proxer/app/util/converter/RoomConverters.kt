@@ -65,4 +65,16 @@ class RoomConverters {
 
     @TypeConverter
     fun toLicense(value: String) = ProxerUtils.toApiEnum(License::class.java, value)
+
+    @TypeConverter
+    fun fromMessageAction(value: MessageAction) = ProxerUtils.getApiEnumName(value)
+
+    @TypeConverter
+    fun toMessageAction(value: String) = ProxerUtils.toApiEnum(MessageAction::class.java, value)
+
+    @TypeConverter
+    fun fromDevice(value: Device) = ProxerUtils.getApiEnumName(value)
+
+    @TypeConverter
+    fun toDevice(value: String) = ProxerUtils.toApiEnum(Device::class.java, value)
 }

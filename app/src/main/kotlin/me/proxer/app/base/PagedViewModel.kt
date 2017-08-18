@@ -14,7 +14,7 @@ abstract class PagedViewModel<T>(application: Application) : BaseViewModel<List<
 
     val refreshError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
 
-    protected var hasReachedEnd = false
+    protected open var hasReachedEnd = false
     protected var page = 0
 
     abstract protected val itemsOnPage: Int
@@ -30,11 +30,11 @@ abstract class PagedViewModel<T>(application: Application) : BaseViewModel<List<
                         when (existingData) {
                             null -> newData
                             else -> when (currentPage) {
-                                0 -> newData + existingData.filter { item ->
-                                    newData.find { oldItem -> areItemsTheSame(oldItem, item) } == null
+                                0 -> newData + existingData.filter { oldItem ->
+                                    newData.find { newItem -> areItemsTheSame(oldItem, newItem) } == null
                                 }
-                                else -> existingData.filter { item ->
-                                    newData.find { oldItem -> areItemsTheSame(oldItem, item) } == null
+                                else -> existingData.filter { oldItem ->
+                                    newData.find { newItem -> areItemsTheSame(oldItem, newItem) } == null
                                 } + newData
                             }
                         }

@@ -10,6 +10,7 @@ import android.view.View
 import io.reactivex.Completable
 import me.proxer.app.MainApplication.Companion.refWatcher
 import me.proxer.app.R
+import me.proxer.app.chat.sync.ChatJob
 import me.proxer.app.manga.MangaCleanDialog
 import me.proxer.app.notification.NotificationJob
 import me.proxer.app.util.data.PreferenceHelper
@@ -103,13 +104,13 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
             }
 
             NOTIFICATIONS_CHAT -> {
-//               Completable.fromAction { ChatJob.scheduleSynchronizationIfPossible(context) }.subscribe()
+                Completable.fromAction { ChatJob.scheduleSynchronizationIfPossible(context) }.subscribe()
             }
 
             NOTIFICATIONS_INTERVAL -> {
                 Completable.fromAction {
                     NotificationJob.scheduleIfPossible(context)
-//                    ChatJob.scheduleSynchronizationIfPossible(context)
+                    ChatJob.scheduleSynchronizationIfPossible(context)
                 }.subscribe()
             }
         }

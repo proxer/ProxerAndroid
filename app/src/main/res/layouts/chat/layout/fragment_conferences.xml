@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.chat.ConferencesFragment">
+    tools:context=".chat.conference.ConferenceFragment">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/progress"

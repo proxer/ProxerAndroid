@@ -10,8 +10,11 @@ import android.widget.ImageView
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
+import io.reactivex.Completable
+import me.proxer.app.MainApplication.Companion.chatDao
 import me.proxer.app.R
 import me.proxer.app.base.ImageTabsActivity
+import me.proxer.app.chat.ChatActivity
 import me.proxer.app.profile.comment.ProfileCommentFragment
 import me.proxer.app.profile.info.ProfileInfoFragment
 import me.proxer.app.profile.media.ProfileMediaListFragment
@@ -106,16 +109,16 @@ class ProfileActivity : ImageTabsActivity() {
             R.id.new_chat -> {
                 username?.let { safeUsername ->
                     image?.let { safeImage ->
-                        //                                    val existingChat = chatDb.findConferenceForUser(safeUsername)
-//
-//                                    when (existingChat) {
-//                                        null -> {
-//                                            weakRef.get()?.let {
-//                                                NewChatActivity.navigateTo(it, false, Participant(safeUsername, safeImage))
-//                                            }
-//                                        }
-//                                        else -> weakRef.get()?.let { ChatActivity.navigateTo(it, existingChat) }
-//                                    }
+                        Completable.fromAction {
+                            val existingChat = chatDao.findConferenceForUser(safeUsername)
+
+                            when (existingChat) {
+                                null -> {
+//                                    NewChatActivity.navigateTo(it, false, Participant(safeUsername, safeImage))
+                                }
+                                else -> ChatActivity.navigateTo(this, existingChat)
+                            }
+                        }
                     }
                 }
             }

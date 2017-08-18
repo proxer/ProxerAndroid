@@ -18,10 +18,10 @@ abstract class LocalMangaDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insertChapterAndPages(chapter: LocalMangaChapter, pages: List<LocalMangaPage>)
 
-    @Query("SELECT * FROM entries WHERE id = :entryId")
+    @Query("SELECT * FROM entries WHERE id = :entryId LIMIT 1")
     abstract fun findEntry(entryId: Long): LocalEntryCore?
 
-    @Query("SELECT * FROM chapters WHERE entryId = :entryId AND episode = :episode AND language = :language")
+    @Query("SELECT * FROM chapters WHERE entryId = :entryId AND episode = :episode AND language = :language LIMIT 1")
     abstract fun findChapter(entryId: Long, episode: Int, language: Language): LocalMangaChapter?
 
     @Query("SELECT * FROM entries")

@@ -50,7 +50,7 @@ object Utils {
     fun getBitmapFromUrl(context: Context, url: HttpUrl) = try {
         GlideApp.with(context)
                 .asBitmap()
-                .load(url)
+                .load(url.toString())
                 .submit(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
                 .get()
     } catch (ignored: Throwable) {
