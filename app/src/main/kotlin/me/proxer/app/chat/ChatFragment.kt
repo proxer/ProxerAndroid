@@ -193,11 +193,11 @@ class ChatFragment : PagedContentFragment<LocalMessage>() {
                     }
                 }
 
-//        innerAdapter.selectedMessages.let {
-//            if (it.isNotEmpty()) {
-//                adapterCallback.onMessageSelection(it.size)
-//            }
-//        }
+        innerAdapter.selectedMessages.let {
+            if (it.isNotEmpty()) {
+                innerAdapter.messageSelectionSubject.onNext(it.size)
+            }
+        }
     }
 
     override fun onResume() {

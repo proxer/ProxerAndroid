@@ -14,7 +14,7 @@ import me.proxer.app.util.extension.buildSingle
 class AccountNotificationDeletionReceiver : BroadcastReceiver() {
 
     companion object {
-        fun getPendingIntent(context: Context) = PendingIntent
+        fun getPendingIntent(context: Context): PendingIntent = PendingIntent
                 .getBroadcast(context, 0, Intent(context, AccountNotificationDeletionReceiver::class.java), 0)
     }
 

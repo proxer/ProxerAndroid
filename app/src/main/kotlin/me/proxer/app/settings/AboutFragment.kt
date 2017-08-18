@@ -18,6 +18,7 @@ import com.mikepenz.aboutlibraries.LibsConfiguration
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import io.reactivex.Completable
+import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.chatDao
 import me.proxer.app.MainApplication.Companion.refWatcher
 import me.proxer.app.R
@@ -150,16 +151,19 @@ class AboutFragment : MaterialAboutFragment() {
                     .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_email)
                             .colorRes(R.color.icon))
                     .setOnClickAction {
-                        Completable.fromAction {
-                            val existingConference = chatDao.findConferenceForUser(DEVELOPER_PROXER_NAME)
-
-                            when (existingConference) {
-                                null -> {
+                        Completable
+                                .fromAction {
+                                    chatDao.findConferenceForUser(DEVELOPER_PROXER_NAME).let { existingConference ->
+                                        when (existingConference) {
+                                            null -> {
 //                                    NewChatActivity.navigateTo(activity, false, Participant(DEVELOPER_PROXER_NAME))
+                                            }
+                                            else -> ChatActivity.navigateTo(activity, existingConference)
+                                        }
+                                    }
                                 }
-                                else -> ChatActivity.navigateTo(activity, existingConference)
-                            }
-                        }
+                                .subscribeOn(Schedulers.io())
+                                .subscribe()
                     }.build()
     )
 

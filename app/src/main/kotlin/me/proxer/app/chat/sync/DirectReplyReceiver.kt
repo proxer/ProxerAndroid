@@ -20,11 +20,9 @@ class DirectReplyReceiver : BroadcastReceiver() {
         private const val CONFERENCE_ID_EXTRA = "conference_id"
         private const val REPLY_ACTION = "${BuildConfig.APPLICATION_ID}.ACTION_MESSAGE_REPLY"
 
-        fun getMessageReplyIntent(conferenceId: Long): Intent {
-            return Intent().addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES)
-                    .setAction(REPLY_ACTION)
-                    .putExtra(CONFERENCE_ID_EXTRA, conferenceId)
-        }
+        fun getMessageReplyIntent(conferenceId: Long): Intent = Intent().addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES)
+                .setAction(REPLY_ACTION)
+                .putExtra(CONFERENCE_ID_EXTRA, conferenceId)
     }
 
     override fun onReceive(context: Context, intent: Intent) {

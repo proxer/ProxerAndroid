@@ -11,10 +11,13 @@ import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.MainApplication.Companion.chatDao
 import me.proxer.app.MainApplication.Companion.chatDatabase
 import me.proxer.app.base.PagedViewModel
+import me.proxer.app.chat.sync.ChatErrorEvent
 import me.proxer.app.chat.sync.ChatJob
 import me.proxer.app.chat.sync.ChatMessageEvent
 import me.proxer.app.chat.sync.ChatSynchronizationEvent
+import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
+import org.jetbrains.anko.collections.forEachReversedByIndex
 
 /**
  * @author Ruben Gees
@@ -26,7 +29,7 @@ class ChatViewModel(application: Application) : PagedViewModel<LocalMessage>(app
 
     override var hasReachedEnd
         get() = safeConference.isFullyLoaded
-        set(value) {}
+        set(value) = Unit
 
     override val dataSingle: Single<List<LocalMessage>>
         get() = Single.fromCallable { Validators.validateLogin() }
@@ -73,27 +76,32 @@ class ChatViewModel(application: Application) : PagedViewModel<LocalMessage>(app
                 .map { (_, newData) ->
                     data.value.let { existingData ->
                         if (existingData != null) {
+                            val result = mutableListOf<LocalMessage>()
                             val newDataCopy = newData.toMutableList()
 
-                            newData + existingData
-                                    .filter { oldMessage ->
-                                        if (oldMessage.id > 0) {
-                                            true
-                                        } else {
-                                            val newMessageIndex = newDataCopy.indexOfLast { newMessage ->
-                                                oldMessage.action == newMessage.action
-                                                        && oldMessage.message == newMessage.message
-                                            }
-
-                                            if (newMessageIndex >= 0) {
-                                                newDataCopy.removeAt(newMessageIndex)
-
-                                                false
-                                            } else {
-                                                true
-                                            }
-                                        }
+                            existingData.forEachReversedByIndex { existingMessage ->
+                                if (existingMessage.id > 0) {
+                                    result += existingMessage
+                                } else {
+                                    val newIndex = newDataCopy.indexOfLast { newMessage ->
+                                        existingMessage.action == newMessage.action
+                                                && existingMessage.message == newMessage.message
                                     }
+
+                                    if (newIndex >= 0) {
+                                        result += newDataCopy[newIndex]
+
+                                        newDataCopy.removeAt(newIndex)
+                                    } else {
+                                        result += existingMessage
+                                    }
+                                }
+                            }
+
+                            result.reverse()
+                            result.addAll(0, newDataCopy)
+
+                            result
                         } else {
                             newData
                         }
@@ -141,22 +149,22 @@ class ChatViewModel(application: Application) : PagedViewModel<LocalMessage>(app
                     data.value = it
                 }
 
-//        disposables += bus.register(ChatErrorEvent::class.java)
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe {
-//                    if (isLoading.value == true) {
-//                        dataDisposable?.dispose()
-//
-//                        isLoading.value = false
-//                        data.value = null
-//                        error.value = it
-//                    }
-//                }
+        disposables += bus.register(ChatErrorEvent::class.java)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { event: ChatErrorEvent ->
+                    if (event.error is ChatJob.ChatMessageException) {
+                        dataDisposable?.dispose()
 
-//        Completable
-//                .fromAction { if (!ChatJob.isRunning()) ChatJob.scheduleSynchronization() }
-//                .subscribeOn(Schedulers.io())
-//                .subscribe()
+                        isLoading.value = false
+                        error.value = ErrorUtils.handle(event.error)
+                    } else if (event.error is ChatJob.ChatSendMessageException) {
+                        data.value?.let { existingData ->
+                            existingData.find { event.error.id == it.id }?.let { invalidMessage ->
+                                data.value = existingData - invalidMessage
+                            }
+                        }
+                    }
+                }
     }
 
     fun sendMessage(text: String) {
@@ -173,11 +181,9 @@ class ChatViewModel(application: Application) : PagedViewModel<LocalMessage>(app
                 .doOnSuccess { if (!ChatJob.isRunning()) ChatJob.scheduleSynchronization() }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
+                .subscribe { it: List<LocalMessage> ->
                     data.value = it
-                }, {
-                    // TODO
-                })
+                }
     }
 
     override fun areItemsTheSame(old: LocalMessage, new: LocalMessage) = old.id == new.id

@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatDelegate
 import android.support.v7.preference.XpPreferenceFragment
 import android.view.View
 import io.reactivex.Completable
+import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.refWatcher
 import me.proxer.app.R
 import me.proxer.app.chat.sync.ChatJob
@@ -100,18 +101,25 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
             NOTIFICATIONS_NEWS, NOTIFICATIONS_ACCOUNT -> {
                 updateIntervalNotification()
 
-                Completable.fromAction { NotificationJob.scheduleIfPossible(context) }.subscribe()
+                Completable.fromAction { NotificationJob.scheduleIfPossible(context) }
+                        .subscribeOn(Schedulers.io())
+                        .subscribe()
             }
 
             NOTIFICATIONS_CHAT -> {
-                Completable.fromAction { ChatJob.scheduleSynchronizationIfPossible(context) }.subscribe()
+                Completable.fromAction { ChatJob.scheduleSynchronizationIfPossible(context) }
+                        .subscribeOn(Schedulers.io())
+                        .subscribe()
             }
 
             NOTIFICATIONS_INTERVAL -> {
-                Completable.fromAction {
-                    NotificationJob.scheduleIfPossible(context)
-                    ChatJob.scheduleSynchronizationIfPossible(context)
-                }.subscribe()
+                Completable
+                        .fromAction {
+                            NotificationJob.scheduleIfPossible(context)
+                            ChatJob.scheduleSynchronizationIfPossible(context)
+                        }
+                        .subscribeOn(Schedulers.io())
+                        .subscribe()
             }
         }
     }

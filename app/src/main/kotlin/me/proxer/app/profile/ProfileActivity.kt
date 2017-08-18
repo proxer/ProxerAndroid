@@ -11,6 +11,7 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import io.reactivex.Completable
+import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.chatDao
 import me.proxer.app.R
 import me.proxer.app.base.ImageTabsActivity
@@ -109,16 +110,19 @@ class ProfileActivity : ImageTabsActivity() {
             R.id.new_chat -> {
                 username?.let { safeUsername ->
                     image?.let { safeImage ->
-                        Completable.fromAction {
-                            val existingChat = chatDao.findConferenceForUser(safeUsername)
-
-                            when (existingChat) {
-                                null -> {
+                        Completable
+                                .fromAction {
+                                    val existingChat = chatDao.findConferenceForUser(safeUsername).let { existingChat ->
+                                        when (existingChat) {
+                                            null -> {
 //                                    NewChatActivity.navigateTo(it, false, Participant(safeUsername, safeImage))
+                                            }
+                                            else -> ChatActivity.navigateTo(this, existingChat)
+                                        }
+                                    }
                                 }
-                                else -> ChatActivity.navigateTo(this, existingChat)
-                            }
-                        }
+                                .subscribeOn(Schedulers.io())
+                                .subscribe()
                     }
                 }
             }

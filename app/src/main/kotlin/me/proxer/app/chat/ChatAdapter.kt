@@ -156,10 +156,8 @@ class ChatAdapter(savedInstanceState: Bundle?, private val isGroup: Boolean)
 
     override fun areItemsTheSame(old: LocalMessage, new: LocalMessage) = old.id == new.id
 
-    override fun areContentsTheSame(old: LocalMessage, new: LocalMessage): Boolean {
-        return old.message == new.message && old.userId == new.userId && old.action == new.action
-                && old.date == new.date
-    }
+    override fun areContentsTheSame(old: LocalMessage, new: LocalMessage) = old.userId == new.userId
+            && old.action == new.action && old.date == new.date && old.message == new.message
 
     override fun clear() {
         clearSelection()
@@ -236,33 +234,31 @@ class ChatAdapter(savedInstanceState: Bundle?, private val isGroup: Boolean)
             applyMargins(marginTop, marginBottom)
         }
 
-        open protected fun onContainerClick(v: View) {
-            withSafeAdapterPosition(this) {
-                val current = data[it]
-                val id = current.id.toString()
+        open protected fun onContainerClick(v: View) = withSafeAdapterPosition(this) {
+            val current = data[it]
+            val id = current.id.toString()
 
-                if (isSelecting) {
-                    if (messageSelectionMap[id] == true) {
-                        messageSelectionMap.remove(id)
+            if (isSelecting) {
+                if (messageSelectionMap[id] == true) {
+                    messageSelectionMap.remove(id)
 
-                        if (messageSelectionMap.size <= 0) {
-                            isSelecting = false
-                        }
-                    } else {
-                        messageSelectionMap.put(id, true)
+                    if (messageSelectionMap.size <= 0) {
+                        isSelecting = false
                     }
-
-                    messageSelectionSubject.onNext(messageSelectionMap.size)
                 } else {
-                    if (timeDisplayMap[id] == true) {
-                        timeDisplayMap.remove(id)
-                    } else {
-                        timeDisplayMap.put(id, true)
-                    }
+                    messageSelectionMap.put(id, true)
                 }
 
-                notifyDataSetChanged()
+                messageSelectionSubject.onNext(messageSelectionMap.size)
+            } else {
+                if (timeDisplayMap[id] == true) {
+                    timeDisplayMap.remove(id)
+                } else {
+                    timeDisplayMap.put(id, true)
+                }
             }
+
+            notifyDataSetChanged()
         }
 
         open protected fun onContainerLongClick(v: View): Boolean {
@@ -303,16 +299,14 @@ class ChatAdapter(savedInstanceState: Bundle?, private val isGroup: Boolean)
             time.text = message.date.convertToRelativeReadableTime(time.context)
         }
 
-        protected open fun applySendStatus(message: LocalMessage) {
-            if (message.id.toLong() < 0) {
-                text.setCompoundDrawablesWithIntrinsicBounds(null, null, IconicsDrawable(text.context)
-                        .icon(CommunityMaterial.Icon.cmd_clock)
-                        .sizeDp(24)
-                        .paddingDp(4)
-                        .colorRes(R.color.icon), null)
-            } else {
-                text.setCompoundDrawables(null, null, null, null)
-            }
+        protected open fun applySendStatus(message: LocalMessage) = if (message.id < 0) {
+            text.setCompoundDrawablesWithIntrinsicBounds(null, null, IconicsDrawable(text.context)
+                    .icon(CommunityMaterial.Icon.cmd_clock)
+                    .sizeDp(24)
+                    .paddingDp(4)
+                    .colorRes(R.color.icon), null)
+        } else {
+            text.setCompoundDrawables(null, null, null, null)
         }
 
         protected open fun applySelection(message: LocalMessage) {
@@ -358,20 +352,18 @@ class ChatAdapter(savedInstanceState: Bundle?, private val isGroup: Boolean)
 
     internal inner class ActionViewHolder(itemView: View) : MessageViewHolder(itemView) {
 
-        override fun onContainerClick(v: View) {
-            withSafeAdapterPosition(this) {
-                val current = data[it]
-                val id = current.id.toString()
+        override fun onContainerClick(v: View) = withSafeAdapterPosition(this) {
+            val current = data[it]
+            val id = current.id.toString()
 
-                if (timeDisplayMap[id] == true) {
-                    time.visibility = View.GONE
+            if (timeDisplayMap[id] == true) {
+                time.visibility = View.GONE
 
-                    timeDisplayMap.remove(id)
-                } else {
-                    time.visibility = View.VISIBLE
+                timeDisplayMap.remove(id)
+            } else {
+                time.visibility = View.VISIBLE
 
-                    timeDisplayMap.put(id, true)
-                }
+                timeDisplayMap.put(id, true)
             }
         }
 
@@ -384,18 +376,16 @@ class ChatAdapter(savedInstanceState: Bundle?, private val isGroup: Boolean)
                     })
         }
 
-        private fun generateText(message: LocalMessage): String {
-            return when (message.action) {
-                MessageAction.ADD_USER -> text.context.getString(R.string.action_conference_add_user,
-                        "@${message.username}", "@${message.message}")
-                MessageAction.REMOVE_USER -> text.context.getString(R.string.action_conference_delete_user,
-                        "@${message.username}", "@${message.message}")
-                MessageAction.SET_LEADER -> text.context.getString(R.string.action_conference_set_leader,
-                        "@${message.username}", "@${message.message}")
-                MessageAction.SET_TOPIC -> text.context.getString(R.string.action_conference_set_topic,
-                        "@${message.username}", message.message)
-                MessageAction.NONE -> message.message
-            }
+        private fun generateText(message: LocalMessage) = when (message.action) {
+            MessageAction.ADD_USER -> text.context.getString(R.string.action_conference_add_user,
+                    "@${message.username}", "@${message.message}")
+            MessageAction.REMOVE_USER -> text.context.getString(R.string.action_conference_delete_user,
+                    "@${message.username}", "@${message.message}")
+            MessageAction.SET_LEADER -> text.context.getString(R.string.action_conference_set_leader,
+                    "@${message.username}", "@${message.message}")
+            MessageAction.SET_TOPIC -> text.context.getString(R.string.action_conference_set_topic,
+                    "@${message.username}", message.message)
+            MessageAction.NONE -> message.message
         }
     }
 

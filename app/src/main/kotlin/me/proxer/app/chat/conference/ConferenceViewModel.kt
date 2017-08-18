@@ -43,8 +43,8 @@ class ConferenceViewModel(application: Application) : BaseViewModel<List<LocalCo
                         data.value.let { existingData ->
                             when (existingData) {
                                 null -> newData
-                                else -> newData + existingData.filter { oldItem ->
-                                    newData.find { newItem -> newItem.id == oldItem.id } == null
+                                else -> newData + existingData.filter { (oldId) ->
+                                    newData.find { (newId) -> newId == oldId } == null
                                 }
                             }
                         }

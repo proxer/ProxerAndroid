@@ -16,6 +16,9 @@ import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.toLocalConference
 import me.proxer.app.util.extension.toLocalMessage
+import me.proxer.library.api.ProxerException
+import me.proxer.library.api.ProxerException.ErrorType
+import me.proxer.library.api.ProxerException.ServerErrorType
 import me.proxer.library.entitiy.messenger.Conference
 import me.proxer.library.entitiy.messenger.Message
 import java.util.*
@@ -33,21 +36,15 @@ class ChatJob : Job() {
 
         private const val CONFERENCE_ID_EXTRA = "conference_id"
 
-        fun scheduleSynchronizationIfPossible(context: Context) {
-            if (canSchedule(context)) {
-                scheduleSynchronization()
-            } else {
-                cancel()
-            }
+        fun scheduleSynchronizationIfPossible(context: Context) = if (canSchedule(context)) {
+            scheduleSynchronization()
+        } else {
+            cancel()
         }
 
-        fun scheduleSynchronization() {
-            doSchedule(1L, 100L)
-        }
+        fun scheduleSynchronization() = doSchedule(1L, 100L)
 
-        fun scheduleMessageLoad(conferenceId: Long) {
-            doSchedule(1L, 100L, conferenceId)
-        }
+        fun scheduleMessageLoad(conferenceId: Long) = doSchedule(1L, 100L, conferenceId)
 
         fun cancel() {
             JobManager.instance().cancelAllForTag(TAG)
@@ -133,7 +130,7 @@ class ChatJob : Job() {
                     chatDao.insertMessages(messages)
 
                     val dataMap = conferences.associate { conference ->
-                        conference to messages.filter { it.conferenceId.toLong() == conference.id }
+                        conference to messages.filter { it.conferenceId == conference.id }
                     }
 
                     StorageHelper.areConferencesSynchronized = true
@@ -148,7 +145,10 @@ class ChatJob : Job() {
 
                     dataMap.isNotEmpty()
                 } catch (error: Throwable) {
-                    bus.post(ChatErrorEvent(ChatSynchronizationException(error)))
+                    when (error) {
+                        is ChatException -> bus.post(ChatErrorEvent(error))
+                        else -> bus.post(ChatErrorEvent(ChatSynchronizationException(error)))
+                    }
 
                     false
                 }
@@ -156,7 +156,10 @@ class ChatJob : Job() {
                     try {
                         fetchMoreMessagesAndInsert(conferenceId).let { bus.post(ChatMessageEvent(it)) }
                     } catch (error: Throwable) {
-                        bus.post(ChatErrorEvent(ChatMessageException(error)))
+                        when (error) {
+                            is ChatException -> bus.post(ChatErrorEvent(error))
+                            else -> bus.post(ChatErrorEvent(ChatMessageException(error)))
+                        }
                     }
 
                     false
@@ -170,28 +173,25 @@ class ChatJob : Job() {
     }
 
     //
-    private fun sendMessages() {
-        chatDao.getMessagesToSend().forEach {
-            val result = api.messenger().sendMessage(it.conferenceId.toString(), it.message)
-                    .build()
-                    .execute()
+    private fun sendMessages() = chatDao.getMessagesToSend().forEach {
+        val result = api.messenger().sendMessage(it.conferenceId.toString(), it.message)
+                .build()
+                .execute()
 
-            chatDao.deleteMessageToSend(it.id)
-            chatDao.markConferenceAsRead(it.conferenceId)
+        chatDao.deleteMessageToSend(it.id)
+        chatDao.markConferenceAsRead(it.conferenceId)
 
-            // Per documentation: The api may return some String in case something was wrong.
-            if (result != null) {
-                throw ChatSendMessageException(it.id.toString())
-            }
+        // Per documentation: The api may return some String in case something was wrong.
+        if (result != null) {
+            throw ChatSendMessageException(ProxerException(ErrorType.SERVER,
+                    ServerErrorType.MESSAGES_INVALID_MESSAGE, result), it.id)
         }
     }
 
-    private fun markConferencesAsRead() {
-        chatDao.getConferencesToMarkAsRead().forEach {
-            api.messenger().markConferenceAsRead(it.id.toString())
-                    .build()
-                    .execute()
-        }
+    private fun markConferencesAsRead() = chatDao.getConferencesToMarkAsRead().forEach {
+        api.messenger().markConferenceAsRead(it.id.toString())
+                .build()
+                .execute()
     }
 
     private fun fetchConferences(): Collection<Conference> {
@@ -311,5 +311,5 @@ class ChatJob : Job() {
     open class ChatException(val innerError: Throwable) : Exception()
     class ChatSynchronizationException(innerError: Throwable) : ChatException(innerError)
     class ChatMessageException(innerError: Throwable) : ChatException(innerError)
-    class ChatSendMessageException(val id: String) : Exception()
+    class ChatSendMessageException(innerError: Throwable, val id: Long) : ChatException(innerError)
 }
