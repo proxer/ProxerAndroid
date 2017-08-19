@@ -34,6 +34,7 @@ class MediaActivity : ImageTabsActivity() {
 
         private const val COMMENTS_SUB_SECTION = "comments"
         private const val EPISODES_SUB_SECTION = "episodes"
+        private const val EPISODES_ALTERNATIVE_SUB_SECTION = "list"
         private const val RELATIONS_SUB_SECTION = "relation"
 
         fun navigateTo(context: Activity, id: String, name: String? = null, category: Category? = null,
@@ -77,7 +78,7 @@ class MediaActivity : ImageTabsActivity() {
         get() = when (intent.action) {
             Intent.ACTION_VIEW -> when (intent.data.pathSegments.getOrNull(2)) {
                 COMMENTS_SUB_SECTION -> 1
-                EPISODES_SUB_SECTION -> 2
+                EPISODES_SUB_SECTION, EPISODES_ALTERNATIVE_SUB_SECTION -> 2
                 RELATIONS_SUB_SECTION -> 3
                 else -> 0
             }
