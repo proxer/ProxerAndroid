@@ -5,7 +5,7 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="me.proxer.app.fragment.chat.NewChatFragment">
+    tools:context=".chat.new.NewChatFragment">
 
     <RelativeLayout
         android:id="@+id/contentContainer"
@@ -112,7 +112,5 @@
             android:layout_marginLeft="@dimen/item_margin"
             android:layout_marginRight="@dimen/item_margin"
             android:layout_marginTop="@dimen/item_margin" />
-
     </RelativeLayout>
-
 </android.support.design.widget.CoordinatorLayout>

@@ -53,5 +53,4 @@
             app:fabSize="mini"
             app:srcCompat="@drawable/ic_send" />
     </LinearLayout>
-
 </android.support.v7.widget.CardView>

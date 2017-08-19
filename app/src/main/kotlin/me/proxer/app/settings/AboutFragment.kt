@@ -23,6 +23,8 @@ import me.proxer.app.MainApplication.Companion.chatDao
 import me.proxer.app.MainApplication.Companion.refWatcher
 import me.proxer.app.R
 import me.proxer.app.chat.ChatActivity
+import me.proxer.app.chat.Participant
+import me.proxer.app.chat.new.NewChatActivity
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.openHttpPage
@@ -155,9 +157,8 @@ class AboutFragment : MaterialAboutFragment() {
                                 .fromAction {
                                     chatDao.findConferenceForUser(DEVELOPER_PROXER_NAME).let { existingConference ->
                                         when (existingConference) {
-                                            null -> {
-//                                    NewChatActivity.navigateTo(activity, false, Participant(DEVELOPER_PROXER_NAME))
-                                            }
+                                            null -> NewChatActivity.navigateTo(activity, false,
+                                                    Participant(DEVELOPER_PROXER_NAME))
                                             else -> ChatActivity.navigateTo(activity, existingConference)
                                         }
                                     }

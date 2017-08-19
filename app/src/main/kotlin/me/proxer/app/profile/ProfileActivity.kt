@@ -16,6 +16,8 @@ import me.proxer.app.MainApplication.Companion.chatDao
 import me.proxer.app.R
 import me.proxer.app.base.ImageTabsActivity
 import me.proxer.app.chat.ChatActivity
+import me.proxer.app.chat.Participant
+import me.proxer.app.chat.new.NewChatActivity
 import me.proxer.app.profile.comment.ProfileCommentFragment
 import me.proxer.app.profile.info.ProfileInfoFragment
 import me.proxer.app.profile.media.ProfileMediaListFragment
@@ -112,11 +114,10 @@ class ProfileActivity : ImageTabsActivity() {
                     image?.let { safeImage ->
                         Completable
                                 .fromAction {
-                                    val existingChat = chatDao.findConferenceForUser(safeUsername).let { existingChat ->
+                                    chatDao.findConferenceForUser(safeUsername).let { existingChat ->
                                         when (existingChat) {
-                                            null -> {
-//                                    NewChatActivity.navigateTo(it, false, Participant(safeUsername, safeImage))
-                                            }
+                                            null -> NewChatActivity.navigateTo(this, false,
+                                                    Participant(safeUsername, safeImage))
                                             else -> ChatActivity.navigateTo(this, existingChat)
                                         }
                                     }
@@ -127,11 +128,11 @@ class ProfileActivity : ImageTabsActivity() {
                 }
             }
             R.id.new_group -> {
-//                            username?.let { safeUsername ->
-//                                image?.let { safeImage ->
-//                                    NewChatActivity.navigateTo(this, true, Participant(safeUsername, safeImage))
-//                                }
-//                            }
+                username?.let { safeUsername ->
+                    image?.let { safeImage ->
+                        NewChatActivity.navigateTo(this, true, Participant(safeUsername, safeImage))
+                    }
+                }
             }
         }
 

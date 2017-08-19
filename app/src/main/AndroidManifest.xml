@@ -67,7 +67,7 @@
 
         <activity android:name=".chat.ChatActivity" />
 
-        <!--<activity android:name=".activity.NewChatActivity" />-->
+        <activity android:name=".chat.new.NewChatActivity" />
 
         <activity android:name=".chat.conference.info.ConferenceInfoActivity" />
 

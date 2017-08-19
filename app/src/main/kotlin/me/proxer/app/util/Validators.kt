@@ -21,22 +21,6 @@ object Validators {
         }
     }
 
-//    fun validateNewChatInput(context: Context, input: NewChatTaskInput) {
-//        if (input.isGroup && input.topic.isBlank()) {
-//            throw TopicEmptyException()
-//        }
-//
-//        if (input.firstMessage.isBlank()) {
-//            throw InvalidInputException(context.getString(R.string.error_missing_message))
-//        }
-//
-//        if (input.participants.isEmpty()) {
-//            throw InvalidInputException(context.getString(R.string.error_missing_participants))
-//        }
-//    }
-
     class NotLoggedInException : Exception()
     class AgeConfirmationRequiredException : Exception()
-//    class TopicEmptyException : Exception()
-//    class InvalidInputException(message: String) : Exception(message)
 }

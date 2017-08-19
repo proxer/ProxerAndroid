@@ -15,6 +15,7 @@ import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.chat.ChatActivity
 import me.proxer.app.chat.LocalConference
+import me.proxer.app.chat.new.NewChatActivity
 import me.proxer.app.chat.sync.ChatNotifications
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
@@ -95,8 +96,8 @@ class ConferenceFragment : BaseContentFragment<List<LocalConference>>() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.new_chat -> Unit // NewChatActivity.navigateTo(activity, false)
-            R.id.new_group -> Unit // NewChatActivity.navigateTo(activity, true)
+            R.id.new_chat -> NewChatActivity.navigateTo(activity, false)
+            R.id.new_group -> NewChatActivity.navigateTo(activity, true)
         }
 
         return super.onOptionsItemSelected(item)
