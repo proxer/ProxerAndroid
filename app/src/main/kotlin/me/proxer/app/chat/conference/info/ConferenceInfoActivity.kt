@@ -1,40 +1,27 @@
-package me.proxer.app.chat
+package me.proxer.app.chat.conference.info
 
 import android.app.Activity
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
-import com.jakewharton.rxbinding2.view.clicks
-import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseActivity
-import me.proxer.app.chat.conference.info.ConferenceInfoActivity
-import me.proxer.app.profile.ProfileActivity
-import org.jetbrains.anko.intentFor
+import me.proxer.app.chat.LocalConference
 import org.jetbrains.anko.startActivity
 
-class ChatActivity : BaseActivity() {
+class ConferenceInfoActivity : BaseActivity() {
 
     companion object {
         private const val CONFERENCE_EXTRA = "conference"
 
         fun navigateTo(context: Activity, conference: LocalConference) {
-            context.startActivity<ChatActivity>(CONFERENCE_EXTRA to conference)
-        }
-
-        fun getIntent(context: Context, conference: LocalConference): Intent {
-            return context.intentFor<ChatActivity>(CONFERENCE_EXTRA to conference)
+            context.startActivity<ConferenceInfoActivity>(CONFERENCE_EXTRA to conference)
         }
     }
 
-    var conference: LocalConference
+    val conference: LocalConference
         get() = intent.getParcelableExtra(CONFERENCE_EXTRA)
-        set(value) {
-            intent.putExtra(CONFERENCE_EXTRA, value)
-        }
 
     private val toolbar: Toolbar by bindView(R.id.toolbar)
 
@@ -48,7 +35,7 @@ class ChatActivity : BaseActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, ChatFragment.newInstance())
+                    .replace(R.id.container, ConferenceInfoFragment.newInstance())
                     .commitNow()
         }
     }
@@ -68,14 +55,5 @@ class ChatActivity : BaseActivity() {
     private fun setupToolbar() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         title = conference.topic
-
-        toolbar.clicks()
-                .bindToLifecycle(this)
-                .subscribe {
-                    when (conference.isGroup) {
-                        true -> ConferenceInfoActivity.navigateTo(this, conference)
-                        false -> ProfileActivity.navigateTo(this, null, conference.topic, conference.image)
-                    }
-                }
     }
 }

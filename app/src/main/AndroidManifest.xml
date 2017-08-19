@@ -69,7 +69,7 @@
 
         <!--<activity android:name=".activity.NewChatActivity" />-->
 
-        <!--<activity android:name=".activity.ConferenceInfoActivity" />-->
+        <activity android:name=".chat.conference.info.ConferenceInfoActivity" />
 
         <activity android:name=".ucp.UcpActivity" />
 
