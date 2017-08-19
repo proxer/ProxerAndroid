@@ -15,10 +15,20 @@ import org.jetbrains.anko.bundleOf
  */
 abstract class BaseActivity : AppCompatActivity(), LifecycleRegistryOwner {
 
+    private companion object {
+        private const val STATE = "activity_state"
+    }
+
     private lateinit var lifecycleRegistry: LifecycleRegistry
     private lateinit var customTabsHelper: CustomTabsHelperFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // This needs to be called before super.onCreate(), because otherwise Fragments might not see the
+        // restored state on time.
+        savedInstanceState?.getBundle(STATE)?.let { state ->
+            intent.putExtras(state)
+        }
+
         super.onCreate(savedInstanceState)
 
         lifecycleRegistry = LifecycleRegistry(this)
@@ -26,6 +36,14 @@ abstract class BaseActivity : AppCompatActivity(), LifecycleRegistryOwner {
     }
 
     override fun getLifecycle() = lifecycleRegistry
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        intent.extras?.let { state ->
+            outState.putBundle(STATE, state)
+        }
+    }
 
     fun setLikelyUrl(url: HttpUrl) = customTabsHelper.mayLaunchUrl(url.androidUri(), bundleOf(), emptyList())
     fun showPage(url: HttpUrl) = customTabsHelper.openHttpPage(this, url)

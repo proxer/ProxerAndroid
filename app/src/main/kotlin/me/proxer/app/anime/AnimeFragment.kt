@@ -45,9 +45,6 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
         }
     }
 
-    private val animeActivity
-        get() = activity as AnimeActivity
-
     override val viewModel: AnimeViewModel by unsafeLazy {
         ViewModelProviders.of(this).get(AnimeViewModel::class.java).apply {
             entryId = this@AnimeFragment.id
@@ -55,30 +52,33 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
         }
     }
 
+    override val hostingActivity: AnimeActivity
+        get() = activity as AnimeActivity
+
     private val id: String
-        get() = animeActivity.id
+        get() = hostingActivity.id
 
     private var episode: Int
-        get() = animeActivity.episode
+        get() = hostingActivity.episode
         set(value) {
-            animeActivity.episode = value
+            hostingActivity.episode = value
 
             viewModel.setEpisode(value)
         }
 
     private val language: AnimeLanguage
-        get() = animeActivity.language
+        get() = hostingActivity.language
 
     private var name: String?
-        get() = animeActivity.name
+        get() = hostingActivity.name
         set(value) {
-            animeActivity.name = value
+            hostingActivity.name = value
         }
 
     private var episodeAmount: Int?
-        get() = animeActivity.episodeAmount
+        get() = hostingActivity.episodeAmount
         set(value) {
-            animeActivity.episodeAmount = value
+            hostingActivity.episodeAmount = value
         }
 
     private lateinit var innerAdapter: AnimeAdapter
