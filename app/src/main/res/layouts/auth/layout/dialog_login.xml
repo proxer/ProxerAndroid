@@ -60,8 +60,7 @@
         <android.support.design.widget.TextInputLayout
             android:id="@+id/secretContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:passwordToggleEnabled="true">
+            android:layout_height="wrap_content">
 
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/secret"
@@ -71,7 +70,7 @@
                 android:ems="10"
                 android:hint="@string/dialog_login_secret_hint"
                 android:imeOptions="actionGo"
-                android:inputType="number"
+                android:inputType="numberPassword"
                 android:maxLines="1"
                 android:visibility="gone"
                 tools:visibility="visible" />

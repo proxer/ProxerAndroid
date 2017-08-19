@@ -71,10 +71,11 @@ class LoginDialog : BaseDialog() {
                     .subscribe { setError(container, null) }
         }
 
+        secret.transformationMethod = null
+
         viewModel.data.observe(this, Observer {
             it?.let {
                 StorageHelper.user = LocalUser(it.loginToken, it.id, username.text.trim().toString(), it.image)
-                StorageHelper.isTwoFactorAuthenticationEnabled = secret.text.isNotBlank()
 
                 bus.post(LoginEvent())
 
