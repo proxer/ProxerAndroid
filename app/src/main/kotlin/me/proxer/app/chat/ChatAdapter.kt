@@ -159,6 +159,12 @@ class ChatAdapter(savedInstanceState: Bundle?, private val isGroup: Boolean)
     override fun areContentsTheSame(old: LocalMessage, new: LocalMessage) = old.userId == new.userId
             && old.action == new.action && old.date == new.date && old.message == new.message
 
+    override fun swapData(newData: List<LocalMessage>) {
+        super.swapData(newData)
+
+        messageSelectionSubject.onNext(messageSelectionMap.size)
+    }
+
     override fun clear() {
         clearSelection()
         timeDisplayMap.clear()

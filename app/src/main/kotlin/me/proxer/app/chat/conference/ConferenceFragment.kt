@@ -7,8 +7,10 @@ import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.*
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
+import io.reactivex.disposables.Disposable
 import kotterknife.bindView
 import me.proxer.app.GlideApp
+import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.chat.ChatActivity
@@ -35,6 +37,8 @@ class ConferenceFragment : BaseContentFragment<List<LocalConference>>() {
     }
 
     private lateinit var adapter: ConferenceAdapter
+
+    private var pingDisposable: Disposable? = null
 
     override val contentContainer: ViewGroup
         get() = recyclerView
@@ -72,6 +76,15 @@ class ConferenceFragment : BaseContentFragment<List<LocalConference>>() {
         super.onResume()
 
         ChatNotifications.cancel(context)
+
+        pingDisposable = bus.register(ConferenceFragmentPingEvent::class.java).subscribe()
+    }
+
+    override fun onPause() {
+        pingDisposable?.dispose()
+        pingDisposable = null
+
+        super.onPause()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater) {

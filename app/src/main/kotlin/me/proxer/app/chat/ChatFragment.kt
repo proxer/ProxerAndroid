@@ -18,7 +18,9 @@ import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
 import com.vanniktech.emoji.EmojiEditText
 import com.vanniktech.emoji.EmojiPopup
+import io.reactivex.disposables.Disposable
 import kotterknife.bindView
+import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.chat.sync.ChatNotifications
@@ -115,6 +117,8 @@ class ChatFragment : PagedContentFragment<LocalMessage>() {
     override val layoutManager by lazy { LinearLayoutManager(context).apply { reverseLayout = true } }
     override lateinit var innerAdapter: ChatAdapter
 
+    private var pingDisposable: Disposable? = null
+
     private val emojiButton: ImageButton by bindView(R.id.emojiButton)
     private val inputContainer: ViewGroup by bindView(R.id.inputContainer)
     private val messageInput: EmojiEditText by bindView(R.id.messageInput)
@@ -192,18 +196,21 @@ class ChatFragment : PagedContentFragment<LocalMessage>() {
                         }
                     }
                 }
-
-        innerAdapter.selectedMessages.let {
-            if (it.isNotEmpty()) {
-                innerAdapter.messageSelectionSubject.onNext(it.size)
-            }
-        }
     }
 
     override fun onResume() {
         super.onResume()
 
         ChatNotifications.cancel(context)
+
+        pingDisposable = bus.register(ChatFragmentPingEvent::class.java).subscribe()
+    }
+
+    override fun onPause() {
+        pingDisposable?.dispose()
+        pingDisposable = null
+
+        super.onPause()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

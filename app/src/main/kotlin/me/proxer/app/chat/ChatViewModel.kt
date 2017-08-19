@@ -58,8 +58,6 @@ class ChatViewModel(application: Application) : PagedViewModel<LocalMessage>(app
         get() = conference.value ?: throw NullPointerException("Conference cannot be null")
 
     init {
-        disposables += bus.register(ChatFragmentPingEvent::class.java).subscribe()
-
         disposables += bus.register(ChatSynchronizationEvent::class.java)
                 .flatMap {
                     val relevantConference = it.dataMap.entries.find { it.key.id == conference.value?.id }

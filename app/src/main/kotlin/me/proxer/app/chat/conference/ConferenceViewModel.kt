@@ -35,8 +35,6 @@ class ConferenceViewModel(application: Application) : BaseViewModel<List<LocalCo
                 }
 
     init {
-        disposables += bus.register(ConferenceFragmentPingEvent::class.java).subscribe()
-
         disposables += bus.register(ChatSynchronizationEvent::class.java)
                 .map {
                     it.dataMap.keys.let { newData ->
