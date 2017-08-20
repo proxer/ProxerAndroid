@@ -51,7 +51,7 @@ buildscript {
         exoplayerVersion = 'r2.5.1'
         materialProgressBarVersion = '1.4.1'
         materialRatingBarVersion = '1.0.2'
-        customtabsHelperVersion = '1.0.3'
+        customtabsHelperVersion = '1.0.4'
         introductionVersion = '1.4.1'
         materialBadgeViewVersion = 'master-SNAPSHOT'
 
