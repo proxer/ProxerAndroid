@@ -136,6 +136,7 @@ dependencies {
     implementation deps.customtabsHelper
     implementation deps.introduction
     implementation deps.materialBadgeView
+    implementation deps.aspectRatioImageView
 
     implementation deps.threeten
     implementation(deps.hawk) { exclude module: 'gson' }

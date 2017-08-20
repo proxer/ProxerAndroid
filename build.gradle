@@ -54,6 +54,7 @@ buildscript {
         customtabsHelperVersion = '1.0.4'
         introductionVersion = '1.4.1'
         materialBadgeViewVersion = 'master-SNAPSHOT'
+        aspectRatioImageViewVersion = '86be53edf0'
 
         // Utils
         threetenVersion = '1.0.5'
@@ -123,6 +124,7 @@ buildscript {
                 customtabsHelper             : "me.zhanghai.android.customtabshelper:library:$customtabsHelperVersion",
                 introduction                 : "com.github.rubengees:introduction:$introductionVersion",
                 materialBadgeView            : "com.github.matrixxun:MaterialBadgeTextView:$materialBadgeViewVersion",
+                aspectRatioImageView         : "com.github.santalu:aspect-ratio-imageview:$aspectRatioImageViewVersion",
 
                 threeten                     : "com.jakewharton.threetenabp:threetenabp:$threetenVersion",
                 hawk                         : "com.orhanobut:hawk:$hawkVersion",
