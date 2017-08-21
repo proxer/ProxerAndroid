@@ -23,9 +23,9 @@ import me.proxer.app.util.Validators
  */
 abstract class BaseViewModel<T>(application: Application) : AndroidViewModel(application) {
 
-    val data = MutableLiveData<T?>()
-    val error = MutableLiveData<ErrorUtils.ErrorAction?>()
-    val isLoading = MutableLiveData<Boolean?>()
+    open val data = MutableLiveData<T?>()
+    open val error = MutableLiveData<ErrorUtils.ErrorAction?>()
+    open val isLoading = MutableLiveData<Boolean?>()
 
     open protected val isLoginRequired = false
     open protected val isAgeConfirmationRequired = false

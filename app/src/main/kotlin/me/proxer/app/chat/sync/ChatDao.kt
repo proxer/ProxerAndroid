@@ -1,5 +1,6 @@
 package me.proxer.app.chat.sync
 
+import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.OnConflictStrategy
@@ -23,7 +24,10 @@ abstract class ChatDao {
     abstract fun insertMessage(message: LocalMessage): Long
 
     @Query("SELECT * FROM conferences ORDER BY date DESC")
-    abstract fun getConferences(): List<LocalConference>
+    abstract fun getConferencesLiveData(): LiveData<List<LocalConference>?>
+
+    @Query("SELECT * FROM conferences WHERE id = :id LIMIT 1")
+    abstract fun getConferenceLiveData(id: Long): LiveData<LocalConference?>
 
     @Query("SELECT * FROM conferences WHERE isRead = 0 ORDER BY id DESC")
     abstract fun getUnreadConferences(): List<LocalConference>
@@ -37,8 +41,10 @@ abstract class ChatDao {
     @Query("SELECT * FROM conferences WHERE topic = :username LIMIT 1")
     abstract fun findConferenceForUser(username: String): LocalConference?
 
-    @Query("SELECT * FROM messages WHERE conferenceId = :conferenceId ORDER BY id DESC")
-    abstract fun getMessagesForConference(conferenceId: Long): List<LocalMessage>
+    @Query("SELECT * FROM (SELECT * FROM messages WHERE conferenceId = :conferenceId AND id < 0 ORDER BY id ASC) " +
+            "UNION ALL " +
+            "SELECT * FROM (SELECT * FROM messages WHERE conferenceId = :conferenceId AND id >= 0 ORDER BY id DESC)")
+    abstract fun getMessagesLiveDataForConference(conferenceId: Long): LiveData<List<LocalMessage>>
 
     @Query("SELECT COUNT(*) FROM messages WHERE conferenceId = :conferenceId AND id = :lastReadMessageId")
     abstract fun getUnreadMessageAmountForConference(conferenceId: Long, lastReadMessageId: Long): Int
@@ -55,7 +61,7 @@ abstract class ChatDao {
     @Query("SELECT MIN(id) FROM messages")
     abstract fun findLowestMessageId(): Long?
 
-    @Query("SELECT * FROM messages WHERE id < 0 ORDER BY id ASC")
+    @Query("SELECT * FROM messages WHERE id < 0 ORDER BY id DESC")
     abstract fun getMessagesToSend(): List<LocalMessage>
 
     @Query("DELETE FROM messages WHERE id = :messageId")

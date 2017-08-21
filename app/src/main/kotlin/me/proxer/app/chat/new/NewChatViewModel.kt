@@ -11,6 +11,7 @@ import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.MainApplication.Companion.bus
+import me.proxer.app.MainApplication.Companion.chatDao
 import me.proxer.app.chat.LocalConference
 import me.proxer.app.chat.Participant
 import me.proxer.app.chat.sync.ChatErrorEvent
@@ -43,7 +44,7 @@ class NewChatViewModel(application: Application?) : AndroidViewModel(application
                     newConferenceId.let { newConferenceId ->
                         when (newConferenceId) {
                             null -> Observable.never()
-                            else -> newData.dataMap.keys.find { it.id == newConferenceId }.let { foundConference ->
+                            else -> chatDao.findConference(newConferenceId).let { foundConference ->
                                 when (foundConference) {
                                     null -> Observable.never()
                                     else -> Observable.just(foundConference)

@@ -8,6 +8,7 @@ import com.evernote.android.job.util.support.PersistableBundleCompat
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.MainApplication.Companion.chatDao
+import me.proxer.app.MainApplication.Companion.chatDatabase
 import me.proxer.app.chat.ChatFragmentPingEvent
 import me.proxer.app.chat.LocalConference
 import me.proxer.app.chat.LocalMessage
@@ -111,39 +112,43 @@ class ChatJob : Job() {
         val changes = conferenceId.let { conferenceId ->
             when (conferenceId) {
                 0L -> try {
-                    sendMessages()
+                    val deletedMessages = sendMessages()
+
                     markConferencesAsRead()
 
-                    val fetchedConferences = fetchConferences()
-                    val fetchedMessages = fetchedConferences.map { fetchNewMessages(it) }
+                    val conferencesAndMessages = fetchConferences().associate { conference ->
+                        fetchNewMessages(conference).let { (messages, isFullyLoaded) ->
+                            val isLocallyFullyLoaded = chatDao.findConference(conference.id.toLong())
+                                    ?.isFullyLoaded == true
 
-                    val conferences = fetchedConferences.mapIndexed { index, it ->
-                        it.toLocalConference(fetchedMessages[index].second
-                                || chatDao.findConference(it.id.toLong())?.isFullyLoaded == true)
+                            conference.toLocalConference(isLocallyFullyLoaded || isFullyLoaded) to
+                                    messages.map { it.toLocalMessage() }.asReversed()
+                        }
                     }
 
-                    val messages = fetchedMessages.flatMap { it.first }
-                            .map { it.toLocalMessage() }
-                            .asReversed()
+                    chatDatabase.runInTransaction {
+                        deletedMessages.forEach {
+                            chatDao.deleteMessageToSend(it.id)
+                            chatDao.markConferenceAsRead(it.conferenceId)
+                        }
 
-                    chatDao.insertConferences(conferences)
-                    chatDao.insertMessages(messages)
-
-                    val dataMap = conferences.associate { conference ->
-                        conference to messages.filter { it.conferenceId == conference.id }
+                        conferencesAndMessages.let {
+                            chatDao.insertConferences(it.keys.toList())
+                            chatDao.insertMessages(it.values.flatten())
+                        }
                     }
 
                     StorageHelper.areConferencesSynchronized = true
 
-                    if (dataMap.isNotEmpty()) {
-                        bus.post(ChatSynchronizationEvent(dataMap))
+                    if (conferencesAndMessages.isNotEmpty()) {
+                        bus.post(ChatSynchronizationEvent())
 
                         if (canShowNotification(context)) {
-                            showNotification(context, conferences)
+                            showNotification(context, conferencesAndMessages.keys)
                         }
                     }
 
-                    dataMap.isNotEmpty()
+                    conferencesAndMessages.isNotEmpty()
                 } catch (error: Throwable) {
                     when (error) {
                         is ChatException -> bus.post(ChatErrorEvent(error))
@@ -154,15 +159,25 @@ class ChatJob : Job() {
                 }
                 else -> {
                     try {
-                        fetchMoreMessagesAndInsert(conferenceId).let { bus.post(ChatMessageEvent(it)) }
+                        val fetchedMessages = fetchMoreMessages(conferenceId)
+
+                        chatDatabase.runInTransaction {
+                            chatDao.insertMessages(fetchedMessages.map { it.toLocalMessage() })
+
+                            if (fetchedMessages.size < MESSAGES_ON_PAGE) {
+                                chatDao.markConferenceAsFullyLoaded(conferenceId)
+                            }
+                        }
+
+                        true
                     } catch (error: Throwable) {
                         when (error) {
                             is ChatException -> bus.post(ChatErrorEvent(error))
                             else -> bus.post(ChatErrorEvent(ChatMessageException(error)))
                         }
-                    }
 
-                    false
+                        false
+                    }
                 }
             }
         }
@@ -172,19 +187,28 @@ class ChatJob : Job() {
         return Result.SUCCESS
     }
 
-    //
-    private fun sendMessages() = chatDao.getMessagesToSend().forEach {
-        val result = api.messenger().sendMessage(it.conferenceId.toString(), it.message)
-                .build()
-                .execute()
+    private fun sendMessages(): List<LocalMessage> {
+        return chatDao.getMessagesToSend().apply {
+            forEachIndexed { index, (messageId, conferenceId, _, _, message) ->
+                val result = api.messenger().sendMessage(conferenceId.toString(), message)
+                        .build()
+                        .execute()
 
-        chatDao.deleteMessageToSend(it.id)
-        chatDao.markConferenceAsRead(it.conferenceId)
+                // Per documentation: The api may return some String in case something went wrong.
+                if (result != null) {
 
-        // Per documentation: The api may return some String in case something was wrong.
-        if (result != null) {
-            throw ChatSendMessageException(ProxerException(ErrorType.SERVER,
-                    ServerErrorType.MESSAGES_INVALID_MESSAGE, result), it.id)
+                    // Delete all messages we have correctly sent already.
+                    for (i in 0..index) {
+                        get(i).let { (idToDelete, conferenceIdToMarkAsRead) ->
+                            chatDao.deleteMessageToSend(idToDelete)
+                            chatDao.markConferenceAsRead(conferenceIdToMarkAsRead)
+                        }
+                    }
+
+                    throw ChatSendMessageException(ProxerException(ErrorType.SERVER,
+                            ServerErrorType.MESSAGES_INVALID_MESSAGE, result), messageId)
+                }
+            }
         }
     }
 
@@ -275,26 +299,14 @@ class ChatJob : Job() {
         }
     }
 
-    private fun fetchMoreMessagesAndInsert(conferenceId: Long): Pair<LocalConference, List<LocalMessage>> {
-        val fetchedMessages = api.messenger().messages()
+    private fun fetchMoreMessages(conferenceId: Long): List<Message> {
+        return api.messenger().messages()
                 .conferenceId(conferenceId.toString())
                 .messageId(chatDao.findOldestMessageForConference(conferenceId)?.id?.toString() ?: "0")
                 .markAsRead(false)
                 .build()
                 .execute()
                 .asReversed()
-
-        val insertedMessages = chatDao.insertMessages(fetchedMessages.map { it.toLocalMessage() })
-                .mapIndexed { index, _ -> fetchedMessages[index].toLocalMessage() }
-
-        if (fetchedMessages.size < MESSAGES_ON_PAGE) {
-            chatDao.markConferenceAsFullyLoaded(conferenceId)
-        }
-
-        val conference = chatDao.findConference(conferenceId)
-                ?: throw IllegalStateException("Conference (id: $conferenceId) cannot be null.")
-
-        return conference to insertedMessages
     }
 
     private fun showNotification(context: Context, changedConferences: Collection<LocalConference>) {

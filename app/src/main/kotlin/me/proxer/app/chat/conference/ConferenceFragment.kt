@@ -111,7 +111,7 @@ class ConferenceFragment : BaseContentFragment<List<LocalConference>>() {
                 adapter.clearAndNotifyRemoval()
 
                 if (adapter.isEmpty()) {
-                    showError(ErrorAction(R.string.error_no_data_conferences, R.string.error_action_new_chat))
+                    showError(ErrorAction(R.string.error_no_data_conferences, ErrorAction.ACTION_MESSAGE_HIDE))
                 }
             }
             else -> {
