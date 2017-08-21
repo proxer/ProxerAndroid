@@ -11,7 +11,6 @@ import me.proxer.app.MainApplication.Companion.chatDao
 import me.proxer.app.MainApplication.Companion.chatDatabase
 import me.proxer.app.chat.ChatFragmentPingEvent
 import me.proxer.app.chat.LocalConference
-import me.proxer.app.chat.LocalMessage
 import me.proxer.app.chat.conference.ConferenceFragmentPingEvent
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
@@ -141,7 +140,7 @@ class ChatJob : Job() {
                     StorageHelper.areConferencesSynchronized = true
 
                     if (conferencesAndMessages.isNotEmpty()) {
-                        bus.post(ChatSynchronizationEvent())
+                        bus.post(SynchronizationEvent())
 
                         if (canShowNotification(context)) {
                             showNotification(context, conferencesAndMessages.keys)
@@ -187,27 +186,25 @@ class ChatJob : Job() {
         return Result.SUCCESS
     }
 
-    private fun sendMessages(): List<LocalMessage> {
-        return chatDao.getMessagesToSend().apply {
-            forEachIndexed { index, (messageId, conferenceId, _, _, message) ->
-                val result = api.messenger().sendMessage(conferenceId.toString(), message)
-                        .build()
-                        .execute()
+    private fun sendMessages() = chatDao.getMessagesToSend().apply {
+        forEachIndexed { index, (messageId, conferenceId, _, _, message) ->
+            val result = api.messenger().sendMessage(conferenceId.toString(), message)
+                    .build()
+                    .execute()
 
-                // Per documentation: The api may return some String in case something went wrong.
-                if (result != null) {
+            // Per documentation: The api may return some String in case something went wrong.
+            if (result != null) {
 
-                    // Delete all messages we have correctly sent already.
-                    for (i in 0..index) {
-                        get(i).let { (idToDelete, conferenceIdToMarkAsRead) ->
-                            chatDao.deleteMessageToSend(idToDelete)
-                            chatDao.markConferenceAsRead(conferenceIdToMarkAsRead)
-                        }
+                // Delete all messages we have correctly sent already.
+                for (i in 0..index) {
+                    get(i).let { (idToDelete, conferenceIdToMarkAsRead) ->
+                        chatDao.deleteMessageToSend(idToDelete)
+                        chatDao.markConferenceAsRead(conferenceIdToMarkAsRead)
                     }
-
-                    throw ChatSendMessageException(ProxerException(ErrorType.SERVER,
-                            ServerErrorType.MESSAGES_INVALID_MESSAGE, result), messageId)
                 }
+
+                throw ChatSendMessageException(ProxerException(ErrorType.SERVER,
+                        ServerErrorType.MESSAGES_INVALID_MESSAGE, result), messageId)
             }
         }
     }
@@ -299,15 +296,13 @@ class ChatJob : Job() {
         }
     }
 
-    private fun fetchMoreMessages(conferenceId: Long): List<Message> {
-        return api.messenger().messages()
-                .conferenceId(conferenceId.toString())
-                .messageId(chatDao.findOldestMessageForConference(conferenceId)?.id?.toString() ?: "0")
-                .markAsRead(false)
-                .build()
-                .execute()
-                .asReversed()
-    }
+    private fun fetchMoreMessages(conferenceId: Long) = api.messenger().messages()
+            .conferenceId(conferenceId.toString())
+            .messageId(chatDao.findOldestMessageForConference(conferenceId)?.id?.toString() ?: "0")
+            .markAsRead(false)
+            .build()
+            .execute()
+            .asReversed()
 
     private fun showNotification(context: Context, changedConferences: Collection<LocalConference>) {
         val unreadMap = chatDao.getUnreadConferences()
@@ -319,6 +314,8 @@ class ChatJob : Job() {
 
         ChatNotifications.showOrUpdate(context, unreadMap)
     }
+
+    class SynchronizationEvent
 
     open class ChatException(val innerError: Throwable) : Exception()
     class ChatSynchronizationException(innerError: Throwable) : ChatException(innerError)

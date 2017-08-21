@@ -16,7 +16,6 @@ import me.proxer.app.chat.LocalConference
 import me.proxer.app.chat.Participant
 import me.proxer.app.chat.sync.ChatErrorEvent
 import me.proxer.app.chat.sync.ChatJob
-import me.proxer.app.chat.sync.ChatSynchronizationEvent
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.extension.buildSingle
@@ -39,8 +38,8 @@ class NewChatViewModel(application: Application?) : AndroidViewModel(application
     private var disposables = CompositeDisposable()
 
     init {
-        disposables += bus.register(ChatSynchronizationEvent::class.java)
-                .flatMap { newData ->
+        disposables += bus.register(ChatJob.SynchronizationEvent::class.java)
+                .flatMap {
                     newConferenceId.let { newConferenceId ->
                         when (newConferenceId) {
                             null -> Observable.never()

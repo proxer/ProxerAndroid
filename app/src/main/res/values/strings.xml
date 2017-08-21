@@ -115,11 +115,10 @@
     <string name="error_action_login">Anmelden</string>
     <string name="error_action_confirm">Bestätigen</string>
 
-    <string name="error_notification_removal">Die Benachrichtigung konnte nicht gelöscht werden: %s</string>
-    <string name="error_bookmark_removal">Das Lesezeichen konnte nicht entfernt werden: %s</string>
+    <string name="error_set_user_info">Eintrag konnte nicht aktualisiert werden: %s</string>
+    <string name="error_notification_deletion">Die Benachrichtigung konnte nicht gelöscht werden: %s</string>
+    <string name="error_bookmark_deletion">Das Lesezeichen konnte nicht entfernt werden: %s</string>
     <string name="error_topten_entry_removal">Der Eintrag konnte nicht entfernt werden: %s</string>
-    <string name="error_local_manga_removal">Der Manga konnte nicht entfernt werden: %s</string>
-    <string name="error_activity_not_found">Keine App zur Anzeige gefunden</string>
 
     <string name="medium_anime_series">Animeserie</string>
     <string name="medium_hentai">Hentai</string>
@@ -266,7 +265,6 @@
     <string name="fragment_media_info_tags_spoiler_show">Spoiler Tags anzeigen</string>
     <string name="fragment_media_info_tags_unrated_hide">Unbewertete Tags verstecken</string>
     <string name="fragment_media_info_tags_unrated_show">Unbewertete Tags anzeigen</string>
-    <string name="fragment_set_user_info_error">Eintrag konnte nicht aktualisiert werden: %s</string>
     <string name="fragment_set_user_info_success">Eintrag wurde aktualisiert</string>
 
     <string name="fragment_topten_anime">Anime</string>

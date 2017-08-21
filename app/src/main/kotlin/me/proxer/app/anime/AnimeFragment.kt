@@ -187,7 +187,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
 
         viewModel.bookmarkError.observe(this, Observer {
             it?.let {
-                multilineSnackbar(root, getString(R.string.fragment_set_user_info_error, getString(it.message)),
+                multilineSnackbar(root, getString(R.string.error_set_user_info, getString(it.message)),
                         Snackbar.LENGTH_LONG, it.buttonMessage, it.buttonAction?.toClickListener(hostingActivity))
             }
         })
