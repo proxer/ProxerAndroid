@@ -47,14 +47,14 @@ buildscript {
         materialDialogsVersion = '0.9.4.7'
         flexboxVersion = '0.3.0'
         emojiIosVersion = '0.5.1'
-        exomediaVersion = 'dff7b531bb'
+        exomediaVersion = 'c611808b8c'
         exoplayerVersion = 'r2.5.1'
         materialProgressBarVersion = '1.4.1'
         materialRatingBarVersion = '1.0.2'
         customtabsHelperVersion = '1.0.4'
         introductionVersion = '1.4.1'
         materialBadgeViewVersion = 'master-SNAPSHOT'
-        aspectRatioImageViewVersion = '86be53edf0'
+        aspectRatioImageViewVersion = '1.0.1'
 
         // Utils
         threetenVersion = '1.0.5'
