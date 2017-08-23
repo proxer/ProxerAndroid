@@ -54,12 +54,12 @@ buildscript {
         customtabsHelperVersion = '1.0.4'
         introductionVersion = '1.4.1'
         materialBadgeViewVersion = 'master-SNAPSHOT'
-        aspectRatioImageViewVersion = '1.0.1'
+        aspectRatioImageViewVersion = 'd02b8ba775'
 
         // Utils
         threetenVersion = '1.0.5'
         hawkVersion = '2.0.1'
-        glideVersion = '4.0.0'
+        glideVersion = '4.1.0-SNAPSHOT'
         okHttpVersion = '3.9.0-SNAPSHOT'
         okioVersion = '1.13.0'
         linkBuilderVersion = '1.6.1'

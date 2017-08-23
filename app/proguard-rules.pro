@@ -92,6 +92,9 @@
 -keep public class * extends com.bumptech.glide.module.AppGlideModule
 -keep class com.bumptech.glide.GeneratedAppGlideModuleImpl
 
+-dontwarn com.bumptech.glide.R
+-dontwarn com.bumptech.glide.integration.okhttp.R
+
 # Iconics
 -keepclassmembernames enum * implements com.mikepenz.iconics.typeface.IIcon { *; }
 
