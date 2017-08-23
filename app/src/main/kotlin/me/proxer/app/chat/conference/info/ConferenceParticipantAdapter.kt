@@ -61,7 +61,7 @@ class ConferenceParticipantAdapter : BaseAdapter<ConferenceParticipant, ViewHold
         init {
             status.movementMethod = TouchableMovementMethod.getInstance()
 
-            itemView.setOnClickListener { view ->
+            itemView.setOnClickListener {
                 withSafeAdapterPosition(this) {
                     participantClickSubject.onNext(image to data[it])
                 }
