@@ -203,6 +203,13 @@ inline val Page.decodedName: String
         ""
     }
 
+inline val LocalMangaPage.decodedName: String
+    get() = try {
+        URLDecoder.decode(name, "UTF-8")
+    } catch (error: Throwable) {
+        ""
+    }
+
 fun EntryCore.toLocalEntryCore() = LocalEntryCore(id.toLong(), name, genres, fskConstraints, description, medium,
         episodeAmount, state, ratingSum, ratingAmount, clicks, category, license)
 

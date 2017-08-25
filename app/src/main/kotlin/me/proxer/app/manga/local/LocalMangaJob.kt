@@ -9,7 +9,6 @@ import com.evernote.android.job.util.support.PersistableBundleCompat
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.MainApplication.Companion.mangaDao
-import me.proxer.app.manga.MangaNotifications
 import me.proxer.app.manga.MangaPageSingle
 import me.proxer.app.manga.MangaPageSingle.Input
 import me.proxer.app.util.data.PreferenceHelper
@@ -22,6 +21,8 @@ import me.proxer.library.api.ProxerException
 import me.proxer.library.api.ProxerException.ServerErrorType
 import me.proxer.library.enums.Language
 import me.proxer.library.util.ProxerUtils
+import org.threeten.bp.LocalDateTime
+import java.util.concurrent.CancellationException
 
 /**
  * @author Ruben Gees
@@ -36,8 +37,11 @@ class LocalMangaJob : Job() {
         private const val LANGUAGE_EXTRA = "language"
 
         private val lock = Any()
-        private var lastTime = 0L
+        private var lastTime = LocalDateTime.now()
         private var ongoing = 0
+
+        private var maxBatchProgress = 0
+        private var batchProgress = 0
 
         fun schedule(context: Context, entryId: String, episode: Int, language: Language) {
             val isUnmeteredRequired = PreferenceHelper.isUnmeteredNetworkRequiredForMangaDownload(context)
@@ -108,8 +112,8 @@ class LocalMangaJob : Job() {
 
         synchronized(lock, {
             when {
-                System.currentTimeMillis() > lastTime + 40 * 1000 -> {
-                    lastTime = System.currentTimeMillis()
+                LocalDateTime.now().isAfter(lastTime.plusSeconds(40)) -> {
+                    lastTime = LocalDateTime.now()
                     ongoing = 1
                 }
                 ongoing <= 6 -> ongoing++
@@ -117,7 +121,9 @@ class LocalMangaJob : Job() {
             }
         })
 
-        try {
+        var batchProgressToAdd = 0
+
+        return try {
             bus.post(StartedEvent())
 
             if (mangaDao.countEntries(entryId.toLong()) <= 0) {
@@ -128,34 +134,49 @@ class LocalMangaJob : Job() {
             val pages = chapter.pages.map { it.toLocalPage(chapterId = chapter.id.toLong()) }
             var error: Throwable? = null
 
-            for (it in chapter.pages) {
-                if (error != null) {
-                    throw error
-                }
+            batchProgressToAdd += pages.size
+            maxBatchProgress += pages.size
 
-                if (isCanceled) {
-                    return Result.FAILURE
-                }
-
+            for (it in pages) {
                 MangaPageSingle(context, true, Input(chapter.server, entryId, chapter.id, it.decodedName))
                         .subscribe({}, { error = it })
+
+                error?.let { throw it }
+                if (isCanceled) throw CancellationException()
+
+                batchProgress += 1
+
+                LocalMangaNotifications.showOrUpdate(context, maxBatchProgress, batchProgress)
             }
 
             mangaDao.insertChapterAndPages(chapter.toLocalChapter(episode, language), pages)
             bus.post(FinishedEvent(entryId, episode, language))
 
-            return Result.SUCCESS
+            Result.SUCCESS
         } catch (error: Throwable) {
             val isIpBlockedError = error is ProxerException && error.serverErrorType == ServerErrorType.IP_BLOCKED
 
-            return if (isIpBlockedError || params.failureCount >= 1) {
-                bus.post(FailedEvent(entryId, episode, language))
+            when {
+                isIpBlockedError || params.failureCount >= 1 -> {
+                    bus.post(FailedEvent(entryId, episode, language))
 
-                MangaNotifications.showError(context, error)
+                    LocalMangaNotifications.showError(context, error)
 
-                Result.FAILURE
-            } else {
-                Result.RESCHEDULE
+                    Result.FAILURE
+                }
+                isCanceled -> {
+                    bus.post(FailedEvent(entryId, episode, language))
+
+                    LocalMangaNotifications.cancel(context)
+
+                    Result.FAILURE
+                }
+                else -> Result.RESCHEDULE
+            }
+        } finally {
+            if (countRunningJobs() + countScheduledJobs() <= 1) {
+                maxBatchProgress = 0
+                batchProgress = 0
             }
         }
     }

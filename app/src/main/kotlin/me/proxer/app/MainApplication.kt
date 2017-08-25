@@ -33,10 +33,10 @@ import me.proxer.app.chat.sync.ChatDatabase
 import me.proxer.app.chat.sync.ChatJob
 import me.proxer.app.chat.sync.ChatNotifications
 import me.proxer.app.manga.MangaLocks
-import me.proxer.app.manga.MangaNotifications
 import me.proxer.app.manga.local.LocalMangaDao
 import me.proxer.app.manga.local.LocalMangaDatabase
 import me.proxer.app.manga.local.LocalMangaJob
+import me.proxer.app.manga.local.LocalMangaNotifications
 import me.proxer.app.notification.AccountNotifications
 import me.proxer.app.notification.NotificationJob
 import me.proxer.app.util.NotificationUtils
@@ -121,7 +121,7 @@ class MainApplication : Application() {
                 .subscribeOn(Schedulers.io())
                 .subscribe {
                     AccountNotifications.cancel(this)
-                    MangaNotifications.cancel(this)
+                    LocalMangaNotifications.cancel(this)
                     ChatNotifications.cancel(this)
 
                     ChatJob.cancel()

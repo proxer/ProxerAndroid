@@ -204,6 +204,10 @@
             android:exported="false" />
 
         <receiver
+            android:name=".manga.local.LocalMangaDownloadCancelReceiver"
+            android:exported="false" />
+
+        <receiver
             android:name=".chat.sync.DirectReplyReceiver"
             android:exported="false">
             <intent-filter>

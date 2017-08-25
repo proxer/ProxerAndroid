@@ -370,13 +370,16 @@
     </plurals>
 
     <string name="notification_account_title">Account Benachrichtigung</string>
+    <string name="notification_account_error_title">Fehler beim Abrufen der Benachrichtigungen</string>
     <plurals name="notification_account_amount">
         <item quantity="one">Eine Benachrichtigung</item>
         <item quantity="other">%d Benachrichtigungen</item>
     </plurals>
 
-    <string name="notification_account_error_title">Fehler beim Abrufen der Benachrichtigungen</string>
+    <string name="notification_manga_download_progress_title">Manga Download</string>
+    <string name="notification_manga_download_finished_content">Download abgeschlossen</string>
     <string name="notification_manga_download_error_title">Fehler beim Manga Download</string>
+    <string name="notification_manga_download_cancel_action">Abbrechen</string>
 
     <string name="category_anime_episodes_title">Episoden</string>
     <string name="category_manga_episodes_title">Kapitel</string>
