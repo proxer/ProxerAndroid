@@ -15,6 +15,7 @@ import me.proxer.app.chat.sync.ChatErrorEvent
 import me.proxer.app.chat.sync.ChatJob
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
+import me.proxer.app.util.data.StorageHelper
 
 /**
  * @author Ruben Gees
@@ -25,12 +26,14 @@ class ConferenceViewModel(application: Application) : BaseViewModel<List<LocalCo
 
     override val data = MediatorLiveData<List<LocalConference>?>().apply {
         this.addSource(chatDao.getConferencesLiveData(), {
-            if (error.value == null) {
-                dataDisposable?.dispose()
+            it?.let {
+                if (error.value == null && StorageHelper.user != null) {
+                    dataDisposable?.dispose()
 
-                isLoading.value = false
-                error.value = null
-                this.value = it
+                    isLoading.value = false
+                    error.value = null
+                    this.value = it
+                }
             }
         })
     }

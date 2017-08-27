@@ -15,6 +15,7 @@ import me.proxer.app.chat.sync.ChatErrorEvent
 import me.proxer.app.chat.sync.ChatJob
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
+import me.proxer.app.util.data.StorageHelper
 
 /**
  * @author Ruben Gees
@@ -37,6 +38,8 @@ class ChatViewModel(application: Application) : PagedViewModel<LocalMessage>(app
 
             addSource(source, {
                 it?.let {
+                    if (StorageHelper.user == null) return@let
+
                     if (it.isEmpty() && !safeConference.isFullyLoaded) {
                         ChatJob.scheduleMessageLoad(safeConference.id)
                     } else {
