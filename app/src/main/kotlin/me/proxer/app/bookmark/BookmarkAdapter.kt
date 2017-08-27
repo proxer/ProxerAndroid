@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import io.reactivex.subjects.PublishSubject
@@ -17,11 +16,7 @@ import kotterknife.bindView
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
-import me.proxer.app.util.extension.toAppDrawable
-import me.proxer.app.util.extension.toAppString
-import me.proxer.app.util.extension.toEpisodeAppString
-import me.proxer.app.util.extension.toGeneralLanguage
-import me.proxer.app.view.GlideGrayscaleTransformation
+import me.proxer.app.util.extension.*
 import me.proxer.library.entitiy.ucp.Bookmark
 import me.proxer.library.util.ProxerUrls
 
@@ -108,14 +103,7 @@ class BookmarkAdapter : BaseAdapter<Bookmark, BookmarkAdapter.ViewHolder>() {
             episode.setCompoundDrawablesWithIntrinsicBounds(null, null, availabilityIndicator, null)
             language.setImageDrawable(item.language.toGeneralLanguage().toAppDrawable(language.context))
 
-            glide?.load(ProxerUrls.entryImage(item.entryId).toString())
-                    ?.transition(DrawableTransitionOptions.withCrossFade())
-                    ?.apply {
-                        if (!item.isAvailable) {
-                            transform(GlideGrayscaleTransformation())
-                        }
-                    }
-                    ?.into(image)
+            glide?.defaultLoad(image, ProxerUrls.entryImage(item.entryId))
         }
     }
 }
