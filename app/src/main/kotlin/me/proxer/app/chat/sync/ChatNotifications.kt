@@ -115,7 +115,10 @@ object ChatNotifications {
         }
 
         val amount = messages.size
-        val content = context.getQuantityString(R.plurals.notification_chat_message_amount, amount)
+        val content = when (amount) {
+            1 -> messages.first().message
+            else -> context.getQuantityString(R.plurals.notification_chat_message_amount, amount)
+        }
 
         val icon = when {
             conference.image.isNotBlank() -> Utils.getBitmapFromUrl(context, ProxerUrls.userImage(conference.image))
@@ -133,7 +136,7 @@ object ChatNotifications {
 
                 NotificationCompat.BigTextStyle()
                         .setBigContentTitle(conference.topic)
-                        .setSummaryText(content)
+                        .setSummaryText(context.getQuantityString(R.plurals.notification_chat_message_amount, amount))
                         .bigText(when (conference.isGroup) {
                             true -> SpannableString("$username $message").apply {
                                 setSpan(StyleSpan(Typeface.BOLD), 0, username.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
