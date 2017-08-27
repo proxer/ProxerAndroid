@@ -25,6 +25,7 @@ import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.chat.sync.ChatNotifications
 import me.proxer.app.profile.ProfileActivity
+import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Utils
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.clipboardManager
@@ -193,6 +194,8 @@ class ChatFragment : PagedContentFragment<LocalMessage>() {
                             viewModel.sendMessage(text)
 
                             messageInput.text.clear()
+
+                            scrollToTop()
                         }
                     }
                 }
@@ -238,6 +241,16 @@ class ChatFragment : PagedContentFragment<LocalMessage>() {
 
         super.hideData()
     }
+
+    override fun showError(action: ErrorUtils.ErrorAction) {
+        super.showError(action)
+
+        if (innerAdapter.isEmpty()) {
+            inputContainer.visibility = View.GONE
+        }
+    }
+
+    override fun isAtTop() = layoutManager.findFirstVisibleItemPosition() == 0
 
     private fun generateEmojiDrawable(iconicRes: IIcon) = IconicsDrawable(context)
             .icon(iconicRes)

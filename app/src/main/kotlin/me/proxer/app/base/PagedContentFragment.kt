@@ -168,17 +168,7 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
         adapter.footer = null
     }
 
-    private fun updateRecyclerViewPadding() = when (innerAdapter.itemCount <= 0 && adapter.footer != null) {
-        true -> recyclerView.setPadding(0, 0, 0, 0)
-        false -> {
-            val horizontalPadding = DeviceUtils.getHorizontalMargin(context)
-            val verticalPadding = DeviceUtils.getVerticalMargin(context)
-
-            recyclerView.setPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
-        }
-    }
-
-    private fun isAtTop() = layoutManager.let {
+    open protected fun isAtTop() = layoutManager.let {
         when (it) {
             is StaggeredGridLayoutManager -> it.findFirstCompletelyVisibleItemPositions(null).contains(0)
             is LinearLayoutManager -> it.findFirstCompletelyVisibleItemPosition() == 0
@@ -186,10 +176,20 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
         }
     }
 
-    private fun scrollToTop() = layoutManager.let {
+    open protected fun scrollToTop() = layoutManager.let {
         when (it) {
             is StaggeredGridLayoutManager -> it.scrollToPositionWithOffset(0, 0)
             is LinearLayoutManager -> it.scrollToPositionWithOffset(0, 0)
+        }
+    }
+
+    private fun updateRecyclerViewPadding() = when (innerAdapter.itemCount <= 0 && adapter.footer != null) {
+        true -> recyclerView.setPadding(0, 0, 0, 0)
+        false -> {
+            val horizontalPadding = DeviceUtils.getHorizontalMargin(context)
+            val verticalPadding = DeviceUtils.getVerticalMargin(context)
+
+            recyclerView.setPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
         }
     }
 }
