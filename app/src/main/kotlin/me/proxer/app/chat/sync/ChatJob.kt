@@ -113,9 +113,12 @@ class ChatJob : Job() {
                 0L -> try {
                     val deletedMessages = sendMessages()
 
-                    markConferencesAsRead()
+                    markConferencesAsRead(chatDao.getConferencesToMarkAsRead()
+                            .plus(deletedMessages.map { chatDao.findConference(it.conferenceId) })
+                            .distinct()
+                            .filterNotNull())
 
-                    val conferencesAndMessages = fetchConferences().associate { conference ->
+                    val newConferencesAndMessages = fetchConferences().associate { conference ->
                         fetchNewMessages(conference).let { (messages, isFullyLoaded) ->
                             val isLocallyFullyLoaded = chatDao.findConference(conference.id.toLong())
                                     ?.isFullyLoaded == true
@@ -126,28 +129,28 @@ class ChatJob : Job() {
                     }
 
                     chatDatabase.runInTransaction {
+                        newConferencesAndMessages.let {
+                            chatDao.insertConferences(it.keys.toList())
+                            chatDao.insertMessages(it.values.flatten())
+                        }
+
                         deletedMessages.forEach {
                             chatDao.deleteMessageToSend(it.id)
                             chatDao.markConferenceAsRead(it.conferenceId)
-                        }
-
-                        conferencesAndMessages.let {
-                            chatDao.insertConferences(it.keys.toList())
-                            chatDao.insertMessages(it.values.flatten())
                         }
                     }
 
                     StorageHelper.areConferencesSynchronized = true
 
-                    if (conferencesAndMessages.isNotEmpty()) {
+                    if (newConferencesAndMessages.isNotEmpty()) {
                         bus.post(SynchronizationEvent())
 
                         if (canShowNotification(context)) {
-                            showNotification(context, conferencesAndMessages.keys)
+                            showNotification(context)
                         }
                     }
 
-                    conferencesAndMessages.isNotEmpty()
+                    newConferencesAndMessages.isNotEmpty()
                 } catch (error: Throwable) {
                     when (error) {
                         is ChatException -> bus.post(ChatErrorEvent(error))
@@ -209,7 +212,7 @@ class ChatJob : Job() {
         }
     }
 
-    private fun markConferencesAsRead() = chatDao.getConferencesToMarkAsRead().forEach {
+    private fun markConferencesAsRead(conferenceToMarkAsRead: List<LocalConference>) = conferenceToMarkAsRead.forEach {
         api.messenger().markConferenceAsRead(it.id.toString())
                 .build()
                 .execute()
@@ -304,13 +307,10 @@ class ChatJob : Job() {
             .execute()
             .asReversed()
 
-    private fun showNotification(context: Context, changedConferences: Collection<LocalConference>) {
-        val unreadMap = chatDao.getUnreadConferences()
-                .plus(changedConferences)
-                .distinct()
-                .associate {
-                    it to chatDao.getMostRecentMessagesForConference(it.id, it.unreadMessageAmount).asReversed()
-                }
+    private fun showNotification(context: Context) {
+        val unreadMap = chatDao.getUnreadConferences().associate {
+            it to chatDao.getMostRecentMessagesForConference(it.id, it.unreadMessageAmount).asReversed()
+        }
 
         ChatNotifications.showOrUpdate(context, unreadMap)
     }
