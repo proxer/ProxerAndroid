@@ -9,6 +9,7 @@ import com.evernote.android.job.util.support.PersistableBundleCompat
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.MainApplication.Companion.mangaDao
+import me.proxer.app.MainApplication.Companion.mangaDatabase
 import me.proxer.app.manga.MangaPageSingle
 import me.proxer.app.manga.MangaPageSingle.Input
 import me.proxer.app.util.data.PreferenceHelper
@@ -40,8 +41,8 @@ class LocalMangaJob : Job() {
         private var lastTime = LocalDateTime.now()
         private var ongoing = 0
 
-        private var maxBatchProgress = 0
-        private var batchProgress = 0
+        private var maxBatchProgress = 0F
+        private var batchProgress = 0F
 
         fun schedule(context: Context, entryId: String, episode: Int, language: Language) {
             val isUnmeteredRequired = PreferenceHelper.isUnmeteredNetworkRequiredForMangaDownload(context)
@@ -50,6 +51,9 @@ class LocalMangaJob : Job() {
                 putInt(EPISODE_EXTRA, episode)
                 putString(LANGUAGE_EXTRA, ProxerUtils.getApiEnumName(language))
             }
+
+            maxBatchProgress += 100F
+            LocalMangaNotifications.showOrUpdate(context, maxBatchProgress, batchProgress)
 
             JobRequest.Builder(constructTag(entryId, episode, language))
                     .setExtras(extras)
@@ -106,50 +110,47 @@ class LocalMangaJob : Job() {
                 ?: throw IllegalArgumentException("No extras passed")
 
     override fun onRunJob(params: Params): Result {
-        if (StorageHelper.user == null) {
-            return Result.FAILURE
-        }
-
-        synchronized(lock, {
-            when {
-                LocalDateTime.now().isAfter(lastTime.plusSeconds(40)) -> {
-                    lastTime = LocalDateTime.now()
-                    ongoing = 1
-                }
-                ongoing <= 6 -> ongoing++
-                else -> return Result.RESCHEDULE
-            }
-        })
-
-        var batchProgressToAdd = 0
-
         return try {
+            if (StorageHelper.user == null) return Result.FAILURE
+
+            synchronized(lock, {
+                when {
+                    LocalDateTime.now().isAfter(lastTime.plusSeconds(40)) -> {
+                        lastTime = LocalDateTime.now()
+                        ongoing = 1
+                    }
+                    ongoing <= 6 -> ongoing++
+                    else -> return Result.RESCHEDULE
+                }
+            })
+
             bus.post(StartedEvent())
 
-            if (mangaDao.countEntries(entryId.toLong()) <= 0) {
-                mangaDao.insertEntry(api.info().entryCore(entryId).build().execute().toLocalEntryCore())
+            val entry = when (mangaDao.countEntries(entryId.toLong()) <= 0) {
+                true -> api.info().entryCore(entryId).build().execute().toLocalEntryCore()
+                false -> null
             }
 
             val chapter = api.manga().chapter(entryId, episode, language).build().execute()
             val pages = chapter.pages.map { it.toLocalPage(chapterId = chapter.id.toLong()) }
             var error: Throwable? = null
 
-            batchProgressToAdd += pages.size
-            maxBatchProgress += pages.size
-
-            for (it in pages) {
+            pages.forEachIndexed { index, it ->
                 MangaPageSingle(context, true, Input(chapter.server, entryId, chapter.id, it.decodedName))
                         .subscribe({}, { error = it })
 
                 error?.let { throw it }
                 if (isCanceled) throw CancellationException()
 
-                batchProgress += 1
-
+                batchProgress += 100F / pages.size
                 LocalMangaNotifications.showOrUpdate(context, maxBatchProgress, batchProgress)
             }
 
-            mangaDao.insertChapterAndPages(chapter.toLocalChapter(episode, language), pages)
+            mangaDatabase.runInTransaction {
+                entry?.let { entry -> mangaDao.insertEntry(entry) }
+                mangaDao.insertChapterAndPages(chapter.toLocalChapter(episode, language), pages)
+            }
+
             bus.post(FinishedEvent(entryId, episode, language))
 
             Result.SUCCESS
@@ -175,8 +176,8 @@ class LocalMangaJob : Job() {
             }
         } finally {
             if (countRunningJobs() + countScheduledJobs() <= 1) {
-                maxBatchProgress = 0
-                batchProgress = 0
+                maxBatchProgress = 0F
+                batchProgress = 0F
             }
         }
     }

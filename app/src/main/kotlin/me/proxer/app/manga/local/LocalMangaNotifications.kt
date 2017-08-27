@@ -25,8 +25,8 @@ object LocalMangaNotifications {
     private const val ID = 54354345
     private const val ERROR_ID = 479239223
 
-    fun showOrUpdate(context: Context, maxProgress: Int, currentProgress: Int) {
-        val isFinished = currentProgress >= maxProgress
+    fun showOrUpdate(context: Context, maxProgress: Float, currentProgress: Float) {
+        val isFinished = currentProgress.toInt() >= maxProgress.toInt()
         val notificationBuilder = NotificationCompat.Builder(context, MANGA_CHANNEL)
                 .setContentTitle(context.getString(R.string.notification_manga_download_progress_title))
                 .setContentIntent(PendingIntent.getActivity(context, 0,
@@ -35,7 +35,6 @@ object LocalMangaNotifications {
                 .setColor(ContextCompat.getColor(context, R.color.primary))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setCategory(NotificationCompat.CATEGORY_PROGRESS)
-                .setOngoing(true)
 
         when (isFinished) {
             true -> notificationBuilder
@@ -43,11 +42,13 @@ object LocalMangaNotifications {
                     .setProgress(0, 0, false)
                     .setContentText(context.getString(R.string.notification_manga_download_finished_content))
                     .setAutoCancel(true)
+                    .setOngoing(false)
             false -> notificationBuilder
                     .setSmallIcon(android.R.drawable.stat_sys_download)
-                    .setProgress(maxProgress, currentProgress, false)
+                    .setProgress(maxProgress.toInt(), currentProgress.toInt(), false)
                     .setContentText(null)
                     .setAutoCancel(false)
+                    .setOngoing(true)
                     .addAction(NotificationCompat.Action.Builder(android.R.drawable.ic_menu_close_clear_cancel,
                             context.getString(R.string.notification_manga_download_cancel_action),
                             LocalMangaDownloadCancelReceiver.getPendingIntent(context)).build())
