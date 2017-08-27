@@ -18,7 +18,11 @@ class LocalMangaDownloadCancelReceiver : BroadcastReceiver() {
     }
 
     override fun onReceive(context: Context, intent: Intent?) {
-        Completable.fromAction { LocalMangaJob.cancelAll() }
+        Completable
+                .fromAction {
+                    LocalMangaJob.cancelAll()
+                    LocalMangaNotifications.cancelProgress(context)
+                }
                 .subscribeOn(Schedulers.io())
                 .subscribe()
     }

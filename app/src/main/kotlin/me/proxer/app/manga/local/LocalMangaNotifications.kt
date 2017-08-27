@@ -26,7 +26,10 @@ object LocalMangaNotifications {
     private const val ERROR_ID = 479239223
 
     fun showOrUpdate(context: Context, maxProgress: Float, currentProgress: Float) {
-        val isFinished = currentProgress.toInt() >= maxProgress.toInt()
+        val roundedMaxProgress = Math.floor(maxProgress.toDouble()).toInt()
+        val roundedCurrentProgress = Math.ceil(currentProgress.toDouble()).toInt()
+
+        val isFinished = currentProgress >= roundedMaxProgress
         val notificationBuilder = NotificationCompat.Builder(context, MANGA_CHANNEL)
                 .setContentTitle(context.getString(R.string.notification_manga_download_progress_title))
                 .setContentIntent(PendingIntent.getActivity(context, 0,
@@ -39,15 +42,12 @@ object LocalMangaNotifications {
         when (isFinished) {
             true -> notificationBuilder
                     .setSmallIcon(android.R.drawable.stat_sys_download_done)
-                    .setProgress(0, 0, false)
                     .setContentText(context.getString(R.string.notification_manga_download_finished_content))
                     .setAutoCancel(true)
-                    .setOngoing(false)
             false -> notificationBuilder
                     .setSmallIcon(android.R.drawable.stat_sys_download)
-                    .setProgress(maxProgress.toInt(), currentProgress.toInt(), false)
-                    .setContentText(null)
-                    .setAutoCancel(false)
+                    .setProgress(roundedMaxProgress, roundedCurrentProgress, false)
+                    .setSubText("${(currentProgress / maxProgress * 100).toInt()}%")
                     .setOngoing(true)
                     .addAction(NotificationCompat.Action.Builder(android.R.drawable.ic_menu_close_clear_cancel,
                             context.getString(R.string.notification_manga_download_cancel_action),
@@ -74,6 +74,10 @@ object LocalMangaNotifications {
         NotificationUtils.showErrorNotification(context, ERROR_ID, MANGA_CHANNEL,
                 context.getString(R.string.notification_manga_download_error_title),
                 context.getString(ErrorUtils.getMessage(innermostError)), intent)
+    }
+
+    fun cancelProgress(context: Context) {
+        NotificationManagerCompat.from(context).cancel(ID)
     }
 
     fun cancel(context: Context) {

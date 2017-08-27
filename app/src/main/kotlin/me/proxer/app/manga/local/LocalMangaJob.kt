@@ -135,8 +135,8 @@ class LocalMangaJob : Job() {
             val pages = chapter.pages.map { it.toLocalPage(chapterId = chapter.id.toLong()) }
             var error: Throwable? = null
 
-            pages.forEachIndexed { index, it ->
-                MangaPageSingle(context, true, Input(chapter.server, entryId, chapter.id, it.decodedName))
+            pages.forEach { page ->
+                MangaPageSingle(context, true, Input(chapter.server, entryId, chapter.id, page.decodedName))
                         .subscribe({}, { error = it })
 
                 error?.let { throw it }
@@ -159,6 +159,8 @@ class LocalMangaJob : Job() {
 
             when {
                 isIpBlockedError || params.failureCount >= 1 -> {
+                    cancelAll()
+
                     bus.post(FailedEvent(entryId, episode, language))
 
                     LocalMangaNotifications.showError(context, error)
@@ -168,7 +170,7 @@ class LocalMangaJob : Job() {
                 isCanceled -> {
                     bus.post(FailedEvent(entryId, episode, language))
 
-                    LocalMangaNotifications.cancel(context)
+                    LocalMangaNotifications.cancelProgress(context)
 
                     Result.FAILURE
                 }
