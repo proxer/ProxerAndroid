@@ -48,6 +48,10 @@ class ChatViewModel(application: Application) : PagedViewModel<LocalMessage>(app
                             isLoading.value = false
                             error.value = null
                             this.value = it
+
+                            Completable.fromAction { chatDao.markConferenceAsRead(safeConference.id) }
+                                    .subscribeOn(Schedulers.io())
+                                    .subscribe()
                         }
                     }
                 }
