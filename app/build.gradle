@@ -47,11 +47,13 @@ android {
             minifyEnabled true
             useProguard false
             proguardFiles 'proguard-rules.pro'
+            archivesBaseName = "proxerme-${defaultConfig.versionName}"
         }
 
         release {
             minifyEnabled true
             proguardFiles 'proguard-rules.pro'
+            archivesBaseName = "app-${defaultConfig.versionName}"
 
             if (shouldSign()) {
                 signingConfig signingConfigs.release
