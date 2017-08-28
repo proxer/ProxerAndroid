@@ -50,7 +50,7 @@ class MangaViewModel(application: Application) : BaseViewModel<MangaChapterInfo>
     private var bookmarkDisposable: Disposable? = null
 
     override fun onCleared() {
-
+        bookmarkDisposable?.dispose()
         bookmarkDisposable = null
 
         super.onCleared()
