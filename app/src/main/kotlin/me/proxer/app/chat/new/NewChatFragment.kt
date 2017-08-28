@@ -331,7 +331,11 @@ class NewChatFragment : BaseFragment() {
         }
     }
 
+
     override fun onDestroyView() {
+        participants.layoutManager = null
+        participants.adapter = null
+
         emojiPopup.dismiss()
 
         super.onDestroyView()

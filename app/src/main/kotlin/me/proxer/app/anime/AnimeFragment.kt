@@ -197,6 +197,13 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
         recyclerView.adapter = adapter
     }
 
+    override fun onDestroyView() {
+        recyclerView.layoutManager = null
+        recyclerView.adapter = null
+
+        super.onDestroyView()
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 

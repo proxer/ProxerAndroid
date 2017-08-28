@@ -88,6 +88,13 @@ class ConferenceFragment : BaseContentFragment<List<LocalConference>>() {
         super.onPause()
     }
 
+    override fun onDestroyView() {
+        recyclerView.layoutManager = null
+        recyclerView.adapter = null
+
+        super.onDestroyView()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater) {
         IconicsMenuInflaterUtil.inflate(inflater, context, R.menu.fragment_conferences, menu, true)
 

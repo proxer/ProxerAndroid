@@ -93,6 +93,16 @@ class UcpTopTenFragment : BaseContentFragment<ZippedTopTenResult>() {
         mangaRecyclerView.adapter = mangaAdapter
     }
 
+    override fun onDestroyView() {
+        animeRecyclerView.layoutManager = null
+        animeRecyclerView.adapter = null
+
+        mangaRecyclerView.layoutManager = null
+        mangaRecyclerView.adapter = null
+
+        super.onDestroyView()
+    }
+
     override fun showData(data: ZippedTopTenResult) {
         super.showData(data)
 
