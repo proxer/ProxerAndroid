@@ -27,12 +27,17 @@ class ConferenceViewModel(application: Application) : BaseViewModel<List<LocalCo
     override val data = MediatorLiveData<List<LocalConference>?>().apply {
         this.addSource(chatDao.getConferencesLiveData(), {
             it?.let {
-                if (error.value == null && StorageHelper.user != null) {
-                    dataDisposable?.dispose()
+                if (StorageHelper.user == null) return@let
 
-                    isLoading.value = false
-                    error.value = null
-                    this.value = it
+                if (!it.isEmpty() || StorageHelper.areConferencesSynchronized) {
+                    if (error.value == null) {
+                        dataDisposable?.dispose()
+
+                        isLoading.value = false
+                        error.value = null
+                        this.value = it
+                    }
+
                 }
             }
         })
