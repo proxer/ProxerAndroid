@@ -2,7 +2,6 @@ package me.proxer.app.chat.new
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
@@ -347,45 +346,41 @@ class NewChatFragment : BaseFragment() {
         innerAdapter.saveInstanceState(outState)
     }
 
-    private fun validateAndAddUser(): Boolean {
-        return participantInput.text.toString().let {
-            when {
-                it.isBlank() -> {
-                    participantInputContainer.isErrorEnabled = true
-                    participantInputContainer.error = context.getString(R.string.error_input_empty)
+    private fun validateAndAddUser(): Boolean = participantInput.text.toString().let {
+        when {
+            it.isBlank() -> {
+                participantInputContainer.isErrorEnabled = true
+                participantInputContainer.error = context.getString(R.string.error_input_empty)
 
+                false
+            }
+            innerAdapter.contains(it) -> {
+                participantInputContainer.isErrorEnabled = true
+                participantInputContainer.error = context.getString(R.string.error_duplicate_participant)
+
+                false
+            }
+            else -> {
+                innerAdapter.add(Participant(it, ""))
+
+                participantInput.text.clear()
+
+                if (!isGroup && innerAdapter.itemCount >= 1) {
+                    adapter.footer = null
+
+                    true
+                } else {
                     false
-                }
-                innerAdapter.contains(it) -> {
-                    participantInputContainer.isErrorEnabled = true
-                    participantInputContainer.error = context.getString(R.string.error_duplicate_participant)
-
-                    false
-                }
-                else -> {
-                    innerAdapter.add(Participant(it, ""))
-
-                    participantInput.text.clear()
-
-                    if (!isGroup && innerAdapter.itemCount >= 1) {
-                        adapter.footer = null
-
-                        true
-                    } else {
-                        false
-                    }
                 }
             }
         }
     }
 
-    private fun generateEmojiDrawable(iconicRes: IIcon): Drawable {
-        return IconicsDrawable(context)
-                .icon(iconicRes)
-                .sizeDp(32)
-                .paddingDp(6)
-                .colorRes(R.color.icon)
-    }
+    private fun generateEmojiDrawable(iconicRes: IIcon) = IconicsDrawable(context)
+            .icon(iconicRes)
+            .sizeDp(32)
+            .paddingDp(6)
+            .colorRes(R.color.icon)
 
     class TopicEmptyException : Exception()
     class InvalidInputException(message: String) : Exception(message)

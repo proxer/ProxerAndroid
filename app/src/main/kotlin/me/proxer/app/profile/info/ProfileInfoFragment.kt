@@ -58,8 +58,7 @@ class ProfileInfoFragment : BaseContentFragment<UserInfo>() {
     private val statusContainer: ViewGroup by bindView(R.id.statusContainer)
     private val statusText: TextView by bindView(R.id.statusText)
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_profile, container, false)
     }
 

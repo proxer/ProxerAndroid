@@ -76,9 +76,7 @@ object LocalMangaNotifications {
                 context.getString(ErrorUtils.getMessage(innermostError)), intent)
     }
 
-    fun cancelProgress(context: Context) {
-        NotificationManagerCompat.from(context).cancel(ID)
-    }
+    fun cancelProgress(context: Context) = NotificationManagerCompat.from(context).cancel(ID)
 
     fun cancel(context: Context) {
         NotificationManagerCompat.from(context).cancel(ID)
