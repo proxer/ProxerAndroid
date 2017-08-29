@@ -28,6 +28,7 @@ class NewsViewModel(application: Application) : PagedContentViewModel<NewsArticl
 
     override val endpoint: PagingLimitEndpoint<List<NewsArticle>>
         get() = api.notifications().news()
+                .markAsRead(page == 0)
 
     init {
         disposables += bus.register(NewsNotificationEvent::class.java).subscribe()

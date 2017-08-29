@@ -5,14 +5,15 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.widget.LinearLayoutManager
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
+import android.support.v7.widget.RecyclerView
+import android.view.*
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
+import kotterknife.bindView
 import me.proxer.app.R
-import me.proxer.app.base.PagedContentFragment
+import me.proxer.app.base.BaseContentFragment
+import me.proxer.app.util.ErrorUtils
+import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.extension.ProxerNotification
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.unsafeLazy
@@ -21,7 +22,7 @@ import org.jetbrains.anko.bundleOf
 /**
  * @author Ruben Gees
  */
-class NotificationFragment : PagedContentFragment<ProxerNotification>() {
+class NotificationFragment : BaseContentFragment<List<ProxerNotification>>() {
 
     companion object {
         fun newInstance() = NotificationFragment().apply {
@@ -30,32 +31,36 @@ class NotificationFragment : PagedContentFragment<ProxerNotification>() {
     }
 
     override val isSwipeToRefreshEnabled = true
-    override val emptyDataMessage = R.string.error_no_data_notifications
 
     override val viewModel: NotificationViewModel by unsafeLazy {
         ViewModelProviders.of(this).get(NotificationViewModel::class.java)
     }
 
-    override val layoutManager by lazy {
-        LinearLayoutManager(context)
-    }
+    private lateinit var adapter: NotificationAdapter
 
-    override lateinit var innerAdapter: NotificationAdapter
+    override val contentContainer: ViewGroup
+        get() = recyclerView
+
+    private val recyclerView: RecyclerView by bindView(R.id.recyclerView)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        innerAdapter = NotificationAdapter()
+        adapter = NotificationAdapter()
 
-        innerAdapter.clickSubject
+        adapter.clickSubject
                 .bindToLifecycle(this)
                 .subscribe { showPage(it.contentLink) }
 
-        innerAdapter.deleteClickSubject
+        adapter.deleteClickSubject
                 .bindToLifecycle(this)
                 .subscribe { viewModel.addItemToDelete(it) }
 
         setHasOptionsMenu(true)
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        return inflater.inflate(R.layout.fragment_notification, container, false)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -67,6 +72,17 @@ class NotificationFragment : PagedContentFragment<ProxerNotification>() {
                         Snackbar.LENGTH_LONG, it.buttonMessage, it.buttonAction?.toClickListener(hostingActivity))
             }
         })
+
+        recyclerView.setHasFixedSize(true)
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.adapter = adapter
+    }
+
+    override fun onDestroyView() {
+        recyclerView.layoutManager = null
+        recyclerView.adapter = null
+
+        super.onDestroyView()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater) {
@@ -78,7 +94,7 @@ class NotificationFragment : PagedContentFragment<ProxerNotification>() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.delete_all -> {
-                if (!innerAdapter.isEmpty()) {
+                if (!adapter.isEmpty()) {
                     viewModel.deleteAll()
                 }
             }
@@ -91,5 +107,23 @@ class NotificationFragment : PagedContentFragment<ProxerNotification>() {
         super.onResume()
 
         AccountNotifications.cancel(context)
+    }
+
+    override fun showData(data: List<ProxerNotification>) {
+        super.showData(data)
+
+        adapter.swapDataAndNotifyChange(data)
+
+        if (adapter.isEmpty()) {
+            showError(ErrorAction(R.string.error_no_data_notifications, ErrorAction.ACTION_MESSAGE_HIDE))
+        }
+    }
+
+    override fun hideData() = Unit
+
+    override fun showError(action: ErrorUtils.ErrorAction) {
+        adapter.clearAndNotifyRemoval()
+
+        super.showError(action)
     }
 }

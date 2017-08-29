@@ -11,6 +11,7 @@ import me.proxer.app.news.NewsNotifications
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.library.entitiy.notifications.NotificationInfo
+import me.proxer.library.enums.NotificationFilter
 
 /**
  * @author Ruben Gees
@@ -96,6 +97,7 @@ class NotificationJob : Job() {
             true -> emptyList()
             false -> api.notifications().notifications()
                     .limit(notificationInfo.notifications)
+                    .filter(NotificationFilter.UNREAD)
                     .build()
                     .execute()
         }

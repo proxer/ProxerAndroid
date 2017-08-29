@@ -200,6 +200,10 @@
         <activity android:name=".view.WebViewActivity" />
 
         <receiver
+            android:name=".news.NewsNotificationDeletionReceiver"
+            android:exported="false" />
+
+        <receiver
             android:name=".notification.AccountNotificationDeletionReceiver"
             android:exported="false" />
 

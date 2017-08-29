@@ -38,6 +38,7 @@ object NewsNotifications {
 
         val builder = NotificationCompat.Builder(context, NEWS_CHANNEL)
         val newsAmount = context.getQuantityString(R.plurals.notification_news_amount, news.size)
+        val deleteIntent = NewsNotificationDeletionReceiver.getPendingIntent(context)
         val style: NotificationCompat.Style
         val title: String
         val content: String
@@ -73,6 +74,7 @@ object NewsNotifications {
                 .setSmallIcon(R.drawable.ic_stat_proxer)
                 .setContentTitle(title)
                 .setContentText(content)
+                .setDeleteIntent(deleteIntent)
                 .setContentIntent(PendingIntent.getActivity(context, 0,
                         MainActivity.getSectionIntent(context, DrawerItem.NEWS),
                         PendingIntent.FLAG_UPDATE_CURRENT))

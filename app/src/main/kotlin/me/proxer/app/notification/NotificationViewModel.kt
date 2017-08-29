@@ -6,25 +6,25 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.MainApplication.Companion.bus
-import me.proxer.app.base.PagedContentViewModel
+import me.proxer.app.base.BaseContentViewModel
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.data.UniqueQueue
 import me.proxer.app.util.extension.ProxerNotification
 import me.proxer.app.util.extension.buildOptionalSingle
-import me.proxer.library.api.PagingLimitEndpoint
+import me.proxer.library.api.Endpoint
 
 /**
  * @author Ruben Gees
  */
-class NotificationViewModel(application: Application) : PagedContentViewModel<ProxerNotification>(application) {
+class NotificationViewModel(application: Application) : BaseContentViewModel<List<ProxerNotification>>(application) {
 
     override val isLoginRequired = true
-    override val itemsOnPage = 30
 
-    override val endpoint: PagingLimitEndpoint<List<ProxerNotification>>
+    override val endpoint: Endpoint<List<ProxerNotification>>
         get() = api.notifications().notifications()
-                .markAsRead(page == 0)
+                .markAsRead(true)
+                .limit(Int.MAX_VALUE)
 
     val deletionError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
 
