@@ -1,4 +1,5 @@
 import groovy.io.FileType
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
@@ -155,6 +156,10 @@ dependencies {
     implementation deps.strictModeCompat
     debugImplementation deps.leakCanary
     releaseImplementation deps.leakCanaryNoOp
+}
+
+tasks.withType(KotlinCompile).all {
+    kotlinOptions.freeCompilerArgs = ["-Xjsr305-annotations=enable"]
 }
 
 static getResSrcDirs() {
