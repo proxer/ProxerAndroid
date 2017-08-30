@@ -77,13 +77,16 @@ class NotificationJob : Job() {
 
     private fun fetchNews(context: Context, notificationInfo: NotificationInfo?) {
         val lastNewsDate = StorageHelper.lastNewsDate
-        val newNews = api.notifications().news()
-                .page(0)
-                .limit(notificationInfo?.news ?: 100)
-                .build()
-                .execute()
-                .filter { it.date.after(lastNewsDate) }
-                .sortedByDescending { it.date }
+        val newNews = when (notificationInfo?.news) {
+            0 -> emptyList()
+            else -> api.notifications().news()
+                    .page(0)
+                    .limit(notificationInfo?.news ?: 100)
+                    .build()
+                    .execute()
+                    .filter { it.date.after(lastNewsDate) }
+                    .sortedByDescending { it.date }
+        }
 
         newNews.firstOrNull()?.date.let {
             if (it != lastNewsDate && !bus.post(NewsNotificationEvent())) {
@@ -93,9 +96,9 @@ class NotificationJob : Job() {
     }
 
     private fun fetchAccountNotifications(context: Context, notificationInfo: NotificationInfo) {
-        val newNotifications = when (notificationInfo.notifications == 0) {
-            true -> emptyList()
-            false -> api.notifications().notifications()
+        val newNotifications = when (notificationInfo.notifications) {
+            0 -> emptyList()
+            else -> api.notifications().notifications()
                     .limit(notificationInfo.notifications)
                     .filter(NotificationFilter.UNREAD)
                     .build()
