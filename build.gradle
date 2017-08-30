@@ -53,7 +53,7 @@ buildscript {
         customtabsHelperVersion = '1.0.4'
         introductionVersion = '1.4.1'
         materialBadgeViewVersion = 'master-SNAPSHOT'
-        aspectRatioImageViewVersion = '994148d780'
+        aspectRatioImageViewVersion = '144783aad3'
 
         // Utils
         threetenVersion = '1.0.5'
