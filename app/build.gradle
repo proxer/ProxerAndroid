@@ -112,7 +112,7 @@ tasks.matching { it.name.matches('compile.*Kotlin') }.all {
     kotlinOptions.freeCompilerArgs = ["-Xjsr305-annotations=enable"]
 }
 
-static getResSrcDirs() {
+static Set<String> getResSrcDirs() {
     Set<String> result = []
 
     new File('app/src/main/res/layouts/').eachFile(FileType.DIRECTORIES) {
