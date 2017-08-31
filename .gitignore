@@ -31,11 +31,11 @@ captures/
 # User-specific stuff:
 .idea
 
-# Mongo Explorer plugin:
-.idea/mongoSettings.xml
-
 ## File-based project format:
 *.iws
+
+## Directory-based project format:
+*.iml
 
 ## Plugin-specific files:
 
@@ -54,9 +54,6 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
-# Other things
+# Project-specific files:
 secrets.properties
 .tasks.cache.json
-*.iml
-.DS_Store
-/captures

@@ -1,7 +1,7 @@
 buildscript {
-    ext {
-        preDexLibs = !project.hasProperty('disablePreDex')
+    apply from: 'dependencies.gradle'
 
+    ext {
         versionMajor = 0
         versionMinor = 10
         versionPatch = 0
@@ -10,137 +10,6 @@ buildscript {
         targetSdkVersion = 26
         compileSdkVersion = 26
         buildToolsVersion = '26.0.1'
-
-        androidPluginVersion = '3.0.0-beta2'
-        kotlinVersion = '1.2-M2'
-
-        gradleVersionsPluginVersion = '0.15.0'
-        androidCommandPluginVersion = '1.7.1'
-
-        // Frameworks and code only libraries
-        ankoVersion = '0.10.1'
-        supportLibraryVersion = '26.0.1'
-        supportPreferenceVersion = '1.2.7'
-        architectureComponentsVersion = '1.0.0-alpha9'
-        playServicesVersion = '11.2.0'
-        androidJobVersion = '1.2.0-alpha4'
-        proxerLibVersion = '3.2.1'
-
-        // RxJava
-        rxJavaVersion = '2.1.3'
-        rxKotlinVersion = '2.1.0'
-        rxAndroidVersion = '2.0.1'
-        rxBindingVersion = '2.0.0'
-        rxLifecycleVersion = '2.1.0'
-        rxBusVersion = '2.0.0'
-
-        // UI components
-        aboutLibrariesVersion = '5.9.7'
-        materialDrawerVersion = '5.9.5'
-        iconicsVersion = '2.9.3'
-        communityMaterialTypefaceVersion = '1.9.32.2'
-        crossfaderVersion = '1.5.0'
-        materialAboutVersion = '2.2.1'
-        subsamplingScaleImageViewVersion = '3.6.0'
-        tabLayoutHelperVersion = '0.9.0'
-        materialDialogsVersion = '0.9.4.7'
-        flexboxVersion = '0.3.0'
-        emojiIosVersion = '0.6.0-SNAPSHOT'
-        exomediaVersion = 'c611808b8c'
-        exoplayerVersion = 'r2.5.1'
-        materialProgressBarVersion = '1.4.1'
-        materialRatingBarVersion = '1.0.2'
-        customtabsHelperVersion = '1.0.4'
-        introductionVersion = '1.4.1'
-        materialBadgeViewVersion = 'master-SNAPSHOT'
-        aspectRatioImageViewVersion = '144783aad3'
-
-        // Utils
-        threetenVersion = '1.0.5'
-        hawkVersion = '2.0.1'
-        glideVersion = '4.1.0-SNAPSHOT'
-        okHttpVersion = '3.9.0-SNAPSHOT'
-        okioVersion = '1.13.0'
-        linkBuilderVersion = '1.6.1'
-        easyHeaderFooterAdapterVersion = '3.0.0'
-        kOptionalVersion = '1.2.0'
-        kotterknifeVersion = '1.0'
-
-        // Debugging
-        strictModeCompatVersion = "26.0.2"
-        leakCanaryVersion = '1.5.2'
-
-        deps = [
-                kotlinStdlib                 : "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
-                anko                         : "org.jetbrains.anko:anko-commons:$ankoVersion",
-                supportAppCompat             : "com.android.support:appcompat-v7:$supportLibraryVersion",
-                supportV13                   : "com.android.support:support-v13:$supportLibraryVersion",
-                supportRecyclerView          : "com.android.support:recyclerview-v7:$supportLibraryVersion",
-                supportCardView              : "com.android.support:cardview-v7:$supportLibraryVersion",
-                supportGridLayout            : "com.android.support:gridlayout-v7:$supportLibraryVersion",
-                supportDesign                : "com.android.support:design:$supportLibraryVersion",
-                supportAnimatedVectorDrawable: "com.android.support:animated-vector-drawable:$supportLibraryVersion",
-                supportCustomtabs            : "com.android.support:customtabs:$supportLibraryVersion",
-                supportPreference            : "com.android.support:preference-v7:$supportLibraryVersion",
-                supportPreferenceFix         : "net.xpece.android:support-preference:$supportPreferenceVersion",
-                supportPreferenceFixSpinner  : "net.xpece.android:support-spinner:$supportPreferenceVersion",
-                architectureLifecycle        : "android.arch.lifecycle:extensions:$architectureComponentsVersion",
-                architectureLifecycleCompiler: "android.arch.lifecycle:compiler:$architectureComponentsVersion",
-                room                         : "android.arch.persistence.room:runtime:$architectureComponentsVersion",
-                roomCompiler                 : "android.arch.persistence.room:compiler:$architectureComponentsVersion",
-                playServicesGcm              : "com.google.android.gms:play-services-gcm:$playServicesVersion",
-                androidJob                   : "com.evernote:android-job:$androidJobVersion",
-                proxerLib                    : "com.github.proxer:ProxerLibJava:$proxerLibVersion",
-
-                rxJava                       : "io.reactivex.rxjava2:rxjava:$rxJavaVersion",
-                rxKotlin                     : "io.reactivex.rxjava2:rxkotlin:$rxKotlinVersion",
-                rxAndroid                    : "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion",
-                rxBinding                    : "com.jakewharton.rxbinding2:rxbinding-kotlin:$rxBindingVersion",
-                rxBindingV4                  : "com.jakewharton.rxbinding2:rxbinding-support-v4-kotlin:$rxBindingVersion",
-                rxBindingV7                  : "com.jakewharton.rxbinding2:rxbinding-appcompat-v7-kotlin:$rxBindingVersion",
-                rxBindingDesign              : "com.jakewharton.rxbinding2:rxbinding-design-kotlin:$rxBindingVersion",
-                rxBindingRecyclerView        : "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7-kotlin:$rxBindingVersion",
-                rxLifecycle                  : "com.trello.rxlifecycle2:rxlifecycle-android-lifecycle-kotlin:$rxLifecycleVersion",
-                rxBus                        : "com.github.rubengees:rxbus:$rxBusVersion",
-
-                aboutLibraries               : "com.mikepenz:aboutlibraries:$aboutLibrariesVersion@aar",
-                materialDrawer               : "com.mikepenz:materialdrawer:$materialDrawerVersion@aar",
-                iconics                      : "com.mikepenz:iconics-core:$iconicsVersion@aar",
-                iconicsViews                 : "com.mikepenz:iconics-views:$iconicsVersion@aar",
-                communityMaterialTypeface    : "com.mikepenz:community-material-typeface:$communityMaterialTypefaceVersion@aar",
-                crossfader                   : "com.mikepenz:crossfader:$crossfaderVersion@aar",
-                materialAbout                : "com.github.daniel-stoneuk:material-about-library:$materialAboutVersion",
-                subsamplingScaleImageView    : "com.davemorrissey.labs:subsampling-scale-image-view:$subsamplingScaleImageViewVersion",
-                tabLayoutHelper              : "com.h6ah4i.android.tablayouthelper:tablayouthelper:$tabLayoutHelperVersion",
-                materialDialogs              : "com.afollestad.material-dialogs:core:$materialDialogsVersion",
-                flexbox                      : "com.google.android:flexbox:$flexboxVersion",
-                emojiIos                     : "com.vanniktech:emoji-ios:$emojiIosVersion",
-                exomedia                     : "com.github.brianwernick:Exomedia:$exomediaVersion",
-                exoplayer                    : "com.google.android.exoplayer:exoplayer-core:$exoplayerVersion",
-                exoplayerIntegration         : "com.google.android.exoplayer:extension-okhttp:$exoplayerVersion",
-                materialProgressBar          : "me.zhanghai.android.materialprogressbar:library:$materialProgressBarVersion",
-                materialRatingBar            : "me.zhanghai.android.materialratingbar:library:$materialRatingBarVersion",
-                customtabsHelper             : "me.zhanghai.android.customtabshelper:library:$customtabsHelperVersion",
-                introduction                 : "com.github.rubengees:introduction:$introductionVersion",
-                materialBadgeView            : "com.github.matrixxun:MaterialBadgeTextView:$materialBadgeViewVersion",
-                aspectRatioImageView         : "com.github.santalu:aspect-ratio-imageview:$aspectRatioImageViewVersion",
-
-                threeten                     : "com.jakewharton.threetenabp:threetenabp:$threetenVersion",
-                hawk                         : "com.orhanobut:hawk:$hawkVersion",
-                glide                        : "com.github.bumptech.glide:glide:$glideVersion",
-                glideOkHttp                  : "com.github.bumptech.glide:okhttp3-integration:$glideVersion",
-                glideCompiler                : "com.github.bumptech.glide:compiler:$glideVersion",
-                okHttp                       : "com.squareup.okhttp3:okhttp:$okHttpVersion",
-                okio                         : "com.squareup.okio:okio:$okioVersion",
-                linkBuilder                  : "com.klinkerapps:link_builder:$linkBuilderVersion",
-                easyHeaderFooterAdapter      : "com.github.rubengees:easy-header-footer-adapter:$easyHeaderFooterAdapterVersion",
-                kOptional                    : "com.gojuno.koptional:koptional-rxjava2-extensions:$kOptionalVersion",
-                kotterknife                  : "com.github.rubengees:kotterknife:$kotterknifeVersion",
-
-                strictModeCompat             : "com.kirich1409:strict-mode-compat:$strictModeCompatVersion",
-                leakCanary                   : "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion",
-                leakCanaryNoOp               : "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
-        ]
     }
 
     repositories {
@@ -150,11 +19,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "com.android.tools.build:gradle:$androidPluginVersion"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-
-        classpath "com.github.ben-manes:gradle-versions-plugin:$gradleVersionsPluginVersion"
-        classpath "com.novoda:gradle-android-command-plugin:$androidCommandPluginVersion"
+        classpathDependencies.values().each { classpath it }
     }
 }
 
@@ -165,17 +30,6 @@ allprojects {
         maven { url "https://jitpack.io" }
         maven { url "https://dl.bintray.com/kotlin/kotlin-eap-1.2" }
         maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
-    }
-}
-
-subprojects {
-    def appPlugin = "com.android.build.gradle.AppPlugin"
-    def libraryPlugin = "com.android.build.gradle.LibraryPlugin"
-
-    project.plugins.whenPluginAdded { plugin ->
-        if (appPlugin == plugin.class.name || libraryPlugin == plugin.class.name) {
-            project.android.dexOptions.preDexLibraries = rootProject.ext.preDexLibs
-        }
     }
 }
 

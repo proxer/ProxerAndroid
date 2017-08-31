@@ -1,5 +1,4 @@
 import groovy.io.FileType
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
@@ -11,6 +10,10 @@ apply plugin: 'com.novoda.android-command'
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
+
+    dexOptions {
+        preDexLibraries !isCI()
+    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -71,99 +74,46 @@ android {
         exclude '**/*.kotlin_module'
         exclude '**/*.gwt.*'
         exclude '**/rxjava.properties'
+        exclude '**/rxkotlin.properties'
+        exclude 'protobuf.meta'
         exclude 'build-data.properties'
     }
 
     sourceSets {
         main {
             java.srcDirs += 'src/main/kotlin'
-            res.srcDirs = getResSrcDirs()
+            res.srcDirs += getResSrcDirs()
         }
     }
 }
 
 dependencies {
-    implementation deps.kotlinStdlib
-    implementation deps.anko
-    implementation deps.supportAppCompat
-    implementation deps.supportV13
-    implementation deps.supportRecyclerView
-    implementation deps.supportCardView
-    implementation deps.supportGridLayout
-    implementation deps.supportDesign
-    implementation deps.supportAnimatedVectorDrawable
-    implementation deps.supportCustomtabs
-    implementation deps.supportPreference
-    implementation deps.supportPreferenceFix
-    implementation deps.supportPreferenceFixSpinner
-    implementation deps.architectureLifecycle
-    implementation deps.room
-    implementation deps.playServicesGcm
-    implementation deps.androidJob
-    implementation deps.proxerLib
-    kapt deps.architectureLifecycleCompiler
-    kapt deps.roomCompiler
+    rootProject.ext.implementationDependencies.values().each { implementation it }
+    rootProject.ext.debugImplementationDependencies.values().each { debugImplementation it }
+    rootProject.ext.releaseImplementationDependencies.values().each { releaseImplementation it }
+    rootProject.ext.kaptDependencies.values().each { kapt it }
 
-    implementation deps.rxJava
-    implementation deps.rxKotlin
-    implementation deps.rxAndroid
-    implementation deps.rxBinding
-    implementation deps.rxBindingV4
-    implementation deps.rxBindingV7
-    implementation deps.rxBindingDesign
-    implementation deps.rxBindingRecyclerView
-    implementation deps.rxLifecycle
-    implementation deps.rxBus
-
-    implementation(deps.aboutLibraries) { transitive = true }
-    implementation(deps.materialDrawer) { transitive = true }
-    implementation deps.iconics
-    implementation deps.iconicsViews
-    implementation deps.communityMaterialTypeface
-    implementation deps.crossfader
-    implementation deps.materialAbout
-    implementation deps.subsamplingScaleImageView
-    implementation deps.tabLayoutHelper
-    implementation deps.materialDialogs
-    implementation deps.flexbox
-    implementation deps.emojiIos
-    implementation(deps.exomedia) {
-        exclude module: 'exoplayer-hls'
-        exclude module: 'exoplayer-dash'
-        exclude module: 'exoplayer-smoothstreaming'
+    rootProject.ext.transitiveImplementationDependencies.values().each {
+        implementation(it) {
+            transitive = true
+        }
     }
-    implementation deps.exoplayer
-    implementation deps.exoplayerIntegration
-    implementation deps.materialProgressBar
-    implementation deps.materialRatingBar
-    implementation deps.customtabsHelper
-    implementation deps.introduction
-    implementation deps.materialBadgeView
-    implementation deps.aspectRatioImageView
 
-    implementation deps.threeten
-    implementation(deps.hawk) { exclude module: 'gson' }
-    implementation deps.glide
-    implementation deps.glideOkHttp
-    implementation deps.okHttp
-    implementation deps.okio
-    implementation deps.linkBuilder
-    implementation deps.easyHeaderFooterAdapter
-    implementation deps.kOptional
-    implementation deps.kotterknife
-    kapt deps.glideCompiler
-
-    implementation deps.strictModeCompat
-    debugImplementation deps.leakCanary
-    releaseImplementation deps.leakCanaryNoOp
+    rootProject.ext.excludingImplementationDependencies.values().each { dependency ->
+        implementation(dependency.dependency) {
+            dependency.exclusions.each {
+                exclude module: it
+            }
+        }
+    }
 }
 
-tasks.withType(KotlinCompile).all {
+tasks.matching { it.name.matches('compile.*Kotlin') }.all {
     kotlinOptions.freeCompilerArgs = ["-Xjsr305-annotations=enable"]
 }
 
 static getResSrcDirs() {
-    List<String> result = ['src/main/res']
+    Set<String> result = []
 
     new File('app/src/main/res/layouts/').eachFile(FileType.DIRECTORIES) {
         result.add("src/main/res/layouts/${it.name}")
@@ -172,30 +122,27 @@ static getResSrcDirs() {
     return result
 }
 
-static getFromSecrets(String key) {
-    Properties result = new Properties()
-    Object isCI = System.getenv('CI')
-
-    if (isCI != null && isCI.toBoolean()) {
+static String getFromSecrets(String key) {
+    if (isCI()) {
         return "dummy"
     }
+
+    Properties result = new Properties()
 
     try {
         result.load(new FileInputStream(new File('secrets.properties')))
     } catch (Exception ignored) {
-        throw new GradleException('Please add a secrets.properties file with a value for "' + key +
-                '" to perform this action.')
+        throw new GradleException("Please add a secrets.properties file with a value for $key to perform this action.")
     }
 
     if (!result.containsKey(key)) {
-        throw new GradleException('Please include a value for "' + key +
-                '" in your secrets.properties file to perform this action.')
+        throw new GradleException("Please include a value for $key in your secrets.properties file to perform this action.")
     }
 
     return result[key]
 }
 
-static shouldSign() {
+static boolean shouldSign() {
     Properties result = new Properties()
 
     try {
@@ -206,4 +153,10 @@ static shouldSign() {
 
     return result.containsKey("RELEASE_STORE_FILE") && result.containsKey("RELEASE_STORE_PASSWORD") &&
             result.containsKey("RELEASE_KEY_ALIAS") && result.containsKey("RELEASE_KEY_PASSWORD")
+}
+
+static boolean isCI() {
+    Object isCI = System.getenv('CI')
+
+    return isCI != null && isCI.toBoolean()
 }
