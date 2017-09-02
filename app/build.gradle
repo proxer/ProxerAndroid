@@ -4,6 +4,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
+apply plugin: 'io.gitlab.arturbosch.detekt'
 apply plugin: 'com.github.ben-manes.versions'
 apply plugin: 'com.novoda.android-command'
 
@@ -51,7 +52,7 @@ android {
             minifyEnabled true
             useProguard false
             proguardFiles 'proguard-rules.pro'
-            archivesBaseName = "app-${defaultConfig.versionName}"
+            archivesBaseName = "proxerme-${defaultConfig.versionName}"
         }
 
         release {
@@ -108,11 +109,23 @@ dependencies {
     }
 }
 
+detekt {
+    profile('main') {
+        config = "$projectDir/detekt.yml"
+        output = "$buildDir/reports/detekt.xml"
+        parallel = true
+    }
+}
+
 tasks.matching { it.name.matches('compile.*Kotlin') }.all {
     kotlinOptions.freeCompilerArgs = ["-Xjsr305-annotations=enable"]
 }
 
-static Set<String> getResSrcDirs() {
+gradle.projectsEvaluated {
+    check.dependsOn(detektCheck)
+}
+
+static getResSrcDirs() {
     Set<String> result = []
 
     new File('app/src/main/res/layouts/').eachFile(FileType.DIRECTORIES) {

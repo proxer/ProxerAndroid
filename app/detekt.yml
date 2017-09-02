@@ -1,0 +1,12 @@
+style:
+  WildcardImport:
+    active: false
+
+comments:
+  active: true
+  UndocumentedPublicFunction:
+    active: false
+
+build:
+  warningThreshold: 10000 #TODO
+  failThreshold: 100000 #TODO

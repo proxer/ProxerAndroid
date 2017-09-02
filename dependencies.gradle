@@ -4,6 +4,7 @@ ext {
     kotlinVersion = '1.2-M2'
 
     // Utility plugins
+    detektPluginVersion = '1.0.0.RC4'
     gradleVersionsPluginVersion = '0.15.0'
     androidCommandPluginVersion = '1.7.1'
 
@@ -64,6 +65,7 @@ ext {
             androidPlugin             : "com.android.tools.build:gradle:$androidPluginVersion",
             kotlinPlugin              : "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion",
 
+            detektPlugin              : "gradle.plugin.io.gitlab.arturbosch.detekt:detekt-gradle-plugin:$detektPluginVersion",
             gradleVersionsPlugin      : "com.github.ben-manes:gradle-versions-plugin:$gradleVersionsPluginVersion",
             gradleAndroidCommandPlugin: "com.novoda:gradle-android-command-plugin:$androidCommandPluginVersion",
     ]
@@ -146,8 +148,8 @@ ext {
     ]
 
     transitiveImplementationDependencies = [
-            aboutLibraries               : "com.mikepenz:aboutlibraries:$aboutLibrariesVersion@aar",
-            materialDrawer               : "com.mikepenz:materialdrawer:$materialDrawerVersion@aar",
+            aboutLibraries: "com.mikepenz:aboutlibraries:$aboutLibrariesVersion@aar",
+            materialDrawer: "com.mikepenz:materialdrawer:$materialDrawerVersion@aar",
     ]
 
     excludingImplementationDependencies = [
