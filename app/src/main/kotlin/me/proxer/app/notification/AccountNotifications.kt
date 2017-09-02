@@ -89,7 +89,7 @@ object AccountNotifications {
                 .setContentText(content)
                 .setContentIntent(intent)
                 .setDeleteIntent(AccountNotificationDeletionReceiver.getPendingIntent(context))
-                .addAction(R.drawable.ic_stat_check, context.getString(R.string.notification_news_read_action),
+                .addAction(R.drawable.ic_stat_check, context.getString(R.string.notification_account_read_action),
                         AccountNotificationReadReceiver.getPendingIntent(context))
                 .setColor(ContextCompat.getColor(context, R.color.primary))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
