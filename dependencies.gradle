@@ -58,7 +58,7 @@ ext {
     kotterknifeVersion = '1.0'
 
     // Debugging
-    strictModeCompatVersion = "26.0.2"
+    strictModeCompatVersion = '26.0.2'
     leakCanaryVersion = '1.5.2'
 
     classpathDependencies = [

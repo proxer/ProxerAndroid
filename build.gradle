@@ -15,8 +15,8 @@ buildscript {
     repositories {
         jcenter()
         google()
-        maven { url "https://plugins.gradle.org/m2/" }
-        maven { url "https://dl.bintray.com/kotlin/kotlin-eap-1.2" }
+        maven { url 'https://plugins.gradle.org/m2/' }
+        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap-1.2' }
     }
 
     dependencies {
@@ -29,17 +29,17 @@ subprojects {
         repositories {
             jcenter()
             google()
-            maven { url "https://plugins.gradle.org/m2/" }
-            maven { url "https://dl.bintray.com/kotlin/kotlin-eap-1.2" }
+            maven { url 'https://plugins.gradle.org/m2/' }
+            maven { url 'https://dl.bintray.com/kotlin/kotlin-eap-1.2' }
         }
     }
 
     repositories {
         jcenter()
         google()
-        maven { url "https://jitpack.io" }
-        maven { url "https://dl.bintray.com/kotlin/kotlin-eap-1.2" }
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+        maven { url 'https://jitpack.io' }
+        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap-1.2' }
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
     }
 }
 

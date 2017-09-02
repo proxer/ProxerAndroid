@@ -29,23 +29,23 @@ android {
         versionName "${rootProject.ext.versionMajor}.${rootProject.ext.versionMinor}.${rootProject.ext.versionPatch}"
 
         vectorDrawables.useSupportLibrary true
-        resConfigs "de"
+        resConfigs 'de'
     }
 
     signingConfigs {
         if (shouldSign()) {
             release {
-                storeFile file(getFromSecrets("RELEASE_STORE_FILE"))
-                storePassword getFromSecrets("RELEASE_STORE_PASSWORD")
-                keyAlias getFromSecrets("RELEASE_KEY_ALIAS")
-                keyPassword getFromSecrets("RELEASE_KEY_PASSWORD")
+                storeFile file(getFromSecrets('RELEASE_STORE_FILE'))
+                storePassword getFromSecrets('RELEASE_STORE_PASSWORD')
+                keyAlias getFromSecrets('RELEASE_KEY_ALIAS')
+                keyPassword getFromSecrets('RELEASE_KEY_PASSWORD')
             }
         }
     }
 
     buildTypes {
         applicationVariants.all { variant ->
-            variant.buildConfigField "String", "PROXER_API_KEY", "\"${getFromSecrets("PROXER_API_KEY")}\""
+            variant.buildConfigField 'String', 'PROXER_API_KEY', "\"${getFromSecrets("PROXER_API_KEY")}\""
         }
 
         debug {
@@ -118,7 +118,7 @@ detekt {
 }
 
 tasks.matching { it.name.matches('compile.*Kotlin') }.all {
-    kotlinOptions.freeCompilerArgs = ["-Xjsr305-annotations=enable"]
+    kotlinOptions.freeCompilerArgs = ['-Xjsr305-annotations=enable']
 }
 
 gradle.projectsEvaluated {
@@ -137,7 +137,7 @@ static getResSrcDirs() {
 
 static String getFromSecrets(String key) {
     if (isCI()) {
-        return "dummy"
+        return 'dummy'
     }
 
     Properties result = new Properties()
@@ -164,8 +164,8 @@ static boolean shouldSign() {
         return false
     }
 
-    return result.containsKey("RELEASE_STORE_FILE") && result.containsKey("RELEASE_STORE_PASSWORD") &&
-            result.containsKey("RELEASE_KEY_ALIAS") && result.containsKey("RELEASE_KEY_PASSWORD")
+    return result.containsKey('RELEASE_STORE_FILE') && result.containsKey('RELEASE_STORE_PASSWORD') &&
+            result.containsKey('RELEASE_KEY_ALIAS') && result.containsKey('RELEASE_KEY_PASSWORD')
 }
 
 static boolean isCI() {
