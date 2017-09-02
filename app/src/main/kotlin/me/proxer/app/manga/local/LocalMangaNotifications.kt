@@ -23,7 +23,6 @@ import me.proxer.library.util.ProxerUrls
 object LocalMangaNotifications {
 
     private const val ID = 54354345
-    private const val ERROR_ID = 479239223
 
     fun showOrUpdate(context: Context, maxProgress: Float, currentProgress: Float) {
         val roundedMaxProgress = Math.floor(maxProgress.toDouble()).toInt()
@@ -49,7 +48,7 @@ object LocalMangaNotifications {
                     .setProgress(roundedMaxProgress, roundedCurrentProgress, false)
                     .setSubText("${(currentProgress / maxProgress * 100).toInt()}%")
                     .setOngoing(true)
-                    .addAction(NotificationCompat.Action.Builder(android.R.drawable.ic_menu_close_clear_cancel,
+                    .addAction(NotificationCompat.Action.Builder(R.drawable.ic_stat_cancel,
                             context.getString(R.string.notification_manga_download_cancel_action),
                             LocalMangaDownloadCancelReceiver.getPendingIntent(context)).build())
         }
@@ -71,15 +70,10 @@ object LocalMangaNotifications {
             else -> null
         }
 
-        NotificationUtils.showErrorNotification(context, ERROR_ID, MANGA_CHANNEL,
+        NotificationUtils.showErrorNotification(context, ID, MANGA_CHANNEL,
                 context.getString(R.string.notification_manga_download_error_title),
                 context.getString(ErrorUtils.getMessage(innermostError)), intent)
     }
 
-    fun cancelProgress(context: Context) = NotificationManagerCompat.from(context).cancel(ID)
-
-    fun cancel(context: Context) {
-        NotificationManagerCompat.from(context).cancel(ID)
-        NotificationManagerCompat.from(context).cancel(ERROR_ID)
-    }
+    fun cancel(context: Context) = NotificationManagerCompat.from(context).cancel(ID)
 }

@@ -4,9 +4,8 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import io.reactivex.schedulers.Schedulers
-import me.proxer.app.MainApplication
-import me.proxer.app.util.extension.buildSingle
+import me.proxer.app.util.data.StorageHelper
+import java.util.*
 
 /**
  * @author Ruben Gees
@@ -19,10 +18,6 @@ class NewsNotificationDeletionReceiver : BroadcastReceiver() {
     }
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        MainApplication.api.notifications().news()
-                .markAsRead(true)
-                .buildSingle()
-                .subscribeOn(Schedulers.io())
-                .subscribe({}, {})
+        StorageHelper.lastNewsDate = Date()
     }
 }

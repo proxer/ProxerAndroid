@@ -1,6 +1,7 @@
 package me.proxer.app.notification
 
 import android.app.Application
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -9,6 +10,7 @@ import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.base.BaseContentViewModel
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.ResettingMutableLiveData
+import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.data.UniqueQueue
 import me.proxer.app.util.extension.ProxerNotification
 import me.proxer.app.util.extension.buildOptionalSingle
@@ -20,6 +22,13 @@ import me.proxer.library.api.Endpoint
 class NotificationViewModel(application: Application) : BaseContentViewModel<List<ProxerNotification>>(application) {
 
     override val isLoginRequired = true
+
+    override val dataSingle: Single<List<ProxerNotification>>
+        get() = super.dataSingle.doOnSuccess {
+            it.firstOrNull()?.date?.let {
+                StorageHelper.lastNotificationsDate = it
+            }
+        }
 
     override val endpoint: Endpoint<List<ProxerNotification>>
         get() = api.notifications().notifications()

@@ -96,17 +96,21 @@ class NotificationJob : Job() {
     }
 
     private fun fetchAccountNotifications(context: Context, notificationInfo: NotificationInfo) {
+        val lastNotificationsDate = StorageHelper.lastNotificationsDate
         val newNotifications = when (notificationInfo.notifications) {
             0 -> emptyList()
             else -> api.notifications().notifications()
+                    .page(0)
                     .limit(notificationInfo.notifications)
                     .filter(NotificationFilter.UNREAD)
                     .build()
                     .execute()
         }
 
-        if (!bus.post(AccountNotificationEvent())) {
-            AccountNotifications.showOrUpdate(context, newNotifications)
+        newNotifications.firstOrNull()?.date.let {
+            if (it != lastNotificationsDate && !bus.post(AccountNotificationEvent())) {
+                AccountNotifications.showOrUpdate(context, newNotifications)
+            }
         }
     }
 }

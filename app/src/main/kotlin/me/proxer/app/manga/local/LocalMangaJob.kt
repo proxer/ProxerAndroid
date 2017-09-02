@@ -163,6 +163,7 @@ class LocalMangaJob : Job() {
 
                     bus.post(FailedEvent(entryId, episode, language))
 
+                    LocalMangaNotifications.cancel(context)
                     LocalMangaNotifications.showError(context, error)
 
                     Result.FAILURE
@@ -170,7 +171,7 @@ class LocalMangaJob : Job() {
                 isCanceled -> {
                     bus.post(FailedEvent(entryId, episode, language))
 
-                    LocalMangaNotifications.cancelProgress(context)
+                    LocalMangaNotifications.cancel(context)
 
                     Result.FAILURE
                 }

@@ -204,7 +204,15 @@
             android:exported="false" />
 
         <receiver
+            android:name=".news.NewsNotificationReadReceiver"
+            android:exported="false" />
+
+        <receiver
             android:name=".notification.AccountNotificationDeletionReceiver"
+            android:exported="false" />
+
+        <receiver
+            android:name=".notification.AccountNotificationReadReceiver"
             android:exported="false" />
 
         <receiver

@@ -21,7 +21,7 @@ class LocalMangaDownloadCancelReceiver : BroadcastReceiver() {
         Completable
                 .fromAction {
                     LocalMangaJob.cancelAll()
-                    LocalMangaNotifications.cancelProgress(context)
+                    LocalMangaNotifications.cancel(context)
                 }
                 .subscribeOn(Schedulers.io())
                 .subscribe()

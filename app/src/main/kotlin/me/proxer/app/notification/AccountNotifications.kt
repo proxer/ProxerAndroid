@@ -22,7 +22,6 @@ import me.proxer.app.util.extension.getQuantityString
 object AccountNotifications {
 
     private const val ID = 759234852
-    private const val ERROR_ID = 89235982
 
     fun showOrUpdate(context: Context, notifications: Collection<ProxerNotification>) {
         val notification = buildNotification(context, notifications)
@@ -34,15 +33,12 @@ object AccountNotifications {
     }
 
     fun showError(context: Context, error: Throwable) {
-        NotificationUtils.showErrorNotification(context, ERROR_ID, PROFILE_CHANNEL,
+        NotificationUtils.showErrorNotification(context, ID, PROFILE_CHANNEL,
                 context.getString(R.string.notification_account_error_title),
                 context.getString(ErrorUtils.getMessage(error)))
     }
 
-    fun cancel(context: Context) {
-        NotificationManagerCompat.from(context).cancel(ID)
-        NotificationManagerCompat.from(context).cancel(ERROR_ID)
-    }
+    fun cancel(context: Context) = NotificationManagerCompat.from(context).cancel(ID)
 
     private fun buildNotification(context: Context, notifications: Collection<ProxerNotification>): Notification? {
         if (notifications.isEmpty()) {
@@ -52,7 +48,6 @@ object AccountNotifications {
         val builder = NotificationCompat.Builder(context, PROFILE_CHANNEL)
         val notificationAmount = context.getQuantityString(R.plurals.notification_account_amount, notifications.size)
         val title = context.getString(R.string.notification_account_title)
-        val deleteIntent = AccountNotificationDeletionReceiver.getPendingIntent(context)
         val style: NotificationCompat.Style
         val intent: PendingIntent
         val content: CharSequence
@@ -93,7 +88,9 @@ object AccountNotifications {
                 .setContentTitle(title)
                 .setContentText(content)
                 .setContentIntent(intent)
-                .setDeleteIntent(deleteIntent)
+                .setDeleteIntent(AccountNotificationDeletionReceiver.getPendingIntent(context))
+                .addAction(R.drawable.ic_stat_check, context.getString(R.string.notification_news_read_action),
+                        AccountNotificationReadReceiver.getPendingIntent(context))
                 .setColor(ContextCompat.getColor(context, R.color.primary))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setCategory(NotificationCompat.CATEGORY_SOCIAL)

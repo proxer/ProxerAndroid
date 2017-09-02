@@ -356,6 +356,7 @@
     <string name="notification_channel_manga_description">Informationen zum Manga-Download</string>
 
     <string name="notification_news_title">News</string>
+    <string name="notification_news_read_action">Gelesen</string>
     <plurals name="notification_news_amount">
         <item quantity="other">%d News</item>
     </plurals>
@@ -370,6 +371,7 @@
     </plurals>
 
     <string name="notification_account_title">Account Benachrichtigung</string>
+    <string name="notification_account_read_action">Gelesen</string>
     <string name="notification_account_error_title">Fehler beim Abrufen der Benachrichtigungen</string>
     <plurals name="notification_account_amount">
         <item quantity="one">Eine Benachrichtigung</item>

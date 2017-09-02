@@ -68,6 +68,7 @@ class MangaPageSingle(context: Context, private val isLocal: Boolean, private va
                         }
                     }
                 } catch (error: Throwable) {
+                    call?.cancel()
                     file.delete()
 
                     if (!Thread.interrupted()) observer.onError(error) else Unit

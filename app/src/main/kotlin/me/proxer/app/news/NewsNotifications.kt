@@ -38,7 +38,6 @@ object NewsNotifications {
 
         val builder = NotificationCompat.Builder(context, NEWS_CHANNEL)
         val newsAmount = context.getQuantityString(R.plurals.notification_news_amount, news.size)
-        val deleteIntent = NewsNotificationDeletionReceiver.getPendingIntent(context)
         val style: NotificationCompat.Style
         val title: String
         val content: String
@@ -74,10 +73,12 @@ object NewsNotifications {
                 .setSmallIcon(R.drawable.ic_stat_proxer)
                 .setContentTitle(title)
                 .setContentText(content)
-                .setDeleteIntent(deleteIntent)
+                .setDeleteIntent(NewsNotificationDeletionReceiver.getPendingIntent(context))
                 .setContentIntent(PendingIntent.getActivity(context, 0,
                         MainActivity.getSectionIntent(context, DrawerItem.NEWS),
                         PendingIntent.FLAG_UPDATE_CURRENT))
+                .addAction(R.drawable.ic_stat_check, context.getString(R.string.notification_news_read_action),
+                        NewsNotificationReadReceiver.getPendingIntent(context))
                 .setColor(ContextCompat.getColor(context, R.color.primary))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setOnlyAlertOnce(true)
