@@ -46,6 +46,7 @@ import me.proxer.library.api.ProxerApi
 import me.proxer.library.api.ProxerApi.Builder.LoggingStrategy
 import okhttp3.OkHttpClient
 import java.io.File
+import java.util.*
 import kotlin.concurrent.write
 
 /**
@@ -127,6 +128,7 @@ class MainApplication : Application() {
                     ChatJob.cancel()
                     LocalMangaJob.cancelAll()
 
+                    StorageHelper.lastNotificationsDate = Date(0L)
                     StorageHelper.areConferencesSynchronized = false
                     StorageHelper.resetChatInterval()
 
