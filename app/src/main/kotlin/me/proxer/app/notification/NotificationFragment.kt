@@ -4,11 +4,15 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.v7.util.DiffUtil
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.*
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
@@ -112,10 +116,32 @@ class NotificationFragment : BaseContentFragment<List<ProxerNotification>>() {
     override fun showData(data: List<ProxerNotification>) {
         super.showData(data)
 
-        adapter.swapDataAndNotifyChange(data)
-
         if (adapter.isEmpty()) {
-            showError(ErrorAction(R.string.error_no_data_notifications, ErrorAction.ACTION_MESSAGE_HIDE))
+            if (data.isEmpty()) {
+                showError(ErrorAction(R.string.error_no_data_notifications, ErrorAction.ACTION_MESSAGE_HIDE))
+            } else {
+                adapter.swapDataAndNotifyInsertion(data)
+            }
+        } else {
+            Single.fromCallable { DiffUtil.calculateDiff(adapter.provideDiffUtilCallback(data)) }
+                    .subscribeOn(Schedulers.single())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .bindToLifecycle(this)
+                    .subscribe { diff: DiffUtil.DiffResult ->
+                        val wasAtFirstPosition = isAtTop()
+
+                        adapter.swapDataAndNotifyWithDiffResult(data, diff)
+
+                        if (adapter.isEmpty()) {
+                            showError(ErrorAction(R.string.error_no_data_notifications, ErrorAction.ACTION_MESSAGE_HIDE))
+                        } else {
+                            if (wasAtFirstPosition) {
+                                recyclerView.let {
+                                    it.postDelayed({ it.smoothScrollToPosition(0) }, 50)
+                                }
+                            }
+                        }
+                    }
         }
     }
 
@@ -125,5 +151,12 @@ class NotificationFragment : BaseContentFragment<List<ProxerNotification>>() {
         adapter.clearAndNotifyRemoval()
 
         super.showError(action)
+    }
+
+    private fun isAtTop() = recyclerView.layoutManager.let {
+        when (it) {
+            is LinearLayoutManager -> it.findFirstCompletelyVisibleItemPosition() == 0
+            else -> false
+        }
     }
 }

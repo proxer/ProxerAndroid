@@ -107,16 +107,14 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
 
         when {
             innerAdapter.isEmpty() -> {
-                innerAdapter.swapDataAndNotifyInsertion(data)
-
                 if (data.isEmpty()) {
                     showError(ErrorAction(emptyDataMessage, ErrorAction.ACTION_MESSAGE_HIDE))
                 } else {
+                    innerAdapter.swapDataAndNotifyInsertion(data)
+
                     if (!isFirstData) {
                         recyclerView.let {
-                            it.postDelayed({
-                                scrollToTop()
-                            }, 50)
+                            it.postDelayed({ scrollToTop() }, 50)
                         }
                     }
 
@@ -127,19 +125,17 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
                     .subscribeOn(Schedulers.single())
                     .observeOn(AndroidSchedulers.mainThread())
                     .bindToLifecycle(this)
-                    .subscribe { it: DiffUtil.DiffResult ->
+                    .subscribe { diff: DiffUtil.DiffResult ->
                         val wasAtFirstPosition = isAtTop()
 
-                        innerAdapter.swapDataAndNotifyWithDiffResult(data, it)
+                        innerAdapter.swapDataAndNotifyWithDiffResult(data, diff)
 
-                        if (data.isEmpty()) {
+                        if (innerAdapter.isEmpty()) {
                             showError(ErrorAction(emptyDataMessage, ErrorAction.ACTION_MESSAGE_HIDE))
                         } else {
                             if (wasAtFirstPosition) {
                                 recyclerView.let {
-                                    it.postDelayed({
-                                        it.smoothScrollToPosition(0)
-                                    }, 50)
+                                    it.postDelayed({ it.smoothScrollToPosition(0) }, 50)
                                 }
                             }
                         }
