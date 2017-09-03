@@ -4,7 +4,7 @@ import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 import android.os.Parcel
 import android.os.Parcelable
-import me.proxer.library.entitiy.messenger.Conference
+import me.proxer.library.entity.messenger.Conference
 import java.util.*
 
 /**

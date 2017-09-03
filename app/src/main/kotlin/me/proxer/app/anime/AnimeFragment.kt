@@ -28,7 +28,7 @@ import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.snackbar
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.app.view.MediaControlView
-import me.proxer.library.entitiy.info.EntryCore
+import me.proxer.library.entity.info.EntryCore
 import me.proxer.library.enums.AnimeLanguage
 import okhttp3.HttpUrl
 import org.jetbrains.anko.applyRecursively

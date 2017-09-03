@@ -15,7 +15,7 @@ import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.extension.unsafeLazy
-import me.proxer.library.entitiy.info.Comment
+import me.proxer.library.entity.info.Comment
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.CommentSortCriteria
 import org.jetbrains.anko.bundleOf

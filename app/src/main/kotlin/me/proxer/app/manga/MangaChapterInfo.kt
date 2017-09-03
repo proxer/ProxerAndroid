@@ -1,6 +1,6 @@
 package me.proxer.app.manga
 
-import me.proxer.library.entitiy.manga.Chapter
+import me.proxer.library.entity.manga.Chapter
 
 /**
  * @author Ruben Gees

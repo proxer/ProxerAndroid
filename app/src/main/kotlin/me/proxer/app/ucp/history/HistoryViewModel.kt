@@ -4,7 +4,7 @@ import android.app.Application
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.base.PagedContentViewModel
 import me.proxer.library.api.PagingLimitEndpoint
-import me.proxer.library.entitiy.ucp.UcpHistoryEntry
+import me.proxer.library.entity.ucp.UcpHistoryEntry
 
 /**
  * @author Ruben Gees

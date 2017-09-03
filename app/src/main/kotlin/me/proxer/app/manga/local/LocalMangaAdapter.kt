@@ -20,7 +20,7 @@ import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.CompleteLocalMangaEntry
 import me.proxer.app.util.extension.defaultLoad
 import me.proxer.app.view.PaddingDividerItemDecoration
-import me.proxer.library.entitiy.info.EntryCore
+import me.proxer.library.entity.info.EntryCore
 import me.proxer.library.util.ProxerUrls
 
 /**

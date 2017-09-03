@@ -13,7 +13,7 @@ import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.data.UniqueQueue
 import me.proxer.app.util.extension.buildOptionalSingle
 import me.proxer.app.util.extension.buildSingle
-import me.proxer.library.entitiy.ucp.UcpTopTenEntry
+import me.proxer.library.entity.ucp.UcpTopTenEntry
 import me.proxer.library.enums.Category
 
 /**

@@ -13,7 +13,7 @@ import me.proxer.app.util.Validators
 import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.extension.buildOptionalSingle
 import me.proxer.library.api.Endpoint
-import me.proxer.library.entitiy.info.Entry
+import me.proxer.library.entity.info.Entry
 
 /**
  * @author Ruben Gees

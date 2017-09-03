@@ -11,7 +11,7 @@ import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.data.UniqueQueue
 import me.proxer.app.util.extension.buildOptionalSingle
 import me.proxer.library.api.PagingLimitEndpoint
-import me.proxer.library.entitiy.ucp.Bookmark
+import me.proxer.library.entity.ucp.Bookmark
 import me.proxer.library.enums.Category
 
 /**

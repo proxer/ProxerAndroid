@@ -4,7 +4,7 @@ import android.app.Application
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.base.PagedContentViewModel
 import me.proxer.library.api.PagingLimitEndpoint
-import me.proxer.library.entitiy.user.UserComment
+import me.proxer.library.entity.user.UserComment
 import me.proxer.library.enums.Category
 
 /**

@@ -45,7 +45,7 @@ class YourUploadStreamResolver : StreamResolver() {
                         .flatMap {
                             client.newCall(Request.Builder()
                                     .head()
-                                    .url(HttpUrl.parse("http://yourupload.com$it"))
+                                    .url(HttpUrl.parse("http://yourupload.com$it") ?: throw NullPointerException())
                                     .header("Referer", url)
                                     .header("User-Agent", GENERIC_USER_AGENT)
                                     .build())

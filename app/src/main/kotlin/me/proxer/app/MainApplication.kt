@@ -55,6 +55,7 @@ import kotlin.concurrent.write
 class MainApplication : Application() {
 
     companion object {
+        const val LOGGING_TAG = "ProxerAndroid"
         const val USER_AGENT = "ProxerAndroid/${BuildConfig.VERSION_NAME}"
         const val GENERIC_USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
 
@@ -145,6 +146,7 @@ class MainApplication : Application() {
         api = ProxerApi.Builder(BuildConfig.PROXER_API_KEY)
                 .userAgent(USER_AGENT)
                 .loggingStrategy(if (BuildConfig.DEBUG) LoggingStrategy.ALL else LoggingStrategy.NONE)
+                .loggingTag(LOGGING_TAG)
                 .loginTokenManager(ProxerLoginTokenManager())
                 .build()
     }

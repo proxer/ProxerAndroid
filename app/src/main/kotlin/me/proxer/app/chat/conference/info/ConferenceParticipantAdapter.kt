@@ -19,7 +19,7 @@ import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.chat.conference.info.ConferenceParticipantAdapter.ViewHolder
 import me.proxer.app.util.Utils
-import me.proxer.library.entitiy.messenger.ConferenceParticipant
+import me.proxer.library.entity.messenger.ConferenceParticipant
 import me.proxer.library.util.ProxerUrls
 import okhttp3.HttpUrl
 

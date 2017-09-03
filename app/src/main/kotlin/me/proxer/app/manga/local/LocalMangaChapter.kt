@@ -4,8 +4,8 @@ import android.arch.persistence.room.Entity
 import android.arch.persistence.room.ForeignKey
 import android.arch.persistence.room.Index
 import android.arch.persistence.room.PrimaryKey
-import me.proxer.library.entitiy.manga.Chapter
-import me.proxer.library.entitiy.manga.Page
+import me.proxer.library.entity.manga.Chapter
+import me.proxer.library.entity.manga.Page
 import me.proxer.library.enums.Language
 import java.util.*
 
@@ -14,8 +14,8 @@ import java.util.*
  */
 @Entity(tableName = "chapters", foreignKeys = [(ForeignKey(
         entity = LocalEntryCore::class,
-        parentColumns = arrayOf("id"),
-        childColumns = arrayOf("entryId")
+        parentColumns = [("id")],
+        childColumns = [("entryId")]
 ))], indices = [(Index(value = "entryId"))])
 data class LocalMangaChapter(@PrimaryKey(autoGenerate = true) val id: Long = 0, val episode: Int,
                              val language: Language, val entryId: Long, val title: String, val uploaderId: String,

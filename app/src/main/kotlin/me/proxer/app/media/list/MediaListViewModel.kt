@@ -4,7 +4,7 @@ import android.app.Application
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.base.PagedContentViewModel
 import me.proxer.library.api.PagingLimitEndpoint
-import me.proxer.library.entitiy.list.MediaListEntry
+import me.proxer.library.entity.list.MediaListEntry
 import me.proxer.library.enums.MediaSearchSortCriteria
 import me.proxer.library.enums.MediaType
 

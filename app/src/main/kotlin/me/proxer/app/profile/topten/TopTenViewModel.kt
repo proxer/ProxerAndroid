@@ -10,7 +10,7 @@ import me.proxer.app.profile.topten.TopTenViewModel.ZippedTopTenResult
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.buildSingle
-import me.proxer.library.entitiy.user.TopTenEntry
+import me.proxer.library.entity.user.TopTenEntry
 import me.proxer.library.enums.Category
 
 /**

@@ -24,7 +24,7 @@ import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.toAnimeLanguage
 import me.proxer.app.util.extension.toGeneralLanguage
 import me.proxer.app.util.extension.unsafeLazy
-import me.proxer.library.entitiy.ucp.Bookmark
+import me.proxer.library.entity.ucp.Bookmark
 import me.proxer.library.enums.Category
 import org.jetbrains.anko.bundleOf
 

@@ -92,6 +92,7 @@ dependencies {
     rootProject.ext.implementationDependencies.values().each { implementation it }
     rootProject.ext.debugImplementationDependencies.values().each { debugImplementation it }
     rootProject.ext.releaseImplementationDependencies.values().each { releaseImplementation it }
+    rootProject.ext.compileOnlyDependencies.values().each { compileOnly it }
     rootProject.ext.kaptDependencies.values().each { kapt it }
 
     rootProject.ext.transitiveImplementationDependencies.values().each {

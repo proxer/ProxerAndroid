@@ -1,8 +1,8 @@
 package me.proxer.app.media.episode
 
-import me.proxer.library.entitiy.info.AnimeEpisode
-import me.proxer.library.entitiy.info.Episode
-import me.proxer.library.entitiy.info.MangaEpisode
+import me.proxer.library.entity.info.AnimeEpisode
+import me.proxer.library.entity.info.Episode
+import me.proxer.library.entity.info.MangaEpisode
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.MediaLanguage
 

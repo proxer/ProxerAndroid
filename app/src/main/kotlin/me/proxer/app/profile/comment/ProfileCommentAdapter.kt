@@ -23,7 +23,7 @@ import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.app.view.bbcode.BBCodeView
-import me.proxer.library.entitiy.user.UserComment
+import me.proxer.library.entity.user.UserComment
 
 /**
  * @author Ruben Gees

@@ -17,7 +17,7 @@ import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.util.extension.*
-import me.proxer.library.entitiy.ucp.Bookmark
+import me.proxer.library.entity.ucp.Bookmark
 import me.proxer.library.util.ProxerUrls
 
 /**

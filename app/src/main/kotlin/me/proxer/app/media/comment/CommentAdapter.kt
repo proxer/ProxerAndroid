@@ -25,7 +25,7 @@ import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.app.view.bbcode.BBCodeView
-import me.proxer.library.entitiy.info.Comment
+import me.proxer.library.entity.info.Comment
 import me.proxer.library.enums.Category
 import me.proxer.library.util.ProxerUrls
 

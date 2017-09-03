@@ -14,7 +14,7 @@ import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.profile.topten.TopTenAdapter.ViewHolder
 import me.proxer.app.util.extension.defaultLoad
-import me.proxer.library.entitiy.user.TopTenEntry
+import me.proxer.library.entity.user.TopTenEntry
 import me.proxer.library.util.ProxerUrls
 
 /**

@@ -15,7 +15,7 @@ import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.util.extension.*
-import me.proxer.library.entitiy.list.MediaListEntry
+import me.proxer.library.entity.list.MediaListEntry
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.Language
 import me.proxer.library.util.ProxerUrls

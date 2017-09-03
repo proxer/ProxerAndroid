@@ -17,7 +17,7 @@ import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.ucp.topten.UcpTopTenAdapter.ViewHolder
 import me.proxer.app.util.extension.defaultLoad
-import me.proxer.library.entitiy.ucp.UcpTopTenEntry
+import me.proxer.library.entity.ucp.UcpTopTenEntry
 import me.proxer.library.util.ProxerUrls
 
 /**

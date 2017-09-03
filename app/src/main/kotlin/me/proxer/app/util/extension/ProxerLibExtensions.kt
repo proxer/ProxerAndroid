@@ -11,14 +11,14 @@ import me.proxer.app.chat.LocalMessage
 import me.proxer.app.manga.local.LocalEntryCore
 import me.proxer.app.manga.local.LocalMangaChapter
 import me.proxer.app.manga.local.LocalMangaPage
-import me.proxer.library.entitiy.anime.Stream
-import me.proxer.library.entitiy.info.EntryCore
-import me.proxer.library.entitiy.info.EntrySeasonInfo
-import me.proxer.library.entitiy.info.Synonym
-import me.proxer.library.entitiy.manga.Chapter
-import me.proxer.library.entitiy.manga.Page
-import me.proxer.library.entitiy.messenger.Conference
-import me.proxer.library.entitiy.messenger.Message
+import me.proxer.library.entity.anime.Stream
+import me.proxer.library.entity.info.EntryCore
+import me.proxer.library.entity.info.EntrySeasonInfo
+import me.proxer.library.entity.info.Synonym
+import me.proxer.library.entity.manga.Chapter
+import me.proxer.library.entity.manga.Page
+import me.proxer.library.entity.messenger.Conference
+import me.proxer.library.entity.messenger.Message
 import me.proxer.library.enums.*
 import java.net.URLDecoder
 

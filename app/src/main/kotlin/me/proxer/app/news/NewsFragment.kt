@@ -12,7 +12,7 @@ import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.app.view.ImageDetailActivity
-import me.proxer.library.entitiy.notifications.NewsArticle
+import me.proxer.library.entity.notifications.NewsArticle
 import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
 import org.jetbrains.anko.bundleOf

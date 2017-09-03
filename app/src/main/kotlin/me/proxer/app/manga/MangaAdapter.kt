@@ -18,7 +18,7 @@ import me.proxer.app.manga.MangaAdapter.ViewHolder
 import me.proxer.app.manga.MangaPageSingle.Input
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.decodedName
-import me.proxer.library.entitiy.manga.Page
+import me.proxer.library.entity.manga.Page
 
 /**
  * @author Ruben Gees

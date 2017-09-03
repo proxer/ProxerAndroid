@@ -4,7 +4,7 @@ import android.app.Application
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.base.BaseContentViewModel
 import me.proxer.library.api.Endpoint
-import me.proxer.library.entitiy.info.TranslatorGroup
+import me.proxer.library.entity.info.TranslatorGroup
 
 /**
  * @author Ruben Gees

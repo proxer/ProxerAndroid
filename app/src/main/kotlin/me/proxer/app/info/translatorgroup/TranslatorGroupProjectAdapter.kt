@@ -16,7 +16,7 @@ import me.proxer.app.base.BaseAdapter
 import me.proxer.app.info.translatorgroup.TranslatorGroupProjectAdapter.ViewHolder
 import me.proxer.app.util.extension.defaultLoad
 import me.proxer.app.util.extension.toAppString
-import me.proxer.library.entitiy.list.TranslatorGroupProject
+import me.proxer.library.entity.list.TranslatorGroupProject
 import me.proxer.library.util.ProxerUrls
 
 /**

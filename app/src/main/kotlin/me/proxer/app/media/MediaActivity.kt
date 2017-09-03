@@ -20,6 +20,7 @@ import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Category
 import me.proxer.library.util.ProxerUrls
+import okhttp3.HttpUrl
 import org.jetbrains.anko.intentFor
 
 /**
@@ -71,7 +72,7 @@ class MediaActivity : ImageTabsActivity() {
             }
         }
 
-    override val headerImageUrl by unsafeLazy { ProxerUrls.entryImage(id) }
+    override val headerImageUrl: HttpUrl by unsafeLazy { ProxerUrls.entryImage(id) }
     override val sectionsPagerAdapter by unsafeLazy { SectionsPagerAdapter(supportFragmentManager) }
 
     override val itemToDisplay: Int

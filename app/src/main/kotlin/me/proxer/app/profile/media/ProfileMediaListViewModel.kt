@@ -7,7 +7,7 @@ import me.proxer.app.base.PagedContentViewModel
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.library.api.PagingLimitEndpoint
-import me.proxer.library.entitiy.user.UserMediaListEntry
+import me.proxer.library.entity.user.UserMediaListEntry
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.UserMediaListFilterType
 

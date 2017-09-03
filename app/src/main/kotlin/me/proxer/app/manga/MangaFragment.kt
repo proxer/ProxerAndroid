@@ -33,7 +33,7 @@ import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.app.view.MediaControlView
 import me.proxer.app.view.MediaControlView.SimpleTranslatorGroup
 import me.proxer.app.view.MediaControlView.Uploader
-import me.proxer.library.entitiy.info.EntryCore
+import me.proxer.library.entity.info.EntryCore
 import me.proxer.library.enums.Language
 import org.jetbrains.anko.bundleOf
 

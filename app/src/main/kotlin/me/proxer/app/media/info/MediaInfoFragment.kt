@@ -21,7 +21,7 @@ import me.proxer.app.info.industry.IndustryActivity
 import me.proxer.app.info.translatorgroup.TranslatorGroupActivity
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.extension.*
-import me.proxer.library.entitiy.info.Entry
+import me.proxer.library.entity.info.Entry
 import me.proxer.library.enums.Category
 import me.proxer.library.util.ProxerUrls
 import me.proxer.library.util.ProxerUtils

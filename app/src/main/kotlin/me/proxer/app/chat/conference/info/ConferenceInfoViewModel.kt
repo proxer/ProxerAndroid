@@ -4,7 +4,7 @@ import android.app.Application
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.base.BaseContentViewModel
 import me.proxer.library.api.Endpoint
-import me.proxer.library.entitiy.messenger.ConferenceInfo
+import me.proxer.library.entity.messenger.ConferenceInfo
 
 /**
  * @author Ruben Gees

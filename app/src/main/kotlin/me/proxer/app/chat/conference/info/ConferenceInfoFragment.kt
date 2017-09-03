@@ -16,7 +16,7 @@ import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.extension.convertToDateTime
 import me.proxer.app.util.extension.unsafeLazy
-import me.proxer.library.entitiy.messenger.ConferenceInfo
+import me.proxer.library.entity.messenger.ConferenceInfo
 import org.jetbrains.anko.bundleOf
 import org.threeten.bp.format.DateTimeFormatter
 

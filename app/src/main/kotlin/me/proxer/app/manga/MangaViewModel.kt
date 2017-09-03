@@ -18,7 +18,7 @@ import me.proxer.app.util.extension.buildPartialErrorSingle
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.toMediaLanguage
 import me.proxer.library.api.Endpoint
-import me.proxer.library.entitiy.info.EntryCore
+import me.proxer.library.entity.info.EntryCore
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.Language
 import java.io.File

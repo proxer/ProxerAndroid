@@ -17,7 +17,7 @@ import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.clipboardManager
 import me.proxer.app.util.extension.toAppDrawable
 import me.proxer.app.util.extension.unsafeLazy
-import me.proxer.library.entitiy.info.TranslatorGroup
+import me.proxer.library.entity.info.TranslatorGroup
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.toast
 

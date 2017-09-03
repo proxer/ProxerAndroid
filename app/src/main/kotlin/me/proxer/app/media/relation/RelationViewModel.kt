@@ -8,7 +8,7 @@ import me.proxer.app.base.BaseContentViewModel
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.library.api.Endpoint
-import me.proxer.library.entitiy.info.Relation
+import me.proxer.library.entity.info.Relation
 
 /**
  * @author Ruben Gees

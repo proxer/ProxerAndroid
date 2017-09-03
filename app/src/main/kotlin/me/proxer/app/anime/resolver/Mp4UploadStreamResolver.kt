@@ -39,7 +39,7 @@ class Mp4UploadStreamResolver : StreamResolver() {
             .flatMap { mediaId ->
                 client.newCall(Request.Builder()
                         .post(FormBody.Builder().add("op", "download2").add("id", mediaId).build())
-                        .url(HttpUrl.parse("https://mp4upload.com/$mediaId"))
+                        .url(HttpUrl.parse("https://mp4upload.com/$mediaId") ?: throw NullPointerException())
                         .header("User-Agent", GENERIC_USER_AGENT)
                         .build())
                         .toSingle()

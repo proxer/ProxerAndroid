@@ -15,7 +15,7 @@ ext {
     architectureComponentsVersion = '1.0.0-alpha9'
     playServicesVersion = '11.2.0'
     androidJobVersion = '1.2.0-RC1'
-    proxerLibVersion = '3.2.1'
+    proxerLibVersion = '5b354351db'
 
     // RxJava
     rxJavaVersion = '2.1.3'
@@ -39,7 +39,7 @@ ext {
     emojiIosVersion = '0.6.0-SNAPSHOT'
     exomediaVersion = 'c611808b8c'
     exoplayerVersion = 'r2.5.1'
-    materialProgressBarVersion = '1.4.1'
+    materialProgressBarVersion = '1.4.2'
     materialRatingBarVersion = '1.0.2'
     customtabsHelperVersion = '1.0.4'
     introductionVersion = '1.4.1'
@@ -56,6 +56,7 @@ ext {
     easyHeaderFooterAdapterVersion = '3.0.0'
     kOptionalVersion = '1.2.0'
     kotterknifeVersion = '1.0'
+    jsr305Version = '3.0.2'
 
     // Debugging
     strictModeCompatVersion = '26.0.2'
@@ -139,6 +140,10 @@ ext {
 
     releaseImplementationDependencies = [
             leakCanaryNoOp: "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion",
+    ]
+
+    compileOnlyDependencies = [
+            jsr305: "com.google.code.findbugs:jsr305:$jsr305Version"
     ]
 
     kaptDependencies = [

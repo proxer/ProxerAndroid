@@ -16,7 +16,7 @@ import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.media.relation.RelationAdapter.ViewHolder
 import me.proxer.app.util.extension.*
-import me.proxer.library.entitiy.info.Relation
+import me.proxer.library.entity.info.Relation
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.Language
 import me.proxer.library.util.ProxerUrls

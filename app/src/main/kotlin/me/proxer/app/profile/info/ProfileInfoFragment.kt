@@ -15,7 +15,7 @@ import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.unsafeLazy
-import me.proxer.library.entitiy.user.UserInfo
+import me.proxer.library.entity.user.UserInfo
 import okhttp3.HttpUrl
 import org.jetbrains.anko.bundleOf
 

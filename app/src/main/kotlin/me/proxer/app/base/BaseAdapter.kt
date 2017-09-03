@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
-import me.proxer.library.entitiy.ProxerIdItem
+import me.proxer.library.entity.ProxerIdItem
 
 /**
  * @author Ruben Gees

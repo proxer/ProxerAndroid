@@ -19,7 +19,7 @@ import me.proxer.app.base.BaseAdapter
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.defaultLoad
-import me.proxer.library.entitiy.notifications.NewsArticle
+import me.proxer.library.entity.notifications.NewsArticle
 import me.proxer.library.util.ProxerUrls
 
 /**

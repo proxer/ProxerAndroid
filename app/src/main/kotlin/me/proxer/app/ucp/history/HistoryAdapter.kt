@@ -16,7 +16,7 @@ import me.proxer.app.ucp.history.HistoryAdapter.ViewHolder
 import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.defaultLoad
 import me.proxer.app.util.extension.toAppString
-import me.proxer.library.entitiy.ucp.UcpHistoryEntry
+import me.proxer.library.entity.ucp.UcpHistoryEntry
 import me.proxer.library.util.ProxerUrls
 
 /**

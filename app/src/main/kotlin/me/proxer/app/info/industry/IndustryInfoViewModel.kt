@@ -4,7 +4,7 @@ import android.app.Application
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.base.BaseContentViewModel
 import me.proxer.library.api.Endpoint
-import me.proxer.library.entitiy.info.Industry
+import me.proxer.library.entity.info.Industry
 
 /**
  * @author Ruben Gees

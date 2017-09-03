@@ -18,7 +18,7 @@ import me.proxer.app.util.extension.defaultLoad
 import me.proxer.app.util.extension.toAppString
 import me.proxer.app.util.extension.toCategory
 import me.proxer.app.util.extension.toEpisodeAppString
-import me.proxer.library.entitiy.user.UserMediaListEntry
+import me.proxer.library.entity.user.UserMediaListEntry
 import me.proxer.library.util.ProxerUrls
 
 /**

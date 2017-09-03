@@ -19,8 +19,8 @@ import me.proxer.app.util.extension.toLocalMessage
 import me.proxer.library.api.ProxerException
 import me.proxer.library.api.ProxerException.ErrorType
 import me.proxer.library.api.ProxerException.ServerErrorType
-import me.proxer.library.entitiy.messenger.Conference
-import me.proxer.library.entitiy.messenger.Message
+import me.proxer.library.entity.messenger.Conference
+import me.proxer.library.entity.messenger.Message
 import java.util.*
 
 /**

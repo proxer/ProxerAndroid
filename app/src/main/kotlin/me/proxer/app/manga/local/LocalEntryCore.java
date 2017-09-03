@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
-import me.proxer.library.entitiy.info.EntryCore;
+import me.proxer.library.entity.info.EntryCore;
 import me.proxer.library.enums.Category;
 import me.proxer.library.enums.FskConstraint;
 import me.proxer.library.enums.Genre;

@@ -16,7 +16,7 @@ import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.extension.unsafeLazy
-import me.proxer.library.entitiy.info.Relation
+import me.proxer.library.entity.info.Relation
 import org.jetbrains.anko.bundleOf
 
 /**

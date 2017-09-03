@@ -13,7 +13,7 @@ import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.toCategory
 import me.proxer.app.util.extension.unsafeLazy
-import me.proxer.library.entitiy.list.IndustryProject
+import me.proxer.library.entity.list.IndustryProject
 import org.jetbrains.anko.bundleOf
 
 /**

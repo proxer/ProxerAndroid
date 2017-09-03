@@ -5,7 +5,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.ResettingMutableLiveData
-import me.proxer.library.entitiy.ProxerIdItem
+import me.proxer.library.entity.ProxerIdItem
 
 /**
  * @author Ruben Gees

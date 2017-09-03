@@ -17,7 +17,7 @@ import me.proxer.app.util.Validators
 import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.extension.*
 import me.proxer.library.api.Endpoint
-import me.proxer.library.entitiy.info.EntryCore
+import me.proxer.library.entity.info.EntryCore
 import me.proxer.library.enums.AnimeLanguage
 import me.proxer.library.enums.Category
 

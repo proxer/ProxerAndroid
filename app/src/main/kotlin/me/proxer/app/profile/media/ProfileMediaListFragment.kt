@@ -17,7 +17,7 @@ import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.toCategory
 import me.proxer.app.util.extension.unsafeLazy
-import me.proxer.library.entitiy.user.UserMediaListEntry
+import me.proxer.library.entity.user.UserMediaListEntry
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.UserMediaListFilterType
 import org.jetbrains.anko.bundleOf

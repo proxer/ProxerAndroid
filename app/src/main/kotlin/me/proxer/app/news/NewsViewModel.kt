@@ -8,7 +8,7 @@ import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.base.PagedContentViewModel
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.library.api.PagingLimitEndpoint
-import me.proxer.library.entitiy.notifications.NewsArticle
+import me.proxer.library.entity.notifications.NewsArticle
 
 /**
  * @author Ruben Gees

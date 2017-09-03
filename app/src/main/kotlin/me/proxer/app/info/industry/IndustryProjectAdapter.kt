@@ -16,7 +16,7 @@ import me.proxer.app.base.BaseAdapter
 import me.proxer.app.info.industry.IndustryProjectAdapter.ViewHolder
 import me.proxer.app.util.extension.defaultLoad
 import me.proxer.app.util.extension.toAppString
-import me.proxer.library.entitiy.list.IndustryProject
+import me.proxer.library.entity.list.IndustryProject
 import me.proxer.library.util.ProxerUrls
 
 /**

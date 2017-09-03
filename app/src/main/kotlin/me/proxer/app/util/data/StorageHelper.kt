@@ -29,7 +29,7 @@ object StorageHelper {
     init {
         if (!Hawk.isBuilt()) {
             Hawk.init(globalContext).setParser(object : Parser {
-                override fun <T : Any?> fromJson(content: String?, type: Type) = moshi.adapter<T>(type).fromJson(content)
+                override fun <T : Any?> fromJson(content: String, type: Type) = moshi.adapter<T>(type).fromJson(content)
                 override fun toJson(body: Any) = moshi.adapter(body.javaClass).toJson(body)
             }).build()
         }

@@ -11,7 +11,7 @@ import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.unsafeLazy
-import me.proxer.library.entitiy.ucp.UcpHistoryEntry
+import me.proxer.library.entity.ucp.UcpHistoryEntry
 import org.jetbrains.anko.bundleOf
 
 /**

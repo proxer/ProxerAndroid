@@ -11,7 +11,7 @@ import me.proxer.app.R
 import me.proxer.app.util.NotificationUtils.NEWS_CHANNEL
 import me.proxer.app.util.extension.getQuantityString
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper.DrawerItem
-import me.proxer.library.entitiy.notifications.NewsArticle
+import me.proxer.library.entity.notifications.NewsArticle
 
 /**
  * @author Ruben Gees

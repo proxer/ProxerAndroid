@@ -12,7 +12,7 @@ import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.library.api.ProxerException
 import me.proxer.library.api.ProxerException.ServerErrorType
-import me.proxer.library.entitiy.user.User
+import me.proxer.library.entity.user.User
 
 /**
  * @author Ruben Gees
