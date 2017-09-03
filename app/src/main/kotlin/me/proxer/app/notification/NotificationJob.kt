@@ -83,7 +83,7 @@ class NotificationJob : Job() {
                     .page(0)
                     .limit(notificationInfo?.news ?: 100)
                     .build()
-                    .execute()
+                    .safeExecute()
                     .filter { it.date.after(lastNewsDate) }
                     .sortedByDescending { it.date }
         }
@@ -104,7 +104,7 @@ class NotificationJob : Job() {
                     .limit(notificationInfo.notifications)
                     .filter(NotificationFilter.UNREAD)
                     .build()
-                    .execute()
+                    .safeExecute()
         }
 
         newNotifications.firstOrNull()?.date.let {

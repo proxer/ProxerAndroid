@@ -226,7 +226,7 @@ class ChatJob : Job() {
             val fetchedConferences = api.messenger().conferences()
                     .page(page)
                     .build()
-                    .execute()
+                    .safeExecute()
 
             changedConferences += fetchedConferences.filter {
                 it != chatDao.findConference(it.id.toLong())?.toNonLocalConference()
@@ -257,7 +257,7 @@ class ChatJob : Job() {
                         .messageId(nextId)
                         .markAsRead(false)
                         .build()
-                        .execute()
+                        .safeExecute()
 
                 newMessages += fetchedMessages
 
@@ -282,7 +282,7 @@ class ChatJob : Job() {
                         .messageId(nextId)
                         .markAsRead(false)
                         .build()
-                        .execute()
+                        .safeExecute()
 
                 newMessages.addAll(fetchedMessages)
 
@@ -304,7 +304,7 @@ class ChatJob : Job() {
             .messageId(chatDao.findOldestMessageForConference(conferenceId)?.id?.toString() ?: "0")
             .markAsRead(false)
             .build()
-            .execute()
+            .safeExecute()
             .asReversed()
 
     private fun showNotification(context: Context) {

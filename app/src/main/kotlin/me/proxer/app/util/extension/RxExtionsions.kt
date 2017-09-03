@@ -26,7 +26,7 @@ fun <T> Endpoint<T>.buildSingle(): Single<T> = Single.create { emitter ->
     emitter.setCancellable { call.cancel() }
 
     try {
-        emitter.onSuccess(call.execute())
+        emitter.onSuccess(call.safeExecute())
     } catch (error: Throwable) {
         if (!emitter.isDisposed) {
             emitter.onError(error)
@@ -54,7 +54,7 @@ fun <I : Any, T : Any> Endpoint<T>.buildPartialErrorSingle(input: I): Single<T> 
     emitter.setCancellable { call.cancel() }
 
     try {
-        emitter.onSuccess(call.execute())
+        emitter.onSuccess(call.safeExecute())
     } catch (error: Throwable) {
         if (!emitter.isDisposed) {
             emitter.onError(PartialException(error, input))

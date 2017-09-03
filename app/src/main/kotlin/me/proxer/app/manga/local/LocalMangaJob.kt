@@ -127,11 +127,11 @@ class LocalMangaJob : Job() {
             bus.post(StartedEvent())
 
             val entry = when (mangaDao.countEntries(entryId.toLong()) <= 0) {
-                true -> api.info().entryCore(entryId).build().execute().toLocalEntryCore()
+                true -> api.info().entryCore(entryId).build().safeExecute().toLocalEntryCore()
                 false -> null
             }
 
-            val chapter = api.manga().chapter(entryId, episode, language).build().execute()
+            val chapter = api.manga().chapter(entryId, episode, language).build().safeExecute()
             val pages = chapter.pages.map { it.toLocalPage(chapterId = chapter.id.toLong()) }
             var error: Throwable? = null
 
