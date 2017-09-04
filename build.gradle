@@ -1,5 +1,7 @@
+import groovy.io.FileType
+
 buildscript {
-    apply from: 'dependencies.gradle'
+    apply from: 'gradle/dependencies.gradle'
 
     ext {
         versionMajor = 0
@@ -24,29 +26,196 @@ buildscript {
     }
 }
 
-subprojects {
-    buildscript {
-        repositories {
-            jcenter()
-            google()
-            maven { url 'https://plugins.gradle.org/m2/' }
-            maven { url 'https://dl.bintray.com/kotlin/kotlin-eap-1.2' }
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
+apply plugin: 'io.gitlab.arturbosch.detekt'
+apply plugin: 'com.github.ben-manes.versions'
+apply plugin: 'com.novoda.android-command'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    dexOptions {
+        preDexLibraries !isCI()
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        applicationId 'me.proxer.app'
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode rootProject.ext.versionMajor * 10000 + rootProject.ext.versionMinor * 1000 + rootProject.ext.versionPatch * 100
+        versionName "${rootProject.ext.versionMajor}.${rootProject.ext.versionMinor}.${rootProject.ext.versionPatch}"
+
+        vectorDrawables.useSupportLibrary true
+        resConfigs 'de'
+    }
+
+    signingConfigs {
+        if (shouldSign()) {
+            release {
+                storeFile file(getFromSecrets('RELEASE_STORE_FILE'))
+                storePassword getFromSecrets('RELEASE_STORE_PASSWORD')
+                keyAlias getFromSecrets('RELEASE_KEY_ALIAS')
+                keyPassword getFromSecrets('RELEASE_KEY_PASSWORD')
+            }
         }
     }
 
-    repositories {
-        jcenter()
-        google()
-        maven { url 'https://jitpack.io' }
-        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap-1.2' }
-        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+    buildTypes {
+        applicationVariants.all { variant ->
+            variant.buildConfigField 'String', 'PROXER_API_KEY', "\"${getFromSecrets("PROXER_API_KEY")}\""
+        }
+
+        debug {
+            minifyEnabled true
+            useProguard false
+            proguardFiles 'config/proguard/proguard-rules.pro'
+            archivesBaseName = "proxerme-${defaultConfig.versionName}"
+        }
+
+        release {
+            minifyEnabled true
+            proguardFiles 'config/proguard/proguard-rules.pro'
+            archivesBaseName = "app-${defaultConfig.versionName}"
+
+            if (shouldSign()) {
+                signingConfig signingConfigs.release
+            } else {
+                logger.warn('This build will not be signed because it is missing the keystore info. Please add ' +
+                        'values for "RELEASE_STORE_FILE", "RELEASE_STORE_PASSWORD", "RELEASE_KEY_ALIAS" and ' +
+                        '"RELEASE_KEY_PASSWORD" to your secrets.properties file if you want the apk to be signed.')
+            }
+        }
+    }
+
+    lintOptions {
+        warningsAsErrors = true
+
+        lintConfig new File(project.rootDir, 'config/lint/lint.xml')
+    }
+
+    packagingOptions {
+        exclude '**/*.kotlin_builtins'
+        exclude '**/*.kotlin_module'
+        exclude '**/*.gwt.*'
+        exclude '**/rxjava.properties'
+        exclude '**/rxkotlin.properties'
+        exclude 'protobuf.meta'
+        exclude 'build-data.properties'
+    }
+
+    sourceSets {
+        main {
+            java.srcDirs += 'src/main/kotlin'
+            res.srcDirs += getResSrcDirs()
+        }
     }
 }
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+repositories {
+    jcenter()
+    google()
+    maven { url 'https://jitpack.io' }
+    maven { url 'https://dl.bintray.com/kotlin/kotlin-eap-1.2' }
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+}
+
+dependencies {
+    rootProject.ext.implementationDependencies.values().each { implementation it }
+    rootProject.ext.debugImplementationDependencies.values().each { debugImplementation it }
+    rootProject.ext.releaseImplementationDependencies.values().each { releaseImplementation it }
+    rootProject.ext.compileOnlyDependencies.values().each { compileOnly it }
+    rootProject.ext.kaptDependencies.values().each { kapt it }
+
+    rootProject.ext.transitiveImplementationDependencies.values().each {
+        implementation(it) {
+            transitive = true
+        }
+    }
+
+    rootProject.ext.excludingImplementationDependencies.values().each { dependency ->
+        implementation(dependency.dependency) {
+            dependency.exclusions.each {
+                exclude module: it
+            }
+        }
+    }
 }
 
 task wrapper(type: Wrapper) {
     gradleVersion = '4.1'
+}
+
+detekt {
+    profile('main') {
+        config = "$projectDir/config/detekt/detekt.yml"
+        output = "$buildDir/reports/detekt.xml"
+        parallel = true
+    }
+}
+
+tasks.matching { it.name.matches('compile.*Kotlin') }.all {
+    kotlinOptions.freeCompilerArgs = ['-Xjsr305-annotations=enable']
+}
+
+gradle.projectsEvaluated {
+    check.dependsOn(detektCheck)
+}
+
+static getResSrcDirs() {
+    String layoutsPath = 'src/main/res/layouts'
+    Set<String> result = []
+
+    new File(layoutsPath).eachFile(FileType.DIRECTORIES) {
+        result.add("${layoutsPath}/${it.name}")
+    }
+
+    return result
+}
+
+static String getFromSecrets(String key) {
+    if (isCI()) {
+        return 'dummy'
+    }
+
+    Properties result = new Properties()
+
+    try {
+        result.load(new FileInputStream(new File('secrets.properties')))
+    } catch (Exception ignored) {
+        throw new GradleException("Please add a secrets.properties file with a value for $key to perform this action.")
+    }
+
+    if (!result.containsKey(key)) {
+        throw new GradleException("Please include a value for $key in your secrets.properties file to perform this action.")
+    }
+
+    return result[key]
+}
+
+static boolean shouldSign() {
+    Properties result = new Properties()
+
+    try {
+        result.load(new FileInputStream(new File('secrets.properties')))
+    } catch (Exception ignored) {
+        return false
+    }
+
+    return result.containsKey('RELEASE_STORE_FILE') && result.containsKey('RELEASE_STORE_PASSWORD') &&
+            result.containsKey('RELEASE_KEY_ALIAS') && result.containsKey('RELEASE_KEY_PASSWORD')
+}
+
+static boolean isCI() {
+    Object isCI = System.getenv('CI')
+
+    return isCI != null && isCI.toBoolean()
 }

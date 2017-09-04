@@ -16,4 +16,7 @@
         <ignore regexp="LinkConsumableEmojiTextView.kt" />
         <ignore regexp="MangaAdapter.kt" />
     </issue>
+
+    <!-- False positive with Kotlin. -->
+    <issue id="UnusedResources" severity="ignore" />
 </lint>
