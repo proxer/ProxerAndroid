@@ -13,7 +13,6 @@ ext {
     supportLibraryVersion = '26.0.2'
     supportPreferenceVersion = '1.2.7'
     architectureComponentsVersion = '1.0.0-alpha9'
-    playServicesVersion = '11.2.0'
     androidJobVersion = '1.2.0-RC1'
     proxerLibVersion = '56cd169981'
 
@@ -87,7 +86,6 @@ ext {
             supportPreferenceFixSpinner  : "net.xpece.android:support-spinner:$supportPreferenceVersion",
             architectureLifecycle        : "android.arch.lifecycle:extensions:$architectureComponentsVersion",
             room                         : "android.arch.persistence.room:runtime:$architectureComponentsVersion",
-            playServicesGcm              : "com.google.android.gms:play-services-gcm:$playServicesVersion",
             androidJob                   : "com.evernote:android-job:$androidJobVersion",
             proxerLib                    : "com.github.proxer:ProxerLibJava:$proxerLibVersion",
 

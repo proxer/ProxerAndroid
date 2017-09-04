@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatDelegate
 import android.widget.ImageView
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.devbrackets.android.exomedia.ExoMedia
+import com.evernote.android.job.JobApi
 import com.evernote.android.job.JobConfig
 import com.evernote.android.job.JobManager
 import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory
@@ -160,6 +161,7 @@ class MainApplication : Application() {
         }
 
         JobConfig.setLogcatEnabled(BuildConfig.DEBUG)
+        JobConfig.setApiEnabled(JobApi.GCM, false)
         JobManager.create(this).addJobCreator {
             when {
                 it == ChatJob.TAG -> ChatJob()
