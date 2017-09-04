@@ -36,12 +36,15 @@ import me.proxer.app.R
 import me.proxer.app.base.BaseFragment
 import me.proxer.app.chat.ChatActivity
 import me.proxer.app.chat.Participant
+import me.proxer.app.exception.InvalidInputException
+import me.proxer.app.exception.TopicEmptyException
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.unsafeLazy
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.find
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
@@ -58,8 +61,8 @@ class NewChatFragment : BaseFragment() {
         get() = activity as NewChatActivity
 
     private val viewModel by unsafeLazy {
-        ViewModelProviders.of(this).get(NewChatViewModel::class.java).apply {
-            isGroup = this@NewChatFragment.isGroup
+        ViewModelProviders.of(this).get(NewChatViewModel::class.java).also {
+            it.isGroup = this.isGroup
         }
     }
 
@@ -82,11 +85,11 @@ class NewChatFragment : BaseFragment() {
         popup
     }
 
-    private lateinit var innerAdapter: NewChatParticipantAdapter
-    private lateinit var adapter: EasyHeaderFooterAdapter
+    private var innerAdapter by Delegates.notNull<NewChatParticipantAdapter>()
+    private var adapter by Delegates.notNull<EasyHeaderFooterAdapter>()
 
-    private lateinit var addParticipantFooter: ViewGroup
-    private lateinit var addParticipantInputFooter: ViewGroup
+    private var addParticipantFooter by Delegates.notNull<ViewGroup>()
+    private var addParticipantInputFooter by Delegates.notNull<ViewGroup>()
 
     private val root: ViewGroup by bindView(R.id.root)
     private val progress: SwipeRefreshLayout by bindView(R.id.progress)
@@ -265,12 +268,10 @@ class NewChatFragment : BaseFragment() {
 
                         when {
                             isGroup && topic.isBlank() -> throw TopicEmptyException()
-                            firstMessage.isBlank() -> {
-                                throw InvalidInputException(context.getString(R.string.error_missing_message))
-                            }
-                            participants.isEmpty() -> {
-                                throw InvalidInputException(context.getString(R.string.error_missing_participants))
-                            }
+                            firstMessage.isBlank() -> throw InvalidInputException(context
+                                    .getString(R.string.error_missing_message))
+                            participants.isEmpty() -> throw InvalidInputException(context
+                                    .getString(R.string.error_missing_participants))
                         }
 
                         Triple(topic, firstMessage, participants)
@@ -285,20 +286,16 @@ class NewChatFragment : BaseFragment() {
                     }
                 }, {
                     when (it) {
-                        is InvalidInputException -> {
-                            it.message?.let {
-                                multilineSnackbar(root, it)
-                            }
+                        is InvalidInputException -> it.message?.let {
+                            multilineSnackbar(root, it)
                         }
                         is TopicEmptyException -> {
                             topicInputContainer.isErrorEnabled = true
                             topicInputContainer.error = context.getString(R.string.error_input_empty)
                         }
-                        else -> {
-                            ErrorUtils.handle(it).let { action ->
-                                multilineSnackbar(root, action.message, Snackbar.LENGTH_LONG, action.buttonMessage,
-                                        action.buttonAction?.toClickListener(hostingActivity))
-                            }
+                        else -> ErrorUtils.handle(it).let { action ->
+                            multilineSnackbar(root, action.message, Snackbar.LENGTH_LONG, action.buttonMessage,
+                                    action.buttonAction?.toClickListener(hostingActivity))
                         }
                     }
                 })
@@ -381,7 +378,4 @@ class NewChatFragment : BaseFragment() {
             .sizeDp(32)
             .paddingDp(6)
             .colorRes(R.color.icon)
-
-    class TopicEmptyException : Exception()
-    class InvalidInputException(message: String) : Exception(message)
 }

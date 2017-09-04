@@ -17,7 +17,7 @@ abstract class PagedViewModel<T>(application: Application) : BaseViewModel<List<
     protected open var hasReachedEnd = false
     protected var page = 0
 
-    abstract protected val itemsOnPage: Int
+    protected abstract val itemsOnPage: Int
 
     override fun load() {
         val currentPage = page
@@ -82,7 +82,7 @@ abstract class PagedViewModel<T>(application: Application) : BaseViewModel<List<
         super.reload()
     }
 
-    open protected fun areItemsTheSame(old: T, new: T) = when {
+    protected open fun areItemsTheSame(old: T, new: T) = when {
         old is ProxerIdItem && new is ProxerIdItem -> old.id == new.id
         else -> old == new
     }

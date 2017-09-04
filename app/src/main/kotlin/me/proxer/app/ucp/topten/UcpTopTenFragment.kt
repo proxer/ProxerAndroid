@@ -19,9 +19,11 @@ import me.proxer.app.media.MediaActivity
 import me.proxer.app.ucp.topten.UcpTopTenViewModel.ZippedTopTenResult
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
+import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.unsafeLazy
 import org.jetbrains.anko.bundleOf
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
@@ -38,8 +40,8 @@ class UcpTopTenFragment : BaseContentFragment<ZippedTopTenResult>() {
         ViewModelProviders.of(this).get(UcpTopTenViewModel::class.java)
     }
 
-    private lateinit var animeAdapter: UcpTopTenAdapter
-    private lateinit var mangaAdapter: UcpTopTenAdapter
+    private var animeAdapter by Delegates.notNull<UcpTopTenAdapter>()
+    private var mangaAdapter by Delegates.notNull<UcpTopTenAdapter>()
 
     private val animeContainer: ViewGroup by bindView(R.id.animeContainer)
     private val mangaContainer: ViewGroup by bindView(R.id.mangaContainer)
@@ -119,7 +121,7 @@ class UcpTopTenFragment : BaseContentFragment<ZippedTopTenResult>() {
         }
 
         if (animeAdapter.isEmpty() && mangaAdapter.isEmpty()) {
-            showError(ErrorAction(R.string.error_no_data_top_ten, ErrorAction.ACTION_MESSAGE_HIDE))
+            showError(ErrorAction(R.string.error_no_data_top_ten, ACTION_MESSAGE_HIDE))
         }
     }
 

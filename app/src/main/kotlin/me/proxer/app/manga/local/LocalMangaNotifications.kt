@@ -62,11 +62,9 @@ object LocalMangaNotifications {
                 innermostError.serverErrorType == ProxerException.ServerErrorType.IP_BLOCKED
 
         val intent = when {
-            isIpBlockedError -> {
-                PendingIntent.getActivity(context, 0, Intent(Intent.ACTION_VIEW).apply {
-                    data = ProxerUrls.captchaWeb(Device.MOBILE).androidUri()
-                }, 0)
-            }
+            isIpBlockedError -> PendingIntent.getActivity(context, 0, Intent(Intent.ACTION_VIEW).apply {
+                data = ProxerUrls.captchaWeb(Device.MOBILE).androidUri()
+            }, 0)
             else -> null
         }
 

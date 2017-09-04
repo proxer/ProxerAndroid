@@ -4,15 +4,12 @@ import android.view.View
 import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.upstream.HttpDataSource
 import me.proxer.app.R
-import me.proxer.app.anime.resolver.StreamResolutionException
 import me.proxer.app.auth.LoginDialog
 import me.proxer.app.base.BaseActivity
-import me.proxer.app.chat.sync.ChatJob.ChatException
+import me.proxer.app.exception.*
 import me.proxer.app.settings.AgeConfirmationDialog
 import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_DEFAULT
-import me.proxer.app.util.Validators.AgeConfirmationRequiredException
-import me.proxer.app.util.Validators.NotLoggedInException
 import me.proxer.library.api.ProxerException
 import me.proxer.library.api.ProxerException.ErrorType.*
 import me.proxer.library.api.ProxerException.ServerErrorType.*
@@ -59,33 +56,31 @@ object ErrorUtils {
     }
 
     fun getMessageForProxerException(error: ProxerException) = when (error.errorType) {
-        SERVER -> {
-            when (error.serverErrorType) {
-                IP_BLOCKED -> R.string.error_captcha
-                INVALID_TOKEN -> R.string.error_invalid_token
-                LOGIN_INVALID_CREDENTIALS -> R.string.error_login_credentials
-                INFO_ENTRY_ALREADY_IN_LIST -> R.string.error_already_in_list
-                INFO_EXCEEDED_MAXIMUM_ENTRIES -> R.string.error_list_full
-                USER_INSUFFICIENT_PERMISSIONS -> R.string.error_insufficient_permissions
-                MANGA_INVALID_CHAPTER -> R.string.error_invalid_chapter
-                ANIME_INVALID_EPISODE -> R.string.error_invalid_episode
-                MESSAGES_INVALID_REPORT_INPUT -> R.string.error_invalid_input
-                MESSAGES_INVALID_MESSAGE -> R.string.error_invalid_input
-                MESSAGES_INVALID_USER -> R.string.error_cant_add_user_to_conference
-                MESSAGES_MISSING_USER -> R.string.error_invalid_users_for_conference
-                MESSAGES_EXCEEDED_MAXIMUM_USERS -> R.string.error_conference_full
-                MESSAGES_INVALID_TOPIC -> R.string.error_invalid_topic
-                USER_2FA_SECRET_REQUIRED -> R.string.error_login_two_factor_authentication
-                USER_ACCOUNT_EXPIRED -> R.string.error_account_expired
-                USER_ACCOUNT_BLOCKED -> R.string.error_account_blocked
-                in API_ERRORS -> R.string.error_api
-                in MAINTENANCE_ERRORS -> R.string.error_maintenance
-                in LOGIN_ERRORS -> R.string.error_login
-                in CLIENT_ERRORS -> R.string.error_client
-                in INVALID_ID_ERRORS -> R.string.error_invalid_id
-                in UNSUPPORTED_ERRORS -> R.string.error_unsupported_code
-                else -> R.string.error_unknown
-            }
+        SERVER -> when (error.serverErrorType) {
+            IP_BLOCKED -> R.string.error_captcha
+            INVALID_TOKEN -> R.string.error_invalid_token
+            LOGIN_INVALID_CREDENTIALS -> R.string.error_login_credentials
+            INFO_ENTRY_ALREADY_IN_LIST -> R.string.error_already_in_list
+            INFO_EXCEEDED_MAXIMUM_ENTRIES -> R.string.error_list_full
+            USER_INSUFFICIENT_PERMISSIONS -> R.string.error_insufficient_permissions
+            MANGA_INVALID_CHAPTER -> R.string.error_invalid_chapter
+            ANIME_INVALID_EPISODE -> R.string.error_invalid_episode
+            MESSAGES_INVALID_REPORT_INPUT -> R.string.error_invalid_input
+            MESSAGES_INVALID_MESSAGE -> R.string.error_invalid_input
+            MESSAGES_INVALID_USER -> R.string.error_cant_add_user_to_conference
+            MESSAGES_MISSING_USER -> R.string.error_invalid_users_for_conference
+            MESSAGES_EXCEEDED_MAXIMUM_USERS -> R.string.error_conference_full
+            MESSAGES_INVALID_TOPIC -> R.string.error_invalid_topic
+            USER_2FA_SECRET_REQUIRED -> R.string.error_login_two_factor_authentication
+            USER_ACCOUNT_EXPIRED -> R.string.error_account_expired
+            USER_ACCOUNT_BLOCKED -> R.string.error_account_blocked
+            in API_ERRORS -> R.string.error_api
+            in MAINTENANCE_ERRORS -> R.string.error_maintenance
+            in LOGIN_ERRORS -> R.string.error_login
+            in CLIENT_ERRORS -> R.string.error_client
+            in INVALID_ID_ERRORS -> R.string.error_invalid_id
+            in UNSUPPORTED_ERRORS -> R.string.error_unsupported_code
+            else -> R.string.error_unknown
         }
         TIMEOUT -> R.string.error_timeout
         IO -> R.string.error_io
@@ -148,6 +143,4 @@ object ErrorUtils {
             }
         }
     }
-
-    class PartialException(val innerError: Throwable, val partialData: Any?) : Exception()
 }

@@ -1,6 +1,8 @@
 package me.proxer.app.util
 
 import android.content.Context
+import me.proxer.app.exception.AgeConfirmationRequiredException
+import me.proxer.app.exception.NotLoggedInException
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 
@@ -20,7 +22,4 @@ object Validators {
             throw AgeConfirmationRequiredException()
         }
     }
-
-    class NotLoggedInException : Exception()
-    class AgeConfirmationRequiredException : Exception()
 }

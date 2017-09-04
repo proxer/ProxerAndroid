@@ -16,6 +16,7 @@ import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.user.UserComment
 import me.proxer.library.enums.Category
 import org.jetbrains.anko.bundleOf
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
@@ -35,9 +36,9 @@ class ProfileCommentFragment : PagedContentFragment<UserComment>() {
     override val pagingThreshold = 3
 
     override val viewModel: ProfileCommentViewModel by unsafeLazy {
-        ViewModelProviders.of(this).get(ProfileCommentViewModel::class.java).apply {
-            userId = this@ProfileCommentFragment.userId
-            username = this@ProfileCommentFragment.username
+        ViewModelProviders.of(this).get(ProfileCommentViewModel::class.java).also {
+            it.userId = this.userId
+            it.username = this.username
         }
     }
 
@@ -59,7 +60,7 @@ class ProfileCommentFragment : PagedContentFragment<UserComment>() {
         }
 
     override val layoutManager by unsafeLazy { LinearLayoutManager(context) }
-    override lateinit var innerAdapter: ProfileCommentAdapter
+    override var innerAdapter by Delegates.notNull<ProfileCommentAdapter>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

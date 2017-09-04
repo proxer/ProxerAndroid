@@ -49,6 +49,7 @@ import okhttp3.OkHttpClient
 import java.io.File
 import java.util.*
 import kotlin.concurrent.write
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
@@ -74,19 +75,19 @@ class MainApplication : Application() {
         val mangaDao: LocalMangaDao
             get() = mangaDatabase.dao()
 
-        lateinit var api: ProxerApi
+        var api by Delegates.notNull<ProxerApi>()
             private set
 
-        lateinit var chatDatabase: ChatDatabase
+        var chatDatabase by Delegates.notNull<ChatDatabase>()
             private set
 
-        lateinit var mangaDatabase: LocalMangaDatabase
+        var mangaDatabase by Delegates.notNull<LocalMangaDatabase>()
             private set
 
-        lateinit var globalContext: MainApplication
+        var globalContext by Delegates.notNull<MainApplication>()
             private set
 
-        lateinit var refWatcher: RefWatcher
+        var refWatcher by Delegates.notNull<RefWatcher>()
             private set
     }
 

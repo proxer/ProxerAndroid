@@ -9,8 +9,8 @@ import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
 import android.view.Gravity
-import me.proxer.app.view.bbcode.BBProcessor.BBElement.BBSpoilerElement
-import me.proxer.app.view.bbcode.BBProcessor.BBElement.BBTextElement
+import me.proxer.app.view.bbcode.BBElement.BBSpoilerElement
+import me.proxer.app.view.bbcode.BBElement.BBTextElement
 import me.proxer.app.view.bbcode.BBTokenizer.BBToken
 import me.proxer.app.view.bbcode.BBTokenizer.BBTokenType.*
 import java.util.*
@@ -22,114 +22,63 @@ internal object BBProcessor {
 
     internal fun process(tree: BBToken) = trimElements(mergeFittingElements(processWithStyle(tree, BBStyle())))
 
-    /**
-     * (•_•)
-     * ( •_•)>⌐■-■
-     * (⌐■_■)
-     */
-    private fun processWithStyle(tree: BBToken, style: BBStyle): List<BBElement> {
-        val result = ArrayList<BBElement>()
+    private fun processWithStyle(tree: BBToken, style: BBStyle): List<BBElement> = when (tree.type) {
+        TOKEN_TEXT -> listOf(handleTextToken(tree, style))
+        TOKEN_SPOILER -> handleSpoilerToken(tree, style)
+        else -> tree.children.flatMap {
+            processWithStyle(it, when (tree.type) {
+                TOKEN_ROOT -> style
+                TOKEN_SIZE -> style.copy(size = tree.attribute as Float)
+                TOKEN_BOLD -> style.copy(isBold = true)
+                TOKEN_ITALIC -> style.copy(isItalic = true)
+                TOKEN_UNDERLINE -> style.copy(isUnderlined = true)
+                TOKEN_LEFT -> style.copy(gravity = Gravity.START)
+                TOKEN_CENTER -> style.copy(gravity = Gravity.CENTER_HORIZONTAL)
+                TOKEN_RIGHT -> style.copy(gravity = Gravity.END)
+                TOKEN_COLOR -> style.copy(color = tree.attribute as String)
+                else -> throw IllegalArgumentException("Invalid token: ${tree.type}")
+            })
+        }
+    }
 
-        when (tree.type) {
-            TOKEN_ROOT -> {
-                tree.children.forEach {
-                    result.addAll(processWithStyle(it, style))
+    private fun handleSpoilerToken(tree: BBToken, style: BBStyle) = tree.children
+            .flatMap { processWithStyle(it, style.copy()) }
+            .let {
+                when (it.isEmpty()) {
+                    true -> it
+                    false -> it.plus(BBSpoilerElement(it))
                 }
             }
 
-            TOKEN_TEXT -> {
-                val text = tree.attribute as String
-                val styledText = SpannableStringBuilder(text)
+    private fun handleTextToken(tree: BBToken, style: BBStyle): BBElement {
+        val text = tree.attribute as String
+        val styledText = SpannableStringBuilder(text)
 
-                if (style.size != 1.0f) {
-                    styledText.setSpan(RelativeSizeSpan(style.size), 0, text.length, SPAN_EXCLUSIVE_EXCLUSIVE)
-                }
-
-                if (style.isBold) {
-                    if (style.isItalic) {
-                        styledText.setSpan(StyleSpan(Typeface.BOLD_ITALIC), 0, text.length, SPAN_EXCLUSIVE_EXCLUSIVE)
-                    } else {
-                        styledText.setSpan(StyleSpan(Typeface.BOLD), 0, text.length, SPAN_EXCLUSIVE_EXCLUSIVE)
-                    }
-                } else if (style.isItalic) {
-                    styledText.setSpan(StyleSpan(Typeface.ITALIC), 0, text.length, SPAN_EXCLUSIVE_EXCLUSIVE)
-                }
-
-                if (style.isUnderlined) {
-                    styledText.setSpan(UnderlineSpan(), 0, text.length, SPAN_EXCLUSIVE_EXCLUSIVE)
-                }
-
-                if (style.color != null) {
-                    val color = Color.parseColor(style.color)
-
-                    styledText.setSpan(ForegroundColorSpan(color), 0, text.length, SPAN_EXCLUSIVE_EXCLUSIVE)
-                }
-
-                result.add(BBTextElement(styledText, style.gravity))
-            }
-
-            TOKEN_SIZE -> {
-                tree.children.forEach {
-                    result.addAll(processWithStyle(it, style.copy(size = tree.attribute as Float)))
-                }
-            }
-
-            TOKEN_BOLD -> {
-                tree.children.forEach {
-                    result.addAll(processWithStyle(it, style.copy(isBold = true)))
-                }
-            }
-
-            TOKEN_ITALIC -> {
-                tree.children.forEach {
-                    result.addAll(processWithStyle(it, style.copy(isItalic = true)))
-                }
-            }
-
-            TOKEN_UNDERLINE -> {
-                tree.children.forEach {
-                    result.addAll(processWithStyle(it, style.copy(isUnderlined = true)))
-                }
-            }
-
-            TOKEN_LEFT -> {
-                tree.children.forEach {
-                    result.addAll(processWithStyle(it, style.copy(gravity = Gravity.START)))
-                }
-            }
-
-            TOKEN_CENTER -> {
-                tree.children.forEach {
-                    result.addAll(processWithStyle(it, style.copy(gravity = Gravity.CENTER_HORIZONTAL)))
-                }
-            }
-
-            TOKEN_RIGHT -> {
-                tree.children.forEach {
-                    result.addAll(processWithStyle(it, style.copy(gravity = Gravity.END)))
-                }
-            }
-
-            TOKEN_COLOR -> {
-                tree.children.forEach {
-                    result.addAll(processWithStyle(it, style.copy(color = tree.attribute as String)))
-                }
-            }
-
-            TOKEN_SPOILER -> {
-                if (tree.children.isNotEmpty()) {
-                    val spoilerChildren = LinkedList<BBElement>()
-
-                    for (child in tree.children) {
-                        spoilerChildren.addAll(processWithStyle(child, style.copy()))
-                    }
-
-                    result.add(BBSpoilerElement(spoilerChildren))
-                }
-            }
+        if (style.size != 1.0f) {
+            styledText.setSpan(RelativeSizeSpan(style.size), 0, text.length, SPAN_EXCLUSIVE_EXCLUSIVE)
         }
 
-        return result
+        if (style.isBold) {
+            if (style.isItalic) {
+                styledText.setSpan(StyleSpan(Typeface.BOLD_ITALIC), 0, text.length, SPAN_EXCLUSIVE_EXCLUSIVE)
+            } else {
+                styledText.setSpan(StyleSpan(Typeface.BOLD), 0, text.length, SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+        } else if (style.isItalic) {
+            styledText.setSpan(StyleSpan(Typeface.ITALIC), 0, text.length, SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+        if (style.isUnderlined) {
+            styledText.setSpan(UnderlineSpan(), 0, text.length, SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+        if (style.color != null) {
+            val color = Color.parseColor(style.color)
+
+            styledText.setSpan(ForegroundColorSpan(color), 0, text.length, SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+        return BBTextElement(styledText, style.gravity)
     }
 
     private fun mergeFittingElements(oldList: List<BBElement>): List<BBElement> {
@@ -160,22 +109,20 @@ internal object BBProcessor {
 
                     newListIndex++
                 }
-                is BBTextElement -> {
-                    when (nextElement) {
-                        is BBTextElement -> {
-                            if (currentElement.gravity == nextElement.gravity) {
-                                currentElement.text.append(nextElement.text)
-                            } else {
-                                newList.add(nextElement)
-
-                                newListIndex++
-                            }
-                        }
-                        is BBSpoilerElement -> {
-                            newList.add(BBSpoilerElement(mergeFittingElements(nextElement.children)))
+                is BBTextElement -> when (nextElement) {
+                    is BBTextElement -> {
+                        if (currentElement.gravity == nextElement.gravity) {
+                            currentElement.text.append(nextElement.text)
+                        } else {
+                            newList.add(nextElement)
 
                             newListIndex++
                         }
+                    }
+                    is BBSpoilerElement -> {
+                        newList.add(BBSpoilerElement(mergeFittingElements(nextElement.children)))
+
+                        newListIndex++
                     }
                 }
             }
@@ -236,68 +183,21 @@ internal object BBProcessor {
 
     private fun trimFirstTextElement(element: BBElement) {
         when (element) {
-            is BBTextElement -> {
-                element.text.delete(0, element.text.indexOfFirst { !it.isWhitespace() })
-            }
-            is BBSpoilerElement -> {
-                if (element.children.isNotEmpty()) {
-                    trimFirstTextElement(element.children.first())
-                }
+            is BBTextElement -> element.text.delete(0, element.text.indexOfFirst { !it.isWhitespace() })
+            is BBSpoilerElement -> if (element.children.isNotEmpty()) {
+                trimFirstTextElement(element.children.first())
             }
         }
     }
 
     private fun trimLastTextElement(element: BBElement) {
         when (element) {
-            is BBTextElement -> {
-                element.text.delete(element.text.indexOfLast { !it.isWhitespace() } + 1, element.text.length)
-            }
-            is BBSpoilerElement -> {
-                if (element.children.isNotEmpty()) {
-                    trimFirstTextElement(element.children.last())
-                }
+            is BBTextElement -> element.text.delete(element.text.indexOfLast { !it.isWhitespace() } + 1,
+                    element.text.length)
+            is BBSpoilerElement -> if (element.children.isNotEmpty()) {
+                trimFirstTextElement(element.children.last())
             }
         }
-    }
-
-    internal sealed class BBElement {
-        class BBTextElement(val text: SpannableStringBuilder, val gravity: Int) : BBElement() {
-
-            companion object {
-                private const val TRIM_PATTERN = "\r\n"
-                private const val ALT_TRIM_PATTERN = "\n"
-            }
-
-            fun trimStart() = when {
-                text.startsWith(TRIM_PATTERN) -> {
-                    text.delete(0, TRIM_PATTERN.length)
-
-                    true
-                }
-                text.startsWith(ALT_TRIM_PATTERN) -> {
-                    text.delete(0, ALT_TRIM_PATTERN.length)
-
-                    true
-                }
-                else -> false
-            }
-
-            fun trimEnd() = when {
-                text.endsWith(TRIM_PATTERN) -> {
-                    text.delete(text.length - TRIM_PATTERN.length, text.length)
-
-                    true
-                }
-                text.startsWith(ALT_TRIM_PATTERN) -> {
-                    text.delete(text.length - ALT_TRIM_PATTERN.length, text.length)
-
-                    true
-                }
-                else -> false
-            }
-        }
-
-        internal class BBSpoilerElement(val children: List<BBElement>) : BBElement()
     }
 
     private data class BBStyle constructor(val gravity: Int = Gravity.START, val size: Float = 1.0f,

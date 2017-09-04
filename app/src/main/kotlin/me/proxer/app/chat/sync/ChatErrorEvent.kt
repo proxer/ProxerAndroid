@@ -1,6 +1,6 @@
 package me.proxer.app.chat.sync
 
-import me.proxer.app.chat.sync.ChatJob.ChatException
+import me.proxer.app.exception.ChatException
 
 /**
  * @author Ruben Gees

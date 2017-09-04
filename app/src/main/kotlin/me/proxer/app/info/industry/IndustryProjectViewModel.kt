@@ -7,6 +7,7 @@ import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.library.api.PagingLimitEndpoint
 import me.proxer.library.entity.list.IndustryProject
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
@@ -20,5 +21,5 @@ class IndustryProjectViewModel(application: Application) : PagedContentViewModel
                 .includeHentai(StorageHelper.user != null
                         && PreferenceHelper.isAgeRestrictedMediaAllowed(getApplication()))
 
-    lateinit var industryId: String
+    var industryId by Delegates.notNull<String>()
 }

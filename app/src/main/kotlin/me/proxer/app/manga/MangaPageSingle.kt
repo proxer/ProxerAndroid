@@ -8,6 +8,7 @@ import me.proxer.app.MainApplication.Companion.client
 import me.proxer.app.util.extension.lock
 import me.proxer.library.util.ProxerUrls
 import okhttp3.Call
+import okhttp3.HttpUrl
 import okhttp3.Request
 import okio.Okio
 import java.io.File
@@ -47,25 +48,7 @@ class MangaPageSingle(context: Context, private val isLocal: Boolean, private va
                             throw CancellationException()
                         }
 
-                        MangaLocks.pageConcurrencyLock.lock {
-                            call = client.newCall(Request.Builder()
-                                    .url(url)
-                                    .build())
-
-                            call?.execute()?.let {
-                                if (it.isSuccessful) {
-                                    it.body()?.use { theBody ->
-                                        Okio.buffer(Okio.sink(file)).use { fileBuffer ->
-                                            fileBuffer.writeAll(theBody.source())
-                                        }
-                                    } ?: throw IOException()
-
-                                    observer.onSuccess(file)
-                                } else {
-                                    throw IOException()
-                                }
-                            }
-                        }
+                        observer.onSuccess(loadPage(url, file))
                     }
                 } catch (error: Throwable) {
                     call?.cancel()
@@ -75,6 +58,28 @@ class MangaPageSingle(context: Context, private val isLocal: Boolean, private va
                 }
             })
         }
+    }
+
+    private fun loadPage(url: HttpUrl, file: File): File = MangaLocks.pageConcurrencyLock.lock {
+        call = client.newCall(Request.Builder()
+                .url(url)
+                .build())
+
+        call?.execute()?.let {
+            if (it.isSuccessful) {
+                it.body()?.use { theBody ->
+                    Okio.buffer(Okio.sink(file)).use { fileBuffer ->
+                        fileBuffer.writeAll(theBody.source())
+                    }
+                } ?: throw IOException()
+
+                file
+            } else {
+                throw IOException()
+            }
+        }
+
+        throw IllegalStateException()
     }
 
     private inner class MangaPageDisposable : Disposable {

@@ -14,5 +14,5 @@ abstract class BaseContentViewModel<T>(application: Application) : BaseViewModel
         get() = Single.fromCallable { validate() }
                 .flatMap { endpoint.buildSingle() }
 
-    abstract protected val endpoint: Endpoint<T>
+    protected abstract val endpoint: Endpoint<T>
 }

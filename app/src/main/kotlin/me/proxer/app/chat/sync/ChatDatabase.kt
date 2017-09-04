@@ -44,7 +44,7 @@ abstract class ChatDatabase : RoomDatabase() {
             result = message
         }
 
-        result ?: throw NullPointerException("Message cannot be null")
+        result ?: throw IllegalStateException("Message cannot be null")
     }
 
     fun clear() = dao().let { dao ->

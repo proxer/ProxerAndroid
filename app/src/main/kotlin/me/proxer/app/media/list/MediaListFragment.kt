@@ -29,6 +29,7 @@ import me.proxer.library.enums.Category
 import me.proxer.library.enums.MediaSearchSortCriteria
 import me.proxer.library.enums.MediaType
 import org.jetbrains.anko.bundleOf
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
@@ -57,7 +58,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
         StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity) + 1, VERTICAL)
     }
 
-    override lateinit var innerAdapter: MediaAdapter
+    override var innerAdapter by Delegates.notNull<MediaAdapter>()
 
     private val category
         get() = arguments.getSerializable(CATEGORY_ARGUMENT) as Category

@@ -94,15 +94,13 @@ class MediaActivity : ImageTabsActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_share -> {
-                name?.let {
-                    ShareCompat.IntentBuilder
-                            .from(this)
-                            .setText(getString(R.string.share_media, it, "https://proxer.me/info/$id"))
-                            .setType("text/plain")
-                            .setChooserTitle(getString(R.string.share_title))
-                            .startChooser()
-                }
+            R.id.action_share -> name?.let {
+                ShareCompat.IntentBuilder
+                        .from(this)
+                        .setText(getString(R.string.share_media, it, "https://proxer.me/info/$id"))
+                        .setType("text/plain")
+                        .setChooserTitle(getString(R.string.share_title))
+                        .startChooser()
             }
         }
 
@@ -122,20 +120,22 @@ class MediaActivity : ImageTabsActivity() {
             1 -> CommentFragment.newInstance()
             2 -> EpisodeFragment.newInstance()
             3 -> RelationFragment.newInstance()
-            else -> throw RuntimeException("Unknown index passed")
+            else -> throw IllegalArgumentException("Unknown index passed")
         }
 
         override fun getCount() = 4
 
+        @Suppress("LabeledExpression")
         override fun getPageTitle(position: Int): String = when (position) {
             0 -> getString(R.string.section_media_info)
             1 -> getString(R.string.section_comments)
             2 -> category?.toEpisodeAppString(this@MediaActivity)
                     ?: getString(R.string.category_anime_episodes_title)
             3 -> getString(R.string.section_relations)
-            else -> throw RuntimeException("Unknown index passed")
+            else -> throw IllegalArgumentException("Unknown index passed")
         }
 
+        @Suppress("LabeledExpression")
         fun updateEpisodesTitle(category: Category) {
             tabs.getTabAt(2)?.text = category.toEpisodeAppString(this@MediaActivity)
         }

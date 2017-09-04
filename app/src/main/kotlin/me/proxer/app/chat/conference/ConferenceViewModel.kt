@@ -27,7 +27,7 @@ class ConferenceViewModel(application: Application) : BaseViewModel<List<LocalCo
     override val data = MediatorLiveData<List<LocalConference>?>().apply {
         this.addSource(chatDao.getConferencesLiveData(), {
             it?.let {
-                if (StorageHelper.user == null) return@let
+                if (StorageHelper.user == null) Unit
 
                 if (!it.isEmpty() || StorageHelper.areConferencesSynchronized) {
                     if (error.value == null) {

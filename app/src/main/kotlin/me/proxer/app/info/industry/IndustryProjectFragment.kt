@@ -15,6 +15,7 @@ import me.proxer.app.util.extension.toCategory
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.list.IndustryProject
 import org.jetbrains.anko.bundleOf
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
@@ -31,7 +32,7 @@ class IndustryProjectFragment : PagedContentFragment<IndustryProject>() {
     override val isSwipeToRefreshEnabled = false
 
     override val viewModel: IndustryProjectViewModel by unsafeLazy {
-        ViewModelProviders.of(this).get(IndustryProjectViewModel::class.java).apply { industryId = id }
+        ViewModelProviders.of(this).get(IndustryProjectViewModel::class.java).also { it.industryId = id }
     }
 
     private val industryActivity
@@ -44,7 +45,7 @@ class IndustryProjectFragment : PagedContentFragment<IndustryProject>() {
         StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity) + 1, VERTICAL)
     }
 
-    override lateinit var innerAdapter: IndustryProjectAdapter
+    override var innerAdapter by Delegates.notNull<IndustryProjectAdapter>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

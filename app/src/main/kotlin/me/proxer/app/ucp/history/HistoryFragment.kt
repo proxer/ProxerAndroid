@@ -13,6 +13,7 @@ import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.ucp.UcpHistoryEntry
 import org.jetbrains.anko.bundleOf
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
@@ -36,7 +37,7 @@ class HistoryFragment : PagedContentFragment<UcpHistoryEntry>() {
         StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity) + 1, StaggeredGridLayoutManager.VERTICAL)
     }
 
-    override lateinit var innerAdapter: HistoryAdapter
+    override var innerAdapter by Delegates.notNull<HistoryAdapter>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -36,6 +36,7 @@ import me.proxer.app.view.MediaControlView.Uploader
 import me.proxer.library.entity.info.EntryCore
 import me.proxer.library.enums.Language
 import org.jetbrains.anko.bundleOf
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
@@ -49,9 +50,9 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
     }
 
     override val viewModel: MangaViewModel by unsafeLazy {
-        ViewModelProviders.of(this).get(MangaViewModel::class.java).apply {
-            entryId = this@MangaFragment.id
-            language = this@MangaFragment.language
+        ViewModelProviders.of(this).get(MangaViewModel::class.java).also {
+            it.entryId = this.id
+            it.language = this.language
         }
     }
 
@@ -97,11 +98,11 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         override fun bookmarkNext() = context.getString(R.string.fragment_manga_bookmark_next_chapter)
     }
 
-    private lateinit var innerAdapter: MangaAdapter
-    private lateinit var adapter: EasyHeaderFooterAdapter
+    private var innerAdapter by Delegates.notNull<MangaAdapter>()
+    private var adapter by Delegates.notNull<EasyHeaderFooterAdapter>()
 
-    private lateinit var header: MediaControlView
-    private lateinit var footer: MediaControlView
+    private var header by Delegates.notNull<MediaControlView>()
+    private var footer by Delegates.notNull<MediaControlView>()
 
     override val contentContainer: ViewGroup
         get() = recyclerView
@@ -140,23 +141,23 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         }
 
         Observable.merge(header.uploaderClickSubject, footer.uploaderClickSubject)
-                .bindToLifecycle(this@MangaFragment)
+                .bindToLifecycle(this)
                 .subscribe { ProfileActivity.navigateTo(activity, it.id, it.name) }
 
         Observable.merge(header.translatorGroupClickSubject, footer.translatorGroupClickSubject)
-                .bindToLifecycle(this@MangaFragment)
+                .bindToLifecycle(this)
                 .subscribe { TranslatorGroupActivity.navigateTo(activity, it.id, it.name) }
 
         Observable.merge(header.episodeSwitchSubject, footer.episodeSwitchSubject)
-                .bindToLifecycle(this@MangaFragment)
+                .bindToLifecycle(this)
                 .subscribe { episode = it }
 
         Observable.merge(header.bookmarkSetSubject, footer.bookmarkSetSubject)
-                .bindToLifecycle(this@MangaFragment)
+                .bindToLifecycle(this)
                 .subscribe { viewModel.bookmark(it) }
 
         Observable.merge(header.finishClickSubject, footer.finishClickSubject)
-                .bindToLifecycle(this@MangaFragment)
+                .bindToLifecycle(this)
                 .subscribe { viewModel.markAsFinished() }
 
         return inflater.inflate(R.layout.fragment_manga, container, false)

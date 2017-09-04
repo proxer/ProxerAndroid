@@ -12,6 +12,10 @@ import me.proxer.app.MainApplication.Companion.chatDatabase
 import me.proxer.app.chat.ChatFragmentPingEvent
 import me.proxer.app.chat.LocalConference
 import me.proxer.app.chat.conference.ConferenceFragmentPingEvent
+import me.proxer.app.exception.ChatException
+import me.proxer.app.exception.ChatMessageException
+import me.proxer.app.exception.ChatSendMessageException
+import me.proxer.app.exception.ChatSynchronizationException
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.toLocalConference
@@ -159,27 +163,25 @@ class ChatJob : Job() {
 
                     false
                 }
-                else -> {
-                    try {
-                        val fetchedMessages = fetchMoreMessages(conferenceId)
+                else -> try {
+                    val fetchedMessages = fetchMoreMessages(conferenceId)
 
-                        chatDatabase.runInTransaction {
-                            chatDao.insertMessages(fetchedMessages.map { it.toLocalMessage() })
+                    chatDatabase.runInTransaction {
+                        chatDao.insertMessages(fetchedMessages.map { it.toLocalMessage() })
 
-                            if (fetchedMessages.size < MESSAGES_ON_PAGE) {
-                                chatDao.markConferenceAsFullyLoaded(conferenceId)
-                            }
+                        if (fetchedMessages.size < MESSAGES_ON_PAGE) {
+                            chatDao.markConferenceAsFullyLoaded(conferenceId)
                         }
-
-                        true
-                    } catch (error: Throwable) {
-                        when (error) {
-                            is ChatException -> bus.post(ChatErrorEvent(error))
-                            else -> bus.post(ChatErrorEvent(ChatMessageException(error)))
-                        }
-
-                        false
                     }
+
+                    true
+                } catch (error: Throwable) {
+                    when (error) {
+                        is ChatException -> bus.post(ChatErrorEvent(error))
+                        else -> bus.post(ChatErrorEvent(ChatMessageException(error)))
+                    }
+
+                    false
                 }
             }
         }
@@ -250,7 +252,7 @@ class ChatJob : Job() {
                 conference.lastReadMessageId.toLong())
         var nextId = "0"
 
-        if (mostRecentMessage == null) {
+        return if (mostRecentMessage == null) {
             while (existingUnreadMessageAmount < conference.unreadMessageAmount) {
                 val fetchedMessages = api.messenger().messages()
                         .conferenceId(conference.id)
@@ -262,14 +264,14 @@ class ChatJob : Job() {
                 newMessages += fetchedMessages
 
                 if (fetchedMessages.size < MESSAGES_ON_PAGE) {
-                    return newMessages to true
+                    newMessages to true
                 } else {
                     existingUnreadMessageAmount += fetchedMessages.size
                     nextId = fetchedMessages.first().id
                 }
             }
 
-            return newMessages to false
+            newMessages to false
         } else {
             val mostRecentMessageIdBeforeUpdate = mostRecentMessage.id.toLong()
             var currentMessage: Message = mostRecentMessage
@@ -287,7 +289,7 @@ class ChatJob : Job() {
                 newMessages.addAll(fetchedMessages)
 
                 if (fetchedMessages.size < MESSAGES_ON_PAGE) {
-                    return newMessages.filter { it.id.toLong() > mostRecentMessageIdBeforeUpdate } to true
+                    newMessages.filter { it.id.toLong() > mostRecentMessageIdBeforeUpdate } to true
                 } else {
                     existingUnreadMessageAmount += fetchedMessages.size
                     currentMessage = fetchedMessages.last()
@@ -295,7 +297,7 @@ class ChatJob : Job() {
                 }
             }
 
-            return newMessages.filter { it.id.toLong() > mostRecentMessageIdBeforeUpdate } to false
+            newMessages.filter { it.id.toLong() > mostRecentMessageIdBeforeUpdate } to false
         }
     }
 
@@ -316,9 +318,4 @@ class ChatJob : Job() {
     }
 
     class SynchronizationEvent
-
-    open class ChatException(val innerError: Throwable) : Exception()
-    class ChatSynchronizationException(innerError: Throwable) : ChatException(innerError)
-    class ChatMessageException(innerError: Throwable) : ChatException(innerError)
-    class ChatSendMessageException(innerError: Throwable, val id: Long) : ChatException(innerError)
 }

@@ -34,7 +34,7 @@ class IndustryInfoFragment : BaseContentFragment<Industry>() {
     }
 
     override val viewModel: IndustryInfoViewModel by unsafeLazy {
-        ViewModelProviders.of(this).get(IndustryInfoViewModel::class.java).apply { industryId = id }
+        ViewModelProviders.of(this).get(IndustryInfoViewModel::class.java).also { it.industryId = id }
     }
 
     override val hostingActivity: IndustryActivity
@@ -74,7 +74,8 @@ class IndustryInfoFragment : BaseContentFragment<Industry>() {
         type.text = ProxerUtils.getApiEnumName(data.type)
                 ?.replace("_", " ")
                 ?.split(" ")
-                ?.joinToString(separator = " ", transform = String::capitalize) ?: throw NullPointerException()
+                ?.joinToString(separator = " ", transform = String::capitalize)
+                ?: throw IllegalArgumentException("Unknown Industry type: ${data.type}")
 
         if (data.link?.toString().isNullOrBlank()) {
             linkRow.visibility = View.GONE

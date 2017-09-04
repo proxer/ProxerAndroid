@@ -6,6 +6,7 @@ import me.proxer.app.base.PagedContentViewModel
 import me.proxer.library.api.PagingLimitEndpoint
 import me.proxer.library.entity.info.Comment
 import me.proxer.library.enums.CommentSortCriteria
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
@@ -18,7 +19,7 @@ class CommentViewModel(application: Application) : PagedContentViewModel<Comment
         get() = api.info().comments(entryId)
                 .sort(sortCriteria)
 
-    lateinit var entryId: String
+    var entryId by Delegates.notNull<String>()
 
     private var sortCriteria = CommentSortCriteria.RATING
 

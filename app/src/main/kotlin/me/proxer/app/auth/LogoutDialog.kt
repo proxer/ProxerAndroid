@@ -33,8 +33,8 @@ class LogoutDialog : BaseDialog() {
             .autoDismiss(false)
             .positiveText(R.string.dialog_logout_positive)
             .negativeText(R.string.cancel)
-            .onPositive({ _, _ -> viewModel.logout() })
-            .onNegative({ _, _ -> dismiss() })
+            .onPositive { _, _ -> viewModel.logout() }
+            .onNegative { _, _ -> dismiss() }
             .customView(R.layout.dialog_logout, true)
             .build()
 

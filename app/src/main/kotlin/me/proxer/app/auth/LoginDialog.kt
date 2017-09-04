@@ -49,8 +49,8 @@ class LoginDialog : BaseDialog() {
             .title(R.string.dialog_login_title)
             .positiveText(R.string.dialog_login_positive)
             .negativeText(R.string.cancel)
-            .onPositive({ _, _ -> validateAndLogin() })
-            .onNegative({ _, _ -> dismiss() })
+            .onPositive { _, _ -> validateAndLogin() }
+            .onNegative { _, _ -> dismiss() }
             .customView(R.layout.dialog_login, true)
             .build()
 

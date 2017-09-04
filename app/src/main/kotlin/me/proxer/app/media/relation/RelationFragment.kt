@@ -15,9 +15,11 @@ import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
+import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.info.Relation
 import org.jetbrains.anko.bundleOf
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
@@ -31,7 +33,7 @@ class RelationFragment : BaseContentFragment<List<Relation>>() {
     }
 
     override val viewModel: RelationViewModel by unsafeLazy {
-        ViewModelProviders.of(this).get(RelationViewModel::class.java).apply { entryId = id }
+        ViewModelProviders.of(this).get(RelationViewModel::class.java).also { it.entryId = id }
     }
 
     override val hostingActivity: MediaActivity
@@ -40,7 +42,7 @@ class RelationFragment : BaseContentFragment<List<Relation>>() {
     private val id: String
         get() = hostingActivity.id
 
-    private lateinit var adapter: RelationAdapter
+    private var adapter by Delegates.notNull<RelationAdapter>()
 
     override val contentContainer: ViewGroup
         get() = recyclerView
@@ -88,7 +90,7 @@ class RelationFragment : BaseContentFragment<List<Relation>>() {
         adapter.swapDataAndNotifyInsertion(data)
 
         if (adapter.isEmpty()) {
-            showError(ErrorAction(R.string.error_no_data_relations, ErrorAction.ACTION_MESSAGE_HIDE))
+            showError(ErrorAction(R.string.error_no_data_relations, ACTION_MESSAGE_HIDE))
         }
     }
 

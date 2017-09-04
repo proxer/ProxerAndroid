@@ -10,6 +10,7 @@ import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.MainApplication.Companion.mangaDao
 import me.proxer.app.base.BaseViewModel
+import me.proxer.app.exception.NotFoundException
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
 import me.proxer.app.util.data.ResettingMutableLiveData
@@ -23,6 +24,7 @@ import me.proxer.library.enums.Category
 import me.proxer.library.enums.Language
 import java.io.File
 import kotlin.concurrent.write
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
@@ -41,8 +43,8 @@ class MangaViewModel(application: Application) : BaseViewModel<MangaChapterInfo>
     val bookmarkData = ResettingMutableLiveData<Unit?>()
     val bookmarkError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
 
-    lateinit var entryId: String
-    lateinit var language: Language
+    var entryId by Delegates.notNull<String>()
+    var language by Delegates.notNull<Language>()
 
     private var episode = 0
     private var cachedEntryCore: EntryCore? = null
@@ -107,13 +109,13 @@ class MangaViewModel(application: Application) : BaseViewModel<MangaChapterInfo>
     }
 
     private fun localEntrySingle() = Single.fromCallable {
-        mangaDao.findEntry(entryId.toLong())?.toNonLocalEntryCore() ?: throw RuntimeException()
+        mangaDao.findEntry(entryId.toLong())?.toNonLocalEntryCore() ?: throw NotFoundException()
     }.doOnSuccess { cachedEntryCore = it }
 
     private fun remoteEntrySingle() = api.info().entryCore(entryId).buildSingle()
 
     private fun localChapterSingle(entry: EntryCore) = Single.fromCallable {
-        val chapter = mangaDao.findChapter(entryId.toLong(), episode, language) ?: throw RuntimeException()
+        val chapter = mangaDao.findChapter(entryId.toLong(), episode, language) ?: throw NotFoundException()
         val nonLocalChapter = chapter.toNonLocalChapter(mangaDao.getPagesForChapter(chapter.id)
                 .map { it.toNonLocalPage() })
 

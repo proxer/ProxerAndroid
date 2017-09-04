@@ -34,9 +34,9 @@ class ProfileInfoFragment : BaseContentFragment<UserInfo>() {
         get() = activity as ProfileActivity
 
     override val viewModel: ProfileInfoViewModel by unsafeLazy {
-        ViewModelProviders.of(this).get(ProfileInfoViewModel::class.java).apply {
-            userId = this@ProfileInfoFragment.userId
-            username = this@ProfileInfoFragment.username
+        ViewModelProviders.of(this).get(ProfileInfoViewModel::class.java).also {
+            it.userId = this.userId
+            it.username = this.username
         }
     }
 
@@ -100,26 +100,26 @@ class ProfileInfoFragment : BaseContentFragment<UserInfo>() {
     }
 
     private fun rankToString(points: Int) = context.getString(when {
-        (points < 10) -> R.string.rank_10
-        (points < 100) -> R.string.rank_100
-        (points < 200) -> R.string.rank_200
-        (points < 500) -> R.string.rank_500
-        (points < 700) -> R.string.rank_700
-        (points < 1000) -> R.string.rank_1000
-        (points < 1500) -> R.string.rank_1500
-        (points < 2000) -> R.string.rank_2000
-        (points < 3000) -> R.string.rank_3000
-        (points < 4000) -> R.string.rank_4000
-        (points < 6000) -> R.string.rank_6000
-        (points < 8000) -> R.string.rank_8000
-        (points < 10000) -> R.string.rank_10000
-        (points < 11000) -> R.string.rank_11000
-        (points < 12000) -> R.string.rank_12000
-        (points < 14000) -> R.string.rank_14000
-        (points < 16000) -> R.string.rank_16000
-        (points < 18000) -> R.string.rank_18000
-        (points < 20000) -> R.string.rank_20000
-        (points > 20000) -> R.string.rank_kami_sama
+        points < 10 -> R.string.rank_10
+        points < 100 -> R.string.rank_100
+        points < 200 -> R.string.rank_200
+        points < 500 -> R.string.rank_500
+        points < 700 -> R.string.rank_700
+        points < 1000 -> R.string.rank_1000
+        points < 1500 -> R.string.rank_1500
+        points < 2000 -> R.string.rank_2000
+        points < 3000 -> R.string.rank_3000
+        points < 4000 -> R.string.rank_4000
+        points < 6000 -> R.string.rank_6000
+        points < 8000 -> R.string.rank_8000
+        points < 10000 -> R.string.rank_10000
+        points < 11000 -> R.string.rank_11000
+        points < 12000 -> R.string.rank_12000
+        points < 14000 -> R.string.rank_14000
+        points < 16000 -> R.string.rank_16000
+        points < 18000 -> R.string.rank_18000
+        points < 20000 -> R.string.rank_20000
+        points > 20000 -> R.string.rank_kami_sama
         else -> throw IllegalArgumentException("Illegal rank: $points")
     })
 }

@@ -10,7 +10,7 @@ import com.gojuno.koptional.toOptional
 import com.jakewharton.rxbinding2.support.v7.widget.scrollEvents
 import io.reactivex.Observable
 import io.reactivex.Single
-import me.proxer.app.util.ErrorUtils.PartialException
+import me.proxer.app.exception.PartialException
 import me.proxer.library.api.Endpoint
 import okhttp3.Call
 import okhttp3.Response
@@ -116,14 +116,12 @@ fun RecyclerView.endScrolls(threshold: Int = 5): Observable<Unit> = scrollEvents
         .filter {
             layoutManager.let {
                 val pastVisibleItems = when (it) {
-                    is StaggeredGridLayoutManager -> {
-                        IntArray(it.spanCount).apply {
-                            it.findFirstVisibleItemPositions(this)
-                        }.let { firstVisibleItems ->
-                            when (firstVisibleItems.isNotEmpty()) {
-                                true -> firstVisibleItems[0]
-                                false -> 0
-                            }
+                    is StaggeredGridLayoutManager -> IntArray(it.spanCount).apply {
+                        it.findFirstVisibleItemPositions(this)
+                    }.let { firstVisibleItems ->
+                        when (firstVisibleItems.isNotEmpty()) {
+                            true -> firstVisibleItems[0]
+                            false -> 0
                         }
                     }
                     is LinearLayoutManager -> it.findFirstVisibleItemPosition()

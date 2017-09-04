@@ -33,6 +33,7 @@ import me.proxer.app.util.extension.inputMethodManager
 import me.proxer.app.util.extension.unsafeLazy
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.toast
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
@@ -116,7 +117,7 @@ class ChatFragment : PagedContentFragment<LocalMessage>() {
         }
 
     override val layoutManager by lazy { LinearLayoutManager(context).apply { reverseLayout = true } }
-    override lateinit var innerAdapter: ChatAdapter
+    override var innerAdapter by Delegates.notNull<ChatAdapter>()
 
     private var pingDisposable: Disposable? = null
 

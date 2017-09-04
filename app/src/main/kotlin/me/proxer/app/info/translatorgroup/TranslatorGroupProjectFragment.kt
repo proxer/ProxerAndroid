@@ -15,6 +15,7 @@ import me.proxer.app.util.extension.toCategory
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.list.TranslatorGroupProject
 import org.jetbrains.anko.bundleOf
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
@@ -45,7 +46,7 @@ class TranslatorGroupProjectFragment : PagedContentFragment<TranslatorGroupProje
         StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity) + 1, VERTICAL)
     }
 
-    override lateinit var innerAdapter: TranslatorGroupProjectAdapter
+    override var innerAdapter by Delegates.notNull<TranslatorGroupProjectAdapter>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

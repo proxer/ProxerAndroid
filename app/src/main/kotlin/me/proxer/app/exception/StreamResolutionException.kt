@@ -1,4 +1,4 @@
-package me.proxer.app.anime.resolver
+package me.proxer.app.exception
 
 /**
  * @author Ruben Gees

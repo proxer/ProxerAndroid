@@ -13,6 +13,7 @@ import me.proxer.app.MainApplication.Companion.chatDatabase
 import me.proxer.app.base.PagedViewModel
 import me.proxer.app.chat.sync.ChatErrorEvent
 import me.proxer.app.chat.sync.ChatJob
+import me.proxer.app.exception.ChatMessageException
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
 import me.proxer.app.util.data.StorageHelper
@@ -38,7 +39,7 @@ class ChatViewModel(application: Application) : PagedViewModel<LocalMessage>(app
 
             addSource(source, {
                 it?.let {
-                    if (StorageHelper.user == null) return@let
+                    if (StorageHelper.user == null) Unit
 
                     if (it.isEmpty() && !safeConference.isFullyLoaded) {
                         ChatJob.scheduleMessageLoad(safeConference.id)
@@ -105,7 +106,7 @@ class ChatViewModel(application: Application) : PagedViewModel<LocalMessage>(app
         disposables += bus.register(ChatErrorEvent::class.java)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { event: ChatErrorEvent ->
-                    if (event.error is ChatJob.ChatMessageException) {
+                    if (event.error is ChatMessageException) {
                         dataDisposable?.dispose()
 
                         isLoading.value = false

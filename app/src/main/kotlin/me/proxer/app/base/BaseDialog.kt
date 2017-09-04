@@ -6,13 +6,14 @@ import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import kotterknife.KotterKnife
 import me.proxer.app.MainApplication.Companion.refWatcher
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
  */
 abstract class BaseDialog : DialogFragment(), LifecycleRegistryOwner {
 
-    private lateinit var lifecycleRegistry: LifecycleRegistry
+    private var lifecycleRegistry by Delegates.notNull<LifecycleRegistry>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

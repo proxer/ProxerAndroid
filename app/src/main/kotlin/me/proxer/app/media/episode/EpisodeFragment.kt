@@ -15,12 +15,14 @@ import me.proxer.app.anime.AnimeActivity
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.manga.MangaActivity
 import me.proxer.app.media.MediaActivity
-import me.proxer.app.util.ErrorUtils
+import me.proxer.app.util.ErrorUtils.ErrorAction
+import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.extension.toAnimeLanguage
 import me.proxer.app.util.extension.toGeneralLanguage
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Category
 import org.jetbrains.anko.bundleOf
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
@@ -36,7 +38,7 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
     override val isSwipeToRefreshEnabled = false
 
     override val viewModel: EpisodeViewModel by unsafeLazy {
-        ViewModelProviders.of(this).get(EpisodeViewModel::class.java).apply { entryId = id }
+        ViewModelProviders.of(this).get(EpisodeViewModel::class.java).also { it.entryId = id }
     }
 
     override val hostingActivity: MediaActivity
@@ -51,7 +53,7 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
     private val category: Category?
         get() = hostingActivity.category
 
-    private lateinit var adapter: EpisodeAdapter
+    private var adapter by Delegates.notNull<EpisodeAdapter>()
 
     override val contentContainer: ViewGroup
         get() = recyclerView
@@ -108,10 +110,10 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
         adapter.swapDataAndNotifyInsertion(data)
 
         if (adapter.isEmpty()) {
-            showError(ErrorUtils.ErrorAction(when (category) {
+            showError(ErrorAction(when (category) {
                 Category.ANIME, null -> R.string.error_no_data_episodes
                 Category.MANGA -> R.string.error_no_data_chapters
-            }, ErrorUtils.ErrorAction.ACTION_MESSAGE_HIDE))
+            }, ACTION_MESSAGE_HIDE))
         }
     }
 }

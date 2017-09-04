@@ -14,6 +14,7 @@ import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.extension.buildOptionalSingle
 import me.proxer.library.api.Endpoint
 import me.proxer.library.entity.info.Entry
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
@@ -26,7 +27,7 @@ class MediaInfoViewModel(application: Application) : BaseContentViewModel<Entry>
     val userInfoUpdateData = ResettingMutableLiveData<Unit?>()
     val userInfoUpdateError = ResettingMutableLiveData<ErrorAction?>()
 
-    lateinit var entryId: String
+    var entryId by Delegates.notNull<String>()
 
     private var userInfoUpdateDisposable: Disposable? = null
 

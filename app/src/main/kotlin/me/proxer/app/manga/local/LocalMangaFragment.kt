@@ -27,10 +27,12 @@ import me.proxer.app.manga.MangaActivity
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
+import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.extension.CompleteLocalMangaEntry
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Category
 import org.jetbrains.anko.bundleOf
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
@@ -49,7 +51,7 @@ class LocalMangaFragment : BaseContentFragment<List<CompleteLocalMangaEntry>>() 
         ViewModelProviders.of(this).get(LocalMangaViewModel::class.java)
     }
 
-    private lateinit var adapter: LocalMangaAdapter
+    private var adapter by Delegates.notNull<LocalMangaAdapter>()
 
     private var searchQuery: String?
         get() = arguments.getString(SEARCH_QUERY_ARGUMENT, null)
@@ -194,14 +196,12 @@ class LocalMangaFragment : BaseContentFragment<List<CompleteLocalMangaEntry>>() 
                 adapter.clearAndNotifyRemoval()
 
                 if (searchQuery.isNullOrBlank()) {
-                    showError(ErrorAction(R.string.error_no_data_local_manga, ErrorAction.ACTION_MESSAGE_HIDE))
+                    showError(ErrorAction(R.string.error_no_data_local_manga, ACTION_MESSAGE_HIDE))
                 } else {
-                    showError(ErrorAction(R.string.error_no_data_search, ErrorAction.ACTION_MESSAGE_HIDE))
+                    showError(ErrorAction(R.string.error_no_data_search, ACTION_MESSAGE_HIDE))
                 }
             }
-            else -> {
-                adapter.swapDataAndNotifyChange(data)
-            }
+            else -> adapter.swapDataAndNotifyChange(data)
         }
     }
 

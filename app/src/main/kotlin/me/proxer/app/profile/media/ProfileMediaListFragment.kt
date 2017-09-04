@@ -21,6 +21,7 @@ import me.proxer.library.entity.user.UserMediaListEntry
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.UserMediaListFilterType
 import org.jetbrains.anko.bundleOf
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
@@ -39,9 +40,9 @@ class ProfileMediaListFragment : PagedContentFragment<UserMediaListEntry>() {
     override val emptyDataMessage = R.string.error_no_data_user_media_list
 
     override val viewModel: ProfileMediaListViewModel by unsafeLazy {
-        ViewModelProviders.of(this).get(ProfileMediaListViewModel::class.java).apply {
-            userId = this@ProfileMediaListFragment.userId
-            username = this@ProfileMediaListFragment.username
+        ViewModelProviders.of(this).get(ProfileMediaListViewModel::class.java).also {
+            it.userId = this.userId
+            it.username = this.username
         }
     }
 
@@ -70,7 +71,7 @@ class ProfileMediaListFragment : PagedContentFragment<UserMediaListEntry>() {
             viewModel.setFilter(value)
         }
 
-    override lateinit var innerAdapter: ProfileMediaAdapter
+    override var innerAdapter by Delegates.notNull<ProfileMediaAdapter>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

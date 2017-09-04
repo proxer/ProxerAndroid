@@ -24,15 +24,17 @@ import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.info.translatorgroup.TranslatorGroupActivity
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.ErrorUtils.ErrorAction
+import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
+import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.snackbar
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.app.view.MediaControlView
 import me.proxer.library.entity.info.EntryCore
 import me.proxer.library.enums.AnimeLanguage
-import okhttp3.HttpUrl
 import org.jetbrains.anko.applyRecursively
 import org.jetbrains.anko.bundleOf
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
@@ -46,9 +48,9 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
     }
 
     override val viewModel: AnimeViewModel by unsafeLazy {
-        ViewModelProviders.of(this).get(AnimeViewModel::class.java).apply {
-            entryId = this@AnimeFragment.id
-            language = this@AnimeFragment.language
+        ViewModelProviders.of(this).get(AnimeViewModel::class.java).also {
+            it.entryId = this.id
+            it.language = this.language
         }
     }
 
@@ -81,10 +83,10 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
             hostingActivity.episodeAmount = value
         }
 
-    private lateinit var innerAdapter: AnimeAdapter
-    private lateinit var adapter: EasyHeaderFooterAdapter
+    private var innerAdapter by Delegates.notNull<AnimeAdapter>()
+    private var adapter by Delegates.notNull<EasyHeaderFooterAdapter>()
 
-    private lateinit var header: MediaControlView
+    private var header by Delegates.notNull<MediaControlView>()
 
     override val contentContainer: ViewGroup
         get() = recyclerView
@@ -152,7 +154,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
             it?.let {
                 if (it.intent.action == Intent.ACTION_VIEW) {
                     if (it.intent.type == "text/html") {
-                        showPage(HttpUrl.parse(it.intent.data.toString()) ?: throw NullPointerException())
+                        showPage(Utils.parseAndFixUrl(it.intent.data.toString()))
                     } else {
                         context.startActivity(it.intent)
                     }
@@ -229,7 +231,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
         innerAdapter.swapDataAndNotifyInsertion(data.streams)
 
         if (data.streams.isEmpty()) {
-            showError(ErrorAction(R.string.error_no_data_anime, ErrorAction.ACTION_MESSAGE_HIDE))
+            showError(ErrorAction(R.string.error_no_data_anime, ACTION_MESSAGE_HIDE))
         }
     }
 

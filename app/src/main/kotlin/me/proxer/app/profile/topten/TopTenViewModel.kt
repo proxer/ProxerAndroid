@@ -20,7 +20,8 @@ class TopTenViewModel(application: Application) : BaseViewModel<ZippedTopTenResu
 
     override val dataSingle: Single<ZippedTopTenResult>
         get() {
-            val includeHentai = PreferenceHelper.isAgeRestrictedMediaAllowed(globalContext) && StorageHelper.user != null
+            val includeHentai = PreferenceHelper.isAgeRestrictedMediaAllowed(globalContext)
+                    && StorageHelper.user != null
 
             return Singles.zip(
                     partialSingle(includeHentai, Category.ANIME),

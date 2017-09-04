@@ -70,12 +70,12 @@ abstract class BaseAdapter<T, VH : RecyclerView.ViewHolder> : RecyclerView.Adapt
 
     open fun saveInstanceState(outState: Bundle) = Unit
 
-    open protected fun areItemsTheSame(old: T, new: T) = when {
+    protected open fun areItemsTheSame(old: T, new: T) = when {
         old is ProxerIdItem && new is ProxerIdItem -> old.id == new.id
         else -> old == new
     }
 
-    open protected fun areContentsTheSame(old: T, new: T) = old == new
+    protected open fun areContentsTheSame(old: T, new: T) = old == new
 
     protected fun withSafeAdapterPosition(holder: VH, action: (Int) -> Unit) = holder.adapterPosition.let {
         if (it != RecyclerView.NO_POSITION) {

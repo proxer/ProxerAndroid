@@ -111,7 +111,7 @@ class LocalMangaJob : Job() {
 
     override fun onRunJob(params: Params): Result {
         return try {
-            if (StorageHelper.user == null) return Result.FAILURE
+            if (StorageHelper.user == null) Result.FAILURE
 
             synchronized(lock, {
                 when {
@@ -120,36 +120,13 @@ class LocalMangaJob : Job() {
                         ongoing = 1
                     }
                     ongoing <= 6 -> ongoing++
-                    else -> return Result.RESCHEDULE
+                    else -> Result.RESCHEDULE
                 }
             })
 
             bus.post(StartedEvent())
 
-            val entry = when (mangaDao.countEntries(entryId.toLong()) <= 0) {
-                true -> api.info().entryCore(entryId).build().safeExecute().toLocalEntryCore()
-                false -> null
-            }
-
-            val chapter = api.manga().chapter(entryId, episode, language).build().safeExecute()
-            val pages = chapter.pages.map { it.toLocalPage(chapterId = chapter.id.toLong()) }
-            var error: Throwable? = null
-
-            pages.forEach { page ->
-                MangaPageSingle(context, true, Input(chapter.server, entryId, chapter.id, page.decodedName))
-                        .subscribe({}, { error = it })
-
-                error?.let { throw it }
-                if (isCanceled) throw CancellationException()
-
-                batchProgress += 100F / pages.size
-                LocalMangaNotifications.showOrUpdate(context, maxBatchProgress, batchProgress)
-            }
-
-            mangaDatabase.runInTransaction {
-                entry?.let { entry -> mangaDao.insertEntry(entry) }
-                mangaDao.insertChapterAndPages(chapter.toLocalChapter(episode, language), pages)
-            }
+            localChapterAndPages()
 
             bus.post(FinishedEvent(entryId, episode, language))
 
@@ -182,6 +159,33 @@ class LocalMangaJob : Job() {
                 maxBatchProgress = 0F
                 batchProgress = 0F
             }
+        }
+    }
+
+    private fun localChapterAndPages() {
+        val entry = when (mangaDao.countEntries(entryId.toLong()) <= 0) {
+            true -> api.info().entryCore(entryId).build().safeExecute().toLocalEntryCore()
+            false -> null
+        }
+
+        val chapter = api.manga().chapter(entryId, episode, language).build().safeExecute()
+        val pages = chapter.pages.map { it.toLocalPage(chapterId = chapter.id.toLong()) }
+        var error: Throwable? = null
+
+        pages.forEach { page ->
+            MangaPageSingle(context, true, Input(chapter.server, entryId, chapter.id, page.decodedName))
+                    .subscribe({}, { error = it })
+
+            error?.let { throw it }
+            if (isCanceled) throw CancellationException()
+
+            batchProgress += 100F / pages.size
+            LocalMangaNotifications.showOrUpdate(context, maxBatchProgress, batchProgress)
+        }
+
+        mangaDatabase.runInTransaction {
+            entry?.let { entry -> mangaDao.insertEntry(entry) }
+            mangaDao.insertChapterAndPages(chapter.toLocalChapter(episode, language), pages)
         }
     }
 

@@ -5,6 +5,7 @@ import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.base.BaseContentViewModel
 import me.proxer.library.api.Endpoint
 import me.proxer.library.entity.info.Industry
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
@@ -14,5 +15,5 @@ class IndustryInfoViewModel(application: Application) : BaseContentViewModel<Ind
     override val endpoint: Endpoint<Industry>
         get() = api.info().industry(industryId)
 
-    lateinit var industryId: String
+    var industryId by Delegates.notNull<String>()
 }

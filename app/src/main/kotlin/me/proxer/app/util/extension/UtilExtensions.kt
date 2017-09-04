@@ -46,20 +46,18 @@ inline fun Context.getQuantityString(id: Int, quantity: Int): String = resources
 
 fun CustomTabsHelperFragment.openHttpPage(activity: Activity, url: HttpUrl) {
     when (Utils.getNativeAppPackage(activity, url).isEmpty()) {
-        true -> {
-            CustomTabsIntent.Builder(session)
-                    .setToolbarColor(ContextCompat.getColor(activity, R.color.colorPrimary))
-                    .setSecondaryToolbarColor(ContextCompat.getColor(activity, R.color.colorPrimaryDark))
-                    .addDefaultShareMenuItem()
-                    .enableUrlBarHiding()
-                    .setShowTitle(true)
-                    .build()
-                    .let {
-                        CustomTabsHelperFragment.open(activity, it, url.androidUri(), { context, uri ->
-                            WebViewActivity.navigateTo(context, uri.toString())
-                        })
-                    }
-        }
+        true -> CustomTabsIntent.Builder(session)
+                .setToolbarColor(ContextCompat.getColor(activity, R.color.colorPrimary))
+                .setSecondaryToolbarColor(ContextCompat.getColor(activity, R.color.colorPrimaryDark))
+                .addDefaultShareMenuItem()
+                .enableUrlBarHiding()
+                .setShowTitle(true)
+                .build()
+                .let {
+                    CustomTabsHelperFragment.open(activity, it, url.androidUri(), { context, uri ->
+                        WebViewActivity.navigateTo(context, uri.toString())
+                    })
+                }
         false -> activity.startActivity(Intent(Intent.ACTION_VIEW).setData(url.androidUri()))
     }
 }

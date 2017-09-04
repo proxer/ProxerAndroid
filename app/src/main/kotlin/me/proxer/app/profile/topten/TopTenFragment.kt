@@ -18,8 +18,10 @@ import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.profile.topten.TopTenViewModel.ZippedTopTenResult
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
+import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.extension.unsafeLazy
 import org.jetbrains.anko.bundleOf
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
@@ -33,9 +35,9 @@ class TopTenFragment : BaseContentFragment<ZippedTopTenResult>() {
     }
 
     override val viewModel: TopTenViewModel by unsafeLazy {
-        ViewModelProviders.of(this).get(TopTenViewModel::class.java).apply {
-            userId = this@TopTenFragment.userId
-            username = this@TopTenFragment.username
+        ViewModelProviders.of(this).get(TopTenViewModel::class.java).also {
+            it.userId = this.userId
+            it.username = this.username
         }
     }
 
@@ -51,8 +53,8 @@ class TopTenFragment : BaseContentFragment<ZippedTopTenResult>() {
     private val username: String?
         get() = profileActivity.username
 
-    private lateinit var animeAdapter: TopTenAdapter
-    private lateinit var mangaAdapter: TopTenAdapter
+    private var animeAdapter by Delegates.notNull<TopTenAdapter>()
+    private var mangaAdapter by Delegates.notNull<TopTenAdapter>()
 
     private val animeContainer: ViewGroup by bindView(R.id.animeContainer)
     private val mangaContainer: ViewGroup by bindView(R.id.mangaContainer)
@@ -121,7 +123,7 @@ class TopTenFragment : BaseContentFragment<ZippedTopTenResult>() {
         }
 
         if (animeAdapter.isEmpty() && mangaAdapter.isEmpty()) {
-            showError(ErrorAction(R.string.error_no_data_top_ten, ErrorAction.ACTION_MESSAGE_HIDE))
+            showError(ErrorAction(R.string.error_no_data_top_ten, ACTION_MESSAGE_HIDE))
         }
     }
 

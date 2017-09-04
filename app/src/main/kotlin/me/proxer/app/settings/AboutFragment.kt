@@ -33,10 +33,12 @@ import me.proxer.library.util.ProxerUrls
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
 import org.jetbrains.anko.bundleOf
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
  */
+@Suppress("SpreadOperator")
 class AboutFragment : MaterialAboutFragment() {
 
     companion object {
@@ -67,7 +69,7 @@ class AboutFragment : MaterialAboutFragment() {
         }
     }
 
-    private lateinit var customTabsHelper: CustomTabsHelperFragment
+    private var customTabsHelper by Delegates.notNull<CustomTabsHelperFragment>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -176,7 +178,7 @@ class AboutFragment : MaterialAboutFragment() {
                             .colorRes(R.color.icon))
                     .setOnClickAction {
                         showPage(HttpUrl.parse("https://github.com/$DEVELOPER_GITHUB_NAME")
-                                ?: throw NullPointerException())
+                                ?: throw IllegalStateException())
                     }.build(),
             MaterialAboutActionItem.Builder()
                     .text(getString(R.string.about_developer_proxer_title))

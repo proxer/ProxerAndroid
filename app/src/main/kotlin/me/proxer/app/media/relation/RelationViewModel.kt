@@ -9,6 +9,7 @@ import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.library.api.Endpoint
 import me.proxer.library.entity.info.Relation
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
@@ -24,5 +25,5 @@ class RelationViewModel(application: Application) : BaseContentViewModel<List<Re
         get() = super.dataSingle
                 .map { it.filterNot { it.id == entryId }.sortedByDescending { it.clicks } }
 
-    lateinit var entryId: String
+    var entryId by Delegates.notNull<String>()
 }

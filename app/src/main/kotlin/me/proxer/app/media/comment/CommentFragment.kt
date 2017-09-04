@@ -19,6 +19,7 @@ import me.proxer.library.entity.info.Comment
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.CommentSortCriteria
 import org.jetbrains.anko.bundleOf
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
@@ -38,7 +39,7 @@ class CommentFragment : PagedContentFragment<Comment>() {
     override val pagingThreshold = 3
 
     override val viewModel: CommentViewModel by unsafeLazy {
-        ViewModelProviders.of(this).get(CommentViewModel::class.java).apply { entryId = id }
+        ViewModelProviders.of(this).get(CommentViewModel::class.java).also { it.entryId = id }
     }
 
     override val hostingActivity: MediaActivity
@@ -60,7 +61,7 @@ class CommentFragment : PagedContentFragment<Comment>() {
 
     override val layoutManager by unsafeLazy { LinearLayoutManager(context) }
 
-    override lateinit var innerAdapter: CommentAdapter
+    override var innerAdapter by Delegates.notNull<CommentAdapter>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

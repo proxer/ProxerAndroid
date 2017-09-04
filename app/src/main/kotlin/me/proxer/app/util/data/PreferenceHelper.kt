@@ -55,6 +55,6 @@ object PreferenceHelper {
         "0" -> AppCompatDelegate.MODE_NIGHT_AUTO
         "1" -> AppCompatDelegate.MODE_NIGHT_YES
         "2" -> AppCompatDelegate.MODE_NIGHT_NO
-        else -> throw RuntimeException("Invalid value")
+        else -> throw IllegalArgumentException("Invalid value")
     }
 }

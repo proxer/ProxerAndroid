@@ -35,20 +35,20 @@ abstract class ImageTabsActivity : BaseActivity() {
     abstract val headerImageUrl: HttpUrl?
     abstract val sectionsPagerAdapter: PagerAdapter
 
-    open protected val contentView
+    protected open val contentView
         get() = R.layout.activity_image_tabs
 
-    open protected val itemToDisplay
+    protected open val itemToDisplay
         get() = 0
 
     private var isHeaderImageVisible = true
 
-    open protected val toolbar: Toolbar by bindView(R.id.toolbar)
-    open protected val appbar: AppBarLayout by bindView(R.id.appbar)
-    open protected val collapsingToolbar: CollapsingToolbarLayout by bindView(R.id.collapsingToolbar)
-    open protected val viewPager: ViewPager by bindView(R.id.viewPager)
-    open protected val headerImage: ImageView by bindView(R.id.image)
-    open protected val tabs: TabLayout by bindView(R.id.tabs)
+    protected open val toolbar: Toolbar by bindView(R.id.toolbar)
+    protected open val appbar: AppBarLayout by bindView(R.id.appbar)
+    protected open val collapsingToolbar: CollapsingToolbarLayout by bindView(R.id.collapsingToolbar)
+    protected open val viewPager: ViewPager by bindView(R.id.viewPager)
+    protected open val headerImage: ImageView by bindView(R.id.image)
+    protected open val tabs: TabLayout by bindView(R.id.tabs)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,7 +98,7 @@ abstract class ImageTabsActivity : BaseActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    open protected fun setupImage() {
+    protected open fun setupImage() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             headerImage.transitionName = ActivityUtils.getTransitionName(this)
         }
@@ -113,12 +113,12 @@ abstract class ImageTabsActivity : BaseActivity() {
                             ViewCompat.setTransitionName(headerImage, "header")
                         }
 
-                        ImageDetailActivity.navigateTo(this@ImageTabsActivity, safeHeaderImageUrl, headerImage)
+                        ImageDetailActivity.navigateTo(this, safeHeaderImageUrl, headerImage)
                     }
                 }
     }
 
-    open protected fun loadImage(animate: Boolean = true) {
+    protected open fun loadImage(animate: Boolean = true) {
         if (headerImageUrl == null) {
             loadEmptyImage()
 
@@ -138,7 +138,7 @@ abstract class ImageTabsActivity : BaseActivity() {
         }
     }
 
-    open protected fun setupToolbar() {
+    protected open fun setupToolbar() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         collapsingToolbar.isTitleEnabled = false
 
@@ -149,7 +149,7 @@ abstract class ImageTabsActivity : BaseActivity() {
                 }
     }
 
-    open protected fun setupContent(savedInstanceState: Bundle?) {
+    protected open fun setupContent(savedInstanceState: Bundle?) {
         viewPager.adapter = sectionsPagerAdapter
 
         if (savedInstanceState == null) {
@@ -159,7 +159,7 @@ abstract class ImageTabsActivity : BaseActivity() {
         TabLayoutHelper(tabs, viewPager).apply { isAutoAdjustTabModeEnabled = true }
     }
 
-    open protected fun loadEmptyImage() = Unit
+    protected open fun loadEmptyImage() = Unit
 
     private fun isEnterTransitionPossible(savedInstanceState: Bundle?): Boolean {
         return savedInstanceState == null && ActivityUtils.getTransitionName(this) != null

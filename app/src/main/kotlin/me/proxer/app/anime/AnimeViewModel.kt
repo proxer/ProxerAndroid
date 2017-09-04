@@ -7,10 +7,11 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.Singles
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.api
-import me.proxer.app.anime.resolver.StreamResolutionException
 import me.proxer.app.anime.resolver.StreamResolutionResult
 import me.proxer.app.anime.resolver.StreamResolverFactory
 import me.proxer.app.base.BaseViewModel
+import me.proxer.app.exception.AppRequiredException
+import me.proxer.app.exception.StreamResolutionException
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.Validators
@@ -20,6 +21,7 @@ import me.proxer.library.api.Endpoint
 import me.proxer.library.entity.info.EntryCore
 import me.proxer.library.enums.AnimeLanguage
 import me.proxer.library.enums.Category
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
@@ -41,8 +43,8 @@ class AnimeViewModel(application: Application) : BaseViewModel<AnimeStreamInfo>(
     val bookmarkData = ResettingMutableLiveData<Unit?>()
     val bookmarkError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
 
-    lateinit var entryId: String
-    lateinit var language: AnimeLanguage
+    var entryId by Delegates.notNull<String>()
+    var language by Delegates.notNull<AnimeLanguage>()
 
     private var episode = 0
     private var cachedEntryCore: EntryCore? = null

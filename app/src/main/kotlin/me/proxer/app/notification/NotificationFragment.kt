@@ -18,10 +18,12 @@ import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
+import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.extension.ProxerNotification
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.unsafeLazy
 import org.jetbrains.anko.bundleOf
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
@@ -40,7 +42,7 @@ class NotificationFragment : BaseContentFragment<List<ProxerNotification>>() {
         ViewModelProviders.of(this).get(NotificationViewModel::class.java)
     }
 
-    private lateinit var adapter: NotificationAdapter
+    private var adapter by Delegates.notNull<NotificationAdapter>()
 
     override val contentContainer: ViewGroup
         get() = recyclerView
@@ -97,10 +99,8 @@ class NotificationFragment : BaseContentFragment<List<ProxerNotification>>() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.delete_all -> {
-                if (!adapter.isEmpty()) {
-                    viewModel.deleteAll()
-                }
+            R.id.delete_all -> if (!adapter.isEmpty()) {
+                viewModel.deleteAll()
             }
         }
 
@@ -118,7 +118,7 @@ class NotificationFragment : BaseContentFragment<List<ProxerNotification>>() {
 
         if (adapter.isEmpty()) {
             if (data.isEmpty()) {
-                showError(ErrorAction(R.string.error_no_data_notifications, ErrorAction.ACTION_MESSAGE_HIDE))
+                showError(ErrorAction(R.string.error_no_data_notifications, ACTION_MESSAGE_HIDE))
             } else {
                 adapter.swapDataAndNotifyInsertion(data)
             }
@@ -133,7 +133,7 @@ class NotificationFragment : BaseContentFragment<List<ProxerNotification>>() {
                         adapter.swapDataAndNotifyWithDiffResult(data, diff)
 
                         if (adapter.isEmpty()) {
-                            showError(ErrorAction(R.string.error_no_data_notifications, ErrorAction.ACTION_MESSAGE_HIDE))
+                            showError(ErrorAction(R.string.error_no_data_notifications, ACTION_MESSAGE_HIDE))
                         } else {
                             if (wasAtFirstPosition) {
                                 recyclerView.let {

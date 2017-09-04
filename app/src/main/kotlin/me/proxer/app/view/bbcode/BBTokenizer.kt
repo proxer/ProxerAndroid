@@ -30,7 +30,7 @@ internal object BBTokenizer {
                         stack.pop()
 
                         index += endLength
-                        currentToken = currentToken.parent!!
+                        currentToken = currentToken.parent ?: throw IllegalStateException("Parent null")
 
                         continue
                     }

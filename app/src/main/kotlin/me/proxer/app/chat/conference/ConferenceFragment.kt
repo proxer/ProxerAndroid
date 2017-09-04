@@ -19,8 +19,10 @@ import me.proxer.app.chat.new.NewChatActivity
 import me.proxer.app.chat.sync.ChatNotifications
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
+import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.extension.unsafeLazy
 import org.jetbrains.anko.bundleOf
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
@@ -37,7 +39,7 @@ class ConferenceFragment : BaseContentFragment<List<LocalConference>>() {
         ViewModelProviders.of(this).get(ConferenceViewModel::class.java)
     }
 
-    private lateinit var adapter: ConferenceAdapter
+    private var adapter by Delegates.notNull<ConferenceAdapter>()
 
     private var pingDisposable: Disposable? = null
 
@@ -118,12 +120,10 @@ class ConferenceFragment : BaseContentFragment<List<LocalConference>>() {
                 adapter.clearAndNotifyRemoval()
 
                 if (adapter.isEmpty()) {
-                    showError(ErrorAction(R.string.error_no_data_conferences, ErrorAction.ACTION_MESSAGE_HIDE))
+                    showError(ErrorAction(R.string.error_no_data_conferences, ACTION_MESSAGE_HIDE))
                 }
             }
-            else -> {
-                adapter.swapDataAndNotifyChange(data)
-            }
+            else -> adapter.swapDataAndNotifyChange(data)
         }
     }
 

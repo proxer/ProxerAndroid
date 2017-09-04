@@ -33,7 +33,7 @@ class AppRequiredDialog : BaseDialog() {
             .content(getString(R.string.dialog_app_required_content, name))
             .positiveText(R.string.dialog_app_required_positive)
             .negativeText(R.string.cancel)
-            .onPositive({ _, _ ->
+            .onPositive { _, _ ->
                 try {
                     context.startActivity(Intent(Intent.ACTION_VIEW,
                             Uri.parse("market://details?id=$packageName")))
@@ -41,6 +41,6 @@ class AppRequiredDialog : BaseDialog() {
                     context.startActivity(Intent(Intent.ACTION_VIEW,
                             Uri.parse("https://play.google.com/store/apps/details?id=$packageName")))
                 }
-            })
+            }
             .build()
 }

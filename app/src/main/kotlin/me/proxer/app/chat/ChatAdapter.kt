@@ -84,9 +84,11 @@ class ChatAdapter(savedInstanceState: Bundle?, private val isGroup: Boolean)
                     val next = data[position + 1]
 
                     if (next.userId == current.userId && next.action == MessageAction.NONE) {
-                        MessageType.BOTTOM.type // The item is the bottommost item and has an item from the same user above.
+                        MessageType.BOTTOM.type /* The item is the bottommost item and has an item from the same
+                                                   user above. */
                     } else {
-                        MessageType.SINGLE.type // The item is the bottommost item and doesn't have an item from the same user above.
+                        MessageType.SINGLE.type /* The item is the bottommost item and doesn't have an item from
+                                                   the same user above. */
                     }
                 }
                 position + 1 >= itemCount -> {
@@ -95,7 +97,8 @@ class ChatAdapter(savedInstanceState: Bundle?, private val isGroup: Boolean)
                     result = if (previous.userId == current.userId && previous.action == MessageAction.NONE) {
                         MessageType.TOP.type // The item is the topmost item and has an item from the same user beneath.
                     } else {
-                        MessageType.SINGLE.type // The item is the topmost item and doesn't have an item from the same user beneath.
+                        MessageType.SINGLE.type /* The item is the topmost item and doesn't have an item from the
+                                                   same user beneath. */
                     }
                 }
                 else -> {
@@ -130,19 +133,15 @@ class ChatAdapter(savedInstanceState: Bundle?, private val isGroup: Boolean)
         val inflater = LayoutInflater.from(parent.context)
 
         return when (MessageType.from(viewType)) {
-            MessageType.TOP, MessageType.SINGLE -> {
-                if (isGroup) {
-                    MessageTitleViewHolder(inflater.inflate(R.layout.item_message_single, parent, false))
-                } else {
-                    MessageViewHolder(inflater.inflate(R.layout.item_message, parent, false))
-                }
-            }
-            MessageType.BOTTOM, MessageType.INNER -> {
+            MessageType.TOP, MessageType.SINGLE -> if (isGroup) {
+                MessageTitleViewHolder(inflater.inflate(R.layout.item_message_single, parent, false))
+            } else {
                 MessageViewHolder(inflater.inflate(R.layout.item_message, parent, false))
             }
-            MessageType.ACTION -> {
-                ActionViewHolder(inflater.inflate(R.layout.item_message_action, parent, false))
-            }
+            MessageType.BOTTOM, MessageType.INNER -> MessageViewHolder(inflater
+                    .inflate(R.layout.item_message, parent, false))
+            MessageType.ACTION -> ActionViewHolder(inflater
+                    .inflate(R.layout.item_message_action, parent, false))
             else -> MessageViewHolder(inflater.inflate(R.layout.item_message_self, parent, false))
         }
     }
@@ -219,10 +218,10 @@ class ChatAdapter(savedInstanceState: Bundle?, private val isGroup: Boolean)
 
     open inner class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        protected val root: ViewGroup by bindView(R.id.root)
-        protected val container: CardView by bindView(R.id.container)
-        protected val text: TextView by bindView(R.id.text)
-        protected val time: TextView by bindView(R.id.time)
+        internal val root: ViewGroup by bindView(R.id.root)
+        internal val container: CardView by bindView(R.id.container)
+        internal val text: TextView by bindView(R.id.text)
+        internal val time: TextView by bindView(R.id.time)
 
         init {
             root.setOnClickListener { onContainerClick(it) }
@@ -231,7 +230,7 @@ class ChatAdapter(savedInstanceState: Bundle?, private val isGroup: Boolean)
             text.setTextColor(ContextCompat.getColor(text.context, R.color.textColorPrimary))
         }
 
-        open fun bind(message: LocalMessage, marginTop: Int, marginBottom: Int) {
+        internal open fun bind(message: LocalMessage, marginTop: Int, marginBottom: Int) {
             applyMessage(message)
             applyTime(message)
             applySendStatus(message)
@@ -240,7 +239,7 @@ class ChatAdapter(savedInstanceState: Bundle?, private val isGroup: Boolean)
             applyMargins(marginTop, marginBottom)
         }
 
-        open protected fun onContainerClick(v: View) = withSafeAdapterPosition(this) {
+        internal open fun onContainerClick(v: View) = withSafeAdapterPosition(this) {
             val current = data[it]
             val id = current.id.toString()
 
@@ -267,7 +266,7 @@ class ChatAdapter(savedInstanceState: Bundle?, private val isGroup: Boolean)
             notifyDataSetChanged()
         }
 
-        open protected fun onContainerLongClick(v: View): Boolean {
+        internal open fun onContainerLongClick(v: View): Boolean {
             var consumed = false
 
             withSafeAdapterPosition(this) {
@@ -288,7 +287,7 @@ class ChatAdapter(savedInstanceState: Bundle?, private val isGroup: Boolean)
             return consumed
         }
 
-        protected open fun applyMessage(message: LocalMessage) {
+        internal open fun applyMessage(message: LocalMessage) {
             text.text = Utils.buildClickableText(text.context, message.message.trim(),
                     onWebClickListener = Link.OnClickListener {
                         linkClickSubject.onNext(Utils.parseAndFixUrl(it))
@@ -301,11 +300,11 @@ class ChatAdapter(savedInstanceState: Bundle?, private val isGroup: Boolean)
                     })
         }
 
-        protected open fun applyTime(message: LocalMessage) {
+        internal open fun applyTime(message: LocalMessage) {
             time.text = message.date.convertToRelativeReadableTime(time.context)
         }
 
-        protected open fun applySendStatus(message: LocalMessage) = if (message.id < 0) {
+        internal open fun applySendStatus(message: LocalMessage) = if (message.id < 0) {
             text.setCompoundDrawablesWithIntrinsicBounds(null, null, IconicsDrawable(text.context)
                     .icon(CommunityMaterial.Icon.cmd_clock)
                     .sizeDp(24)
@@ -315,21 +314,21 @@ class ChatAdapter(savedInstanceState: Bundle?, private val isGroup: Boolean)
             text.setCompoundDrawables(null, null, null, null)
         }
 
-        protected open fun applySelection(message: LocalMessage) {
+        internal open fun applySelection(message: LocalMessage) {
             container.cardBackgroundColor = ContextCompat.getColorStateList(container.context, when {
                 messageSelectionMap[message.id.toString()] == true -> R.color.selected
                 else -> R.color.card_background
             })
         }
 
-        protected open fun applyTimeVisibility(message: LocalMessage) {
+        internal open fun applyTimeVisibility(message: LocalMessage) {
             time.visibility = when (timeDisplayMap[message.id.toString()]) {
                 true -> View.VISIBLE
                 else -> View.GONE
             }
         }
 
-        protected open fun applyMargins(marginTop: Int, marginBottom: Int) {
+        internal open fun applyMargins(marginTop: Int, marginBottom: Int) {
             (root.layoutParams as ViewGroup.MarginLayoutParams).apply {
                 topMargin = marginTop
                 bottomMargin = marginBottom

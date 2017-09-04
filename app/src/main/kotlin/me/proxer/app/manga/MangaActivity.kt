@@ -51,9 +51,8 @@ class MangaActivity : BaseActivity() {
 
     var episode: Int
         get() = when {
-            intent.action == Intent.ACTION_VIEW && !intent.hasExtra(EPISODE_EXTRA) -> {
-                intent.data.pathSegments.getOrElse(2, { "1" }).toIntOrNull() ?: 1
-            }
+            intent.action == Intent.ACTION_VIEW && !intent.hasExtra(EPISODE_EXTRA) -> intent.data.pathSegments
+                    .getOrElse(2, { "1" }).toIntOrNull() ?: 1
             else -> intent.getIntExtra(EPISODE_EXTRA, 1)
         }
         set(value) {
@@ -64,10 +63,8 @@ class MangaActivity : BaseActivity() {
 
     val language: Language
         get() = when {
-            intent.action == Intent.ACTION_VIEW -> {
-                ProxerUtils.toApiEnum(Language::class.java, intent.data.pathSegments.getOrElse(3, { "" }))
-                        ?: Language.ENGLISH
-            }
+            intent.action == Intent.ACTION_VIEW -> ProxerUtils.toApiEnum(Language::class.java, intent.data.pathSegments
+                    .getOrElse(3, { "" })) ?: Language.ENGLISH
             else -> intent.getSerializableExtra(LANGUAGE_EXTRA) as Language
         }
 
@@ -123,36 +120,33 @@ class MangaActivity : BaseActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_share -> {
-                name?.let {
-                    val link = "https://proxer.me/chapter/$id/$episode/${ProxerUtils.getApiEnumName(language)}"
-                    val text = chapterTitle.let { title ->
-                        when {
-                            title.isNullOrBlank() -> getString(R.string.share_manga, episode, it, link)
-                            else -> getString(R.string.share_manga_title, title, it, link)
-                        }
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.action_share -> {
+            name?.let {
+                val link = "https://proxer.me/chapter/$id/$episode/${ProxerUtils.getApiEnumName(language)}"
+                val text = chapterTitle.let { title ->
+                    when {
+                        title.isNullOrBlank() -> getString(R.string.share_manga, episode, it, link)
+                        else -> getString(R.string.share_manga_title, title, it, link)
                     }
-
-                    ShareCompat.IntentBuilder
-                            .from(this)
-                            .setText(text)
-                            .setType("text/plain")
-                            .setChooserTitle(getString(R.string.share_title))
-                            .startChooser()
                 }
 
-                return true
+                ShareCompat.IntentBuilder
+                        .from(this)
+                        .setText(text)
+                        .setType("text/plain")
+                        .setChooserTitle(getString(R.string.share_title))
+                        .startChooser()
             }
-            android.R.id.home -> {
-                finish()
 
-                return true
-            }
+            true
         }
+        android.R.id.home -> {
+            finish()
 
-        return super.onOptionsItemSelected(item)
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
     }
 
     private fun setupToolbar() {

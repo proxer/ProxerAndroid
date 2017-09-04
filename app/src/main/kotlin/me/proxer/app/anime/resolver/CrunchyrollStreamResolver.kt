@@ -7,7 +7,8 @@ import me.proxer.app.MainApplication.Companion.USER_AGENT
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.MainApplication.Companion.client
 import me.proxer.app.MainApplication.Companion.globalContext
-import me.proxer.app.anime.AppRequiredException
+import me.proxer.app.exception.AppRequiredException
+import me.proxer.app.exception.StreamResolutionException
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.toBodySingle

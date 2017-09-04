@@ -9,12 +9,10 @@ class ProxerLoginTokenManager : LoginTokenManager {
     override fun provide() = StorageHelper.user?.token
     override fun persist(loginToken: String?) {
         when (loginToken) {
-            null -> {
-                if (StorageHelper.user?.token != loginToken) {
-                    StorageHelper.user = null
+            null -> if (StorageHelper.user?.token != loginToken) {
+                StorageHelper.user = null
 
-                    bus.post(LogoutEvent())
-                }
+                bus.post(LogoutEvent())
             }
             else -> Unit /* Don't do anything in case the token is not null. We save the token
                             manually in the LoginDialog. */

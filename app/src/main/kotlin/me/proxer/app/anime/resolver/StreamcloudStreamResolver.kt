@@ -5,6 +5,7 @@ import io.reactivex.Single
 import me.proxer.app.MainApplication.Companion.GENERIC_USER_AGENT
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.MainApplication.Companion.client
+import me.proxer.app.exception.StreamResolutionException
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.toBodySingle
 import okhttp3.FormBody

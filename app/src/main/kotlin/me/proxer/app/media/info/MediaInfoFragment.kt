@@ -45,7 +45,7 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
         get() = activity as MediaActivity
 
     override val viewModel: MediaInfoViewModel by unsafeLazy {
-        ViewModelProviders.of(this).get(MediaInfoViewModel::class.java).apply { entryId = id }
+        ViewModelProviders.of(this).get(MediaInfoViewModel::class.java).also { it.entryId = id }
     }
 
     private val id: String
@@ -203,7 +203,9 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
         val seasons = result.seasons
 
         if (seasons.isNotEmpty()) {
-            val tableRow = LayoutInflater.from(context).inflate(R.layout.layout_media_info_seasons_row, infoTable, false)
+            val tableRow = LayoutInflater.from(context)
+                    .inflate(R.layout.layout_media_info_seasons_row, infoTable, false)
+
             val seasonStartView = tableRow.findViewById<TextView>(R.id.seasonStart)
             val seasonEndView = tableRow.findViewById<TextView>(R.id.seasonEnd)
 
@@ -251,9 +253,10 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
         }
 
         bindChips(genres, result.genres.toList(), mapFunction = {
-            ProxerUtils.getApiEnumName(it) ?: throw NullPointerException()
+            ProxerUtils.getApiEnumName(it) ?: throw IllegalArgumentException("Unknown genre: $it")
         }, onClick = {
-            showPage(ProxerUrls.wikiWeb(ProxerUtils.getApiEnumName(it) ?: throw NullPointerException()))
+            showPage(ProxerUrls.wikiWeb(ProxerUtils.getApiEnumName(it)
+                    ?: throw IllegalArgumentException("Unknown genre: $it")))
         })
     }
 
@@ -337,7 +340,8 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
             val type = ProxerUtils.getApiEnumName(it.type)
                     ?.replace("_", " ")
                     ?.split(" ")
-                    ?.joinToString(separator = " ", transform = String::capitalize) ?: throw NullPointerException()
+                    ?.joinToString(separator = " ", transform = String::capitalize)
+                    ?: throw IllegalArgumentException("Unknown industry type: ${it.type}")
 
             "${it.name} ($type)"
         }, onClick = { IndustryActivity.navigateTo(activity, it.id, it.name) })

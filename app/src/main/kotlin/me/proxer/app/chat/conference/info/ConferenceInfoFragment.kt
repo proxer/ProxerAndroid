@@ -19,6 +19,7 @@ import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.messenger.ConferenceInfo
 import org.jetbrains.anko.bundleOf
 import org.threeten.bp.format.DateTimeFormatter
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
@@ -32,8 +33,8 @@ class ConferenceInfoFragment : BaseContentFragment<ConferenceInfo>() {
     }
 
     override val viewModel: ConferenceInfoViewModel by unsafeLazy {
-        ViewModelProviders.of(this).get(ConferenceInfoViewModel::class.java).apply {
-            conferenceId = id.toString()
+        ViewModelProviders.of(this).get(ConferenceInfoViewModel::class.java).also {
+            it.conferenceId = id.toString()
         }
     }
 
@@ -43,7 +44,7 @@ class ConferenceInfoFragment : BaseContentFragment<ConferenceInfo>() {
     private val id: Long
         get() = hostingActivity.conference.id
 
-    private lateinit var adapter: ConferenceParticipantAdapter
+    private var adapter by Delegates.notNull<ConferenceParticipantAdapter>()
 
     private val time: TextView by bindView(R.id.time)
     private val list: RecyclerView by bindView(R.id.participantList)

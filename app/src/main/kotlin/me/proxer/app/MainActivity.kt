@@ -44,6 +44,7 @@ import me.proxer.library.enums.Category
 import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
 import org.jetbrains.anko.intentFor
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
@@ -62,7 +63,7 @@ class MainActivity : BaseActivity() {
                 .intentFor<MainActivity>(SECTION_EXTRA to section.id)
     }
 
-    private lateinit var drawer: MaterialDrawerWrapper
+    private var drawer by Delegates.notNull<MaterialDrawerWrapper>()
 
     private val root: ViewGroup by bindView(R.id.root)
     private val toolbar: Toolbar by bindView(R.id.toolbar)
@@ -74,13 +75,13 @@ class MainActivity : BaseActivity() {
         setSupportActionBar(toolbar)
         supportPostponeEnterTransition()
 
-        drawer = MaterialDrawerWrapper(this, toolbar, savedInstanceState).apply {
-            itemClickSubject
-                    .bindToLifecycle(this@MainActivity)
+        drawer = MaterialDrawerWrapper(this, toolbar, savedInstanceState).also {
+            it.itemClickSubject
+                    .bindToLifecycle(this)
                     .subscribe { handleDrawerItemClick(it) }
 
-            accountClickSubject
-                    .bindToLifecycle(this@MainActivity)
+            it.accountClickSubject
+                    .bindToLifecycle(this)
                     .subscribe { handleAccountItemClick(it) }
         }
 
@@ -131,8 +132,8 @@ class MainActivity : BaseActivity() {
                 data.getParcelableArrayListExtra<Option>(OPTION_RESULT).forEach { option ->
                     when (option.position) {
                         1 -> {
-                            PreferenceHelper.setNewsNotificationsEnabled(this@MainActivity, option.isActivated)
-                            PreferenceHelper.setAccountNotificationsEnabled(this@MainActivity, option.isActivated)
+                            PreferenceHelper.setNewsNotificationsEnabled(this, option.isActivated)
+                            PreferenceHelper.setAccountNotificationsEnabled(this, option.isActivated)
 
                             Completable.fromAction { NotificationJob.scheduleIfPossible(this) }
                                     .bindToLifecycle<Unit>(this)

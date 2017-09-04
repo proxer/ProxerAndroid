@@ -9,16 +9,17 @@ import me.proxer.app.util.extension.openHttpPage
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
 import org.jetbrains.anko.bundleOf
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
  */
 abstract class BaseFragment : LifecycleFragment() {
 
-    private lateinit var customTabsHelper: CustomTabsHelperFragment
-
-    open protected val hostingActivity: BaseActivity
+    protected open val hostingActivity: BaseActivity
         get() = activity as BaseActivity
+
+    private var customTabsHelper by Delegates.notNull<CustomTabsHelperFragment>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

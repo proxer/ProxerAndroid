@@ -86,10 +86,8 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         when (key) {
-            AGE_CONFIRMATION -> {
-                if (PreferenceHelper.isAgeRestrictedMediaAllowed(context)) {
-                    (findPreference(AGE_CONFIRMATION) as TwoStatePreference).isChecked = true
-                }
+            AGE_CONFIRMATION -> if (PreferenceHelper.isAgeRestrictedMediaAllowed(context)) {
+                (findPreference(AGE_CONFIRMATION) as TwoStatePreference).isChecked = true
             }
 
             THEME -> {
@@ -106,21 +104,17 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
                         .subscribe()
             }
 
-            NOTIFICATIONS_CHAT -> {
-                Completable.fromAction { ChatJob.scheduleSynchronizationIfPossible(context) }
-                        .subscribeOn(Schedulers.io())
-                        .subscribe()
-            }
+            NOTIFICATIONS_CHAT -> Completable.fromAction { ChatJob.scheduleSynchronizationIfPossible(context) }
+                    .subscribeOn(Schedulers.io())
+                    .subscribe()
 
-            NOTIFICATIONS_INTERVAL -> {
-                Completable
-                        .fromAction {
-                            NotificationJob.scheduleIfPossible(context)
-                            ChatJob.scheduleSynchronizationIfPossible(context)
-                        }
-                        .subscribeOn(Schedulers.io())
-                        .subscribe()
-            }
+            NOTIFICATIONS_INTERVAL -> Completable
+                    .fromAction {
+                        NotificationJob.scheduleIfPossible(context)
+                        ChatJob.scheduleSynchronizationIfPossible(context)
+                    }
+                    .subscribeOn(Schedulers.io())
+                    .subscribe()
         }
     }
 

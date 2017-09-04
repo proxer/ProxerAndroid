@@ -65,7 +65,7 @@ fun Language.toAppDrawable(context: Context) = AppCompatResources.getDrawable(co
     Language.GERMAN -> R.drawable.ic_germany
     Language.ENGLISH -> R.drawable.ic_united_states
     Language.OTHER -> R.drawable.ic_united_nations
-}) ?: throw NullPointerException("Could not resolve Drawable for language: $this")
+}) ?: throw IllegalStateException("Could not resolve Drawable for language: $this")
 
 fun MediaLanguage.toAppString(context: Context): String = context.getString(when (this) {
     MediaLanguage.GERMAN -> R.string.language_german
@@ -85,7 +85,7 @@ fun Country.toAppDrawable(context: Context) = AppCompatResources.getDrawable(con
     Country.KOREA -> R.drawable.ic_korea
     Country.CHINA -> R.drawable.ic_china
     Country.OTHER -> R.drawable.ic_united_nations
-}) ?: throw NullPointerException("Could not resolve Drawable for country: $this")
+}) ?: throw IllegalStateException("Could not resolve Drawable for country: $this")
 
 fun Medium.toCategory() = when (this) {
     Medium.ANIMESERIES, Medium.MOVIE, Medium.OVA, Medium.HENTAI -> Category.ANIME
@@ -194,7 +194,7 @@ fun FskConstraint.toAppDrawable(context: Context) = AppCompatResources.getDrawab
     FskConstraint.FEAR -> R.drawable.ic_fsk_fear
     FskConstraint.SEX -> R.drawable.ic_fsk_sex
     FskConstraint.VIOLENCE -> R.drawable.ic_fsk_violence
-}) ?: throw NullPointerException("Could not resolve Drawable for fsk constraint: $this")
+}) ?: throw IllegalStateException("Could not resolve Drawable for fsk constraint: $this")
 
 inline val Page.decodedName: String
     get() = try {

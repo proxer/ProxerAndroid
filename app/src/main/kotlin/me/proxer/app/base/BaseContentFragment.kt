@@ -16,6 +16,8 @@ import kotterknife.bindView
 import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.R
 import me.proxer.app.util.ErrorUtils.ErrorAction
+import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_DEFAULT
+import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
 
@@ -28,17 +30,17 @@ abstract class BaseContentFragment<T> : BaseFragment() {
         private const val IS_SOLVING_CAPTCHA_ARGUMENT = "is_solving_chaptcha"
     }
 
-    abstract protected val viewModel: BaseViewModel<T>
+    protected abstract val viewModel: BaseViewModel<T>
 
-    open protected val isSwipeToRefreshEnabled = false
+    protected open val isSwipeToRefreshEnabled = false
 
-    open protected val root: ViewGroup by bindView(R.id.root)
-    open protected val contentContainer: ViewGroup by bindView(R.id.contentContainer)
-    open protected val errorContainer: ViewGroup by bindView(R.id.errorContainer)
-    open protected val errorInnerContainer: ViewGroup by bindView(R.id.errorInnerContainer)
-    open protected val errorText: TextView by bindView(R.id.errorText)
-    open protected val errorButton: Button by bindView(R.id.errorButton)
-    open protected val progress: SwipeRefreshLayout by bindView(R.id.progress)
+    protected open val root: ViewGroup by bindView(R.id.root)
+    protected open val contentContainer: ViewGroup by bindView(R.id.contentContainer)
+    protected open val errorContainer: ViewGroup by bindView(R.id.errorContainer)
+    protected open val errorInnerContainer: ViewGroup by bindView(R.id.errorInnerContainer)
+    protected open val errorText: TextView by bindView(R.id.errorText)
+    protected open val errorButton: Button by bindView(R.id.errorButton)
+    protected open val progress: SwipeRefreshLayout by bindView(R.id.progress)
 
     private var isSolvingCaptcha: Boolean
         get() = arguments.getBoolean(IS_SOLVING_CAPTCHA_ARGUMENT, false)
@@ -88,26 +90,26 @@ abstract class BaseContentFragment<T> : BaseFragment() {
         }
     }
 
-    open protected fun showData(data: T) {
+    protected open fun showData(data: T) {
         contentContainer.visibility = View.VISIBLE
     }
 
-    open protected fun hideData() {
+    protected open fun hideData() {
         contentContainer.visibility = View.GONE
     }
 
-    open protected fun showError(action: ErrorAction) {
+    protected open fun showError(action: ErrorAction) {
         errorContainer.visibility = View.VISIBLE
         errorText.text = getString(action.message)
 
         errorButton.text = when (action.buttonMessage) {
-            ErrorAction.ACTION_MESSAGE_DEFAULT -> getString(R.string.error_action_retry)
-            ErrorAction.ACTION_MESSAGE_HIDE -> null
+            ACTION_MESSAGE_DEFAULT -> getString(R.string.error_action_retry)
+            ACTION_MESSAGE_HIDE -> null
             else -> getString(action.buttonMessage)
         }
 
         errorButton.visibility = when (action.buttonMessage) {
-            ErrorAction.ACTION_MESSAGE_HIDE -> View.GONE
+            ACTION_MESSAGE_HIDE -> View.GONE
             else -> View.VISIBLE
         }
 
@@ -126,7 +128,7 @@ abstract class BaseContentFragment<T> : BaseFragment() {
                 }
     }
 
-    open protected fun hideError() {
+    protected open fun hideError() {
         errorContainer.visibility = View.GONE
     }
 }

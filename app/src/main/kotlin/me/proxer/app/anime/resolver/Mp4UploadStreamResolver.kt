@@ -4,6 +4,7 @@ import io.reactivex.Single
 import me.proxer.app.MainApplication.Companion.GENERIC_USER_AGENT
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.MainApplication.Companion.client
+import me.proxer.app.exception.StreamResolutionException
 import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.toSingle
@@ -16,6 +17,7 @@ import java.util.regex.Pattern.quote
 /**
  * @author Ruben Gees
  */
+@Suppress("ClassNaming")
 class Mp4UploadStreamResolver : StreamResolver() {
 
     private companion object {
@@ -39,7 +41,7 @@ class Mp4UploadStreamResolver : StreamResolver() {
             .flatMap { mediaId ->
                 client.newCall(Request.Builder()
                         .post(FormBody.Builder().add("op", "download2").add("id", mediaId).build())
-                        .url(HttpUrl.parse("https://mp4upload.com/$mediaId") ?: throw NullPointerException())
+                        .url(HttpUrl.parse("https://mp4upload.com/$mediaId") ?: throw IllegalStateException())
                         .header("User-Agent", GENERIC_USER_AGENT)
                         .build())
                         .toSingle()

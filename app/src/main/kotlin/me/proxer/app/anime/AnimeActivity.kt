@@ -52,9 +52,8 @@ class AnimeActivity : BaseActivity() {
 
     var episode: Int
         get() = when {
-            intent.action == Intent.ACTION_VIEW && !intent.hasExtra(EPISODE_EXTRA) -> {
-                intent.data.pathSegments.getOrElse(2, { "1" }).toIntOrNull() ?: 1
-            }
+            intent.action == Intent.ACTION_VIEW && !intent.hasExtra(EPISODE_EXTRA) -> intent.data.pathSegments
+                    .getOrElse(2, { "1" }).toIntOrNull() ?: 1
             else -> intent.getIntExtra(EPISODE_EXTRA, 1)
         }
         set(value) {
@@ -65,10 +64,8 @@ class AnimeActivity : BaseActivity() {
 
     val language: AnimeLanguage
         get() = when (intent.action) {
-            Intent.ACTION_VIEW -> {
-                ProxerUtils.toApiEnum(AnimeLanguage::class.java, intent.data.pathSegments.getOrElse(3, { "" }))
-                        ?: AnimeLanguage.ENGLISH_SUB
-            }
+            Intent.ACTION_VIEW -> ProxerUtils.toApiEnum(AnimeLanguage::class.java, intent.data.pathSegments
+                    .getOrElse(3, { "" })) ?: AnimeLanguage.ENGLISH_SUB
             else -> intent.getSerializableExtra(LANGUAGE_EXTRA) as AnimeLanguage
         }
 
@@ -117,30 +114,27 @@ class AnimeActivity : BaseActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_share -> {
-                name?.let {
-                    val link = "https://proxer.me/watch/$id/$episode/${ProxerUtils.getApiEnumName(language)}"
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+        R.id.action_share -> {
+            name?.let {
+                val link = "https://proxer.me/watch/$id/$episode/${ProxerUtils.getApiEnumName(language)}"
 
-                    ShareCompat.IntentBuilder
-                            .from(this)
-                            .setText(getString(R.string.share_anime, episode, it, link))
-                            .setType("text/plain")
-                            .setChooserTitle(getString(R.string.share_title))
-                            .startChooser()
-                }
-
-                return true
+                ShareCompat.IntentBuilder
+                        .from(this)
+                        .setText(getString(R.string.share_anime, episode, it, link))
+                        .setType("text/plain")
+                        .setChooserTitle(getString(R.string.share_title))
+                        .startChooser()
             }
-            android.R.id.home -> {
-                finish()
 
-                return true
-            }
+            true
         }
+        android.R.id.home -> {
+            finish()
 
-        return super.onOptionsItemSelected(item)
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
     }
 
     private fun setupToolbar() {

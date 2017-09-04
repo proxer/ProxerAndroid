@@ -19,15 +19,16 @@ import me.proxer.app.manga.MangaPageSingle.Input
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.decodedName
 import me.proxer.library.entity.manga.Page
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
  */
 class MangaAdapter : BaseAdapter<Page, ViewHolder>() {
 
-    lateinit var server: String
-    lateinit var entryId: String
-    lateinit var id: String
+    var server by Delegates.notNull<String>()
+    var entryId by Delegates.notNull<String>()
+    var id by Delegates.notNull<String>()
     var isLocal: Boolean = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -83,10 +84,9 @@ class MangaAdapter : BaseAdapter<Page, ViewHolder>() {
                     })
         }
 
-        /**
-         * Make scrolling smoother by hacking the SubsamplingScaleImageView to only receive touch events when zooming.
-         */
         private fun applySmoothScrollHack() = image.setOnTouchListener { _, event ->
+            // Make scrolling smoother by hacking the SubsamplingScaleImageView to only
+            // receive touch events when zooming.
             val shouldInterceptEvent = event.action == MotionEvent.ACTION_MOVE && event.pointerCount == 1 &&
                     image.scale == image.minScale
 

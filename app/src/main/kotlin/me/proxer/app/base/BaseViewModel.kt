@@ -27,13 +27,13 @@ abstract class BaseViewModel<T>(application: Application) : AndroidViewModel(app
     open val error = MutableLiveData<ErrorUtils.ErrorAction?>()
     open val isLoading = MutableLiveData<Boolean?>()
 
-    open protected val isLoginRequired = false
-    open protected val isAgeConfirmationRequired = false
+    protected open val isLoginRequired = false
+    protected open val isAgeConfirmationRequired = false
 
     protected var dataDisposable: Disposable? = null
     protected val disposables = CompositeDisposable()
 
-    abstract protected val dataSingle: Single<T>
+    protected abstract val dataSingle: Single<T>
 
     init {
         disposables += Observable.merge(bus.register(LoginEvent::class.java), bus.register(LogoutEvent::class.java))

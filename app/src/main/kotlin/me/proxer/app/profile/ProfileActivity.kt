@@ -85,7 +85,9 @@ class ProfileActivity : ImageTabsActivity() {
     override val sectionsPagerAdapter by unsafeLazy { SectionsPagerAdapter(supportFragmentManager) }
 
     override val headerImageUrl
-        get() = if (image.isNullOrBlank()) null else ProxerUrls.userImage(image!!)
+        get() = image.let { image ->
+            if (image == null || image.isBlank()) null else ProxerUrls.userImage(image)
+        }
 
     override val itemToDisplay: Int
         get() = when (intent.action) {
@@ -99,7 +101,7 @@ class ProfileActivity : ImageTabsActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         StorageHelper.user.let {
-            if (it == null || (it.id != userId && !it.name.equals(username, true))) {
+            if (it == null || it.id != userId && !it.name.equals(username, true)) {
                 IconicsMenuInflaterUtil.inflate(menuInflater, this, R.menu.activity_profile, menu, true)
             }
         }
@@ -109,29 +111,25 @@ class ProfileActivity : ImageTabsActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.new_chat -> {
-                username?.let { safeUsername ->
-                    image?.let { safeImage ->
-                        Completable
-                                .fromAction {
-                                    chatDao.findConferenceForUser(safeUsername).let { existingChat ->
-                                        when (existingChat) {
-                                            null -> NewChatActivity.navigateTo(this, false,
-                                                    Participant(safeUsername, safeImage))
-                                            else -> ChatActivity.navigateTo(this, existingChat)
-                                        }
+            R.id.new_chat -> username?.let { safeUsername ->
+                image?.let { safeImage ->
+                    Completable
+                            .fromAction {
+                                chatDao.findConferenceForUser(safeUsername).let { existingChat ->
+                                    when (existingChat) {
+                                        null -> NewChatActivity.navigateTo(this, false,
+                                                Participant(safeUsername, safeImage))
+                                        else -> ChatActivity.navigateTo(this, existingChat)
                                     }
                                 }
-                                .subscribeOn(Schedulers.io())
-                                .subscribe()
-                    }
+                            }
+                            .subscribeOn(Schedulers.io())
+                            .subscribe()
                 }
             }
-            R.id.new_group -> {
-                username?.let { safeUsername ->
-                    image?.let { safeImage ->
-                        NewChatActivity.navigateTo(this, true, Participant(safeUsername, safeImage))
-                    }
+            R.id.new_group -> username?.let { safeUsername ->
+                image?.let { safeImage ->
+                    NewChatActivity.navigateTo(this, true, Participant(safeUsername, safeImage))
                 }
             }
         }
@@ -166,7 +164,7 @@ class ProfileActivity : ImageTabsActivity() {
             2 -> ProfileMediaListFragment.newInstance(Category.ANIME)
             3 -> ProfileMediaListFragment.newInstance(Category.MANGA)
             4 -> ProfileCommentFragment.newInstance()
-            else -> throw RuntimeException("Unknown index passed")
+            else -> throw IllegalArgumentException("Unknown index passed")
         }
 
         override fun getCount() = 5
@@ -177,7 +175,7 @@ class ProfileActivity : ImageTabsActivity() {
             2 -> getString(R.string.section_user_media_list_anime)
             3 -> getString(R.string.section_user_media_list_manga)
             4 -> getString(R.string.section_user_comments)
-            else -> throw RuntimeException("Unknown index passed")
+            else -> throw IllegalArgumentException("Unknown index passed")
         }
     }
 }

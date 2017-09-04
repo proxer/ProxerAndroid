@@ -22,27 +22,29 @@ import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter.ContainerPositionResolver
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
+import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.extension.endScrolls
 import me.proxer.app.util.extension.multilineSnackbar
 import java.util.concurrent.TimeUnit
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
  */
 abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
 
-    override abstract val viewModel: PagedViewModel<T>
+    abstract override val viewModel: PagedViewModel<T>
 
     override val isSwipeToRefreshEnabled = true
 
-    open protected val emptyDataMessage get() = R.string.error_no_data
-    open protected val pagingThreshold = 5
+    protected open val emptyDataMessage get() = R.string.error_no_data
+    protected open val pagingThreshold = 5
 
-    abstract protected val layoutManager: RecyclerView.LayoutManager
-    abstract protected val innerAdapter: BaseAdapter<T, *>
-    private lateinit var adapter: EasyHeaderFooterAdapter
+    protected abstract val layoutManager: RecyclerView.LayoutManager
+    protected abstract val innerAdapter: BaseAdapter<T, *>
+    private var adapter by Delegates.notNull<EasyHeaderFooterAdapter>()
 
-    open protected val recyclerView: RecyclerView by bindView(R.id.recyclerView)
+    protected open val recyclerView: RecyclerView by bindView(R.id.recyclerView)
 
     override val contentContainer: ViewGroup
         get() = recyclerView
@@ -106,20 +108,18 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
         updateRecyclerViewPadding()
 
         when {
-            innerAdapter.isEmpty() -> {
-                if (data.isEmpty()) {
-                    showError(ErrorAction(emptyDataMessage, ErrorAction.ACTION_MESSAGE_HIDE))
-                } else {
-                    innerAdapter.swapDataAndNotifyInsertion(data)
+            innerAdapter.isEmpty() -> if (data.isEmpty()) {
+                showError(ErrorAction(emptyDataMessage, ACTION_MESSAGE_HIDE))
+            } else {
+                innerAdapter.swapDataAndNotifyInsertion(data)
 
-                    if (!isFirstData) {
-                        recyclerView.let {
-                            it.postDelayed({ scrollToTop() }, 50)
-                        }
+                if (!isFirstData) {
+                    recyclerView.let {
+                        it.postDelayed({ scrollToTop() }, 50)
                     }
-
-                    isFirstData = false
                 }
+
+                isFirstData = false
             }
             else -> Single.fromCallable { DiffUtil.calculateDiff(innerAdapter.provideDiffUtilCallback(data)) }
                     .subscribeOn(Schedulers.single())
@@ -131,7 +131,7 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
                         innerAdapter.swapDataAndNotifyWithDiffResult(data, diff)
 
                         if (innerAdapter.isEmpty()) {
-                            showError(ErrorAction(emptyDataMessage, ErrorAction.ACTION_MESSAGE_HIDE))
+                            showError(ErrorAction(emptyDataMessage, ACTION_MESSAGE_HIDE))
                         } else {
                             if (wasAtFirstPosition) {
                                 recyclerView.let {
@@ -164,7 +164,7 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
         adapter.footer = null
     }
 
-    open protected fun isAtTop() = layoutManager.let {
+    protected open fun isAtTop() = layoutManager.let {
         when (it) {
             is StaggeredGridLayoutManager -> it.findFirstCompletelyVisibleItemPositions(null).contains(0)
             is LinearLayoutManager -> it.findFirstCompletelyVisibleItemPosition() == 0
@@ -172,7 +172,7 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
         }
     }
 
-    open protected fun scrollToTop() = layoutManager.let {
+    protected open fun scrollToTop() = layoutManager.let {
         when (it) {
             is StaggeredGridLayoutManager -> it.scrollToPositionWithOffset(0, 0)
             is LinearLayoutManager -> it.scrollToPositionWithOffset(0, 0)

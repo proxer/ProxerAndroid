@@ -7,7 +7,6 @@ import android.util.SparseBooleanArray
 import android.view.View
 import android.view.View.MeasureSpec.*
 import android.widget.LinearLayout
-import me.proxer.app.view.bbcode.BBProcessor.BBElement
 import org.jetbrains.anko.collections.forEachWithIndex
 import java.util.*
 import kotlin.properties.Delegates

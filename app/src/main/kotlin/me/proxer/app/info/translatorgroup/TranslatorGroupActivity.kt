@@ -53,16 +53,14 @@ class TranslatorGroupActivity : ImageTabsActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_share -> {
-                name?.let {
-                    ShareCompat.IntentBuilder
-                            .from(this)
-                            .setText(getString(R.string.share_translator_group, it,
-                                    "https://proxer.me/translatorgroups?id=$id"))
-                            .setType("text/plain")
-                            .setChooserTitle(getString(R.string.share_title))
-                            .startChooser()
-                }
+            R.id.action_share -> name?.let {
+                ShareCompat.IntentBuilder
+                        .from(this)
+                        .setText(getString(R.string.share_translator_group, it,
+                                "https://proxer.me/translatorgroups?id=$id"))
+                        .setType("text/plain")
+                        .setChooserTitle(getString(R.string.share_title))
+                        .startChooser()
             }
         }
 
@@ -80,7 +78,7 @@ class TranslatorGroupActivity : ImageTabsActivity() {
         override fun getItem(position: Int) = when (position) {
             0 -> TranslatorGroupInfoFragment.newInstance()
             1 -> TranslatorGroupProjectFragment.newInstance()
-            else -> throw RuntimeException("Unknown index passed")
+            else -> throw IllegalArgumentException("Unknown index passed")
         }
 
         override fun getCount() = 2
@@ -88,7 +86,7 @@ class TranslatorGroupActivity : ImageTabsActivity() {
         override fun getPageTitle(position: Int): String = when (position) {
             0 -> getString(R.string.section_translator_group_info)
             1 -> getString(R.string.section_translator_group_projects)
-            else -> throw RuntimeException("Unknown index passed")
+            else -> throw IllegalArgumentException("Unknown index passed")
         }
     }
 }

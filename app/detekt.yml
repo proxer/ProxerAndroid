@@ -1,12 +1,47 @@
+potential-bugs:
+  UnsafeCast:
+    active: false
+
+exceptions:
+  TooGenericExceptionCatched:
+    active: false
+
+complexity:
+  LongParameterList:
+    active: false
+  LargeClass:
+    active: false
+  ComplexMethod:
+    active: false
+  TooManyFunctions:
+    active: false
+  ComplexCondition:
+    active: false
+  NestedBlockDepth:
+    active: false
+  StringLiteralDuplication:
+    threshold: 5
+
 style:
   WildcardImport:
     active: false
+  SafeCast:
+    active: false
+  FunctionMaxLength:
+    active: false
+  MagicNumber:
+    active: false
+  VariableMinLength:
+    minimumVariableNameLength: 2
+  VariableMaxLength:
+    active: false
 
 comments:
-  active: true
+  UndocumentedPublicClass:
+    active: false
   UndocumentedPublicFunction:
     active: false
 
 build:
-  warningThreshold: 10000 #TODO
-  failThreshold: 100000 #TODO
+  warningThreshold: 0
+  failThreshold: 0

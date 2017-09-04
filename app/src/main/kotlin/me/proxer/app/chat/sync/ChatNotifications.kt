@@ -10,7 +10,7 @@ import android.support.v4.app.NotificationManagerCompat
 import android.support.v4.app.RemoteInput
 import android.support.v4.app.TaskStackBuilder
 import android.support.v4.content.ContextCompat
-import android.text.Spannable
+import android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
 import android.text.SpannableString
 import android.text.style.StyleSpan
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
@@ -81,7 +81,7 @@ object ChatNotifications {
                             }
 
                             addLine(SpannableString(sender + it.message).apply {
-                                setSpan(StyleSpan(Typeface.BOLD), 0, sender.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                setSpan(StyleSpan(Typeface.BOLD), 0, sender.length, SPAN_EXCLUSIVE_EXCLUSIVE)
                             })
                         }
                     }
@@ -139,7 +139,7 @@ object ChatNotifications {
                         .setSummaryText(context.getQuantityString(R.plurals.notification_chat_message_amount, amount))
                         .bigText(when (conference.isGroup) {
                             true -> SpannableString("$username $message").apply {
-                                setSpan(StyleSpan(Typeface.BOLD), 0, username.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                setSpan(StyleSpan(Typeface.BOLD), 0, username.length, SPAN_EXCLUSIVE_EXCLUSIVE)
                             }
                             false -> message
                         })

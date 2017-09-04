@@ -9,6 +9,7 @@ import me.proxer.app.util.extension.openHttpPage
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
 import org.jetbrains.anko.bundleOf
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
@@ -19,8 +20,8 @@ abstract class BaseActivity : AppCompatActivity(), LifecycleRegistryOwner {
         private const val STATE = "activity_state"
     }
 
-    private lateinit var lifecycleRegistry: LifecycleRegistry
-    private lateinit var customTabsHelper: CustomTabsHelperFragment
+    private var lifecycleRegistry by Delegates.notNull<LifecycleRegistry>()
+    private var customTabsHelper by Delegates.notNull<CustomTabsHelperFragment>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // This needs to be called before super.onCreate(), because otherwise Fragments might not see the

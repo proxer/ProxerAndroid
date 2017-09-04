@@ -5,6 +5,7 @@ import io.reactivex.Single
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.base.BaseViewModel
 import me.proxer.app.util.extension.buildSingle
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
@@ -21,5 +22,5 @@ class EpisodeViewModel(application: Application) : BaseViewModel<List<EpisodeRow
                             .map { EpisodeRow(info.category, info.userProgress, info.lastEpisode, it.value) }
                 }
 
-    lateinit var entryId: String
+    var entryId by Delegates.notNull<String>()
 }

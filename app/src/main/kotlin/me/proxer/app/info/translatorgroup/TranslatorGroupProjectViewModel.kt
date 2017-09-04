@@ -7,11 +7,13 @@ import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.library.api.PagingLimitEndpoint
 import me.proxer.library.entity.list.TranslatorGroupProject
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
  */
-class TranslatorGroupProjectViewModel(application: Application) : PagedContentViewModel<TranslatorGroupProject>(application) {
+class TranslatorGroupProjectViewModel(application: Application)
+    : PagedContentViewModel<TranslatorGroupProject>(application) {
 
     override val itemsOnPage = 30
 
@@ -20,5 +22,5 @@ class TranslatorGroupProjectViewModel(application: Application) : PagedContentVi
                 .includeHentai(StorageHelper.user != null
                         && PreferenceHelper.isAgeRestrictedMediaAllowed(getApplication()))
 
-    lateinit var translatorGroupId: String
+    var translatorGroupId by Delegates.notNull<String>()
 }

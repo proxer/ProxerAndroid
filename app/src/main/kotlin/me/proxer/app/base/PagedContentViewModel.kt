@@ -14,5 +14,5 @@ abstract class PagedContentViewModel<T>(application: Application) : PagedViewMod
         get() = Single.fromCallable { validate() }
                 .flatMap { endpoint.page(page).limit(itemsOnPage).buildSingle() }
 
-    abstract protected val endpoint: PagingLimitEndpoint<List<T>>
+    protected abstract val endpoint: PagingLimitEndpoint<List<T>>
 }

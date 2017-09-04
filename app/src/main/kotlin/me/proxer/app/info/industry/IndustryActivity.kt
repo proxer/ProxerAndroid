@@ -53,16 +53,14 @@ class IndustryActivity : ImageTabsActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_share -> {
-                name?.let {
-                    ShareCompat.IntentBuilder
-                            .from(this)
-                            .setText(getString(R.string.share_industry, it,
-                                    "https://proxer.me/industry?id=$id"))
-                            .setType("text/plain")
-                            .setChooserTitle(getString(R.string.share_title))
-                            .startChooser()
-                }
+            R.id.action_share -> name?.let {
+                ShareCompat.IntentBuilder
+                        .from(this)
+                        .setText(getString(R.string.share_industry, it,
+                                "https://proxer.me/industry?id=$id"))
+                        .setType("text/plain")
+                        .setChooserTitle(getString(R.string.share_title))
+                        .startChooser()
             }
         }
 
@@ -80,7 +78,7 @@ class IndustryActivity : ImageTabsActivity() {
         override fun getItem(position: Int) = when (position) {
             0 -> IndustryInfoFragment.newInstance()
             1 -> IndustryProjectFragment.newInstance()
-            else -> throw RuntimeException("Unknown index passed")
+            else -> throw IllegalArgumentException("Unknown index passed")
         }
 
         override fun getCount() = 2
@@ -88,7 +86,7 @@ class IndustryActivity : ImageTabsActivity() {
         override fun getPageTitle(position: Int): String = when (position) {
             0 -> getString(R.string.section_industry_info)
             1 -> getString(R.string.section_industry_projects)
-            else -> throw RuntimeException("Unknown index passed")
+            else -> throw IllegalArgumentException("Unknown index passed")
         }
     }
 }

@@ -5,6 +5,7 @@ import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.base.BaseContentViewModel
 import me.proxer.library.api.Endpoint
 import me.proxer.library.entity.info.TranslatorGroup
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
@@ -14,5 +15,5 @@ class TranslatorGroupInfoViewModel(application: Application) : BaseContentViewMo
     override val endpoint: Endpoint<TranslatorGroup>
         get() = api.info().translatorGroup(translatorGroupId)
 
-    lateinit var translatorGroupId: String
+    var translatorGroupId by Delegates.notNull<String>()
 }

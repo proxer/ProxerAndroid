@@ -16,6 +16,7 @@ import me.proxer.library.entity.notifications.NewsArticle
 import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
 import org.jetbrains.anko.bundleOf
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
@@ -38,7 +39,7 @@ class NewsFragment : PagedContentFragment<NewsArticle>() {
         StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity), VERTICAL)
     }
 
-    override lateinit var innerAdapter: NewsAdapter
+    override var innerAdapter by Delegates.notNull<NewsAdapter>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,7 +64,7 @@ class NewsFragment : PagedContentFragment<NewsArticle>() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        innerAdapter.glide = GlideApp.with(this@NewsFragment)
+        innerAdapter.glide = GlideApp.with(this)
     }
 
     override fun onResume() {

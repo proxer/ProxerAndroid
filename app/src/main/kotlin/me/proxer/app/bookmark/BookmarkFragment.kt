@@ -27,6 +27,7 @@ import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.ucp.Bookmark
 import me.proxer.library.enums.Category
 import org.jetbrains.anko.bundleOf
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
@@ -51,7 +52,7 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
         StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity) + 1, VERTICAL)
     }
 
-    override lateinit var innerAdapter: BookmarkAdapter
+    override var innerAdapter by Delegates.notNull<BookmarkAdapter>()
 
     private var category: Category?
         get() = arguments.getSerializable(CATEGORY_ARGUMENT) as? Category
