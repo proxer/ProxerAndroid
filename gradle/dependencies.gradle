@@ -4,7 +4,7 @@ ext {
     kotlinVersion = '1.2-M2'
 
     // Utility plugins
-    detektPluginVersion = '1.0.0.RC4'
+    detektPluginVersion = '1.0.0.RC4-2'
     gradleVersionsPluginVersion = '0.15.0'
     androidCommandPluginVersion = '1.7.1'
 
@@ -48,7 +48,7 @@ ext {
     // Utils
     threetenVersion = '1.0.5'
     hawkVersion = '2.0.1'
-    glideVersion = '4.1.0'
+    glideVersion = '4.1.1'
     okHttpVersion = '3.9.0'
     okioVersion = '1.13.0'
     linkBuilderVersion = '1.6.1'
