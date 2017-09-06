@@ -22,10 +22,5 @@ jobs:
           destination: apk
       - save_cache:
           paths:
-            - $ANDROID_HOME/tools
-            - $ANDROID_HOME/platform-tools
-            - $ANDROID_HOME/build-tools
-            - $ANDROID_HOME/licenses
-            - $ANDROID_HOME/extras/google/m2repository
             - $HOME/.gradle
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "gradle/dependencies.gradle" }}
