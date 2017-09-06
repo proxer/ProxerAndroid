@@ -23,8 +23,8 @@ import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
 import kotterknife.bindView
 import me.proxer.app.GlideApp
 import me.proxer.app.R
+import me.proxer.app.ui.ImageDetailActivity
 import me.proxer.app.util.ActivityUtils
-import me.proxer.app.view.ImageDetailActivity
 import okhttp3.HttpUrl
 
 /**

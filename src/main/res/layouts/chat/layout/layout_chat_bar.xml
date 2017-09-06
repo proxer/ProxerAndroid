@@ -13,7 +13,7 @@
         android:orientation="horizontal"
         android:weightSum="1">
 
-        <me.proxer.app.view.InfoImageButton
+        <me.proxer.app.ui.view.InfoImageButton
             android:id="@+id/emojiButton"
             android:layout_width="32dp"
             android:layout_height="32dp"

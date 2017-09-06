@@ -36,7 +36,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         tools:text="Ruby" />
 
-    <me.proxer.app.view.InfoImageButton
+    <me.proxer.app.ui.view.InfoImageButton
         android:id="@+id/delete"
         android:layout_width="48dp"
         android:layout_height="48dp"

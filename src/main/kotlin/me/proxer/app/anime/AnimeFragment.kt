@@ -23,13 +23,13 @@ import me.proxer.app.base.BaseAdapter
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.info.translatorgroup.TranslatorGroupActivity
 import me.proxer.app.profile.ProfileActivity
+import me.proxer.app.ui.view.MediaControlView
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.snackbar
 import me.proxer.app.util.extension.unsafeLazy
-import me.proxer.app.view.MediaControlView
 import me.proxer.library.entity.info.EntryCore
 import me.proxer.library.enums.AnimeLanguage
 import org.jetbrains.anko.applyRecursively

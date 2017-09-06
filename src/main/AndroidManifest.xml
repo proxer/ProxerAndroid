@@ -109,7 +109,7 @@
             android:theme="@style/Theme.App.Translucent" />
 
         <activity
-            android:name=".view.ImageDetailActivity"
+            android:name="me.proxer.app.ui.ImageDetailActivity"
             android:theme="@style/Theme.App.Transparent" />
 
         <activity
@@ -198,14 +198,14 @@
         </activity>
 
         <activity
-            android:name=".view.CrashActivity"
+            android:name="me.proxer.app.ui.crash.CrashActivity"
             android:process=":error_activity">
             <intent-filter>
                 <action android:name="cat.ereza.customactivityoncrash.ERROR" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".view.WebViewActivity" />
+        <activity android:name="me.proxer.app.ui.WebViewActivity" />
 
         <receiver
             android:name=".news.NewsNotificationDeletionReceiver"

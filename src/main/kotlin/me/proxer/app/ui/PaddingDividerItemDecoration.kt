@@ -1,4 +1,4 @@
-package me.proxer.app.view
+package me.proxer.app.ui
 
 import android.content.Context
 import android.graphics.Canvas

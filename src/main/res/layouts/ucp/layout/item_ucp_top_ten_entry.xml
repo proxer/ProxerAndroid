@@ -44,7 +44,7 @@
                 android:textColor="@android:color/white"
                 tools:text="Some title" />
 
-            <me.proxer.app.view.InfoImageButton
+            <me.proxer.app.ui.view.InfoImageButton
                 android:id="@+id/deleteButton"
                 android:layout_width="48dp"
                 android:layout_height="48dp"

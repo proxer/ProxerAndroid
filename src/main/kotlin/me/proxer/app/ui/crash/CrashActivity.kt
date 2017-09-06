@@ -1,4 +1,4 @@
-package me.proxer.app.view
+package me.proxer.app.ui.crash
 
 import android.os.Bundle
 import android.support.v7.widget.Toolbar

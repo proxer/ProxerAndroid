@@ -1,4 +1,4 @@
-package me.proxer.app.view.bbcode
+package me.proxer.app.ui.view.bbcode
 
 import android.text.SpannableStringBuilder
 

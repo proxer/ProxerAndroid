@@ -18,11 +18,11 @@ import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.profile.comment.ProfileCommentAdapter.ViewHolder
+import me.proxer.app.ui.view.bbcode.BBCodeView
 import me.proxer.app.util.data.ParcelableStringBooleanArrayMap
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.toEpisodeAppString
-import me.proxer.app.view.bbcode.BBCodeView
 import me.proxer.library.entity.user.UserComment
 
 /**

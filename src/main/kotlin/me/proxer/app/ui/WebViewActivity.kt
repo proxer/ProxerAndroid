@@ -1,4 +1,4 @@
-package me.proxer.app.view
+package me.proxer.app.ui
 
 import android.annotation.SuppressLint
 import android.app.Activity

@@ -16,10 +16,10 @@ import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.manga.local.LocalMangaAdapter.ViewHolder
 import me.proxer.app.manga.local.LocalMangaChapterAdapter.LocalMangaChapterAdapterCallback
+import me.proxer.app.ui.PaddingDividerItemDecoration
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.CompleteLocalMangaEntry
 import me.proxer.app.util.extension.defaultLoad
-import me.proxer.app.view.PaddingDividerItemDecoration
 import me.proxer.library.entity.info.EntryCore
 import me.proxer.library.util.ProxerUrls
 

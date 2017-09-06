@@ -1,4 +1,4 @@
-package me.proxer.app.view.bbcode
+package me.proxer.app.ui.view.bbcode
 
 import android.graphics.Color
 import android.graphics.Typeface
@@ -9,10 +9,10 @@ import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
 import android.view.Gravity
-import me.proxer.app.view.bbcode.BBElement.BBSpoilerElement
-import me.proxer.app.view.bbcode.BBElement.BBTextElement
-import me.proxer.app.view.bbcode.BBTokenizer.BBToken
-import me.proxer.app.view.bbcode.BBTokenizer.BBTokenType.*
+import me.proxer.app.ui.view.bbcode.BBElement.BBSpoilerElement
+import me.proxer.app.ui.view.bbcode.BBElement.BBTextElement
+import me.proxer.app.ui.view.bbcode.BBTokenizer.BBToken
+import me.proxer.app.ui.view.bbcode.BBTokenizer.BBTokenType.*
 import java.util.*
 
 /**

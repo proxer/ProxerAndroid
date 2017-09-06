@@ -9,9 +9,9 @@ import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
 import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
+import me.proxer.app.ui.ImageDetailActivity
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.unsafeLazy
-import me.proxer.app.view.ImageDetailActivity
 import me.proxer.library.entity.notifications.NewsArticle
 import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls

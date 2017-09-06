@@ -1,4 +1,4 @@
-package me.proxer.app.view.bbcode
+package me.proxer.app.ui.view.bbcode
 
 import android.content.Context
 import android.support.v7.widget.AppCompatTextView

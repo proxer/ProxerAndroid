@@ -14,8 +14,8 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.target.Target
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
+import me.proxer.app.ui.WebViewActivity
 import me.proxer.app.util.Utils
-import me.proxer.app.view.WebViewActivity
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
 import java.util.concurrent.Semaphore

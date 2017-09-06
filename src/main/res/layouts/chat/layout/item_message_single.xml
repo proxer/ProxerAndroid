@@ -36,7 +36,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 tools:text="RubyGee" />
 
-            <me.proxer.app.view.LinkConsumableEmojiTextView
+            <me.proxer.app.ui.view.LinkConsumableEmojiTextView
                 android:id="@+id/text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

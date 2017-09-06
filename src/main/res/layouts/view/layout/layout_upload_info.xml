@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:shrinkColumns="0"
     android:stretchColumns="1"
-    tools:context=".view.MediaControlView">
+    tools:context=".ui.view.MediaControlView">
 
     <TableRow android:id="@+id/uploaderRow">
 

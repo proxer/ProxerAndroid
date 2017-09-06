@@ -1,4 +1,4 @@
-package me.proxer.app.view
+package me.proxer.app.ui.crash
 
 import android.app.Dialog
 import android.content.ClipData

@@ -2,7 +2,7 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="view.MediaControlView">
+    tools:context=".ui.view.MediaControlView">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"

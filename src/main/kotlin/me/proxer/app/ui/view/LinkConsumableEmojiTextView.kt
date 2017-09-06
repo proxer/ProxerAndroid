@@ -1,4 +1,4 @@
-package me.proxer.app.view
+package me.proxer.app.ui.view
 
 import android.content.Context
 import android.util.AttributeSet

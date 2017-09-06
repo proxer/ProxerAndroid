@@ -19,7 +19,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         tools:text="Chapter 2" />
 
-    <me.proxer.app.view.InfoImageButton
+    <me.proxer.app.ui.view.InfoImageButton
         android:id="@+id/delete"
         android:layout_width="22dp"
         android:layout_height="22dp"

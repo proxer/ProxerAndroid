@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/screen_horizontal_margin"
     android:paddingRight="@dimen/screen_horizontal_margin"
     android:paddingTop="@dimen/screen_vertical_margin"
-    tools:context=".view.ImageDetailActivity">
+    tools:context=".ui.ImageDetailActivity">
 
     <ImageView
         android:id="@+id/image"

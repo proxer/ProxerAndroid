@@ -1,7 +1,7 @@
-package me.proxer.app.view.bbcode
+package me.proxer.app.ui.view.bbcode
 
-import me.proxer.app.view.bbcode.BBTokenizer.BBTokenRule.*
-import me.proxer.app.view.bbcode.BBTokenizer.BBTokenType.*
+import me.proxer.app.ui.view.bbcode.BBTokenizer.BBTokenRule.*
+import me.proxer.app.ui.view.bbcode.BBTokenizer.BBTokenType.*
 import java.util.*
 
 /**

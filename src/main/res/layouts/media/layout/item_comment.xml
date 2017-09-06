@@ -254,7 +254,7 @@
                 </TableRow>
             </TableLayout>
 
-            <me.proxer.app.view.bbcode.BBCodeView
+            <me.proxer.app.ui.view.bbcode.BBCodeView
                 android:id="@+id/comment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

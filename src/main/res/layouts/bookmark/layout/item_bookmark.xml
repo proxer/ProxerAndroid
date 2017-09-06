@@ -95,7 +95,7 @@
                 android:layout_marginRight="8dp"
                 tools:ignore="ContentDescription" />
 
-            <me.proxer.app.view.InfoImageButton
+            <me.proxer.app.ui.view.InfoImageButton
                 android:id="@+id/delete"
                 android:layout_width="48dp"
                 android:layout_height="48dp"

@@ -1,4 +1,4 @@
-package me.proxer.app.view
+package me.proxer.app.ui
 
 import android.app.Activity
 import android.graphics.drawable.Drawable
