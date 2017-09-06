@@ -65,7 +65,7 @@ class MangaPageSingle(context: Context, private val isLocal: Boolean, private va
                 .url(url)
                 .build())
 
-        call?.execute()?.let {
+        return call?.execute()?.let {
             if (it.isSuccessful) {
                 it.body()?.use { theBody ->
                     Okio.buffer(Okio.sink(file)).use { fileBuffer ->
@@ -77,9 +77,7 @@ class MangaPageSingle(context: Context, private val isLocal: Boolean, private va
             } else {
                 throw IOException()
             }
-        }
-
-        throw IllegalStateException()
+        } ?: throw IllegalStateException()
     }
 
     private inner class MangaPageDisposable : Disposable {
