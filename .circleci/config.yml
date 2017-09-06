@@ -15,10 +15,10 @@ jobs:
           name: Run Build
           command: ./gradlew build --console=plain
       - store_artifacts:
-          path: app/build/reports
+          path: build/reports
           destination: reports
       - store_artifacts:
-          path: app/build/outputs/apk
+          path: build/outputs/apk
           destination: apk
       - save_cache:
           paths:
