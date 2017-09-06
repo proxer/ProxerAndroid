@@ -48,7 +48,7 @@ ext {
     // Utils
     threetenVersion = '1.0.5'
     hawkVersion = '2.0.1'
-    glideVersion = '4.1.1'
+    glideVersion = '4.2.0-SNAPSHOT'
     okHttpVersion = '3.9.0'
     okioVersion = '1.13.0'
     linkBuilderVersion = '1.6.1'
@@ -56,6 +56,7 @@ ext {
     kOptionalVersion = '1.2.0'
     kotterknifeVersion = '1.0'
     jsr305Version = '3.0.2'
+    customActivityOnCrashVersion = '2.1.0'
 
     // Debugging
     strictModeCompatVersion = '26.0.2'
@@ -128,6 +129,7 @@ ext {
             easyHeaderFooterAdapter      : "com.github.rubengees:easy-header-footer-adapter:$easyHeaderFooterAdapterVersion",
             kOptional                    : "com.gojuno.koptional:koptional-rxjava2-extensions:$kOptionalVersion",
             kotterknife                  : "com.github.rubengees:kotterknife:$kotterknifeVersion",
+            customActivityOnCrash        : "cat.ereza:customactivityoncrash:$customActivityOnCrashVersion",
 
             strictModeCompat             : "com.kirich1409:strict-mode-compat:$strictModeCompatVersion",
     ]

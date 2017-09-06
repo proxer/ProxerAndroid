@@ -197,6 +197,14 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".view.CrashActivity"
+            android:process=":error_activity">
+            <intent-filter>
+                <action android:name="cat.ereza.customactivityoncrash.ERROR" />
+            </intent-filter>
+        </activity>
+
         <activity android:name=".view.WebViewActivity" />
 
         <receiver

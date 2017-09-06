@@ -17,6 +17,7 @@
     <string name="section_logout">Abmelden</string>
     <string name="section_info">Info</string>
     <string name="section_settings">Einstellungen</string>
+    <string name="section_crash">Absturz</string>
 
     <string name="section_notifications">Benachrichtigungen</string>
 
@@ -202,6 +203,10 @@
 
     <string name="cancel">Abbrechen</string>
 
+    <string name="activity_crash_text">Die App ist leider abgestürzt. Sende den Fehler bitte an @RubyGee oder einen anderen Techniker um bei der Beseitigung zu helfen!</string>
+    <string name="activity_crash_report">Fehlerbericht</string>
+    <string name="activity_crash_restart">Neustart</string>
+
     <string name="dialog_login_title">Anmelden</string>
     <string name="dialog_login_positive">Anmelden</string>
     <string name="dialog_login_password_hint">Passwort</string>
@@ -224,6 +229,10 @@
 
     <string name="dialog_clean_manga_content">Sollen alle heruntergeladenen Kapitel und Seiten gelöscht werden?</string>
     <string name="dialog_clean_manga_positive">Alles löschen</string>
+
+    <string name="dialog_crash_title">Fehlerbericht</string>
+    <string name="dialog_crash_neutral">Kopieren</string>
+    <string name="dialog_crash_negative">Schließen</string>
 
     <string name="fragment_ucp_overview_username">Nutzername</string>
     <string name="fragment_ucp_overview_epsiode_counter_days">Tage</string>
@@ -334,6 +343,8 @@
     <string name="fragment_new_chat_delete_description">Entfernen</string>
     <string name="fragment_new_chat_cancel_content_description">Abbrechen</string>
     <string name="fragment_new_chat_accept_description">Akzeptieren</string>
+
+    <string name="fragment_notification_delete_content_description">Alle löschen</string>
 
     <string name="view_media_control_uploader">Uploader</string>
     <string name="view_media_control_translator_group">Translator-Gruppe</string>
@@ -519,13 +530,13 @@
 
     <string name="clipboard_title">Proxer Zwischenablage</string>
     <string name="clipboard_status">In die Zwischenablage kopiert</string>
+    <string name="clipboard_crash_title">ProxerMe Fehlerbericht</string>
 
     <string name="interval_often">Oft (Alle 30 Minuten)</string>
     <string name="interval_moderate">Moderat (Alle 2 Stunden)</string>
     <string name="interval_seldom">Selten (Alle 8 Stunden)</string>
 
     <string name="time_a_moment_ago">Eben gerade</string>
-    <string name="fragment_notification_delete_content_description">Löschen</string>
     <plurals name="time_days_ago">
         <item quantity="one">"Gestern"</item>
         <item quantity="other">"Vor %d Tagen"</item>

@@ -1,6 +1,7 @@
 package me.proxer.app.chat.new
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
@@ -21,6 +22,13 @@ class NewChatActivity : BaseActivity() {
                     IS_GROUP_EXTRA to isGroup,
                     INITIAL_PARTICIPANT_EXTRA to initialParticipant
             ))
+        }
+
+        fun getIntent(context: Activity, isGroup: Boolean = false, initialParticipant: Participant? = null): Intent {
+            return context.intentFor<NewChatActivity>(
+                    IS_GROUP_EXTRA to isGroup,
+                    INITIAL_PARTICIPANT_EXTRA to initialParticipant
+            )
         }
     }
 

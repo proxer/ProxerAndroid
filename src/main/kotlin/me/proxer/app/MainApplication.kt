@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.support.v7.app.AppCompatDelegate
 import android.widget.ImageView
+import cat.ereza.customactivityoncrash.config.CaocConfig
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.devbrackets.android.exomedia.ExoMedia
 import com.evernote.android.job.JobApi
@@ -154,6 +155,10 @@ class MainApplication : Application() {
     }
 
     private fun initLibs() {
+        CaocConfig.Builder.create()
+                .backgroundMode(CaocConfig.BACKGROUND_MODE_CRASH)
+                .apply()
+
         EmojiManager.install(IosEmojiProvider())
         AndroidThreeTen.init(this)
 
