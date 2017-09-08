@@ -9,6 +9,7 @@ import me.proxer.library.enums.MediaLanguage
 /**
  * @author Ruben Gees
  */
+@Suppress("ExceptionRaisedInUnexpectedLocation") // I don't know of a better way currently, check back later.
 class EpisodeRow(val category: Category, val userProgress: Int, val episodeAmount: Int, episodes: List<Episode>) {
 
     val number: Int

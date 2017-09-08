@@ -5,6 +5,9 @@ potential-bugs:
 exceptions:
   TooGenericExceptionCatched:
     active: false
+  # Enable later
+  TooGenericExceptionCaught:
+    active: false
 
 complexity:
   LongParameterList:
@@ -34,6 +37,10 @@ style:
   VariableMinLength:
     minimumVariableNameLength: 2
   VariableMaxLength:
+    active: false
+  DataClassContainsFunctions:
+    active: false
+  UseDataClass:
     active: false
 
 comments:

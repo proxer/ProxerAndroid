@@ -16,7 +16,6 @@ import me.proxer.app.R
 import org.jetbrains.anko.dip
 import kotlin.properties.Delegates
 
-
 /**
  * @author Ruben Gees
  */

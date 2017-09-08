@@ -10,53 +10,53 @@ import me.proxer.library.enums.Language
  * @author Ruben Gees
  */
 @Dao
-abstract class LocalMangaDao {
+interface LocalMangaDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insertEntry(entry: LocalEntryCore)
+    fun insertEntry(entry: LocalEntryCore)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insertChapterAndPages(chapter: LocalMangaChapter, pages: List<LocalMangaPage>)
+    fun insertChapterAndPages(chapter: LocalMangaChapter, pages: List<LocalMangaPage>)
 
     @Query("SELECT * FROM entries WHERE id = :entryId LIMIT 1")
-    abstract fun findEntry(entryId: Long): LocalEntryCore?
+    fun findEntry(entryId: Long): LocalEntryCore?
 
     @Query("SELECT * FROM chapters WHERE entryId = :entryId AND episode = :episode AND language = :language LIMIT 1")
-    abstract fun findChapter(entryId: Long, episode: Int, language: Language): LocalMangaChapter?
+    fun findChapter(entryId: Long, episode: Int, language: Language): LocalMangaChapter?
 
     @Query("SELECT * FROM entries")
-    abstract fun getEntries(): List<LocalEntryCore>
+    fun getEntries(): List<LocalEntryCore>
 
     @Query("SELECT * FROM chapters WHERE entryId = :entryId ORDER BY episode ASC")
-    abstract fun getChaptersForEntry(entryId: Long): List<LocalMangaChapter>
+    fun getChaptersForEntry(entryId: Long): List<LocalMangaChapter>
 
     @Query("SELECT * FROM pages WHERE chapterId = :chapterId")
-    abstract fun getPagesForChapter(chapterId: Long): List<LocalMangaPage>
+    fun getPagesForChapter(chapterId: Long): List<LocalMangaPage>
 
     @Query("SELECT COUNT(*) FROM entries WHERE id = :id")
-    abstract fun countEntries(id: Long): Int
+    fun countEntries(id: Long): Int
 
     @Query("SELECT COUNT(*) FROM chapters WHERE entryId = :entryId")
-    abstract fun countChaptersForEntry(entryId: Long): Int
+    fun countChaptersForEntry(entryId: Long): Int
 
     @Query("SELECT COUNT(*) FROM chapters WHERE entryId = :entryId AND episode = :episode AND language = :language")
-    abstract fun countSpecificChaptersForEntry(entryId: Long, episode: Int, language: Language): Int
+    fun countSpecificChaptersForEntry(entryId: Long, episode: Int, language: Language): Int
 
     @Query("DELETE FROM entries WHERE id = :entryId")
-    abstract fun deleteEntry(entryId: Long)
+    fun deleteEntry(entryId: Long)
 
     @Query("DELETE FROM chapters WHERE id = :chapterId")
-    abstract fun deleteChapter(chapterId: Long)
+    fun deleteChapter(chapterId: Long)
 
     @Query("DELETE FROM pages WHERE chapterId = :chapterId")
-    abstract fun deletePagesOfChapter(chapterId: Long)
+    fun deletePagesOfChapter(chapterId: Long)
 
     @Query("DELETE FROM entries")
-    abstract fun clearEntries()
+    fun clearEntries()
 
     @Query("DELETE FROM chapters")
-    abstract fun clearChapters()
+    fun clearChapters()
 
     @Query("DELETE FROM pages")
-    abstract fun clearPages()
+    fun clearPages()
 }

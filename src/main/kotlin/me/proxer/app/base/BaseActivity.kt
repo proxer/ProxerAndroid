@@ -14,6 +14,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
+@Suppress("UnnecessaryAbstractClass")
 abstract class BaseActivity : AppCompatActivity(), LifecycleRegistryOwner {
 
     private companion object {

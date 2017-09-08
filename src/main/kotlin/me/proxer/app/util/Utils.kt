@@ -22,7 +22,6 @@ import me.proxer.library.util.ProxerUrls
 import okhttp3.HttpUrl
 import java.util.regex.Pattern
 
-
 /**
  * @author Ruben Gees
  */

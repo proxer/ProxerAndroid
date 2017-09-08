@@ -11,7 +11,6 @@ import org.jetbrains.anko.collections.forEachWithIndex
 import java.util.*
 import kotlin.properties.Delegates
 
-
 /**
  * @author Ruben Gees
  */

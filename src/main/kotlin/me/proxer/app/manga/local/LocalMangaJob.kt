@@ -109,6 +109,7 @@ class LocalMangaJob : Job() {
         get() = ProxerUtils.toApiEnum(Language::class.java, params.extras.getString(LANGUAGE_EXTRA, "en"))
                 ?: throw IllegalArgumentException("No extras passed")
 
+    @Suppress("InstanceOfCheckForException")
     override fun onRunJob(params: Params): Result {
         return try {
             if (StorageHelper.user == null) Result.FAILURE

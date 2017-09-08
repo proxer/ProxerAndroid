@@ -4,7 +4,7 @@ ext {
     kotlinVersion = '1.2-M2'
 
     // Utility plugins
-    detektPluginVersion = '1.0.0.RC4-2'
+    detektPluginVersion = '1.0.0.RC4-3'
     gradleVersionsPluginVersion = '0.15.0'
     androidCommandPluginVersion = '1.7.1'
 
@@ -21,7 +21,7 @@ ext {
     rxKotlinVersion = '2.1.0'
     rxAndroidVersion = '2.0.1'
     rxBindingVersion = '2.0.0'
-    rxLifecycleVersion = '2.1.0'
+    rxLifecycleVersion = '2.2.0'
     rxBusVersion = '2.0.0'
 
     // UI components

@@ -11,6 +11,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
+@Suppress("UnnecessaryAbstractClass")
 abstract class BaseDialog : DialogFragment(), LifecycleRegistryOwner {
 
     private var lifecycleRegistry by Delegates.notNull<LifecycleRegistry>()
