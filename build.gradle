@@ -12,6 +12,8 @@ buildscript {
         targetSdkVersion = 26
         compileSdkVersion = 26
         buildToolsVersion = '26.0.1'
+
+        gradleVersion = '4.2-rc-1'
     }
 
     repositories {
@@ -151,7 +153,7 @@ dependencies {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.1'
+    gradleVersion = rootProject.ext.gradleVersion
 }
 
 detekt {
