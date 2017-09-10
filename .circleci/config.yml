@@ -11,7 +11,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "gradle/dependencies.gradle" }}
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "gradle/dependencies.gradle" }}-{{ checksum  ".circleci/config.yml" }}
       - run:
           name: Run Build
           command: ./gradlew build -Pkotlin.incremental=false --max-workers 1 --console=plain
@@ -23,5 +23,5 @@ jobs:
           destination: apk
       - save_cache:
           paths:
-            - $HOME/.gradle
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "gradle/dependencies.gradle" }}
+            - ~/.gradle
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "gradle/dependencies.gradle" }}-{{ checksum  ".circleci/config.yml" }}
