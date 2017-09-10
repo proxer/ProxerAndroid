@@ -1,6 +1,5 @@
 package me.proxer.app.info.industry
 
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.support.v7.widget.StaggeredGridLayoutManager.VERTICAL
@@ -31,9 +30,7 @@ class IndustryProjectFragment : PagedContentFragment<IndustryProject>() {
     override val emptyDataMessage = R.string.error_no_data_projects
     override val isSwipeToRefreshEnabled = false
 
-    override val viewModel: IndustryProjectViewModel by unsafeLazy {
-        ViewModelProviders.of(this).get(IndustryProjectViewModel::class.java).also { it.industryId = id }
-    }
+    override val viewModel: IndustryProjectViewModel by unsafeLazy { IndustryProjectViewModelProvider.get(this, id) }
 
     private val industryActivity
         get() = activity as IndustryActivity

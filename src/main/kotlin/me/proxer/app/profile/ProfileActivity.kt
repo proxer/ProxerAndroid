@@ -17,7 +17,7 @@ import me.proxer.app.R
 import me.proxer.app.base.ImageTabsActivity
 import me.proxer.app.chat.ChatActivity
 import me.proxer.app.chat.Participant
-import me.proxer.app.chat.new.NewChatActivity
+import me.proxer.app.chat.create.CreateChatActivity
 import me.proxer.app.profile.comment.ProfileCommentFragment
 import me.proxer.app.profile.info.ProfileInfoFragment
 import me.proxer.app.profile.media.ProfileMediaListFragment
@@ -111,13 +111,13 @@ class ProfileActivity : ImageTabsActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.new_chat -> username?.let { safeUsername ->
+            R.id.create_chat -> username?.let { safeUsername ->
                 image?.let { safeImage ->
                     Completable
                             .fromAction {
                                 chatDao.findConferenceForUser(safeUsername).let { existingChat ->
                                     when (existingChat) {
-                                        null -> NewChatActivity.navigateTo(this, false,
+                                        null -> CreateChatActivity.navigateTo(this, false,
                                                 Participant(safeUsername, safeImage))
                                         else -> ChatActivity.navigateTo(this, existingChat)
                                     }
@@ -129,7 +129,7 @@ class ProfileActivity : ImageTabsActivity() {
             }
             R.id.new_group -> username?.let { safeUsername ->
                 image?.let { safeImage ->
-                    NewChatActivity.navigateTo(this, true, Participant(safeUsername, safeImage))
+                    CreateChatActivity.navigateTo(this, true, Participant(safeUsername, safeImage))
                 }
             }
         }

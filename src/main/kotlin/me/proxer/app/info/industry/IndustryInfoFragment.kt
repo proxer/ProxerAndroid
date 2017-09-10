@@ -1,6 +1,5 @@
 package me.proxer.app.info.industry
 
-import android.arch.lifecycle.ViewModelProviders
 import android.content.ClipData
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -33,9 +32,7 @@ class IndustryInfoFragment : BaseContentFragment<Industry>() {
         }
     }
 
-    override val viewModel: IndustryInfoViewModel by unsafeLazy {
-        ViewModelProviders.of(this).get(IndustryInfoViewModel::class.java).also { it.industryId = id }
-    }
+    override val viewModel: IndustryInfoViewModel by unsafeLazy { IndustryInfoViewModelProvider.get(this, id) }
 
     override val hostingActivity: IndustryActivity
         get() = activity as IndustryActivity

@@ -1,6 +1,5 @@
 package me.proxer.app.ucp.history
 
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
@@ -30,7 +29,7 @@ class HistoryFragment : PagedContentFragment<UcpHistoryEntry>() {
     override val isSwipeToRefreshEnabled = false
 
     override val viewModel: HistoryViewModel by unsafeLazy {
-        ViewModelProviders.of(this).get(HistoryViewModel::class.java)
+        HistoryViewModelProvider.get(this)
     }
 
     override val layoutManager by lazy {

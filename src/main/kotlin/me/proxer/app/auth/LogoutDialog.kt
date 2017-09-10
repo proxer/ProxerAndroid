@@ -2,7 +2,6 @@ package me.proxer.app.auth
 
 import android.app.Dialog
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.FragmentActivity
 import android.view.View
@@ -24,7 +23,7 @@ class LogoutDialog : BaseDialog() {
         fun show(activity: FragmentActivity) = LogoutDialog().show(activity.supportFragmentManager, "logout_dialog")
     }
 
-    private val viewModel by unsafeLazy { ViewModelProviders.of(this).get(LogoutViewModel::class.java) }
+    private val viewModel by unsafeLazy { LogoutViewModelProvider.get(this) }
 
     private val content: TextView by bindView(R.id.content)
     private val progress: ProgressBar by bindView(R.id.progress)

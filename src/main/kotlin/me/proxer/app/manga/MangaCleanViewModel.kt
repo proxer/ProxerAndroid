@@ -1,8 +1,8 @@
 package me.proxer.app.manga
 
-import android.app.Application
-import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.ViewModel
+import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -16,7 +16,8 @@ import kotlin.concurrent.write
 /**
  * @author Ruben Gees
  */
-class MangaCleanViewModel(application: Application?) : AndroidViewModel(application) {
+@GeneratedProvider
+class MangaCleanViewModel : ViewModel() {
 
     val data = MutableLiveData<Unit>()
 

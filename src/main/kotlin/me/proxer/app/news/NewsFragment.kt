@@ -1,6 +1,5 @@
 package me.proxer.app.news
 
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.support.v7.widget.StaggeredGridLayoutManager.VERTICAL
@@ -31,9 +30,7 @@ class NewsFragment : PagedContentFragment<NewsArticle>() {
 
     override val emptyDataMessage = R.string.error_no_data_news
 
-    override val viewModel: NewsViewModel by unsafeLazy {
-        ViewModelProviders.of(this).get(NewsViewModel::class.java)
-    }
+    override val viewModel: NewsViewModel by unsafeLazy { NewsViewModelProvider.get(this) }
 
     override val layoutManager by unsafeLazy {
         StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity), VERTICAL)

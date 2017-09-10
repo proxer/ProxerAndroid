@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/new_chat"
+        android:id="@+id/create_chat"
         android:title="@string/action_send_message"
         app:iiv_color="@android:color/white"
         app:iiv_icon="cmd_message_text"

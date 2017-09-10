@@ -2,7 +2,6 @@ package me.proxer.app.manga.local
 
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.transition.TransitionManager
 import android.support.v7.widget.RecyclerView
@@ -48,7 +47,7 @@ class LocalMangaFragment : BaseContentFragment<List<CompleteLocalMangaEntry>>() 
     }
 
     override val viewModel: LocalMangaViewModel by unsafeLazy {
-        ViewModelProviders.of(this).get(LocalMangaViewModel::class.java)
+        LocalMangaViewModelProvider.get(this, searchQuery)
     }
 
     private var adapter by Delegates.notNull<LocalMangaAdapter>()
@@ -58,7 +57,7 @@ class LocalMangaFragment : BaseContentFragment<List<CompleteLocalMangaEntry>>() 
         set(value) {
             arguments.putString(SEARCH_QUERY_ARGUMENT, value)
 
-            viewModel.setSearchQuery(value)
+            viewModel.searchQuery = value
         }
 
     override val contentContainer: ViewGroup

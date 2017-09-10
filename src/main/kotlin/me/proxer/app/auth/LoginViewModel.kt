@@ -1,8 +1,8 @@
 package me.proxer.app.auth
 
-import android.app.Application
-import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.ViewModel
+import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -17,7 +17,8 @@ import me.proxer.library.entity.user.User
 /**
  * @author Ruben Gees
  */
-class LoginViewModel(application: Application) : AndroidViewModel(application) {
+@GeneratedProvider
+class LoginViewModel : ViewModel() {
 
     val data = MutableLiveData<User?>()
     val error = MutableLiveData<ErrorUtils.ErrorAction?>()

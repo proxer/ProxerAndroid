@@ -1,6 +1,5 @@
 package me.proxer.app.chat.conference
 
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
@@ -15,7 +14,7 @@ import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.chat.ChatActivity
 import me.proxer.app.chat.LocalConference
-import me.proxer.app.chat.new.NewChatActivity
+import me.proxer.app.chat.create.CreateChatActivity
 import me.proxer.app.chat.sync.ChatNotifications
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
@@ -35,9 +34,7 @@ class ConferenceFragment : BaseContentFragment<List<LocalConference>>() {
         }
     }
 
-    override val viewModel: ConferenceViewModel by unsafeLazy {
-        ViewModelProviders.of(this).get(ConferenceViewModel::class.java)
-    }
+    override val viewModel: ConferenceViewModel by unsafeLazy { ConferenceViewModelProvider.get(this) }
 
     private var adapter by Delegates.notNull<ConferenceAdapter>()
 
@@ -105,8 +102,8 @@ class ConferenceFragment : BaseContentFragment<List<LocalConference>>() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.new_chat -> NewChatActivity.navigateTo(activity, false)
-            R.id.new_group -> NewChatActivity.navigateTo(activity, true)
+            R.id.create_chat -> CreateChatActivity.navigateTo(activity, false)
+            R.id.new_group -> CreateChatActivity.navigateTo(activity, true)
         }
 
         return super.onOptionsItemSelected(item)

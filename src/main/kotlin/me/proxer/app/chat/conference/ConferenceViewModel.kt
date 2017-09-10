@@ -1,7 +1,7 @@
 package me.proxer.app.chat.conference
 
-import android.app.Application
 import android.arch.lifecycle.MediatorLiveData
+import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -20,7 +20,8 @@ import me.proxer.app.util.data.StorageHelper
 /**
  * @author Ruben Gees
  */
-class ConferenceViewModel(application: Application) : BaseViewModel<List<LocalConference>>(application) {
+@GeneratedProvider
+class ConferenceViewModel : BaseViewModel<List<LocalConference>>() {
 
     override val isLoginRequired = true
 

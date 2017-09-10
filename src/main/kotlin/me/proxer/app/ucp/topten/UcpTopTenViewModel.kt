@@ -1,6 +1,6 @@
 package me.proxer.app.ucp.topten
 
-import android.app.Application
+import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -19,7 +19,8 @@ import me.proxer.library.enums.Category
 /**
  * @author Ruben Gees
  */
-class UcpTopTenViewModel(application: Application) : BaseViewModel<ZippedTopTenResult>(application) {
+@GeneratedProvider
+class UcpTopTenViewModel : BaseViewModel<ZippedTopTenResult>() {
 
     override val isLoginRequired = true
 

@@ -88,6 +88,11 @@
 -dontwarn android.arch.util.paging.CountedDataSource
 -dontwarn android.arch.persistence.room.paging.LimitOffsetDataSource
 
+# Alfred
+-keepclassmembers class me.proxer.app.**.*ViewModel {
+    public <init>(...);
+}
+
 # Glide
 -keep public class * extends com.bumptech.glide.module.AppGlideModule
 -keep class com.bumptech.glide.GeneratedAppGlideModuleImpl
@@ -128,7 +133,7 @@
     @retrofit2.http.* <methods>;
 }
 
-# Work around weird Proguard bug
+# Work around weird Proguard bug.
 -keep class okhttp3.internal.publicsuffix.PublicSuffixDatabase
 
 # ProxerLib
@@ -137,18 +142,18 @@
     public *;
 }
 
-# Avoid crash of SearchView
+# Avoid crash of SearchView.
 -keep class android.support.v7.widget.SearchView { *; }
 
-# Avoid crash on some emulators when running the debug variant
+# Avoid crash on some emulators when running the debug variant.
 -keepclassmembers class com.facebook.android.crypto.keychain.SecureRandomFix$LinuxPRNGSecureRandom {
-   public <init>(...);
+    public <init>(...);
 }
 
 -keepclassmembers class com.davemorrissey.labs.subscaleview.decoder.SkiaImageRegionDecoder {
-   public <init>(...);
+    public <init>(...);
 }
 
 -keepclassmembers class com.davemorrissey.labs.subscaleview.decoder.SkiaImageDecoder {
-   public <init>(...);
+    public <init>(...);
 }

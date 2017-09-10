@@ -1,6 +1,6 @@
 package me.proxer.app.manga
 
-import android.app.Application
+import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -29,7 +29,9 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-class MangaViewModel(application: Application) : BaseViewModel<MangaChapterInfo>(application) {
+@GeneratedProvider
+class MangaViewModel(private val entryId: String, private val language: Language, episode: Int)
+    : BaseViewModel<MangaChapterInfo>() {
 
     private companion object {
         private const val MAX_CACHE_SIZE = 1024L * 1024L * 256L
@@ -43,10 +45,10 @@ class MangaViewModel(application: Application) : BaseViewModel<MangaChapterInfo>
     val bookmarkData = ResettingMutableLiveData<Unit?>()
     val bookmarkError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
 
-    var entryId by Delegates.notNull<String>()
-    var language by Delegates.notNull<Language>()
+    var episode by Delegates.observable(episode, { _, old, new ->
+        if (old != new) reload()
+    })
 
-    private var episode = 0
     private var cachedEntryCore: EntryCore? = null
 
     private var bookmarkDisposable: Disposable? = null

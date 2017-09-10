@@ -1,6 +1,5 @@
 package me.proxer.app.ucp.overview
 
-import android.arch.lifecycle.ViewModelProviders
 import android.content.ClipData
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -34,9 +33,7 @@ class UcpOverviewFragment : BaseContentFragment<Int>() {
         }
     }
 
-    override val viewModel: UcpOverviewViewModel by unsafeLazy {
-        ViewModelProviders.of(this).get(UcpOverviewViewModel::class.java)
-    }
+    override val viewModel: UcpOverviewViewModel by unsafeLazy { UcpOverviewViewModelProvider.get(this) }
 
     private val profileLink: TextView by bindView(R.id.profileLink)
     private val username: TextView by bindView(R.id.username)

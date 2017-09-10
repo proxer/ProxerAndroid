@@ -1,7 +1,6 @@
 package me.proxer.app.manga
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
@@ -50,10 +49,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
     }
 
     override val viewModel: MangaViewModel by unsafeLazy {
-        ViewModelProviders.of(this).get(MangaViewModel::class.java).also {
-            it.entryId = this.id
-            it.language = this.language
-        }
+        MangaViewModelProvider.get(this, id, language, episode)
     }
 
     override val hostingActivity: MangaActivity

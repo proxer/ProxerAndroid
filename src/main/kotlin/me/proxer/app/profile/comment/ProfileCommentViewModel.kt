@@ -1,16 +1,19 @@
 package me.proxer.app.profile.comment
 
-import android.app.Application
+import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.base.PagedContentViewModel
 import me.proxer.library.api.PagingLimitEndpoint
 import me.proxer.library.entity.user.UserComment
 import me.proxer.library.enums.Category
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
  */
-class ProfileCommentViewModel(application: Application) : PagedContentViewModel<UserComment>(application) {
+@GeneratedProvider
+class ProfileCommentViewModel(private val userId: String?, private val username: String?, category: Category?)
+    : PagedContentViewModel<UserComment>() {
 
     override val itemsOnPage: Int
         get() = 10
@@ -19,16 +22,7 @@ class ProfileCommentViewModel(application: Application) : PagedContentViewModel<
         get() = api.user().comments(userId, username)
                 .category(category)
 
-    var userId: String? = null
-    var username: String? = null
-
-    private var category: Category? = null
-
-    fun setCategory(value: Category?, trigger: Boolean = true) {
-        if (category != value) {
-            category = value
-
-            if (trigger) reload()
-        }
-    }
+    var category by Delegates.observable(category, { _, old, new ->
+        if (old != new) reload()
+    })
 }

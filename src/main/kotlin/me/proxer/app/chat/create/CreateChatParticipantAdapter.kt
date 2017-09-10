@@ -1,4 +1,4 @@
-package me.proxer.app.chat.new
+package me.proxer.app.chat.create
 
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
@@ -17,16 +17,16 @@ import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.chat.Participant
-import me.proxer.app.chat.new.NewChatParticipantAdapter.ViewHolder
+import me.proxer.app.chat.create.CreateChatParticipantAdapter.ViewHolder
 import me.proxer.library.util.ProxerUrls
 
 /**
  * @author Ruben Gees
  */
-class NewChatParticipantAdapter(savedInstanceState: Bundle?) : BaseAdapter<Participant, ViewHolder>() {
+class CreateChatParticipantAdapter(savedInstanceState: Bundle?) : BaseAdapter<Participant, ViewHolder>() {
 
     private companion object {
-        private const val LIST_STATE = "new_chat_participant_list"
+        private const val LIST_STATE = "create_chat_participant_list"
     }
 
     var glide: GlideRequests? = null

@@ -57,9 +57,10 @@ ext {
     kotterknifeVersion = '1.0'
     jsr305Version = '3.0.2'
     javaxExtrasVersion = '0.1.0'
-    customActivityOnCrashVersion = '2.1.0'
+    alfredVersion = 'v1.0.0-RC.2'
 
     // Debugging
+    customActivityOnCrashVersion = '2.1.0'
     strictModeCompatVersion = '26.0.2'
     leakCanaryVersion = '1.5.2'
 
@@ -130,8 +131,9 @@ ext {
             easyHeaderFooterAdapter      : "com.github.rubengees:easy-header-footer-adapter:$easyHeaderFooterAdapterVersion",
             kOptional                    : "com.gojuno.koptional:koptional-rxjava2-extensions:$kOptionalVersion",
             kotterknife                  : "com.github.rubengees:kotterknife:$kotterknifeVersion",
-            customActivityOnCrash        : "cat.ereza:customactivityoncrash:$customActivityOnCrashVersion",
+            alfred                       : "com.hadisatrio.Alfred:annotations:$alfredVersion",
 
+            customActivityOnCrash        : "cat.ereza:customactivityoncrash:$customActivityOnCrashVersion",
             strictModeCompat             : "com.kirich1409:strict-mode-compat:$strictModeCompatVersion",
     ]
 
@@ -145,13 +147,14 @@ ext {
 
     compileOnlyDependencies = [
             jsr305     : "com.google.code.findbugs:jsr305:$jsr305Version",
-            javaxExtras: "com.uber.javaxextras:javax-extras:$javaxExtrasVersion"
+            javaxExtras: "com.uber.javaxextras:javax-extras:$javaxExtrasVersion",
     ]
 
     kaptDependencies = [
             architectureLifecycleCompiler: "android.arch.lifecycle:compiler:$architectureComponentsVersion",
             roomCompiler                 : "android.arch.persistence.room:compiler:$architectureComponentsVersion",
             glideCompiler                : "com.github.bumptech.glide:compiler:$glideVersion",
+            alfredCompiler               : "com.hadisatrio.Alfred:compiler:$alfredVersion",
     ]
 
     transitiveImplementationDependencies = [

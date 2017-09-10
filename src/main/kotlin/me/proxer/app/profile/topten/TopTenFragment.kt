@@ -1,6 +1,5 @@
 package me.proxer.app.profile.topten
 
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -34,12 +33,7 @@ class TopTenFragment : BaseContentFragment<ZippedTopTenResult>() {
         }
     }
 
-    override val viewModel: TopTenViewModel by unsafeLazy {
-        ViewModelProviders.of(this).get(TopTenViewModel::class.java).also {
-            it.userId = this.userId
-            it.username = this.username
-        }
-    }
+    override val viewModel: TopTenViewModel by unsafeLazy { TopTenViewModelProvider.get(this, userId, username) }
 
     override val hostingActivity: ProfileActivity
         get() = activity as ProfileActivity

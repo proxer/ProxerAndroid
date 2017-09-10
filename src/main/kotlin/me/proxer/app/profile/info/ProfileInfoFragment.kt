@@ -1,6 +1,5 @@
 package me.proxer.app.profile.info
 
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -34,10 +33,7 @@ class ProfileInfoFragment : BaseContentFragment<UserInfo>() {
         get() = activity as ProfileActivity
 
     override val viewModel: ProfileInfoViewModel by unsafeLazy {
-        ViewModelProviders.of(this).get(ProfileInfoViewModel::class.java).also {
-            it.userId = this.userId
-            it.username = this.username
-        }
+        ProfileInfoViewModelProvider.get(this, userId, username)
     }
 
     private val userId: String?

@@ -1,7 +1,6 @@
 package me.proxer.app.anime
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
@@ -47,12 +46,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
         }
     }
 
-    override val viewModel: AnimeViewModel by unsafeLazy {
-        ViewModelProviders.of(this).get(AnimeViewModel::class.java).also {
-            it.entryId = this.id
-            it.language = this.language
-        }
-    }
+    override val viewModel: AnimeViewModel by unsafeLazy { AnimeViewModelProvider.get(this, id, language, episode) }
 
     override val hostingActivity: AnimeActivity
         get() = activity as AnimeActivity
@@ -65,7 +59,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
         set(value) {
             hostingActivity.episode = value
 
-            viewModel.setEpisode(value)
+            viewModel.episode = value
         }
 
     private val language: AnimeLanguage
@@ -118,8 +112,6 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
         innerAdapter.playClickSubject
                 .bindToLifecycle(this)
                 .subscribe { viewModel.resolve(it.hosterName, it.id) }
-
-        viewModel.setEpisode(episode, false)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

@@ -1,6 +1,5 @@
 package me.proxer.app.profile.comment
 
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
@@ -36,10 +35,7 @@ class ProfileCommentFragment : PagedContentFragment<UserComment>() {
     override val pagingThreshold = 3
 
     override val viewModel: ProfileCommentViewModel by unsafeLazy {
-        ViewModelProviders.of(this).get(ProfileCommentViewModel::class.java).also {
-            it.userId = this.userId
-            it.username = this.username
-        }
+        ProfileCommentViewModelProvider.get(this, userId, username, category)
     }
 
     override val hostingActivity: ProfileActivity
@@ -56,7 +52,7 @@ class ProfileCommentFragment : PagedContentFragment<UserComment>() {
         set(value) {
             arguments.putSerializable(CATEGORY_ARGUMENT, value)
 
-            viewModel.setCategory(value)
+            viewModel.category = value
         }
 
     override val layoutManager by unsafeLazy { LinearLayoutManager(context) }
@@ -72,8 +68,6 @@ class ProfileCommentFragment : PagedContentFragment<UserComment>() {
                 .subscribe {
                     MediaActivity.navigateTo(activity, it.entryId, it.entryName, it.category)
                 }
-
-        viewModel.setCategory(category, false)
 
         setHasOptionsMenu(true)
     }

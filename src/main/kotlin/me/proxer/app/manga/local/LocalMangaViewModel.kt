@@ -1,8 +1,8 @@
 package me.proxer.app.manga.local
 
-import android.app.Application
 import android.arch.lifecycle.MutableLiveData
 import com.gojuno.koptional.toOptional
+import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -24,11 +24,13 @@ import me.proxer.app.util.extension.getQuantityString
 import java.io.File
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.write
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
  */
-class LocalMangaViewModel(application: Application) : BaseViewModel<List<CompleteLocalMangaEntry>>(application) {
+@GeneratedProvider
+class LocalMangaViewModel(searchQuery: String?) : BaseViewModel<List<CompleteLocalMangaEntry>>() {
 
     override val isLoginRequired = true
 
@@ -50,7 +52,9 @@ class LocalMangaViewModel(application: Application) : BaseViewModel<List<Complet
 
     val jobInfo = MutableLiveData<String>()
 
-    private var searchQuery: String? = null
+    var searchQuery by Delegates.observable(searchQuery, { _, old, new ->
+        if (old != new) reload()
+    })
 
     private var deletionDisposable: Disposable? = null
 
@@ -78,14 +82,6 @@ class LocalMangaViewModel(application: Application) : BaseViewModel<List<Complet
         deletionDisposable = null
 
         super.onCleared()
-    }
-
-    fun setSearchQuery(value: String?, trigger: Boolean = true) {
-        if (searchQuery != value) {
-            searchQuery = value
-
-            if (trigger) reload()
-        }
     }
 
     fun deleteChapter(chapter: LocalMangaChapter) {

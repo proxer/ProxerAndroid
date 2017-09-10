@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:foreground="?attr/selectableItemBackground"
-    tools:context=".chat.new.NewChatParticipantAdapter">
+    tools:context=".chat.create.CreateChatParticipantAdapter">
 
     <ImageView
         android:id="@+id/image"
@@ -29,6 +29,6 @@
         android:layout_toRightOf="@+id/image"
         android:gravity="start|center_vertical"
         android:padding="8dp"
-        android:text="@string/fragment_new_chat_add_participant"
+        android:text="@string/fragment_create_chat_add_participant"
         android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 </RelativeLayout>

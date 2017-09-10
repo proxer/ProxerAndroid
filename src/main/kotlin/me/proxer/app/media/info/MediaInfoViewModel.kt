@@ -1,6 +1,6 @@
 package me.proxer.app.media.info
 
-import android.app.Application
+import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -14,20 +14,18 @@ import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.extension.buildOptionalSingle
 import me.proxer.library.api.Endpoint
 import me.proxer.library.entity.info.Entry
-import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
  */
-class MediaInfoViewModel(application: Application) : BaseContentViewModel<Entry>(application) {
+@GeneratedProvider
+class MediaInfoViewModel(private val entryId: String) : BaseContentViewModel<Entry>() {
 
     override val endpoint: Endpoint<Entry>
         get() = api.info().entry(entryId)
 
     val userInfoUpdateData = ResettingMutableLiveData<Unit?>()
     val userInfoUpdateError = ResettingMutableLiveData<ErrorAction?>()
-
-    var entryId by Delegates.notNull<String>()
 
     private var userInfoUpdateDisposable: Disposable? = null
 

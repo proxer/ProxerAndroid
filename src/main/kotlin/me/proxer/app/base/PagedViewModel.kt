@@ -1,6 +1,5 @@
 package me.proxer.app.base
 
-import android.app.Application
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.util.ErrorUtils
@@ -10,7 +9,7 @@ import me.proxer.library.entity.ProxerIdItem
 /**
  * @author Ruben Gees
  */
-abstract class PagedViewModel<T>(application: Application) : BaseViewModel<List<T>>(application) {
+abstract class PagedViewModel<T> : BaseViewModel<List<T>>() {
 
     val refreshError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
 

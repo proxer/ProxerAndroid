@@ -1,7 +1,6 @@
 package me.proxer.app.media.info
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
@@ -44,9 +43,7 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
     override val hostingActivity: MediaActivity
         get() = activity as MediaActivity
 
-    override val viewModel: MediaInfoViewModel by unsafeLazy {
-        ViewModelProviders.of(this).get(MediaInfoViewModel::class.java).also { it.entryId = id }
-    }
+    override val viewModel: MediaInfoViewModel by unsafeLazy { MediaInfoViewModelProvider.get(this, id) }
 
     private val id: String
         get() = hostingActivity.id

@@ -1,7 +1,6 @@
 package me.proxer.app.bookmark
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.widget.StaggeredGridLayoutManager
@@ -45,7 +44,7 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
     override val emptyDataMessage = R.string.error_no_data_bookmark
 
     override val viewModel: BookmarkViewModel by unsafeLazy {
-        ViewModelProviders.of(this).get(BookmarkViewModel::class.java)
+        BookmarkViewModelProvider.get(this, category)
     }
 
     override val layoutManager by unsafeLazy {
@@ -59,7 +58,7 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
         set(value) {
             arguments.putSerializable(CATEGORY_ARGUMENT, value)
 
-            viewModel.setCategory(value)
+            viewModel.category = value
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,6 +1,6 @@
 package me.proxer.app.notification
 
-import android.app.Application
+import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -19,7 +19,8 @@ import me.proxer.library.api.Endpoint
 /**
  * @author Ruben Gees
  */
-class NotificationViewModel(application: Application) : BaseContentViewModel<List<ProxerNotification>>(application) {
+@GeneratedProvider
+class NotificationViewModel : BaseContentViewModel<List<ProxerNotification>>() {
 
     override val isLoginRequired = true
 

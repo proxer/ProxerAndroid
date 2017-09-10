@@ -1,7 +1,5 @@
 package me.proxer.app.chat
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.ClipData
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
@@ -46,9 +44,7 @@ class ChatFragment : PagedContentFragment<LocalMessage>() {
         }
     }
 
-    override val viewModel: ChatViewModel by unsafeLazy {
-        ViewModelProviders.of(this).get(ChatViewModel::class.java)
-    }
+    override val viewModel: ChatViewModel by unsafeLazy { ChatViewModelProvider.get(this, conference) }
 
     override val emptyDataMessage = R.string.error_no_data_chat
     override val isSwipeToRefreshEnabled = false
@@ -166,12 +162,6 @@ class ChatFragment : PagedContentFragment<LocalMessage>() {
         innerAdapter.mentionsClickSubject
                 .bindToLifecycle(this)
                 .subscribe { ProfileActivity.navigateTo(activity, username = it) }
-
-        viewModel.conference.value = conference
-
-        viewModel.conference.observe(this, Observer {
-            it?.let { conference = it }
-        })
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

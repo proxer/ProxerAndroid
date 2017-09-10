@@ -5,7 +5,7 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".chat.new.NewChatFragment">
+    tools:context=".chat.create.CreateChatFragment">
 
     <RelativeLayout
         android:id="@+id/contentContainer"
@@ -61,7 +61,7 @@
                                     android:id="@+id/topicInput"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:hint="@string/fragment_new_chat_topic_hint"
+                                    android:hint="@string/fragment_create_chat_topic_hint"
                                     android:imeOptions="actionNext"
                                     android:inputType="text"
                                     android:maxLines="1" />
@@ -88,7 +88,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:padding="8dp"
-                                android:text="@string/fragment_new_chat_participants"
+                                android:text="@string/fragment_create_chat_participants"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                                 android:textColor="@color/colorAccent" />
 

@@ -1,6 +1,5 @@
 package me.proxer.app.info.translatorgroup
 
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.support.v7.widget.StaggeredGridLayoutManager.VERTICAL
@@ -32,8 +31,7 @@ class TranslatorGroupProjectFragment : PagedContentFragment<TranslatorGroupProje
     override val isSwipeToRefreshEnabled = false
 
     override val viewModel: TranslatorGroupProjectViewModel by unsafeLazy {
-        ViewModelProviders.of(this).get(TranslatorGroupProjectViewModel::class.java)
-                .apply { translatorGroupId = id }
+        TranslatorGroupProjectViewModelProvider.get(this, id)
     }
 
     override val hostingActivity: TranslatorGroupActivity

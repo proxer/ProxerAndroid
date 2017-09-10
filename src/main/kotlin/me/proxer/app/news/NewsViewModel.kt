@@ -1,6 +1,6 @@
 package me.proxer.app.news
 
-import android.app.Application
+import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
 import io.reactivex.Single
 import io.reactivex.rxkotlin.plusAssign
 import me.proxer.app.MainApplication.Companion.api
@@ -13,7 +13,8 @@ import me.proxer.library.entity.notifications.NewsArticle
 /**
  * @author Ruben Gees
  */
-class NewsViewModel(application: Application) : PagedContentViewModel<NewsArticle>(application) {
+@GeneratedProvider
+class NewsViewModel : PagedContentViewModel<NewsArticle>() {
 
     override val itemsOnPage = 15
 

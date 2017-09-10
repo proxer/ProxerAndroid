@@ -1,6 +1,5 @@
 package me.proxer.app.media.comment
 
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
@@ -38,9 +37,7 @@ class CommentFragment : PagedContentFragment<Comment>() {
     override val isSwipeToRefreshEnabled = true
     override val pagingThreshold = 3
 
-    override val viewModel: CommentViewModel by unsafeLazy {
-        ViewModelProviders.of(this).get(CommentViewModel::class.java).also { it.entryId = id }
-    }
+    override val viewModel: CommentViewModel by unsafeLazy { CommentViewModelProvider.get(this, id, sortCriteria) }
 
     override val hostingActivity: MediaActivity
         get() = activity as MediaActivity
@@ -56,7 +53,7 @@ class CommentFragment : PagedContentFragment<Comment>() {
         set(value) {
             arguments.putSerializable(SORT_CRITERIA_ARGUMENT, value)
 
-            viewModel.setSortCriteria(value)
+            viewModel.sortCriteria = value
         }
 
     override val layoutManager by unsafeLazy { LinearLayoutManager(context) }
@@ -74,8 +71,6 @@ class CommentFragment : PagedContentFragment<Comment>() {
                     ProfileActivity.navigateTo(activity, comment.authorId, comment.author, comment.image,
                             if (view.drawable != null && comment.image.isNotBlank()) view else null)
                 }
-
-        viewModel.setSortCriteria(sortCriteria, false)
 
         setHasOptionsMenu(true)
     }

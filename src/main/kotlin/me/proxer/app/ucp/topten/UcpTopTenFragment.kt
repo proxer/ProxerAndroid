@@ -1,7 +1,6 @@
 package me.proxer.app.ucp.topten
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.widget.GridLayoutManager
@@ -36,9 +35,7 @@ class UcpTopTenFragment : BaseContentFragment<ZippedTopTenResult>() {
         }
     }
 
-    override val viewModel: UcpTopTenViewModel by unsafeLazy {
-        ViewModelProviders.of(this).get(UcpTopTenViewModel::class.java)
-    }
+    override val viewModel: UcpTopTenViewModel by unsafeLazy { UcpTopTenViewModelProvider.get(this) }
 
     private var animeAdapter by Delegates.notNull<UcpTopTenAdapter>()
     private var mangaAdapter by Delegates.notNull<UcpTopTenAdapter>()

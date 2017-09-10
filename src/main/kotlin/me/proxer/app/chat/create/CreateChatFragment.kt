@@ -1,7 +1,6 @@
-package me.proxer.app.chat.new
+package me.proxer.app.chat.create
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
@@ -49,22 +48,18 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-class NewChatFragment : BaseFragment() {
+class CreateChatFragment : BaseFragment() {
 
     companion object {
-        fun newInstance() = NewChatFragment().apply {
+        fun newInstance() = CreateChatFragment().apply {
             arguments = bundleOf()
         }
     }
 
-    override val hostingActivity: NewChatActivity
-        get() = activity as NewChatActivity
+    override val hostingActivity: CreateChatActivity
+        get() = activity as CreateChatActivity
 
-    private val viewModel by unsafeLazy {
-        ViewModelProviders.of(this).get(NewChatViewModel::class.java).also {
-            it.isGroup = this.isGroup
-        }
-    }
+    private val viewModel by unsafeLazy { CreateChatViewModelProvider.get(this) }
 
     private val isGroup: Boolean
         get() = hostingActivity.isGroup
@@ -85,7 +80,7 @@ class NewChatFragment : BaseFragment() {
         popup
     }
 
-    private var innerAdapter by Delegates.notNull<NewChatParticipantAdapter>()
+    private var innerAdapter by Delegates.notNull<CreateChatParticipantAdapter>()
     private var adapter by Delegates.notNull<EasyHeaderFooterAdapter>()
 
     private var addParticipantFooter by Delegates.notNull<ViewGroup>()
@@ -124,7 +119,7 @@ class NewChatFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        innerAdapter = NewChatParticipantAdapter(savedInstanceState)
+        innerAdapter = CreateChatParticipantAdapter(savedInstanceState)
         adapter = EasyHeaderFooterAdapter(innerAdapter)
 
         innerAdapter.removalSubject
@@ -167,9 +162,11 @@ class NewChatFragment : BaseFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        addParticipantFooter = inflater.inflate(R.layout.item_new_chat_add_participant, container, false) as ViewGroup
-        addParticipantInputFooter = inflater.inflate(R.layout.item_new_chat_add_participant_input, container, false)
-                as ViewGroup
+        addParticipantFooter = inflater.inflate(R.layout.item_create_chat_add_participant,
+                container, false) as ViewGroup
+
+        addParticipantInputFooter = inflater.inflate(R.layout.item_create_chat_add_participant_input,
+                container, false) as ViewGroup
 
         addParticipantImage.setImageDrawable(IconicsDrawable(context)
                 .icon(when {
@@ -236,7 +233,7 @@ class NewChatFragment : BaseFragment() {
             adapter.footer = addParticipantFooter
         }
 
-        return inflater.inflate(R.layout.fragment_new_chat, container, false)
+        return inflater.inflate(R.layout.fragment_create_chat, container, false)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {

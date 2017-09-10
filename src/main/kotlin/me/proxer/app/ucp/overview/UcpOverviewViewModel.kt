@@ -1,6 +1,6 @@
 package me.proxer.app.ucp.overview
 
-import android.app.Application
+import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.base.BaseContentViewModel
 import me.proxer.library.api.Endpoint
@@ -8,7 +8,8 @@ import me.proxer.library.api.Endpoint
 /**
  * @author Ruben Gees
  */
-class UcpOverviewViewModel(application: Application) : BaseContentViewModel<Int>(application) {
+@GeneratedProvider
+class UcpOverviewViewModel : BaseContentViewModel<Int>() {
 
     override val isLoginRequired = true
 

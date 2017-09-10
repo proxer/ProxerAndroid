@@ -1,6 +1,6 @@
 package me.proxer.app.media.comment
 
-import android.app.Application
+import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.base.PagedContentViewModel
 import me.proxer.library.api.PagingLimitEndpoint
@@ -11,7 +11,9 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-class CommentViewModel(application: Application) : PagedContentViewModel<Comment>(application) {
+@GeneratedProvider
+class CommentViewModel(private val entryId: String, sortCriteria: CommentSortCriteria)
+    : PagedContentViewModel<Comment>() {
 
     override val itemsOnPage = 10
 
@@ -19,15 +21,7 @@ class CommentViewModel(application: Application) : PagedContentViewModel<Comment
         get() = api.info().comments(entryId)
                 .sort(sortCriteria)
 
-    var entryId by Delegates.notNull<String>()
-
-    private var sortCriteria = CommentSortCriteria.RATING
-
-    fun setSortCriteria(value: CommentSortCriteria, trigger: Boolean = true) {
-        if (sortCriteria != value) {
-            sortCriteria = value
-
-            if (trigger) reload()
-        }
-    }
+    var sortCriteria by Delegates.observable(sortCriteria, { _, old, new ->
+        if (old != new) reload()
+    })
 }

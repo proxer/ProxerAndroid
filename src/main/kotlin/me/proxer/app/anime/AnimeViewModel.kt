@@ -1,6 +1,6 @@
 package me.proxer.app.anime
 
-import android.app.Application
+import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -26,7 +26,9 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-class AnimeViewModel(application: Application) : BaseViewModel<AnimeStreamInfo>(application) {
+@GeneratedProvider
+class AnimeViewModel(private val entryId: String, private val language: AnimeLanguage, episode: Int)
+    : BaseViewModel<AnimeStreamInfo>() {
 
     override val dataSingle: Single<AnimeStreamInfo>
         get() = entrySingle().flatMap {
@@ -43,10 +45,10 @@ class AnimeViewModel(application: Application) : BaseViewModel<AnimeStreamInfo>(
     val bookmarkData = ResettingMutableLiveData<Unit?>()
     val bookmarkError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
 
-    var entryId by Delegates.notNull<String>()
-    var language by Delegates.notNull<AnimeLanguage>()
+    var episode by Delegates.observable(episode, { _, old, new ->
+        if (old != new) reload()
+    })
 
-    private var episode = 0
     private var cachedEntryCore: EntryCore? = null
 
     private var resolverDisposable: Disposable? = null
@@ -85,14 +87,6 @@ class AnimeViewModel(application: Application) : BaseViewModel<AnimeStreamInfo>(
                         else -> ErrorUtils.handle(it)
                     }
                 })
-    }
-
-    fun setEpisode(value: Int, trigger: Boolean = true) {
-        if (episode != value) {
-            episode = value
-
-            if (trigger) reload()
-        }
     }
 
     fun markAsFinished() = updateUserState(api.info().markAsFinished(entryId))

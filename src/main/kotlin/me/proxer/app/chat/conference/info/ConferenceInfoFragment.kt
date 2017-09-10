@@ -1,6 +1,5 @@
 package me.proxer.app.chat.conference.info
 
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -33,9 +32,7 @@ class ConferenceInfoFragment : BaseContentFragment<ConferenceInfo>() {
     }
 
     override val viewModel: ConferenceInfoViewModel by unsafeLazy {
-        ViewModelProviders.of(this).get(ConferenceInfoViewModel::class.java).also {
-            it.conferenceId = id.toString()
-        }
+        ConferenceInfoViewModelProvider.get(this, id.toString())
     }
 
     override val hostingActivity: ConferenceInfoActivity

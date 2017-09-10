@@ -1,7 +1,6 @@
 package me.proxer.app.media.list
 
 import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.transition.TransitionManager
 import android.support.v7.widget.SearchView
@@ -51,7 +50,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
     override val emptyDataMessage = R.string.error_no_data_search
 
     override val viewModel: MediaListViewModel by unsafeLazy {
-        ViewModelProviders.of(this).get(MediaListViewModel::class.java)
+        MediaListViewModelProvider.get(this, sortCriteria, type, searchQuery)
     }
 
     override val layoutManager by unsafeLazy {
@@ -69,7 +68,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
         set(value) {
             arguments.putSerializable(SORT_CRITERIA_ARGUMENT, value)
 
-            viewModel.setSortCriteria(value)
+            viewModel.sortCriteria = value
         }
 
     private var type: MediaType
@@ -81,7 +80,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
         set(value) {
             arguments.putSerializable(TYPE_ARGUMENT, value)
 
-            viewModel.setType(value)
+            viewModel.type = value
         }
 
     private var searchQuery: String?
@@ -89,7 +88,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
         set(value) {
             arguments.putString(SEARCH_QUERY_ARGUMENT, value)
 
-            viewModel.setSearchQuery(value)
+            viewModel.searchQuery = value
         }
 
     private val toolbar by unsafeLazy { activity.findViewById<Toolbar>(R.id.toolbar) }
@@ -105,10 +104,6 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
                     MediaActivity.navigateTo(activity, entry.id, entry.name, entry.medium.toCategory(),
                             if (view.drawable != null) view else null)
                 }
-
-        viewModel.setSortCriteria(sortCriteria, false)
-        viewModel.setType(type, false)
-        viewModel.setSearchQuery(searchQuery, false)
 
         setHasOptionsMenu(true)
     }

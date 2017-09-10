@@ -2,7 +2,6 @@ package me.proxer.app.auth
 
 import android.app.Dialog
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.design.widget.TextInputEditText
 import android.support.design.widget.TextInputLayout
@@ -34,7 +33,7 @@ class LoginDialog : BaseDialog() {
         fun show(activity: AppCompatActivity) = LoginDialog().show(activity.supportFragmentManager, "login_dialog")
     }
 
-    private val viewModel by unsafeLazy { ViewModelProviders.of(this).get(LoginViewModel::class.java) }
+    private val viewModel by unsafeLazy { LoginViewModelProvider.get(this) }
 
     private val username: TextInputEditText by bindView(R.id.username)
     private val password: TextInputEditText by bindView(R.id.password)

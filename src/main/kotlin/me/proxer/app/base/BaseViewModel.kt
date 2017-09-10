@@ -1,8 +1,7 @@
 package me.proxer.app.base
 
-import android.app.Application
-import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.ViewModel
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -11,6 +10,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.bus
+import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.R
 import me.proxer.app.auth.LoginEvent
 import me.proxer.app.auth.LogoutEvent
@@ -21,7 +21,7 @@ import me.proxer.app.util.Validators
 /**
  * @author Ruben Gees
  */
-abstract class BaseViewModel<T>(application: Application) : AndroidViewModel(application) {
+abstract class BaseViewModel<T> : ViewModel() {
 
     open val data = MutableLiveData<T?>()
     open val error = MutableLiveData<ErrorUtils.ErrorAction?>()
@@ -99,6 +99,6 @@ abstract class BaseViewModel<T>(application: Application) : AndroidViewModel(app
 
     open fun validate() {
         if (isLoginRequired) Validators.validateLogin()
-        if (isAgeConfirmationRequired) Validators.validateAgeConfirmation(getApplication())
+        if (isAgeConfirmationRequired) Validators.validateAgeConfirmation(globalContext)
     }
 }

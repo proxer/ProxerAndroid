@@ -1,6 +1,5 @@
 package me.proxer.app.profile.media
 
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.Menu
@@ -40,10 +39,7 @@ class ProfileMediaListFragment : PagedContentFragment<UserMediaListEntry>() {
     override val emptyDataMessage = R.string.error_no_data_user_media_list
 
     override val viewModel: ProfileMediaListViewModel by unsafeLazy {
-        ViewModelProviders.of(this).get(ProfileMediaListViewModel::class.java).also {
-            it.userId = this.userId
-            it.username = this.username
-        }
+        ProfileMediaListViewModelProvider.get(this, userId, username, category, filter)
     }
 
     override val layoutManager by unsafeLazy {
@@ -68,7 +64,7 @@ class ProfileMediaListFragment : PagedContentFragment<UserMediaListEntry>() {
         set(value) {
             arguments.putSerializable(FILTER_ARGUMENT, value)
 
-            viewModel.setFilter(value)
+            viewModel.filter = value
         }
 
     override var innerAdapter by Delegates.notNull<ProfileMediaAdapter>()
@@ -84,9 +80,6 @@ class ProfileMediaListFragment : PagedContentFragment<UserMediaListEntry>() {
                     MediaActivity.navigateTo(activity, item.id, item.name, item.medium.toCategory(),
                             if (view.drawable != null) view else null)
                 }
-
-        viewModel.setCategory(category, false)
-        viewModel.setFilter(filter, false)
 
         setHasOptionsMenu(true)
     }

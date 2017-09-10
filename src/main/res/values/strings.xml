@@ -336,13 +336,13 @@
     <string name="fragment_conference_info_participants_title">Teilnehmer</string>
     <string name="fragment_conference_info_time">Erstellt am %1$s um %2$s</string>
 
-    <string name="fragment_new_chat_participants">Teilnehmer</string>
-    <string name="fragment_new_chat_topic_hint">Thema</string>
-    <string name="fragment_new_chat_add_participant">Teilnehmer hinzufügen</string>
-    <string name="fragment_new_chat_add_participant_hint">Nutzername</string>
-    <string name="fragment_new_chat_delete_description">Entfernen</string>
-    <string name="fragment_new_chat_cancel_content_description">Abbrechen</string>
-    <string name="fragment_new_chat_accept_description">Akzeptieren</string>
+    <string name="fragment_create_chat_participants">Teilnehmer</string>
+    <string name="fragment_create_chat_topic_hint">Thema</string>
+    <string name="fragment_create_chat_add_participant">Teilnehmer hinzufügen</string>
+    <string name="fragment_create_chat_add_participant_hint">Nutzername</string>
+    <string name="fragment_create_chat_delete_description">Entfernen</string>
+    <string name="fragment_create_chat_cancel_content_description">Abbrechen</string>
+    <string name="fragment_create_chat_accept_description">Akzeptieren</string>
 
     <string name="fragment_notification_delete_content_description">Alle löschen</string>
 
@@ -483,9 +483,9 @@
     <string name="action_sort_time">Nach Datum</string>
 
     <string name="action_send_message">Nachricht schreiben</string>
-    <string name="action_new_chat">Neuer Chat</string>
+    <string name="action_create_chat">Neuer Chat</string>
     <string name="action_new_group_with_user">Neue Gruppe mit diesem Nutzer</string>
-    <string name="action_new_group">Neue Gruppe</string>
+    <string name="action_create_group">Neue Gruppe</string>
 
     <string name="action_conference_add_user">%1$s hat %2$s zur Konferenz hinzugefügt</string>
     <string name="action_conference_delete_user">%1$s hat %2$s aus der Konferenz entfernt</string>

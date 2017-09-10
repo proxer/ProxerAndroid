@@ -1,6 +1,6 @@
 package me.proxer.app.bookmark
 
-import android.app.Application
+import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -13,11 +13,13 @@ import me.proxer.app.util.extension.buildOptionalSingle
 import me.proxer.library.api.PagingLimitEndpoint
 import me.proxer.library.entity.ucp.Bookmark
 import me.proxer.library.enums.Category
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
  */
-class BookmarkViewModel(application: Application) : PagedContentViewModel<Bookmark>(application) {
+@GeneratedProvider
+class BookmarkViewModel(category: Category?) : PagedContentViewModel<Bookmark>() {
 
     override val itemsOnPage = 30
     override val isLoginRequired = true
@@ -27,7 +29,9 @@ class BookmarkViewModel(application: Application) : PagedContentViewModel<Bookma
 
     val itemDeletionError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
 
-    private var category: Category? = null
+    var category by Delegates.observable(category, { _, old, new ->
+        if (old != new) reload()
+    })
 
     private val deletionQueue = UniqueQueue<Bookmark>()
     private var deletionDisposable: Disposable? = null
@@ -48,14 +52,6 @@ class BookmarkViewModel(application: Application) : PagedContentViewModel<Bookma
     }
 
     override fun refresh() = reload()
-
-    fun setCategory(value: Category?, trigger: Boolean = true) {
-        if (category != value) {
-            category = value
-
-            if (trigger) reload()
-        }
-    }
 
     fun addItemToDelete(item: Bookmark) {
         deletionQueue.add(item)

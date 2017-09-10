@@ -1,6 +1,5 @@
 package me.proxer.app.info.translatorgroup
 
-import android.arch.lifecycle.ViewModelProviders
 import android.content.ClipData
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -33,8 +32,7 @@ class TranslatorGroupInfoFragment : BaseContentFragment<TranslatorGroup>() {
     }
 
     override val viewModel: TranslatorGroupInfoViewModel by unsafeLazy {
-        ViewModelProviders.of(this).get(TranslatorGroupInfoViewModel::class.java)
-                .apply { translatorGroupId = id }
+        TranslatorGroupInfoViewModelProvider.get(this, id)
     }
 
     override val hostingActivity: TranslatorGroupActivity

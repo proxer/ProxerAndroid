@@ -1,8 +1,8 @@
-package me.proxer.app.chat.new
+package me.proxer.app.chat.create
 
-import android.app.Application
-import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.ViewModel
+import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -24,13 +24,12 @@ import me.proxer.library.api.Endpoint
 /**
  * @author Ruben Gees
  */
-class NewChatViewModel(application: Application?) : AndroidViewModel(application) {
+@GeneratedProvider
+class CreateChatViewModel : ViewModel() {
 
     val isLoading = MutableLiveData<Boolean>()
     val result = ResettingMutableLiveData<LocalConference>()
     val error = ResettingMutableLiveData<ErrorUtils.ErrorAction>()
-
-    var isGroup: Boolean = false
 
     private var newConferenceId: Long? = null
 

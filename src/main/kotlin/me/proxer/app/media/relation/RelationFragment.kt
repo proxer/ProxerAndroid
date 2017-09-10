@@ -1,6 +1,5 @@
 package me.proxer.app.media.relation
 
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
@@ -32,9 +31,7 @@ class RelationFragment : BaseContentFragment<List<Relation>>() {
         }
     }
 
-    override val viewModel: RelationViewModel by unsafeLazy {
-        ViewModelProviders.of(this).get(RelationViewModel::class.java).also { it.entryId = id }
-    }
+    override val viewModel: RelationViewModel by unsafeLazy { RelationViewModelProvider.get(this, id) }
 
     override val hostingActivity: MediaActivity
         get() = activity as MediaActivity

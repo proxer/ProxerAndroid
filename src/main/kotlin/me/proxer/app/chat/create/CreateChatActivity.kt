@@ -1,4 +1,4 @@
-package me.proxer.app.chat.new
+package me.proxer.app.chat.create
 
 import android.app.Activity
 import android.content.Intent
@@ -11,21 +11,21 @@ import me.proxer.app.base.BaseActivity
 import me.proxer.app.chat.Participant
 import org.jetbrains.anko.intentFor
 
-class NewChatActivity : BaseActivity() {
+class CreateChatActivity : BaseActivity() {
 
     companion object {
         private const val IS_GROUP_EXTRA = "is_group"
         private const val INITIAL_PARTICIPANT_EXTRA = "initial_participant"
 
         fun navigateTo(context: Activity, isGroup: Boolean = false, initialParticipant: Participant? = null) {
-            context.startActivity(context.intentFor<NewChatActivity>(
+            context.startActivity(context.intentFor<CreateChatActivity>(
                     IS_GROUP_EXTRA to isGroup,
                     INITIAL_PARTICIPANT_EXTRA to initialParticipant
             ))
         }
 
         fun getIntent(context: Activity, isGroup: Boolean = false, initialParticipant: Participant? = null): Intent {
-            return context.intentFor<NewChatActivity>(
+            return context.intentFor<CreateChatActivity>(
                     IS_GROUP_EXTRA to isGroup,
                     INITIAL_PARTICIPANT_EXTRA to initialParticipant
             )
@@ -50,7 +50,7 @@ class NewChatActivity : BaseActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, NewChatFragment.newInstance())
+                    .replace(R.id.container, CreateChatFragment.newInstance())
                     .commitNow()
         }
     }
@@ -70,8 +70,8 @@ class NewChatActivity : BaseActivity() {
     private fun setupToolbar() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         title = when (isGroup) {
-            true -> getString(R.string.action_new_group)
-            false -> getString(R.string.action_new_chat)
+            true -> getString(R.string.action_create_group)
+            false -> getString(R.string.action_create_chat)
         }
     }
 }

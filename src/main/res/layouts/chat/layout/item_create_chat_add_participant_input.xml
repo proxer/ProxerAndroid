@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="8dp"
-    tools:context=".chat.new.NewChatParticipantAdapter"
+    tools:context=".chat.create.CreateChatParticipantAdapter"
     tools:ignore="UselessParent">
 
     <android.support.design.widget.TextInputLayout
@@ -21,7 +21,7 @@
             android:id="@+id/participantInput"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="@string/fragment_new_chat_add_participant_hint"
+            android:hint="@string/fragment_create_chat_add_participant_hint"
             android:imeOptions="actionNext"
             android:inputType="text"
             android:maxLines="1" />
@@ -35,7 +35,7 @@
         android:layout_toLeftOf="@+id/accept"
         android:layout_toStartOf="@+id/accept"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="@string/fragment_new_chat_cancel_content_description" />
+        android:contentDescription="@string/fragment_create_chat_cancel_content_description" />
 
     <me.proxer.app.ui.view.InfoImageButton
         android:id="@+id/accept"
@@ -45,6 +45,6 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="@string/fragment_new_chat_accept_description"
+        android:contentDescription="@string/fragment_create_chat_accept_description"
         tools:ignore="ContentDescription" />
 </RelativeLayout>

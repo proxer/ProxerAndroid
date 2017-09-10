@@ -1,6 +1,5 @@
 package me.proxer.app.media.episode
 
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -37,9 +36,7 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
 
     override val isSwipeToRefreshEnabled = false
 
-    override val viewModel: EpisodeViewModel by unsafeLazy {
-        ViewModelProviders.of(this).get(EpisodeViewModel::class.java).also { it.entryId = id }
-    }
+    override val viewModel: EpisodeViewModel by unsafeLazy { EpisodeViewModelProvider.get(this, id) }
 
     override val hostingActivity: MediaActivity
         get() = activity as MediaActivity

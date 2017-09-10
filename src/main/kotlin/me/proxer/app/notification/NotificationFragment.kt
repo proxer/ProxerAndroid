@@ -1,7 +1,6 @@
 package me.proxer.app.notification
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.util.DiffUtil
@@ -38,9 +37,7 @@ class NotificationFragment : BaseContentFragment<List<ProxerNotification>>() {
 
     override val isSwipeToRefreshEnabled = true
 
-    override val viewModel: NotificationViewModel by unsafeLazy {
-        ViewModelProviders.of(this).get(NotificationViewModel::class.java)
-    }
+    override val viewModel: NotificationViewModel by unsafeLazy { NotificationViewModelProvider.get(this) }
 
     private var adapter by Delegates.notNull<NotificationAdapter>()
 
