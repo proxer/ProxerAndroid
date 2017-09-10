@@ -3,6 +3,7 @@ package me.proxer.app.chat.sync
 import android.app.Notification
 import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.graphics.Typeface
 import android.os.Build
 import android.support.v4.app.NotificationCompat
@@ -20,11 +21,16 @@ import me.proxer.app.R
 import me.proxer.app.chat.ChatActivity
 import me.proxer.app.chat.LocalConference
 import me.proxer.app.chat.LocalMessage
+import me.proxer.app.util.ErrorUtils
+import me.proxer.app.util.NotificationUtils
 import me.proxer.app.util.NotificationUtils.CHAT_CHANNEL
 import me.proxer.app.util.Utils
 import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.getQuantityString
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper.DrawerItem
+import me.proxer.library.api.ProxerException
+import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
 
 /**
@@ -48,6 +54,23 @@ object ChatNotifications {
                 else -> NotificationManagerCompat.from(context).notify(it.first, it.second)
             }
         }
+    }
+
+    fun showError(context: Context, error: Throwable) {
+        val innermostError = ErrorUtils.getInnermostError(error)
+        val isIpBlockedError = innermostError is ProxerException &&
+                innermostError.serverErrorType == ProxerException.ServerErrorType.IP_BLOCKED
+
+        val intent = when {
+            isIpBlockedError -> PendingIntent.getActivity(context, 0, Intent(Intent.ACTION_VIEW).apply {
+                data = ProxerUrls.captchaWeb(Device.MOBILE).androidUri()
+            }, 0)
+            else -> null
+        }
+
+        NotificationUtils.showErrorNotification(context, ID, NotificationUtils.CHAT_CHANNEL,
+                context.getString(R.string.notification_chat_error_title),
+                context.getString(ErrorUtils.getMessage(innermostError)), intent)
     }
 
     fun cancel(context: Context) = NotificationManagerCompat.from(context).cancel(ID)

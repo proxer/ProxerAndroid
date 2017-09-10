@@ -12,6 +12,7 @@ import me.proxer.app.MainApplication.Companion.chatDatabase
 import me.proxer.app.chat.ChatFragmentPingEvent
 import me.proxer.app.chat.LocalConference
 import me.proxer.app.chat.conference.ConferenceFragmentPingEvent
+import me.proxer.app.chat.sync.ChatJob.SynchronizationResult.*
 import me.proxer.app.exception.ChatException
 import me.proxer.app.exception.ChatMessageException
 import me.proxer.app.exception.ChatSendMessageException
@@ -58,9 +59,9 @@ class ChatJob : Job() {
             it is ChatJob && !it.isCanceled && !it.isFinished
         } != null
 
-        private fun reschedule(context: Context, changes: Boolean = false) {
-            if (canSchedule(context)) {
-                if (changes || bus.post(ChatFragmentPingEvent())) {
+        private fun reschedule(context: Context, synchronizationResult: SynchronizationResult) {
+            if (canSchedule(context) && synchronizationResult != ERROR) {
+                if (synchronizationResult == CHANGES || bus.post(ChatFragmentPingEvent())) {
                     StorageHelper.resetChatInterval()
 
                     doSchedule(3_000L, 4_000L)
@@ -112,7 +113,7 @@ class ChatJob : Job() {
             return Result.FAILURE
         }
 
-        val changes = conferenceId.let { conferenceId ->
+        val synchronizationResult = conferenceId.let { conferenceId ->
             when (conferenceId) {
                 0L -> try {
                     val deletedMessages = sendMessages()
@@ -154,14 +155,23 @@ class ChatJob : Job() {
                         }
                     }
 
-                    newConferencesAndMessages.isNotEmpty()
+                    if (newConferencesAndMessages.isNotEmpty()) CHANGES else NO_CHANGES
                 } catch (error: Throwable) {
+                    val isIpBlockedError = error is ProxerException
+                            && error.serverErrorType == ServerErrorType.IP_BLOCKED
+
                     when (error) {
                         is ChatException -> bus.post(ChatErrorEvent(error))
                         else -> bus.post(ChatErrorEvent(ChatSynchronizationException(error)))
                     }
 
-                    false
+                    if (isIpBlockedError) {
+                        ChatNotifications.showError(context, error)
+
+                        ERROR
+                    } else {
+                        NO_CHANGES
+                    }
                 }
                 else -> try {
                     val fetchedMessages = fetchMoreMessages(conferenceId)
@@ -174,19 +184,19 @@ class ChatJob : Job() {
                         }
                     }
 
-                    true
+                    CHANGES
                 } catch (error: Throwable) {
                     when (error) {
                         is ChatException -> bus.post(ChatErrorEvent(error))
                         else -> bus.post(ChatErrorEvent(ChatMessageException(error)))
                     }
 
-                    false
+                    NO_CHANGES
                 }
             }
         }
 
-        reschedule(context, changes)
+        reschedule(context, synchronizationResult)
 
         return Result.SUCCESS
     }
@@ -201,7 +211,7 @@ class ChatJob : Job() {
             if (result != null) {
 
                 // Delete all messages we have correctly sent already.
-                for (i in 0..index) {
+                (0..index).forEach { i ->
                     get(i).let { (idToDelete, conferenceIdToMarkAsRead) ->
                         chatDao.deleteMessageToSend(idToDelete)
                         chatDao.markConferenceAsRead(conferenceIdToMarkAsRead)
@@ -318,4 +328,8 @@ class ChatJob : Job() {
     }
 
     class SynchronizationEvent
+
+    private enum class SynchronizationResult {
+        CHANGES, NO_CHANGES, ERROR
+    }
 }
