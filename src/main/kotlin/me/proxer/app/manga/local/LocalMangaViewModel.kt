@@ -22,6 +22,7 @@ import me.proxer.app.util.Validators
 import me.proxer.app.util.extension.CompleteLocalMangaEntry
 import me.proxer.app.util.extension.getQuantityString
 import java.io.File
+import java.util.concurrent.TimeUnit
 import kotlin.concurrent.write
 
 /**
@@ -128,7 +129,8 @@ class LocalMangaViewModel(application: Application) : BaseViewModel<List<Complet
 
                     (if (message.isBlank()) null else message).toOptional()
                 }
-                .subscribeOn(Schedulers.io())
+                .delaySubscription(50, TimeUnit.MILLISECONDS)
+                .subscribeOn(Schedulers.single())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { value -> jobInfo.value = value.toNullable() }
     }
