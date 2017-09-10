@@ -41,8 +41,8 @@ class LocalMangaJob : Job() {
         private var lastTime = LocalDateTime.now()
         private var ongoing = 0
 
-        private var maxBatchProgress = 0F
-        private var batchProgress = 0F
+        private var maxBatchProgress = 0.0
+        private var batchProgress = 0.0
 
         fun schedule(context: Context, entryId: String, episode: Int, language: Language) {
             val isUnmeteredRequired = PreferenceHelper.isUnmeteredNetworkRequiredForMangaDownload(context)
@@ -127,7 +127,7 @@ class LocalMangaJob : Job() {
 
             bus.post(StartedEvent())
 
-            localChapterAndPages()
+            loadChapterAndPages()
 
             bus.post(FinishedEvent(entryId, episode, language))
 
@@ -157,13 +157,13 @@ class LocalMangaJob : Job() {
             }
         } finally {
             if (countRunningJobs() + countScheduledJobs() <= 1) {
-                maxBatchProgress = 0F
-                batchProgress = 0F
+                maxBatchProgress = 0.0
+                batchProgress = 0.0
             }
         }
     }
 
-    private fun localChapterAndPages() {
+    private fun loadChapterAndPages() {
         val entry = when (mangaDao.countEntries(entryId.toLong()) <= 0) {
             true -> api.info().entryCore(entryId).build().safeExecute().toLocalEntryCore()
             false -> null
