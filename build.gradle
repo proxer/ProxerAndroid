@@ -85,6 +85,7 @@ android {
 
         release {
             minifyEnabled true
+            shrinkResources true
             proguardFiles 'config/proguard/proguard-rules.pro'
             archivesBaseName = "app-${defaultConfig.versionName}"
 
