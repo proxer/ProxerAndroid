@@ -29,7 +29,6 @@ import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.getQuantityString
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper.DrawerItem
-import me.proxer.library.api.ProxerException
 import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
 
@@ -57,20 +56,17 @@ object ChatNotifications {
     }
 
     fun showError(context: Context, error: Throwable) {
-        val innermostError = ErrorUtils.getInnermostError(error)
-        val isIpBlockedError = innermostError is ProxerException &&
-                innermostError.serverErrorType == ProxerException.ServerErrorType.IP_BLOCKED
-
-        val intent = when {
-            isIpBlockedError -> PendingIntent.getActivity(context, 0, Intent(Intent.ACTION_VIEW).apply {
+        val intent = if (ErrorUtils.isIpBlockedError(error)) {
+            PendingIntent.getActivity(context, 0, Intent(Intent.ACTION_VIEW).apply {
                 data = ProxerUrls.captchaWeb(Device.MOBILE).androidUri()
             }, 0)
-            else -> null
+        } else {
+            null
         }
 
         NotificationUtils.showErrorNotification(context, ID, NotificationUtils.CHAT_CHANNEL,
                 context.getString(R.string.notification_chat_error_title),
-                context.getString(ErrorUtils.getMessage(innermostError)), intent)
+                context.getString(ErrorUtils.getMessage(error)), intent)
     }
 
     fun cancel(context: Context) = NotificationManagerCompat.from(context).cancel(ID)

@@ -12,14 +12,13 @@ import me.proxer.app.MainApplication.Companion.mangaDao
 import me.proxer.app.MainApplication.Companion.mangaDatabase
 import me.proxer.app.manga.MangaPageSingle
 import me.proxer.app.manga.MangaPageSingle.Input
+import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.decodedName
 import me.proxer.app.util.extension.toLocalChapter
 import me.proxer.app.util.extension.toLocalEntryCore
 import me.proxer.app.util.extension.toLocalPage
-import me.proxer.library.api.ProxerException
-import me.proxer.library.api.ProxerException.ServerErrorType
 import me.proxer.library.enums.Language
 import me.proxer.library.util.ProxerUtils
 import org.threeten.bp.LocalDateTime
@@ -133,10 +132,8 @@ class LocalMangaJob : Job() {
 
             Result.SUCCESS
         } catch (error: Throwable) {
-            val isIpBlockedError = error is ProxerException && error.serverErrorType == ServerErrorType.IP_BLOCKED
-
             when {
-                isIpBlockedError || params.failureCount >= 1 -> {
+                ErrorUtils.isIpBlockedError(error) || params.failureCount >= 1 -> {
                     cancelAll()
 
                     bus.post(FailedEvent(entryId, episode, language))

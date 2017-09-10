@@ -17,6 +17,7 @@ import me.proxer.app.exception.ChatException
 import me.proxer.app.exception.ChatMessageException
 import me.proxer.app.exception.ChatSendMessageException
 import me.proxer.app.exception.ChatSynchronizationException
+import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.toLocalConference
@@ -158,15 +159,12 @@ class ChatJob : Job() {
 
                     if (newConferencesAndMessages.isNotEmpty()) CHANGES else NO_CHANGES
                 } catch (error: Throwable) {
-                    val isIpBlockedError = error is ProxerException
-                            && error.serverErrorType == ServerErrorType.IP_BLOCKED
-
                     when (error) {
                         is ChatException -> bus.post(ChatErrorEvent(error))
                         else -> bus.post(ChatErrorEvent(ChatSynchronizationException(error)))
                     }
 
-                    if (isIpBlockedError) {
+                    if (ErrorUtils.isIpBlockedError(error)) {
                         ChatNotifications.showError(context, error)
 
                         ERROR

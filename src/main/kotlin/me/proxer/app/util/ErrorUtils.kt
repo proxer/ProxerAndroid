@@ -96,6 +96,10 @@ object ErrorUtils {
         else -> error
     }
 
+    fun isIpBlockedError(error: Throwable) = getInnermostError(error).let {
+        it is ProxerException && it.serverErrorType == IP_BLOCKED
+    }
+
     fun handle(error: Throwable): ErrorAction {
         val innermostError = getInnermostError(error)
         val errorMessage = getMessage(innermostError)
