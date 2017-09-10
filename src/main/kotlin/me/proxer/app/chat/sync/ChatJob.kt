@@ -109,7 +109,6 @@ class ChatJob : Job() {
     private val conferenceId: Long
         get() = params.extras.getLong(CONFERENCE_ID_EXTRA, 0)
 
-    @Suppress("InstanceOfCheckForException")
     override fun onRunJob(params: Params): Result {
         if (StorageHelper.user == null) {
             return Result.FAILURE
