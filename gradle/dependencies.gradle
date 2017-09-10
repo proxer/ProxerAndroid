@@ -14,7 +14,7 @@ ext {
     supportPreferenceVersion = '1.2.7'
     architectureComponentsVersion = '1.0.0-alpha9'
     androidJobVersion = '1.2.0-RC1'
-    proxerLibVersion = '56cd169981'
+    proxerLibVersion = '4.0.0'
 
     // RxJava
     rxJavaVersion = '2.1.3'
@@ -56,6 +56,7 @@ ext {
     kOptionalVersion = '1.2.0'
     kotterknifeVersion = '1.0'
     jsr305Version = '3.0.2'
+    javaxExtrasVersion = '0.1.0'
     customActivityOnCrashVersion = '2.1.0'
 
     // Debugging
@@ -143,7 +144,8 @@ ext {
     ]
 
     compileOnlyDependencies = [
-            jsr305: "com.google.code.findbugs:jsr305:$jsr305Version"
+            jsr305     : "com.google.code.findbugs:jsr305:$jsr305Version",
+            javaxExtras: "com.uber.javaxextras:javax-extras:$javaxExtrasVersion"
     ]
 
     kaptDependencies = [
