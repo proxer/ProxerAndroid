@@ -5,7 +5,8 @@ jobs:
     docker:
       - image: circleci/android:api-26-alpha
     environment:
-      _JAVA_OPTIONS: "-Xmx1400m -XX:ParallelGCThreads=2 -XX:ConcGCThreads=2 -XX:ParallelGCThreads=2 -Djava.util.concurrent.ForkJoinPool.common.parallelism=2"
+      _JAVA_OPTIONS: "-Xmx2048m -XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -XX:ParallelGCThreads=1
+                      -Djava.util.concurrent.ForkJoinPool.common.parallelism=1"
       TERM: dumb
     steps:
       - checkout
