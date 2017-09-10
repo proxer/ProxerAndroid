@@ -108,6 +108,7 @@ class ChatJob : Job() {
     private val conferenceId: Long
         get() = params.extras.getLong(CONFERENCE_ID_EXTRA, 0)
 
+    @Suppress("InstanceOfCheckForException")
     override fun onRunJob(params: Params): Result {
         if (StorageHelper.user == null) {
             return Result.FAILURE
@@ -211,7 +212,7 @@ class ChatJob : Job() {
             if (result != null) {
 
                 // Delete all messages we have correctly sent already.
-                (0..index).forEach { i ->
+                for (i in 0..index) {
                     get(i).let { (idToDelete, conferenceIdToMarkAsRead) ->
                         chatDao.deleteMessageToSend(idToDelete)
                         chatDao.markConferenceAsRead(conferenceIdToMarkAsRead)
