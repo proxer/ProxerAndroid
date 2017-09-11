@@ -88,11 +88,6 @@
 -dontwarn android.arch.util.paging.CountedDataSource
 -dontwarn android.arch.persistence.room.paging.LimitOffsetDataSource
 
-# Alfred
--keepclassmembers class me.proxer.app.**.*ViewModel {
-    public <init>(...);
-}
-
 # Glide
 -keep public class * extends com.bumptech.glide.module.AppGlideModule
 -keep class com.bumptech.glide.GeneratedAppGlideModuleImpl

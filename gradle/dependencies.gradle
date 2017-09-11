@@ -37,7 +37,7 @@ ext {
     flexboxVersion = '0.3.0'
     emojiIosVersion = '0.6.0-SNAPSHOT'
     exomediaVersion = 'c611808b8c'
-    exoplayerVersion = 'r2.5.1'
+    exoplayerVersion = 'r2.5.2'
     materialProgressBarVersion = '1.4.2'
     materialRatingBarVersion = '1.0.2'
     customtabsHelperVersion = '1.0.4'
@@ -57,7 +57,7 @@ ext {
     kotterknifeVersion = '1.0'
     jsr305Version = '3.0.2'
     javaxExtrasVersion = '0.1.0'
-    alfredVersion = 'v1.0.0-RC.2'
+    alfredVersion = 'v1.0.0-RC.3'
 
     // Debugging
     customActivityOnCrashVersion = '2.1.0'
