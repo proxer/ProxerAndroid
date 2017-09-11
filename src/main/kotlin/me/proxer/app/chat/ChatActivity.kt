@@ -34,6 +34,8 @@ class ChatActivity : BaseActivity() {
         get() = intent.getParcelableExtra(CONFERENCE_EXTRA)
         set(value) {
             intent.putExtra(CONFERENCE_EXTRA, value)
+
+            title = conference.topic
         }
 
     private val toolbar: Toolbar by bindView(R.id.toolbar)

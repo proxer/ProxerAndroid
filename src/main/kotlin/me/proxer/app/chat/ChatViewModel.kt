@@ -22,18 +22,18 @@ import me.proxer.app.util.data.StorageHelper
  * @author Ruben Gees
  */
 @GeneratedProvider
-class ChatViewModel(private val conference: LocalConference) : PagedViewModel<LocalMessage>() {
+class ChatViewModel(initialConference: LocalConference) : PagedViewModel<LocalMessage>() {
 
     override val isLoginRequired = true
     override val itemsOnPage = ChatJob.MESSAGES_ON_PAGE
 
     override var hasReachedEnd
-        get() = conference.isFullyLoaded
+        get() = safeConference.isFullyLoaded
         set(value) = Unit
 
     override val data = object : MediatorLiveData<List<LocalMessage>>() {
 
-        private val source by lazy { chatDao.getMessagesLiveDataForConference(conference.id) }
+        private val source by lazy { chatDao.getMessagesLiveDataForConference(safeConference.id) }
 
         override fun onActive() {
             super.onActive()
@@ -41,8 +41,8 @@ class ChatViewModel(private val conference: LocalConference) : PagedViewModel<Lo
             addSource(source, {
                 it?.let {
                     if (StorageHelper.user != null) {
-                        if (it.isEmpty() && !conference.isFullyLoaded) {
-                            ChatJob.scheduleMessageLoad(conference.id)
+                        if (it.isEmpty() && !hasReachedEnd) {
+                            ChatJob.scheduleMessageLoad(safeConference.id)
                         } else {
                             if (error.value == null) {
                                 dataDisposable?.dispose()
@@ -53,7 +53,7 @@ class ChatViewModel(private val conference: LocalConference) : PagedViewModel<Lo
                                 error.value = null
                                 this.value = it
 
-                                Completable.fromAction { chatDao.markConferenceAsRead(conference.id) }
+                                Completable.fromAction { chatDao.markConferenceAsRead(safeConference.id) }
                                         .subscribeOn(Schedulers.io())
                                         .subscribe()
                             }
@@ -74,14 +74,38 @@ class ChatViewModel(private val conference: LocalConference) : PagedViewModel<Lo
         get() = Single.fromCallable { Validators.validateLogin() }
                 .flatMap {
                     when (page) {
-                        0 -> chatDao.markConferenceAsRead(conference.id)
-                        else -> ChatJob.scheduleMessageLoad(conference.id)
+                        0 -> chatDao.markConferenceAsRead(safeConference.id)
+                        else -> ChatJob.scheduleMessageLoad(safeConference.id)
                     }
 
                     Single.never<List<LocalMessage>>()
                 }
 
+    val conference = object : MediatorLiveData<LocalConference>() {
+
+        private val source by lazy { chatDao.getConferenceLiveData(safeConference.id) }
+
+        override fun onActive() {
+            super.onActive()
+
+            addSource(source, {
+                it?.let { this.value = it }
+            })
+        }
+
+        override fun onInactive() {
+            removeSource(source)
+
+            super.onInactive()
+        }
+    }
+
+    private val safeConference: LocalConference
+        get() = conference.value ?: throw IllegalArgumentException("Conference cannot be null")
+
     init {
+        conference.value = initialConference
+
         disposables += bus.register(ChatErrorEvent::class.java)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { event: ChatErrorEvent ->
@@ -91,17 +115,17 @@ class ChatViewModel(private val conference: LocalConference) : PagedViewModel<Lo
                         isLoading.value = false
                         error.value = ErrorUtils.handle(event.error)
                     }
-                }
 
-        Completable
-                .fromAction { if (!ChatJob.isRunning()) ChatJob.scheduleSynchronization() }
-                .subscribeOn(Schedulers.io())
-                .subscribe()
+                    Completable
+                            .fromAction { if (!ChatJob.isRunning()) ChatJob.scheduleSynchronization() }
+                            .subscribeOn(Schedulers.io())
+                            .subscribe()
+                }
     }
 
     fun sendMessage(text: String) {
         disposables += Single
-                .fromCallable { chatDatabase.insertMessageToSend(text, conference.id) }
+                .fromCallable { chatDatabase.insertMessageToSend(text, safeConference.id) }
                 .doOnSuccess { if (!ChatJob.isRunning()) ChatJob.scheduleSynchronization() }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

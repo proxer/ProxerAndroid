@@ -1,5 +1,6 @@
 package me.proxer.app.chat
 
+import android.arch.lifecycle.Observer
 import android.content.ClipData
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
@@ -162,6 +163,10 @@ class ChatFragment : PagedContentFragment<LocalMessage>() {
         innerAdapter.mentionsClickSubject
                 .bindToLifecycle(this)
                 .subscribe { ProfileActivity.navigateTo(activity, username = it) }
+
+        viewModel.conference.observe(this, Observer {
+            it?.let { conference = it }
+        })
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
