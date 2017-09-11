@@ -40,23 +40,23 @@ class ChatViewModel(private val conference: LocalConference) : PagedViewModel<Lo
 
             addSource(source, {
                 it?.let {
-                    if (StorageHelper.user == null) Unit
+                    if (StorageHelper.user != null) {
+                        if (it.isEmpty() && !conference.isFullyLoaded) {
+                            ChatJob.scheduleMessageLoad(conference.id)
+                        } else {
+                            if (error.value == null) {
+                                dataDisposable?.dispose()
 
-                    if (it.isEmpty() && !conference.isFullyLoaded) {
-                        ChatJob.scheduleMessageLoad(conference.id)
-                    } else {
-                        if (error.value == null) {
-                            dataDisposable?.dispose()
+                                page = it.size.div(itemsOnPage)
 
-                            page = it.size.div(itemsOnPage)
+                                isLoading.value = false
+                                error.value = null
+                                this.value = it
 
-                            isLoading.value = false
-                            error.value = null
-                            this.value = it
-
-                            Completable.fromAction { chatDao.markConferenceAsRead(conference.id) }
-                                    .subscribeOn(Schedulers.io())
-                                    .subscribe()
+                                Completable.fromAction { chatDao.markConferenceAsRead(conference.id) }
+                                        .subscribeOn(Schedulers.io())
+                                        .subscribe()
+                            }
                         }
                     }
                 }

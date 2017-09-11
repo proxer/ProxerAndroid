@@ -110,9 +110,7 @@ class ChatJob : Job() {
         get() = params.extras.getLong(CONFERENCE_ID_EXTRA, 0)
 
     override fun onRunJob(params: Params): Result {
-        if (StorageHelper.user == null) {
-            return Result.FAILURE
-        }
+        if (StorageHelper.user == null) return Result.FAILURE
 
         val synchronizationResult = conferenceId.let { conferenceId ->
             when (conferenceId) {
@@ -254,59 +252,70 @@ class ChatJob : Job() {
 
     private fun fetchNewMessages(conference: Conference): Pair<List<Message>, Boolean> {
         val mostRecentMessage = chatDao.findMostRecentMessageForConference(conference.id.toLong())?.toNonLocalMessage()
+
+        return when (mostRecentMessage) {
+            null -> fetchNewMessagesForEmptyConference(conference)
+            else -> fetchNewMessagesForExistingConference(conference, mostRecentMessage)
+        }
+    }
+
+    private fun fetchNewMessagesForEmptyConference(conference: Conference): Pair<List<Message>, Boolean> {
+        val newMessages = mutableListOf<Message>()
+
+        var unreadAmount = 0
+        var nextId = "0"
+
+        while (unreadAmount < conference.unreadMessageAmount) {
+            val fetchedMessages = api.messenger().messages()
+                    .conferenceId(conference.id)
+                    .messageId(nextId)
+                    .markAsRead(false)
+                    .build()
+                    .safeExecute()
+
+            newMessages += fetchedMessages
+
+            if (fetchedMessages.size < MESSAGES_ON_PAGE) {
+                return newMessages to true
+            } else {
+                unreadAmount += fetchedMessages.size
+                nextId = fetchedMessages.first().id
+            }
+        }
+
+        return newMessages to false
+    }
+
+    private fun fetchNewMessagesForExistingConference(conference: Conference, mostRecentMessage: Message):
+            Pair<List<Message>, Boolean> {
+        val mostRecentMessageIdBeforeUpdate = mostRecentMessage.id.toLong()
         val newMessages = mutableListOf<Message>()
 
         var existingUnreadMessageAmount = chatDao.getUnreadMessageAmountForConference(conference.id.toLong(),
                 conference.lastReadMessageId.toLong())
+        var currentMessage: Message = mostRecentMessage
         var nextId = "0"
 
-        return if (mostRecentMessage == null) {
-            while (existingUnreadMessageAmount < conference.unreadMessageAmount) {
-                val fetchedMessages = api.messenger().messages()
-                        .conferenceId(conference.id)
-                        .messageId(nextId)
-                        .markAsRead(false)
-                        .build()
-                        .safeExecute()
+        while (currentMessage.date < conference.date || existingUnreadMessageAmount < conference.unreadMessageAmount) {
+            val fetchedMessages = api.messenger().messages()
+                    .conferenceId(conference.id)
+                    .messageId(nextId)
+                    .markAsRead(false)
+                    .build()
+                    .safeExecute()
 
-                newMessages += fetchedMessages
+            newMessages += fetchedMessages
 
-                if (fetchedMessages.size < MESSAGES_ON_PAGE) {
-                    newMessages to true
-                } else {
-                    existingUnreadMessageAmount += fetchedMessages.size
-                    nextId = fetchedMessages.first().id
-                }
+            if (fetchedMessages.size < MESSAGES_ON_PAGE) {
+                return newMessages.filter { it.id.toLong() > mostRecentMessageIdBeforeUpdate } to true
+            } else {
+                existingUnreadMessageAmount += fetchedMessages.size
+                currentMessage = fetchedMessages.last()
+                nextId = fetchedMessages.first().id
             }
-
-            newMessages to false
-        } else {
-            val mostRecentMessageIdBeforeUpdate = mostRecentMessage.id.toLong()
-            var currentMessage: Message = mostRecentMessage
-
-            while (currentMessage.date < conference.date ||
-                    existingUnreadMessageAmount < conference.unreadMessageAmount) {
-
-                val fetchedMessages = api.messenger().messages()
-                        .conferenceId(conference.id)
-                        .messageId(nextId)
-                        .markAsRead(false)
-                        .build()
-                        .safeExecute()
-
-                newMessages.addAll(fetchedMessages)
-
-                if (fetchedMessages.size < MESSAGES_ON_PAGE) {
-                    newMessages.filter { it.id.toLong() > mostRecentMessageIdBeforeUpdate } to true
-                } else {
-                    existingUnreadMessageAmount += fetchedMessages.size
-                    currentMessage = fetchedMessages.last()
-                    nextId = fetchedMessages.first().id
-                }
-            }
-
-            newMessages.filter { it.id.toLong() > mostRecentMessageIdBeforeUpdate } to false
         }
+
+        return newMessages.filter { it.id.toLong() > mostRecentMessageIdBeforeUpdate } to false
     }
 
     private fun fetchMoreMessages(conferenceId: Long) = api.messenger().messages()

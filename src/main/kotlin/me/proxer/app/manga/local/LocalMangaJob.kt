@@ -110,7 +110,7 @@ class LocalMangaJob : Job() {
 
     override fun onRunJob(params: Params): Result {
         return try {
-            if (StorageHelper.user == null) Result.FAILURE
+            if (StorageHelper.user == null) return Result.FAILURE
 
             synchronized(lock, {
                 when {

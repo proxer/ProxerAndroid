@@ -49,7 +49,7 @@ class NotificationJob : Job() {
     }
 
     override fun onRunJob(params: Params): Result {
-        try {
+        return try {
             val notificationInfo = when (StorageHelper.user != null) {
                 true -> api.notifications().notificationInfo().build().execute()
                 false -> null
@@ -62,8 +62,10 @@ class NotificationJob : Job() {
             if (PreferenceHelper.areAccountNotificationsEnabled(context) && notificationInfo != null) {
                 fetchAccountNotifications(context, notificationInfo)
             }
+
+            Result.SUCCESS
         } catch (error: Throwable) {
-            return if (params.failureCount >= 1) {
+            if (params.failureCount >= 1) {
                 AccountNotifications.showError(context, error)
 
                 Result.FAILURE
@@ -71,8 +73,6 @@ class NotificationJob : Job() {
                 Result.RESCHEDULE
             }
         }
-
-        return Result.SUCCESS
     }
 
     private fun fetchNews(context: Context, notificationInfo: NotificationInfo?) {
