@@ -13,7 +13,7 @@ ext {
     supportLibraryVersion = '26.0.2'
     supportPreferenceVersion = '1.2.7'
     architectureComponentsVersion = '1.0.0-alpha9'
-    androidJobVersion = '1.2.0-RC2'
+    androidJobVersion = '1.2.0-RC3'
     proxerLibVersion = '4.0.0'
 
     // RxJava
@@ -48,7 +48,7 @@ ext {
     // Utils
     threetenVersion = '1.0.5'
     hawkVersion = '2.0.1'
-    glideVersion = '4.2.0-SNAPSHOT'
+    glideVersion = '4.1.1'
     okHttpVersion = '3.9.0'
     okioVersion = '1.13.0'
     linkBuilderVersion = '1.6.1'
