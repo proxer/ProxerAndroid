@@ -16,7 +16,9 @@ class AccountNotificationDeletionReceiver : BroadcastReceiver() {
 
     companion object {
         fun getPendingIntent(context: Context): PendingIntent = PendingIntent.getBroadcast(context, 0,
-                Intent(context, AccountNotificationDeletionReceiver::class.java), PendingIntent.FLAG_UPDATE_CURRENT)
+                Intent(context, AccountNotificationDeletionReceiver::class.java)
+                        .addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES),
+                PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
     override fun onReceive(context: Context?, intent: Intent?) {

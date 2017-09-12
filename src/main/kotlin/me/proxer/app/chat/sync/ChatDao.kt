@@ -29,7 +29,7 @@ interface ChatDao {
     @Query("SELECT * FROM conferences WHERE id = :id LIMIT 1")
     fun getConferenceLiveData(id: Long): LiveData<LocalConference?>
 
-    @Query("SELECT * FROM conferences WHERE isRead = 0 ORDER BY id DESC")
+    @Query("SELECT * FROM conferences WHERE localIsRead = 0 AND isRead = 0 ORDER BY id DESC")
     fun getUnreadConferences(): List<LocalConference>
 
     @Query("SELECT * FROM conferences WHERE localIsRead != 0 AND isRead = 0")

@@ -17,8 +17,10 @@ class ChatNotificationReadReceiver : BroadcastReceiver() {
         private const val CONFERENCE_ID_EXTRA = "conference_id"
 
         fun getPendingIntent(context: Context, conferenceId: Long): PendingIntent = PendingIntent.getBroadcast(context,
-                conferenceId.toInt(), Intent(context, ChatNotificationReadReceiver::class.java)
-                .apply { putExtra(CONFERENCE_ID_EXTRA, conferenceId) },
+                conferenceId.toInt(),
+                Intent(context, ChatNotificationReadReceiver::class.java)
+                        .addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES)
+                        .apply { putExtra(CONFERENCE_ID_EXTRA, conferenceId) },
                 PendingIntent.FLAG_UPDATE_CURRENT)
     }
 

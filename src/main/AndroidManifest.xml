@@ -233,10 +233,6 @@
 
         <receiver
             android:name=".chat.sync.DirectReplyReceiver"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="me.proxer.app.ACTION_MESSAGE_REPLY" />
-            </intent-filter>
-        </receiver>
+            android:exported="false" />
     </application>
 </manifest>

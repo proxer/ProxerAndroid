@@ -211,9 +211,7 @@ object ChatNotifications {
                                 .setLabel(context.getString(R.string.action_answer))
                                 .build()
 
-                        val replyIntent = PendingIntent.getBroadcast(context, conference.id.toInt(),
-                                DirectReplyReceiver.getMessageReplyIntent(conference.id),
-                                PendingIntent.FLAG_UPDATE_CURRENT)
+                        val replyIntent = DirectReplyReceiver.getPendingIntent(context, conference.id)
 
                         val actionReplyByRemoteInput = NotificationCompat.Action.Builder(R.mipmap.ic_launcher,
                                 context.getString(R.string.action_answer), replyIntent)
