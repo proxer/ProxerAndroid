@@ -13,17 +13,17 @@ import io.reactivex.schedulers.Schedulers
 class LocalMangaDownloadCancelReceiver : BroadcastReceiver() {
 
     companion object {
-        fun getPendingIntent(context: Context): PendingIntent = PendingIntent
-                .getBroadcast(context, 0, Intent(context, LocalMangaDownloadCancelReceiver::class.java), 0)
+        fun getPendingIntent(context: Context): PendingIntent = PendingIntent.getBroadcast(context, 0,
+                Intent(context, LocalMangaDownloadCancelReceiver::class.java), PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
     override fun onReceive(context: Context, intent: Intent?) {
         Completable
                 .fromAction {
-                    LocalMangaJob.cancelAll()
                     LocalMangaNotifications.cancel(context)
+                    LocalMangaJob.cancelAll()
                 }
                 .subscribeOn(Schedulers.io())
-                .subscribe()
+                .subscribe({}, {})
     }
 }

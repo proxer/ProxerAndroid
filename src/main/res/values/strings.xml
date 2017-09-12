@@ -373,6 +373,7 @@
     </plurals>
 
     <string name="notification_chat_error_title">Fehler beim Abrufen der Nachrichten</string>
+    <string name="notification_chat_read_action">Gelesen</string>
     <plurals name="notification_chat_conference_amount">
         <item quantity="one">in einem Chat</item>
         <item quantity="other">in %d Chats</item>

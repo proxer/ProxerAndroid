@@ -42,24 +42,26 @@ object ChatNotifications {
 
     fun showOrUpdate(context: Context, conferenceMap: Map<LocalConference, List<LocalMessage>>) {
         listOf(ID to buildChatSummaryNotification(context, conferenceMap))
-                .plus(conferenceMap.entries.map { (conference, messages) ->
-                    conference.id.toInt() to when {
-                        messages.isEmpty() -> null
-                        else -> buildIndividualChatNotification(context, conference, messages)
+                .plus(conferenceMap.entries
+                        .map { (conference, messages) ->
+                            conference.id.toInt() to when {
+                                messages.isEmpty() -> null
+                                else -> buildIndividualChatNotification(context, conference, messages)
+                            }
+                        })
+                .forEach { (id, notification) ->
+                    when (notification) {
+                        null -> NotificationManagerCompat.from(context).cancel(id)
+                        else -> NotificationManagerCompat.from(context).notify(id, notification)
                     }
-                }).forEach {
-            when (it.second) {
-                null -> NotificationManagerCompat.from(context).cancel(it.first)
-                else -> NotificationManagerCompat.from(context).notify(it.first, it.second)
-            }
-        }
+                }
     }
 
     fun showError(context: Context, error: Throwable) {
         val intent = if (ErrorUtils.isIpBlockedError(error)) {
             PendingIntent.getActivity(context, 0, Intent(Intent.ACTION_VIEW).apply {
                 data = ProxerUrls.captchaWeb(Device.MOBILE).androidUri()
-            }, 0)
+            }, PendingIntent.FLAG_UPDATE_CURRENT)
         } else {
             null
         }
@@ -70,6 +72,8 @@ object ChatNotifications {
     }
 
     fun cancel(context: Context) = NotificationManagerCompat.from(context).cancel(ID)
+    fun cancelIndividual(context: Context, conferenceId: Long) = NotificationManagerCompat.from(context)
+            .cancel(conferenceId.toInt())
 
     private fun buildChatSummaryNotification(context: Context,
                                              conferenceMap: Map<LocalConference, List<LocalMessage>>): Notification? {
@@ -220,6 +224,8 @@ object ChatNotifications {
                         addAction(actionReplyByRemoteInput)
                     }
                 }
+                .addAction(R.drawable.ic_stat_check, context.getString(R.string.notification_chat_read_action),
+                        ChatNotificationReadReceiver.getPendingIntent(context, conference.id))
                 .build()
     }
 }

@@ -7,6 +7,7 @@ import android.support.v4.app.RemoteInput
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.BuildConfig
+import me.proxer.app.MainApplication.Companion.chatDao
 import me.proxer.app.MainApplication.Companion.chatDatabase
 
 /**
@@ -27,16 +28,22 @@ class DirectReplyReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == REPLY_ACTION) {
-            intent.getLongExtra(CONFERENCE_ID_EXTRA, 0).let {
-                Completable
-                        .fromAction {
-                            chatDatabase.insertMessageToSend(getMessageText(intent), it)
+            val conferenceId = intent.getLongExtra(CONFERENCE_ID_EXTRA, -1)
 
-                            ChatJob.scheduleSynchronization()
+            Completable
+                    .fromAction {
+                        chatDatabase.insertMessageToSend(getMessageText(intent), conferenceId)
+
+                        if (chatDao.getUnreadConferences().isEmpty()) {
+                            ChatNotifications.cancel(context)
+                        } else {
+                            ChatNotifications.cancelIndividual(context, conferenceId)
                         }
-                        .subscribeOn(Schedulers.io())
-                        .subscribe()
-            }
+
+                        ChatJob.scheduleSynchronization()
+                    }
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({}, {})
         }
     }
 

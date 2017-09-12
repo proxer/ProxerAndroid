@@ -228,6 +228,10 @@
             android:exported="false" />
 
         <receiver
+            android:name=".chat.sync.ChatNotificationReadReceiver"
+            android:exported="false" />
+
+        <receiver
             android:name=".chat.sync.DirectReplyReceiver"
             android:exported="false">
             <intent-filter>

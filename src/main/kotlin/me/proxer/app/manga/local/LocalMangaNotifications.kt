@@ -61,7 +61,7 @@ object LocalMangaNotifications {
         val intent = if (ErrorUtils.isIpBlockedError(error)) {
             PendingIntent.getActivity(context, 0, Intent(Intent.ACTION_VIEW).apply {
                 data = ProxerUrls.captchaWeb(Device.MOBILE).androidUri()
-            }, 0)
+            }, PendingIntent.FLAG_UPDATE_CURRENT)
         } else {
             null
         }

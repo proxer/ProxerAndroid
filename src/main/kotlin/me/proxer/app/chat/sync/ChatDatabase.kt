@@ -38,6 +38,7 @@ abstract class ChatDatabase : RoomDatabase() {
                     MessageAction.NONE, Date(), Device.MOBILE)
 
             dao.insertMessage(message)
+            dao.markConferenceAsRead(conferenceId)
 
             nextMessageToSendId--
 

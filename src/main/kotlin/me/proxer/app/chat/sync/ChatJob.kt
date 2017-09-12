@@ -140,7 +140,6 @@ class ChatJob : Job() {
 
                         deletedMessages.forEach {
                             chatDao.deleteMessageToSend(it.id)
-                            chatDao.markConferenceAsRead(it.conferenceId)
                         }
                     }
 
@@ -208,10 +207,7 @@ class ChatJob : Job() {
 
                 // Delete all messages we have correctly sent already.
                 for (i in 0..index) {
-                    get(i).let { (idToDelete, conferenceIdToMarkAsRead) ->
-                        chatDao.deleteMessageToSend(idToDelete)
-                        chatDao.markConferenceAsRead(conferenceIdToMarkAsRead)
-                    }
+                    chatDao.deleteMessageToSend(get(i).id)
                 }
 
                 throw ChatSendMessageException(ProxerException(ErrorType.SERVER,
