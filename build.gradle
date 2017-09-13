@@ -25,8 +25,8 @@ apply plugin: 'com.github.ben-manes.versions'
 apply plugin: 'com.novoda.android-command'
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+    compileSdkVersion project.ext.compileSdkVersion
+    buildToolsVersion project.ext.buildToolsVersion
 
     dexOptions {
         preDexLibraries !isCI()
@@ -39,10 +39,10 @@ android {
 
     defaultConfig {
         applicationId 'me.proxer.app'
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode rootProject.ext.appVersionMajor * 10000 + rootProject.ext.appVersionMinor * 1000 + rootProject.ext.appVersionPatch * 100
-        versionName "${rootProject.ext.appVersionMajor}.${rootProject.ext.appVersionMinor}.${rootProject.ext.appVersionPatch}"
+        minSdkVersion project.ext.minSdkVersion
+        targetSdkVersion project.ext.targetSdkVersion
+        versionCode project.ext.appVersionMajor * 10000 + project.ext.appVersionMinor * 1000 + project.ext.appVersionPatch * 100
+        versionName "${project.ext.appVersionMajor}.${project.ext.appVersionMinor}.${project.ext.appVersionPatch}"
 
         vectorDrawables.useSupportLibrary true
         resConfigs 'de'
@@ -120,19 +120,19 @@ repositories {
 }
 
 dependencies {
-    rootProject.ext.implementationDependencies.values().each { implementation it }
-    rootProject.ext.debugImplementationDependencies.values().each { debugImplementation it }
-    rootProject.ext.releaseImplementationDependencies.values().each { releaseImplementation it }
-    rootProject.ext.compileOnlyDependencies.values().each { compileOnly it }
-    rootProject.ext.kaptDependencies.values().each { kapt it }
+    project.ext.implementationDependencies.values().each { implementation it }
+    project.ext.debugImplementationDependencies.values().each { debugImplementation it }
+    project.ext.releaseImplementationDependencies.values().each { releaseImplementation it }
+    project.ext.compileOnlyDependencies.values().each { compileOnly it }
+    project.ext.kaptDependencies.values().each { kapt it }
 
-    rootProject.ext.transitiveImplementationDependencies.values().each {
+    project.ext.transitiveImplementationDependencies.values().each {
         implementation(it) {
             transitive = true
         }
     }
 
-    rootProject.ext.excludingImplementationDependencies.values().each { dependency ->
+    project.ext.excludingImplementationDependencies.values().each { dependency ->
         implementation(dependency.dependency) {
             dependency.exclusions.each {
                 exclude module: it
@@ -142,7 +142,7 @@ dependencies {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = rootProject.ext.gradleVersion
+    gradleVersion = project.ext.gradleVersion
 }
 
 detekt {
