@@ -34,6 +34,7 @@
     <string name="section_media_info">Info</string>
     <string name="section_comments">Kommentare</string>
     <string name="section_relations">Verbindungen</string>
+    <string name="section_recommendations">Empfehlungen</string>
 
     <string name="section_industry_info">Info</string>
     <string name="section_industry_projects">Projekte</string>
@@ -102,6 +103,7 @@
     <string name="error_no_data_chapters">Es sind (noch) keine Kapitel verfügbar</string>
     <string name="error_no_data_anime">Aktuell gibt es noch keine Streams</string>
     <string name="error_no_data_relations">Für dieses Werk gibt es keine Verbindungen</string>
+    <string name="error_no_data_recommendations">Für dieses Werk gibt es noch keine Empfehlungen</string>
     <string name="error_no_data_projects">Es gibt noch keine Projekte</string>
     <string name="error_no_data_comments">Es gibt noch keine Kommentare</string>
     <string name="error_no_data_user_media_list">Es gibt noch keine Einträge</string>

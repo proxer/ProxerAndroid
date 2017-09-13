@@ -14,6 +14,7 @@ import me.proxer.app.base.ImageTabsActivity
 import me.proxer.app.media.comment.CommentFragment
 import me.proxer.app.media.episode.EpisodeFragment
 import me.proxer.app.media.info.MediaInfoFragment
+import me.proxer.app.media.recommendation.RecommendationFragment
 import me.proxer.app.media.relation.RelationFragment
 import me.proxer.app.util.ActivityUtils
 import me.proxer.app.util.extension.toEpisodeAppString
@@ -37,6 +38,7 @@ class MediaActivity : ImageTabsActivity() {
         private const val EPISODES_SUB_SECTION = "episodes"
         private const val EPISODES_ALTERNATIVE_SUB_SECTION = "list"
         private const val RELATIONS_SUB_SECTION = "relation"
+        private const val RECOMMENDATIONS_SUB_SECTION = "recommendations"
 
         fun navigateTo(context: Activity, id: String, name: String? = null, category: Category? = null,
                        imageView: ImageView? = null) {
@@ -81,6 +83,7 @@ class MediaActivity : ImageTabsActivity() {
                 COMMENTS_SUB_SECTION -> 1
                 EPISODES_SUB_SECTION, EPISODES_ALTERNATIVE_SUB_SECTION -> 2
                 RELATIONS_SUB_SECTION -> 3
+                RECOMMENDATIONS_SUB_SECTION -> 4
                 else -> 0
             }
             else -> 0
@@ -120,10 +123,11 @@ class MediaActivity : ImageTabsActivity() {
             1 -> CommentFragment.newInstance()
             2 -> EpisodeFragment.newInstance()
             3 -> RelationFragment.newInstance()
-            else -> throw IllegalArgumentException("Unknown index passed")
+            4 -> RecommendationFragment.newInstance()
+            else -> throw IllegalArgumentException("Unknown index passed: $position")
         }
 
-        override fun getCount() = 4
+        override fun getCount() = 5
 
         @Suppress("LabeledExpression")
         override fun getPageTitle(position: Int): String = when (position) {
@@ -132,7 +136,8 @@ class MediaActivity : ImageTabsActivity() {
             2 -> category?.toEpisodeAppString(this@MediaActivity)
                     ?: getString(R.string.category_anime_episodes_title)
             3 -> getString(R.string.section_relations)
-            else -> throw IllegalArgumentException("Unknown index passed")
+            4 -> getString(R.string.section_recommendations)
+            else -> throw IllegalArgumentException("Unknown index passed: $position")
         }
 
         @Suppress("LabeledExpression")

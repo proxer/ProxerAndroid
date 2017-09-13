@@ -65,7 +65,7 @@ class UcpActivity : BaseActivity() {
             0 -> UcpOverviewFragment.newInstance()
             1 -> UcpTopTenFragment.newInstance()
             2 -> HistoryFragment.newInstance()
-            else -> throw IllegalArgumentException("Unknown index passed")
+            else -> throw IllegalArgumentException("Unknown index passed: $position")
         }
 
         override fun getCount() = 3
@@ -74,7 +74,7 @@ class UcpActivity : BaseActivity() {
             0 -> getString(R.string.section_ucp_overview)
             1 -> getString(R.string.section_ucp_top_ten)
             2 -> getString(R.string.section_ucp_history)
-            else -> throw IllegalArgumentException("Unknown index passed")
+            else -> throw IllegalArgumentException("Unknown index passed: $position")
         }
     }
 }

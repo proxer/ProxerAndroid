@@ -48,30 +48,28 @@ class NotificationJob : Job() {
         }
     }
 
-    override fun onRunJob(params: Params): Result {
-        return try {
-            val notificationInfo = when (StorageHelper.user != null) {
-                true -> api.notifications().notificationInfo().build().execute()
-                false -> null
-            }
+    override fun onRunJob(params: Params) = try {
+        val notificationInfo = when (StorageHelper.user != null) {
+            true -> api.notifications().notificationInfo().build().execute()
+            false -> null
+        }
 
-            if (PreferenceHelper.areNewsNotificationsEnabled(context)) {
-                fetchNews(context, notificationInfo)
-            }
+        if (PreferenceHelper.areNewsNotificationsEnabled(context)) {
+            fetchNews(context, notificationInfo)
+        }
 
-            if (PreferenceHelper.areAccountNotificationsEnabled(context) && notificationInfo != null) {
-                fetchAccountNotifications(context, notificationInfo)
-            }
+        if (PreferenceHelper.areAccountNotificationsEnabled(context) && notificationInfo != null) {
+            fetchAccountNotifications(context, notificationInfo)
+        }
 
-            Result.SUCCESS
-        } catch (error: Throwable) {
-            if (params.failureCount >= 1) {
-                AccountNotifications.showError(context, error)
+        Result.SUCCESS
+    } catch (error: Throwable) {
+        if (params.failureCount >= 1) {
+            AccountNotifications.showError(context, error)
 
-                Result.FAILURE
-            } else {
-                Result.RESCHEDULE
-            }
+            Result.FAILURE
+        } else {
+            Result.RESCHEDULE
         }
     }
 

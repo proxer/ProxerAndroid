@@ -164,7 +164,7 @@ class ProfileActivity : ImageTabsActivity() {
             2 -> ProfileMediaListFragment.newInstance(Category.ANIME)
             3 -> ProfileMediaListFragment.newInstance(Category.MANGA)
             4 -> ProfileCommentFragment.newInstance()
-            else -> throw IllegalArgumentException("Unknown index passed")
+            else -> throw IllegalArgumentException("Unknown index passed: $position")
         }
 
         override fun getCount() = 5
@@ -175,7 +175,7 @@ class ProfileActivity : ImageTabsActivity() {
             2 -> getString(R.string.section_user_media_list_anime)
             3 -> getString(R.string.section_user_media_list_manga)
             4 -> getString(R.string.section_user_comments)
-            else -> throw IllegalArgumentException("Unknown index passed")
+            else -> throw IllegalArgumentException("Unknown index passed: $position")
         }
     }
 }
