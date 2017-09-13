@@ -1,20 +1,8 @@
 import groovy.io.FileType
 
 buildscript {
+    apply from: 'gradle/versions.gradle'
     apply from: 'gradle/dependencies.gradle'
-
-    ext {
-        versionMajor = 0
-        versionMinor = 10
-        versionPatch = 0
-
-        minSdkVersion = 16
-        targetSdkVersion = 26
-        compileSdkVersion = 26
-        buildToolsVersion = '26.0.1'
-
-        gradleVersion = '4.2-rc-2'
-    }
 
     repositories {
         jcenter()
@@ -53,8 +41,8 @@ android {
         applicationId 'me.proxer.app'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode rootProject.ext.versionMajor * 10000 + rootProject.ext.versionMinor * 1000 + rootProject.ext.versionPatch * 100
-        versionName "${rootProject.ext.versionMajor}.${rootProject.ext.versionMinor}.${rootProject.ext.versionPatch}"
+        versionCode rootProject.ext.appVersionMajor * 10000 + rootProject.ext.appVersionMinor * 1000 + rootProject.ext.appVersionPatch * 100
+        versionName "${rootProject.ext.appVersionMajor}.${rootProject.ext.appVersionMinor}.${rootProject.ext.appVersionPatch}"
 
         vectorDrawables.useSupportLibrary true
         resConfigs 'de'
