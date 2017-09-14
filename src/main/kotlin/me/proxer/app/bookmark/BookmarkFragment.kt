@@ -128,8 +128,6 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun hideData() = Unit
-
     override fun showError(action: ErrorUtils.ErrorAction) {
         innerAdapter.clearAndNotifyRemoval()
 

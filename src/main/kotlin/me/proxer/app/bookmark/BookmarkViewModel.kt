@@ -43,15 +43,19 @@ class BookmarkViewModel(category: Category?) : PagedContentViewModel<Bookmark>()
         super.onCleared()
     }
 
-    override fun load() {
-        if (page == 0) {
-            data.value = null
+    override fun mergeNewDataWithExistingData(newData: List<Bookmark>, currentPage: Int): List<Bookmark> {
+        return data.value.let { existingData ->
+            when (existingData) {
+                null -> newData
+                else -> when (currentPage) {
+                    0 -> newData
+                    else -> existingData.filter { oldItem ->
+                        newData.find { newItem -> areItemsTheSame(oldItem, newItem) } == null
+                    } + newData
+                }
+            }
         }
-
-        super.load()
     }
-
-    override fun refresh() = reload()
 
     fun addItemToDelete(item: Bookmark) {
         deletionQueue.add(item)

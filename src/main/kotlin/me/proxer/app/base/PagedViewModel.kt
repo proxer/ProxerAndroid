@@ -24,21 +24,7 @@ abstract class PagedViewModel<T> : BaseViewModel<List<T>>() {
         dataDisposable?.dispose()
         dataDisposable = dataSingle
                 .doAfterSuccess { newData -> hasReachedEnd = newData.size < itemsOnPage }
-                .map { newData ->
-                    data.value.let { existingData ->
-                        when (existingData) {
-                            null -> newData
-                            else -> when (currentPage) {
-                                0 -> newData + existingData.filter { oldItem ->
-                                    newData.find { newItem -> areItemsTheSame(oldItem, newItem) } == null
-                                }
-                                else -> existingData.filter { oldItem ->
-                                    newData.find { newItem -> areItemsTheSame(oldItem, newItem) } == null
-                                } + newData
-                            }
-                        }
-                    }
-                }
+                .map { newData -> mergeNewDataWithExistingData(newData, currentPage) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
@@ -84,5 +70,21 @@ abstract class PagedViewModel<T> : BaseViewModel<List<T>>() {
     protected open fun areItemsTheSame(old: T, new: T) = when {
         old is ProxerIdItem && new is ProxerIdItem -> old.id == new.id
         else -> old == new
+    }
+
+    open protected fun mergeNewDataWithExistingData(newData: List<T>, currentPage: Int): List<T> {
+        return data.value.let { existingData ->
+            when (existingData) {
+                null -> newData
+                else -> when (currentPage) {
+                    0 -> newData + existingData.filter { oldItem ->
+                        newData.find { newItem -> areItemsTheSame(oldItem, newItem) } == null
+                    }
+                    else -> existingData.filter { oldItem ->
+                        newData.find { newItem -> areItemsTheSame(oldItem, newItem) } == null
+                    } + newData
+                }
+            }
+        }
     }
 }
