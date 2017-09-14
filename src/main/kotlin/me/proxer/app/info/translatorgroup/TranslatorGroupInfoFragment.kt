@@ -31,9 +31,7 @@ class TranslatorGroupInfoFragment : BaseContentFragment<TranslatorGroup>() {
         }
     }
 
-    override val viewModel: TranslatorGroupInfoViewModel by unsafeLazy {
-        TranslatorGroupInfoViewModelProvider.get(this, id)
-    }
+    override val viewModel by unsafeLazy { TranslatorGroupInfoViewModelProvider.get(this, id) }
 
     override val hostingActivity: TranslatorGroupActivity
         get() = activity as TranslatorGroupActivity

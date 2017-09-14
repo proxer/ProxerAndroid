@@ -45,7 +45,7 @@ class ChatFragment : PagedContentFragment<LocalMessage>() {
         }
     }
 
-    override val viewModel: ChatViewModel by unsafeLazy { ChatViewModelProvider.get(this, conference) }
+    override val viewModel by unsafeLazy { ChatViewModelProvider.get(this, conference) }
 
     override val emptyDataMessage = R.string.error_no_data_chat
     override val isSwipeToRefreshEnabled = false

@@ -46,7 +46,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
         }
     }
 
-    override val viewModel: AnimeViewModel by unsafeLazy { AnimeViewModelProvider.get(this, id, language, episode) }
+    override val viewModel by unsafeLazy { AnimeViewModelProvider.get(this, id, language, episode) }
 
     override val hostingActivity: AnimeActivity
         get() = activity as AnimeActivity

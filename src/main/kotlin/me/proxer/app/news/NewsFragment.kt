@@ -30,7 +30,7 @@ class NewsFragment : PagedContentFragment<NewsArticle>() {
 
     override val emptyDataMessage = R.string.error_no_data_news
 
-    override val viewModel: NewsViewModel by unsafeLazy { NewsViewModelProvider.get(this) }
+    override val viewModel by unsafeLazy { NewsViewModelProvider.get(this) }
 
     override val layoutManager by unsafeLazy {
         StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity), VERTICAL)

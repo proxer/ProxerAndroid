@@ -37,7 +37,7 @@ class NotificationFragment : BaseContentFragment<List<ProxerNotification>>() {
 
     override val isSwipeToRefreshEnabled = true
 
-    override val viewModel: NotificationViewModel by unsafeLazy { NotificationViewModelProvider.get(this) }
+    override val viewModel by unsafeLazy { NotificationViewModelProvider.get(this) }
 
     private var adapter by Delegates.notNull<NotificationAdapter>()
 

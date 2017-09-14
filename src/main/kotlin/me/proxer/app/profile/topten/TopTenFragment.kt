@@ -33,7 +33,7 @@ class TopTenFragment : BaseContentFragment<ZippedTopTenResult>() {
         }
     }
 
-    override val viewModel: TopTenViewModel by unsafeLazy { TopTenViewModelProvider.get(this, userId, username) }
+    override val viewModel by unsafeLazy { TopTenViewModelProvider.get(this, userId, username) }
 
     override val hostingActivity: ProfileActivity
         get() = activity as ProfileActivity

@@ -37,7 +37,7 @@ class CommentFragment : PagedContentFragment<Comment>() {
     override val isSwipeToRefreshEnabled = true
     override val pagingThreshold = 3
 
-    override val viewModel: CommentViewModel by unsafeLazy { CommentViewModelProvider.get(this, id, sortCriteria) }
+    override val viewModel by unsafeLazy { CommentViewModelProvider.get(this, id, sortCriteria) }
 
     override val hostingActivity: MediaActivity
         get() = activity as MediaActivity

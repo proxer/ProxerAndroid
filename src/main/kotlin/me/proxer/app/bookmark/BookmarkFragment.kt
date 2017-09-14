@@ -43,9 +43,7 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
 
     override val emptyDataMessage = R.string.error_no_data_bookmark
 
-    override val viewModel: BookmarkViewModel by unsafeLazy {
-        BookmarkViewModelProvider.get(this, category)
-    }
+    override val viewModel by unsafeLazy { BookmarkViewModelProvider.get(this, category) }
 
     override val layoutManager by unsafeLazy {
         StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity) + 1, VERTICAL)

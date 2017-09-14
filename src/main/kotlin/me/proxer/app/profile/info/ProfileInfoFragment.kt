@@ -32,9 +32,7 @@ class ProfileInfoFragment : BaseContentFragment<UserInfo>() {
     override val hostingActivity: ProfileActivity
         get() = activity as ProfileActivity
 
-    override val viewModel: ProfileInfoViewModel by unsafeLazy {
-        ProfileInfoViewModelProvider.get(this, userId, username)
-    }
+    override val viewModel by unsafeLazy { ProfileInfoViewModelProvider.get(this, userId, username) }
 
     private val userId: String?
         get() = hostingActivity.userId

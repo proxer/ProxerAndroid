@@ -72,7 +72,7 @@ abstract class PagedViewModel<T> : BaseViewModel<List<T>>() {
         else -> old == new
     }
 
-    open protected fun mergeNewDataWithExistingData(newData: List<T>, currentPage: Int): List<T> {
+    protected open fun mergeNewDataWithExistingData(newData: List<T>, currentPage: Int): List<T> {
         return data.value.let { existingData ->
             when (existingData) {
                 null -> newData

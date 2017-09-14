@@ -48,9 +48,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         }
     }
 
-    override val viewModel: MangaViewModel by unsafeLazy {
-        MangaViewModelProvider.get(this, id, language, episode)
-    }
+    override val viewModel by unsafeLazy { MangaViewModelProvider.get(this, id, language, episode) }
 
     override val hostingActivity: MangaActivity
         get() = activity as MangaActivity

@@ -43,7 +43,7 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
     override val hostingActivity: MediaActivity
         get() = activity as MediaActivity
 
-    override val viewModel: MediaInfoViewModel by unsafeLazy { MediaInfoViewModelProvider.get(this, id) }
+    override val viewModel by unsafeLazy { MediaInfoViewModelProvider.get(this, id) }
 
     private val id: String
         get() = hostingActivity.id

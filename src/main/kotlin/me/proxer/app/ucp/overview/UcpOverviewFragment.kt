@@ -33,7 +33,7 @@ class UcpOverviewFragment : BaseContentFragment<Int>() {
         }
     }
 
-    override val viewModel: UcpOverviewViewModel by unsafeLazy { UcpOverviewViewModelProvider.get(this) }
+    override val viewModel by unsafeLazy { UcpOverviewViewModelProvider.get(this) }
 
     private val profileLink: TextView by bindView(R.id.profileLink)
     private val username: TextView by bindView(R.id.username)

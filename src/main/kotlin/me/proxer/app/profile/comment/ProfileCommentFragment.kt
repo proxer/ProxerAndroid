@@ -34,9 +34,7 @@ class ProfileCommentFragment : PagedContentFragment<UserComment>() {
     override val isSwipeToRefreshEnabled = false
     override val pagingThreshold = 3
 
-    override val viewModel: ProfileCommentViewModel by unsafeLazy {
-        ProfileCommentViewModelProvider.get(this, userId, username, category)
-    }
+    override val viewModel by unsafeLazy { ProfileCommentViewModelProvider.get(this, userId, username, category) }
 
     override val hostingActivity: ProfileActivity
         get() = activity as ProfileActivity

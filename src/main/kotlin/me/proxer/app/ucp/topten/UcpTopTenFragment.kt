@@ -35,7 +35,7 @@ class UcpTopTenFragment : BaseContentFragment<ZippedTopTenResult>() {
         }
     }
 
-    override val viewModel: UcpTopTenViewModel by unsafeLazy { UcpTopTenViewModelProvider.get(this) }
+    override val viewModel by unsafeLazy { UcpTopTenViewModelProvider.get(this) }
 
     private var animeAdapter by Delegates.notNull<UcpTopTenAdapter>()
     private var mangaAdapter by Delegates.notNull<UcpTopTenAdapter>()

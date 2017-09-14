@@ -32,7 +32,7 @@ class IndustryInfoFragment : BaseContentFragment<Industry>() {
         }
     }
 
-    override val viewModel: IndustryInfoViewModel by unsafeLazy { IndustryInfoViewModelProvider.get(this, id) }
+    override val viewModel by unsafeLazy { IndustryInfoViewModelProvider.get(this, id) }
 
     override val hostingActivity: IndustryActivity
         get() = activity as IndustryActivity

@@ -28,9 +28,7 @@ class HistoryFragment : PagedContentFragment<UcpHistoryEntry>() {
     override val emptyDataMessage = R.string.error_no_data_history
     override val isSwipeToRefreshEnabled = false
 
-    override val viewModel: HistoryViewModel by unsafeLazy {
-        HistoryViewModelProvider.get(this)
-    }
+    override val viewModel by unsafeLazy { HistoryViewModelProvider.get(this) }
 
     override val layoutManager by lazy {
         StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity) + 1, StaggeredGridLayoutManager.VERTICAL)

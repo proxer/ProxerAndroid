@@ -49,9 +49,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
     override val isSwipeToRefreshEnabled = false
     override val emptyDataMessage = R.string.error_no_data_search
 
-    override val viewModel: MediaListViewModel by unsafeLazy {
-        MediaListViewModelProvider.get(this, sortCriteria, type, searchQuery)
-    }
+    override val viewModel by unsafeLazy { MediaListViewModelProvider.get(this, sortCriteria, type, searchQuery) }
 
     override val layoutManager by unsafeLazy {
         StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity) + 1, VERTICAL)

@@ -31,7 +31,7 @@ class RecommendationFragment : BaseContentFragment<List<Recommendation>>() {
         }
     }
 
-    override val viewModel: RecommendationViewModel by unsafeLazy { RecommendationViewModelProvider.get(this, id) }
+    override val viewModel by unsafeLazy { RecommendationViewModelProvider.get(this, id) }
 
     override val hostingActivity: MediaActivity
         get() = activity as MediaActivity

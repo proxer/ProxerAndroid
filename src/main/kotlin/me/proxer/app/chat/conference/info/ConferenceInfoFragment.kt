@@ -31,9 +31,7 @@ class ConferenceInfoFragment : BaseContentFragment<ConferenceInfo>() {
         }
     }
 
-    override val viewModel: ConferenceInfoViewModel by unsafeLazy {
-        ConferenceInfoViewModelProvider.get(this, id.toString())
-    }
+    override val viewModel by unsafeLazy { ConferenceInfoViewModelProvider.get(this, id.toString()) }
 
     override val hostingActivity: ConferenceInfoActivity
         get() = activity as ConferenceInfoActivity

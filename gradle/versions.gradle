@@ -70,7 +70,7 @@ ext {
     kotterknifeVersion = '1.0'
     jsr305Version = '3.0.2'
     javaxExtrasVersion = '0.1.0'
-    alfredVersion = 'v1.0.0-RC.3'
+    alfredVersion = 'nullability-SNAPSHOT'
 
     // Debugging
     customActivityOnCrashVersion = '2.1.0'

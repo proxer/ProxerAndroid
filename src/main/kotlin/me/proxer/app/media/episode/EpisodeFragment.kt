@@ -36,7 +36,7 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
 
     override val isSwipeToRefreshEnabled = false
 
-    override val viewModel: EpisodeViewModel by unsafeLazy { EpisodeViewModelProvider.get(this, id) }
+    override val viewModel by unsafeLazy { EpisodeViewModelProvider.get(this, id) }
 
     override val hostingActivity: MediaActivity
         get() = activity as MediaActivity

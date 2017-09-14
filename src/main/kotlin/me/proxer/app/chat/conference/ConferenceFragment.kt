@@ -34,7 +34,7 @@ class ConferenceFragment : BaseContentFragment<List<LocalConference>>() {
         }
     }
 
-    override val viewModel: ConferenceViewModel by unsafeLazy { ConferenceViewModelProvider.get(this) }
+    override val viewModel by unsafeLazy { ConferenceViewModelProvider.get(this) }
 
     private var adapter by Delegates.notNull<ConferenceAdapter>()
 

@@ -46,9 +46,7 @@ class LocalMangaFragment : BaseContentFragment<List<CompleteLocalMangaEntry>>() 
         }
     }
 
-    override val viewModel: LocalMangaViewModel by unsafeLazy {
-        LocalMangaViewModelProvider.get(this, searchQuery)
-    }
+    override val viewModel by unsafeLazy { LocalMangaViewModelProvider.get(this, searchQuery) }
 
     private var adapter by Delegates.notNull<LocalMangaAdapter>()
 

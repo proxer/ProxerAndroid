@@ -31,7 +31,7 @@ class RelationFragment : BaseContentFragment<List<Relation>>() {
         }
     }
 
-    override val viewModel: RelationViewModel by unsafeLazy { RelationViewModelProvider.get(this, id) }
+    override val viewModel by unsafeLazy { RelationViewModelProvider.get(this, id) }
 
     override val hostingActivity: MediaActivity
         get() = activity as MediaActivity

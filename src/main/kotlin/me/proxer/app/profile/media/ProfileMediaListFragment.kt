@@ -39,7 +39,7 @@ class ProfileMediaListFragment : PagedContentFragment<UserMediaListEntry>() {
     override val emptyDataMessage = R.string.error_no_data_user_media_list
     override val isSwipeToRefreshEnabled = false
 
-    override val viewModel: ProfileMediaListViewModel by unsafeLazy {
+    override val viewModel by unsafeLazy {
         ProfileMediaListViewModelProvider.get(this, userId, username, category, filter)
     }
 
