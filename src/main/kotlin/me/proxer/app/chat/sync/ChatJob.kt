@@ -11,6 +11,7 @@ import me.proxer.app.MainApplication.Companion.chatDao
 import me.proxer.app.MainApplication.Companion.chatDatabase
 import me.proxer.app.chat.ChatFragmentPingEvent
 import me.proxer.app.chat.LocalConference
+import me.proxer.app.chat.LocalMessage
 import me.proxer.app.chat.conference.ConferenceFragmentPingEvent
 import me.proxer.app.chat.sync.ChatJob.SynchronizationResult.*
 import me.proxer.app.exception.ChatException
@@ -115,33 +116,7 @@ class ChatJob : Job() {
         val synchronizationResult = conferenceId.let { conferenceId ->
             when (conferenceId) {
                 0L -> try {
-                    val deletedMessages = sendMessages()
-
-                    markConferencesAsRead(chatDao.getConferencesToMarkAsRead()
-                            .plus(deletedMessages.map { chatDao.findConference(it.conferenceId) })
-                            .distinct()
-                            .filterNotNull())
-
-                    val newConferencesAndMessages = fetchConferences().associate { conference ->
-                        fetchNewMessages(conference).let { (messages, isFullyLoaded) ->
-                            val isLocallyFullyLoaded = chatDao.findConference(conference.id.toLong())
-                                    ?.isFullyLoaded == true
-
-                            conference.toLocalConference(isLocallyFullyLoaded || isFullyLoaded) to
-                                    messages.map { it.toLocalMessage() }.asReversed()
-                        }
-                    }
-
-                    chatDatabase.runInTransaction {
-                        newConferencesAndMessages.let {
-                            chatDao.insertConferences(it.keys.toList())
-                            chatDao.insertMessages(it.values.flatten())
-                        }
-
-                        deletedMessages.forEach {
-                            chatDao.deleteMessageToSend(it.id)
-                        }
-                    }
+                    val newConferencesAndMessages = synchronize()
 
                     StorageHelper.areConferencesSynchronized = true
 
@@ -150,6 +125,12 @@ class ChatJob : Job() {
 
                         if (canShowNotification(context)) {
                             showNotification(context)
+                        }
+                    }
+
+                    newConferencesAndMessages.flatMap { it.value }.maxBy { it.date }?.date?.let { mostRecentDate ->
+                        if (mostRecentDate > StorageHelper.lastChatMessageDate) {
+                            StorageHelper.lastChatMessageDate = mostRecentDate
                         }
                     }
 
@@ -169,13 +150,11 @@ class ChatJob : Job() {
                     }
                 }
                 else -> try {
-                    val fetchedMessages = fetchMoreMessages(conferenceId)
+                    val fetchedMessages = loadMoreMessages(conferenceId)
 
-                    chatDatabase.runInTransaction {
-                        chatDao.insertMessages(fetchedMessages.map { it.toLocalMessage() })
-
-                        if (fetchedMessages.size < MESSAGES_ON_PAGE) {
-                            chatDao.markConferenceAsFullyLoaded(conferenceId)
+                    fetchedMessages.maxBy { it.date }?.date?.let { mostRecentDate ->
+                        if (mostRecentDate > StorageHelper.lastChatMessageDate) {
+                            StorageHelper.lastChatMessageDate = mostRecentDate
                         }
                     }
 
@@ -194,6 +173,52 @@ class ChatJob : Job() {
         reschedule(context, synchronizationResult)
 
         return Result.SUCCESS
+    }
+
+    private fun synchronize(): Map<LocalConference, List<LocalMessage>> {
+        val deletedMessages = sendMessages()
+
+        markConferencesAsRead(chatDao.getConferencesToMarkAsRead()
+                .plus(deletedMessages.map { chatDao.findConference(it.conferenceId) })
+                .distinct()
+                .filterNotNull())
+
+        val newConferencesAndMessages = fetchConferences().associate { conference ->
+            fetchNewMessages(conference).let { (messages, isFullyLoaded) ->
+                val isLocallyFullyLoaded = chatDao.findConference(conference.id.toLong())
+                        ?.isFullyLoaded == true
+
+                conference.toLocalConference(isLocallyFullyLoaded || isFullyLoaded) to
+                        messages.map { it.toLocalMessage() }.asReversed()
+            }
+        }
+
+        chatDatabase.runInTransaction {
+            newConferencesAndMessages.let {
+                chatDao.insertConferences(it.keys.toList())
+                chatDao.insertMessages(it.values.flatten())
+            }
+
+            deletedMessages.forEach {
+                chatDao.deleteMessageToSend(it.id)
+            }
+        }
+
+        return newConferencesAndMessages
+    }
+
+    private fun loadMoreMessages(conferenceId: Long): List<Message> {
+        val fetchedMessages = fetchMoreMessages(conferenceId)
+
+        chatDatabase.runInTransaction {
+            chatDao.insertMessages(fetchedMessages.map { it.toLocalMessage() })
+
+            if (fetchedMessages.size < MESSAGES_ON_PAGE) {
+                chatDao.markConferenceAsFullyLoaded(conferenceId)
+            }
+        }
+
+        return fetchedMessages
     }
 
     private fun sendMessages() = chatDao.getMessagesToSend().apply {

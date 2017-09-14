@@ -110,6 +110,10 @@ object ChatNotifications {
                     }
                 }
 
+        val shouldAlert = conferenceMap.keys
+                .map { it.date }
+                .maxBy { it }?.time ?: 0 > StorageHelper.lastChatMessageDate.time
+
         return NotificationCompat.Builder(context, CHAT_CHANNEL)
                 .setSmallIcon(R.drawable.ic_stat_proxer)
                 .setContentTitle(title)
@@ -118,7 +122,7 @@ object ChatNotifications {
                 .setContentIntent(TaskStackBuilder.create(context)
                         .addNextIntent(MainActivity.getSectionIntent(context, DrawerItem.CHAT))
                         .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT))
-                .setDefaults(Notification.DEFAULT_ALL)
+                .setDefaults(if (shouldAlert) Notification.DEFAULT_ALL else 0)
                 .setColor(ContextCompat.getColor(context, R.color.primary))
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)

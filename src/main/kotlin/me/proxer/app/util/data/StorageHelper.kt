@@ -20,6 +20,7 @@ object StorageHelper {
     private const val TWO_FACTOR_AUTHENTICATION = "two_factor_authentication"
     private const val LAST_NEWS_DATE = "last_news_date"
     private const val LAST_NOTIFICATIONS_DATE = "last_notifications_date"
+    private const val LAST_CHAT_MESSAGE_DATE = "last_chat_date"
     private const val CHAT_INTERVAL = "chat_interval"
     private const val CONFERENCES_SYNCHRONIZED = "conferences_synchronized"
 
@@ -66,6 +67,12 @@ object StorageHelper {
         get() = Date(Hawk.get(LAST_NOTIFICATIONS_DATE, 0L))
         set(value) {
             Hawk.put(LAST_NOTIFICATIONS_DATE, value.time)
+        }
+
+    var lastChatMessageDate: Date
+        get() = Date(Hawk.get(LAST_CHAT_MESSAGE_DATE, 0L))
+        set(value) {
+            Hawk.put(LAST_CHAT_MESSAGE_DATE, value.time)
         }
 
     val chatInterval: Long
