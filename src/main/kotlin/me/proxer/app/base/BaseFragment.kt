@@ -1,7 +1,7 @@
 package me.proxer.app.base
 
-import android.arch.lifecycle.LifecycleFragment
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import kotterknife.KotterKnife
 import me.proxer.app.MainApplication.Companion.refWatcher
 import me.proxer.app.util.extension.androidUri
@@ -15,7 +15,7 @@ import kotlin.properties.Delegates
  * @author Ruben Gees
  */
 @Suppress("UnnecessaryAbstractClass")
-abstract class BaseFragment : LifecycleFragment() {
+abstract class BaseFragment : Fragment() {
 
     protected open val hostingActivity: BaseActivity
         get() = activity as BaseActivity

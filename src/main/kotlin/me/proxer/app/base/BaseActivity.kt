@@ -1,7 +1,5 @@
 package me.proxer.app.base
 
-import android.arch.lifecycle.LifecycleRegistry
-import android.arch.lifecycle.LifecycleRegistryOwner
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import me.proxer.app.util.extension.androidUri
@@ -15,13 +13,12 @@ import kotlin.properties.Delegates
  * @author Ruben Gees
  */
 @Suppress("UnnecessaryAbstractClass")
-abstract class BaseActivity : AppCompatActivity(), LifecycleRegistryOwner {
+abstract class BaseActivity : AppCompatActivity() {
 
     private companion object {
         private const val STATE = "activity_state"
     }
 
-    private var lifecycleRegistry by Delegates.notNull<LifecycleRegistry>()
     private var customTabsHelper by Delegates.notNull<CustomTabsHelperFragment>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,11 +30,8 @@ abstract class BaseActivity : AppCompatActivity(), LifecycleRegistryOwner {
 
         super.onCreate(savedInstanceState)
 
-        lifecycleRegistry = LifecycleRegistry(this)
         customTabsHelper = CustomTabsHelperFragment.attachTo(this)
     }
-
-    override fun getLifecycle() = lifecycleRegistry
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)

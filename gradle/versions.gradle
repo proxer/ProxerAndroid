@@ -23,9 +23,9 @@ ext {
 
     // Frameworks and code only libraries
     ankoVersion = '0.10.1'
-    supportLibraryVersion = '26.0.2'
+    supportLibraryVersion = '26.1.0'
     supportPreferenceVersion = '1.2.7'
-    architectureComponentsVersion = '1.0.0-alpha9'
+    architectureComponentsVersion = '1.0.0-alpha9-1'
     androidJobVersion = '1.2.0-RC3'
     proxerLibVersion = 'ec9ad187f30f'
 
