@@ -70,15 +70,8 @@ class RecommendationAdapter : BaseAdapter<Recommendation, ViewHolder>() {
         internal val downvotesText: TextView by bindView(R.id.downvotesText)
 
         init {
-            upvotesImage.setImageDrawable(IconicsDrawable(upvotesImage.context, CommunityMaterial.Icon.cmd_thumb_up)
-                    .colorRes(R.color.icon)
-                    .sizeDp(32)
-                    .paddingDp(4))
-
-            downvotesImage.setImageDrawable(IconicsDrawable(upvotesImage.context, CommunityMaterial.Icon.cmd_thumb_down)
-                    .colorRes(R.color.icon)
-                    .sizeDp(32)
-                    .paddingDp(4))
+            upvotesImage.setImageDrawable(generateUpvotesImage())
+            downvotesImage.setImageDrawable(generateDownvotesImage())
 
             itemView.setOnClickListener {
                 withSafeAdapterPosition(this) {
@@ -114,11 +107,28 @@ class RecommendationAdapter : BaseAdapter<Recommendation, ViewHolder>() {
                 }
             }
 
+            when (item.userVote) {
+                true -> upvotesImage.setImageDrawable(generateUpvotesImage(true))
+                false -> downvotesImage.setImageDrawable(generateUpvotesImage(true))
+            }
+
             upvotesText.text = item.positiveVotes.toString()
             downvotesText.text = item.negativeVotes.toString()
 
             state.setImageDrawable(item.state.toAppDrawable(state.context))
             glide?.defaultLoad(image, ProxerUrls.entryImage(item.id))
         }
+
+        private fun generateUpvotesImage(userVoted: Boolean = false) = IconicsDrawable(upvotesImage.context)
+                .icon(CommunityMaterial.Icon.cmd_thumb_up)
+                .colorRes(if (userVoted) R.color.md_green_500 else R.color.icon)
+                .sizeDp(32)
+                .paddingDp(4)
+
+        private fun generateDownvotesImage(userVoted: Boolean = false) = IconicsDrawable(downvotesImage.context)
+                .icon(CommunityMaterial.Icon.cmd_thumb_down)
+                .colorRes(if (userVoted) R.color.md_red_500 else R.color.icon)
+                .sizeDp(32)
+                .paddingDp(4)
     }
 }
