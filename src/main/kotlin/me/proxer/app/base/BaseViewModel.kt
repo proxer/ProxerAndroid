@@ -38,7 +38,7 @@ abstract class BaseViewModel<T> : ViewModel() {
     init {
         disposables += Observable.merge(bus.register(LoginEvent::class.java), bus.register(LogoutEvent::class.java))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { if (isLoginRequired) reload() }
+                .subscribe { if (isLoginRequired || isLoginErrorPresent()) reload() }
 
         disposables += bus.register(AgeConfirmationEvent::class.java)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -101,4 +101,6 @@ abstract class BaseViewModel<T> : ViewModel() {
         if (isLoginRequired) Validators.validateLogin()
         if (isAgeConfirmationRequired) Validators.validateAgeConfirmation(globalContext)
     }
+
+    private fun isLoginErrorPresent()  = error.value?.message == R.string.error_invalid_token
 }
