@@ -146,6 +146,8 @@ task wrapper(type: Wrapper) {
 }
 
 detekt {
+    version = project.ext.detektPluginVersion
+
     profile('main') {
         config = "$projectDir/config/detekt/detekt.yml"
         output = "$buildDir/reports/detekt.xml"
