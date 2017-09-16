@@ -7,7 +7,7 @@ import android.arch.persistence.room.PrimaryKey
 import me.proxer.library.entity.messenger.Message
 import me.proxer.library.enums.Device
 import me.proxer.library.enums.MessageAction
-import java.util.*
+import java.util.Date
 
 /**
  * @author Ruben Gees

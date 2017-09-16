@@ -6,7 +6,11 @@ import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.view.ActionMode
 import android.support.v7.widget.LinearLayoutManager
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageButton
 import com.jakewharton.rxbinding2.view.clicks

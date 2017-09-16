@@ -6,7 +6,7 @@ import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.MainApplication.Companion.moshi
 import me.proxer.app.auth.LocalUser
 import java.lang.reflect.Type
-import java.util.*
+import java.util.Date
 
 /**
  * A helper class, giving access to the storage.

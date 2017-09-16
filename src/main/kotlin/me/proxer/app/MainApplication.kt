@@ -48,7 +48,7 @@ import me.proxer.library.api.ProxerApi
 import me.proxer.library.api.ProxerApi.Builder.LoggingStrategy
 import okhttp3.OkHttpClient
 import java.io.File
-import java.util.*
+import java.util.Date
 import kotlin.concurrent.write
 import kotlin.properties.Delegates
 

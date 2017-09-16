@@ -7,7 +7,7 @@ import android.content.Intent
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.util.data.StorageHelper
-import java.util.*
+import java.util.Date
 
 /**
  * @author Ruben Gees

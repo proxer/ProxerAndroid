@@ -7,7 +7,7 @@ import android.arch.persistence.room.PrimaryKey
 import me.proxer.library.entity.manga.Chapter
 import me.proxer.library.entity.manga.Page
 import me.proxer.library.enums.Language
-import java.util.*
+import java.util.Date
 
 /**
  * @author Ruben Gees

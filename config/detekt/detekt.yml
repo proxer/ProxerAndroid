@@ -26,8 +26,6 @@ complexity:
     threshold: 5
 
 style:
-  WildcardImport:
-    active: false
   SafeCast:
     active: false
   FunctionMaxLength:

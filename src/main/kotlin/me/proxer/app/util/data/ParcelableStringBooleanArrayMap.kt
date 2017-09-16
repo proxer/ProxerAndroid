@@ -3,7 +3,7 @@ package me.proxer.app.util.data
 import android.os.Parcel
 import android.os.Parcelable
 import android.util.SparseBooleanArray
-import java.util.*
+import java.util.LinkedHashMap
 
 /**
  * @author Ruben Gees

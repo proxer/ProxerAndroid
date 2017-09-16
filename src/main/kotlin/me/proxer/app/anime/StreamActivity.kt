@@ -9,7 +9,13 @@ import android.view.WindowManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.devbrackets.android.exomedia.listener.VideoControlsButtonListener
 import com.devbrackets.android.exomedia.listener.VideoControlsVisibilityListener
-import com.devbrackets.android.exomedia.ui.widget.VideoControls.*
+import com.devbrackets.android.exomedia.ui.widget.VideoControls.SYSTEM_UI_FLAG_FULLSCREEN
+import com.devbrackets.android.exomedia.ui.widget.VideoControls.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+import com.devbrackets.android.exomedia.ui.widget.VideoControls.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+import com.devbrackets.android.exomedia.ui.widget.VideoControls.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+import com.devbrackets.android.exomedia.ui.widget.VideoControls.SYSTEM_UI_FLAG_LAYOUT_STABLE
+import com.devbrackets.android.exomedia.ui.widget.VideoControls.SYSTEM_UI_FLAG_LOW_PROFILE
+import com.devbrackets.android.exomedia.ui.widget.VideoControls.SYSTEM_UI_FLAG_VISIBLE
 import com.devbrackets.android.exomedia.ui.widget.VideoView
 import com.jakewharton.rxbinding2.view.systemUiVisibilityChanges
 import com.mikepenz.community_material_typeface_library.CommunityMaterial

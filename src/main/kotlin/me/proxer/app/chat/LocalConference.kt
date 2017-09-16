@@ -5,7 +5,7 @@ import android.arch.persistence.room.PrimaryKey
 import android.os.Parcel
 import android.os.Parcelable
 import me.proxer.library.entity.messenger.Conference
-import java.util.*
+import java.util.Date
 
 /**
  * @author Ruben Gees

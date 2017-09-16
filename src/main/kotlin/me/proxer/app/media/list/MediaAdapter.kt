@@ -14,7 +14,11 @@ import kotterknife.bindView
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
-import me.proxer.app.util.extension.*
+import me.proxer.app.util.extension.defaultLoad
+import me.proxer.app.util.extension.getQuantityString
+import me.proxer.app.util.extension.toAppDrawable
+import me.proxer.app.util.extension.toAppString
+import me.proxer.app.util.extension.toGeneralLanguage
 import me.proxer.library.entity.list.MediaListEntry
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.Language

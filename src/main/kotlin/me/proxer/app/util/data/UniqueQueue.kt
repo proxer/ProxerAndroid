@@ -1,8 +1,6 @@
 package me.proxer.app.util.data
 
-import java.util.*
-import kotlin.NoSuchElementException
-import kotlin.collections.LinkedHashSet
+import java.util.Queue
 
 /**
  * @author Ruben Gees

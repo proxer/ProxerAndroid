@@ -1,9 +1,17 @@
 package me.proxer.app.util.converter
 
 import android.arch.persistence.room.TypeConverter
-import me.proxer.library.enums.*
+import me.proxer.library.enums.Category
+import me.proxer.library.enums.Device
+import me.proxer.library.enums.FskConstraint
+import me.proxer.library.enums.Genre
+import me.proxer.library.enums.Language
+import me.proxer.library.enums.License
+import me.proxer.library.enums.MediaState
+import me.proxer.library.enums.Medium
+import me.proxer.library.enums.MessageAction
 import me.proxer.library.util.ProxerUtils
-import java.util.*
+import java.util.Date
 
 /**
  * @author Ruben Gees

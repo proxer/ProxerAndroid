@@ -5,10 +5,16 @@ import android.support.v7.widget.AppCompatTextView
 import android.util.AttributeSet
 import android.util.SparseBooleanArray
 import android.view.View
-import android.view.View.MeasureSpec.*
+import android.view.View.MeasureSpec.AT_MOST
+import android.view.View.MeasureSpec.EXACTLY
+import android.view.View.MeasureSpec.UNSPECIFIED
+import android.view.View.MeasureSpec.getMode
+import android.view.View.MeasureSpec.getSize
+import android.view.View.MeasureSpec.makeMeasureSpec
 import android.widget.LinearLayout
 import org.jetbrains.anko.collections.forEachWithIndex
-import java.util.*
+import java.util.ArrayList
+import java.util.LinkedList
 import kotlin.properties.Delegates
 
 /**

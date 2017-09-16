@@ -1,8 +1,27 @@
 package me.proxer.app.ui.view.bbcode
 
-import me.proxer.app.ui.view.bbcode.BBTokenizer.BBTokenRule.*
-import me.proxer.app.ui.view.bbcode.BBTokenizer.BBTokenType.*
-import java.util.*
+import me.proxer.app.ui.view.bbcode.BBTokenizer.BBTokenRule.BoldTokenRule
+import me.proxer.app.ui.view.bbcode.BBTokenizer.BBTokenRule.CenterTokenRule
+import me.proxer.app.ui.view.bbcode.BBTokenizer.BBTokenRule.ColorTokenRule
+import me.proxer.app.ui.view.bbcode.BBTokenizer.BBTokenRule.ItalicTokenRule
+import me.proxer.app.ui.view.bbcode.BBTokenizer.BBTokenRule.LeftTokenRule
+import me.proxer.app.ui.view.bbcode.BBTokenizer.BBTokenRule.RightTokenRule
+import me.proxer.app.ui.view.bbcode.BBTokenizer.BBTokenRule.SizeTokenRule
+import me.proxer.app.ui.view.bbcode.BBTokenizer.BBTokenRule.SpoilerTokenRule
+import me.proxer.app.ui.view.bbcode.BBTokenizer.BBTokenRule.UnderlineTokenRule
+import me.proxer.app.ui.view.bbcode.BBTokenizer.BBTokenType.TOKEN_BOLD
+import me.proxer.app.ui.view.bbcode.BBTokenizer.BBTokenType.TOKEN_CENTER
+import me.proxer.app.ui.view.bbcode.BBTokenizer.BBTokenType.TOKEN_COLOR
+import me.proxer.app.ui.view.bbcode.BBTokenizer.BBTokenType.TOKEN_ITALIC
+import me.proxer.app.ui.view.bbcode.BBTokenizer.BBTokenType.TOKEN_LEFT
+import me.proxer.app.ui.view.bbcode.BBTokenizer.BBTokenType.TOKEN_RIGHT
+import me.proxer.app.ui.view.bbcode.BBTokenizer.BBTokenType.TOKEN_ROOT
+import me.proxer.app.ui.view.bbcode.BBTokenizer.BBTokenType.TOKEN_SIZE
+import me.proxer.app.ui.view.bbcode.BBTokenizer.BBTokenType.TOKEN_SPOILER
+import me.proxer.app.ui.view.bbcode.BBTokenizer.BBTokenType.TOKEN_TEXT
+import me.proxer.app.ui.view.bbcode.BBTokenizer.BBTokenType.TOKEN_UNDERLINE
+import java.util.ArrayList
+import java.util.Stack
 
 /**
  * @author Ruben Gees

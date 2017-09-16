@@ -12,8 +12,18 @@ import android.view.Gravity
 import me.proxer.app.ui.view.bbcode.BBElement.BBSpoilerElement
 import me.proxer.app.ui.view.bbcode.BBElement.BBTextElement
 import me.proxer.app.ui.view.bbcode.BBTokenizer.BBToken
-import me.proxer.app.ui.view.bbcode.BBTokenizer.BBTokenType.*
-import java.util.*
+import me.proxer.app.ui.view.bbcode.BBTokenizer.BBTokenType.TOKEN_BOLD
+import me.proxer.app.ui.view.bbcode.BBTokenizer.BBTokenType.TOKEN_CENTER
+import me.proxer.app.ui.view.bbcode.BBTokenizer.BBTokenType.TOKEN_COLOR
+import me.proxer.app.ui.view.bbcode.BBTokenizer.BBTokenType.TOKEN_ITALIC
+import me.proxer.app.ui.view.bbcode.BBTokenizer.BBTokenType.TOKEN_LEFT
+import me.proxer.app.ui.view.bbcode.BBTokenizer.BBTokenType.TOKEN_RIGHT
+import me.proxer.app.ui.view.bbcode.BBTokenizer.BBTokenType.TOKEN_ROOT
+import me.proxer.app.ui.view.bbcode.BBTokenizer.BBTokenType.TOKEN_SIZE
+import me.proxer.app.ui.view.bbcode.BBTokenizer.BBTokenType.TOKEN_SPOILER
+import me.proxer.app.ui.view.bbcode.BBTokenizer.BBTokenType.TOKEN_TEXT
+import me.proxer.app.ui.view.bbcode.BBTokenizer.BBTokenType.TOKEN_UNDERLINE
+import java.util.ArrayList
 
 /**
  * @author Ruben Gees

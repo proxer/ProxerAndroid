@@ -13,7 +13,9 @@ import me.proxer.app.chat.ChatFragmentPingEvent
 import me.proxer.app.chat.LocalConference
 import me.proxer.app.chat.LocalMessage
 import me.proxer.app.chat.conference.ConferenceFragmentPingEvent
-import me.proxer.app.chat.sync.ChatJob.SynchronizationResult.*
+import me.proxer.app.chat.sync.ChatJob.SynchronizationResult.CHANGES
+import me.proxer.app.chat.sync.ChatJob.SynchronizationResult.ERROR
+import me.proxer.app.chat.sync.ChatJob.SynchronizationResult.NO_CHANGES
 import me.proxer.app.exception.ChatException
 import me.proxer.app.exception.ChatMessageException
 import me.proxer.app.exception.ChatSendMessageException
@@ -28,7 +30,7 @@ import me.proxer.library.api.ProxerException.ErrorType
 import me.proxer.library.api.ProxerException.ServerErrorType
 import me.proxer.library.entity.messenger.Conference
 import me.proxer.library.entity.messenger.Message
-import java.util.*
+import java.util.LinkedHashSet
 
 /**
  * @author Ruben Gees

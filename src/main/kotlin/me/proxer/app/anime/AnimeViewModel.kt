@@ -16,7 +16,11 @@ import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.Validators
 import me.proxer.app.util.data.ResettingMutableLiveData
-import me.proxer.app.util.extension.*
+import me.proxer.app.util.extension.buildOptionalSingle
+import me.proxer.app.util.extension.buildPartialErrorSingle
+import me.proxer.app.util.extension.buildSingle
+import me.proxer.app.util.extension.toAnimeStreamInfo
+import me.proxer.app.util.extension.toMediaLanguage
 import me.proxer.library.api.Endpoint
 import me.proxer.library.entity.info.EntryCore
 import me.proxer.library.enums.AnimeLanguage

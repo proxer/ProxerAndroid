@@ -10,7 +10,7 @@ import me.proxer.app.util.converter.RoomJavaConverters
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.library.enums.Device
 import me.proxer.library.enums.MessageAction
-import java.util.*
+import java.util.Date
 
 /**
  * @author Ruben Gees

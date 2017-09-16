@@ -1,6 +1,6 @@
 package me.proxer.app.anime
 
-import java.util.*
+import java.util.Date
 
 /**
  * @author Ruben Gees
