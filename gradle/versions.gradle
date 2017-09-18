@@ -26,7 +26,7 @@ ext {
     supportLibraryVersion = '26.1.0'
     supportPreferenceVersion = '1.2.7'
     architectureComponentsVersion = '1.0.0-alpha9-1'
-    androidJobVersion = '1.2.0-RC3'
+    androidJobVersion = '1.2.0-RC4'
     proxerLibVersion = '805a392250'
 
     // RxJava
@@ -43,7 +43,7 @@ ext {
     iconicsVersion = '2.9.3'
     communityMaterialTypefaceVersion = '1.9.32.2'
     crossfaderVersion = '1.5.0'
-    materialAboutVersion = '2.2.1'
+    materialAboutVersion = '2.2.3'
     subsamplingScaleImageViewVersion = '3.6.0'
     tabLayoutHelperVersion = '0.9.0'
     materialDialogsVersion = '0.9.4.7'
@@ -70,10 +70,10 @@ ext {
     kotterknifeVersion = '1.0'
     jsr305Version = '3.0.2'
     javaxExtrasVersion = '0.1.0'
-    alfredVersion = 'nullability-SNAPSHOT'
+    alfredVersion = 'develop-SNAPSHOT'
 
     // Debugging
     customActivityOnCrashVersion = '2.1.0'
     strictModeCompatVersion = '26.0.2'
-    leakCanaryVersion = '1.5.2'
+    leakCanaryVersion = '1.5.3'
 }
