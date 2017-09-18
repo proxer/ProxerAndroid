@@ -14,7 +14,8 @@ jobs:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "gradle/dependencies.gradle" }}-{{ checksum  ".circleci/config.yml" }}
       - run:
           name: Run Build
-          command: ./gradlew build -Pkotlin.incremental=false --max-workers 1 --console=plain
+          command: ./gradlew build -Porg.gradle.parallel=false -Porg.gradle.daemon=false -Pkotlin.incremental=false
+                                   --max-workers 1 --console=plain
       - store_artifacts:
           path: build/reports
           destination: reports
