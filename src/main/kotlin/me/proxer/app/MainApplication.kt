@@ -132,6 +132,7 @@ class MainApplication : Application() {
                     ChatJob.cancel()
                     LocalMangaJob.cancelAll()
 
+                    StorageHelper.lastChatMessageDate = Date(0L)
                     StorageHelper.lastNotificationsDate = Date(0L)
                     StorageHelper.areConferencesSynchronized = false
                     StorageHelper.resetChatInterval()
