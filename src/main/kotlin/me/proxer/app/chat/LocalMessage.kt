@@ -12,11 +12,11 @@ import java.util.Date
 /**
  * @author Ruben Gees
  */
-@Entity(tableName = "messages", foreignKeys = [ForeignKey(
+@Entity(tableName = "messages", foreignKeys = arrayOf(ForeignKey(
         entity = LocalConference::class,
-        parentColumns = ["id"],
-        childColumns = ["conferenceId"]
-)], indices = [Index(value = "conferenceId")])
+        parentColumns = arrayOf("id"),
+        childColumns = arrayOf("conferenceId")
+)), indices = arrayOf(Index(value = "conferenceId")))
 data class LocalMessage(@PrimaryKey(autoGenerate = true) val id: Long, val conferenceId: Long, val userId: String,
                         val username: String, val message: String, val action: MessageAction, val date: Date,
                         val device: Device) {

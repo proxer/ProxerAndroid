@@ -9,11 +9,11 @@ import me.proxer.library.entity.manga.Page
 /**
  * @author Ruben Gees
  */
-@Entity(tableName = "pages", foreignKeys = [ForeignKey(
+@Entity(tableName = "pages", foreignKeys = arrayOf(ForeignKey(
         entity = LocalMangaChapter::class,
-        parentColumns = ["id"],
-        childColumns = ["chapterId"]
-)], indices = [Index(value = "chapterId")])
+        parentColumns = arrayOf("id"),
+        childColumns = arrayOf("chapterId")
+)), indices = arrayOf(Index(value = "chapterId")))
 data class LocalMangaPage(@PrimaryKey(autoGenerate = true) val id: Long = 0, val name: String,
                           val height: Int, val width: Int, val chapterId: Long) {
 

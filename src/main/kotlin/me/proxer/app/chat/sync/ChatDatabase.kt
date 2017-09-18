@@ -15,7 +15,7 @@ import java.util.Date
 /**
  * @author Ruben Gees
  */
-@Database(entities = [(LocalConference::class), (LocalMessage::class)], version = 1, exportSchema = false)
+@Database(entities = arrayOf(LocalConference::class, LocalMessage::class), version = 1, exportSchema = false)
 @TypeConverters(RoomConverters::class, RoomJavaConverters::class)
 abstract class ChatDatabase : RoomDatabase() {
 

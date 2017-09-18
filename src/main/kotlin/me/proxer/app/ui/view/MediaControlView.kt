@@ -40,7 +40,6 @@ class MediaControlView(context: Context?, attrs: AttributeSet?) : FrameLayout(co
                 bookmarkNext.text = value.bookmarkNext()
             }
         }
-        get() = field
 
     private val uploaderRow: ViewGroup by bindView(R.id.uploaderRow)
     private val translatorRow: ViewGroup by bindView(R.id.translatorRow)
