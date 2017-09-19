@@ -90,7 +90,7 @@ android {
     lintOptions {
         warningsAsErrors = true
 
-        lintConfig new File(project.rootDir, 'config/lint/lint.xml')
+        lintConfig new File(rootDir, 'config/lint/lint.xml')
     }
 
     packagingOptions {
@@ -142,7 +142,7 @@ dependencies {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = project.ext.gradleVersion
+    gradleVersion project.ext.gradleVersion
 }
 
 detekt {
@@ -150,7 +150,7 @@ detekt {
 
     profile('main') {
         config = "$projectDir/config/detekt/detekt.yml"
-        output = "$buildDir/reports/detekt.xml"
+        output = "$buildDir/reports/detekt"
         parallel = true
     }
 }
