@@ -264,6 +264,7 @@
     <string name="fragment_media_info_genres">Genres</string>
     <string name="fragment_media_info_translator_groups">Gruppen</string>
     <string name="fragment_media_info_license_title">Lizenz</string>
+    <string name="fragment_media_info_adaption_title">Adaption</string>
     <string name="fragment_media_info_industries">Industrie</string>
     <string name="fragment_media_info_season_title">Season</string>
     <string name="fragment_media_info_status_title">Status</string>

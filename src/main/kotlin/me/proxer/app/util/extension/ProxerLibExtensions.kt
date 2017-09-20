@@ -222,7 +222,7 @@ inline val LocalMangaPage.decodedName: String
     }
 
 fun EntryCore.toLocalEntryCore() = LocalEntryCore(id.toLong(), name, genres, fskConstraints, description, medium,
-        episodeAmount, state, ratingSum, ratingAmount, clicks, category, license)
+        episodeAmount, state, ratingSum, ratingAmount, clicks, category, license, adaptionInfo)
 
 fun Chapter.toLocalChapter(episode: Int, language: Language) = LocalMangaChapter(id.toLong(), episode, language,
         entryId.toLong(), title, uploaderId, uploaderName, date, scanGroupId, scanGroupName, server)

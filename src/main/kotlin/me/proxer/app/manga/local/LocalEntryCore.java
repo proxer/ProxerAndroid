@@ -1,5 +1,6 @@
 package me.proxer.app.manga.local;
 
+import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
@@ -7,6 +8,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
+import io.reactivex.annotations.NonNull;
+import me.proxer.library.entity.info.AdaptionInfo;
 import me.proxer.library.entity.info.EntryCore;
 import me.proxer.library.enums.Category;
 import me.proxer.library.enums.FskConstraint;
@@ -54,10 +57,15 @@ public class LocalEntryCore {
     @NotNull
     private final License license;
 
+    @Embedded(prefix = "adaption_")
+    @NotNull
+    private final AdaptionInfo adaptionInfo;
+
     public LocalEntryCore(long id, @NotNull String name, @NotNull Set<Genre> genres,
                           @NotNull Set<FskConstraint> fskConstraints, @NotNull String description,
                           @NotNull Medium medium, int episodeAmount, @NotNull MediaState state, int ratingSum,
-                          int ratingAmount, int clicks, @NotNull Category category, @NotNull License license) {
+                          int ratingAmount, int clicks, @NotNull Category category, @NotNull License license,
+                          @NonNull AdaptionInfo adaptionInfo) {
         this.id = id;
         this.name = name;
         this.genres = genres;
@@ -71,12 +79,13 @@ public class LocalEntryCore {
         this.clicks = clicks;
         this.category = category;
         this.license = license;
+        this.adaptionInfo = adaptionInfo;
     }
 
     @NotNull
     public EntryCore toNonLocalEntryCore() {
         return new EntryCore(String.valueOf(id), name, genres, fskConstraints, description, medium, episodeAmount,
-                state, ratingSum, ratingAmount, clicks, category, license);
+                state, ratingSum, ratingAmount, clicks, category, license, adaptionInfo);
     }
 
     public long getId() {
@@ -139,6 +148,11 @@ public class LocalEntryCore {
         return license;
     }
 
+    @NotNull
+    public AdaptionInfo getAdaptionInfo() {
+        return adaptionInfo;
+    }
+
     @SuppressWarnings("SimplifiableIfStatement")
     @Override
     public boolean equals(Object o) {
@@ -159,7 +173,8 @@ public class LocalEntryCore {
         if (medium != that.medium) return false;
         if (state != that.state) return false;
         if (category != that.category) return false;
-        return license == that.license;
+        if (license != that.license) return false;
+        return adaptionInfo.equals(that.adaptionInfo);
     }
 
     @Override
@@ -177,6 +192,7 @@ public class LocalEntryCore {
         result = 31 * result + clicks;
         result = 31 * result + category.hashCode();
         result = 31 * result + license.hashCode();
+        result = 31 * result + adaptionInfo.hashCode();
         return result;
     }
 }

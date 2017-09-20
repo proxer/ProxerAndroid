@@ -4,6 +4,7 @@ import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +29,7 @@ import me.proxer.app.util.extension.snackbar
 import me.proxer.app.util.extension.toAppDrawable
 import me.proxer.app.util.extension.toAppString
 import me.proxer.app.util.extension.toAppStringDescription
+import me.proxer.app.util.extension.toCategory
 import me.proxer.app.util.extension.toEndAppString
 import me.proxer.app.util.extension.toStartAppString
 import me.proxer.app.util.extension.toTypeAppString
@@ -116,15 +118,15 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.userInfoUpdateData.observe(this, Observer {
-            it?.let {
+            it.let {
                 snackbar(root, R.string.fragment_set_user_info_success)
             }
         })
 
         viewModel.userInfoUpdateError.observe(this, Observer {
-            it?.let {
+            it.let {
                 multilineSnackbar(root, getString(R.string.error_set_user_info, getString(it.message)),
-                        Snackbar.LENGTH_LONG, it.buttonMessage, it.buttonAction?.toClickListener(hostingActivity))
+                        Snackbar.LENGTH_LONG, it.buttonMessage, it.buttonAction.toClickListener(hostingActivity))
             }
         })
 
@@ -158,7 +160,7 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
                     showUnratedTags = !showUnratedTags
 
                     tags.removeAllViews()
-                    viewModel.data.value?.let { bindTags(it) }
+                    viewModel.data.value.let { bindTags(it) }
                 }
 
         spoilerTags.clicks()
@@ -167,7 +169,7 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
                     showSpoilerTags = !showSpoilerTags
 
                     tags.removeAllViews()
-                    viewModel.data.value?.let { bindTags(it) }
+                    viewModel.data.value.let { bindTags(it) }
                 }
 
         updateUnratedButton()
@@ -185,6 +187,7 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
         bindSeasons(data)
         bindStatus(data)
         bindLicense(data)
+        bindAdaption(data)
         bindGenres(data)
         bindTags(data)
         bindFskConstraints(data)
@@ -238,6 +241,31 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
     private fun bindLicense(result: Entry) {
         infoTable.addView(constructInfoTableRow(context.getString(R.string.fragment_media_info_license_title),
                 result.license.toAppString(context)))
+    }
+
+    private fun bindAdaption(result: Entry) {
+        result.adaptionInfo.let { adaptionInfo ->
+            if (adaptionInfo.id != "0") {
+                val title = getString(R.string.fragment_media_info_adaption_title)
+                val content = "${adaptionInfo.name} (${adaptionInfo.medium.toAppString(context)})"
+
+                infoTable.addView(constructInfoTableRow(title, content).also { tableRow ->
+                    tableRow.findViewById<View>(R.id.content).also { contentView ->
+                        val selectableItemBackground = TypedValue().apply {
+                            context.theme.resolveAttribute(R.attr.selectableItemBackground, this, true)
+                        }
+
+                        contentView.setBackgroundResource(selectableItemBackground.resourceId)
+                        contentView.clicks()
+                                .bindToLifecycle(this)
+                                .subscribe {
+                                    MediaActivity.navigateTo(activity, adaptionInfo.id, adaptionInfo.name,
+                                            adaptionInfo.medium.toCategory())
+                                }
+                    }
+                })
+            }
+        }
     }
 
     private fun constructInfoTableRow(title: String, content: String, isSelectable: Boolean = false): View {
