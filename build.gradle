@@ -156,7 +156,7 @@ detekt {
 }
 
 tasks.matching { it.name.matches('compile.*Kotlin') }.all {
-    kotlinOptions.freeCompilerArgs = ['-Xjsr305-annotations=enable']
+    kotlinOptions.freeCompilerArgs = ['-Xjsr305=strict']
 }
 
 gradle.projectsEvaluated {
