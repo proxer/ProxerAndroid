@@ -86,7 +86,6 @@ ext {
     ]
 
     kaptDependencies = [
-            architectureLifecycleCompiler: "android.arch.lifecycle:compiler:$architectureComponentsVersion",
             roomCompiler                 : "android.arch.persistence.room:compiler:$architectureComponentsVersion",
             glideCompiler                : "com.github.bumptech.glide:compiler:$glideVersion",
             alfredCompiler               : "com.hadisatrio.Alfred:compiler:$alfredVersion",

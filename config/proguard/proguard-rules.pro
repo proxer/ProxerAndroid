@@ -1,5 +1,5 @@
 -optimizations !field/*,!class/merging/*
--optimizationpasses 10
+-optimizationpasses 1
 -allowaccessmodification
 -dontpreverify
 
@@ -83,10 +83,6 @@
 -assumenosideeffects class kotlin.jvm.internal.Intrinsics {
     static void checkParameterIsNotNull(java.lang.Object, java.lang.String);
 }
-
-# Room
--dontwarn android.arch.util.paging.CountedDataSource
--dontwarn android.arch.persistence.room.paging.LimitOffsetDataSource
 
 # Glide
 -keep public class * extends com.bumptech.glide.module.AppGlideModule
