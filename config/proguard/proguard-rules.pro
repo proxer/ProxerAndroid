@@ -1,5 +1,5 @@
 -optimizations !field/*,!class/merging/*
--optimizationpasses 1
+-optimizationpasses 10
 -allowaccessmodification
 -dontpreverify
 
