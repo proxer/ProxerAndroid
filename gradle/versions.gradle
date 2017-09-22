@@ -14,7 +14,7 @@ ext {
 
     // Core plugins
     androidPluginVersion = '3.0.0-beta6'
-    kotlinVersion = '1.1.50-eap-28'
+    kotlinVersion = '1.1.50'
 
     // Utility plugins
     detektPluginVersion = '1.0.0.RC4-3'
