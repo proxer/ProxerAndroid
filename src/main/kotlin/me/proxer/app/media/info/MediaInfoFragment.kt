@@ -118,15 +118,15 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.userInfoUpdateData.observe(this, Observer {
-            it.let {
+            it?.let {
                 snackbar(root, R.string.fragment_set_user_info_success)
             }
         })
 
         viewModel.userInfoUpdateError.observe(this, Observer {
-            it.let {
+            it?.let {
                 multilineSnackbar(root, getString(R.string.error_set_user_info, getString(it.message)),
-                        Snackbar.LENGTH_LONG, it.buttonMessage, it.buttonAction.toClickListener(hostingActivity))
+                        Snackbar.LENGTH_LONG, it.buttonMessage, it.buttonAction?.toClickListener(hostingActivity))
             }
         })
 
@@ -160,7 +160,7 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
                     showUnratedTags = !showUnratedTags
 
                     tags.removeAllViews()
-                    viewModel.data.value.let { bindTags(it) }
+                    viewModel.data.value?.let { bindTags(it) }
                 }
 
         spoilerTags.clicks()
@@ -169,7 +169,7 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
                     showSpoilerTags = !showSpoilerTags
 
                     tags.removeAllViews()
-                    viewModel.data.value.let { bindTags(it) }
+                    viewModel.data.value?.let { bindTags(it) }
                 }
 
         updateUnratedButton()
@@ -247,7 +247,7 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
         result.adaptionInfo.let { adaptionInfo ->
             if (adaptionInfo.id != "0") {
                 val title = getString(R.string.fragment_media_info_adaption_title)
-                val content = "${adaptionInfo.name} (${adaptionInfo.medium.toAppString(context)})"
+                val content = "${adaptionInfo.name} (${adaptionInfo.medium?.toAppString(context)})"
 
                 infoTable.addView(constructInfoTableRow(title, content).also { tableRow ->
                     tableRow.findViewById<View>(R.id.content).also { contentView ->
@@ -260,7 +260,7 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
                                 .bindToLifecycle(this)
                                 .subscribe {
                                     MediaActivity.navigateTo(activity, adaptionInfo.id, adaptionInfo.name,
-                                            adaptionInfo.medium.toCategory())
+                                            adaptionInfo.medium?.toCategory())
                                 }
                     }
                 })
