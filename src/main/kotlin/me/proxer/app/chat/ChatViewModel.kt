@@ -9,7 +9,6 @@ import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.MainApplication.Companion.chatDao
-import me.proxer.app.MainApplication.Companion.chatDatabase
 import me.proxer.app.base.PagedViewModel
 import me.proxer.app.chat.sync.ChatErrorEvent
 import me.proxer.app.chat.sync.ChatJob
@@ -125,7 +124,7 @@ class ChatViewModel(initialConference: LocalConference) : PagedViewModel<LocalMe
 
     fun sendMessage(text: String) {
         disposables += Single
-                .fromCallable { chatDatabase.insertMessageToSend(text, safeConference.id) }
+                .fromCallable { chatDao.insertMessageToSend(text, safeConference.id) }
                 .doOnSuccess { if (!ChatJob.isRunning()) ChatJob.scheduleSynchronization() }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

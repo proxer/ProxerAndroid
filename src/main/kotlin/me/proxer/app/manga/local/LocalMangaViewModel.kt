@@ -14,7 +14,6 @@ import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.MainApplication.Companion.mangaDao
-import me.proxer.app.MainApplication.Companion.mangaDatabase
 import me.proxer.app.R
 import me.proxer.app.base.BaseViewModel
 import me.proxer.app.manga.MangaLocks
@@ -88,7 +87,7 @@ class LocalMangaViewModel(searchQuery: String?) : BaseViewModel<List<CompleteLoc
         deletionDisposable?.dispose()
         deletionDisposable = Completable
                 .fromAction {
-                    mangaDatabase.deleteChapterAndEntryIfEmpty(chapter)
+                    mangaDao.deleteChapterAndEntryIfEmpty(chapter)
 
                     MangaLocks.localLock.write {
                         File("${globalContext.filesDir}/manga/${chapter.entryId}/${chapter.id}").deleteRecursively()

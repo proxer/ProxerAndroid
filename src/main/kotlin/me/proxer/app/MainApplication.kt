@@ -137,8 +137,8 @@ class MainApplication : Application() {
                     StorageHelper.areConferencesSynchronized = false
                     StorageHelper.resetChatInterval()
 
-                    mangaDatabase.clear()
-                    chatDatabase.clear()
+                    mangaDao.clear()
+                    chatDao.clear()
 
                     MangaLocks.localLock.write {
                         File("${globalContext.filesDir}/manga").deleteRecursively()

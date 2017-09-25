@@ -8,7 +8,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.globalContext
-import me.proxer.app.MainApplication.Companion.mangaDatabase
+import me.proxer.app.MainApplication.Companion.mangaDao
 import me.proxer.app.manga.local.LocalMangaJob
 import java.io.File
 import kotlin.concurrent.write
@@ -36,7 +36,7 @@ class MangaCleanViewModel : ViewModel() {
                 .fromAction {
                     LocalMangaJob.cancelAll()
 
-                    mangaDatabase.clear()
+                    mangaDao.clear()
 
                     MangaLocks.localLock.write {
                         File("${globalContext.filesDir}/manga").deleteRecursively()

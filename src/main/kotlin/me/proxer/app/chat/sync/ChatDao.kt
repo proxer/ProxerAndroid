@@ -5,77 +5,119 @@ import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.OnConflictStrategy
 import android.arch.persistence.room.Query
+import android.arch.persistence.room.Transaction
 import me.proxer.app.chat.LocalConference
 import me.proxer.app.chat.LocalMessage
+import me.proxer.app.util.data.StorageHelper
+import me.proxer.library.enums.Device
+import me.proxer.library.enums.MessageAction
+import java.util.Date
 
 /**
  * @author Ruben Gees
  */
 @Dao
-interface ChatDao {
+abstract class ChatDao {
+
+    companion object {
+        private var nextMessageToSendId = 0L
+    }
+
+    @Transaction
+    open fun insertMessageToSend(text: String, conferenceId: Long): LocalMessage {
+        if (nextMessageToSendId >= 0) {
+            calculateNextMessageToSendId()
+        }
+
+        val user = StorageHelper.user ?: throw IllegalStateException("User cannot be null")
+        val message = LocalMessage(nextMessageToSendId, conferenceId, user.id, user.name, text,
+                MessageAction.NONE, Date(), Device.MOBILE)
+
+        insertMessage(message)
+        markConferenceAsRead(conferenceId)
+
+        nextMessageToSendId--
+
+        return message
+    }
+
+    @Transaction
+    open fun clear() {
+        clearMessages()
+        clearConferences()
+    }
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertConferences(conference: List<LocalConference>): List<Long>
+    abstract fun insertConferences(conference: List<LocalConference>): List<Long>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertMessages(messages: List<LocalMessage>): List<Long>
+    abstract fun insertMessages(messages: List<LocalMessage>): List<Long>
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    fun insertMessage(message: LocalMessage): Long
+    abstract fun insertMessage(message: LocalMessage): Long
 
     @Query("SELECT * FROM conferences ORDER BY date DESC")
-    fun getConferencesLiveData(): LiveData<List<LocalConference>?>
+    abstract fun getConferencesLiveData(): LiveData<List<LocalConference>?>
 
     @Query("SELECT * FROM conferences WHERE id = :id LIMIT 1")
-    fun getConferenceLiveData(id: Long): LiveData<LocalConference?>
+    abstract fun getConferenceLiveData(id: Long): LiveData<LocalConference?>
 
     @Query("SELECT * FROM conferences WHERE localIsRead = 0 AND isRead = 0 ORDER BY id DESC")
-    fun getUnreadConferences(): List<LocalConference>
+    abstract fun getUnreadConferences(): List<LocalConference>
 
     @Query("SELECT * FROM conferences WHERE localIsRead != 0 AND isRead = 0")
-    fun getConferencesToMarkAsRead(): List<LocalConference>
+    abstract fun getConferencesToMarkAsRead(): List<LocalConference>
 
     @Query("SELECT * FROM conferences WHERE id = :id LIMIT 1")
-    fun findConference(id: Long): LocalConference?
+    abstract fun findConference(id: Long): LocalConference?
 
     @Query("SELECT * FROM conferences WHERE topic = :username LIMIT 1")
-    fun findConferenceForUser(username: String): LocalConference?
+    abstract fun findConferenceForUser(username: String): LocalConference?
 
     @Query("SELECT * FROM (SELECT * FROM messages WHERE conferenceId = :conferenceId AND id < 0 ORDER BY id ASC) " +
             "UNION ALL " +
             "SELECT * FROM (SELECT * FROM messages WHERE conferenceId = :conferenceId AND id >= 0 ORDER BY id DESC)")
-    fun getMessagesLiveDataForConference(conferenceId: Long): LiveData<List<LocalMessage>>
+    abstract fun getMessagesLiveDataForConference(conferenceId: Long): LiveData<List<LocalMessage>>
 
     @Query("SELECT COUNT(*) FROM messages WHERE conferenceId = :conferenceId AND id = :lastReadMessageId")
-    fun getUnreadMessageAmountForConference(conferenceId: Long, lastReadMessageId: Long): Int
+    abstract fun getUnreadMessageAmountForConference(conferenceId: Long, lastReadMessageId: Long): Int
 
     @Query("SELECT * FROM messages WHERE conferenceId = :conferenceId AND id >= 0 ORDER BY id DESC LIMIT :amount")
-    fun getMostRecentMessagesForConference(conferenceId: Long, amount: Int): List<LocalMessage>
+    abstract fun getMostRecentMessagesForConference(conferenceId: Long, amount: Int): List<LocalMessage>
 
     @Query("SELECT * FROM messages WHERE conferenceId = :conferenceId AND id >= 0 ORDER BY id DESC LIMIT 1")
-    fun findMostRecentMessageForConference(conferenceId: Long): LocalMessage?
+    abstract fun findMostRecentMessageForConference(conferenceId: Long): LocalMessage?
 
     @Query("SELECT * FROM messages WHERE conferenceId = :conferenceId AND id >= 0 ORDER BY id ASC LIMIT 1")
-    fun findOldestMessageForConference(conferenceId: Long): LocalMessage?
+    abstract fun findOldestMessageForConference(conferenceId: Long): LocalMessage?
 
     @Query("SELECT MIN(id) FROM messages")
-    fun findLowestMessageId(): Long?
+    abstract fun findLowestMessageId(): Long?
 
     @Query("SELECT * FROM messages WHERE id < 0 ORDER BY id DESC")
-    fun getMessagesToSend(): List<LocalMessage>
+    abstract fun getMessagesToSend(): List<LocalMessage>
 
     @Query("DELETE FROM messages WHERE id = :messageId")
-    fun deleteMessageToSend(messageId: Long)
+    abstract fun deleteMessageToSend(messageId: Long)
 
     @Query("UPDATE conferences SET localIsRead = 1 WHERE id = :conferenceId")
-    fun markConferenceAsRead(conferenceId: Long)
+    abstract fun markConferenceAsRead(conferenceId: Long)
 
     @Query("UPDATE conferences SET isFullyLoaded = 1 WHERE id = :conferenceId")
-    fun markConferenceAsFullyLoaded(conferenceId: Long)
+    abstract fun markConferenceAsFullyLoaded(conferenceId: Long)
 
     @Query("DELETE FROM conferences")
-    fun clearConferences()
+    abstract fun clearConferences()
 
     @Query("DELETE FROM messages")
-    fun clearMessages()
+    abstract fun clearMessages()
+
+    private fun calculateNextMessageToSendId() {
+        val candidate = findLowestMessageId() ?: -1L
+
+        nextMessageToSendId = when (candidate < 0) {
+            true -> candidate
+            false -> -1L
+        }
+    }
 }

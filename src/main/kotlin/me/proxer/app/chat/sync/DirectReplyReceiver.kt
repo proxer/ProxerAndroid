@@ -8,7 +8,6 @@ import android.support.v4.app.RemoteInput
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.chatDao
-import me.proxer.app.MainApplication.Companion.chatDatabase
 
 /**
  * @author Ruben Gees
@@ -33,7 +32,7 @@ class DirectReplyReceiver : BroadcastReceiver() {
 
         Completable
                 .fromAction {
-                    chatDatabase.insertMessageToSend(getMessageText(intent), conferenceId)
+                    chatDao.insertMessageToSend(getMessageText(intent), conferenceId)
 
                     if (chatDao.getUnreadConferences().isEmpty()) {
                         ChatNotifications.cancel(context)

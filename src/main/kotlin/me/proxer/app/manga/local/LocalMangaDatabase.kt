@@ -13,24 +13,6 @@ import me.proxer.app.util.converter.RoomJavaConverters
         exportSchema = false)
 @TypeConverters(RoomConverters::class, RoomJavaConverters::class)
 abstract class LocalMangaDatabase : RoomDatabase() {
+
     abstract fun dao(): LocalMangaDao
-
-    fun deleteChapterAndEntryIfEmpty(chapter: LocalMangaChapter) = dao().let { dao ->
-        runInTransaction {
-            dao.deletePagesOfChapter(chapter.id)
-            dao.deleteChapter(chapter.id)
-
-            if (dao.countChaptersForEntry(chapter.entryId) <= 0) {
-                dao.deleteEntry(chapter.entryId)
-            }
-        }
-    }
-
-    fun clear() = dao().let { dao ->
-        runInTransaction {
-            dao.clearPages()
-            dao.clearChapters()
-            dao.clearEntries()
-        }
-    }
 }
