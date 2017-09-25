@@ -11,6 +11,7 @@ import me.proxer.app.util.converter.RoomJavaConverters
 /**
  * @author Ruben Gees
  */
+@Suppress("UnnecessaryAbstractClass")
 @Database(entities = arrayOf(LocalConference::class, LocalMessage::class), version = 1, exportSchema = false)
 @TypeConverters(RoomConverters::class, RoomJavaConverters::class)
 abstract class ChatDatabase : RoomDatabase() {
