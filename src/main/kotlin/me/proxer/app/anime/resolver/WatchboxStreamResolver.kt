@@ -13,23 +13,24 @@ import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.toBodySingle
 import okhttp3.Request
+import kotlin.text.RegexOption.DOT_MATCHES_ALL
 
 /**
  * @author Ruben Gees
  */
-class ClipfishStreamResolver : StreamResolver() {
+class WatchboxStreamResolver : StreamResolver() {
 
     private companion object {
-        private const val CLIPFISH_PACKAGE = "com.rtli.clipfish"
-        private val regex = Regex("video/(\\d+)?")
+        private const val WATCHBOX_PACKAGE = "com.rtli.clipfish"
+        private val regex = Regex("\"al:android:url\" content=\"(.*?)?\"", DOT_MATCHES_ALL)
     }
 
-    override val name = "Clipfish"
+    override val name = "Watchbox"
 
     override fun resolve(id: String): Single<StreamResolutionResult> = Single
             .fromCallable {
-                if (!Utils.isPackageInstalled(globalContext.packageManager, CLIPFISH_PACKAGE)) {
-                    throw AppRequiredException(name, CLIPFISH_PACKAGE)
+                if (!Utils.isPackageInstalled(globalContext.packageManager, WATCHBOX_PACKAGE)) {
+                    throw AppRequiredException(name, WATCHBOX_PACKAGE)
                 }
             }
             .flatMap { api.anime().link(id).buildSingle() }
@@ -42,13 +43,12 @@ class ClipfishStreamResolver : StreamResolver() {
                         .toBodySingle()
             }
             .map {
-                val mediaId = regex.find(it)?.groupValues?.get(1) ?: throw StreamResolutionException()
+                val mediaUri = regex.find(it)?.groupValues?.get(1) ?: throw StreamResolutionException()
 
-                if (mediaId.isBlank()) {
+                if (mediaUri.isBlank()) {
                     throw StreamResolutionException()
                 }
 
-                StreamResolutionResult(Intent(Intent.ACTION_VIEW,
-                        Uri.parse("clipfish://video/$id?ref=proxer")))
+                StreamResolutionResult(Intent(Intent.ACTION_VIEW, Uri.parse(mediaUri)))
             }
 }
