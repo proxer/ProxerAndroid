@@ -4,11 +4,10 @@ import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Set;
 
 import io.reactivex.annotations.NonNull;
+import io.reactivex.annotations.Nullable;
 import me.proxer.library.entity.info.AdaptionInfo;
 import me.proxer.library.entity.info.EntryCore;
 import me.proxer.library.enums.Category;
@@ -27,44 +26,44 @@ public class LocalEntryCore {
     @PrimaryKey(autoGenerate = true)
     private final long id;
 
-    @NotNull
+    @NonNull
     private final String name;
 
-    @NotNull
+    @NonNull
     private final Set<Genre> genres;
 
-    @NotNull
+    @NonNull
     private final Set<FskConstraint> fskConstraints;
 
-    @NotNull
+    @NonNull
     private final String description;
 
-    @NotNull
+    @NonNull
     private final Medium medium;
 
     private final int episodeAmount;
 
-    @NotNull
+    @NonNull
     private final MediaState state;
 
     private final int ratingSum;
     private final int ratingAmount;
     private final int clicks;
 
-    @NotNull
+    @NonNull
     private final Category category;
 
-    @NotNull
+    @NonNull
     private final License license;
 
+    @NonNull
     @Embedded(prefix = "adaption_")
-    @NotNull
     private final AdaptionInfo adaptionInfo;
 
-    public LocalEntryCore(long id, @NotNull String name, @NotNull Set<Genre> genres,
-                          @NotNull Set<FskConstraint> fskConstraints, @NotNull String description,
-                          @NotNull Medium medium, int episodeAmount, @NotNull MediaState state, int ratingSum,
-                          int ratingAmount, int clicks, @NotNull Category category, @NotNull License license,
+    public LocalEntryCore(long id, @NonNull String name, @NonNull Set<Genre> genres,
+                          @NonNull Set<FskConstraint> fskConstraints, @NonNull String description,
+                          @NonNull Medium medium, int episodeAmount, @NonNull MediaState state, int ratingSum,
+                          int ratingAmount, int clicks, @NonNull Category category, @NonNull License license,
                           @NonNull AdaptionInfo adaptionInfo) {
         this.id = id;
         this.name = name;
@@ -82,7 +81,7 @@ public class LocalEntryCore {
         this.adaptionInfo = adaptionInfo;
     }
 
-    @NotNull
+    @NonNull
     public EntryCore toNonLocalEntryCore() {
         return new EntryCore(String.valueOf(id), name, genres, fskConstraints, description, medium, episodeAmount,
                 state, ratingSum, ratingAmount, clicks, category, license, adaptionInfo);
@@ -92,27 +91,27 @@ public class LocalEntryCore {
         return id;
     }
 
-    @NotNull
+    @NonNull
     public String getName() {
         return name;
     }
 
-    @NotNull
+    @NonNull
     public Set<Genre> getGenres() {
         return genres;
     }
 
-    @NotNull
+    @NonNull
     public Set<FskConstraint> getFskConstraints() {
         return fskConstraints;
     }
 
-    @NotNull
+    @NonNull
     public String getDescription() {
         return description;
     }
 
-    @NotNull
+    @NonNull
     public Medium getMedium() {
         return medium;
     }
@@ -121,7 +120,7 @@ public class LocalEntryCore {
         return episodeAmount;
     }
 
-    @NotNull
+    @NonNull
     public MediaState getState() {
         return state;
     }
@@ -138,24 +137,24 @@ public class LocalEntryCore {
         return clicks;
     }
 
-    @NotNull
+    @NonNull
     public Category getCategory() {
         return category;
     }
 
-    @NotNull
+    @NonNull
     public License getLicense() {
         return license;
     }
 
-    @NotNull
+    @NonNull
     public AdaptionInfo getAdaptionInfo() {
         return adaptionInfo;
     }
 
     @SuppressWarnings("SimplifiableIfStatement")
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
