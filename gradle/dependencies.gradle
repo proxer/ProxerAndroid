@@ -86,9 +86,9 @@ ext {
     ]
 
     kaptDependencies = [
-            roomCompiler                 : "android.arch.persistence.room:compiler:$architectureComponentsVersion",
-            glideCompiler                : "com.github.bumptech.glide:compiler:$glideVersion",
-            alfredCompiler               : "com.hadisatrio.Alfred:compiler:$alfredVersion",
+            roomCompiler  : "android.arch.persistence.room:compiler:$architectureComponentsVersion",
+            glideCompiler : "com.github.bumptech.glide:compiler:$glideVersion",
+            alfredCompiler: "com.hadisatrio.Alfred:compiler:$alfredVersion",
     ]
 
     transitiveImplementationDependencies = [
@@ -109,5 +109,9 @@ ext {
                     dependency: "com.orhanobut:hawk:$hawkVersion",
                     exclusions: ['gson'],
             ],
+    ]
+
+    ktlintDependencies = [
+            ktlint: "com.github.shyiko:ktlint:$ktlintVersion",
     ]
 }

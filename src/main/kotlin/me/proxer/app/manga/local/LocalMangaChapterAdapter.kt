@@ -32,7 +32,6 @@ internal class LocalMangaChapterAdapter : BaseAdapter<LocalMangaChapter, ViewHol
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(data[position])
 
-
     override fun getItemId(position: Int) = data[position].episode.toLong()
     override fun areItemsTheSame(old: LocalMangaChapter, new: LocalMangaChapter) = old.episode == new.episode
 

@@ -20,6 +20,7 @@ ext {
     detektPluginVersion = '1.0.0.RC4-3'
     gradleVersionsPluginVersion = '0.15.0'
     androidCommandPluginVersion = '1.7.1'
+    ktlintVersion = '0.9.2'
 
     // Frameworks and code only libraries
     ankoVersion = '0.10.1'

@@ -324,7 +324,6 @@ class CreateChatFragment : BaseFragment() {
         }
     }
 
-
     override fun onDestroyView() {
         participants.layoutManager = null
         participants.adapter = null

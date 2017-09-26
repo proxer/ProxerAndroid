@@ -102,5 +102,5 @@ abstract class BaseViewModel<T> : ViewModel() {
         if (isAgeConfirmationRequired) Validators.validateAgeConfirmation(globalContext)
     }
 
-    private fun isLoginErrorPresent()  = error.value?.message == R.string.error_invalid_token
+    private fun isLoginErrorPresent() = error.value?.message == R.string.error_invalid_token
 }

@@ -94,7 +94,7 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
     private val tags: FlexboxLayout by bindView(R.id.tags)
     private val unratedTags: Button by bindView(R.id.unratedTags)
     private val spoilerTags: Button by bindView(R.id.spoilerTags)
-    private val fskConstraintsTitle: TextView  by bindView(R.id.fskConstraintsTitle)
+    private val fskConstraintsTitle: TextView by bindView(R.id.fskConstraintsTitle)
     private val fskConstraints: FlexboxLayout by bindView(R.id.fskConstraints)
     private val translatorGroupsTitle: TextView by bindView(R.id.translatorGroupsTitle)
     private val translatorGroups: FlexboxLayout by bindView(R.id.translatorGroups)

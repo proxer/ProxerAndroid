@@ -20,8 +20,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
-apply plugin: 'io.gitlab.arturbosch.detekt'
 apply plugin: 'com.github.ben-manes.versions'
+apply plugin: 'io.gitlab.arturbosch.detekt'
 apply plugin: 'com.novoda.android-command'
 
 android {
@@ -111,6 +111,10 @@ android {
     }
 }
 
+configurations {
+    ktlint
+}
+
 repositories {
     jcenter()
     google()
@@ -125,6 +129,7 @@ dependencies {
     project.ext.releaseImplementationDependencies.values().each { releaseImplementation it }
     project.ext.compileOnlyDependencies.values().each { compileOnly it }
     project.ext.kaptDependencies.values().each { kapt it }
+    project.ext.ktlintDependencies.values().each { ktlint it }
 
     project.ext.transitiveImplementationDependencies.values().each {
         implementation(it) {
@@ -137,6 +142,33 @@ dependencies {
             dependency.exclusions.each {
                 exclude module: it
             }
+        }
+    }
+}
+
+task ktlint(type: Exec) {
+    group 'Verification'
+    description 'Analyze your kotlin code with ktlint.'
+
+    commandLine 'java', '-cp', configurations.ktlint.join(System.getProperty('path.separator')),
+            'com.github.shyiko.ktlint.Main', '--reporter=checkstyle', 'src/**/*.kt'
+
+    ignoreExitValue = true
+
+    doFirst {
+        File outputFile = new File(buildDir, 'reports/ktlint/ktlint-checkstyle.xml')
+
+        outputFile.parentFile.mkdirs()
+        outputFile.createNewFile()
+
+        standardOutput = new FileOutputStream(outputFile)
+    }
+
+    doLast {
+        standardOutput.close()
+
+        if (execResult.exitValue != 0) {
+            throw new GradleException("ktlint finished with non-zero exit value ${execResult.exitValue}")
         }
     }
 }
@@ -160,7 +192,8 @@ tasks.matching { it.name.matches('compile.*Kotlin') }.all {
 }
 
 gradle.projectsEvaluated {
-    check.dependsOn(detektCheck)
+    check.dependsOn detektCheck
+    check.dependsOn ktlint
 }
 
 static getResSrcDirs() {

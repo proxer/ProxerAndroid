@@ -115,7 +115,7 @@ class ChatAdapter(savedInstanceState: Bundle?, private val isGroup: Boolean)
                         if (next.userId == current.userId && next.action == MessageAction.NONE) {
                             MessageType.BOTTOM.type // The item has an item from the same user above but not beneath.
                         } else {
-                            MessageType.SINGLE.type  // The item stands alone.
+                            MessageType.SINGLE.type // The item stands alone.
                         }
                     }
                 }
