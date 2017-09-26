@@ -189,7 +189,6 @@ detekt {
 tasks.matching { it.name.matches('compile.*Kotlin') }.all {
     kotlinOptions {
         freeCompilerArgs = ['-Xjsr305=strict']
-        jvmTarget = project.ext.javaVersion
     }
 }
 
