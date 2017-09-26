@@ -33,8 +33,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility project.ext.javaVersion
+        targetCompatibility project.ext.javaVersion
     }
 
     defaultConfig {
@@ -127,7 +127,6 @@ dependencies {
     project.ext.implementationDependencies.values().each { implementation it }
     project.ext.debugImplementationDependencies.values().each { debugImplementation it }
     project.ext.releaseImplementationDependencies.values().each { releaseImplementation it }
-    project.ext.compileOnlyDependencies.values().each { compileOnly it }
     project.ext.kaptDependencies.values().each { kapt it }
     project.ext.ktlintDependencies.values().each { ktlint it }
 
@@ -188,7 +187,10 @@ detekt {
 }
 
 tasks.matching { it.name.matches('compile.*Kotlin') }.all {
-    kotlinOptions.freeCompilerArgs = ['-Xjsr305=strict']
+    kotlinOptions {
+        freeCompilerArgs = ['-Xjsr305=strict']
+        jvmTarget = project.ext.javaVersion
+    }
 }
 
 gradle.projectsEvaluated {

@@ -9,6 +9,9 @@ ext {
     compileSdkVersion = 26
     buildToolsVersion = '26.0.1'
 
+    // Java
+    javaVersion = JavaVersion.VERSION_1_8
+
     // Gradle
     gradleVersion = '4.2'
 
