@@ -23,9 +23,7 @@ class NewsNotificationDeletionReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
         Completable
-                .fromAction {
-                    StorageHelper.lastNewsDate = Date()
-                }
+                .fromAction { StorageHelper.lastNewsDate = Date() }
                 .subscribeOn(Schedulers.io())
                 .subscribe({}, {})
     }

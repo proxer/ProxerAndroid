@@ -154,7 +154,7 @@ class ChatJob : Job() {
                 else -> try {
                     val fetchedMessages = loadMoreMessages(conferenceId)
 
-                    fetchedMessages.maxBy { it.date }?.date?.let { mostRecentDate ->
+                    fetchedMessages.maxBy { it.date }?.date.let { mostRecentDate ->
                         if (mostRecentDate > StorageHelper.lastChatMessageDate) {
                             StorageHelper.lastChatMessageDate = mostRecentDate
                         }
@@ -174,7 +174,7 @@ class ChatJob : Job() {
 
         reschedule(context, synchronizationResult)
 
-        return Result.SUCCESS
+        return if (synchronizationResult != ERROR) Result.SUCCESS else Result.FAILURE
     }
 
     private fun synchronize(): Map<LocalConference, List<LocalMessage>> {
@@ -233,8 +233,10 @@ class ChatJob : Job() {
             if (result != null) {
 
                 // Delete all messages we have correctly sent already.
-                for (i in 0..index) {
-                    chatDao.deleteMessageToSend(get(i).id)
+                chatDatabase.runInTransaction {
+                    for (i in 0..index) {
+                        chatDao.deleteMessageToSend(get(i).id)
+                    }
                 }
 
                 throw ChatSendMessageException(ProxerException(ErrorType.SERVER,

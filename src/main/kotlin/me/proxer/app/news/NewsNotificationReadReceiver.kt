@@ -7,6 +7,8 @@ import android.content.Intent
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication
+import me.proxer.app.util.data.StorageHelper
+import java.util.Date
 
 /**
  * @author Ruben Gees
@@ -25,8 +27,11 @@ class NewsNotificationReadReceiver : BroadcastReceiver() {
                 .fromAction {
                     NewsNotifications.cancel(context)
 
+                    StorageHelper.lastNewsDate = Date()
+
                     MainApplication.api.notifications().news()
                             .markAsRead(true)
+                            .limit(0)
                             .build()
                             .execute()
                 }

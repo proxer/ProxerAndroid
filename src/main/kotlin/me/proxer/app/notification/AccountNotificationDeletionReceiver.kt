@@ -23,9 +23,7 @@ class AccountNotificationDeletionReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
         Completable
-                .fromAction {
-                    StorageHelper.lastNotificationsDate = Date()
-                }
+                .fromAction { StorageHelper.lastNotificationsDate = Date() }
                 .subscribeOn(Schedulers.io())
                 .subscribe({}, {})
     }

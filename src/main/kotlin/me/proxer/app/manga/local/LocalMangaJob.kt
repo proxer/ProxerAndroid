@@ -108,6 +108,7 @@ class LocalMangaJob : Job() {
         get() = ProxerUtils.toApiEnum(Language::class.java, params.extras.getString(LANGUAGE_EXTRA, "en"))
                 ?: throw IllegalArgumentException("No extras passed")
 
+    @Suppress("ReturnCount")
     override fun onRunJob(params: Params): Result {
         return try {
             if (StorageHelper.user == null) return Result.FAILURE
@@ -119,7 +120,7 @@ class LocalMangaJob : Job() {
                         ongoing = 1
                     }
                     ongoing <= 6 -> ongoing++
-                    else -> Result.RESCHEDULE
+                    else -> return Result.RESCHEDULE
                 }
             })
 
