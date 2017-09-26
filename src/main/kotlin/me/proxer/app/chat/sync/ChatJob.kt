@@ -154,7 +154,7 @@ class ChatJob : Job() {
                 else -> try {
                     val fetchedMessages = loadMoreMessages(conferenceId)
 
-                    fetchedMessages.maxBy { it.date }?.date.let { mostRecentDate ->
+                    fetchedMessages.maxBy { it.date }?.date?.let { mostRecentDate ->
                         if (mostRecentDate > StorageHelper.lastChatMessageDate) {
                             StorageHelper.lastChatMessageDate = mostRecentDate
                         }
