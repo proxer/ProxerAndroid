@@ -45,6 +45,8 @@ class HistoryAdapter : BaseAdapter<UcpHistoryEntry, ViewHolder>() {
         glide = null
     }
 
+    override fun areItemsTheSame(old: UcpHistoryEntry, new: UcpHistoryEntry) = old == new
+
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         internal val title: TextView by bindView(R.id.title)
