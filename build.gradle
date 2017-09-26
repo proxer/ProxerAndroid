@@ -146,7 +146,7 @@ dependencies {
     }
 }
 
-task ktlint(type: Exec) {
+task ktlintCheck(type: Exec) {
     group 'Verification'
     description 'Analyze your kotlin code with ktlint.'
 
@@ -193,7 +193,7 @@ tasks.matching { it.name.matches('compile.*Kotlin') }.all {
 
 gradle.projectsEvaluated {
     check.dependsOn detektCheck
-    check.dependsOn ktlint
+    check.dependsOn ktlintCheck
 }
 
 static getResSrcDirs() {
