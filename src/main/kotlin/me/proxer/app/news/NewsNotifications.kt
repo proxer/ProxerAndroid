@@ -9,6 +9,7 @@ import android.support.v4.content.ContextCompat
 import me.proxer.app.MainActivity
 import me.proxer.app.R
 import me.proxer.app.util.NotificationUtils.NEWS_CHANNEL
+import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.getQuantityString
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper.DrawerItem
 import me.proxer.library.entity.notifications.NewsArticle
@@ -69,19 +70,22 @@ object NewsNotifications {
             }
         }
 
+        val shouldAlert = news
+                .map { it.date }
+                .maxBy { it }.time ?: 0 > StorageHelper.lastNewsDate.time
+
         return builder.setAutoCancel(true)
                 .setSmallIcon(R.drawable.ic_stat_proxer)
                 .setContentTitle(title)
                 .setContentText(content)
-                .setDeleteIntent(NewsNotificationDeletionReceiver.getPendingIntent(context))
                 .setContentIntent(PendingIntent.getActivity(context, 0,
                         MainActivity.getSectionIntent(context, DrawerItem.NEWS),
                         PendingIntent.FLAG_UPDATE_CURRENT))
                 .addAction(R.drawable.ic_stat_check, context.getString(R.string.notification_news_read_action),
                         NewsNotificationReadReceiver.getPendingIntent(context))
+                .setDefaults(if (shouldAlert) Notification.DEFAULT_ALL else 0)
                 .setColor(ContextCompat.getColor(context, R.color.primary))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setOnlyAlertOnce(true)
                 .setNumber(news.size)
                 .setStyle(style)
                 .build()

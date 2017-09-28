@@ -12,6 +12,7 @@ import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.NotificationUtils
 import me.proxer.app.util.NotificationUtils.PROFILE_CHANNEL
 import me.proxer.app.util.compat.HtmlCompat
+import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.ProxerNotification
 import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.getQuantityString
@@ -83,14 +84,18 @@ object AccountNotifications {
             }
         }
 
+        val shouldAlert = notifications
+                .map { it.date }
+                .maxBy { it }.time ?: 0 > StorageHelper.lastNotificationsDate.time
+
         return builder.setAutoCancel(true)
                 .setSmallIcon(R.drawable.ic_stat_proxer)
                 .setContentTitle(title)
                 .setContentText(content)
                 .setContentIntent(intent)
-                .setDeleteIntent(AccountNotificationDeletionReceiver.getPendingIntent(context))
                 .addAction(R.drawable.ic_stat_check, context.getString(R.string.notification_account_read_action),
                         AccountNotificationReadReceiver.getPendingIntent(context))
+                .setDefaults(if (shouldAlert) Notification.DEFAULT_ALL else 0)
                 .setColor(ContextCompat.getColor(context, R.color.primary))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setCategory(NotificationCompat.CATEGORY_SOCIAL)

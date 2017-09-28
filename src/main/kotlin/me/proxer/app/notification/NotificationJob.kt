@@ -86,9 +86,11 @@ class NotificationJob : Job() {
                     .sortedByDescending { it.date }
         }
 
-        newNews.firstOrNull()?.date?.let {
+        newNews.firstOrNull()?.date.let {
             if (it != lastNewsDate && !bus.post(NewsNotificationEvent())) {
                 NewsNotifications.showOrUpdate(context, newNews)
+
+                StorageHelper.lastNewsDate = it
             }
         }
     }
@@ -105,9 +107,11 @@ class NotificationJob : Job() {
                     .safeExecute()
         }
 
-        newNotifications.firstOrNull()?.date?.let {
+        newNotifications.firstOrNull()?.date.let {
             if (it != lastNotificationsDate && !bus.post(AccountNotificationEvent())) {
                 AccountNotifications.showOrUpdate(context, newNotifications)
+
+                StorageHelper.lastNotificationsDate = it
             }
         }
     }
