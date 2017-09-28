@@ -72,7 +72,7 @@ object NewsNotifications {
 
         val shouldAlert = news
                 .map { it.date }
-                .maxBy { it }.time ?: 0 > StorageHelper.lastNewsDate.time
+                .maxBy { it }?.time ?: 0 > StorageHelper.lastNewsDate.time
 
         return builder.setAutoCancel(true)
                 .setSmallIcon(R.drawable.ic_stat_proxer)

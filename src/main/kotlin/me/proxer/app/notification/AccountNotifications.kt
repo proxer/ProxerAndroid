@@ -86,7 +86,7 @@ object AccountNotifications {
 
         val shouldAlert = notifications
                 .map { it.date }
-                .maxBy { it }.time ?: 0 > StorageHelper.lastNotificationsDate.time
+                .maxBy { it }?.time ?: 0 > StorageHelper.lastNotificationsDate.time
 
         return builder.setAutoCancel(true)
                 .setSmallIcon(R.drawable.ic_stat_proxer)
