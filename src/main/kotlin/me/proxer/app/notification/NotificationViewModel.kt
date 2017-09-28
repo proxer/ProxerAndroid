@@ -26,7 +26,7 @@ class NotificationViewModel : BaseContentViewModel<List<ProxerNotification>>() {
 
     override val dataSingle: Single<List<ProxerNotification>>
         get() = super.dataSingle.doOnSuccess {
-            it.firstOrNull()?.date.let {
+            it.firstOrNull()?.date?.let {
                 StorageHelper.lastNotificationsDate = it
             }
         }
