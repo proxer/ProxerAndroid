@@ -26,7 +26,7 @@ class NotificationViewModel : BaseContentViewModel<List<ProxerNotification>>() {
 
     override val dataSingle: Single<List<ProxerNotification>>
         get() = super.dataSingle.doOnSuccess {
-            it.firstOrNull()?.date?.let {
+            it.firstOrNull()?.date.let {
                 StorageHelper.lastNotificationsDate = it
             }
         }
@@ -44,6 +44,25 @@ class NotificationViewModel : BaseContentViewModel<List<ProxerNotification>>() {
 
     init {
         bus.register(AccountNotificationEvent::class.java).subscribe()
+    }
+
+    override fun load() {
+        dataDisposable?.dispose()
+        dataDisposable = dataSingle
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe {
+                    isLoading.value = true
+                    error.value = null
+                }
+                .doAfterTerminate { isLoading.value = false }
+                .subscribe({
+                    error.value = null
+                    data.value = it
+                }, {
+                    data.value = null
+                    error.value = ErrorUtils.handle(it)
+                })
     }
 
     override fun onCleared() {
@@ -75,7 +94,7 @@ class NotificationViewModel : BaseContentViewModel<List<ProxerNotification>>() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    data.value = null
+                    data.value = emptyList()
                 }, {
                     deletionError.value = ErrorUtils.handle(it)
                 })

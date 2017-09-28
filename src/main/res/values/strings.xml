@@ -232,6 +232,9 @@
     <string name="dialog_clean_manga_content">Sollen alle heruntergeladenen Kapitel und Seiten gelöscht werden?</string>
     <string name="dialog_clean_manga_positive">Alles löschen</string>
 
+    <string name="dialog_notification_deletion_confirmation_content">Sollen alle Benachrichtigungen gelöscht werden? Das kann nicht rückgängig gemacht werden.</string>
+    <string name="dialog_notification_deletion_confirmation_positive">Löschen</string>
+
     <string name="dialog_crash_title">Fehlerbericht</string>
     <string name="dialog_crash_neutral">Kopieren</string>
     <string name="dialog_crash_negative">Schließen</string>

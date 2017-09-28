@@ -102,7 +102,7 @@ class NotificationFragment : BaseContentFragment<List<ProxerNotification>>() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.delete_all -> if (!adapter.isEmpty()) {
-                viewModel.deleteAll()
+                NotificationDeletionConfirmationDialog.show(hostingActivity, this)
             }
         }
 
@@ -146,8 +146,6 @@ class NotificationFragment : BaseContentFragment<List<ProxerNotification>>() {
                     }
         }
     }
-
-    override fun hideData() = Unit
 
     override fun showError(action: ErrorUtils.ErrorAction) {
         adapter.clearAndNotifyRemoval()
