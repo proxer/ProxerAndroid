@@ -6,14 +6,13 @@ import android.arch.persistence.room.TypeConverters
 import me.proxer.app.chat.LocalConference
 import me.proxer.app.chat.LocalMessage
 import me.proxer.app.util.converter.RoomConverters
-import me.proxer.app.util.converter.RoomJavaConverters
 
 /**
  * @author Ruben Gees
  */
 @Suppress("UnnecessaryAbstractClass")
 @Database(entities = [(LocalConference::class), (LocalMessage::class)], version = 1, exportSchema = false)
-@TypeConverters(RoomConverters::class, RoomJavaConverters::class)
+@TypeConverters(RoomConverters::class)
 abstract class ChatDatabase : RoomDatabase() {
 
     abstract fun dao(): ChatDao
