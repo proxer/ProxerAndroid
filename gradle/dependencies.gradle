@@ -9,7 +9,7 @@ ext {
     ]
 
     implementationDependencies = [
-            kotlinStdlib                 : "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
+            kotlinStdlib                 : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion",
             anko                         : "org.jetbrains.anko:anko-commons:$ankoVersion",
             supportAppCompat             : "com.android.support:appcompat-v7:$supportLibraryVersion",
             supportV13                   : "com.android.support:support-v13:$supportLibraryVersion",

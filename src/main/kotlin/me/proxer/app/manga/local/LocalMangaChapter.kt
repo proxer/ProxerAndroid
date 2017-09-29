@@ -12,11 +12,11 @@ import java.util.Date
 /**
  * @author Ruben Gees
  */
-@Entity(tableName = "chapters", foreignKeys = arrayOf(ForeignKey(
+@Entity(tableName = "chapters", foreignKeys = [(ForeignKey(
         entity = LocalEntryCore::class,
-        parentColumns = arrayOf("id"),
-        childColumns = arrayOf("entryId")
-)), indices = arrayOf(Index(value = "entryId")))
+        parentColumns = ["id"],
+        childColumns = ["entryId"]
+))], indices = [(Index(value = ["entryId"]))])
 data class LocalMangaChapter(@PrimaryKey(autoGenerate = true) val id: Long = 0, val episode: Int,
                              val language: Language, val entryId: Long, val title: String, val uploaderId: String,
                              val uploaderName: String, val date: Date, val scanGroupId: String?,

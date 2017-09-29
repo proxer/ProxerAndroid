@@ -14,6 +14,7 @@ import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_DEFAUL
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import org.jetbrains.anko.applyRecursively
 
+@Suppress("unused")
 inline fun Activity.snackbar(
         root: View,
         message: CharSequence,

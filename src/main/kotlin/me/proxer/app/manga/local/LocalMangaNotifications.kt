@@ -6,7 +6,6 @@ import android.content.Intent
 import android.support.v4.app.NotificationCompat
 import android.support.v4.app.NotificationManagerCompat
 import android.support.v4.content.ContextCompat
-import android.util.Log
 import me.proxer.app.MainActivity
 import me.proxer.app.R
 import me.proxer.app.util.ErrorUtils
@@ -27,7 +26,6 @@ object LocalMangaNotifications {
     fun showOrUpdate(context: Context, maxProgress: Double, currentProgress: Double) {
         val roundedMaxProgress = Math.floor(maxProgress).toInt()
         val roundedCurrentProgress = Math.ceil(currentProgress).toInt()
-        Log.i("Progress", "max: $roundedMaxProgress, current: $roundedCurrentProgress")
 
         val isFinished = roundedCurrentProgress >= roundedMaxProgress
         val notificationBuilder = NotificationCompat.Builder(context, MANGA_CHANNEL)
