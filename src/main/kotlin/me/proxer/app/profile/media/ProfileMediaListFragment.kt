@@ -7,7 +7,8 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
-import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
+import com.uber.autodispose.android.lifecycle.AndroidLifecycle
+import com.uber.autodispose.kotlin.autoDisposeWith
 import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
@@ -76,7 +77,7 @@ class ProfileMediaListFragment : PagedContentFragment<UserMediaListEntry>() {
         innerAdapter = ProfileMediaAdapter()
 
         innerAdapter.clickSubject
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe { (view, item) ->
                     MediaActivity.navigateTo(activity, item.id, item.name, item.medium.toCategory(),
                             if (view.drawable != null) view else null)

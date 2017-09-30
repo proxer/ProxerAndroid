@@ -4,7 +4,8 @@ import android.os.Bundle
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.support.v7.widget.StaggeredGridLayoutManager.VERTICAL
 import android.view.View
-import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
+import com.uber.autodispose.android.lifecycle.AndroidLifecycle
+import com.uber.autodispose.kotlin.autoDisposeWith
 import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
@@ -44,15 +45,15 @@ class NewsFragment : PagedContentFragment<NewsArticle>() {
         innerAdapter = NewsAdapter(savedInstanceState)
 
         innerAdapter.clickSubject
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe { showPage(ProxerUrls.newsWeb(it.categoryId, it.threadId, Device.MOBILE)) }
 
         innerAdapter.expansionSubject
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe { setLikelyUrl(ProxerUrls.newsWeb(it.categoryId, it.threadId, Device.MOBILE)) }
 
         innerAdapter.imageClickSubject
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe { (view, article) ->
                     ImageDetailActivity.navigateTo(activity, ProxerUrls.newsImage(article.id, article.image), view)
                 }

@@ -10,7 +10,8 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
-import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
+import com.uber.autodispose.android.lifecycle.AndroidLifecycle
+import com.uber.autodispose.kotlin.autoDisposeWith
 import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.anime.AnimeActivity
@@ -65,7 +66,7 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
         innerAdapter = BookmarkAdapter()
 
         innerAdapter.clickSubject
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe {
                     when (it.category) {
                         Category.ANIME -> AnimeActivity.navigateTo(activity, it.entryId, it.episode,
@@ -76,14 +77,14 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
                 }
 
         innerAdapter.longClickSubject
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe { (view, bookmark) ->
                     MediaActivity.navigateTo(activity, bookmark.entryId, bookmark.name, bookmark.category,
                             if (view.drawable != null) view else null)
                 }
 
         innerAdapter.deleteClickSubject
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe {
                     viewModel.addItemToDelete(it)
                 }

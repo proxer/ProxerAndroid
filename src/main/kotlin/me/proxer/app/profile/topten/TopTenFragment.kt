@@ -6,7 +6,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
+import com.uber.autodispose.android.lifecycle.AndroidLifecycle
+import com.uber.autodispose.kotlin.autoDisposeWith
 import io.reactivex.Observable
 import kotterknife.bindView
 import me.proxer.app.GlideApp
@@ -62,7 +63,7 @@ class TopTenFragment : BaseContentFragment<ZippedTopTenResult>() {
         mangaAdapter = TopTenAdapter()
 
         Observable.merge(animeAdapter.clickSubject, mangaAdapter.clickSubject)
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe { (view, item) ->
                     MediaActivity.navigateTo(activity, item.id, item.name, item.category,
                             if (view.drawable != null) view else null)

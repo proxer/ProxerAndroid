@@ -19,7 +19,8 @@ import com.bumptech.glide.request.target.ImageViewTarget
 import com.h6ah4i.android.tablayouthelper.TabLayoutHelper
 import com.jakewharton.rxbinding2.support.design.widget.offsetChanges
 import com.jakewharton.rxbinding2.view.clicks
-import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
+import com.uber.autodispose.android.lifecycle.AndroidLifecycle
+import com.uber.autodispose.kotlin.autoDisposeWith
 import kotterknife.bindView
 import me.proxer.app.GlideApp
 import me.proxer.app.R
@@ -104,7 +105,7 @@ abstract class ImageTabsActivity : BaseActivity() {
         }
 
         headerImage.clicks()
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe {
                     val safeHeaderImageUrl = headerImageUrl
 
@@ -143,7 +144,7 @@ abstract class ImageTabsActivity : BaseActivity() {
         collapsingToolbar.isTitleEnabled = false
 
         appbar.offsetChanges()
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe {
                     isHeaderImageVisible = collapsingToolbar.height + it > collapsingToolbar.scrimVisibleHeightTrigger
                 }

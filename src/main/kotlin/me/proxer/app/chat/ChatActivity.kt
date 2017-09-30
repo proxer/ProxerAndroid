@@ -7,7 +7,8 @@ import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import com.jakewharton.rxbinding2.view.clicks
-import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
+import com.uber.autodispose.android.lifecycle.AndroidLifecycle
+import com.uber.autodispose.kotlin.autoDisposeWith
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseActivity
@@ -72,7 +73,7 @@ class ChatActivity : BaseActivity() {
         title = conference.topic
 
         toolbar.clicks()
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe {
                     when (conference.isGroup) {
                         true -> ConferenceInfoActivity.navigateTo(this, conference)

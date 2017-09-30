@@ -12,7 +12,8 @@ import android.view.ViewGroup
 import com.rubengees.introduction.IntroductionActivity.OPTION_RESULT
 import com.rubengees.introduction.IntroductionBuilder
 import com.rubengees.introduction.Option
-import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
+import com.uber.autodispose.android.lifecycle.AndroidLifecycle
+import com.uber.autodispose.kotlin.autoDisposeWith
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -77,17 +78,17 @@ class MainActivity : BaseActivity() {
 
         drawer = MaterialDrawerWrapper(this, toolbar, savedInstanceState).also {
             it.itemClickSubject
-                    .bindToLifecycle(this)
+                    .autoDisposeWith(AndroidLifecycle.from(this))
                     .subscribe { handleDrawerItemClick(it) }
 
             it.accountClickSubject
-                    .bindToLifecycle(this)
+                    .autoDisposeWith(AndroidLifecycle.from(this))
                     .subscribe { handleAccountItemClick(it) }
         }
 
         Observable.merge(bus.register(LoginEvent::class.java), bus.register(LogoutEvent::class.java))
                 .observeOn(AndroidSchedulers.mainThread())
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe { drawer.refreshHeader() }
 
         displayFirstPage(savedInstanceState)
@@ -136,7 +137,7 @@ class MainActivity : BaseActivity() {
                             PreferenceHelper.setAccountNotificationsEnabled(this, option.isActivated)
 
                             Completable.fromAction { NotificationJob.scheduleIfPossible(this) }
-                                    .bindToLifecycle<Unit>(this)
+                                    .autoDisposeWith(AndroidLifecycle.from(this))
                                     .subscribe()
                         }
                     }

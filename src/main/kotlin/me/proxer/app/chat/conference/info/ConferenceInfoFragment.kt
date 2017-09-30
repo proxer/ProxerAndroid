@@ -7,7 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
+import com.uber.autodispose.android.lifecycle.AndroidLifecycle
+import com.uber.autodispose.kotlin.autoDisposeWith
 import kotterknife.bindView
 import me.proxer.app.GlideApp
 import me.proxer.app.R
@@ -50,14 +51,14 @@ class ConferenceInfoFragment : BaseContentFragment<ConferenceInfo>() {
         adapter = ConferenceParticipantAdapter()
 
         adapter.participantClickSubject
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe { (view, item) ->
                     ProfileActivity.navigateTo(activity, item.id, item.username, item.image,
                             if (view.drawable != null && item.image.isNotBlank()) view else null)
                 }
 
         adapter.statusLinkClickSubject
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe { showPage(it) }
     }
 

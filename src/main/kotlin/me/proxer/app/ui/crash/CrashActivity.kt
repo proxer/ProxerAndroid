@@ -12,7 +12,8 @@ import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.TouchableMovementMethod
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
-import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
+import com.uber.autodispose.android.lifecycle.AndroidLifecycle
+import com.uber.autodispose.kotlin.autoDisposeWith
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseActivity
@@ -57,11 +58,11 @@ class CrashActivity : BaseActivity() {
                 .paddingDp(12))
 
         report.clicks()
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe { CrashDialog.show(this, errorDetails, stacktrace) }
 
         restart.clicks()
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe { CustomActivityOnCrash.restartApplication(this, config) }
 
         text.movementMethod = TouchableMovementMethod.getInstance()

@@ -6,7 +6,8 @@ import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
+import com.uber.autodispose.android.lifecycle.AndroidLifecycle
+import com.uber.autodispose.kotlin.autoDisposeWith
 import kotterknife.bindView
 import me.proxer.app.GlideApp
 import me.proxer.app.R
@@ -52,7 +53,7 @@ class RelationFragment : BaseContentFragment<List<Relation>>() {
         adapter = RelationAdapter()
 
         adapter.clickSubject
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe { (view, relation) ->
                     MediaActivity.navigateTo(activity, relation.id, relation.name, relation.category,
                             if (view.drawable != null) view else null)

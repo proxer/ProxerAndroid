@@ -15,7 +15,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
-import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
+import com.uber.autodispose.android.lifecycle.AndroidLifecycle
+import com.uber.autodispose.kotlin.autoDisposeWith
 import io.reactivex.Observable
 import kotterknife.bindView
 import me.proxer.app.R
@@ -135,23 +136,23 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         }
 
         Observable.merge(header.uploaderClickSubject, footer.uploaderClickSubject)
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe { ProfileActivity.navigateTo(activity, it.id, it.name) }
 
         Observable.merge(header.translatorGroupClickSubject, footer.translatorGroupClickSubject)
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe { TranslatorGroupActivity.navigateTo(activity, it.id, it.name) }
 
         Observable.merge(header.episodeSwitchSubject, footer.episodeSwitchSubject)
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe { episode = it }
 
         Observable.merge(header.bookmarkSetSubject, footer.bookmarkSetSubject)
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe { viewModel.bookmark(it) }
 
         Observable.merge(header.finishClickSubject, footer.finishClickSubject)
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe { viewModel.markAsFinished() }
 
         return inflater.inflate(R.layout.fragment_manga, container, false)

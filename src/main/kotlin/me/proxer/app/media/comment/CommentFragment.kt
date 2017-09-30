@@ -7,7 +7,8 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
-import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
+import com.uber.autodispose.android.lifecycle.AndroidLifecycle
+import com.uber.autodispose.kotlin.autoDisposeWith
 import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
@@ -66,7 +67,7 @@ class CommentFragment : PagedContentFragment<Comment>() {
         innerAdapter = CommentAdapter(savedInstanceState)
 
         innerAdapter.profileClickSubject
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe { (view, comment) ->
                     ProfileActivity.navigateTo(activity, comment.authorId, comment.author, comment.image,
                             if (view.drawable != null && comment.image.isNotBlank()) view else null)

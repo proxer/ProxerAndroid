@@ -4,7 +4,8 @@ import android.os.Bundle
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.support.v7.widget.StaggeredGridLayoutManager.VERTICAL
 import android.view.View
-import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
+import com.uber.autodispose.android.lifecycle.AndroidLifecycle
+import com.uber.autodispose.kotlin.autoDisposeWith
 import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
@@ -50,7 +51,7 @@ class TranslatorGroupProjectFragment : PagedContentFragment<TranslatorGroupProje
         innerAdapter = TranslatorGroupProjectAdapter()
 
         innerAdapter.clickSubject
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe { (view, translatorGroup) ->
                     MediaActivity.navigateTo(activity, translatorGroup.id, translatorGroup.name,
                             translatorGroup.medium.toCategory(), if (view.drawable != null) view else null)

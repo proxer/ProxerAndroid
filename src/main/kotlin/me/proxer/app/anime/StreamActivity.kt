@@ -20,7 +20,8 @@ import com.devbrackets.android.exomedia.ui.widget.VideoView
 import com.jakewharton.rxbinding2.view.systemUiVisibilityChanges
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
-import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
+import com.uber.autodispose.android.lifecycle.AndroidLifecycle
+import com.uber.autodispose.kotlin.autoDisposeWith
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseActivity
@@ -96,7 +97,7 @@ class StreamActivity : BaseActivity() {
                     View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
 
             it.systemUiVisibilityChanges()
-                    .bindToLifecycle(this)
+                    .autoDisposeWith(AndroidLifecycle.from(this))
                     .subscribe { visibility ->
                         toolbar.let {
                             if (visibility and View.SYSTEM_UI_FLAG_FULLSCREEN == 0) {

@@ -13,7 +13,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
-import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
+import com.uber.autodispose.android.lifecycle.AndroidLifecycle
+import com.uber.autodispose.kotlin.autoDisposeWith
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -87,7 +88,7 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
 
         recyclerView.endScrolls(pagingThreshold)
                 .throttleFirst(300, TimeUnit.MILLISECONDS)
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe { viewModel.loadIfPossible() }
     }
 
@@ -124,7 +125,7 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
             else -> Single.fromCallable { DiffUtil.calculateDiff(innerAdapter.provideDiffUtilCallback(data)) }
                     .subscribeOn(Schedulers.single())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .bindToLifecycle(this)
+                    .autoDisposeWith(AndroidLifecycle.from(this))
                     .subscribe { diff: DiffUtil.DiffResult ->
                         val wasAtFirstPosition = isAtTop()
 

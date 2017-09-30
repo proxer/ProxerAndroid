@@ -14,7 +14,8 @@ import android.widget.ProgressBar
 import com.afollestad.materialdialogs.MaterialDialog
 import com.jakewharton.rxbinding2.widget.editorActionEvents
 import com.jakewharton.rxbinding2.widget.textChanges
-import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
+import com.uber.autodispose.android.lifecycle.AndroidLifecycle
+import com.uber.autodispose.kotlin.autoDisposeWith
 import io.reactivex.functions.Predicate
 import kotterknife.bindView
 import me.proxer.app.MainApplication.Companion.bus
@@ -59,14 +60,14 @@ class LoginDialog : BaseDialog() {
         listOf(password, secret).forEach {
             it.editorActionEvents(Predicate { event -> event.actionId() == EditorInfo.IME_ACTION_GO })
                     .filter { event -> event.actionId() == EditorInfo.IME_ACTION_GO }
-                    .bindToLifecycle(this)
+                    .autoDisposeWith(AndroidLifecycle.from(this))
                     .subscribe { validateAndLogin() }
         }
 
         listOf(username to usernameContainer, password to passwordContainer).forEach { (input, container) ->
             input.textChanges()
                     .skipInitialValue()
-                    .bindToLifecycle(this)
+                    .autoDisposeWith(AndroidLifecycle.from(this))
                     .subscribe { setError(container, null) }
         }
 

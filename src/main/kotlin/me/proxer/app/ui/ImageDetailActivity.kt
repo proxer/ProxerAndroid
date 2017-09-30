@@ -8,7 +8,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import com.bumptech.glide.request.target.ImageViewTarget
 import com.jakewharton.rxbinding2.view.clicks
-import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
+import com.uber.autodispose.android.lifecycle.AndroidLifecycle
+import com.uber.autodispose.kotlin.autoDisposeWith
 import kotterknife.bindView
 import me.proxer.app.GlideApp
 import me.proxer.app.R
@@ -59,7 +60,7 @@ class ImageDetailActivity : BaseActivity() {
                 })
 
         root.clicks()
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe { supportFinishAfterTransition() }
     }
 }

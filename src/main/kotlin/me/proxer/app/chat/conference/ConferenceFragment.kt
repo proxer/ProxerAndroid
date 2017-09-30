@@ -10,7 +10,8 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
-import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
+import com.uber.autodispose.android.lifecycle.AndroidLifecycle
+import com.uber.autodispose.kotlin.autoDisposeWith
 import io.reactivex.disposables.Disposable
 import kotterknife.bindView
 import me.proxer.app.GlideApp
@@ -56,7 +57,7 @@ class ConferenceFragment : BaseContentFragment<List<LocalConference>>() {
         adapter = ConferenceAdapter()
 
         adapter.clickSubject
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe { ChatActivity.navigateTo(activity, it) }
 
         setHasOptionsMenu(true)

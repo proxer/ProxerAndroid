@@ -18,7 +18,8 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
-import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
+import com.uber.autodispose.android.lifecycle.AndroidLifecycle
+import com.uber.autodispose.kotlin.autoDisposeWith
 import com.vanniktech.emoji.EmojiEditText
 import com.vanniktech.emoji.EmojiPopup
 import io.reactivex.disposables.Disposable
@@ -133,11 +134,11 @@ class ChatFragment : PagedContentFragment<LocalMessage>() {
         innerAdapter = ChatAdapter(savedInstanceState, conference.isGroup)
 
         innerAdapter.titleClickSubject
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe { ProfileActivity.navigateTo(activity, it.userId, it.username) }
 
         innerAdapter.messageSelectionSubject
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe {
                     if (it > 0) {
                         when (actionMode) {
@@ -152,11 +153,11 @@ class ChatFragment : PagedContentFragment<LocalMessage>() {
                 }
 
         innerAdapter.linkClickSubject
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe { showPage(it) }
 
         innerAdapter.linkLongClickSubject
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe {
                     getString(R.string.clipboard_title).let { title ->
                         context.clipboardManager.primaryClip = ClipData.newPlainText(title, it.toString())
@@ -165,7 +166,7 @@ class ChatFragment : PagedContentFragment<LocalMessage>() {
                 }
 
         innerAdapter.mentionsClickSubject
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe { ProfileActivity.navigateTo(activity, username = it) }
 
         viewModel.conference.observe(this, Observer {
@@ -183,11 +184,11 @@ class ChatFragment : PagedContentFragment<LocalMessage>() {
         emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_emoticon))
 
         emojiButton.clicks()
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe { emojiPopup.toggle() }
 
         sendButton.clicks()
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe {
                     messageInput.text.toString().trim().let { text ->
                         if (text.isNotBlank()) {

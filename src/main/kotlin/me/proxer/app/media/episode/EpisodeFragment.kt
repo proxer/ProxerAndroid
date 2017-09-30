@@ -6,7 +6,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
+import com.uber.autodispose.android.lifecycle.AndroidLifecycle
+import com.uber.autodispose.kotlin.autoDisposeWith
 import kotterknife.bindView
 import me.proxer.app.GlideApp
 import me.proxer.app.R
@@ -63,7 +64,7 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
         adapter = EpisodeAdapter(savedInstanceState, id)
 
         adapter.languageClickSubject
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe { (language, episode) ->
                     when (episode.category) {
                         Category.ANIME -> AnimeActivity.navigateTo(activity, id, episode.number,

@@ -13,7 +13,8 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
-import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
+import com.uber.autodispose.android.lifecycle.AndroidLifecycle
+import com.uber.autodispose.kotlin.autoDisposeWith
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -57,11 +58,11 @@ class NotificationFragment : BaseContentFragment<List<ProxerNotification>>() {
         adapter = NotificationAdapter()
 
         adapter.clickSubject
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe { showPage(it.contentLink) }
 
         adapter.deleteClickSubject
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe { viewModel.addItemToDelete(it) }
 
         setHasOptionsMenu(true)
@@ -128,7 +129,7 @@ class NotificationFragment : BaseContentFragment<List<ProxerNotification>>() {
             Single.fromCallable { DiffUtil.calculateDiff(adapter.provideDiffUtilCallback(data)) }
                     .subscribeOn(Schedulers.single())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .bindToLifecycle(this)
+                    .autoDisposeWith(AndroidLifecycle.from(this))
                     .subscribe { diff: DiffUtil.DiffResult ->
                         val wasAtFirstPosition = isAtTop()
 

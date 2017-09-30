@@ -3,7 +3,8 @@ package me.proxer.app.ucp.history
 import android.os.Bundle
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
-import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
+import com.uber.autodispose.android.lifecycle.AndroidLifecycle
+import com.uber.autodispose.kotlin.autoDisposeWith
 import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
@@ -42,7 +43,7 @@ class HistoryFragment : PagedContentFragment<UcpHistoryEntry>() {
         innerAdapter = HistoryAdapter()
 
         innerAdapter.clickSubject
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe { (view, item) ->
                     MediaActivity.navigateTo(activity, item.id, item.name, item.category,
                             if (view.drawable != null) view else null)

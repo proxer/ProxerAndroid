@@ -22,7 +22,8 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
-import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
+import com.uber.autodispose.android.lifecycle.AndroidLifecycle
+import com.uber.autodispose.kotlin.autoDisposeWith
 import com.vanniktech.emoji.EmojiEditText
 import com.vanniktech.emoji.EmojiPopup
 import io.reactivex.Observable
@@ -123,7 +124,7 @@ class CreateChatFragment : BaseFragment() {
         adapter = EasyHeaderFooterAdapter(innerAdapter)
 
         innerAdapter.removalSubject
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe {
                     if (adapter.footer == null) {
                         adapter.footer = addParticipantFooter
@@ -190,11 +191,11 @@ class CreateChatFragment : BaseFragment() {
                 .colorRes(R.color.icon))
 
         addParticipantFooter.clicks()
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe { adapter.footer = addParticipantInputFooter }
 
         cancelParticipant.clicks()
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe {
                     participantInput.text.clear()
 
@@ -204,7 +205,7 @@ class CreateChatFragment : BaseFragment() {
                 }
 
         acceptParticipant.clicks()
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe {
                     if (validateAndAddUser()) {
                         messageInput.requestFocus()
@@ -213,14 +214,14 @@ class CreateChatFragment : BaseFragment() {
 
         participantInput.textChanges()
                 .skipInitialValue()
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe {
                     participantInputContainer.error = null
                     participantInputContainer.isErrorEnabled = false
                 }
 
         participantInput.editorActions(Predicate { it == EditorInfo.IME_ACTION_NEXT })
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe {
                     if (it == EditorInfo.IME_ACTION_NEXT) {
                         if (validateAndAddUser()) {
@@ -251,7 +252,7 @@ class CreateChatFragment : BaseFragment() {
         emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_emoticon))
 
         emojiButton.clicks()
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe { emojiPopup.toggle() }
 
         sendButton.clicks()
@@ -275,7 +276,7 @@ class CreateChatFragment : BaseFragment() {
                     }.subscribeOn(Schedulers.io())
                 }
                 .observeOn(AndroidSchedulers.mainThread())
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe({ (topic, firstMessage, participants) ->
                     when (isGroup) {
                         true -> viewModel.createGroup(topic, firstMessage, participants)
@@ -300,14 +301,14 @@ class CreateChatFragment : BaseFragment() {
         if (isGroup) {
             topicInput.textChanges()
                     .skipInitialValue()
-                    .bindToLifecycle(this)
+                    .autoDisposeWith(AndroidLifecycle.from(this))
                     .subscribe {
                         topicInputContainer.isErrorEnabled = false
                         topicInputContainer.error = null
                     }
 
             topicInput.editorActions(Predicate { it == EditorInfo.IME_ACTION_NEXT })
-                    .bindToLifecycle(this)
+                    .autoDisposeWith(AndroidLifecycle.from(this))
                     .subscribe {
                         if (it == EditorInfo.IME_ACTION_NEXT) {
                             if (innerAdapter.isEmpty()) {

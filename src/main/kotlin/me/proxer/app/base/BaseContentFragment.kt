@@ -1,6 +1,5 @@
 package me.proxer.app.base
 
-import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
@@ -10,8 +9,8 @@ import android.widget.Button
 import android.widget.TextView
 import com.jakewharton.rxbinding2.support.v4.widget.refreshes
 import com.jakewharton.rxbinding2.view.clicks
-import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
-import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindUntilEvent
+import com.uber.autodispose.android.lifecycle.AndroidLifecycle
+import com.uber.autodispose.kotlin.autoDisposeWith
 import kotterknife.bindView
 import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.R
@@ -53,7 +52,7 @@ abstract class BaseContentFragment<T> : BaseFragment() {
         progress.isEnabled = isSwipeToRefreshEnabled
 
         progress.refreshes()
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe { viewModel.refresh() }
 
         viewModel.error.observe(this, Observer {
@@ -114,7 +113,7 @@ abstract class BaseContentFragment<T> : BaseFragment() {
         }
 
         errorButton.clicks()
-                .bindUntilEvent(this, Lifecycle.Event.ON_DESTROY)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe {
                     when (action.message == R.string.error_captcha) {
                         true -> {

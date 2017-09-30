@@ -1,6 +1,5 @@
 package me.proxer.app.media.list
 
-import android.arch.lifecycle.Lifecycle
 import android.os.Bundle
 import android.support.transition.TransitionManager
 import android.support.v7.widget.SearchView
@@ -14,8 +13,8 @@ import android.view.View
 import com.jakewharton.rxbinding2.support.v7.widget.queryTextChangeEvents
 import com.jakewharton.rxbinding2.view.actionViewEvents
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
-import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindToLifecycle
-import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindUntilEvent
+import com.uber.autodispose.android.lifecycle.AndroidLifecycle
+import com.uber.autodispose.kotlin.autoDisposeWith
 import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
@@ -97,7 +96,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
         innerAdapter = MediaAdapter(category)
 
         innerAdapter.clickSubject
-                .bindToLifecycle(this)
+                .autoDisposeWith(AndroidLifecycle.from(this))
                 .subscribe { (view, entry) ->
                     MediaActivity.navigateTo(activity, entry.id, entry.name, entry.medium.toCategory(),
                             if (view.drawable != null) view else null)
@@ -148,7 +147,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
             val searchView = searchItem.actionView as SearchView
 
             searchItem.actionViewEvents()
-                    .bindUntilEvent(this, Lifecycle.Event.ON_DESTROY)
+                    .autoDisposeWith(AndroidLifecycle.from(this))
                     .subscribe {
                         if (it.menuItem().isActionViewExpanded) {
                             searchQuery = null
@@ -159,7 +158,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
 
             searchView.queryTextChangeEvents()
                     .skipInitialValue()
-                    .bindUntilEvent(this, Lifecycle.Event.ON_DESTROY)
+                    .autoDisposeWith(AndroidLifecycle.from(this))
                     .subscribe {
                         if (it.isSubmitted) {
                             searchQuery = it.queryText().toString()
