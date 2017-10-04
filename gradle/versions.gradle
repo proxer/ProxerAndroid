@@ -7,7 +7,6 @@ ext {
     minSdkVersion = 16
     targetSdkVersion = 26
     compileSdkVersion = 26
-    buildToolsVersion = '26.0.2'
 
     // Java
     javaVersion = JavaVersion.VERSION_1_8
@@ -16,7 +15,7 @@ ext {
     gradleVersion = '4.2.1'
 
     // Core plugins
-    androidPluginVersion = '3.0.0-beta6'
+    androidPluginVersion = '3.0.0-beta7'
     kotlinVersion = '1.2.0-beta-31'
 
     // Utility plugins
@@ -28,9 +27,9 @@ ext {
     // Frameworks and code only libraries
     ankoVersion = '0.10.1'
     supportLibraryVersion = '26.1.0'
-    supportPreferenceVersion = '1.3.0'
+    supportPreferenceVersion = '1.3.1'
     architectureComponentsVersion = '1.0.0-beta1'
-    androidJobVersion = '1.2.0-RC4'
+    androidJobVersion = '1.2.0-RC6'
     proxerLibVersion = '4.1.0'
 
     // RxJava
@@ -65,7 +64,7 @@ ext {
     // Utils
     threetenVersion = '1.0.5'
     hawkVersion = '2.0.1'
-    glideVersion = '4.1.1'
+    glideVersion = '4.2.0'
     okHttpVersion = '3.9.0'
     okioVersion = '1.13.0'
     linkBuilderVersion = '1.6.1'
