@@ -11,6 +11,9 @@
     <color name="icon">#7FFFFFFF</color>
     <color name="selected">#5C5C5C</color>
 
+    <color name="fastscroll_track">#1FFFFFFF</color>
+    <color name="fastscroll_thumb">#9E9E9E</color>
+
     <color name="card_background">@color/cardview_dark_background</color>
 
     <color name="material_drawer_background">#303030</color>
