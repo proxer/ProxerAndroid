@@ -6,12 +6,6 @@
         <ignore regexp=".*retrofit.*" />
     </issue>
 
-    <!-- Ignore accessibility issues we do not care about and can't ignore in the code. -->
-    <issue id="ClickableViewAccessibility">
-        <ignore regexp="LinkConsumableEmojiTextView.kt" />
-        <ignore regexp="MangaAdapter.kt" />
-    </issue>
-
     <!-- False positive with Kotlin. -->
     <issue id="UnusedResources" severity="ignore" />
 </lint>

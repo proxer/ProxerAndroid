@@ -54,10 +54,28 @@ class MangaAdapter : BaseAdapter<Page, ViewHolder>() {
 
         internal val image: SubsamplingScaleImageView by bindView(R.id.image)
 
+        private var smoothScollHack = { _: View?, event: MotionEvent ->
+            // Make scrolling smoother by hacking the SubsamplingScaleImageView to only
+            // receive touch events when zooming.
+            val shouldInterceptEvent = event.action == MotionEvent.ACTION_MOVE && event.pointerCount == 1 &&
+                    image.scale == image.minScale
+
+            if (shouldInterceptEvent) {
+                image.parent.requestDisallowInterceptTouchEvent(true)
+                itemView.onTouchEvent(event)
+                image.parent.requestDisallowInterceptTouchEvent(false)
+
+                true
+            } else {
+                false
+            }
+        }
+
         init {
             image.setDoubleTapZoomDuration(shortAnimationTime)
 
-            applySmoothScrollHack()
+            @Suppress("ClickableViewAccessibility")
+            image.setOnTouchListener(smoothScollHack)
         }
 
         fun bind(item: Page) {
@@ -82,23 +100,6 @@ class MangaAdapter : BaseAdapter<Page, ViewHolder>() {
                     }, {
                         // Ignore errors.
                     })
-        }
-
-        private fun applySmoothScrollHack() = image.setOnTouchListener { _, event ->
-            // Make scrolling smoother by hacking the SubsamplingScaleImageView to only
-            // receive touch events when zooming.
-            val shouldInterceptEvent = event.action == MotionEvent.ACTION_MOVE && event.pointerCount == 1 &&
-                    image.scale == image.minScale
-
-            if (shouldInterceptEvent) {
-                image.parent.requestDisallowInterceptTouchEvent(true)
-                itemView.onTouchEvent(event)
-                image.parent.requestDisallowInterceptTouchEvent(false)
-
-                true
-            } else {
-                false
-            }
         }
     }
 }

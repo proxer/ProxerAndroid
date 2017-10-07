@@ -1,5 +1,6 @@
 package me.proxer.app.ui.view
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
@@ -13,6 +14,7 @@ class LinkConsumableEmojiTextView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null
 ) : EmojiTextView(context, attrs) {
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         super.onTouchEvent(event)
 
