@@ -124,8 +124,7 @@
     @retrofit2.http.* <methods>;
 }
 
-# Work around weird Proguard bug.
--keep class okhttp3.internal.publicsuffix.PublicSuffixDatabase
+-keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
 
 # ProxerLib
 -keep enum me.proxer.library.** {
