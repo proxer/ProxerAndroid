@@ -7,13 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.uber.autodispose.android.lifecycle.AndroidLifecycle
-import com.uber.autodispose.kotlin.autoDisposeWith
 import kotterknife.bindView
 import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.profile.ProfileActivity
+import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.convertToDateTime
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.messenger.ConferenceInfo
@@ -51,14 +50,14 @@ class ConferenceInfoFragment : BaseContentFragment<ConferenceInfo>() {
         adapter = ConferenceParticipantAdapter()
 
         adapter.participantClickSubject
-                .autoDisposeWith(AndroidLifecycle.from(this))
+                .autoDispose(this)
                 .subscribe { (view, item) ->
                     ProfileActivity.navigateTo(activity, item.id, item.username, item.image,
                             if (view.drawable != null && item.image.isNotBlank()) view else null)
                 }
 
         adapter.statusLinkClickSubject
-                .autoDisposeWith(AndroidLifecycle.from(this))
+                .autoDispose(this)
                 .subscribe { showPage(it) }
     }
 

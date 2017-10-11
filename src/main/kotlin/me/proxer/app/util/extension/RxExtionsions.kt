@@ -2,12 +2,17 @@
 
 package me.proxer.app.util.extension
 
+import android.arch.lifecycle.Lifecycle
+import android.arch.lifecycle.LifecycleOwner
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
 import com.gojuno.koptional.Optional
 import com.gojuno.koptional.toOptional
 import com.jakewharton.rxbinding2.support.v7.widget.scrollEvents
+import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
+import com.uber.autodispose.kotlin.autoDisposeWith
+import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import me.proxer.app.exception.PartialException
@@ -19,6 +24,15 @@ import java.io.IOException
 /**
  * @author Ruben Gees
  */
+
+inline fun <T> Observable<T>.autoDispose(owner: LifecycleOwner) = this
+        .autoDisposeWith(AndroidLifecycleScopeProvider.from(owner, Lifecycle.Event.ON_DESTROY))
+
+inline fun <T> Single<T>.autoDispose(owner: LifecycleOwner) = this
+        .autoDisposeWith(AndroidLifecycleScopeProvider.from(owner, Lifecycle.Event.ON_DESTROY))
+
+inline fun Completable.autoDispose(owner: LifecycleOwner) = this
+        .autoDisposeWith(AndroidLifecycleScopeProvider.from(owner, Lifecycle.Event.ON_DESTROY))
 
 fun <T> Endpoint<T>.buildSingle(): Single<T> = Single.create { emitter ->
     val call = build()

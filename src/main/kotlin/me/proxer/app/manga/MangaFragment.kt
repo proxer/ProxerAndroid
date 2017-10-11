@@ -15,8 +15,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
-import com.uber.autodispose.android.lifecycle.AndroidLifecycle
-import com.uber.autodispose.kotlin.autoDisposeWith
 import io.reactivex.Observable
 import kotterknife.bindView
 import me.proxer.app.R
@@ -29,6 +27,7 @@ import me.proxer.app.ui.view.MediaControlView.SimpleTranslatorGroup
 import me.proxer.app.ui.view.MediaControlView.Uploader
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils
+import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.convertToDateTime
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.snackbar
@@ -136,23 +135,23 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         }
 
         Observable.merge(header.uploaderClickSubject, footer.uploaderClickSubject)
-                .autoDisposeWith(AndroidLifecycle.from(this))
+                .autoDispose(this)
                 .subscribe { ProfileActivity.navigateTo(activity, it.id, it.name) }
 
         Observable.merge(header.translatorGroupClickSubject, footer.translatorGroupClickSubject)
-                .autoDisposeWith(AndroidLifecycle.from(this))
+                .autoDispose(this)
                 .subscribe { TranslatorGroupActivity.navigateTo(activity, it.id, it.name) }
 
         Observable.merge(header.episodeSwitchSubject, footer.episodeSwitchSubject)
-                .autoDisposeWith(AndroidLifecycle.from(this))
+                .autoDispose(this)
                 .subscribe { episode = it }
 
         Observable.merge(header.bookmarkSetSubject, footer.bookmarkSetSubject)
-                .autoDisposeWith(AndroidLifecycle.from(this))
+                .autoDispose(this)
                 .subscribe { viewModel.bookmark(it) }
 
         Observable.merge(header.finishClickSubject, footer.finishClickSubject)
-                .autoDisposeWith(AndroidLifecycle.from(this))
+                .autoDispose(this)
                 .subscribe { viewModel.markAsFinished() }
 
         return inflater.inflate(R.layout.fragment_manga, container, false)

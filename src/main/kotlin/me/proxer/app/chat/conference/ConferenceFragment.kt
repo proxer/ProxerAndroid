@@ -10,8 +10,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
-import com.uber.autodispose.android.lifecycle.AndroidLifecycle
-import com.uber.autodispose.kotlin.autoDisposeWith
 import io.reactivex.disposables.Disposable
 import kotterknife.bindView
 import me.proxer.app.GlideApp
@@ -25,6 +23,7 @@ import me.proxer.app.chat.sync.ChatNotifications
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
+import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.unsafeLazy
 import org.jetbrains.anko.bundleOf
 import kotlin.properties.Delegates
@@ -57,7 +56,7 @@ class ConferenceFragment : BaseContentFragment<List<LocalConference>>() {
         adapter = ConferenceAdapter()
 
         adapter.clickSubject
-                .autoDisposeWith(AndroidLifecycle.from(this))
+                .autoDispose(this)
                 .subscribe { ChatActivity.navigateTo(activity, it) }
 
         setHasOptionsMenu(true)

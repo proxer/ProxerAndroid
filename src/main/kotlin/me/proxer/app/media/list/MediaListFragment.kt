@@ -13,13 +13,12 @@ import android.view.View
 import com.jakewharton.rxbinding2.support.v7.widget.queryTextChangeEvents
 import com.jakewharton.rxbinding2.view.actionViewEvents
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
-import com.uber.autodispose.android.lifecycle.AndroidLifecycle
-import com.uber.autodispose.kotlin.autoDisposeWith
 import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.DeviceUtils
+import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.toCategory
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.list.MediaListEntry
@@ -96,7 +95,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
         innerAdapter = MediaAdapter(category)
 
         innerAdapter.clickSubject
-                .autoDisposeWith(AndroidLifecycle.from(this))
+                .autoDispose(this)
                 .subscribe { (view, entry) ->
                     MediaActivity.navigateTo(activity, entry.id, entry.name, entry.medium.toCategory(),
                             if (view.drawable != null) view else null)
@@ -147,7 +146,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
             val searchView = searchItem.actionView as SearchView
 
             searchItem.actionViewEvents()
-                    .autoDisposeWith(AndroidLifecycle.from(this))
+                    .autoDispose(this)
                     .subscribe {
                         if (it.menuItem().isActionViewExpanded) {
                             searchQuery = null
@@ -158,7 +157,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
 
             searchView.queryTextChangeEvents()
                     .skipInitialValue()
-                    .autoDisposeWith(AndroidLifecycle.from(this))
+                    .autoDispose(this)
                     .subscribe {
                         if (it.isSubmitted) {
                             searchQuery = it.queryText().toString()

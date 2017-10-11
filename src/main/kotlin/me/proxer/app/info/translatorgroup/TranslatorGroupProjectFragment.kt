@@ -4,13 +4,12 @@ import android.os.Bundle
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.support.v7.widget.StaggeredGridLayoutManager.VERTICAL
 import android.view.View
-import com.uber.autodispose.android.lifecycle.AndroidLifecycle
-import com.uber.autodispose.kotlin.autoDisposeWith
 import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.DeviceUtils
+import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.toCategory
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.list.TranslatorGroupProject
@@ -51,7 +50,7 @@ class TranslatorGroupProjectFragment : PagedContentFragment<TranslatorGroupProje
         innerAdapter = TranslatorGroupProjectAdapter()
 
         innerAdapter.clickSubject
-                .autoDisposeWith(AndroidLifecycle.from(this))
+                .autoDispose(this)
                 .subscribe { (view, translatorGroup) ->
                     MediaActivity.navigateTo(activity, translatorGroup.id, translatorGroup.name,
                             translatorGroup.medium.toCategory(), if (view.drawable != null) view else null)

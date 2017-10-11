@@ -6,8 +6,6 @@ import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.uber.autodispose.android.lifecycle.AndroidLifecycle
-import com.uber.autodispose.kotlin.autoDisposeWith
 import kotterknife.bindView
 import me.proxer.app.GlideApp
 import me.proxer.app.R
@@ -16,6 +14,7 @@ import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
+import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.info.Recommendation
 import org.jetbrains.anko.bundleOf
@@ -53,7 +52,7 @@ class RecommendationFragment : BaseContentFragment<List<Recommendation>>() {
         adapter = RecommendationAdapter()
 
         adapter.clickSubject
-                .autoDisposeWith(AndroidLifecycle.from(this))
+                .autoDispose(this)
                 .subscribe { (view, recommendation) ->
                     MediaActivity.navigateTo(activity, recommendation.id, recommendation.name, recommendation.category,
                             if (view.drawable != null) view else null)

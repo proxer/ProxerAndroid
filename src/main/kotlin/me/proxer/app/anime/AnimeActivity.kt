@@ -9,12 +9,11 @@ import android.view.Menu
 import android.view.MenuItem
 import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
-import com.uber.autodispose.android.lifecycle.AndroidLifecycle
-import com.uber.autodispose.kotlin.autoDisposeWith
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.media.MediaActivity
+import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.library.enums.AnimeLanguage
 import me.proxer.library.enums.Category
@@ -141,7 +140,7 @@ class AnimeActivity : BaseActivity() {
     private fun setupToolbar() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toolbar.clicks()
-                .autoDisposeWith(AndroidLifecycle.from(this))
+                .autoDispose(this)
                 .subscribe {
                     name?.let {
                         MediaActivity.navigateTo(this, id, it, Category.ANIME)

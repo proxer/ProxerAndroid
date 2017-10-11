@@ -12,14 +12,13 @@ import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.TouchableMovementMethod
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
-import com.uber.autodispose.android.lifecycle.AndroidLifecycle
-import com.uber.autodispose.kotlin.autoDisposeWith
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.chat.Participant
 import me.proxer.app.chat.create.CreateChatActivity
 import me.proxer.app.util.Utils
+import me.proxer.app.util.extension.autoDispose
 
 /**
  * @author Ruben Gees
@@ -58,11 +57,11 @@ class CrashActivity : BaseActivity() {
                 .paddingDp(12))
 
         report.clicks()
-                .autoDisposeWith(AndroidLifecycle.from(this))
+                .autoDispose(this)
                 .subscribe { CrashDialog.show(this, errorDetails, stacktrace) }
 
         restart.clicks()
-                .autoDisposeWith(AndroidLifecycle.from(this))
+                .autoDispose(this)
                 .subscribe { CustomActivityOnCrash.restartApplication(this, config) }
 
         text.movementMethod = TouchableMovementMethod.getInstance()

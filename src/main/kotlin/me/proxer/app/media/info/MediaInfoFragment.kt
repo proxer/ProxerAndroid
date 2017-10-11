@@ -17,14 +17,13 @@ import com.google.android.flexbox.FlexboxLayout
 import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
-import com.uber.autodispose.android.lifecycle.AndroidLifecycle
-import com.uber.autodispose.kotlin.autoDisposeWith
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.info.industry.IndustryActivity
 import me.proxer.app.info.translatorgroup.TranslatorGroupActivity
 import me.proxer.app.media.MediaActivity
+import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.snackbar
 import me.proxer.app.util.extension.toAppDrawable
@@ -144,19 +143,19 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
                 .colorRes(R.color.icon))
 
         noteContainer.clicks()
-                .autoDisposeWith(AndroidLifecycle.from(this))
+                .autoDispose(this)
                 .subscribe { viewModel.note() }
 
         favorContainer.clicks()
-                .autoDisposeWith(AndroidLifecycle.from(this))
+                .autoDispose(this)
                 .subscribe { viewModel.markAsFavorite() }
 
         finishContainer.clicks()
-                .autoDisposeWith(AndroidLifecycle.from(this))
+                .autoDispose(this)
                 .subscribe { viewModel.markAsFinished() }
 
         unratedTags.clicks()
-                .autoDisposeWith(AndroidLifecycle.from(this))
+                .autoDispose(this)
                 .subscribe {
                     showUnratedTags = !showUnratedTags
 
@@ -165,7 +164,7 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
                 }
 
         spoilerTags.clicks()
-                .autoDisposeWith(AndroidLifecycle.from(this))
+                .autoDispose(this)
                 .subscribe {
                     showSpoilerTags = !showSpoilerTags
 
@@ -258,7 +257,7 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
 
                         contentView.setBackgroundResource(selectableItemBackground.resourceId)
                         contentView.clicks()
-                                .autoDisposeWith(AndroidLifecycle.from(this))
+                                .autoDispose(this)
                                 .subscribe {
                                     MediaActivity.navigateTo(activity, adaptionInfo.id, adaptionInfo.name,
                                             adaptionInfo.medium?.toCategory())

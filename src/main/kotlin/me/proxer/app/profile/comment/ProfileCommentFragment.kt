@@ -6,12 +6,11 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
-import com.uber.autodispose.android.lifecycle.AndroidLifecycle
-import com.uber.autodispose.kotlin.autoDisposeWith
 import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.profile.ProfileActivity
+import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.user.UserComment
 import me.proxer.library.enums.Category
@@ -63,7 +62,7 @@ class ProfileCommentFragment : PagedContentFragment<UserComment>() {
         innerAdapter = ProfileCommentAdapter(savedInstanceState)
 
         innerAdapter.titleClickSubject
-                .autoDisposeWith(AndroidLifecycle.from(this))
+                .autoDispose(this)
                 .subscribe {
                     MediaActivity.navigateTo(activity, it.entryId, it.entryName, it.category)
                 }

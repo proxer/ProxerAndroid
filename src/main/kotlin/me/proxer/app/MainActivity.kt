@@ -12,8 +12,6 @@ import android.view.ViewGroup
 import com.rubengees.introduction.IntroductionActivity.OPTION_RESULT
 import com.rubengees.introduction.IntroductionBuilder
 import com.rubengees.introduction.Option
-import com.uber.autodispose.android.lifecycle.AndroidLifecycle
-import com.uber.autodispose.kotlin.autoDisposeWith
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -37,6 +35,7 @@ import me.proxer.app.settings.SettingsFragment
 import me.proxer.app.ucp.UcpActivity
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.wrapper.IntroductionWrapper
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper.AccountItem
@@ -78,17 +77,17 @@ class MainActivity : BaseActivity() {
 
         drawer = MaterialDrawerWrapper(this, toolbar, savedInstanceState).also {
             it.itemClickSubject
-                    .autoDisposeWith(AndroidLifecycle.from(this))
+                    .autoDispose(this)
                     .subscribe { handleDrawerItemClick(it) }
 
             it.accountClickSubject
-                    .autoDisposeWith(AndroidLifecycle.from(this))
+                    .autoDispose(this)
                     .subscribe { handleAccountItemClick(it) }
         }
 
         Observable.merge(bus.register(LoginEvent::class.java), bus.register(LogoutEvent::class.java))
                 .observeOn(AndroidSchedulers.mainThread())
-                .autoDisposeWith(AndroidLifecycle.from(this))
+                .autoDispose(this)
                 .subscribe { drawer.refreshHeader() }
 
         displayFirstPage(savedInstanceState)
@@ -137,7 +136,7 @@ class MainActivity : BaseActivity() {
                             PreferenceHelper.setAccountNotificationsEnabled(this, option.isActivated)
 
                             Completable.fromAction { NotificationJob.scheduleIfPossible(this) }
-                                    .autoDisposeWith(AndroidLifecycle.from(this))
+                                    .autoDispose(this)
                                     .subscribe()
                         }
                     }

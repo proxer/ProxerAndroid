@@ -18,8 +18,6 @@ import com.jakewharton.rxbinding2.support.v7.widget.queryTextChangeEvents
 import com.jakewharton.rxbinding2.view.actionViewEvents
 import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
-import com.uber.autodispose.android.lifecycle.AndroidLifecycle
-import com.uber.autodispose.kotlin.autoDisposeWith
 import io.reactivex.schedulers.Schedulers
 import kotterknife.bindView
 import me.proxer.app.GlideApp
@@ -31,6 +29,7 @@ import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.extension.CompleteLocalMangaEntry
+import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Category
 import org.jetbrains.anko.bundleOf
@@ -76,14 +75,14 @@ class LocalMangaFragment : BaseContentFragment<List<CompleteLocalMangaEntry>>() 
         adapter = LocalMangaAdapter(savedInstanceState)
 
         adapter.clickSubject
-                .autoDisposeWith(AndroidLifecycle.from(this))
+                .autoDispose(this)
                 .subscribe { (entry, chapter) ->
                     MangaActivity.navigateTo(activity, entry.id, chapter.episode, chapter.language, chapter.title,
                             entry.name, entry.episodeAmount)
                 }
 
         adapter.longClickSubject
-                .autoDisposeWith(AndroidLifecycle.from(this))
+                .autoDispose(this)
                 .subscribe { (view, entry) ->
                     MediaActivity.navigateTo(activity, entry.id, entry.name, Category.MANGA,
                             if (view.drawable != null) view else null)
@@ -91,7 +90,7 @@ class LocalMangaFragment : BaseContentFragment<List<CompleteLocalMangaEntry>>() 
 
         adapter.deleteClickSubject
                 .subscribeOn(Schedulers.io())
-                .autoDisposeWith(AndroidLifecycle.from(this))
+                .autoDispose(this)
                 .subscribe { (_, chapter) -> viewModel.deleteChapter(chapter) }
 
         setHasOptionsMenu(true)
@@ -113,7 +112,7 @@ class LocalMangaFragment : BaseContentFragment<List<CompleteLocalMangaEntry>>() 
 
         jobInfoCancel.clicks()
                 .observeOn(Schedulers.io())
-                .autoDisposeWith(AndroidLifecycle.from(this))
+                .autoDispose(this)
                 .subscribe {
                     LocalMangaJob.cancelAll()
 
@@ -150,7 +149,7 @@ class LocalMangaFragment : BaseContentFragment<List<CompleteLocalMangaEntry>>() 
             val searchView = searchItem.actionView as SearchView
 
             searchItem.actionViewEvents()
-                    .autoDisposeWith(AndroidLifecycle.from(this))
+                    .autoDispose(this)
                     .subscribe {
                         if (it.menuItem().isActionViewExpanded) {
                             searchQuery = null
@@ -161,7 +160,7 @@ class LocalMangaFragment : BaseContentFragment<List<CompleteLocalMangaEntry>>() 
 
             searchView.queryTextChangeEvents()
                     .skipInitialValue()
-                    .autoDisposeWith(AndroidLifecycle.from(this))
+                    .autoDispose(this)
                     .subscribe {
                         searchQuery = it.queryText().toString()
 

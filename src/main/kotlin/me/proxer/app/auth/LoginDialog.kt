@@ -14,14 +14,13 @@ import android.widget.ProgressBar
 import com.afollestad.materialdialogs.MaterialDialog
 import com.jakewharton.rxbinding2.widget.editorActionEvents
 import com.jakewharton.rxbinding2.widget.textChanges
-import com.uber.autodispose.android.lifecycle.AndroidLifecycle
-import com.uber.autodispose.kotlin.autoDisposeWith
 import io.reactivex.functions.Predicate
 import kotterknife.bindView
 import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.R
 import me.proxer.app.base.BaseDialog
 import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.unsafeLazy
 import org.jetbrains.anko.longToast
 
@@ -60,14 +59,14 @@ class LoginDialog : BaseDialog() {
         listOf(password, secret).forEach {
             it.editorActionEvents(Predicate { event -> event.actionId() == EditorInfo.IME_ACTION_GO })
                     .filter { event -> event.actionId() == EditorInfo.IME_ACTION_GO }
-                    .autoDisposeWith(AndroidLifecycle.from(this))
+                    .autoDispose(this)
                     .subscribe { validateAndLogin() }
         }
 
         listOf(username to usernameContainer, password to passwordContainer).forEach { (input, container) ->
             input.textChanges()
                     .skipInitialValue()
-                    .autoDisposeWith(AndroidLifecycle.from(this))
+                    .autoDispose(this)
                     .subscribe { setError(container, null) }
         }
 

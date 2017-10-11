@@ -7,13 +7,12 @@ import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import com.jakewharton.rxbinding2.view.clicks
-import com.uber.autodispose.android.lifecycle.AndroidLifecycle
-import com.uber.autodispose.kotlin.autoDisposeWith
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.chat.conference.info.ConferenceInfoActivity
 import me.proxer.app.profile.ProfileActivity
+import me.proxer.app.util.extension.autoDispose
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.startActivity
 
@@ -73,7 +72,7 @@ class ChatActivity : BaseActivity() {
         title = conference.topic
 
         toolbar.clicks()
-                .autoDisposeWith(AndroidLifecycle.from(this))
+                .autoDispose(this)
                 .subscribe {
                     when (conference.isGroup) {
                         true -> ConferenceInfoActivity.navigateTo(this, conference)

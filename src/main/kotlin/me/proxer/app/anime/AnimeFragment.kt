@@ -13,8 +13,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
-import com.uber.autodispose.android.lifecycle.AndroidLifecycle
-import com.uber.autodispose.kotlin.autoDisposeWith
 import kotterknife.bindView
 import me.proxer.app.GlideApp
 import me.proxer.app.R
@@ -27,6 +25,7 @@ import me.proxer.app.ui.view.MediaControlView
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.Utils
+import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.snackbar
 import me.proxer.app.util.extension.unsafeLazy
@@ -97,11 +96,11 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
         innerAdapter.positionResolver = BaseAdapter.ContainerPositionResolver(adapter)
 
         innerAdapter.uploaderClickSubject
-                .autoDisposeWith(AndroidLifecycle.from(this))
+                .autoDispose(this)
                 .subscribe { ProfileActivity.navigateTo(activity, it.uploaderId, it.uploaderName) }
 
         innerAdapter.translatorGroupClickSubject
-                .autoDisposeWith(AndroidLifecycle.from(this))
+                .autoDispose(this)
                 .subscribe {
                     it.translatorGroupId?.let { id ->
                         it.translatorGroupName?.let { name ->
@@ -111,7 +110,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
                 }
 
         innerAdapter.playClickSubject
-                .autoDisposeWith(AndroidLifecycle.from(this))
+                .autoDispose(this)
                 .subscribe { viewModel.resolve(it.hosterName, it.id) }
     }
 
@@ -126,15 +125,15 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
         }
 
         header.episodeSwitchSubject
-                .autoDisposeWith(AndroidLifecycle.from(this))
+                .autoDispose(this)
                 .subscribe { episode = it }
 
         header.bookmarkSetSubject
-                .autoDisposeWith(AndroidLifecycle.from(this))
+                .autoDispose(this)
                 .subscribe { viewModel.bookmark(it) }
 
         header.finishClickSubject
-                .autoDisposeWith(AndroidLifecycle.from(this))
+                .autoDispose(this)
                 .subscribe { viewModel.markAsFinished() }
 
         return inflater.inflate(R.layout.fragment_anime, container, false)

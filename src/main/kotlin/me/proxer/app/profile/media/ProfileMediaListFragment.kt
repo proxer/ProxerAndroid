@@ -7,14 +7,13 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
-import com.uber.autodispose.android.lifecycle.AndroidLifecycle
-import com.uber.autodispose.kotlin.autoDisposeWith
 import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.DeviceUtils
+import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.toCategory
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.user.UserMediaListEntry
@@ -77,7 +76,7 @@ class ProfileMediaListFragment : PagedContentFragment<UserMediaListEntry>() {
         innerAdapter = ProfileMediaAdapter()
 
         innerAdapter.clickSubject
-                .autoDisposeWith(AndroidLifecycle.from(this))
+                .autoDispose(this)
                 .subscribe { (view, item) ->
                     MediaActivity.navigateTo(activity, item.id, item.name, item.medium.toCategory(),
                             if (view.drawable != null) view else null)

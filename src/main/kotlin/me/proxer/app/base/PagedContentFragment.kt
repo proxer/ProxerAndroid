@@ -13,8 +13,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
-import com.uber.autodispose.android.lifecycle.AndroidLifecycle
-import com.uber.autodispose.kotlin.autoDisposeWith
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -24,6 +22,7 @@ import me.proxer.app.base.BaseAdapter.ContainerPositionResolver
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
+import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.endScrolls
 import me.proxer.app.util.extension.multilineSnackbar
 import java.util.concurrent.TimeUnit
@@ -88,7 +87,7 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
 
         recyclerView.endScrolls(pagingThreshold)
                 .throttleFirst(300, TimeUnit.MILLISECONDS)
-                .autoDisposeWith(AndroidLifecycle.from(this))
+                .autoDispose(this)
                 .subscribe { viewModel.loadIfPossible() }
     }
 
@@ -125,7 +124,7 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
             else -> Single.fromCallable { DiffUtil.calculateDiff(innerAdapter.provideDiffUtilCallback(data)) }
                     .subscribeOn(Schedulers.single())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .autoDisposeWith(AndroidLifecycle.from(this))
+                    .autoDispose(this)
                     .subscribe { diff: DiffUtil.DiffResult ->
                         val wasAtFirstPosition = isAtTop()
 
