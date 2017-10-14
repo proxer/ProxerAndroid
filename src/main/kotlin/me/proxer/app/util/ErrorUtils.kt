@@ -162,6 +162,10 @@ object ErrorUtils {
         it is ProxerException && it.serverErrorType == IP_BLOCKED
     }
 
+    fun isNetworkError(error: Throwable) = ErrorUtils.getInnermostError(error).let {
+        it is ProxerException && it.errorType == IO
+    }
+
     fun handle(error: Throwable): ErrorAction {
         val innermostError = getInnermostError(error)
         val errorMessage = getMessage(innermostError)

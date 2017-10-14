@@ -8,6 +8,7 @@ import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.news.NewsNotificationEvent
 import me.proxer.app.news.NewsNotifications
+import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.library.entity.notifications.NotificationInfo
@@ -64,7 +65,7 @@ class NotificationJob : Job() {
 
         Result.SUCCESS
     } catch (error: Throwable) {
-        if (params.failureCount >= 1) {
+        if (params.failureCount >= 1 && !ErrorUtils.isNetworkError(error)) {
             AccountNotifications.showError(context, error)
 
             Result.FAILURE
