@@ -12,10 +12,10 @@ ext {
     javaVersion = JavaVersion.VERSION_1_8
 
     // Gradle
-    gradleVersion = '4.2.1'
+    gradleVersion = '4.3-rc-1'
 
     // Core plugins
-    androidPluginVersion = '3.0.0-beta7'
+    androidPluginVersion = '3.0.0-rc1'
     kotlinVersion = '1.2.0-beta-31'
 
     // Utility plugins
