@@ -40,7 +40,7 @@ class LogViewModel : ViewModel() {
 
                     process.inputStream.use { it.reader().readLines() }
                             .filter { it.substringAfter(": ").isNotBlank() }
-                            .map { convertToLogMessage(it) }
+                            .mapIndexed { index, rawLog -> convertToLogMessage(index, rawLog) }
                             .asReversed()
                             .also { process.waitFor() }
                 }
@@ -87,7 +87,7 @@ class LogViewModel : ViewModel() {
                 })
     }
 
-    private fun convertToLogMessage(rawLog: String): LogMessage {
+    private fun convertToLogMessage(index: Int, rawLog: String): LogMessage {
         val date = try {
             val rawDate = rawLog.split(" ").let { "${it[0]} ${it[1]}" }
 
@@ -102,6 +102,6 @@ class LogViewModel : ViewModel() {
             LocalDateTime.ofEpochSecond(0, 0, ZoneOffset.UTC)
         }
 
-        return LogMessage(rawLog.substringAfter(": ").trimEnd(), date)
+        return LogMessage(index.toLong(), rawLog.substringAfter(": ").trimEnd(), date)
     }
 }

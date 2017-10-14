@@ -2,6 +2,7 @@ package me.proxer.app.log
 
 import android.Manifest
 import android.arch.lifecycle.Observer
+import android.content.ClipData
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -15,8 +16,10 @@ import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.util.extension.autoDispose
+import me.proxer.app.util.extension.clipboardManager
 import me.proxer.app.util.extension.snackbar
 import me.proxer.app.util.extension.unsafeLazy
+import org.jetbrains.anko.toast
 import kotlin.properties.Delegates
 
 class LogActivity : BaseActivity() {
@@ -37,6 +40,15 @@ class LogActivity : BaseActivity() {
 
         adapter = LogAdapter(savedInstanceState)
 
+        adapter.longClickSubject
+                .autoDispose(this)
+                .subscribe {
+                    getString(R.string.clipboard_title).let { title ->
+                        clipboardManager.primaryClip = ClipData.newPlainText(title, it.toString())
+                        toast(R.string.clipboard_status)
+                    }
+                }
+
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true)
         recyclerView.adapter = adapter
 
@@ -45,13 +57,15 @@ class LogActivity : BaseActivity() {
                 val previousItemCount = adapter.itemCount
                 val wasAtTop = isAtTop()
 
-                adapter.swapData(it)
-                adapter.notifyItemRangeInserted(0, it.size - previousItemCount)
+                if (previousItemCount < it.size) {
+                    adapter.swapData(it)
+                    adapter.notifyItemRangeInserted(0, it.size - previousItemCount)
 
-                if (wasAtTop) {
-                    recyclerView.postDelayed({
-                        recyclerView.smoothScrollToPosition(0)
-                    }, 50)
+                    if (wasAtTop) {
+                        recyclerView.postDelayed({
+                            recyclerView.smoothScrollToPosition(0)
+                        }, 50)
+                    }
                 }
             }
         })

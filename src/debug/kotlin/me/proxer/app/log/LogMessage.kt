@@ -6,6 +6,6 @@ import org.threeten.bp.LocalDateTime
 /**
  * @author Ruben Gees
  */
-data class LogMessage(val content: String, val dateTime: LocalDateTime) {
+data class LogMessage(val id: Long, val content: String, val dateTime: LocalDateTime) {
     override fun toString() = "${Utils.dateTimeFormatter.format(dateTime)}: $content"
 }
