@@ -8,6 +8,7 @@ import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication
 import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.extension.subscribeAndLogErrors
 import java.util.Date
 
 /**
@@ -36,6 +37,6 @@ class NewsNotificationReadReceiver : BroadcastReceiver() {
                             .execute()
                 }
                 .subscribeOn(Schedulers.io())
-                .subscribe({}, {})
+                .subscribeAndLogErrors()
     }
 }

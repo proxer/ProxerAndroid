@@ -7,6 +7,7 @@ import android.content.Intent
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.api
+import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.enums.NotificationFilter
 
 /**
@@ -34,6 +35,6 @@ class AccountNotificationReadReceiver : BroadcastReceiver() {
                             .execute()
                 }
                 .subscribeOn(Schedulers.io())
-                .subscribe({}, {})
+                .subscribeAndLogErrors()
     }
 }

@@ -4,6 +4,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.ResettingMutableLiveData
+import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.entity.ProxerIdItem
 
 /**
@@ -34,7 +35,7 @@ abstract class PagedViewModel<T> : BaseViewModel<List<T>>() {
                 }
                 .doAfterTerminate { page = data.value?.size?.div(itemsOnPage) ?: 0 }
                 .doAfterTerminate { isLoading.value = false }
-                .subscribe({
+                .subscribeAndLogErrors({
                     refreshError.value = null
                     error.value = null
                     data.value = it

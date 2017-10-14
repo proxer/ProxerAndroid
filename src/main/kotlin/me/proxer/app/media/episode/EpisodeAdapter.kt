@@ -29,6 +29,7 @@ import me.proxer.app.media.episode.EpisodeAdapter.ViewHolder
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.defaultLoad
+import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.toAppDrawable
 import me.proxer.app.util.extension.toAppString
 import me.proxer.app.util.extension.toEpisodeAppString
@@ -199,8 +200,8 @@ class EpisodeAdapter(savedInstanceState: Bundle?, private val entryId: String) :
                                 is LocalMangaJob.FinishedEvent -> event.entryId to event.episode
                                 is LocalMangaJob.FailedEvent -> event.entryId to event.episode
                                 else -> throw IllegalArgumentException("Unknown event: $event")
-
                             }
+
                             if (entryId == entryId && episode == data[it].number) {
                                 notifyItemChanged(it)
                             }
@@ -259,7 +260,7 @@ class EpisodeAdapter(savedInstanceState: Bundle?, private val entryId: String) :
                                 }
                                 .subscribeOn(Schedulers.newThread())
                                 .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe { exists: Boolean ->
+                                .subscribeAndLogErrors { exists: Boolean ->
                                     if (!exists) {
                                         download.visibility = View.INVISIBLE
                                         downloadProgress.visibility = View.VISIBLE
@@ -271,7 +272,7 @@ class EpisodeAdapter(savedInstanceState: Bundle?, private val entryId: String) :
                         Single.fromCallable { LocalMangaJob.cancel(entryId, episode, generalLanguage) }
                                 .subscribeOn(Schedulers.newThread())
                                 .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe { _: Unit ->
+                                .subscribeAndLogErrors { _: Unit ->
                                     download.visibility = View.VISIBLE
                                     downloadProgress.visibility = View.INVISIBLE
                                 }
@@ -281,7 +282,7 @@ class EpisodeAdapter(savedInstanceState: Bundle?, private val entryId: String) :
                             .map { it to LocalMangaJob.isScheduledOrRunning(entryId, episode, generalLanguage) }
                             .subscribeOn(Schedulers.newThread())
                             .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe { (containsChapter, isScheduledOrRunning) ->
+                            .subscribeAndLogErrors { (containsChapter, isScheduledOrRunning) ->
                                 val progressVisibility = when (isScheduledOrRunning) {
                                     true -> View.VISIBLE
                                     false -> View.INVISIBLE

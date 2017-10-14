@@ -12,6 +12,7 @@ import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.Validators
 import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.extension.buildOptionalSingle
+import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.api.Endpoint
 import me.proxer.library.entity.info.Entry
 
@@ -47,7 +48,7 @@ class MediaInfoViewModel(private val entryId: String) : BaseContentViewModel<Ent
                 .subscribeOn(Schedulers.io())
                 .flatMap { Single.fromCallable { it.apply { Validators.validateLogin() } } }
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
+                .subscribeAndLogErrors({
                     userInfoUpdateError.value = null
                     userInfoUpdateData.value = Unit
                 }, {

@@ -8,6 +8,7 @@ import android.support.v4.app.RemoteInput
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.chatDao
+import me.proxer.app.util.extension.subscribeAndLogErrors
 
 /**
  * @author Ruben Gees
@@ -43,7 +44,7 @@ class DirectReplyReceiver : BroadcastReceiver() {
                     ChatJob.scheduleSynchronization()
                 }
                 .subscribeOn(Schedulers.io())
-                .subscribe({}, {})
+                .subscribeAndLogErrors()
     }
 
     private fun getMessageText(intent: Intent) = RemoteInput.getResultsFromIntent(intent)

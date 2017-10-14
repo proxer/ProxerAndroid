@@ -20,6 +20,7 @@ import me.proxer.app.manga.MangaLocks
 import me.proxer.app.util.Validators
 import me.proxer.app.util.extension.CompleteLocalMangaEntry
 import me.proxer.app.util.extension.getQuantityString
+import me.proxer.app.util.extension.subscribeAndLogErrors
 import java.io.File
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.write
@@ -127,6 +128,6 @@ class LocalMangaViewModel(searchQuery: String?) : BaseViewModel<List<CompleteLoc
                 .delaySubscription(50, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.single())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { value -> jobInfo.value = value.toNullable() }
+                .subscribeAndLogErrors { value -> jobInfo.value = value.toNullable() }
     }
 }

@@ -4,22 +4,14 @@ package me.proxer.app.util.extension
 
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleOwner
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.StaggeredGridLayoutManager
-import com.gojuno.koptional.Optional
-import com.gojuno.koptional.toOptional
-import com.jakewharton.rxbinding2.support.v7.widget.scrollEvents
+import com.uber.autodispose.CompletableSubscribeProxy
+import com.uber.autodispose.ObservableSubscribeProxy
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposeWith
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
-import me.proxer.app.exception.PartialException
-import me.proxer.library.api.Endpoint
-import okhttp3.Call
-import okhttp3.Response
-import java.io.IOException
+import io.reactivex.disposables.Disposable
 
 /**
  * @author Ruben Gees
@@ -34,115 +26,103 @@ inline fun <T> Single<T>.autoDispose(owner: LifecycleOwner) = this
 inline fun Completable.autoDispose(owner: LifecycleOwner) = this
         .autoDisposeWith(AndroidLifecycleScopeProvider.from(owner, Lifecycle.Event.ON_DESTROY))
 
-fun <T> Endpoint<T>.buildSingle(): Single<T> = Single.create { emitter ->
-    val call = build()
-
-    emitter.setCancellable { call.cancel() }
-
-    try {
-        emitter.onSuccess(call.safeExecute())
-    } catch (error: Throwable) {
-        if (!emitter.isDisposed) {
-            emitter.onError(error)
-        }
-    }
+inline fun <T> Observable<T>.subscribeAndLogErrors(noinline onSuccess: (T) -> Unit,
+                                                   noinline onError: (Throwable) -> Unit): Disposable {
+    return this.subscribe(onSuccess, {
+        it.printStackTrace()
+        onError(it)
+    })
 }
 
-fun <T : Any> Endpoint<T>.buildOptionalSingle(): Single<Optional<T>> = Single.create { emitter ->
-    val call = build()
-
-    emitter.setCancellable { call.cancel() }
-
-    try {
-        emitter.onSuccess(call.execute().toOptional())
-    } catch (error: Throwable) {
-        if (!emitter.isDisposed) {
-            emitter.onError(error)
-        }
-    }
+inline fun <T> Observable<T>.subscribeAndLogErrors(noinline onSuccess: (T) -> Unit): Disposable {
+    return this.subscribe(onSuccess, {
+        it.printStackTrace()
+    })
 }
 
-fun <I : Any, T : Any> Endpoint<T>.buildPartialErrorSingle(input: I): Single<T> = Single.create { emitter ->
-    val call = build()
-
-    emitter.setCancellable { call.cancel() }
-
-    try {
-        emitter.onSuccess(call.safeExecute())
-    } catch (error: Throwable) {
-        if (!emitter.isDisposed) {
-            emitter.onError(PartialException(error, input))
-        }
-    }
+inline fun <T> Observable<T>.subscribeAndLogErrors(): Disposable? {
+    return this.subscribe({}, {
+        it.printStackTrace()
+    })
 }
 
-fun Call.toSingle(): Single<Response> = Single.create { emitter ->
-    emitter.setCancellable { cancel() }
-
-    try {
-        val result = execute()
-
-        result.body()?.close()
-
-        if (result.isSuccessful) {
-            emitter.onSuccess(result)
-        } else {
-            if (!emitter.isDisposed) {
-                emitter.onError(IOException())
-            }
-        }
-    } catch (error: Throwable) {
-        if (!emitter.isDisposed) {
-            emitter.onError(error)
-        }
-    }
+inline fun <T> Single<T>.subscribeAndLogErrors(noinline onSuccess: (T) -> Unit,
+                                               noinline onError: (Throwable) -> Unit): Disposable {
+    return this.subscribe(onSuccess, {
+        it.printStackTrace()
+        onError(it)
+    })
 }
 
-fun Call.toBodySingle(): Single<String> = Single.create { emitter ->
-    emitter.setCancellable { cancel() }
-
-    try {
-        val result = execute()
-
-        if (result.isSuccessful) {
-            val body = result.body()
-
-            if (body != null) {
-                emitter.onSuccess(body.string())
-            } else {
-                if (!emitter.isDisposed) {
-                    emitter.onError(IOException())
-                }
-            }
-        } else {
-            if (!emitter.isDisposed) {
-                emitter.onError(IOException())
-            }
-        }
-    } catch (error: Throwable) {
-        if (!emitter.isDisposed) {
-            emitter.onError(error)
-        }
-    }
+inline fun <T> Single<T>.subscribeAndLogErrors(noinline onSuccess: (T) -> Unit): Disposable {
+    return this.subscribe(onSuccess, {
+        it.printStackTrace()
+    })
 }
 
-fun RecyclerView.endScrolls(threshold: Int = 5): Observable<Unit> = scrollEvents()
-        .filter {
-            layoutManager.let {
-                val pastVisibleItems = when (it) {
-                    is StaggeredGridLayoutManager -> IntArray(it.spanCount).apply {
-                        it.findFirstVisibleItemPositions(this)
-                    }.let { firstVisibleItems ->
-                        when (firstVisibleItems.isNotEmpty()) {
-                            true -> firstVisibleItems[0]
-                            false -> 0
-                        }
-                    }
-                    is LinearLayoutManager -> it.findFirstVisibleItemPosition()
-                    else -> 0
-                }
+inline fun <T> Single<T>.subscribeAndLogErrors(): Disposable {
+    return this.subscribe({}, {
+        it.printStackTrace()
+    })
+}
 
-                it.itemCount > 0 && it.childCount + pastVisibleItems >= it.itemCount - threshold
-            }
-        }
-        .map { Unit }
+inline fun Completable.subscribeAndLogErrors(noinline onSuccess: () -> Unit,
+                                             noinline onError: (Throwable) -> Unit): Disposable {
+    return this.subscribe(onSuccess, {
+        it.printStackTrace()
+        onError(it)
+    })
+}
+
+inline fun Completable.subscribeAndLogErrors(noinline onSuccess: () -> Unit): Disposable {
+    return this.subscribe(onSuccess, {
+        it.printStackTrace()
+    })
+}
+
+inline fun Completable.subscribeAndLogErrors(): Disposable {
+    return this.subscribe({}, {
+        it.printStackTrace()
+    })
+}
+
+inline fun <T> ObservableSubscribeProxy<T>.subscribeAndLogErrors(noinline onSuccess: (T) -> Unit,
+                                                                 noinline onError: (Throwable) -> Unit): Disposable {
+    return this.subscribe(onSuccess, {
+        it.printStackTrace()
+        onError(it)
+    })
+}
+
+inline fun <T> ObservableSubscribeProxy<T>.subscribeAndLogErrors(noinline onSuccess: (T) -> Unit): Disposable {
+    return this.subscribe(onSuccess, {
+        it.printStackTrace()
+    })
+}
+
+inline fun <T> ObservableSubscribeProxy<T>.subscribeAndLogErrors(): Disposable {
+    return this.subscribe({}, {
+        it.printStackTrace()
+    })
+}
+
+inline fun CompletableSubscribeProxy.subscribeAndLogErrors(noinline onSuccess: () -> Unit,
+                                                           noinline onError: (Throwable) -> Unit): Disposable {
+    return this.subscribe(onSuccess, {
+        it.printStackTrace()
+        onError(it)
+    })
+}
+
+inline fun CompletableSubscribeProxy.subscribeAndLogErrors(noinline onSuccess: () -> Unit): Disposable {
+    return this.subscribe(onSuccess, {
+        it.printStackTrace()
+    })
+}
+
+inline fun CompletableSubscribeProxy.subscribeAndLogErrors(): Disposable {
+    return this.subscribe({}, {
+        it.printStackTrace()
+    })
+}
+

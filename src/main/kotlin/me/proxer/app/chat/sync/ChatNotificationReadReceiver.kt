@@ -7,6 +7,7 @@ import android.content.Intent
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.chatDao
+import me.proxer.app.util.extension.subscribeAndLogErrors
 
 /**
  * @author Ruben Gees
@@ -38,6 +39,6 @@ class ChatNotificationReadReceiver : BroadcastReceiver() {
                     }
                 }
                 .subscribeOn(Schedulers.io())
-                .subscribe({}, {})
+                .subscribeAndLogErrors()
     }
 }

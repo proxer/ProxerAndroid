@@ -28,6 +28,7 @@ import me.proxer.app.chat.create.CreateChatActivity
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.openHttpPage
+import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
@@ -166,7 +167,7 @@ class AboutFragment : MaterialAboutFragment() {
                                     }
                                 }
                                 .subscribeOn(Schedulers.io())
-                                .subscribe()
+                                .subscribeAndLogErrors()
                     }.build()
     )
 

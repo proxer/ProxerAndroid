@@ -16,6 +16,7 @@ import me.proxer.app.chat.sync.ChatJob
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
 import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.extension.subscribeAndLogErrors
 
 /**
  * @author Ruben Gees
@@ -65,6 +66,6 @@ class ConferenceViewModel : BaseViewModel<List<LocalConference>>() {
         Completable
                 .fromAction { if (!ChatJob.isRunning()) ChatJob.scheduleSynchronization() }
                 .subscribeOn(Schedulers.io())
-                .subscribe()
+                .subscribeAndLogErrors()
     }
 }

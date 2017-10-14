@@ -25,6 +25,7 @@ import me.proxer.app.profile.topten.TopTenFragment
 import me.proxer.app.util.ActivityUtils
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Category
 import me.proxer.library.util.ProxerUrls
@@ -124,7 +125,7 @@ class ProfileActivity : ImageTabsActivity() {
                                 }
                             }
                             .subscribeOn(Schedulers.io())
-                            .subscribe()
+                            .subscribeAndLogErrors()
                 }
             }
             R.id.new_group -> username?.let { safeUsername ->

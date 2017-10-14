@@ -10,6 +10,7 @@ import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.data.UniqueQueue
 import me.proxer.app.util.extension.buildOptionalSingle
+import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.api.PagingLimitEndpoint
 import me.proxer.library.entity.ucp.Bookmark
 import me.proxer.library.enums.Category
@@ -73,7 +74,7 @@ class BookmarkViewModel(category: Category?) : PagedContentViewModel<Bookmark>()
                     .buildOptionalSingle()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({
+                    .subscribeAndLogErrors({
                         data.value = data.value?.filterNot { it == item }
 
                         doItemDeletion()

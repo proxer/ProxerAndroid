@@ -10,6 +10,7 @@ import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.buildSingle
+import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.api.ProxerException
 import me.proxer.library.api.ProxerException.ServerErrorType
 import me.proxer.library.entity.user.User
@@ -51,7 +52,7 @@ class LoginViewModel : ViewModel() {
                         isLoading.value = true
                     }
                     .doAfterTerminate { isLoading.value = false }
-                    .subscribe({
+                    .subscribeAndLogErrors({
                         data.value = it
                     }, {
                         if (it is ProxerException && it.serverErrorType == ServerErrorType.USER_2FA_SECRET_REQUIRED) {

@@ -12,6 +12,7 @@ import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.R
 import me.proxer.app.util.data.ResettingMutableLiveData
+import me.proxer.app.util.extension.subscribeAndLogErrors
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneOffset
 import java.io.File
@@ -80,7 +81,7 @@ class LogViewModel : ViewModel() {
                     saveSuccess.value = null
                     saveError.value = null
                 }
-                .subscribe({
+                .subscribeAndLogErrors({
                     saveSuccess.value = Unit
                 }, {
                     saveError.value = it

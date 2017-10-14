@@ -16,6 +16,7 @@ import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.decodedName
+import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.toLocalChapter
 import me.proxer.app.util.extension.toLocalEntryCore
 import me.proxer.app.util.extension.toLocalPage
@@ -172,7 +173,7 @@ class LocalMangaJob : Job() {
 
         pages.forEach { page ->
             MangaPageSingle(context, true, Input(chapter.server, entryId, chapter.id, page.decodedName))
-                    .subscribe({}, { error = it })
+                    .subscribeAndLogErrors({}, { error = it })
 
             error?.let { throw it }
             if (isCanceled) throw CancellationException()

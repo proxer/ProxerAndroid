@@ -22,6 +22,7 @@ import me.proxer.app.util.data.PreferenceHelper.NOTIFICATIONS_CHAT
 import me.proxer.app.util.data.PreferenceHelper.NOTIFICATIONS_INTERVAL
 import me.proxer.app.util.data.PreferenceHelper.NOTIFICATIONS_NEWS
 import me.proxer.app.util.data.PreferenceHelper.THEME
+import me.proxer.app.util.extension.subscribeAndLogErrors
 import net.xpece.android.support.preference.TwoStatePreference
 import org.jetbrains.anko.bundleOf
 
@@ -101,12 +102,12 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
 
                 Completable.fromAction { NotificationJob.scheduleIfPossible(context) }
                         .subscribeOn(Schedulers.io())
-                        .subscribe()
+                        .subscribeAndLogErrors()
             }
 
             NOTIFICATIONS_CHAT -> Completable.fromAction { ChatJob.scheduleSynchronizationIfPossible(context) }
                     .subscribeOn(Schedulers.io())
-                    .subscribe()
+                    .subscribeAndLogErrors()
 
             NOTIFICATIONS_INTERVAL -> Completable
                     .fromAction {
@@ -114,7 +115,7 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
                         ChatJob.scheduleSynchronizationIfPossible(context)
                     }
                     .subscribeOn(Schedulers.io())
-                    .subscribe()
+                    .subscribeAndLogErrors()
         }
     }
 

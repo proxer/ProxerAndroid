@@ -10,6 +10,7 @@ import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.MainApplication.Companion.mangaDao
 import me.proxer.app.manga.local.LocalMangaJob
+import me.proxer.app.util.extension.subscribeAndLogErrors
 import java.io.File
 import kotlin.concurrent.write
 
@@ -44,6 +45,6 @@ class MangaCleanViewModel : ViewModel() {
                 }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { data.value = Unit }
+                .subscribeAndLogErrors { data.value = Unit }
     }
 }

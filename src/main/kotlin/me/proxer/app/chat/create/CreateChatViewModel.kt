@@ -19,6 +19,7 @@ import me.proxer.app.chat.sync.ChatJob
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.extension.buildSingle
+import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.api.Endpoint
 
 /**
@@ -109,7 +110,7 @@ class CreateChatViewModel : ViewModel() {
                     result.value = null
                     error.value = null
                 }
-                .subscribe({
+                .subscribeAndLogErrors({
                     newConferenceId = it.toLong()
 
                     ChatJob.scheduleSynchronization()

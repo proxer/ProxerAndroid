@@ -17,6 +17,7 @@ import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.extension.buildOptionalSingle
 import me.proxer.app.util.extension.buildPartialErrorSingle
 import me.proxer.app.util.extension.buildSingle
+import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.toMediaLanguage
 import me.proxer.library.api.Endpoint
 import me.proxer.library.entity.info.EntryCore
@@ -134,7 +135,7 @@ class MangaViewModel(private val entryId: String, private val language: Language
                 .flatMap { endpoint.buildOptionalSingle() }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
+                .subscribeAndLogErrors({
                     bookmarkError.value = null
                     bookmarkData.value = Unit
                 }, {

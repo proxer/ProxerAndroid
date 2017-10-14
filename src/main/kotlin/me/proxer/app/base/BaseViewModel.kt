@@ -17,6 +17,7 @@ import me.proxer.app.auth.LogoutEvent
 import me.proxer.app.settings.AgeConfirmationEvent
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
+import me.proxer.app.util.extension.subscribeAndLogErrors
 
 /**
  * @author Ruben Gees
@@ -73,7 +74,7 @@ abstract class BaseViewModel<T> : ViewModel() {
                     data.value = null
                 }
                 .doAfterTerminate { isLoading.value = false }
-                .subscribe({
+                .subscribeAndLogErrors({
                     error.value = null
                     data.value = it
                 }, {

@@ -44,6 +44,7 @@ import me.proxer.app.notification.NotificationJob
 import me.proxer.app.util.NotificationUtils
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.api.ProxerApi
 import me.proxer.library.api.ProxerApi.Builder.LoggingStrategy
 import okhttp3.OkHttpClient
@@ -117,14 +118,14 @@ class MainApplication : Application() {
     private fun initBus() {
         bus.register(LoginEvent::class.java)
                 .subscribeOn(Schedulers.io())
-                .subscribe {
+                .subscribeAndLogErrors {
                     ChatJob.scheduleSynchronizationIfPossible(this)
                     NotificationJob.scheduleIfPossible(this)
                 }
 
         bus.register(LogoutEvent::class.java)
                 .subscribeOn(Schedulers.io())
-                .subscribe {
+                .subscribeAndLogErrors {
                     AccountNotifications.cancel(this)
                     LocalMangaNotifications.cancel(this)
                     ChatNotifications.cancel(this)

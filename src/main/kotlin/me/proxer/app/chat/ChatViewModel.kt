@@ -16,6 +16,7 @@ import me.proxer.app.exception.ChatMessageException
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
 import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.extension.subscribeAndLogErrors
 
 /**
  * @author Ruben Gees
@@ -54,7 +55,7 @@ class ChatViewModel(initialConference: LocalConference) : PagedViewModel<LocalMe
 
                                 Completable.fromAction { chatDao.markConferenceAsRead(safeConference.id) }
                                         .subscribeOn(Schedulers.io())
-                                        .subscribe()
+                                        .subscribeAndLogErrors()
                             }
                         }
                     }
@@ -118,7 +119,7 @@ class ChatViewModel(initialConference: LocalConference) : PagedViewModel<LocalMe
                     Completable
                             .fromAction { if (!ChatJob.isRunning()) ChatJob.scheduleSynchronization() }
                             .subscribeOn(Schedulers.io())
-                            .subscribe()
+                            .subscribeAndLogErrors()
                 }
     }
 
@@ -128,6 +129,6 @@ class ChatViewModel(initialConference: LocalConference) : PagedViewModel<LocalMe
                 .doOnSuccess { if (!ChatJob.isRunning()) ChatJob.scheduleSynchronization() }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe()
+                .subscribeAndLogErrors()
     }
 }

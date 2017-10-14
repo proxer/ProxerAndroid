@@ -19,6 +19,7 @@ import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.extension.buildOptionalSingle
 import me.proxer.app.util.extension.buildPartialErrorSingle
 import me.proxer.app.util.extension.buildSingle
+import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.toAnimeStreamInfo
 import me.proxer.app.util.extension.toMediaLanguage
 import me.proxer.library.api.Endpoint
@@ -81,7 +82,7 @@ class AnimeViewModel(private val entryId: String, private val language: AnimeLan
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { isLoading.value = true }
                 .doAfterTerminate { isLoading.value = false }
-                .subscribe({
+                .subscribeAndLogErrors({
                     resolutionError.value = null
                     resolutionResult.value = it
                 }, {
@@ -112,7 +113,7 @@ class AnimeViewModel(private val entryId: String, private val language: AnimeLan
                 .flatMap { endpoint.buildOptionalSingle() }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
+                .subscribeAndLogErrors({
                     bookmarkError.value = null
                     bookmarkData.value = Unit
                 }, {

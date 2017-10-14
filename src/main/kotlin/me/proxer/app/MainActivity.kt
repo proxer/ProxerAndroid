@@ -36,6 +36,7 @@ import me.proxer.app.ucp.UcpActivity
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.autoDispose
+import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.wrapper.IntroductionWrapper
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper.AccountItem
@@ -137,7 +138,7 @@ class MainActivity : BaseActivity() {
 
                             Completable.fromAction { NotificationJob.scheduleIfPossible(this) }
                                     .autoDispose(this)
-                                    .subscribe()
+                                    .subscribeAndLogErrors()
                         }
                     }
                 }

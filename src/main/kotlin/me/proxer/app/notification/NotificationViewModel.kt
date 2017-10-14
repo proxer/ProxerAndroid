@@ -14,6 +14,7 @@ import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.data.UniqueQueue
 import me.proxer.app.util.extension.ProxerNotification
 import me.proxer.app.util.extension.buildOptionalSingle
+import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.api.Endpoint
 
 /**
@@ -56,7 +57,7 @@ class NotificationViewModel : BaseContentViewModel<List<ProxerNotification>>() {
                     error.value = null
                 }
                 .doAfterTerminate { isLoading.value = false }
-                .subscribe({
+                .subscribeAndLogErrors({
                     error.value = null
                     data.value = it
                 }, {
@@ -93,7 +94,7 @@ class NotificationViewModel : BaseContentViewModel<List<ProxerNotification>>() {
                 .buildOptionalSingle()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
+                .subscribeAndLogErrors({
                     data.value = emptyList()
                 }, {
                     deletionError.value = ErrorUtils.handle(it)
@@ -109,7 +110,7 @@ class NotificationViewModel : BaseContentViewModel<List<ProxerNotification>>() {
                     .buildOptionalSingle()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({
+                    .subscribeAndLogErrors({
                         data.value = data.value?.filterNot { it == item }
 
                         doItemDeletion()

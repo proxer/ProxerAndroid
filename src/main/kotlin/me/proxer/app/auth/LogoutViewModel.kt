@@ -9,6 +9,7 @@ import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.extension.buildOptionalSingle
+import me.proxer.app.util.extension.subscribeAndLogErrors
 
 /**
  * @author Ruben Gees
@@ -41,7 +42,7 @@ class LogoutViewModel : ViewModel() {
                         isLoading.value = true
                     }
                     .doAfterTerminate { isLoading.value = false }
-                    .subscribe({
+                    .subscribeAndLogErrors({
                         data.value = Unit
                     }, {
                         error.value = ErrorUtils.handle(it)

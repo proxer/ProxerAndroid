@@ -18,6 +18,7 @@ import me.proxer.app.manga.MangaAdapter.ViewHolder
 import me.proxer.app.manga.MangaPageSingle.Input
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.decodedName
+import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.entity.manga.Page
 import kotlin.properties.Delegates
 
@@ -89,7 +90,7 @@ class MangaAdapter : BaseAdapter<Page, ViewHolder>() {
             image.tag = MangaPageSingle(image.context, isLocal, Input(server, entryId, id, item.decodedName))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({
+                    .subscribeAndLogErrors {
                         image.setImage(ImageSource.uri(it.path))
                         image.setScaleAndCenter(0.2f, PointF(0f, 0f))
                         image.apply { alpha = 0.2f }
@@ -97,9 +98,7 @@ class MangaAdapter : BaseAdapter<Page, ViewHolder>() {
                                 .alpha(1.0f)
                                 .setDuration(mediumAnimationTime.toLong())
                                 .start()
-                    }, {
-                        // Ignore errors.
-                    })
+                    }
         }
     }
 }

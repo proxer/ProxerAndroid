@@ -40,6 +40,7 @@ import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.multilineSnackbar
+import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.unsafeLazy
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.find
@@ -276,7 +277,7 @@ class CreateChatFragment : BaseFragment() {
                 }
                 .observeOn(AndroidSchedulers.mainThread())
                 .autoDispose(this)
-                .subscribe({ (topic, firstMessage, participants) ->
+                .subscribeAndLogErrors({ (topic, firstMessage, participants) ->
                     when (isGroup) {
                         true -> viewModel.createGroup(topic, firstMessage, participants)
                         false -> viewModel.createChat(firstMessage, participants.first())

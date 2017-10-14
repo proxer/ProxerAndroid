@@ -13,6 +13,7 @@ import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.data.UniqueQueue
 import me.proxer.app.util.extension.buildOptionalSingle
 import me.proxer.app.util.extension.buildSingle
+import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.entity.ucp.UcpTopTenEntry
 import me.proxer.library.enums.Category
 
@@ -74,7 +75,7 @@ class UcpTopTenViewModel : BaseViewModel<ZippedTopTenResult>() {
                     }
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({
+                    .subscribeAndLogErrors({
                         data.value = it
 
                         doItemDeletion()
