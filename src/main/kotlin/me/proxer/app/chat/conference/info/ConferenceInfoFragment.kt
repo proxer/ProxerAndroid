@@ -12,12 +12,12 @@ import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.profile.ProfileActivity
+import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.convertToDateTime
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.messenger.ConferenceInfo
 import org.jetbrains.anko.bundleOf
-import org.threeten.bp.format.DateTimeFormatter
 import kotlin.properties.Delegates
 
 /**
@@ -79,8 +79,8 @@ class ConferenceInfoFragment : BaseContentFragment<ConferenceInfo>() {
         super.showData(data)
 
         val dateTime = data.firstMessageTime.convertToDateTime()
-        val creationDate = DateTimeFormatter.ofPattern("dd.MM.yyyy").format(dateTime)
-        val creationTime = DateTimeFormatter.ofPattern("HH:mm").format(dateTime)
+        val creationDate = Utils.dateFormatter.format(dateTime)
+        val creationTime = Utils.timeFormatter.format(dateTime)
 
         time.text = getString(R.string.fragment_conference_info_time, creationDate, creationTime)
 

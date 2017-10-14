@@ -78,7 +78,8 @@ ext {
     ]
 
     debugImplementationDependencies = [
-            leakCanary: "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion",
+            leakCanary  : "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion",
+            rxPermissions: "com.tbruyelle.rxpermissions2:rxpermissions:$rxPermissionsVersion@aar",
     ]
 
     releaseImplementationDependencies = [

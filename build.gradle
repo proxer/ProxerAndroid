@@ -105,6 +105,7 @@ android {
     sourceSets {
         main {
             java.srcDirs += 'src/main/kotlin'
+            java.srcDirs += 'src/debug/kotlin'
             res.srcDirs += getResSrcDirs()
         }
     }

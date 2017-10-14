@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="activity_log_save_success">Erfolgreich gespeichert</string>
+    <string name="activity_log_save_error">Fehler beim Speichern</string>
+    <string name="activity_log_expanded_content">%1$s\n%2$s</string>
+    <string name="action_save">Speichern</string>
+</resources>

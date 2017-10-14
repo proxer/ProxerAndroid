@@ -16,11 +16,11 @@ import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.anime.AnimeAdapter.ViewHolder
 import me.proxer.app.base.BaseAdapter
+import me.proxer.app.util.Utils
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.convertToDateTime
 import me.proxer.app.util.extension.defaultLoad
 import me.proxer.library.util.ProxerUrls
-import org.threeten.bp.format.DateTimeFormatter
 
 /**
  * @author Ruben Gees
@@ -30,7 +30,6 @@ class AnimeAdapter(savedInstanceState: Bundle?, private val glide: GlideRequests
 
     private companion object {
         private const val EXPANDED_STATE = "anime_stream_expanded"
-        private val DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy")
     }
 
     val uploaderClickSubject: PublishSubject<AnimeStream> = PublishSubject.create()
@@ -127,7 +126,7 @@ class AnimeAdapter(savedInstanceState: Bundle?, private val glide: GlideRequests
             translatorGroup.text = item.translatorGroupName
                     ?: translatorGroup.context.getString(R.string.fragment_anime_empty_subgroup)
 
-            dateText.text = DATE_TIME_FORMATTER.format(item.date.convertToDateTime())
+            dateText.text = Utils.dateFormatter.format(item.date.convertToDateTime())
 
             play.visibility = if (item.isSupported) View.VISIBLE else View.GONE
             unsupported.visibility = if (item.isSupported) View.GONE else View.VISIBLE

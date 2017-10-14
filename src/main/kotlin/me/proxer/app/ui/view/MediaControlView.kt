@@ -11,17 +11,13 @@ import android.widget.TextView
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.R
+import me.proxer.app.util.Utils
 import org.threeten.bp.LocalDateTime
-import org.threeten.bp.format.DateTimeFormatter
 
 /**
  * @author Ruben Gees
  */
 class MediaControlView(context: Context?, attrs: AttributeSet?) : FrameLayout(context, attrs) {
-
-    private companion object {
-        private val DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-    }
 
     val uploaderClickSubject: PublishSubject<Uploader> = PublishSubject.create()
     val translatorGroupClickSubject: PublishSubject<SimpleTranslatorGroup> = PublishSubject.create()
@@ -92,7 +88,7 @@ class MediaControlView(context: Context?, attrs: AttributeSet?) : FrameLayout(co
         dateRow.visibility = View.GONE
     } else {
         dateRow.visibility = View.VISIBLE
-        dateText.text = DATE_TIME_FORMATTER.format(dateTime)
+        dateText.text = Utils.dateFormatter.format(dateTime)
     }
 
     fun setEpisodeInfo(episodeAmount: Int, currentEpisode: Int) {
