@@ -95,11 +95,8 @@ android {
     packagingOptions {
         exclude '**/*.kotlin_builtins'
         exclude '**/*.kotlin_module'
-        exclude '**/*.gwt.*'
-        exclude '**/rxjava.properties'
         exclude '**/rxkotlin.properties'
-        exclude 'protobuf.meta'
-        exclude 'build-data.properties'
+        exclude '**/*.pro'
     }
 
     sourceSets {
