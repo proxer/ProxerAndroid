@@ -16,7 +16,6 @@ import me.proxer.app.util.extension.subscribeAndLogErrors
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneOffset
 import java.io.File
-import java.io.IOException
 import java.util.Date
 import java.util.concurrent.TimeUnit
 
@@ -65,13 +64,10 @@ class LogViewModel : ViewModel() {
         saveDisposable = Completable
                 .fromAction {
                     data.value?.let {
-                        val dir = File(Environment.getExternalStorageDirectory(),
-                                globalContext.getString(R.string.app_name))
+                        val environmentDir = Environment.getExternalStorageDirectory()
+                        val dir = File(environmentDir, globalContext.getString(R.string.app_name)).apply { mkdirs() }
+                        val file = File(dir, "${Date().time}.log").apply { createNewFile() }
 
-                        val file = File(dir, "${Date().time}.log")
-
-                        if (!dir.mkdirs()) throw IOException()
-                        if (!file.createNewFile()) throw IOException()
                         file.writeText(it.asReversed().joinToString("\n"))
                     }
                 }
