@@ -74,6 +74,8 @@ class MangaAdapter : BaseAdapter<Page, ViewHolder>() {
 
         init {
             image.setDoubleTapZoomDuration(shortAnimationTime)
+            image.setBitmapDecoderClass(RapidImageDecoder::class.java)
+            image.setRegionDecoderClass(RapidImageRegionDecoder::class.java)
 
             @Suppress("ClickableViewAccessibility")
             image.setOnTouchListener(smoothScollHack)

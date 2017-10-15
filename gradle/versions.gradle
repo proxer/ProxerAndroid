@@ -75,6 +75,7 @@ ext {
     jsr305Version = '3.0.2'
     javaxExtrasVersion = '0.1.0'
     alfredVersion = 'develop-SNAPSHOT'
+    rapidDecoderVersion = '7cdfca47fa'
 
     // Debugging
     customActivityOnCrashVersion = '2.1.0'
