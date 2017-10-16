@@ -79,6 +79,10 @@
     public static int wtf(...);
 }
 
+-keep class * implements android.arch.lifecycle.GeneratedAdapter {
+    <init>(...);
+}
+
 # Remove Kotlin null checks.
 -assumenosideeffects class kotlin.jvm.internal.Intrinsics {
     static void checkParameterIsNotNull(java.lang.Object, java.lang.String);
