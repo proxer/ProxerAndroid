@@ -17,7 +17,7 @@ class RapidImageDecoder : ImageDecoder {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     config(Bitmap.Config.HARDWARE)
                 } else {
-                    config(Bitmap.Config.RGB_565)
+                    config(Bitmap.Config.ARGB_8888)
                 }
             }
             .decode()
