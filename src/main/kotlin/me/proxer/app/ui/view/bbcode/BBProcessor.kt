@@ -34,7 +34,7 @@ internal object BBProcessor {
 
     private fun processWithStyle(tree: BBToken, style: BBStyle): List<BBElement> = when (tree.type) {
         TOKEN_TEXT -> listOf(handleTextToken(tree, style))
-        TOKEN_SPOILER -> handleSpoilerToken(tree, style)
+        TOKEN_SPOILER -> listOf(handleSpoilerToken(tree, style))
         else -> tree.children.flatMap {
             processWithStyle(it, when (tree.type) {
                 TOKEN_ROOT -> style
@@ -53,12 +53,7 @@ internal object BBProcessor {
 
     private fun handleSpoilerToken(tree: BBToken, style: BBStyle) = tree.children
             .flatMap { processWithStyle(it, style.copy()) }
-            .let {
-                when (it.isEmpty()) {
-                    true -> it
-                    false -> it.plus(BBSpoilerElement(it))
-                }
-            }
+            .let { BBSpoilerElement(it) }
 
     private fun handleTextToken(tree: BBToken, style: BBStyle): BBElement {
         val text = tree.attribute as String
