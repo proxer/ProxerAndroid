@@ -103,8 +103,12 @@ class MainApplication : Application() {
         AppCompatDelegate.setDefaultNightMode(PreferenceHelper.getNightMode(this))
         NotificationUtils.createNotificationChannels(this)
 
-        chatDatabase = Room.databaseBuilder(this, ChatDatabase::class.java, "chat.db").build()
-        mangaDatabase = Room.databaseBuilder(this, LocalMangaDatabase::class.java, "manga.db").build()
+        chatDatabase = Room.databaseBuilder(this, ChatDatabase::class.java, "chat.db")
+                .build()
+
+        mangaDatabase = Room.databaseBuilder(this, LocalMangaDatabase::class.java, "manga.db")
+                .addMigrations(LocalMangaDatabase.MIGRATION_ONE_TWO)
+                .build()
 
         refWatcher = LeakCanary.install(this)
         globalContext = this
