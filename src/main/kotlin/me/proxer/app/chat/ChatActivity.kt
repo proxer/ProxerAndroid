@@ -14,19 +14,25 @@ import me.proxer.app.chat.conference.info.ConferenceInfoActivity
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.extension.autoDispose
 import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.startActivity
 
 class ChatActivity : BaseActivity() {
 
     companion object {
         private const val CONFERENCE_EXTRA = "conference"
+        private const val INITIAL_MESSAGE_EXTRA = "initial_message"
 
-        fun navigateTo(context: Activity, conference: LocalConference) {
-            context.startActivity<ChatActivity>(CONFERENCE_EXTRA to conference)
+        fun navigateTo(context: Activity, conference: LocalConference, initialMessage: String? = null) {
+            context.startActivity(context.intentFor<ChatActivity>(
+                    CONFERENCE_EXTRA to conference,
+                    INITIAL_MESSAGE_EXTRA to initialMessage
+            ))
         }
 
-        fun getIntent(context: Context, conference: LocalConference): Intent {
-            return context.intentFor<ChatActivity>(CONFERENCE_EXTRA to conference)
+        fun getIntent(context: Context, conference: LocalConference, initialMessage: String? = null): Intent {
+            return context.intentFor<ChatActivity>(
+                    CONFERENCE_EXTRA to conference,
+                    INITIAL_MESSAGE_EXTRA to initialMessage
+            )
         }
     }
 
@@ -37,6 +43,9 @@ class ChatActivity : BaseActivity() {
 
             title = conference.topic
         }
+
+    val initialMessage: String?
+        get() = intent.getStringExtra(INITIAL_MESSAGE_EXTRA)
 
     private val toolbar: Toolbar by bindView(R.id.toolbar)
 

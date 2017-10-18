@@ -57,6 +57,9 @@ abstract class ChatDao {
     abstract fun insertMessage(message: LocalMessage): Long
 
     @Query("SELECT * FROM conferences ORDER BY date DESC")
+    abstract fun getConferences(): List<LocalConference>
+
+    @Query("SELECT * FROM conferences ORDER BY date DESC")
     abstract fun getConferencesLiveData(): LiveData<List<LocalConference>?>
 
     @Query("SELECT * FROM conferences WHERE id = :id LIMIT 1")

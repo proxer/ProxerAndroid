@@ -148,7 +148,8 @@ object ChatNotifications {
         }
 
         val icon = when {
-            conference.image.isNotBlank() -> Utils.getBitmapFromUrl(context, ProxerUrls.userImage(conference.image))
+            conference.image.isNotBlank() -> Utils.getCircleBitmapFromUrl(context,
+                    ProxerUrls.userImage(conference.image))
 
             else -> IconicsDrawable(context, when (conference.isGroup) {
                 true -> CommunityMaterial.Icon.cmd_account_multiple

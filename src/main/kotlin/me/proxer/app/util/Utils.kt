@@ -51,13 +51,16 @@ object Utils {
         }
     }
 
-    fun getBitmapFromUrl(context: Context, url: HttpUrl) = try {
+    fun getCircleBitmapFromUrl(context: Context, url: HttpUrl) = try {
         GlideApp.with(context)
                 .asBitmap()
                 .load(url.toString())
+                .circleCrop()
                 .submit(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
                 .get()
     } catch (ignored: Throwable) {
+        ignored.printStackTrace()
+
         null
     }
 

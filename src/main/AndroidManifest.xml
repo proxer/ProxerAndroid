@@ -68,6 +68,19 @@
 
         <activity android:name=".chat.ChatActivity" />
 
+        <activity
+            android:name=".chat.share.ShareReceiverActivity"
+            android:label="Senden an&#8230;">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+            <meta-data
+                android:name="android.service.chooser.chooser_target_service"
+                android:value=".chat.share.ConferenceChooserTargetService" />
+        </activity>
+
         <activity android:name=".chat.create.CreateChatActivity" />
 
         <activity android:name=".chat.conference.info.ConferenceInfoActivity" />
@@ -110,7 +123,7 @@
             android:theme="@style/Theme.App.Translucent" />
 
         <activity
-            android:name="me.proxer.app.ui.ImageDetailActivity"
+            android:name=".ui.ImageDetailActivity"
             android:theme="@style/Theme.App.Transparent" />
 
         <activity
@@ -199,14 +212,23 @@
         </activity>
 
         <activity
-            android:name="me.proxer.app.ui.crash.CrashActivity"
+            android:name=".ui.crash.CrashActivity"
             android:process=":error_activity">
             <intent-filter>
                 <action android:name="cat.ereza.customactivityoncrash.ERROR" />
             </intent-filter>
         </activity>
 
-        <activity android:name="me.proxer.app.ui.WebViewActivity" />
+        <activity android:name=".ui.WebViewActivity" />
+
+        <service
+            android:name=".chat.share.ConferenceChooserTargetService"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_CHOOSER_TARGET_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.chooser.ChooserTargetService" />
+            </intent-filter>
+        </service>
 
         <receiver
             android:name=".news.NewsNotificationReadReceiver"

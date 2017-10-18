@@ -180,6 +180,10 @@ class ChatFragment : PagedContentFragment<LocalMessage>() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        if (savedInstanceState == null) {
+            messageInput.setText(hostingActivity.initialMessage)
+        }
+
         emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_emoticon))
 
         emojiButton.clicks()
