@@ -4,6 +4,7 @@ package me.proxer.app.util.extension
 
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleOwner
+import android.util.Log
 import com.uber.autodispose.CompletableSubscribeProxy
 import com.uber.autodispose.ObservableSubscribeProxy
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
@@ -12,6 +13,8 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
+import me.proxer.app.MainApplication.Companion.LOGGING_TAG
+import org.jetbrains.anko.getStackTraceString
 
 /**
  * @author Ruben Gees
@@ -29,100 +32,100 @@ inline fun Completable.autoDispose(owner: LifecycleOwner) = this
 inline fun <T> Observable<T>.subscribeAndLogErrors(noinline onSuccess: (T) -> Unit,
                                                    noinline onError: (Throwable) -> Unit): Disposable {
     return this.subscribe(onSuccess, {
-        it.printStackTrace()
+        Log.e(LOGGING_TAG, it.getStackTraceString())
         onError(it)
     })
 }
 
 inline fun <T> Observable<T>.subscribeAndLogErrors(noinline onSuccess: (T) -> Unit): Disposable {
     return this.subscribe(onSuccess, {
-        it.printStackTrace()
+        Log.e(LOGGING_TAG, it.getStackTraceString())
     })
 }
 
 inline fun <T> Observable<T>.subscribeAndLogErrors(): Disposable? {
     return this.subscribe({}, {
-        it.printStackTrace()
+        Log.e(LOGGING_TAG, it.getStackTraceString())
     })
 }
 
 inline fun <T> Single<T>.subscribeAndLogErrors(noinline onSuccess: (T) -> Unit,
                                                noinline onError: (Throwable) -> Unit): Disposable {
     return this.subscribe(onSuccess, {
-        it.printStackTrace()
+        Log.e(LOGGING_TAG, it.getStackTraceString())
         onError(it)
     })
 }
 
 inline fun <T> Single<T>.subscribeAndLogErrors(noinline onSuccess: (T) -> Unit): Disposable {
     return this.subscribe(onSuccess, {
-        it.printStackTrace()
+        Log.e(LOGGING_TAG, it.getStackTraceString())
     })
 }
 
 inline fun <T> Single<T>.subscribeAndLogErrors(): Disposable {
     return this.subscribe({}, {
-        it.printStackTrace()
+        Log.e(LOGGING_TAG, it.getStackTraceString())
     })
 }
 
 inline fun Completable.subscribeAndLogErrors(noinline onSuccess: () -> Unit,
                                              noinline onError: (Throwable) -> Unit): Disposable {
     return this.subscribe(onSuccess, {
-        it.printStackTrace()
+        Log.e(LOGGING_TAG, it.getStackTraceString())
         onError(it)
     })
 }
 
 inline fun Completable.subscribeAndLogErrors(noinline onSuccess: () -> Unit): Disposable {
     return this.subscribe(onSuccess, {
-        it.printStackTrace()
+        Log.e(LOGGING_TAG, it.getStackTraceString())
     })
 }
 
 inline fun Completable.subscribeAndLogErrors(): Disposable {
     return this.subscribe({}, {
-        it.printStackTrace()
+        Log.e(LOGGING_TAG, it.getStackTraceString())
     })
 }
 
 inline fun <T> ObservableSubscribeProxy<T>.subscribeAndLogErrors(noinline onSuccess: (T) -> Unit,
                                                                  noinline onError: (Throwable) -> Unit): Disposable {
     return this.subscribe(onSuccess, {
-        it.printStackTrace()
+        Log.e(LOGGING_TAG, it.getStackTraceString())
         onError(it)
     })
 }
 
 inline fun <T> ObservableSubscribeProxy<T>.subscribeAndLogErrors(noinline onSuccess: (T) -> Unit): Disposable {
     return this.subscribe(onSuccess, {
-        it.printStackTrace()
+        Log.e(LOGGING_TAG, it.getStackTraceString())
     })
 }
 
 inline fun <T> ObservableSubscribeProxy<T>.subscribeAndLogErrors(): Disposable {
     return this.subscribe({}, {
-        it.printStackTrace()
+        Log.e(LOGGING_TAG, it.getStackTraceString())
     })
 }
 
 inline fun CompletableSubscribeProxy.subscribeAndLogErrors(noinline onSuccess: () -> Unit,
                                                            noinline onError: (Throwable) -> Unit): Disposable {
     return this.subscribe(onSuccess, {
-        it.printStackTrace()
+        Log.e(LOGGING_TAG, it.getStackTraceString())
         onError(it)
     })
 }
 
 inline fun CompletableSubscribeProxy.subscribeAndLogErrors(noinline onSuccess: () -> Unit): Disposable {
     return this.subscribe(onSuccess, {
-        it.printStackTrace()
+        Log.e(LOGGING_TAG, it.getStackTraceString())
     })
 }
 
 inline fun CompletableSubscribeProxy.subscribeAndLogErrors(): Disposable {
     return this.subscribe({}, {
-        it.printStackTrace()
+        Log.e(LOGGING_TAG, it.getStackTraceString())
     })
 }
 

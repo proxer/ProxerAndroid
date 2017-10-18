@@ -9,17 +9,20 @@ import android.net.Uri
 import android.os.Build
 import android.support.annotation.ColorRes
 import android.support.v4.content.ContextCompat
+import android.util.Log
 import android.util.Patterns
 import com.bumptech.glide.request.target.Target
 import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.LinkBuilder
 import me.proxer.app.GlideApp
+import me.proxer.app.MainApplication.Companion.LOGGING_TAG
 import me.proxer.app.R
 import me.proxer.app.util.extension.androidUri
 import me.proxer.library.api.ProxerException
 import me.proxer.library.api.ProxerException.ErrorType
 import me.proxer.library.util.ProxerUrls
 import okhttp3.HttpUrl
+import org.jetbrains.anko.getStackTraceString
 import org.threeten.bp.format.DateTimeFormatter
 import java.util.regex.Pattern
 
@@ -58,8 +61,8 @@ object Utils {
                 .circleCrop()
                 .submit(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
                 .get()
-    } catch (ignored: Throwable) {
-        ignored.printStackTrace()
+    } catch (error: Throwable) {
+        Log.e(LOGGING_TAG, error.getStackTraceString())
 
         null
     }
