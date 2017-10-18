@@ -4,6 +4,9 @@ import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.library.api.LoginTokenManager
 
+/**
+ * @author Ruben Gees
+ */
 class ProxerLoginTokenManager : LoginTokenManager {
 
     override fun provide() = StorageHelper.user?.token

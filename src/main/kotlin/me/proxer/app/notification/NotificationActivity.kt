@@ -11,6 +11,9 @@ import me.proxer.app.base.BaseActivity
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.startActivity
 
+/**
+ * @author Ruben Gees
+ */
 class NotificationActivity : BaseActivity() {
 
     companion object {

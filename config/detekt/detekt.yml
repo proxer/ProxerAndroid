@@ -1,12 +1,7 @@
+failFast: true
+
 potential-bugs:
   UnsafeCast:
-    active: false
-
-exceptions:
-  TooGenericExceptionCatched:
-    active: false
-  # Enable later
-  TooGenericExceptionCaught:
     active: false
 
 complexity:
@@ -43,10 +38,9 @@ style:
 
 comments:
   UndocumentedPublicClass:
-    active: false
+    searchInNestedClass: false
+    searchInInnerClass: false
+    searchInInnerObject: false
+    searchInInnerInterface: false
   UndocumentedPublicFunction:
     active: false
-
-build:
-  warningThreshold: 0
-  failThreshold: 0

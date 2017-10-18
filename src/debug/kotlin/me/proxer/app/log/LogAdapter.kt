@@ -15,6 +15,8 @@ import me.proxer.app.util.Utils
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 
 /**
+ * abc
+ *
  * @author Ruben Gees
  */
 class LogAdapter(savedInstanceState: Bundle?) : BaseAdapter<LogMessage, ViewHolder>() {

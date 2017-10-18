@@ -26,6 +26,9 @@ import me.proxer.app.base.BaseActivity
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.extension.autoDispose
 
+/**
+ * @author Ruben Gees
+ */
 class StreamActivity : BaseActivity() {
 
     private val uri

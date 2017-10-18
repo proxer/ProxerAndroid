@@ -17,6 +17,9 @@ import me.proxer.app.ucp.overview.UcpOverviewFragment
 import me.proxer.app.ucp.topten.UcpTopTenFragment
 import org.jetbrains.anko.startActivity
 
+/**
+ * @author Ruben Gees
+ */
 class UcpActivity : BaseActivity() {
 
     companion object {

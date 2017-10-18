@@ -29,6 +29,7 @@ class RapidImageRegionDecoder : ImageRegionDecoder {
         return Point(decoder?.sourceWidth() ?: -1, decoder?.sourceHeight() ?: -1)
     }
 
+    @Suppress("TooGenericExceptionCaught")
     @Synchronized override fun decodeRegion(sRect: Rect, sampleSize: Int): Bitmap? {
         return try {
             decoder?.reset()

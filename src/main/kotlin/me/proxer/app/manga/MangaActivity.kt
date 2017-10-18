@@ -20,6 +20,9 @@ import me.proxer.library.enums.Language
 import me.proxer.library.util.ProxerUtils
 import org.jetbrains.anko.intentFor
 
+/**
+ * @author Ruben Gees
+ */
 class MangaActivity : BaseActivity() {
 
     companion object {

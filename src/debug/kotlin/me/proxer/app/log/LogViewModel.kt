@@ -86,7 +86,7 @@ class LogViewModel : ViewModel() {
 
     private fun convertToLogMessage(index: Int, rawLog: String): LogMessage {
         val date = try {
-            val rawDate = rawLog.split(" ").let { "${it[0]} ${it[1]}" }
+            val rawDate = rawLog.split(" ").let { if (it.size < 2) "" else "${it[0]} ${it[1]}" }
 
             LocalDateTime.now()
                     .withMonth(rawDate.substringBefore("-").toInt())
@@ -95,7 +95,7 @@ class LogViewModel : ViewModel() {
                     .withMinute(rawDate.substringAfter(":").substringBefore(":").toInt())
                     .withSecond(rawDate.substringAfterLast(":").substringBefore(".").toInt())
                     .withNano(rawDate.substringAfter(".").toInt() * 1000)
-        } catch (error: Exception) {
+        } catch (error: NumberFormatException) {
             LocalDateTime.ofEpochSecond(0, 0, ZoneOffset.UTC)
         }
 

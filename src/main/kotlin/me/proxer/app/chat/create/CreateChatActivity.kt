@@ -11,6 +11,9 @@ import me.proxer.app.base.BaseActivity
 import me.proxer.app.chat.Participant
 import org.jetbrains.anko.intentFor
 
+/**
+ * @author Ruben Gees
+ */
 class CreateChatActivity : BaseActivity() {
 
     companion object {

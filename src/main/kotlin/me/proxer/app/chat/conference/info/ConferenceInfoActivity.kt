@@ -10,6 +10,9 @@ import me.proxer.app.base.BaseActivity
 import me.proxer.app.chat.LocalConference
 import org.jetbrains.anko.startActivity
 
+/**
+ * @author Ruben Gees
+ */
 class ConferenceInfoActivity : BaseActivity() {
 
     companion object {

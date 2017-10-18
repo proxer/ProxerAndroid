@@ -22,6 +22,9 @@ import me.proxer.app.util.extension.unsafeLazy
 import org.jetbrains.anko.toast
 import kotlin.properties.Delegates
 
+/**
+ * @author Ruben Gees
+ */
 class LogActivity : BaseActivity() {
 
     private val viewModel by unsafeLazy { LogViewModelProvider.get(this) }

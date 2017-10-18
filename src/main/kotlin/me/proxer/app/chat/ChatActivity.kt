@@ -15,6 +15,9 @@ import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.extension.autoDispose
 import org.jetbrains.anko.intentFor
 
+/**
+ * @author Ruben Gees
+ */
 class ChatActivity : BaseActivity() {
 
     companion object {
