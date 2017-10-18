@@ -25,18 +25,12 @@ abstract class ChatDao {
 
     @Transaction
     open fun insertMessageToSend(text: String, conferenceId: Long): LocalMessage {
-        if (nextMessageToSendId >= 0) {
-            calculateNextMessageToSendId()
-        }
-
         val user = StorageHelper.user ?: throw IllegalStateException("User cannot be null")
-        val message = LocalMessage(nextMessageToSendId, conferenceId, user.id, user.name, text,
+        val message = LocalMessage(calculateNextMessageToSendId(), conferenceId, user.id, user.name, text,
                 MessageAction.NONE, Date(), Device.MOBILE)
 
         insertMessage(message)
         markConferenceAsRead(conferenceId)
-
-        nextMessageToSendId--
 
         return message
     }
@@ -115,11 +109,11 @@ abstract class ChatDao {
     @Query("DELETE FROM messages")
     abstract fun clearMessages()
 
-    private fun calculateNextMessageToSendId() {
+    private fun calculateNextMessageToSendId(): Long {
         val candidate = findLowestMessageId() ?: -1L
 
-        nextMessageToSendId = when (candidate < 0) {
-            true -> candidate
+        return when (candidate < 0) {
+            true -> candidate - 1
             false -> -1L
         }
     }
