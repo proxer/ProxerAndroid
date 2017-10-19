@@ -22,6 +22,7 @@ import java.util.Date
 /**
  * @author Ruben Gees
  */
+@TargetApi(Build.VERSION_CODES.M)
 class ConferenceChooserTargetService : ChooserTargetService() {
 
     companion object {

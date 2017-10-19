@@ -19,10 +19,6 @@ import java.util.Date
 @Dao
 abstract class ChatDao {
 
-    companion object {
-        private var nextMessageToSendId = 0L
-    }
-
     @Transaction
     open fun insertMessageToSend(text: String, conferenceId: Long): LocalMessage {
         val user = StorageHelper.user ?: throw IllegalStateException("User cannot be null")

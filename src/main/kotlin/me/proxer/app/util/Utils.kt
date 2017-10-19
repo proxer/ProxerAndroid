@@ -31,9 +31,9 @@ import java.util.regex.Pattern
  */
 object Utils {
 
-    val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
-    val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-    val dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss dd.MM.yyyy")
+    val timeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
+    val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+    val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss dd.MM.yyyy")
 
     private val WEB_REGEX = Patterns.WEB_URL
     private val MENTIONS_REGEX = Pattern.compile("(@[a-zA-Z0-9_-]+)")
