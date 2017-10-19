@@ -40,7 +40,7 @@ android {
         applicationId 'me.proxer.app'
         minSdkVersion project.ext.minSdkVersion
         targetSdkVersion project.ext.targetSdkVersion
-        versionCode project.ext.appVersionMajor * 10000 + project.ext.appVersionMinor * 1000 + project.ext.appVersionPatch * 100
+        versionCode project.ext.appVersionMajor * 1000000 + project.ext.appVersionMinor * 10000 + project.ext.appVersionPatch * 100
         versionName "${project.ext.appVersionMajor}.${project.ext.appVersionMinor}.${project.ext.appVersionPatch}"
 
         vectorDrawables.useSupportLibrary true
