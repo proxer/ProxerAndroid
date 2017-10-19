@@ -5,11 +5,11 @@ potential-bugs:
     active: false
 
 complexity:
+  StringLiteralDuplication:
+    threshold: 5
   LongParameterList:
     active: false
   LargeClass:
-    active: false
-  ComplexMethod:
     active: false
   TooManyFunctions:
     active: false
@@ -17,19 +17,15 @@ complexity:
     active: false
   NestedBlockDepth:
     active: false
-  StringLiteralDuplication:
-    threshold: 5
 
 style:
-  SafeCast:
-    active: false
   FunctionMaxLength:
-    active: false
-  MagicNumber:
-    active: false
+    maximumFunctionNameLength: 35
   VariableMinLength:
     minimumVariableNameLength: 2
   VariableMaxLength:
+    maximumVariableNameLength: 35
+  MagicNumber:
     active: false
   DataClassContainsFunctions:
     active: false

@@ -47,7 +47,7 @@ object PreferenceHelper {
     fun getNotificationsInterval(context: Context)
             = getDefaultSharedPreferences(context).getString(NOTIFICATIONS_INTERVAL, "30").toLong()
 
-    fun isUnmeteredNetworkRequiredForMangaDownload(context: Context)
+    fun isUnmeteredNetworkRequired(context: Context)
             = getDefaultSharedPreferences(context).getBoolean(MANGA_WLAN, true)
 
     @AppCompatDelegate.NightMode

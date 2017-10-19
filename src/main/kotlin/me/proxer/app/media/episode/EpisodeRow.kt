@@ -9,7 +9,6 @@ import me.proxer.library.enums.MediaLanguage
 /**
  * @author Ruben Gees
  */
-@Suppress("ExceptionRaisedInUnexpectedLocation") // I don't know of a better way currently, check back later.
 class EpisodeRow(val category: Category, val userProgress: Int, val episodeAmount: Int, episodes: List<Episode>) {
 
     val number: Int
@@ -17,22 +16,21 @@ class EpisodeRow(val category: Category, val userProgress: Int, val episodeAmoun
     val languageHosterList: List<Pair<MediaLanguage, List<String>?>>
 
     init {
-        if (episodes.isEmpty()) {
-            throw IllegalArgumentException("At least one episode has to be passed.")
+        val firstEpisode = episodes.firstOrNull()
+
+        if (firstEpisode != null) {
+            title = (firstEpisode as? MangaEpisode)?.title
+            number = firstEpisode.number
+        } else {
+            title = null
+            number = -1
         }
 
-        this.number = episodes.first().number
-
-        when {
-            episodes.first() is MangaEpisode -> {
-                this.title = (episodes.first() as MangaEpisode).title
-                this.languageHosterList = episodes.map { it.language to null }
+        languageHosterList = episodes.map {
+            when (it) {
+                is AnimeEpisode -> it.language to it.hosterImages
+                else -> it.language to null
             }
-            episodes.first() is AnimeEpisode -> {
-                this.title = null
-                this.languageHosterList = episodes.map { it.language to (it as AnimeEpisode).hosterImages }
-            }
-            else -> throw IllegalArgumentException("Unknown type: ${episodes.first().javaClass}")
         }
     }
 }

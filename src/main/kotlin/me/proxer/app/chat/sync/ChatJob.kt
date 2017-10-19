@@ -115,66 +115,80 @@ class ChatJob : Job() {
     override fun onRunJob(params: Params): Result {
         if (StorageHelper.user == null) return Result.FAILURE
 
-        val synchronizationResult = conferenceId.let { conferenceId ->
-            when (conferenceId) {
-                0L -> try {
-                    val newConferencesAndMessages = synchronize()
-
-                    StorageHelper.areConferencesSynchronized = true
-
-                    if (newConferencesAndMessages.isNotEmpty()) {
-                        bus.post(SynchronizationEvent())
-
-                        if (canShowNotification(context)) {
-                            showNotification(context)
-                        }
-                    }
-
-                    newConferencesAndMessages.flatMap { it.value }.maxBy { it.date }?.date?.let { mostRecentDate ->
-                        if (mostRecentDate > StorageHelper.lastChatMessageDate) {
-                            StorageHelper.lastChatMessageDate = mostRecentDate
-                        }
-                    }
-
-                    if (newConferencesAndMessages.isNotEmpty()) CHANGES else NO_CHANGES
-                } catch (error: Throwable) {
-                    when (error) {
-                        is ChatException -> bus.post(ChatErrorEvent(error))
-                        else -> bus.post(ChatErrorEvent(ChatSynchronizationException(error)))
-                    }
-
-                    if (ErrorUtils.isIpBlockedError(error)) {
-                        ChatNotifications.showError(context, error)
-
-                        ERROR
-                    } else {
-                        NO_CHANGES
-                    }
-                }
-                else -> try {
-                    val fetchedMessages = loadMoreMessages(conferenceId)
-
-                    fetchedMessages.maxBy { it.date }?.date?.let { mostRecentDate ->
-                        if (mostRecentDate > StorageHelper.lastChatMessageDate) {
-                            StorageHelper.lastChatMessageDate = mostRecentDate
-                        }
-                    }
-
-                    CHANGES
-                } catch (error: Throwable) {
-                    when (error) {
-                        is ChatException -> bus.post(ChatErrorEvent(error))
-                        else -> bus.post(ChatErrorEvent(ChatMessageException(error)))
-                    }
-
-                    NO_CHANGES
-                }
+        val synchronizationResult = when (conferenceId) {
+            0L -> try {
+                handleSynchronization()
+            } catch (error: Throwable) {
+                handleSynchronizationError(error)
+            }
+            else -> try {
+                handleLoadMoreMessages(conferenceId)
+            } catch (error: Throwable) {
+                handleLoadMoreMessagesError(error)
             }
         }
 
         reschedule(context, synchronizationResult)
 
         return if (synchronizationResult != ERROR) Result.SUCCESS else Result.FAILURE
+    }
+
+    private fun handleSynchronization(): SynchronizationResult {
+        val newConferencesAndMessages = synchronize()
+
+        StorageHelper.areConferencesSynchronized = true
+
+        if (newConferencesAndMessages.isNotEmpty()) {
+            bus.post(SynchronizationEvent())
+
+            if (canShowNotification(context)) {
+                showNotification(context)
+            }
+        }
+
+        newConferencesAndMessages.flatMap { it.value }.maxBy { it.date }?.date?.let { mostRecentDate ->
+            if (mostRecentDate > StorageHelper.lastChatMessageDate) {
+                StorageHelper.lastChatMessageDate = mostRecentDate
+            }
+        }
+
+        return if (newConferencesAndMessages.isNotEmpty()) CHANGES else NO_CHANGES
+    }
+
+    private fun handleSynchronizationError(error: Throwable): SynchronizationResult {
+        when (error) {
+            is ChatException -> bus.post(ChatErrorEvent(error))
+            else -> bus.post(ChatErrorEvent(ChatSynchronizationException(error)))
+        }
+
+        return if (ErrorUtils.isIpBlockedError(error)) {
+            ChatNotifications.showError(context, error)
+
+            ERROR
+        } else {
+            NO_CHANGES
+        }
+    }
+
+    private fun handleLoadMoreMessagesError(error: Throwable): SynchronizationResult {
+        when (error) {
+            is ChatException -> bus.post(ChatErrorEvent(error))
+            else -> bus.post(ChatErrorEvent(ChatMessageException(error)))
+        }
+
+        return NO_CHANGES
+    }
+
+    private fun handleLoadMoreMessages(conferenceId: Long): SynchronizationResult {
+        val fetchedMessages = loadMoreMessages(conferenceId)
+
+        fetchedMessages.maxBy { it.date }?.date?.let { mostRecentDate ->
+            if (mostRecentDate > StorageHelper.lastChatMessageDate) {
+                StorageHelper.lastChatMessageDate = mostRecentDate
+            }
+        }
+
+        return CHANGES
     }
 
     private fun synchronize(): Map<LocalConference, List<LocalMessage>> {
@@ -231,7 +245,6 @@ class ChatJob : Job() {
 
             // Per documentation: The api may return some String in case something went wrong.
             if (result != null) {
-
                 // Delete all messages we have correctly sent already.
                 chatDatabase.runInTransaction {
                     for (i in 0..index) {
@@ -279,12 +292,12 @@ class ChatJob : Job() {
         val mostRecentMessage = chatDao.findMostRecentMessageForConference(conference.id.toLong())?.toNonLocalMessage()
 
         return when (mostRecentMessage) {
-            null -> fetchNewMessagesForEmptyConference(conference)
-            else -> fetchNewMessagesForExistingConference(conference, mostRecentMessage)
+            null -> fetchForEmptyConference(conference)
+            else -> fetchForExistingConference(conference, mostRecentMessage)
         }
     }
 
-    private fun fetchNewMessagesForEmptyConference(conference: Conference): Pair<List<Message>, Boolean> {
+    private fun fetchForEmptyConference(conference: Conference): Pair<List<Message>, Boolean> {
         val newMessages = mutableListOf<Message>()
 
         var unreadAmount = 0
@@ -311,7 +324,7 @@ class ChatJob : Job() {
         return newMessages to false
     }
 
-    private fun fetchNewMessagesForExistingConference(conference: Conference, mostRecentMessage: Message):
+    private fun fetchForExistingConference(conference: Conference, mostRecentMessage: Message):
             Pair<List<Message>, Boolean> {
         val mostRecentMessageIdBeforeUpdate = mostRecentMessage.id.toLong()
         val newMessages = mutableListOf<Message>()

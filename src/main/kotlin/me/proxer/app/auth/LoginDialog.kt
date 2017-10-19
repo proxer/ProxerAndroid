@@ -56,6 +56,17 @@ class LoginDialog : BaseDialog() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        setupViews()
+        setupViewModels()
+
+        if (savedInstanceState == null) {
+            username.requestFocus()
+
+            dialog.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+        }
+    }
+
+    private fun setupViews() {
         listOf(password, secret).forEach {
             it.editorActionEvents(Predicate { event -> event.actionId() == EditorInfo.IME_ACTION_GO })
                     .filter { event -> event.actionId() == EditorInfo.IME_ACTION_GO }
@@ -71,7 +82,9 @@ class LoginDialog : BaseDialog() {
         }
 
         secret.transformationMethod = null
+    }
 
+    private fun setupViewModels() {
         viewModel.data.observe(this, Observer {
             it?.let {
                 StorageHelper.user = LocalUser(it.loginToken, it.id, username.text.trim().toString(), it.image)
@@ -100,12 +113,6 @@ class LoginDialog : BaseDialog() {
             secret.imeOptions = if (it == true) EditorInfo.IME_ACTION_GO else EditorInfo.IME_ACTION_NEXT
             password.imeOptions = if (it == true) EditorInfo.IME_ACTION_NEXT else EditorInfo.IME_ACTION_GO
         })
-
-        if (savedInstanceState == null) {
-            username.requestFocus()
-
-            dialog.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
-        }
     }
 
     private fun validateAndLogin() {

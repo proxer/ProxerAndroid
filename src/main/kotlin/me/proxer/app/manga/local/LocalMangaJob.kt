@@ -45,7 +45,7 @@ class LocalMangaJob : Job() {
         private var batchProgress = 0.0
 
         fun schedule(context: Context, entryId: String, episode: Int, language: Language) {
-            val isUnmeteredRequired = PreferenceHelper.isUnmeteredNetworkRequiredForMangaDownload(context)
+            val isUnmeteredRequired = PreferenceHelper.isUnmeteredNetworkRequired(context)
             val extras = PersistableBundleCompat().apply {
                 putString(ENTRY_ID_EXTRA, entryId)
                 putInt(EPISODE_EXTRA, episode)

@@ -18,6 +18,7 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.MainActivity
 import me.proxer.app.R
+import me.proxer.app.auth.LocalUser
 import me.proxer.app.chat.ChatActivity
 import me.proxer.app.chat.LocalConference
 import me.proxer.app.chat.LocalMessage
@@ -26,6 +27,7 @@ import me.proxer.app.util.NotificationUtils
 import me.proxer.app.util.NotificationUtils.CHAT_CHANNEL
 import me.proxer.app.util.Utils
 import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.extension.LocalConferenceMap
 import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.getQuantityString
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper.DrawerItem
@@ -40,7 +42,7 @@ object ChatNotifications {
     private const val GROUP = "chat"
     private const val ID = 782373275
 
-    fun showOrUpdate(context: Context, conferenceMap: Map<LocalConference, List<LocalMessage>>) {
+    fun showOrUpdate(context: Context, conferenceMap: LocalConferenceMap) {
         listOf(ID to buildChatSummaryNotification(context, conferenceMap))
                 .plus(conferenceMap.entries
                         .map { (conference, messages) ->
@@ -75,9 +77,7 @@ object ChatNotifications {
     fun cancelIndividual(context: Context, conferenceId: Long) = NotificationManagerCompat.from(context)
             .cancel(conferenceId.toInt())
 
-    private fun buildChatSummaryNotification(context: Context,
-                                             conferenceMap: Map<LocalConference, List<LocalMessage>>): Notification? {
-
+    private fun buildChatSummaryNotification(context: Context, conferenceMap: LocalConferenceMap): Notification? {
         val filteredConferenceMap = conferenceMap.filter { it.value.isNotEmpty() }.apply {
             if (isEmpty()) {
                 return null
@@ -92,23 +92,7 @@ object ChatNotifications {
 
         val title = "$messageAmountText $conferenceAmountText"
         val content = SpannableString(filteredConferenceMap.keys.joinToString(", ", transform = { it.topic }))
-        val style = NotificationCompat.InboxStyle()
-                .setBigContentTitle(content)
-                .setSummaryText(title)
-                .apply {
-                    filteredConferenceMap.forEach { entry ->
-                        entry.value.forEach {
-                            val sender = when {
-                                entry.key.isGroup -> "${entry.key.topic}: ${it.username} "
-                                else -> "${entry.key.topic}: "
-                            }
-
-                            addLine(SpannableString(sender + it.message).apply {
-                                setSpan(StyleSpan(Typeface.BOLD), 0, sender.length, SPAN_EXCLUSIVE_EXCLUSIVE)
-                            })
-                        }
-                    }
-                }
+        val style = buildSummaryStyle(content, title, filteredConferenceMap)
 
         val shouldAlert = conferenceMap.keys
                 .map { it.date }
@@ -133,6 +117,25 @@ object ChatNotifications {
                 .build()
     }
 
+    private fun buildSummaryStyle(content: SpannableString, title: String,
+                                  filteredConferenceMap: LocalConferenceMap) = NotificationCompat.InboxStyle()
+            .setBigContentTitle(content)
+            .setSummaryText(title)
+            .apply {
+                filteredConferenceMap.forEach { entry ->
+                    entry.value.forEach {
+                        val sender = when {
+                            entry.key.isGroup -> "${entry.key.topic}: ${it.username} "
+                            else -> "${entry.key.topic}: "
+                        }
+
+                        addLine(SpannableString(sender + it.message).apply {
+                            setSpan(StyleSpan(Typeface.BOLD), 0, sender.length, SPAN_EXCLUSIVE_EXCLUSIVE)
+                        })
+                    }
+                }
+            }
+
     private fun buildIndividualChatNotification(context: Context, conference: LocalConference,
                                                 messages: List<LocalMessage>): Notification? {
         val user = StorageHelper.user
@@ -141,57 +144,13 @@ object ChatNotifications {
             return null
         }
 
-        val amount = messages.size
-        val content = when (amount) {
+        val content = when (messages.size) {
             1 -> messages.first().message
-            else -> context.getQuantityString(R.plurals.notification_chat_message_amount, amount)
+            else -> context.getQuantityString(R.plurals.notification_chat_message_amount, messages.size)
         }
 
-        val icon = when {
-            conference.image.isNotBlank() -> Utils.getCircleBitmapFromUrl(context,
-                    ProxerUrls.userImage(conference.image))
-
-            else -> IconicsDrawable(context, when (conference.isGroup) {
-                true -> CommunityMaterial.Icon.cmd_account_multiple
-                false -> CommunityMaterial.Icon.cmd_account
-            }).sizeDp(96).colorRes(R.color.colorPrimary).toBitmap()
-        }
-
-        val style = when (amount) {
-            1 -> {
-                val username = messages.first().username
-                val message = messages.first().message
-
-                NotificationCompat.BigTextStyle()
-                        .setBigContentTitle(conference.topic)
-                        .setSummaryText(context.getQuantityString(R.plurals.notification_chat_message_amount, amount))
-                        .bigText(when (conference.isGroup) {
-                            true -> SpannableString("$username $message").apply {
-                                setSpan(StyleSpan(Typeface.BOLD), 0, username.length, SPAN_EXCLUSIVE_EXCLUSIVE)
-                            }
-                            false -> message
-                        })
-            }
-
-            else -> when (conference.isGroup) {
-                true -> NotificationCompat.MessagingStyle(user.name)
-                        .setConversationTitle(conference.topic)
-                        .apply {
-                            messages.forEach {
-                                addMessage(it.message, it.date.time, it.username)
-                            }
-                        }
-                false -> NotificationCompat.InboxStyle()
-                        .setBigContentTitle(conference.topic)
-                        .setSummaryText(content)
-                        .apply {
-                            messages.forEach {
-                                addLine(it.message)
-                            }
-                        }
-            }
-        }
-
+        val icon = buildIndividualIcon(context, conference)
+        val style = buildIndividualStyle(messages, conference, context, user, content)
         val intent = TaskStackBuilder.create(context)
                 .addNextIntent(MainActivity.getSectionIntent(context, DrawerItem.CHAT))
                 .addNextIntent(ChatActivity.getIntent(context, conference))
@@ -230,5 +189,51 @@ object ChatNotifications {
                 .addAction(R.drawable.ic_stat_check, context.getString(R.string.notification_chat_read_action),
                         ChatNotificationReadReceiver.getPendingIntent(context, conference.id))
                 .build()
+    }
+
+    private fun buildIndividualIcon(context: Context, conference: LocalConference) = when {
+        conference.image.isNotBlank() -> Utils.getCircleBitmapFromUrl(context,
+                ProxerUrls.userImage(conference.image))
+
+        else -> IconicsDrawable(context, when (conference.isGroup) {
+            true -> CommunityMaterial.Icon.cmd_account_multiple
+            false -> CommunityMaterial.Icon.cmd_account
+        }).sizeDp(96).colorRes(R.color.colorPrimary).toBitmap()
+    }
+
+    private fun buildIndividualStyle(messages: List<LocalMessage>, conference: LocalConference, context: Context,
+                                     user: LocalUser, content: String) = when (messages.size) {
+        1 -> {
+            val message = messages.first().message
+            val username = messages.first().username
+            val summaryText = context.getQuantityString(R.plurals.notification_chat_message_amount, messages.size)
+
+            NotificationCompat.BigTextStyle()
+                    .setBigContentTitle(conference.topic)
+                    .setSummaryText(summaryText)
+                    .bigText(when (conference.isGroup) {
+                        true -> SpannableString("$username $message").apply {
+                            setSpan(StyleSpan(Typeface.BOLD), 0, username.length, SPAN_EXCLUSIVE_EXCLUSIVE)
+                        }
+                        false -> message
+                    })
+        }
+        else -> when (conference.isGroup) {
+            true -> NotificationCompat.MessagingStyle(user.name)
+                    .setConversationTitle(conference.topic)
+                    .apply {
+                        messages.forEach {
+                            addMessage(it.message, it.date.time, it.username)
+                        }
+                    }
+            false -> NotificationCompat.InboxStyle()
+                    .setBigContentTitle(conference.topic)
+                    .setSummaryText(content)
+                    .apply {
+                        messages.forEach {
+                            addLine(it.message)
+                        }
+                    }
+        }
     }
 }

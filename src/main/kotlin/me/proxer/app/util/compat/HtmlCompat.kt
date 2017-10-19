@@ -12,7 +12,7 @@ object HtmlCompat {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             return Html.fromHtml(source, Html.FROM_HTML_MODE_LEGACY)
         } else {
-            @Suppress("DEPRECATION")
+            @Suppress("deprecation")
             return Html.fromHtml(source)
         }
     }
