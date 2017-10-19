@@ -13,7 +13,7 @@ class ResettingMutableLiveData<T> : MutableLiveData<T>() {
     private val observerAmount = AtomicInteger()
     private val deliveredAmount = AtomicInteger()
 
-    override fun observe(owner: LifecycleOwner?, observer: Observer<T>) {
+    override fun observe(owner: LifecycleOwner, observer: Observer<T>) {
         super.observe(owner, Observer {
             observer.onChanged(it)
 
@@ -29,7 +29,7 @@ class ResettingMutableLiveData<T> : MutableLiveData<T>() {
         observerAmount.incrementAndGet()
     }
 
-    override fun removeObserver(observer: Observer<T>?) {
+    override fun removeObserver(observer: Observer<T>) {
         observerAmount.decrementAndGet()
 
         super.removeObserver(observer)
