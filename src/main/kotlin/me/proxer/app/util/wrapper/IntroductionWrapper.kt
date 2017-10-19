@@ -41,6 +41,6 @@ object IntroductionWrapper {
                     .withDescription(R.string.introduction_welcome_description),
             Slide().withTitle(R.string.introduction_notifications_title)
                     .withColorResource(R.color.colorAccent)
-                    .withOption(Option(context.getString(R.string.introduction_notifications_description), false))
+                    .withOption(Option(context.getString(R.string.introduction_notifications_description), true))
     )
 }
