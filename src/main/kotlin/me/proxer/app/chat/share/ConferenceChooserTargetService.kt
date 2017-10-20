@@ -58,7 +58,6 @@ class ConferenceChooserTargetService : ChooserTargetService() {
     private fun constructEmptyIcon(conference: LocalConference) = IconicsDrawable(applicationContext)
             .sizeDp(DeviceUtils.getScreenWidth(applicationContext) / 6)
             .paddingDp(DeviceUtils.getScreenWidth(applicationContext) / 32)
-            .backgroundColorRes(R.color.icon)
             .colorRes(R.color.colorAccent)
             .let { drawable ->
                 when {
