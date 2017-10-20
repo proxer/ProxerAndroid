@@ -191,22 +191,33 @@ class ChatJob : Job() {
         return CHANGES
     }
 
+    @Suppress("RethrowCaughtException")
     private fun synchronize(): Map<LocalConference, List<LocalMessage>> {
-        val deletedMessages = sendMessages()
+        val sentMessages = sendMessages()
 
-        markConferencesAsRead(chatDao.getConferencesToMarkAsRead()
-                .plus(deletedMessages.map { chatDao.findConference(it.conferenceId) })
-                .distinct()
-                .filterNotNull())
+        val newConferencesAndMessages = try {
+            markConferencesAsRead(chatDao.getConferencesToMarkAsRead()
+                    .plus(sentMessages.map { chatDao.findConference(it.conferenceId) })
+                    .distinct()
+                    .filterNotNull())
 
-        val newConferencesAndMessages = fetchConferences().associate { conference ->
-            fetchNewMessages(conference).let { (messages, isFullyLoaded) ->
-                val isLocallyFullyLoaded = chatDao.findConference(conference.id.toLong())
-                        ?.isFullyLoaded == true
+            fetchConferences().associate { conference ->
+                fetchNewMessages(conference).let { (messages, isFullyLoaded) ->
+                    val isLocallyFullyLoaded = chatDao.findConference(conference.id.toLong())
+                            ?.isFullyLoaded == true
 
-                conference.toLocalConference(isLocallyFullyLoaded || isFullyLoaded) to
-                        messages.map { it.toLocalMessage() }.asReversed()
+                    conference.toLocalConference(isLocallyFullyLoaded || isFullyLoaded) to
+                            messages.map { it.toLocalMessage() }.asReversed()
+                }
             }
+        } catch (error: Throwable) {
+            chatDatabase.runInTransaction {
+                sentMessages.forEach {
+                    chatDao.deleteMessageToSend(it.id)
+                }
+            }
+
+            throw error
         }
 
         chatDatabase.runInTransaction {
@@ -215,7 +226,7 @@ class ChatJob : Job() {
                 chatDao.insertMessages(it.values.flatten())
             }
 
-            deletedMessages.forEach {
+            sentMessages.forEach {
                 chatDao.deleteMessageToSend(it.id)
             }
         }
@@ -237,11 +248,20 @@ class ChatJob : Job() {
         return fetchedMessages
     }
 
+    @Suppress("RethrowCaughtException")
     private fun sendMessages() = chatDao.getMessagesToSend().apply {
         forEachIndexed { index, (messageId, conferenceId, _, _, message) ->
-            val result = api.messenger().sendMessage(conferenceId.toString(), message)
-                    .build()
-                    .execute()
+            val result = try {
+                api.messenger().sendMessage(conferenceId.toString(), message)
+                        .build()
+                        .execute()
+            } catch (error: ProxerException) {
+                if (error.cause?.stackTrace?.find { it.methodName.contains("read") } != null) {
+                    chatDao.deleteMessageToSend(messageId)
+                }
+
+                throw error
+            }
 
             // Per documentation: The api may return some String in case something went wrong.
             if (result != null) {
