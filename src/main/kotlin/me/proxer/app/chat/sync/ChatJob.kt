@@ -257,6 +257,8 @@ class ChatJob : Job() {
                         .execute()
             } catch (error: ProxerException) {
                 if (error.cause?.stackTrace?.find { it.methodName.contains("read") } != null) {
+                    // The message was sent, but we did not receive a proper api answer due to slow network, delete the
+                    // message to avoid resending it.
                     chatDao.deleteMessageToSend(messageId)
                 }
 
