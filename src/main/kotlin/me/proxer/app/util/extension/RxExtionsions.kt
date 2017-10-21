@@ -1,4 +1,4 @@
-@file:Suppress("NOTHING_TO_INLINE")
+@file:Suppress("NOTHING_TO_INLINE", "MethodOverloading")
 
 package me.proxer.app.util.extension
 

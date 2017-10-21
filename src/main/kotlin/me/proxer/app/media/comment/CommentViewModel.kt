@@ -12,8 +12,8 @@ import kotlin.properties.Delegates
  * @author Ruben Gees
  */
 @GeneratedProvider
-class CommentViewModel(private val entryId: String, sortCriteria: CommentSortCriteria)
-    : PagedContentViewModel<Comment>() {
+class CommentViewModel(private val entryId: String, sortCriteria: CommentSortCriteria) :
+        PagedContentViewModel<Comment>() {
 
     override val itemsOnPage = 10
 

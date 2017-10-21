@@ -179,7 +179,7 @@ class AboutFragment : MaterialAboutFragment() {
                             .colorRes(R.color.icon))
                     .setOnClickAction {
                         showPage(HttpUrl.parse("https://github.com/$DEVELOPER_GITHUB_NAME")
-                                ?: throw IllegalStateException())
+                                ?: throw IllegalStateException("url is null"))
                     }.build(),
             MaterialAboutActionItem.Builder()
                     .text(getString(R.string.about_developer_proxer_title))

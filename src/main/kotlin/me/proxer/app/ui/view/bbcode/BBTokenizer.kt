@@ -20,7 +20,6 @@ import me.proxer.app.ui.view.bbcode.BBTokenizer.BBTokenType.TOKEN_SIZE
 import me.proxer.app.ui.view.bbcode.BBTokenizer.BBTokenType.TOKEN_SPOILER
 import me.proxer.app.ui.view.bbcode.BBTokenizer.BBTokenType.TOKEN_TEXT
 import me.proxer.app.ui.view.bbcode.BBTokenizer.BBTokenType.TOKEN_UNDERLINE
-import java.util.ArrayList
 import java.util.Stack
 
 /**
@@ -118,6 +117,7 @@ internal object BBTokenizer {
         val children = ArrayList<BBToken>()
     }
 
+    @Suppress("MethodOverloading") // This seems to be buggy currently.
     internal sealed class BBTokenRule {
         internal class SizeTokenRule : BBTokenRule() {
 

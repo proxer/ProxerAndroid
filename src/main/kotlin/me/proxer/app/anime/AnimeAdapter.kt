@@ -25,8 +25,8 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-class AnimeAdapter(savedInstanceState: Bundle?, private val glide: GlideRequests)
-    : BaseAdapter<AnimeStream, ViewHolder>() {
+class AnimeAdapter(savedInstanceState: Bundle?, private val glide: GlideRequests) :
+        BaseAdapter<AnimeStream, ViewHolder>() {
 
     private companion object {
         private const val EXPANDED_STATE = "anime_stream_expanded"

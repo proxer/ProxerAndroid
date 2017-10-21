@@ -33,7 +33,7 @@ class Mp4UploadStreamResolver : StreamResolver() {
                 val mediaId = regexResult.groupValues[1]
 
                 if (mediaId.isBlank()) {
-                    throw StreamResolutionException()
+                    throw StreamResolutionException("mediaId is null")
                 }
 
                 mediaId
@@ -41,13 +41,15 @@ class Mp4UploadStreamResolver : StreamResolver() {
             .flatMap { mediaId ->
                 client.newCall(Request.Builder()
                         .post(FormBody.Builder().add("op", "download2").add("id", mediaId).build())
-                        .url(HttpUrl.parse("https://mp4upload.com/$mediaId") ?: throw IllegalStateException())
+                        .url(HttpUrl.parse("https://mp4upload.com/$mediaId")
+                                ?: throw IllegalStateException("url is null")
+                        )
                         .header("User-Agent", GENERIC_USER_AGENT)
                         .build())
                         .toSingle()
             }
             .map {
-                val url = it.networkResponse()?.request()?.url() ?: throw IOException()
+                val url = it.networkResponse()?.request()?.url() ?: throw IOException("response url is null")
 
                 StreamResolutionResult(url.androidUri(), "video/mp4")
             }

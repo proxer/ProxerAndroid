@@ -72,7 +72,7 @@ fun Call.toSingle(): Single<Response> = Single.create { emitter ->
             emitter.onSuccess(result)
         } else {
             if (!emitter.isDisposed) {
-                emitter.onError(IOException())
+                emitter.onError(IOException("Load failed: ${result.message()}"))
             }
         }
     } catch (error: Throwable) {
@@ -95,12 +95,12 @@ fun Call.toBodySingle(): Single<String> = Single.create { emitter ->
                 emitter.onSuccess(body.string())
             } else {
                 if (!emitter.isDisposed) {
-                    emitter.onError(IOException())
+                    emitter.onError(IOException("body is null"))
                 }
             }
         } else {
             if (!emitter.isDisposed) {
-                emitter.onError(IOException())
+                emitter.onError(IOException("Load failed: ${result.message()}"))
             }
         }
     } catch (error: Throwable) {

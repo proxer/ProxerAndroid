@@ -35,7 +35,7 @@ internal class LocalMangaChapterAdapter : BaseAdapter<LocalMangaChapter, ViewHol
     override fun getItemId(position: Int) = data[position].episode.toLong()
     override fun areItemsTheSame(old: LocalMangaChapter, new: LocalMangaChapter) = old.episode == new.episode
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    internal inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         internal val title: TextView by bindView(R.id.title)
         internal val delete: ImageView by bindView(R.id.delete)
@@ -66,7 +66,7 @@ internal class LocalMangaChapterAdapter : BaseAdapter<LocalMangaChapter, ViewHol
         }
     }
 
-    interface LocalMangaChapterAdapterCallback {
+    internal interface LocalMangaChapterAdapterCallback {
         fun onChapterClick(chapter: LocalMangaChapter) = Unit
         fun onDeleteClick(chapter: LocalMangaChapter) = Unit
     }

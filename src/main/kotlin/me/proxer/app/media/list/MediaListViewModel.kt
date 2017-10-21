@@ -13,8 +13,8 @@ import kotlin.properties.Delegates
  * @author Ruben Gees
  */
 @GeneratedProvider
-class MediaListViewModel(sortCriteria: MediaSearchSortCriteria, type: MediaType, searchQuery: String?)
-    : PagedContentViewModel<MediaListEntry>() {
+class MediaListViewModel(sortCriteria: MediaSearchSortCriteria, type: MediaType, searchQuery: String?) :
+        PagedContentViewModel<MediaListEntry>() {
 
     override val itemsOnPage = 30
 

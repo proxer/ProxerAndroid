@@ -29,7 +29,10 @@ class RoomConverters {
     @TypeConverter
     fun toGenres(value: String?) = value?.split(DELIMITER)
             ?.filter { it.isNotBlank() }
-            ?.map { ProxerUtils.toApiEnum(Genre::class.java, it) ?: throw IllegalArgumentException() }
+            ?.map {
+                ProxerUtils.toApiEnum(Genre::class.java, it)
+                        ?: throw IllegalArgumentException("enum is null: $it")
+            }
             ?.toSet()
 
     @TypeConverter
@@ -39,7 +42,10 @@ class RoomConverters {
     @TypeConverter
     fun toFskConstraints(value: String?) = value?.split(DELIMITER)
             ?.filter { it.isNotBlank() }
-            ?.map { ProxerUtils.toApiEnum(FskConstraint::class.java, it) ?: throw IllegalArgumentException() }
+            ?.map {
+                ProxerUtils.toApiEnum(FskConstraint::class.java, it)
+                        ?: throw IllegalArgumentException("enum is null: $it")
+            }
             ?.toSet()
 
     @TypeConverter

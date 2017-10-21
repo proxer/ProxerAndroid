@@ -17,8 +17,8 @@ import me.proxer.library.enums.Category
  * @author Ruben Gees
  */
 @GeneratedProvider
-class TopTenViewModel(private val userId: String?, private val username: String?)
-    : BaseViewModel<ZippedTopTenResult>() {
+class TopTenViewModel(private val userId: String?, private val username: String?) :
+        BaseViewModel<ZippedTopTenResult>() {
 
     override val dataSingle: Single<ZippedTopTenResult>
         get() {

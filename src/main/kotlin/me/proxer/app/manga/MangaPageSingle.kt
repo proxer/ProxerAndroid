@@ -60,6 +60,7 @@ class MangaPageSingle(context: Context, private val isLocal: Boolean, private va
         }
     }
 
+    @Suppress("ThrowsCount")
     private fun loadPage(url: HttpUrl, file: File): File = MangaLocks.pageConcurrencyLock.lock {
         call = client.newCall(Request.Builder()
                 .url(url)
@@ -71,13 +72,13 @@ class MangaPageSingle(context: Context, private val isLocal: Boolean, private va
                     Okio.buffer(Okio.sink(file)).use { fileBuffer ->
                         fileBuffer.writeAll(theBody.source())
                     }
-                } ?: throw IOException()
+                } ?: throw IOException("body is null")
 
                 file
             } else {
-                throw IOException()
+                throw IOException("Manga page download with url $url not successful: ${it.message()}")
             }
-        } ?: throw IllegalStateException()
+        } ?: throw IllegalStateException("call is null")
     }
 
     private inner class MangaPageDisposable : Disposable {

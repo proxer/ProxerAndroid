@@ -78,10 +78,10 @@ object ChatNotifications {
             .cancel(conferenceId.toInt())
 
     private fun buildChatSummaryNotification(context: Context, conferenceMap: LocalConferenceMap): Notification? {
-        val filteredConferenceMap = conferenceMap.filter { it.value.isNotEmpty() }.apply {
-            if (isEmpty()) {
-                return null
-            }
+        val filteredConferenceMap = conferenceMap.filter { it.value.isNotEmpty() }
+
+        if (filteredConferenceMap.isEmpty()) {
+            return null
         }
 
         val messageAmount = filteredConferenceMap.values.sumBy { it.size }

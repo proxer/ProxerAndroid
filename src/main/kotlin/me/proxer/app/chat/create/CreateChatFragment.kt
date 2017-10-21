@@ -223,10 +223,8 @@ class CreateChatFragment : BaseFragment() {
         participantInput.editorActions(Predicate { it == EditorInfo.IME_ACTION_NEXT })
                 .autoDispose(this)
                 .subscribe {
-                    if (it == EditorInfo.IME_ACTION_NEXT) {
-                        if (validateAndAddUser()) {
-                            messageInput.requestFocus()
-                        }
+                    if (it == EditorInfo.IME_ACTION_NEXT && validateAndAddUser()) {
+                        messageInput.requestFocus()
                     }
                 }
 

@@ -31,8 +31,8 @@ import kotlin.properties.Delegates
  * @author Ruben Gees
  */
 @GeneratedProvider
-class MangaViewModel(private val entryId: String, private val language: Language, episode: Int)
-    : BaseViewModel<MangaChapterInfo>() {
+class MangaViewModel(private val entryId: String, private val language: Language, episode: Int) :
+        BaseViewModel<MangaChapterInfo>() {
 
     private companion object {
         private const val MAX_CACHE_SIZE = 1024L * 1024L * 256L

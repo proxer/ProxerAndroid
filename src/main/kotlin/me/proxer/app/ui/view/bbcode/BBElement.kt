@@ -3,7 +3,7 @@ package me.proxer.app.ui.view.bbcode
 import android.text.SpannableStringBuilder
 
 internal sealed class BBElement {
-    class BBTextElement(val text: SpannableStringBuilder, val gravity: Int) : BBElement() {
+    internal class BBTextElement(val text: SpannableStringBuilder, val gravity: Int) : BBElement() {
 
         companion object {
             private const val TRIM_PATTERN = "\r\n"

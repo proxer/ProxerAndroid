@@ -5,20 +5,24 @@ potential-bugs:
     active: false
 
 complexity:
-  StringLiteralDuplication:
-    threshold: 5
+  NestedBlockDepth:
+    active: false
   LongParameterList:
     active: false
   LargeClass:
+    active: false
+  ComplexMethod:
     active: false
   TooManyFunctions:
     active: false
   ComplexCondition:
     active: false
-  NestedBlockDepth:
-    active: false
+  StringLiteralDuplication:
+    threshold: 5
 
 style:
+  CollapsibleIfStatements:
+    active: false
   FunctionMaxLength:
     maximumFunctionNameLength: 35
   VariableMinLength:
@@ -31,6 +35,10 @@ style:
     active: false
   UseDataClass:
     active: false
+  ExpressionBodySyntax:
+    active: false
+  FunctionOnlyReturningConstant:
+    active: false
 
 comments:
   UndocumentedPublicClass:
@@ -39,4 +47,8 @@ comments:
     searchInInnerObject: false
     searchInInnerInterface: false
   UndocumentedPublicFunction:
+    active: false
+
+exceptions:
+  TooGenericExceptionCaught:
     active: false
