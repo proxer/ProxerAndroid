@@ -3,7 +3,6 @@ package me.proxer.app.base
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.design.widget.Snackbar
-import android.support.v7.util.DiffUtil
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
@@ -13,9 +12,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter.ContainerPositionResolver
@@ -61,9 +57,6 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
     override val errorButton: Button
         get() = errorContainer.findViewById(R.id.errorButton)
 
-    // This is an ugly hack, but I can't figure out another way around RecyclerView's bugs.
-    private var isFirstData = true
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_paged, container, false)
     }
@@ -107,39 +100,20 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
     override fun showData(data: List<T>) {
         updateRecyclerViewPadding()
 
-        when {
-            innerAdapter.isEmpty() -> if (data.isEmpty()) {
-                showError(ErrorAction(emptyDataMessage, ACTION_MESSAGE_HIDE))
-            } else {
-                innerAdapter.swapDataAndNotifyInsertion(data)
+        val wasAtFirstPosition = isAtTop()
+        val wasEmpty = innerAdapter.isEmpty()
 
-                if (!isFirstData) {
-                    recyclerView.let {
-                        it.postDelayed({ scrollToTop() }, 50)
-                    }
+        innerAdapter.swapDataAndNotifyWithDiffing(data)
+
+        if (innerAdapter.isEmpty()) {
+            showError(ErrorAction(emptyDataMessage, ACTION_MESSAGE_HIDE))
+        } else if (wasAtFirstPosition || wasEmpty) {
+            recyclerView.postDelayed({
+                when {
+                    wasEmpty -> scrollToTop()
+                    else -> recyclerView.smoothScrollToPosition(0)
                 }
-
-                isFirstData = false
-            }
-            else -> Single.fromCallable { DiffUtil.calculateDiff(innerAdapter.provideDiffUtilCallback(data)) }
-                    .subscribeOn(Schedulers.single())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .autoDispose(this)
-                    .subscribe { diff: DiffUtil.DiffResult ->
-                        val wasAtFirstPosition = isAtTop()
-
-                        innerAdapter.swapDataAndNotifyWithDiffResult(data, diff)
-
-                        if (innerAdapter.isEmpty()) {
-                            showError(ErrorAction(emptyDataMessage, ACTION_MESSAGE_HIDE))
-                        } else {
-                            if (wasAtFirstPosition) {
-                                recyclerView.let {
-                                    it.postDelayed({ it.smoothScrollToPosition(0) }, 50)
-                                }
-                            }
-                        }
-                    }
+            }, 50)
         }
     }
 

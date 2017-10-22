@@ -3,9 +3,9 @@ package me.proxer.app.notification
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.design.widget.Snackbar
-import android.support.v7.util.DiffUtil
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -13,9 +13,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
@@ -118,32 +115,22 @@ class NotificationFragment : BaseContentFragment<List<ProxerNotification>>() {
     override fun showData(data: List<ProxerNotification>) {
         super.showData(data)
 
+        val wasAtFirstPosition = isAtTop()
+        val wasEmpty = adapter.isEmpty()
+
+        adapter.swapDataAndNotifyWithDiffing(data)
+
         if (adapter.isEmpty()) {
-            if (data.isEmpty()) {
+            if (adapter.isEmpty()) {
                 showError(ErrorAction(R.string.error_no_data_notifications, ACTION_MESSAGE_HIDE))
-            } else {
-                adapter.swapDataAndNotifyInsertion(data)
-            }
-        } else {
-            Single.fromCallable { DiffUtil.calculateDiff(adapter.provideDiffUtilCallback(data)) }
-                    .subscribeOn(Schedulers.single())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .autoDispose(this)
-                    .subscribe { diff: DiffUtil.DiffResult ->
-                        val wasAtFirstPosition = isAtTop()
-
-                        adapter.swapDataAndNotifyWithDiffResult(data, diff)
-
-                        if (adapter.isEmpty()) {
-                            showError(ErrorAction(R.string.error_no_data_notifications, ACTION_MESSAGE_HIDE))
-                        } else {
-                            if (wasAtFirstPosition) {
-                                recyclerView.let {
-                                    it.postDelayed({ it.smoothScrollToPosition(0) }, 50)
-                                }
-                            }
-                        }
+            } else if (wasAtFirstPosition || wasEmpty) {
+                recyclerView.postDelayed({
+                    when {
+                        wasEmpty -> scrollToTop()
+                        else -> recyclerView.smoothScrollToPosition(0)
                     }
+                }, 50)
+            }
         }
     }
 
@@ -157,6 +144,13 @@ class NotificationFragment : BaseContentFragment<List<ProxerNotification>>() {
         when (it) {
             is LinearLayoutManager -> it.findFirstCompletelyVisibleItemPosition() == 0
             else -> false
+        }
+    }
+
+    private fun scrollToTop() = recyclerView.layoutManager.let {
+        when (it) {
+            is StaggeredGridLayoutManager -> it.scrollToPositionWithOffset(0, 0)
+            is LinearLayoutManager -> it.scrollToPositionWithOffset(0, 0)
         }
     }
 }

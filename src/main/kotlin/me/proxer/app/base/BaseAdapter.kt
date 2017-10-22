@@ -56,17 +56,16 @@ abstract class BaseAdapter<T, VH : RecyclerView.ViewHolder> : RecyclerView.Adapt
         notifyDataSetChanged()
     }
 
-    fun swapDataAndNotifyWithDiffResult(newData: List<T>, diffResult: DiffUtil.DiffResult) {
+    fun swapDataAndNotifyWithDiffing(newData: List<T>) {
+        val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+            override fun areItemsTheSame(old: Int, new: Int) = areItemsTheSame(data[old], newData[new])
+            override fun areContentsTheSame(old: Int, new: Int) = areContentsTheSame(data[old], newData[new])
+            override fun getOldListSize() = data.size
+            override fun getNewListSize() = newData.size
+        })
+
         swapData(newData)
-
         diffResult.dispatchUpdatesTo(this)
-    }
-
-    fun provideDiffUtilCallback(newData: List<T>) = object : DiffUtil.Callback() {
-        override fun areItemsTheSame(old: Int, new: Int) = areItemsTheSame(data[old], newData[new])
-        override fun areContentsTheSame(old: Int, new: Int) = areContentsTheSame(data[old], newData[new])
-        override fun getOldListSize() = data.size
-        override fun getNewListSize() = newData.size
     }
 
     open fun saveInstanceState(outState: Bundle) = Unit
