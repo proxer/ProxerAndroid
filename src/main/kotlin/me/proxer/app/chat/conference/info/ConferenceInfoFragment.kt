@@ -85,11 +85,11 @@ class ConferenceInfoFragment : BaseContentFragment<ConferenceInfo>() {
         time.text = getString(R.string.fragment_conference_info_time, creationDate, creationTime)
 
         adapter.leaderId = data.leaderId
-        adapter.swapDataAndNotifyInsertion(data.participants)
+        adapter.swapDataAndNotifyWithDiffing(data.participants)
     }
 
     override fun hideData() {
-        adapter.clearAndNotifyRemoval()
+        adapter.swapDataAndNotifyWithDiffing(emptyList())
 
         super.hideData()
     }

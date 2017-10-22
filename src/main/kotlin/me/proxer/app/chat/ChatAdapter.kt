@@ -153,25 +153,21 @@ class ChatAdapter(savedInstanceState: Bundle?, private val isGroup: Boolean) :
         holder.bind(data[position], context.dip(margins.first), context.dip(margins.second))
     }
 
-    override fun areItemsTheSame(old: LocalMessage, new: LocalMessage) = old.id == new.id
-
-    override fun areContentsTheSame(old: LocalMessage, new: LocalMessage) = old.userId == new.userId
-            && old.action == new.action && old.date == new.date && old.message == new.message
-
     override fun swapData(newData: List<LocalMessage>) {
         super.swapData(newData)
+
+        if (newData.isEmpty()) {
+            clearSelection()
+            timeDisplayMap.clear()
+        }
 
         messageSelectionSubject.onNext(messageSelectionMap.size)
     }
 
-    override fun clear() {
-        clearSelection()
-        timeDisplayMap.clear()
+    override fun areItemsTheSame(old: LocalMessage, new: LocalMessage) = old.id == new.id
 
-        messageSelectionSubject.onNext(0)
-
-        super.clear()
-    }
+    override fun areContentsTheSame(old: LocalMessage, new: LocalMessage) = old.userId == new.userId
+            && old.action == new.action && old.date == new.date && old.message == new.message
 
     override fun saveInstanceState(outState: Bundle) {
         outState.putParcelable(IS_SELECTING_STATE, messageSelectionMap)

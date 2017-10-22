@@ -22,39 +22,6 @@ abstract class BaseAdapter<T, VH : RecyclerView.ViewHolder> : RecyclerView.Adapt
     }
 
     override fun getItemCount() = data.size
-    open fun isEmpty() = data.isEmpty()
-
-    open fun clear() {
-        data = emptyList()
-    }
-
-    fun clearAndNotifyRemoval() = itemCount.let {
-        clear()
-
-        notifyItemRangeRemoved(0, it)
-    }
-
-    fun clearAndNotifyChange() {
-        clear()
-
-        notifyDataSetChanged()
-    }
-
-    open fun swapData(newData: List<T>) {
-        data = ArrayList(newData)
-    }
-
-    fun swapDataAndNotifyInsertion(newData: List<T>) {
-        swapData(newData)
-
-        notifyItemRangeInserted(0, newData.size)
-    }
-
-    fun swapDataAndNotifyChange(newData: List<T>) {
-        swapData(newData)
-
-        notifyDataSetChanged()
-    }
 
     fun swapDataAndNotifyWithDiffing(newData: List<T>) {
         val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
@@ -68,7 +35,13 @@ abstract class BaseAdapter<T, VH : RecyclerView.ViewHolder> : RecyclerView.Adapt
         diffResult.dispatchUpdatesTo(this)
     }
 
+    open fun isEmpty() = data.isEmpty()
+
     open fun saveInstanceState(outState: Bundle) = Unit
+
+    protected open fun swapData(newData: List<T>) {
+        data = ArrayList(newData)
+    }
 
     protected open fun areItemsTheSame(old: T, new: T) = when {
         old is ProxerIdItem && new is ProxerIdItem -> old.id == new.id

@@ -135,7 +135,7 @@ class NotificationFragment : BaseContentFragment<List<ProxerNotification>>() {
     }
 
     override fun showError(action: ErrorUtils.ErrorAction) {
-        adapter.clearAndNotifyRemoval()
+        adapter.swapDataAndNotifyWithDiffing(emptyList())
 
         super.showError(action)
     }

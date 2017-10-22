@@ -127,7 +127,7 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
     }
 
     override fun showError(action: ErrorUtils.ErrorAction) {
-        innerAdapter.clearAndNotifyRemoval()
+        innerAdapter.swapDataAndNotifyWithDiffing(emptyList())
 
         super.showError(action)
     }

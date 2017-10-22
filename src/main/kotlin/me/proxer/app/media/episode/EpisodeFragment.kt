@@ -104,7 +104,7 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
     override fun showData(data: List<EpisodeRow>) {
         super.showData(data)
 
-        adapter.swapDataAndNotifyInsertion(data)
+        adapter.swapDataAndNotifyWithDiffing(data)
 
         if (adapter.isEmpty()) {
             showError(ErrorAction(when (category) {

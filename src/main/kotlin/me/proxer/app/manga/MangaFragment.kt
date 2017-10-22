@@ -226,7 +226,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         innerAdapter.id = data.chapter.id
         innerAdapter.isLocal = data.isLocal
 
-        innerAdapter.swapDataAndNotifyInsertion(data.chapter.pages)
+        innerAdapter.swapDataAndNotifyWithDiffing(data.chapter.pages)
 
         activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LOW_PROFILE
     }
@@ -236,7 +236,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
             scrollFlags = SCROLL_FLAG_SCROLL or SCROLL_FLAG_ENTER_ALWAYS
         }
 
-        innerAdapter.clearAndNotifyChange()
+        innerAdapter.swapDataAndNotifyWithDiffing(emptyList())
         adapter.header = null
         adapter.footer = null
 

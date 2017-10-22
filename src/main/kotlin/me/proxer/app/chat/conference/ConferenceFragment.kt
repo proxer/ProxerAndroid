@@ -117,21 +117,16 @@ class ConferenceFragment : BaseContentFragment<List<LocalConference>>() {
     override fun showData(data: List<LocalConference>) {
         super.showData(data)
 
-        when {
-            data.isEmpty() -> {
-                adapter.clearAndNotifyRemoval()
+        adapter.swapDataAndNotifyWithDiffing(data)
 
-                if (adapter.isEmpty()) {
-                    showError(ErrorAction(R.string.error_no_data_conferences, ACTION_MESSAGE_HIDE))
-                }
-            }
-            else -> adapter.swapDataAndNotifyChange(data)
+        if (adapter.isEmpty()) {
+            showError(ErrorAction(R.string.error_no_data_conferences, ACTION_MESSAGE_HIDE))
         }
     }
 
     override fun hideData() {
         super.hideData()
 
-        adapter.clearAndNotifyRemoval()
+        adapter.swapDataAndNotifyWithDiffing(emptyList())
     }
 }

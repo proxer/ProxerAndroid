@@ -103,8 +103,8 @@ class TopTenFragment : BaseContentFragment<ZippedTopTenResult>() {
     override fun showData(data: ZippedTopTenResult) {
         super.showData(data)
 
-        animeAdapter.swapDataAndNotifyInsertion(data.animeEntries)
-        mangaAdapter.swapDataAndNotifyInsertion(data.mangaEntries)
+        animeAdapter.swapDataAndNotifyWithDiffing(data.animeEntries)
+        mangaAdapter.swapDataAndNotifyWithDiffing(data.mangaEntries)
 
         when (animeAdapter.isEmpty()) {
             true -> animeContainer.visibility = View.GONE
@@ -122,8 +122,8 @@ class TopTenFragment : BaseContentFragment<ZippedTopTenResult>() {
     }
 
     override fun hideData() {
-        animeAdapter.clearAndNotifyRemoval()
-        mangaAdapter.clearAndNotifyRemoval()
+        animeAdapter.swapDataAndNotifyWithDiffing(emptyList())
+        mangaAdapter.swapDataAndNotifyWithDiffing(emptyList())
 
         super.hideData()
     }

@@ -84,7 +84,7 @@ class RecommendationFragment : BaseContentFragment<List<Recommendation>>() {
     override fun showData(data: List<Recommendation>) {
         super.showData(data)
 
-        adapter.swapDataAndNotifyInsertion(data)
+        adapter.swapDataAndNotifyWithDiffing(data)
 
         if (adapter.isEmpty()) {
             showError(ErrorAction(R.string.error_no_data_recommendations, ACTION_MESSAGE_HIDE))
@@ -92,7 +92,7 @@ class RecommendationFragment : BaseContentFragment<List<Recommendation>>() {
     }
 
     override fun hideData() {
-        adapter.clearAndNotifyRemoval()
+        adapter.swapDataAndNotifyWithDiffing(emptyList())
 
         super.hideData()
     }

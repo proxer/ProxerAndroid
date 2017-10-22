@@ -57,6 +57,8 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
     override val errorButton: Button
         get() = errorContainer.findViewById(R.id.errorButton)
 
+    private var isFirstData = true
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_paged, container, false)
     }
@@ -107,7 +109,7 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
 
         if (innerAdapter.isEmpty()) {
             showError(ErrorAction(emptyDataMessage, ACTION_MESSAGE_HIDE))
-        } else if (wasAtFirstPosition || wasEmpty) {
+        } else if (!isFirstData && (wasAtFirstPosition || wasEmpty)) {
             recyclerView.postDelayed({
                 when {
                     wasEmpty -> scrollToTop()
@@ -115,9 +117,11 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
                 }
             }, 50)
         }
+
+        isFirstData = false
     }
 
-    override fun hideData() = innerAdapter.clearAndNotifyRemoval()
+    override fun hideData() = innerAdapter.swapDataAndNotifyWithDiffing(emptyList())
 
     override fun showError(action: ErrorAction) {
         if (adapter.footer == null) {
@@ -130,6 +134,8 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
         }
 
         updateRecyclerViewPadding()
+
+        isFirstData = false
 
         super.showError(action)
     }

@@ -57,18 +57,14 @@ class LogActivity : BaseActivity() {
 
         viewModel.data.observe(this, Observer {
             it?.let {
-                val previousItemCount = adapter.itemCount
                 val wasAtTop = isAtTop()
 
-                if (previousItemCount < it.size) {
-                    adapter.swapData(it)
-                    adapter.notifyItemRangeInserted(0, it.size - previousItemCount)
+                adapter.swapDataAndNotifyWithDiffing(it)
 
-                    if (wasAtTop) {
-                        recyclerView.postDelayed({
-                            recyclerView.smoothScrollToPosition(0)
-                        }, 50)
-                    }
+                if (wasAtTop) {
+                    recyclerView.postDelayed({
+                        recyclerView.smoothScrollToPosition(0)
+                    }, 50)
                 }
             }
         })

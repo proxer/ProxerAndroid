@@ -190,17 +190,14 @@ class LocalMangaFragment : BaseContentFragment<List<CompleteLocalMangaEntry>>() 
 
         errorContainer.visibility = View.GONE
 
-        when {
-            data.isEmpty() -> {
-                adapter.clearAndNotifyRemoval()
+        adapter.swapDataAndNotifyWithDiffing(data)
 
-                if (searchQuery.isNullOrBlank()) {
-                    showError(ErrorAction(R.string.error_no_data_local_manga, ACTION_MESSAGE_HIDE))
-                } else {
-                    showError(ErrorAction(R.string.error_no_data_search, ACTION_MESSAGE_HIDE))
-                }
+        if (adapter.isEmpty()) {
+            if (searchQuery.isNullOrBlank()) {
+                showError(ErrorAction(R.string.error_no_data_local_manga, ACTION_MESSAGE_HIDE))
+            } else {
+                showError(ErrorAction(R.string.error_no_data_search, ACTION_MESSAGE_HIDE))
             }
-            else -> adapter.swapDataAndNotifyChange(data)
         }
     }
 

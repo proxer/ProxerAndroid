@@ -84,7 +84,7 @@ class RelationFragment : BaseContentFragment<List<Relation>>() {
     override fun showData(data: List<Relation>) {
         super.showData(data)
 
-        adapter.swapDataAndNotifyInsertion(data)
+        adapter.swapDataAndNotifyWithDiffing(data)
 
         if (adapter.isEmpty()) {
             showError(ErrorAction(R.string.error_no_data_relations, ACTION_MESSAGE_HIDE))
@@ -92,7 +92,7 @@ class RelationFragment : BaseContentFragment<List<Relation>>() {
     }
 
     override fun hideData() {
-        adapter.clearAndNotifyRemoval()
+        adapter.swapDataAndNotifyWithDiffing(emptyList())
 
         super.hideData()
     }

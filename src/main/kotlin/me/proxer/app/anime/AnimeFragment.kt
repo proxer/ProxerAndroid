@@ -205,7 +205,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
     }
 
     override fun hideData() {
-        innerAdapter.clearAndNotifyRemoval()
+        innerAdapter.swapDataAndNotifyWithDiffing(emptyList())
         adapter.header = null
 
         super.hideData()
@@ -220,7 +220,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
         header.setEpisodeInfo(data.episodeAmount, episode)
         adapter.header = header
 
-        innerAdapter.swapDataAndNotifyInsertion(data.streams)
+        innerAdapter.swapDataAndNotifyWithDiffing(data.streams)
 
         if (data.streams.isEmpty()) {
             showError(ErrorAction(R.string.error_no_data_anime, ACTION_MESSAGE_HIDE))
