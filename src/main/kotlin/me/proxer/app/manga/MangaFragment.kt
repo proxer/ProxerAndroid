@@ -11,9 +11,11 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.github.rubensousa.gravitysnaphelper.GravityPagerSnapHelper
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import io.reactivex.Observable
 import kotterknife.bindView
@@ -27,6 +29,7 @@ import me.proxer.app.ui.view.MediaControlView.SimpleTranslatorGroup
 import me.proxer.app.ui.view.MediaControlView.Uploader
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils
+import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.convertToDateTime
 import me.proxer.app.util.extension.multilineSnackbar
@@ -85,6 +88,8 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
             hostingActivity.episodeAmount = value
         }
 
+    private var isVertical by Delegates.notNull<Boolean>()
+
     private val mediaControlTextResolver = object : MediaControlView.TextResourceResolver {
         override fun next() = context.getString(R.string.fragment_manga_next_chapter)
         override fun previous() = context.getString(R.string.fragment_manga_previous_chapter)
@@ -108,7 +113,9 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        innerAdapter = MangaAdapter()
+        isVertical = PreferenceHelper.isVerticalReaderEnabled(context)
+
+        innerAdapter = MangaAdapter(isVertical)
         adapter = EasyHeaderFooterAdapter(innerAdapter)
 
         innerAdapter.positionResolver = ContainerPositionResolver(adapter)
@@ -125,6 +132,10 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
 
             (layoutParams as ViewGroup.MarginLayoutParams).setMargins(horizontalMargin, verticalMargin,
                     horizontalMargin, verticalMargin)
+
+            if (!isVertical) {
+                layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
+            }
         }
 
         footer = (inflater.inflate(R.layout.layout_media_control, container, false) as MediaControlView).apply {
@@ -132,6 +143,10 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
 
             (layoutParams as ViewGroup.MarginLayoutParams).setMargins(horizontalMargin, verticalMargin,
                     horizontalMargin, verticalMargin)
+
+            if (!isVertical) {
+                layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
+            }
         }
 
         Observable.merge(header.uploaderClickSubject, footer.uploaderClickSubject)
@@ -183,8 +198,14 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
             }
         })
 
+        if (isVertical) {
+            recyclerView.layoutManager = LinearLayoutManager(context)
+        } else {
+            recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            GravityPagerSnapHelper(Gravity.END).attachToRecyclerView(recyclerView)
+        }
+
         recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = adapter
     }
 
@@ -198,8 +219,10 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
     override fun showData(data: MangaChapterInfo) {
         super.showData(data)
 
-        (toolbar.layoutParams as AppBarLayout.LayoutParams).apply {
-            scrollFlags = SCROLL_FLAG_SCROLL or SCROLL_FLAG_ENTER_ALWAYS
+        if (isVertical) {
+            (toolbar.layoutParams as AppBarLayout.LayoutParams).apply {
+                scrollFlags = SCROLL_FLAG_SCROLL or SCROLL_FLAG_ENTER_ALWAYS
+            }
         }
 
         chapterTitle = data.chapter.title
@@ -232,8 +255,10 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
     }
 
     override fun hideData() {
-        (toolbar.layoutParams as AppBarLayout.LayoutParams).apply {
-            scrollFlags = SCROLL_FLAG_SCROLL or SCROLL_FLAG_ENTER_ALWAYS
+        if (isVertical) {
+            (toolbar.layoutParams as AppBarLayout.LayoutParams).apply {
+                scrollFlags = SCROLL_FLAG_SCROLL or SCROLL_FLAG_ENTER_ALWAYS
+            }
         }
 
         innerAdapter.swapDataAndNotifyWithDiffing(emptyList())

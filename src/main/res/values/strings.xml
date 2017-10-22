@@ -424,6 +424,9 @@
     <string name="preference_manga_unmetered_title">Nur über WLAN herunterladen</string>
     <string name="preference_manga_unmetered_summary_off">Manga werden immer heruntergeladen</string>
     <string name="preference_manga_unmetered_summary_on">Manga werden nur über WLAN heruntergeladen</string>
+    <string name="preference_manga_vertical_reader_title">Mangareader Ausrichtung</string>
+    <string name="preference_manga_vertical_reader_summary_off">Manga werden von Links nach Rechts angezeigt</string>
+    <string name="preference_manga_vertical_reader_summary_on">Manga werden von Oben nach Unten angezeigt</string>
     <string name="preference_manga_clean">Heruntergeladene Daten löschen</string>
 
     <string name="preference_category_notifications_title">Benachrichtigungen</string>

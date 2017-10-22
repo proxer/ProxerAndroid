@@ -17,6 +17,7 @@ object PreferenceHelper {
     const val NOTIFICATIONS_ACCOUNT = "notifications_account"
     const val NOTIFICATIONS_CHAT = "notifications_chat"
     const val NOTIFICATIONS_INTERVAL = "notifications_interval"
+    const val MANGA_VERTICAL_READER = "manga_vertical_reader"
     const val MANGA_WLAN = "manga_unmetered_required"
     const val MANGA_CLEAN = "manga_clean"
 
@@ -46,6 +47,9 @@ object PreferenceHelper {
 
     fun getNotificationsInterval(context: Context)
             = getDefaultSharedPreferences(context).getString(NOTIFICATIONS_INTERVAL, "30").toLong()
+
+    fun isVerticalReaderEnabled(context: Context)
+            = getDefaultSharedPreferences(context).getBoolean(MANGA_VERTICAL_READER, true)
 
     fun isUnmeteredNetworkRequired(context: Context)
             = getDefaultSharedPreferences(context).getBoolean(MANGA_WLAN, true)

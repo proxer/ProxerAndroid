@@ -58,6 +58,7 @@ ext {
             introduction                     : "com.github.rubengees:introduction:$introductionVersion",
             materialBadgeView                : "com.github.matrixxun:MaterialBadgeTextView:$materialBadgeViewVersion",
             aspectRatioImageView             : "com.github.santalu:aspect-ratio-imageview:$aspectRatioImageViewVersion",
+            gravitySnapHelper                : "com.github.rubensousa:gravitysnaphelper:$gravitySnapHelperVersion",
 
             threeten                         : "com.jakewharton.threetenabp:threetenabp:$threetenVersion",
             glide                            : "com.github.bumptech.glide:glide:$glideVersion",

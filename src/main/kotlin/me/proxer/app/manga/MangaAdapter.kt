@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -25,7 +26,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-class MangaAdapter : BaseAdapter<Page, ViewHolder>() {
+class MangaAdapter(private val isVertical: Boolean) : BaseAdapter<Page, ViewHolder>() {
 
     var server by Delegates.notNull<String>()
     var entryId by Delegates.notNull<String>()
@@ -41,10 +42,7 @@ class MangaAdapter : BaseAdapter<Page, ViewHolder>() {
     override fun onViewRecycled(holder: ViewHolder) {
         holder.image.recycle()
 
-        holder.image.tag.let {
-            (it as? Disposable)?.dispose()
-        }
-
+        (holder.image.tag as? Disposable)?.dispose()
         holder.image.tag = null
     }
 
@@ -55,7 +53,7 @@ class MangaAdapter : BaseAdapter<Page, ViewHolder>() {
 
         internal val image: SubsamplingScaleImageView by bindView(R.id.image)
 
-        private var smoothScollHack = { _: View?, event: MotionEvent ->
+        private val smoothScollHack = { _: View?, event: MotionEvent ->
             // Make scrolling smoother by hacking the SubsamplingScaleImageView to only
             // receive touch events when zooming.
             val shouldInterceptEvent = event.action == MotionEvent.ACTION_MOVE && event.pointerCount == 1 &&
@@ -79,27 +77,38 @@ class MangaAdapter : BaseAdapter<Page, ViewHolder>() {
 
             @Suppress("ClickableViewAccessibility")
             image.setOnTouchListener(smoothScollHack)
+
+            if (!isVertical) {
+                itemView.layoutParams.height = MATCH_PARENT
+            }
         }
 
         fun bind(item: Page) {
-            val width = DeviceUtils.getScreenWidth(image.context)
-            val height = (item.height * width.toFloat() / item.width.toFloat()).toInt()
-            val scale = width.toFloat() / item.width.toFloat() * 2f
+            if (isVertical) {
+                val width = DeviceUtils.getScreenWidth(image.context)
+                val height = (item.height * width.toFloat() / item.width.toFloat()).toInt()
+                val scale = width.toFloat() / item.width.toFloat() * 2f
 
-            image.setDoubleTapZoomScale(scale)
-            image.layoutParams.height = height
-            image.maxScale = scale
+                image.setDoubleTapZoomScale(scale)
+                image.layoutParams.height = height
+                image.maxScale = scale
+            }
+
             image.tag = MangaPageSingle(image.context, isLocal, Input(server, entryId, id, item.decodedName))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeAndLogErrors {
                         image.setImage(ImageSource.uri(it.path))
                         image.setScaleAndCenter(0.2f, PointF(0f, 0f))
-                        image.apply { alpha = 0.2f }
-                                .animate()
-                                .alpha(1.0f)
-                                .setDuration(mediumAnimationTime.toLong())
-                                .start()
+
+                        // Fade animations do not look good with the horizontal reader.
+                        if (isVertical) {
+                            image.apply { alpha = 0.2f }
+                                    .animate()
+                                    .alpha(1.0f)
+                                    .setDuration(mediumAnimationTime.toLong())
+                                    .start()
+                        }
                     }
         }
     }
