@@ -36,9 +36,8 @@ ext {
             rxBindingDesign                  : "com.jakewharton.rxbinding2:rxbinding-design-kotlin:$rxBindingVersion",
             rxBindingRecyclerView            : "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7-kotlin:$rxBindingVersion",
             rxBus                            : "com.github.rubengees:rxbus:$rxBusVersion",
-            autoDispose                      : "com.github.rubengees.AutoDispose:autodispose-kotlin:$autoDisposeVersion",
-            autoDisposeAndroid               : "com.github.rubengees.AutoDispose:autodispose-android:$autoDisposeVersion",
-            autoDisposeArchitectureComponents: "com.github.rubengees.AutoDispose:autodispose-android-archcomponents:$autoDisposeVersion",
+            autoDispose                      : "com.uber.autodispose:autodispose-kotlin:$autoDisposeVersion",
+            autoDisposeArchitectureComponents: "com.uber.autodispose:autodispose-android-archcomponents-kotlin:$autoDisposeVersion",
 
             iconics                          : "com.mikepenz:iconics-core:$iconicsVersion@aar",
             iconicsViews                     : "com.mikepenz:iconics-views:$iconicsVersion@aar",

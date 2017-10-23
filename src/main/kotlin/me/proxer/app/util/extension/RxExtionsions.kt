@@ -7,7 +7,7 @@ import android.arch.lifecycle.LifecycleOwner
 import android.util.Log
 import com.uber.autodispose.CompletableSubscribeProxy
 import com.uber.autodispose.ObservableSubscribeProxy
-import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
+import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.kotlin.autoDisposeWith
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -21,13 +21,13 @@ import org.jetbrains.anko.getStackTraceString
  */
 
 inline fun <T> Observable<T>.autoDispose(owner: LifecycleOwner) = this
-        .autoDisposeWith(AndroidLifecycleScopeProvider.from(owner, Lifecycle.Event.ON_DESTROY))
+        .autoDisposeWith(owner.scope(Lifecycle.Event.ON_DESTROY))
 
 inline fun <T> Single<T>.autoDispose(owner: LifecycleOwner) = this
-        .autoDisposeWith(AndroidLifecycleScopeProvider.from(owner, Lifecycle.Event.ON_DESTROY))
+        .autoDisposeWith(owner.scope(Lifecycle.Event.ON_DESTROY))
 
 inline fun Completable.autoDispose(owner: LifecycleOwner) = this
-        .autoDisposeWith(AndroidLifecycleScopeProvider.from(owner, Lifecycle.Event.ON_DESTROY))
+        .autoDisposeWith(owner.scope(Lifecycle.Event.ON_DESTROY))
 
 inline fun <T> Observable<T>.subscribeAndLogErrors(noinline onSuccess: (T) -> Unit,
                                                    noinline onError: (Throwable) -> Unit): Disposable {
