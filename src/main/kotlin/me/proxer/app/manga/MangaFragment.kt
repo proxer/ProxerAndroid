@@ -15,6 +15,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import com.github.rubensousa.gravitysnaphelper.GravityPagerSnapHelper
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import io.reactivex.Observable
@@ -132,10 +133,6 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
 
             (layoutParams as ViewGroup.MarginLayoutParams).setMargins(horizontalMargin, verticalMargin,
                     horizontalMargin, verticalMargin)
-
-            if (!isVertical) {
-                layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
-            }
         }
 
         footer = (inflater.inflate(R.layout.layout_media_control, container, false) as MediaControlView).apply {
@@ -143,10 +140,6 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
 
             (layoutParams as ViewGroup.MarginLayoutParams).setMargins(horizontalMargin, verticalMargin,
                     horizontalMargin, verticalMargin)
-
-            if (!isVertical) {
-                layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
-            }
         }
 
         Observable.merge(header.uploaderClickSubject, footer.uploaderClickSubject)
@@ -229,20 +222,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         episodeAmount = data.episodeAmount
         name = data.name
 
-        header.setEpisodeInfo(data.episodeAmount, episode)
-        header.setDateTime(data.chapter.date.convertToDateTime())
-        header.setUploader(Uploader(data.chapter.uploaderId, data.chapter.uploaderName))
-
-        footer.setEpisodeInfo(data.episodeAmount, episode)
-
-        data.chapter.scanGroupId?.let { id ->
-            data.chapter.scanGroupName?.let { name ->
-                header.setTranslatorGroup(SimpleTranslatorGroup(id, name))
-            }
-        }
-
-        adapter.header = header
-        adapter.footer = footer
+        showHeaderAndFooter(data)
 
         innerAdapter.server = data.chapter.server
         innerAdapter.entryId = data.chapter.entryId
@@ -288,6 +268,10 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         }
 
         if (adapter.header != null) {
+            if (!isVertical) {
+                header.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+            }
+
             contentContainer.visibility = View.VISIBLE
             errorContainer.visibility = View.INVISIBLE
 
@@ -301,5 +285,26 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         } else {
             errorContainer.translationY = 0f
         }
+    }
+
+    private fun showHeaderAndFooter(data: MangaChapterInfo) {
+        if (!isVertical) {
+            header.layoutParams.height = MATCH_PARENT
+        }
+
+        header.setEpisodeInfo(data.episodeAmount, episode)
+        header.setDateTime(data.chapter.date.convertToDateTime())
+        header.setUploader(Uploader(data.chapter.uploaderId, data.chapter.uploaderName))
+
+        footer.setEpisodeInfo(data.episodeAmount, episode)
+
+        data.chapter.scanGroupId?.let { id ->
+            data.chapter.scanGroupName?.let { name ->
+                header.setTranslatorGroup(SimpleTranslatorGroup(id, name))
+            }
+        }
+
+        adapter.header = header
+        adapter.footer = footer
     }
 }
