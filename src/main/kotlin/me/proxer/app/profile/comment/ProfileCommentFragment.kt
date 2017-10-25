@@ -46,9 +46,9 @@ class ProfileCommentFragment : PagedContentFragment<UserComment>() {
         get() = hostingActivity.username
 
     private var category: Category?
-        get() = arguments.getSerializable(CATEGORY_ARGUMENT) as? Category
+        get() = safeArguments.getSerializable(CATEGORY_ARGUMENT) as? Category
         set(value) {
-            arguments.putSerializable(CATEGORY_ARGUMENT, value)
+            safeArguments.putSerializable(CATEGORY_ARGUMENT, value)
 
             viewModel.category = value
         }
@@ -64,7 +64,7 @@ class ProfileCommentFragment : PagedContentFragment<UserComment>() {
         innerAdapter.titleClickSubject
                 .autoDispose(this)
                 .subscribe {
-                    MediaActivity.navigateTo(activity, it.entryId, it.entryName, it.category)
+                    MediaActivity.navigateTo(safeActivity, it.entryId, it.entryName, it.category)
                 }
 
         setHasOptionsMenu(true)

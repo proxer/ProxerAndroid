@@ -20,9 +20,9 @@ class NotificationDeletionConfirmationDialog : BaseDialog() {
         }.show(activity.supportFragmentManager, "notification_deletion_confirmation_dialog")
     }
 
-    private val viewModel by unsafeLazy { NotificationViewModelProvider.get(targetFragment) }
+    private val viewModel by unsafeLazy { NotificationViewModelProvider.get(safeTargetFragment) }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialDialog.Builder(context)
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialDialog.Builder(safeContext)
             .content(R.string.dialog_notification_deletion_confirmation_content)
             .positiveText(R.string.dialog_notification_deletion_confirmation_positive)
             .negativeText(R.string.cancel)

@@ -117,19 +117,22 @@ object ChatNotifications {
                 .build()
     }
 
-    private fun buildSummaryStyle(content: SpannableString, title: String,
-                                  filteredConferenceMap: LocalConferenceMap) = NotificationCompat.InboxStyle()
+    private fun buildSummaryStyle(
+            content: SpannableString,
+            title: String,
+            filteredConferenceMap: LocalConferenceMap
+    ) = NotificationCompat.InboxStyle()
             .setBigContentTitle(content)
             .setSummaryText(title)
-            .apply {
+            .also {
                 filteredConferenceMap.forEach { entry ->
-                    entry.value.forEach {
+                    entry.value.forEach { message ->
                         val sender = when {
-                            entry.key.isGroup -> "${entry.key.topic}: ${it.username} "
+                            entry.key.isGroup -> "${entry.key.topic}: ${message.username} "
                             else -> "${entry.key.topic}: "
                         }
 
-                        addLine(SpannableString(sender + it.message).apply {
+                        it.addLine(SpannableString(sender + message.message).apply {
                             setSpan(StyleSpan(Typeface.BOLD), 0, sender.length, SPAN_EXCLUSIVE_EXCLUSIVE)
                         })
                     }
@@ -221,17 +224,17 @@ object ChatNotifications {
         else -> when (conference.isGroup) {
             true -> NotificationCompat.MessagingStyle(user.name)
                     .setConversationTitle(conference.topic)
-                    .apply {
-                        messages.forEach {
-                            addMessage(it.message, it.date.time, it.username)
+                    .also {
+                        messages.forEach { message ->
+                            it.addMessage(message.message, message.date.time, message.username)
                         }
                     }
             false -> NotificationCompat.InboxStyle()
                     .setBigContentTitle(conference.topic)
                     .setSummaryText(content)
-                    .apply {
-                        messages.forEach {
-                            addLine(it.message)
+                    .also {
+                        messages.forEach { message ->
+                            it.addLine(message.message)
                         }
                     }
         }

@@ -57,7 +57,7 @@ class IndustryInfoFragment : BaseContentFragment<Industry>() {
         return inflater.inflate(R.layout.fragment_industry, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         link.movementMethod = TouchableMovementMethod.getInstance()
@@ -67,7 +67,7 @@ class IndustryInfoFragment : BaseContentFragment<Industry>() {
         super.showData(data)
 
         name = data.name
-        language.setImageDrawable(data.country.toAppDrawable(context))
+        language.setImageDrawable(data.country.toAppDrawable(safeContext))
         type.text = ProxerUtils.getApiEnumName(data.type)
                 ?.replace("_", " ")
                 ?.split(" ")
@@ -78,15 +78,15 @@ class IndustryInfoFragment : BaseContentFragment<Industry>() {
             linkRow.visibility = View.GONE
         } else {
             linkRow.visibility = View.VISIBLE
-            link.text = Utils.buildClickableText(context, data.link.toString(),
+            link.text = Utils.buildClickableText(safeContext, data.link.toString(),
                     onWebClickListener = Link.OnClickListener { link ->
                         showPage(Utils.parseAndFixUrl(link))
                     },
                     onWebLongClickListener = Link.OnLongClickListener { link ->
                         val title = getString(R.string.clipboard_title)
 
-                        context.clipboardManager.primaryClip = ClipData.newPlainText(title, link)
-                        context.toast(R.string.clipboard_status)
+                        safeContext.clipboardManager.primaryClip = ClipData.newPlainText(title, link)
+                        safeContext.toast(R.string.clipboard_status)
                     })
         }
 

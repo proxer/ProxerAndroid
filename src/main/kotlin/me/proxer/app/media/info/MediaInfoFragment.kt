@@ -75,12 +75,12 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
         }
 
     private var showUnratedTags: Boolean
-        get() = arguments.getBoolean(SHOW_UNRATED_TAGS_ARGUMENT, false)
-        set(value) = arguments.putBoolean(SHOW_UNRATED_TAGS_ARGUMENT, value)
+        get() = safeArguments.getBoolean(SHOW_UNRATED_TAGS_ARGUMENT, false)
+        set(value) = safeArguments.putBoolean(SHOW_UNRATED_TAGS_ARGUMENT, value)
 
     private var showSpoilerTags: Boolean
-        get() = arguments.getBoolean(SHOW_SPOILER_TAGS_ARGUMENT, false)
-        set(value) = arguments.putBoolean(SHOW_SPOILER_TAGS_ARGUMENT, value)
+        get() = safeArguments.getBoolean(SHOW_SPOILER_TAGS_ARGUMENT, false)
+        set(value) = safeArguments.putBoolean(SHOW_SPOILER_TAGS_ARGUMENT, value)
 
     private val ratingContainer: ViewGroup by bindView(R.id.ratingContainer)
     private val rating: RatingBar by bindView(R.id.rating)
@@ -114,7 +114,7 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
         return inflater.inflate(R.layout.fragment_media_info, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.userInfoUpdateData.observe(this, Observer {
@@ -208,7 +208,7 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
     }
 
     private fun bindSynonyms(result: Entry) = result.synonyms.forEach {
-        infoTable.addView(constructInfoTableRow(it.toTypeAppString(context), it.name, true))
+        infoTable.addView(constructInfoTableRow(it.toTypeAppString(safeContext), it.name, true))
     }
 
     private fun bindSeasons(result: Entry) {
@@ -221,10 +221,10 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
             val seasonStartView = tableRow.findViewById<TextView>(R.id.seasonStart)
             val seasonEndView = tableRow.findViewById<TextView>(R.id.seasonEnd)
 
-            seasonStartView.text = seasons[0].toStartAppString(context)
+            seasonStartView.text = seasons[0].toStartAppString(safeContext)
 
             if (seasons.size >= 2) {
-                seasonEndView.text = seasons[1].toEndAppString(context)
+                seasonEndView.text = seasons[1].toEndAppString(safeContext)
             } else {
                 seasonEndView.visibility = View.GONE
             }
@@ -234,32 +234,32 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
     }
 
     private fun bindStatus(result: Entry) {
-        infoTable.addView(constructInfoTableRow(context.getString(R.string.fragment_media_info_status_title),
-                result.state.toAppString(context)))
+        infoTable.addView(constructInfoTableRow(safeContext.getString(R.string.fragment_media_info_status_title),
+                result.state.toAppString(safeContext)))
     }
 
     private fun bindLicense(result: Entry) {
-        infoTable.addView(constructInfoTableRow(context.getString(R.string.fragment_media_info_license_title),
-                result.license.toAppString(context)))
+        infoTable.addView(constructInfoTableRow(safeContext.getString(R.string.fragment_media_info_license_title),
+                result.license.toAppString(safeContext)))
     }
 
     private fun bindAdaption(result: Entry) {
         result.adaptionInfo.let { adaptionInfo ->
             if (adaptionInfo.id != "0") {
                 val title = getString(R.string.fragment_media_info_adaption_title)
-                val content = "${adaptionInfo.name} (${adaptionInfo.medium?.toAppString(context)})"
+                val content = "${adaptionInfo.name} (${adaptionInfo.medium?.toAppString(safeContext)})"
 
                 infoTable.addView(constructInfoTableRow(title, content).also { tableRow ->
                     tableRow.findViewById<View>(R.id.content).also { contentView ->
                         val selectableItemBackground = TypedValue().apply {
-                            context.theme.resolveAttribute(R.attr.selectableItemBackground, this, true)
+                            safeContext.theme.resolveAttribute(R.attr.selectableItemBackground, this, true)
                         }
 
                         contentView.setBackgroundResource(selectableItemBackground.resourceId)
                         contentView.clicks()
                                 .autoDispose(this)
                                 .subscribe {
-                                    MediaActivity.navigateTo(activity, adaptionInfo.id, adaptionInfo.name,
+                                    MediaActivity.navigateTo(safeActivity, adaptionInfo.id, adaptionInfo.name,
                                             adaptionInfo.medium?.toCategory())
                                 }
                     }
@@ -352,9 +352,9 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
             val image = LayoutInflater.from(context)
                     .inflate(R.layout.layout_image, fskConstraints, false) as ImageView
 
-            image.setImageDrawable(constraint.toAppDrawable(context))
+            image.setImageDrawable(constraint.toAppDrawable(safeContext))
             image.setOnClickListener {
-                multilineSnackbar(root, constraint.toAppStringDescription(context))
+                multilineSnackbar(root, constraint.toAppStringDescription(safeContext))
             }
 
             fskConstraints.addView(image)
@@ -366,7 +366,7 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
         translatorGroups.visibility = View.GONE
     } else {
         bindChips(translatorGroups, result.translatorGroups, mapFunction = { it.name },
-                onClick = { TranslatorGroupActivity.navigateTo(activity, it.id, it.name) })
+                onClick = { TranslatorGroupActivity.navigateTo(safeActivity, it.id, it.name) })
     }
 
     private fun bindIndustries(result: Entry) = if (result.industries.isEmpty()) {
@@ -381,7 +381,7 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
                     ?: throw IllegalArgumentException("Unknown industry type: ${it.type}")
 
             "${it.name} ($type)"
-        }, onClick = { IndustryActivity.navigateTo(activity, it.id, it.name) })
+        }, onClick = { IndustryActivity.navigateTo(safeActivity, it.id, it.name) })
     }
 
     private fun <T> bindChips(layout: FlexboxLayout, items: List<T>, mapFunction: (T) -> String = { it.toString() },

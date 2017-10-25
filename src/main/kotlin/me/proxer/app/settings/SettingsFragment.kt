@@ -37,6 +37,9 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
         }
     }
 
+    private val safeContext get() = context ?: throw IllegalStateException("context is null")
+    private val safeActivity get() = activity ?: throw IllegalStateException("activity is null")
+
     override fun onCreatePreferences2(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences)
 
@@ -61,7 +64,7 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
         updateIntervalNotification()
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         listView.isFocusable = false
@@ -87,32 +90,32 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         when (key) {
-            AGE_CONFIRMATION -> if (PreferenceHelper.isAgeRestrictedMediaAllowed(context)) {
+            AGE_CONFIRMATION -> if (PreferenceHelper.isAgeRestrictedMediaAllowed(safeContext)) {
                 (findPreference(AGE_CONFIRMATION) as TwoStatePreference).isChecked = true
             }
 
             THEME -> {
-                AppCompatDelegate.setDefaultNightMode(PreferenceHelper.getNightMode(context))
+                AppCompatDelegate.setDefaultNightMode(PreferenceHelper.getNightMode(safeContext))
 
-                activity.recreate()
+                safeActivity.recreate()
             }
 
             NOTIFICATIONS_NEWS, NOTIFICATIONS_ACCOUNT -> {
                 updateIntervalNotification()
 
-                Completable.fromAction { NotificationJob.scheduleIfPossible(context) }
+                Completable.fromAction { NotificationJob.scheduleIfPossible(safeContext) }
                         .subscribeOn(Schedulers.io())
                         .subscribeAndLogErrors()
             }
 
-            NOTIFICATIONS_CHAT -> Completable.fromAction { ChatJob.scheduleSynchronizationIfPossible(context) }
+            NOTIFICATIONS_CHAT -> Completable.fromAction { ChatJob.scheduleSynchronizationIfPossible(safeContext) }
                     .subscribeOn(Schedulers.io())
                     .subscribeAndLogErrors()
 
             NOTIFICATIONS_INTERVAL -> Completable
                     .fromAction {
-                        NotificationJob.scheduleIfPossible(context)
-                        ChatJob.scheduleSynchronizationIfPossible(context)
+                        NotificationJob.scheduleIfPossible(safeContext)
+                        ChatJob.scheduleSynchronizationIfPossible(safeContext)
                     }
                     .subscribeOn(Schedulers.io())
                     .subscribeAndLogErrors()
@@ -120,7 +123,7 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
     }
 
     private fun updateIntervalNotification() {
-        findPreference(NOTIFICATIONS_INTERVAL).isEnabled = PreferenceHelper.areNewsNotificationsEnabled(context) ||
-                PreferenceHelper.areAccountNotificationsEnabled(context)
+        findPreference(NOTIFICATIONS_INTERVAL).isEnabled = PreferenceHelper.areNewsNotificationsEnabled(safeContext) ||
+                PreferenceHelper.areAccountNotificationsEnabled(safeContext)
     }
 }

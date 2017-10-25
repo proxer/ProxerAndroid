@@ -39,7 +39,7 @@ class TranslatorGroupProjectFragment : PagedContentFragment<TranslatorGroupProje
         get() = hostingActivity.id
 
     override val layoutManager by unsafeLazy {
-        StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity) + 1, VERTICAL)
+        StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(safeActivity) + 1, VERTICAL)
     }
 
     override var innerAdapter by Delegates.notNull<TranslatorGroupProjectAdapter>()
@@ -52,12 +52,12 @@ class TranslatorGroupProjectFragment : PagedContentFragment<TranslatorGroupProje
         innerAdapter.clickSubject
                 .autoDispose(this)
                 .subscribe { (view, translatorGroup) ->
-                    MediaActivity.navigateTo(activity, translatorGroup.id, translatorGroup.name,
+                    MediaActivity.navigateTo(safeActivity, translatorGroup.id, translatorGroup.name,
                             translatorGroup.medium.toCategory(), if (view.drawable != null) view else null)
                 }
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         innerAdapter.glide = GlideApp.with(this)

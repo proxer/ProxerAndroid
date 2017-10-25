@@ -48,7 +48,7 @@ class UcpOverviewFragment : BaseContentFragment<Int>() {
         return inflater.inflate(R.layout.fragment_ucp_overview, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         profileLink.movementMethod = TouchableMovementMethod.getInstance()
@@ -58,14 +58,14 @@ class UcpOverviewFragment : BaseContentFragment<Int>() {
         super.showData(data)
 
         StorageHelper.user?.let { (_, id, name) ->
-            profileLink.text = Utils.buildClickableText(context, ProxerUrls.userWeb(id).toString(),
+            profileLink.text = Utils.buildClickableText(safeContext, ProxerUrls.userWeb(id).toString(),
                     onWebClickListener = Link.OnClickListener {
                         HttpUrl.parse(it)?.let { showPage(it) }
                     },
                     onWebLongClickListener = Link.OnLongClickListener {
                         val title = getString(R.string.clipboard_title)
 
-                        context.clipboardManager.primaryClip = ClipData.newPlainText(title, it)
+                        safeContext.clipboardManager.primaryClip = ClipData.newPlainText(title, it)
                         snackbar(root, R.string.clipboard_status)
                     })
 

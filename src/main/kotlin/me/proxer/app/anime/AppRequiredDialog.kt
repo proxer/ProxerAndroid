@@ -25,20 +25,20 @@ class AppRequiredDialog : BaseDialog() {
         }.show(activity.supportFragmentManager, "app_required_dialog")
     }
 
-    private val name get() = arguments.getString(NAME_ARGUMENT)
-    private val packageName get() = arguments.getString(PACKAGE_NAME_ARGUMENT)
+    private val name get() = safeArguments.getString(NAME_ARGUMENT)
+    private val packageName get() = safeArguments.getString(PACKAGE_NAME_ARGUMENT)
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialDialog.Builder(context)
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialDialog.Builder(safeContext)
             .title(getString(R.string.dialog_app_required_title, name))
             .content(getString(R.string.dialog_app_required_content, name))
             .positiveText(R.string.dialog_app_required_positive)
             .negativeText(R.string.cancel)
             .onPositive { _, _ ->
                 try {
-                    context.startActivity(Intent(Intent.ACTION_VIEW,
+                    safeContext.startActivity(Intent(Intent.ACTION_VIEW,
                             Uri.parse("market://details?id=$packageName")))
                 } catch (error: ActivityNotFoundException) {
-                    context.startActivity(Intent(Intent.ACTION_VIEW,
+                    safeContext.startActivity(Intent(Intent.ACTION_VIEW,
                             Uri.parse("https://play.google.com/store/apps/details?id=$packageName")))
                 }
             }

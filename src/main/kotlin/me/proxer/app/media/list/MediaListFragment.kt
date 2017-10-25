@@ -50,44 +50,44 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
     override val viewModel by unsafeLazy { MediaListViewModelProvider.get(this, sortCriteria, type, searchQuery) }
 
     override val layoutManager by unsafeLazy {
-        StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity) + 1, VERTICAL)
+        StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(safeActivity) + 1, VERTICAL)
     }
 
     override var innerAdapter by Delegates.notNull<MediaAdapter>()
 
     private val category
-        get() = arguments.getSerializable(CATEGORY_ARGUMENT) as Category
+        get() = safeArguments.getSerializable(CATEGORY_ARGUMENT) as Category
 
     private var sortCriteria: MediaSearchSortCriteria
-        get() = arguments.getSerializable(SORT_CRITERIA_ARGUMENT) as? MediaSearchSortCriteria
+        get() = safeArguments.getSerializable(SORT_CRITERIA_ARGUMENT) as? MediaSearchSortCriteria
                 ?: MediaSearchSortCriteria.RATING
         set(value) {
-            arguments.putSerializable(SORT_CRITERIA_ARGUMENT, value)
+            safeArguments.putSerializable(SORT_CRITERIA_ARGUMENT, value)
 
             viewModel.sortCriteria = value
         }
 
     private var type: MediaType
-        get() = arguments.getSerializable(TYPE_ARGUMENT) as? MediaType ?: when (category) {
+        get() = safeArguments.getSerializable(TYPE_ARGUMENT) as? MediaType ?: when (category) {
             Category.ANIME -> MediaType.ALL_ANIME
             Category.MANGA -> MediaType.ALL_MANGA
             else -> throw IllegalArgumentException("Unknown value for category")
         }
         set(value) {
-            arguments.putSerializable(TYPE_ARGUMENT, value)
+            safeArguments.putSerializable(TYPE_ARGUMENT, value)
 
             viewModel.type = value
         }
 
     private var searchQuery: String?
-        get() = arguments.getString(SEARCH_QUERY_ARGUMENT, null)
+        get() = safeArguments.getString(SEARCH_QUERY_ARGUMENT, null)
         set(value) {
-            arguments.putString(SEARCH_QUERY_ARGUMENT, value)
+            safeArguments.putString(SEARCH_QUERY_ARGUMENT, value)
 
             viewModel.searchQuery = value
         }
 
-    private val toolbar by unsafeLazy { activity.findViewById<Toolbar>(R.id.toolbar) }
+    private val toolbar by unsafeLazy { safeActivity.findViewById<Toolbar>(R.id.toolbar) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,14 +97,14 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
         innerAdapter.clickSubject
                 .autoDispose(this)
                 .subscribe { (view, entry) ->
-                    MediaActivity.navigateTo(activity, entry.id, entry.name, entry.medium.toCategory(),
+                    MediaActivity.navigateTo(safeActivity, entry.id, entry.name, entry.medium.toCategory(),
                             if (view.drawable != null) view else null)
                 }
 
         setHasOptionsMenu(true)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         innerAdapter.glide = GlideApp.with(this)

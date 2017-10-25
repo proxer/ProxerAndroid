@@ -31,7 +31,8 @@ class HistoryFragment : PagedContentFragment<UcpHistoryEntry>() {
     override val viewModel by unsafeLazy { HistoryViewModelProvider.get(this) }
 
     override val layoutManager by lazy {
-        StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity) + 1, StaggeredGridLayoutManager.VERTICAL)
+        StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(safeActivity) + 1,
+                StaggeredGridLayoutManager.VERTICAL)
     }
 
     override var innerAdapter by Delegates.notNull<HistoryAdapter>()
@@ -44,12 +45,12 @@ class HistoryFragment : PagedContentFragment<UcpHistoryEntry>() {
         innerAdapter.clickSubject
                 .autoDispose(this)
                 .subscribe { (view, item) ->
-                    MediaActivity.navigateTo(activity, item.id, item.name, item.category,
+                    MediaActivity.navigateTo(safeActivity, item.id, item.name, item.category,
                             if (view.drawable != null) view else null)
                 }
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         innerAdapter.glide = GlideApp.with(this)

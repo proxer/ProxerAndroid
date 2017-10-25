@@ -26,21 +26,21 @@ class CrashDialog : BaseDialog() {
     }
 
     private val errorDetails: String
-        get() = arguments.getString(ERROR_DETAILS_ARGUMENT)
+        get() = safeArguments.getString(ERROR_DETAILS_ARGUMENT)
 
     private val stacktrace: String
-        get() = arguments.getString(STACKTRACE_ARGUMENT)
+        get() = safeArguments.getString(STACKTRACE_ARGUMENT)
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialDialog.Builder(context)
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialDialog.Builder(safeContext)
             .title(R.string.dialog_crash_title)
             .content("$errorDetails\n$stacktrace")
             .neutralText(R.string.dialog_crash_neutral)
             .negativeText(R.string.dialog_crash_negative)
             .onNeutral { _, _ ->
-                context.clipboardManager.primaryClip = ClipData.newPlainText(getString(R.string.clipboard_crash_title),
-                        "$errorDetails\n$stacktrace")
+                safeContext.clipboardManager.primaryClip = ClipData
+                        .newPlainText(getString(R.string.clipboard_crash_title), "$errorDetails\n$stacktrace")
 
-                context.toast(R.string.clipboard_status)
+                safeContext.toast(R.string.clipboard_status)
             }
             .build()
 }

@@ -55,7 +55,7 @@ class TranslatorGroupInfoFragment : BaseContentFragment<TranslatorGroup>() {
         return inflater.inflate(R.layout.fragment_translator_group, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         link.movementMethod = TouchableMovementMethod.getInstance()
@@ -65,21 +65,21 @@ class TranslatorGroupInfoFragment : BaseContentFragment<TranslatorGroup>() {
         super.showData(data)
 
         name = data.name
-        language.setImageDrawable(data.country.toAppDrawable(context))
+        language.setImageDrawable(data.country.toAppDrawable(safeContext))
 
         if (data.link?.toString().isNullOrBlank()) {
             linkRow.visibility = View.GONE
         } else {
             linkRow.visibility = View.VISIBLE
-            link.text = Utils.buildClickableText(context, data.link.toString(),
+            link.text = Utils.buildClickableText(safeContext, data.link.toString(),
                     onWebClickListener = Link.OnClickListener { link ->
                         showPage(Utils.parseAndFixUrl(link))
                     },
                     onWebLongClickListener = Link.OnLongClickListener { link ->
                         val title = getString(R.string.clipboard_title)
 
-                        context.clipboardManager.primaryClip = ClipData.newPlainText(title, link)
-                        context.toast(R.string.clipboard_status)
+                        safeContext.clipboardManager.primaryClip = ClipData.newPlainText(title, link)
+                        safeContext.toast(R.string.clipboard_status)
                     })
         }
 

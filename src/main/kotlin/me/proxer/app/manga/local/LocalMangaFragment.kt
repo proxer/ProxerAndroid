@@ -53,9 +53,9 @@ class LocalMangaFragment : BaseContentFragment<List<CompleteLocalMangaEntry>>() 
     private var adapter by Delegates.notNull<LocalMangaAdapter>()
 
     private var searchQuery: String?
-        get() = arguments.getString(SEARCH_QUERY_ARGUMENT, null)
+        get() = safeArguments.getString(SEARCH_QUERY_ARGUMENT, null)
         set(value) {
-            arguments.putString(SEARCH_QUERY_ARGUMENT, value)
+            safeArguments.putString(SEARCH_QUERY_ARGUMENT, value)
 
             viewModel.searchQuery = value
         }
@@ -63,7 +63,7 @@ class LocalMangaFragment : BaseContentFragment<List<CompleteLocalMangaEntry>>() 
     override val contentContainer: ViewGroup
         get() = recyclerView
 
-    private val toolbar by unsafeLazy { activity.findViewById<Toolbar>(R.id.toolbar) }
+    private val toolbar by unsafeLazy { safeActivity.findViewById<Toolbar>(R.id.toolbar) }
     private val jobInfoContainer: ViewGroup by bindView(R.id.jobInfoContainer)
     private val jobInfoText: TextView by bindView(R.id.jobInfoText)
     private val jobInfoCancel: Button by bindView(R.id.jobInfoCancel)
@@ -77,14 +77,14 @@ class LocalMangaFragment : BaseContentFragment<List<CompleteLocalMangaEntry>>() 
         adapter.clickSubject
                 .autoDispose(this)
                 .subscribe { (entry, chapter) ->
-                    MangaActivity.navigateTo(activity, entry.id, chapter.episode, chapter.language, chapter.title,
+                    MangaActivity.navigateTo(safeActivity, entry.id, chapter.episode, chapter.language, chapter.title,
                             entry.name, entry.episodeAmount)
                 }
 
         adapter.longClickSubject
                 .autoDispose(this)
                 .subscribe { (view, entry) ->
-                    MediaActivity.navigateTo(activity, entry.id, entry.name, Category.MANGA,
+                    MediaActivity.navigateTo(safeActivity, entry.id, entry.name, Category.MANGA,
                             if (view.drawable != null) view else null)
                 }
 
@@ -100,13 +100,13 @@ class LocalMangaFragment : BaseContentFragment<List<CompleteLocalMangaEntry>>() 
         return inflater.inflate(R.layout.fragment_local_manga, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         adapter.glide = GlideApp.with(this)
 
         recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity) + 1,
+        recyclerView.layoutManager = StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(safeActivity) + 1,
                 StaggeredGridLayoutManager.VERTICAL)
         recyclerView.adapter = adapter
 
@@ -129,7 +129,7 @@ class LocalMangaFragment : BaseContentFragment<List<CompleteLocalMangaEntry>>() 
             } else {
                 jobInfoContainer.visibility = View.GONE
 
-                recyclerView.setPadding(recyclerView.paddingLeft, DeviceUtils.getVerticalMargin(context),
+                recyclerView.setPadding(recyclerView.paddingLeft, DeviceUtils.getVerticalMargin(safeContext),
                         recyclerView.paddingRight, recyclerView.paddingBottom)
             }
         })

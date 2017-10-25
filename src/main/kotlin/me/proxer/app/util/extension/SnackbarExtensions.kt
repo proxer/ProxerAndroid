@@ -69,7 +69,7 @@ inline fun Fragment.snackbar(
         duration: Int = LENGTH_LONG,
         actionMessage: Int = ACTION_MESSAGE_DEFAULT,
         actionCallback: View.OnClickListener? = null
-) = activity.snackbar(root, message, duration, actionMessage, actionCallback)
+) = activity?.snackbar(root, message, duration, actionMessage, actionCallback)
 
 inline fun Fragment.snackbar(
         root: View,
@@ -77,7 +77,7 @@ inline fun Fragment.snackbar(
         duration: Int = LENGTH_LONG,
         actionMessage: Int = ACTION_MESSAGE_DEFAULT,
         actionCallback: View.OnClickListener? = null
-) = activity.snackbar(root, message, duration, actionMessage, actionCallback)
+) = activity?.snackbar(root, message, duration, actionMessage, actionCallback)
 
 inline fun Fragment.multilineSnackbar(
         root: View,
@@ -86,7 +86,7 @@ inline fun Fragment.multilineSnackbar(
         actionMessage: Int = ACTION_MESSAGE_DEFAULT,
         actionCallback: View.OnClickListener? = null,
         maxLines: Int = 5
-) = activity.multilineSnackbar(root, message, duration, actionMessage, actionCallback, maxLines)
+) = activity?.multilineSnackbar(root, message, duration, actionMessage, actionCallback, maxLines)
 
 inline fun Fragment.multilineSnackbar(
         root: View,
@@ -95,5 +95,5 @@ inline fun Fragment.multilineSnackbar(
         actionMessage: Int = ACTION_MESSAGE_DEFAULT,
         actionCallback: View.OnClickListener? = null,
         maxLines: Int = 5
-) = activity.multilineSnackbar(root, message, duration, actionMessage, actionCallback, maxLines)
+) = activity?.multilineSnackbar(root, message, duration, actionMessage, actionCallback, maxLines)
 

@@ -43,7 +43,7 @@ class LoginDialog : BaseDialog() {
     private val inputContainer: ViewGroup by bindView(R.id.inputContainer)
     private val progress: ProgressBar by bindView(R.id.progress)
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialDialog.Builder(context)
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialDialog.Builder(safeContext)
             .autoDismiss(false)
             .title(R.string.dialog_login_title)
             .positiveText(R.string.dialog_login_positive)
@@ -99,7 +99,7 @@ class LoginDialog : BaseDialog() {
             it?.let {
                 viewModel.error.value = null
 
-                context.longToast(it.message)
+                safeContext.longToast(it.message)
             }
         })
 

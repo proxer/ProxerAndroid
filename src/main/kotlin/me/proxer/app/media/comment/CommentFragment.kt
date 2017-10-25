@@ -49,9 +49,10 @@ class CommentFragment : PagedContentFragment<Comment>() {
         get() = hostingActivity.category
 
     private var sortCriteria: CommentSortCriteria
-        get() = arguments.getSerializable(SORT_CRITERIA_ARGUMENT) as? CommentSortCriteria ?: CommentSortCriteria.RATING
+        get() = safeArguments.getSerializable(SORT_CRITERIA_ARGUMENT) as? CommentSortCriteria
+                ?: CommentSortCriteria.RATING
         set(value) {
-            arguments.putSerializable(SORT_CRITERIA_ARGUMENT, value)
+            safeArguments.putSerializable(SORT_CRITERIA_ARGUMENT, value)
 
             viewModel.sortCriteria = value
         }
@@ -68,14 +69,14 @@ class CommentFragment : PagedContentFragment<Comment>() {
         innerAdapter.profileClickSubject
                 .autoDispose(this)
                 .subscribe { (view, comment) ->
-                    ProfileActivity.navigateTo(activity, comment.authorId, comment.author, comment.image,
+                    ProfileActivity.navigateTo(safeActivity, comment.authorId, comment.author, comment.image,
                             if (view.drawable != null && comment.image.isNotBlank()) view else null)
                 }
 
         setHasOptionsMenu(true)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         innerAdapter.glide = GlideApp.with(this)

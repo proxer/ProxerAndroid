@@ -73,13 +73,13 @@ object AccountNotifications {
                         NotificationActivity.getIntent(context),
                         PendingIntent.FLAG_UPDATE_CURRENT)
 
-                style = NotificationCompat.InboxStyle().apply {
-                    notifications.forEach {
-                        addLine(HtmlCompat.fromHtml(it.text))
+                style = NotificationCompat.InboxStyle().also {
+                    notifications.forEach { notification ->
+                        it.addLine(HtmlCompat.fromHtml(notification.text))
                     }
 
-                    setBigContentTitle(title)
-                    setSummaryText(notificationAmount)
+                    it.setBigContentTitle(title)
+                    it.setSummaryText(notificationAmount)
                 }
             }
         }

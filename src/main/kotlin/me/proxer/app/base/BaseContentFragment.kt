@@ -41,10 +41,10 @@ abstract class BaseContentFragment<T> : BaseFragment() {
     protected open val progress: SwipeRefreshLayout by bindView(R.id.progress)
 
     private var isSolvingCaptcha: Boolean
-        get() = arguments.getBoolean(IS_SOLVING_CAPTCHA_ARGUMENT, false)
-        set(value) = arguments.putBoolean(IS_SOLVING_CAPTCHA_ARGUMENT, value)
+        get() = safeArguments.getBoolean(IS_SOLVING_CAPTCHA_ARGUMENT, false)
+        set(value) = safeArguments.putBoolean(IS_SOLVING_CAPTCHA_ARGUMENT, value)
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         progress.setColorSchemeResources(R.color.colorPrimary)

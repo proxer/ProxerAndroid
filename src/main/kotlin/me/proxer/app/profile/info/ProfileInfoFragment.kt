@@ -56,7 +56,7 @@ class ProfileInfoFragment : BaseContentFragment<UserInfo>() {
         return inflater.inflate(R.layout.fragment_profile, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         statusText.movementMethod = TouchableMovementMethod.getInstance()
@@ -84,7 +84,7 @@ class ProfileInfoFragment : BaseContentFragment<UserInfo>() {
         if (data.status.isBlank()) {
             statusContainer.visibility = View.GONE
         } else {
-            val rawText = data.status + " - " + data.lastStatusChange.convertToRelativeReadableTime(context)
+            val rawText = data.status + " - " + data.lastStatusChange.convertToRelativeReadableTime(safeContext)
 
             statusText.text = Utils.buildClickableText(statusText.context, rawText,
                     onWebClickListener = Link.OnClickListener {
@@ -94,7 +94,7 @@ class ProfileInfoFragment : BaseContentFragment<UserInfo>() {
     }
 
     @Suppress("ExceptionRaisedInUnexpectedLocation")
-    private fun rankToString(points: Int) = context.getString(when {
+    private fun rankToString(points: Int) = safeContext.getString(when {
         points < 10 -> R.string.rank_10
         points < 100 -> R.string.rank_100
         points < 200 -> R.string.rank_200

@@ -66,9 +66,9 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
                 .autoDispose(this)
                 .subscribe { (language, episode) ->
                     when (episode.category) {
-                        Category.ANIME -> AnimeActivity.navigateTo(activity, id, episode.number,
+                        Category.ANIME -> AnimeActivity.navigateTo(safeActivity, id, episode.number,
                                 language.toAnimeLanguage(), name, episode.episodeAmount)
-                        Category.MANGA -> MangaActivity.navigateTo(activity, id, episode.number,
+                        Category.MANGA -> MangaActivity.navigateTo(safeActivity, id, episode.number,
                                 language.toGeneralLanguage(), episode.title, name, episode.episodeAmount)
                     }
                 }
@@ -78,7 +78,7 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
         return inflater.inflate(R.layout.fragment_episode, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         adapter.glide = GlideApp.with(this)

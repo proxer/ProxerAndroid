@@ -63,7 +63,7 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
         return inflater.inflate(R.layout.fragment_paged, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.refreshError.observe(this, Observer {
@@ -162,8 +162,8 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
     private fun updateRecyclerViewPadding() = when (innerAdapter.itemCount <= 0 && adapter.footer != null) {
         true -> recyclerView.setPadding(0, 0, 0, 0)
         false -> {
-            val horizontalPadding = DeviceUtils.getHorizontalMargin(context)
-            val verticalPadding = DeviceUtils.getVerticalMargin(context)
+            val horizontalPadding = DeviceUtils.getHorizontalMargin(safeContext)
+            val verticalPadding = DeviceUtils.getVerticalMargin(safeContext)
 
             recyclerView.setPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
         }

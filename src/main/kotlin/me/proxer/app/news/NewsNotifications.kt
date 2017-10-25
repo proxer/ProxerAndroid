@@ -59,13 +59,13 @@ object NewsNotifications {
                 title = context.getString(R.string.notification_news_title)
                 content = newsAmount
 
-                style = NotificationCompat.InboxStyle().apply {
-                    news.forEach {
-                        addLine(it.subject)
+                style = NotificationCompat.InboxStyle().also {
+                    news.forEach { newsArticle ->
+                        it.addLine(newsArticle.subject)
                     }
 
-                    setBigContentTitle(context.getString(R.string.notification_news_title))
-                    setSummaryText(newsAmount)
+                    it.setBigContentTitle(context.getString(R.string.notification_news_title))
+                    it.setSummaryText(newsAmount)
                 }
             }
         }

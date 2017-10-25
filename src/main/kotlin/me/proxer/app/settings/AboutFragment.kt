@@ -70,6 +70,9 @@ class AboutFragment : MaterialAboutFragment() {
         }
     }
 
+    private val safeContext get() = context ?: throw IllegalStateException("context is null")
+    private val safeActivity get() = activity ?: throw IllegalStateException("activity is null")
+
     private var customTabsHelper by Delegates.notNull<CustomTabsHelperFragment>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -160,9 +163,9 @@ class AboutFragment : MaterialAboutFragment() {
                                 .fromAction {
                                     chatDao.findConferenceForUser(DEVELOPER_PROXER_NAME).let { existingConference ->
                                         when (existingConference) {
-                                            null -> CreateChatActivity.navigateTo(activity, false,
+                                            null -> CreateChatActivity.navigateTo(safeActivity, false,
                                                     Participant(DEVELOPER_PROXER_NAME))
-                                            else -> ChatActivity.navigateTo(activity, existingConference)
+                                            else -> ChatActivity.navigateTo(safeActivity, existingConference)
                                         }
                                     }
                                 }
@@ -184,15 +187,15 @@ class AboutFragment : MaterialAboutFragment() {
             MaterialAboutActionItem.Builder()
                     .text(getString(R.string.about_developer_proxer_title))
                     .subText(DEVELOPER_PROXER_NAME)
-                    .icon(ContextCompat.getDrawable(context, R.drawable.ic_stat_proxer).apply {
-                        setColorFilter(ContextCompat.getColor(context, R.color.icon), PorterDuff.Mode.SRC_IN)
+                    .icon(ContextCompat.getDrawable(safeContext, R.drawable.ic_stat_proxer)?.apply {
+                        setColorFilter(ContextCompat.getColor(safeContext, R.color.icon), PorterDuff.Mode.SRC_IN)
                     })
                     .setOnClickAction {
-                        ProfileActivity.navigateTo(activity, DEVELOPER_PROXER_ID, DEVELOPER_PROXER_NAME, null)
+                        ProfileActivity.navigateTo(safeActivity, DEVELOPER_PROXER_ID, DEVELOPER_PROXER_NAME, null)
                     }.build()
     )
 
-    private fun showPage(url: HttpUrl) = customTabsHelper.openHttpPage(activity, url)
+    private fun showPage(url: HttpUrl) = customTabsHelper.openHttpPage(safeActivity, url)
 
     private fun getAboutLibrariesActivityStyle() =
             when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {

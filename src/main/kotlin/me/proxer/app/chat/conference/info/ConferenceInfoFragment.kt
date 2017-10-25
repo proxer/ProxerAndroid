@@ -52,7 +52,7 @@ class ConferenceInfoFragment : BaseContentFragment<ConferenceInfo>() {
         adapter.participantClickSubject
                 .autoDispose(this)
                 .subscribe { (view, item) ->
-                    ProfileActivity.navigateTo(activity, item.id, item.username, item.image,
+                    ProfileActivity.navigateTo(safeActivity, item.id, item.username, item.image,
                             if (view.drawable != null && item.image.isNotBlank()) view else null)
                 }
 
@@ -65,7 +65,7 @@ class ConferenceInfoFragment : BaseContentFragment<ConferenceInfo>() {
         return inflater.inflate(R.layout.fragment_conference_info, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         adapter.glide = GlideApp.with(this)

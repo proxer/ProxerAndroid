@@ -46,15 +46,15 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
     override val viewModel by unsafeLazy { BookmarkViewModelProvider.get(this, category) }
 
     override val layoutManager by unsafeLazy {
-        StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity) + 1, VERTICAL)
+        StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(safeActivity) + 1, VERTICAL)
     }
 
     override var innerAdapter by Delegates.notNull<BookmarkAdapter>()
 
     private var category: Category?
-        get() = arguments.getSerializable(CATEGORY_ARGUMENT) as? Category
+        get() = safeArguments.getSerializable(CATEGORY_ARGUMENT) as? Category
         set(value) {
-            arguments.putSerializable(CATEGORY_ARGUMENT, value)
+            safeArguments.putSerializable(CATEGORY_ARGUMENT, value)
 
             viewModel.category = value
         }
@@ -68,9 +68,9 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
                 .autoDispose(this)
                 .subscribe {
                     when (it.category) {
-                        Category.ANIME -> AnimeActivity.navigateTo(activity, it.entryId, it.episode,
+                        Category.ANIME -> AnimeActivity.navigateTo(safeActivity, it.entryId, it.episode,
                                 it.language.toAnimeLanguage(), it.name)
-                        Category.MANGA -> MangaActivity.navigateTo(activity, it.entryId, it.episode,
+                        Category.MANGA -> MangaActivity.navigateTo(safeActivity, it.entryId, it.episode,
                                 it.language.toGeneralLanguage(), it.chapterName, it.name)
                     }
                 }
@@ -78,7 +78,7 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
         innerAdapter.longClickSubject
                 .autoDispose(this)
                 .subscribe { (view, bookmark) ->
-                    MediaActivity.navigateTo(activity, bookmark.entryId, bookmark.name, bookmark.category,
+                    MediaActivity.navigateTo(safeActivity, bookmark.entryId, bookmark.name, bookmark.category,
                             if (view.drawable != null) view else null)
                 }
 
@@ -91,7 +91,7 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
         setHasOptionsMenu(true)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         innerAdapter.glide = GlideApp.with(this)

@@ -138,9 +138,9 @@ class CreateChatFragment : BaseFragment() {
 
         viewModel.result.observe(this, Observer {
             it?.let {
-                activity.finish()
+                safeActivity.finish()
 
-                ChatActivity.navigateTo(activity, it)
+                ChatActivity.navigateTo(safeActivity, it)
             }
         })
 
@@ -235,7 +235,7 @@ class CreateChatFragment : BaseFragment() {
         return inflater.inflate(R.layout.fragment_create_chat, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         innerAdapter.glide = GlideApp.with(this)
@@ -264,9 +264,9 @@ class CreateChatFragment : BaseFragment() {
 
                         when {
                             isGroup && topic.isBlank() -> throw TopicEmptyException()
-                            firstMessage.isBlank() -> throw InvalidInputException(context
+                            firstMessage.isBlank() -> throw InvalidInputException(safeContext
                                     .getString(R.string.error_missing_message))
-                            participants.isEmpty() -> throw InvalidInputException(context
+                            participants.isEmpty() -> throw InvalidInputException(safeContext
                                     .getString(R.string.error_missing_participants))
                         }
 
@@ -287,7 +287,7 @@ class CreateChatFragment : BaseFragment() {
                         }
                         is TopicEmptyException -> {
                             topicInputContainer.isErrorEnabled = true
-                            topicInputContainer.error = context.getString(R.string.error_input_empty)
+                            topicInputContainer.error = safeContext.getString(R.string.error_input_empty)
                         }
                         else -> ErrorUtils.handle(it).let { action ->
                             multilineSnackbar(root, action.message, Snackbar.LENGTH_LONG, action.buttonMessage,
@@ -342,13 +342,13 @@ class CreateChatFragment : BaseFragment() {
         when {
             it.isBlank() -> {
                 participantInputContainer.isErrorEnabled = true
-                participantInputContainer.error = context.getString(R.string.error_input_empty)
+                participantInputContainer.error = safeContext.getString(R.string.error_input_empty)
 
                 false
             }
             innerAdapter.contains(it) -> {
                 participantInputContainer.isErrorEnabled = true
-                participantInputContainer.error = context.getString(R.string.error_duplicate_participant)
+                participantInputContainer.error = safeContext.getString(R.string.error_duplicate_participant)
 
                 false
             }

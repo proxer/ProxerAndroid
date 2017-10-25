@@ -97,14 +97,14 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
 
         innerAdapter.uploaderClickSubject
                 .autoDispose(this)
-                .subscribe { ProfileActivity.navigateTo(activity, it.uploaderId, it.uploaderName) }
+                .subscribe { ProfileActivity.navigateTo(safeActivity, it.uploaderId, it.uploaderName) }
 
         innerAdapter.translatorGroupClickSubject
                 .autoDispose(this)
                 .subscribe {
                     it.translatorGroupId?.let { id ->
                         it.translatorGroupName?.let { name ->
-                            TranslatorGroupActivity.navigateTo(activity, id, name)
+                            TranslatorGroupActivity.navigateTo(safeActivity, id, name)
                         }
                     }
                 }
@@ -118,10 +118,10 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
         header = inflater.inflate(R.layout.layout_media_control, container, false) as MediaControlView
 
         header.textResolver = object : MediaControlView.TextResourceResolver {
-            override fun next() = context.getString(R.string.fragment_anime_next_episode)
-            override fun previous() = context.getString(R.string.fragment_anime_previous_episode)
-            override fun bookmarkThis() = context.getString(R.string.fragment_anime_bookmark_this_episode)
-            override fun bookmarkNext() = context.getString(R.string.fragment_anime_bookmark_next_episode)
+            override fun next() = safeContext.getString(R.string.fragment_anime_next_episode)
+            override fun previous() = safeContext.getString(R.string.fragment_anime_previous_episode)
+            override fun bookmarkThis() = safeContext.getString(R.string.fragment_anime_bookmark_this_episode)
+            override fun bookmarkNext() = safeContext.getString(R.string.fragment_anime_bookmark_next_episode)
         }
 
         header.episodeSwitchSubject
@@ -139,7 +139,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
         return inflater.inflate(R.layout.fragment_anime, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.resolutionResult.observe(this, Observer {
@@ -148,12 +148,12 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
                     if (it.intent.type == "text/html") {
                         showPage(Utils.parseAndFixUrl(it.intent.data.toString()))
                     } else {
-                        context.startActivity(it.intent)
+                        safeContext.startActivity(it.intent)
                     }
                 } else {
                     multilineSnackbar(root, it.intent.getCharSequenceExtra(StreamResolutionResult.MESSAGE_EXTRA))
-                            .apply {
-                                this.view.applyRecursively {
+                            ?.apply {
+                                view.applyRecursively {
                                     if (it is TextView && it !is Button) {
                                         it.movementMethod = LinkMovementMethod.getInstance()
                                     }

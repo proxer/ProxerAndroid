@@ -39,7 +39,7 @@ class IndustryProjectFragment : PagedContentFragment<IndustryProject>() {
         get() = industryActivity.id
 
     override val layoutManager by unsafeLazy {
-        StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity) + 1, VERTICAL)
+        StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(safeActivity) + 1, VERTICAL)
     }
 
     override var innerAdapter by Delegates.notNull<IndustryProjectAdapter>()
@@ -52,12 +52,12 @@ class IndustryProjectFragment : PagedContentFragment<IndustryProject>() {
         innerAdapter.clickSubject
                 .autoDispose(this)
                 .subscribe { (view, project) ->
-                    MediaActivity.navigateTo(activity, project.id, project.name, project.medium.toCategory(),
+                    MediaActivity.navigateTo(safeActivity, project.id, project.name, project.medium.toCategory(),
                             if (view.drawable != null) view else null)
                 }
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         innerAdapter.glide = GlideApp.with(this)

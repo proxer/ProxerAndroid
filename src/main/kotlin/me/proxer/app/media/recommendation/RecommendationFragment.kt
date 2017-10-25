@@ -54,8 +54,8 @@ class RecommendationFragment : BaseContentFragment<List<Recommendation>>() {
         adapter.clickSubject
                 .autoDispose(this)
                 .subscribe { (view, recommendation) ->
-                    MediaActivity.navigateTo(activity, recommendation.id, recommendation.name, recommendation.category,
-                            if (view.drawable != null) view else null)
+                    MediaActivity.navigateTo(safeActivity, recommendation.id, recommendation.name,
+                            recommendation.category, if (view.drawable != null) view else null)
                 }
     }
 
@@ -70,13 +70,13 @@ class RecommendationFragment : BaseContentFragment<List<Recommendation>>() {
         super.onDestroyView()
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         adapter.glide = GlideApp.with(this)
 
         recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity) + 1,
+        recyclerView.layoutManager = StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(safeActivity) + 1,
                 StaggeredGridLayoutManager.VERTICAL)
         recyclerView.adapter = adapter
     }

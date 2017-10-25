@@ -311,10 +311,10 @@ class ChatAdapter(savedInstanceState: Bundle?, private val isGroup: Boolean) :
         }
 
         internal open fun applySelection(message: LocalMessage) {
-            container.cardBackgroundColor = ContextCompat.getColorStateList(container.context, when {
+            container.setCardBackgroundColor(ContextCompat.getColorStateList(container.context, when {
                 messageSelectionMap[message.id.toString()] == true -> R.color.selected
                 else -> R.color.card_background
-            })
+            }))
         }
 
         internal open fun applyTimeVisibility(message: LocalMessage) {

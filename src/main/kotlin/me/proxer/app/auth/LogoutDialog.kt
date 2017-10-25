@@ -28,7 +28,7 @@ class LogoutDialog : BaseDialog() {
     private val content: TextView by bindView(R.id.content)
     private val progress: ProgressBar by bindView(R.id.progress)
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialDialog.Builder(context)
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialDialog.Builder(safeContext)
             .autoDismiss(false)
             .positiveText(R.string.dialog_logout_positive)
             .negativeText(R.string.cancel)
@@ -48,7 +48,7 @@ class LogoutDialog : BaseDialog() {
             it?.let {
                 viewModel.error.value = null
 
-                context.longToast(it.message)
+                safeContext.longToast(it.message)
             }
         })
 

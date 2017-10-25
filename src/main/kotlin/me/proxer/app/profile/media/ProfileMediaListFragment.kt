@@ -44,7 +44,7 @@ class ProfileMediaListFragment : PagedContentFragment<UserMediaListEntry>() {
     }
 
     override val layoutManager by unsafeLazy {
-        StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(activity) + 1,
+        StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(safeActivity) + 1,
                 StaggeredGridLayoutManager.VERTICAL)
     }
 
@@ -58,12 +58,12 @@ class ProfileMediaListFragment : PagedContentFragment<UserMediaListEntry>() {
         get() = hostingActivity.username
 
     private val category: Category
-        get() = arguments.getSerializable(CATEGORY_ARGUMENT) as Category
+        get() = safeArguments.getSerializable(CATEGORY_ARGUMENT) as Category
 
     private var filter: UserMediaListFilterType?
-        get() = arguments.getSerializable(FILTER_ARGUMENT) as? UserMediaListFilterType
+        get() = safeArguments.getSerializable(FILTER_ARGUMENT) as? UserMediaListFilterType
         set(value) {
-            arguments.putSerializable(FILTER_ARGUMENT, value)
+            safeArguments.putSerializable(FILTER_ARGUMENT, value)
 
             viewModel.filter = value
         }
@@ -78,14 +78,14 @@ class ProfileMediaListFragment : PagedContentFragment<UserMediaListEntry>() {
         innerAdapter.clickSubject
                 .autoDispose(this)
                 .subscribe { (view, item) ->
-                    MediaActivity.navigateTo(activity, item.id, item.name, item.medium.toCategory(),
+                    MediaActivity.navigateTo(safeActivity, item.id, item.name, item.medium.toCategory(),
                             if (view.drawable != null) view else null)
                 }
 
         setHasOptionsMenu(true)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         innerAdapter.glide = GlideApp.with(this)
