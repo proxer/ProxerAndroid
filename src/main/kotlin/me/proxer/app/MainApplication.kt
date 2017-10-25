@@ -50,6 +50,7 @@ import me.proxer.library.api.ProxerApi.Builder.LoggingStrategy
 import okhttp3.OkHttpClient
 import java.io.File
 import java.util.Date
+import java.util.concurrent.TimeUnit
 import kotlin.concurrent.write
 import kotlin.properties.Delegates
 
@@ -157,6 +158,11 @@ class MainApplication : Application() {
                 .loggingStrategy(if (BuildConfig.DEBUG) LoggingStrategy.ALL else LoggingStrategy.NONE)
                 .loggingTag(LOGGING_TAG)
                 .loginTokenManager(ProxerLoginTokenManager())
+                .client(OkHttpClient.Builder()
+                        .connectTimeout(5, TimeUnit.SECONDS)
+                        .writeTimeout(10, TimeUnit.SECONDS)
+                        .readTimeout(10, TimeUnit.SECONDS)
+                        .build())
                 .build()
     }
 
