@@ -5,8 +5,8 @@ ext {
     appVersionPatch = 1
 
     minSdkVersion = 16
-    targetSdkVersion = 26
-    compileSdkVersion = 26
+    targetSdkVersion = 27
+    compileSdkVersion = 27
 
     // Java
     javaVersion = JavaVersion.VERSION_1_8
