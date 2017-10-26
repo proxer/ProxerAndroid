@@ -70,8 +70,8 @@ class AboutFragment : MaterialAboutFragment() {
         }
     }
 
-    private val safeContext get() = context ?: throw IllegalStateException("context is null")
-    private val safeActivity get() = activity ?: throw IllegalStateException("activity is null")
+    val safeContext get() = context ?: throw IllegalStateException("context is null")
+    val safeActivity get() = activity ?: throw IllegalStateException("activity is null")
 
     private var customTabsHelper by Delegates.notNull<CustomTabsHelperFragment>()
 

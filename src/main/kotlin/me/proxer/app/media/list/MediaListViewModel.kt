@@ -5,6 +5,7 @@ import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.base.PagedContentViewModel
 import me.proxer.library.api.PagingLimitEndpoint
 import me.proxer.library.entity.list.MediaListEntry
+import me.proxer.library.enums.Genre
 import me.proxer.library.enums.MediaSearchSortCriteria
 import me.proxer.library.enums.MediaType
 import kotlin.properties.Delegates
@@ -28,6 +29,8 @@ class MediaListViewModel(sortCriteria: MediaSearchSortCriteria, type: MediaType,
         get() = api.list().mediaSearch()
                 .sort(sortCriteria)
                 .name(searchQuery)
+                .genres(genres)
+                .excludedGenres(excludedGenres)
                 .type(type)
 
     var sortCriteria by Delegates.observable(sortCriteria, { _, old, new ->
@@ -41,4 +44,7 @@ class MediaListViewModel(sortCriteria: MediaSearchSortCriteria, type: MediaType,
     var searchQuery by Delegates.observable(searchQuery, { _, old, new ->
         if (old != new) reload()
     })
+
+    var genres = emptySet<Genre>()
+    var excludedGenres = emptySet<Genre>()
 }

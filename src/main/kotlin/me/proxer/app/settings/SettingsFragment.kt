@@ -37,8 +37,8 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
         }
     }
 
-    private val safeContext get() = context ?: throw IllegalStateException("context is null")
-    private val safeActivity get() = activity ?: throw IllegalStateException("activity is null")
+    val safeContext get() = context ?: throw IllegalStateException("context is null")
+    val safeActivity get() = activity ?: throw IllegalStateException("activity is null")
 
     override fun onCreatePreferences2(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences)

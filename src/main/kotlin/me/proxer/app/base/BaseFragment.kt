@@ -17,9 +17,9 @@ import kotlin.properties.Delegates
 @Suppress("UnnecessaryAbstractClass")
 abstract class BaseFragment : Fragment() {
 
-    protected val safeContext get() = context ?: throw IllegalStateException("context is null")
-    protected val safeActivity get() = activity ?: throw IllegalStateException("activity is null")
-    protected val safeArguments get() = arguments ?: throw IllegalStateException("arguments are null")
+    val safeContext get() = context ?: throw IllegalStateException("context is null")
+    val safeActivity get() = activity ?: throw IllegalStateException("activity is null")
+    val safeArguments get() = arguments ?: throw IllegalStateException("arguments are null")
 
     protected open val hostingActivity: BaseActivity
         get() = safeActivity as BaseActivity

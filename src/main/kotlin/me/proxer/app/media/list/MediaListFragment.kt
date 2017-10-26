@@ -6,13 +6,18 @@ import android.support.v7.widget.SearchView
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.support.v7.widget.StaggeredGridLayoutManager.VERTICAL
 import android.support.v7.widget.Toolbar
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
 import com.jakewharton.rxbinding2.support.v7.widget.queryTextChangeEvents
 import com.jakewharton.rxbinding2.view.actionViewEvents
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
+import kotterknife.bindView
 import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
@@ -89,6 +94,17 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
 
     private val toolbar by unsafeLazy { safeActivity.findViewById<Toolbar>(R.id.toolbar) }
 
+    internal val searchBottomSheet by bindView<ViewGroup>(R.id.searchBottomSheet)
+    internal val searchBottomSheetTitle by bindView<ViewGroup>(R.id.titleContainer)
+    internal val searchBottomSheetContent by bindView<ViewGroup>(R.id.searchBottomSheetContent)
+    internal val search by bindView<Button>(R.id.search)
+    internal val genresToggle by bindView<View>(R.id.genresToggle)
+    internal val genresToggleIcon by bindView<ImageView>(R.id.genresToggleIcon)
+    internal val genresContainer by bindView<ViewGroup>(R.id.genres)
+    internal val excludedGenresToggle by bindView<View>(R.id.excludedGenresToggle)
+    internal val excludedGenresToggleIcon by bindView<ImageView>(R.id.excludedGenresToggleIcon)
+    internal val excludedGenresContainer by bindView<ViewGroup>(R.id.excludedGenresContainer)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -104,10 +120,16 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
         setHasOptionsMenu(true)
     }
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        return inflater.inflate(R.layout.fragment_media_list, container, false)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         innerAdapter.glide = GlideApp.with(this)
+
+        MediaListSearchBottomSheet.bindTo(this, viewModel)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

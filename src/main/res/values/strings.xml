@@ -261,6 +261,11 @@
     <string name="fragment_profile_points_total">Insgesamt</string>
     <string name="fragment_profile_points_uploads">Uploads</string>
 
+    <string name="fragment_media_list_extended_criteria">Erweiterte Kriterien</string>
+    <string name="fragment_media_list_search">Suchen</string>
+    <string name="fragment_media_list_genres">Enthaltene Genre</string>
+    <string name="fragment_media_list_excluded_genres">Nicht enthaltene Genre</string>
+
     <string name="fragment_media_info_description">Beschreibung</string>
     <string name="fragment_media_info_fsk_constraints">FSK</string>
     <string name="fragment_media_info_general">Allgemein</string>
