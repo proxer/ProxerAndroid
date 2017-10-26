@@ -92,5 +92,3 @@ fun CustomTabsHelperFragment.openHttpPage(activity: Activity, url: HttpUrl) {
         false -> activity.startActivity(Intent(Intent.ACTION_VIEW).setData(url.androidUri()))
     }
 }
-
-
