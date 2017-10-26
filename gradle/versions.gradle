@@ -12,7 +12,7 @@ ext {
     javaVersion = JavaVersion.VERSION_1_8
 
     // Gradle
-    gradleVersion = '4.3-rc-3'
+    gradleVersion = '4.3-rc-4'
 
     // Core plugins
     androidPluginVersion = '3.0.0'
@@ -20,7 +20,7 @@ ext {
 
     // Utility plugins
     detektPluginVersion = '1.0.0.RC5-2'
-    gradleVersionsPluginVersion = '0.16.0'
+    gradleVersionsPluginVersion = '0.17.0'
     androidCommandPluginVersion = '1.7.1'
     ktlintVersion = '0.11.0'
 
@@ -48,12 +48,12 @@ ext {
     communityMaterialTypefaceVersion = '1.9.32.2'
     crossfaderVersion = '1.5.0'
     materialAboutVersion = '2.2.3'
-    subsamplingScaleImageViewVersion = '3.7.0'
+    subsamplingScaleImageViewVersion = '3.7.2'
     tabLayoutHelperVersion = '0.9.0'
     materialDialogsVersion = '0.9.5.0'
     flexboxVersion = '0.3.1'
     emojiIosVersion = '0.6.0-SNAPSHOT'
-    exomediaVersion = 'd49a09b2d6'
+    exomediaVersion = '1bd4e7b8e9'
     exoplayerVersion = 'r2.5.4'
     materialProgressBarVersion = '1.4.2'
     materialRatingBarVersion = '1.1.1'
