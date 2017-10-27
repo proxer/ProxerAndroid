@@ -13,6 +13,7 @@ import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.module.AppGlideModule
 import com.bumptech.glide.request.RequestOptions
 import me.proxer.app.MainApplication.Companion.client
+import me.proxer.app.util.DeviceUtils
 import java.io.InputStream
 
 /**
@@ -26,8 +27,13 @@ class ProxerGlideModule : AppGlideModule() {
         registry.replace(GlideUrl::class.java, InputStream::class.java, OkHttpUrlLoader.Factory(client))
     }
 
-    override fun applyOptions(context: Context?, builder: GlideBuilder) {
-        builder.setDefaultRequestOptions(RequestOptions().format(DecodeFormat.PREFER_ARGB_8888))
+    override fun applyOptions(context: Context, builder: GlideBuilder) {
+        val format = when (DeviceUtils.shouldShowHighQualityImages(context)) {
+            true -> DecodeFormat.PREFER_ARGB_8888
+            false -> DecodeFormat.PREFER_RGB_565
+        }
+
+        builder.setDefaultRequestOptions(RequestOptions().format(format))
     }
 
     override fun isManifestParsingEnabled() = false

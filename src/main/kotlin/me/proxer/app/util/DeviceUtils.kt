@@ -1,12 +1,14 @@
 package me.proxer.app.util
 
 import android.app.Activity
+import android.app.ActivityManager
 import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Point
 import android.os.Build
 import me.proxer.app.R
+import me.proxer.app.util.extension.activityManager
 import me.proxer.app.util.extension.windowManager
 
 /**
@@ -50,5 +52,13 @@ object DeviceUtils {
         }
 
         return result
+    }
+
+    fun shouldShowHighQualityImages(context: Context): Boolean {
+        val memoryInfo = ActivityManager.MemoryInfo()
+
+        context.activityManager.getMemoryInfo(memoryInfo)
+
+        return memoryInfo.availMem >= 1024 * 1024 * 1024
     }
 }

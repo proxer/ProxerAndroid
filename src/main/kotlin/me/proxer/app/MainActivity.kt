@@ -2,7 +2,6 @@ package me.proxer.app
 
 import android.content.Context
 import android.content.Intent
-import android.content.pm.ShortcutManager
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -36,6 +35,7 @@ import me.proxer.app.ucp.UcpActivity
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.autoDispose
+import me.proxer.app.util.extension.shortcutManager
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.wrapper.IntroductionWrapper
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper
@@ -172,7 +172,7 @@ class MainActivity : BaseActivity() {
     private fun getItemToLoad() = DrawerItem.fromOrDefault(when (intent.action == Intent.ACTION_VIEW) {
         true -> intent.dataString.toLongOrNull().apply {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-                getSystemService(ShortcutManager::class.java).reportShortcutUsed(when (this) {
+                shortcutManager.reportShortcutUsed(when (this) {
                     0L -> SHORTCUT_NEWS
                     1L -> SHORTCUT_CHAT
                     2L -> SHORTCUT_BOOKMARKS
