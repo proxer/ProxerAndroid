@@ -33,7 +33,7 @@ ext {
     proxerLibVersion = '4e2780306a'
 
     // RxJava
-    rxJavaVersion = '2.1.5'
+    rxJavaVersion = '2.1.6'
     rxKotlinVersion = '2.1.0'
     rxAndroidVersion = '2.0.1'
     rxBindingVersion = '2.0.0'
