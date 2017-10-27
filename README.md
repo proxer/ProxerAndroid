@@ -1,4 +1,4 @@
-# Proxer.Me Android [![Latest Release](https://img.shields.io/github/release/proxer/ProxerAndroid.svg)](https://github.com/proxer/ProxerAndroid/releases/latest) [![Build status](https://circleci.com/gh/proxer/ProxerAndroid.svg?style=shield)](https://circleci.com/gh/proxer/ProxerAndroid)
+# Proxer.Me Android [![Latest Release](https://img.shields.io/github/release/proxer/ProxerAndroid.svg)](https://github.com/proxer/ProxerAndroid/releases/latest) [![Build status](https://circleci.com/gh/proxer/ProxerAndroid.svg?style=shield)](https://circleci.com/gh/proxer/ProxerAndroid) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/4d3ba4628c1140ad86274db382734b6c)](https://www.codacy.com/app/geesruben/ProxerAndroid?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=proxer/ProxerAndroid&amp;utm_campaign=Badge_Grade)
 
 ### What is this?
 
