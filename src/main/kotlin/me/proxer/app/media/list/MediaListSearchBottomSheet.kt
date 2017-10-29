@@ -1,6 +1,8 @@
 package me.proxer.app.media.list
 
-import android.support.design.widget.BottomSheetBehavior
+import android.support.design.widget.BottomSheetBehavior.STATE_COLLAPSED
+import android.support.design.widget.BottomSheetBehavior.STATE_EXPANDED
+import android.support.design.widget.BottomSheetBehavior.from
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.AppCompatCheckBox
 import android.view.View
@@ -50,17 +52,17 @@ class MediaListSearchBottomSheet private constructor(
     private var excludedGenres: EnumSet<Genre>
         get() = fragment.safeArguments.getEnumSet(EXCLUDED_GENRES_ARGUMENT, Genre::class.java)
         set(value) {
-            fragment.safeArguments.putEnumSet(GENRES_ARGUMENT, value)
+            fragment.safeArguments.putEnumSet(EXCLUDED_GENRES_ARGUMENT, value)
 
             viewModel.excludedGenres = value
         }
 
-    private val bottomSheetBehaviour = BottomSheetBehavior.from(fragment.searchBottomSheet)
+    private val bottomSheetBehaviour = from(fragment.searchBottomSheet)
 
     init {
         bottomSheetBehaviour.isHideable = false
         bottomSheetBehaviour.peekHeight = measureTitle()
-        bottomSheetBehaviour.state = BottomSheetBehavior.STATE_COLLAPSED
+        bottomSheetBehaviour.state = STATE_COLLAPSED
 
         fragment.genresContainer.enableLayoutAnimationsSafely()
         fragment.excludedGenresContainer.enableLayoutAnimationsSafely()
@@ -81,8 +83,8 @@ class MediaListSearchBottomSheet private constructor(
                 .autoDispose(fragment)
                 .subscribe {
                     bottomSheetBehaviour.state = when (bottomSheetBehaviour.state) {
-                        BottomSheetBehavior.STATE_EXPANDED -> BottomSheetBehavior.STATE_COLLAPSED
-                        else -> BottomSheetBehavior.STATE_EXPANDED
+                        STATE_EXPANDED -> STATE_COLLAPSED
+                        else -> STATE_EXPANDED
                     }
                 }
 
@@ -126,7 +128,11 @@ class MediaListSearchBottomSheet private constructor(
 
         fragment.search.clicks()
                 .autoDispose(fragment)
-                .subscribe { viewModel.reload() }
+                .subscribe {
+                    bottomSheetBehaviour.state = STATE_COLLAPSED
+
+                    viewModel.reload()
+                }
     }
 
     private fun measureTitle(): Int {
