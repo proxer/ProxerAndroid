@@ -24,13 +24,17 @@ import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.autoDispose
+import me.proxer.app.util.extension.getEnumSet
+import me.proxer.app.util.extension.putEnumSet
 import me.proxer.app.util.extension.toCategory
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.list.MediaListEntry
 import me.proxer.library.enums.Category
+import me.proxer.library.enums.Genre
 import me.proxer.library.enums.MediaSearchSortCriteria
 import me.proxer.library.enums.MediaType
 import org.jetbrains.anko.bundleOf
+import java.util.EnumSet
 import kotlin.properties.Delegates
 
 /**
@@ -43,6 +47,8 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
         private const val SORT_CRITERIA_ARGUMENT = "sort_criteria"
         private const val TYPE_ARGUMENT = "type"
         private const val SEARCH_QUERY_ARGUMENT = "search_query"
+        private const val GENRES_ARGUMENT = "genres"
+        private const val EXCLUDED_GENRES_ARGUMENT = "excluded_genres"
 
         fun newInstance(category: Category) = MediaListFragment().apply {
             arguments = bundleOf(CATEGORY_ARGUMENT to category)
@@ -52,7 +58,10 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
     override val isSwipeToRefreshEnabled = false
     override val emptyDataMessage = R.string.error_no_data_search
 
-    override val viewModel by unsafeLazy { MediaListViewModelProvider.get(this, sortCriteria, type, searchQuery) }
+    override val viewModel by unsafeLazy {
+        MediaListViewModelProvider.get(this, sortCriteria, type, searchQuery,
+                genres, excludedGenres)
+    }
 
     override val layoutManager by unsafeLazy {
         StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(safeActivity) + 1, VERTICAL)
@@ -92,17 +101,34 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
             viewModel.searchQuery = value
         }
 
+    internal var genres: EnumSet<Genre>
+        get() = safeArguments.getEnumSet(GENRES_ARGUMENT, Genre::class.java)
+        set(value) {
+            safeArguments.putEnumSet(GENRES_ARGUMENT, value)
+
+            viewModel.genres = value
+        }
+
+    internal var excludedGenres: EnumSet<Genre>
+        get() = safeArguments.getEnumSet(EXCLUDED_GENRES_ARGUMENT, Genre::class.java)
+        set(value) {
+            safeArguments.putEnumSet(EXCLUDED_GENRES_ARGUMENT, value)
+
+            viewModel.excludedGenres = value
+        }
+
     private val toolbar by unsafeLazy { safeActivity.findViewById<Toolbar>(R.id.toolbar) }
 
     internal val searchBottomSheet by bindView<ViewGroup>(R.id.searchBottomSheet)
     internal val searchBottomSheetTitle by bindView<ViewGroup>(R.id.titleContainer)
-    internal val searchBottomSheetContent by bindView<ViewGroup>(R.id.searchBottomSheetContent)
     internal val search by bindView<Button>(R.id.search)
     internal val genresToggle by bindView<View>(R.id.genresToggle)
-    internal val genresToggleIcon by bindView<ImageView>(R.id.genresToggleIcon)
+    internal val genresToggleButton by bindView<ImageView>(R.id.genresToggleButton)
+    internal val genresResetIcon by bindView<ImageView>(R.id.genresResetIcon)
     internal val genresContainer by bindView<ViewGroup>(R.id.genres)
     internal val excludedGenresToggle by bindView<View>(R.id.excludedGenresToggle)
-    internal val excludedGenresToggleIcon by bindView<ImageView>(R.id.excludedGenresToggleIcon)
+    internal val excludedGenresToggleButton by bindView<ImageView>(R.id.excludedGenresToggleButton)
+    internal val excludedGenresResetIcon by bindView<ImageView>(R.id.excludedGenresResetIcon)
     internal val excludedGenresContainer by bindView<ViewGroup>(R.id.excludedGenresContainer)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -172,6 +198,8 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
                     .subscribe {
                         if (it.menuItem().isActionViewExpanded) {
                             searchQuery = null
+
+                            viewModel.reload()
                         }
 
                         TransitionManager.beginDelayedTransition(toolbar)
@@ -181,10 +209,12 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
                     .skipInitialValue()
                     .autoDispose(this)
                     .subscribe {
-                        if (it.isSubmitted) {
-                            searchQuery = it.queryText().toString()
+                        searchQuery = it.queryText().toString()
 
+                        if (it.isSubmitted) {
                             searchView.clearFocus()
+
+                            viewModel.reload()
                         }
                     }
 

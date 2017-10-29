@@ -8,14 +8,20 @@ import me.proxer.library.entity.list.MediaListEntry
 import me.proxer.library.enums.Genre
 import me.proxer.library.enums.MediaSearchSortCriteria
 import me.proxer.library.enums.MediaType
+import java.util.EnumSet
 import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
  */
 @GeneratedProvider
-class MediaListViewModel(sortCriteria: MediaSearchSortCriteria, type: MediaType, searchQuery: String?) :
-        PagedContentViewModel<MediaListEntry>() {
+class MediaListViewModel(
+        sortCriteria: MediaSearchSortCriteria,
+        type: MediaType,
+        var searchQuery: String?,
+        var genres: EnumSet<Genre>,
+        var excludedGenres: EnumSet<Genre>
+) : PagedContentViewModel<MediaListEntry>() {
 
     override val itemsOnPage = 30
 
@@ -40,11 +46,4 @@ class MediaListViewModel(sortCriteria: MediaSearchSortCriteria, type: MediaType,
     var type by Delegates.observable(type, { _, old, new ->
         if (old != new) reload()
     })
-
-    var searchQuery by Delegates.observable(searchQuery, { _, old, new ->
-        if (old != new) reload()
-    })
-
-    var genres = emptySet<Genre>()
-    var excludedGenres = emptySet<Genre>()
 }

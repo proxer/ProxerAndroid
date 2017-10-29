@@ -265,6 +265,8 @@
     <string name="fragment_media_list_search">Suchen</string>
     <string name="fragment_media_list_genres">Enthaltene Genre</string>
     <string name="fragment_media_list_excluded_genres">Nicht enthaltene Genre</string>
+    <string name="fragment_media_list_extend_content_description">Ausklappen</string>
+    <string name="fragment_media_list_reset_content_description">Zurücksetzen</string>
 
     <string name="fragment_media_info_description">Beschreibung</string>
     <string name="fragment_media_info_fsk_constraints">FSK</string>
