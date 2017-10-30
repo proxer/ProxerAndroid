@@ -7,7 +7,8 @@
 -dontskipnonpubliclibraryclasses
 -verbose
 
--keepattributes *Annotation*
+-renamesourcefileattribute SourceFile
+-keepattributes *Annotation*,SourceFile,LineNumberTable
 
 # For native methods, see http://proguard.sourceforge.net/manual/examples.html#native
 -keepclasseswithmembernames class * {
