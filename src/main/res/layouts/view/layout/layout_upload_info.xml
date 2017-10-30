@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:shrinkColumns="0"
-    android:stretchColumns="1"
+    android:shrinkColumns="1"
+    android:stretchColumns="0"
     tools:context=".ui.view.MediaControlView">
 
     <TableRow android:id="@+id/uploaderRow">
@@ -12,6 +12,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:padding="8dp"
             android:text="@string/view_media_control_uploader"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
@@ -33,6 +34,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:padding="8dp"
             android:text="@string/view_media_control_translator_group"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
@@ -54,6 +56,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:padding="8dp"
             android:text="@string/view_media_control_date"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
