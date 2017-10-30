@@ -11,7 +11,6 @@ import com.jakewharton.rxbinding2.view.clicks
 import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.TouchableMovementMethod
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
-import com.mikepenz.iconics.IconicsDrawable
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseActivity
@@ -19,6 +18,7 @@ import me.proxer.app.chat.Participant
 import me.proxer.app.chat.create.CreateChatActivity
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.autoDispose
+import me.proxer.app.util.extension.setIconicsImage
 
 /**
  * @author Ruben Gees
@@ -51,10 +51,7 @@ class CrashActivity : BaseActivity() {
         setSupportActionBar(toolbar)
         title = getString(R.string.section_crash)
 
-        image.setImageDrawable(IconicsDrawable(this, CommunityMaterial.Icon.cmd_bug)
-                .colorRes(R.color.primary)
-                .sizeDp(200)
-                .paddingDp(12))
+        image.setIconicsImage(CommunityMaterial.Icon.cmd_bug, 200, 12, R.color.primary)
 
         report.clicks()
                 .autoDispose(this)

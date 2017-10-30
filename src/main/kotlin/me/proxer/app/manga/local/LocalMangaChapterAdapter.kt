@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
-import com.mikepenz.iconics.IconicsDrawable
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.manga.local.LocalMangaChapterAdapter.ViewHolder
+import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.library.enums.Category
 
@@ -53,9 +53,7 @@ internal class LocalMangaChapterAdapter : BaseAdapter<LocalMangaChapter, ViewHol
                 }
             }
 
-            delete.setImageDrawable(IconicsDrawable(delete.context, CommunityMaterial.Icon.cmd_delete)
-                    .colorRes(R.color.icon)
-                    .sizeDp(16))
+            delete.setIconicsImage(CommunityMaterial.Icon.cmd_delete, 16, 0)
         }
 
         fun bind(item: LocalMangaChapter) {

@@ -9,7 +9,6 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
-import com.mikepenz.iconics.IconicsDrawable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.GlideRequests
@@ -17,6 +16,7 @@ import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.ucp.topten.UcpTopTenAdapter.ViewHolder
 import me.proxer.app.util.extension.defaultLoad
+import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.library.entity.ucp.UcpTopTenEntry
 import me.proxer.library.util.ProxerUrls
 
@@ -60,11 +60,7 @@ class UcpTopTenAdapter : BaseAdapter<UcpTopTenEntry, ViewHolder>() {
                 }
             }
 
-            removeButton.setImageDrawable(IconicsDrawable(removeButton.context)
-                    .icon(CommunityMaterial.Icon.cmd_star_off)
-                    .colorRes(R.color.icon)
-                    .sizeDp(48)
-                    .paddingDp(12))
+            removeButton.setIconicsImage(CommunityMaterial.Icon.cmd_star_off, 48)
 
             removeButton.setOnClickListener {
                 withSafeAdapterPosition(this) {

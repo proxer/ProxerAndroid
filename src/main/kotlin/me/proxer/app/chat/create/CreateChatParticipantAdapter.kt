@@ -10,7 +10,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
-import com.mikepenz.iconics.IconicsDrawable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.GlideRequests
@@ -18,6 +17,7 @@ import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.chat.Participant
 import me.proxer.app.chat.create.CreateChatParticipantAdapter.ViewHolder
+import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.library.util.ProxerUrls
 
 /**
@@ -70,11 +70,7 @@ class CreateChatParticipantAdapter(savedInstanceState: Bundle?) : BaseAdapter<Pa
         internal val delete: ImageButton by bindView(R.id.delete)
 
         init {
-            delete.setImageDrawable(IconicsDrawable(delete.context)
-                    .icon(CommunityMaterial.Icon.cmd_close)
-                    .sizeDp(48)
-                    .paddingDp(16)
-                    .colorRes(R.color.icon))
+            delete.setIconicsImage(CommunityMaterial.Icon.cmd_close, 48, 16)
 
             delete.setOnClickListener {
                 withSafeAdapterPosition(this) {
@@ -93,11 +89,7 @@ class CreateChatParticipantAdapter(savedInstanceState: Bundle?) : BaseAdapter<Pa
             username.text = item.username
 
             if (item.image.isBlank()) {
-                image.setImageDrawable(IconicsDrawable(image.context)
-                        .icon(CommunityMaterial.Icon.cmd_account)
-                        .sizeDp(96)
-                        .paddingDp(16)
-                        .colorRes(R.color.colorAccent))
+                delete.setIconicsImage(CommunityMaterial.Icon.cmd_account, 96, 16)
             } else {
                 glide?.load(ProxerUrls.userImage(item.image).toString())
                         ?.transition(DrawableTransitionOptions.withCrossFade())

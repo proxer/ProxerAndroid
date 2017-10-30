@@ -12,7 +12,6 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
-import com.mikepenz.iconics.IconicsDrawable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.R
@@ -22,6 +21,7 @@ import me.proxer.app.ui.view.bbcode.BBCodeView
 import me.proxer.app.util.data.ParcelableStringBooleanArrayMap
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.convertToRelativeReadableTime
+import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.library.entity.user.UserComment
 
@@ -96,11 +96,7 @@ class ProfileCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<UserComme
         init {
             image.visibility = View.GONE
 
-            expand.setImageDrawable(IconicsDrawable(expand.context)
-                    .colorRes(R.color.icon)
-                    .sizeDp(32)
-                    .paddingDp(8)
-                    .icon(CommunityMaterial.Icon.cmd_chevron_down))
+            expand.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32)
 
             expand.setOnClickListener {
                 withSafeAdapterPosition(this) {
@@ -122,11 +118,7 @@ class ProfileCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<UserComme
                 }
             }
 
-            upvoteIcon.setImageDrawable(IconicsDrawable(expand.context)
-                    .colorRes(R.color.icon)
-                    .sizeDp(32)
-                    .paddingDp(8)
-                    .icon(CommunityMaterial.Icon.cmd_thumb_up))
+            upvoteIcon.setIconicsImage(CommunityMaterial.Icon.cmd_thumb_up, 32)
         }
 
         fun bind(item: UserComment) {

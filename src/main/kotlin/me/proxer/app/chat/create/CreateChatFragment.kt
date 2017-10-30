@@ -40,6 +40,7 @@ import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.multilineSnackbar
+import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.unsafeLazy
 import org.jetbrains.anko.bundleOf
@@ -169,26 +170,13 @@ class CreateChatFragment : BaseFragment() {
         addParticipantInputFooter = inflater.inflate(R.layout.item_create_chat_add_participant_input,
                 container, false) as ViewGroup
 
-        addParticipantImage.setImageDrawable(IconicsDrawable(context)
-                .icon(when {
-                    isGroup -> CommunityMaterial.Icon.cmd_account_plus
-                    else -> CommunityMaterial.Icon.cmd_account_multiple_plus
-                })
-                .sizeDp(96)
-                .paddingDp(16)
-                .colorRes(R.color.icon))
+        addParticipantImage.setIconicsImage(when (isGroup) {
+            true -> CommunityMaterial.Icon.cmd_account_plus
+            false -> CommunityMaterial.Icon.cmd_account_multiple_plus
+        }, 96, 16)
 
-        acceptParticipant.setImageDrawable(IconicsDrawable(context)
-                .icon(CommunityMaterial.Icon.cmd_check)
-                .sizeDp(48)
-                .paddingDp(16)
-                .colorRes(R.color.icon))
-
-        cancelParticipant.setImageDrawable(IconicsDrawable(context)
-                .icon(CommunityMaterial.Icon.cmd_close)
-                .sizeDp(48)
-                .paddingDp(16)
-                .colorRes(R.color.icon))
+        acceptParticipant.setIconicsImage(CommunityMaterial.Icon.cmd_check, 48, 16)
+        cancelParticipant.setIconicsImage(CommunityMaterial.Icon.cmd_close, 48, 16)
 
         addParticipantFooter.clicks()
                 .autoDispose(this)

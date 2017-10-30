@@ -16,6 +16,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.target.Target
+import com.mikepenz.iconics.IconicsDrawable
+import com.mikepenz.iconics.typeface.IIcon
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.ui.WebViewActivity
@@ -51,6 +53,18 @@ inline fun Context.getQuantityString(id: Int, quantity: Int): String = resources
         .getQuantityString(id, quantity, quantity)
 
 inline fun Fragment.dip(value: Int) = context?.dip(value) ?: throw IllegalStateException("context is null")
+
+inline fun ImageView.setIconicsImage(
+        icon: IIcon,
+        sizeDp: Int,
+        paddingDp: Int = sizeDp / 4,
+        colorRes: Int = R.color.icon
+) {
+    setImageDrawable(IconicsDrawable(context, icon)
+            .sizeDp(sizeDp)
+            .paddingDp(paddingDp)
+            .colorRes(colorRes))
+}
 
 inline fun GlideRequests.defaultLoad(view: ImageView, url: HttpUrl): Target<Drawable> = load(url.toString())
         .transition(DrawableTransitionOptions.withCrossFade())

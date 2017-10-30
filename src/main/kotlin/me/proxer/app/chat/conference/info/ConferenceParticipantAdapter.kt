@@ -19,6 +19,7 @@ import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.chat.conference.info.ConferenceParticipantAdapter.ViewHolder
 import me.proxer.app.util.Utils
+import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.library.entity.messenger.ConferenceParticipant
 import me.proxer.library.util.ProxerUrls
 import okhttp3.HttpUrl
@@ -94,11 +95,7 @@ class ConferenceParticipantAdapter : BaseAdapter<ConferenceParticipant, ViewHold
             }
 
             if (item.image.isBlank()) {
-                image.setImageDrawable(IconicsDrawable(image.context)
-                        .icon(CommunityMaterial.Icon.cmd_account)
-                        .sizeDp(96)
-                        .paddingDp(16)
-                        .colorRes(R.color.colorAccent))
+                image.setIconicsImage(CommunityMaterial.Icon.cmd_account, 96, 16, R.color.colorAccent)
             } else {
                 glide?.load(ProxerUrls.userImage(item.image).toString())
                         ?.transition(DrawableTransitionOptions.withCrossFade())

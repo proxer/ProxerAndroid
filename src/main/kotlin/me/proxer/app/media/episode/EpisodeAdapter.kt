@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
-import com.mikepenz.iconics.IconicsDrawable
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -29,6 +28,7 @@ import me.proxer.app.media.episode.EpisodeAdapter.ViewHolder
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.defaultLoad
+import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.toAppDrawable
 import me.proxer.app.util.extension.toAppString
@@ -135,10 +135,7 @@ class EpisodeAdapter(savedInstanceState: Bundle?, private val entryId: String) :
                 }
             }
 
-            watched.setImageDrawable(IconicsDrawable(watched.context)
-                    .icon(CommunityMaterial.Icon.cmd_check)
-                    .sizeDp(24)
-                    .colorRes(R.color.icon))
+            watched.setIconicsImage(CommunityMaterial.Icon.cmd_check, 24, 0)
         }
 
         fun bind(item: EpisodeRow) {
@@ -293,11 +290,6 @@ class EpisodeAdapter(savedInstanceState: Bundle?, private val entryId: String) :
                                     false -> View.VISIBLE
                                 }
 
-                                val icon = IconicsDrawable(download.context, when (containsChapter) {
-                                    true -> CommunityMaterial.Icon.cmd_cloud_check
-                                    false -> CommunityMaterial.Icon.cmd_download
-                                }).colorRes(R.color.icon).sizeDp(32)
-
                                 when (containsChapter) {
                                     true -> TooltipCompat.setTooltipText(download, download.context
                                             .getString(R.string.fragment_episode_already_downloaded_hint))
@@ -308,7 +300,11 @@ class EpisodeAdapter(savedInstanceState: Bundle?, private val entryId: String) :
                                 downloadContainer.visibility = View.VISIBLE
                                 downloadProgress.visibility = progressVisibility
                                 download.visibility = downloadVisibility
-                                download.setImageDrawable(icon)
+
+                                download.setIconicsImage(when (containsChapter) {
+                                    true -> CommunityMaterial.Icon.cmd_cloud_check
+                                    false -> CommunityMaterial.Icon.cmd_download
+                                }, 32, 0)
                             }
                 }
             } else {

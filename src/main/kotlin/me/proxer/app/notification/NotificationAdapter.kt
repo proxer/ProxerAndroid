@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
-import com.mikepenz.iconics.IconicsDrawable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.R
@@ -16,6 +15,7 @@ import me.proxer.app.notification.NotificationAdapter.ViewHolder
 import me.proxer.app.util.compat.HtmlCompat
 import me.proxer.app.util.extension.ProxerNotification
 import me.proxer.app.util.extension.convertToRelativeReadableTime
+import me.proxer.app.util.extension.setIconicsImage
 
 /**
  * @author Ruben Gees
@@ -54,11 +54,7 @@ class NotificationAdapter : BaseAdapter<ProxerNotification, ViewHolder>() {
                 }
             }
 
-            delete.setImageDrawable(IconicsDrawable(delete.context)
-                    .icon(CommunityMaterial.Icon.cmd_delete)
-                    .colorRes(R.color.icon)
-                    .sizeDp(32)
-                    .paddingDp(4))
+            delete.setIconicsImage(CommunityMaterial.Icon.cmd_delete, 32, 4)
         }
 
         fun bind(item: ProxerNotification) {

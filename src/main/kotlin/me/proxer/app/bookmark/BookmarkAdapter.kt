@@ -10,13 +10,13 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
-import com.mikepenz.iconics.IconicsDrawable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.util.extension.defaultLoad
+import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.toAppDrawable
 import me.proxer.app.util.extension.toAppString
 import me.proxer.app.util.extension.toEpisodeAppString
@@ -85,11 +85,7 @@ class BookmarkAdapter : BaseAdapter<Bookmark, BookmarkAdapter.ViewHolder>() {
                 }
             }
 
-            delete.setImageDrawable(IconicsDrawable(delete.context)
-                    .icon(CommunityMaterial.Icon.cmd_bookmark_remove)
-                    .colorRes(R.color.icon)
-                    .sizeDp(48)
-                    .paddingDp(12))
+            delete.setIconicsImage(CommunityMaterial.Icon.cmd_bookmark_remove, 48)
         }
 
         fun bind(item: Bookmark) {

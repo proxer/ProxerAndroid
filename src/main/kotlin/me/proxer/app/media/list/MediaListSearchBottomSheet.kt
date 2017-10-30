@@ -11,12 +11,11 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
-import com.mikepenz.iconics.IconicsDrawable
-import me.proxer.app.R
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.enableLayoutAnimationsSafely
+import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.library.enums.Genre
 import me.proxer.library.util.ProxerUtils
 import org.jetbrains.anko.childrenSequence
@@ -61,29 +60,10 @@ class MediaListSearchBottomSheet private constructor(
         fragment.genresContainer.enableLayoutAnimationsSafely()
         fragment.excludedGenresContainer.enableLayoutAnimationsSafely()
 
-        fragment.genresToggleButton.setImageDrawable(IconicsDrawable(fragment.context)
-                .icon(CommunityMaterial.Icon.cmd_chevron_down)
-                .colorRes(R.color.icon)
-                .sizeDp(32)
-                .paddingDp(8))
-
-        fragment.excludedGenresToggleButton.setImageDrawable(IconicsDrawable(fragment.context)
-                .icon(CommunityMaterial.Icon.cmd_chevron_down)
-                .colorRes(R.color.icon)
-                .sizeDp(32)
-                .paddingDp(8))
-
-        fragment.genresResetIcon.setImageDrawable(IconicsDrawable(fragment.context)
-                .icon(CommunityMaterial.Icon.cmd_undo)
-                .colorRes(R.color.icon)
-                .sizeDp(32)
-                .paddingDp(8))
-
-        fragment.excludedGenresResetIcon.setImageDrawable(IconicsDrawable(fragment.context)
-                .icon(CommunityMaterial.Icon.cmd_undo)
-                .colorRes(R.color.icon)
-                .sizeDp(32)
-                .paddingDp(8))
+        fragment.genresToggleButton.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32)
+        fragment.excludedGenresToggleButton.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32)
+        fragment.genresResetIcon.setIconicsImage(CommunityMaterial.Icon.cmd_undo, 32)
+        fragment.excludedGenresResetIcon.setIconicsImage(CommunityMaterial.Icon.cmd_undo, 32)
 
         fragment.searchBottomSheetTitle.clicks()
                 .autoDispose(fragment)

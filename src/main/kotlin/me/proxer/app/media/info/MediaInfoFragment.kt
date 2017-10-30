@@ -16,7 +16,6 @@ import android.widget.TextView
 import com.google.android.flexbox.FlexboxLayout
 import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
-import com.mikepenz.iconics.IconicsDrawable
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
@@ -25,6 +24,7 @@ import me.proxer.app.info.translatorgroup.TranslatorGroupActivity
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.multilineSnackbar
+import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.snackbar
 import me.proxer.app.util.extension.toAppDrawable
 import me.proxer.app.util.extension.toAppString
@@ -130,17 +130,10 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
             }
         })
 
-        note.setImageDrawable(IconicsDrawable(context, CommunityMaterial.Icon.cmd_clock)
-                .sizeDp(24)
-                .colorRes(R.color.icon))
 
-        favor.setImageDrawable(IconicsDrawable(context, CommunityMaterial.Icon.cmd_star)
-                .sizeDp(24)
-                .colorRes(R.color.icon))
-
-        finish.setImageDrawable(IconicsDrawable(context, CommunityMaterial.Icon.cmd_check)
-                .sizeDp(24)
-                .colorRes(R.color.icon))
+        note.setIconicsImage(CommunityMaterial.Icon.cmd_clock, 24, 0)
+        favor.setIconicsImage(CommunityMaterial.Icon.cmd_star, 24, 0)
+        finish.setIconicsImage(CommunityMaterial.Icon.cmd_check, 24, 0)
 
         noteContainer.clicks()
                 .autoDispose(this)

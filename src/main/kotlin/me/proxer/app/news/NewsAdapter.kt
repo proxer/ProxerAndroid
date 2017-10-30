@@ -10,7 +10,6 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
-import com.mikepenz.iconics.IconicsDrawable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.GlideRequests
@@ -19,6 +18,7 @@ import me.proxer.app.base.BaseAdapter
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.defaultLoad
+import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.library.entity.notifications.NewsArticle
 import me.proxer.library.util.ProxerUrls
 
@@ -106,11 +106,7 @@ class NewsAdapter(savedInstanceState: Bundle?) : BaseAdapter<NewsArticle, NewsAd
                 }
             }
 
-            expand.setImageDrawable(IconicsDrawable(expand.context)
-                    .colorRes(R.color.icon)
-                    .sizeDp(32)
-                    .paddingDp(8)
-                    .icon(CommunityMaterial.Icon.cmd_chevron_down))
+            expand.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32)
         }
 
         fun bind(item: NewsArticle) {
