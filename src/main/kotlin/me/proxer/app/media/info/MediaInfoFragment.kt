@@ -130,7 +130,6 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
             }
         })
 
-
         note.setIconicsImage(CommunityMaterial.Icon.cmd_clock, 24, 0)
         favor.setIconicsImage(CommunityMaterial.Icon.cmd_star, 24, 0)
         finish.setIconicsImage(CommunityMaterial.Icon.cmd_check, 24, 0)
