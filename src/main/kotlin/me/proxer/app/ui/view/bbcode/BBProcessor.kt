@@ -188,7 +188,13 @@ internal object BBProcessor {
 
     private fun trimFirstTextElement(element: BBElement) {
         when (element) {
-            is BBTextElement -> element.text.delete(0, element.text.indexOfFirst { !it.isWhitespace() })
+            is BBTextElement -> {
+                val firstNonWhitespaceIndex = element.text.indexOfFirst { !it.isWhitespace() }
+
+                if (firstNonWhitespaceIndex >= 0) {
+                    element.text.delete(0, firstNonWhitespaceIndex)
+                }
+            }
             is BBSpoilerElement -> if (element.children.isNotEmpty()) {
                 trimFirstTextElement(element.children.first())
             }
@@ -197,8 +203,13 @@ internal object BBProcessor {
 
     private fun trimLastTextElement(element: BBElement) {
         when (element) {
-            is BBTextElement -> element.text.delete(element.text.indexOfLast { !it.isWhitespace() } + 1,
-                    element.text.length)
+            is BBTextElement -> {
+                val lastNonWhitespaceIndex = element.text.indexOfLast { !it.isWhitespace() }
+
+                if (lastNonWhitespaceIndex >= 0) {
+                    element.text.delete(lastNonWhitespaceIndex + 1, element.text.length)
+                }
+            }
             is BBSpoilerElement -> if (element.children.isNotEmpty()) {
                 trimFirstTextElement(element.children.last())
             }
