@@ -5,10 +5,10 @@
     <item
         android:id="@+id/sort"
         android:title="@string/action_sort"
-        app:iiv_color="@android:color/white"
-        app:iiv_icon="cmd_sort"
-        app:iiv_padding="2dp"
-        app:iiv_size="24dp"
+        app:ico_color="@android:color/white"
+        app:ico_icon="cmd_sort"
+        app:ico_padding="2dp"
+        app:ico_size="24dp"
         app:showAsAction="ifRoom">
 
         <menu>

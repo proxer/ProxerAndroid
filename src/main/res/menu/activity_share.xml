@@ -5,9 +5,9 @@
     <item
         android:id="@+id/action_share"
         android:title="@string/action_share"
-        app:iiv_color="@android:color/white"
-        app:iiv_icon="cmd_share_variant"
-        app:iiv_padding="2dp"
-        app:iiv_size="24dp"
+        app:ico_color="@android:color/white"
+        app:ico_icon="cmd_share_variant"
+        app:ico_padding="2dp"
+        app:ico_size="24dp"
         app:showAsAction="ifRoom" />
 </menu>

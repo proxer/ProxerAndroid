@@ -127,7 +127,6 @@ class MaterialDrawerWrapper(context: Activity, toolbar: Toolbar, savedInstanceSt
             .withAccountHeader(accountHeader)
             .withDrawerItems(generateDrawerItems())
             .withStickyDrawerItems(generateStickyDrawerItems())
-            .withPositionBasedStateManagement(false)
             .withShowDrawerOnFirstLaunch(true)
             .withTranslucentStatusBar(true)
             .withGenerateMiniDrawer(DeviceUtils.isTablet(context))
