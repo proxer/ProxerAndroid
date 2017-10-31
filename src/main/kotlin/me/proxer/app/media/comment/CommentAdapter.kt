@@ -43,11 +43,11 @@ class CommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<Comment, ViewHol
     val profileClickSubject: PublishSubject<Pair<ImageView, Comment>> = PublishSubject.create()
     var categoryCallback: (() -> Category?)? = null
 
-    private val expanded: ParcelableStringBooleanMap
+    private val expansionMap: ParcelableStringBooleanMap
     private val spoilerStates: ParcelableStringBooleanArrayMap
 
     init {
-        expanded = when (savedInstanceState) {
+        expansionMap = when (savedInstanceState) {
             null -> ParcelableStringBooleanMap()
             else -> savedInstanceState.getParcelable(EXPANDED_STATE)
         }
@@ -75,7 +75,7 @@ class CommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<Comment, ViewHol
     }
 
     override fun saveInstanceState(outState: Bundle) {
-        outState.putParcelable(EXPANDED_STATE, expanded)
+        outState.putParcelable(EXPANDED_STATE, expansionMap)
         outState.putParcelable(SPOILER_STATES_STATE, spoilerStates)
     }
 
@@ -112,13 +112,7 @@ class CommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<Comment, ViewHol
 
             expand.setOnClickListener {
                 withSafeAdapterPosition(this) {
-                    data[it].id.let { id ->
-                        if (expanded[id] == true) {
-                            expanded.remove(id)
-                        } else {
-                            expanded.put(id, true)
-                        }
-                    }
+                    expansionMap.putOrRemove(data[it].id)
 
                     notifyItemChanged(it)
                 }
@@ -158,8 +152,8 @@ class CommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<Comment, ViewHol
                 spoilerStates.put(item.id, states)
 
                 if (isExpanded) {
-                    if (expanded[item.id] != true) {
-                        expanded.put(item.id, true)
+                    if (!expansionMap.containsKey(item.id)) {
+                        expansionMap.put(item.id, true)
 
                         comment.maxHeight = Int.MAX_VALUE
                         comment.post {
@@ -175,7 +169,7 @@ class CommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<Comment, ViewHol
                 }
             }
 
-            if (expanded[item.id] == true) {
+            if (expansionMap.containsKey(item.id)) {
                 comment.maxHeight = Int.MAX_VALUE
 
                 ViewCompat.animate(expand).rotation(180f)

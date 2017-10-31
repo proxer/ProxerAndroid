@@ -61,81 +61,17 @@
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp">
 
-                <LinearLayout
-                    android:id="@+id/genresToggle"
+                <me.proxer.app.ui.view.ExpandableMultiSelectionView
+                    android:id="@+id/genreSelector"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:ignore="UseCompoundDrawables">
+                    app:titleText="@string/fragment_media_list_genres" />
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:text="@string/fragment_media_list_genres"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
-                    <me.proxer.app.ui.view.InfoImageButton
-                        android:id="@+id/genresResetIcon"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:layout_gravity="center_vertical"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="@string/fragment_media_list_reset_content_description" />
-
-                    <me.proxer.app.ui.view.InfoImageButton
-                        android:id="@+id/genresToggleButton"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:layout_gravity="center_vertical"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="@string/fragment_media_list_extend_content_description" />
-                </LinearLayout>
-
-                <com.google.android.flexbox.FlexboxLayout
-                    android:id="@+id/genres"
+                <me.proxer.app.ui.view.ExpandableMultiSelectionView
+                    android:id="@+id/excludedGenreSelector"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:alignItems="flex_start"
-                    app:flexWrap="wrap" />
-
-                <LinearLayout
-                    android:id="@+id/excludedGenresToggle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    tools:ignore="UseCompoundDrawables">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:text="@string/fragment_media_list_excluded_genres"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
-                    <me.proxer.app.ui.view.InfoImageButton
-                        android:id="@+id/excludedGenresResetIcon"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:layout_gravity="center_vertical"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="@string/fragment_media_list_reset_content_description" />
-
-                    <me.proxer.app.ui.view.InfoImageButton
-                        android:id="@+id/excludedGenresToggleButton"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:layout_gravity="center_vertical"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="@string/fragment_media_list_extend_content_description" />
-                </LinearLayout>
-
-                <com.google.android.flexbox.FlexboxLayout
-                    android:id="@+id/excludedGenresContainer"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:alignItems="flex_start"
-                    app:flexWrap="wrap" />
+                    app:titleText="@string/fragment_media_list_excluded_genres" />
 
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>

@@ -37,10 +37,10 @@ class LocalMangaAdapter(savedInstanceState: Bundle?) : BaseAdapter<CompleteLocal
     val longClickSubject: PublishSubject<Pair<ImageView, EntryCore>> = PublishSubject.create()
     val deleteClickSubject: PublishSubject<Pair<EntryCore, LocalMangaChapter>> = PublishSubject.create()
 
-    private val expanded: ParcelableStringBooleanMap
+    private val expansionMap: ParcelableStringBooleanMap
 
     init {
-        expanded = when (savedInstanceState) {
+        expansionMap = when (savedInstanceState) {
             null -> ParcelableStringBooleanMap()
             else -> savedInstanceState.getParcelable(EXPANDED_STATE)
         }
@@ -87,7 +87,7 @@ class LocalMangaAdapter(savedInstanceState: Bundle?) : BaseAdapter<CompleteLocal
         holder.adapter.callback = null
     }
 
-    override fun saveInstanceState(outState: Bundle) = outState.putParcelable(EXPANDED_STATE, expanded)
+    override fun saveInstanceState(outState: Bundle) = outState.putParcelable(EXPANDED_STATE, expansionMap)
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -101,12 +101,7 @@ class LocalMangaAdapter(savedInstanceState: Bundle?) : BaseAdapter<CompleteLocal
         init {
             itemView.setOnClickListener {
                 withSafeAdapterPosition(this) {
-                    val id = data[it].first.id
-
-                    when (expanded[id]) {
-                        true -> expanded.remove(id)
-                        else -> expanded.put(id, true)
-                    }
+                    expansionMap.putOrRemove(data[it].first.id)
 
                     notifyItemChanged(it)
                 }
@@ -131,7 +126,7 @@ class LocalMangaAdapter(savedInstanceState: Bundle?) : BaseAdapter<CompleteLocal
 
             title.text = item.first.name
 
-            if (expanded[item.first.id] == true) {
+            if (expansionMap.containsKey(item.first.id)) {
                 chapters.visibility = View.VISIBLE
 
                 adapter.swapDataAndNotifyWithDiffing(item.second)

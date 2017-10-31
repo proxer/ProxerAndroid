@@ -55,12 +55,7 @@ class LogAdapter(savedInstanceState: Bundle?) : BaseAdapter<LogMessage, ViewHold
         init {
             logContent.setOnClickListener {
                 withSafeAdapterPosition(this) {
-                    val id = getItemId(it).toString()
-
-                    when (expansionMap[id]) {
-                        true -> expansionMap.remove(id)
-                        else -> expansionMap.put(id, true)
-                    }
+                    expansionMap.putOrRemove(getItemId(it).toString())
 
                     notifyItemChanged(it)
                 }
@@ -76,7 +71,7 @@ class LogAdapter(savedInstanceState: Bundle?) : BaseAdapter<LogMessage, ViewHold
         }
 
         fun bind(logMessage: LogMessage) {
-            if (expansionMap[logMessage.id.toString()] == true) {
+            if (expansionMap.containsKey(logMessage.id.toString())) {
                 logContent.text = logContent.context.getString(R.string.activity_log_expanded_content,
                         Utils.dateTimeFormatter.format(logMessage.dateTime), logMessage.content)
 

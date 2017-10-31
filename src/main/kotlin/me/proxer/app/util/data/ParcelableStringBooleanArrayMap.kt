@@ -20,6 +20,9 @@ class ParcelableStringBooleanArrayMap : Parcelable {
         }
     }
 
+    val size get() = internalMap.size
+    val entries get() = internalMap.entries
+
     private val internalMap = LinkedHashMap<String, SparseBooleanArray>()
 
     constructor() : super()
@@ -31,9 +34,9 @@ class ParcelableStringBooleanArrayMap : Parcelable {
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
-        dest.writeInt(internalMap.size)
+        dest.writeInt(size)
 
-        internalMap.entries.forEach {
+        entries.forEach {
             dest.writeString(it.key)
             dest.writeSparseBooleanArray(it.value)
         }
@@ -42,5 +45,6 @@ class ParcelableStringBooleanArrayMap : Parcelable {
     override fun describeContents() = 0
 
     operator fun get(key: String) = internalMap[key]
+
     fun put(key: String, value: SparseBooleanArray) = internalMap.put(key, value)
 }

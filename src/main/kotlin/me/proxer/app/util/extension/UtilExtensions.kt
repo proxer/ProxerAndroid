@@ -28,6 +28,11 @@ import org.jetbrains.anko.dip
 import java.util.EnumSet
 import java.util.concurrent.Semaphore
 
+inline fun <reified T : Enum<T>> enumSetOf(collection: Collection<T>): EnumSet<T> = when (collection.isEmpty()) {
+    true -> EnumSet.noneOf(T::class.java)
+    false -> EnumSet.copyOf(collection)
+}
+
 inline fun <T> unsafeLazy(noinline initializer: () -> T) = lazy(LazyThreadSafetyMode.NONE, initializer)
 
 inline fun <T> Semaphore.lock(action: () -> T): T {

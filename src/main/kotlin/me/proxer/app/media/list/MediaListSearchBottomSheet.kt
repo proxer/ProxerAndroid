@@ -1,69 +1,50 @@
 package me.proxer.app.media.list
 
+import android.os.Bundle
 import android.support.design.widget.BottomSheetBehavior.STATE_COLLAPSED
 import android.support.design.widget.BottomSheetBehavior.STATE_EXPANDED
 import android.support.design.widget.BottomSheetBehavior.from
-import android.support.v4.view.ViewCompat
-import android.support.v7.widget.AppCompatCheckBox
 import android.view.View
 import android.view.View.MeasureSpec.makeMeasureSpec
 import android.view.ViewGroup
-import android.widget.CheckBox
 import com.jakewharton.rxbinding2.view.clicks
-import com.mikepenz.community_material_typeface_library.CommunityMaterial
+import me.proxer.app.R
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.enableLayoutAnimationsSafely
-import me.proxer.app.util.extension.setIconicsImage
+import me.proxer.app.util.extension.enumSetOf
+import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.enums.Genre
 import me.proxer.library.util.ProxerUtils
-import org.jetbrains.anko.childrenSequence
-import java.util.EnumSet
 
 /**
  * @author Ruben Gees
  */
 class MediaListSearchBottomSheet private constructor(
         private val fragment: MediaListFragment,
-        private val viewModel: MediaListViewModel
+        private val viewModel: MediaListViewModel,
+        savedInstanceState: Bundle?
 ) {
 
     companion object {
-        private const val GENRES_EXPANDED_ARGUMENT = "are_genres_expanded"
-        private const val EXCLUDED_GENRES_EXPANDED_ARGUMENT = "are_excluded_genres_expanded"
-
-        fun bindTo(fragment: MediaListFragment, viewModel: MediaListViewModel) {
-            MediaListSearchBottomSheet(fragment, viewModel)
+        fun bindTo(fragment: MediaListFragment, viewModel: MediaListViewModel, savedInstanceState: Bundle?) {
+            MediaListSearchBottomSheet(fragment, viewModel, savedInstanceState)
         }
     }
-
-    private var areGenresExpanded
-        get() = fragment.safeArguments.getBoolean(GENRES_EXPANDED_ARGUMENT, false)
-        set(value) {
-            fragment.safeArguments.putBoolean(GENRES_EXPANDED_ARGUMENT, value)
-        }
-
-    private var areExcludedGenresExpanded
-        get() = fragment.safeArguments.getBoolean(EXCLUDED_GENRES_EXPANDED_ARGUMENT, false)
-        set(value) {
-            fragment.safeArguments.putBoolean(EXCLUDED_GENRES_EXPANDED_ARGUMENT, value)
-        }
 
     private val bottomSheetBehaviour = from(fragment.searchBottomSheet)
 
     init {
+        if (savedInstanceState == null) {
+            bottomSheetBehaviour.state = STATE_COLLAPSED
+        }
+
         bottomSheetBehaviour.isHideable = false
         bottomSheetBehaviour.peekHeight = measureTitle()
-        bottomSheetBehaviour.state = STATE_COLLAPSED
 
-        fragment.genresContainer.enableLayoutAnimationsSafely()
-        fragment.excludedGenresContainer.enableLayoutAnimationsSafely()
-
-        fragment.genresToggleButton.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32)
-        fragment.excludedGenresToggleButton.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32)
-        fragment.genresResetIcon.setIconicsImage(CommunityMaterial.Icon.cmd_undo, 32)
-        fragment.excludedGenresResetIcon.setIconicsImage(CommunityMaterial.Icon.cmd_undo, 32)
+        fragment.genreSelector.findViewById<ViewGroup>(R.id.items).enableLayoutAnimationsSafely()
+        fragment.excludedGenreSelector.findViewById<ViewGroup>(R.id.items).enableLayoutAnimationsSafely()
 
         fragment.searchBottomSheetTitle.clicks()
                 .autoDispose(fragment)
@@ -71,34 +52,6 @@ class MediaListSearchBottomSheet private constructor(
                     bottomSheetBehaviour.state = when (bottomSheetBehaviour.state) {
                         STATE_EXPANDED -> STATE_COLLAPSED
                         else -> STATE_EXPANDED
-                    }
-                }
-
-        fragment.genresToggle.clicks().mergeWith(fragment.genresToggleButton.clicks())
-                .autoDispose(fragment)
-                .subscribe { handleGenreExpansion(fragment.genresContainer.childCount <= 0) }
-
-        fragment.excludedGenresToggle.clicks().mergeWith(fragment.excludedGenresToggleButton.clicks())
-                .autoDispose(fragment)
-                .subscribe { handleExcludedGenreExpansion(fragment.excludedGenresContainer.childCount <= 0) }
-
-        fragment.genresResetIcon.clicks()
-                .autoDispose(fragment)
-                .subscribe {
-                    fragment.genres = EnumSet.noneOf(Genre::class.java)
-
-                    fragment.genresContainer.childrenSequence().forEach {
-                        if (it is CheckBox) it.isChecked = false
-                    }
-                }
-
-        fragment.excludedGenresResetIcon.clicks()
-                .autoDispose(fragment)
-                .subscribe {
-                    fragment.excludedGenres = EnumSet.noneOf(Genre::class.java)
-
-                    fragment.excludedGenresContainer.childrenSequence().forEach {
-                        if (it is CheckBox) it.isChecked = false
                     }
                 }
 
@@ -110,8 +63,26 @@ class MediaListSearchBottomSheet private constructor(
                     viewModel.reload()
                 }
 
-        handleGenreExpansion(areGenresExpanded)
-        handleExcludedGenreExpansion(areExcludedGenresExpanded)
+        fragment.genreSelector.selectionChangeSubject
+                .autoDispose(fragment)
+                .subscribeAndLogErrors { selections ->
+                    fragment.genres = enumSetOf(selections.values.map {
+                        toSafeApiEnum(Genre::class.java, it)
+                    })
+                }
+
+        fragment.excludedGenreSelector.selectionChangeSubject
+                .autoDispose(fragment)
+                .subscribeAndLogErrors { selections ->
+                    fragment.excludedGenres = enumSetOf(selections.values.map {
+                        toSafeApiEnum(Genre::class.java, it)
+                    })
+                }
+
+        val genreItems = Genre.values().map { getSafeApiEnum(it) }
+
+        fragment.genreSelector.items = genreItems
+        fragment.excludedGenreSelector.items = genreItems
     }
 
     private fun measureTitle(): Int {
@@ -123,68 +94,9 @@ class MediaListSearchBottomSheet private constructor(
         return fragment.searchBottomSheetTitle.measuredHeight + fragment.dip(16)
     }
 
-    private fun handleGenreExpansion(expand: Boolean) {
-        areGenresExpanded = expand
+    private fun <T : Enum<T>> toSafeApiEnum(klass: Class<T>, value: String) = ProxerUtils.toApiEnum(klass, value)
+            ?: throw IllegalArgumentException("Unknown ${klass.simpleName}: $value")
 
-        fragment.genresContainer.removeAllViews()
-        ViewCompat.animate(fragment.genresToggleButton).rotation(if (expand) 180f else 0f)
-
-        if (expand) {
-            val genres = fragment.genres
-            val checkBoxes = constructCheckBoxes(Genre::class.java, { genres.contains(it) }, {
-                fragment.genres = when {
-                    it.isEmpty() -> EnumSet.noneOf(Genre::class.java)
-                    else -> EnumSet.copyOf(it)
-                }
-            })
-
-            checkBoxes.forEach { fragment.genresContainer.addView(it) }
-        }
-    }
-
-    private fun handleExcludedGenreExpansion(expand: Boolean) {
-        areExcludedGenresExpanded = expand
-
-        fragment.excludedGenresContainer.removeAllViews()
-        ViewCompat.animate(fragment.excludedGenresToggleButton).rotation(if (expand) 180f else 0f)
-
-        if (expand) {
-            val excludedGenres = fragment.excludedGenres
-            val checkBoxes = constructCheckBoxes(Genre::class.java, { excludedGenres.contains(it) }, {
-                fragment.excludedGenres = when {
-                    it.isEmpty() -> EnumSet.noneOf(Genre::class.java)
-                    else -> EnumSet.copyOf(it)
-                }
-            })
-
-            checkBoxes.forEach { fragment.excludedGenresContainer.addView(it) }
-        }
-    }
-
-    private fun <T : Enum<T>> constructCheckBoxes(
-            klass: Class<T>,
-            shouldCheck: (T) -> Boolean,
-            onClick: (selection: List<T>) -> Unit
-    ) = klass.enumConstants.map {
-        val checkBox = AppCompatCheckBox(fragment.context)
-
-        checkBox.text = ProxerUtils.getApiEnumName(it)
-        checkBox.isChecked = shouldCheck(it)
-        checkBox.clicks()
-                .autoDispose(fragment)
-                .subscribe {
-                    val selection = (checkBox.parent as ViewGroup).childrenSequence().map {
-                        val isChecked = it is CheckBox && it.isChecked
-
-                        when {
-                            isChecked -> ProxerUtils.toApiEnum(klass, (it as CheckBox).text.toString())
-                            else -> null
-                        }
-                    }
-
-                    onClick(selection.filterNotNull().toList())
-                }
-
-        checkBox
-    }
+    private fun getSafeApiEnum(value: Enum<*>) = ProxerUtils.getApiEnumName(value)
+            ?: throw IllegalArgumentException("Unknown ${value::class.java.simpleName}: ${value.name}")
 }

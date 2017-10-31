@@ -109,7 +109,7 @@
                             android:textColor="@color/colorAccent" />
 
                         <com.google.android.flexbox.FlexboxLayout
-                            android:id="@+id/genres"
+                            android:id="@+id/items"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="4dp"

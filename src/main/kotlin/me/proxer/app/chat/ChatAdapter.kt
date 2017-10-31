@@ -240,23 +240,15 @@ class ChatAdapter(savedInstanceState: Bundle?, private val isGroup: Boolean) :
             val id = current.id.toString()
 
             if (isSelecting) {
-                if (messageSelectionMap[id] == true) {
-                    messageSelectionMap.remove(id)
+                messageSelectionMap.putOrRemove(id)
 
-                    if (messageSelectionMap.size <= 0) {
-                        isSelecting = false
-                    }
-                } else {
-                    messageSelectionMap.put(id, true)
+                if (messageSelectionMap.size <= 0) {
+                    isSelecting = false
                 }
 
                 messageSelectionSubject.onNext(messageSelectionMap.size)
             } else {
-                if (timeDisplayMap[id] == true) {
-                    timeDisplayMap.remove(id)
-                } else {
-                    timeDisplayMap.put(id, true)
-                }
+                timeDisplayMap.putOrRemove(id)
             }
 
             notifyDataSetChanged()
@@ -357,15 +349,9 @@ class ChatAdapter(savedInstanceState: Bundle?, private val isGroup: Boolean) :
             val current = data[it]
             val id = current.id.toString()
 
-            if (timeDisplayMap[id] == true) {
-                time.visibility = View.GONE
+            timeDisplayMap.putOrRemove(id)
 
-                timeDisplayMap.remove(id)
-            } else {
-                time.visibility = View.VISIBLE
-
-                timeDisplayMap.put(id, true)
-            }
+            time.visibility = if (timeDisplayMap.containsKey(id)) View.VISIBLE else View.GONE
         }
 
         override fun onContainerLongClick(v: View) = false

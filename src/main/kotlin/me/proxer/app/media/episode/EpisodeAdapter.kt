@@ -56,13 +56,13 @@ class EpisodeAdapter(savedInstanceState: Bundle?, private val entryId: String) :
     var glide: GlideRequests? = null
     val languageClickSubject: PublishSubject<Pair<MediaLanguage, EpisodeRow>> = PublishSubject.create()
 
-    private val expanded: ParcelableStringBooleanMap
+    private val expansionMap: ParcelableStringBooleanMap
     private var isLoggedIn = StorageHelper.user != null
 
     private var busDisposable: Disposable? = null
 
     init {
-        expanded = when (savedInstanceState) {
+        expansionMap = when (savedInstanceState) {
             null -> ParcelableStringBooleanMap()
             else -> savedInstanceState.getParcelable(EXPANDED_STATE)
         }
@@ -109,7 +109,7 @@ class EpisodeAdapter(savedInstanceState: Bundle?, private val entryId: String) :
     }
 
     override fun areItemsTheSame(old: EpisodeRow, new: EpisodeRow) = old.number == new.number
-    override fun saveInstanceState(outState: Bundle) = outState.putParcelable(EXPANDED_STATE, expanded)
+    override fun saveInstanceState(outState: Bundle) = outState.putParcelable(EXPANDED_STATE, expansionMap)
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -123,13 +123,7 @@ class EpisodeAdapter(savedInstanceState: Bundle?, private val entryId: String) :
         init {
             titleContainer.setOnClickListener {
                 withSafeAdapterPosition(this) {
-                    val number = data[it].number.toString()
-
-                    if (expanded[number] == true) {
-                        expanded.remove(number)
-                    } else {
-                        expanded.put(number, true)
-                    }
+                    expansionMap.putOrRemove(data[it].number.toString())
 
                     notifyItemChanged(it)
                 }
@@ -147,7 +141,7 @@ class EpisodeAdapter(savedInstanceState: Bundle?, private val entryId: String) :
                 watched.visibility = View.INVISIBLE
             }
 
-            if (expanded[item.number.toString()] == true) {
+            if (expansionMap.containsKey(item.number.toString())) {
                 languages.visibility = View.VISIBLE
             } else {
                 languages.visibility = View.GONE

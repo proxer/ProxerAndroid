@@ -36,10 +36,10 @@ class AnimeAdapter(savedInstanceState: Bundle?, private val glide: GlideRequests
     val translatorGroupClickSubject: PublishSubject<AnimeStream> = PublishSubject.create()
     val playClickSubject: PublishSubject<AnimeStream> = PublishSubject.create()
 
-    private val expanded: ParcelableStringBooleanMap
+    private val expansionMap: ParcelableStringBooleanMap
 
     init {
-        expanded = when (savedInstanceState) {
+        expansionMap = when (savedInstanceState) {
             null -> ParcelableStringBooleanMap()
             else -> savedInstanceState.getParcelable(EXPANDED_STATE)
         }
@@ -54,7 +54,7 @@ class AnimeAdapter(savedInstanceState: Bundle?, private val glide: GlideRequests
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(data[position])
     override fun getItemId(position: Int) = data[position].id.toLong()
     override fun onViewRecycled(holder: ViewHolder) = glide.clear(holder.image)
-    override fun saveInstanceState(outState: Bundle) = outState.putParcelable(EXPANDED_STATE, expanded)
+    override fun saveInstanceState(outState: Bundle) = outState.putParcelable(EXPANDED_STATE, expansionMap)
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -73,12 +73,7 @@ class AnimeAdapter(savedInstanceState: Bundle?, private val glide: GlideRequests
         init {
             nameContainer.setOnClickListener {
                 withSafeAdapterPosition(this) {
-                    val id = data[it].id
-
-                    when {
-                        expanded[id] == true -> expanded.remove(id)
-                        else -> expanded.put(id, true)
-                    }
+                    expansionMap.putOrRemove(data[it].id)
 
                     notifyItemChanged(it)
                 }
@@ -114,7 +109,7 @@ class AnimeAdapter(savedInstanceState: Bundle?, private val glide: GlideRequests
 
             glide.defaultLoad(image, ProxerUrls.hosterImage(item.image))
 
-            if (expanded[item.id] == true) {
+            if (expansionMap.containsKey(item.id)) {
                 uploadInfoContainer.visibility = View.VISIBLE
             } else {
                 uploadInfoContainer.visibility = View.GONE

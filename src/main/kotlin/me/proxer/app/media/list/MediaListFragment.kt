@@ -13,7 +13,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageView
 import com.jakewharton.rxbinding2.support.v7.widget.queryTextChangeEvents
 import com.jakewharton.rxbinding2.view.actionViewEvents
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
@@ -22,6 +21,7 @@ import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.media.MediaActivity
+import me.proxer.app.ui.view.ExpandableMultiSelectionView
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.getEnumSet
@@ -122,14 +122,8 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
     internal val searchBottomSheet by bindView<ViewGroup>(R.id.searchBottomSheet)
     internal val searchBottomSheetTitle by bindView<ViewGroup>(R.id.titleContainer)
     internal val search by bindView<Button>(R.id.search)
-    internal val genresToggle by bindView<View>(R.id.genresToggle)
-    internal val genresToggleButton by bindView<ImageView>(R.id.genresToggleButton)
-    internal val genresResetIcon by bindView<ImageView>(R.id.genresResetIcon)
-    internal val genresContainer by bindView<ViewGroup>(R.id.genres)
-    internal val excludedGenresToggle by bindView<View>(R.id.excludedGenresToggle)
-    internal val excludedGenresToggleButton by bindView<ImageView>(R.id.excludedGenresToggleButton)
-    internal val excludedGenresResetIcon by bindView<ImageView>(R.id.excludedGenresResetIcon)
-    internal val excludedGenresContainer by bindView<ViewGroup>(R.id.excludedGenresContainer)
+    internal val genreSelector by bindView<ExpandableMultiSelectionView>(R.id.genreSelector)
+    internal val excludedGenreSelector by bindView<ExpandableMultiSelectionView>(R.id.excludedGenreSelector)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -155,7 +149,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
 
         innerAdapter.glide = GlideApp.with(this)
 
-        MediaListSearchBottomSheet.bindTo(this, viewModel)
+        MediaListSearchBottomSheet.bindTo(this, viewModel, savedInstanceState)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

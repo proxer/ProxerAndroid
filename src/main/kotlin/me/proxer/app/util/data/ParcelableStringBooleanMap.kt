@@ -9,8 +9,6 @@ import android.os.Parcelable
 class ParcelableStringBooleanMap : Parcelable {
 
     companion object {
-        private const val ZERO_BYTE: Byte = 0
-
         @Suppress("unused")
         @JvmField
         val CREATOR = object : Parcelable.Creator<ParcelableStringBooleanMap> {
@@ -19,8 +17,9 @@ class ParcelableStringBooleanMap : Parcelable {
         }
     }
 
-    val size: Int
-        get() = internalMap.size
+    val size get() = internalMap.size
+    val keys get() = internalMap.keys
+    val entries get() = internalMap.entries
 
     private val internalMap = LinkedHashMap<String, Boolean>()
 
@@ -28,23 +27,32 @@ class ParcelableStringBooleanMap : Parcelable {
 
     internal constructor(source: Parcel) {
         (0 until source.readInt()).forEach {
-            put(source.readString(), source.readByte() != ParcelableStringBooleanMap.Companion.ZERO_BYTE)
+            put(source.readString(), source.readInt() == 1)
         }
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
-        dest.writeInt(internalMap.size)
+        dest.writeInt(size)
 
-        internalMap.entries.forEach {
+        entries.forEach {
             dest.writeString(it.key)
-            dest.writeByte(if (it.value) 1 else 0)
+            dest.writeInt(if (it.value) 1 else 0)
         }
     }
 
     override fun describeContents() = 0
 
     operator fun get(key: String) = internalMap[key]
+
+    fun containsKey(key: String) = internalMap.containsKey(key)
     fun put(key: String, value: Boolean) = internalMap.put(key, value)
     fun remove(key: String) = internalMap.remove(key)
     fun clear() = internalMap.clear()
+
+    fun putOrRemove(key: String) {
+        when (containsKey(key)) {
+            true -> remove(key)
+            false -> put(key, true)
+        }
+    }
 }

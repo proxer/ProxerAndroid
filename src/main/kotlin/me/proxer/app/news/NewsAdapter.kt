@@ -94,11 +94,10 @@ class NewsAdapter(savedInstanceState: Bundle?) : BaseAdapter<NewsArticle, NewsAd
                 withSafeAdapterPosition(this) {
                     val id = data[it].id
 
-                    if (expansionMap[id] == true) {
+                    if (expansionMap.containsKey(id)) {
                         expansionMap.remove(id)
                     } else {
                         expansionMap.put(id, true)
-
                         expansionSubject.onNext(data[it])
                     }
 
@@ -117,7 +116,7 @@ class NewsAdapter(savedInstanceState: Bundle?) : BaseAdapter<NewsArticle, NewsAd
             category.text = item.category
             time.text = item.date.convertToRelativeReadableTime(time.context)
 
-            if (expansionMap[item.id] == true) {
+            if (expansionMap.containsKey(item.id)) {
                 description.maxLines = Int.MAX_VALUE
 
                 ViewCompat.animate(expand).rotation(180f)
