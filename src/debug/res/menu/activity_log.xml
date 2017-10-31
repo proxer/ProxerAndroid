@@ -5,9 +5,9 @@
     <item
         android:id="@+id/action_save"
         android:title="@string/action_save"
-        app:iiv_color="@android:color/white"
-        app:iiv_icon="cmd_content_save"
-        app:iiv_padding="2dp"
-        app:iiv_size="24dp"
+        app:ico_color="@android:color/white"
+        app:ico_icon="cmd_content_save"
+        app:ico_padding="2dp"
+        app:ico_size="24dp"
         app:showAsAction="ifRoom" />
 </menu>
