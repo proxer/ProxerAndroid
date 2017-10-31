@@ -75,7 +75,7 @@ ext {
     kotterknifeVersion = '1.0'
     jsr305Version = '3.0.2'
     javaxExtrasVersion = '0.1.0'
-    alfredVersion = 'bf410f72d8'
+    alfredVersion = '3ea7529bd2'
     rapidDecoderVersion = '7cdfca47fa'
 
     // Debugging
