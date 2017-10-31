@@ -23,6 +23,7 @@ import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import org.jetbrains.anko.childrenSequence
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
@@ -45,10 +46,21 @@ class ExpandableMultiSelectionView @JvmOverloads constructor(
             title.text = value
         }
 
-    var items = emptyList<String>()
+    var items by Delegates.observable(emptyList<String>(), { _, old, new ->
+        if (old != new && isExtended) {
+            itemContainer.removeAllViews()
 
-    private var selection = ParcelableStringBooleanMap()
-    private var isExtended = false
+            handleExtension()
+        }
+    })
+
+    var selection by Delegates.observable(ParcelableStringBooleanMap(), { _, old, new ->
+        if (old != new) handleSelection()
+    })
+
+    var isExtended by Delegates.observable(false, { _, old, new ->
+        if (old != new) handleExtension()
+    })
 
     init {
         orientation = VERTICAL
@@ -68,8 +80,6 @@ class ExpandableMultiSelectionView @JvmOverloads constructor(
                 .autoDispose(context as LifecycleOwner)
                 .subscribeAndLogErrors {
                     isExtended = !isExtended
-
-                    handleExtension()
                 }
 
         resetButton.clicks()
@@ -120,10 +130,7 @@ class ExpandableMultiSelectionView @JvmOverloads constructor(
                     checkBox.clicks()
                             .autoDispose(context as LifecycleOwner)
                             .subscribeAndLogErrors {
-                                when (selection.containsKey(item)) {
-                                    true -> selection.remove(item)
-                                    false -> selection.put(item, true)
-                                }
+                                selection.putOrRemove(item)
 
                                 notifySelectionChangedListener()
                             }

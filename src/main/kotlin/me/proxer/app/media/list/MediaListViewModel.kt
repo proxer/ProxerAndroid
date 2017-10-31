@@ -6,6 +6,7 @@ import me.proxer.app.base.PagedContentViewModel
 import me.proxer.library.api.PagingLimitEndpoint
 import me.proxer.library.entity.list.MediaListEntry
 import me.proxer.library.enums.Genre
+import me.proxer.library.enums.Language
 import me.proxer.library.enums.MediaSearchSortCriteria
 import me.proxer.library.enums.MediaType
 import java.util.EnumSet
@@ -19,6 +20,7 @@ class MediaListViewModel(
         sortCriteria: MediaSearchSortCriteria,
         type: MediaType,
         var searchQuery: String?,
+        var language: Language?,
         var genres: EnumSet<Genre>,
         var excludedGenres: EnumSet<Genre>
 ) : PagedContentViewModel<MediaListEntry>() {
@@ -35,6 +37,7 @@ class MediaListViewModel(
         get() = api.list().mediaSearch()
                 .sort(sortCriteria)
                 .name(searchQuery)
+                .language(language)
                 .genres(genres)
                 .excludedGenres(excludedGenres)
                 .type(type)

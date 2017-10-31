@@ -31,6 +31,7 @@ import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.list.MediaListEntry
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.Genre
+import me.proxer.library.enums.Language
 import me.proxer.library.enums.MediaSearchSortCriteria
 import me.proxer.library.enums.MediaType
 import org.jetbrains.anko.bundleOf
@@ -47,6 +48,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
         private const val SORT_CRITERIA_ARGUMENT = "sort_criteria"
         private const val TYPE_ARGUMENT = "type"
         private const val SEARCH_QUERY_ARGUMENT = "search_query"
+        private const val LANGUAGE_ARGUMENT = "language"
         private const val GENRES_ARGUMENT = "genres"
         private const val EXCLUDED_GENRES_ARGUMENT = "excluded_genres"
 
@@ -59,7 +61,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
     override val emptyDataMessage = R.string.error_no_data_search
 
     override val viewModel by unsafeLazy {
-        MediaListViewModelProvider.get(this, sortCriteria, type, searchQuery,
+        MediaListViewModelProvider.get(this, sortCriteria, type, searchQuery, language,
                 genres, excludedGenres)
     }
 
@@ -101,6 +103,14 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
             viewModel.searchQuery = value
         }
 
+    internal var language: Language?
+        get() = safeArguments.getSerializable(LANGUAGE_ARGUMENT) as? Language?
+        set(value) {
+            safeArguments.putSerializable(LANGUAGE_ARGUMENT, language)
+
+            viewModel.language = value
+        }
+
     internal var genres: EnumSet<Genre>
         get() = safeArguments.getEnumSet(GENRES_ARGUMENT, Genre::class.java)
         set(value) {
@@ -122,6 +132,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
     internal val searchBottomSheet by bindView<ViewGroup>(R.id.searchBottomSheet)
     internal val searchBottomSheetTitle by bindView<ViewGroup>(R.id.titleContainer)
     internal val search by bindView<Button>(R.id.search)
+    internal val languageSelector by bindView<ExpandableMultiSelectionView>(R.id.languageSelector)
     internal val genreSelector by bindView<ExpandableMultiSelectionView>(R.id.genreSelector)
     internal val excludedGenreSelector by bindView<ExpandableMultiSelectionView>(R.id.excludedGenreSelector)
 

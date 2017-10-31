@@ -10,12 +10,14 @@ import android.view.ViewGroup
 import com.jakewharton.rxbinding2.view.clicks
 import me.proxer.app.R
 import me.proxer.app.util.DeviceUtils
+import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.enableLayoutAnimationsSafely
 import me.proxer.app.util.extension.enumSetOf
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.enums.Genre
+import me.proxer.library.enums.Language
 import me.proxer.library.util.ProxerUtils
 
 /**
@@ -63,6 +65,17 @@ class MediaListSearchBottomSheet private constructor(
                     viewModel.reload()
                 }
 
+        fragment.languageSelector.selectionChangeSubject
+                .autoDispose(fragment)
+                .subscribeAndLogErrors {
+                    fragment.language = when {
+                        it.isEmpty() || it.size > 1 -> null
+                        it.keys.first() == 0 -> Language.GERMAN
+                        it.keys.first() == 1 -> Language.ENGLISH
+                        else -> throw IllegalArgumentException("Unknown language: ${it.values.first()}")
+                    }
+                }
+
         fragment.genreSelector.selectionChangeSubject
                 .autoDispose(fragment)
                 .subscribeAndLogErrors { selections ->
@@ -80,9 +93,18 @@ class MediaListSearchBottomSheet private constructor(
                 }
 
         val genreItems = Genre.values().map { getSafeApiEnum(it) }
+        val languageItems = listOf(
+                fragment.getString(R.string.language_german),
+                fragment.getString(R.string.language_english)
+        )
 
+        fragment.languageSelector.items = languageItems
         fragment.genreSelector.items = genreItems
         fragment.excludedGenreSelector.items = genreItems
+
+        if (savedInstanceState == null) {
+            fragment.languageSelector.selection = ParcelableStringBooleanMap(languageItems)
+        }
     }
 
     private fun measureTitle(): Int {

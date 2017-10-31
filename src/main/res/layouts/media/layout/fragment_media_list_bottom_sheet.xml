@@ -62,6 +62,12 @@
                 android:paddingRight="16dp">
 
                 <me.proxer.app.ui.view.ExpandableMultiSelectionView
+                    android:id="@+id/languageSelector"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:titleText="Sprache" />
+
+                <me.proxer.app.ui.view.ExpandableMultiSelectionView
                     android:id="@+id/genreSelector"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -23,7 +23,13 @@ class ParcelableStringBooleanMap : Parcelable {
 
     private val internalMap = LinkedHashMap<String, Boolean>()
 
-    constructor() : super()
+    constructor()
+
+    constructor(items: Iterable<String>) {
+        items.forEach {
+            put(it, true)
+        }
+    }
 
     internal constructor(source: Parcel) {
         (0 until source.readInt()).forEach {
