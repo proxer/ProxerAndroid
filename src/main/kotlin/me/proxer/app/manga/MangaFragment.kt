@@ -270,6 +270,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         if (adapter.header != null) {
             if (!isVertical) {
                 header.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                footer.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
             }
 
             contentContainer.visibility = View.VISIBLE
@@ -290,6 +291,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
     private fun showHeaderAndFooter(data: MangaChapterInfo) {
         if (!isVertical) {
             header.layoutParams.height = MATCH_PARENT
+            footer.layoutParams.height = MATCH_PARENT
         }
 
         header.setEpisodeInfo(data.episodeAmount, episode)
