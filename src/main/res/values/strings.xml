@@ -510,6 +510,8 @@
     <string name="action_conference_set_leader">%1$s hat %2$s als neuen Konferenzleiter bestimmt</string>
     <string name="action_conference_set_topic">%1$s hat den Konferenztitel in %2$s geändert</string>
 
+    <string name="action_filter_available">Nur verfügbare anzeigen</string>
+
     <string name="rank_10">Schnupperninja</string>
     <string name="rank_100">Anwärter</string>
     <string name="rank_200">Akademie Schüler</string>

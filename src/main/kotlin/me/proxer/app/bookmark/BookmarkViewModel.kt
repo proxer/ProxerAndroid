@@ -26,11 +26,17 @@ class BookmarkViewModel(category: Category?) : PagedContentViewModel<Bookmark>()
     override val isLoginRequired = true
 
     override val endpoint: PagingLimitEndpoint<List<Bookmark>>
-        get() = api.ucp().bookmarks().category(category)
+        get() = api.ucp().bookmarks()
+                .category(category)
+                .filterAvailable(filterAvailable)
 
     val itemDeletionError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
 
     var category by Delegates.observable(category, { _, old, new ->
+        if (old != new) reload()
+    })
+
+    var filterAvailable by Delegates.observable<Boolean?>(null, { _, old, new ->
         if (old != new) reload()
     })
 

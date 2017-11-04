@@ -35,6 +35,7 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
 
     companion object {
         private const val CATEGORY_ARGUMENT = "category"
+        private const val FILTER_AVAILABLE_ARGUMENT = "filter_available"
 
         fun newInstance() = BookmarkFragment().apply {
             arguments = bundleOf()
@@ -57,6 +58,14 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
             safeArguments.putSerializable(CATEGORY_ARGUMENT, value)
 
             viewModel.category = value
+        }
+
+    private var filterAvailable: Boolean?
+        get() = safeArguments.getBoolean(FILTER_AVAILABLE_ARGUMENT)
+        set(value) {
+            value?.let { safeArguments.putBoolean(FILTER_AVAILABLE_ARGUMENT, it) }
+
+            viewModel.filterAvailable = value
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -112,16 +121,33 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
             Category.MANGA -> menu.findItem(R.id.manga).isChecked = true
             else -> menu.findItem(R.id.all).isChecked = true
         }
+
+        menu.findItem(R.id.filterAvailable).isChecked = filterAvailable == true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.anime -> category = Category.ANIME
-            R.id.manga -> category = Category.MANGA
-            R.id.all -> category = null
-        }
+            R.id.anime -> {
+                category = Category.ANIME
 
-        item.isChecked = true
+                item.isChecked = true
+            }
+            R.id.manga -> {
+                category = Category.MANGA
+
+                item.isChecked = true
+            }
+            R.id.all -> {
+                category = null
+
+                item.isChecked = true
+            }
+            R.id.filterAvailable -> {
+                filterAvailable = if (item.isChecked) null else true
+
+                item.isChecked = !item.isChecked
+            }
+        }
 
         return super.onOptionsItemSelected(item)
     }
