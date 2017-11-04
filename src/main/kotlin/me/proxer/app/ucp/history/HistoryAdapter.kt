@@ -45,8 +45,6 @@ class HistoryAdapter : BaseAdapter<UcpHistoryEntry, ViewHolder>() {
         glide = null
     }
 
-    override fun areItemsTheSame(old: UcpHistoryEntry, new: UcpHistoryEntry) = old == new
-
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         internal val title: TextView by bindView(R.id.title)
@@ -70,7 +68,7 @@ class HistoryAdapter : BaseAdapter<UcpHistoryEntry, ViewHolder>() {
             status.text = status.context.getString(R.string.fragment_history_entry_status, item.episode,
                     item.date.convertToRelativeReadableTime(status.context))
 
-            glide?.defaultLoad(image, ProxerUrls.entryImage(item.id))
+            glide?.defaultLoad(image, ProxerUrls.entryImage(item.entryId))
         }
     }
 }
