@@ -12,14 +12,14 @@ ext {
     javaVersion = JavaVersion.VERSION_1_8
 
     // Gradle
-    gradleVersion = '4.3-rc-4'
+    gradleVersion = '4.3'
 
     // Core plugins
-    androidPluginVersion = '3.0.0'
-    kotlinVersion = '1.2.0-beta-88'
+    androidPluginVersion = '3.1.0-alpha02'
+    kotlinVersion = '1.2.0-rc-39'
 
     // Utility plugins
-    detektPluginVersion = '1.0.0.RC5-2'
+    detektPluginVersion = '1.0.0.RC5-3'
     gradleVersionsPluginVersion = '0.17.0'
     androidCommandPluginVersion = '1.7.1'
     ktlintVersion = '0.11.1'
@@ -66,7 +66,7 @@ ext {
     // Utils
     threetenVersion = '1.0.5'
     hawkVersion = '2.0.1'
-    glideVersion = '4.3.0-SNAPSHOT'
+    glideVersion = '4.3.0'
     okHttpVersion = '3.9.0'
     okioVersion = '1.13.0'
     linkBuilderVersion = '1.6.1'
