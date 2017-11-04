@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import com.jakewharton.rxbinding2.view.clicks
 import me.proxer.app.R
 import me.proxer.app.util.DeviceUtils
-import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.enableLayoutAnimationsSafely
@@ -23,7 +22,6 @@ import me.proxer.library.util.ProxerUtils
 /**
  * @author Ruben Gees
  */
-@Suppress("ExceptionRaisedInUnexpectedLocation")
 class MediaListSearchBottomSheet private constructor(
         private val fragment: MediaListFragment,
         private val viewModel: MediaListViewModel,
@@ -46,6 +44,7 @@ class MediaListSearchBottomSheet private constructor(
         bottomSheetBehaviour.isHideable = false
         bottomSheetBehaviour.peekHeight = measureTitle()
 
+        fragment.languageSelector.findViewById<ViewGroup>(R.id.items).enableLayoutAnimationsSafely()
         fragment.genreSelector.findViewById<ViewGroup>(R.id.items).enableLayoutAnimationsSafely()
         fragment.excludedGenreSelector.findViewById<ViewGroup>(R.id.items).enableLayoutAnimationsSafely()
 
@@ -70,17 +69,16 @@ class MediaListSearchBottomSheet private constructor(
                 .autoDispose(fragment)
                 .subscribeAndLogErrors {
                     fragment.language = when {
-                        it.isEmpty() || it.size > 1 -> null
-                        it.keys.first() == 0 -> Language.GERMAN
-                        it.keys.first() == 1 -> Language.ENGLISH
-                        else -> throw IllegalArgumentException("Unknown language: ${it.values.first()}")
+                        it.firstOrNull() == fragment.getString(R.string.language_german) -> Language.GERMAN
+                        it.firstOrNull() == fragment.getString(R.string.language_english) -> Language.ENGLISH
+                        else -> null
                     }
                 }
 
         fragment.genreSelector.selectionChangeSubject
                 .autoDispose(fragment)
                 .subscribeAndLogErrors { selections ->
-                    fragment.genres = enumSetOf(selections.values.map {
+                    fragment.genres = enumSetOf(selections.map {
                         toSafeApiEnum(Genre::class.java, it)
                     })
                 }
@@ -88,13 +86,14 @@ class MediaListSearchBottomSheet private constructor(
         fragment.excludedGenreSelector.selectionChangeSubject
                 .autoDispose(fragment)
                 .subscribeAndLogErrors { selections ->
-                    fragment.excludedGenres = enumSetOf(selections.values.map {
+                    fragment.excludedGenres = enumSetOf(selections.map {
                         toSafeApiEnum(Genre::class.java, it)
                     })
                 }
 
         val genreItems = Genre.values().map { getSafeApiEnum(it) }
         val languageItems = listOf(
+                fragment.getString(R.string.fragment_media_list_all_languages),
                 fragment.getString(R.string.language_german),
                 fragment.getString(R.string.language_english)
         )
@@ -102,10 +101,6 @@ class MediaListSearchBottomSheet private constructor(
         fragment.languageSelector.items = languageItems
         fragment.genreSelector.items = genreItems
         fragment.excludedGenreSelector.items = genreItems
-
-        if (savedInstanceState == null) {
-            fragment.languageSelector.selection = ParcelableStringBooleanMap(languageItems)
-        }
     }
 
     private fun measureTitle(): Int {

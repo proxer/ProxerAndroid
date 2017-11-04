@@ -61,19 +61,20 @@
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp">
 
-                <me.proxer.app.ui.view.ExpandableMultiSelectionView
+                <me.proxer.app.ui.view.ExpandableSelectionView
                     android:id="@+id/languageSelector"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:singleSelection="true"
                     app:titleText="Sprache" />
 
-                <me.proxer.app.ui.view.ExpandableMultiSelectionView
+                <me.proxer.app.ui.view.ExpandableSelectionView
                     android:id="@+id/genreSelector"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:titleText="@string/fragment_media_list_genres" />
 
-                <me.proxer.app.ui.view.ExpandableMultiSelectionView
+                <me.proxer.app.ui.view.ExpandableSelectionView
                     android:id="@+id/excludedGenreSelector"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

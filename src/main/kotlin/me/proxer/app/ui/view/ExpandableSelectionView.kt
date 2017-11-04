@@ -6,19 +6,21 @@ import android.os.Parcel
 import android.os.Parcelable
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.AppCompatCheckBox
+import android.support.v7.widget.AppCompatRadioButton
 import android.util.AttributeSet
 import android.util.SparseArray
+import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageButton
 import android.widget.LinearLayout
+import android.widget.RadioButton
 import android.widget.TextView
 import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.R
-import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.subscribeAndLogErrors
@@ -28,7 +30,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-class ExpandableMultiSelectionView @JvmOverloads constructor(
+class ExpandableSelectionView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
@@ -38,7 +40,7 @@ class ExpandableMultiSelectionView @JvmOverloads constructor(
     private val toggleButton by bindView<ImageButton>(R.id.toggleButton)
     private val itemContainer by bindView<ViewGroup>(R.id.items)
 
-    val selectionChangeSubject: PublishSubject<Map<Int, String>> = PublishSubject.create()
+    val selectionChangeSubject: PublishSubject<List<String>> = PublishSubject.create()
 
     var titleText: CharSequence
         get() = title.text
@@ -46,7 +48,7 @@ class ExpandableMultiSelectionView @JvmOverloads constructor(
             title.text = value
         }
 
-    var items by Delegates.observable(emptyList<String>(), { _, old, new ->
+    var items by Delegates.observable(listOf<String>(), { _, old, new ->
         if (old != new && isExtended) {
             itemContainer.removeAllViews()
 
@@ -54,7 +56,7 @@ class ExpandableMultiSelectionView @JvmOverloads constructor(
         }
     })
 
-    var selection by Delegates.observable(ParcelableStringBooleanMap(), { _, old, new ->
+    var selection by Delegates.observable(mutableListOf<String>(), { _, old, new ->
         if (old != new) handleSelection()
     })
 
@@ -62,15 +64,22 @@ class ExpandableMultiSelectionView @JvmOverloads constructor(
         if (old != new) handleExtension()
     })
 
+    private var isSingleSelection = false
+
     init {
         orientation = VERTICAL
 
         inflate(context, R.layout.view_expandable_multi_selection, this)
 
-        context.theme.obtainStyledAttributes(attrs, R.styleable.ExpandableMultiSelectionView, 0, 0).apply {
-            titleText = getString(R.styleable.ExpandableMultiSelectionView_titleText)
+        context.theme.obtainStyledAttributes(attrs, R.styleable.ExpandableSelectionView, 0, 0).apply {
+            titleText = getString(R.styleable.ExpandableSelectionView_titleText)
+            isSingleSelection = getBoolean(R.styleable.ExpandableSelectionView_singleSelection, false)
 
             recycle()
+        }
+
+        if (isSingleSelection) {
+            resetButton.visibility = View.GONE
         }
 
         resetButton.setIconicsImage(CommunityMaterial.Icon.cmd_undo, 32)
@@ -88,7 +97,7 @@ class ExpandableMultiSelectionView @JvmOverloads constructor(
                     itemContainer.childrenSequence().forEach {
                         if (it is CheckBox) it.isChecked = false
 
-                        selection.clear()
+                        selection = mutableListOf()
 
                         handleSelection()
                         notifySelectionChangedListener()
@@ -123,36 +132,72 @@ class ExpandableMultiSelectionView @JvmOverloads constructor(
         if (isExtended) {
             if (itemContainer.childCount <= 0) {
                 items.forEach { item ->
-                    val checkBox = AppCompatCheckBox(context)
-
-                    checkBox.text = item
-                    checkBox.isChecked = selection[item] == true
-                    checkBox.clicks()
-                            .autoDispose(context as LifecycleOwner)
-                            .subscribeAndLogErrors {
-                                selection.putOrRemove(item)
-
-                                notifySelectionChangedListener()
-                            }
-
-                    itemContainer.addView(checkBox)
+                    itemContainer.addView(when (isSingleSelection) {
+                        true -> constructSingleSelectionView(item)
+                        false -> createMultiSelectionView(item)
+                    })
                 }
             }
         } else {
             itemContainer.removeAllViews()
         }
+
+        if (isSingleSelection) {
+            if (itemContainer.childrenSequence().none { it is RadioButton && it.isChecked }) {
+                (itemContainer.childrenSequence().firstOrNull() as? RadioButton)?.let {
+                    it.isChecked = true
+                    it.jumpDrawablesToCurrentState()
+                }
+            }
+        }
     }
 
     private fun handleSelection() {
         childrenSequence().forEach {
-            if (it is CheckBox) it.isChecked = selection[it.text.toString()] == true
+            if (it is CheckBox) it.isChecked = selection.contains(it.text.toString())
         }
     }
 
-    private fun notifySelectionChangedListener() {
-        val selectionMap = selection.keys.mapIndexed { index, item -> index to item }.toMap()
+    private fun constructSingleSelectionView(item: String): View {
+        val radioButton = AppCompatRadioButton(context)
 
-        selectionChangeSubject.onNext(selectionMap)
+        radioButton.text = item
+        radioButton.isChecked = selection.contains(item)
+        radioButton.clicks()
+                .autoDispose(context as LifecycleOwner)
+                .subscribeAndLogErrors {
+                    selection.clear()
+                    selection.add(item)
+
+                    itemContainer.childrenSequence().forEach {
+                        if (it is RadioButton && it != radioButton) it.isChecked = false
+                    }
+
+                    notifySelectionChangedListener()
+                }
+
+        return radioButton
+    }
+
+    private fun createMultiSelectionView(item: String): View {
+        val checkBox = AppCompatCheckBox(context)
+
+        checkBox.text = item
+        checkBox.isChecked = selection.contains(item)
+        checkBox.clicks()
+                .autoDispose(context as LifecycleOwner)
+                .subscribeAndLogErrors {
+                    if (!selection.remove(item)) {
+                        selection.add(item)
+                    }
+
+                    notifySelectionChangedListener()
+                }
+        return checkBox
+    }
+
+    private fun notifySelectionChangedListener() {
+        selectionChangeSubject.onNext(selection)
     }
 
     internal class SavedState : BaseSavedState {
@@ -165,27 +210,26 @@ class ExpandableMultiSelectionView @JvmOverloads constructor(
             }
         }
 
-        internal val selection: ParcelableStringBooleanMap
+        internal val selection: MutableList<String>
         internal val isExtended: Boolean
 
-        internal constructor(
-                superState: Parcelable,
-                selection: ParcelableStringBooleanMap,
-                isExtended: Boolean
+        internal constructor(superState: Parcelable,
+                             selection: MutableList<String>,
+                             isExtended: Boolean
         ) : super(superState) {
             this.selection = selection
             this.isExtended = isExtended
         }
 
         internal constructor(state: Parcel) : super(state) {
-            selection = ParcelableStringBooleanMap.CREATOR.createFromParcel(state)
+            selection = mutableListOf<String>().also { state.readStringList(it) }
             isExtended = state.readInt() == 1
         }
 
         override fun writeToParcel(out: Parcel, flags: Int) {
             super.writeToParcel(out, flags)
 
-            selection.writeToParcel(out, 0)
+            out.writeStringList(selection)
             out.writeInt(if (isExtended) 1 else 0)
         }
     }

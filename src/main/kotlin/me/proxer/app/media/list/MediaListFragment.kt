@@ -21,7 +21,7 @@ import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.media.MediaActivity
-import me.proxer.app.ui.view.ExpandableMultiSelectionView
+import me.proxer.app.ui.view.ExpandableSelectionView
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.getEnumSet
@@ -132,9 +132,9 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
     internal val searchBottomSheet by bindView<ViewGroup>(R.id.searchBottomSheet)
     internal val searchBottomSheetTitle by bindView<ViewGroup>(R.id.titleContainer)
     internal val search by bindView<Button>(R.id.search)
-    internal val languageSelector by bindView<ExpandableMultiSelectionView>(R.id.languageSelector)
-    internal val genreSelector by bindView<ExpandableMultiSelectionView>(R.id.genreSelector)
-    internal val excludedGenreSelector by bindView<ExpandableMultiSelectionView>(R.id.excludedGenreSelector)
+    internal val languageSelector by bindView<ExpandableSelectionView>(R.id.languageSelector)
+    internal val genreSelector by bindView<ExpandableSelectionView>(R.id.genreSelector)
+    internal val excludedGenreSelector by bindView<ExpandableSelectionView>(R.id.excludedGenreSelector)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

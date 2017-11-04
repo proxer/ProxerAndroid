@@ -1,5 +1,6 @@
 <resources>
-    <declare-styleable name="ExpandableMultiSelectionView">
+    <declare-styleable name="ExpandableSelectionView">
         <attr name="titleText" format="string" />
+        <attr name="singleSelection" format="boolean" />
     </declare-styleable>
 </resources>
