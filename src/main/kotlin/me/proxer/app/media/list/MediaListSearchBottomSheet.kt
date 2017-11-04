@@ -109,7 +109,7 @@ class MediaListSearchBottomSheet private constructor(
 
         fragment.searchBottomSheetTitle.measure(widthSpec, heightSpec)
 
-        return fragment.searchBottomSheetTitle.measuredHeight + fragment.dip(16)
+        return fragment.searchBottomSheetTitle.measuredHeight + fragment.dip(10)
     }
 
     private fun <T : Enum<T>> toSafeApiEnum(klass: Class<T>, value: String) = ProxerUtils.toApiEnum(klass, value)
