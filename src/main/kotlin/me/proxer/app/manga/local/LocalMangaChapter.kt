@@ -16,7 +16,7 @@ import java.util.Date
         entity = LocalEntryCore::class,
         parentColumns = ["id"],
         childColumns = ["entryId"]
-))], indices = [(Index(value = ["entryId"]))])
+))], indices = [(Index("entryId"))])
 data class LocalMangaChapter(@PrimaryKey(autoGenerate = true) val id: Long = 0, val episode: Int,
                              val language: Language, val entryId: Long, val title: String, val uploaderId: String,
                              val uploaderName: String, val date: Date, val scanGroupId: String?,

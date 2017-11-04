@@ -13,7 +13,7 @@ import me.proxer.library.entity.manga.Page
         entity = LocalMangaChapter::class,
         parentColumns = ["id"],
         childColumns = ["chapterId"]
-))], indices = [(Index(value = ["chapterId"]))])
+))], indices = [(Index("chapterId"))])
 data class LocalMangaPage(@PrimaryKey(autoGenerate = true) val id: Long = 0, val name: String,
                           val height: Int, val width: Int, val chapterId: Long) {
 

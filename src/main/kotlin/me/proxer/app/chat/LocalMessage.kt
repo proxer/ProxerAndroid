@@ -16,7 +16,7 @@ import java.util.Date
         entity = LocalConference::class,
         parentColumns = ["id"],
         childColumns = ["conferenceId"]
-))], indices = [(Index(value = ["conferenceId"]))])
+))], indices = [(Index("conferenceId"))])
 data class LocalMessage(@PrimaryKey(autoGenerate = true) val id: Long, val conferenceId: Long, val userId: String,
                         val username: String, val message: String, val action: MessageAction, val date: Date,
                         val device: Device) {

@@ -1,9 +1,9 @@
 package me.proxer.app.media.list
 
 import android.os.Bundle
+import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.BottomSheetBehavior.STATE_COLLAPSED
 import android.support.design.widget.BottomSheetBehavior.STATE_EXPANDED
-import android.support.design.widget.BottomSheetBehavior.from
 import android.view.View
 import android.view.View.MeasureSpec.makeMeasureSpec
 import android.view.ViewGroup
@@ -23,6 +23,7 @@ import me.proxer.library.util.ProxerUtils
 /**
  * @author Ruben Gees
  */
+@Suppress("ExceptionRaisedInUnexpectedLocation")
 class MediaListSearchBottomSheet private constructor(
         private val fragment: MediaListFragment,
         private val viewModel: MediaListViewModel,
@@ -35,7 +36,7 @@ class MediaListSearchBottomSheet private constructor(
         }
     }
 
-    private val bottomSheetBehaviour = from(fragment.searchBottomSheet)
+    private val bottomSheetBehaviour = BottomSheetBehavior.from(fragment.searchBottomSheet)
 
     init {
         if (savedInstanceState == null) {

@@ -126,7 +126,7 @@ class ExpandableMultiSelectionView @JvmOverloads constructor(
                     val checkBox = AppCompatCheckBox(context)
 
                     checkBox.text = item
-                    checkBox.isChecked = selection[item] ?: false
+                    checkBox.isChecked = selection[item] == true
                     checkBox.clicks()
                             .autoDispose(context as LifecycleOwner)
                             .subscribeAndLogErrors {

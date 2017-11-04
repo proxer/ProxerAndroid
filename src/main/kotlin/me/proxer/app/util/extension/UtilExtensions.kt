@@ -89,7 +89,7 @@ inline fun <reified T : Enum<T>> Bundle.getEnumSet(key: String, klass: Class<T>)
     val values = getIntArray(key)?.map { klass.enumConstants[it] }
 
     return when {
-        values?.isEmpty() ?: true -> EnumSet.noneOf(T::class.java)
+        values?.isEmpty() != false -> EnumSet.noneOf(T::class.java)
         else -> EnumSet.copyOf(values)
     }
 }
