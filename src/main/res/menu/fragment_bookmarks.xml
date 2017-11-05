@@ -12,11 +12,6 @@
         app:showAsAction="ifRoom">
 
         <menu>
-            <item
-                android:id="@+id/filterAvailable"
-                android:checkable="true"
-                android:title="@string/action_filter_available" />
-
             <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/all"
@@ -33,6 +28,11 @@
                     android:title="@string/action_filter_manga"
                     app:showAsAction="never" />
             </group>
+
+            <item
+                android:id="@+id/filterAvailable"
+                android:checkable="true"
+                android:title="@string/action_filter_available" />
         </menu>
     </item>
 </menu>
