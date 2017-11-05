@@ -20,6 +20,7 @@ import me.proxer.app.auth.LoginDialog
 import me.proxer.app.auth.LoginEvent
 import me.proxer.app.auth.LogoutDialog
 import me.proxer.app.auth.LogoutEvent
+import me.proxer.app.base.BackPressAware
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.bookmark.BookmarkFragment
 import me.proxer.app.chat.conference.ConferenceFragment
@@ -121,7 +122,15 @@ class MainActivity : BaseActivity() {
 
     override fun onBackPressed() {
         if (!drawer.onBackPressed()) {
-            super.onBackPressed()
+            if (supportFragmentManager.fragments.none { it is BackPressAware && it.onBackPressed() }) {
+                val startPage = PreferenceHelper.getStartPage(this)
+
+                if (startPage != drawer.currentItem) {
+                    drawer.select(startPage)
+                } else {
+                    super.onBackPressed()
+                }
+            }
         }
     }
 

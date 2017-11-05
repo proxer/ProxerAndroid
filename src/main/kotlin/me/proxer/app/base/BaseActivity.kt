@@ -23,7 +23,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // This needs to be called before super.onCreate(), because otherwise Fragments might not see the
-        // restored state on time.
+        // restored state in time.
         savedInstanceState?.getBundle(STATE)?.let { state ->
             intent.putExtras(state)
         }

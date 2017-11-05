@@ -21,7 +21,6 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile
 import io.reactivex.subjects.PublishSubject
 import me.proxer.app.R
 import me.proxer.app.util.DeviceUtils
-import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.util.ProxerUrls
@@ -39,15 +38,15 @@ class MaterialDrawerWrapper(context: Activity, toolbar: Toolbar, savedInstanceSt
         drawer.header.findViewById<ImageView>(R.id.material_drawer_account_header_current)
     }
 
+    val currentItem: DrawerItem
+        get() = DrawerItem.fromOrNull(drawer.currentSelection)
+                ?: getStickyItemIds()[drawer.currentStickyFooterSelectedPosition]
+
     private val header: AccountHeader
     private val drawer: Drawer
 
     private val miniDrawer: MiniDrawer?
     private val crossfader: Crossfader<*>?
-
-    private val currentItem: DrawerItem
-        get() = DrawerItem.fromOrNull(drawer.currentSelection)
-                ?: getStickyItemIds()[drawer.currentStickyFooterSelectedPosition]
 
     init {
         header = buildAccountHeader(context, savedInstanceState)
@@ -76,21 +75,7 @@ class MaterialDrawerWrapper(context: Activity, toolbar: Toolbar, savedInstanceSt
 
                 true
             }
-            else -> {
-                val startPage = PreferenceHelper.getStartPage(when {
-                    drawer.drawerLayout != null -> drawer.drawerLayout.context
-                    crossfader != null -> crossfader.getCrossFadeSlidingPaneLayout()?.context
-                    else -> null
-                } ?: return false)
-
-                if (currentItem != startPage) {
-                    select(startPage)
-
-                    true
-                } else {
-                    false
-                }
-            }
+            else -> false
         }
     }
 

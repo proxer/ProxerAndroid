@@ -29,9 +29,11 @@ class MediaListSearchBottomSheet private constructor(
 ) {
 
     companion object {
-        fun bindTo(fragment: MediaListFragment, viewModel: MediaListViewModel, savedInstanceState: Bundle?) {
-            MediaListSearchBottomSheet(fragment, viewModel, savedInstanceState)
-        }
+        fun bindTo(
+                fragment: MediaListFragment,
+                viewModel: MediaListViewModel,
+                savedInstanceState: Bundle?
+        ) = MediaListSearchBottomSheet(fragment, viewModel, savedInstanceState)
     }
 
     private val bottomSheetBehaviour = BottomSheetBehavior.from(fragment.searchBottomSheet)
@@ -117,4 +119,12 @@ class MediaListSearchBottomSheet private constructor(
 
     private fun getSafeApiEnum(value: Enum<*>) = ProxerUtils.getApiEnumName(value)
             ?: throw IllegalArgumentException("Unknown ${value::class.java.simpleName}: ${value.name}")
+
+    fun onBackPressed() = if (bottomSheetBehaviour.state != STATE_COLLAPSED) {
+        bottomSheetBehaviour.state = STATE_COLLAPSED
+
+        true
+    } else {
+        false
+    }
 }

@@ -19,6 +19,7 @@ import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import kotterknife.bindView
 import me.proxer.app.GlideApp
 import me.proxer.app.R
+import me.proxer.app.base.BackPressAware
 import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.ui.view.ExpandableSelectionView
@@ -41,7 +42,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-class MediaListFragment : PagedContentFragment<MediaListEntry>() {
+class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware {
 
     companion object {
         private const val CATEGORY_ARGUMENT = "category"
@@ -127,6 +128,8 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
             viewModel.excludedGenres = value
         }
 
+    private var searchBottomSheetManager by Delegates.notNull<MediaListSearchBottomSheet>()
+
     private val toolbar by unsafeLazy { safeActivity.findViewById<Toolbar>(R.id.toolbar) }
 
     internal val searchBottomSheet by bindView<ViewGroup>(R.id.searchBottomSheet)
@@ -160,7 +163,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
 
         innerAdapter.glide = GlideApp.with(this)
 
-        MediaListSearchBottomSheet.bindTo(this, viewModel, savedInstanceState)
+        searchBottomSheetManager = MediaListSearchBottomSheet.bindTo(this, viewModel, savedInstanceState)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -252,5 +255,9 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>() {
         item.isChecked = true
 
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed(): Boolean {
+        return searchBottomSheetManager.onBackPressed()
     }
 }
