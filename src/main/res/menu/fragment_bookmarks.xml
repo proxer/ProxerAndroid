@@ -3,11 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/filterAvailable"
-        android:checkable="true"
-        android:title="@string/action_filter_available" />
-
-    <item
         android:id="@+id/filter"
         android:title="@string/action_filter"
         app:ico_color="@android:color/white"
@@ -17,6 +12,11 @@
         app:showAsAction="ifRoom">
 
         <menu>
+            <item
+                android:id="@+id/filterAvailable"
+                android:checkable="true"
+                android:title="@string/action_filter_available" />
+
             <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/all"
