@@ -35,6 +35,7 @@ import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.convertToDateTime
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.snackbar
+import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.info.EntryCore
 import me.proxer.library.enums.Language
@@ -120,6 +121,10 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         adapter = EasyHeaderFooterAdapter(innerAdapter)
 
         innerAdapter.positionResolver = ContainerPositionResolver(adapter)
+
+        innerAdapter.clickSubject
+                .autoDispose(this)
+                .subscribeAndLogErrors { recyclerView.smoothScrollToPosition(it + 2) }
 
         viewModel.setEpisode(episode, false)
     }

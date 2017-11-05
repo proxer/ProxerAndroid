@@ -12,6 +12,7 @@ import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
@@ -27,6 +28,8 @@ import kotlin.properties.Delegates
  * @author Ruben Gees
  */
 class MangaAdapter(private val isVertical: Boolean) : BaseAdapter<Page, ViewHolder>() {
+
+    val clickSubject: PublishSubject<Int> = PublishSubject.create()
 
     var server by Delegates.notNull<String>()
     var entryId by Delegates.notNull<String>()
@@ -53,7 +56,7 @@ class MangaAdapter(private val isVertical: Boolean) : BaseAdapter<Page, ViewHold
 
         internal val image: SubsamplingScaleImageView by bindView(R.id.image)
 
-        private val smoothScollHack = { _: View?, event: MotionEvent ->
+        private val smoothScrollHack = { _: View?, event: MotionEvent ->
             // Make scrolling smoother by hacking the SubsamplingScaleImageView to only
             // receive touch events when zooming.
             val shouldInterceptEvent = event.action == MotionEvent.ACTION_MOVE && event.pointerCount == 1 &&
@@ -61,7 +64,7 @@ class MangaAdapter(private val isVertical: Boolean) : BaseAdapter<Page, ViewHold
 
             if (shouldInterceptEvent) {
                 image.parent.requestDisallowInterceptTouchEvent(true)
-                itemView.onTouchEvent(event)
+                image.onTouchEvent(event)
                 image.parent.requestDisallowInterceptTouchEvent(false)
 
                 true
@@ -76,10 +79,16 @@ class MangaAdapter(private val isVertical: Boolean) : BaseAdapter<Page, ViewHold
             image.setRegionDecoderClass(RapidImageRegionDecoder::class.java)
 
             @Suppress("ClickableViewAccessibility")
-            image.setOnTouchListener(smoothScollHack)
+            image.setOnTouchListener(smoothScrollHack)
 
             if (!isVertical) {
                 itemView.layoutParams.height = MATCH_PARENT
+
+                image.setOnClickListener {
+                    withSafeAdapterPosition(this, {
+                        clickSubject.onNext(it)
+                    })
+                }
             }
         }
 
