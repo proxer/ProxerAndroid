@@ -31,6 +31,10 @@ import me.proxer.app.util.extension.autoDispose
  */
 class StreamActivity : BaseActivity() {
 
+    private companion object {
+        private const val PREVIOUS_POSITION_EXTRA = "previous_position"
+    }
+
     private val uri
         get() = intent.data
 
@@ -38,6 +42,12 @@ class StreamActivity : BaseActivity() {
 
     private val toolbar: Toolbar by bindView(R.id.toolbar)
     private val player: VideoView by bindView(R.id.player)
+
+    private var previousPosition: Long
+        get() = intent.getLongExtra(PREVIOUS_POSITION_EXTRA, -1)
+        set(value) {
+            intent.putExtra(PREVIOUS_POSITION_EXTRA, value)
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +69,12 @@ class StreamActivity : BaseActivity() {
         } else {
             player.setOnPreparedListener {
                 player.start()
+
+                if (previousPosition > 0) {
+                    player.seekTo(previousPosition)
+
+                    previousPosition = -1
+                }
             }
         }
     }
@@ -157,6 +173,10 @@ class StreamActivity : BaseActivity() {
         }
 
         player.setOnErrorListener {
+            if (player.currentPosition > 0) {
+                previousPosition = player.currentPosition
+            }
+
             ErrorUtils.handle(it).let {
                 MaterialDialog.Builder(this)
                         .content(it.message)
