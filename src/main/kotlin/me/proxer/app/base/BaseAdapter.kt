@@ -37,7 +37,7 @@ abstract class BaseAdapter<T, VH : RecyclerView.ViewHolder> : RecyclerView.Adapt
 
     open fun isEmpty() = data.isEmpty()
 
-    open fun saveInstanceState(outState: Bundle) = Unit
+    open fun saveInstanceState(outState: Bundle) {}
 
     protected open fun swapData(newData: List<T>) {
         data = ArrayList(newData)

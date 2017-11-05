@@ -65,7 +65,7 @@ internal class LocalMangaChapterAdapter : BaseAdapter<LocalMangaChapter, ViewHol
     }
 
     internal interface LocalMangaChapterAdapterCallback {
-        fun onChapterClick(chapter: LocalMangaChapter) = Unit
-        fun onDeleteClick(chapter: LocalMangaChapter) = Unit
+        fun onChapterClick(chapter: LocalMangaChapter) {}
+        fun onDeleteClick(chapter: LocalMangaChapter) {}
     }
 }

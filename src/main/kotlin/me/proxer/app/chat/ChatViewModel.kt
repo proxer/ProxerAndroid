@@ -29,7 +29,6 @@ class ChatViewModel(initialConference: LocalConference) : PagedViewModel<LocalMe
 
     override var hasReachedEnd
         get() = safeConference.isFullyLoaded
-        set(value) = Unit
 
     override val data = object : MediatorLiveData<List<LocalMessage>>() {
 

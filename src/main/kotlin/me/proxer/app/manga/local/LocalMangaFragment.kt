@@ -201,7 +201,7 @@ class LocalMangaFragment : BaseContentFragment<List<CompleteLocalMangaEntry>>() 
         }
     }
 
-    override fun hideData() = Unit
+    override fun hideData() {}
 
     override fun showError(action: ErrorAction) {
         contentContainer.visibility = View.GONE
@@ -209,5 +209,5 @@ class LocalMangaFragment : BaseContentFragment<List<CompleteLocalMangaEntry>>() 
         super.showError(action)
     }
 
-    override fun hideError() = Unit
+    override fun hideError() {}
 }

@@ -6,6 +6,9 @@
         <ignore regexp=".*retrofit.*" />
     </issue>
 
-    <!-- False positive with Kotlin. -->
+    <!-- False positives with Kotlin. -->
     <issue id="UnusedResources" severity="ignore" />
+
+    <!-- False positives with Kotlin. -->
+    <issue id="NewApi" severity="informational" />
 </lint>

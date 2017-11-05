@@ -159,7 +159,7 @@ abstract class ImageTabsActivity : BaseActivity() {
         TabLayoutHelper(tabs, viewPager).apply { isAutoAdjustTabModeEnabled = true }
     }
 
-    protected open fun loadEmptyImage() = Unit
+    protected open fun loadEmptyImage() {}
 
     private fun isEnterTransitionPossible(savedInstanceState: Bundle?): Boolean {
         return savedInstanceState == null && ActivityUtils.getTransitionName(this) != null
@@ -167,10 +167,10 @@ abstract class ImageTabsActivity : BaseActivity() {
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     interface TransitionListenerWrapper : Transition.TransitionListener {
-        override fun onTransitionEnd(transition: Transition?) = Unit
-        override fun onTransitionResume(transition: Transition?) = Unit
-        override fun onTransitionPause(transition: Transition?) = Unit
-        override fun onTransitionCancel(transition: Transition?) = Unit
-        override fun onTransitionStart(transition: Transition?) = Unit
+        override fun onTransitionEnd(transition: Transition?) {}
+        override fun onTransitionResume(transition: Transition?) {}
+        override fun onTransitionPause(transition: Transition?) {}
+        override fun onTransitionCancel(transition: Transition?) {}
+        override fun onTransitionStart(transition: Transition?) {}
     }
 }
