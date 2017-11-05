@@ -68,6 +68,7 @@ android {
             useProguard false
             proguardFiles 'config/proguard/proguard-rules.pro'
             archivesBaseName = "proxerme-${defaultConfig.versionName}"
+            buildConfigField 'boolean', 'STORE', "false"
         }
 
         release {
@@ -75,6 +76,7 @@ android {
             shrinkResources true
             proguardFiles 'config/proguard/proguard-rules.pro'
             archivesBaseName = "app-${defaultConfig.versionName}"
+            buildConfigField 'boolean', 'STORE', "false"
 
             if (shouldSign()) {
                 signingConfig signingConfigs.release
@@ -83,6 +85,11 @@ android {
                         'values for "RELEASE_STORE_FILE", "RELEASE_STORE_PASSWORD", "RELEASE_KEY_ALIAS" and ' +
                         '"RELEASE_KEY_PASSWORD" to your secrets.properties file if you want the apk to be signed.')
             }
+        }
+
+        storeRelease {
+            initWith release
+            buildConfigField 'boolean', 'STORE', "true"
         }
     }
 
@@ -124,6 +131,7 @@ dependencies {
     project.ext.implementationDependencies.values().each { implementation it }
     project.ext.debugImplementationDependencies.values().each { debugImplementation it }
     project.ext.releaseImplementationDependencies.values().each { releaseImplementation it }
+    project.ext.releaseImplementationDependencies.values().each { storeReleaseImplementation it }
     project.ext.kaptDependencies.values().each { kapt it }
     project.ext.ktlintDependencies.values().each { ktlint it }
 

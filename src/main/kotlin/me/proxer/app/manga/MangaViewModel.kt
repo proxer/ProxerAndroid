@@ -6,6 +6,7 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import me.proxer.app.BuildConfig
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.MainApplication.Companion.mangaDao
@@ -38,8 +39,11 @@ class MangaViewModel(private val entryId: String, private val language: Language
         private const val MAX_CACHE_SIZE = 1024L * 1024L * 256L
     }
 
+    override val isLoginRequired = BuildConfig.STORE
+
     override val dataSingle: Single<MangaChapterInfo>
-        get() = cleanCompletable()
+        get() = Single.fromCallable { validate() }
+                .flatMapCompletable { cleanCompletable() }
                 .andThen(entrySingle())
                 .flatMap { localChapterSingle(it).onErrorResumeNext(remoteChapterSingle(it)) }
 

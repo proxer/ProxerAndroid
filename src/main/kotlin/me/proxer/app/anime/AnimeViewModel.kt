@@ -6,6 +6,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.Singles
 import io.reactivex.schedulers.Schedulers
+import me.proxer.app.BuildConfig
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.anime.resolver.StreamResolutionResult
 import me.proxer.app.anime.resolver.StreamResolverFactory
@@ -35,14 +36,18 @@ import kotlin.properties.Delegates
 class AnimeViewModel(private val entryId: String, private val language: AnimeLanguage, episode: Int) :
         BaseViewModel<AnimeStreamInfo>() {
 
+    override val isLoginRequired = BuildConfig.STORE
+
     override val dataSingle: Single<AnimeStreamInfo>
-        get() = entrySingle().flatMap {
-            Singles.zip(Single.just(it), streamSingle(it), { entry, streams ->
-                AnimeStreamInfo(entry.name, entry.episodeAmount, streams.map {
-                    it.toAnimeStreamInfo(StreamResolverFactory.resolverFor(it.hosterName) != null)
-                })
-            })
-        }
+        get() = Single.fromCallable { validate() }
+                .flatMap { entrySingle() }
+                .flatMap {
+                    Singles.zip(Single.just(it), streamSingle(it), { entry, streams ->
+                        AnimeStreamInfo(entry.name, entry.episodeAmount, streams.map {
+                            it.toAnimeStreamInfo(StreamResolverFactory.resolverFor(it.hosterName) != null)
+                        })
+                    })
+                }
 
     val resolutionResult = ResettingMutableLiveData<StreamResolutionResult>()
     val resolutionError = ResettingMutableLiveData<ErrorAction>()
