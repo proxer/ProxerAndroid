@@ -78,7 +78,7 @@ object NewsNotifications {
                 .setSmallIcon(R.drawable.ic_stat_proxer)
                 .setContentTitle(title)
                 .setContentText(content)
-                .setContentIntent(PendingIntent.getActivity(context, 0,
+                .setContentIntent(PendingIntent.getActivity(context, ID,
                         MainActivity.getSectionIntent(context, DrawerItem.NEWS),
                         PendingIntent.FLAG_UPDATE_CURRENT))
                 .addAction(R.drawable.ic_stat_check, context.getString(R.string.notification_news_read_action),

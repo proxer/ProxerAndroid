@@ -61,7 +61,7 @@ object ChatNotifications {
 
     fun showError(context: Context, error: Throwable) {
         val intent = if (ErrorUtils.isIpBlockedError(error)) {
-            PendingIntent.getActivity(context, 0, Intent(Intent.ACTION_VIEW).apply {
+            PendingIntent.getActivity(context, ID, Intent(Intent.ACTION_VIEW).apply {
                 data = ProxerUrls.captchaWeb(Device.MOBILE).androidUri()
             }, PendingIntent.FLAG_UPDATE_CURRENT)
         } else {

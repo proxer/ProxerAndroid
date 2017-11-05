@@ -57,7 +57,7 @@ object AccountNotifications {
             1 -> {
                 content = HtmlCompat.fromHtml(notifications.first().text)
 
-                intent = PendingIntent.getActivity(context, 0,
+                intent = PendingIntent.getActivity(context, ID,
                         Intent(Intent.ACTION_VIEW, notifications.first().contentLink.androidUri()),
                         PendingIntent.FLAG_UPDATE_CURRENT)
 
@@ -69,7 +69,7 @@ object AccountNotifications {
             else -> {
                 content = notificationAmount
 
-                intent = PendingIntent.getActivity(context, 0,
+                intent = PendingIntent.getActivity(context, ID,
                         NotificationActivity.getIntent(context),
                         PendingIntent.FLAG_UPDATE_CURRENT)
 

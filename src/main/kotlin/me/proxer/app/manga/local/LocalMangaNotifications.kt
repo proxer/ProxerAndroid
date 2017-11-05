@@ -30,7 +30,7 @@ object LocalMangaNotifications {
         val isFinished = roundedCurrentProgress >= roundedMaxProgress
         val notificationBuilder = NotificationCompat.Builder(context, MANGA_CHANNEL)
                 .setContentTitle(context.getString(R.string.notification_manga_download_progress_title))
-                .setContentIntent(PendingIntent.getActivity(context, 0,
+                .setContentIntent(PendingIntent.getActivity(context, ID,
                         MainActivity.getSectionIntent(context, MaterialDrawerWrapper.DrawerItem.LOCAL_MANGA),
                         PendingIntent.FLAG_UPDATE_CURRENT))
                 .setColor(ContextCompat.getColor(context, R.color.primary))
@@ -57,7 +57,7 @@ object LocalMangaNotifications {
 
     fun showError(context: Context, error: Throwable) {
         val intent = if (ErrorUtils.isIpBlockedError(error)) {
-            PendingIntent.getActivity(context, 0, Intent(Intent.ACTION_VIEW).apply {
+            PendingIntent.getActivity(context, ID, Intent(Intent.ACTION_VIEW).apply {
                 data = ProxerUrls.captchaWeb(Device.MOBILE).androidUri()
             }, PendingIntent.FLAG_UPDATE_CURRENT)
         } else {
