@@ -87,7 +87,7 @@ class MainApplication : Application() {
         var mangaDatabase by Delegates.notNull<LocalMangaDatabase>()
             private set
 
-        var globalContext by Delegates.notNull<MainApplication>()
+        var globalContext by Delegates.notNull<Context>()
             private set
 
         var refWatcher by Delegates.notNull<RefWatcher>()
@@ -101,6 +101,9 @@ class MainApplication : Application() {
             return
         }
 
+        refWatcher = LeakCanary.install(this)
+        globalContext = applicationContext
+
         AppCompatDelegate.setDefaultNightMode(PreferenceHelper.getNightMode(this))
         NotificationUtils.createNotificationChannels(this)
 
@@ -110,9 +113,6 @@ class MainApplication : Application() {
         mangaDatabase = Room.databaseBuilder(this, LocalMangaDatabase::class.java, "manga.db")
                 .addMigrations(LocalMangaDatabase.MIGRATION_ONE_TWO)
                 .build()
-
-        refWatcher = LeakCanary.install(this)
-        globalContext = this
 
         initBus()
         initApi()
