@@ -11,7 +11,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "gradle/dependencies.gradle" }}-{{ checksum  ".circleci/config.yml" }}
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "gradle/versions.gradle" }}-{{ checksum  ".circleci/config.yml" }}
       - run:
           name: Create Licences
           command: echo "d56f5187479451eabf01fb78af6dfcb131a6481e" > $ANDROID_HOME/licenses/android-sdk-license &&
@@ -29,4 +29,4 @@ jobs:
       - save_cache:
           paths:
             - ~/.gradle
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "gradle/dependencies.gradle" }}-{{ checksum  ".circleci/config.yml" }}
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "gradle/versions.gradle" }}-{{ checksum  ".circleci/config.yml" }}
