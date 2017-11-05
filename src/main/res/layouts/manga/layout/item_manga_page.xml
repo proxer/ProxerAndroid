@@ -9,4 +9,14 @@
         android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <ImageView
+        android:id="@+id/errorIndicator"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        tools:ignore="ContentDescription"
+        tools:src="@drawable/emoji_ios_1f1ef_1f1f5"
+        tools:visibility="visible" />
 </FrameLayout>

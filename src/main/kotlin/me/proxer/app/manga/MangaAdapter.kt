@@ -3,12 +3,13 @@ package me.proxer.app.manga
 import android.graphics.PointF
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.widget.ImageView
 import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
+import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -20,6 +21,7 @@ import me.proxer.app.manga.MangaAdapter.ViewHolder
 import me.proxer.app.manga.MangaPageSingle.Input
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.decodedName
+import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.entity.manga.Page
 import kotlin.properties.Delegates
@@ -55,31 +57,20 @@ class MangaAdapter(private val isVertical: Boolean) : BaseAdapter<Page, ViewHold
         private val mediumAnimationTime = itemView.context.resources.getInteger(android.R.integer.config_mediumAnimTime)
 
         internal val image: SubsamplingScaleImageView by bindView(R.id.image)
-
-        private val smoothScrollHack = { _: View?, event: MotionEvent ->
-            // Make scrolling smoother by hacking the SubsamplingScaleImageView to only
-            // receive touch events when zooming.
-            val shouldInterceptEvent = event.action == MotionEvent.ACTION_MOVE && event.pointerCount == 1 &&
-                    image.scale == image.minScale
-
-            if (shouldInterceptEvent) {
-                image.parent.requestDisallowInterceptTouchEvent(true)
-                image.onTouchEvent(event)
-                image.parent.requestDisallowInterceptTouchEvent(false)
-
-                true
-            } else {
-                false
-            }
-        }
+        internal val errorIndicator: ImageView by bindView(R.id.errorIndicator)
 
         init {
             image.setDoubleTapZoomDuration(shortAnimationTime)
             image.setBitmapDecoderClass(RapidImageDecoder::class.java)
             image.setRegionDecoderClass(RapidImageRegionDecoder::class.java)
 
-            @Suppress("ClickableViewAccessibility")
-            image.setOnTouchListener(smoothScrollHack)
+            errorIndicator.setIconicsImage(CommunityMaterial.Icon.cmd_refresh, 64)
+
+            itemView.setOnClickListener {
+                withSafeAdapterPosition(this, {
+                    bind(data[it])
+                })
+            }
 
             if (!isVertical) {
                 itemView.layoutParams.height = MATCH_PARENT
@@ -98,15 +89,19 @@ class MangaAdapter(private val isVertical: Boolean) : BaseAdapter<Page, ViewHold
                 val height = (item.height * width.toFloat() / item.width.toFloat()).toInt()
                 val scale = width.toFloat() / item.width.toFloat() * 2f
 
+                itemView.layoutParams.height = height
+
                 image.setDoubleTapZoomScale(scale)
-                image.layoutParams.height = height
                 image.maxScale = scale
             }
+
+            errorIndicator.visibility = View.GONE
+            image.visibility = View.VISIBLE
 
             image.tag = MangaPageSingle(image.context, isLocal, Input(server, entryId, id, item.decodedName))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeAndLogErrors {
+                    .subscribeAndLogErrors({
                         image.setImage(ImageSource.uri(it.path))
                         image.setScaleAndCenter(0.2f, PointF(0f, 0f))
 
@@ -118,7 +113,10 @@ class MangaAdapter(private val isVertical: Boolean) : BaseAdapter<Page, ViewHold
                                     .setDuration(mediumAnimationTime.toLong())
                                     .start()
                         }
-                    }
+                    }, {
+                        errorIndicator.visibility = View.VISIBLE
+                        image.visibility = View.GONE
+                    })
         }
     }
 }
