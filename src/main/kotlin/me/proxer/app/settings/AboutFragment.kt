@@ -70,7 +70,6 @@ class AboutFragment : MaterialAboutFragment() {
         }
     }
 
-    val safeContext get() = context ?: throw IllegalStateException("context is null")
     val safeActivity get() = activity ?: throw IllegalStateException("activity is null")
 
     private var customTabsHelper by Delegates.notNull<CustomTabsHelperFragment>()
@@ -89,22 +88,22 @@ class AboutFragment : MaterialAboutFragment() {
 
     override fun getMaterialAboutList(context: Context): MaterialAboutList = MaterialAboutList.Builder()
             .addCard(MaterialAboutCard.Builder()
-                    .apply { buildInfoItems().forEach { addItem(it) } }
+                    .apply { buildInfoItems(context).forEach { addItem(it) } }
                     .build())
             .addCard(MaterialAboutCard.Builder()
                     .title(R.string.about_support_title)
-                    .apply { buildSupportItems().forEach { addItem(it) } }
+                    .apply { buildSupportItems(context).forEach { addItem(it) } }
                     .build())
             .addCard(MaterialAboutCard.Builder()
                     .title(getString(R.string.about_developer_title))
-                    .apply { buildDeveloperItems().forEach { addItem(it) } }
+                    .apply { buildDeveloperItems(context).forEach { addItem(it) } }
                     .build())
             .build()
 
     override fun getTheme() = R.style.Theme_App_AboutFragment
     override fun shouldAnimate() = false
 
-    private fun buildInfoItems() = listOf(
+    private fun buildInfoItems(context: Context) = listOf(
             ConvenienceBuilder.createAppTitleItem(context),
             ConvenienceBuilder.createVersionActionItem(context,
                     IconicsDrawable(context, CommunityMaterial.Icon.cmd_tag)
@@ -144,7 +143,7 @@ class AboutFragment : MaterialAboutFragment() {
                     }.build()
     )
 
-    private fun buildSupportItems() = listOf(
+    private fun buildSupportItems(context: Context) = listOf(
             MaterialAboutActionItem.Builder()
                     .text(R.string.about_support_forum_title)
                     .subText(R.string.about_support_forum_description)
@@ -174,7 +173,7 @@ class AboutFragment : MaterialAboutFragment() {
                     }.build()
     )
 
-    private fun buildDeveloperItems() = listOf(
+    private fun buildDeveloperItems(context: Context) = listOf(
             MaterialAboutActionItem.Builder()
                     .text(R.string.about_developer_github_title)
                     .subText(DEVELOPER_GITHUB_NAME)
@@ -187,8 +186,8 @@ class AboutFragment : MaterialAboutFragment() {
             MaterialAboutActionItem.Builder()
                     .text(getString(R.string.about_developer_proxer_title))
                     .subText(DEVELOPER_PROXER_NAME)
-                    .icon(ContextCompat.getDrawable(safeContext, R.drawable.ic_stat_proxer)?.apply {
-                        setColorFilter(ContextCompat.getColor(safeContext, R.color.icon), PorterDuff.Mode.SRC_IN)
+                    .icon(ContextCompat.getDrawable(context, R.drawable.ic_stat_proxer)?.apply {
+                        setColorFilter(ContextCompat.getColor(context, R.color.icon), PorterDuff.Mode.SRC_IN)
                     })
                     .setOnClickAction {
                         ProfileActivity.navigateTo(safeActivity, DEVELOPER_PROXER_ID, DEVELOPER_PROXER_NAME, null)
