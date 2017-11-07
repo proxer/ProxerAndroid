@@ -153,8 +153,8 @@ class ChatAdapter(savedInstanceState: Bundle?, private val isGroup: Boolean) :
         holder.bind(data[position], context.dip(margins.first), context.dip(margins.second))
     }
 
-    override fun swapData(newData: List<LocalMessage>) {
-        super.swapData(newData)
+    override fun swapDataAndNotifyWithDiffing(newData: List<LocalMessage>) {
+        super.swapDataAndNotifyWithDiffing(newData)
 
         if (newData.isEmpty()) {
             clearSelection()

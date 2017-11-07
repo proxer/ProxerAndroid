@@ -50,6 +50,10 @@ class MediaAdapter(private val category: Category) : BaseAdapter<MediaListEntry,
         glide = null
     }
 
+    override fun swapDataAndNotifyWithDiffing(newData: List<MediaListEntry>) {
+        super.swapDataAndNotifyWithDiffing(newData.distinctBy { it.id })
+    }
+
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         internal val title: TextView by bindView(R.id.title)

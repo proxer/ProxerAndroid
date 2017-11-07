@@ -49,4 +49,8 @@ class MediaListViewModel(
     var type by Delegates.observable(type, { _, old, new ->
         if (old != new) reload()
     })
+
+    override fun mergeNewDataWithExistingData(newData: List<MediaListEntry>, currentPage: Int): List<MediaListEntry> {
+        return data.value?.plus(newData) ?: newData
+    }
 }
