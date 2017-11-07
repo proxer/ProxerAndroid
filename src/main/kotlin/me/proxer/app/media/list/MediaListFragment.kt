@@ -260,4 +260,13 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
     override fun onBackPressed(): Boolean {
         return searchBottomSheetManager.onBackPressed()
     }
+
+    override fun updateRecyclerViewPadding() {
+        super.updateRecyclerViewPadding()
+
+        if (innerAdapter.itemCount > 0 || adapter.footer == null) {
+            recyclerView.setPadding(recyclerView.paddingLeft, recyclerView.paddingTop, recyclerView.paddingRight,
+                    recyclerView.paddingBottom + searchBottomSheetTitle.measuredHeight)
+        }
+    }
 }

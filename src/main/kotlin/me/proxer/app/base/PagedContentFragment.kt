@@ -38,7 +38,7 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
 
     protected abstract val layoutManager: RecyclerView.LayoutManager
     protected abstract val innerAdapter: BaseAdapter<T, *>
-    private var adapter by Delegates.notNull<EasyHeaderFooterAdapter>()
+    protected var adapter by Delegates.notNull<EasyHeaderFooterAdapter>()
 
     protected open val recyclerView: RecyclerView by bindView(R.id.recyclerView)
 
@@ -159,7 +159,7 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
         }
     }
 
-    private fun updateRecyclerViewPadding() = when (innerAdapter.itemCount <= 0 && adapter.footer != null) {
+    open protected fun updateRecyclerViewPadding() = when (innerAdapter.itemCount <= 0 && adapter.footer != null) {
         true -> recyclerView.setPadding(0, 0, 0, 0)
         false -> {
             val horizontalPadding = DeviceUtils.getHorizontalMargin(safeContext)
