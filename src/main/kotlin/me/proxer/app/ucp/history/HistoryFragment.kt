@@ -45,7 +45,7 @@ class HistoryFragment : PagedContentFragment<UcpHistoryEntry>() {
         innerAdapter.clickSubject
                 .autoDispose(this)
                 .subscribe { (view, item) ->
-                    MediaActivity.navigateTo(safeActivity, item.id, item.name, item.category,
+                    MediaActivity.navigateTo(safeActivity, item.entryId, item.name, item.category,
                             if (view.drawable != null) view else null)
                 }
     }
