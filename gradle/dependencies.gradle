@@ -44,7 +44,7 @@ ext {
             communityMaterialTypeface        : "com.mikepenz:community-material-typeface:$communityMaterialTypefaceVersion@aar",
             crossfader                       : "com.mikepenz:crossfader:$crossfaderVersion@aar",
             materialAbout                    : "com.github.daniel-stoneuk:material-about-library:$materialAboutVersion",
-            subsamplingScaleImageView        : "com.davemorrissey.labs:subsampling-scale-image-view:$subsamplingScaleImageViewVersion",
+            subsamplingScaleImageView        : "com.github.davemorrissey:subsampling-scale-image-view:$subsamplingScaleImageViewVersion",
             tabLayoutHelper                  : "com.h6ah4i.android.tablayouthelper:tablayouthelper:$tabLayoutHelperVersion",
             materialDialogs                  : "com.afollestad.material-dialogs:core:$materialDialogsVersion",
             flexbox                          : "com.google.android:flexbox:$flexboxVersion",

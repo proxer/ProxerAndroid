@@ -49,7 +49,7 @@ ext {
     communityMaterialTypefaceVersion = '2.0.46.1'
     crossfaderVersion = '1.5.1'
     materialAboutVersion = '2.2.3'
-    subsamplingScaleImageViewVersion = '3.7.2'
+    subsamplingScaleImageViewVersion = '22fb5e3b36'
     tabLayoutHelperVersion = '0.9.0'
     materialDialogsVersion = '0.9.5.0'
     flexboxVersion = '0.3.1'

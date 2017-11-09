@@ -89,7 +89,7 @@ class CreateChatParticipantAdapter(savedInstanceState: Bundle?) : BaseAdapter<Pa
             username.text = item.username
 
             if (item.image.isBlank()) {
-                delete.setIconicsImage(CommunityMaterial.Icon.cmd_account, 96, 16)
+                image.setIconicsImage(CommunityMaterial.Icon.cmd_account, 96, 16, R.color.colorAccent)
             } else {
                 glide?.load(ProxerUrls.userImage(item.image).toString())
                         ?.transition(DrawableTransitionOptions.withCrossFade())
