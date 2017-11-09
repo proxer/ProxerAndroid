@@ -1,6 +1,5 @@
 package me.proxer.app.settings
 
-import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.PorterDuff
@@ -127,11 +126,11 @@ class AboutFragment : MaterialAboutFragment() {
                                 .withUiListener(object : LibsConfiguration.LibsUIListener {
                                     override fun preOnCreateView(view: View) = view
                                     override fun postOnCreateView(view: View) = view.apply {
-                                        Utils.setNavigationBarColorIfPossible(context as Activity, R.color.primary)
+                                        Utils.setNavigationBarColorIfPossible(safeActivity, R.color.primary)
                                     }
                                 })
                                 .withActivityTitle(getString(R.string.about_info_licenses_activity_title))
-                                .start(context)
+                                .start(safeActivity)
                     }.build(),
             MaterialAboutActionItem.Builder()
                     .text(R.string.about_info_source_code)
