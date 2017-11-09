@@ -13,6 +13,7 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TableLayout
 import android.widget.TextView
+import com.gojuno.koptional.Optional
 import com.google.android.flexbox.FlexboxLayout
 import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
@@ -35,6 +36,7 @@ import me.proxer.app.util.extension.toStartAppString
 import me.proxer.app.util.extension.toTypeAppString
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.info.Entry
+import me.proxer.library.entity.info.MediaUserInfo
 import me.proxer.library.enums.Category
 import me.proxer.library.util.ProxerUrls
 import me.proxer.library.util.ProxerUtils
@@ -43,7 +45,7 @@ import org.jetbrains.anko.bundleOf
 /**
  * @author Ruben Gees
  */
-class MediaInfoFragment : BaseContentFragment<Entry>() {
+class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo>>>() {
 
     companion object {
         private const val SHOW_UNRATED_TAGS_ARGUMENT = "show_unrated_tags"
@@ -130,10 +132,6 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
             }
         })
 
-        note.setIconicsImage(CommunityMaterial.Icon.cmd_clock, 24, 0)
-        favor.setIconicsImage(CommunityMaterial.Icon.cmd_star, 24, 0)
-        finish.setIconicsImage(CommunityMaterial.Icon.cmd_check, 24, 0)
-
         noteContainer.clicks()
                 .autoDispose(this)
                 .subscribe { viewModel.note() }
@@ -152,7 +150,7 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
                     showUnratedTags = !showUnratedTags
 
                     tags.removeAllViews()
-                    viewModel.data.value?.let { bindTags(it) }
+                    viewModel.data.value?.let { bindTags(it.first) }
                 }
 
         spoilerTags.clicks()
@@ -161,32 +159,42 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
                     showSpoilerTags = !showSpoilerTags
 
                     tags.removeAllViews()
-                    viewModel.data.value?.let { bindTags(it) }
+                    viewModel.data.value?.let { bindTags(it.first) }
                 }
 
         updateUnratedButton()
         updateSpoilerButton()
     }
 
-    override fun showData(data: Entry) {
+    override fun showData(data: Pair<Entry, Optional<MediaUserInfo>>) {
         super.showData(data)
 
-        name = data.name
-        category = data.category
+        val (entry, userInfo) = data
 
-        bindRating(data)
-        bindSynonyms(data)
-        bindSeasons(data)
-        bindStatus(data)
-        bindLicense(data)
-        bindAdaption(data)
-        bindGenres(data)
-        bindTags(data)
-        bindFskConstraints(data)
-        bindTranslatorGroups(data)
-        bindIndustries(data)
+        name = entry.name
+        category = entry.category
 
-        description.text = data.description
+        infoTable.removeAllViews()
+        genres.removeAllViews()
+        tags.removeAllViews()
+        fskConstraints.removeAllViews()
+        translatorGroups.removeAllViews()
+        industries.removeAllViews()
+
+        bindRating(entry)
+        bindSynonyms(entry)
+        bindSeasons(entry)
+        bindStatus(entry)
+        bindLicense(entry)
+        bindAdaption(entry)
+        bindGenres(entry)
+        bindTags(entry)
+        bindFskConstraints(entry)
+        bindTranslatorGroups(entry)
+        bindIndustries(entry)
+        bindUserInfo(userInfo)
+
+        description.text = entry.description
     }
 
     private fun bindRating(result: Entry) = if (result.rating > 0) {
@@ -388,6 +396,18 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
             }
 
             layout.addView(badge)
+        }
+    }
+
+    private fun bindUserInfo(userInfo: Optional<MediaUserInfo>) {
+        userInfo.toNullable().let { nullableUserInfo ->
+            val noteColor = if (nullableUserInfo?.isNoted == true) R.color.colorAccent else R.color.icon
+            val favorColor = if (nullableUserInfo?.isTopTen == true) R.color.colorAccent else R.color.icon
+            val finishColor = if (nullableUserInfo?.isFinished == true) R.color.colorAccent else R.color.icon
+
+            note.setIconicsImage(CommunityMaterial.Icon.cmd_clock, 24, 0, noteColor)
+            favor.setIconicsImage(CommunityMaterial.Icon.cmd_star, 24, 0, favorColor)
+            finish.setIconicsImage(CommunityMaterial.Icon.cmd_check, 24, 0, finishColor)
         }
     }
 }
