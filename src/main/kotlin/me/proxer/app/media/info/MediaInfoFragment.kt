@@ -201,7 +201,7 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
         bindIndustries(entry)
         bindUserInfo(userInfo)
 
-        description.text = data.first.description
+        description.text = entry.description
     }
 
     private fun bindRating(result: Entry) = if (result.rating > 0) {
