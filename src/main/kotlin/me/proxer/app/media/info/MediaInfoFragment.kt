@@ -171,18 +171,23 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
     override fun showData(data: Pair<Entry, Optional<MediaUserInfo>>) {
         super.showData(data)
 
-        val (entry, userInfo) = data
+        name = data.first.name
+        category = data.first.category
 
-        name = entry.name
-        category = entry.category
+        removeViews()
+        bind(data.first, data.second)
+    }
 
+    private fun removeViews() {
         infoTable.removeAllViews()
         genres.removeAllViews()
         tags.removeAllViews()
         fskConstraints.removeAllViews()
         translatorGroups.removeAllViews()
         industries.removeAllViews()
+    }
 
+    private fun bind(entry: Entry, userInfo: Optional<MediaUserInfo>) {
         bindRating(entry)
         bindSynonyms(entry)
         bindSeasons(entry)
@@ -196,7 +201,7 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
         bindIndustries(entry)
         bindUserInfo(userInfo)
 
-        description.text = entry.description
+        description.text = data.first.description
     }
 
     private fun bindRating(result: Entry) = if (result.rating > 0) {
@@ -386,22 +391,23 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
         }, onClick = { IndustryActivity.navigateTo(safeActivity, it.id, it.name) })
     }
 
-    private fun <T> bindChips(layout: FlexboxLayout, items: List<T>, mapFunction: (T) -> String = { it.toString() },
-                              onClick: ((T) -> Unit)? = null) {
-        items.map(mapFunction).forEachIndexed { index, it ->
-            val badge = MaterialBadgeTextView(layout.context)
+    private fun <T> bindChips(layout: FlexboxLayout,
+                              items: List<T>,
+                              mapFunction: (T) -> String = { it.toString() },
+                              onClick: ((T) -> Unit)? = null
+    ) = items.map(mapFunction).forEachIndexed { index, it ->
+        val badge = MaterialBadgeTextView(layout.context)
 
-            badge.text = it
-            badge.setTypeface(null, Typeface.BOLD)
-            badge.setTextColor(ContextCompat.getColorStateList(layout.context, android.R.color.white))
-            badge.setBackgroundColor(ContextCompat.getColor(badge.context, R.color.colorAccent))
+        badge.text = it
+        badge.setTypeface(null, Typeface.BOLD)
+        badge.setTextColor(ContextCompat.getColorStateList(layout.context, android.R.color.white))
+        badge.setBackgroundColor(ContextCompat.getColor(badge.context, R.color.colorAccent))
 
-            badge.setOnClickListener {
-                onClick?.invoke(items[index])
-            }
-
-            layout.addView(badge)
+        badge.setOnClickListener {
+            onClick?.invoke(items[index])
         }
+
+        layout.addView(badge)
     }
 
     private fun bindUserInfo(userInfo: Optional<MediaUserInfo>) {
