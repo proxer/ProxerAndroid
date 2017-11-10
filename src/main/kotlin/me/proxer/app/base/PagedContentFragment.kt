@@ -3,9 +3,7 @@ package me.proxer.app.base
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.design.widget.Snackbar
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +18,9 @@ import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.endScrolls
+import me.proxer.app.util.extension.isAtCompleteTop
 import me.proxer.app.util.extension.multilineSnackbar
+import me.proxer.app.util.extension.scrollToTop
 import java.util.concurrent.TimeUnit
 import kotlin.properties.Delegates
 
@@ -144,20 +144,8 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
         adapter.footer = null
     }
 
-    protected open fun isAtTop() = layoutManager.let {
-        when (it) {
-            is StaggeredGridLayoutManager -> it.findFirstCompletelyVisibleItemPositions(null).contains(0)
-            is LinearLayoutManager -> it.findFirstCompletelyVisibleItemPosition() == 0
-            else -> false
-        }
-    }
-
-    protected open fun scrollToTop() = layoutManager.let {
-        when (it) {
-            is StaggeredGridLayoutManager -> it.scrollToPositionWithOffset(0, 0)
-            is LinearLayoutManager -> it.scrollToPositionWithOffset(0, 0)
-        }
-    }
+    protected open fun isAtTop() = layoutManager.isAtCompleteTop()
+    protected open fun scrollToTop() = layoutManager.scrollToTop()
 
     protected open fun updateRecyclerViewPadding() = when (innerAdapter.itemCount <= 0 && adapter.footer != null) {
         true -> recyclerView.setPadding(0, 0, 0, 0)

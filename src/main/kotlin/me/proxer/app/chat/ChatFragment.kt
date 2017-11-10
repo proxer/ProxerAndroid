@@ -33,6 +33,7 @@ import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.clipboardManager
 import me.proxer.app.util.extension.inputMethodManager
+import me.proxer.app.util.extension.isAtTop
 import me.proxer.app.util.extension.unsafeLazy
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.toast
@@ -254,7 +255,7 @@ class ChatFragment : PagedContentFragment<LocalMessage>() {
         }
     }
 
-    override fun isAtTop() = layoutManager.findFirstVisibleItemPosition() == 0
+    override fun isAtTop() = layoutManager.isAtTop()
 
     private fun generateEmojiDrawable(iconicRes: IIcon) = IconicsDrawable(context)
             .icon(iconicRes)

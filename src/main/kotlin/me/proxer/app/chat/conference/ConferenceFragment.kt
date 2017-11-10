@@ -24,6 +24,8 @@ import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.extension.autoDispose
+import me.proxer.app.util.extension.isAtTop
+import me.proxer.app.util.extension.scrollToTop
 import me.proxer.app.util.extension.unsafeLazy
 import org.jetbrains.anko.bundleOf
 import kotlin.properties.Delegates
@@ -49,6 +51,8 @@ class ConferenceFragment : BaseContentFragment<List<LocalConference>>() {
         get() = recyclerView
 
     private val recyclerView: RecyclerView by bindView(R.id.recyclerView)
+
+    private var isFirstData = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -117,16 +121,34 @@ class ConferenceFragment : BaseContentFragment<List<LocalConference>>() {
     override fun showData(data: List<LocalConference>) {
         super.showData(data)
 
+        val wasAtFirstPosition = recyclerView.layoutManager.isAtTop()
+        val wasEmpty = adapter.isEmpty()
+
         adapter.swapDataAndNotifyWithDiffing(data)
 
         if (adapter.isEmpty()) {
             showError(ErrorAction(R.string.error_no_data_conferences, ACTION_MESSAGE_HIDE))
+        } else if (!isFirstData && (wasAtFirstPosition || wasEmpty)) {
+            recyclerView.postDelayed({
+                when {
+                    wasEmpty -> recyclerView.layoutManager.scrollToTop()
+                    else -> recyclerView.smoothScrollToPosition(0)
+                }
+            }, 50)
         }
+
+        isFirstData = false
     }
 
     override fun hideData() {
         super.hideData()
 
         adapter.swapDataAndNotifyWithDiffing(emptyList())
+    }
+
+    override fun showError(action: ErrorAction) {
+        super.showError(action)
+
+        isFirstData = false
     }
 }

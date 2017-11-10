@@ -12,6 +12,9 @@ import android.os.Bundle
 import android.support.customtabs.CustomTabsIntent
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.ViewGroup
 import android.widget.ImageView
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
@@ -110,4 +113,22 @@ fun CustomTabsHelperFragment.openHttpPage(activity: Activity, url: HttpUrl) {
                 }
         false -> activity.startActivity(Intent(Intent.ACTION_VIEW).setData(url.androidUri()))
     }
+}
+
+fun RecyclerView.LayoutManager.isAtCompleteTop() = when (this) {
+    is StaggeredGridLayoutManager -> findFirstCompletelyVisibleItemPositions(null).contains(0)
+    is LinearLayoutManager -> findFirstCompletelyVisibleItemPosition() == 0
+    else -> false
+}
+
+fun RecyclerView.LayoutManager.isAtTop() = when (this) {
+    is StaggeredGridLayoutManager -> findFirstVisibleItemPositions(null).contains(0)
+    is LinearLayoutManager -> findFirstVisibleItemPosition() == 0
+    else -> false
+}
+
+fun RecyclerView.LayoutManager.scrollToTop() = when (this) {
+    is StaggeredGridLayoutManager -> scrollToPositionWithOffset(0, 0)
+    is LinearLayoutManager -> scrollToPositionWithOffset(0, 0)
+    else -> Unit
 }

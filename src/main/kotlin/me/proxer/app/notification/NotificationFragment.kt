@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -21,7 +20,9 @@ import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.extension.ProxerNotification
 import me.proxer.app.util.extension.autoDispose
+import me.proxer.app.util.extension.isAtTop
 import me.proxer.app.util.extension.multilineSnackbar
+import me.proxer.app.util.extension.scrollToTop
 import me.proxer.app.util.extension.unsafeLazy
 import org.jetbrains.anko.bundleOf
 import kotlin.properties.Delegates
@@ -115,7 +116,7 @@ class NotificationFragment : BaseContentFragment<List<ProxerNotification>>() {
     override fun showData(data: List<ProxerNotification>) {
         super.showData(data)
 
-        val wasAtFirstPosition = isAtTop()
+        val wasAtFirstPosition = recyclerView.layoutManager.isAtTop()
         val wasEmpty = adapter.isEmpty()
 
         adapter.swapDataAndNotifyWithDiffing(data)
@@ -126,7 +127,7 @@ class NotificationFragment : BaseContentFragment<List<ProxerNotification>>() {
             } else if (wasAtFirstPosition || wasEmpty) {
                 recyclerView.postDelayed({
                     when {
-                        wasEmpty -> scrollToTop()
+                        wasEmpty -> recyclerView.layoutManager.scrollToTop()
                         else -> recyclerView.smoothScrollToPosition(0)
                     }
                 }, 50)
@@ -138,19 +139,5 @@ class NotificationFragment : BaseContentFragment<List<ProxerNotification>>() {
         adapter.swapDataAndNotifyWithDiffing(emptyList())
 
         super.showError(action)
-    }
-
-    private fun isAtTop() = recyclerView.layoutManager.let {
-        when (it) {
-            is LinearLayoutManager -> it.findFirstCompletelyVisibleItemPosition() == 0
-            else -> false
-        }
-    }
-
-    private fun scrollToTop() = recyclerView.layoutManager.let {
-        when (it) {
-            is StaggeredGridLayoutManager -> it.scrollToPositionWithOffset(0, 0)
-            is LinearLayoutManager -> it.scrollToPositionWithOffset(0, 0)
-        }
     }
 }
