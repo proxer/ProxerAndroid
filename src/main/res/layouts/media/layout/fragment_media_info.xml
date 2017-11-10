@@ -113,7 +113,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="4dp"
-                            android:animateLayoutChanges="true"
                             app:alignItems="flex_start"
                             app:flexWrap="wrap" />
 
@@ -258,7 +257,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
-                                    android:gravity="center_vertical"
+                                    android:gravity="center"
                                     android:text="@string/fragment_media_info_note"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Small" />
                             </LinearLayout>
@@ -284,7 +283,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
-                                    android:gravity="center_vertical"
+                                    android:gravity="center"
                                     android:text="@string/fragment_media_info_favor"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Small" />
                             </LinearLayout>
@@ -310,7 +309,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
-                                    android:gravity="center_vertical"
+                                    android:gravity="center"
                                     android:text="@string/fragment_media_info_finish"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Small" />
                             </LinearLayout>

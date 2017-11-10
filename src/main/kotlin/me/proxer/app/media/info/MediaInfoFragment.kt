@@ -1,6 +1,7 @@
 package me.proxer.app.media.info
 
 import android.arch.lifecycle.Observer
+import android.graphics.Typeface
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
@@ -16,6 +17,7 @@ import android.widget.TextView
 import com.gojuno.koptional.Optional
 import com.google.android.flexbox.FlexboxLayout
 import com.jakewharton.rxbinding2.view.clicks
+import com.matrixxun.starry.badgetextview.MaterialBadgeTextView
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import kotterknife.bindView
 import me.proxer.app.R
@@ -387,10 +389,13 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
     private fun <T> bindChips(layout: FlexboxLayout, items: List<T>, mapFunction: (T) -> String = { it.toString() },
                               onClick: ((T) -> Unit)? = null) {
         items.map(mapFunction).forEachIndexed { index, it ->
-            val badge = LayoutInflater.from(layout.context).inflate(R.layout.view_badge, layout, false) as TextView
+            val badge = MaterialBadgeTextView(layout.context)
 
             badge.text = it
+            badge.setTypeface(null, Typeface.BOLD)
+            badge.setTextColor(ContextCompat.getColorStateList(layout.context, android.R.color.white))
             badge.setBackgroundColor(ContextCompat.getColor(badge.context, R.color.colorAccent))
+
             badge.setOnClickListener {
                 onClick?.invoke(items[index])
             }
