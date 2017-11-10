@@ -35,6 +35,7 @@
                     android:id="@+id/animeContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:focusableInTouchMode="true"
                     android:orientation="vertical"
                     android:paddingTop="@dimen/screen_vertical_margin">
 
@@ -58,6 +59,7 @@
                     android:id="@+id/mangaContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:focusableInTouchMode="true"
                     android:orientation="vertical"
                     android:paddingTop="@dimen/screen_vertical_margin">
 
