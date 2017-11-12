@@ -208,7 +208,7 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
         ratingContainer.visibility = View.VISIBLE
         rating.rating = result.rating / 2.0f
         ratingAmount.visibility = View.VISIBLE
-        ratingAmount.text = getString(R.string.fragment_media_info_rate_count, result.ratingAmount)
+        ratingAmount.text = getString(R.string.fragment_media_info_rate_count, result.rating, result.ratingAmount)
     } else {
         ratingContainer.visibility = View.GONE
         ratingAmount.visibility = View.GONE
