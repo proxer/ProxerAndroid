@@ -18,6 +18,7 @@ ext {
             supportGridLayout                : "com.android.support:gridlayout-v7:$supportLibraryVersion",
             supportDesign                    : "com.android.support:design:$supportLibraryVersion",
             supportAnimatedVectorDrawable    : "com.android.support:animated-vector-drawable:$supportLibraryVersion",
+            supportExifinterface             : "com.android.support:exifinterface:$supportLibraryVersion",
             supportCustomtabs                : "com.android.support:customtabs:$supportLibraryVersion",
             supportPreference                : "com.android.support:preference-v7:$supportLibraryVersion",
             supportPreferenceFix             : "net.xpece.android:support-preference:$supportPreferenceVersion",
