@@ -35,6 +35,7 @@ import me.proxer.app.settings.SettingsFragment
 import me.proxer.app.ucp.UcpActivity
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.shortcutManager
 import me.proxer.app.util.extension.subscribeAndLogErrors
@@ -200,7 +201,9 @@ class MainActivity : BaseActivity() {
         DrawerItem.MANGA -> setFragment(MediaListFragment.newInstance(Category.MANGA), R.string.section_manga)
         DrawerItem.LOCAL_MANGA -> setFragment(LocalMangaFragment.newInstance(), R.string.section_local_manga)
         DrawerItem.INFO -> setFragment(AboutFragment.newInstance(), R.string.section_info)
-        DrawerItem.DONATE -> showPage(ProxerUrls.donateWeb(Device.DEFAULT))
+        DrawerItem.DONATE -> {
+            startActivity(Intent(Intent.ACTION_VIEW, ProxerUrls.donateWeb(Device.DEFAULT).androidUri()))
+        }
         DrawerItem.SETTINGS -> setFragment(SettingsFragment.newInstance(), R.string.section_settings)
     }
 
