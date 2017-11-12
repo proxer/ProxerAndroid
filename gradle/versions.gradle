@@ -22,7 +22,7 @@ ext {
     detektPluginVersion = '1.0.0.RC5-3'
     gradleVersionsPluginVersion = '0.17.0'
     androidCommandPluginVersion = '1.7.1'
-    ktlintVersion = '0.11.1'
+    ktlintVersion = '0.12.0'
 
     // Frameworks and code only libraries
     ankoVersion = '0.10.2'
@@ -49,7 +49,7 @@ ext {
     communityMaterialTypefaceVersion = '2.0.46.1'
     crossfaderVersion = '1.5.1'
     materialAboutVersion = '2.2.3'
-    subsamplingScaleImageViewVersion = '22fb5e3b36'
+    subsamplingScaleImageViewVersion = '16ab48121d'
     tabLayoutHelperVersion = '0.9.0'
     materialDialogsVersion = '0.9.5.0'
     flexboxVersion = '0.3.1'
