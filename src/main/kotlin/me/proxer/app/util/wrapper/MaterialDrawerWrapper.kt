@@ -19,6 +19,7 @@ import com.mikepenz.materialdrawer.model.ProfileSettingDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IProfile
 import io.reactivex.subjects.PublishSubject
+import me.proxer.app.BuildConfig
 import me.proxer.app.R
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.data.StorageHelper
@@ -219,19 +220,23 @@ class MaterialDrawerWrapper(context: Activity, toolbar: Toolbar, savedInstanceSt
                     .withSelectedIconColorRes(R.color.colorAccent)
                     .withIdentifier(DrawerItem.INFO.id),
             PrimaryDrawerItem()
-                    .withName(R.string.section_donate)
-                    .withIcon(CommunityMaterial.Icon.cmd_gift)
-                    .withSelectedTextColorRes(R.color.colorAccent)
-                    .withSelectedIconColorRes(R.color.colorAccent)
-                    .withSelectable(false)
-                    .withIdentifier(DrawerItem.DONATE.id),
-            PrimaryDrawerItem()
                     .withName(R.string.section_settings)
                     .withIcon(CommunityMaterial.Icon.cmd_settings)
                     .withSelectedTextColorRes(R.color.colorAccent)
                     .withSelectedIconColorRes(R.color.colorAccent)
                     .withIdentifier(DrawerItem.SETTINGS.id)
-    )
+    ).apply {
+        @Suppress("ConstantConditionIf")
+        if (!BuildConfig.STORE) {
+            add(PrimaryDrawerItem()
+                    .withName(R.string.section_donate)
+                    .withIcon(CommunityMaterial.Icon.cmd_gift)
+                    .withSelectedTextColorRes(R.color.colorAccent)
+                    .withSelectedIconColorRes(R.color.colorAccent)
+                    .withSelectable(false)
+                    .withIdentifier(DrawerItem.DONATE.id))
+        }
+    }
 
     private fun onDrawerItemClick(item: IDrawerItem<*, *>) = DrawerItem.fromOrDefault(item.identifier).let {
         if (it in getStickyItemIds()) {
