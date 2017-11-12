@@ -281,11 +281,16 @@
     <string name="fragment_media_info_note">Vermerken</string>
     <string name="fragment_media_info_favor">Favorisieren</string>
     <string name="fragment_media_info_finish">Abgeschlossen</string>
-    <string name="fragment_media_info_rate_count">%1$.2f (%2$d Bewertungen)</string>
     <string name="fragment_media_info_tags_spoiler_hide">Spoiler Tags verstecken</string>
     <string name="fragment_media_info_tags_spoiler_show">Spoiler Tags anzeigen</string>
     <string name="fragment_media_info_tags_unrated_hide">Unbewertete Tags verstecken</string>
     <string name="fragment_media_info_tags_unrated_show">Unbewertete Tags anzeigen</string>
+
+    <plurals name="fragment_media_info_rate_count">
+        <item quantity="one">%1$.2f (Eine Bewertung)</item>
+        <item quantity="other">%1$.2f (%2$d Bewertungen)</item>
+    </plurals>
+
     <string name="fragment_set_user_info_success">Eintrag wurde aktualisiert</string>
 
     <string name="fragment_topten_anime">Anime</string>
