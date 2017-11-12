@@ -201,24 +201,28 @@ class MainActivity : BaseActivity() {
         DrawerItem.MANGA -> setFragment(MediaListFragment.newInstance(Category.MANGA), R.string.section_manga)
         DrawerItem.LOCAL_MANGA -> setFragment(LocalMangaFragment.newInstance(), R.string.section_local_manga)
         DrawerItem.INFO -> setFragment(AboutFragment.newInstance(), R.string.section_info)
-        DrawerItem.DONATE -> {
-            startActivity(Intent(Intent.ACTION_VIEW, ProxerUrls.donateWeb(Device.DEFAULT).androidUri()))
-        }
+        DrawerItem.DONATE -> showDonationPage()
         DrawerItem.SETTINGS -> setFragment(SettingsFragment.newInstance(), R.string.section_settings)
     }
 
     private fun handleAccountItemClick(item: AccountItem) = when (item) {
         AccountItem.GUEST, AccountItem.LOGIN -> LoginDialog.show(this)
         AccountItem.LOGOUT -> LogoutDialog.show(this)
-        AccountItem.USER -> StorageHelper.user?.let {
-            drawer.profileImageView.let { view ->
-                ViewCompat.setTransitionName(view, "profile_image")
-
-                ProfileActivity.navigateTo(this, it.id, it.name, it.image,
-                        if (view.drawable != null) view else null)
-            }
-        }
+        AccountItem.USER -> showProfilePage()
         AccountItem.NOTIFICATIONS -> NotificationActivity.navigateTo(this)
         AccountItem.UCP -> UcpActivity.navigateTo(this)
+    }
+
+    private fun showDonationPage() {
+        startActivity(Intent(Intent.ACTION_VIEW, ProxerUrls.donateWeb(Device.DEFAULT).androidUri()))
+    }
+
+    private fun showProfilePage() = StorageHelper.user?.let {
+        drawer.profileImageView.let { view ->
+            ViewCompat.setTransitionName(view, "profile_image")
+
+            ProfileActivity.navigateTo(this, it.id, it.name, it.image,
+                    if (view.drawable != null) view else null)
+        }
     }
 }
