@@ -19,10 +19,10 @@ ext {
     kotlinVersion = '1.2.0-rc-39'
 
     // Utility plugins
-    detektPluginVersion = '1.0.0.RC5-3'
+    detektPluginVersion = '1.0.0.RC5-4'
     gradleVersionsPluginVersion = '0.17.0'
     androidCommandPluginVersion = '1.7.1'
-    ktlintVersion = '0.12.0'
+    ktlintVersion = '0.12.1'
 
     // Frameworks and code only libraries
     ankoVersion = '0.10.2'
