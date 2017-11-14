@@ -236,7 +236,6 @@ fun FskConstraint.toAppDrawable(context: Context) = AppCompatResources.getDrawab
     FskConstraint.VIOLENCE -> R.drawable.ic_fsk_violence
 }) ?: throw IllegalStateException("Could not resolve Drawable for fsk constraint: $this")
 
-
 inline val Page.decodedName: String
     get() = try {
         URLDecoder.decode(name, "UTF-8")
