@@ -94,14 +94,10 @@ class ExpandableSelectionView @JvmOverloads constructor(
         resetButton.clicks()
                 .autoDispose(context as LifecycleOwner)
                 .subscribeAndLogErrors {
-                    itemContainer.childrenSequence().forEach {
-                        if (it is CheckBox) it.isChecked = false
+                    selection = mutableListOf()
 
-                        selection = mutableListOf()
-
-                        handleSelection()
-                        notifySelectionChangedListener()
-                    }
+                    handleSelection()
+                    notifySelectionChangedListener()
                 }
     }
 
@@ -153,7 +149,7 @@ class ExpandableSelectionView @JvmOverloads constructor(
     }
 
     private fun handleSelection() {
-        childrenSequence().forEach {
+        itemContainer.childrenSequence().forEach {
             if (it is CheckBox) it.isChecked = selection.contains(it.text.toString())
         }
     }
