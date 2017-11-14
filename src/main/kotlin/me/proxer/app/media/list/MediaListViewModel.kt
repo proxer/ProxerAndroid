@@ -5,6 +5,7 @@ import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.base.PagedContentViewModel
 import me.proxer.library.api.PagingLimitEndpoint
 import me.proxer.library.entity.list.MediaListEntry
+import me.proxer.library.enums.FskConstraint
 import me.proxer.library.enums.Genre
 import me.proxer.library.enums.Language
 import me.proxer.library.enums.MediaSearchSortCriteria
@@ -22,7 +23,8 @@ class MediaListViewModel(
         var searchQuery: String?,
         var language: Language?,
         var genres: EnumSet<Genre>,
-        var excludedGenres: EnumSet<Genre>
+        var excludedGenres: EnumSet<Genre>,
+        var fskConstraints: EnumSet<FskConstraint>
 ) : PagedContentViewModel<MediaListEntry>() {
 
     override val itemsOnPage = 30
@@ -40,6 +42,7 @@ class MediaListViewModel(
                 .language(language)
                 .genres(genres)
                 .excludedGenres(excludedGenres)
+                .fskConstraints(fskConstraints)
                 .type(type)
 
     var sortCriteria by Delegates.observable(sortCriteria, { _, old, new ->

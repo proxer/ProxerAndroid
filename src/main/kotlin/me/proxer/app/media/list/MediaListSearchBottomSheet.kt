@@ -10,11 +10,14 @@ import android.view.ViewGroup
 import com.jakewharton.rxbinding2.view.clicks
 import me.proxer.app.R
 import me.proxer.app.util.DeviceUtils
+import me.proxer.app.util.extension.ProxerLibExtensions
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.enableLayoutAnimationsSafely
 import me.proxer.app.util.extension.enumSetOf
 import me.proxer.app.util.extension.subscribeAndLogErrors
+import me.proxer.app.util.extension.toAppString
+import me.proxer.library.enums.FskConstraint
 import me.proxer.library.enums.Genre
 import me.proxer.library.enums.Language
 import me.proxer.library.util.ProxerUtils
@@ -93,7 +96,16 @@ class MediaListSearchBottomSheet private constructor(
                     })
                 }
 
+        fragment.fskSelector.selectionChangeSubject
+                .autoDispose(fragment)
+                .subscribeAndLogErrors { selections ->
+                    fragment.fskConstraints = enumSetOf(selections.map {
+                        ProxerLibExtensions.fskConstraintFromAppString(fragment.safeContext, it)
+                    })
+                }
+
         val genreItems = Genre.values().map { getSafeApiEnum(it) }
+        val fskItems = FskConstraint.values().map { it.toAppString(fragment.safeContext) }
         val languageItems = listOf(
                 fragment.getString(R.string.fragment_media_list_all_languages),
                 fragment.getString(R.string.language_german),
@@ -103,6 +115,7 @@ class MediaListSearchBottomSheet private constructor(
         fragment.languageSelector.items = languageItems
         fragment.genreSelector.items = genreItems
         fragment.excludedGenreSelector.items = genreItems
+        fragment.fskSelector.items = fskItems
     }
 
     private fun measureTitle(): Int {

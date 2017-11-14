@@ -31,6 +31,7 @@ import me.proxer.app.util.extension.toCategory
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.list.MediaListEntry
 import me.proxer.library.enums.Category
+import me.proxer.library.enums.FskConstraint
 import me.proxer.library.enums.Genre
 import me.proxer.library.enums.Language
 import me.proxer.library.enums.MediaSearchSortCriteria
@@ -52,6 +53,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
         private const val LANGUAGE_ARGUMENT = "language"
         private const val GENRES_ARGUMENT = "genres"
         private const val EXCLUDED_GENRES_ARGUMENT = "excluded_genres"
+        private const val FSK_CONSTRAINTS_ARGUMENT = "fsk_constraints"
 
         fun newInstance(category: Category) = MediaListFragment().apply {
             arguments = bundleOf(CATEGORY_ARGUMENT to category)
@@ -63,7 +65,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
 
     override val viewModel by unsafeLazy {
         MediaListViewModelProvider.get(this, sortCriteria, type, searchQuery, language,
-                genres, excludedGenres)
+                genres, excludedGenres, fskConstraints)
     }
 
     override val layoutManager by unsafeLazy {
@@ -128,6 +130,14 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
             viewModel.excludedGenres = value
         }
 
+    internal var fskConstraints: EnumSet<FskConstraint>
+        get() = safeArguments.getEnumSet(FSK_CONSTRAINTS_ARGUMENT, FskConstraint::class.java)
+        set(value) {
+            safeArguments.putEnumSet(FSK_CONSTRAINTS_ARGUMENT, value)
+
+            viewModel.fskConstraints = value
+        }
+
     private var searchBottomSheetManager by Delegates.notNull<MediaListSearchBottomSheet>()
 
     private val toolbar by unsafeLazy { safeActivity.findViewById<Toolbar>(R.id.toolbar) }
@@ -138,6 +148,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
     internal val languageSelector by bindView<ExpandableSelectionView>(R.id.languageSelector)
     internal val genreSelector by bindView<ExpandableSelectionView>(R.id.genreSelector)
     internal val excludedGenreSelector by bindView<ExpandableSelectionView>(R.id.excludedGenreSelector)
+    internal val fskSelector by bindView<ExpandableSelectionView>(R.id.fskSelector)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

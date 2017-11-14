@@ -80,6 +80,12 @@
                     android:layout_height="wrap_content"
                     app:titleText="@string/fragment_media_list_excluded_genres" />
 
+                <me.proxer.app.ui.view.ExpandableSelectionView
+                    android:id="@+id/fskSelector"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:titleText="Enthaltene FSK" />
+
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
     </LinearLayout>

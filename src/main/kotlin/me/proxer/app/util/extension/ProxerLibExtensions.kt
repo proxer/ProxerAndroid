@@ -5,6 +5,7 @@ import android.support.v7.content.res.AppCompatResources
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
+import me.proxer.app.R.id.description
 import me.proxer.app.anime.AnimeStream
 import me.proxer.app.chat.LocalConference
 import me.proxer.app.chat.LocalMessage
@@ -32,6 +33,22 @@ import me.proxer.library.enums.Season
 import me.proxer.library.enums.SynonymType
 import me.proxer.library.enums.UserMediaProgress
 import java.net.URLDecoder
+
+object ProxerLibExtensions {
+
+    fun fskConstraintFromAppString(context: Context, string: String) = when (string) {
+        context.getString(R.string.fsk_0) -> FskConstraint.FSK_0
+        context.getString(R.string.fsk_6) -> FskConstraint.FSK_6
+        context.getString(R.string.fsk_12) -> FskConstraint.FSK_12
+        context.getString(R.string.fsk_16) -> FskConstraint.FSK_16
+        context.getString(R.string.fsk_18) -> FskConstraint.FSK_18
+        context.getString(R.string.fsk_bad_language) -> FskConstraint.BAD_LANGUAGE
+        context.getString(R.string.fsk_fear) -> FskConstraint.FEAR
+        context.getString(R.string.fsk_violence) -> FskConstraint.VIOLENCE
+        context.getString(R.string.fsk_sex) -> FskConstraint.SEX
+        else -> throw IllegalStateException("Could not find fsk constraint for description: $description")
+    }
+}
 
 fun Medium.toAppString(context: Context): String = context.getString(when (this) {
     Medium.ANIMESERIES -> R.string.medium_anime_series
@@ -183,6 +200,18 @@ fun License.toAppString(context: Context): String = context.getString(when (this
     License.UNKNOWN -> R.string.license_unknown
 })
 
+fun FskConstraint.toAppString(context: Context): String = context.getString(when (this) {
+    FskConstraint.FSK_0 -> R.string.fsk_0
+    FskConstraint.FSK_6 -> R.string.fsk_6
+    FskConstraint.FSK_12 -> R.string.fsk_12
+    FskConstraint.FSK_16 -> R.string.fsk_16
+    FskConstraint.FSK_18 -> R.string.fsk_18
+    FskConstraint.BAD_LANGUAGE -> R.string.fsk_bad_language
+    FskConstraint.FEAR -> R.string.fsk_fear
+    FskConstraint.VIOLENCE -> R.string.fsk_violence
+    FskConstraint.SEX -> R.string.fsk_sex
+})
+
 fun FskConstraint.toAppStringDescription(context: Context): String = context.getString(when (this) {
     FskConstraint.FSK_0 -> R.string.fsk_0_description
     FskConstraint.FSK_6 -> R.string.fsk_6_description
@@ -206,6 +235,7 @@ fun FskConstraint.toAppDrawable(context: Context) = AppCompatResources.getDrawab
     FskConstraint.SEX -> R.drawable.ic_fsk_sex
     FskConstraint.VIOLENCE -> R.drawable.ic_fsk_violence
 }) ?: throw IllegalStateException("Could not resolve Drawable for fsk constraint: $this")
+
 
 inline val Page.decodedName: String
     get() = try {

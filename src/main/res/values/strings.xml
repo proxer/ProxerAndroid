@@ -171,6 +171,16 @@
     <string name="user_media_progress_will_read">Wird noch Gelesen</string>
     <string name="user_media_progress_cancelled">Abgebrochen (%d)</string>
 
+    <string name="fsk_0">PSK 0</string>
+    <string name="fsk_6">PSK 6</string>
+    <string name="fsk_12">PSK 12</string>
+    <string name="fsk_16">PSK 16</string>
+    <string name="fsk_18">PSK 18</string>
+    <string name="fsk_bad_language">Schimpfwörter</string>
+    <string name="fsk_fear">Furcht</string>
+    <string name="fsk_violence">Gewalt</string>
+    <string name="fsk_sex">Sex</string>
+
     <string name="fsk_0_description">Dieser Anime ist für alle geeignet.</string>
     <string name="fsk_12_description">Dieser Anime ist nicht für Personen unter 12 Jahren geeignet.</string>
     <string name="fsk_16_description">Dieser Anime ist nicht für Personen unter 16 Jahren geeignet.</string>
