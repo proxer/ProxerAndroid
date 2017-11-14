@@ -228,7 +228,7 @@ class MaterialDrawerWrapper(context: Activity, toolbar: Toolbar, savedInstanceSt
     ).apply {
         @Suppress("ConstantConditionIf")
         if (!BuildConfig.STORE) {
-            add(PrimaryDrawerItem()
+            add(1, PrimaryDrawerItem()
                     .withName(R.string.section_donate)
                     .withIcon(CommunityMaterial.Icon.cmd_gift)
                     .withSelectedTextColorRes(R.color.colorAccent)
