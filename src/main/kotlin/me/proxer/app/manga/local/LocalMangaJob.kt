@@ -10,6 +10,7 @@ import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.MainApplication.Companion.mangaDao
 import me.proxer.app.MainApplication.Companion.mangaDatabase
+import me.proxer.app.manga.MangaLocks
 import me.proxer.app.manga.MangaPageSingle
 import me.proxer.app.manga.MangaPageSingle.Input
 import me.proxer.app.util.ErrorUtils
@@ -23,7 +24,9 @@ import me.proxer.app.util.extension.toLocalPage
 import me.proxer.library.enums.Language
 import me.proxer.library.util.ProxerUtils
 import org.threeten.bp.LocalDateTime
+import java.io.File
 import java.util.concurrent.CancellationException
+import kotlin.concurrent.write
 
 /**
  * @author Ruben Gees
@@ -180,6 +183,14 @@ class LocalMangaJob : Job() {
 
             batchProgress += 100F / pages.size
             LocalMangaNotifications.showOrUpdate(context, maxBatchProgress, batchProgress)
+        }
+
+        MangaLocks.cacheLock.write {
+            val cacheDirectory = File("${context.cacheDir}/manga/$entryId/${chapter.id}")
+
+            if (cacheDirectory.exists()) {
+                cacheDirectory.deleteRecursively()
+            }
         }
 
         mangaDatabase.runInTransaction {
