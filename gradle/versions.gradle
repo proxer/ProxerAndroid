@@ -73,7 +73,7 @@ ext {
     linkBuilderVersion = '1.6.1'
     easyHeaderFooterAdapterVersion = '3.0.0'
     kOptionalVersion = '1.2.0'
-    kotterknifeVersion = '1.0'
+    kotterknifeVersion = '1.1'
     jsr305Version = '3.0.2'
     javaxExtrasVersion = '0.1.0'
     alfredVersion = '3ea7529bd2'
