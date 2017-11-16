@@ -11,7 +11,6 @@ import android.support.design.widget.TabLayout
 import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewCompat
 import android.support.v4.view.ViewPager
-import android.support.v7.widget.Toolbar
 import android.transition.Transition
 import android.view.MenuItem
 import android.widget.ImageView
@@ -30,12 +29,12 @@ import okhttp3.HttpUrl
 /**
  * @author Ruben Gees
  */
-abstract class ImageTabsActivity : BaseActivity() {
+abstract class ImageTabsActivity : DrawerActivity() {
 
     abstract val headerImageUrl: HttpUrl?
     abstract val sectionsPagerAdapter: PagerAdapter
 
-    protected open val contentView
+    override val contentView
         get() = R.layout.activity_image_tabs
 
     protected open val itemToDisplay
@@ -43,7 +42,6 @@ abstract class ImageTabsActivity : BaseActivity() {
 
     private var isHeaderImageVisible = true
 
-    protected open val toolbar: Toolbar by bindView(R.id.toolbar)
     protected open val appbar: AppBarLayout by bindView(R.id.appbar)
     protected open val collapsingToolbar: CollapsingToolbarLayout by bindView(R.id.collapsingToolbar)
     protected open val viewPager: ViewPager by bindView(R.id.viewPager)
@@ -53,8 +51,6 @@ abstract class ImageTabsActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(contentView)
-        setSupportActionBar(toolbar)
         supportPostponeEnterTransition()
 
         setupToolbar()

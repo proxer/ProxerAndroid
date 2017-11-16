@@ -30,7 +30,12 @@ import org.jetbrains.anko.dip
 /**
  * @author Ruben Gees
  */
-class MaterialDrawerWrapper(context: Activity, toolbar: Toolbar, savedInstanceState: Bundle?) {
+class MaterialDrawerWrapper(
+        context: Activity,
+        toolbar: Toolbar,
+        savedInstanceState: Bundle?,
+        private val isRoot: Boolean
+) {
 
     val itemClickSubject: PublishSubject<DrawerItem> = PublishSubject.create()
     val accountClickSubject: PublishSubject<AccountItem> = PublishSubject.create()
@@ -64,20 +69,18 @@ class MaterialDrawerWrapper(context: Activity, toolbar: Toolbar, savedInstanceSt
         }
     }
 
-    fun onBackPressed(): Boolean {
-        return when {
-            crossfader?.isCrossFaded() == true -> {
-                crossfader.crossFade()
+    fun onBackPressed() = when {
+        crossfader?.isCrossFaded() == true -> {
+            crossfader.crossFade()
 
-                true
-            }
-            drawer.isDrawerOpen -> {
-                drawer.closeDrawer()
-
-                true
-            }
-            else -> false
+            true
         }
+        drawer.isDrawerOpen -> {
+            drawer.closeDrawer()
+
+            true
+        }
+        else -> false
     }
 
     fun saveInstanceState(outState: Bundle) {
@@ -118,7 +121,9 @@ class MaterialDrawerWrapper(context: Activity, toolbar: Toolbar, savedInstanceSt
             .withGenerateMiniDrawer(DeviceUtils.isTablet(context))
             .withSavedInstance(savedInstanceState)
             .withOnDrawerItemClickListener { _, _, item -> onDrawerItemClick(item) }
+            .withOnDrawerNavigationListener { if (!isRoot) context.onBackPressed(); !isRoot }
             .let { if (DeviceUtils.isTablet(context)) it.buildView() else it.build() }
+            .apply { actionBarDrawerToggle.isDrawerIndicatorEnabled = isRoot }
 
     private fun buildMiniDrawer(drawer: Drawer) = drawer.miniDrawer.apply {
         withIncludeSecondaryDrawerItems(true)
@@ -179,35 +184,41 @@ class MaterialDrawerWrapper(context: Activity, toolbar: Toolbar, savedInstanceSt
                     .withIcon(CommunityMaterial.Icon.cmd_newspaper)
                     .withSelectedTextColorRes(R.color.colorAccent)
                     .withSelectedIconColorRes(R.color.colorAccent)
+                    .withSelectable(isRoot)
                     .withIdentifier(DrawerItem.NEWS.id),
             PrimaryDrawerItem()
                     .withName(R.string.section_chat)
                     .withIcon(CommunityMaterial.Icon.cmd_message_text)
                     .withSelectedTextColorRes(R.color.colorAccent)
+                    .withSelectable(isRoot)
                     .withSelectedIconColorRes(R.color.colorAccent)
                     .withIdentifier(DrawerItem.CHAT.id),
             PrimaryDrawerItem()
                     .withName(R.string.section_bookmarks)
                     .withIcon(CommunityMaterial.Icon.cmd_bookmark)
                     .withSelectedTextColorRes(R.color.colorAccent)
+                    .withSelectable(isRoot)
                     .withSelectedIconColorRes(R.color.colorAccent)
                     .withIdentifier(DrawerItem.BOOKMARKS.id),
             PrimaryDrawerItem()
                     .withName(R.string.section_anime)
                     .withIcon(CommunityMaterial.Icon.cmd_television)
                     .withSelectedTextColorRes(R.color.colorAccent)
+                    .withSelectable(isRoot)
                     .withSelectedIconColorRes(R.color.colorAccent)
                     .withIdentifier(DrawerItem.ANIME.id),
             PrimaryDrawerItem()
                     .withName(R.string.section_manga)
                     .withIcon(CommunityMaterial.Icon.cmd_book_open_page_variant)
                     .withSelectedTextColorRes(R.color.colorAccent)
+                    .withSelectable(isRoot)
                     .withSelectedIconColorRes(R.color.colorAccent)
                     .withIdentifier(DrawerItem.MANGA.id),
             PrimaryDrawerItem()
                     .withName(R.string.section_local_manga)
                     .withIcon(CommunityMaterial.Icon.cmd_cloud_download)
                     .withSelectedTextColorRes(R.color.colorAccent)
+                    .withSelectable(isRoot)
                     .withSelectedIconColorRes(R.color.colorAccent)
                     .withIdentifier(DrawerItem.LOCAL_MANGA.id)
     )
@@ -217,12 +228,14 @@ class MaterialDrawerWrapper(context: Activity, toolbar: Toolbar, savedInstanceSt
                     .withName(R.string.section_info)
                     .withIcon(CommunityMaterial.Icon.cmd_information_outline)
                     .withSelectedTextColorRes(R.color.colorAccent)
+                    .withSelectable(isRoot)
                     .withSelectedIconColorRes(R.color.colorAccent)
                     .withIdentifier(DrawerItem.INFO.id),
             PrimaryDrawerItem()
                     .withName(R.string.section_settings)
                     .withIcon(CommunityMaterial.Icon.cmd_settings)
                     .withSelectedTextColorRes(R.color.colorAccent)
+                    .withSelectable(isRoot)
                     .withSelectedIconColorRes(R.color.colorAccent)
                     .withIdentifier(DrawerItem.SETTINGS.id)
     ).apply {
