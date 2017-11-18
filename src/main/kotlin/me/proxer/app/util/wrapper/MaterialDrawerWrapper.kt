@@ -129,7 +129,11 @@ class MaterialDrawerWrapper(
             .withGenerateMiniDrawer(DeviceUtils.isTablet(context))
             .withSavedInstance(savedInstanceState)
             .withOnDrawerItemClickListener { _, _, item -> onDrawerItemClick(item) }
-            .withOnDrawerNavigationListener { if (!isRoot) context.onBackPressed(); !isRoot }
+            .withOnDrawerNavigationListener {
+                if (!isRoot) context.onBackPressed()
+
+                !isRoot
+            }
             .let { if (DeviceUtils.isTablet(context)) it.buildView() else it.build() }
             .apply { actionBarDrawerToggle?.isDrawerIndicatorEnabled = isRoot }
 

@@ -29,6 +29,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
+@Suppress("UnnecessaryAbstractClass")
 abstract class DrawerActivity : BaseActivity() {
 
     protected open val contentView
@@ -58,7 +59,9 @@ abstract class DrawerActivity : BaseActivity() {
                     .subscribe { handleAccountItemClick(it) }
         }
 
-        Observable.merge(MainApplication.bus.register(LoginEvent::class.java), MainApplication.bus.register(LogoutEvent::class.java))
+        Observable.merge(
+                MainApplication.bus.register(LoginEvent::class.java),
+                MainApplication.bus.register(LogoutEvent::class.java))
                 .observeOn(AndroidSchedulers.mainThread())
                 .autoDispose(this)
                 .subscribe { drawer.refreshHeader() }
