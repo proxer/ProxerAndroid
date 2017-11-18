@@ -6,12 +6,11 @@ import android.support.design.widget.TabLayout
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.ViewPager
-import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import com.h6ah4i.android.tablayouthelper.TabLayoutHelper
 import kotterknife.bindView
 import me.proxer.app.R
-import me.proxer.app.base.BaseActivity
+import me.proxer.app.base.DrawerActivity
 import me.proxer.app.ucp.history.HistoryFragment
 import me.proxer.app.ucp.overview.UcpOverviewFragment
 import me.proxer.app.ucp.topten.UcpTopTenFragment
@@ -20,7 +19,7 @@ import org.jetbrains.anko.startActivity
 /**
  * @author Ruben Gees
  */
-class UcpActivity : BaseActivity() {
+class UcpActivity : DrawerActivity() {
 
     companion object {
         fun navigateTo(context: Activity) = context.startActivity<UcpActivity>()
@@ -28,15 +27,11 @@ class UcpActivity : BaseActivity() {
 
     private var sectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
 
-    private val toolbar: Toolbar by bindView(R.id.toolbar)
     private val viewPager: ViewPager by bindView(R.id.viewPager)
     private val tabs: TabLayout by bindView(R.id.tabs)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        setContentView(R.layout.activity_ucp)
-        setSupportActionBar(toolbar)
 
         setupToolbar()
 

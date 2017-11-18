@@ -2,18 +2,16 @@ package me.proxer.app.chat.conference.info
 
 import android.app.Activity
 import android.os.Bundle
-import android.support.v7.widget.Toolbar
 import android.view.MenuItem
-import kotterknife.bindView
 import me.proxer.app.R
-import me.proxer.app.base.BaseActivity
+import me.proxer.app.base.DrawerActivity
 import me.proxer.app.chat.LocalConference
 import org.jetbrains.anko.startActivity
 
 /**
  * @author Ruben Gees
  */
-class ConferenceInfoActivity : BaseActivity() {
+class ConferenceInfoActivity : DrawerActivity() {
 
     companion object {
         private const val CONFERENCE_EXTRA = "conference"
@@ -26,13 +24,8 @@ class ConferenceInfoActivity : BaseActivity() {
     val conference: LocalConference
         get() = intent.getParcelableExtra(CONFERENCE_EXTRA)
 
-    private val toolbar: Toolbar by bindView(R.id.toolbar)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        setContentView(R.layout.activity_default)
-        setSupportActionBar(toolbar)
 
         setupToolbar()
 

@@ -37,7 +37,7 @@ abstract class DrawerActivity : BaseActivity() {
     protected var drawer by Delegates.notNull<MaterialDrawerWrapper>()
         private set
 
-    protected open val isRoot = false
+    protected open val isRootActivity = false
 
     protected val root: ViewGroup by bindView(R.id.root)
     protected val toolbar: Toolbar by bindView(R.id.toolbar)
@@ -48,7 +48,7 @@ abstract class DrawerActivity : BaseActivity() {
         setContentView(contentView)
         setSupportActionBar(toolbar)
 
-        drawer = MaterialDrawerWrapper(this, toolbar, savedInstanceState, false).also {
+        drawer = MaterialDrawerWrapper(this, toolbar, savedInstanceState, isRootActivity).also {
             it.itemClickSubject
                     .autoDispose(this)
                     .subscribe { handleDrawerItemClick(it) }

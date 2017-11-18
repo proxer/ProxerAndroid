@@ -67,6 +67,10 @@ class MaterialDrawerWrapper(
             miniDrawer != null -> buildCrossfader(context, drawer, miniDrawer, savedInstanceState)
             else -> null
         }
+
+        if (!isRoot) {
+            drawer.deselect()
+        }
     }
 
     fun onBackPressed() = when {
@@ -90,8 +94,12 @@ class MaterialDrawerWrapper(
     }
 
     fun select(item: DrawerItem) {
-        drawer.setSelection(item.id)
-        miniDrawer?.setSelection(item.id)
+        if (item in arrayOf(DrawerItem.INFO, DrawerItem.SETTINGS)) {
+            drawer.setStickyFooterSelection(item.id, true)
+        } else {
+            drawer.setSelection(item.id)
+            miniDrawer?.setSelection(item.id)
+        }
     }
 
     fun refreshHeader() {
@@ -123,7 +131,7 @@ class MaterialDrawerWrapper(
             .withOnDrawerItemClickListener { _, _, item -> onDrawerItemClick(item) }
             .withOnDrawerNavigationListener { if (!isRoot) context.onBackPressed(); !isRoot }
             .let { if (DeviceUtils.isTablet(context)) it.buildView() else it.build() }
-            .apply { actionBarDrawerToggle.isDrawerIndicatorEnabled = isRoot }
+            .apply { actionBarDrawerToggle?.isDrawerIndicatorEnabled = isRoot }
 
     private fun buildMiniDrawer(drawer: Drawer) = drawer.miniDrawer.apply {
         withIncludeSecondaryDrawerItems(true)

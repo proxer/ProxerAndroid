@@ -3,31 +3,24 @@ package me.proxer.app.notification
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
-import android.support.v7.widget.Toolbar
 import android.view.MenuItem
-import kotterknife.bindView
 import me.proxer.app.R
-import me.proxer.app.base.BaseActivity
+import me.proxer.app.base.DrawerActivity
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.startActivity
 
 /**
  * @author Ruben Gees
  */
-class NotificationActivity : BaseActivity() {
+class NotificationActivity : DrawerActivity() {
 
     companion object {
         fun navigateTo(context: Activity) = context.startActivity<NotificationActivity>()
         fun getIntent(context: Context) = context.intentFor<NotificationActivity>()
     }
 
-    private val toolbar: Toolbar by bindView(R.id.toolbar)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        setContentView(R.layout.activity_default)
-        setSupportActionBar(toolbar)
 
         setupToolbar()
 

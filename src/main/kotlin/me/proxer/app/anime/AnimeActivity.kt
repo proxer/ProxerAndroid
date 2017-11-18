@@ -4,14 +4,12 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.ShareCompat
-import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
-import kotterknife.bindView
 import me.proxer.app.R
-import me.proxer.app.base.BaseActivity
+import me.proxer.app.base.DrawerActivity
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.toEpisodeAppString
@@ -23,7 +21,7 @@ import org.jetbrains.anko.intentFor
 /**
  * @author Ruben Gees
  */
-class AnimeActivity : BaseActivity() {
+class AnimeActivity : DrawerActivity() {
 
     companion object {
         private const val ID_EXTRA = "id"
@@ -90,13 +88,8 @@ class AnimeActivity : BaseActivity() {
             }
         }
 
-    private val toolbar: Toolbar by bindView(R.id.toolbar)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        setContentView(R.layout.activity_default)
-        setSupportActionBar(toolbar)
 
         setupToolbar()
         updateTitle()

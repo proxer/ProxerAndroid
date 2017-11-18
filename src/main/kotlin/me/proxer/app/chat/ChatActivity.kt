@@ -4,12 +4,10 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import com.jakewharton.rxbinding2.view.clicks
-import kotterknife.bindView
 import me.proxer.app.R
-import me.proxer.app.base.BaseActivity
+import me.proxer.app.base.DrawerActivity
 import me.proxer.app.chat.conference.info.ConferenceInfoActivity
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.extension.autoDispose
@@ -18,7 +16,7 @@ import org.jetbrains.anko.intentFor
 /**
  * @author Ruben Gees
  */
-class ChatActivity : BaseActivity() {
+class ChatActivity : DrawerActivity() {
 
     companion object {
         private const val CONFERENCE_EXTRA = "conference"
@@ -50,13 +48,8 @@ class ChatActivity : BaseActivity() {
     val initialMessage: String?
         get() = intent.getStringExtra(INITIAL_MESSAGE_EXTRA)
 
-    private val toolbar: Toolbar by bindView(R.id.toolbar)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        setContentView(R.layout.activity_default)
-        setSupportActionBar(toolbar)
 
         setupToolbar()
 

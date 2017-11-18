@@ -30,7 +30,6 @@ import me.proxer.library.enums.Category
 import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
 import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.startActivity
 
 /**
  * @author Ruben Gees
@@ -46,13 +45,15 @@ class MainActivity : DrawerActivity() {
         private const val SHORTCUT_BOOKMARKS = "bookmarks"
 
         fun navigateToSection(context: Context, section: DrawerItem) = context
-                .startActivity<MainActivity>(SECTION_EXTRA to section.id)
+                .startActivity(getSectionIntent(context, section).apply {
+                    flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                })
 
         fun getSectionIntent(context: Context, section: DrawerItem) = context
                 .intentFor<MainActivity>(SECTION_EXTRA to section.id)
     }
 
-    override val isRoot = true
+    override val isRootActivity = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,6 +116,14 @@ class MainActivity : DrawerActivity() {
             StorageHelper.isFirstStart = false
             displayFirstPage(null)
         }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+
+        this.intent = intent
+
+        drawer.select(getItemToLoad())
     }
 
     private fun setFragment(fragment: Fragment, newTitle: Int) {

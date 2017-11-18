@@ -3,18 +3,16 @@ package me.proxer.app.chat.create
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.widget.Toolbar
 import android.view.MenuItem
-import kotterknife.bindView
 import me.proxer.app.R
-import me.proxer.app.base.BaseActivity
+import me.proxer.app.base.DrawerActivity
 import me.proxer.app.chat.Participant
 import org.jetbrains.anko.intentFor
 
 /**
  * @author Ruben Gees
  */
-class CreateChatActivity : BaseActivity() {
+class CreateChatActivity : DrawerActivity() {
 
     companion object {
         private const val IS_GROUP_EXTRA = "is_group"
@@ -41,13 +39,8 @@ class CreateChatActivity : BaseActivity() {
     val initialParticipant: Participant?
         get() = intent.getParcelableExtra(INITIAL_PARTICIPANT_EXTRA)
 
-    private val toolbar: Toolbar by bindView(R.id.toolbar)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        setContentView(R.layout.activity_default)
-        setSupportActionBar(toolbar)
 
         setupToolbar()
 
