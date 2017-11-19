@@ -118,12 +118,14 @@ class MainActivity : DrawerActivity() {
         }
     }
 
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
 
         this.intent = intent
 
-        drawer.select(getItemToLoad())
+        if (intent.hasExtra(SECTION_EXTRA)) {
+            drawer.select(DrawerItem.fromOrDefault(intent.getLongExtra(SECTION_EXTRA, -1)))
+        }
     }
 
     private fun setFragment(fragment: Fragment, newTitle: Int) {
