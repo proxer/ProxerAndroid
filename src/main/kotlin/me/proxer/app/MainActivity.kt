@@ -45,12 +45,11 @@ class MainActivity : DrawerActivity() {
         private const val SHORTCUT_BOOKMARKS = "bookmarks"
 
         fun navigateToSection(context: Context, section: DrawerItem) = context
-                .startActivity(getSectionIntent(context, section).apply {
-                    flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-                })
+                .startActivity(getSectionIntent(context, section))
 
         fun getSectionIntent(context: Context, section: DrawerItem) = context
                 .intentFor<MainActivity>(SECTION_EXTRA to section.id)
+                .apply { flags = Intent.FLAG_ACTIVITY_CLEAR_TOP }
     }
 
     override val isRootActivity = true
