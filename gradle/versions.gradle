@@ -15,7 +15,7 @@ ext {
     gradleVersion = '4.3.1'
 
     // Core plugins
-    androidPluginVersion = '3.1.0-alpha03'
+    androidPluginVersion = '3.1.0-alpha04'
     kotlinVersion = '1.2.0-rc-39'
 
     // Utility plugins
@@ -67,7 +67,7 @@ ext {
     threetenVersion = '1.0.5'
     hawkVersion = '2.0.1'
     glideVersion = '4.3.1'
-    okHttpVersion = '3.9.0'
+    okHttpVersion = '3.9.1'
     okioVersion = '1.13.0'
     linkBuilderVersion = '1.6.1'
     easyHeaderFooterAdapterVersion = '3.0.0'

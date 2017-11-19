@@ -25,6 +25,9 @@ class UcpActivity : DrawerActivity() {
         fun navigateTo(context: Activity) = context.startActivity<UcpActivity>()
     }
 
+    override val contentView: Int
+        get() = R.layout.activity_ucp
+
     private var sectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
 
     private val viewPager: ViewPager by bindView(R.id.viewPager)
