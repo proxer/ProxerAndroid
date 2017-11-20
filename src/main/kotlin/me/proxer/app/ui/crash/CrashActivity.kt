@@ -30,13 +30,13 @@ class CrashActivity : BaseActivity() {
     }
 
     private val config: CaocConfig
-        get() = CustomActivityOnCrash.getConfigFromIntent(intent)
+        get() = CustomActivityOnCrash.getConfigFromIntent(intent) ?: CaocConfig()
 
     private val errorDetails: String
         get() = CustomActivityOnCrash.getAllErrorDetailsFromIntent(this, intent)
 
     private val stacktrace: String
-        get() = CustomActivityOnCrash.getStackTraceFromIntent(intent)
+        get() = CustomActivityOnCrash.getStackTraceFromIntent(intent) ?: ""
 
     private val toolbar: Toolbar by bindView(R.id.toolbar)
     private val image: ImageView by bindView(R.id.image)
