@@ -128,20 +128,20 @@ repositories {
 }
 
 dependencies {
-    project.ext.implementationDependencies.values().each { implementation it }
-    project.ext.debugImplementationDependencies.values().each { debugImplementation it }
-    project.ext.releaseImplementationDependencies.values().each { releaseImplementation it }
-    project.ext.releaseImplementationDependencies.values().each { storeReleaseImplementation it }
-    project.ext.kaptDependencies.values().each { kapt it }
-    project.ext.ktlintDependencies.values().each { ktlint it }
+    implementationDependencies.values().each { implementation it }
+    debugImplementationDependencies.values().each { debugImplementation it }
+    releaseImplementationDependencies.values().each { releaseImplementation it }
+    releaseImplementationDependencies.values().each { storeReleaseImplementation it }
+    kaptDependencies.values().each { kapt it }
+    ktlintDependencies.values().each { ktlint it }
 
-    project.ext.transitiveImplementationDependencies.values().each {
+    transitiveImplementationDependencies.values().each {
         implementation(it) {
             transitive = true
         }
     }
 
-    project.ext.excludingImplementationDependencies.values().each { dependency ->
+    excludingImplementationDependencies.values().each { dependency ->
         implementation(dependency.dependency) {
             dependency.exclusions.each {
                 exclude module: it
@@ -182,7 +182,7 @@ task wrapper(type: Wrapper) {
 }
 
 detekt {
-    version = project.ext.detektPluginVersion
+    version = detektPluginVersion
 
     profile('main') {
         config = "$projectDir/config/detekt/detekt.yml"
