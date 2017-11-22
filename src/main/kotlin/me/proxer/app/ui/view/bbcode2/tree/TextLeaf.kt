@@ -11,11 +11,11 @@ class TextLeaf(parent: BBTree?, children: MutableList<BBTree>, private val text:
 
     override fun endsWith(code: String) = false
 
-    override fun makeView(context: Context): View {
+    override fun makeViews(context: Context): List<View> {
         val view = AppCompatTextView(context)
 
         view.text = text
 
-        return view
+        return listOf(view)
     }
 }

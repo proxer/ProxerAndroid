@@ -2,9 +2,10 @@ package me.proxer.app.ui.view.bbcode2.tree
 
 import android.content.Context
 import android.graphics.Typeface
-import android.view.View
-import android.widget.TextView
-import org.jetbrains.anko.childrenRecursiveSequence
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.StyleSpan
+import me.proxer.app.ui.view.bbcode2.BBUtils
 
 /**
  * @author Ruben Gees
@@ -13,11 +14,9 @@ class BoldTree(parent: BBTree?, children: MutableList<BBTree>) : BBTree(parent, 
 
     override fun endsWith(code: String) = code.startsWith("b", ignoreCase = true)
 
-    override fun makeView(context: Context): View {
-        return super.makeView(context).apply {
-            childrenRecursiveSequence().forEach {
-                if (it is TextView) it.setTypeface(it.typeface, Typeface.BOLD)
-            }
+    override fun makeViews(context: Context) = BBUtils.applyToTextViews(super.makeViews(context)) { view ->
+        view.text = SpannableString(view.text).apply {
+            setSpan(StyleSpan(Typeface.BOLD), 0, view.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
     }
 }

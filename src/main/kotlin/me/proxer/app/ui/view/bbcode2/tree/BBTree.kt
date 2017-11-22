@@ -2,7 +2,7 @@ package me.proxer.app.ui.view.bbcode2.tree
 
 import android.content.Context
 import android.view.View
-import android.widget.LinearLayout
+import android.widget.TextView
 
 /**
  * @author Ruben Gees
@@ -11,11 +11,28 @@ open class BBTree(val parent: BBTree?, val children: MutableList<BBTree>) {
 
     open fun endsWith(code: String) = false
 
-    open fun makeView(context: Context): View {
-        val container = LinearLayout(context).apply { orientation = LinearLayout.VERTICAL }
+    open fun makeViews(context: Context): List<View> {
+        val views = children.flatMap { it.makeViews(context) }
 
-        children.map { it.makeView(context) }.forEach { container.addView(it) }
+        if (views.size <= 1) {
+            return views
+        } else {
+            val result = mutableListOf<View>()
+            var previous = views.first()
 
-        return container
+            for (current in views.drop(1)) {
+                if (previous is TextView && current is TextView) {
+                    previous.append(current.text)
+                } else {
+                    result += (previous)
+
+                    previous = current
+                }
+            }
+
+            result += previous
+
+            return result
+        }
     }
 }

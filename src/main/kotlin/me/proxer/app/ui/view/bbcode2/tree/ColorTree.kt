@@ -2,9 +2,10 @@ package me.proxer.app.ui.view.bbcode2.tree
 
 import android.content.Context
 import android.support.annotation.ColorInt
-import android.view.View
-import android.widget.TextView
-import org.jetbrains.anko.childrenRecursiveSequence
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
+import me.proxer.app.ui.view.bbcode2.BBUtils.applyToTextViews
 
 /**
  * @author Ruben Gees
@@ -13,11 +14,9 @@ class ColorTree(parent: BBTree?, children: MutableList<BBTree>, @ColorInt val co
 
     override fun endsWith(code: String) = code.startsWith("color", ignoreCase = true)
 
-    override fun makeView(context: Context): View {
-        return super.makeView(context).apply {
-            childrenRecursiveSequence().forEach {
-                if (it is TextView) it.setTextColor(color)
-            }
+    override fun makeViews(context: Context) = applyToTextViews(super.makeViews(context)) { view ->
+        view.text = SpannableString(view.text).apply {
+            setSpan(ForegroundColorSpan(color), 0, view.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
     }
 }
