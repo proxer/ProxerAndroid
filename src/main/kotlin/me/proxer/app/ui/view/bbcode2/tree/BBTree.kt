@@ -18,21 +18,23 @@ open class BBTree(val parent: BBTree?, val children: MutableList<BBTree>) {
             return views
         } else {
             val result = mutableListOf<View>()
-            var previous = views.first()
+            var current = views.first()
 
-            for (current in views.drop(1)) {
-                if (previous is TextView && current is TextView) {
-                    previous.append(current.text)
+            for (next in views.drop(1)) {
+                if (current is TextView && next is TextView && current.gravity == next.gravity) {
+                    current.append(next.text)
                 } else {
-                    result += (previous)
+                    result += current
 
-                    previous = current
+                    current = next
                 }
             }
 
-            result += previous
+            result += current
 
             return result
         }
     }
+
+    protected fun makeViewsWithoutMerging(context: Context) = children.flatMap { it.makeViews(context) }
 }

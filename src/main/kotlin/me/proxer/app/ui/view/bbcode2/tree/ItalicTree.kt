@@ -3,7 +3,7 @@ package me.proxer.app.ui.view.bbcode2.tree
 import android.content.Context
 import android.graphics.Typeface
 import android.text.Spannable
-import android.text.SpannableString
+import android.text.SpannableStringBuilder
 import android.text.style.StyleSpan
 import me.proxer.app.ui.view.bbcode2.BBUtils
 
@@ -14,9 +14,9 @@ class ItalicTree(parent: BBTree?, children: MutableList<BBTree>) : BBTree(parent
 
     override fun endsWith(code: String) = code.startsWith("i", ignoreCase = true)
 
-    override fun makeViews(context: Context) = BBUtils.applyToTextViews(super.makeViews(context)) { view ->
-        view.text = SpannableString(view.text).apply {
-            setSpan(StyleSpan(Typeface.ITALIC), 0, view.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+    override fun makeViews(context: Context) = BBUtils.applyToTextViews(super.makeViewsWithoutMerging(context)) { view ->
+        view.text = SpannableStringBuilder(view.text).apply {
+            setSpan(StyleSpan(Typeface.ITALIC), 0, view.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
         }
     }
 }

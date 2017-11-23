@@ -2,7 +2,6 @@ package me.proxer.app.ui.view.bbcode2.tree
 
 import android.content.Context
 import android.support.v7.widget.AppCompatTextView
-import android.view.View
 
 /**
  * @author Ruben Gees
@@ -11,11 +10,5 @@ class TextLeaf(parent: BBTree?, children: MutableList<BBTree>, private val text:
 
     override fun endsWith(code: String) = false
 
-    override fun makeViews(context: Context): List<View> {
-        val view = AppCompatTextView(context)
-
-        view.text = text
-
-        return listOf(view)
-    }
+    override fun makeViews(context: Context) = listOf(AppCompatTextView(context).also { it.text = text })
 }
