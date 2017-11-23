@@ -16,7 +16,7 @@ ext {
 
     // Core plugins
     androidPluginVersion = '3.1.0-alpha04'
-    kotlinVersion = '1.2.0-rc-39'
+    kotlinVersion = '1.2.0-rc-84'
 
     // Utility plugins
     detektPluginVersion = '1.0.0.RC5-4'
@@ -29,7 +29,7 @@ ext {
     supportLibraryVersion = '27.0.1'
     supportPreferenceVersion = '1.3.1'
     architectureComponentsVersion = '1.0.0'
-    androidJobVersion = '1.2.0'
+    androidJobVersion = '1.2.1'
     proxerLibVersion = '4.2.1'
 
     // RxJava
@@ -48,7 +48,7 @@ ext {
     communityMaterialTypefaceVersion = '2.0.46.1'
     crossfaderVersion = '1.5.1'
     materialAboutVersion = '2.2.3'
-    subsamplingScaleImageViewVersion = '3.8.0'
+    subsamplingScaleImageViewVersion = '3.9.0.ALPHA'
     tabLayoutHelperVersion = '0.9.0'
     materialDialogsVersion = '0.9.5.0'
     flexboxVersion = '0.3.1'
