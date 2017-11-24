@@ -6,7 +6,10 @@ import me.proxer.app.ui.view.bbcode2.prototype.ColorPrototype
 import me.proxer.app.ui.view.bbcode2.prototype.ItalicPrototype
 import me.proxer.app.ui.view.bbcode2.prototype.LeftPrototype
 import me.proxer.app.ui.view.bbcode2.prototype.RightPrototype
+import me.proxer.app.ui.view.bbcode2.prototype.SizePrototype
 import me.proxer.app.ui.view.bbcode2.prototype.SpoilerPrototype
+import me.proxer.app.ui.view.bbcode2.prototype.StrikethroughPrototype
+import me.proxer.app.ui.view.bbcode2.prototype.UnderlinePrototype
 import me.proxer.app.ui.view.bbcode2.tree.BBTree
 import me.proxer.app.ui.view.bbcode2.tree.TextLeaf
 import java.util.regex.Pattern.quote
@@ -18,8 +21,8 @@ object BBParser {
 
     private val regex = Regex("${quote("[")}(.*?)${quote("]")}", RegexOption.DOT_MATCHES_ALL)
 
-    private val prototypes = arrayOf(BoldPrototype, ItalicPrototype, ColorPrototype, LeftPrototype, CenterPrototype,
-            RightPrototype, SpoilerPrototype)
+    private val prototypes = arrayOf(BoldPrototype, ItalicPrototype, UnderlinePrototype, StrikethroughPrototype,
+            SizePrototype, ColorPrototype, LeftPrototype, CenterPrototype, RightPrototype, SpoilerPrototype)
 
     fun parse(input: String): BBTree {
         val result = BBTree(null, mutableListOf())
