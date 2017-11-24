@@ -7,10 +7,13 @@ import me.proxer.app.ui.view.bbcode2.BBSpoilerView
 /**
  * @author Ruben Gees
  */
-class SpoilerTree(parent: BBTree?, children: MutableList<BBTree>) : BBTree(parent, children) {
+class SpoilerTree(parent: BBTree?, children: MutableList<BBTree> = mutableListOf()) : BBTree(parent, children) {
 
     override fun endsWith(code: String) = code.startsWith("spoiler", ignoreCase = true)
 
-    override fun makeViews(context: Context): List<View> = listOf(BBSpoilerView(context)
-            .apply { super.makeViews(context).forEach { addView(it) } })
+    override fun makeViews(context: Context): List<View> {
+        val childViews = super.makeViewsWithoutMerging(context)
+
+        return listOf(BBSpoilerView(context).apply { childViews.forEach { addView(it) } })
+    }
 }

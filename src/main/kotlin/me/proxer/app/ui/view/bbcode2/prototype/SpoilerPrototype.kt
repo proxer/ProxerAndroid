@@ -9,7 +9,7 @@ import me.proxer.app.ui.view.bbcode2.tree.SpoilerTree
 object SpoilerPrototype : BBPrototype() {
 
     override fun fromCode(code: String, parent: BBTree) = when (code.startsWith("spoiler", ignoreCase = true)) {
-        true -> SpoilerTree(parent, mutableListOf())
+        true -> SpoilerTree(parent)
         false -> null
     }
 }

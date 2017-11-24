@@ -9,7 +9,7 @@ import me.proxer.app.ui.view.bbcode2.tree.RightTree
 object RightPrototype : BBPrototype() {
 
     override fun fromCode(code: String, parent: BBTree) = when (code.startsWith("right", ignoreCase = true)) {
-        true -> RightTree(parent, mutableListOf())
+        true -> RightTree(parent)
         false -> null
     }
 }

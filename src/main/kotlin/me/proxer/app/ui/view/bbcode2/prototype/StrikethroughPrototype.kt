@@ -9,7 +9,7 @@ import me.proxer.app.ui.view.bbcode2.tree.StrikethroughTree
 object StrikethroughPrototype : BBPrototype() {
 
     override fun fromCode(code: String, parent: BBTree) = when (code.startsWith("s", ignoreCase = true)) {
-        true -> StrikethroughTree(parent, mutableListOf())
+        true -> StrikethroughTree(parent)
         false -> null
     }
 }

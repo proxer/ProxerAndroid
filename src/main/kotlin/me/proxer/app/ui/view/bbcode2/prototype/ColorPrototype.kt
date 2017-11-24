@@ -32,7 +32,7 @@ object ColorPrototype : BBPrototype() {
                 false -> availableColors.find { it.first == value }?.second
             }
 
-            color?.let { ColorTree(parent, mutableListOf(), color) }
+            color?.let { ColorTree(color, parent) }
         }
         false -> null
     }

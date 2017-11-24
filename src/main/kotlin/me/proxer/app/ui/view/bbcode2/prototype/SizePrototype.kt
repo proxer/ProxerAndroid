@@ -13,12 +13,12 @@ object SizePrototype : BBPrototype() {
             val value = code.substringAfter("=").trim()
 
             when (value.getOrNull(0)) {
-                '1' -> SizeTree(parent, mutableListOf(), 0.4f)
-                '2' -> SizeTree(parent, mutableListOf(), 0.6f)
-                '3' -> SizeTree(parent, mutableListOf(), 0.8f)
-                '4' -> SizeTree(parent, mutableListOf(), 1.0f)
-                '5' -> SizeTree(parent, mutableListOf(), 1.5f)
-                '6' -> SizeTree(parent, mutableListOf(), 2.0f)
+                '1' -> SizeTree(0.4f, parent)
+                '2' -> SizeTree(0.6f, parent)
+                '3' -> SizeTree(0.8f, parent)
+                '4' -> SizeTree(1.0f, parent)
+                '5' -> SizeTree(1.5f, parent)
+                '6' -> SizeTree(2.0f, parent)
                 else -> null
             }
         }

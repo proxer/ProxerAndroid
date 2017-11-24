@@ -9,7 +9,7 @@ import me.proxer.app.ui.view.bbcode2.tree.LeftTree
 object LeftPrototype : BBPrototype() {
 
     override fun fromCode(code: String, parent: BBTree) = when (code.startsWith("left", ignoreCase = true)) {
-        true -> LeftTree(parent, mutableListOf())
+        true -> LeftTree(parent)
         false -> null
     }
 }

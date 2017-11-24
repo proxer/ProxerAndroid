@@ -9,7 +9,7 @@ import me.proxer.app.ui.view.bbcode2.tree.ItalicTree
 object ItalicPrototype : BBPrototype() {
 
     override fun fromCode(code: String, parent: BBTree) = when (code.startsWith("i", ignoreCase = true)) {
-        true -> ItalicTree(parent, mutableListOf())
+        true -> ItalicTree(parent)
         false -> null
     }
 }

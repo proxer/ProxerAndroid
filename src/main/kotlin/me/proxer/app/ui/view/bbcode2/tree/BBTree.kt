@@ -7,7 +7,7 @@ import android.widget.TextView
 /**
  * @author Ruben Gees
  */
-open class BBTree(val parent: BBTree?, val children: MutableList<BBTree>) {
+open class BBTree(val parent: BBTree?, val children: MutableList<BBTree> = mutableListOf()) {
 
     open fun endsWith(code: String) = false
 

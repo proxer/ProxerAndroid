@@ -5,7 +5,7 @@ import me.proxer.app.ui.view.bbcode2.tree.BBTree
 /**
  * @author Ruben Gees
  */
-abstract class BBPrototype {
+interface BBPrototype {
 
-    abstract fun fromCode(code: String, parent: BBTree): BBTree?
+    fun fromCode(code: String, parent: BBTree): BBTree?
 }

@@ -9,7 +9,7 @@ import me.proxer.app.ui.view.bbcode2.tree.BoldTree
 object BoldPrototype : BBPrototype() {
 
     override fun fromCode(code: String, parent: BBTree) = when (code.startsWith("b", ignoreCase = true)) {
-        true -> BoldTree(parent, mutableListOf())
+        true -> BoldTree(parent)
         false -> null
     }
 }

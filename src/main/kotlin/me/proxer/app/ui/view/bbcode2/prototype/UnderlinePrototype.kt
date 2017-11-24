@@ -9,7 +9,7 @@ import me.proxer.app.ui.view.bbcode2.tree.UnderlineTree
 object UnderlinePrototype : BBPrototype() {
 
     override fun fromCode(code: String, parent: BBTree) = when (code.startsWith("u", ignoreCase = true)) {
-        true -> UnderlineTree(parent, mutableListOf())
+        true -> UnderlineTree(parent)
         false -> null
     }
 }

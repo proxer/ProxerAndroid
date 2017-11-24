@@ -25,7 +25,7 @@ object BBParser {
             SizePrototype, ColorPrototype, LeftPrototype, CenterPrototype, RightPrototype, SpoilerPrototype)
 
     fun parse(input: String): BBTree {
-        val result = BBTree(null, mutableListOf())
+        val result = BBTree(null)
         val parts = regex.findAll(input)
         var currentTree = result
         var currentPosition = 0
@@ -34,8 +34,7 @@ object BBParser {
             val part = it.groupValues[1].trim()
 
             if (it.range.first > currentPosition) {
-                currentTree.children.add(TextLeaf(currentTree, mutableListOf(),
-                        input.substring(currentPosition, it.range.first)))
+                currentTree.children.add(TextLeaf(input.substring(currentPosition, it.range.first), currentTree))
             }
 
             if (part.startsWith("/") && part.length >= 2) {
@@ -60,8 +59,7 @@ object BBParser {
         }
 
         if (currentPosition < input.length) {
-            currentTree.children.add(TextLeaf(currentTree, mutableListOf(),
-                    input.substring(currentPosition, input.length)))
+            currentTree.children.add(TextLeaf(input.substring(currentPosition, input.length), currentTree))
         }
 
         return result

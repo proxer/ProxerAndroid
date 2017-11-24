@@ -9,7 +9,7 @@ import me.proxer.app.ui.view.bbcode2.tree.CenterTree
 object CenterPrototype : BBPrototype() {
 
     override fun fromCode(code: String, parent: BBTree) = when (code.startsWith("center", ignoreCase = true)) {
-        true -> CenterTree(parent, mutableListOf())
+        true -> CenterTree(parent)
         false -> null
     }
 }
