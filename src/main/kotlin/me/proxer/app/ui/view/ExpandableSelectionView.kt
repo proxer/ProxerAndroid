@@ -197,7 +197,9 @@ class ExpandableSelectionView @JvmOverloads constructor(
     }
 
     internal class SavedState : BaseSavedState {
+
         companion object {
+
             @Suppress("unused")
             @JvmField
             val CREATOR = object : Parcelable.Creator<SavedState> {
@@ -209,9 +211,10 @@ class ExpandableSelectionView @JvmOverloads constructor(
         internal val selection: MutableList<String>
         internal val isExtended: Boolean
 
-        internal constructor(superState: Parcelable,
-                             selection: MutableList<String>,
-                             isExtended: Boolean
+        internal constructor(
+                superState: Parcelable,
+                selection: MutableList<String>,
+                isExtended: Boolean
         ) : super(superState) {
             this.selection = selection
             this.isExtended = isExtended
