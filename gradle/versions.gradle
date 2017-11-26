@@ -50,7 +50,7 @@ ext {
     materialAboutVersion = '2.2.3'
     subsamplingScaleImageViewVersion = '3.9.0.ALPHA'
     tabLayoutHelperVersion = '0.9.0'
-    materialDialogsVersion = '0.9.5.0'
+    materialDialogsVersion = '0.9.6.0'
     flexboxVersion = '0.3.1'
     emojiIosVersion = '0.6.0-SNAPSHOT'
     exomediaVersion = '735e92ff83'
