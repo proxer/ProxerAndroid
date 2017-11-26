@@ -6,7 +6,7 @@ import me.proxer.app.ui.view.bbcode2.tree.SizeTree
 /**
  * @author Ruben Gees
  */
-object SizePrototype : BBPrototype() {
+object SizePrototype : BBPrototype {
 
     override fun fromCode(code: String, parent: BBTree) = when (code.startsWith("size", ignoreCase = true)) {
         true -> {

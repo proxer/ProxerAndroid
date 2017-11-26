@@ -7,7 +7,7 @@ import me.proxer.app.ui.view.bbcode2.tree.ColorTree
 /**
  * @author Ruben Gees
  */
-object ColorPrototype : BBPrototype() {
+object ColorPrototype : BBPrototype {
 
     private val availableColors = arrayOf(
             "black" to Color.parseColor("#000000"),

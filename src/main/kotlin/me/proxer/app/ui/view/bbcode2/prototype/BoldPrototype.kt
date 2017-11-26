@@ -6,7 +6,7 @@ import me.proxer.app.ui.view.bbcode2.tree.BoldTree
 /**
  * @author Ruben Gees
  */
-object BoldPrototype : BBPrototype() {
+object BoldPrototype : BBPrototype {
 
     override fun fromCode(code: String, parent: BBTree) = when (code.startsWith("b", ignoreCase = true)) {
         true -> BoldTree(parent)

@@ -6,7 +6,7 @@ import me.proxer.app.ui.view.bbcode2.tree.ItalicTree
 /**
  * @author Ruben Gees
  */
-object ItalicPrototype : BBPrototype() {
+object ItalicPrototype : BBPrototype {
 
     override fun fromCode(code: String, parent: BBTree) = when (code.startsWith("i", ignoreCase = true)) {
         true -> ItalicTree(parent)
