@@ -19,7 +19,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-class BBSpoilerView @JvmOverloads constructor(
+internal class BBSpoilerView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
@@ -38,7 +38,7 @@ class BBSpoilerView @JvmOverloads constructor(
         val twoDip = dip(2)
 
         val selectableItemBackground = TypedValue().apply {
-            getContext().theme.resolveAttribute(R.attr.selectableItemBackground, this, true)
+            context.theme.resolveAttribute(R.attr.selectableItemBackground, this, true)
         }
 
         orientation = VERTICAL
@@ -79,8 +79,8 @@ class BBSpoilerView @JvmOverloads constructor(
         handleExpansion()
     }
 
-    fun addViews(views: Iterable<View>) = views.forEach {
-        container.addView(it)
+    override fun addView(child: View?) {
+        container.addView(child)
     }
 
     private fun handleExpansion() {

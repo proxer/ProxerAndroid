@@ -1,17 +1,17 @@
-package me.proxer.app.ui.view.bbcode2
+package me.proxer.app.ui.view.bbcode
 
-import me.proxer.app.ui.view.bbcode2.prototype.BoldPrototype
-import me.proxer.app.ui.view.bbcode2.prototype.CenterPrototype
-import me.proxer.app.ui.view.bbcode2.prototype.ColorPrototype
-import me.proxer.app.ui.view.bbcode2.prototype.ItalicPrototype
-import me.proxer.app.ui.view.bbcode2.prototype.LeftPrototype
-import me.proxer.app.ui.view.bbcode2.prototype.RightPrototype
-import me.proxer.app.ui.view.bbcode2.prototype.SizePrototype
-import me.proxer.app.ui.view.bbcode2.prototype.SpoilerPrototype
-import me.proxer.app.ui.view.bbcode2.prototype.StrikethroughPrototype
-import me.proxer.app.ui.view.bbcode2.prototype.UnderlinePrototype
-import me.proxer.app.ui.view.bbcode2.tree.BBTree
-import me.proxer.app.ui.view.bbcode2.tree.TextLeaf
+import me.proxer.app.ui.view.bbcode.prototype.BoldPrototype
+import me.proxer.app.ui.view.bbcode.prototype.CenterPrototype
+import me.proxer.app.ui.view.bbcode.prototype.ColorPrototype
+import me.proxer.app.ui.view.bbcode.prototype.ItalicPrototype
+import me.proxer.app.ui.view.bbcode.prototype.LeftPrototype
+import me.proxer.app.ui.view.bbcode.prototype.RightPrototype
+import me.proxer.app.ui.view.bbcode.prototype.SizePrototype
+import me.proxer.app.ui.view.bbcode.prototype.SpoilerPrototype
+import me.proxer.app.ui.view.bbcode.prototype.StrikethroughPrototype
+import me.proxer.app.ui.view.bbcode.prototype.UnderlinePrototype
+import me.proxer.app.ui.view.bbcode.tree.BBTree
+import me.proxer.app.ui.view.bbcode.tree.TextLeaf
 import java.util.regex.Pattern.quote
 
 /**
@@ -25,8 +25,10 @@ object BBParser {
             SizePrototype, ColorPrototype, LeftPrototype, CenterPrototype, RightPrototype, SpoilerPrototype)
 
     fun parse(input: String): BBTree {
+        val trimmedInput = input.trim()
         val result = BBTree(null)
-        val parts = regex.findAll(input)
+        val parts = regex.findAll(trimmedInput)
+
         var currentTree = result
         var currentPosition = 0
 
@@ -34,7 +36,9 @@ object BBParser {
             val part = it.groupValues[1].trim()
 
             if (it.range.first > currentPosition) {
-                currentTree.children.add(TextLeaf(input.substring(currentPosition, it.range.first), currentTree))
+                val startString = trimmedInput.substring(currentPosition, it.range.first)
+
+                currentTree.children.add(TextLeaf(startString, currentTree))
             }
 
             if (part.startsWith("/") && part.length >= 2) {
@@ -43,23 +47,32 @@ object BBParser {
                             ?: throw IllegalStateException("tree does not have a parent: $currentTree")
                 }
             } else {
+                var treeFound = false
+
                 for (prototype in prototypes) {
                     val newTree = prototype.fromCode(it.groupValues[1], currentTree)
 
                     if (newTree != null) {
                         currentTree.children.add(newTree)
                         currentTree = newTree
+                        treeFound = true
 
                         break
                     }
+                }
+
+                if (!treeFound) {
+                    currentTree.children.add(TextLeaf(it.value, currentTree))
                 }
             }
 
             currentPosition = it.range.endInclusive + 1
         }
 
-        if (currentPosition < input.length) {
-            currentTree.children.add(TextLeaf(input.substring(currentPosition, input.length), currentTree))
+        if (currentPosition < trimmedInput.length) {
+            val endString = trimmedInput.substring(currentPosition, trimmedInput.length)
+
+            currentTree.children.add(TextLeaf(endString, currentTree))
         }
 
         return result

@@ -1,8 +1,8 @@
-package me.proxer.app.ui.view.bbcode2.prototype
+package me.proxer.app.ui.view.bbcode.prototype
 
 import android.graphics.Color
-import me.proxer.app.ui.view.bbcode2.tree.BBTree
-import me.proxer.app.ui.view.bbcode2.tree.ColorTree
+import me.proxer.app.ui.view.bbcode.tree.BBTree
+import me.proxer.app.ui.view.bbcode.tree.ColorTree
 
 /**
  * @author Ruben Gees

@@ -1,4 +1,4 @@
-package me.proxer.app.ui.view.bbcode2.tree
+package me.proxer.app.ui.view.bbcode.tree
 
 import android.content.Context
 import android.view.View
@@ -20,14 +20,22 @@ open class BBTree(val parent: BBTree?, val children: MutableList<BBTree> = mutab
             val result = mutableListOf<View>()
             var current = views.first()
 
+            if (current is TextView) {
+                current.text = current.text.trimStart()
+            }
+
             for (next in views.drop(1)) {
-                if (current is TextView && next is TextView && current.gravity == next.gravity) {
+                if (current is TextView && next is TextView) {
                     current.append(next.text)
                 } else {
                     result += current
 
                     current = next
                 }
+            }
+
+            if (current is TextView) {
+                current.text = current.text.trimEnd()
             }
 
             result += current

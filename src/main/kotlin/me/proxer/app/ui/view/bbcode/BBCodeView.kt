@@ -1,10 +1,8 @@
 package me.proxer.app.ui.view.bbcode
 
 import android.content.Context
-import android.support.v7.widget.AppCompatTextView
 import android.util.AttributeSet
 import android.util.SparseBooleanArray
-import android.view.View
 import android.view.View.MeasureSpec.AT_MOST
 import android.view.View.MeasureSpec.EXACTLY
 import android.view.View.MeasureSpec.UNSPECIFIED
@@ -12,9 +10,8 @@ import android.view.View.MeasureSpec.getMode
 import android.view.View.MeasureSpec.getSize
 import android.view.View.MeasureSpec.makeMeasureSpec
 import android.widget.LinearLayout
+import org.jetbrains.anko.childrenRecursiveSequence
 import org.jetbrains.anko.collections.forEachWithIndex
-import java.util.ArrayList
-import java.util.LinkedList
 import kotlin.properties.Delegates
 
 /**
@@ -28,12 +25,16 @@ class BBCodeView @JvmOverloads constructor(
     var text by Delegates.observable("", { _, _, _ -> refreshViews() })
 
     var spoilerStates: SparseBooleanArray
-        get() = SparseBooleanArray().apply { spoilers.forEachWithIndex { index, it -> put(index, it.isExpanded) } }
-        set(value) = spoilers.forEachWithIndex { index, it -> it.isExpanded = value.get(index, false) }
+        get() = SparseBooleanArray().apply {
+            spoilerViews.forEachWithIndex { index, it -> put(index, it.isExpanded) }
+        }
+        set(value) = spoilerViews.forEachWithIndex { index, it ->
+            it.isExpanded = value.get(index, false)
+        }
 
     var spoilerStateListener: ((SparseBooleanArray, isExpanded: Boolean) -> Unit)? = null
 
-    private val spoilers = ArrayList<BBSpoilerView>()
+    private val spoilerViews = mutableListOf<BBSpoilerView>()
 
     init {
         orientation = VERTICAL
@@ -52,44 +53,29 @@ class BBCodeView @JvmOverloads constructor(
     }
 
     private fun refreshViews() {
+        spoilerViews.clear()
         removeAllViews()
-        spoilers.clear()
 
         if (text.isNotBlank()) {
-            buildViews(BBProcessor.process(BBTokenizer.tokenize(text))).forEach {
+            BBParser.parse(text).makeViews(context).forEach {
+                if (it is BBSpoilerView) {
+                    spoilerViews += it
+                }
+
+                it.childrenRecursiveSequence().forEach {
+                    if (it is BBSpoilerView) {
+                        spoilerViews += it
+                    }
+                }
+
                 addView(it)
             }
-        }
-    }
 
-    private fun buildViews(elements: List<BBElement>): List<View> {
-        val result = LinkedList<View>()
-
-        for (element in elements) {
-            when (element) {
-                is BBElement.BBTextElement -> {
-                    val textView = AppCompatTextView(context)
-
-                    textView.text = element.text
-                    textView.gravity = element.gravity
-
-                    result.add(textView)
-                }
-                is BBElement.BBSpoilerElement -> {
-                    val spoiler = BBSpoilerView(context).apply {
-                        addViews(buildViews(element.children))
-                    }
-
-                    spoiler.expansionListener = {
-                        spoilerStateListener?.invoke(spoilerStates, it)
-                    }
-
-                    spoilers.add(spoiler)
-                    result.add(spoiler)
+            spoilerViews.forEach {
+                it.expansionListener = {
+                    spoilerStateListener?.invoke(spoilerStates, it)
                 }
             }
         }
-
-        return result
     }
 }

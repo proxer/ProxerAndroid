@@ -1,6 +1,6 @@
-package me.proxer.app.ui.view.bbcode2.prototype
+package me.proxer.app.ui.view.bbcode.prototype
 
-import me.proxer.app.ui.view.bbcode2.tree.BBTree
+import me.proxer.app.ui.view.bbcode.tree.BBTree
 
 /**
  * @author Ruben Gees

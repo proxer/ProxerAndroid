@@ -1,4 +1,4 @@
-package me.proxer.app.ui.view.bbcode2
+package me.proxer.app.ui.view.bbcode
 
 import android.view.View
 import android.widget.TextView
