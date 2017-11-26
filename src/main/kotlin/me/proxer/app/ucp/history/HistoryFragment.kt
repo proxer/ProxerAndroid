@@ -5,12 +5,16 @@ import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
 import me.proxer.app.GlideApp
 import me.proxer.app.R
+import me.proxer.app.anime.AnimeActivity
 import me.proxer.app.base.PagedContentFragment
-import me.proxer.app.media.MediaActivity
+import me.proxer.app.manga.MangaActivity
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.autoDispose
+import me.proxer.app.util.extension.toAnimeLanguage
+import me.proxer.app.util.extension.toGeneralLanguage
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.ucp.UcpHistoryEntry
+import me.proxer.library.enums.Category
 import org.jetbrains.anko.bundleOf
 import kotlin.properties.Delegates
 
@@ -44,9 +48,13 @@ class HistoryFragment : PagedContentFragment<UcpHistoryEntry>() {
 
         innerAdapter.clickSubject
                 .autoDispose(this)
-                .subscribe { (view, item) ->
-                    MediaActivity.navigateTo(safeActivity, item.entryId, item.name, item.category,
-                            if (view.drawable != null) view else null)
+                .subscribe { (_, item) ->
+                    when (item.category) {
+                        Category.ANIME -> AnimeActivity.navigateTo(safeActivity, item.entryId, item.episode,
+                                item.language.toAnimeLanguage(), item.name)
+                        Category.MANGA -> MangaActivity.navigateTo(safeActivity, item.entryId, item.episode,
+                                item.language.toGeneralLanguage(), null, item.name)
+                    }
                 }
     }
 
