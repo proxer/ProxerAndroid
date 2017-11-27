@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.TouchableMovementMethod
@@ -18,6 +19,7 @@ import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.chat.conference.info.ConferenceParticipantAdapter.ViewHolder
+import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.library.entity.messenger.ConferenceParticipant
@@ -100,6 +102,10 @@ class ConferenceParticipantAdapter : BaseAdapter<ConferenceParticipant, ViewHold
                 glide?.load(ProxerUrls.userImage(item.image).toString())
                         ?.transition(DrawableTransitionOptions.withCrossFade())
                         ?.circleCrop()
+                        ?.format(when (DeviceUtils.shouldShowHighQualityImages(image.context)) {
+                            true -> DecodeFormat.PREFER_ARGB_8888
+                            false -> DecodeFormat.PREFER_RGB_565
+                        })
                         ?.into(image)
             }
         }

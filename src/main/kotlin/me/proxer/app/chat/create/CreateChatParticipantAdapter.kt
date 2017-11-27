@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import io.reactivex.subjects.PublishSubject
@@ -17,6 +18,7 @@ import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.chat.Participant
 import me.proxer.app.chat.create.CreateChatParticipantAdapter.ViewHolder
+import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.library.util.ProxerUrls
 
@@ -94,6 +96,10 @@ class CreateChatParticipantAdapter(savedInstanceState: Bundle?) : BaseAdapter<Pa
                 glide?.load(ProxerUrls.userImage(item.image).toString())
                         ?.transition(DrawableTransitionOptions.withCrossFade())
                         ?.circleCrop()
+                        ?.format(when (DeviceUtils.shouldShowHighQualityImages(image.context)) {
+                            true -> DecodeFormat.PREFER_ARGB_8888
+                            false -> DecodeFormat.PREFER_RGB_565
+                        })
                         ?.into(image)
             }
         }

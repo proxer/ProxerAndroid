@@ -11,6 +11,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
+import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import io.reactivex.subjects.PublishSubject
@@ -20,6 +21,7 @@ import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.media.comment.CommentAdapter.ViewHolder
 import me.proxer.app.ui.view.bbcode.BBCodeView
+import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.data.ParcelableStringBooleanArrayMap
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.convertToRelativeReadableTime
@@ -206,6 +208,10 @@ class CommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<Comment, ViewHol
                 glide?.load(ProxerUrls.userImage(item.image).toString())
                         ?.transition(DrawableTransitionOptions.withCrossFade())
                         ?.circleCrop()
+                        ?.format(when (DeviceUtils.shouldShowHighQualityImages(image.context)) {
+                            true -> DecodeFormat.PREFER_ARGB_8888
+                            false -> DecodeFormat.PREFER_RGB_565
+                        })
                         ?.into(image)
             }
         }

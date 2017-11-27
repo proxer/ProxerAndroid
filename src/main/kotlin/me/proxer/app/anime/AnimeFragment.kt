@@ -90,7 +90,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        innerAdapter = AnimeAdapter(savedInstanceState, GlideApp.with(this))
+        innerAdapter = AnimeAdapter(savedInstanceState)
         adapter = EasyHeaderFooterAdapter(innerAdapter)
 
         innerAdapter.positionResolver = BaseAdapter.ContainerPositionResolver(adapter)
@@ -141,6 +141,8 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        innerAdapter.glide = GlideApp.with(this)
 
         viewModel.resolutionResult.observe(this, Observer {
             it?.let {

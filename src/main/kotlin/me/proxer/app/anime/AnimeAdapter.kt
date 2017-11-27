@@ -25,13 +25,13 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-class AnimeAdapter(savedInstanceState: Bundle?, private val glide: GlideRequests) :
-        BaseAdapter<AnimeStream, ViewHolder>() {
+class AnimeAdapter(savedInstanceState: Bundle?) : BaseAdapter<AnimeStream, ViewHolder>() {
 
     private companion object {
         private const val EXPANDED_STATE = "anime_stream_expanded"
     }
 
+    var glide: GlideRequests? = null
     val uploaderClickSubject: PublishSubject<AnimeStream> = PublishSubject.create()
     val translatorGroupClickSubject: PublishSubject<AnimeStream> = PublishSubject.create()
     val playClickSubject: PublishSubject<AnimeStream> = PublishSubject.create()
@@ -47,13 +47,22 @@ class AnimeAdapter(savedInstanceState: Bundle?, private val glide: GlideRequests
         setHasStableIds(true)
     }
 
+    override fun getItemId(position: Int) = data[position].id.toLong()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_stream, parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(data[position])
-    override fun getItemId(position: Int) = data[position].id.toLong()
-    override fun onViewRecycled(holder: ViewHolder) = glide.clear(holder.image)
+
+    override fun onViewRecycled(holder: ViewHolder) {
+        glide?.clear(holder.image)
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView?) {
+        glide = null
+    }
+
     override fun saveInstanceState(outState: Bundle) = outState.putParcelable(EXPANDED_STATE, expansionMap)
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -107,7 +116,7 @@ class AnimeAdapter(savedInstanceState: Bundle?, private val glide: GlideRequests
         fun bind(item: AnimeStream) {
             name.text = item.hosterName
 
-            glide.defaultLoad(image, ProxerUrls.hosterImage(item.image))
+            glide?.defaultLoad(image, ProxerUrls.hosterImage(item.image))
 
             if (expansionMap.containsKey(item.id)) {
                 uploadInfoContainer.visibility = View.VISIBLE
@@ -125,6 +134,7 @@ class AnimeAdapter(savedInstanceState: Bundle?, private val glide: GlideRequests
 
             play.visibility = if (item.isSupported) View.VISIBLE else View.GONE
             unsupported.visibility = if (item.isSupported) View.GONE else View.VISIBLE
+
         }
     }
 }
