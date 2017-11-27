@@ -134,7 +134,6 @@ class AnimeAdapter(savedInstanceState: Bundle?) : BaseAdapter<AnimeStream, ViewH
 
             play.visibility = if (item.isSupported) View.VISIBLE else View.GONE
             unsupported.visibility = if (item.isSupported) View.GONE else View.VISIBLE
-
         }
     }
 }
