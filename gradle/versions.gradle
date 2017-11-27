@@ -12,7 +12,7 @@ ext {
     javaVersion = JavaVersion.VERSION_1_8
 
     // Gradle
-    gradleVersion = '4.4-rc-2'
+    gradleVersion = '4.4-rc-3'
 
     // Core plugins
     androidPluginVersion = '3.1.0-alpha04'
@@ -33,8 +33,8 @@ ext {
     proxerLibVersion = '4.2.1'
 
     // RxJava
-    rxJavaVersion = '2.1.6'
-    rxKotlinVersion = '2.1.0'
+    rxJavaVersion = '2.1.7'
+    rxKotlinVersion = '2.2.0'
     rxAndroidVersion = '2.0.1'
     rxBindingVersion = '2.0.0'
     rxBusVersion = '2.0.0'
@@ -48,7 +48,7 @@ ext {
     communityMaterialTypefaceVersion = '2.0.46.1'
     crossfaderVersion = '1.5.1'
     materialAboutVersion = '2.2.3'
-    subsamplingScaleImageViewVersion = '3.9.0.ALPHA'
+    subsamplingScaleImageViewVersion = '3.9.0.BETA'
     tabLayoutHelperVersion = '0.9.0'
     materialDialogsVersion = '0.9.6.0'
     flexboxVersion = '0.3.1'
