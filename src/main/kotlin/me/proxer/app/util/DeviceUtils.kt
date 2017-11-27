@@ -55,10 +55,16 @@ object DeviceUtils {
     }
 
     fun shouldShowHighQualityImages(context: Context): Boolean {
-        val memoryInfo = ActivityManager.MemoryInfo()
+        val isLowRamDevice = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            context.activityManager.isLowRamDevice
+        } else {
+            true
+        }
 
-        context.activityManager.getMemoryInfo(memoryInfo)
+        val memoryInfo = ActivityManager.MemoryInfo().apply {
+            context.activityManager.getMemoryInfo(this)
+        }
 
-        return memoryInfo.availMem >= 1024 * 1024 * 1024
+        return !isLowRamDevice && !memoryInfo.lowMemory && memoryInfo.availMem >= 1024 * 1024 * 1024
     }
 }
