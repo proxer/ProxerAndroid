@@ -88,9 +88,9 @@ android {
         }
 
         applicationVariants.all { variant ->
-            variant.buildConfigField 'String', 'PROXER_API_KEY', "\"${getFromSecrets("PROXER_API_KEY")}\""
+            variant.buildConfigField 'String', 'PROXER_API_KEY', "\"${getFromSecrets('PROXER_API_KEY')}\""
 
-            if(variant.getName() == "storeRelease") {
+            if (variant.getName() == 'storeRelease') {
                 variant.buildConfigField 'boolean', 'STORE', "true"
             } else {
                 variant.buildConfigField 'boolean', 'STORE', "false"
