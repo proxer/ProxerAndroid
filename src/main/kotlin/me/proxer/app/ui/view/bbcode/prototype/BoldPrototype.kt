@@ -8,8 +8,8 @@ import me.proxer.app.ui.view.bbcode.tree.BoldTree
  */
 object BoldPrototype : BBPrototype {
 
-    override fun fromCode(code: String, parent: BBTree) = when (code.equals("b", ignoreCase = true)) {
-        true -> BoldTree(parent)
-        false -> null
-    }
+    override val startRegex = Regex("\\s*b\\s*", RegexOption.IGNORE_CASE)
+    override val endRegex = Regex("/\\s*b\\s*", RegexOption.IGNORE_CASE)
+
+    override fun construct(code: String, parent: BBTree) = BoldTree(parent)
 }

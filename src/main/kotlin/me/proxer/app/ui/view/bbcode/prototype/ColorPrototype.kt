@@ -20,20 +20,21 @@ object ColorPrototype : BBPrototype {
             "gray" to Color.parseColor("#7f7f7f")
     )
 
-    override fun fromCode(code: String, parent: BBTree) = when (code.startsWith("color", ignoreCase = true)) {
-        true -> {
-            val value = code.substringAfter("=").trim()
-            val color = when (value.startsWith("#")) {
-                true -> try {
-                    Color.parseColor(value)
-                } catch (ignored: IllegalArgumentException) {
-                    null
-                }
-                false -> availableColors.find { it.first == value }?.second
-            }
+    private val availableColorsForRegex = availableColors.joinToString("|") { it.first }
 
-            color?.let { ColorTree(color, parent) }
+    override val startRegex = Regex("\\s*color\\s*=\\s*(#[A-Fa-f0-9]{6}|#[A-Fa-f0-9]{8}|$availableColorsForRegex)\\s*",
+            RegexOption.IGNORE_CASE)
+
+    override val endRegex = Regex("/\\s*color\\s*", RegexOption.IGNORE_CASE)
+
+    override fun construct(code: String, parent: BBTree): BBTree {
+        val value = code.substringAfter("=").trim()
+        val color = when (value.startsWith("#")) {
+            true -> Color.parseColor(value)
+            false -> availableColors.find { it.first == value }?.second
+                    ?: throw IllegalArgumentException("Unknown color: $value")
         }
-        false -> null
+
+        return ColorTree(color, parent)
     }
 }

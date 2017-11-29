@@ -7,5 +7,13 @@ import me.proxer.app.ui.view.bbcode.tree.BBTree
  */
 interface BBPrototype {
 
-    fun fromCode(code: String, parent: BBTree): BBTree?
+    val startRegex: Regex
+    val endRegex: Regex
+
+    fun fromCode(code: String, parent: BBTree) = when (startRegex.matches(code)) {
+        true -> construct(code, parent)
+        false -> null
+    }
+
+    fun construct(code: String, parent: BBTree): BBTree
 }

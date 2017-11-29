@@ -15,6 +15,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
+import android.text.SpannableStringBuilder
 import android.view.ViewGroup
 import android.widget.ImageView
 import com.bumptech.glide.load.DecodeFormat
@@ -48,6 +49,22 @@ inline fun <T> Semaphore.lock(action: () -> T): T {
     } finally {
         release()
     }
+}
+
+inline fun SpannableStringBuilder.trimStartSafely() = when (firstOrNull()?.isWhitespace()) {
+    true -> indices
+            .firstOrNull { !this[it].isWhitespace() }
+            ?.let { delete(0, it) }
+            ?: this
+    else -> this
+}
+
+inline fun SpannableStringBuilder.trimEndSafely() = when (lastOrNull()?.isWhitespace()) {
+    true -> indices.reversed()
+            .firstOrNull { !this[it].isWhitespace() }
+            ?.let { delete(it, length) }
+            ?: this
+    else -> this
 }
 
 inline fun Context.getDrawableFromAttrs(resource: Int): Drawable {

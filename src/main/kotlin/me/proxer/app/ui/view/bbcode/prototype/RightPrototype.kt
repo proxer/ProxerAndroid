@@ -8,8 +8,8 @@ import me.proxer.app.ui.view.bbcode.tree.RightTree
  */
 object RightPrototype : BBPrototype {
 
-    override fun fromCode(code: String, parent: BBTree) = when (code.equals("right", ignoreCase = true)) {
-        true -> RightTree(parent)
-        false -> null
-    }
+    override val startRegex = Regex("\\s*right\\s*", RegexOption.IGNORE_CASE)
+    override val endRegex = Regex("/\\s*right\\s*", RegexOption.IGNORE_CASE)
+
+    override fun construct(code: String, parent: BBTree) = RightTree(parent)
 }

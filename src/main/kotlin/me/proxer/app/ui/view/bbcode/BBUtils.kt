@@ -13,11 +13,11 @@ object BBUtils {
         return views.map { view ->
             if (view is TextView) {
                 operation(view)
+            } else {
+                view.childrenRecursiveSequence().plus(view)
+                        .filterIsInstance(TextView::class.java)
+                        .forEach(operation)
             }
-
-            view.childrenRecursiveSequence().plus(view)
-                    .filterIsInstance(TextView::class.java)
-                    .forEach(operation)
 
             view
         }

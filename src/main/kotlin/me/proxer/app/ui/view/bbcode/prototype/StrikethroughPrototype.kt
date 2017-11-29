@@ -8,8 +8,8 @@ import me.proxer.app.ui.view.bbcode.tree.StrikethroughTree
  */
 object StrikethroughPrototype : BBPrototype {
 
-    override fun fromCode(code: String, parent: BBTree) = when (code.equals("s", ignoreCase = true)) {
-        true -> StrikethroughTree(parent)
-        false -> null
-    }
+    override val startRegex = Regex("\\s*s\\s*", RegexOption.IGNORE_CASE)
+    override val endRegex = Regex("/\\s*s\\s*", RegexOption.IGNORE_CASE)
+
+    override fun construct(code: String, parent: BBTree) = StrikethroughTree(parent)
 }

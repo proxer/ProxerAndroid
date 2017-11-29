@@ -19,10 +19,14 @@ import java.util.regex.Pattern.quote
  */
 object BBParser {
 
-    private val regex = Regex("${quote("[")}(.*?)${quote("]")}", RegexOption.DOT_MATCHES_ALL)
-
     private val prototypes = arrayOf(BoldPrototype, ItalicPrototype, UnderlinePrototype, StrikethroughPrototype,
             SizePrototype, ColorPrototype, LeftPrototype, CenterPrototype, RightPrototype, SpoilerPrototype)
+
+    private val prototypeRegex = prototypes.joinToString("|") {
+        it.startRegex.toPattern().pattern() + "|" + it.endRegex.toPattern().pattern()
+    }
+
+    private val regex = Regex("${quote("[")}(($prototypeRegex)?)${quote("]")}", RegexOption.IGNORE_CASE)
 
     fun parse(input: String): BBTree {
         val trimmedInput = input.trim()
@@ -41,28 +45,19 @@ object BBParser {
                 currentTree.children.add(TextLeaf(startString, currentTree))
             }
 
-            if (part.startsWith("/") && part.length >= 2) {
-                if (currentTree.endsWith(part.substring(1))) {
-                    currentTree = currentTree.parent
-                            ?: throw IllegalStateException("tree does not have a parent: $currentTree")
-                }
+            if (currentTree.endsWith(part)) {
+                currentTree = currentTree.parent
+                        ?: throw IllegalStateException("tree does not have a parent: $currentTree")
             } else {
-                var treeFound = false
-
                 for (prototype in prototypes) {
                     val newTree = prototype.fromCode(it.groupValues[1], currentTree)
 
                     if (newTree != null) {
                         currentTree.children.add(newTree)
                         currentTree = newTree
-                        treeFound = true
 
                         break
                     }
-                }
-
-                if (!treeFound) {
-                    currentTree.children.add(TextLeaf(it.value, currentTree))
                 }
             }
 

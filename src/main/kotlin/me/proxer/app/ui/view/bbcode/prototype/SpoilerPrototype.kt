@@ -8,8 +8,8 @@ import me.proxer.app.ui.view.bbcode.tree.SpoilerTree
  */
 object SpoilerPrototype : BBPrototype {
 
-    override fun fromCode(code: String, parent: BBTree) = when (code.equals("spoiler", ignoreCase = true)) {
-        true -> SpoilerTree(parent)
-        false -> null
-    }
+    override val startRegex = Regex("\\s*spoiler\\s*", RegexOption.IGNORE_CASE)
+    override val endRegex = Regex("/\\s*spoiler\\s*", RegexOption.IGNORE_CASE)
+
+    override fun construct(code: String, parent: BBTree) = SpoilerTree(parent)
 }

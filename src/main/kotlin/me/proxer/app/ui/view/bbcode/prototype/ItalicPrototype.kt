@@ -8,8 +8,8 @@ import me.proxer.app.ui.view.bbcode.tree.ItalicTree
  */
 object ItalicPrototype : BBPrototype {
 
-    override fun fromCode(code: String, parent: BBTree) = when (code.equals("i", ignoreCase = true)) {
-        true -> ItalicTree(parent)
-        false -> null
-    }
+    override val startRegex = Regex("\\s*i\\s*", RegexOption.IGNORE_CASE)
+    override val endRegex = Regex("/\\s*i\\s*", RegexOption.IGNORE_CASE)
+
+    override fun construct(code: String, parent: BBTree) = ItalicTree(parent)
 }

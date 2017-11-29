@@ -8,8 +8,8 @@ import me.proxer.app.ui.view.bbcode.tree.CenterTree
  */
 object CenterPrototype : BBPrototype {
 
-    override fun fromCode(code: String, parent: BBTree) = when (code.equals("center", ignoreCase = true)) {
-        true -> CenterTree(parent)
-        false -> null
-    }
+    override val startRegex = Regex("\\s*center\\s*", RegexOption.IGNORE_CASE)
+    override val endRegex = Regex("/\\s*center\\s*", RegexOption.IGNORE_CASE)
+
+    override fun construct(code: String, parent: BBTree) = CenterTree(parent)
 }

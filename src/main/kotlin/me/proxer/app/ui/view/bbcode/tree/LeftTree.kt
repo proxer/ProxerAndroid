@@ -7,13 +7,14 @@ import android.text.SpannableStringBuilder
 import android.text.style.AlignmentSpan
 import android.view.View
 import me.proxer.app.ui.view.bbcode.BBUtils
+import me.proxer.app.ui.view.bbcode.prototype.LeftPrototype
 
 /**
  * @author Ruben Gees
  */
 class LeftTree(parent: BBTree?, children: MutableList<BBTree> = mutableListOf()) : BBTree(parent, children) {
 
-    override fun endsWith(code: String) = code.equals("left", ignoreCase = true)
+    override val prototype = LeftPrototype
 
     override fun makeViews(context: Context): List<View> {
         val childViews = super.makeViewsWithoutMerging(context)
