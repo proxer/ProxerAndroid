@@ -59,15 +59,11 @@ android {
     }
 
     buildTypes {
-        applicationVariants.all { variant ->
-            variant.buildConfigField 'String', 'PROXER_API_KEY', "\"${getFromSecrets("PROXER_API_KEY")}\""
-        }
-
         debug {
             minifyEnabled true
             useProguard false
             proguardFiles 'config/proguard/proguard-rules.pro'
-            archivesBaseName = "proxerme-${defaultConfig.versionName}"
+            archivesBaseName = "app-${defaultConfig.versionName}"
             buildConfigField 'boolean', 'STORE', "false"
         }
 
@@ -89,7 +85,16 @@ android {
 
         storeRelease {
             initWith release
-            buildConfigField 'boolean', 'STORE', "true"
+        }
+
+        applicationVariants.all { variant ->
+            variant.buildConfigField 'String', 'PROXER_API_KEY', "\"${getFromSecrets("PROXER_API_KEY")}\""
+
+            if(variant.getName() == "storeRelease") {
+                variant.buildConfigField 'boolean', 'STORE', "true"
+            } else {
+                variant.buildConfigField 'boolean', 'STORE', "false"
+            }
         }
     }
 
