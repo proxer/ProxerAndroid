@@ -96,4 +96,3 @@ inline fun Fragment.multilineSnackbar(
         actionCallback: View.OnClickListener? = null,
         maxLines: Int = 5
 ) = activity?.multilineSnackbar(root, message, duration, actionMessage, actionCallback, maxLines)
-

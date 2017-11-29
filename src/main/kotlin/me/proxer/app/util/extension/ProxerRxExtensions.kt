@@ -14,10 +14,6 @@ import okhttp3.Call
 import okhttp3.Response
 import java.io.IOException
 
-/**
- * @author Ruben Gees
- */
-
 fun <T> Endpoint<T>.buildSingle(): Single<T> = Single.create { emitter ->
     val call = build()
 

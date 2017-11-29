@@ -16,10 +16,6 @@ import io.reactivex.disposables.Disposable
 import me.proxer.app.MainApplication.Companion.LOGGING_TAG
 import org.jetbrains.anko.getStackTraceString
 
-/**
- * @author Ruben Gees
- */
-
 inline fun <T> Observable<T>.autoDispose(owner: LifecycleOwner) = this
         .autoDisposeWith(owner.scope(Lifecycle.Event.ON_DESTROY))
 
@@ -128,4 +124,3 @@ inline fun CompletableSubscribeProxy.subscribeAndLogErrors(): Disposable {
         Log.e(LOGGING_TAG, it.getStackTraceString())
     })
 }
-

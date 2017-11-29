@@ -21,38 +21,38 @@ object PreferenceHelper {
     const val MANGA_WLAN = "manga_unmetered_required"
     const val MANGA_CLEAN = "manga_clean"
 
-    fun isAgeRestrictedMediaAllowed(context: Context)
-            = getDefaultSharedPreferences(context).getBoolean(AGE_CONFIRMATION, false)
+    fun isAgeRestrictedMediaAllowed(context: Context) = getDefaultSharedPreferences(context)
+            .getBoolean(AGE_CONFIRMATION, false)
 
-    fun getStartPage(context: Context) = DrawerItem
-            .fromOrDefault(getDefaultSharedPreferences(context).getString(START_PAGE, "0").toLongOrNull())
+    fun getStartPage(context: Context) = DrawerItem.fromOrDefault(getDefaultSharedPreferences(context)
+            .getString(START_PAGE, "0").toLongOrNull())
 
-    fun setAgeRestrictedMediaAllowed(context: Context, allowed: Boolean)
-            = getDefaultSharedPreferences(context).edit().putBoolean(AGE_CONFIRMATION, allowed).apply()
+    fun setAgeRestrictedMediaAllowed(context: Context, allowed: Boolean) = getDefaultSharedPreferences(context).edit()
+            .putBoolean(AGE_CONFIRMATION, allowed).apply()
 
-    fun areNewsNotificationsEnabled(context: Context)
-            = getDefaultSharedPreferences(context).getBoolean(NOTIFICATIONS_NEWS, false)
+    fun areNewsNotificationsEnabled(context: Context) = getDefaultSharedPreferences(context)
+            .getBoolean(NOTIFICATIONS_NEWS, false)
 
-    fun areAccountNotificationsEnabled(context: Context)
-            = getDefaultSharedPreferences(context).getBoolean(NOTIFICATIONS_ACCOUNT, false)
+    fun areAccountNotificationsEnabled(context: Context) = getDefaultSharedPreferences(context)
+            .getBoolean(NOTIFICATIONS_ACCOUNT, false)
 
-    fun areChatNotificationsEnabled(context: Context)
-            = getDefaultSharedPreferences(context).getBoolean(NOTIFICATIONS_CHAT, true)
+    fun areChatNotificationsEnabled(context: Context) = getDefaultSharedPreferences(context)
+            .getBoolean(NOTIFICATIONS_CHAT, true)
 
-    fun setNewsNotificationsEnabled(context: Context, enabled: Boolean)
-            = getDefaultSharedPreferences(context).edit().putBoolean(NOTIFICATIONS_NEWS, enabled).apply()
+    fun setNewsNotificationsEnabled(context: Context, enabled: Boolean) = getDefaultSharedPreferences(context).edit()
+            .putBoolean(NOTIFICATIONS_NEWS, enabled).apply()
 
-    fun setAccountNotificationsEnabled(context: Context, enabled: Boolean)
-            = getDefaultSharedPreferences(context).edit().putBoolean(NOTIFICATIONS_ACCOUNT, enabled).apply()
+    fun setAccountNotificationsEnabled(context: Context, enabled: Boolean) = getDefaultSharedPreferences(context).edit()
+            .putBoolean(NOTIFICATIONS_ACCOUNT, enabled).apply()
 
-    fun getNotificationsInterval(context: Context)
-            = getDefaultSharedPreferences(context).getString(NOTIFICATIONS_INTERVAL, "30").toLong()
+    fun getNotificationsInterval(context: Context) = getDefaultSharedPreferences(context)
+            .getString(NOTIFICATIONS_INTERVAL, "30").toLong()
 
-    fun isVerticalReaderEnabled(context: Context)
-            = getDefaultSharedPreferences(context).getBoolean(MANGA_VERTICAL_READER, true)
+    fun isVerticalReaderEnabled(context: Context) = getDefaultSharedPreferences(context)
+            .getBoolean(MANGA_VERTICAL_READER, true)
 
-    fun isUnmeteredNetworkRequired(context: Context)
-            = getDefaultSharedPreferences(context).getBoolean(MANGA_WLAN, true)
+    fun isUnmeteredNetworkRequired(context: Context) = getDefaultSharedPreferences(context)
+            .getBoolean(MANGA_WLAN, true)
 
     @AppCompatDelegate.NightMode
     fun getNightMode(context: Context) = when (getDefaultSharedPreferences(context).getString(THEME, "2")) {

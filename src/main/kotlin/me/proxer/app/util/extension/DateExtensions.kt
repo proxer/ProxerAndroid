@@ -9,10 +9,6 @@ import org.threeten.bp.ZoneId
 import org.threeten.bp.temporal.ChronoUnit
 import java.util.Date
 
-/**
- * @author Ruben Gees
- */
-
 fun Date.convertToRelativeReadableTime(context: Context): String {
     val dateTime = convertToDateTime()
     val now = LocalDateTime.now()
