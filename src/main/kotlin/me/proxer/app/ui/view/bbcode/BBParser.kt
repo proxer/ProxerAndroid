@@ -49,15 +49,24 @@ object BBParser {
                 currentTree = currentTree.parent
                         ?: throw IllegalStateException("tree does not have a parent: $currentTree")
             } else {
+                var prototypeFound = false
+
                 for (prototype in prototypes) {
                     val newTree = prototype.fromCode(it.groupValues[1], currentTree)
 
                     if (newTree != null) {
                         currentTree.children.add(newTree)
                         currentTree = newTree
+                        prototypeFound = true
 
                         break
                     }
+                }
+
+                // If nothing found assume a user error and look for a fitting end tag in the existing tree.
+                if (!prototypeFound && currentTree.parent?.endsWith(part) == true) {
+                    currentTree = currentTree.parent?.parent
+                            ?: throw IllegalStateException("tree does not have a parent: $currentTree")
                 }
             }
 
