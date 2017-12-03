@@ -1,8 +1,8 @@
 ext {
     // App
     appVersionMajor = 1
-    appVersionMinor = 1
-    appVersionPatch = 3
+    appVersionMinor = 2
+    appVersionPatch = 0
 
     minSdkVersion = 16
     targetSdkVersion = 27
@@ -53,7 +53,7 @@ ext {
     materialDialogsVersion = '0.9.6.0'
     flexboxVersion = '0.3.1'
     emojiIosVersion = '0.6.0-SNAPSHOT'
-    exomediaVersion = '735e92ff83'
+    exomediaVersion = 'f3d2a6d3fc'
     exoplayerVersion = '2.6.0'
     materialProgressBarVersion = '1.4.2'
     materialRatingBarVersion = '1.2.0'
@@ -77,6 +77,7 @@ ext {
     javaxExtrasVersion = '0.1.0'
     alfredVersion = '3ea7529bd2'
     rapidDecoderVersion = '7cdfca47fa'
+    concealVersion = '2.0.1'
 
     // Debugging
     customActivityOnCrashVersion = '2.2.0'
