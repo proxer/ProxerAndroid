@@ -60,17 +60,27 @@ android {
 
     buildTypes {
         debug {
-            minifyEnabled true
-            useProguard false
-            proguardFiles 'config/proguard/proguard-rules.pro'
+            postprocessing {
+                removeUnusedCode true
+                removeUnusedResources false
+                obfuscate false
+                optimizeCode false
+                proguardFile 'config/proguard/proguard-rules.pro'
+            }
+
             archivesBaseName = "app-${defaultConfig.versionName}"
             buildConfigField 'boolean', 'STORE', "false"
         }
 
         release {
-            minifyEnabled true
-            shrinkResources true
-            proguardFiles 'config/proguard/proguard-rules.pro'
+            postprocessing {
+                removeUnusedCode true
+                removeUnusedResources true
+                obfuscate true
+                optimizeCode true
+                proguardFile 'config/proguard/proguard-rules.pro'
+            }
+
             archivesBaseName = "app-${defaultConfig.versionName}"
             buildConfigField 'boolean', 'STORE', "false"
 

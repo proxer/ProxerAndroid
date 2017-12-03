@@ -1,37 +1,7 @@
--optimizations !field/*,!class/merging/*
 -optimizationpasses 10
--allowaccessmodification
--dontpreverify
-
--dontusemixedcaseclassnames
--dontskipnonpubliclibraryclasses
--verbose
 
 -renamesourcefileattribute SourceFile
 -keepattributes *Annotation*,SourceFile,LineNumberTable
-
-# For native methods, see http://proguard.sourceforge.net/manual/examples.html#native
--keepclasseswithmembernames class * {
-    native <methods>;
-}
-
-# keep setters in Views so that animations can still work.
-# see http://proguard.sourceforge.net/manual/examples.html#beans
--keepclassmembers public class * extends android.view.View {
-   void set*(***);
-   *** get*();
-}
-
-# For enumeration classes, see http://proguard.sourceforge.net/manual/examples.html#enumerations
--keepclassmembers enum * {
-    public static **[] values();
-    public static ** valueOf(java.lang.String);
-}
-
-# Keep Parcelable implementations.
--keepclassmembers class * implements android.os.Parcelable {
-    public static final android.os.Parcelable$Creator CREATOR;
-}
 
 # Keep fields in R which are accessed through reflection.
 -keepclasseswithmembers class **.R$* {
@@ -48,28 +18,6 @@
 -dontnote org.apache.commons.codec.**
 -dontnote org.apache.http.**
 
-# The support library contains references to newer platform versions.
-# Don't warn about those in case this app is linking against an older
-# platform version. We know about them, and they are safe.
--dontnote android.support.**
--dontwarn android.support.**
-
-# Understand the @Keep support annotation.
--keep class android.support.annotation.Keep
--keep @android.support.annotation.Keep class * { *; }
-
--keepclasseswithmembers class * {
-    @android.support.annotation.Keep <methods>;
-}
-
--keepclasseswithmembers class * {
-    @android.support.annotation.Keep <fields>;
-}
-
--keepclasseswithmembers class * {
-    @android.support.annotation.Keep <init>(...);
-}
-
 # Remove all kinds of logging.
 -assumenosideeffects class android.util.Log {
     public static int d(...);
@@ -80,13 +28,30 @@
     public static int wtf(...);
 }
 
--keep class * implements android.arch.lifecycle.GeneratedAdapter {
-    <init>(...);
-}
-
 # Remove Kotlin null checks.
 -assumenosideeffects class kotlin.jvm.internal.Intrinsics {
     static void checkParameterIsNotNull(java.lang.Object, java.lang.String);
+}
+
+# Avoid crash of SearchView.
+-keep class android.support.v7.widget.SearchView { *; }
+
+# Avoid crash on some emulators when running the debug variant.
+-keepclassmembers class com.facebook.android.crypto.keychain.SecureRandomFix$LinuxPRNGSecureRandom {
+    public <init>(...);
+}
+
+-keepclassmembers class com.davemorrissey.labs.subscaleview.decoder.SkiaImageRegionDecoder {
+    public <init>(...);
+}
+
+-keepclassmembers class com.davemorrissey.labs.subscaleview.decoder.SkiaImageDecoder {
+    public <init>(...);
+}
+
+# Android Architecture Components
+-keep class * implements android.arch.lifecycle.GeneratedAdapter {
+    <init>(...);
 }
 
 # Glide
@@ -135,20 +100,4 @@
 -keep enum me.proxer.library.** {
     **[] $VALUES;
     public *;
-}
-
-# Avoid crash of SearchView.
--keep class android.support.v7.widget.SearchView { *; }
-
-# Avoid crash on some emulators when running the debug variant.
--keepclassmembers class com.facebook.android.crypto.keychain.SecureRandomFix$LinuxPRNGSecureRandom {
-    public <init>(...);
-}
-
--keepclassmembers class com.davemorrissey.labs.subscaleview.decoder.SkiaImageRegionDecoder {
-    public <init>(...);
-}
-
--keepclassmembers class com.davemorrissey.labs.subscaleview.decoder.SkiaImageDecoder {
-    public <init>(...);
 }
