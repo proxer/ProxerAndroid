@@ -18,6 +18,7 @@ import me.proxer.app.base.BaseActivity
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.clipboardManager
 import me.proxer.app.util.extension.isAtTop
+import me.proxer.app.util.extension.postDelayedSafely
 import me.proxer.app.util.extension.snackbar
 import me.proxer.app.util.extension.unsafeLazy
 import org.jetbrains.anko.toast
@@ -63,7 +64,7 @@ class LogActivity : BaseActivity() {
                 adapter.swapDataAndNotifyWithDiffing(it)
 
                 if (wasAtTop) {
-                    recyclerView.postDelayed({
+                    recyclerView.postDelayedSafely({ recyclerView ->
                         recyclerView.smoothScrollToPosition(0)
                     }, 50)
                 }

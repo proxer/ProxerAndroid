@@ -117,7 +117,44 @@ object ErrorUtils {
         }
     }
 
-    fun getMessageForProxerException(error: ProxerException) = when (error.errorType) {
+    fun isIpBlockedError(error: Throwable) = getInnermostError(error).let {
+        it is ProxerException && it.serverErrorType == IP_BLOCKED
+    }
+
+    fun isNetworkError(error: Throwable) = ErrorUtils.getInnermostError(error).let {
+        it is ProxerException && (it.errorType == IO || it.errorType == TIMEOUT)
+    }
+
+    fun handle(error: Throwable): ErrorAction {
+        val innermostError = getInnermostError(error)
+        val errorMessage = getMessage(innermostError)
+
+        val buttonMessage = when (innermostError) {
+            is ProxerException -> when (innermostError.serverErrorType) {
+                IP_BLOCKED -> R.string.error_action_captcha
+                in LOGIN_ERRORS -> R.string.error_action_login
+                else -> ACTION_MESSAGE_DEFAULT
+            }
+            is NotLoggedInException -> R.string.error_action_login
+            is AgeConfirmationRequiredException -> R.string.error_action_confirm
+            else -> ACTION_MESSAGE_DEFAULT
+        }
+
+        val buttonAction = when (innermostError) {
+            is ProxerException -> when (innermostError.serverErrorType) {
+                IP_BLOCKED -> ButtonAction.CAPTCHA
+                in LOGIN_ERRORS -> ButtonAction.LOGIN
+                else -> null
+            }
+            is NotLoggedInException -> ButtonAction.LOGIN
+            is AgeConfirmationRequiredException -> ButtonAction.AGE_CONFIRMATION
+            else -> null
+        }
+
+        return ErrorAction(errorMessage, buttonMessage, buttonAction, (error as? PartialException)?.partialData)
+    }
+
+    private fun getMessageForProxerException(error: ProxerException) = when (error.errorType) {
         SERVER -> when (error.serverErrorType) {
             IP_BLOCKED -> R.string.error_captcha
             INVALID_TOKEN -> R.string.error_invalid_token
@@ -151,48 +188,11 @@ object ErrorUtils {
         UNKNOWN -> R.string.error_unknown
     }
 
-    fun getInnermostError(error: Throwable) = when (error) {
+    private fun getInnermostError(error: Throwable) = when (error) {
         is PartialException -> error.innerError
         is ChatException -> error.innerError
         is ExoPlaybackException -> error.cause ?: Exception()
         else -> error
-    }
-
-    fun isIpBlockedError(error: Throwable) = getInnermostError(error).let {
-        it is ProxerException && it.serverErrorType == IP_BLOCKED
-    }
-
-    fun isNetworkError(error: Throwable) = ErrorUtils.getInnermostError(error).let {
-        it is ProxerException && it.errorType == IO
-    }
-
-    fun handle(error: Throwable): ErrorAction {
-        val innermostError = getInnermostError(error)
-        val errorMessage = getMessage(innermostError)
-
-        val buttonMessage = when (innermostError) {
-            is ProxerException -> when (innermostError.serverErrorType) {
-                IP_BLOCKED -> R.string.error_action_captcha
-                in LOGIN_ERRORS -> R.string.error_action_login
-                else -> ACTION_MESSAGE_DEFAULT
-            }
-            is NotLoggedInException -> R.string.error_action_login
-            is AgeConfirmationRequiredException -> R.string.error_action_confirm
-            else -> ACTION_MESSAGE_DEFAULT
-        }
-
-        val buttonAction = when (innermostError) {
-            is ProxerException -> when (innermostError.serverErrorType) {
-                IP_BLOCKED -> ButtonAction.CAPTCHA
-                in LOGIN_ERRORS -> ButtonAction.LOGIN
-                else -> null
-            }
-            is NotLoggedInException -> ButtonAction.LOGIN
-            is AgeConfirmationRequiredException -> ButtonAction.AGE_CONFIRMATION
-            else -> null
-        }
-
-        return ErrorAction(errorMessage, buttonMessage, buttonAction, (error as? PartialException)?.partialData)
     }
 
     open class ErrorAction(val message: Int, val buttonMessage: Int = ACTION_MESSAGE_DEFAULT,

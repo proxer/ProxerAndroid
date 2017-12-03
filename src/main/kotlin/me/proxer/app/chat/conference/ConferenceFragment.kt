@@ -25,6 +25,7 @@ import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.isAtTop
+import me.proxer.app.util.extension.postDelayedSafely
 import me.proxer.app.util.extension.scrollToTop
 import me.proxer.app.util.extension.unsafeLazy
 import org.jetbrains.anko.bundleOf
@@ -129,7 +130,7 @@ class ConferenceFragment : BaseContentFragment<List<LocalConference>>() {
         if (adapter.isEmpty()) {
             showError(ErrorAction(R.string.error_no_data_conferences, ACTION_MESSAGE_HIDE))
         } else if (!isFirstData && (wasAtFirstPosition || wasEmpty)) {
-            recyclerView.postDelayed({
+            recyclerView.postDelayedSafely({ recyclerView ->
                 when {
                     wasEmpty -> recyclerView.layoutManager.scrollToTop()
                     else -> recyclerView.smoothScrollToPosition(0)

@@ -16,6 +16,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.text.SpannableStringBuilder
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import com.bumptech.glide.load.DecodeFormat
@@ -102,6 +103,10 @@ inline fun GlideRequests.defaultLoad(view: ImageView, url: HttpUrl): Target<Draw
         .into(view)
 
 inline fun HttpUrl.androidUri(): Uri = Uri.parse(toString())
+
+inline fun <T : View> T.postDelayedSafely(crossinline callback: (T) -> Unit, delayMillis: Long) {
+    postDelayed({ callback(this) }, delayMillis)
+}
 
 inline fun ViewGroup.enableLayoutAnimationsSafely() {
     this.layoutTransition = LayoutTransition().apply { setAnimateParentHierarchy(false) }

@@ -20,6 +20,7 @@ import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.endScrolls
 import me.proxer.app.util.extension.isAtCompleteTop
 import me.proxer.app.util.extension.multilineSnackbar
+import me.proxer.app.util.extension.postDelayedSafely
 import me.proxer.app.util.extension.scrollToTop
 import java.util.concurrent.TimeUnit
 import kotlin.properties.Delegates
@@ -110,7 +111,7 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
         if (innerAdapter.isEmpty()) {
             showError(ErrorAction(emptyDataMessage, ACTION_MESSAGE_HIDE))
         } else if (!isFirstData && (wasAtFirstPosition || wasEmpty)) {
-            recyclerView.postDelayed({
+            recyclerView.postDelayedSafely({ recyclerView ->
                 when {
                     wasEmpty -> scrollToTop()
                     else -> recyclerView.smoothScrollToPosition(0)

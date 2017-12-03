@@ -25,6 +25,7 @@ import me.proxer.app.R
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.extension.autoDispose
+import me.proxer.app.util.extension.postDelayedSafely
 
 /**
  * @author Ruben Gees
@@ -117,18 +118,16 @@ class StreamActivity : BaseActivity() {
             it.systemUiVisibilityChanges()
                     .autoDispose(this)
                     .subscribe { visibility ->
-                        toolbar.let {
-                            if (visibility and View.SYSTEM_UI_FLAG_FULLSCREEN == 0) {
-                                player.showControls()
+                        if (visibility and View.SYSTEM_UI_FLAG_FULLSCREEN == 0) {
+                            player.showControls()
 
-                                it.postDelayed({
-                                    it.visibility = View.VISIBLE
-                                }, 50)
-                            } else {
-                                it.postDelayed({
-                                    it.visibility = View.GONE
-                                }, 50)
-                            }
+                            toolbar.postDelayedSafely({
+                                it.visibility = View.VISIBLE
+                            }, 50)
+                        } else {
+                            toolbar.postDelayedSafely({
+                                it.visibility = View.GONE
+                            }, 50)
                         }
                     }
         }

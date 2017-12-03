@@ -22,6 +22,7 @@ import me.proxer.app.util.extension.ProxerNotification
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.isAtTop
 import me.proxer.app.util.extension.multilineSnackbar
+import me.proxer.app.util.extension.postDelayedSafely
 import me.proxer.app.util.extension.scrollToTop
 import me.proxer.app.util.extension.unsafeLazy
 import org.jetbrains.anko.bundleOf
@@ -125,7 +126,7 @@ class NotificationFragment : BaseContentFragment<List<ProxerNotification>>() {
             if (adapter.isEmpty()) {
                 showError(ErrorAction(R.string.error_no_data_notifications, ACTION_MESSAGE_HIDE))
             } else if (wasAtFirstPosition || wasEmpty) {
-                recyclerView.postDelayed({
+                recyclerView.postDelayedSafely({ recyclerView ->
                     when {
                         wasEmpty -> recyclerView.layoutManager.scrollToTop()
                         else -> recyclerView.smoothScrollToPosition(0)
