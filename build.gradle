@@ -69,6 +69,7 @@ android {
             }
 
             archivesBaseName = "app-${defaultConfig.versionName}"
+            buildConfigField 'String', 'PROXER_API_KEY', "\"${getFromSecrets('PROXER_API_KEY')}\""
             buildConfigField 'boolean', 'STORE', "false"
         }
 
@@ -82,9 +83,10 @@ android {
             }
 
             archivesBaseName = "app-${defaultConfig.versionName}"
+            buildConfigField 'String', 'PROXER_API_KEY', "\"${getFromSecrets('PROXER_API_KEY')}\""
             buildConfigField 'boolean', 'STORE', "false"
 
-            if (shouldSign()) {
+            if (shouldSign() && !isCI()) {
                 signingConfig signingConfigs.release
             } else {
                 logger.warn('This build will not be signed because it is missing the keystore info. Please add ' +
@@ -94,16 +96,24 @@ android {
         }
 
         storeRelease {
-            initWith release
-        }
+            postprocessing {
+                removeUnusedCode true
+                removeUnusedResources true
+                obfuscate true
+                optimizeCode true
+                proguardFile 'config/proguard/proguard-rules.pro'
+            }
 
-        applicationVariants.all { variant ->
-            variant.buildConfigField 'String', 'PROXER_API_KEY', "\"${getFromSecrets('PROXER_API_KEY')}\""
+            archivesBaseName = "app-${defaultConfig.versionName}"
+            buildConfigField 'String', 'PROXER_API_KEY', "\"${getFromSecrets('PROXER_API_KEY')}\""
+            buildConfigField 'boolean', 'STORE', "true"
 
-            if (variant.getName() == 'storeRelease') {
-                variant.buildConfigField 'boolean', 'STORE', "true"
+            if (shouldSign() && !isCI()) {
+                signingConfig signingConfigs.release
             } else {
-                variant.buildConfigField 'boolean', 'STORE', "false"
+                logger.warn('This build will not be signed because it is missing the keystore info. Please add ' +
+                        'values for "RELEASE_STORE_FILE", "RELEASE_STORE_PASSWORD", "RELEASE_KEY_ALIAS" and ' +
+                        '"RELEASE_KEY_PASSWORD" to your secrets.properties file if you want the apk to be signed.')
             }
         }
     }
