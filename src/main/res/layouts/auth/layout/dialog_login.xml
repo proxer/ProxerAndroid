@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".auth.LoginDialog">
 
     <me.zhanghai.android.materialprogressbar.MaterialProgressBar
@@ -75,5 +76,11 @@
                 android:visibility="gone"
                 tools:visibility="visible" />
         </android.support.design.widget.TextInputLayout>
+
+        <TextView
+            android:id="@+id/registrationInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Info" />
     </LinearLayout>
 </FrameLayout>

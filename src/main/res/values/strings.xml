@@ -215,7 +215,8 @@
 
     <string name="cancel">Abbrechen</string>
 
-    <string name="activity_crash_text">Die App ist leider abgestürzt. Sende den Fehler bitte an @RubyGee oder einen anderen Techniker um bei der Beseitigung zu helfen!</string>
+    <string name="activity_crash_text">Die App ist leider abgestürzt. Sende den Fehler bitte an @RubyGee oder einen
+        anderen Techniker um bei der Beseitigung zu helfen!</string>
     <string name="activity_crash_report">Fehlerbericht</string>
     <string name="activity_crash_restart">Neustart</string>
 
@@ -226,6 +227,8 @@
     <string name="dialog_login_secret_hint">Secret Key</string>
     <string name="dialog_login_error_password">Bitte gib ein Passwort an</string>
     <string name="dialog_login_error_username">Bitte gib einen Nutzernamen an</string>
+    <string name="dialog_login_registration">Solltest du noch keinen Account haben, kannst du dich auf der Proxer
+        Webseite registrieren</string>
 
     <string name="dialog_logout_content">Möchtest du dich abmelden? Dabei werden alle heruntergeladenen Manga und
         Chats gelöscht und du hast keinen Zugriff mehr auf einige Bereiche.</string>
@@ -242,7 +245,8 @@
     <string name="dialog_clean_manga_content">Sollen alle heruntergeladenen Kapitel und Seiten gelöscht werden?</string>
     <string name="dialog_clean_manga_positive">Alles löschen</string>
 
-    <string name="dialog_notification_deletion_confirmation_content">Sollen alle Benachrichtigungen gelöscht werden? Das kann nicht rückgängig gemacht werden.</string>
+    <string name="dialog_notification_deletion_confirmation_content">Sollen alle Benachrichtigungen gelöscht werden?
+        Das kann nicht rückgängig gemacht werden.</string>
     <string name="dialog_notification_deletion_confirmation_positive">Löschen</string>
 
     <string name="dialog_crash_title">Fehlerbericht</string>
