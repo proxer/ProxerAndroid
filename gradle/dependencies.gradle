@@ -105,7 +105,6 @@ ext {
                     exclusions: [
                             'exoplayer-hls',
                             'exoplayer-dash',
-                            'exoplayer-smoothstreaming',
                     ],
             ],
             hawk    : [
