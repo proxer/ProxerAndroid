@@ -39,7 +39,7 @@ ext {
     rxBindingVersion = '2.0.0'
     rxBusVersion = '2.0.0'
     rxPermissionsVersion = '0.9.4'
-    autoDisposeVersion = '0.4.0'
+    autoDisposeVersion = '0.5.0'
 
     // UI components
     aboutLibrariesVersion = '6.0.1'
