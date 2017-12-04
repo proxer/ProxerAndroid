@@ -52,7 +52,7 @@ ext {
     tabLayoutHelperVersion = '0.9.0'
     materialDialogsVersion = '0.9.6.0'
     flexboxVersion = '0.3.1'
-    emojiIosVersion = '0.6.0-SNAPSHOT'
+    emojiIosVersion = '4815f0801d'
     exomediaVersion = 'f3d2a6d3fc'
     exoplayerVersion = '2.6.0'
     materialProgressBarVersion = '1.4.2'
@@ -66,7 +66,7 @@ ext {
     // Utils
     threetenVersion = '1.0.5'
     hawkVersion = '2.0.1'
-    glideVersion = '4.4.0-SNAPSHOT'
+    glideVersion = '4.4.0'
     okHttpVersion = '3.9.1'
     okioVersion = '1.13.0'
     linkBuilderVersion = '1.6.1'
