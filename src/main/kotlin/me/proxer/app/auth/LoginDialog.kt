@@ -29,7 +29,9 @@ import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.unsafeLazy
+import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
+import me.proxer.library.util.ProxerUtils
 import org.jetbrains.anko.longToast
 import java.util.regex.Pattern
 
@@ -40,6 +42,7 @@ class LoginDialog : BaseDialog() {
 
     companion object {
         private val WEBSITE_PATTERN = Pattern.compile("Proxer \\b(.+?)\\b", Pattern.DOTALL)
+        private const val DEVICE_PARAMETER = "device"
 
         fun show(activity: AppCompatActivity) = LoginDialog().show(activity.supportFragmentManager, "login_dialog")
     }
@@ -110,7 +113,12 @@ class LoginDialog : BaseDialog() {
                 .addLink(Link(WEBSITE_PATTERN)
                         .setTextColor(ContextCompat.getColor(safeContext, R.color.link))
                         .setUnderlined(false)
-                        .setOnClickListener { showPage(ProxerUrls.webBase()) })
+                        .setOnClickListener {
+                            showPage(ProxerUrls.webBase()
+                                    .newBuilder()
+                                    .addQueryParameter(DEVICE_PARAMETER, ProxerUtils.getApiEnumName(Device.DEFAULT))
+                                    .build())
+                        })
                 .build()
     }
 
