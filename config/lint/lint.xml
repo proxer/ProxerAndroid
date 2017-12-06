@@ -8,4 +8,7 @@
 
     <!-- False positives with Kotlin. -->
     <issue id="NewApi" severity="informational" />
+
+    <!-- False positives with Kotlin. -->
+    <issue id="CheckResult" severity="informational" />
 </lint>
