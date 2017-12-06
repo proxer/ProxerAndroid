@@ -6,6 +6,7 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.support.v7.app.AppCompatDelegate
+import android.util.Log
 import android.widget.ImageView
 import cat.ereza.customactivityoncrash.config.CaocConfig
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
@@ -26,6 +27,8 @@ import com.squareup.leakcanary.RefWatcher
 import com.squareup.moshi.Moshi
 import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.ios.IosEmojiProvider
+import io.reactivex.exceptions.UndeliverableException
+import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.auth.LoginEvent
 import me.proxer.app.auth.LogoutEvent
@@ -186,6 +189,14 @@ class MainApplication : Application() {
                 it == NotificationJob.TAG -> NotificationJob()
                 it.startsWith(LocalMangaJob.TAG) -> LocalMangaJob()
                 else -> null
+            }
+        }
+
+        RxJavaPlugins.setErrorHandler { error ->
+            when (error) {
+                is UndeliverableException -> Log.w(LOGGING_TAG, "Can't deliver error: $error")
+                is InterruptedException -> Log.w(LOGGING_TAG, error)
+                else -> Thread.currentThread().uncaughtExceptionHandler.uncaughtException(Thread.currentThread(), error)
             }
         }
 
