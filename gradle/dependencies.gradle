@@ -101,7 +101,7 @@ ext {
 
     excludingImplementationDependencies = [
             exomedia: [
-                    dependency: "com.github.brianwernick:Exomedia:$exomediaVersion",
+                    dependency: "com.devbrackets.android:exomedia:$exomediaVersion",
                     exclusions: [
                             'exoplayer-hls',
                             'exoplayer-dash',
