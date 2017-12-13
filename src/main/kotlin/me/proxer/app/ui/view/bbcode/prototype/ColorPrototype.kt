@@ -21,14 +21,15 @@ object ColorPrototype : BBPrototype {
     )
 
     private val availableColorsForRegex = availableColors.joinToString("|") { it.first }
+    private val colorsForRegex = "(#[A-Fa-f0-9]{6}|#[A-Fa-f0-9]{8}|$availableColorsForRegex)"
 
-    override val startRegex = Regex("\\s*color\\s*=\\s*(#[A-Fa-f0-9]{6}|#[A-Fa-f0-9]{8}|$availableColorsForRegex)\\s*",
-            RegexOption.IGNORE_CASE)
+    override val startRegex = Regex("\\s*color\\s*=\\s*\"?$colorsForRegex\"?\\s*", RegexOption.IGNORE_CASE)
 
     override val endRegex = Regex("/\\s*color\\s*", RegexOption.IGNORE_CASE)
 
     override fun construct(code: String, parent: BBTree): BBTree {
-        val value = code.substringAfter("=").trim()
+        val value = code.substringAfter("=").trim().replace("\"", "")
+
         val color = when (value.startsWith("#")) {
             true -> Color.parseColor(value)
             false -> availableColors.find { it.first == value }?.second

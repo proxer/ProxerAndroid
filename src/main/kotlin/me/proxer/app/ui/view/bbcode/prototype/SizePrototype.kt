@@ -8,11 +8,11 @@ import me.proxer.app.ui.view.bbcode.tree.SizeTree
  */
 object SizePrototype : BBPrototype {
 
-    override val startRegex = Regex("\\s*size\\s*=\\s*[1-6]\\s*", RegexOption.IGNORE_CASE)
+    override val startRegex = Regex("\\s*size\\s*=\\s*\"?[1-6]\"?\\s*", RegexOption.IGNORE_CASE)
     override val endRegex = Regex("/\\s*size\\s*", RegexOption.IGNORE_CASE)
 
     override fun construct(code: String, parent: BBTree): BBTree {
-        val value = code.substringAfter("=").trim().getOrNull(0)
+        val value = code.substringAfter("=").trim().replace("\"", "").getOrNull(0)
 
         return when (value) {
             '1' -> SizeTree(0.4f, parent)
