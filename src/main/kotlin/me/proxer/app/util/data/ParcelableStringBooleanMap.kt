@@ -18,18 +18,11 @@ class ParcelableStringBooleanMap : Parcelable {
     }
 
     val size get() = internalMap.size
-    val keys get() = internalMap.keys
     val entries get() = internalMap.entries
 
     private val internalMap = LinkedHashMap<String, Boolean>()
 
     constructor()
-
-    constructor(items: Iterable<String>) {
-        items.forEach {
-            put(it, true)
-        }
-    }
 
     internal constructor(source: Parcel) {
         (0 until source.readInt()).forEach {
