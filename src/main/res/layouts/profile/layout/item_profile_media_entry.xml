@@ -58,38 +58,52 @@
                 android:textColor="@android:color/white"
                 tools:text="Animeseries" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <FrameLayout
+                android:id="@+id/ratingContainer"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:layout_below="@+id/medium"
-                android:orientation="vertical">
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_toLeftOf="@+id/state"
+                android:layout_toStartOf="@+id/state">
 
-                <FrameLayout
-                    android:id="@+id/ratingContainer"
+                <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                    android:id="@+id/rating"
+                    style="?attr/ratingBarStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginTop="8dp">
+                    android:isIndicator="true"
+                    android:numStars="5" />
+            </FrameLayout>
 
-                    <me.zhanghai.android.materialratingbar.MaterialRatingBar
-                        android:id="@+id/rating"
-                        style="?attr/ratingBarStyleSmall"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:isIndicator="true"
-                        android:numStars="5" />
+            <TextView
+                android:id="@+id/status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/ratingContainer"
+                android:layout_toLeftOf="@+id/state"
+                android:layout_toStartOf="@+id/state"
+                android:padding="8dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                tools:text="Episode 13/24 - Watching" />
 
-                </FrameLayout>
-
-                <TextView
-                    android:id="@+id/status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    tools:text="Episode 13/24 - Watching" />
-            </LinearLayout>
+            <ImageView
+                android:id="@+id/state"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_alignBottom="@+id/status"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/image"
+                android:layout_margin="8dp"
+                tools:ignore="ContentDescription"
+                tools:src="@drawable/ic_japan" />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </FrameLayout>

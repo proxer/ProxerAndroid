@@ -15,6 +15,7 @@ import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.profile.media.ProfileMediaAdapter.ViewHolder
 import me.proxer.app.util.extension.defaultLoad
+import me.proxer.app.util.extension.toAppDrawable
 import me.proxer.app.util.extension.toAppString
 import me.proxer.app.util.extension.toCategory
 import me.proxer.app.util.extension.toEpisodeAppString
@@ -53,6 +54,7 @@ class ProfileMediaAdapter : BaseAdapter<UserMediaListEntry, ViewHolder>() {
         internal val medium: TextView by bindView(R.id.medium)
         internal val image: ImageView by bindView(R.id.image)
         internal val status: TextView by bindView(R.id.status)
+        internal val state: ImageView by bindView(R.id.state)
         internal val ratingContainer: ViewGroup by bindView(R.id.ratingContainer)
         internal val rating: RatingBar by bindView(R.id.rating)
 
@@ -70,6 +72,7 @@ class ProfileMediaAdapter : BaseAdapter<UserMediaListEntry, ViewHolder>() {
             title.text = item.name
             medium.text = item.medium.toAppString(medium.context)
             status.text = item.mediaProgress.toEpisodeAppString(status.context, item.episode, item.medium.toCategory())
+            state.setImageDrawable(item.state.toAppDrawable(state.context).sizeDp(16))
 
             if (item.rating > 0) {
                 ratingContainer.visibility = View.VISIBLE
