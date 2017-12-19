@@ -1,4 +1,8 @@
-**Please check for existing changes like this and if the changes are compliant with the code style of this project. Delete this line when submitting the Pull Request.**
+<!--
+Please check for existing changes like this and if the changes are
+compliant with the code style of this project. This info will not show
+up in the Pull Request.
+-->
 
 #### This Pull Request makes the following changes:
 
