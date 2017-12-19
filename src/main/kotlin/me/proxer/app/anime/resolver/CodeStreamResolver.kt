@@ -10,10 +10,7 @@ import me.proxer.app.util.extension.buildSingle
  */
 class CodeStreamResolver : StreamResolver() {
 
-    override val name = "Code"
-
-    override fun supports(name: String) = name.startsWith(this.name, true) ||
-            name.startsWith("Nachricht", true)
+    override val name = "Nachricht"
 
     override fun resolve(id: String): Single<StreamResolutionResult> = api.anime().link(id)
             .buildSingle()
