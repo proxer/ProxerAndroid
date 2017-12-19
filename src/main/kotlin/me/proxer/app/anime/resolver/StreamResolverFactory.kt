@@ -6,7 +6,7 @@ package me.proxer.app.anime.resolver
 object StreamResolverFactory {
 
     private val resolvers = arrayOf(AkibaPassStreamResolver(), AmazonPrimeVideoStreamResolver(),
-            AnimeOnDemandStreamResolver(), AuravidStreamResolver(), WatchboxStreamResolver(), CodeStreamResolver(),
+            AnimeOnDemandStreamResolver(), AuravidStreamResolver(), WatchboxStreamResolver(), MessageStreamResolver(),
             CrunchyrollStreamResolver(), DailymotionStreamResolver(), Mp4UploadStreamResolver(),
             NetflixStreamResolver(), OpenloadStreamResolver(), ProsiebenMAXXStreamResolver(), ProxerStreamResolver(),
             StreamcloudStreamResolver(), VideoweedStreamResolver(), ViewsterStreamResolver(),
