@@ -81,12 +81,11 @@ class MainActivity : DrawerActivity() {
     }
 
     override fun onBackPressed() {
-        val drawerBackPressResult by unsafeLazy { !drawer.onBackPressed() }
-        val fragmentsBackPressResult by unsafeLazy {
+        val fragmentsBackPressedResult by unsafeLazy {
             supportFragmentManager.fragments.none { it is BackPressAware && it.onBackPressed() }
         }
 
-        if (drawerBackPressResult && fragmentsBackPressResult) {
+        if (!drawer.onBackPressed() && fragmentsBackPressedResult) {
             val startPage = PreferenceHelper.getStartPage(this)
 
             if (startPage != drawer.currentItem) {
