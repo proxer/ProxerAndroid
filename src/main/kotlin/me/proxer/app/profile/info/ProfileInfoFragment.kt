@@ -93,7 +93,6 @@ class ProfileInfoFragment : BaseContentFragment<UserInfo>() {
         }
     }
 
-    @Suppress("ExceptionRaisedInUnexpectedLocation")
     private fun rankToString(points: Int) = safeContext.getString(when {
         points < 10 -> R.string.rank_10
         points < 100 -> R.string.rank_100

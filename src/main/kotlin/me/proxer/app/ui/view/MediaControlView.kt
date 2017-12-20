@@ -130,8 +130,8 @@ class MediaControlView(context: Context?, attrs: AttributeSet?) : FrameLayout(co
         }
     }
 
-    class Uploader(val id: String, val name: String)
-    class SimpleTranslatorGroup(val id: String, val name: String)
+    data class Uploader(val id: String, val name: String)
+    data class SimpleTranslatorGroup(val id: String, val name: String)
 
     interface TextResourceResolver {
         fun next(): String

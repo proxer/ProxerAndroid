@@ -21,8 +21,6 @@ complexity:
     threshold: 5
 
 style:
-  CollapsibleIfStatements:
-    active: false
   FunctionMaxLength:
     maximumFunctionNameLength: 35
   VariableMinLength:
@@ -30,10 +28,6 @@ style:
   VariableMaxLength:
     maximumVariableNameLength: 35
   MagicNumber:
-    active: false
-  DataClassContainsFunctions:
-    active: false
-  UseDataClass:
     active: false
   ExpressionBodySyntax:
     active: false

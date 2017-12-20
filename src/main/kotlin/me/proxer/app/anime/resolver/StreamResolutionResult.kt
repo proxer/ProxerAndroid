@@ -6,7 +6,7 @@ import android.net.Uri
 /**
  * @author Ruben Gees
  */
-class StreamResolutionResult(val intent: Intent) {
+data class StreamResolutionResult(val intent: Intent) {
 
     companion object {
         const val ACTION_SHOW_MESSAGE = "me.proxer.app.intent.action.SHOW_MESSAGE"

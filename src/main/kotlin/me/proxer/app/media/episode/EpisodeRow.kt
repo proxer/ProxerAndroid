@@ -9,7 +9,12 @@ import me.proxer.library.enums.MediaLanguage
 /**
  * @author Ruben Gees
  */
-class EpisodeRow(val category: Category, val userProgress: Int, val episodeAmount: Int, episodes: List<Episode>) {
+data class EpisodeRow(
+        val category: Category,
+        val userProgress: Int,
+        val episodeAmount: Int,
+        private val episodes: List<Episode>
+) {
 
     val number: Int
     val title: String?

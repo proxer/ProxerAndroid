@@ -87,5 +87,5 @@ class UcpTopTenViewModel : BaseViewModel<ZippedTopTenResult>() {
         }
     }
 
-    class ZippedTopTenResult(val animeEntries: List<UcpTopTenEntry>, val mangaEntries: List<UcpTopTenEntry>)
+    data class ZippedTopTenResult(val animeEntries: List<UcpTopTenEntry>, val mangaEntries: List<UcpTopTenEntry>)
 }

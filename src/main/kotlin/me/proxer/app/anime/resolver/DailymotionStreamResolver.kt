@@ -60,5 +60,5 @@ class DailymotionStreamResolver : StreamResolver() {
                 }
             }
 
-    private class QualityMap(val qualities: Map<String, Array<Map<String, String>>>?)
+    private data class QualityMap(val qualities: Map<String, Array<Map<String, String>>>?)
 }

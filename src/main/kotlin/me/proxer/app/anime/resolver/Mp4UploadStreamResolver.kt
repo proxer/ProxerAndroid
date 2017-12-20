@@ -17,7 +17,6 @@ import java.util.regex.Pattern.quote
 /**
  * @author Ruben Gees
  */
-@Suppress("ClassNaming")
 class Mp4UploadStreamResolver : StreamResolver() {
 
     private companion object {

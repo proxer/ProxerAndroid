@@ -138,12 +138,10 @@ class ExpandableSelectionView @JvmOverloads constructor(
             itemContainer.removeAllViews()
         }
 
-        if (isSingleSelection) {
-            if (itemContainer.childrenSequence().none { it is RadioButton && it.isChecked }) {
-                (itemContainer.childrenSequence().firstOrNull() as? RadioButton)?.let {
-                    it.isChecked = true
-                    it.jumpDrawablesToCurrentState()
-                }
+        if (isSingleSelection && itemContainer.childrenSequence().none { it is RadioButton && it.isChecked }) {
+            (itemContainer.childrenSequence().firstOrNull() as? RadioButton)?.let {
+                it.isChecked = true
+                it.jumpDrawablesToCurrentState()
             }
         }
     }

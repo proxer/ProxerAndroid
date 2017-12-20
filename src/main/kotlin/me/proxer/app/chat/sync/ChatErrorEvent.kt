@@ -5,4 +5,4 @@ import me.proxer.app.exception.ChatException
 /**
  * @author Ruben Gees
  */
-class ChatErrorEvent(val error: ChatException)
+data class ChatErrorEvent(val error: ChatException)

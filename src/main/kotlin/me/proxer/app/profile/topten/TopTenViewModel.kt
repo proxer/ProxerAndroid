@@ -39,5 +39,5 @@ class TopTenViewModel(private val userId: String?, private val username: String?
             .category(category)
             .buildSingle()
 
-    class ZippedTopTenResult(val animeEntries: List<TopTenEntry>, val mangaEntries: List<TopTenEntry>)
+    data class ZippedTopTenResult(val animeEntries: List<TopTenEntry>, val mangaEntries: List<TopTenEntry>)
 }

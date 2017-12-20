@@ -204,6 +204,6 @@ class LocalMangaJob : Job() {
     }
 
     class StartedEvent
-    class FinishedEvent(val entryId: String, val episode: Int, val language: Language)
-    class FailedEvent(val entryId: String, val episode: Int, val language: Language)
+    data class FinishedEvent(val entryId: String, val episode: Int, val language: Language)
+    data class FailedEvent(val entryId: String, val episode: Int, val language: Language)
 }

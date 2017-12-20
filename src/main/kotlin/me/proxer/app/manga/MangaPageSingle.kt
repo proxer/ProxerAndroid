@@ -98,5 +98,5 @@ class MangaPageSingle(context: Context, private val isLocal: Boolean, private va
         }
     }
 
-    class Input(val server: String, val entryId: String, val chapterId: String, val name: String)
+    data class Input(val server: String, val entryId: String, val chapterId: String, val name: String)
 }
