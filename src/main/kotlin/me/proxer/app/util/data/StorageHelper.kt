@@ -27,72 +27,86 @@ object StorageHelper {
     private const val DEFAULT_CHAT_INTERVAL = 10_000L
     private const val MAX_CHAT_INTERVAL = 850_000L
 
-    init {
-        if (!Hawk.isBuilt()) {
-            Hawk.init(globalContext).setParser(object : Parser {
-                override fun <T : Any?> fromJson(content: String, type: Type) = moshi.adapter<T>(type).fromJson(content)
-                override fun toJson(body: Any) = moshi.adapter(body.javaClass).toJson(body)
-            }).build()
-        }
+    private val jsonParser = object : Parser {
+        override fun <T : Any?> fromJson(content: String, type: Type) = moshi.adapter<T>(type).fromJson(content)
+        override fun toJson(body: Any) = moshi.adapter(body.javaClass).toJson(body)
     }
 
     var isFirstStart: Boolean
-        get() = Hawk.get(FIRST_START, true)
-        set(value) {
-            Hawk.put(FIRST_START, value)
-        }
+        get() = safeGet(FIRST_START, true)
+        set(value) = safePut(FIRST_START, value)
 
     var user: LocalUser?
-        get() = Hawk.get(USER)
-        set(value) {
-            when (value) {
-                null -> Hawk.delete(USER)
-                else -> Hawk.put(USER, value)
-            }
+        get() = safeGet(USER)
+        set(value) = when (value) {
+            null -> safeDelete(USER)
+            else -> safePut(USER, value)
         }
 
     var isTwoFactorAuthenticationEnabled: Boolean
-        get() = Hawk.get(TWO_FACTOR_AUTHENTICATION, false)
-        set(value) {
-            Hawk.put(TWO_FACTOR_AUTHENTICATION, value)
-        }
+        get() = safeGet(TWO_FACTOR_AUTHENTICATION, false)
+        set(value) = safePut(TWO_FACTOR_AUTHENTICATION, value)
 
     var lastNewsDate: Date
-        get() = Date(Hawk.get(LAST_NEWS_DATE, 0L))
-        set(value) {
-            Hawk.put(LAST_NEWS_DATE, value.time)
-        }
+        get() = Date(safeGet(LAST_NEWS_DATE, 0L))
+        set(value) = safePut(LAST_NEWS_DATE, value.time)
 
     var lastNotificationsDate: Date
-        get() = Date(Hawk.get(LAST_NOTIFICATIONS_DATE, 0L))
-        set(value) {
-            Hawk.put(LAST_NOTIFICATIONS_DATE, value.time)
-        }
+        get() = Date(safeGet(LAST_NOTIFICATIONS_DATE, 0L))
+        set(value) = safePut(LAST_NOTIFICATIONS_DATE, value.time)
 
     var lastChatMessageDate: Date
-        get() = Date(Hawk.get(LAST_CHAT_MESSAGE_DATE, 0L))
-        set(value) {
-            Hawk.put(LAST_CHAT_MESSAGE_DATE, value.time)
-        }
+        get() = Date(safeGet(LAST_CHAT_MESSAGE_DATE, 0L))
+        set(value) = safePut(LAST_CHAT_MESSAGE_DATE, value.time)
 
     val chatInterval: Long
-        get() = Hawk.get(CHAT_INTERVAL, DEFAULT_CHAT_INTERVAL)
+        get() = safeGet(CHAT_INTERVAL, DEFAULT_CHAT_INTERVAL)
 
     var areConferencesSynchronized: Boolean
-        get() = Hawk.get(CONFERENCES_SYNCHRONIZED, false)
-        set(value) {
-            Hawk.put(CONFERENCES_SYNCHRONIZED, value)
-        }
+        get() = safeGet(CONFERENCES_SYNCHRONIZED, false)
+        set(value) =
+            safePut(CONFERENCES_SYNCHRONIZED, value)
 
-    fun incrementChatInterval() {
-        Hawk.get(CHAT_INTERVAL, DEFAULT_CHAT_INTERVAL).let {
-            if (it < MAX_CHAT_INTERVAL) {
-                Hawk.put(CHAT_INTERVAL, (it * 1.5f).toLong())
-            }
+    fun incrementChatInterval() = safeGet(CHAT_INTERVAL, DEFAULT_CHAT_INTERVAL).let {
+        if (it < MAX_CHAT_INTERVAL) {
+            safePut(CHAT_INTERVAL, (it * 1.5f).toLong())
         }
     }
 
     fun resetChatInterval() {
-        Hawk.put(CHAT_INTERVAL, DEFAULT_CHAT_INTERVAL)
+        ensureInit()
+
+        safePut(CHAT_INTERVAL, DEFAULT_CHAT_INTERVAL)
+    }
+
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun <T> safeGet(key: String, defaultValue: T? = null): T {
+        ensureInit()
+
+        return when {
+            defaultValue != null -> Hawk.get(key, defaultValue)
+            else -> Hawk.get(key)
+        }
+    }
+
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun <T> safePut(key: String, value: T) {
+        ensureInit()
+
+        Hawk.put(key, value)
+    }
+
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun safeDelete(key: String) {
+        ensureInit()
+
+        Hawk.delete(key)
+    }
+
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun ensureInit() {
+        if (!Hawk.isBuilt()) {
+            Hawk.init(globalContext).setParser(jsonParser).build()
+        }
     }
 }
