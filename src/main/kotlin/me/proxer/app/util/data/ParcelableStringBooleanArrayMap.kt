@@ -29,7 +29,7 @@ class ParcelableStringBooleanArrayMap : Parcelable {
 
     internal constructor(source: Parcel) {
         (0 until source.readInt()).forEach {
-            internalMap.put(source.readString(), source.readSparseBooleanArray())
+            internalMap[source.readString()] = source.readSparseBooleanArray()
         }
     }
 
