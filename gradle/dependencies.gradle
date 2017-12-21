@@ -52,6 +52,7 @@ ext {
             emojiIos                         : "com.github.vanniktech.Emoji:emoji-ios:$emojiIosVersion",
             exoplayer                        : "com.google.android.exoplayer:exoplayer-core:$exoplayerVersion",
             exoplayerIntegration             : "com.google.android.exoplayer:extension-okhttp:$exoplayerVersion",
+            exomedia                         : "com.devbrackets.android:exomedia:$exomediaVersion",
             materialProgressBar              : "me.zhanghai.android.materialprogressbar:library:$materialProgressBarVersion",
             materialRatingBar                : "me.zhanghai.android.materialratingbar:library:$materialRatingBarVersion",
             customtabsHelper                 : "me.zhanghai.android.customtabshelper:library:$customtabsHelperVersion",
@@ -100,13 +101,6 @@ ext {
     ]
 
     excludingImplementationDependencies = [
-            exomedia: [
-                    dependency: "com.devbrackets.android:exomedia:$exomediaVersion",
-                    exclusions: [
-                            'exoplayer-hls',
-                            'exoplayer-dash',
-                    ],
-            ],
             hawk    : [
                     dependency: "com.orhanobut:hawk:$hawkVersion",
                     exclusions: ['gson'],
