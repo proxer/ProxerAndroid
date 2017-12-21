@@ -9,8 +9,6 @@ import java.lang.reflect.Type
 import java.util.Date
 
 /**
- * A helper class, giving access to the storage.
-
  * @author Ruben Gees
  */
 object StorageHelper {
@@ -64,8 +62,7 @@ object StorageHelper {
 
     var areConferencesSynchronized: Boolean
         get() = safeGet(CONFERENCES_SYNCHRONIZED, false)
-        set(value) =
-            safePut(CONFERENCES_SYNCHRONIZED, value)
+        set(value) = safePut(CONFERENCES_SYNCHRONIZED, value)
 
     fun incrementChatInterval() = safeGet(CHAT_INTERVAL, DEFAULT_CHAT_INTERVAL).let {
         if (it < MAX_CHAT_INTERVAL) {

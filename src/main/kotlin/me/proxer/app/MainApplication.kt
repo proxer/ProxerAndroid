@@ -105,7 +105,7 @@ class MainApplication : Application() {
         }
 
         refWatcher = LeakCanary.install(this)
-        globalContext = applicationContext
+        globalContext = this
 
         AppCompatDelegate.setDefaultNightMode(PreferenceHelper.getNightMode(this))
         NotificationUtils.createNotificationChannels(this)
@@ -150,7 +150,7 @@ class MainApplication : Application() {
                     chatDao.clear()
 
                     MangaLocks.localLock.write {
-                        File("${globalContext.filesDir}/manga").deleteRecursively()
+                        File("${applicationContext.filesDir}/manga").deleteRecursively()
                     }
                 }
     }
