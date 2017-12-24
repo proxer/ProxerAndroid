@@ -16,6 +16,7 @@ import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.unsafeLazy
 import org.jetbrains.anko.bundleOf
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
@@ -37,7 +38,7 @@ class NotificationFragment : PagedContentFragment<ProxerNotification>() {
         LinearLayoutManager(context)
     }
 
-    override lateinit var innerAdapter: NotificationAdapter
+    override var innerAdapter by Delegates.notNull<NotificationAdapter>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
