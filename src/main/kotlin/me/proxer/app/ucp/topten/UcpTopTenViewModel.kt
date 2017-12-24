@@ -9,6 +9,7 @@ import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.base.BaseViewModel
 import me.proxer.app.ucp.topten.UcpTopTenViewModel.ZippedTopTenResult
 import me.proxer.app.util.ErrorUtils
+import me.proxer.app.util.Validators
 import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.data.UniqueQueue
 import me.proxer.app.util.extension.buildOptionalSingle
@@ -26,8 +27,8 @@ class UcpTopTenViewModel : BaseViewModel<ZippedTopTenResult>() {
     override val isLoginRequired = true
 
     override val dataSingle: Single<ZippedTopTenResult>
-        get() = api.ucp().topTen()
-                .buildSingle()
+        get() = Single.fromCallable { Validators.validateLogin() }
+                .flatMap { api.ucp().topTen().buildSingle() }
                 .map {
                     val animeList = it.filter { it.category == Category.ANIME }
                     val mangaList = it.filter { it.category == Category.MANGA }

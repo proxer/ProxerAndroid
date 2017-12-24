@@ -15,7 +15,7 @@ import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.toCategory
 import me.proxer.app.util.extension.unsafeLazy
-import me.proxer.library.entity.ucp.UcpMediaListEntry
+import me.proxer.library.entity.user.UserMediaListEntry
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.UserMediaListFilterType
 import org.jetbrains.anko.bundleOf
@@ -24,7 +24,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-class UcpMediaListFragment : PagedContentFragment<UcpMediaListEntry>() {
+class UcpMediaListFragment : PagedContentFragment<UserMediaListEntry>() {
 
     companion object {
         private const val CATEGORY_ARGUMENT = "category"

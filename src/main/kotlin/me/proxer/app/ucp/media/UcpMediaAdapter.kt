@@ -19,16 +19,16 @@ import me.proxer.app.util.extension.toAppDrawable
 import me.proxer.app.util.extension.toAppString
 import me.proxer.app.util.extension.toCategory
 import me.proxer.app.util.extension.toEpisodeAppString
-import me.proxer.library.entity.ucp.UcpMediaListEntry
+import me.proxer.library.entity.user.UserMediaListEntry
 import me.proxer.library.util.ProxerUrls
 
 /**
  * @author Ruben Gees
  */
-class UcpMediaAdapter : BaseAdapter<UcpMediaListEntry, ViewHolder>() {
+class UcpMediaAdapter : BaseAdapter<UserMediaListEntry, ViewHolder>() {
 
     var glide: GlideRequests? = null
-    val clickSubject: PublishSubject<Pair<ImageView, UcpMediaListEntry>> = PublishSubject.create()
+    val clickSubject: PublishSubject<Pair<ImageView, UserMediaListEntry>> = PublishSubject.create()
 
     init {
         setHasStableIds(true)
@@ -66,7 +66,7 @@ class UcpMediaAdapter : BaseAdapter<UcpMediaListEntry, ViewHolder>() {
             }
         }
 
-        fun bind(item: UcpMediaListEntry) {
+        fun bind(item: UserMediaListEntry) {
             ViewCompat.setTransitionName(image, "ucp_media_${item.id}")
 
             title.text = item.name
