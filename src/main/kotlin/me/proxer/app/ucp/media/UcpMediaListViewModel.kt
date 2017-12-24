@@ -1,4 +1,4 @@
-package me.proxer.app.profile.media
+package me.proxer.app.ucp.media
 
 import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
 import me.proxer.app.MainApplication.Companion.api
@@ -7,7 +7,7 @@ import me.proxer.app.base.PagedContentViewModel
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.library.api.PagingLimitEndpoint
-import me.proxer.library.entity.user.UserMediaListEntry
+import me.proxer.library.entity.ucp.UcpMediaListEntry
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.UserMediaListFilterType
 import kotlin.properties.Delegates
@@ -16,17 +16,16 @@ import kotlin.properties.Delegates
  * @author Ruben Gees
  */
 @GeneratedProvider
-class ProfileMediaListViewModel(
-        private val userId: String?,
-        private val username: String?,
+class UcpMediaListViewModel(
         category: Category,
         filter: UserMediaListFilterType?
-) : PagedContentViewModel<UserMediaListEntry>() {
+) : PagedContentViewModel<UcpMediaListEntry>() {
 
+    override val isLoginRequired = true
     override val itemsOnPage = 30
 
-    override val endpoint: PagingLimitEndpoint<List<UserMediaListEntry>>
-        get() = api.user().mediaList(userId, username)
+    override val endpoint: PagingLimitEndpoint<List<UcpMediaListEntry>>
+        get() = api.ucp().mediaList()
                 .includeHentai(PreferenceHelper.isAgeRestrictedMediaAllowed(globalContext)
                         && StorageHelper.user != null)
                 .category(category)

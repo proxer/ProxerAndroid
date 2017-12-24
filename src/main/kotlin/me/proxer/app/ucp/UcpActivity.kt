@@ -12,8 +12,10 @@ import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.DrawerActivity
 import me.proxer.app.ucp.history.HistoryFragment
+import me.proxer.app.ucp.media.UcpMediaListFragment
 import me.proxer.app.ucp.overview.UcpOverviewFragment
 import me.proxer.app.ucp.topten.UcpTopTenFragment
+import me.proxer.library.enums.Category
 import org.jetbrains.anko.startActivity
 
 /**
@@ -65,16 +67,20 @@ class UcpActivity : DrawerActivity() {
         override fun getItem(position: Int) = when (position) {
             0 -> UcpOverviewFragment.newInstance()
             1 -> UcpTopTenFragment.newInstance()
-            2 -> HistoryFragment.newInstance()
+            2 -> UcpMediaListFragment.newInstance(Category.ANIME)
+            3 -> UcpMediaListFragment.newInstance(Category.MANGA)
+            4 -> HistoryFragment.newInstance()
             else -> throw IllegalArgumentException("Unknown index passed: $position")
         }
 
-        override fun getCount() = 3
+        override fun getCount() = 5
 
         override fun getPageTitle(position: Int): String = when (position) {
             0 -> getString(R.string.section_ucp_overview)
             1 -> getString(R.string.section_ucp_top_ten)
-            2 -> getString(R.string.section_ucp_history)
+            2 -> getString(R.string.section_user_media_list_anime)
+            3 -> getString(R.string.section_user_media_list_manga)
+            4 -> getString(R.string.section_ucp_history)
             else -> throw IllegalArgumentException("Unknown index passed: $position")
         }
     }
