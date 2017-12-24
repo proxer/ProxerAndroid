@@ -49,7 +49,7 @@ abstract class BaseViewModel<T> : ViewModel() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     if (error.value?.message == R.string.error_captcha) {
-                        reload()
+                        refresh()
                     }
                 }
     }
