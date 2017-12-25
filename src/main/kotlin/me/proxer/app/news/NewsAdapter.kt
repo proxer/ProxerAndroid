@@ -3,6 +3,7 @@ package me.proxer.app.news
 import android.os.Bundle
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.RecyclerView.LayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,6 +37,7 @@ class NewsAdapter(savedInstanceState: Bundle?) : BaseAdapter<NewsArticle, NewsAd
     val expansionSubject: PublishSubject<NewsArticle> = PublishSubject.create()
     val imageClickSubject: PublishSubject<Pair<ImageView, NewsArticle>> = PublishSubject.create()
 
+    private var layoutManager: LayoutManager? = null
     private val expansionMap: ParcelableStringBooleanMap
 
     init {
@@ -52,11 +54,16 @@ class NewsAdapter(savedInstanceState: Bundle?) : BaseAdapter<NewsArticle, NewsAd
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(data[position])
 
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        layoutManager = recyclerView.layoutManager
+    }
+
     override fun onViewRecycled(holder: ViewHolder) {
         glide?.clear(holder.image)
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView?) {
+        layoutManager = null
         glide = null
     }
 
@@ -101,7 +108,7 @@ class NewsAdapter(savedInstanceState: Bundle?) : BaseAdapter<NewsArticle, NewsAd
                         expansionSubject.onNext(data[it])
                     }
 
-                    notifyItemChanged(it)
+                    handleExpansion(true)
                 }
             }
 
@@ -116,25 +123,44 @@ class NewsAdapter(savedInstanceState: Bundle?) : BaseAdapter<NewsArticle, NewsAd
             category.text = item.category
             time.text = item.date.convertToRelativeReadableTime(time.context)
 
-            if (expansionMap.containsKey(item.id)) {
-                description.maxLines = Int.MAX_VALUE
-
-                ViewCompat.animate(expand).rotation(180f)
-            } else {
-                description.maxLines = 3
-
-                ViewCompat.animate(expand).rotation(0f)
-            }
-
-            description.post {
-                if (description.lineCount <= 3) {
-                    expand.visibility = View.GONE
-                } else {
-                    expand.visibility = View.VISIBLE
-                }
-            }
+            handleExpansion()
 
             glide?.defaultLoad(image, ProxerUrls.newsImage(item.id, item.image))
+        }
+
+        private fun handleExpansion(animate: Boolean = false) {
+            withSafeAdapterPosition(this) {
+                ViewCompat.animate(expand).cancel()
+
+                if (expansionMap.containsKey(data[it].id)) {
+                    description.maxLines = Int.MAX_VALUE
+
+                    when (animate) {
+                        true -> ViewCompat.animate(expand).rotation(180f)
+                        false -> expand.rotation = 180f
+                    }
+                } else {
+                    description.maxLines = 3
+
+                    when (animate) {
+                        true -> ViewCompat.animate(expand).rotation(0f)
+                        false -> expand.rotation = 0f
+                    }
+                }
+
+                description.post {
+                    if (description.lineCount <= 3) {
+                        expand.visibility = View.GONE
+                    } else {
+                        expand.visibility = View.VISIBLE
+                    }
+                }
+
+                if (animate) {
+                    description.requestLayout()
+                    layoutManager?.requestSimpleAnimationsInNextLayout()
+                }
+            }
         }
     }
 }
