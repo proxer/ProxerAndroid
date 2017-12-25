@@ -3,7 +3,6 @@ package me.proxer.app.profile.comment
 import android.os.Bundle
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.RecyclerView
-import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +17,6 @@ import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.profile.comment.ProfileCommentAdapter.ViewHolder
 import me.proxer.app.ui.view.bbcode.BBCodeView
-import me.proxer.app.util.data.ParcelableStringBooleanArrayMap
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.setIconicsImage
@@ -32,23 +30,16 @@ class ProfileCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<UserComme
 
     private companion object {
         private const val EXPANDED_STATE = "profile_comment_expanded"
-        private const val SPOILER_STATES_STATE = "profile_comment_spoiler"
     }
 
     val titleClickSubject: PublishSubject<UserComment> = PublishSubject.create()
 
     private val expansionMap: ParcelableStringBooleanMap
-    private val spoilerStates: ParcelableStringBooleanArrayMap
 
     init {
         expansionMap = when (savedInstanceState) {
             null -> ParcelableStringBooleanMap()
             else -> savedInstanceState.getParcelable(EXPANDED_STATE)
-        }
-
-        spoilerStates = when (savedInstanceState) {
-            null -> ParcelableStringBooleanArrayMap()
-            else -> savedInstanceState.getParcelable(SPOILER_STATES_STATE)
         }
 
         setHasStableIds(true)
@@ -62,7 +53,6 @@ class ProfileCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<UserComme
 
     override fun saveInstanceState(outState: Bundle) {
         outState.putParcelable(EXPANDED_STATE, expansionMap)
-        outState.putParcelable(SPOILER_STATES_STATE, spoilerStates)
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -134,28 +124,6 @@ class ProfileCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<UserComme
             time.text = item.date.convertToRelativeReadableTime(time.context)
             progress.text = item.mediaProgress.toEpisodeAppString(progress.context, item.episode, item.category)
 
-            comment.spoilerStates = spoilerStates[item.id] ?: SparseBooleanArray(0)
-            comment.spoilerStateListener = { states, isExpanded ->
-                spoilerStates.put(item.id, states)
-
-                if (isExpanded) {
-                    if (!expansionMap.containsKey(item.id)) {
-                        expansionMap.put(item.id, true)
-
-                        comment.maxHeight = Int.MAX_VALUE
-                        comment.post {
-                            bindExpandButton(maxHeight)
-                        }
-
-                        ViewCompat.animate(expand).rotation(180f)
-                    }
-                } else {
-                    comment.post {
-                        bindExpandButton(maxHeight)
-                    }
-                }
-            }
-
             if (expansionMap.containsKey(item.id)) {
                 comment.maxHeight = Int.MAX_VALUE
 
@@ -166,22 +134,20 @@ class ProfileCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<UserComme
                 ViewCompat.animate(expand).rotation(0f)
             }
 
-            comment.post {
-                bindExpandButton(maxHeight)
+            comment.post { bindExpandButton(maxHeight) }
+        }
+
+        private fun bindRatingRow(container: ViewGroup, ratingBar: RatingBar, rating: Float) = when (rating <= 0) {
+            true -> container.visibility = View.GONE
+            false -> {
+                container.visibility = View.VISIBLE
+                ratingBar.rating = rating
             }
         }
 
-        private fun bindRatingRow(container: ViewGroup, ratingBar: RatingBar, rating: Float) = if (rating <= 0) {
-            container.visibility = View.GONE
-        } else {
-            container.visibility = View.VISIBLE
-            ratingBar.rating = rating
-        }
-
-        private fun bindExpandButton(maxHeight: Int) = if (comment.height < maxHeight) {
-            expand.visibility = View.GONE
-        } else {
-            expand.visibility = View.VISIBLE
+        private fun bindExpandButton(maxHeight: Int) = when (comment.height < maxHeight) {
+            true -> expand.visibility = View.GONE
+            false -> expand.visibility = View.VISIBLE
         }
     }
 }

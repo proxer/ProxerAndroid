@@ -23,7 +23,6 @@ internal class BBSpoilerView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
-    var expansionListener: ((isExpanded: Boolean) -> Unit)? = null
     var isExpanded by Delegates.observable(false, { _, _, _ ->
         handleExpansion()
     })
@@ -48,11 +47,7 @@ internal class BBSpoilerView @JvmOverloads constructor(
         toggle.setTextColor(ContextCompat.getColor(context, R.color.colorAccent))
         toggle.setBackgroundResource(selectableItemBackground.resourceId)
         toggle.setPadding(fourDip, twoDip, fourDip, twoDip)
-        toggle.setOnClickListener {
-            isExpanded = !isExpanded
-
-            expansionListener?.invoke(isExpanded)
-        }
+        toggle.setOnClickListener { isExpanded = !isExpanded }
 
         container.orientation = VERTICAL
         decoration.orientation = HORIZONTAL

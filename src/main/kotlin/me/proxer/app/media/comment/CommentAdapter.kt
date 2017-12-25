@@ -3,7 +3,6 @@ package me.proxer.app.media.comment
 import android.os.Bundle
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.RecyclerView
-import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,7 +21,6 @@ import me.proxer.app.base.BaseAdapter
 import me.proxer.app.media.comment.CommentAdapter.ViewHolder
 import me.proxer.app.ui.view.bbcode.BBCodeView
 import me.proxer.app.util.DeviceUtils
-import me.proxer.app.util.data.ParcelableStringBooleanArrayMap
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.setIconicsImage
@@ -38,7 +36,6 @@ class CommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<Comment, ViewHol
 
     private companion object {
         private const val EXPANDED_STATE = "comments_expanded"
-        private const val SPOILER_STATES_STATE = "comments_spoiler_states"
     }
 
     var glide: GlideRequests? = null
@@ -46,17 +43,11 @@ class CommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<Comment, ViewHol
     var categoryCallback: (() -> Category?)? = null
 
     private val expansionMap: ParcelableStringBooleanMap
-    private val spoilerStates: ParcelableStringBooleanArrayMap
 
     init {
         expansionMap = when (savedInstanceState) {
             null -> ParcelableStringBooleanMap()
             else -> savedInstanceState.getParcelable(EXPANDED_STATE)
-        }
-
-        spoilerStates = when (savedInstanceState) {
-            null -> ParcelableStringBooleanArrayMap()
-            else -> savedInstanceState.getParcelable(SPOILER_STATES_STATE)
         }
 
         setHasStableIds(true)
@@ -78,7 +69,6 @@ class CommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<Comment, ViewHol
 
     override fun saveInstanceState(outState: Bundle) {
         outState.putParcelable(EXPANDED_STATE, expansionMap)
-        outState.putParcelable(SPOILER_STATES_STATE, spoilerStates)
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -149,28 +139,6 @@ class CommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<Comment, ViewHol
             progress.text = item.mediaProgress.toEpisodeAppString(progress.context, item.episode,
                     categoryCallback?.invoke() ?: Category.ANIME)
 
-            comment.spoilerStates = spoilerStates[item.id] ?: SparseBooleanArray(0)
-            comment.spoilerStateListener = { states, isExpanded ->
-                spoilerStates.put(item.id, states)
-
-                if (isExpanded) {
-                    if (!expansionMap.containsKey(item.id)) {
-                        expansionMap.put(item.id, true)
-
-                        comment.maxHeight = Int.MAX_VALUE
-                        comment.post {
-                            bindExpandButton(maxHeight)
-                        }
-
-                        ViewCompat.animate(expand).rotation(180f)
-                    }
-                } else {
-                    comment.post {
-                        bindExpandButton(maxHeight)
-                    }
-                }
-            }
-
             if (expansionMap.containsKey(item.id)) {
                 comment.maxHeight = Int.MAX_VALUE
 
@@ -181,9 +149,7 @@ class CommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<Comment, ViewHol
                 ViewCompat.animate(expand).rotation(0f)
             }
 
-            comment.post {
-                bindExpandButton(maxHeight)
-            }
+            comment.post { bindExpandButton(maxHeight) }
 
             bindImage(item)
         }
@@ -195,10 +161,9 @@ class CommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<Comment, ViewHol
             ratingBar.rating = rating
         }
 
-        private fun bindExpandButton(maxHeight: Int) = if (comment.height < maxHeight) {
-            expand.visibility = View.GONE
-        } else {
-            expand.visibility = View.VISIBLE
+        private fun bindExpandButton(maxHeight: Int) = when (comment.height < maxHeight) {
+            true -> expand.visibility = View.GONE
+            false -> expand.visibility = View.VISIBLE
         }
 
         private fun bindImage(item: Comment) {
