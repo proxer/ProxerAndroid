@@ -3,6 +3,7 @@ package me.proxer.app.media.comment
 import android.os.Bundle
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.RecyclerView.LayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +26,7 @@ import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.toEpisodeAppString
+import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.info.Comment
 import me.proxer.library.enums.Category
 import me.proxer.library.util.ProxerUrls
@@ -42,6 +44,7 @@ class CommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<Comment, ViewHol
     val profileClickSubject: PublishSubject<Pair<ImageView, Comment>> = PublishSubject.create()
     var categoryCallback: (() -> Category?)? = null
 
+    private var layoutManager: LayoutManager? = null
     private val expansionMap: ParcelableStringBooleanMap
 
     init {
@@ -59,11 +62,16 @@ class CommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<Comment, ViewHol
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(data[position])
 
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        layoutManager = recyclerView.layoutManager
+    }
+
     override fun onViewRecycled(holder: ViewHolder) {
         glide?.clear(holder.image)
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView?) {
+        layoutManager = null
         glide = null
     }
 
@@ -99,6 +107,8 @@ class CommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<Comment, ViewHol
         internal val time: TextView by bindView(R.id.time)
         internal val progress: TextView by bindView(R.id.progress)
 
+        private val maxHeight by unsafeLazy { comment.context.resources.displayMetrics.heightPixels / 4 }
+
         init {
             expand.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32)
 
@@ -106,7 +116,7 @@ class CommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<Comment, ViewHol
                 withSafeAdapterPosition(this) {
                     expansionMap.putOrRemove(data[it].id)
 
-                    notifyItemChanged(it)
+                    handleExpansion(true)
                 }
             }
 
@@ -116,12 +126,21 @@ class CommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<Comment, ViewHol
                 }
             }
 
+            comment.heightChangedListener = {
+                withSafeAdapterPosition(this) {
+                    when (comment.maxHeight >= maxHeight) {
+                        true -> expansionMap.put(data[it].id, true)
+                        false -> expansionMap.remove(data[it].id)
+                    }
+
+                    handleExpansion(true)
+                }
+            }
+
             upvoteIcon.setIconicsImage(CommunityMaterial.Icon.cmd_thumb_up, 32)
         }
 
         fun bind(item: Comment) {
-            val maxHeight = comment.context.resources.displayMetrics.heightPixels / 4
-
             ViewCompat.setTransitionName(image, "comment_${item.id}")
 
             title.text = item.author
@@ -139,19 +158,37 @@ class CommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<Comment, ViewHol
             progress.text = item.mediaProgress.toEpisodeAppString(progress.context, item.episode,
                     categoryCallback?.invoke() ?: Category.ANIME)
 
-            if (expansionMap.containsKey(item.id)) {
-                comment.maxHeight = Int.MAX_VALUE
-
-                ViewCompat.animate(expand).rotation(180f)
-            } else {
-                comment.maxHeight = maxHeight
-
-                ViewCompat.animate(expand).rotation(0f)
-            }
-
-            comment.post { bindExpandButton(maxHeight) }
-
+            handleExpansion()
             bindImage(item)
+        }
+
+        private fun handleExpansion(animate: Boolean = false) {
+            withSafeAdapterPosition(this) {
+                ViewCompat.animate(expand).cancel()
+
+                if (expansionMap.containsKey(data[it].id)) {
+                    comment.maxHeight = Int.MAX_VALUE
+
+                    when (animate) {
+                        true -> ViewCompat.animate(expand).rotation(180f)
+                        false -> expand.rotation = 180f
+                    }
+                } else {
+                    comment.maxHeight = maxHeight
+
+                    when (animate) {
+                        true -> ViewCompat.animate(expand).rotation(0f)
+                        false -> expand.rotation = 0f
+                    }
+                }
+
+                comment.post { bindExpandButton(maxHeight) }
+
+                if (animate) {
+                    comment.requestLayout()
+                    layoutManager?.requestSimpleAnimationsInNextLayout()
+                }
+            }
         }
 
         private fun bindRatingRow(container: ViewGroup, ratingBar: RatingBar, rating: Float) = if (rating <= 0) {

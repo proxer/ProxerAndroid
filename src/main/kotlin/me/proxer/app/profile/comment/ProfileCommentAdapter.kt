@@ -3,6 +3,7 @@ package me.proxer.app.profile.comment
 import android.os.Bundle
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.RecyclerView.LayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +22,7 @@ import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.toEpisodeAppString
+import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.user.UserComment
 
 /**
@@ -34,6 +36,7 @@ class ProfileCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<UserComme
 
     val titleClickSubject: PublishSubject<UserComment> = PublishSubject.create()
 
+    private var layoutManager: LayoutManager? = null
     private val expansionMap: ParcelableStringBooleanMap
 
     init {
@@ -83,6 +86,8 @@ class ProfileCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<UserComme
         internal val time: TextView by bindView(R.id.time)
         internal val progress: TextView by bindView(R.id.progress)
 
+        private val maxHeight by unsafeLazy { comment.context.resources.displayMetrics.heightPixels / 4 }
+
         init {
             image.visibility = View.GONE
 
@@ -92,7 +97,7 @@ class ProfileCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<UserComme
                 withSafeAdapterPosition(this) {
                     expansionMap.putOrRemove(data[it].id)
 
-                    notifyItemChanged(it)
+                    handleExpansion(true)
                 }
             }
 
@@ -102,12 +107,21 @@ class ProfileCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<UserComme
                 }
             }
 
+            comment.heightChangedListener = {
+                withSafeAdapterPosition(this) {
+                    when (comment.maxHeight >= maxHeight) {
+                        true -> expansionMap.put(data[it].id, true)
+                        false -> expansionMap.remove(data[it].id)
+                    }
+
+                    handleExpansion(true)
+                }
+            }
+
             upvoteIcon.setIconicsImage(CommunityMaterial.Icon.cmd_thumb_up, 32)
         }
 
         fun bind(item: UserComment) {
-            val maxHeight = comment.context.resources.displayMetrics.heightPixels / 4
-
             ViewCompat.setTransitionName(image, "comment_${item.id}")
 
             title.text = item.entryName
@@ -124,17 +138,36 @@ class ProfileCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<UserComme
             time.text = item.date.convertToRelativeReadableTime(time.context)
             progress.text = item.mediaProgress.toEpisodeAppString(progress.context, item.episode, item.category)
 
-            if (expansionMap.containsKey(item.id)) {
-                comment.maxHeight = Int.MAX_VALUE
+            handleExpansion()
+        }
 
-                ViewCompat.animate(expand).rotation(180f)
-            } else {
-                comment.maxHeight = maxHeight
+        private fun handleExpansion(animate: Boolean = false) {
+            withSafeAdapterPosition(this) {
+                ViewCompat.animate(expand).cancel()
 
-                ViewCompat.animate(expand).rotation(0f)
+                if (expansionMap.containsKey(data[it].id)) {
+                    comment.maxHeight = Int.MAX_VALUE
+
+                    when (animate) {
+                        true -> ViewCompat.animate(expand).rotation(180f)
+                        false -> expand.rotation = 180f
+                    }
+                } else {
+                    comment.maxHeight = maxHeight
+
+                    when (animate) {
+                        true -> ViewCompat.animate(expand).rotation(0f)
+                        false -> expand.rotation = 0f
+                    }
+                }
+
+                comment.post { bindExpandButton(maxHeight) }
+
+                if (animate) {
+                    comment.requestLayout()
+                    layoutManager?.requestSimpleAnimationsInNextLayout()
+                }
             }
-
-            comment.post { bindExpandButton(maxHeight) }
         }
 
         private fun bindRatingRow(container: ViewGroup, ratingBar: RatingBar, rating: Float) = when (rating <= 0) {

@@ -9,6 +9,7 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.LinearLayout.LayoutParams.MATCH_PARENT
 import android.widget.LinearLayout.LayoutParams.WRAP_CONTENT
@@ -23,8 +24,16 @@ internal class BBSpoilerView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
-    var isExpanded by Delegates.observable(false, { _, _, _ ->
+    var isExpanded by Delegates.observable(false, { _, _, new ->
         handleExpansion()
+
+        findHost()?.let { host ->
+            if (new) {
+                host.maxHeight = Int.MAX_VALUE
+            }
+
+            host.heightChangedListener?.invoke()
+        }
     })
 
     private val toggle = AppCompatTextView(context)
@@ -84,5 +93,15 @@ internal class BBSpoilerView @JvmOverloads constructor(
             true -> R.string.view_bbcode_hide_spoiler
             false -> R.string.view_bbcode_show_spoiler
         })
+    }
+
+    private fun findHost(): BBCodeView? {
+        var current = parent
+
+        while (current !is BBCodeView && current is ViewGroup) {
+            current = current.parent
+        }
+
+        return current as? BBCodeView
     }
 }

@@ -20,6 +20,7 @@ class BBCodeView @JvmOverloads constructor(
 
     var maxHeight = Int.MAX_VALUE
     var text by Delegates.observable("", { _, _, _ -> refreshViews() })
+    var heightChangedListener: (() -> Unit)? = null
 
     init {
         orientation = VERTICAL
