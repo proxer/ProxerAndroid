@@ -50,6 +50,8 @@ import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.api.ProxerApi
 import me.proxer.library.api.ProxerApi.Builder.LoggingStrategy
+import me.proxer.library.util.ProxerUrls
+import okhttp3.CertificatePinner
 import okhttp3.OkHttpClient
 import java.io.File
 import java.util.Date
@@ -66,6 +68,13 @@ class MainApplication : Application() {
         const val LOGGING_TAG = "ProxerAndroid"
         const val USER_AGENT = "ProxerAndroid/${BuildConfig.VERSION_NAME}"
         const val GENERIC_USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+
+        val CERTIFICATES = arrayOf(
+                "sha256/PayWw1Ju/5xUzbXI8P21LEZoqd0sAX3aeSgmgGrGSs4=",
+                "sha256/EULHwYvGhknyznoBvyvgbidiBH3JX3eFHHlIO3YK8Ek=",
+                "sha256/grX4Ta9HpZx6tSHkmCrvpApTQGo67CYDnvprLg5yRME=",
+                "sha256/lCppFqbkrlJ3EcVFAkeip0+44VaoJUymbnOaEUk7tEU="
+        )
 
         val bus = RxBus()
 
@@ -156,6 +165,15 @@ class MainApplication : Application() {
     }
 
     private fun initApi() {
+        val certificatePinner = CertificatePinner.Builder()
+                .apply {
+                    CERTIFICATES.forEach {
+                        add(ProxerUrls.webBase().host(), it)
+                        add("*.${ProxerUrls.webBase().host()}", it)
+                    }
+                }
+                .build()
+
         api = ProxerApi.Builder(BuildConfig.PROXER_API_KEY)
                 .userAgent(USER_AGENT)
                 .loggingStrategy(if (BuildConfig.DEBUG) LoggingStrategy.ALL else LoggingStrategy.NONE)
@@ -165,6 +183,7 @@ class MainApplication : Application() {
                         .connectTimeout(5, TimeUnit.SECONDS)
                         .writeTimeout(10, TimeUnit.SECONDS)
                         .readTimeout(10, TimeUnit.SECONDS)
+                        .certificatePinner(certificatePinner)
                         .build())
                 .build()
     }
