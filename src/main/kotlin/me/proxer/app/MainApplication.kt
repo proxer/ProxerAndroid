@@ -69,12 +69,7 @@ class MainApplication : Application() {
         const val USER_AGENT = "ProxerAndroid/${BuildConfig.VERSION_NAME}"
         const val GENERIC_USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
 
-        val CERTIFICATES = arrayOf(
-                "sha256/PayWw1Ju/5xUzbXI8P21LEZoqd0sAX3aeSgmgGrGSs4=",
-                "sha256/EULHwYvGhknyznoBvyvgbidiBH3JX3eFHHlIO3YK8Ek=",
-                "sha256/grX4Ta9HpZx6tSHkmCrvpApTQGo67CYDnvprLg5yRME=",
-                "sha256/lCppFqbkrlJ3EcVFAkeip0+44VaoJUymbnOaEUk7tEU="
-        )
+        val CERTIFICATES = arrayOf("sha256/58qRu/uxh4gFezqAcERupSkRYBlBAvfcw7mEjGPLnNU=")
 
         val bus = RxBus()
 
