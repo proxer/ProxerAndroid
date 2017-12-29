@@ -5,7 +5,8 @@ import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.RelativeSizeSpan
 import android.view.View
-import me.proxer.app.ui.view.bbcode.BBUtils.applyToTextViews
+import android.widget.TextView
+import me.proxer.app.ui.view.bbcode.applyToViews
 import me.proxer.app.ui.view.bbcode.prototype.SizePrototype
 
 /**
@@ -22,7 +23,7 @@ class SizeTree(
     override fun makeViews(context: Context): List<View> {
         val childViews = super.makeViewsWithoutMerging(context)
 
-        return applyToTextViews(childViews) { view ->
+        return applyToViews(childViews) { view: TextView ->
             view.text = SpannableStringBuilder(view.text).apply {
                 setSpan(RelativeSizeSpan(relativeSize), 0, view.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
             }

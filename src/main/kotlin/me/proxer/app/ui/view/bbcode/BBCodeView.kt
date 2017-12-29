@@ -8,7 +8,10 @@ import android.view.View.MeasureSpec.UNSPECIFIED
 import android.view.View.MeasureSpec.getMode
 import android.view.View.MeasureSpec.getSize
 import android.view.View.MeasureSpec.makeMeasureSpec
+import android.widget.ImageView
 import android.widget.LinearLayout
+import me.proxer.app.GlideRequests
+import org.jetbrains.anko.childrenSequence
 import kotlin.properties.Delegates
 
 /**
@@ -20,7 +23,9 @@ class BBCodeView @JvmOverloads constructor(
 
     var maxHeight = Int.MAX_VALUE
     var text by Delegates.observable("", { _, _, _ -> refreshViews() })
+
     var heightChangedListener: (() -> Unit)? = null
+    var glide: GlideRequests? = null
 
     init {
         orientation = VERTICAL
@@ -38,11 +43,20 @@ class BBCodeView @JvmOverloads constructor(
         })
     }
 
+    fun destroy() {
+        applyToViews(childrenSequence().toList(), { view: ImageView ->
+            glide?.clear(view)
+        })
+
+        removeAllViews()
+    }
+
     private fun refreshViews() {
         removeAllViews()
 
-        BBParser.parse(text).makeViews(context).forEach {
-            addView(it)
-        }
+        BBParser.parse(text)
+                .also { it.glide = glide }
+                .makeViews(context)
+                .forEach { this.addView(it) }
     }
 }

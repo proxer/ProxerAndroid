@@ -68,6 +68,8 @@ class CommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<Comment, ViewHol
 
     override fun onViewRecycled(holder: ViewHolder) {
         glide?.clear(holder.image)
+
+        holder.comment.destroy()
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView?) {
@@ -126,6 +128,7 @@ class CommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<Comment, ViewHol
                 }
             }
 
+            comment.glide = glide
             comment.heightChangedListener = {
                 withSafeAdapterPosition(this) {
                     when (comment.maxHeight >= maxHeight) {

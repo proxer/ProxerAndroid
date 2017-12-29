@@ -24,11 +24,10 @@ object ColorPrototype : BBPrototype {
     private val colorsForRegex = "(#[A-Fa-f0-9]{6}|#[A-Fa-f0-9]{8}|$availableColorsForRegex)"
 
     override val startRegex = Regex("\\s*color\\s*=\\s*\"?$colorsForRegex\"?\\s*", RegexOption.IGNORE_CASE)
-
     override val endRegex = Regex("/\\s*color\\s*", RegexOption.IGNORE_CASE)
 
     override fun construct(code: String, parent: BBTree): BBTree {
-        val value = code.substringAfter("=").trim().replace("\"", "")
+        val value = code.substringAfter("=").trim().trim { it == '"' }
 
         val color = when (value.startsWith("#")) {
             true -> Color.parseColor(value)

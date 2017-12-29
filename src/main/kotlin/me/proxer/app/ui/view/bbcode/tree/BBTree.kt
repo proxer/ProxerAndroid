@@ -4,6 +4,7 @@ import android.content.Context
 import android.text.SpannableStringBuilder
 import android.view.View
 import android.widget.TextView
+import me.proxer.app.GlideRequests
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype
 import me.proxer.app.util.extension.trimEndSafely
 import me.proxer.app.util.extension.trimStartSafely
@@ -20,6 +21,15 @@ open class BBTree(val parent: BBTree?, val children: MutableList<BBTree> = mutab
         override val endRegex = Regex("x^")
         override fun construct(code: String, parent: BBTree) = BBTree(parent)
     }
+
+    var glide: GlideRequests? = null
+        set(value) {
+            field = value
+
+            children.forEach {
+                it.glide = value
+            }
+        }
 
     open fun endsWith(code: String) = prototype.endRegex.matches(code)
 

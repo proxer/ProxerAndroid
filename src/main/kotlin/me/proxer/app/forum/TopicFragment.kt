@@ -3,6 +3,8 @@ package me.proxer.app.forum
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.view.View
+import me.proxer.app.GlideApp
 import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.forum.Post
@@ -46,5 +48,11 @@ class TopicFragment : PagedContentFragment<Post>() {
         viewModel.metaData.observe(this, Observer {
             it?.let { topic = it.subject }
         })
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        innerAdapter.glide = GlideApp.with(this)
     }
 }

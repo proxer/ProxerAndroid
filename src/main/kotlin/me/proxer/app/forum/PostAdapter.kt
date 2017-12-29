@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotterknife.bindView
+import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.forum.PostAdapter.ViewHolder
@@ -16,6 +17,8 @@ import me.proxer.library.entity.forum.Post
  */
 class PostAdapter : BaseAdapter<Post, ViewHolder>() {
 
+    var glide: GlideRequests? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_topic, parent, false))
     }
@@ -24,9 +27,21 @@ class PostAdapter : BaseAdapter<Post, ViewHolder>() {
         holder.bind(data[position])
     }
 
+    override fun onViewRecycled(holder: ViewHolder) {
+        holder.post.destroy()
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView?) {
+        glide = null
+    }
+
     inner class ViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
 
         internal val post by bindView<BBCodeView>(R.id.post)
+
+        init {
+            post.glide = glide
+        }
 
         fun bind(item: Post) {
             post.text = item.message

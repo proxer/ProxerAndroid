@@ -14,6 +14,7 @@ import android.widget.TextView
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
+import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.profile.comment.ProfileCommentAdapter.ViewHolder
@@ -34,6 +35,7 @@ class ProfileCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<UserComme
         private const val EXPANDED_STATE = "profile_comment_expanded"
     }
 
+    var glide: GlideRequests? = null
     val titleClickSubject: PublishSubject<UserComment> = PublishSubject.create()
 
     private var layoutManager: LayoutManager? = null
@@ -53,6 +55,19 @@ class ProfileCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<UserComme
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(data[position])
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        layoutManager = recyclerView.layoutManager
+    }
+
+    override fun onViewRecycled(holder: ViewHolder) {
+        holder.comment.destroy()
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView?) {
+        layoutManager = null
+        glide = null
+    }
 
     override fun saveInstanceState(outState: Bundle) {
         outState.putParcelable(EXPANDED_STATE, expansionMap)
@@ -107,6 +122,7 @@ class ProfileCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<UserComme
                 }
             }
 
+            comment.glide = glide
             comment.heightChangedListener = {
                 withSafeAdapterPosition(this) {
                     when (comment.maxHeight >= maxHeight) {
