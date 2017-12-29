@@ -1,7 +1,9 @@
 package me.proxer.app.ui.view.bbcode.tree
 
 import android.content.Context
+import android.support.v7.widget.AppCompatTextView
 import android.text.SpannableStringBuilder
+import android.text.TextUtils
 import android.view.View
 import android.widget.TextView
 import me.proxer.app.GlideRequests
@@ -48,10 +50,30 @@ open class BBTree(val parent: BBTree?, val children: MutableList<BBTree> = mutab
         }
 
         for (next in views.drop(1)) {
-            if (current is TextView && next is TextView) {
-                current.append(next.text)
+            if (current is TextView) {
+                if (next is TextView) {
+                    current.append(next.text)
+                } else {
+                    val text = current.text
+                    val trimmedText = (text as? SpannableStringBuilder)?.trimEndSafely() ?: text.trimEnd()
+
+                    current.text = if (trimmedText.isBlank()) "" else TextUtils.concat(trimmedText, "\n")
+
+                    result += current
+                    current = next
+                }
             } else {
-                result += current
+                if (next is TextView) {
+                    val text = next.text
+                    val trimmedText = (text as? SpannableStringBuilder)?.trimStartSafely() ?: text.trimStart()
+
+                    next.text = if (trimmedText.isBlank()) "" else TextUtils.concat("\n", trimmedText)
+
+                    result += current
+                } else {
+                    result += current
+                    result += AppCompatTextView(context).also { it.text = "\n" }
+                }
 
                 current = next
             }
