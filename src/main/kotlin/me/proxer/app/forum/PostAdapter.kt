@@ -1,6 +1,7 @@
 package me.proxer.app.forum
 
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.RecyclerView.LayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +20,8 @@ class PostAdapter : BaseAdapter<Post, ViewHolder>() {
 
     var glide: GlideRequests? = null
 
+    private var layoutManager: LayoutManager? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_topic, parent, false))
     }
@@ -27,11 +30,16 @@ class PostAdapter : BaseAdapter<Post, ViewHolder>() {
         holder.bind(data[position])
     }
 
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        layoutManager = recyclerView.layoutManager
+    }
+
     override fun onViewRecycled(holder: ViewHolder) {
         holder.post.destroy()
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView?) {
+        layoutManager = null
         glide = null
     }
 
@@ -41,6 +49,10 @@ class PostAdapter : BaseAdapter<Post, ViewHolder>() {
 
         init {
             post.glide = glide
+            post.heightChangedListener = {
+                post.requestLayout()
+                layoutManager?.requestSimpleAnimationsInNextLayout()
+            }
         }
 
         fun bind(item: Post) {
