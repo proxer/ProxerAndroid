@@ -79,9 +79,9 @@ internal class BBSpoilerView @JvmOverloads constructor(
             }
         })
 
-        decoration.addView(container, LayoutParams(WRAP_CONTENT, WRAP_CONTENT))
+        decoration.addView(container, LayoutParams(MATCH_PARENT, WRAP_CONTENT))
 
-        addView(toggle, LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
+        addView(toggle, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
             gravity = Gravity.CENTER_HORIZONTAL
         })
 
