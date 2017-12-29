@@ -67,7 +67,7 @@ open class BBTree(val parent: BBTree?, val children: MutableList<BBTree> = mutab
                     val text = next.text
                     val trimmedText = (text as? SpannableStringBuilder)?.trimStartSafely() ?: text.trimStart()
 
-                    next.text = if (trimmedText.isBlank()) "" else TextUtils.concat("\n", trimmedText)
+                    next.text = TextUtils.concat("\n", trimmedText)
 
                     result += current
                 } else {

@@ -66,6 +66,7 @@ internal class BBSpoilerView @JvmOverloads constructor(
         toggle.setBackgroundResource(selectableItemBackground.resourceId)
         toggle.setPadding(fourDip, twoDip, fourDip, twoDip)
         toggle.setOnClickListener { isExpanded = !isExpanded }
+        toggle.gravity = Gravity.CENTER_HORIZONTAL
 
         container.orientation = VERTICAL
         decoration.orientation = HORIZONTAL
