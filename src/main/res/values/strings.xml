@@ -7,7 +7,7 @@
     <string name="section_chat">Chat</string>
     <string name="section_donate" tools:ignore="UnusedResources">Spenden</string>
     <string name="section_manga">Manga</string>
-    <string name="section_local_manga">Heruntergeladene Manga</string>
+    <string name="section_local_manga">Offline Manga</string>
     <string name="section_news">News</string>
     <string name="section_bookmarks">Lesezeichen</string>
     <string name="section_guest">Gast</string>
@@ -107,7 +107,7 @@
     <string name="error_no_data_projects">Es gibt noch keine Projekte</string>
     <string name="error_no_data_comments">Es gibt noch keine Kommentare</string>
     <string name="error_no_data_user_media_list">Es gibt noch keine Einträge</string>
-    <string name="error_no_data_local_manga">Du hast noch keine Manga heruntergeladen</string>
+    <string name="error_no_data_local_manga">Du hast noch keine Manga offline verfügbar gemacht</string>
     <string name="error_no_data_search">Es wurde nichts gefunden, das den Kriterien entspricht</string>
     <string name="error_no_data_conferences">Du hast noch keine Chats</string>
     <string name="error_no_data_chat">Diese Konferenz hat noch keine Nachrichten</string>
@@ -230,7 +230,7 @@
     <string name="dialog_login_registration">Solltest du noch keinen Account haben, kannst du dich auf der Proxer
         Webseite registrieren</string>
 
-    <string name="dialog_logout_content">Möchtest du dich abmelden? Dabei werden alle heruntergeladenen Manga und
+    <string name="dialog_logout_content">Möchtest du dich abmelden? Dabei werden alle offline verfügbaren Manga und
         Chats gelöscht und du hast keinen Zugriff mehr auf einige Bereiche.</string>
     <string name="dialog_logout_positive">Abmelden</string>
 
@@ -242,7 +242,7 @@
     <string name="dialog_app_required_content">Zum Verwenden dieses Streams ist die %s-App nötig</string>
     <string name="dialog_app_required_positive">Installieren</string>
 
-    <string name="dialog_clean_manga_content">Sollen alle heruntergeladenen Kapitel und Seiten gelöscht werden?</string>
+    <string name="dialog_clean_manga_content">Sollen alle offline verfügbaren Kapitel und Seiten gelöscht werden?</string>
     <string name="dialog_clean_manga_positive">Alles löschen</string>
 
     <string name="dialog_notification_deletion_confirmation_content">Sollen alle Benachrichtigungen gelöscht werden?
@@ -322,17 +322,17 @@
     <string name="fragment_local_manga_delete_content_description">Dieses Kapitel löschen</string>
 
     <plurals name="fragment_local_manga_chapters_downloading">
-        <item quantity="one">Ein Kapitel wird heruntergeladen</item>
-        <item quantity="other">%d Kapitel werden heruntergeladen</item>
+        <item quantity="one">Ein Kapitel wird offline verfügbar gemacht</item>
+        <item quantity="other">%d Kapitel werden offline verfügbar gemacht</item>
     </plurals>
 
     <plurals name="fragment_local_manga_chapters_scheduled">
-        <item quantity="one">Ein Kapitel ist zum Herunterladen eingereiht</item>
-        <item quantity="other">%d Kapitel sind zum Herunterladen eingereiht</item>
+        <item quantity="one">Ein Kapitel ist für Offlineverfügbarkeit eingereiht</item>
+        <item quantity="other">%d Kapitel sind für Offlineverfügbarkeit eingereiht</item>
     </plurals>
 
-    <string name="fragment_episode_download_hint">Dieses Kapitel herunterladen</string>
-    <string name="fragment_episode_already_downloaded_hint">Dieses Kapitel ist Offline verfügbar</string>
+    <string name="fragment_episode_download_hint">Dieses Kapitel offline verfügbar machen</string>
+    <string name="fragment_episode_already_downloaded_hint">Dieses Kapitel ist offline verfügbar</string>
 
     <string name="fragment_manga_next_chapter">Nächstes Kapitel</string>
     <string name="fragment_manga_previous_chapter">Vorheriges Kapitel</string>
@@ -398,7 +398,7 @@
     <string name="notification_channel_news_description">Aktuelle News</string>
     <string name="notification_channel_profile_description">Alles zu deinem Profil</string>
     <string name="notification_channel_chat_description">Private Chat-Nachrichten und Konferenzen</string>
-    <string name="notification_channel_manga_description">Informationen zum Manga-Download</string>
+    <string name="notification_channel_manga_description">Informationen zur Manga Offlineverfügbarkeit</string>
 
     <string name="notification_news_title">News</string>
     <string name="notification_news_read_action">Gelesen</string>
@@ -425,8 +425,8 @@
         <item quantity="other">%d Benachrichtigungen</item>
     </plurals>
 
-    <string name="notification_manga_download_progress_title">Manga Download</string>
-    <string name="notification_manga_download_finished_content">Download abgeschlossen</string>
+    <string name="notification_manga_download_progress_title">Manga Offlineverfügbarkeit</string>
+    <string name="notification_manga_download_finished_content">Vorgang abgeschlossen</string>
     <string name="notification_manga_download_error_title">Fehler beim Manga Download</string>
     <string name="notification_manga_download_cancel_action">Abbrechen</string>
 
@@ -449,13 +449,13 @@
     <string name="preference_theme_light">Hell</string>
 
     <string name="preference_category_manga_title">Manga</string>
-    <string name="preference_manga_unmetered_title">Nur über WLAN herunterladen</string>
-    <string name="preference_manga_unmetered_summary_off">Manga werden immer heruntergeladen</string>
-    <string name="preference_manga_unmetered_summary_on">Manga werden nur über WLAN heruntergeladen</string>
+    <string name="preference_manga_unmetered_title">Nur über WLAN offline verügbar machen</string>
+    <string name="preference_manga_unmetered_summary_off">Manga werden immer offline verfügbar gemacht</string>
+    <string name="preference_manga_unmetered_summary_on">Manga werden nur über WLAN offline verfügbar gemacht</string>
     <string name="preference_manga_vertical_reader_title">Mangareader Ausrichtung</string>
     <string name="preference_manga_vertical_reader_summary_off">Manga werden von Links nach Rechts angezeigt</string>
     <string name="preference_manga_vertical_reader_summary_on">Manga werden von Oben nach Unten angezeigt</string>
-    <string name="preference_manga_clean">Heruntergeladene Daten löschen</string>
+    <string name="preference_manga_clean">Gespeicherte Daten löschen</string>
 
     <string name="preference_category_notifications_title">Benachrichtigungen</string>
     <string name="preference_notifications_news_title">News</string>

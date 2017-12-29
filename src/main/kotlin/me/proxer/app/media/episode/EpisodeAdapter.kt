@@ -297,7 +297,7 @@ class EpisodeAdapter(savedInstanceState: Bundle?, private val entryId: String) :
 
                                 download.setIconicsImage(when (containsChapter) {
                                     true -> CommunityMaterial.Icon.cmd_cloud_check
-                                    false -> CommunityMaterial.Icon.cmd_download
+                                    false -> CommunityMaterial.Icon.cmd_cloud_download
                                 }, 32, 0)
                             }
                 }
