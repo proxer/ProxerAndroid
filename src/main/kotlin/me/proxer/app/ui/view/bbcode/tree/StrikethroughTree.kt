@@ -1,7 +1,7 @@
 package me.proxer.app.ui.view.bbcode.tree
 
 import android.content.Context
-import android.text.Spannable
+import android.text.Spannable.SPAN_INCLUSIVE_EXCLUSIVE
 import android.text.SpannableStringBuilder
 import android.text.style.StrikethroughSpan
 import android.view.View
@@ -21,7 +21,7 @@ class StrikethroughTree(parent: BBTree?, children: MutableList<BBTree> = mutable
 
         return applyToViews(childViews) { view: TextView ->
             view.text = SpannableStringBuilder(view.text).apply {
-                setSpan(StrikethroughSpan(), 0, view.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+                setSpan(StrikethroughSpan(), 0, view.length(), SPAN_INCLUSIVE_EXCLUSIVE)
             }
         }
     }

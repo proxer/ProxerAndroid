@@ -2,7 +2,7 @@ package me.proxer.app.ui.view.bbcode.tree
 
 import android.content.Context
 import android.text.Layout.Alignment.ALIGN_OPPOSITE
-import android.text.Spannable
+import android.text.Spannable.SPAN_INCLUSIVE_EXCLUSIVE
 import android.text.SpannableStringBuilder
 import android.text.style.AlignmentSpan
 import android.view.Gravity
@@ -26,7 +26,7 @@ class RightTree(parent: BBTree?, children: MutableList<BBTree> = mutableListOf()
         return applyToViews(childViews) { view: View ->
             if (view is TextView) {
                 view.text = SpannableStringBuilder(view.text).apply {
-                    setSpan(AlignmentSpan.Standard(ALIGN_OPPOSITE), 0, view.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+                    setSpan(AlignmentSpan.Standard(ALIGN_OPPOSITE), 0, view.length(), SPAN_INCLUSIVE_EXCLUSIVE)
                 }
             } else if (view is ImageView) {
                 (view.layoutParams as? LinearLayout.LayoutParams)?.gravity = Gravity.END

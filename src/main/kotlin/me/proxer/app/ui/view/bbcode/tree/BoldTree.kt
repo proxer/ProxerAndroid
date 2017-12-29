@@ -2,7 +2,7 @@ package me.proxer.app.ui.view.bbcode.tree
 
 import android.content.Context
 import android.graphics.Typeface
-import android.text.Spannable
+import android.text.Spannable.SPAN_INCLUSIVE_EXCLUSIVE
 import android.text.SpannableStringBuilder
 import android.text.style.StyleSpan
 import android.view.View
@@ -22,7 +22,7 @@ class BoldTree(parent: BBTree?, children: MutableList<BBTree> = mutableListOf())
 
         return applyToViews(childViews) { view: TextView ->
             view.text = SpannableStringBuilder(view.text).apply {
-                setSpan(StyleSpan(Typeface.BOLD), 0, view.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+                setSpan(StyleSpan(Typeface.BOLD), 0, view.length(), SPAN_INCLUSIVE_EXCLUSIVE)
             }
         }
     }
