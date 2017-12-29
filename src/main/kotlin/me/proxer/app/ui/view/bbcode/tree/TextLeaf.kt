@@ -2,6 +2,7 @@ package me.proxer.app.ui.view.bbcode.tree
 
 import android.content.Context
 import android.support.v7.widget.AppCompatTextView
+import android.text.method.LinkMovementMethod
 
 /**
  * @author Ruben Gees
@@ -14,5 +15,8 @@ class TextLeaf(
 
     override fun endsWith(code: String) = false
 
-    override fun makeViews(context: Context) = listOf(AppCompatTextView(context).also { it.text = text })
+    override fun makeViews(context: Context) = listOf(AppCompatTextView(context).also {
+        it.movementMethod = LinkMovementMethod.getInstance()
+        it.text = text
+    })
 }

@@ -11,6 +11,7 @@ import me.proxer.app.ui.view.bbcode.prototype.SizePrototype
 import me.proxer.app.ui.view.bbcode.prototype.SpoilerPrototype
 import me.proxer.app.ui.view.bbcode.prototype.StrikethroughPrototype
 import me.proxer.app.ui.view.bbcode.prototype.UnderlinePrototype
+import me.proxer.app.ui.view.bbcode.prototype.UrlPrototype
 import me.proxer.app.ui.view.bbcode.tree.BBTree
 import me.proxer.app.ui.view.bbcode.tree.TextLeaf
 import java.util.regex.Pattern.quote
@@ -22,7 +23,7 @@ object BBParser {
 
     private val prototypes = arrayOf(BoldPrototype, ItalicPrototype, UnderlinePrototype, StrikethroughPrototype,
             SizePrototype, ColorPrototype, LeftPrototype, CenterPrototype, RightPrototype, SpoilerPrototype,
-            ImagePrototype)
+            UrlPrototype, ImagePrototype)
 
     private val prototypeRegex = prototypes.joinToString("|") {
         it.startRegex.toPattern().pattern() + "|" + it.endRegex.toPattern().pattern()
