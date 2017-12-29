@@ -7,6 +7,7 @@ import android.view.View
 import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
+import me.proxer.app.forum.TopicActivity
 import me.proxer.app.ui.ImageDetailActivity
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.autoDispose
@@ -45,7 +46,11 @@ class NewsFragment : PagedContentFragment<NewsArticle>() {
 
         innerAdapter.clickSubject
                 .autoDispose(this)
-                .subscribe { showPage(ProxerUrls.newsWeb(it.categoryId, it.threadId, Device.MOBILE)) }
+                .subscribe {
+                    TopicActivity.navigateTo(safeActivity, it.threadId, it.subject)
+
+//                    showPage(ProxerUrls.newsWeb(it.categoryId, it.threadId, Device.MOBILE))
+                }
 
         innerAdapter.expansionSubject
                 .autoDispose(this)

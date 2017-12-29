@@ -213,6 +213,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".forum.TopicActivity" />
+
         <activity
             android:name=".ui.crash.CrashActivity"
             android:process=":error_activity">

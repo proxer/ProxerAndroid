@@ -6,13 +6,16 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
 import me.proxer.app.R.id.description
+import me.proxer.app.R.id.post
 import me.proxer.app.anime.AnimeStream
 import me.proxer.app.chat.LocalConference
 import me.proxer.app.chat.LocalMessage
+import me.proxer.app.forum.TopicMetaData
 import me.proxer.app.manga.local.LocalEntryCore
 import me.proxer.app.manga.local.LocalMangaChapter
 import me.proxer.app.manga.local.LocalMangaPage
 import me.proxer.library.entity.anime.Stream
+import me.proxer.library.entity.forum.Topic
 import me.proxer.library.entity.info.EntryCore
 import me.proxer.library.entity.info.EntrySeasonInfo
 import me.proxer.library.entity.info.Synonym
@@ -267,3 +270,6 @@ fun Conference.toLocalConference(isFullyLoaded: Boolean) = LocalConference(id.to
 
 fun Message.toLocalMessage() = LocalMessage(id.toLong(), conferenceId.toLong(), userId, username, message, action,
         date, device)
+
+fun Topic.toTopicMetaData() = TopicMetaData(categoryId, categoryName, firstPostDate, lastPostDate, hits, isLocked,
+        post, subject)

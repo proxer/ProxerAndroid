@@ -1,0 +1,33 @@
+package me.proxer.app.forum
+
+import android.arch.lifecycle.MutableLiveData
+import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import me.proxer.app.MainApplication.Companion.api
+import me.proxer.app.base.PagedViewModel
+import me.proxer.app.util.extension.buildSingle
+import me.proxer.app.util.extension.toTopicMetaData
+import me.proxer.library.entity.forum.Post
+
+/**
+ * @author Ruben Gees
+ */
+@GeneratedProvider
+class TopicViewModel(private val id: String) : PagedViewModel<Post>() {
+
+    override val itemsOnPage = 10
+
+    override val dataSingle: Single<List<Post>>
+        get() = api.forum().topic(id)
+                .page(page)
+                .limit(itemsOnPage)
+                .buildSingle()
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSuccess { metaData.value = it.toTopicMetaData() }
+                .observeOn(Schedulers.io())
+                .map { it.posts }
+
+    val metaData = MutableLiveData<TopicMetaData>()
+}
