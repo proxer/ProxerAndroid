@@ -15,7 +15,6 @@ import android.widget.LinearLayout.LayoutParams.MATCH_PARENT
 import android.widget.LinearLayout.LayoutParams.WRAP_CONTENT
 import me.proxer.app.R
 import org.jetbrains.anko.dip
-import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
@@ -24,17 +23,27 @@ internal class BBSpoilerView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
-    var isExpanded by Delegates.observable(false, { _, _, new ->
-        handleExpansion()
+    var spoilerTitle: String? = null
+        set(value) {
+            field = value
 
-        findHost()?.let { host ->
-            if (new) {
-                host.maxHeight = Int.MAX_VALUE
-            }
-
-            host.heightChangedListener?.invoke()
+            handleExpansion()
         }
-    })
+
+    private var isExpanded = false
+        set(value) {
+            field = value
+
+            handleExpansion()
+
+            findHost()?.let { host ->
+                if (value) {
+                    host.maxHeight = Int.MAX_VALUE
+                }
+
+                host.heightChangedListener?.invoke()
+            }
+        }
 
     private val toggle = AppCompatTextView(context)
     private val decoration = LinearLayout(context)
@@ -89,10 +98,11 @@ internal class BBSpoilerView @JvmOverloads constructor(
 
     private fun handleExpansion() {
         decoration.visibility = if (isExpanded) View.VISIBLE else View.GONE
-        toggle.text = context.getString(when (isExpanded) {
-            true -> R.string.view_bbcode_hide_spoiler
-            false -> R.string.view_bbcode_show_spoiler
-        })
+        toggle.text = when {
+            spoilerTitle != null -> spoilerTitle
+            isExpanded -> context.getString(R.string.view_bbcode_hide_spoiler)
+            else -> context.getString(R.string.view_bbcode_show_spoiler)
+        }
     }
 
     private fun findHost(): BBCodeView? {

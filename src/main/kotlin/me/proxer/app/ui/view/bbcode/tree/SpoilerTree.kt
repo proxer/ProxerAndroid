@@ -8,7 +8,11 @@ import me.proxer.app.ui.view.bbcode.prototype.SpoilerPrototype
 /**
  * @author Ruben Gees
  */
-class SpoilerTree(parent: BBTree?, children: MutableList<BBTree> = mutableListOf()) : BBTree(parent, children) {
+class SpoilerTree(
+        private val title: String?,
+        parent: BBTree?,
+        children: MutableList<BBTree> = mutableListOf()
+) : BBTree(parent, children) {
 
     override val prototype = SpoilerPrototype
 
@@ -17,7 +21,11 @@ class SpoilerTree(parent: BBTree?, children: MutableList<BBTree> = mutableListOf
 
         return when (childViews.isEmpty()) {
             true -> childViews
-            false -> listOf(BBSpoilerView(context).apply { childViews.forEach { addView(it) } })
+            false -> listOf(BBSpoilerView(context).apply {
+                spoilerTitle = title
+
+                childViews.forEach { addView(it) }
+            })
         }
     }
 }
