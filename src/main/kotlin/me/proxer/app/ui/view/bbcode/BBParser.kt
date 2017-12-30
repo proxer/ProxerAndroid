@@ -15,6 +15,8 @@ import me.proxer.app.ui.view.bbcode.strikethrough.StrikethroughPrototype
 import me.proxer.app.ui.view.bbcode.underline.UnderlinePrototype
 import me.proxer.app.ui.view.bbcode.url.UrlPrototype
 import java.util.regex.Pattern.quote
+import kotlin.text.RegexOption.DOT_MATCHES_ALL
+import kotlin.text.RegexOption.IGNORE_CASE
 
 /**
  * @author Ruben Gees
@@ -29,7 +31,8 @@ object BBParser {
         it.startRegex.toPattern().pattern() + "|" + it.endRegex.toPattern().pattern()
     }
 
-    private val regex = Regex("${quote("[")}(($prototypeRegex)?)${quote("]")}", RegexOption.IGNORE_CASE)
+    private val regex = Regex("${quote("[")}(($prototypeRegex)?)${quote("]")}",
+            options = setOf(IGNORE_CASE, DOT_MATCHES_ALL))
 
     fun parse(input: String): BBTree {
         val trimmedInput = input.trim()

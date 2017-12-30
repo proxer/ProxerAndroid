@@ -11,6 +11,9 @@ import me.proxer.app.R
 import me.proxer.app.ui.view.bbcode.BBTree
 import org.jetbrains.anko.dip
 
+/**
+ * @author Ruben Gees
+ */
 class QuoteTree(parent: BBTree?, children: MutableList<BBTree> = mutableListOf()) : BBTree(parent, children) {
 
     override val prototype = QuotePrototype
