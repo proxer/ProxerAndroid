@@ -10,6 +10,8 @@ interface BBPrototype {
     val startRegex: Regex
     val endRegex: Regex
 
+    val canHaveChildren get() = true
+
     fun fromCode(code: String, parent: BBTree) = when (startRegex.matches(code)) {
         true -> construct(code, parent)
         false -> null

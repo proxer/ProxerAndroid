@@ -3,6 +3,7 @@ package me.proxer.app.ui.view.bbcode
 import me.proxer.app.ui.view.bbcode.prototype.BoldPrototype
 import me.proxer.app.ui.view.bbcode.prototype.CenterPrototype
 import me.proxer.app.ui.view.bbcode.prototype.ColorPrototype
+import me.proxer.app.ui.view.bbcode.prototype.DividerPrototype
 import me.proxer.app.ui.view.bbcode.prototype.ImagePrototype
 import me.proxer.app.ui.view.bbcode.prototype.ItalicPrototype
 import me.proxer.app.ui.view.bbcode.prototype.LeftPrototype
@@ -23,7 +24,7 @@ object BBParser {
 
     private val prototypes = arrayOf(BoldPrototype, ItalicPrototype, UnderlinePrototype, StrikethroughPrototype,
             SizePrototype, ColorPrototype, LeftPrototype, CenterPrototype, RightPrototype, SpoilerPrototype,
-            UrlPrototype, ImagePrototype)
+            UrlPrototype, ImagePrototype, DividerPrototype)
 
     private val prototypeRegex = prototypes.joinToString("|") {
         it.startRegex.toPattern().pattern() + "|" + it.endRegex.toPattern().pattern()
@@ -59,8 +60,9 @@ object BBParser {
 
                     if (newTree != null) {
                         currentTree.children.add(newTree)
-                        currentTree = newTree
                         prototypeFound = true
+
+                        if (prototype.canHaveChildren) currentTree = newTree
 
                         break
                     }
