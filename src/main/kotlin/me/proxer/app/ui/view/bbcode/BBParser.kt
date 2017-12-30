@@ -1,20 +1,19 @@
 package me.proxer.app.ui.view.bbcode
 
-import me.proxer.app.ui.view.bbcode.prototype.BoldPrototype
-import me.proxer.app.ui.view.bbcode.prototype.CenterPrototype
-import me.proxer.app.ui.view.bbcode.prototype.ColorPrototype
-import me.proxer.app.ui.view.bbcode.prototype.DividerPrototype
-import me.proxer.app.ui.view.bbcode.prototype.ImagePrototype
-import me.proxer.app.ui.view.bbcode.prototype.ItalicPrototype
-import me.proxer.app.ui.view.bbcode.prototype.LeftPrototype
-import me.proxer.app.ui.view.bbcode.prototype.RightPrototype
-import me.proxer.app.ui.view.bbcode.prototype.SizePrototype
-import me.proxer.app.ui.view.bbcode.prototype.SpoilerPrototype
-import me.proxer.app.ui.view.bbcode.prototype.StrikethroughPrototype
-import me.proxer.app.ui.view.bbcode.prototype.UnderlinePrototype
-import me.proxer.app.ui.view.bbcode.prototype.UrlPrototype
-import me.proxer.app.ui.view.bbcode.tree.BBTree
-import me.proxer.app.ui.view.bbcode.tree.TextLeaf
+import me.proxer.app.ui.view.bbcode.bold.BoldPrototype
+import me.proxer.app.ui.view.bbcode.center.CenterPrototype
+import me.proxer.app.ui.view.bbcode.color.ColorPrototype
+import me.proxer.app.ui.view.bbcode.divider.DividerPrototype
+import me.proxer.app.ui.view.bbcode.image.ImagePrototype
+import me.proxer.app.ui.view.bbcode.italic.ItalicPrototype
+import me.proxer.app.ui.view.bbcode.left.LeftPrototype
+import me.proxer.app.ui.view.bbcode.quote.QuotePrototype
+import me.proxer.app.ui.view.bbcode.right.RightPrototype
+import me.proxer.app.ui.view.bbcode.size.SizePrototype
+import me.proxer.app.ui.view.bbcode.spoiler.SpoilerPrototype
+import me.proxer.app.ui.view.bbcode.strikethrough.StrikethroughPrototype
+import me.proxer.app.ui.view.bbcode.underline.UnderlinePrototype
+import me.proxer.app.ui.view.bbcode.url.UrlPrototype
 import java.util.regex.Pattern.quote
 
 /**
@@ -24,7 +23,7 @@ object BBParser {
 
     private val prototypes = arrayOf(BoldPrototype, ItalicPrototype, UnderlinePrototype, StrikethroughPrototype,
             SizePrototype, ColorPrototype, LeftPrototype, CenterPrototype, RightPrototype, SpoilerPrototype,
-            UrlPrototype, ImagePrototype, DividerPrototype)
+            QuotePrototype, UrlPrototype, ImagePrototype, DividerPrototype)
 
     private val prototypeRegex = prototypes.joinToString("|") {
         it.startRegex.toPattern().pattern() + "|" + it.endRegex.toPattern().pattern()
