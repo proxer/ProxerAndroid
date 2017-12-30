@@ -4,6 +4,7 @@ import android.content.Context
 import android.support.v4.content.ContextCompat
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.LinearLayout.LayoutParams
 import android.widget.LinearLayout.LayoutParams.MATCH_PARENT
 import android.widget.LinearLayout.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout.VERTICAL
@@ -26,8 +27,8 @@ class QuoteTree(parent: BBTree?, children: MutableList<BBTree> = mutableListOf()
             false -> listOf(LinearLayout(context).apply {
                 val fourDip = dip(4)
 
+                layoutParams = LayoutParams(MATCH_PARENT, WRAP_CONTENT)
                 orientation = VERTICAL
-                layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
 
                 setPadding(fourDip, fourDip, fourDip, fourDip)
                 setBackgroundColor(ContextCompat.getColor(context, R.color.selected))
