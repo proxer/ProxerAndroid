@@ -67,10 +67,16 @@ object BBParser {
                     }
                 }
 
-                // If nothing found assume a user error and look for a fitting end tag in the existing tree.
-                if (!prototypeFound && currentTree.parent?.endsWith(part) == true) {
-                    currentTree = currentTree.parent?.parent
-                            ?: throw IllegalStateException("tree does not have a parent: $currentTree")
+                if (!prototypeFound) {
+                    // If nothing found assume a user error and look for a fitting end tag in the existing tree.
+                    if (currentTree.parent?.endsWith(part) == true) {
+                        currentTree = currentTree.parent?.parent
+                                ?: throw IllegalStateException("tree does not have a parent: $currentTree")
+                    } else {
+                        val unknownString = trimmedInput.substring(it.range.first, it.range.endInclusive + 1)
+
+                        currentTree.children.add(TextLeaf(unknownString, currentTree))
+                    }
                 }
             }
 
