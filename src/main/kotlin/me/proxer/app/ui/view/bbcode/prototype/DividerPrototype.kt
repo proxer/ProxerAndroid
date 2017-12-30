@@ -9,7 +9,7 @@ import me.proxer.app.ui.view.bbcode.tree.DividerTree
 object DividerPrototype : BBPrototype {
 
     override val startRegex = Regex("\\s*hr\\s*", RegexOption.IGNORE_CASE)
-    override val endRegex = Regex(".*", RegexOption.DOT_MATCHES_ALL)
+    override val endRegex = Regex("/\\s*hr\\s*", RegexOption.DOT_MATCHES_ALL)
 
     override val canHaveChildren get() = false
 

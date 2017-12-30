@@ -63,7 +63,7 @@ inline fun SpannableStringBuilder.trimStartSafely() = when (firstOrNull()?.isWhi
 inline fun SpannableStringBuilder.trimEndSafely() = when (lastOrNull()?.isWhitespace()) {
     true -> indices.reversed()
             .firstOrNull { !this[it].isWhitespace() }
-            ?.let { delete(it, length) }
+            ?.let { delete(it + 1, length) }
             ?: this
     else -> this
 }
