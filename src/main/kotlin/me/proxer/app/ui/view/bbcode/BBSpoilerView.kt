@@ -3,17 +3,22 @@ package me.proxer.app.ui.view.bbcode
 import android.content.Context
 import android.os.Build
 import android.support.v4.content.ContextCompat
+import android.support.v4.view.ViewCompat
 import android.support.v4.widget.TextViewCompat
 import android.support.v7.widget.AppCompatTextView
 import android.util.AttributeSet
 import android.util.TypedValue
-import android.view.Gravity
+import android.view.Gravity.CENTER_HORIZONTAL
+import android.view.Gravity.CENTER_VERTICAL
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.LinearLayout.LayoutParams.MATCH_PARENT
 import android.widget.LinearLayout.LayoutParams.WRAP_CONTENT
+import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import me.proxer.app.R
+import me.proxer.app.util.extension.setIconicsImage
 import org.jetbrains.anko.dip
 
 /**
@@ -45,7 +50,10 @@ internal class BBSpoilerView @JvmOverloads constructor(
             }
         }
 
-    private val toggle = AppCompatTextView(context)
+    private val toggle = LinearLayout(context)
+    private val toggleText = AppCompatTextView(context)
+    private val toggleButton = ImageView(context)
+
     private val decoration = LinearLayout(context)
     private val space = View(context)
     private val container = LinearLayout(context)
@@ -60,19 +68,31 @@ internal class BBSpoilerView @JvmOverloads constructor(
 
         orientation = VERTICAL
 
-        TextViewCompat.setTextAppearance(toggle, R.style.TextAppearance_AppCompat_Medium)
-
-        toggle.setTextColor(ContextCompat.getColor(context, R.color.colorAccent))
-        toggle.setBackgroundResource(selectableItemBackground.resourceId)
-        toggle.setPadding(fourDip, twoDip, fourDip, twoDip)
-        toggle.setOnClickListener { isExpanded = !isExpanded }
-        toggle.gravity = Gravity.CENTER_HORIZONTAL
-
+        toggle.orientation = HORIZONTAL
         container.orientation = VERTICAL
         decoration.orientation = HORIZONTAL
+
+        TextViewCompat.setTextAppearance(toggleText, R.style.TextAppearance_AppCompat_Medium)
+
+        toggle.setOnClickListener { isExpanded = !isExpanded }
+        toggle.setBackgroundResource(selectableItemBackground.resourceId)
+
+        toggleText.setTextColor(ContextCompat.getColor(context, R.color.colorAccent))
+        toggleText.setPadding(fourDip, twoDip, fourDip, twoDip)
+
+        toggleButton.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32)
+
         space.setBackgroundColor(ContextCompat.getColor(context, R.color.divider))
 
-        decoration.addView(space, LinearLayout.LayoutParams(twoDip, MATCH_PARENT).apply {
+        toggle.addView(toggleText, LayoutParams(WRAP_CONTENT, WRAP_CONTENT, 1f).apply {
+            gravity = CENTER_VERTICAL
+        })
+
+        toggle.addView(toggleButton, LayoutParams(dip(32), dip(32)).apply {
+            gravity = CENTER_VERTICAL
+        })
+
+        decoration.addView(space, LayoutParams(twoDip, MATCH_PARENT).apply {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                 marginEnd = fourDip
             } else {
@@ -82,8 +102,8 @@ internal class BBSpoilerView @JvmOverloads constructor(
 
         decoration.addView(container, LayoutParams(MATCH_PARENT, WRAP_CONTENT))
 
-        addView(toggle, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
-            gravity = Gravity.CENTER_HORIZONTAL
+        addView(toggle, LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
+            gravity = CENTER_HORIZONTAL
         })
 
         addView(decoration, LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
@@ -99,10 +119,15 @@ internal class BBSpoilerView @JvmOverloads constructor(
 
     private fun handleExpansion() {
         decoration.visibility = if (isExpanded) View.VISIBLE else View.GONE
-        toggle.text = when {
+        toggleText.text = when {
             spoilerTitle != null -> spoilerTitle
             isExpanded -> context.getString(R.string.view_bbcode_hide_spoiler)
             else -> context.getString(R.string.view_bbcode_show_spoiler)
+        }
+
+        when (isExpanded) {
+            true -> ViewCompat.animate(toggleButton).rotation(180f)
+            false -> ViewCompat.animate(toggleButton).rotation(0f)
         }
     }
 
