@@ -2,12 +2,12 @@ package me.proxer.app.ui.view.bbcode.size
 
 import android.content.Context
 import android.text.Spannable.SPAN_INCLUSIVE_EXCLUSIVE
-import android.text.SpannableStringBuilder
 import android.text.style.RelativeSizeSpan
 import android.view.View
 import android.widget.TextView
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.applyToViews
+import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
 
 /**
  * @author Ruben Gees
@@ -24,7 +24,7 @@ class SizeTree(
         val childViews = super.makeViewsWithoutMerging(context)
 
         return applyToViews(childViews) { view: TextView ->
-            view.text = SpannableStringBuilder(view.text).apply {
+            view.text = view.text.toSpannableStringBuilder().apply {
                 setSpan(RelativeSizeSpan(relativeSize), 0, view.length(), SPAN_INCLUSIVE_EXCLUSIVE)
             }
         }

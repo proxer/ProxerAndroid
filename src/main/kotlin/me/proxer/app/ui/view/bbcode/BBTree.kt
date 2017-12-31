@@ -2,13 +2,9 @@ package me.proxer.app.ui.view.bbcode
 
 import android.content.Context
 import android.support.v7.widget.AppCompatTextView
-import android.text.SpannableStringBuilder
-import android.text.TextUtils
 import android.view.View
 import android.widget.TextView
 import me.proxer.app.GlideRequests
-import me.proxer.app.util.extension.trimEndSafely
-import me.proxer.app.util.extension.trimStartSafely
 
 /**
  * @author Ruben Gees
@@ -43,30 +39,32 @@ open class BBTree(val parent: BBTree?, val children: MutableList<BBTree> = mutab
         var current = views.first()
 
         if (current is TextView) {
-            val text = current.text
-
-            current.text = (text as? SpannableStringBuilder)?.trimStartSafely() ?: text.trimStart()
+            current.text = current.text.toSpannableStringBuilder().trimStartSafely()
         }
 
         for (next in views.drop(1)) {
             if (current is TextView) {
-                if (next is TextView) {
-                    current.append(next.text)
-                } else {
-                    val text = current.text
-                    val trimmedText = (text as? SpannableStringBuilder)?.trimEndSafely() ?: text.trimEnd()
+                val currentText = current.text.toSpannableStringBuilder()
 
-                    current.text = if (trimmedText.isBlank()) "" else TextUtils.concat(trimmedText, "\n")
+                if (next is TextView) {
+                    current.text = currentText
+                            .apply { if (isEmpty()) insert(0, "\n") }
+                            .insert(currentText.length, next.text)
+                } else {
+                    current.text = currentText
+                            .trimEndSafely()
+                            .apply { if (isNotEmpty()) insert(length, "\n") }
 
                     result += current
                     current = next
                 }
             } else {
                 if (next is TextView) {
-                    val text = next.text
-                    val trimmedText = (text as? SpannableStringBuilder)?.trimStartSafely() ?: text.trimStart()
+                    val nextText = next.text.toSpannableStringBuilder()
 
-                    next.text = TextUtils.concat("\n", trimmedText)
+                    next.text = nextText
+                            .trimStartSafely()
+                            .apply { if (!isEmpty()) insert(0, "\n") }
 
                     result += current
                 } else {
@@ -79,9 +77,7 @@ open class BBTree(val parent: BBTree?, val children: MutableList<BBTree> = mutab
         }
 
         if (current is TextView) {
-            val text = current.text
-
-            current.text = (text as? SpannableStringBuilder)?.trimEndSafely() ?: text.trimEnd()
+            current.text = current.text.toSpannableStringBuilder().trimEndSafely()
         }
 
         result += current

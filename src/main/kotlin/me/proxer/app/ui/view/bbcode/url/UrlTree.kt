@@ -2,13 +2,13 @@ package me.proxer.app.ui.view.bbcode.url
 
 import android.content.Context
 import android.text.Spannable.SPAN_INCLUSIVE_EXCLUSIVE
-import android.text.SpannableStringBuilder
 import android.text.style.ClickableSpan
 import android.view.View
 import android.widget.TextView
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.applyToViews
+import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
 import okhttp3.HttpUrl
 
 /**
@@ -32,7 +32,7 @@ class UrlTree(
                 }
             }
 
-            view.text = SpannableStringBuilder(view.text).apply {
+            view.text = view.text.toSpannableStringBuilder().apply {
                 setSpan(clickableSpan, 0, view.length(), SPAN_INCLUSIVE_EXCLUSIVE)
             }
         })

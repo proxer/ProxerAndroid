@@ -2,6 +2,7 @@ package me.proxer.app.ui.view.bbcode
 
 import android.content.Context
 import android.support.v7.widget.AppCompatTextView
+import android.text.SpannableStringBuilder
 import android.text.method.LinkMovementMethod
 
 /**
@@ -17,6 +18,6 @@ class TextLeaf(
 
     override fun makeViews(context: Context) = listOf(AppCompatTextView(context).also {
         it.movementMethod = LinkMovementMethod.getInstance()
-        it.text = text
+        it.text = SpannableStringBuilder(text)
     })
 }
