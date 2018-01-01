@@ -50,7 +50,7 @@
 
                 <data
                     android:host="proxer.me"
-                    android:pathPrefix="/user/"
+                    android:pathPattern="/user/.*"
                     android:scheme="http" />
             </intent-filter>
             <intent-filter>
@@ -61,7 +61,7 @@
 
                 <data
                     android:host="proxer.me"
-                    android:pathPrefix="/user/"
+                    android:pathPattern="/user/.*"
                     android:scheme="https" />
             </intent-filter>
         </activity>
@@ -100,7 +100,7 @@
 
                 <data
                     android:host="proxer.me"
-                    android:pathPrefix="/info/"
+                    android:pathPattern="/info/.*"
                     android:scheme="http" />
             </intent-filter>
             <intent-filter>
@@ -111,7 +111,7 @@
 
                 <data
                     android:host="proxer.me"
-                    android:pathPrefix="/info/"
+                    android:pathPattern="/info/.*"
                     android:scheme="https" />
             </intent-filter>
         </activity>
@@ -150,7 +150,7 @@
 
                 <data
                     android:host="proxer.me"
-                    android:pathPrefix="/chapter/"
+                    android:pathPattern="/chapter/.*"
                     android:scheme="http" />
             </intent-filter>
             <intent-filter>
@@ -161,7 +161,7 @@
 
                 <data
                     android:host="proxer.me"
-                    android:pathPrefix="/chapter/"
+                    android:pathPattern="/chapter/.*"
                     android:scheme="https" />
             </intent-filter>
             <intent-filter>
@@ -172,7 +172,7 @@
 
                 <data
                     android:host="proxer.me"
-                    android:pathPrefix="/read/"
+                    android:pathPattern="/read/.*"
                     android:scheme="http" />
             </intent-filter>
             <intent-filter>
@@ -183,7 +183,7 @@
 
                 <data
                     android:host="proxer.me"
-                    android:pathPrefix="/read/"
+                    android:pathPattern="/read/.*"
                     android:scheme="https" />
             </intent-filter>
         </activity>
@@ -197,7 +197,7 @@
 
                 <data
                     android:host="proxer.me"
-                    android:pathPrefix="/watch/"
+                    android:pathPattern="/watch/.*"
                     android:scheme="http" />
             </intent-filter>
             <intent-filter>
@@ -208,12 +208,35 @@
 
                 <data
                     android:host="proxer.me"
-                    android:pathPrefix="/watch/"
+                    android:pathPattern="/watch/.*"
                     android:scheme="https" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".forum.TopicActivity" />
+        <activity android:name=".forum.TopicActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="proxer.me"
+                    android:pathPattern="/forum/.*/.*"
+                    android:scheme="http" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="proxer.me"
+                    android:pathPattern="/forum/.*/.*"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name=".ui.crash.CrashActivity"

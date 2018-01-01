@@ -1,6 +1,7 @@
 package me.proxer.app.forum
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import me.proxer.app.R
 import me.proxer.app.base.DrawerActivity
@@ -23,7 +24,10 @@ class TopicActivity : DrawerActivity() {
     }
 
     val id: String
-        get() = intent.getStringExtra(ID_EXTRA)
+        get() = when {
+            intent.action == Intent.ACTION_VIEW -> intent.data.pathSegments.getOrElse(2, { "-1" })
+            else -> intent.getStringExtra(ID_EXTRA)
+        }
 
     var topic: String?
         get() = intent.getStringExtra(TOPIC_EXTRA)
