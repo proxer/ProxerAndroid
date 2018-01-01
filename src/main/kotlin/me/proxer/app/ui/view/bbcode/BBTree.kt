@@ -64,12 +64,12 @@ open class BBTree(val parent: BBTree?, val children: MutableList<BBTree> = mutab
 
                     next.text = nextText
                             .trimStartSafely()
-                            .apply { if (!isEmpty()) insert(0, "\n") }
+                            .apply { if (isNotEmpty()) insert(0, "\n") }
 
                     result += current
                 } else {
                     result += current
-                    result += AppCompatTextView(context).also { it.text = "\n" }
+                    result += AppCompatTextView(context)
                 }
 
                 current = next
@@ -78,9 +78,13 @@ open class BBTree(val parent: BBTree?, val children: MutableList<BBTree> = mutab
 
         if (current is TextView) {
             current.text = current.text.toSpannableStringBuilder().trimEndSafely()
-        }
 
-        result += current
+            if (current.text.isNotEmpty()) {
+                result += current
+            }
+        } else {
+            result += current
+        }
 
         return result
     }
