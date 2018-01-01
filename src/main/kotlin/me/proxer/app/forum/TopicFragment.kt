@@ -7,14 +7,13 @@ import android.view.View
 import me.proxer.app.GlideApp
 import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.util.extension.unsafeLazy
-import me.proxer.library.entity.forum.Post
 import org.jetbrains.anko.bundleOf
 import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
  */
-class TopicFragment : PagedContentFragment<Post>() {
+class TopicFragment : PagedContentFragment<ParsedPost>() {
 
     companion object {
         fun newInstance() = TopicFragment().apply {

@@ -12,7 +12,6 @@ import me.proxer.app.media.MediaActivity
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.unsafeLazy
-import me.proxer.library.entity.user.UserComment
 import me.proxer.library.enums.Category
 import org.jetbrains.anko.bundleOf
 import kotlin.properties.Delegates
@@ -20,7 +19,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-class ProfileCommentFragment : PagedContentFragment<UserComment>() {
+class ProfileCommentFragment : PagedContentFragment<ParsedUserComment>() {
 
     companion object {
         private const val CATEGORY_ARGUMENT = "category"

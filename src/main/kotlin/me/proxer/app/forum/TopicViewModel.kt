@@ -8,18 +8,18 @@ import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.base.PagedViewModel
 import me.proxer.app.util.extension.buildSingle
+import me.proxer.app.util.extension.toParsedPost
 import me.proxer.app.util.extension.toTopicMetaData
-import me.proxer.library.entity.forum.Post
 
 /**
  * @author Ruben Gees
  */
 @GeneratedProvider
-class TopicViewModel(private val id: String) : PagedViewModel<Post>() {
+class TopicViewModel(private val id: String) : PagedViewModel<ParsedPost>() {
 
     override val itemsOnPage = 10
 
-    override val dataSingle: Single<List<Post>>
+    override val dataSingle: Single<List<ParsedPost>>
         get() = api.forum().topic(id)
                 .page(page)
                 .limit(itemsOnPage)
@@ -27,7 +27,7 @@ class TopicViewModel(private val id: String) : PagedViewModel<Post>() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSuccess { metaData.value = it.toTopicMetaData() }
                 .observeOn(Schedulers.io())
-                .map { it.posts }
+                .map { it.posts.map { it.toParsedPost() } }
 
     val metaData = MutableLiveData<TopicMetaData>()
 }

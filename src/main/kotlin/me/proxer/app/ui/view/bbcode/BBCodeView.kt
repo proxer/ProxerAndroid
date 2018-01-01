@@ -12,7 +12,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import me.proxer.app.GlideRequests
 import org.jetbrains.anko.childrenSequence
-import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
@@ -22,7 +21,6 @@ class BBCodeView @JvmOverloads constructor(
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
     var maxHeight = Int.MAX_VALUE
-    var text by Delegates.observable("", { _, _, _ -> refreshViews() })
 
     var heightChangedListener: (() -> Unit)? = null
     var glide: GlideRequests? = null
@@ -43,6 +41,14 @@ class BBCodeView @JvmOverloads constructor(
         })
     }
 
+    fun setTree(tree: BBTree) {
+        refreshViews(tree)
+    }
+
+    fun setText(text: String) {
+        refreshViews(BBParser.parse(text))
+    }
+
     fun destroy() {
         applyToViews(childrenSequence().toList(), { view: ImageView ->
             glide?.clear(view)
@@ -51,12 +57,9 @@ class BBCodeView @JvmOverloads constructor(
         removeAllViews()
     }
 
-    private fun refreshViews() {
+    private fun refreshViews(tree: BBTree) {
         removeAllViews()
 
-        BBParser.parse(text)
-                .also { it.glide = glide }
-                .makeViews(context)
-                .forEach { this.addView(it) }
+        tree.also { it.glide = glide }.makeViews(context).forEach { this.addView(it) }
     }
 }

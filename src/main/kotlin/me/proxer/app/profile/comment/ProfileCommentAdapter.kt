@@ -24,19 +24,18 @@ import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.app.util.extension.unsafeLazy
-import me.proxer.library.entity.user.UserComment
 
 /**
  * @author Ruben Gees
  */
-class ProfileCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<UserComment, ViewHolder>() {
+class ProfileCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedUserComment, ViewHolder>() {
 
     private companion object {
         private const val EXPANDED_STATE = "profile_comment_expanded"
     }
 
     var glide: GlideRequests? = null
-    val titleClickSubject: PublishSubject<UserComment> = PublishSubject.create()
+    val titleClickSubject: PublishSubject<ParsedUserComment> = PublishSubject.create()
 
     private var layoutManager: LayoutManager? = null
     private val expansionMap: ParcelableStringBooleanMap
@@ -137,7 +136,7 @@ class ProfileCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<UserComme
             upvoteIcon.setIconicsImage(CommunityMaterial.Icon.cmd_thumb_up, 32)
         }
 
-        fun bind(item: UserComment) {
+        fun bind(item: ParsedUserComment) {
             ViewCompat.setTransitionName(image, "comment_${item.id}")
 
             title.text = item.entryName
@@ -150,7 +149,8 @@ class ProfileCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<UserComme
             bindRatingRow(ratingMusicRow, ratingMusic, item.ratingDetails.music.toFloat())
             bindRatingRow(ratingOverallRow, ratingOverall, item.overallRating.toFloat() / 2.0f)
 
-            comment.text = item.content
+            comment.setTree(item.parsedContent)
+
             time.text = item.date.convertToRelativeReadableTime(time.context)
             progress.text = item.mediaProgress.toEpisodeAppString(progress.context, item.episode, item.category)
 

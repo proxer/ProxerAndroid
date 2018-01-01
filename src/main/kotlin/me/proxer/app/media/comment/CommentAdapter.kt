@@ -27,21 +27,20 @@ import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.app.util.extension.unsafeLazy
-import me.proxer.library.entity.info.Comment
 import me.proxer.library.enums.Category
 import me.proxer.library.util.ProxerUrls
 
 /**
  * @author Ruben Gees
  */
-class CommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<Comment, ViewHolder>() {
+class CommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedComment, ViewHolder>() {
 
     private companion object {
         private const val EXPANDED_STATE = "comments_expanded"
     }
 
     var glide: GlideRequests? = null
-    val profileClickSubject: PublishSubject<Pair<ImageView, Comment>> = PublishSubject.create()
+    val profileClickSubject: PublishSubject<Pair<ImageView, ParsedComment>> = PublishSubject.create()
     var categoryCallback: (() -> Category?)? = null
 
     private var layoutManager: LayoutManager? = null
@@ -143,7 +142,7 @@ class CommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<Comment, ViewHol
             upvoteIcon.setIconicsImage(CommunityMaterial.Icon.cmd_thumb_up, 32)
         }
 
-        fun bind(item: Comment) {
+        fun bind(item: ParsedComment) {
             ViewCompat.setTransitionName(image, "comment_${item.id}")
 
             title.text = item.author
@@ -156,7 +155,8 @@ class CommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<Comment, ViewHol
             bindRatingRow(ratingMusicRow, ratingMusic, item.ratingDetails.music.toFloat())
             bindRatingRow(ratingOverallRow, ratingOverall, item.overallRating.toFloat() / 2.0f)
 
-            comment.text = item.content
+            comment.setTree(item.parsedContent)
+
             time.text = item.date.convertToRelativeReadableTime(time.context)
             progress.text = item.mediaProgress.toEpisodeAppString(progress.context, item.episode,
                     categoryCallback?.invoke() ?: Category.ANIME)
@@ -206,7 +206,7 @@ class CommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<Comment, ViewHol
             false -> expand.visibility = View.VISIBLE
         }
 
-        private fun bindImage(item: Comment) {
+        private fun bindImage(item: ParsedComment) {
             if (item.image.isBlank()) {
                 image.setIconicsImage(CommunityMaterial.Icon.cmd_account, 96, 16, R.color.colorAccent)
             } else {

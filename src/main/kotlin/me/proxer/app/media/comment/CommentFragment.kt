@@ -14,7 +14,6 @@ import me.proxer.app.media.MediaActivity
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.unsafeLazy
-import me.proxer.library.entity.info.Comment
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.CommentSortCriteria
 import org.jetbrains.anko.bundleOf
@@ -23,7 +22,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-class CommentFragment : PagedContentFragment<Comment>() {
+class CommentFragment : PagedContentFragment<ParsedComment>() {
 
     companion object {
         private const val SORT_CRITERIA_ARGUMENT = "sort_criteria"

@@ -11,12 +11,11 @@ import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.forum.PostAdapter.ViewHolder
 import me.proxer.app.ui.view.bbcode.BBCodeView
-import me.proxer.library.entity.forum.Post
 
 /**
  * @author Ruben Gees
  */
-class PostAdapter : BaseAdapter<Post, ViewHolder>() {
+class PostAdapter : BaseAdapter<ParsedPost, ViewHolder>() {
 
     var glide: GlideRequests? = null
 
@@ -55,8 +54,8 @@ class PostAdapter : BaseAdapter<Post, ViewHolder>() {
             }
         }
 
-        fun bind(item: Post) {
-            post.text = item.message
+        fun bind(item: ParsedPost) {
+            post.setTree(item.parsedMessage)
         }
     }
 }
