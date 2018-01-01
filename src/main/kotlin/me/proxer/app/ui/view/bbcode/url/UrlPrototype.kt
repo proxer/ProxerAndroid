@@ -12,7 +12,7 @@ import kotlin.text.RegexOption.IGNORE_CASE
  */
 object UrlPrototype : BBPrototype {
 
-    override val startRegex = Regex("\\s*url\\s*(=\\s*\"?${Patterns.WEB_URL}\"?\\s*)?", IGNORE_CASE)
+    override val startRegex = Regex("\\s*url\\s*(=\\s*\"?${Patterns.WEB_URL}/?\"?\\s*)?", IGNORE_CASE)
     override val endRegex = Regex("/\\s*url\\s*", IGNORE_CASE)
 
     override fun construct(code: String, parent: BBTree): BBTree {

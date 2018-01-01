@@ -10,7 +10,7 @@ import kotlin.text.RegexOption.IGNORE_CASE
 object StrikethroughPrototype : BBPrototype {
 
     override val startRegex = Regex("\\s*(s|strike)\\s*", IGNORE_CASE)
-    override val endRegex = Regex("/\\s*(s|string)\\s*", IGNORE_CASE)
+    override val endRegex = Regex("/\\s*(s|strike)\\s*", IGNORE_CASE)
 
     override fun construct(code: String, parent: BBTree) = StrikethroughTree(parent)
 }
