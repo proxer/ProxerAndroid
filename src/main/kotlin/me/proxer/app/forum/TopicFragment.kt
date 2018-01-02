@@ -6,6 +6,8 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import me.proxer.app.GlideApp
 import me.proxer.app.base.PagedContentFragment
+import me.proxer.app.profile.ProfileActivity
+import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.unsafeLazy
 import org.jetbrains.anko.bundleOf
 import kotlin.properties.Delegates
@@ -43,6 +45,12 @@ class TopicFragment : PagedContentFragment<ParsedPost>() {
         super.onCreate(savedInstanceState)
 
         innerAdapter = PostAdapter()
+
+        innerAdapter.profileClickSubject
+                .autoDispose(this)
+                .subscribe { (_, post) ->
+                    ProfileActivity.navigateTo(safeActivity, post.userId, post.username)
+                }
 
         viewModel.metaData.observe(this, Observer {
             it?.let { topic = it.subject }

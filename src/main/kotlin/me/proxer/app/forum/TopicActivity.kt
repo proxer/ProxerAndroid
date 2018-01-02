@@ -19,7 +19,7 @@ class TopicActivity : DrawerActivity() {
         fun navigateTo(
                 context: Activity,
                 id: String,
-                topic: String?
+                topic: String? = null
         ) = context.startActivity<TopicActivity>(ID_EXTRA to id, TOPIC_EXTRA to topic)
     }
 
