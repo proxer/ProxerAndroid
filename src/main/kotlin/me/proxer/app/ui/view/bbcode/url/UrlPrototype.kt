@@ -1,6 +1,5 @@
 package me.proxer.app.ui.view.bbcode.url
 
-import android.util.Patterns
 import me.proxer.app.ui.view.bbcode.BBPrototype
 import me.proxer.app.ui.view.bbcode.BBPrototype.Companion.REGEX_OPTIONS
 import me.proxer.app.ui.view.bbcode.BBTree
@@ -12,7 +11,7 @@ import me.proxer.app.util.Utils
  */
 object UrlPrototype : BBPrototype {
 
-    override val startRegex = Regex(" *url(=\"?${Patterns.WEB_URL.pattern()}/?\"?)?( .*?)?", REGEX_OPTIONS)
+    override val startRegex = Regex(" *url(=\"?.*?\"?)?( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *url *", REGEX_OPTIONS)
 
     override fun construct(code: String, parent: BBTree): BBTree {
