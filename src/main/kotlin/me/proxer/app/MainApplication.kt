@@ -222,7 +222,13 @@ class MainApplication : Application() {
                     .build()
 
             val vmPolicy = StrictModeCompat.VmPolicy.Builder()
-                    .detectAll()
+                    .detectContentUriWithoutPermission()
+                    .detectLeakedRegistrationObjects()
+                    .detectLeakedClosableObjects()
+                    .detectLeakedSqlLiteObjects()
+                    .detectCleartextNetwork()
+                    .detectFileUriExposure()
+                    .detectActivityLeaks()
                     .penaltyLog()
                     .build()
 
