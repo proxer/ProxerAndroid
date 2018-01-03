@@ -17,7 +17,6 @@ import me.proxer.app.util.extension.clipboardManager
 import me.proxer.app.util.extension.snackbar
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.util.ProxerUrls
-import okhttp3.HttpUrl
 import org.jetbrains.anko.bundleOf
 
 /**
@@ -60,7 +59,7 @@ class UcpOverviewFragment : BaseContentFragment<Int>() {
         StorageHelper.user?.let { (_, id, name) ->
             profileLink.text = Utils.buildClickableText(safeContext, ProxerUrls.userWeb(id).toString(),
                     onWebClickListener = Link.OnClickListener {
-                        HttpUrl.parse(it)?.let { showPage(it) }
+                        showPage(Utils.parseAndFixUrl(it))
                     },
                     onWebLongClickListener = Link.OnLongClickListener {
                         val title = getString(R.string.clipboard_title)

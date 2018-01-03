@@ -8,6 +8,7 @@ import android.support.v4.widget.TextViewCompat
 import android.support.v7.widget.AppCompatTextView
 import android.util.AttributeSet
 import android.util.TypedValue
+import android.view.Gravity.CENTER
 import android.view.Gravity.CENTER_HORIZONTAL
 import android.view.Gravity.CENTER_VERTICAL
 import android.view.View
@@ -79,6 +80,7 @@ internal class BBSpoilerView @JvmOverloads constructor(
 
         toggleText.setTextColor(ContextCompat.getColor(context, R.color.colorAccent))
         toggleText.setPadding(fourDip, twoDip, fourDip, twoDip)
+        toggleText.gravity = CENTER
 
         toggleButton.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32)
 

@@ -1,5 +1,6 @@
 package me.proxer.app.ui.view.bbcode
 
+import me.proxer.app.ui.view.bbcode.BBPrototype.Companion.REGEX_OPTIONS
 import me.proxer.app.ui.view.bbcode.bold.BoldPrototype
 import me.proxer.app.ui.view.bbcode.center.CenterPrototype
 import me.proxer.app.ui.view.bbcode.color.ColorPrototype
@@ -18,8 +19,6 @@ import me.proxer.app.ui.view.bbcode.table.TableRowPrototype
 import me.proxer.app.ui.view.bbcode.underline.UnderlinePrototype
 import me.proxer.app.ui.view.bbcode.url.UrlPrototype
 import java.util.regex.Pattern.quote
-import kotlin.text.RegexOption.DOT_MATCHES_ALL
-import kotlin.text.RegexOption.IGNORE_CASE
 
 /**
  * @author Ruben Gees
@@ -31,12 +30,15 @@ object BBParser {
             QuotePrototype, UrlPrototype, ImagePrototype, DividerPrototype,
             TablePrototype, TableRowPrototype, TableCellPrototype)
 
-    private val prototypeRegex = prototypes.joinToString("|") {
-        it.startRegex.toPattern().pattern() + "|" + it.endRegex.toPattern().pattern()
-    }
+    private val prototypeRegex
+        get() = prototypes.joinToString("|") {
+            when (it.canHaveChildren) {
+                true -> it.startRegex.pattern + "|" + it.endRegex.pattern
+                false -> it.startRegex.pattern
+            }
+        }
 
-    private val regex = Regex("${quote("[")}(($prototypeRegex)?)${quote("]")}",
-            options = setOf(IGNORE_CASE, DOT_MATCHES_ALL))
+    private val regex = Regex("${quote("[")}(($prototypeRegex)?)${quote("]")}", REGEX_OPTIONS)
 
     fun parse(input: String): BBTree {
         val trimmedInput = input.trim()

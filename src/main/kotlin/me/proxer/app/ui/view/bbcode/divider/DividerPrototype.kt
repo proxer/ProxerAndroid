@@ -1,17 +1,16 @@
 package me.proxer.app.ui.view.bbcode.divider
 
 import me.proxer.app.ui.view.bbcode.BBPrototype
+import me.proxer.app.ui.view.bbcode.BBPrototype.Companion.REGEX_OPTIONS
 import me.proxer.app.ui.view.bbcode.BBTree
-import kotlin.text.RegexOption.DOT_MATCHES_ALL
-import kotlin.text.RegexOption.IGNORE_CASE
 
 /**
  * @author Ruben Gees
  */
 object DividerPrototype : BBPrototype {
 
-    override val startRegex = Regex("\\s*hr\\s*", IGNORE_CASE)
-    override val endRegex = Regex("/\\s*hr\\s*", setOf(IGNORE_CASE, DOT_MATCHES_ALL))
+    override val startRegex = Regex(" *hr *", REGEX_OPTIONS)
+    override val endRegex = Regex("/ *hr *", REGEX_OPTIONS)
 
     override val canHaveChildren get() = false
 

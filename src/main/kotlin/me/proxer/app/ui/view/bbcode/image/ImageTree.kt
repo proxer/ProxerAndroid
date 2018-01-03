@@ -10,8 +10,8 @@ import android.widget.LinearLayout.LayoutParams
 import android.widget.TextView
 import me.proxer.app.ui.ImageDetailActivity
 import me.proxer.app.ui.view.bbcode.BBTree
+import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.defaultLoad
-import okhttp3.HttpUrl
 
 /**
  * @author Ruben Gees
@@ -26,7 +26,7 @@ class ImageTree(
 
     override fun makeViews(context: Context): List<View> {
         val childViews = super.makeViewsWithoutMerging(context)
-        val url = HttpUrl.parse((childViews.firstOrNull() as? TextView)?.text.toString())
+        val url = Utils.parseAndFixUrl((childViews.firstOrNull() as? TextView)?.text.toString())
 
         return listOf(AppCompatImageView(context).also { it: ImageView ->
             ViewCompat.setTransitionName(it, "bb_image_$url")
@@ -36,14 +36,12 @@ class ImageTree(
                 else -> width
             }, LayoutParams.WRAP_CONTENT)
 
-            if (url != null) {
-                glide?.defaultLoad(it, url)
+            glide?.defaultLoad(it, url)
 
-                if (context is Activity) {
-                    it.setOnClickListener { _ ->
-                        if (it.drawable != null) {
-                            ImageDetailActivity.navigateTo(context, url, it)
-                        }
+            if (context is Activity) {
+                it.setOnClickListener { _ ->
+                    if (it.drawable != null) {
+                        ImageDetailActivity.navigateTo(context, url, it)
                     }
                 }
             }

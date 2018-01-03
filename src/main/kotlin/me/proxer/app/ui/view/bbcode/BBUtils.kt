@@ -6,13 +6,38 @@ import android.text.SpannableStringBuilder
 import android.view.View
 import org.jetbrains.anko.childrenRecursiveSequence
 
-inline fun <reified T> applyToViews(views: List<View>, operation: (T) -> Unit): List<View> {
+/**
+ * @author Ruben Gees
+ */
+internal object BBUtils {
+
+    /**
+     * Cuts the relevant info from the given [target] by using the given [startDelimiter] and [endDelimiter].
+     * Case is ignored and '"' characters are trimmed from the result. If the [startDelimiter] is not found,
+     * null is returned.
+     *
+     * This is a function which should not used anywhere else as in the BBCode parser.
+     */
+    internal fun cutAttribute(target: String, startDelimiter: String, endDelimiter: String = " "): String? {
+        val startIndex = target.indexOf(startDelimiter, ignoreCase = true)
+        val endIndex = target.indexOf(endDelimiter, ignoreCase = true, startIndex = startIndex)
+
+        return when {
+            startIndex < 0 -> null
+            endIndex < 0 -> target.substring(startIndex + startDelimiter.length, target.length).trim { it == '"' }
+            else -> target.substring(startIndex + startDelimiter.length, endIndex).trim { it == '"' }
+        }
+    }
+}
+
+internal inline fun <reified T : View> applyToViews(views: List<View>, operation: (T) -> Unit): List<View> {
     return views.map { view ->
         if (view is T) {
             operation(view)
         } else {
             view.childrenRecursiveSequence().plus(view)
                     .filterIsInstance(T::class.java)
+                    .filter { it.parent !is BBCodeView }
                     .forEach(operation)
         }
 
@@ -20,10 +45,10 @@ inline fun <reified T> applyToViews(views: List<View>, operation: (T) -> Unit): 
     }
 }
 
-inline fun CharSequence.toSpannableStringBuilder() = this as? SpannableStringBuilder
+internal inline fun CharSequence.toSpannableStringBuilder() = this as? SpannableStringBuilder
         ?: SpannableStringBuilder(this)
 
-inline fun SpannableStringBuilder.trimStartSafely() = when (firstOrNull()?.isWhitespace()) {
+internal inline fun SpannableStringBuilder.trimStartSafely() = when (firstOrNull()?.isWhitespace()) {
     true -> indices
             .firstOrNull { !this[it].isWhitespace() }
             ?.let { delete(0, it) }
@@ -31,7 +56,7 @@ inline fun SpannableStringBuilder.trimStartSafely() = when (firstOrNull()?.isWhi
     else -> this
 }
 
-inline fun SpannableStringBuilder.trimEndSafely() = when (lastOrNull()?.isWhitespace()) {
+internal inline fun SpannableStringBuilder.trimEndSafely() = when (lastOrNull()?.isWhitespace()) {
     true -> indices.reversed()
             .firstOrNull { !this[it].isWhitespace() }
             ?.let { delete(it + 1, length) }

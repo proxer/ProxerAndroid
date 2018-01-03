@@ -1,21 +1,27 @@
 package me.proxer.app.ui.view.bbcode.spoiler
 
 import me.proxer.app.ui.view.bbcode.BBPrototype
+import me.proxer.app.ui.view.bbcode.BBPrototype.Companion.REGEX_OPTIONS
 import me.proxer.app.ui.view.bbcode.BBTree
-import kotlin.text.RegexOption.IGNORE_CASE
 
 /**
  * @author Ruben Gees
  */
 object SpoilerPrototype : BBPrototype {
 
-    override val startRegex = Regex("\\s*spoiler\\s*(=\\s*\"?.*?\"?\\s*)?", IGNORE_CASE)
-    override val endRegex = Regex("/\\s*spoiler\\s*", IGNORE_CASE)
+    private const val DELIMITER = "spoiler="
+
+    override val startRegex = Regex(" *spoiler(=\"?.*?\"?)?( .*?)?", REGEX_OPTIONS)
+    override val endRegex = Regex("/ *spoiler *", REGEX_OPTIONS)
 
     override fun construct(code: String, parent: BBTree): SpoilerTree {
-        val title = code.substringAfter("=", "").trim().trim { it == '"' }
-        val parsedTitle = if (title.isBlank()) null else title
+        val titleIndex = code.indexOf(DELIMITER, ignoreCase = true)
 
-        return SpoilerTree(parsedTitle, parent)
+        val title = when (titleIndex < 0) {
+            true -> null
+            false -> code.substring(titleIndex + DELIMITER.length, code.length).trim().trim { it == '"' }
+        }
+
+        return SpoilerTree(title, parent)
     }
 }

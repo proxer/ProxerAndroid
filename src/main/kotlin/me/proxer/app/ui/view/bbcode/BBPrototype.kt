@@ -1,9 +1,16 @@
 package me.proxer.app.ui.view.bbcode
 
+import kotlin.text.RegexOption.DOT_MATCHES_ALL
+import kotlin.text.RegexOption.IGNORE_CASE
+
 /**
  * @author Ruben Gees
  */
 interface BBPrototype {
+
+    companion object {
+        val REGEX_OPTIONS = setOf(IGNORE_CASE, DOT_MATCHES_ALL)
+    }
 
     val startRegex: Regex
     val endRegex: Regex

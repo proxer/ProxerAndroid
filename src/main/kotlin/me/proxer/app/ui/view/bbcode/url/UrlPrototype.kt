@@ -2,24 +2,23 @@ package me.proxer.app.ui.view.bbcode.url
 
 import android.util.Patterns
 import me.proxer.app.ui.view.bbcode.BBPrototype
+import me.proxer.app.ui.view.bbcode.BBPrototype.Companion.REGEX_OPTIONS
 import me.proxer.app.ui.view.bbcode.BBTree
-import me.proxer.library.util.ProxerUrls
-import okhttp3.HttpUrl
-import kotlin.text.RegexOption.IGNORE_CASE
+import me.proxer.app.ui.view.bbcode.BBUtils
+import me.proxer.app.util.Utils
 
 /**
  * @author Ruben Gees
  */
 object UrlPrototype : BBPrototype {
 
-    override val startRegex = Regex("\\s*url\\s*(=\\s*\"?${Patterns.WEB_URL}/?\"?\\s*)?", IGNORE_CASE)
-    override val endRegex = Regex("/\\s*url\\s*", IGNORE_CASE)
+    override val startRegex = Regex(" *url(=\"?${Patterns.WEB_URL.pattern()}/?\"?)?( .*?)?", REGEX_OPTIONS)
+    override val endRegex = Regex("/ *url *", REGEX_OPTIONS)
 
     override fun construct(code: String, parent: BBTree): BBTree {
-        val url = code.substringAfter("=", "").trim().trim { it == '"' }
-        val parsedUrl = HttpUrl.parse(url)
+        val url = BBUtils.cutAttribute(code, "url=") ?: ""
+        val parsedUrl = Utils.parseAndFixUrl(url)
 
-        return UrlTree(parsedUrl ?: ProxerUrls.webBase(), parent) /* parsedUrl being null should never happen,
-                                                                         but prevent crash just in case. */
+        return UrlTree(parsedUrl, parent)
     }
 }

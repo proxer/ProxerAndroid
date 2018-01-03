@@ -2,8 +2,9 @@ package me.proxer.app.ui.view.bbcode.color
 
 import android.graphics.Color
 import me.proxer.app.ui.view.bbcode.BBPrototype
+import me.proxer.app.ui.view.bbcode.BBPrototype.Companion.REGEX_OPTIONS
 import me.proxer.app.ui.view.bbcode.BBTree
-import kotlin.text.RegexOption.IGNORE_CASE
+import me.proxer.app.ui.view.bbcode.BBUtils
 
 /**
  * @author Ruben Gees
@@ -24,11 +25,11 @@ object ColorPrototype : BBPrototype {
     private val availableColorsForRegex = availableColors.joinToString("|") { it.first }
     private val colorsForRegex = "(#[A-Fa-f0-9]{6}|#[A-Fa-f0-9]{8}|$availableColorsForRegex)"
 
-    override val startRegex = Regex("\\s*color\\s*=\\s*\"?$colorsForRegex\"?\\s*", IGNORE_CASE)
-    override val endRegex = Regex("/\\s*color\\s*", IGNORE_CASE)
+    override val startRegex = Regex(" *color=\"?$colorsForRegex\"?( .*?)?", REGEX_OPTIONS)
+    override val endRegex = Regex("/ *color *", REGEX_OPTIONS)
 
     override fun construct(code: String, parent: BBTree): BBTree {
-        val value = code.substringAfter("=").trim().trim { it == '"' }
+        val value = BBUtils.cutAttribute(code, "color=") ?: ""
 
         val color = when (value.startsWith("#")) {
             true -> Color.parseColor(value)

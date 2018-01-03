@@ -1,13 +1,13 @@
 package me.proxer.app.ui.view.bbcode.quote
 
 import me.proxer.app.ui.view.bbcode.BBPrototype
+import me.proxer.app.ui.view.bbcode.BBPrototype.Companion.REGEX_OPTIONS
 import me.proxer.app.ui.view.bbcode.BBTree
-import kotlin.text.RegexOption.IGNORE_CASE
 
 object QuotePrototype : BBPrototype {
 
-    override val startRegex = Regex("\\s*quote\\s*(=\\s*\"?.*?\"?)?\\s*(post\\s*=\\s*\"?.*?\"?)?\\s*", IGNORE_CASE)
-    override val endRegex = Regex("/\\s*quote\\s*", IGNORE_CASE)
+    override val startRegex = Regex(" *quote(=\"?.*?\"?)?( .*?)?", REGEX_OPTIONS)
+    override val endRegex = Regex("/ *quote *", REGEX_OPTIONS)
 
     override fun construct(code: String, parent: BBTree): BBTree {
         return QuoteTree(parent)

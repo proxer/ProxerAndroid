@@ -15,7 +15,6 @@ import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.user.UserInfo
-import okhttp3.HttpUrl
 import org.jetbrains.anko.bundleOf
 
 /**
@@ -88,7 +87,7 @@ class ProfileInfoFragment : BaseContentFragment<UserInfo>() {
 
             statusText.text = Utils.buildClickableText(statusText.context, rawText,
                     onWebClickListener = Link.OnClickListener {
-                        HttpUrl.parse(it)?.let { showPage(it) }
+                        showPage(Utils.parseAndFixUrl(it))
                     })
         }
     }
