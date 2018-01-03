@@ -162,10 +162,7 @@ class MainApplication : Application() {
     private fun initApi() {
         val certificatePinner = CertificatePinner.Builder()
                 .apply {
-                    CERTIFICATES.forEach {
-                        add(ProxerUrls.webBase().host(), it)
-                        add("*.${ProxerUrls.webBase().host()}", it)
-                    }
+                    CERTIFICATES.forEach { add(ProxerUrls.webBase().host(), it) }
                 }
                 .build()
 
@@ -198,13 +195,13 @@ class MainApplication : Application() {
         JobConfig.setLogcatEnabled(BuildConfig.DEBUG)
         JobConfig.setApiEnabled(JobApi.GCM, false)
         JobManager.create(this).addJobCreator {
-            when {
-                it == ChatJob.TAG -> ChatJob()
-                it == NotificationJob.TAG -> NotificationJob()
-                it.startsWith(LocalMangaJob.TAG) -> LocalMangaJob()
-                else -> null
-            }
-        }
+                    when {
+                        it == ChatJob.TAG -> ChatJob()
+                        it == NotificationJob.TAG -> NotificationJob()
+                        it.startsWith(LocalMangaJob.TAG) -> LocalMangaJob()
+                        else -> null
+                    }
+                }
 
         RxJavaPlugins.setErrorHandler { error ->
             when (error) {

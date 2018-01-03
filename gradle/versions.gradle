@@ -30,7 +30,7 @@ ext {
     supportPreferenceVersion = '1.3.1'
     architectureComponentsVersion = '1.0.0'
     androidJobVersion = '1.2.1'
-    proxerLibVersion = 'f6b2b822d5'
+    proxerLibVersion = 'dd8c7aadf8'
 
     // RxJava
     rxJavaVersion = '2.1.8'
