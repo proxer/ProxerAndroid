@@ -26,6 +26,8 @@ class OrderedListTree(parent: BBTree?, children: MutableList<BBTree> = mutableLi
         val children = children.filterIsInstance(ListItemTree::class.java).flatMap { it.makeViews(context) }
 
         return listOf(LinearLayout(context).apply {
+            val eightDip = dip(8)
+
             layoutParams = LayoutParams(MATCH_PARENT, WRAP_CONTENT)
             orientation = VERTICAL
 
@@ -36,7 +38,7 @@ class OrderedListTree(parent: BBTree?, children: MutableList<BBTree> = mutableLi
 
                     addView(AppCompatTextView(context).apply {
                         layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
-                            setMargins(0, 0, dip(4), 0)
+                            setMargins(0, 0, eightDip, 0)
 
                             gravity = CENTER
                         }
