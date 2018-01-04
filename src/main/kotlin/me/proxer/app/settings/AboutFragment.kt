@@ -29,8 +29,6 @@ import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.openHttpPage
 import me.proxer.app.util.extension.subscribeAndLogErrors
-import me.proxer.library.enums.Device
-import me.proxer.library.util.ProxerUrls
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
 import org.jetbrains.anko.bundleOf
@@ -58,8 +56,7 @@ class AboutFragment : MaterialAboutFragment() {
                 .addPathSegment("ProxerAndroid")
                 .build()
 
-        private val SUPPORT_LINK = ProxerUrls.forumWeb("anwendungen",
-                "374605-opensource-android-proxer-app-fuer-android", Device.MOBILE)
+        private const val SUPPORT_ID = "374605"
 
         private const val DEVELOPER_PROXER_NAME = "RubyGee"
         private const val DEVELOPER_PROXER_ID = "121658"
@@ -134,12 +131,6 @@ class AboutFragment : MaterialAboutFragment() {
                                 .start(safeActivity)
                     }.build(),
             MaterialAboutActionItem.Builder()
-                    .text("Forum Test")
-                    .subText("Thread with all BBCode tags")
-                    .setOnClickAction {
-                        TopicActivity.navigateTo(safeActivity, "384155")
-                    }.build(),
-            MaterialAboutActionItem.Builder()
                     .text(R.string.about_info_source_code)
                     .subText(R.string.about_info_source_code_description)
                     .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_code_braces)
@@ -156,7 +147,7 @@ class AboutFragment : MaterialAboutFragment() {
                     .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_forum)
                             .colorRes(R.color.icon))
                     .setOnClickAction {
-                        showPage(SUPPORT_LINK)
+                        TopicActivity.navigateTo(safeActivity, SUPPORT_ID)
                     }.build(),
             MaterialAboutActionItem.Builder()
                     .text(R.string.about_support_message_title)
