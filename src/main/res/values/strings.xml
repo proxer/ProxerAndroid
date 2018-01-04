@@ -385,6 +385,7 @@
 
     <string name="view_bbcode_hide_spoiler">Spoiler verstecken</string>
     <string name="view_bbcode_show_spoiler">Spoiler!</string>
+    <string name="view_bbcode_video_link">Zum Video</string>
 
     <string name="view_expandable_multi_selection_extend_content_description">Ausklappen</string>
     <string name="view_expandable_multi_selection_reset_content_description">Zurücksetzen</string>

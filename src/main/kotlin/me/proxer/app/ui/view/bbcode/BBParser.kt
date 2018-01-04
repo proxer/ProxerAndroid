@@ -24,6 +24,7 @@ import me.proxer.app.ui.view.bbcode.prototype.TextPrototype
 import me.proxer.app.ui.view.bbcode.prototype.UnderlinePrototype
 import me.proxer.app.ui.view.bbcode.prototype.UnorderedListPrototype
 import me.proxer.app.ui.view.bbcode.prototype.UrlPrototype
+import me.proxer.app.ui.view.bbcode.prototype.VideoPrototype
 import java.util.regex.Pattern.quote
 
 /**
@@ -33,7 +34,7 @@ object BBParser {
 
     private val prototypes = arrayOf(BoldPrototype, ItalicPrototype, UnderlinePrototype, StrikethroughPrototype,
             SizePrototype, ColorPrototype, LeftPrototype, CenterPrototype, RightPrototype, SpoilerPrototype,
-            QuotePrototype, UrlPrototype, ImagePrototype, DividerPrototype,
+            QuotePrototype, UrlPrototype, ImagePrototype, DividerPrototype, VideoPrototype,
             TablePrototype, TableRowPrototype, TableCellPrototype, CodePrototype,
             UnorderedListPrototype, OrderedListPrototype, ListItemPrototype)
 
