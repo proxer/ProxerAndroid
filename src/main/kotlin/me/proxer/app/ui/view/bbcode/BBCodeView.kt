@@ -60,6 +60,8 @@ class BBCodeView @JvmOverloads constructor(
     private fun refreshViews(tree: BBTree) {
         removeAllViews()
 
-        tree.also { it.glide = glide }.makeViews(context).forEach { this.addView(it) }
+        tree.glide = glide
+        tree.makeViews(context).forEach { this.addView(it) }
+        tree.glide = null
     }
 }
