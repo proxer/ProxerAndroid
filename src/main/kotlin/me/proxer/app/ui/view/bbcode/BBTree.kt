@@ -1,10 +1,12 @@
 package me.proxer.app.ui.view.bbcode
 
 import android.content.Context
+import android.support.v4.widget.TextViewCompat
 import android.support.v7.widget.AppCompatTextView
 import android.view.View
 import android.widget.TextView
 import me.proxer.app.GlideRequests
+import me.proxer.app.R
 
 /**
  * @author Ruben Gees
@@ -69,7 +71,9 @@ open class BBTree(val parent: BBTree?, val children: MutableList<BBTree> = mutab
                     result += current
                 } else {
                     result += current
-                    result += AppCompatTextView(context)
+                    result += AppCompatTextView(context).apply {
+                        TextViewCompat.setTextAppearance(this, R.style.TextAppearance_AppCompat_Small)
+                    }
                 }
 
                 current = next

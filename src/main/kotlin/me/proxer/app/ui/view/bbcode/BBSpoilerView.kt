@@ -1,6 +1,7 @@
 package me.proxer.app.ui.view.bbcode
 
 import android.content.Context
+import android.graphics.Typeface.DEFAULT_BOLD
 import android.os.Build
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
@@ -78,8 +79,8 @@ internal class BBSpoilerView @JvmOverloads constructor(
         toggle.setOnClickListener { isExpanded = !isExpanded }
         toggle.setBackgroundResource(selectableItemBackground.resourceId)
 
-        toggleText.setTextColor(ContextCompat.getColor(context, R.color.colorAccent))
         toggleText.setPadding(fourDip, twoDip, fourDip, twoDip)
+        toggleText.typeface = DEFAULT_BOLD
         toggleText.gravity = CENTER
 
         toggleButton.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32)
