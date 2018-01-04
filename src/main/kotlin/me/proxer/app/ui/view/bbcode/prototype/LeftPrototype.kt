@@ -6,7 +6,7 @@ import android.text.Spannable.SPAN_INCLUSIVE_EXCLUSIVE
 import android.text.style.AlignmentSpan
 import android.view.Gravity.START
 import android.view.View
-import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.LinearLayout.LayoutParams
 import android.widget.TextView
 import me.proxer.app.ui.view.bbcode.BBTree
@@ -26,12 +26,14 @@ object LeftPrototype : BBPrototype {
         val childViews = children.flatMap { it.makeViews(context) }
 
         return applyToViews(childViews) { view: View ->
-            if (view is TextView) {
-                view.text = view.text.toSpannableStringBuilder().apply {
-                    setSpan(AlignmentSpan.Standard(ALIGN_NORMAL), 0, view.length(), SPAN_INCLUSIVE_EXCLUSIVE)
+            when (view) {
+                is TextView -> {
+                    view.text = view.text.toSpannableStringBuilder().apply {
+                        setSpan(AlignmentSpan.Standard(ALIGN_NORMAL), 0, view.length(), SPAN_INCLUSIVE_EXCLUSIVE)
+                    }
                 }
-            } else if (view is ImageView) {
-                (view.layoutParams as? LayoutParams)?.gravity = START
+                is LinearLayout -> view.gravity = START
+                else -> (view.layoutParams as? LayoutParams)?.gravity = START
             }
         }
     }

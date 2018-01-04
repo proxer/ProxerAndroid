@@ -30,19 +30,10 @@ internal object BBUtils {
     }
 }
 
-internal inline fun <reified T : View> applyToViews(views: List<View>, operation: (T) -> Unit): List<View> {
-    return views.map { view ->
-        if (view is T) {
-            operation(view)
-        } else {
-            view.childrenRecursiveSequence().plus(view)
-                    .filterIsInstance(T::class.java)
-                    .filter { it.parent !is BBCodeView }
-                    .forEach(operation)
-        }
-
-        view
-    }
+internal inline fun <reified T : View> applyToViews(views: List<View>, operation: (T) -> Unit) = views.apply {
+    flatMap { it.childrenRecursiveSequence().plus(it).toList() }
+            .filterIsInstance(T::class.java)
+            .onEach(operation)
 }
 
 internal inline fun CharSequence.toSpannableStringBuilder() = this as? SpannableStringBuilder

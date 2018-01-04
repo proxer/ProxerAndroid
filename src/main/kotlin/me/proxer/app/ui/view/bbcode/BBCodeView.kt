@@ -11,7 +11,6 @@ import android.view.View.MeasureSpec.makeMeasureSpec
 import android.widget.ImageView
 import android.widget.LinearLayout
 import me.proxer.app.GlideRequests
-import org.jetbrains.anko.childrenSequence
 
 /**
  * @author Ruben Gees
@@ -45,12 +44,8 @@ class BBCodeView @JvmOverloads constructor(
         refreshViews(tree)
     }
 
-    fun setText(text: String) {
-        refreshViews(BBParser.parse(text))
-    }
-
     fun destroy() {
-        applyToViews(childrenSequence().toList(), { view: ImageView ->
+        applyToViews(listOf(this), { view: ImageView ->
             glide?.clear(view)
         })
 

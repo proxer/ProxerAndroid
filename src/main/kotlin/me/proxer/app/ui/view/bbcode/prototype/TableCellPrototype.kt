@@ -2,7 +2,6 @@ package me.proxer.app.ui.view.bbcode.prototype
 
 import android.content.Context
 import android.view.View
-import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TableRow.LayoutParams
 import android.widget.TableRow.LayoutParams.WRAP_CONTENT
@@ -25,14 +24,7 @@ object TableCellPrototype : BBPrototype {
 
         return when (childViews.size) {
             0, 1 -> childViews.map {
-                when (it.layoutParams?.width ?: -1 > 0 || it.layoutParams?.height ?: -1 > 0) {
-                    true -> FrameLayout(context).apply {
-                        layoutParams = LayoutParams(0, WRAP_CONTENT, 1f)
-
-                        addView(it)
-                    }
-                    false -> it.apply { layoutParams = LayoutParams(0, WRAP_CONTENT, 1f) }
-                }
+                it.apply { layoutParams = LayoutParams(0, WRAP_CONTENT, 1f) }
             }
             else -> listOf(LinearLayout(context).apply {
                 layoutParams = LayoutParams(0, WRAP_CONTENT, 1f)

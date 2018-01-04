@@ -4,9 +4,9 @@ import android.content.Context
 import android.text.Layout.Alignment.ALIGN_CENTER
 import android.text.Spannable.SPAN_INCLUSIVE_EXCLUSIVE
 import android.text.style.AlignmentSpan
-import android.view.Gravity.CENTER_HORIZONTAL
+import android.view.Gravity.CENTER
 import android.view.View
-import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.LinearLayout.LayoutParams
 import android.widget.TextView
 import me.proxer.app.ui.view.bbcode.BBTree
@@ -26,12 +26,14 @@ object CenterPrototype : BBPrototype {
         val childViews = children.flatMap { it.makeViews(context) }
 
         return applyToViews(childViews) { view: View ->
-            if (view is TextView) {
-                view.text = view.text.toSpannableStringBuilder().apply {
-                    setSpan(AlignmentSpan.Standard(ALIGN_CENTER), 0, view.length(), SPAN_INCLUSIVE_EXCLUSIVE)
+            when (view) {
+                is TextView -> {
+                    view.text = view.text.toSpannableStringBuilder().apply {
+                        setSpan(AlignmentSpan.Standard(ALIGN_CENTER), 0, view.length(), SPAN_INCLUSIVE_EXCLUSIVE)
+                    }
                 }
-            } else if (view is ImageView) {
-                (view.layoutParams as? LayoutParams)?.gravity = CENTER_HORIZONTAL
+                is LinearLayout -> view.gravity = CENTER
+                else -> (view.layoutParams as? LayoutParams)?.gravity = CENTER
             }
         }
     }

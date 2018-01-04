@@ -6,18 +6,18 @@ import android.support.v4.view.ViewCompat
 import android.support.v7.widget.AppCompatImageView
 import android.view.View
 import android.widget.ImageView
-import android.widget.LinearLayout.LayoutParams
-import android.widget.LinearLayout.LayoutParams.MATCH_PARENT
-import android.widget.LinearLayout.LayoutParams.WRAP_CONTENT
 import android.widget.TextView
+import com.bumptech.glide.load.DecodeFormat
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.bumptech.glide.request.target.Target.SIZE_ORIGINAL
 import me.proxer.app.GlideRequests
 import me.proxer.app.ui.ImageDetailActivity
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.BBTree.Companion.GLIDE_ARGUMENT
 import me.proxer.app.ui.view.bbcode.BBUtils
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
+import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.Utils
-import me.proxer.app.util.extension.defaultLoad
 import okhttp3.HttpUrl
 
 /**
@@ -52,12 +52,14 @@ object ImagePrototype : BBPrototype {
         return listOf(AppCompatImageView(context).also { it: ImageView ->
             ViewCompat.setTransitionName(it, "bb_image_$url")
 
-            it.layoutParams = LayoutParams(when (width) {
-                null -> MATCH_PARENT
-                else -> width
-            }, WRAP_CONTENT)
-
-            glide?.defaultLoad(it, url)
+            glide?.load(url.toString())
+                    ?.override(width ?: SIZE_ORIGINAL, SIZE_ORIGINAL)
+                    ?.transition(DrawableTransitionOptions.withCrossFade())
+                    ?.format(when (DeviceUtils.shouldShowHighQualityImages(context)) {
+                        true -> DecodeFormat.PREFER_ARGB_8888
+                        false -> DecodeFormat.PREFER_RGB_565
+                    })
+                    ?.into(it)
 
             if (context is Activity) {
                 it.setOnClickListener { _ ->
