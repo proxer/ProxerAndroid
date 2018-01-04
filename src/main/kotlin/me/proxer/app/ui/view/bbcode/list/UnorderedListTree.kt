@@ -37,7 +37,7 @@ class UnorderedListTree(parent: BBTree?, children: MutableList<BBTree> = mutable
                     orientation = HORIZONTAL
 
                     addView(AppCompatTextView(context).apply {
-                        TextViewCompat.setTextAppearance(this, R.style.TextAppearance_AppCompat_Medium)
+                        TextViewCompat.setTextAppearance(this, R.style.TextAppearance_AppCompat_Small)
 
                         layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
                             setMargins(0, 0, eightDip, 0)
