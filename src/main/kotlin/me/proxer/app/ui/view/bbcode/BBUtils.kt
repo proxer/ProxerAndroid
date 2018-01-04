@@ -4,6 +4,7 @@ package me.proxer.app.ui.view.bbcode
 
 import android.text.SpannableStringBuilder
 import android.view.View
+import me.proxer.app.R
 import org.jetbrains.anko.childrenRecursiveSequence
 
 /**
@@ -33,6 +34,7 @@ internal object BBUtils {
 internal inline fun <reified T : View> applyToViews(views: List<View>, operation: (T) -> Unit) = views.apply {
     flatMap { it.childrenRecursiveSequence().plus(it).toList() }
             .filterIsInstance(T::class.java)
+            .filter { it.getTag(R.id.ignore_tag) == null }
             .onEach(operation)
 }
 

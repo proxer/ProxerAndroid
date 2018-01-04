@@ -80,6 +80,7 @@ internal class BBSpoilerView @JvmOverloads constructor(
         toggle.setBackgroundResource(selectableItemBackground.resourceId)
 
         toggleText.setPadding(fourDip, twoDip, fourDip, twoDip)
+        toggleText.setTag(R.id.ignore_tag, Unit)
         toggleText.typeface = DEFAULT_BOLD
         toggleText.gravity = CENTER
 
