@@ -1,27 +1,29 @@
 package me.proxer.app.ui.view.bbcode
 
-import me.proxer.app.ui.view.bbcode.BBPrototype.Companion.REGEX_OPTIONS
-import me.proxer.app.ui.view.bbcode.bold.BoldPrototype
-import me.proxer.app.ui.view.bbcode.center.CenterPrototype
-import me.proxer.app.ui.view.bbcode.code.CodePrototype
-import me.proxer.app.ui.view.bbcode.color.ColorPrototype
-import me.proxer.app.ui.view.bbcode.divider.DividerPrototype
-import me.proxer.app.ui.view.bbcode.image.ImagePrototype
-import me.proxer.app.ui.view.bbcode.italic.ItalicPrototype
-import me.proxer.app.ui.view.bbcode.left.LeftPrototype
-import me.proxer.app.ui.view.bbcode.list.ListItemPrototype
-import me.proxer.app.ui.view.bbcode.list.OrderedListPrototype
-import me.proxer.app.ui.view.bbcode.list.UnorderedListPrototype
-import me.proxer.app.ui.view.bbcode.quote.QuotePrototype
-import me.proxer.app.ui.view.bbcode.right.RightPrototype
-import me.proxer.app.ui.view.bbcode.size.SizePrototype
-import me.proxer.app.ui.view.bbcode.spoiler.SpoilerPrototype
-import me.proxer.app.ui.view.bbcode.strikethrough.StrikethroughPrototype
-import me.proxer.app.ui.view.bbcode.table.TableCellPrototype
-import me.proxer.app.ui.view.bbcode.table.TablePrototype
-import me.proxer.app.ui.view.bbcode.table.TableRowPrototype
-import me.proxer.app.ui.view.bbcode.underline.UnderlinePrototype
-import me.proxer.app.ui.view.bbcode.url.UrlPrototype
+import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
+import me.proxer.app.ui.view.bbcode.prototype.BoldPrototype
+import me.proxer.app.ui.view.bbcode.prototype.CenterPrototype
+import me.proxer.app.ui.view.bbcode.prototype.CodePrototype
+import me.proxer.app.ui.view.bbcode.prototype.ColorPrototype
+import me.proxer.app.ui.view.bbcode.prototype.DividerPrototype
+import me.proxer.app.ui.view.bbcode.prototype.ImagePrototype
+import me.proxer.app.ui.view.bbcode.prototype.ItalicPrototype
+import me.proxer.app.ui.view.bbcode.prototype.LeftPrototype
+import me.proxer.app.ui.view.bbcode.prototype.ListItemPrototype
+import me.proxer.app.ui.view.bbcode.prototype.OrderedListPrototype
+import me.proxer.app.ui.view.bbcode.prototype.QuotePrototype
+import me.proxer.app.ui.view.bbcode.prototype.RightPrototype
+import me.proxer.app.ui.view.bbcode.prototype.RootPrototype
+import me.proxer.app.ui.view.bbcode.prototype.SizePrototype
+import me.proxer.app.ui.view.bbcode.prototype.SpoilerPrototype
+import me.proxer.app.ui.view.bbcode.prototype.StrikethroughPrototype
+import me.proxer.app.ui.view.bbcode.prototype.TableCellPrototype
+import me.proxer.app.ui.view.bbcode.prototype.TablePrototype
+import me.proxer.app.ui.view.bbcode.prototype.TableRowPrototype
+import me.proxer.app.ui.view.bbcode.prototype.TextPrototype
+import me.proxer.app.ui.view.bbcode.prototype.UnderlinePrototype
+import me.proxer.app.ui.view.bbcode.prototype.UnorderedListPrototype
+import me.proxer.app.ui.view.bbcode.prototype.UrlPrototype
 import java.util.regex.Pattern.quote
 
 /**
@@ -47,7 +49,7 @@ object BBParser {
 
     fun parse(input: String): BBTree {
         val trimmedInput = input.trim()
-        val result = BBTree(null)
+        val result = BBTree(RootPrototype, null)
         val parts = regex.findAll(trimmedInput)
 
         var currentTree = result
@@ -59,7 +61,7 @@ object BBParser {
             if (it.range.first > currentPosition) {
                 val startString = trimmedInput.substring(currentPosition, it.range.first)
 
-                currentTree.children.add(TextLeaf(startString, currentTree))
+                currentTree.children.add(TextPrototype.construct(startString, currentTree))
             }
 
             if (currentTree.endsWith(part)) {
@@ -89,7 +91,7 @@ object BBParser {
                     } else {
                         val unknownString = trimmedInput.substring(it.range.first, it.range.endInclusive + 1)
 
-                        currentTree.children.add(TextLeaf(unknownString, currentTree))
+                        currentTree.children.add(TextPrototype.construct(unknownString, currentTree))
                     }
                 }
             }
@@ -100,7 +102,7 @@ object BBParser {
         if (currentPosition < trimmedInput.length) {
             val endString = trimmedInput.substring(currentPosition, trimmedInput.length)
 
-            currentTree.children.add(TextLeaf(endString, currentTree))
+            currentTree.children.add(TextPrototype.construct(endString, currentTree))
         }
 
         return result

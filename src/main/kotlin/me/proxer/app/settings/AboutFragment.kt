@@ -24,6 +24,7 @@ import me.proxer.app.R
 import me.proxer.app.chat.ChatActivity
 import me.proxer.app.chat.Participant
 import me.proxer.app.chat.create.CreateChatActivity
+import me.proxer.app.forum.TopicActivity
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.openHttpPage
@@ -133,6 +134,12 @@ class AboutFragment : MaterialAboutFragment() {
                                 .start(safeActivity)
                     }.build(),
             MaterialAboutActionItem.Builder()
+                    .text("Forum Test")
+                    .subText("Thread with all BBCode tags")
+                    .setOnClickAction {
+                        TopicActivity.navigateTo(safeActivity, "384155")
+                    }.build(),
+            MaterialAboutActionItem.Builder()
                     .text(R.string.about_info_source_code)
                     .subText(R.string.about_info_source_code_description)
                     .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_code_braces)
@@ -160,12 +167,12 @@ class AboutFragment : MaterialAboutFragment() {
                         Completable
                                 .fromAction {
                                     chatDao.findConferenceForUser(DEVELOPER_PROXER_NAME).let { existingConference ->
-                                        when (existingConference) {
-                                            null -> CreateChatActivity.navigateTo(safeActivity, false,
-                                                    Participant(DEVELOPER_PROXER_NAME))
-                                            else -> ChatActivity.navigateTo(safeActivity, existingConference)
-                                        }
-                                    }
+                                                when (existingConference) {
+                                                    null -> CreateChatActivity.navigateTo(safeActivity, false,
+                                                            Participant(DEVELOPER_PROXER_NAME))
+                                                    else -> ChatActivity.navigateTo(safeActivity, existingConference)
+                                                }
+                                            }
                                 }
                                 .subscribeOn(Schedulers.io())
                                 .subscribeAndLogErrors()
@@ -179,15 +186,14 @@ class AboutFragment : MaterialAboutFragment() {
                     .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_github_circle)
                             .colorRes(R.color.icon))
                     .setOnClickAction {
-                        showPage(HttpUrl.parse("https://github.com/$DEVELOPER_GITHUB_NAME")
-                                ?: throw IllegalStateException("url is null"))
+                        showPage(Utils.parseAndFixUrl("https://github.com/$DEVELOPER_GITHUB_NAME"))
                     }.build(),
             MaterialAboutActionItem.Builder()
                     .text(getString(R.string.about_developer_proxer_title))
                     .subText(DEVELOPER_PROXER_NAME)
                     .icon(ContextCompat.getDrawable(context, R.drawable.ic_stat_proxer)?.apply {
-                        setColorFilter(ContextCompat.getColor(context, R.color.icon), PorterDuff.Mode.SRC_IN)
-                    })
+                                setColorFilter(ContextCompat.getColor(context, R.color.icon), PorterDuff.Mode.SRC_IN)
+                            })
                     .setOnClickAction {
                         ProfileActivity.navigateTo(safeActivity, DEVELOPER_PROXER_ID, DEVELOPER_PROXER_NAME, null)
                     }.build()
