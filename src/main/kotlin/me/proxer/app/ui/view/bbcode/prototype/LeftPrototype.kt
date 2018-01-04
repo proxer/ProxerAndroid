@@ -22,16 +22,15 @@ object LeftPrototype : BBPrototype {
     override val startRegex = Regex(" *left( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *left *", REGEX_OPTIONS)
 
+    @Suppress("OptionalWhenBraces")
     override fun makeViews(context: Context, children: List<BBTree>, args: Map<String, Any?>): List<View> {
         val childViews = children.flatMap { it.makeViews(context) }
 
         return applyToViews(childViews) { view: View ->
             when (view) {
-                is TextView -> {
-                    view.text = view.text.toSpannableStringBuilder().apply {
-                        setSpan(AlignmentSpan.Standard(ALIGN_NORMAL), 0, view.length(), SPAN_INCLUSIVE_EXCLUSIVE)
-                    }
-                }
+                is TextView -> view.text = view.text.toSpannableStringBuilder().apply {
+                            setSpan(AlignmentSpan.Standard(ALIGN_NORMAL), 0, view.length(), SPAN_INCLUSIVE_EXCLUSIVE)
+                        }
                 is LinearLayout -> view.gravity = START
                 else -> (view.layoutParams as? LayoutParams)?.gravity = START
             }

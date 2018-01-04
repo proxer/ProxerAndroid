@@ -22,6 +22,7 @@ object CenterPrototype : BBPrototype {
     override val startRegex = Regex(" *center( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *center *", REGEX_OPTIONS)
 
+    @Suppress("OptionalWhenBraces")
     override fun makeViews(context: Context, children: List<BBTree>, args: Map<String, Any?>): List<View> {
         val childViews = children.flatMap { it.makeViews(context) }
 
