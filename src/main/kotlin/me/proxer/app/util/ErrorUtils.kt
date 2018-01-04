@@ -14,6 +14,7 @@ import me.proxer.app.exception.StreamResolutionException
 import me.proxer.app.settings.AgeConfirmationDialog
 import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_DEFAULT
+import me.proxer.app.util.data.StorageHelper
 import me.proxer.library.api.ProxerException
 import me.proxer.library.api.ProxerException.ErrorType.CANCELLED
 import me.proxer.library.api.ProxerException.ErrorType.IO
@@ -105,14 +106,14 @@ object ErrorUtils {
             is ProxerException -> getMessageForProxerException(innermostError)
             is SocketTimeoutException -> R.string.error_timeout
             is IOException -> R.string.error_io
+            is NotLoggedInException -> R.string.error_login_required
+            is AgeConfirmationRequiredException -> R.string.error_age_confirmation_needed
+            is StreamResolutionException -> R.string.error_stream_resolution
             is HttpDataSource.InvalidResponseCodeException -> when (innermostError.responseCode) {
                 404 -> R.string.error_video_deleted
                 in 400 until 600 -> R.string.error_video_unknown
                 else -> R.string.error_unknown
             }
-            is NotLoggedInException -> R.string.error_login_required
-            is AgeConfirmationRequiredException -> R.string.error_age_confirmation_needed
-            is StreamResolutionException -> R.string.error_stream_resolution
             else -> R.string.error_unknown
         }
     }
@@ -122,8 +123,8 @@ object ErrorUtils {
     }
 
     fun isNetworkError(error: Throwable) = ErrorUtils.getInnermostError(error).let {
-        it is ProxerException && (it.errorType == IO || it.errorType == TIMEOUT)
-    }
+                it is ProxerException && (it.errorType == IO || it.errorType == TIMEOUT)
+            }
 
     fun handle(error: Throwable): ErrorAction {
         val innermostError = getInnermostError(error)
@@ -161,7 +162,6 @@ object ErrorUtils {
             LOGIN_INVALID_CREDENTIALS -> R.string.error_login_credentials
             INFO_ENTRY_ALREADY_IN_LIST -> R.string.error_already_in_list
             INFO_EXCEEDED_MAXIMUM_ENTRIES -> R.string.error_list_full
-            USER_INSUFFICIENT_PERMISSIONS -> R.string.error_insufficient_permissions
             MANGA_INVALID_CHAPTER -> R.string.error_invalid_chapter
             ANIME_INVALID_EPISODE -> R.string.error_invalid_episode
             MESSAGES_INVALID_REPORT_INPUT -> R.string.error_invalid_input
@@ -173,6 +173,10 @@ object ErrorUtils {
             USER_2FA_SECRET_REQUIRED -> R.string.error_login_two_factor_authentication
             USER_ACCOUNT_EXPIRED -> R.string.error_account_expired
             USER_ACCOUNT_BLOCKED -> R.string.error_account_blocked
+            USER_INSUFFICIENT_PERMISSIONS -> when (StorageHelper.user == null) {
+                true -> R.string.error_insufficient_permissions
+                false -> R.string.error_insufficient_permissions_logged_in
+            }
             in API_ERRORS -> R.string.error_api
             in MAINTENANCE_ERRORS -> R.string.error_maintenance
             in LOGIN_ERRORS -> R.string.error_login

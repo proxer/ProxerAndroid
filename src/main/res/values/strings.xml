@@ -56,6 +56,7 @@
     <string name="error_list_full">Deine Liste ist voll</string>
     <string name="error_insufficient_permissions">Diese Information wurde vom Benutzer nicht freigegeben, eventuell
         musst du dich anmelden</string>
+    <string name="error_insufficient_permissions_logged_in">Diese Information wurde vom Benutzer nicht freigegeben</string>
     <string name="error_invalid_chapter">Dieses Kapitel wurde noch nicht hochgeladen :/</string>
     <string name="error_invalid_episode">Diese Episode wurde noch nicht hochgeladen :/</string>
     <string name="error_invalid_input">Ungültige Eingabe</string>
