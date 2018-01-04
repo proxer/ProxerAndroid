@@ -101,18 +101,25 @@ object Utils {
         return result
     }
 
-    fun parseAndFixUrl(url: String) = when {
-        url.startsWith("http://") || url.startsWith("https://") -> HttpUrl.parse(url)
-        else -> HttpUrl.parse(when {
-            url.startsWith("//") -> "http:$url"
-            else -> "http://$url"
-        })?.let {
+    fun safelyParseAndFixUrl(url: String): HttpUrl? {
+        val fixedUrl = when {
+            url.startsWith("http://") || url.startsWith("https://") -> HttpUrl.parse(url)
+            else -> HttpUrl.parse(when {
+                url.startsWith("//") -> "http:$url"
+                else -> "http://$url"
+            })
+        }
+
+        return fixedUrl?.let {
             when (isEligibleForHttps(it)) {
                 true -> it.newBuilder().scheme("https").build()
                 false -> it
             }
         }
-    } ?: throw ProxerException(ErrorType.PARSING)
+    }
+
+    fun parseAndFixUrl(url: String) = safelyParseAndFixUrl(url)
+            ?: throw ProxerException(ErrorType.PARSING)
 
     fun isPackageInstalled(packageManager: PackageManager, packageName: String) = try {
         packageManager.getApplicationInfo(packageName, 0).enabled

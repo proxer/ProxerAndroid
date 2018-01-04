@@ -22,12 +22,15 @@ object UrlPrototype : BBPrototype {
     private const val DELIMITER = "url="
     private const val URL_ARGUMENT = "url"
 
+    private val INVALID_URL = HttpUrl.parse("https://proxer.me/404")
+            ?: throw IllegalArgumentException("Could not parse url")
+
     override val startRegex = Regex(" *url(=\"?.*?\"?)?( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *url *", REGEX_OPTIONS)
 
     override fun construct(code: String, parent: BBTree): BBTree {
         val url = BBUtils.cutAttribute(code, DELIMITER) ?: ""
-        val parsedUrl = Utils.parseAndFixUrl(url)
+        val parsedUrl = Utils.safelyParseAndFixUrl(url) ?: INVALID_URL
 
         return BBTree(this, parent, args = mapOf(URL_ARGUMENT to parsedUrl))
     }

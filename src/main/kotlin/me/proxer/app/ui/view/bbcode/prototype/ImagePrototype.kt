@@ -18,6 +18,7 @@ import me.proxer.app.ui.view.bbcode.BBUtils
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.defaultLoad
+import okhttp3.HttpUrl
 
 /**
  * @author Ruben Gees
@@ -26,6 +27,9 @@ object ImagePrototype : BBPrototype {
 
     private const val DELIMITER = "size="
     private const val WIDTH_ARGUMENT = "width"
+
+    private val INVALID_IMAGE = HttpUrl.parse("https://cdn.proxer.me/keinbild.jpg")
+            ?: throw IllegalArgumentException("Could not parse url")
 
     override val startRegex = Regex(" *img( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *img *", REGEX_OPTIONS)
@@ -38,9 +42,12 @@ object ImagePrototype : BBPrototype {
 
     override fun makeViews(context: Context, children: List<BBTree>, args: Map<String, Any?>): List<View> {
         val childViews = children.flatMap { it.makeViews(context) }
-        val url = Utils.parseAndFixUrl((childViews.firstOrNull() as? TextView)?.text.toString())
+
         val glide = args[GLIDE_ARGUMENT] as GlideRequests?
         val width = args[WIDTH_ARGUMENT] as Int?
+
+        val url = Utils.safelyParseAndFixUrl((childViews.firstOrNull() as? TextView)?.text.toString())
+                ?: INVALID_IMAGE
 
         return listOf(AppCompatImageView(context).also { it: ImageView ->
             ViewCompat.setTransitionName(it, "bb_image_$url")

@@ -41,7 +41,7 @@ object ColorPrototype : BBPrototype {
         val value = BBUtils.cutAttribute(code, DELIMITER) ?: ""
         val color = when (value.startsWith("#")) {
             true -> Color.parseColor(value)
-            false -> availableColors.find { it.first == value }?.second
+            false -> availableColors.find { it.first.equals(value, ignoreCase = true) }?.second
                     ?: throw IllegalArgumentException("Unknown color: $value")
         }
 
