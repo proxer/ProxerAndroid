@@ -8,6 +8,7 @@ import android.text.SpannableStringBuilder
 import android.text.method.LinkMovementMethod
 import android.text.util.Linkify
 import android.view.View
+import android.widget.TextView
 import me.proxer.app.R
 import me.proxer.app.ui.view.bbcode.BBTree
 
@@ -28,12 +29,16 @@ object TextPrototype : BBPrototype {
     override fun makeViews(context: Context, children: List<BBTree>, args: Map<String, Any?>): List<View> {
         val text = args[TEXT_ARGUMENT] as String
 
-        return listOf(AppCompatTextView(context).also {
+        return listOf(makeView(context, text))
+    }
+
+    fun makeView(context: Context, text: String): TextView {
+        return AppCompatTextView(context).also {
             it.movementMethod = LinkMovementMethod.getInstance()
             it.text = SpannableStringBuilder(text)
 
             TextViewCompat.setTextAppearance(it, R.style.TextAppearance_AppCompat_Small)
             LinkifyCompat.addLinks(it, Linkify.WEB_URLS)
-        })
+        }
     }
 }

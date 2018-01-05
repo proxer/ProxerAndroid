@@ -1,11 +1,8 @@
 package me.proxer.app.ui.view.bbcode.prototype
 
 import android.content.Context
-import android.support.v4.widget.TextViewCompat
-import android.support.v7.widget.AppCompatTextView
 import android.view.View
 import android.widget.TextView
-import me.proxer.app.R
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
 import me.proxer.app.ui.view.bbcode.trimEndSafely
@@ -73,9 +70,7 @@ interface BBPrototype {
                     result += current
                 } else {
                     result += current
-                    result += AppCompatTextView(context).apply {
-                        TextViewCompat.setTextAppearance(this, R.style.TextAppearance_AppCompat_Small)
-                    }
+                    result += TextPrototype.makeView(context, "")
                 }
 
                 current = next
