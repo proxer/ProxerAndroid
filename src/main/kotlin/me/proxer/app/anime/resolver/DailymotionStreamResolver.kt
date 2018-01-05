@@ -16,7 +16,7 @@ import java.util.regex.Pattern.quote
 /**
  * @author Ruben Gees
  */
-class DailymotionStreamResolver : StreamResolver() {
+class DailymotionStreamResolver : StreamResolver {
 
     private companion object {
         private val regex = Regex("\"qualities\":(${quote("{")}.+${quote("}")}${quote("]")}${quote("}")}),")

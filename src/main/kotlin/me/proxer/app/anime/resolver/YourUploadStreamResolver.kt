@@ -16,7 +16,7 @@ import java.io.IOException
 /**
  * @author Ruben Gees
  */
-class YourUploadStreamResolver : StreamResolver() {
+class YourUploadStreamResolver : StreamResolver {
 
     private companion object {
         private val regex = Regex("<meta property=\"og:video\" content=\"(.*?)\">")

@@ -9,7 +9,7 @@ import me.proxer.app.util.extension.buildSingle
 /**
  * @author Ruben Gees
  */
-class YouTubeStreamResolver : StreamResolver() {
+class YouTubeStreamResolver : StreamResolver {
 
     override val name = "YouTube"
 

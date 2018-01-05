@@ -14,13 +14,14 @@ import okhttp3.Request
 /**
  * @author Ruben Gees
  */
-class AuravidStreamResolver : StreamResolver() {
+class AuravidStreamResolver : StreamResolver {
 
     private companion object {
         private val regex = Regex("<source type=\"(.*?)\" src=\"(.*?)\">", RegexOption.DOT_MATCHES_ALL)
     }
 
     override val name = "Auroravid/Novamov"
+    override val ignore = true
 
     override fun resolve(id: String): Single<StreamResolutionResult> = api.anime().link(id)
             .buildSingle()

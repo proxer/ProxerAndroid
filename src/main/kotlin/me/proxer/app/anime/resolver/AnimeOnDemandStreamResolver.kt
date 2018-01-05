@@ -9,7 +9,7 @@ import me.proxer.app.util.extension.buildSingle
 /**
  * @author Ruben Gees
  */
-class AnimeOnDemandStreamResolver : StreamResolver() {
+class AnimeOnDemandStreamResolver : StreamResolver {
 
     override val name = "Anime on demand"
 

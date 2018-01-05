@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit
 /**
  * @author Ruben Gees
  */
-class OpenloadStreamResolver : StreamResolver() {
+class OpenloadStreamResolver : StreamResolver {
 
     companion object {
         private const val CALLBACK_NAME = "ProxerCallback"

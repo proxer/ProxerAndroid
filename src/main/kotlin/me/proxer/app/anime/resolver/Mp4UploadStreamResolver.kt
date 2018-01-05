@@ -17,7 +17,7 @@ import java.util.regex.Pattern.quote
 /**
  * @author Ruben Gees
  */
-class Mp4UploadStreamResolver : StreamResolver() {
+class Mp4UploadStreamResolver : StreamResolver {
 
     private companion object {
         private val regex = Regex("-(.*?)${quote(".")}", RegexOption.DOT_MATCHES_ALL)

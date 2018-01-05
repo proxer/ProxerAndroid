@@ -14,7 +14,7 @@ import okhttp3.Request
 /**
  * @author Ruben Gees
  */
-class StreamcloudStreamResolver : StreamResolver() {
+class StreamcloudStreamResolver : StreamResolver {
 
     private companion object {
         private val formRegex = Regex("<input.*?name=\"(.*?)\".*?value=\"(.*?)\">")

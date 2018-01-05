@@ -11,7 +11,7 @@ import me.proxer.app.util.extension.buildSingle
 /**
  * @author Ruben Gees
  */
-class NetflixStreamResolver : StreamResolver() {
+class NetflixStreamResolver : StreamResolver {
 
     private companion object {
         private const val NETFLIX_PACKAGE = "com.netflix.mediaclient"

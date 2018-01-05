@@ -9,7 +9,7 @@ import me.proxer.app.util.extension.buildSingle
 /**
  * @author Ruben Gees
  */
-class ViewsterStreamResolver : StreamResolver() {
+class ViewsterStreamResolver : StreamResolver {
 
     override val name = "Viewster"
 

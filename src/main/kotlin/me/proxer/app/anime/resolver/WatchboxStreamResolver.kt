@@ -18,7 +18,7 @@ import kotlin.text.RegexOption.DOT_MATCHES_ALL
 /**
  * @author Ruben Gees
  */
-class WatchboxStreamResolver : StreamResolver() {
+class WatchboxStreamResolver : StreamResolver {
 
     private companion object {
         private const val WATCHBOX_PACKAGE = "com.rtli.clipfish"

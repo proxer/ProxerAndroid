@@ -14,7 +14,7 @@ import okhttp3.Request
 /**
  * @author Ruben Gees
  */
-class ProxerStreamResolver : StreamResolver() {
+class ProxerStreamResolver : StreamResolver {
 
     private companion object {
         private val regex = Regex("<source type=\"(.*?)\" src=\"(.*?)\">")

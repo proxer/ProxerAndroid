@@ -9,7 +9,7 @@ import me.proxer.app.util.extension.buildSingle
 /**
  * @author Ruben Gees
  */
-class AkibaPassStreamResolver : StreamResolver() {
+class AkibaPassStreamResolver : StreamResolver {
 
     override val name = "AkibaPass"
 

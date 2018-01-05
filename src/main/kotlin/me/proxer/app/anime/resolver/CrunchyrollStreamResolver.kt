@@ -13,7 +13,7 @@ import me.proxer.app.util.extension.buildSingle
 /**
  * @author Ruben Gees
  */
-class CrunchyrollStreamResolver : StreamResolver() {
+class CrunchyrollStreamResolver : StreamResolver {
 
     private companion object {
         private const val CRUNCHYROLL_PACKAGE = "com.crunchyroll.crunchyroid"

@@ -8,7 +8,7 @@ import me.proxer.app.util.extension.buildSingle
 /**
  * @author Ruben Gees
  */
-class MessageStreamResolver : StreamResolver() {
+class MessageStreamResolver : StreamResolver {
 
     override val name = "Nachricht"
 

@@ -5,10 +5,11 @@ import io.reactivex.Single
 /**
  * @author Ruben Gees
  */
-abstract class StreamResolver {
+interface StreamResolver {
 
-    abstract val name: String
+    val name: String
+    val ignore: Boolean get() = false
 
-    open fun supports(name: String) = name.equals(this.name, true)
-    abstract fun resolve(id: String): Single<StreamResolutionResult>
+    fun supports(name: String) = name.equals(this.name, true)
+    fun resolve(id: String): Single<StreamResolutionResult>
 }

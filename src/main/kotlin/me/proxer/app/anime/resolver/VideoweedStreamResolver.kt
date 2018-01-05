@@ -14,13 +14,14 @@ import okhttp3.Request
 /**
  * @author Ruben Gees
  */
-class VideoweedStreamResolver : StreamResolver() {
+class VideoweedStreamResolver : StreamResolver {
 
     private companion object {
         private val regex = Regex("<source src=\"(.*?)\" type=\'(.*?)\'", RegexOption.DOT_MATCHES_ALL)
     }
 
     override val name = "VideoWeed"
+    override val ignore = true
 
     override fun resolve(id: String): Single<StreamResolutionResult> = api.anime().link(id)
             .buildSingle()
