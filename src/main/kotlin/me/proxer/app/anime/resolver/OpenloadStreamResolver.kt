@@ -57,8 +57,6 @@ class OpenloadStreamResolver : StreamResolver {
             }
             .observeOn(AndroidSchedulers.mainThread())
             .flatMap {
-                val test = it
-
                 Single.create<StreamResolutionResult> { emitter ->
                     try {
                         val webView = WebView(globalContext)
