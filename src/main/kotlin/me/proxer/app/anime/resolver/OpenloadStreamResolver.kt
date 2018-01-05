@@ -30,7 +30,7 @@ class OpenloadStreamResolver : StreamResolver() {
                 "var url1 = \"https://openload.co/stream/\";" +
                 "var url2 = \"?mime=true\";" +
 
-                "var streamUrlElement = document.getElementById(\"streamurl\");" +
+                "var streamUrlElement = document.getElementById(\"streamurj\");" +
                 "var streamUrlContent = streamUrlElement ? streamUrlElement.innerText : undefined;" +
                 "var streamUrl = streamUrlContent ? url1 + streamUrlContent + url2 : \"\";" +
 
@@ -57,6 +57,8 @@ class OpenloadStreamResolver : StreamResolver() {
             }
             .observeOn(AndroidSchedulers.mainThread())
             .flatMap {
+                val test = it
+
                 Single.create<StreamResolutionResult> { emitter ->
                     try {
                         val webView = WebView(globalContext)
