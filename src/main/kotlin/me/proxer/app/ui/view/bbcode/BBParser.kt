@@ -17,6 +17,8 @@ import me.proxer.app.ui.view.bbcode.prototype.RootPrototype
 import me.proxer.app.ui.view.bbcode.prototype.SizePrototype
 import me.proxer.app.ui.view.bbcode.prototype.SpoilerPrototype
 import me.proxer.app.ui.view.bbcode.prototype.StrikethroughPrototype
+import me.proxer.app.ui.view.bbcode.prototype.SubscriptPrototype
+import me.proxer.app.ui.view.bbcode.prototype.SuperscriptPrototype
 import me.proxer.app.ui.view.bbcode.prototype.TableCellPrototype
 import me.proxer.app.ui.view.bbcode.prototype.TablePrototype
 import me.proxer.app.ui.view.bbcode.prototype.TableRowPrototype
@@ -34,8 +36,8 @@ object BBParser {
 
     private val prototypes = arrayOf(BoldPrototype, ItalicPrototype, UnderlinePrototype, StrikethroughPrototype,
             SizePrototype, ColorPrototype, LeftPrototype, CenterPrototype, RightPrototype, SpoilerPrototype,
-            QuotePrototype, UrlPrototype, ImagePrototype, DividerPrototype, VideoPrototype,
-            TablePrototype, TableRowPrototype, TableCellPrototype, CodePrototype,
+            QuotePrototype, UrlPrototype, ImagePrototype, DividerPrototype, VideoPrototype, SuperscriptPrototype,
+            SubscriptPrototype, TablePrototype, TableRowPrototype, TableCellPrototype, CodePrototype,
             UnorderedListPrototype, OrderedListPrototype, ListItemPrototype)
 
     private val prototypeRegex
