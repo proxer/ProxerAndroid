@@ -46,14 +46,13 @@ object ImagePrototype : BBPrototype {
         val glide = args[GLIDE_ARGUMENT] as GlideRequests?
         val width = args[WIDTH_ARGUMENT] as Int?
 
-        val url = Utils.safelyParseAndFixUrl((childViews.firstOrNull() as? TextView)?.text.toString())
-                ?: INVALID_IMAGE
+        val url = Utils.safelyParseAndFixUrl((childViews.firstOrNull() as? TextView)?.text.toString()) ?: INVALID_IMAGE
 
         return listOf(AppCompatImageView(context).also { it: ImageView ->
             ViewCompat.setTransitionName(it, "bb_image_$url")
 
             glide?.load(url.toString())
-                    ?.override(width ?: SIZE_ORIGINAL, SIZE_ORIGINAL)
+                    ?.apply { if (width != null) override(width, SIZE_ORIGINAL) }
                     ?.transition(DrawableTransitionOptions.withCrossFade())
                     ?.format(when (DeviceUtils.shouldShowHighQualityImages(context)) {
                         true -> DecodeFormat.PREFER_ARGB_8888
