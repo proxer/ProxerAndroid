@@ -1,0 +1,1 @@
+-keep class me.proxer.app.log.LogActivity

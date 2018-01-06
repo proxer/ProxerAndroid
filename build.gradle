@@ -65,7 +65,7 @@ android {
                 removeUnusedResources false
                 obfuscate false
                 optimizeCode false
-                proguardFile 'config/proguard/proguard-rules.pro'
+                proguardFiles 'config/proguard/proguard-rules.pro', 'config/proguard/proguard-rules-debug.pro'
             }
 
             archivesBaseName = "app-${defaultConfig.versionName}"
