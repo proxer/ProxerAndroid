@@ -33,8 +33,9 @@
     static void checkParameterIsNotNull(java.lang.Object, java.lang.String);
 }
 
-# Fix Instant Run crash.
+# Fix Instant Run issues.
 -keep class * extends android.content.ContentProvider
+-keep class me.proxer.app.ui.crash.CrashActivity
 
 # Avoid crash of SearchView.
 -keep class android.support.v7.widget.SearchView { *; }
