@@ -23,6 +23,8 @@ class TopicFragment : PagedContentFragment<ParsedPost>() {
         }
     }
 
+    override val isSwipeToRefreshEnabled = false
+
     override val hostingActivity: TopicActivity
         get() = activity as TopicActivity
 
