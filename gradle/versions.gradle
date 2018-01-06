@@ -15,7 +15,7 @@ ext {
     gradleVersion = '4.4.1'
 
     // Core plugins
-    androidPluginVersion = '3.1.0-alpha06'
+    androidPluginVersion = '3.1.0-alpha07'
     kotlinVersion = '1.2.20-eap-33'
 
     // Utility plugins
@@ -42,7 +42,7 @@ ext {
     autoDisposeVersion = '0.5.1'
 
     // UI components
-    aboutLibrariesVersion = '6.0.1'
+    aboutLibrariesVersion = '6.0.2'
     materialDrawerVersion = '6.0.2'
     iconicsVersion = '3.0.0'
     communityMaterialTypefaceVersion = '2.0.46.1'
@@ -51,14 +51,14 @@ ext {
     subsamplingScaleImageViewVersion = '3.9.0'
     tabLayoutHelperVersion = '0.9.0'
     materialDialogsVersion = '0.9.6.0'
-    flexboxVersion = '0.3.1'
+    flexboxVersion = '0.3.2'
     emojiIosVersion = 'd4f5344e63'
     exomediaVersion = '4.1.0'
     exoplayerVersion = '2.6.0'
     materialProgressBarVersion = '1.4.2'
     materialRatingBarVersion = '1.2.0'
     customtabsHelperVersion = '1.0.4'
-    introductionVersion = '1.4.1'
+    introductionVersion = '2.0.0'
     materialBadgeViewVersion = 'c5a27e8243'
     aspectRatioImageViewVersion = '144783aad3'
     gravitySnapHelperVersion = '1.5'
@@ -66,7 +66,7 @@ ext {
     // Utils
     threetenVersion = '1.0.5'
     hawkVersion = '2.0.1'
-    glideVersion = '4.4.0'
+    glideVersion = '4.5.0'
     okHttpVersion = '3.9.1'
     okioVersion = '1.13.0'
     linkBuilderVersion = '1.6.1'

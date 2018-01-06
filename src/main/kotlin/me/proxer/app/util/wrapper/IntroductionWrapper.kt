@@ -22,7 +22,7 @@ object IntroductionWrapper {
             .withSlides(generateSlides(activity))
             .withSkipEnabled(R.string.introduction_skip)
             .withOnSlideListener(object : OnSlideListener() {
-                override fun onSlideInit(position: Int, title: TextView, image: ImageView, description: TextView) {
+                override fun onSlideInit(position: Int, title: TextView?, image: ImageView, description: TextView?) {
                     when (position) {
                         0 -> image.setImageDrawable(AppCompatResources.getDrawable(activity, R.drawable.ic_proxer))
                         1 -> image.setIconicsImage(CommunityMaterial.Icon.cmd_bell_outline, 256, 16,
