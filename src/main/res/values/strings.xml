@@ -102,7 +102,7 @@
     <string name="error_no_data_history">Noch keine Einträge verfügbar</string>
     <string name="error_no_data_episodes">Es sind (noch) keine Episoden verfügbar</string>
     <string name="error_no_data_chapters">Es sind (noch) keine Kapitel verfügbar</string>
-    <string name="error_no_data_anime">Aktuell gibt es noch keine Streams</string>
+    <string name="error_no_data_anime">Aktuell gibt es noch keine unterstützten Streams</string>
     <string name="error_no_data_relations">Für dieses Werk gibt es keine Verbindungen</string>
     <string name="error_no_data_recommendations">Für dieses Werk gibt es noch keine Empfehlungen</string>
     <string name="error_no_data_projects">Es gibt noch keine Projekte</string>
