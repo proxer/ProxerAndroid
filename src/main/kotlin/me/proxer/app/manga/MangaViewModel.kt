@@ -12,6 +12,7 @@ import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.MainApplication.Companion.mangaDao
 import me.proxer.app.base.BaseViewModel
 import me.proxer.app.exception.NotFoundException
+import me.proxer.app.exception.PartialException
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
 import me.proxer.app.util.data.ResettingMutableLiveData
@@ -21,6 +22,8 @@ import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.toMediaLanguage
 import me.proxer.library.api.Endpoint
+import me.proxer.library.api.ProxerException
+import me.proxer.library.api.ProxerException.ErrorType
 import me.proxer.library.entity.info.EntryCore
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.Language
@@ -48,7 +51,18 @@ class MangaViewModel(
         get() = Single.fromCallable { validate() }
                 .flatMapCompletable { cleanCompletable() }
                 .andThen(entrySingle())
-                .flatMap { localChapterSingle(it).onErrorResumeNext(remoteChapterSingle(it)) }
+                .flatMap { entry ->
+                    localChapterSingle(entry)
+                            .onErrorResumeNext(remoteChapterSingle(entry))
+                            .map { data ->
+                                @Suppress("SENSELESS_COMPARISON") // Can happen in case of a server outage.
+                                if (data.chapter.pages == null) {
+                                    throw PartialException(ProxerException(ErrorType.PARSING), entry)
+                                }
+
+                                data
+                            }
+                }
 
     val bookmarkData = ResettingMutableLiveData<Unit?>()
     val bookmarkError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
