@@ -31,7 +31,7 @@ class MediaInfoViewModel(private val entryId: String) : BaseViewModel<Pair<Entry
         get() = Single.fromCallable { validate() }
                 .flatMap { api.info().entry(entryId).buildSingle() }
                 .flatMap { entry ->
-                    when (StorageHelper.user != null) {
+                    when (StorageHelper.isLoggedIn) {
                         true -> api.info().userInfo(entryId)
                                 .buildOptionalSingle()
                                 .map { entry to it }
@@ -86,13 +86,13 @@ class MediaInfoViewModel(private val entryId: String) : BaseViewModel<Pair<Entry
             data: Pair<Entry, Optional<MediaUserInfo>>,
             updateType: UserInfoUpdateType
     ) = data.first to data.second.toNullable()?.let {
-        MediaUserInfo(
-                it.isNoted || updateType == UserInfoUpdateType.NOTE,
-                it.isFinished || updateType == UserInfoUpdateType.FINISHED,
-                it.isCanceled,
-                it.isTopTen || updateType == UserInfoUpdateType.FAVORITE
-        )
-    }.toOptional()
+                MediaUserInfo(
+                        it.isNoted || updateType == UserInfoUpdateType.NOTE,
+                        it.isFinished || updateType == UserInfoUpdateType.FINISHED,
+                        it.isCanceled,
+                        it.isTopTen || updateType == UserInfoUpdateType.FAVORITE
+                )
+            }.toOptional()
 
     private enum class UserInfoUpdateType {
         NOTE, FAVORITE, FINISHED

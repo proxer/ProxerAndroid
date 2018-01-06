@@ -115,7 +115,7 @@ class LocalMangaJob : Job() {
     @Suppress("ReturnCount")
     override fun onRunJob(params: Params): Result {
         return try {
-            if (StorageHelper.user == null) return Result.FAILURE
+            if (!StorageHelper.isLoggedIn) return Result.FAILURE
 
             synchronized(lock, {
                 when {

@@ -26,8 +26,7 @@ class UcpMediaListViewModel(
 
     override val endpoint: PagingLimitEndpoint<List<UserMediaListEntry>>
         get() = api.ucp().mediaList()
-                .includeHentai(PreferenceHelper.isAgeRestrictedMediaAllowed(globalContext)
-                        && StorageHelper.user != null)
+                .includeHentai(PreferenceHelper.isAgeRestrictedMediaAllowed(globalContext) && StorageHelper.isLoggedIn)
                 .category(category)
                 .filter(filter)
 

@@ -26,11 +26,10 @@ object HidePrototype : BBPrototype {
 
     override fun makeViews(context: Context, children: List<BBTree>, args: Map<String, Any?>): List<View> {
         val childViews = super.makeViews(context, children, args)
-        val shouldHide = StorageHelper.user == null
 
         return when {
             childViews.isEmpty() -> childViews
-            shouldHide -> listOf(FrameLayout(context).apply {
+            StorageHelper.isLoggedIn -> listOf(FrameLayout(context).apply {
                 layoutParams = LayoutParams(MATCH_PARENT, WRAP_CONTENT)
 
                 addView(TextPrototype.makeView(context, context.getString(R.string.view_bbcode_hide_login)).apply {

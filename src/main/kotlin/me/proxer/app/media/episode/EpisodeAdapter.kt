@@ -57,7 +57,7 @@ class EpisodeAdapter(savedInstanceState: Bundle?, private val entryId: String) :
     val languageClickSubject: PublishSubject<Pair<MediaLanguage, EpisodeRow>> = PublishSubject.create()
 
     private val expansionMap: ParcelableStringBooleanMap
-    private var isLoggedIn = StorageHelper.user != null
+    private var isLoggedIn = StorageHelper.isLoggedIn
 
     private var busDisposable: Disposable? = null
 
@@ -242,65 +242,65 @@ class EpisodeAdapter(savedInstanceState: Bundle?, private val entryId: String) :
 
             if (category == Category.MANGA && isLoggedIn) {
                 language.toGeneralLanguage().let { generalLanguage ->
-                    download.setOnClickListener {
-                        constructChapterCheckSingle(entryId, episode, generalLanguage)
-                                .doOnSuccess { exists ->
-                                    if (!exists) {
-                                        LocalMangaJob.schedule(download.context, entryId, episode, generalLanguage)
-                                    }
-                                }
-                                .subscribeOn(Schedulers.newThread())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribeAndLogErrors { exists: Boolean ->
-                                    if (!exists) {
-                                        download.visibility = View.INVISIBLE
-                                        downloadProgress.visibility = View.VISIBLE
-                                    }
-                                }
-                    }
-
-                    downloadProgress.setOnClickListener {
-                        Single.fromCallable { LocalMangaJob.cancel(entryId, episode, generalLanguage) }
-                                .subscribeOn(Schedulers.newThread())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribeAndLogErrors { _: Unit ->
-                                    download.visibility = View.VISIBLE
-                                    downloadProgress.visibility = View.INVISIBLE
-                                }
-                    }
-
-                    downloadProgress.tag = constructChapterCheckSingle(entryId, episode, generalLanguage)
-                            .map { it to LocalMangaJob.isScheduledOrRunning(entryId, episode, generalLanguage) }
-                            .subscribeOn(Schedulers.newThread())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribeAndLogErrors { (containsChapter, isScheduledOrRunning) ->
-                                val progressVisibility = when (isScheduledOrRunning) {
-                                    true -> View.VISIBLE
-                                    false -> View.INVISIBLE
-                                }
-
-                                val downloadVisibility = when (isScheduledOrRunning) {
-                                    true -> View.INVISIBLE
-                                    false -> View.VISIBLE
-                                }
-
-                                when (containsChapter) {
-                                    true -> TooltipCompat.setTooltipText(download, download.context
-                                            .getString(R.string.fragment_episode_already_downloaded_hint))
-                                    false -> TooltipCompat.setTooltipText(download, download.context
-                                            .getString(R.string.fragment_episode_download_hint))
-                                }
-
-                                downloadContainer.visibility = View.VISIBLE
-                                downloadProgress.visibility = progressVisibility
-                                download.visibility = downloadVisibility
-
-                                download.setIconicsImage(when (containsChapter) {
-                                    true -> CommunityMaterial.Icon.cmd_cloud_check
-                                    false -> CommunityMaterial.Icon.cmd_cloud_download
-                                }, 32, 0)
+                            download.setOnClickListener {
+                                constructChapterCheckSingle(entryId, episode, generalLanguage)
+                                        .doOnSuccess { exists ->
+                                            if (!exists) {
+                                                LocalMangaJob.schedule(download.context, entryId, episode, generalLanguage)
+                                            }
+                                        }
+                                        .subscribeOn(Schedulers.newThread())
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribeAndLogErrors { exists: Boolean ->
+                                            if (!exists) {
+                                                download.visibility = View.INVISIBLE
+                                                downloadProgress.visibility = View.VISIBLE
+                                            }
+                                        }
                             }
-                }
+
+                            downloadProgress.setOnClickListener {
+                                Single.fromCallable { LocalMangaJob.cancel(entryId, episode, generalLanguage) }
+                                        .subscribeOn(Schedulers.newThread())
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribeAndLogErrors { _: Unit ->
+                                            download.visibility = View.VISIBLE
+                                            downloadProgress.visibility = View.INVISIBLE
+                                        }
+                            }
+
+                            downloadProgress.tag = constructChapterCheckSingle(entryId, episode, generalLanguage)
+                                    .map { it to LocalMangaJob.isScheduledOrRunning(entryId, episode, generalLanguage) }
+                                    .subscribeOn(Schedulers.newThread())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribeAndLogErrors { (containsChapter, isScheduledOrRunning) ->
+                                        val progressVisibility = when (isScheduledOrRunning) {
+                                            true -> View.VISIBLE
+                                            false -> View.INVISIBLE
+                                        }
+
+                                        val downloadVisibility = when (isScheduledOrRunning) {
+                                            true -> View.INVISIBLE
+                                            false -> View.VISIBLE
+                                        }
+
+                                        when (containsChapter) {
+                                            true -> TooltipCompat.setTooltipText(download, download.context
+                                                    .getString(R.string.fragment_episode_already_downloaded_hint))
+                                            false -> TooltipCompat.setTooltipText(download, download.context
+                                                    .getString(R.string.fragment_episode_download_hint))
+                                        }
+
+                                        downloadContainer.visibility = View.VISIBLE
+                                        downloadProgress.visibility = progressVisibility
+                                        download.visibility = downloadVisibility
+
+                                        download.setIconicsImage(when (containsChapter) {
+                                            true -> CommunityMaterial.Icon.cmd_cloud_check
+                                            false -> CommunityMaterial.Icon.cmd_cloud_download
+                                        }, 32, 0)
+                                    }
+                        }
             } else {
                 downloadContainer.visibility = View.GONE
             }

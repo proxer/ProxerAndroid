@@ -40,7 +40,7 @@ class ChatViewModel(initialConference: LocalConference) : PagedViewModel<LocalMe
 
             addSource(source, {
                 it?.let {
-                    if (StorageHelper.user != null) {
+                    if (StorageHelper.isLoggedIn) {
                         if (it.isEmpty() && !hasReachedEnd) {
                             ChatJob.scheduleMessageLoad(safeConference.id)
                         } else {

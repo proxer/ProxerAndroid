@@ -98,11 +98,11 @@ abstract class DrawerActivity : BaseActivity() {
         AccountItem.UCP -> UcpActivity.navigateTo(this)
     }
 
-    private fun showProfilePage() = StorageHelper.user?.let {
+    private fun showProfilePage() = StorageHelper.user?.let { (id, name, image) ->
         drawer.profileImageView.let { view ->
             ViewCompat.setTransitionName(view, "profile_image")
 
-            ProfileActivity.navigateTo(this, it.id, it.name, it.image,
+            ProfileActivity.navigateTo(this, id, name, image,
                     if (view.drawable != null) view else null)
         }
     }

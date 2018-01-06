@@ -12,7 +12,7 @@ import me.proxer.app.util.data.StorageHelper
 object Validators {
 
     fun validateLogin() {
-        if (StorageHelper.user == null) {
+        if (!StorageHelper.isLoggedIn) {
             throw NotLoggedInException()
         }
     }

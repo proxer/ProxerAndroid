@@ -22,13 +22,12 @@ class TopTenViewModel(private val userId: String?, private val username: String?
 
     override val dataSingle: Single<ZippedTopTenResult>
         get() {
-            val includeHentai = PreferenceHelper.isAgeRestrictedMediaAllowed(globalContext)
-                    && StorageHelper.user != null
+            val includeHentai = PreferenceHelper.isAgeRestrictedMediaAllowed(globalContext) && StorageHelper.isLoggedIn
 
             return Singles.zip(
                     partialSingle(includeHentai, Category.ANIME),
                     partialSingle(includeHentai, Category.MANGA),
-                    { animeEntries, mangaEntries ->
+                    zipper = { animeEntries, mangaEntries ->
                         ZippedTopTenResult(animeEntries, mangaEntries)
                     }
             )

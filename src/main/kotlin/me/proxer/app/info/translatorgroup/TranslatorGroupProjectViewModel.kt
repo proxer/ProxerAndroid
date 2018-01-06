@@ -20,6 +20,5 @@ class TranslatorGroupProjectViewModel(private val translatorGroupId: String) :
 
     override val endpoint: PagingLimitEndpoint<List<TranslatorGroupProject>>
         get() = api.list().translatorGroupProjectList(translatorGroupId)
-                .includeHentai(StorageHelper.user != null
-                        && PreferenceHelper.isAgeRestrictedMediaAllowed(globalContext))
+                .includeHentai(PreferenceHelper.isAgeRestrictedMediaAllowed(globalContext) && StorageHelper.isLoggedIn)
 }

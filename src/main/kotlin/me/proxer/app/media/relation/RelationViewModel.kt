@@ -18,8 +18,7 @@ class RelationViewModel(private val entryId: String) : BaseContentViewModel<List
 
     override val endpoint: Endpoint<List<Relation>>
         get() = api.info().relations(entryId)
-                .includeHentai(PreferenceHelper.isAgeRestrictedMediaAllowed(globalContext)
-                        && StorageHelper.user != null)
+                .includeHentai(PreferenceHelper.isAgeRestrictedMediaAllowed(globalContext) && StorageHelper.isLoggedIn)
 
     override val dataSingle: Single<List<Relation>>
         get() = super.dataSingle

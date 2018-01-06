@@ -21,8 +21,8 @@ abstract class ChatDao {
 
     @Transaction
     open fun insertMessageToSend(text: String, conferenceId: Long): LocalMessage {
-        val user = StorageHelper.user ?: throw IllegalStateException("User cannot be null")
-        val message = LocalMessage(calculateNextMessageToSendId(), conferenceId, user.id, user.name, text,
+        val (_, id, name) = StorageHelper.user ?: throw IllegalStateException("User cannot be null")
+        val message = LocalMessage(calculateNextMessageToSendId(), conferenceId, id, name, text,
                 MessageAction.NONE, Date(), Device.MOBILE)
 
         insertMessage(message)

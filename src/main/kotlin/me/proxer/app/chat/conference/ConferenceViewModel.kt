@@ -31,7 +31,7 @@ class ConferenceViewModel : BaseViewModel<List<LocalConference>>() {
             it?.let {
                 val containsRelevantData = it.isNotEmpty() || StorageHelper.areConferencesSynchronized
 
-                if (containsRelevantData && StorageHelper.user != null && error.value == null) {
+                if (containsRelevantData && StorageHelper.isLoggedIn && error.value == null) {
                     dataDisposable?.dispose()
 
                     isLoading.value = false

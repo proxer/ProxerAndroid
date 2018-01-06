@@ -173,7 +173,7 @@ object ErrorUtils {
             USER_2FA_SECRET_REQUIRED -> R.string.error_login_two_factor_authentication
             USER_ACCOUNT_EXPIRED -> R.string.error_account_expired
             USER_ACCOUNT_BLOCKED -> R.string.error_account_blocked
-            USER_INSUFFICIENT_PERMISSIONS -> when (StorageHelper.user == null) {
+            USER_INSUFFICIENT_PERMISSIONS -> when (!StorageHelper.isLoggedIn) {
                 true -> R.string.error_insufficient_permissions
                 false -> R.string.error_insufficient_permissions_logged_in
             }

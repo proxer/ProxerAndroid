@@ -41,6 +41,9 @@ object StorageHelper {
             else -> safePut(USER, value)
         }
 
+    val isLoggedIn: Boolean
+        get() = safeContains(USER)
+
     var isTwoFactorAuthenticationEnabled: Boolean
         get() = safeGet(TWO_FACTOR_AUTHENTICATION, false)
         set(value) = safePut(TWO_FACTOR_AUTHENTICATION, value)
@@ -98,6 +101,13 @@ object StorageHelper {
         ensureInit()
 
         Hawk.delete(key)
+    }
+
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun safeContains(key: String): Boolean {
+        ensureInit()
+
+        return Hawk.contains(key)
     }
 
     @Suppress("NOTHING_TO_INLINE")

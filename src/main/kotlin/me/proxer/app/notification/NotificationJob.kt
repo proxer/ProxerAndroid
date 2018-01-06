@@ -50,7 +50,7 @@ class NotificationJob : Job() {
     }
 
     override fun onRunJob(params: Params) = try {
-        val notificationInfo = when (StorageHelper.user != null) {
+        val notificationInfo = when (StorageHelper.isLoggedIn) {
             true -> api.notifications().notificationInfo().build().execute()
             false -> null
         }

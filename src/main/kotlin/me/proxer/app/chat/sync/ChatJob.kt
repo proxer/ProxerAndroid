@@ -113,7 +113,7 @@ class ChatJob : Job() {
         get() = params.extras.getLong(CONFERENCE_ID_EXTRA, 0)
 
     override fun onRunJob(params: Params): Result {
-        if (StorageHelper.user == null) return Result.FAILURE
+        if (!StorageHelper.isLoggedIn) return Result.FAILURE
 
         val synchronizationResult = when (conferenceId) {
             0L -> try {
