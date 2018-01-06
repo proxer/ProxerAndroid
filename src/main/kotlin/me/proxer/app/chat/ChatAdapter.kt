@@ -21,6 +21,7 @@ import me.proxer.app.util.Utils
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.convertToRelativeReadableTime
+import me.proxer.app.util.extension.iconColor
 import me.proxer.library.enums.MessageAction
 import okhttp3.HttpUrl
 import org.jetbrains.anko.dip
@@ -297,7 +298,7 @@ class ChatAdapter(savedInstanceState: Bundle?, private val isGroup: Boolean) :
                     .icon(CommunityMaterial.Icon.cmd_clock)
                     .sizeDp(24)
                     .paddingDp(4)
-                    .colorRes(R.color.icon), null)
+                    .iconColor(text.context), null)
         } else {
             text.setCompoundDrawables(null, null, null, null)
         }

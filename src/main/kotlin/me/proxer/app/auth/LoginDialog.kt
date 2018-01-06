@@ -28,6 +28,7 @@ import me.proxer.app.base.BaseDialog
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.dip
+import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
@@ -184,6 +185,6 @@ class LoginDialog : BaseDialog() {
 
     private fun generateInfoDrawable() = IconicsDrawable(safeContext)
             .icon(CommunityMaterial.Icon.cmd_information_outline)
-            .colorRes(R.color.icon)
+            .iconColor(safeContext)
             .sizeDp(20)
 }

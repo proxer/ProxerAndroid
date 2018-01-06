@@ -142,7 +142,7 @@ fun Category.toEpisodeAppString(context: Context, number: Int? = null): String =
 }
 
 fun MediaState.toAppDrawable(context: Context): IconicsDrawable = IconicsDrawable(context)
-        .colorRes(R.color.icon)
+        .iconColor(context)
         .icon(when (this) {
             MediaState.PRE_AIRING -> CommunityMaterial.Icon.cmd_radio_tower
             MediaState.FINISHED -> CommunityMaterial.Icon.cmd_book

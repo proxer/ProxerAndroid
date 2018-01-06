@@ -39,6 +39,7 @@ import me.proxer.app.exception.TopicEmptyException
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
 import me.proxer.app.util.extension.autoDispose
+import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.subscribeAndLogErrors
@@ -360,5 +361,5 @@ class CreateChatFragment : BaseFragment() {
             .icon(iconicRes)
             .sizeDp(32)
             .paddingDp(6)
-            .colorRes(R.color.icon)
+            .iconColor(safeContext)
 }

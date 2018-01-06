@@ -25,6 +25,7 @@ import me.proxer.app.profile.topten.TopTenFragment
 import me.proxer.app.util.ActivityUtils
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.extension.colorRes
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Category
@@ -117,12 +118,12 @@ class ProfileActivity : ImageTabsActivity() {
                     Completable
                             .fromAction {
                                 chatDao.findConferenceForUser(safeUsername).let { existingChat ->
-                                    when (existingChat) {
-                                        null -> CreateChatActivity.navigateTo(this, false,
-                                                Participant(safeUsername, safeImage))
-                                        else -> ChatActivity.navigateTo(this, existingChat)
-                                    }
-                                }
+                                            when (existingChat) {
+                                                null -> CreateChatActivity.navigateTo(this, false,
+                                                        Participant(safeUsername, safeImage))
+                                                else -> ChatActivity.navigateTo(this, existingChat)
+                                            }
+                                        }
                             }
                             .subscribeOn(Schedulers.io())
                             .subscribeAndLogErrors()
@@ -145,15 +146,15 @@ class ProfileActivity : ImageTabsActivity() {
     }
 
     override fun loadEmptyImage() {
-        // If the image is not null, it means the user has none set. If it is null, it means we just have'nt loaded it
-        // yet.
+        // If the image is not null, it means the user has none set.
+        // If it is null, it means we just have'nt loaded it yet.
         if (image != null) {
             headerImage.setImageDrawable(IconicsDrawable(headerImage.context)
                     .icon(CommunityMaterial.Icon.cmd_account)
                     .sizeDp((DeviceUtils.getScreenWidth(this) * 0.75).toInt())
                     .paddingDp(32)
                     .backgroundColorRes(R.color.colorPrimaryLight)
-                    .colorRes(R.color.colorPrimary))
+                    .colorRes(headerImage.context, R.color.colorPrimary))
         }
     }
 

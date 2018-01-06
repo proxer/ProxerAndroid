@@ -65,6 +65,14 @@ inline fun Context.getQuantityString(id: Int, quantity: Int): String = resources
 
 inline fun Fragment.dip(value: Int) = context?.dip(value) ?: throw IllegalStateException("context is null")
 
+inline fun IconicsDrawable.colorRes(context: Context, id: Int): IconicsDrawable {
+    return this.color(ContextCompat.getColor(context, id))
+}
+
+inline fun IconicsDrawable.iconColor(context: Context): IconicsDrawable {
+    return this.colorRes(context, R.color.icon)
+}
+
 inline fun ImageView.setIconicsImage(
         icon: IIcon,
         sizeDp: Int,
@@ -74,7 +82,7 @@ inline fun ImageView.setIconicsImage(
     setImageDrawable(IconicsDrawable(context, icon)
             .sizeDp(sizeDp)
             .paddingDp(paddingDp)
-            .colorRes(colorRes))
+            .colorRes(context, colorRes))
 }
 
 inline fun GlideRequests.defaultLoad(view: ImageView, url: HttpUrl): Target<Drawable> = load(url.toString())

@@ -32,6 +32,7 @@ import me.proxer.app.util.Utils
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.clipboardManager
+import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.inputMethodManager
 import me.proxer.app.util.extension.isAtTop
 import me.proxer.app.util.extension.unsafeLazy
@@ -261,7 +262,7 @@ class ChatFragment : PagedContentFragment<LocalMessage>() {
             .icon(iconicRes)
             .sizeDp(32)
             .paddingDp(6)
-            .colorRes(R.color.icon)
+            .iconColor(safeContext)
 
     private fun handleCopyClick() {
         val title = getString(R.string.fragment_chat_clip_title)

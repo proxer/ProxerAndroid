@@ -21,6 +21,7 @@ import me.proxer.app.base.BaseAdapter
 import me.proxer.app.chat.conference.info.ConferenceParticipantAdapter.ViewHolder
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.Utils
+import me.proxer.app.util.extension.colorRes
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.library.entity.messenger.ConferenceParticipant
 import me.proxer.library.util.ProxerUrls
@@ -81,7 +82,7 @@ class ConferenceParticipantAdapter : BaseAdapter<ConferenceParticipant, ViewHold
                         .icon(CommunityMaterial.Icon.cmd_star)
                         .sizeDp(32)
                         .paddingDp(8)
-                        .colorRes(R.color.colorAccent), null)
+                        .colorRes(username.context, R.color.colorAccent), null)
             } else {
                 username.setCompoundDrawables(null, null, null, null)
             }

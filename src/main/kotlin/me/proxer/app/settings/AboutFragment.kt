@@ -27,6 +27,7 @@ import me.proxer.app.chat.create.CreateChatActivity
 import me.proxer.app.forum.TopicActivity
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.Utils
+import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.openHttpPage
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
@@ -103,14 +104,12 @@ class AboutFragment : MaterialAboutFragment() {
     private fun buildInfoItems(context: Context) = listOf(
             ConvenienceBuilder.createAppTitleItem(context),
             ConvenienceBuilder.createVersionActionItem(context,
-                    IconicsDrawable(context, CommunityMaterial.Icon.cmd_tag)
-                            .colorRes(R.color.icon),
+                    IconicsDrawable(context, CommunityMaterial.Icon.cmd_tag).iconColor(context),
                     getString(R.string.about_info_version_title), false),
             MaterialAboutActionItem.Builder()
                     .text(R.string.about_info_licenses_title)
                     .subText(R.string.about_info_licenses_description)
-                    .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_clipboard_text)
-                            .colorRes(R.color.icon))
+                    .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_clipboard_text).iconColor(context))
                     .setOnClickAction {
                         LibsBuilder().withAutoDetect(false)
                                 .withShowLoadingProgress(false)
@@ -133,8 +132,7 @@ class AboutFragment : MaterialAboutFragment() {
             MaterialAboutActionItem.Builder()
                     .text(R.string.about_info_source_code)
                     .subText(R.string.about_info_source_code_description)
-                    .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_code_braces)
-                            .colorRes(R.color.icon))
+                    .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_code_braces).iconColor(context))
                     .setOnClickAction {
                         showPage(REPOSITORY_LINK)
                     }.build()
@@ -144,16 +142,14 @@ class AboutFragment : MaterialAboutFragment() {
             MaterialAboutActionItem.Builder()
                     .text(R.string.about_support_forum_title)
                     .subText(R.string.about_support_forum_description)
-                    .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_forum)
-                            .colorRes(R.color.icon))
+                    .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_forum).iconColor(context))
                     .setOnClickAction {
                         TopicActivity.navigateTo(safeActivity, SUPPORT_ID)
                     }.build(),
             MaterialAboutActionItem.Builder()
                     .text(R.string.about_support_message_title)
                     .subText(R.string.about_support_message_description)
-                    .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_email)
-                            .colorRes(R.color.icon))
+                    .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_email).iconColor(context))
                     .setOnClickAction {
                         Completable
                                 .fromAction {
@@ -174,8 +170,7 @@ class AboutFragment : MaterialAboutFragment() {
             MaterialAboutActionItem.Builder()
                     .text(R.string.about_developer_github_title)
                     .subText(DEVELOPER_GITHUB_NAME)
-                    .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_github_circle)
-                            .colorRes(R.color.icon))
+                    .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_github_circle).iconColor(context))
                     .setOnClickAction {
                         showPage(Utils.parseAndFixUrl("https://github.com/$DEVELOPER_GITHUB_NAME"))
                     }.build(),

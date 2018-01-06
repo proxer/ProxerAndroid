@@ -20,6 +20,7 @@ import me.proxer.app.base.BaseAdapter
 import me.proxer.app.chat.LocalConference
 import me.proxer.app.chat.conference.ConferenceAdapter.ViewHolder
 import me.proxer.app.util.DeviceUtils
+import me.proxer.app.util.extension.colorRes
 import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.getQuantityString
 import me.proxer.library.util.ProxerUrls
@@ -90,7 +91,7 @@ class ConferenceAdapter : BaseAdapter<LocalConference, ViewHolder>() {
                 val icon = IconicsDrawable(image.context)
                         .sizeDp(96)
                         .paddingDp(16)
-                        .colorRes(R.color.colorAccent)
+                        .colorRes(image.context, R.color.colorAccent)
 
                 if (item.isGroup) {
                     icon.icon(CommunityMaterial.Icon.cmd_account_multiple)

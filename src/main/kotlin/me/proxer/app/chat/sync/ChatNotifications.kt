@@ -198,10 +198,14 @@ object ChatNotifications {
         conference.image.isNotBlank() -> Utils.getCircleBitmapFromUrl(context,
                 ProxerUrls.userImage(conference.image))
 
-        else -> IconicsDrawable(context, when (conference.isGroup) {
-            true -> CommunityMaterial.Icon.cmd_account_multiple
-            false -> CommunityMaterial.Icon.cmd_account
-        }).sizeDp(96).colorRes(R.color.colorPrimary).toBitmap()
+        else -> IconicsDrawable(context)
+                .icon(when (conference.isGroup) {
+                    true -> CommunityMaterial.Icon.cmd_account_multiple
+                    false -> CommunityMaterial.Icon.cmd_account
+                })
+                .color(ContextCompat.getColor(context, R.color.colorPrimary))
+                .sizeDp(96)
+                .toBitmap()
     }
 
     private fun buildIndividualStyle(messages: List<LocalMessage>, conference: LocalConference, context: Context,
