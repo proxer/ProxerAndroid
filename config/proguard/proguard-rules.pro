@@ -34,6 +34,7 @@
 }
 
 # Fix Instant Run issues.
+-keep class * extends android.service.chooser.ChooserTargetService
 -keep class * extends android.content.ContentProvider
 -keep class me.proxer.app.ui.crash.CrashActivity
 
