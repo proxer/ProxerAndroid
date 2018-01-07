@@ -3,13 +3,13 @@ package me.proxer.app.ui.view.bbcode.prototype
 import android.content.Context
 import android.support.v4.text.util.LinkifyCompat
 import android.support.v4.widget.TextViewCompat
-import android.support.v7.widget.AppCompatTextView
 import android.text.SpannableStringBuilder
 import android.text.method.LinkMovementMethod
 import android.text.util.Linkify
 import android.view.View
 import android.widget.TextView
 import me.proxer.app.R
+import me.proxer.app.ui.view.GifAwareTextView
 import me.proxer.app.ui.view.bbcode.BBTree
 
 /**
@@ -33,7 +33,7 @@ object TextPrototype : BBPrototype {
     }
 
     fun makeView(context: Context, text: String): TextView {
-        return AppCompatTextView(context).also {
+        return GifAwareTextView(context).also {
             it.movementMethod = LinkMovementMethod.getInstance()
             it.text = SpannableStringBuilder(text)
 
