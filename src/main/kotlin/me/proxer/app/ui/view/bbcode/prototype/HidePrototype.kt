@@ -29,7 +29,7 @@ object HidePrototype : BBPrototype {
 
         return when {
             childViews.isEmpty() -> childViews
-            StorageHelper.isLoggedIn -> listOf(FrameLayout(context).apply {
+            !StorageHelper.isLoggedIn -> listOf(FrameLayout(context).apply {
                 layoutParams = LayoutParams(MATCH_PARENT, WRAP_CONTENT)
 
                 addView(TextPrototype.makeView(context, context.getString(R.string.view_bbcode_hide_login)).apply {
