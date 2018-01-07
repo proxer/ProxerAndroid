@@ -24,7 +24,6 @@ import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.shortcutManager
 import me.proxer.app.util.extension.subscribeAndLogErrors
-import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.app.util.wrapper.IntroductionWrapper
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper.DrawerItem
 import me.proxer.library.enums.Category
@@ -81,11 +80,9 @@ class MainActivity : DrawerActivity() {
     }
 
     override fun onBackPressed() {
-        val fragmentsBackPressedResult by unsafeLazy {
-            supportFragmentManager.fragments.none { it is BackPressAware && it.onBackPressed() }
-        }
+        val fragmentList = supportFragmentManager.fragments
 
-        if (!drawer.onBackPressed() && fragmentsBackPressedResult) {
+        if (!drawer.onBackPressed() && fragmentList.none { it is BackPressAware && it.onBackPressed() }) {
             val startPage = PreferenceHelper.getStartPage(this)
 
             if (startPage != drawer.currentItem) {
