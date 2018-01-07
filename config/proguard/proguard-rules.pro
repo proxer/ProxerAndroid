@@ -33,26 +33,8 @@
     static void checkParameterIsNotNull(java.lang.Object, java.lang.String);
 }
 
-# Fix Instant Run issues.
--keep class * extends android.service.chooser.ChooserTargetService
--keep class * extends android.content.ContentProvider
--keep class me.proxer.app.ui.crash.CrashActivity
-
 # Avoid crash of SearchView.
 -keep class android.support.v7.widget.SearchView { *; }
-
-# Avoid crash on some emulators when running the debug variant.
--keepclassmembers class com.facebook.android.crypto.keychain.SecureRandomFix$LinuxPRNGSecureRandom {
-    public <init>(...);
-}
-
--keepclassmembers class com.davemorrissey.labs.subscaleview.decoder.SkiaImageRegionDecoder {
-    public <init>(...);
-}
-
--keepclassmembers class com.davemorrissey.labs.subscaleview.decoder.SkiaImageDecoder {
-    public <init>(...);
-}
 
 # Android Architecture Components
 -keep class * implements android.arch.lifecycle.GeneratedAdapter {
