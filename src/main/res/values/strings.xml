@@ -54,6 +54,9 @@
         Zwei-Faktor-Authentifizierung ein!</string>
     <string name="error_already_in_list">Es gibt bereits einen Eintrag in deiner Liste</string>
     <string name="error_list_full">Deine Liste ist voll</string>
+    <string name="error_list_top_access_reset">Die Top-Zugriffe wurden zurückgesetzt. Sie sind innerhalb der nächsten
+        Zeit wieder verfügbar
+    </string>
     <string name="error_insufficient_permissions">Diese Information wurde vom Benutzer nicht freigegeben, eventuell
         musst du dich anmelden</string>
     <string name="error_insufficient_permissions_logged_in">Diese Information wurde vom Benutzer nicht freigegeben</string>

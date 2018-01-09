@@ -12,7 +12,7 @@ ext {
     javaVersion = JavaVersion.VERSION_1_8
 
     // Gradle
-    gradleVersion = '4.4.1'
+    gradleVersion = '4.5-rc-1'
 
     // Core plugins
     androidPluginVersion = '3.1.0-alpha07'
@@ -27,10 +27,10 @@ ext {
     // Frameworks and code only libraries
     ankoVersion = '0.10.4'
     supportLibraryVersion = '27.0.2'
-    supportPreferenceVersion = '1.3.1'
+    supportPreferenceVersion = '1.3.2'
     architectureComponentsVersion = '1.0.0'
     androidJobVersion = '1.2.1'
-    proxerLibVersion = 'dd8c7aadf8'
+    proxerLibVersion = '5d971f8421'
 
     // RxJava
     rxJavaVersion = '2.1.8'
@@ -38,7 +38,7 @@ ext {
     rxAndroidVersion = '2.0.1'
     rxBindingVersion = '2.0.0'
     rxBusVersion = '2.0.0'
-    rxPermissionsVersion = '0.9.4'
+    rxPermissionsVersion = '0.9.5'
     autoDisposeVersion = '0.5.1'
 
     // UI components

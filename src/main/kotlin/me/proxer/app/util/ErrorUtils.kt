@@ -1,8 +1,6 @@
 package me.proxer.app.util
 
 import android.view.View
-import com.google.android.exoplayer2.ExoPlaybackException
-import com.google.android.exoplayer2.upstream.HttpDataSource
 import me.proxer.app.R
 import me.proxer.app.auth.LoginDialog
 import me.proxer.app.base.BaseActivity
@@ -26,11 +24,13 @@ import me.proxer.library.api.ProxerException.ServerErrorType.ANIME_INVALID_EPISO
 import me.proxer.library.api.ProxerException.ServerErrorType.ANIME_INVALID_STREAM
 import me.proxer.library.api.ProxerException.ServerErrorType.API_MAINTENANCE
 import me.proxer.library.api.ProxerException.ServerErrorType.API_REMOVED
+import me.proxer.library.api.ProxerException.ServerErrorType.APPS_INVALID_ID
 import me.proxer.library.api.ProxerException.ServerErrorType.CHAT_INVALID_MESSAGE
 import me.proxer.library.api.ProxerException.ServerErrorType.CHAT_INVALID_PERMISSIONS
 import me.proxer.library.api.ProxerException.ServerErrorType.CHAT_INVALID_ROOM
 import me.proxer.library.api.ProxerException.ServerErrorType.CHAT_LOGIN_REQUIRED
 import me.proxer.library.api.ProxerException.ServerErrorType.ERRORLOG_INVALID_INPUT
+import me.proxer.library.api.ProxerException.ServerErrorType.FORUM_INVALID_ID
 import me.proxer.library.api.ProxerException.ServerErrorType.FUNCTION_BLOCKED
 import me.proxer.library.api.ProxerException.ServerErrorType.INFO_ENTRY_ALREADY_IN_LIST
 import me.proxer.library.api.ProxerException.ServerErrorType.INFO_EXCEEDED_MAXIMUM_ENTRIES
@@ -46,7 +46,9 @@ import me.proxer.library.api.ProxerException.ServerErrorType.LIST_INVALID_CATEGO
 import me.proxer.library.api.ProxerException.ServerErrorType.LIST_INVALID_ID
 import me.proxer.library.api.ProxerException.ServerErrorType.LIST_INVALID_LANGUAGE
 import me.proxer.library.api.ProxerException.ServerErrorType.LIST_INVALID_MEDIUM
+import me.proxer.library.api.ProxerException.ServerErrorType.LIST_INVALID_SUBJECT
 import me.proxer.library.api.ProxerException.ServerErrorType.LIST_INVALID_TYPE
+import me.proxer.library.api.ProxerException.ServerErrorType.LIST_TOP_ACCESS_RESET
 import me.proxer.library.api.ProxerException.ServerErrorType.LOGIN_ALREADY_LOGGED_IN
 import me.proxer.library.api.ProxerException.ServerErrorType.LOGIN_DIFFERENT_USER_ALREADY_LOGGED_IN
 import me.proxer.library.api.ProxerException.ServerErrorType.LOGIN_INVALID_CREDENTIALS
@@ -93,9 +95,10 @@ object ErrorUtils {
             INFO_LOGIN_REQUIRED, MESSAGES_LOGIN_REQUIRED, USER_2FA_SECRET_REQUIRED)
     private val CLIENT_ERRORS = arrayOf(NEWS, LOGIN_MISSING_CREDENTIALS, UCP_INVALID_CATEGORY, INFO_INVALID_TYPE,
             LOGIN_ALREADY_LOGGED_IN, LOGIN_DIFFERENT_USER_ALREADY_LOGGED_IN, LIST_INVALID_CATEGORY, LIST_INVALID_MEDIUM,
-            MEDIA_INVALID_STYLE, ANIME_INVALID_STREAM, LIST_INVALID_LANGUAGE, LIST_INVALID_TYPE, ERRORLOG_INVALID_INPUT)
+            MEDIA_INVALID_STYLE, ANIME_INVALID_STREAM, LIST_INVALID_LANGUAGE, LIST_INVALID_TYPE, ERRORLOG_INVALID_INPUT,
+            LIST_INVALID_SUBJECT)
     private val INVALID_ID_ERRORS = arrayOf(USERINFO_INVALID_ID, UCP_INVALID_ID, INFO_INVALID_ID, MEDIA_INVALID_ENTRY,
-            UCP_INVALID_EPISODE, MESSAGES_INVALID_CONFERENCE, LIST_INVALID_ID)
+            UCP_INVALID_EPISODE, MESSAGES_INVALID_CONFERENCE, LIST_INVALID_ID, FORUM_INVALID_ID, APPS_INVALID_ID)
     private val UNSUPPORTED_ERRORS = arrayOf(CHAT_INVALID_ROOM, CHAT_INVALID_PERMISSIONS, CHAT_INVALID_MESSAGE,
             CHAT_LOGIN_REQUIRED, USER)
 
@@ -170,6 +173,7 @@ object ErrorUtils {
             MESSAGES_MISSING_USER -> R.string.error_invalid_users_for_conference
             MESSAGES_EXCEEDED_MAXIMUM_USERS -> R.string.error_conference_full
             MESSAGES_INVALID_TOPIC -> R.string.error_invalid_topic
+            LIST_TOP_ACCESS_RESET -> R.string.error_list_top_access_reset
             USER_2FA_SECRET_REQUIRED -> R.string.error_login_two_factor_authentication
             USER_ACCOUNT_EXPIRED -> R.string.error_account_expired
             USER_ACCOUNT_BLOCKED -> R.string.error_account_blocked
