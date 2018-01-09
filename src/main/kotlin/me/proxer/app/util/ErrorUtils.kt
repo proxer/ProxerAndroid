@@ -1,6 +1,8 @@
 package me.proxer.app.util
 
 import android.view.View
+import com.google.android.exoplayer2.ExoPlaybackException
+import com.google.android.exoplayer2.upstream.HttpDataSource
 import me.proxer.app.R
 import me.proxer.app.auth.LoginDialog
 import me.proxer.app.base.BaseActivity
