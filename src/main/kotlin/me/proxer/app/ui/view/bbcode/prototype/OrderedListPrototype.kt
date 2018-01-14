@@ -1,6 +1,5 @@
 package me.proxer.app.ui.view.bbcode.prototype
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.view.Gravity.CENTER
 import android.view.View
@@ -21,7 +20,6 @@ object OrderedListPrototype : BBPrototype {
     override val startRegex = Regex(" *ol( .*?)?", BBPrototype.REGEX_OPTIONS)
     override val endRegex = Regex("/ *ol *", BBPrototype.REGEX_OPTIONS)
 
-    @SuppressLint("SetTextI18n")
     override fun makeViews(context: Context, children: List<BBTree>, args: Map<String, Any?>): List<View> {
         val childViews = children.filter { it.prototype is ListItemPrototype }.flatMap { it.makeViews(context) }
 
