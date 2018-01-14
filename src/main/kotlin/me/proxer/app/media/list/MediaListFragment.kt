@@ -228,7 +228,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
                     .skipInitialValue()
                     .autoDispose(this)
                     .subscribe {
-                        searchQuery = it.queryText().toString()
+                        searchQuery = it.queryText().toString().trim()
 
                         if (it.isSubmitted) {
                             searchView.clearFocus()
