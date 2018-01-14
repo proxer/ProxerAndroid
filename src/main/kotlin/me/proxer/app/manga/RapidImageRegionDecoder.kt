@@ -28,7 +28,8 @@ class RapidImageRegionDecoder : ImageRegionDecoder {
         return Point(decoder?.sourceWidth() ?: -1, decoder?.sourceHeight() ?: -1)
     }
 
-    @Synchronized override fun decodeRegion(sRect: Rect, sampleSize: Int): Bitmap? {
+    @Synchronized
+    override fun decodeRegion(sRect: Rect, sampleSize: Int): Bitmap? {
         return try {
             decoder?.reset()
                     ?.region(sRect)

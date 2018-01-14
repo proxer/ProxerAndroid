@@ -125,11 +125,11 @@ object ChatNotifications {
             .setBigContentTitle(content)
             .setSummaryText(title)
             .also {
-                filteredConferenceMap.forEach { entry ->
-                    entry.value.forEach { message ->
+                filteredConferenceMap.forEach { (conference, messages) ->
+                    messages.forEach { message ->
                         val sender = when {
-                            entry.key.isGroup -> "${entry.key.topic}: ${message.username} "
-                            else -> "${entry.key.topic}: "
+                            conference.isGroup -> "${conference.topic}: ${message.username} "
+                            else -> "${conference.topic}: "
                         }
 
                         it.addLine(SpannableString(sender + message.message).apply {

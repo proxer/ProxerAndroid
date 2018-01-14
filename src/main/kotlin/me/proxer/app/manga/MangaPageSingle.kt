@@ -83,7 +83,8 @@ class MangaPageSingle(context: Context, private val isLocal: Boolean, private va
 
     private inner class MangaPageDisposable : Disposable {
 
-        @Volatile private var isDisposed = false
+        @Volatile
+        private var isDisposed = false
 
         override fun isDisposed() = isDisposed
 

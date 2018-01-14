@@ -32,8 +32,8 @@ class NotificationViewModel : PagedViewModel<ProxerNotification>() {
     override val dataSingle: Single<List<ProxerNotification>>
         get() = Single.fromCallable { Validators.validateLogin() }
                 .flatMap {
-                    if (page == 0) {
-                        api.notifications().notifications()
+                    when (page) {
+                        0 -> api.notifications().notifications()
                                 .markAsRead(true)
                                 .page(page)
                                 .filter(NotificationFilter.UNREAD)
@@ -41,8 +41,7 @@ class NotificationViewModel : PagedViewModel<ProxerNotification>() {
                                 .buildSingle()
                                 .doOnSuccess { firstPageItemAmount = it.size }
                                 .zipWith(readSingle(), BiFunction { first, second -> first + second })
-                    } else {
-                        readSingle()
+                        else -> readSingle()
                     }
                 }
                 .doOnSuccess {

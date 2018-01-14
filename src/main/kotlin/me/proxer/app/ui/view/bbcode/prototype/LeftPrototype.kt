@@ -28,8 +28,8 @@ object LeftPrototype : BBPrototype {
         return applyToViews(childViews) { view: View ->
             when (view) {
                 is TextView -> view.text = view.text.toSpannableStringBuilder().apply {
-                            setSpan(AlignmentSpan.Standard(ALIGN_NORMAL), 0, view.length(), SPAN_INCLUSIVE_EXCLUSIVE)
-                        }
+                    setSpan(AlignmentSpan.Standard(ALIGN_NORMAL), 0, view.length(), SPAN_INCLUSIVE_EXCLUSIVE)
+                }
                 is LinearLayout -> view.gravity = START
                 else -> (view.layoutParams as? LayoutParams)?.gravity = START
             }

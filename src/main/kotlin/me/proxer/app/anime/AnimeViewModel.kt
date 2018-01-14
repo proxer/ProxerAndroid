@@ -102,7 +102,7 @@ class AnimeViewModel(private val entryId: String, private val language: AnimeLan
 
     fun markAsFinished() = updateUserState(api.info().markAsFinished(entryId))
     fun bookmark(episode: Int) = updateUserState(api.ucp().setBookmark(entryId, episode, language.toMediaLanguage(),
-                    Category.ANIME))
+            Category.ANIME))
 
     private fun entrySingle() = when (cachedEntryCore != null) {
         true -> Single.just(cachedEntryCore)

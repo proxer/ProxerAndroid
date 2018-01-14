@@ -128,8 +128,8 @@ object ErrorUtils {
     }
 
     fun isNetworkError(error: Throwable) = ErrorUtils.getInnermostError(error).let {
-                it is ProxerException && (it.errorType == IO || it.errorType == TIMEOUT)
-            }
+        it is ProxerException && (it.errorType == IO || it.errorType == TIMEOUT)
+    }
 
     fun handle(error: Throwable): ErrorAction {
         val innermostError = getInnermostError(error)

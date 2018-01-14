@@ -154,12 +154,12 @@ class AboutFragment : MaterialAboutFragment() {
                         Completable
                                 .fromAction {
                                     chatDao.findConferenceForUser(DEVELOPER_PROXER_NAME).let { existingConference ->
-                                                when (existingConference) {
-                                                    null -> CreateChatActivity.navigateTo(safeActivity, false,
-                                                            Participant(DEVELOPER_PROXER_NAME))
-                                                    else -> ChatActivity.navigateTo(safeActivity, existingConference)
-                                                }
-                                            }
+                                        when (existingConference) {
+                                            null -> CreateChatActivity.navigateTo(safeActivity, false,
+                                                    Participant(DEVELOPER_PROXER_NAME))
+                                            else -> ChatActivity.navigateTo(safeActivity, existingConference)
+                                        }
+                                    }
                                 }
                                 .subscribeOn(Schedulers.io())
                                 .subscribeAndLogErrors()
@@ -178,8 +178,8 @@ class AboutFragment : MaterialAboutFragment() {
                     .text(getString(R.string.about_developer_proxer_title))
                     .subText(DEVELOPER_PROXER_NAME)
                     .icon(ContextCompat.getDrawable(context, R.drawable.ic_stat_proxer)?.apply {
-                                setColorFilter(ContextCompat.getColor(context, R.color.icon), PorterDuff.Mode.SRC_IN)
-                            })
+                        setColorFilter(ContextCompat.getColor(context, R.color.icon), PorterDuff.Mode.SRC_IN)
+                    })
                     .setOnClickAction {
                         ProfileActivity.navigateTo(safeActivity, DEVELOPER_PROXER_ID, DEVELOPER_PROXER_NAME, null)
                     }.build()

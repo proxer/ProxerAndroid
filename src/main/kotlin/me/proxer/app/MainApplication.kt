@@ -198,13 +198,13 @@ class MainApplication : Application() {
         JobConfig.setLogcatEnabled(BuildConfig.DEBUG)
         JobConfig.setApiEnabled(JobApi.GCM, false)
         JobManager.create(this).addJobCreator {
-                    when {
-                        it == ChatJob.TAG -> ChatJob()
-                        it == NotificationJob.TAG -> NotificationJob()
-                        it.startsWith(LocalMangaJob.TAG) -> LocalMangaJob()
-                        else -> null
-                    }
-                }
+            when {
+                it == ChatJob.TAG -> ChatJob()
+                it == NotificationJob.TAG -> NotificationJob()
+                it.startsWith(LocalMangaJob.TAG) -> LocalMangaJob()
+                else -> null
+            }
+        }
 
         RxJavaPlugins.setErrorHandler { error ->
             when (error) {

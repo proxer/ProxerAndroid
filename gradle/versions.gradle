@@ -15,7 +15,7 @@ ext {
     gradleVersion = '4.5-rc-1'
 
     // Core plugins
-    androidPluginVersion = '3.1.0-alpha07'
+    androidPluginVersion = '3.1.0-alpha08'
     kotlinVersion = '1.2.20-eap-71'
 
     // Utility plugins

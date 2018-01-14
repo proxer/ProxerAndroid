@@ -118,12 +118,12 @@ class ProfileActivity : ImageTabsActivity() {
                     Completable
                             .fromAction {
                                 chatDao.findConferenceForUser(safeUsername).let { existingChat ->
-                                            when (existingChat) {
-                                                null -> CreateChatActivity.navigateTo(this, false,
-                                                        Participant(safeUsername, safeImage))
-                                                else -> ChatActivity.navigateTo(this, existingChat)
-                                            }
-                                        }
+                                    when (existingChat) {
+                                        null -> CreateChatActivity.navigateTo(this, false,
+                                                Participant(safeUsername, safeImage))
+                                        else -> ChatActivity.navigateTo(this, existingChat)
+                                    }
+                                }
                             }
                             .subscribeOn(Schedulers.io())
                             .subscribeAndLogErrors()

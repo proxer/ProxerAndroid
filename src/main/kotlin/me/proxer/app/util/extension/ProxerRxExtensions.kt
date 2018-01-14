@@ -110,11 +110,13 @@ fun RecyclerView.endScrolls(threshold: Int = 5): Observable<Unit> = scrollEvents
         .filter {
             layoutManager.let {
                 val pastVisibleItems = when (it) {
-                    is StaggeredGridLayoutManager -> IntArray(it.spanCount).apply {
-                        it.findFirstVisibleItemPositions(this)
-                    }.let { firstVisibleItems ->
-                        when (firstVisibleItems.isNotEmpty()) {
-                            true -> firstVisibleItems[0]
+                    is StaggeredGridLayoutManager -> {
+                        val visibleItemPositions = IntArray(it.spanCount).apply {
+                            it.findFirstVisibleItemPositions(this)
+                        }
+
+                        when (visibleItemPositions.isNotEmpty()) {
+                            true -> visibleItemPositions[0]
                             false -> 0
                         }
                     }
