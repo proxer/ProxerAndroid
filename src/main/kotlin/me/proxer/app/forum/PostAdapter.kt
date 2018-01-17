@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.load.DecodeFormat
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
@@ -16,8 +18,10 @@ import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.forum.PostAdapter.ViewHolder
 import me.proxer.app.ui.view.bbcode.BBCodeView
+import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.setIconicsImage
+import me.proxer.library.util.ProxerUrls
 
 /**
  * @author Ruben Gees
@@ -45,6 +49,7 @@ class PostAdapter : BaseAdapter<ParsedPost, ViewHolder>() {
         glide?.clear(holder.image)
 
         holder.post.destroy()
+        holder.signature.destroy()
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView?) {
@@ -58,7 +63,11 @@ class PostAdapter : BaseAdapter<ParsedPost, ViewHolder>() {
         internal val image by bindView<ImageView>(R.id.image)
         internal val user by bindView<TextView>(R.id.user)
         internal val post by bindView<BBCodeView>(R.id.post)
+        internal val signatureDivider by bindView<View>(R.id.signatureDivider)
+        internal val signature by bindView<BBCodeView>(R.id.signature)
         internal val date by bindView<TextView>(R.id.date)
+        internal val thankYouIcon by bindView<ImageView>(R.id.thankYouIcon)
+        internal val thankYou by bindView<TextView>(R.id.thankYou)
 
         init {
             userContainer.setOnClickListener {
@@ -72,6 +81,14 @@ class PostAdapter : BaseAdapter<ParsedPost, ViewHolder>() {
                 post.requestLayout()
                 layoutManager?.requestSimpleAnimationsInNextLayout()
             }
+
+            signature.glide = glide
+            signature.heightChangedListener = {
+                signature.requestLayout()
+                layoutManager?.requestSimpleAnimationsInNextLayout()
+            }
+
+            thankYouIcon.setIconicsImage(CommunityMaterial.Icon.cmd_thumb_up, 32, 6)
         }
 
         fun bind(item: ParsedPost) {
@@ -79,14 +96,38 @@ class PostAdapter : BaseAdapter<ParsedPost, ViewHolder>() {
 
             user.text = item.username
             date.text = item.date.convertToRelativeReadableTime(date.context)
+            thankYou.text = item.thankYouAmount.toString()
 
             post.setTree(item.parsedMessage)
+
+            item.signature.let {
+                if (it == null) {
+                    signatureDivider.visibility = View.GONE
+                    signature.visibility = View.GONE
+                    signature.destroy()
+                } else {
+                    signatureDivider.visibility = View.VISIBLE
+                    signature.visibility = View.VISIBLE
+                    signature.setTree(it)
+                }
+            }
 
             bindImage(item)
         }
 
         private fun bindImage(item: ParsedPost) {
-            image.setIconicsImage(CommunityMaterial.Icon.cmd_account, 32, 4, R.color.colorAccent)
+            if (item.image.isBlank()) {
+                image.setIconicsImage(CommunityMaterial.Icon.cmd_account, 32, 4, R.color.colorAccent)
+            } else {
+                glide?.load(ProxerUrls.userImage(item.image).toString())
+                        ?.transition(DrawableTransitionOptions.withCrossFade())
+                        ?.circleCrop()
+                        ?.format(when (DeviceUtils.shouldShowHighQualityImages(image.context)) {
+                            true -> DecodeFormat.PREFER_ARGB_8888
+                            false -> DecodeFormat.PREFER_RGB_565
+                        })
+                        ?.into(image)
+            }
         }
     }
 }

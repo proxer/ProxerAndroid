@@ -288,5 +288,6 @@ fun UserComment.toParsedUserComment() = ParsedUserComment(id, entryId, entryName
 fun Topic.toTopicMetaData() = TopicMetaData(categoryId, categoryName, firstPostDate, lastPostDate, hits, isLocked,
         post, subject)
 
-fun Post.toParsedPost() = ParsedPost(id, parentId, userId, username, date, modifiedById, modifiedByName,
-        modifiedReason, BBParser.parse(message))
+fun Post.toParsedPost() = ParsedPost(id, parentId, userId, username, image, date,
+        signature?.let { if (it.isNotBlank()) BBParser.parse(it) else null },
+        modifiedById, modifiedByName, modifiedReason, BBParser.parse(message), thankYouAmount)

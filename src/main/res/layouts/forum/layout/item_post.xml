@@ -58,6 +58,21 @@
                 android:layout_margin="8dp" />
 
             <View
+                android:id="@+id/signatureDivider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="4dp"
+                android:background="@color/divider" />
+
+            <me.proxer.app.ui.view.bbcode.BBCodeView
+                android:id="@+id/signature"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp" />
+
+            <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginLeft="8dp"
@@ -73,12 +88,35 @@
 
                 <TextView
                     android:id="@+id/date"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_margin="4dp"
+                    android:layout_weight="1"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     tools:text="Two days ago" />
+
+                <ImageView
+                    android:id="@+id/thankYouIcon"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="4dp"
+                    tools:ignore="ContentDescription"
+                    tools:src="@drawable/ic_japan" />
+
+                <TextView
+                    android:id="@+id/thankYou"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginTop="4dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    tools:text="12" />
+
             </LinearLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>
