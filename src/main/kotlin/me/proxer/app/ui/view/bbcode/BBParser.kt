@@ -88,11 +88,12 @@ object BBParser {
                     }
                 }
 
+                // If nothing found assume a user error and look for a fitting end tag in the existing tree.
                 if (!prototypeFound) {
-                    // If nothing found assume a user error and look for a fitting end tag in the existing tree.
-                    if (currentTree.parent?.endsWith(part) == true) {
-                        currentTree = currentTree.parent?.parent
-                                ?: throw IllegalStateException("tree does not have a parent: $currentTree")
+                    val fittingParent = findFittingParent(currentTree, part)
+
+                    if (fittingParent != null) {
+                        currentTree = fittingParent
                     } else {
                         val unknownString = trimmedInput.substring(it.range.first, it.range.endInclusive + 1)
 
@@ -111,5 +112,20 @@ object BBParser {
         }
 
         return result
+    }
+
+    private fun findFittingParent(currentTree: BBTree, endTag: String): BBTree? {
+        var currentParent = currentTree.parent
+
+        while (true) {
+            if (currentParent?.endsWith(endTag) == true) {
+
+                return currentParent
+            } else if (currentParent?.parent == null) {
+                return null
+            }
+
+            currentParent = currentParent.parent
+        }
     }
 }

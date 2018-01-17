@@ -88,7 +88,7 @@ class PostAdapter : BaseAdapter<ParsedPost, ViewHolder>() {
                 layoutManager?.requestSimpleAnimationsInNextLayout()
             }
 
-            thankYouIcon.setIconicsImage(CommunityMaterial.Icon.cmd_thumb_up, 32, 6)
+            thankYouIcon.setIconicsImage(CommunityMaterial.Icon.cmd_thumb_up, 32)
         }
 
         fun bind(item: ParsedPost) {
