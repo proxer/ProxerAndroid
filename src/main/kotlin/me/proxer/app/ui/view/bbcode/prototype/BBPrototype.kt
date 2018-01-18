@@ -56,7 +56,7 @@ interface BBPrototype {
                             .trimEndSafely()
                             .apply { if (isNotEmpty()) insert(length, "\n") }
 
-                    if (current != childViews.first() || current.text.isNotEmpty()) {
+                    if (current !== childViews.first() || current.text.isNotEmpty()) {
                         result += current
                     }
 
