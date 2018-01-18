@@ -49,7 +49,10 @@ interface BBPrototype {
 
                     // Add a single line padding view instead of the potentially more padded mergedView if blank.
                     if (mergedView.text.isBlank()) {
-                        result.add(TextPrototype.makeView(context, ""))
+                        // Only add if it is not the first view.
+                        if (shouldPadStart) {
+                            result.add(TextPrototype.makeView(context, ""))
+                        }
                     } else {
                         result.add(mergedView)
                     }
