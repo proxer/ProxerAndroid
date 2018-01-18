@@ -7,6 +7,7 @@ import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
 import me.proxer.app.ui.view.bbcode.trimEndSafely
 import me.proxer.app.ui.view.bbcode.trimStartSafely
+import org.jetbrains.anko.collections.forEachWithIndex
 import kotlin.text.RegexOption.DOT_MATCHES_ALL
 import kotlin.text.RegexOption.IGNORE_CASE
 
@@ -34,62 +35,67 @@ interface BBPrototype {
     fun makeViews(context: Context, children: List<BBTree>, args: Map<String, Any?>): List<View> {
         val childViews = children.flatMap { it.makeViews(context) }
 
-        if (childViews.isEmpty()) return childViews
-
         val result = mutableListOf<View>()
-        var current = childViews.first()
+        val currentTextViews = mutableListOf<TextView>()
 
-        if (current is TextView) {
-            current.text = current.text.toSpannableStringBuilder().trimStartSafely()
-        }
+        childViews.forEachWithIndex { index, childView ->
+            if (childView is TextView) {
+                currentTextViews.add(childView)
+            } else {
+                if (currentTextViews.isNotEmpty()) {
+                    // Don't pad start if the currentTextViews are the first.
+                    val shouldPadStart = index - currentTextViews.size > 0
+                    val mergedView = mergeAndTrim(currentTextViews, shouldPadStart, true)
 
-        for (next in childViews.drop(1)) {
-            if (current is TextView) {
-                val currentText = current.text.toSpannableStringBuilder()
-
-                if (next is TextView) {
-                    current.text = currentText
-                            .apply { if (isEmpty()) insert(0, "\n") }
-                            .insert(currentText.length, next.text)
-                } else {
-                    current.text = currentText
-                            .trimEndSafely()
-                            .apply { if (isNotEmpty()) insert(length, "\n") }
-
-                    if (current !== childViews.first() || current.text.isNotEmpty()) {
-                        result += current
+                    // Add a single line padding view instead of the potentially more padded mergedView if blank.
+                    if (mergedView.text.isBlank()) {
+                        result.add(TextPrototype.makeView(context, ""))
+                    } else {
+                        result.add(mergedView)
                     }
 
-                    current = next
-                }
-            } else {
-                if (next is TextView) {
-                    val nextText = next.text.toSpannableStringBuilder()
-
-                    next.text = nextText
-                            .trimStartSafely()
-                            .apply { if (isNotEmpty()) insert(0, "\n") }
-
-                    result += current
-                } else {
-                    result += current
-                    result += TextPrototype.makeView(context, "")
+                    currentTextViews.clear()
                 }
 
-                current = next
+                result.add(childView)
+
+                // Add a padding view if the next view is also not a TextView.
+                val isBetweenNonTextViews = index + 1 <= childViews.lastIndex && childViews[index + 1] !is TextView
+
+                if (isBetweenNonTextViews) {
+                    result.add(TextPrototype.makeView(context, ""))
+                }
             }
         }
 
-        if (current is TextView) {
-            current.text = current.text.toSpannableStringBuilder().trimEndSafely()
+        if (currentTextViews.isNotEmpty()) {
+            // Don't pad if this view does only consist of TextViews.
+            val shouldPadStart = currentTextViews.size != childViews.size
 
-            if (current.text.isNotEmpty()) {
-                result += current
-            }
-        } else {
-            result += current
+            result.add(mergeAndTrim(currentTextViews, shouldPadStart, false))
+
+            currentTextViews.clear()
         }
 
         return result
+    }
+
+    private fun mergeAndTrim(views: List<TextView>, padStart: Boolean, padEnd: Boolean): TextView {
+        val current = views.first()
+        val currentText = current.text.toSpannableStringBuilder()
+
+        for (currentTextView in views.drop(1)) {
+            currentText.append(currentTextView.text)
+        }
+
+        currentText.trimStartSafely()
+        currentText.trimEndSafely()
+
+        if (padStart) currentText.insert(0, "\n")
+        if (padEnd) currentText.append("\n")
+
+        current.text = currentText
+
+        return current
     }
 }
