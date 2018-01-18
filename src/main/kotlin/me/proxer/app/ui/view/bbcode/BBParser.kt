@@ -120,7 +120,7 @@ object BBParser {
         while (true) {
             if (currentParent?.endsWith(endTag) == true) {
 
-                return currentParent
+                return currentParent.parent
             } else if (currentParent?.parent == null) {
                 return null
             }
