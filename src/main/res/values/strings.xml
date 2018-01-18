@@ -46,6 +46,8 @@
     <string name="error_io">Es gab ein Problem bei der Datenübertragung. Versuche es erneut</string>
     <string name="error_parsing">Der Server hat beschädigte Daten gesendet. Versuche es erneut</string>
     <string name="error_unknown">Ein unbekannter Fehler ist aufgetreten. Versuche es erneut</string>
+    <string name="error_ssl">Die Sicherheitszertifikate sind ungültig. Überprüfe ob es ein Update für die App gibt
+    </string>
 
     <string name="error_invalid_token">Du wurdest zu deiner Sicherheit automatisch abgemeldet. Melde dich erneut an
     </string>
