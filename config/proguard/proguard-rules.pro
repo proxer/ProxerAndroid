@@ -62,9 +62,8 @@
 -dontwarn com.orhanobut.hawk.HawkConverter**
 -dontwarn com.orhanobut.hawk.GsonParser
 
-# We exclude unused modules of ExoPlayer.
--dontwarn com.devbrackets.android.exomedia.core.source.builder.HlsMediaSourceBuilder
--dontwarn com.devbrackets.android.exomedia.core.source.builder.DashMediaSourceBuilder
+# Exoplayer
+-dontwarn com.google.android.exoplayer2.source.**
 
 # OkHttp/Okio/Retrofit
 -dontwarn okio.**

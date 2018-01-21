@@ -44,7 +44,7 @@ ext {
     // UI components
     aboutLibrariesVersion = '6.0.2'
     materialDrawerVersion = '6.0.2'
-    iconicsVersion = '3.0.1'
+    iconicsVersion = '3.0.2'
     communityMaterialTypefaceVersion = '2.0.46.1'
     crossfaderVersion = '1.5.1'
     materialAboutVersion = '2.2.3'
@@ -54,7 +54,7 @@ ext {
     flexboxVersion = '0.3.2'
     emojiIosVersion = 'd4f5344e63'
     exomediaVersion = '4.1.0'
-    exoplayerVersion = '2.6.0'
+    exoplayerVersion = '2.6.1'
     materialProgressBarVersion = '1.4.2'
     materialRatingBarVersion = '1.2.0'
     customtabsHelperVersion = '1.0.4'
