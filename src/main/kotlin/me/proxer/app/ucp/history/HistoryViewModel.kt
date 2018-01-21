@@ -17,6 +17,4 @@ class HistoryViewModel : PagedContentViewModel<UcpHistoryEntry>() {
 
     override val endpoint: PagingLimitEndpoint<List<UcpHistoryEntry>>
         get() = api.ucp().history()
-
-    override fun areItemsTheSame(old: UcpHistoryEntry, new: UcpHistoryEntry) = old == new
 }
