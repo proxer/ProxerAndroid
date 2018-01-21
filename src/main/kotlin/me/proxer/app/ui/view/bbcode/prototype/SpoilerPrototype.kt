@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.View
 import me.proxer.app.ui.view.bbcode.BBSpoilerView
 import me.proxer.app.ui.view.bbcode.BBTree
+import me.proxer.app.ui.view.bbcode.BBUtils
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
 
 /**
@@ -11,19 +12,14 @@ import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTION
  */
 object SpoilerPrototype : BBPrototype {
 
-    private const val DELIMITER = "spoiler="
+    private val ATTRIBUTE_REGEX = Regex("spoiler *= *(.+?)$", REGEX_OPTIONS)
     private const val TITLE_ARGUMENT = "title"
 
-    override val startRegex = Regex(" *spoiler(=\"?.*?\"?)?( .*?)?", REGEX_OPTIONS)
+    override val startRegex = Regex(" *spoiler( *=\"?.+?\"?)?( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *spoiler *", REGEX_OPTIONS)
 
     override fun construct(code: String, parent: BBTree): BBTree {
-        val titleIndex = code.indexOf(DELIMITER, ignoreCase = true)
-
-        val title = when (titleIndex < 0) {
-            true -> null
-            false -> code.substring(titleIndex + DELIMITER.length, code.length).trim().trim { it == '"' }
-        }
+        val title = BBUtils.cutAttribute(code, ATTRIBUTE_REGEX)
 
         return BBTree(this, parent, args = mapOf(TITLE_ARGUMENT to title))
     }

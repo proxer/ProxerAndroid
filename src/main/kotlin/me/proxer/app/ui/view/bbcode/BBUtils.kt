@@ -12,22 +12,8 @@ import org.jetbrains.anko.childrenRecursiveSequence
  */
 internal object BBUtils {
 
-    /**
-     * Cuts the relevant info from the given [target] by using the given [startDelimiter] and [endDelimiter].
-     * Case is ignored and '"' characters are trimmed from the result. If the [startDelimiter] is not found,
-     * null is returned.
-     *
-     * This is a function which should not used anywhere else as in the BBCode parser.
-     */
-    internal fun cutAttribute(target: String, startDelimiter: String, endDelimiter: String = " "): String? {
-        val startIndex = target.indexOf(startDelimiter, ignoreCase = true)
-        val endIndex = target.indexOf(endDelimiter, ignoreCase = true, startIndex = startIndex)
-
-        return when {
-            startIndex < 0 -> null
-            endIndex < 0 -> target.substring(startIndex + startDelimiter.length, target.length).trim { it == '"' }
-            else -> target.substring(startIndex + startDelimiter.length, endIndex).trim { it == '"' }
-        }
+    internal fun cutAttribute(target: String, regex: Regex): String? {
+        return regex.find(target)?.groupValues?.getOrNull(1)?.trim()?.trim { it == '"' }
     }
 }
 

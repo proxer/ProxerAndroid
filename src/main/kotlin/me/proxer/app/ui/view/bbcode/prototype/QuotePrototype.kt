@@ -15,7 +15,7 @@ import org.jetbrains.anko.dip
 
 object QuotePrototype : BBPrototype {
 
-    override val startRegex = Regex(" *quote(=\"?.*?\"?)?( .*?)?", REGEX_OPTIONS)
+    override val startRegex = Regex(" *quote( *=\"?.+?\"?)?( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *quote *", REGEX_OPTIONS)
 
     override fun makeViews(context: Context, children: List<BBTree>, args: Map<String, Any?>): List<View> {

@@ -19,7 +19,7 @@ import okhttp3.HttpUrl
  */
 object VideoPrototype : BBPrototype {
 
-    private const val DELIMITER = "type="
+    private val ATTRIBUTE_REGEX = Regex("type *= *(.+?)( |$)", REGEX_OPTIONS)
     private const val TYPE_ARGUMENT = "type"
     private const val TYPE_YOUTUBE = "youtube"
     private const val TYPE_YOUTUBE_URL = "https://youtu.be/"
@@ -28,7 +28,7 @@ object VideoPrototype : BBPrototype {
     override val endRegex = Regex("/ *video *", REGEX_OPTIONS)
 
     override fun construct(code: String, parent: BBTree): BBTree {
-        val type = BBUtils.cutAttribute(code, DELIMITER)
+        val type = BBUtils.cutAttribute(code, ATTRIBUTE_REGEX)
 
         return BBTree(this, parent, args = mapOf(TYPE_ARGUMENT to type))
     }
@@ -37,7 +37,7 @@ object VideoPrototype : BBPrototype {
         val childViews = children.flatMap { it.makeViews(context) }.filterIsInstance(TextView::class.java)
         val text = context.getString(R.string.view_bbcode_video_link)
 
-        val urlOrId = childViews.firstOrNull()?.text?.toString() ?: ""
+        val urlOrId = childViews.firstOrNull()?.text?.toString()?.trim() ?: ""
         val type = args[TYPE_ARGUMENT] as String?
 
         val url = HttpUrl.parse(when {

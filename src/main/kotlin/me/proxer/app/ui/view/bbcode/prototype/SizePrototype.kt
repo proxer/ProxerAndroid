@@ -16,14 +16,14 @@ import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
  */
 object SizePrototype : BBPrototype {
 
-    private const val DELIMITER = "size="
+    private val ATTRIBUTE_REGEX = Regex("size *= *(.+?)( |$)", REGEX_OPTIONS)
     private const val SIZE_ARGUMENT = "size"
 
-    override val startRegex = Regex(" *size=\"?[1-6]\"?( .*?)?", REGEX_OPTIONS)
+    override val startRegex = Regex(" *size *= *\"?[1-6]\"?( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *size *", REGEX_OPTIONS)
 
     override fun construct(code: String, parent: BBTree): BBTree {
-        val value = BBUtils.cutAttribute(code, DELIMITER)
+        val value = BBUtils.cutAttribute(code, ATTRIBUTE_REGEX)
         val size = when (value) {
             "1" -> 0.4f
             "2" -> 0.7f

@@ -17,7 +17,7 @@ import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
  */
 object ColorPrototype : BBPrototype {
 
-    private const val DELIMITER = "color="
+    private val ATTRIBUTE_REGEX = Regex("color *= *(.+?)( |$)", REGEX_OPTIONS)
     private const val COLOR_ARGUMENT = "color"
 
     private val availableColors = arrayOf(
@@ -34,11 +34,11 @@ object ColorPrototype : BBPrototype {
     private val availableColorsForRegex = availableColors.joinToString("|") { it.first }
     private val colorsForRegex = "(#[A-Fa-f0-9]{6}|#[A-Fa-f0-9]{8}|$availableColorsForRegex)"
 
-    override val startRegex = Regex(" *color=\"?$colorsForRegex\"?( .*?)?", REGEX_OPTIONS)
+    override val startRegex = Regex(" *color *= *\"?$colorsForRegex\"?( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *color *", REGEX_OPTIONS)
 
     override fun construct(code: String, parent: BBTree): BBTree {
-        val value = BBUtils.cutAttribute(code, DELIMITER) ?: ""
+        val value = BBUtils.cutAttribute(code, ATTRIBUTE_REGEX) ?: ""
         val color = when (value.startsWith("#")) {
             true -> Color.parseColor(value)
             false -> availableColors.find { it.first.equals(value, ignoreCase = true) }?.second

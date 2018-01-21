@@ -25,7 +25,7 @@ import okhttp3.HttpUrl
  */
 object ImagePrototype : BBPrototype {
 
-    private const val DELIMITER = "size="
+    private val WIDTH_ATTRIBUTE_REGEX = Regex("size *= *(.+?)( |$)", REGEX_OPTIONS)
     private const val WIDTH_ARGUMENT = "width"
 
     private val INVALID_IMAGE = HttpUrl.parse("https://cdn.proxer.me/keinbild.jpg")
@@ -35,7 +35,7 @@ object ImagePrototype : BBPrototype {
     override val endRegex = Regex("/ *img *", REGEX_OPTIONS)
 
     override fun construct(code: String, parent: BBTree): BBTree {
-        val width = BBUtils.cutAttribute(code, DELIMITER)?.toIntOrNull()
+        val width = BBUtils.cutAttribute(code, WIDTH_ATTRIBUTE_REGEX)?.toIntOrNull()
 
         return BBTree(this, parent, args = mapOf(WIDTH_ARGUMENT to width))
     }
@@ -43,15 +43,16 @@ object ImagePrototype : BBPrototype {
     override fun makeViews(context: Context, children: List<BBTree>, args: Map<String, Any?>): List<View> {
         val childViews = children.flatMap { it.makeViews(context) }
 
-        val glide = args[GLIDE_ARGUMENT] as GlideRequests?
-        val width = args[WIDTH_ARGUMENT] as Int?
+        val url = (childViews.firstOrNull() as? TextView)?.text.toString().trim()
+        val parsedUrl = Utils.safelyParseAndFixUrl(url) ?: INVALID_IMAGE
 
-        val url = Utils.safelyParseAndFixUrl((childViews.firstOrNull() as? TextView)?.text.toString()) ?: INVALID_IMAGE
+        val glide = args[GLIDE_ARGUMENT] as GlideRequests?
+        val width = if (parsedUrl == INVALID_IMAGE) 200 else args[WIDTH_ARGUMENT] as Int?
 
         return listOf(AppCompatImageView(context).also { it: ImageView ->
-            ViewCompat.setTransitionName(it, "bb_image_$url")
+            ViewCompat.setTransitionName(it, "bb_image_$parsedUrl")
 
-            glide?.load(url.toString())
+            glide?.load(parsedUrl.toString())
                     ?.apply { if (width != null) override(width, SIZE_ORIGINAL) }
                     ?.transition(DrawableTransitionOptions.withCrossFade())
                     ?.format(when (DeviceUtils.shouldShowHighQualityImages(context)) {
@@ -63,7 +64,7 @@ object ImagePrototype : BBPrototype {
             if (context is Activity) {
                 it.setOnClickListener { _ ->
                     if (it.drawable != null) {
-                        ImageDetailActivity.navigateTo(context, url, it)
+                        ImageDetailActivity.navigateTo(context, parsedUrl, it)
                     }
                 }
             }

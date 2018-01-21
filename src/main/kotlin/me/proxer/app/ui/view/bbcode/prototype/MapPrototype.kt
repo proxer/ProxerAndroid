@@ -20,14 +20,14 @@ import org.jetbrains.anko.longToast
  */
 object MapPrototype : BBPrototype {
 
-    private const val ZOOM_DELIMITER = "zoom="
+    private val ZOOM_ATTRIBUTE_REGEX = Regex("zoom *= *(.+?)( |$)", REGEX_OPTIONS)
     private const val ZOOM_ARGUMENT = "zoom"
 
     override val startRegex = Regex(" *map( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *map *", REGEX_OPTIONS)
 
     override fun construct(code: String, parent: BBTree): BBTree {
-        val zoom = BBUtils.cutAttribute(code, ZOOM_DELIMITER)?.toIntOrNull()
+        val zoom = BBUtils.cutAttribute(code, ZOOM_ATTRIBUTE_REGEX)?.toIntOrNull()
 
         return BBTree(this, parent, args = mapOf(ZOOM_ARGUMENT to zoom))
     }
