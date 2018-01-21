@@ -13,7 +13,6 @@ import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.notifications.NewsArticle
-import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
 import org.jetbrains.anko.bundleOf
 import kotlin.properties.Delegates
@@ -46,15 +45,7 @@ class NewsFragment : PagedContentFragment<NewsArticle>() {
 
         innerAdapter.clickSubject
                 .autoDispose(this)
-                .subscribe {
-                    TopicActivity.navigateTo(safeActivity, it.threadId, it.subject)
-
-//                    showPage(ProxerUrls.newsWeb(it.categoryId, it.threadId, Device.MOBILE))
-                }
-
-        innerAdapter.expansionSubject
-                .autoDispose(this)
-                .subscribe { setLikelyUrl(ProxerUrls.newsWeb(it.categoryId, it.threadId, Device.MOBILE)) }
+                .subscribe { TopicActivity.navigateTo(safeActivity, it.threadId, it.subject) }
 
         innerAdapter.imageClickSubject
                 .autoDispose(this)

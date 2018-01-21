@@ -34,7 +34,6 @@ class NewsAdapter(savedInstanceState: Bundle?) : BaseAdapter<NewsArticle, NewsAd
 
     var glide: GlideRequests? = null
     val clickSubject: PublishSubject<NewsArticle> = PublishSubject.create()
-    val expansionSubject: PublishSubject<NewsArticle> = PublishSubject.create()
     val imageClickSubject: PublishSubject<Pair<ImageView, NewsArticle>> = PublishSubject.create()
 
     private var layoutManager: LayoutManager? = null
@@ -99,14 +98,7 @@ class NewsAdapter(savedInstanceState: Bundle?) : BaseAdapter<NewsArticle, NewsAd
 
             expand.setOnClickListener {
                 withSafeAdapterPosition(this) {
-                    val id = data[it].id
-
-                    if (expansionMap.containsKey(id)) {
-                        expansionMap.remove(id)
-                    } else {
-                        expansionMap.put(id, true)
-                        expansionSubject.onNext(data[it])
-                    }
+                    expansionMap.putOrRemove(data[it].id)
 
                     handleExpansion(true)
                 }
