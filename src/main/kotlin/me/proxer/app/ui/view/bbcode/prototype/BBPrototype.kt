@@ -74,10 +74,11 @@ interface BBPrototype {
         if (currentTextViews.isNotEmpty()) {
             // Don't pad if this view does only consist of TextViews.
             val shouldPadStart = currentTextViews.size != childViews.size
+            val mergedView = mergeAndTrim(currentTextViews, shouldPadStart, false)
 
-            result.add(mergeAndTrim(currentTextViews, shouldPadStart, false))
-
-            currentTextViews.clear()
+            if (mergedView.text.isNotBlank()) {
+                result.add(mergedView)
+            }
         }
 
         return result
@@ -91,8 +92,7 @@ interface BBPrototype {
             currentText.append(currentTextView.text)
         }
 
-        currentText.trimStartSafely()
-        currentText.trimEndSafely()
+        currentText.trimStartSafely().trimEndSafely()
 
         if (padStart) currentText.insert(0, "\n")
         if (padEnd) currentText.append("\n")
