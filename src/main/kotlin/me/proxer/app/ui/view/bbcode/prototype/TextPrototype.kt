@@ -23,16 +23,16 @@ object TextPrototype : BBPrototype {
     override val endRegex = Regex("x^")
 
     override fun construct(code: String, parent: BBTree): BBTree {
-        return BBTree(this, parent, args = mapOf(TEXT_ARGUMENT to code))
+        return BBTree(this, parent, args = mutableMapOf(TEXT_ARGUMENT to code))
     }
 
     override fun makeViews(context: Context, children: List<BBTree>, args: Map<String, Any?>): List<View> {
-        val text = args[TEXT_ARGUMENT] as String
+        val text = args[TEXT_ARGUMENT] as CharSequence
 
         return listOf(makeView(context, text))
     }
 
-    fun makeView(context: Context, text: String): TextView {
+    fun makeView(context: Context, text: CharSequence): TextView {
         return GifAwareTextView(context).also {
             it.movementMethod = LinkMovementMethod.getInstance()
             it.text = SpannableStringBuilder(text)
@@ -40,5 +40,11 @@ object TextPrototype : BBPrototype {
             TextViewCompat.setTextAppearance(it, R.style.TextAppearance_AppCompat_Small)
             LinkifyCompat.addLinks(it, Linkify.WEB_URLS)
         }
+    }
+
+    fun getText(args: Map<String, Any?>) = args[TEXT_ARGUMENT] as CharSequence
+
+    fun updateText(newText: CharSequence, args: MutableMap<String, Any?>) {
+        args[TEXT_ARGUMENT] = newText
     }
 }

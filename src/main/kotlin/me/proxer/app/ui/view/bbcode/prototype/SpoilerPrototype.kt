@@ -21,7 +21,7 @@ object SpoilerPrototype : BBPrototype {
     override fun construct(code: String, parent: BBTree): BBTree {
         val title = BBUtils.cutAttribute(code, ATTRIBUTE_REGEX)
 
-        return BBTree(this, parent, args = mapOf(TITLE_ARGUMENT to title))
+        return BBTree(this, parent, args = mutableMapOf(TITLE_ARGUMENT to title))
     }
 
     override fun makeViews(context: Context, children: List<BBTree>, args: Map<String, Any?>): List<View> {

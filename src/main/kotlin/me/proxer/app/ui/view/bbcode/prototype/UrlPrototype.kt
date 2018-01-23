@@ -32,7 +32,7 @@ object UrlPrototype : BBPrototype {
         val url = BBUtils.cutAttribute(code, ATTRIBUTE_REGEX)?.trim() ?: ""
         val parsedUrl = Utils.safelyParseAndFixUrl(url) ?: INVALID_URL
 
-        return BBTree(this, parent, args = mapOf(URL_ARGUMENT to parsedUrl))
+        return BBTree(this, parent, args = mutableMapOf(URL_ARGUMENT to parsedUrl))
     }
 
     override fun makeViews(context: Context, children: List<BBTree>, args: Map<String, Any?>): List<View> {

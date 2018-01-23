@@ -37,7 +37,7 @@ object ImagePrototype : BBPrototype {
     override fun construct(code: String, parent: BBTree): BBTree {
         val width = BBUtils.cutAttribute(code, WIDTH_ATTRIBUTE_REGEX)?.toIntOrNull()
 
-        return BBTree(this, parent, args = mapOf(WIDTH_ARGUMENT to width))
+        return BBTree(this, parent, args = mutableMapOf(WIDTH_ARGUMENT to width))
     }
 
     override fun makeViews(context: Context, children: List<BBTree>, args: Map<String, Any?>): List<View> {

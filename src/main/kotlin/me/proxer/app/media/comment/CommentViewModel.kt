@@ -2,6 +2,7 @@ package me.proxer.app.media.comment
 
 import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
 import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.base.PagedViewModel
 import me.proxer.app.util.extension.buildSingle
@@ -29,6 +30,7 @@ class CommentViewModel(
                             .limit(itemsOnPage)
                             .buildSingle()
                 }
+                .observeOn(Schedulers.computation())
                 .map { it.map { it.toParsedComment() } }
 
     var sortCriteria by Delegates.observable(sortCriteria, { _, old, new ->

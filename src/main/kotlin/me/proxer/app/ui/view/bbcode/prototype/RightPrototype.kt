@@ -3,6 +3,7 @@ package me.proxer.app.ui.view.bbcode.prototype
 import android.content.Context
 import android.text.Layout.Alignment.ALIGN_OPPOSITE
 import android.text.Spannable.SPAN_INCLUSIVE_EXCLUSIVE
+import android.text.SpannableStringBuilder
 import android.text.style.AlignmentSpan
 import android.view.Gravity.END
 import android.view.View
@@ -17,7 +18,7 @@ import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
 /**
  * @author Ruben Gees
  */
-object RightPrototype : BBPrototype {
+object RightPrototype : ConditionalTextMutatorPrototype {
 
     override val startRegex = Regex(" *right( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *right *", REGEX_OPTIONS)
@@ -27,12 +28,16 @@ object RightPrototype : BBPrototype {
 
         return applyToViews(childViews) { view: View ->
             when (view) {
-                is TextView -> view.text = view.text.toSpannableStringBuilder().apply {
-                    setSpan(AlignmentSpan.Standard(ALIGN_OPPOSITE), 0, view.length(), SPAN_INCLUSIVE_EXCLUSIVE)
-                }
+                is TextView -> view.text = mutate(view.text.toSpannableStringBuilder(), args)
                 is LinearLayout -> view.gravity = END
                 else -> (view.layoutParams as? LayoutParams)?.gravity = END
             }
+        }
+    }
+
+    override fun mutate(text: SpannableStringBuilder, args: Map<String, Any?>): SpannableStringBuilder {
+        return text.apply {
+            setSpan(AlignmentSpan.Standard(ALIGN_OPPOSITE), 0, text.length, SPAN_INCLUSIVE_EXCLUSIVE)
         }
     }
 }

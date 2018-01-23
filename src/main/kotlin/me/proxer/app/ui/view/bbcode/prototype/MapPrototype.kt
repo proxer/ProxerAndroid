@@ -29,7 +29,7 @@ object MapPrototype : BBPrototype {
     override fun construct(code: String, parent: BBTree): BBTree {
         val zoom = BBUtils.cutAttribute(code, ZOOM_ATTRIBUTE_REGEX)?.toIntOrNull()
 
-        return BBTree(this, parent, args = mapOf(ZOOM_ARGUMENT to zoom))
+        return BBTree(this, parent, args = mutableMapOf(ZOOM_ARGUMENT to zoom))
     }
 
     override fun makeViews(context: Context, children: List<BBTree>, args: Map<String, Any?>): List<View> {

@@ -21,7 +21,7 @@ object UnorderedListPrototype : BBPrototype {
     override val endRegex = Regex("/ *ul *", BBPrototype.REGEX_OPTIONS)
 
     override fun makeViews(context: Context, children: List<BBTree>, args: Map<String, Any?>): List<View> {
-        val childViews = children.filter { it.prototype is ListItemPrototype }.flatMap { it.makeViews(context) }
+        val childViews = children.filter { it.prototype == ListItemPrototype }.flatMap { it.makeViews(context) }
 
         return listOf(LinearLayout(context).apply {
             val eightDip = dip(8)

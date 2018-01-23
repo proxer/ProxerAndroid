@@ -34,7 +34,7 @@ object SizePrototype : BBPrototype {
             else -> throw IllegalArgumentException("Unknown size: $value")
         }
 
-        return BBTree(this, parent, args = mapOf(SIZE_ARGUMENT to size))
+        return BBTree(this, parent, args = mutableMapOf(SIZE_ARGUMENT to size))
     }
 
     override fun makeViews(context: Context, children: List<BBTree>, args: Map<String, Any?>): List<View> {

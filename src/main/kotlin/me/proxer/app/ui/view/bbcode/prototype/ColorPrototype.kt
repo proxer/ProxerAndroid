@@ -1,21 +1,17 @@
 package me.proxer.app.ui.view.bbcode.prototype
 
-import android.content.Context
 import android.graphics.Color
 import android.text.Spannable.SPAN_INCLUSIVE_EXCLUSIVE
+import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
-import android.view.View
-import android.widget.TextView
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.BBUtils
-import me.proxer.app.ui.view.bbcode.applyToViews
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
-import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
 
 /**
  * @author Ruben Gees
  */
-object ColorPrototype : BBPrototype {
+object ColorPrototype : TextMutatorPrototype {
 
     private val ATTRIBUTE_REGEX = Regex("color *= *(.+?)( |$)", REGEX_OPTIONS)
     private const val COLOR_ARGUMENT = "color"
@@ -45,17 +41,14 @@ object ColorPrototype : BBPrototype {
                     ?: throw IllegalArgumentException("Unknown color: $value")
         }
 
-        return BBTree(this, parent, args = mapOf(COLOR_ARGUMENT to color))
+        return BBTree(this, parent, args = mutableMapOf(COLOR_ARGUMENT to color))
     }
 
-    override fun makeViews(context: Context, children: List<BBTree>, args: Map<String, Any?>): List<View> {
-        val childViews = children.flatMap { it.makeViews(context) }
+    override fun mutate(text: SpannableStringBuilder, args: Map<String, Any?>): SpannableStringBuilder {
         val color = args[COLOR_ARGUMENT] as Int
 
-        return applyToViews(childViews) { view: TextView ->
-            view.text = view.text.toSpannableStringBuilder().apply {
-                setSpan(ForegroundColorSpan(color), 0, view.length(), SPAN_INCLUSIVE_EXCLUSIVE)
-            }
+        return text.apply {
+            setSpan(ForegroundColorSpan(color), 0, text.length, SPAN_INCLUSIVE_EXCLUSIVE)
         }
     }
 }

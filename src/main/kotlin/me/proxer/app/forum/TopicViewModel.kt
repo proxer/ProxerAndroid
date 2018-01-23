@@ -26,7 +26,7 @@ class TopicViewModel(private val id: String) : PagedViewModel<ParsedPost>() {
                 .buildSingle()
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSuccess { metaData.value = it.toTopicMetaData() }
-                .observeOn(Schedulers.io())
+                .observeOn(Schedulers.computation())
                 .map { it.posts.map { it.toParsedPost() } }
 
     val metaData = MutableLiveData<TopicMetaData>()

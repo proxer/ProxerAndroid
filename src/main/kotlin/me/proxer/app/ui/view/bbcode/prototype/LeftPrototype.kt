@@ -3,6 +3,7 @@ package me.proxer.app.ui.view.bbcode.prototype
 import android.content.Context
 import android.text.Layout.Alignment.ALIGN_NORMAL
 import android.text.Spannable.SPAN_INCLUSIVE_EXCLUSIVE
+import android.text.SpannableStringBuilder
 import android.text.style.AlignmentSpan
 import android.view.Gravity.START
 import android.view.View
@@ -17,7 +18,7 @@ import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
 /**
  * @author Ruben Gees
  */
-object LeftPrototype : BBPrototype {
+object LeftPrototype : ConditionalTextMutatorPrototype {
 
     override val startRegex = Regex(" *left( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *left *", REGEX_OPTIONS)
@@ -27,12 +28,16 @@ object LeftPrototype : BBPrototype {
 
         return applyToViews(childViews) { view: View ->
             when (view) {
-                is TextView -> view.text = view.text.toSpannableStringBuilder().apply {
-                    setSpan(AlignmentSpan.Standard(ALIGN_NORMAL), 0, view.length(), SPAN_INCLUSIVE_EXCLUSIVE)
-                }
+                is TextView -> view.text = mutate(view.text.toSpannableStringBuilder(), args)
                 is LinearLayout -> view.gravity = START
                 else -> (view.layoutParams as? LayoutParams)?.gravity = START
             }
+        }
+    }
+
+    override fun mutate(text: SpannableStringBuilder, args: Map<String, Any?>): SpannableStringBuilder {
+        return text.apply {
+            setSpan(AlignmentSpan.Standard(ALIGN_NORMAL), 0, text.length, SPAN_INCLUSIVE_EXCLUSIVE)
         }
     }
 }

@@ -30,7 +30,7 @@ object VideoPrototype : BBPrototype {
     override fun construct(code: String, parent: BBTree): BBTree {
         val type = BBUtils.cutAttribute(code, ATTRIBUTE_REGEX)
 
-        return BBTree(this, parent, args = mapOf(TYPE_ARGUMENT to type))
+        return BBTree(this, parent, args = mutableMapOf(TYPE_ARGUMENT to type))
     }
 
     override fun makeViews(context: Context, children: List<BBTree>, args: Map<String, Any?>): List<View> {
