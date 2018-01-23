@@ -1,23 +1,18 @@
 package me.proxer.app.ui.view.bbcode.prototype
 
-import android.content.Context
 import android.text.Spannable.SPAN_INCLUSIVE_EXCLUSIVE
-import android.text.style.ClickableSpan
-import android.view.View
-import android.widget.TextView
-import me.proxer.app.base.BaseActivity
+import android.text.SpannableStringBuilder
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.BBUtils
-import me.proxer.app.ui.view.bbcode.applyToViews
+import me.proxer.app.ui.view.bbcode.UrlClickableSpan
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
-import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
 import me.proxer.app.util.Utils
 import okhttp3.HttpUrl
 
 /**
  * @author Ruben Gees
  */
-object UrlPrototype : BBPrototype {
+object UrlPrototype : TextMutatorPrototype {
 
     private val ATTRIBUTE_REGEX = Regex("url *= *(.+?)( |$)", REGEX_OPTIONS)
     private const val URL_ARGUMENT = "url"
@@ -35,20 +30,11 @@ object UrlPrototype : BBPrototype {
         return BBTree(this, parent, args = mutableMapOf(URL_ARGUMENT to parsedUrl))
     }
 
-    override fun makeViews(context: Context, children: List<BBTree>, args: Map<String, Any?>): List<View> {
-        val childViews = children.flatMap { it.makeViews(context) }
+    override fun mutate(text: SpannableStringBuilder, args: Map<String, Any?>): SpannableStringBuilder {
         val url = args[URL_ARGUMENT] as HttpUrl
 
-        return applyToViews(childViews, { view: TextView ->
-            val clickableSpan = object : ClickableSpan() {
-                override fun onClick(widget: View?) {
-                    (context as? BaseActivity)?.showPage(url)
-                }
-            }
-
-            view.text = view.text.toSpannableStringBuilder().apply {
-                setSpan(clickableSpan, 0, view.length(), SPAN_INCLUSIVE_EXCLUSIVE)
-            }
-        })
+        return text.apply {
+            setSpan(UrlClickableSpan(url), 0, length, SPAN_INCLUSIVE_EXCLUSIVE)
+        }
     }
 }

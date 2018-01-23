@@ -14,9 +14,7 @@ object BoldPrototype : TextMutatorPrototype {
     override val startRegex = Regex(" *b( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *b *", REGEX_OPTIONS)
 
-    override fun mutate(text: SpannableStringBuilder, args: Map<String, Any?>): SpannableStringBuilder {
-        return text.apply {
-            setSpan(StyleSpan(BOLD), 0, text.length, SPAN_INCLUSIVE_EXCLUSIVE)
-        }
+    override fun mutate(text: SpannableStringBuilder, args: Map<String, Any?>) = text.apply {
+        setSpan(StyleSpan(BOLD), 0, length, SPAN_INCLUSIVE_EXCLUSIVE)
     }
 }

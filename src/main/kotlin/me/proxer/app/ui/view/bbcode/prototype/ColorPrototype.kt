@@ -48,7 +48,7 @@ object ColorPrototype : TextMutatorPrototype {
         val color = args[COLOR_ARGUMENT] as Int
 
         return text.apply {
-            setSpan(ForegroundColorSpan(color), 0, text.length, SPAN_INCLUSIVE_EXCLUSIVE)
+            setSpan(ForegroundColorSpan(color), 0, length, SPAN_INCLUSIVE_EXCLUSIVE)
         }
     }
 }

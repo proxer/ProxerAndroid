@@ -14,9 +14,7 @@ object ItalicPrototype : TextMutatorPrototype {
     override val startRegex = Regex(" *i( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *i *", REGEX_OPTIONS)
 
-    override fun mutate(text: SpannableStringBuilder, args: Map<String, Any?>): SpannableStringBuilder {
-        return text.apply {
-            setSpan(StyleSpan(ITALIC), 0, text.length, SPAN_INCLUSIVE_EXCLUSIVE)
-        }
+    override fun mutate(text: SpannableStringBuilder, args: Map<String, Any?>) = text.apply {
+        setSpan(StyleSpan(ITALIC), 0, length, SPAN_INCLUSIVE_EXCLUSIVE)
     }
 }

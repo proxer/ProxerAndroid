@@ -13,9 +13,7 @@ object UnderlinePrototype : TextMutatorPrototype {
     override val startRegex = Regex(" *u( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *u *", REGEX_OPTIONS)
 
-    override fun mutate(text: SpannableStringBuilder, args: Map<String, Any?>): SpannableStringBuilder {
-        return text.apply {
-            setSpan(UnderlineSpan(), 0, text.length, SPAN_INCLUSIVE_EXCLUSIVE)
-        }
+    override fun mutate(text: SpannableStringBuilder, args: Map<String, Any?>) = text.apply {
+        setSpan(UnderlineSpan(), 0, length, SPAN_INCLUSIVE_EXCLUSIVE)
     }
 }

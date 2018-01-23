@@ -41,7 +41,7 @@ class BBTree(
         if (prototype is TextMutatorPrototype) {
             val recursiveChildren = getRecursiveChildren(children)
 
-            canOptimize = prototype is ConditionalTextMutatorPrototype && prototype.canOptimize(recursiveChildren)
+            canOptimize = prototype !is ConditionalTextMutatorPrototype || prototype.canOptimize(recursiveChildren)
 
             if (canOptimize) {
                 recursiveChildren.forEach {

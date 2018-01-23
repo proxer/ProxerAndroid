@@ -13,9 +13,7 @@ object StrikethroughPrototype : TextMutatorPrototype {
     override val startRegex = Regex(" *(s|strike)( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *(s|strike) *", REGEX_OPTIONS)
 
-    override fun mutate(text: SpannableStringBuilder, args: Map<String, Any?>): SpannableStringBuilder {
-        return text.apply {
-            setSpan(StrikethroughSpan(), 0, text.length, SPAN_INCLUSIVE_EXCLUSIVE)
-        }
+    override fun mutate(text: SpannableStringBuilder, args: Map<String, Any?>) = text.apply {
+        setSpan(StrikethroughSpan(), 0, length, SPAN_INCLUSIVE_EXCLUSIVE)
     }
 }
