@@ -17,6 +17,7 @@ import me.proxer.app.util.extension.clipboardManager
 import me.proxer.app.util.extension.toAppDrawable
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.info.TranslatorGroup
+import me.proxer.library.enums.Country
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.toast
 
@@ -45,6 +46,7 @@ class TranslatorGroupInfoFragment : BaseContentFragment<TranslatorGroup>() {
             hostingActivity.name = value
         }
 
+    private val languageRow: ViewGroup by bindView(R.id.languageRow)
     private val language: ImageView by bindView(R.id.language)
     private val linkRow: ViewGroup by bindView(R.id.linkRow)
     private val link: TextView by bindView(R.id.link)
@@ -65,7 +67,13 @@ class TranslatorGroupInfoFragment : BaseContentFragment<TranslatorGroup>() {
         super.showData(data)
 
         name = data.name
-        language.setImageDrawable(data.country.toAppDrawable(safeContext))
+
+        if (data.country == Country.NONE) {
+            languageRow.visibility = View.GONE
+        } else {
+            languageRow.visibility = View.VISIBLE
+            language.setImageDrawable(data.country.toAppDrawable(safeContext))
+        }
 
         if (data.link?.toString().isNullOrBlank()) {
             linkRow.visibility = View.GONE

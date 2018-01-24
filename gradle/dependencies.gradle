@@ -23,8 +23,8 @@ ext {
             supportPreference                : "com.android.support:preference-v7:$supportLibraryVersion",
             supportPreferenceFix             : "net.xpece.android:support-preference:$supportPreferenceVersion",
             supportPreferenceFixSpinner      : "net.xpece.android:support-spinner:$supportPreferenceVersion",
-            architectureLifecycle            : "android.arch.lifecycle:extensions:$architectureComponentsVersion",
-            room                             : "android.arch.persistence.room:runtime:$architectureComponentsVersion",
+            architectureLifecycle            : "android.arch.lifecycle:extensions:$lifecycleVersion",
+            room                             : "android.arch.persistence.room:runtime:$roomVersion",
             androidJob                       : "com.evernote:android-job:$androidJobVersion",
             proxerLib                        : "com.github.proxer:ProxerLibJava:$proxerLibVersion",
 
@@ -90,7 +90,7 @@ ext {
     ]
 
     kaptDependencies = [
-            roomCompiler  : "android.arch.persistence.room:compiler:$architectureComponentsVersion",
+            roomCompiler  : "android.arch.persistence.room:compiler:$roomVersion",
             glideCompiler : "com.github.bumptech.glide:compiler:$glideVersion",
             alfredCompiler: "com.hadisatrio.Alfred:compiler:$alfredVersion",
     ]

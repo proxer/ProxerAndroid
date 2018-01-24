@@ -12,11 +12,11 @@ ext {
     javaVersion = JavaVersion.VERSION_1_8
 
     // Gradle
-    gradleVersion = '4.5-rc-1'
+    gradleVersion = '4.5-rc-2'
 
     // Core plugins
-    androidPluginVersion = '3.1.0-alpha08'
-    kotlinVersion = '1.2.20'
+    androidPluginVersion = '3.1.0-alpha09'
+    kotlinVersion = '1.2.21'
 
     // Utility plugins
     detektPluginVersion = '1.0.0.RC6-2'
@@ -28,12 +28,13 @@ ext {
     ankoVersion = '0.10.4'
     supportLibraryVersion = '27.0.2'
     supportPreferenceVersion = '1.3.2'
-    architectureComponentsVersion = '1.0.0'
+    lifecycleVersion = '1.1.0'
+    roomVersion = '1.1.0-alpha1'
     androidJobVersion = '1.2.2'
-    proxerLibVersion = 'da2c9cc6c2'
+    proxerLibVersion = '0afc3f5fbe'
 
     // RxJava
-    rxJavaVersion = '2.1.8'
+    rxJavaVersion = '2.1.9'
     rxKotlinVersion = '2.2.0'
     rxAndroidVersion = '2.0.1'
     rxBindingVersion = '2.0.0'
@@ -52,7 +53,7 @@ ext {
     tabLayoutHelperVersion = '0.9.0'
     materialDialogsVersion = '0.9.6.0'
     flexboxVersion = '0.3.2'
-    emojiIosVersion = 'd4f5344e63'
+    emojiIosVersion = 'de427477d4'
     exomediaVersion = '4.1.0'
     exoplayerVersion = '2.6.1'
     materialProgressBarVersion = '1.4.2'

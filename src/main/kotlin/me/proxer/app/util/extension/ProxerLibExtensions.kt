@@ -122,7 +122,7 @@ fun Country.toAppDrawable(context: Context) = AppCompatResources.getDrawable(con
     Country.JAPAN -> R.drawable.ic_japan
     Country.KOREA -> R.drawable.ic_korea
     Country.CHINA -> R.drawable.ic_china
-    Country.OTHER -> R.drawable.ic_united_nations
+    Country.OTHER, Country.NONE -> R.drawable.ic_united_nations
 }) ?: throw IllegalStateException("Could not resolve Drawable for country: $this")
 
 fun Medium.toCategory() = when (this) {

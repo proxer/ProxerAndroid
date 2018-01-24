@@ -17,6 +17,7 @@ import me.proxer.app.util.extension.clipboardManager
 import me.proxer.app.util.extension.toAppDrawable
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.info.Industry
+import me.proxer.library.enums.Country
 import me.proxer.library.util.ProxerUtils
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.toast
@@ -46,6 +47,7 @@ class IndustryInfoFragment : BaseContentFragment<Industry>() {
             hostingActivity.name = value
         }
 
+    private val languageRow: ViewGroup by bindView(R.id.languageRow)
     private val language: ImageView by bindView(R.id.language)
     private val type: TextView by bindView(R.id.type)
     private val linkRow: ViewGroup by bindView(R.id.linkRow)
@@ -67,12 +69,18 @@ class IndustryInfoFragment : BaseContentFragment<Industry>() {
         super.showData(data)
 
         name = data.name
-        language.setImageDrawable(data.country.toAppDrawable(safeContext))
         type.text = ProxerUtils.getApiEnumName(data.type)
                 ?.replace("_", " ")
                 ?.split(" ")
                 ?.joinToString(separator = " ", transform = String::capitalize)
                 ?: throw IllegalArgumentException("Unknown Industry type: ${data.type}")
+
+        if (data.country == Country.NONE) {
+            languageRow.visibility = View.GONE
+        } else {
+            languageRow.visibility = View.VISIBLE
+            language.setImageDrawable(data.country.toAppDrawable(safeContext))
+        }
 
         if (data.link?.toString().isNullOrBlank()) {
             linkRow.visibility = View.GONE
