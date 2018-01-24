@@ -56,12 +56,14 @@
         Zwei-Faktor-Authentifizierung ein!</string>
     <string name="error_already_in_list">Es gibt bereits einen Eintrag in deiner Liste</string>
     <string name="error_list_full">Deine Liste ist voll</string>
-    <string name="error_list_top_access_reset">Die Top-Zugriffe wurden zurückgesetzt. Sie sind innerhalb der nächsten
-        Zeit wieder verfügbar
+    <string name="error_list_top_access_reset">Die Zugriffe wurden kürzlich zurückgesetzt.
+        Es dauert ein paar Tage bis die Liste wieder verfügbar ist
     </string>
     <string name="error_insufficient_permissions">Diese Information wurde vom Benutzer nicht freigegeben, eventuell
-        musst du dich anmelden</string>
-    <string name="error_insufficient_permissions_logged_in">Diese Information wurde vom Benutzer nicht freigegeben</string>
+        musst du dich anmelden
+    </string>
+    <string name="error_insufficient_permissions_logged_in">Diese Information wurde vom Benutzer nicht freigegeben
+    </string>
     <string name="error_invalid_chapter">Dieses Kapitel wurde noch nicht hochgeladen :/</string>
     <string name="error_invalid_episode">Diese Episode wurde noch nicht hochgeladen :/</string>
     <string name="error_invalid_input">Ungültige Eingabe</string>
@@ -248,7 +250,8 @@
     <string name="dialog_app_required_content">Zum Verwenden dieses Streams ist die %s-App nötig</string>
     <string name="dialog_app_required_positive">Installieren</string>
 
-    <string name="dialog_clean_manga_content">Sollen alle offline verfügbaren Kapitel und Seiten gelöscht werden?</string>
+    <string name="dialog_clean_manga_content">Sollen alle offline verfügbaren Kapitel und Seiten gelöscht werden?
+    </string>
     <string name="dialog_clean_manga_positive">Alles löschen</string>
 
     <string name="dialog_notification_deletion_confirmation_content">Sollen alle Benachrichtigungen gelöscht werden?
@@ -439,10 +442,17 @@
         <item quantity="other">%d Benachrichtigungen</item>
     </plurals>
 
-    <string name="notification_manga_download_progress_title">Manga Offlineverfügbarkeit</string>
-    <string name="notification_manga_download_finished_content">Vorgang abgeschlossen</string>
+    <string name="notification_manga_download_finished_title">Vorgang abgeschlossen</string>
     <string name="notification_manga_download_error_title">Fehler beim Manga Download</string>
     <string name="notification_manga_download_cancel_action">Abbrechen</string>
+    <plurals name="notification_manga_download_finished_content">
+        <item quantity="one">Ein Kapitel wurde offline verfügbar gemacht</item>
+        <item quantity="other">%d Kapitel wurden offline verfügbar gemacht</item>
+    </plurals>
+    <plurals name="notification_manga_download_progress_title">
+        <item quantity="one">Ein Kapitel wird offline verfügbar gemacht…</item>
+        <item quantity="other">%d Kapitel werden offline verfügbar gemacht…</item>
+    </plurals>
 
     <string name="category_anime_episodes_title">Episoden</string>
     <string name="category_manga_episodes_title">Kapitel</string>

@@ -2,6 +2,9 @@ package me.proxer.app.manga.local
 
 import android.content.Context
 import com.evernote.android.job.Job
+import com.evernote.android.job.Job.Result.FAILURE
+import com.evernote.android.job.Job.Result.RESCHEDULE
+import com.evernote.android.job.Job.Result.SUCCESS
 import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
 import com.evernote.android.job.JobRequest.NetworkType
@@ -55,8 +58,10 @@ class LocalMangaJob : Job() {
                 putString(LANGUAGE_EXTRA, ProxerUtils.getApiEnumName(language))
             }
 
-            maxBatchProgress += 100F
-            LocalMangaNotifications.showOrUpdate(context, maxBatchProgress, batchProgress)
+            maxBatchProgress += 100.0
+
+            LocalMangaNotifications.showOrUpdate(context, maxBatchProgress, batchProgress,
+                    countCurrentJobsForNotification())
 
             JobRequest.Builder(constructTag(entryId, episode, language))
                     .setExtras(extras)
@@ -100,6 +105,12 @@ class LocalMangaJob : Job() {
         private fun constructTag(entryId: String, episode: Int, language: Language): String {
             return "${TAG}_${entryId}_${episode}_${ProxerUtils.getApiEnumName(language)}"
         }
+
+        private fun countCurrentJobsForNotification(): Int {
+            val currentJobs = countRunningJobs() + countScheduledJobs()
+
+            return if (currentJobs == 0) 1 else currentJobs
+        }
     }
 
     val entryId: String
@@ -112,56 +123,77 @@ class LocalMangaJob : Job() {
         get() = ProxerUtils.toApiEnum(Language::class.java, params.extras.getString(LANGUAGE_EXTRA, "en"))
                 ?: throw IllegalArgumentException("No extras passed")
 
-    @Suppress("ReturnCount")
     override fun onRunJob(params: Params): Result {
-        return try {
-            if (!StorageHelper.isLoggedIn) return Result.FAILURE
+        val result = try {
+            val checkResult = checkAndUpdateState()
 
-            synchronized(lock, {
-                when {
-                    LocalDateTime.now().isAfter(lastTime.plusSeconds(40)) -> {
-                        lastTime = LocalDateTime.now()
-                        ongoing = 1
-                    }
-                    ongoing <= 6 -> ongoing++
-                    else -> return Result.RESCHEDULE
-                }
-            })
+            if (checkResult != SUCCESS) {
+                checkResult
+            } else {
+                bus.post(StartedEvent())
 
-            bus.post(StartedEvent())
+                loadChapterAndPages()
 
-            loadChapterAndPages()
+                bus.post(FinishedEvent(entryId, episode, language))
 
-            bus.post(FinishedEvent(entryId, episode, language))
-
-            Result.SUCCESS
+                SUCCESS
+            }
         } catch (error: Throwable) {
-            when {
-                ErrorUtils.isIpBlockedError(error) || params.failureCount >= 1 -> {
-                    cancelAll()
-
-                    bus.post(FailedEvent(entryId, episode, language))
-
-                    LocalMangaNotifications.cancel(context)
-                    LocalMangaNotifications.showError(context, error)
-
-                    Result.FAILURE
-                }
-                isCanceled -> {
-                    bus.post(FailedEvent(entryId, episode, language))
-
-                    LocalMangaNotifications.cancel(context)
-
-                    Result.FAILURE
-                }
-                else -> Result.RESCHEDULE
-            }
-        } finally {
-            if (countRunningJobs() + countScheduledJobs() <= 1) {
-                maxBatchProgress = 0.0
-                batchProgress = 0.0
-            }
+            handleError(error, params)
         }
+
+        val jobAmount = countRunningJobs() + countScheduledJobs()
+
+        if (result == SUCCESS) {
+            LocalMangaNotifications.showOrUpdate(context, maxBatchProgress, batchProgress, jobAmount - 1)
+        }
+
+        if (result != RESCHEDULE && jobAmount <= 1) {
+            maxBatchProgress = 0.0
+            batchProgress = 0.0
+        }
+
+        return result
+    }
+
+    private fun checkAndUpdateState() = when {
+        !StorageHelper.isLoggedIn -> FAILURE
+        else -> synchronized(lock, {
+            when {
+                LocalDateTime.now().isAfter(lastTime.plusSeconds(40)) -> {
+                    lastTime = LocalDateTime.now()
+                    ongoing = 1
+
+                    SUCCESS
+                }
+                ongoing <= 6 -> {
+                    ongoing++
+
+                    SUCCESS
+                }
+                else -> RESCHEDULE
+            }
+        })
+    }
+
+    private fun handleError(error: Throwable, params: Params) = when {
+        ErrorUtils.isIpBlockedError(error) || params.failureCount >= 1 -> {
+            cancelAll()
+
+            bus.post(FailedEvent(entryId, episode, language))
+
+            LocalMangaNotifications.showError(context, error)
+
+            FAILURE
+        }
+        isCanceled -> {
+            bus.post(FailedEvent(entryId, episode, language))
+
+            LocalMangaNotifications.cancel(context)
+
+            FAILURE
+        }
+        else -> RESCHEDULE
     }
 
     private fun loadChapterAndPages() {
@@ -181,8 +213,10 @@ class LocalMangaJob : Job() {
             error?.let { throw it }
             if (isCanceled) throw CancellationException()
 
-            batchProgress += 100F / pages.size
-            LocalMangaNotifications.showOrUpdate(context, maxBatchProgress, batchProgress)
+            batchProgress += 100.0 / pages.size
+
+            LocalMangaNotifications.showOrUpdate(context, maxBatchProgress, batchProgress,
+                    countCurrentJobsForNotification())
         }
 
         MangaLocks.cacheLock.write {
