@@ -5,10 +5,12 @@ import android.content.Context
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.AppCompatImageView
 import android.view.View
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.ImageView
+import android.widget.LinearLayout.LayoutParams
+import android.widget.LinearLayout.LayoutParams.MATCH_PARENT
 import android.widget.TextView
 import com.bumptech.glide.load.DecodeFormat
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.target.Target.SIZE_ORIGINAL
 import me.proxer.app.GlideRequests
 import me.proxer.app.ui.ImageDetailActivity
@@ -19,6 +21,7 @@ import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTION
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.Utils
 import okhttp3.HttpUrl
+import org.jetbrains.anko.dip
 
 /**
  * @author Ruben Gees
@@ -47,14 +50,15 @@ object ImagePrototype : BBPrototype {
         val parsedUrl = Utils.safelyParseAndFixUrl(url) ?: INVALID_IMAGE
 
         val glide = args[GLIDE_ARGUMENT] as GlideRequests?
-        val width = if (parsedUrl == INVALID_IMAGE) 200 else args[WIDTH_ARGUMENT] as Int?
+        val width = if (parsedUrl == INVALID_IMAGE) context.dip(100) else args[WIDTH_ARGUMENT] as Int?
 
         return listOf(AppCompatImageView(context).also { it: ImageView ->
             ViewCompat.setTransitionName(it, "bb_image_$parsedUrl")
 
+            it.layoutParams = LayoutParams(MATCH_PARENT, WRAP_CONTENT)
+
             glide?.load(parsedUrl.toString())
-                    ?.apply { if (width != null) override(width, SIZE_ORIGINAL) }
-                    ?.transition(DrawableTransitionOptions.withCrossFade())
+                    ?.apply { if (width != null) override(width, SIZE_ORIGINAL) else override(SIZE_ORIGINAL) }
                     ?.format(when (DeviceUtils.shouldShowHighQualityImages(context)) {
                         true -> DecodeFormat.PREFER_ARGB_8888
                         false -> DecodeFormat.PREFER_RGB_565
