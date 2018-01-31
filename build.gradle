@@ -59,14 +59,17 @@ android {
     }
 
     buildTypes {
+        boolean shouldSign = shouldSign() && !isCI()
+
+        if (!shouldSign) {
+            logger.warn('This build will not be signed because it is missing the keystore info. Please add ' +
+                    'values for "RELEASE_STORE_FILE", "RELEASE_STORE_PASSWORD", "RELEASE_KEY_ALIAS" and ' +
+                    '"RELEASE_KEY_PASSWORD" to your secrets.properties file if you want the apk to be signed.')
+        }
+
         debug {
-            postprocessing {
-                removeUnusedCode true
-                removeUnusedResources false
-                obfuscate false
-                optimizeCode false
-                proguardFiles 'config/proguard/proguard-rules.pro', 'config/proguard/proguard-rules-debug.pro'
-            }
+            multiDexEnabled true
+            multiDexKeepProguard file('config/multidex/multidex-config.pro')
 
             archivesBaseName = "app-${defaultConfig.versionName}"
             buildConfigField 'String', 'PROXER_API_KEY', "\"${getFromSecrets('PROXER_API_KEY')}\""
@@ -79,19 +82,15 @@ android {
                 removeUnusedResources true
                 obfuscate true
                 optimizeCode true
-                proguardFile 'config/proguard/proguard-rules.pro'
+                proguardFile file('config/proguard/proguard-rules.pro')
             }
 
             archivesBaseName = "app-${defaultConfig.versionName}"
             buildConfigField 'String', 'PROXER_API_KEY', "\"${getFromSecrets('PROXER_API_KEY')}\""
             buildConfigField 'boolean', 'STORE', "false"
 
-            if (shouldSign() && !isCI()) {
+            if (shouldSign) {
                 signingConfig signingConfigs.release
-            } else {
-                logger.warn('This build will not be signed because it is missing the keystore info. Please add ' +
-                        'values for "RELEASE_STORE_FILE", "RELEASE_STORE_PASSWORD", "RELEASE_KEY_ALIAS" and ' +
-                        '"RELEASE_KEY_PASSWORD" to your secrets.properties file if you want the apk to be signed.')
             }
         }
 
@@ -101,19 +100,15 @@ android {
                 removeUnusedResources true
                 obfuscate true
                 optimizeCode true
-                proguardFile 'config/proguard/proguard-rules.pro'
+                proguardFile file('config/proguard/proguard-rules.pro')
             }
 
             archivesBaseName = "app-${defaultConfig.versionName}"
             buildConfigField 'String', 'PROXER_API_KEY', "\"${getFromSecrets('PROXER_API_KEY')}\""
             buildConfigField 'boolean', 'STORE', "true"
 
-            if (shouldSign() && !isCI()) {
+            if (shouldSign) {
                 signingConfig signingConfigs.release
-            } else {
-                logger.warn('This build will not be signed because it is missing the keystore info. Please add ' +
-                        'values for "RELEASE_STORE_FILE", "RELEASE_STORE_PASSWORD", "RELEASE_KEY_ALIAS" and ' +
-                        '"RELEASE_KEY_PASSWORD" to your secrets.properties file if you want the apk to be signed.')
             }
         }
     }
@@ -204,6 +199,10 @@ task ktlintCheck(type: Exec) {
 
 task wrapper(type: Wrapper) {
     gradleVersion project.ext.gradleVersion
+}
+
+kapt {
+    useBuildCache = true
 }
 
 detekt {

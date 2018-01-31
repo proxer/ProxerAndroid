@@ -265,7 +265,7 @@ class MaterialDrawerWrapper(
 
     private fun onDrawerItemClick(item: IDrawerItem<*, *>) = DrawerItem.fromOrDefault(item.identifier).let {
         if (it in getStickyItemIds()) {
-            miniDrawer?.adapter?.deselect()
+            miniDrawer?.setSelection(-1)
 
             if (!it.shouldKeepOpen) crossfader?.crossFade()
         }

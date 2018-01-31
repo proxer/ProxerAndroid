@@ -5,6 +5,7 @@ import android.arch.persistence.room.Room
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.support.multidex.MultiDex
 import android.support.v7.app.AppCompatDelegate
 import android.util.Log
 import android.widget.ImageView
@@ -128,6 +129,14 @@ class MainApplication : Application() {
         initApi()
         initLibs()
         enableStrictModeForDebug()
+    }
+
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(base)
+
+        if (BuildConfig.DEBUG) {
+            MultiDex.install(this)
+        }
     }
 
     private fun initBus() {

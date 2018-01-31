@@ -20,8 +20,9 @@
 
 # Remove all kinds of logging.
 -assumenosideeffects class android.util.Log {
-    public static int d(...);
+    public static boolean isLoggable(java.lang.String, int);
     public static int v(...);
+    public static int d(...);
     public static int i(...);
     public static int w(...);
     public static int e(...);
@@ -40,6 +41,9 @@
 -keep class * implements android.arch.lifecycle.GeneratedAdapter {
     <init>(...);
 }
+
+# RxBinding (Remove when consumer proguard file comes in an Update).
+-dontwarn com.google.auto.value.AutoValue
 
 # Glide
 -keep public class * extends com.bumptech.glide.module.AppGlideModule

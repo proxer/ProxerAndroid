@@ -11,6 +11,7 @@ ext {
     implementationDependencies = [
             kotlinStdlib                     : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion",
             anko                             : "org.jetbrains.anko:anko-commons:$ankoVersion",
+            multidex                         : "com.android.support:multidex:$multidexVersion",
             supportAppCompat                 : "com.android.support:appcompat-v7:$supportLibraryVersion",
             supportV13                       : "com.android.support:support-v13:$supportLibraryVersion",
             supportRecyclerView              : "com.android.support:recyclerview-v7:$supportLibraryVersion",
@@ -101,7 +102,7 @@ ext {
     ]
 
     excludingImplementationDependencies = [
-            hawk    : [
+            hawk: [
                     dependency: "com.orhanobut:hawk:$hawkVersion",
                     exclusions: ['gson'],
             ],
