@@ -23,6 +23,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.target.Target
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
+import me.proxer.app.BuildConfig
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.ui.WebViewActivity
@@ -117,7 +118,9 @@ inline fun <reified T : Enum<T>> Bundle.getEnumSet(key: String, klass: Class<T>)
 }
 
 fun CustomTabsHelperFragment.openHttpPage(activity: Activity, url: HttpUrl) {
-    when (Utils.getNativeAppPackage(activity, url).isEmpty()) {
+    val nativePackages = Utils.getNativeAppPackage(activity, url)
+
+    when (nativePackages.isEmpty()) {
         true -> CustomTabsIntent.Builder(session)
                 .setToolbarColor(ContextCompat.getColor(activity, R.color.colorPrimary))
                 .setSecondaryToolbarColor(ContextCompat.getColor(activity, R.color.colorPrimaryDark))
@@ -130,7 +133,11 @@ fun CustomTabsHelperFragment.openHttpPage(activity: Activity, url: HttpUrl) {
                         WebViewActivity.navigateTo(context, uri.toString())
                     })
                 }
-        false -> activity.startActivity(Intent(Intent.ACTION_VIEW).setData(url.androidUri()))
+        false -> when (nativePackages.contains(BuildConfig.APPLICATION_ID)) {
+            true -> activity.startActivity(Intent(Intent.ACTION_VIEW, url.androidUri())
+                    .setPackage(BuildConfig.APPLICATION_ID))
+            false -> activity.startActivity(Intent(Intent.ACTION_VIEW, url.androidUri()))
+        }
     }
 }
 
