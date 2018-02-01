@@ -1,3 +1,4 @@
+-optimizations !field/*,!class/merging/*,*
 -optimizationpasses 10
 
 -renamesourcefileattribute SourceFile
@@ -12,6 +13,10 @@
 -keepclassmembers class * {
     @android.webkit.JavascriptInterface <methods>;
 }
+
+# Supress warnings about Java 8 features.
+-dontwarn java.lang.invoke.*
+-dontwarn **$$Lambda$*
 
 # Suppress warnings about duplicate classes.
 -dontnote android.net.http.*
