@@ -18,7 +18,7 @@ abstract class PagedViewModel<T> : BaseViewModel<List<T>>() {
     protected var isRefreshing = false
 
     protected var page = 0
-        get () = if (isRefreshing) 0 else field
+        get() = if (isRefreshing) 0 else field
 
     protected abstract val itemsOnPage: Int
 
