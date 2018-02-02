@@ -82,7 +82,7 @@ android {
                 removeUnusedResources true
                 obfuscate true
                 optimizeCode true
-                proguardFile file('config/proguard/proguard-rules.pro')
+                getProguardFiles().add(0, file('config/proguard/proguard-rules.pro'))
             }
 
             archivesBaseName = "app-${defaultConfig.versionName}"
@@ -100,7 +100,7 @@ android {
                 removeUnusedResources true
                 obfuscate true
                 optimizeCode true
-                proguardFile file('config/proguard/proguard-rules.pro')
+                getProguardFiles().add(0, file('config/proguard/proguard-rules.pro'))
             }
 
             archivesBaseName = "app-${defaultConfig.versionName}"
