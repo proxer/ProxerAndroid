@@ -15,7 +15,10 @@ abstract class PagedViewModel<T> : BaseViewModel<List<T>>() {
     val refreshError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
 
     protected open var hasReachedEnd = false
+    protected var isRefreshing = false
+
     protected var page = 0
+        get () = if (isRefreshing) 0 else field
 
     protected abstract val itemsOnPage: Int
 
@@ -27,13 +30,14 @@ abstract class PagedViewModel<T> : BaseViewModel<List<T>>() {
                 .doAfterSuccess { newData -> hasReachedEnd = newData.size < itemsOnPage }
                 .map { newData -> mergeNewDataWithExistingData(newData, currentPage) }
                 .subscribeOn(Schedulers.io())
+                .doAfterTerminate { if (!isRefreshing) page++ }
+                .doAfterTerminate { isRefreshing = false }
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
                     refreshError.value = null
                     error.value = null
                     isLoading.value = true
                 }
-                .doAfterTerminate { page = data.value?.size?.div(itemsOnPage) ?: 0 }
                 .doAfterTerminate { isLoading.value = false }
                 .subscribeAndLogErrors({
                     refreshError.value = null
@@ -55,7 +59,7 @@ abstract class PagedViewModel<T> : BaseViewModel<List<T>>() {
     }
 
     override fun refresh() {
-        page = 0
+        isRefreshing = true
 
         load()
     }
@@ -63,6 +67,7 @@ abstract class PagedViewModel<T> : BaseViewModel<List<T>>() {
     override fun reload() {
         refreshError.value = null
         hasReachedEnd = false
+        isRefreshing = false
         page = 0
 
         super.reload()
