@@ -6,7 +6,7 @@ import android.content.Context
 import android.content.Intent
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
-import me.proxer.app.MainApplication
+import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import java.util.Date
@@ -30,7 +30,7 @@ class NewsNotificationReadReceiver : BroadcastReceiver() {
 
                     StorageHelper.lastNewsDate = Date()
 
-                    MainApplication.api.notifications().news()
+                    api.notifications().news()
                             .markAsRead(true)
                             .limit(0)
                             .build()

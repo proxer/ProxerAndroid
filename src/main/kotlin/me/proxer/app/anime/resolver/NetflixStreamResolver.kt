@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import io.reactivex.Single
 import me.proxer.app.MainApplication
+import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.exception.AppRequiredException
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.buildSingle
@@ -25,6 +26,6 @@ class NetflixStreamResolver : StreamResolver {
                     throw AppRequiredException(name, NETFLIX_PACKAGE)
                 }
             }
-            .flatMap { MainApplication.api.anime().link(id).buildSingle() }
+            .flatMap { api.anime().link(id).buildSingle() }
             .map { StreamResolutionResult(Intent(Intent.ACTION_VIEW, Uri.parse(it))) }
 }

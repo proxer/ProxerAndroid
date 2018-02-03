@@ -8,7 +8,7 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotterknife.bindView
 import me.proxer.app.MainActivity
-import me.proxer.app.MainApplication
+import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.R
 import me.proxer.app.auth.LoginDialog
 import me.proxer.app.auth.LoginEvent
@@ -59,9 +59,7 @@ abstract class DrawerActivity : BaseActivity() {
                     .subscribe { handleAccountItemClick(it) }
         }
 
-        Observable.merge(
-                MainApplication.bus.register(LoginEvent::class.java),
-                MainApplication.bus.register(LogoutEvent::class.java))
+        Observable.merge(bus.register(LoginEvent::class.java), bus.register(LogoutEvent::class.java))
                 .observeOn(AndroidSchedulers.mainThread())
                 .autoDispose(this)
                 .subscribe { drawer.refreshHeader() }
