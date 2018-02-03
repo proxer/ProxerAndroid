@@ -45,7 +45,7 @@ class MaterialDrawerWrapper(
     }
 
     val currentItem: DrawerItem
-        get() = DrawerItem.fromOrNull(drawer.currentSelection)
+        get() = DrawerItem.fromIdOrNull(drawer.currentSelection)
                 ?: getStickyItemIds()[drawer.currentStickyFooterSelectedPosition]
 
     private val header: AccountHeader
@@ -263,54 +263,52 @@ class MaterialDrawerWrapper(
         }
     }
 
-    private fun onDrawerItemClick(item: IDrawerItem<*, *>) = DrawerItem.fromOrDefault(item.identifier).let {
+    private fun onDrawerItemClick(item: IDrawerItem<*, *>) = DrawerItem.fromIdOrDefault(item.identifier).let {
         if (it in getStickyItemIds()) {
             miniDrawer?.setSelection(-1)
-
-            if (!it.shouldKeepOpen) crossfader?.crossFade()
         }
 
         itemClickSubject.onNext(it)
 
-        it.shouldKeepOpen
+        false
     }
 
-    private fun onAccountItemClick(profile: IProfile<*>) = AccountItem.fromOrDefault(profile.identifier).let {
+    private fun onAccountItemClick(profile: IProfile<*>) = AccountItem.fromIdOrDefault(profile.identifier).let {
         accountClickSubject.onNext(it)
 
-        it.shouldKeepOpen
+        false
     }
 
     private fun getStickyItemIds() = DrawerItem.values().filter { it.id >= 10L }
 
-    enum class DrawerItem(val id: Long, val shouldKeepOpen: Boolean) {
-        NEWS(0L, false),
-        CHAT(1L, false),
-        BOOKMARKS(2L, false),
-        ANIME(3L, false),
-        MANGA(4L, false),
-        LOCAL_MANGA(5L, false),
-        INFO(10L, false),
-        DONATE(11L, true),
-        SETTINGS(12L, false);
+    enum class DrawerItem(val id: Long) {
+        NEWS(0L),
+        CHAT(1L),
+        BOOKMARKS(2L),
+        ANIME(3L),
+        MANGA(4L),
+        LOCAL_MANGA(5L),
+        INFO(10L),
+        DONATE(11L),
+        SETTINGS(12L);
 
         companion object {
-            fun fromOrNull(id: Long?) = values().firstOrNull { it.id == id }
-            fun fromOrDefault(id: Long?) = fromOrNull(id) ?: NEWS
+            fun fromIdOrNull(id: Long?) = values().firstOrNull { it.id == id }
+            fun fromIdOrDefault(id: Long?) = fromIdOrNull(id) ?: NEWS
         }
     }
 
-    enum class AccountItem(val id: Long, val shouldKeepOpen: Boolean) {
-        GUEST(100L, true),
-        LOGIN(101L, true),
-        USER(102L, true),
-        LOGOUT(103L, true),
-        NOTIFICATIONS(104L, true),
-        UCP(105L, true);
+    enum class AccountItem(val id: Long) {
+        GUEST(100L),
+        LOGIN(101L),
+        USER(102L),
+        LOGOUT(103L),
+        NOTIFICATIONS(104L),
+        UCP(105L);
 
         companion object {
-            fun fromOrNull(id: Long?) = values().firstOrNull { it.id == id }
-            fun fromOrDefault(id: Long?) = fromOrNull(id) ?: USER
+            fun fromIdOrNull(id: Long?) = values().firstOrNull { it.id == id }
+            fun fromIdOrDefault(id: Long?) = fromIdOrNull(id) ?: USER
         }
     }
 

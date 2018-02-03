@@ -24,7 +24,7 @@ object PreferenceHelper {
     fun isAgeRestrictedMediaAllowed(context: Context) = getDefaultSharedPreferences(context)
             .getBoolean(AGE_CONFIRMATION, false)
 
-    fun getStartPage(context: Context) = DrawerItem.fromOrDefault(getDefaultSharedPreferences(context)
+    fun getStartPage(context: Context) = DrawerItem.fromIdOrDefault(getDefaultSharedPreferences(context)
             .getString(START_PAGE, "0").toLongOrNull())
 
     fun setAgeRestrictedMediaAllowed(context: Context, allowed: Boolean) = getDefaultSharedPreferences(context).edit()

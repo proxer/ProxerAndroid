@@ -123,7 +123,7 @@ class MainActivity : DrawerActivity() {
         this.intent = intent
 
         if (intent.hasExtra(SECTION_EXTRA)) {
-            drawer.select(DrawerItem.fromOrDefault(intent.getLongExtra(SECTION_EXTRA, -1)))
+            drawer.select(DrawerItem.fromIdOrDefault(intent.getLongExtra(SECTION_EXTRA, -1)))
         }
     }
 
@@ -145,7 +145,7 @@ class MainActivity : DrawerActivity() {
         }
     }
 
-    private fun getItemToLoad() = DrawerItem.fromOrDefault(when (intent.action == Intent.ACTION_VIEW) {
+    private fun getItemToLoad() = DrawerItem.fromIdOrDefault(when (intent.action == Intent.ACTION_VIEW) {
         true -> intent.dataString.toLongOrNull().apply {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
                 shortcutManager.reportShortcutUsed(when (this) {
