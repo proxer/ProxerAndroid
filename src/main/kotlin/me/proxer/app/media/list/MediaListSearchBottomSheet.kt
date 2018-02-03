@@ -4,12 +4,9 @@ import android.os.Bundle
 import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.BottomSheetBehavior.STATE_COLLAPSED
 import android.support.design.widget.BottomSheetBehavior.STATE_EXPANDED
-import android.view.View
-import android.view.View.MeasureSpec.makeMeasureSpec
 import android.view.ViewGroup
 import com.jakewharton.rxbinding2.view.clicks
 import me.proxer.app.R
-import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.ProxerLibExtensions
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.dip
@@ -47,7 +44,6 @@ class MediaListSearchBottomSheet private constructor(
         }
 
         bottomSheetBehaviour.isHideable = false
-        bottomSheetBehaviour.peekHeight = measureTitle()
 
         fragment.languageSelector.findViewById<ViewGroup>(R.id.items).enableLayoutAnimationsSafely()
         fragment.genreSelector.findViewById<ViewGroup>(R.id.items).enableLayoutAnimationsSafely()
@@ -116,15 +112,10 @@ class MediaListSearchBottomSheet private constructor(
         fragment.genreSelector.items = genreItems
         fragment.excludedGenreSelector.items = genreItems
         fragment.fskSelector.items = fskItems
-    }
 
-    private fun measureTitle(): Int {
-        val widthSpec = makeMeasureSpec(DeviceUtils.getScreenWidth(fragment.safeContext), View.MeasureSpec.EXACTLY)
-        val heightSpec = makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
-
-        fragment.searchBottomSheetTitle.measure(widthSpec, heightSpec)
-
-        return fragment.searchBottomSheetTitle.measuredHeight + fragment.dip(10)
+        fragment.searchBottomSheetTitle.post {
+            bottomSheetBehaviour.peekHeight = fragment.searchBottomSheetTitle.height + fragment.dip(10)
+        }
     }
 
     private fun <T : Enum<T>> toSafeApiEnum(klass: Class<T>, value: String) = ProxerUtils.toApiEnum(klass, value)
