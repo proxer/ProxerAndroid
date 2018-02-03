@@ -19,7 +19,7 @@ ext {
     kotlinVersion = '1.2.30-eap-16'
 
     // Utility plugins
-    detektPluginVersion = '1.0.0.RC6-2'
+    detektPluginVersion = '1.0.0.RC6-3'
     gradleVersionsPluginVersion = '0.17.0'
     androidCommandPluginVersion = '2.0'
     ktlintVersion = '0.15.0'
@@ -68,7 +68,7 @@ ext {
     // Utils
     threetenVersion = '1.0.5'
     hawkVersion = '2.0.1'
-    glideVersion = '4.5.0'
+    glideVersion = '4.6.1'
     okHttpVersion = '3.9.1'
     okioVersion = '1.13.0'
     linkBuilderVersion = '1.6.1'

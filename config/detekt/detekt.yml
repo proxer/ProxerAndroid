@@ -1,7 +1,12 @@
 failFast: true
 
-potential-bugs:
-  UnsafeCast:
+comments:
+  UndocumentedPublicClass:
+    searchInNestedClass: false
+    searchInInnerClass: false
+    searchInInnerObject: false
+    searchInInnerInterface: false
+  UndocumentedPublicFunction:
     active: false
 
 complexity:
@@ -20,27 +25,20 @@ complexity:
   StringLiteralDuplication:
     threshold: 5
 
-style:
+exceptions:
+  TooGenericExceptionCaught:
+    active: false
+
+naming:
   FunctionMaxLength:
     maximumFunctionNameLength: 35
-  VariableMinLength:
-    minimumVariableNameLength: 2
-  VariableMaxLength:
-    maximumVariableNameLength: 35
+
+potential-bugs:
+  UnsafeCast:
+    active: false
+
+style:
   MagicNumber:
     active: false
   ExpressionBodySyntax:
-    active: false
-
-comments:
-  UndocumentedPublicClass:
-    searchInNestedClass: false
-    searchInInnerClass: false
-    searchInInnerObject: false
-    searchInInnerInterface: false
-  UndocumentedPublicFunction:
-    active: false
-
-exceptions:
-  TooGenericExceptionCaught:
     active: false

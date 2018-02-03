@@ -25,7 +25,7 @@ class ProxerGlideModule : AppGlideModule() {
         registry.replace(GlideUrl::class.java, InputStream::class.java, OkHttpUrlLoader.Factory(client))
     }
 
-    override fun applyOptions(context: Context?, builder: GlideBuilder) {
+    override fun applyOptions(context: Context, builder: GlideBuilder) {
         builder.setDefaultRequestOptions(RequestOptions().disallowHardwareConfig())
     }
 
