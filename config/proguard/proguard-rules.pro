@@ -50,6 +50,9 @@
 # RxBinding (Remove when consumer proguard file comes in an Update).
 -dontwarn com.google.auto.value.AutoValue
 
+# AutoDispose
+-dontwarn com.google.errorprone.annotations.DoNotMock
+
 # Glide
 -keep public class * extends com.bumptech.glide.module.AppGlideModule
 -keep class com.bumptech.glide.GeneratedAppGlideModuleImpl

@@ -76,9 +76,6 @@ ext {
 
             customActivityOnCrash            : "cat.ereza:customactivityoncrash:$customActivityOnCrashVersion",
             strictModeCompat                 : "com.kirich1409:strict-mode-compat:$strictModeCompatVersion",
-
-            jsr305                           : "com.google.code.findbugs:jsr305:$jsr305Version",
-            javaxExtras                      : "com.uber.javaxextras:javax-extras:$javaxExtrasVersion",
     ]
 
     debugImplementationDependencies = [
