@@ -7,8 +7,6 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDelegate
 import android.support.v7.preference.XpPreferenceFragment
 import android.view.View
-import io.reactivex.Completable
-import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.refWatcher
 import me.proxer.app.R
 import me.proxer.app.chat.sync.ChatJob
@@ -22,7 +20,6 @@ import me.proxer.app.util.data.PreferenceHelper.NOTIFICATIONS_CHAT
 import me.proxer.app.util.data.PreferenceHelper.NOTIFICATIONS_INTERVAL
 import me.proxer.app.util.data.PreferenceHelper.NOTIFICATIONS_NEWS
 import me.proxer.app.util.data.PreferenceHelper.THEME
-import me.proxer.app.util.extension.subscribeAndLogErrors
 import net.xpece.android.support.preference.TwoStatePreference
 import org.jetbrains.anko.bundleOf
 
@@ -103,22 +100,15 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
             NOTIFICATIONS_NEWS, NOTIFICATIONS_ACCOUNT -> {
                 updateIntervalNotification()
 
-                Completable.fromAction { NotificationJob.scheduleIfPossible(safeContext) }
-                        .subscribeOn(Schedulers.io())
-                        .subscribeAndLogErrors()
+                NotificationJob.scheduleIfPossible(safeContext)
             }
 
-            NOTIFICATIONS_CHAT -> Completable.fromAction { ChatJob.scheduleSynchronizationIfPossible(safeContext) }
-                    .subscribeOn(Schedulers.io())
-                    .subscribeAndLogErrors()
+            NOTIFICATIONS_CHAT -> ChatJob.scheduleSynchronizationIfPossible(safeContext)
 
-            NOTIFICATIONS_INTERVAL -> Completable
-                    .fromAction {
-                        NotificationJob.scheduleIfPossible(safeContext)
-                        ChatJob.scheduleSynchronizationIfPossible(safeContext)
-                    }
-                    .subscribeOn(Schedulers.io())
-                    .subscribeAndLogErrors()
+            NOTIFICATIONS_INTERVAL -> {
+                NotificationJob.scheduleIfPossible(safeContext)
+                ChatJob.scheduleSynchronizationIfPossible(safeContext)
+            }
         }
     }
 

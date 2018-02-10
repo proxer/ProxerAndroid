@@ -244,13 +244,13 @@ class EpisodeAdapter(savedInstanceState: Bundle?, private val entryId: String) :
                 language.toGeneralLanguage().let { generalLanguage ->
                     download.setOnClickListener {
                         constructChapterCheckSingle(entryId, episode, generalLanguage)
+                                .subscribeOn(Schedulers.newThread())
+                                .observeOn(AndroidSchedulers.mainThread())
                                 .doOnSuccess { exists ->
                                     if (!exists) {
                                         LocalMangaJob.schedule(download.context, entryId, episode, generalLanguage)
                                     }
                                 }
-                                .subscribeOn(Schedulers.newThread())
-                                .observeOn(AndroidSchedulers.mainThread())
                                 .subscribeAndLogErrors { exists: Boolean ->
                                     if (!exists) {
                                         download.visibility = View.INVISIBLE

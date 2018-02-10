@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment
 import com.rubengees.introduction.IntroductionActivity.OPTION_RESULT
 import com.rubengees.introduction.IntroductionBuilder
 import com.rubengees.introduction.Option
-import io.reactivex.Completable
 import me.proxer.app.base.BackPressAware
 import me.proxer.app.base.DrawerActivity
 import me.proxer.app.bookmark.BookmarkFragment
@@ -21,9 +20,7 @@ import me.proxer.app.settings.AboutFragment
 import me.proxer.app.settings.SettingsFragment
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
-import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.shortcutManager
-import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.wrapper.IntroductionWrapper
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper.DrawerItem
 import me.proxer.library.enums.Category
@@ -104,9 +101,7 @@ class MainActivity : DrawerActivity() {
                             PreferenceHelper.setNewsNotificationsEnabled(this, option.isActivated)
                             PreferenceHelper.setAccountNotificationsEnabled(this, option.isActivated)
 
-                            Completable.fromAction { NotificationJob.scheduleIfPossible(this) }
-                                    .autoDispose(this)
-                                    .subscribeAndLogErrors()
+                            NotificationJob.scheduleIfPossible(this)
                         }
                     }
                 }

@@ -45,7 +45,7 @@ class NotificationJob : Job() {
                     .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
                     .setUpdateCurrent(true)
                     .build()
-                    .schedule()
+                    .scheduleAsync()
         }
     }
 

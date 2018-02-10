@@ -99,7 +99,7 @@ class ChatJob : Job() {
                         }
                     })
                     .build()
-                    .schedule()
+                    .scheduleAsync()
         }
 
         private fun canSchedule(context: Context) = PreferenceHelper.areChatNotificationsEnabled(context)

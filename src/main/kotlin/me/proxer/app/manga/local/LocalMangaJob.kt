@@ -71,7 +71,7 @@ class LocalMangaJob : Job() {
                     .setRequirementsEnforced(true)
                     .setUpdateCurrent(true)
                     .build()
-                    .schedule()
+                    .scheduleAsync()
         }
 
         fun cancel(entryId: String, episode: Int, language: Language) {

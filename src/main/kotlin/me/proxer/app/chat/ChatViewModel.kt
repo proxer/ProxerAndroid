@@ -116,10 +116,7 @@ class ChatViewModel(initialConference: LocalConference) : PagedViewModel<LocalMe
                         error.value = ErrorUtils.handle(event.error)
                     }
 
-                    Completable
-                            .fromAction { if (!ChatJob.isRunning()) ChatJob.scheduleSynchronization() }
-                            .subscribeOn(Schedulers.io())
-                            .subscribeAndLogErrors()
+                    ChatJob.scheduleSynchronization()
                 }
     }
 
@@ -128,7 +125,6 @@ class ChatViewModel(initialConference: LocalConference) : PagedViewModel<LocalMe
                 .fromCallable { chatDao.insertMessageToSend(text, safeConference.id) }
                 .doOnSuccess { if (!ChatJob.isRunning()) ChatJob.scheduleSynchronization() }
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribeAndLogErrors()
     }
 }
