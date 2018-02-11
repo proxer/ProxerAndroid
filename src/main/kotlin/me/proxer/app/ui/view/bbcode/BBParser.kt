@@ -70,8 +70,9 @@ object BBParser {
             }
 
             if (currentTree.endsWith(part)) {
-                currentTree = currentTree.parent
-                        ?: throw IllegalStateException("tree does not have a parent: $currentTree")
+                currentTree.isFinished = true
+
+                currentTree = findNextUnfinishedTree(currentTree)
             } else {
                 var prototypeFound = false
 
@@ -90,10 +91,10 @@ object BBParser {
 
                 // If nothing found assume a user error and look for a fitting end tag in the existing tree.
                 if (!prototypeFound) {
-                    val fittingParent = findFittingParent(currentTree, part)
+                    val fittingTree = findFittingTree(currentTree, part)
 
-                    if (fittingParent != null) {
-                        currentTree = fittingParent
+                    if (fittingTree != null) {
+                        fittingTree.isFinished = true
                     } else {
                         val unknownString = trimmedInput.substring(it.range.first, it.range.endInclusive + 1)
 
@@ -114,18 +115,29 @@ object BBParser {
         return result
     }
 
-    private fun findFittingParent(currentTree: BBTree, endTag: String): BBTree? {
-        var currentParent = currentTree.parent
+    private fun findFittingTree(tree: BBTree, endTag: String): BBTree? {
+        var currentTree = tree.parent
 
         while (true) {
-            if (currentParent?.endsWith(endTag) == true) {
-
-                return currentParent.parent
-            } else if (currentParent?.parent == null) {
+            if (currentTree?.endsWith(endTag) == true && !currentTree.isFinished) {
+                return currentTree
+            } else if (currentTree?.parent == null) {
                 return null
             }
 
-            currentParent = currentParent.parent
+            currentTree = currentTree.parent
+        }
+    }
+
+    private fun findNextUnfinishedTree(tree: BBTree): BBTree {
+        var currentTree = tree
+
+        while (true) {
+            if (!currentTree.isFinished) {
+                return currentTree
+            } else {
+                currentTree = currentTree.parent ?: throw IllegalStateException("No unfinished tree found")
+            }
         }
     }
 }

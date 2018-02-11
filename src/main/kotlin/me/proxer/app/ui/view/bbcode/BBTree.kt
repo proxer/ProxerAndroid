@@ -13,6 +13,7 @@ import me.proxer.app.ui.view.bbcode.prototype.TextPrototype
 class BBTree(
         val prototype: BBPrototype,
         val parent: BBTree?,
+        var isFinished: Boolean = false,
         val children: MutableList<BBTree> = mutableListOf(),
         val args: MutableMap<String, Any?> = mutableMapOf()
 ) {
@@ -77,7 +78,7 @@ class BBTree(
 
             return when {
                 canOptimize && prototype is TextMutatorPrototype -> result.map {
-                    BBTree(it.prototype, parent, it.children, it.args)
+                    BBTree(it.prototype, parent, isFinished, it.children, it.args)
                 }
                 else -> {
                     children.clear()
