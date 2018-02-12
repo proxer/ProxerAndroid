@@ -60,6 +60,7 @@ class CalendarAdapter : BaseAdapter<Pair<CalendarDay, List<CalendarEntry>>, View
             adapter.glide = glide
             adapter.clickSubject.subscribe(clickSubject)
 
+            childRecyclerView.setHasFixedSize(true)
             childRecyclerView.isNestedScrollingEnabled = false
             childRecyclerView.layoutManager = LinearLayoutManager(childRecyclerView.context, HORIZONTAL, false)
             childRecyclerView.adapter = adapter

@@ -61,7 +61,6 @@ class CalendarFragment : BaseContentFragment<Map<CalendarDay, List<CalendarEntry
         adapter.glide = GlideApp.with(this)
 
         recyclerView.setHasFixedSize(true)
-        recyclerView.setItemViewCacheSize(7)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = adapter
     }

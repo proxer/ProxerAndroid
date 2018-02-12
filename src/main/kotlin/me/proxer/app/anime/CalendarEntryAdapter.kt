@@ -1,9 +1,13 @@
 package me.proxer.app.anime
 
 import android.os.Handler
+import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.RecyclerView.LayoutParams
+import android.text.SpannableString
+import android.text.SpannableString.SPAN_INCLUSIVE_EXCLUSIVE
+import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,18 +21,23 @@ import me.proxer.app.R
 import me.proxer.app.anime.CalendarEntryAdapter.ViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.util.DeviceUtils
+import me.proxer.app.util.extension.calculateAndFormatDifference
 import me.proxer.app.util.extension.convertToDateTime
 import me.proxer.app.util.extension.defaultLoad
 import me.proxer.library.entity.media.CalendarEntry
 import me.proxer.library.util.ProxerUrls
-import org.threeten.bp.Duration
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
+import java.util.Date
 
 /**
  * @author Ruben Gees
  */
 class CalendarEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
+
+    private companion object {
+        private val HOUR_MINUTE_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm")
+    }
 
     var glide: GlideRequests? = null
     val clickSubject: PublishSubject<Pair<ImageView, CalendarEntry>> = PublishSubject.create()
@@ -47,7 +56,6 @@ class CalendarEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
 
     override fun onViewRecycled(holder: ViewHolder) {
         holder.handler.removeCallbacks(null)
-        holder.updateAction = null
 
         glide?.clear(holder.image)
     }
@@ -67,7 +75,6 @@ class CalendarEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
         internal val status by bindView<TextView>(R.id.status)
 
         internal val handler = Handler()
-        internal var updateAction: Runnable? = null
 
         init {
             val width = DeviceUtils.getScreenWidth(itemView.context) / when {
@@ -97,41 +104,38 @@ class CalendarEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
                 ratingContainer.visibility = View.GONE
             }
 
-            val convertedDate = item.date.convertToDateTime()
-            val convertedUploadDate = item.uploadDate.convertToDateTime()
-
-            val airingDate = DateTimeFormatter.ofPattern("HH:mm").format(convertedDate)
-            val uploadDate = DateTimeFormatter.ofPattern("HH:mm").format(convertedUploadDate)
+            val airingDate = HOUR_MINUTE_DATE_TIME_FORMATTER.format(item.date.convertToDateTime())
+            val uploadDate = HOUR_MINUTE_DATE_TIME_FORMATTER.format(item.uploadDate.convertToDateTime())
 
             airingInfo.text = "Ausstrahlung:\n${airingDate}\nAuf Proxer (geschätzt):\n${uploadDate}"
 
-            updateAction = Runnable {
+            handler.removeCallbacksAndMessages(null)
+            handler.post(UpdateAction(item))
+
+            glide?.defaultLoad(image, ProxerUrls.entryImage(item.entryId))
+        }
+
+        private inner class UpdateAction(private val item: CalendarEntry) : Runnable {
+
+            override fun run() {
                 val now = LocalDateTime.now()
 
-                if (convertedUploadDate.isBefore(now)) {
-                    status.text = "Auf Proxer (geschätzt)"
+                if (item.uploadDate.convertToDateTime().isBefore(now)) {
+                    status.text = SpannableString("Auf Proxer (geschätzt)").apply {
+                        val span = ForegroundColorSpan(ContextCompat.getColor(status.context, R.color.md_green_500))
+
+                        setSpan(span, 0, length, SPAN_INCLUSIVE_EXCLUSIVE)
+                    }
                 } else {
-                    val duration = Duration.between(now, convertedUploadDate)
-
-                    val days = duration.toDays()
-                    val hours = duration.minusDays(days).toHours()
-                    val minutes = duration.minusDays(days).minusHours(hours).toMinutes()
-                    val seconds = duration.minusDays(days).minusHours(hours).minusMinutes(minutes).seconds
-
-                    val formattedDuration = "%02d:%02d:%02d:%02d".format(days, hours, minutes, seconds)
-
-                    if (convertedDate.isBefore(now)) {
-                        status.text = "Ausgestrahlt\nNoch $formattedDuration"
+                    if (item.date.convertToDateTime().isBefore(now)) {
+                        status.text = "Ausgestrahlt\nNoch " + Date().calculateAndFormatDifference(item.uploadDate)
                     } else {
-                        status.text = "Noch $formattedDuration"
+                        status.text = "Noch " + Date().calculateAndFormatDifference(item.date)
                     }
                 }
 
-                handler.postDelayed(updateAction, 1000)
+                handler.postDelayed(this, 1000)
             }
-
-            handler.post(updateAction)
-            glide?.defaultLoad(image, ProxerUrls.entryImage(item.entryId))
         }
     }
 }

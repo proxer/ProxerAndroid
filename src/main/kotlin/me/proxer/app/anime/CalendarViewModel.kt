@@ -19,7 +19,7 @@ class CalendarViewModel : BaseViewModel<Map<CalendarDay, List<CalendarEntry>>>()
                 .map { calendarEntries -> calendarEntries.groupBy { it.weekDay } }
                 .map { groupedCalendarEntries ->
                     groupedCalendarEntries.mapValues { (_, calendarEntries) ->
-                        calendarEntries.sortedBy { it.uploadDate }
+                        calendarEntries.sortedBy { it.date }
                     }
                 }
 }
