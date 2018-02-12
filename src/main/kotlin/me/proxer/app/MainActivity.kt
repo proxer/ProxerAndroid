@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment
 import com.rubengees.introduction.IntroductionActivity.OPTION_RESULT
 import com.rubengees.introduction.IntroductionBuilder
 import com.rubengees.introduction.Option
+import me.proxer.app.anime.CalendarFragment
 import me.proxer.app.base.BackPressAware
 import me.proxer.app.base.DrawerActivity
 import me.proxer.app.bookmark.BookmarkFragment
@@ -159,6 +160,7 @@ class MainActivity : DrawerActivity() {
         DrawerItem.CHAT -> setFragment(ConferenceFragment.newInstance(), R.string.section_chat)
         DrawerItem.BOOKMARKS -> setFragment(BookmarkFragment.newInstance(), R.string.section_bookmarks)
         DrawerItem.ANIME -> setFragment(MediaListFragment.newInstance(Category.ANIME), R.string.section_anime)
+        DrawerItem.CALENDAR -> setFragment(CalendarFragment.newInstance(), R.string.section_calendar)
         DrawerItem.MANGA -> setFragment(MediaListFragment.newInstance(Category.MANGA), R.string.section_manga)
         DrawerItem.LOCAL_MANGA -> setFragment(LocalMangaFragment.newInstance(), R.string.section_local_manga)
         DrawerItem.INFO -> setFragment(AboutFragment.newInstance(), R.string.section_info)

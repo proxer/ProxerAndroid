@@ -40,6 +40,7 @@ import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.info.Entry
 import me.proxer.library.entity.info.MediaUserInfo
 import me.proxer.library.enums.Category
+import me.proxer.library.enums.IndustryType
 import me.proxer.library.util.ProxerUrls
 import me.proxer.library.util.ProxerUtils
 import org.jetbrains.anko.bundleOf
@@ -382,13 +383,17 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
         industries.visibility = View.GONE
     } else {
         bindChips(industries, result.industries, mapFunction = {
-            val type = ProxerUtils.getApiEnumName(it.type)
-                    ?.replace("_", " ")
-                    ?.split(" ")
-                    ?.joinToString(separator = " ", transform = String::capitalize)
-                    ?: throw IllegalArgumentException("Unknown industry type: ${it.type}")
+            if (it.type == IndustryType.UNKNOWN) {
+                it.name
+            } else {
+                val type = ProxerUtils.getApiEnumName(it.type)
+                        ?.replace("_", " ")
+                        ?.split(" ")
+                        ?.joinToString(separator = " ", transform = String::capitalize)
+                        ?: throw IllegalArgumentException("Unknown industry type: ${it.type}")
 
-            "${it.name} ($type)"
+                "${it.name} ($type)"
+            }
         }, onClick = { IndustryActivity.navigateTo(safeActivity, it.id, it.name) })
     }
 

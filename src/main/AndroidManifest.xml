@@ -213,6 +213,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".anime.CalendarActivity" />
+
         <activity android:name=".forum.TopicActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

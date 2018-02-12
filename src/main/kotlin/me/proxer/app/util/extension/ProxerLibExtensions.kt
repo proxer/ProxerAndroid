@@ -31,6 +31,7 @@ import me.proxer.library.entity.messenger.Conference
 import me.proxer.library.entity.messenger.Message
 import me.proxer.library.entity.user.UserComment
 import me.proxer.library.enums.AnimeLanguage
+import me.proxer.library.enums.CalendarDay
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.Country
 import me.proxer.library.enums.FskConstraint
@@ -122,7 +123,7 @@ fun Country.toAppDrawable(context: Context) = AppCompatResources.getDrawable(con
     Country.JAPAN -> R.drawable.ic_japan
     Country.KOREA -> R.drawable.ic_korea
     Country.CHINA -> R.drawable.ic_china
-    Country.OTHER, Country.NONE -> R.drawable.ic_united_nations
+    Country.INTERNATIONAL, Country.OTHER, Country.NONE -> R.drawable.ic_united_nations
 }) ?: throw IllegalStateException("Could not resolve Drawable for country: $this")
 
 fun Medium.toCategory() = when (this) {
@@ -245,6 +246,16 @@ fun FskConstraint.toAppDrawable(context: Context) = AppCompatResources.getDrawab
     FskConstraint.SEX -> R.drawable.ic_fsk_sex
     FskConstraint.VIOLENCE -> R.drawable.ic_fsk_violence
 }) ?: throw IllegalStateException("Could not resolve Drawable for fsk constraint: $this")
+
+fun CalendarDay.toAppString(context: Context) = context.getString(when (this) {
+    CalendarDay.MONDAY -> R.string.calendar_day_monday
+    CalendarDay.TUESDAY -> R.string.calendar_day_tuesday
+    CalendarDay.WEDNESDAY -> R.string.calendar_day_wednesday
+    CalendarDay.THURSDAY -> R.string.calendar_day_thursday
+    CalendarDay.FRIDAY -> R.string.calendar_day_friday
+    CalendarDay.SATURDAY -> R.string.calendar_day_saturday
+    CalendarDay.SUNDAY -> R.string.calendar_day_sunday
+})
 
 inline val Page.decodedName: String
     get() = try {

@@ -220,6 +220,13 @@ class MaterialDrawerWrapper(
                     .withSelectedIconColorRes(R.color.colorAccent)
                     .withIdentifier(DrawerItem.ANIME.id),
             PrimaryDrawerItem()
+                    .withName(R.string.section_calendar)
+                    .withIcon(CommunityMaterial.Icon.cmd_calendar)
+                    .withSelectedTextColorRes(R.color.colorAccent)
+                    .withSelectable(isRoot)
+                    .withSelectedIconColorRes(R.color.colorAccent)
+                    .withIdentifier(DrawerItem.CALENDAR.id),
+            PrimaryDrawerItem()
                     .withName(R.string.section_manga)
                     .withIcon(CommunityMaterial.Icon.cmd_book_open_page_variant)
                     .withSelectedTextColorRes(R.color.colorAccent)
@@ -286,8 +293,9 @@ class MaterialDrawerWrapper(
         CHAT(1L),
         BOOKMARKS(2L),
         ANIME(3L),
-        MANGA(4L),
-        LOCAL_MANGA(5L),
+        CALENDAR(4L),
+        MANGA(5L),
+        LOCAL_MANGA(6L),
         INFO(10L),
         DONATE(11L),
         SETTINGS(12L);

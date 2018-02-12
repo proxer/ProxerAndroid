@@ -4,8 +4,9 @@
     <string name="app_name">ProxerMe</string>
 
     <string name="section_anime">Anime</string>
+    <string name="section_calendar">Anime-Kalendar</string>
     <string name="section_chat">Chat</string>
-    <string name="section_donate" tools:ignore="UnusedResources">Spenden</string>
+    <string name="section_donate">Spenden</string>
     <string name="section_manga">Manga</string>
     <string name="section_local_manga">Offline Manga</string>
     <string name="section_news">News</string>
@@ -220,6 +221,14 @@
         <item quantity="one">Eine Episode</item>
         <item quantity="other">%d Episoden</item>
     </plurals>
+
+    <string name="calendar_day_monday">Montag</string>
+    <string name="calendar_day_tuesday">Dienstag</string>
+    <string name="calendar_day_wednesday">Mittwoch</string>
+    <string name="calendar_day_thursday">Donnerstag</string>
+    <string name="calendar_day_friday">Freitag</string>
+    <string name="calendar_day_saturday">Samstag</string>
+    <string name="calendar_day_sunday">Sonntag</string>
 
     <string name="cancel">Abbrechen</string>
 
@@ -602,6 +611,7 @@
     <string name="interval_seldom">Selten (Alle 8 Stunden)</string>
 
     <string name="time_a_moment_ago">Eben gerade</string>
+    <string name="calendar_episode">Episode %s</string>
     <plurals name="time_days_ago">
         <item quantity="one">"Gestern"</item>
         <item quantity="other">"Vor %d Tagen"</item>
