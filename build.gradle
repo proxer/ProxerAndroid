@@ -152,6 +152,7 @@ dependencies {
     debugImplementationDependencies.values().each { debugImplementation it }
     releaseImplementationDependencies.values().each { releaseImplementation it }
     releaseImplementationDependencies.values().each { storeReleaseImplementation it }
+    compileOnlyDependencies.values().each { compileOnly it }
     kaptDependencies.values().each { kapt it }
     ktlintDependencies.values().each { ktlint it }
 
@@ -215,9 +216,9 @@ detekt {
     }
 }
 
-tasks.matching { it.name.matches('compile.*Kotlin') }.all {
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
     kotlinOptions {
-        freeCompilerArgs = ['-Xjsr305=strict']
+        freeCompilerArgs = ["-Xjsr305=strict"]
     }
 }
 

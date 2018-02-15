@@ -87,6 +87,10 @@ ext {
             leakCanaryNoOp: "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion",
     ]
 
+    compileOnlyDependencies = [
+            javaxExtras: "com.uber.javaxextras:javax-extras:$javaxExtrasVersion",
+    ]
+
     kaptDependencies = [
             roomCompiler  : "android.arch.persistence.room:compiler:$roomVersion",
             glideCompiler : "com.github.bumptech.glide:compiler:$glideVersion",

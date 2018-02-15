@@ -10,7 +10,4 @@
     <issue id="GifUsage">
         <ignore regexp="res/drawable-nodpi/o_.*[.]gif" />
     </issue>
-
-    <!-- False positives with Kotlin. -->
-    <issue id="NewApi" severity="informational" />
 </lint>

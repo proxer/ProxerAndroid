@@ -42,14 +42,6 @@
 # Avoid crash of SearchView.
 -keep class android.support.v7.widget.SearchView { *; }
 
-# Android Architecture Components
--keep class * implements android.arch.lifecycle.GeneratedAdapter {
-    <init>(...);
-}
-
-# RxBinding (Remove when consumer proguard file comes in an Update).
--dontwarn com.google.auto.value.AutoValue
-
 # AutoDispose
 -dontwarn com.google.errorprone.annotations.DoNotMock
 
