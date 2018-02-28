@@ -114,7 +114,8 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
                             android:isIndicator="true"
-                            android:numStars="5" />
+                            android:numStars="5"
+                            android:stepSize="0.1" />
                     </FrameLayout>
                 </TableRow>
 
@@ -141,7 +142,8 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
                             android:isIndicator="true"
-                            android:numStars="5" />
+                            android:numStars="5"
+                            android:stepSize="0.1" />
                     </FrameLayout>
                 </TableRow>
 
@@ -168,7 +170,8 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
                             android:isIndicator="true"
-                            android:numStars="5" />
+                            android:numStars="5"
+                            android:stepSize="0.1" />
                     </FrameLayout>
                 </TableRow>
 
@@ -195,7 +198,8 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
                             android:isIndicator="true"
-                            android:numStars="5" />
+                            android:numStars="5"
+                            android:stepSize="0.1" />
                     </FrameLayout>
                 </TableRow>
 
@@ -222,7 +226,8 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
                             android:isIndicator="true"
-                            android:numStars="5" />
+                            android:numStars="5"
+                            android:stepSize="0.1" />
                     </FrameLayout>
                 </TableRow>
 
@@ -249,7 +254,8 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
                             android:isIndicator="true"
-                            android:numStars="5" />
+                            android:numStars="5"
+                            android:stepSize="0.1" />
                     </FrameLayout>
                 </TableRow>
             </TableLayout>
