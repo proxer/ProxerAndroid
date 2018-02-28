@@ -68,6 +68,7 @@
 -dontwarn javax.annotation.**
 -dontnote retrofit2.Platform
 -dontwarn retrofit2.Platform$Java8
+-dontwarn okhttp3.internal.platform.ConscryptPlatform
 
 -keepclasseswithmembers class * {
     @retrofit2.http.* <methods>;

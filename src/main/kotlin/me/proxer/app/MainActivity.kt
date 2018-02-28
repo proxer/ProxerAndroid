@@ -13,7 +13,6 @@ import me.proxer.app.base.BackPressAware
 import me.proxer.app.base.DrawerActivity
 import me.proxer.app.bookmark.BookmarkFragment
 import me.proxer.app.chat.conference.ConferenceFragment
-import me.proxer.app.manga.local.LocalMangaFragment
 import me.proxer.app.media.list.MediaListFragment
 import me.proxer.app.news.NewsFragment
 import me.proxer.app.notification.NotificationJob
@@ -162,7 +161,6 @@ class MainActivity : DrawerActivity() {
         DrawerItem.ANIME -> setFragment(MediaListFragment.newInstance(Category.ANIME), R.string.section_anime)
         DrawerItem.CALENDAR -> setFragment(CalendarFragment.newInstance(), R.string.section_calendar)
         DrawerItem.MANGA -> setFragment(MediaListFragment.newInstance(Category.MANGA), R.string.section_manga)
-        DrawerItem.LOCAL_MANGA -> setFragment(LocalMangaFragment.newInstance(), R.string.section_local_manga)
         DrawerItem.INFO -> setFragment(AboutFragment.newInstance(), R.string.section_info)
         DrawerItem.DONATE -> showPage(ProxerUrls.donateWeb(Device.DEFAULT))
         DrawerItem.SETTINGS -> setFragment(SettingsFragment.newInstance(), R.string.section_settings)

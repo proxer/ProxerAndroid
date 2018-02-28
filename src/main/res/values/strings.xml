@@ -8,7 +8,6 @@
     <string name="section_chat">Chat</string>
     <string name="section_donate" tools:ignore="UnusedResources">Spenden</string>
     <string name="section_manga">Manga</string>
-    <string name="section_local_manga">Offline Manga</string>
     <string name="section_news">News</string>
     <string name="section_bookmarks">Lesezeichen</string>
     <string name="section_guest">Gast</string>
@@ -116,7 +115,6 @@
     <string name="error_no_data_projects">Es gibt noch keine Projekte</string>
     <string name="error_no_data_comments">Es gibt noch keine Kommentare</string>
     <string name="error_no_data_user_media_list">Es gibt noch keine Einträge</string>
-    <string name="error_no_data_local_manga">Du hast noch keine Manga offline verfügbar gemacht</string>
     <string name="error_no_data_search">Es wurde nichts gefunden, das den Kriterien entspricht</string>
     <string name="error_no_data_conferences">Du hast noch keine Chats</string>
     <string name="error_no_data_chat">Diese Konferenz hat noch keine Nachrichten</string>
@@ -222,25 +220,25 @@
         <item quantity="other">%d Episoden</item>
     </plurals>
 
-    <string name="calendar_day_monday">Montag</string>
-    <string name="calendar_day_tuesday">Dienstag</string>
-    <string name="calendar_day_wednesday">Mittwoch</string>
-    <string name="calendar_day_thursday">Donnerstag</string>
-    <string name="calendar_day_friday">Freitag</string>
-    <string name="calendar_day_saturday">Samstag</string>
-    <string name="calendar_day_sunday">Sonntag</string>
+    <string name="fragment_calendar_day_monday">Montag</string>
+    <string name="fragment_calendar_day_tuesday">Dienstag</string>
+    <string name="fragment_calendar_day_wednesday">Mittwoch</string>
+    <string name="fragment_calendar_day_thursday">Donnerstag</string>
+    <string name="fragment_calendar_day_friday">Freitag</string>
+    <string name="fragment_calendar_day_saturday">Samstag</string>
+    <string name="fragment_calendar_day_sunday">Sonntag</string>
 
-    <string name="calendar_episode">Episode %s</string>
-    <string name="calendar_aired">Ausgestrahlt</string>
-    <string name="calendar_uploaded">Auf Proxer (geschätzt)</string>
-    <string name="calendar_remaining_time">Noch %s</string>
-    <string name="calendar_aired_remaining_time">Ausgestrahlt
+    <string name="fragment_calendar_episode">Episode %s</string>
+    <string name="fragment_calendar_aired">Ausgestrahlt</string>
+    <string name="fragment_calendar_uploaded">Auf Proxer (geschätzt)</string>
+    <string name="fragment_calendar_remaining_time">Noch %s</string>
+    <string name="fragment_calendar_aired_remaining_time">Ausgestrahlt
         \nNoch %s
     </string>
-    <string name="calendar_airing">Ausstrahlung:
+    <string name="fragment_calendar_airing">Ausstrahlung:
         \n%s
     </string>
-    <string name="calendar_airing_upload">Ausstrahlung:
+    <string name="fragment_calendar_airing_upload">Ausstrahlung:
         \n%1$s
         \nAuf Proxer (geschätzt):
         \n%2$s
@@ -274,10 +272,6 @@
     <string name="dialog_app_required_title">%s-App</string>
     <string name="dialog_app_required_content">Zum Verwenden dieses Streams ist die %s-App nötig</string>
     <string name="dialog_app_required_positive">Installieren</string>
-
-    <string name="dialog_clean_manga_content">Sollen alle offline verfügbaren Kapitel und Seiten gelöscht werden?
-    </string>
-    <string name="dialog_clean_manga_positive">Alles löschen</string>
 
     <string name="dialog_notification_deletion_confirmation_content">Sollen alle Benachrichtigungen gelöscht werden?
         Das kann nicht rückgängig gemacht werden.</string>
@@ -352,21 +346,6 @@
     <string name="fragment_anime_bookmark_next_episode">Lesezeichen: Nächste Episode</string>
     <string name="fragment_anime_bookmark_this_episode">Lesezeichen: Diese Episode</string>
     <string name="fragment_anime_stream_play">Abspielen</string>
-
-    <string name="fragment_local_manga_delete_content_description">Dieses Kapitel löschen</string>
-
-    <plurals name="fragment_local_manga_chapters_downloading">
-        <item quantity="one">Ein Kapitel wird offline verfügbar gemacht</item>
-        <item quantity="other">%d Kapitel werden offline verfügbar gemacht</item>
-    </plurals>
-
-    <plurals name="fragment_local_manga_chapters_scheduled">
-        <item quantity="one">Ein Kapitel ist für Offlineverfügbarkeit eingereiht</item>
-        <item quantity="other">%d Kapitel sind für Offlineverfügbarkeit eingereiht</item>
-    </plurals>
-
-    <string name="fragment_episode_download_hint">Dieses Kapitel offline verfügbar machen</string>
-    <string name="fragment_episode_already_downloaded_hint">Dieses Kapitel ist offline verfügbar</string>
 
     <string name="fragment_manga_next_chapter">Nächstes Kapitel</string>
     <string name="fragment_manga_previous_chapter">Vorheriges Kapitel</string>
@@ -467,18 +446,6 @@
         <item quantity="other">%d Benachrichtigungen</item>
     </plurals>
 
-    <string name="notification_manga_download_finished_title">Vorgang abgeschlossen</string>
-    <string name="notification_manga_download_error_title">Fehler beim Manga Download</string>
-    <string name="notification_manga_download_cancel_action">Abbrechen</string>
-    <plurals name="notification_manga_download_finished_content">
-        <item quantity="one">Ein Kapitel wurde offline verfügbar gemacht</item>
-        <item quantity="other">%d Kapitel wurden offline verfügbar gemacht</item>
-    </plurals>
-    <plurals name="notification_manga_download_progress_title">
-        <item quantity="one">Ein Kapitel wird offline verfügbar gemacht…</item>
-        <item quantity="other">%d Kapitel werden offline verfügbar gemacht…</item>
-    </plurals>
-
     <string name="category_anime_episodes_title">Episoden</string>
     <string name="category_manga_episodes_title">Kapitel</string>
 
@@ -504,7 +471,6 @@
     <string name="preference_manga_vertical_reader_title">Mangareader Ausrichtung</string>
     <string name="preference_manga_vertical_reader_summary_off">Manga werden von Links nach Rechts angezeigt</string>
     <string name="preference_manga_vertical_reader_summary_on">Manga werden von Oben nach Unten angezeigt</string>
-    <string name="preference_manga_clean">Gespeicherte Daten löschen</string>
 
     <string name="preference_category_notifications_title">Benachrichtigungen</string>
     <string name="preference_notifications_news_title">News</string>

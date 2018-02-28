@@ -238,14 +238,7 @@ class MaterialDrawerWrapper(
                     .withSelectedTextColorRes(R.color.colorAccent)
                     .withSelectable(isRoot)
                     .withSelectedIconColorRes(R.color.colorAccent)
-                    .withIdentifier(DrawerItem.MANGA.id),
-            PrimaryDrawerItem()
-                    .withName(R.string.section_local_manga)
-                    .withIcon(CommunityMaterial.Icon.cmd_cloud_download)
-                    .withSelectedTextColorRes(R.color.colorAccent)
-                    .withSelectable(isRoot)
-                    .withSelectedIconColorRes(R.color.colorAccent)
-                    .withIdentifier(DrawerItem.LOCAL_MANGA.id)
+                    .withIdentifier(DrawerItem.MANGA.id)
     )
 
     private fun generateStickyDrawerItems() = arrayListOf<IDrawerItem<*, *>>(
@@ -301,7 +294,6 @@ class MaterialDrawerWrapper(
         ANIME(3L),
         CALENDAR(4L),
         MANGA(5L),
-        LOCAL_MANGA(6L),
         INFO(10L),
         DONATE(11L),
         SETTINGS(12L);

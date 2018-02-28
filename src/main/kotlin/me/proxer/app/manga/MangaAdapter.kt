@@ -1,29 +1,31 @@
 package me.proxer.app.manga
 
 import android.graphics.PointF
+import android.graphics.drawable.Drawable
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.ImageView
+import com.bumptech.glide.load.DecodeFormat
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
 import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
+import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.manga.MangaAdapter.ViewHolder
-import me.proxer.app.manga.MangaPageSingle.Input
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.decodedName
 import me.proxer.app.util.extension.setIconicsImage
-import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.entity.manga.Page
+import me.proxer.library.util.ProxerUrls
+import java.io.File
 import kotlin.properties.Delegates
 
 /**
@@ -31,12 +33,12 @@ import kotlin.properties.Delegates
  */
 class MangaAdapter(private val isVertical: Boolean) : BaseAdapter<Page, ViewHolder>() {
 
+    var glide: GlideRequests? = null
     val clickSubject: PublishSubject<Int> = PublishSubject.create()
 
     var server by Delegates.notNull<String>()
     var entryId by Delegates.notNull<String>()
     var id by Delegates.notNull<String>()
-    var isLocal: Boolean = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_manga_page, parent, false))
@@ -44,11 +46,15 @@ class MangaAdapter(private val isVertical: Boolean) : BaseAdapter<Page, ViewHold
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(data[position])
 
-    override fun onViewRecycled(holder: ViewHolder) {
-        holder.image.recycle()
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        glide = null
+    }
 
-        (holder.image.tag as? Disposable)?.dispose()
-        holder.image.tag = null
+    override fun onViewRecycled(holder: ViewHolder) {
+        glide?.clear(holder.glideTarget)
+
+        holder.glideTarget = null
+        holder.image.recycle()
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -58,6 +64,8 @@ class MangaAdapter(private val isVertical: Boolean) : BaseAdapter<Page, ViewHold
 
         internal val image: SubsamplingScaleImageView by bindView(R.id.image)
         internal val errorIndicator: ImageView by bindView(R.id.errorIndicator)
+
+        internal var glideTarget: GlideFileTarget? = null
 
         init {
             image.setDoubleTapZoomDuration(shortAnimationTime)
@@ -98,25 +106,39 @@ class MangaAdapter(private val isVertical: Boolean) : BaseAdapter<Page, ViewHold
             errorIndicator.visibility = View.GONE
             image.visibility = View.VISIBLE
 
-            image.tag = MangaPageSingle(image.context, isLocal, Input(server, entryId, id, item.decodedName))
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeAndLogErrors({
-                        image.setImage(ImageSource.uri(it.path))
-                        image.setScaleAndCenter(0.2f, PointF(0f, 0f))
+            glide?.clear(glideTarget)
+            glideTarget = GlideFileTarget()
 
-                        // Fade animations do not look good with the horizontal reader.
-                        if (isVertical) {
-                            image.apply { alpha = 0.2f }
-                                    .animate()
-                                    .alpha(1.0f)
-                                    .setDuration(mediumAnimationTime.toLong())
-                                    .start()
-                        }
-                    }, {
-                        errorIndicator.visibility = View.VISIBLE
-                        image.visibility = View.GONE
-                    })
+            glideTarget?.let { target ->
+                glide?.download(ProxerUrls.mangaPageImage(server, entryId, id, item.decodedName).toString())
+                        ?.format(when (DeviceUtils.shouldShowHighQualityImages(image.context)) {
+                            true -> DecodeFormat.PREFER_ARGB_8888
+                            false -> DecodeFormat.PREFER_RGB_565
+                        })
+                        ?.into(target)
+            }
+        }
+
+        internal inner class GlideFileTarget : SimpleTarget<File>() {
+
+            override fun onResourceReady(resource: File, transition: Transition<in File>?) {
+                image.setImage(ImageSource.uri(resource.path))
+                image.setScaleAndCenter(0.2f, PointF(0f, 0f))
+
+                // Fade animations do not look good with the horizontal reader.
+                if (isVertical) {
+                    image.apply { alpha = 0.2f }
+                            .animate()
+                            .alpha(1.0f)
+                            .setDuration(mediumAnimationTime.toLong())
+                            .start()
+                }
+            }
+
+            override fun onLoadFailed(errorDrawable: Drawable?) {
+                errorIndicator.visibility = View.VISIBLE
+                image.visibility = View.GONE
+            }
         }
     }
 }

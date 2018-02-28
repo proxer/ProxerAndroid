@@ -20,6 +20,7 @@ import com.github.rubensousa.gravitysnaphelper.GravityPagerSnapHelper
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import io.reactivex.Observable
 import kotterknife.bindView
+import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter.ContainerPositionResolver
 import me.proxer.app.base.BaseContentFragment
@@ -183,6 +184,8 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
             }
         }
 
+        innerAdapter.glide = GlideApp.with(this)
+
         viewModel.bookmarkData.observe(this, Observer {
             it?.let {
                 snackbar(activityRoot, R.string.fragment_set_user_info_success)
@@ -232,7 +235,6 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         innerAdapter.server = data.chapter.server
         innerAdapter.entryId = data.chapter.entryId
         innerAdapter.id = data.chapter.id
-        innerAdapter.isLocal = data.isLocal
 
         innerAdapter.swapDataAndNotifyWithDiffing(data.chapter.pages)
 

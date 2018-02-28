@@ -38,11 +38,6 @@ import me.proxer.app.chat.sync.ChatDao
 import me.proxer.app.chat.sync.ChatDatabase
 import me.proxer.app.chat.sync.ChatJob
 import me.proxer.app.chat.sync.ChatNotifications
-import me.proxer.app.manga.MangaLocks
-import me.proxer.app.manga.local.LocalMangaDao
-import me.proxer.app.manga.local.LocalMangaDatabase
-import me.proxer.app.manga.local.LocalMangaJob
-import me.proxer.app.manga.local.LocalMangaNotifications
 import me.proxer.app.notification.AccountNotifications
 import me.proxer.app.notification.NotificationJob
 import me.proxer.app.util.NotificationUtils
@@ -54,10 +49,8 @@ import me.proxer.library.api.ProxerApi.Builder.LoggingStrategy
 import me.proxer.library.util.ProxerUrls
 import okhttp3.CertificatePinner
 import okhttp3.OkHttpClient
-import java.io.File
 import java.util.Date
 import java.util.concurrent.TimeUnit
-import kotlin.concurrent.write
 import kotlin.properties.Delegates
 
 /**
@@ -86,16 +79,10 @@ class MainApplication : Application() {
         val chatDao: ChatDao
             get() = chatDatabase.dao()
 
-        val mangaDao: LocalMangaDao
-            get() = mangaDatabase.dao()
-
         var api by Delegates.notNull<ProxerApi>()
             private set
 
         var chatDatabase by Delegates.notNull<ChatDatabase>()
-            private set
-
-        var mangaDatabase by Delegates.notNull<LocalMangaDatabase>()
             private set
 
         var globalContext by Delegates.notNull<Context>()
@@ -119,10 +106,6 @@ class MainApplication : Application() {
         NotificationUtils.createNotificationChannels(this)
 
         chatDatabase = Room.databaseBuilder(this, ChatDatabase::class.java, "chat.db")
-                .build()
-
-        mangaDatabase = Room.databaseBuilder(this, LocalMangaDatabase::class.java, "manga.db")
-                .addMigrations(LocalMangaDatabase.MIGRATION_ONE_TWO)
                 .build()
 
         initBus()
@@ -151,23 +134,16 @@ class MainApplication : Application() {
                 .subscribeOn(Schedulers.io())
                 .subscribeAndLogErrors {
                     AccountNotifications.cancel(this)
-                    LocalMangaNotifications.cancel(this)
                     ChatNotifications.cancel(this)
 
                     ChatJob.cancel()
-                    LocalMangaJob.cancelAll()
 
                     StorageHelper.lastChatMessageDate = Date(0L)
                     StorageHelper.lastNotificationsDate = Date(0L)
                     StorageHelper.areConferencesSynchronized = false
                     StorageHelper.resetChatInterval()
 
-                    mangaDao.clear()
                     chatDao.clear()
-
-                    MangaLocks.localLock.write {
-                        File("${applicationContext.filesDir}/manga").deleteRecursively()
-                    }
                 }
     }
 
@@ -210,7 +186,6 @@ class MainApplication : Application() {
             when {
                 it == ChatJob.TAG -> ChatJob()
                 it == NotificationJob.TAG -> NotificationJob()
-                it.startsWith(LocalMangaJob.TAG) -> LocalMangaJob()
                 else -> null
             }
         }

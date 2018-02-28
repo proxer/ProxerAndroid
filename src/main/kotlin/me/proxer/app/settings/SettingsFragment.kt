@@ -10,11 +10,9 @@ import android.view.View
 import me.proxer.app.MainApplication.Companion.refWatcher
 import me.proxer.app.R
 import me.proxer.app.chat.sync.ChatJob
-import me.proxer.app.manga.MangaCleanDialog
 import me.proxer.app.notification.NotificationJob
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.PreferenceHelper.AGE_CONFIRMATION
-import me.proxer.app.util.data.PreferenceHelper.MANGA_CLEAN
 import me.proxer.app.util.data.PreferenceHelper.NOTIFICATIONS_ACCOUNT
 import me.proxer.app.util.data.PreferenceHelper.NOTIFICATIONS_CHAT
 import me.proxer.app.util.data.PreferenceHelper.NOTIFICATIONS_INTERVAL
@@ -45,12 +43,6 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
 
                 AgeConfirmationDialog.show(activity as AppCompatActivity)
             }
-
-            true
-        }
-
-        findPreference(MANGA_CLEAN).setOnPreferenceClickListener {
-            MangaCleanDialog.show(activity as AppCompatActivity)
 
             true
         }

@@ -14,9 +14,6 @@ import me.proxer.app.chat.LocalConference
 import me.proxer.app.chat.LocalMessage
 import me.proxer.app.forum.ParsedPost
 import me.proxer.app.forum.TopicMetaData
-import me.proxer.app.manga.local.LocalEntryCore
-import me.proxer.app.manga.local.LocalMangaChapter
-import me.proxer.app.manga.local.LocalMangaPage
 import me.proxer.app.media.comment.ParsedComment
 import me.proxer.app.profile.comment.ParsedUserComment
 import me.proxer.app.ui.view.bbcode.BBParser
@@ -24,10 +21,8 @@ import me.proxer.library.entity.anime.Stream
 import me.proxer.library.entity.forum.Post
 import me.proxer.library.entity.forum.Topic
 import me.proxer.library.entity.info.Comment
-import me.proxer.library.entity.info.EntryCore
 import me.proxer.library.entity.info.EntrySeasonInfo
 import me.proxer.library.entity.info.Synonym
-import me.proxer.library.entity.manga.Chapter
 import me.proxer.library.entity.manga.Page
 import me.proxer.library.entity.messenger.Conference
 import me.proxer.library.entity.messenger.Message
@@ -253,13 +248,13 @@ fun FskConstraint.toAppDrawable(context: Context) = AppCompatResources.getDrawab
 }) ?: throw IllegalStateException("Could not resolve Drawable for fsk constraint: $this")
 
 fun CalendarDay.toAppString(context: Context) = context.getString(when (this) {
-    CalendarDay.MONDAY -> R.string.calendar_day_monday
-    CalendarDay.TUESDAY -> R.string.calendar_day_tuesday
-    CalendarDay.WEDNESDAY -> R.string.calendar_day_wednesday
-    CalendarDay.THURSDAY -> R.string.calendar_day_thursday
-    CalendarDay.FRIDAY -> R.string.calendar_day_friday
-    CalendarDay.SATURDAY -> R.string.calendar_day_saturday
-    CalendarDay.SUNDAY -> R.string.calendar_day_sunday
+    CalendarDay.MONDAY -> R.string.fragment_calendar_day_monday
+    CalendarDay.TUESDAY -> R.string.fragment_calendar_day_tuesday
+    CalendarDay.WEDNESDAY -> R.string.fragment_calendar_day_wednesday
+    CalendarDay.THURSDAY -> R.string.fragment_calendar_day_thursday
+    CalendarDay.FRIDAY -> R.string.fragment_calendar_day_friday
+    CalendarDay.SATURDAY -> R.string.fragment_calendar_day_saturday
+    CalendarDay.SUNDAY -> R.string.fragment_calendar_day_sunday
 })
 
 inline val Page.decodedName: String
@@ -268,21 +263,6 @@ inline val Page.decodedName: String
     } catch (error: Throwable) {
         ""
     }
-
-inline val LocalMangaPage.decodedName: String
-    get() = try {
-        URLDecoder.decode(name, "UTF-8")
-    } catch (error: Throwable) {
-        ""
-    }
-
-fun EntryCore.toLocalEntryCore() = LocalEntryCore(id.toLong(), name, genres, fskConstraints, description, medium,
-        episodeAmount, state, ratingSum, ratingAmount, clicks, category, license, adaptionInfo)
-
-fun Chapter.toLocalChapter(episode: Int, language: Language) = LocalMangaChapter(id.toLong(), episode, language,
-        entryId.toLong(), title, uploaderId, uploaderName, date, scanGroupId, scanGroupName, server)
-
-fun Page.toLocalPage(id: Long = 0, chapterId: Long) = LocalMangaPage(id, name, height, width, chapterId)
 
 fun Stream.toAnimeStreamInfo(isSupported: Boolean) = AnimeStream(id, hoster, hosterName, image, uploaderId,
         uploaderName, date, translatorGroupId, translatorGroupName, isSupported)

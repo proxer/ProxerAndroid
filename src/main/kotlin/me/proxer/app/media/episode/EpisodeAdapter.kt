@@ -2,7 +2,6 @@ package me.proxer.app.media.episode
 
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.TooltipCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,35 +9,27 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.GlideRequests
 import me.proxer.app.MainApplication.Companion.bus
-import me.proxer.app.MainApplication.Companion.mangaDao
 import me.proxer.app.R
 import me.proxer.app.auth.LoginEvent
 import me.proxer.app.auth.LogoutEvent
 import me.proxer.app.base.BaseAdapter
-import me.proxer.app.manga.local.LocalMangaJob
 import me.proxer.app.media.episode.EpisodeAdapter.ViewHolder
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.defaultLoad
 import me.proxer.app.util.extension.setIconicsImage
-import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.toAppDrawable
 import me.proxer.app.util.extension.toAppString
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.app.util.extension.toGeneralLanguage
-import me.proxer.library.enums.Category
-import me.proxer.library.enums.Language
 import me.proxer.library.enums.MediaLanguage
 import me.proxer.library.util.ProxerUrls
-import me.zhanghai.android.materialprogressbar.MaterialProgressBar
 import org.jetbrains.anko.applyRecursively
 import org.jetbrains.anko.collections.forEachWithIndex
 import org.jetbrains.anko.dip
@@ -97,9 +88,6 @@ class EpisodeAdapter(savedInstanceState: Bundle?, private val entryId: String) :
         glide = null
     }
 
-    override fun onViewAttachedToWindow(holder: ViewHolder) = holder.registerBus()
-    override fun onViewDetachedFromWindow(holder: ViewHolder) = holder.disposeBus()
-
     override fun onViewRecycled(holder: ViewHolder) {
         holder.languages.applyRecursively {
             if (it is ImageView) {
@@ -117,8 +105,6 @@ class EpisodeAdapter(savedInstanceState: Bundle?, private val entryId: String) :
         internal val titleContainer: ViewGroup by bindView(R.id.titleContainer)
         internal val watched: ImageView by bindView(R.id.watched)
         internal val languages: ViewGroup by bindView(R.id.languages)
-
-        private var jobDisposable: Disposable? = null
 
         init {
             titleContainer.setOnClickListener {
@@ -161,9 +147,6 @@ class EpisodeAdapter(savedInstanceState: Bundle?, private val entryId: String) :
                 val languageContainer = languages.getChildAt(index)
                 val languageView = languageContainer.findViewById<TextView>(R.id.language)
                 val hostersView = languageContainer.findViewById<ViewGroup>(R.id.hosters)
-                val downloadContainer = languageContainer.findViewById<ViewGroup>(R.id.downloadContainer)
-                val download = languageContainer.findViewById<ImageView>(R.id.download)
-                val downloadProgress = languageContainer.findViewById<MaterialProgressBar>(R.id.downloadProgress)
 
                 languageView.text = language.toAppString(languageView.context)
                 languageView.setCompoundDrawablesWithIntrinsicBounds(language.toGeneralLanguage()
@@ -176,33 +159,7 @@ class EpisodeAdapter(savedInstanceState: Bundle?, private val entryId: String) :
                 }
 
                 bindHosterImages(hosterImages, hostersView)
-                bindDownload(item.category, item.number, language, downloadContainer, download, downloadProgress)
             }
-        }
-
-        fun registerBus() {
-            jobDisposable = Observable.merge(
-                    bus.register(LocalMangaJob.FinishedEvent::class.java),
-                    bus.register(LocalMangaJob.FailedEvent::class.java))
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { event ->
-                        withSafeAdapterPosition(this) {
-                            val (entryId, episode) = when (event) {
-                                is LocalMangaJob.FinishedEvent -> event.entryId to event.episode
-                                is LocalMangaJob.FailedEvent -> event.entryId to event.episode
-                                else -> throw IllegalArgumentException("Unknown event: $event")
-                            }
-
-                            if (entryId == entryId && episode == data[it].number) {
-                                notifyItemChanged(it)
-                            }
-                        }
-                    }
-        }
-
-        fun disposeBus() {
-            jobDisposable?.dispose()
-            jobDisposable = null
         }
 
         private fun bindHosterImages(hosterImages: List<String>?, hostersView: ViewGroup) {
@@ -232,87 +189,5 @@ class EpisodeAdapter(savedInstanceState: Bundle?, private val entryId: String) :
                 }
             }
         }
-
-        private fun bindDownload(
-            category: Category,
-            episode: Int,
-            language: MediaLanguage,
-            downloadContainer: ViewGroup,
-            download: ImageView,
-            downloadProgress: MaterialProgressBar
-        ) {
-
-            downloadProgress.tag.let { (it as? Disposable)?.dispose() }
-            downloadProgress.tag = null
-
-            if (category == Category.MANGA && isLoggedIn) {
-                language.toGeneralLanguage().let { generalLanguage ->
-                    download.setOnClickListener {
-                        constructChapterCheckSingle(entryId, episode, generalLanguage)
-                                .subscribeOn(Schedulers.newThread())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .doOnSuccess { exists ->
-                                    if (!exists) {
-                                        LocalMangaJob.schedule(download.context, entryId, episode, generalLanguage)
-                                    }
-                                }
-                                .subscribeAndLogErrors { exists: Boolean ->
-                                    if (!exists) {
-                                        download.visibility = View.INVISIBLE
-                                        downloadProgress.visibility = View.VISIBLE
-                                    }
-                                }
-                    }
-
-                    downloadProgress.setOnClickListener {
-                        Single.fromCallable { LocalMangaJob.cancel(entryId, episode, generalLanguage) }
-                                .subscribeOn(Schedulers.newThread())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribeAndLogErrors { _: Unit ->
-                                    download.visibility = View.VISIBLE
-                                    downloadProgress.visibility = View.INVISIBLE
-                                }
-                    }
-
-                    downloadProgress.tag = constructChapterCheckSingle(entryId, episode, generalLanguage)
-                            .map { it to LocalMangaJob.isScheduledOrRunning(entryId, episode, generalLanguage) }
-                            .subscribeOn(Schedulers.newThread())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribeAndLogErrors { (containsChapter, isScheduledOrRunning) ->
-                                val progressVisibility = when (isScheduledOrRunning) {
-                                    true -> View.VISIBLE
-                                    false -> View.INVISIBLE
-                                }
-
-                                val downloadVisibility = when (isScheduledOrRunning) {
-                                    true -> View.INVISIBLE
-                                    false -> View.VISIBLE
-                                }
-
-                                when (containsChapter) {
-                                    true -> TooltipCompat.setTooltipText(download, download.context
-                                            .getString(R.string.fragment_episode_already_downloaded_hint))
-                                    false -> TooltipCompat.setTooltipText(download, download.context
-                                            .getString(R.string.fragment_episode_download_hint))
-                                }
-
-                                downloadContainer.visibility = View.VISIBLE
-                                downloadProgress.visibility = progressVisibility
-                                download.visibility = downloadVisibility
-
-                                download.setIconicsImage(when (containsChapter) {
-                                    true -> CommunityMaterial.Icon.cmd_cloud_check
-                                    false -> CommunityMaterial.Icon.cmd_cloud_download
-                                }, 32, 0)
-                            }
-                }
-            } else {
-                downloadContainer.visibility = View.GONE
-            }
-        }
-    }
-
-    private fun constructChapterCheckSingle(entryId: String, episode: Int, language: Language) = Single.fromCallable {
-        mangaDao.countSpecificChaptersForEntry(entryId.toLong(), episode, language) > 0
     }
 }

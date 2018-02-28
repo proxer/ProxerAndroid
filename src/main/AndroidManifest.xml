@@ -268,10 +268,6 @@
             android:exported="false" />
 
         <receiver
-            android:name=".manga.local.LocalMangaDownloadCancelReceiver"
-            android:exported="false" />
-
-        <receiver
             android:name=".chat.sync.ChatNotificationReadReceiver"
             android:exported="false" />
 

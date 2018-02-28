@@ -100,7 +100,7 @@ class CalendarEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
             ViewCompat.setTransitionName(image, "calendar_${item.id}")
 
             title.text = item.name
-            episode.text = episode.context.getString(R.string.calendar_episode, item.episode.toString())
+            episode.text = episode.context.getString(R.string.fragment_calendar_episode, item.episode.toString())
 
             if (item.rating > 0) {
                 ratingContainer.visibility = View.VISIBLE
@@ -113,9 +113,10 @@ class CalendarEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
             val uploadDate = HOUR_MINUTE_DATE_TIME_FORMATTER.format(item.uploadDate.convertToDateTime())
 
             if (item.date == item.uploadDate) {
-                airingInfo.text = airingInfo.context.getString(R.string.calendar_airing, airingDate)
+                airingInfo.text = airingInfo.context.getString(R.string.fragment_calendar_airing, airingDate)
             } else {
-                airingInfo.text = airingInfo.context.getString(R.string.calendar_airing_upload, airingDate, uploadDate)
+                airingInfo.text = airingInfo.context.getString(R.string.fragment_calendar_airing_upload,
+                        airingDate, uploadDate)
             }
 
             airingInfoDisposable?.dispose()
@@ -133,9 +134,11 @@ class CalendarEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
 
                 if (item.uploadDate.convertToDateTime().isBefore(now)) {
                     if (item.date == item.uploadDate) {
-                        status.text = status.context.getString(R.string.calendar_aired)
+                        status.text = status.context.getString(R.string.fragment_calendar_aired)
                     } else {
-                        status.text = SpannableString(status.context.getString(R.string.calendar_uploaded)).apply {
+                        val uploadedText = status.context.getString(R.string.fragment_calendar_uploaded)
+
+                        status.text = SpannableString(uploadedText).apply {
                             val span = ForegroundColorSpan(ContextCompat.getColor(status.context, R.color.md_green_500))
 
                             setSpan(span, 0, length, SPAN_INCLUSIVE_EXCLUSIVE)
@@ -143,13 +146,11 @@ class CalendarEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
                     }
                 } else {
                     if (item.date.convertToDateTime().isBefore(now)) {
-                        val remainingTime = Date().calculateAndFormatDifference(item.uploadDate)
-
-                        status.text = status.context.getString(R.string.calendar_aired_remaining_time, remainingTime)
+                        status.text = status.context.getString(R.string.fragment_calendar_aired_remaining_time,
+                                Date().calculateAndFormatDifference(item.uploadDate))
                     } else {
-                        val remainingTime = Date().calculateAndFormatDifference(item.date)
-
-                        status.text = status.context.getString(R.string.calendar_remaining_time, remainingTime)
+                        status.text = status.context.getString(R.string.fragment_calendar_remaining_time,
+                                Date().calculateAndFormatDifference(item.date))
                     }
                 }
             }
