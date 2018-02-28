@@ -9,11 +9,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.RatingBar
-import android.widget.TableLayout
-import android.widget.TextView
+import android.widget.*
 import com.gojuno.koptional.Optional
 import com.google.android.flexbox.FlexboxLayout
 import com.jakewharton.rxbinding2.view.clicks
@@ -25,18 +21,7 @@ import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.info.industry.IndustryActivity
 import me.proxer.app.info.translatorgroup.TranslatorGroupActivity
 import me.proxer.app.media.MediaActivity
-import me.proxer.app.util.extension.autoDispose
-import me.proxer.app.util.extension.multilineSnackbar
-import me.proxer.app.util.extension.setIconicsImage
-import me.proxer.app.util.extension.snackbar
-import me.proxer.app.util.extension.toAppDrawable
-import me.proxer.app.util.extension.toAppString
-import me.proxer.app.util.extension.toAppStringDescription
-import me.proxer.app.util.extension.toCategory
-import me.proxer.app.util.extension.toEndAppString
-import me.proxer.app.util.extension.toStartAppString
-import me.proxer.app.util.extension.toTypeAppString
-import me.proxer.app.util.extension.unsafeLazy
+import me.proxer.app.util.extension.*
 import me.proxer.library.entity.info.Entry
 import me.proxer.library.entity.info.MediaUserInfo
 import me.proxer.library.enums.Category
@@ -397,10 +382,11 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
         }, onClick = { IndustryActivity.navigateTo(safeActivity, it.id, it.name) })
     }
 
-    private fun <T> bindChips(layout: FlexboxLayout,
-                              items: List<T>,
-                              mapFunction: (T) -> String = { it.toString() },
-                              onClick: ((T) -> Unit)? = null
+    private fun <T> bindChips(
+            layout: FlexboxLayout,
+            items: List<T>,
+            mapFunction: (T) -> String = { it.toString() },
+            onClick: ((T) -> Unit)? = null
     ) = items.map(mapFunction).forEachIndexed { index, it ->
         val badge = MaterialBadgeTextView(layout.context)
 

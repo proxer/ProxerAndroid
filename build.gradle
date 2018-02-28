@@ -198,6 +198,14 @@ task ktlintCheck(type: Exec) {
     }
 }
 
+task ktlintFormat(type: Exec) {
+    group 'Formatting'
+    description = "Fix Kotlin code style deviations."
+
+    commandLine 'java', '-cp', configurations.ktlint.join(System.getProperty('path.separator')),
+            'com.github.shyiko.ktlint.Main', '-F', 'src/**/*.kt'
+}
+
 task wrapper(type: Wrapper) {
     gradleVersion project.ext.gradleVersion
 }

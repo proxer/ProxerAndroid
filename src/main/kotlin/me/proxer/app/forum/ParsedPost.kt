@@ -4,7 +4,7 @@ import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.library.entity.ProxerDateItem
 import me.proxer.library.entity.ProxerIdItem
 import me.proxer.library.entity.ProxerImageItem
-import java.util.Date
+import java.util.*
 
 /**
  * @author Ruben Gees

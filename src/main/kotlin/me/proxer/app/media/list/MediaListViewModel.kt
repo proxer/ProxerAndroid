@@ -5,12 +5,8 @@ import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.base.PagedContentViewModel
 import me.proxer.library.api.PagingLimitEndpoint
 import me.proxer.library.entity.list.MediaListEntry
-import me.proxer.library.enums.FskConstraint
-import me.proxer.library.enums.Genre
-import me.proxer.library.enums.Language
-import me.proxer.library.enums.MediaSearchSortCriteria
-import me.proxer.library.enums.MediaType
-import java.util.EnumSet
+import me.proxer.library.enums.*
+import java.util.*
 import kotlin.properties.Delegates
 
 /**

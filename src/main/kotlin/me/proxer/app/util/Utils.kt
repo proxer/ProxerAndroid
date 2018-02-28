@@ -68,7 +68,8 @@ object Utils {
     }
 
     fun buildClickableText(
-            context: Context, text: CharSequence,
+            context: Context,
+            text: CharSequence,
             onWebClickListener: Link.OnClickListener? = null,
             onWebLongClickListener: Link.OnLongClickListener? = null,
             onMentionsClickListener: Link.OnClickListener? = null,

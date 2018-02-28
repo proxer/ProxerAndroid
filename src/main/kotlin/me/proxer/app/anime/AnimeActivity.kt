@@ -30,8 +30,14 @@ class AnimeActivity : DrawerActivity() {
         private const val NAME_EXTRA = "name"
         private const val EPISODE_AMOUNT_EXTRA = "episode_amount"
 
-        fun navigateTo(context: Activity, id: String, episode: Int, language: AnimeLanguage,
-                       name: String? = null, episodeAmount: Int? = null) {
+        fun navigateTo(
+                context: Activity,
+                id: String,
+                episode: Int,
+                language: AnimeLanguage,
+                name: String? = null,
+                episodeAmount: Int? = null
+        ) {
             context.startActivity(context.intentFor<AnimeActivity>(
                     ID_EXTRA to id,
                     EPISODE_EXTRA to episode,

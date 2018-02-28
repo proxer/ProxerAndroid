@@ -32,7 +32,7 @@ import me.proxer.app.util.Utils
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
 import org.jetbrains.anko.dip
-import java.util.EnumSet
+import java.util.*
 import java.util.concurrent.Semaphore
 
 inline fun <reified T : Enum<T>> enumSetOf(collection: Collection<T>): EnumSet<T> = when (collection.isEmpty()) {

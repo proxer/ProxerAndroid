@@ -7,13 +7,7 @@ import android.support.design.widget.BottomSheetBehavior.STATE_EXPANDED
 import android.view.ViewGroup
 import com.jakewharton.rxbinding2.view.clicks
 import me.proxer.app.R
-import me.proxer.app.util.extension.ProxerLibExtensions
-import me.proxer.app.util.extension.autoDispose
-import me.proxer.app.util.extension.dip
-import me.proxer.app.util.extension.enableLayoutAnimationsSafely
-import me.proxer.app.util.extension.enumSetOf
-import me.proxer.app.util.extension.subscribeAndLogErrors
-import me.proxer.app.util.extension.toAppString
+import me.proxer.app.util.extension.*
 import me.proxer.library.enums.FskConstraint
 import me.proxer.library.enums.Genre
 import me.proxer.library.enums.Language

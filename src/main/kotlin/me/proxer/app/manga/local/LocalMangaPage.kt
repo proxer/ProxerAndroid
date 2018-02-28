@@ -14,8 +14,13 @@ import me.proxer.library.entity.manga.Page
         parentColumns = ["id"],
         childColumns = ["chapterId"]
 ))], indices = [(Index("chapterId"))])
-data class LocalMangaPage(@PrimaryKey(autoGenerate = true) val id: Long = 0, val name: String,
-                          val height: Int, val width: Int, val chapterId: Long) {
+data class LocalMangaPage(
+        @PrimaryKey(autoGenerate = true) val id: Long = 0,
+        val name: String,
+        val height: Int,
+        val width: Int,
+        val chapterId: Long
+) {
 
     fun toNonLocalPage() = Page(name, height, width)
 }

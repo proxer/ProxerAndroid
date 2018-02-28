@@ -6,7 +6,7 @@ import me.proxer.library.entity.ProxerIdItem
 import me.proxer.library.entity.ProxerImageItem
 import me.proxer.library.entity.info.RatingDetails
 import me.proxer.library.enums.UserMediaProgress
-import java.util.Date
+import java.util.*
 
 /**
  * @author Ruben Gees

@@ -66,11 +66,11 @@ class NewsAdapter(savedInstanceState: Bundle?) : BaseAdapter<NewsArticle, NewsAd
         glide = null
     }
 
-    override fun areContentsTheSame(old: NewsArticle, new: NewsArticle) = old.date == new.date
-            && old.category == new.category
-            && old.image == new.image
-            && old.subject == new.subject
-            && old.description == new.description
+    override fun areContentsTheSame(old: NewsArticle, new: NewsArticle) = old.date == new.date &&
+            old.category == new.category &&
+            old.image == new.image &&
+            old.subject == new.subject &&
+            old.description == new.description
 
     override fun saveInstanceState(outState: Bundle) = outState.putParcelable(EXPANDED_STATE, expansionMap)
 

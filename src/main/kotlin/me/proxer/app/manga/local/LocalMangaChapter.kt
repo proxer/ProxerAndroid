@@ -7,7 +7,7 @@ import android.arch.persistence.room.PrimaryKey
 import me.proxer.library.entity.manga.Chapter
 import me.proxer.library.entity.manga.Page
 import me.proxer.library.enums.Language
-import java.util.Date
+import java.util.*
 
 /**
  * @author Ruben Gees
@@ -17,10 +17,19 @@ import java.util.Date
         parentColumns = ["id"],
         childColumns = ["entryId"]
 ))], indices = [(Index("entryId"))])
-data class LocalMangaChapter(@PrimaryKey(autoGenerate = true) val id: Long = 0, val episode: Int,
-                             val language: Language, val entryId: Long, val title: String, val uploaderId: String,
-                             val uploaderName: String, val date: Date, val scanGroupId: String?,
-                             val scanGroupName: String?, val server: String) {
+data class LocalMangaChapter(
+        @PrimaryKey(autoGenerate = true) val id: Long = 0,
+        val episode: Int,
+        val language: Language,
+        val entryId: Long,
+        val title: String,
+        val uploaderId: String,
+        val uploaderName: String,
+        val date: Date,
+        val scanGroupId: String?,
+        val scanGroupName: String?,
+        val server: String
+) {
 
     fun toNonLocalChapter(pages: List<Page>) = Chapter(id.toString(), entryId.toString(), title, uploaderId,
             uploaderName, date, scanGroupId, scanGroupName, server, pages)

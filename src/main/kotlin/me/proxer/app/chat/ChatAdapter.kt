@@ -167,8 +167,8 @@ class ChatAdapter(savedInstanceState: Bundle?, private val isGroup: Boolean) :
 
     override fun areItemsTheSame(old: LocalMessage, new: LocalMessage) = old.id == new.id
 
-    override fun areContentsTheSame(old: LocalMessage, new: LocalMessage) = old.userId == new.userId
-            && old.action == new.action && old.date == new.date && old.message == new.message
+    override fun areContentsTheSame(old: LocalMessage, new: LocalMessage) = old.userId == new.userId &&
+            old.action == new.action && old.date == new.date && old.message == new.message
 
     override fun saveInstanceState(outState: Bundle) {
         outState.putParcelable(IS_SELECTING_STATE, messageSelectionMap)

@@ -1,6 +1,6 @@
 package me.proxer.app.forum
 
-import java.util.Date
+import java.util.*
 
 /**
  * @author Ruben Gees

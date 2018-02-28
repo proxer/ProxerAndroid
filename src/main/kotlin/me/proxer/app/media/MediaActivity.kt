@@ -40,8 +40,13 @@ class MediaActivity : ImageTabsActivity() {
         private const val RELATIONS_SUB_SECTION = "relation"
         private const val RECOMMENDATIONS_SUB_SECTION = "recommendations"
 
-        fun navigateTo(context: Activity, id: String, name: String? = null, category: Category? = null,
-                       imageView: ImageView? = null) {
+        fun navigateTo(
+                context: Activity,
+                id: String,
+                name: String? = null,
+                category: Category? = null,
+                imageView: ImageView? = null
+        ) {
             context.intentFor<MediaActivity>(
                     ID_EXTRA to id,
                     NAME_EXTRA to name,

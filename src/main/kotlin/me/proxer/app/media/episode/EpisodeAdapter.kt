@@ -27,13 +27,7 @@ import me.proxer.app.manga.local.LocalMangaJob
 import me.proxer.app.media.episode.EpisodeAdapter.ViewHolder
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.data.StorageHelper
-import me.proxer.app.util.extension.defaultLoad
-import me.proxer.app.util.extension.setIconicsImage
-import me.proxer.app.util.extension.subscribeAndLogErrors
-import me.proxer.app.util.extension.toAppDrawable
-import me.proxer.app.util.extension.toAppString
-import me.proxer.app.util.extension.toEpisodeAppString
-import me.proxer.app.util.extension.toGeneralLanguage
+import me.proxer.app.util.extension.*
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.Language
 import me.proxer.library.enums.MediaLanguage
@@ -233,9 +227,14 @@ class EpisodeAdapter(savedInstanceState: Bundle?, private val entryId: String) :
             }
         }
 
-        private fun bindDownload(category: Category, episode: Int, language: MediaLanguage,
-                                 downloadContainer: ViewGroup, download: ImageView,
-                                 downloadProgress: MaterialProgressBar) {
+        private fun bindDownload(
+                category: Category,
+                episode: Int,
+                language: MediaLanguage,
+                downloadContainer: ViewGroup,
+                download: ImageView,
+                downloadProgress: MaterialProgressBar
+        ) {
 
             downloadProgress.tag.let { (it as? Disposable)?.dispose() }
             downloadProgress.tag = null

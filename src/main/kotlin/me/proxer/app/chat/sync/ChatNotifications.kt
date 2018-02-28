@@ -139,8 +139,11 @@ object ChatNotifications {
                 }
             }
 
-    private fun buildIndividualChatNotification(context: Context, conference: LocalConference,
-                                                messages: List<LocalMessage>): Notification? {
+    private fun buildIndividualChatNotification(
+            context: Context,
+            conference: LocalConference,
+            messages: List<LocalMessage>
+    ): Notification? {
         val user = StorageHelper.user
 
         if (messages.isEmpty() || user == null) {
@@ -208,8 +211,13 @@ object ChatNotifications {
                 .toBitmap()
     }
 
-    private fun buildIndividualStyle(messages: List<LocalMessage>, conference: LocalConference, context: Context,
-                                     user: LocalUser, content: String) = when (messages.size) {
+    private fun buildIndividualStyle(
+            messages: List<LocalMessage>,
+            conference: LocalConference,
+            context: Context,
+            user: LocalUser,
+            content: String
+    ) = when (messages.size) {
         1 -> {
             val message = messages.first().message
             val username = messages.first().username
