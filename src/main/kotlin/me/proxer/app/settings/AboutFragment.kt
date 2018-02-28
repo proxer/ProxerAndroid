@@ -67,8 +67,6 @@ class AboutFragment : MaterialAboutFragment() {
         }
     }
 
-    val safeActivity get() = activity ?: throw IllegalStateException("activity is null")
-
     private var customTabsHelper by Delegates.notNull<CustomTabsHelperFragment>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -123,11 +121,11 @@ class AboutFragment : MaterialAboutFragment() {
                                 .withUiListener(object : LibsConfiguration.LibsUIListener {
                                     override fun preOnCreateView(view: View) = view
                                     override fun postOnCreateView(view: View) = view.apply {
-                                        Utils.setNavigationBarColorIfPossible(safeActivity, R.color.primary)
+                                        Utils.setNavigationBarColorIfPossible(requireActivity(), R.color.primary)
                                     }
                                 })
                                 .withActivityTitle(getString(R.string.about_info_licenses_activity_title))
-                                .start(safeActivity)
+                                .start(requireActivity())
                     }.build(),
             MaterialAboutActionItem.Builder()
                     .text(R.string.about_info_source_code)
@@ -144,7 +142,7 @@ class AboutFragment : MaterialAboutFragment() {
                     .subText(R.string.about_support_forum_description)
                     .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_forum).iconColor(context))
                     .setOnClickAction {
-                        TopicActivity.navigateTo(safeActivity, SUPPORT_ID)
+                        TopicActivity.navigateTo(requireActivity(), SUPPORT_ID)
                     }.build(),
             MaterialAboutActionItem.Builder()
                     .text(R.string.about_support_message_title)
@@ -155,9 +153,9 @@ class AboutFragment : MaterialAboutFragment() {
                                 .fromAction {
                                     chatDao.findConferenceForUser(DEVELOPER_PROXER_NAME).let { existingConference ->
                                         when (existingConference) {
-                                            null -> CreateChatActivity.navigateTo(safeActivity, false,
+                                            null -> CreateChatActivity.navigateTo(requireActivity(), false,
                                                     Participant(DEVELOPER_PROXER_NAME))
-                                            else -> ChatActivity.navigateTo(safeActivity, existingConference)
+                                            else -> ChatActivity.navigateTo(requireActivity(), existingConference)
                                         }
                                     }
                                 }
@@ -181,11 +179,11 @@ class AboutFragment : MaterialAboutFragment() {
                         setColorFilter(ContextCompat.getColor(context, R.color.icon), PorterDuff.Mode.SRC_IN)
                     })
                     .setOnClickAction {
-                        ProfileActivity.navigateTo(safeActivity, DEVELOPER_PROXER_ID, DEVELOPER_PROXER_NAME, null)
+                        ProfileActivity.navigateTo(requireActivity(), DEVELOPER_PROXER_ID, DEVELOPER_PROXER_NAME, null)
                     }.build()
     )
 
-    private fun showPage(url: HttpUrl) = customTabsHelper.openHttpPage(safeActivity, url)
+    private fun showPage(url: HttpUrl) = customTabsHelper.openHttpPage(requireActivity(), url)
 
     private fun getAboutLibrariesActivityStyle() =
             when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {

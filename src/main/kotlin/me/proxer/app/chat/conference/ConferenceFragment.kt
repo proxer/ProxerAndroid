@@ -62,7 +62,7 @@ class ConferenceFragment : BaseContentFragment<List<LocalConference>>() {
 
         adapter.clickSubject
                 .autoDispose(this)
-                .subscribe { ChatActivity.navigateTo(safeActivity, it) }
+                .subscribe { ChatActivity.navigateTo(requireActivity(), it) }
 
         setHasOptionsMenu(true)
     }
@@ -77,7 +77,7 @@ class ConferenceFragment : BaseContentFragment<List<LocalConference>>() {
         adapter.glide = GlideApp.with(this)
 
         recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(safeActivity),
+        recyclerView.layoutManager = StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(requireActivity()),
                 StaggeredGridLayoutManager.VERTICAL)
         recyclerView.adapter = adapter
     }
@@ -85,7 +85,7 @@ class ConferenceFragment : BaseContentFragment<List<LocalConference>>() {
     override fun onResume() {
         super.onResume()
 
-        ChatNotifications.cancel(safeContext)
+        ChatNotifications.cancel(requireContext())
 
         pingDisposable = bus.register(ConferenceFragmentPingEvent::class.java).subscribe()
     }
@@ -112,8 +112,8 @@ class ConferenceFragment : BaseContentFragment<List<LocalConference>>() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.create_chat -> CreateChatActivity.navigateTo(safeActivity, false)
-            R.id.new_group -> CreateChatActivity.navigateTo(safeActivity, true)
+            R.id.create_chat -> CreateChatActivity.navigateTo(requireActivity(), false)
+            R.id.new_group -> CreateChatActivity.navigateTo(requireActivity(), true)
         }
 
         return super.onOptionsItemSelected(item)

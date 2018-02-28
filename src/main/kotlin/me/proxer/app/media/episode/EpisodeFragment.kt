@@ -66,9 +66,9 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
                 .autoDispose(this)
                 .subscribe { (language, episode) ->
                     when (episode.category) {
-                        Category.ANIME -> AnimeActivity.navigateTo(safeActivity, id, episode.number,
+                        Category.ANIME -> AnimeActivity.navigateTo(requireActivity(), id, episode.number,
                                 language.toAnimeLanguage(), name, episode.episodeAmount)
-                        Category.MANGA -> MangaActivity.navigateTo(safeActivity, id, episode.number,
+                        Category.MANGA -> MangaActivity.navigateTo(requireActivity(), id, episode.number,
                                 language.toGeneralLanguage(), episode.title, name, episode.episodeAmount)
                     }
                 }

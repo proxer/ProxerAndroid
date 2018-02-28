@@ -60,9 +60,9 @@ class ShareReceiverFragment : BaseContentFragment<List<LocalConference>>() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .autoDispose(this)
                 .subscribe {
-                    ChatActivity.navigateTo(safeActivity, it, text)
+                    ChatActivity.navigateTo(requireActivity(), it, text)
 
-                    safeActivity.finish()
+                    requireActivity().finish()
                 }
     }
 
@@ -76,7 +76,7 @@ class ShareReceiverFragment : BaseContentFragment<List<LocalConference>>() {
         adapter.glide = GlideApp.with(this)
 
         recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(safeActivity),
+        recyclerView.layoutManager = StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(requireActivity()),
                 StaggeredGridLayoutManager.VERTICAL)
         recyclerView.adapter = adapter
     }

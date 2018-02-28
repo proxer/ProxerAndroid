@@ -47,23 +47,23 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
     override val viewModel by unsafeLazy { BookmarkViewModelProvider.get(this, category) }
 
     override val layoutManager by unsafeLazy {
-        StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(safeActivity) + 1, VERTICAL)
+        StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(requireActivity()) + 1, VERTICAL)
     }
 
     override var innerAdapter by Delegates.notNull<BookmarkAdapter>()
 
     private var category: Category?
-        get() = safeArguments.getSerializable(CATEGORY_ARGUMENT) as? Category
+        get() = requireArguments().getSerializable(CATEGORY_ARGUMENT) as? Category
         set(value) {
-            safeArguments.putSerializable(CATEGORY_ARGUMENT, value)
+            requireArguments().putSerializable(CATEGORY_ARGUMENT, value)
 
             viewModel.category = value
         }
 
     private var filterAvailable: Boolean?
-        get() = safeArguments.getBoolean(FILTER_AVAILABLE_ARGUMENT)
+        get() = requireArguments().getBoolean(FILTER_AVAILABLE_ARGUMENT)
         set(value) {
-            value?.let { safeArguments.putBoolean(FILTER_AVAILABLE_ARGUMENT, it) }
+            value?.let { requireArguments().putBoolean(FILTER_AVAILABLE_ARGUMENT, it) }
 
             viewModel.filterAvailable = value
         }
@@ -77,9 +77,9 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
                 .autoDispose(this)
                 .subscribe {
                     when (it.category) {
-                        Category.ANIME -> AnimeActivity.navigateTo(safeActivity, it.entryId, it.episode,
+                        Category.ANIME -> AnimeActivity.navigateTo(requireActivity(), it.entryId, it.episode,
                                 it.language.toAnimeLanguage(), it.name)
-                        Category.MANGA -> MangaActivity.navigateTo(safeActivity, it.entryId, it.episode,
+                        Category.MANGA -> MangaActivity.navigateTo(requireActivity(), it.entryId, it.episode,
                                 it.language.toGeneralLanguage(), it.chapterName, it.name)
                     }
                 }
@@ -87,7 +87,7 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
         innerAdapter.longClickSubject
                 .autoDispose(this)
                 .subscribe { (view, bookmark) ->
-                    MediaActivity.navigateTo(safeActivity, bookmark.entryId, bookmark.name, bookmark.category,
+                    MediaActivity.navigateTo(requireActivity(), bookmark.entryId, bookmark.name, bookmark.category,
                             if (view.drawable != null) view else null)
                 }
 

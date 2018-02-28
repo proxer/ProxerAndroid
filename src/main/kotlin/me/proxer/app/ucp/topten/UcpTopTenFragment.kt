@@ -54,7 +54,7 @@ class UcpTopTenFragment : BaseContentFragment<ZippedTopTenResult>() {
         Observable.merge(animeAdapter.clickSubject, mangaAdapter.clickSubject)
                 .autoDispose(this)
                 .subscribe { (view, item) ->
-                    MediaActivity.navigateTo(safeActivity, item.entryId, item.name, item.category,
+                    MediaActivity.navigateTo(requireActivity(), item.entryId, item.name, item.category,
                             if (view.drawable != null) view else null)
                 }
 
@@ -70,7 +70,7 @@ class UcpTopTenFragment : BaseContentFragment<ZippedTopTenResult>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val spanCount = DeviceUtils.calculateSpanAmount(safeActivity) + 1
+        val spanCount = DeviceUtils.calculateSpanAmount(requireActivity()) + 1
 
         animeAdapter.glide = GlideApp.with(this)
         mangaAdapter.glide = GlideApp.with(this)

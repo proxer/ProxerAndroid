@@ -136,7 +136,7 @@ class ChatFragment : PagedContentFragment<LocalMessage>() {
 
         innerAdapter.titleClickSubject
                 .autoDispose(this)
-                .subscribe { ProfileActivity.navigateTo(safeActivity, it.userId, it.username) }
+                .subscribe { ProfileActivity.navigateTo(requireActivity(), it.userId, it.username) }
 
         innerAdapter.messageSelectionSubject
                 .autoDispose(this)
@@ -161,14 +161,14 @@ class ChatFragment : PagedContentFragment<LocalMessage>() {
                 .autoDispose(this)
                 .subscribe {
                     getString(R.string.clipboard_title).let { title ->
-                        safeContext.clipboardManager.primaryClip = ClipData.newPlainText(title, it.toString())
-                        safeContext.toast(R.string.clipboard_status)
+                        requireContext().clipboardManager.primaryClip = ClipData.newPlainText(title, it.toString())
+                        requireContext().toast(R.string.clipboard_status)
                     }
                 }
 
         innerAdapter.mentionsClickSubject
                 .autoDispose(this)
-                .subscribe { ProfileActivity.navigateTo(safeActivity, username = it) }
+                .subscribe { ProfileActivity.navigateTo(requireActivity(), username = it) }
 
         viewModel.conference.observe(this, Observer {
             it?.let { conference = it }
@@ -210,7 +210,7 @@ class ChatFragment : PagedContentFragment<LocalMessage>() {
     override fun onResume() {
         super.onResume()
 
-        ChatNotifications.cancel(safeContext)
+        ChatNotifications.cancel(requireContext())
 
         pingDisposable = bus.register(ChatFragmentPingEvent::class.java).subscribe()
     }
@@ -262,14 +262,14 @@ class ChatFragment : PagedContentFragment<LocalMessage>() {
             .icon(iconicRes)
             .sizeDp(32)
             .paddingDp(6)
-            .iconColor(safeContext)
+            .iconColor(requireContext())
 
     private fun handleCopyClick() {
         val title = getString(R.string.fragment_chat_clip_title)
         val content = innerAdapter.selectedMessages.joinToString(separator = "\n", transform = { it.message })
 
-        safeContext.clipboardManager.primaryClip = ClipData.newPlainText(title, content)
-        safeContext.toast(R.string.clipboard_status)
+        requireContext().clipboardManager.primaryClip = ClipData.newPlainText(title, content)
+        requireContext().toast(R.string.clipboard_status)
 
         actionMode?.finish()
     }
@@ -279,7 +279,7 @@ class ChatFragment : PagedContentFragment<LocalMessage>() {
         messageInput.setSelection(messageInput.text.length)
         messageInput.requestFocus()
 
-        safeContext.inputMethodManager.showSoftInput(messageInput, InputMethodManager.SHOW_IMPLICIT)
+        requireContext().inputMethodManager.showSoftInput(messageInput, InputMethodManager.SHOW_IMPLICIT)
 
         actionMode?.finish()
     }

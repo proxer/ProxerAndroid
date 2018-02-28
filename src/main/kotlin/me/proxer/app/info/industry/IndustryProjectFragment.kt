@@ -39,7 +39,7 @@ class IndustryProjectFragment : PagedContentFragment<IndustryProject>() {
         get() = industryActivity.id
 
     override val layoutManager by unsafeLazy {
-        StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(safeActivity) + 1, VERTICAL)
+        StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(requireActivity()) + 1, VERTICAL)
     }
 
     override var innerAdapter by Delegates.notNull<IndustryProjectAdapter>()
@@ -52,7 +52,7 @@ class IndustryProjectFragment : PagedContentFragment<IndustryProject>() {
         innerAdapter.clickSubject
                 .autoDispose(this)
                 .subscribe { (view, project) ->
-                    MediaActivity.navigateTo(safeActivity, project.id, project.name, project.medium.toCategory(),
+                    MediaActivity.navigateTo(requireActivity(), project.id, project.name, project.medium.toCategory(),
                             if (view.drawable != null) view else null)
                 }
     }

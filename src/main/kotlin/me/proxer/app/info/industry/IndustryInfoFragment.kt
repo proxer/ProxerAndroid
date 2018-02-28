@@ -79,22 +79,22 @@ class IndustryInfoFragment : BaseContentFragment<Industry>() {
             languageRow.visibility = View.GONE
         } else {
             languageRow.visibility = View.VISIBLE
-            language.setImageDrawable(data.country.toAppDrawable(safeContext))
+            language.setImageDrawable(data.country.toAppDrawable(requireContext()))
         }
 
         if (data.link?.toString().isNullOrBlank()) {
             linkRow.visibility = View.GONE
         } else {
             linkRow.visibility = View.VISIBLE
-            link.text = Utils.buildClickableText(safeContext, data.link.toString(),
+            link.text = Utils.buildClickableText(requireContext(), data.link.toString(),
                     onWebClickListener = Link.OnClickListener { link ->
                         showPage(Utils.parseAndFixUrl(link))
                     },
                     onWebLongClickListener = Link.OnLongClickListener { link ->
                         val title = getString(R.string.clipboard_title)
 
-                        safeContext.clipboardManager.primaryClip = ClipData.newPlainText(title, link)
-                        safeContext.toast(R.string.clipboard_status)
+                        requireContext().clipboardManager.primaryClip = ClipData.newPlainText(title, link)
+                        requireContext().toast(R.string.clipboard_status)
                     })
         }
 

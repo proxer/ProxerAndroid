@@ -54,7 +54,7 @@ class RelationFragment : BaseContentFragment<List<Relation>>() {
         adapter.clickSubject
                 .autoDispose(this)
                 .subscribe { (view, relation) ->
-                    MediaActivity.navigateTo(safeActivity, relation.id, relation.name, relation.category,
+                    MediaActivity.navigateTo(requireActivity(), relation.id, relation.name, relation.category,
                             if (view.drawable != null) view else null)
                 }
     }
@@ -76,7 +76,7 @@ class RelationFragment : BaseContentFragment<List<Relation>>() {
         adapter.glide = GlideApp.with(this)
 
         recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(safeActivity) + 1,
+        recyclerView.layoutManager = StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(requireActivity()) + 1,
                 StaggeredGridLayoutManager.VERTICAL)
         recyclerView.adapter = adapter
     }

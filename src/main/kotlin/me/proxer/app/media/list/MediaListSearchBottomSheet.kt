@@ -96,12 +96,12 @@ class MediaListSearchBottomSheet private constructor(
                 .autoDispose(fragment)
                 .subscribeAndLogErrors { selections ->
                     fragment.fskConstraints = enumSetOf(selections.map {
-                        ProxerLibExtensions.fskConstraintFromAppString(fragment.safeContext, it)
+                        ProxerLibExtensions.fskConstraintFromAppString(fragment.requireContext(), it)
                     })
                 }
 
         val genreItems = Genre.values().map { getSafeApiEnum(it) }
-        val fskItems = FskConstraint.values().map { it.toAppString(fragment.safeContext) }
+        val fskItems = FskConstraint.values().map { it.toAppString(fragment.requireContext()) }
         val languageItems = listOf(
                 fragment.getString(R.string.fragment_media_list_all_languages),
                 fragment.getString(R.string.language_german),

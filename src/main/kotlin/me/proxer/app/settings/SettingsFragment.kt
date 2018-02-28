@@ -34,9 +34,6 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
         }
     }
 
-    val safeContext get() = context ?: throw IllegalStateException("context is null")
-    val safeActivity get() = activity ?: throw IllegalStateException("activity is null")
-
     override fun onCreatePreferences2(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences)
 
@@ -87,33 +84,34 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         when (key) {
-            AGE_CONFIRMATION -> if (PreferenceHelper.isAgeRestrictedMediaAllowed(safeContext)) {
+            AGE_CONFIRMATION -> if (PreferenceHelper.isAgeRestrictedMediaAllowed(requireContext())) {
                 (findPreference(AGE_CONFIRMATION) as TwoStatePreference).isChecked = true
             }
 
             THEME -> {
-                AppCompatDelegate.setDefaultNightMode(PreferenceHelper.getNightMode(safeContext))
+                AppCompatDelegate.setDefaultNightMode(PreferenceHelper.getNightMode(requireContext()))
 
-                safeActivity.recreate()
+                requireActivity().recreate()
             }
 
             NOTIFICATIONS_NEWS, NOTIFICATIONS_ACCOUNT -> {
                 updateIntervalNotification()
 
-                NotificationJob.scheduleIfPossible(safeContext)
+                NotificationJob.scheduleIfPossible(requireContext())
             }
 
-            NOTIFICATIONS_CHAT -> ChatJob.scheduleSynchronizationIfPossible(safeContext)
+            NOTIFICATIONS_CHAT -> ChatJob.scheduleSynchronizationIfPossible(requireContext())
 
             NOTIFICATIONS_INTERVAL -> {
-                NotificationJob.scheduleIfPossible(safeContext)
-                ChatJob.scheduleSynchronizationIfPossible(safeContext)
+                NotificationJob.scheduleIfPossible(requireContext())
+                ChatJob.scheduleSynchronizationIfPossible(requireContext())
             }
         }
     }
 
     private fun updateIntervalNotification() {
-        findPreference(NOTIFICATIONS_INTERVAL).isEnabled = PreferenceHelper.areNewsNotificationsEnabled(safeContext) ||
-                PreferenceHelper.areAccountNotificationsEnabled(safeContext)
+        findPreference(NOTIFICATIONS_INTERVAL).isEnabled = PreferenceHelper
+                .areNewsNotificationsEnabled(requireContext()) || PreferenceHelper
+                .areAccountNotificationsEnabled(requireContext())
     }
 }

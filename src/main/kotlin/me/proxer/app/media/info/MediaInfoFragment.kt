@@ -80,12 +80,12 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
         }
 
     private var showUnratedTags: Boolean
-        get() = safeArguments.getBoolean(SHOW_UNRATED_TAGS_ARGUMENT, false)
-        set(value) = safeArguments.putBoolean(SHOW_UNRATED_TAGS_ARGUMENT, value)
+        get() = requireArguments().getBoolean(SHOW_UNRATED_TAGS_ARGUMENT, false)
+        set(value) = requireArguments().putBoolean(SHOW_UNRATED_TAGS_ARGUMENT, value)
 
     private var showSpoilerTags: Boolean
-        get() = safeArguments.getBoolean(SHOW_SPOILER_TAGS_ARGUMENT, false)
-        set(value) = safeArguments.putBoolean(SHOW_SPOILER_TAGS_ARGUMENT, value)
+        get() = requireArguments().getBoolean(SHOW_SPOILER_TAGS_ARGUMENT, false)
+        set(value) = requireArguments().putBoolean(SHOW_SPOILER_TAGS_ARGUMENT, value)
 
     private val ratingContainer: ViewGroup by bindView(R.id.ratingContainer)
     private val rating: RatingBar by bindView(R.id.rating)
@@ -209,7 +209,7 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
         ratingContainer.visibility = View.VISIBLE
         rating.rating = result.rating / 2.0f
         ratingAmount.visibility = View.VISIBLE
-        ratingAmount.text = safeContext.resources.getQuantityString(R.plurals.fragment_media_info_rate_count,
+        ratingAmount.text = requireContext().resources.getQuantityString(R.plurals.fragment_media_info_rate_count,
                 result.ratingAmount, result.rating, result.ratingAmount)
     } else {
         ratingContainer.visibility = View.GONE
@@ -217,7 +217,7 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
     }
 
     private fun bindSynonyms(result: Entry) = result.synonyms.forEach {
-        infoTable.addView(constructInfoTableRow(it.toTypeAppString(safeContext), it.name, true))
+        infoTable.addView(constructInfoTableRow(it.toTypeAppString(requireContext()), it.name, true))
     }
 
     private fun bindSeasons(result: Entry) {
@@ -230,10 +230,10 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
             val seasonStartView = tableRow.findViewById<TextView>(R.id.seasonStart)
             val seasonEndView = tableRow.findViewById<TextView>(R.id.seasonEnd)
 
-            seasonStartView.text = seasons[0].toStartAppString(safeContext)
+            seasonStartView.text = seasons[0].toStartAppString(requireContext())
 
             if (seasons.size >= 2) {
-                seasonEndView.text = seasons[1].toEndAppString(safeContext)
+                seasonEndView.text = seasons[1].toEndAppString(requireContext())
             } else {
                 seasonEndView.visibility = View.GONE
             }
@@ -243,32 +243,32 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
     }
 
     private fun bindStatus(result: Entry) {
-        infoTable.addView(constructInfoTableRow(safeContext.getString(R.string.fragment_media_info_status_title),
-                result.state.toAppString(safeContext)))
+        infoTable.addView(constructInfoTableRow(requireContext().getString(R.string.fragment_media_info_status_title),
+                result.state.toAppString(requireContext())))
     }
 
     private fun bindLicense(result: Entry) {
-        infoTable.addView(constructInfoTableRow(safeContext.getString(R.string.fragment_media_info_license_title),
-                result.license.toAppString(safeContext)))
+        infoTable.addView(constructInfoTableRow(requireContext().getString(R.string.fragment_media_info_license_title),
+                result.license.toAppString(requireContext())))
     }
 
     private fun bindAdaption(result: Entry) {
         result.adaptionInfo.let { adaptionInfo ->
             if (adaptionInfo.id != "0") {
                 val title = getString(R.string.fragment_media_info_adaption_title)
-                val content = "${adaptionInfo.name} (${adaptionInfo.medium?.toAppString(safeContext)})"
+                val content = "${adaptionInfo.name} (${adaptionInfo.medium?.toAppString(requireContext())})"
 
                 infoTable.addView(constructInfoTableRow(title, content).also { tableRow ->
                     tableRow.findViewById<View>(R.id.content).also { contentView ->
                         val selectableItemBackground = TypedValue().apply {
-                            safeContext.theme.resolveAttribute(R.attr.selectableItemBackground, this, true)
+                            requireContext().theme.resolveAttribute(R.attr.selectableItemBackground, this, true)
                         }
 
                         contentView.setBackgroundResource(selectableItemBackground.resourceId)
                         contentView.clicks()
                                 .autoDispose(this)
                                 .subscribe {
-                                    MediaActivity.navigateTo(safeActivity, adaptionInfo.id, adaptionInfo.name,
+                                    MediaActivity.navigateTo(requireActivity(), adaptionInfo.id, adaptionInfo.name,
                                             adaptionInfo.medium?.toCategory())
                                 }
                     }
@@ -361,9 +361,9 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
             val image = LayoutInflater.from(context)
                     .inflate(R.layout.layout_image, fskConstraints, false) as ImageView
 
-            image.setImageDrawable(constraint.toAppDrawable(safeContext))
+            image.setImageDrawable(constraint.toAppDrawable(requireContext()))
             image.setOnClickListener {
-                multilineSnackbar(root, constraint.toAppStringDescription(safeContext))
+                multilineSnackbar(root, constraint.toAppStringDescription(requireContext()))
             }
 
             fskConstraints.addView(image)
@@ -375,7 +375,7 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
         translatorGroups.visibility = View.GONE
     } else {
         bindChips(translatorGroups, result.translatorGroups, mapFunction = { it.name },
-                onClick = { TranslatorGroupActivity.navigateTo(safeActivity, it.id, it.name) })
+                onClick = { TranslatorGroupActivity.navigateTo(requireActivity(), it.id, it.name) })
     }
 
     private fun bindIndustries(result: Entry) = if (result.industries.isEmpty()) {
@@ -394,7 +394,7 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
 
                 "${it.name} ($type)"
             }
-        }, onClick = { IndustryActivity.navigateTo(safeActivity, it.id, it.name) })
+        }, onClick = { IndustryActivity.navigateTo(requireActivity(), it.id, it.name) })
     }
 
     private fun <T> bindChips(

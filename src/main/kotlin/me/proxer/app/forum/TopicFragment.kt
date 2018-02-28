@@ -51,7 +51,7 @@ class TopicFragment : PagedContentFragment<ParsedPost>() {
         innerAdapter.profileClickSubject
                 .autoDispose(this)
                 .subscribe { (view, post) ->
-                    ProfileActivity.navigateTo(safeActivity, post.userId, post.username, post.image,
+                    ProfileActivity.navigateTo(requireActivity(), post.userId, post.username, post.image,
                             if (view.drawable != null && post.image.isNotBlank()) view else null)
                 }
 

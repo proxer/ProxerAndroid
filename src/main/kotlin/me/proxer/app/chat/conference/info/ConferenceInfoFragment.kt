@@ -52,7 +52,7 @@ class ConferenceInfoFragment : BaseContentFragment<ConferenceInfo>() {
         adapter.participantClickSubject
                 .autoDispose(this)
                 .subscribe { (view, item) ->
-                    ProfileActivity.navigateTo(safeActivity, item.id, item.username, item.image,
+                    ProfileActivity.navigateTo(requireActivity(), item.id, item.username, item.image,
                             if (view.drawable != null && item.image.isNotBlank()) view else null)
                 }
 

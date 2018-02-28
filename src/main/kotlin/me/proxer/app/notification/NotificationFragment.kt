@@ -86,6 +86,6 @@ class NotificationFragment : PagedContentFragment<ProxerNotification>() {
     override fun onResume() {
         super.onResume()
 
-        AccountNotifications.cancel(safeContext)
+        AccountNotifications.cancel(requireContext())
     }
 }

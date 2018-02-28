@@ -69,78 +69,78 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
     }
 
     override val layoutManager by unsafeLazy {
-        StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(safeActivity) + 1, VERTICAL)
+        StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(requireActivity()) + 1, VERTICAL)
     }
 
     override var innerAdapter by Delegates.notNull<MediaAdapter>()
 
     private val category
-        get() = safeArguments.getSerializable(CATEGORY_ARGUMENT) as Category
+        get() = requireArguments().getSerializable(CATEGORY_ARGUMENT) as Category
 
     private var sortCriteria: MediaSearchSortCriteria
-        get() = safeArguments.getSerializable(SORT_CRITERIA_ARGUMENT) as? MediaSearchSortCriteria
+        get() = requireArguments().getSerializable(SORT_CRITERIA_ARGUMENT) as? MediaSearchSortCriteria
                 ?: MediaSearchSortCriteria.RATING
         set(value) {
-            safeArguments.putSerializable(SORT_CRITERIA_ARGUMENT, value)
+            requireArguments().putSerializable(SORT_CRITERIA_ARGUMENT, value)
 
             viewModel.sortCriteria = value
         }
 
     private var type: MediaType
-        get() = safeArguments.getSerializable(TYPE_ARGUMENT) as? MediaType ?: when (category) {
+        get() = requireArguments().getSerializable(TYPE_ARGUMENT) as? MediaType ?: when (category) {
             Category.ANIME -> MediaType.ALL_ANIME
             Category.MANGA -> MediaType.ALL_MANGA
             else -> throw IllegalArgumentException("Unknown value for category")
         }
         set(value) {
-            safeArguments.putSerializable(TYPE_ARGUMENT, value)
+            requireArguments().putSerializable(TYPE_ARGUMENT, value)
 
             viewModel.type = value
         }
 
     private var searchQuery: String?
-        get() = safeArguments.getString(SEARCH_QUERY_ARGUMENT, null)
+        get() = requireArguments().getString(SEARCH_QUERY_ARGUMENT, null)
         set(value) {
-            safeArguments.putString(SEARCH_QUERY_ARGUMENT, value)
+            requireArguments().putString(SEARCH_QUERY_ARGUMENT, value)
 
             viewModel.searchQuery = value
         }
 
     internal var language: Language?
-        get() = safeArguments.getSerializable(LANGUAGE_ARGUMENT) as? Language?
+        get() = requireArguments().getSerializable(LANGUAGE_ARGUMENT) as? Language?
         set(value) {
-            safeArguments.putSerializable(LANGUAGE_ARGUMENT, language)
+            requireArguments().putSerializable(LANGUAGE_ARGUMENT, language)
 
             viewModel.language = value
         }
 
     internal var genres: EnumSet<Genre>
-        get() = safeArguments.getEnumSet(GENRES_ARGUMENT, Genre::class.java)
+        get() = requireArguments().getEnumSet(GENRES_ARGUMENT, Genre::class.java)
         set(value) {
-            safeArguments.putEnumSet(GENRES_ARGUMENT, value)
+            requireArguments().putEnumSet(GENRES_ARGUMENT, value)
 
             viewModel.genres = value
         }
 
     internal var excludedGenres: EnumSet<Genre>
-        get() = safeArguments.getEnumSet(EXCLUDED_GENRES_ARGUMENT, Genre::class.java)
+        get() = requireArguments().getEnumSet(EXCLUDED_GENRES_ARGUMENT, Genre::class.java)
         set(value) {
-            safeArguments.putEnumSet(EXCLUDED_GENRES_ARGUMENT, value)
+            requireArguments().putEnumSet(EXCLUDED_GENRES_ARGUMENT, value)
 
             viewModel.excludedGenres = value
         }
 
     internal var fskConstraints: EnumSet<FskConstraint>
-        get() = safeArguments.getEnumSet(FSK_CONSTRAINTS_ARGUMENT, FskConstraint::class.java)
+        get() = requireArguments().getEnumSet(FSK_CONSTRAINTS_ARGUMENT, FskConstraint::class.java)
         set(value) {
-            safeArguments.putEnumSet(FSK_CONSTRAINTS_ARGUMENT, value)
+            requireArguments().putEnumSet(FSK_CONSTRAINTS_ARGUMENT, value)
 
             viewModel.fskConstraints = value
         }
 
     private var searchBottomSheetManager by Delegates.notNull<MediaListSearchBottomSheet>()
 
-    private val toolbar by unsafeLazy { safeActivity.findViewById<Toolbar>(R.id.toolbar) }
+    private val toolbar by unsafeLazy { requireActivity().findViewById<Toolbar>(R.id.toolbar) }
 
     internal val searchBottomSheet by bindView<ViewGroup>(R.id.searchBottomSheet)
     internal val searchBottomSheetTitle by bindView<ViewGroup>(R.id.titleContainer)
@@ -158,7 +158,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
         innerAdapter.clickSubject
                 .autoDispose(this)
                 .subscribe { (view, entry) ->
-                    MediaActivity.navigateTo(safeActivity, entry.id, entry.name, entry.medium.toCategory(),
+                    MediaActivity.navigateTo(requireActivity(), entry.id, entry.name, entry.medium.toCategory(),
                             if (view.drawable != null) view else null)
                 }
 

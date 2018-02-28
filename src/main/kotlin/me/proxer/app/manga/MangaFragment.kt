@@ -93,10 +93,10 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
     private var isVertical by Delegates.notNull<Boolean>()
 
     private val mediaControlTextResolver = object : MediaControlView.TextResourceResolver {
-        override fun next() = safeContext.getString(R.string.fragment_manga_next_chapter)
-        override fun previous() = safeContext.getString(R.string.fragment_manga_previous_chapter)
-        override fun bookmarkThis() = safeContext.getString(R.string.fragment_manga_bookmark_this_chapter)
-        override fun bookmarkNext() = safeContext.getString(R.string.fragment_manga_bookmark_next_chapter)
+        override fun next() = requireContext().getString(R.string.fragment_manga_next_chapter)
+        override fun previous() = requireContext().getString(R.string.fragment_manga_previous_chapter)
+        override fun bookmarkThis() = requireContext().getString(R.string.fragment_manga_bookmark_this_chapter)
+        override fun bookmarkNext() = requireContext().getString(R.string.fragment_manga_bookmark_next_chapter)
     }
 
     private var innerAdapter by Delegates.notNull<MangaAdapter>()
@@ -108,14 +108,14 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
     override val contentContainer: ViewGroup
         get() = recyclerView
 
-    private val activityRoot by unsafeLazy { safeActivity.findViewById<ViewGroup>(R.id.root) }
-    private val toolbar by unsafeLazy { safeActivity.findViewById<Toolbar>(R.id.toolbar) }
+    private val activityRoot by unsafeLazy { requireActivity().findViewById<ViewGroup>(R.id.root) }
+    private val toolbar by unsafeLazy { requireActivity().findViewById<Toolbar>(R.id.toolbar) }
     private val recyclerView: RecyclerView by bindView(R.id.recyclerView)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        isVertical = PreferenceHelper.isVerticalReaderEnabled(safeContext)
+        isVertical = PreferenceHelper.isVerticalReaderEnabled(requireContext())
 
         innerAdapter = MangaAdapter(isVertical)
         adapter = EasyHeaderFooterAdapter(innerAdapter)
@@ -130,8 +130,8 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val horizontalMargin = DeviceUtils.getHorizontalMargin(safeContext, true)
-        val verticalMargin = DeviceUtils.getVerticalMargin(safeContext, true)
+        val horizontalMargin = DeviceUtils.getHorizontalMargin(requireContext(), true)
+        val verticalMargin = DeviceUtils.getVerticalMargin(requireContext(), true)
 
         header = (inflater.inflate(R.layout.layout_media_control, container, false) as MediaControlView).apply {
             textResolver = mediaControlTextResolver
@@ -149,11 +149,11 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
 
         Observable.merge(header.uploaderClickSubject, footer.uploaderClickSubject)
                 .autoDispose(this)
-                .subscribe { ProfileActivity.navigateTo(safeActivity, it.id, it.name) }
+                .subscribe { ProfileActivity.navigateTo(requireActivity(), it.id, it.name) }
 
         Observable.merge(header.translatorGroupClickSubject, footer.translatorGroupClickSubject)
                 .autoDispose(this)
-                .subscribe { TranslatorGroupActivity.navigateTo(safeActivity, it.id, it.name) }
+                .subscribe { TranslatorGroupActivity.navigateTo(requireActivity(), it.id, it.name) }
 
         Observable.merge(header.episodeSwitchSubject, footer.episodeSwitchSubject)
                 .autoDispose(this)
@@ -174,7 +174,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         super.onViewCreated(view, savedInstanceState)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            safeActivity.window.decorView.setOnSystemUiVisibilityChangeListener { visibility ->
+            requireActivity().window.decorView.setOnSystemUiVisibilityChangeListener { visibility ->
                 if (visibility and View.SYSTEM_UI_FLAG_FULLSCREEN == View.VISIBLE) {
                     (activity as AppCompatActivity).supportActionBar?.show()
                 } else {
@@ -236,7 +236,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
 
         innerAdapter.swapDataAndNotifyWithDiffing(data.chapter.pages)
 
-        safeActivity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LOW_PROFILE
+        requireActivity().window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LOW_PROFILE
     }
 
     override fun hideData() {

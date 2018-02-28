@@ -65,7 +65,7 @@ class LoginDialog : BaseDialog() {
         setLikelyUrl(ProxerUrls.webBase())
     }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialDialog.Builder(safeContext)
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialDialog.Builder(requireContext())
             .autoDismiss(false)
             .title(R.string.dialog_login_title)
             .positiveText(R.string.dialog_login_positive)
@@ -105,14 +105,14 @@ class LoginDialog : BaseDialog() {
 
         secret.transformationMethod = null
 
-        registrationInfo.text = safeContext.getString(R.string.dialog_login_registration)
+        registrationInfo.text = requireContext().getString(R.string.dialog_login_registration)
         registrationInfo.compoundDrawablePadding = dip(12)
 
         registrationInfo.setCompoundDrawables(generateInfoDrawable(), null, null, null)
 
         LinkBuilder.on(registrationInfo)
                 .addLink(Link(WEBSITE_PATTERN)
-                        .setTextColor(ContextCompat.getColor(safeContext, R.color.link))
+                        .setTextColor(ContextCompat.getColor(requireContext(), R.color.link))
                         .setUnderlined(false)
                         .setOnClickListener {
                             showPage(ProxerUrls.webBase()
@@ -138,7 +138,7 @@ class LoginDialog : BaseDialog() {
             it?.let {
                 viewModel.error.value = null
 
-                safeContext.longToast(it.message)
+                requireContext().longToast(it.message)
             }
         })
 
@@ -183,8 +183,8 @@ class LoginDialog : BaseDialog() {
         container.error = errorText
     }
 
-    private fun generateInfoDrawable() = IconicsDrawable(safeContext)
+    private fun generateInfoDrawable() = IconicsDrawable(requireContext())
             .icon(CommunityMaterial.Icon.cmd_information_outline)
-            .iconColor(safeContext)
+            .iconColor(requireContext())
             .sizeDp(20)
 }

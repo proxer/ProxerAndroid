@@ -33,7 +33,7 @@ class NewsFragment : PagedContentFragment<NewsArticle>() {
     override val viewModel by unsafeLazy { NewsViewModelProvider.get(this) }
 
     override val layoutManager by unsafeLazy {
-        StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(safeActivity), VERTICAL)
+        StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(requireActivity()), VERTICAL)
     }
 
     override var innerAdapter by Delegates.notNull<NewsAdapter>()
@@ -45,12 +45,13 @@ class NewsFragment : PagedContentFragment<NewsArticle>() {
 
         innerAdapter.clickSubject
                 .autoDispose(this)
-                .subscribe { TopicActivity.navigateTo(safeActivity, it.threadId, it.subject) }
+                .subscribe { TopicActivity.navigateTo(requireActivity(), it.threadId, it.subject) }
 
         innerAdapter.imageClickSubject
                 .autoDispose(this)
                 .subscribe { (view, article) ->
-                    ImageDetailActivity.navigateTo(safeActivity, ProxerUrls.newsImage(article.id, article.image), view)
+                    ImageDetailActivity.navigateTo(requireActivity(),
+                            ProxerUrls.newsImage(article.id, article.image), view)
                 }
     }
 
@@ -63,6 +64,6 @@ class NewsFragment : PagedContentFragment<NewsArticle>() {
     override fun onResume() {
         super.onResume()
 
-        NewsNotifications.cancel(safeContext)
+        NewsNotifications.cancel(requireContext())
     }
 }

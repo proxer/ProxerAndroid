@@ -17,11 +17,6 @@ import kotlin.properties.Delegates
 @Suppress("UnnecessaryAbstractClass")
 abstract class BaseDialog : DialogFragment() {
 
-    val safeContext get() = context ?: throw IllegalStateException("context is null")
-    val safeActivity get() = activity ?: throw IllegalStateException("activity is null")
-    val safeArguments get() = arguments ?: throw IllegalStateException("arguments are null")
-    val safeTargetFragment get() = targetFragment ?: throw IllegalStateException("targetFragment is null")
-
     private var customTabsHelper by Delegates.notNull<CustomTabsHelperFragment>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,5 +38,8 @@ abstract class BaseDialog : DialogFragment() {
     }
 
     fun setLikelyUrl(url: HttpUrl) = customTabsHelper.mayLaunchUrl(url.androidUri(), bundleOf(), emptyList())
-    fun showPage(url: HttpUrl) = customTabsHelper.openHttpPage(safeActivity, url)
+    fun showPage(url: HttpUrl) = customTabsHelper.openHttpPage(requireActivity(), url)
+
+    protected fun requireArguments() = arguments ?: throw IllegalStateException("arguments are null")
+    protected fun requireTargetFragment() = targetFragment ?: throw IllegalStateException("targetFragment is null")
 }

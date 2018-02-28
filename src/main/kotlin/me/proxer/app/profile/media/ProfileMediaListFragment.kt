@@ -44,7 +44,7 @@ class ProfileMediaListFragment : PagedContentFragment<UserMediaListEntry>() {
     }
 
     override val layoutManager by unsafeLazy {
-        StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(safeActivity) + 1,
+        StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(requireActivity()) + 1,
                 StaggeredGridLayoutManager.VERTICAL)
     }
 
@@ -58,12 +58,12 @@ class ProfileMediaListFragment : PagedContentFragment<UserMediaListEntry>() {
         get() = hostingActivity.username
 
     private val category: Category
-        get() = safeArguments.getSerializable(CATEGORY_ARGUMENT) as Category
+        get() = requireArguments().getSerializable(CATEGORY_ARGUMENT) as Category
 
     private var filter: UserMediaListFilterType?
-        get() = safeArguments.getSerializable(FILTER_ARGUMENT) as? UserMediaListFilterType
+        get() = requireArguments().getSerializable(FILTER_ARGUMENT) as? UserMediaListFilterType
         set(value) {
-            safeArguments.putSerializable(FILTER_ARGUMENT, value)
+            requireArguments().putSerializable(FILTER_ARGUMENT, value)
 
             viewModel.filter = value
         }
@@ -78,7 +78,7 @@ class ProfileMediaListFragment : PagedContentFragment<UserMediaListEntry>() {
         innerAdapter.clickSubject
                 .autoDispose(this)
                 .subscribe { (view, item) ->
-                    MediaActivity.navigateTo(safeActivity, item.id, item.name, item.medium.toCategory(),
+                    MediaActivity.navigateTo(requireActivity(), item.id, item.name, item.medium.toCategory(),
                             if (view.drawable != null) view else null)
                 }
 

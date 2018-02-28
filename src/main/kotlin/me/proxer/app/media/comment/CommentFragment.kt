@@ -48,10 +48,10 @@ class CommentFragment : PagedContentFragment<ParsedComment>() {
         get() = hostingActivity.category
 
     private var sortCriteria: CommentSortCriteria
-        get() = safeArguments.getSerializable(SORT_CRITERIA_ARGUMENT) as? CommentSortCriteria
+        get() = requireArguments().getSerializable(SORT_CRITERIA_ARGUMENT) as? CommentSortCriteria
                 ?: CommentSortCriteria.RATING
         set(value) {
-            safeArguments.putSerializable(SORT_CRITERIA_ARGUMENT, value)
+            requireArguments().putSerializable(SORT_CRITERIA_ARGUMENT, value)
 
             viewModel.sortCriteria = value
         }
@@ -68,7 +68,7 @@ class CommentFragment : PagedContentFragment<ParsedComment>() {
         innerAdapter.profileClickSubject
                 .autoDispose(this)
                 .subscribe { (view, comment) ->
-                    ProfileActivity.navigateTo(safeActivity, comment.authorId, comment.author, comment.image,
+                    ProfileActivity.navigateTo(requireActivity(), comment.authorId, comment.author, comment.image,
                             if (view.drawable != null && comment.image.isNotBlank()) view else null)
                 }
 

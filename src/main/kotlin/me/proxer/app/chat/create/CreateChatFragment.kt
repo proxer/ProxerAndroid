@@ -140,9 +140,9 @@ class CreateChatFragment : BaseFragment() {
 
         viewModel.result.observe(this, Observer {
             it?.let {
-                safeActivity.finish()
+                requireActivity().finish()
 
-                ChatActivity.navigateTo(safeActivity, it)
+                ChatActivity.navigateTo(requireActivity(), it)
             }
         })
 
@@ -253,9 +253,9 @@ class CreateChatFragment : BaseFragment() {
 
                         when {
                             isGroup && topic.isBlank() -> throw TopicEmptyException()
-                            firstMessage.isBlank() -> throw InvalidInputException(safeContext
+                            firstMessage.isBlank() -> throw InvalidInputException(requireContext()
                                     .getString(R.string.error_missing_message))
-                            participants.isEmpty() -> throw InvalidInputException(safeContext
+                            participants.isEmpty() -> throw InvalidInputException(requireContext()
                                     .getString(R.string.error_missing_participants))
                         }
 
@@ -276,7 +276,7 @@ class CreateChatFragment : BaseFragment() {
                         }
                         is TopicEmptyException -> {
                             topicInputContainer.isErrorEnabled = true
-                            topicInputContainer.error = safeContext.getString(R.string.error_input_empty)
+                            topicInputContainer.error = requireContext().getString(R.string.error_input_empty)
                         }
                         else -> ErrorUtils.handle(it).let { action ->
                             multilineSnackbar(root, action.message, Snackbar.LENGTH_LONG, action.buttonMessage,
@@ -331,13 +331,13 @@ class CreateChatFragment : BaseFragment() {
         when {
             it.isBlank() -> {
                 participantInputContainer.isErrorEnabled = true
-                participantInputContainer.error = safeContext.getString(R.string.error_input_empty)
+                participantInputContainer.error = requireContext().getString(R.string.error_input_empty)
 
                 false
             }
             innerAdapter.contains(it) -> {
                 participantInputContainer.isErrorEnabled = true
-                participantInputContainer.error = safeContext.getString(R.string.error_duplicate_participant)
+                participantInputContainer.error = requireContext().getString(R.string.error_duplicate_participant)
 
                 false
             }
@@ -361,5 +361,5 @@ class CreateChatFragment : BaseFragment() {
             .icon(iconicRes)
             .sizeDp(32)
             .paddingDp(6)
-            .iconColor(safeContext)
+            .iconColor(requireContext())
 }

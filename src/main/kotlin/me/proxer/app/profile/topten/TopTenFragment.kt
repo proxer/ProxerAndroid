@@ -64,7 +64,7 @@ class TopTenFragment : BaseContentFragment<ZippedTopTenResult>() {
         Observable.merge(animeAdapter.clickSubject, mangaAdapter.clickSubject)
                 .autoDispose(this)
                 .subscribe { (view, item) ->
-                    MediaActivity.navigateTo(safeActivity, item.id, item.name, item.category,
+                    MediaActivity.navigateTo(requireActivity(), item.id, item.name, item.category,
                             if (view.drawable != null) view else null)
                 }
     }
@@ -79,7 +79,7 @@ class TopTenFragment : BaseContentFragment<ZippedTopTenResult>() {
         animeAdapter.glide = GlideApp.with(this)
         mangaAdapter.glide = GlideApp.with(this)
 
-        val spanCount = DeviceUtils.calculateSpanAmount(safeActivity) + 1
+        val spanCount = DeviceUtils.calculateSpanAmount(requireActivity()) + 1
 
         animeRecyclerView.isNestedScrollingEnabled = false
         animeRecyclerView.layoutManager = GridLayoutManager(context, spanCount)

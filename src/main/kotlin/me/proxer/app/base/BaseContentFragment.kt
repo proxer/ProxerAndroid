@@ -41,8 +41,8 @@ abstract class BaseContentFragment<T> : BaseFragment() {
     protected open val progress: SwipeRefreshLayout by bindView(R.id.progress)
 
     private var isSolvingCaptcha: Boolean
-        get() = safeArguments.getBoolean(IS_SOLVING_CAPTCHA_ARGUMENT, false)
-        set(value) = safeArguments.putBoolean(IS_SOLVING_CAPTCHA_ARGUMENT, value)
+        get() = requireArguments().getBoolean(IS_SOLVING_CAPTCHA_ARGUMENT, false)
+        set(value) = requireArguments().putBoolean(IS_SOLVING_CAPTCHA_ARGUMENT, value)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

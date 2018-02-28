@@ -22,7 +22,7 @@ class MangaCleanDialog : BaseDialog() {
 
     private val viewModel by unsafeLazy { MangaCleanViewModelProvider.get(this) }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialDialog.Builder(safeContext)
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialDialog.Builder(requireContext())
             .content(R.string.dialog_clean_manga_content)
             .positiveText(R.string.dialog_clean_manga_positive)
             .negativeText(R.string.cancel)

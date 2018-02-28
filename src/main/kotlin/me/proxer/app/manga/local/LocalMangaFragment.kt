@@ -53,9 +53,9 @@ class LocalMangaFragment : BaseContentFragment<List<CompleteLocalMangaEntry>>() 
     private var adapter by Delegates.notNull<LocalMangaAdapter>()
 
     private var searchQuery: String?
-        get() = safeArguments.getString(SEARCH_QUERY_ARGUMENT, null)
+        get() = requireArguments().getString(SEARCH_QUERY_ARGUMENT, null)
         set(value) {
-            safeArguments.putString(SEARCH_QUERY_ARGUMENT, value)
+            requireArguments().putString(SEARCH_QUERY_ARGUMENT, value)
 
             viewModel.searchQuery = value
         }
@@ -63,7 +63,7 @@ class LocalMangaFragment : BaseContentFragment<List<CompleteLocalMangaEntry>>() 
     override val contentContainer: ViewGroup
         get() = recyclerView
 
-    private val toolbar by unsafeLazy { safeActivity.findViewById<Toolbar>(R.id.toolbar) }
+    private val toolbar by unsafeLazy { requireActivity().findViewById<Toolbar>(R.id.toolbar) }
     private val jobInfoContainer: ViewGroup by bindView(R.id.jobInfoContainer)
     private val jobInfoText: TextView by bindView(R.id.jobInfoText)
     private val jobInfoCancel: Button by bindView(R.id.jobInfoCancel)
@@ -77,14 +77,14 @@ class LocalMangaFragment : BaseContentFragment<List<CompleteLocalMangaEntry>>() 
         adapter.clickSubject
                 .autoDispose(this)
                 .subscribe { (entry, chapter) ->
-                    MangaActivity.navigateTo(safeActivity, entry.id, chapter.episode, chapter.language, chapter.title,
-                            entry.name, entry.episodeAmount)
+                    MangaActivity.navigateTo(requireActivity(), entry.id, chapter.episode, chapter.language,
+                            chapter.title, entry.name, entry.episodeAmount)
                 }
 
         adapter.longClickSubject
                 .autoDispose(this)
                 .subscribe { (view, entry) ->
-                    MediaActivity.navigateTo(safeActivity, entry.id, entry.name, Category.MANGA,
+                    MediaActivity.navigateTo(requireActivity(), entry.id, entry.name, Category.MANGA,
                             if (view.drawable != null) view else null)
                 }
 
@@ -106,7 +106,7 @@ class LocalMangaFragment : BaseContentFragment<List<CompleteLocalMangaEntry>>() 
         adapter.glide = GlideApp.with(this)
 
         recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(safeActivity) + 1,
+        recyclerView.layoutManager = StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(requireActivity()) + 1,
                 StaggeredGridLayoutManager.VERTICAL)
         recyclerView.adapter = adapter
 
@@ -129,7 +129,7 @@ class LocalMangaFragment : BaseContentFragment<List<CompleteLocalMangaEntry>>() 
             } else {
                 jobInfoContainer.visibility = View.GONE
 
-                recyclerView.setPadding(recyclerView.paddingLeft, DeviceUtils.getVerticalMargin(safeContext),
+                recyclerView.setPadding(recyclerView.paddingLeft, DeviceUtils.getVerticalMargin(requireContext()),
                         recyclerView.paddingRight, recyclerView.paddingBottom)
             }
         })
