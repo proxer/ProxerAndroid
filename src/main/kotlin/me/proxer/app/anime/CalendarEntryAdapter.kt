@@ -1,6 +1,5 @@
 package me.proxer.app.anime
 
-import android.os.Handler
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.RecyclerView
@@ -14,6 +13,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.functions.Consumer
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.GlideRequests
@@ -29,6 +32,7 @@ import me.proxer.library.util.ProxerUrls
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import java.util.Date
+import java.util.concurrent.TimeUnit
 
 /**
  * @author Ruben Gees
@@ -55,12 +59,13 @@ class CalendarEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
     }
 
     override fun onViewRecycled(holder: ViewHolder) {
-        holder.handler.removeCallbacks(null)
+        holder.airingInfoDisposable?.dispose()
+        holder.airingInfoDisposable = null
 
         glide?.clear(holder.image)
     }
 
-    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView?) {
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         glide = null
     }
 
@@ -74,7 +79,7 @@ class CalendarEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
         internal val airingInfo by bindView<TextView>(R.id.airingInfo)
         internal val status by bindView<TextView>(R.id.status)
 
-        internal val handler = Handler()
+        internal var airingInfoDisposable: Disposable? = null
 
         init {
             val width = DeviceUtils.getScreenWidth(itemView.context) / when {
@@ -107,34 +112,46 @@ class CalendarEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
             val airingDate = HOUR_MINUTE_DATE_TIME_FORMATTER.format(item.date.convertToDateTime())
             val uploadDate = HOUR_MINUTE_DATE_TIME_FORMATTER.format(item.uploadDate.convertToDateTime())
 
-            airingInfo.text = "Ausstrahlung:\n${airingDate}\nAuf Proxer (geschätzt):\n${uploadDate}"
+            if (item.date == item.uploadDate) {
+                airingInfo.text = airingInfo.context.getString(R.string.calendar_airing, airingDate)
+            } else {
+                airingInfo.text = airingInfo.context.getString(R.string.calendar_airing_upload, airingDate, uploadDate)
+            }
 
-            handler.removeCallbacksAndMessages(null)
-            handler.post(UpdateAction(item))
+            airingInfoDisposable?.dispose()
+            airingInfoDisposable = Observable.interval(0, 1, TimeUnit.SECONDS)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(AiringInfoUpdateConsumer(item))
 
             glide?.defaultLoad(image, ProxerUrls.entryImage(item.entryId))
         }
 
-        private inner class UpdateAction(private val item: CalendarEntry) : Runnable {
+        internal inner class AiringInfoUpdateConsumer(private val item: CalendarEntry) : Consumer<Long> {
 
-            override fun run() {
+            override fun accept(t: Long?) {
                 val now = LocalDateTime.now()
 
                 if (item.uploadDate.convertToDateTime().isBefore(now)) {
-                    status.text = SpannableString("Auf Proxer (geschätzt)").apply {
-                        val span = ForegroundColorSpan(ContextCompat.getColor(status.context, R.color.md_green_500))
+                    if (item.date == item.uploadDate) {
+                        status.text = status.context.getString(R.string.calendar_aired)
+                    } else {
+                        status.text = SpannableString(status.context.getString(R.string.calendar_uploaded)).apply {
+                            val span = ForegroundColorSpan(ContextCompat.getColor(status.context, R.color.md_green_500))
 
-                        setSpan(span, 0, length, SPAN_INCLUSIVE_EXCLUSIVE)
+                            setSpan(span, 0, length, SPAN_INCLUSIVE_EXCLUSIVE)
+                        }
                     }
                 } else {
                     if (item.date.convertToDateTime().isBefore(now)) {
-                        status.text = "Ausgestrahlt\nNoch " + Date().calculateAndFormatDifference(item.uploadDate)
+                        val remainingTime = Date().calculateAndFormatDifference(item.uploadDate)
+
+                        status.text = status.context.getString(R.string.calendar_aired_remaining_time, remainingTime)
                     } else {
-                        status.text = "Noch " + Date().calculateAndFormatDifference(item.date)
+                        val remainingTime = Date().calculateAndFormatDifference(item.date)
+
+                        status.text = status.context.getString(R.string.calendar_remaining_time, remainingTime)
                     }
                 }
-
-                handler.postDelayed(this, 1000)
             }
         }
     }

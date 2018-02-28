@@ -49,7 +49,7 @@ class RelationAdapter : BaseAdapter<Relation, ViewHolder>() {
         glide?.clear(holder.image)
     }
 
-    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView?) {
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         glide = null
     }
 

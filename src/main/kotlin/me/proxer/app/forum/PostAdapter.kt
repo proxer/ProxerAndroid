@@ -52,7 +52,7 @@ class PostAdapter : BaseAdapter<ParsedPost, ViewHolder>() {
         holder.signature.destroy()
     }
 
-    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView?) {
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         layoutManager = null
         glide = null
     }

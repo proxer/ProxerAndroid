@@ -77,7 +77,7 @@ class EpisodeAdapter(savedInstanceState: Bundle?, private val entryId: String) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(data[position])
     override fun getItemId(position: Int) = data[position].number.toLong()
 
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView?) {
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         busDisposable = Observable.merge(bus.register(LoginEvent::class.java), bus.register(LogoutEvent::class.java))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
@@ -91,7 +91,7 @@ class EpisodeAdapter(savedInstanceState: Bundle?, private val entryId: String) :
                 }
     }
 
-    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView?) {
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         busDisposable?.dispose()
         busDisposable = null
         glide = null

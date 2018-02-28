@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="?attr/selectableItemBackground"
     android:padding="@dimen/item_margin"
     tools:context=".media.list.MediaAdapter">
@@ -79,6 +79,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/ratingContainer"
         android:layout_marginTop="8dp"
+        android:minLines="4"
         tools:text="Airing: 12:55\nAvailable: 13:55" />
 
     <View
@@ -93,9 +94,9 @@
         android:id="@+id/status"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/divider"
+        android:layout_below="@id/divider"
         android:layout_marginTop="8dp"
         android:gravity="center_vertical"
-        android:lines="2"
+        android:minLines="2"
         tools:text="Aired\n00:01:01:55 remaining" />
 </RelativeLayout>

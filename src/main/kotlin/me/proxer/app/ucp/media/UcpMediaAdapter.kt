@@ -44,7 +44,7 @@ class UcpMediaAdapter : BaseAdapter<UserMediaListEntry, ViewHolder>() {
         glide?.clear(holder.image)
     }
 
-    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView?) {
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         glide = null
     }
 

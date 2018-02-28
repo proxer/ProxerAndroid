@@ -46,7 +46,7 @@ class MediaAdapter(private val category: Category) : BaseAdapter<MediaListEntry,
         glide?.clear(holder.image)
     }
 
-    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView?) {
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         glide = null
     }
 

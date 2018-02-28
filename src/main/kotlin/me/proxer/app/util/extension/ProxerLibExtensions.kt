@@ -1,3 +1,5 @@
+@file:Suppress("MethodOverloading")
+
 package me.proxer.app.util.extension
 
 import android.content.Context

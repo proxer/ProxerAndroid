@@ -42,7 +42,12 @@ class CalendarAdapter : BaseAdapter<Pair<CalendarDay, List<CalendarEntry>>, View
         holder.bind(data[position])
     }
 
-    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView?) {
+    override fun onViewRecycled(holder: ViewHolder) {
+        holder.childRecyclerView.layoutManager = null
+        holder.childRecyclerView.adapter = null
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         glide = null
     }
 
@@ -51,28 +56,25 @@ class CalendarAdapter : BaseAdapter<Pair<CalendarDay, List<CalendarEntry>>, View
         internal val weekDay by bindView<TextView>(R.id.weekDay)
         internal val childRecyclerView by bindView<RecyclerView>(R.id.childRecyclerView)
 
-        private val adapter: CalendarEntryAdapter
-            get() = childRecyclerView.adapter as CalendarEntryAdapter
-
         init {
-            val adapter = CalendarEntryAdapter()
-
-            adapter.glide = glide
-            adapter.clickSubject.subscribe(clickSubject)
-
             childRecyclerView.setHasFixedSize(true)
             childRecyclerView.isNestedScrollingEnabled = false
-            childRecyclerView.layoutManager = LinearLayoutManager(childRecyclerView.context, HORIZONTAL, false)
-            childRecyclerView.adapter = adapter
 
             GravitySnapHelper(Gravity.START).attachToRecyclerView(childRecyclerView)
         }
 
         fun bind(item: Pair<CalendarDay, List<CalendarEntry>>) {
             val (day, calendarEntries) = item
+            val adapter = CalendarEntryAdapter()
+
+            adapter.glide = glide
+            adapter.clickSubject.subscribe(clickSubject)
+            adapter.swapDataAndNotifyWithDiffing(calendarEntries)
 
             weekDay.text = day.toAppString(weekDay.context)
-            adapter.swapDataAndNotifyWithDiffing(calendarEntries)
+
+            childRecyclerView.layoutManager = LinearLayoutManager(childRecyclerView.context, HORIZONTAL, false)
+            childRecyclerView.adapter = adapter
         }
     }
 }

@@ -230,6 +230,22 @@
     <string name="calendar_day_saturday">Samstag</string>
     <string name="calendar_day_sunday">Sonntag</string>
 
+    <string name="calendar_episode">Episode %s</string>
+    <string name="calendar_aired">Ausgestrahlt</string>
+    <string name="calendar_uploaded">Auf Proxer (geschätzt)</string>
+    <string name="calendar_remaining_time">Noch %s</string>
+    <string name="calendar_aired_remaining_time">Ausgestrahlt
+        \nNoch %s
+    </string>
+    <string name="calendar_airing">Ausstrahlung:
+        \n%s
+    </string>
+    <string name="calendar_airing_upload">Ausstrahlung:
+        \n%1$s
+        \nAuf Proxer (geschätzt):
+        \n%2$s
+    </string>
+
     <string name="cancel">Abbrechen</string>
 
     <string name="activity_crash_text">Die App ist leider abgestürzt. Sende den Fehler bitte an @RubyGee oder einen
@@ -611,7 +627,6 @@
     <string name="interval_seldom">Selten (Alle 8 Stunden)</string>
 
     <string name="time_a_moment_ago">Eben gerade</string>
-    <string name="calendar_episode">Episode %s</string>
     <plurals name="time_days_ago">
         <item quantity="one">"Gestern"</item>
         <item quantity="other">"Vor %d Tagen"</item>
