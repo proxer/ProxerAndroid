@@ -11,8 +11,8 @@ import com.vanniktech.emoji.EmojiTextView
  * @author Ruben Gees
  */
 class LinkConsumableEmojiTextView @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null
+    context: Context,
+    attrs: AttributeSet? = null
 ) : EmojiTextView(context, attrs) {
 
     @SuppressLint("ClickableViewAccessibility")

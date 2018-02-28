@@ -17,10 +17,10 @@ import kotlin.properties.Delegates
  */
 @GeneratedProvider
 class ProfileMediaListViewModel(
-        private val userId: String?,
-        private val username: String?,
-        category: Category,
-        filter: UserMediaListFilterType?
+    private val userId: String?,
+    private val username: String?,
+    category: Category,
+    filter: UserMediaListFilterType?
 ) : PagedContentViewModel<UserMediaListEntry>() {
 
     override val itemsOnPage = 30

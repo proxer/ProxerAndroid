@@ -83,8 +83,8 @@ class MediaInfoViewModel(private val entryId: String) : BaseViewModel<Pair<Entry
     }
 
     private fun copyData(
-            data: Pair<Entry, Optional<MediaUserInfo>>,
-            updateType: UserInfoUpdateType
+        data: Pair<Entry, Optional<MediaUserInfo>>,
+        updateType: UserInfoUpdateType
     ) = data.first to data.second.toNullable()?.let {
         MediaUserInfo(
                 it.isNoted || updateType == UserInfoUpdateType.NOTE,

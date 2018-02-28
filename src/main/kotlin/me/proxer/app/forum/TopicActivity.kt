@@ -17,9 +17,9 @@ class TopicActivity : DrawerActivity() {
         private const val TOPIC_EXTRA = "topic"
 
         fun navigateTo(
-                context: Activity,
-                id: String,
-                topic: String? = null
+            context: Activity,
+            id: String,
+            topic: String? = null
         ) = context.startActivity<TopicActivity>(ID_EXTRA to id, TOPIC_EXTRA to topic)
     }
 

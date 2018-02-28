@@ -9,7 +9,9 @@ import android.support.v4.widget.TextViewCompat
 import android.support.v7.widget.AppCompatTextView
 import android.util.AttributeSet
 import android.util.TypedValue
-import android.view.Gravity.*
+import android.view.Gravity.CENTER
+import android.view.Gravity.CENTER_HORIZONTAL
+import android.view.Gravity.CENTER_VERTICAL
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -25,9 +27,9 @@ import org.jetbrains.anko.dip
  * @author Ruben Gees
  */
 internal class BBSpoilerView @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
     var spoilerTitle: String? = null

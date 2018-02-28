@@ -32,7 +32,19 @@ import me.proxer.library.entity.manga.Page
 import me.proxer.library.entity.messenger.Conference
 import me.proxer.library.entity.messenger.Message
 import me.proxer.library.entity.user.UserComment
-import me.proxer.library.enums.*
+import me.proxer.library.enums.AnimeLanguage
+import me.proxer.library.enums.CalendarDay
+import me.proxer.library.enums.Category
+import me.proxer.library.enums.Country
+import me.proxer.library.enums.FskConstraint
+import me.proxer.library.enums.Language
+import me.proxer.library.enums.License
+import me.proxer.library.enums.MediaLanguage
+import me.proxer.library.enums.MediaState
+import me.proxer.library.enums.Medium
+import me.proxer.library.enums.Season
+import me.proxer.library.enums.SynonymType
+import me.proxer.library.enums.UserMediaProgress
 import java.net.URLDecoder
 
 object ProxerLibExtensions {
@@ -143,9 +155,9 @@ fun MediaState.toAppDrawable(context: Context): IconicsDrawable = IconicsDrawabl
         })
 
 fun UserMediaProgress.toEpisodeAppString(
-        context: Context,
-        episode: Int = 1,
-        category: Category = Category.ANIME
+    context: Context,
+    episode: Int = 1,
+    category: Category = Category.ANIME
 ): String = when (this) {
     UserMediaProgress.WATCHED -> context.getString(when (category) {
         Category.ANIME -> R.string.user_media_progress_watched

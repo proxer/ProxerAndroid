@@ -11,11 +11,11 @@ import me.proxer.app.ui.view.bbcode.prototype.TextPrototype
  * @author Ruben Gees
  */
 class BBTree(
-        val prototype: BBPrototype,
-        val parent: BBTree?,
-        var isFinished: Boolean = false,
-        val children: MutableList<BBTree> = mutableListOf(),
-        val args: MutableMap<String, Any?> = mutableMapOf()
+    val prototype: BBPrototype,
+    val parent: BBTree?,
+    var isFinished: Boolean = false,
+    val children: MutableList<BBTree> = mutableListOf(),
+    val args: MutableMap<String, Any?> = mutableMapOf()
 ) {
 
     companion object {

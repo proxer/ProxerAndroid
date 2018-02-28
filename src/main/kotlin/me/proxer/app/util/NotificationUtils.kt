@@ -46,12 +46,12 @@ object NotificationUtils {
     }
 
     fun showErrorNotification(
-            context: Context,
-            id: Int,
-            channel: String,
-            title: String,
-            content: String,
-            intent: PendingIntent? = null
+        context: Context,
+        id: Int,
+        channel: String,
+        title: String,
+        content: String,
+        intent: PendingIntent? = null
     ) {
         NotificationManagerCompat.from(context).notify(id, NotificationCompat.Builder(context, channel)
                 .setContentTitle(title)

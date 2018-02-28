@@ -2,7 +2,12 @@ package me.proxer.app.ui.view.bbcode
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.View.MeasureSpec.*
+import android.view.View.MeasureSpec.AT_MOST
+import android.view.View.MeasureSpec.EXACTLY
+import android.view.View.MeasureSpec.UNSPECIFIED
+import android.view.View.MeasureSpec.getMode
+import android.view.View.MeasureSpec.getSize
+import android.view.View.MeasureSpec.makeMeasureSpec
 import android.widget.ImageView
 import android.widget.LinearLayout
 import me.proxer.app.GlideRequests
@@ -11,9 +16,9 @@ import me.proxer.app.GlideRequests
  * @author Ruben Gees
  */
 class BBCodeView @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
     var maxHeight = Int.MAX_VALUE

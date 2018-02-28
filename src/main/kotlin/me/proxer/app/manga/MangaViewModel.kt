@@ -16,7 +16,11 @@ import me.proxer.app.exception.PartialException
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
 import me.proxer.app.util.data.ResettingMutableLiveData
-import me.proxer.app.util.extension.*
+import me.proxer.app.util.extension.buildOptionalSingle
+import me.proxer.app.util.extension.buildPartialErrorSingle
+import me.proxer.app.util.extension.buildSingle
+import me.proxer.app.util.extension.subscribeAndLogErrors
+import me.proxer.app.util.extension.toMediaLanguage
 import me.proxer.library.api.Endpoint
 import me.proxer.library.api.ProxerException
 import me.proxer.library.api.ProxerException.ErrorType
@@ -32,9 +36,9 @@ import kotlin.properties.Delegates
  */
 @GeneratedProvider
 class MangaViewModel(
-        private val entryId: String,
-        private val language: Language,
-        episode: Int
+    private val entryId: String,
+    private val language: Language,
+    episode: Int
 ) : BaseViewModel<MangaChapterInfo>() {
 
     private companion object {
@@ -162,9 +166,9 @@ class MangaViewModel(
     }
 
     private data class LocalDataInfo(
-            val entryId: String,
-            val chapterId: String,
-            val lastModification: Long,
-            val size: Long
+        val entryId: String,
+        val chapterId: String,
+        val lastModification: Long,
+        val size: Long
     )
 }

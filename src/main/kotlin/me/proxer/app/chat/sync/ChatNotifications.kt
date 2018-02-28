@@ -118,9 +118,9 @@ object ChatNotifications {
     }
 
     private fun buildSummaryStyle(
-            content: SpannableString,
-            title: String,
-            filteredConferenceMap: LocalConferenceMap
+        content: SpannableString,
+        title: String,
+        filteredConferenceMap: LocalConferenceMap
     ) = NotificationCompat.InboxStyle()
             .setBigContentTitle(content)
             .setSummaryText(title)
@@ -140,9 +140,9 @@ object ChatNotifications {
             }
 
     private fun buildIndividualChatNotification(
-            context: Context,
-            conference: LocalConference,
-            messages: List<LocalMessage>
+        context: Context,
+        conference: LocalConference,
+        messages: List<LocalMessage>
     ): Notification? {
         val user = StorageHelper.user
 
@@ -212,11 +212,11 @@ object ChatNotifications {
     }
 
     private fun buildIndividualStyle(
-            messages: List<LocalMessage>,
-            conference: LocalConference,
-            context: Context,
-            user: LocalUser,
-            content: String
+        messages: List<LocalMessage>,
+        conference: LocalConference,
+        context: Context,
+        user: LocalUser,
+        content: String
     ) = when (messages.size) {
         1 -> {
             val message = messages.first().message

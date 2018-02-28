@@ -5,26 +5,26 @@ import android.arch.persistence.room.PrimaryKey
 import android.os.Parcel
 import android.os.Parcelable
 import me.proxer.library.entity.messenger.Conference
-import java.util.*
+import java.util.Date
 
 /**
  * @author Ruben Gees
  */
 @Entity(tableName = "conferences")
 data class LocalConference(
-        @PrimaryKey(autoGenerate = true) val id: Long,
-        val topic: String,
-        val customTopic: String,
-        val participantAmount: Int,
-        val image: String,
-        val imageType: String,
-        val isGroup: Boolean,
-        val localIsRead: Boolean,
-        val isRead: Boolean,
-        val date: Date,
-        val unreadMessageAmount: Int,
-        val lastReadMessageId: String,
-        val isFullyLoaded: Boolean
+    @PrimaryKey(autoGenerate = true) val id: Long,
+    val topic: String,
+    val customTopic: String,
+    val participantAmount: Int,
+    val image: String,
+    val imageType: String,
+    val isGroup: Boolean,
+    val localIsRead: Boolean,
+    val isRead: Boolean,
+    val date: Date,
+    val unreadMessageAmount: Int,
+    val lastReadMessageId: String,
+    val isFullyLoaded: Boolean
 ) : Parcelable {
 
     companion object {

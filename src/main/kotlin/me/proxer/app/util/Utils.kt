@@ -68,12 +68,12 @@ object Utils {
     }
 
     fun buildClickableText(
-            context: Context,
-            text: CharSequence,
-            onWebClickListener: Link.OnClickListener? = null,
-            onWebLongClickListener: Link.OnLongClickListener? = null,
-            onMentionsClickListener: Link.OnClickListener? = null,
-            onMentionsLongClickListener: Link.OnLongClickListener? = null
+        context: Context,
+        text: CharSequence,
+        onWebClickListener: Link.OnClickListener? = null,
+        onWebLongClickListener: Link.OnLongClickListener? = null,
+        onMentionsClickListener: Link.OnClickListener? = null,
+        onMentionsLongClickListener: Link.OnLongClickListener? = null
     ): CharSequence {
         val builder = LinkBuilder.from(context, text.toString())
 

@@ -34,13 +34,13 @@ class MangaActivity : BaseActivity() {
         private const val EPISODE_AMOUNT_EXTRA = "episode_amount"
 
         fun navigateTo(
-                context: Activity,
-                id: String,
-                episode: Int,
-                language: Language,
-                chapterTitle: String?,
-                name: String? = null,
-                episodeAmount: Int? = null
+            context: Activity,
+            id: String,
+            episode: Int,
+            language: Language,
+            chapterTitle: String?,
+            name: String? = null,
+            episodeAmount: Int? = null
         ) {
             context.startActivity(context.intentFor<MangaActivity>(
                     ID_EXTRA to id,

@@ -46,11 +46,11 @@ class ProfileActivity : ImageTabsActivity() {
         private const val MANGA_SUB_SECTION = "manga"
 
         fun navigateTo(
-                context: Activity,
-                userId: String? = null,
-                username: String? = null,
-                image: String? = null,
-                imageView: ImageView? = null
+            context: Activity,
+            userId: String? = null,
+            username: String? = null,
+            image: String? = null,
+            imageView: ImageView? = null
         ) {
             if (userId.isNullOrBlank() && username.isNullOrBlank()) {
                 return

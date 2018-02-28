@@ -7,7 +7,11 @@ import android.widget.ImageView
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.crossfader.Crossfader
 import com.mikepenz.crossfader.view.GmailStyleCrossFadeSlidingPaneLayout
-import com.mikepenz.materialdrawer.*
+import com.mikepenz.materialdrawer.AccountHeader
+import com.mikepenz.materialdrawer.AccountHeaderBuilder
+import com.mikepenz.materialdrawer.Drawer
+import com.mikepenz.materialdrawer.DrawerBuilder
+import com.mikepenz.materialdrawer.MiniDrawer
 import com.mikepenz.materialdrawer.interfaces.ICrossfader
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem
@@ -27,10 +31,10 @@ import org.jetbrains.anko.dip
  * @author Ruben Gees
  */
 class MaterialDrawerWrapper(
-        context: Activity,
-        toolbar: Toolbar,
-        savedInstanceState: Bundle?,
-        private val isRoot: Boolean
+    context: Activity,
+    toolbar: Toolbar,
+    savedInstanceState: Bundle?,
+    private val isRoot: Boolean
 ) {
 
     val itemClickSubject: PublishSubject<DrawerItem> = PublishSubject.create()
@@ -114,10 +118,10 @@ class MaterialDrawerWrapper(
             .build()
 
     private fun buildDrawer(
-            context: Activity,
-            toolbar: Toolbar,
-            accountHeader: AccountHeader,
-            savedInstanceState: Bundle?
+        context: Activity,
+        toolbar: Toolbar,
+        accountHeader: AccountHeader,
+        savedInstanceState: Bundle?
     ) = DrawerBuilder(context)
             .withToolbar(toolbar)
             .withAccountHeader(accountHeader)
@@ -141,10 +145,10 @@ class MaterialDrawerWrapper(
     }
 
     private fun buildCrossfader(
-            context: Activity,
-            drawer: Drawer,
-            miniDrawer: MiniDrawer,
-            savedInstanceState: Bundle?
+        context: Activity,
+        drawer: Drawer,
+        miniDrawer: MiniDrawer,
+        savedInstanceState: Bundle?
     ) = Crossfader<GmailStyleCrossFadeSlidingPaneLayout>()
             .withContent(context.findViewById(R.id.root))
             .withFirst(drawer.slider, context.dip(300))

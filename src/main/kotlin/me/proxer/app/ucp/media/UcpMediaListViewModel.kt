@@ -17,8 +17,8 @@ import kotlin.properties.Delegates
  */
 @GeneratedProvider
 class UcpMediaListViewModel(
-        category: Category,
-        filter: UserMediaListFilterType?
+    category: Category,
+    filter: UserMediaListFilterType?
 ) : PagedContentViewModel<UserMediaListEntry>() {
 
     override val isLoginRequired = true

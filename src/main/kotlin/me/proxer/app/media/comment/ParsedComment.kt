@@ -6,24 +6,24 @@ import me.proxer.library.entity.ProxerIdItem
 import me.proxer.library.entity.ProxerImageItem
 import me.proxer.library.entity.info.RatingDetails
 import me.proxer.library.enums.UserMediaProgress
-import java.util.*
+import java.util.Date
 
 /**
  * @author Ruben Gees
  */
 data class ParsedComment(
-        private val id: String,
-        val entryId: String,
-        val authorId: String,
-        val mediaProgress: UserMediaProgress,
-        val ratingDetails: RatingDetails,
-        val parsedContent: BBTree,
-        val overallRating: Int,
-        val episode: Int,
-        val helpfulVotes: Int,
-        private val date: Date,
-        val author: String,
-        private val image: String
+    private val id: String,
+    val entryId: String,
+    val authorId: String,
+    val mediaProgress: UserMediaProgress,
+    val ratingDetails: RatingDetails,
+    val parsedContent: BBTree,
+    val overallRating: Int,
+    val episode: Int,
+    val helpfulVotes: Int,
+    private val date: Date,
+    val author: String,
+    private val image: String
 ) : ProxerIdItem, ProxerImageItem, ProxerDateItem {
 
     override fun getId() = id

@@ -32,7 +32,7 @@ import me.proxer.app.util.Utils
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
 import org.jetbrains.anko.dip
-import java.util.*
+import java.util.EnumSet
 import java.util.concurrent.Semaphore
 
 inline fun <reified T : Enum<T>> enumSetOf(collection: Collection<T>): EnumSet<T> = when (collection.isEmpty()) {
@@ -75,10 +75,10 @@ inline fun IconicsDrawable.iconColor(context: Context): IconicsDrawable {
 }
 
 inline fun ImageView.setIconicsImage(
-        icon: IIcon,
-        sizeDp: Int,
-        paddingDp: Int = sizeDp / 4,
-        colorRes: Int = R.color.icon
+    icon: IIcon,
+    sizeDp: Int,
+    paddingDp: Int = sizeDp / 4,
+    colorRes: Int = R.color.icon
 ) {
     setImageDrawable(IconicsDrawable(context, icon)
             .sizeDp(sizeDp)

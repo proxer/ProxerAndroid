@@ -6,14 +6,80 @@ import com.google.android.exoplayer2.upstream.HttpDataSource
 import me.proxer.app.R
 import me.proxer.app.auth.LoginDialog
 import me.proxer.app.base.BaseActivity
-import me.proxer.app.exception.*
+import me.proxer.app.exception.AgeConfirmationRequiredException
+import me.proxer.app.exception.ChatException
+import me.proxer.app.exception.NotLoggedInException
+import me.proxer.app.exception.PartialException
+import me.proxer.app.exception.StreamResolutionException
 import me.proxer.app.settings.AgeConfirmationDialog
 import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_DEFAULT
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.library.api.ProxerException
-import me.proxer.library.api.ProxerException.ErrorType.*
-import me.proxer.library.api.ProxerException.ServerErrorType.*
+import me.proxer.library.api.ProxerException.ErrorType.CANCELLED
+import me.proxer.library.api.ProxerException.ErrorType.IO
+import me.proxer.library.api.ProxerException.ErrorType.PARSING
+import me.proxer.library.api.ProxerException.ErrorType.SERVER
+import me.proxer.library.api.ProxerException.ErrorType.TIMEOUT
+import me.proxer.library.api.ProxerException.ErrorType.UNKNOWN
+import me.proxer.library.api.ProxerException.ServerErrorType.ANIME_INVALID_EPISODE
+import me.proxer.library.api.ProxerException.ServerErrorType.ANIME_INVALID_STREAM
+import me.proxer.library.api.ProxerException.ServerErrorType.API_MAINTENANCE
+import me.proxer.library.api.ProxerException.ServerErrorType.API_REMOVED
+import me.proxer.library.api.ProxerException.ServerErrorType.APPS_INVALID_ID
+import me.proxer.library.api.ProxerException.ServerErrorType.CHAT_INVALID_MESSAGE
+import me.proxer.library.api.ProxerException.ServerErrorType.CHAT_INVALID_PERMISSIONS
+import me.proxer.library.api.ProxerException.ServerErrorType.CHAT_INVALID_ROOM
+import me.proxer.library.api.ProxerException.ServerErrorType.CHAT_LOGIN_REQUIRED
+import me.proxer.library.api.ProxerException.ServerErrorType.ERRORLOG_INVALID_INPUT
+import me.proxer.library.api.ProxerException.ServerErrorType.FORUM_INVALID_ID
+import me.proxer.library.api.ProxerException.ServerErrorType.FUNCTION_BLOCKED
+import me.proxer.library.api.ProxerException.ServerErrorType.INFO_ENTRY_ALREADY_IN_LIST
+import me.proxer.library.api.ProxerException.ServerErrorType.INFO_EXCEEDED_MAXIMUM_ENTRIES
+import me.proxer.library.api.ProxerException.ServerErrorType.INFO_INVALID_ID
+import me.proxer.library.api.ProxerException.ServerErrorType.INFO_INVALID_TYPE
+import me.proxer.library.api.ProxerException.ServerErrorType.INFO_LOGIN_REQUIRED
+import me.proxer.library.api.ProxerException.ServerErrorType.INSUFFICIENT_PERMISSIONS
+import me.proxer.library.api.ProxerException.ServerErrorType.INVALID_API_CLASS
+import me.proxer.library.api.ProxerException.ServerErrorType.INVALID_API_FUNCTION
+import me.proxer.library.api.ProxerException.ServerErrorType.INVALID_TOKEN
+import me.proxer.library.api.ProxerException.ServerErrorType.IP_BLOCKED
+import me.proxer.library.api.ProxerException.ServerErrorType.LIST_INVALID_CATEGORY
+import me.proxer.library.api.ProxerException.ServerErrorType.LIST_INVALID_ID
+import me.proxer.library.api.ProxerException.ServerErrorType.LIST_INVALID_LANGUAGE
+import me.proxer.library.api.ProxerException.ServerErrorType.LIST_INVALID_MEDIUM
+import me.proxer.library.api.ProxerException.ServerErrorType.LIST_INVALID_SUBJECT
+import me.proxer.library.api.ProxerException.ServerErrorType.LIST_INVALID_TYPE
+import me.proxer.library.api.ProxerException.ServerErrorType.LIST_TOP_ACCESS_RESET
+import me.proxer.library.api.ProxerException.ServerErrorType.LOGIN_ALREADY_LOGGED_IN
+import me.proxer.library.api.ProxerException.ServerErrorType.LOGIN_DIFFERENT_USER_ALREADY_LOGGED_IN
+import me.proxer.library.api.ProxerException.ServerErrorType.LOGIN_INVALID_CREDENTIALS
+import me.proxer.library.api.ProxerException.ServerErrorType.LOGIN_MISSING_CREDENTIALS
+import me.proxer.library.api.ProxerException.ServerErrorType.MANGA_INVALID_CHAPTER
+import me.proxer.library.api.ProxerException.ServerErrorType.MEDIA_INVALID_ENTRY
+import me.proxer.library.api.ProxerException.ServerErrorType.MEDIA_INVALID_STYLE
+import me.proxer.library.api.ProxerException.ServerErrorType.MESSAGES_EXCEEDED_MAXIMUM_USERS
+import me.proxer.library.api.ProxerException.ServerErrorType.MESSAGES_INVALID_CONFERENCE
+import me.proxer.library.api.ProxerException.ServerErrorType.MESSAGES_INVALID_MESSAGE
+import me.proxer.library.api.ProxerException.ServerErrorType.MESSAGES_INVALID_REPORT_INPUT
+import me.proxer.library.api.ProxerException.ServerErrorType.MESSAGES_INVALID_TOPIC
+import me.proxer.library.api.ProxerException.ServerErrorType.MESSAGES_INVALID_USER
+import me.proxer.library.api.ProxerException.ServerErrorType.MESSAGES_LOGIN_REQUIRED
+import me.proxer.library.api.ProxerException.ServerErrorType.MESSAGES_MISSING_USER
+import me.proxer.library.api.ProxerException.ServerErrorType.NEWS
+import me.proxer.library.api.ProxerException.ServerErrorType.NOTIFICATIONS_LOGIN_REQUIRED
+import me.proxer.library.api.ProxerException.ServerErrorType.SERVER_MAINTENANCE
+import me.proxer.library.api.ProxerException.ServerErrorType.UCP_INVALID_CATEGORY
+import me.proxer.library.api.ProxerException.ServerErrorType.UCP_INVALID_EPISODE
+import me.proxer.library.api.ProxerException.ServerErrorType.UCP_INVALID_ID
+import me.proxer.library.api.ProxerException.ServerErrorType.UCP_LOGIN_REQUIRED
+import me.proxer.library.api.ProxerException.ServerErrorType.UNKNOWN_API
+import me.proxer.library.api.ProxerException.ServerErrorType.USER
+import me.proxer.library.api.ProxerException.ServerErrorType.USERINFO_INVALID_ID
+import me.proxer.library.api.ProxerException.ServerErrorType.USER_2FA_SECRET_REQUIRED
+import me.proxer.library.api.ProxerException.ServerErrorType.USER_ACCOUNT_BLOCKED
+import me.proxer.library.api.ProxerException.ServerErrorType.USER_ACCOUNT_EXPIRED
+import me.proxer.library.api.ProxerException.ServerErrorType.USER_INSUFFICIENT_PERMISSIONS
 import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
 import java.io.IOException
@@ -145,10 +211,10 @@ object ErrorUtils {
     }
 
     open class ErrorAction(
-            val message: Int,
-            val buttonMessage: Int = ACTION_MESSAGE_DEFAULT,
-            val buttonAction: ButtonAction? = null,
-            val partialData: Any? = null
+        val message: Int,
+        val buttonMessage: Int = ACTION_MESSAGE_DEFAULT,
+        val buttonAction: ButtonAction? = null,
+        val partialData: Any? = null
     ) {
 
         companion object {

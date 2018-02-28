@@ -15,9 +15,9 @@ import kotlin.properties.Delegates
  */
 @GeneratedProvider
 class ProfileCommentViewModel(
-        private val userId: String?,
-        private val username: String?,
-        category: Category?
+    private val userId: String?,
+    private val username: String?,
+    category: Category?
 ) : PagedViewModel<ParsedUserComment>() {
 
     override val itemsOnPage = 10
