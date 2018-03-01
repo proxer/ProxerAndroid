@@ -10,7 +10,7 @@ import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTION
 /**
  * @author Ruben Gees
  */
-object SpoilerPrototype : BBPrototype {
+object SpoilerPrototype : AutoClosingPrototype {
 
     private val ATTRIBUTE_REGEX = Regex("spoiler *= *(.+?)$", REGEX_OPTIONS)
     private const val TITLE_ARGUMENT = "title"

@@ -26,7 +26,7 @@ import org.jetbrains.anko.dip
 /**
  * @author Ruben Gees
  */
-object ImagePrototype : BBPrototype {
+object ImagePrototype : AutoClosingPrototype {
 
     private val WIDTH_ATTRIBUTE_REGEX = Regex("size *= *(.+?)( |$)", REGEX_OPTIONS)
     private const val WIDTH_ARGUMENT = "width"

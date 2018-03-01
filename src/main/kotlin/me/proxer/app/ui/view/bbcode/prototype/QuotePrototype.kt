@@ -13,7 +13,7 @@ import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
 import org.jetbrains.anko.dip
 
-object QuotePrototype : BBPrototype {
+object QuotePrototype : AutoClosingPrototype {
 
     override val startRegex = Regex(" *quote( *=\"?.+?\"?)?( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *quote *", REGEX_OPTIONS)

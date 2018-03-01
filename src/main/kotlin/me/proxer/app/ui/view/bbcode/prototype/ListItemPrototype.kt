@@ -12,7 +12,7 @@ import me.proxer.app.ui.view.bbcode.BBTree
 /**
  * @author Ruben Gees
  */
-object ListItemPrototype : BBPrototype {
+object ListItemPrototype : AutoClosingPrototype {
 
     override val startRegex = Regex(" *li( .*?)?", BBPrototype.REGEX_OPTIONS)
     override val endRegex = Regex("/ *li *", BBPrototype.REGEX_OPTIONS)

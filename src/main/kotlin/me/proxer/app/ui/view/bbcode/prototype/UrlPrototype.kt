@@ -12,7 +12,7 @@ import okhttp3.HttpUrl
 /**
  * @author Ruben Gees
  */
-object UrlPrototype : TextMutatorPrototype {
+object UrlPrototype : TextMutatorPrototype, AutoClosingPrototype {
 
     private val ATTRIBUTE_REGEX = Regex("url *= *(.+?)( |$)", REGEX_OPTIONS)
     private const val URL_ARGUMENT = "url"

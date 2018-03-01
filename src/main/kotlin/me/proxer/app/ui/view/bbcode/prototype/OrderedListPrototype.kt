@@ -15,7 +15,7 @@ import org.jetbrains.anko.dip
 /**
  * @author Ruben Gees
  */
-object OrderedListPrototype : BBPrototype {
+object OrderedListPrototype : AutoClosingPrototype {
 
     override val startRegex = Regex(" *ol( .*?)?", BBPrototype.REGEX_OPTIONS)
     override val endRegex = Regex("/ *ol *", BBPrototype.REGEX_OPTIONS)

@@ -1,5 +1,6 @@
 package me.proxer.app.ui.view.bbcode
 
+import me.proxer.app.ui.view.bbcode.prototype.AutoClosingPrototype
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
 import me.proxer.app.ui.view.bbcode.prototype.BoldPrototype
 import me.proxer.app.ui.view.bbcode.prototype.CenterPrototype
@@ -95,6 +96,10 @@ object BBParser {
 
                     if (fittingTree != null) {
                         fittingTree.isFinished = true
+
+                        if (fittingTree.prototype is AutoClosingPrototype) {
+                            currentTree = fittingTree.parent ?: throw IllegalArgumentException("parent is null")
+                        }
                     } else {
                         val unknownString = trimmedInput.substring(it.range.first, it.range.endInclusive + 1)
 

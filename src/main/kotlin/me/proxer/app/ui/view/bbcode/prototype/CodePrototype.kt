@@ -18,7 +18,7 @@ import org.jetbrains.anko.dip
 /**
  * @author Ruben Gees
  */
-object CodePrototype : BBPrototype {
+object CodePrototype : AutoClosingPrototype {
 
     override val startRegex = Regex(" *code( .*?)?", BBPrototype.REGEX_OPTIONS)
     override val endRegex = Regex("/ *code *", BBPrototype.REGEX_OPTIONS)

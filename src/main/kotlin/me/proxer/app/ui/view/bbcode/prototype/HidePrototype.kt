@@ -19,7 +19,7 @@ import org.jetbrains.anko.dip
 /**
  * @author Ruben Gees
  */
-object HidePrototype : BBPrototype {
+object HidePrototype : AutoClosingPrototype {
 
     override val startRegex = Regex(" *hide( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *hide *", REGEX_OPTIONS)

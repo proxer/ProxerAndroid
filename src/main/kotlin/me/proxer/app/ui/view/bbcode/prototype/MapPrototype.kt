@@ -18,7 +18,7 @@ import org.jetbrains.anko.longToast
 /**
  * @author Ruben Gees
  */
-object MapPrototype : TextMutatorPrototype {
+object MapPrototype : TextMutatorPrototype, AutoClosingPrototype {
 
     private val ZOOM_ATTRIBUTE_REGEX = Regex("zoom *= *(.+?)( |$)", REGEX_OPTIONS)
     private const val ZOOM_ARGUMENT = "zoom"

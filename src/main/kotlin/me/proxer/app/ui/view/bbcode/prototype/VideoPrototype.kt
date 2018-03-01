@@ -14,7 +14,7 @@ import okhttp3.HttpUrl
 /**
  * @author Ruben Gees
  */
-object VideoPrototype : TextMutatorPrototype {
+object VideoPrototype : TextMutatorPrototype, AutoClosingPrototype {
 
     private val ATTRIBUTE_REGEX = Regex("type *= *(.+?)( |$)", REGEX_OPTIONS)
     private const val TYPE_ARGUMENT = "type"

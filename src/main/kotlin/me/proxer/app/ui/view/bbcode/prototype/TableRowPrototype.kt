@@ -14,7 +14,7 @@ import org.jetbrains.anko.dip
 /**
  * @author Ruben Gees
  */
-object TableRowPrototype : BBPrototype {
+object TableRowPrototype : AutoClosingPrototype {
 
     override val startRegex = Regex(" *tr( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *tr *", REGEX_OPTIONS)
