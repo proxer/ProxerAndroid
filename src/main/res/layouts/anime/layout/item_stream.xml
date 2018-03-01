@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="@dimen/item_margin"
-    tools:context=".anime.AnimeAdapter">
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:padding="@dimen/item_margin"
+             tools:context=".anime.AnimeAdapter">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
@@ -35,7 +35,7 @@
                     android:layout_height="64dp"
                     android:layout_gravity="center_vertical"
                     android:padding="8dp"
-                    tools:ignore="ContentDescription" />
+                    tools:ignore="ContentDescription"/>
 
                 <TextView
                     android:id="@+id/name"
@@ -44,7 +44,7 @@
                     android:layout_gravity="center_vertical"
                     android:padding="8dp"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    tools:text="Streamcloud" />
+                    tools:text="Streamcloud"/>
             </LinearLayout>
 
             <LinearLayout
@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <include layout="@layout/layout_upload_info" />
+                <include layout="@layout/layout_upload_info"/>
 
                 <Button
                     android:id="@+id/play"
@@ -63,7 +63,7 @@
                     android:layout_gravity="center"
                     android:layout_margin="16dp"
                     android:text="@string/fragment_anime_stream_play"
-                    android:textColor="@android:color/white" />
+                    android:textColor="@android:color/white"/>
 
                 <TextView
                     android:id="@+id/unsupported"
@@ -73,7 +73,7 @@
                     android:layout_margin="16dp"
                     android:gravity="center"
                     android:text="@string/error_unsupported_hoster"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
 
             </LinearLayout>
         </LinearLayout>

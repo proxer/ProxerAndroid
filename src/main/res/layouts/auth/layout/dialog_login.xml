@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".auth.LoginDialog">
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:orientation="vertical"
+             tools:context=".auth.LoginDialog">
 
     <me.zhanghai.android.materialprogressbar.MaterialProgressBar
         android:id="@+id/progress"
@@ -15,7 +15,7 @@
         android:layout_gravity="center"
         android:indeterminate="true"
         android:visibility="gone"
-        tools:visibility="visible" />
+        tools:visibility="visible"/>
 
     <LinearLayout
         android:id="@+id/inputContainer"
@@ -37,7 +37,7 @@
                 android:hint="@string/dialog_login_username_hint"
                 android:imeOptions="actionNext"
                 android:inputType="text"
-                android:maxLines="1" />
+                android:maxLines="1"/>
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -55,7 +55,7 @@
                 android:hint="@string/dialog_login_password_hint"
                 android:imeOptions="actionGo"
                 android:inputType="textPassword"
-                android:maxLines="1" />
+                android:maxLines="1"/>
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -74,13 +74,13 @@
                 android:inputType="numberPassword"
                 android:maxLines="1"
                 android:visibility="gone"
-                tools:visibility="visible" />
+                tools:visibility="visible"/>
         </android.support.design.widget.TextInputLayout>
 
         <TextView
             android:id="@+id/registrationInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="Info" />
+            tools:text="Info"/>
     </LinearLayout>
 </FrameLayout>

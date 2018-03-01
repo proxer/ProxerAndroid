@@ -206,6 +206,14 @@ task ktlintFormat(type: Exec) {
             'com.github.shyiko.ktlint.Main', '-F', 'src/**/*.kt'
 }
 
+task ktlintConfigureAndroidStudio(type: Exec) {
+    group 'Configuration'
+    description = "Configure Android Studio."
+
+    commandLine 'java', '-cp', configurations.ktlint.join(System.getProperty('path.separator')),
+            'com.github.shyiko.ktlint.Main', '--apply-to-idea', '--android', '-y'
+}
+
 task wrapper(type: Wrapper) {
     gradleVersion project.ext.gradleVersion
 }

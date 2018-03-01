@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/errorContainer"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/screen_vertical_margin"
-    android:paddingLeft="@dimen/screen_horizontal_margin"
-    android:paddingRight="@dimen/screen_horizontal_margin"
-    android:paddingTop="@dimen/screen_vertical_margin"
-    android:visibility="gone"
-    tools:visibility="visible">
+             xmlns:tools="http://schemas.android.com/tools"
+             android:id="@+id/errorContainer"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:orientation="vertical"
+             android:paddingBottom="@dimen/screen_vertical_margin"
+             android:paddingLeft="@dimen/screen_horizontal_margin"
+             android:paddingRight="@dimen/screen_horizontal_margin"
+             android:paddingTop="@dimen/screen_vertical_margin"
+             android:visibility="gone"
+             tools:visibility="visible">
 
     <LinearLayout
         android:id="@+id/errorInnerContainer"
@@ -30,7 +30,7 @@
             android:layout_marginRight="8dp"
             android:gravity="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            tools:text="A problem occurred" />
+            tools:text="A problem occurred"/>
 
         <Button
             android:id="@+id/errorButton"
@@ -42,6 +42,6 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:text="@string/error_action_retry"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"/>
     </LinearLayout>
 </FrameLayout>

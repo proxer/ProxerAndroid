@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="@dimen/item_margin"
-    tools:context=".media.episode.EpisodeAdapter">
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:padding="@dimen/item_margin"
+             tools:context=".media.episode.EpisodeAdapter">
 
     <android.support.v7.widget.CardView
         android:id="@+id/container"
@@ -36,7 +36,7 @@
                     android:layout_margin="8dp"
                     android:layout_weight="1"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                    tools:text="Episode 1" />
+                    tools:text="Episode 1"/>
 
                 <ImageView
                     android:id="@+id/watched"
@@ -44,14 +44,14 @@
                     android:layout_height="24dp"
                     android:layout_gravity="center_vertical"
                     android:layout_margin="8dp"
-                    tools:ignore="ContentDescription" />
+                    tools:ignore="ContentDescription"/>
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/languages"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" />
+                android:orientation="horizontal"/>
 
         </LinearLayout>
     </android.support.v7.widget.CardView>

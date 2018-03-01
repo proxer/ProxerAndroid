@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/root"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".chat.ChatFragment">
+                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                 xmlns:tools="http://schemas.android.com/tools"
+                                                 android:id="@+id/root"
+                                                 android:layout_width="match_parent"
+                                                 android:layout_height="match_parent"
+                                                 tools:context=".chat.ChatFragment">
 
     <RelativeLayout
         android:id="@+id/contentRoot"
@@ -33,7 +33,7 @@
                 app:fastScrollHorizontalThumbDrawable="@drawable/fastscroll_thumb"
                 app:fastScrollHorizontalTrackDrawable="@drawable/fastscroll_track"
                 app:fastScrollVerticalThumbDrawable="@drawable/fastscroll_thumb"
-                app:fastScrollVerticalTrackDrawable="@drawable/fastscroll_track" />
+                app:fastScrollVerticalTrackDrawable="@drawable/fastscroll_track"/>
 
         </android.support.v4.widget.SwipeRefreshLayout>
 
@@ -48,6 +48,6 @@
             android:layout_marginRight="@dimen/item_margin"
             android:layout_marginTop="@dimen/item_margin"
             android:visibility="gone"
-            tools:visibility="visible" />
+            tools:visibility="visible"/>
     </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

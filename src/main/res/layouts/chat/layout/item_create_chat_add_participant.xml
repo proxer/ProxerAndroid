@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:foreground="?attr/selectableItemBackground"
-    tools:context=".chat.create.CreateChatParticipantAdapter">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:foreground="?attr/selectableItemBackground"
+                tools:context=".chat.create.CreateChatParticipantAdapter">
 
     <ImageView
         android:id="@+id/image"
@@ -15,7 +15,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerVertical="true"
         android:padding="8dp"
-        tools:ignore="ContentDescription" />
+        tools:ignore="ContentDescription"/>
 
     <TextView
         android:id="@+id/username"
@@ -30,5 +30,5 @@
         android:gravity="start|center_vertical"
         android:padding="8dp"
         android:text="@string/fragment_create_chat_add_participant"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
 </RelativeLayout>

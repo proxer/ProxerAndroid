@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.view.MediaControlView">
+       xmlns:app="http://schemas.android.com/apk/res-auto"
+       xmlns:tools="http://schemas.android.com/tools"
+       tools:context=".ui.view.MediaControlView">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <include layout="@layout/layout_upload_info" />
+            <include layout="@layout/layout_upload_info"/>
 
             <android.support.v7.widget.GridLayout
                 android:layout_width="match_parent"
@@ -38,7 +38,7 @@
                     app:layout_columnWeight="1"
                     app:layout_gravity="fill"
                     app:layout_rowWeight="1"
-                    tools:visibility="visible" />
+                    tools:visibility="visible"/>
 
                 <Button
                     android:id="@+id/next"
@@ -51,7 +51,7 @@
                     app:layout_columnWeight="1"
                     app:layout_gravity="fill"
                     app:layout_rowWeight="1"
-                    tools:visibility="visible" />
+                    tools:visibility="visible"/>
 
                 <Button
                     android:id="@+id/bookmarkThis"
@@ -62,7 +62,7 @@
                     android:textColor="@android:color/white"
                     app:layout_columnWeight="1"
                     app:layout_gravity="fill"
-                    app:layout_rowWeight="1" />
+                    app:layout_rowWeight="1"/>
 
                 <Button
                     android:id="@+id/bookmarkNext"
@@ -73,7 +73,7 @@
                     android:textColor="@android:color/white"
                     app:layout_columnWeight="1"
                     app:layout_gravity="fill"
-                    app:layout_rowWeight="1" />
+                    app:layout_rowWeight="1"/>
 
             </android.support.v7.widget.GridLayout>
         </LinearLayout>

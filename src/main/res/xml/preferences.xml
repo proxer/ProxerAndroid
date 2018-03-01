@@ -7,7 +7,7 @@
             android:key="age_confirmation"
             android:summaryOff="@string/preference_age_confirmation_summary_off"
             android:summaryOn="@string/preference_age_confirmation_summary_on"
-            android:title="@string/preference_age_confirmation_title" />
+            android:title="@string/preference_age_confirmation_title"/>
 
         <!--suppress AndroidUnknownAttribute -->
         <ListPreference
@@ -17,7 +17,7 @@
             android:entryValues="@array/start_page_values"
             android:key="start_page"
             android:summary="%s"
-            android:title="@string/preference_start_page_title" />
+            android:title="@string/preference_start_page_title"/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/preference_category_design_title">
@@ -30,7 +30,7 @@
             android:entryValues="@array/theme_values"
             android:key="theme"
             android:summary="%s"
-            android:title="@string/preference_theme_title" />
+            android:title="@string/preference_theme_title"/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/preference_category_manga_title">
@@ -40,14 +40,14 @@
             android:key="manga_vertical_reader"
             android:summaryOff="@string/preference_manga_vertical_reader_summary_off"
             android:summaryOn="@string/preference_manga_vertical_reader_summary_on"
-            android:title="@string/preference_manga_vertical_reader_title" />
+            android:title="@string/preference_manga_vertical_reader_title"/>
 
         <SwitchPreference
             android:defaultValue="true"
             android:key="manga_unmetered_required"
             android:summaryOff="@string/preference_manga_unmetered_summary_off"
             android:summaryOn="@string/preference_manga_unmetered_summary_on"
-            android:title="@string/preference_manga_unmetered_title" />
+            android:title="@string/preference_manga_unmetered_title"/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/preference_category_notifications_title">
@@ -57,21 +57,21 @@
             android:key="notifications_news"
             android:summaryOff="@string/preference_notifications_summary_off"
             android:summaryOn="@string/preference_notifications_summary_on"
-            android:title="@string/preference_notifications_news_title" />
+            android:title="@string/preference_notifications_news_title"/>
 
         <SwitchPreference
             android:defaultValue="false"
             android:key="notifications_account"
             android:summaryOff="@string/preference_notifications_summary_off"
             android:summaryOn="@string/preference_notifications_summary_on"
-            android:title="@string/preference_notifications_account_title" />
+            android:title="@string/preference_notifications_account_title"/>
 
         <SwitchPreference
             android:defaultValue="true"
             android:key="notifications_chat"
             android:summaryOff="@string/preference_notifications_summary_off"
             android:summaryOn="@string/preference_notifications_summary_on"
-            android:title="@string/preference_notifications_chat_title" />
+            android:title="@string/preference_notifications_chat_title"/>
 
         <!--suppress AndroidUnknownAttribute -->
         <ListPreference
@@ -81,6 +81,6 @@
             android:entryValues="@array/notifications_interval_values"
             android:key="notifications_interval"
             android:summary="%s"
-            android:title="@string/preference_notifications_interval_title" />
+            android:title="@string/preference_notifications_interval_title"/>
     </PreferenceCategory>
 </PreferenceScreen>

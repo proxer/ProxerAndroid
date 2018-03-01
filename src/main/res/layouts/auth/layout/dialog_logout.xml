@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:context=".auth.LogoutDialog">
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             tools:context=".auth.LogoutDialog">
 
     <me.zhanghai.android.materialprogressbar.MaterialProgressBar
         android:id="@+id/progress"
@@ -14,7 +14,7 @@
         android:layout_marginTop="16dp"
         android:indeterminate="true"
         android:visibility="gone"
-        tools:visibility="visible" />
+        tools:visibility="visible"/>
 
     <TextView
         android:id="@+id/content"
@@ -22,5 +22,5 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/dialog_logout_content"
-        android:textSize="16sp" />
+        android:textSize="16sp"/>
 </FrameLayout>

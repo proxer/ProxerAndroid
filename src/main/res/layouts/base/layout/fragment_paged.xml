@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/root"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".base.PagedContentFragment">
+                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                 xmlns:tools="http://schemas.android.com/tools"
+                                                 android:id="@+id/root"
+                                                 android:layout_width="match_parent"
+                                                 android:layout_height="match_parent"
+                                                 tools:context=".base.PagedContentFragment">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/progress"
@@ -25,6 +25,6 @@
             app:fastScrollHorizontalThumbDrawable="@drawable/fastscroll_thumb"
             app:fastScrollHorizontalTrackDrawable="@drawable/fastscroll_track"
             app:fastScrollVerticalThumbDrawable="@drawable/fastscroll_thumb"
-            app:fastScrollVerticalTrackDrawable="@drawable/fastscroll_track" />
+            app:fastScrollVerticalTrackDrawable="@drawable/fastscroll_track"/>
     </android.support.v4.widget.SwipeRefreshLayout>
 </android.support.design.widget.CoordinatorLayout>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/root"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".base.BaseActivity">
+                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                 xmlns:tools="http://schemas.android.com/tools"
+                                                 android:id="@+id/root"
+                                                 android:layout_width="match_parent"
+                                                 android:layout_height="match_parent"
+                                                 tools:context=".base.BaseActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
@@ -17,7 +17,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:popupTheme="@style/ThemeOverlay.App" />
+            app:popupTheme="@style/ThemeOverlay.App"/>
 
     </android.support.design.widget.AppBarLayout>
 
@@ -40,7 +40,7 @@
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:layout_gravity="center_horizontal"
-                tools:ignore="ContentDescription" />
+                tools:ignore="ContentDescription"/>
 
             <TextView
                 android:id="@+id/text"
@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:gravity="center"
-                tools:text="@string/activity_crash_text" />
+                tools:text="@string/activity_crash_text"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -64,7 +64,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
                     android:text="@string/activity_crash_report"
-                    android:textColor="@android:color/white" />
+                    android:textColor="@android:color/white"/>
 
                 <Button
                     android:id="@+id/restart"
@@ -73,7 +73,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
                     android:text="@string/activity_crash_restart"
-                    android:textColor="@android:color/white" />
+                    android:textColor="@android:color/white"/>
 
             </LinearLayout>
         </LinearLayout>

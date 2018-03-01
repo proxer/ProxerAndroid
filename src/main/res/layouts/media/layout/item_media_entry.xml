@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/root"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="@dimen/item_margin"
-    tools:context=".media.list.MediaAdapter">
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:id="@+id/root"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:padding="@dimen/item_margin"
+             tools:context=".media.list.MediaAdapter">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
@@ -30,7 +30,7 @@
                 app:ari_ratio="1.25"
                 tools:ignore="UnusedAttribute"
                 tools:layout_height="200dp"
-                tools:src="@drawable/emoji_ios_1f1ef_1f1f5" />
+                tools:src="@drawable/emoji_ios_1f1ef_1f1f5"/>
 
             <TextView
                 android:id="@+id/title"
@@ -44,7 +44,7 @@
                 android:padding="8dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@android:color/white"
-                tools:text="Some title" />
+                tools:text="Some title"/>
 
             <TextView
                 android:id="@+id/medium"
@@ -58,7 +58,7 @@
                 android:paddingRight="8dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="@android:color/white"
-                tools:text="Animeseries" />
+                tools:text="Animeseries"/>
 
             <FrameLayout
                 android:id="@+id/ratingContainer"
@@ -79,7 +79,7 @@
                     android:layout_height="wrap_content"
                     android:isIndicator="true"
                     android:numStars="5"
-                    android:stepSize="0.1" />
+                    android:stepSize="0.1"/>
             </FrameLayout>
 
             <ImageView
@@ -92,7 +92,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginTop="8dp"
-                tools:ignore="ContentDescription" />
+                tools:ignore="ContentDescription"/>
 
             <TextView
                 android:id="@+id/episodes"
@@ -106,7 +106,7 @@
                 android:gravity="center_vertical"
                 android:padding="8dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                tools:text="12 Episodes - Finished" />
+                tools:text="12 Episodes - Finished"/>
 
             <LinearLayout
                 android:id="@+id/languageContainer"
@@ -128,7 +128,7 @@
                     android:visibility="gone"
                     app:srcCompat="@drawable/ic_germany"
                     tools:ignore="ContentDescription"
-                    tools:visibility="visible" />
+                    tools:visibility="visible"/>
 
                 <ImageView
                     android:id="@+id/english"
@@ -139,7 +139,7 @@
                     android:visibility="gone"
                     app:srcCompat="@drawable/ic_united_states"
                     tools:ignore="ContentDescription"
-                    tools:visibility="visible" />
+                    tools:visibility="visible"/>
 
             </LinearLayout>
         </RelativeLayout>

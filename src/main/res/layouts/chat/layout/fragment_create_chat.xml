@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/root"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".chat.create.CreateChatFragment">
+                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                 xmlns:tools="http://schemas.android.com/tools"
+                                                 android:id="@+id/root"
+                                                 android:layout_width="match_parent"
+                                                 android:layout_height="match_parent"
+                                                 tools:context=".chat.create.CreateChatFragment">
 
     <RelativeLayout
         android:id="@+id/contentContainer"
@@ -64,7 +64,7 @@
                                     android:hint="@string/fragment_create_chat_topic_hint"
                                     android:imeOptions="actionNext"
                                     android:inputType="text"
-                                    android:maxLines="1" />
+                                    android:maxLines="1"/>
 
                             </android.support.design.widget.TextInputLayout>
                         </LinearLayout>
@@ -90,12 +90,12 @@
                                 android:padding="8dp"
                                 android:text="@string/fragment_create_chat_participants"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                                android:textColor="@color/colorAccent" />
+                                android:textColor="@color/colorAccent"/>
 
                             <android.support.v7.widget.RecyclerView
                                 android:id="@+id/participants"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content" />
+                                android:layout_height="wrap_content"/>
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
                 </LinearLayout>
@@ -111,6 +111,6 @@
             android:layout_marginBottom="@dimen/item_margin"
             android:layout_marginLeft="@dimen/item_margin"
             android:layout_marginRight="@dimen/item_margin"
-            android:layout_marginTop="@dimen/item_margin" />
+            android:layout_marginTop="@dimen/item_margin"/>
     </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

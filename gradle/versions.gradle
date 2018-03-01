@@ -16,13 +16,13 @@ ext {
 
     // Core plugins
     androidPluginVersion = '3.2.0-alpha04'
-    kotlinVersion = '1.2.30-eap-16'
+    kotlinVersion = '1.2.30-eap-47'
 
     // Utility plugins
     detektPluginVersion = '1.0.0.RC6-3'
     gradleVersionsPluginVersion = '0.17.0'
     androidCommandPluginVersion = '2.0'
-    ktlintVersion = '0.16.1'
+    ktlintVersion = '0.17.1'
 
     // Frameworks and code only libraries
     ankoVersion = '0.10.4'

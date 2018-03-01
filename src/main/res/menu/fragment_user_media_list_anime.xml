@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+      xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/filter"
@@ -16,27 +16,27 @@
                 <item
                     android:id="@+id/all"
                     android:title="@string/media_filter_all"
-                    app:showAsAction="never" />
+                    app:showAsAction="never"/>
 
                 <item
                     android:id="@+id/watching"
                     android:title="@string/media_filter_watching"
-                    app:showAsAction="never" />
+                    app:showAsAction="never"/>
 
                 <item
                     android:id="@+id/watched"
                     android:title="@string/media_filter_finished"
-                    app:showAsAction="never" />
+                    app:showAsAction="never"/>
 
                 <item
                     android:id="@+id/will_watch"
                     android:title="@string/media_filter_will_watch"
-                    app:showAsAction="never" />
+                    app:showAsAction="never"/>
 
                 <item
                     android:id="@+id/cancelled"
                     android:title="@string/media_filter_cancelled"
-                    app:showAsAction="never" />
+                    app:showAsAction="never"/>
             </group>
         </menu>
     </item>

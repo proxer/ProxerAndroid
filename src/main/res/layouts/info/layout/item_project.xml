@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/root"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="@dimen/item_margin"
-    tools:context=".info.industry.IndustryProjectAdapter">
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:id="@+id/root"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:padding="@dimen/item_margin"
+             tools:context=".info.industry.IndustryProjectAdapter">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
@@ -28,7 +28,7 @@
                 android:scaleType="centerCrop"
                 app:ari_aspect="height"
                 app:ari_ratio="1.25"
-                tools:ignore="UnusedAttribute" />
+                tools:ignore="UnusedAttribute"/>
 
             <TextView
                 android:id="@+id/title"
@@ -42,7 +42,7 @@
                 android:padding="8dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@android:color/white"
-                tools:text="Some title" />
+                tools:text="Some title"/>
 
             <TextView
                 android:id="@+id/medium"
@@ -56,7 +56,7 @@
                 android:paddingRight="8dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="@android:color/white"
-                tools:text="Animeserie" />
+                tools:text="Animeserie"/>
 
             <FrameLayout
                 android:id="@+id/ratingContainer"
@@ -74,7 +74,7 @@
                     android:layout_height="wrap_content"
                     android:isIndicator="true"
                     android:numStars="5"
-                    android:stepSize="0.1" />
+                    android:stepSize="0.1"/>
             </FrameLayout>
 
             <TextView
@@ -86,7 +86,7 @@
                 android:layout_below="@+id/ratingContainer"
                 android:padding="8dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                tools:text="In progress" />
+                tools:text="In progress"/>
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </FrameLayout>

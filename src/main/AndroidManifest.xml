@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="me.proxer.app">
+          xmlns:tools="http://schemas.android.com/tools"
+          package="me.proxer.app">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <uses-feature
         android:name="android.hardware.telephony"
-        android:required="false" />
+        android:required="false"/>
 
     <application
         android:name=".MainApplication"
@@ -23,220 +23,220 @@
 
         <meta-data
             android:name="android.webkit.WebView.EnableSafeBrowsing"
-            android:value="true" />
+            android:value="true"/>
 
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
             <meta-data
                 android:name="android.app.shortcuts"
-                android:resource="@xml/shortcuts" />
+                android:resource="@xml/shortcuts"/>
         </activity>
 
         <activity
             android:name=".profile.ProfileActivity"
             android:theme="@style/Theme.App.Translucent">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.VIEW"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
 
                 <data
                     android:host="proxer.me"
                     android:pathPattern="/user/.*"
-                    android:scheme="http" />
+                    android:scheme="http"/>
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.VIEW"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
 
                 <data
                     android:host="proxer.me"
                     android:pathPattern="/user/.*"
-                    android:scheme="https" />
+                    android:scheme="https"/>
             </intent-filter>
         </activity>
 
-        <activity android:name=".notification.NotificationActivity" />
+        <activity android:name=".notification.NotificationActivity"/>
 
-        <activity android:name=".chat.ChatActivity" />
+        <activity android:name=".chat.ChatActivity"/>
 
         <activity
             android:name=".chat.share.ShareReceiverActivity"
             android:label="Senden an&#8230;">
             <intent-filter>
-                <action android:name="android.intent.action.SEND" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="text/plain" />
+                <action android:name="android.intent.action.SEND"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="text/plain"/>
             </intent-filter>
             <meta-data
                 android:name="android.service.chooser.chooser_target_service"
-                android:value=".chat.share.ConferenceChooserTargetService" />
+                android:value=".chat.share.ConferenceChooserTargetService"/>
         </activity>
 
-        <activity android:name=".chat.create.CreateChatActivity" />
+        <activity android:name=".chat.create.CreateChatActivity"/>
 
-        <activity android:name=".chat.conference.info.ConferenceInfoActivity" />
+        <activity android:name=".chat.conference.info.ConferenceInfoActivity"/>
 
-        <activity android:name=".ucp.UcpActivity" />
+        <activity android:name=".ucp.UcpActivity"/>
 
         <activity
             android:name=".media.MediaActivity"
             android:theme="@style/Theme.App.Translucent">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.VIEW"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
 
                 <data
                     android:host="proxer.me"
                     android:pathPattern="/info/.*"
-                    android:scheme="http" />
+                    android:scheme="http"/>
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.VIEW"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
 
                 <data
                     android:host="proxer.me"
                     android:pathPattern="/info/.*"
-                    android:scheme="https" />
+                    android:scheme="https"/>
             </intent-filter>
         </activity>
 
         <activity
             android:name=".info.translatorgroup.TranslatorGroupActivity"
-            android:theme="@style/Theme.App.Translucent" />
+            android:theme="@style/Theme.App.Translucent"/>
 
         <activity
             android:name=".info.industry.IndustryActivity"
-            android:theme="@style/Theme.App.Translucent" />
+            android:theme="@style/Theme.App.Translucent"/>
 
         <activity
             android:name=".ui.ImageDetailActivity"
-            android:theme="@style/Theme.App.Transparent" />
+            android:theme="@style/Theme.App.Transparent"/>
 
         <activity
             android:name=".anime.StreamActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode">
             <intent-filter tools:ignore="AppLinkUrlError">
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
 
-                <data android:scheme="http" />
-                <data android:scheme="https" />
-                <data android:mimeType="video/*" />
+                <data android:scheme="http"/>
+                <data android:scheme="https"/>
+                <data android:mimeType="video/*"/>
             </intent-filter>
         </activity>
 
         <activity android:name=".manga.MangaActivity">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.VIEW"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="proxer.me"
-                    android:pathPattern="/chapter/.*"
-                    android:scheme="http" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
 
                 <data
                     android:host="proxer.me"
                     android:pathPattern="/chapter/.*"
-                    android:scheme="https" />
+                    android:scheme="http"/>
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.VIEW"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data
+                    android:host="proxer.me"
+                    android:pathPattern="/chapter/.*"
+                    android:scheme="https"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
 
                 <data
                     android:host="proxer.me"
                     android:pathPattern="/read/.*"
-                    android:scheme="http" />
+                    android:scheme="http"/>
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.VIEW"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
 
                 <data
                     android:host="proxer.me"
                     android:pathPattern="/read/.*"
-                    android:scheme="https" />
+                    android:scheme="https"/>
             </intent-filter>
         </activity>
 
         <activity android:name=".anime.AnimeActivity">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.VIEW"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
 
                 <data
                     android:host="proxer.me"
                     android:pathPattern="/watch/.*"
-                    android:scheme="http" />
+                    android:scheme="http"/>
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.VIEW"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
 
                 <data
                     android:host="proxer.me"
                     android:pathPattern="/watch/.*"
-                    android:scheme="https" />
+                    android:scheme="https"/>
             </intent-filter>
         </activity>
 
-        <activity android:name=".anime.CalendarActivity" />
+        <activity android:name=".anime.CalendarActivity"/>
 
         <activity android:name=".forum.TopicActivity">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.VIEW"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
 
                 <data
                     android:host="proxer.me"
                     android:pathPattern="/forum/.*/.*"
-                    android:scheme="http" />
+                    android:scheme="http"/>
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.VIEW"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
 
                 <data
                     android:host="proxer.me"
                     android:pathPattern="/forum/.*/.*"
-                    android:scheme="https" />
+                    android:scheme="https"/>
             </intent-filter>
         </activity>
 
@@ -244,35 +244,35 @@
             android:name=".ui.crash.CrashActivity"
             android:process=":error_activity">
             <intent-filter>
-                <action android:name="cat.ereza.customactivityoncrash.ERROR" />
+                <action android:name="cat.ereza.customactivityoncrash.ERROR"/>
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.WebViewActivity" />
+        <activity android:name=".ui.WebViewActivity"/>
 
         <service
             android:name=".chat.share.ConferenceChooserTargetService"
             android:label="@string/app_name"
             android:permission="android.permission.BIND_CHOOSER_TARGET_SERVICE">
             <intent-filter>
-                <action android:name="android.service.chooser.ChooserTargetService" />
+                <action android:name="android.service.chooser.ChooserTargetService"/>
             </intent-filter>
         </service>
 
         <receiver
             android:name=".news.NewsNotificationReadReceiver"
-            android:exported="false" />
+            android:exported="false"/>
 
         <receiver
             android:name=".notification.AccountNotificationReadReceiver"
-            android:exported="false" />
+            android:exported="false"/>
 
         <receiver
             android:name=".chat.sync.ChatNotificationReadReceiver"
-            android:exported="false" />
+            android:exported="false"/>
 
         <receiver
             android:name=".chat.sync.DirectReplyReceiver"
-            android:exported="false" />
+            android:exported="false"/>
     </application>
 </manifest>

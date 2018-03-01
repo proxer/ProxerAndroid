@@ -53,7 +53,8 @@
     </string>
     <string name="error_login_credentials">Falsches Passwort oder falscher Nutzername</string>
     <string name="error_login_two_factor_authentication">Bitte gebe deinen Geheimschlüssel der
-        Zwei-Faktor-Authentifizierung ein!</string>
+        Zwei-Faktor-Authentifizierung ein!
+    </string>
     <string name="error_already_in_list">Es gibt bereits einen Eintrag in deiner Liste</string>
     <string name="error_list_full">Deine Liste ist voll</string>
     <string name="error_list_top_access_reset">Die Zugriffe wurden kürzlich zurückgesetzt.
@@ -68,11 +69,13 @@
     <string name="error_invalid_episode">Diese Episode wurde noch nicht hochgeladen :/</string>
     <string name="error_invalid_input">Ungültige Eingabe</string>
     <string name="error_cant_add_user_to_conference">Dieser Nutzer existiert nicht oder kann der Konferenz nicht
-        hinzugefügt werden</string>
+        hinzugefügt werden
+    </string>
     <string name="error_invalid_users_for_conference">Es muss mindestens ein existierender Teilnehmer angegeben werden
     </string>
     <string name="error_conference_full">Es können keine weiteren Nutzer zur Konferenz hinzugefügt werden, da sie voll
-        ist</string>
+        ist
+    </string>
     <string name="error_invalid_topic">Ungültiges Thema</string>
     <string name="error_account_expired">Der Account ist abgelaufen</string>
     <string name="error_account_blocked">Der Account wurde geblockt</string>
@@ -86,7 +89,8 @@
     <string name="error_login_required">Für diesen Bereich musst du dich anmelden</string>
     <string name="error_captcha">Es wurden zu viele Anfragen gemacht</string>
     <string name="error_age_confirmation_needed">Für diese Kategorie musst du bestätigen, dass du mindestens 18
-        Jahre alt bist</string>
+        Jahre alt bist
+    </string>
     <string name="error_refresh">Aktualisierung fehlgeschlagen: %s</string>
 
     <string name="error_unsupported_hoster">Dieser Hoster wird\nnicht unterstützt</string>
@@ -247,7 +251,8 @@
     <string name="cancel">Abbrechen</string>
 
     <string name="activity_crash_text">Die App ist leider abgestürzt. Sende den Fehler bitte an @RubyGee oder einen
-        anderen Techniker um bei der Beseitigung zu helfen!</string>
+        anderen Techniker um bei der Beseitigung zu helfen!
+    </string>
     <string name="activity_crash_report">Fehlerbericht</string>
     <string name="activity_crash_restart">Neustart</string>
 
@@ -259,14 +264,17 @@
     <string name="dialog_login_error_password">Bitte gib ein Passwort an</string>
     <string name="dialog_login_error_username">Bitte gib einen Nutzernamen an</string>
     <string name="dialog_login_registration">Solltest du noch keinen Account haben, kannst du dich auf der Proxer
-        Webseite registrieren</string>
+        Webseite registrieren
+    </string>
 
     <string name="dialog_logout_content">Möchtest du dich abmelden? Dabei werden alle offline verfügbaren Manga und
-        Chats gelöscht und du hast keinen Zugriff mehr auf einige Bereiche.</string>
+        Chats gelöscht und du hast keinen Zugriff mehr auf einige Bereiche.
+    </string>
     <string name="dialog_logout_positive">Abmelden</string>
 
     <string name="dialog_age_confirmation_content">Dieser Bereich darf nur von Benutzern über 18 Jahren betreten werden!
-        Eltern haften für ihre Kinder. Proxer.Me übernimmt keinerlei Haftung!</string>
+        Eltern haften für ihre Kinder. Proxer.Me übernimmt keinerlei Haftung!
+    </string>
     <string name="dialog_age_confirmation_positive">Verstanden</string>
 
     <string name="dialog_app_required_title">%s-App</string>
@@ -274,7 +282,8 @@
     <string name="dialog_app_required_positive">Installieren</string>
 
     <string name="dialog_notification_deletion_confirmation_content">Sollen alle Benachrichtigungen gelöscht werden?
-        Das kann nicht rückgängig gemacht werden.</string>
+        Das kann nicht rückgängig gemacht werden.
+    </string>
     <string name="dialog_notification_deletion_confirmation_positive">Löschen</string>
 
     <string name="dialog_crash_title">Fehlerbericht</string>
@@ -505,7 +514,8 @@
     <string name="introduction_welcome_description">Ein paar Einstellungen und es geht los</string>
     <string name="introduction_notifications_title">Benachrichtigungen</string>
     <string name="introduction_notifications_description">Erhalte Benachrichtigungen zu News und deinem
-        Account</string>
+        Account
+    </string>
     <string name="introduction_skip">Überspringen</string>
 
     <string name="action_search">Suchen</string>
@@ -572,15 +582,20 @@
 
     <string name="share_media">Sieh dir %1$s auf Proxer.Me, deiner Anime und Manga Community an: %2$s</string>
     <string name="share_anime" tools:ignore="PluralsCandidate">Schau dir Folge %1$d von %2$s auf Proxer.Me, deiner Anime
-        und Manga Community an: %3$s</string>
+        und Manga Community an: %3$s
+    </string>
     <string name="share_manga" tools:ignore="PluralsCandidate">Lies Kapitel %1$d von %2$s auf Proxer.Me, deiner Anime
-        und Manga Community: %3$s</string>
+        und Manga Community: %3$s
+    </string>
     <string name="share_manga_title" tools:ignore="PluralsCandidate">Lies %1$s von %2$s auf Proxer.Me, deiner Anime und
-        Manga Community: %3$s</string>
+        Manga Community: %3$s
+    </string>
     <string name="share_industry">Schau dir die Industrie %1$s auf Proxer.Me, deiner Anime und Manga Community
-        an: %2$s</string>
+        an: %2$s
+    </string>
     <string name="share_translator_group">Schau dir die Gruppe %1$s auf Proxer.Me, deiner Anime und Manga Community
-        an: %2$s</string>
+        an: %2$s
+    </string>
 
     <string name="shortcut_disabled_message">Diese Verknüpung ist nicht mehr verfügbar</string>
 

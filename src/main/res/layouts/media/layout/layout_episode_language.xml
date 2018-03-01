@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="0dp"
-    android:layout_height="match_parent"
-    android:layout_weight="1"
-    android:background="?attr/selectableItemBackground"
-    tools:context=".media.episode.EpisodeAdapter"
-    tools:ignore="Overdraw"
-    tools:layout_width="match_parent">
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?attr/selectableItemBackground"
+                tools:context=".media.episode.EpisodeAdapter"
+                tools:ignore="Overdraw"
+                tools:layout_width="match_parent">
 
     <FrameLayout
         android:id="@+id/languageContainer"
@@ -26,7 +26,7 @@
             android:drawablePadding="8dp"
             android:gravity="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            tools:text="engsub" />
+            tools:text="engsub"/>
 
     </FrameLayout>
 
@@ -38,11 +38,11 @@
         android:layout_margin="4dp"
         app:alignItems="center"
         app:flexWrap="wrap"
-        app:justifyContent="center" />
+        app:justifyContent="center"/>
 
     <android.support.v4.widget.Space
         android:layout_width="match_parent"
         android:layout_height="8dp"
-        android:layout_below="@+id/hosters" />
+        android:layout_below="@+id/hosters"/>
 
 </RelativeLayout>

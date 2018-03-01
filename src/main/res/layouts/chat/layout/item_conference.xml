@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="@dimen/item_margin"
-    tools:context=".chat.conference.ConferenceAdapter">
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:padding="@dimen/item_margin"
+             tools:context=".chat.conference.ConferenceAdapter">
 
     <android.support.v7.widget.CardView
         android:id="@+id/container"
@@ -29,7 +29,7 @@
                 android:layout_centerVertical="true"
                 android:padding="8dp"
                 android:scaleType="centerCrop"
-                tools:ignore="ContentDescription,UnusedAttribute" />
+                tools:ignore="ContentDescription,UnusedAttribute"/>
 
             <TextView
                 android:id="@+id/topic"
@@ -43,7 +43,7 @@
                 android:paddingRight="8dp"
                 android:paddingTop="8dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                tools:text="Title" />
+                tools:text="Title"/>
 
             <com.matrixxun.starry.badgetextview.MaterialBadgeTextView
                 android:id="@+id/newMessages"
@@ -55,7 +55,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:textColor="@android:color/white"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/time"
@@ -69,7 +69,7 @@
                 android:layout_toStartOf="@+id/participants"
                 android:padding="8dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                tools:text="Two days ago" />
+                tools:text="Two days ago"/>
 
             <TextView
                 android:id="@+id/participants"
@@ -81,7 +81,7 @@
                 android:layout_below="@+id/topic"
                 android:padding="8dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                tools:text="5 Participants" />
+                tools:text="5 Participants"/>
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </FrameLayout>
