@@ -25,6 +25,7 @@ class BBCodeView @JvmOverloads constructor(
 
     var heightChangedListener: (() -> Unit)? = null
     var glide: GlideRequests? = null
+    var userId: String? = null
 
     init {
         orientation = VERTICAL
@@ -58,7 +59,9 @@ class BBCodeView @JvmOverloads constructor(
         removeAllViews()
 
         tree.glide = glide
+        tree.userId = userId
         tree.makeViews(context).forEach { this.addView(it) }
+        tree.userId = null
         tree.glide = null
     }
 }

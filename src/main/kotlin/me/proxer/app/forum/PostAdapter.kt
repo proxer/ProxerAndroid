@@ -98,9 +98,12 @@ class PostAdapter : BaseAdapter<ParsedPost, ViewHolder>() {
             date.text = item.date.convertToRelativeReadableTime(date.context)
             thankYou.text = item.thankYouAmount.toString()
 
+            post.userId = item.userId
             post.setTree(item.parsedMessage)
 
             item.signature.let {
+                signature.userId = item.userId
+
                 if (it == null) {
                     signatureDivider.visibility = View.GONE
                     signature.visibility = View.GONE

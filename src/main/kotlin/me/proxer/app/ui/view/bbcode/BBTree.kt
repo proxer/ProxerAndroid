@@ -20,6 +20,7 @@ class BBTree(
 
     companion object {
         internal const val GLIDE_ARGUMENT = "glide"
+        internal const val USER_ID_ARGUMENT = "userId"
     }
 
     var glide: GlideRequests? = null
@@ -31,8 +32,18 @@ class BBTree(
             }
         }
 
+    var userId: String? = null
+        set(value) {
+            field = value
+
+            children.forEach {
+                it.userId = value
+            }
+        }
+
     fun endsWith(code: String) = prototype.endRegex.matches(code)
-    fun makeViews(context: Context) = prototype.makeViews(context, children, args.plus(GLIDE_ARGUMENT to glide))
+    fun makeViews(context: Context) = prototype.makeViews(context, children,
+            args.plus(arrayOf(GLIDE_ARGUMENT to glide, USER_ID_ARGUMENT to userId)))
 
     fun optimize() = recursiveOptimize().first()
 

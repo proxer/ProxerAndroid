@@ -155,6 +155,7 @@ class CommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedComment, V
             bindRatingRow(ratingMusicRow, ratingMusic, item.ratingDetails.music.toFloat())
             bindRatingRow(ratingOverallRow, ratingOverall, item.overallRating.toFloat() / 2.0f)
 
+            comment.userId = item.authorId
             comment.setTree(item.parsedContent)
 
             time.text = item.date.convertToRelativeReadableTime(time.context)
