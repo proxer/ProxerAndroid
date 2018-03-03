@@ -23,7 +23,9 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import com.vanniktech.emoji.EmojiEditText
+import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.EmojiPopup
+import com.vanniktech.emoji.ios.IosEmojiProvider
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Predicate
@@ -165,6 +167,8 @@ class CreateChatFragment : BaseFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        EmojiManager.install(IosEmojiProvider())
+
         addParticipantFooter = inflater.inflate(R.layout.item_create_chat_add_participant,
                 container, false) as ViewGroup
 
@@ -317,6 +321,8 @@ class CreateChatFragment : BaseFragment() {
         participants.adapter = null
 
         emojiPopup.dismiss()
+
+        EmojiManager.destroy()
 
         super.onDestroyView()
     }

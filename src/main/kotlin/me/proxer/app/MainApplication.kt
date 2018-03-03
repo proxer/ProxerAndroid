@@ -26,8 +26,6 @@ import com.rubengees.rxbus.RxBus
 import com.squareup.leakcanary.LeakCanary
 import com.squareup.leakcanary.RefWatcher
 import com.squareup.moshi.Moshi
-import com.vanniktech.emoji.EmojiManager
-import com.vanniktech.emoji.ios.IosEmojiProvider
 import io.reactivex.exceptions.UndeliverableException
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
@@ -173,7 +171,6 @@ class MainApplication : Application() {
                 .backgroundMode(CaocConfig.BACKGROUND_MODE_CRASH)
                 .apply()
 
-        EmojiManager.install(IosEmojiProvider())
         AndroidThreeTen.init(this)
 
         ExoMedia.setDataSourceFactoryProvider { _, listener ->
