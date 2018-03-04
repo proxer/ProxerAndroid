@@ -154,6 +154,7 @@ class MaterialDrawerWrapper(
             .withFirst(drawer.slider, context.dip(300))
             .withSecond(miniDrawer.build(context), context.dip(72))
             .withSavedInstance(savedInstanceState)
+            .withGmailStyleSwiping()
             .build()
             .apply {
                 miniDrawer.withCrossFader(CrossfadeWrapper(this))
