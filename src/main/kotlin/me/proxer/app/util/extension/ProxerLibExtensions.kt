@@ -247,7 +247,7 @@ fun FskConstraint.toAppDrawable(context: Context) = AppCompatResources.getDrawab
     FskConstraint.VIOLENCE -> R.drawable.ic_fsk_violence
 }) ?: throw IllegalStateException("Could not resolve Drawable for fsk constraint: $this")
 
-fun CalendarDay.toAppString(context: Context) = context.getString(when (this) {
+fun CalendarDay.toAppString(context: Context): String = context.getString(when (this) {
     CalendarDay.MONDAY -> R.string.fragment_calendar_day_monday
     CalendarDay.TUESDAY -> R.string.fragment_calendar_day_tuesday
     CalendarDay.WEDNESDAY -> R.string.fragment_calendar_day_wednesday

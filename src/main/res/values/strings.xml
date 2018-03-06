@@ -269,8 +269,8 @@
         Webseite registrieren
     </string>
 
-    <string name="dialog_logout_content">Möchtest du dich abmelden? Dabei werden alle offline verfügbaren Manga und
-        Chats gelöscht und du hast keinen Zugriff mehr auf einige Bereiche.
+    <string name="dialog_logout_content">Möchtest du dich abmelden? Du hast dann keinen Zugriff mehr auf einige
+        Bereiche.
     </string>
     <string name="dialog_logout_positive">Abmelden</string>
 
@@ -428,12 +428,10 @@
     <string name="notification_channel_news">News</string>
     <string name="notification_channel_profile">Profil</string>
     <string name="notification_channel_chat">Chat</string>
-    <string name="notification_channel_manga">Manga</string>
 
     <string name="notification_channel_news_description">Aktuelle News</string>
     <string name="notification_channel_profile_description">Alles zu deinem Profil</string>
     <string name="notification_channel_chat_description">Private Chat-Nachrichten und Konferenzen</string>
-    <string name="notification_channel_manga_description">Informationen zur Manga Offlineverfügbarkeit</string>
 
     <string name="notification_news_title">News</string>
     <string name="notification_news_read_action">Gelesen</string>
@@ -479,9 +477,6 @@
     <string name="preference_theme_light">Hell</string>
 
     <string name="preference_category_manga_title">Manga</string>
-    <string name="preference_manga_unmetered_title">Nur über WLAN offline verügbar machen</string>
-    <string name="preference_manga_unmetered_summary_off">Manga werden immer offline verfügbar gemacht</string>
-    <string name="preference_manga_unmetered_summary_on">Manga werden nur über WLAN offline verfügbar gemacht</string>
     <string name="preference_manga_vertical_reader_title">Mangareader Ausrichtung</string>
     <string name="preference_manga_vertical_reader_summary_off">Manga werden von Links nach Rechts angezeigt</string>
     <string name="preference_manga_vertical_reader_summary_on">Manga werden von Oben nach Unten angezeigt</string>

@@ -18,8 +18,6 @@ object PreferenceHelper {
     const val NOTIFICATIONS_CHAT = "notifications_chat"
     const val NOTIFICATIONS_INTERVAL = "notifications_interval"
     const val MANGA_VERTICAL_READER = "manga_vertical_reader"
-    const val MANGA_WLAN = "manga_unmetered_required"
-    const val MANGA_CLEAN = "manga_clean"
 
     fun isAgeRestrictedMediaAllowed(context: Context) = getDefaultSharedPreferences(context)
             .getBoolean(AGE_CONFIRMATION, false)
@@ -50,9 +48,6 @@ object PreferenceHelper {
 
     fun isVerticalReaderEnabled(context: Context) = getDefaultSharedPreferences(context)
             .getBoolean(MANGA_VERTICAL_READER, true)
-
-    fun isUnmeteredNetworkRequired(context: Context) = getDefaultSharedPreferences(context)
-            .getBoolean(MANGA_WLAN, true)
 
     @AppCompatDelegate.NightMode
     fun getNightMode(context: Context) = when (getDefaultSharedPreferences(context).getString(THEME, "2")) {

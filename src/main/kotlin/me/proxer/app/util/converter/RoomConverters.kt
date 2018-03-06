@@ -16,6 +16,7 @@ import java.util.Date
 /**
  * @author Ruben Gees
  */
+@Suppress("unused")
 class RoomConverters {
 
     private companion object {

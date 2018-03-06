@@ -19,14 +19,12 @@ object NotificationUtils {
     const val NEWS_CHANNEL = "proxer_news"
     const val PROFILE_CHANNEL = "proxer_profile"
     const val CHAT_CHANNEL = "proxer_chat"
-    const val MANGA_CHANNEL = "proxer_manga"
 
     fun createNotificationChannels(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val newsTitle = context.getString(R.string.notification_channel_news)
             val profileTitle = context.getString(R.string.notification_channel_profile)
             val chatTitle = context.getString(R.string.notification_channel_chat)
-            val mangaTitle = context.getString(R.string.notification_channel_manga)
 
             context.notificationManager.createNotificationChannels(listOf(
                     NotificationChannel(NEWS_CHANNEL, newsTitle, NotificationManager.IMPORTANCE_LOW).apply {
@@ -37,9 +35,6 @@ object NotificationUtils {
                     },
                     NotificationChannel(CHAT_CHANNEL, chatTitle, NotificationManager.IMPORTANCE_HIGH).apply {
                         description = context.getString(R.string.notification_channel_chat_description)
-                    },
-                    NotificationChannel(MANGA_CHANNEL, mangaTitle, NotificationManager.IMPORTANCE_LOW).apply {
-                        description = context.getString(R.string.notification_channel_manga_description)
                     }
             ))
         }
