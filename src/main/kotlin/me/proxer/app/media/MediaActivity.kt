@@ -12,6 +12,7 @@ import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import me.proxer.app.R
 import me.proxer.app.base.ImageTabsActivity
 import me.proxer.app.media.comment.CommentFragment
+import me.proxer.app.media.discussion.DiscussionFragment
 import me.proxer.app.media.episode.EpisodeFragment
 import me.proxer.app.media.info.MediaInfoFragment
 import me.proxer.app.media.recommendation.RecommendationFragment
@@ -39,6 +40,7 @@ class MediaActivity : ImageTabsActivity() {
         private const val EPISODES_ALTERNATIVE_SUB_SECTION = "list"
         private const val RELATIONS_SUB_SECTION = "relation"
         private const val RECOMMENDATIONS_SUB_SECTION = "recommendations"
+        private const val DISCUSSIONS_SUB_SECTION = "forum"
 
         fun navigateTo(
             context: Activity,
@@ -89,6 +91,7 @@ class MediaActivity : ImageTabsActivity() {
                 EPISODES_SUB_SECTION, EPISODES_ALTERNATIVE_SUB_SECTION -> 2
                 RELATIONS_SUB_SECTION -> 3
                 RECOMMENDATIONS_SUB_SECTION -> 4
+                DISCUSSIONS_SUB_SECTION -> 5
                 else -> 0
             }
             else -> 0
@@ -129,10 +132,11 @@ class MediaActivity : ImageTabsActivity() {
             2 -> EpisodeFragment.newInstance()
             3 -> RelationFragment.newInstance()
             4 -> RecommendationFragment.newInstance()
+            5 -> DiscussionFragment.newInstance()
             else -> throw IllegalArgumentException("Unknown index passed: $position")
         }
 
-        override fun getCount() = 5
+        override fun getCount() = 6
 
         @Suppress("LabeledExpression")
         override fun getPageTitle(position: Int): String = when (position) {
@@ -142,6 +146,7 @@ class MediaActivity : ImageTabsActivity() {
                     ?: getString(R.string.category_anime_episodes_title)
             3 -> getString(R.string.section_relations)
             4 -> getString(R.string.section_recommendations)
+            5 -> getString(R.string.section_discussions)
             else -> throw IllegalArgumentException("Unknown index passed: $position")
         }
 

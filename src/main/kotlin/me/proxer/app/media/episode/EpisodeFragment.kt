@@ -60,7 +60,7 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        adapter = EpisodeAdapter(savedInstanceState, id)
+        adapter = EpisodeAdapter(savedInstanceState)
 
         adapter.languageClickSubject
                 .autoDispose(this)

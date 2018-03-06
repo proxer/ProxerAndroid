@@ -38,7 +38,7 @@ import org.jetbrains.anko.forEachChildWithIndex
 /**
  * @author Ruben Gees
  */
-class EpisodeAdapter(savedInstanceState: Bundle?, private val entryId: String) : BaseAdapter<EpisodeRow, ViewHolder>() {
+class EpisodeAdapter(savedInstanceState: Bundle?) : BaseAdapter<EpisodeRow, ViewHolder>() {
 
     private companion object {
         private const val EXPANDED_STATE = "episode_expanded"

@@ -35,6 +35,7 @@
     <string name="section_comments">Kommentare</string>
     <string name="section_relations">Verbindungen</string>
     <string name="section_recommendations">Empfehlungen</string>
+    <string name="section_discussions">Diskussionen</string>
 
     <string name="section_industry_info">Info</string>
     <string name="section_industry_projects">Projekte</string>
@@ -122,6 +123,7 @@
     <string name="error_no_data_search">Es wurde nichts gefunden, das den Kriterien entspricht</string>
     <string name="error_no_data_conferences">Du hast noch keine Chats</string>
     <string name="error_no_data_chat">Diese Konferenz hat noch keine Nachrichten</string>
+    <string name="error_no_data_discussions">Für dieses Werk gibt es noch keine Diskussionen</string>
 
     <string name="error_action_retry">Erneut versuchen</string>
     <string name="error_action_finish">Beenden</string>
@@ -376,6 +378,8 @@
     <string name="fragment_comment_rating_music">Musik</string>
     <string name="fragment_comment_rating_overall">Insgesamt</string>
     <string name="fragment_comment_rating_story">Story</string>
+
+    <string name="fragment_discussion_meta_info">Von %1$s in %2$s</string>
 
     <plurals name="fragment_conference_participants">
         <item quantity="other">%d Teilnehmer</item>
