@@ -17,7 +17,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.jakewharton.rxbinding2.widget.editorActionEvents
 import com.jakewharton.rxbinding2.widget.textChanges
 import com.klinker.android.link_builder.Link
-import com.klinker.android.link_builder.LinkBuilder
+import com.klinker.android.link_builder.applyLinks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import io.reactivex.functions.Predicate
@@ -110,17 +110,15 @@ class LoginDialog : BaseDialog() {
 
         registrationInfo.setCompoundDrawables(generateInfoDrawable(), null, null, null)
 
-        LinkBuilder.on(registrationInfo)
-                .addLink(Link(WEBSITE_PATTERN)
-                        .setTextColor(ContextCompat.getColor(requireContext(), R.color.link))
-                        .setUnderlined(false)
-                        .setOnClickListener {
-                            showPage(ProxerUrls.webBase()
-                                    .newBuilder()
-                                    .addQueryParameter(DEVICE_PARAMETER, ProxerUtils.getApiEnumName(Device.DEFAULT))
-                                    .build())
-                        })
-                .build()
+        registrationInfo.applyLinks(Link(WEBSITE_PATTERN)
+                .setTextColor(ContextCompat.getColor(requireContext(), R.color.link))
+                .setUnderlined(false)
+                .setOnClickListener {
+                    showPage(ProxerUrls.webBase()
+                            .newBuilder()
+                            .addQueryParameter(DEVICE_PARAMETER, ProxerUtils.getApiEnumName(Device.DEFAULT))
+                            .build())
+                })
     }
 
     private fun setupViewModels() {

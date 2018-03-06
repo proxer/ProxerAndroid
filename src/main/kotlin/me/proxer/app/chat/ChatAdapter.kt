@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.TouchableMovementMethod
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
@@ -223,7 +222,7 @@ class ChatAdapter(savedInstanceState: Bundle?, private val isGroup: Boolean) :
         init {
             root.setOnClickListener { onContainerClick(it) }
             root.setOnLongClickListener { onContainerLongClick(it) }
-            text.movementMethod = TouchableMovementMethod.getInstance()
+            text.movementMethod = TouchableMovementMethod.instance
             text.setTextColor(ContextCompat.getColor(text.context, R.color.textColorPrimary))
         }
 
@@ -278,15 +277,9 @@ class ChatAdapter(savedInstanceState: Bundle?, private val isGroup: Boolean) :
 
         internal open fun applyMessage(message: LocalMessage) {
             text.text = Utils.buildClickableText(text.context, message.message.trim(),
-                    onWebClickListener = Link.OnClickListener {
-                        linkClickSubject.onNext(Utils.parseAndFixUrl(it))
-                    },
-                    onWebLongClickListener = Link.OnLongClickListener {
-                        linkLongClickSubject.onNext(Utils.parseAndFixUrl(it))
-                    },
-                    onMentionsClickListener = Link.OnClickListener {
-                        mentionsClickSubject.onNext(it.trim().substring(1))
-                    })
+                    onWebClickListener = { linkClickSubject.onNext(Utils.parseAndFixUrl(it)) },
+                    onWebLongClickListener = { linkLongClickSubject.onNext(Utils.parseAndFixUrl(it)) },
+                    onMentionsClickListener = { mentionsClickSubject.onNext(it.trim().substring(1)) })
         }
 
         internal open fun applyTime(message: LocalMessage) {
@@ -358,10 +351,9 @@ class ChatAdapter(savedInstanceState: Bundle?, private val isGroup: Boolean) :
         override fun onContainerLongClick(v: View) = false
 
         override fun applyMessage(message: LocalMessage) {
-            text.text = Utils.buildClickableText(text.context, generateText(message),
-                    onMentionsClickListener = Link.OnClickListener {
-                        mentionsClickSubject.onNext(it.trim().substring(1))
-                    })
+            text.text = Utils.buildClickableText(text.context, generateText(message), onMentionsClickListener = {
+                mentionsClickSubject.onNext(it.trim().substring(1))
+            })
         }
 
         private fun generateText(message: LocalMessage) = when (message.action) {

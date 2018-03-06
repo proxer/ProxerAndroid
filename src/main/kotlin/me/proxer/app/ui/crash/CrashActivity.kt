@@ -8,7 +8,6 @@ import android.widget.TextView
 import cat.ereza.customactivityoncrash.CustomActivityOnCrash
 import cat.ereza.customactivityoncrash.config.CaocConfig
 import com.jakewharton.rxbinding2.view.clicks
-import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.TouchableMovementMethod
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import kotterknife.bindView
@@ -61,9 +60,9 @@ class CrashActivity : BaseActivity() {
                 .autoDispose(this)
                 .subscribe { CustomActivityOnCrash.restartApplication(this, config) }
 
-        text.movementMethod = TouchableMovementMethod.getInstance()
+        text.movementMethod = TouchableMovementMethod.instance
         text.text = Utils.buildClickableText(this, getString(R.string.activity_crash_text),
-                onMentionsClickListener = Link.OnClickListener {
+                onMentionsClickListener = {
                     CustomActivityOnCrash.restartApplicationWithIntent(this,
                             CreateChatActivity.getIntent(this, false, Participant(DEVELOPER_PROXER_NAME)), config)
                 })

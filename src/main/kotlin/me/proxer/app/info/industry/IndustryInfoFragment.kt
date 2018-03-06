@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.TouchableMovementMethod
 import kotterknife.bindView
 import me.proxer.app.R
@@ -62,7 +61,7 @@ class IndustryInfoFragment : BaseContentFragment<Industry>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        link.movementMethod = TouchableMovementMethod.getInstance()
+        link.movementMethod = TouchableMovementMethod.instance
     }
 
     override fun showData(data: Industry) {
@@ -87,10 +86,8 @@ class IndustryInfoFragment : BaseContentFragment<Industry>() {
         } else {
             linkRow.visibility = View.VISIBLE
             link.text = Utils.buildClickableText(requireContext(), data.link.toString(),
-                    onWebClickListener = Link.OnClickListener { link ->
-                        showPage(Utils.parseAndFixUrl(link))
-                    },
-                    onWebLongClickListener = Link.OnLongClickListener { link ->
+                    onWebClickListener = { link -> showPage(Utils.parseAndFixUrl(link)) },
+                    onWebLongClickListener = { link ->
                         val title = getString(R.string.clipboard_title)
 
                         requireContext().clipboardManager.primaryClip = ClipData.newPlainText(title, link)

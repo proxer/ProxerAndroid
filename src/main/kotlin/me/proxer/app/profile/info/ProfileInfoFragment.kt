@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.TouchableMovementMethod
 import kotterknife.bindView
 import me.proxer.app.R
@@ -58,7 +57,7 @@ class ProfileInfoFragment : BaseContentFragment<UserInfo>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        statusText.movementMethod = TouchableMovementMethod.getInstance()
+        statusText.movementMethod = TouchableMovementMethod.instance
     }
 
     override fun showData(data: UserInfo) {
@@ -85,10 +84,9 @@ class ProfileInfoFragment : BaseContentFragment<UserInfo>() {
         } else {
             val rawText = data.status + " - " + data.lastStatusChange.convertToRelativeReadableTime(requireContext())
 
-            statusText.text = Utils.buildClickableText(statusText.context, rawText,
-                    onWebClickListener = Link.OnClickListener {
-                        showPage(Utils.parseAndFixUrl(it))
-                    })
+            statusText.text = Utils.buildClickableText(statusText.context, rawText, onWebClickListener = {
+                showPage(Utils.parseAndFixUrl(it))
+            })
         }
     }
 

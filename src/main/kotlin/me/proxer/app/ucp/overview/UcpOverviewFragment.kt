@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.TouchableMovementMethod
 import kotterknife.bindView
 import me.proxer.app.R
@@ -50,7 +49,7 @@ class UcpOverviewFragment : BaseContentFragment<Int>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        profileLink.movementMethod = TouchableMovementMethod.getInstance()
+        profileLink.movementMethod = TouchableMovementMethod.instance
     }
 
     override fun showData(data: Int) {
@@ -58,10 +57,8 @@ class UcpOverviewFragment : BaseContentFragment<Int>() {
 
         StorageHelper.user?.let { (_, id, name) ->
             profileLink.text = Utils.buildClickableText(requireContext(), ProxerUrls.userWeb(id).toString(),
-                    onWebClickListener = Link.OnClickListener {
-                        showPage(Utils.parseAndFixUrl(it))
-                    },
-                    onWebLongClickListener = Link.OnLongClickListener {
+                    onWebClickListener = { showPage(Utils.parseAndFixUrl(it)) },
+                    onWebLongClickListener = {
                         val title = getString(R.string.clipboard_title)
 
                         requireContext().clipboardManager.primaryClip = ClipData.newPlainText(title, it)

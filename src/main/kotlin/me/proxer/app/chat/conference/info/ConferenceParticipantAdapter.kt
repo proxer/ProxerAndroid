@@ -9,7 +9,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.TouchableMovementMethod
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
@@ -63,7 +62,7 @@ class ConferenceParticipantAdapter : BaseAdapter<ConferenceParticipant, ViewHold
         internal val status: TextView by bindView(R.id.status)
 
         init {
-            status.movementMethod = TouchableMovementMethod.getInstance()
+            status.movementMethod = TouchableMovementMethod.instance
 
             itemView.setOnClickListener {
                 withSafeAdapterPosition(this) {
@@ -91,10 +90,9 @@ class ConferenceParticipantAdapter : BaseAdapter<ConferenceParticipant, ViewHold
                 status.visibility = View.GONE
             } else {
                 status.visibility = View.VISIBLE
-                status.text = Utils.buildClickableText(status.context, item.status,
-                        onWebClickListener = Link.OnClickListener { link ->
-                            statusLinkClickSubject.onNext(Utils.parseAndFixUrl(link))
-                        })
+                status.text = Utils.buildClickableText(status.context, item.status, onWebClickListener = { link ->
+                    statusLinkClickSubject.onNext(Utils.parseAndFixUrl(link))
+                })
             }
 
             if (item.image.isBlank()) {

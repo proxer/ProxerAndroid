@@ -70,10 +70,10 @@ object Utils {
     fun buildClickableText(
         context: Context,
         text: CharSequence,
-        onWebClickListener: Link.OnClickListener? = null,
-        onWebLongClickListener: Link.OnLongClickListener? = null,
-        onMentionsClickListener: Link.OnClickListener? = null,
-        onMentionsLongClickListener: Link.OnLongClickListener? = null
+        onWebClickListener: ((String) -> Unit)? = null,
+        onWebLongClickListener: ((String) -> Unit)? = null,
+        onMentionsClickListener: ((String) -> Unit)? = null,
+        onMentionsLongClickListener: ((String) -> Unit)? = null
     ): CharSequence {
         val builder = LinkBuilder.from(context, text.toString())
 
@@ -81,25 +81,19 @@ object Utils {
             builder.addLink(Link(WEB_REGEX)
                     .setTextColor(ContextCompat.getColor(context, R.color.link))
                     .setUnderlined(false)
-                    .setOnClickListener(onWebClickListener)
-                    .setOnLongClickListener(onWebLongClickListener))
+                    .apply { onWebClickListener?.let { setOnClickListener(it) } }
+                    .apply { onWebLongClickListener?.let { setOnLongClickListener(it) } })
         }
 
         if (onMentionsClickListener != null || onMentionsLongClickListener != null) {
             builder.addLink(Link(MENTIONS_REGEX)
                     .setTextColor(ContextCompat.getColor(context, R.color.link))
                     .setUnderlined(false)
-                    .setOnClickListener(onMentionsClickListener)
-                    .setOnLongClickListener(onMentionsLongClickListener))
+                    .apply { onMentionsClickListener?.let { setOnClickListener(it) } }
+                    .apply { onMentionsLongClickListener?.let { setOnLongClickListener(it) } })
         }
 
-        var result = builder.build()
-
-        if (result == null) {
-            result = text
-        }
-
-        return result
+        return builder.build() ?: text
     }
 
     fun safelyParseAndFixUrl(url: String): HttpUrl? {
