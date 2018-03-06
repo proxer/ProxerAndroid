@@ -40,8 +40,13 @@ abstract class BaseFragment : Fragment() {
         refWatcher.watch(this)
     }
 
-    fun setLikelyUrl(url: HttpUrl) = customTabsHelper.mayLaunchUrl(url.androidUri(), bundleOf(), emptyList())
-    fun showPage(url: HttpUrl) = customTabsHelper.openHttpPage(requireActivity(), url)
+    fun setLikelyUrl(url: HttpUrl): Boolean {
+        return customTabsHelper.mayLaunchUrl(url.androidUri(), bundleOf(), emptyList())
+    }
+
+    fun showPage(url: HttpUrl, forceBrowser: Boolean = false) {
+        customTabsHelper.openHttpPage(requireActivity(), url, forceBrowser)
+    }
 
     protected fun requireArguments() = arguments ?: throw IllegalStateException("arguments are null")
 }

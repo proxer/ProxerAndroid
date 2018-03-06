@@ -41,6 +41,11 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
-    fun setLikelyUrl(url: HttpUrl) = customTabsHelper.mayLaunchUrl(url.androidUri(), bundleOf(), emptyList())
-    fun showPage(url: HttpUrl) = customTabsHelper.openHttpPage(this, url)
+    fun setLikelyUrl(url: HttpUrl): Boolean {
+        return customTabsHelper.mayLaunchUrl(url.androidUri(), bundleOf(), emptyList())
+    }
+
+    fun showPage(url: HttpUrl, forceBrowser: Boolean = false) {
+        customTabsHelper.openHttpPage(this, url, forceBrowser)
+    }
 }

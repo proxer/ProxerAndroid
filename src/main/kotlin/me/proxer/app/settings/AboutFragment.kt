@@ -183,7 +183,9 @@ class AboutFragment : MaterialAboutFragment() {
                     }.build()
     )
 
-    private fun showPage(url: HttpUrl) = customTabsHelper.openHttpPage(requireActivity(), url)
+    private fun showPage(url: HttpUrl, forceBrowser: Boolean = false) {
+        customTabsHelper.openHttpPage(requireActivity(), url, forceBrowser)
+    }
 
     private fun getAboutLibrariesActivityStyle() =
             when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {

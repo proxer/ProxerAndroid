@@ -562,6 +562,8 @@
 
     <string name="action_filter_available">Nur verfügbare anzeigen</string>
 
+    <string name="action_show_in_browser">Im Browser anzeigen</string>
+
     <string name="rank_10">Schnupperninja</string>
     <string name="rank_100">Anwärter</string>
     <string name="rank_200">Akademie Schüler</string>

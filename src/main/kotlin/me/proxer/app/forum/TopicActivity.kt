@@ -3,8 +3,12 @@ package me.proxer.app.forum
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import com.jakewharton.rxbinding2.view.clicks
 import me.proxer.app.R
 import me.proxer.app.base.DrawerActivity
+import me.proxer.app.util.extension.autoDispose
+import me.proxer.app.util.extension.multilineSnackbar
+import me.proxer.app.util.extension.subscribeAndLogErrors
 import org.jetbrains.anko.startActivity
 
 /**
@@ -52,5 +56,13 @@ class TopicActivity : DrawerActivity() {
     private fun setupToolbar() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         title = topic
+
+        toolbar.clicks()
+                .autoDispose(this)
+                .subscribeAndLogErrors {
+                    topic?.also { topic ->
+                        multilineSnackbar(root, topic)
+                    }
+                }
     }
 }

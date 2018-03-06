@@ -23,7 +23,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.target.Target
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
-import me.proxer.app.BuildConfig
+import me.proxer.app.BuildConfig.APPLICATION_ID
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.ui.WebViewActivity
@@ -33,7 +33,6 @@ import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
 import org.jetbrains.anko.dip
 import java.util.EnumSet
-import java.util.concurrent.Semaphore
 
 inline fun <reified T : Enum<T>> enumSetOf(collection: Collection<T>): EnumSet<T> = when (collection.isEmpty()) {
     true -> EnumSet.noneOf(T::class.java)
@@ -41,16 +40,6 @@ inline fun <reified T : Enum<T>> enumSetOf(collection: Collection<T>): EnumSet<T
 }
 
 inline fun <T> unsafeLazy(noinline initializer: () -> T) = lazy(LazyThreadSafetyMode.NONE, initializer)
-
-inline fun <T> Semaphore.lock(action: () -> T): T {
-    acquire()
-
-    return try {
-        action()
-    } finally {
-        release()
-    }
-}
 
 inline fun Context.getDrawableFromAttrs(resource: Int): Drawable {
     val styledAttributes = obtainStyledAttributes(intArrayOf(resource))
@@ -117,26 +106,18 @@ inline fun <reified T : Enum<T>> Bundle.getEnumSet(key: String, klass: Class<T>)
     }
 }
 
-fun CustomTabsHelperFragment.openHttpPage(activity: Activity, url: HttpUrl) {
-    val nativePackages = Utils.getNativeAppPackage(activity, url)
+fun CustomTabsHelperFragment.openHttpPage(activity: Activity, url: HttpUrl, forceBrowser: Boolean = false) {
+    if (forceBrowser) {
+        doOpenHttpPage(activity, url)
+    } else {
+        val nativePackages = Utils.getNativeAppPackage(activity, url)
 
-    when (nativePackages.isEmpty()) {
-        true -> CustomTabsIntent.Builder(session)
-                .setToolbarColor(ContextCompat.getColor(activity, R.color.colorPrimary))
-                .setSecondaryToolbarColor(ContextCompat.getColor(activity, R.color.colorPrimaryDark))
-                .addDefaultShareMenuItem()
-                .enableUrlBarHiding()
-                .setShowTitle(true)
-                .build()
-                .let {
-                    CustomTabsHelperFragment.open(activity, it, url.androidUri(), { context, uri ->
-                        WebViewActivity.navigateTo(context, uri.toString())
-                    })
-                }
-        false -> when (nativePackages.contains(BuildConfig.APPLICATION_ID)) {
-            true -> activity.startActivity(Intent(Intent.ACTION_VIEW, url.androidUri())
-                    .setPackage(BuildConfig.APPLICATION_ID))
-            false -> activity.startActivity(Intent(Intent.ACTION_VIEW, url.androidUri()))
+        when (nativePackages.isEmpty()) {
+            true -> doOpenHttpPage(activity, url)
+            false -> when (nativePackages.contains(APPLICATION_ID)) {
+                true -> activity.startActivity(Intent(Intent.ACTION_VIEW, url.androidUri()).setPackage(APPLICATION_ID))
+                false -> activity.startActivity(Intent(Intent.ACTION_VIEW, url.androidUri()))
+            }
         }
     }
 }
@@ -157,4 +138,19 @@ fun RecyclerView.LayoutManager.scrollToTop() = when (this) {
     is StaggeredGridLayoutManager -> scrollToPositionWithOffset(0, 0)
     is LinearLayoutManager -> scrollToPositionWithOffset(0, 0)
     else -> Unit
+}
+
+private fun CustomTabsHelperFragment.doOpenHttpPage(activity: Activity, url: HttpUrl) {
+    CustomTabsIntent.Builder(session)
+            .setToolbarColor(ContextCompat.getColor(activity, R.color.colorPrimary))
+            .setSecondaryToolbarColor(ContextCompat.getColor(activity, R.color.colorPrimaryDark))
+            .addDefaultShareMenuItem()
+            .enableUrlBarHiding()
+            .setShowTitle(true)
+            .build()
+            .let {
+                CustomTabsHelperFragment.open(activity, it, url.androidUri(), { context, uri ->
+                    WebViewActivity.navigateTo(context, uri.toString())
+                })
+            }
 }

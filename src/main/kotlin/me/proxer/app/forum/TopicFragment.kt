@@ -3,12 +3,19 @@ package me.proxer.app.forum
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
+import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import me.proxer.app.GlideApp
+import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.unsafeLazy
+import me.proxer.library.enums.Device
+import me.proxer.library.util.ProxerUrls
 import org.jetbrains.anko.bundleOf
 import kotlin.properties.Delegates
 
@@ -58,11 +65,29 @@ class TopicFragment : PagedContentFragment<ParsedPost>() {
         viewModel.metaData.observe(this, Observer {
             it?.let { topic = it.subject }
         })
+
+        setHasOptionsMenu(true)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         innerAdapter.glide = GlideApp.with(this)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater) {
+        IconicsMenuInflaterUtil.inflate(inflater, context, R.menu.fragment_topic, menu, true)
+
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.show_in_browser -> viewModel.metaData.value?.categoryId?.also { categoryId ->
+                showPage(ProxerUrls.forumWeb(categoryId, id, Device.MOBILE), true)
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 }
