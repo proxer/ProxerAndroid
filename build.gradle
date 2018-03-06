@@ -81,7 +81,7 @@ android {
                 removeUnusedCode true
                 removeUnusedResources true
                 obfuscate true
-                optimizeCode true
+                optimizeCode false
                 getProguardFiles().add(0, file('config/proguard/proguard-rules.pro'))
             }
 
@@ -99,7 +99,7 @@ android {
                 removeUnusedCode true
                 removeUnusedResources true
                 obfuscate true
-                optimizeCode true
+                optimizeCode false
                 getProguardFiles().add(0, file('config/proguard/proguard-rules.pro'))
             }
 
