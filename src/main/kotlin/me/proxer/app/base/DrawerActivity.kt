@@ -1,7 +1,6 @@
 package me.proxer.app.base
 
 import android.os.Bundle
-import android.support.v4.view.ViewCompat
 import android.support.v7.widget.Toolbar
 import android.view.ViewGroup
 import io.reactivex.Observable
@@ -39,6 +38,7 @@ abstract class DrawerActivity : BaseActivity() {
         private set
 
     protected open val isRootActivity = false
+    protected open val isMainActivity = false
 
     protected val root: ViewGroup by bindView(R.id.root)
     protected val toolbar: Toolbar by bindView(R.id.toolbar)
@@ -49,7 +49,7 @@ abstract class DrawerActivity : BaseActivity() {
         setContentView(contentView)
         setSupportActionBar(toolbar)
 
-        drawer = MaterialDrawerWrapper(this, toolbar, savedInstanceState, isRootActivity).also {
+        drawer = MaterialDrawerWrapper(this, toolbar, savedInstanceState, isRootActivity, isMainActivity).also {
             it.itemClickSubject
                     .autoDispose(this)
                     .subscribe { handleDrawerItemClick(it) }
@@ -97,11 +97,6 @@ abstract class DrawerActivity : BaseActivity() {
     }
 
     private fun showProfilePage() = StorageHelper.user?.let { (_, id, name, image) ->
-        drawer.profileImageView.let { view ->
-            ViewCompat.setTransitionName(view, "profile_image")
-
-            ProfileActivity.navigateTo(this, id, name, image,
-                    if (view.drawable != null) view else null)
-        }
+        ProfileActivity.navigateTo(this, id, name, image, null)
     }
 }

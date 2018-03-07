@@ -26,8 +26,7 @@
             android:value="true"/>
 
         <activity
-            android:name=".MainActivity"
-            android:launchMode="singleTop">
+            android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

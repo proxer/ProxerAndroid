@@ -46,16 +46,20 @@ class MainActivity : DrawerActivity() {
 
         fun getSectionIntent(context: Context, section: DrawerItem) = context
                 .intentFor<MainActivity>(SECTION_EXTRA to section.id)
-                .apply { flags = Intent.FLAG_ACTIVITY_CLEAR_TOP }
     }
 
-    override val isRootActivity = true
+    override val isRootActivity get() = intent.extras?.containsKey(SECTION_EXTRA) != true
+    override val isMainActivity = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         supportPostponeEnterTransition()
         displayFirstPage(savedInstanceState)
+
+        if (!isRootActivity) {
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        }
 
         root.postDelayed({
             supportStartPostponedEnterTransition()
@@ -80,10 +84,14 @@ class MainActivity : DrawerActivity() {
         val fragmentList = supportFragmentManager.fragments
 
         if (!drawer.onBackPressed() && fragmentList.none { it is BackPressAware && it.onBackPressed() }) {
-            val startPage = PreferenceHelper.getStartPage(this)
+            if (isRootActivity) {
+                val startPage = PreferenceHelper.getStartPage(this)
 
-            if (startPage != drawer.currentItem) {
-                drawer.select(startPage)
+                if (startPage != drawer.currentItem) {
+                    drawer.select(startPage)
+                } else {
+                    super.onBackPressed()
+                }
             } else {
                 super.onBackPressed()
             }
@@ -122,6 +130,20 @@ class MainActivity : DrawerActivity() {
         }
     }
 
+    private fun setFragment(item: DrawerItem) {
+        when (item) {
+            DrawerItem.NEWS -> setFragment(NewsFragment.newInstance(), R.string.section_news)
+            DrawerItem.CHAT -> setFragment(ConferenceFragment.newInstance(), R.string.section_chat)
+            DrawerItem.BOOKMARKS -> setFragment(BookmarkFragment.newInstance(), R.string.section_bookmarks)
+            DrawerItem.ANIME -> setFragment(MediaListFragment.newInstance(Category.ANIME), R.string.section_anime)
+            DrawerItem.CALENDAR -> setFragment(CalendarFragment.newInstance(), R.string.section_calendar)
+            DrawerItem.MANGA -> setFragment(MediaListFragment.newInstance(Category.MANGA), R.string.section_manga)
+            DrawerItem.INFO -> setFragment(AboutFragment.newInstance(), R.string.section_info)
+            DrawerItem.DONATE -> showPage(ProxerUrls.donateWeb(Device.DEFAULT))
+            DrawerItem.SETTINGS -> setFragment(SettingsFragment.newInstance(), R.string.section_settings)
+        }
+    }
+
     private fun setFragment(fragment: Fragment, newTitle: Int) {
         title = getString(newTitle)
 
@@ -135,7 +157,14 @@ class MainActivity : DrawerActivity() {
             if (StorageHelper.isFirstStart) {
                 IntroductionWrapper.introduce(this)
             } else {
-                drawer.select(getItemToLoad())
+                val itemToLoad = getItemToLoad()
+
+                drawer.select(itemToLoad, isRootActivity)
+
+                if (!isRootActivity) {
+                    setFragment(itemToLoad)
+                    drawer.test()
+                }
             }
         }
     }
@@ -154,15 +183,8 @@ class MainActivity : DrawerActivity() {
         false -> intent.getLongExtra(SECTION_EXTRA, PreferenceHelper.getStartPage(this).id)
     })
 
-    override fun handleDrawerItemClick(item: DrawerItem) = when (item) {
-        DrawerItem.NEWS -> setFragment(NewsFragment.newInstance(), R.string.section_news)
-        DrawerItem.CHAT -> setFragment(ConferenceFragment.newInstance(), R.string.section_chat)
-        DrawerItem.BOOKMARKS -> setFragment(BookmarkFragment.newInstance(), R.string.section_bookmarks)
-        DrawerItem.ANIME -> setFragment(MediaListFragment.newInstance(Category.ANIME), R.string.section_anime)
-        DrawerItem.CALENDAR -> setFragment(CalendarFragment.newInstance(), R.string.section_calendar)
-        DrawerItem.MANGA -> setFragment(MediaListFragment.newInstance(Category.MANGA), R.string.section_manga)
-        DrawerItem.INFO -> setFragment(AboutFragment.newInstance(), R.string.section_info)
-        DrawerItem.DONATE -> showPage(ProxerUrls.donateWeb(Device.DEFAULT))
-        DrawerItem.SETTINGS -> setFragment(SettingsFragment.newInstance(), R.string.section_settings)
+    override fun handleDrawerItemClick(item: DrawerItem) = when (isRootActivity) {
+        true -> setFragment(item)
+        false -> super.handleDrawerItemClick(item)
     }
 }
