@@ -8,6 +8,7 @@ import android.support.v4.app.NotificationManagerCompat
 import android.support.v4.content.ContextCompat
 import me.proxer.app.MainActivity
 import me.proxer.app.R
+import me.proxer.app.forum.TopicActivity
 import me.proxer.app.util.NotificationUtils.NEWS_CHANNEL
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.getQuantityString
@@ -40,6 +41,7 @@ object NewsNotifications {
         val builder = NotificationCompat.Builder(context, NEWS_CHANNEL)
         val newsAmount = context.getQuantityString(R.plurals.notification_news_amount, news.size)
         val style: NotificationCompat.Style
+        val intent: PendingIntent
         val title: String
         val content: String
 
@@ -49,6 +51,9 @@ object NewsNotifications {
 
                 title = current.subject.trim()
                 content = current.description.trim()
+                intent = PendingIntent.getActivity(context, ID,
+                        TopicActivity.getIntent(context, current.threadId, current.subject),
+                        PendingIntent.FLAG_UPDATE_CURRENT)
 
                 style = NotificationCompat.BigTextStyle(builder)
                         .bigText(content)
@@ -58,6 +63,9 @@ object NewsNotifications {
             else -> {
                 title = context.getString(R.string.notification_news_title)
                 content = newsAmount
+                intent = PendingIntent.getActivity(context, ID,
+                        MainActivity.getSectionIntent(context, DrawerItem.NEWS),
+                        PendingIntent.FLAG_UPDATE_CURRENT)
 
                 style = NotificationCompat.InboxStyle().also {
                     news.forEach { newsArticle ->
@@ -78,9 +86,7 @@ object NewsNotifications {
                 .setSmallIcon(R.drawable.ic_stat_proxer)
                 .setContentTitle(title)
                 .setContentText(content)
-                .setContentIntent(PendingIntent.getActivity(context, ID,
-                        MainActivity.getSectionIntent(context, DrawerItem.NEWS),
-                        PendingIntent.FLAG_UPDATE_CURRENT))
+                .setContentIntent(intent)
                 .addAction(R.drawable.ic_stat_check, context.getString(R.string.notification_news_read_action),
                         NewsNotificationReadReceiver.getPendingIntent(context))
                 .setDefaults(if (shouldAlert) Notification.DEFAULT_ALL else 0)

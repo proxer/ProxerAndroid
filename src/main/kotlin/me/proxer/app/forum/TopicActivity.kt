@@ -1,6 +1,7 @@
 package me.proxer.app.forum
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.jakewharton.rxbinding2.view.clicks
@@ -9,6 +10,7 @@ import me.proxer.app.base.DrawerActivity
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.subscribeAndLogErrors
+import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.startActivity
 
 /**
@@ -20,11 +22,15 @@ class TopicActivity : DrawerActivity() {
         private const val ID_EXTRA = "id"
         private const val TOPIC_EXTRA = "topic"
 
-        fun navigateTo(
-            context: Activity,
-            id: String,
-            topic: String? = null
-        ) = context.startActivity<TopicActivity>(ID_EXTRA to id, TOPIC_EXTRA to topic)
+        fun navigateTo(context: Activity, id: String, topic: String? = null) = context.startActivity<TopicActivity>(
+                ID_EXTRA to id,
+                TOPIC_EXTRA to topic
+        )
+
+        fun getIntent(context: Context, id: String, topic: String? = null) = context.intentFor<TopicActivity>(
+                ID_EXTRA to id,
+                TOPIC_EXTRA to topic
+        )
     }
 
     val id: String
