@@ -161,8 +161,10 @@ class ChatJob : Job() {
             else -> bus.post(ChatErrorEvent(ChatSynchronizationException(error)))
         }
 
-        return if (ErrorUtils.isIpBlockedError(error)) {
-            ChatNotifications.showError(context, error)
+        return if (params.failureCount >= 1 || ErrorUtils.isIpBlockedError(error)) {
+            if (canShowNotification(context)) {
+                ChatNotifications.showError(context, error)
+            }
 
             ERROR
         } else {

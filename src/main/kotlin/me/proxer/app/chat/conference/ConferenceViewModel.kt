@@ -2,11 +2,9 @@ package me.proxer.app.chat.conference
 
 import android.arch.lifecycle.MediatorLiveData
 import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
-import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
-import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.MainApplication.Companion.chatDao
 import me.proxer.app.base.BaseViewModel
@@ -16,7 +14,6 @@ import me.proxer.app.chat.sync.ChatJob
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
 import me.proxer.app.util.data.StorageHelper
-import me.proxer.app.util.extension.subscribeAndLogErrors
 
 /**
  * @author Ruben Gees
@@ -45,7 +42,11 @@ class ConferenceViewModel : BaseViewModel<List<LocalConference>>() {
     override val dataSingle: Single<List<LocalConference>>
         get() = Single
                 .fromCallable { Validators.validateLogin() }
-                .flatMap { Single.never<List<LocalConference>>() }
+                .flatMap {
+                    if (!ChatJob.isRunning()) ChatJob.scheduleSynchronization()
+
+                    Single.never<List<LocalConference>>()
+                }
 
     init {
         disposables += bus.register(ChatErrorEvent::class.java)
@@ -60,10 +61,5 @@ class ConferenceViewModel : BaseViewModel<List<LocalConference>>() {
                         error.value = it
                     }
                 }
-
-        Completable
-                .fromAction { if (!ChatJob.isRunning()) ChatJob.scheduleSynchronization() }
-                .subscribeOn(Schedulers.io())
-                .subscribeAndLogErrors()
     }
 }
