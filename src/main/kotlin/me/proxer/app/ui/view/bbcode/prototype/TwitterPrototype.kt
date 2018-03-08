@@ -12,19 +12,19 @@ import okhttp3.HttpUrl
 /**
  * @author Ruben Gees
  */
-object FacebookPrototype : TextMutatorPrototype, AutoClosingPrototype {
+object TwitterPrototype : TextMutatorPrototype, AutoClosingPrototype {
 
-    override val startRegex = Regex(" *facebook_link( .*?)?", REGEX_OPTIONS)
-    override val endRegex = Regex("/ *facebook_link *", REGEX_OPTIONS)
+    override val startRegex = Regex(" *tweet( .*?)?", REGEX_OPTIONS)
+    override val endRegex = Regex("/ *tweet *", REGEX_OPTIONS)
 
     override fun mutate(text: SpannableStringBuilder, args: Map<String, Any?>): SpannableStringBuilder {
-        val url = text.trim().toString()
-        val parsedUrl = HttpUrl.parse(url)
+        val id = text.trim()
+        val url = HttpUrl.parse("https://twitter.com/i/web/status/$id")
 
-        return when (parsedUrl) {
+        return when (url) {
             null -> text
-            else -> globalContext.getString(R.string.view_bbcode_facebook_link).toSpannableStringBuilder().apply {
-                setSpan(UrlClickableSpan(parsedUrl), 0, length, SPAN_INCLUSIVE_EXCLUSIVE)
+            else -> globalContext.getString(R.string.view_bbcode_twitter_link).toSpannableStringBuilder().apply {
+                setSpan(UrlClickableSpan(url), 0, length, SPAN_INCLUSIVE_EXCLUSIVE)
             }
         }
     }
