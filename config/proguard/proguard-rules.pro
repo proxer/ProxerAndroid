@@ -39,6 +39,12 @@
     static void checkParameterIsNotNull(java.lang.Object, java.lang.String);
 }
 
+# Avoid crash of SearchView.
+-keep class android.support.v7.widget.SearchView {
+   public <init>(android.content.Context);
+   public <init>(android.content.Context, android.util.AttributeSet);
+}
+
 # Glide
 -keep public class * extends com.bumptech.glide.module.AppGlideModule
 -keep class com.bumptech.glide.GeneratedAppGlideModuleImpl
