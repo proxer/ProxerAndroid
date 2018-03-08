@@ -412,6 +412,7 @@
     <string name="view_bbcode_show_spoiler">Spoiler!</string>
     <string name="view_bbcode_video_link">Zum Video</string>
     <string name="view_bbcode_attachment_link">Zum Anhang</string>
+    <string name="view_bbcode_faceook_link">Zum Facebook Post</string>
     <string name="view_bbcode_hide_login">Dieser Inhalt ist für Gäste nicht sichtbar. Bitte melde dich an, oder
         registriere dich.
     </string>
