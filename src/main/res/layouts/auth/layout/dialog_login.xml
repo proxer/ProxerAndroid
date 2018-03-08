@@ -81,6 +81,8 @@
             android:id="@+id/registrationInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:importantForAutofill="no"
+            tools:ignore="UnusedAttribute"
             tools:text="Info"/>
     </LinearLayout>
 </FrameLayout>
