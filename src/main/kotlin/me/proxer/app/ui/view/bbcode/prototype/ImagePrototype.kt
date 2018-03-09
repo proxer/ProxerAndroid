@@ -41,7 +41,7 @@ object ImagePrototype : AutoClosingPrototype {
     private const val WIDTH_ARGUMENT = "width"
 
     private val INVALID_IMAGE = HttpUrl.parse("https://cdn.proxer.me/keinbild.jpg")
-            ?: throw IllegalArgumentException("Could not parse url")
+        ?: throw IllegalArgumentException("Could not parse url")
 
     override val startRegex = Regex(" *img( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *img *", REGEX_OPTIONS)
@@ -83,34 +83,34 @@ object ImagePrototype : AutoClosingPrototype {
     }
 
     private fun loadImage(glide: GlideRequests, view: ImageView, url: HttpUrl, width: Int?) = glide.load(url.toString())
-            .apply { if (width != null) override(width, SIZE_ORIGINAL) else override(SIZE_ORIGINAL) }
-            .format(when (DeviceUtils.shouldShowHighQualityImages(view.context)) {
-                true -> DecodeFormat.PREFER_ARGB_8888
-                false -> DecodeFormat.PREFER_RGB_565
-            })
-            .listener(object : RequestListener<Drawable?> {
+        .apply { if (width != null) override(width, SIZE_ORIGINAL) else override(SIZE_ORIGINAL) }
+        .format(when (DeviceUtils.shouldShowHighQualityImages(view.context)) {
+            true -> DecodeFormat.PREFER_ARGB_8888
+            false -> DecodeFormat.PREFER_RGB_565
+        })
+        .listener(object : RequestListener<Drawable?> {
 
-                override fun onLoadFailed(
-                    e: GlideException?,
-                    model: Any?,
-                    target: Target<Drawable?>?,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    view.setTag(R.id.error_tag, true)
+            override fun onLoadFailed(
+                e: GlideException?,
+                model: Any?,
+                target: Target<Drawable?>?,
+                isFirstResource: Boolean
+            ): Boolean {
+                view.setTag(R.id.error_tag, true)
 
-                    return false
-                }
+                return false
+            }
 
-                override fun onResourceReady(
-                    resource: Drawable?,
-                    model: Any?,
-                    target: Target<Drawable?>?,
-                    dataSource: DataSource?,
-                    isFirstResource: Boolean
-                ) = false
-            })
-            .error(IconicsDrawable(view.context, CommunityMaterial.Icon.cmd_refresh)
-                    .iconColor(view.context)
-                    .sizeDp(32))
-            .into(view)
+            override fun onResourceReady(
+                resource: Drawable?,
+                model: Any?,
+                target: Target<Drawable?>?,
+                dataSource: DataSource?,
+                isFirstResource: Boolean
+            ) = false
+        })
+        .error(IconicsDrawable(view.context, CommunityMaterial.Icon.cmd_refresh)
+            .iconColor(view.context)
+            .sizeDp(32))
+        .into(view)
 }

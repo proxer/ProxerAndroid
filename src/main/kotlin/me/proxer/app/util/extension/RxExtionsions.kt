@@ -17,13 +17,13 @@ import me.proxer.app.MainApplication.Companion.LOGGING_TAG
 import org.jetbrains.anko.getStackTraceString
 
 inline fun <T> Observable<T>.autoDispose(owner: LifecycleOwner) = this
-        .autoDisposable(owner.scope(Lifecycle.Event.ON_DESTROY))
+    .autoDisposable(owner.scope(Lifecycle.Event.ON_DESTROY))
 
 inline fun <T> Single<T>.autoDispose(owner: LifecycleOwner) = this
-        .autoDisposable(owner.scope(Lifecycle.Event.ON_DESTROY))
+    .autoDisposable(owner.scope(Lifecycle.Event.ON_DESTROY))
 
 inline fun Completable.autoDispose(owner: LifecycleOwner) = this
-        .autoDisposable(owner.scope(Lifecycle.Event.ON_DESTROY))
+    .autoDisposable(owner.scope(Lifecycle.Event.ON_DESTROY))
 
 inline fun <T> Observable<T>.subscribeAndLogErrors(
     noinline onSuccess: (T) -> Unit,

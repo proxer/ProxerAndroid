@@ -11,7 +11,7 @@ abstract class PagedContentViewModel<T> : PagedViewModel<T>() {
 
     override val dataSingle: Single<List<T>>
         get() = Single.fromCallable { validate() }
-                .flatMap { endpoint.page(page).limit(itemsOnPage).buildSingle() }
+            .flatMap { endpoint.page(page).limit(itemsOnPage).buildSingle() }
 
     protected abstract val endpoint: PagingLimitEndpoint<List<T>>
 }

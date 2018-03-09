@@ -18,12 +18,12 @@ class RapidImageRegionDecoder : ImageRegionDecoder {
 
     override fun init(context: Context, uri: Uri): Point {
         decoder = BitmapDecoder.from(context, uri)
-                .apply {
-                    when (DeviceUtils.shouldShowHighQualityImages(context)) {
-                        true -> config(Bitmap.Config.ARGB_8888)
-                        false -> config(Bitmap.Config.RGB_565)
-                    }
+            .apply {
+                when (DeviceUtils.shouldShowHighQualityImages(context)) {
+                    true -> config(Bitmap.Config.ARGB_8888)
+                    false -> config(Bitmap.Config.RGB_565)
                 }
+            }
 
         return Point(decoder?.sourceWidth() ?: -1, decoder?.sourceHeight() ?: -1)
     }
@@ -32,9 +32,9 @@ class RapidImageRegionDecoder : ImageRegionDecoder {
     override fun decodeRegion(sRect: Rect, sampleSize: Int): Bitmap? {
         return try {
             decoder?.reset()
-                    ?.region(sRect)
-                    ?.scale(sRect.width() / sampleSize, sRect.height() / sampleSize)
-                    ?.decode()
+                ?.region(sRect)
+                ?.scale(sRect.width() / sampleSize, sRect.height() / sampleSize)
+                ?.decode()
         } catch (error: Exception) {
             null
         }

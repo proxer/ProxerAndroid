@@ -26,30 +26,30 @@ class Mp4UploadStreamResolver : StreamResolver {
     override val name = "MP4Upload"
 
     override fun resolve(id: String): Single<StreamResolutionResult> = api.anime().link(id)
-            .buildSingle()
-            .map {
-                val regexResult = regex.find(it) ?: throw StreamResolutionException()
-                val mediaId = regexResult.groupValues[1]
+        .buildSingle()
+        .map {
+            val regexResult = regex.find(it) ?: throw StreamResolutionException()
+            val mediaId = regexResult.groupValues[1]
 
-                if (mediaId.isBlank()) {
-                    throw StreamResolutionException("mediaId is null")
-                }
+            if (mediaId.isBlank()) {
+                throw StreamResolutionException("mediaId is null")
+            }
 
-                mediaId
-            }
-            .flatMap { mediaId ->
-                client.newCall(Request.Builder()
-                        .post(FormBody.Builder().add("op", "download2").add("id", mediaId).build())
-                        .url(HttpUrl.parse("https://mp4upload.com/$mediaId")
-                                ?: throw IllegalStateException("url is null")
-                        )
-                        .header("User-Agent", GENERIC_USER_AGENT)
-                        .build())
-                        .toSingle()
-            }
-            .map {
-                val url = it.networkResponse()?.request()?.url() ?: throw IOException("response url is null")
+            mediaId
+        }
+        .flatMap { mediaId ->
+            client.newCall(Request.Builder()
+                .post(FormBody.Builder().add("op", "download2").add("id", mediaId).build())
+                .url(HttpUrl.parse("https://mp4upload.com/$mediaId")
+                    ?: throw IllegalStateException("url is null")
+                )
+                .header("User-Agent", GENERIC_USER_AGENT)
+                .build())
+                .toSingle()
+        }
+        .map {
+            val url = it.networkResponse()?.request()?.url() ?: throw IOException("response url is null")
 
-                StreamResolutionResult(url.androidUri(), "video/mp4")
-            }
+            StreamResolutionResult(url.androidUri(), "video/mp4")
+        }
 }

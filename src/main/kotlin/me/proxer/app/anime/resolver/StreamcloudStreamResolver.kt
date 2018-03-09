@@ -24,43 +24,43 @@ class StreamcloudStreamResolver : StreamResolver {
     override val name = "Streamcloud"
 
     override fun resolve(id: String): Single<StreamResolutionResult> = api.anime().link(id)
-            .buildSingle()
-            .flatMap { url ->
-                client.newCall(Request.Builder()
-                        .get()
+        .buildSingle()
+        .flatMap { url ->
+            client.newCall(Request.Builder()
+                .get()
+                .url(url)
+                .header("User-Agent", GENERIC_USER_AGENT)
+                .build())
+                .toBodySingle()
+                .map {
+                    val formValues = FormBody.Builder().apply {
+                        for (i in formRegex.findAll(it)) {
+                            if (i.groupValues.size < 2) {
+                                throw StreamResolutionException()
+                            }
+
+                            add(i.groupValues[1], i.groupValues[2].replace("download1", "download2"))
+                        }
+                    }.build()
+
+                    if (formValues.size() == 0) {
+                        throw StreamResolutionException()
+                    }
+
+                    formValues
+                }
+                .flatMap {
+                    client.newCall(Request.Builder()
+                        .post(it)
                         .url(url)
                         .header("User-Agent", GENERIC_USER_AGENT)
                         .build())
                         .toBodySingle()
-                        .map {
-                            val formValues = FormBody.Builder().apply {
-                                for (i in formRegex.findAll(it)) {
-                                    if (i.groupValues.size < 2) {
-                                        throw StreamResolutionException()
-                                    }
+                }
+        }
+        .map {
+            val result = Uri.parse(fileRegex.find(it)?.groupValues?.get(1) ?: throw StreamResolutionException())
 
-                                    add(i.groupValues[1], i.groupValues[2].replace("download1", "download2"))
-                                }
-                            }.build()
-
-                            if (formValues.size() == 0) {
-                                throw StreamResolutionException()
-                            }
-
-                            formValues
-                        }
-                        .flatMap {
-                            client.newCall(Request.Builder()
-                                    .post(it)
-                                    .url(url)
-                                    .header("User-Agent", GENERIC_USER_AGENT)
-                                    .build())
-                                    .toBodySingle()
-                        }
-            }
-            .map {
-                val result = Uri.parse(fileRegex.find(it)?.groupValues?.get(1) ?: throw StreamResolutionException())
-
-                StreamResolutionResult(result, "video/mp4")
-            }
+            StreamResolutionResult(result, "video/mp4")
+        }
 }

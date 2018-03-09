@@ -24,21 +24,21 @@ class CrunchyrollStreamResolver : StreamResolver {
 
     override fun supports(name: String) = name.startsWith(this.name, true)
     override fun resolve(id: String): Single<StreamResolutionResult> = Single
-            .fromCallable {
-                if (!Utils.isPackageInstalled(globalContext.packageManager, CRUNCHYROLL_PACKAGE)) {
-                    throw AppRequiredException(name, CRUNCHYROLL_PACKAGE)
-                }
+        .fromCallable {
+            if (!Utils.isPackageInstalled(globalContext.packageManager, CRUNCHYROLL_PACKAGE)) {
+                throw AppRequiredException(name, CRUNCHYROLL_PACKAGE)
             }
-            .flatMap { api.anime().link(id).buildSingle() }
-            .map { url ->
-                val regexResult = regex.find(url) ?: throw StreamResolutionException()
-                val mediaId = regexResult.groupValues[1]
+        }
+        .flatMap { api.anime().link(id).buildSingle() }
+        .map { url ->
+            val regexResult = regex.find(url) ?: throw StreamResolutionException()
+            val mediaId = regexResult.groupValues[1]
 
-                if (mediaId.isBlank()) {
-                    throw StreamResolutionException()
-                }
-
-                StreamResolutionResult(Intent(Intent.ACTION_VIEW,
-                        Uri.parse("crunchyroll://media/$mediaId")))
+            if (mediaId.isBlank()) {
+                throw StreamResolutionException()
             }
+
+            StreamResolutionResult(Intent(Intent.ACTION_VIEW,
+                Uri.parse("crunchyroll://media/$mediaId")))
+        }
 }

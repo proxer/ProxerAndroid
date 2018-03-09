@@ -44,7 +44,7 @@ class UcpMediaListFragment : PagedContentFragment<UserMediaListEntry>() {
 
     override val layoutManager by unsafeLazy {
         StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(requireActivity()) + 1,
-                StaggeredGridLayoutManager.VERTICAL)
+            StaggeredGridLayoutManager.VERTICAL)
     }
 
     private val category: Category
@@ -66,11 +66,11 @@ class UcpMediaListFragment : PagedContentFragment<UserMediaListEntry>() {
         innerAdapter = UcpMediaAdapter()
 
         innerAdapter.clickSubject
-                .autoDispose(this)
-                .subscribe { (view, item) ->
-                    MediaActivity.navigateTo(requireActivity(), item.id, item.name, item.medium.toCategory(),
-                            if (view.drawable != null) view else null)
-                }
+            .autoDispose(this)
+            .subscribe { (view, item) ->
+                MediaActivity.navigateTo(requireActivity(), item.id, item.name, item.medium.toCategory(),
+                    if (view.drawable != null) view else null)
+            }
 
         setHasOptionsMenu(true)
     }

@@ -103,7 +103,7 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
 
     private fun updateIntervalNotification() {
         findPreference(NOTIFICATIONS_INTERVAL).isEnabled = PreferenceHelper
-                .areNewsNotificationsEnabled(requireContext()) || PreferenceHelper
-                .areAccountNotificationsEnabled(requireContext())
+            .areNewsNotificationsEnabled(requireContext()) || PreferenceHelper
+            .areAccountNotificationsEnabled(requireContext())
     }
 }

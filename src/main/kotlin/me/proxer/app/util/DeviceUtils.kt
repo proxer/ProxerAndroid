@@ -21,16 +21,16 @@ object DeviceUtils {
     fun getScreenWidth(context: Context) = Point().apply { context.windowManager.defaultDisplay.getSize(this) }.x
 
     fun getVerticalMargin(context: Context, withItems: Boolean = true) = context.resources
-            .getDimensionPixelSize(when (withItems) {
-                true -> R.dimen.screen_vertical_margin_with_items
-                false -> R.dimen.screen_vertical_margin
-            })
+        .getDimensionPixelSize(when (withItems) {
+            true -> R.dimen.screen_vertical_margin_with_items
+            false -> R.dimen.screen_vertical_margin
+        })
 
     fun getHorizontalMargin(context: Context, withItems: Boolean = true) = context.resources
-            .getDimensionPixelSize(when (withItems) {
-                true -> R.dimen.screen_horizontal_margin_with_items
-                false -> R.dimen.screen_horizontal_margin
-            })
+        .getDimensionPixelSize(when (withItems) {
+            true -> R.dimen.screen_horizontal_margin_with_items
+            false -> R.dimen.screen_horizontal_margin
+        })
 
     fun isLandscape(resources: Resources) = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 

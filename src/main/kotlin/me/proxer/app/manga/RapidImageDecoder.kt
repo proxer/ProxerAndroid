@@ -13,11 +13,11 @@ import rapid.decoder.BitmapDecoder
 class RapidImageDecoder : ImageDecoder {
 
     override fun decode(context: Context, uri: Uri) = BitmapDecoder.from(context, uri)
-            .apply {
-                when (DeviceUtils.shouldShowHighQualityImages(context)) {
-                    true -> config(Bitmap.Config.ARGB_8888)
-                    false -> config(Bitmap.Config.RGB_565)
-                }
+        .apply {
+            when (DeviceUtils.shouldShowHighQualityImages(context)) {
+                true -> config(Bitmap.Config.ARGB_8888)
+                false -> config(Bitmap.Config.RGB_565)
             }
-            .decode()
+        }
+        .decode()
 }

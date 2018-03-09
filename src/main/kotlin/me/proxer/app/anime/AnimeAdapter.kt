@@ -107,10 +107,10 @@ class AnimeAdapter(savedInstanceState: Bundle?) : BaseAdapter<AnimeStream, ViewH
             }
 
             play.setCompoundDrawablesWithIntrinsicBounds(IconicsDrawable(play.context)
-                    .icon(CommunityMaterial.Icon.cmd_play)
-                    .sizeDp(28)
-                    .paddingDp(8)
-                    .colorRes(android.R.color.white), null, null, null)
+                .icon(CommunityMaterial.Icon.cmd_play)
+                .sizeDp(28)
+                .paddingDp(8)
+                .colorRes(android.R.color.white), null, null, null)
         }
 
         fun bind(item: AnimeStream) {
@@ -128,7 +128,7 @@ class AnimeAdapter(savedInstanceState: Bundle?) : BaseAdapter<AnimeStream, ViewH
 
             uploaderText.text = item.uploaderName
             translatorGroup.text = item.translatorGroupName
-                    ?: translatorGroup.context.getString(R.string.fragment_anime_empty_subgroup)
+                ?: translatorGroup.context.getString(R.string.fragment_anime_empty_subgroup)
 
             dateText.text = Utils.dateFormatter.format(item.date.convertToDateTime())
 

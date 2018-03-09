@@ -50,11 +50,11 @@ class IndustryProjectFragment : PagedContentFragment<IndustryProject>() {
         innerAdapter = IndustryProjectAdapter()
 
         innerAdapter.clickSubject
-                .autoDispose(this)
-                .subscribe { (view, project) ->
-                    MediaActivity.navigateTo(requireActivity(), project.id, project.name, project.medium.toCategory(),
-                            if (view.drawable != null) view else null)
-                }
+            .autoDispose(this)
+            .subscribe { (view, project) ->
+                MediaActivity.navigateTo(requireActivity(), project.id, project.name, project.medium.toCategory(),
+                    if (view.drawable != null) view else null)
+            }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

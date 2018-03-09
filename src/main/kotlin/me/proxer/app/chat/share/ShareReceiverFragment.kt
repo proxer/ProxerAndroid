@@ -56,14 +56,14 @@ class ShareReceiverFragment : BaseContentFragment<List<LocalConference>>() {
         adapter = ConferenceAdapter()
 
         adapter.clickSubject
-                .debounce(50, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .autoDispose(this)
-                .subscribe {
-                    ChatActivity.navigateTo(requireActivity(), it, text)
+            .debounce(50, TimeUnit.MILLISECONDS)
+            .observeOn(AndroidSchedulers.mainThread())
+            .autoDispose(this)
+            .subscribe {
+                ChatActivity.navigateTo(requireActivity(), it, text)
 
-                    requireActivity().finish()
-                }
+                requireActivity().finish()
+            }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -77,7 +77,7 @@ class ShareReceiverFragment : BaseContentFragment<List<LocalConference>>() {
 
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(requireActivity()),
-                StaggeredGridLayoutManager.VERTICAL)
+            StaggeredGridLayoutManager.VERTICAL)
         recyclerView.adapter = adapter
     }
 

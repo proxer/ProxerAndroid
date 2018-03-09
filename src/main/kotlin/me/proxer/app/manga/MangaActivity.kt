@@ -43,12 +43,12 @@ class MangaActivity : BaseActivity() {
             episodeAmount: Int? = null
         ) {
             context.startActivity(context.intentFor<MangaActivity>(
-                    ID_EXTRA to id,
-                    EPISODE_EXTRA to episode,
-                    LANGUAGE_EXTRA to language,
-                    CHAPTER_TITLE_EXTRA to chapterTitle,
-                    NAME_EXTRA to name,
-                    EPISODE_AMOUNT_EXTRA to episodeAmount
+                ID_EXTRA to id,
+                EPISODE_EXTRA to episode,
+                LANGUAGE_EXTRA to language,
+                CHAPTER_TITLE_EXTRA to chapterTitle,
+                NAME_EXTRA to name,
+                EPISODE_AMOUNT_EXTRA to episodeAmount
             ))
         }
     }
@@ -62,7 +62,7 @@ class MangaActivity : BaseActivity() {
     var episode: Int
         get() = when {
             intent.action == Intent.ACTION_VIEW && !intent.hasExtra(EPISODE_EXTRA) -> intent.data.pathSegments
-                    .getOrElse(2, { "1" }).toIntOrNull() ?: 1
+                .getOrElse(2, { "1" }).toIntOrNull() ?: 1
             else -> intent.getIntExtra(EPISODE_EXTRA, 1)
         }
         set(value) {
@@ -74,7 +74,7 @@ class MangaActivity : BaseActivity() {
     val language: Language
         get() = when {
             intent.action == Intent.ACTION_VIEW -> ProxerUtils.toApiEnum(Language::class.java, intent.data.pathSegments
-                    .getOrElse(3, { "" })) ?: Language.ENGLISH
+                .getOrElse(3, { "" })) ?: Language.ENGLISH
             else -> intent.getSerializableExtra(LANGUAGE_EXTRA) as Language
         }
 
@@ -119,8 +119,8 @@ class MangaActivity : BaseActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, MangaFragment.newInstance())
-                    .commitNow()
+                .replace(R.id.container, MangaFragment.newInstance())
+                .commitNow()
         }
     }
 
@@ -142,11 +142,11 @@ class MangaActivity : BaseActivity() {
                 }
 
                 ShareCompat.IntentBuilder
-                        .from(this)
-                        .setText(text)
-                        .setType("text/plain")
-                        .setChooserTitle(getString(R.string.share_title))
-                        .startChooser()
+                    .from(this)
+                    .setText(text)
+                    .setType("text/plain")
+                    .setChooserTitle(getString(R.string.share_title))
+                    .startChooser()
             }
 
             true
@@ -162,12 +162,12 @@ class MangaActivity : BaseActivity() {
     private fun setupToolbar() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toolbar.clicks()
-                .autoDispose(this)
-                .subscribe {
-                    name?.let {
-                        MediaActivity.navigateTo(this, id, name, Category.MANGA)
-                    }
+            .autoDispose(this)
+            .subscribe {
+                name?.let {
+                    MediaActivity.navigateTo(this, id, name, Category.MANGA)
                 }
+            }
     }
 
     private fun updateTitle() {

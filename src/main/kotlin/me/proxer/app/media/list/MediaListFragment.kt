@@ -65,7 +65,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
 
     override val viewModel by unsafeLazy {
         MediaListViewModelProvider.get(this, sortCriteria, type, searchQuery, language,
-                genres, excludedGenres, fskConstraints)
+            genres, excludedGenres, fskConstraints)
     }
 
     override val layoutManager by unsafeLazy {
@@ -79,7 +79,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
 
     private var sortCriteria: MediaSearchSortCriteria
         get() = requireArguments().getSerializable(SORT_CRITERIA_ARGUMENT) as? MediaSearchSortCriteria
-                ?: MediaSearchSortCriteria.RATING
+            ?: MediaSearchSortCriteria.RATING
         set(value) {
             requireArguments().putSerializable(SORT_CRITERIA_ARGUMENT, value)
 
@@ -156,11 +156,11 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
         innerAdapter = MediaAdapter(category)
 
         innerAdapter.clickSubject
-                .autoDispose(this)
-                .subscribe { (view, entry) ->
-                    MediaActivity.navigateTo(requireActivity(), entry.id, entry.name, entry.medium.toCategory(),
-                            if (view.drawable != null) view else null)
-                }
+            .autoDispose(this)
+            .subscribe { (view, entry) ->
+                MediaActivity.navigateTo(requireActivity(), entry.id, entry.name, entry.medium.toCategory(),
+                    if (view.drawable != null) view else null)
+            }
 
         setHasOptionsMenu(true)
     }
@@ -213,29 +213,29 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
             val searchView = searchItem.actionView as SearchView
 
             searchItem.actionViewEvents()
-                    .autoDispose(this)
-                    .subscribe {
-                        if (it.menuItem().isActionViewExpanded) {
-                            searchQuery = null
+                .autoDispose(this)
+                .subscribe {
+                    if (it.menuItem().isActionViewExpanded) {
+                        searchQuery = null
 
-                            viewModel.reload()
-                        }
-
-                        TransitionManager.beginDelayedTransition(toolbar)
+                        viewModel.reload()
                     }
+
+                    TransitionManager.beginDelayedTransition(toolbar)
+                }
 
             searchView.queryTextChangeEvents()
-                    .skipInitialValue()
-                    .autoDispose(this)
-                    .subscribe {
-                        searchQuery = it.queryText().toString().trim()
+                .skipInitialValue()
+                .autoDispose(this)
+                .subscribe {
+                    searchQuery = it.queryText().toString().trim()
 
-                        if (it.isSubmitted) {
-                            searchView.clearFocus()
+                    if (it.isSubmitted) {
+                        searchView.clearFocus()
 
-                            viewModel.reload()
-                        }
+                        viewModel.reload()
                     }
+                }
 
             searchQuery?.let {
                 searchItem.expandActionView()
@@ -277,7 +277,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
 
         if (innerAdapter.itemCount > 0 || adapter.footer == null) {
             recyclerView.setPadding(recyclerView.paddingLeft, recyclerView.paddingTop, recyclerView.paddingRight,
-                    recyclerView.paddingBottom + searchBottomSheetTitle.measuredHeight)
+                recyclerView.paddingBottom + searchBottomSheetTitle.measuredHeight)
         }
     }
 }

@@ -24,15 +24,15 @@ class ProfileCommentViewModel(
 
     override val dataSingle: Single<List<ParsedUserComment>>
         get() = Single.fromCallable { validate() }
-                .flatMap {
-                    api.user().comments(userId, username)
-                            .category(category)
-                            .page(page)
-                            .limit(itemsOnPage)
-                            .buildSingle()
-                }
-                .observeOn(Schedulers.computation())
-                .map { it.map { it.toParsedUserComment() } }
+            .flatMap {
+                api.user().comments(userId, username)
+                    .category(category)
+                    .page(page)
+                    .limit(itemsOnPage)
+                    .buildSingle()
+            }
+            .observeOn(Schedulers.computation())
+            .map { it.map { it.toParsedUserComment() } }
 
     var category by Delegates.observable(category, { _, old, new ->
         if (old != new) reload()

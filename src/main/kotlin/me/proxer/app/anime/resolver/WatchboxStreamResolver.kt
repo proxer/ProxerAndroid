@@ -28,27 +28,27 @@ class WatchboxStreamResolver : StreamResolver {
     override val name = "Watchbox"
 
     override fun resolve(id: String): Single<StreamResolutionResult> = Single
-            .fromCallable {
-                if (!Utils.isPackageInstalled(globalContext.packageManager, WATCHBOX_PACKAGE)) {
-                    throw AppRequiredException(name, WATCHBOX_PACKAGE)
-                }
+        .fromCallable {
+            if (!Utils.isPackageInstalled(globalContext.packageManager, WATCHBOX_PACKAGE)) {
+                throw AppRequiredException(name, WATCHBOX_PACKAGE)
             }
-            .flatMap { api.anime().link(id).buildSingle() }
-            .flatMap { url ->
-                client.newCall(Request.Builder()
-                        .get()
-                        .url(Utils.parseAndFixUrl(url))
-                        .header("User-Agent", USER_AGENT)
-                        .build())
-                        .toBodySingle()
-            }
-            .map {
-                val mediaUri = regex.find(it)?.groupValues?.get(1) ?: throw StreamResolutionException()
+        }
+        .flatMap { api.anime().link(id).buildSingle() }
+        .flatMap { url ->
+            client.newCall(Request.Builder()
+                .get()
+                .url(Utils.parseAndFixUrl(url))
+                .header("User-Agent", USER_AGENT)
+                .build())
+                .toBodySingle()
+        }
+        .map {
+            val mediaUri = regex.find(it)?.groupValues?.get(1) ?: throw StreamResolutionException()
 
-                if (mediaUri.isBlank()) {
-                    throw StreamResolutionException()
-                }
-
-                StreamResolutionResult(Intent(Intent.ACTION_VIEW, Uri.parse(mediaUri)))
+            if (mediaUri.isBlank()) {
+                throw StreamResolutionException()
             }
+
+            StreamResolutionResult(Intent(Intent.ACTION_VIEW, Uri.parse(mediaUri)))
+        }
 }

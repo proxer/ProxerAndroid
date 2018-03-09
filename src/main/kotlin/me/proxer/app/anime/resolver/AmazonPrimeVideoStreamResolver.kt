@@ -14,6 +14,6 @@ class AmazonPrimeVideoStreamResolver : StreamResolver {
     override val name = "Amazon Prime Video"
 
     override fun resolve(id: String): Single<StreamResolutionResult> = api.anime().link(id)
-            .buildSingle()
-            .map { StreamResolutionResult(Utils.parseAndFixUrl(it).androidUri(), "text/html") }
+        .buildSingle()
+        .map { StreamResolutionResult(Utils.parseAndFixUrl(it).androidUri(), "text/html") }
 }

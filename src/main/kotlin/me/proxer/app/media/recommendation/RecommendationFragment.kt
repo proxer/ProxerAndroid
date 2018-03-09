@@ -52,11 +52,11 @@ class RecommendationFragment : BaseContentFragment<List<Recommendation>>() {
         adapter = RecommendationAdapter()
 
         adapter.clickSubject
-                .autoDispose(this)
-                .subscribe { (view, recommendation) ->
-                    MediaActivity.navigateTo(requireActivity(), recommendation.id, recommendation.name,
-                            recommendation.category, if (view.drawable != null) view else null)
-                }
+            .autoDispose(this)
+            .subscribe { (view, recommendation) ->
+                MediaActivity.navigateTo(requireActivity(), recommendation.id, recommendation.name,
+                    recommendation.category, if (view.drawable != null) view else null)
+            }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -77,7 +77,7 @@ class RecommendationFragment : BaseContentFragment<List<Recommendation>>() {
 
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(requireActivity()) + 1,
-                StaggeredGridLayoutManager.VERTICAL)
+            StaggeredGridLayoutManager.VERTICAL)
         recyclerView.adapter = adapter
     }
 

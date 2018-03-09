@@ -21,11 +21,11 @@ class NetflixStreamResolver : StreamResolver {
     override val name = "Netflix"
 
     override fun resolve(id: String): Single<StreamResolutionResult> = Single
-            .fromCallable {
-                if (!Utils.isPackageInstalled(MainApplication.globalContext.packageManager, NETFLIX_PACKAGE)) {
-                    throw AppRequiredException(name, NETFLIX_PACKAGE)
-                }
+        .fromCallable {
+            if (!Utils.isPackageInstalled(MainApplication.globalContext.packageManager, NETFLIX_PACKAGE)) {
+                throw AppRequiredException(name, NETFLIX_PACKAGE)
             }
-            .flatMap { api.anime().link(id).buildSingle() }
-            .map { StreamResolutionResult(Intent(Intent.ACTION_VIEW, Uri.parse(it))) }
+        }
+        .flatMap { api.anime().link(id).buildSingle() }
+        .map { StreamResolutionResult(Intent(Intent.ACTION_VIEW, Uri.parse(it))) }
 }

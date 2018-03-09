@@ -49,7 +49,7 @@ class NewsAdapter(savedInstanceState: Bundle?) : BaseAdapter<NewsArticle, NewsAd
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_news, parent, false))
+        .inflate(R.layout.item_news, parent, false))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(data[position])
 
@@ -67,10 +67,10 @@ class NewsAdapter(savedInstanceState: Bundle?) : BaseAdapter<NewsArticle, NewsAd
     }
 
     override fun areContentsTheSame(old: NewsArticle, new: NewsArticle) = old.date == new.date &&
-            old.category == new.category &&
-            old.image == new.image &&
-            old.subject == new.subject &&
-            old.description == new.description
+        old.category == new.category &&
+        old.image == new.image &&
+        old.subject == new.subject &&
+        old.description == new.description
 
     override fun saveInstanceState(outState: Bundle) = outState.putParcelable(EXPANDED_STATE, expansionMap)
 

@@ -48,7 +48,7 @@ class DiscussionAdapter : BaseAdapter<ForumDiscussion, ViewHolder>() {
 
         fun bind(item: ForumDiscussion) {
             val metaInfoText = metaInfo.context.getString(R.string.fragment_discussion_meta_info,
-                    item.firstPostUsername, item.category)
+                item.firstPostUsername, item.category)
 
             subject.text = item.subject
             metaInfo.text = metaInfoText.toSpannableStringBuilder().apply {

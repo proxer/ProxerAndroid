@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                 xmlns:tools="http://schemas.android.com/tools"
-                                                 android:id="@+id/root"
-                                                 android:layout_width="match_parent"
-                                                 android:layout_height="match_parent"
-                                                 tools:context=".ucp.UcpActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ucp.UcpActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             app:tabIndicatorColor="@android:color/white"
             app:tabMode="scrollable"
-            app:tabTextColor="@android:color/white"/>
+            app:tabTextColor="@android:color/white" />
 
     </android.support.design.widget.AppBarLayout>
 
@@ -35,6 +35,6 @@
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </android.support.design.widget.CoordinatorLayout>

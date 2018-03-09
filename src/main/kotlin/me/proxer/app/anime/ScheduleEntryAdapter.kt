@@ -160,7 +160,7 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
                 }
             } else {
                 val airingUploadText = airingInfo.context.getString(R.string.fragment_schedule_airing_upload,
-                        airingDate, uploadDate)
+                    airingDate, uploadDate)
 
                 airingInfo.text = SpannableString(airingUploadText).apply {
                     setSpan(StyleSpan(BOLD), indexOf(airingDate), indexOf("\n"), SPAN_INCLUSIVE_EXCLUSIVE)
@@ -173,8 +173,8 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
 
             airingInfoDisposable?.dispose()
             airingInfoDisposable = Observable.interval(0, 1, TimeUnit.SECONDS)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(AiringInfoUpdateConsumer(item))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(AiringInfoUpdateConsumer(item))
 
             glide?.defaultLoad(image, ProxerUrls.entryImage(item.entryId))
         }
@@ -205,10 +205,10 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
                 } else {
                     if (item.date.convertToDateTime().isBefore(now)) {
                         status.text = status.context.getString(R.string.fragment_schedule_aired_remaining_time,
-                                Date().calculateAndFormatDifference(item.uploadDate))
+                            Date().calculateAndFormatDifference(item.uploadDate))
                     } else {
                         status.text = status.context.getString(R.string.fragment_schedule_remaining_time,
-                                Date().calculateAndFormatDifference(item.date))
+                            Date().calculateAndFormatDifference(item.date))
                     }
                 }
             }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/filter"
@@ -19,27 +19,27 @@
                 <item
                     android:id="@+id/all_anime"
                     android:title="@string/action_filter_all"
-                    app:showAsAction="never"/>
+                    app:showAsAction="never" />
 
                 <item
                     android:id="@+id/animeseries"
                     android:title="@string/action_filter_anime_series"
-                    app:showAsAction="never"/>
+                    app:showAsAction="never" />
 
                 <item
                     android:id="@+id/movies"
                     android:title="@string/action_filter_movies"
-                    app:showAsAction="never"/>
+                    app:showAsAction="never" />
 
                 <item
                     android:id="@+id/ova"
                     android:title="@string/action_filter_ova"
-                    app:showAsAction="never"/>
+                    app:showAsAction="never" />
 
                 <item
                     android:id="@+id/hentai"
                     android:title="@string/action_filter_hentai"
-                    app:showAsAction="never"/>
+                    app:showAsAction="never" />
 
             </group>
 
@@ -50,27 +50,27 @@
                 <item
                     android:id="@+id/all_manga"
                     android:title="@string/action_filter_all"
-                    app:showAsAction="never"/>
+                    app:showAsAction="never" />
 
                 <item
                     android:id="@+id/mangaseries"
                     android:title="@string/action_filter_manga_series"
-                    app:showAsAction="never"/>
+                    app:showAsAction="never" />
 
                 <item
                     android:id="@+id/oneshot"
                     android:title="@string/action_filter_one_shots"
-                    app:showAsAction="never"/>
+                    app:showAsAction="never" />
 
                 <item
                     android:id="@+id/doujin"
                     android:title="@string/action_filter_doujin"
-                    app:showAsAction="never"/>
+                    app:showAsAction="never" />
 
                 <item
                     android:id="@+id/hmanga"
                     android:title="@string/action_filter_hmanga"
-                    app:showAsAction="never"/>
+                    app:showAsAction="never" />
 
             </group>
         </menu>
@@ -91,19 +91,19 @@
                 <item
                     android:id="@+id/rating"
                     android:title="@string/action_sort_rating"
-                    app:showAsAction="never"/>
+                    app:showAsAction="never" />
                 <item
                     android:id="@+id/clicks"
                     android:title="@string/action_sort_clicks"
-                    app:showAsAction="never"/>
+                    app:showAsAction="never" />
                 <item
                     android:id="@+id/episodeAmount"
                     android:title="@string/action_sort_count"
-                    app:showAsAction="never"/>
+                    app:showAsAction="never" />
                 <item
                     android:id="@+id/name"
                     android:title="@string/action_sort_name"
-                    app:showAsAction="never"/>
+                    app:showAsAction="never" />
             </group>
         </menu>
     </item>
@@ -116,5 +116,5 @@
         app:ico_icon="cmd_magnify"
         app:ico_padding="2dp"
         app:ico_size="24dp"
-        app:showAsAction="always|collapseActionView"/>
+        app:showAsAction="always|collapseActionView" />
 </menu>

@@ -19,25 +19,25 @@ import me.proxer.app.util.extension.setIconicsImage
 object IntroductionWrapper {
 
     fun introduce(activity: Activity) = IntroductionBuilder(activity)
-            .withSlides(generateSlides(activity))
-            .withSkipEnabled(R.string.introduction_skip)
-            .withOnSlideListener(object : OnSlideListener() {
-                override fun onSlideInit(position: Int, title: TextView?, image: ImageView, description: TextView?) {
-                    when (position) {
-                        0 -> image.setImageDrawable(AppCompatResources.getDrawable(activity, R.drawable.ic_proxer))
-                        1 -> image.setIconicsImage(CommunityMaterial.Icon.cmd_bell_outline, 256, 16,
-                                android.R.color.white)
-                    }
+        .withSlides(generateSlides(activity))
+        .withSkipEnabled(R.string.introduction_skip)
+        .withOnSlideListener(object : OnSlideListener() {
+            override fun onSlideInit(position: Int, title: TextView?, image: ImageView, description: TextView?) {
+                when (position) {
+                    0 -> image.setImageDrawable(AppCompatResources.getDrawable(activity, R.drawable.ic_proxer))
+                    1 -> image.setIconicsImage(CommunityMaterial.Icon.cmd_bell_outline, 256, 16,
+                        android.R.color.white)
                 }
-            })
-            .introduceMyself()
+            }
+        })
+        .introduceMyself()
 
     private fun generateSlides(context: Context) = arrayListOf(
-            Slide().withTitle(R.string.introduction_welcome_title)
-                    .withColorResource(R.color.primary)
-                    .withDescription(R.string.introduction_welcome_description),
-            Slide().withTitle(R.string.introduction_notifications_title)
-                    .withColorResource(R.color.colorAccent)
-                    .withOption(Option(context.getString(R.string.introduction_notifications_description), true))
+        Slide().withTitle(R.string.introduction_welcome_title)
+            .withColorResource(R.color.primary)
+            .withDescription(R.string.introduction_welcome_description),
+        Slide().withTitle(R.string.introduction_notifications_title)
+            .withColorResource(R.color.colorAccent)
+            .withOption(Option(context.getString(R.string.introduction_notifications_description), true))
     )
 }

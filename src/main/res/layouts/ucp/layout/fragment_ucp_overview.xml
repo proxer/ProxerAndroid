@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:id="@+id/root"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context=".ucp.overview.UcpOverviewFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ucp.overview.UcpOverviewFragment">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/progress"
@@ -48,7 +48,7 @@
                             android:padding="8dp"
                             android:text="@string/fragment_ucp_overview_general"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                            android:textColor="@color/colorAccent"/>
+                            android:textColor="@color/colorAccent" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -58,7 +58,7 @@
                             android:paddingRight="8dp"
                             android:paddingTop="4dp"
                             android:text="@string/fragment_ucp_overview_profile_link"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"/>
+                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
                         <TextView
                             android:id="@+id/profileLink"
@@ -68,7 +68,7 @@
                             android:paddingLeft="8dp"
                             android:paddingRight="8dp"
                             android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                            tools:text="https://link.com?id=123"/>
+                            tools:text="https://link.com?id=123" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -78,7 +78,7 @@
                             android:paddingRight="8dp"
                             android:paddingTop="4dp"
                             android:text="@string/fragment_ucp_overview_username"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"/>
+                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
                         <TextView
                             android:id="@+id/username"
@@ -89,7 +89,7 @@
                             android:paddingRight="8dp"
                             android:textAppearance="@style/TextAppearance.AppCompat.Small"
                             android:textIsSelectable="true"
-                            tools:text="Username"/>
+                            tools:text="Username" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -99,7 +99,7 @@
                             android:paddingRight="8dp"
                             android:paddingTop="4dp"
                             android:text="@string/fragment_ucp_overview_user_id"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"/>
+                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
                         <TextView
                             android:id="@+id/userId"
@@ -110,7 +110,7 @@
                             android:paddingRight="8dp"
                             android:textAppearance="@style/TextAppearance.AppCompat.Small"
                             android:textIsSelectable="true"
-                            tools:text="123456"/>
+                            tools:text="123456" />
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
 
@@ -133,7 +133,7 @@
                             android:padding="8dp"
                             android:text="@string/fragment_ucp_overview_epsiode_counter"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                            android:textColor="@color/colorAccent"/>
+                            android:textColor="@color/colorAccent" />
 
                         <TableLayout
                             android:layout_width="match_parent"
@@ -147,7 +147,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_margin="8dp"
                                     android:text="@string/fragment_ucp_overview_epsiode_counter_episodes"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
                                 <TextView
                                     android:id="@+id/episodesRow"
@@ -156,7 +156,7 @@
                                     android:layout_margin="8dp"
                                     android:gravity="end"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                                    tools:text="100"/>
+                                    tools:text="100" />
                             </TableRow>
 
                             <TableRow>
@@ -166,7 +166,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_margin="8dp"
                                     android:text="@string/fragment_ucp_overview_epsiode_counter_minutes"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
                                 <TextView
                                     android:id="@+id/minutesRow"
@@ -175,7 +175,7 @@
                                     android:layout_margin="8dp"
                                     android:gravity="end"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                                    tools:text="100"/>
+                                    tools:text="100" />
                             </TableRow>
 
                             <TableRow>
@@ -185,7 +185,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_margin="8dp"
                                     android:text="@string/fragment_ucp_overview_epsiode_counter_hours"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
                                 <TextView
                                     android:id="@+id/hoursRow"
@@ -194,7 +194,7 @@
                                     android:layout_margin="8dp"
                                     android:gravity="end"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                                    tools:text="100"/>
+                                    tools:text="100" />
                             </TableRow>
 
                             <TableRow>
@@ -204,7 +204,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_margin="8dp"
                                     android:text="@string/fragment_ucp_overview_epsiode_counter_days"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
                                 <TextView
                                     android:id="@+id/daysRow"
@@ -213,7 +213,7 @@
                                     android:layout_margin="8dp"
                                     android:gravity="end"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                                    tools:text="100"/>
+                                    tools:text="100" />
                             </TableRow>
                         </TableLayout>
                     </LinearLayout>
@@ -222,5 +222,5 @@
         </android.support.v4.widget.NestedScrollView>
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <include layout="@layout/layout_error"/>
+    <include layout="@layout/layout_error" />
 </FrameLayout>

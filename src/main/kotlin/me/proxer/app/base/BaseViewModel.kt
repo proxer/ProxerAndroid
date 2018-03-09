@@ -38,20 +38,20 @@ abstract class BaseViewModel<T> : ViewModel() {
 
     init {
         disposables += Observable.merge(bus.register(LoginEvent::class.java), bus.register(LogoutEvent::class.java))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { if (isLoginRequired || isLoginErrorPresent()) reload() }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { if (isLoginRequired || isLoginErrorPresent()) reload() }
 
         disposables += bus.register(AgeConfirmationEvent::class.java)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { if (isAgeConfirmationRequired) reload() }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { if (isAgeConfirmationRequired) reload() }
 
         disposables += bus.register(CaptchaSolvedEvent::class.java)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    if (error.value?.message == R.string.error_captcha) {
-                        refresh()
-                    }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                if (error.value?.message == R.string.error_captcha) {
+                    refresh()
                 }
+            }
     }
 
     override fun onCleared() {
@@ -66,21 +66,21 @@ abstract class BaseViewModel<T> : ViewModel() {
     open fun load() {
         dataDisposable?.dispose()
         dataDisposable = dataSingle
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe {
-                    isLoading.value = true
-                    error.value = null
-                    data.value = null
-                }
-                .doAfterTerminate { isLoading.value = false }
-                .subscribeAndLogErrors({
-                    error.value = null
-                    data.value = it
-                }, {
-                    data.value = null
-                    error.value = ErrorUtils.handle(it)
-                })
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                isLoading.value = true
+                error.value = null
+                data.value = null
+            }
+            .doAfterTerminate { isLoading.value = false }
+            .subscribeAndLogErrors({
+                error.value = null
+                data.value = it
+            }, {
+                data.value = null
+                error.value = ErrorUtils.handle(it)
+            })
     }
 
     open fun loadIfPossible() {

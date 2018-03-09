@@ -31,26 +31,26 @@ class NotificationViewModel : PagedViewModel<ProxerNotification>() {
 
     override val dataSingle: Single<List<ProxerNotification>>
         get() = Single.fromCallable { Validators.validateLogin() }
-                .flatMap {
-                    when (page) {
-                        0 -> api.notifications().notifications()
-                                .markAsRead(true)
-                                .page(page)
-                                .filter(NotificationFilter.UNREAD)
-                                .limit(Int.MAX_VALUE)
-                                .buildSingle()
-                                .doOnSuccess { firstPageItemAmount = it.size }
-                                .zipWith(readSingle(), BiFunction { first, second -> first + second })
-                        else -> readSingle()
+            .flatMap {
+                when (page) {
+                    0 -> api.notifications().notifications()
+                        .markAsRead(true)
+                        .page(page)
+                        .filter(NotificationFilter.UNREAD)
+                        .limit(Int.MAX_VALUE)
+                        .buildSingle()
+                        .doOnSuccess { firstPageItemAmount = it.size }
+                        .zipWith(readSingle(), BiFunction { first, second -> first + second })
+                    else -> readSingle()
+                }
+            }
+            .doOnSuccess {
+                if (page == 0) {
+                    it.firstOrNull()?.date?.let {
+                        StorageHelper.lastNotificationsDate = it
                     }
                 }
-                .doOnSuccess {
-                    if (page == 0) {
-                        it.firstOrNull()?.date?.let {
-                            StorageHelper.lastNotificationsDate = it
-                        }
-                    }
-                }
+            }
 
     val deletionError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
 
@@ -89,14 +89,14 @@ class NotificationViewModel : PagedViewModel<ProxerNotification>() {
         deletionQueue.clear()
 
         api.notifications().deleteAllNotifications()
-                .buildOptionalSingle()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeAndLogErrors({
-                    data.value = emptyList()
-                }, {
-                    deletionError.value = ErrorUtils.handle(it)
-                })
+            .buildOptionalSingle()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeAndLogErrors({
+                data.value = emptyList()
+            }, {
+                deletionError.value = ErrorUtils.handle(it)
+            })
     }
 
     private fun doItemDeletion() {
@@ -105,24 +105,24 @@ class NotificationViewModel : PagedViewModel<ProxerNotification>() {
 
         deletionQueue.poll()?.let { item ->
             deletionDisposable = api.notifications().deleteNotification(item.id)
-                    .buildOptionalSingle()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeAndLogErrors({
-                        data.value = data.value?.filterNot { it == item }
+                .buildOptionalSingle()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeAndLogErrors({
+                    data.value = data.value?.filterNot { it == item }
 
-                        doItemDeletion()
-                    }, {
-                        deletionQueue.clear()
+                    doItemDeletion()
+                }, {
+                    deletionQueue.clear()
 
-                        deletionError.value = ErrorUtils.handle(it)
-                    })
+                    deletionError.value = ErrorUtils.handle(it)
+                })
         }
     }
 
     private fun readSingle() = api.notifications().notifications()
-            .page(page - firstPageItemAmount / itemsOnPage)
-            .filter(NotificationFilter.READ)
-            .limit(itemsOnPage)
-            .buildSingle()
+        .page(page - firstPageItemAmount / itemsOnPage)
+        .filter(NotificationFilter.READ)
+        .limit(itemsOnPage)
+        .buildSingle()
 }

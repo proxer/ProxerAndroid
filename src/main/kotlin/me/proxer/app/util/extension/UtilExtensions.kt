@@ -51,7 +51,7 @@ inline fun Context.getDrawableFromAttrs(resource: Int): Drawable {
 }
 
 inline fun Context.getQuantityString(id: Int, quantity: Int): String = resources
-        .getQuantityString(id, quantity, quantity)
+    .getQuantityString(id, quantity, quantity)
 
 inline fun Fragment.dip(value: Int) = context?.dip(value) ?: throw IllegalStateException("context is null")
 
@@ -70,18 +70,18 @@ inline fun ImageView.setIconicsImage(
     colorRes: Int = R.color.icon
 ) {
     setImageDrawable(IconicsDrawable(context, icon)
-            .sizeDp(sizeDp)
-            .paddingDp(paddingDp)
-            .colorRes(context, colorRes))
+        .sizeDp(sizeDp)
+        .paddingDp(paddingDp)
+        .colorRes(context, colorRes))
 }
 
 inline fun GlideRequests.defaultLoad(view: ImageView, url: HttpUrl): Target<Drawable> = load(url.toString())
-        .transition(DrawableTransitionOptions.withCrossFade())
-        .format(when (DeviceUtils.shouldShowHighQualityImages(view.context)) {
-            true -> DecodeFormat.PREFER_ARGB_8888
-            false -> DecodeFormat.PREFER_RGB_565
-        })
-        .into(view)
+    .transition(DrawableTransitionOptions.withCrossFade())
+    .format(when (DeviceUtils.shouldShowHighQualityImages(view.context)) {
+        true -> DecodeFormat.PREFER_ARGB_8888
+        false -> DecodeFormat.PREFER_RGB_565
+    })
+    .into(view)
 
 inline fun HttpUrl.androidUri(): Uri = Uri.parse(toString())
 
@@ -142,15 +142,15 @@ fun RecyclerView.LayoutManager.scrollToTop() = when (this) {
 
 private fun CustomTabsHelperFragment.doOpenHttpPage(activity: Activity, url: HttpUrl) {
     CustomTabsIntent.Builder(session)
-            .setToolbarColor(ContextCompat.getColor(activity, R.color.colorPrimary))
-            .setSecondaryToolbarColor(ContextCompat.getColor(activity, R.color.colorPrimaryDark))
-            .addDefaultShareMenuItem()
-            .enableUrlBarHiding()
-            .setShowTitle(true)
-            .build()
-            .let {
-                CustomTabsHelperFragment.open(activity, it, url.androidUri(), { context, uri ->
-                    WebViewActivity.navigateTo(context, uri.toString())
-                })
-            }
+        .setToolbarColor(ContextCompat.getColor(activity, R.color.colorPrimary))
+        .setSecondaryToolbarColor(ContextCompat.getColor(activity, R.color.colorPrimaryDark))
+        .addDefaultShareMenuItem()
+        .enableUrlBarHiding()
+        .setShowTitle(true)
+        .build()
+        .let {
+            CustomTabsHelperFragment.open(activity, it, url.androidUri(), { context, uri ->
+                WebViewActivity.navigateTo(context, uri.toString())
+            })
+        }
 }

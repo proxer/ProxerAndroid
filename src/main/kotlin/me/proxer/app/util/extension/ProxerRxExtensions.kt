@@ -107,24 +107,24 @@ fun Call.toBodySingle(): Single<String> = Single.create { emitter ->
 }
 
 fun RecyclerView.endScrolls(threshold: Int = 5): Observable<Unit> = scrollEvents()
-        .filter {
-            layoutManager.let {
-                val pastVisibleItems = when (it) {
-                    is StaggeredGridLayoutManager -> {
-                        val visibleItemPositions = IntArray(it.spanCount).apply {
-                            it.findFirstVisibleItemPositions(this)
-                        }
-
-                        when (visibleItemPositions.isNotEmpty()) {
-                            true -> visibleItemPositions[0]
-                            false -> 0
-                        }
+    .filter {
+        layoutManager.let {
+            val pastVisibleItems = when (it) {
+                is StaggeredGridLayoutManager -> {
+                    val visibleItemPositions = IntArray(it.spanCount).apply {
+                        it.findFirstVisibleItemPositions(this)
                     }
-                    is LinearLayoutManager -> it.findFirstVisibleItemPosition()
-                    else -> 0
-                }
 
-                it.itemCount > 0 && it.childCount + pastVisibleItems >= it.itemCount - threshold
+                    when (visibleItemPositions.isNotEmpty()) {
+                        true -> visibleItemPositions[0]
+                        false -> 0
+                    }
+                }
+                is LinearLayoutManager -> it.findFirstVisibleItemPosition()
+                else -> 0
             }
+
+            it.itemCount > 0 && it.childCount + pastVisibleItems >= it.itemCount - threshold
         }
-        .map { Unit }
+    }
+    .map { Unit }

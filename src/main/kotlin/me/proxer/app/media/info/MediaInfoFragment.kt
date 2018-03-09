@@ -131,39 +131,39 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
         viewModel.userInfoUpdateError.observe(this, Observer {
             it?.let {
                 multilineSnackbar(root, getString(R.string.error_set_user_info, getString(it.message)),
-                        Snackbar.LENGTH_LONG, it.buttonMessage, it.buttonAction?.toClickListener(hostingActivity))
+                    Snackbar.LENGTH_LONG, it.buttonMessage, it.buttonAction?.toClickListener(hostingActivity))
             }
         })
 
         noteContainer.clicks()
-                .autoDispose(this)
-                .subscribe { viewModel.note() }
+            .autoDispose(this)
+            .subscribe { viewModel.note() }
 
         favorContainer.clicks()
-                .autoDispose(this)
-                .subscribe { viewModel.markAsFavorite() }
+            .autoDispose(this)
+            .subscribe { viewModel.markAsFavorite() }
 
         finishContainer.clicks()
-                .autoDispose(this)
-                .subscribe { viewModel.markAsFinished() }
+            .autoDispose(this)
+            .subscribe { viewModel.markAsFinished() }
 
         unratedTags.clicks()
-                .autoDispose(this)
-                .subscribe {
-                    showUnratedTags = !showUnratedTags
+            .autoDispose(this)
+            .subscribe {
+                showUnratedTags = !showUnratedTags
 
-                    tags.removeAllViews()
-                    viewModel.data.value?.let { bindTags(it.first) }
-                }
+                tags.removeAllViews()
+                viewModel.data.value?.let { bindTags(it.first) }
+            }
 
         spoilerTags.clicks()
-                .autoDispose(this)
-                .subscribe {
-                    showSpoilerTags = !showSpoilerTags
+            .autoDispose(this)
+            .subscribe {
+                showSpoilerTags = !showSpoilerTags
 
-                    tags.removeAllViews()
-                    viewModel.data.value?.let { bindTags(it.first) }
-                }
+                tags.removeAllViews()
+                viewModel.data.value?.let { bindTags(it.first) }
+            }
 
         updateUnratedButton()
         updateSpoilerButton()
@@ -210,7 +210,7 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
         rating.rating = result.rating / 2.0f
         ratingAmount.visibility = View.VISIBLE
         ratingAmount.text = requireContext().resources.getQuantityString(R.plurals.fragment_media_info_rate_count,
-                result.ratingAmount, result.rating, result.ratingAmount)
+            result.ratingAmount, result.rating, result.ratingAmount)
     } else {
         ratingContainer.visibility = View.GONE
         ratingAmount.visibility = View.GONE
@@ -225,7 +225,7 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
 
         if (seasons.isNotEmpty()) {
             val tableRow = LayoutInflater.from(context)
-                    .inflate(R.layout.layout_media_info_seasons_row, infoTable, false)
+                .inflate(R.layout.layout_media_info_seasons_row, infoTable, false)
 
             val seasonStartView = tableRow.findViewById<TextView>(R.id.seasonStart)
             val seasonEndView = tableRow.findViewById<TextView>(R.id.seasonEnd)
@@ -244,12 +244,12 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
 
     private fun bindStatus(result: Entry) {
         infoTable.addView(constructInfoTableRow(requireContext().getString(R.string.fragment_media_info_status_title),
-                result.state.toAppString(requireContext())))
+            result.state.toAppString(requireContext())))
     }
 
     private fun bindLicense(result: Entry) {
         infoTable.addView(constructInfoTableRow(requireContext().getString(R.string.fragment_media_info_license_title),
-                result.license.toAppString(requireContext())))
+            result.license.toAppString(requireContext())))
     }
 
     private fun bindAdaption(result: Entry) {
@@ -266,11 +266,11 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
 
                         contentView.setBackgroundResource(selectableItemBackground.resourceId)
                         contentView.clicks()
-                                .autoDispose(this)
-                                .subscribe {
-                                    MediaActivity.navigateTo(requireActivity(), adaptionInfo.id, adaptionInfo.name,
-                                            adaptionInfo.medium?.toCategory())
-                                }
+                            .autoDispose(this)
+                            .subscribe {
+                                MediaActivity.navigateTo(requireActivity(), adaptionInfo.id, adaptionInfo.name,
+                                    adaptionInfo.medium?.toCategory())
+                            }
                     }
                 })
             }
@@ -302,7 +302,7 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
             ProxerUtils.getApiEnumName(it) ?: throw IllegalArgumentException("Unknown genre: $it")
         }, onClick = {
             showPage(ProxerUrls.wikiWeb(ProxerUtils.getApiEnumName(it)
-                    ?: throw IllegalArgumentException("Unknown genre: $it")))
+                ?: throw IllegalArgumentException("Unknown genre: $it")))
         })
     }
 
@@ -359,7 +359,7 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
     } else {
         result.fskConstraints.forEach { constraint ->
             val image = LayoutInflater.from(context)
-                    .inflate(R.layout.layout_image, fskConstraints, false) as ImageView
+                .inflate(R.layout.layout_image, fskConstraints, false) as ImageView
 
             image.setImageDrawable(constraint.toAppDrawable(requireContext()))
             image.setOnClickListener {
@@ -375,7 +375,7 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
         translatorGroups.visibility = View.GONE
     } else {
         bindChips(translatorGroups, result.translatorGroups, mapFunction = { it.name },
-                onClick = { TranslatorGroupActivity.navigateTo(requireActivity(), it.id, it.name) })
+            onClick = { TranslatorGroupActivity.navigateTo(requireActivity(), it.id, it.name) })
     }
 
     private fun bindIndustries(result: Entry) = if (result.industries.isEmpty()) {
@@ -387,10 +387,10 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
                 it.name
             } else {
                 val type = ProxerUtils.getApiEnumName(it.type)
-                        ?.replace("_", " ")
-                        ?.split(" ")
-                        ?.joinToString(separator = " ", transform = String::capitalize)
-                        ?: throw IllegalArgumentException("Unknown industry type: ${it.type}")
+                    ?.replace("_", " ")
+                    ?.split(" ")
+                    ?.joinToString(separator = " ", transform = String::capitalize)
+                    ?: throw IllegalArgumentException("Unknown industry type: ${it.type}")
 
                 "${it.name} ($type)"
             }

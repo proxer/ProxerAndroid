@@ -33,38 +33,38 @@ class ConferenceChooserTargetService : ChooserTargetService() {
 
     @TargetApi(Build.VERSION_CODES.M)
     override fun onGetChooserTargets(component: ComponentName, filter: IntentFilter) = chatDao.getConferences()
-            .take(8)
-            .map {
-                val bundle = Bundle()
+        .take(8)
+        .map {
+            val bundle = Bundle()
 
-                bundle.putParcelable(ARGUMENT_CONFERENCE, it)
-                bundle.classLoader = LocalConference::class.java.classLoader
+            bundle.putParcelable(ARGUMENT_CONFERENCE, it)
+            bundle.classLoader = LocalConference::class.java.classLoader
 
-                ChooserTarget(it.topic,
-                        constructIcon(it),
-                        calculateScore(it.date),
-                        ComponentName(packageName, ShareReceiverActivity::class.java.canonicalName),
-                        bundleOf(ARGUMENT_CONFERENCE_WRAPPER to bundleOf(ARGUMENT_CONFERENCE to it))
-                )
-            }
+            ChooserTarget(it.topic,
+                constructIcon(it),
+                calculateScore(it.date),
+                ComponentName(packageName, ShareReceiverActivity::class.java.canonicalName),
+                bundleOf(ARGUMENT_CONFERENCE_WRAPPER to bundleOf(ARGUMENT_CONFERENCE to it))
+            )
+        }
 
     @TargetApi(Build.VERSION_CODES.M)
     private fun constructIcon(conference: LocalConference) = when {
         conference.image.isBlank() -> Icon.createWithBitmap(constructEmptyIcon(conference))
         else -> Icon.createWithBitmap(Utils.getCircleBitmapFromUrl(applicationContext,
-                ProxerUrls.userImage(conference.image)))
+            ProxerUrls.userImage(conference.image)))
     }
 
     private fun constructEmptyIcon(conference: LocalConference) = IconicsDrawable(applicationContext)
-            .sizeDp(DeviceUtils.getScreenWidth(applicationContext) / 6)
-            .paddingDp(DeviceUtils.getScreenWidth(applicationContext) / 32)
-            .colorRes(R.color.colorPrimary)
-            .let { drawable ->
-                when {
-                    conference.isGroup -> drawable.icon(CommunityMaterial.Icon.cmd_account_multiple)
-                    else -> drawable.icon(CommunityMaterial.Icon.cmd_account)
-                }
-            }.toBitmap()
+        .sizeDp(DeviceUtils.getScreenWidth(applicationContext) / 6)
+        .paddingDp(DeviceUtils.getScreenWidth(applicationContext) / 32)
+        .colorRes(R.color.colorPrimary)
+        .let { drawable ->
+            when {
+                conference.isGroup -> drawable.icon(CommunityMaterial.Icon.cmd_account_multiple)
+                else -> drawable.icon(CommunityMaterial.Icon.cmd_account)
+            }
+        }.toBitmap()
 
     private fun calculateScore(conferenceDate: Date): Float {
         val score = Date().time.toFloat() / conferenceDate.time.toFloat()

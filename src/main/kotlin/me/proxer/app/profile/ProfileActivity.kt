@@ -57,9 +57,9 @@ class ProfileActivity : ImageTabsActivity() {
             }
 
             context.intentFor<ProfileActivity>(
-                    USER_ID_EXTRA to userId,
-                    USERNAME_EXTRA to username,
-                    IMAGE_ID_EXTRA to image
+                USER_ID_EXTRA to userId,
+                USERNAME_EXTRA to username,
+                IMAGE_ID_EXTRA to image
             ).let { ActivityUtils.navigateToWithImageTransition(it, context, imageView) }
         }
     }
@@ -121,17 +121,17 @@ class ProfileActivity : ImageTabsActivity() {
             R.id.create_chat -> username?.let { safeUsername ->
                 image?.let { safeImage ->
                     Completable
-                            .fromAction {
-                                chatDao.findConferenceForUser(safeUsername).let { existingChat ->
-                                    when (existingChat) {
-                                        null -> CreateChatActivity.navigateTo(this, false,
-                                                Participant(safeUsername, safeImage))
-                                        else -> ChatActivity.navigateTo(this, existingChat)
-                                    }
+                        .fromAction {
+                            chatDao.findConferenceForUser(safeUsername).let { existingChat ->
+                                when (existingChat) {
+                                    null -> CreateChatActivity.navigateTo(this, false,
+                                        Participant(safeUsername, safeImage))
+                                    else -> ChatActivity.navigateTo(this, existingChat)
                                 }
                             }
-                            .subscribeOn(Schedulers.io())
-                            .subscribeAndLogErrors()
+                        }
+                        .subscribeOn(Schedulers.io())
+                        .subscribeAndLogErrors()
                 }
             }
             R.id.new_group -> username?.let { safeUsername ->
@@ -155,11 +155,11 @@ class ProfileActivity : ImageTabsActivity() {
         // If it is null, it means we just have'nt loaded it yet.
         if (image != null) {
             headerImage.setImageDrawable(IconicsDrawable(headerImage.context)
-                    .icon(CommunityMaterial.Icon.cmd_account)
-                    .sizeDp((DeviceUtils.getScreenWidth(this) * 0.75).toInt())
-                    .paddingDp(32)
-                    .backgroundColorRes(R.color.colorPrimaryLight)
-                    .colorRes(headerImage.context, R.color.colorPrimary))
+                .icon(CommunityMaterial.Icon.cmd_account)
+                .sizeDp((DeviceUtils.getScreenWidth(this) * 0.75).toInt())
+                .paddingDp(32)
+                .backgroundColorRes(R.color.colorPrimaryLight)
+                .colorRes(headerImage.context, R.color.colorPrimary))
         }
     }
 

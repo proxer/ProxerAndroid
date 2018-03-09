@@ -61,8 +61,8 @@ class ConferenceFragment : BaseContentFragment<List<LocalConference>>() {
         adapter = ConferenceAdapter()
 
         adapter.clickSubject
-                .autoDispose(this)
-                .subscribe { ChatActivity.navigateTo(requireActivity(), it) }
+            .autoDispose(this)
+            .subscribe { ChatActivity.navigateTo(requireActivity(), it) }
 
         setHasOptionsMenu(true)
     }
@@ -78,7 +78,7 @@ class ConferenceFragment : BaseContentFragment<List<LocalConference>>() {
 
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(requireActivity()),
-                StaggeredGridLayoutManager.VERTICAL)
+            StaggeredGridLayoutManager.VERTICAL)
         recyclerView.adapter = adapter
     }
 

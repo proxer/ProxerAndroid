@@ -52,6 +52,6 @@ object AttachmentPrototype : AutoClosingPrototype {
     private fun isImage(attachment: CharSequence) = IMAGE_EXTENSIONS.any { attachment.endsWith(it, true) }
 
     private fun constructUrl(userId: String, attachment: CharSequence) = ProxerUrls.webBase().newBuilder()
-            .addPathSegments("media/kunena/attachments/$userId/$attachment")
-            .build()
+        .addPathSegments("media/kunena/attachments/$userId/$attachment")
+        .build()
 }

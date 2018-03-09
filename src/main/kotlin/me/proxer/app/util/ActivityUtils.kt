@@ -18,7 +18,7 @@ object ActivityUtils {
             intent.putExtra(TRANSITION_NAME_EXTRA, imageView.transitionName)
 
             context.startActivity(intent, ActivityOptionsCompat
-                    .makeSceneTransitionAnimation(context, imageView, imageView.transitionName).toBundle())
+                .makeSceneTransitionAnimation(context, imageView, imageView.transitionName).toBundle())
         } else {
             context.startActivity(intent)
         }

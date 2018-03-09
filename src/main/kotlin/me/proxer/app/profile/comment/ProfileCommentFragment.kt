@@ -61,10 +61,10 @@ class ProfileCommentFragment : PagedContentFragment<ParsedUserComment>() {
         innerAdapter = ProfileCommentAdapter(savedInstanceState)
 
         innerAdapter.titleClickSubject
-                .autoDispose(this)
-                .subscribe {
-                    MediaActivity.navigateTo(requireActivity(), it.entryId, it.entryName, it.category)
-                }
+            .autoDispose(this)
+            .subscribe {
+                MediaActivity.navigateTo(requireActivity(), it.entryId, it.entryName, it.category)
+            }
 
         setHasOptionsMenu(true)
     }

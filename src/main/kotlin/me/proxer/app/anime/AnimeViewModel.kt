@@ -34,20 +34,20 @@ import kotlin.properties.Delegates
  */
 @GeneratedProvider
 class AnimeViewModel(private val entryId: String, private val language: AnimeLanguage, episode: Int) :
-        BaseViewModel<AnimeStreamInfo>() {
+    BaseViewModel<AnimeStreamInfo>() {
 
     override val isLoginRequired = BuildConfig.STORE
 
     override val dataSingle: Single<AnimeStreamInfo>
         get() = Single.fromCallable { validate() }
-                .flatMap { entrySingle() }
-                .flatMap {
-                    Singles.zip(Single.just(it), streamSingle(it), { entry, streams ->
-                        AnimeStreamInfo(entry.name, entry.episodeAmount, streams.map {
-                            it.toAnimeStreamInfo(StreamResolverFactory.resolverFor(it.hosterName) != null)
-                        })
+            .flatMap { entrySingle() }
+            .flatMap {
+                Singles.zip(Single.just(it), streamSingle(it), { entry, streams ->
+                    AnimeStreamInfo(entry.name, entry.episodeAmount, streams.map {
+                        it.toAnimeStreamInfo(StreamResolverFactory.resolverFor(it.hosterName) != null)
                     })
-                }
+                })
+            }
 
     val resolutionResult = ResettingMutableLiveData<StreamResolutionResult>()
     val resolutionError = ResettingMutableLiveData<ErrorAction>()
@@ -83,26 +83,26 @@ class AnimeViewModel(private val entryId: String, private val language: AnimeLan
     fun resolve(name: String, id: String) {
         resolverDisposable?.dispose()
         resolverDisposable = (StreamResolverFactory.resolverFor(name)?.resolve(id)
-                ?: throw StreamResolutionException())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe { isLoading.value = true }
-                .doAfterTerminate { isLoading.value = false }
-                .subscribeAndLogErrors({
-                    resolutionError.value = null
-                    resolutionResult.value = it
-                }, {
-                    resolutionResult.value = null
-                    resolutionError.value = when (it) {
-                        is AppRequiredException -> AppRequiredErrorAction(it.name, it.appPackage)
-                        else -> ErrorUtils.handle(it)
-                    }
-                })
+            ?: throw StreamResolutionException())
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe { isLoading.value = true }
+            .doAfterTerminate { isLoading.value = false }
+            .subscribeAndLogErrors({
+                resolutionError.value = null
+                resolutionResult.value = it
+            }, {
+                resolutionResult.value = null
+                resolutionError.value = when (it) {
+                    is AppRequiredException -> AppRequiredErrorAction(it.name, it.appPackage)
+                    else -> ErrorUtils.handle(it)
+                }
+            })
     }
 
     fun markAsFinished() = updateUserState(api.info().markAsFinished(entryId))
     fun bookmark(episode: Int) = updateUserState(api.ucp().setBookmark(entryId, episode, language.toMediaLanguage(),
-            Category.ANIME))
+        Category.ANIME))
 
     private fun entrySingle() = when (cachedEntryCore != null) {
         true -> Single.just(cachedEntryCore)
@@ -110,22 +110,22 @@ class AnimeViewModel(private val entryId: String, private val language: AnimeLan
     }.doOnSuccess { cachedEntryCore = it }
 
     private fun streamSingle(entry: EntryCore) = api.anime().streams(entryId, episode, language)
-            .includeProxerStreams(true)
-            .buildPartialErrorSingle(entry)
-            .map { it.filterNot { StreamResolverFactory.resolverFor(it.hosterName)?.ignore == true } }
+        .includeProxerStreams(true)
+        .buildPartialErrorSingle(entry)
+        .map { it.filterNot { StreamResolverFactory.resolverFor(it.hosterName)?.ignore == true } }
 
     private fun updateUserState(endpoint: Endpoint<Void>) {
         bookmarkDisposable?.dispose()
         bookmarkDisposable = Single.fromCallable { Validators.validateLogin() }
-                .flatMap { endpoint.buildOptionalSingle() }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeAndLogErrors({
-                    bookmarkError.value = null
-                    bookmarkData.value = Unit
-                }, {
-                    bookmarkData.value = null
-                    bookmarkError.value = ErrorUtils.handle(it)
-                })
+            .flatMap { endpoint.buildOptionalSingle() }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeAndLogErrors({
+                bookmarkError.value = null
+                bookmarkData.value = Unit
+            }, {
+                bookmarkData.value = null
+                bookmarkError.value = ErrorUtils.handle(it)
+            })
     }
 }

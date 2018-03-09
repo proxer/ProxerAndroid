@@ -39,47 +39,47 @@ class CreateChatViewModel : ViewModel() {
 
     init {
         disposables += bus.register(ChatJob.SynchronizationEvent::class.java)
-                .flatMap {
-                    newConferenceId.let { newConferenceId ->
-                        when (newConferenceId) {
-                            null -> Observable.never()
-                            else -> chatDao.findConference(newConferenceId).let { foundConference ->
-                                when (foundConference) {
-                                    null -> Observable.never()
-                                    else -> Observable.just(foundConference)
-                                }
+            .flatMap {
+                newConferenceId.let { newConferenceId ->
+                    when (newConferenceId) {
+                        null -> Observable.never()
+                        else -> chatDao.findConference(newConferenceId).let { foundConference ->
+                            when (foundConference) {
+                                null -> Observable.never()
+                                else -> Observable.just(foundConference)
                             }
                         }
                     }
                 }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    newConferenceId = null
+            }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                newConferenceId = null
 
-                    isLoading.value = false
-                    error.value = null
-                    result.value = it
-                }
+                isLoading.value = false
+                error.value = null
+                result.value = it
+            }
 
         disposables += bus.register(ChatErrorEvent::class.java)
-                .flatMap {
-                    newConferenceId.let { newConferenceId ->
-                        when (newConferenceId) {
-                            null -> Observable.never()
-                            else -> Observable.just(ErrorUtils.handle(it.error))
-                        }
+            .flatMap {
+                newConferenceId.let { newConferenceId ->
+                    when (newConferenceId) {
+                        null -> Observable.never()
+                        else -> Observable.just(ErrorUtils.handle(it.error))
                     }
                 }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    newConferenceId = null
+            }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                newConferenceId = null
 
-                    isLoading.value = false
-                    result.value = null
-                    error.value = it
-                }
+                isLoading.value = false
+                result.value = null
+                error.value = it
+            }
     }
 
     override fun onCleared() {
@@ -92,31 +92,31 @@ class CreateChatViewModel : ViewModel() {
     }
 
     fun createGroup(topic: String, firstMessage: String, participants: List<Participant>) = createConference(api
-            .messenger()
-            .createConferenceGroup(topic, firstMessage, participants.map { it.username }))
+        .messenger()
+        .createConferenceGroup(topic, firstMessage, participants.map { it.username }))
 
     fun createChat(firstMessage: String, participant: Participant) = createConference(api
-            .messenger()
-            .createConference(firstMessage, participant.username))
+        .messenger()
+        .createConference(firstMessage, participant.username))
 
     private fun createConference(endpoint: Endpoint<String>) {
         creationDisposable?.dispose()
         creationDisposable = endpoint.buildSingle()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe {
-                    newConferenceId = null
-                    isLoading.value = true
-                    result.value = null
-                    error.value = null
-                }
-                .subscribeAndLogErrors({
-                    newConferenceId = it.toLong()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                newConferenceId = null
+                isLoading.value = true
+                result.value = null
+                error.value = null
+            }
+            .subscribeAndLogErrors({
+                newConferenceId = it.toLong()
 
-                    ChatJob.scheduleSynchronization()
-                }, {
-                    isLoading.value = false
-                    error.value = ErrorUtils.handle(it)
-                })
+                ChatJob.scheduleSynchronization()
+            }, {
+                isLoading.value = false
+                error.value = ErrorUtils.handle(it)
+            })
     }
 }

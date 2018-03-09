@@ -36,7 +36,7 @@ class HistoryFragment : PagedContentFragment<UcpHistoryEntry>() {
 
     override val layoutManager by lazy {
         StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(requireActivity()) + 1,
-                StaggeredGridLayoutManager.VERTICAL)
+            StaggeredGridLayoutManager.VERTICAL)
     }
 
     override var innerAdapter by Delegates.notNull<HistoryAdapter>()
@@ -47,15 +47,15 @@ class HistoryFragment : PagedContentFragment<UcpHistoryEntry>() {
         innerAdapter = HistoryAdapter()
 
         innerAdapter.clickSubject
-                .autoDispose(this)
-                .subscribe { (_, item) ->
-                    when (item.category) {
-                        Category.ANIME -> AnimeActivity.navigateTo(requireActivity(), item.entryId, item.episode,
-                                item.language.toAnimeLanguage(), item.name)
-                        Category.MANGA -> MangaActivity.navigateTo(requireActivity(), item.entryId, item.episode,
-                                item.language.toGeneralLanguage(), null, item.name)
-                    }
+            .autoDispose(this)
+            .subscribe { (_, item) ->
+                when (item.category) {
+                    Category.ANIME -> AnimeActivity.navigateTo(requireActivity(), item.entryId, item.episode,
+                        item.language.toAnimeLanguage(), item.name)
+                    Category.MANGA -> MangaActivity.navigateTo(requireActivity(), item.entryId, item.episode,
+                        item.language.toGeneralLanguage(), null, item.name)
                 }
+            }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

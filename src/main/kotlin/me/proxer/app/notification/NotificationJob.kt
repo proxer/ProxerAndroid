@@ -24,7 +24,7 @@ class NotificationJob : Job() {
 
         fun scheduleIfPossible(context: Context) {
             val areNotificationsEnabled = PreferenceHelper.areNewsNotificationsEnabled(context) ||
-                    PreferenceHelper.areAccountNotificationsEnabled(context)
+                PreferenceHelper.areAccountNotificationsEnabled(context)
 
             if (areNotificationsEnabled) {
                 schedule(context)
@@ -41,11 +41,11 @@ class NotificationJob : Job() {
             val interval = PreferenceHelper.getNotificationsInterval(context) * 1000 * 60
 
             JobRequest.Builder(TAG)
-                    .setPeriodic(interval)
-                    .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
-                    .setUpdateCurrent(true)
-                    .build()
-                    .scheduleAsync()
+                .setPeriodic(interval)
+                .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
+                .setUpdateCurrent(true)
+                .build()
+                .scheduleAsync()
         }
     }
 
@@ -79,12 +79,12 @@ class NotificationJob : Job() {
         val newNews = when (notificationInfo?.news) {
             0 -> emptyList()
             else -> api.notifications().news()
-                    .page(0)
-                    .limit(notificationInfo?.news ?: 100)
-                    .build()
-                    .safeExecute()
-                    .filter { it.date.after(lastNewsDate) }
-                    .sortedByDescending { it.date }
+                .page(0)
+                .limit(notificationInfo?.news ?: 100)
+                .build()
+                .safeExecute()
+                .filter { it.date.after(lastNewsDate) }
+                .sortedByDescending { it.date }
         }
 
         newNews.firstOrNull()?.date?.let {
@@ -101,11 +101,11 @@ class NotificationJob : Job() {
         val newNotifications = when (notificationInfo.notifications) {
             0 -> emptyList()
             else -> api.notifications().notifications()
-                    .page(0)
-                    .limit(notificationInfo.notifications)
-                    .filter(NotificationFilter.UNREAD)
-                    .build()
-                    .safeExecute()
+                .page(0)
+                .limit(notificationInfo.notifications)
+                .filter(NotificationFilter.UNREAD)
+                .build()
+                .safeExecute()
         }
 
         newNotifications.firstOrNull()?.date?.let {

@@ -27,9 +27,9 @@ class ProfileMediaListViewModel(
 
     override val endpoint: PagingLimitEndpoint<List<UserMediaListEntry>>
         get() = api.user().mediaList(userId, username)
-                .includeHentai(PreferenceHelper.isAgeRestrictedMediaAllowed(globalContext) && StorageHelper.isLoggedIn)
-                .category(category)
-                .filter(filter)
+            .includeHentai(PreferenceHelper.isAgeRestrictedMediaAllowed(globalContext) && StorageHelper.isLoggedIn)
+            .category(category)
+            .filter(filter)
 
     var category by Delegates.observable(category, { _, old, new ->
         if (old != new) reload()

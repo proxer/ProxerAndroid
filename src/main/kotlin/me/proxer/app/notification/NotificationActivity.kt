@@ -26,8 +26,8 @@ class NotificationActivity : DrawerActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, NotificationFragment.newInstance())
-                    .commitNow()
+                .replace(R.id.container, NotificationFragment.newInstance())
+                .commitNow()
         }
     }
 

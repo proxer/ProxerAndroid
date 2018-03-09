@@ -13,6 +13,6 @@ class MessageStreamResolver : StreamResolver {
     override val name = "Nachricht"
 
     override fun resolve(id: String): Single<StreamResolutionResult> = api.anime().link(id)
-            .buildSingle()
-            .map { StreamResolutionResult(HtmlCompat.fromHtml(it).trim()) }
+        .buildSingle()
+        .map { StreamResolutionResult(HtmlCompat.fromHtml(it).trim()) }
 }

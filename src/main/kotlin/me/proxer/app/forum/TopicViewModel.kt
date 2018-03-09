@@ -21,13 +21,13 @@ class TopicViewModel(private val id: String) : PagedViewModel<ParsedPost>() {
 
     override val dataSingle: Single<List<ParsedPost>>
         get() = api.forum().topic(id)
-                .page(page)
-                .limit(itemsOnPage)
-                .buildSingle()
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSuccess { metaData.value = it.toTopicMetaData() }
-                .observeOn(Schedulers.computation())
-                .map { it.posts.map { it.toParsedPost() } }
+            .page(page)
+            .limit(itemsOnPage)
+            .buildSingle()
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSuccess { metaData.value = it.toTopicMetaData() }
+            .observeOn(Schedulers.computation())
+            .map { it.posts.map { it.toParsedPost() } }
 
     val metaData = MutableLiveData<TopicMetaData>()
 }

@@ -11,7 +11,7 @@ abstract class BaseContentViewModel<T> : BaseViewModel<T>() {
 
     override val dataSingle: Single<T>
         get() = Single.fromCallable { validate() }
-                .flatMap { endpoint.buildSingle() }
+            .flatMap { endpoint.buildSingle() }
 
     protected abstract val endpoint: Endpoint<T>
 }

@@ -37,19 +37,20 @@ data class LocalConference(
     }
 
     constructor(parcel: Parcel) : this(
-            parcel.readLong(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readInt(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readByte() != 0.toByte(),
-            parcel.readByte() != 0.toByte(),
-            parcel.readByte() != 0.toByte(),
-            Date(parcel.readLong()),
-            parcel.readInt(),
-            parcel.readString(),
-            parcel.readByte() != 0.toByte())
+        parcel.readLong(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readInt(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readByte() != 0.toByte(),
+        parcel.readByte() != 0.toByte(),
+        parcel.readByte() != 0.toByte(),
+        Date(parcel.readLong()),
+        parcel.readInt(),
+        parcel.readString(),
+        parcel.readByte() != 0.toByte()
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeLong(id)
@@ -70,5 +71,5 @@ data class LocalConference(
     override fun describeContents() = 0
 
     fun toNonLocalConference() = Conference(id.toString(), topic, customTopic, participantAmount, image, imageType,
-            isGroup, isRead, date, unreadMessageAmount, lastReadMessageId)
+        isGroup, isRead, date, unreadMessageAmount, lastReadMessageId)
 }

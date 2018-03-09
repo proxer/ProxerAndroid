@@ -74,28 +74,28 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
         innerAdapter = BookmarkAdapter()
 
         innerAdapter.clickSubject
-                .autoDispose(this)
-                .subscribe {
-                    when (it.category) {
-                        Category.ANIME -> AnimeActivity.navigateTo(requireActivity(), it.entryId, it.episode,
-                                it.language.toAnimeLanguage(), it.name)
-                        Category.MANGA -> MangaActivity.navigateTo(requireActivity(), it.entryId, it.episode,
-                                it.language.toGeneralLanguage(), it.chapterName, it.name)
-                    }
+            .autoDispose(this)
+            .subscribe {
+                when (it.category) {
+                    Category.ANIME -> AnimeActivity.navigateTo(requireActivity(), it.entryId, it.episode,
+                        it.language.toAnimeLanguage(), it.name)
+                    Category.MANGA -> MangaActivity.navigateTo(requireActivity(), it.entryId, it.episode,
+                        it.language.toGeneralLanguage(), it.chapterName, it.name)
                 }
+            }
 
         innerAdapter.longClickSubject
-                .autoDispose(this)
-                .subscribe { (view, bookmark) ->
-                    MediaActivity.navigateTo(requireActivity(), bookmark.entryId, bookmark.name, bookmark.category,
-                            if (view.drawable != null) view else null)
-                }
+            .autoDispose(this)
+            .subscribe { (view, bookmark) ->
+                MediaActivity.navigateTo(requireActivity(), bookmark.entryId, bookmark.name, bookmark.category,
+                    if (view.drawable != null) view else null)
+            }
 
         innerAdapter.deleteClickSubject
-                .autoDispose(this)
-                .subscribe {
-                    viewModel.addItemToDelete(it)
-                }
+            .autoDispose(this)
+            .subscribe {
+                viewModel.addItemToDelete(it)
+            }
 
         setHasOptionsMenu(true)
     }
@@ -108,7 +108,7 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
         viewModel.itemDeletionError.observe(this, Observer {
             it?.let {
                 multilineSnackbar(root, getString(R.string.error_bookmark_deletion, getString(it.message)),
-                        Snackbar.LENGTH_LONG, it.buttonMessage, it.buttonAction?.toClickListener(hostingActivity))
+                    Snackbar.LENGTH_LONG, it.buttonMessage, it.buttonAction?.toClickListener(hostingActivity))
             }
         })
     }

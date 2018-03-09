@@ -43,25 +43,25 @@ class LoginViewModel : ViewModel() {
         if (isLoading.value != true) {
             dataDisposable?.dispose()
             dataDisposable = api.user().login(username, password)
-                    .secretKey(secretKey)
-                    .buildSingle()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doOnSubscribe {
-                        error.value = null
-                        isLoading.value = true
+                .secretKey(secretKey)
+                .buildSingle()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe {
+                    error.value = null
+                    isLoading.value = true
+                }
+                .doAfterTerminate { isLoading.value = false }
+                .subscribeAndLogErrors({
+                    data.value = it
+                }, {
+                    if (it is ProxerException && it.serverErrorType == ServerErrorType.USER_2FA_SECRET_REQUIRED) {
+                        StorageHelper.isTwoFactorAuthenticationEnabled = true
+                        isTwoFactorAuthenticationEnabled.value = true
                     }
-                    .doAfterTerminate { isLoading.value = false }
-                    .subscribeAndLogErrors({
-                        data.value = it
-                    }, {
-                        if (it is ProxerException && it.serverErrorType == ServerErrorType.USER_2FA_SECRET_REQUIRED) {
-                            StorageHelper.isTwoFactorAuthenticationEnabled = true
-                            isTwoFactorAuthenticationEnabled.value = true
-                        }
 
-                        error.value = ErrorUtils.handle(it)
-                    })
+                    error.value = ErrorUtils.handle(it)
+                })
         }
     }
 }

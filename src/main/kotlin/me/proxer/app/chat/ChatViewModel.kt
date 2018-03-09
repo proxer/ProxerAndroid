@@ -54,8 +54,8 @@ class ChatViewModel(initialConference: LocalConference) : PagedViewModel<LocalMe
                                 this.value = it
 
                                 Completable.fromAction { chatDao.markConferenceAsRead(safeConference.id) }
-                                        .subscribeOn(Schedulers.io())
-                                        .subscribeAndLogErrors()
+                                    .subscribeOn(Schedulers.io())
+                                    .subscribeAndLogErrors()
                             }
                         }
                     }
@@ -72,14 +72,14 @@ class ChatViewModel(initialConference: LocalConference) : PagedViewModel<LocalMe
 
     override val dataSingle: Single<List<LocalMessage>>
         get() = Single.fromCallable { Validators.validateLogin() }
-                .flatMap {
-                    when (page) {
-                        0 -> chatDao.markConferenceAsRead(safeConference.id)
-                        else -> ChatJob.scheduleMessageLoad(safeConference.id)
-                    }
-
-                    Single.never<List<LocalMessage>>()
+            .flatMap {
+                when (page) {
+                    0 -> chatDao.markConferenceAsRead(safeConference.id)
+                    else -> ChatJob.scheduleMessageLoad(safeConference.id)
                 }
+
+                Single.never<List<LocalMessage>>()
+            }
 
     val conference = object : MediatorLiveData<LocalConference>() {
 
@@ -107,24 +107,24 @@ class ChatViewModel(initialConference: LocalConference) : PagedViewModel<LocalMe
         conference.value = initialConference
 
         disposables += bus.register(ChatErrorEvent::class.java)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { event: ChatErrorEvent ->
-                    if (event.error is ChatMessageException) {
-                        dataDisposable?.dispose()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { event: ChatErrorEvent ->
+                if (event.error is ChatMessageException) {
+                    dataDisposable?.dispose()
 
-                        isLoading.value = false
-                        error.value = ErrorUtils.handle(event.error)
-                    }
-
-                    ChatJob.scheduleSynchronization()
+                    isLoading.value = false
+                    error.value = ErrorUtils.handle(event.error)
                 }
+
+                ChatJob.scheduleSynchronization()
+            }
     }
 
     fun sendMessage(text: String) {
         disposables += Single
-                .fromCallable { chatDao.insertMessageToSend(text, safeConference.id) }
-                .doOnSuccess { if (!ChatJob.isRunning()) ChatJob.scheduleSynchronization() }
-                .subscribeOn(Schedulers.io())
-                .subscribeAndLogErrors()
+            .fromCallable { chatDao.insertMessageToSend(text, safeConference.id) }
+            .doOnSuccess { if (!ChatJob.isRunning()) ChatJob.scheduleSynchronization() }
+            .subscribeOn(Schedulers.io())
+            .subscribeAndLogErrors()
     }
 }

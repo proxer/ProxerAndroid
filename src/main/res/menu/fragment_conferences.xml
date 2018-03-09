@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/create_chat"
@@ -9,7 +9,7 @@
         app:ico_icon="cmd_message_text"
         app:ico_padding="2dp"
         app:ico_size="24dp"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/new_group"
@@ -18,5 +18,5 @@
         app:ico_icon="cmd_account_multiple_plus"
         app:ico_padding="2dp"
         app:ico_size="24dp"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom" />
 </menu>

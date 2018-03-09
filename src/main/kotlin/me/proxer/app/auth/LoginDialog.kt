@@ -66,14 +66,14 @@ class LoginDialog : BaseDialog() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialDialog.Builder(requireContext())
-            .autoDismiss(false)
-            .title(R.string.dialog_login_title)
-            .positiveText(R.string.dialog_login_positive)
-            .negativeText(R.string.cancel)
-            .onPositive { _, _ -> validateAndLogin() }
-            .onNegative { _, _ -> dismiss() }
-            .customView(R.layout.dialog_login, true)
-            .build()
+        .autoDismiss(false)
+        .title(R.string.dialog_login_title)
+        .positiveText(R.string.dialog_login_positive)
+        .negativeText(R.string.cancel)
+        .onPositive { _, _ -> validateAndLogin() }
+        .onNegative { _, _ -> dismiss() }
+        .customView(R.layout.dialog_login, true)
+        .build()
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -91,16 +91,16 @@ class LoginDialog : BaseDialog() {
     private fun setupViews() {
         listOf(password, secret).forEach {
             it.editorActionEvents(Predicate { event -> event.actionId() == EditorInfo.IME_ACTION_GO })
-                    .filter { event -> event.actionId() == EditorInfo.IME_ACTION_GO }
-                    .autoDispose(this)
-                    .subscribe { validateAndLogin() }
+                .filter { event -> event.actionId() == EditorInfo.IME_ACTION_GO }
+                .autoDispose(this)
+                .subscribe { validateAndLogin() }
         }
 
         listOf(username to usernameContainer, password to passwordContainer).forEach { (input, container) ->
             input.textChanges()
-                    .skipInitialValue()
-                    .autoDispose(this)
-                    .subscribe { setError(container, null) }
+                .skipInitialValue()
+                .autoDispose(this)
+                .subscribe { setError(container, null) }
         }
 
         secret.transformationMethod = null
@@ -111,14 +111,14 @@ class LoginDialog : BaseDialog() {
         registrationInfo.setCompoundDrawables(generateInfoDrawable(), null, null, null)
 
         registrationInfo.applyLinks(Link(WEBSITE_PATTERN)
-                .setTextColor(ContextCompat.getColor(requireContext(), R.color.link))
-                .setUnderlined(false)
-                .setOnClickListener {
-                    showPage(ProxerUrls.webBase()
-                            .newBuilder()
-                            .addQueryParameter(DEVICE_PARAMETER, ProxerUtils.getApiEnumName(Device.DEFAULT))
-                            .build())
-                })
+            .setTextColor(ContextCompat.getColor(requireContext(), R.color.link))
+            .setUnderlined(false)
+            .setOnClickListener {
+                showPage(ProxerUrls.webBase()
+                    .newBuilder()
+                    .addQueryParameter(DEVICE_PARAMETER, ProxerUtils.getApiEnumName(Device.DEFAULT))
+                    .build())
+            })
     }
 
     private fun setupViewModels() {
@@ -182,7 +182,7 @@ class LoginDialog : BaseDialog() {
     }
 
     private fun generateInfoDrawable() = IconicsDrawable(requireContext())
-            .icon(CommunityMaterial.Icon.cmd_information_outline)
-            .iconColor(requireContext())
-            .sizeDp(20)
+        .icon(CommunityMaterial.Icon.cmd_information_outline)
+        .iconColor(requireContext())
+        .sizeDp(20)
 }

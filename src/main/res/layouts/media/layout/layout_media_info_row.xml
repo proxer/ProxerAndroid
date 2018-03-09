@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          tools:context=".media.info.MediaInfoFragment">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".media.info.MediaInfoFragment">
 
     <TextView
         android:id="@+id/title"
@@ -12,7 +12,7 @@
         android:layout_gravity="center_vertical"
         android:padding="8dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        tools:text="Japanese"/>
+        tools:text="Japanese" />
 
     <TextView
         android:id="@+id/content"
@@ -22,5 +22,5 @@
         android:gravity="end"
         android:padding="8dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        tools:text="RE:Zero"/>
+        tools:text="RE:Zero" />
 </TableRow>

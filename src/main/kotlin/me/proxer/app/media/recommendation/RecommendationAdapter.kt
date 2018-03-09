@@ -121,21 +121,21 @@ class RecommendationAdapter : BaseAdapter<Recommendation, ViewHolder>() {
         }
 
         private fun generateUpvotesImage(userVoted: Boolean = false) = IconicsDrawable(upvotesImage.context)
-                .icon(CommunityMaterial.Icon.cmd_thumb_up)
-                .sizeDp(32)
-                .paddingDp(4)
-                .colorRes(upvotesImage.context, when (userVoted) {
-                    true -> R.color.md_green_500
-                    false -> R.color.icon
-                })
+            .icon(CommunityMaterial.Icon.cmd_thumb_up)
+            .sizeDp(32)
+            .paddingDp(4)
+            .colorRes(upvotesImage.context, when (userVoted) {
+                true -> R.color.md_green_500
+                false -> R.color.icon
+            })
 
         private fun generateDownvotesImage(userVoted: Boolean = false) = IconicsDrawable(downvotesImage.context)
-                .icon(CommunityMaterial.Icon.cmd_thumb_down)
-                .sizeDp(32)
-                .paddingDp(4)
-                .colorRes(upvotesImage.context, when (userVoted) {
-                    true -> R.color.md_red_500
-                    false -> R.color.icon
-                })
+            .icon(CommunityMaterial.Icon.cmd_thumb_down)
+            .sizeDp(32)
+            .paddingDp(4)
+            .colorRes(upvotesImage.context, when (userVoted) {
+                true -> R.color.md_red_500
+                false -> R.color.icon
+            })
     }
 }

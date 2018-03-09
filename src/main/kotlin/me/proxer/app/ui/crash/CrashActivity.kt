@@ -53,18 +53,18 @@ class CrashActivity : BaseActivity() {
         image.setIconicsImage(CommunityMaterial.Icon.cmd_bug, 200, 12, R.color.primary)
 
         report.clicks()
-                .autoDispose(this)
-                .subscribe { CrashDialog.show(this, errorDetails, stacktrace) }
+            .autoDispose(this)
+            .subscribe { CrashDialog.show(this, errorDetails, stacktrace) }
 
         restart.clicks()
-                .autoDispose(this)
-                .subscribe { CustomActivityOnCrash.restartApplication(this, config) }
+            .autoDispose(this)
+            .subscribe { CustomActivityOnCrash.restartApplication(this, config) }
 
         text.movementMethod = TouchableMovementMethod.instance
         text.text = Utils.buildClickableText(this, getString(R.string.activity_crash_text),
-                onMentionsClickListener = {
-                    CustomActivityOnCrash.restartApplicationWithIntent(this,
-                            CreateChatActivity.getIntent(this, false, Participant(DEVELOPER_PROXER_NAME)), config)
-                })
+            onMentionsClickListener = {
+                CustomActivityOnCrash.restartApplicationWithIntent(this,
+                    CreateChatActivity.getIntent(this, false, Participant(DEVELOPER_PROXER_NAME)), config)
+            })
     }
 }

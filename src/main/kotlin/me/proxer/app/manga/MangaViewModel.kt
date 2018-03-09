@@ -39,17 +39,17 @@ class MangaViewModel(
 
     override val dataSingle: Single<MangaChapterInfo>
         get() = Single.fromCallable { validate() }
-                .flatMap<EntryCore> { entrySingle() }
-                .flatMap { entry ->
-                    chapterSingle(entry).map { data ->
-                        @Suppress("SENSELESS_COMPARISON") // Can happen in case of a server outage.
-                        if (data.chapter.pages == null) {
-                            throw PartialException(ProxerException(ErrorType.PARSING), entry)
-                        }
-
-                        data
+            .flatMap<EntryCore> { entrySingle() }
+            .flatMap { entry ->
+                chapterSingle(entry).map { data ->
+                    @Suppress("SENSELESS_COMPARISON") // Can happen in case of a server outage.
+                    if (data.chapter.pages == null) {
+                        throw PartialException(ProxerException(ErrorType.PARSING), entry)
                     }
+
+                    data
                 }
+            }
 
     val bookmarkData = ResettingMutableLiveData<Unit?>()
     val bookmarkError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
@@ -79,7 +79,7 @@ class MangaViewModel(
 
     fun markAsFinished() = updateUserState(api.info().markAsFinished(entryId))
     fun bookmark(episode: Int) = updateUserState(api.ucp().setBookmark(entryId, episode, language.toMediaLanguage(),
-            Category.MANGA))
+        Category.MANGA))
 
     private fun entrySingle() = when (cachedEntryCore != null) {
         true -> Single.just(cachedEntryCore)
@@ -87,21 +87,21 @@ class MangaViewModel(
     }
 
     private fun chapterSingle(entry: EntryCore) = api.manga().chapter(entryId, episode, language)
-            .buildPartialErrorSingle(entry)
-            .map { MangaChapterInfo(it, entry.name, entry.episodeAmount) }
+        .buildPartialErrorSingle(entry)
+        .map { MangaChapterInfo(it, entry.name, entry.episodeAmount) }
 
     private fun updateUserState(endpoint: Endpoint<Void>) {
         bookmarkDisposable?.dispose()
         bookmarkDisposable = Single.fromCallable { Validators.validateLogin() }
-                .flatMap { endpoint.buildOptionalSingle() }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeAndLogErrors({
-                    bookmarkError.value = null
-                    bookmarkData.value = Unit
-                }, {
-                    bookmarkData.value = null
-                    bookmarkError.value = ErrorUtils.handle(it)
-                })
+            .flatMap { endpoint.buildOptionalSingle() }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeAndLogErrors({
+                bookmarkError.value = null
+                bookmarkData.value = Unit
+            }, {
+                bookmarkData.value = null
+                bookmarkError.value = ErrorUtils.handle(it)
+            })
     }
 }

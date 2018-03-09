@@ -85,28 +85,28 @@ class ChatJob : Job() {
 
         private fun doSchedule(startTime: Long, endTime: Long, conferenceId: Long? = null) {
             JobRequest.Builder(TAG)
-                    .apply {
-                        if (startTime != 1L) {
-                            setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
-                        }
+                .apply {
+                    if (startTime != 1L) {
+                        setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
                     }
-                    .setExecutionWindow(startTime, endTime)
-                    .setRequirementsEnforced(true)
-                    .setUpdateCurrent(true)
-                    .setExtras(PersistableBundleCompat().apply {
-                        if (conferenceId != null) {
-                            putLong(CONFERENCE_ID_EXTRA, conferenceId)
-                        }
-                    })
-                    .build()
-                    .scheduleAsync()
+                }
+                .setExecutionWindow(startTime, endTime)
+                .setRequirementsEnforced(true)
+                .setUpdateCurrent(true)
+                .setExtras(PersistableBundleCompat().apply {
+                    if (conferenceId != null) {
+                        putLong(CONFERENCE_ID_EXTRA, conferenceId)
+                    }
+                })
+                .build()
+                .scheduleAsync()
         }
 
         private fun canSchedule(context: Context) = PreferenceHelper.areChatNotificationsEnabled(context) ||
-                bus.post(ConferenceFragmentPingEvent()) || bus.post(ChatFragmentPingEvent())
+            bus.post(ConferenceFragmentPingEvent()) || bus.post(ChatFragmentPingEvent())
 
         private fun canShowNotification(context: Context) = PreferenceHelper.areChatNotificationsEnabled(context) &&
-                !bus.post(ConferenceFragmentPingEvent()) && !bus.post(ChatFragmentPingEvent())
+            !bus.post(ConferenceFragmentPingEvent()) && !bus.post(ChatFragmentPingEvent())
     }
 
     private val conferenceId: Long
@@ -199,17 +199,17 @@ class ChatJob : Job() {
 
         val newConferencesAndMessages = try {
             markConferencesAsRead(chatDao.getConferencesToMarkAsRead()
-                    .plus(sentMessages.map { chatDao.findConference(it.conferenceId) })
-                    .distinct()
-                    .filterNotNull())
+                .plus(sentMessages.map { chatDao.findConference(it.conferenceId) })
+                .distinct()
+                .filterNotNull())
 
             fetchConferences().associate { conference ->
                 fetchNewMessages(conference).let { (messages, isFullyLoaded) ->
                     val isLocallyFullyLoaded = chatDao.findConference(conference.id.toLong())
-                            ?.isFullyLoaded == true
+                        ?.isFullyLoaded == true
 
                     conference.toLocalConference(isLocallyFullyLoaded || isFullyLoaded) to
-                            messages.map { it.toLocalMessage() }.asReversed()
+                        messages.map { it.toLocalMessage() }.asReversed()
                 }
             }
         } catch (error: Throwable) {
@@ -255,8 +255,8 @@ class ChatJob : Job() {
         forEachIndexed { index, (messageId, conferenceId, _, _, message) ->
             val result = try {
                 api.messenger().sendMessage(conferenceId.toString(), message)
-                        .build()
-                        .execute()
+                    .build()
+                    .execute()
             } catch (error: ProxerException) {
                 if (error.cause?.stackTrace?.find { it.methodName.contains("read") } != null) {
                     // The message was sent, but we did not receive a proper api answer due to slow network, delete the
@@ -277,15 +277,15 @@ class ChatJob : Job() {
                 }
 
                 throw ChatSendMessageException(ProxerException(ErrorType.SERVER,
-                        ServerErrorType.MESSAGES_INVALID_MESSAGE, result), messageId)
+                    ServerErrorType.MESSAGES_INVALID_MESSAGE, result), messageId)
             }
         }
     }
 
     private fun markConferencesAsRead(conferenceToMarkAsRead: List<LocalConference>) = conferenceToMarkAsRead.forEach {
         api.messenger().markConferenceAsRead(it.id.toString())
-                .build()
-                .execute()
+            .build()
+            .execute()
     }
 
     private fun fetchConferences(): Collection<Conference> {
@@ -294,9 +294,9 @@ class ChatJob : Job() {
 
         while (true) {
             val fetchedConferences = api.messenger().conferences()
-                    .page(page)
-                    .build()
-                    .safeExecute()
+                .page(page)
+                .build()
+                .safeExecute()
 
             changedConferences += fetchedConferences.filter {
                 it != chatDao.findConference(it.id.toLong())?.toNonLocalConference()
@@ -329,11 +329,11 @@ class ChatJob : Job() {
 
         while (unreadAmount < conference.unreadMessageAmount) {
             val fetchedMessages = api.messenger().messages()
-                    .conferenceId(conference.id)
-                    .messageId(nextId)
-                    .markAsRead(false)
-                    .build()
-                    .safeExecute()
+                .conferenceId(conference.id)
+                .messageId(nextId)
+                .markAsRead(false)
+                .build()
+                .safeExecute()
 
             newMessages += fetchedMessages
 
@@ -349,22 +349,22 @@ class ChatJob : Job() {
     }
 
     private fun fetchForExistingConference(conference: Conference, mostRecentMessage: Message):
-            Pair<List<Message>, Boolean> {
+        Pair<List<Message>, Boolean> {
         val mostRecentMessageIdBeforeUpdate = mostRecentMessage.id.toLong()
         val newMessages = mutableListOf<Message>()
 
         var existingUnreadMessageAmount = chatDao.getUnreadMessageAmountForConference(conference.id.toLong(),
-                conference.lastReadMessageId.toLong())
+            conference.lastReadMessageId.toLong())
         var currentMessage: Message = mostRecentMessage
         var nextId = "0"
 
         while (currentMessage.date < conference.date || existingUnreadMessageAmount < conference.unreadMessageAmount) {
             val fetchedMessages = api.messenger().messages()
-                    .conferenceId(conference.id)
-                    .messageId(nextId)
-                    .markAsRead(false)
-                    .build()
-                    .safeExecute()
+                .conferenceId(conference.id)
+                .messageId(nextId)
+                .markAsRead(false)
+                .build()
+                .safeExecute()
 
             newMessages += fetchedMessages
 
@@ -381,12 +381,12 @@ class ChatJob : Job() {
     }
 
     private fun fetchMoreMessages(conferenceId: Long) = api.messenger().messages()
-            .conferenceId(conferenceId.toString())
-            .messageId(chatDao.findOldestMessageForConference(conferenceId)?.id?.toString() ?: "0")
-            .markAsRead(false)
-            .build()
-            .safeExecute()
-            .asReversed()
+        .conferenceId(conferenceId.toString())
+        .messageId(chatDao.findOldestMessageForConference(conferenceId)?.id?.toString() ?: "0")
+        .markAsRead(false)
+        .build()
+        .safeExecute()
+        .asReversed()
 
     private fun showNotification(context: Context) {
         val unreadMap = chatDao.getUnreadConferences().associate {

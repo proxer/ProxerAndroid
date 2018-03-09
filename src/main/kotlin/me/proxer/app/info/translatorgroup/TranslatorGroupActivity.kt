@@ -25,8 +25,8 @@ class TranslatorGroupActivity : ImageTabsActivity() {
 
         fun navigateTo(context: Activity, id: String, name: String? = null) {
             context.startActivity(context.intentFor<TranslatorGroupActivity>(
-                    ID_EXTRA to id,
-                    NAME_EXTRA to name
+                ID_EXTRA to id,
+                NAME_EXTRA to name
             ))
         }
     }
@@ -55,12 +55,12 @@ class TranslatorGroupActivity : ImageTabsActivity() {
         when (item.itemId) {
             R.id.action_share -> name?.let {
                 ShareCompat.IntentBuilder
-                        .from(this)
-                        .setText(getString(R.string.share_translator_group, it,
-                                "https://proxer.me/translatorgroups?id=$id"))
-                        .setType("text/plain")
-                        .setChooserTitle(getString(R.string.share_title))
-                        .startChooser()
+                    .from(this)
+                    .setText(getString(R.string.share_translator_group, it,
+                        "https://proxer.me/translatorgroups?id=$id"))
+                    .setType("text/plain")
+                    .setChooserTitle(getString(R.string.share_title))
+                    .startChooser()
             }
         }
 

@@ -35,8 +35,8 @@ object AccountNotifications {
 
     fun showError(context: Context, error: Throwable) {
         NotificationUtils.showErrorNotification(context, ID, PROFILE_CHANNEL,
-                context.getString(R.string.notification_account_error_title),
-                context.getString(ErrorUtils.getMessage(error)))
+            context.getString(R.string.notification_account_error_title),
+            context.getString(ErrorUtils.getMessage(error)))
     }
 
     fun cancel(context: Context) = NotificationManagerCompat.from(context).cancel(ID)
@@ -58,20 +58,20 @@ object AccountNotifications {
                 content = HtmlCompat.fromHtml(notifications.first().text)
 
                 intent = PendingIntent.getActivity(context, ID,
-                        Intent(Intent.ACTION_VIEW, notifications.first().contentLink.androidUri()),
-                        PendingIntent.FLAG_UPDATE_CURRENT)
+                    Intent(Intent.ACTION_VIEW, notifications.first().contentLink.androidUri()),
+                    PendingIntent.FLAG_UPDATE_CURRENT)
 
                 style = NotificationCompat.BigTextStyle(builder)
-                        .bigText(content)
-                        .setBigContentTitle(title)
-                        .setSummaryText(notificationAmount)
+                    .bigText(content)
+                    .setBigContentTitle(title)
+                    .setSummaryText(notificationAmount)
             }
             else -> {
                 content = notificationAmount
 
                 intent = PendingIntent.getActivity(context, ID,
-                        NotificationActivity.getIntent(context),
-                        PendingIntent.FLAG_UPDATE_CURRENT)
+                    NotificationActivity.getIntent(context),
+                    PendingIntent.FLAG_UPDATE_CURRENT)
 
                 style = NotificationCompat.InboxStyle().also {
                     notifications.forEach { notification ->
@@ -85,23 +85,23 @@ object AccountNotifications {
         }
 
         val shouldAlert = notifications
-                .map { it.date }
-                .maxBy { it }?.time ?: 0 > StorageHelper.lastNotificationsDate.time
+            .map { it.date }
+            .maxBy { it }?.time ?: 0 > StorageHelper.lastNotificationsDate.time
 
         return builder.setAutoCancel(true)
-                .setSmallIcon(R.drawable.ic_stat_proxer)
-                .setContentTitle(title)
-                .setContentText(content)
-                .setContentIntent(intent)
-                .addAction(R.drawable.ic_stat_check, context.getString(R.string.notification_account_read_action),
-                        AccountNotificationReadReceiver.getPendingIntent(context))
-                .setDefaults(if (shouldAlert) Notification.DEFAULT_ALL else 0)
-                .setColor(ContextCompat.getColor(context, R.color.primary))
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setCategory(NotificationCompat.CATEGORY_SOCIAL)
-                .setNumber(notifications.size)
-                .setOnlyAlertOnce(true)
-                .setStyle(style)
-                .build()
+            .setSmallIcon(R.drawable.ic_stat_proxer)
+            .setContentTitle(title)
+            .setContentText(content)
+            .setContentIntent(intent)
+            .addAction(R.drawable.ic_stat_check, context.getString(R.string.notification_account_read_action),
+                AccountNotificationReadReceiver.getPendingIntent(context))
+            .setDefaults(if (shouldAlert) Notification.DEFAULT_ALL else 0)
+            .setColor(ContextCompat.getColor(context, R.color.primary))
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setCategory(NotificationCompat.CATEGORY_SOCIAL)
+            .setNumber(notifications.size)
+            .setOnlyAlertOnce(true)
+            .setStyle(style)
+            .build()
     }
 }

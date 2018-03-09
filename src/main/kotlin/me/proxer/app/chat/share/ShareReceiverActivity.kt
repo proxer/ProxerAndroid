@@ -22,7 +22,7 @@ class ShareReceiverActivity : BaseActivity() {
 
     val conference: LocalConference? by unsafeLazy {
         intent.getBundleExtra(ConferenceChooserTargetService.ARGUMENT_CONFERENCE_WRAPPER)
-                ?.getParcelable<LocalConference>(ConferenceChooserTargetService.ARGUMENT_CONFERENCE)
+            ?.getParcelable<LocalConference>(ConferenceChooserTargetService.ARGUMENT_CONFERENCE)
     }
 
     private val toolbar: Toolbar by bindView(R.id.toolbar)
@@ -45,8 +45,8 @@ class ShareReceiverActivity : BaseActivity() {
 
                 if (savedInstanceState == null) {
                     supportFragmentManager.beginTransaction()
-                            .replace(R.id.container, ShareReceiverFragment.newInstance())
-                            .commitNow()
+                        .replace(R.id.container, ShareReceiverFragment.newInstance())
+                        .commitNow()
                 }
             }
         } else {

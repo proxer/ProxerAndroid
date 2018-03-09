@@ -29,18 +29,18 @@ class AppRequiredDialog : BaseDialog() {
     private val packageName get() = requireArguments().getString(PACKAGE_NAME_ARGUMENT)
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialDialog.Builder(requireContext())
-            .title(getString(R.string.dialog_app_required_title, name))
-            .content(getString(R.string.dialog_app_required_content, name))
-            .positiveText(R.string.dialog_app_required_positive)
-            .negativeText(R.string.cancel)
-            .onPositive { _, _ ->
-                try {
-                    requireContext().startActivity(Intent(Intent.ACTION_VIEW,
-                            Uri.parse("market://details?id=$packageName")))
-                } catch (error: ActivityNotFoundException) {
-                    requireContext().startActivity(Intent(Intent.ACTION_VIEW,
-                            Uri.parse("https://play.google.com/store/apps/details?id=$packageName")))
-                }
+        .title(getString(R.string.dialog_app_required_title, name))
+        .content(getString(R.string.dialog_app_required_content, name))
+        .positiveText(R.string.dialog_app_required_positive)
+        .negativeText(R.string.cancel)
+        .onPositive { _, _ ->
+            try {
+                requireContext().startActivity(Intent(Intent.ACTION_VIEW,
+                    Uri.parse("market://details?id=$packageName")))
+            } catch (error: ActivityNotFoundException) {
+                requireContext().startActivity(Intent(Intent.ACTION_VIEW,
+                    Uri.parse("https://play.google.com/store/apps/details?id=$packageName")))
             }
-            .build()
+        }
+        .build()
 }

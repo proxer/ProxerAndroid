@@ -52,15 +52,15 @@ class UcpTopTenFragment : BaseContentFragment<ZippedTopTenResult>() {
         mangaAdapter = UcpTopTenAdapter()
 
         Observable.merge(animeAdapter.clickSubject, mangaAdapter.clickSubject)
-                .autoDispose(this)
-                .subscribe { (view, item) ->
-                    MediaActivity.navigateTo(requireActivity(), item.entryId, item.name, item.category,
-                            if (view.drawable != null) view else null)
-                }
+            .autoDispose(this)
+            .subscribe { (view, item) ->
+                MediaActivity.navigateTo(requireActivity(), item.entryId, item.name, item.category,
+                    if (view.drawable != null) view else null)
+            }
 
         Observable.merge(animeAdapter.deleteSubject, mangaAdapter.deleteSubject)
-                .autoDispose(this)
-                .subscribe { viewModel.addItemToDelete(it) }
+            .autoDispose(this)
+            .subscribe { viewModel.addItemToDelete(it) }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -78,7 +78,7 @@ class UcpTopTenFragment : BaseContentFragment<ZippedTopTenResult>() {
         viewModel.itemDeletionError.observe(this, Observer {
             it?.let {
                 multilineSnackbar(root, getString(R.string.error_topten_entry_removal, getString(it.message)),
-                        Snackbar.LENGTH_LONG, it.buttonMessage, it.buttonAction?.toClickListener(hostingActivity))
+                    Snackbar.LENGTH_LONG, it.buttonMessage, it.buttonAction?.toClickListener(hostingActivity))
             }
         })
 

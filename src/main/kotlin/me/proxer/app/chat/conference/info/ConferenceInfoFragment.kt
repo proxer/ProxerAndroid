@@ -50,15 +50,15 @@ class ConferenceInfoFragment : BaseContentFragment<ConferenceInfo>() {
         adapter = ConferenceParticipantAdapter()
 
         adapter.participantClickSubject
-                .autoDispose(this)
-                .subscribe { (view, item) ->
-                    ProfileActivity.navigateTo(requireActivity(), item.id, item.username, item.image,
-                            if (view.drawable != null && item.image.isNotBlank()) view else null)
-                }
+            .autoDispose(this)
+            .subscribe { (view, item) ->
+                ProfileActivity.navigateTo(requireActivity(), item.id, item.username, item.image,
+                    if (view.drawable != null && item.image.isNotBlank()) view else null)
+            }
 
         adapter.statusLinkClickSubject
-                .autoDispose(this)
-                .subscribe { showPage(it) }
+            .autoDispose(this)
+            .subscribe { showPage(it) }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

@@ -27,8 +27,8 @@ class BookmarkViewModel(category: Category?) : PagedContentViewModel<Bookmark>()
 
     override val endpoint: PagingLimitEndpoint<List<Bookmark>>
         get() = api.ucp().bookmarks()
-                .category(category)
-                .filterAvailable(filterAvailable)
+            .category(category)
+            .filterAvailable(filterAvailable)
 
     val itemDeletionError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
 
@@ -77,18 +77,18 @@ class BookmarkViewModel(category: Category?) : PagedContentViewModel<Bookmark>()
 
         deletionQueue.poll()?.let { item ->
             deletionDisposable = api.ucp().deleteBookmark(item.id)
-                    .buildOptionalSingle()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeAndLogErrors({
-                        data.value = data.value?.filterNot { it == item }
+                .buildOptionalSingle()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeAndLogErrors({
+                    data.value = data.value?.filterNot { it == item }
 
-                        doItemDeletion()
-                    }, {
-                        deletionQueue.clear()
+                    doItemDeletion()
+                }, {
+                    deletionQueue.clear()
 
-                        itemDeletionError.value = ErrorUtils.handle(it)
-                    })
+                    itemDeletionError.value = ErrorUtils.handle(it)
+                })
         }
     }
 }

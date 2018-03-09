@@ -72,13 +72,13 @@ class CreateChatFragment : BaseFragment() {
 
     private val emojiPopup by lazy {
         val popup = EmojiPopup.Builder.fromRootView(root)
-                .setOnEmojiPopupShownListener {
-                    emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_keyboard))
-                }
-                .setOnEmojiPopupDismissListener {
-                    emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_emoticon))
-                }
-                .build(messageInput)
+            .setOnEmojiPopupShownListener {
+                emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_keyboard))
+            }
+            .setOnEmojiPopupDismissListener {
+                emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_emoticon))
+            }
+            .build(messageInput)
 
         popup
     }
@@ -126,12 +126,12 @@ class CreateChatFragment : BaseFragment() {
         adapter = EasyHeaderFooterAdapter(innerAdapter)
 
         innerAdapter.removalSubject
-                .autoDispose(this)
-                .subscribe {
-                    if (adapter.footer == null) {
-                        adapter.footer = addParticipantFooter
-                    }
+            .autoDispose(this)
+            .subscribe {
+                if (adapter.footer == null) {
+                    adapter.footer = addParticipantFooter
                 }
+            }
 
         viewModel.isLoading.observe(this, Observer {
             progress.isEnabled = it == true
@@ -149,7 +149,7 @@ class CreateChatFragment : BaseFragment() {
         viewModel.error.observe(this, Observer {
             it?.let {
                 multilineSnackbar(root, it.message, Snackbar.LENGTH_LONG, it.buttonMessage,
-                        it.buttonAction?.toClickListener(hostingActivity))
+                    it.buttonAction?.toClickListener(hostingActivity))
             }
         })
 
@@ -166,10 +166,10 @@ class CreateChatFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         addParticipantFooter = inflater.inflate(R.layout.item_create_chat_add_participant,
-                container, false) as ViewGroup
+            container, false) as ViewGroup
 
         addParticipantInputFooter = inflater.inflate(R.layout.item_create_chat_add_participant_input,
-                container, false) as ViewGroup
+            container, false) as ViewGroup
 
         addParticipantImage.setIconicsImage(when (isGroup) {
             true -> CommunityMaterial.Icon.cmd_account_plus
@@ -180,42 +180,42 @@ class CreateChatFragment : BaseFragment() {
         cancelParticipant.setIconicsImage(CommunityMaterial.Icon.cmd_close, 48, 16)
 
         addParticipantFooter.clicks()
-                .autoDispose(this)
-                .subscribe { adapter.footer = addParticipantInputFooter }
+            .autoDispose(this)
+            .subscribe { adapter.footer = addParticipantInputFooter }
 
         cancelParticipant.clicks()
-                .autoDispose(this)
-                .subscribe {
-                    participantInput.text.clear()
+            .autoDispose(this)
+            .subscribe {
+                participantInput.text.clear()
 
-                    adapter.footer = addParticipantFooter
+                adapter.footer = addParticipantFooter
 
-                    messageInput.requestFocus()
-                }
+                messageInput.requestFocus()
+            }
 
         acceptParticipant.clicks()
-                .autoDispose(this)
-                .subscribe {
-                    if (validateAndAddUser()) {
-                        messageInput.requestFocus()
-                    }
+            .autoDispose(this)
+            .subscribe {
+                if (validateAndAddUser()) {
+                    messageInput.requestFocus()
                 }
+            }
 
         participantInput.textChanges()
-                .skipInitialValue()
-                .autoDispose(this)
-                .subscribe {
-                    participantInputContainer.error = null
-                    participantInputContainer.isErrorEnabled = false
-                }
+            .skipInitialValue()
+            .autoDispose(this)
+            .subscribe {
+                participantInputContainer.error = null
+                participantInputContainer.isErrorEnabled = false
+            }
 
         participantInput.editorActions(Predicate { it == EditorInfo.IME_ACTION_NEXT })
-                .autoDispose(this)
-                .subscribe {
-                    if (it == EditorInfo.IME_ACTION_NEXT && validateAndAddUser()) {
-                        messageInput.requestFocus()
-                    }
+            .autoDispose(this)
+            .subscribe {
+                if (it == EditorInfo.IME_ACTION_NEXT && validateAndAddUser()) {
+                    messageInput.requestFocus()
                 }
+            }
 
         if (isGroup || innerAdapter.itemCount <= 0) {
             adapter.footer = addParticipantFooter
@@ -239,74 +239,74 @@ class CreateChatFragment : BaseFragment() {
         emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_emoticon))
 
         emojiButton.clicks()
-                .autoDispose(this)
-                .subscribe { emojiPopup.toggle() }
+            .autoDispose(this)
+            .subscribe { emojiPopup.toggle() }
 
         sendButton.clicks()
-                .flatMap {
-                    Observable.fromCallable {
-                        Validators.validateLogin()
+            .flatMap {
+                Observable.fromCallable {
+                    Validators.validateLogin()
 
-                        val topic = topicInput.text.toString()
-                        val firstMessage = messageInput.text.toString()
-                        val participants = innerAdapter.participants
+                    val topic = topicInput.text.toString()
+                    val firstMessage = messageInput.text.toString()
+                    val participants = innerAdapter.participants
 
-                        when {
-                            isGroup && topic.isBlank() -> throw TopicEmptyException()
-                            firstMessage.isBlank() -> throw InvalidInputException(requireContext()
-                                    .getString(R.string.error_missing_message))
-                            participants.isEmpty() -> throw InvalidInputException(requireContext()
-                                    .getString(R.string.error_missing_participants))
-                        }
+                    when {
+                        isGroup && topic.isBlank() -> throw TopicEmptyException()
+                        firstMessage.isBlank() -> throw InvalidInputException(requireContext()
+                            .getString(R.string.error_missing_message))
+                        participants.isEmpty() -> throw InvalidInputException(requireContext()
+                            .getString(R.string.error_missing_participants))
+                    }
 
-                        Triple(topic, firstMessage, participants)
-                    }.subscribeOn(Schedulers.io())
+                    Triple(topic, firstMessage, participants)
+                }.subscribeOn(Schedulers.io())
+            }
+            .observeOn(AndroidSchedulers.mainThread())
+            .autoDispose(this)
+            .subscribeAndLogErrors({ (topic, firstMessage, participants) ->
+                when (isGroup) {
+                    true -> viewModel.createGroup(topic, firstMessage, participants)
+                    false -> viewModel.createChat(firstMessage, participants.first())
                 }
-                .observeOn(AndroidSchedulers.mainThread())
-                .autoDispose(this)
-                .subscribeAndLogErrors({ (topic, firstMessage, participants) ->
-                    when (isGroup) {
-                        true -> viewModel.createGroup(topic, firstMessage, participants)
-                        false -> viewModel.createChat(firstMessage, participants.first())
+            }, {
+                when (it) {
+                    is InvalidInputException -> it.message?.let {
+                        multilineSnackbar(root, it)
                     }
-                }, {
-                    when (it) {
-                        is InvalidInputException -> it.message?.let {
-                            multilineSnackbar(root, it)
-                        }
-                        is TopicEmptyException -> {
-                            topicInputContainer.isErrorEnabled = true
-                            topicInputContainer.error = requireContext().getString(R.string.error_input_empty)
-                        }
-                        else -> ErrorUtils.handle(it).let { action ->
-                            multilineSnackbar(root, action.message, Snackbar.LENGTH_LONG, action.buttonMessage,
-                                    action.buttonAction?.toClickListener(hostingActivity))
-                        }
+                    is TopicEmptyException -> {
+                        topicInputContainer.isErrorEnabled = true
+                        topicInputContainer.error = requireContext().getString(R.string.error_input_empty)
                     }
-                })
+                    else -> ErrorUtils.handle(it).let { action ->
+                        multilineSnackbar(root, action.message, Snackbar.LENGTH_LONG, action.buttonMessage,
+                            action.buttonAction?.toClickListener(hostingActivity))
+                    }
+                }
+            })
 
         if (isGroup) {
             topicInput.textChanges()
-                    .skipInitialValue()
-                    .autoDispose(this)
-                    .subscribe {
-                        topicInputContainer.isErrorEnabled = false
-                        topicInputContainer.error = null
-                    }
+                .skipInitialValue()
+                .autoDispose(this)
+                .subscribe {
+                    topicInputContainer.isErrorEnabled = false
+                    topicInputContainer.error = null
+                }
 
             topicInput.editorActions(Predicate { it == EditorInfo.IME_ACTION_NEXT })
-                    .autoDispose(this)
-                    .subscribe {
-                        if (it == EditorInfo.IME_ACTION_NEXT) {
-                            if (innerAdapter.isEmpty()) {
-                                adapter.footer = addParticipantInputFooter
+                .autoDispose(this)
+                .subscribe {
+                    if (it == EditorInfo.IME_ACTION_NEXT) {
+                        if (innerAdapter.isEmpty()) {
+                            adapter.footer = addParticipantInputFooter
 
-                                participantInput.requestFocus()
-                            } else {
-                                messageInput.requestFocus()
-                            }
+                            participantInput.requestFocus()
+                        } else {
+                            messageInput.requestFocus()
                         }
                     }
+                }
         } else {
             topicContainer.visibility = View.GONE
         }
@@ -358,8 +358,8 @@ class CreateChatFragment : BaseFragment() {
     }
 
     private fun generateEmojiDrawable(iconicRes: IIcon) = IconicsDrawable(context)
-            .icon(iconicRes)
-            .sizeDp(32)
-            .paddingDp(6)
-            .iconColor(requireContext())
+        .icon(iconicRes)
+        .sizeDp(32)
+        .paddingDp(6)
+        .iconColor(requireContext())
 }

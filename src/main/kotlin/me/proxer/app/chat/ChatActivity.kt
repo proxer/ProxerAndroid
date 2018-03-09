@@ -24,15 +24,15 @@ class ChatActivity : DrawerActivity() {
 
         fun navigateTo(context: Activity, conference: LocalConference, initialMessage: String? = null) {
             context.startActivity(context.intentFor<ChatActivity>(
-                    CONFERENCE_EXTRA to conference,
-                    INITIAL_MESSAGE_EXTRA to initialMessage
+                CONFERENCE_EXTRA to conference,
+                INITIAL_MESSAGE_EXTRA to initialMessage
             ))
         }
 
         fun getIntent(context: Context, conference: LocalConference, initialMessage: String? = null): Intent {
             return context.intentFor<ChatActivity>(
-                    CONFERENCE_EXTRA to conference,
-                    INITIAL_MESSAGE_EXTRA to initialMessage
+                CONFERENCE_EXTRA to conference,
+                INITIAL_MESSAGE_EXTRA to initialMessage
             )
         }
     }
@@ -55,8 +55,8 @@ class ChatActivity : DrawerActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, ChatFragment.newInstance())
-                    .commitNow()
+                .replace(R.id.container, ChatFragment.newInstance())
+                .commitNow()
         }
     }
 
@@ -77,12 +77,12 @@ class ChatActivity : DrawerActivity() {
         title = conference.topic
 
         toolbar.clicks()
-                .autoDispose(this)
-                .subscribe {
-                    when (conference.isGroup) {
-                        true -> ConferenceInfoActivity.navigateTo(this, conference)
-                        false -> ProfileActivity.navigateTo(this, null, conference.topic, conference.image)
-                    }
+            .autoDispose(this)
+            .subscribe {
+                when (conference.isGroup) {
+                    true -> ConferenceInfoActivity.navigateTo(this, conference)
+                    false -> ProfileActivity.navigateTo(this, null, conference.topic, conference.image)
                 }
+            }
     }
 }

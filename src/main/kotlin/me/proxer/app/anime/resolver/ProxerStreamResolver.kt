@@ -23,21 +23,21 @@ class ProxerStreamResolver : StreamResolver {
     override val name = "Proxer-Stream"
 
     override fun resolve(id: String): Single<StreamResolutionResult> = api.anime().link(id)
-            .buildSingle()
-            .flatMap { url ->
-                client.newCall(Request.Builder()
-                        .get()
-                        .url(Utils.parseAndFixUrl(url))
-                        .header("User-Agent", USER_AGENT)
-                        .build())
-                        .toBodySingle()
-                        .map {
-                            val regexResult = regex.find(it) ?: throw StreamResolutionException()
+        .buildSingle()
+        .flatMap { url ->
+            client.newCall(Request.Builder()
+                .get()
+                .url(Utils.parseAndFixUrl(url))
+                .header("User-Agent", USER_AGENT)
+                .build())
+                .toBodySingle()
+                .map {
+                    val regexResult = regex.find(it) ?: throw StreamResolutionException()
 
-                            val result = Uri.parse(regexResult.groupValues[2])
-                            val type = regexResult.groupValues[1]
+                    val result = Uri.parse(regexResult.groupValues[2])
+                    val type = regexResult.groupValues[1]
 
-                            StreamResolutionResult(result, type)
-                        }
-            }
+                    StreamResolutionResult(result, type)
+                }
+        }
 }

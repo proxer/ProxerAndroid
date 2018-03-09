@@ -50,9 +50,9 @@ class MediaActivity : ImageTabsActivity() {
             imageView: ImageView? = null
         ) {
             context.intentFor<MediaActivity>(
-                    ID_EXTRA to id,
-                    NAME_EXTRA to name,
-                    CATEGORY_EXTRA to category
+                ID_EXTRA to id,
+                NAME_EXTRA to name,
+                CATEGORY_EXTRA to category
             ).let { ActivityUtils.navigateToWithImageTransition(it, context, imageView) }
         }
     }
@@ -107,11 +107,11 @@ class MediaActivity : ImageTabsActivity() {
         when (item.itemId) {
             R.id.action_share -> name?.let {
                 ShareCompat.IntentBuilder
-                        .from(this)
-                        .setText(getString(R.string.share_media, it, "https://proxer.me/info/$id"))
-                        .setType("text/plain")
-                        .setChooserTitle(getString(R.string.share_title))
-                        .startChooser()
+                    .from(this)
+                    .setText(getString(R.string.share_media, it, "https://proxer.me/info/$id"))
+                    .setType("text/plain")
+                    .setChooserTitle(getString(R.string.share_title))
+                    .startChooser()
             }
         }
 
@@ -143,7 +143,7 @@ class MediaActivity : ImageTabsActivity() {
             0 -> getString(R.string.section_media_info)
             1 -> getString(R.string.section_comments)
             2 -> category?.toEpisodeAppString(this@MediaActivity)
-                    ?: getString(R.string.category_anime_episodes_title)
+                ?: getString(R.string.category_anime_episodes_title)
             3 -> getString(R.string.section_relations)
             4 -> getString(R.string.section_recommendations)
             5 -> getString(R.string.section_discussions)

@@ -17,14 +17,14 @@ object ColorPrototype : TextMutatorPrototype {
     private const val COLOR_ARGUMENT = "color"
 
     private val availableColors = arrayOf(
-            "black" to Color.parseColor("#000000"),
-            "orange" to Color.parseColor("#f8a523"),
-            "red" to Color.parseColor("#f50022"),
-            "blue" to Color.parseColor("#3000fd"),
-            "purple" to Color.parseColor("#7c007f"),
-            "green" to Color.parseColor("#238107"),
-            "white" to Color.parseColor("#ffffff"),
-            "gray" to Color.parseColor("#7f7f7f")
+        "black" to Color.parseColor("#000000"),
+        "orange" to Color.parseColor("#f8a523"),
+        "red" to Color.parseColor("#f50022"),
+        "blue" to Color.parseColor("#3000fd"),
+        "purple" to Color.parseColor("#7c007f"),
+        "green" to Color.parseColor("#238107"),
+        "white" to Color.parseColor("#ffffff"),
+        "gray" to Color.parseColor("#7f7f7f")
     )
 
     private val availableColorsForRegex = availableColors.joinToString("|") { it.first }
@@ -38,7 +38,7 @@ object ColorPrototype : TextMutatorPrototype {
         val color = when (value.startsWith("#")) {
             true -> Color.parseColor(value)
             false -> availableColors.find { it.first.equals(value, ignoreCase = true) }?.second
-                    ?: throw IllegalArgumentException("Unknown color: $value")
+                ?: throw IllegalArgumentException("Unknown color: $value")
         }
 
         return BBTree(this, parent, args = mutableMapOf(COLOR_ARGUMENT to color))

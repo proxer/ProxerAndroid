@@ -53,112 +53,112 @@ class MaterialDrawerWrapper(
         get() = StorageHelper.user.let {
             when (it) {
                 null -> listOf<IProfile<*>>(
-                        ProfileDrawerItem()
-                                .withName(R.string.section_guest)
-                                .withIcon(R.mipmap.ic_launcher)
-                                .withSelectedTextColorRes(R.color.colorAccent)
-                                .withIdentifier(AccountItem.GUEST.id),
-                        ProfileSettingDrawerItem()
-                                .withName(R.string.section_login)
-                                .withIcon(CommunityMaterial.Icon.cmd_account_key)
-                                .withIdentifier(AccountItem.LOGIN.id)
+                    ProfileDrawerItem()
+                        .withName(R.string.section_guest)
+                        .withIcon(R.mipmap.ic_launcher)
+                        .withSelectedTextColorRes(R.color.colorAccent)
+                        .withIdentifier(AccountItem.GUEST.id),
+                    ProfileSettingDrawerItem()
+                        .withName(R.string.section_login)
+                        .withIcon(CommunityMaterial.Icon.cmd_account_key)
+                        .withIdentifier(AccountItem.LOGIN.id)
                 )
                 else -> listOf<IProfile<*>>(
-                        ProfileDrawerItem()
-                                .withName(it.name)
-                                .withEmail(R.string.section_user_subtitle)
-                                .withIcon(ProxerUrls.userImage(it.image).toString())
-                                .withSelectedTextColorRes(R.color.colorAccent)
-                                .withIdentifier(AccountItem.USER.id),
-                        ProfileSettingDrawerItem()
-                                .withName(R.string.section_notifications)
-                                .withIcon(CommunityMaterial.Icon.cmd_bell_outline)
-                                .withIdentifier(AccountItem.NOTIFICATIONS.id),
-                        ProfileSettingDrawerItem()
-                                .withName(R.string.section_ucp)
-                                .withIcon(CommunityMaterial.Icon.cmd_account_key)
-                                .withIdentifier(AccountItem.UCP.id),
-                        ProfileSettingDrawerItem()
-                                .withName(R.string.section_logout)
-                                .withIcon(CommunityMaterial.Icon.cmd_account_remove)
-                                .withIdentifier(AccountItem.LOGOUT.id)
+                    ProfileDrawerItem()
+                        .withName(it.name)
+                        .withEmail(R.string.section_user_subtitle)
+                        .withIcon(ProxerUrls.userImage(it.image).toString())
+                        .withSelectedTextColorRes(R.color.colorAccent)
+                        .withIdentifier(AccountItem.USER.id),
+                    ProfileSettingDrawerItem()
+                        .withName(R.string.section_notifications)
+                        .withIcon(CommunityMaterial.Icon.cmd_bell_outline)
+                        .withIdentifier(AccountItem.NOTIFICATIONS.id),
+                    ProfileSettingDrawerItem()
+                        .withName(R.string.section_ucp)
+                        .withIcon(CommunityMaterial.Icon.cmd_account_key)
+                        .withIdentifier(AccountItem.UCP.id),
+                    ProfileSettingDrawerItem()
+                        .withName(R.string.section_logout)
+                        .withIcon(CommunityMaterial.Icon.cmd_account_remove)
+                        .withIdentifier(AccountItem.LOGOUT.id)
                 )
             }
         }
 
     private val drawerItems by lazy {
         listOf<IDrawerItem<*, *>>(
-                PrimaryDrawerItem()
-                        .withName(R.string.section_news)
-                        .withIcon(CommunityMaterial.Icon.cmd_newspaper)
-                        .withSelectedTextColorRes(R.color.colorAccent)
-                        .withSelectedIconColorRes(R.color.colorAccent)
-                        .withSelectable(isMain)
-                        .withIdentifier(DrawerItem.NEWS.id),
-                PrimaryDrawerItem()
-                        .withName(R.string.section_chat)
-                        .withIcon(CommunityMaterial.Icon.cmd_message_text)
-                        .withSelectedTextColorRes(R.color.colorAccent)
-                        .withSelectable(isMain)
-                        .withSelectedIconColorRes(R.color.colorAccent)
-                        .withIdentifier(DrawerItem.CHAT.id),
-                PrimaryDrawerItem()
-                        .withName(R.string.section_bookmarks)
-                        .withIcon(CommunityMaterial.Icon.cmd_bookmark)
-                        .withSelectedTextColorRes(R.color.colorAccent)
-                        .withSelectable(isMain)
-                        .withSelectedIconColorRes(R.color.colorAccent)
-                        .withIdentifier(DrawerItem.BOOKMARKS.id),
-                PrimaryDrawerItem()
-                        .withName(R.string.section_anime)
-                        .withIcon(CommunityMaterial.Icon.cmd_television)
-                        .withSelectedTextColorRes(R.color.colorAccent)
-                        .withSelectable(isMain)
-                        .withSelectedIconColorRes(R.color.colorAccent)
-                        .withIdentifier(DrawerItem.ANIME.id),
-                PrimaryDrawerItem()
-                        .withName(R.string.section_schedule)
-                        .withIcon(CommunityMaterial.Icon.cmd_calendar)
-                        .withSelectedTextColorRes(R.color.colorAccent)
-                        .withSelectable(isMain)
-                        .withSelectedIconColorRes(R.color.colorAccent)
-                        .withIdentifier(DrawerItem.SCHEDULE.id),
-                PrimaryDrawerItem()
-                        .withName(R.string.section_manga)
-                        .withIcon(CommunityMaterial.Icon.cmd_book_open_page_variant)
-                        .withSelectedTextColorRes(R.color.colorAccent)
-                        .withSelectable(isMain)
-                        .withSelectedIconColorRes(R.color.colorAccent)
-                        .withIdentifier(DrawerItem.MANGA.id)
+            PrimaryDrawerItem()
+                .withName(R.string.section_news)
+                .withIcon(CommunityMaterial.Icon.cmd_newspaper)
+                .withSelectedTextColorRes(R.color.colorAccent)
+                .withSelectedIconColorRes(R.color.colorAccent)
+                .withSelectable(isMain)
+                .withIdentifier(DrawerItem.NEWS.id),
+            PrimaryDrawerItem()
+                .withName(R.string.section_chat)
+                .withIcon(CommunityMaterial.Icon.cmd_message_text)
+                .withSelectedTextColorRes(R.color.colorAccent)
+                .withSelectable(isMain)
+                .withSelectedIconColorRes(R.color.colorAccent)
+                .withIdentifier(DrawerItem.CHAT.id),
+            PrimaryDrawerItem()
+                .withName(R.string.section_bookmarks)
+                .withIcon(CommunityMaterial.Icon.cmd_bookmark)
+                .withSelectedTextColorRes(R.color.colorAccent)
+                .withSelectable(isMain)
+                .withSelectedIconColorRes(R.color.colorAccent)
+                .withIdentifier(DrawerItem.BOOKMARKS.id),
+            PrimaryDrawerItem()
+                .withName(R.string.section_anime)
+                .withIcon(CommunityMaterial.Icon.cmd_television)
+                .withSelectedTextColorRes(R.color.colorAccent)
+                .withSelectable(isMain)
+                .withSelectedIconColorRes(R.color.colorAccent)
+                .withIdentifier(DrawerItem.ANIME.id),
+            PrimaryDrawerItem()
+                .withName(R.string.section_schedule)
+                .withIcon(CommunityMaterial.Icon.cmd_calendar)
+                .withSelectedTextColorRes(R.color.colorAccent)
+                .withSelectable(isMain)
+                .withSelectedIconColorRes(R.color.colorAccent)
+                .withIdentifier(DrawerItem.SCHEDULE.id),
+            PrimaryDrawerItem()
+                .withName(R.string.section_manga)
+                .withIcon(CommunityMaterial.Icon.cmd_book_open_page_variant)
+                .withSelectedTextColorRes(R.color.colorAccent)
+                .withSelectable(isMain)
+                .withSelectedIconColorRes(R.color.colorAccent)
+                .withIdentifier(DrawerItem.MANGA.id)
         )
     }
 
     private val stickyDrawerItems by lazy {
         mutableListOf<IDrawerItem<*, *>>(
-                PrimaryDrawerItem()
-                        .withName(R.string.section_info)
-                        .withIcon(CommunityMaterial.Icon.cmd_information_outline)
-                        .withSelectedTextColorRes(R.color.colorAccent)
-                        .withSelectable(isMain)
-                        .withSelectedIconColorRes(R.color.colorAccent)
-                        .withIdentifier(DrawerItem.INFO.id),
-                PrimaryDrawerItem()
-                        .withName(R.string.section_settings)
-                        .withIcon(CommunityMaterial.Icon.cmd_settings)
-                        .withSelectedTextColorRes(R.color.colorAccent)
-                        .withSelectable(isMain)
-                        .withSelectedIconColorRes(R.color.colorAccent)
-                        .withIdentifier(DrawerItem.SETTINGS.id)
+            PrimaryDrawerItem()
+                .withName(R.string.section_info)
+                .withIcon(CommunityMaterial.Icon.cmd_information_outline)
+                .withSelectedTextColorRes(R.color.colorAccent)
+                .withSelectable(isMain)
+                .withSelectedIconColorRes(R.color.colorAccent)
+                .withIdentifier(DrawerItem.INFO.id),
+            PrimaryDrawerItem()
+                .withName(R.string.section_settings)
+                .withIcon(CommunityMaterial.Icon.cmd_settings)
+                .withSelectedTextColorRes(R.color.colorAccent)
+                .withSelectable(isMain)
+                .withSelectedIconColorRes(R.color.colorAccent)
+                .withIdentifier(DrawerItem.SETTINGS.id)
         ).apply {
             @Suppress("ConstantConditionIf")
             if (!BuildConfig.STORE) {
                 add(1, PrimaryDrawerItem()
-                        .withName(R.string.section_donate)
-                        .withIcon(CommunityMaterial.Icon.cmd_gift)
-                        .withSelectedTextColorRes(R.color.colorAccent)
-                        .withSelectedIconColorRes(R.color.colorAccent)
-                        .withSelectable(false)
-                        .withIdentifier(DrawerItem.DONATE.id))
+                    .withName(R.string.section_donate)
+                    .withIcon(CommunityMaterial.Icon.cmd_gift)
+                    .withSelectedTextColorRes(R.color.colorAccent)
+                    .withSelectedIconColorRes(R.color.colorAccent)
+                    .withSelectable(false)
+                    .withIdentifier(DrawerItem.DONATE.id))
             }
         }.toList()
     }
@@ -228,13 +228,13 @@ class MaterialDrawerWrapper(
     }
 
     private fun buildAccountHeader(context: Activity, savedInstanceState: Bundle?) = AccountHeaderBuilder()
-            .withActivity(context)
-            .withCompactStyle(true)
-            .withHeaderBackground(R.color.colorPrimary)
-            .withSavedInstance(savedInstanceState)
-            .withProfiles(accountItems)
-            .withOnAccountHeaderListener { _, profile, _ -> onAccountItemClick(profile) }
-            .build()
+        .withActivity(context)
+        .withCompactStyle(true)
+        .withHeaderBackground(R.color.colorPrimary)
+        .withSavedInstance(savedInstanceState)
+        .withProfiles(accountItems)
+        .withOnAccountHeaderListener { _, profile, _ -> onAccountItemClick(profile) }
+        .build()
 
     private fun buildDrawer(
         context: Activity,
@@ -242,22 +242,22 @@ class MaterialDrawerWrapper(
         accountHeader: AccountHeader,
         savedInstanceState: Bundle?
     ) = DrawerBuilder(context)
-            .withToolbar(toolbar)
-            .withAccountHeader(accountHeader)
-            .withDrawerItems(drawerItems)
-            .withStickyDrawerItems(stickyDrawerItems)
-            .withShowDrawerOnFirstLaunch(true)
-            .withTranslucentStatusBar(true)
-            .withGenerateMiniDrawer(DeviceUtils.isTablet(context))
-            .withSavedInstance(savedInstanceState)
-            .withOnDrawerItemClickListener { _, _, item -> onDrawerItemClick(item) }
-            .withOnDrawerNavigationListener {
-                if (!isRoot) context.onBackPressed()
+        .withToolbar(toolbar)
+        .withAccountHeader(accountHeader)
+        .withDrawerItems(drawerItems)
+        .withStickyDrawerItems(stickyDrawerItems)
+        .withShowDrawerOnFirstLaunch(true)
+        .withTranslucentStatusBar(true)
+        .withGenerateMiniDrawer(DeviceUtils.isTablet(context))
+        .withSavedInstance(savedInstanceState)
+        .withOnDrawerItemClickListener { _, _, item -> onDrawerItemClick(item) }
+        .withOnDrawerNavigationListener {
+            if (!isRoot) context.onBackPressed()
 
-                !isRoot
-            }
-            .let { if (DeviceUtils.isTablet(context)) it.buildView() else it.build() }
-            .apply { actionBarDrawerToggle?.isDrawerIndicatorEnabled = isRoot }
+            !isRoot
+        }
+        .let { if (DeviceUtils.isTablet(context)) it.buildView() else it.build() }
+        .apply { actionBarDrawerToggle?.isDrawerIndicatorEnabled = isRoot }
 
     private fun buildMiniDrawer(drawer: Drawer) = drawer.miniDrawer.apply {
         withIncludeSecondaryDrawerItems(true)
@@ -269,16 +269,16 @@ class MaterialDrawerWrapper(
         miniDrawer: MiniDrawer,
         savedInstanceState: Bundle?
     ) = Crossfader<GmailStyleCrossFadeSlidingPaneLayout>()
-            .withContent(context.findViewById(R.id.root))
-            .withFirst(drawer.slider, context.dip(300))
-            .withSecond(miniDrawer.build(context), context.dip(72))
-            .withSavedInstance(savedInstanceState)
-            .withGmailStyleSwiping()
-            .build()
-            .apply {
-                miniDrawer.withCrossFader(CrossfadeWrapper(this))
-                getCrossFadeSlidingPaneLayout()?.setShadowResourceLeft(R.drawable.material_drawer_shadow_left)
-            }
+        .withContent(context.findViewById(R.id.root))
+        .withFirst(drawer.slider, context.dip(300))
+        .withSecond(miniDrawer.build(context), context.dip(72))
+        .withSavedInstance(savedInstanceState)
+        .withGmailStyleSwiping()
+        .build()
+        .apply {
+            miniDrawer.withCrossFader(CrossfadeWrapper(this))
+            getCrossFadeSlidingPaneLayout()?.setShadowResourceLeft(R.drawable.material_drawer_shadow_left)
+        }
 
     private fun onDrawerItemClick(item: IDrawerItem<*, *>) = DrawerItem.fromIdOrDefault(item.identifier).let {
         if (it.id >= 10L) {

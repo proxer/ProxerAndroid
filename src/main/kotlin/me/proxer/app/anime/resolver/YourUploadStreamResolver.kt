@@ -25,39 +25,39 @@ class YourUploadStreamResolver : StreamResolver {
     override val name = "YourUpload"
 
     override fun resolve(id: String): Single<StreamResolutionResult> = api.anime().link(id)
-            .buildSingle()
-            .flatMap { url ->
-                client.newCall(Request.Builder()
-                        .get()
-                        .url(url)
+        .buildSingle()
+        .flatMap { url ->
+            client.newCall(Request.Builder()
+                .get()
+                .url(url)
+                .header("User-Agent", GENERIC_USER_AGENT)
+                .build())
+                .toBodySingle()
+                .map {
+                    val regexResult = regex.find(it) ?: throw StreamResolutionException()
+                    val apiUrl = regexResult.groupValues[1]
+
+                    if (apiUrl.isBlank()) {
+                        throw StreamResolutionException("apiUrl is null")
+                    }
+
+                    apiUrl
+                }
+                .flatMap {
+                    client.newCall(Request.Builder()
+                        .head()
+                        .url(HttpUrl.parse("http://yourupload.com$it")
+                            ?: throw IllegalStateException("url is null")
+                        )
+                        .header("Referer", url)
                         .header("User-Agent", GENERIC_USER_AGENT)
                         .build())
-                        .toBodySingle()
-                        .map {
-                            val regexResult = regex.find(it) ?: throw StreamResolutionException()
-                            val apiUrl = regexResult.groupValues[1]
+                        .toSingle()
+                }
+        }
+        .map {
+            val url = it.networkResponse()?.request()?.url() ?: throw IOException("response url is null")
 
-                            if (apiUrl.isBlank()) {
-                                throw StreamResolutionException("apiUrl is null")
-                            }
-
-                            apiUrl
-                        }
-                        .flatMap {
-                            client.newCall(Request.Builder()
-                                    .head()
-                                    .url(HttpUrl.parse("http://yourupload.com$it")
-                                            ?: throw IllegalStateException("url is null")
-                                    )
-                                    .header("Referer", url)
-                                    .header("User-Agent", GENERIC_USER_AGENT)
-                                    .build())
-                                    .toSingle()
-                        }
-            }
-            .map {
-                val url = it.networkResponse()?.request()?.url() ?: throw IOException("response url is null")
-
-                StreamResolutionResult(url.androidUri(), "video/mp4")
-            }
+            StreamResolutionResult(url.androidUri(), "video/mp4")
+        }
 }

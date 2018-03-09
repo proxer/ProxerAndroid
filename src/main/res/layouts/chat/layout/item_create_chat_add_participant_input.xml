@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                tools:context=".chat.create.CreateChatParticipantAdapter"
-                tools:ignore="UselessParent">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp"
+    tools:context=".chat.create.CreateChatParticipantAdapter"
+    tools:ignore="UselessParent">
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/participantInputContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
+        android:layout_toStartOf="@+id/cancel"
         android:layout_toLeftOf="@+id/cancel"
-        android:layout_toStartOf="@+id/cancel">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true">
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/participantInput"
@@ -24,18 +24,18 @@
             android:hint="@string/fragment_create_chat_add_participant_hint"
             android:imeOptions="actionNext"
             android:inputType="text"
-            android:maxLines="1"/>
+            android:maxLines="1" />
     </android.support.design.widget.TextInputLayout>
 
     <me.proxer.app.ui.view.InfoImageButton
         android:id="@+id/cancel"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/accept"
         android:layout_toStartOf="@+id/accept"
+        android:layout_toLeftOf="@+id/accept"
+        android:layout_centerVertical="true"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="@string/fragment_create_chat_cancel_content_description"/>
+        android:contentDescription="@string/fragment_create_chat_cancel_content_description" />
 
     <me.proxer.app.ui.view.InfoImageButton
         android:id="@+id/accept"
@@ -46,5 +46,5 @@
         android:layout_centerVertical="true"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/fragment_create_chat_accept_description"
-        tools:ignore="ContentDescription"/>
+        tools:ignore="ContentDescription" />
 </RelativeLayout>

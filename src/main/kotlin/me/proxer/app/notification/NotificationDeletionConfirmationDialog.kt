@@ -23,9 +23,9 @@ class NotificationDeletionConfirmationDialog : BaseDialog() {
     private val viewModel by unsafeLazy { NotificationViewModelProvider.get(requireTargetFragment()) }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialDialog.Builder(requireContext())
-            .content(R.string.dialog_notification_deletion_confirmation_content)
-            .positiveText(R.string.dialog_notification_deletion_confirmation_positive)
-            .negativeText(R.string.cancel)
-            .onPositive { _, _ -> viewModel.deleteAll() }
-            .build()
+        .content(R.string.dialog_notification_deletion_confirmation_content)
+        .positiveText(R.string.dialog_notification_deletion_confirmation_positive)
+        .negativeText(R.string.cancel)
+        .onPositive { _, _ -> viewModel.deleteAll() }
+        .build()
 }

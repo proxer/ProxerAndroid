@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:id="@+id/root"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="?attr/selectableItemBackground"
-                android:padding="@dimen/item_margin"
-                tools:context=".anime.ScheduleEntryAdapter">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/selectableItemBackground"
+    android:padding="@dimen/item_margin"
+    tools:context=".anime.ScheduleEntryAdapter">
 
     <com.santalu.aspectratioimageview.AspectRatioImageView
         android:id="@+id/image"
@@ -19,7 +19,7 @@
         app:ari_ratio="1.25"
         tools:ignore="UnusedAttribute"
         tools:layout_height="200dp"
-        tools:src="@drawable/ic_japan"/>
+        tools:src="@drawable/ic_japan" />
 
     <TextView
         android:id="@+id/title"
@@ -35,15 +35,15 @@
         android:padding="8dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@android:color/white"
-        tools:text="Some title"/>
+        tools:text="Some title" />
 
     <TextView
         android:id="@+id/episode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/image"
         android:layout_alignEnd="@+id/image"
         android:layout_alignRight="@+id/image"
+        android:layout_alignBottom="@+id/image"
         android:background="@color/half_transparent"
         android:gravity="center"
         android:paddingBottom="8dp"
@@ -51,16 +51,16 @@
         android:paddingRight="8dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:textColor="@android:color/white"
-        tools:text="Episode 55"/>
+        tools:text="Episode 55" />
 
     <FrameLayout
         android:id="@+id/ratingContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_below="@+id/image"
         android:layout_alignEnd="@+id/image"
         android:layout_alignRight="@+id/image"
-        android:layout_below="@+id/image"
-        android:layout_marginTop="8dp"
         android:gravity="center_vertical|start">
 
         <me.zhanghai.android.materialratingbar.MaterialRatingBar
@@ -70,33 +70,33 @@
             android:layout_height="wrap_content"
             android:isIndicator="true"
             android:numStars="5"
-            android:stepSize="0.1"/>
+            android:stepSize="0.1" />
     </FrameLayout>
 
     <TextView
         android:id="@+id/airingInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ratingContainer"
         android:layout_marginTop="8dp"
+        android:layout_below="@+id/ratingContainer"
         android:minLines="2"
-        tools:text="Airing: 12:55\nAvailable: 13:55"/>
+        tools:text="Airing: 12:55\nAvailable: 13:55" />
 
     <View
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@+id/airingInfo"
         android:layout_marginTop="8dp"
-        android:background="@color/divider"/>
+        android:layout_below="@+id/airingInfo"
+        android:background="@color/divider" />
 
     <TextView
         android:id="@+id/status"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/divider"
         android:layout_marginTop="8dp"
+        android:layout_below="@id/divider"
         android:gravity="center_vertical"
         android:minLines="2"
-        tools:text="Aired in 00:01:01:55"/>
+        tools:text="Aired in 00:01:01:55" />
 </RelativeLayout>

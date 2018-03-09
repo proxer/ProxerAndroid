@@ -14,11 +14,11 @@ import me.proxer.library.entity.list.TranslatorGroupProject
  */
 @GeneratedProvider
 class TranslatorGroupProjectViewModel(private val translatorGroupId: String) :
-        PagedContentViewModel<TranslatorGroupProject>() {
+    PagedContentViewModel<TranslatorGroupProject>() {
 
     override val itemsOnPage = 30
 
     override val endpoint: PagingLimitEndpoint<List<TranslatorGroupProject>>
         get() = api.list().translatorGroupProjectList(translatorGroupId)
-                .includeHentai(PreferenceHelper.isAgeRestrictedMediaAllowed(globalContext) && StorageHelper.isLoggedIn)
+            .includeHentai(PreferenceHelper.isAgeRestrictedMediaAllowed(globalContext) && StorageHelper.isLoggedIn)
 }

@@ -21,33 +21,33 @@ class DirectReplyReceiver : BroadcastReceiver() {
         private const val CONFERENCE_ID_EXTRA = "conference_id"
 
         fun getPendingIntent(context: Context, conferenceId: Long): PendingIntent = PendingIntent.getBroadcast(context,
-                conferenceId.toInt(),
-                Intent(context, DirectReplyReceiver::class.java)
-                        .addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES)
-                        .apply { putExtra(CONFERENCE_ID_EXTRA, conferenceId) },
-                PendingIntent.FLAG_UPDATE_CURRENT)
+            conferenceId.toInt(),
+            Intent(context, DirectReplyReceiver::class.java)
+                .addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES)
+                .apply { putExtra(CONFERENCE_ID_EXTRA, conferenceId) },
+            PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
     override fun onReceive(context: Context, intent: Intent) {
         val conferenceId = intent.getLongExtra(CONFERENCE_ID_EXTRA, -1)
 
         Completable
-                .fromAction {
-                    chatDao.insertMessageToSend(getMessageText(intent), conferenceId)
+            .fromAction {
+                chatDao.insertMessageToSend(getMessageText(intent), conferenceId)
 
-                    if (chatDao.getUnreadConferences().isEmpty()) {
-                        ChatNotifications.cancel(context)
-                    } else {
-                        ChatNotifications.cancelIndividual(context, conferenceId)
-                    }
-
-                    ChatJob.scheduleSynchronization()
+                if (chatDao.getUnreadConferences().isEmpty()) {
+                    ChatNotifications.cancel(context)
+                } else {
+                    ChatNotifications.cancelIndividual(context, conferenceId)
                 }
-                .subscribeOn(Schedulers.io())
-                .subscribeAndLogErrors()
+
+                ChatJob.scheduleSynchronization()
+            }
+            .subscribeOn(Schedulers.io())
+            .subscribeAndLogErrors()
     }
 
     private fun getMessageText(intent: Intent) = RemoteInput.getResultsFromIntent(intent)
-            .getCharSequence(REMOTE_REPLY_EXTRA)
-            .toString()
+        .getCharSequence(REMOTE_REPLY_EXTRA)
+        .toString()
 }

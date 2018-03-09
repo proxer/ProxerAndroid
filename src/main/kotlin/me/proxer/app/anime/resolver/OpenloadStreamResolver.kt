@@ -27,68 +27,68 @@ class OpenloadStreamResolver : StreamResolver {
     companion object {
         private const val CALLBACK_NAME = "ProxerCallback"
         private const val EXTRACTION_CODE = "javascript:" +
-                "var url1 = \"https://openload.co/stream/\";" +
-                "var url2 = \"?mime=true\";" +
+            "var url1 = \"https://openload.co/stream/\";" +
+            "var url2 = \"?mime=true\";" +
 
-                "var streamUrlElement = document.getElementById(\"streamurj\");" +
-                "var streamUrlContent = streamUrlElement ? streamUrlElement.innerText : undefined;" +
-                "var streamUrl = streamUrlContent ? url1 + streamUrlContent + url2 : \"\";" +
+            "var streamUrlElement = document.getElementById(\"streamurj\");" +
+            "var streamUrlContent = streamUrlElement ? streamUrlElement.innerText : undefined;" +
+            "var streamUrl = streamUrlContent ? url1 + streamUrlContent + url2 : \"\";" +
 
-                "var titleElement = document.querySelector('meta[name=\"og:title\"]');" +
-                "var titleContent = titleElement ? titleElement.getAttribute(\"content\") : undefined;" +
-                "var fileType = titleContent ? titleContent.substr(titleContent.lastIndexOf(\".\") + 1) : undefined;" +
-                "var mimeType = fileType ? \"video/\" + fileType : \"\";" +
+            "var titleElement = document.querySelector('meta[name=\"og:title\"]');" +
+            "var titleContent = titleElement ? titleElement.getAttribute(\"content\") : undefined;" +
+            "var fileType = titleContent ? titleContent.substr(titleContent.lastIndexOf(\".\") + 1) : undefined;" +
+            "var mimeType = fileType ? \"video/\" + fileType : \"\";" +
 
-                "$CALLBACK_NAME.call(streamUrl, mimeType);"
+            "$CALLBACK_NAME.call(streamUrl, mimeType);"
     }
 
     override val name = "Openload.Co"
 
     @SuppressLint("SetJavaScriptEnabled", "AddJavascriptInterface")
     override fun resolve(id: String): Single<StreamResolutionResult> = api.anime().link(id)
-            .buildSingle()
-            .flatMap { url ->
-                client.newCall(Request.Builder()
-                        .get()
-                        .url(Utils.parseAndFixUrl(url))
-                        .header("User-Agent", GENERIC_USER_AGENT)
-                        .build())
-                        .toBodySingle()
-            }
-            .observeOn(AndroidSchedulers.mainThread())
-            .flatMap {
-                Single.create<StreamResolutionResult> { emitter ->
-                    try {
-                        val webView = WebView(globalContext)
-                        val webSettings = webView.settings
+        .buildSingle()
+        .flatMap { url ->
+            client.newCall(Request.Builder()
+                .get()
+                .url(Utils.parseAndFixUrl(url))
+                .header("User-Agent", GENERIC_USER_AGENT)
+                .build())
+                .toBodySingle()
+        }
+        .observeOn(AndroidSchedulers.mainThread())
+        .flatMap {
+            Single.create<StreamResolutionResult> { emitter ->
+                try {
+                    val webView = WebView(globalContext)
+                    val webSettings = webView.settings
 
-                        emitter.setCancellable {
-                            webView.post {
-                                webView.removeJavascriptInterface(CALLBACK_NAME)
-                                webView.clearHistory()
-                                webView.destroy()
-                            }
-                        }
-
-                        webSettings.blockNetworkImage = true
-                        webSettings.javaScriptEnabled = true
-                        webSettings.allowContentAccess = false
-                        webSettings.allowFileAccess = false
-                        webSettings.loadsImagesAutomatically = false
-                        webSettings.userAgentString = GENERIC_USER_AGENT
-                        webSettings.setGeolocationEnabled(false)
-
-                        webView.setWillNotDraw(true)
-                        webView.webViewClient = OpenLoadClient()
-                        webView.addJavascriptInterface(OpenLoadJavaScriptInterface(emitter), CALLBACK_NAME)
-                        webView.loadDataWithBaseURL("https://openload.co", it, "text/html", "UTF-8", null)
-                    } catch (error: Throwable) {
-                        if (!emitter.isDisposed) {
-                            emitter.onError(error)
+                    emitter.setCancellable {
+                        webView.post {
+                            webView.removeJavascriptInterface(CALLBACK_NAME)
+                            webView.clearHistory()
+                            webView.destroy()
                         }
                     }
-                }.timeout(10, TimeUnit.SECONDS)
-            }
+
+                    webSettings.blockNetworkImage = true
+                    webSettings.javaScriptEnabled = true
+                    webSettings.allowContentAccess = false
+                    webSettings.allowFileAccess = false
+                    webSettings.loadsImagesAutomatically = false
+                    webSettings.userAgentString = GENERIC_USER_AGENT
+                    webSettings.setGeolocationEnabled(false)
+
+                    webView.setWillNotDraw(true)
+                    webView.webViewClient = OpenLoadClient()
+                    webView.addJavascriptInterface(OpenLoadJavaScriptInterface(emitter), CALLBACK_NAME)
+                    webView.loadDataWithBaseURL("https://openload.co", it, "text/html", "UTF-8", null)
+                } catch (error: Throwable) {
+                    if (!emitter.isDisposed) {
+                        emitter.onError(error)
+                    }
+                }
+            }.timeout(10, TimeUnit.SECONDS)
+        }
 
     private class OpenLoadClient : WebViewClient() {
         override fun onPageFinished(view: WebView, url: String) = view.loadUrl(EXTRACTION_CODE)

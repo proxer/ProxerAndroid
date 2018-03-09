@@ -140,14 +140,14 @@ fun Category.toEpisodeAppString(context: Context, number: Int? = null): String =
 }
 
 fun MediaState.toAppDrawable(context: Context): IconicsDrawable = IconicsDrawable(context)
-        .iconColor(context)
-        .icon(when (this) {
-            MediaState.PRE_AIRING -> CommunityMaterial.Icon.cmd_radio_tower
-            MediaState.FINISHED -> CommunityMaterial.Icon.cmd_book
-            MediaState.AIRING -> CommunityMaterial.Icon.cmd_book_open_variant
-            MediaState.CANCELLED -> CommunityMaterial.Icon.cmd_close
-            MediaState.CANCELLED_SUB -> CommunityMaterial.Icon.cmd_close
-        })
+    .iconColor(context)
+    .icon(when (this) {
+        MediaState.PRE_AIRING -> CommunityMaterial.Icon.cmd_radio_tower
+        MediaState.FINISHED -> CommunityMaterial.Icon.cmd_book
+        MediaState.AIRING -> CommunityMaterial.Icon.cmd_book_open_variant
+        MediaState.CANCELLED -> CommunityMaterial.Icon.cmd_close
+        MediaState.CANCELLED_SUB -> CommunityMaterial.Icon.cmd_close
+    })
 
 fun UserMediaProgress.toEpisodeAppString(
     context: Context,
@@ -265,25 +265,25 @@ inline val Page.decodedName: String
     }
 
 fun Stream.toAnimeStreamInfo(isSupported: Boolean) = AnimeStream(id, hoster, hosterName, image, uploaderId,
-        uploaderName, date, translatorGroupId, translatorGroupName, isSupported)
+    uploaderName, date, translatorGroupId, translatorGroupName, isSupported)
 
 fun Conference.toLocalConference(isFullyLoaded: Boolean) = LocalConference(id.toLong(), topic,
-        customTopic, participantAmount, image, imageType, isGroup, isRead, isRead, date, unreadMessageAmount,
-        lastReadMessageId, isFullyLoaded)
+    customTopic, participantAmount, image, imageType, isGroup, isRead, isRead, date, unreadMessageAmount,
+    lastReadMessageId, isFullyLoaded)
 
 fun Message.toLocalMessage() = LocalMessage(id.toLong(), conferenceId.toLong(), userId, username, message, action,
-        date, device)
+    date, device)
 
 fun Comment.toParsedComment() = ParsedComment(id, entryId, authorId, mediaProgress, ratingDetails,
-        BBParser.parse(content).optimize(), overallRating, episode, helpfulVotes, date, author, image)
+    BBParser.parse(content).optimize(), overallRating, episode, helpfulVotes, date, author, image)
 
 fun UserComment.toParsedUserComment() = ParsedUserComment(id, entryId, entryName, medium, category, authorId,
-        mediaProgress, ratingDetails, BBParser.parse(content).optimize(), overallRating, episode, helpfulVotes, date,
-        author, image)
+    mediaProgress, ratingDetails, BBParser.parse(content).optimize(), overallRating, episode, helpfulVotes, date,
+    author, image)
 
 fun Topic.toTopicMetaData() = TopicMetaData(categoryId, categoryName, firstPostDate, lastPostDate, hits, isLocked,
-        post, subject)
+    post, subject)
 
 fun Post.toParsedPost() = ParsedPost(id, parentId, userId, username, image, date,
-        signature?.let { if (it.isNotBlank()) BBParser.parse(it).optimize() else null },
-        modifiedById, modifiedByName, modifiedReason, BBParser.parse(message).optimize(), thankYouAmount)
+    signature?.let { if (it.isNotBlank()) BBParser.parse(it).optimize() else null },
+    modifiedById, modifiedByName, modifiedReason, BBParser.parse(message).optimize(), thankYouAmount)

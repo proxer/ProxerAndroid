@@ -124,8 +124,8 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         innerAdapter.positionResolver = ContainerPositionResolver(adapter)
 
         innerAdapter.clickSubject
-                .autoDispose(this)
-                .subscribeAndLogErrors { recyclerView.smoothScrollToPosition(it + 2) }
+            .autoDispose(this)
+            .subscribeAndLogErrors { recyclerView.smoothScrollToPosition(it + 2) }
 
         viewModel.setEpisode(episode, false)
     }
@@ -138,35 +138,35 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
             textResolver = mediaControlTextResolver
 
             (layoutParams as ViewGroup.MarginLayoutParams).setMargins(horizontalMargin, verticalMargin,
-                    horizontalMargin, verticalMargin)
+                horizontalMargin, verticalMargin)
         }
 
         footer = (inflater.inflate(R.layout.layout_media_control, container, false) as MediaControlView).apply {
             textResolver = mediaControlTextResolver
 
             (layoutParams as ViewGroup.MarginLayoutParams).setMargins(horizontalMargin, verticalMargin,
-                    horizontalMargin, verticalMargin)
+                horizontalMargin, verticalMargin)
         }
 
         Observable.merge(header.uploaderClickSubject, footer.uploaderClickSubject)
-                .autoDispose(this)
-                .subscribe { ProfileActivity.navigateTo(requireActivity(), it.id, it.name) }
+            .autoDispose(this)
+            .subscribe { ProfileActivity.navigateTo(requireActivity(), it.id, it.name) }
 
         Observable.merge(header.translatorGroupClickSubject, footer.translatorGroupClickSubject)
-                .autoDispose(this)
-                .subscribe { TranslatorGroupActivity.navigateTo(requireActivity(), it.id, it.name) }
+            .autoDispose(this)
+            .subscribe { TranslatorGroupActivity.navigateTo(requireActivity(), it.id, it.name) }
 
         Observable.merge(header.episodeSwitchSubject, footer.episodeSwitchSubject)
-                .autoDispose(this)
-                .subscribe { episode = it }
+            .autoDispose(this)
+            .subscribe { episode = it }
 
         Observable.merge(header.bookmarkSetSubject, footer.bookmarkSetSubject)
-                .autoDispose(this)
-                .subscribe { viewModel.bookmark(it) }
+            .autoDispose(this)
+            .subscribe { viewModel.bookmark(it) }
 
         Observable.merge(header.finishClickSubject, footer.finishClickSubject)
-                .autoDispose(this)
-                .subscribe { viewModel.markAsFinished() }
+            .autoDispose(this)
+            .subscribe { viewModel.markAsFinished() }
 
         return inflater.inflate(R.layout.fragment_manga, container, false)
     }
@@ -195,7 +195,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         viewModel.bookmarkError.observe(this, Observer {
             it?.let {
                 multilineSnackbar(root, getString(R.string.error_set_user_info, getString(it.message)),
-                        Snackbar.LENGTH_LONG, it.buttonMessage, it.buttonAction?.toClickListener(hostingActivity))
+                    Snackbar.LENGTH_LONG, it.buttonMessage, it.buttonAction?.toClickListener(hostingActivity))
             }
         })
 

@@ -25,40 +25,40 @@ class DailymotionStreamResolver : StreamResolver {
     override val name = "Dailymotion"
 
     override fun resolve(id: String): Single<StreamResolutionResult> = api.anime().link(id)
-            .buildSingle()
-            .flatMap { url ->
-                client.newCall(Request.Builder()
-                        .get()
-                        .url(Utils.parseAndFixUrl(url))
-                        .header("User-Agent", GENERIC_USER_AGENT)
-                        .build())
-                        .toBodySingle()
-            }
-            .map {
-                val qualitiesJson = regex.find(it)?.value ?: throw StreamResolutionException()
-                val qualityMap = moshi.adapter(QualityMap::class.java)
-                        .fromJson("{${qualitiesJson.trimEnd(',')}}")
+        .buildSingle()
+        .flatMap { url ->
+            client.newCall(Request.Builder()
+                .get()
+                .url(Utils.parseAndFixUrl(url))
+                .header("User-Agent", GENERIC_USER_AGENT)
+                .build())
+                .toBodySingle()
+        }
+        .map {
+            val qualitiesJson = regex.find(it)?.value ?: throw StreamResolutionException()
+            val qualityMap = moshi.adapter(QualityMap::class.java)
+                .fromJson("{${qualitiesJson.trimEnd(',')}}")
 
-                val mp4Links = qualityMap?.qualities?.mapNotNull { qualityEntry ->
-                    val quality = try {
-                        qualityEntry.key.toInt()
-                    } catch (exception: NumberFormatException) {
+            val mp4Links = qualityMap?.qualities?.mapNotNull { qualityEntry ->
+                val quality = try {
+                    qualityEntry.key.toInt()
+                } catch (exception: NumberFormatException) {
+                    null
+                }
+
+                qualityEntry.value.mapNotNull {
+                    if (it["type"] == "video/mp4" && it["url"]?.isNotBlank() == true) {
+                        quality to it["url"]
+                    } else {
                         null
                     }
-
-                    qualityEntry.value.mapNotNull {
-                        if (it["type"] == "video/mp4" && it["url"]?.isNotBlank() == true) {
-                            quality to it["url"]
-                        } else {
-                            null
-                        }
-                    }
-                }?.flatten()?.sortedByDescending { it.first }
-
-                Uri.parse(mp4Links?.firstOrNull()?.second ?: throw StreamResolutionException()).let {
-                    StreamResolutionResult(it, "video/mp4")
                 }
+            }?.flatten()?.sortedByDescending { it.first }
+
+            Uri.parse(mp4Links?.firstOrNull()?.second ?: throw StreamResolutionException()).let {
+                StreamResolutionResult(it, "video/mp4")
             }
+        }
 
     private data class QualityMap(val qualities: Map<String, Array<Map<String, String>>>?)
 }

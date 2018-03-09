@@ -77,7 +77,7 @@ class ConferenceAdapter : BaseAdapter<LocalConference, ViewHolder>() {
             topic.text = item.topic
             time.text = item.date.convertToRelativeReadableTime(time.context)
             participants.text = participants.context.getQuantityString(R.plurals.fragment_conference_participants,
-                    item.participantAmount)
+                item.participantAmount)
 
             if (item.localIsRead) {
                 newMessages.visibility = View.GONE
@@ -89,9 +89,9 @@ class ConferenceAdapter : BaseAdapter<LocalConference, ViewHolder>() {
 
             if (item.image.isBlank()) {
                 val icon = IconicsDrawable(image.context)
-                        .sizeDp(96)
-                        .paddingDp(16)
-                        .colorRes(image.context, R.color.colorAccent)
+                    .sizeDp(96)
+                    .paddingDp(16)
+                    .colorRes(image.context, R.color.colorAccent)
 
                 if (item.isGroup) {
                     icon.icon(CommunityMaterial.Icon.cmd_account_multiple)
@@ -102,13 +102,13 @@ class ConferenceAdapter : BaseAdapter<LocalConference, ViewHolder>() {
                 image.setImageDrawable(icon)
             } else {
                 glide?.load(ProxerUrls.userImage(item.image).toString())
-                        ?.transition(DrawableTransitionOptions.withCrossFade())
-                        ?.circleCrop()
-                        ?.format(when (DeviceUtils.shouldShowHighQualityImages(image.context)) {
-                            true -> DecodeFormat.PREFER_ARGB_8888
-                            false -> DecodeFormat.PREFER_RGB_565
-                        })
-                        ?.into(image)
+                    ?.transition(DrawableTransitionOptions.withCrossFade())
+                    ?.circleCrop()
+                    ?.format(when (DeviceUtils.shouldShowHighQualityImages(image.context)) {
+                        true -> DecodeFormat.PREFER_ARGB_8888
+                        false -> DecodeFormat.PREFER_RGB_565
+                    })
+                    ?.into(image)
             }
         }
     }

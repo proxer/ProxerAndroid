@@ -42,7 +42,7 @@ class ConferenceParticipantAdapter : BaseAdapter<ConferenceParticipant, ViewHold
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_conference_participant, parent, false))
+            .inflate(R.layout.item_conference_participant, parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(data[position])
@@ -78,10 +78,10 @@ class ConferenceParticipantAdapter : BaseAdapter<ConferenceParticipant, ViewHold
 
             if (item.id == leaderId) {
                 username.setCompoundDrawablesWithIntrinsicBounds(null, null, IconicsDrawable(username.context)
-                        .icon(CommunityMaterial.Icon.cmd_star)
-                        .sizeDp(32)
-                        .paddingDp(8)
-                        .colorRes(username.context, R.color.colorAccent), null)
+                    .icon(CommunityMaterial.Icon.cmd_star)
+                    .sizeDp(32)
+                    .paddingDp(8)
+                    .colorRes(username.context, R.color.colorAccent), null)
             } else {
                 username.setCompoundDrawables(null, null, null, null)
             }
@@ -99,13 +99,13 @@ class ConferenceParticipantAdapter : BaseAdapter<ConferenceParticipant, ViewHold
                 image.setIconicsImage(CommunityMaterial.Icon.cmd_account, 96, 16, R.color.colorAccent)
             } else {
                 glide?.load(ProxerUrls.userImage(item.image).toString())
-                        ?.transition(DrawableTransitionOptions.withCrossFade())
-                        ?.circleCrop()
-                        ?.format(when (DeviceUtils.shouldShowHighQualityImages(image.context)) {
-                            true -> DecodeFormat.PREFER_ARGB_8888
-                            false -> DecodeFormat.PREFER_RGB_565
-                        })
-                        ?.into(image)
+                    ?.transition(DrawableTransitionOptions.withCrossFade())
+                    ?.circleCrop()
+                    ?.format(when (DeviceUtils.shouldShowHighQualityImages(image.context)) {
+                        true -> DecodeFormat.PREFER_ARGB_8888
+                        false -> DecodeFormat.PREFER_RGB_565
+                    })
+                    ?.into(image)
             }
         }
     }

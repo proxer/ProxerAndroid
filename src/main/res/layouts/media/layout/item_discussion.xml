@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:padding="@dimen/item_margin"
-             tools:context=".media.discussion.DiscussionAdapter">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/item_margin"
+    tools:context=".media.discussion.DiscussionAdapter">
 
     <android.support.v7.widget.CardView
         android:id="@+id/container"
@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                tools:text="Exciting topic"/>
+                tools:text="Exciting topic" />
 
             <TextView
                 android:id="@+id/metaInfo"
@@ -36,7 +36,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginBottom="8dp"
-                tools:text="By RubyGee in News"/>
+                tools:text="By RubyGee in News" />
 
         </LinearLayout>
     </android.support.v7.widget.CardView>

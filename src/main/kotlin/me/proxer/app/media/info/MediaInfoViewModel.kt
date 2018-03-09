@@ -29,16 +29,16 @@ class MediaInfoViewModel(private val entryId: String) : BaseViewModel<Pair<Entry
 
     override val dataSingle: Single<Pair<Entry, Optional<MediaUserInfo>>>
         get() = Single.fromCallable { validate() }
-                .flatMap { api.info().entry(entryId).buildSingle() }
-                .flatMap { entry ->
-                    when (StorageHelper.isLoggedIn) {
-                        true -> api.info().userInfo(entryId)
-                                .buildOptionalSingle()
-                                .map { entry to it }
-                                .onErrorReturn { entry to None }
-                        false -> Single.just(None).map { entry to it }
-                    }
+            .flatMap { api.info().entry(entryId).buildSingle() }
+            .flatMap { entry ->
+                when (StorageHelper.isLoggedIn) {
+                    true -> api.info().userInfo(entryId)
+                        .buildOptionalSingle()
+                        .map { entry to it }
+                        .onErrorReturn { entry to None }
+                    false -> Single.just(None).map { entry to it }
                 }
+            }
 
     val userInfoUpdateData = ResettingMutableLiveData<Unit?>()
     val userInfoUpdateError = ResettingMutableLiveData<ErrorAction?>()
@@ -65,21 +65,21 @@ class MediaInfoViewModel(private val entryId: String) : BaseViewModel<Pair<Entry
 
         userInfoUpdateDisposable?.dispose()
         userInfoUpdateDisposable = endpoint
-                .buildOptionalSingle()
-                .subscribeOn(Schedulers.io())
-                .flatMap { Single.fromCallable { it.apply { Validators.validateLogin() } } }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeAndLogErrors({
-                    userInfoUpdateError.value = null
-                    userInfoUpdateData.value = Unit
+            .buildOptionalSingle()
+            .subscribeOn(Schedulers.io())
+            .flatMap { Single.fromCallable { it.apply { Validators.validateLogin() } } }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeAndLogErrors({
+                userInfoUpdateError.value = null
+                userInfoUpdateData.value = Unit
 
-                    data.value?.let {
-                        data.value = copyData(it, updateType)
-                    }
-                }, {
-                    userInfoUpdateData.value = null
-                    userInfoUpdateError.value = ErrorUtils.handle(it)
-                })
+                data.value?.let {
+                    data.value = copyData(it, updateType)
+                }
+            }, {
+                userInfoUpdateData.value = null
+                userInfoUpdateError.value = ErrorUtils.handle(it)
+            })
     }
 
     private fun copyData(
@@ -87,10 +87,10 @@ class MediaInfoViewModel(private val entryId: String) : BaseViewModel<Pair<Entry
         updateType: UserInfoUpdateType
     ) = data.first to data.second.toNullable()?.let {
         MediaUserInfo(
-                it.isNoted || updateType == UserInfoUpdateType.NOTE,
-                it.isFinished || updateType == UserInfoUpdateType.FINISHED,
-                it.isCanceled,
-                it.isTopTen || updateType == UserInfoUpdateType.FAVORITE
+            it.isNoted || updateType == UserInfoUpdateType.NOTE,
+            it.isFinished || updateType == UserInfoUpdateType.FINISHED,
+            it.isCanceled,
+            it.isTopTen || updateType == UserInfoUpdateType.FAVORITE
         )
     }.toOptional()
 

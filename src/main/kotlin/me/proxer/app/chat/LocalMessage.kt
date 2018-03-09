@@ -13,9 +13,9 @@ import java.util.Date
  * @author Ruben Gees
  */
 @Entity(tableName = "messages", foreignKeys = [(ForeignKey(
-        entity = LocalConference::class,
-        parentColumns = ["id"],
-        childColumns = ["conferenceId"]
+    entity = LocalConference::class,
+    parentColumns = ["id"],
+    childColumns = ["conferenceId"]
 ))], indices = [(Index("conferenceId"))])
 data class LocalMessage(
     @PrimaryKey(autoGenerate = true) val id: Long,
@@ -29,5 +29,5 @@ data class LocalMessage(
 ) {
 
     fun toNonLocalMessage() = Message(id.toString(), conferenceId.toString(), userId, username, message, action, date,
-            device)
+        device)
 }

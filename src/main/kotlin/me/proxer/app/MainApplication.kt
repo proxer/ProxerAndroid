@@ -64,8 +64,8 @@ class MainApplication : Application() {
         const val GENERIC_USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
 
         val CERTIFICATES = arrayOf(
-                "sha256/58qRu/uxh4gFezqAcERupSkRYBlBAvfcw7mEjGPLnNU=",
-                "sha256/grX4Ta9HpZx6tSHkmCrvpApTQGo67CYDnvprLg5yRME="
+            "sha256/58qRu/uxh4gFezqAcERupSkRYBlBAvfcw7mEjGPLnNU=",
+            "sha256/grX4Ta9HpZx6tSHkmCrvpApTQGo67CYDnvprLg5yRME="
         )
 
         val bus = RxBus()
@@ -106,7 +106,7 @@ class MainApplication : Application() {
         NotificationUtils.createNotificationChannels(this)
 
         chatDatabase = Room.databaseBuilder(this, ChatDatabase::class.java, "chat.db")
-                .build()
+            .build()
 
         initBus()
         initApi()
@@ -124,54 +124,54 @@ class MainApplication : Application() {
 
     private fun initBus() {
         bus.register(LoginEvent::class.java)
-                .subscribeOn(Schedulers.io())
-                .subscribeAndLogErrors {
-                    ChatJob.scheduleSynchronizationIfPossible(this)
-                    NotificationJob.scheduleIfPossible(this)
-                }
+            .subscribeOn(Schedulers.io())
+            .subscribeAndLogErrors {
+                ChatJob.scheduleSynchronizationIfPossible(this)
+                NotificationJob.scheduleIfPossible(this)
+            }
 
         bus.register(LogoutEvent::class.java)
-                .subscribeOn(Schedulers.io())
-                .subscribeAndLogErrors {
-                    AccountNotifications.cancel(this)
-                    ChatNotifications.cancel(this)
+            .subscribeOn(Schedulers.io())
+            .subscribeAndLogErrors {
+                AccountNotifications.cancel(this)
+                ChatNotifications.cancel(this)
 
-                    ChatJob.cancel()
+                ChatJob.cancel()
 
-                    StorageHelper.lastChatMessageDate = Date(0L)
-                    StorageHelper.lastNotificationsDate = Date(0L)
-                    StorageHelper.areConferencesSynchronized = false
-                    StorageHelper.resetChatInterval()
+                StorageHelper.lastChatMessageDate = Date(0L)
+                StorageHelper.lastNotificationsDate = Date(0L)
+                StorageHelper.areConferencesSynchronized = false
+                StorageHelper.resetChatInterval()
 
-                    chatDao.clear()
-                }
+                chatDao.clear()
+            }
     }
 
     private fun initApi() {
         val certificatePinner = CertificatePinner.Builder()
-                .apply {
-                    CERTIFICATES.forEach { add(ProxerUrls.webBase().host(), it) }
-                }
-                .build()
+            .apply {
+                CERTIFICATES.forEach { add(ProxerUrls.webBase().host(), it) }
+            }
+            .build()
 
         api = ProxerApi.Builder(BuildConfig.PROXER_API_KEY)
-                .userAgent(USER_AGENT)
-                .loggingStrategy(if (BuildConfig.DEBUG) LoggingStrategy.ALL else LoggingStrategy.NONE)
-                .loggingTag(LOGGING_TAG)
-                .loginTokenManager(ProxerLoginTokenManager())
-                .client(OkHttpClient.Builder()
-                        .connectTimeout(5, TimeUnit.SECONDS)
-                        .writeTimeout(10, TimeUnit.SECONDS)
-                        .readTimeout(10, TimeUnit.SECONDS)
-                        .certificatePinner(certificatePinner)
-                        .build())
-                .build()
+            .userAgent(USER_AGENT)
+            .loggingStrategy(if (BuildConfig.DEBUG) LoggingStrategy.ALL else LoggingStrategy.NONE)
+            .loggingTag(LOGGING_TAG)
+            .loginTokenManager(ProxerLoginTokenManager())
+            .client(OkHttpClient.Builder()
+                .connectTimeout(5, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(10, TimeUnit.SECONDS)
+                .certificatePinner(certificatePinner)
+                .build())
+            .build()
     }
 
     private fun initLibs() {
         CaocConfig.Builder.create()
-                .backgroundMode(CaocConfig.BACKGROUND_MODE_CRASH)
-                .apply()
+            .backgroundMode(CaocConfig.BACKGROUND_MODE_CRASH)
+            .apply()
 
         EmojiManager.install(IosEmojiProvider())
         AndroidThreeTen.init(this)
@@ -204,20 +204,20 @@ class MainApplication : Application() {
     private fun enableStrictModeForDebug() {
         if (BuildConfig.DEBUG) {
             val threadPolicy = StrictModeCompat.ThreadPolicy.Builder()
-                    .detectAll()
-                    .penaltyLog()
-                    .build()
+                .detectAll()
+                .penaltyLog()
+                .build()
 
             val vmPolicy = StrictModeCompat.VmPolicy.Builder()
-                    .detectContentUriWithoutPermission()
-                    .detectLeakedRegistrationObjects()
-                    .detectLeakedClosableObjects()
-                    .detectLeakedSqlLiteObjects()
-                    .detectCleartextNetwork()
-                    .detectFileUriExposure()
-                    .detectActivityLeaks()
-                    .penaltyLog()
-                    .build()
+                .detectContentUriWithoutPermission()
+                .detectLeakedRegistrationObjects()
+                .detectLeakedClosableObjects()
+                .detectLeakedSqlLiteObjects()
+                .detectCleartextNetwork()
+                .detectFileUriExposure()
+                .detectActivityLeaks()
+                .penaltyLog()
+                .build()
 
             StrictModeCompat.setPolicies(threadPolicy, vmPolicy)
         }
@@ -226,17 +226,17 @@ class MainApplication : Application() {
     private class ConcreteDrawerImageLoader : AbstractDrawerImageLoader() {
         override fun set(image: ImageView, uri: Uri?, placeholder: Drawable?, tag: String?) {
             GlideApp.with(image)
-                    .load(uri)
-                    .centerCrop()
-                    .placeholder(placeholder)
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .into(image)
+                .load(uri)
+                .centerCrop()
+                .placeholder(placeholder)
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .into(image)
         }
 
         override fun cancel(imageView: ImageView) = GlideApp.with(imageView).clear(imageView)
 
         override fun placeholder(context: Context, tag: String?): IconicsDrawable = IconicsDrawable(context)
-                .icon(CommunityMaterial.Icon.cmd_account)
-                .colorRes(android.R.color.white)
+            .icon(CommunityMaterial.Icon.cmd_account)
+            .colorRes(android.R.color.white)
     }
 }

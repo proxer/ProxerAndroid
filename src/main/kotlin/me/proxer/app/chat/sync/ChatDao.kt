@@ -23,7 +23,7 @@ abstract class ChatDao {
     open fun insertMessageToSend(text: String, conferenceId: Long): LocalMessage {
         val (_, id, name) = StorageHelper.user ?: throw IllegalStateException("User cannot be null")
         val message = LocalMessage(calculateNextMessageToSendId(), conferenceId, id, name, text,
-                MessageAction.NONE, Date(), Device.MOBILE)
+            MessageAction.NONE, Date(), Device.MOBILE)
 
         insertMessage(message)
         markConferenceAsRead(conferenceId)
@@ -68,8 +68,8 @@ abstract class ChatDao {
     abstract fun findConferenceForUser(username: String): LocalConference?
 
     @Query("SELECT * FROM (SELECT * FROM messages WHERE conferenceId = :conferenceId AND id < 0 ORDER BY id ASC) " +
-            "UNION ALL " +
-            "SELECT * FROM (SELECT * FROM messages WHERE conferenceId = :conferenceId AND id >= 0 ORDER BY id DESC)")
+        "UNION ALL " +
+        "SELECT * FROM (SELECT * FROM messages WHERE conferenceId = :conferenceId AND id >= 0 ORDER BY id DESC)")
     abstract fun getMessagesLiveDataForConference(conferenceId: Long): LiveData<List<LocalMessage>>
 
     @Query("SELECT COUNT(*) FROM messages WHERE conferenceId = :conferenceId AND id = :lastReadMessageId")

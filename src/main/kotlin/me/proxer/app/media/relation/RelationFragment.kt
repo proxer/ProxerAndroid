@@ -52,11 +52,11 @@ class RelationFragment : BaseContentFragment<List<Relation>>() {
         adapter = RelationAdapter()
 
         adapter.clickSubject
-                .autoDispose(this)
-                .subscribe { (view, relation) ->
-                    MediaActivity.navigateTo(requireActivity(), relation.id, relation.name, relation.category,
-                            if (view.drawable != null) view else null)
-                }
+            .autoDispose(this)
+            .subscribe { (view, relation) ->
+                MediaActivity.navigateTo(requireActivity(), relation.id, relation.name, relation.category,
+                    if (view.drawable != null) view else null)
+            }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -77,7 +77,7 @@ class RelationFragment : BaseContentFragment<List<Relation>>() {
 
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(requireActivity()) + 1,
-                StaggeredGridLayoutManager.VERTICAL)
+            StaggeredGridLayoutManager.VERTICAL)
         recyclerView.adapter = adapter
     }
 

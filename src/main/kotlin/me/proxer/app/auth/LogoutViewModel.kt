@@ -34,19 +34,19 @@ class LogoutViewModel : ViewModel() {
         if (isLoading.value != true) {
             dataDisposable?.dispose()
             dataDisposable = api.user().logout()
-                    .buildOptionalSingle()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doOnSubscribe {
-                        error.value = null
-                        isLoading.value = true
-                    }
-                    .doAfterTerminate { isLoading.value = false }
-                    .subscribeAndLogErrors({
-                        data.value = Unit
-                    }, {
-                        error.value = ErrorUtils.handle(it)
-                    })
+                .buildOptionalSingle()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe {
+                    error.value = null
+                    isLoading.value = true
+                }
+                .doAfterTerminate { isLoading.value = false }
+                .subscribeAndLogErrors({
+                    data.value = Unit
+                }, {
+                    error.value = ErrorUtils.handle(it)
+                })
         }
     }
 }

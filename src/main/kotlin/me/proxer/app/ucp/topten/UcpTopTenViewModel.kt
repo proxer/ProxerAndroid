@@ -28,13 +28,13 @@ class UcpTopTenViewModel : BaseViewModel<ZippedTopTenResult>() {
 
     override val dataSingle: Single<ZippedTopTenResult>
         get() = Single.fromCallable { Validators.validateLogin() }
-                .flatMap { api.ucp().topTen().buildSingle() }
-                .map {
-                    val animeList = it.filter { it.category == Category.ANIME }
-                    val mangaList = it.filter { it.category == Category.MANGA }
+            .flatMap { api.ucp().topTen().buildSingle() }
+            .map {
+                val animeList = it.filter { it.category == Category.ANIME }
+                val mangaList = it.filter { it.category == Category.MANGA }
 
-                    ZippedTopTenResult(animeList, mangaList)
-                }
+                ZippedTopTenResult(animeList, mangaList)
+            }
 
     val itemDeletionError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
 
@@ -61,30 +61,30 @@ class UcpTopTenViewModel : BaseViewModel<ZippedTopTenResult>() {
 
         deletionQueue.poll()?.let { item ->
             deletionDisposable = api.ucp().deleteFavorite(item.id)
-                    .buildOptionalSingle()
-                    .map {
-                        data.value.let { currentData ->
-                            if (currentData != null) {
-                                val filteredAnimeEntries = currentData.animeEntries.filterNot { it == item }
-                                val filteredMangaEntries = currentData.mangaEntries.filterNot { it == item }
+                .buildOptionalSingle()
+                .map {
+                    data.value.let { currentData ->
+                        if (currentData != null) {
+                            val filteredAnimeEntries = currentData.animeEntries.filterNot { it == item }
+                            val filteredMangaEntries = currentData.mangaEntries.filterNot { it == item }
 
-                                ZippedTopTenResult(filteredAnimeEntries, filteredMangaEntries)
-                            } else {
-                                null
-                            }
+                            ZippedTopTenResult(filteredAnimeEntries, filteredMangaEntries)
+                        } else {
+                            null
                         }
                     }
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeAndLogErrors({
-                        data.value = it
+                }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeAndLogErrors({
+                    data.value = it
 
-                        doItemDeletion()
-                    }, {
-                        deletionQueue.clear()
+                    doItemDeletion()
+                }, {
+                    deletionQueue.clear()
 
-                        itemDeletionError.value = ErrorUtils.handle(it)
-                    })
+                    itemDeletionError.value = ErrorUtils.handle(it)
+                })
         }
     }
 

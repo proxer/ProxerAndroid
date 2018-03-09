@@ -18,25 +18,25 @@ class NewsNotificationReadReceiver : BroadcastReceiver() {
 
     companion object {
         fun getPendingIntent(context: Context): PendingIntent = PendingIntent.getBroadcast(context, 0,
-                Intent(context, NewsNotificationReadReceiver::class.java)
-                        .addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES),
-                PendingIntent.FLAG_UPDATE_CURRENT)
+            Intent(context, NewsNotificationReadReceiver::class.java)
+                .addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES),
+            PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
     override fun onReceive(context: Context, intent: Intent?) {
         Completable
-                .fromAction {
-                    NewsNotifications.cancel(context)
+            .fromAction {
+                NewsNotifications.cancel(context)
 
-                    StorageHelper.lastNewsDate = Date()
+                StorageHelper.lastNewsDate = Date()
 
-                    api.notifications().news()
-                            .markAsRead(true)
-                            .limit(0)
-                            .build()
-                            .execute()
-                }
-                .subscribeOn(Schedulers.io())
-                .subscribeAndLogErrors()
+                api.notifications().news()
+                    .markAsRead(true)
+                    .limit(0)
+                    .build()
+                    .execute()
+            }
+            .subscribeOn(Schedulers.io())
+            .subscribeAndLogErrors()
     }
 }

@@ -50,11 +50,11 @@ class TranslatorGroupProjectFragment : PagedContentFragment<TranslatorGroupProje
         innerAdapter = TranslatorGroupProjectAdapter()
 
         innerAdapter.clickSubject
-                .autoDispose(this)
-                .subscribe { (view, translatorGroup) ->
-                    MediaActivity.navigateTo(requireActivity(), translatorGroup.id, translatorGroup.name,
-                            translatorGroup.medium.toCategory(), if (view.drawable != null) view else null)
-                }
+            .autoDispose(this)
+            .subscribe { (view, translatorGroup) ->
+                MediaActivity.navigateTo(requireActivity(), translatorGroup.id, translatorGroup.name,
+                    translatorGroup.medium.toCategory(), if (view.drawable != null) view else null)
+            }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

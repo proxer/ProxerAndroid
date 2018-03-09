@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:padding="@dimen/item_margin"
-             tools:context=".profile.media.ProfileMediaAdapter">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/item_margin"
+    tools:context=".profile.media.ProfileMediaAdapter">
 
     <android.support.v7.widget.CardView
         android:id="@+id/root"
@@ -28,7 +28,7 @@
                 android:scaleType="centerCrop"
                 app:ari_aspect="height"
                 app:ari_ratio="1.25"
-                tools:ignore="UnusedAttribute"/>
+                tools:ignore="UnusedAttribute" />
 
             <TextView
                 android:id="@+id/title"
@@ -42,7 +42,7 @@
                 android:padding="8dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@android:color/white"
-                tools:text="Some title"/>
+                tools:text="Some title" />
 
             <TextView
                 android:id="@+id/medium"
@@ -56,20 +56,20 @@
                 android:paddingRight="8dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="@android:color/white"
-                tools:text="Animeseries"/>
+                tools:text="Animeseries" />
 
             <FrameLayout
                 android:id="@+id/ratingContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/medium"
                 android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_toStartOf="@+id/state"
                 android:layout_toLeftOf="@+id/state"
-                android:layout_toStartOf="@+id/state">
+                android:layout_below="@+id/medium"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true">
 
                 <me.zhanghai.android.materialratingbar.MaterialRatingBar
                     android:id="@+id/rating"
@@ -78,33 +78,33 @@
                     android:layout_height="wrap_content"
                     android:isIndicator="true"
                     android:numStars="5"
-                    android:stepSize="0.1"/>
+                    android:stepSize="0.1" />
             </FrameLayout>
 
             <TextView
                 android:id="@+id/status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/ratingContainer"
-                android:layout_toLeftOf="@+id/state"
                 android:layout_toStartOf="@+id/state"
+                android:layout_toLeftOf="@+id/state"
+                android:layout_below="@+id/ratingContainer"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
                 android:padding="8dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                tools:text="Episode 13/24 - Watching"/>
+                tools:text="Episode 13/24 - Watching" />
 
             <ImageView
                 android:id="@+id/state"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
+                android:layout_margin="8dp"
+                android:layout_below="@+id/image"
                 android:layout_alignBottom="@+id/status"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_below="@+id/image"
-                android:layout_margin="8dp"
                 tools:ignore="ContentDescription"
-                tools:src="@drawable/ic_japan"/>
+                tools:src="@drawable/ic_japan" />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </FrameLayout>

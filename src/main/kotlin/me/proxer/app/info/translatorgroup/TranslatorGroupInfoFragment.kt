@@ -79,13 +79,13 @@ class TranslatorGroupInfoFragment : BaseContentFragment<TranslatorGroup>() {
         } else {
             linkRow.visibility = View.VISIBLE
             link.text = Utils.buildClickableText(requireContext(), data.link.toString(),
-                    onWebClickListener = { link -> showPage(Utils.parseAndFixUrl(link)) },
-                    onWebLongClickListener = { link ->
-                        val title = getString(R.string.clipboard_title)
+                onWebClickListener = { link -> showPage(Utils.parseAndFixUrl(link)) },
+                onWebLongClickListener = { link ->
+                    val title = getString(R.string.clipboard_title)
 
-                        requireContext().clipboardManager.primaryClip = ClipData.newPlainText(title, link)
-                        requireContext().toast(R.string.clipboard_status)
-                    })
+                    requireContext().clipboardManager.primaryClip = ClipData.newPlainText(title, link)
+                    requireContext().toast(R.string.clipboard_status)
+                })
         }
 
         if (data.description.isBlank()) {

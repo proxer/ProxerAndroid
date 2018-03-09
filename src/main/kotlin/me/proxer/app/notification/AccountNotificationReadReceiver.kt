@@ -17,24 +17,24 @@ class AccountNotificationReadReceiver : BroadcastReceiver() {
 
     companion object {
         fun getPendingIntent(context: Context): PendingIntent = PendingIntent.getBroadcast(context, 0,
-                Intent(context, AccountNotificationReadReceiver::class.java)
-                        .addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES),
-                PendingIntent.FLAG_UPDATE_CURRENT)
+            Intent(context, AccountNotificationReadReceiver::class.java)
+                .addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES),
+            PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
     override fun onReceive(context: Context, intent: Intent?) {
         Completable
-                .fromAction {
-                    AccountNotifications.cancel(context)
+            .fromAction {
+                AccountNotifications.cancel(context)
 
-                    api.notifications().notifications()
-                            .limit(Int.MAX_VALUE)
-                            .markAsRead(true)
-                            .filter(NotificationFilter.UNREAD)
-                            .build()
-                            .execute()
-                }
-                .subscribeOn(Schedulers.io())
-                .subscribeAndLogErrors()
+                api.notifications().notifications()
+                    .limit(Int.MAX_VALUE)
+                    .markAsRead(true)
+                    .filter(NotificationFilter.UNREAD)
+                    .build()
+                    .execute()
+            }
+            .subscribeOn(Schedulers.io())
+            .subscribeAndLogErrors()
     }
 }

@@ -18,7 +18,7 @@ object UrlPrototype : TextMutatorPrototype, AutoClosingPrototype {
     private const val URL_ARGUMENT = "url"
 
     private val INVALID_URL = HttpUrl.parse("https://proxer.me/404")
-            ?: throw IllegalArgumentException("Could not parse url")
+        ?: throw IllegalArgumentException("Could not parse url")
 
     override val startRegex = Regex(" *url *= *.+?( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *url *", REGEX_OPTIONS)

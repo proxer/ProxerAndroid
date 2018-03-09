@@ -56,11 +56,11 @@ object Utils {
 
     fun getCircleBitmapFromUrl(context: Context, url: HttpUrl) = try {
         GlideApp.with(context)
-                .asBitmap()
-                .load(url.toString())
-                .circleCrop()
-                .submit(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-                .get()
+            .asBitmap()
+            .load(url.toString())
+            .circleCrop()
+            .submit(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+            .get()
     } catch (error: Throwable) {
         Log.e(LOGGING_TAG, error.getStackTraceString())
 
@@ -79,18 +79,18 @@ object Utils {
 
         if (onWebClickListener != null || onWebLongClickListener != null) {
             builder.addLink(Link(WEB_REGEX)
-                    .setTextColor(ContextCompat.getColor(context, R.color.link))
-                    .setUnderlined(false)
-                    .apply { onWebClickListener?.let { setOnClickListener(it) } }
-                    .apply { onWebLongClickListener?.let { setOnLongClickListener(it) } })
+                .setTextColor(ContextCompat.getColor(context, R.color.link))
+                .setUnderlined(false)
+                .apply { onWebClickListener?.let { setOnClickListener(it) } }
+                .apply { onWebLongClickListener?.let { setOnLongClickListener(it) } })
         }
 
         if (onMentionsClickListener != null || onMentionsLongClickListener != null) {
             builder.addLink(Link(MENTIONS_REGEX)
-                    .setTextColor(ContextCompat.getColor(context, R.color.link))
-                    .setUnderlined(false)
-                    .apply { onMentionsClickListener?.let { setOnClickListener(it) } }
-                    .apply { onMentionsLongClickListener?.let { setOnLongClickListener(it) } })
+                .setTextColor(ContextCompat.getColor(context, R.color.link))
+                .setUnderlined(false)
+                .apply { onMentionsClickListener?.let { setOnClickListener(it) } }
+                .apply { onMentionsLongClickListener?.let { setOnLongClickListener(it) } })
         }
 
         return builder.build() ?: text
@@ -114,7 +114,7 @@ object Utils {
     }
 
     fun parseAndFixUrl(url: String) = safelyParseAndFixUrl(url)
-            ?: throw ProxerException(ErrorType.PARSING)
+        ?: throw ProxerException(ErrorType.PARSING)
 
     fun isPackageInstalled(packageManager: PackageManager, packageName: String) = try {
         packageManager.getApplicationInfo(packageName, 0).enabled
@@ -125,11 +125,11 @@ object Utils {
     fun getNativeAppPackage(context: Context, url: HttpUrl): Set<String> {
         val browserActivityIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://www.generic.com"))
         val genericResolvedList = extractPackageNames(context.packageManager
-                .queryIntentActivities(browserActivityIntent, 0))
+            .queryIntentActivities(browserActivityIntent, 0))
 
         val specializedActivityIntent = Intent(Intent.ACTION_VIEW, url.androidUri())
         val resolvedSpecializedList = extractPackageNames(context.packageManager
-                .queryIntentActivities(specializedActivityIntent, 0))
+            .queryIntentActivities(specializedActivityIntent, 0))
 
         resolvedSpecializedList.removeAll(genericResolvedList)
 
@@ -142,6 +142,6 @@ object Utils {
     }
 
     private fun extractPackageNames(resolveInfo: List<ResolveInfo>) = resolveInfo
-            .map { it.activityInfo.packageName }
-            .toMutableSet()
+        .map { it.activityInfo.packageName }
+        .toMutableSet()
 }

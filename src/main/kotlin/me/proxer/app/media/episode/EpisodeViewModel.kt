@@ -14,11 +14,11 @@ class EpisodeViewModel(private val entryId: String) : BaseViewModel<List<Episode
 
     override val dataSingle: Single<List<EpisodeRow>>
         get() = api.info().episodeInfo(entryId)
-                .limit(Int.MAX_VALUE)
-                .buildSingle()
-                .map { info ->
-                    info.episodes
-                            .groupBy { it.number }
-                            .map { EpisodeRow(info.category, info.userProgress, info.lastEpisode, it.value) }
-                }
+            .limit(Int.MAX_VALUE)
+            .buildSingle()
+            .map { info ->
+                info.episodes
+                    .groupBy { it.number }
+                    .map { EpisodeRow(info.category, info.userProgress, info.lastEpisode, it.value) }
+            }
 }

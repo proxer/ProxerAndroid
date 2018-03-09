@@ -68,7 +68,7 @@ class ProfileInfoFragment : BaseContentFragment<UserInfo>() {
         hostingActivity.image = data.image
 
         val totalPoints = data.animePoints + data.mangaPoints + data.uploadPoints + data.forumPoints +
-                data.infoPoints + data.miscPoints
+            data.infoPoints + data.miscPoints
 
         animePointsRow.text = data.animePoints.toString()
         mangaPointsRow.text = data.mangaPoints.toString()

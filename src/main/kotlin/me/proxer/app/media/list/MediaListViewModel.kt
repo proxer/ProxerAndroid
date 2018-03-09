@@ -37,13 +37,13 @@ class MediaListViewModel(
 
     override val endpoint: PagingLimitEndpoint<List<MediaListEntry>>
         get() = api.list().mediaSearch()
-                .sort(sortCriteria)
-                .name(searchQuery)
-                .language(language)
-                .genres(genres)
-                .excludedGenres(excludedGenres)
-                .fskConstraints(fskConstraints)
-                .type(type)
+            .sort(sortCriteria)
+            .name(searchQuery)
+            .language(language)
+            .genres(genres)
+            .excludedGenres(excludedGenres)
+            .fskConstraints(fskConstraints)
+            .type(type)
 
     var sortCriteria by Delegates.observable(sortCriteria, { _, old, new ->
         if (old != new) reload()

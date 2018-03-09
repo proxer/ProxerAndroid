@@ -111,11 +111,11 @@ class MangaAdapter(private val isVertical: Boolean) : BaseAdapter<Page, ViewHold
 
             glideTarget?.let { target ->
                 glide?.download(ProxerUrls.mangaPageImage(server, entryId, id, item.decodedName).toString())
-                        ?.format(when (DeviceUtils.shouldShowHighQualityImages(image.context)) {
-                            true -> DecodeFormat.PREFER_ARGB_8888
-                            false -> DecodeFormat.PREFER_RGB_565
-                        })
-                        ?.into(target)
+                    ?.format(when (DeviceUtils.shouldShowHighQualityImages(image.context)) {
+                        true -> DecodeFormat.PREFER_ARGB_8888
+                        false -> DecodeFormat.PREFER_RGB_565
+                    })
+                    ?.into(target)
             }
         }
 
@@ -128,10 +128,10 @@ class MangaAdapter(private val isVertical: Boolean) : BaseAdapter<Page, ViewHold
                 // Fade animations do not look good with the horizontal reader.
                 if (isVertical) {
                     image.apply { alpha = 0.2f }
-                            .animate()
-                            .alpha(1.0f)
-                            .setDuration(mediumAnimationTime.toLong())
-                            .start()
+                        .animate()
+                        .alpha(1.0f)
+                        .setDuration(mediumAnimationTime.toLong())
+                        .start()
                 }
             }
 

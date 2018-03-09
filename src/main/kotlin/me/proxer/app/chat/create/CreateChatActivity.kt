@@ -20,15 +20,15 @@ class CreateChatActivity : DrawerActivity() {
 
         fun navigateTo(context: Activity, isGroup: Boolean = false, initialParticipant: Participant? = null) {
             context.startActivity(context.intentFor<CreateChatActivity>(
-                    IS_GROUP_EXTRA to isGroup,
-                    INITIAL_PARTICIPANT_EXTRA to initialParticipant
+                IS_GROUP_EXTRA to isGroup,
+                INITIAL_PARTICIPANT_EXTRA to initialParticipant
             ))
         }
 
         fun getIntent(context: Activity, isGroup: Boolean = false, initialParticipant: Participant? = null): Intent {
             return context.intentFor<CreateChatActivity>(
-                    IS_GROUP_EXTRA to isGroup,
-                    INITIAL_PARTICIPANT_EXTRA to initialParticipant
+                IS_GROUP_EXTRA to isGroup,
+                INITIAL_PARTICIPANT_EXTRA to initialParticipant
             )
         }
     }
@@ -46,8 +46,8 @@ class CreateChatActivity : DrawerActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, CreateChatFragment.newInstance())
-                    .commitNow()
+                .replace(R.id.container, CreateChatFragment.newInstance())
+                .commitNow()
         }
     }
 

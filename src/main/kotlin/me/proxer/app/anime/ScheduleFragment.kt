@@ -44,11 +44,11 @@ class ScheduleFragment : BaseContentFragment<Map<CalendarDay, List<CalendarEntry
         adapter = ScheduleAdapter()
 
         adapter.clickSubject
-                .autoDispose(this)
-                .subscribe { (view, item) ->
-                    MediaActivity.navigateTo(requireActivity(), item.entryId, item.name, null,
-                            if (view.drawable != null) view else null)
-                }
+            .autoDispose(this)
+            .subscribe { (view, item) ->
+                MediaActivity.navigateTo(requireActivity(), item.entryId, item.name, null,
+                    if (view.drawable != null) view else null)
+            }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

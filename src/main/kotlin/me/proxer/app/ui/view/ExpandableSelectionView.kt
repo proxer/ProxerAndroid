@@ -88,19 +88,19 @@ class ExpandableSelectionView @JvmOverloads constructor(
         toggleButton.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32)
 
         controlContainer.clicks().mergeWith(toggleButton.clicks())
-                .autoDispose(context as LifecycleOwner)
-                .subscribeAndLogErrors {
-                    isExtended = !isExtended
-                }
+            .autoDispose(context as LifecycleOwner)
+            .subscribeAndLogErrors {
+                isExtended = !isExtended
+            }
 
         resetButton.clicks()
-                .autoDispose(context as LifecycleOwner)
-                .subscribeAndLogErrors {
-                    selection = mutableListOf()
+            .autoDispose(context as LifecycleOwner)
+            .subscribeAndLogErrors {
+                selection = mutableListOf()
 
-                    handleSelection()
-                    notifySelectionChangedListener()
-                }
+                handleSelection()
+                notifySelectionChangedListener()
+            }
     }
 
     override fun onSaveInstanceState(): Parcelable = SavedState(super.onSaveInstanceState(), selection, isExtended)
@@ -160,17 +160,17 @@ class ExpandableSelectionView @JvmOverloads constructor(
         radioButton.text = item
         radioButton.isChecked = selection.contains(item)
         radioButton.clicks()
-                .autoDispose(context as LifecycleOwner)
-                .subscribeAndLogErrors {
-                    selection.clear()
-                    selection.add(item)
+            .autoDispose(context as LifecycleOwner)
+            .subscribeAndLogErrors {
+                selection.clear()
+                selection.add(item)
 
-                    itemContainer.childrenSequence().forEach {
-                        if (it is RadioButton && it != radioButton) it.isChecked = false
-                    }
-
-                    notifySelectionChangedListener()
+                itemContainer.childrenSequence().forEach {
+                    if (it is RadioButton && it != radioButton) it.isChecked = false
                 }
+
+                notifySelectionChangedListener()
+            }
 
         return radioButton
     }
@@ -181,14 +181,14 @@ class ExpandableSelectionView @JvmOverloads constructor(
         checkBox.text = item
         checkBox.isChecked = selection.contains(item)
         checkBox.clicks()
-                .autoDispose(context as LifecycleOwner)
-                .subscribeAndLogErrors {
-                    if (!selection.remove(item)) {
-                        selection.add(item)
-                    }
-
-                    notifySelectionChangedListener()
+            .autoDispose(context as LifecycleOwner)
+            .subscribeAndLogErrors {
+                if (!selection.remove(item)) {
+                    selection.add(item)
                 }
+
+                notifySelectionChangedListener()
+            }
         return checkBox
     }
 

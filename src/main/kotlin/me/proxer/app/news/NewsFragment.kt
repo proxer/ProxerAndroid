@@ -44,15 +44,15 @@ class NewsFragment : PagedContentFragment<NewsArticle>() {
         innerAdapter = NewsAdapter(savedInstanceState)
 
         innerAdapter.clickSubject
-                .autoDispose(this)
-                .subscribe { TopicActivity.navigateTo(requireActivity(), it.threadId, it.subject) }
+            .autoDispose(this)
+            .subscribe { TopicActivity.navigateTo(requireActivity(), it.threadId, it.subject) }
 
         innerAdapter.imageClickSubject
-                .autoDispose(this)
-                .subscribe { (view, article) ->
-                    ImageDetailActivity.navigateTo(requireActivity(),
-                            ProxerUrls.newsImage(article.id, article.image), view)
-                }
+            .autoDispose(this)
+            .subscribe { (view, article) ->
+                ImageDetailActivity.navigateTo(requireActivity(),
+                    ProxerUrls.newsImage(article.id, article.image), view)
+            }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

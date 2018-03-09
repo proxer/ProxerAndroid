@@ -41,7 +41,7 @@ class LogAdapter(savedInstanceState: Bundle?) : BaseAdapter<LogMessage, ViewHold
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_log, parent, false))
+        .inflate(R.layout.item_log, parent, false))
 
     override fun getItemId(position: Int) = data[position].id
     override fun saveInstanceState(outState: Bundle) = outState.putParcelable(EXPANDED_STATE, expansionMap)
@@ -71,7 +71,7 @@ class LogAdapter(savedInstanceState: Bundle?) : BaseAdapter<LogMessage, ViewHold
         fun bind(logMessage: LogMessage) {
             if (expansionMap.containsKey(logMessage.id.toString())) {
                 logContent.text = logContent.context.getString(R.string.activity_log_expanded_content,
-                        Utils.dateTimeFormatter.format(logMessage.dateTime), logMessage.content)
+                    Utils.dateTimeFormatter.format(logMessage.dateTime), logMessage.content)
 
                 logContent.maxLines = Int.MAX_VALUE
             } else {

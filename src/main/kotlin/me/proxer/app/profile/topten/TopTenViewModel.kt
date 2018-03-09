@@ -18,25 +18,25 @@ import me.proxer.library.enums.Category
  */
 @GeneratedProvider
 class TopTenViewModel(private val userId: String?, private val username: String?) :
-        BaseViewModel<ZippedTopTenResult>() {
+    BaseViewModel<ZippedTopTenResult>() {
 
     override val dataSingle: Single<ZippedTopTenResult>
         get() {
             val includeHentai = PreferenceHelper.isAgeRestrictedMediaAllowed(globalContext) && StorageHelper.isLoggedIn
 
             return Singles.zip(
-                    partialSingle(includeHentai, Category.ANIME),
-                    partialSingle(includeHentai, Category.MANGA),
-                    zipper = { animeEntries, mangaEntries ->
-                        ZippedTopTenResult(animeEntries, mangaEntries)
-                    }
+                partialSingle(includeHentai, Category.ANIME),
+                partialSingle(includeHentai, Category.MANGA),
+                zipper = { animeEntries, mangaEntries ->
+                    ZippedTopTenResult(animeEntries, mangaEntries)
+                }
             )
         }
 
     private fun partialSingle(includeHentai: Boolean, category: Category) = api.user().topTen(userId, username)
-            .includeHentai(includeHentai)
-            .category(category)
-            .buildSingle()
+        .includeHentai(includeHentai)
+        .category(category)
+        .buildSingle()
 
     data class ZippedTopTenResult(val animeEntries: List<TopTenEntry>, val mangaEntries: List<TopTenEntry>)
 }

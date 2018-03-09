@@ -100,13 +100,13 @@ class ChatFragment : PagedContentFragment<LocalMessage>() {
 
     private val emojiPopup by lazy {
         val popup = EmojiPopup.Builder.fromRootView(root)
-                .setOnEmojiPopupShownListener {
-                    emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_keyboard))
-                }
-                .setOnEmojiPopupDismissListener {
-                    emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_emoticon))
-                }
-                .build(messageInput)
+            .setOnEmojiPopupShownListener {
+                emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_keyboard))
+            }
+            .setOnEmojiPopupDismissListener {
+                emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_emoticon))
+            }
+            .build(messageInput)
 
         popup
     }
@@ -135,40 +135,40 @@ class ChatFragment : PagedContentFragment<LocalMessage>() {
         innerAdapter = ChatAdapter(savedInstanceState, conference.isGroup)
 
         innerAdapter.titleClickSubject
-                .autoDispose(this)
-                .subscribe { ProfileActivity.navigateTo(requireActivity(), it.userId, it.username) }
+            .autoDispose(this)
+            .subscribe { ProfileActivity.navigateTo(requireActivity(), it.userId, it.username) }
 
         innerAdapter.messageSelectionSubject
-                .autoDispose(this)
-                .subscribe {
-                    if (it > 0) {
-                        when (actionMode) {
-                            null -> actionMode = chatActivity.startSupportActionMode(actionModeCallback)
-                            else -> actionMode?.invalidate()
-                        }
-
-                        actionMode?.title = it.toString()
-                    } else {
-                        actionMode?.finish()
+            .autoDispose(this)
+            .subscribe {
+                if (it > 0) {
+                    when (actionMode) {
+                        null -> actionMode = chatActivity.startSupportActionMode(actionModeCallback)
+                        else -> actionMode?.invalidate()
                     }
+
+                    actionMode?.title = it.toString()
+                } else {
+                    actionMode?.finish()
                 }
+            }
 
         innerAdapter.linkClickSubject
-                .autoDispose(this)
-                .subscribe { showPage(it) }
+            .autoDispose(this)
+            .subscribe { showPage(it) }
 
         innerAdapter.linkLongClickSubject
-                .autoDispose(this)
-                .subscribe {
-                    getString(R.string.clipboard_title).let { title ->
-                        requireContext().clipboardManager.primaryClip = ClipData.newPlainText(title, it.toString())
-                        requireContext().toast(R.string.clipboard_status)
-                    }
+            .autoDispose(this)
+            .subscribe {
+                getString(R.string.clipboard_title).let { title ->
+                    requireContext().clipboardManager.primaryClip = ClipData.newPlainText(title, it.toString())
+                    requireContext().toast(R.string.clipboard_status)
                 }
+            }
 
         innerAdapter.mentionsClickSubject
-                .autoDispose(this)
-                .subscribe { ProfileActivity.navigateTo(requireActivity(), username = it) }
+            .autoDispose(this)
+            .subscribe { ProfileActivity.navigateTo(requireActivity(), username = it) }
 
         viewModel.conference.observe(this, Observer {
             it?.let { conference = it }
@@ -189,22 +189,22 @@ class ChatFragment : PagedContentFragment<LocalMessage>() {
         emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_emoticon))
 
         emojiButton.clicks()
-                .autoDispose(this)
-                .subscribe { emojiPopup.toggle() }
+            .autoDispose(this)
+            .subscribe { emojiPopup.toggle() }
 
         sendButton.clicks()
-                .autoDispose(this)
-                .subscribe {
-                    messageInput.text.toString().trim().let { text ->
-                        if (text.isNotBlank()) {
-                            viewModel.sendMessage(text)
+            .autoDispose(this)
+            .subscribe {
+                messageInput.text.toString().trim().let { text ->
+                    if (text.isNotBlank()) {
+                        viewModel.sendMessage(text)
 
-                            messageInput.text.clear()
+                        messageInput.text.clear()
 
-                            scrollToTop()
-                        }
+                        scrollToTop()
                     }
                 }
+            }
     }
 
     override fun onResume() {
@@ -259,10 +259,10 @@ class ChatFragment : PagedContentFragment<LocalMessage>() {
     override fun isAtTop() = layoutManager.isAtTop()
 
     private fun generateEmojiDrawable(iconicRes: IIcon) = IconicsDrawable(context)
-            .icon(iconicRes)
-            .sizeDp(32)
-            .paddingDp(6)
-            .iconColor(requireContext())
+        .icon(iconicRes)
+        .sizeDp(32)
+        .paddingDp(6)
+        .iconColor(requireContext())
 
     private fun handleCopyClick() {
         val title = getString(R.string.fragment_chat_clip_title)

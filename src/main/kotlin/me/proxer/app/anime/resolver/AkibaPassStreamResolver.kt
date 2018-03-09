@@ -14,6 +14,6 @@ class AkibaPassStreamResolver : StreamResolver {
     override val name = "AkibaPass"
 
     override fun resolve(id: String): Single<StreamResolutionResult> = api.anime().link(id)
-            .buildSingle()
-            .map { StreamResolutionResult(Utils.parseAndFixUrl(it).androidUri(), "text/html") }
+        .buildSingle()
+        .map { StreamResolutionResult(Utils.parseAndFixUrl(it).androidUri(), "text/html") }
 }

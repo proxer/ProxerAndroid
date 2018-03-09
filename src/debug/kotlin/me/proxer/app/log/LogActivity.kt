@@ -46,13 +46,13 @@ class LogActivity : BaseActivity() {
         adapter = LogAdapter(savedInstanceState)
 
         adapter.longClickSubject
-                .autoDispose(this)
-                .subscribe {
-                    getString(R.string.clipboard_title).let { title ->
-                        clipboardManager.primaryClip = ClipData.newPlainText(title, it.toString())
-                        toast(R.string.clipboard_status)
-                    }
+            .autoDispose(this)
+            .subscribe {
+                getString(R.string.clipboard_title).let { title ->
+                    clipboardManager.primaryClip = ClipData.newPlainText(title, it.toString())
+                    toast(R.string.clipboard_status)
                 }
+            }
 
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true)
         recyclerView.adapter = adapter
@@ -84,10 +84,10 @@ class LogActivity : BaseActivity() {
         IconicsMenuInflaterUtil.inflate(menuInflater, this, R.menu.activity_log, menu, true)
 
         menu.findItem(R.id.action_save)
-                .clicks()
-                .compose(RxPermissions(this).ensure(Manifest.permission.WRITE_EXTERNAL_STORAGE))
-                .autoDispose(this)
-                .subscribe { granted -> if (granted) viewModel.save() }
+            .clicks()
+            .compose(RxPermissions(this).ensure(Manifest.permission.WRITE_EXTERNAL_STORAGE))
+            .autoDispose(this)
+            .subscribe { granted -> if (granted) viewModel.save() }
 
         return true
     }

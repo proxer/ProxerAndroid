@@ -27,29 +27,29 @@ abstract class PagedViewModel<T> : BaseViewModel<List<T>>() {
 
         dataDisposable?.dispose()
         dataDisposable = dataSingle
-                .doAfterSuccess { newData -> hasReachedEnd = newData.size < itemsOnPage }
-                .map { newData -> mergeNewDataWithExistingData(newData, currentPage) }
-                .subscribeOn(Schedulers.io())
-                .doAfterSuccess { if (!isRefreshing) page++ }
-                .doAfterTerminate { isRefreshing = false }
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe {
-                    refreshError.value = null
-                    error.value = null
-                    isLoading.value = true
+            .doAfterSuccess { newData -> hasReachedEnd = newData.size < itemsOnPage }
+            .map { newData -> mergeNewDataWithExistingData(newData, currentPage) }
+            .subscribeOn(Schedulers.io())
+            .doAfterSuccess { if (!isRefreshing) page++ }
+            .doAfterTerminate { isRefreshing = false }
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                refreshError.value = null
+                error.value = null
+                isLoading.value = true
+            }
+            .doAfterTerminate { isLoading.value = false }
+            .subscribeAndLogErrors({
+                refreshError.value = null
+                error.value = null
+                data.value = it
+            }, {
+                if (currentPage == 0 && data.value?.size ?: 0 > 0) {
+                    refreshError.value = ErrorUtils.handle(it)
+                } else {
+                    error.value = ErrorUtils.handle(it)
                 }
-                .doAfterTerminate { isLoading.value = false }
-                .subscribeAndLogErrors({
-                    refreshError.value = null
-                    error.value = null
-                    data.value = it
-                }, {
-                    if (currentPage == 0 && data.value?.size ?: 0 > 0) {
-                        refreshError.value = ErrorUtils.handle(it)
-                    } else {
-                        error.value = ErrorUtils.handle(it)
-                    }
-                })
+            })
     }
 
     override fun loadIfPossible() {

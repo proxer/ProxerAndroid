@@ -24,24 +24,24 @@ class AuravidStreamResolver : StreamResolver {
     override val ignore = true
 
     override fun resolve(id: String): Single<StreamResolutionResult> = api.anime().link(id)
-            .buildSingle()
-            .flatMap { url ->
-                client.newCall(Request.Builder()
-                        .get()
-                        .url(Utils.parseAndFixUrl(url))
-                        .header("User-Agent", GENERIC_USER_AGENT)
-                        .build())
-                        .toBodySingle()
-            }
-            .map {
-                val regexResult = regex.find(it) ?: throw StreamResolutionException()
-                val source = regexResult.groupValues[1]
-                val type = regexResult.groupValues[2]
+        .buildSingle()
+        .flatMap { url ->
+            client.newCall(Request.Builder()
+                .get()
+                .url(Utils.parseAndFixUrl(url))
+                .header("User-Agent", GENERIC_USER_AGENT)
+                .build())
+                .toBodySingle()
+        }
+        .map {
+            val regexResult = regex.find(it) ?: throw StreamResolutionException()
+            val source = regexResult.groupValues[1]
+            val type = regexResult.groupValues[2]
 
-                if (source.isBlank() || type.isBlank()) {
-                    throw StreamResolutionException()
-                }
-
-                StreamResolutionResult(Uri.parse(source), type)
+            if (source.isBlank() || type.isBlank()) {
+                throw StreamResolutionException()
             }
+
+            StreamResolutionResult(Uri.parse(source), type)
+        }
 }

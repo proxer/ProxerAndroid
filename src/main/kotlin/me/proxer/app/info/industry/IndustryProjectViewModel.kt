@@ -19,5 +19,5 @@ class IndustryProjectViewModel(private val industryId: String) : PagedContentVie
 
     override val endpoint: PagingLimitEndpoint<List<IndustryProject>>
         get() = api.list().industryProjectList(industryId)
-                .includeHentai(PreferenceHelper.isAgeRestrictedMediaAllowed(globalContext) && StorageHelper.isLoggedIn)
+            .includeHentai(PreferenceHelper.isAgeRestrictedMediaAllowed(globalContext) && StorageHelper.isLoggedIn)
 }

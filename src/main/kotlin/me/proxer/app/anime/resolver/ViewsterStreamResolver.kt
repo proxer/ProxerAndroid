@@ -14,6 +14,6 @@ class ViewsterStreamResolver : StreamResolver {
     override val name = "Viewster"
 
     override fun resolve(id: String): Single<StreamResolutionResult> = api.anime().link(id)
-            .buildSingle()
-            .map { StreamResolutionResult(Utils.parseAndFixUrl(it).androidUri(), "text/html") }
+        .buildSingle()
+        .map { StreamResolutionResult(Utils.parseAndFixUrl(it).androidUri(), "text/html") }
 }

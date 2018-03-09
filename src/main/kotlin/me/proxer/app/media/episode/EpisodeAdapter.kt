@@ -70,16 +70,16 @@ class EpisodeAdapter(savedInstanceState: Bundle?) : BaseAdapter<EpisodeRow, View
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         busDisposable = Observable.merge(bus.register(LoginEvent::class.java), bus.register(LogoutEvent::class.java))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    isLoggedIn = when (it) {
-                        is LoginEvent -> true
-                        is LogoutEvent -> false
-                        else -> false
-                    }
-
-                    notifyDataSetChanged()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                isLoggedIn = when (it) {
+                    is LoginEvent -> true
+                    is LogoutEvent -> false
+                    else -> false
                 }
+
+                notifyDataSetChanged()
+            }
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
@@ -150,7 +150,7 @@ class EpisodeAdapter(savedInstanceState: Bundle?) : BaseAdapter<EpisodeRow, View
 
                 languageView.text = language.toAppString(languageView.context)
                 languageView.setCompoundDrawablesWithIntrinsicBounds(language.toGeneralLanguage()
-                        .toAppDrawable(languageView.context), null, null, null)
+                    .toAppDrawable(languageView.context), null, null, null)
 
                 languageContainer.setOnClickListener {
                     withSafeAdapterPosition(this) {

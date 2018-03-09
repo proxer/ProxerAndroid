@@ -51,8 +51,8 @@ abstract class BaseContentFragment<T> : BaseFragment() {
         progress.isEnabled = isSwipeToRefreshEnabled
 
         progress.refreshes()
-                .autoDispose(this)
-                .subscribe { viewModel.refresh() }
+            .autoDispose(this)
+            .subscribe { viewModel.refresh() }
 
         viewModel.error.observe(this, Observer {
             when (it) {
@@ -112,18 +112,18 @@ abstract class BaseContentFragment<T> : BaseFragment() {
         }
 
         errorButton.clicks()
-                .autoDispose(this)
-                .subscribe {
-                    when (action.message == R.string.error_captcha) {
-                        true -> {
-                            isSolvingCaptcha = true
+            .autoDispose(this)
+            .subscribe {
+                when (action.message == R.string.error_captcha) {
+                    true -> {
+                        isSolvingCaptcha = true
 
-                            showPage(ProxerUrls.captchaWeb(Device.MOBILE))
-                        }
-                        false -> action.buttonAction?.toClickListener(hostingActivity)?.onClick(errorButton)
-                                ?: viewModel.load()
+                        showPage(ProxerUrls.captchaWeb(Device.MOBILE))
                     }
+                    false -> action.buttonAction?.toClickListener(hostingActivity)?.onClick(errorButton)
+                        ?: viewModel.load()
                 }
+            }
     }
 
     protected open fun hideError() {

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:id="@+id/root"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             tools:context=".chat.ChatAdapter">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".chat.ChatAdapter">
 
     <android.support.v7.widget.CardView
         android:id="@+id/container"
@@ -34,7 +34,7 @@
                 android:foreground="?attr/selectableItemBackground"
                 android:padding="8dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                tools:text="RubyGee"/>
+                tools:text="RubyGee" />
 
             <me.proxer.app.ui.view.LinkConsumableEmojiTextView
                 android:id="@+id/text"
@@ -46,7 +46,7 @@
                 android:importantForAutofill="no"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 tools:ignore="UnusedAttribute"
-                tools:text="Message looooooooooooooooooooooooooong"/>
+                tools:text="Message looooooooooooooooooooooooooong" />
 
             <TextView
                 android:id="@+id/time"
@@ -55,7 +55,7 @@
                 android:layout_margin="8dp"
                 android:layout_gravity="end"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                tools:text="10 minutes ago"/>
+                tools:text="10 minutes ago" />
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </FrameLayout>

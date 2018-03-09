@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:shrinkColumns="1"
-             android:stretchColumns="0"
-             tools:context=".ui.view.MediaControlView">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:shrinkColumns="1"
+    android:stretchColumns="0"
+    tools:context=".ui.view.MediaControlView">
 
     <TableRow android:id="@+id/uploaderRow">
 
@@ -15,7 +15,7 @@
             android:layout_gravity="center_vertical"
             android:padding="8dp"
             android:text="@string/view_media_control_uploader"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
         <TextView
             android:id="@+id/uploader"
@@ -26,7 +26,7 @@
             android:gravity="end"
             android:padding="8dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            tools:text="Ruby"/>
+            tools:text="Ruby" />
     </TableRow>
 
     <TableRow android:id="@+id/translatorRow">
@@ -37,7 +37,7 @@
             android:layout_gravity="center_vertical"
             android:padding="8dp"
             android:text="@string/view_media_control_translator_group"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
         <TextView
             android:id="@+id/translatorGroup"
@@ -48,7 +48,7 @@
             android:gravity="end"
             android:padding="8dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            tools:text="See chapter credits"/>
+            tools:text="See chapter credits" />
     </TableRow>
 
     <TableRow android:id="@+id/dateRow">
@@ -59,7 +59,7 @@
             android:layout_gravity="center_vertical"
             android:padding="8dp"
             android:text="@string/view_media_control_date"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
         <TextView
             android:id="@+id/date"
@@ -70,7 +70,7 @@
             android:gravity="end"
             android:padding="8dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            tools:text="30.12.2015"/>
+            tools:text="30.12.2015" />
     </TableRow>
 
 </TableLayout>

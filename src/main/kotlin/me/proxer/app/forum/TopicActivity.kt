@@ -23,13 +23,13 @@ class TopicActivity : DrawerActivity() {
         private const val TOPIC_EXTRA = "topic"
 
         fun navigateTo(context: Activity, id: String, topic: String? = null) = context.startActivity<TopicActivity>(
-                ID_EXTRA to id,
-                TOPIC_EXTRA to topic
+            ID_EXTRA to id,
+            TOPIC_EXTRA to topic
         )
 
         fun getIntent(context: Context, id: String, topic: String? = null) = context.intentFor<TopicActivity>(
-                ID_EXTRA to id,
-                TOPIC_EXTRA to topic
+            ID_EXTRA to id,
+            TOPIC_EXTRA to topic
         )
     }
 
@@ -54,8 +54,8 @@ class TopicActivity : DrawerActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, TopicFragment.newInstance())
-                    .commitNow()
+                .replace(R.id.container, TopicFragment.newInstance())
+                .commitNow()
         }
     }
 
@@ -64,11 +64,11 @@ class TopicActivity : DrawerActivity() {
         title = topic
 
         toolbar.clicks()
-                .autoDispose(this)
-                .subscribeAndLogErrors {
-                    topic?.also { topic ->
-                        multilineSnackbar(root, topic)
-                    }
+            .autoDispose(this)
+            .subscribeAndLogErrors {
+                topic?.also { topic ->
+                    multilineSnackbar(root, topic)
                 }
+            }
     }
 }

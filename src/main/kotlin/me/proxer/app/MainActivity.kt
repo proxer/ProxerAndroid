@@ -42,10 +42,10 @@ class MainActivity : DrawerActivity() {
         private const val SHORTCUT_BOOKMARKS = "bookmarks"
 
         fun navigateToSection(context: Context, section: DrawerItem) = context
-                .startActivity(getSectionIntent(context, section))
+            .startActivity(getSectionIntent(context, section))
 
         fun getSectionIntent(context: Context, section: DrawerItem) = context
-                .intentFor<MainActivity>(SECTION_EXTRA to section.id)
+            .intentFor<MainActivity>(SECTION_EXTRA to section.id)
     }
 
     override val isRootActivity get() = intent.extras?.containsKey(SECTION_EXTRA) != true
@@ -148,8 +148,8 @@ class MainActivity : DrawerActivity() {
         title = getString(newTitle)
 
         supportFragmentManager.beginTransaction()
-                .replace(R.id.container, fragment)
-                .commitNow()
+            .replace(R.id.container, fragment)
+            .commitNow()
     }
 
     private fun displayFirstPage(savedInstanceState: Bundle?) {

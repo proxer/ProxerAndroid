@@ -29,7 +29,7 @@ import org.jetbrains.anko.dip
  * @author Ruben Gees
  */
 class ChatAdapter(savedInstanceState: Bundle?, private val isGroup: Boolean) :
-        BaseAdapter<LocalMessage, MessageViewHolder>() {
+    BaseAdapter<LocalMessage, MessageViewHolder>() {
 
     private companion object {
         private const val IS_SELECTING_STATE = "chat_is_selecting"
@@ -139,9 +139,9 @@ class ChatAdapter(savedInstanceState: Bundle?, private val isGroup: Boolean) :
                 MessageViewHolder(inflater.inflate(R.layout.item_message, parent, false))
             }
             MessageType.BOTTOM, MessageType.INNER -> MessageViewHolder(inflater
-                    .inflate(R.layout.item_message, parent, false))
+                .inflate(R.layout.item_message, parent, false))
             MessageType.ACTION -> ActionViewHolder(inflater
-                    .inflate(R.layout.item_message_action, parent, false))
+                .inflate(R.layout.item_message_action, parent, false))
             else -> MessageViewHolder(inflater.inflate(R.layout.item_message_self, parent, false))
         }
     }
@@ -167,7 +167,7 @@ class ChatAdapter(savedInstanceState: Bundle?, private val isGroup: Boolean) :
     override fun areItemsTheSame(old: LocalMessage, new: LocalMessage) = old.id == new.id
 
     override fun areContentsTheSame(old: LocalMessage, new: LocalMessage) = old.userId == new.userId &&
-            old.action == new.action && old.date == new.date && old.message == new.message
+        old.action == new.action && old.date == new.date && old.message == new.message
 
     override fun saveInstanceState(outState: Bundle) {
         outState.putParcelable(IS_SELECTING_STATE, messageSelectionMap)
@@ -277,9 +277,9 @@ class ChatAdapter(savedInstanceState: Bundle?, private val isGroup: Boolean) :
 
         internal open fun applyMessage(message: LocalMessage) {
             text.text = Utils.buildClickableText(text.context, message.message.trim(),
-                    onWebClickListener = { linkClickSubject.onNext(Utils.parseAndFixUrl(it)) },
-                    onWebLongClickListener = { linkLongClickSubject.onNext(Utils.parseAndFixUrl(it)) },
-                    onMentionsClickListener = { mentionsClickSubject.onNext(it.trim().substring(1)) })
+                onWebClickListener = { linkClickSubject.onNext(Utils.parseAndFixUrl(it)) },
+                onWebLongClickListener = { linkLongClickSubject.onNext(Utils.parseAndFixUrl(it)) },
+                onMentionsClickListener = { mentionsClickSubject.onNext(it.trim().substring(1)) })
         }
 
         internal open fun applyTime(message: LocalMessage) {
@@ -288,10 +288,10 @@ class ChatAdapter(savedInstanceState: Bundle?, private val isGroup: Boolean) :
 
         internal open fun applySendStatus(message: LocalMessage) = if (message.id < 0) {
             text.setCompoundDrawablesWithIntrinsicBounds(null, null, IconicsDrawable(text.context)
-                    .icon(CommunityMaterial.Icon.cmd_clock)
-                    .sizeDp(24)
-                    .paddingDp(4)
-                    .iconColor(text.context), null)
+                .icon(CommunityMaterial.Icon.cmd_clock)
+                .sizeDp(24)
+                .paddingDp(4)
+                .iconColor(text.context), null)
         } else {
             text.setCompoundDrawables(null, null, null, null)
         }
@@ -358,13 +358,13 @@ class ChatAdapter(savedInstanceState: Bundle?, private val isGroup: Boolean) :
 
         private fun generateText(message: LocalMessage) = when (message.action) {
             MessageAction.ADD_USER -> text.context.getString(R.string.action_conference_add_user,
-                    "@${message.username}", "@${message.message}")
+                "@${message.username}", "@${message.message}")
             MessageAction.REMOVE_USER -> text.context.getString(R.string.action_conference_delete_user,
-                    "@${message.username}", "@${message.message}")
+                "@${message.username}", "@${message.message}")
             MessageAction.SET_LEADER -> text.context.getString(R.string.action_conference_set_leader,
-                    "@${message.username}", "@${message.message}")
+                "@${message.username}", "@${message.message}")
             MessageAction.SET_TOPIC -> text.context.getString(R.string.action_conference_set_topic,
-                    "@${message.username}", message.message)
+                "@${message.username}", message.message)
             MessageAction.NONE -> message.message
         }
     }
@@ -376,7 +376,7 @@ class ChatAdapter(savedInstanceState: Bundle?, private val isGroup: Boolean) :
 
         companion object {
             fun from(type: Int) = values().firstOrNull { it.type == type }
-                    ?: throw IllegalArgumentException("Unknown type: $type")
+                ?: throw IllegalArgumentException("Unknown type: $type")
         }
     }
 }

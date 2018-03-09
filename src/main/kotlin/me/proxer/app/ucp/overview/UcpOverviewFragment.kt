@@ -57,13 +57,13 @@ class UcpOverviewFragment : BaseContentFragment<Int>() {
 
         StorageHelper.user?.let { (_, id, name) ->
             profileLink.text = Utils.buildClickableText(requireContext(), ProxerUrls.userWeb(id).toString(),
-                    onWebClickListener = { showPage(Utils.parseAndFixUrl(it)) },
-                    onWebLongClickListener = {
-                        val title = getString(R.string.clipboard_title)
+                onWebClickListener = { showPage(Utils.parseAndFixUrl(it)) },
+                onWebLongClickListener = {
+                    val title = getString(R.string.clipboard_title)
 
-                        requireContext().clipboardManager.primaryClip = ClipData.newPlainText(title, it)
-                        snackbar(root, R.string.clipboard_status)
-                    })
+                    requireContext().clipboardManager.primaryClip = ClipData.newPlainText(title, it)
+                    snackbar(root, R.string.clipboard_status)
+                })
 
             username.text = name
             userId.text = id

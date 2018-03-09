@@ -45,7 +45,7 @@ class ProfileMediaListFragment : PagedContentFragment<UserMediaListEntry>() {
 
     override val layoutManager by unsafeLazy {
         StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(requireActivity()) + 1,
-                StaggeredGridLayoutManager.VERTICAL)
+            StaggeredGridLayoutManager.VERTICAL)
     }
 
     override val hostingActivity: ProfileActivity
@@ -76,11 +76,11 @@ class ProfileMediaListFragment : PagedContentFragment<UserMediaListEntry>() {
         innerAdapter = ProfileMediaAdapter()
 
         innerAdapter.clickSubject
-                .autoDispose(this)
-                .subscribe { (view, item) ->
-                    MediaActivity.navigateTo(requireActivity(), item.id, item.name, item.medium.toCategory(),
-                            if (view.drawable != null) view else null)
-                }
+            .autoDispose(this)
+            .subscribe { (view, item) ->
+                MediaActivity.navigateTo(requireActivity(), item.id, item.name, item.medium.toCategory(),
+                    if (view.drawable != null) view else null)
+            }
 
         setHasOptionsMenu(true)
     }

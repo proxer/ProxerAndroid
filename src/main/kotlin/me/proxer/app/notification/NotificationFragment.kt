@@ -46,12 +46,12 @@ class NotificationFragment : PagedContentFragment<ProxerNotification>() {
         innerAdapter = NotificationAdapter()
 
         innerAdapter.clickSubject
-                .autoDispose(this)
-                .subscribe { showPage(it.contentLink) }
+            .autoDispose(this)
+            .subscribe { showPage(it.contentLink) }
 
         innerAdapter.deleteClickSubject
-                .autoDispose(this)
-                .subscribe { viewModel.addItemToDelete(it) }
+            .autoDispose(this)
+            .subscribe { viewModel.addItemToDelete(it) }
 
         setHasOptionsMenu(true)
     }
@@ -62,7 +62,7 @@ class NotificationFragment : PagedContentFragment<ProxerNotification>() {
         viewModel.deletionError.observe(this, Observer {
             it?.let {
                 multilineSnackbar(root, getString(R.string.error_notification_deletion, getString(it.message)),
-                        Snackbar.LENGTH_LONG, it.buttonMessage, it.buttonAction?.toClickListener(hostingActivity))
+                    Snackbar.LENGTH_LONG, it.buttonMessage, it.buttonAction?.toClickListener(hostingActivity))
             }
         })
     }

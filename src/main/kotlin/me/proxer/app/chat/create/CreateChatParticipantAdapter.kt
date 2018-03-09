@@ -94,13 +94,13 @@ class CreateChatParticipantAdapter(savedInstanceState: Bundle?) : BaseAdapter<Pa
                 image.setIconicsImage(CommunityMaterial.Icon.cmd_account, 96, 16, R.color.colorAccent)
             } else {
                 glide?.load(ProxerUrls.userImage(item.image).toString())
-                        ?.transition(DrawableTransitionOptions.withCrossFade())
-                        ?.circleCrop()
-                        ?.format(when (DeviceUtils.shouldShowHighQualityImages(image.context)) {
-                            true -> DecodeFormat.PREFER_ARGB_8888
-                            false -> DecodeFormat.PREFER_RGB_565
-                        })
-                        ?.into(image)
+                    ?.transition(DrawableTransitionOptions.withCrossFade())
+                    ?.circleCrop()
+                    ?.format(when (DeviceUtils.shouldShowHighQualityImages(image.context)) {
+                        true -> DecodeFormat.PREFER_ARGB_8888
+                        false -> DecodeFormat.PREFER_RGB_565
+                    })
+                    ?.into(image)
             }
         }
     }

@@ -18,27 +18,27 @@ class ChatNotificationReadReceiver : BroadcastReceiver() {
         private const val CONFERENCE_ID_EXTRA = "conference_id"
 
         fun getPendingIntent(context: Context, conferenceId: Long): PendingIntent = PendingIntent.getBroadcast(context,
-                conferenceId.toInt(),
-                Intent(context, ChatNotificationReadReceiver::class.java)
-                        .addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES)
-                        .apply { putExtra(CONFERENCE_ID_EXTRA, conferenceId) },
-                PendingIntent.FLAG_UPDATE_CURRENT)
+            conferenceId.toInt(),
+            Intent(context, ChatNotificationReadReceiver::class.java)
+                .addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES)
+                .apply { putExtra(CONFERENCE_ID_EXTRA, conferenceId) },
+            PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
     override fun onReceive(context: Context, intent: Intent) {
         val conferenceId = intent.getLongExtra(CONFERENCE_ID_EXTRA, -1L)
 
         Completable
-                .fromAction {
-                    chatDao.markConferenceAsRead(conferenceId)
+            .fromAction {
+                chatDao.markConferenceAsRead(conferenceId)
 
-                    if (chatDao.getUnreadConferences().isEmpty()) {
-                        ChatNotifications.cancel(context)
-                    } else {
-                        ChatNotifications.cancelIndividual(context, conferenceId)
-                    }
+                if (chatDao.getUnreadConferences().isEmpty()) {
+                    ChatNotifications.cancel(context)
+                } else {
+                    ChatNotifications.cancelIndividual(context, conferenceId)
                 }
-                .subscribeOn(Schedulers.io())
-                .subscribeAndLogErrors()
+            }
+            .subscribeOn(Schedulers.io())
+            .subscribeAndLogErrors()
     }
 }

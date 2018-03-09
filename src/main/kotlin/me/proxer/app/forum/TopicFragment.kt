@@ -56,11 +56,11 @@ class TopicFragment : PagedContentFragment<ParsedPost>() {
         innerAdapter = PostAdapter()
 
         innerAdapter.profileClickSubject
-                .autoDispose(this)
-                .subscribe { (view, post) ->
-                    ProfileActivity.navigateTo(requireActivity(), post.userId, post.username, post.image,
-                            if (view.drawable != null && post.image.isNotBlank()) view else null)
-                }
+            .autoDispose(this)
+            .subscribe { (view, post) ->
+                ProfileActivity.navigateTo(requireActivity(), post.userId, post.username, post.image,
+                    if (view.drawable != null && post.image.isNotBlank()) view else null)
+            }
 
         viewModel.metaData.observe(this, Observer {
             it?.let { topic = it.subject }

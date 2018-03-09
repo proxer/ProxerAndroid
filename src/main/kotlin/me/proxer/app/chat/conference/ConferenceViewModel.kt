@@ -41,25 +41,25 @@ class ConferenceViewModel : BaseViewModel<List<LocalConference>>() {
 
     override val dataSingle: Single<List<LocalConference>>
         get() = Single
-                .fromCallable { Validators.validateLogin() }
-                .flatMap {
-                    if (!ChatJob.isRunning()) ChatJob.scheduleSynchronization()
+            .fromCallable { Validators.validateLogin() }
+            .flatMap {
+                if (!ChatJob.isRunning()) ChatJob.scheduleSynchronization()
 
-                    Single.never<List<LocalConference>>()
-                }
+                Single.never<List<LocalConference>>()
+            }
 
     init {
         disposables += bus.register(ChatErrorEvent::class.java)
-                .map { ErrorUtils.handle(it.error) }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    if (isLoading.value == true) {
-                        dataDisposable?.dispose()
+            .map { ErrorUtils.handle(it.error) }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                if (isLoading.value == true) {
+                    dataDisposable?.dispose()
 
-                        isLoading.value = false
-                        data.value = null
-                        error.value = it
-                    }
+                    isLoading.value = false
+                    data.value = null
+                    error.value = it
                 }
+            }
     }
 }

@@ -39,11 +39,11 @@ class AnimeActivity : DrawerActivity() {
             episodeAmount: Int? = null
         ) {
             context.startActivity(context.intentFor<AnimeActivity>(
-                    ID_EXTRA to id,
-                    EPISODE_EXTRA to episode,
-                    LANGUAGE_EXTRA to language,
-                    NAME_EXTRA to name,
-                    EPISODE_AMOUNT_EXTRA to episodeAmount
+                ID_EXTRA to id,
+                EPISODE_EXTRA to episode,
+                LANGUAGE_EXTRA to language,
+                NAME_EXTRA to name,
+                EPISODE_AMOUNT_EXTRA to episodeAmount
             ))
         }
     }
@@ -57,7 +57,7 @@ class AnimeActivity : DrawerActivity() {
     var episode: Int
         get() = when {
             intent.action == Intent.ACTION_VIEW && !intent.hasExtra(EPISODE_EXTRA) -> intent.data.pathSegments
-                    .getOrElse(2, { "1" }).toIntOrNull() ?: 1
+                .getOrElse(2, { "1" }).toIntOrNull() ?: 1
             else -> intent.getIntExtra(EPISODE_EXTRA, 1)
         }
         set(value) {
@@ -69,7 +69,7 @@ class AnimeActivity : DrawerActivity() {
     val language: AnimeLanguage
         get() = when (intent.action) {
             Intent.ACTION_VIEW -> ProxerUtils.toApiEnum(AnimeLanguage::class.java, intent.data.pathSegments
-                    .getOrElse(3, { "" })) ?: AnimeLanguage.ENGLISH_SUB
+                .getOrElse(3, { "" })) ?: AnimeLanguage.ENGLISH_SUB
             else -> intent.getSerializableExtra(LANGUAGE_EXTRA) as AnimeLanguage
         }
 
@@ -102,8 +102,8 @@ class AnimeActivity : DrawerActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, AnimeFragment.newInstance())
-                    .commitNow()
+                .replace(R.id.container, AnimeFragment.newInstance())
+                .commitNow()
         }
     }
 
@@ -119,11 +119,11 @@ class AnimeActivity : DrawerActivity() {
                 val link = "https://proxer.me/watch/$id/$episode/${ProxerUtils.getApiEnumName(language)}"
 
                 ShareCompat.IntentBuilder
-                        .from(this)
-                        .setText(getString(R.string.share_anime, episode, it, link))
-                        .setType("text/plain")
-                        .setChooserTitle(getString(R.string.share_title))
-                        .startChooser()
+                    .from(this)
+                    .setText(getString(R.string.share_anime, episode, it, link))
+                    .setType("text/plain")
+                    .setChooserTitle(getString(R.string.share_title))
+                    .startChooser()
             }
 
             true
@@ -139,12 +139,12 @@ class AnimeActivity : DrawerActivity() {
     private fun setupToolbar() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toolbar.clicks()
-                .autoDispose(this)
-                .subscribe {
-                    name?.let {
-                        MediaActivity.navigateTo(this, id, it, Category.ANIME)
-                    }
+            .autoDispose(this)
+            .subscribe {
+                name?.let {
+                    MediaActivity.navigateTo(this, id, it, Category.ANIME)
                 }
+            }
     }
 
     private fun updateTitle() {

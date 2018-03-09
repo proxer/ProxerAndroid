@@ -38,7 +38,7 @@ class MediaAdapter(private val category: Category) : BaseAdapter<MediaListEntry,
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_media_entry, parent, false))
+        .inflate(R.layout.item_media_entry, parent, false))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(data[position])
 

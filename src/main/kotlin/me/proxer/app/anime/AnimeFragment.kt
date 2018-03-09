@@ -96,22 +96,22 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
         innerAdapter.positionResolver = BaseAdapter.ContainerPositionResolver(adapter)
 
         innerAdapter.uploaderClickSubject
-                .autoDispose(this)
-                .subscribe { ProfileActivity.navigateTo(requireActivity(), it.uploaderId, it.uploaderName) }
+            .autoDispose(this)
+            .subscribe { ProfileActivity.navigateTo(requireActivity(), it.uploaderId, it.uploaderName) }
 
         innerAdapter.translatorGroupClickSubject
-                .autoDispose(this)
-                .subscribe {
-                    it.translatorGroupId?.let { id ->
-                        it.translatorGroupName?.let { name ->
-                            TranslatorGroupActivity.navigateTo(requireActivity(), id, name)
-                        }
+            .autoDispose(this)
+            .subscribe {
+                it.translatorGroupId?.let { id ->
+                    it.translatorGroupName?.let { name ->
+                        TranslatorGroupActivity.navigateTo(requireActivity(), id, name)
                     }
                 }
+            }
 
         innerAdapter.playClickSubject
-                .autoDispose(this)
-                .subscribe { viewModel.resolve(it.hosterName, it.id) }
+            .autoDispose(this)
+            .subscribe { viewModel.resolve(it.hosterName, it.id) }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -125,16 +125,16 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
         }
 
         header.episodeSwitchSubject
-                .autoDispose(this)
-                .subscribe { episode = it }
+            .autoDispose(this)
+            .subscribe { episode = it }
 
         header.bookmarkSetSubject
-                .autoDispose(this)
-                .subscribe { viewModel.bookmark(it) }
+            .autoDispose(this)
+            .subscribe { viewModel.bookmark(it) }
 
         header.finishClickSubject
-                .autoDispose(this)
-                .subscribe { viewModel.markAsFinished() }
+            .autoDispose(this)
+            .subscribe { viewModel.markAsFinished() }
 
         return inflater.inflate(R.layout.fragment_anime, container, false)
     }
@@ -154,13 +154,13 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
                     }
                 } else {
                     multilineSnackbar(root, it.intent.getCharSequenceExtra(StreamResolutionResult.MESSAGE_EXTRA))
-                            ?.apply {
-                                view.applyRecursively {
-                                    if (it is TextView && it !is Button) {
-                                        it.movementMethod = LinkMovementMethod.getInstance()
-                                    }
+                        ?.apply {
+                            view.applyRecursively {
+                                if (it is TextView && it !is Button) {
+                                    it.movementMethod = LinkMovementMethod.getInstance()
                                 }
                             }
+                        }
                 }
             }
         })
@@ -170,7 +170,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
                 when (it) {
                     is AppRequiredErrorAction -> it.showDialog(hostingActivity)
                     else -> multilineSnackbar(root, it.message, Snackbar.LENGTH_LONG, it.buttonMessage,
-                            it.buttonAction?.toClickListener(hostingActivity))
+                        it.buttonAction?.toClickListener(hostingActivity))
                 }
             }
         })
@@ -184,7 +184,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
         viewModel.bookmarkError.observe(this, Observer {
             it?.let {
                 multilineSnackbar(root, getString(R.string.error_set_user_info, getString(it.message)),
-                        Snackbar.LENGTH_LONG, it.buttonMessage, it.buttonAction?.toClickListener(hostingActivity))
+                    Snackbar.LENGTH_LONG, it.buttonMessage, it.buttonAction?.toClickListener(hostingActivity))
             }
         })
 

@@ -11,7 +11,7 @@ import me.proxer.library.entity.user.UserInfo
  */
 @GeneratedProvider
 class ProfileInfoViewModel(private val userId: String?, private val username: String?) :
-        BaseContentViewModel<UserInfo>() {
+    BaseContentViewModel<UserInfo>() {
 
     override val endpoint: Endpoint<UserInfo>
         get() = api.user().info(userId, username)

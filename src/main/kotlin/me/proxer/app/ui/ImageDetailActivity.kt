@@ -47,19 +47,19 @@ class ImageDetailActivity : BaseActivity() {
         ViewCompat.setTransitionName(image, ActivityUtils.getTransitionName(this))
 
         GlideApp.with(this)
-                .load(url)
-                .into(object : ImageViewTarget<Drawable>(image) {
-                    override fun setResource(resource: Drawable?) {
-                        image.setImageDrawable(resource)
+            .load(url)
+            .into(object : ImageViewTarget<Drawable>(image) {
+                override fun setResource(resource: Drawable?) {
+                    image.setImageDrawable(resource)
 
-                        if (resource != null) {
-                            supportStartPostponedEnterTransition()
-                        }
+                    if (resource != null) {
+                        supportStartPostponedEnterTransition()
                     }
-                })
+                }
+            })
 
         root.clicks()
-                .autoDispose(this)
-                .subscribe { supportFinishAfterTransition() }
+            .autoDispose(this)
+            .subscribe { supportFinishAfterTransition() }
     }
 }

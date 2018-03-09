@@ -24,8 +24,8 @@ class ScheduleActivity : DrawerActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, AnimeFragment.newInstance())
-                    .commitNow()
+                .replace(R.id.container, AnimeFragment.newInstance())
+                .commitNow()
         }
     }
 

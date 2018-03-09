@@ -18,8 +18,8 @@ data class Participant(val username: String, val image: String = "") : Parcelabl
     }
 
     constructor(parcel: Parcel) : this(
-            parcel.readString(),
-            parcel.readString()
+        parcel.readString(),
+        parcel.readString()
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {

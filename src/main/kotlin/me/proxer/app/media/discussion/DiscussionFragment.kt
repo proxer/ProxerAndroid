@@ -51,10 +51,10 @@ class DiscussionFragment : BaseContentFragment<List<ForumDiscussion>>() {
         adapter = DiscussionAdapter()
 
         adapter.clickSubject
-                .autoDispose(this)
-                .subscribe { item ->
-                    TopicActivity.navigateTo(requireActivity(), item.id, item.subject)
-                }
+            .autoDispose(this)
+            .subscribe { item ->
+                TopicActivity.navigateTo(requireActivity(), item.id, item.subject)
+            }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

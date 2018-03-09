@@ -51,18 +51,18 @@ abstract class DrawerActivity : BaseActivity() {
 
         drawer = MaterialDrawerWrapper(this, toolbar, savedInstanceState, isRootActivity, isMainActivity).also {
             it.itemClickSubject
-                    .autoDispose(this)
-                    .subscribe { handleDrawerItemClick(it) }
+                .autoDispose(this)
+                .subscribe { handleDrawerItemClick(it) }
 
             it.accountClickSubject
-                    .autoDispose(this)
-                    .subscribe { handleAccountItemClick(it) }
+                .autoDispose(this)
+                .subscribe { handleAccountItemClick(it) }
         }
 
         Observable.merge(bus.register(LoginEvent::class.java), bus.register(LogoutEvent::class.java))
-                .observeOn(AndroidSchedulers.mainThread())
-                .autoDispose(this)
-                .subscribe { drawer.refreshHeader() }
+            .observeOn(AndroidSchedulers.mainThread())
+            .autoDispose(this)
+            .subscribe { drawer.refreshHeader() }
     }
 
     override fun onResume() {

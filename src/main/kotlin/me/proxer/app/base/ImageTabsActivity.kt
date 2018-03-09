@@ -100,18 +100,18 @@ abstract class ImageTabsActivity : DrawerActivity() {
         }
 
         headerImage.clicks()
-                .autoDispose(this)
-                .subscribe {
-                    val safeHeaderImageUrl = headerImageUrl
+            .autoDispose(this)
+            .subscribe {
+                val safeHeaderImageUrl = headerImageUrl
 
-                    if (headerImage.drawable != null && safeHeaderImageUrl != null) {
-                        if (ViewCompat.getTransitionName(headerImage) == null) {
-                            ViewCompat.setTransitionName(headerImage, "header")
-                        }
-
-                        ImageDetailActivity.navigateTo(this, safeHeaderImageUrl, headerImage)
+                if (headerImage.drawable != null && safeHeaderImageUrl != null) {
+                    if (ViewCompat.getTransitionName(headerImage) == null) {
+                        ViewCompat.setTransitionName(headerImage, "header")
                     }
+
+                    ImageDetailActivity.navigateTo(this, safeHeaderImageUrl, headerImage)
                 }
+            }
     }
 
     protected open fun loadImage(animate: Boolean = true) {
@@ -121,16 +121,16 @@ abstract class ImageTabsActivity : DrawerActivity() {
             supportStartPostponedEnterTransition()
         } else {
             GlideApp.with(this)
-                    .load(headerImageUrl.toString())
-                    .into(object : ImageViewTarget<Drawable>(headerImage) {
-                        override fun setResource(resource: Drawable?) {
-                            headerImage.setImageDrawable(resource)
+                .load(headerImageUrl.toString())
+                .into(object : ImageViewTarget<Drawable>(headerImage) {
+                    override fun setResource(resource: Drawable?) {
+                        headerImage.setImageDrawable(resource)
 
-                            if (resource != null) {
-                                supportStartPostponedEnterTransition()
-                            }
+                        if (resource != null) {
+                            supportStartPostponedEnterTransition()
                         }
-                    })
+                    }
+                })
         }
     }
 
@@ -139,10 +139,10 @@ abstract class ImageTabsActivity : DrawerActivity() {
         collapsingToolbar.isTitleEnabled = false
 
         appbar.offsetChanges()
-                .autoDispose(this)
-                .subscribe {
-                    isHeaderImageVisible = collapsingToolbar.height + it > collapsingToolbar.scrimVisibleHeightTrigger
-                }
+            .autoDispose(this)
+            .subscribe {
+                isHeaderImageVisible = collapsingToolbar.height + it > collapsingToolbar.scrimVisibleHeightTrigger
+            }
     }
 
     protected open fun setupContent(savedInstanceState: Bundle?) {

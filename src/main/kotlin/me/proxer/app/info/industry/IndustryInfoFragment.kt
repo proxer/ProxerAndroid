@@ -69,10 +69,10 @@ class IndustryInfoFragment : BaseContentFragment<Industry>() {
 
         name = data.name
         type.text = ProxerUtils.getApiEnumName(data.type)
-                ?.replace("_", " ")
-                ?.split(" ")
-                ?.joinToString(separator = " ", transform = String::capitalize)
-                ?: throw IllegalArgumentException("Unknown Industry type: ${data.type}")
+            ?.replace("_", " ")
+            ?.split(" ")
+            ?.joinToString(separator = " ", transform = String::capitalize)
+            ?: throw IllegalArgumentException("Unknown Industry type: ${data.type}")
 
         if (data.country == Country.NONE) {
             languageRow.visibility = View.GONE
@@ -86,13 +86,13 @@ class IndustryInfoFragment : BaseContentFragment<Industry>() {
         } else {
             linkRow.visibility = View.VISIBLE
             link.text = Utils.buildClickableText(requireContext(), data.link.toString(),
-                    onWebClickListener = { link -> showPage(Utils.parseAndFixUrl(link)) },
-                    onWebLongClickListener = { link ->
-                        val title = getString(R.string.clipboard_title)
+                onWebClickListener = { link -> showPage(Utils.parseAndFixUrl(link)) },
+                onWebLongClickListener = { link ->
+                    val title = getString(R.string.clipboard_title)
 
-                        requireContext().clipboardManager.primaryClip = ClipData.newPlainText(title, link)
-                        requireContext().toast(R.string.clipboard_status)
-                    })
+                    requireContext().clipboardManager.primaryClip = ClipData.newPlainText(title, link)
+                    requireContext().toast(R.string.clipboard_status)
+                })
         }
 
         if (data.description.isBlank()) {

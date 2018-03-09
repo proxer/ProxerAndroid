@@ -160,7 +160,7 @@ class CommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedComment, V
 
             time.text = item.date.convertToRelativeReadableTime(time.context)
             progress.text = item.mediaProgress.toEpisodeAppString(progress.context, item.episode,
-                    categoryCallback?.invoke() ?: Category.ANIME)
+                categoryCallback?.invoke() ?: Category.ANIME)
 
             handleExpansion()
             bindImage(item)
@@ -212,13 +212,13 @@ class CommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedComment, V
                 image.setIconicsImage(CommunityMaterial.Icon.cmd_account, 32, 4, R.color.colorAccent)
             } else {
                 glide?.load(ProxerUrls.userImage(item.image).toString())
-                        ?.transition(DrawableTransitionOptions.withCrossFade())
-                        ?.circleCrop()
-                        ?.format(when (DeviceUtils.shouldShowHighQualityImages(image.context)) {
-                            true -> DecodeFormat.PREFER_ARGB_8888
-                            false -> DecodeFormat.PREFER_RGB_565
-                        })
-                        ?.into(image)
+                    ?.transition(DrawableTransitionOptions.withCrossFade())
+                    ?.circleCrop()
+                    ?.format(when (DeviceUtils.shouldShowHighQualityImages(image.context)) {
+                        true -> DecodeFormat.PREFER_ARGB_8888
+                        false -> DecodeFormat.PREFER_RGB_565
+                    })
+                    ?.into(image)
             }
         }
     }

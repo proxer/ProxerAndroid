@@ -25,29 +25,29 @@ class RoomConverters {
 
     @TypeConverter
     fun fromGenres(value: MutableSet<Genre>?) = value?.map { ProxerUtils.getApiEnumName(it) }
-            ?.joinToString(DELIMITER)
+        ?.joinToString(DELIMITER)
 
     @TypeConverter
     fun toGenres(value: String?) = value?.split(DELIMITER)
-            ?.filter { it.isNotBlank() }
-            ?.map {
-                ProxerUtils.toApiEnum(Genre::class.java, it)
-                        ?: throw IllegalArgumentException("enum is null: $it")
-            }
-            ?.toSet()
+        ?.filter { it.isNotBlank() }
+        ?.map {
+            ProxerUtils.toApiEnum(Genre::class.java, it)
+                ?: throw IllegalArgumentException("enum is null: $it")
+        }
+        ?.toSet()
 
     @TypeConverter
     fun fromFskConstraints(value: MutableSet<FskConstraint>?) = value?.map { ProxerUtils.getApiEnumName(it) }
-            ?.joinToString(DELIMITER)
+        ?.joinToString(DELIMITER)
 
     @TypeConverter
     fun toFskConstraints(value: String?) = value?.split(DELIMITER)
-            ?.filter { it.isNotBlank() }
-            ?.map {
-                ProxerUtils.toApiEnum(FskConstraint::class.java, it)
-                        ?: throw IllegalArgumentException("enum is null: $it")
-            }
-            ?.toSet()
+        ?.filter { it.isNotBlank() }
+        ?.map {
+            ProxerUtils.toApiEnum(FskConstraint::class.java, it)
+                ?: throw IllegalArgumentException("enum is null: $it")
+        }
+        ?.toSet()
 
     @TypeConverter
     fun fromTimestamp(value: Long?) = value?.let { Date(it) }

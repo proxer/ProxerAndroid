@@ -27,15 +27,15 @@ object NotificationUtils {
             val chatTitle = context.getString(R.string.notification_channel_chat)
 
             context.notificationManager.createNotificationChannels(listOf(
-                    NotificationChannel(NEWS_CHANNEL, newsTitle, NotificationManager.IMPORTANCE_LOW).apply {
-                        description = context.getString(R.string.notification_channel_news_description)
-                    },
-                    NotificationChannel(PROFILE_CHANNEL, profileTitle, NotificationManager.IMPORTANCE_DEFAULT).apply {
-                        description = context.getString(R.string.notification_channel_profile_description)
-                    },
-                    NotificationChannel(CHAT_CHANNEL, chatTitle, NotificationManager.IMPORTANCE_HIGH).apply {
-                        description = context.getString(R.string.notification_channel_chat_description)
-                    }
+                NotificationChannel(NEWS_CHANNEL, newsTitle, NotificationManager.IMPORTANCE_LOW).apply {
+                    description = context.getString(R.string.notification_channel_news_description)
+                },
+                NotificationChannel(PROFILE_CHANNEL, profileTitle, NotificationManager.IMPORTANCE_DEFAULT).apply {
+                    description = context.getString(R.string.notification_channel_profile_description)
+                },
+                NotificationChannel(CHAT_CHANNEL, chatTitle, NotificationManager.IMPORTANCE_HIGH).apply {
+                    description = context.getString(R.string.notification_channel_chat_description)
+                }
             ))
         }
     }
@@ -49,16 +49,16 @@ object NotificationUtils {
         intent: PendingIntent? = null
     ) {
         NotificationManagerCompat.from(context).notify(id, NotificationCompat.Builder(context, channel)
-                .setContentTitle(title)
-                .setContentText(content)
-                .setStyle(NotificationCompat.BigTextStyle()
-                        .setBigContentTitle(title)
-                        .bigText(content))
-                .setColor(ContextCompat.getColor(context, R.color.primary))
-                .setSmallIcon(R.drawable.ic_stat_proxer)
-                .setPriority(NotificationCompat.PRIORITY_LOW)
-                .setContentIntent(intent)
-                .setAutoCancel(true)
-                .build())
+            .setContentTitle(title)
+            .setContentText(content)
+            .setStyle(NotificationCompat.BigTextStyle()
+                .setBigContentTitle(title)
+                .bigText(content))
+            .setColor(ContextCompat.getColor(context, R.color.primary))
+            .setSmallIcon(R.drawable.ic_stat_proxer)
+            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setContentIntent(intent)
+            .setAutoCancel(true)
+            .build())
     }
 }

@@ -50,62 +50,62 @@ class MediaListSearchBottomSheet private constructor(
         fragment.excludedGenreSelector.findViewById<ViewGroup>(R.id.items).enableLayoutAnimationsSafely()
 
         fragment.searchBottomSheetTitle.clicks()
-                .autoDispose(fragment)
-                .subscribe {
-                    bottomSheetBehaviour.state = when (bottomSheetBehaviour.state) {
-                        STATE_EXPANDED -> STATE_COLLAPSED
-                        else -> STATE_EXPANDED
-                    }
+            .autoDispose(fragment)
+            .subscribe {
+                bottomSheetBehaviour.state = when (bottomSheetBehaviour.state) {
+                    STATE_EXPANDED -> STATE_COLLAPSED
+                    else -> STATE_EXPANDED
                 }
+            }
 
         fragment.search.clicks()
-                .autoDispose(fragment)
-                .subscribe {
-                    bottomSheetBehaviour.state = STATE_COLLAPSED
+            .autoDispose(fragment)
+            .subscribe {
+                bottomSheetBehaviour.state = STATE_COLLAPSED
 
-                    viewModel.reload()
-                }
+                viewModel.reload()
+            }
 
         fragment.languageSelector.selectionChangeSubject
-                .autoDispose(fragment)
-                .subscribeAndLogErrors {
-                    fragment.language = when {
-                        it.firstOrNull() == fragment.getString(R.string.language_german) -> Language.GERMAN
-                        it.firstOrNull() == fragment.getString(R.string.language_english) -> Language.ENGLISH
-                        else -> null
-                    }
+            .autoDispose(fragment)
+            .subscribeAndLogErrors {
+                fragment.language = when {
+                    it.firstOrNull() == fragment.getString(R.string.language_german) -> Language.GERMAN
+                    it.firstOrNull() == fragment.getString(R.string.language_english) -> Language.ENGLISH
+                    else -> null
                 }
+            }
 
         fragment.genreSelector.selectionChangeSubject
-                .autoDispose(fragment)
-                .subscribeAndLogErrors { selections ->
-                    fragment.genres = enumSetOf(selections.map {
-                        toSafeApiEnum(Genre::class.java, it)
-                    })
-                }
+            .autoDispose(fragment)
+            .subscribeAndLogErrors { selections ->
+                fragment.genres = enumSetOf(selections.map {
+                    toSafeApiEnum(Genre::class.java, it)
+                })
+            }
 
         fragment.excludedGenreSelector.selectionChangeSubject
-                .autoDispose(fragment)
-                .subscribeAndLogErrors { selections ->
-                    fragment.excludedGenres = enumSetOf(selections.map {
-                        toSafeApiEnum(Genre::class.java, it)
-                    })
-                }
+            .autoDispose(fragment)
+            .subscribeAndLogErrors { selections ->
+                fragment.excludedGenres = enumSetOf(selections.map {
+                    toSafeApiEnum(Genre::class.java, it)
+                })
+            }
 
         fragment.fskSelector.selectionChangeSubject
-                .autoDispose(fragment)
-                .subscribeAndLogErrors { selections ->
-                    fragment.fskConstraints = enumSetOf(selections.map {
-                        ProxerLibExtensions.fskConstraintFromAppString(fragment.requireContext(), it)
-                    })
-                }
+            .autoDispose(fragment)
+            .subscribeAndLogErrors { selections ->
+                fragment.fskConstraints = enumSetOf(selections.map {
+                    ProxerLibExtensions.fskConstraintFromAppString(fragment.requireContext(), it)
+                })
+            }
 
         val genreItems = Genre.values().map { getSafeApiEnum(it) }
         val fskItems = FskConstraint.values().map { it.toAppString(fragment.requireContext()) }
         val languageItems = listOf(
-                fragment.getString(R.string.fragment_media_list_all_languages),
-                fragment.getString(R.string.language_german),
-                fragment.getString(R.string.language_english)
+            fragment.getString(R.string.fragment_media_list_all_languages),
+            fragment.getString(R.string.language_german),
+            fragment.getString(R.string.language_english)
         )
 
         fragment.languageSelector.items = languageItems
@@ -119,10 +119,10 @@ class MediaListSearchBottomSheet private constructor(
     }
 
     private fun <T : Enum<T>> toSafeApiEnum(klass: Class<T>, value: String) = ProxerUtils.toApiEnum(klass, value)
-            ?: throw IllegalArgumentException("Unknown ${klass.simpleName}: $value")
+        ?: throw IllegalArgumentException("Unknown ${klass.simpleName}: $value")
 
     private fun getSafeApiEnum(value: Enum<*>) = ProxerUtils.getApiEnumName(value)
-            ?: throw IllegalArgumentException("Unknown ${value::class.java.simpleName}: ${value.name}")
+        ?: throw IllegalArgumentException("Unknown ${value::class.java.simpleName}: ${value.name}")
 
     fun onBackPressed() = if (bottomSheetBehaviour.state != STATE_COLLAPSED) {
         bottomSheetBehaviour.state = STATE_COLLAPSED
