@@ -12,7 +12,7 @@ import me.proxer.library.enums.CalendarDay
  * @author Ruben Gees
  */
 @GeneratedProvider
-class CalendarViewModel : BaseViewModel<Map<CalendarDay, List<CalendarEntry>>>() {
+class ScheduleViewModel : BaseViewModel<Map<CalendarDay, List<CalendarEntry>>>() {
 
     override val dataSingle: Single<Map<CalendarDay, List<CalendarEntry>>>
         get() = api.media().calendar().buildSingle()

@@ -14,7 +14,7 @@ import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
-import me.proxer.app.anime.CalendarAdapter.ViewHolder
+import me.proxer.app.anime.ScheduleAdapter.ViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.util.extension.toAppString
 import me.proxer.library.entity.media.CalendarEntry
@@ -23,7 +23,7 @@ import me.proxer.library.enums.CalendarDay
 /**
  * @author Ruben Gees
  */
-class CalendarAdapter : BaseAdapter<Pair<CalendarDay, List<CalendarEntry>>, ViewHolder>() {
+class ScheduleAdapter : BaseAdapter<Pair<CalendarDay, List<CalendarEntry>>, ViewHolder>() {
 
     var glide: GlideRequests? = null
     val clickSubject: PublishSubject<Pair<ImageView, CalendarEntry>> = PublishSubject.create()
@@ -35,7 +35,7 @@ class CalendarAdapter : BaseAdapter<Pair<CalendarDay, List<CalendarEntry>>, View
     override fun getItemId(position: Int) = data[position].let { (day, _) -> day.ordinal.toLong() }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_calendar_day, parent, false))
+        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_schedule_day, parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -65,7 +65,7 @@ class CalendarAdapter : BaseAdapter<Pair<CalendarDay, List<CalendarEntry>>, View
 
         fun bind(item: Pair<CalendarDay, List<CalendarEntry>>) {
             val (day, calendarEntries) = item
-            val adapter = CalendarEntryAdapter()
+            val adapter = ScheduleEntryAdapter()
 
             adapter.glide = glide
             adapter.clickSubject.subscribe(clickSubject)

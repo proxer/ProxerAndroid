@@ -248,13 +248,13 @@ fun FskConstraint.toAppDrawable(context: Context) = AppCompatResources.getDrawab
 }) ?: throw IllegalStateException("Could not resolve Drawable for fsk constraint: $this")
 
 fun CalendarDay.toAppString(context: Context): String = context.getString(when (this) {
-    CalendarDay.MONDAY -> R.string.fragment_calendar_day_monday
-    CalendarDay.TUESDAY -> R.string.fragment_calendar_day_tuesday
-    CalendarDay.WEDNESDAY -> R.string.fragment_calendar_day_wednesday
-    CalendarDay.THURSDAY -> R.string.fragment_calendar_day_thursday
-    CalendarDay.FRIDAY -> R.string.fragment_calendar_day_friday
-    CalendarDay.SATURDAY -> R.string.fragment_calendar_day_saturday
-    CalendarDay.SUNDAY -> R.string.fragment_calendar_day_sunday
+    CalendarDay.MONDAY -> R.string.fragment_schedule_day_monday
+    CalendarDay.TUESDAY -> R.string.fragment_schedule_day_tuesday
+    CalendarDay.WEDNESDAY -> R.string.fragment_schedule_day_wednesday
+    CalendarDay.THURSDAY -> R.string.fragment_schedule_day_thursday
+    CalendarDay.FRIDAY -> R.string.fragment_schedule_day_friday
+    CalendarDay.SATURDAY -> R.string.fragment_schedule_day_saturday
+    CalendarDay.SUNDAY -> R.string.fragment_schedule_day_sunday
 })
 
 inline val Page.decodedName: String

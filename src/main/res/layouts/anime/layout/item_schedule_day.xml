@@ -5,7 +5,7 @@
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
              android:padding="@dimen/item_margin"
-             tools:context=".anime.CalendarAdapter">
+             tools:context=".anime.ScheduleAdapter">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
@@ -19,7 +19,7 @@
                       android:layout_width="match_parent"
                       android:layout_height="wrap_content"
                       android:orientation="vertical"
-                      tools:context=".anime.CalendarAdapter">
+                      tools:context=".anime.ScheduleAdapter">
 
             <TextView
                 android:id="@+id/weekDay"

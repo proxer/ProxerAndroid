@@ -4,7 +4,7 @@
     <string name="app_name">ProxerMe</string>
 
     <string name="section_anime">Anime</string>
-    <string name="section_calendar">Anime-Kalender</string>
+    <string name="section_schedule">Anime-Wochenplan</string>
     <string name="section_chat">Chat</string>
     <string name="section_donate" tools:ignore="UnusedResources">Spenden</string>
     <string name="section_manga">Manga</string>
@@ -226,28 +226,22 @@
         <item quantity="other">%d Episoden</item>
     </plurals>
 
-    <string name="fragment_calendar_day_monday">Montag</string>
-    <string name="fragment_calendar_day_tuesday">Dienstag</string>
-    <string name="fragment_calendar_day_wednesday">Mittwoch</string>
-    <string name="fragment_calendar_day_thursday">Donnerstag</string>
-    <string name="fragment_calendar_day_friday">Freitag</string>
-    <string name="fragment_calendar_day_saturday">Samstag</string>
-    <string name="fragment_calendar_day_sunday">Sonntag</string>
+    <string name="fragment_schedule_day_monday">Montag</string>
+    <string name="fragment_schedule_day_tuesday">Dienstag</string>
+    <string name="fragment_schedule_day_wednesday">Mittwoch</string>
+    <string name="fragment_schedule_day_thursday">Donnerstag</string>
+    <string name="fragment_schedule_day_friday">Freitag</string>
+    <string name="fragment_schedule_day_saturday">Samstag</string>
+    <string name="fragment_schedule_day_sunday">Sonntag</string>
 
-    <string name="fragment_calendar_episode">Episode %s</string>
-    <string name="fragment_calendar_aired">Ausgestrahlt</string>
-    <string name="fragment_calendar_uploaded">Auf Proxer (geschätzt)</string>
-    <string name="fragment_calendar_remaining_time">Noch %s</string>
-    <string name="fragment_calendar_aired_remaining_time">Ausgestrahlt
-        \nNoch %s
-    </string>
-    <string name="fragment_calendar_airing">Ausstrahlung:
-        \n%s
-    </string>
-    <string name="fragment_calendar_airing_upload">Ausstrahlung:
-        \n%1$s
-        \nAuf Proxer (geschätzt):
-        \n%2$s
+    <string name="fragment_schedule_episode">Episode %s</string>
+    <string name="fragment_schedule_aired">Ausgestrahlt</string>
+    <string name="fragment_schedule_uploaded">Auf Proxer (geschätzt)</string>
+    <string name="fragment_schedule_remaining_time">In %s ausgestrahlt</string>
+    <string name="fragment_schedule_aired_remaining_time">In %s auf Proxer (geschätzt)</string>
+    <string name="fragment_schedule_airing">Ausstrahlung: %s</string>
+    <string name="fragment_schedule_airing_upload">Ausstrahlung: %1$s
+        \nAuf Proxer: %2$s
     </string>
 
     <string name="cancel">Abbrechen</string>

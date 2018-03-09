@@ -1,5 +1,6 @@
 package me.proxer.app.anime
 
+import android.graphics.Typeface.BOLD
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.RecyclerView
@@ -7,6 +8,7 @@ import android.support.v7.widget.RecyclerView.LayoutParams
 import android.text.SpannableString
 import android.text.SpannableString.SPAN_INCLUSIVE_EXCLUSIVE
 import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,7 +23,7 @@ import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
-import me.proxer.app.anime.CalendarEntryAdapter.ViewHolder
+import me.proxer.app.anime.ScheduleEntryAdapter.ViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.calculateAndFormatDifference
@@ -30,7 +32,6 @@ import me.proxer.app.util.extension.defaultLoad
 import me.proxer.library.entity.media.CalendarEntry
 import me.proxer.library.util.ProxerUrls
 import org.jetbrains.anko.childrenSequence
-import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import java.util.Date
@@ -39,7 +40,7 @@ import java.util.concurrent.TimeUnit
 /**
  * @author Ruben Gees
  */
-class CalendarEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
+class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
 
     private companion object {
         private val HOUR_MINUTE_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm")
@@ -49,15 +50,15 @@ class CalendarEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
     val clickSubject: PublishSubject<Pair<ImageView, CalendarEntry>> = PublishSubject.create()
 
     private var layoutManager: RecyclerView.LayoutManager? = null
-    private var currentMinAiringInfoLines = 4
-    private var currentMinStatusLines = 1
+    private var currentMinAiringInfoLines = 2
+    private var currentMinStatusLines = 2
 
     init {
         setHasStableIds(true)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_calendar_entry, parent, false))
+        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_schedule_entry, parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -136,15 +137,10 @@ class CalendarEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
         }
 
         fun bind(item: CalendarEntry) {
-            // Optimization to update the currentMinStatusLines since we now that there will in all cases two lines.
-            if (item.date.convertToDateTime().toLocalDate() == LocalDate.now() && currentMinStatusLines < 2) {
-                currentMinStatusLines = 2
-            }
-
-            ViewCompat.setTransitionName(image, "calendar_${item.id}")
+            ViewCompat.setTransitionName(image, "schedule_${item.id}")
 
             title.text = item.name
-            episode.text = episode.context.getString(R.string.fragment_calendar_episode, item.episode.toString())
+            episode.text = episode.context.getString(R.string.fragment_schedule_episode, item.episode.toString())
 
             if (item.rating > 0) {
                 ratingContainer.visibility = View.VISIBLE
@@ -157,10 +153,19 @@ class CalendarEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
             val uploadDate = HOUR_MINUTE_DATE_TIME_FORMATTER.format(item.uploadDate.convertToDateTime())
 
             if (item.date == item.uploadDate) {
-                airingInfo.text = airingInfo.context.getString(R.string.fragment_calendar_airing, airingDate)
+                val airingText = airingInfo.context.getString(R.string.fragment_schedule_airing, airingDate)
+
+                airingInfo.text = SpannableString(airingText).apply {
+                    setSpan(StyleSpan(BOLD), indexOf(airingDate), length, SPAN_INCLUSIVE_EXCLUSIVE)
+                }
             } else {
-                airingInfo.text = airingInfo.context.getString(R.string.fragment_calendar_airing_upload,
+                val airingUploadText = airingInfo.context.getString(R.string.fragment_schedule_airing_upload,
                         airingDate, uploadDate)
+
+                airingInfo.text = SpannableString(airingUploadText).apply {
+                    setSpan(StyleSpan(BOLD), indexOf(airingDate), indexOf("\n"), SPAN_INCLUSIVE_EXCLUSIVE)
+                    setSpan(StyleSpan(BOLD), lastIndexOf(uploadDate), length, SPAN_INCLUSIVE_EXCLUSIVE)
+                }
             }
 
             airingInfo.minLines = currentMinAiringInfoLines
@@ -181,9 +186,15 @@ class CalendarEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
 
                 if (item.uploadDate.convertToDateTime().isBefore(now)) {
                     if (item.date == item.uploadDate) {
-                        status.text = status.context.getString(R.string.fragment_calendar_aired)
+                        val airedText = status.context.getString(R.string.fragment_schedule_aired)
+
+                        status.text = SpannableString(airedText).apply {
+                            val span = ForegroundColorSpan(ContextCompat.getColor(status.context, R.color.md_green_500))
+
+                            setSpan(span, 0, length, SPAN_INCLUSIVE_EXCLUSIVE)
+                        }
                     } else {
-                        val uploadedText = status.context.getString(R.string.fragment_calendar_uploaded)
+                        val uploadedText = status.context.getString(R.string.fragment_schedule_uploaded)
 
                         status.text = SpannableString(uploadedText).apply {
                             val span = ForegroundColorSpan(ContextCompat.getColor(status.context, R.color.md_green_500))
@@ -193,10 +204,10 @@ class CalendarEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
                     }
                 } else {
                     if (item.date.convertToDateTime().isBefore(now)) {
-                        status.text = status.context.getString(R.string.fragment_calendar_aired_remaining_time,
+                        status.text = status.context.getString(R.string.fragment_schedule_aired_remaining_time,
                                 Date().calculateAndFormatDifference(item.uploadDate))
                     } else {
-                        status.text = status.context.getString(R.string.fragment_calendar_remaining_time,
+                        status.text = status.context.getString(R.string.fragment_schedule_remaining_time,
                                 Date().calculateAndFormatDifference(item.date))
                     }
                 }

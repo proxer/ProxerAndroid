@@ -9,11 +9,11 @@ import org.jetbrains.anko.startActivity
 /**
  * @author Ruben Gees
  */
-class CalendarActivity : DrawerActivity() {
+class ScheduleActivity : DrawerActivity() {
 
     companion object {
         fun navigateTo(context: Activity) {
-            context.startActivity<CalendarActivity>()
+            context.startActivity<ScheduleActivity>()
         }
     }
 
@@ -31,6 +31,6 @@ class CalendarActivity : DrawerActivity() {
 
     private fun setupToolbar() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title = getString(R.string.section_calendar)
+        title = getString(R.string.section_schedule)
     }
 }

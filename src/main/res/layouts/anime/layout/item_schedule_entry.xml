@@ -7,7 +7,7 @@
                 android:layout_height="match_parent"
                 android:background="?attr/selectableItemBackground"
                 android:padding="@dimen/item_margin"
-                tools:context=".anime.CalendarEntryAdapter">
+                tools:context=".anime.ScheduleEntryAdapter">
 
     <com.santalu.aspectratioimageview.AspectRatioImageView
         android:id="@+id/image"
@@ -79,7 +79,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/ratingContainer"
         android:layout_marginTop="8dp"
-        android:minLines="4"
+        android:minLines="2"
         tools:text="Airing: 12:55\nAvailable: 13:55"/>
 
     <View
@@ -97,6 +97,6 @@
         android:layout_below="@id/divider"
         android:layout_marginTop="8dp"
         android:gravity="center_vertical"
-        android:minLines="1"
-        tools:text="Aired\n00:01:01:55 remaining"/>
+        android:minLines="2"
+        tools:text="Aired in 00:01:01:55"/>
 </RelativeLayout>

@@ -21,17 +21,17 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-class CalendarFragment : BaseContentFragment<Map<CalendarDay, List<CalendarEntry>>>() {
+class ScheduleFragment : BaseContentFragment<Map<CalendarDay, List<CalendarEntry>>>() {
 
     companion object {
-        fun newInstance() = CalendarFragment().apply {
+        fun newInstance() = ScheduleFragment().apply {
             arguments = bundleOf()
         }
     }
 
-    override val viewModel by unsafeLazy { CalendarViewModelProvider.get(this) }
+    override val viewModel by unsafeLazy { ScheduleViewModelProvider.get(this) }
 
-    private var adapter by Delegates.notNull<CalendarAdapter>()
+    private var adapter by Delegates.notNull<ScheduleAdapter>()
 
     override val contentContainer: ViewGroup
         get() = recyclerView
@@ -41,7 +41,7 @@ class CalendarFragment : BaseContentFragment<Map<CalendarDay, List<CalendarEntry
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        adapter = CalendarAdapter()
+        adapter = ScheduleAdapter()
 
         adapter.clickSubject
                 .autoDispose(this)
@@ -52,7 +52,7 @@ class CalendarFragment : BaseContentFragment<Map<CalendarDay, List<CalendarEntry
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_calendar, container, false)
+        return inflater.inflate(R.layout.fragment_schedule, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
