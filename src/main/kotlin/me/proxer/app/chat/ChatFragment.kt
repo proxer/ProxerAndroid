@@ -19,9 +19,7 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.vanniktech.emoji.EmojiEditText
-import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.EmojiPopup
-import com.vanniktech.emoji.ios.IosEmojiProvider
 import io.reactivex.disposables.Disposable
 import kotterknife.bindView
 import me.proxer.app.MainApplication.Companion.bus
@@ -178,8 +176,6 @@ class ChatFragment : PagedContentFragment<LocalMessage>() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        EmojiManager.install(IosEmojiProvider())
-
         return inflater.inflate(R.layout.fragment_chat, container, false)
     }
 
@@ -234,8 +230,6 @@ class ChatFragment : PagedContentFragment<LocalMessage>() {
 
     override fun onDestroyView() {
         emojiPopup.dismiss()
-
-        EmojiManager.destroy()
 
         super.onDestroyView()
     }
