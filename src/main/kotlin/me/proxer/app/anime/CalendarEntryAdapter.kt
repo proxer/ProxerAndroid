@@ -29,6 +29,8 @@ import me.proxer.app.util.extension.convertToDateTime
 import me.proxer.app.util.extension.defaultLoad
 import me.proxer.library.entity.media.CalendarEntry
 import me.proxer.library.util.ProxerUrls
+import org.jetbrains.anko.childrenSequence
+import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import java.util.Date
@@ -46,6 +48,10 @@ class CalendarEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
     var glide: GlideRequests? = null
     val clickSubject: PublishSubject<Pair<ImageView, CalendarEntry>> = PublishSubject.create()
 
+    private var layoutManager: RecyclerView.LayoutManager? = null
+    private var currentMinAiringInfoLines = 4
+    private var currentMinStatusLines = 1
+
     init {
         setHasStableIds(true)
     }
@@ -58,6 +64,38 @@ class CalendarEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
         holder.bind(data[position])
     }
 
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        layoutManager = recyclerView.layoutManager
+    }
+
+    override fun onViewAttachedToWindow(holder: ViewHolder) {
+        holder.itemView.post {
+            val parentViewGroup = holder.itemView.parent as? ViewGroup?
+
+            if (parentViewGroup != null) {
+                if (holder.airingInfo.lineCount > currentMinAiringInfoLines) {
+                    currentMinAiringInfoLines = holder.airingInfo.lineCount
+
+                    parentViewGroup.childrenSequence().forEach {
+                        it.findViewById<TextView>(R.id.airingInfo).minLines = currentMinAiringInfoLines
+                    }
+
+                    layoutManager?.requestSimpleAnimationsInNextLayout()
+                }
+
+                if (holder.status.lineCount > currentMinStatusLines) {
+                    currentMinStatusLines = holder.status.lineCount
+
+                    parentViewGroup.childrenSequence().forEach {
+                        it.findViewById<TextView>(R.id.status).minLines = currentMinStatusLines
+                    }
+
+                    layoutManager?.requestSimpleAnimationsInNextLayout()
+                }
+            }
+        }
+    }
+
     override fun onViewRecycled(holder: ViewHolder) {
         holder.airingInfoDisposable?.dispose()
         holder.airingInfoDisposable = null
@@ -66,6 +104,7 @@ class CalendarEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        layoutManager = null
         glide = null
     }
 
@@ -97,6 +136,11 @@ class CalendarEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
         }
 
         fun bind(item: CalendarEntry) {
+            // Optimization to update the currentMinStatusLines since we now that there will in all cases two lines.
+            if (item.date.convertToDateTime().toLocalDate() == LocalDate.now() && currentMinStatusLines < 2) {
+                currentMinStatusLines = 2
+            }
+
             ViewCompat.setTransitionName(image, "calendar_${item.id}")
 
             title.text = item.name
@@ -118,6 +162,9 @@ class CalendarEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
                 airingInfo.text = airingInfo.context.getString(R.string.fragment_calendar_airing_upload,
                         airingDate, uploadDate)
             }
+
+            airingInfo.minLines = currentMinAiringInfoLines
+            status.minLines = currentMinStatusLines
 
             airingInfoDisposable?.dispose()
             airingInfoDisposable = Observable.interval(0, 1, TimeUnit.SECONDS)

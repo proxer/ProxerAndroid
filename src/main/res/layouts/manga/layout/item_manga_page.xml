@@ -17,6 +17,6 @@
         android:layout_gravity="center"
         android:visibility="gone"
         tools:ignore="ContentDescription"
-        tools:src="@drawable/emoji_ios_1f1ef_1f1f5"
+        tools:src="@drawable/ic_japan"
         tools:visibility="visible"/>
 </FrameLayout>

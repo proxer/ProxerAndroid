@@ -7,7 +7,7 @@
                 android:layout_height="match_parent"
                 android:background="?attr/selectableItemBackground"
                 android:padding="@dimen/item_margin"
-                tools:context=".media.list.MediaAdapter">
+                tools:context=".anime.CalendarEntryAdapter">
 
     <com.santalu.aspectratioimageview.AspectRatioImageView
         android:id="@+id/image"
@@ -19,7 +19,7 @@
         app:ari_ratio="1.25"
         tools:ignore="UnusedAttribute"
         tools:layout_height="200dp"
-        tools:src="@drawable/emoji_ios_1f1ef_1f1f5"/>
+        tools:src="@drawable/ic_japan"/>
 
     <TextView
         android:id="@+id/title"
@@ -97,6 +97,6 @@
         android:layout_below="@id/divider"
         android:layout_marginTop="8dp"
         android:gravity="center_vertical"
-        android:minLines="2"
+        android:minLines="1"
         tools:text="Aired\n00:01:01:55 remaining"/>
 </RelativeLayout>

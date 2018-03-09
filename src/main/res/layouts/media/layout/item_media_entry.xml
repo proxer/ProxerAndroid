@@ -30,7 +30,7 @@
                 app:ari_ratio="1.25"
                 tools:ignore="UnusedAttribute"
                 tools:layout_height="200dp"
-                tools:src="@drawable/emoji_ios_1f1ef_1f1f5"/>
+                tools:src="@drawable/ic_japan"/>
 
             <TextView
                 android:id="@+id/title"
