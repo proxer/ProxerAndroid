@@ -237,8 +237,8 @@
     <string name="fragment_schedule_episode">Episode %s</string>
     <string name="fragment_schedule_aired">Ausgestrahlt</string>
     <string name="fragment_schedule_uploaded">Auf Proxer (geschätzt)</string>
-    <string name="fragment_schedule_remaining_time">In %s ausgestrahlt</string>
-    <string name="fragment_schedule_aired_remaining_time">In %s auf Proxer (geschätzt)</string>
+    <string name="fragment_schedule_remaining_time">Ausstrahlung in %s</string>
+    <string name="fragment_schedule_aired_remaining_time">Auf Proxer in %s (geschätzt)</string>
     <string name="fragment_schedule_airing">Ausstrahlung: %s</string>
     <string name="fragment_schedule_airing_upload">Ausstrahlung: %1$s
         \nAuf Proxer: %2$s
