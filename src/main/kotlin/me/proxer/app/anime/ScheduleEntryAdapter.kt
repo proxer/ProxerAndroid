@@ -35,6 +35,7 @@ import org.jetbrains.anko.childrenSequence
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import java.util.Date
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 /**
@@ -44,6 +45,7 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
 
     private companion object {
         private val HOUR_MINUTE_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm")
+        private val DAY_TEXT_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("EEEE", Locale.GERMAN)
     }
 
     var glide: GlideRequests? = null
@@ -149,24 +151,7 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
                 ratingContainer.visibility = View.GONE
             }
 
-            val airingDate = HOUR_MINUTE_DATE_TIME_FORMATTER.format(item.date.convertToDateTime())
-            val uploadDate = HOUR_MINUTE_DATE_TIME_FORMATTER.format(item.uploadDate.convertToDateTime())
-
-            if (item.date == item.uploadDate) {
-                val airingText = airingInfo.context.getString(R.string.fragment_schedule_airing, airingDate)
-
-                airingInfo.text = SpannableString(airingText).apply {
-                    setSpan(StyleSpan(BOLD), indexOf(airingDate), length, SPAN_INCLUSIVE_EXCLUSIVE)
-                }
-            } else {
-                val airingUploadText = airingInfo.context.getString(R.string.fragment_schedule_airing_upload,
-                    airingDate, uploadDate)
-
-                airingInfo.text = SpannableString(airingUploadText).apply {
-                    setSpan(StyleSpan(BOLD), indexOf(airingDate), indexOf("\n"), SPAN_INCLUSIVE_EXCLUSIVE)
-                    setSpan(StyleSpan(BOLD), lastIndexOf(uploadDate), length, SPAN_INCLUSIVE_EXCLUSIVE)
-                }
-            }
+            bindAiringInfo(item)
 
             airingInfo.minLines = currentMinAiringInfoLines
             status.minLines = currentMinStatusLines
@@ -177,6 +162,35 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
                 .subscribe(AiringInfoUpdateConsumer(item))
 
             glide?.defaultLoad(image, ProxerUrls.entryImage(item.entryId))
+        }
+
+        private fun bindAiringInfo(item: CalendarEntry) {
+            val itemDateTime = item.date.convertToDateTime()
+            val itemUploadDateTime = item.uploadDate.convertToDateTime()
+
+            val airingDateText = HOUR_MINUTE_DATE_TIME_FORMATTER.format(itemDateTime)
+            val uploadDate = HOUR_MINUTE_DATE_TIME_FORMATTER.format(itemUploadDateTime)
+
+            val uploadDateText = when (itemUploadDateTime.toLocalDate() != itemDateTime.toLocalDate()) {
+                true -> itemUploadDateTime.format(DAY_TEXT_DATE_TIME_FORMATTER) + ", " + uploadDate
+                false -> uploadDate
+            }
+
+            if (item.date == item.uploadDate) {
+                val airingText = airingInfo.context.getString(R.string.fragment_schedule_airing, airingDateText)
+
+                airingInfo.text = SpannableString(airingText).apply {
+                    setSpan(StyleSpan(BOLD), indexOf(airingDateText), length, SPAN_INCLUSIVE_EXCLUSIVE)
+                }
+            } else {
+                val airingUploadText = airingInfo.context.getString(R.string.fragment_schedule_airing_upload,
+                    airingDateText, uploadDateText)
+
+                airingInfo.text = SpannableString(airingUploadText).apply {
+                    setSpan(StyleSpan(BOLD), indexOf(airingDateText), indexOf("\n"), SPAN_INCLUSIVE_EXCLUSIVE)
+                    setSpan(StyleSpan(BOLD), lastIndexOf(uploadDateText), length, SPAN_INCLUSIVE_EXCLUSIVE)
+                }
+            }
         }
 
         internal inner class AiringInfoUpdateConsumer(private val item: CalendarEntry) : Consumer<Long> {

@@ -1,5 +1,6 @@
 package me.proxer.app.anime
 
+import android.os.Parcelable
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.LinearLayoutManager.HORIZONTAL
 import android.support.v7.widget.RecyclerView
@@ -28,6 +29,8 @@ class ScheduleAdapter : BaseAdapter<Pair<CalendarDay, List<CalendarEntry>>, View
     var glide: GlideRequests? = null
     val clickSubject: PublishSubject<Pair<ImageView, CalendarEntry>> = PublishSubject.create()
 
+    private val layoutManagerStates = mutableMapOf<CalendarDay, Parcelable>()
+
     init {
         setHasStableIds(true)
     }
@@ -43,6 +46,10 @@ class ScheduleAdapter : BaseAdapter<Pair<CalendarDay, List<CalendarEntry>>, View
     }
 
     override fun onViewRecycled(holder: ViewHolder) {
+        withSafeAdapterPosition(holder) {
+            layoutManagerStates[data[it].first] = holder.childRecyclerView.layoutManager.onSaveInstanceState()
+        }
+
         holder.childRecyclerView.layoutManager = null
         holder.childRecyclerView.adapter = null
     }
@@ -75,6 +82,10 @@ class ScheduleAdapter : BaseAdapter<Pair<CalendarDay, List<CalendarEntry>>, View
 
             childRecyclerView.layoutManager = LinearLayoutManager(childRecyclerView.context, HORIZONTAL, false)
             childRecyclerView.adapter = adapter
+
+            layoutManagerStates[item.first]?.let {
+                childRecyclerView.layoutManager.onRestoreInstanceState(it)
+            }
         }
     }
 }
