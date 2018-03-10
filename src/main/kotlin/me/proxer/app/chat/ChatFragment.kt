@@ -19,6 +19,7 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.vanniktech.emoji.EmojiEditText
+import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.EmojiPopup
 import io.reactivex.disposables.Disposable
 import kotterknife.bindView
@@ -215,6 +216,12 @@ class ChatFragment : PagedContentFragment<LocalMessage>() {
         pingDisposable = bus.register(ChatFragmentPingEvent::class.java).subscribe()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        innerAdapter.saveInstanceState(outState)
+    }
+
     override fun onPause() {
         pingDisposable?.dispose()
         pingDisposable = null
@@ -222,16 +229,16 @@ class ChatFragment : PagedContentFragment<LocalMessage>() {
         super.onPause()
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-        innerAdapter.saveInstanceState(outState)
-    }
-
     override fun onDestroyView() {
         emojiPopup.dismiss()
 
         super.onDestroyView()
+    }
+
+    override fun onDestroy() {
+        EmojiManager.release()
+
+        super.onDestroy()
     }
 
     override fun showData(data: List<LocalMessage>) {
