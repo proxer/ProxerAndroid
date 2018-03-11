@@ -27,7 +27,7 @@ internal inline fun <reified T : View> applyToViews(views: List<View>, operation
 internal inline fun CharSequence.toSpannableStringBuilder() = this as? SpannableStringBuilder
     ?: SpannableStringBuilder(this)
 
-internal inline fun SpannableStringBuilder.trimStartSafely() = when (firstOrNull()?.isWhitespace()) {
+internal fun SpannableStringBuilder.trimStartSafely() = when (firstOrNull()?.isWhitespace()) {
     true -> indices
         .firstOrNull { !this[it].isWhitespace() }
         ?.let { delete(0, it) }
@@ -35,7 +35,7 @@ internal inline fun SpannableStringBuilder.trimStartSafely() = when (firstOrNull
     else -> this
 }
 
-internal inline fun SpannableStringBuilder.trimEndSafely() = when (lastOrNull()?.isWhitespace()) {
+internal fun SpannableStringBuilder.trimEndSafely() = when (lastOrNull()?.isWhitespace()) {
     true -> indices.reversed()
         .firstOrNull { !this[it].isWhitespace() }
         ?.let { delete(it + 1, length) }
