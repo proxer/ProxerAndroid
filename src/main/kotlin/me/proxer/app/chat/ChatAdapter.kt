@@ -49,8 +49,8 @@ class ChatAdapter(savedInstanceState: Bundle?, private val isGroup: Boolean) :
     private val messageSelectionMap: ParcelableStringBooleanMap
     private val timeDisplayMap: ParcelableStringBooleanMap
 
-    private var isSelecting = false
     private val user by lazy { StorageHelper.user }
+    private var isSelecting = false
 
     init {
         messageSelectionMap = when (savedInstanceState) {
@@ -157,8 +157,18 @@ class ChatAdapter(savedInstanceState: Bundle?, private val isGroup: Boolean) :
         super.swapDataAndNotifyWithDiffing(newData)
 
         if (newData.isEmpty()) {
-            clearSelection()
+            messageSelectionMap.clear()
             timeDisplayMap.clear()
+        } else {
+            messageSelectionMap.entries.forEach { (id, _) ->
+                if (newData.find { it.id == id.toLong() } == null) {
+                    messageSelectionMap.remove(id)
+                }
+            }
+        }
+
+        if (messageSelectionMap.size <= 0) {
+            isSelecting = false
         }
 
         messageSelectionSubject.onNext(messageSelectionMap.size)
@@ -173,13 +183,6 @@ class ChatAdapter(savedInstanceState: Bundle?, private val isGroup: Boolean) :
         outState.putParcelable(IS_SELECTING_STATE, messageSelectionMap)
         outState.putParcelable(TIME_DISPLAY_STATE, timeDisplayMap)
         outState.putBoolean(MESSAGE_SELECTION_STATE, isSelecting)
-    }
-
-    fun clearSelection() {
-        isSelecting = false
-
-        messageSelectionMap.clear()
-        notifyDataSetChanged()
     }
 
     private fun getMarginsForPosition(position: Int): Pair<Int, Int> {
