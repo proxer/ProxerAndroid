@@ -21,6 +21,7 @@ import me.proxer.app.exception.ChatMessageException
 import me.proxer.app.exception.ChatSendMessageException
 import me.proxer.app.exception.ChatSynchronizationException
 import me.proxer.app.util.ErrorUtils
+import me.proxer.app.util.JobUtils
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.toLocalConference
@@ -161,7 +162,7 @@ class ChatJob : Job() {
             else -> bus.post(ChatErrorEvent(ChatSynchronizationException(error)))
         }
 
-        return if (params.failureCount >= 1 || ErrorUtils.isIpBlockedError(error)) {
+        return if (JobUtils.shouldShowError(params, error)) {
             if (canShowNotification(context)) {
                 ChatNotifications.showError(context, error)
             }
@@ -178,7 +179,10 @@ class ChatJob : Job() {
             else -> bus.post(ChatErrorEvent(ChatMessageException(error)))
         }
 
-        return NO_CHANGES
+        return when (ErrorUtils.isIpBlockedError(error)) {
+            true -> ERROR
+            false -> NO_CHANGES
+        }
     }
 
     private fun handleLoadMoreMessages(conferenceId: Long): SynchronizationResult {
