@@ -185,6 +185,11 @@ class ChatAdapter(savedInstanceState: Bundle?, private val isGroup: Boolean) :
         outState.putBoolean(MESSAGE_SELECTION_STATE, isSelecting)
     }
 
+    fun clearSelection() {
+        isSelecting = false
+        messageSelectionMap.clear()
+    }
+
     private fun getMarginsForPosition(position: Int): Pair<Int, Int> {
         val marginTop: Int
         val marginBottom: Int

@@ -94,6 +94,7 @@ class ChatFragment : PagedContentFragment<LocalMessage>() {
             actionMode = null
 
             innerAdapter.clearSelection()
+            innerAdapter.notifyDataSetChanged()
 
             Utils.setStatusBarColorIfPossible(activity, R.color.colorPrimaryDark)
         }
