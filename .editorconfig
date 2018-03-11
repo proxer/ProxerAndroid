@@ -10,6 +10,9 @@ trim_trailing_whitespace = true
 [*.{kt,java,gradle}]
 continuation_indent_size = 4
 
+[*.{java,gradle}]
+continuation_indent_size = 8
+
 [*.{yml}]
 indent_size = 2
 

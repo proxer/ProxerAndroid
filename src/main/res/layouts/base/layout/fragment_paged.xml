@@ -5,6 +5,7 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
     tools:context=".base.PagedContentFragment">
 
     <android.support.v4.widget.SwipeRefreshLayout

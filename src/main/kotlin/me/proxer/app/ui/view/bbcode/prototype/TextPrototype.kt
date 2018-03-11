@@ -1,16 +1,15 @@
 package me.proxer.app.ui.view.bbcode.prototype
 
 import android.content.Context
-import android.support.v4.text.util.LinkifyCompat
 import android.support.v4.widget.TextViewCompat
 import android.text.SpannableStringBuilder
-import android.text.method.LinkMovementMethod
 import android.text.util.Linkify
 import android.view.View
 import android.widget.TextView
 import me.proxer.app.R
 import me.proxer.app.ui.view.GifAwareTextView
 import me.proxer.app.ui.view.bbcode.BBTree
+import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
 /**
  * @author Ruben Gees
@@ -34,11 +33,11 @@ object TextPrototype : BBPrototype {
 
     fun makeView(context: Context, text: CharSequence): TextView {
         return GifAwareTextView(context).also {
-            it.movementMethod = LinkMovementMethod.getInstance()
             it.text = SpannableStringBuilder(text)
+            it.setTextIsSelectable(true)
 
             TextViewCompat.setTextAppearance(it, R.style.TextAppearance_AppCompat_Small)
-            LinkifyCompat.addLinks(it, Linkify.WEB_URLS)
+            BetterLinkMovementMethod.linkify(Linkify.WEB_URLS, it)
         }
     }
 
