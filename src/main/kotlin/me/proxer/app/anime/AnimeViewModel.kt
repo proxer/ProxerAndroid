@@ -33,8 +33,11 @@ import kotlin.properties.Delegates
  * @author Ruben Gees
  */
 @GeneratedProvider
-class AnimeViewModel(private val entryId: String, private val language: AnimeLanguage, episode: Int) :
-    BaseViewModel<AnimeStreamInfo>() {
+class AnimeViewModel(
+    private val entryId: String,
+    private val language: AnimeLanguage,
+    episode: Int
+) : BaseViewModel<AnimeStreamInfo>() {
 
     override val isLoginRequired = BuildConfig.STORE
 

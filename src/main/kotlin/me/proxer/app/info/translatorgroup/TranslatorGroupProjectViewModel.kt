@@ -13,8 +13,9 @@ import me.proxer.library.entity.list.TranslatorGroupProject
  * @author Ruben Gees
  */
 @GeneratedProvider
-class TranslatorGroupProjectViewModel(private val translatorGroupId: String) :
-    PagedContentViewModel<TranslatorGroupProject>() {
+class TranslatorGroupProjectViewModel(
+    private val translatorGroupId: String
+) : PagedContentViewModel<TranslatorGroupProject>() {
 
     override val itemsOnPage = 30
 

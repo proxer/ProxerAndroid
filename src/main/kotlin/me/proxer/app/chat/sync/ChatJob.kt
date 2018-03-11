@@ -348,8 +348,10 @@ class ChatJob : Job() {
         return newMessages to false
     }
 
-    private fun fetchForExistingConference(conference: Conference, mostRecentMessage: Message):
-        Pair<List<Message>, Boolean> {
+    private fun fetchForExistingConference(
+        conference: Conference,
+        mostRecentMessage: Message
+    ): Pair<List<Message>, Boolean> {
         val mostRecentMessageIdBeforeUpdate = mostRecentMessage.id.toLong()
         val newMessages = mutableListOf<Message>()
 

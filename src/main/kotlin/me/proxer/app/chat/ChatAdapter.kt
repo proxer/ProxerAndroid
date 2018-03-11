@@ -28,8 +28,10 @@ import org.jetbrains.anko.dip
 /**
  * @author Ruben Gees
  */
-class ChatAdapter(savedInstanceState: Bundle?, private val isGroup: Boolean) :
-    BaseAdapter<LocalMessage, MessageViewHolder>() {
+class ChatAdapter(
+    savedInstanceState: Bundle?,
+    private val isGroup: Boolean
+) : BaseAdapter<LocalMessage, MessageViewHolder>() {
 
     private companion object {
         private const val IS_SELECTING_STATE = "chat_is_selecting"
