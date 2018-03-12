@@ -162,9 +162,13 @@ class ChatAdapter(
             messageSelectionMap.clear()
             timeDisplayMap.clear()
         } else {
-            messageSelectionMap.entries.forEach { (id, _) ->
-                if (newData.find { it.id == id.toLong() } == null) {
-                    messageSelectionMap.remove(id)
+            messageSelectionMap.entries.iterator().let { iterator ->
+                while (iterator.hasNext()) {
+                    val nextKey = iterator.next().key
+
+                    if (newData.find { it.id.toString() == nextKey } == null) {
+                        iterator.remove()
+                    }
                 }
             }
         }
