@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatDelegate
 import android.util.Log
 import android.widget.ImageView
 import cat.ereza.customactivityoncrash.config.CaocConfig
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.devbrackets.android.exomedia.ExoMedia
 import com.evernote.android.job.JobApi
 import com.evernote.android.job.JobConfig
@@ -229,7 +228,6 @@ class MainApplication : Application() {
                 .load(uri)
                 .centerCrop()
                 .placeholder(placeholder)
-                .transition(DrawableTransitionOptions.withCrossFade())
                 .into(image)
         }
 
