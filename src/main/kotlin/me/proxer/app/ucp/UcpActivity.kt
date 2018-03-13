@@ -6,7 +6,6 @@ import android.support.design.widget.TabLayout
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.ViewPager
-import android.view.MenuItem
 import com.h6ah4i.android.tablayouthelper.TabLayoutHelper
 import kotterknife.bindView
 import me.proxer.app.R
@@ -43,18 +42,6 @@ class UcpActivity : DrawerActivity() {
         viewPager.adapter = sectionsPagerAdapter
 
         TabLayoutHelper(tabs, viewPager).apply { isAutoAdjustTabModeEnabled = true }
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> {
-                finish()
-
-                return true
-            }
-        }
-
-        return super.onOptionsItemSelected(item)
     }
 
     private fun setupToolbar() {

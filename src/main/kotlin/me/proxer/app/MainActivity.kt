@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.view.MenuItem
 import com.rubengees.introduction.IntroductionActivity.OPTION_RESULT
 import com.rubengees.introduction.IntroductionBuilder
 import com.rubengees.introduction.Option
@@ -79,18 +78,6 @@ class MainActivity : DrawerActivity() {
         if (savedInstanceState != null) {
             title = savedInstanceState.getString(TITLE_STATE)
         }
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> {
-                finish()
-
-                return true
-            }
-        }
-
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onBackPressed() {

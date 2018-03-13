@@ -3,7 +3,6 @@ package me.proxer.app.anime
 import android.os.Build
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
-import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
 import com.afollestad.materialdialogs.MaterialDialog
@@ -96,18 +95,6 @@ class StreamActivity : BaseActivity() {
         toggleFullscreen(false)
 
         super.onDestroy()
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> {
-                finish()
-
-                return true
-            }
-        }
-
-        return super.onOptionsItemSelected(item)
     }
 
     private fun setupUi() {

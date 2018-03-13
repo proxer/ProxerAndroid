@@ -3,7 +3,6 @@ package me.proxer.app.chat.create
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.view.MenuItem
 import me.proxer.app.R
 import me.proxer.app.base.DrawerActivity
 import me.proxer.app.chat.Participant
@@ -49,18 +48,6 @@ class CreateChatActivity : DrawerActivity() {
                 .replace(R.id.container, CreateChatFragment.newInstance())
                 .commitNow()
         }
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> {
-                finish()
-
-                return true
-            }
-        }
-
-        return super.onOptionsItemSelected(item)
     }
 
     private fun setupToolbar() {

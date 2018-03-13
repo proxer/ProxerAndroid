@@ -3,7 +3,6 @@ package me.proxer.app.notification
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
-import android.view.MenuItem
 import me.proxer.app.R
 import me.proxer.app.base.DrawerActivity
 import org.jetbrains.anko.intentFor
@@ -29,18 +28,6 @@ class NotificationActivity : DrawerActivity() {
                 .replace(R.id.container, NotificationFragment.newInstance())
                 .commitNow()
         }
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> {
-                finish()
-
-                return true
-            }
-        }
-
-        return super.onOptionsItemSelected(item)
     }
 
     private fun setupToolbar() {

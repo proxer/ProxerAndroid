@@ -113,9 +113,9 @@ class AnimeActivity : DrawerActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
-        R.id.action_share -> {
-            name?.let {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_share -> name?.let {
                 val link = "https://proxer.me/watch/$id/$episode/${ProxerUtils.getApiEnumName(language)}"
 
                 ShareCompat.IntentBuilder
@@ -125,15 +125,9 @@ class AnimeActivity : DrawerActivity() {
                     .setChooserTitle(getString(R.string.share_title))
                     .startChooser()
             }
-
-            true
         }
-        android.R.id.home -> {
-            finish()
 
-            true
-        }
-        else -> super.onOptionsItemSelected(item)
+        return super.onOptionsItemSelected(item)
     }
 
     private fun setupToolbar() {

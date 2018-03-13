@@ -3,7 +3,6 @@ package me.proxer.app.chat.share
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
-import android.view.MenuItem
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseActivity
@@ -52,17 +51,5 @@ class ShareReceiverActivity : BaseActivity() {
         } else {
             finish()
         }
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> {
-                finish()
-
-                return true
-            }
-        }
-
-        return super.onOptionsItemSelected(item)
     }
 }

@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.MenuItem
 import com.jakewharton.rxbinding2.view.clicks
 import me.proxer.app.R
 import me.proxer.app.base.DrawerActivity
@@ -58,18 +57,6 @@ class ChatActivity : DrawerActivity() {
                 .replace(R.id.container, ChatFragment.newInstance())
                 .commitNow()
         }
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> {
-                finish()
-
-                return true
-            }
-        }
-
-        return super.onOptionsItemSelected(item)
     }
 
     private fun setupToolbar() {

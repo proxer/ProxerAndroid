@@ -81,13 +81,9 @@ abstract class ImageTabsActivity : DrawerActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            android.R.id.home -> {
-                when (isHeaderImageVisible) {
-                    true -> supportFinishAfterTransition()
-                    false -> finish()
-                }
-
-                return true
+            android.R.id.home -> when (isHeaderImageVisible) {
+                true -> supportFinishAfterTransition()
+                false -> finish()
             }
         }
 
