@@ -1,6 +1,7 @@
 package me.proxer.app.ui.view.bbcode
 
 import android.content.Context
+import android.text.Spanned
 import me.proxer.app.GlideRequests
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype
 import me.proxer.app.ui.view.bbcode.prototype.ConditionalTextMutatorPrototype
@@ -118,7 +119,22 @@ class BBTree(
 
         if (prototype != other.prototype) return false
         if (children != other.children) return false
-        if (args != other.args) return false
+        if (args.size != other.args.size) return false
+
+        // Work around a bug in the SpannableStringBuilder (and possibly others) implementation.
+        // See: https://stackoverflow.com/a/46403431/4279995.
+        args.forEach { (key, value) ->
+            other.args.forEach { (otherKey, otherValue) ->
+                if (key != otherKey) return false
+
+                if (value is Spanned) {
+                    if (otherValue !is Spanned) return false
+                    if (value.toString() != otherValue.toString()) return false
+                } else if (value != otherValue) {
+                    return false
+                }
+            }
+        }
 
         return true
     }
