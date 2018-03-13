@@ -57,6 +57,7 @@ class AboutFragment : MaterialAboutFragment() {
             .build()
 
         private const val SUPPORT_ID = "374605"
+        private const val SUPPORT_CATEGORY = "anwendungen"
 
         private const val DEVELOPER_PROXER_NAME = "RubyGee"
         private const val DEVELOPER_PROXER_ID = "121658"
@@ -142,7 +143,7 @@ class AboutFragment : MaterialAboutFragment() {
             .subText(R.string.about_support_forum_description)
             .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_forum).iconColor(context))
             .setOnClickAction {
-                TopicActivity.navigateTo(requireActivity(), SUPPORT_ID)
+                TopicActivity.navigateTo(requireActivity(), SUPPORT_ID, SUPPORT_CATEGORY)
             }.build(),
         MaterialAboutActionItem.Builder()
             .text(R.string.about_support_message_title)

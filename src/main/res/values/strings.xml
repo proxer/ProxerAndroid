@@ -594,6 +594,9 @@
     <string name="share_translator_group">Schau dir die Gruppe %1$s auf Proxer.Me, deiner Anime und Manga Community
         an: %2$s
     </string>
+    <string name="share_topic">Schau dir das Thema %1$s auf Proxer.Me, deiner Anime und Manga Community
+        an: %2$s
+    </string>
 
     <string name="shortcut_disabled_message">Diese Verknüpung ist nicht mehr verfügbar</string>
 

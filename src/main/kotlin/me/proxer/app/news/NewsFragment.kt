@@ -45,7 +45,7 @@ class NewsFragment : PagedContentFragment<NewsArticle>() {
 
         innerAdapter.clickSubject
             .autoDispose(this)
-            .subscribe { TopicActivity.navigateTo(requireActivity(), it.threadId, it.subject) }
+            .subscribe { TopicActivity.navigateTo(requireActivity(), it.threadId, it.categoryId, it.subject) }
 
         innerAdapter.imageClickSubject
             .autoDispose(this)

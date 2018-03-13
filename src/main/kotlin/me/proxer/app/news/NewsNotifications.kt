@@ -52,7 +52,7 @@ object NewsNotifications {
                 title = current.subject.trim()
                 content = current.description.trim()
                 intent = PendingIntent.getActivity(context, ID,
-                    TopicActivity.getIntent(context, current.threadId, current.subject),
+                    TopicActivity.getIntent(context, current.threadId, current.categoryId, current.subject),
                     PendingIntent.FLAG_UPDATE_CURRENT)
 
                 style = NotificationCompat.BigTextStyle(builder)

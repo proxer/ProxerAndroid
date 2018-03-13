@@ -53,7 +53,7 @@ class DiscussionFragment : BaseContentFragment<List<ForumDiscussion>>() {
         adapter.clickSubject
             .autoDispose(this)
             .subscribe { item ->
-                TopicActivity.navigateTo(requireActivity(), item.id, item.subject)
+                TopicActivity.navigateTo(requireActivity(), item.id, item.categoryId, item.subject)
             }
     }
 
