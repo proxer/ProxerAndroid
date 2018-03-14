@@ -30,6 +30,9 @@ class ScheduleAdapter : BaseAdapter<Pair<CalendarDay, List<CalendarEntry>>, View
     val clickSubject: PublishSubject<Pair<ImageView, CalendarEntry>> = PublishSubject.create()
 
     private val layoutManagerStates = mutableMapOf<CalendarDay, Parcelable>()
+    private val viewPool = RecyclerView.RecycledViewPool().apply {
+        setMaxRecycledViews(0, 9)
+    }
 
     init {
         setHasStableIds(true)
@@ -65,6 +68,7 @@ class ScheduleAdapter : BaseAdapter<Pair<CalendarDay, List<CalendarEntry>>, View
 
         init {
             childRecyclerView.setHasFixedSize(true)
+            childRecyclerView.recycledViewPool = viewPool
             childRecyclerView.isNestedScrollingEnabled = false
 
             GravitySnapHelper(Gravity.START).attachToRecyclerView(childRecyclerView)
@@ -80,8 +84,11 @@ class ScheduleAdapter : BaseAdapter<Pair<CalendarDay, List<CalendarEntry>>, View
 
             weekDay.text = day.toAppString(weekDay.context)
 
-            childRecyclerView.layoutManager = LinearLayoutManager(childRecyclerView.context, HORIZONTAL, false)
-            childRecyclerView.adapter = adapter
+            childRecyclerView.layoutManager = LinearLayoutManager(childRecyclerView.context, HORIZONTAL, false).apply {
+                initialPrefetchItemCount = 3
+            }
+
+            childRecyclerView.swapAdapter(adapter, false)
 
             layoutManagerStates[item.first]?.let {
                 childRecyclerView.layoutManager.onRestoreInstanceState(it)
