@@ -125,16 +125,16 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
             }
 
             itemView.layoutParams = LayoutParams(width.toInt(), LayoutParams.WRAP_CONTENT)
-
-            itemView.setOnClickListener {
-                withSafeAdapterPosition(this) {
-                    clickSubject.onNext(image to data[it])
-                }
-            }
         }
 
         fun bind(item: CalendarEntry) {
             ViewCompat.setTransitionName(image, "schedule_${item.id}")
+
+            itemView.setOnClickListener {
+                withSafeAdapterPosition(this) {
+                    clickSubject.onNext(image to item)
+                }
+            }
 
             title.text = item.name
             episode.text = episode.context.getString(R.string.fragment_schedule_episode, item.episode.toString())
@@ -188,7 +188,7 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
             }
         }
 
-        internal inner class AiringInfoUpdateConsumer(private val item: CalendarEntry) : Consumer<Long> {
+        private inner class AiringInfoUpdateConsumer(private val item: CalendarEntry) : Consumer<Long> {
 
             override fun accept(t: Long?) {
                 val now = LocalDateTime.now()
