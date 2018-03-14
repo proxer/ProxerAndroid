@@ -6,8 +6,8 @@
     android:layout_height="wrap_content"
     android:background="?attr/selectableItemBackground"
     android:ellipsize="end"
-    android:paddingBottom="2dp"
     android:paddingTop="2dp"
+    android:paddingBottom="2dp"
     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
     tools:context=".log.LogAdapter"
     tools:text="Some log" />

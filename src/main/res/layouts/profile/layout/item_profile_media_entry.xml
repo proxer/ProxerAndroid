@@ -51,9 +51,9 @@
                 android:layout_alignBottom="@+id/image"
                 android:background="@color/half_transparent"
                 android:gravity="center"
-                android:paddingBottom="8dp"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
+                android:paddingBottom="8dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="@android:color/white"
                 tools:text="Animeseries" />
@@ -62,14 +62,14 @@
                 android:id="@+id/ratingContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/medium"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_toStartOf="@+id/state"
-                android:layout_toLeftOf="@+id/state"
-                android:layout_below="@+id/medium"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true">
+                android:layout_toLeftOf="@+id/state">
 
                 <me.zhanghai.android.materialratingbar.MaterialRatingBar
                     android:id="@+id/rating"
@@ -85,11 +85,11 @@
                 android:id="@+id/status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toStartOf="@+id/state"
-                android:layout_toLeftOf="@+id/state"
                 android:layout_below="@+id/ratingContainer"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
+                android:layout_toStartOf="@+id/state"
+                android:layout_toLeftOf="@+id/state"
                 android:padding="8dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 tools:text="Episode 13/24 - Watching" />
@@ -98,11 +98,11 @@
                 android:id="@+id/state"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
-                android:layout_margin="8dp"
                 android:layout_below="@+id/image"
                 android:layout_alignBottom="@+id/status"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
+                android:layout_margin="8dp"
                 tools:ignore="ContentDescription"
                 tools:src="@drawable/ic_japan" />
         </RelativeLayout>

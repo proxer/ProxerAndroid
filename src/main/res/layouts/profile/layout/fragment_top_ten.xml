@@ -26,9 +26,9 @@
                 android:layout_height="match_parent"
                 android:animateLayoutChanges="true"
                 android:orientation="vertical"
-                android:paddingBottom="@dimen/screen_vertical_margin_with_items"
                 android:paddingLeft="@dimen/screen_horizontal_margin_with_items"
                 android:paddingRight="@dimen/screen_horizontal_margin_with_items"
+                android:paddingBottom="@dimen/screen_vertical_margin_with_items"
                 android:visibility="gone"
                 tools:visibility="visible">
 

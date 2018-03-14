@@ -30,26 +30,26 @@
                     android:id="@+id/image"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
                     tools:ignore="ContentDescription" />
 
                 <TextView
                     android:id="@+id/title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
                     android:layout_alignWithParentIfMissing="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="8dp"
                     android:layout_toStartOf="@+id/upvoteIcon"
                     android:layout_toLeftOf="@+id/upvoteIcon"
                     android:layout_toEndOf="@+id/image"
                     android:layout_toRightOf="@+id/image"
-                    android:layout_centerVertical="true"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     tools:text="Username" />
 
@@ -57,6 +57,7 @@
                     android:id="@+id/upvoteIcon"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
+                    android:layout_centerVertical="true"
                     android:layout_marginStart="4dp"
                     android:layout_marginLeft="4dp"
                     android:layout_marginTop="8dp"
@@ -65,22 +66,21 @@
                     android:layout_marginBottom="8dp"
                     android:layout_toStartOf="@+id/upvotes"
                     android:layout_toLeftOf="@+id/upvotes"
-                    android:layout_centerVertical="true"
                     tools:ignore="ContentDescription" />
 
                 <TextView
                     android:id="@+id/upvotes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
                     android:layout_marginStart="2dp"
                     android:layout_marginLeft="2dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginBottom="8dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     tools:text="12" />
             </RelativeLayout>
@@ -96,16 +96,16 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
                         android:layout_gravity="center_vertical"
+                        android:layout_margin="8dp"
                         android:text="@string/fragment_comment_rating_genre"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
                     <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:layout_gravity="center_vertical">
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="8dp">
 
                         <me.zhanghai.android.materialratingbar.MaterialRatingBar
                             android:id="@+id/ratingGenre"
@@ -124,16 +124,16 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
                         android:layout_gravity="center_vertical"
+                        android:layout_margin="8dp"
                         android:text="@string/fragment_comment_rating_story"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
                     <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:layout_gravity="center_vertical">
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="8dp">
 
                         <me.zhanghai.android.materialratingbar.MaterialRatingBar
                             android:id="@+id/ratingStory"
@@ -152,16 +152,16 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
                         android:layout_gravity="center_vertical"
+                        android:layout_margin="8dp"
                         android:text="@string/fragment_comment_rating_animation"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
                     <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:layout_gravity="center_vertical">
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="8dp">
 
                         <me.zhanghai.android.materialratingbar.MaterialRatingBar
                             android:id="@+id/ratingAnimation"
@@ -180,16 +180,16 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
                         android:layout_gravity="center_vertical"
+                        android:layout_margin="8dp"
                         android:text="@string/fragment_comment_rating_characters"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
                     <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:layout_gravity="center_vertical">
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="8dp">
 
                         <me.zhanghai.android.materialratingbar.MaterialRatingBar
                             android:id="@+id/ratingCharacters"
@@ -208,16 +208,16 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
                         android:layout_gravity="center_vertical"
+                        android:layout_margin="8dp"
                         android:text="@string/fragment_comment_rating_music"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
                     <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:layout_gravity="center_vertical">
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="8dp">
 
                         <me.zhanghai.android.materialratingbar.MaterialRatingBar
                             android:id="@+id/ratingMusic"
@@ -236,16 +236,16 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
                         android:layout_gravity="center_vertical"
+                        android:layout_margin="8dp"
                         android:text="@string/fragment_comment_rating_overall"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
                     <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:layout_gravity="center_vertical">
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="8dp">
 
                         <me.zhanghai.android.materialratingbar.MaterialRatingBar
                             android:id="@+id/ratingOverall"
@@ -273,8 +273,8 @@
                 android:id="@+id/expand"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="4dp"
                 android:layout_gravity="center_horizontal"
+                android:layout_margin="4dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:scaleType="centerCrop"
                 tools:ignore="ContentDescription" />
@@ -297,8 +297,8 @@
                     android:id="@+id/time"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="4dp"
                     android:layout_gravity="center_vertical"
+                    android:layout_margin="4dp"
                     android:layout_weight="4"
                     android:gravity="start"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
@@ -308,8 +308,8 @@
                     android:id="@+id/progress"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="4dp"
                     android:layout_gravity="center_vertical"
+                    android:layout_margin="4dp"
                     android:layout_weight="6"
                     android:gravity="end"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"

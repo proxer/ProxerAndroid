@@ -51,9 +51,9 @@
                 android:layout_alignBottom="@+id/image"
                 android:background="@color/half_transparent"
                 android:gravity="center"
-                android:paddingBottom="8dp"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
+                android:paddingBottom="8dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="@android:color/white"
                 tools:text="Animeserie" />
@@ -62,21 +62,21 @@
                 android:id="@+id/episodeContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:layout_toStartOf="@+id/language"
-                android:layout_toLeftOf="@+id/language"
                 android:layout_below="@+id/medium"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
+                android:layout_margin="8dp"
+                android:layout_toStartOf="@+id/language"
+                android:layout_toLeftOf="@+id/language"
                 tools:ignore="UseCompoundDrawables">
 
                 <TextView
                     android:id="@+id/episode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginEnd="2dp"
                     android:layout_marginRight="2dp"
-                    android:layout_gravity="center_vertical"
                     android:drawablePadding="4dp"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     tools:text="Episode 12" />
@@ -86,13 +86,13 @@
                 android:id="@+id/language"
                 android:layout_width="16dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
                 android:layout_below="@+id/medium"
                 android:layout_alignTop="@+id/episodeContainer"
                 android:layout_alignBottom="@+id/episodeContainer"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 tools:ignore="ContentDescription" />
 
             <me.proxer.app.ui.view.InfoImageButton

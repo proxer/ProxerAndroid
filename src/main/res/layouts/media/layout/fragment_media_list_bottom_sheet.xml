@@ -18,17 +18,17 @@
             android:id="@+id/titleContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="4dp"
             android:paddingLeft="16dp"
+            android:paddingTop="4dp"
             android:paddingRight="16dp"
-            android:paddingTop="4dp">
+            android:paddingBottom="4dp">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_marginEnd="4dp"
                 android:layout_marginRight="4dp"
-                android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:text="@string/fragment_media_list_extended_criteria"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
@@ -38,9 +38,9 @@
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|end"
                 android:layout_marginStart="4dp"
                 android:layout_marginLeft="4dp"
-                android:layout_gravity="center_vertical|end"
                 android:text="@string/fragment_media_list_search"
                 android:textColor="@android:color/white" />
 
@@ -55,9 +55,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingBottom="8dp"
                 android:paddingLeft="16dp"
-                android:paddingRight="16dp">
+                android:paddingRight="16dp"
+                android:paddingBottom="8dp">
 
                 <me.proxer.app.ui.view.ExpandableSelectionView
                     android:id="@+id/languageSelector"

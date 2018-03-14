@@ -26,10 +26,10 @@
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
                 android:fillViewport="true"
-                android:paddingBottom="@dimen/screen_vertical_margin_with_items"
                 android:paddingLeft="@dimen/screen_horizontal_margin_with_items"
-                android:paddingRight="@dimen/screen_horizontal_margin_with_items"
                 android:paddingTop="@dimen/screen_vertical_margin_with_items"
+                android:paddingRight="@dimen/screen_horizontal_margin_with_items"
+                android:paddingBottom="@dimen/screen_vertical_margin_with_items"
                 android:scrollbarStyle="outsideOverlay"
                 android:scrollbars="vertical">
 
@@ -108,10 +108,10 @@
             layout="@layout/layout_chat_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:layout_marginLeft="@dimen/item_margin"
             android:layout_marginTop="@dimen/item_margin"
             android:layout_marginRight="@dimen/item_margin"
-            android:layout_marginBottom="@dimen/item_margin"
-            android:layout_alignParentBottom="true" />
+            android:layout_marginBottom="@dimen/item_margin" />
     </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

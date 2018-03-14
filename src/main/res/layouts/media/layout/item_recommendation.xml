@@ -53,9 +53,9 @@
                 android:layout_alignBottom="@+id/image"
                 android:background="@color/half_transparent"
                 android:gravity="center"
-                android:paddingBottom="8dp"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
+                android:paddingBottom="8dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="@android:color/white"
                 tools:text="Animeseries" />
@@ -64,12 +64,12 @@
                 android:id="@+id/ratingContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/state"
+                android:layout_alignBottom="@+id/state"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_toStartOf="@+id/state"
                 android:layout_toLeftOf="@+id/state"
-                android:layout_alignTop="@+id/state"
-                android:layout_alignBottom="@+id/state"
                 android:gravity="center_vertical|start">
 
                 <me.zhanghai.android.materialratingbar.MaterialRatingBar
@@ -86,23 +86,23 @@
                 android:id="@+id/state"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginRight="8dp"
                 android:layout_below="@+id/medium"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp"
                 tools:ignore="ContentDescription" />
 
             <TextView
                 android:id="@+id/episodes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toStartOf="@+id/languageContainer"
-                android:layout_toLeftOf="@+id/languageContainer"
                 android:layout_below="@+id/state"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
+                android:layout_toStartOf="@+id/languageContainer"
+                android:layout_toLeftOf="@+id/languageContainer"
                 android:gravity="center_vertical"
                 android:padding="8dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
@@ -112,12 +112,12 @@
                 android:id="@+id/languageContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginRight="8dp"
                 android:layout_below="@+id/state"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true">
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp">
 
                 <ImageView
                     android:id="@+id/german"
@@ -147,18 +147,18 @@
                 android:id="@+id/divider"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_below="@+id/episodes"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
-                android:layout_below="@+id/episodes"
                 android:background="@color/divider" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/divider"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginRight="16dp"
-                android:layout_below="@+id/divider"
                 android:baselineAligned="false">
 
                 <LinearLayout
@@ -180,8 +180,8 @@
                         android:id="@+id/upvotesText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="4dp"
                         android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="4dp"
                         android:textAppearance="@style/TextAppearance.AppCompat.Small"
                         tools:text="10" />
 
@@ -206,8 +206,8 @@
                         android:id="@+id/downvotesText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="4dp"
                         android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="4dp"
                         android:textAppearance="@style/TextAppearance.AppCompat.Small"
                         tools:text="1" />
 

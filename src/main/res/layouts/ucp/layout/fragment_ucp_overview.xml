@@ -22,10 +22,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingBottom="@dimen/screen_vertical_margin"
                 android:paddingLeft="@dimen/screen_horizontal_margin"
-                android:paddingRight="@dimen/screen_horizontal_margin"
                 android:paddingTop="@dimen/screen_vertical_margin"
+                android:paddingRight="@dimen/screen_horizontal_margin"
+                android:paddingBottom="@dimen/screen_vertical_margin"
                 android:visibility="gone"
                 tools:visibility="visible">
 
@@ -53,10 +53,10 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:paddingBottom="4dp"
                             android:paddingLeft="8dp"
-                            android:paddingRight="8dp"
                             android:paddingTop="4dp"
+                            android:paddingRight="8dp"
+                            android:paddingBottom="4dp"
                             android:text="@string/fragment_ucp_overview_profile_link"
                             android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
@@ -64,19 +64,19 @@
                             android:id="@+id/profileLink"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingBottom="8dp"
                             android:paddingLeft="8dp"
                             android:paddingRight="8dp"
+                            android:paddingBottom="8dp"
                             android:textAppearance="@style/TextAppearance.AppCompat.Small"
                             tools:text="https://link.com?id=123" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:paddingBottom="4dp"
                             android:paddingLeft="8dp"
-                            android:paddingRight="8dp"
                             android:paddingTop="4dp"
+                            android:paddingRight="8dp"
+                            android:paddingBottom="4dp"
                             android:text="@string/fragment_ucp_overview_username"
                             android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
@@ -84,9 +84,9 @@
                             android:id="@+id/username"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingBottom="8dp"
                             android:paddingLeft="8dp"
                             android:paddingRight="8dp"
+                            android:paddingBottom="8dp"
                             android:textAppearance="@style/TextAppearance.AppCompat.Small"
                             android:textIsSelectable="true"
                             tools:text="Username" />
@@ -94,10 +94,10 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:paddingBottom="4dp"
                             android:paddingLeft="8dp"
-                            android:paddingRight="8dp"
                             android:paddingTop="4dp"
+                            android:paddingRight="8dp"
+                            android:paddingBottom="4dp"
                             android:text="@string/fragment_ucp_overview_user_id"
                             android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
@@ -105,9 +105,9 @@
                             android:id="@+id/userId"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingBottom="8dp"
                             android:paddingLeft="8dp"
                             android:paddingRight="8dp"
+                            android:paddingBottom="8dp"
                             android:textAppearance="@style/TextAppearance.AppCompat.Small"
                             android:textIsSelectable="true"
                             tools:text="123456" />

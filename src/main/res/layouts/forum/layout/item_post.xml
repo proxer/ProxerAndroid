@@ -32,11 +32,11 @@
                     android:id="@+id/image"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
-                    android:layout_gravity="center_vertical"
                     tools:ignore="ContentDescription"
                     tools:src="@drawable/ic_japan" />
 
@@ -44,8 +44,8 @@
                     android:id="@+id/user"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
                     android:layout_gravity="center_vertical"
+                    android:layout_margin="8dp"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     tools:text="Username" />
 
@@ -90,8 +90,8 @@
                     android:id="@+id/date"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="4dp"
                     android:layout_gravity="center_vertical"
+                    android:layout_margin="4dp"
                     android:layout_weight="1"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     tools:text="Two days ago" />
@@ -100,11 +100,11 @@
                     android:id="@+id/thankYouIcon"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginStart="4dp"
                     android:layout_marginLeft="4dp"
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="4dp"
-                    android:layout_gravity="center_vertical"
                     tools:ignore="ContentDescription"
                     tools:src="@drawable/ic_japan" />
 
@@ -112,11 +112,11 @@
                     android:id="@+id/thankYou"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginTop="4dp"
                     android:layout_marginEnd="4dp"
                     android:layout_marginRight="4dp"
                     android:layout_marginBottom="4dp"
-                    android:layout_gravity="center_vertical"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     tools:text="12" />
 

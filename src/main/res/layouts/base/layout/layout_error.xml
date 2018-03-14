@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/screen_vertical_margin"
     android:paddingLeft="@dimen/screen_horizontal_margin"
-    android:paddingRight="@dimen/screen_horizontal_margin"
     android:paddingTop="@dimen/screen_vertical_margin"
+    android:paddingRight="@dimen/screen_horizontal_margin"
+    android:paddingBottom="@dimen/screen_vertical_margin"
     android:visibility="gone"
     tools:visibility="visible">
 
@@ -24,10 +24,10 @@
             android:id="@+id/errorText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
-            android:layout_gravity="center"
             android:gravity="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             tools:text="A problem occurred" />
@@ -37,10 +37,10 @@
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
-            android:layout_gravity="center"
             android:text="@string/error_action_retry"
             android:textColor="@android:color/white" />
     </LinearLayout>

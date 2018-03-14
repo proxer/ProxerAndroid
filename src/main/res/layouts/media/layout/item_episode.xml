@@ -32,8 +32,8 @@
                     android:id="@+id/title"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
                     android:layout_gravity="center_vertical"
+                    android:layout_margin="8dp"
                     android:layout_weight="1"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
                     tools:text="Episode 1" />
@@ -42,8 +42,8 @@
                     android:id="@+id/watched"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:layout_margin="8dp"
                     android:layout_gravity="center_vertical"
+                    android:layout_margin="8dp"
                     tools:ignore="ContentDescription" />
             </LinearLayout>
 

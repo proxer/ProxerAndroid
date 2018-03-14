@@ -34,8 +34,8 @@
         android:id="@+id/hosters"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
         android:layout_below="@+id/languageContainer"
+        android:layout_margin="4dp"
         app:alignItems="center"
         app:flexWrap="wrap"
         app:justifyContent="center" />

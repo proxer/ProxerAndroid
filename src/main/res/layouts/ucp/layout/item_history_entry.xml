@@ -51,9 +51,9 @@
                 android:layout_alignBottom="@+id/image"
                 android:background="@color/half_transparent"
                 android:gravity="center"
-                android:paddingBottom="8dp"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
+                android:paddingBottom="8dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="@android:color/white"
                 tools:text="Animeseries" />

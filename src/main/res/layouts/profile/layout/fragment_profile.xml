@@ -23,10 +23,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingBottom="@dimen/screen_vertical_margin"
                 android:paddingLeft="@dimen/screen_horizontal_margin"
-                android:paddingRight="@dimen/screen_horizontal_margin"
                 android:paddingTop="@dimen/screen_vertical_margin"
+                android:paddingRight="@dimen/screen_horizontal_margin"
+                android:paddingBottom="@dimen/screen_vertical_margin"
                 android:visibility="gone"
                 tools:visibility="visible">
 
@@ -54,8 +54,8 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_margin="8dp"
                                     android:layout_gravity="center_vertical"
+                                    android:layout_margin="8dp"
                                     android:text="@string/fragment_profile_points_anime"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
@@ -63,8 +63,8 @@
                                     android:id="@+id/animePointsRow"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_margin="8dp"
                                     android:layout_gravity="center_vertical"
+                                    android:layout_margin="8dp"
                                     android:gravity="end"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                                     tools:text="100" />
@@ -75,8 +75,8 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_margin="8dp"
                                     android:layout_gravity="center_vertical"
+                                    android:layout_margin="8dp"
                                     android:text="@string/fragment_profile_points_manga"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
@@ -84,8 +84,8 @@
                                     android:id="@+id/mangaPointsRow"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_margin="8dp"
                                     android:layout_gravity="center_vertical"
+                                    android:layout_margin="8dp"
                                     android:gravity="end"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                                     tools:text="100" />
@@ -96,8 +96,8 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_margin="8dp"
                                     android:layout_gravity="center_vertical"
+                                    android:layout_margin="8dp"
                                     android:text="@string/fragment_profile_points_uploads"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
@@ -105,8 +105,8 @@
                                     android:id="@+id/uploadPointsRow"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_margin="8dp"
                                     android:layout_gravity="center_vertical"
+                                    android:layout_margin="8dp"
                                     android:gravity="end"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                                     tools:text="100" />
@@ -117,8 +117,8 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_margin="8dp"
                                     android:layout_gravity="center_vertical"
+                                    android:layout_margin="8dp"
                                     android:text="@string/fragment_profile_points_forum"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
@@ -126,8 +126,8 @@
                                     android:id="@+id/forumPointsRow"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_margin="8dp"
                                     android:layout_gravity="center_vertical"
+                                    android:layout_margin="8dp"
                                     android:gravity="end"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                                     tools:text="100" />
@@ -138,8 +138,8 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_margin="8dp"
                                     android:layout_gravity="center_vertical"
+                                    android:layout_margin="8dp"
                                     android:text="@string/fragment_profile_points_info"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
@@ -147,8 +147,8 @@
                                     android:id="@+id/infoPointsRow"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_margin="8dp"
                                     android:layout_gravity="center_vertical"
+                                    android:layout_margin="8dp"
                                     android:gravity="end"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                                     tools:text="100" />
@@ -159,8 +159,8 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_margin="8dp"
                                     android:layout_gravity="center_vertical"
+                                    android:layout_margin="8dp"
                                     android:text="@string/fragment_profile_points_miscellaneous"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
@@ -168,8 +168,8 @@
                                     android:id="@+id/miscellaneousPointsRow"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_margin="8dp"
                                     android:layout_gravity="center_vertical"
+                                    android:layout_margin="8dp"
                                     android:gravity="end"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                                     tools:text="100" />
@@ -206,8 +206,8 @@
                             android:id="@+id/rank"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_margin="16dp"
                             android:layout_gravity="center"
+                            android:layout_margin="16dp"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                             android:textColor="@color/colorAccent"
                             tools:text="Kage" />
