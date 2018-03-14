@@ -1,9 +1,9 @@
 package me.proxer.app.media.list
 
-import android.os.Bundle
 import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.BottomSheetBehavior.STATE_COLLAPSED
 import android.support.design.widget.BottomSheetBehavior.STATE_EXPANDED
+import android.view.View
 import android.view.ViewGroup
 import com.jakewharton.rxbinding2.view.clicks
 import me.proxer.app.R
@@ -24,27 +24,19 @@ import me.proxer.library.util.ProxerUtils
  */
 class MediaListSearchBottomSheet private constructor(
     private val fragment: MediaListFragment,
-    private val viewModel: MediaListViewModel,
-    savedInstanceState: Bundle?
+    private val viewModel: MediaListViewModel
 ) {
 
     companion object {
         fun bindTo(
             fragment: MediaListFragment,
-            viewModel: MediaListViewModel,
-            savedInstanceState: Bundle?
-        ) = MediaListSearchBottomSheet(fragment, viewModel, savedInstanceState)
+            viewModel: MediaListViewModel
+        ) = MediaListSearchBottomSheet(fragment, viewModel)
     }
 
     private val bottomSheetBehaviour = BottomSheetBehavior.from(fragment.searchBottomSheet)
 
     init {
-        if (savedInstanceState == null) {
-            bottomSheetBehaviour.state = STATE_COLLAPSED
-        }
-
-        bottomSheetBehaviour.isHideable = false
-
         fragment.languageSelector.findViewById<ViewGroup>(R.id.items).enableLayoutAnimationsSafely()
         fragment.genreSelector.findViewById<ViewGroup>(R.id.items).enableLayoutAnimationsSafely()
         fragment.excludedGenreSelector.findViewById<ViewGroup>(R.id.items).enableLayoutAnimationsSafely()
@@ -115,6 +107,7 @@ class MediaListSearchBottomSheet private constructor(
 
         fragment.searchBottomSheetTitle.post {
             bottomSheetBehaviour.peekHeight = fragment.searchBottomSheetTitle.height + fragment.dip(10)
+            fragment.searchBottomSheet.visibility = View.VISIBLE
         }
     }
 

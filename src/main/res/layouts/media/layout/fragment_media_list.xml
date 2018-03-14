@@ -18,10 +18,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:paddingBottom="@dimen/screen_vertical_margin_with_items"
             android:paddingLeft="@dimen/screen_horizontal_margin_with_items"
-            android:paddingRight="@dimen/screen_horizontal_margin_with_items"
             android:paddingTop="@dimen/screen_vertical_margin_with_items"
+            android:paddingRight="@dimen/screen_horizontal_margin_with_items"
+            android:paddingBottom="@dimen/screen_vertical_margin_with_items"
             app:fastScrollEnabled="true"
             app:fastScrollHorizontalThumbDrawable="@drawable/fastscroll_thumb"
             app:fastScrollHorizontalTrackDrawable="@drawable/fastscroll_track"
@@ -29,6 +29,8 @@
             app:fastScrollVerticalTrackDrawable="@drawable/fastscroll_track" />
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <include layout="@layout/fragment_media_list_bottom_sheet" />
+    <include
+        layout="@layout/fragment_media_list_bottom_sheet"
+        android:visibility="invisible" />
 
 </android.support.design.widget.CoordinatorLayout>

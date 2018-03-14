@@ -174,7 +174,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
 
         innerAdapter.glide = GlideApp.with(this)
 
-        searchBottomSheetManager = MediaListSearchBottomSheet.bindTo(this, viewModel, savedInstanceState)
+        searchBottomSheetManager = MediaListSearchBottomSheet.bindTo(this, viewModel)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
