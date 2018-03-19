@@ -29,15 +29,12 @@ class RapidImageRegionDecoder : ImageRegionDecoder {
     }
 
     @Synchronized
-    override fun decodeRegion(sRect: Rect, sampleSize: Int): Bitmap? {
-        return try {
-            decoder?.reset()
-                ?.region(sRect)
-                ?.scale(sRect.width() / sampleSize, sRect.height() / sampleSize)
-                ?.decode()
-        } catch (error: Exception) {
-            null
-        }
+    override fun decodeRegion(sRect: Rect, sampleSize: Int): Bitmap {
+        return decoder?.reset()
+            ?.region(sRect)
+            ?.scale(sRect.width() / sampleSize, sRect.height() / sampleSize)
+            ?.decode()
+            ?: throw NullPointerException("decoded bitmap is null")
     }
 
     override fun isReady() = decoder != null

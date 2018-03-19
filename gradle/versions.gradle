@@ -31,7 +31,7 @@ ext {
     supportPreferenceVersion = '2.1.1'
     lifecycleVersion = '1.1.0'
     roomVersion = '1.1.0-alpha3'
-    androidJobVersion = '1.2.4'
+    androidJobVersion = '1.2.5'
     proxerLibVersion = '4.3.0'
 
     // RxJava
@@ -50,7 +50,7 @@ ext {
     communityMaterialTypefaceVersion = '2.0.46.1'
     crossfaderVersion = '1.5.2'
     materialAboutVersion = '2.2.5'
-    subsamplingScaleImageViewVersion = '3.9.0'
+    subsamplingScaleImageViewVersion = '3.10.0'
     tabLayoutHelperVersion = '0.9.0'
     materialDialogsVersion = '0.9.6.0'
     flexboxVersion = '0.3.2'
