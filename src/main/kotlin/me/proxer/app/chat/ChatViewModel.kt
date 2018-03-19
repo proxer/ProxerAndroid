@@ -115,8 +115,6 @@ class ChatViewModel(initialConference: LocalConference) : PagedViewModel<LocalMe
                     isLoading.value = false
                     error.value = ErrorUtils.handle(event.error)
                 }
-
-                ChatJob.scheduleSynchronization()
             }
     }
 
