@@ -34,7 +34,7 @@ class RapidImageRegionDecoder : ImageRegionDecoder {
             ?.region(sRect)
             ?.scale(sRect.width() / sampleSize, sRect.height() / sampleSize)
             ?.decode()
-            ?: throw NullPointerException("decoded bitmap is null")
+            ?: throw IllegalStateException("decoded bitmap is null")
     }
 
     override fun isReady() = decoder != null

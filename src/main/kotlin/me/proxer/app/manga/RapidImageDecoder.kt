@@ -20,5 +20,5 @@ class RapidImageDecoder : ImageDecoder {
             }
         }
         .decode()
-        ?: throw NullPointerException("decoded bitmap is null")
+        ?: throw IllegalStateException("decoded bitmap is null")
 }
