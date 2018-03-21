@@ -4,8 +4,12 @@
     <color name="colorAccent">#C21414</color>
 
     <color name="textColorPrimary">@android:color/primary_text_dark</color>
-    <color name="textColorSecondary" tools:keep="@color/textColorSecondary">@android:color/secondary_text_dark</color>
-    <color name="textColorTertiary" tools:keep="@color/textColorTertiary">@android:color/tertiary_text_dark</color>
+    <color name="textColorSecondary" tools:keep="@color/textColorSecondary">
+        @android:color/secondary_text_dark
+    </color>
+    <color name="textColorTertiary" tools:keep="@color/textColorTertiary">
+        @android:color/tertiary_text_dark
+    </color>
 
     <color name="divider">#1FFFFFFF</color>
     <color name="icon">#7FFFFFFF</color>
@@ -16,10 +20,22 @@
 
     <color name="card_background">@color/cardview_dark_background</color>
 
-    <color name="material_drawer_background" tools:ignore="UnusedResources">#303030</color>
-    <color name="material_drawer_primary_text" tools:ignore="UnusedResources">@color/textColorPrimary</color>
-    <color name="material_drawer_primary_icon" tools:ignore="UnusedResources">@color/icon</color>
-    <color name="material_drawer_secondary_text" tools:ignore="UnusedResources">@color/textColorTertiary</color>
-    <color name="material_drawer_selected" tools:ignore="UnusedResources">#FF424242</color>
-    <color name="material_drawer_divider" tools:ignore="UnusedResources">@color/divider</color>
+    <color name="material_drawer_background" tools:ignore="UnusedResources,MissingDefaultResource">
+        #303030
+    </color>
+    <color name="material_drawer_primary_text" tools:ignore="UnusedResources,MissingDefaultResource">
+        @color/textColorPrimary
+    </color>
+    <color name="material_drawer_primary_icon" tools:ignore="UnusedResources,MissingDefaultResource">
+        @color/icon
+    </color>
+    <color name="material_drawer_secondary_text" tools:ignore="UnusedResources,MissingDefaultResource">
+        @color/textColorTertiary
+    </color>
+    <color name="material_drawer_selected" tools:ignore="UnusedResources,MissingDefaultResource">
+        #FF424242
+    </color>
+    <color name="material_drawer_divider" tools:ignore="UnusedResources,MissingDefaultResource">
+        @color/divider
+    </color>
 </resources>
