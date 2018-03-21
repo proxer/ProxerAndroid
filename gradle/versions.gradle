@@ -15,14 +15,14 @@ ext {
     gradleVersion = '4.6'
 
     // Core plugins
-    androidPluginVersion = '3.2.0-alpha06'
+    androidPluginVersion = '3.2.0-alpha07'
     kotlinVersion = '1.2.30'
 
     // Utility plugins
     detektPluginVersion = '1.0.0.RC6-3'
     gradleVersionsPluginVersion = '0.17.0'
     androidCommandPluginVersion = '2.0'
-    ktlintVersion = '0.19.0'
+    ktlintVersion = '0.20.0'
 
     // Frameworks and code only libraries
     ankoVersion = '0.10.4'
@@ -35,7 +35,7 @@ ext {
     proxerLibVersion = '4.3.0'
 
     // RxJava
-    rxJavaVersion = '2.1.10'
+    rxJavaVersion = '2.1.11'
     rxKotlinVersion = '2.2.0'
     rxAndroidVersion = '2.0.2'
     rxBindingVersion = '2.1.1'
