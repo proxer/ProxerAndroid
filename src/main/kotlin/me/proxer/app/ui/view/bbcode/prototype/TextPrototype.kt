@@ -33,9 +33,7 @@ object TextPrototype : BBPrototype {
 
     fun makeView(context: Context, text: CharSequence): TextView {
         return GifAwareTextView(context).also {
-            it.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
             it.text = SpannableStringBuilder(text)
-            it.setTextIsSelectable(true)
 
             TextViewCompat.setTextAppearance(it, R.style.TextAppearance_AppCompat_Small)
             BetterLinkMovementMethod.linkify(Linkify.WEB_URLS, it)
