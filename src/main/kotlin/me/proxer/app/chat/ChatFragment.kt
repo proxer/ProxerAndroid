@@ -19,7 +19,6 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.vanniktech.emoji.EmojiEditText
-import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.EmojiPopup
 import io.reactivex.disposables.Disposable
 import kotterknife.bindView
@@ -234,12 +233,6 @@ class ChatFragment : PagedContentFragment<LocalMessage>() {
         emojiPopup.dismiss()
 
         super.onDestroyView()
-    }
-
-    override fun onDestroy() {
-        EmojiManager.release()
-
-        super.onDestroy()
     }
 
     override fun showData(data: List<LocalMessage>) {

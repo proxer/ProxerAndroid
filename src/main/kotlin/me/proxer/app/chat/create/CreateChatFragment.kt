@@ -23,7 +23,6 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import com.vanniktech.emoji.EmojiEditText
-import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.EmojiPopup
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -326,12 +325,6 @@ class CreateChatFragment : BaseFragment() {
         emojiPopup.dismiss()
 
         super.onDestroyView()
-    }
-
-    override fun onDestroy() {
-        EmojiManager.release()
-
-        super.onDestroy()
     }
 
     private fun validateAndAddUser(): Boolean = participantInput.text.toString().let {
