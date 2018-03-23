@@ -9,6 +9,7 @@ import com.bumptech.glide.request.transition.Transition
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.ui.view.GifAwareTextView
+import org.jetbrains.anko.dip
 import java.util.regex.Pattern.quote
 
 /**
@@ -85,7 +86,7 @@ object BBCodeEmoticons {
                     override fun onResourceReady(resource: GifDrawable, transition: Transition<in GifDrawable>?) {
                         resource.callback = view
 
-                        resource.setBounds(0, 0, resource.intrinsicWidth, resource.intrinsicHeight)
+                        resource.setBounds(0, 0, view.context.dip(24), view.context.dip(24))
                         resource.setLoopCount(LOOP_FOREVER)
                         resource.start()
 
