@@ -124,17 +124,17 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
                 else -> 2.5
             }
 
+            itemView.setOnClickListener {
+                withSafeAdapterPosition(this) {
+                    clickSubject.onNext(image to data[it])
+                }
+            }
+
             itemView.layoutParams = LayoutParams(width.toInt(), LayoutParams.WRAP_CONTENT)
         }
 
         fun bind(item: CalendarEntry) {
             ViewCompat.setTransitionName(image, "schedule_${item.id}")
-
-            itemView.setOnClickListener {
-                withSafeAdapterPosition(this) {
-                    clickSubject.onNext(image to item)
-                }
-            }
 
             title.text = item.name
             episode.text = episode.context.getString(R.string.fragment_schedule_episode, item.episode.toString())
