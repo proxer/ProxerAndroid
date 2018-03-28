@@ -2,9 +2,12 @@
 
 package me.proxer.app.ui.view.bbcode
 
+import android.content.Context
+import android.content.ContextWrapper
 import android.text.SpannableStringBuilder
 import android.view.View
 import me.proxer.app.R
+import me.proxer.app.base.BaseActivity
 import org.jetbrains.anko.childrenRecursiveSequence
 
 /**
@@ -14,6 +17,12 @@ internal object BBUtils {
 
     internal fun cutAttribute(target: String, regex: Regex): String? {
         return regex.find(target)?.groupValues?.getOrNull(1)?.trim()?.trim { it == '"' }
+    }
+
+    internal fun findBaseActivity(currentContext: Context): BaseActivity? = when (currentContext) {
+        is BaseActivity -> currentContext
+        is ContextWrapper -> findBaseActivity(currentContext.baseContext)
+        else -> null
     }
 }
 
