@@ -15,7 +15,7 @@ ext {
     gradleVersion = '4.6'
 
     // Core plugins
-    androidPluginVersion = '3.2.0-alpha07'
+    androidPluginVersion = '3.2.0-alpha08'
     kotlinVersion = '1.2.31'
 
     // Utility plugins
@@ -41,7 +41,7 @@ ext {
     rxBindingVersion = '2.1.1'
     rxBusVersion = '2.0.0'
     rxPermissionsVersion = '0.9.5'
-    autoDisposeVersion = '0.6.1'
+    autoDisposeVersion = '0.7.0'
 
     // UI components
     aboutLibrariesVersion = '6.0.6'
