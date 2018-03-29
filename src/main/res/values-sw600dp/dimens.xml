@@ -2,6 +2,7 @@
 <resources>
 
     <bool name="is_tablet">true</bool>
+    <bool name="is_large_tablet">false</bool>
 
     <dimen name="screen_horizontal_margin">16dp</dimen>
     <dimen name="screen_vertical_margin">16dp</dimen>

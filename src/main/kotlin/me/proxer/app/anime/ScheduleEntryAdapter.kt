@@ -120,10 +120,23 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
         internal var airingInfoDisposable: Disposable? = null
 
         init {
-            val width = DeviceUtils.getScreenWidth(itemView.context) / when {
-                DeviceUtils.isLandscape(itemView.resources) -> 4.5f
-                else -> 2.25f
+            val itemsPerPage = when {
+                DeviceUtils.isLargeTablet(itemView.context) -> when (DeviceUtils.isLandscape(itemView.resources)) {
+                    true -> 6.5f
+                    false -> 4.5f
+                }
+                DeviceUtils.isTablet(itemView.context) -> when (DeviceUtils.isLandscape(itemView.resources)) {
+                    true -> 5f
+                    false -> 3f
+                }
+                else -> when (DeviceUtils.isLandscape(itemView.resources)) {
+                    true -> 4.5f
+                    false -> 2.25f
+                }
             }
+
+            val margin = itemView.context.resources.getDimension(R.dimen.screen_horizontal_margin)
+            val width = (DeviceUtils.getScreenWidth(itemView.context) - margin) / itemsPerPage
 
             itemView.setOnClickListener {
                 withSafeAdapterPosition(this) {
