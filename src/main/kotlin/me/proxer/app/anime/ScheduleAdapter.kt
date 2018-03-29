@@ -17,9 +17,11 @@ import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.anime.ScheduleAdapter.ViewHolder
 import me.proxer.app.base.BaseAdapter
+import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.toAppString
 import me.proxer.library.entity.media.CalendarEntry
 import me.proxer.library.enums.CalendarDay
+import kotlin.math.max
 
 /**
  * @author Ruben Gees
@@ -81,7 +83,10 @@ class ScheduleAdapter : BaseAdapter<Pair<CalendarDay, List<CalendarEntry>>, View
             weekDay.text = day.toAppString(weekDay.context)
 
             childRecyclerView.layoutManager = LinearLayoutManager(childRecyclerView.context, HORIZONTAL, false).apply {
-                initialPrefetchItemCount = 3
+                initialPrefetchItemCount = when (DeviceUtils.isLandscape(itemView.resources)) {
+                    true -> max(5, calendarEntries.size)
+                    false -> max(3, calendarEntries.size)
+                }
             }
 
             childRecyclerView.swapAdapter(adapter, false)

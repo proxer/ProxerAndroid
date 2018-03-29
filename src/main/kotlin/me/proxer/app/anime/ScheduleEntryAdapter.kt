@@ -4,7 +4,6 @@ import android.graphics.Typeface.BOLD
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.RecyclerView.LayoutParams
 import android.text.SpannableString
 import android.text.SpannableString.SPAN_INCLUSIVE_EXCLUSIVE
 import android.text.style.ForegroundColorSpan
@@ -14,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RatingBar
+import android.widget.RelativeLayout
 import android.widget.TextView
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -31,6 +31,7 @@ import me.proxer.app.util.extension.convertToDateTime
 import me.proxer.app.util.extension.defaultLoad
 import me.proxer.library.entity.media.CalendarEntry
 import me.proxer.library.util.ProxerUrls
+import org.jetbrains.anko.below
 import org.jetbrains.anko.childrenSequence
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
@@ -120,8 +121,8 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
 
         init {
             val width = DeviceUtils.getScreenWidth(itemView.context) / when {
-                DeviceUtils.isLandscape(itemView.resources) -> 4.5
-                else -> 2.5
+                DeviceUtils.isLandscape(itemView.resources) -> 4.5f
+                else -> 2.25f
             }
 
             itemView.setOnClickListener {
@@ -130,7 +131,7 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
                 }
             }
 
-            itemView.layoutParams = LayoutParams(width.toInt(), LayoutParams.WRAP_CONTENT)
+            itemView.layoutParams = RecyclerView.LayoutParams(width.toInt(), RecyclerView.LayoutParams.WRAP_CONTENT)
         }
 
         fun bind(item: CalendarEntry) {
@@ -142,8 +143,26 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
             if (item.rating > 0) {
                 ratingContainer.visibility = View.VISIBLE
                 rating.rating = item.rating / 2.0f
+
+                (airingInfo.layoutParams as RelativeLayout.LayoutParams).apply {
+                    bottomMargin = 0
+
+                    below(R.id.ratingContainer)
+                }
             } else {
-                ratingContainer.visibility = View.GONE
+                ratingContainer.visibility = View.INVISIBLE
+
+                (airingInfo.layoutParams as RelativeLayout.LayoutParams).apply {
+                    below(R.id.image)
+                }
+
+                ratingContainer.post {
+                    (airingInfo.layoutParams as RelativeLayout.LayoutParams).apply {
+                        val containerMargin = (ratingContainer.layoutParams as RelativeLayout.LayoutParams).topMargin
+
+                        bottomMargin = ratingContainer.height + containerMargin
+                    }
+                }
             }
 
             bindAiringInfo(item)
