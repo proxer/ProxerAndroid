@@ -27,6 +27,7 @@ import com.squareup.leakcanary.RefWatcher
 import com.squareup.moshi.Moshi
 import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.ios.IosEmojiProvider
+import io.reactivex.Completable
 import io.reactivex.exceptions.UndeliverableException
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
@@ -48,6 +49,7 @@ import me.proxer.library.api.ProxerApi.Builder.LoggingStrategy
 import me.proxer.library.util.ProxerUrls
 import okhttp3.CertificatePinner
 import okhttp3.OkHttpClient
+import java.io.File
 import java.util.Date
 import java.util.concurrent.TimeUnit
 import kotlin.properties.Delegates
@@ -111,6 +113,12 @@ class MainApplication : Application() {
         initApi()
         initLibs()
         enableStrictModeForDebug()
+
+        // TODO: Remove in next update
+        Completable
+            .fromCallable { File("$filesDir/manga").deleteRecursively() }
+            .subscribeOn(Schedulers.io())
+            .subscribeAndLogErrors()
     }
 
     override fun attachBaseContext(base: Context?) {

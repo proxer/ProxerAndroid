@@ -2,7 +2,7 @@ package me.proxer.app.ui.view.bbcode.prototype
 
 import android.text.Spannable
 import android.text.SpannableStringBuilder
-import me.proxer.app.MainApplication
+import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.R
 import me.proxer.app.ui.view.bbcode.UrlClickableSpan
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
@@ -25,7 +25,7 @@ object PollPrototype : TextMutatorPrototype, AutoClosingPrototype {
 
         return when (url) {
             null -> text
-            else -> MainApplication.globalContext.getString(R.string.view_bbcode_poll_link).toSpannableStringBuilder().apply {
+            else -> globalContext.getString(R.string.view_bbcode_poll_link).toSpannableStringBuilder().apply {
                 setSpan(UrlClickableSpan(url), 0, length, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
             }
         }

@@ -3,8 +3,8 @@ package me.proxer.app.anime.resolver
 import android.content.Intent
 import android.net.Uri
 import io.reactivex.Single
-import me.proxer.app.MainApplication
 import me.proxer.app.MainApplication.Companion.api
+import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.exception.AppRequiredException
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.buildSingle
@@ -22,7 +22,7 @@ class NetflixStreamResolver : StreamResolver {
 
     override fun resolve(id: String): Single<StreamResolutionResult> = Single
         .fromCallable {
-            if (!Utils.isPackageInstalled(MainApplication.globalContext.packageManager, NETFLIX_PACKAGE)) {
+            if (!Utils.isPackageInstalled(globalContext.packageManager, NETFLIX_PACKAGE)) {
                 throw AppRequiredException(name, NETFLIX_PACKAGE)
             }
         }

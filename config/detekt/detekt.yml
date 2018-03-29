@@ -42,3 +42,6 @@ style:
     active: false
   ExpressionBodySyntax:
     active: false
+  ForbiddenComment:
+    active: true
+    values: 'FIXME:,STOPSHIP:'
