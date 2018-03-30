@@ -57,7 +57,7 @@ ext {
     flexboxVersion = '0.3.2'
     emojiIosVersion = '7f7f35c3e7'
     exomediaVersion = '07f03c7779'
-    exoplayerVersion = '2.7.1'
+    exoplayerVersion = '2.7.2'
     materialProgressBarVersion = '1.4.2'
     materialRatingBarVersion = '1.2.0'
     customtabsHelperVersion = '1.0.4'
