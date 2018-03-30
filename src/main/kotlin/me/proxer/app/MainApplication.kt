@@ -167,6 +167,7 @@ class MainApplication : Application() {
             .loggingTag(LOGGING_TAG)
             .loginTokenManager(ProxerLoginTokenManager())
             .client(OkHttpClient.Builder()
+                .retryOnConnectionFailure(false)
                 .connectTimeout(5, TimeUnit.SECONDS)
                 .writeTimeout(10, TimeUnit.SECONDS)
                 .readTimeout(10, TimeUnit.SECONDS)
