@@ -8,12 +8,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.ImageView
-import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
+import com.davemorrissey.labs.subscaleview.decoder.SkiaImageDecoder
+import com.davemorrissey.labs.subscaleview.decoder.SkiaPooledImageRegionDecoder
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.GlideRequests
@@ -23,6 +27,7 @@ import me.proxer.app.manga.MangaAdapter.ViewHolder
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.decodedName
 import me.proxer.app.util.extension.setIconicsImage
+import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.entity.manga.Page
 import me.proxer.library.util.ProxerUrls
 import java.io.File
@@ -69,8 +74,6 @@ class MangaAdapter(private val isVertical: Boolean) : BaseAdapter<Page, ViewHold
 
         init {
             image.setDoubleTapZoomDuration(shortAnimationTime)
-            image.setBitmapDecoderClass(RapidImageDecoder::class.java)
-            image.setRegionDecoderClass(RapidImageRegionDecoder::class.java)
 
             errorIndicator.setIconicsImage(CommunityMaterial.Icon.cmd_refresh, 64)
 
@@ -103,6 +106,14 @@ class MangaAdapter(private val isVertical: Boolean) : BaseAdapter<Page, ViewHold
                 image.maxScale = scale
             }
 
+            if (item.name.endsWith("png")) {
+                image.setBitmapDecoderClass(RapidImageDecoder::class.java)
+                image.setRegionDecoderClass(RapidImageRegionDecoder::class.java)
+            } else {
+                image.setBitmapDecoderClass(SkiaImageDecoder::class.java)
+                image.setRegionDecoderClass(SkiaPooledImageRegionDecoder::class.java)
+            }
+
             errorIndicator.visibility = View.GONE
             image.visibility = View.VISIBLE
 
@@ -110,11 +121,8 @@ class MangaAdapter(private val isVertical: Boolean) : BaseAdapter<Page, ViewHold
             glideTarget = GlideFileTarget()
 
             glideTarget?.let { target ->
-                glide?.download(ProxerUrls.mangaPageImage(server, entryId, id, item.decodedName).toString())
-                    ?.format(when (DeviceUtils.shouldShowHighQualityImages(image.context)) {
-                        true -> DecodeFormat.PREFER_ARGB_8888
-                        false -> DecodeFormat.PREFER_RGB_565
-                    })
+                glide
+                    ?.download(ProxerUrls.mangaPageImage(server, entryId, id, item.decodedName).toString())
                     ?.into(target)
             }
         }
@@ -122,17 +130,22 @@ class MangaAdapter(private val isVertical: Boolean) : BaseAdapter<Page, ViewHold
         internal inner class GlideFileTarget : SimpleTarget<File>() {
 
             override fun onResourceReady(resource: File, transition: Transition<in File>?) {
-                image.setImage(ImageSource.uri(resource.path))
-                image.setScaleAndCenter(0.2f, PointF(0f, 0f))
+                Single.fromCallable { ImageSource.uri(resource.path) }
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeAndLogErrors { source ->
+                        image.setImage(source)
+                        image.setScaleAndCenter(0.2f, PointF(0f, 0f))
 
-                // Fade animations do not look good with the horizontal reader.
-                if (isVertical) {
-                    image.apply { alpha = 0.2f }
-                        .animate()
-                        .alpha(1.0f)
-                        .setDuration(mediumAnimationTime.toLong())
-                        .start()
-                }
+                        // Fade animations do not look good with the horizontal reader.
+                        if (isVertical) {
+                            image.apply { alpha = 0.2f }
+                                .animate()
+                                .alpha(1.0f)
+                                .setDuration(mediumAnimationTime.toLong())
+                                .start()
+                        }
+                    }
             }
 
             override fun onLoadFailed(errorDrawable: Drawable?) {
