@@ -263,12 +263,19 @@ class ChatJob : Job() {
                     .execute()
             } catch (error: ProxerException) {
                 if (error.cause?.stackTrace?.find { it.methodName.contains("read") } != null) {
-                    // The message was sent, but we did not receive a proper api answer due to slow network, delete the
-                    // message to avoid resending it.
-                    chatDao.deleteMessageToSend(messageId)
-                }
+                    // The message was sent, but we did not receive a proper api answer due to slow network, return
+                    // non-null to handle it like the non-empty result case.
+                    "error"
+                } else {
+                    // The message was most likely not sent, but the previous ones are. Delete them to avoid resending.
+                    chatDatabase.runInTransaction {
+                        for (i in 0 until index) {
+                            chatDao.deleteMessageToSend(get(i).id)
+                        }
+                    }
 
-                throw error
+                    throw error
+                }
             }
 
             // Per documentation: The api may return some String in case something went wrong.
