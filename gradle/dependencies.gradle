@@ -4,6 +4,7 @@ ext {
             kotlinPlugin              : "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion",
 
             detektPlugin              : "gradle.plugin.io.gitlab.arturbosch.detekt:detekt-gradle-plugin:$detektPluginVersion",
+            ktlintPlugin              : "gradle.plugin.org.jlleitschuh.gradle:ktlint-gradle:$ktlintPluginVersion",
             gradleVersionsPlugin      : "com.github.ben-manes:gradle-versions-plugin:$gradleVersionsPluginVersion",
             gradleAndroidCommandPlugin: "com.novoda:gradle-android-command-plugin:$androidCommandPluginVersion",
     ]
@@ -53,7 +54,7 @@ ext {
             emojiIos                         : "com.github.vanniktech.Emoji:emoji-ios:$emojiIosVersion",
             exoplayer                        : "com.google.android.exoplayer:exoplayer-core:$exoplayerVersion",
             exoplayerIntegration             : "com.google.android.exoplayer:extension-okhttp:$exoplayerVersion",
-            exomedia                         : "com.devbrackets.android:exomedia:$exomediaVersion",
+            exomedia                         : "com.github.brianwernick:exomedia:$exomediaVersion",
             materialProgressBar              : "me.zhanghai.android.materialprogressbar:library:$materialProgressBarVersion",
             materialRatingBar                : "me.zhanghai.android.materialratingbar:library:$materialRatingBarVersion",
             customtabsHelper                 : "me.zhanghai.android.customtabshelper:library:$customtabsHelperVersion",
@@ -112,9 +113,5 @@ ext {
                     dependency: "com.orhanobut:hawk:$hawkVersion",
                     exclusions: ['gson'],
             ],
-    ]
-
-    ktlintDependencies = [
-            ktlint: "com.github.shyiko:ktlint:$ktlintVersion",
     ]
 }

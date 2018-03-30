@@ -22,7 +22,8 @@ ext {
     detektPluginVersion = '1.0.0.RC6-3'
     gradleVersionsPluginVersion = '0.17.0'
     androidCommandPluginVersion = '2.0.1'
-    ktlintVersion = '0.20.0'
+    ktlintPluginVersion = '3.2.0'
+    ktlintVersion = '0.21.0'
 
     // Frameworks and code only libraries
     ankoVersion = '0.10.4'
@@ -55,8 +56,8 @@ ext {
     materialDialogsVersion = '0.9.6.0'
     flexboxVersion = '0.3.2'
     emojiIosVersion = '7f7f35c3e7'
-    exomediaVersion = '4.1.0'
-    exoplayerVersion = '2.6.1'
+    exomediaVersion = '07f03c7779'
+    exoplayerVersion = '2.7.1'
     materialProgressBarVersion = '1.4.2'
     materialRatingBarVersion = '1.2.0'
     customtabsHelperVersion = '1.0.4'

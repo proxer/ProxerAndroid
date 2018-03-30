@@ -21,6 +21,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
 apply plugin: 'com.github.ben-manes.versions'
+apply plugin: 'org.jlleitschuh.gradle.ktlint'
 apply plugin: 'io.gitlab.arturbosch.detekt'
 apply plugin: 'com.novoda.android-command'
 
@@ -135,10 +136,6 @@ android {
     }
 }
 
-configurations {
-    ktlint
-}
-
 repositories {
     jcenter()
     google()
@@ -154,7 +151,6 @@ dependencies {
     releaseImplementationDependencies.values().each { storeReleaseImplementation it }
     compileOnlyDependencies.values().each { compileOnly it }
     kaptDependencies.values().each { kapt it }
-    ktlintDependencies.values().each { ktlint it }
 
     transitiveImplementationDependencies.values().each {
         implementation(it) {
@@ -169,41 +165,6 @@ dependencies {
             }
         }
     }
-}
-
-task ktlintCheck(type: Exec) {
-    group 'Verification'
-    description 'Analyze your kotlin code with ktlint.'
-
-    commandLine 'java', '-cp', configurations.ktlint.join(System.getProperty('path.separator')),
-            'com.github.shyiko.ktlint.Main', '--reporter=checkstyle', 'src/**/*.kt'
-
-    ignoreExitValue = true
-
-    doFirst {
-        File outputFile = new File(buildDir, 'reports/ktlint/ktlint-checkstyle.xml')
-
-        outputFile.parentFile.mkdirs()
-        outputFile.createNewFile()
-
-        standardOutput = new FileOutputStream(outputFile)
-    }
-
-    doLast {
-        standardOutput.close()
-
-        if (execResult.exitValue != 0) {
-            throw new GradleException("ktlint finished with non-zero exit value ${execResult.exitValue}")
-        }
-    }
-}
-
-task ktlintFormat(type: Exec) {
-    group 'Formatting'
-    description = "Fix Kotlin code style deviations."
-
-    commandLine 'java', '-cp', configurations.ktlint.join(System.getProperty('path.separator')),
-            'com.github.shyiko.ktlint.Main', '-F', 'src/**/*.kt'
 }
 
 task wrapper(type: Wrapper) {
@@ -224,6 +185,11 @@ detekt {
     }
 }
 
+ktlint {
+    version = ktlintVersion
+    reporters = ["CHECKSTYLE"]
+}
+
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
     kotlinOptions {
         freeCompilerArgs = ["-Xjsr305=strict"]
@@ -232,7 +198,6 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
 
 gradle.projectsEvaluated {
     check.dependsOn detektCheck
-    check.dependsOn ktlintCheck
 }
 
 static getResSrcDirs() {
