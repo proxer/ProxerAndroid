@@ -6,7 +6,7 @@ jobs:
       - image: circleci/android:api-27-alpha
     environment:
       _JAVA_OPTIONS: "-Xms512m -Xmx1536M -XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -XX:ParallelGCThreads=1
-                      -Djava.util.concurrent.ForkJoinPool.common.parallelism=1 -XX:MaxHeapSize=512M"
+                      -Djava.util.concurrent.ForkJoinPool.common.parallelism=1"
       TERM: dumb
     steps:
       - checkout
