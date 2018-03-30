@@ -3,7 +3,7 @@
 ### What is this?
 
 This is a client for the german Anime & Manga page [Proxer.Me](https://proxer.me/).<br>
-It features the most important functionalities including an anime player for various hosters and languages, a mobile-friendly vertical manga reader, offline synchronized chat, offline manga and much more.
+It features the most important functionalities including an anime player for various hosters and languages, a mobile-friendly vertical manga reader, offline synchronized chat and much more.
 
 ### How to use it?
 
@@ -72,9 +72,9 @@ gradlew.bat assembleDebug
 | :---------------: | :---------------------: | :---------------------: |
 | ![](art/news.png) | ![](art/anime-list.png) | ![](art/manga-list.png) |
 
-|       Media Detail        |    Manga Reader    |       Offline Manga        |
-| :-----------------------: | :----------------: | :------------------------: |
-| ![](art/media-detail.png) | ![](art/manga.png) | ![](art/offline-manga.png) |
+|       Media Detail        |    Manga Reader
+| :-----------------------: | :----------------:
+| ![](art/media-detail.png) | ![](art/manga.png)
 
 |     Anime Stream List      |      Anime Player       |
 | :------------------------: | :---------------------: |
