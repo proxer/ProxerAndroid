@@ -6,17 +6,16 @@ import android.graphics.drawable.Drawable
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.AppCompatImageView
 import android.view.View
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.ImageView
 import android.widget.LinearLayout.LayoutParams
-import android.widget.LinearLayout.LayoutParams.MATCH_PARENT
 import android.widget.TextView
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import com.bumptech.glide.request.target.Target.SIZE_ORIGINAL
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.GlideRequests
@@ -64,16 +63,16 @@ object ImagePrototype : AutoClosingPrototype {
         return listOf(AppCompatImageView(context).also { view: ImageView ->
             ViewCompat.setTransitionName(view, "bb_image_$parsedUrl")
 
-            view.layoutParams = LayoutParams(MATCH_PARENT, WRAP_CONTENT)
+            view.layoutParams = LayoutParams(width ?: MATCH_PARENT, WRAP_CONTENT)
 
-            glide?.let { loadImage(it, view, parsedUrl, width) }
+            glide?.let { loadImage(it, view, parsedUrl) }
 
             if (context is Activity) {
                 view.setOnClickListener { _ ->
                     if (view.getTag(R.id.error_tag) == true) {
                         view.tag = null
 
-                        glide?.let { loadImage(it, view, parsedUrl, width) }
+                        glide?.let { loadImage(it, view, parsedUrl) }
                     } else if (view.drawable != null) {
                         ImageDetailActivity.navigateTo(context, parsedUrl, view)
                     }
@@ -82,12 +81,12 @@ object ImagePrototype : AutoClosingPrototype {
         })
     }
 
-    private fun loadImage(glide: GlideRequests, view: ImageView, url: HttpUrl, width: Int?) = glide.load(url.toString())
-        .apply { if (width != null) override(width, SIZE_ORIGINAL) else override(SIZE_ORIGINAL) }
+    private fun loadImage(glide: GlideRequests, view: ImageView, url: HttpUrl) = glide.load(url.toString())
         .format(when (DeviceUtils.shouldShowHighQualityImages(view.context)) {
             true -> DecodeFormat.PREFER_ARGB_8888
             false -> DecodeFormat.PREFER_RGB_565
         })
+        .centerInside()
         .listener(object : RequestListener<Drawable?> {
 
             override fun onLoadFailed(
