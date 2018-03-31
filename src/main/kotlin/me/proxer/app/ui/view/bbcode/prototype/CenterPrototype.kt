@@ -18,7 +18,7 @@ import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
 /**
  * @author Ruben Gees
  */
-object CenterPrototype : ConditionalTextMutatorPrototype {
+object CenterPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
 
     override val startRegex = Regex(" *center( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *center *", REGEX_OPTIONS)

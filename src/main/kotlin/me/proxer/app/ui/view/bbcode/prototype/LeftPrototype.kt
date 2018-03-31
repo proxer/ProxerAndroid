@@ -18,7 +18,7 @@ import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
 /**
  * @author Ruben Gees
  */
-object LeftPrototype : ConditionalTextMutatorPrototype {
+object LeftPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
 
     override val startRegex = Regex(" *left( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *left *", REGEX_OPTIONS)
