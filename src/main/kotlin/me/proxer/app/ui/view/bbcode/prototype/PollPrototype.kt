@@ -20,7 +20,7 @@ object PollPrototype : TextMutatorPrototype, AutoClosingPrototype {
         val id = text.trim()
         val url = ProxerUrls.webBase().newBuilder()
             .addPathSegments("poll/$id")
-            .addQueryParameter("device", ProxerUtils.getApiEnumName(Device.MOBILE))
+            .setQueryParameter("device", ProxerUtils.getApiEnumName(Device.MOBILE))
             .build()
 
         return when (url) {

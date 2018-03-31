@@ -16,6 +16,8 @@ import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
+import me.proxer.library.util.ProxerUtils
+import okhttp3.HttpUrl
 import org.jetbrains.anko.bundleOf
 import kotlin.properties.Delegates
 
@@ -83,8 +85,20 @@ class TopicFragment : PagedContentFragment<ParsedPost>() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.show_in_browser -> viewModel.metaData.value?.categoryId?.also { categoryId ->
-                showPage(ProxerUrls.forumWeb(categoryId, id, Device.MOBILE), true)
+            R.id.show_in_browser -> {
+                val url = HttpUrl.parse(activity?.intent?.dataString ?: "")
+
+                if (url != null) {
+                    val mobileUrl = url.newBuilder()
+                        .setQueryParameter("device", ProxerUtils.getApiEnumName(Device.MOBILE))
+                        .build()
+
+                    showPage(mobileUrl, true)
+                } else {
+                    viewModel.metaData.value?.categoryId?.also { categoryId ->
+                        showPage(ProxerUrls.forumWeb(categoryId, id, Device.MOBILE), true)
+                    }
+                }
             }
         }
 
