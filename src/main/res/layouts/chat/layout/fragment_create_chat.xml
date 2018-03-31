@@ -56,13 +56,13 @@
                                 android:id="@+id/topicInputContainer"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="8dp">
+                                android:layout_margin="8dp"
+                                android:hint="@string/fragment_create_chat_topic_hint">
 
                                 <android.support.design.widget.TextInputEditText
                                     android:id="@+id/topicInput"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:hint="@string/fragment_create_chat_topic_hint"
                                     android:imeOptions="actionNext"
                                     android:inputType="text"
                                     android:maxLines="1" />

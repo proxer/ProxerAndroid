@@ -7,8 +7,12 @@
     <color name="colorAccent">#8A0E0E</color>
 
     <color name="textColorPrimary">@android:color/primary_text_light</color>
-    <color name="textColorSecondary" tools:keep="@color/textColorSecondary">@android:color/secondary_text_light</color>
-    <color name="textColorTertiary" tools:keep="@color/textColorTertiary">@android:color/tertiary_text_light</color>
+    <color name="textColorSecondary" tools:keep="@color/textColorSecondary">
+        @android:color/secondary_text_light
+    </color>
+    <color name="textColorTertiary" tools:keep="@color/textColorTertiary">
+        @android:color/tertiary_text_light
+    </color>
 
     <color name="half_transparent">#7F000000</color>
 
@@ -26,8 +30,12 @@
 
     <color name="card_background">@color/cardview_light_background</color>
 
-    <color name="about_libraries_card_dark" tools:ignore="UnusedResources">@color/cardview_dark_background</color>
-    <color name="about_libraries_dividerLight_openSource_dark" tools:ignore="UnusedResources">@color/divider</color>
+    <color name="about_libraries_card_dark" tools:ignore="UnusedResources">
+        @color/cardview_dark_background
+    </color>
+    <color name="about_libraries_dividerLight_openSource_dark" tools:ignore="UnusedResources">
+        @color/divider
+    </color>
 
     <color name="emoji_icons" tools:ignore="UnusedResources">@color/icon</color>
     <color name="emoji_divider" tools:ignore="UnusedResources">@color/divider</color>
