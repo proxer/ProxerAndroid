@@ -20,7 +20,7 @@ object TablePrototype : AutoClosingPrototype {
     override val endRegex = Regex("/ *table *", REGEX_OPTIONS)
 
     override fun makeViews(context: Context, children: List<BBTree>, args: Map<String, Any?>): List<View> {
-        val childViews = children.filter { it.prototype == TableRowPrototype }.flatMap { it.makeViews(context) }
+        val childViews = CenterPrototype.makeViews(context, children.filter { it.prototype == TableRowPrototype }, args)
 
         for (child in childViews.dropLast(1)) {
             (child.layoutParams as? MarginLayoutParams)?.apply {

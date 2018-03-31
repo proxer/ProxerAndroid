@@ -23,9 +23,7 @@ object TableCellPrototype : AutoClosingPrototype {
         val childViews = super.makeViews(context, children, args)
 
         return when (childViews.size) {
-            0, 1 -> childViews.map {
-                it.apply { layoutParams = LayoutParams(0, WRAP_CONTENT, 1f) }
-            }
+            0, 1 -> childViews.map { it.apply { layoutParams = LayoutParams(0, WRAP_CONTENT, 1f) } }
             else -> listOf(LinearLayout(context).apply {
                 layoutParams = LayoutParams(0, WRAP_CONTENT, 1f)
                 orientation = VERTICAL
