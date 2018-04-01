@@ -64,7 +64,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:singleSelection="true"
-                    app:titleText="Sprache" />
+                    app:titleText="@string/fragment_media_list_language" />
 
                 <me.proxer.app.ui.view.ExpandableSelectionView
                     android:id="@+id/genreSelector"
@@ -82,7 +82,21 @@
                     android:id="@+id/fskSelector"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:titleText="Enthaltene FSK" />
+                    app:titleText="@string/fragment_media_list_fsk" />
+
+                <me.proxer.app.ui.view.ExpandableSelectionView
+                    android:id="@+id/tagSelector"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:titleText="@string/fragment_media_list_tags" />
+
+                <me.proxer.app.ui.view.ExpandableSelectionView
+                    android:id="@+id/excludedTagSelector"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:titleText="@string/fragment_media_list_excluded_tags" />
 
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>

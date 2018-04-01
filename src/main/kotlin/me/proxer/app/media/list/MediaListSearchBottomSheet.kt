@@ -1,5 +1,6 @@
 package me.proxer.app.media.list
 
+import android.arch.lifecycle.Observer
 import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.BottomSheetBehavior.STATE_COLLAPSED
 import android.support.design.widget.BottomSheetBehavior.STATE_EXPANDED
@@ -41,6 +42,40 @@ class MediaListSearchBottomSheet private constructor(
         fragment.genreSelector.findViewById<ViewGroup>(R.id.items).enableLayoutAnimationsSafely()
         fragment.excludedGenreSelector.findViewById<ViewGroup>(R.id.items).enableLayoutAnimationsSafely()
 
+        initClickSubscriptions()
+        initSelectionSubscriptions()
+
+        val genreItems = Genre.values().map { getSafeApiEnum(it) }
+        val fskItems = FskConstraint.values().map { it.toAppString(fragment.requireContext()) }
+        val languageItems = listOf(
+            fragment.getString(R.string.fragment_media_list_all_languages),
+            fragment.getString(R.string.language_german),
+            fragment.getString(R.string.language_english)
+        )
+
+        fragment.languageSelector.items = languageItems
+        fragment.genreSelector.items = genreItems
+        fragment.excludedGenreSelector.items = genreItems
+        fragment.fskSelector.items = fskItems
+
+        fragment.searchBottomSheetTitle.post {
+            bottomSheetBehaviour.peekHeight = fragment.searchBottomSheetTitle.height + fragment.dip(10)
+            fragment.searchBottomSheet.visibility = View.VISIBLE
+        }
+
+        viewModel.loadTags()
+        viewModel.tagData.observe(fragment, Observer {
+            if (it != null) {
+                fragment.tagSelector.items = it.map { it.name }
+                fragment.excludedTagSelector.items = it.map { it.name }
+
+                fragment.tagSelector.visibility = View.VISIBLE
+                fragment.excludedTagSelector.visibility = View.VISIBLE
+            }
+        })
+    }
+
+    private fun initClickSubscriptions() {
         fragment.searchBottomSheetTitle.clicks()
             .autoDispose(fragment)
             .subscribe {
@@ -57,7 +92,9 @@ class MediaListSearchBottomSheet private constructor(
 
                 viewModel.reload()
             }
+    }
 
+    private fun initSelectionSubscriptions() {
         fragment.languageSelector.selectionChangeSubject
             .autoDispose(fragment)
             .subscribeAndLogErrors {
@@ -92,30 +129,22 @@ class MediaListSearchBottomSheet private constructor(
                 })
             }
 
-        val genreItems = Genre.values().map { getSafeApiEnum(it) }
-        val fskItems = FskConstraint.values().map { it.toAppString(fragment.requireContext()) }
-        val languageItems = listOf(
-            fragment.getString(R.string.fragment_media_list_all_languages),
-            fragment.getString(R.string.language_german),
-            fragment.getString(R.string.language_english)
-        )
+        fragment.tagSelector.selectionChangeSubject
+            .autoDispose(fragment)
+            .subscribeAndLogErrors { selections ->
+                viewModel.tagData.value?.let { tagData ->
+                    fragment.tags = selections.mapNotNull { selection -> tagData.find { it.name == selection } }
+                }
+            }
 
-        fragment.languageSelector.items = languageItems
-        fragment.genreSelector.items = genreItems
-        fragment.excludedGenreSelector.items = genreItems
-        fragment.fskSelector.items = fskItems
-
-        fragment.searchBottomSheetTitle.post {
-            bottomSheetBehaviour.peekHeight = fragment.searchBottomSheetTitle.height + fragment.dip(10)
-            fragment.searchBottomSheet.visibility = View.VISIBLE
-        }
+        fragment.excludedTagSelector.selectionChangeSubject
+            .autoDispose(fragment)
+            .subscribeAndLogErrors { selections ->
+                viewModel.tagData.value?.let { tagData ->
+                    fragment.excludedTags = selections.mapNotNull { selection -> tagData.find { it.name == selection } }
+                }
+            }
     }
-
-    private fun <T : Enum<T>> toSafeApiEnum(klass: Class<T>, value: String) = ProxerUtils.toApiEnum(klass, value)
-        ?: throw IllegalArgumentException("Unknown ${klass.simpleName}: $value")
-
-    private fun getSafeApiEnum(value: Enum<*>) = ProxerUtils.getApiEnumName(value)
-        ?: throw IllegalArgumentException("Unknown ${value::class.java.simpleName}: ${value.name}")
 
     fun onBackPressed() = if (bottomSheetBehaviour.state != STATE_COLLAPSED) {
         bottomSheetBehaviour.state = STATE_COLLAPSED
@@ -124,4 +153,10 @@ class MediaListSearchBottomSheet private constructor(
     } else {
         false
     }
+
+    private fun <T : Enum<T>> toSafeApiEnum(klass: Class<T>, value: String) = ProxerUtils.toApiEnum(klass, value)
+        ?: throw IllegalArgumentException("Unknown ${klass.simpleName}: $value")
+
+    private fun getSafeApiEnum(value: Enum<*>) = ProxerUtils.getApiEnumName(value)
+        ?: throw IllegalArgumentException("Unknown ${value::class.java.simpleName}: ${value.name}")
 }

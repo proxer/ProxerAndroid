@@ -65,7 +65,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
 
     override val viewModel by unsafeLazy {
         MediaListViewModelProvider.get(this, sortCriteria, type, searchQuery, language,
-            genres, excludedGenres, fskConstraints)
+            genres, excludedGenres, fskConstraints, tags, excludedTags)
     }
 
     override val layoutManager by unsafeLazy {
@@ -138,6 +138,22 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
             viewModel.fskConstraints = value
         }
 
+    internal var tags: List<ParcelableTag>
+        get() = requireArguments().getParcelableArrayList("tags") ?: emptyList()
+        set(value) {
+            requireArguments().putParcelableArrayList("tags", ArrayList(value))
+
+            viewModel.tags = value
+        }
+
+    internal var excludedTags: List<ParcelableTag>
+        get() = requireArguments().getParcelableArrayList("excludedTags") ?: emptyList()
+        set(value) {
+            requireArguments().putParcelableArrayList("excludedTags", ArrayList(value))
+
+            viewModel.excludedTags = value
+        }
+
     private var searchBottomSheetManager by Delegates.notNull<MediaListSearchBottomSheet>()
 
     private val toolbar by unsafeLazy { requireActivity().findViewById<Toolbar>(R.id.toolbar) }
@@ -149,6 +165,8 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
     internal val genreSelector by bindView<ExpandableSelectionView>(R.id.genreSelector)
     internal val excludedGenreSelector by bindView<ExpandableSelectionView>(R.id.excludedGenreSelector)
     internal val fskSelector by bindView<ExpandableSelectionView>(R.id.fskSelector)
+    internal val tagSelector by bindView<ExpandableSelectionView>(R.id.tagSelector)
+    internal val excludedTagSelector by bindView<ExpandableSelectionView>(R.id.excludedTagSelector)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

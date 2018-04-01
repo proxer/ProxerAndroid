@@ -15,6 +15,7 @@ import me.proxer.app.chat.LocalMessage
 import me.proxer.app.forum.ParsedPost
 import me.proxer.app.forum.TopicMetaData
 import me.proxer.app.media.comment.ParsedComment
+import me.proxer.app.media.list.ParcelableTag
 import me.proxer.app.profile.comment.ParsedUserComment
 import me.proxer.app.ui.view.bbcode.BBParser
 import me.proxer.library.entity.anime.Stream
@@ -23,6 +24,7 @@ import me.proxer.library.entity.forum.Topic
 import me.proxer.library.entity.info.Comment
 import me.proxer.library.entity.info.EntrySeasonInfo
 import me.proxer.library.entity.info.Synonym
+import me.proxer.library.entity.list.Tag
 import me.proxer.library.entity.manga.Page
 import me.proxer.library.entity.messenger.Conference
 import me.proxer.library.entity.messenger.Message
@@ -302,3 +304,5 @@ fun Topic.toTopicMetaData() = TopicMetaData(categoryId, categoryName, firstPostD
 fun Post.toParsedPost() = ParsedPost(id, parentId, userId, username, image, date,
     signature?.let { if (it.isNotBlank()) BBParser.parse(it).optimize() else null },
     modifiedById, modifiedByName, modifiedReason, BBParser.parse(message).optimize(), thankYouAmount)
+
+fun Tag.toParcelableTag() = ParcelableTag(id, name)

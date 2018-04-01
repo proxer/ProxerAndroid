@@ -322,8 +322,12 @@
 
     <string name="fragment_media_list_extended_criteria">Erweiterte Kriterien</string>
     <string name="fragment_media_list_search">Suchen</string>
+    <string name="fragment_media_list_language">Sprache</string>
     <string name="fragment_media_list_genres">Enthaltene Genre</string>
     <string name="fragment_media_list_excluded_genres">Nicht enthaltene Genre</string>
+    <string name="fragment_media_list_fsk">Enthaltene FSK</string>
+    <string name="fragment_media_list_tags">Enthaltene Tags</string>
+    <string name="fragment_media_list_excluded_tags">Nicht enthaltene Tags</string>
     <string name="fragment_media_list_all_languages">Alle</string>
 
     <string name="fragment_media_info_description">Beschreibung</string>
