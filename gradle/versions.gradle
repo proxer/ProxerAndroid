@@ -19,7 +19,7 @@ ext {
     kotlinVersion = '1.2.31'
 
     // Utility plugins
-    detektPluginVersion = '1.0.0.RC6-3'
+    detektPluginVersion = '1.0.0.RC6-4'
     gradleVersionsPluginVersion = '0.17.0'
     androidCommandPluginVersion = '2.0.1'
     ktlintPluginVersion = '3.2.0'
@@ -33,7 +33,7 @@ ext {
     lifecycleVersion = '1.1.1'
     roomVersion = '1.1.0-beta1'
     androidJobVersion = '1.2.5'
-    proxerLibVersion = '76829253b9'
+    proxerLibVersion = '8c7576ae14'
 
     // RxJava
     rxJavaVersion = '2.1.12'
@@ -45,8 +45,8 @@ ext {
     autoDisposeVersion = '0.7.0'
 
     // UI components
-    aboutLibrariesVersion = '6.0.6'
-    materialDrawerVersion = '6.0.6'
+    aboutLibrariesVersion = '6.0.7'
+    materialDrawerVersion = '6.0.7'
     iconicsVersion = '3.0.3'
     communityMaterialTypefaceVersion = '2.0.46.1'
     crossfaderVersion = '1.5.2'
@@ -55,6 +55,7 @@ ext {
     tabLayoutHelperVersion = '0.9.0'
     materialDialogsVersion = '0.9.6.0'
     flexboxVersion = '0.3.2'
+    emojiIosVersion = '7f7f35c3e7'
     emojiIosVersion = '7f7f35c3e7'
     exomediaVersion = '07f03c7779'
     exoplayerVersion = '2.7.2'

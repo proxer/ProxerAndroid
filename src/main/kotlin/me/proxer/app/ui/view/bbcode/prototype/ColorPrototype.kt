@@ -28,6 +28,8 @@ object ColorPrototype : TextMutatorPrototype {
     )
 
     private val availableColorsForRegex = availableColors.joinToString("|") { it.first }
+
+    @Suppress("MayBeConst")
     private val colorsForRegex = "(#[A-Fa-f0-9]{6}|#[A-Fa-f0-9]{8}|$availableColorsForRegex)"
 
     override val startRegex = Regex(" *color *= *\"?$colorsForRegex\"?( .*?)?", REGEX_OPTIONS)

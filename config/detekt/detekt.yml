@@ -2,28 +2,28 @@ failFast: true
 
 comments:
   UndocumentedPublicClass:
-    searchInNestedClass: false
     searchInInnerClass: false
-    searchInInnerObject: false
     searchInInnerInterface: false
+    searchInInnerObject: false
+    searchInNestedClass: false
   UndocumentedPublicFunction:
     active: false
 
 complexity:
-  NestedBlockDepth:
-    active: false
-  LongParameterList:
-    active: false
-  LargeClass:
+  ComplexCondition:
     active: false
   ComplexMethod:
     active: false
-  TooManyFunctions:
+  LargeClass:
     active: false
-  ComplexCondition:
+  LongParameterList:
+    active: false
+  NestedBlockDepth:
     active: false
   StringLiteralDuplication:
     threshold: 5
+  TooManyFunctions:
+    active: false
 
 exceptions:
   TooGenericExceptionCaught:
@@ -38,10 +38,12 @@ potential-bugs:
     active: false
 
 style:
-  MagicNumber:
-    active: false
   ExpressionBodySyntax:
     active: false
   ForbiddenComment:
     active: true
     values: 'FIXME:,STOPSHIP:'
+  MagicNumber:
+    active: false
+  UnusedPrivateMember:
+    active: false
