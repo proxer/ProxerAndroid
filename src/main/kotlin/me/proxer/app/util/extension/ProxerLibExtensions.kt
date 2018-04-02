@@ -252,7 +252,7 @@ fun IndustryType.toAppString(context: Context): String = context.getString(when 
     IndustryType.PUBLISHER -> R.string.industry_publisher
     IndustryType.STUDIO -> R.string.industry_studio
     IndustryType.STUDIO_SECONDARY -> R.string.industry_studio_secondary
-    IndustryType.PRODUCER -> R.string.industry_publisher
+    IndustryType.PRODUCER -> R.string.industry_producer
     IndustryType.RECORD_LABEL -> R.string.industry_record_label
     IndustryType.TALENT_AGENT -> R.string.industry_talent_agent
     IndustryType.STREAMING -> R.string.industry_streaming
