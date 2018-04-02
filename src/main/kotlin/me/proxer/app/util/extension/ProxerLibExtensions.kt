@@ -32,6 +32,7 @@ import me.proxer.library.enums.CalendarDay
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.Country
 import me.proxer.library.enums.FskConstraint
+import me.proxer.library.enums.IndustryType
 import me.proxer.library.enums.Language
 import me.proxer.library.enums.License
 import me.proxer.library.enums.MediaLanguage
@@ -247,14 +248,28 @@ fun FskConstraint.toAppDrawable(context: Context) = AppCompatResources.getDrawab
     FskConstraint.VIOLENCE -> R.drawable.ic_fsk_violence
 }) ?: throw IllegalStateException("Could not resolve Drawable for fsk constraint: $this")
 
+fun IndustryType.toAppString(context: Context): String = context.getString(when (this) {
+    IndustryType.PUBLISHER -> R.string.industry_publisher
+    IndustryType.STUDIO -> R.string.industry_studio
+    IndustryType.STUDIO_SECONDARY -> R.string.industry_studio_secondary
+    IndustryType.PRODUCER -> R.string.industry_publisher
+    IndustryType.RECORD_LABEL -> R.string.industry_record_label
+    IndustryType.TALENT_AGENT -> R.string.industry_talent_agent
+    IndustryType.STREAMING -> R.string.industry_streaming
+    IndustryType.DEVELOPER -> R.string.industry_developer
+    IndustryType.TV -> R.string.industry_tv
+    IndustryType.SOUND_STUDIO -> R.string.industry_sound_studio
+    IndustryType.UNKNOWN -> R.string.industry_unknown
+})
+
 fun CalendarDay.toAppString(context: Context): String = context.getString(when (this) {
-    CalendarDay.MONDAY -> R.string.fragment_schedule_day_monday
-    CalendarDay.TUESDAY -> R.string.fragment_schedule_day_tuesday
-    CalendarDay.WEDNESDAY -> R.string.fragment_schedule_day_wednesday
-    CalendarDay.THURSDAY -> R.string.fragment_schedule_day_thursday
-    CalendarDay.FRIDAY -> R.string.fragment_schedule_day_friday
-    CalendarDay.SATURDAY -> R.string.fragment_schedule_day_saturday
-    CalendarDay.SUNDAY -> R.string.fragment_schedule_day_sunday
+    CalendarDay.MONDAY -> R.string.day_monday
+    CalendarDay.TUESDAY -> R.string.day_tuesday
+    CalendarDay.WEDNESDAY -> R.string.day_wednesday
+    CalendarDay.THURSDAY -> R.string.day_thursday
+    CalendarDay.FRIDAY -> R.string.day_friday
+    CalendarDay.SATURDAY -> R.string.day_saturday
+    CalendarDay.SUNDAY -> R.string.day_sunday
 })
 
 inline val Page.decodedName: String

@@ -386,13 +386,7 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
             if (it.type == IndustryType.UNKNOWN) {
                 it.name
             } else {
-                val type = ProxerUtils.getApiEnumName(it.type)
-                    ?.replace("_", " ")
-                    ?.split(" ")
-                    ?.joinToString(separator = " ", transform = String::capitalize)
-                    ?: throw IllegalArgumentException("Unknown industry type: ${it.type}")
-
-                "${it.name} ($type)"
+                "${it.name} (${it.type.toAppString(requireContext())})"
             }
         }, onClick = { IndustryActivity.navigateTo(requireActivity(), it.id, it.name) })
     }

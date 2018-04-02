@@ -217,6 +217,26 @@
     <string name="license_not_licensed">Nicht lizenziert</string>
     <string name="license_unknown">Unbekannt</string>
 
+    <string name="industry_publisher">Publisher</string>
+    <string name="industry_studio">Studio</string>
+    <string name="industry_studio_secondary">Nebenstudio</string>
+    <string name="industry_producer">Producer</string>
+    <string name="industry_record_label">Plattenlabel</string>
+    <string name="industry_talent_agent">Talentagentur</string>
+    <string name="industry_streaming">Streamingdienst</string>
+    <string name="industry_developer">Entwicklerstudio</string>
+    <string name="industry_tv">TV-Sender</string>
+    <string name="industry_sound_studio">Musik-/Soundstudio</string>
+    <string name="industry_unknown">Unbekannt</string>
+
+    <string name="day_monday">Montag</string>
+    <string name="day_tuesday">Dienstag</string>
+    <string name="day_wednesday">Mittwoch</string>
+    <string name="day_thursday">Donnerstag</string>
+    <string name="day_friday">Freitag</string>
+    <string name="day_saturday">Samstag</string>
+    <string name="day_sunday">Sonntag</string>
+
     <plurals name="media_chapter_count">
         <item quantity="one">Ein Kapitel</item>
         <item quantity="other">%d Kapitel</item>
@@ -225,14 +245,6 @@
         <item quantity="one">Eine Episode</item>
         <item quantity="other">%d Episoden</item>
     </plurals>
-
-    <string name="fragment_schedule_day_monday">Montag</string>
-    <string name="fragment_schedule_day_tuesday">Dienstag</string>
-    <string name="fragment_schedule_day_wednesday">Mittwoch</string>
-    <string name="fragment_schedule_day_thursday">Donnerstag</string>
-    <string name="fragment_schedule_day_friday">Freitag</string>
-    <string name="fragment_schedule_day_saturday">Samstag</string>
-    <string name="fragment_schedule_day_sunday">Sonntag</string>
 
     <string name="fragment_schedule_episode">Episode %s</string>
     <string name="fragment_schedule_aired">Ausgestrahlt</string>

@@ -14,10 +14,10 @@ import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.clipboardManager
 import me.proxer.app.util.extension.toAppDrawable
+import me.proxer.app.util.extension.toAppString
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.info.Industry
 import me.proxer.library.enums.Country
-import me.proxer.library.util.ProxerUtils
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.toast
 
@@ -68,11 +68,7 @@ class IndustryInfoFragment : BaseContentFragment<Industry>() {
         super.showData(data)
 
         name = data.name
-        type.text = ProxerUtils.getApiEnumName(data.type)
-            ?.replace("_", " ")
-            ?.split(" ")
-            ?.joinToString(separator = " ", transform = String::capitalize)
-            ?: throw IllegalArgumentException("Unknown Industry type: ${data.type}")
+        type.text = data.type.toAppString(requireContext())
 
         if (data.country == Country.NONE) {
             languageRow.visibility = View.GONE
