@@ -15,7 +15,7 @@ ext {
     gradleVersion = '4.6'
 
     // Core plugins
-    androidPluginVersion = '3.2.0-alpha08'
+    androidPluginVersion = '3.2.0-alpha09'
     kotlinVersion = '1.2.31'
 
     // Utility plugins
@@ -29,7 +29,7 @@ ext {
     ankoVersion = '0.10.4'
     multidexVersion = '1.0.3'
     supportLibraryVersion = '27.1.0'
-    supportPreferenceVersion = '2.1.1'
+    supportPreferenceVersion = '2.1.2'
     lifecycleVersion = '1.1.1'
     roomVersion = '1.1.0-beta1'
     androidJobVersion = '1.2.5'
@@ -45,7 +45,7 @@ ext {
     autoDisposeVersion = '0.7.0'
 
     // UI components
-    aboutLibrariesVersion = '6.0.7'
+    aboutLibrariesVersion = '6.0.8'
     materialDrawerVersion = '6.0.7'
     iconicsVersion = '3.0.3'
     communityMaterialTypefaceVersion = '2.0.46.1'
