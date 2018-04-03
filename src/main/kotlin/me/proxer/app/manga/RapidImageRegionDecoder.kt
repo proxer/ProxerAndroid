@@ -6,7 +6,6 @@ import android.graphics.Point
 import android.graphics.Rect
 import android.net.Uri
 import com.davemorrissey.labs.subscaleview.decoder.ImageRegionDecoder
-import me.proxer.app.util.DeviceUtils
 import rapid.decoder.BitmapDecoder
 
 /**
@@ -18,12 +17,7 @@ class RapidImageRegionDecoder : ImageRegionDecoder {
 
     override fun init(context: Context, uri: Uri): Point {
         decoder = BitmapDecoder.from(context, uri)
-            .apply {
-                when (DeviceUtils.shouldShowHighQualityImages(context)) {
-                    true -> config(Bitmap.Config.ARGB_8888)
-                    false -> config(Bitmap.Config.RGB_565)
-                }
-            }
+            .config(Bitmap.Config.RGB_565)
 
         return Point(decoder?.sourceWidth() ?: -1, decoder?.sourceHeight() ?: -1)
     }

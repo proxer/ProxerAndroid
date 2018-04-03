@@ -1,14 +1,12 @@
 package me.proxer.app.util
 
 import android.app.Activity
-import android.app.ActivityManager
 import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Point
 import android.os.Build
 import me.proxer.app.R
-import me.proxer.app.util.extension.activityManager
 import me.proxer.app.util.extension.windowManager
 
 /**
@@ -54,19 +52,5 @@ object DeviceUtils {
         }
 
         return result
-    }
-
-    fun shouldShowHighQualityImages(context: Context): Boolean {
-        val isLowRamDevice = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            context.activityManager.isLowRamDevice
-        } else {
-            true
-        }
-
-        val memoryInfo = ActivityManager.MemoryInfo().apply {
-            context.activityManager.getMemoryInfo(this)
-        }
-
-        return !isLowRamDevice && !memoryInfo.lowMemory && memoryInfo.availMem >= 1024 * 1024 * 1024
     }
 }

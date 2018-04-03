@@ -3,6 +3,7 @@ package me.proxer.app
 import android.app.Application
 import android.arch.persistence.room.Room
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.support.multidex.MultiDex
@@ -10,6 +11,7 @@ import android.support.v7.app.AppCompatDelegate
 import android.util.Log
 import android.widget.ImageView
 import cat.ereza.customactivityoncrash.config.CaocConfig
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.devbrackets.android.exomedia.ExoMedia
 import com.evernote.android.job.JobApi
 import com.evernote.android.job.JobConfig
@@ -207,6 +209,7 @@ class MainApplication : Application() {
         }
 
         DrawerImageLoader.init(ConcreteDrawerImageLoader())
+        SubsamplingScaleImageView.setPreferredBitmapConfig(Bitmap.Config.RGB_565)
     }
 
     private fun enableStrictModeForDebug() {

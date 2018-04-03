@@ -12,7 +12,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout.LayoutParams
 import android.widget.TextView
 import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
@@ -25,7 +24,6 @@ import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.BBTree.Companion.GLIDE_ARGUMENT
 import me.proxer.app.ui.view.bbcode.BBUtils
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
-import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.iconColor
 import okhttp3.HttpUrl
@@ -82,10 +80,6 @@ object ImagePrototype : AutoClosingPrototype {
     }
 
     private fun loadImage(glide: GlideRequests, view: ImageView, url: HttpUrl) = glide.load(url.toString())
-        .format(when (DeviceUtils.shouldShowHighQualityImages(view.context)) {
-            true -> DecodeFormat.PREFER_ARGB_8888
-            false -> DecodeFormat.PREFER_RGB_565
-        })
         .centerInside()
         .listener(object : RequestListener<Drawable?> {
 

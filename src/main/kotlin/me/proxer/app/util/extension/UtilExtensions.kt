@@ -18,7 +18,6 @@ import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.target.Target
 import com.mikepenz.iconics.IconicsDrawable
@@ -27,7 +26,6 @@ import me.proxer.app.BuildConfig.APPLICATION_ID
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.ui.WebViewActivity
-import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.Utils
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
@@ -77,10 +75,6 @@ inline fun ImageView.setIconicsImage(
 
 inline fun GlideRequests.defaultLoad(view: ImageView, url: HttpUrl): Target<Drawable> = load(url.toString())
     .transition(DrawableTransitionOptions.withCrossFade())
-    .format(when (DeviceUtils.shouldShowHighQualityImages(view.context)) {
-        true -> DecodeFormat.PREFER_ARGB_8888
-        false -> DecodeFormat.PREFER_RGB_565
-    })
     .into(view)
 
 inline fun HttpUrl.androidUri(): Uri = Uri.parse(toString())
