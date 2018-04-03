@@ -3,6 +3,7 @@ package me.proxer.app.manga
 import android.graphics.PointF
 import android.graphics.drawable.Drawable
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +22,7 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.GlideRequests
+import me.proxer.app.MainApplication.Companion.LOGGING_TAG
 import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.manga.MangaAdapter.ViewHolder
@@ -30,7 +32,9 @@ import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.entity.manga.Page
 import me.proxer.library.util.ProxerUrls
+import org.jetbrains.anko.getStackTraceString
 import java.io.File
+import java.lang.Exception
 import kotlin.properties.Delegates
 
 /**
@@ -74,6 +78,22 @@ class MangaAdapter(private val isVertical: Boolean) : BaseAdapter<Page, ViewHold
 
         init {
             image.setDoubleTapZoomDuration(shortAnimationTime)
+
+            image.setOnImageEventListener(object : SubsamplingScaleImageView.DefaultOnImageEventListener() {
+                override fun onTileLoadError(error: Exception) {
+                    errorIndicator.visibility = View.VISIBLE
+                    image.visibility = View.GONE
+
+                    Log.e(LOGGING_TAG, error.getStackTraceString())
+                }
+
+                override fun onImageLoadError(error: Exception) {
+                    errorIndicator.visibility = View.VISIBLE
+                    image.visibility = View.GONE
+
+                    Log.e(LOGGING_TAG, error.getStackTraceString())
+                }
+            })
 
             errorIndicator.setIconicsImage(CommunityMaterial.Icon.cmd_refresh, 64)
 
