@@ -100,6 +100,7 @@ class MangaAdapter(savedInstanceState: Bundle?, private val isVertical: Boolean)
         init {
             image.setDoubleTapZoomDuration(shortAnimationTime)
 
+            @Suppress("LabeledExpression")
             image.setOnImageEventListener(object : SubsamplingScaleImageView.DefaultOnImageEventListener() {
                 override fun onTileLoadError(error: Exception) = withSafeAdapterPosition(this@ViewHolder) {
                     handleImageLoadError(error, it)
