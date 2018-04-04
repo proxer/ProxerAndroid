@@ -2,6 +2,7 @@ package me.proxer.app.manga
 
 import android.graphics.PointF
 import android.graphics.drawable.Drawable
+import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -27,6 +28,7 @@ import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.manga.MangaAdapter.ViewHolder
 import me.proxer.app.util.DeviceUtils
+import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.decodedName
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.subscribeAndLogErrors
@@ -40,7 +42,11 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-class MangaAdapter(private val isVertical: Boolean) : BaseAdapter<Page, ViewHolder>() {
+class MangaAdapter(savedInstanceState: Bundle?, private val isVertical: Boolean) : BaseAdapter<Page, ViewHolder>() {
+
+    private companion object {
+        private const val REQUIRES_FALLBACK_STATE = "manga_requires_fallback_state"
+    }
 
     var glide: GlideRequests? = null
     val clickSubject: PublishSubject<Int> = PublishSubject.create()
@@ -48,6 +54,19 @@ class MangaAdapter(private val isVertical: Boolean) : BaseAdapter<Page, ViewHold
     var server by Delegates.notNull<String>()
     var entryId by Delegates.notNull<String>()
     var id by Delegates.notNull<String>()
+
+    private val requiresFallback: ParcelableStringBooleanMap
+
+    init {
+        requiresFallback = when (savedInstanceState) {
+            null -> ParcelableStringBooleanMap()
+            else -> savedInstanceState.getParcelable(REQUIRES_FALLBACK_STATE)
+        }
+
+        setHasStableIds(true)
+    }
+
+    override fun getItemId(position: Int) = data[position].decodedName.hashCode().toLong()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_manga_page, parent, false))
@@ -66,6 +85,8 @@ class MangaAdapter(private val isVertical: Boolean) : BaseAdapter<Page, ViewHold
         holder.image.recycle()
     }
 
+    override fun saveInstanceState(outState: Bundle) = outState.putParcelable(REQUIRES_FALLBACK_STATE, requiresFallback)
+
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         private val shortAnimationTime = itemView.context.resources.getInteger(android.R.integer.config_shortAnimTime)
@@ -80,18 +101,12 @@ class MangaAdapter(private val isVertical: Boolean) : BaseAdapter<Page, ViewHold
             image.setDoubleTapZoomDuration(shortAnimationTime)
 
             image.setOnImageEventListener(object : SubsamplingScaleImageView.DefaultOnImageEventListener() {
-                override fun onTileLoadError(error: Exception) {
-                    errorIndicator.visibility = View.VISIBLE
-                    image.visibility = View.GONE
-
-                    Log.e(LOGGING_TAG, error.getStackTraceString())
+                override fun onTileLoadError(error: Exception) = withSafeAdapterPosition(this@ViewHolder) {
+                    handleImageLoadError(error, it)
                 }
 
-                override fun onImageLoadError(error: Exception) {
-                    errorIndicator.visibility = View.VISIBLE
-                    image.visibility = View.GONE
-
-                    Log.e(LOGGING_TAG, error.getStackTraceString())
+                override fun onImageLoadError(error: Exception) = withSafeAdapterPosition(this@ViewHolder) {
+                    handleImageLoadError(error, it)
                 }
             })
 
@@ -126,7 +141,7 @@ class MangaAdapter(private val isVertical: Boolean) : BaseAdapter<Page, ViewHold
                 image.maxScale = scale
             }
 
-            if (item.name.endsWith("png")) {
+            if (item.name.endsWith("png") || requiresFallback[item.decodedName] == true) {
                 image.setBitmapDecoderClass(RapidImageDecoder::class.java)
                 image.setRegionDecoderClass(RapidImageRegionDecoder::class.java)
             } else {
@@ -144,6 +159,21 @@ class MangaAdapter(private val isVertical: Boolean) : BaseAdapter<Page, ViewHold
                 glide
                     ?.download(ProxerUrls.mangaPageImage(server, entryId, id, item.decodedName).toString())
                     ?.into(target)
+            }
+        }
+
+        private fun handleImageLoadError(error: Exception, position: Int) {
+            // This happens on certain devices with certain images due to a buggy Skia library version.
+            // Fallback to the less efficient, but working RapidDecoder in that case.
+            if (error.message?.contains("Image failed to decode using JPEG decoder") == true) {
+                requiresFallback.put(data[position].decodedName, true)
+
+                bind(data[position])
+            } else {
+                errorIndicator.visibility = View.VISIBLE
+                image.visibility = View.GONE
+
+                Log.e(LOGGING_TAG, error.getStackTraceString())
             }
         }
 

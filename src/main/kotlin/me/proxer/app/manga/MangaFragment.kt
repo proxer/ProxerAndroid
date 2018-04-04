@@ -118,7 +118,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
 
         isVertical = PreferenceHelper.isVerticalReaderEnabled(requireContext())
 
-        innerAdapter = MangaAdapter(isVertical)
+        innerAdapter = MangaAdapter(savedInstanceState, isVertical)
         adapter = EasyHeaderFooterAdapter(innerAdapter)
 
         innerAdapter.positionResolver = ContainerPositionResolver(adapter)
@@ -215,6 +215,12 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         recyclerView.adapter = null
 
         super.onDestroyView()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        innerAdapter.saveInstanceState(outState)
     }
 
     override fun showData(data: MangaChapterInfo) {
