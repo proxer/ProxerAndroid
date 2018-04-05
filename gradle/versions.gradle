@@ -12,7 +12,7 @@ ext {
     javaVersion = JavaVersion.VERSION_1_8
 
     // Gradle
-    gradleVersion = '4.6'
+    gradleVersion = '4.7-rc-1'
 
     // Core plugins
     androidPluginVersion = '3.2.0-alpha09'
@@ -28,10 +28,10 @@ ext {
     // Frameworks and code only libraries
     ankoVersion = '0.10.4'
     multidexVersion = '1.0.3'
-    supportLibraryVersion = '27.1.0'
+    supportLibraryVersion = '27.1.1'
     supportPreferenceVersion = '2.1.2'
     lifecycleVersion = '1.1.1'
-    roomVersion = '1.1.0-beta1'
+    roomVersion = '1.1.0-beta2'
     androidJobVersion = '1.2.5'
     proxerLibVersion = '4941bf9151'
 
@@ -57,8 +57,8 @@ ext {
     flexboxVersion = '0.3.2'
     emojiIosVersion = '7f7f35c3e7'
     emojiIosVersion = '7f7f35c3e7'
-    exomediaVersion = '07f03c7779'
-    exoplayerVersion = '2.7.2'
+    exomediaVersion = '4276f6766b'
+    exoplayerVersion = '2.7.3'
     materialProgressBarVersion = '1.4.2'
     materialRatingBarVersion = '1.2.0'
     customtabsHelperVersion = '1.0.4'
@@ -82,7 +82,7 @@ ext {
     javaxExtrasVersion = '0.1.0'
     alfredVersion = '3ea7529bd2'
     rapidDecoderVersion = '7cdfca47fa'
-    concealVersion = '2.0.1'
+    concealVersion = '2.0.2'
     betterLinkMovementMethodVersion = '2.1.0'
 
     // Debugging
