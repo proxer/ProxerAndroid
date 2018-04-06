@@ -8,6 +8,7 @@ import me.proxer.app.R
 import me.proxer.app.anime.AnimeActivity
 import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.manga.MangaActivity
+import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.toAnimeLanguage
@@ -48,13 +49,20 @@ class HistoryFragment : PagedContentFragment<UcpHistoryEntry>() {
 
         innerAdapter.clickSubject
             .autoDispose(this)
-            .subscribe { (_, item) ->
-                when (item.category) {
-                    Category.ANIME -> AnimeActivity.navigateTo(requireActivity(), item.entryId, item.episode,
-                        item.language.toAnimeLanguage(), item.name)
-                    Category.MANGA -> MangaActivity.navigateTo(requireActivity(), item.entryId, item.episode,
-                        item.language.toGeneralLanguage(), null, item.name)
+            .subscribe { (_, entry) ->
+                when (entry.category) {
+                    Category.ANIME -> AnimeActivity.navigateTo(requireActivity(), entry.entryId, entry.episode,
+                        entry.language.toAnimeLanguage(), entry.name)
+                    Category.MANGA -> MangaActivity.navigateTo(requireActivity(), entry.entryId, entry.episode,
+                        entry.language.toGeneralLanguage(), null, entry.name)
                 }
+            }
+
+        innerAdapter.longClickSubject
+            .autoDispose(this)
+            .subscribe { (view, entry) ->
+                MediaActivity.navigateTo(requireActivity(), entry.entryId, entry.name, entry.category,
+                    if (view.drawable != null) view else null)
             }
     }
 

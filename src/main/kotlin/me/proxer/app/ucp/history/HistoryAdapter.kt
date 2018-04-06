@@ -26,6 +26,7 @@ class HistoryAdapter : BaseAdapter<UcpHistoryEntry, ViewHolder>() {
 
     var glide: GlideRequests? = null
     val clickSubject: PublishSubject<Pair<ImageView, UcpHistoryEntry>> = PublishSubject.create()
+    val longClickSubject: PublishSubject<Pair<ImageView, UcpHistoryEntry>> = PublishSubject.create()
 
     init {
         setHasStableIds(false)
@@ -57,6 +58,14 @@ class HistoryAdapter : BaseAdapter<UcpHistoryEntry, ViewHolder>() {
                 withSafeAdapterPosition(this) {
                     clickSubject.onNext(image to data[it])
                 }
+            }
+
+            itemView.setOnLongClickListener {
+                withSafeAdapterPosition(this) {
+                    longClickSubject.onNext(image to data[it])
+                }
+
+                true
             }
         }
 
