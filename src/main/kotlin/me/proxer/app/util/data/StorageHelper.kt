@@ -21,6 +21,7 @@ object StorageHelper {
     private const val LAST_CHAT_MESSAGE_DATE = "last_chat_date"
     private const val CHAT_INTERVAL = "chat_interval"
     private const val CONFERENCES_SYNCHRONIZED = "conferences_synchronized"
+    private const val LAST_TAG_UPDATE_DATE = "last_tag_update_date"
 
     private const val DEFAULT_CHAT_INTERVAL = 10_000L
     private const val MAX_CHAT_INTERVAL = 850_000L
@@ -66,6 +67,10 @@ object StorageHelper {
     var areConferencesSynchronized: Boolean
         get() = safeGet(CONFERENCES_SYNCHRONIZED, false)
         set(value) = safePut(CONFERENCES_SYNCHRONIZED, value)
+
+    var lastTagUpdateDate: Date
+        get() = Date(safeGet(LAST_TAG_UPDATE_DATE, 0L))
+        set(value) = safePut(LAST_TAG_UPDATE_DATE, value.time)
 
     fun incrementChatInterval() = safeGet(CHAT_INTERVAL, DEFAULT_CHAT_INTERVAL).let {
         if (it < MAX_CHAT_INTERVAL) {

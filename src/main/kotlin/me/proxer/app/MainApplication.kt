@@ -40,6 +40,8 @@ import me.proxer.app.chat.sync.ChatDao
 import me.proxer.app.chat.sync.ChatDatabase
 import me.proxer.app.chat.sync.ChatJob
 import me.proxer.app.chat.sync.ChatNotifications
+import me.proxer.app.media.TagDao
+import me.proxer.app.media.TagDatabase
 import me.proxer.app.notification.AccountNotifications
 import me.proxer.app.notification.NotificationJob
 import me.proxer.app.util.NotificationUtils
@@ -82,10 +84,16 @@ class MainApplication : Application() {
         val chatDao: ChatDao
             get() = chatDatabase.dao()
 
+        val tagDao: TagDao
+            get() = tagDatabase.dao()
+
         var api by Delegates.notNull<ProxerApi>()
             private set
 
         var chatDatabase by Delegates.notNull<ChatDatabase>()
+            private set
+
+        var tagDatabase by Delegates.notNull<TagDatabase>()
             private set
 
         var globalContext by Delegates.notNull<Context>()
@@ -108,8 +116,8 @@ class MainApplication : Application() {
         AppCompatDelegate.setDefaultNightMode(PreferenceHelper.getNightMode(this))
         NotificationUtils.createNotificationChannels(this)
 
-        chatDatabase = Room.databaseBuilder(this, ChatDatabase::class.java, "chat.db")
-            .build()
+        chatDatabase = Room.databaseBuilder(this, ChatDatabase::class.java, "chat.db").build()
+        tagDatabase = Room.databaseBuilder(this, TagDatabase::class.java, "tags.db").build()
 
         initBus()
         initApi()

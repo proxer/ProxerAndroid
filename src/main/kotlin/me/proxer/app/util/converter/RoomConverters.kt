@@ -10,6 +10,8 @@ import me.proxer.library.enums.License
 import me.proxer.library.enums.MediaState
 import me.proxer.library.enums.Medium
 import me.proxer.library.enums.MessageAction
+import me.proxer.library.enums.TagSubType
+import me.proxer.library.enums.TagType
 import me.proxer.library.util.ProxerUtils
 import java.util.Date
 
@@ -96,4 +98,16 @@ class RoomConverters {
 
     @TypeConverter
     fun toDevice(value: String?) = value?.let { ProxerUtils.toApiEnum(Device::class.java, it) }
+
+    @TypeConverter
+    fun fromTagType(value: TagType?) = value?.let { ProxerUtils.getApiEnumName(it) }
+
+    @TypeConverter
+    fun toTagType(value: String?) = value?.let { ProxerUtils.toApiEnum(TagType::class.java, it) }
+
+    @TypeConverter
+    fun fromTagSubType(value: TagSubType?) = value?.let { ProxerUtils.getApiEnumName(it) }
+
+    @TypeConverter
+    fun toTagSubType(value: String?) = value?.let { ProxerUtils.toApiEnum(TagSubType::class.java, it) }
 }

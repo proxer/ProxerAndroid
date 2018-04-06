@@ -14,8 +14,8 @@ import me.proxer.app.chat.LocalConference
 import me.proxer.app.chat.LocalMessage
 import me.proxer.app.forum.ParsedPost
 import me.proxer.app.forum.TopicMetaData
+import me.proxer.app.media.LocalTag
 import me.proxer.app.media.comment.ParsedComment
-import me.proxer.app.media.list.ParcelableTag
 import me.proxer.app.profile.comment.ParsedUserComment
 import me.proxer.app.ui.view.bbcode.BBParser
 import me.proxer.library.entity.anime.Stream
@@ -305,4 +305,4 @@ fun Post.toParsedPost() = ParsedPost(id, parentId, userId, username, image, date
     signature?.let { if (it.isNotBlank()) BBParser.parse(it).optimize() else null },
     modifiedById, modifiedByName, modifiedReason, BBParser.parse(message).optimize(), thankYouAmount)
 
-fun Tag.toParcelableTag() = ParcelableTag(id, name)
+fun Tag.toParcelableTag() = LocalTag(id, type, name, description, subType, isSpoiler)

@@ -21,6 +21,7 @@ import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.BackPressAware
 import me.proxer.app.base.PagedContentFragment
+import me.proxer.app.media.LocalTag
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.ui.view.ExpandableSelectionView
 import me.proxer.app.util.DeviceUtils
@@ -138,7 +139,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
             viewModel.fskConstraints = value
         }
 
-    internal var tags: List<ParcelableTag>
+    internal var tags: List<LocalTag>
         get() = requireArguments().getParcelableArrayList("tags") ?: emptyList()
         set(value) {
             requireArguments().putParcelableArrayList("tags", ArrayList(value))
@@ -146,7 +147,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
             viewModel.tags = value
         }
 
-    internal var excludedTags: List<ParcelableTag>
+    internal var excludedTags: List<LocalTag>
         get() = requireArguments().getParcelableArrayList("excludedTags") ?: emptyList()
         set(value) {
             requireArguments().putParcelableArrayList("excludedTags", ArrayList(value))
