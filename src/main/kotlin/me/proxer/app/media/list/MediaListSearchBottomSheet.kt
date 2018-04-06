@@ -16,9 +16,7 @@ import me.proxer.app.util.extension.enumSetOf
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.toAppString
 import me.proxer.library.enums.FskConstraint
-import me.proxer.library.enums.Genre
 import me.proxer.library.enums.Language
-import me.proxer.library.util.ProxerUtils
 
 /**
  * @author Ruben Gees
@@ -45,7 +43,6 @@ class MediaListSearchBottomSheet private constructor(
         initClickSubscriptions()
         initSelectionSubscriptions()
 
-        val genreItems = Genre.values().map { getSafeApiEnum(it) }
         val fskItems = FskConstraint.values().map { it.toAppString(fragment.requireContext()) }
         val languageItems = listOf(
             fragment.getString(R.string.fragment_media_list_all_languages),
@@ -54,8 +51,6 @@ class MediaListSearchBottomSheet private constructor(
         )
 
         fragment.languageSelector.items = languageItems
-        fragment.genreSelector.items = genreItems
-        fragment.excludedGenreSelector.items = genreItems
         fragment.fskSelector.items = fskItems
 
         fragment.searchBottomSheetTitle.post {
@@ -64,6 +59,17 @@ class MediaListSearchBottomSheet private constructor(
         }
 
         viewModel.loadTags()
+
+        viewModel.genreData.observe(fragment, Observer {
+            if (it != null) {
+                fragment.genreSelector.items = it.map { it.name }
+                fragment.excludedGenreSelector.items = it.map { it.name }
+
+                fragment.genreSelector.visibility = View.VISIBLE
+                fragment.excludedGenreSelector.visibility = View.VISIBLE
+            }
+        })
+
         viewModel.tagData.observe(fragment, Observer {
             if (it != null) {
                 fragment.tagSelector.items = it.map { it.name }
@@ -108,17 +114,19 @@ class MediaListSearchBottomSheet private constructor(
         fragment.genreSelector.selectionChangeSubject
             .autoDispose(fragment)
             .subscribeAndLogErrors { selections ->
-                fragment.genres = enumSetOf(selections.map {
-                    toSafeApiEnum(Genre::class.java, it)
-                })
+                viewModel.genreData.value?.let { genreData ->
+                    fragment.genres = selections.mapNotNull { selection -> genreData.find { it.name == selection } }
+                }
             }
 
         fragment.excludedGenreSelector.selectionChangeSubject
             .autoDispose(fragment)
             .subscribeAndLogErrors { selections ->
-                fragment.excludedGenres = enumSetOf(selections.map {
-                    toSafeApiEnum(Genre::class.java, it)
-                })
+                viewModel.genreData.value?.let { genreData ->
+                    fragment.excludedGenres = selections.mapNotNull { selection ->
+                        genreData.find { it.name == selection }
+                    }
+                }
             }
 
         fragment.fskSelector.selectionChangeSubject
@@ -153,10 +161,4 @@ class MediaListSearchBottomSheet private constructor(
     } else {
         false
     }
-
-    private fun <T : Enum<T>> toSafeApiEnum(klass: Class<T>, value: String) = ProxerUtils.toApiEnum(klass, value)
-        ?: throw IllegalArgumentException("Unknown ${klass.simpleName}: $value")
-
-    private fun getSafeApiEnum(value: Enum<*>) = ProxerUtils.getApiEnumName(value)
-        ?: throw IllegalArgumentException("Unknown ${value::class.java.simpleName}: ${value.name}")
 }

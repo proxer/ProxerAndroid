@@ -18,7 +18,6 @@ import me.proxer.app.util.extension.toParcelableTag
 import me.proxer.library.api.PagingLimitEndpoint
 import me.proxer.library.entity.list.MediaListEntry
 import me.proxer.library.enums.FskConstraint
-import me.proxer.library.enums.Genre
 import me.proxer.library.enums.Language
 import me.proxer.library.enums.MediaSearchSortCriteria
 import me.proxer.library.enums.MediaType
@@ -37,8 +36,8 @@ class MediaListViewModel(
     type: MediaType,
     var searchQuery: String?,
     var language: Language?,
-    var genres: EnumSet<Genre>,
-    var excludedGenres: EnumSet<Genre>,
+    var genres: List<LocalTag>,
+    var excludedGenres: List<LocalTag>,
     var fskConstraints: EnumSet<FskConstraint>,
     var tags: List<LocalTag>,
     var excludedTags: List<LocalTag>
@@ -57,8 +56,8 @@ class MediaListViewModel(
             .sort(sortCriteria)
             .name(searchQuery)
             .language(language)
-            .genres(genres)
-            .excludedGenres(excludedGenres)
+            .genreTags(genres.map { it.id }.toSet())
+            .excludedGenreTags(excludedGenres.map { it.id }.toSet())
             .fskConstraints(fskConstraints)
             .tags(tags.map { it.id }.toSet())
             .excludedTags(excludedTags.map { it.id }.toSet())
@@ -72,6 +71,7 @@ class MediaListViewModel(
         if (old != new) reload()
     })
 
+    val genreData = MutableLiveData<List<LocalTag>>()
     val tagData = MutableLiveData<List<LocalTag>>()
 
     private var tagsDisposable: Disposable? = null
@@ -90,7 +90,7 @@ class MediaListViewModel(
     fun loadTags() {
         tagsDisposable?.dispose()
         tagsDisposable = Single
-            .fromCallable { tagDao.getTags(TagType.TAG) }
+            .fromCallable { tagDao.getTags() }
             .flatMap { cachedTags ->
                 when {
                     shouldUpdateTags() || cachedTags.isEmpty() -> api.list().tagList().buildSingle()
@@ -105,7 +105,10 @@ class MediaListViewModel(
             }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribeAndLogErrors { tagData.value = it }
+            .subscribeAndLogErrors { tags ->
+                genreData.value = tags.filter { it.type == TagType.GENRE }
+                tagData.value = tags.filter { it.type == TagType.TAG }
+            }
     }
 
     private fun shouldUpdateTags() = StorageHelper.lastTagUpdateDate.convertToDateTime()

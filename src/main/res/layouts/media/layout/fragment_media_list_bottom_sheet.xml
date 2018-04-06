@@ -70,12 +70,14 @@
                     android:id="@+id/genreSelector"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     app:titleText="@string/fragment_media_list_genres" />
 
                 <me.proxer.app.ui.view.ExpandableSelectionView
                     android:id="@+id/excludedGenreSelector"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     app:titleText="@string/fragment_media_list_excluded_genres" />
 
                 <me.proxer.app.ui.view.ExpandableSelectionView

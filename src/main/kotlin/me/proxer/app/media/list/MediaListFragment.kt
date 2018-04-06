@@ -33,7 +33,6 @@ import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.list.MediaListEntry
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.FskConstraint
-import me.proxer.library.enums.Genre
 import me.proxer.library.enums.Language
 import me.proxer.library.enums.MediaSearchSortCriteria
 import me.proxer.library.enums.MediaType
@@ -55,6 +54,8 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
         private const val GENRES_ARGUMENT = "genres"
         private const val EXCLUDED_GENRES_ARGUMENT = "excluded_genres"
         private const val FSK_CONSTRAINTS_ARGUMENT = "fsk_constraints"
+        private const val TAGS_ARGUMENT = "tags"
+        private const val EXCLUDED_TAGS_ARGUMENT = "excluded_tags"
 
         fun newInstance(category: Category) = MediaListFragment().apply {
             arguments = bundleOf(CATEGORY_ARGUMENT to category)
@@ -115,18 +116,18 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
             viewModel.language = value
         }
 
-    internal var genres: EnumSet<Genre>
-        get() = requireArguments().getEnumSet(GENRES_ARGUMENT, Genre::class.java)
+    internal var genres: List<LocalTag>
+        get() = requireArguments().getParcelableArrayList(GENRES_ARGUMENT) ?: emptyList()
         set(value) {
-            requireArguments().putEnumSet(GENRES_ARGUMENT, value)
+            requireArguments().putParcelableArrayList(GENRES_ARGUMENT, ArrayList(value))
 
             viewModel.genres = value
         }
 
-    internal var excludedGenres: EnumSet<Genre>
-        get() = requireArguments().getEnumSet(EXCLUDED_GENRES_ARGUMENT, Genre::class.java)
+    internal var excludedGenres: List<LocalTag>
+        get() = requireArguments().getParcelableArrayList(EXCLUDED_GENRES_ARGUMENT) ?: emptyList()
         set(value) {
-            requireArguments().putEnumSet(EXCLUDED_GENRES_ARGUMENT, value)
+            requireArguments().putParcelableArrayList(EXCLUDED_GENRES_ARGUMENT, ArrayList(value))
 
             viewModel.excludedGenres = value
         }
@@ -140,17 +141,17 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
         }
 
     internal var tags: List<LocalTag>
-        get() = requireArguments().getParcelableArrayList("tags") ?: emptyList()
+        get() = requireArguments().getParcelableArrayList(TAGS_ARGUMENT) ?: emptyList()
         set(value) {
-            requireArguments().putParcelableArrayList("tags", ArrayList(value))
+            requireArguments().putParcelableArrayList(TAGS_ARGUMENT, ArrayList(value))
 
             viewModel.tags = value
         }
 
     internal var excludedTags: List<LocalTag>
-        get() = requireArguments().getParcelableArrayList("excludedTags") ?: emptyList()
+        get() = requireArguments().getParcelableArrayList(EXCLUDED_TAGS_ARGUMENT) ?: emptyList()
         set(value) {
-            requireArguments().putParcelableArrayList("excludedTags", ArrayList(value))
+            requireArguments().putParcelableArrayList(EXCLUDED_TAGS_ARGUMENT, ArrayList(value))
 
             viewModel.excludedTags = value
         }
