@@ -10,6 +10,9 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.MeasureSpec.AT_MOST
+import android.view.View.MeasureSpec.UNSPECIFIED
+import android.view.View.MeasureSpec.makeMeasureSpec
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RatingBar
@@ -32,11 +35,12 @@ import me.proxer.app.util.extension.defaultLoad
 import me.proxer.library.entity.media.CalendarEntry
 import me.proxer.library.util.ProxerUrls
 import org.jetbrains.anko.below
-import org.jetbrains.anko.childrenSequence
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
+import java.util.Collections
 import java.util.Date
 import java.util.Locale
+import java.util.WeakHashMap
 import java.util.concurrent.TimeUnit
 
 /**
@@ -53,8 +57,10 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
     val clickSubject: PublishSubject<Pair<ImageView, CalendarEntry>> = PublishSubject.create()
 
     private var layoutManager: RecyclerView.LayoutManager? = null
+
     private var currentMinAiringInfoLines = 2
     private var currentMinStatusLines = 2
+    private val cachedViewHolders = Collections.newSetFromMap(WeakHashMap<ViewHolder, Boolean>())
 
     init {
         setHasStableIds(true)
@@ -66,6 +72,8 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(data[position])
+
+        cachedViewHolders += holder
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -74,28 +82,20 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
 
     override fun onViewAttachedToWindow(holder: ViewHolder) {
         holder.itemView.post {
-            val parentViewGroup = holder.itemView.parent as? ViewGroup?
+            if (holder.airingInfo.lineCount > currentMinAiringInfoLines) {
+                currentMinAiringInfoLines = holder.airingInfo.lineCount
 
-            if (parentViewGroup != null) {
-                if (holder.airingInfo.lineCount > currentMinAiringInfoLines) {
-                    currentMinAiringInfoLines = holder.airingInfo.lineCount
+                cachedViewHolders.forEach { it.airingInfo.minLines = currentMinAiringInfoLines }
 
-                    parentViewGroup.childrenSequence().forEach {
-                        it.findViewById<TextView>(R.id.airingInfo).minLines = currentMinAiringInfoLines
-                    }
+                layoutManager?.requestSimpleAnimationsInNextLayout()
+            }
 
-                    layoutManager?.requestSimpleAnimationsInNextLayout()
-                }
+            if (holder.status.lineCount > currentMinStatusLines) {
+                currentMinStatusLines = holder.status.lineCount
 
-                if (holder.status.lineCount > currentMinStatusLines) {
-                    currentMinStatusLines = holder.status.lineCount
+                cachedViewHolders.forEach { it.status.minLines = currentMinStatusLines }
 
-                    parentViewGroup.childrenSequence().forEach {
-                        it.findViewById<TextView>(R.id.status).minLines = currentMinStatusLines
-                    }
-
-                    layoutManager?.requestSimpleAnimationsInNextLayout()
-                }
+                layoutManager?.requestSimpleAnimationsInNextLayout()
             }
         }
     }
@@ -105,6 +105,8 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
         holder.airingInfoDisposable = null
 
         glide?.clear(holder.image)
+
+        cachedViewHolders -= holder
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -153,6 +155,21 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
             title.text = item.name
             episode.text = episode.context.getString(R.string.fragment_schedule_episode, item.episode.toString())
 
+            bindRating(item)
+            bindAiringInfo(item)
+
+            airingInfo.minLines = currentMinAiringInfoLines
+            status.minLines = currentMinStatusLines
+
+            airingInfoDisposable?.dispose()
+            airingInfoDisposable = Observable.interval(0, 1, TimeUnit.SECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(AiringInfoUpdateConsumer(item))
+
+            glide?.defaultLoad(image, ProxerUrls.entryImage(item.entryId))
+        }
+
+        private fun bindRating(item: CalendarEntry) {
             if (item.rating > 0) {
                 ratingContainer.visibility = View.VISIBLE
                 rating.rating = item.rating / 2.0f
@@ -165,30 +182,19 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
             } else {
                 ratingContainer.visibility = View.INVISIBLE
 
+                ratingContainer.measure(
+                    makeMeasureSpec(DeviceUtils.getScreenWidth(ratingContainer.context), AT_MOST),
+                    makeMeasureSpec(0, UNSPECIFIED)
+                )
+
                 (airingInfo.layoutParams as RelativeLayout.LayoutParams).apply {
+                    val containerMargin = (ratingContainer.layoutParams as RelativeLayout.LayoutParams).topMargin
+
+                    bottomMargin = ratingContainer.measuredHeight + containerMargin
+
                     below(R.id.image)
                 }
-
-                ratingContainer.post {
-                    (airingInfo.layoutParams as RelativeLayout.LayoutParams).apply {
-                        val containerMargin = (ratingContainer.layoutParams as RelativeLayout.LayoutParams).topMargin
-
-                        bottomMargin = ratingContainer.height + containerMargin
-                    }
-                }
             }
-
-            bindAiringInfo(item)
-
-            airingInfo.minLines = currentMinAiringInfoLines
-            status.minLines = currentMinStatusLines
-
-            airingInfoDisposable?.dispose()
-            airingInfoDisposable = Observable.interval(0, 1, TimeUnit.SECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(AiringInfoUpdateConsumer(item))
-
-            glide?.defaultLoad(image, ProxerUrls.entryImage(item.entryId))
         }
 
         private fun bindAiringInfo(item: CalendarEntry) {
