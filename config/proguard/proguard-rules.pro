@@ -34,11 +34,6 @@
     public static int wtf(...);
 }
 
-# Remove Kotlin null checks.
--assumenosideeffects class kotlin.jvm.internal.Intrinsics {
-    static void checkParameterIsNotNull(java.lang.Object, java.lang.String);
-}
-
 # Avoid crash of SearchView.
 -keep class android.support.v7.widget.SearchView {
    public <init>(android.content.Context);
