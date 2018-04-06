@@ -49,8 +49,8 @@ abstract class ChatDao {
     @Query("SELECT * FROM conferences ORDER BY date DESC")
     abstract fun getConferences(): List<LocalConference>
 
-    @Query("SELECT * FROM conferences ORDER BY date DESC")
-    abstract fun getConferencesLiveData(): LiveData<List<LocalConference>?>
+    @Query("SELECT * FROM conferences WHERE topic LIKE '%' || :searchQuery || '%' ORDER BY date DESC")
+    abstract fun getConferencesLiveData(searchQuery: String): LiveData<List<LocalConference>?>
 
     @Query("SELECT * FROM conferences WHERE id = :id LIMIT 1")
     abstract fun getConferenceLiveData(id: Long): LiveData<LocalConference?>

@@ -1,6 +1,7 @@
 package me.proxer.app.chat.conference
 
 import android.arch.lifecycle.MediatorLiveData
+import android.arch.lifecycle.Observer
 import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -14,30 +15,17 @@ import me.proxer.app.chat.sync.ChatJob
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
 import me.proxer.app.util.data.StorageHelper
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
  */
 @GeneratedProvider
-class ConferenceViewModel : BaseViewModel<List<LocalConference>>() {
+class ConferenceViewModel(searchQuery: String) : BaseViewModel<List<LocalConference>>() {
 
     override val isLoginRequired = true
 
-    override val data = MediatorLiveData<List<LocalConference>?>().apply {
-        this.addSource(chatDao.getConferencesLiveData(), {
-            it?.let {
-                val containsRelevantData = it.isNotEmpty() || StorageHelper.areConferencesSynchronized
-
-                if (containsRelevantData && StorageHelper.isLoggedIn && error.value == null) {
-                    dataDisposable?.dispose()
-
-                    isLoading.value = false
-                    error.value = null
-                    this.value = it
-                }
-            }
-        })
-    }
+    override val data = MediatorLiveData<List<LocalConference>?>()
 
     override val dataSingle: Single<List<LocalConference>>
         get() = Single
@@ -48,7 +36,35 @@ class ConferenceViewModel : BaseViewModel<List<LocalConference>>() {
                 Single.never<List<LocalConference>>()
             }
 
+    private val sourceObserver = Observer { it: List<LocalConference>? ->
+        it?.let {
+            val containsRelevantData = it.isNotEmpty() || StorageHelper.areConferencesSynchronized
+
+            if (containsRelevantData && StorageHelper.isLoggedIn && error.value == null) {
+                dataDisposable?.dispose()
+
+                isLoading.value = false
+                error.value = null
+                data.value = it
+            }
+        }
+    }
+
+    var searchQuery: String = searchQuery
+        set(value) {
+            field = value
+
+            source = chatDao.getConferencesLiveData(value)
+        }
+
+    private var source by Delegates.observable(chatDao.getConferencesLiveData(searchQuery), { _, old, new ->
+        data.removeSource(old)
+        data.addSource(new, sourceObserver)
+    })
+
     init {
+        data.addSource(source, sourceObserver)
+
         disposables += bus.register(ChatErrorEvent::class.java)
             .map { ErrorUtils.handle(it.error) }
             .observeOn(AndroidSchedulers.mainThread())

@@ -19,4 +19,14 @@
         app:ico_padding="2dp"
         app:ico_size="24dp"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/search"
+        android:title="@string/action_search"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:ico_color="@android:color/white"
+        app:ico_icon="cmd_magnify"
+        app:ico_padding="2dp"
+        app:ico_size="24dp"
+        app:showAsAction="always|collapseActionView" />
 </menu>
