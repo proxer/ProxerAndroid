@@ -39,6 +39,8 @@ class MediaListSearchBottomSheet private constructor(
         fragment.languageSelector.findViewById<ViewGroup>(R.id.items).enableLayoutAnimationsSafely()
         fragment.genreSelector.findViewById<ViewGroup>(R.id.items).enableLayoutAnimationsSafely()
         fragment.excludedGenreSelector.findViewById<ViewGroup>(R.id.items).enableLayoutAnimationsSafely()
+        fragment.tagSelector.findViewById<ViewGroup>(R.id.items).enableLayoutAnimationsSafely()
+        fragment.excludedTagSelector.findViewById<ViewGroup>(R.id.items).enableLayoutAnimationsSafely()
 
         initClickSubscriptions()
         initSelectionSubscriptions()
