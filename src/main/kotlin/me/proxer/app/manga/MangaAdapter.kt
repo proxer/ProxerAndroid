@@ -109,6 +109,10 @@ class MangaAdapter(savedInstanceState: Bundle?, private val isVertical: Boolean)
                 override fun onImageLoadError(error: Exception) = withSafeAdapterPosition(this@ViewHolder) {
                     handleImageLoadError(error, it)
                 }
+
+                override fun onPreviewLoadError(error: Exception) = withSafeAdapterPosition(this@ViewHolder) {
+                    handleImageLoadError(error, it)
+                }
             })
 
             errorIndicator.setIconicsImage(CommunityMaterial.Icon.cmd_refresh, 64)
@@ -165,16 +169,17 @@ class MangaAdapter(savedInstanceState: Bundle?, private val isVertical: Boolean)
 
         private fun handleImageLoadError(error: Exception, position: Int) {
             // This happens on certain devices with certain images due to a buggy Skia library version.
-            // Fallback to the less efficient, but working RapidDecoder in that case.
-            if (error.message?.contains("Image failed to decode using JPEG decoder") == true) {
-                requiresFallback.put(data[position].decodedName, true)
-
-                bind(data[position])
-            } else {
+            // Fallback to the less efficient, but working RapidDecoder in that case. If the RapidDecoder is already in
+            // use, show the error indicator.
+            if (requiresFallback[data[position].decodedName] == true) {
                 errorIndicator.visibility = View.VISIBLE
                 image.visibility = View.GONE
 
                 Log.e(LOGGING_TAG, error.getStackTraceString())
+            } else {
+                requiresFallback.put(data[position].decodedName, true)
+
+                bind(data[position])
             }
         }
 
