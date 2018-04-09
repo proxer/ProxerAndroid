@@ -180,6 +180,7 @@ fun Synonym.toTypeAppString(context: Context): String = context.getString(when (
     SynonymType.KOREAN -> R.string.synonym_korean_type
     SynonymType.CHINESE -> R.string.synonym_chinese_type
     SynonymType.ORIGINAL_ALTERNATIVE -> R.string.synonym_alternative_type
+    SynonymType.OTHER -> R.string.synonym_alternative_type
 })
 
 fun EntrySeasonInfo.toStartAppString(context: Context): String = when (season) {
@@ -188,7 +189,6 @@ fun EntrySeasonInfo.toStartAppString(context: Context): String = when (season) {
     Season.SUMMER -> context.getString(R.string.season_summer_start, year)
     Season.AUTUMN -> context.getString(R.string.season_autumn_start, year)
     Season.UNSPECIFIED -> year.toString()
-    Season.UNSPECIFIED_ALT -> year.toString()
 }
 
 fun EntrySeasonInfo.toEndAppString(context: Context): String = when (season) {
@@ -197,7 +197,6 @@ fun EntrySeasonInfo.toEndAppString(context: Context): String = when (season) {
     Season.SUMMER -> context.getString(R.string.season_summer_end, year)
     Season.AUTUMN -> context.getString(R.string.season_autumn_end, year)
     Season.UNSPECIFIED -> year.toString()
-    Season.UNSPECIFIED_ALT -> year.toString()
 }
 
 fun MediaState.toAppString(context: Context): String = context.getString(when (this) {
