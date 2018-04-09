@@ -12,6 +12,7 @@ import me.proxer.app.exception.NotLoggedInException
 import me.proxer.app.exception.PartialException
 import me.proxer.app.exception.StreamResolutionException
 import me.proxer.app.manga.MangaNotAvailableException
+import me.proxer.app.settings.AgeConfirmationDialog
 import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_DEFAULT
 import me.proxer.app.util.data.StorageHelper
