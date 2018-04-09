@@ -18,8 +18,6 @@ import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.toMediaLanguage
 import me.proxer.library.api.Endpoint
-import me.proxer.library.api.ProxerException
-import me.proxer.library.api.ProxerException.ErrorType
 import me.proxer.library.entity.info.EntryCore
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.Language
@@ -42,9 +40,8 @@ class MangaViewModel(
             .flatMap<EntryCore> { entrySingle() }
             .flatMap { entry ->
                 chapterSingle(entry).map { data ->
-                    @Suppress("SENSELESS_COMPARISON") // Can happen in case of a server outage.
                     if (data.chapter.pages == null) {
-                        throw PartialException(ProxerException(ErrorType.PARSING), entry)
+                        throw PartialException(MangaNotAvailableException(), entry)
                     }
 
                     data

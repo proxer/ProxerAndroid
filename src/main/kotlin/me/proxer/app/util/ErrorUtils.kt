@@ -11,7 +11,7 @@ import me.proxer.app.exception.ChatException
 import me.proxer.app.exception.NotLoggedInException
 import me.proxer.app.exception.PartialException
 import me.proxer.app.exception.StreamResolutionException
-import me.proxer.app.settings.AgeConfirmationDialog
+import me.proxer.app.manga.MangaNotAvailableException
 import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_DEFAULT
 import me.proxer.app.util.data.StorageHelper
@@ -116,6 +116,7 @@ object ErrorUtils {
             is NotLoggedInException -> R.string.error_login_required
             is AgeConfirmationRequiredException -> R.string.error_age_confirmation_needed
             is StreamResolutionException -> R.string.error_stream_resolution
+            is MangaNotAvailableException -> R.string.error_manga_not_available
             is HttpDataSource.InvalidResponseCodeException -> when (innermostError.responseCode) {
                 404 -> R.string.error_video_deleted
                 in 400 until 600 -> R.string.error_video_unknown

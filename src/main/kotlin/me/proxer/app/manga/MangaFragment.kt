@@ -242,7 +242,9 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         innerAdapter.entryId = data.chapter.entryId
         innerAdapter.id = data.chapter.id
 
-        innerAdapter.swapDataAndNotifyWithDiffing(data.chapter.pages)
+        data.chapter.pages?.let { pages ->
+            innerAdapter.swapDataAndNotifyWithDiffing(pages)
+        }
 
         requireActivity().window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LOW_PROFILE
     }

@@ -98,6 +98,10 @@
     <string name="error_stream_resolution">Fehler beim Laden des Streams. Das Video ist eventuell nicht mehr verfügbar
     </string>
 
+    <string name="error_manga_not_available">Dieses Kapitel ist (derzeit) nicht verfügbar.
+    Möglicherweise wurde es entfernt oder der Server hat Probleme
+    </string>
+
     <string name="error_input_empty">Gib etwas ein</string>
     <string name="error_duplicate_participant">Diesen Teilnehmer hast du schon hinzugefügt</string>
     <string name="error_missing_message">Gib eine Nachricht ein</string>
