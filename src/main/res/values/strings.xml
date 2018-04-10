@@ -289,7 +289,8 @@
     </string>
     <string name="dialog_logout_positive">Abmelden</string>
 
-    <string name="dialog_age_confirmation_content">Dieser Bereich darf nur von Benutzern über 18 Jahren betreten werden!
+    <string name="dialog_age_confirmation_content">
+        Dieser Bereich darf nur von Benutzern über 18 Jahren betreten werden!
         Eltern haften für ihre Kinder. Proxer.Me übernimmt keinerlei Haftung!
     </string>
     <string name="dialog_age_confirmation_positive">Verstanden</string>
@@ -302,6 +303,15 @@
         Das kann nicht rückgängig gemacht werden.
     </string>
     <string name="dialog_notification_deletion_confirmation_positive">Löschen</string>
+
+    <string name="dialog_rating_title">Bewertung</string>
+    <string name="dialog_rating_content">
+        Gefällt dir die App? Hast du Probleme, Kritik oder Verbesserungsvorschläge?
+        Dann bewerte sie im Play Store!
+    </string>
+    <string name="dialog_rating_positive">Bewerten</string>
+    <string name="dialog_rating_neutral">Später erinnern</string>
+    <string name="dialog_rating_negative">Nicht mehr fragen</string>
 
     <string name="dialog_crash_title">Fehlerbericht</string>
     <string name="dialog_crash_neutral">Kopieren</string>
@@ -499,7 +509,7 @@
     <string name="preference_theme_light">Hell</string>
 
     <string name="preference_category_manga_title">Manga</string>
-    <string name="preference_manga_vertical_reader_title">Mangareader Ausrichtung</string>
+    <string name="preference_manga_vertical_reader_title">Manga Reader Ausrichtung</string>
     <string name="preference_manga_vertical_reader_summary_off">Manga werden von Links nach Rechts angezeigt</string>
     <string name="preference_manga_vertical_reader_summary_on">Manga werden von Oben nach Unten angezeigt</string>
 
@@ -535,9 +545,11 @@
     <string name="introduction_welcome_title">Willkommen!</string>
     <string name="introduction_welcome_description">Ein paar Einstellungen und es geht los</string>
     <string name="introduction_notifications_title">Benachrichtigungen</string>
-    <string name="introduction_notifications_description">Erhalte Benachrichtigungen zu News und deinem
-        Account
+    <string name="introduction_notifications_description">
+        Erhalte Benachrichtigungen zu News und deinem Account
     </string>
+    <string name="introduction_manga_reader_title">Manga Reader Ausrichtung</string>
+    <string name="introduction_manga_reader_description">Zeige Manga mobil-freundlich von oben nach unten an</string>
     <string name="introduction_skip">Überspringen</string>
 
     <string name="action_search">Suchen</string>

@@ -18,6 +18,8 @@ object PreferenceHelper {
     const val NOTIFICATIONS_CHAT = "notifications_chat"
     const val NOTIFICATIONS_INTERVAL = "notifications_interval"
     const val MANGA_VERTICAL_READER = "manga_vertical_reader"
+    const val LAUNCHES = "launches"
+    const val RATED = "rated"
 
     fun isAgeRestrictedMediaAllowed(context: Context) = getDefaultSharedPreferences(context)
         .getBoolean(AGE_CONFIRMATION, false)
@@ -48,6 +50,24 @@ object PreferenceHelper {
 
     fun isVerticalReaderEnabled(context: Context) = getDefaultSharedPreferences(context)
         .getBoolean(MANGA_VERTICAL_READER, true)
+
+    fun setVerticalReaderEnabled(context: Context, enabled: Boolean) = getDefaultSharedPreferences(context).edit()
+        .putBoolean(MANGA_VERTICAL_READER, enabled).apply()
+
+    fun getLaunches(context: Context) = getDefaultSharedPreferences(context)
+        .getInt(LAUNCHES, 0).let {
+            // TODO: For backwards compatibility, remove in a future update
+            if (it <= 0 && !StorageHelper.isFirstStart) 1 else it
+        }
+
+    fun incrementLaunches(context: Context) = getDefaultSharedPreferences(context).edit()
+        .putInt(LAUNCHES, getLaunches(context) + 1).apply()
+
+    fun hasRated(context: Context) = getDefaultSharedPreferences(context)
+        .getBoolean(RATED, false)
+
+    fun setHasRated(context: Context) = getDefaultSharedPreferences(context).edit()
+        .putBoolean(RATED, true).apply()
 
     @AppCompatDelegate.NightMode
     fun getNightMode(context: Context) = when (getDefaultSharedPreferences(context).getString(THEME, "2")) {

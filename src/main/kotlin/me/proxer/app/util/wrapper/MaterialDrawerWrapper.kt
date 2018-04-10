@@ -223,7 +223,7 @@ class MaterialDrawerWrapper(
         miniDrawer?.createItems()
     }
 
-    fun test() {
+    fun disableSelectability() {
         (drawerItems + stickyDrawerItems).forEach { it.withSelectable(false) }
     }
 

@@ -18,8 +18,8 @@ import me.proxer.app.news.NewsFragment
 import me.proxer.app.notification.NotificationJob
 import me.proxer.app.settings.AboutFragment
 import me.proxer.app.settings.SettingsFragment
+import me.proxer.app.ui.view.RatingDialog
 import me.proxer.app.util.data.PreferenceHelper
-import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.shortcutManager
 import me.proxer.app.util.wrapper.IntroductionWrapper
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper.DrawerItem
@@ -48,7 +48,7 @@ class MainActivity : DrawerActivity() {
             .intentFor<MainActivity>(SECTION_EXTRA to section.id)
     }
 
-    override val isRootActivity get() = intent.extras?.containsKey(SECTION_EXTRA) != true
+    override val isRootActivity get() = !intent.hasExtra(SECTION_EXTRA)
     override val isMainActivity = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,6 +64,16 @@ class MainActivity : DrawerActivity() {
         root.postDelayed({
             supportStartPostponedEnterTransition()
         }, 50)
+
+        if (intent.action != Intent.ACTION_VIEW && !intent.hasExtra(SECTION_EXTRA)) {
+            PreferenceHelper.incrementLaunches(this)
+
+            PreferenceHelper.getLaunches(this).let { launches ->
+                if (launches >= 3 && launches % 3 == 0 && !PreferenceHelper.hasRated(this)) {
+                    RatingDialog.show(this)
+                }
+            }
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -111,11 +121,11 @@ class MainActivity : DrawerActivity() {
 
                             NotificationJob.scheduleIfPossible(this)
                         }
+                        2 -> PreferenceHelper.setVerticalReaderEnabled(this, option.isActivated)
                     }
                 }
             }
 
-            StorageHelper.isFirstStart = false
             displayFirstPage(null)
         }
     }
@@ -154,7 +164,10 @@ class MainActivity : DrawerActivity() {
 
     private fun displayFirstPage(savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
-            if (StorageHelper.isFirstStart) {
+            val shouldIntroduce = PreferenceHelper.getLaunches(this) <= 0 &&
+                intent.action != Intent.ACTION_VIEW && !intent.hasExtra(SECTION_EXTRA)
+
+            if (shouldIntroduce) {
                 IntroductionWrapper.introduce(this)
             } else {
                 val itemToLoad = getItemToLoad()
@@ -163,7 +176,8 @@ class MainActivity : DrawerActivity() {
 
                 if (!isRootActivity) {
                     setFragment(itemToLoad)
-                    drawer.test()
+
+                    drawer.disableSelectability()
                 }
             }
         }

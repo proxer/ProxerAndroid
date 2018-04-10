@@ -20,6 +20,8 @@ object DeviceUtils {
 
     fun getScreenWidth(context: Context) = Point().apply { context.windowManager.defaultDisplay.getSize(this) }.x
 
+    fun getScreenHeight(context: Context) = Point().apply { context.windowManager.defaultDisplay.getSize(this) }.y
+
     fun getVerticalMargin(context: Context, withItems: Boolean = true) = context.resources
         .getDimensionPixelSize(when (withItems) {
             true -> R.dimen.screen_vertical_margin_with_items

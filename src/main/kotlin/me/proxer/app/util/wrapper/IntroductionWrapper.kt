@@ -11,6 +11,7 @@ import com.rubengees.introduction.Option
 import com.rubengees.introduction.Slide
 import com.rubengees.introduction.interfaces.OnSlideListener
 import me.proxer.app.R
+import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.setIconicsImage
 
 /**
@@ -23,9 +24,16 @@ object IntroductionWrapper {
         .withSkipEnabled(R.string.introduction_skip)
         .withOnSlideListener(object : OnSlideListener() {
             override fun onSlideInit(position: Int, title: TextView?, image: ImageView, description: TextView?) {
+                val padding = DeviceUtils.getScreenHeight(image.context) / 16
+
                 when (position) {
-                    0 -> image.setImageDrawable(AppCompatResources.getDrawable(activity, R.drawable.ic_proxer))
-                    1 -> image.setIconicsImage(CommunityMaterial.Icon.cmd_bell_outline, 256, 16,
+                    0 -> {
+                        image.setPadding(padding, padding, padding, padding)
+                        image.setImageDrawable(AppCompatResources.getDrawable(activity, R.drawable.ic_proxer))
+                    }
+                    1 -> image.setIconicsImage(CommunityMaterial.Icon.cmd_bell_outline, 256, padding / 2,
+                        android.R.color.white)
+                    2 -> image.setIconicsImage(CommunityMaterial.Icon.cmd_book_open_page_variant, 256, padding / 2,
                         android.R.color.white)
                 }
             }
@@ -37,7 +45,10 @@ object IntroductionWrapper {
             .withColorResource(R.color.primary)
             .withDescription(R.string.introduction_welcome_description),
         Slide().withTitle(R.string.introduction_notifications_title)
-            .withColorResource(R.color.colorAccent)
-            .withOption(Option(context.getString(R.string.introduction_notifications_description), true))
+            .withColorResource(R.color.primary)
+            .withOption(Option(context.getString(R.string.introduction_notifications_description), true)),
+        Slide().withTitle(R.string.introduction_manga_reader_title)
+            .withColorResource(R.color.primary)
+            .withOption(Option(R.string.introduction_manga_reader_description, true))
     )
 }
