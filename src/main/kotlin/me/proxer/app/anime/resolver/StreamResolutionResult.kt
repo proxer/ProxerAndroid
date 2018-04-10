@@ -14,6 +14,7 @@ data class StreamResolutionResult(val intent: Intent) {
     }
 
     constructor(uri: Uri, mimeType: String) : this(Intent(Intent.ACTION_VIEW).apply {
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         setDataAndType(uri, mimeType)
     })
 

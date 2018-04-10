@@ -49,6 +49,8 @@ class WatchboxStreamResolver : StreamResolver {
                 throw StreamResolutionException()
             }
 
-            StreamResolutionResult(Intent(Intent.ACTION_VIEW, Uri.parse(mediaUri)))
+            val uri = Uri.parse(mediaUri)
+
+            StreamResolutionResult(Intent(Intent.ACTION_VIEW, uri).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
         }
 }

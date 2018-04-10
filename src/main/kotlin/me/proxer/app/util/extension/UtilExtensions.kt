@@ -27,6 +27,7 @@ import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.ui.WebViewActivity
 import me.proxer.app.util.Utils
+import me.proxer.library.util.ProxerUrls
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
 import org.jetbrains.anko.dip
@@ -108,9 +109,17 @@ fun CustomTabsHelperFragment.openHttpPage(activity: Activity, url: HttpUrl, forc
 
         when (nativePackages.isEmpty()) {
             true -> doOpenHttpPage(activity, url)
-            false -> when (nativePackages.contains(APPLICATION_ID)) {
-                true -> activity.startActivity(Intent(Intent.ACTION_VIEW, url.androidUri()).setPackage(APPLICATION_ID))
-                false -> activity.startActivity(Intent(Intent.ACTION_VIEW, url.androidUri()))
+            false -> {
+                val intent = when (nativePackages.contains(APPLICATION_ID)) {
+                    true -> Intent(Intent.ACTION_VIEW, url.androidUri()).setPackage(APPLICATION_ID)
+                    false -> Intent(Intent.ACTION_VIEW, url.androidUri()).apply {
+                        if (!ProxerUrls.hasProxerHost(url)) {
+                            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        }
+                    }
+                }
+
+                activity.startActivity(intent)
             }
         }
     }

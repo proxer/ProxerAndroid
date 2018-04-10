@@ -38,7 +38,8 @@ class CrunchyrollStreamResolver : StreamResolver {
                 throw StreamResolutionException()
             }
 
-            StreamResolutionResult(Intent(Intent.ACTION_VIEW,
-                Uri.parse("crunchyroll://media/$mediaId")))
+            val uri = Uri.parse("crunchyroll://media/$mediaId")
+
+            StreamResolutionResult(Intent(Intent.ACTION_VIEW, uri).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
         }
 }

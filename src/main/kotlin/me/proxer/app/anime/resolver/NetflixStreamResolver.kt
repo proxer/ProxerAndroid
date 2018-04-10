@@ -27,5 +27,9 @@ class NetflixStreamResolver : StreamResolver {
             }
         }
         .flatMap { api.anime().link(id).buildSingle() }
-        .map { StreamResolutionResult(Intent(Intent.ACTION_VIEW, Uri.parse(it))) }
+        .map {
+            val uri = Uri.parse(it)
+
+            StreamResolutionResult(Intent(Intent.ACTION_VIEW, uri).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+        }
 }
