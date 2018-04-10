@@ -131,7 +131,7 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
         viewModel.userInfoUpdateError.observe(this, Observer {
             it?.let {
                 multilineSnackbar(root, getString(R.string.error_set_user_info, getString(it.message)),
-                    Snackbar.LENGTH_LONG, it.buttonMessage, it.buttonAction?.toClickListener(hostingActivity))
+                    Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity))
             }
         })
 

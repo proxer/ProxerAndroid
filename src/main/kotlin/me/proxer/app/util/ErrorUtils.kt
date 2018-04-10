@@ -11,9 +11,13 @@ import me.proxer.app.exception.ChatException
 import me.proxer.app.exception.NotLoggedInException
 import me.proxer.app.exception.PartialException
 import me.proxer.app.exception.StreamResolutionException
+import me.proxer.app.manga.MangaLinkException
 import me.proxer.app.manga.MangaNotAvailableException
 import me.proxer.app.settings.AgeConfirmationDialog
-import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction
+import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction.AGE_CONFIRMATION
+import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction.CAPTCHA
+import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction.LOGIN
+import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction.OPEN_LINK
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_DEFAULT
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.library.api.ProxerException
@@ -83,6 +87,7 @@ import me.proxer.library.api.ProxerException.ServerErrorType.USER_ACCOUNT_EXPIRE
 import me.proxer.library.api.ProxerException.ServerErrorType.USER_INSUFFICIENT_PERMISSIONS
 import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
+import okhttp3.HttpUrl
 import java.io.IOException
 import java.net.SocketTimeoutException
 import javax.net.ssl.SSLPeerUnverifiedException
@@ -118,6 +123,7 @@ object ErrorUtils {
             is AgeConfirmationRequiredException -> R.string.error_age_confirmation_needed
             is StreamResolutionException -> R.string.error_stream_resolution
             is MangaNotAvailableException -> R.string.error_manga_not_available
+            is MangaLinkException -> R.string.error_manga_link
             is HttpDataSource.InvalidResponseCodeException -> when (innermostError.responseCode) {
                 404 -> R.string.error_video_deleted
                 in 400 until 600 -> R.string.error_video_unknown
@@ -147,21 +153,33 @@ object ErrorUtils {
             }
             is NotLoggedInException -> R.string.error_action_login
             is AgeConfirmationRequiredException -> R.string.error_action_confirm
+            is MangaLinkException -> R.string.error_action_open_link
             else -> ACTION_MESSAGE_DEFAULT
         }
 
         val buttonAction = when (innermostError) {
             is ProxerException -> when (innermostError.serverErrorType) {
-                IP_BLOCKED -> ButtonAction.CAPTCHA
-                in LOGIN_ERRORS -> ButtonAction.LOGIN
+                IP_BLOCKED -> CAPTCHA
+                in LOGIN_ERRORS -> LOGIN
                 else -> null
             }
-            is NotLoggedInException -> ButtonAction.LOGIN
-            is AgeConfirmationRequiredException -> ButtonAction.AGE_CONFIRMATION
+            is NotLoggedInException -> LOGIN
+            is AgeConfirmationRequiredException -> AGE_CONFIRMATION
+            is MangaLinkException -> OPEN_LINK
             else -> null
         }
 
-        return ErrorAction(errorMessage, buttonMessage, buttonAction, (error as? PartialException)?.partialData)
+        val data = when {
+            error is PartialException -> error.partialData
+            else -> null
+        }
+
+        val errorData = when {
+            innermostError is MangaLinkException -> innermostError.link
+            else -> null
+        }
+
+        return ErrorAction(errorMessage, buttonMessage, buttonAction, data, errorData)
     }
 
     private fun getMessageForProxerException(error: ProxerException) = when (error.errorType) {
@@ -216,7 +234,8 @@ object ErrorUtils {
         val message: Int,
         val buttonMessage: Int = ACTION_MESSAGE_DEFAULT,
         val buttonAction: ButtonAction? = null,
-        val partialData: Any? = null
+        val data: Any? = null,
+        val errorData: Any? = null
     ) {
 
         companion object {
@@ -224,14 +243,17 @@ object ErrorUtils {
             const val ACTION_MESSAGE_HIDE = -2
         }
 
-        enum class ButtonAction {
-            CAPTCHA, LOGIN, AGE_CONFIRMATION;
-
-            fun toClickListener(activity: BaseActivity) = when (this) {
-                CAPTCHA -> View.OnClickListener { activity.showPage(ProxerUrls.captchaWeb(Device.MOBILE)) }
-                LOGIN -> View.OnClickListener { LoginDialog.show(activity) }
-                AGE_CONFIRMATION -> View.OnClickListener { AgeConfirmationDialog.show(activity) }
+        fun toClickListener(activity: BaseActivity) = when (buttonAction) {
+            CAPTCHA -> View.OnClickListener { activity.showPage(ProxerUrls.captchaWeb(Device.MOBILE)) }
+            LOGIN -> View.OnClickListener { LoginDialog.show(activity) }
+            AGE_CONFIRMATION -> View.OnClickListener { AgeConfirmationDialog.show(activity) }
+            OPEN_LINK -> when (errorData) {
+                is HttpUrl -> View.OnClickListener { activity.showPage(errorData) }
+                else -> null
             }
+            else -> null
         }
+
+        enum class ButtonAction { CAPTCHA, LOGIN, AGE_CONFIRMATION, OPEN_LINK }
     }
 }

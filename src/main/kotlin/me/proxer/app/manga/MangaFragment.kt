@@ -195,7 +195,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         viewModel.bookmarkError.observe(this, Observer {
             it?.let {
                 multilineSnackbar(root, getString(R.string.error_set_user_info, getString(it.message)),
-                    Snackbar.LENGTH_LONG, it.buttonMessage, it.buttonAction?.toClickListener(hostingActivity))
+                    Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity))
             }
         })
 
@@ -268,7 +268,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
 
         chapterTitle = null
 
-        action.partialData?.let {
+        action.data?.let {
             if (it is EntryCore) {
                 episodeAmount = it.episodeAmount
                 name = it.name

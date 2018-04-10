@@ -149,7 +149,7 @@ class CreateChatFragment : BaseFragment() {
         viewModel.error.observe(this, Observer {
             it?.let {
                 multilineSnackbar(root, it.message, Snackbar.LENGTH_LONG, it.buttonMessage,
-                    it.buttonAction?.toClickListener(hostingActivity))
+                    it.toClickListener(hostingActivity))
             }
         })
 
@@ -280,7 +280,7 @@ class CreateChatFragment : BaseFragment() {
                     }
                     else -> ErrorUtils.handle(it).let { action ->
                         multilineSnackbar(root, action.message, Snackbar.LENGTH_LONG, action.buttonMessage,
-                            action.buttonAction?.toClickListener(hostingActivity))
+                            action.toClickListener(hostingActivity))
                     }
                 }
             })

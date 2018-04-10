@@ -120,8 +120,7 @@ abstract class BaseContentFragment<T> : BaseFragment() {
 
                         showPage(ProxerUrls.captchaWeb(Device.MOBILE))
                     }
-                    false -> action.buttonAction?.toClickListener(hostingActivity)?.onClick(errorButton)
-                        ?: viewModel.load()
+                    false -> action.toClickListener(hostingActivity)?.onClick(errorButton) ?: viewModel.load()
                 }
             }
     }

@@ -170,7 +170,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
                 when (it) {
                     is AppRequiredErrorAction -> it.showDialog(hostingActivity)
                     else -> multilineSnackbar(root, it.message, Snackbar.LENGTH_LONG, it.buttonMessage,
-                        it.buttonAction?.toClickListener(hostingActivity))
+                        it.toClickListener(hostingActivity))
                 }
             }
         })
@@ -184,7 +184,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
         viewModel.bookmarkError.observe(this, Observer {
             it?.let {
                 multilineSnackbar(root, getString(R.string.error_set_user_info, getString(it.message)),
-                    Snackbar.LENGTH_LONG, it.buttonMessage, it.buttonAction?.toClickListener(hostingActivity))
+                    Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity))
             }
         })
 
@@ -232,7 +232,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
     override fun showError(action: ErrorAction) {
         super.showError(action)
 
-        action.partialData?.let {
+        action.data?.let {
             if (it is EntryCore) {
                 episodeAmount = it.episodeAmount
                 name = it.name

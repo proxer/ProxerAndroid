@@ -108,7 +108,7 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
         viewModel.itemDeletionError.observe(this, Observer {
             it?.let {
                 multilineSnackbar(root, getString(R.string.error_bookmark_deletion, getString(it.message)),
-                    Snackbar.LENGTH_LONG, it.buttonMessage, it.buttonAction?.toClickListener(hostingActivity))
+                    Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity))
             }
         })
     }

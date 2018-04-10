@@ -10,6 +10,7 @@ import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.base.BaseViewModel
 import me.proxer.app.exception.PartialException
 import me.proxer.app.util.ErrorUtils
+import me.proxer.app.util.Utils
 import me.proxer.app.util.Validators
 import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.extension.buildOptionalSingle
@@ -33,6 +34,10 @@ class MangaViewModel(
     episode: Int
 ) : BaseViewModel<MangaChapterInfo>() {
 
+    private companion object {
+        private val supportedExternalServers = arrayOf("www.webtoons.com")
+    }
+
     override val isLoginRequired = BuildConfig.STORE
 
     override val dataSingle: Single<MangaChapterInfo>
@@ -41,7 +46,13 @@ class MangaViewModel(
             .flatMap { entry ->
                 chapterSingle(entry).map { data ->
                     if (data.chapter.pages == null) {
-                        throw PartialException(MangaNotAvailableException(), entry)
+                        val serverUrl = Utils.safelyParseAndFixUrl(data.chapter.server)
+
+                        if (serverUrl != null && serverUrl.host() in supportedExternalServers) {
+                            throw PartialException(MangaLinkException(serverUrl), entry)
+                        } else {
+                            throw PartialException(MangaNotAvailableException(), entry)
+                        }
                     }
 
                     data

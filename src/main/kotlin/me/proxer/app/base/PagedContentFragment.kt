@@ -70,7 +70,7 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
         viewModel.refreshError.observe(this, Observer {
             it?.let {
                 multilineSnackbar(root, getString(R.string.error_refresh, getString(it.message)), Snackbar.LENGTH_LONG,
-                    it.buttonMessage, it.buttonAction?.toClickListener(hostingActivity))
+                    it.buttonMessage, it.toClickListener(hostingActivity))
             }
         })
 

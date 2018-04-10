@@ -98,8 +98,12 @@
     <string name="error_stream_resolution">Fehler beim Laden des Streams. Das Video ist eventuell nicht mehr verfügbar
     </string>
 
-    <string name="error_manga_not_available">Dieses Kapitel ist (derzeit) nicht verfügbar.
-    Möglicherweise wurde es entfernt oder der Server hat Probleme
+    <string name="error_manga_not_available">
+        Dieses Kapitel ist (derzeit) nicht verfügbar.
+        Möglicherweise wurde es entfernt oder der Server hat Probleme
+    </string>
+    <string name="error_manga_link">
+        Dieses Kapitel ist aufgrund von einer Lizensierung nicht im internen Reader verfügbar
     </string>
 
     <string name="error_input_empty">Gib etwas ein</string>
@@ -134,6 +138,7 @@
     <string name="error_action_captcha">Captcha</string>
     <string name="error_action_login">Anmelden</string>
     <string name="error_action_confirm">Bestätigen</string>
+    <string name="error_action_open_link">Extern öffnen</string>
 
     <string name="error_set_user_info">Eintrag konnte nicht aktualisiert werden: %s</string>
     <string name="error_notification_deletion">Die Benachrichtigung konnte nicht gelöscht werden: %s</string>
