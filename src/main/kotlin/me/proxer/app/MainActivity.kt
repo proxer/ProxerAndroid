@@ -68,9 +68,12 @@ class MainActivity : DrawerActivity() {
         if (intent.action != Intent.ACTION_VIEW && !intent.hasExtra(SECTION_EXTRA)) {
             PreferenceHelper.incrementLaunches(this)
 
-            PreferenceHelper.getLaunches(this).let { launches ->
-                if (launches >= 3 && launches % 3 == 0 && !PreferenceHelper.hasRated(this)) {
-                    RatingDialog.show(this)
+            @Suppress("ConstantConditionIf")
+            if (BuildConfig.STORE) {
+                PreferenceHelper.getLaunches(this).let { launches ->
+                    if (launches >= 3 && launches % 3 == 0 && !PreferenceHelper.hasRated(this)) {
+                        RatingDialog.show(this)
+                    }
                 }
             }
         }

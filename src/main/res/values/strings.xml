@@ -99,7 +99,7 @@
     </string>
 
     <string name="error_manga_not_available">
-        Dieses Kapitel ist (derzeit) nicht verfügbar.
+        Dieses Kapitel ist (derzeit) nicht verfügbar.\n
         Möglicherweise wurde es entfernt oder der Server hat Probleme
     </string>
     <string name="error_manga_link">
