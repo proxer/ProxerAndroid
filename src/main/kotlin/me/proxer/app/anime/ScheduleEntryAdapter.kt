@@ -109,6 +109,11 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
         cachedViewHolders -= holder
     }
 
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        layoutManager = null
+        glide = null
+    }
+
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         internal val image by bindView<ImageView>(R.id.image)
