@@ -35,7 +35,7 @@ class MangaViewModel(
 ) : BaseViewModel<MangaChapterInfo>() {
 
     private companion object {
-        private val supportedExternalServers = arrayOf("www.webtoons.com")
+        private val supportedExternalServers = arrayOf("www.webtoons.com", "www.lezhin.com")
     }
 
     override val isLoginRequired = BuildConfig.STORE
