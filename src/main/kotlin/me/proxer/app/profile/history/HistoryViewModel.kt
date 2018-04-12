@@ -1,8 +1,8 @@
 package me.proxer.app.profile.history
 
 import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
-import me.proxer.app.MainApplication
 import me.proxer.app.MainApplication.Companion.api
+import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.base.PagedContentViewModel
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
@@ -23,5 +23,5 @@ class HistoryViewModel(
 
     override val endpoint: PagingLimitEndpoint<List<UserHistoryEntry>>
         get() = api.user().history(userId, username)
-            .includeHentai(PreferenceHelper.isAgeRestrictedMediaAllowed(MainApplication.globalContext) && StorageHelper.isLoggedIn)
+            .includeHentai(PreferenceHelper.isAgeRestrictedMediaAllowed(globalContext) && StorageHelper.isLoggedIn)
 }
