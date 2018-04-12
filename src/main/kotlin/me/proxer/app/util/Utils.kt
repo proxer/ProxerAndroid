@@ -20,7 +20,6 @@ import me.proxer.app.R
 import me.proxer.app.util.extension.androidUri
 import me.proxer.library.api.ProxerException
 import me.proxer.library.api.ProxerException.ErrorType
-import me.proxer.library.util.ProxerUrls
 import okhttp3.HttpUrl
 import org.jetbrains.anko.getStackTraceString
 import org.threeten.bp.format.DateTimeFormatter
@@ -96,21 +95,12 @@ object Utils {
         return builder.build() ?: text
     }
 
-    fun safelyParseAndFixUrl(url: String): HttpUrl? {
-        val fixedUrl = when {
-            url.startsWith("http://") || url.startsWith("https://") -> HttpUrl.parse(url)
-            else -> HttpUrl.parse(when {
-                url.startsWith("//") -> "http:$url"
-                else -> "http://$url"
-            })
-        }
-
-        return fixedUrl?.let {
-            when (isEligibleForHttps(it)) {
-                true -> it.newBuilder().scheme("https").build()
-                false -> it
-            }
-        }
+    fun safelyParseAndFixUrl(url: String) = when {
+        url.startsWith("http://") || url.startsWith("https://") -> HttpUrl.parse(url)
+        else -> HttpUrl.parse(when {
+            url.startsWith("//") -> "http:$url"
+            else -> "http://$url"
+        })
     }
 
     fun parseAndFixUrl(url: String) = safelyParseAndFixUrl(url)
@@ -134,11 +124,6 @@ object Utils {
         resolvedSpecializedList.removeAll(genericResolvedList)
 
         return resolvedSpecializedList
-    }
-
-    private fun isEligibleForHttps(url: HttpUrl) = when {
-        ProxerUrls.hasProxerHost(url) -> true
-        else -> false
     }
 
     private fun extractPackageNames(resolveInfo: List<ResolveInfo>) = resolveInfo

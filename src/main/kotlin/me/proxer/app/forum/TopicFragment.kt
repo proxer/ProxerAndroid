@@ -12,12 +12,12 @@ import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.profile.ProfileActivity
+import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
 import me.proxer.library.util.ProxerUtils
-import okhttp3.HttpUrl
 import org.jetbrains.anko.bundleOf
 import kotlin.properties.Delegates
 
@@ -86,7 +86,7 @@ class TopicFragment : PagedContentFragment<ParsedPost>() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.show_in_browser -> {
-                val url = HttpUrl.parse(activity?.intent?.dataString ?: "")
+                val url = Utils.safelyParseAndFixUrl(activity?.intent?.dataString ?: "")
 
                 if (url != null) {
                     val mobileUrl = url.newBuilder()

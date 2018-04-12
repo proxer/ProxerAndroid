@@ -7,7 +7,7 @@ import me.proxer.app.R
 import me.proxer.app.ui.view.bbcode.UrlClickableSpan
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
 import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
-import okhttp3.HttpUrl
+import me.proxer.app.util.Utils
 
 /**
  * @author Ruben Gees
@@ -19,7 +19,7 @@ object FacebookPrototype : TextMutatorPrototype, AutoClosingPrototype {
 
     override fun mutate(text: SpannableStringBuilder, args: Map<String, Any?>): SpannableStringBuilder {
         val url = text.trim().toString()
-        val parsedUrl = HttpUrl.parse(url)
+        val parsedUrl = Utils.safelyParseAndFixUrl(url)
 
         return when (parsedUrl) {
             null -> text

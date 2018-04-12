@@ -9,7 +9,7 @@ import me.proxer.app.ui.view.bbcode.BBUtils
 import me.proxer.app.ui.view.bbcode.UrlClickableSpan
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
 import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
-import okhttp3.HttpUrl
+import me.proxer.app.util.Utils
 
 /**
  * @author Ruben Gees
@@ -34,7 +34,7 @@ object VideoPrototype : TextMutatorPrototype, AutoClosingPrototype {
         val type = args[TYPE_ARGUMENT] as String?
         val urlOrId = text.trim()
 
-        val url = HttpUrl.parse(when {
+        val url = Utils.safelyParseAndFixUrl(when {
             type?.equals(TYPE_YOUTUBE, ignoreCase = true) == true -> "$TYPE_YOUTUBE_URL$urlOrId"
             else -> urlOrId.toString()
         })
