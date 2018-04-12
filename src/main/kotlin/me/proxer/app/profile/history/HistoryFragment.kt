@@ -1,4 +1,4 @@
-package me.proxer.app.ucp.history
+package me.proxer.app.profile.history
 
 import android.os.Bundle
 import android.support.v7.widget.StaggeredGridLayoutManager
@@ -9,12 +9,13 @@ import me.proxer.app.anime.AnimeActivity
 import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.manga.MangaActivity
 import me.proxer.app.media.MediaActivity
+import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.toAnimeLanguage
 import me.proxer.app.util.extension.toGeneralLanguage
 import me.proxer.app.util.extension.unsafeLazy
-import me.proxer.library.entity.ucp.UcpHistoryEntry
+import me.proxer.library.entity.user.UserHistoryEntry
 import me.proxer.library.enums.Category
 import org.jetbrains.anko.bundleOf
 import kotlin.properties.Delegates
@@ -22,7 +23,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-class HistoryFragment : PagedContentFragment<UcpHistoryEntry>() {
+class HistoryFragment : PagedContentFragment<UserHistoryEntry>() {
 
     companion object {
         fun newInstance() = HistoryFragment().apply {
@@ -33,12 +34,21 @@ class HistoryFragment : PagedContentFragment<UcpHistoryEntry>() {
     override val emptyDataMessage = R.string.error_no_data_history
     override val isSwipeToRefreshEnabled = false
 
-    override val viewModel by unsafeLazy { HistoryViewModelProvider.get(this) }
+    override val viewModel by unsafeLazy { HistoryViewModelProvider.get(this, userId, username) }
 
     override val layoutManager by lazy {
         StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(requireActivity()) + 1,
             StaggeredGridLayoutManager.VERTICAL)
     }
+
+    override val hostingActivity: ProfileActivity
+        get() = activity as ProfileActivity
+
+    private val userId: String?
+        get() = hostingActivity.userId
+
+    private val username: String?
+        get() = hostingActivity.username
 
     override var innerAdapter by Delegates.notNull<HistoryAdapter>()
 

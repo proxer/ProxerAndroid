@@ -1,4 +1,4 @@
-package me.proxer.app.ucp.history
+package me.proxer.app.profile.history
 
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.RecyclerView
@@ -12,21 +12,21 @@ import kotterknife.bindView
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
-import me.proxer.app.ucp.history.HistoryAdapter.ViewHolder
-import me.proxer.app.util.extension.convertToRelativeReadableTime
+import me.proxer.app.profile.history.HistoryAdapter.ViewHolder
 import me.proxer.app.util.extension.defaultLoad
 import me.proxer.app.util.extension.toAppString
-import me.proxer.library.entity.ucp.UcpHistoryEntry
+import me.proxer.library.entity.user.UserHistoryEntry
+import me.proxer.library.enums.Category
 import me.proxer.library.util.ProxerUrls
 
 /**
  * @author Ruben Gees
  */
-class HistoryAdapter : BaseAdapter<UcpHistoryEntry, ViewHolder>() {
+class HistoryAdapter : BaseAdapter<UserHistoryEntry, ViewHolder>() {
 
     var glide: GlideRequests? = null
-    val clickSubject: PublishSubject<Pair<ImageView, UcpHistoryEntry>> = PublishSubject.create()
-    val longClickSubject: PublishSubject<Pair<ImageView, UcpHistoryEntry>> = PublishSubject.create()
+    val clickSubject: PublishSubject<Pair<ImageView, UserHistoryEntry>> = PublishSubject.create()
+    val longClickSubject: PublishSubject<Pair<ImageView, UserHistoryEntry>> = PublishSubject.create()
 
     init {
         setHasStableIds(false)
@@ -69,13 +69,15 @@ class HistoryAdapter : BaseAdapter<UcpHistoryEntry, ViewHolder>() {
             }
         }
 
-        fun bind(item: UcpHistoryEntry) {
+        fun bind(item: UserHistoryEntry) {
             ViewCompat.setTransitionName(image, "history_${item.id}")
 
             title.text = item.name
             medium.text = item.medium.toAppString(medium.context)
-            status.text = status.context.getString(R.string.fragment_history_entry_status, item.episode,
-                item.date.convertToRelativeReadableTime(status.context))
+            status.text = status.context.getString(when (item.category) {
+                Category.ANIME -> R.string.fragment_history_entry_status_anime
+                Category.MANGA -> R.string.fragment_history_entry_status_manga
+            }, item.episode)
 
             glide?.defaultLoad(image, ProxerUrls.entryImage(item.entryId))
         }

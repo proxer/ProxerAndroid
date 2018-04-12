@@ -10,7 +10,7 @@ import me.proxer.library.entity.ucp.UcpHistoryEntry
  * @author Ruben Gees
  */
 @GeneratedProvider
-class HistoryViewModel : PagedContentViewModel<UcpHistoryEntry>() {
+class UcpHistoryViewModel : PagedContentViewModel<UcpHistoryEntry>() {
 
     override val isLoginRequired = true
     override val itemsOnPage = 50

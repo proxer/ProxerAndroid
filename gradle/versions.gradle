@@ -29,11 +29,11 @@ ext {
     ankoVersion = '0.10.4'
     multidexVersion = '1.0.3'
     supportLibraryVersion = '27.1.1'
-    supportPreferenceVersion = '2.1.2'
+    supportPreferenceVersion = '2.2.0'
     lifecycleVersion = '1.1.1'
     roomVersion = '1.1.0-beta2'
     androidJobVersion = '1.2.5'
-    proxerLibVersion = '85adc7b95b'
+    proxerLibVersion = '1217326d2b'
 
     // RxJava
     rxJavaVersion = '2.1.12'
@@ -83,7 +83,7 @@ ext {
     alfredVersion = '3ea7529bd2'
     rapidDecoderVersion = '7cdfca47fa'
     concealVersion = '2.0.2'
-    betterLinkMovementMethodVersion = '2.1.0'
+    betterLinkMovementMethodVersion = '2.2.0'
 
     // Debugging
     customActivityOnCrashVersion = '2.2.0'

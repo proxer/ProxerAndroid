@@ -30,6 +30,7 @@
     <string name="section_user_media_list_anime">Anime</string>
     <string name="section_user_media_list_manga">Manga</string>
     <string name="section_user_comments">Kommentare</string>
+    <string name="section_user_history">Chronik</string>
 
     <string name="section_media_info">Info</string>
     <string name="section_comments">Kommentare</string>
@@ -378,7 +379,10 @@
     <string name="fragment_topten_anime">Anime</string>
     <string name="fragment_topten_manga">Manga</string>
 
-    <string name="fragment_history_entry_status">%1$d - %2$s</string>
+    <string name="fragment_history_entry_status_anime">Folge %d</string>
+    <string name="fragment_history_entry_status_manga">Kapitel %d</string>
+
+    <string name="fragment_ucp_history_entry_status">%1$d - %2$s</string>
 
     <string name="fragment_anime_empty_subgroup">Keine angegeben</string>
     <string name="fragment_anime_next_episode">Nächste Episode</string>

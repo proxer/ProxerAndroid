@@ -10,7 +10,7 @@ import com.h6ah4i.android.tablayouthelper.TabLayoutHelper
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.DrawerActivity
-import me.proxer.app.ucp.history.HistoryFragment
+import me.proxer.app.ucp.history.UcpHistoryFragment
 import me.proxer.app.ucp.media.UcpMediaListFragment
 import me.proxer.app.ucp.overview.UcpOverviewFragment
 import me.proxer.app.ucp.topten.UcpTopTenFragment
@@ -56,7 +56,7 @@ class UcpActivity : DrawerActivity() {
             1 -> UcpTopTenFragment.newInstance()
             2 -> UcpMediaListFragment.newInstance(Category.ANIME)
             3 -> UcpMediaListFragment.newInstance(Category.MANGA)
-            4 -> HistoryFragment.newInstance()
+            4 -> UcpHistoryFragment.newInstance()
             else -> throw IllegalArgumentException("Unknown index passed: $position")
         }
 

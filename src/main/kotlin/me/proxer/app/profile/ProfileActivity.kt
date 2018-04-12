@@ -19,6 +19,7 @@ import me.proxer.app.chat.ChatActivity
 import me.proxer.app.chat.Participant
 import me.proxer.app.chat.create.CreateChatActivity
 import me.proxer.app.profile.comment.ProfileCommentFragment
+import me.proxer.app.profile.history.HistoryFragment
 import me.proxer.app.profile.info.ProfileInfoFragment
 import me.proxer.app.profile.media.ProfileMediaListFragment
 import me.proxer.app.profile.topten.TopTenFragment
@@ -171,10 +172,11 @@ class ProfileActivity : ImageTabsActivity() {
             2 -> ProfileMediaListFragment.newInstance(Category.ANIME)
             3 -> ProfileMediaListFragment.newInstance(Category.MANGA)
             4 -> ProfileCommentFragment.newInstance()
+            5 -> HistoryFragment.newInstance()
             else -> throw IllegalArgumentException("Unknown index passed: $position")
         }
 
-        override fun getCount() = 5
+        override fun getCount() = 6
 
         override fun getPageTitle(position: Int): String = when (position) {
             0 -> getString(R.string.section_profile_info)
@@ -182,6 +184,7 @@ class ProfileActivity : ImageTabsActivity() {
             2 -> getString(R.string.section_user_media_list_anime)
             3 -> getString(R.string.section_user_media_list_manga)
             4 -> getString(R.string.section_user_comments)
+            5 -> getString(R.string.section_user_history)
             else -> throw IllegalArgumentException("Unknown index passed: $position")
         }
     }
