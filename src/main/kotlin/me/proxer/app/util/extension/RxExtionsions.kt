@@ -10,6 +10,7 @@ import com.uber.autodispose.ObservableSubscribeProxy
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.Completable
+import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
@@ -42,6 +43,28 @@ inline fun <T> Observable<T>.subscribeAndLogErrors(noinline onSuccess: (T) -> Un
 }
 
 inline fun <T> Observable<T>.subscribeAndLogErrors(): Disposable? {
+    return this.subscribe({}, {
+        Log.e(LOGGING_TAG, it.getStackTraceString())
+    })
+}
+
+inline fun <T> Flowable<T>.subscribeAndLogErrors(
+    noinline onSuccess: (T) -> Unit,
+    noinline onError: (Throwable) -> Unit
+): Disposable {
+    return this.subscribe(onSuccess, {
+        Log.e(LOGGING_TAG, it.getStackTraceString())
+        onError(it)
+    })
+}
+
+inline fun <T> Flowable<T>.subscribeAndLogErrors(noinline onSuccess: (T) -> Unit): Disposable {
+    return this.subscribe(onSuccess, {
+        Log.e(LOGGING_TAG, it.getStackTraceString())
+    })
+}
+
+inline fun <T> Flowable<T>.subscribeAndLogErrors(): Disposable? {
     return this.subscribe({}, {
         Log.e(LOGGING_TAG, it.getStackTraceString())
     })

@@ -66,6 +66,8 @@
 
         <activity android:name=".notification.NotificationActivity" />
 
+        <activity android:name=".chat.pub.message.ChatActivity" />
+
         <activity android:name=".chat.prv.message.MessengerActivity" />
 
         <activity

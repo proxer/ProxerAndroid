@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
+import me.proxer.app.chat.pub.message.ChatActivity
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.chat.ChatRoom
@@ -39,9 +40,7 @@ class ChatRoomFragment : BaseContentFragment<List<ChatRoom>>() {
 
         adapter.clickSubject
             .autoDispose(this)
-            .subscribe { item ->
-                // TODO
-            }
+            .subscribe { item -> ChatActivity.navigateTo(requireActivity(), item.id, item.name) }
 
         adapter.linkClickSubject
             .autoDispose(this)

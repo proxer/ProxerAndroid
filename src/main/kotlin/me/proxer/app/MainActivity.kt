@@ -1,5 +1,6 @@
 package me.proxer.app
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -143,9 +144,14 @@ class MainActivity : DrawerActivity() {
         }
     }
 
-    fun setElevation(elevation: Float) {
+    @SuppressLint("PrivateResource")
+    fun toggleAppbarElevation(enable: Boolean) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            appbar.elevation = elevation
+            if (enable) {
+                appbar.elevation = resources.getDimension(R.dimen.design_appbar_elevation)
+            } else {
+                appbar.elevation = 0f
+            }
         }
     }
 

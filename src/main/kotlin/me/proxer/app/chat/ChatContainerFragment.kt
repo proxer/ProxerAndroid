@@ -35,17 +35,23 @@ class ChatContainerFragment : BaseFragment() {
     private val tabs: TabLayout by bindView(R.id.tabs)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        hostingActivity.toggleAppbarElevation(false)
+
         return inflater.inflate(R.layout.fragment_chat_container, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        hostingActivity.setElevation(0f)
-
         viewPager.adapter = sectionsPagerAdapter
 
         TabLayoutHelper(tabs, viewPager).apply { isAutoAdjustTabModeEnabled = true }
+    }
+
+    override fun onDestroyView() {
+        hostingActivity.toggleAppbarElevation(true)
+
+        super.onDestroyView()
     }
 
     inner class SectionsPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {
