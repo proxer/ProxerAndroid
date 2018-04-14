@@ -25,7 +25,6 @@ import kotterknife.bindView
 import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
-import me.proxer.app.chat.ChatActivity
 import me.proxer.app.chat.prv.LocalConference
 import me.proxer.app.chat.prv.LocalMessage
 import me.proxer.app.chat.prv.sync.MessengerNotifications
@@ -59,11 +58,8 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
     override val emptyDataMessage = R.string.error_no_data_chat
     override val isSwipeToRefreshEnabled = false
 
-    override val hostingActivity: ChatActivity
-        get() = activity as ChatActivity
-
-    private val chatActivity
-        get() = activity as ChatActivity
+    override val hostingActivity: MessengerActivity
+        get() = activity as MessengerActivity
 
     private val actionModeCallback: ActionMode.Callback = object : ActionMode.Callback {
         override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
@@ -118,9 +114,9 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
     private var actionMode: ActionMode? = null
 
     private var conference: LocalConference
-        get() = chatActivity.conference
+        get() = hostingActivity.conference
         set(value) {
-            chatActivity.conference = value
+            hostingActivity.conference = value
         }
 
     override val layoutManager by lazy { LinearLayoutManager(context).apply { reverseLayout = true } }
@@ -147,7 +143,7 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
             .subscribe {
                 if (it > 0) {
                     when (actionMode) {
-                        null -> actionMode = chatActivity.startSupportActionMode(actionModeCallback)
+                        null -> actionMode = hostingActivity.startSupportActionMode(actionModeCallback)
                         else -> actionMode?.invalidate()
                     }
 
@@ -180,7 +176,7 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_chat, container, false)
+        return inflater.inflate(R.layout.fragment_messenger, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

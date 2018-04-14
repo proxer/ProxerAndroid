@@ -12,7 +12,7 @@ import me.proxer.app.anime.ScheduleFragment
 import me.proxer.app.base.BackPressAware
 import me.proxer.app.base.DrawerActivity
 import me.proxer.app.bookmark.BookmarkFragment
-import me.proxer.app.chat.prv.conference.ConferenceFragment
+import me.proxer.app.chat.ChatContainerFragment
 import me.proxer.app.media.list.MediaListFragment
 import me.proxer.app.news.NewsFragment
 import me.proxer.app.notification.NotificationJob
@@ -143,10 +143,16 @@ class MainActivity : DrawerActivity() {
         }
     }
 
+    fun setElevation(elevation: Float) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            appbar.elevation = elevation
+        }
+    }
+
     private fun setFragment(item: DrawerItem) {
         when (item) {
             DrawerItem.NEWS -> setFragment(NewsFragment.newInstance(), R.string.section_news)
-            DrawerItem.CHAT -> setFragment(ConferenceFragment.newInstance(), R.string.section_chat)
+            DrawerItem.CHAT -> setFragment(ChatContainerFragment.newInstance(), R.string.section_chat)
             DrawerItem.BOOKMARKS -> setFragment(BookmarkFragment.newInstance(), R.string.section_bookmarks)
             DrawerItem.ANIME -> setFragment(MediaListFragment.newInstance(Category.ANIME), R.string.section_anime)
             DrawerItem.SCHEDULE -> setFragment(ScheduleFragment.newInstance(), R.string.section_schedule)

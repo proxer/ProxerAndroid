@@ -21,9 +21,9 @@ import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.messengerDao
 import me.proxer.app.MainApplication.Companion.refWatcher
 import me.proxer.app.R
-import me.proxer.app.chat.ChatActivity
 import me.proxer.app.chat.prv.Participant
 import me.proxer.app.chat.prv.create.CreateConferenceActivity
+import me.proxer.app.chat.prv.message.MessengerActivity
 import me.proxer.app.forum.TopicActivity
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.Utils
@@ -156,7 +156,7 @@ class AboutFragment : MaterialAboutFragment() {
                             when (existingConference) {
                                 null -> CreateConferenceActivity.navigateTo(requireActivity(), false,
                                     Participant(DEVELOPER_PROXER_NAME))
-                                else -> ChatActivity.navigateTo(requireActivity(), existingConference)
+                                else -> MessengerActivity.navigateTo(requireActivity(), existingConference)
                             }
                         }
                     }

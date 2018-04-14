@@ -1,0 +1,52 @@
+package me.proxer.app.chat.pub.room
+
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import com.mikepenz.materialdrawer.model.BaseViewHolder
+import io.reactivex.subjects.PublishSubject
+import kotterknife.bindView
+import me.proxer.app.R
+import me.proxer.app.base.BaseAdapter
+import me.proxer.app.chat.pub.room.ChatRoomAdapter.ViewHolder
+import me.proxer.library.entity.chat.ChatRoom
+
+class ChatRoomAdapter : BaseAdapter<ChatRoom, ViewHolder>() {
+
+    val clickSubject: PublishSubject<ChatRoom> = PublishSubject.create()
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_chat_room, parent, false))
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(data[position])
+    }
+
+    inner class ViewHolder(view: View) : BaseViewHolder(view) {
+
+        internal val nameView by bindView<TextView>(R.id.name)
+        internal val topic by bindView<TextView>(R.id.topic)
+
+        init {
+            itemView.setOnClickListener {
+                withSafeAdapterPosition(this) {
+                    clickSubject.onNext(data[it])
+                }
+            }
+        }
+
+        fun bind(item: ChatRoom) {
+            nameView.text = item.name
+
+            if (item.topic.isBlank()) {
+                topic.visibility = View.GONE
+                topic.text = item.topic
+            } else {
+                topic.visibility = View.VISIBLE
+                topic.text = item.topic
+            }
+        }
+    }
+}

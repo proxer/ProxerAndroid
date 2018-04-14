@@ -19,9 +19,9 @@ import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.MainActivity
 import me.proxer.app.R
 import me.proxer.app.auth.LocalUser
-import me.proxer.app.chat.ChatActivity
 import me.proxer.app.chat.prv.LocalConference
 import me.proxer.app.chat.prv.LocalMessage
+import me.proxer.app.chat.prv.message.MessengerActivity
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.NotificationUtils
 import me.proxer.app.util.NotificationUtils.CHAT_CHANNEL
@@ -159,7 +159,7 @@ object MessengerNotifications {
         val style = buildIndividualStyle(messages, conference, context, user, content)
         val intent = TaskStackBuilder.create(context)
             .addNextIntent(MainActivity.getSectionIntent(context, DrawerItem.CHAT))
-            .addNextIntent(ChatActivity.getIntent(context, conference))
+            .addNextIntent(MessengerActivity.getIntent(context, conference))
             .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
 
         return NotificationCompat.Builder(context, CHAT_CHANNEL)

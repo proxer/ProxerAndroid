@@ -32,8 +32,8 @@ import kotterknife.bindView
 import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.BaseFragment
-import me.proxer.app.chat.ChatActivity
 import me.proxer.app.chat.prv.Participant
+import me.proxer.app.chat.prv.message.MessengerActivity
 import me.proxer.app.exception.InvalidInputException
 import me.proxer.app.exception.TopicEmptyException
 import me.proxer.app.util.ErrorUtils
@@ -142,7 +142,7 @@ class CreateConferenceFragment : BaseFragment() {
             it?.let {
                 requireActivity().finish()
 
-                ChatActivity.navigateTo(requireActivity(), it)
+                MessengerActivity.navigateTo(requireActivity(), it)
             }
         })
 
@@ -165,10 +165,10 @@ class CreateConferenceFragment : BaseFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        addParticipantFooter = inflater.inflate(R.layout.item_create_chat_add_participant,
+        addParticipantFooter = inflater.inflate(R.layout.item_create_conference_add_participant,
             container, false) as ViewGroup
 
-        addParticipantInputFooter = inflater.inflate(R.layout.item_create_chat_add_participant_input,
+        addParticipantInputFooter = inflater.inflate(R.layout.item_create_conference_add_participant_input,
             container, false) as ViewGroup
 
         addParticipantImage.setIconicsImage(when (isGroup) {
@@ -221,7 +221,7 @@ class CreateConferenceFragment : BaseFragment() {
             adapter.footer = addParticipantFooter
         }
 
-        return inflater.inflate(R.layout.fragment_create_chat, container, false)
+        return inflater.inflate(R.layout.fragment_create_conference, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

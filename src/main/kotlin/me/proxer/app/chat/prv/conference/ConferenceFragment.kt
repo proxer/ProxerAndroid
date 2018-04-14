@@ -22,9 +22,9 @@ import me.proxer.app.GlideApp
 import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
-import me.proxer.app.chat.ChatActivity
 import me.proxer.app.chat.prv.LocalConference
 import me.proxer.app.chat.prv.create.CreateConferenceActivity
+import me.proxer.app.chat.prv.message.MessengerActivity
 import me.proxer.app.chat.prv.sync.MessengerNotifications
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
@@ -80,7 +80,7 @@ class ConferenceFragment : BaseContentFragment<List<LocalConference>>() {
 
         adapter.clickSubject
             .autoDispose(this)
-            .subscribe { ChatActivity.navigateTo(requireActivity(), it) }
+            .subscribe { MessengerActivity.navigateTo(requireActivity(), it) }
 
         setHasOptionsMenu(true)
     }

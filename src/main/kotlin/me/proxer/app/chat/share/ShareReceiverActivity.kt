@@ -6,8 +6,8 @@ import android.support.v7.widget.Toolbar
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseActivity
-import me.proxer.app.chat.ChatActivity
 import me.proxer.app.chat.prv.LocalConference
+import me.proxer.app.chat.prv.message.MessengerActivity
 import me.proxer.app.util.extension.unsafeLazy
 
 /**
@@ -33,7 +33,7 @@ class ShareReceiverActivity : BaseActivity() {
             val safeConference = conference
 
             if (safeConference != null) {
-                ChatActivity.navigateTo(this, safeConference, text)
+                MessengerActivity.navigateTo(this, safeConference, text)
 
                 finish()
             } else {

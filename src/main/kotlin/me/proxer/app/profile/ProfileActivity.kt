@@ -15,9 +15,9 @@ import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.messengerDao
 import me.proxer.app.R
 import me.proxer.app.base.ImageTabsActivity
-import me.proxer.app.chat.ChatActivity
 import me.proxer.app.chat.prv.Participant
 import me.proxer.app.chat.prv.create.CreateConferenceActivity
+import me.proxer.app.chat.prv.message.MessengerActivity
 import me.proxer.app.profile.comment.ProfileCommentFragment
 import me.proxer.app.profile.history.HistoryFragment
 import me.proxer.app.profile.info.ProfileInfoFragment
@@ -127,7 +127,7 @@ class ProfileActivity : ImageTabsActivity() {
                                 when (existingChat) {
                                     null -> CreateConferenceActivity.navigateTo(this, false,
                                         Participant(safeUsername, safeImage))
-                                    else -> ChatActivity.navigateTo(this, existingChat)
+                                    else -> MessengerActivity.navigateTo(this, existingChat)
                                 }
                             }
                         }

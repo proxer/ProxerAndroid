@@ -14,6 +14,7 @@ import me.proxer.app.ucp.history.UcpHistoryFragment
 import me.proxer.app.ucp.media.UcpMediaListFragment
 import me.proxer.app.ucp.overview.UcpOverviewFragment
 import me.proxer.app.ucp.topten.UcpTopTenFragment
+import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Category
 import org.jetbrains.anko.startActivity
 
@@ -29,7 +30,7 @@ class UcpActivity : DrawerActivity() {
     override val contentView: Int
         get() = R.layout.activity_ucp
 
-    private var sectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
+    private val sectionsPagerAdapter by unsafeLazy { SectionsPagerAdapter(supportFragmentManager) }
 
     private val viewPager: ViewPager by bindView(R.id.viewPager)
     private val tabs: TabLayout by bindView(R.id.tabs)

@@ -1,6 +1,7 @@
 package me.proxer.app.base
 
 import android.os.Bundle
+import android.support.design.widget.AppBarLayout
 import android.support.v7.widget.Toolbar
 import android.view.ViewGroup
 import io.reactivex.Observable
@@ -40,8 +41,9 @@ abstract class DrawerActivity : BaseActivity() {
     protected open val isRootActivity = false
     protected open val isMainActivity = false
 
-    protected val root: ViewGroup by bindView(R.id.root)
-    protected val toolbar: Toolbar by bindView(R.id.toolbar)
+    protected open val root: ViewGroup by bindView(R.id.root)
+    protected open val toolbar: Toolbar by bindView(R.id.toolbar)
+    protected open val appbar: AppBarLayout by bindView(R.id.appbar)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

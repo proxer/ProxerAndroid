@@ -19,10 +19,10 @@ import kotterknife.bindView
 import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
-import me.proxer.app.chat.ChatActivity
 import me.proxer.app.chat.prv.LocalConference
 import me.proxer.app.chat.prv.conference.ConferenceAdapter
 import me.proxer.app.chat.prv.conference.ConferenceViewModelProvider
+import me.proxer.app.chat.prv.message.MessengerActivity
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
@@ -79,7 +79,7 @@ class ShareReceiverFragment : BaseContentFragment<List<LocalConference>>() {
             .observeOn(AndroidSchedulers.mainThread())
             .autoDispose(this)
             .subscribe {
-                ChatActivity.navigateTo(requireActivity(), it, text)
+                MessengerActivity.navigateTo(requireActivity(), it, text)
 
                 requireActivity().finish()
             }
