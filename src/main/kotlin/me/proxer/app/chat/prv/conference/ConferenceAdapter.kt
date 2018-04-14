@@ -1,4 +1,4 @@
-package me.proxer.app.chat.conference
+package me.proxer.app.chat.prv.conference
 
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
@@ -16,8 +16,8 @@ import kotterknife.bindView
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
-import me.proxer.app.chat.LocalConference
-import me.proxer.app.chat.conference.ConferenceAdapter.ViewHolder
+import me.proxer.app.chat.prv.LocalConference
+import me.proxer.app.chat.prv.conference.ConferenceAdapter.ViewHolder
 import me.proxer.app.util.extension.colorRes
 import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.getQuantityString

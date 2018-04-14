@@ -13,8 +13,8 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseActivity
-import me.proxer.app.chat.Participant
-import me.proxer.app.chat.create.CreateChatActivity
+import me.proxer.app.chat.prv.Participant
+import me.proxer.app.chat.prv.create.CreateConferenceActivity
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.setIconicsImage
@@ -64,7 +64,7 @@ class CrashActivity : BaseActivity() {
         text.text = Utils.buildClickableText(this, getString(R.string.activity_crash_text),
             onMentionsClickListener = {
                 CustomActivityOnCrash.restartApplicationWithIntent(this,
-                    CreateChatActivity.getIntent(this, false, Participant(DEVELOPER_PROXER_NAME)), config)
+                    CreateConferenceActivity.getIntent(this, false, Participant(DEVELOPER_PROXER_NAME)), config)
             })
     }
 }

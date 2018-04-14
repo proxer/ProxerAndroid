@@ -1,4 +1,4 @@
-package me.proxer.app.chat.conference
+package me.proxer.app.chat.prv.conference
 
 /**
  * @author Ruben Gees

@@ -1,4 +1,4 @@
-package me.proxer.app.chat
+package me.proxer.app.chat.prv.message
 
 import android.arch.lifecycle.MediatorLiveData
 import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
@@ -8,10 +8,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.bus
-import me.proxer.app.MainApplication.Companion.chatDao
+import me.proxer.app.MainApplication.Companion.messengerDao
 import me.proxer.app.base.PagedViewModel
-import me.proxer.app.chat.sync.ChatErrorEvent
-import me.proxer.app.chat.sync.ChatJob
+import me.proxer.app.chat.prv.LocalConference
+import me.proxer.app.chat.prv.LocalMessage
+import me.proxer.app.chat.prv.sync.MessengerErrorEvent
+import me.proxer.app.chat.prv.sync.MessengerJob
 import me.proxer.app.exception.ChatMessageException
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
@@ -22,10 +24,10 @@ import me.proxer.app.util.extension.subscribeAndLogErrors
  * @author Ruben Gees
  */
 @GeneratedProvider
-class ChatViewModel(initialConference: LocalConference) : PagedViewModel<LocalMessage>() {
+class MessengerViewModel(initialConference: LocalConference) : PagedViewModel<LocalMessage>() {
 
     override val isLoginRequired = true
-    override val itemsOnPage = ChatJob.MESSAGES_ON_PAGE
+    override val itemsOnPage = MessengerJob.MESSAGES_ON_PAGE
 
     override var hasReachedEnd
         get() = safeConference.isFullyLoaded
@@ -33,7 +35,7 @@ class ChatViewModel(initialConference: LocalConference) : PagedViewModel<LocalMe
 
     override val data = object : MediatorLiveData<List<LocalMessage>>() {
 
-        private val source by lazy { chatDao.getMessagesLiveDataForConference(safeConference.id) }
+        private val source by lazy { messengerDao.getMessagesLiveDataForConference(safeConference.id) }
 
         override fun onActive() {
             super.onActive()
@@ -42,7 +44,7 @@ class ChatViewModel(initialConference: LocalConference) : PagedViewModel<LocalMe
                 it?.let {
                     if (StorageHelper.isLoggedIn) {
                         if (it.isEmpty() && !hasReachedEnd) {
-                            ChatJob.scheduleMessageLoad(safeConference.id)
+                            MessengerJob.scheduleMessageLoad(safeConference.id)
                         } else {
                             if (error.value == null) {
                                 dataDisposable?.dispose()
@@ -53,7 +55,7 @@ class ChatViewModel(initialConference: LocalConference) : PagedViewModel<LocalMe
                                 error.value = null
                                 this.value = it
 
-                                Completable.fromAction { chatDao.markConferenceAsRead(safeConference.id) }
+                                Completable.fromAction { messengerDao.markConferenceAsRead(safeConference.id) }
                                     .subscribeOn(Schedulers.io())
                                     .subscribeAndLogErrors()
                             }
@@ -74,8 +76,8 @@ class ChatViewModel(initialConference: LocalConference) : PagedViewModel<LocalMe
         get() = Single.fromCallable { Validators.validateLogin() }
             .flatMap {
                 when (page) {
-                    0 -> chatDao.markConferenceAsRead(safeConference.id)
-                    else -> ChatJob.scheduleMessageLoad(safeConference.id)
+                    0 -> messengerDao.markConferenceAsRead(safeConference.id)
+                    else -> MessengerJob.scheduleMessageLoad(safeConference.id)
                 }
 
                 Single.never<List<LocalMessage>>()
@@ -83,7 +85,7 @@ class ChatViewModel(initialConference: LocalConference) : PagedViewModel<LocalMe
 
     val conference = object : MediatorLiveData<LocalConference>() {
 
-        private val source by lazy { chatDao.getConferenceLiveData(safeConference.id) }
+        private val source by lazy { messengerDao.getConferenceLiveData(safeConference.id) }
 
         override fun onActive() {
             super.onActive()
@@ -106,9 +108,9 @@ class ChatViewModel(initialConference: LocalConference) : PagedViewModel<LocalMe
     init {
         conference.value = initialConference
 
-        disposables += bus.register(ChatErrorEvent::class.java)
+        disposables += bus.register(MessengerErrorEvent::class.java)
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { event: ChatErrorEvent ->
+            .subscribe { event: MessengerErrorEvent ->
                 if (event.error is ChatMessageException) {
                     dataDisposable?.dispose()
 
@@ -120,8 +122,8 @@ class ChatViewModel(initialConference: LocalConference) : PagedViewModel<LocalMe
 
     fun sendMessage(text: String) {
         disposables += Single
-            .fromCallable { chatDao.insertMessageToSend(text, safeConference.id) }
-            .doOnSuccess { if (!ChatJob.isRunning()) ChatJob.scheduleSynchronization() }
+            .fromCallable { messengerDao.insertMessageToSend(text, safeConference.id) }
+            .doOnSuccess { if (!MessengerJob.isRunning()) MessengerJob.scheduleSynchronization() }
             .subscribeOn(Schedulers.io())
             .subscribeAndLogErrors()
     }

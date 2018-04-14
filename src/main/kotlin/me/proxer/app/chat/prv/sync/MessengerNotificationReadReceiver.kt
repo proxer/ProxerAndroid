@@ -1,4 +1,4 @@
-package me.proxer.app.chat.sync
+package me.proxer.app.chat.prv.sync
 
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
@@ -6,20 +6,20 @@ import android.content.Context
 import android.content.Intent
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
-import me.proxer.app.MainApplication.Companion.chatDao
+import me.proxer.app.MainApplication.Companion.messengerDao
 import me.proxer.app.util.extension.subscribeAndLogErrors
 
 /**
  * @author Ruben Gees
  */
-class ChatNotificationReadReceiver : BroadcastReceiver() {
+class MessengerNotificationReadReceiver : BroadcastReceiver() {
 
     companion object {
         private const val CONFERENCE_ID_EXTRA = "conference_id"
 
         fun getPendingIntent(context: Context, conferenceId: Long): PendingIntent = PendingIntent.getBroadcast(context,
             conferenceId.toInt(),
-            Intent(context, ChatNotificationReadReceiver::class.java)
+            Intent(context, MessengerNotificationReadReceiver::class.java)
                 .addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES)
                 .apply { putExtra(CONFERENCE_ID_EXTRA, conferenceId) },
             PendingIntent.FLAG_UPDATE_CURRENT)
@@ -30,12 +30,12 @@ class ChatNotificationReadReceiver : BroadcastReceiver() {
 
         Completable
             .fromAction {
-                chatDao.markConferenceAsRead(conferenceId)
+                messengerDao.markConferenceAsRead(conferenceId)
 
-                if (chatDao.getUnreadConferences().isEmpty()) {
-                    ChatNotifications.cancel(context)
+                if (messengerDao.getUnreadConferences().isEmpty()) {
+                    MessengerNotifications.cancel(context)
                 } else {
-                    ChatNotifications.cancelIndividual(context, conferenceId)
+                    MessengerNotifications.cancelIndividual(context, conferenceId)
                 }
             }
             .subscribeOn(Schedulers.io())

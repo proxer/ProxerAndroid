@@ -1,4 +1,4 @@
-package me.proxer.app.chat.conference.info
+package me.proxer.app.chat.prv.conference.info
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager

@@ -1,4 +1,4 @@
-package me.proxer.app.chat.sync
+package me.proxer.app.chat.prv.sync
 
 import android.content.Context
 import com.evernote.android.job.Job
@@ -7,15 +7,15 @@ import com.evernote.android.job.JobRequest
 import com.evernote.android.job.util.support.PersistableBundleCompat
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.MainApplication.Companion.bus
-import me.proxer.app.MainApplication.Companion.chatDao
-import me.proxer.app.MainApplication.Companion.chatDatabase
-import me.proxer.app.chat.ChatFragmentPingEvent
-import me.proxer.app.chat.LocalConference
-import me.proxer.app.chat.LocalMessage
-import me.proxer.app.chat.conference.ConferenceFragmentPingEvent
-import me.proxer.app.chat.sync.ChatJob.SynchronizationResult.CHANGES
-import me.proxer.app.chat.sync.ChatJob.SynchronizationResult.ERROR
-import me.proxer.app.chat.sync.ChatJob.SynchronizationResult.NO_CHANGES
+import me.proxer.app.MainApplication.Companion.messengerDao
+import me.proxer.app.MainApplication.Companion.messengerDatabase
+import me.proxer.app.chat.prv.LocalConference
+import me.proxer.app.chat.prv.LocalMessage
+import me.proxer.app.chat.prv.conference.ConferenceFragmentPingEvent
+import me.proxer.app.chat.prv.message.MessengerFragmentPingEvent
+import me.proxer.app.chat.prv.sync.MessengerJob.SynchronizationResult.CHANGES
+import me.proxer.app.chat.prv.sync.MessengerJob.SynchronizationResult.ERROR
+import me.proxer.app.chat.prv.sync.MessengerJob.SynchronizationResult.NO_CHANGES
 import me.proxer.app.exception.ChatException
 import me.proxer.app.exception.ChatMessageException
 import me.proxer.app.exception.ChatSendMessageException
@@ -36,7 +36,7 @@ import java.util.LinkedHashSet
 /**
  * @author Ruben Gees
  */
-class ChatJob : Job() {
+class MessengerJob : Job() {
 
     companion object {
         const val TAG = "chat_job"
@@ -61,12 +61,12 @@ class ChatJob : Job() {
         }
 
         fun isRunning() = JobManager.instance().allJobs.find {
-            it is ChatJob && !it.isCanceled && !it.isFinished
+            it is MessengerJob && !it.isCanceled && !it.isFinished
         } != null
 
         private fun reschedule(context: Context, synchronizationResult: SynchronizationResult) {
             if (canSchedule(context) && synchronizationResult != ERROR) {
-                if (synchronizationResult == CHANGES || bus.post(ChatFragmentPingEvent())) {
+                if (synchronizationResult == CHANGES || bus.post(MessengerFragmentPingEvent())) {
                     StorageHelper.resetChatInterval()
 
                     doSchedule(3_000L, 4_000L)
@@ -104,10 +104,10 @@ class ChatJob : Job() {
         }
 
         private fun canSchedule(context: Context) = PreferenceHelper.areChatNotificationsEnabled(context) ||
-            bus.post(ConferenceFragmentPingEvent()) || bus.post(ChatFragmentPingEvent())
+            bus.post(ConferenceFragmentPingEvent()) || bus.post(MessengerFragmentPingEvent())
 
         private fun canShowNotification(context: Context) = PreferenceHelper.areChatNotificationsEnabled(context) &&
-            !bus.post(ConferenceFragmentPingEvent()) && !bus.post(ChatFragmentPingEvent())
+            !bus.post(ConferenceFragmentPingEvent()) && !bus.post(MessengerFragmentPingEvent())
     }
 
     private val conferenceId: Long
@@ -158,13 +158,13 @@ class ChatJob : Job() {
 
     private fun handleSynchronizationError(error: Throwable): SynchronizationResult {
         when (error) {
-            is ChatException -> bus.post(ChatErrorEvent(error))
-            else -> bus.post(ChatErrorEvent(ChatSynchronizationException(error)))
+            is ChatException -> bus.post(MessengerErrorEvent(error))
+            else -> bus.post(MessengerErrorEvent(ChatSynchronizationException(error)))
         }
 
         return if (JobUtils.shouldShowError(params, error)) {
             if (canShowNotification(context)) {
-                ChatNotifications.showError(context, error)
+                MessengerNotifications.showError(context, error)
             }
 
             ERROR
@@ -175,8 +175,8 @@ class ChatJob : Job() {
 
     private fun handleLoadMoreMessagesError(error: Throwable): SynchronizationResult {
         when (error) {
-            is ChatException -> bus.post(ChatErrorEvent(error))
-            else -> bus.post(ChatErrorEvent(ChatMessageException(error)))
+            is ChatException -> bus.post(MessengerErrorEvent(error))
+            else -> bus.post(MessengerErrorEvent(ChatMessageException(error)))
         }
 
         return when (ErrorUtils.isIpBlockedError(error)) {
@@ -202,14 +202,14 @@ class ChatJob : Job() {
         val sentMessages = sendMessages()
 
         val newConferencesAndMessages = try {
-            markConferencesAsRead(chatDao.getConferencesToMarkAsRead()
-                .plus(sentMessages.map { chatDao.findConference(it.conferenceId) })
+            markConferencesAsRead(messengerDao.getConferencesToMarkAsRead()
+                .plus(sentMessages.map { messengerDao.findConference(it.conferenceId) })
                 .distinct()
                 .filterNotNull())
 
             fetchConferences().associate { conference ->
                 fetchNewMessages(conference).let { (messages, isFullyLoaded) ->
-                    val isLocallyFullyLoaded = chatDao.findConference(conference.id.toLong())
+                    val isLocallyFullyLoaded = messengerDao.findConference(conference.id.toLong())
                         ?.isFullyLoaded == true
 
                     conference.toLocalConference(isLocallyFullyLoaded || isFullyLoaded) to
@@ -217,23 +217,23 @@ class ChatJob : Job() {
                 }
             }
         } catch (error: Throwable) {
-            chatDatabase.runInTransaction {
+            messengerDatabase.runInTransaction {
                 sentMessages.forEach {
-                    chatDao.deleteMessageToSend(it.id)
+                    messengerDao.deleteMessageToSend(it.id)
                 }
             }
 
             throw error
         }
 
-        chatDatabase.runInTransaction {
+        messengerDatabase.runInTransaction {
             newConferencesAndMessages.let {
-                chatDao.insertConferences(it.keys.toList())
-                chatDao.insertMessages(it.values.flatten())
+                messengerDao.insertConferences(it.keys.toList())
+                messengerDao.insertMessages(it.values.flatten())
             }
 
             sentMessages.forEach {
-                chatDao.deleteMessageToSend(it.id)
+                messengerDao.deleteMessageToSend(it.id)
             }
         }
 
@@ -243,11 +243,11 @@ class ChatJob : Job() {
     private fun loadMoreMessages(conferenceId: Long): List<Message> {
         val fetchedMessages = fetchMoreMessages(conferenceId)
 
-        chatDatabase.runInTransaction {
-            chatDao.insertMessages(fetchedMessages.map { it.toLocalMessage() })
+        messengerDatabase.runInTransaction {
+            messengerDao.insertMessages(fetchedMessages.map { it.toLocalMessage() })
 
             if (fetchedMessages.size < MESSAGES_ON_PAGE) {
-                chatDao.markConferenceAsFullyLoaded(conferenceId)
+                messengerDao.markConferenceAsFullyLoaded(conferenceId)
             }
         }
 
@@ -255,7 +255,7 @@ class ChatJob : Job() {
     }
 
     @Suppress("RethrowCaughtException")
-    private fun sendMessages() = chatDao.getMessagesToSend().apply {
+    private fun sendMessages() = messengerDao.getMessagesToSend().apply {
         forEachIndexed { index, (messageId, conferenceId, _, _, message) ->
             val result = try {
                 api.messenger().sendMessage(conferenceId.toString(), message)
@@ -268,9 +268,9 @@ class ChatJob : Job() {
                     "error"
                 } else {
                     // The message was most likely not sent, but the previous ones are. Delete them to avoid resending.
-                    chatDatabase.runInTransaction {
+                    messengerDatabase.runInTransaction {
                         for (i in 0 until index) {
-                            chatDao.deleteMessageToSend(get(i).id)
+                            messengerDao.deleteMessageToSend(get(i).id)
                         }
                     }
 
@@ -281,9 +281,9 @@ class ChatJob : Job() {
             // Per documentation: The api may return some String in case something went wrong.
             if (result != null) {
                 // Delete all messages we have correctly sent already.
-                chatDatabase.runInTransaction {
+                messengerDatabase.runInTransaction {
                     for (i in 0..index) {
-                        chatDao.deleteMessageToSend(get(i).id)
+                        messengerDao.deleteMessageToSend(get(i).id)
                     }
                 }
 
@@ -310,7 +310,7 @@ class ChatJob : Job() {
                 .safeExecute()
 
             changedConferences += fetchedConferences.filter {
-                it != chatDao.findConference(it.id.toLong())?.toNonLocalConference()
+                it != messengerDao.findConference(it.id.toLong())?.toNonLocalConference()
             }
 
             if (changedConferences.size / (page + 1) < CONFERENCES_ON_PAGE) {
@@ -324,7 +324,7 @@ class ChatJob : Job() {
     }
 
     private fun fetchNewMessages(conference: Conference): Pair<List<Message>, Boolean> {
-        val mostRecentMessage = chatDao.findMostRecentMessageForConference(conference.id.toLong())?.toNonLocalMessage()
+        val mostRecentMessage = messengerDao.findMostRecentMessageForConference(conference.id.toLong())?.toNonLocalMessage()
 
         return when (mostRecentMessage) {
             null -> fetchForEmptyConference(conference)
@@ -366,7 +366,7 @@ class ChatJob : Job() {
         val mostRecentMessageIdBeforeUpdate = mostRecentMessage.id.toLong()
         val newMessages = mutableListOf<Message>()
 
-        var existingUnreadMessageAmount = chatDao.getUnreadMessageAmountForConference(conference.id.toLong(),
+        var existingUnreadMessageAmount = messengerDao.getUnreadMessageAmountForConference(conference.id.toLong(),
             conference.lastReadMessageId.toLong())
         var currentMessage: Message = mostRecentMessage
         var nextId = "0"
@@ -395,18 +395,18 @@ class ChatJob : Job() {
 
     private fun fetchMoreMessages(conferenceId: Long) = api.messenger().messages()
         .conferenceId(conferenceId.toString())
-        .messageId(chatDao.findOldestMessageForConference(conferenceId)?.id?.toString() ?: "0")
+        .messageId(messengerDao.findOldestMessageForConference(conferenceId)?.id?.toString() ?: "0")
         .markAsRead(false)
         .build()
         .safeExecute()
         .asReversed()
 
     private fun showNotification(context: Context) {
-        val unreadMap = chatDao.getUnreadConferences().associate {
-            it to chatDao.getMostRecentMessagesForConference(it.id, it.unreadMessageAmount).asReversed()
+        val unreadMap = messengerDao.getUnreadConferences().associate {
+            it to messengerDao.getMostRecentMessagesForConference(it.id, it.unreadMessageAmount).asReversed()
         }
 
-        ChatNotifications.showOrUpdate(context, unreadMap)
+        MessengerNotifications.showOrUpdate(context, unreadMap)
     }
 
     class SynchronizationEvent

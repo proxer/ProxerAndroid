@@ -36,10 +36,10 @@ import io.reactivex.schedulers.Schedulers
 import me.proxer.app.auth.LoginEvent
 import me.proxer.app.auth.LogoutEvent
 import me.proxer.app.auth.ProxerLoginTokenManager
-import me.proxer.app.chat.sync.ChatDao
-import me.proxer.app.chat.sync.ChatDatabase
-import me.proxer.app.chat.sync.ChatJob
-import me.proxer.app.chat.sync.ChatNotifications
+import me.proxer.app.chat.prv.sync.MessengerDao
+import me.proxer.app.chat.prv.sync.MessengerDatabase
+import me.proxer.app.chat.prv.sync.MessengerJob
+import me.proxer.app.chat.prv.sync.MessengerNotifications
 import me.proxer.app.media.TagDao
 import me.proxer.app.media.TagDatabase
 import me.proxer.app.notification.AccountNotifications
@@ -74,8 +74,8 @@ class MainApplication : Application() {
         val client: OkHttpClient
             get() = api.client()
 
-        val chatDao: ChatDao
-            get() = chatDatabase.dao()
+        val messengerDao: MessengerDao
+            get() = messengerDatabase.dao()
 
         val tagDao: TagDao
             get() = tagDatabase.dao()
@@ -83,7 +83,7 @@ class MainApplication : Application() {
         var api by Delegates.notNull<ProxerApi>()
             private set
 
-        var chatDatabase by Delegates.notNull<ChatDatabase>()
+        var messengerDatabase by Delegates.notNull<MessengerDatabase>()
             private set
 
         var tagDatabase by Delegates.notNull<TagDatabase>()
@@ -109,7 +109,7 @@ class MainApplication : Application() {
         AppCompatDelegate.setDefaultNightMode(PreferenceHelper.getNightMode(this))
         NotificationUtils.createNotificationChannels(this)
 
-        chatDatabase = Room.databaseBuilder(this, ChatDatabase::class.java, "chat.db").build()
+        messengerDatabase = Room.databaseBuilder(this, MessengerDatabase::class.java, "chat.db").build()
         tagDatabase = Room.databaseBuilder(this, TagDatabase::class.java, "tags.db").build()
 
         initBus()
@@ -136,7 +136,7 @@ class MainApplication : Application() {
         bus.register(LoginEvent::class.java)
             .subscribeOn(Schedulers.io())
             .subscribeAndLogErrors {
-                ChatJob.scheduleSynchronizationIfPossible(this)
+                MessengerJob.scheduleSynchronizationIfPossible(this)
                 NotificationJob.scheduleIfPossible(this)
             }
 
@@ -144,16 +144,16 @@ class MainApplication : Application() {
             .subscribeOn(Schedulers.io())
             .subscribeAndLogErrors {
                 AccountNotifications.cancel(this)
-                ChatNotifications.cancel(this)
+                MessengerNotifications.cancel(this)
 
-                ChatJob.cancel()
+                MessengerJob.cancel()
 
                 StorageHelper.lastChatMessageDate = Date(0L)
                 StorageHelper.lastNotificationsDate = Date(0L)
                 StorageHelper.areConferencesSynchronized = false
                 StorageHelper.resetChatInterval()
 
-                chatDao.clear()
+                messengerDao.clear()
             }
     }
 
@@ -188,7 +188,7 @@ class MainApplication : Application() {
         JobConfig.setApiEnabled(JobApi.GCM, false)
         JobManager.create(this).addJobCreator {
             when (it) {
-                ChatJob.TAG -> ChatJob()
+                MessengerJob.TAG -> MessengerJob()
                 NotificationJob.TAG -> NotificationJob()
                 else -> null
             }

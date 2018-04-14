@@ -1,4 +1,4 @@
-package me.proxer.app.chat.create
+package me.proxer.app.chat.prv.create
 
 import android.arch.lifecycle.Observer
 import android.os.Bundle
@@ -33,7 +33,7 @@ import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.BaseFragment
 import me.proxer.app.chat.ChatActivity
-import me.proxer.app.chat.Participant
+import me.proxer.app.chat.prv.Participant
 import me.proxer.app.exception.InvalidInputException
 import me.proxer.app.exception.TopicEmptyException
 import me.proxer.app.util.ErrorUtils
@@ -51,18 +51,18 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-class CreateChatFragment : BaseFragment() {
+class CreateConferenceFragment : BaseFragment() {
 
     companion object {
-        fun newInstance() = CreateChatFragment().apply {
+        fun newInstance() = CreateConferenceFragment().apply {
             arguments = bundleOf()
         }
     }
 
-    override val hostingActivity: CreateChatActivity
-        get() = activity as CreateChatActivity
+    override val hostingActivity: CreateConferenceActivity
+        get() = activity as CreateConferenceActivity
 
-    private val viewModel by unsafeLazy { CreateChatViewModelProvider.get(this) }
+    private val viewModel by unsafeLazy { CreateConferenceViewModelProvider.get(this) }
 
     private val isGroup: Boolean
         get() = hostingActivity.isGroup
@@ -83,7 +83,7 @@ class CreateChatFragment : BaseFragment() {
         popup
     }
 
-    private var innerAdapter by Delegates.notNull<CreateChatParticipantAdapter>()
+    private var innerAdapter by Delegates.notNull<CreateConferenceParticipantAdapter>()
     private var adapter by Delegates.notNull<EasyHeaderFooterAdapter>()
 
     private var addParticipantFooter by Delegates.notNull<ViewGroup>()
@@ -122,7 +122,7 @@ class CreateChatFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        innerAdapter = CreateChatParticipantAdapter(savedInstanceState)
+        innerAdapter = CreateConferenceParticipantAdapter(savedInstanceState)
         adapter = EasyHeaderFooterAdapter(innerAdapter)
 
         innerAdapter.removalSubject

@@ -1,4 +1,4 @@
-package me.proxer.app.chat.conference
+package me.proxer.app.chat.prv.conference
 
 import android.os.Bundle
 import android.support.transition.TransitionManager
@@ -23,9 +23,9 @@ import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.chat.ChatActivity
-import me.proxer.app.chat.LocalConference
-import me.proxer.app.chat.create.CreateChatActivity
-import me.proxer.app.chat.sync.ChatNotifications
+import me.proxer.app.chat.prv.LocalConference
+import me.proxer.app.chat.prv.create.CreateConferenceActivity
+import me.proxer.app.chat.prv.sync.MessengerNotifications
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
@@ -103,7 +103,7 @@ class ConferenceFragment : BaseContentFragment<List<LocalConference>>() {
     override fun onResume() {
         super.onResume()
 
-        ChatNotifications.cancel(requireContext())
+        MessengerNotifications.cancel(requireContext())
 
         pingDisposable = bus.register(ConferenceFragmentPingEvent::class.java).subscribe()
     }
@@ -163,8 +163,8 @@ class ConferenceFragment : BaseContentFragment<List<LocalConference>>() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.create_chat -> CreateChatActivity.navigateTo(requireActivity(), false)
-            R.id.new_group -> CreateChatActivity.navigateTo(requireActivity(), true)
+            R.id.create_chat -> CreateConferenceActivity.navigateTo(requireActivity(), false)
+            R.id.new_group -> CreateConferenceActivity.navigateTo(requireActivity(), true)
         }
 
         return super.onOptionsItemSelected(item)

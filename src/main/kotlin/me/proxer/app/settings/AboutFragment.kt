@@ -18,12 +18,12 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
-import me.proxer.app.MainApplication.Companion.chatDao
+import me.proxer.app.MainApplication.Companion.messengerDao
 import me.proxer.app.MainApplication.Companion.refWatcher
 import me.proxer.app.R
 import me.proxer.app.chat.ChatActivity
-import me.proxer.app.chat.Participant
-import me.proxer.app.chat.create.CreateChatActivity
+import me.proxer.app.chat.prv.Participant
+import me.proxer.app.chat.prv.create.CreateConferenceActivity
 import me.proxer.app.forum.TopicActivity
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.Utils
@@ -152,9 +152,9 @@ class AboutFragment : MaterialAboutFragment() {
             .setOnClickAction {
                 Completable
                     .fromAction {
-                        chatDao.findConferenceForUser(DEVELOPER_PROXER_NAME).let { existingConference ->
+                        messengerDao.findConferenceForUser(DEVELOPER_PROXER_NAME).let { existingConference ->
                             when (existingConference) {
-                                null -> CreateChatActivity.navigateTo(requireActivity(), false,
+                                null -> CreateConferenceActivity.navigateTo(requireActivity(), false,
                                     Participant(DEVELOPER_PROXER_NAME))
                                 else -> ChatActivity.navigateTo(requireActivity(), existingConference)
                             }

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusableInTouchMode="true"
-    tools:context=".chat.create.CreateChatFragment">
+    tools:context=".chat.prv.create.CreateConferenceFragment">
 
     <RelativeLayout
         android:id="@+id/contentContainer"
@@ -57,7 +57,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="8dp"
-                                android:hint="@string/fragment_create_chat_topic_hint">
+                                android:hint="@string/fragment_create_conference_topic_hint">
 
                                 <android.support.design.widget.TextInputEditText
                                     android:id="@+id/topicInput"
@@ -89,7 +89,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:padding="8dp"
-                                android:text="@string/fragment_create_chat_participants"
+                                android:text="@string/fragment_create_conference_participants"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                                 android:textColor="@color/colorAccent" />
 

@@ -1,4 +1,4 @@
-package me.proxer.app.chat
+package me.proxer.app.chat.prv.message
 
 import android.arch.lifecycle.Observer
 import android.content.ClipData
@@ -25,7 +25,10 @@ import kotterknife.bindView
 import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
-import me.proxer.app.chat.sync.ChatNotifications
+import me.proxer.app.chat.ChatActivity
+import me.proxer.app.chat.prv.LocalConference
+import me.proxer.app.chat.prv.LocalMessage
+import me.proxer.app.chat.prv.sync.MessengerNotifications
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Utils
@@ -43,15 +46,15 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-class ChatFragment : PagedContentFragment<LocalMessage>() {
+class MessengerFragment : PagedContentFragment<LocalMessage>() {
 
     companion object {
-        fun newInstance() = ChatFragment().apply {
+        fun newInstance() = MessengerFragment().apply {
             arguments = bundleOf()
         }
     }
 
-    override val viewModel by unsafeLazy { ChatViewModelProvider.get(this, conference) }
+    override val viewModel by unsafeLazy { MessengerViewModelProvider.get(this, conference) }
 
     override val emptyDataMessage = R.string.error_no_data_chat
     override val isSwipeToRefreshEnabled = false
@@ -121,7 +124,7 @@ class ChatFragment : PagedContentFragment<LocalMessage>() {
         }
 
     override val layoutManager by lazy { LinearLayoutManager(context).apply { reverseLayout = true } }
-    override var innerAdapter by Delegates.notNull<ChatAdapter>()
+    override var innerAdapter by Delegates.notNull<MessengerAdapter>()
 
     private var pingDisposable: Disposable? = null
 
@@ -133,7 +136,7 @@ class ChatFragment : PagedContentFragment<LocalMessage>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        innerAdapter = ChatAdapter(savedInstanceState, conference.isGroup)
+        innerAdapter = MessengerAdapter(savedInstanceState, conference.isGroup)
 
         innerAdapter.titleClickSubject
             .autoDispose(this)
@@ -211,9 +214,9 @@ class ChatFragment : PagedContentFragment<LocalMessage>() {
     override fun onResume() {
         super.onResume()
 
-        ChatNotifications.cancel(requireContext())
+        MessengerNotifications.cancel(requireContext())
 
-        pingDisposable = bus.register(ChatFragmentPingEvent::class.java).subscribe()
+        pingDisposable = bus.register(MessengerFragmentPingEvent::class.java).subscribe()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -266,7 +269,7 @@ class ChatFragment : PagedContentFragment<LocalMessage>() {
         .iconColor(requireContext())
 
     private fun handleCopyClick() {
-        val title = getString(R.string.fragment_chat_clip_title)
+        val title = getString(R.string.fragment_messenger_clip_title)
         val content = innerAdapter.selectedMessages.joinToString(separator = "\n", transform = { it.message })
 
         requireContext().clipboardManager.primaryClip = ClipData.newPlainText(title, content)
@@ -276,7 +279,7 @@ class ChatFragment : PagedContentFragment<LocalMessage>() {
     }
 
     private fun handleReplyClick() {
-        messageInput.setText(getString(R.string.fragment_chat_reply, innerAdapter.selectedMessages.first().username))
+        messageInput.setText(getString(R.string.fragment_messenger_reply, innerAdapter.selectedMessages.first().username))
         messageInput.setSelection(messageInput.text.length)
         messageInput.requestFocus()
 

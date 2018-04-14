@@ -1,4 +1,4 @@
-package me.proxer.app.chat.conference
+package me.proxer.app.chat.prv.conference
 
 import android.arch.lifecycle.MediatorLiveData
 import android.arch.lifecycle.Observer
@@ -7,11 +7,11 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
 import me.proxer.app.MainApplication.Companion.bus
-import me.proxer.app.MainApplication.Companion.chatDao
+import me.proxer.app.MainApplication.Companion.messengerDao
 import me.proxer.app.base.BaseViewModel
-import me.proxer.app.chat.LocalConference
-import me.proxer.app.chat.sync.ChatErrorEvent
-import me.proxer.app.chat.sync.ChatJob
+import me.proxer.app.chat.prv.LocalConference
+import me.proxer.app.chat.prv.sync.MessengerErrorEvent
+import me.proxer.app.chat.prv.sync.MessengerJob
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
 import me.proxer.app.util.data.StorageHelper
@@ -31,7 +31,7 @@ class ConferenceViewModel(searchQuery: String) : BaseViewModel<List<LocalConfere
         get() = Single
             .fromCallable { Validators.validateLogin() }
             .flatMap {
-                if (!ChatJob.isRunning()) ChatJob.scheduleSynchronization()
+                if (!MessengerJob.isRunning()) MessengerJob.scheduleSynchronization()
 
                 Single.never<List<LocalConference>>()
             }
@@ -54,10 +54,10 @@ class ConferenceViewModel(searchQuery: String) : BaseViewModel<List<LocalConfere
         set(value) {
             field = value
 
-            source = chatDao.getConferencesLiveData(value)
+            source = messengerDao.getConferencesLiveData(value)
         }
 
-    private var source by Delegates.observable(chatDao.getConferencesLiveData(searchQuery), { _, old, new ->
+    private var source by Delegates.observable(messengerDao.getConferencesLiveData(searchQuery), { _, old, new ->
         data.removeSource(old)
         data.addSource(new, sourceObserver)
     })
@@ -65,7 +65,7 @@ class ConferenceViewModel(searchQuery: String) : BaseViewModel<List<LocalConfere
     init {
         data.addSource(source, sourceObserver)
 
-        disposables += bus.register(ChatErrorEvent::class.java)
+        disposables += bus.register(MessengerErrorEvent::class.java)
             .map { ErrorUtils.handle(it.error) }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {

@@ -81,9 +81,9 @@
                 android:value=".chat.share.ConferenceChooserTargetService" />
         </activity>
 
-        <activity android:name=".chat.create.CreateChatActivity" />
+        <activity android:name="me.proxer.app.chat.prv.create.CreateConferenceActivity" />
 
-        <activity android:name=".chat.conference.info.ConferenceInfoActivity" />
+        <activity android:name="me.proxer.app.chat.prv.conference.info.ConferenceInfoActivity" />
 
         <activity android:name=".ucp.UcpActivity" />
 
@@ -266,11 +266,11 @@
             android:exported="false" />
 
         <receiver
-            android:name=".chat.sync.ChatNotificationReadReceiver"
+            android:name="me.proxer.app.chat.prv.sync.MessengerNotificationReadReceiver"
             android:exported="false" />
 
         <receiver
-            android:name=".chat.sync.DirectReplyReceiver"
+            android:name="me.proxer.app.chat.prv.sync.DirectReplyReceiver"
             android:exported="false" />
     </application>
 </manifest>

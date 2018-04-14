@@ -1,4 +1,4 @@
-package me.proxer.app.chat
+package me.proxer.app.chat.prv
 
 import android.os.Parcel
 import android.os.Parcelable

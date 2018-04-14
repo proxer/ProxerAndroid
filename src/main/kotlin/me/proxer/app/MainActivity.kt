@@ -12,7 +12,7 @@ import me.proxer.app.anime.ScheduleFragment
 import me.proxer.app.base.BackPressAware
 import me.proxer.app.base.DrawerActivity
 import me.proxer.app.bookmark.BookmarkFragment
-import me.proxer.app.chat.conference.ConferenceFragment
+import me.proxer.app.chat.prv.conference.ConferenceFragment
 import me.proxer.app.media.list.MediaListFragment
 import me.proxer.app.news.NewsFragment
 import me.proxer.app.notification.NotificationJob

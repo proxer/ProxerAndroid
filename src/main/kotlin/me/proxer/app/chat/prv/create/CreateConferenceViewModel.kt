@@ -1,4 +1,4 @@
-package me.proxer.app.chat.create
+package me.proxer.app.chat.prv.create
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
@@ -11,11 +11,11 @@ import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.MainApplication.Companion.bus
-import me.proxer.app.MainApplication.Companion.chatDao
-import me.proxer.app.chat.LocalConference
-import me.proxer.app.chat.Participant
-import me.proxer.app.chat.sync.ChatErrorEvent
-import me.proxer.app.chat.sync.ChatJob
+import me.proxer.app.MainApplication.Companion.messengerDao
+import me.proxer.app.chat.prv.LocalConference
+import me.proxer.app.chat.prv.Participant
+import me.proxer.app.chat.prv.sync.MessengerErrorEvent
+import me.proxer.app.chat.prv.sync.MessengerJob
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.extension.buildSingle
@@ -26,7 +26,7 @@ import me.proxer.library.api.Endpoint
  * @author Ruben Gees
  */
 @GeneratedProvider
-class CreateChatViewModel : ViewModel() {
+class CreateConferenceViewModel : ViewModel() {
 
     val isLoading = MutableLiveData<Boolean>()
     val result = ResettingMutableLiveData<LocalConference>()
@@ -38,12 +38,12 @@ class CreateChatViewModel : ViewModel() {
     private var disposables = CompositeDisposable()
 
     init {
-        disposables += bus.register(ChatJob.SynchronizationEvent::class.java)
+        disposables += bus.register(MessengerJob.SynchronizationEvent::class.java)
             .flatMap {
                 newConferenceId.let { newConferenceId ->
                     when (newConferenceId) {
                         null -> Observable.never()
-                        else -> chatDao.findConference(newConferenceId).let { foundConference ->
+                        else -> messengerDao.findConference(newConferenceId).let { foundConference ->
                             when (foundConference) {
                                 null -> Observable.never()
                                 else -> Observable.just(foundConference)
@@ -62,7 +62,7 @@ class CreateChatViewModel : ViewModel() {
                 result.value = it
             }
 
-        disposables += bus.register(ChatErrorEvent::class.java)
+        disposables += bus.register(MessengerErrorEvent::class.java)
             .flatMap {
                 newConferenceId.let { newConferenceId ->
                     when (newConferenceId) {
@@ -113,7 +113,7 @@ class CreateChatViewModel : ViewModel() {
             .subscribeAndLogErrors({
                 newConferenceId = it.toLong()
 
-                ChatJob.scheduleSynchronization()
+                MessengerJob.scheduleSynchronization()
             }, {
                 isLoading.value = false
                 error.value = ErrorUtils.handle(it)

@@ -10,9 +10,9 @@ import android.service.chooser.ChooserTarget
 import android.service.chooser.ChooserTargetService
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
-import me.proxer.app.MainApplication.Companion.chatDao
+import me.proxer.app.MainApplication.Companion.messengerDao
 import me.proxer.app.R
-import me.proxer.app.chat.LocalConference
+import me.proxer.app.chat.prv.LocalConference
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.Utils
 import me.proxer.library.util.ProxerUrls
@@ -32,7 +32,7 @@ class ConferenceChooserTargetService : ChooserTargetService() {
     }
 
     @TargetApi(Build.VERSION_CODES.M)
-    override fun onGetChooserTargets(component: ComponentName, filter: IntentFilter) = chatDao.getConferences()
+    override fun onGetChooserTargets(component: ComponentName, filter: IntentFilter) = messengerDao.getConferences()
         .take(8)
         .map {
             val bundle = Bundle()

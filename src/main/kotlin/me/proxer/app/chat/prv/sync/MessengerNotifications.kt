@@ -1,4 +1,4 @@
-package me.proxer.app.chat.sync
+package me.proxer.app.chat.prv.sync
 
 import android.app.Notification
 import android.app.PendingIntent
@@ -20,8 +20,8 @@ import me.proxer.app.MainActivity
 import me.proxer.app.R
 import me.proxer.app.auth.LocalUser
 import me.proxer.app.chat.ChatActivity
-import me.proxer.app.chat.LocalConference
-import me.proxer.app.chat.LocalMessage
+import me.proxer.app.chat.prv.LocalConference
+import me.proxer.app.chat.prv.LocalMessage
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.NotificationUtils
 import me.proxer.app.util.NotificationUtils.CHAT_CHANNEL
@@ -37,7 +37,7 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-object ChatNotifications {
+object MessengerNotifications {
 
     private const val GROUP = "chat"
     private const val ID = 782373275
@@ -193,7 +193,7 @@ object ChatNotifications {
                 }
             }
             .addAction(R.drawable.ic_stat_check, context.getString(R.string.notification_chat_read_action),
-                ChatNotificationReadReceiver.getPendingIntent(context, conference.id))
+                MessengerNotificationReadReceiver.getPendingIntent(context, conference.id))
             .build()
     }
 

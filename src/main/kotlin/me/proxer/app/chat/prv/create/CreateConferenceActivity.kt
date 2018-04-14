@@ -1,31 +1,31 @@
-package me.proxer.app.chat.create
+package me.proxer.app.chat.prv.create
 
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import me.proxer.app.R
 import me.proxer.app.base.DrawerActivity
-import me.proxer.app.chat.Participant
+import me.proxer.app.chat.prv.Participant
 import org.jetbrains.anko.intentFor
 
 /**
  * @author Ruben Gees
  */
-class CreateChatActivity : DrawerActivity() {
+class CreateConferenceActivity : DrawerActivity() {
 
     companion object {
         private const val IS_GROUP_EXTRA = "is_group"
         private const val INITIAL_PARTICIPANT_EXTRA = "initial_participant"
 
         fun navigateTo(context: Activity, isGroup: Boolean = false, initialParticipant: Participant? = null) {
-            context.startActivity(context.intentFor<CreateChatActivity>(
+            context.startActivity(context.intentFor<CreateConferenceActivity>(
                 IS_GROUP_EXTRA to isGroup,
                 INITIAL_PARTICIPANT_EXTRA to initialParticipant
             ))
         }
 
         fun getIntent(context: Activity, isGroup: Boolean = false, initialParticipant: Participant? = null): Intent {
-            return context.intentFor<CreateChatActivity>(
+            return context.intentFor<CreateConferenceActivity>(
                 IS_GROUP_EXTRA to isGroup,
                 INITIAL_PARTICIPANT_EXTRA to initialParticipant
             )
@@ -45,7 +45,7 @@ class CreateChatActivity : DrawerActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.container, CreateChatFragment.newInstance())
+                .replace(R.id.container, CreateConferenceFragment.newInstance())
                 .commitNow()
         }
     }

@@ -10,8 +10,8 @@ import me.proxer.app.R
 import me.proxer.app.R.id.description
 import me.proxer.app.R.id.post
 import me.proxer.app.anime.AnimeStream
-import me.proxer.app.chat.LocalConference
-import me.proxer.app.chat.LocalMessage
+import me.proxer.app.chat.prv.LocalConference
+import me.proxer.app.chat.prv.LocalMessage
 import me.proxer.app.forum.ParsedPost
 import me.proxer.app.forum.TopicMetaData
 import me.proxer.app.media.LocalTag

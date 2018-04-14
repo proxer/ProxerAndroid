@@ -1,4 +1,4 @@
-package me.proxer.app.chat
+package me.proxer.app.chat.prv.message
 
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
@@ -15,7 +15,8 @@ import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
-import me.proxer.app.chat.ChatAdapter.MessageViewHolder
+import me.proxer.app.chat.prv.LocalMessage
+import me.proxer.app.chat.prv.message.MessengerAdapter.MessageViewHolder
 import me.proxer.app.util.Utils
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.data.StorageHelper
@@ -28,7 +29,7 @@ import org.jetbrains.anko.dip
 /**
  * @author Ruben Gees
  */
-class ChatAdapter(
+class MessengerAdapter(
     savedInstanceState: Bundle?,
     private val isGroup: Boolean
 ) : BaseAdapter<LocalMessage, MessageViewHolder>() {

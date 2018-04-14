@@ -1,4 +1,4 @@
-package me.proxer.app.chat.sync
+package me.proxer.app.chat.prv.sync
 
 import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.Dao
@@ -6,8 +6,8 @@ import android.arch.persistence.room.Insert
 import android.arch.persistence.room.OnConflictStrategy
 import android.arch.persistence.room.Query
 import android.arch.persistence.room.Transaction
-import me.proxer.app.chat.LocalConference
-import me.proxer.app.chat.LocalMessage
+import me.proxer.app.chat.prv.LocalConference
+import me.proxer.app.chat.prv.LocalMessage
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.library.enums.Device
 import me.proxer.library.enums.MessageAction
@@ -17,7 +17,7 @@ import java.util.Date
  * @author Ruben Gees
  */
 @Dao
-abstract class ChatDao {
+abstract class MessengerDao {
 
     @Transaction
     open fun insertMessageToSend(text: String, conferenceId: Long): LocalMessage {

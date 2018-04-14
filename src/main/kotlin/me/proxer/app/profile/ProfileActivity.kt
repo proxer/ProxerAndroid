@@ -12,12 +12,12 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
-import me.proxer.app.MainApplication.Companion.chatDao
+import me.proxer.app.MainApplication.Companion.messengerDao
 import me.proxer.app.R
 import me.proxer.app.base.ImageTabsActivity
 import me.proxer.app.chat.ChatActivity
-import me.proxer.app.chat.Participant
-import me.proxer.app.chat.create.CreateChatActivity
+import me.proxer.app.chat.prv.Participant
+import me.proxer.app.chat.prv.create.CreateConferenceActivity
 import me.proxer.app.profile.comment.ProfileCommentFragment
 import me.proxer.app.profile.history.HistoryFragment
 import me.proxer.app.profile.info.ProfileInfoFragment
@@ -123,9 +123,9 @@ class ProfileActivity : ImageTabsActivity() {
                 image?.let { safeImage ->
                     Completable
                         .fromAction {
-                            chatDao.findConferenceForUser(safeUsername).let { existingChat ->
+                            messengerDao.findConferenceForUser(safeUsername).let { existingChat ->
                                 when (existingChat) {
-                                    null -> CreateChatActivity.navigateTo(this, false,
+                                    null -> CreateConferenceActivity.navigateTo(this, false,
                                         Participant(safeUsername, safeImage))
                                     else -> ChatActivity.navigateTo(this, existingChat)
                                 }
@@ -137,7 +137,7 @@ class ProfileActivity : ImageTabsActivity() {
             }
             R.id.new_group -> username?.let { safeUsername ->
                 image?.let { safeImage ->
-                    CreateChatActivity.navigateTo(this, true, Participant(safeUsername, safeImage))
+                    CreateConferenceActivity.navigateTo(this, true, Participant(safeUsername, safeImage))
                 }
             }
         }

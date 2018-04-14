@@ -1,4 +1,4 @@
-package me.proxer.app.chat
+package me.proxer.app.chat.prv
 
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.ForeignKey

@@ -7,7 +7,9 @@ import android.os.Bundle
 import com.jakewharton.rxbinding2.view.clicks
 import me.proxer.app.R
 import me.proxer.app.base.DrawerActivity
-import me.proxer.app.chat.conference.info.ConferenceInfoActivity
+import me.proxer.app.chat.prv.LocalConference
+import me.proxer.app.chat.prv.conference.info.ConferenceInfoActivity
+import me.proxer.app.chat.prv.message.MessengerFragment
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.extension.autoDispose
 import org.jetbrains.anko.intentFor
@@ -54,7 +56,7 @@ class ChatActivity : DrawerActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.container, ChatFragment.newInstance())
+                .replace(R.id.container, MessengerFragment.newInstance())
                 .commitNow()
         }
     }

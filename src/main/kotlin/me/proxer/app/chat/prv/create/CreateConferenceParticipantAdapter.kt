@@ -1,4 +1,4 @@
-package me.proxer.app.chat.create
+package me.proxer.app.chat.prv.create
 
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
@@ -15,15 +15,15 @@ import kotterknife.bindView
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
-import me.proxer.app.chat.Participant
-import me.proxer.app.chat.create.CreateChatParticipantAdapter.ViewHolder
+import me.proxer.app.chat.prv.Participant
+import me.proxer.app.chat.prv.create.CreateConferenceParticipantAdapter.ViewHolder
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.library.util.ProxerUrls
 
 /**
  * @author Ruben Gees
  */
-class CreateChatParticipantAdapter(savedInstanceState: Bundle?) : BaseAdapter<Participant, ViewHolder>() {
+class CreateConferenceParticipantAdapter(savedInstanceState: Bundle?) : BaseAdapter<Participant, ViewHolder>() {
 
     private companion object {
         private const val LIST_STATE = "create_chat_participant_list"

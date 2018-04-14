@@ -1,4 +1,4 @@
-package me.proxer.app.chat.conference.info
+package me.proxer.app.chat.prv.conference.info
 
 import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
 import me.proxer.app.MainApplication.Companion.api

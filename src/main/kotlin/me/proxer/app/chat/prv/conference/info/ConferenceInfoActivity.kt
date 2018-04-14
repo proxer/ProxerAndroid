@@ -1,10 +1,10 @@
-package me.proxer.app.chat.conference.info
+package me.proxer.app.chat.prv.conference.info
 
 import android.app.Activity
 import android.os.Bundle
 import me.proxer.app.R
 import me.proxer.app.base.DrawerActivity
-import me.proxer.app.chat.LocalConference
+import me.proxer.app.chat.prv.LocalConference
 import org.jetbrains.anko.startActivity
 
 /**

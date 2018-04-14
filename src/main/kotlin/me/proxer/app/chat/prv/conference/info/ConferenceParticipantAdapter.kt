@@ -1,4 +1,4 @@
-package me.proxer.app.chat.conference.info
+package me.proxer.app.chat.prv.conference.info
 
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.RecyclerView
@@ -16,7 +16,7 @@ import kotterknife.bindView
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
-import me.proxer.app.chat.conference.info.ConferenceParticipantAdapter.ViewHolder
+import me.proxer.app.chat.prv.conference.info.ConferenceParticipantAdapter.ViewHolder
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.colorRes
 import me.proxer.app.util.extension.setIconicsImage

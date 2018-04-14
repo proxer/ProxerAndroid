@@ -7,7 +7,7 @@ import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.chat.ChatActivity
-import me.proxer.app.chat.LocalConference
+import me.proxer.app.chat.prv.LocalConference
 import me.proxer.app.util.extension.unsafeLazy
 
 /**

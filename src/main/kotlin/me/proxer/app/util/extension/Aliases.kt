@@ -1,7 +1,7 @@
 package me.proxer.app.util.extension
 
-import me.proxer.app.chat.LocalConference
-import me.proxer.app.chat.LocalMessage
+import me.proxer.app.chat.prv.LocalConference
+import me.proxer.app.chat.prv.LocalMessage
 
 typealias LocalConferenceMap = Map<LocalConference, List<LocalMessage>>
 

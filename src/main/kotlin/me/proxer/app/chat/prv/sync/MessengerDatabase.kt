@@ -1,10 +1,10 @@
-package me.proxer.app.chat.sync
+package me.proxer.app.chat.prv.sync
 
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.RoomDatabase
 import android.arch.persistence.room.TypeConverters
-import me.proxer.app.chat.LocalConference
-import me.proxer.app.chat.LocalMessage
+import me.proxer.app.chat.prv.LocalConference
+import me.proxer.app.chat.prv.LocalMessage
 import me.proxer.app.util.converter.RoomConverters
 
 /**
@@ -13,7 +13,7 @@ import me.proxer.app.util.converter.RoomConverters
 @Suppress("UnnecessaryAbstractClass")
 @Database(entities = [(LocalConference::class), (LocalMessage::class)], version = 1, exportSchema = false)
 @TypeConverters(RoomConverters::class)
-abstract class ChatDatabase : RoomDatabase() {
+abstract class MessengerDatabase : RoomDatabase() {
 
-    abstract fun dao(): ChatDao
+    abstract fun dao(): MessengerDao
 }

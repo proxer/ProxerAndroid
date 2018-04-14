@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusableInTouchMode="true"
-    tools:context=".chat.ChatFragment">
+    tools:context=".chat.prv.message.MessengerFragment">
 
     <RelativeLayout
         android:id="@+id/contentRoot"
