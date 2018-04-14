@@ -42,6 +42,10 @@ class ChatRoomFragment : BaseContentFragment<List<ChatRoom>>() {
             .subscribe { item ->
                 // TODO
             }
+
+        adapter.linkClickSubject
+            .autoDispose(this)
+            .subscribe { showPage(it) }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

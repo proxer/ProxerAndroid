@@ -4,17 +4,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.klinker.android.link_builder.TouchableMovementMethod
 import com.mikepenz.materialdrawer.model.BaseViewHolder
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.chat.pub.room.ChatRoomAdapter.ViewHolder
+import me.proxer.app.util.Utils
 import me.proxer.library.entity.chat.ChatRoom
+import okhttp3.HttpUrl
 
 class ChatRoomAdapter : BaseAdapter<ChatRoom, ViewHolder>() {
 
     val clickSubject: PublishSubject<ChatRoom> = PublishSubject.create()
+    val linkClickSubject: PublishSubject<HttpUrl> = PublishSubject.create()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_chat_room, parent, false))
@@ -35,6 +39,8 @@ class ChatRoomAdapter : BaseAdapter<ChatRoom, ViewHolder>() {
                     clickSubject.onNext(data[it])
                 }
             }
+
+            topic.movementMethod = TouchableMovementMethod.instance
         }
 
         fun bind(item: ChatRoom) {
@@ -45,7 +51,9 @@ class ChatRoomAdapter : BaseAdapter<ChatRoom, ViewHolder>() {
                 topic.text = item.topic
             } else {
                 topic.visibility = View.VISIBLE
-                topic.text = item.topic
+                topic.text = Utils.buildClickableText(topic.context, item.topic.trim(), onWebClickListener = {
+                    Utils.safelyParseAndFixUrl(it)?.let { url -> linkClickSubject.onNext(url) }
+                })
             }
         }
     }
