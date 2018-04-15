@@ -1,14 +1,15 @@
 package me.proxer.app
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import com.rubengees.introduction.IntroductionActivity.OPTION_RESULT
 import com.rubengees.introduction.IntroductionBuilder
 import com.rubengees.introduction.Option
+import kotterknife.bindView
 import me.proxer.app.anime.ScheduleFragment
 import me.proxer.app.base.BackPressAware
 import me.proxer.app.base.DrawerActivity
@@ -49,8 +50,12 @@ class MainActivity : DrawerActivity() {
             .intentFor<MainActivity>(SECTION_EXTRA to section.id)
     }
 
+    override val contentView = R.layout.activity_main
+
     override val isRootActivity get() = !intent.hasExtra(SECTION_EXTRA)
     override val isMainActivity = true
+
+    val tabs: TabLayout by bindView(R.id.tabs)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -141,17 +146,6 @@ class MainActivity : DrawerActivity() {
 
         if (intent.hasExtra(SECTION_EXTRA)) {
             drawer.select(DrawerItem.fromIdOrDefault(intent.getLongExtra(SECTION_EXTRA, -1)))
-        }
-    }
-
-    @SuppressLint("PrivateResource")
-    fun toggleAppbarElevation(enable: Boolean) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (enable) {
-                appbar.elevation = resources.getDimension(R.dimen.design_appbar_elevation)
-            } else {
-                appbar.elevation = 0f
-            }
         }
     }
 

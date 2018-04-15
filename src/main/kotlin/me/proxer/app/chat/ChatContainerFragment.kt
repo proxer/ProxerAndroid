@@ -35,10 +35,12 @@ class ChatContainerFragment : BaseFragment() {
     private val sectionsPagerAdapter by unsafeLazy { SectionsPagerAdapter(childFragmentManager) }
 
     private val viewPager: ViewPager by bindView(R.id.viewPager)
-    private val tabs: TabLayout by bindView(R.id.tabs)
+    private val tabs: TabLayout by unsafeLazy { hostingActivity.tabs }
+
+    private var tabLayoutHelper: TabLayoutHelper? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        hostingActivity.toggleAppbarElevation(false)
+        tabs.visibility = View.VISIBLE
 
         return inflater.inflate(R.layout.fragment_chat_container, container, false)
     }
@@ -48,11 +50,14 @@ class ChatContainerFragment : BaseFragment() {
 
         viewPager.adapter = sectionsPagerAdapter
 
-        TabLayoutHelper(tabs, viewPager).apply { isAutoAdjustTabModeEnabled = true }
+        tabLayoutHelper = TabLayoutHelper(tabs, viewPager).apply { isAutoAdjustTabModeEnabled = true }
     }
 
     override fun onDestroyView() {
-        hostingActivity.toggleAppbarElevation(true)
+        tabLayoutHelper?.release()
+        tabLayoutHelper = null
+
+        tabs.visibility = View.GONE
 
         super.onDestroyView()
     }
