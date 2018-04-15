@@ -25,7 +25,9 @@ object PollPrototype : TextMutatorPrototype, AutoClosingPrototype {
 
         return when (url) {
             null -> text
-            else -> globalContext.getString(R.string.view_bbcode_poll_link).toSpannableStringBuilder().apply {
+            else -> text.toSpannableStringBuilder().apply {
+                replace(0, length, globalContext.getString(R.string.view_bbcode_poll_link))
+
                 setSpan(UrlClickableSpan(url), 0, length, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
             }
         }

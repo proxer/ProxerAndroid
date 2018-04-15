@@ -38,7 +38,9 @@ object MapPrototype : TextMutatorPrototype, AutoClosingPrototype {
         val zoomUriPart = if (zoom != null) "&z=$zoom" else ""
         val uri = Uri.parse("geo:0,0?q=$text$zoomUriPart")
 
-        return globalContext.getString(R.string.view_bbcode_map_link).toSpannableStringBuilder().apply {
+        return text.toSpannableStringBuilder().apply {
+            replace(0, length, globalContext.getString(R.string.view_bbcode_map_link))
+
             setSpan(UriClickableSpan(uri), 0, length, SPAN_INCLUSIVE_EXCLUSIVE)
         }
     }

@@ -23,7 +23,9 @@ object TwitterPrototype : TextMutatorPrototype, AutoClosingPrototype {
 
         return when (url) {
             null -> text
-            else -> globalContext.getString(R.string.view_bbcode_twitter_link).toSpannableStringBuilder().apply {
+            else -> text.toSpannableStringBuilder().apply {
+                replace(0, length, globalContext.getString(R.string.view_bbcode_twitter_link))
+
                 setSpan(UrlClickableSpan(url), 0, length, SPAN_INCLUSIVE_EXCLUSIVE)
             }
         }

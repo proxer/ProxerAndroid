@@ -23,7 +23,9 @@ object FacebookPrototype : TextMutatorPrototype, AutoClosingPrototype {
 
         return when (parsedUrl) {
             null -> text
-            else -> globalContext.getString(R.string.view_bbcode_facebook_link).toSpannableStringBuilder().apply {
+            else -> text.toSpannableStringBuilder().apply {
+                replace(0, length, globalContext.getString(R.string.view_bbcode_facebook_link))
+
                 setSpan(UrlClickableSpan(parsedUrl), 0, length, SPAN_INCLUSIVE_EXCLUSIVE)
             }
         }
