@@ -43,7 +43,7 @@ class ChatRoomFragment : BaseContentFragment<List<ChatRoom>>() {
 
         adapter.clickSubject
             .autoDispose(this)
-            .subscribe { item -> ChatActivity.navigateTo(requireActivity(), item.id, item.name) }
+            .subscribe { item -> ChatActivity.navigateTo(requireActivity(), item.id, item.name, item.isReadOnly) }
 
         adapter.linkClickSubject
             .autoDispose(this)

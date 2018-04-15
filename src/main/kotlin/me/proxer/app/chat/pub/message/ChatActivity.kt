@@ -14,11 +14,13 @@ class ChatActivity : DrawerActivity() {
     companion object {
         private const val CHAT_ROOM_ID_EXTRA = "chat_room_id"
         private const val CHAT_ROOM_NAME_EXTRA = "chat_room_name"
+        private const val CHAT_ROOM_IS_READ_ONLY_EXTRA = "chat_room_is_read_only"
 
-        fun navigateTo(context: Activity, chatRoomId: String, chatRoomName: String) {
+        fun navigateTo(context: Activity, chatRoomId: String, chatRoomName: String, chatRoomIsReadOnly: Boolean) {
             context.startActivity(context.intentFor<ChatActivity>(
                 CHAT_ROOM_ID_EXTRA to chatRoomId,
-                CHAT_ROOM_NAME_EXTRA to chatRoomName
+                CHAT_ROOM_NAME_EXTRA to chatRoomName,
+                CHAT_ROOM_IS_READ_ONLY_EXTRA to chatRoomIsReadOnly
             ))
         }
     }
@@ -28,6 +30,9 @@ class ChatActivity : DrawerActivity() {
 
     val chatRoomName: String
         get() = intent.getStringExtra(CHAT_ROOM_NAME_EXTRA)
+
+    val chatRoomIsReadOnly: Boolean
+        get() = intent.getBooleanExtra(CHAT_ROOM_IS_READ_ONLY_EXTRA, false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -40,14 +40,13 @@ class ChatContainerFragment : BaseFragment() {
     private var tabLayoutHelper: TabLayoutHelper? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        tabs.visibility = View.VISIBLE
-
         return inflater.inflate(R.layout.fragment_chat_container, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        tabs.visibility = View.VISIBLE
         viewPager.adapter = sectionsPagerAdapter
 
         tabLayoutHelper = TabLayoutHelper(tabs, viewPager).apply { isAutoAdjustTabModeEnabled = true }

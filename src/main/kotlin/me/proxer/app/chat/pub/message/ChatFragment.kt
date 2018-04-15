@@ -115,6 +115,9 @@ class ChatFragment : PagedContentFragment<ChatMessage>() {
     private val chatRoomId: String
         get() = hostingActivity.chatRoomId
 
+    private val isReadOnly: Boolean
+        get() = hostingActivity.chatRoomIsReadOnly
+
     override val layoutManager by lazy { LinearLayoutManager(context).apply { reverseLayout = true } }
     override var innerAdapter by Delegates.notNull<ChatAdapter>()
 
@@ -175,25 +178,33 @@ class ChatFragment : PagedContentFragment<ChatMessage>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_emoticon))
+        if (isReadOnly) {
+            emojiButton.visibility = View.GONE
+            sendButton.visibility = View.INVISIBLE
 
-        emojiButton.clicks()
-            .autoDispose(this)
-            .subscribe { emojiPopup.toggle() }
+            messageInput.isEnabled = false
+            messageInput.hint = "In diesen Chat kann nicht geschrieben werden"
+        } else {
+            emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_emoticon))
 
-        sendButton.clicks()
-            .autoDispose(this)
-            .subscribe {
-                messageInput.text.toString().trim().let { text ->
-                    if (text.isNotBlank()) {
-                        viewModel.sendMessage(text)
+            emojiButton.clicks()
+                .autoDispose(this)
+                .subscribe { emojiPopup.toggle() }
 
-                        messageInput.text.clear()
+            sendButton.clicks()
+                .autoDispose(this)
+                .subscribe {
+                    messageInput.text.toString().trim().let { text ->
+                        if (text.isNotBlank()) {
+                            viewModel.sendMessage(text)
 
-                        scrollToTop()
+                            messageInput.text.clear()
+
+                            scrollToTop()
+                        }
                     }
                 }
-            }
+        }
 
         viewModel.sendMessageError.observe(this, Observer {
             if (it != null) {
