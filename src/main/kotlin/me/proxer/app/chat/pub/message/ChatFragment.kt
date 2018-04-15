@@ -183,7 +183,7 @@ class ChatFragment : PagedContentFragment<ChatMessage>() {
             sendButton.visibility = View.INVISIBLE
 
             messageInput.isEnabled = false
-            messageInput.hint = "In diesen Chat kann nicht geschrieben werden"
+            messageInput.hint = getString(R.string.fragment_chat_read_only_message)
         } else {
             emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_emoticon))
 
