@@ -2,7 +2,6 @@ package me.proxer.app
 
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
@@ -22,7 +21,6 @@ import me.proxer.app.settings.AboutFragment
 import me.proxer.app.settings.SettingsFragment
 import me.proxer.app.ui.view.RatingDialog
 import me.proxer.app.util.data.PreferenceHelper
-import me.proxer.app.util.extension.shortcutManager
 import me.proxer.app.util.wrapper.IntroductionWrapper
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper.DrawerItem
 import me.proxer.library.enums.Category
@@ -192,19 +190,26 @@ class MainActivity : DrawerActivity() {
         }
     }
 
-    private fun getItemToLoad() = DrawerItem.fromIdOrDefault(when (intent.action == Intent.ACTION_VIEW) {
-        true -> intent.dataString.toLongOrNull().apply {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-                shortcutManager.reportShortcutUsed(when (this) {
-                    0L -> SHORTCUT_NEWS
-                    1L -> SHORTCUT_CHAT
-                    2L -> SHORTCUT_BOOKMARKS
-                    else -> null
-                })
+    private fun getItemToLoad(): DrawerItem {
+        val actionDrawerItem = when (intent.action == Intent.ACTION_VIEW) {
+            true -> when (intent.data?.pathSegments?.firstOrNull()) {
+                "news" -> DrawerItem.NEWS
+                "chat", "messages" -> DrawerItem.CHAT
+                "reminder" -> DrawerItem.BOOKMARKS
+                "anime" -> DrawerItem.ANIME
+                "calendar" -> DrawerItem.SCHEDULE
+                "manga" -> DrawerItem.MANGA
+                else -> null
             }
+            false -> null
         }
-        false -> intent.getLongExtra(SECTION_EXTRA, PreferenceHelper.getStartPage(this).id)
-    })
+
+        return when (actionDrawerItem) {
+            null -> DrawerItem.fromIdOrDefault(intent
+                .getLongExtra(SECTION_EXTRA, PreferenceHelper.getStartPage(this).id))
+            else -> actionDrawerItem
+        }
+    }
 
     override fun handleDrawerItemClick(item: DrawerItem) = when (isRootActivity || item == drawer.currentItem) {
         true -> setFragment(item)

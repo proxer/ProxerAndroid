@@ -12,7 +12,7 @@
         android:shortcutShortLabel="@string/section_news">
         <intent
             android:action="android.intent.action.VIEW"
-            android:data="0"
+            android:data="news"
             android:targetClass="me.proxer.app.MainActivity"
             android:targetPackage="me.proxer.app" />
     </shortcut>
@@ -25,7 +25,7 @@
         android:shortcutShortLabel="@string/section_chat">
         <intent
             android:action="android.intent.action.VIEW"
-            android:data="1"
+            android:data="chat"
             android:targetClass="me.proxer.app.MainActivity"
             android:targetPackage="me.proxer.app" />
     </shortcut>
@@ -38,7 +38,7 @@
         android:shortcutShortLabel="@string/section_bookmarks">
         <intent
             android:action="android.intent.action.VIEW"
-            android:data="2"
+            android:data="reminder"
             android:targetClass="me.proxer.app.MainActivity"
             android:targetPackage="me.proxer.app" />
     </shortcut>
