@@ -85,7 +85,7 @@
     <string name="error_maintenance">Proxer wird grade gewartet. Probiere es später noch einmal</string>
     <string name="error_client">Die App hat fehlerhafte Daten geschickt. Bitte informiere einen Techniker</string>
     <string name="error_invalid_id">Der Eintrag existiert nicht (mehr)</string>
-    <string name="error_unsupported_code">Diese Fehler wird nicht unterstützt. Bitte informiere einen Techniker</string>
+    <string name="error_unsupported_code">Diesee Fehler wird nicht unterstützt. Bitte informiere einen Techniker</string>
     <string name="error_chat_seven_days">
         Du musst mindestens sieben Tage angemeldet sein, bevor du Nachrichten senden kannst
     </string>

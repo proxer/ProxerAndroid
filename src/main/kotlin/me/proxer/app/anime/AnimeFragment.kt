@@ -22,6 +22,7 @@ import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.info.translatorgroup.TranslatorGroupActivity
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.ui.view.MediaControlView
+import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.Utils
@@ -232,7 +233,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
     override fun showError(action: ErrorAction) {
         super.showError(action)
 
-        action.data?.let {
+        action.data[ErrorUtils.ENTRY_DATA_KEY].let {
             if (it is EntryCore) {
                 episodeAmount = it.episodeAmount
                 name = it.name

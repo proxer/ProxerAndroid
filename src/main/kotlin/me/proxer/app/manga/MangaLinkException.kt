@@ -5,4 +5,4 @@ import okhttp3.HttpUrl
 /**
  * @author Ruben Gees
  */
-class MangaLinkException(val link: HttpUrl) : Exception()
+class MangaLinkException(val chapterTitle: String, val link: HttpUrl) : Exception()

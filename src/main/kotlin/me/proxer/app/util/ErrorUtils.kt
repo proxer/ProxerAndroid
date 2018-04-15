@@ -109,6 +109,10 @@ import javax.net.ssl.SSLPeerUnverifiedException
  */
 object ErrorUtils {
 
+    const val ENTRY_DATA_KEY = "entry"
+    const val CHAPTER_TITLE_DATA_KEY = "chapterTitle"
+    const val LINK_DATA_KEY = "link"
+
     private val API_ERRORS = arrayOf(UNKNOWN_API, API_REMOVED, INVALID_API_CLASS, INVALID_API_FUNCTION,
         INSUFFICIENT_PERMISSIONS, FUNCTION_BLOCKED)
     private val MAINTENANCE_ERRORS = arrayOf(SERVER_MAINTENANCE, API_MAINTENANCE)
@@ -182,17 +186,18 @@ object ErrorUtils {
             else -> null
         }
 
-        val data = when {
-            error is PartialException -> error.partialData
-            else -> null
+        val data = mutableMapOf<String, Any?>()
+
+        if (error is PartialException) {
+            data[ENTRY_DATA_KEY] = error.partialData
         }
 
-        val errorData = when {
-            innermostError is MangaLinkException -> innermostError.link
-            else -> null
+        if (innermostError is MangaLinkException) {
+            data[CHAPTER_TITLE_DATA_KEY] = innermostError.chapterTitle
+            data[LINK_DATA_KEY] = innermostError.link
         }
 
-        return ErrorAction(errorMessage, buttonMessage, buttonAction, data, errorData)
+        return ErrorAction(errorMessage, buttonMessage, buttonAction, data)
     }
 
     private fun getMessageForProxerException(error: ProxerException) = when (error.errorType) {
@@ -250,8 +255,7 @@ object ErrorUtils {
         val message: Int,
         val buttonMessage: Int = ACTION_MESSAGE_DEFAULT,
         val buttonAction: ButtonAction? = null,
-        val data: Any? = null,
-        val errorData: Any? = null
+        val data: Map<String, Any?> = emptyMap()
     ) {
 
         companion object {
@@ -263,9 +267,11 @@ object ErrorUtils {
             CAPTCHA -> View.OnClickListener { activity.showPage(ProxerUrls.captchaWeb(Device.MOBILE)) }
             LOGIN -> View.OnClickListener { LoginDialog.show(activity) }
             AGE_CONFIRMATION -> View.OnClickListener { AgeConfirmationDialog.show(activity) }
-            OPEN_LINK -> when (errorData) {
-                is HttpUrl -> View.OnClickListener { activity.showPage(errorData) }
-                else -> null
+            OPEN_LINK -> data[LINK_DATA_KEY].let { link ->
+                when (link) {
+                    is HttpUrl -> View.OnClickListener { activity.showPage(link) }
+                    else -> null
+                }
             }
             else -> null
         }

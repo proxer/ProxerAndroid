@@ -49,7 +49,7 @@ class MangaViewModel(
                         val serverUrl = Utils.safelyParseAndFixUrl(data.chapter.server)
 
                         if (serverUrl != null && serverUrl.host() in supportedExternalServers) {
-                            throw PartialException(MangaLinkException(serverUrl), entry)
+                            throw PartialException(MangaLinkException(data.chapter.title, serverUrl), entry)
                         } else {
                             throw PartialException(MangaNotAvailableException(), entry)
                         }

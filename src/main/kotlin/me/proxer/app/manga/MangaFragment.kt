@@ -266,9 +266,11 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
     override fun showError(action: ErrorUtils.ErrorAction) {
         super.showError(action)
 
-        chapterTitle = null
+        action.data[ErrorUtils.CHAPTER_TITLE_DATA_KEY].let {
+            chapterTitle = it as? String
+        }
 
-        action.data?.let {
+        action.data[ErrorUtils.ENTRY_DATA_KEY].let {
             if (it is EntryCore) {
                 episodeAmount = it.episodeAmount
                 name = it.name
