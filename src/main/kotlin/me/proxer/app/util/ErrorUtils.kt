@@ -32,10 +32,22 @@ import me.proxer.library.api.ProxerException.ServerErrorType.ANIME_INVALID_STREA
 import me.proxer.library.api.ProxerException.ServerErrorType.API_MAINTENANCE
 import me.proxer.library.api.ProxerException.ServerErrorType.API_REMOVED
 import me.proxer.library.api.ProxerException.ServerErrorType.APPS_INVALID_ID
+import me.proxer.library.api.ProxerException.ServerErrorType.AUTH_CODE_ALREADY_EXISTS
+import me.proxer.library.api.ProxerException.ServerErrorType.AUTH_CODE_DOES_NOT_EXIST
+import me.proxer.library.api.ProxerException.ServerErrorType.AUTH_CODE_DUPLICATE
+import me.proxer.library.api.ProxerException.ServerErrorType.AUTH_CODE_INVALID_NAME
+import me.proxer.library.api.ProxerException.ServerErrorType.AUTH_CODE_PENDING
+import me.proxer.library.api.ProxerException.ServerErrorType.AUTH_CODE_REJECTED
+import me.proxer.library.api.ProxerException.ServerErrorType.AUTH_INVALID_USER
+import me.proxer.library.api.ProxerException.ServerErrorType.CHAT_INVALID_INPUT
 import me.proxer.library.api.ProxerException.ServerErrorType.CHAT_INVALID_MESSAGE
 import me.proxer.library.api.ProxerException.ServerErrorType.CHAT_INVALID_PERMISSIONS
 import me.proxer.library.api.ProxerException.ServerErrorType.CHAT_INVALID_ROOM
+import me.proxer.library.api.ProxerException.ServerErrorType.CHAT_INVALID_THANK_YOU
 import me.proxer.library.api.ProxerException.ServerErrorType.CHAT_LOGIN_REQUIRED
+import me.proxer.library.api.ProxerException.ServerErrorType.CHAT_NO_PERMISSIONS
+import me.proxer.library.api.ProxerException.ServerErrorType.CHAT_SEVEN_DAY_PROTECTION
+import me.proxer.library.api.ProxerException.ServerErrorType.CHAT_USER_ON_BLACKLIST
 import me.proxer.library.api.ProxerException.ServerErrorType.ERRORLOG_INVALID_INPUT
 import me.proxer.library.api.ProxerException.ServerErrorType.FORUM_INVALID_ID
 import me.proxer.library.api.ProxerException.ServerErrorType.FUNCTION_BLOCKED
@@ -105,11 +117,12 @@ object ErrorUtils {
     private val CLIENT_ERRORS = arrayOf(NEWS, LOGIN_MISSING_CREDENTIALS, UCP_INVALID_CATEGORY, INFO_INVALID_TYPE,
         LOGIN_ALREADY_LOGGED_IN, LOGIN_DIFFERENT_USER_ALREADY_LOGGED_IN, LIST_INVALID_CATEGORY, LIST_INVALID_MEDIUM,
         MEDIA_INVALID_STYLE, ANIME_INVALID_STREAM, LIST_INVALID_LANGUAGE, LIST_INVALID_TYPE, ERRORLOG_INVALID_INPUT,
-        LIST_INVALID_SUBJECT)
+        LIST_INVALID_SUBJECT, CHAT_INVALID_ROOM, CHAT_INVALID_MESSAGE, CHAT_LOGIN_REQUIRED, CHAT_INVALID_THANK_YOU,
+        CHAT_INVALID_INPUT)
     private val INVALID_ID_ERRORS = arrayOf(USERINFO_INVALID_ID, UCP_INVALID_ID, INFO_INVALID_ID, MEDIA_INVALID_ENTRY,
         UCP_INVALID_EPISODE, MESSAGES_INVALID_CONFERENCE, LIST_INVALID_ID, FORUM_INVALID_ID, APPS_INVALID_ID)
-    private val UNSUPPORTED_ERRORS = arrayOf(CHAT_INVALID_ROOM, CHAT_INVALID_PERMISSIONS, CHAT_INVALID_MESSAGE,
-        CHAT_LOGIN_REQUIRED, USER)
+    private val UNSUPPORTED_ERRORS = arrayOf(USER, AUTH_INVALID_USER, AUTH_CODE_ALREADY_EXISTS,
+        AUTH_CODE_DOES_NOT_EXIST, AUTH_CODE_REJECTED, AUTH_CODE_PENDING, AUTH_CODE_INVALID_NAME, AUTH_CODE_DUPLICATE)
 
     fun getMessage(error: Throwable): Int {
         val innermostError = getInnermostError(error)
@@ -205,6 +218,9 @@ object ErrorUtils {
                 true -> R.string.error_insufficient_permissions
                 false -> R.string.error_insufficient_permissions_logged_in
             }
+            CHAT_SEVEN_DAY_PROTECTION -> R.string.error_chat_seven_days
+            CHAT_USER_ON_BLACKLIST -> R.string.error_chat_blacklist
+            CHAT_INVALID_PERMISSIONS, CHAT_NO_PERMISSIONS -> R.string.error_chat_no_permissions
             in API_ERRORS -> R.string.error_api
             in MAINTENANCE_ERRORS -> R.string.error_maintenance
             in LOGIN_ERRORS -> R.string.error_login

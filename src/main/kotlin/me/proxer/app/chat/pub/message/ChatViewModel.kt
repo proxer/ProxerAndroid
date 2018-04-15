@@ -9,10 +9,15 @@ import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.base.PagedViewModel
 import me.proxer.app.util.ErrorUtils
+import me.proxer.app.util.Validators
+import me.proxer.app.util.data.ResettingMutableLiveData
+import me.proxer.app.util.extension.buildOptionalSingle
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.entity.chat.ChatMessage
 import me.proxer.library.enums.ChatMessageAction
+import java.util.LinkedList
+import java.util.Queue
 import java.util.concurrent.TimeUnit
 
 @GeneratedProvider
@@ -22,14 +27,26 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ChatMessage
     override val itemsOnPage = 50
 
     override val dataSingle: Single<List<ChatMessage>>
-        get() = api.chat().messages(chatRoomId).messageId(data.value?.lastOrNull()?.id ?: "0")
-            .buildSingle()
+        get() = Single.fromCallable { Validators.validateLogin() }
+            .flatMap {
+                api.chat().messages(chatRoomId)
+                    .messageId(data.value?.lastOrNull()?.id ?: "0")
+                    .buildSingle()
+            }
+
+    val sendMessageError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
 
     private var pollingDisposable: Disposable? = null
 
+    private val messageQueue: Queue<String> = LinkedList<String>()
+    private var messageDisposable: Disposable? = null
+
     override fun onCleared() {
         pollingDisposable?.dispose()
+        messageDisposable?.dispose()
+
         pollingDisposable = null
+        messageDisposable = null
 
         super.onCleared()
     }
@@ -62,6 +79,14 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ChatMessage
             })
     }
 
+    fun sendMessage(text: String) {
+        messageQueue.add(text)
+
+        if (messageDisposable?.isDisposed != false) {
+            doSendMessages()
+        }
+    }
+
     private fun mergeNewDataWithExistingData(newData: List<ChatMessage>, currentId: String): List<ChatMessage> {
         val messageIdsToDelete = newData.filter { it.action == ChatMessageAction.REMOVE_MESSAGE }
             .flatMap { listOf(it.id, it.message) }
@@ -87,22 +112,37 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ChatMessage
     }
 
     private fun startPolling() {
-        pollingDisposable = api.chat().messages(chatRoomId).messageId("0").buildSingle()
+        pollingDisposable = Single.fromCallable { Validators.validateLogin() }
+            .flatMap { api.chat().messages(chatRoomId).messageId("0").buildSingle() }
             .repeatWhen { it.concatMap { Flowable.timer(3, TimeUnit.SECONDS) } }
             .retryWhen { it.concatMap { Flowable.timer(3, TimeUnit.SECONDS) } }
             .map { newData -> mergeNewDataWithExistingData(newData, "0") }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe {
-                error.value = null
-                isLoading.value = true
-            }
-            .doAfterTerminate { isLoading.value = false }
             .subscribeAndLogErrors({
                 error.value = null
                 data.value = it
-            }, {
-                error.value = ErrorUtils.handle(it)
             })
+    }
+
+    private fun doSendMessages() {
+        messageDisposable?.dispose()
+
+        messageQueue.poll()?.let { item ->
+            messageDisposable = Single.fromCallable { Validators.validateLogin() }
+                .flatMap { api.chat().sendMessage(chatRoomId, item).buildOptionalSingle() }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeAndLogErrors({
+                    pollingDisposable?.dispose()
+
+                    startPolling()
+                    doSendMessages()
+                }, {
+                    messageQueue.clear()
+
+                    sendMessageError.value = ErrorUtils.handle(it)
+                })
+        }
     }
 }

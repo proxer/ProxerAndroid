@@ -86,6 +86,11 @@
     <string name="error_client">Die App hat fehlerhafte Daten geschickt. Bitte informiere einen Techniker</string>
     <string name="error_invalid_id">Der Eintrag existiert nicht (mehr)</string>
     <string name="error_unsupported_code">Diese Fehler wird nicht unterstützt. Bitte informiere einen Techniker</string>
+    <string name="error_chat_seven_days">
+        Du musst mindestens sieben Tage angemeldet sein, bevor du Nachrichten senden kannst
+    </string>
+    <string name="error_chat_blacklist">Du bist aktuell vom Chat ausgeschlossen</string>
+    <string name="error_chat_no_permissions">Du hast nicht die nötigen Berechtigungen für diesen Chat</string>
 
     <string name="error_login">Du bist nicht angemeldet</string>
     <string name="error_login_required">Für diesen Bereich musst du dich anmelden</string>
@@ -145,6 +150,7 @@
     <string name="error_notification_deletion">Die Benachrichtigung konnte nicht gelöscht werden: %s</string>
     <string name="error_bookmark_deletion">Das Lesezeichen konnte nicht entfernt werden: %s</string>
     <string name="error_topten_entry_removal">Der Eintrag konnte nicht entfernt werden: %s</string>
+    <string name="error_chat_send_message">Die Nachricht konnte nicht versandt werden: %s</string>
 
     <string name="medium_anime_series">Animeserie</string>
     <string name="medium_hentai">Hentai</string>

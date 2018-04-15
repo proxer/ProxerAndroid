@@ -1,16 +1,26 @@
 package me.proxer.app.chat.pub.room
 
 import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
+import io.reactivex.Single
+import io.reactivex.functions.BiFunction
 import me.proxer.app.MainApplication.Companion.api
-import me.proxer.app.base.BaseContentViewModel
-import me.proxer.library.api.Endpoint
+import me.proxer.app.base.BaseViewModel
+import me.proxer.app.util.Validators
+import me.proxer.app.util.extension.buildSingle
 import me.proxer.library.entity.chat.ChatRoom
 
 @GeneratedProvider
-class ChatRoomViewModel : BaseContentViewModel<List<ChatRoom>>() {
+class ChatRoomViewModel : BaseViewModel<List<ChatRoom>>() {
+
+    private companion object {
+        private val zipper = BiFunction { first: List<ChatRoom>, second: List<ChatRoom> -> first + second }
+    }
 
     override val isLoginRequired = true
 
-    override val endpoint: Endpoint<List<ChatRoom>>
-        get() = api.chat().publicRooms()
+    override val dataSingle: Single<List<ChatRoom>>
+        get() = Single.fromCallable { Validators.validateLogin() }
+            .flatMap { api.chat().publicRooms().buildSingle() }
+            .zipWith(api.chat().userRooms().buildSingle(), zipper)
+            .map { it.distinctBy { it.id }.sortedBy { it.id } }
 }

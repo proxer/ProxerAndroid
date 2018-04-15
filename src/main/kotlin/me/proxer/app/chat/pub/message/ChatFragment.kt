@@ -1,8 +1,10 @@
 package me.proxer.app.chat.pub.message
 
+import android.arch.lifecycle.Observer
 import android.content.ClipData
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
+import android.support.design.widget.Snackbar
 import android.support.v7.view.ActionMode
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -32,6 +34,7 @@ import me.proxer.app.util.extension.clipboardManager
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.inputMethodManager
 import me.proxer.app.util.extension.isAtTop
+import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.chat.ChatMessage
 import org.jetbrains.anko.bundleOf
@@ -181,17 +184,23 @@ class ChatFragment : PagedContentFragment<ChatMessage>() {
         sendButton.clicks()
             .autoDispose(this)
             .subscribe {
-                // TODO
-                //                messageInput.text.toString().trim().let { text ->
-                //                    if (text.isNotBlank()) {
-                //                        viewModel.sendMessage(text)
-                //
-                //                        messageInput.text.clear()
-                //
-                //                        scrollToTop()
-                //                    }
-                //                }
+                messageInput.text.toString().trim().let { text ->
+                    if (text.isNotBlank()) {
+                        viewModel.sendMessage(text)
+
+                        messageInput.text.clear()
+
+                        scrollToTop()
+                    }
+                }
             }
+
+        viewModel.sendMessageError.observe(this, Observer {
+            if (it != null) {
+                multilineSnackbar(root, getString(R.string.error_chat_send_message, getString(it.message)),
+                    Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity))
+            }
+        })
 
         innerAdapter.glide = GlideApp.with(this)
     }
