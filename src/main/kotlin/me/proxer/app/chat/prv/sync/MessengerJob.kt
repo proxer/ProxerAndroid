@@ -324,7 +324,8 @@ class MessengerJob : Job() {
     }
 
     private fun fetchNewMessages(conference: Conference): Pair<List<Message>, Boolean> {
-        val mostRecentMessage = messengerDao.findMostRecentMessageForConference(conference.id.toLong())?.toNonLocalMessage()
+        val mostRecentMessage = messengerDao.findMostRecentMessageForConference(conference.id.toLong())
+            ?.toNonLocalMessage()
 
         return when (mostRecentMessage) {
             null -> fetchForEmptyConference(conference)

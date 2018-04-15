@@ -20,6 +20,9 @@ import java.util.LinkedList
 import java.util.Queue
 import java.util.concurrent.TimeUnit
 
+/**
+ * @author Ruben Gees
+ */
 @GeneratedProvider
 class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ChatMessage>() {
 
@@ -119,10 +122,10 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ChatMessage
             .map { newData -> mergeNewDataWithExistingData(newData, "0") }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribeAndLogErrors({
+            .subscribeAndLogErrors {
                 error.value = null
                 data.value = it
-            })
+            }
     }
 
     private fun doSendMessages() {

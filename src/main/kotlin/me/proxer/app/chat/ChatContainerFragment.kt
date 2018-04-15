@@ -18,6 +18,9 @@ import me.proxer.app.chat.pub.room.ChatRoomFragment
 import me.proxer.app.util.extension.unsafeLazy
 import org.jetbrains.anko.bundleOf
 
+/**
+ * @author Ruben Gees
+ */
 class ChatContainerFragment : BaseFragment() {
 
     companion object {

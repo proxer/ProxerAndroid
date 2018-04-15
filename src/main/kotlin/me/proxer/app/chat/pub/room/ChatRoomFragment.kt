@@ -16,6 +16,9 @@ import me.proxer.library.entity.chat.ChatRoom
 import org.jetbrains.anko.bundleOf
 import kotlin.properties.Delegates
 
+/**
+ * @author Ruben Gees
+ */
 class ChatRoomFragment : BaseContentFragment<List<ChatRoom>>() {
 
     companion object {

@@ -258,7 +258,9 @@ class ChatFragment : PagedContentFragment<ChatMessage>() {
     }
 
     private fun handleReplyClick() {
-        messageInput.setText(getString(R.string.fragment_messenger_reply, innerAdapter.selectedMessages.first().username))
+        val username = innerAdapter.selectedMessages.first().username
+
+        messageInput.setText(getString(R.string.fragment_messenger_reply, username))
         messageInput.setSelection(messageInput.text.length)
         messageInput.requestFocus()
 

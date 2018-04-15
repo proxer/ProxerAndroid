@@ -15,6 +15,9 @@ import me.proxer.app.util.Utils
 import me.proxer.library.entity.chat.ChatRoom
 import okhttp3.HttpUrl
 
+/**
+ * @author Ruben Gees
+ */
 class ChatRoomAdapter : BaseAdapter<ChatRoom, ViewHolder>() {
 
     val clickSubject: PublishSubject<ChatRoom> = PublishSubject.create()

@@ -9,6 +9,9 @@ import me.proxer.app.util.Validators
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.library.entity.chat.ChatRoom
 
+/**
+ * @author Ruben Gees
+ */
 @GeneratedProvider
 class ChatRoomViewModel : BaseViewModel<List<ChatRoom>>() {
 
