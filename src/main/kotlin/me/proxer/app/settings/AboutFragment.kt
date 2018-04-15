@@ -9,6 +9,7 @@ import android.view.View
 import com.danielstone.materialaboutlibrary.ConvenienceBuilder
 import com.danielstone.materialaboutlibrary.MaterialAboutFragment
 import com.danielstone.materialaboutlibrary.items.MaterialAboutActionItem
+import com.danielstone.materialaboutlibrary.items.MaterialAboutItemOnClickAction
 import com.danielstone.materialaboutlibrary.model.MaterialAboutCard
 import com.danielstone.materialaboutlibrary.model.MaterialAboutList
 import com.mikepenz.aboutlibraries.Libs
@@ -109,6 +110,7 @@ class AboutFragment : MaterialAboutFragment() {
             .text(R.string.about_info_licenses_title)
             .subText(R.string.about_info_licenses_description)
             .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_clipboard_text).iconColor(context))
+            .setOnClickAction(MaterialAboutItemOnClickAction { })
             .setOnClickAction {
                 LibsBuilder().withAutoDetect(false)
                     .withShowLoadingProgress(false)
@@ -119,12 +121,7 @@ class AboutFragment : MaterialAboutFragment() {
                     .withExcludedLibraries(*EXCLUDED_LIBRARIES)
                     .withFields(R.string::class.java.fields)
                     .withActivityStyle(getAboutLibrariesActivityStyle())
-                    .withUiListener(object : LibsConfiguration.LibsUIListener {
-                        override fun preOnCreateView(view: View) = view
-                        override fun postOnCreateView(view: View) = view.apply {
-                            Utils.setNavigationBarColorIfPossible(requireActivity(), R.color.primary)
-                        }
-                    })
+                    .withUiListener(NavigationBarLibsUIListener())
                     .withActivityTitle(getString(R.string.about_info_licenses_activity_title))
                     .start(requireActivity())
             }.build(),
@@ -195,4 +192,11 @@ class AboutFragment : MaterialAboutFragment() {
             Configuration.UI_MODE_NIGHT_UNDEFINED -> Libs.ActivityStyle.LIGHT_DARK_TOOLBAR
             else -> throw IllegalArgumentException("Unknown mode")
         }
+
+    private class NavigationBarLibsUIListener : LibsConfiguration.LibsUIListener {
+        override fun preOnCreateView(view: View) = view
+        override fun postOnCreateView(view: View) = view.apply {
+            Utils.setNavigationBarColorIfPossible(Utils.findActivity(context), R.color.primary)
+        }
+    }
 }

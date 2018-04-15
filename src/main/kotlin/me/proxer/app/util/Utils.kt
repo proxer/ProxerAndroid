@@ -2,6 +2,7 @@ package me.proxer.app.util
 
 import android.app.Activity
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
@@ -36,6 +37,12 @@ object Utils {
 
     private val WEB_REGEX = Patterns.WEB_URL
     private val MENTIONS_REGEX = Pattern.compile("(@[a-zA-Z0-9_-]+)")
+
+    fun findActivity(currentContext: Context): Activity? = when (currentContext) {
+        is Activity -> currentContext
+        is ContextWrapper -> findActivity(currentContext.baseContext)
+        else -> null
+    }
 
     fun setStatusBarColorIfPossible(activity: Activity?, @ColorRes color: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
