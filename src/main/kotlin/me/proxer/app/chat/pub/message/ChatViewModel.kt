@@ -44,6 +44,8 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ChatMessage
     private val messageQueue: Queue<String> = LinkedList<String>()
     private var messageDisposable: Disposable? = null
 
+    private var currentFirstId = "0"
+
     override fun onCleared() {
         pollingDisposable?.dispose()
         messageDisposable?.dispose()
@@ -70,6 +72,8 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ChatMessage
             .doOnSuccess { if (pollingDisposable == null) startPolling() }
             .doAfterTerminate { isLoading.value = false }
             .subscribeAndLogErrors({
+                currentFirstId = it.firstOrNull()?.id ?: "0"
+
                 refreshError.value = null
                 error.value = null
                 data.value = it
@@ -124,8 +128,12 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ChatMessage
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeAndLogErrors {
-                error.value = null
-                data.value = it
+                if (it.isNotEmpty() && it.first().id != currentFirstId) {
+                    currentFirstId = it.first().id
+
+                    error.value = null
+                    data.value = it
+                }
             }
     }
 
