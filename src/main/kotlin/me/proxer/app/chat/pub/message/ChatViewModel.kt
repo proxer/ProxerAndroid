@@ -120,6 +120,7 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ChatMessage
             .repeatWhen { it.concatMap { Flowable.timer(3, TimeUnit.SECONDS) } }
             .retryWhen { it.concatMap { Flowable.timer(3, TimeUnit.SECONDS) } }
             .map { newData -> mergeNewDataWithExistingData(newData, "0") }
+            .delaySubscription(3, TimeUnit.SECONDS)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeAndLogErrors {

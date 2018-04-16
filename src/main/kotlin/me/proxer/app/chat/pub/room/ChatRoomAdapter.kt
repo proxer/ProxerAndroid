@@ -1,11 +1,11 @@
 package me.proxer.app.chat.pub.room
 
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.klinker.android.link_builder.TouchableMovementMethod
-import com.mikepenz.materialdrawer.model.BaseViewHolder
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.R
@@ -31,7 +31,7 @@ class ChatRoomAdapter : BaseAdapter<ChatRoom, ViewHolder>() {
         holder.bind(data[position])
     }
 
-    inner class ViewHolder(view: View) : BaseViewHolder(view) {
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         internal val nameView by bindView<TextView>(R.id.name)
         internal val topic by bindView<TextView>(R.id.topic)

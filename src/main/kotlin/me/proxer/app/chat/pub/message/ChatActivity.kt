@@ -2,8 +2,11 @@ package me.proxer.app.chat.pub.message
 
 import android.app.Activity
 import android.os.Bundle
+import com.jakewharton.rxbinding2.view.clicks
 import me.proxer.app.R
 import me.proxer.app.base.DrawerActivity
+import me.proxer.app.chat.pub.room.info.ChatRoomInfoActivity
+import me.proxer.app.util.extension.autoDispose
 import org.jetbrains.anko.intentFor
 
 /**
@@ -49,5 +52,11 @@ class ChatActivity : DrawerActivity() {
     private fun setupToolbar() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         title = chatRoomName
+
+        toolbar.clicks()
+            .autoDispose(this)
+            .subscribe {
+                ChatRoomInfoActivity.navigateTo(this, chatRoomId, chatRoomName)
+            }
     }
 }
