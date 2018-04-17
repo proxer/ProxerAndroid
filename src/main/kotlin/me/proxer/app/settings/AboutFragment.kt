@@ -9,7 +9,6 @@ import android.view.View
 import com.danielstone.materialaboutlibrary.ConvenienceBuilder
 import com.danielstone.materialaboutlibrary.MaterialAboutFragment
 import com.danielstone.materialaboutlibrary.items.MaterialAboutActionItem
-import com.danielstone.materialaboutlibrary.items.MaterialAboutItemOnClickAction
 import com.danielstone.materialaboutlibrary.model.MaterialAboutCard
 import com.danielstone.materialaboutlibrary.model.MaterialAboutList
 import com.mikepenz.aboutlibraries.Libs
@@ -110,7 +109,6 @@ class AboutFragment : MaterialAboutFragment() {
             .text(R.string.about_info_licenses_title)
             .subText(R.string.about_info_licenses_description)
             .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_clipboard_text).iconColor(context))
-            .setOnClickAction(MaterialAboutItemOnClickAction { })
             .setOnClickAction {
                 LibsBuilder().withAutoDetect(false)
                     .withShowLoadingProgress(false)

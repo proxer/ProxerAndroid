@@ -15,7 +15,7 @@ ext {
     gradleVersion = '4.7-rc-2'
 
     // Core plugins
-    androidPluginVersion = '3.2.0-alpha10'
+    androidPluginVersion = '3.2.0-alpha11'
     kotlinVersion = '1.2.31'
 
     // Utility plugins
@@ -80,7 +80,7 @@ ext {
     jsr305Version = '3.0.2'
     javaxExtrasVersion = '0.1.0'
     javaxExtrasVersion = '0.1.0'
-    alfredVersion = '3ea7529bd2'
+    alfredVersion = 'e8e0036a8f'
     rapidDecoderVersion = '7cdfca47fa'
     concealVersion = '2.0.2'
     betterLinkMovementMethodVersion = '2.2.0'

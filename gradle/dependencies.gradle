@@ -72,7 +72,7 @@ ext {
             easyHeaderFooterAdapter          : "com.github.rubengees:easy-header-footer-adapter:$easyHeaderFooterAdapterVersion",
             kOptional                        : "com.gojuno.koptional:koptional-rxjava2-extensions:$kOptionalVersion",
             kotterknife                      : "com.github.rubengees:kotterknife:$kotterknifeVersion",
-            alfred                           : "com.hadisatrio.Alfred:annotations:$alfredVersion",
+            alfred                           : "com.github.rubengees.Alfred:annotations:$alfredVersion",
             rapidDecoder                     : "com.github.suckgamony.RapidDecoder:library:$rapidDecoderVersion",
             betterLinkMovementMethod         : "me.saket:better-link-movement-method:$betterLinkMovementMethodVersion",
 
@@ -100,7 +100,7 @@ ext {
     kaptDependencies = [
             roomCompiler  : "android.arch.persistence.room:compiler:$roomVersion",
             glideCompiler : "com.github.bumptech.glide:compiler:$glideVersion",
-            alfredCompiler: "com.hadisatrio.Alfred:compiler:$alfredVersion",
+            alfredCompiler: "com.github.rubengees.Alfred:compiler:$alfredVersion",
     ]
 
     transitiveImplementationDependencies = [

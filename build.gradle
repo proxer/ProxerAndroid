@@ -115,6 +115,7 @@ android {
     }
 
     lintOptions {
+        check 'Interoperability'
         warningsAsErrors = true
 
         lintConfig new File(rootDir, 'config/lint/lint.xml')
