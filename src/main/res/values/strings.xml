@@ -355,6 +355,8 @@
     <string name="fragment_media_list_tags">Enthaltene Tags</string>
     <string name="fragment_media_list_excluded_tags">Nicht enthaltene Tags</string>
     <string name="fragment_media_list_all_languages">Alle</string>
+    <string name="fragment_media_list_include_unrated_tags">Unbestimmte Tags einbeziehen</string>
+    <string name="fragment_media_list_include_spoiler_tags">Spoiler Tags einbeziehen</string>
 
     <string name="fragment_media_info_description">Beschreibung</string>
     <string name="fragment_media_info_fsk_constraints">FSK</string>

@@ -87,20 +87,22 @@ class ExpandableSelectionView @JvmOverloads constructor(
         resetButton.setIconicsImage(CommunityMaterial.Icon.cmd_undo, 32)
         toggleButton.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32)
 
-        controlContainer.clicks().mergeWith(toggleButton.clicks())
-            .autoDispose(context as LifecycleOwner)
-            .subscribeAndLogErrors {
-                isExtended = !isExtended
-            }
+        if (!isInEditMode) {
+            controlContainer.clicks().mergeWith(toggleButton.clicks())
+                .autoDispose(context as LifecycleOwner)
+                .subscribeAndLogErrors {
+                    isExtended = !isExtended
+                }
 
-        resetButton.clicks()
-            .autoDispose(context as LifecycleOwner)
-            .subscribeAndLogErrors {
-                selection = mutableListOf()
+            resetButton.clicks()
+                .autoDispose(context as LifecycleOwner)
+                .subscribeAndLogErrors {
+                    selection = mutableListOf()
 
-                handleSelection()
-                notifySelectionChangedListener()
-            }
+                    handleSelection()
+                    notifySelectionChangedListener()
+                }
+        }
     }
 
     override fun onSaveInstanceState(): Parcelable = SavedState(super.onSaveInstanceState(), selection, isExtended)

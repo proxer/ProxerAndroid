@@ -21,6 +21,8 @@ import me.proxer.library.enums.FskConstraint
 import me.proxer.library.enums.Language
 import me.proxer.library.enums.MediaSearchSortCriteria
 import me.proxer.library.enums.MediaType
+import me.proxer.library.enums.TagRateFilter
+import me.proxer.library.enums.TagSpoilerFilter
 import me.proxer.library.enums.TagType
 import org.threeten.bp.LocalDateTime
 import java.util.Date
@@ -40,7 +42,9 @@ class MediaListViewModel(
     var excludedGenres: List<LocalTag>,
     var fskConstraints: EnumSet<FskConstraint>,
     var tags: List<LocalTag>,
-    var excludedTags: List<LocalTag>
+    var excludedTags: List<LocalTag>,
+    var tagRateFilter: TagRateFilter?,
+    var tagSpoilerFilter: TagSpoilerFilter?
 ) : PagedContentViewModel<MediaListEntry>() {
 
     override val itemsOnPage = 30
@@ -61,6 +65,8 @@ class MediaListViewModel(
             .fskConstraints(fskConstraints)
             .tags(tags.map { it.id }.toSet())
             .excludedTags(excludedTags.map { it.id }.toSet())
+            .tagRateFilter(tagRateFilter)
+            .tagSpoilerFilter(tagSpoilerFilter)
             .type(type)
 
     var sortCriteria by Delegates.observable(sortCriteria, { _, old, new ->

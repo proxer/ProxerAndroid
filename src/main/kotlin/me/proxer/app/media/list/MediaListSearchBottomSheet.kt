@@ -7,6 +7,7 @@ import android.support.design.widget.BottomSheetBehavior.STATE_EXPANDED
 import android.view.View
 import android.view.ViewGroup
 import com.jakewharton.rxbinding2.view.clicks
+import com.jakewharton.rxbinding2.widget.checkedChanges
 import me.proxer.app.R
 import me.proxer.app.util.extension.ProxerLibExtensions
 import me.proxer.app.util.extension.autoDispose
@@ -17,6 +18,8 @@ import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.toAppString
 import me.proxer.library.enums.FskConstraint
 import me.proxer.library.enums.Language
+import me.proxer.library.enums.TagRateFilter
+import me.proxer.library.enums.TagSpoilerFilter
 
 /**
  * @author Ruben Gees
@@ -45,6 +48,16 @@ class MediaListSearchBottomSheet private constructor(
 
         initClickSubscriptions()
         initSelectionSubscriptions()
+
+        fragment.includeSpoilerTags.checkedChanges()
+            .skipInitialValue()
+            .autoDispose(fragment)
+            .subscribe { fragment.tagRateFilter = if (it) TagRateFilter.ALL else TagRateFilter.RATED_ONLY }
+
+        fragment.includeSpoilerTags.checkedChanges()
+            .skipInitialValue()
+            .autoDispose(fragment)
+            .subscribe { fragment.tagSpoilerFilter = if (it) TagSpoilerFilter.ALL else TagSpoilerFilter.NO_SPOILERS }
 
         val fskItems = FskConstraint.values().map { it.toAppString(fragment.requireContext()) }
         val languageItems = listOf(

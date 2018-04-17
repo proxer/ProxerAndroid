@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/searchBottomSheet"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -71,14 +72,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
-                    app:titleText="@string/fragment_media_list_genres" />
+                    app:titleText="@string/fragment_media_list_genres"
+                    tools:visibility="visible" />
 
                 <me.proxer.app.ui.view.ExpandableSelectionView
                     android:id="@+id/excludedGenreSelector"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
-                    app:titleText="@string/fragment_media_list_excluded_genres" />
+                    app:titleText="@string/fragment_media_list_excluded_genres"
+                    tools:visibility="visible" />
 
                 <me.proxer.app.ui.view.ExpandableSelectionView
                     android:id="@+id/fskSelector"
@@ -91,14 +94,39 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
-                    app:titleText="@string/fragment_media_list_tags" />
+                    app:titleText="@string/fragment_media_list_tags"
+                    tools:visibility="visible" />
 
                 <me.proxer.app.ui.view.ExpandableSelectionView
                     android:id="@+id/excludedTagSelector"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
-                    app:titleText="@string/fragment_media_list_excluded_tags" />
+                    app:titleText="@string/fragment_media_list_excluded_tags"
+                    tools:visibility="visible" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@color/divider" />
+
+                <CheckBox
+                    android:id="@+id/includeUnratedTags"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="-5dp"
+                    android:layout_marginLeft="-5dp"
+                    android:text="@string/fragment_media_list_include_unrated_tags" />
+
+                <CheckBox
+                    android:id="@+id/includeSpoilerTags"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="-5dp"
+                    android:layout_marginLeft="-5dp"
+                    android:text="@string/fragment_media_list_include_spoiler_tags" />
 
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>

@@ -13,6 +13,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.CheckBox
 import com.jakewharton.rxbinding2.support.v7.widget.queryTextChangeEvents
 import com.jakewharton.rxbinding2.view.actionViewEvents
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
@@ -36,6 +37,8 @@ import me.proxer.library.enums.FskConstraint
 import me.proxer.library.enums.Language
 import me.proxer.library.enums.MediaSearchSortCriteria
 import me.proxer.library.enums.MediaType
+import me.proxer.library.enums.TagRateFilter
+import me.proxer.library.enums.TagSpoilerFilter
 import org.jetbrains.anko.bundleOf
 import java.util.EnumSet
 import kotlin.properties.Delegates
@@ -56,6 +59,8 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
         private const val FSK_CONSTRAINTS_ARGUMENT = "fsk_constraints"
         private const val TAGS_ARGUMENT = "tags"
         private const val EXCLUDED_TAGS_ARGUMENT = "excluded_tags"
+        private const val TAG_RATE_FILTER_ARGUMENT = "tag_rate_filter"
+        private const val TAG_SPOILER_FILTER_ARGUMENT = "tag_spoiler_filter"
 
         fun newInstance(category: Category) = MediaListFragment().apply {
             arguments = bundleOf(CATEGORY_ARGUMENT to category)
@@ -67,7 +72,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
 
     override val viewModel by unsafeLazy {
         MediaListViewModelProvider.get(this, sortCriteria, type, searchQuery, language,
-            genres, excludedGenres, fskConstraints, tags, excludedTags)
+            genres, excludedGenres, fskConstraints, tags, excludedTags, tagRateFilter, tagSpoilerFilter)
     }
 
     override val layoutManager by unsafeLazy {
@@ -156,6 +161,24 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
             viewModel.excludedTags = value
         }
 
+    internal var tagRateFilter: TagRateFilter
+        get() = requireArguments().getSerializable(TAG_RATE_FILTER_ARGUMENT) as? TagRateFilter
+            ?: TagRateFilter.RATED_ONLY
+        set(value) {
+            requireArguments().putSerializable(TAG_RATE_FILTER_ARGUMENT, value)
+
+            viewModel.tagRateFilter = value
+        }
+
+    internal var tagSpoilerFilter: TagSpoilerFilter
+        get() = requireArguments().getSerializable(TAG_SPOILER_FILTER_ARGUMENT) as? TagSpoilerFilter
+            ?: TagSpoilerFilter.NO_SPOILERS
+        set(value) {
+            requireArguments().putSerializable(TAG_SPOILER_FILTER_ARGUMENT, value)
+
+            viewModel.tagSpoilerFilter = value
+        }
+
     private var searchBottomSheetManager by Delegates.notNull<MediaListSearchBottomSheet>()
 
     private val toolbar by unsafeLazy { requireActivity().findViewById<Toolbar>(R.id.toolbar) }
@@ -169,6 +192,8 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
     internal val fskSelector by bindView<ExpandableSelectionView>(R.id.fskSelector)
     internal val tagSelector by bindView<ExpandableSelectionView>(R.id.tagSelector)
     internal val excludedTagSelector by bindView<ExpandableSelectionView>(R.id.excludedTagSelector)
+    internal val includeUnratedTags by bindView<CheckBox>(R.id.includeUnratedTags)
+    internal val includeSpoilerTags by bindView<CheckBox>(R.id.includeSpoilerTags)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
