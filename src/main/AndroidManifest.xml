@@ -32,7 +32,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <intent-filter>
+            <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -42,166 +42,76 @@
                     android:host="proxer.me"
                     android:pathPattern="/news"
                     android:scheme="http" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
                     android:host="proxer.me"
                     android:pathPattern="/news"
                     android:scheme="https" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
                     android:host="proxer.me"
                     android:pathPattern="/chat"
                     android:scheme="http" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
                     android:host="proxer.me"
                     android:pathPattern="/chat"
                     android:scheme="https" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
                     android:host="proxer.me"
                     android:pathPattern="/messages"
                     android:scheme="http" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
                     android:host="proxer.me"
                     android:pathPattern="/messages"
                     android:scheme="https" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
                     android:host="proxer.me"
                     android:pathPattern="/anime"
                     android:scheme="http" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
                     android:host="proxer.me"
                     android:pathPattern="/anime"
                     android:scheme="https" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
                     android:host="proxer.me"
                     android:pathPattern="/anime/.*"
                     android:scheme="http" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
                     android:host="proxer.me"
                     android:pathPattern="/anime/.*"
                     android:scheme="https" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
                     android:host="proxer.me"
                     android:pathPattern="/calendar"
                     android:scheme="http" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
                     android:host="proxer.me"
                     android:pathPattern="/calendar"
                     android:scheme="https" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
                     android:host="proxer.me"
                     android:pathPattern="/manga"
                     android:scheme="http" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
                     android:host="proxer.me"
                     android:pathPattern="/manga"
                     android:scheme="https" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
                     android:host="proxer.me"
                     android:pathPattern="/manga/.*"
                     android:scheme="http" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
                     android:host="proxer.me"
@@ -217,7 +127,7 @@
         <activity
             android:name=".profile.ProfileActivity"
             android:theme="@style/Theme.App.Translucent">
-            <intent-filter>
+            <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -227,12 +137,6 @@
                     android:host="proxer.me"
                     android:pathPattern="/user/.*"
                     android:scheme="http" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
                     android:host="proxer.me"
@@ -255,6 +159,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="text/plain" />
             </intent-filter>
+
             <meta-data
                 android:name="android.service.chooser.chooser_target_service"
                 android:value=".chat.share.ConferenceChooserTargetService" />
@@ -271,7 +176,7 @@
         <activity
             android:name=".media.MediaActivity"
             android:theme="@style/Theme.App.Translucent">
-            <intent-filter>
+            <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -281,12 +186,6 @@
                     android:host="proxer.me"
                     android:pathPattern="/info/.*"
                     android:scheme="http" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
                     android:host="proxer.me"
@@ -321,7 +220,7 @@
         </activity>
 
         <activity android:name=".manga.MangaActivity">
-            <intent-filter>
+            <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -331,34 +230,16 @@
                     android:host="proxer.me"
                     android:pathPattern="/chapter/.*"
                     android:scheme="http" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
                     android:host="proxer.me"
                     android:pathPattern="/chapter/.*"
                     android:scheme="https" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
                     android:host="proxer.me"
                     android:pathPattern="/read/.*"
                     android:scheme="http" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
                     android:host="proxer.me"
@@ -368,7 +249,7 @@
         </activity>
 
         <activity android:name=".anime.AnimeActivity">
-            <intent-filter>
+            <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -378,12 +259,6 @@
                     android:host="proxer.me"
                     android:pathPattern="/watch/.*"
                     android:scheme="http" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
                     android:host="proxer.me"
@@ -393,7 +268,7 @@
         </activity>
 
         <activity android:name=".forum.TopicActivity">
-            <intent-filter>
+            <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -403,12 +278,6 @@
                     android:host="proxer.me"
                     android:pathPattern="/forum/.*/.*"
                     android:scheme="http" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
                     android:host="proxer.me"
