@@ -26,16 +26,12 @@ import java.util.concurrent.TimeUnit
 @GeneratedProvider
 class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ChatMessage>() {
 
-    override val isLoginRequired = true
     override val itemsOnPage = 50
 
     override val dataSingle: Single<List<ChatMessage>>
-        get() = Single.fromCallable { Validators.validateLogin() }
-            .flatMap {
-                api.chat().messages(chatRoomId)
+        get() = api.chat().messages(chatRoomId)
                     .messageId(data.value?.lastOrNull()?.id ?: "0")
                     .buildSingle()
-            }
 
     val sendMessageError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
 

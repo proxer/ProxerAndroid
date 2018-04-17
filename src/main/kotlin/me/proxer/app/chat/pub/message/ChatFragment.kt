@@ -21,9 +21,14 @@ import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.vanniktech.emoji.EmojiEditText
 import com.vanniktech.emoji.EmojiPopup
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotterknife.bindView
 import me.proxer.app.GlideApp
+import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.R
+import me.proxer.app.auth.LoginEvent
+import me.proxer.app.auth.LogoutEvent
 import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.ErrorUtils
@@ -134,7 +139,7 @@ class ChatFragment : PagedContentFragment<ChatMessage>() {
         innerAdapter.titleClickSubject
             .autoDispose(this)
             .subscribe { (view, item) ->
-                ProfileActivity.navigateTo(requireActivity(), item.id, item.username, item.image,
+                ProfileActivity.navigateTo(requireActivity(), item.userId, item.username, item.image,
                     if (view.drawable != null && item.image.isNotBlank()) view else null)
             }
 
@@ -169,6 +174,11 @@ class ChatFragment : PagedContentFragment<ChatMessage>() {
         innerAdapter.mentionsClickSubject
             .autoDispose(this)
             .subscribe { ProfileActivity.navigateTo(requireActivity(), username = it) }
+
+        Observable.merge(bus.register(LoginEvent::class.java), bus.register(LogoutEvent::class.java))
+            .observeOn(AndroidSchedulers.mainThread())
+            .autoDispose(this)
+            .subscribe { updateInputVisibility() }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -178,33 +188,27 @@ class ChatFragment : PagedContentFragment<ChatMessage>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (isReadOnly) {
-            emojiButton.visibility = View.GONE
-            sendButton.visibility = View.INVISIBLE
+        updateInputVisibility()
 
-            messageInput.isEnabled = false
-            messageInput.hint = getString(R.string.fragment_chat_read_only_message)
-        } else {
-            emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_emoticon))
+        emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_emoticon))
 
-            emojiButton.clicks()
-                .autoDispose(this)
-                .subscribe { emojiPopup.toggle() }
+        emojiButton.clicks()
+            .autoDispose(this)
+            .subscribe { emojiPopup.toggle() }
 
-            sendButton.clicks()
-                .autoDispose(this)
-                .subscribe {
-                    messageInput.text.toString().trim().let { text ->
-                        if (text.isNotBlank()) {
-                            viewModel.sendMessage(text)
+        sendButton.clicks()
+            .autoDispose(this)
+            .subscribe {
+                messageInput.text.toString().trim().let { text ->
+                    if (text.isNotBlank()) {
+                        viewModel.sendMessage(text)
 
-                            messageInput.text.clear()
+                        messageInput.text.clear()
 
-                            scrollToTop()
-                        }
+                        scrollToTop()
                     }
                 }
-        }
+            }
 
         viewModel.sendMessageError.observe(this, Observer {
             if (it != null) {
@@ -251,6 +255,28 @@ class ChatFragment : PagedContentFragment<ChatMessage>() {
     }
 
     override fun isAtTop() = layoutManager.isAtTop()
+
+    private fun updateInputVisibility() {
+        val isLoggedIn = StorageHelper.user != null
+
+        if (isReadOnly || !isLoggedIn) {
+            emojiButton.visibility = View.GONE
+            sendButton.visibility = View.INVISIBLE
+
+            messageInput.isEnabled = false
+
+            messageInput.hint = when {
+                isReadOnly -> getString(R.string.fragment_chat_read_only_message)
+                else -> getString(R.string.fragment_chat_login_required_message)
+            }
+        } else {
+            emojiButton.visibility = View.VISIBLE
+            sendButton.visibility = View.VISIBLE
+
+            messageInput.isEnabled = true
+            messageInput.hint = getString(R.string.fragment_messenger_message)
+        }
+    }
 
     private fun generateEmojiDrawable(iconicRes: IIcon) = IconicsDrawable(context)
         .icon(iconicRes)

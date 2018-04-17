@@ -18,7 +18,6 @@ class HistoryViewModel(
     private val username: String?
 ) : PagedContentViewModel<UserHistoryEntry>() {
 
-    override val isLoginRequired = true
     override val itemsOnPage = 50
 
     override val endpoint: PagingLimitEndpoint<List<UserHistoryEntry>>
