@@ -17,6 +17,7 @@ import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.entity.chat.ChatMessage
 import me.proxer.library.enums.ChatMessageAction
+import java.util.Collections.emptyList
 import java.util.Date
 import java.util.LinkedList
 import java.util.Queue
@@ -105,25 +106,30 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ChatMessage
         val messageIdsToDelete = newData.filter { it.action == ChatMessageAction.REMOVE_MESSAGE }
             .flatMap { listOf(it.id, it.message) }
 
+        val previousSentMessageIdAmount = sentMessageIds.size
+        val existingUnsendMessages = data.value?.takeWhile { it.id.toLong() < 0 } ?: emptyList()
+
+        sentMessageIds.removeAll(newData.map { it.id })
+
         val result = data.value.let { existingData ->
             when (existingData) {
                 null -> newData
                 else -> when (currentId) {
-                    "0" -> newData + existingData.filter { oldItem ->
-                        oldItem.id !in sentMessageIds && newData.none { newItem -> oldItem.id == newItem.id }
+                    "0" -> newData + existingData.dropWhile { it.id.toLong() < 0 }.filter { oldItem ->
+                        newData.none { newItem -> oldItem.id == newItem.id }
                     }
-                    else -> existingData.filter { oldItem ->
-                        oldItem.id !in sentMessageIds && newData.none { newItem -> oldItem.id == newItem.id }
+                    else -> existingData.dropWhile { it.id.toLong() < 0 }.filter { oldItem ->
+                        newData.none { newItem -> oldItem.id == newItem.id }
                     } + newData
                 }
             }
         }
 
-        sentMessageIds.removeAll { existingId -> newData.any { newItem -> newItem.id == existingId } }
+        val mergedResult = existingUnsendMessages.dropLast(previousSentMessageIdAmount - sentMessageIds.size) + result
 
         return when (messageIdsToDelete.isNotEmpty()) {
-            true -> result.filterNot { it.id in messageIdsToDelete }
-            false -> result
+            true -> mergedResult.filterNot { it.id in messageIdsToDelete }
+            false -> mergedResult
         }
     }
 
