@@ -46,6 +46,8 @@ abstract class ImageTabsActivity : DrawerActivity() {
     protected open val headerImage: ImageView by bindView(R.id.image)
     protected open val tabs: TabLayout by bindView(R.id.tabs)
 
+    private var tabLayoutHelper: TabLayoutHelper? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -70,6 +72,13 @@ abstract class ImageTabsActivity : DrawerActivity() {
         } else {
             setupContent(savedInstanceState)
         }
+    }
+
+    override fun onDestroy() {
+        tabLayoutHelper?.release()
+        tabLayoutHelper = null
+
+        super.onDestroy()
     }
 
     override fun onBackPressed() = when (isHeaderImageVisible) {
@@ -146,7 +155,7 @@ abstract class ImageTabsActivity : DrawerActivity() {
             viewPager.currentItem = itemToDisplay
         }
 
-        TabLayoutHelper(tabs, viewPager).apply { isAutoAdjustTabModeEnabled = true }
+        tabLayoutHelper = TabLayoutHelper(tabs, viewPager).apply { isAutoAdjustTabModeEnabled = true }
     }
 
     protected open fun loadEmptyImage() {}

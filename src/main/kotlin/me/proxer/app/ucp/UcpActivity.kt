@@ -35,6 +35,8 @@ class UcpActivity : DrawerActivity() {
     private val viewPager: ViewPager by bindView(R.id.viewPager)
     private val tabs: TabLayout by bindView(R.id.tabs)
 
+    private var tabLayoutHelper: TabLayoutHelper? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -42,7 +44,14 @@ class UcpActivity : DrawerActivity() {
 
         viewPager.adapter = sectionsPagerAdapter
 
-        TabLayoutHelper(tabs, viewPager).apply { isAutoAdjustTabModeEnabled = true }
+        tabLayoutHelper = TabLayoutHelper(tabs, viewPager).apply { isAutoAdjustTabModeEnabled = true }
+    }
+
+    override fun onDestroy() {
+        tabLayoutHelper?.release()
+        tabLayoutHelper = null
+
+        super.onDestroy()
     }
 
     private fun setupToolbar() {

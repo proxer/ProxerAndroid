@@ -32,8 +32,6 @@ class ChatContainerFragment : BaseFragment() {
     override val hostingActivity: MainActivity
         get() = activity as MainActivity
 
-    private val sectionsPagerAdapter by unsafeLazy { SectionsPagerAdapter(childFragmentManager) }
-
     private val viewPager: ViewPager by bindView(R.id.viewPager)
     private val tabs: TabLayout by unsafeLazy { hostingActivity.tabs }
 
@@ -47,7 +45,7 @@ class ChatContainerFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         tabs.visibility = View.VISIBLE
-        viewPager.adapter = sectionsPagerAdapter
+        viewPager.adapter = SectionsPagerAdapter(childFragmentManager)
 
         tabLayoutHelper = TabLayoutHelper(tabs, viewPager).apply { isAutoAdjustTabModeEnabled = true }
     }
