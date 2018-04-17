@@ -17,7 +17,6 @@ import me.proxer.app.R
 import me.proxer.app.anime.AnimeAdapter.ViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.util.Utils
-import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.convertToDateTime
 import me.proxer.app.util.extension.defaultLoad
 import me.proxer.library.util.ProxerUrls
@@ -28,7 +27,7 @@ import me.proxer.library.util.ProxerUrls
 class AnimeAdapter(savedInstanceState: Bundle?) : BaseAdapter<AnimeStream, ViewHolder>() {
 
     private companion object {
-        private const val EXPANDED_STATE = "anime_stream_expanded"
+        private const val EXPANDED_ITEM_STATE = "anime_stream_expanded"
     }
 
     var glide: GlideRequests? = null
@@ -36,12 +35,12 @@ class AnimeAdapter(savedInstanceState: Bundle?) : BaseAdapter<AnimeStream, ViewH
     val translatorGroupClickSubject: PublishSubject<AnimeStream> = PublishSubject.create()
     val playClickSubject: PublishSubject<AnimeStream> = PublishSubject.create()
 
-    private val expansionMap: ParcelableStringBooleanMap
+    private var expandedItem: String?
 
     init {
-        expansionMap = when (savedInstanceState) {
-            null -> ParcelableStringBooleanMap()
-            else -> savedInstanceState.getParcelable(EXPANDED_STATE)
+        expandedItem = when (savedInstanceState) {
+            null -> null
+            else -> savedInstanceState.getString(EXPANDED_ITEM_STATE)
         }
 
         setHasStableIds(true)
@@ -63,7 +62,7 @@ class AnimeAdapter(savedInstanceState: Bundle?) : BaseAdapter<AnimeStream, ViewH
         glide = null
     }
 
-    override fun saveInstanceState(outState: Bundle) = outState.putParcelable(EXPANDED_STATE, expansionMap)
+    override fun saveInstanceState(outState: Bundle) = outState.putString(EXPANDED_ITEM_STATE, expandedItem)
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -82,7 +81,18 @@ class AnimeAdapter(savedInstanceState: Bundle?) : BaseAdapter<AnimeStream, ViewH
         init {
             nameContainer.setOnClickListener {
                 withSafeAdapterPosition(this) {
-                    expansionMap.putOrRemove(data[it].id)
+                    val previousItemId = expandedItem
+                    val newItemId = data[it].id
+
+                    if (newItemId == previousItemId) {
+                        expandedItem = null
+                    } else {
+                        expandedItem = newItemId
+
+                        if (previousItemId != null) {
+                            notifyItemChanged(data.indexOfFirst { it.id == previousItemId })
+                        }
+                    }
 
                     notifyItemChanged(it)
                 }
@@ -118,7 +128,7 @@ class AnimeAdapter(savedInstanceState: Bundle?) : BaseAdapter<AnimeStream, ViewH
 
             glide?.defaultLoad(image, ProxerUrls.hosterImage(item.image))
 
-            if (expansionMap.containsKey(item.id)) {
+            if (expandedItem == item.id) {
                 uploadInfoContainer.visibility = View.VISIBLE
             } else {
                 uploadInfoContainer.visibility = View.GONE
