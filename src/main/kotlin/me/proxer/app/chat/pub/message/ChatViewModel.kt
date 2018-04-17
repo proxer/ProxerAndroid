@@ -131,8 +131,8 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ChatMessage
         pollingDisposable?.dispose()
         pollingDisposable = Single.fromCallable { Validators.validateLogin() }
             .flatMap { api.chat().messages(chatRoomId).messageId("0").buildSingle() }
-            .repeatWhen { it.concatMap { Flowable.timer(300, TimeUnit.SECONDS) } }
-            .retryWhen { it.concatMap { Flowable.timer(300, TimeUnit.SECONDS) } }
+            .repeatWhen { it.concatMap { Flowable.timer(3, TimeUnit.SECONDS) } }
+            .retryWhen { it.concatMap { Flowable.timer(3, TimeUnit.SECONDS) } }
             .map { newData -> mergeNewDataWithExistingData(newData, "0") }
             .let { if (!immediate) it.delaySubscription(3, TimeUnit.SECONDS) else it }
             .subscribeOn(Schedulers.io())
