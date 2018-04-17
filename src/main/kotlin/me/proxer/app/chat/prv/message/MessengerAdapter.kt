@@ -168,7 +168,7 @@ class MessengerAdapter(
                 while (iterator.hasNext()) {
                     val nextKey = iterator.next().key
 
-                    if (newData.find { it.id.toString() == nextKey } == null) {
+                    if (newData.none { it.id.toString() == nextKey }) {
                         iterator.remove()
                     }
                 }

@@ -13,6 +13,7 @@ import android.widget.TextView
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.klinker.android.link_builder.TouchableMovementMethod
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
+import com.mikepenz.iconics.IconicsDrawable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.GlideRequests
@@ -23,6 +24,7 @@ import me.proxer.app.util.Utils
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.convertToRelativeReadableTime
+import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.library.entity.chat.ChatMessage
 import me.proxer.library.util.ProxerUrls
@@ -154,6 +156,16 @@ class ChatAdapter(savedInstanceState: Bundle?) : BaseAdapter<ChatMessage, Messag
         if (newData.isEmpty()) {
             messageSelectionMap.clear()
             timeDisplayMap.clear()
+        } else {
+            messageSelectionMap.entries.iterator().let { iterator ->
+                while (iterator.hasNext()) {
+                    val nextKey = iterator.next().key
+
+                    if (newData.none { it.id == nextKey }) {
+                        iterator.remove()
+                    }
+                }
+            }
         }
 
         if (messageSelectionMap.size <= 0) {
@@ -227,6 +239,7 @@ class ChatAdapter(savedInstanceState: Bundle?) : BaseAdapter<ChatMessage, Messag
         internal open fun bind(message: ChatMessage, marginTop: Int, marginBottom: Int) {
             applyMessage(message)
             applyTime(message)
+            applySendStatus(message)
             applySelection(message)
             applyTimeVisibility(message)
             applyMargins(marginTop, marginBottom)
@@ -280,6 +293,16 @@ class ChatAdapter(savedInstanceState: Bundle?) : BaseAdapter<ChatMessage, Messag
 
         internal open fun applyTime(message: ChatMessage) {
             time.text = message.date.convertToRelativeReadableTime(time.context)
+        }
+
+        internal open fun applySendStatus(message: ChatMessage) = if (message.id.toLong() < 0) {
+            text.setCompoundDrawablesWithIntrinsicBounds(null, null, IconicsDrawable(text.context)
+                .icon(CommunityMaterial.Icon.cmd_clock)
+                .sizeDp(24)
+                .paddingDp(4)
+                .iconColor(text.context), null)
+        } else {
+            text.setCompoundDrawables(null, null, null, null)
         }
 
         internal open fun applySelection(message: ChatMessage) {
