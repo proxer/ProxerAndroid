@@ -9,6 +9,7 @@ import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.base.PagedViewModel
 import me.proxer.app.util.ErrorUtils
+import me.proxer.app.util.RxRetryWithDelay
 import me.proxer.app.util.Validators
 import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.data.StorageHelper
@@ -160,6 +161,7 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ChatMessage
         sendMessageQueue.poll()?.let { item ->
             sendMessageDisposable = Single.fromCallable { Validators.validateLogin() }
                 .flatMap { api.chat().sendMessage(chatRoomId, item.message).buildOptionalSingle() }
+                .retryWhen(RxRetryWithDelay(2, 3000))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeAndLogErrors({
