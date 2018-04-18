@@ -2,7 +2,7 @@ ext {
     // App
     appVersionMajor = 1
     appVersionMinor = 4
-    appVersionPatch = 0
+    appVersionPatch = 1
 
     minSdkVersion = 16
     targetSdkVersion = 27
@@ -33,7 +33,7 @@ ext {
     lifecycleVersion = '1.1.1'
     roomVersion = '1.1.0-beta2'
     androidJobVersion = '1.2.5'
-    proxerLibVersion = '4.4.0'
+    proxerLibVersion = '4.4.1'
 
     // RxJava
     rxJavaVersion = '2.1.12'
