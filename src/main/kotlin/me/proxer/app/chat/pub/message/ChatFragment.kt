@@ -70,7 +70,10 @@ class ChatFragment : PagedContentFragment<ChatMessage>() {
             Utils.setStatusBarColorIfPossible(activity, R.color.colorPrimary)
 
             innerAdapter.selectedMessages.let {
-                menu.findItem(R.id.reply).isVisible = it.size == 1 && it.first().userId != StorageHelper.user?.id
+                val user = StorageHelper.user
+
+                menu.findItem(R.id.reply).isVisible = it.size == 1 && it.first().userId != user?.id && user != null
+                menu.findItem(R.id.report).isVisible = it.size == 1 && it.first().userId != user?.id && user != null
             }
 
             return false
@@ -80,6 +83,7 @@ class ChatFragment : PagedContentFragment<ChatMessage>() {
             when (item.itemId) {
                 R.id.copy -> handleCopyClick()
                 R.id.reply -> handleReplyClick()
+                R.id.report -> handleReportClick()
                 else -> return false
             }
 
@@ -178,7 +182,11 @@ class ChatFragment : PagedContentFragment<ChatMessage>() {
         Observable.merge(bus.register(LoginEvent::class.java), bus.register(LogoutEvent::class.java))
             .observeOn(AndroidSchedulers.mainThread())
             .autoDispose(this)
-            .subscribe { updateInputVisibility() }
+            .subscribe {
+                updateInputVisibility()
+
+                actionMode?.invalidate()
+            }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -302,6 +310,14 @@ class ChatFragment : PagedContentFragment<ChatMessage>() {
         messageInput.requestFocus()
 
         requireContext().inputMethodManager.showSoftInput(messageInput, InputMethodManager.SHOW_IMPLICIT)
+
+        actionMode?.finish()
+    }
+
+    private fun handleReportClick() {
+        val messageId = innerAdapter.selectedMessages.first().id
+
+        ChatReportDialog.show(hostingActivity, messageId)
 
         actionMode?.finish()
     }

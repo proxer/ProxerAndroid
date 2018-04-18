@@ -83,7 +83,7 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
         }
 
         override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
-            IconicsMenuInflaterUtil.inflate(mode.menuInflater, context, R.menu.fragment_chat_cab, menu, true)
+            IconicsMenuInflaterUtil.inflate(mode.menuInflater, context, R.menu.fragment_messenger_cab, menu, true)
 
             return true
         }

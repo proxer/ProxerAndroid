@@ -3,15 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/report"
-        android:title="@string/action_report"
-        app:ico_color="@android:color/white"
-        app:ico_icon="cmd_alert_octagon"
-        app:ico_padding="2dp"
-        app:ico_size="24dp"
-        app:showAsAction="ifRoom" />
-
-    <item
         android:id="@+id/copy"
         android:title="@string/action_copy"
         app:ico_color="@android:color/white"

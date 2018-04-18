@@ -320,6 +320,11 @@
     <string name="dialog_rating_neutral">Später erinnern</string>
     <string name="dialog_rating_negative">Nicht mehr fragen</string>
 
+    <string name="dialog_chat_report_title">Nachricht melden</string>
+    <string name="dialog_chat_report_positive">Senden</string>
+    <string name="dialog_chat_report_message_hint">Nachricht an den Moderator</string>
+    <string name="dialog_chat_error_message">Bitte gib eine Nachricht an</string>
+
     <string name="dialog_crash_title">Fehlerbericht</string>
     <string name="dialog_crash_neutral">Kopieren</string>
     <string name="dialog_crash_negative">Schließen</string>
@@ -577,6 +582,7 @@
     <string name="action_copy">Kopieren</string>
     <string name="action_reply">Antworten</string>
     <string name="action_delete_all">Alle löschen</string>
+    <string name="action_report">Melden</string>
 
     <string name="action_filter_all">Alles</string>
     <string name="action_filter_anime_series">Serien</string>
