@@ -49,12 +49,10 @@ class AboutFragment : MaterialAboutFragment() {
 
         private val EXCLUDED_LIBRARIES = arrayOf("fastadapter", "materialize")
 
-        private val REPOSITORY_LINK = HttpUrl.Builder()
-            .scheme("https")
-            .host("github.com")
-            .addPathSegment("proxer")
-            .addPathSegment("ProxerAndroid")
-            .build()
+        private val FACEBOOK_LINK = Utils.parseAndFixUrl("https://facebook.com/Anime.Proxer.Me")
+        private val TWITTER_LINK = Utils.parseAndFixUrl("https://twitter.com/proxerme")
+        private val YOUTUBE_LINK = Utils.parseAndFixUrl("https://youtube.com/channel/UC7h-fT9Y9XFxuZ5GZpbcrtA/")
+        private val REPOSITORY_LINK = Utils.parseAndFixUrl("https://github.com/proxer/ProxerAndroid")
 
         private const val SUPPORT_ID = "374605"
         private const val SUPPORT_CATEGORY = "anwendungen"
@@ -87,6 +85,10 @@ class AboutFragment : MaterialAboutFragment() {
             .apply { buildInfoItems(context).forEach { addItem(it) } }
             .build())
         .addCard(MaterialAboutCard.Builder()
+            .title(R.string.about_social_media_title)
+            .apply { buildSocialMediaItems(context).forEach { addItem(it) } }
+            .build())
+        .addCard(MaterialAboutCard.Builder()
             .title(R.string.about_support_title)
             .apply { buildSupportItems(context).forEach { addItem(it) } }
             .build())
@@ -104,32 +106,52 @@ class AboutFragment : MaterialAboutFragment() {
         ConvenienceBuilder.createAppTitleItem(context),
         ConvenienceBuilder.createVersionActionItem(context,
             IconicsDrawable(context, CommunityMaterial.Icon.cmd_tag).iconColor(context),
-            getString(R.string.about_info_version_title), false),
+            getString(R.string.about_version_title), false),
         MaterialAboutActionItem.Builder()
-            .text(R.string.about_info_licenses_title)
-            .subText(R.string.about_info_licenses_description)
+            .text(R.string.about_licenses_title)
+            .subText(R.string.about_licenses_description)
             .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_clipboard_text).iconColor(context))
             .setOnClickAction {
                 LibsBuilder().withAutoDetect(false)
                     .withShowLoadingProgress(false)
                     .withAboutVersionShown(false)
                     .withAboutIconShown(false)
-                    .withAboutDescription(getString(R.string.about_info_licenses_activity_description))
+                    .withAboutDescription(getString(R.string.about_licenses_activity_description))
                     .withLibraries(*LIBRARIES)
                     .withExcludedLibraries(*EXCLUDED_LIBRARIES)
                     .withFields(R.string::class.java.fields)
                     .withActivityStyle(getAboutLibrariesActivityStyle())
                     .withUiListener(NavigationBarLibsUIListener())
-                    .withActivityTitle(getString(R.string.about_info_licenses_activity_title))
+                    .withActivityTitle(getString(R.string.about_licenses_activity_title))
                     .start(requireActivity())
             }.build(),
         MaterialAboutActionItem.Builder()
-            .text(R.string.about_info_source_code)
-            .subText(R.string.about_info_source_code_description)
+            .text(R.string.about_source_code)
+            .subText(R.string.about_source_code_description)
             .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_code_braces).iconColor(context))
-            .setOnClickAction {
-                showPage(REPOSITORY_LINK)
-            }.build()
+            .setOnClickAction { showPage(REPOSITORY_LINK) }
+            .build()
+    )
+
+    private fun buildSocialMediaItems(context: Context) = listOf(
+        MaterialAboutActionItem.Builder()
+            .text(R.string.about_facebook_title)
+            .subText(R.string.about_facebook_description)
+            .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_facebook).iconColor(context))
+            .setOnClickAction { showPage(FACEBOOK_LINK) }
+            .build(),
+        MaterialAboutActionItem.Builder()
+            .text(R.string.about_twitter_title)
+            .subText(R.string.about_twitter_description)
+            .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_twitter).iconColor(context))
+            .setOnClickAction { showPage(TWITTER_LINK) }
+            .build(),
+        MaterialAboutActionItem.Builder()
+            .text(R.string.about_youtube_title)
+            .subText(R.string.about_youtube_description)
+            .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_youtube_play).iconColor(context))
+            .setOnClickAction { showPage(YOUTUBE_LINK) }
+            .build()
     )
 
     private fun buildSupportItems(context: Context) = listOf(
@@ -137,9 +159,8 @@ class AboutFragment : MaterialAboutFragment() {
             .text(R.string.about_support_forum_title)
             .subText(R.string.about_support_forum_description)
             .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_forum).iconColor(context))
-            .setOnClickAction {
-                TopicActivity.navigateTo(requireActivity(), SUPPORT_ID, SUPPORT_CATEGORY)
-            }.build(),
+            .setOnClickAction { TopicActivity.navigateTo(requireActivity(), SUPPORT_ID, SUPPORT_CATEGORY) }
+            .build(),
         MaterialAboutActionItem.Builder()
             .text(R.string.about_support_message_title)
             .subText(R.string.about_support_message_description)
@@ -165,9 +186,8 @@ class AboutFragment : MaterialAboutFragment() {
             .text(R.string.about_developer_github_title)
             .subText(DEVELOPER_GITHUB_NAME)
             .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_github_circle).iconColor(context))
-            .setOnClickAction {
-                showPage(Utils.parseAndFixUrl("https://github.com/$DEVELOPER_GITHUB_NAME"))
-            }.build(),
+            .setOnClickAction { showPage(Utils.parseAndFixUrl("https://github.com/$DEVELOPER_GITHUB_NAME")) }
+            .build(),
         MaterialAboutActionItem.Builder()
             .text(getString(R.string.about_developer_proxer_title))
             .subText(DEVELOPER_PROXER_NAME)
@@ -176,7 +196,8 @@ class AboutFragment : MaterialAboutFragment() {
             })
             .setOnClickAction {
                 ProfileActivity.navigateTo(requireActivity(), DEVELOPER_PROXER_ID, DEVELOPER_PROXER_NAME, null)
-            }.build()
+            }
+            .build()
     )
 
     private fun showPage(url: HttpUrl, forceBrowser: Boolean = false) {

@@ -543,18 +543,25 @@
     <string name="preference_notifications_summary_on">Benachrichtigungen sind aktiviert</string>
     <string name="preference_notifications_interval_title">Aktualisierungshäufigkeit</string>
 
-    <string name="about_info_version_title">Version</string>
-    <string name="about_info_licenses_title">Lizenzen</string>
-    <string name="about_info_licenses_description">Lizenzen von Bibliotheken, die in dieser App verwendet werden
+    <string name="about_version_title">Version</string>
+    <string name="about_licenses_title">Lizenzen</string>
+    <string name="about_licenses_description">Lizenzen von Bibliotheken, die in dieser App verwendet werden
     </string>
-    <string name="about_info_licenses_activity_title">Lizenzen</string>
-    <string name="about_info_licenses_activity_description" tools:ignore="TypographyQuotes">
+    <string name="about_licenses_activity_title">Lizenzen</string>
+    <string name="about_licenses_activity_description" tools:ignore="TypographyQuotes">
         <![CDATA[In dieser App werden Icons von <a href="http://www.freepik.com/">Freepik</a>,
         <a href="https://material.io/icons/">Google</a> und <a href="https://materialdesignicons.com/">weiteren
         Mitwirkenden</a> (Unter \"View the Contributors\") verwendet.<br><br>Außerdem werden die folgenden Open
         Source Bibliotheken eingesetzt.]]></string>
-    <string name="about_info_source_code">Quellcode</string>
-    <string name="about_info_source_code_description">Sieh dir den Quellcode auf GitHub an</string>
+    <string name="about_source_code">Quellcode</string>
+    <string name="about_source_code_description">Sieh dir den Quellcode auf GitHub an</string>
+    <string name="about_social_media_title">Soziale Medien</string>
+    <string name="about_facebook_title">Facebook</string>
+    <string name="about_facebook_description">Abonniere Proxer.Me auf Facebook</string>
+    <string name="about_twitter_title">Twitter</string>
+    <string name="about_twitter_description">Folge Proxer.Me auf Twitter</string>
+    <string name="about_youtube_title">YouTube</string>
+    <string name="about_youtube_description">Abonniere Proxer.Me auf YouTube</string>
     <string name="about_support_title">Support</string>
     <string name="about_support_forum_title">Forum</string>
     <string name="about_support_forum_description">Berichte Fehler oder mache Verbesserungsvorschläge im Forum</string>
