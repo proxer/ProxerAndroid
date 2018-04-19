@@ -37,10 +37,6 @@ class MainActivity : DrawerActivity() {
         private const val TITLE_STATE = "title"
         private const val SECTION_EXTRA = "section"
 
-        private const val SHORTCUT_NEWS = "news"
-        private const val SHORTCUT_CHAT = "chat"
-        private const val SHORTCUT_BOOKMARKS = "bookmarks"
-
         fun navigateToSection(context: Context, section: DrawerItem) = context
             .startActivity(getSectionIntent(context, section))
 

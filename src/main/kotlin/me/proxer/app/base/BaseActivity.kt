@@ -50,6 +50,14 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
+    /* Workaround for a bug in the Android menu management */
+    @Suppress("OverridingDeprecatedMember")
+    override fun supportInvalidateOptionsMenu() {
+        this.runOnUiThread {
+            super.invalidateOptionsMenu()
+        }
+    }
+
     fun setLikelyUrl(url: HttpUrl): Boolean {
         return customTabsHelper.mayLaunchUrl(url.androidUri(), bundleOf(), emptyList())
     }
