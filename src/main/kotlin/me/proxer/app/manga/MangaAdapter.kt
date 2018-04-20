@@ -123,14 +123,14 @@ class MangaAdapter(savedInstanceState: Bundle?, private val isVertical: Boolean)
                 })
             }
 
+            image.setOnClickListener {
+                withSafeAdapterPosition(this, {
+                    clickSubject.onNext(it)
+                })
+            }
+
             if (!isVertical) {
                 itemView.layoutParams.height = MATCH_PARENT
-
-                image.setOnClickListener {
-                    withSafeAdapterPosition(this, {
-                        clickSubject.onNext(it)
-                    })
-                }
             }
         }
 

@@ -125,7 +125,13 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
 
         innerAdapter.clickSubject
             .autoDispose(this)
-            .subscribeAndLogErrors { recyclerView.smoothScrollToPosition(it + 2) }
+            .subscribeAndLogErrors {
+                if (isVertical) {
+                    recyclerView.smoothScrollBy(0, (DeviceUtils.getScreenHeight(requireContext()) * 0.5).toInt())
+                } else {
+                    recyclerView.smoothScrollToPosition(it + 2)
+                }
+            }
 
         viewModel.setEpisode(episode, false)
     }
