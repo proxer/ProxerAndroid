@@ -1,5 +1,6 @@
 package me.proxer.app.ui.crash
 
+import android.os.Build
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.widget.Button
@@ -29,10 +30,18 @@ class CrashActivity : BaseActivity() {
     }
 
     private val config: CaocConfig
-        get() = CustomActivityOnCrash.getConfigFromIntent(intent) ?: CaocConfig()
+        get() = try {
+            CustomActivityOnCrash.getConfigFromIntent(intent)
+        } catch (ignored: Exception) { // Workaround for a bug in Caoc.
+            CaocConfig()
+        } ?: CaocConfig()
 
     private val errorDetails: String
-        get() = CustomActivityOnCrash.getAllErrorDetailsFromIntent(this, intent)
+        get() {
+            val androidVersion = "Android version: ${Build.VERSION.RELEASE}\n"
+
+            return androidVersion + CustomActivityOnCrash.getAllErrorDetailsFromIntent(this, intent)
+        }
 
     private val stacktrace: String
         get() = CustomActivityOnCrash.getStackTraceFromIntent(intent) ?: ""
