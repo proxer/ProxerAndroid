@@ -408,6 +408,7 @@
     <string name="fragment_manga_previous_chapter">Vorheriges Kapitel</string>
     <string name="fragment_manga_bookmark_next_chapter">Lesezeichen: Nächstes Kapitel</string>
     <string name="fragment_manga_bookmark_this_chapter">Lesezeichen: Dieses Kapitel</string>
+    <string name="fragment_manga_toggle_orientation">Leserichtung ändern</string>
 
     <string name="fragment_translator_group_description">Beschreibung</string>
     <string name="fragment_translator_group_language">Sprache</string>

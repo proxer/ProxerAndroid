@@ -42,7 +42,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-class MangaAdapter(savedInstanceState: Bundle?, private val isVertical: Boolean) : BaseAdapter<Page, ViewHolder>() {
+class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseAdapter<Page, ViewHolder>() {
 
     private companion object {
         private const val REQUIRES_FALLBACK_STATE = "manga_requires_fallback_state"
@@ -128,22 +128,21 @@ class MangaAdapter(savedInstanceState: Bundle?, private val isVertical: Boolean)
                     clickSubject.onNext(it)
                 })
             }
-
-            if (!isVertical) {
-                itemView.layoutParams.height = MATCH_PARENT
-            }
         }
 
         fun bind(item: Page) {
+            val width = DeviceUtils.getScreenWidth(image.context)
+            val scale = width.toFloat() / item.width.toFloat() * 2f
+
+            image.setDoubleTapZoomScale(scale)
+            image.maxScale = scale
+
             if (isVertical) {
-                val width = DeviceUtils.getScreenWidth(image.context)
                 val height = (item.height * width.toFloat() / item.width.toFloat()).toInt()
-                val scale = width.toFloat() / item.width.toFloat() * 2f
 
                 itemView.layoutParams.height = height
-
-                image.setDoubleTapZoomScale(scale)
-                image.maxScale = scale
+            } else {
+                itemView.layoutParams.height = MATCH_PARENT
             }
 
             if (item.name.endsWith("png") || requiresFallback[item.decodedName] == true) {

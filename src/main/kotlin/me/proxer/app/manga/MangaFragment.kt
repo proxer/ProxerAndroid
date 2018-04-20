@@ -13,10 +13,15 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.view.Gravity
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import com.github.rubensousa.gravitysnaphelper.GravityPagerSnapHelper
+import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import io.reactivex.Observable
 import kotterknife.bindView
@@ -113,6 +118,8 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
     private val toolbar by unsafeLazy { requireActivity().findViewById<Toolbar>(R.id.toolbar) }
     private val recyclerView: RecyclerView by bindView(R.id.recyclerView)
 
+    private val mediumAnimationTime by unsafeLazy { resources.getInteger(android.R.integer.config_mediumAnimTime) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -134,6 +141,8 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
             }
 
         viewModel.setEpisode(episode, false)
+
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -205,15 +214,38 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
             }
         })
 
-        if (isVertical) {
-            recyclerView.layoutManager = LinearLayoutManager(context)
-        } else {
-            recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            GravityPagerSnapHelper(Gravity.END).attachToRecyclerView(recyclerView)
-        }
+        bindLayoutManager()
 
         recyclerView.setHasFixedSize(true)
         recyclerView.adapter = adapter
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater?) {
+        IconicsMenuInflaterUtil.inflate(inflater, context, R.menu.fragment_manga, menu, true)
+
+        toolbar.post {
+            toolbar.findViewById<View>(R.id.toggle_orientation).rotation = if (isVertical) 0.0f else 90.0f
+        }
+
+        return super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.toggle_orientation -> {
+                isVertical = !isVertical
+
+                PreferenceHelper.setVerticalReaderEnabled(requireContext(), isVertical)
+
+                bindOrientationOptionsItem()
+                bindToolbar()
+                bindHeaderAndFooterHeight()
+                bindLayoutManager()
+
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onDestroyView() {
@@ -232,11 +264,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
     override fun showData(data: MangaChapterInfo) {
         super.showData(data)
 
-        if (isVertical) {
-            (toolbar.layoutParams as AppBarLayout.LayoutParams).apply {
-                scrollFlags = SCROLL_FLAG_SCROLL or SCROLL_FLAG_ENTER_ALWAYS
-            }
-        }
+        bindToolbar()
 
         chapterTitle = data.chapter.title
         episodeAmount = data.episodeAmount
@@ -256,10 +284,8 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
     }
 
     override fun hideData() {
-        if (isVertical) {
-            (toolbar.layoutParams as AppBarLayout.LayoutParams).apply {
-                scrollFlags = SCROLL_FLAG_SCROLL or SCROLL_FLAG_ENTER_ALWAYS
-            }
+        toolbar.layoutParams = (toolbar.layoutParams as AppBarLayout.LayoutParams).apply {
+            scrollFlags = 0
         }
 
         innerAdapter.swapDataAndNotifyWithDiffing(emptyList())
@@ -291,10 +317,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         }
 
         if (adapter.header != null) {
-            if (!isVertical) {
-                header.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-                footer.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-            }
+            bindHeaderAndFooterHeight()
 
             contentContainer.visibility = View.VISIBLE
             errorContainer.visibility = View.INVISIBLE
@@ -312,10 +335,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
     }
 
     private fun showHeaderAndFooter(data: MangaChapterInfo) {
-        if (!isVertical) {
-            header.layoutParams.height = MATCH_PARENT
-            footer.layoutParams.height = MATCH_PARENT
-        }
+        bindHeaderAndFooterHeight()
 
         header.setEpisodeInfo(data.episodeAmount, episode)
         header.setDateTime(data.chapter.date.convertToDateTime())
@@ -331,5 +351,45 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
 
         adapter.header = header
         adapter.footer = footer
+    }
+
+    private fun bindOrientationOptionsItem() {
+        toolbar.findViewById<View>(R.id.toggle_orientation).animate()
+            .rotation(if (isVertical) 0.0f else 90.0f)
+            .setDuration(mediumAnimationTime.toLong())
+            .start()
+    }
+
+    private fun bindLayoutManager() {
+        val state = recyclerView.layoutManager?.onSaveInstanceState()
+
+        if (isVertical) {
+            recyclerView.layoutManager = LinearLayoutManager(context)
+            recyclerView.onFlingListener = null
+            recyclerView.clearOnScrollListeners()
+        } else {
+            recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            GravityPagerSnapHelper(Gravity.END).attachToRecyclerView(recyclerView)
+        }
+
+        innerAdapter.isVertical = isVertical
+
+        recyclerView.layoutManager.onRestoreInstanceState(state)
+    }
+
+    private fun bindToolbar() {
+        toolbar.layoutParams = (toolbar.layoutParams as AppBarLayout.LayoutParams).apply {
+            scrollFlags = if (isVertical) SCROLL_FLAG_SCROLL or SCROLL_FLAG_ENTER_ALWAYS else 0
+        }
+    }
+
+    private fun bindHeaderAndFooterHeight() {
+        if (isVertical) {
+            header.layoutParams.height = WRAP_CONTENT
+            footer.layoutParams.height = WRAP_CONTENT
+        } else {
+            header.layoutParams.height = MATCH_PARENT
+            footer.layoutParams.height = MATCH_PARENT
+        }
     }
 }
