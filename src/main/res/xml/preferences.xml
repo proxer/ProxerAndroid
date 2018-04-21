@@ -12,9 +12,9 @@
         <SwitchPreference
             android:defaultValue="false"
             android:key="auto_bookmark"
-            android:summaryOff="Lesezeichen werden beim Wechseln des Kapitels oder der Episode automatisch gesetzt"
-            android:summaryOn="Lesezeichen werden beim Wechseln des Kapitels oder der Episode nicht automatisch gesetzt"
-            android:title="Automatische Lesezeichen" />
+            android:summaryOff="@string/preference_auto_bookmark_off"
+            android:summaryOn="@string/preference_auto_bookmark_summary_on"
+            android:title="@string/preference_auto_bookmark_title" />
 
         <!--suppress AndroidUnknownAttribute -->
         <ListPreference

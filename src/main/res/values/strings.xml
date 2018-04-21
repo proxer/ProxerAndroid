@@ -523,6 +523,13 @@
     <string name="preference_age_confirmation_title">Altersbeschränkte Inhalte</string>
     <string name="preference_age_confirmation_summary_off">Altersbeschränkte Inhalte werden nicht angezeigt</string>
     <string name="preference_age_confirmation_summary_on">Altersbeschränkte Inhalte werden angezeigt</string>
+    <string name="preference_auto_bookmark_title">Automatische Lesezeichen</string>
+    <string name="preference_auto_bookmark_summary_on">
+        Lesezeichen werden beim Wechseln des Kapitels oder der Episode automatisch gesetzt
+    </string>
+    <string name="preference_auto_bookmark_off">
+        Lesezeichen werden beim Wechseln des Kapitels oder der Episode nicht automatisch gesetzt
+    </string>
     <string name="preference_start_page_title">Startseite</string>
 
     <string name="preference_category_design_title">Design</string>
