@@ -24,8 +24,10 @@ import org.jetbrains.anko.bundleOf
 class ChatContainerFragment : BaseFragment() {
 
     companion object {
-        fun newInstance() = ChatContainerFragment().apply {
-            arguments = bundleOf()
+        private const val SHOW_MESSENGER_ARGUMENT = "show_messenger"
+
+        fun newInstance(showMessenger: Boolean = false) = ChatContainerFragment().apply {
+            arguments = bundleOf(SHOW_MESSENGER_ARGUMENT to showMessenger)
         }
     }
 
@@ -34,6 +36,9 @@ class ChatContainerFragment : BaseFragment() {
 
     private val viewPager: ViewPager by bindView(R.id.viewPager)
     private val tabs: TabLayout by unsafeLazy { hostingActivity.tabs }
+
+    private val showMessenger
+        get() = requireArguments().getBoolean(SHOW_MESSENGER_ARGUMENT, false)
 
     private var tabLayoutHelper: TabLayoutHelper? = null
 
@@ -54,6 +59,10 @@ class ChatContainerFragment : BaseFragment() {
         viewPager.adapter = SectionsPagerAdapter(childFragmentManager)
 
         tabLayoutHelper = TabLayoutHelper(tabs, viewPager).apply { isAutoAdjustTabModeEnabled = true }
+
+        if (savedInstanceState == null) {
+            viewPager.currentItem = if (showMessenger) 1 else 0
+        }
     }
 
     override fun onDestroyView() {

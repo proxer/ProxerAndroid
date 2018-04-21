@@ -41,12 +41,12 @@ class MainActivity : DrawerActivity() {
             .startActivity(getSectionIntent(context, section))
 
         fun getSectionIntent(context: Context, section: DrawerItem) = context
-            .intentFor<MainActivity>(SECTION_EXTRA to section.id)
+            .intentFor<MainActivity>(SECTION_EXTRA to section)
     }
 
     override val contentView = R.layout.activity_main
 
-    override val isRootActivity get() = !intent.hasExtra(SECTION_EXTRA)
+    override val isRootActivity get() = !intent.hasExtra(SECTION_EXTRA) && intent.action != Intent.ACTION_VIEW
     override val isMainActivity = true
 
     val tabs: TabLayout by bindView(R.id.tabs)
@@ -139,7 +139,11 @@ class MainActivity : DrawerActivity() {
         this.intent = intent
 
         if (intent.hasExtra(SECTION_EXTRA)) {
-            drawer.select(DrawerItem.fromIdOrDefault(intent.getLongExtra(SECTION_EXTRA, -1)))
+            val itemToShow = DrawerItem.fromIdOrDefault(intent.getLongExtra(SECTION_EXTRA, -1))
+
+            drawer.select(itemToShow, false)
+
+            setFragment(itemToShow)
         }
     }
 
@@ -147,6 +151,7 @@ class MainActivity : DrawerActivity() {
         when (item) {
             DrawerItem.NEWS -> setFragment(NewsFragment.newInstance(), R.string.section_news)
             DrawerItem.CHAT -> setFragment(ChatContainerFragment.newInstance(), R.string.section_chat)
+            DrawerItem.MESSENGER -> setFragment(ChatContainerFragment.newInstance(true), R.string.section_chat)
             DrawerItem.BOOKMARKS -> setFragment(BookmarkFragment.newInstance(), R.string.section_bookmarks)
             DrawerItem.ANIME -> setFragment(MediaListFragment.newInstance(Category.ANIME), R.string.section_anime)
             DrawerItem.SCHEDULE -> setFragment(ScheduleFragment.newInstance(), R.string.section_schedule)
@@ -175,11 +180,11 @@ class MainActivity : DrawerActivity() {
             } else {
                 val itemToLoad = getItemToLoad()
 
-                drawer.select(itemToLoad, isRootActivity)
+                drawer.select(itemToLoad, false)
+
+                setFragment(itemToLoad)
 
                 if (!isRootActivity) {
-                    setFragment(itemToLoad)
-
                     drawer.disableSelectability()
                 }
             }
@@ -190,7 +195,8 @@ class MainActivity : DrawerActivity() {
         val actionDrawerItem = when (intent.action == Intent.ACTION_VIEW) {
             true -> when (intent.data?.pathSegments?.firstOrNull()) {
                 "news" -> DrawerItem.NEWS
-                "chat", "messages" -> DrawerItem.CHAT
+                "chat" -> DrawerItem.CHAT
+                "messages" -> DrawerItem.MESSENGER
                 "reminder" -> DrawerItem.BOOKMARKS
                 "anime" -> DrawerItem.ANIME
                 "calendar" -> DrawerItem.SCHEDULE
@@ -201,8 +207,11 @@ class MainActivity : DrawerActivity() {
         }
 
         return when (actionDrawerItem) {
-            null -> DrawerItem.fromIdOrDefault(intent
-                .getLongExtra(SECTION_EXTRA, PreferenceHelper.getStartPage(this).id))
+            null -> {
+                val sectionExtra = intent.getSerializableExtra(SECTION_EXTRA) as? DrawerItem
+
+                sectionExtra ?: PreferenceHelper.getStartPage(this)
+            }
             else -> actionDrawerItem
         }
     }
