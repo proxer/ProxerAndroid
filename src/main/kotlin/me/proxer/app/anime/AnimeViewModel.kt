@@ -55,8 +55,8 @@ class AnimeViewModel(
     val resolutionResult = ResettingMutableLiveData<StreamResolutionResult>()
     val resolutionError = ResettingMutableLiveData<ErrorAction>()
 
-    val bookmarkData = ResettingMutableLiveData<Unit?>()
-    val bookmarkError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
+    val userStateData = ResettingMutableLiveData<Unit?>()
+    val userStateError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
 
     var episode by Delegates.observable(episode, { _, old, new ->
         if (old != new) reload()
@@ -65,14 +65,14 @@ class AnimeViewModel(
     private var cachedEntryCore: EntryCore? = null
 
     private var resolverDisposable: Disposable? = null
-    private var bookmarkDisposable: Disposable? = null
+    private var userStateDisposable: Disposable? = null
 
     override fun onCleared() {
         resolverDisposable?.dispose()
-        bookmarkDisposable?.dispose()
+        userStateDisposable?.dispose()
 
         resolverDisposable = null
-        bookmarkDisposable = null
+        userStateDisposable = null
 
         super.onCleared()
     }
@@ -118,17 +118,17 @@ class AnimeViewModel(
         .map { it.filterNot { StreamResolverFactory.resolverFor(it.hosterName)?.ignore == true } }
 
     private fun updateUserState(endpoint: Endpoint<Void>) {
-        bookmarkDisposable?.dispose()
-        bookmarkDisposable = Single.fromCallable { Validators.validateLogin() }
+        userStateDisposable?.dispose()
+        userStateDisposable = Single.fromCallable { Validators.validateLogin() }
             .flatMap { endpoint.buildOptionalSingle() }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeAndLogErrors({
-                bookmarkError.value = null
-                bookmarkData.value = Unit
+                userStateError.value = null
+                userStateData.value = Unit
             }, {
-                bookmarkData.value = null
-                bookmarkError.value = ErrorUtils.handle(it)
+                userStateData.value = null
+                userStateError.value = ErrorUtils.handle(it)
             })
     }
 }

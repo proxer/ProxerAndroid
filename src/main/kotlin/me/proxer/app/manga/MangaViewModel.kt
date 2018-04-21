@@ -59,8 +59,8 @@ class MangaViewModel(
                 }
             }
 
-    val bookmarkData = ResettingMutableLiveData<Unit?>()
-    val bookmarkError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
+    val userStateData = ResettingMutableLiveData<Unit?>()
+    val userStateError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
 
     var episode by Delegates.observable(episode, { _, old, new ->
         if (old != new) reload()
@@ -68,11 +68,11 @@ class MangaViewModel(
 
     private var cachedEntryCore: EntryCore? = null
 
-    private var bookmarkDisposable: Disposable? = null
+    private var userStateDisposable: Disposable? = null
 
     override fun onCleared() {
-        bookmarkDisposable?.dispose()
-        bookmarkDisposable = null
+        userStateDisposable?.dispose()
+        userStateDisposable = null
 
         super.onCleared()
     }
@@ -99,17 +99,17 @@ class MangaViewModel(
         .map { MangaChapterInfo(it, entry.name, entry.episodeAmount) }
 
     private fun updateUserState(endpoint: Endpoint<Void>) {
-        bookmarkDisposable?.dispose()
-        bookmarkDisposable = Single.fromCallable { Validators.validateLogin() }
+        userStateDisposable?.dispose()
+        userStateDisposable = Single.fromCallable { Validators.validateLogin() }
             .flatMap { endpoint.buildOptionalSingle() }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeAndLogErrors({
-                bookmarkError.value = null
-                bookmarkData.value = Unit
+                userStateError.value = null
+                userStateData.value = Unit
             }, {
-                bookmarkData.value = null
-                bookmarkError.value = ErrorUtils.handle(it)
+                userStateData.value = null
+                userStateError.value = ErrorUtils.handle(it)
             })
     }
 }

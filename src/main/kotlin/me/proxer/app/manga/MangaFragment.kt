@@ -37,6 +37,7 @@ import me.proxer.app.ui.view.MediaControlView.Uploader
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.PreferenceHelper
+import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.convertToDateTime
 import me.proxer.app.util.extension.multilineSnackbar
@@ -118,6 +119,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
     private val toolbar by unsafeLazy { requireActivity().findViewById<Toolbar>(R.id.toolbar) }
     private val recyclerView: RecyclerView by bindView(R.id.recyclerView)
 
+    private val areBookmarksAutomatic by unsafeLazy { PreferenceHelper.areBookmarksAutomatic(requireContext()) }
     private val mediumAnimationTime by unsafeLazy { resources.getInteger(android.R.integer.config_mediumAnimTime) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -173,7 +175,13 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
 
         Observable.merge(header.episodeSwitchSubject, footer.episodeSwitchSubject)
             .autoDispose(this)
-            .subscribe { episode = it }
+            .subscribe {
+                if (areBookmarksAutomatic && it > episode && StorageHelper.isLoggedIn) {
+                    viewModel.bookmark(it)
+                }
+
+                episode = it
+            }
 
         Observable.merge(header.bookmarkSetSubject, footer.bookmarkSetSubject)
             .autoDispose(this)
@@ -201,13 +209,13 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
 
         innerAdapter.glide = GlideApp.with(this)
 
-        viewModel.bookmarkData.observe(this, Observer {
+        viewModel.userStateData.observe(this, Observer {
             it?.let {
                 snackbar(activityRoot, R.string.fragment_set_user_info_success)
             }
         })
 
-        viewModel.bookmarkError.observe(this, Observer {
+        viewModel.userStateError.observe(this, Observer {
             it?.let {
                 multilineSnackbar(root, getString(R.string.error_set_user_info, getString(it.message)),
                     Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity))

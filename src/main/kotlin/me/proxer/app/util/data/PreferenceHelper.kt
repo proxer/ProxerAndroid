@@ -11,6 +11,7 @@ import me.proxer.app.util.wrapper.MaterialDrawerWrapper.DrawerItem
 object PreferenceHelper {
 
     const val AGE_CONFIRMATION = "age_confirmation"
+    const val AUTO_BOOKMARK = "auto_bookmark"
     const val START_PAGE = "start_page"
     const val THEME = "theme"
     const val NOTIFICATIONS_NEWS = "notifications_news"
@@ -23,6 +24,9 @@ object PreferenceHelper {
 
     fun isAgeRestrictedMediaAllowed(context: Context) = getDefaultSharedPreferences(context)
         .getBoolean(AGE_CONFIRMATION, false)
+
+    fun areBookmarksAutomatic(context: Context) = getDefaultSharedPreferences(context)
+        .getBoolean(AUTO_BOOKMARK, false)
 
     fun getStartPage(context: Context) = DrawerItem.fromIdOrDefault(getDefaultSharedPreferences(context)
         .getString(START_PAGE, "0").toLongOrNull())

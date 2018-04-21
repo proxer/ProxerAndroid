@@ -26,6 +26,8 @@ import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.Utils
+import me.proxer.app.util.data.PreferenceHelper
+import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.snackbar
@@ -83,6 +85,8 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
 
     private var header by Delegates.notNull<MediaControlView>()
 
+    private val areBookmarksAutomatic by unsafeLazy { PreferenceHelper.areBookmarksAutomatic(requireContext()) }
+
     override val contentContainer: ViewGroup
         get() = recyclerView
 
@@ -127,7 +131,13 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
 
         header.episodeSwitchSubject
             .autoDispose(this)
-            .subscribe { episode = it }
+            .subscribe {
+                if (areBookmarksAutomatic && it > episode && StorageHelper.isLoggedIn) {
+                    viewModel.bookmark(it)
+                }
+
+                episode = it
+            }
 
         header.bookmarkSetSubject
             .autoDispose(this)
@@ -176,13 +186,13 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
             }
         })
 
-        viewModel.bookmarkData.observe(this, Observer {
+        viewModel.userStateData.observe(this, Observer {
             it?.let {
                 snackbar(root, R.string.fragment_set_user_info_success)
             }
         })
 
-        viewModel.bookmarkError.observe(this, Observer {
+        viewModel.userStateError.observe(this, Observer {
             it?.let {
                 multilineSnackbar(root, getString(R.string.error_set_user_info, getString(it.message)),
                     Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity))

@@ -9,6 +9,13 @@
             android:summaryOn="@string/preference_age_confirmation_summary_on"
             android:title="@string/preference_age_confirmation_title" />
 
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="auto_bookmark"
+            android:summaryOff="Lesezeichen werden beim Wechseln des Kapitels oder der Episode automatisch gesetzt"
+            android:summaryOn="Lesezeichen werden beim Wechseln des Kapitels oder der Episode nicht automatisch gesetzt"
+            android:title="Automatische Lesezeichen" />
+
         <!--suppress AndroidUnknownAttribute -->
         <ListPreference
             style="@style/Preference.Material.DialogPreference.ListPreference.SimpleMenu"
