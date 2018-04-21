@@ -202,6 +202,17 @@ gradle.projectsEvaluated {
     check.dependsOn detektCheck
 }
 
+// Workaround for issue in the Room annotation processor and the latest Kotlin compiler (1.2.40).
+configurations.all {
+    resolutionStrategy {
+        eachDependency { DependencyResolveDetails details ->
+            if (details.requested.name == 'kotlin-compiler-embeddable') {
+                details.useVersion "1.2.30"
+            }
+        }
+    }
+}
+
 static getResSrcDirs() {
     String layoutsPath = 'src/main/res/layouts'
     Set<String> result = []

@@ -40,15 +40,6 @@ inline fun <reified T : Enum<T>> enumSetOf(collection: Collection<T>): EnumSet<T
 
 inline fun <T> unsafeLazy(noinline initializer: () -> T) = lazy(LazyThreadSafetyMode.NONE, initializer)
 
-inline fun Context.getDrawableFromAttrs(resource: Int): Drawable {
-    val styledAttributes = obtainStyledAttributes(intArrayOf(resource))
-    val result = styledAttributes.getDrawable(0)
-
-    styledAttributes.recycle()
-
-    return result
-}
-
 inline fun Context.getQuantityString(id: Int, quantity: Int): String = resources
     .getQuantityString(id, quantity, quantity)
 
