@@ -1,6 +1,5 @@
 package me.proxer.app.manga
 
-import android.graphics.PointF
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
@@ -90,7 +89,6 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         private val shortAnimationTime = itemView.context.resources.getInteger(android.R.integer.config_shortAnimTime)
-        private val mediumAnimationTime = itemView.context.resources.getInteger(android.R.integer.config_mediumAnimTime)
 
         internal val image: SubsamplingScaleImageView by bindView(R.id.image)
         internal val errorIndicator: ImageView by bindView(R.id.errorIndicator)
@@ -190,16 +188,7 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeAndLogErrors { source ->
                         image.setImage(source)
-                        image.setScaleAndCenter(0.2f, PointF(0f, 0f))
-
-                        // Fade animations do not look good with the horizontal reader.
-                        if (isVertical) {
-                            image.apply { alpha = 0.2f }
-                                .animate()
-                                .alpha(1.0f)
-                                .setDuration(mediumAnimationTime.toLong())
-                                .start()
-                        }
+                        image.setScaleAndCenter(image.minScale, image.center)
                     }
             }
 

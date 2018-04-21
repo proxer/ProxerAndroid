@@ -38,6 +38,7 @@ import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.extension.activityManager
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.convertToDateTime
 import me.proxer.app.util.extension.multilineSnackbar
@@ -372,11 +373,23 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         val state = recyclerView.layoutManager?.onSaveInstanceState()
 
         if (isVertical) {
-            recyclerView.layoutManager = LinearLayoutManager(context)
+            recyclerView.layoutManager = object : LinearLayoutManager(context) {
+                override fun getExtraLayoutSpace(state: RecyclerView.State): Int {
+                    val isLowRamDevice = Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT ||
+                        requireContext().activityManager.isLowRamDevice
+
+                    return when {
+                        isLowRamDevice -> 0
+                        else -> DeviceUtils.getScreenHeight(requireContext())
+                    }
+                }
+            }
+
             recyclerView.onFlingListener = null
             recyclerView.clearOnScrollListeners()
         } else {
             recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+
             GravityPagerSnapHelper(Gravity.END).attachToRecyclerView(recyclerView)
         }
 
