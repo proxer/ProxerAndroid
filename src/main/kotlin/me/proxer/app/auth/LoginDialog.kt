@@ -116,6 +116,7 @@ class LoginDialog : BaseDialog() {
             .setOnClickListener {
                 showPage(ProxerUrls.webBase()
                     .newBuilder()
+                    .addPathSegment("register")
                     .setQueryParameter(DEVICE_PARAMETER, ProxerUtils.getApiEnumName(Device.DEFAULT))
                     .build())
             })
