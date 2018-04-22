@@ -11,7 +11,6 @@ import org.jetbrains.anko.intentFor
 class NewsWidgetProvider : AppWidgetProvider() {
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
-        NewsWidgetUpdateService.enqueueWork(context, context.intentFor<NewsWidgetUpdateService>()
-            .putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds))
+        NewsWidgetUpdateService.enqueueWork(context, context.intentFor<NewsWidgetUpdateService>())
     }
 }

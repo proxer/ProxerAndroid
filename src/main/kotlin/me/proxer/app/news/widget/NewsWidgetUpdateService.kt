@@ -3,6 +3,7 @@ package me.proxer.app.news.widget
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.support.v4.app.JobIntentService
@@ -41,8 +42,9 @@ class NewsWidgetUpdateService : JobIntentService() {
     private var disposable: Disposable? = null
 
     override fun onHandleWork(intent: Intent) {
+        val componentName = ComponentName(applicationContext.applicationContext, NewsWidgetProvider::class.java)
         val appWidgetManager = AppWidgetManager.getInstance(applicationContext)
-        val widgetIds = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS)
+        val widgetIds = appWidgetManager.getAppWidgetIds(componentName)
 
         widgetIds.forEach { id ->
             val views = RemoteViews(applicationContext.packageName, R.layout.layout_widget_news_loading)
