@@ -6,7 +6,7 @@ import android.widget.RemoteViewsService
 /**
  * @author Ruben Gees
  */
-class NewsWidgetService : RemoteViewsService() {
+class NewsWidgetDarkService : RemoteViewsService() {
 
     companion object {
         const val ARGUMENT_NEWS = "news"
@@ -18,6 +18,6 @@ class NewsWidgetService : RemoteViewsService() {
         val newsWrapper = intent.getBundleExtra(ARGUMENT_NEWS_WRAPPER)
         val news = newsWrapper.getParcelableArray(ARGUMENT_NEWS).map { it as SimpleNews }
 
-        return NewsWidgetViewsFactory(applicationContext, false, news)
+        return NewsWidgetViewsFactory(applicationContext, true, news)
     }
 }

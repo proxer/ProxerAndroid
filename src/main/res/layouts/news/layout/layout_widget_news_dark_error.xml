@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@color/background_dark"
     android:orientation="vertical">
 
     <LinearLayout
@@ -53,7 +53,7 @@
             android:layout_marginRight="8dp"
             android:gravity="center_horizontal"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/textColorSecondary"
+            android:textColor="@color/textColorSecondaryDark"
             tools:ignore="UnusedAttribute"
             tools:text="Error :/" />
 

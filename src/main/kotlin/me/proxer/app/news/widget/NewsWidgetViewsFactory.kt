@@ -12,6 +12,7 @@ import me.proxer.app.util.extension.convertToRelativeReadableTime
  */
 class NewsWidgetViewsFactory(
     private val context: Context,
+    private val dark: Boolean,
     private val news: List<SimpleNews>
 ) : RemoteViewsService.RemoteViewsFactory {
 
@@ -20,8 +21,10 @@ class NewsWidgetViewsFactory(
     override fun getLoadingView() = null
 
     override fun getViewAt(position: Int): RemoteViews {
+        val layout = if (dark) R.layout.layout_widget_news_dark_item else R.layout.layout_widget_news_item
         val news = news[position]
-        val result = RemoteViews(context.packageName, R.layout.layout_widget_news_item)
+
+        val result = RemoteViews(context.packageName, layout)
         val topicIntent = TopicActivity.getIntent(context, news.threadId, news.categoryId, news.subject)
         val info = context.getString(R.string.widget_news_info,
             news.date.convertToRelativeReadableTime(context), news.category)

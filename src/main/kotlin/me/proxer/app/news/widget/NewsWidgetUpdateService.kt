@@ -17,6 +17,7 @@ import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.R
 import me.proxer.app.forum.TopicActivity
 import me.proxer.app.util.ErrorUtils
+import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.subscribeAndLogErrors
@@ -43,55 +44,25 @@ class NewsWidgetUpdateService : JobIntentService() {
 
     override fun onHandleWork(intent: Intent) {
         val componentName = ComponentName(applicationContext.applicationContext, NewsWidgetProvider::class.java)
+        val darkComponentName = ComponentName(applicationContext.applicationContext, NewsWidgetDarkProvider::class.java)
+
         val appWidgetManager = AppWidgetManager.getInstance(applicationContext)
         val widgetIds = appWidgetManager.getAppWidgetIds(componentName)
+        val darkWidgetIds = appWidgetManager.getAppWidgetIds(darkComponentName)
 
-        widgetIds.forEach { id ->
-            val views = RemoteViews(applicationContext.packageName, R.layout.layout_widget_news_loading)
-
-            bindBaseLayout(id, views)
-
-            appWidgetManager.updateAppWidget(id, views)
-        }
+        widgetIds.forEach { id -> bindLoadingLayout(appWidgetManager, id, false) }
+        darkWidgetIds.forEach { id -> bindLoadingLayout(appWidgetManager, id, true) }
 
         disposable = api.notifications().news().buildSingle()
             .map { it.map { SimpleNews(it.id, it.threadId, it.categoryId, it.subject, it.category, it.date) } }
             .subscribeAndLogErrors({ news ->
-                widgetIds.forEach { id ->
-                    val views = RemoteViews(applicationContext.packageName, R.layout.layout_widget_news_list)
-
-                    bindBaseLayout(id, views)
-
-                    views.setRemoteAdapter(R.id.list, applicationContext.intentFor<NewsWidgetService>(
-                        NewsWidgetService.ARGUMENT_NEWS_WRAPPER to bundleOf(
-                            NewsWidgetService.ARGUMENT_NEWS to news.toTypedArray()
-                        )
-                    ))
-
-                    appWidgetManager.updateAppWidget(id, views)
-                }
+                widgetIds.forEach { id -> bindListLayout(appWidgetManager, id, news, false) }
+                darkWidgetIds.forEach { id -> bindListLayout(appWidgetManager, id, news, true) }
             }, { error ->
-                widgetIds.forEach { id ->
-                    val views = RemoteViews(applicationContext.packageName, R.layout.layout_widget_news_error)
-                    val action = ErrorUtils.handle(error)
+                val action = ErrorUtils.handle(error)
 
-                    bindBaseLayout(id, views)
-
-                    views.setTextViewText(R.id.errorText, applicationContext.getString(action.message))
-
-                    if (action.buttonAction == ErrorUtils.ErrorAction.ButtonAction.CAPTCHA) {
-                        val errorIntent = Intent(Intent.ACTION_VIEW, ProxerUrls.captchaWeb(Device.MOBILE).androidUri())
-                        val errorPendingIntent = PendingIntent.getActivity(applicationContext, 0,
-                            errorIntent, FLAG_UPDATE_CURRENT)
-
-                        views.setTextViewText(R.id.errorButton, applicationContext.getString(action.buttonMessage))
-                        views.setOnClickPendingIntent(R.id.errorButton, errorPendingIntent)
-                    } else {
-                        views.setViewVisibility(R.id.errorButton, View.GONE)
-                    }
-
-                    appWidgetManager.updateAppWidget(id, views)
-                }
+                widgetIds.forEach { id -> bindErrorLayout(appWidgetManager, id, action, false) }
+                darkWidgetIds.forEach { id -> bindErrorLayout(appWidgetManager, id, action, true) }
             })
     }
 
@@ -102,7 +73,67 @@ class NewsWidgetUpdateService : JobIntentService() {
         return false
     }
 
-    private fun bindBaseLayout(widgetId: Int, views: RemoteViews) {
+    @Suppress("SpreadOperator")
+    private fun bindListLayout(appWidgetManager: AppWidgetManager, id: Int, news: List<SimpleNews>, dark: Boolean) {
+        val views = RemoteViews(applicationContext.packageName, when (dark) {
+            true -> R.layout.layout_widget_news_dark_list
+            false -> R.layout.layout_widget_news_list
+        })
+
+        val params = arrayOf(
+            NewsWidgetService.ARGUMENT_NEWS_WRAPPER to bundleOf(
+                NewsWidgetService.ARGUMENT_NEWS to news.toTypedArray()
+            )
+        )
+
+        val intent = when (dark) {
+            true -> applicationContext.intentFor<NewsWidgetDarkService>(*params)
+            false -> applicationContext.intentFor<NewsWidgetService>(*params)
+        }
+
+        bindBaseLayout(id, views)
+
+        views.setRemoteAdapter(R.id.list, intent)
+
+        appWidgetManager.updateAppWidget(id, views)
+    }
+
+    private fun bindErrorLayout(appWidgetManager: AppWidgetManager, id: Int, errorAction: ErrorAction, dark: Boolean) {
+        val views = RemoteViews(applicationContext.packageName, when (dark) {
+            true -> R.layout.layout_widget_news_dark_error
+            false -> R.layout.layout_widget_news_error
+        })
+
+        bindBaseLayout(id, views)
+
+        views.setTextViewText(R.id.errorText, applicationContext.getString(errorAction.message))
+
+        if (errorAction.buttonAction == ErrorAction.ButtonAction.CAPTCHA) {
+            val errorIntent = Intent(Intent.ACTION_VIEW, ProxerUrls.captchaWeb(Device.MOBILE).androidUri())
+            val errorPendingIntent = PendingIntent.getActivity(applicationContext, 0,
+                errorIntent, FLAG_UPDATE_CURRENT)
+
+            views.setTextViewText(R.id.errorButton, applicationContext.getString(errorAction.buttonMessage))
+            views.setOnClickPendingIntent(R.id.errorButton, errorPendingIntent)
+        } else {
+            views.setViewVisibility(R.id.errorButton, View.GONE)
+        }
+
+        appWidgetManager.updateAppWidget(id, views)
+    }
+
+    private fun bindLoadingLayout(appWidgetManager: AppWidgetManager, id: Int, dark: Boolean) {
+        val views = RemoteViews(applicationContext.packageName, when (dark) {
+            true -> R.layout.layout_widget_news_dark_loading
+            false -> R.layout.layout_widget_news_loading
+        })
+
+        bindBaseLayout(id, views)
+
+        appWidgetManager.updateAppWidget(id, views)
+    }
+
+    private fun bindBaseLayout(id: Int, views: RemoteViews) {
         val intent = MainActivity.getSectionIntent(applicationContext, MaterialDrawerWrapper.DrawerItem.NEWS)
         val pendingIntent = PendingIntent.getActivity(applicationContext, 0, intent, FLAG_UPDATE_CURRENT)
 
@@ -111,7 +142,7 @@ class NewsWidgetUpdateService : JobIntentService() {
 
         val updateIntent = applicationContext.intentFor<NewsWidgetProvider>()
             .setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE)
-            .putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, intArrayOf(widgetId))
+            .putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, intArrayOf(id))
 
         val updatePendingIntent = PendingIntent.getBroadcast(applicationContext, 0, updateIntent, FLAG_UPDATE_CURRENT)
 
