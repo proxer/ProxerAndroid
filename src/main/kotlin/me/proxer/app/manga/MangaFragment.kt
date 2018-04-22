@@ -11,13 +11,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import com.github.rubensousa.gravitysnaphelper.GravityPagerSnapHelper
@@ -38,13 +32,7 @@ import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
-import me.proxer.app.util.extension.activityManager
-import me.proxer.app.util.extension.autoDispose
-import me.proxer.app.util.extension.convertToDateTime
-import me.proxer.app.util.extension.multilineSnackbar
-import me.proxer.app.util.extension.snackbar
-import me.proxer.app.util.extension.subscribeAndLogErrors
-import me.proxer.app.util.extension.unsafeLazy
+import me.proxer.app.util.extension.*
 import me.proxer.library.entity.info.EntryCore
 import me.proxer.library.enums.Language
 import org.jetbrains.anko.bundleOf
@@ -135,11 +123,18 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
 
         innerAdapter.clickSubject
             .autoDispose(this)
-            .subscribeAndLogErrors {
+            .subscribeAndLogErrors { (view, position) ->
                 if (isVertical) {
-                    recyclerView.smoothScrollBy(0, (DeviceUtils.getScreenHeight(requireContext()) * 0.5).toInt())
+                    val screenHeight = DeviceUtils.getScreenHeight(requireContext())
+                    val maxScrollHeight = screenHeight - toolbar.height - dip(32)
+
+                    if (view.height > maxScrollHeight) {
+                        recyclerView.smoothScrollBy(0, maxScrollHeight)
+                    } else {
+                        recyclerView.smoothScrollBy(0, view.height)
+                    }
                 } else {
-                    recyclerView.smoothScrollToPosition(it + 2)
+                    recyclerView.smoothScrollToPosition(position + 2)
                 }
             }
 

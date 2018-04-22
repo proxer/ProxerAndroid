@@ -48,7 +48,7 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
     }
 
     var glide: GlideRequests? = null
-    val clickSubject: PublishSubject<Int> = PublishSubject.create()
+    val clickSubject: PublishSubject<Pair<View, Int>> = PublishSubject.create()
 
     var server by Delegates.notNull<String>()
     var entryId by Delegates.notNull<String>()
@@ -123,7 +123,7 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
 
             image.setOnClickListener {
                 withSafeAdapterPosition(this, {
-                    clickSubject.onNext(it)
+                    clickSubject.onNext(image to it)
                 })
             }
         }
