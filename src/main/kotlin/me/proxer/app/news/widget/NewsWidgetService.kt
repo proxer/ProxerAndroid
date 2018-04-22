@@ -15,8 +15,8 @@ class NewsWidgetService : RemoteViewsService() {
     }
 
     override fun onGetViewFactory(intent: Intent): RemoteViewsFactory {
-        val newsWrapper = intent.getBundleExtra(ARGUMENT_NEWS)
-        val news = newsWrapper.getParcelableArray(ARGUMENT_NEWS_WRAPPER).map { it as SimpleNews }
+        val newsWrapper = intent.getBundleExtra(ARGUMENT_NEWS_WRAPPER)
+        val news = newsWrapper.getParcelableArray(ARGUMENT_NEWS).map { it as SimpleNews }
 
         return NewsWidgetViewsFactory(applicationContext, news)
     }

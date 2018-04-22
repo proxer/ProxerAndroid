@@ -52,6 +52,7 @@
             android:layout_marginRight="8dp"
             android:gravity="center_horizontal"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/textColorSecondary"
             tools:ignore="UnusedAttribute"
             tools:text="Error :/" />
 
