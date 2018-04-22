@@ -49,7 +49,7 @@ class MediaListSearchBottomSheet private constructor(
         initClickSubscriptions()
         initSelectionSubscriptions()
 
-        fragment.includeSpoilerTags.checkedChanges()
+        fragment.includeUnratedTags.checkedChanges()
             .skipInitialValue()
             .autoDispose(fragment)
             .subscribe { fragment.tagRateFilter = if (it) TagRateFilter.ALL else TagRateFilter.RATED_ONLY }
