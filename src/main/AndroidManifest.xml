@@ -343,7 +343,7 @@
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/widget_provider_news" />
+                android:resource="@xml/widget_provider_news_dark" />
         </receiver>
 
         <receiver
