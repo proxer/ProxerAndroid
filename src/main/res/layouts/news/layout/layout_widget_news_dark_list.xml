@@ -39,5 +39,8 @@
     <ListView
         android:id="@+id/list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:divider="@color/divider_dark"
+        android:dividerHeight="1dp"
+        tools:listitem="@layout/layout_widget_news_dark_item" />
 </LinearLayout>

@@ -23,7 +23,7 @@ ext {
     gradleVersionsPluginVersion = '0.17.0'
     androidCommandPluginVersion = '2.0.1'
     ktlintPluginVersion = '3.2.0'
-    ktlintVersion = '0.21.0'
+    ktlintVersion = '0.22.0'
 
     // Frameworks and code only libraries
     ankoVersion = '0.10.4'
@@ -68,7 +68,7 @@ ext {
     gravitySnapHelperVersion = '1.5'
 
     // Utils
-    threetenVersion = '1.0.5'
+    threetenVersion = '1.1.0'
     hawkVersion = '2.0.1'
     glideVersion = '4.7.1'
     okHttpVersion = '3.10.0'
