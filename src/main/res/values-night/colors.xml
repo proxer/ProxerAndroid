@@ -3,13 +3,9 @@
 
     <color name="colorAccent">#C21414</color>
 
-    <color name="textColorPrimary">@android:color/primary_text_dark</color>
-    <color name="textColorSecondary" tools:keep="@color/textColorSecondary">
-        @android:color/secondary_text_dark
-    </color>
-    <color name="textColorTertiary" tools:keep="@color/textColorTertiary">
-        @android:color/tertiary_text_dark
-    </color>
+    <color name="textColorPrimary">#FFFFFF</color>
+    <color name="textColorSecondary" tools:keep="@color/textColorSecondary">#B3FFFFFF</color>
+    <color name="textColorTertiary" tools:keep="@color/textColorTertiary">#80FFFFFF</color>
 
     <color name="divider">#1FFFFFFF</color>
     <color name="icon">#7FFFFFFF</color>

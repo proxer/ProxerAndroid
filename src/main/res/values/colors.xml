@@ -6,13 +6,9 @@
     <color name="colorPrimaryLight">#CE1A1A</color>
     <color name="colorAccent">#8A0E0E</color>
 
-    <color name="textColorPrimary">@android:color/primary_text_light</color>
-    <color name="textColorSecondary" tools:keep="@color/textColorSecondary">
-        @android:color/secondary_text_light
-    </color>
-    <color name="textColorTertiary" tools:keep="@color/textColorTertiary">
-        @android:color/tertiary_text_light
-    </color>
+    <color name="textColorPrimary">#DE000000</color>
+    <color name="textColorSecondary" tools:keep="@color/textColorSecondary">#8A000000</color>
+    <color name="textColorTertiary" tools:keep="@color/textColorTertiary">#61000000</color>
 
     <color name="half_transparent">#7F000000</color>
 
