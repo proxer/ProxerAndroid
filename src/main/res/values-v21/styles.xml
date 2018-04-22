@@ -8,4 +8,9 @@
     <style name="Theme.App.Translucent" parent="Theme.App">
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
+
+    <style name="Widget.App.WidgetButton" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:colorButtonNormal">@color/colorAccent</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
 </resources>

@@ -306,6 +306,28 @@
             </intent-filter>
         </service>
 
+        <service
+            android:name=".news.widget.NewsWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+        <service
+            android:name=".news.widget.NewsWidgetUpdateService"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <receiver
+            android:name=".news.widget.NewsWidgetProvider"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/widget_news_label">
+
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_provider_news" />
+        </receiver>
+
         <receiver
             android:name=".news.NewsNotificationReadReceiver"
             android:exported="false" />

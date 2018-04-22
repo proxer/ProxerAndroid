@@ -480,6 +480,10 @@
 
     <string name="layout_chat_bar_emoji_content_description">Emoji Auswahl</string>
 
+    <string name="widget_news_label">News</string>
+    <string name="widget_news_title">Proxer.Me News</string>
+    <string name="widget_news_info">%1$s in %2$s</string>
+
     <string name="notification_channel_news">News</string>
     <string name="notification_channel_profile">Profil</string>
     <string name="notification_channel_chat">Chat</string>

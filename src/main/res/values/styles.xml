@@ -37,4 +37,9 @@
     <style name="Theme.App" parent="Base.Theme.App" />
 
     <style name="Theme.App.Translucent" parent="Theme.App" />
+
+    <style name="Widget.App.WidgetButton" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/colorAccent</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
 </resources>
