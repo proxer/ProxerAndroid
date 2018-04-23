@@ -41,7 +41,6 @@ import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.activityManager
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.convertToDateTime
-import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.snackbar
 import me.proxer.app.util.extension.subscribeAndLogErrors
@@ -136,18 +135,32 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
 
         innerAdapter.clickSubject
             .autoDispose(this)
-            .subscribeAndLogErrors { (view, position) ->
-                if (isVertical) {
-                    val screenHeight = DeviceUtils.getScreenHeight(requireContext())
-                    val maxScrollHeight = screenHeight - toolbar.height - dip(32)
+            .subscribeAndLogErrors { (view, coordinates, position) ->
+                val (xCoordinate, yCoordinate) = coordinates
+                val parentHeight = recyclerView.height
+                val parentWidth = recyclerView.width
+                val normalizedParentHeight = parentHeight - parentHeight / 8
 
-                    if (view.height > maxScrollHeight) {
-                        recyclerView.smoothScrollBy(0, maxScrollHeight)
+                if (isVertical) {
+                    if (view.height > normalizedParentHeight) {
+                        if (yCoordinate < parentHeight / 3) {
+                            recyclerView.smoothScrollBy(0, -normalizedParentHeight)
+                        } else {
+                            recyclerView.smoothScrollBy(0, normalizedParentHeight)
+                        }
                     } else {
-                        recyclerView.smoothScrollBy(0, view.height)
+                        if (yCoordinate < parentHeight / 3) {
+                            recyclerView.smoothScrollBy(0, -view.height)
+                        } else {
+                            recyclerView.smoothScrollBy(0, view.height)
+                        }
                     }
                 } else {
-                    recyclerView.smoothScrollToPosition(position + 2)
+                    if (xCoordinate < parentWidth / 3) {
+                        recyclerView.smoothScrollToPosition(position)
+                    } else {
+                        recyclerView.smoothScrollToPosition(position + 2)
+                    }
                 }
             }
 

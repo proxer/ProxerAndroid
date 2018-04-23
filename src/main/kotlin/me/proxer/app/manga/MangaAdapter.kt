@@ -1,10 +1,12 @@
 package me.proxer.app.manga
 
+import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
@@ -48,13 +50,15 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
     }
 
     var glide: GlideRequests? = null
-    val clickSubject: PublishSubject<Pair<View, Int>> = PublishSubject.create()
+    val clickSubject: PublishSubject<Triple<View, Pair<Float, Float>, Int>> = PublishSubject.create()
 
     var server by Delegates.notNull<String>()
     var entryId by Delegates.notNull<String>()
     var id by Delegates.notNull<String>()
 
     private val requiresFallback: ParcelableStringBooleanMap
+
+    private var lastTouchCoordinates: Pair<Float, Float>? = null
 
     init {
         requiresFallback = when (savedInstanceState) {
@@ -98,34 +102,9 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
         init {
             image.setDoubleTapZoomDuration(shortAnimationTime)
 
-            @Suppress("LabeledExpression")
-            image.setOnImageEventListener(object : SubsamplingScaleImageView.DefaultOnImageEventListener() {
-                override fun onTileLoadError(error: Exception) = withSafeAdapterPosition(this@ViewHolder) {
-                    handleImageLoadError(error, it)
-                }
-
-                override fun onImageLoadError(error: Exception) = withSafeAdapterPosition(this@ViewHolder) {
-                    handleImageLoadError(error, it)
-                }
-
-                override fun onPreviewLoadError(error: Exception) = withSafeAdapterPosition(this@ViewHolder) {
-                    handleImageLoadError(error, it)
-                }
-            })
-
             errorIndicator.setIconicsImage(CommunityMaterial.Icon.cmd_refresh, 64)
 
-            itemView.setOnClickListener {
-                withSafeAdapterPosition(this, {
-                    bind(data[it])
-                })
-            }
-
-            image.setOnClickListener {
-                withSafeAdapterPosition(this, {
-                    clickSubject.onNext(image to it)
-                })
-            }
+            initListeners(itemView)
         }
 
         fun bind(item: Page) {
@@ -161,6 +140,48 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
                 glide
                     ?.download(ProxerUrls.mangaPageImage(server, entryId, id, item.decodedName).toString())
                     ?.into(target)
+            }
+        }
+
+        @SuppressLint("ClickableViewAccessibility")
+        private fun initListeners(itemView: View) {
+            itemView.setOnClickListener {
+                withSafeAdapterPosition(this, {
+                    bind(data[it])
+                })
+            }
+
+            @Suppress("LabeledExpression")
+            image.setOnImageEventListener(object : SubsamplingScaleImageView.DefaultOnImageEventListener() {
+                override fun onTileLoadError(error: Exception) = withSafeAdapterPosition(this@ViewHolder) {
+                    handleImageLoadError(error, it)
+                }
+
+                override fun onImageLoadError(error: Exception) = withSafeAdapterPosition(this@ViewHolder) {
+                    handleImageLoadError(error, it)
+                }
+
+                override fun onPreviewLoadError(error: Exception) = withSafeAdapterPosition(this@ViewHolder) {
+                    handleImageLoadError(error, it)
+                }
+            })
+
+            image.setOnTouchListener { view, event ->
+                if (event.actionMasked == MotionEvent.ACTION_DOWN) {
+                    val (viewX, viewY) = IntArray(2).apply { view.getLocationInWindow(this) }
+
+                    lastTouchCoordinates = event.x + viewX to event.y + viewY
+                }
+
+                false
+            }
+
+            image.setOnClickListener {
+                withSafeAdapterPosition(this, {
+                    lastTouchCoordinates?.let { touchCoordinates ->
+                        clickSubject.onNext(Triple(image, touchCoordinates, it))
+                    }
+                })
             }
         }
 
