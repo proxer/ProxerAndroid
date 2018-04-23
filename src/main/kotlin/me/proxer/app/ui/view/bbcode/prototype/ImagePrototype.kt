@@ -11,10 +11,7 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.ImageView
 import android.widget.LinearLayout.LayoutParams
 import android.widget.TextView
-import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.GlideRequests
@@ -26,6 +23,7 @@ import me.proxer.app.ui.view.bbcode.BBUtils
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.iconColor
+import me.proxer.app.util.wrapper.SimpleGlideRequestListener
 import okhttp3.HttpUrl
 import org.jetbrains.anko.dip
 
@@ -81,26 +79,12 @@ object ImagePrototype : AutoClosingPrototype {
 
     private fun loadImage(glide: GlideRequests, view: ImageView, url: HttpUrl) = glide.load(url.toString())
         .centerInside()
-        .listener(object : RequestListener<Drawable?> {
-
-            override fun onLoadFailed(
-                e: GlideException?,
-                model: Any?,
-                target: Target<Drawable?>?,
-                isFirstResource: Boolean
-            ): Boolean {
+        .listener(object : SimpleGlideRequestListener<Drawable?> {
+            override fun onLoadFailed(error: GlideException?): Boolean {
                 view.setTag(R.id.error_tag, true)
 
                 return false
             }
-
-            override fun onResourceReady(
-                resource: Drawable?,
-                model: Any?,
-                target: Target<Drawable?>?,
-                dataSource: DataSource?,
-                isFirstResource: Boolean
-            ) = false
         })
         .error(IconicsDrawable(view.context, CommunityMaterial.Icon.cmd_refresh)
             .iconColor(view.context)

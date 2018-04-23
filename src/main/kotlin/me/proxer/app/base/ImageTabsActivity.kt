@@ -1,6 +1,5 @@
 package me.proxer.app.base
 
-import android.annotation.TargetApi
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
@@ -13,6 +12,7 @@ import android.support.v4.view.ViewPager
 import android.transition.Transition
 import android.view.MenuItem
 import android.widget.ImageView
+import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.target.ImageViewTarget
 import com.h6ah4i.android.tablayouthelper.TabLayoutHelper
 import com.jakewharton.rxbinding2.support.design.widget.offsetChanges
@@ -23,6 +23,7 @@ import me.proxer.app.R
 import me.proxer.app.ui.ImageDetailActivity
 import me.proxer.app.util.ActivityUtils
 import me.proxer.app.util.extension.autoDispose
+import me.proxer.app.util.wrapper.SimpleGlideRequestListener
 import okhttp3.HttpUrl
 
 /**
@@ -51,22 +52,18 @@ abstract class ImageTabsActivity : DrawerActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        supportPostponeEnterTransition()
-
         setupToolbar()
         setupImage()
         loadImage()
 
         if (isEnterTransitionPossible(savedInstanceState) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.sharedElementEnterTransition.addListener(object : TransitionListenerWrapper {
+            supportPostponeEnterTransition()
 
-                @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+            window.sharedElementEnterTransition.addListener(object : TransitionListenerWrapper {
                 override fun onTransitionEnd(transition: Transition?) {
                     window.sharedElementEnterTransition.removeListener(this)
 
-                    viewPager.postDelayed({
-                        setupContent(savedInstanceState)
-                    }, 50)
+                    viewPager.postDelayed({ setupContent(savedInstanceState) }, 50)
                 }
             })
         } else {
@@ -81,14 +78,14 @@ abstract class ImageTabsActivity : DrawerActivity() {
         super.onDestroy()
     }
 
-    override fun onBackPressed() = when (isHeaderImageVisible) {
+    override fun onBackPressed() = when (isHeaderImageVisible && headerImage.drawable != null) {
         true -> super.onBackPressed()
         false -> finish()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            android.R.id.home -> when (isHeaderImageVisible) {
+            android.R.id.home -> when (isHeaderImageVisible && headerImage.drawable != null) {
                 true -> supportFinishAfterTransition()
                 false -> finish()
             }
@@ -98,9 +95,7 @@ abstract class ImageTabsActivity : DrawerActivity() {
     }
 
     protected open fun setupImage() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            headerImage.transitionName = ActivityUtils.getTransitionName(this)
-        }
+        ViewCompat.setTransitionName(headerImage, ActivityUtils.getTransitionName(this))
 
         headerImage.clicks()
             .autoDispose(this)
@@ -125,6 +120,13 @@ abstract class ImageTabsActivity : DrawerActivity() {
         } else {
             GlideApp.with(this)
                 .load(headerImageUrl.toString())
+                .listener(object : SimpleGlideRequestListener<Drawable?> {
+                    override fun onLoadFailed(error: GlideException?): Boolean {
+                        supportStartPostponedEnterTransition()
+
+                        return false
+                    }
+                })
                 .into(object : ImageViewTarget<Drawable>(headerImage) {
                     override fun setResource(resource: Drawable?) {
                         headerImage.setImageDrawable(resource)
