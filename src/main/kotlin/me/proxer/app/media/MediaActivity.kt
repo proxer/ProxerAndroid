@@ -1,6 +1,7 @@
 package me.proxer.app.media
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
@@ -49,11 +50,22 @@ class MediaActivity : ImageTabsActivity() {
             category: Category? = null,
             imageView: ImageView? = null
         ) {
-            context.intentFor<MediaActivity>(
+            getIntent(context, id, name, category).let {
+                ActivityUtils.navigateToWithImageTransition(it, context, imageView)
+            }
+        }
+
+        fun getIntent(
+            context: Context,
+            id: String,
+            name: String? = null,
+            category: Category? = null
+        ): Intent {
+            return context.intentFor<MediaActivity>(
                 ID_EXTRA to id,
                 NAME_EXTRA to name,
                 CATEGORY_EXTRA to category
-            ).let { ActivityUtils.navigateToWithImageTransition(it, context, imageView) }
+            )
         }
     }
 

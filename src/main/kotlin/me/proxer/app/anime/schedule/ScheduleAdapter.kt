@@ -1,4 +1,4 @@
-package me.proxer.app.anime
+package me.proxer.app.anime.schedule
 
 import android.os.Parcelable
 import android.support.v7.widget.LinearLayoutManager
@@ -15,7 +15,7 @@ import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
-import me.proxer.app.anime.ScheduleAdapter.ViewHolder
+import me.proxer.app.anime.schedule.ScheduleAdapter.ViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.toAppString

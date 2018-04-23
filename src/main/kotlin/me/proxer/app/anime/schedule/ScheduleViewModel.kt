@@ -1,4 +1,4 @@
-package me.proxer.app.anime
+package me.proxer.app.anime.schedule
 
 import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
 import io.reactivex.Single

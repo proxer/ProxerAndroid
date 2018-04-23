@@ -1,4 +1,4 @@
-package me.proxer.app.news.widget
+package me.proxer.app.anime.schedule.widget
 
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
@@ -15,36 +15,42 @@ import io.reactivex.disposables.Disposable
 import me.proxer.app.MainActivity
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.R
-import me.proxer.app.forum.TopicActivity
+import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.buildSingle
+import me.proxer.app.util.extension.convertToDateTime
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper
 import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.intentFor
+import org.threeten.bp.LocalDate
+import org.threeten.bp.format.DateTimeFormatter
+import java.util.Locale
 
 /**
  * @author Ruben Gees
  */
-class NewsWidgetUpdateService : JobIntentService() {
+class ScheduleWidgetUpdateService : JobIntentService() {
 
     companion object {
-        private const val JOB_ID = 31221
+        private const val JOB_ID = 31253
+
+        private val DAY_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd. MMMM", Locale.GERMANY)
 
         fun enqueueWork(context: Context, work: Intent) {
-            enqueueWork(context, NewsWidgetUpdateService::class.java, JOB_ID, work)
+            enqueueWork(context, ScheduleWidgetUpdateService::class.java, JOB_ID, work)
         }
     }
 
     private var disposable: Disposable? = null
 
     override fun onHandleWork(intent: Intent) {
-        val componentName = ComponentName(applicationContext.applicationContext, NewsWidgetProvider::class.java)
-        val darkComponentName = ComponentName(applicationContext.applicationContext, NewsWidgetDarkProvider::class.java)
+        val componentName = ComponentName(applicationContext.applicationContext, ScheduleWidgetProvider::class.java)
+        val darkComponentName = ComponentName(applicationContext.applicationContext, ScheduleWidgetDarkProvider::class.java)
 
         val appWidgetManager = AppWidgetManager.getInstance(applicationContext)
         val widgetIds = appWidgetManager.getAppWidgetIds(componentName)
@@ -53,11 +59,15 @@ class NewsWidgetUpdateService : JobIntentService() {
         widgetIds.forEach { id -> bindLoadingLayout(appWidgetManager, id, false) }
         darkWidgetIds.forEach { id -> bindLoadingLayout(appWidgetManager, id, true) }
 
-        disposable = api.notifications().news().buildSingle()
-            .map { it.map { SimpleNews(it.id, it.threadId, it.categoryId, it.subject, it.category, it.date) } }
-            .subscribeAndLogErrors({ news ->
-                widgetIds.forEach { id -> bindListLayout(appWidgetManager, id, news, false) }
-                darkWidgetIds.forEach { id -> bindListLayout(appWidgetManager, id, news, true) }
+        disposable = api.media().calendar().buildSingle()
+            .map { entries ->
+                entries
+                    .filter { it.date.convertToDateTime().dayOfMonth == LocalDate.now().dayOfMonth }
+                    .map { SimpleCalendarEntry(it.id, it.entryId, it.name, it.episode, it.date, it.uploadDate) }
+            }
+            .subscribeAndLogErrors({ calendarEntries ->
+                widgetIds.forEach { id -> bindListLayout(appWidgetManager, id, calendarEntries, false) }
+                darkWidgetIds.forEach { id -> bindListLayout(appWidgetManager, id, calendarEntries, true) }
             }, { error ->
                 val action = ErrorUtils.handle(error)
 
@@ -74,24 +84,29 @@ class NewsWidgetUpdateService : JobIntentService() {
     }
 
     @Suppress("SpreadOperator")
-    private fun bindListLayout(appWidgetManager: AppWidgetManager, id: Int, news: List<SimpleNews>, dark: Boolean) {
+    private fun bindListLayout(
+        appWidgetManager: AppWidgetManager,
+        id: Int,
+        calendarEntries: List<SimpleCalendarEntry>,
+        dark: Boolean
+    ) {
         val views = RemoteViews(applicationContext.packageName, when (dark) {
-            true -> R.layout.layout_widget_news_dark_list
-            false -> R.layout.layout_widget_news_list
+            true -> R.layout.layout_widget_schedule_dark_list
+            false -> R.layout.layout_widget_schedule_list
         })
 
         val params = arrayOf(
-            NewsWidgetService.ARGUMENT_NEWS_WRAPPER to bundleOf(
-                NewsWidgetService.ARGUMENT_NEWS to news.toTypedArray()
+            ScheduleWidgetService.ARGUMENT_CALENDAR_ENTRIES_WRAPPER to bundleOf(
+                ScheduleWidgetService.ARGUMENT_CALENDAR_ENTRIES to calendarEntries.toTypedArray()
             )
         )
 
         val intent = when (dark) {
-            true -> applicationContext.intentFor<NewsWidgetDarkService>(*params)
-            false -> applicationContext.intentFor<NewsWidgetService>(*params)
+            true -> applicationContext.intentFor<ScheduleWidgetDarkService>(*params)
+            false -> applicationContext.intentFor<ScheduleWidgetService>(*params)
         }
 
-        val detailIntent = applicationContext.intentFor<TopicActivity>()
+        val detailIntent = applicationContext.intentFor<MediaActivity>()
         val detailPendingIntent = PendingIntent.getActivity(applicationContext, 0, detailIntent, FLAG_UPDATE_CURRENT)
 
         bindBaseLayout(id, views)
@@ -104,8 +119,8 @@ class NewsWidgetUpdateService : JobIntentService() {
 
     private fun bindErrorLayout(appWidgetManager: AppWidgetManager, id: Int, errorAction: ErrorAction, dark: Boolean) {
         val views = RemoteViews(applicationContext.packageName, when (dark) {
-            true -> R.layout.layout_widget_news_dark_error
-            false -> R.layout.layout_widget_news_error
+            true -> R.layout.layout_widget_schedule_dark_error
+            false -> R.layout.layout_widget_schedule_error
         })
 
         bindBaseLayout(id, views)
@@ -128,8 +143,8 @@ class NewsWidgetUpdateService : JobIntentService() {
 
     private fun bindLoadingLayout(appWidgetManager: AppWidgetManager, id: Int, dark: Boolean) {
         val views = RemoteViews(applicationContext.packageName, when (dark) {
-            true -> R.layout.layout_widget_news_dark_loading
-            false -> R.layout.layout_widget_news_loading
+            true -> R.layout.layout_widget_schedule_dark_loading
+            false -> R.layout.layout_widget_schedule_loading
         })
 
         bindBaseLayout(id, views)
@@ -138,15 +153,16 @@ class NewsWidgetUpdateService : JobIntentService() {
     }
 
     private fun bindBaseLayout(id: Int, views: RemoteViews) {
-        val intent = MainActivity.getSectionIntent(applicationContext, MaterialDrawerWrapper.DrawerItem.NEWS)
+        val intent = MainActivity.getSectionIntent(applicationContext, MaterialDrawerWrapper.DrawerItem.SCHEDULE)
         val pendingIntent = PendingIntent.getActivity(applicationContext, 0, intent, FLAG_UPDATE_CURRENT)
 
-        val updateIntent = applicationContext.intentFor<NewsWidgetProvider>()
+        val updateIntent = applicationContext.intentFor<ScheduleWidgetProvider>()
             .setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE)
             .putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, intArrayOf(id))
 
         val updatePendingIntent = PendingIntent.getBroadcast(applicationContext, 0, updateIntent, FLAG_UPDATE_CURRENT)
 
+        views.setTextViewText(R.id.day, LocalDate.now().format(DAY_DATE_TIME_FORMATTER))
         views.setOnClickPendingIntent(R.id.title, pendingIntent)
         views.setOnClickPendingIntent(R.id.refresh, updatePendingIntent)
 

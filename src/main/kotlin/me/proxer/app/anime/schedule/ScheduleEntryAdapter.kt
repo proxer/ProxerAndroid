@@ -1,4 +1,4 @@
-package me.proxer.app.anime
+package me.proxer.app.anime.schedule
 
 import android.graphics.Typeface.BOLD
 import android.support.v4.content.ContextCompat
@@ -26,7 +26,7 @@ import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
-import me.proxer.app.anime.ScheduleEntryAdapter.ViewHolder
+import me.proxer.app.anime.schedule.ScheduleEntryAdapter.ViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.calculateAndFormatDifference

@@ -9,7 +9,7 @@ import com.rubengees.introduction.IntroductionActivity.OPTION_RESULT
 import com.rubengees.introduction.IntroductionBuilder
 import com.rubengees.introduction.Option
 import kotterknife.bindView
-import me.proxer.app.anime.ScheduleFragment
+import me.proxer.app.anime.schedule.ScheduleFragment
 import me.proxer.app.base.BackPressAware
 import me.proxer.app.base.DrawerActivity
 import me.proxer.app.bookmark.BookmarkFragment

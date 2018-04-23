@@ -682,6 +682,8 @@
     <string name="interval_seldom">Selten (Alle 8 Stunden)</string>
 
     <string name="time_a_moment_ago">Eben gerade</string>
+    <string name="widget_schedule_label">Proxer.Me Tagesplan</string>
+    <string name="widget_schedule_title">Proxer.Me Tagesplan</string>
     <plurals name="time_days_ago">
         <item quantity="one">"Gestern"</item>
         <item quantity="other">"Vor %d Tagen"</item>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:initialLayout="@layout/layout_widget_schedule_dark_loading"
+    android:minWidth="200dp"
+    android:minHeight="110dp"
+    android:minResizeWidth="200dp"
+    android:minResizeHeight="110dp"
+    android:resizeMode="vertical|horizontal"
+    android:updatePeriodMillis="1800000"
+    android:widgetCategory="home_screen"
+    tools:ignore="UnusedAttribute" />

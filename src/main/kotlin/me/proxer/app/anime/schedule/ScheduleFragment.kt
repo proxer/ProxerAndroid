@@ -1,4 +1,4 @@
-package me.proxer.app.anime
+package me.proxer.app.anime.schedule
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
