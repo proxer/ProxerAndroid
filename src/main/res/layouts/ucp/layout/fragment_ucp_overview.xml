@@ -21,6 +21,7 @@
                 android:id="@+id/contentContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:focusableInTouchMode="true"
                 android:orientation="vertical"
                 android:paddingLeft="@dimen/screen_horizontal_margin"
                 android:paddingTop="@dimen/screen_vertical_margin"
