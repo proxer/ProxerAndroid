@@ -55,7 +55,7 @@ class RecommendationFragment : BaseContentFragment<List<Recommendation>>() {
             .autoDispose(this)
             .subscribe { (view, recommendation) ->
                 MediaActivity.navigateTo(requireActivity(), recommendation.id, recommendation.name,
-                    recommendation.category, if (view.drawable != null) view else null)
+                    recommendation.category, view)
             }
     }
 

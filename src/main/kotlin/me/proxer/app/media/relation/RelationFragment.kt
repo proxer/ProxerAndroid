@@ -54,8 +54,7 @@ class RelationFragment : BaseContentFragment<List<Relation>>() {
         adapter.clickSubject
             .autoDispose(this)
             .subscribe { (view, relation) ->
-                MediaActivity.navigateTo(requireActivity(), relation.id, relation.name, relation.category,
-                    if (view.drawable != null) view else null)
+                MediaActivity.navigateTo(requireActivity(), relation.id, relation.name, relation.category, view)
             }
     }
 

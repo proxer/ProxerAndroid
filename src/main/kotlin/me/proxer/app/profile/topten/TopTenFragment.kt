@@ -64,8 +64,7 @@ class TopTenFragment : BaseContentFragment<ZippedTopTenResult>() {
         Observable.merge(animeAdapter.clickSubject, mangaAdapter.clickSubject)
             .autoDispose(this)
             .subscribe { (view, item) ->
-                MediaActivity.navigateTo(requireActivity(), item.id, item.name, item.category,
-                    if (view.drawable != null) view else null)
+                MediaActivity.navigateTo(requireActivity(), item.id, item.name, item.category, view)
             }
     }
 

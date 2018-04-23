@@ -87,8 +87,7 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
         innerAdapter.longClickSubject
             .autoDispose(this)
             .subscribe { (view, bookmark) ->
-                MediaActivity.navigateTo(requireActivity(), bookmark.entryId, bookmark.name, bookmark.category,
-                    if (view.drawable != null) view else null)
+                MediaActivity.navigateTo(requireActivity(), bookmark.entryId, bookmark.name, bookmark.category, view)
             }
 
         innerAdapter.deleteClickSubject

@@ -46,8 +46,7 @@ class ScheduleFragment : BaseContentFragment<Map<CalendarDay, List<CalendarEntry
         adapter.clickSubject
             .autoDispose(this)
             .subscribe { (view, item) ->
-                MediaActivity.navigateTo(requireActivity(), item.entryId, item.name, null,
-                    if (view.drawable != null) view else null)
+                MediaActivity.navigateTo(requireActivity(), item.entryId, item.name, null, view)
             }
     }
 

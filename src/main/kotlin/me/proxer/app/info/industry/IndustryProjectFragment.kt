@@ -52,8 +52,7 @@ class IndustryProjectFragment : PagedContentFragment<IndustryProject>() {
         innerAdapter.clickSubject
             .autoDispose(this)
             .subscribe { (view, project) ->
-                MediaActivity.navigateTo(requireActivity(), project.id, project.name, project.medium.toCategory(),
-                    if (view.drawable != null) view else null)
+                MediaActivity.navigateTo(requireActivity(), project.id, project.name, project.medium.toCategory(), view)
             }
     }
 

@@ -68,8 +68,7 @@ class UcpMediaListFragment : PagedContentFragment<UserMediaListEntry>() {
         innerAdapter.clickSubject
             .autoDispose(this)
             .subscribe { (view, item) ->
-                MediaActivity.navigateTo(requireActivity(), item.id, item.name, item.medium.toCategory(),
-                    if (view.drawable != null) view else null)
+                MediaActivity.navigateTo(requireActivity(), item.id, item.name, item.medium.toCategory(), view)
             }
 
         setHasOptionsMenu(true)

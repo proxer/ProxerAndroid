@@ -53,7 +53,7 @@ class TranslatorGroupProjectFragment : PagedContentFragment<TranslatorGroupProje
             .autoDispose(this)
             .subscribe { (view, translatorGroup) ->
                 MediaActivity.navigateTo(requireActivity(), translatorGroup.id, translatorGroup.name,
-                    translatorGroup.medium.toCategory(), if (view.drawable != null) view else null)
+                    translatorGroup.medium.toCategory(), view)
             }
     }
 

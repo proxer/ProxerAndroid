@@ -14,7 +14,7 @@ object ActivityUtils {
     private const val TRANSITION_NAME_EXTRA = "transition_name"
 
     fun navigateToWithImageTransition(intent: Intent, context: Activity, imageView: ImageView?) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && imageView != null) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && imageView != null && imageView.drawable != null) {
             intent.putExtra(TRANSITION_NAME_EXTRA, imageView.transitionName)
 
             context.startActivity(intent, ActivityOptionsCompat

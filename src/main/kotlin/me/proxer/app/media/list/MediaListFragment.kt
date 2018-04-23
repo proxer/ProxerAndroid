@@ -203,8 +203,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
         innerAdapter.clickSubject
             .autoDispose(this)
             .subscribe { (view, entry) ->
-                MediaActivity.navigateTo(requireActivity(), entry.id, entry.name, entry.medium.toCategory(),
-                    if (view.drawable != null) view else null)
+                MediaActivity.navigateTo(requireActivity(), entry.id, entry.name, entry.medium.toCategory(), view)
             }
 
         setHasOptionsMenu(true)

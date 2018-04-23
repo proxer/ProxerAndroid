@@ -54,8 +54,7 @@ class UcpTopTenFragment : BaseContentFragment<ZippedTopTenResult>() {
         Observable.merge(animeAdapter.clickSubject, mangaAdapter.clickSubject)
             .autoDispose(this)
             .subscribe { (view, item) ->
-                MediaActivity.navigateTo(requireActivity(), item.entryId, item.name, item.category,
-                    if (view.drawable != null) view else null)
+                MediaActivity.navigateTo(requireActivity(), item.entryId, item.name, item.category, view)
             }
 
         Observable.merge(animeAdapter.deleteSubject, mangaAdapter.deleteSubject)

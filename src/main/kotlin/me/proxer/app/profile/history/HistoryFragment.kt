@@ -71,8 +71,7 @@ class HistoryFragment : PagedContentFragment<UserHistoryEntry>() {
         innerAdapter.longClickSubject
             .autoDispose(this)
             .subscribe { (view, entry) ->
-                MediaActivity.navigateTo(requireActivity(), entry.entryId, entry.name, entry.category,
-                    if (view.drawable != null) view else null)
+                MediaActivity.navigateTo(requireActivity(), entry.entryId, entry.name, entry.category, view)
             }
     }
 
