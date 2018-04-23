@@ -33,8 +33,6 @@ object IntroductionWrapper {
                     }
                     1 -> image.setIconicsImage(CommunityMaterial.Icon.cmd_bell_outline, 256, padding / 2,
                         android.R.color.white)
-                    2 -> image.setIconicsImage(CommunityMaterial.Icon.cmd_book_open_page_variant, 256, padding / 2,
-                        android.R.color.white)
                 }
             }
         })
@@ -46,9 +44,6 @@ object IntroductionWrapper {
             .withDescription(R.string.introduction_welcome_description),
         Slide().withTitle(R.string.introduction_notifications_title)
             .withColorResource(R.color.primary)
-            .withOption(Option(context.getString(R.string.introduction_notifications_description), true)),
-        Slide().withTitle(R.string.introduction_manga_reader_title)
-            .withColorResource(R.color.primary)
-            .withOption(Option(R.string.introduction_manga_reader_description, true))
+            .withOption(Option(context.getString(R.string.introduction_notifications_description), true))
     )
 }

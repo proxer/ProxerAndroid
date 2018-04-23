@@ -40,16 +40,6 @@
             android:title="@string/preference_theme_title" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/preference_category_manga_title">
-
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="manga_vertical_reader"
-            android:summaryOff="@string/preference_manga_vertical_reader_summary_off"
-            android:summaryOn="@string/preference_manga_vertical_reader_summary_on"
-            android:title="@string/preference_manga_vertical_reader_title" />
-    </PreferenceCategory>
-
     <PreferenceCategory android:title="@string/preference_category_notifications_title">
 
         <SwitchPreference

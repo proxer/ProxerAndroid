@@ -542,11 +542,6 @@
     <string name="preference_theme_dark">Dunkel</string>
     <string name="preference_theme_light">Hell</string>
 
-    <string name="preference_category_manga_title">Manga</string>
-    <string name="preference_manga_vertical_reader_title">Manga Reader Ausrichtung</string>
-    <string name="preference_manga_vertical_reader_summary_off">Manga werden von Links nach Rechts angezeigt</string>
-    <string name="preference_manga_vertical_reader_summary_on">Manga werden von Oben nach Unten angezeigt</string>
-
     <string name="preference_category_notifications_title">Benachrichtigungen</string>
     <string name="preference_notifications_news_title">News</string>
     <string name="preference_notifications_account_title">Account</string>
@@ -589,8 +584,6 @@
     <string name="introduction_notifications_description">
         Erhalte Benachrichtigungen zu News und deinem Account
     </string>
-    <string name="introduction_manga_reader_title">Manga Reader Ausrichtung</string>
-    <string name="introduction_manga_reader_description">Zeige Manga mobil-freundlich von oben nach unten an</string>
     <string name="introduction_skip">Überspringen</string>
 
     <string name="action_search">Suchen</string>
