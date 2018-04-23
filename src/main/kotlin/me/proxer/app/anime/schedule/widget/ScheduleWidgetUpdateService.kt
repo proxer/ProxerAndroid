@@ -49,8 +49,8 @@ class ScheduleWidgetUpdateService : JobIntentService() {
     private var disposable: Disposable? = null
 
     override fun onHandleWork(intent: Intent) {
-        val componentName = ComponentName(applicationContext.applicationContext, ScheduleWidgetProvider::class.java)
-        val darkComponentName = ComponentName(applicationContext.applicationContext, ScheduleWidgetDarkProvider::class.java)
+        val componentName = ComponentName(applicationContext, ScheduleWidgetProvider::class.java)
+        val darkComponentName = ComponentName(applicationContext, ScheduleWidgetDarkProvider::class.java)
 
         val appWidgetManager = AppWidgetManager.getInstance(applicationContext)
         val widgetIds = appWidgetManager.getAppWidgetIds(componentName)

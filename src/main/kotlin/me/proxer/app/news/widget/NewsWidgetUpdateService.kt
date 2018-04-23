@@ -43,8 +43,8 @@ class NewsWidgetUpdateService : JobIntentService() {
     private var disposable: Disposable? = null
 
     override fun onHandleWork(intent: Intent) {
-        val componentName = ComponentName(applicationContext.applicationContext, NewsWidgetProvider::class.java)
-        val darkComponentName = ComponentName(applicationContext.applicationContext, NewsWidgetDarkProvider::class.java)
+        val componentName = ComponentName(applicationContext, NewsWidgetProvider::class.java)
+        val darkComponentName = ComponentName(applicationContext, NewsWidgetDarkProvider::class.java)
 
         val appWidgetManager = AppWidgetManager.getInstance(applicationContext)
         val widgetIds = appWidgetManager.getAppWidgetIds(componentName)
