@@ -18,27 +18,23 @@ class CrashDialog : BaseDialog() {
 
     companion object {
         private const val ERROR_DETAILS_ARGUMENT = "error_details"
-        private const val STACKTRACE_ARGUMENT = "stacktrace"
 
-        fun show(activity: AppCompatActivity, errorDetails: String, stacktrace: String) = CrashDialog().apply {
-            arguments = bundleOf(ERROR_DETAILS_ARGUMENT to errorDetails, STACKTRACE_ARGUMENT to stacktrace)
+        fun show(activity: AppCompatActivity, errorDetails: String) = CrashDialog().apply {
+            arguments = bundleOf(ERROR_DETAILS_ARGUMENT to errorDetails)
         }.show(activity.supportFragmentManager, "crash_dialog")
     }
 
     private val errorDetails: String
         get() = requireArguments().getString(ERROR_DETAILS_ARGUMENT)
 
-    private val stacktrace: String
-        get() = requireArguments().getString(STACKTRACE_ARGUMENT)
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialDialog.Builder(requireContext())
         .title(R.string.dialog_crash_title)
-        .content("$errorDetails\n$stacktrace")
+        .content(errorDetails)
         .neutralText(R.string.dialog_crash_neutral)
         .negativeText(R.string.dialog_crash_negative)
         .onNeutral { _, _ ->
             requireContext().clipboardManager.primaryClip = ClipData
-                .newPlainText(getString(R.string.clipboard_crash_title), "$errorDetails\n$stacktrace")
+                .newPlainText(getString(R.string.clipboard_crash_title), errorDetails)
 
             requireContext().toast(R.string.clipboard_status)
         }

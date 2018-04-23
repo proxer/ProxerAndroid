@@ -43,9 +43,6 @@ class CrashActivity : BaseActivity() {
             return androidVersion + CustomActivityOnCrash.getAllErrorDetailsFromIntent(this, intent)
         }
 
-    private val stacktrace: String
-        get() = CustomActivityOnCrash.getStackTraceFromIntent(intent) ?: ""
-
     private val toolbar: Toolbar by bindView(R.id.toolbar)
     private val image: ImageView by bindView(R.id.image)
     private val text: TextView by bindView(R.id.text)
@@ -63,7 +60,7 @@ class CrashActivity : BaseActivity() {
 
         report.clicks()
             .autoDispose(this)
-            .subscribe { CrashDialog.show(this, errorDetails, stacktrace) }
+            .subscribe { CrashDialog.show(this, errorDetails) }
 
         restart.clicks()
             .autoDispose(this)
