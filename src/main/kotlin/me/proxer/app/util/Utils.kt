@@ -36,7 +36,7 @@ object Utils {
     val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss dd.MM.yyyy")
 
     private val WEB_REGEX = Patterns.WEB_URL
-    private val MENTIONS_REGEX = Pattern.compile("(@[a-zA-Z0-9_-]+)")
+    private val MENTIONS_REGEX = Pattern.compile("(@[a-zA-Z0-9_\\-.]+)")
 
     fun findActivity(currentContext: Context): Activity? = when (currentContext) {
         is Activity -> currentContext
@@ -83,20 +83,20 @@ object Utils {
     ): CharSequence {
         val builder = LinkBuilder.from(context, text.toString())
 
-        if (onWebClickListener != null || onWebLongClickListener != null) {
-            builder.addLink(Link(WEB_REGEX)
-                .setTextColor(ContextCompat.getColor(context, R.color.link))
-                .setUnderlined(false)
-                .apply { onWebClickListener?.let { setOnClickListener(it) } }
-                .apply { onWebLongClickListener?.let { setOnLongClickListener(it) } })
-        }
-
         if (onMentionsClickListener != null || onMentionsLongClickListener != null) {
             builder.addLink(Link(MENTIONS_REGEX)
                 .setTextColor(ContextCompat.getColor(context, R.color.link))
                 .setUnderlined(false)
                 .apply { onMentionsClickListener?.let { setOnClickListener(it) } }
                 .apply { onMentionsLongClickListener?.let { setOnLongClickListener(it) } })
+        }
+
+        if (onWebClickListener != null || onWebLongClickListener != null) {
+            builder.addLink(Link(WEB_REGEX)
+                .setTextColor(ContextCompat.getColor(context, R.color.link))
+                .setUnderlined(false)
+                .apply { onWebClickListener?.let { setOnClickListener(it) } }
+                .apply { onWebLongClickListener?.let { setOnLongClickListener(it) } })
         }
 
         return builder.build() ?: text
