@@ -25,7 +25,7 @@ import me.proxer.library.util.ProxerUrls
 abstract class BaseContentFragment<T> : BaseFragment() {
 
     private companion object {
-        private const val IS_SOLVING_CAPTCHA_ARGUMENT = "is_solving_chaptcha"
+        private const val IS_SOLVING_CAPTCHA_ARGUMENT = "is_solving_captcha"
     }
 
     protected abstract val viewModel: BaseViewModel<T>
