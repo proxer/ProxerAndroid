@@ -6,6 +6,8 @@ import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.os.Handler
+import android.os.HandlerThread
 import android.support.v4.app.JobIntentService
 import android.view.View
 import android.widget.RemoteViews
@@ -28,6 +30,7 @@ import me.proxer.library.util.ProxerUrls
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.intentFor
 import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import java.util.Locale
 
@@ -46,6 +49,8 @@ class ScheduleWidgetUpdateService : JobIntentService() {
         }
     }
 
+    private val workerThread = HandlerThread("ScheduleWidget-Worker").apply { start() }
+    private val workerQueue = Handler(workerThread.looper)
     private var disposable: Disposable? = null
 
     override fun onHandleWork(intent: Intent) {
@@ -109,12 +114,20 @@ class ScheduleWidgetUpdateService : JobIntentService() {
         val detailIntent = applicationContext.intentFor<MediaActivity>()
         val detailPendingIntent = PendingIntent.getActivity(applicationContext, 0, detailIntent, FLAG_UPDATE_CURRENT)
 
+        val position = calendarEntries.indexOfFirst { it.date.convertToDateTime().isAfter(LocalDateTime.now()) }
+
         bindBaseLayout(id, views)
 
         views.setPendingIntentTemplate(R.id.list, detailPendingIntent)
         views.setRemoteAdapter(R.id.list, intent)
 
         appWidgetManager.updateAppWidget(id, views)
+
+        workerQueue.postDelayed({
+            views.setScrollPosition(R.id.list, position)
+
+            appWidgetManager.partiallyUpdateAppWidget(id, views)
+        }, 100)
     }
 
     private fun bindErrorLayout(appWidgetManager: AppWidgetManager, id: Int, errorAction: ErrorAction, dark: Boolean) {

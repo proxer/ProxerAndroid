@@ -361,7 +361,7 @@
         <receiver
             android:name=".anime.schedule.widget.ScheduleWidgetProvider"
             android:icon="@mipmap/ic_launcher"
-            android:label="">
+            android:label="@string/widget_schedule_label">
 
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

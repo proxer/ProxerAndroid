@@ -19,7 +19,7 @@ class ScheduleWidgetViewsFactory(
 ) : RemoteViewsService.RemoteViewsFactory {
 
     private companion object {
-        private val HOUR_MINUTE_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("hh:mm")
+        private val HOUR_MINUTE_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm")
     }
 
     override fun hasStableIds() = true

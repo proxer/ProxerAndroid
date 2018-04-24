@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:theme="@style/Theme.App"
     android:background="@color/background"
     android:orientation="vertical">
 
@@ -61,5 +62,7 @@
         android:layout_height="match_parent"
         android:divider="@color/divider"
         android:dividerHeight="1dp"
+        android:scrollbarThumbVertical="@drawable/fastscroll_thumb_idle"
+        android:scrollbarTrackVertical="@drawable/fastscroll_track"
         tools:listitem="@layout/layout_widget_schedule_item" />
 </LinearLayout>

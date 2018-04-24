@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:theme="@style/Theme.App"
     android:background="@color/background_dark"
     android:orientation="vertical">
 
@@ -61,7 +62,5 @@
         android:layout_gravity="center"
         android:layout_weight="1"
         android:indeterminate="true"
-        android:indeterminateTint="@color/colorAccent"
-        android:indeterminateTintMode="src_in"
         tools:ignore="UnusedAttribute" />
 </LinearLayout>
