@@ -235,7 +235,13 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
     }
 
     override fun showData(data: List<LocalMessage>) {
+        val wasEmpty = innerAdapter.isEmpty()
+
         super.showData(data)
+
+        if (wasEmpty && conference.unreadMessageAmount >= 1) {
+            recyclerView.scrollToPosition(conference.unreadMessageAmount - 1)
+        }
 
         inputContainer.visibility = View.VISIBLE
     }
