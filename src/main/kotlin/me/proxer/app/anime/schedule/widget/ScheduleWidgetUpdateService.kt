@@ -20,13 +20,10 @@ import me.proxer.app.R
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
-import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.convertToDateTime
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper
-import me.proxer.library.enums.Device
-import me.proxer.library.util.ProxerUrls
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.intentFor
 import org.threeten.bp.LocalDate
@@ -136,14 +133,14 @@ class ScheduleWidgetUpdateService : JobIntentService() {
             false -> R.layout.layout_widget_schedule_error
         })
 
+        val errorIntent = errorAction.toIntent()
+
         bindBaseLayout(id, views)
 
         views.setTextViewText(R.id.errorText, applicationContext.getString(errorAction.message))
 
-        if (errorAction.buttonAction == ErrorAction.ButtonAction.CAPTCHA) {
-            val errorIntent = Intent(Intent.ACTION_VIEW, ProxerUrls.captchaWeb(Device.MOBILE).androidUri())
-            val errorPendingIntent = PendingIntent.getActivity(applicationContext, 0,
-                errorIntent, FLAG_UPDATE_CURRENT)
+        if (errorIntent != null) {
+            val errorPendingIntent = PendingIntent.getActivity(applicationContext, 0, errorIntent, FLAG_UPDATE_CURRENT)
 
             views.setTextViewText(R.id.errorButton, applicationContext.getString(errorAction.buttonMessage))
             views.setOnClickPendingIntent(R.id.errorButton, errorPendingIntent)

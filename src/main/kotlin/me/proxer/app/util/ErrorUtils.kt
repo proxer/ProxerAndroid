@@ -1,5 +1,6 @@
 package me.proxer.app.util
 
+import android.content.Intent
 import android.view.View
 import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.upstream.HttpDataSource
@@ -20,6 +21,7 @@ import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction.LOGIN
 import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction.OPEN_LINK
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_DEFAULT
 import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.extension.androidUri
 import me.proxer.library.api.ProxerException
 import me.proxer.library.api.ProxerException.ErrorType.CANCELLED
 import me.proxer.library.api.ProxerException.ErrorType.IO
@@ -273,6 +275,11 @@ object ErrorUtils {
                     else -> null
                 }
             }
+            else -> null
+        }
+
+        fun toIntent() = when (buttonAction) {
+            CAPTCHA -> Intent(Intent.ACTION_VIEW, ProxerUrls.captchaWeb(Device.MOBILE).androidUri())
             else -> null
         }
 

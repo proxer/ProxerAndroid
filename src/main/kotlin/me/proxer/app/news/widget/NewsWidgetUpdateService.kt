@@ -18,12 +18,9 @@ import me.proxer.app.R
 import me.proxer.app.forum.TopicActivity
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
-import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper
-import me.proxer.library.enums.Device
-import me.proxer.library.util.ProxerUrls
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.intentFor
 
@@ -108,14 +105,14 @@ class NewsWidgetUpdateService : JobIntentService() {
             false -> R.layout.layout_widget_news_error
         })
 
+        val errorIntent = errorAction.toIntent()
+
         bindBaseLayout(id, views)
 
         views.setTextViewText(R.id.errorText, applicationContext.getString(errorAction.message))
 
-        if (errorAction.buttonAction == ErrorAction.ButtonAction.CAPTCHA) {
-            val errorIntent = Intent(Intent.ACTION_VIEW, ProxerUrls.captchaWeb(Device.MOBILE).androidUri())
-            val errorPendingIntent = PendingIntent.getActivity(applicationContext, 0,
-                errorIntent, FLAG_UPDATE_CURRENT)
+        if (errorIntent != null) {
+            val errorPendingIntent = PendingIntent.getActivity(applicationContext, 0, errorIntent, FLAG_UPDATE_CURRENT)
 
             views.setTextViewText(R.id.errorButton, applicationContext.getString(errorAction.buttonMessage))
             views.setOnClickPendingIntent(R.id.errorButton, errorPendingIntent)

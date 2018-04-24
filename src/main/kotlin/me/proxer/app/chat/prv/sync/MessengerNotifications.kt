@@ -3,7 +3,6 @@ package me.proxer.app.chat.prv.sync
 import android.app.Notification
 import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.graphics.Typeface
 import android.os.Build
 import android.support.v4.app.NotificationCompat
@@ -28,10 +27,8 @@ import me.proxer.app.util.NotificationUtils.CHAT_CHANNEL
 import me.proxer.app.util.Utils
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.LocalConferenceMap
-import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.getQuantityString
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper.DrawerItem
-import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
 
 /**
@@ -60,17 +57,12 @@ object MessengerNotifications {
     }
 
     fun showError(context: Context, error: Throwable) {
-        val intent = if (ErrorUtils.isIpBlockedError(error)) {
-            PendingIntent.getActivity(context, ID, Intent(Intent.ACTION_VIEW).apply {
-                data = ProxerUrls.captchaWeb(Device.MOBILE).androidUri()
-            }, PendingIntent.FLAG_UPDATE_CURRENT)
-        } else {
-            null
-        }
+        val errorAction = ErrorUtils.handle(error)
 
         NotificationUtils.showErrorNotification(context, ID, NotificationUtils.CHAT_CHANNEL,
             context.getString(R.string.notification_chat_error_title),
-            context.getString(ErrorUtils.getMessage(error)), intent)
+            context.getString(errorAction.message),
+            PendingIntent.getActivity(context, 0, errorAction.toIntent(), PendingIntent.FLAG_UPDATE_CURRENT))
     }
 
     fun cancel(context: Context) = NotificationManagerCompat.from(context).cancel(ID)

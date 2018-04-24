@@ -34,9 +34,12 @@ object AccountNotifications {
     }
 
     fun showError(context: Context, error: Throwable) {
+        val errorAction = ErrorUtils.handle(error)
+
         NotificationUtils.showErrorNotification(context, ID, PROFILE_CHANNEL,
             context.getString(R.string.notification_account_error_title),
-            context.getString(ErrorUtils.getMessage(error)))
+            context.getString(errorAction.message),
+            PendingIntent.getActivity(context, 0, errorAction.toIntent(), PendingIntent.FLAG_UPDATE_CURRENT))
     }
 
     fun cancel(context: Context) = NotificationManagerCompat.from(context).cancel(ID)
