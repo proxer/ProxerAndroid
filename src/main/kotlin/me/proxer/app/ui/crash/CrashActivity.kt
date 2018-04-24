@@ -10,7 +10,6 @@ import cat.ereza.customactivityoncrash.CustomActivityOnCrash
 import cat.ereza.customactivityoncrash.config.CaocConfig
 import com.jakewharton.rxbinding2.view.clicks
 import com.klinker.android.link_builder.TouchableMovementMethod
-import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseActivity
@@ -18,7 +17,6 @@ import me.proxer.app.chat.prv.Participant
 import me.proxer.app.chat.prv.create.CreateConferenceActivity
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.autoDispose
-import me.proxer.app.util.extension.setIconicsImage
 
 /**
  * @author Ruben Gees
@@ -55,8 +53,6 @@ class CrashActivity : BaseActivity() {
         setContentView(R.layout.activity_crash)
         setSupportActionBar(toolbar)
         title = getString(R.string.section_crash)
-
-        image.setIconicsImage(CommunityMaterial.Icon.cmd_bug, 200, 12, R.color.primary)
 
         report.clicks()
             .autoDispose(this)
