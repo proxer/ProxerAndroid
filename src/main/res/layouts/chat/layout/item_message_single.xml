@@ -28,7 +28,7 @@
 
             <LinearLayout
                 android:id="@+id/titleContainer"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:foreground="?attr/selectableItemBackground"
                 android:orientation="horizontal"
@@ -43,13 +43,15 @@
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
+                    tools:src="@drawable/ic_japan"
                     tools:ignore="ContentDescription" />
 
                 <TextView
                     android:id="@+id/title"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
                     android:padding="8dp"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
                     tools:text="RubyGee" />
@@ -57,7 +59,7 @@
 
             <me.proxer.app.ui.view.LinkConsumableEmojiTextView
                 android:id="@+id/text"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
@@ -65,14 +67,14 @@
                 android:importantForAutofill="no"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 tools:ignore="UnusedAttribute"
-                tools:text="Message looooooooooooooooooooooooooong" />
+                tools:text="short" />
 
             <TextView
                 android:id="@+id/time"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
                 android:layout_margin="8dp"
+                android:gravity="end"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 tools:text="10 minutes ago" />
         </LinearLayout>

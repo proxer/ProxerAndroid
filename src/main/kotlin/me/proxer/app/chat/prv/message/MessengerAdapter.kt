@@ -50,6 +50,8 @@ class MessengerAdapter(
     val selectedMessages: List<LocalMessage>
         get() = data.filter { messageSelectionMap[it.id.toString()] == true }.sortedBy { it.date }
 
+    private var layoutManager: RecyclerView.LayoutManager? = null
+
     private val messageSelectionMap: ParcelableStringBooleanMap
     private val timeDisplayMap: ParcelableStringBooleanMap
 
@@ -155,6 +157,14 @@ class MessengerAdapter(
         val context = holder.itemView.context
 
         holder.bind(data[position], context.dip(margins.first), context.dip(margins.second))
+    }
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        layoutManager = recyclerView.layoutManager
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        layoutManager = null
     }
 
     override fun swapDataAndNotifyWithDiffing(newData: List<LocalMessage>) {
@@ -267,7 +277,10 @@ class MessengerAdapter(
                 timeDisplayMap.putOrRemove(id)
             }
 
-            notifyDataSetChanged()
+            applySelection(current)
+            applyTimeVisibility(current)
+
+            layoutManager?.requestSimpleAnimationsInNextLayout()
         }
 
         internal open fun onContainerLongClick(v: View): Boolean {
@@ -279,10 +292,11 @@ class MessengerAdapter(
 
                 if (!isSelecting) {
                     isSelecting = true
-                    messageSelectionMap.put(id, true)
 
+                    messageSelectionMap.put(id, true)
                     messageSelectionSubject.onNext(messageSelectionMap.size)
-                    notifyDataSetChanged()
+
+                    applySelection(current)
 
                     consumed = true
                 }

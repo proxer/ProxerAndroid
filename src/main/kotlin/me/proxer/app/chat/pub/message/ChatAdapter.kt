@@ -52,6 +52,8 @@ class ChatAdapter(savedInstanceState: Bundle?) : BaseAdapter<ChatMessage, Messag
     val selectedMessages: List<ChatMessage>
         get() = data.filter { messageSelectionMap[it.id] == true }.sortedBy { it.date }
 
+    private var layoutManager: RecyclerView.LayoutManager? = null
+
     private val messageSelectionMap: ParcelableStringBooleanMap
     private val timeDisplayMap: ParcelableStringBooleanMap
 
@@ -150,6 +152,10 @@ class ChatAdapter(savedInstanceState: Bundle?) : BaseAdapter<ChatMessage, Messag
         holder.bind(data[position], context.dip(margins.first), context.dip(margins.second))
     }
 
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        layoutManager = recyclerView.layoutManager
+    }
+
     override fun swapDataAndNotifyWithDiffing(newData: List<ChatMessage>) {
         super.swapDataAndNotifyWithDiffing(newData)
 
@@ -182,6 +188,7 @@ class ChatAdapter(savedInstanceState: Bundle?) : BaseAdapter<ChatMessage, Messag
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        layoutManager = null
         glide = null
     }
 
@@ -261,7 +268,10 @@ class ChatAdapter(savedInstanceState: Bundle?) : BaseAdapter<ChatMessage, Messag
                 timeDisplayMap.putOrRemove(id)
             }
 
-            notifyDataSetChanged()
+            applySelection(current)
+            applyTimeVisibility(current)
+
+            layoutManager?.requestSimpleAnimationsInNextLayout()
         }
 
         internal open fun onContainerLongClick(v: View): Boolean {
@@ -272,10 +282,11 @@ class ChatAdapter(savedInstanceState: Bundle?) : BaseAdapter<ChatMessage, Messag
 
                 if (!isSelecting) {
                     isSelecting = true
-                    messageSelectionMap.put(current.id, true)
 
+                    messageSelectionMap.put(current.id, true)
                     messageSelectionSubject.onNext(messageSelectionMap.size)
-                    notifyDataSetChanged()
+
+                    applySelection(current)
 
                     consumed = true
                 }

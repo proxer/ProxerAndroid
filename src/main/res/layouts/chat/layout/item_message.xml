@@ -28,7 +28,7 @@
 
             <me.proxer.app.ui.view.LinkConsumableEmojiTextView
                 android:id="@+id/text"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
@@ -41,13 +41,13 @@
 
             <TextView
                 android:id="@+id/time"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginBottom="8dp"
+                android:gravity="end"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 tools:text="10 minutes ago" />
         </LinearLayout>
