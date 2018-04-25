@@ -383,7 +383,7 @@
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/widget_provider_schedule" />
+                android:resource="@xml/widget_provider_schedule_dark" />
         </receiver>
 
         <receiver
