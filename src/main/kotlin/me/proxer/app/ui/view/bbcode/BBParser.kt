@@ -43,22 +43,27 @@ import java.util.regex.Pattern.quote
  */
 object BBParser {
 
-    private val defaultPrototypes = setOf(BoldPrototype, ItalicPrototype, UnderlinePrototype, StrikethroughPrototype,
-        SizePrototype, ColorPrototype, LeftPrototype, CenterPrototype, RightPrototype, SpoilerPrototype,
-        QuotePrototype, UrlPrototype, ImagePrototype, DividerPrototype, VideoPrototype, SuperscriptPrototype,
-        SubscriptPrototype, TablePrototype, TableRowPrototype, TableCellPrototype, CodePrototype, HidePrototype,
-        UnorderedListPrototype, OrderedListPrototype, ListItemPrototype, MapPrototype, AttachmentPrototype,
-        FacebookPrototype, TwitterPrototype, PollPrototype, BreakPrototype)
-
     private val textOnlyPrototypes = setOf(BoldPrototype, ItalicPrototype, UnderlinePrototype, StrikethroughPrototype,
         SizePrototype, ColorPrototype, LeftPrototype, CenterPrototype, RightPrototype, SuperscriptPrototype,
         SubscriptPrototype)
+
+    private val simplePrototypes = textOnlyPrototypes.plus(SpoilerPrototype)
+
+    private val defaultPrototypes = simplePrototypes.plus(setOf(QuotePrototype, UrlPrototype, QuotePrototype,
+        UrlPrototype, ImagePrototype, DividerPrototype, VideoPrototype, TablePrototype, TableRowPrototype,
+        TableCellPrototype, CodePrototype, HidePrototype, UnorderedListPrototype, OrderedListPrototype,
+        ListItemPrototype, MapPrototype, AttachmentPrototype, FacebookPrototype, TwitterPrototype, PollPrototype,
+        BreakPrototype))
 
     fun parseTextOnly(input: String): CharSequence {
         val result = parse(input, textOnlyPrototypes).optimize()
         val args = result.children.firstOrNull()?.args
 
         return if (args == null) input else TextPrototype.getText(args)
+    }
+
+    fun parseSimple(input: String): BBTree {
+        return parse(input, simplePrototypes)
     }
 
     fun parse(input: String, prototypes: Set<BBPrototype> = defaultPrototypes): BBTree {

@@ -295,10 +295,10 @@ fun Message.toLocalMessage() = LocalMessage(id.toLong(), conferenceId.toLong(), 
     date, device)
 
 fun Comment.toParsedComment() = ParsedComment(id, entryId, authorId, mediaProgress, ratingDetails,
-    BBParser.parse(content).optimize(), overallRating, episode, helpfulVotes, date, author, image)
+    BBParser.parseSimple(content).optimize(), overallRating, episode, helpfulVotes, date, author, image)
 
 fun UserComment.toParsedUserComment() = ParsedUserComment(id, entryId, entryName, medium, category, authorId,
-    mediaProgress, ratingDetails, BBParser.parse(content).optimize(), overallRating, episode, helpfulVotes, date,
+    mediaProgress, ratingDetails, BBParser.parseSimple(content).optimize(), overallRating, episode, helpfulVotes, date,
     author, image)
 
 fun Topic.toTopicMetaData() = TopicMetaData(categoryId, categoryName, firstPostDate, lastPostDate, hits, isLocked,
