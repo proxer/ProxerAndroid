@@ -56,7 +56,7 @@ abstract class ImageTabsActivity : DrawerActivity() {
         setupImage()
         loadImage()
 
-        if (isEnterTransitionPossible(savedInstanceState) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (isTransitionPossible(savedInstanceState) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
             supportPostponeEnterTransition()
 
             window.sharedElementEnterTransition.addListener(object : TransitionListenerWrapper {
@@ -162,7 +162,7 @@ abstract class ImageTabsActivity : DrawerActivity() {
 
     protected open fun loadEmptyImage() {}
 
-    private fun isEnterTransitionPossible(savedInstanceState: Bundle?): Boolean {
+    private fun isTransitionPossible(savedInstanceState: Bundle?): Boolean {
         return savedInstanceState == null && ActivityUtils.getTransitionName(this) != null
     }
 
