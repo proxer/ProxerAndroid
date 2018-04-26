@@ -36,6 +36,7 @@
                 android:layout_marginBottom="8dp"
                 android:importantForAutofill="no"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textSize="16sp"
                 tools:ignore="UnusedAttribute"
                 tools:text="Message looooooooooooooooooooooooooong" />
 

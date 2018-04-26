@@ -36,6 +36,7 @@
                 android:gravity="center"
                 android:importantForAutofill="no"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textSize="16sp"
                 tools:ignore="UnusedAttribute"
                 tools:text="User A was added by B looooooooooooooooooooooooong" />
 
