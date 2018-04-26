@@ -41,7 +41,6 @@ import me.proxer.app.util.extension.inputMethodManager
 import me.proxer.app.util.extension.isAtTop
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.unsafeLazy
-import me.proxer.library.entity.chat.ChatMessage
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.toast
 import kotlin.properties.Delegates
@@ -49,7 +48,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-class ChatFragment : PagedContentFragment<ChatMessage>() {
+class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
 
     companion object {
         fun newInstance() = ChatFragment().apply {
@@ -240,7 +239,7 @@ class ChatFragment : PagedContentFragment<ChatMessage>() {
         super.onDestroyView()
     }
 
-    override fun showData(data: List<ChatMessage>) {
+    override fun showData(data: List<ParsedChatMessage>) {
         super.showData(data)
 
         inputContainer.visibility = View.VISIBLE

@@ -1,22 +1,18 @@
 package me.proxer.app.ui.view.bbcode.prototype
 
-import android.content.Context
 import android.text.Spannable.SPAN_INCLUSIVE_EXCLUSIVE
+import android.text.SpannableStringBuilder
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.CharacterStyle
 import android.text.style.RelativeSizeSpan
-import android.view.View
-import android.widget.TextView
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.BBUtils
-import me.proxer.app.ui.view.bbcode.applyToViews
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
-import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
 
 /**
  * @author Ruben Gees
  */
-object SizePrototype : BBPrototype {
+object SizePrototype : TextMutatorPrototype {
 
     private val ATTRIBUTE_REGEX = Regex("size *= *(.+?)( |$)", REGEX_OPTIONS)
 
@@ -52,20 +48,17 @@ object SizePrototype : BBPrototype {
         }
     }
 
-    override fun makeViews(context: Context, children: List<BBTree>, args: Map<String, Any?>): List<View> {
-        val childViews = children.flatMap { it.makeViews(context) }
+    override fun mutate(text: SpannableStringBuilder, args: Map<String, Any?>): SpannableStringBuilder {
         val sizeType = args[SIZE_TYPE_ARGUMENT] as SizeType
         val size = args[SIZE_ARGUMENT] as Float
 
-        return applyToViews(childViews) { view: TextView ->
-            view.text = view.text.toSpannableStringBuilder().apply {
-                val span: CharacterStyle = when (sizeType) {
-                    SizeType.RELATIVE -> RelativeSizeSpan(size)
-                    SizeType.ABSOLUTE -> AbsoluteSizeSpan(size.toInt(), true)
-                }
-
-                setSpan(span, 0, view.length(), SPAN_INCLUSIVE_EXCLUSIVE)
+        return text.apply {
+            val span: CharacterStyle = when (sizeType) {
+                SizeType.RELATIVE -> RelativeSizeSpan(size)
+                SizeType.ABSOLUTE -> AbsoluteSizeSpan(size.toInt(), true)
             }
+
+            setSpan(span, 0, length, SPAN_INCLUSIVE_EXCLUSIVE)
         }
     }
 

@@ -306,7 +306,7 @@ class MessengerAdapter(
         }
 
         internal open fun applyMessage(message: LocalMessage) {
-            text.text = Utils.buildClickableText(text.context, message.message.trim(),
+            text.text = Utils.buildClickableText(text.context, message.styledMessage,
                 onWebClickListener = { linkClickSubject.onNext(Utils.parseAndFixUrl(it)) },
                 onWebLongClickListener = { linkLongClickSubject.onNext(Utils.parseAndFixUrl(it)) },
                 onMentionsClickListener = { mentionsClickSubject.onNext(it.trim().substring(1)) })

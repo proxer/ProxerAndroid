@@ -26,7 +26,6 @@ import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.setIconicsImage
-import me.proxer.library.entity.chat.ChatMessage
 import me.proxer.library.util.ProxerUrls
 import okhttp3.HttpUrl
 import org.jetbrains.anko.dip
@@ -34,7 +33,7 @@ import org.jetbrains.anko.dip
 /**
  * @author Ruben Gees
  */
-class ChatAdapter(savedInstanceState: Bundle?) : BaseAdapter<ChatMessage, MessageViewHolder>() {
+class ChatAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedChatMessage, MessageViewHolder>() {
 
     private companion object {
         private const val IS_SELECTING_STATE = "chat_is_selecting"
@@ -43,13 +42,13 @@ class ChatAdapter(savedInstanceState: Bundle?) : BaseAdapter<ChatMessage, Messag
     }
 
     var glide: GlideRequests? = null
-    val titleClickSubject: PublishSubject<Pair<ImageView, ChatMessage>> = PublishSubject.create()
+    val titleClickSubject: PublishSubject<Pair<ImageView, ParsedChatMessage>> = PublishSubject.create()
     val messageSelectionSubject: PublishSubject<Int> = PublishSubject.create()
     val linkClickSubject: PublishSubject<HttpUrl> = PublishSubject.create()
     val linkLongClickSubject: PublishSubject<HttpUrl> = PublishSubject.create()
     val mentionsClickSubject: PublishSubject<String> = PublishSubject.create()
 
-    val selectedMessages: List<ChatMessage>
+    val selectedMessages: List<ParsedChatMessage>
         get() = data.filter { messageSelectionMap[it.id] == true }.sortedBy { it.date }
 
     private var layoutManager: RecyclerView.LayoutManager? = null
@@ -156,7 +155,7 @@ class ChatAdapter(savedInstanceState: Bundle?) : BaseAdapter<ChatMessage, Messag
         layoutManager = recyclerView.layoutManager
     }
 
-    override fun swapDataAndNotifyWithDiffing(newData: List<ChatMessage>) {
+    override fun swapDataAndNotifyWithDiffing(newData: List<ParsedChatMessage>) {
         super.swapDataAndNotifyWithDiffing(newData)
 
         if (newData.isEmpty()) {
@@ -243,7 +242,7 @@ class ChatAdapter(savedInstanceState: Bundle?) : BaseAdapter<ChatMessage, Messag
             text.setTextColor(ContextCompat.getColor(text.context, R.color.textColorPrimary))
         }
 
-        internal open fun bind(message: ChatMessage, marginTop: Int, marginBottom: Int) {
+        internal open fun bind(message: ParsedChatMessage, marginTop: Int, marginBottom: Int) {
             applyMessage(message)
             applyTime(message)
             applySendStatus(message)
@@ -295,18 +294,18 @@ class ChatAdapter(savedInstanceState: Bundle?) : BaseAdapter<ChatMessage, Messag
             return consumed
         }
 
-        internal open fun applyMessage(message: ChatMessage) {
-            text.text = Utils.buildClickableText(text.context, message.message.trim(),
+        internal open fun applyMessage(message: ParsedChatMessage) {
+            text.text = Utils.buildClickableText(text.context, message.styledMessage,
                 onWebClickListener = { linkClickSubject.onNext(Utils.parseAndFixUrl(it)) },
                 onWebLongClickListener = { linkLongClickSubject.onNext(Utils.parseAndFixUrl(it)) },
                 onMentionsClickListener = { mentionsClickSubject.onNext(it.trim().substring(1)) })
         }
 
-        internal open fun applyTime(message: ChatMessage) {
+        internal open fun applyTime(message: ParsedChatMessage) {
             time.text = message.date.convertToRelativeReadableTime(time.context)
         }
 
-        internal open fun applySendStatus(message: ChatMessage) = if (message.id.toLong() < 0) {
+        internal open fun applySendStatus(message: ParsedChatMessage) = if (message.id.toLong() < 0) {
             text.setCompoundDrawablesWithIntrinsicBounds(null, null, IconicsDrawable(text.context)
                 .icon(CommunityMaterial.Icon.cmd_clock)
                 .sizeDp(24)
@@ -316,14 +315,14 @@ class ChatAdapter(savedInstanceState: Bundle?) : BaseAdapter<ChatMessage, Messag
             text.setCompoundDrawables(null, null, null, null)
         }
 
-        internal open fun applySelection(message: ChatMessage) {
+        internal open fun applySelection(message: ParsedChatMessage) {
             container.setCardBackgroundColor(ContextCompat.getColorStateList(container.context, when {
                 messageSelectionMap[message.id] == true -> R.color.selected
                 else -> R.color.card_background
             }))
         }
 
-        internal open fun applyTimeVisibility(message: ChatMessage) {
+        internal open fun applyTimeVisibility(message: ParsedChatMessage) {
             time.visibility = when (timeDisplayMap[message.id]) {
                 true -> View.VISIBLE
                 else -> View.GONE
@@ -352,7 +351,7 @@ class ChatAdapter(savedInstanceState: Bundle?) : BaseAdapter<ChatMessage, Messag
             }
         }
 
-        override fun bind(message: ChatMessage, marginTop: Int, marginBottom: Int) {
+        override fun bind(message: ParsedChatMessage, marginTop: Int, marginBottom: Int) {
             super.bind(message, marginTop, marginBottom)
 
             ViewCompat.setTransitionName(image, "chat_${message.id}")

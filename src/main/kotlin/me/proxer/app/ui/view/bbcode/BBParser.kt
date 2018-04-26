@@ -2,6 +2,7 @@ package me.proxer.app.ui.view.bbcode
 
 import me.proxer.app.ui.view.bbcode.prototype.AttachmentPrototype
 import me.proxer.app.ui.view.bbcode.prototype.AutoClosingPrototype
+import me.proxer.app.ui.view.bbcode.prototype.BBPrototype
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
 import me.proxer.app.ui.view.bbcode.prototype.BoldPrototype
 import me.proxer.app.ui.view.bbcode.prototype.BreakPrototype
@@ -42,27 +43,28 @@ import java.util.regex.Pattern.quote
  */
 object BBParser {
 
-    private val prototypes = arrayOf(BoldPrototype, ItalicPrototype, UnderlinePrototype, StrikethroughPrototype,
+    private val defaultPrototypes = setOf(BoldPrototype, ItalicPrototype, UnderlinePrototype, StrikethroughPrototype,
         SizePrototype, ColorPrototype, LeftPrototype, CenterPrototype, RightPrototype, SpoilerPrototype,
         QuotePrototype, UrlPrototype, ImagePrototype, DividerPrototype, VideoPrototype, SuperscriptPrototype,
         SubscriptPrototype, TablePrototype, TableRowPrototype, TableCellPrototype, CodePrototype, HidePrototype,
         UnorderedListPrototype, OrderedListPrototype, ListItemPrototype, MapPrototype, AttachmentPrototype,
         FacebookPrototype, TwitterPrototype, PollPrototype, BreakPrototype)
 
-    private val prototypeRegex
-        get() = prototypes.joinToString("|") {
-            when (it.canHaveChildren) {
-                true -> it.startRegex.pattern + "|" + it.endRegex.pattern
-                false -> it.startRegex.pattern
-            }
-        }
+    private val textOnlyPrototypes = setOf(BoldPrototype, ItalicPrototype, UnderlinePrototype, StrikethroughPrototype,
+        SizePrototype, ColorPrototype, LeftPrototype, CenterPrototype, RightPrototype, SuperscriptPrototype,
+        SubscriptPrototype)
 
-    private val regex = Regex("${quote("[")}(($prototypeRegex)?)${quote("]")}", REGEX_OPTIONS)
+    fun parseTextOnly(input: String): CharSequence {
+        val result = parse(input, textOnlyPrototypes).optimize()
+        val args = result.children.firstOrNull()?.args
 
-    fun parse(input: String): BBTree {
+        return if (args == null) input else TextPrototype.getText(args)
+    }
+
+    fun parse(input: String, prototypes: Set<BBPrototype> = defaultPrototypes): BBTree {
         val trimmedInput = input.trim()
         val result = BBTree(RootPrototype, null)
-        val parts = regex.findAll(trimmedInput)
+        val parts = constructRegex(prototypes).findAll(trimmedInput)
 
         var currentTree = result
         var currentPosition = 0
@@ -124,6 +126,17 @@ object BBParser {
         }
 
         return result
+    }
+
+    private fun constructRegex(prototypes: Set<BBPrototype>): Regex {
+        val prototypeRegex = prototypes.joinToString("|") {
+            when (it.canHaveChildren) {
+                true -> it.startRegex.pattern + "|" + it.endRegex.pattern
+                false -> it.startRegex.pattern
+            }
+        }
+
+        return Regex("${quote("[")}(($prototypeRegex)?)${quote("]")}", REGEX_OPTIONS)
     }
 
     private fun findFittingTree(tree: BBTree, endTag: String): BBTree? {

@@ -81,7 +81,7 @@ object Utils {
         onMentionsClickListener: ((String) -> Unit)? = null,
         onMentionsLongClickListener: ((String) -> Unit)? = null
     ): CharSequence {
-        val builder = LinkBuilder.from(context, text.toString())
+        val builder = LinkBuilder.from(context, text)
 
         if (onMentionsClickListener != null || onMentionsLongClickListener != null) {
             builder.addLink(Link(MENTIONS_REGEX)

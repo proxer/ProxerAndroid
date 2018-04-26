@@ -4,6 +4,8 @@ import android.arch.persistence.room.Entity
 import android.arch.persistence.room.ForeignKey
 import android.arch.persistence.room.Index
 import android.arch.persistence.room.PrimaryKey
+import android.text.SpannableString
+import me.proxer.app.ui.view.bbcode.BBParser
 import me.proxer.library.entity.messenger.Message
 import me.proxer.library.enums.Device
 import me.proxer.library.enums.MessageAction
@@ -27,6 +29,9 @@ data class LocalMessage(
     val date: Date,
     val device: Device
 ) {
+
+    @Transient
+    val styledMessage = if (action == MessageAction.NONE) BBParser.parseTextOnly(message) else SpannableString("")
 
     fun toNonLocalMessage() = Message(id.toString(), conferenceId.toString(), userId, username, message, action, date,
         device)

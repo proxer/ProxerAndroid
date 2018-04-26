@@ -8,6 +8,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.base.PagedViewModel
+import me.proxer.app.ui.view.bbcode.BBParser
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.RxRetryWithDelay
 import me.proxer.app.util.Validators
@@ -16,7 +17,7 @@ import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.buildOptionalSingle
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.subscribeAndLogErrors
-import me.proxer.library.entity.chat.ChatMessage
+import me.proxer.app.util.extension.toParsedMessage
 import me.proxer.library.enums.ChatMessageAction
 import java.util.Collections.emptyList
 import java.util.Date
@@ -28,20 +29,21 @@ import java.util.concurrent.TimeUnit
  * @author Ruben Gees
  */
 @GeneratedProvider
-class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ChatMessage>() {
+class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ParsedChatMessage>() {
 
     override val itemsOnPage = 50
 
-    override val dataSingle: Single<List<ChatMessage>>
+    override val dataSingle: Single<List<ParsedChatMessage>>
         get() = api.chat().messages(chatRoomId)
             .messageId(data.value?.lastOrNull()?.id ?: "0")
             .buildSingle()
+            .map { it.map { it.toParsedMessage() } }
 
     val sendMessageError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
 
     private var pollingDisposable: Disposable? = null
 
-    private val sendMessageQueue: Queue<ChatMessage> = LinkedList()
+    private val sendMessageQueue: Queue<ParsedChatMessage> = LinkedList()
     private val sentMessageIds = mutableSetOf<String>()
     private var sendMessageDisposable: Disposable? = null
 
@@ -91,8 +93,8 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ChatMessage
         StorageHelper.user?.let { user ->
             val firstId = data.value?.firstOrNull()?.id?.toLong()
             val nextId = if (firstId == null || firstId >= 0) -1 else firstId - 1
-            val message = ChatMessage(nextId.toString(), user.id, user.name, user.image,
-                text, ChatMessageAction.NONE, Date())
+            val message = ParsedChatMessage(nextId.toString(), user.id, user.name, user.image,
+                text, BBParser.parseTextOnly(text), ChatMessageAction.NONE, Date())
 
             data.value = listOf(message).plus(data.value ?: emptyList())
             sendMessageQueue.offer(message)
@@ -103,7 +105,10 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ChatMessage
         }
     }
 
-    private fun mergeNewDataWithExistingData(newData: List<ChatMessage>, currentId: String): List<ChatMessage> {
+    private fun mergeNewDataWithExistingData(
+        newData: List<ParsedChatMessage>,
+        currentId: String
+    ): List<ParsedChatMessage> {
         val messageIdsToDelete = newData.filter { it.action == ChatMessageAction.REMOVE_MESSAGE }
             .flatMap { listOf(it.id, it.message) }
 
@@ -138,6 +143,7 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ChatMessage
         pollingDisposable?.dispose()
         pollingDisposable = Single.fromCallable { Validators.validateLogin() }
             .flatMap { api.chat().messages(chatRoomId).messageId("0").buildSingle() }
+            .map { it.map { it.toParsedMessage() } }
             .repeatWhen { it.concatMap { Flowable.timer(3, TimeUnit.SECONDS) } }
             .retryWhen { it.concatMap { Flowable.timer(3, TimeUnit.SECONDS) } }
             .map { newData -> mergeNewDataWithExistingData(newData, "0") }
@@ -180,7 +186,7 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ChatMessage
         }
     }
 
-    private fun findFirstRemoteId(data: List<ChatMessage>): String? {
+    private fun findFirstRemoteId(data: List<ParsedChatMessage>): String? {
         return data.dropWhile { it.id.toLong() < 0 }.firstOrNull()?.id
     }
 }

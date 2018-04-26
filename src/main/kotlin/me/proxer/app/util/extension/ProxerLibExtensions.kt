@@ -4,6 +4,7 @@ package me.proxer.app.util.extension
 
 import android.content.Context
 import android.support.v7.content.res.AppCompatResources
+import android.text.SpannableString
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
@@ -12,6 +13,7 @@ import me.proxer.app.R.id.post
 import me.proxer.app.anime.AnimeStream
 import me.proxer.app.chat.prv.LocalConference
 import me.proxer.app.chat.prv.LocalMessage
+import me.proxer.app.chat.pub.message.ParsedChatMessage
 import me.proxer.app.forum.ParsedPost
 import me.proxer.app.forum.TopicMetaData
 import me.proxer.app.media.LocalTag
@@ -19,6 +21,7 @@ import me.proxer.app.media.comment.ParsedComment
 import me.proxer.app.profile.comment.ParsedUserComment
 import me.proxer.app.ui.view.bbcode.BBParser
 import me.proxer.library.entity.anime.Stream
+import me.proxer.library.entity.chat.ChatMessage
 import me.proxer.library.entity.forum.Post
 import me.proxer.library.entity.forum.Topic
 import me.proxer.library.entity.info.Comment
@@ -32,6 +35,7 @@ import me.proxer.library.entity.user.UserComment
 import me.proxer.library.enums.AnimeLanguage
 import me.proxer.library.enums.CalendarDay
 import me.proxer.library.enums.Category
+import me.proxer.library.enums.ChatMessageAction
 import me.proxer.library.enums.Country
 import me.proxer.library.enums.FskConstraint
 import me.proxer.library.enums.IndustryType
@@ -305,3 +309,7 @@ fun Post.toParsedPost() = ParsedPost(id, parentId, userId, username, image, date
     modifiedById, modifiedByName, modifiedReason, BBParser.parse(message).optimize(), thankYouAmount)
 
 fun Tag.toParcelableTag() = LocalTag(id, type, name, description, subType, isSpoiler)
+
+fun ChatMessage.toParsedMessage() = ParsedChatMessage(id, userId, username, image, message,
+    if (action == ChatMessageAction.NONE) BBParser.parseTextOnly(message) else SpannableString(""),
+    action, date)
