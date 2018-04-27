@@ -2,7 +2,7 @@ ext {
     // App
     appVersionMajor = 1
     appVersionMinor = 4
-    appVersionPatch = 1
+    appVersionPatch = 2
 
     minSdkVersion = 16
     targetSdkVersion = 27
@@ -36,7 +36,7 @@ ext {
     proxerLibVersion = '4dbaff6033'
 
     // RxJava
-    rxJavaVersion = '2.1.12'
+    rxJavaVersion = '2.1.13'
     rxKotlinVersion = '2.2.0'
     rxAndroidVersion = '2.0.2'
     rxBindingVersion = '2.1.1'
