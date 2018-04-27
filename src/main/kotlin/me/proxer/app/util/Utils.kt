@@ -24,7 +24,6 @@ import me.proxer.library.api.ProxerException.ErrorType
 import okhttp3.HttpUrl
 import org.jetbrains.anko.getStackTraceString
 import org.threeten.bp.format.DateTimeFormatter
-import java.util.regex.Pattern
 
 /**
  * @author Ruben Gees
@@ -36,7 +35,7 @@ object Utils {
     val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss dd.MM.yyyy")
 
     private val WEB_REGEX = Patterns.WEB_URL
-    private val MENTIONS_REGEX = Pattern.compile("(@[a-zA-Z0-9_\\-.]+)")
+    private val MENTIONS_REGEX = Regex("@.*?\\W").toPattern()
 
     fun findActivity(currentContext: Context): Activity? = when (currentContext) {
         is Activity -> currentContext
