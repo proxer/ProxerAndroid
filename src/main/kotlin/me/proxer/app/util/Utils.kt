@@ -35,7 +35,7 @@ object Utils {
     val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss dd.MM.yyyy")
 
     private val WEB_REGEX = Patterns.WEB_URL
-    private val MENTIONS_REGEX = Regex("@.*?\\W").toPattern()
+    private val MENTIONS_REGEX = Regex("(@[^ ]+)").toPattern()
 
     fun findActivity(currentContext: Context): Activity? = when (currentContext) {
         is Activity -> currentContext
