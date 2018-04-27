@@ -75,12 +75,14 @@ class PostAdapter : BaseAdapter<ParsedPost, ViewHolder>() {
             }
 
             post.glide = glide
+            post.enableEmotions = true
             post.heightChangedListener = {
                 post.requestLayout()
                 layoutManager?.requestSimpleAnimationsInNextLayout()
             }
 
             signature.glide = glide
+            post.enableEmotions = true
             signature.heightChangedListener = {
                 signature.requestLayout()
                 layoutManager?.requestSimpleAnimationsInNextLayout()
