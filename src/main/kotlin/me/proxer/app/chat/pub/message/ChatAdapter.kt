@@ -357,6 +357,7 @@ class ChatAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedChatMessage, 
             ViewCompat.setTransitionName(image, "chat_${message.id}")
 
             title.text = message.username
+            title.requestLayout()
 
             if (message.image.isBlank()) {
                 image.setIconicsImage(CommunityMaterial.Icon.cmd_account, 32, 4, R.color.colorAccent)

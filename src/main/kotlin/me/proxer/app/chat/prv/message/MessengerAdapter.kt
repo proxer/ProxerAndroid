@@ -369,6 +369,7 @@ class MessengerAdapter(
             super.bind(message, marginTop, marginBottom)
 
             title.text = message.username
+            title.requestLayout()
         }
     }
 

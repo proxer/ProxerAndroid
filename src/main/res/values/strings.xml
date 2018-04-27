@@ -479,6 +479,7 @@
     <string name="view_expandable_multi_selection_reset_content_description">Zurücksetzen</string>
 
     <string name="layout_chat_bar_emoji_content_description">Emoji Auswahl</string>
+    <string name="layout_chat_bar_send_content_description">Senden</string>
 
     <string name="widget_news_label">Proxer.Me News</string>
     <string name="widget_news_title">News</string>

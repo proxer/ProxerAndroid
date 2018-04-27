@@ -1,67 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    app:cardCornerRadius="1dp"
+    app:cardElevation="3dp"
+    app:cardUseCompatPadding="true">
 
-    <android.support.v7.widget.CardView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        app:cardCornerRadius="1dp"
-        app:cardElevation="3dp"
-        app:cardUseCompatPadding="true">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:orientation="horizontal"
-            android:weightSum="1">
-
-            <me.proxer.app.ui.view.InfoImageButton
-                android:id="@+id/emojiButton"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_gravity="center_vertical"
-                android:layout_margin="8dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="@string/layout_chat_bar_emoji_content_description"
-                tools:src="@drawable/ic_japan" />
-
-            <com.vanniktech.emoji.EmojiEditText
-                android:id="@+id/messageInput"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_margin="8dp"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"
-                android:hint="@string/fragment_messenger_message"
-                android:imeOptions="flagNoExtractUi"
-                android:inputType="textMultiLine|textCapSentences|textAutoCorrect"
-                android:maxLines="5"
-                android:scrollbars="vertical"
-                android:textColorHint="?android:attr/textColorTertiary" />
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/sendButton"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginBottom="8dp"
-        android:scaleType="center"
-        app:elevation="3dp"
-        app:fabSize="mini"
-        app:srcCompat="@drawable/ic_send" />
+        android:orientation="horizontal"
+        android:weightSum="1">
 
-</LinearLayout>
+        <me.proxer.app.ui.view.InfoImageButton
+            android:id="@+id/emojiButton"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/layout_chat_bar_emoji_content_description"
+            tools:src="@drawable/ic_japan" />
+
+        <com.vanniktech.emoji.EmojiEditText
+            android:id="@+id/messageInput"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:hint="@string/fragment_messenger_message"
+            android:imeOptions="flagNoExtractUi"
+            android:inputType="textMultiLine|textCapSentences|textAutoCorrect"
+            android:maxLines="5"
+            android:scrollbars="vertical"
+            android:textColorHint="?android:attr/textColorTertiary" />
+
+        <me.proxer.app.ui.view.InfoImageButton
+            android:id="@+id/sendButton"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/layout_chat_bar_send_content_description"
+            tools:src="@drawable/ic_japan" />
+    </LinearLayout>
+</android.support.v7.widget.CardView>

@@ -3,7 +3,6 @@ package me.proxer.app.chat.prv.message
 import android.arch.lifecycle.Observer
 import android.content.ClipData
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
 import android.support.v7.view.ActionMode
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -13,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageButton
+import android.widget.ImageView
 import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
@@ -34,6 +34,7 @@ import me.proxer.app.util.Utils
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.clipboardManager
+import me.proxer.app.util.extension.colorRes
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.inputMethodManager
 import me.proxer.app.util.extension.isAtTop
@@ -127,7 +128,7 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
     private val emojiButton: ImageButton by bindView(R.id.emojiButton)
     private val inputContainer: ViewGroup by bindView(R.id.inputContainer)
     private val messageInput: EmojiEditText by bindView(R.id.messageInput)
-    private val sendButton: FloatingActionButton by bindView(R.id.sendButton)
+    private val sendButton: ImageView by bindView(R.id.sendButton)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -187,6 +188,11 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
         }
 
         emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_emoticon))
+
+        sendButton.setImageDrawable(IconicsDrawable(requireContext(), CommunityMaterial.Icon.cmd_send)
+            .colorRes(requireContext(), R.color.accent)
+            .sizeDp(32)
+            .paddingDp(4))
 
         emojiButton.clicks()
             .autoDispose(this)
