@@ -314,9 +314,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
     }
 
     override fun hideData() {
-        toolbar.layoutParams = (toolbar.layoutParams as AppBarLayout.LayoutParams).apply {
-            scrollFlags = 0
-        }
+        bindToolbar()
 
         innerAdapter.swapDataAndNotifyWithDiffing(emptyList())
         adapter.header = null
@@ -421,12 +419,15 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
 
     private fun bindToolbar() {
         toolbar.layoutParams = (toolbar.layoutParams as AppBarLayout.LayoutParams).apply {
-            scrollFlags = if (isVertical) SCROLL_FLAG_SCROLL or SCROLL_FLAG_ENTER_ALWAYS else 0
+            scrollFlags = when (isVertical && viewModel.data.value != null && viewModel.error.value == null) {
+                true -> SCROLL_FLAG_SCROLL or SCROLL_FLAG_ENTER_ALWAYS
+                false -> 0
+            }
         }
     }
 
     private fun bindHeaderAndFooterHeight() {
-        if (isVertical) {
+        if (isVertical || viewModel.error.value != null) {
             header.layoutParams.height = WRAP_CONTENT
             footer.layoutParams.height = WRAP_CONTENT
         } else {
