@@ -119,7 +119,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="-5dp"
                     android:layout_marginLeft="-5dp"
-                    android:text="@string/fragment_media_list_include_unrated_tags" />
+                    android:text="@string/fragment_media_list_include_unrated_tags"
+                    tools:ignore="NegativeMargin" />
 
                 <CheckBox
                     android:id="@+id/includeSpoilerTags"
@@ -127,7 +128,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="-5dp"
                     android:layout_marginLeft="-5dp"
-                    android:text="@string/fragment_media_list_include_spoiler_tags" />
+                    android:text="@string/fragment_media_list_include_spoiler_tags"
+                    tools:ignore="NegativeMargin" />
 
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>

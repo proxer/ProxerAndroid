@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <lint>
+    <!-- Enable disabled lint checks. -->
+    <issue id="ConvertToWebp" severity="error" />
+    <issue id="EasterEgg" severity="error" />
+    <issue id="KotlinPropertyAccess" severity="error" />
+    <issue id="LambdaLast" severity="error" />
+    <issue id="LogConditional" severity="error" />
+    <issue id="MangledCRLF" severity="error" />
+    <issue id="MinSdkTooLow" severity="warning" />
+    <issue id="NegativeMargin" severity="error" />
+    <issue id="NoHardKeywords" severity="error" />
+    <issue id="PermissionImpliesUnsupportedChromeOsHardware" severity="error" />
+    <issue id="RequiredSize" severity="error" />
+    <issue id="SelectableText" severity="informational" />
+    <issue id="SyntheticAccessor" severity="informational" />
+    <issue id="UnknownNullness" severity="error" />
+    <issue id="UnpackedNativeCode" severity="error" />
+    <issue id="UnusedIds" severity="error" />
+    <issue id="WrongThreadInterprocedural" severity="error" />
+
     <!-- Needed for Okio and Retrofit. -->
     <issue id="InvalidPackage" severity="error">
         <ignore regexp=".*okio.*" />

@@ -2,7 +2,6 @@ package me.proxer.app.chat.prv.create
 
 import android.arch.lifecycle.Observer
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
 import android.support.design.widget.TextInputLayout
 import android.support.v4.widget.SwipeRefreshLayout
@@ -39,6 +38,7 @@ import me.proxer.app.exception.TopicEmptyException
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
 import me.proxer.app.util.extension.autoDispose
+import me.proxer.app.util.extension.colorRes
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.setIconicsImage
@@ -97,7 +97,7 @@ class CreateConferenceFragment : BaseFragment() {
     private val participants: RecyclerView by bindView(R.id.participants)
     private val emojiButton: ImageButton by bindView(R.id.emojiButton)
     private val messageInput: EmojiEditText by bindView(R.id.messageInput)
-    private val sendButton: FloatingActionButton by bindView(R.id.sendButton)
+    private val sendButton: ImageView by bindView(R.id.sendButton)
 
     private val addParticipantImage by lazy {
         addParticipantFooter.find<ImageView>(R.id.image)
@@ -237,6 +237,11 @@ class CreateConferenceFragment : BaseFragment() {
         progress.isEnabled = false
 
         emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_emoticon))
+
+        sendButton.setImageDrawable(IconicsDrawable(requireContext(), CommunityMaterial.Icon.cmd_send)
+            .colorRes(requireContext(), R.color.accent)
+            .sizeDp(32)
+            .paddingDp(4))
 
         emojiButton.clicks()
             .autoDispose(this)
