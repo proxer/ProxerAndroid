@@ -113,6 +113,8 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
     private var header by Delegates.notNull<MediaControlView>()
     private var footer by Delegates.notNull<MediaControlView>()
 
+    private var gravityPagerSnapHelper: GravityPagerSnapHelper? = null
+
     override val contentContainer: ViewGroup
         get() = recyclerView
 
@@ -279,6 +281,9 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
     }
 
     override fun onDestroyView() {
+        gravityPagerSnapHelper?.attachToRecyclerView(null)
+        gravityPagerSnapHelper = null
+
         recyclerView.layoutManager = null
         recyclerView.adapter = null
 
@@ -391,6 +396,9 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
     private fun bindLayoutManager() {
         val state = recyclerView.layoutManager?.onSaveInstanceState()
 
+        gravityPagerSnapHelper?.attachToRecyclerView(null)
+        gravityPagerSnapHelper = null
+
         if (isVertical) {
             recyclerView.layoutManager = object : LinearLayoutManager(context) {
                 override fun getExtraLayoutSpace(state: RecyclerView.State): Int {
@@ -403,13 +411,10 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
                     }
                 }
             }
-
-            recyclerView.onFlingListener = null
-            recyclerView.clearOnScrollListeners()
         } else {
             recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
-            GravityPagerSnapHelper(Gravity.END).attachToRecyclerView(recyclerView)
+            gravityPagerSnapHelper = GravityPagerSnapHelper(Gravity.END).apply { attachToRecyclerView(recyclerView) }
         }
 
         innerAdapter.isVertical = isVertical
