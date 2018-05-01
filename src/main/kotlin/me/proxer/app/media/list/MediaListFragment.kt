@@ -195,6 +195,8 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
     internal val includeUnratedTags by bindView<CheckBox>(R.id.includeUnratedTags)
     internal val includeSpoilerTags by bindView<CheckBox>(R.id.includeSpoilerTags)
 
+    internal var searchView by Delegates.notNull<SearchView>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -254,7 +256,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
         }
 
         menu.findItem(R.id.search).let { searchItem ->
-            val searchView = searchItem.actionView as SearchView
+            searchView = searchItem.actionView as SearchView
 
             searchItem.actionViewEvents()
                 .autoDispose(this)

@@ -110,6 +110,8 @@ class MediaListSearchBottomSheet private constructor(
         fragment.search.clicks()
             .autoDispose(fragment)
             .subscribe {
+                fragment.searchView.clearFocus()
+
                 bottomSheetBehaviour.state = STATE_COLLAPSED
 
                 viewModel.reload()
