@@ -26,7 +26,10 @@ internal object BBUtils {
     }
 }
 
-internal inline fun <reified T : View> applyToViews(views: List<View>, operation: (T) -> Unit) = views.apply {
+internal inline fun <reified T : View> applyToViews(
+    views: List<View>,
+    crossinline operation: (T) -> Unit
+) = views.apply {
     flatMap { it.childrenRecursiveSequence().plus(it).toList() }
         .filterIsInstance(T::class.java)
         .filter { it.getTag(R.id.ignore_tag) == null }

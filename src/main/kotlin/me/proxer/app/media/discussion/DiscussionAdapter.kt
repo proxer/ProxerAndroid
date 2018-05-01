@@ -3,6 +3,7 @@ package me.proxer.app.media.discussion
 import android.graphics.Typeface
 import android.support.v7.widget.RecyclerView
 import android.text.Spannable.SPAN_INCLUSIVE_EXCLUSIVE
+import android.text.SpannableString
 import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +14,6 @@ import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.media.discussion.DiscussionAdapter.ViewHolder
-import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
 import me.proxer.library.entity.info.ForumDiscussion
 
 /**
@@ -51,7 +51,7 @@ class DiscussionAdapter : BaseAdapter<ForumDiscussion, ViewHolder>() {
                 item.firstPostUsername, item.category)
 
             subject.text = item.subject
-            metaInfo.text = metaInfoText.toSpannableStringBuilder().apply {
+            metaInfo.text = SpannableString(metaInfoText).apply {
                 val usernameSpanStart = indexOf(item.firstPostUsername)
                 val usernameSpanEnd = usernameSpanStart + item.firstPostUsername.length
                 val categorySpanStart = indexOf(item.category)
