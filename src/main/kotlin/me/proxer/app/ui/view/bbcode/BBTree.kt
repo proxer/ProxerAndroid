@@ -7,6 +7,7 @@ import me.proxer.app.ui.view.bbcode.prototype.BBPrototype
 import me.proxer.app.ui.view.bbcode.prototype.ConditionalTextMutatorPrototype
 import me.proxer.app.ui.view.bbcode.prototype.TextMutatorPrototype
 import me.proxer.app.ui.view.bbcode.prototype.TextPrototype
+import me.proxer.app.util.extension.unsafeLazy
 
 /**
  * @author Ruben Gees
@@ -56,29 +57,39 @@ class BBTree(
     fun optimize() = recursiveOptimize().first()
 
     private fun recursiveOptimize(): List<BBTree> {
-        var canOptimize = true
+        val newChildren = mergeChildren(children.flatMap { it.recursiveOptimize() })
 
-        if (prototype is TextMutatorPrototype) {
-            val recursiveChildren = getRecursiveChildren(children)
+        val recursiveNewChildren by unsafeLazy { getRecursiveChildren(newChildren) }
+        val canOptimize = prototype !is ConditionalTextMutatorPrototype || prototype.canOptimize(recursiveNewChildren)
 
-            canOptimize = prototype !is ConditionalTextMutatorPrototype || prototype.canOptimize(recursiveChildren)
+        if (prototype is TextMutatorPrototype && canOptimize) {
+            recursiveNewChildren.forEach {
+                if (it.prototype == TextPrototype) {
+                    val text = TextPrototype.getText(it.args).toSpannableStringBuilder()
+                    val mutatedText = prototype.mutate(text, args)
 
-            if (canOptimize) {
-                recursiveChildren.forEach {
-                    if (it.prototype == TextPrototype) {
-                        val text = TextPrototype.getText(it.args).toSpannableStringBuilder()
-                        val mutatedText = prototype.mutate(text, args)
-
-                        TextPrototype.updateText(mutatedText, it.args)
-                    }
+                    TextPrototype.updateText(mutatedText, it.args)
                 }
             }
         }
 
-        val newChildren = children.flatMap { it.recursiveOptimize() }
+        return when {
+            canOptimize && prototype is TextMutatorPrototype -> newChildren.map {
+                BBTree(it.prototype, parent, isFinished, it.children, it.args)
+            }
+            else -> {
+                children.clear()
+                children.addAll(newChildren)
+
+                listOf(this)
+            }
+        }
+    }
+
+    private fun mergeChildren(newChildren: List<BBTree>): List<BBTree> {
+        val result = mutableListOf<BBTree>()
 
         if (newChildren.isNotEmpty()) {
-            val result = mutableListOf<BBTree>()
             var current = newChildren.first()
 
             newChildren.drop(1).forEach { next ->
@@ -94,24 +105,9 @@ class BBTree(
             }
 
             result += current
-
-            return when {
-                canOptimize && prototype is TextMutatorPrototype -> result.map {
-                    BBTree(it.prototype, parent, isFinished, it.children, it.args)
-                }
-                else -> {
-                    children.clear()
-                    children.addAll(result)
-
-                    listOf(this)
-                }
-            }
-        } else {
-            return when {
-                canOptimize && prototype is TextMutatorPrototype -> emptyList()
-                else -> listOf(this)
-            }
         }
+
+        return result
     }
 
     private fun getRecursiveChildren(current: List<BBTree>): List<BBTree> = current
