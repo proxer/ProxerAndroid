@@ -9,6 +9,8 @@
         <item name="windowActionModeOverlay">true</item>
         <item name="actionModeStyle">@style/Widget.App.ActionMode</item>
 
+        <item name="android:windowBackground">@color/background</item>
+
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.Material</item>
 
         <item name="asp_preferenceIconTint">@color/colorAccent</item>
