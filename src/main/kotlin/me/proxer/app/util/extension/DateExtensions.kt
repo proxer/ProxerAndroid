@@ -54,5 +54,6 @@ fun Date.calculateAndFormatDifference(other: Date): String {
     return "%02d:%02d:%02d:%02d".format(days, hours, minutes, seconds)
 }
 
-fun Date.convertToDateTime(): LocalDateTime = LocalDateTime
-    .ofInstant(Instant.ofEpochMilli(time), ZoneId.systemDefault())
+fun Date.convertToDateTime(): LocalDateTime = Instant.ofEpochMilli(time)
+    .atZone(ZoneId.systemDefault())
+    .toLocalDateTime()

@@ -38,12 +38,14 @@ import me.proxer.library.enums.Category
 import me.proxer.library.enums.ChatMessageAction
 import me.proxer.library.enums.Country
 import me.proxer.library.enums.FskConstraint
+import me.proxer.library.enums.Gender
 import me.proxer.library.enums.IndustryType
 import me.proxer.library.enums.Language
 import me.proxer.library.enums.License
 import me.proxer.library.enums.MediaLanguage
 import me.proxer.library.enums.MediaState
 import me.proxer.library.enums.Medium
+import me.proxer.library.enums.RelationshipStatus
 import me.proxer.library.enums.Season
 import me.proxer.library.enums.SynonymType
 import me.proxer.library.enums.UserMediaProgress
@@ -275,6 +277,24 @@ fun CalendarDay.toAppString(context: Context): String = context.getString(when (
     CalendarDay.FRIDAY -> R.string.day_friday
     CalendarDay.SATURDAY -> R.string.day_saturday
     CalendarDay.SUNDAY -> R.string.day_sunday
+})
+
+fun Gender.toAppString(context: Context): String = context.getString(when (this) {
+    Gender.MALE -> R.string.gender_male
+    Gender.FEMALE -> R.string.gender_female
+    Gender.OTHER -> R.string.gender_other
+    Gender.UNKNOWN -> R.string.gender_unknown
+})
+
+fun RelationshipStatus.toAppString(context: Context): String = context.getString(when (this) {
+    RelationshipStatus.SINGLE -> R.string.relationship_status_single
+    RelationshipStatus.IN_RELATION -> R.string.relationship_status_in_relation
+    RelationshipStatus.ENGAGED -> R.string.relationship_status_engaged
+    RelationshipStatus.COMPLICATED -> R.string.relationship_status_complicated
+    RelationshipStatus.MARRIED -> R.string.relationship_status_married
+    RelationshipStatus.SEARCHING -> R.string.relationship_status_searching
+    RelationshipStatus.NOT_SEARCHING -> R.string.relationship_status_not_searching
+    RelationshipStatus.UNKNOWN -> R.string.relationship_status_unknown
 })
 
 inline val Page.decodedName: String

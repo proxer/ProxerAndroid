@@ -18,6 +18,7 @@ import me.proxer.app.base.ImageTabsActivity
 import me.proxer.app.chat.prv.Participant
 import me.proxer.app.chat.prv.create.CreateConferenceActivity
 import me.proxer.app.chat.prv.message.MessengerActivity
+import me.proxer.app.profile.about.ProfileAboutFragment
 import me.proxer.app.profile.comment.ProfileCommentFragment
 import me.proxer.app.profile.history.HistoryFragment
 import me.proxer.app.profile.info.ProfileInfoFragment
@@ -168,23 +169,25 @@ class ProfileActivity : ImageTabsActivity() {
 
         override fun getItem(position: Int) = when (position) {
             0 -> ProfileInfoFragment.newInstance()
-            1 -> TopTenFragment.newInstance()
-            2 -> ProfileMediaListFragment.newInstance(Category.ANIME)
-            3 -> ProfileMediaListFragment.newInstance(Category.MANGA)
-            4 -> ProfileCommentFragment.newInstance()
-            5 -> HistoryFragment.newInstance()
+            1 -> ProfileAboutFragment.newInstance()
+            2 -> TopTenFragment.newInstance()
+            3 -> ProfileMediaListFragment.newInstance(Category.ANIME)
+            4 -> ProfileMediaListFragment.newInstance(Category.MANGA)
+            5 -> ProfileCommentFragment.newInstance()
+            6 -> HistoryFragment.newInstance()
             else -> throw IllegalArgumentException("Unknown index passed: $position")
         }
 
-        override fun getCount() = 6
+        override fun getCount() = 7
 
         override fun getPageTitle(position: Int): String = when (position) {
             0 -> getString(R.string.section_profile_info)
-            1 -> getString(R.string.section_top_ten)
-            2 -> getString(R.string.section_user_media_list_anime)
-            3 -> getString(R.string.section_user_media_list_manga)
-            4 -> getString(R.string.section_user_comments)
-            5 -> getString(R.string.section_user_history)
+            1 -> getString(R.string.section_profile_about)
+            2 -> getString(R.string.section_top_ten)
+            3 -> getString(R.string.section_user_media_list_anime)
+            4 -> getString(R.string.section_user_media_list_manga)
+            5 -> getString(R.string.section_user_comments)
+            6 -> getString(R.string.section_user_history)
             else -> throw IllegalArgumentException("Unknown index passed: $position")
         }
     }

@@ -26,6 +26,7 @@
     <string name="section_ucp_history">Chronik</string>
 
     <string name="section_profile_info">Profil</string>
+    <string name="section_profile_about">Infos</string>
     <string name="section_top_ten">Favoriten</string>
     <string name="section_user_media_list_anime">Anime</string>
     <string name="section_user_media_list_manga">Manga</string>
@@ -138,6 +139,7 @@
     <string name="error_no_data_conferences">Du hast noch keine Chats</string>
     <string name="error_no_data_chat">Diese Konferenz hat noch keine Nachrichten</string>
     <string name="error_no_data_discussions">Für dieses Werk gibt es noch keine Diskussionen</string>
+    <string name="error_no_data_profile_about">Es wurde noch nichts eingetragen</string>
 
     <string name="error_action_retry">Erneut versuchen</string>
     <string name="error_action_finish">Beenden</string>
@@ -253,6 +255,20 @@
     <string name="day_saturday">Samstag</string>
     <string name="day_sunday">Sonntag</string>
 
+    <string name="gender_male">Männlich</string>
+    <string name="gender_female">Weiblich</string>
+    <string name="gender_other">Sonstige</string>
+    <string name="gender_unknown">Unbekannt</string>
+
+    <string name="relationship_status_single">Single</string>
+    <string name="relationship_status_in_relation">In einer Beziehung</string>
+    <string name="relationship_status_engaged">Verlobt</string>
+    <string name="relationship_status_complicated">Kompliziert</string>
+    <string name="relationship_status_married">Verheirated</string>
+    <string name="relationship_status_searching">Auf der Suche</string>
+    <string name="relationship_status_not_searching">Nicht auf der Suche</string>
+    <string name="relationship_status_unknown">Unbekannt</string>
+
     <plurals name="media_chapter_count">
         <item quantity="one">Ein Kapitel</item>
         <item quantity="other">%d Kapitel</item>
@@ -350,6 +366,23 @@
     <string name="fragment_profile_points_miscellaneous">Verschiedenes</string>
     <string name="fragment_profile_points_total">Insgesamt</string>
     <string name="fragment_profile_points_uploads">Uploads</string>
+
+    <string name="fragment_about_general">Allgemein</string>
+    <string name="fragment_about_about">About</string>
+    <string name="fragment_about_occupation">Beruf</string>
+    <string name="fragment_about_interests">Interessen</string>
+    <string name="fragment_about_city">Stadt</string>
+    <string name="fragment_about_country">Land</string>
+    <string name="fragment_about_gender">Geschlecht</string>
+    <string name="fragment_about_relationship_status">Beziehungsstatus</string>
+    <string name="fragment_about_birthday">Geburtstag</string>
+    <string name="fragment_about_website">Webseite</string>
+    <string name="fragment_about_facebook">Facebook</string>
+    <string name="fragment_about_youtube">Youtube</string>
+    <string name="fragment_about_chatango">Chatango</string>
+    <string name="fragment_about_twitter">Twitter</string>
+    <string name="fragment_about_skype">Skype</string>
+    <string name="fragment_about_deviantart">Deviantart</string>
 
     <string name="fragment_media_list_extended_criteria">Erweiterte Kriterien</string>
     <string name="fragment_media_list_search">Suchen</string>
