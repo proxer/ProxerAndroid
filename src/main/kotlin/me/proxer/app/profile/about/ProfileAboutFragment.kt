@@ -28,7 +28,6 @@ import me.proxer.library.entity.user.UserAbout
 import me.proxer.library.enums.Gender
 import me.proxer.library.enums.RelationshipStatus
 import org.jetbrains.anko.bundleOf
-import org.jetbrains.anko.childrenSequence
 import org.jetbrains.anko.toast
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -109,6 +108,25 @@ class ProfileAboutFragment : BaseContentFragment<UserAbout>() {
     override fun showData(data: UserAbout) {
         super.showData(data)
 
+        addTableRows(data)
+
+        data.about.let {
+            when (it.isNotBlank()) {
+                true -> about.loadData(it.trim(), "text/html", "utf-8")
+                false -> aboutContainer.visibility = View.GONE
+            }
+        }
+
+        if (generalTable.childCount <= 0) {
+            generalContainer.visibility = View.GONE
+        }
+
+        if (generalContainer.visibility == View.GONE && aboutContainer.visibility == View.GONE) {
+            showError(ErrorAction(R.string.error_no_data_profile_about, ACTION_MESSAGE_HIDE))
+        }
+    }
+
+    private fun addTableRows(data: UserAbout) {
         val normalizedGender = when (data.gender) {
             Gender.UNKNOWN -> ""
             else -> data.gender.toAppString(requireContext())
@@ -138,19 +156,6 @@ class ProfileAboutFragment : BaseContentFragment<UserAbout>() {
         addTableRowIfNotBlank(getString(R.string.fragment_about_twitter), data.twitter)
         addTableRowIfNotBlank(getString(R.string.fragment_about_skype), data.skype)
         addTableRowIfNotBlank(getString(R.string.fragment_about_deviantart), data.deviantart)
-
-        if (generalTable.childrenSequence().toList().isEmpty()) generalContainer.visibility = View.GONE
-
-        data.about.let {
-            when (it.isNotBlank()) {
-                true -> about.loadData(it.trim(), "text/html", "utf-8")
-                false -> aboutContainer.visibility = View.GONE
-            }
-        }
-
-        if (generalContainer.visibility == View.GONE && aboutContainer.visibility == View.GONE) {
-            showError(ErrorAction(R.string.error_no_data_profile_about, ACTION_MESSAGE_HIDE))
-        }
     }
 
     private fun addTableRowIfNotBlank(title: String, content: String) {
