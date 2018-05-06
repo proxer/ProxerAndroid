@@ -23,7 +23,7 @@ ext {
     gradleVersionsPluginVersion = '0.17.0'
     androidCommandPluginVersion = '2.0.1'
     ktlintPluginVersion = '3.3.0'
-    ktlintVersion = '0.22.0'
+    ktlintVersion = '0.23.1'
 
     // Frameworks and code only libraries
     ankoVersion = '0.10.5'
@@ -31,9 +31,9 @@ ext {
     supportLibraryVersion = '27.1.1'
     supportPreferenceVersion = '2.2.0'
     lifecycleVersion = '1.1.1'
-    roomVersion = '1.1.0-beta3'
+    roomVersion = '1.1.0-rc1'
     androidJobVersion = '1.2.5'
-    proxerLibVersion = '87f4761772'
+    proxerLibVersion = '7d4ef27973'
 
     // RxJava
     rxJavaVersion = '2.1.13'
