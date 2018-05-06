@@ -4,8 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_dark"
+    android:orientation="vertical"
     android:theme="@style/Theme.App"
-    android:orientation="vertical">
+    tools:ignore="Overdraw">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -41,9 +42,9 @@
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbarThumbVertical="@drawable/fastscroll_thumb_idle_dark"
-        android:scrollbarTrackVertical="@drawable/fastscroll_track_dark"
         android:divider="@color/divider_dark"
         android:dividerHeight="1dp"
+        android:scrollbarThumbVertical="@drawable/fastscroll_thumb_idle_dark"
+        android:scrollbarTrackVertical="@drawable/fastscroll_track_dark"
         tools:listitem="@layout/layout_widget_news_dark_item" />
 </LinearLayout>

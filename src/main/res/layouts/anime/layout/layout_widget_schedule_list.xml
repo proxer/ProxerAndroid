@@ -3,9 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:theme="@style/Theme.App"
     android:background="@color/background"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:theme="@style/Theme.App"
+    tools:ignore="Overdraw">
 
     <LinearLayout
         android:layout_width="match_parent"
