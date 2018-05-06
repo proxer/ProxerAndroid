@@ -46,8 +46,8 @@ class PostAdapter : BaseAdapter<ParsedPost, ViewHolder>() {
     override fun onViewRecycled(holder: ViewHolder) {
         glide?.clear(holder.image)
 
-        holder.post.destroy()
-        holder.signature.destroy()
+        holder.post.destroyWithRetainingViews()
+        holder.signature.destroyWithRetainingViews()
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {

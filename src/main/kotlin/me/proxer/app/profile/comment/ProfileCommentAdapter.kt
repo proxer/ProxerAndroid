@@ -60,7 +60,7 @@ class ProfileCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedUse
     }
 
     override fun onViewRecycled(holder: ViewHolder) {
-        holder.comment.destroy()
+        holder.comment.destroyWithRetainingViews()
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {

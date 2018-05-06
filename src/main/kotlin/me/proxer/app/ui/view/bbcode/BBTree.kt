@@ -17,7 +17,7 @@ class BBTree(
     val parent: BBTree?,
     var isFinished: Boolean = false,
     val children: MutableList<BBTree> = mutableListOf(),
-    val args: MutableMap<String, Any?> = mutableMapOf()
+    args: MutableMap<String, Any?> = mutableMapOf()
 ) {
 
     companion object {
@@ -25,6 +25,15 @@ class BBTree(
         internal const val USER_ID_ARGUMENT = "userId"
         internal const val ENABLE_EMOTICONS_ARGUMENT = "enable_emoticons"
     }
+
+    private val internalArgs: MutableMap<String, Any?> = args
+
+    val args: Map<String, Any?>
+        get() = internalArgs.plus(arrayOf(
+            GLIDE_ARGUMENT to glide,
+            USER_ID_ARGUMENT to userId,
+            ENABLE_EMOTICONS_ARGUMENT to enableEmoticons
+        ))
 
     var glide: GlideRequests? = null
         set(value) {
@@ -48,11 +57,7 @@ class BBTree(
 
     fun endsWith(code: String) = prototype.endRegex.matches(code)
 
-    fun makeViews(context: Context) = prototype.makeViews(context, children, args.plus(arrayOf(
-        GLIDE_ARGUMENT to glide,
-        USER_ID_ARGUMENT to userId,
-        ENABLE_EMOTICONS_ARGUMENT to enableEmoticons
-    )))
+    fun makeViews(context: Context) = prototype.makeViews(context, children, args)
 
     fun optimize() = recursiveOptimize().first()
 
@@ -65,17 +70,17 @@ class BBTree(
         if (prototype is TextMutatorPrototype && canOptimize) {
             recursiveNewChildren.forEach {
                 if (it.prototype == TextPrototype) {
-                    val text = TextPrototype.getText(it.args).toSpannableStringBuilder()
-                    val mutatedText = prototype.mutate(text, args)
+                    val text = TextPrototype.getText(it.internalArgs).toSpannableStringBuilder()
+                    val mutatedText = prototype.mutate(text, internalArgs)
 
-                    TextPrototype.updateText(mutatedText, it.args)
+                    TextPrototype.updateText(mutatedText, it.internalArgs)
                 }
             }
         }
 
         return when {
             canOptimize && prototype is TextMutatorPrototype -> newChildren.map {
-                BBTree(it.prototype, parent, isFinished, it.children, it.args)
+                BBTree(it.prototype, parent, isFinished, it.children, it.internalArgs)
             }
             else -> {
                 children.clear()
@@ -94,10 +99,10 @@ class BBTree(
 
             newChildren.drop(1).forEach { next ->
                 if (current.prototype == TextPrototype && next.prototype == TextPrototype) {
-                    val currentText = TextPrototype.getText(current.args).toSpannableStringBuilder()
-                    val mergedText = currentText.append(TextPrototype.getText(next.args))
+                    val currentText = TextPrototype.getText(current.internalArgs).toSpannableStringBuilder()
+                    val mergedText = currentText.append(TextPrototype.getText(next.internalArgs))
 
-                    TextPrototype.updateText(mergedText, current.args)
+                    TextPrototype.updateText(mergedText, current.internalArgs)
                 } else {
                     result += current
                     current = next
@@ -122,12 +127,12 @@ class BBTree(
 
         if (prototype != other.prototype) return false
         if (children != other.children) return false
-        if (args.size != other.args.size) return false
+        if (internalArgs.size != other.internalArgs.size) return false
 
         // Work around a bug in the SpannableStringBuilder (and possibly others) implementation.
         // See: https://stackoverflow.com/a/46403431/4279995.
-        args.forEach { (key, value) ->
-            other.args.forEach { (otherKey, otherValue) ->
+        internalArgs.forEach { (key, value) ->
+            other.internalArgs.forEach { (otherKey, otherValue) ->
                 if (key != otherKey) return false
 
                 if (value is Spanned) {
@@ -145,7 +150,7 @@ class BBTree(
     override fun hashCode(): Int {
         var result = prototype.hashCode()
         result = 31 * result + children.hashCode()
-        result = 31 * result + args.hashCode()
+        result = 31 * result + internalArgs.hashCode()
         return result
     }
 }

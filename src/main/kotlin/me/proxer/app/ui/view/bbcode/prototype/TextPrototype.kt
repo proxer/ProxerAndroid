@@ -2,13 +2,13 @@ package me.proxer.app.ui.view.bbcode.prototype
 
 import android.content.Context
 import android.support.v4.widget.TextViewCompat
-import android.text.SpannableStringBuilder
 import android.text.util.Linkify
 import android.view.View
 import android.widget.TextView
 import me.proxer.app.R
 import me.proxer.app.ui.view.GifAwareTextView
 import me.proxer.app.ui.view.bbcode.BBTree
+import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
 /**
@@ -32,17 +32,27 @@ object TextPrototype : BBPrototype {
     }
 
     fun makeView(context: Context, text: CharSequence): TextView {
-        return GifAwareTextView(context).also {
-            it.text = SpannableStringBuilder(text)
+        return applyOnView(GifAwareTextView(context), text)
+    }
 
-            TextViewCompat.setTextAppearance(it, R.style.TextAppearance_AppCompat_Small)
-            BetterLinkMovementMethod.linkify(Linkify.WEB_URLS, it)
-        }
+    fun applyOnView(view: GifAwareTextView, args: Map<String, Any?>): GifAwareTextView {
+        val text = args[TEXT_ARGUMENT] as CharSequence
+
+        return applyOnView(view, text)
     }
 
     fun getText(args: Map<String, Any?>) = args[TEXT_ARGUMENT] as CharSequence
 
     fun updateText(newText: CharSequence, args: MutableMap<String, Any?>) {
         args[TEXT_ARGUMENT] = newText
+    }
+
+    private fun applyOnView(view: GifAwareTextView, text: CharSequence): GifAwareTextView {
+        view.text = text.toSpannableStringBuilder()
+
+        TextViewCompat.setTextAppearance(view, R.style.TextAppearance_AppCompat_Small)
+        BetterLinkMovementMethod.linkify(Linkify.WEB_URLS, view)
+
+        return view
     }
 }

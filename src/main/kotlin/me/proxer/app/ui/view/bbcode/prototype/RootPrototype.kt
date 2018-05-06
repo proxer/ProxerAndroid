@@ -20,6 +20,11 @@ object RootPrototype : BBPrototype {
 
     override fun makeViews(context: Context, children: List<BBTree>, args: Map<String, Any?>): List<View> {
         val views = super.makeViews(context, children, args)
+
+        return applyOnViews(views, args)
+    }
+
+    fun applyOnViews(views: List<View>, args: Map<String, Any?>): List<View> {
         val enableEmotions = args[ENABLE_EMOTICONS_ARGUMENT] as Boolean?
 
         return when (enableEmotions) {

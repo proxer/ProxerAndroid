@@ -66,7 +66,7 @@ class CommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedComment, V
     override fun onViewRecycled(holder: ViewHolder) {
         glide?.clear(holder.image)
 
-        holder.comment.destroy()
+        holder.comment.destroyWithRetainingViews()
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
