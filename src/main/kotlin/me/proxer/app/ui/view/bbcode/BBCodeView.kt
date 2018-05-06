@@ -64,7 +64,7 @@ class BBCodeView @JvmOverloads constructor(
     }
 
     private fun refreshViews(tree: BBTree) {
-        val existingChild = this.childrenSequence().firstOrNull()
+        val existingChild = if (childCount == 1) this.childrenSequence().firstOrNull() else null
         val firstTreeChild = if (tree.children.size == 1) tree.children.firstOrNull() else null
 
         tree.glide = glide
