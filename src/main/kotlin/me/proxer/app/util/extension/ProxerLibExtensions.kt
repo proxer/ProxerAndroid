@@ -324,9 +324,16 @@ fun UserComment.toParsedUserComment() = ParsedUserComment(id, entryId, entryName
 fun Topic.toTopicMetaData() = TopicMetaData(categoryId, categoryName, firstPostDate, lastPostDate, hits, isLocked,
     post, subject)
 
-fun Post.toParsedPost() = ParsedPost(id, parentId, userId, username, image, date,
-    signature?.let { if (it.isNotBlank()) BBParser.parse(it).optimize() else null },
-    modifiedById, modifiedByName, modifiedReason, BBParser.parse(message).optimize(), thankYouAmount)
+fun Post.toParsedPost(): ParsedPost {
+    val parsedMessage = BBParser.parse(message)
+    val parsedSignature = signature?.let { if (it.isNotBlank()) BBParser.parse(it) else null }
+
+    parsedMessage.userId = userId
+    parsedSignature?.userId = userId
+
+    return ParsedPost(id, parentId, userId, username, image, date, parsedSignature?.optimize(),
+        modifiedById, modifiedByName, modifiedReason, parsedMessage.optimize(), thankYouAmount)
+}
 
 fun Tag.toParcelableTag() = LocalTag(id, type, name, description, subType, isSpoiler)
 

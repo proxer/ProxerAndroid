@@ -7,7 +7,7 @@ import me.proxer.app.ui.view.bbcode.BBTree
  */
 interface ConditionalTextMutatorPrototype : TextMutatorPrototype {
 
-    fun canOptimize(recursiveChildren: List<BBTree>) = recursiveChildren.find {
-        it.prototype != TextPrototype && it.prototype !is TextMutatorPrototype
-    } == null
+    fun canOptimize(recursiveChildren: List<BBTree>) = recursiveChildren.none {
+        it.prototype !== TextPrototype && it.prototype !is TextMutatorPrototype
+    }
 }

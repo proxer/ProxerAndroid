@@ -71,7 +71,7 @@ class BBTree(
             recursiveNewChildren.forEach {
                 if (it.prototype == TextPrototype) {
                     val text = TextPrototype.getText(it.internalArgs).toSpannableStringBuilder()
-                    val mutatedText = prototype.mutate(text, internalArgs)
+                    val mutatedText = prototype.mutate(text, args)
 
                     TextPrototype.updateText(mutatedText, it.internalArgs)
                 }
