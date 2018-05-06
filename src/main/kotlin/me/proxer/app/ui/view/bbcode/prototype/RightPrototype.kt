@@ -7,8 +7,8 @@ import android.text.SpannableStringBuilder
 import android.text.style.AlignmentSpan
 import android.view.Gravity.END
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.LinearLayout
-import android.widget.LinearLayout.LayoutParams
 import android.widget.TextView
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.applyToViews
@@ -30,7 +30,14 @@ object RightPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
             when (view) {
                 is TextView -> view.text = mutate(view.text.toSpannableStringBuilder(), args)
                 is LinearLayout -> view.gravity = END
-                else -> (view.layoutParams as? LayoutParams)?.gravity = END
+                else -> {
+                    val layoutParams = view.layoutParams
+
+                    when (layoutParams) {
+                        is FrameLayout.LayoutParams -> layoutParams.gravity = END
+                        is LinearLayout.LayoutParams -> layoutParams.gravity = END
+                    }
+                }
             }
         }
     }

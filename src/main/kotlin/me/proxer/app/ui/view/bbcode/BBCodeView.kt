@@ -8,8 +8,8 @@ import android.view.View.MeasureSpec.UNSPECIFIED
 import android.view.View.MeasureSpec.getMode
 import android.view.View.MeasureSpec.getSize
 import android.view.View.MeasureSpec.makeMeasureSpec
+import android.widget.FrameLayout
 import android.widget.ImageView
-import android.widget.LinearLayout
 import me.proxer.app.GlideRequests
 import me.proxer.app.ui.view.GifAwareTextView
 import me.proxer.app.ui.view.bbcode.prototype.RootPrototype
@@ -23,7 +23,7 @@ class BBCodeView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : LinearLayout(context, attrs, defStyleAttr) {
+) : FrameLayout(context, attrs, defStyleAttr) {
 
     var maxHeight = Int.MAX_VALUE
 
@@ -31,10 +31,6 @@ class BBCodeView @JvmOverloads constructor(
     var glide: GlideRequests? = null
     var userId: String? = null
     var enableEmotions = false
-
-    init {
-        orientation = VERTICAL
-    }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val hSize = getSize(heightMeasureSpec)

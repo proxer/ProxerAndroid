@@ -38,6 +38,7 @@ object HidePrototype : AutoClosingPrototype {
                     gravity = CENTER
                 })
             })
+            childViews.size == 1 -> childViews
             else -> listOf(LinearLayout(context).apply {
                 val fourDip = dip(4)
 
