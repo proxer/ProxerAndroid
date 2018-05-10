@@ -200,7 +200,6 @@ class ProfileAboutFragment : BaseContentFragment<UserAbout>() {
                 <style>
                   body { color: ${htmlColorFromResource(R.color.textColorSecondary)} }
                   a { color: ${htmlColorFromResource(R.color.link)} }
-                  a:active { color: ${htmlColorFromResource(R.color.colorAccent)} }
                 </style>
               </head>
               <body>
@@ -211,11 +210,11 @@ class ProfileAboutFragment : BaseContentFragment<UserAbout>() {
     }
 
     private fun htmlColorFromResource(@ColorRes resource: Int): String {
-        val color = Color.valueOf(ContextCompat.getColor(requireContext(), resource))
-        val red = color.red() * 255
-        val green = color.green() * 255
-        val blue = color.blue() * 255
-        val alpha = color.alpha()
+        val color = ContextCompat.getColor(requireContext(), resource)
+        val red = color shr 16 and 0xff
+        val green = color shr 8 and 0xff
+        val blue = color and 0xff
+        val alpha = color shr 24 and 0xff
 
         return "rgba($red, $green, $blue, $alpha)"
     }

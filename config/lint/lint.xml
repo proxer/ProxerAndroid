@@ -19,13 +19,14 @@
     <issue id="UnusedIds" severity="error" />
     <issue id="WrongThreadInterprocedural" severity="error" />
 
-    <!-- Needed for Okio and Retrofit. -->
+    <!-- Ignore errors about packages not contained in Android. These are safe. -->
     <issue id="InvalidPackage" severity="error">
         <ignore regexp=".*okio.*" />
         <ignore regexp=".*retrofit.*" />
+        <ignore regexp="org.checkerframework.checker.signedness.SignednessUtil" />
     </issue>
 
-    <!-- Look later for a better alternative. -->
+    <!-- Gifs are not the best option performance-wise. Look later for a better alternative. -->
     <issue id="GifUsage">
         <ignore regexp="res/drawable-nodpi/o_.*[.]gif" />
     </issue>
