@@ -15,11 +15,11 @@ ext {
     gradleVersion = '4.7'
 
     // Core plugins
-    androidPluginVersion = '3.2.0-alpha13'
+    androidPluginVersion = '3.2.0-alpha14'
     kotlinVersion = '1.2.41'
 
     // Utility plugins
-    detektPluginVersion = '1.0.0.RC6-4'
+    detektPluginVersion = '1.0.0.RC7'
     gradleVersionsPluginVersion = '0.17.0'
     androidCommandPluginVersion = '2.0.1'
     ktlintPluginVersion = '3.3.0'
@@ -31,7 +31,7 @@ ext {
     supportLibraryVersion = '27.1.1'
     supportPreferenceVersion = '2.2.0'
     lifecycleVersion = '1.1.1'
-    roomVersion = '1.1.0-rc1'
+    roomVersion = '1.1.0'
     androidJobVersion = '1.2.5'
     proxerLibVersion = '7d4ef27973'
 
@@ -57,8 +57,8 @@ ext {
     flexboxVersion = '0.3.2'
     emojiIosVersion = '7f7f35c3e7'
     emojiIosVersion = '7f7f35c3e7'
-    exomediaVersion = '4276f6766b'
-    exoplayerVersion = '2.7.3'
+    exomediaVersion = '4.2.0'
+    exoplayerVersion = '2.8.0'
     materialProgressBarVersion = '1.4.2'
     materialRatingBarVersion = '1.2.0'
     customtabsHelperVersion = '1.0.4'
