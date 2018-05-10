@@ -1,8 +1,11 @@
 package me.proxer.app.profile.about
 
 import android.content.ClipData
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.support.annotation.ColorRes
+import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -69,10 +72,13 @@ class ProfileAboutFragment : BaseContentFragment<UserAbout>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        about.setBackgroundColor(Color.TRANSPARENT)
+        about.settings.cacheMode = WebSettings.LOAD_NO_CACHE
         about.settings.userAgentString = USER_AGENT
         about.settings.loadWithOverviewMode = true
         about.settings.javaScriptEnabled = false
         about.settings.useWideViewPort = true
+        about.settings.defaultFontSize = 22
         about.isHorizontalScrollBarEnabled = false
         about.isVerticalScrollBarEnabled = false
 
@@ -112,7 +118,7 @@ class ProfileAboutFragment : BaseContentFragment<UserAbout>() {
 
         data.about.let {
             when (it.isNotBlank()) {
-                true -> about.loadData(it.trim(), "text/html", "utf-8")
+                true -> about.loadData(constructHtmlSkeleton(it), "text/html", "utf-8")
                 false -> aboutContainer.visibility = View.GONE
             }
         }
@@ -185,5 +191,32 @@ class ProfileAboutFragment : BaseContentFragment<UserAbout>() {
             })
 
         return tableRow
+    }
+
+    private fun constructHtmlSkeleton(content: String): String {
+        return """
+            <html>
+              <head>
+                <style>
+                  body { color: ${htmlColorFromResource(R.color.textColorSecondary)} }
+                  a { color: ${htmlColorFromResource(R.color.link)} }
+                  a:active { color: ${htmlColorFromResource(R.color.colorAccent)} }
+                </style>
+              </head>
+              <body>
+              ${content.trim()}
+              </body>
+            </html>
+            """
+    }
+
+    private fun htmlColorFromResource(@ColorRes resource: Int): String {
+        val color = Color.valueOf(ContextCompat.getColor(requireContext(), resource))
+        val red = color.red() * 255
+        val green = color.green() * 255
+        val blue = color.blue() * 255
+        val alpha = color.alpha()
+
+        return "rgba($red, $green, $blue, $alpha)"
     }
 }

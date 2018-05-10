@@ -9,6 +9,7 @@ import android.net.Uri
 import android.support.multidex.MultiDex
 import android.support.v7.app.AppCompatDelegate
 import android.util.Log
+import android.webkit.WebView
 import android.widget.ImageView
 import cat.ereza.customactivityoncrash.config.CaocConfig
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
@@ -106,7 +107,19 @@ class MainApplication : Application() {
         refWatcher = LeakCanary.install(this)
         globalContext = this
 
-        AppCompatDelegate.setDefaultNightMode(PreferenceHelper.getNightMode(this))
+        val nightMode = PreferenceHelper.getNightMode(this)
+
+        // Ugly hack to avoid WebViews to change the ui mode. On first inflation, a WebView changes the ui mode
+        // and creating an instance before the first inflation fixes that.
+        // See: https://issuetracker.google.com/issues/37124582
+        if (nightMode != AppCompatDelegate.MODE_NIGHT_NO) {
+            try {
+                WebView(this)
+            } catch (ignored: Throwable) {
+            }
+        }
+
+        AppCompatDelegate.setDefaultNightMode(nightMode)
         NotificationUtils.createNotificationChannels(this)
 
         messengerDatabase = Room.databaseBuilder(this, MessengerDatabase::class.java, "chat.db").build()
