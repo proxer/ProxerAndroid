@@ -8,6 +8,7 @@ import android.view.WindowManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.devbrackets.android.exomedia.listener.VideoControlsButtonListener
 import com.devbrackets.android.exomedia.listener.VideoControlsVisibilityListener
+import com.devbrackets.android.exomedia.ui.widget.VideoControls
 import com.devbrackets.android.exomedia.ui.widget.VideoControls.SYSTEM_UI_FLAG_FULLSCREEN
 import com.devbrackets.android.exomedia.ui.widget.VideoControls.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 import com.devbrackets.android.exomedia.ui.widget.VideoControls.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
@@ -126,7 +127,7 @@ class StreamActivity : BaseActivity() {
     }
 
     private fun setupPlayer() {
-        player.videoControls?.let {
+        (player.videoControlsCore as? VideoControls)?.let {
             it.setNextDrawable(IconicsDrawable(this, CommunityMaterial.Icon.cmd_fast_forward)
                 .colorRes(android.R.color.white)
                 .sizeDp(24))

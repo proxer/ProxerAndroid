@@ -18,6 +18,7 @@ import me.proxer.app.ui.view.bbcode.prototype.LeftPrototype
 import me.proxer.app.ui.view.bbcode.prototype.ListItemPrototype
 import me.proxer.app.ui.view.bbcode.prototype.MapPrototype
 import me.proxer.app.ui.view.bbcode.prototype.OrderedListPrototype
+import me.proxer.app.ui.view.bbcode.prototype.PdfPrototype
 import me.proxer.app.ui.view.bbcode.prototype.PollPrototype
 import me.proxer.app.ui.view.bbcode.prototype.QuotePrototype
 import me.proxer.app.ui.view.bbcode.prototype.RightPrototype
@@ -53,7 +54,7 @@ object BBParser {
         UrlPrototype, ImagePrototype, DividerPrototype, VideoPrototype, TablePrototype, TableRowPrototype,
         TableCellPrototype, CodePrototype, HidePrototype, UnorderedListPrototype, OrderedListPrototype,
         ListItemPrototype, MapPrototype, AttachmentPrototype, FacebookPrototype, TwitterPrototype, PollPrototype,
-        BreakPrototype))
+        BreakPrototype, PdfPrototype))
 
     fun parseTextOnly(input: String): CharSequence {
         val result = parse(input, textOnlyPrototypes).optimize()

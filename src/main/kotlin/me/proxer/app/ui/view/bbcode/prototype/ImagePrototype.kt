@@ -25,7 +25,6 @@ import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.wrapper.SimpleGlideRequestListener
 import okhttp3.HttpUrl
-import org.jetbrains.anko.dip
 
 /**
  * @author Ruben Gees
@@ -34,9 +33,6 @@ object ImagePrototype : AutoClosingPrototype {
 
     private val WIDTH_ATTRIBUTE_REGEX = Regex("size *= *(.+?)( |$)", REGEX_OPTIONS)
     private const val WIDTH_ARGUMENT = "width"
-
-    private val INVALID_IMAGE = HttpUrl.parse("https://cdn.proxer.me/keinbild.jpg")
-        ?: throw IllegalArgumentException("Could not parse url")
 
     override val startRegex = Regex(" *img( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *img *", REGEX_OPTIONS)
@@ -51,10 +47,10 @@ object ImagePrototype : AutoClosingPrototype {
         val childViews = children.flatMap { it.makeViews(context) }
 
         val url = (childViews.firstOrNull() as? TextView)?.text.toString().trim()
-        val parsedUrl = Utils.safelyParseAndFixUrl(url) ?: INVALID_IMAGE
+        val parsedUrl = Utils.safelyParseAndFixUrl(url)
 
         val glide = args[GLIDE_ARGUMENT] as GlideRequests?
-        val width = if (parsedUrl == INVALID_IMAGE) context.dip(100) else args[WIDTH_ARGUMENT] as Int?
+        val width = if (parsedUrl == null) null else args[WIDTH_ARGUMENT] as Int?
 
         return listOf(AppCompatImageView(context).also { view: ImageView ->
             ViewCompat.setTransitionName(view, "bb_image_$parsedUrl")
@@ -69,7 +65,7 @@ object ImagePrototype : AutoClosingPrototype {
                         view.tag = null
 
                         glide?.let { loadImage(it, view, parsedUrl) }
-                    } else if (view.drawable != null) {
+                    } else if (view.drawable != null && parsedUrl != null) {
                         ImageDetailActivity.navigateTo(context, parsedUrl, view)
                     }
                 }
@@ -77,7 +73,8 @@ object ImagePrototype : AutoClosingPrototype {
         })
     }
 
-    private fun loadImage(glide: GlideRequests, view: ImageView, url: HttpUrl) = glide.load(url.toString())
+    private fun loadImage(glide: GlideRequests, view: ImageView, url: HttpUrl?) = glide
+        .load(url.toString())
         .centerInside()
         .listener(object : SimpleGlideRequestListener<Drawable?> {
             override fun onLoadFailed(error: GlideException?): Boolean {

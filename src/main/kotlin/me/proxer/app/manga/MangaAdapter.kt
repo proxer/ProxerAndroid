@@ -108,13 +108,10 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
         }
 
         fun bind(item: Page) {
-            val width = DeviceUtils.getScreenWidth(image.context)
-            val scale = width.toFloat() / item.width.toFloat() * 2f
-
-            image.setDoubleTapZoomScale(scale)
-            image.maxScale = scale
+            image.setMinimumTileDpi(120)
 
             if (isVertical) {
+                val width = DeviceUtils.getScreenWidth(image.context)
                 val height = (item.height * width.toFloat() / item.width.toFloat()).toInt()
 
                 itemView.layoutParams.height = height
@@ -153,6 +150,11 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
 
             @Suppress("LabeledExpression")
             image.setOnImageEventListener(object : SubsamplingScaleImageView.DefaultOnImageEventListener() {
+                override fun onImageLoaded() {
+                    image.setDoubleTapZoomScale(image.scale * 2.5f)
+                    image.maxScale = image.scale * 2.5f
+                }
+
                 override fun onTileLoadError(error: Exception) = withSafeAdapterPosition(this@ViewHolder) {
                     handleImageLoadError(error, it)
                 }

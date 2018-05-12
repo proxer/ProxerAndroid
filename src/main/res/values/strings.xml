@@ -503,6 +503,10 @@
     <string name="view_bbcode_hide_login">Dieser Inhalt ist für Gäste nicht sichtbar. Bitte melde dich an, oder
         registriere dich.
     </string>
+    <string name="view_bbcode_pdf_link">PDF ansehen</string>
+    <string name="view_bbcode_pdf_no_activity_error">Ein Webbrowser wie Google Chrome wird benötigt um PDFs
+        anzuzeigen
+    </string>
     <string name="view_bbcode_map_link">Zur Karte</string>
     <string name="view_bbcode_map_no_activity_error">Ein Kartendienst wie Google Maps wird benötigt um Karten
         anzuzeigen
