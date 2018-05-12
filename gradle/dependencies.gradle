@@ -69,7 +69,6 @@ ext {
             glideOkHttp                      : "com.github.bumptech.glide:okhttp3-integration:$glideVersion",
             okHttp                           : "com.squareup.okhttp3:okhttp:$okHttpVersion",
             okio                             : "com.squareup.okio:okio:$okioVersion",
-            linkBuilder                      : "com.github.rubengees:Android-TextView-LinkBuilder:$linkBuilderVersion",
             easyHeaderFooterAdapter          : "com.github.rubengees:easy-header-footer-adapter:$easyHeaderFooterAdapterVersion",
             kOptional                        : "com.gojuno.koptional:koptional-rxjava2-extensions:$kOptionalVersion",
             kotterknife                      : "com.github.rubengees:kotterknife:$kotterknifeVersion",

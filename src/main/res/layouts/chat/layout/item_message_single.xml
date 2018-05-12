@@ -59,7 +59,7 @@
                     tools:text="RubyGee" />
             </LinearLayout>
 
-            <me.proxer.app.ui.view.LinkConsumableEmojiTextView
+            <me.proxer.app.ui.view.BetterLinkEmojiTextView
                 android:id="@+id/text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

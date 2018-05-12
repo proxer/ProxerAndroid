@@ -5,7 +5,6 @@ import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.design.widget.TextInputEditText
 import android.support.design.widget.TextInputLayout
-import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.ViewGroup
@@ -16,8 +15,6 @@ import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.jakewharton.rxbinding2.widget.editorActionEvents
 import com.jakewharton.rxbinding2.widget.textChanges
-import com.klinker.android.link_builder.Link
-import com.klinker.android.link_builder.applyLinks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import io.reactivex.functions.Predicate
@@ -26,15 +23,11 @@ import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.R
 import me.proxer.app.base.BaseDialog
 import me.proxer.app.util.data.StorageHelper
-import me.proxer.app.util.extension.autoDispose
-import me.proxer.app.util.extension.dip
-import me.proxer.app.util.extension.iconColor
-import me.proxer.app.util.extension.unsafeLazy
+import me.proxer.app.util.extension.*
 import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
 import me.proxer.library.util.ProxerUtils
 import org.jetbrains.anko.longToast
-import java.util.regex.Pattern
 
 /**
  * @author Ruben Gees
@@ -42,7 +35,7 @@ import java.util.regex.Pattern
 class LoginDialog : BaseDialog() {
 
     companion object {
-        private val WEBSITE_PATTERN = Pattern.compile("Proxer \\b(.+?)\\b", Pattern.DOTALL)
+        private val WEBSITE_REGEX = Regex("Proxer \\b(.+?)\\b")
         private const val DEVICE_PARAMETER = "device"
 
         fun show(activity: AppCompatActivity) = LoginDialog().show(activity.supportFragmentManager, "login_dialog")
@@ -88,6 +81,7 @@ class LoginDialog : BaseDialog() {
         }
     }
 
+    @Suppress("SpreadOperator")
     private fun setupViews() {
         listOf(password, secret).forEach {
             it.editorActionEvents(Predicate { event -> event.actionId() == EditorInfo.IME_ACTION_GO })
@@ -105,21 +99,19 @@ class LoginDialog : BaseDialog() {
 
         secret.transformationMethod = null
 
-        registrationInfo.text = requireContext().getString(R.string.dialog_login_registration)
         registrationInfo.compoundDrawablePadding = dip(12)
+        registrationInfo.text = requireContext().getString(R.string.dialog_login_registration)
+            .linkify(web = false, mentions = false, custom = *arrayOf(WEBSITE_REGEX))
 
         registrationInfo.setCompoundDrawables(generateInfoDrawable(), null, null, null)
 
-        registrationInfo.applyLinks(Link(WEBSITE_PATTERN)
-            .setTextColor(ContextCompat.getColor(requireContext(), R.color.link))
-            .setUnderlined(false)
-            .setOnClickListener {
-                showPage(ProxerUrls.webBase()
-                    .newBuilder()
-                    .addPathSegment("register")
-                    .setQueryParameter(DEVICE_PARAMETER, ProxerUtils.getApiEnumName(Device.DEFAULT))
-                    .build())
-            })
+        registrationInfo.setOnLinkClickListener { _, _ ->
+            showPage(ProxerUrls.webBase()
+                .newBuilder()
+                .addPathSegment("register")
+                .setQueryParameter(DEVICE_PARAMETER, ProxerUtils.getApiEnumName(Device.DEFAULT))
+                .build())
+        }
     }
 
     private fun setupViewModels() {

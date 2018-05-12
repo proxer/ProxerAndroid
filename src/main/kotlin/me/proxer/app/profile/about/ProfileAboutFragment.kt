@@ -15,7 +15,6 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.TableLayout
 import android.widget.TextView
-import com.klinker.android.link_builder.TouchableMovementMethod
 import kotterknife.bindView
 import me.proxer.app.MainApplication.Companion.USER_AGENT
 import me.proxer.app.R
@@ -24,16 +23,14 @@ import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.Utils
-import me.proxer.app.util.extension.clipboardManager
-import me.proxer.app.util.extension.toAppString
-import me.proxer.app.util.extension.unsafeLazy
+import me.proxer.app.util.extension.*
 import me.proxer.library.entity.user.UserAbout
 import me.proxer.library.enums.Gender
 import me.proxer.library.enums.RelationshipStatus
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.toast
 import java.text.SimpleDateFormat
-import java.util.Locale
+import java.util.*
 
 /**
  * @author Ruben Gees
@@ -176,19 +173,18 @@ class ProfileAboutFragment : BaseContentFragment<UserAbout>() {
         val contentView = tableRow.findViewById<TextView>(R.id.content)
 
         contentView.setTextIsSelectable(true)
-
         contentView.isSaveEnabled = false
-        contentView.movementMethod = TouchableMovementMethod.instance
+
+        contentView.setOnLinkClickListener { _, link -> showPage(Utils.parseAndFixUrl(link)) }
+        contentView.setOnLinkLongClickListener { _, link ->
+            val clipboardTitle = getString(R.string.clipboard_title)
+
+            requireContext().clipboardManager.primaryClip = ClipData.newPlainText(clipboardTitle, link)
+            requireContext().toast(R.string.clipboard_status)
+        }
 
         titleView.text = title
-        contentView.text = Utils.buildClickableText(requireContext(), content,
-            onWebClickListener = { link -> showPage(Utils.parseAndFixUrl(link)) },
-            onWebLongClickListener = { link ->
-                val clipboardTitle = getString(R.string.clipboard_title)
-
-                requireContext().clipboardManager.primaryClip = ClipData.newPlainText(clipboardTitle, link)
-                requireContext().toast(R.string.clipboard_status)
-            })
+        contentView.text = content.linkify(mentions = false)
 
         return tableRow
     }

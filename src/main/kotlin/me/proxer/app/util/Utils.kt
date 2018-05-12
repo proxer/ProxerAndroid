@@ -11,13 +11,9 @@ import android.os.Build
 import android.support.annotation.ColorRes
 import android.support.v4.content.ContextCompat
 import android.util.Log
-import android.util.Patterns
 import com.bumptech.glide.request.target.Target
-import com.klinker.android.link_builder.Link
-import com.klinker.android.link_builder.LinkBuilder
 import me.proxer.app.GlideApp
 import me.proxer.app.MainApplication.Companion.LOGGING_TAG
-import me.proxer.app.R
 import me.proxer.app.util.extension.androidUri
 import me.proxer.library.api.ProxerException
 import me.proxer.library.api.ProxerException.ErrorType
@@ -33,9 +29,6 @@ object Utils {
     val timeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
     val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
     val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss dd.MM.yyyy")
-
-    private val WEB_REGEX = Patterns.WEB_URL
-    private val MENTIONS_REGEX = Regex("(@[^ \n]+)").toPattern()
 
     fun findActivity(currentContext: Context): Activity? = when (currentContext) {
         is Activity -> currentContext
@@ -70,35 +63,6 @@ object Utils {
         Log.e(LOGGING_TAG, error.getStackTraceString())
 
         null
-    }
-
-    fun buildClickableText(
-        context: Context,
-        text: CharSequence,
-        onWebClickListener: ((String) -> Unit)? = null,
-        onWebLongClickListener: ((String) -> Unit)? = null,
-        onMentionsClickListener: ((String) -> Unit)? = null,
-        onMentionsLongClickListener: ((String) -> Unit)? = null
-    ): CharSequence {
-        val builder = LinkBuilder.from(context, text)
-
-        if (onMentionsClickListener != null || onMentionsLongClickListener != null) {
-            builder.addLink(Link(MENTIONS_REGEX)
-                .setTextColor(ContextCompat.getColor(context, R.color.link))
-                .setUnderlined(false)
-                .apply { onMentionsClickListener?.let { setOnClickListener(it) } }
-                .apply { onMentionsLongClickListener?.let { setOnLongClickListener(it) } })
-        }
-
-        if (onWebClickListener != null || onWebLongClickListener != null) {
-            builder.addLink(Link(WEB_REGEX)
-                .setTextColor(ContextCompat.getColor(context, R.color.link))
-                .setUnderlined(false)
-                .apply { onWebClickListener?.let { setOnClickListener(it) } }
-                .apply { onWebLongClickListener?.let { setOnLongClickListener(it) } })
-        }
-
-        return builder.build() ?: text
     }
 
     fun safelyParseAndFixUrl(url: String) = when {

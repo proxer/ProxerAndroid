@@ -15,9 +15,13 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.util.Linkify
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.target.Target
 import com.mikepenz.iconics.IconicsDrawable
@@ -28,10 +32,13 @@ import me.proxer.app.R
 import me.proxer.app.ui.WebViewActivity
 import me.proxer.app.util.Utils
 import me.proxer.library.util.ProxerUrls
+import me.saket.bettermovementmethod.BetterLinkMovementMethod
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
 import org.jetbrains.anko.dip
-import java.util.EnumSet
+import java.util.*
+
+val MENTIONS_REGEX = Regex("(@[^ \n]+)").toPattern()
 
 inline fun <reified T : Enum<T>> enumSetOf(collection: Collection<T>): EnumSet<T> = when (collection.isEmpty()) {
     true -> EnumSet.noneOf(T::class.java)
@@ -63,6 +70,55 @@ inline fun ImageView.setIconicsImage(
         .sizeDp(sizeDp)
         .paddingDp(paddingDp)
         .colorRes(context, colorRes))
+}
+
+inline fun CharSequence.linkify(web: Boolean = true, mentions: Boolean = true, vararg custom: Regex): Spannable {
+    val spannable = this as? Spannable ?: SpannableString(this)
+
+    if (web) Linkify.addLinks(spannable, Linkify.WEB_URLS)
+    if (mentions) Linkify.addLinks(spannable, MENTIONS_REGEX, "")
+
+    custom.forEach {
+        Linkify.addLinks(spannable, it.toPattern(), "")
+    }
+
+    return spannable
+}
+
+inline fun TextView.setOnLinkClickListener(crossinline listener: (view: TextView, link: String) -> Unit) {
+    movementMethod.let {
+        if (it is BetterLinkMovementMethod) {
+            it.setOnLinkClickListener { view, link ->
+                listener(view, link)
+
+                true
+            }
+        } else {
+            movementMethod = BetterLinkMovementMethod.newInstance().setOnLinkClickListener { view, link ->
+                listener(view, link)
+
+                true
+            }
+        }
+    }
+}
+
+inline fun TextView.setOnLinkLongClickListener(crossinline listener: (view: TextView, link: String) -> Unit) {
+    movementMethod.let {
+        if (it is BetterLinkMovementMethod) {
+            it.setOnLinkLongClickListener { view, link ->
+                listener(view, link)
+
+                true
+            }
+        } else {
+            movementMethod = BetterLinkMovementMethod.newInstance().setOnLinkLongClickListener { view, link ->
+                listener(view, link)
+
+                true
+            }
+        }
+    }
 }
 
 inline fun GlideRequests.defaultLoad(view: ImageView, url: HttpUrl): Target<Drawable> = load(url.toString())

@@ -5,13 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.klinker.android.link_builder.TouchableMovementMethod
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.convertToRelativeReadableTime
+import me.proxer.app.util.extension.linkify
+import me.proxer.app.util.extension.setOnLinkClickListener
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.user.UserInfo
 import org.jetbrains.anko.bundleOf
@@ -57,7 +58,7 @@ class ProfileInfoFragment : BaseContentFragment<UserInfo>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        statusText.movementMethod = TouchableMovementMethod.instance
+        statusText.setOnLinkClickListener { _, link -> showPage(Utils.parseAndFixUrl(link)) }
     }
 
     override fun showData(data: UserInfo) {
@@ -84,9 +85,7 @@ class ProfileInfoFragment : BaseContentFragment<UserInfo>() {
         } else {
             val rawText = data.status + " - " + data.lastStatusChange.convertToRelativeReadableTime(requireContext())
 
-            statusText.text = Utils.buildClickableText(statusText.context, rawText, onWebClickListener = {
-                showPage(Utils.parseAndFixUrl(it))
-            })
+            statusText.text = rawText.linkify(mentions = false)
         }
     }
 

@@ -7,15 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import com.klinker.android.link_builder.TouchableMovementMethod
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.util.Utils
-import me.proxer.app.util.extension.clipboardManager
-import me.proxer.app.util.extension.toAppDrawable
-import me.proxer.app.util.extension.toAppString
-import me.proxer.app.util.extension.unsafeLazy
+import me.proxer.app.util.extension.*
 import me.proxer.library.entity.info.Industry
 import me.proxer.library.enums.Country
 import org.jetbrains.anko.bundleOf
@@ -61,7 +57,14 @@ class IndustryInfoFragment : BaseContentFragment<Industry>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        link.movementMethod = TouchableMovementMethod.instance
+        link.setOnLinkClickListener { _, link -> showPage(Utils.parseAndFixUrl(link)) }
+
+        link.setOnLinkLongClickListener { _, link ->
+            val title = getString(R.string.clipboard_title)
+
+            requireContext().clipboardManager.primaryClip = ClipData.newPlainText(title, link)
+            requireContext().toast(R.string.clipboard_status)
+        }
     }
 
     override fun showData(data: Industry) {
@@ -81,14 +84,7 @@ class IndustryInfoFragment : BaseContentFragment<Industry>() {
             linkRow.visibility = View.GONE
         } else {
             linkRow.visibility = View.VISIBLE
-            link.text = Utils.buildClickableText(requireContext(), data.link.toString(),
-                onWebClickListener = { link -> showPage(Utils.parseAndFixUrl(link)) },
-                onWebLongClickListener = { link ->
-                    val title = getString(R.string.clipboard_title)
-
-                    requireContext().clipboardManager.primaryClip = ClipData.newPlainText(title, link)
-                    requireContext().toast(R.string.clipboard_status)
-                })
+            link.text = data.link.toString().linkify(mentions = false)
         }
 
         if (data.description.isBlank()) {

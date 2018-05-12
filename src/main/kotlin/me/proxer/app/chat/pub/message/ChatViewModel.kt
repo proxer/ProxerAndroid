@@ -8,7 +8,6 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.base.PagedViewModel
-import me.proxer.app.ui.view.bbcode.BBParser
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.RxRetryWithDelay
 import me.proxer.app.util.Validators
@@ -19,10 +18,8 @@ import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.toParsedMessage
 import me.proxer.library.enums.ChatMessageAction
+import java.util.*
 import java.util.Collections.emptyList
-import java.util.Date
-import java.util.LinkedList
-import java.util.Queue
 import java.util.concurrent.TimeUnit
 
 /**
@@ -93,8 +90,8 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ParsedChatM
         StorageHelper.user?.let { user ->
             val firstId = data.value?.firstOrNull()?.id?.toLong()
             val nextId = if (firstId == null || firstId >= 0) -1 else firstId - 1
-            val message = ParsedChatMessage(nextId.toString(), user.id, user.name, user.image,
-                text, BBParser.parseTextOnly(text), ChatMessageAction.NONE, Date())
+            val message = ParsedChatMessage(nextId.toString(), user.id, user.name, user.image, text,
+                ChatMessageAction.NONE, Date())
 
             data.value = listOf(message).plus(data.value ?: emptyList())
             sendMessageQueue.offer(message)

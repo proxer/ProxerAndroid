@@ -2,14 +2,13 @@ package me.proxer.app.ui.view.bbcode.prototype
 
 import android.content.Context
 import android.support.v4.widget.TextViewCompat
-import android.text.util.Linkify
 import android.view.View
 import android.widget.TextView
 import me.proxer.app.R
 import me.proxer.app.ui.view.GifAwareTextView
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
-import me.saket.bettermovementmethod.BetterLinkMovementMethod
+import me.proxer.app.util.extension.linkify
 
 /**
  * @author Ruben Gees
@@ -22,7 +21,7 @@ object TextPrototype : BBPrototype {
     override val endRegex = Regex("x^")
 
     override fun construct(code: String, parent: BBTree): BBTree {
-        return BBTree(this, parent, args = mutableMapOf(TEXT_ARGUMENT to code))
+        return BBTree(this, parent, args = mutableMapOf(TEXT_ARGUMENT to code.toSpannableStringBuilder().linkify()))
     }
 
     override fun makeViews(context: Context, children: List<BBTree>, args: Map<String, Any?>): List<View> {
@@ -48,10 +47,9 @@ object TextPrototype : BBPrototype {
     }
 
     private fun applyOnView(view: GifAwareTextView, text: CharSequence): GifAwareTextView {
-        view.text = text.toSpannableStringBuilder()
+        view.text = text
 
         TextViewCompat.setTextAppearance(view, R.style.TextAppearance_AppCompat_Small)
-        BetterLinkMovementMethod.linkify(Linkify.WEB_URLS, view)
 
         return view
     }

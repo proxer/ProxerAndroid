@@ -4,7 +4,6 @@ package me.proxer.app.util.extension
 
 import android.content.Context
 import android.support.v7.content.res.AppCompatResources
-import android.text.SpannableString
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
@@ -32,23 +31,7 @@ import me.proxer.library.entity.manga.Page
 import me.proxer.library.entity.messenger.Conference
 import me.proxer.library.entity.messenger.Message
 import me.proxer.library.entity.user.UserComment
-import me.proxer.library.enums.AnimeLanguage
-import me.proxer.library.enums.CalendarDay
-import me.proxer.library.enums.Category
-import me.proxer.library.enums.ChatMessageAction
-import me.proxer.library.enums.Country
-import me.proxer.library.enums.FskConstraint
-import me.proxer.library.enums.Gender
-import me.proxer.library.enums.IndustryType
-import me.proxer.library.enums.Language
-import me.proxer.library.enums.License
-import me.proxer.library.enums.MediaLanguage
-import me.proxer.library.enums.MediaState
-import me.proxer.library.enums.Medium
-import me.proxer.library.enums.RelationshipStatus
-import me.proxer.library.enums.Season
-import me.proxer.library.enums.SynonymType
-import me.proxer.library.enums.UserMediaProgress
+import me.proxer.library.enums.*
 import java.net.URLDecoder
 
 object ProxerLibExtensions {
@@ -337,6 +320,4 @@ fun Post.toParsedPost(): ParsedPost {
 
 fun Tag.toParcelableTag() = LocalTag(id, type, name, description, subType, isSpoiler)
 
-fun ChatMessage.toParsedMessage() = ParsedChatMessage(id, userId, username, image, message,
-    if (action == ChatMessageAction.NONE) BBParser.parseTextOnly(message) else SpannableString(""),
-    action, date)
+fun ChatMessage.toParsedMessage() = ParsedChatMessage(id, userId, username, image, message, action, date)

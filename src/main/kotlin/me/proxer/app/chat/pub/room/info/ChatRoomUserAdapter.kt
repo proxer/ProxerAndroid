@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.klinker.android.link_builder.TouchableMovementMethod
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import io.reactivex.subjects.PublishSubject
@@ -19,7 +18,9 @@ import me.proxer.app.base.BaseAdapter
 import me.proxer.app.chat.pub.room.info.ChatRoomUserAdapter.ViewHolder
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.colorRes
+import me.proxer.app.util.extension.linkify
 import me.proxer.app.util.extension.setIconicsImage
+import me.proxer.app.util.extension.setOnLinkClickListener
 import me.proxer.library.entity.chat.ChatRoomUser
 import me.proxer.library.util.ProxerUrls
 import okhttp3.HttpUrl
@@ -59,12 +60,14 @@ class ChatRoomUserAdapter : BaseAdapter<ChatRoomUser, ViewHolder>() {
         internal val status: TextView by bindView(R.id.status)
 
         init {
-            status.movementMethod = TouchableMovementMethod.instance
-
             itemView.setOnClickListener {
                 withSafeAdapterPosition(this) {
                     participantClickSubject.onNext(image to data[it])
                 }
+            }
+
+            status.setOnLinkClickListener { _, link ->
+                statusLinkClickSubject.onNext(Utils.parseAndFixUrl(link))
             }
         }
 
@@ -87,9 +90,7 @@ class ChatRoomUserAdapter : BaseAdapter<ChatRoomUser, ViewHolder>() {
                 status.visibility = View.GONE
             } else {
                 status.visibility = View.VISIBLE
-                status.text = Utils.buildClickableText(status.context, item.status, onWebClickListener = { link ->
-                    statusLinkClickSubject.onNext(Utils.parseAndFixUrl(link))
-                })
+                status.text = item.status.trim().linkify(mentions = false)
             }
 
             if (item.image.isBlank()) {

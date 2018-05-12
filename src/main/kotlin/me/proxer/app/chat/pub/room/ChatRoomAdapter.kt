@@ -5,13 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.klinker.android.link_builder.TouchableMovementMethod
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.chat.pub.room.ChatRoomAdapter.ViewHolder
 import me.proxer.app.util.Utils
+import me.proxer.app.util.extension.linkify
+import me.proxer.app.util.extension.setOnLinkClickListener
 import me.proxer.library.entity.chat.ChatRoom
 import okhttp3.HttpUrl
 
@@ -43,7 +44,9 @@ class ChatRoomAdapter : BaseAdapter<ChatRoom, ViewHolder>() {
                 }
             }
 
-            topic.movementMethod = TouchableMovementMethod.instance
+            topic.setOnLinkClickListener { _, link ->
+                Utils.safelyParseAndFixUrl(link)?.let { url -> linkClickSubject.onNext(url) }
+            }
         }
 
         fun bind(item: ChatRoom) {
@@ -54,9 +57,7 @@ class ChatRoomAdapter : BaseAdapter<ChatRoom, ViewHolder>() {
                 topic.text = item.topic
             } else {
                 topic.visibility = View.VISIBLE
-                topic.text = Utils.buildClickableText(topic.context, item.topic.trim(), onWebClickListener = {
-                    Utils.safelyParseAndFixUrl(it)?.let { url -> linkClickSubject.onNext(url) }
-                })
+                topic.text = item.topic.trim().linkify(mentions = false)
             }
         }
     }

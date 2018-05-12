@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.klinker.android.link_builder.TouchableMovementMethod
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import io.reactivex.subjects.PublishSubject
@@ -23,9 +22,7 @@ import me.proxer.app.chat.pub.message.ChatAdapter.MessageViewHolder
 import me.proxer.app.util.Utils
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.data.StorageHelper
-import me.proxer.app.util.extension.convertToRelativeReadableTime
-import me.proxer.app.util.extension.iconColor
-import me.proxer.app.util.extension.setIconicsImage
+import me.proxer.app.util.extension.*
 import me.proxer.library.util.ProxerUrls
 import okhttp3.HttpUrl
 import org.jetbrains.anko.dip
@@ -238,8 +235,20 @@ class ChatAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedChatMessage, 
         init {
             root.setOnClickListener { onContainerClick(it) }
             root.setOnLongClickListener { onContainerLongClick(it) }
-            text.movementMethod = TouchableMovementMethod.instance
+
             text.setTextColor(ContextCompat.getColor(text.context, R.color.textColorPrimary))
+
+            text.setOnLinkClickListener { _, link ->
+                if (link.startsWith("@")) {
+                    mentionsClickSubject.onNext(link.trim().drop(1))
+                } else {
+                    linkClickSubject.onNext(Utils.parseAndFixUrl(link))
+                }
+            }
+
+            text.setOnLinkLongClickListener { _, link ->
+                if (!link.startsWith("@")) linkLongClickSubject.onNext(Utils.parseAndFixUrl(link))
+            }
         }
 
         internal open fun bind(message: ParsedChatMessage, marginTop: Int, marginBottom: Int) {
@@ -295,10 +304,7 @@ class ChatAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedChatMessage, 
         }
 
         internal open fun applyMessage(message: ParsedChatMessage) {
-            text.text = Utils.buildClickableText(text.context, message.styledMessage,
-                onWebClickListener = { linkClickSubject.onNext(Utils.parseAndFixUrl(it)) },
-                onWebLongClickListener = { linkLongClickSubject.onNext(Utils.parseAndFixUrl(it)) },
-                onMentionsClickListener = { mentionsClickSubject.onNext(it.trim().substring(1)) })
+            text.text = message.styledMessage
         }
 
         internal open fun applyTime(message: ParsedChatMessage) {

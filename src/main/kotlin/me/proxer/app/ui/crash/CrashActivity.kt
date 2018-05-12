@@ -9,14 +9,14 @@ import android.widget.TextView
 import cat.ereza.customactivityoncrash.CustomActivityOnCrash
 import cat.ereza.customactivityoncrash.config.CaocConfig
 import com.jakewharton.rxbinding2.view.clicks
-import com.klinker.android.link_builder.TouchableMovementMethod
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.chat.prv.Participant
 import me.proxer.app.chat.prv.create.CreateConferenceActivity
-import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.autoDispose
+import me.proxer.app.util.extension.linkify
+import me.proxer.app.util.extension.setOnLinkClickListener
 
 /**
  * @author Ruben Gees
@@ -62,11 +62,11 @@ class CrashActivity : BaseActivity() {
             .autoDispose(this)
             .subscribe { CustomActivityOnCrash.restartApplication(this, config) }
 
-        text.movementMethod = TouchableMovementMethod.instance
-        text.text = Utils.buildClickableText(this, getString(R.string.activity_crash_text),
-            onMentionsClickListener = {
-                CustomActivityOnCrash.restartApplicationWithIntent(this,
-                    CreateConferenceActivity.getIntent(this, false, Participant(DEVELOPER_PROXER_NAME)), config)
-            })
+        text.setOnLinkClickListener { _, _ ->
+            CustomActivityOnCrash.restartApplicationWithIntent(this,
+                CreateConferenceActivity.getIntent(this, false, Participant(DEVELOPER_PROXER_NAME)), config)
+        }
+
+        text.text = getString(R.string.activity_crash_text).linkify(web = false)
     }
 }

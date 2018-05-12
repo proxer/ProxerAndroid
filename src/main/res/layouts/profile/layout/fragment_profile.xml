@@ -224,7 +224,7 @@
                     app:cardElevation="2dp"
                     app:cardUseCompatPadding="true">
 
-                    <com.klinker.android.link_builder.LinkConsumableTextView
+                    <TextView
                         android:id="@+id/statusText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

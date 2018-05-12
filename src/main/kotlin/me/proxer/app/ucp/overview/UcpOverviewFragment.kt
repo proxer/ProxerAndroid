@@ -6,17 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.klinker.android.link_builder.TouchableMovementMethod
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.util.Utils
 import me.proxer.app.util.data.StorageHelper
-import me.proxer.app.util.extension.clipboardManager
-import me.proxer.app.util.extension.snackbar
-import me.proxer.app.util.extension.unsafeLazy
+import me.proxer.app.util.extension.*
 import me.proxer.library.util.ProxerUrls
 import org.jetbrains.anko.bundleOf
+import org.jetbrains.anko.toast
 
 /**
  * @author Ruben Gees
@@ -49,21 +47,21 @@ class UcpOverviewFragment : BaseContentFragment<Int>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        profileLink.movementMethod = TouchableMovementMethod.instance
+        profileLink.setOnLinkClickListener { _, link -> showPage(Utils.parseAndFixUrl(link)) }
+
+        profileLink.setOnLinkLongClickListener { _, link ->
+            val title = getString(R.string.clipboard_title)
+
+            requireContext().clipboardManager.primaryClip = ClipData.newPlainText(title, link)
+            requireContext().toast(R.string.clipboard_status)
+        }
     }
 
     override fun showData(data: Int) {
         super.showData(data)
 
         StorageHelper.user?.let { (_, id, name) ->
-            profileLink.text = Utils.buildClickableText(requireContext(), ProxerUrls.userWeb(id).toString(),
-                onWebClickListener = { showPage(Utils.parseAndFixUrl(it)) },
-                onWebLongClickListener = {
-                    val title = getString(R.string.clipboard_title)
-
-                    requireContext().clipboardManager.primaryClip = ClipData.newPlainText(title, it)
-                    snackbar(root, R.string.clipboard_status)
-                })
+            profileLink.text = ProxerUrls.userWeb(id).toString().linkify(mentions = false)
 
             username.text = name
             userId.text = id

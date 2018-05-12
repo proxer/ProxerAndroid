@@ -40,7 +40,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             tools:text="Ruby" />
 
-        <com.klinker.android.link_builder.LinkConsumableTextView
+        <me.proxer.app.ui.view.BetterLinkTextView
             android:id="@+id/status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
