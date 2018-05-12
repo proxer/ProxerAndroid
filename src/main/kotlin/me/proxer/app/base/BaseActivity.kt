@@ -3,6 +3,7 @@ package me.proxer.app.base
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
+import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.openHttpPage
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
@@ -20,6 +21,7 @@ abstract class BaseActivity : AppCompatActivity() {
         private const val STATE = "activity_state"
     }
 
+    private var currentNightMode by Delegates.notNull<Int>()
     private var customTabsHelper by Delegates.notNull<CustomTabsHelperFragment>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,7 +33,20 @@ abstract class BaseActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
 
+        currentNightMode = PreferenceHelper.getNightMode(this)
         customTabsHelper = CustomTabsHelperFragment.attachTo(this)
+    }
+
+    override fun onResume() {
+        val newNightMode = PreferenceHelper.getNightMode(this)
+
+        if (currentNightMode != newNightMode) {
+            currentNightMode = newNightMode
+
+            recreate()
+        }
+
+        super.onResume()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
