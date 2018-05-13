@@ -57,10 +57,10 @@ object BBParser {
         BreakPrototype, PdfPrototype))
 
     fun parseTextOnly(input: String): CharSequence {
-        val result = parse(input, textOnlyPrototypes).optimize()
+        val result = parse(input, textOnlyPrototypes).optimize(BBArgs())
         val args = result.children.firstOrNull()?.args
 
-        return if (args == null) input else TextPrototype.getText(args)
+        return args?.safeText ?: input
     }
 
     fun parseSimple(input: String): BBTree {

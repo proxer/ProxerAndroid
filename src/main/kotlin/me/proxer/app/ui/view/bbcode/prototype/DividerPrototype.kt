@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.LinearLayout.LayoutParams
 import android.widget.LinearLayout.LayoutParams.MATCH_PARENT
 import me.proxer.app.R
+import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
 import org.jetbrains.anko.dip
@@ -20,7 +21,7 @@ object DividerPrototype : BBPrototype {
 
     override val canHaveChildren get() = false
 
-    override fun makeViews(context: Context, children: List<BBTree>, args: Map<String, Any?>): List<View> {
+    override fun makeViews(context: Context, children: List<BBTree>, args: BBArgs): List<View> {
         return listOf(View(context).apply {
             layoutParams = LayoutParams(MATCH_PARENT, dip(2))
 

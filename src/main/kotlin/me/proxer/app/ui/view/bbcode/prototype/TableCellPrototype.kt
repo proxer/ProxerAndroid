@@ -6,6 +6,7 @@ import android.widget.LinearLayout
 import android.widget.TableRow.LayoutParams
 import android.widget.TableRow.LayoutParams.WRAP_CONTENT
 import android.widget.TableRow.VERTICAL
+import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
 
@@ -19,7 +20,7 @@ object TableCellPrototype : AutoClosingPrototype {
 
     override fun construct(code: String, parent: BBTree) = BBTree(this, parent)
 
-    override fun makeViews(context: Context, children: List<BBTree>, args: Map<String, Any?>): List<View> {
+    override fun makeViews(context: Context, children: List<BBTree>, args: BBArgs): List<View> {
         val childViews = super.makeViews(context, children, args)
 
         return when (childViews.size) {

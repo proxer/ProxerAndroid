@@ -3,6 +3,7 @@ package me.proxer.app.ui.view.bbcode.prototype
 import android.text.Spannable.SPAN_INCLUSIVE_EXCLUSIVE
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
+import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.BBUtils
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
@@ -27,12 +28,12 @@ object ColorPrototype : TextMutatorPrototype {
             .firstOrNull()?.foregroundColor
 
         return when (color) {
-            null -> BBTree(this, parent, args = mutableMapOf())
-            else -> BBTree(this, parent, args = mutableMapOf(COLOR_ARGUMENT to color))
+            null -> BBTree(this, parent)
+            else -> BBTree(this, parent, args = BBArgs(custom = *arrayOf(COLOR_ARGUMENT to color)))
         }
     }
 
-    override fun mutate(text: SpannableStringBuilder, args: Map<String, Any?>): SpannableStringBuilder {
+    override fun mutate(text: SpannableStringBuilder, args: BBArgs): SpannableStringBuilder {
         val color = args[COLOR_ARGUMENT] as Int?
 
         return when (color) {

@@ -85,7 +85,6 @@ class ScheduleWidgetUpdateService : JobIntentService() {
         return false
     }
 
-    @Suppress("SpreadOperator")
     private fun bindListLayout(
         appWidgetManager: AppWidgetManager,
         id: Int,

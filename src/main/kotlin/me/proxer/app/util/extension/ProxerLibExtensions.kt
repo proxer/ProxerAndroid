@@ -18,6 +18,7 @@ import me.proxer.app.forum.TopicMetaData
 import me.proxer.app.media.LocalTag
 import me.proxer.app.media.comment.ParsedComment
 import me.proxer.app.profile.comment.ParsedUserComment
+import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBParser
 import me.proxer.library.entity.anime.Stream
 import me.proxer.library.entity.chat.ChatMessage
@@ -326,11 +327,8 @@ fun Post.toParsedPost(): ParsedPost {
     val parsedMessage = BBParser.parse(message)
     val parsedSignature = signature?.let { if (it.isNotBlank()) BBParser.parse(it) else null }
 
-    parsedMessage.userId = userId
-    parsedSignature?.userId = userId
-
-    return ParsedPost(id, parentId, userId, username, image, date, parsedSignature?.optimize(),
-        modifiedById, modifiedByName, modifiedReason, parsedMessage.optimize(), thankYouAmount)
+    return ParsedPost(id, parentId, userId, username, image, date, parsedSignature?.optimize(BBArgs(userId = userId)),
+        modifiedById, modifiedByName, modifiedReason, parsedMessage.optimize(BBArgs(userId = userId)), thankYouAmount)
 }
 
 fun Tag.toParcelableTag() = LocalTag(id, type, name, description, subType, isSpoiler)

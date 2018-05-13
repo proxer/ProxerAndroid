@@ -9,6 +9,7 @@ import android.widget.TextView
 import me.proxer.app.R
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.ui.view.BetterLinkGifAwareEmojiTextView
+import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.BBUtils
 import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
@@ -24,35 +25,23 @@ import org.jetbrains.anko.toast
  */
 object TextPrototype : BBPrototype {
 
-    private const val TEXT_ARGUMENT = "text"
-
     override val startRegex = Regex("x^")
     override val endRegex = Regex("x^")
 
     override fun construct(code: String, parent: BBTree): BBTree {
-        return BBTree(this, parent, args = mutableMapOf(TEXT_ARGUMENT to code.toSpannableStringBuilder().linkify()))
+        return BBTree(this, parent, args = BBArgs(text = code.toSpannableStringBuilder().linkify()))
     }
 
-    override fun makeViews(context: Context, children: List<BBTree>, args: Map<String, Any?>): List<View> {
-        val text = args[TEXT_ARGUMENT] as CharSequence
-
-        return listOf(makeView(context, text))
+    override fun makeViews(context: Context, children: List<BBTree>, args: BBArgs): List<View> {
+        return listOf(makeView(context, args.safeText))
     }
 
     fun makeView(context: Context, text: CharSequence): TextView {
         return applyOnView(BetterLinkGifAwareEmojiTextView(context), text)
     }
 
-    fun applyOnView(view: BetterLinkGifAwareEmojiTextView, args: Map<String, Any?>): BetterLinkGifAwareEmojiTextView {
-        val text = args[TEXT_ARGUMENT] as CharSequence
-
-        return applyOnView(view, text)
-    }
-
-    fun getText(args: Map<String, Any?>) = args[TEXT_ARGUMENT] as CharSequence
-
-    fun updateText(newText: CharSequence, args: MutableMap<String, Any?>) {
-        args[TEXT_ARGUMENT] = newText
+    fun applyOnView(view: BetterLinkGifAwareEmojiTextView, args: BBArgs): BetterLinkGifAwareEmojiTextView {
+        return applyOnView(view, args.safeText)
     }
 
     private fun applyOnView(

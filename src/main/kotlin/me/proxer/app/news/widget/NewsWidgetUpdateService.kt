@@ -70,7 +70,6 @@ class NewsWidgetUpdateService : JobIntentService() {
         return false
     }
 
-    @Suppress("SpreadOperator")
     private fun bindListLayout(appWidgetManager: AppWidgetManager, id: Int, news: List<SimpleNews>, dark: Boolean) {
         val views = RemoteViews(applicationContext.packageName, when (dark) {
             true -> R.layout.layout_widget_news_dark_list

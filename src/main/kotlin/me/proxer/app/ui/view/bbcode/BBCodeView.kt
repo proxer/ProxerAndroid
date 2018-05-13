@@ -63,9 +63,7 @@ class BBCodeView @JvmOverloads constructor(
         val existingChild = if (childCount == 1) this.childrenSequence().firstOrNull() else null
         val firstTreeChild = if (tree.children.size == 1) tree.children.firstOrNull() else null
 
-        tree.glide = glide
-        tree.userId = userId
-        tree.enableEmoticons = enableEmotions
+        val args = BBArgs(glide = glide, userId = userId, enableEmoticons = enableEmotions)
 
         if (existingChild is BetterLinkGifAwareEmojiTextView && firstTreeChild?.prototype === TextPrototype) {
             TextPrototype.applyOnView(existingChild, firstTreeChild.args)
@@ -73,11 +71,7 @@ class BBCodeView @JvmOverloads constructor(
         } else {
             removeAllViews()
 
-            tree.makeViews(context).forEach { this.addView(it) }
+            tree.makeViews(context, args).forEach { this.addView(it) }
         }
-
-        tree.enableEmoticons = false
-        tree.userId = null
-        tree.glide = null
     }
 }

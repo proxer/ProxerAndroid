@@ -101,7 +101,6 @@ class AboutFragment : MaterialAboutFragment() {
     override fun getTheme() = R.style.Theme_App_AboutFragment
     override fun shouldAnimate() = false
 
-    @Suppress("SpreadOperator")
     private fun buildInfoItems(context: Context) = listOf(
         ConvenienceBuilder.createAppTitleItem(context),
         ConvenienceBuilder.createVersionActionItem(context,

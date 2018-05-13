@@ -7,8 +7,8 @@ import android.view.View
 import android.widget.TextView
 import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.R
+import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBTree
-import me.proxer.app.ui.view.bbcode.BBTree.Companion.USER_ID_ARGUMENT
 import me.proxer.app.ui.view.bbcode.UrlClickableSpan
 import me.proxer.app.ui.view.bbcode.applyToViews
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
@@ -26,8 +26,8 @@ object AttachmentPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototy
     override val startRegex = Regex(" *attachment( *=\"?.+?\"?)?( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *attachment *", REGEX_OPTIONS)
 
-    override fun makeViews(context: Context, children: List<BBTree>, args: Map<String, Any?>): List<View> {
-        val childViews = children.flatMap { it.makeViews(context) }
+    override fun makeViews(context: Context, children: List<BBTree>, args: BBArgs): List<View> {
+        val childViews = children.flatMap { it.makeViews(context, args) }
 
         if (childViews.isEmpty()) {
             return childViews
@@ -38,9 +38,7 @@ object AttachmentPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototy
         return when {
             isImage(attachment) -> {
                 val parent = children.first().parent ?: throw IllegalArgumentException("parent is null")
-
-                val userId = args[USER_ID_ARGUMENT] as? String ?: throw IllegalStateException("userId is null")
-                val url = constructUrl(userId, attachment)
+                val url = constructUrl(args.safeUserId, attachment)
 
                 ImagePrototype.makeViews(context, listOf(TextPrototype.construct(url.toString(), parent)), args)
             }
@@ -50,9 +48,8 @@ object AttachmentPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototy
         }
     }
 
-    override fun mutate(text: SpannableStringBuilder, args: Map<String, Any?>): SpannableStringBuilder {
-        val userId = args[USER_ID_ARGUMENT] as? String ?: throw IllegalStateException("userId is null")
-        val url = constructUrl(userId, text)
+    override fun mutate(text: SpannableStringBuilder, args: BBArgs): SpannableStringBuilder {
+        val url = constructUrl(args.safeUserId, text)
 
         return text.toSpannableStringBuilder().apply {
             replace(0, length, globalContext.getString(R.string.view_bbcode_attachment_link))
@@ -65,9 +62,7 @@ object AttachmentPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototy
         val firstChild = recursiveChildren.firstOrNull()
 
         return if (firstChild?.prototype === TextPrototype) {
-            val firstText = TextPrototype.getText(firstChild.args)
-
-            !isImage(firstText) && super.canOptimize(recursiveChildren)
+            !isImage(firstChild.args.safeText) && super.canOptimize(recursiveChildren)
         } else {
             false
         }

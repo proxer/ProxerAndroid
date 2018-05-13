@@ -12,6 +12,7 @@ import android.widget.LinearLayout.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout.VERTICAL
 import android.widget.TextView
 import me.proxer.app.R
+import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.applyToViews
 import org.jetbrains.anko.dip
@@ -24,7 +25,7 @@ object CodePrototype : AutoClosingPrototype {
     override val startRegex = Regex(" *code( .*?)?", BBPrototype.REGEX_OPTIONS)
     override val endRegex = Regex("/ *code *", BBPrototype.REGEX_OPTIONS)
 
-    override fun makeViews(context: Context, children: List<BBTree>, args: Map<String, Any?>): List<View> {
+    override fun makeViews(context: Context, children: List<BBTree>, args: BBArgs): List<View> {
         val childViews = super.makeViews(context, children, args)
 
         applyToViews(childViews, { view: TextView ->

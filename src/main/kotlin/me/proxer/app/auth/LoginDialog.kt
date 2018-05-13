@@ -86,7 +86,6 @@ class LoginDialog : BaseDialog() {
         }
     }
 
-    @Suppress("SpreadOperator")
     private fun setupViews() {
         listOf(password, secret).forEach {
             it.editorActionEvents(Predicate { event -> event.actionId() == EditorInfo.IME_ACTION_GO })

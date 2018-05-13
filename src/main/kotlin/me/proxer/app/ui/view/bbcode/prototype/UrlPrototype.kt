@@ -5,6 +5,7 @@ import android.text.Spannable.SPAN_INCLUSIVE_EXCLUSIVE
 import android.text.SpannableStringBuilder
 import android.view.View
 import android.widget.TextView
+import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.BBUtils
 import me.proxer.app.ui.view.bbcode.UrlClickableSpan
@@ -32,11 +33,11 @@ object UrlPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
         val url = BBUtils.cutAttribute(code, ATTRIBUTE_REGEX)?.trim() ?: ""
         val parsedUrl = Utils.safelyParseAndFixUrl(url) ?: INVALID_URL
 
-        return BBTree(this, parent, args = mutableMapOf(URL_ARGUMENT to parsedUrl))
+        return BBTree(this, parent, args = BBArgs(custom = *arrayOf(URL_ARGUMENT to parsedUrl)))
     }
 
-    override fun makeViews(context: Context, children: List<BBTree>, args: Map<String, Any?>): List<View> {
-        val childViews = children.flatMap { it.makeViews(context) }
+    override fun makeViews(context: Context, children: List<BBTree>, args: BBArgs): List<View> {
+        val childViews = children.flatMap { it.makeViews(context, args) }
         val url = args[URL_ARGUMENT] as HttpUrl
 
         return applyToViews(childViews) { view: View ->
@@ -47,7 +48,7 @@ object UrlPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
         }
     }
 
-    override fun mutate(text: SpannableStringBuilder, args: Map<String, Any?>): SpannableStringBuilder {
+    override fun mutate(text: SpannableStringBuilder, args: BBArgs): SpannableStringBuilder {
         val url = args[URL_ARGUMENT] as HttpUrl
 
         return text.apply {

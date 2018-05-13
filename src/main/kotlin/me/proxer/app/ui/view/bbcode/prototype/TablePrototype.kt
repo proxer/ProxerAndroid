@@ -7,6 +7,7 @@ import android.widget.LinearLayout.LayoutParams
 import android.widget.LinearLayout.LayoutParams.MATCH_PARENT
 import android.widget.LinearLayout.LayoutParams.WRAP_CONTENT
 import android.widget.TableLayout
+import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
 import org.jetbrains.anko.dip
@@ -19,7 +20,7 @@ object TablePrototype : AutoClosingPrototype {
     override val startRegex = Regex(" *table( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *table *", REGEX_OPTIONS)
 
-    override fun makeViews(context: Context, children: List<BBTree>, args: Map<String, Any?>): List<View> {
+    override fun makeViews(context: Context, children: List<BBTree>, args: BBArgs): List<View> {
         val childViews = CenterPrototype.makeViews(context, children.filter { it.prototype == TableRowPrototype }, args)
 
         for (child in childViews.dropLast(1)) {

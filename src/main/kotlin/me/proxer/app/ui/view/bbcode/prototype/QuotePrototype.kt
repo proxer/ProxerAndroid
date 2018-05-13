@@ -10,6 +10,7 @@ import android.widget.LinearLayout.LayoutParams.MATCH_PARENT
 import android.widget.LinearLayout.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout.VERTICAL
 import me.proxer.app.R
+import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
 import org.jetbrains.anko.dip
@@ -19,7 +20,7 @@ object QuotePrototype : AutoClosingPrototype {
     override val startRegex = Regex(" *quote( *=\"?.+?\"?)?( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *quote *", REGEX_OPTIONS)
 
-    override fun makeViews(context: Context, children: List<BBTree>, args: Map<String, Any?>): List<View> {
+    override fun makeViews(context: Context, children: List<BBTree>, args: BBArgs): List<View> {
         val childViews = super.makeViews(context, children, args)
 
         return when (childViews.size) {

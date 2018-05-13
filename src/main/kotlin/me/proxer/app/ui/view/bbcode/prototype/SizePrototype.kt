@@ -5,6 +5,7 @@ import android.text.SpannableStringBuilder
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.CharacterStyle
 import android.text.style.RelativeSizeSpan
+import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.BBUtils
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
@@ -26,10 +27,10 @@ object SizePrototype : TextMutatorPrototype {
         val value = BBUtils.cutAttribute(code, ATTRIBUTE_REGEX)
 
         return if (value?.endsWith("px") == true) {
-            BBTree(this, parent, args = mutableMapOf(
-                SIZE_ARGUMENT to value.substringBefore("px").toFloat(),
+            BBTree(this, parent, args = BBArgs(custom = *arrayOf(
+                SIZE_ARGUMENT to value.substringBeforeLast("px").toFloat(),
                 SIZE_TYPE_ARGUMENT to SizeType.ABSOLUTE
-            ))
+            )))
         } else {
             val size = when (value) {
                 "1" -> 0.4f
@@ -41,14 +42,14 @@ object SizePrototype : TextMutatorPrototype {
                 else -> throw IllegalArgumentException("Unknown size: $value")
             }
 
-            BBTree(this, parent, args = mutableMapOf(
+            BBTree(this, parent, args = BBArgs(custom = *arrayOf(
                 SIZE_ARGUMENT to size,
                 SIZE_TYPE_ARGUMENT to SizeType.RELATIVE
-            ))
+            )))
         }
     }
 
-    override fun mutate(text: SpannableStringBuilder, args: Map<String, Any?>): SpannableStringBuilder {
+    override fun mutate(text: SpannableStringBuilder, args: BBArgs): SpannableStringBuilder {
         val sizeType = args[SIZE_TYPE_ARGUMENT] as SizeType
         val size = args[SIZE_ARGUMENT] as Float
 

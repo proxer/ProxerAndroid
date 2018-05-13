@@ -9,6 +9,7 @@ import android.text.style.ClickableSpan
 import android.view.View
 import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.R
+import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.BBUtils
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
@@ -29,10 +30,10 @@ object MapPrototype : TextMutatorPrototype, AutoClosingPrototype {
     override fun construct(code: String, parent: BBTree): BBTree {
         val zoom = BBUtils.cutAttribute(code, ZOOM_ATTRIBUTE_REGEX)?.toIntOrNull()
 
-        return BBTree(this, parent, args = mutableMapOf(ZOOM_ARGUMENT to zoom))
+        return BBTree(this, parent, args = BBArgs(custom = *arrayOf(ZOOM_ARGUMENT to zoom)))
     }
 
-    override fun mutate(text: SpannableStringBuilder, args: Map<String, Any?>): SpannableStringBuilder {
+    override fun mutate(text: SpannableStringBuilder, args: BBArgs): SpannableStringBuilder {
         val zoom = args[ZOOM_ARGUMENT] as Int?
 
         val zoomUriPart = if (zoom != null) "&z=$zoom" else ""

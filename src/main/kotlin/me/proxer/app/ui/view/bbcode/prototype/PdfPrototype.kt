@@ -26,6 +26,7 @@ import de.number42.subsampling_pdf_decoder.PDFRegionDecoder
 import me.proxer.app.GlideRequests
 import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.R
+import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.BBUtils
 import me.proxer.app.ui.view.bbcode.applyToViews
@@ -52,11 +53,11 @@ object PdfPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
     override fun construct(code: String, parent: BBTree): BBTree {
         val width = BBUtils.cutAttribute(code, WIDTH_ATTRIBUTE_REGEX)?.toIntOrNull()
 
-        return BBTree(this, parent, args = mutableMapOf(WIDTH_ARGUMENT to width))
+        return BBTree(this, parent, args = BBArgs(custom = *arrayOf(WIDTH_ARGUMENT to width)))
     }
 
-    override fun makeViews(context: Context, children: List<BBTree>, args: Map<String, Any?>): List<View> {
-        val childViews = children.flatMap { it.makeViews(context) }
+    override fun makeViews(context: Context, children: List<BBTree>, args: BBArgs): List<View> {
+        val childViews = children.flatMap { it.makeViews(context, args) }
 
         return when {
             childViews.isEmpty() -> childViews
@@ -67,7 +68,6 @@ object PdfPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
                 val url = (childViews.firstOrNull() as? TextView)?.text.toString().trim()
                 val parsedUrl = Utils.safelyParseAndFixUrl(url)
 
-                val glide = args[BBTree.GLIDE_ARGUMENT] as GlideRequests?
                 val width = if (parsedUrl == null) null else args[WIDTH_ARGUMENT] as Int?
 
                 view.layoutParams = LayoutParams(MATCH_PARENT, WRAP_CONTENT)
@@ -75,14 +75,14 @@ object PdfPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
                 view.setMinimumTileDpi(120)
                 view.setDoubleTapZoomDuration(view.context.resources.getInteger(android.R.integer.config_shortAnimTime))
 
-                glide?.let { loadImage(it, view, parsedUrl) }
+                args.glide?.let { loadImage(it, view, parsedUrl) }
 
                 if (context is Activity) {
                     view.setOnClickListener { _ ->
                         if (view.getTag(R.id.error_tag) == true) {
                             view.tag = null
 
-                            glide?.let { loadImage(it, view, parsedUrl) }
+                            args.glide?.let { loadImage(it, view, parsedUrl) }
                         }
                     }
                 }
@@ -98,7 +98,7 @@ object PdfPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
         }
     }
 
-    override fun mutate(text: SpannableStringBuilder, args: Map<String, Any?>): SpannableStringBuilder {
+    override fun mutate(text: SpannableStringBuilder, args: BBArgs): SpannableStringBuilder {
         val uri = Uri.parse(text.toString())
 
         return text.toSpannableStringBuilder().apply {

@@ -33,6 +33,10 @@ naming:
   FunctionMaxLength:
     maximumFunctionNameLength: 35
 
+performance:
+  SpreadOperator:
+    active: false
+
 potential-bugs:
   UnsafeCast:
     active: false

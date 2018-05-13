@@ -17,8 +17,8 @@ import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.ui.ImageDetailActivity
+import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBTree
-import me.proxer.app.ui.view.bbcode.BBTree.Companion.GLIDE_ARGUMENT
 import me.proxer.app.ui.view.bbcode.BBUtils
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
 import me.proxer.app.util.Utils
@@ -31,8 +31,9 @@ import okhttp3.HttpUrl
  */
 object ImagePrototype : AutoClosingPrototype {
 
-    private val WIDTH_ATTRIBUTE_REGEX = Regex("size *= *(.+?)( |$)", REGEX_OPTIONS)
     private const val WIDTH_ARGUMENT = "width"
+
+    private val WIDTH_ATTRIBUTE_REGEX = Regex("size *= *(.+?)( |$)", REGEX_OPTIONS)
 
     override val startRegex = Regex(" *img( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *img *", REGEX_OPTIONS)
@@ -40,16 +41,15 @@ object ImagePrototype : AutoClosingPrototype {
     override fun construct(code: String, parent: BBTree): BBTree {
         val width = BBUtils.cutAttribute(code, WIDTH_ATTRIBUTE_REGEX)?.toIntOrNull()
 
-        return BBTree(this, parent, args = mutableMapOf(WIDTH_ARGUMENT to width))
+        return BBTree(this, parent, args = BBArgs(custom = *arrayOf(WIDTH_ARGUMENT to width)))
     }
 
-    override fun makeViews(context: Context, children: List<BBTree>, args: Map<String, Any?>): List<View> {
-        val childViews = children.flatMap { it.makeViews(context) }
+    override fun makeViews(context: Context, children: List<BBTree>, args: BBArgs): List<View> {
+        val childViews = children.flatMap { it.makeViews(context, args) }
 
         val url = (childViews.firstOrNull() as? TextView)?.text.toString().trim()
         val parsedUrl = Utils.safelyParseAndFixUrl(url)
 
-        val glide = args[GLIDE_ARGUMENT] as GlideRequests?
         val width = if (parsedUrl == null) null else args[WIDTH_ARGUMENT] as Int?
 
         return listOf(AppCompatImageView(context).also { view: ImageView ->
@@ -57,14 +57,14 @@ object ImagePrototype : AutoClosingPrototype {
 
             view.layoutParams = LayoutParams(width ?: MATCH_PARENT, WRAP_CONTENT)
 
-            glide?.let { loadImage(it, view, parsedUrl) }
+            args.glide?.let { loadImage(it, view, parsedUrl) }
 
             if (context is Activity) {
                 view.setOnClickListener { _ ->
                     if (view.getTag(R.id.error_tag) == true) {
                         view.tag = null
 
-                        glide?.let { loadImage(it, view, parsedUrl) }
+                        args.glide?.let { loadImage(it, view, parsedUrl) }
                     } else if (view.drawable != null && parsedUrl != null) {
                         ImageDetailActivity.navigateTo(context, parsedUrl, view)
                     }

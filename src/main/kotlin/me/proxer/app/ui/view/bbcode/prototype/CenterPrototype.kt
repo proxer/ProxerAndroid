@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
+import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.applyToViews
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
@@ -23,8 +24,8 @@ object CenterPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
     override val startRegex = Regex(" *center( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *center *", REGEX_OPTIONS)
 
-    override fun makeViews(context: Context, children: List<BBTree>, args: Map<String, Any?>): List<View> {
-        val childViews = children.flatMap { it.makeViews(context) }
+    override fun makeViews(context: Context, children: List<BBTree>, args: BBArgs): List<View> {
+        val childViews = children.flatMap { it.makeViews(context, args) }
 
         return applyToViews(childViews) { view: View ->
             when (view) {
@@ -42,7 +43,7 @@ object CenterPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
         }
     }
 
-    override fun mutate(text: SpannableStringBuilder, args: Map<String, Any?>) = text.apply {
+    override fun mutate(text: SpannableStringBuilder, args: BBArgs) = text.apply {
         setSpan(AlignmentSpan.Standard(ALIGN_CENTER), 0, length, SPAN_INCLUSIVE_EXCLUSIVE)
     }
 }

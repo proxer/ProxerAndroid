@@ -4,6 +4,7 @@ import android.text.Spannable.SPAN_INCLUSIVE_EXCLUSIVE
 import android.text.SpannableStringBuilder
 import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.R
+import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.BBUtils
 import me.proxer.app.ui.view.bbcode.UrlClickableSpan
@@ -27,10 +28,10 @@ object VideoPrototype : TextMutatorPrototype, AutoClosingPrototype {
     override fun construct(code: String, parent: BBTree): BBTree {
         val type = BBUtils.cutAttribute(code, ATTRIBUTE_REGEX)
 
-        return BBTree(this, parent, args = mutableMapOf(TYPE_ARGUMENT to type))
+        return BBTree(this, parent, args = BBArgs(custom = *arrayOf(TYPE_ARGUMENT to type)))
     }
 
-    override fun mutate(text: SpannableStringBuilder, args: Map<String, Any?>): SpannableStringBuilder {
+    override fun mutate(text: SpannableStringBuilder, args: BBArgs): SpannableStringBuilder {
         val type = args[TYPE_ARGUMENT] as String?
         val urlOrId = text.trim()
 

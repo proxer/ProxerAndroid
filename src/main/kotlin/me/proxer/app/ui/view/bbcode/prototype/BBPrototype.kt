@@ -3,6 +3,7 @@ package me.proxer.app.ui.view.bbcode.prototype
 import android.content.Context
 import android.view.View
 import android.widget.TextView
+import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
 import me.proxer.app.ui.view.bbcode.trimEndSafely
@@ -32,11 +33,11 @@ interface BBPrototype {
 
     fun construct(code: String, parent: BBTree) = BBTree(this, parent)
 
-    fun makeViews(context: Context, children: List<BBTree>, args: Map<String, Any?>): List<View> {
-        val childViews = children.flatMap { it.makeViews(context) }
+    fun makeViews(context: Context, children: List<BBTree>, args: BBArgs): List<View> {
+        val childViews = children.flatMap { it.makeViews(context, args) }
 
-        val result = mutableListOf<View>()
         val currentTextViews = mutableListOf<TextView>()
+        val result = mutableListOf<View>()
 
         childViews.forEachWithIndex { index, childView ->
             if (childView is TextView) {
