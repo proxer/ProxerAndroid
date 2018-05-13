@@ -2,8 +2,8 @@ package me.proxer.app.ui.view.bbcode.prototype
 
 import android.content.ClipData
 import android.content.Context
+import android.support.v4.util.PatternsCompat
 import android.support.v4.widget.TextViewCompat
-import android.util.Patterns
 import android.view.View
 import android.widget.TextView
 import me.proxer.app.R
@@ -62,7 +62,7 @@ object TextPrototype : BBPrototype {
 
                     true
                 }
-                Patterns.WEB_URL.matcher(link).matches() -> {
+                PatternsCompat.AUTOLINK_WEB_URL.matcher(link).matches() -> {
                     baseActivity.showPage(Utils.parseAndFixUrl(link))
 
                     true
@@ -72,7 +72,7 @@ object TextPrototype : BBPrototype {
         }
 
         view.setOnLinkLongClickListener { textView, link ->
-            if (Patterns.WEB_URL.matcher(link).matches()) {
+            if (PatternsCompat.AUTOLINK_WEB_URL.matcher(link).matches()) {
                 val title = textView.context.getString(R.string.clipboard_title)
 
                 textView.context.clipboardManager.primaryClip = ClipData.newPlainText(title, link)

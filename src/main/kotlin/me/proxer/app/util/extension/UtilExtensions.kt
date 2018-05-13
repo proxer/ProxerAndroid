@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.support.customtabs.CustomTabsIntent
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
+import android.support.v4.text.util.LinkifyCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
@@ -75,11 +76,11 @@ inline fun ImageView.setIconicsImage(
 inline fun CharSequence.linkify(web: Boolean = true, mentions: Boolean = true, vararg custom: Regex): Spannable {
     val spannable = this as? Spannable ?: SpannableString(this)
 
-    if (web) Linkify.addLinks(spannable, Linkify.WEB_URLS)
-    if (mentions) Linkify.addLinks(spannable, MENTIONS_REGEX, "")
+    if (web) LinkifyCompat.addLinks(spannable, Linkify.WEB_URLS)
+    if (mentions) LinkifyCompat.addLinks(spannable, MENTIONS_REGEX, "")
 
     custom.forEach {
-        Linkify.addLinks(spannable, it.toPattern(), "")
+        LinkifyCompat.addLinks(spannable, it.toPattern(), "")
     }
 
     return spannable

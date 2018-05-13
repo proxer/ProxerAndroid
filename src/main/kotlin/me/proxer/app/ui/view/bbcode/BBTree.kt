@@ -13,7 +13,6 @@ import me.proxer.app.util.extension.unsafeLazy
 class BBTree(
     val prototype: BBPrototype,
     val parent: BBTree?,
-    var isFinished: Boolean = false,
     val children: MutableList<BBTree> = mutableListOf(),
     val args: BBArgs = BBArgs()
 ) {
@@ -42,7 +41,7 @@ class BBTree(
 
         return when {
             canOptimize && prototype is TextMutatorPrototype -> newChildren.map {
-                BBTree(it.prototype, parent, isFinished, it.children, it.args)
+                BBTree(it.prototype, parent, it.children, it.args)
             }
             else -> {
                 children.clear()

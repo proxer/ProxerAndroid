@@ -72,6 +72,7 @@ object BBParser {
         val result = BBTree(RootPrototype, null)
         val parts = constructRegex(prototypes).findAll(trimmedInput)
 
+        val finishedList = mutableListOf<BBTree>()
         var currentTree = result
         var currentPosition = 0
 
@@ -85,9 +86,9 @@ object BBParser {
             }
 
             if (currentTree.endsWith(part)) {
-                currentTree.isFinished = true
+                finishedList += currentTree
 
-                currentTree = findNextUnfinishedTree(currentTree)
+                currentTree = findNextUnfinishedTree(currentTree, finishedList)
             } else {
                 var prototypeFound = false
 
@@ -106,10 +107,10 @@ object BBParser {
 
                 // If nothing found assume a user error and look for a fitting end tag in the existing tree.
                 if (!prototypeFound) {
-                    val fittingTree = findFittingTree(currentTree, part)
+                    val fittingTree = findFittingTree(currentTree, part, finishedList)
 
                     if (fittingTree != null) {
-                        fittingTree.isFinished = true
+                        finishedList += fittingTree
 
                         if (fittingTree.prototype is AutoClosingPrototype) {
                             currentTree = fittingTree.parent ?: throw IllegalArgumentException("parent is null")
@@ -145,11 +146,11 @@ object BBParser {
         return Regex("${quote("[")}(($prototypeRegex)?)${quote("]")}", REGEX_OPTIONS)
     }
 
-    private fun findFittingTree(tree: BBTree, endTag: String): BBTree? {
+    private fun findFittingTree(tree: BBTree, endTag: String, finishedList: List<BBTree>): BBTree? {
         var currentTree = tree.parent
 
         while (true) {
-            if (currentTree?.endsWith(endTag) == true && !currentTree.isFinished) {
+            if (currentTree?.endsWith(endTag) == true && finishedList.none { it === currentTree }) {
                 return currentTree
             } else if (currentTree?.parent == null) {
                 return null
@@ -159,11 +160,11 @@ object BBParser {
         }
     }
 
-    private fun findNextUnfinishedTree(tree: BBTree): BBTree {
+    private fun findNextUnfinishedTree(tree: BBTree, finishedList: List<BBTree>): BBTree {
         var currentTree = tree
 
         while (true) {
-            if (!currentTree.isFinished) {
+            if (finishedList.none { it === currentTree }) {
                 return currentTree
             } else {
                 currentTree = currentTree.parent ?: throw IllegalStateException("No unfinished tree found")
