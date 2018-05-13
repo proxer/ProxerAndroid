@@ -11,7 +11,13 @@ import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.util.Utils
-import me.proxer.app.util.extension.*
+import me.proxer.app.util.extension.clipboardManager
+import me.proxer.app.util.extension.linkify
+import me.proxer.app.util.extension.setOnLinkClickListener
+import me.proxer.app.util.extension.setOnLinkLongClickListener
+import me.proxer.app.util.extension.toAppDrawable
+import me.proxer.app.util.extension.toAppString
+import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.info.Industry
 import me.proxer.library.enums.Country
 import org.jetbrains.anko.bundleOf

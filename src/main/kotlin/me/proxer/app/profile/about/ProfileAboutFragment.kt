@@ -23,14 +23,19 @@ import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.Utils
-import me.proxer.app.util.extension.*
+import me.proxer.app.util.extension.clipboardManager
+import me.proxer.app.util.extension.linkify
+import me.proxer.app.util.extension.setOnLinkClickListener
+import me.proxer.app.util.extension.setOnLinkLongClickListener
+import me.proxer.app.util.extension.toAppString
+import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.user.UserAbout
 import me.proxer.library.enums.Gender
 import me.proxer.library.enums.RelationshipStatus
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.toast
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 /**
  * @author Ruben Gees

@@ -22,7 +22,11 @@ import me.proxer.app.chat.pub.message.ChatAdapter.MessageViewHolder
 import me.proxer.app.util.Utils
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.data.StorageHelper
-import me.proxer.app.util.extension.*
+import me.proxer.app.util.extension.convertToRelativeReadableTime
+import me.proxer.app.util.extension.iconColor
+import me.proxer.app.util.extension.setIconicsImage
+import me.proxer.app.util.extension.setOnLinkClickListener
+import me.proxer.app.util.extension.setOnLinkLongClickListener
 import me.proxer.library.util.ProxerUrls
 import okhttp3.HttpUrl
 import org.jetbrains.anko.dip

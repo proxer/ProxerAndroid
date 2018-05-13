@@ -23,7 +23,12 @@ import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.R
 import me.proxer.app.base.BaseDialog
 import me.proxer.app.util.data.StorageHelper
-import me.proxer.app.util.extension.*
+import me.proxer.app.util.extension.autoDispose
+import me.proxer.app.util.extension.dip
+import me.proxer.app.util.extension.iconColor
+import me.proxer.app.util.extension.linkify
+import me.proxer.app.util.extension.setOnLinkClickListener
+import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
 import me.proxer.library.util.ProxerUtils
