@@ -86,19 +86,19 @@ inline fun CharSequence.linkify(web: Boolean = true, mentions: Boolean = true, v
 }
 
 inline fun TextView.setSimpleOnLinkClickListener(crossinline listener: (view: TextView, link: String) -> Unit) {
-    setOnLinkClickListener({ view, link ->
+    setOnLinkClickListener { view, link ->
         listener(view, link)
 
         true
-    })
+    }
 }
 
 inline fun TextView.setSimpleOnLinkLongClickListener(crossinline listener: (view: TextView, link: String) -> Unit) {
-    setOnLinkLongClickListener({ view, link ->
+    setOnLinkLongClickListener { view, link ->
         listener(view, link)
 
         true
-    })
+    }
 }
 
 inline fun TextView.setOnLinkClickListener(noinline listener: (view: TextView, link: String) -> Boolean) {
