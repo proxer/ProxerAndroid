@@ -9,6 +9,7 @@ import me.proxer.app.ui.view.GifAwareTextView
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
 import me.proxer.app.util.extension.linkify
+import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
 /**
  * @author Ruben Gees
@@ -48,6 +49,7 @@ object TextPrototype : BBPrototype {
 
     private fun applyOnView(view: GifAwareTextView, text: CharSequence): GifAwareTextView {
         view.text = text
+        view.movementMethod = BetterLinkMovementMethod.newInstance()
 
         TextViewCompat.setTextAppearance(view, R.style.TextAppearance_AppCompat_Small)
 
