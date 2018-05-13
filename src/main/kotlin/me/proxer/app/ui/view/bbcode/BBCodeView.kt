@@ -11,7 +11,7 @@ import android.view.View.MeasureSpec.makeMeasureSpec
 import android.widget.FrameLayout
 import android.widget.ImageView
 import me.proxer.app.GlideRequests
-import me.proxer.app.ui.view.GifAwareTextView
+import me.proxer.app.ui.view.BetterLinkGifAwareEmojiTextView
 import me.proxer.app.ui.view.bbcode.prototype.RootPrototype
 import me.proxer.app.ui.view.bbcode.prototype.TextPrototype
 import org.jetbrains.anko.childrenSequence
@@ -67,7 +67,7 @@ class BBCodeView @JvmOverloads constructor(
         tree.userId = userId
         tree.enableEmoticons = enableEmotions
 
-        if (existingChild is GifAwareTextView && firstTreeChild?.prototype === TextPrototype) {
+        if (existingChild is BetterLinkGifAwareEmojiTextView && firstTreeChild?.prototype === TextPrototype) {
             TextPrototype.applyOnView(existingChild, firstTreeChild.args)
             RootPrototype.applyOnViews(listOf(existingChild), tree.args)
         } else {

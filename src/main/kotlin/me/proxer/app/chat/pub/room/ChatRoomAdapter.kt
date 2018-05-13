@@ -12,7 +12,7 @@ import me.proxer.app.base.BaseAdapter
 import me.proxer.app.chat.pub.room.ChatRoomAdapter.ViewHolder
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.linkify
-import me.proxer.app.util.extension.setOnLinkClickListener
+import me.proxer.app.util.extension.setSimpleOnLinkClickListener
 import me.proxer.library.entity.chat.ChatRoom
 import okhttp3.HttpUrl
 
@@ -44,7 +44,7 @@ class ChatRoomAdapter : BaseAdapter<ChatRoom, ViewHolder>() {
                 }
             }
 
-            topic.setOnLinkClickListener { _, link ->
+            topic.setSimpleOnLinkClickListener { _, link ->
                 Utils.safelyParseAndFixUrl(link)?.let { url -> linkClickSubject.onNext(url) }
             }
         }

@@ -27,7 +27,7 @@ import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.linkify
-import me.proxer.app.util.extension.setOnLinkClickListener
+import me.proxer.app.util.extension.setSimpleOnLinkClickListener
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
@@ -110,7 +110,7 @@ class LoginDialog : BaseDialog() {
 
         registrationInfo.setCompoundDrawables(generateInfoDrawable(), null, null, null)
 
-        registrationInfo.setOnLinkClickListener { _, _ ->
+        registrationInfo.setSimpleOnLinkClickListener { _, _ ->
             showPage(ProxerUrls.webBase()
                 .newBuilder()
                 .addPathSegment("register")

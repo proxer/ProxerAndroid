@@ -8,7 +8,7 @@ import me.proxer.library.entity.ProxerIdItem
 import me.proxer.library.entity.ProxerImageItem
 import me.proxer.library.enums.ChatMessageAction
 import me.proxer.library.enums.MessageAction
-import java.util.*
+import java.util.Date
 
 /**
  * @author Ruben Gees

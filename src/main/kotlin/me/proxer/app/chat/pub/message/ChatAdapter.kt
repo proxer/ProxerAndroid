@@ -25,8 +25,8 @@ import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.setIconicsImage
-import me.proxer.app.util.extension.setOnLinkClickListener
-import me.proxer.app.util.extension.setOnLinkLongClickListener
+import me.proxer.app.util.extension.setSimpleOnLinkClickListener
+import me.proxer.app.util.extension.setSimpleOnLinkLongClickListener
 import me.proxer.library.util.ProxerUrls
 import okhttp3.HttpUrl
 import org.jetbrains.anko.dip
@@ -242,7 +242,7 @@ class ChatAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedChatMessage, 
 
             text.setTextColor(ContextCompat.getColor(text.context, R.color.textColorPrimary))
 
-            text.setOnLinkClickListener { _, link ->
+            text.setSimpleOnLinkClickListener { _, link ->
                 if (link.startsWith("@")) {
                     mentionsClickSubject.onNext(link.trim().drop(1))
                 } else {
@@ -250,7 +250,7 @@ class ChatAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedChatMessage, 
                 }
             }
 
-            text.setOnLinkLongClickListener { _, link ->
+            text.setSimpleOnLinkLongClickListener { _, link ->
                 if (!link.startsWith("@")) linkLongClickSubject.onNext(Utils.parseAndFixUrl(link))
             }
         }

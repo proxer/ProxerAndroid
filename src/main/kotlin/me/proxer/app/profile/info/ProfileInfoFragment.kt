@@ -12,7 +12,7 @@ import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.linkify
-import me.proxer.app.util.extension.setOnLinkClickListener
+import me.proxer.app.util.extension.setSimpleOnLinkClickListener
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.user.UserInfo
 import org.jetbrains.anko.bundleOf
@@ -58,7 +58,7 @@ class ProfileInfoFragment : BaseContentFragment<UserInfo>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        statusText.setOnLinkClickListener { _, link -> showPage(Utils.parseAndFixUrl(link)) }
+        statusText.setSimpleOnLinkClickListener { _, link -> showPage(Utils.parseAndFixUrl(link)) }
     }
 
     override fun showData(data: UserInfo) {

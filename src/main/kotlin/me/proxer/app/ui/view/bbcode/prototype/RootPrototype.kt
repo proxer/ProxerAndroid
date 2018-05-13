@@ -8,7 +8,7 @@ import android.widget.LinearLayout.LayoutParams.MATCH_PARENT
 import android.widget.LinearLayout.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout.VERTICAL
 import me.proxer.app.GlideRequests
-import me.proxer.app.ui.view.GifAwareTextView
+import me.proxer.app.ui.view.BetterLinkGifAwareEmojiTextView
 import me.proxer.app.ui.view.bbcode.BBCodeEmoticons
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.BBTree.Companion.ENABLE_EMOTICONS_ARGUMENT
@@ -48,7 +48,7 @@ object RootPrototype : BBPrototype {
 
                 when (glide) {
                     null -> views
-                    else -> applyToViews(views, { view: GifAwareTextView ->
+                    else -> applyToViews(views, { view: BetterLinkGifAwareEmojiTextView ->
                         BBCodeEmoticons.replaceWithGifs(view, glide)
                     })
                 }

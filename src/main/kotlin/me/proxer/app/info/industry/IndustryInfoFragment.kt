@@ -13,8 +13,8 @@ import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.clipboardManager
 import me.proxer.app.util.extension.linkify
-import me.proxer.app.util.extension.setOnLinkClickListener
-import me.proxer.app.util.extension.setOnLinkLongClickListener
+import me.proxer.app.util.extension.setSimpleOnLinkClickListener
+import me.proxer.app.util.extension.setSimpleOnLinkLongClickListener
 import me.proxer.app.util.extension.toAppDrawable
 import me.proxer.app.util.extension.toAppString
 import me.proxer.app.util.extension.unsafeLazy
@@ -63,9 +63,9 @@ class IndustryInfoFragment : BaseContentFragment<Industry>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        link.setOnLinkClickListener { _, link -> showPage(Utils.parseAndFixUrl(link)) }
+        link.setSimpleOnLinkClickListener { _, link -> showPage(Utils.parseAndFixUrl(link)) }
 
-        link.setOnLinkLongClickListener { _, link ->
+        link.setSimpleOnLinkLongClickListener { _, link ->
             val title = getString(R.string.clipboard_title)
 
             requireContext().clipboardManager.primaryClip = ClipData.newPlainText(title, link)

@@ -20,7 +20,7 @@ import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.colorRes
 import me.proxer.app.util.extension.linkify
 import me.proxer.app.util.extension.setIconicsImage
-import me.proxer.app.util.extension.setOnLinkClickListener
+import me.proxer.app.util.extension.setSimpleOnLinkClickListener
 import me.proxer.library.entity.chat.ChatRoomUser
 import me.proxer.library.util.ProxerUrls
 import okhttp3.HttpUrl
@@ -66,7 +66,7 @@ class ChatRoomUserAdapter : BaseAdapter<ChatRoomUser, ViewHolder>() {
                 }
             }
 
-            status.setOnLinkClickListener { _, link ->
+            status.setSimpleOnLinkClickListener { _, link ->
                 statusLinkClickSubject.onNext(Utils.parseAndFixUrl(link))
             }
         }

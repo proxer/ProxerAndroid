@@ -16,7 +16,7 @@ import me.proxer.app.chat.prv.Participant
 import me.proxer.app.chat.prv.create.CreateConferenceActivity
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.linkify
-import me.proxer.app.util.extension.setOnLinkClickListener
+import me.proxer.app.util.extension.setSimpleOnLinkClickListener
 
 /**
  * @author Ruben Gees
@@ -62,7 +62,7 @@ class CrashActivity : BaseActivity() {
             .autoDispose(this)
             .subscribe { CustomActivityOnCrash.restartApplication(this, config) }
 
-        text.setOnLinkClickListener { _, _ ->
+        text.setSimpleOnLinkClickListener { _, _ ->
             CustomActivityOnCrash.restartApplicationWithIntent(this,
                 CreateConferenceActivity.getIntent(this, false, Participant(DEVELOPER_PROXER_NAME)), config)
         }

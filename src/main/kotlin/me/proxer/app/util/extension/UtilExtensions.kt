@@ -36,7 +36,7 @@ import me.saket.bettermovementmethod.BetterLinkMovementMethod
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
 import org.jetbrains.anko.dip
-import java.util.*
+import java.util.EnumSet
 
 val MENTIONS_REGEX = Regex("(@[^ \n]+)").toPattern()
 
@@ -85,38 +85,42 @@ inline fun CharSequence.linkify(web: Boolean = true, mentions: Boolean = true, v
     return spannable
 }
 
-inline fun TextView.setOnLinkClickListener(crossinline listener: (view: TextView, link: String) -> Unit) {
+inline fun TextView.setSimpleOnLinkClickListener(crossinline listener: (view: TextView, link: String) -> Unit) {
+    setOnLinkClickListener({ view, link ->
+        listener(view, link)
+
+        true
+    })
+}
+
+inline fun TextView.setSimpleOnLinkLongClickListener(crossinline listener: (view: TextView, link: String) -> Unit) {
+    setOnLinkLongClickListener({ view, link ->
+        listener(view, link)
+
+        true
+    })
+}
+
+inline fun TextView.setOnLinkClickListener(noinline listener: (view: TextView, link: String) -> Boolean) {
+    val listenerWrapper = BetterLinkMovementMethod.OnLinkClickListener(listener)
+
     movementMethod.let {
         if (it is BetterLinkMovementMethod) {
-            it.setOnLinkClickListener { view, link ->
-                listener(view, link)
-
-                true
-            }
+            it.setOnLinkClickListener(listenerWrapper)
         } else {
-            movementMethod = BetterLinkMovementMethod.newInstance().setOnLinkClickListener { view, link ->
-                listener(view, link)
-
-                true
-            }
+            movementMethod = BetterLinkMovementMethod.newInstance().setOnLinkClickListener(listenerWrapper)
         }
     }
 }
 
-inline fun TextView.setOnLinkLongClickListener(crossinline listener: (view: TextView, link: String) -> Unit) {
+inline fun TextView.setOnLinkLongClickListener(noinline listener: (view: TextView, link: String) -> Boolean) {
+    val listenerWrapper = BetterLinkMovementMethod.OnLinkLongClickListener(listener)
+
     movementMethod.let {
         if (it is BetterLinkMovementMethod) {
-            it.setOnLinkLongClickListener { view, link ->
-                listener(view, link)
-
-                true
-            }
+            it.setOnLinkLongClickListener(listenerWrapper)
         } else {
-            movementMethod = BetterLinkMovementMethod.newInstance().setOnLinkLongClickListener { view, link ->
-                listener(view, link)
-
-                true
-            }
+            movementMethod = BetterLinkMovementMethod.newInstance().setOnLinkLongClickListener(listenerWrapper)
         }
     }
 }

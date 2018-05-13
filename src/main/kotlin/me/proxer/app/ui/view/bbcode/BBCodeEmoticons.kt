@@ -8,7 +8,7 @@ import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
-import me.proxer.app.ui.view.GifAwareTextView
+import me.proxer.app.ui.view.BetterLinkGifAwareEmojiTextView
 import org.jetbrains.anko.dip
 import java.util.regex.Pattern.quote
 
@@ -71,7 +71,7 @@ object BBCodeEmoticons {
 
     private val emoticonRegex = Regex(emoticons.joinToString(separator = "|") { quote(it.pattern) })
 
-    fun replaceWithGifs(view: GifAwareTextView, glide: GlideRequests) {
+    fun replaceWithGifs(view: BetterLinkGifAwareEmojiTextView, glide: GlideRequests) {
         val text = view.text.toSpannableStringBuilder()
         val foundEmoticons = emoticonRegex.findAll(text).toList()
 

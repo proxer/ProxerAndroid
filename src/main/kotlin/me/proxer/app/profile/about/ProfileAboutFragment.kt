@@ -25,8 +25,8 @@ import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.clipboardManager
 import me.proxer.app.util.extension.linkify
-import me.proxer.app.util.extension.setOnLinkClickListener
-import me.proxer.app.util.extension.setOnLinkLongClickListener
+import me.proxer.app.util.extension.setSimpleOnLinkClickListener
+import me.proxer.app.util.extension.setSimpleOnLinkLongClickListener
 import me.proxer.app.util.extension.toAppString
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.user.UserAbout
@@ -180,8 +180,8 @@ class ProfileAboutFragment : BaseContentFragment<UserAbout>() {
         contentView.setTextIsSelectable(true)
         contentView.isSaveEnabled = false
 
-        contentView.setOnLinkClickListener { _, link -> showPage(Utils.parseAndFixUrl(link)) }
-        contentView.setOnLinkLongClickListener { _, link ->
+        contentView.setSimpleOnLinkClickListener { _, link -> showPage(Utils.parseAndFixUrl(link)) }
+        contentView.setSimpleOnLinkLongClickListener { _, link ->
             val clipboardTitle = getString(R.string.clipboard_title)
 
             requireContext().clipboardManager.primaryClip = ClipData.newPlainText(clipboardTitle, link)
