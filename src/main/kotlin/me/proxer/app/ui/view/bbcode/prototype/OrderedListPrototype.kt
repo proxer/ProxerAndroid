@@ -3,11 +3,11 @@ package me.proxer.app.ui.view.bbcode.prototype
 import android.content.Context
 import android.view.Gravity.CENTER
 import android.view.View
+import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout
 import android.widget.LinearLayout.HORIZONTAL
-import android.widget.LinearLayout.LayoutParams
-import android.widget.LinearLayout.LayoutParams.MATCH_PARENT
-import android.widget.LinearLayout.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout.VERTICAL
 import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBTree
@@ -27,16 +27,16 @@ object OrderedListPrototype : AutoClosingPrototype {
         return listOf(LinearLayout(context).apply {
             val eightDip = dip(8)
 
-            layoutParams = LayoutParams(MATCH_PARENT, WRAP_CONTENT)
+            layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
             orientation = VERTICAL
 
             childViews.forEachIndexed { index, it ->
                 addView(LinearLayout(context).apply {
-                    layoutParams = LayoutParams(MATCH_PARENT, WRAP_CONTENT)
+                    layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
                     orientation = HORIZONTAL
 
                     addView(TextPrototype.makeView(context, "${index + 1}.").apply {
-                        layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
+                        layoutParams = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
                             setMargins(0, 0, eightDip, 0)
 
                             gravity = CENTER

@@ -6,10 +6,10 @@ import android.graphics.drawable.Drawable
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.AppCompatImageView
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.ImageView
-import android.widget.LinearLayout.LayoutParams
 import android.widget.TextView
 import com.bumptech.glide.load.engine.GlideException
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
@@ -55,7 +55,7 @@ object ImagePrototype : AutoClosingPrototype {
         return listOf(AppCompatImageView(context).also { view: ImageView ->
             ViewCompat.setTransitionName(view, "bb_image_$parsedUrl")
 
-            view.layoutParams = LayoutParams(width ?: MATCH_PARENT, WRAP_CONTENT)
+            view.layoutParams = ViewGroup.MarginLayoutParams(width ?: MATCH_PARENT, WRAP_CONTENT)
 
             args.glide?.let { loadImage(it, view, parsedUrl) }
 

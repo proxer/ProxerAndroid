@@ -26,6 +26,12 @@ internal object BBUtils {
     }
 }
 
+internal inline fun applyToAllViews(views: List<View>, crossinline operation: (View) -> Unit) = views.apply {
+    flatMap { it.childrenRecursiveSequence().plus(it).toList() }
+        .filter { it.getTag(R.id.ignore_tag) == null }
+        .onEach(operation)
+}
+
 internal inline fun <reified T : View> applyToViews(
     views: List<View>,
     crossinline operation: (T) -> Unit

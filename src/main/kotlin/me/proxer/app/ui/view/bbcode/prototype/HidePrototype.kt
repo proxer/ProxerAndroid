@@ -4,11 +4,11 @@ import android.content.Context
 import android.support.v4.content.ContextCompat
 import android.view.Gravity.CENTER
 import android.view.View
+import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import android.widget.LinearLayout.LayoutParams
-import android.widget.LinearLayout.LayoutParams.MATCH_PARENT
-import android.widget.LinearLayout.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout.VERTICAL
 import me.proxer.app.R
 import me.proxer.app.ui.view.bbcode.BBArgs
@@ -31,7 +31,7 @@ object HidePrototype : AutoClosingPrototype {
         return when {
             childViews.isEmpty() -> childViews
             !StorageHelper.isLoggedIn -> listOf(FrameLayout(context).apply {
-                layoutParams = LayoutParams(MATCH_PARENT, WRAP_CONTENT)
+                layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
 
                 addView(TextPrototype.makeView(context, context.getString(R.string.view_bbcode_hide_login)).apply {
                     setTag(R.id.ignore_tag, Unit)
@@ -43,7 +43,7 @@ object HidePrototype : AutoClosingPrototype {
             else -> listOf(LinearLayout(context).apply {
                 val fourDip = dip(4)
 
-                layoutParams = LayoutParams(MATCH_PARENT, WRAP_CONTENT)
+                layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
                 orientation = VERTICAL
 
                 setPadding(fourDip, fourDip, fourDip, fourDip)

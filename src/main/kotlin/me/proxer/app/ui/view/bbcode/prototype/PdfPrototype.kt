@@ -11,9 +11,9 @@ import android.text.Spannable.SPAN_INCLUSIVE_EXCLUSIVE
 import android.text.SpannableStringBuilder
 import android.text.style.ClickableSpan
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
-import android.widget.LinearLayout.LayoutParams
 import android.widget.TextView
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
@@ -70,7 +70,7 @@ object PdfPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
 
                 val width = if (parsedUrl == null) null else args[WIDTH_ARGUMENT] as Int?
 
-                view.layoutParams = LayoutParams(MATCH_PARENT, WRAP_CONTENT)
+                view.layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
 
                 view.setMinimumTileDpi(120)
                 view.setDoubleTapZoomDuration(view.context.resources.getInteger(android.R.integer.config_shortAnimTime))

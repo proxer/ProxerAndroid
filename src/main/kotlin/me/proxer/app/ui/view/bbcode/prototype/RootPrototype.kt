@@ -2,16 +2,17 @@ package me.proxer.app.ui.view.bbcode.prototype
 
 import android.content.Context
 import android.view.View
+import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.widget.FrameLayout
 import android.widget.LinearLayout
-import android.widget.LinearLayout.LayoutParams
-import android.widget.LinearLayout.LayoutParams.MATCH_PARENT
-import android.widget.LinearLayout.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout.VERTICAL
 import me.proxer.app.ui.view.BetterLinkGifAwareEmojiTextView
 import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBCodeEmoticons
 import me.proxer.app.ui.view.bbcode.BBTree
-import me.proxer.app.ui.view.bbcode.applyToViews
+import me.proxer.app.ui.view.bbcode.applyToAllViews
 
 /**
  * @author Ruben Gees
@@ -25,9 +26,9 @@ object RootPrototype : BBPrototype {
         val views = super.makeViews(context, children, args)
 
         val result = when (views.size) {
-            0, 1 -> applyOnViews(views, args)
+            0, 1 -> views
             else -> listOf(LinearLayout(context).apply {
-                layoutParams = LayoutParams(MATCH_PARENT, WRAP_CONTENT)
+                layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
                 orientation = VERTICAL
 
                 views.forEach { addView(it) }
@@ -37,17 +38,21 @@ object RootPrototype : BBPrototype {
         return applyOnViews(result, args)
     }
 
-    fun applyOnViews(views: List<View>, args: BBArgs) = when (args.enableEmoticons) {
-        true -> {
+    fun applyOnViews(views: List<View>, args: BBArgs) = applyToAllViews(views, { view: View ->
+        if (view is BetterLinkGifAwareEmojiTextView && args.enableEmoticons) {
             val glide = args.glide
 
-            when (glide) {
-                null -> views
-                else -> applyToViews(views, { view: BetterLinkGifAwareEmojiTextView ->
-                    BBCodeEmoticons.replaceWithGifs(view, glide)
-                })
+            if (glide != null) BBCodeEmoticons.replaceWithGifs(view, glide)
+        }
+
+        val layoutParams = view.layoutParams
+
+        if (layoutParams is LinearLayout.LayoutParams) {
+            val parent = view.parent
+
+            if (parent == null || parent is FrameLayout) {
+                view.layoutParams = FrameLayout.LayoutParams(layoutParams).apply { gravity = layoutParams.gravity }
             }
         }
-        else -> views
-    }
+    })
 }

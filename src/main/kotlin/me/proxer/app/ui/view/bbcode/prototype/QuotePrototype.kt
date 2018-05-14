@@ -3,11 +3,11 @@ package me.proxer.app.ui.view.bbcode.prototype
 import android.content.Context
 import android.support.v4.content.ContextCompat
 import android.view.View
+import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import android.widget.LinearLayout.LayoutParams
-import android.widget.LinearLayout.LayoutParams.MATCH_PARENT
-import android.widget.LinearLayout.LayoutParams.WRAP_CONTENT
 import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.R
 import me.proxer.app.ui.view.bbcode.BBArgs
@@ -49,7 +49,7 @@ object QuotePrototype : AutoClosingPrototype {
         layout?.apply {
             val fourDip = context.dip(4)
 
-            layoutParams = LayoutParams(MATCH_PARENT, WRAP_CONTENT)
+            layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
 
             setPadding(fourDip, fourDip, fourDip, fourDip)
             setBackgroundColor(ContextCompat.getColor(context, R.color.selected))

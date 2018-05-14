@@ -9,7 +9,7 @@ import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.BBUtils
 import me.proxer.app.ui.view.bbcode.UrlClickableSpan
-import me.proxer.app.ui.view.bbcode.applyToViews
+import me.proxer.app.ui.view.bbcode.applyToAllViews
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
 import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
 import me.proxer.app.util.Utils
@@ -40,7 +40,7 @@ object UrlPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
         val childViews = children.flatMap { it.makeViews(context, args) }
         val url = args[URL_ARGUMENT] as HttpUrl
 
-        return applyToViews(childViews) { view: View ->
+        return applyToAllViews(childViews) { view: View ->
             when (view) {
                 is TextView -> view.text = mutate(view.text.toSpannableStringBuilder(), args)
                 else -> view.setOnClickListener { BBUtils.findBaseActivity(it.context)?.showPage(url) }

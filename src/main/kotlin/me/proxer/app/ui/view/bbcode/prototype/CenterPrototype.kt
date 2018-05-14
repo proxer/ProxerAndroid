@@ -7,12 +7,11 @@ import android.text.SpannableStringBuilder
 import android.text.style.AlignmentSpan
 import android.view.Gravity.CENTER
 import android.view.View
-import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
 import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBTree
-import me.proxer.app.ui.view.bbcode.applyToViews
+import me.proxer.app.ui.view.bbcode.applyToAllViews
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
 import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
 
@@ -27,7 +26,7 @@ object CenterPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
     override fun makeViews(context: Context, children: List<BBTree>, args: BBArgs): List<View> {
         val childViews = children.flatMap { it.makeViews(context, args) }
 
-        return applyToViews(childViews) { view: View ->
+        return applyToAllViews(childViews) { view: View ->
             when (view) {
                 is TextView -> view.text = mutate(view.text.toSpannableStringBuilder(), args)
                 is LinearLayout -> view.gravity = CENTER
@@ -35,8 +34,8 @@ object CenterPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
                     val layoutParams = view.layoutParams
 
                     when (layoutParams) {
-                        is FrameLayout.LayoutParams -> layoutParams.gravity = CENTER
                         is LinearLayout.LayoutParams -> layoutParams.gravity = CENTER
+                        else -> view.layoutParams = LinearLayout.LayoutParams(layoutParams).apply { gravity = CENTER }
                     }
                 }
             }

@@ -2,10 +2,9 @@ package me.proxer.app.ui.view.bbcode.prototype
 
 import android.content.Context
 import android.view.View
-import android.view.ViewGroup.MarginLayoutParams
-import android.widget.TableLayout.LayoutParams
-import android.widget.TableLayout.LayoutParams.MATCH_PARENT
-import android.widget.TableLayout.LayoutParams.WRAP_CONTENT
+import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.TableRow
 import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBTree
@@ -24,13 +23,13 @@ object TableRowPrototype : AutoClosingPrototype {
         val childViews = children.filter { it.prototype == TableCellPrototype }.flatMap { it.makeViews(context, args) }
 
         for (child in childViews.dropLast(1)) {
-            (child.layoutParams as? MarginLayoutParams)?.apply {
+            (child.layoutParams as? ViewGroup.MarginLayoutParams)?.apply {
                 setMargins(0, 0, context.dip(4), 0)
             }
         }
 
         return listOf(TableRow(context).apply {
-            layoutParams = LayoutParams(MATCH_PARENT, WRAP_CONTENT)
+            layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
 
             childViews.forEach { addView(it) }
         })

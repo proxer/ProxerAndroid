@@ -2,10 +2,10 @@ package me.proxer.app.ui.view.bbcode.prototype
 
 import android.content.Context
 import android.view.View
+import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout
-import android.widget.LinearLayout.LayoutParams
-import android.widget.LinearLayout.LayoutParams.MATCH_PARENT
-import android.widget.LinearLayout.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout.VERTICAL
 import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBTree
@@ -24,7 +24,7 @@ object ListItemPrototype : AutoClosingPrototype {
         return when (childViews.size) {
             0, 1 -> childViews
             else -> listOf(LinearLayout(context).apply {
-                layoutParams = LayoutParams(MATCH_PARENT, WRAP_CONTENT)
+                layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
                 orientation = VERTICAL
 
                 childViews.forEach { addView(it) }
