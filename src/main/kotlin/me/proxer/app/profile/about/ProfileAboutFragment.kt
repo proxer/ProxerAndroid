@@ -41,7 +41,7 @@ import org.jetbrains.anko.toast
 class ProfileAboutFragment : BaseContentFragment<UserAbout>() {
 
     companion object {
-        private val ZERO_DATE = "0000-00-00"
+        private const val ZERO_DATE = "0000-00-00"
 
         fun newInstance() = ProfileAboutFragment().apply {
             arguments = bundleOf()
