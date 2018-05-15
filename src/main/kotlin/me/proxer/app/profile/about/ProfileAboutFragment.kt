@@ -34,8 +34,6 @@ import me.proxer.library.enums.Gender
 import me.proxer.library.enums.RelationshipStatus
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.toast
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 /**
  * @author Ruben Gees
@@ -43,8 +41,7 @@ import java.util.Locale
 class ProfileAboutFragment : BaseContentFragment<UserAbout>() {
 
     companion object {
-        private val ZERO_DATE = SimpleDateFormat("yyyy-MM-dd", Locale.GERMANY).parse("0000-00-00")
-        private val DATE_FORMAT = SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY)
+        private val ZERO_DATE = "0000-00-00"
 
         fun newInstance() = ProfileAboutFragment().apply {
             arguments = bundleOf()
@@ -147,7 +144,16 @@ class ProfileAboutFragment : BaseContentFragment<UserAbout>() {
 
         val normalizedBirthday = when (data.birthday) {
             ZERO_DATE -> ""
-            else -> DATE_FORMAT.format(data.birthday)
+            else -> data.birthday.split("-").let {
+                when (it.size) {
+                    3 -> {
+                        val (year, month, day) = it
+
+                        "$day.$month.$year"
+                    }
+                    else -> ""
+                }
+            }
         }
 
         addTableRowIfNotBlank(getString(R.string.fragment_about_occupation), data.occupation)
