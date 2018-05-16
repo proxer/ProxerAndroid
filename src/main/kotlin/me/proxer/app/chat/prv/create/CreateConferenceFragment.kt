@@ -181,7 +181,13 @@ class CreateConferenceFragment : BaseFragment() {
 
         addParticipantFooter.clicks()
             .autoDispose(this)
-            .subscribe { adapter.footer = addParticipantInputFooter }
+            .subscribe {
+                adapter.footer = addParticipantInputFooter
+
+                addParticipantFooter.post {
+                    addParticipantInputFooter.requestFocus()
+                }
+            }
 
         cancelParticipant.clicks()
             .autoDispose(this)
@@ -217,8 +223,8 @@ class CreateConferenceFragment : BaseFragment() {
                 }
             }
 
-        if (isGroup || innerAdapter.itemCount <= 0) {
-            adapter.footer = addParticipantFooter
+        if (innerAdapter.itemCount <= 0) {
+            adapter.footer = addParticipantInputFooter
         }
 
         return inflater.inflate(R.layout.fragment_create_conference, container, false)
@@ -312,8 +318,16 @@ class CreateConferenceFragment : BaseFragment() {
                         }
                     }
                 }
+
+            topicInput.requestFocus()
         } else {
             topicContainer.visibility = View.GONE
+
+            if (innerAdapter.itemCount <= 0) {
+                addParticipantInputFooter.requestFocus()
+            } else {
+                messageInput.requestFocus()
+            }
         }
     }
 
