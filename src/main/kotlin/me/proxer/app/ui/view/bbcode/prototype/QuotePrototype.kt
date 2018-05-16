@@ -8,6 +8,7 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import android.widget.LinearLayout.VERTICAL
 import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.R
 import me.proxer.app.ui.view.bbcode.BBArgs
@@ -43,7 +44,7 @@ object QuotePrototype : AutoClosingPrototype {
         val layout = when (childViews.size) {
             0 -> null
             1 -> FrameLayout(context)
-            else -> LinearLayout(context)
+            else -> LinearLayout(context).apply { orientation = VERTICAL }
         }
 
         layout?.apply {
