@@ -2,9 +2,12 @@ package me.proxer.app.ui.view.bbcode.prototype
 
 import android.content.ClipData
 import android.content.Context
+import android.os.Build
 import android.support.v4.util.PatternsCompat
-import android.support.v4.widget.TextViewCompat
 import android.view.View
+import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.TextView
 import me.proxer.app.R
 import me.proxer.app.profile.ProfileActivity
@@ -48,9 +51,12 @@ object TextPrototype : BBPrototype {
         view: BetterLinkGifAwareEmojiTextView,
         text: CharSequence
     ): BetterLinkGifAwareEmojiTextView {
+        view.layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
         view.text = text
 
-        TextViewCompat.setTextAppearance(view, R.style.TextAppearance_AppCompat_Small)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            view.importantForAutofill = View.IMPORTANT_FOR_AUTOFILL_NO
+        }
 
         view.setOnLinkClickListener { textView, link ->
             val baseActivity = BBUtils.findBaseActivity(textView.context)

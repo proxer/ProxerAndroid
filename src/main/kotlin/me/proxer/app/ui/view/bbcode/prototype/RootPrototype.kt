@@ -47,11 +47,13 @@ object RootPrototype : BBPrototype {
 
         val layoutParams = view.layoutParams
 
-        if (layoutParams is LinearLayout.LayoutParams) {
+        if (layoutParams != null) {
             val parent = view.parent
 
             if (parent == null || parent is FrameLayout) {
-                view.layoutParams = FrameLayout.LayoutParams(layoutParams).apply { gravity = layoutParams.gravity }
+                view.layoutParams = FrameLayout.LayoutParams(layoutParams).apply {
+                    if (layoutParams is LinearLayout.LayoutParams) gravity = layoutParams.gravity
+                }
             }
         }
     })
