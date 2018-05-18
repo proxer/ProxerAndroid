@@ -30,16 +30,16 @@ inline fun <T> Observable<T>.subscribeAndLogErrors(
     noinline onSuccess: (T) -> Unit,
     noinline onError: (Throwable) -> Unit
 ): Disposable {
-    return this.subscribe(onSuccess, {
+    return this.subscribe(onSuccess) {
         Log.e(LOGGING_TAG, it.getStackTraceString())
         onError(it)
-    })
+    }
 }
 
 inline fun <T> Observable<T>.subscribeAndLogErrors(noinline onSuccess: (T) -> Unit): Disposable {
-    return this.subscribe(onSuccess, {
+    return this.subscribe(onSuccess) {
         Log.e(LOGGING_TAG, it.getStackTraceString())
-    })
+    }
 }
 
 inline fun <T> Observable<T>.subscribeAndLogErrors(): Disposable? {
@@ -52,16 +52,16 @@ inline fun <T> Flowable<T>.subscribeAndLogErrors(
     noinline onSuccess: (T) -> Unit,
     noinline onError: (Throwable) -> Unit
 ): Disposable {
-    return this.subscribe(onSuccess, {
+    return this.subscribe(onSuccess) {
         Log.e(LOGGING_TAG, it.getStackTraceString())
         onError(it)
-    })
+    }
 }
 
 inline fun <T> Flowable<T>.subscribeAndLogErrors(noinline onSuccess: (T) -> Unit): Disposable {
-    return this.subscribe(onSuccess, {
+    return this.subscribe(onSuccess) {
         Log.e(LOGGING_TAG, it.getStackTraceString())
-    })
+    }
 }
 
 inline fun <T> Flowable<T>.subscribeAndLogErrors(): Disposable? {
@@ -74,16 +74,16 @@ inline fun <T> Single<T>.subscribeAndLogErrors(
     noinline onSuccess: (T) -> Unit,
     noinline onError: (Throwable) -> Unit
 ): Disposable {
-    return this.subscribe(onSuccess, {
+    return this.subscribe(onSuccess) {
         Log.e(LOGGING_TAG, it.getStackTraceString())
         onError(it)
-    })
+    }
 }
 
 inline fun <T> Single<T>.subscribeAndLogErrors(noinline onSuccess: (T) -> Unit): Disposable {
-    return this.subscribe(onSuccess, {
+    return this.subscribe(onSuccess) {
         Log.e(LOGGING_TAG, it.getStackTraceString())
-    })
+    }
 }
 
 inline fun <T> Single<T>.subscribeAndLogErrors(): Disposable {
@@ -96,16 +96,16 @@ inline fun Completable.subscribeAndLogErrors(
     noinline onSuccess: () -> Unit,
     noinline onError: (Throwable) -> Unit
 ): Disposable {
-    return this.subscribe(onSuccess, {
+    return this.subscribe(onSuccess) {
         Log.e(LOGGING_TAG, it.getStackTraceString())
         onError(it)
-    })
+    }
 }
 
 inline fun Completable.subscribeAndLogErrors(noinline onSuccess: () -> Unit): Disposable {
-    return this.subscribe(onSuccess, {
+    return this.subscribe(onSuccess) {
         Log.e(LOGGING_TAG, it.getStackTraceString())
-    })
+    }
 }
 
 inline fun Completable.subscribeAndLogErrors(): Disposable {
@@ -118,16 +118,16 @@ inline fun <T> ObservableSubscribeProxy<T>.subscribeAndLogErrors(
     noinline onSuccess: (T) -> Unit,
     noinline onError: (Throwable) -> Unit
 ): Disposable {
-    return this.subscribe(onSuccess, {
+    return this.subscribe(onSuccess) {
         Log.e(LOGGING_TAG, it.getStackTraceString())
         onError(it)
-    })
+    }
 }
 
 inline fun <T> ObservableSubscribeProxy<T>.subscribeAndLogErrors(noinline onSuccess: (T) -> Unit): Disposable {
-    return this.subscribe(onSuccess, {
+    return this.subscribe(onSuccess) {
         Log.e(LOGGING_TAG, it.getStackTraceString())
-    })
+    }
 }
 
 inline fun <T> ObservableSubscribeProxy<T>.subscribeAndLogErrors(): Disposable {
@@ -140,16 +140,16 @@ inline fun CompletableSubscribeProxy.subscribeAndLogErrors(
     noinline onSuccess: () -> Unit,
     noinline onError: (Throwable) -> Unit
 ): Disposable {
-    return this.subscribe(onSuccess, {
+    return this.subscribe(onSuccess) {
         Log.e(LOGGING_TAG, it.getStackTraceString())
         onError(it)
-    })
+    }
 }
 
 inline fun CompletableSubscribeProxy.subscribeAndLogErrors(noinline onSuccess: () -> Unit): Disposable {
-    return this.subscribe(onSuccess, {
+    return this.subscribe(onSuccess) {
         Log.e(LOGGING_TAG, it.getStackTraceString())
-    })
+    }
 }
 
 inline fun CompletableSubscribeProxy.subscribeAndLogErrors(): Disposable {

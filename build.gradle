@@ -167,10 +167,6 @@ dependencies {
     }
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion project.ext.gradleVersion
-}
-
 kapt {
     useBuildCache = true
 }
@@ -189,6 +185,10 @@ detekt {
 ktlint {
     version = ktlintVersion
     reporters = ["CHECKSTYLE"]
+}
+
+wrapper {
+    gradleVersion project.ext.gradleVersion
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {

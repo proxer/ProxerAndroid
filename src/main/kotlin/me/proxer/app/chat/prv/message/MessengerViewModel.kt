@@ -29,6 +29,7 @@ class MessengerViewModel(initialConference: LocalConference) : PagedViewModel<Lo
     override val isLoginRequired = true
     override val itemsOnPage = MessengerJob.MESSAGES_ON_PAGE
 
+    @Suppress("UNUSED_PARAMETER")
     override var hasReachedEnd
         get() = safeConference.isFullyLoaded
         set(value) = Unit
@@ -40,7 +41,7 @@ class MessengerViewModel(initialConference: LocalConference) : PagedViewModel<Lo
         override fun onActive() {
             super.onActive()
 
-            addSource(source, {
+            addSource(source) {
                 it?.let {
                     if (StorageHelper.isLoggedIn) {
                         if (it.isEmpty() && !hasReachedEnd) {
@@ -62,7 +63,7 @@ class MessengerViewModel(initialConference: LocalConference) : PagedViewModel<Lo
                         }
                     }
                 }
-            })
+            }
         }
 
         override fun onInactive() {
@@ -90,9 +91,9 @@ class MessengerViewModel(initialConference: LocalConference) : PagedViewModel<Lo
         override fun onActive() {
             super.onActive()
 
-            addSource(source, {
+            addSource(source) {
                 it?.let { this.value = it }
-            })
+            }
         }
 
         override fun onInactive() {

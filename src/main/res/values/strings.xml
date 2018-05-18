@@ -504,7 +504,7 @@
     <string name="view_bbcode_facebook_link">Zum Facebook Post</string>
     <string name="view_bbcode_twitter_link">Zum Tweet</string>
     <string name="view_bbcode_poll_link">Zur Abstimmung</string>
-    <string name="view_bbcode_quote">@%s schrieb:</string>
+    <string name="view_bbcode_quote">\@%s schrieb:</string>
     <string name="view_bbcode_hide_login">Dieser Inhalt ist für Gäste nicht sichtbar. Bitte melde dich an, oder
         registriere dich.
     </string>

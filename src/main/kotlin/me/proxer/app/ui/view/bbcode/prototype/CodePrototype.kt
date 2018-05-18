@@ -28,9 +28,9 @@ object CodePrototype : AutoClosingPrototype {
     override fun makeViews(context: Context, children: List<BBTree>, args: BBArgs): List<View> {
         val childViews = super.makeViews(context, children, args)
 
-        applyToViews(childViews, { view: TextView ->
+        applyToViews(childViews) { view: TextView ->
             view.typeface = MONOSPACE
-        })
+        }
 
         return when (childViews.size) {
             0 -> childViews

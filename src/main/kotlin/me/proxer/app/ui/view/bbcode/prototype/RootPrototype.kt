@@ -38,7 +38,7 @@ object RootPrototype : BBPrototype {
         return applyOnViews(result, args)
     }
 
-    fun applyOnViews(views: List<View>, args: BBArgs) = applyToAllViews(views, { view: View ->
+    fun applyOnViews(views: List<View>, args: BBArgs) = applyToAllViews(views) { view: View ->
         if (view is BetterLinkGifAwareEmojiTextView && args.enableEmoticons) {
             val glide = args.glide
 
@@ -56,5 +56,5 @@ object RootPrototype : BBPrototype {
                 }
             }
         }
-    })
+    }
 }

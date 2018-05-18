@@ -4,7 +4,6 @@ import android.os.Build
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
 import cat.ereza.customactivityoncrash.CustomActivityOnCrash
 import cat.ereza.customactivityoncrash.config.CaocConfig
@@ -42,7 +41,6 @@ class CrashActivity : BaseActivity() {
         }
 
     private val toolbar: Toolbar by bindView(R.id.toolbar)
-    private val image: ImageView by bindView(R.id.image)
     private val text: TextView by bindView(R.id.text)
     private val report: Button by bindView(R.id.report)
     private val restart: Button by bindView(R.id.restart)

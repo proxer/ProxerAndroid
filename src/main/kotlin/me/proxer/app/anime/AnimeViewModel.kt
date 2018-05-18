@@ -45,11 +45,11 @@ class AnimeViewModel(
         get() = Single.fromCallable { validate() }
             .flatMap { entrySingle() }
             .flatMap {
-                Singles.zip(Single.just(it), streamSingle(it), { entry, streams ->
+                Singles.zip(Single.just(it), streamSingle(it)) { entry, streams ->
                     AnimeStreamInfo(entry.name, entry.episodeAmount, streams.map {
                         it.toAnimeStreamInfo(StreamResolverFactory.resolverFor(it.hosterName) != null)
                     })
-                })
+                }
             }
 
     val resolutionResult = ResettingMutableLiveData<StreamResolutionResult>()
@@ -58,9 +58,9 @@ class AnimeViewModel(
     val userStateData = ResettingMutableLiveData<Unit?>()
     val userStateError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
 
-    var episode by Delegates.observable(episode, { _, old, new ->
+    var episode by Delegates.observable(episode) { _, old, new ->
         if (old != new) reload()
-    })
+    }
 
     private var cachedEntryCore: EntryCore? = null
 

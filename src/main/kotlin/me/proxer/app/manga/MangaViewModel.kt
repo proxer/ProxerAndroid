@@ -62,9 +62,9 @@ class MangaViewModel(
     val userStateData = ResettingMutableLiveData<Unit?>()
     val userStateError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
 
-    var episode by Delegates.observable(episode, { _, old, new ->
+    var episode by Delegates.observable(episode) { _, old, new ->
         if (old != new) reload()
-    })
+    }
 
     private var cachedEntryCore: EntryCore? = null
 

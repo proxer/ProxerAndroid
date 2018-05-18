@@ -61,9 +61,9 @@ object PdfPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
 
         return when {
             childViews.isEmpty() -> childViews
-            Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP -> applyToViews<TextView>(childViews, {
+            Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP -> applyToViews<TextView>(childViews) {
                 it.text = mutate(it.text.toSpannableStringBuilder(), args)
-            })
+            }
             else -> listOf(SubsamplingScaleImageView(context).also { view: SubsamplingScaleImageView ->
                 val url = (childViews.firstOrNull() as? TextView)?.text.toString().trim()
                 val parsedUrl = Utils.safelyParseAndFixUrl(url)

@@ -69,13 +69,13 @@ class MediaListViewModel(
             .tagSpoilerFilter(tagSpoilerFilter)
             .type(type)
 
-    var sortCriteria by Delegates.observable(sortCriteria, { _, old, new ->
+    var sortCriteria by Delegates.observable(sortCriteria) { _, old, new ->
         if (old != new) reload()
-    })
+    }
 
-    var type by Delegates.observable(type, { _, old, new ->
+    var type by Delegates.observable(type) { _, old, new ->
         if (old != new) reload()
-    })
+    }
 
     val genreData = MutableLiveData<List<LocalTag>>()
     val tagData = MutableLiveData<List<LocalTag>>()

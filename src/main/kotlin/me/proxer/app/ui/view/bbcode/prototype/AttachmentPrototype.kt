@@ -42,9 +42,9 @@ object AttachmentPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototy
 
                 ImagePrototype.makeViews(context, listOf(TextPrototype.construct(url.toString(), parent)), args)
             }
-            else -> applyToViews<TextView>(childViews, {
+            else -> applyToViews<TextView>(childViews) {
                 it.text = mutate(it.text.toSpannableStringBuilder(), args)
-            })
+            }
         }
     }
 

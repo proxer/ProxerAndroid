@@ -204,8 +204,8 @@ private fun CustomTabsHelperFragment.doOpenHttpPage(activity: Activity, url: Htt
         .setShowTitle(true)
         .build()
         .let {
-            CustomTabsHelperFragment.open(activity, it, url.androidUri(), { context, uri ->
+            CustomTabsHelperFragment.open(activity, it, url.androidUri()) { context, uri ->
                 WebViewActivity.navigateTo(context, uri.toString())
-            })
+            }
         }
 }

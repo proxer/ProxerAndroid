@@ -57,10 +57,10 @@ class ConferenceViewModel(searchQuery: String) : BaseViewModel<List<LocalConfere
             source = messengerDao.getConferencesLiveData(value)
         }
 
-    private var source by Delegates.observable(messengerDao.getConferencesLiveData(searchQuery), { _, old, new ->
+    private var source by Delegates.observable(messengerDao.getConferencesLiveData(searchQuery)) { _, old, new ->
         data.removeSource(old)
         data.addSource(new, sourceObserver)
-    })
+    }
 
     init {
         data.addSource(source, sourceObserver)

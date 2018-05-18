@@ -46,13 +46,13 @@ class TopicActivity : DrawerActivity() {
 
     val id: String
         get() = when {
-            intent.action == Intent.ACTION_VIEW -> intent.data.pathSegments.getOrElse(2, { "-1" })
+            intent.action == Intent.ACTION_VIEW -> intent.data.pathSegments.getOrElse(2) { "-1" }
             else -> intent.getStringExtra(ID_EXTRA)
         }
 
     val categoryId: String
         get() = when {
-            intent.action == Intent.ACTION_VIEW -> intent.data.pathSegments.getOrElse(1, { "-1" })
+            intent.action == Intent.ACTION_VIEW -> intent.data.pathSegments.getOrElse(1) { "-1" }
             else -> intent.getStringExtra(CATEGORY_ID_EXTRA)
         }
 

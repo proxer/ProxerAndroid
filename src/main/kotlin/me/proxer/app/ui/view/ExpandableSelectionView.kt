@@ -50,21 +50,21 @@ class ExpandableSelectionView @JvmOverloads constructor(
             title.text = value
         }
 
-    var items by Delegates.observable(listOf<String>(), { _, old, new ->
+    var items by Delegates.observable(listOf<String>()) { _, old, new ->
         if (old != new && isExtended) {
             itemContainer.removeAllViews()
 
             handleExtension()
         }
-    })
+    }
 
-    var selection by Delegates.observable(mutableListOf<String>(), { _, old, new ->
+    var selection by Delegates.observable(mutableListOf<String>()) { _, old, new ->
         if (old != new) handleSelection()
-    })
+    }
 
-    var isExtended by Delegates.observable(false, { _, old, new ->
+    var isExtended by Delegates.observable(false) { _, old, new ->
         if (old != new) handleExtension()
-    })
+    }
 
     private var isSingleSelection = false
 

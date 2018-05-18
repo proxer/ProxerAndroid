@@ -143,9 +143,9 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
         @SuppressLint("ClickableViewAccessibility")
         private fun initListeners(itemView: View) {
             itemView.setOnClickListener {
-                withSafeAdapterPosition(this, {
+                withSafeAdapterPosition(this) {
                     bind(data[it])
-                })
+                }
             }
 
             @Suppress("LabeledExpression")
@@ -179,11 +179,11 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
             }
 
             image.setOnClickListener {
-                withSafeAdapterPosition(this, {
+                withSafeAdapterPosition(this) {
                     lastTouchCoordinates?.let { touchCoordinates ->
                         clickSubject.onNext(Triple(image, touchCoordinates, it))
                     }
-                })
+                }
             }
         }
 

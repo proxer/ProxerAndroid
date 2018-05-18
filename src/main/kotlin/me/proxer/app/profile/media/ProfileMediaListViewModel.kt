@@ -31,11 +31,11 @@ class ProfileMediaListViewModel(
             .category(category)
             .filter(filter)
 
-    var category by Delegates.observable(category, { _, old, new ->
+    var category by Delegates.observable(category) { _, old, new ->
         if (old != new) reload()
-    })
+    }
 
-    var filter by Delegates.observable(filter, { _, old, new ->
+    var filter by Delegates.observable(filter) { _, old, new ->
         if (old != new) reload()
-    })
+    }
 }

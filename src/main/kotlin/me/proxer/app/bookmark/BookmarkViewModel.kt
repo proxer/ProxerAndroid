@@ -32,13 +32,13 @@ class BookmarkViewModel(category: Category?) : PagedContentViewModel<Bookmark>()
 
     val itemDeletionError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
 
-    var category by Delegates.observable(category, { _, old, new ->
+    var category by Delegates.observable(category) { _, old, new ->
         if (old != new) reload()
-    })
+    }
 
-    var filterAvailable by Delegates.observable<Boolean?>(null, { _, old, new ->
+    var filterAvailable by Delegates.observable<Boolean?>(null) { _, old, new ->
         if (old != new) reload()
-    })
+    }
 
     private val deletionQueue = UniqueQueue<Bookmark>()
     private var deletionDisposable: Disposable? = null

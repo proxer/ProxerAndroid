@@ -54,9 +54,9 @@ class BBCodeView @JvmOverloads constructor(
     }
 
     fun destroyWithRetainingViews() {
-        applyToViews(listOf(this), { view: ImageView ->
+        applyToViews(listOf(this)) { view: ImageView ->
             glide?.clear(view)
-        })
+        }
     }
 
     private fun refreshViews(tree: BBTree) {

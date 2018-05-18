@@ -33,7 +33,7 @@ class CommentViewModel(
             .observeOn(Schedulers.computation())
             .map { it.map { it.toParsedComment() } }
 
-    var sortCriteria by Delegates.observable(sortCriteria, { _, old, new ->
+    var sortCriteria by Delegates.observable(sortCriteria) { _, old, new ->
         if (old != new) reload()
-    })
+    }
 }

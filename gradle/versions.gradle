@@ -12,17 +12,17 @@ ext {
     javaVersion = JavaVersion.VERSION_1_8
 
     // Gradle
-    gradleVersion = '4.7'
+    gradleVersion = '4.8-rc-1'
 
     // Core plugins
-    androidPluginVersion = '3.2.0-alpha14'
-    kotlinVersion = '1.2.41'
+    androidPluginVersion = '3.2.0-alpha15'
+    kotlinVersion = '1.2.50-eap-17'
 
     // Utility plugins
     detektPluginVersion = '1.0.0.RC7'
     gradleVersionsPluginVersion = '0.17.0'
     androidCommandPluginVersion = '2.0.1'
-    ktlintPluginVersion = '3.3.0'
+    ktlintPluginVersion = '4.0.0'
     ktlintVersion = '0.23.1'
 
     // Frameworks and code only libraries
@@ -31,7 +31,7 @@ ext {
     supportLibraryVersion = '27.1.1'
     supportPreferenceVersion = '2.2.0'
     lifecycleVersion = '1.1.1'
-    roomVersion = '1.1.0'
+    roomVersion = '1.1.1-rc1'
     androidJobVersion = '1.2.5'
     proxerLibVersion = '7af6e8be64'
 
@@ -42,7 +42,7 @@ ext {
     rxBindingVersion = '2.1.1'
     rxBusVersion = '2.0.0'
     rxPermissionsVersion = '0.9.5'
-    autoDisposeVersion = '0.7.0'
+    autoDisposeVersion = '0.8.0'
 
     // UI components
     aboutLibrariesVersion = '6.0.8'
@@ -55,7 +55,7 @@ ext {
     subsamplingPdfDecoderVersion = '4ae64c42f9'
     tabLayoutHelperVersion = '0.9.0'
     materialDialogsVersion = '0.9.6.0'
-    flexboxVersion = '0.3.2'
+    flexboxVersion = '1.0.0'
     emojiIosVersion = '7f7f35c3e7'
     emojiIosVersion = '7f7f35c3e7'
     exomediaVersion = '4.2.0'
