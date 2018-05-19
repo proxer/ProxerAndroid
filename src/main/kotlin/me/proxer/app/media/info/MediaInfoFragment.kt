@@ -25,6 +25,7 @@ import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.info.industry.IndustryActivity
 import me.proxer.app.info.translatorgroup.TranslatorGroupActivity
 import me.proxer.app.media.MediaActivity
+import me.proxer.app.ui.view.MaxLineFlexboxLayout
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.setIconicsImage
@@ -152,7 +153,6 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
             .subscribe {
                 showUnratedTags = !showUnratedTags
 
-                tags.removeAllViews()
                 viewModel.data.value?.let { bindTags(it.first) }
             }
 
@@ -161,7 +161,6 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
             .subscribe {
                 showSpoilerTags = !showSpoilerTags
 
-                tags.removeAllViews()
                 viewModel.data.value?.let { bindTags(it.first) }
             }
 
@@ -175,17 +174,7 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
         name = data.first.name
         category = data.first.category
 
-        removeViews()
         bind(data.first, data.second)
-    }
-
-    private fun removeViews() {
-        infoTable.removeAllViews()
-        genres.removeAllViews()
-        tags.removeAllViews()
-        fskConstraints.removeAllViews()
-        translatorGroups.removeAllViews()
-        industries.removeAllViews()
     }
 
     private fun bind(entry: Entry, userInfo: Optional<MediaUserInfo>) {
@@ -298,12 +287,15 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
             return
         }
 
-        bindChips(genres, result.genres.toList(), mapFunction = {
-            ProxerUtils.getApiEnumName(it) ?: throw IllegalArgumentException("Unknown genre: $it")
-        }, onClick = {
-            showPage(ProxerUrls.wikiWeb(ProxerUtils.getApiEnumName(it)
-                ?: throw IllegalArgumentException("Unknown genre: $it")))
-        })
+        bindChips(genres, result.genres.toList(),
+            mapFunction = {
+                ProxerUtils.getApiEnumName(it)
+                    ?: throw IllegalArgumentException("Unknown genre: $it")
+            },
+            onClick = {
+                showPage(ProxerUrls.wikiWeb(ProxerUtils.getApiEnumName(it)
+                    ?: throw IllegalArgumentException("Unknown genre: $it")))
+            })
     }
 
     private fun bindTags(result: Entry) {
@@ -332,11 +324,9 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
             }
         }
 
-        bindChips(tags, filteredTags, mapFunction = {
-            it.name
-        }, onClick = {
-            multilineSnackbar(root, it.description)
-        })
+        bindChips(tags, filteredTags,
+            mapFunction = { it.name },
+            onClick = { multilineSnackbar(root, it.description) })
     }
 
     private fun updateUnratedButton() {
@@ -374,7 +364,8 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
         translatorGroupsTitle.visibility = View.GONE
         translatorGroups.visibility = View.GONE
     } else {
-        bindChips(translatorGroups, result.translatorGroups, mapFunction = { it.name },
+        bindChips(translatorGroups, result.translatorGroups,
+            mapFunction = { it.name },
             onClick = { TranslatorGroupActivity.navigateTo(requireActivity(), it.id, it.name) })
     }
 
@@ -382,13 +373,15 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
         industriesTitle.visibility = View.GONE
         industries.visibility = View.GONE
     } else {
-        bindChips(industries, result.industries, mapFunction = {
-            if (it.type == IndustryType.UNKNOWN) {
-                it.name
-            } else {
-                "${it.name} (${it.type.toAppString(requireContext())})"
-            }
-        }, onClick = { IndustryActivity.navigateTo(requireActivity(), it.id, it.name) })
+        bindChips(industries, result.industries,
+            mapFunction = {
+                if (it.type == IndustryType.UNKNOWN) {
+                    it.name
+                } else {
+                    "${it.name} (${it.type.toAppString(requireContext())})"
+                }
+            },
+            onClick = { IndustryActivity.navigateTo(requireActivity(), it.id, it.name) })
     }
 
     private fun <T> bindChips(
@@ -396,19 +389,32 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
         items: List<T>,
         mapFunction: (T) -> String = { it.toString() },
         onClick: ((T) -> Unit)? = null
-    ) = items.map(mapFunction).forEachIndexed { index, it ->
-        val badge = MaterialBadgeTextView(layout.context)
+    ) {
+        layout.post {
+            if (layout.childCount > 0) layout.removeAllViews()
 
-        badge.text = it
-        badge.setTypeface(null, Typeface.BOLD)
-        badge.setTextColor(ContextCompat.getColorStateList(layout.context, android.R.color.white))
-        badge.setBackgroundColor(ContextCompat.getColor(badge.context, R.color.colorAccent))
+            for ((index, mappedItem) in items.map(mapFunction).withIndex()) {
+                val badge = MaterialBadgeTextView(layout.context)
 
-        badge.setOnClickListener {
-            onClick?.invoke(items[index])
+                badge.text = mappedItem
+                badge.setTypeface(null, Typeface.BOLD)
+                badge.setTextColor(ContextCompat.getColorStateList(layout.context, android.R.color.white))
+                badge.setBackgroundColor(ContextCompat.getColor(badge.context, R.color.colorAccent))
+                badge.setOnClickListener { onClick?.invoke(items[index]) }
+
+                if (layout is MaxLineFlexboxLayout && !layout.canAddView(badge)) {
+                    layout.enableShowAllButton {
+                        layout.maxLines = Int.MAX_VALUE
+
+                        bindChips(layout, items, mapFunction, onClick)
+                    }
+
+                    break
+                } else {
+                    layout.addView(badge)
+                }
+            }
         }
-
-        layout.addView(badge)
     }
 
     private fun bindUserInfo(userInfo: Optional<MediaUserInfo>) {

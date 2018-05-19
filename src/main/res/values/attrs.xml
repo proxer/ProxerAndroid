@@ -3,4 +3,7 @@
         <attr name="titleText" format="string" />
         <attr name="singleSelection" format="boolean" />
     </declare-styleable>
+    <declare-styleable name="MaxLineFlexboxLayout">
+        <attr name="maxLines" format="integer" />
+    </declare-styleable>
 </resources>

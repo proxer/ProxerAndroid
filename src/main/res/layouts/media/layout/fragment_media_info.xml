@@ -110,7 +110,7 @@
 
                         <com.google.android.flexbox.FlexboxLayout
                             android:id="@+id/genres"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="4dp"
                             app:alignItems="flex_start"
@@ -127,7 +127,7 @@
 
                         <com.google.android.flexbox.FlexboxLayout
                             android:id="@+id/tags"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="4dp"
                             app:alignItems="flex_start"
@@ -182,7 +182,7 @@
 
                         <com.google.android.flexbox.FlexboxLayout
                             android:id="@+id/fskConstraints"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="4dp"
                             app:alignItems="flex_start"
@@ -197,13 +197,14 @@
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                             android:textColor="@color/colorAccent" />
 
-                        <com.google.android.flexbox.FlexboxLayout
+                        <me.proxer.app.ui.view.MaxLineFlexboxLayout
                             android:id="@+id/translatorGroups"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="4dp"
                             app:alignItems="flex_start"
-                            app:flexWrap="wrap" />
+                            app:flexWrap="wrap"
+                            app:maxLines="3" />
 
                         <TextView
                             android:id="@+id/industriesTitle"
@@ -214,13 +215,14 @@
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                             android:textColor="@color/colorAccent" />
 
-                        <com.google.android.flexbox.FlexboxLayout
+                        <me.proxer.app.ui.view.MaxLineFlexboxLayout
                             android:id="@+id/industries"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="4dp"
                             app:alignItems="flex_start"
-                            app:flexWrap="wrap" />
+                            app:flexWrap="wrap"
+                            app:maxLines="3" />
 
                         <View
                             android:layout_width="match_parent"
