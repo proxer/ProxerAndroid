@@ -1,5 +1,6 @@
 package me.proxer.app.ui.view
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.AppCompatButton
@@ -19,7 +20,9 @@ import me.proxer.app.R
  * @author Ruben Gees
  */
 class MaxLineFlexboxLayout @JvmOverloads constructor(
-    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : FlexboxLayout(context, attrs, defStyleAttr) {
 
     var maxLines: Int
@@ -30,6 +33,7 @@ class MaxLineFlexboxLayout @JvmOverloads constructor(
 
     init {
         if (attrs != null) {
+            @SuppressLint("Recycle") // False positive
             val typedArray = context.obtainStyledAttributes(attrs, R.styleable.MaxLineFlexboxLayout)
 
             maxLines = typedArray.getInt(R.styleable.MaxLineFlexboxLayout_maxLines, Int.MAX_VALUE)
@@ -77,7 +81,7 @@ class MaxLineFlexboxLayout @JvmOverloads constructor(
         val container = FrameLayout(context)
         val button = AppCompatButton(context, null, android.R.attr.borderlessButtonStyle)
 
-        button.text = "Alle anzeigen"
+        button.text = context.getString(R.string.fragment_media_info_show_all)
         button.layoutParams = FrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT, Gravity.CENTER)
         button.setTextColor(ContextCompat.getColor(context, R.color.colorAccent))
         button.setOnClickListener { listener(it) }

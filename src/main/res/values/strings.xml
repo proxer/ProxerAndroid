@@ -418,6 +418,7 @@
     <string name="fragment_media_info_tags_spoiler_show">Spoiler Tags anzeigen</string>
     <string name="fragment_media_info_tags_unrated_hide">Unbewertete Tags verstecken</string>
     <string name="fragment_media_info_tags_unrated_show">Unbewertete Tags anzeigen</string>
+    <string name="fragment_media_info_show_all">Alle anzeigen</string>
 
     <plurals name="fragment_media_info_rate_count">
         <item quantity="one">%1$.2f (Eine Bewertung)</item>
