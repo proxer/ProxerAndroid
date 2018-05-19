@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.support.customtabs.CustomTabsIntent
 import android.support.v4.app.Fragment
@@ -153,6 +154,18 @@ inline fun <reified T : Enum<T>> Bundle.getEnumSet(key: String, klass: Class<T>)
     }
 }
 
+inline fun Intent.addReferer(context: Context): Intent {
+    val referrerExtraName = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+        Intent.EXTRA_REFERRER
+    } else {
+        "android.intent.extra.REFERRER"
+    }
+
+    putExtra(referrerExtraName, Uri.parse("android-app://" + context.packageName))
+
+    return this
+}
+
 fun CustomTabsHelperFragment.openHttpPage(activity: Activity, url: HttpUrl, forceBrowser: Boolean = false) {
     if (forceBrowser) {
         doOpenHttpPage(activity, url)
@@ -171,7 +184,7 @@ fun CustomTabsHelperFragment.openHttpPage(activity: Activity, url: HttpUrl, forc
                     }
                 }
 
-                activity.startActivity(intent)
+                activity.startActivity(intent.addReferer(activity))
             }
         }
     }
@@ -204,6 +217,8 @@ private fun CustomTabsHelperFragment.doOpenHttpPage(activity: Activity, url: Htt
         .setShowTitle(true)
         .build()
         .let {
+            it.intent.addReferer(activity)
+
             CustomTabsHelperFragment.open(activity, it, url.androidUri()) { context, uri ->
                 WebViewActivity.navigateTo(context, uri.toString())
             }

@@ -28,6 +28,7 @@ import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.Utils
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.extension.addReferer
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.snackbar
@@ -161,7 +162,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
                     if (it.intent.type == "text/html") {
                         showPage(Utils.parseAndFixUrl(it.intent.data.toString()))
                     } else {
-                        requireContext().startActivity(it.intent)
+                        requireContext().startActivity(it.intent.addReferer(requireContext()))
                     }
                 } else {
                     multilineSnackbar(root, it.intent.getCharSequenceExtra(StreamResolutionResult.MESSAGE_EXTRA))

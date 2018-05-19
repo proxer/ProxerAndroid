@@ -23,6 +23,7 @@ class CrunchyrollStreamResolver : StreamResolver {
     override val name = "Crunchyroll"
 
     override fun supports(name: String) = name.startsWith(this.name, true)
+
     override fun resolve(id: String): Single<StreamResolutionResult> = Single
         .fromCallable {
             if (!Utils.isPackageInstalled(globalContext.packageManager, CRUNCHYROLL_PACKAGE)) {
