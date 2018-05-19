@@ -94,7 +94,7 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
     private val infoTable: TableLayout by bindView(R.id.infoTable)
 
     private val genresTitle: TextView by bindView(R.id.genresTitle)
-    private val genres: FlexboxLayout by bindView(R.id.items)
+    private val genres: FlexboxLayout by bindView(R.id.genres)
     private val tagsTitle: TextView by bindView(R.id.tagsTitle)
     private val tags: FlexboxLayout by bindView(R.id.tags)
     private val unratedTags: Button by bindView(R.id.unratedTags)
