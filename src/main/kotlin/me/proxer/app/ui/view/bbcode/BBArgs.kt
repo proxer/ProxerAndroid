@@ -2,39 +2,32 @@ package me.proxer.app.ui.view.bbcode
 
 import android.text.Spanned
 import me.proxer.app.GlideRequests
+import java.util.LinkedHashMap
 
 /**
  * @author Ruben Gees
  */
-class BBArgs {
+class BBArgs : LinkedHashMap<String, Any?> {
 
-    private companion object {
+    companion object {
         private const val TEXT_ARGUMENT = "text"
         private const val GLIDE_ARGUMENT = "glide"
         private const val USER_ID_ARGUMENT = "userId"
         private const val ENABLE_EMOTICONS_ARGUMENT = "enable_emoticons"
-
-        private val predefinedKeys = arrayOf(TEXT_ARGUMENT, GLIDE_ARGUMENT, USER_ID_ARGUMENT, ENABLE_EMOTICONS_ARGUMENT)
     }
 
     var text: CharSequence?
-        get() = internalArgs[TEXT_ARGUMENT] as? CharSequence
+        get() = this[TEXT_ARGUMENT] as? CharSequence
         set(value) {
-            internalArgs[TEXT_ARGUMENT] = value
+            this[TEXT_ARGUMENT] = value
         }
 
-    val glide get() = internalArgs[GLIDE_ARGUMENT] as? GlideRequests
-    val userId get() = internalArgs[USER_ID_ARGUMENT] as? String
-    val enableEmoticons get() = internalArgs[ENABLE_EMOTICONS_ARGUMENT] as? Boolean ?: false
+    val glide get() = this[GLIDE_ARGUMENT] as? GlideRequests
+    val userId get() = this[USER_ID_ARGUMENT] as? String
+    val enableEmoticons get() = this[ENABLE_EMOTICONS_ARGUMENT] as? Boolean ?: false
 
     val safeText get() = text ?: throw IllegalStateException("text is null")
     val safeUserId get() = userId ?: throw IllegalStateException("userId is null")
-
-    private val internalArgs: MutableMap<String, Any?>
-
-    constructor() {
-        internalArgs = mutableMapOf()
-    }
 
     constructor(
         text: CharSequence? = null,
@@ -43,34 +36,21 @@ class BBArgs {
         enableEmoticons: Boolean? = null,
         vararg custom: Pair<String, Any?>
     ) {
-        internalArgs = mutableMapOf()
+        if (text != null) this[TEXT_ARGUMENT] = text
+        if (glide != null) this[GLIDE_ARGUMENT] = glide
+        if (userId != null) this[USER_ID_ARGUMENT] = userId
+        if (enableEmoticons != null) this[ENABLE_EMOTICONS_ARGUMENT] = enableEmoticons
 
-        if (text != null) internalArgs[TEXT_ARGUMENT] = text
-        if (glide != null) internalArgs[GLIDE_ARGUMENT] = glide
-        if (userId != null) internalArgs[USER_ID_ARGUMENT] = userId
-        if (enableEmoticons != null) internalArgs[ENABLE_EMOTICONS_ARGUMENT] = enableEmoticons
-
-        custom.forEach { (key, value) -> internalArgs[key] = value }
+        custom.forEach { (key, value) -> this[key] = value }
     }
 
     constructor(args: Map<String, Any?>) {
-        internalArgs = args.toMutableMap()
+        putAll(args)
     }
 
-    operator fun get(key: String): Any? {
-        return internalArgs[key]
-    }
-
-    operator fun plus(other: BBArgs): BBArgs {
-        return BBArgs(internalArgs + other.internalArgs)
-    }
-
-    fun put(key: String, value: Any?) {
-        if (key in predefinedKeys) {
-            throw IllegalArgumentException("Do not use put for the predefined key $key")
-        }
-
-        internalArgs[key] = value
+    operator fun plus(other: BBArgs) = BBArgs().also {
+        it.putAll(this)
+        it.putAll(other)
     }
 
     override fun equals(other: Any?): Boolean {
@@ -79,12 +59,12 @@ class BBArgs {
 
         other as BBArgs
 
-        if (internalArgs.size != other.internalArgs.size) return false
+        if (size != other.size) return false
 
         // Work around a bug in the SpannableStringBuilder (and possibly others) implementation.
         // See: https://stackoverflow.com/a/46403431/4279995.
-        internalArgs.forEach { (key, value) ->
-            other.internalArgs.forEach { (otherKey, otherValue) ->
+        this.forEach { (key, value) ->
+            other.forEach { (otherKey, otherValue) ->
                 if (key != otherKey) return false
 
                 if (value is Spanned) {
@@ -99,11 +79,8 @@ class BBArgs {
         return true
     }
 
-    override fun hashCode(): Int {
-        return internalArgs.hashCode()
-    }
+    @Suppress("RedundantOverride")
+    override fun hashCode() = super.hashCode()
 
-    override fun toString(): String {
-        return "BBArgs(internalArgs=$internalArgs)"
-    }
+    override fun toString() = "BBArgs() ${super.toString()}"
 }

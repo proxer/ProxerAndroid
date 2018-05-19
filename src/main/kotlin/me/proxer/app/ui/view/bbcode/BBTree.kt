@@ -32,7 +32,7 @@ class BBTree(
         if (prototype is TextMutatorPrototype && canOptimize) {
             recursiveNewChildren.forEach {
                 if (it.prototype == TextPrototype) {
-                    val mergedArgs = it.args + this.args + args
+                    val mergedArgs = args + this.args + it.args
 
                     it.args.text = prototype.mutate(it.args.safeText.toSpannableStringBuilder(), mergedArgs)
                 }

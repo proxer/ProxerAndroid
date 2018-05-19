@@ -13,6 +13,8 @@ import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTION
  */
 object SpoilerPrototype : AutoClosingPrototype {
 
+    const val SPOILER_TEXT_COLOR_ARGUMENT = "spoiler_text_color"
+
     private val ATTRIBUTE_REGEX = Regex("spoiler *= *(.+?)$", REGEX_OPTIONS)
     private const val TITLE_ARGUMENT = "title"
 
@@ -32,6 +34,7 @@ object SpoilerPrototype : AutoClosingPrototype {
         return when (childViews.isEmpty()) {
             true -> childViews
             false -> listOf(BBSpoilerView(context).apply {
+                textColor = args[SPOILER_TEXT_COLOR_ARGUMENT] as? Int
                 spoilerTitle = title
 
                 childViews.forEach { addView(it) }

@@ -4,6 +4,7 @@ import android.content.ClipData
 import android.content.Context
 import android.os.Build
 import android.support.v4.util.PatternsCompat
+import android.support.v4.widget.TextViewCompat
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
@@ -28,6 +29,10 @@ import org.jetbrains.anko.toast
  */
 object TextPrototype : BBPrototype {
 
+    const val TEXT_COLOR_ARGUMENT = "text_color"
+    const val TEXT_SIZE_ARGUMENT = "text_size"
+    const val TEXT_APPEARANCE_ARGUMENT = "text_appearance"
+
     override val startRegex = Regex("x^")
     override val endRegex = Regex("x^")
 
@@ -36,28 +41,41 @@ object TextPrototype : BBPrototype {
     }
 
     override fun makeViews(context: Context, children: List<BBTree>, args: BBArgs): List<View> {
-        return listOf(makeView(context, args.safeText))
+        return listOf(makeView(context, args))
     }
 
-    fun makeView(context: Context, text: CharSequence): TextView {
-        return applyOnView(BetterLinkGifAwareEmojiTextView(context), text)
+    fun makeView(context: Context, args: BBArgs): TextView {
+        return applyOnView(BetterLinkGifAwareEmojiTextView(context), args)
     }
 
     fun applyOnView(view: BetterLinkGifAwareEmojiTextView, args: BBArgs): BetterLinkGifAwareEmojiTextView {
-        return applyOnView(view, args.safeText)
-    }
-
-    private fun applyOnView(
-        view: BetterLinkGifAwareEmojiTextView,
-        text: CharSequence
-    ): BetterLinkGifAwareEmojiTextView {
         view.layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
-        view.text = text
+        view.text = args.safeText
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             view.importantForAutofill = View.IMPORTANT_FOR_AUTOFILL_NO
         }
 
+        applyStyle(args, view)
+        setListeners(view)
+
+        return view
+    }
+
+    private fun applyStyle(args: BBArgs, view: BetterLinkGifAwareEmojiTextView) {
+        (args[TEXT_APPEARANCE_ARGUMENT] as? Int).let {
+            if (it == null) {
+                TextViewCompat.setTextAppearance(view, R.style.TextAppearance_AppCompat_Small)
+            } else {
+                TextViewCompat.setTextAppearance(view, it)
+            }
+        }
+
+        (args[TEXT_COLOR_ARGUMENT] as? Int)?.let { view.setTextColor(it) }
+        (args[TEXT_SIZE_ARGUMENT] as? Float)?.let { view.textSize = it }
+    }
+
+    private fun setListeners(view: BetterLinkGifAwareEmojiTextView) {
         view.setOnLinkClickListener { textView, link ->
             val baseActivity = BBUtils.findBaseActivity(textView.context)
 
@@ -89,7 +107,5 @@ object TextPrototype : BBPrototype {
                 false
             }
         }
-
-        return view
     }
 }

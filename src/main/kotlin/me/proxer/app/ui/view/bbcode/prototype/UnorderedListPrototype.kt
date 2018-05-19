@@ -35,7 +35,7 @@ object UnorderedListPrototype : BBPrototype, AutoClosingPrototype {
                     layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
                     orientation = HORIZONTAL
 
-                    addView(TextPrototype.makeView(context, "\u2022").apply {
+                    addView(TextPrototype.makeView(context, args + BBArgs(text = "\u2022")).apply {
                         layoutParams = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
                             setMargins(0, 0, eightDip, 0)
 

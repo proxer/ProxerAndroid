@@ -39,6 +39,8 @@ internal class BBSpoilerView @JvmOverloads constructor(
             handleExpansion()
         }
 
+    var textColor: Int? = null
+
     private var isExpanded = false
         set(value) {
             field = value
@@ -85,6 +87,8 @@ internal class BBSpoilerView @JvmOverloads constructor(
         toggleText.setTag(R.id.ignore_tag, Unit)
         toggleText.typeface = DEFAULT_BOLD
         toggleText.gravity = CENTER
+
+        textColor?.let { toggleText.setTextColor(ContextCompat.getColor(context, it)) }
 
         toggleButton.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32)
 

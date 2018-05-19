@@ -52,7 +52,7 @@ interface BBPrototype {
                     if (mergedView.text.isBlank()) {
                         // Only add if it is not the first view.
                         if (shouldPadStart) {
-                            result.add(TextPrototype.makeView(context, ""))
+                            result.add(TextPrototype.makeView(context, args + BBArgs(text = "")))
                         }
                     } else {
                         result.add(mergedView)
@@ -67,7 +67,7 @@ interface BBPrototype {
                 val isBetweenNonTextViews = index + 1 <= childViews.lastIndex && childViews[index + 1] !is TextView
 
                 if (isBetweenNonTextViews) {
-                    result.add(TextPrototype.makeView(context, ""))
+                    result.add(TextPrototype.makeView(context, args + BBArgs(text = "")))
                 }
             }
         }

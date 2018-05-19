@@ -31,9 +31,11 @@ object HidePrototype : AutoClosingPrototype {
         return when {
             childViews.isEmpty() -> childViews
             !StorageHelper.isLoggedIn -> listOf(FrameLayout(context).apply {
+                val text = context.getString(R.string.view_bbcode_hide_login)
+
                 layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
 
-                addView(TextPrototype.makeView(context, context.getString(R.string.view_bbcode_hide_login)).apply {
+                addView(TextPrototype.makeView(context, args + BBArgs(text = text)).apply {
                     setTag(R.id.ignore_tag, Unit)
 
                     gravity = CENTER

@@ -35,7 +35,7 @@ object OrderedListPrototype : AutoClosingPrototype {
                     layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
                     orientation = HORIZONTAL
 
-                    addView(TextPrototype.makeView(context, "${index + 1}.").apply {
+                    addView(TextPrototype.makeView(context, args + BBArgs(text = "${index + 1}.")).apply {
                         layoutParams = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
                             setMargins(0, 0, eightDip, 0)
 
