@@ -12,6 +12,7 @@ import android.widget.TextView
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import io.reactivex.subjects.PublishSubject
+import kotterknife.bindOptionalView
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
@@ -244,13 +245,13 @@ class MessengerAdapter(
         internal val container: CardView by bindView(R.id.container)
         internal val text: BBCodeView by bindView(R.id.text)
         internal val time: TextView by bindView(R.id.time)
-        internal val sendStatus: ImageView by bindView(R.id.sendStatus)
+        internal val sendStatus: ImageView? by bindOptionalView(R.id.sendStatus)
 
         init {
             root.setOnClickListener { onContainerClick(it) }
             root.setOnLongClickListener { onContainerLongClick(it) }
 
-            sendStatus.setImageDrawable(IconicsDrawable(text.context, CommunityMaterial.Icon.cmd_clock)
+            sendStatus?.setImageDrawable(IconicsDrawable(text.context, CommunityMaterial.Icon.cmd_clock)
                 .sizeDp(16)
                 .iconColor(text.context))
         }
@@ -317,8 +318,8 @@ class MessengerAdapter(
         }
 
         internal open fun applySendStatus(message: LocalMessage) = when (message.id < 0) {
-            true -> sendStatus.visibility = View.VISIBLE
-            false -> sendStatus.visibility = View.GONE
+            true -> sendStatus?.visibility = View.VISIBLE
+            false -> sendStatus?.visibility = View.GONE
         }
 
         internal open fun applySelection(message: LocalMessage) {

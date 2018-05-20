@@ -14,6 +14,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import io.reactivex.subjects.PublishSubject
+import kotterknife.bindOptionalView
 import kotterknife.bindView
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
@@ -233,13 +234,13 @@ class ChatAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedChatMessage, 
         internal val container: CardView by bindView(R.id.container)
         internal val text: BBCodeView by bindView(R.id.text)
         internal val time: TextView by bindView(R.id.time)
-        internal val sendStatus: ImageView by bindView(R.id.sendStatus)
+        internal val sendStatus: ImageView? by bindOptionalView(R.id.sendStatus)
 
         init {
             root.setOnClickListener { onContainerClick(it) }
             root.setOnLongClickListener { onContainerLongClick(it) }
 
-            sendStatus.setImageDrawable(IconicsDrawable(text.context, CommunityMaterial.Icon.cmd_clock)
+            sendStatus?.setImageDrawable(IconicsDrawable(text.context, CommunityMaterial.Icon.cmd_clock)
                 .sizeDp(16)
                 .iconColor(text.context))
         }
@@ -305,8 +306,8 @@ class ChatAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedChatMessage, 
         }
 
         internal open fun applySendStatus(message: ParsedChatMessage) = when (message.id.toLong() < 0) {
-            true -> sendStatus.visibility = View.VISIBLE
-            false -> sendStatus.visibility = View.GONE
+            true -> sendStatus?.visibility = View.VISIBLE
+            false -> sendStatus?.visibility = View.GONE
         }
 
         internal open fun applySelection(message: ParsedChatMessage) {
