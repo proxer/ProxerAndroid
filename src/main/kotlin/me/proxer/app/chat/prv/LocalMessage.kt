@@ -4,9 +4,7 @@ import android.arch.persistence.room.Entity
 import android.arch.persistence.room.ForeignKey
 import android.arch.persistence.room.Index
 import android.arch.persistence.room.PrimaryKey
-import android.text.SpannableString
 import me.proxer.app.ui.view.bbcode.BBParser
-import me.proxer.app.util.extension.linkify
 import me.proxer.library.entity.messenger.Message
 import me.proxer.library.enums.Device
 import me.proxer.library.enums.MessageAction
@@ -32,10 +30,7 @@ data class LocalMessage(
 ) {
 
     @Transient
-    val styledMessage = when (action) {
-        MessageAction.NONE -> BBParser.parseTextOnly(message).linkify()
-        else -> SpannableString("")
-    }
+    val styledMessage = BBParser.parseSimple(message).optimize()
 
     fun toNonLocalMessage() = Message(id.toString(), conferenceId.toString(), userId, username, message, action, date,
         device)

@@ -6,4 +6,12 @@
     <declare-styleable name="MaxLineFlexboxLayout">
         <attr name="maxLines" format="integer" />
     </declare-styleable>
+    <declare-styleable name="BBCodeView">
+        <attr name="text" format="string" />
+        <attr name="textColor" format="color" />
+        <attr name="textSize" format="dimension" />
+        <attr name="textAppearance" format="reference" />
+        <attr name="maxHeight" format="dimension" />
+        <attr name="spoilerTextColor" format="color" />
+    </declare-styleable>
 </resources>

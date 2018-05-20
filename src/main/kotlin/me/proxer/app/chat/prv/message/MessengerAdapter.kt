@@ -17,14 +17,12 @@ import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.chat.prv.LocalMessage
 import me.proxer.app.chat.prv.message.MessengerAdapter.MessageViewHolder
-import me.proxer.app.util.Utils
+import me.proxer.app.ui.view.bbcode.BBCodeView
+import me.proxer.app.ui.view.bbcode.BBParser
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.iconColor
-import me.proxer.app.util.extension.linkify
-import me.proxer.app.util.extension.setSimpleOnLinkClickListener
-import me.proxer.app.util.extension.setSimpleOnLinkLongClickListener
 import me.proxer.library.enums.MessageAction
 import okhttp3.HttpUrl
 import org.jetbrains.anko.dip
@@ -244,26 +242,17 @@ class MessengerAdapter(
 
         internal val root: ViewGroup by bindView(R.id.root)
         internal val container: CardView by bindView(R.id.container)
-        internal val text: TextView by bindView(R.id.text)
+        internal val text: BBCodeView by bindView(R.id.text)
         internal val time: TextView by bindView(R.id.time)
+        internal val sendStatus: ImageView by bindView(R.id.sendStatus)
 
         init {
             root.setOnClickListener { onContainerClick(it) }
             root.setOnLongClickListener { onContainerLongClick(it) }
 
-            text.setTextColor(ContextCompat.getColor(text.context, R.color.textColorPrimary))
-
-            text.setSimpleOnLinkClickListener { _, link ->
-                if (link.startsWith("@")) {
-                    mentionsClickSubject.onNext(link.trim().drop(1))
-                } else {
-                    linkClickSubject.onNext(Utils.parseAndFixUrl(link))
-                }
-            }
-
-            text.setSimpleOnLinkLongClickListener { _, link ->
-                if (!link.startsWith("@")) linkLongClickSubject.onNext(Utils.parseAndFixUrl(link))
-            }
+            sendStatus.setImageDrawable(IconicsDrawable(text.context, CommunityMaterial.Icon.cmd_clock)
+                .sizeDp(16)
+                .iconColor(text.context))
         }
 
         internal open fun bind(message: LocalMessage, marginTop: Int, marginBottom: Int) {
@@ -320,21 +309,16 @@ class MessengerAdapter(
         }
 
         internal open fun applyMessage(message: LocalMessage) {
-            text.text = message.styledMessage
+            text.setTree(message.styledMessage)
         }
 
         internal open fun applyTime(message: LocalMessage) {
             time.text = message.date.convertToRelativeReadableTime(time.context)
         }
 
-        internal open fun applySendStatus(message: LocalMessage) = if (message.id < 0) {
-            text.setCompoundDrawablesWithIntrinsicBounds(null, null, IconicsDrawable(text.context)
-                .icon(CommunityMaterial.Icon.cmd_clock)
-                .sizeDp(24)
-                .paddingDp(4)
-                .iconColor(text.context), null)
-        } else {
-            text.setCompoundDrawables(null, null, null, null)
+        internal open fun applySendStatus(message: LocalMessage) = when (message.id < 0) {
+            true -> sendStatus.visibility = View.VISIBLE
+            false -> sendStatus.visibility = View.GONE
         }
 
         internal open fun applySelection(message: LocalMessage) {
@@ -398,7 +382,7 @@ class MessengerAdapter(
         override fun onContainerLongClick(v: View) = false
 
         override fun applyMessage(message: LocalMessage) {
-            text.text = generateText(message).linkify(web = false)
+            text.setTree(BBParser.parseSimple(generateText(message)).optimize())
         }
 
         private fun generateText(message: LocalMessage) = when (message.action) {

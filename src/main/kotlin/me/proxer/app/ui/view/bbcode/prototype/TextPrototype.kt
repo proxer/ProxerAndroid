@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Build
 import android.support.v4.util.PatternsCompat
 import android.support.v4.widget.TextViewCompat
+import android.util.TypedValue.COMPLEX_UNIT_PX
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
@@ -72,7 +73,7 @@ object TextPrototype : BBPrototype {
         }
 
         (args[TEXT_COLOR_ARGUMENT] as? Int)?.let { view.setTextColor(it) }
-        (args[TEXT_SIZE_ARGUMENT] as? Float)?.let { view.textSize = it }
+        (args[TEXT_SIZE_ARGUMENT] as? Float)?.let { view.setTextSize(COMPLEX_UNIT_PX, it) }
     }
 
     private fun setListeners(view: BetterLinkGifAwareEmojiTextView) {

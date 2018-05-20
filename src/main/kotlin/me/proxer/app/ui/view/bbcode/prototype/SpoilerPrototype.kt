@@ -34,7 +34,8 @@ object SpoilerPrototype : AutoClosingPrototype {
         return when (childViews.isEmpty()) {
             true -> childViews
             false -> listOf(BBSpoilerView(context).apply {
-                textColor = args[SPOILER_TEXT_COLOR_ARGUMENT] as? Int
+                (args[SPOILER_TEXT_COLOR_ARGUMENT] as? Int)?.let { spoilerTextColor = it }
+
                 spoilerTitle = title
 
                 childViews.forEach { addView(it) }

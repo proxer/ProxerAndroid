@@ -14,13 +14,13 @@ import android.view.Gravity.CENTER_HORIZONTAL
 import android.view.Gravity.CENTER_VERTICAL
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.LinearLayout.LayoutParams.MATCH_PARENT
-import android.widget.LinearLayout.LayoutParams.WRAP_CONTENT
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
+import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
-import me.proxer.app.util.extension.setIconicsImage
 import org.jetbrains.anko.dip
 
 /**
@@ -39,7 +39,13 @@ internal class BBSpoilerView @JvmOverloads constructor(
             handleExpansion()
         }
 
-    var textColor: Int? = null
+    var spoilerTextColor: Int
+        get() = toggleText.currentTextColor
+        set(value) {
+            toggleText.setTextColor(value)
+
+            initToggleButton()
+        }
 
     private var isExpanded = false
         set(value) {
@@ -64,53 +70,23 @@ internal class BBSpoilerView @JvmOverloads constructor(
     private val space = View(context)
     private val container = LinearLayout(context)
 
+    private val fourDip = dip(4)
+    private val twoDip = dip(2)
+
     init {
-        val fourDip = dip(4)
-        val twoDip = dip(2)
-
-        val selectableItemBackground = TypedValue().apply {
-            context.theme.resolveAttribute(R.attr.selectableItemBackground, this, true)
-        }
-
         orientation = VERTICAL
+        layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
 
         toggle.orientation = HORIZONTAL
         container.orientation = VERTICAL
         decoration.orientation = HORIZONTAL
 
-        TextViewCompat.setTextAppearance(toggleText, R.style.TextAppearance_AppCompat_Medium)
-
-        toggle.setOnClickListener { isExpanded = !isExpanded }
-        toggle.setBackgroundResource(selectableItemBackground.resourceId)
-
-        toggleText.setPadding(fourDip, twoDip, fourDip, twoDip)
-        toggleText.setTag(R.id.ignore_tag, Unit)
-        toggleText.typeface = DEFAULT_BOLD
-        toggleText.gravity = CENTER
-
-        textColor?.let { toggleText.setTextColor(ContextCompat.getColor(context, it)) }
-
-        toggleButton.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32)
-
         space.setBackgroundColor(ContextCompat.getColor(context, R.color.divider))
 
-        toggle.addView(toggleText, LayoutParams(WRAP_CONTENT, WRAP_CONTENT, 1f).apply {
-            gravity = CENTER_VERTICAL
-        })
-
-        toggle.addView(toggleButton, LayoutParams(dip(32), dip(32)).apply {
-            gravity = CENTER_VERTICAL
-        })
-
-        decoration.addView(space, LayoutParams(twoDip, MATCH_PARENT).apply {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                marginEnd = fourDip
-            } else {
-                rightMargin = fourDip
-            }
-        })
-
-        decoration.addView(container, LayoutParams(MATCH_PARENT, WRAP_CONTENT))
+        initToggle()
+        initToggleText()
+        initDecoration()
+        initToggleButton()
 
         addView(toggle, LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
             gravity = CENTER_HORIZONTAL
@@ -125,6 +101,52 @@ internal class BBSpoilerView @JvmOverloads constructor(
 
     override fun addView(child: View?) {
         container.addView(child)
+    }
+
+    private fun initToggle() {
+        toggle.addView(toggleText, LayoutParams(WRAP_CONTENT, WRAP_CONTENT, 1f).apply {
+            gravity = CENTER_VERTICAL
+        })
+
+        toggle.addView(toggleButton, LayoutParams(dip(32), dip(32)).apply {
+            gravity = CENTER_VERTICAL
+        })
+    }
+
+    private fun initToggleText() {
+        val selectableItemBackground = TypedValue().apply {
+            context.theme.resolveAttribute(R.attr.selectableItemBackground, this, true)
+        }
+
+        TextViewCompat.setTextAppearance(toggleText, R.style.TextAppearance_AppCompat_Medium)
+
+        toggle.setOnClickListener { isExpanded = !isExpanded }
+        toggle.setBackgroundResource(selectableItemBackground.resourceId)
+
+        toggleText.setPadding(fourDip, twoDip, fourDip, twoDip)
+        toggleText.setTextColor(spoilerTextColor)
+        toggleText.setTag(R.id.ignore_tag, Unit)
+        toggleText.typeface = DEFAULT_BOLD
+        toggleText.gravity = CENTER
+    }
+
+    private fun initDecoration() {
+        decoration.addView(space, LayoutParams(twoDip, MATCH_PARENT).apply {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                marginEnd = fourDip
+            } else {
+                rightMargin = fourDip
+            }
+        })
+
+        decoration.addView(container, LayoutParams(MATCH_PARENT, WRAP_CONTENT))
+    }
+
+    private fun initToggleButton() {
+        toggleButton.setImageDrawable(IconicsDrawable(context, CommunityMaterial.Icon.cmd_chevron_down)
+            .sizeDp(32)
+            .paddingDp(8)
+            .color(spoilerTextColor))
     }
 
     private fun handleExpansion() {

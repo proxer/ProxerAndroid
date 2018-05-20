@@ -1,13 +1,10 @@
 package me.proxer.app.chat.pub.message
 
-import android.text.SpannableString
 import me.proxer.app.ui.view.bbcode.BBParser
-import me.proxer.app.util.extension.linkify
 import me.proxer.library.entity.ProxerDateItem
 import me.proxer.library.entity.ProxerIdItem
 import me.proxer.library.entity.ProxerImageItem
 import me.proxer.library.enums.ChatMessageAction
-import me.proxer.library.enums.MessageAction
 import java.util.Date
 
 /**
@@ -24,10 +21,7 @@ data class ParsedChatMessage(
 ) : ProxerIdItem, ProxerImageItem, ProxerDateItem {
 
     @Transient
-    val styledMessage = when (action) {
-        MessageAction.NONE -> BBParser.parseTextOnly(message).linkify()
-        else -> SpannableString("")
-    }
+    val styledMessage = BBParser.parseSimple(message).optimize()
 
     override fun getId() = id
     override fun getImage() = image

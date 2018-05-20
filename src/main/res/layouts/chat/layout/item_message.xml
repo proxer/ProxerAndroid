@@ -24,33 +24,56 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
-            <me.proxer.app.ui.view.BetterLinkEmojiTextView
-                android:id="@+id/text"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <me.proxer.app.ui.view.bbcode.BBCodeView
+                    android:id="@+id/text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp"
+                    app:spoilerTextColor="@color/textColorPrimary"
+                    app:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    app:textColor="@color/textColorPrimary"
+                    app:textSize="16sp"
+                    tools:ignore="UnusedAttribute"
+                    tools:text="Message looooooooooooooooooooooooooong" />
+
+                <TextView
+                    android:id="@+id/time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:gravity="end"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    tools:text="10 minutes ago" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/sendStatus"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_gravity="center_vertical"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginBottom="8dp"
-                android:importantForAutofill="no"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textSize="16sp"
-                tools:ignore="UnusedAttribute"
-                tools:text="Message looooooooooooooooooooooooooong" />
-
-            <TextView
-                android:id="@+id/time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="8dp"
-                android:gravity="end"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                tools:text="10 minutes ago" />
+                android:visibility="visible"
+                tools:ignore="ContentDescription"
+                tools:src="@drawable/ic_japan"
+                tools:visibility="visible" />
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </FrameLayout>
