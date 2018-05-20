@@ -44,8 +44,10 @@ class ProfileActivity : ImageTabsActivity() {
         private const val USERNAME_EXTRA = "username"
         private const val IMAGE_ID_EXTRA = "image_id"
 
+        private const val ABOUT_SUB_SECTION = "about"
         private const val ANIME_SUB_SECTION = "anime"
         private const val MANGA_SUB_SECTION = "manga"
+        private const val HISTORY_SUB_SECTION = "chronik"
 
         fun navigateTo(
             context: Activity,
@@ -101,8 +103,10 @@ class ProfileActivity : ImageTabsActivity() {
     override val itemToDisplay: Int
         get() = when (intent.action) {
             Intent.ACTION_VIEW -> when (intent.data.pathSegments.getOrNull(2)) {
-                ANIME_SUB_SECTION -> 2
-                MANGA_SUB_SECTION -> 3
+                ABOUT_SUB_SECTION -> 1
+                ANIME_SUB_SECTION -> 3
+                MANGA_SUB_SECTION -> 4
+                HISTORY_SUB_SECTION -> 5
                 else -> 0
             }
             else -> 0
