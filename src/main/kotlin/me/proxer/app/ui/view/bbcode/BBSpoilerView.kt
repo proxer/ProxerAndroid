@@ -107,6 +107,16 @@ internal class BBSpoilerView @JvmOverloads constructor(
         }
 
         toggleText.requestLayout()
+
+        post {
+            // Set MATCH_PARENT only for non-dynamic parents.
+            @Suppress("ConvertTwoComparisonsToRangeCheck")
+            if (decoration.width > 0 && decoration.width < width) {
+                decoration.layoutParams.width = MATCH_PARENT
+                container.layoutParams.width = MATCH_PARENT
+                container.requestLayout()
+            }
+        }
     }
 
     private fun findHost(): BBCodeView? {
