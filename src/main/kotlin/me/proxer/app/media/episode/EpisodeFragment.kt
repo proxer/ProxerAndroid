@@ -1,11 +1,14 @@
 package me.proxer.app.media.episode
 
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.jakewharton.rxbinding2.view.clicks
+import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import kotterknife.bindView
 import me.proxer.app.GlideApp
 import me.proxer.app.R
@@ -16,6 +19,7 @@ import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.extension.autoDispose
+import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.toAnimeLanguage
 import me.proxer.app.util.extension.toGeneralLanguage
 import me.proxer.app.util.extension.unsafeLazy
@@ -56,6 +60,7 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
         get() = recyclerView
 
     private val recyclerView: RecyclerView by bindView(R.id.recyclerView)
+    private val scrollToBottom: FloatingActionButton by bindView(R.id.scrollToBottom)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,6 +91,34 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = adapter
+
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                val currentPosition = (recyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+
+                if (currentPosition >= adapter.itemCount - 1) {
+                    scrollToBottom.animate().alpha(0f).start()
+                } else {
+                    scrollToBottom.animate().alpha(1f).start()
+                }
+            }
+        })
+
+        scrollToBottom.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32, colorRes = android.R.color.white)
+
+        scrollToBottom.clicks()
+            .autoDispose(this)
+            .subscribe {
+                val currentPosition = (recyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+                val userProgress = viewModel.data.value?.firstOrNull()?.userProgress?.minus(1) ?: 0
+
+                val targetPosition = when (currentPosition >= userProgress) {
+                    true -> if (adapter.itemCount == 0) 0 else adapter.itemCount - 1
+                    false -> userProgress
+                }
+
+                (recyclerView.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(targetPosition, 0)
+            }
     }
 
     override fun onDestroyView() {
@@ -112,5 +145,13 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
                 Category.MANGA -> R.string.error_no_data_chapters
             }, ACTION_MESSAGE_HIDE))
         }
+
+        scrollToBottom.visibility = View.VISIBLE
+    }
+
+    override fun hideData() {
+        scrollToBottom.visibility = View.GONE
+
+        super.hideData()
     }
 }
