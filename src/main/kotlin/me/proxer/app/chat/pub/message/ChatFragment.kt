@@ -3,9 +3,11 @@ package me.proxer.app.chat.pub.message
 import android.arch.lifecycle.Observer
 import android.content.ClipData
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
 import android.support.v7.view.ActionMode
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
@@ -41,6 +43,7 @@ import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.inputMethodManager
 import me.proxer.app.util.extension.isAtTop
 import me.proxer.app.util.extension.multilineSnackbar
+import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.unsafeLazy
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.toast
@@ -130,6 +133,7 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
     override val layoutManager by lazy { LinearLayoutManager(context).apply { reverseLayout = true } }
     override var innerAdapter by Delegates.notNull<ChatAdapter>()
 
+    private val scrollToBottom: FloatingActionButton by bindView(R.id.scrollToBottom)
     private val emojiButton: ImageButton by bindView(R.id.emojiButton)
     private val inputContainer: ViewGroup by bindView(R.id.inputContainer)
     private val messageInput: EmojiEditText by bindView(R.id.messageInput)
@@ -198,7 +202,25 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
 
         updateInputVisibility()
 
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                val currentPosition = layoutManager.findFirstVisibleItemPosition()
+
+                if (currentPosition <= 0) {
+                    scrollToBottom.animate().alpha(0f).start()
+                } else {
+                    scrollToBottom.animate().alpha(1f).start()
+                }
+            }
+        })
+
         emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_emoticon))
+
+        scrollToBottom.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32, colorRes = R.color.textColorPrimary)
+
+        scrollToBottom.clicks()
+            .autoDispose(this)
+            .subscribe { layoutManager.scrollToPositionWithOffset(0, 0) }
 
         sendButton.setImageDrawable(IconicsDrawable(requireContext(), CommunityMaterial.Icon.cmd_send)
             .colorRes(requireContext(), R.color.accent)
@@ -249,9 +271,12 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
         super.showData(data)
 
         inputContainer.visibility = View.VISIBLE
+        scrollToBottom.visibility = View.VISIBLE
     }
 
     override fun hideData() {
+        scrollToBottom.visibility = View.GONE
+
         if (innerAdapter.isEmpty()) {
             inputContainer.visibility = View.GONE
         }

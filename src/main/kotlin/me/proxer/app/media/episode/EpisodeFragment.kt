@@ -54,6 +54,7 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
     private val category: Category?
         get() = hostingActivity.category
 
+    private val layoutManager by lazy { LinearLayoutManager(context) }
     private var adapter by Delegates.notNull<EpisodeAdapter>()
 
     override val contentContainer: ViewGroup
@@ -89,12 +90,12 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
         adapter.glide = GlideApp.with(this)
 
         recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.layoutManager = layoutManager
         recyclerView.adapter = adapter
 
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                val currentPosition = (recyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+                val currentPosition = layoutManager.findLastVisibleItemPosition()
 
                 if (currentPosition >= adapter.itemCount - 1) {
                     scrollToBottom.animate().alpha(0f).start()
@@ -104,20 +105,21 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
             }
         })
 
-        scrollToBottom.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32, colorRes = android.R.color.white)
+        scrollToBottom.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32, colorRes = R.color.textColorPrimary)
 
         scrollToBottom.clicks()
             .autoDispose(this)
             .subscribe {
-                val currentPosition = (recyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
-                val userProgress = viewModel.data.value?.firstOrNull()?.userProgress?.minus(1) ?: 0
+                val indexBasedUserProgress = viewModel.data.value?.firstOrNull()?.userProgress?.minus(1)
+                    ?: 0
+                val currentPosition = layoutManager.findLastVisibleItemPosition()
 
-                val targetPosition = when (currentPosition >= userProgress) {
+                val targetPosition = when (currentPosition >= indexBasedUserProgress) {
                     true -> if (adapter.itemCount == 0) 0 else adapter.itemCount - 1
-                    false -> userProgress
+                    false -> indexBasedUserProgress
                 }
 
-                (recyclerView.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(targetPosition, 0)
+                layoutManager.scrollToPositionWithOffset(targetPosition, 0)
             }
     }
 

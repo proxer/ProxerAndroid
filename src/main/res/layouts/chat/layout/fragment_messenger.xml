@@ -18,7 +18,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/inputContainer"
-            android:layout_alignParentTop="true">
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="@dimen/item_margin">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerView"
@@ -37,6 +38,22 @@
 
         </android.support.v4.widget.SwipeRefreshLayout>
 
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/scrollToBottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/inputContainer"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:alpha="0"
+            android:visibility="gone"
+            app:backgroundTint="@color/card_background"
+            app:fabSize="mini"
+            app:useCompatPadding="true"
+            tools:alpha="1"
+            tools:src="@drawable/ic_japan"
+            tools:visibility="visible" />
+
         <include
             android:id="@+id/inputContainer"
             layout="@layout/layout_chat_bar"
@@ -44,7 +61,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="@dimen/item_margin"
-            android:layout_marginTop="@dimen/item_margin"
             android:layout_marginRight="@dimen/item_margin"
             android:layout_marginBottom="@dimen/item_margin"
             android:visibility="gone"
