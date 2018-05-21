@@ -8,7 +8,7 @@ object StreamResolverFactory {
     private val resolvers = arrayOf(AkibaPassStreamResolver(), AmazonPrimeVideoStreamResolver(),
         AnimeOnDemandStreamResolver(), AuravidStreamResolver(), WatchboxStreamResolver(), MessageStreamResolver(),
         CrunchyrollStreamResolver(), DailymotionStreamResolver(), Mp4UploadStreamResolver(),
-        NetflixStreamResolver(), OpenloadStreamResolver(), ProsiebenMAXXStreamResolver(), ProxerStreamResolver(),
+        NetflixStreamResolver(), ProsiebenMAXXStreamResolver(), ProxerStreamResolver(),
         StreamcloudStreamResolver(), VideoweedStreamResolver(), ViewsterStreamResolver(),
         YourUploadStreamResolver(), YouTubeStreamResolver())
 
