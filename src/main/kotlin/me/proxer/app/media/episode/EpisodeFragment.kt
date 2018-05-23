@@ -97,10 +97,9 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 val currentPosition = layoutManager.findLastVisibleItemPosition()
 
-                if (currentPosition >= adapter.itemCount - 1) {
-                    scrollToBottom.animate().alpha(0f).start()
-                } else {
-                    scrollToBottom.animate().alpha(1f).start()
+                scrollToBottom.visibility = when (currentPosition) {
+                    adapter.itemCount - 1 -> View.GONE
+                    else -> View.VISIBLE
                 }
             }
         })
@@ -110,8 +109,7 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
         scrollToBottom.clicks()
             .autoDispose(this)
             .subscribe {
-                val indexBasedUserProgress = viewModel.data.value?.firstOrNull()?.userProgress?.minus(1)
-                    ?: 0
+                val indexBasedUserProgress = viewModel.data.value?.firstOrNull()?.userProgress?.minus(1) ?: 0
                 val currentPosition = layoutManager.findLastVisibleItemPosition()
 
                 val targetPosition = when (currentPosition >= indexBasedUserProgress) {
@@ -119,6 +117,7 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
                     false -> indexBasedUserProgress
                 }
 
+                recyclerView.stopScroll()
                 layoutManager.scrollToPositionWithOffset(targetPosition, 0)
             }
     }

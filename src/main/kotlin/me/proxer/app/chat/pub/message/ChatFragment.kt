@@ -207,10 +207,9 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 val currentPosition = layoutManager.findFirstVisibleItemPosition()
 
-                if (currentPosition <= 0) {
-                    scrollToBottom.animate().alpha(0f).start()
-                } else {
-                    scrollToBottom.animate().alpha(1f).start()
+                scrollToBottom.visibility = when (currentPosition) {
+                    0 -> View.GONE
+                    else -> View.VISIBLE
                 }
             }
         })
@@ -221,7 +220,10 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
 
         scrollToBottom.clicks()
             .autoDispose(this)
-            .subscribe { layoutManager.scrollToPositionWithOffset(0, 0) }
+            .subscribe {
+                recyclerView.stopScroll()
+                layoutManager.scrollToPositionWithOffset(0, 0)
+            }
 
         sendButton.setImageDrawable(IconicsDrawable(requireContext(), CommunityMaterial.Icon.cmd_send)
             .colorRes(requireContext(), R.color.accent)
