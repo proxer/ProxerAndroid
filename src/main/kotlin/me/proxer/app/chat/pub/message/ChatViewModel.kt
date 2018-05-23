@@ -1,5 +1,7 @@
 package me.proxer.app.chat.pub.message
 
+import com.gojuno.koptional.Some
+import com.gojuno.koptional.toOptional
 import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -39,8 +41,10 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ParsedChatM
             .map { it.map { it.toParsedMessage() } }
 
     val sendMessageError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
+    val draft = ResettingMutableLiveData<String?>()
 
     private var pollingDisposable: Disposable? = null
+    private var draftDisposable: Disposable? = null
 
     private val sendMessageQueue: Queue<ParsedChatMessage> = LinkedList()
     private val sentMessageIds = mutableSetOf<String>()
@@ -49,9 +53,11 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ParsedChatM
     private var currentFirstId = "0"
 
     override fun onCleared() {
+        draftDisposable?.dispose()
         pollingDisposable?.dispose()
         sendMessageDisposable?.dispose()
 
+        draftDisposable = null
         pollingDisposable = null
         sendMessageDisposable = null
 
@@ -86,6 +92,28 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ParsedChatM
                     error.value = ErrorUtils.handle(it)
                 }
             })
+    }
+
+    fun loadDraft() {
+        draftDisposable?.dispose()
+        draftDisposable = Single.fromCallable { StorageHelper.getMessageDraft(chatRoomId).toOptional() }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { it -> if (it is Some) draft.value = it.value }
+    }
+
+    fun updateDraft(draft: String) {
+        draftDisposable?.dispose()
+        draftDisposable = Single
+            .fromCallable {
+                if (draft.isBlank()) {
+                    StorageHelper.deleteMessageDraft(chatRoomId)
+                } else {
+                    StorageHelper.putMessageDraft(chatRoomId, draft)
+                }
+            }
+            .subscribeOn(Schedulers.io())
+            .subscribe()
     }
 
     fun sendMessage(text: String) {

@@ -1,10 +1,13 @@
 package me.proxer.app.chat.prv.message
 
 import android.arch.lifecycle.MediatorLiveData
+import com.gojuno.koptional.Some
+import com.gojuno.koptional.toOptional
 import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.bus
@@ -17,6 +20,7 @@ import me.proxer.app.chat.prv.sync.MessengerJob
 import me.proxer.app.exception.ChatMessageException
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
+import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.subscribeAndLogErrors
 
@@ -103,8 +107,12 @@ class MessengerViewModel(initialConference: LocalConference) : PagedViewModel<Lo
         }
     }
 
+    val draft = ResettingMutableLiveData<String?>()
+
     private val safeConference: LocalConference
         get() = conference.value ?: throw IllegalArgumentException("Conference cannot be null")
+
+    private var draftDisposable: Disposable? = null
 
     init {
         conference.value = initialConference
@@ -119,6 +127,37 @@ class MessengerViewModel(initialConference: LocalConference) : PagedViewModel<Lo
                     error.value = ErrorUtils.handle(event.error)
                 }
             }
+    }
+
+    override fun onCleared() {
+        draftDisposable?.dispose()
+        draftDisposable = null
+
+        super.onCleared()
+    }
+
+    fun loadDraft() {
+        draftDisposable?.dispose()
+        draftDisposable = Single.fromCallable {
+            StorageHelper.getMessageDraft(safeConference.id.toString()).toOptional()
+        }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { it -> if (it is Some) draft.value = it.value }
+    }
+
+    fun updateDraft(draft: String) {
+        draftDisposable?.dispose()
+        draftDisposable = Single
+            .fromCallable {
+                if (draft.isBlank()) {
+                    StorageHelper.deleteMessageDraft(safeConference.id.toString())
+                } else {
+                    StorageHelper.putMessageDraft(safeConference.id.toString(), draft)
+                }
+            }
+            .subscribeOn(Schedulers.io())
+            .subscribe()
     }
 
     fun sendMessage(text: String) {

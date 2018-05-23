@@ -16,6 +16,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ImageButton
 import android.widget.ImageView
 import com.jakewharton.rxbinding2.view.clicks
+import com.jakewharton.rxbinding2.widget.textChanges
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
@@ -233,6 +234,23 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
                     }
                 }
             }
+
+        messageInput.textChanges()
+            .skipInitialValue()
+            .autoDispose(this)
+            .subscribe { message ->
+                viewModel.updateDraft(message.toString())
+
+                messageInput.requestFocus()
+            }
+
+        viewModel.draft.observe(this, Observer {
+            if (it != null && messageInput.text.isBlank()) messageInput.setText(it)
+        })
+
+        if (savedInstanceState == null) {
+            viewModel.loadDraft()
+        }
     }
 
     override fun onResume() {

@@ -17,6 +17,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ImageButton
 import android.widget.ImageView
 import com.jakewharton.rxbinding2.view.clicks
+import com.jakewharton.rxbinding2.widget.textChanges
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
@@ -245,12 +246,29 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
                 }
             }
 
+        messageInput.textChanges()
+            .skipInitialValue()
+            .autoDispose(this)
+            .subscribe { message ->
+                viewModel.updateDraft(message.toString())
+
+                messageInput.requestFocus()
+            }
+
         viewModel.sendMessageError.observe(this, Observer {
             if (it != null) {
                 multilineSnackbar(root, getString(R.string.error_chat_send_message, getString(it.message)),
                     Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity))
             }
         })
+
+        viewModel.draft.observe(this, Observer {
+            if (it != null && messageInput.text.isBlank()) messageInput.setText(it)
+        })
+
+        if (savedInstanceState == null) {
+            viewModel.loadDraft()
+        }
 
         innerAdapter.glide = GlideApp.with(this)
     }

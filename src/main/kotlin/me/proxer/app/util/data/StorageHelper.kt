@@ -22,6 +22,7 @@ object StorageHelper {
     private const val CHAT_INTERVAL = "chat_interval"
     private const val CONFERENCES_SYNCHRONIZED = "conferences_synchronized"
     private const val LAST_TAG_UPDATE_DATE = "last_tag_update_date"
+    private const val MESSAGE_DRAFT_PREFIX = "message_draft_"
 
     private const val DEFAULT_CHAT_INTERVAL = 10_000L
     private const val MAX_CHAT_INTERVAL = 850_000L
@@ -83,6 +84,12 @@ object StorageHelper {
 
         safePut(CHAT_INTERVAL, DEFAULT_CHAT_INTERVAL)
     }
+
+    fun putMessageDraft(id: String, draft: String) = safePut("$MESSAGE_DRAFT_PREFIX$id", draft)
+
+    fun getMessageDraft(id: String): String? = safeGet("$MESSAGE_DRAFT_PREFIX$id")
+
+    fun deleteMessageDraft(id: String) = safeDelete("$MESSAGE_DRAFT_PREFIX$id")
 
     @Suppress("NOTHING_TO_INLINE")
     private inline fun <T> safeGet(key: String, defaultValue: T? = null): T {
