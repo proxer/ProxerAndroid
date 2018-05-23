@@ -70,7 +70,6 @@ android {
 
         debug {
             multiDexEnabled true
-            multiDexKeepProguard file('config/multidex/multidex-config.pro')
 
             archivesBaseName = "app-${defaultConfig.versionName}"
             buildConfigField 'String', 'PROXER_API_KEY', "\"${getFromSecrets('PROXER_API_KEY')}\""
