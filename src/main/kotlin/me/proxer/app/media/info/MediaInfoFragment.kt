@@ -402,7 +402,7 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
                 badge.setBackgroundColor(ContextCompat.getColor(badge.context, R.color.colorAccent))
                 badge.setOnClickListener { onClick?.invoke(items[index]) }
 
-                if (layout is MaxLineFlexboxLayout && !layout.canAddView(badge)) {
+                if (layout is MaxLineFlexboxLayout && layout.width > 0 && !layout.canAddView(badge)) {
                     layout.enableShowAllButton {
                         layout.maxLines = Int.MAX_VALUE
 
