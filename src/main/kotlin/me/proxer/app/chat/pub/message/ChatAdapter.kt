@@ -51,6 +51,9 @@ class ChatAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedChatMessage, 
     val selectedMessages: List<ParsedChatMessage>
         get() = data.filter { messageSelectionMap[it.id] == true }.sortedBy { it.date }
 
+    val enqueuedMessageCount: Int
+        get() = data.takeWhile { it.id.toLong() < 0 }.size
+
     private var layoutManager: RecyclerView.LayoutManager? = null
 
     private val messageSelectionMap: ParcelableStringBooleanMap

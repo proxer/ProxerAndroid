@@ -7,8 +7,10 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.jakewharton.rxbinding2.support.v7.widget.scrollEvents
 import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotterknife.bindView
 import me.proxer.app.GlideApp
 import me.proxer.app.R
@@ -25,6 +27,7 @@ import me.proxer.app.util.extension.toGeneralLanguage
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Category
 import org.jetbrains.anko.bundleOf
+import java.util.concurrent.TimeUnit
 import kotlin.properties.Delegates
 
 /**
@@ -93,8 +96,11 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = adapter
 
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+        recyclerView.scrollEvents()
+            .debounce(10, TimeUnit.MILLISECONDS)
+            .observeOn(AndroidSchedulers.mainThread())
+            .autoDispose(this)
+            .subscribe {
                 val currentPosition = layoutManager.findLastVisibleItemPosition()
 
                 scrollToBottom.visibility = when (currentPosition) {
@@ -102,7 +108,6 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
                     else -> View.VISIBLE
                 }
             }
-        })
 
         scrollToBottom.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32, colorRes = R.color.textColorPrimary)
 
@@ -146,13 +151,5 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
                 Category.MANGA -> R.string.error_no_data_chapters
             }, ACTION_MESSAGE_HIDE))
         }
-
-        scrollToBottom.visibility = View.VISIBLE
-    }
-
-    override fun hideData() {
-        scrollToBottom.visibility = View.GONE
-
-        super.hideData()
     }
 }

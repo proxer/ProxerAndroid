@@ -7,7 +7,6 @@ import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
 import android.support.v7.view.ActionMode
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
@@ -16,6 +15,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageButton
 import android.widget.ImageView
+import com.jakewharton.rxbinding2.support.v7.widget.scrollEvents
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.textChanges
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
@@ -48,6 +48,7 @@ import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.unsafeLazy
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.toast
+import java.util.concurrent.TimeUnit
 import kotlin.properties.Delegates
 
 /**
@@ -203,16 +204,18 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
 
         updateInputVisibility()
 
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+        recyclerView.scrollEvents()
+            .debounce(10, TimeUnit.MILLISECONDS)
+            .observeOn(AndroidSchedulers.mainThread())
+            .autoDispose(this)
+            .subscribe {
                 val currentPosition = layoutManager.findFirstVisibleItemPosition()
 
-                scrollToBottom.visibility = when (currentPosition) {
-                    0 -> View.GONE
-                    else -> View.VISIBLE
+                scrollToBottom.visibility = when (currentPosition < innerAdapter.enqueuedMessageCount) {
+                    true -> View.GONE
+                    false -> View.VISIBLE
                 }
             }
-        })
 
         emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_emoticon))
 
@@ -291,11 +294,9 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
         super.showData(data)
 
         inputContainer.visibility = View.VISIBLE
-        scrollToBottom.visibility = View.VISIBLE
     }
 
     override fun hideData() {
-        scrollToBottom.visibility = View.GONE
 
         if (innerAdapter.isEmpty()) {
             inputContainer.visibility = View.GONE

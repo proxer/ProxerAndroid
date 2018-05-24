@@ -51,6 +51,9 @@ class MessengerAdapter(
     val selectedMessages: List<LocalMessage>
         get() = data.filter { messageSelectionMap[it.id.toString()] == true }.sortedBy { it.date }
 
+    val enqueuedMessageCount: Int
+        get() = data.takeWhile { it.id < 0 }.size
+
     private var layoutManager: RecyclerView.LayoutManager? = null
 
     private val messageSelectionMap: ParcelableStringBooleanMap

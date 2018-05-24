@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.view.ActionMode
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
@@ -15,6 +14,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageButton
 import android.widget.ImageView
+import com.jakewharton.rxbinding2.support.v7.widget.scrollEvents
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.textChanges
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
@@ -23,6 +23,7 @@ import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.vanniktech.emoji.EmojiEditText
 import com.vanniktech.emoji.EmojiPopup
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import kotterknife.bindView
 import me.proxer.app.MainApplication.Companion.bus
@@ -192,16 +193,17 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
             messageInput.setText(hostingActivity.initialMessage)
         }
 
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+        recyclerView.scrollEvents()
+            .observeOn(AndroidSchedulers.mainThread())
+            .autoDispose(this)
+            .subscribe {
                 val currentPosition = layoutManager.findFirstVisibleItemPosition()
 
-                scrollToBottom.visibility = when (currentPosition) {
-                    0 -> View.GONE
-                    else -> View.VISIBLE
+                scrollToBottom.visibility = when (currentPosition < innerAdapter.enqueuedMessageCount) {
+                    true -> View.GONE
+                    false -> View.VISIBLE
                 }
             }
-        })
 
         emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_emoticon))
 
@@ -292,12 +294,9 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
         }
 
         inputContainer.visibility = View.VISIBLE
-        scrollToBottom.visibility = View.VISIBLE
     }
 
     override fun hideData() {
-        scrollToBottom.visibility = View.GONE
-
         if (innerAdapter.isEmpty()) {
             inputContainer.visibility = View.GONE
         }
