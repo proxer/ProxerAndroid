@@ -211,7 +211,7 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
             .subscribe {
                 val currentPosition = layoutManager.findFirstVisibleItemPosition()
 
-                scrollToBottom.visibility = when (currentPosition < innerAdapter.enqueuedMessageCount) {
+                scrollToBottom.visibility = when (currentPosition <= innerAdapter.enqueuedMessageCount) {
                     true -> View.GONE
                     false -> View.VISIBLE
                 }
