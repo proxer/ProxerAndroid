@@ -151,12 +151,6 @@ dependencies {
     compileOnlyDependencies.values().each { compileOnly it }
     kaptDependencies.values().each { kapt it }
 
-    transitiveImplementationDependencies.values().each {
-        implementation(it) {
-            transitive = true
-        }
-    }
-
     excludingImplementationDependencies.values().each { dependency ->
         implementation(dependency.dependency) {
             dependency.exclusions.each {

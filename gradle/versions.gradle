@@ -45,10 +45,11 @@ ext {
     autoDisposeVersion = '0.8.0'
 
     // UI components
-    aboutLibrariesVersion = '6.0.8'
+    iconicsVersion = 'ea73674bd3'
     materialDrawerVersion = '6.0.7'
-    iconicsVersion = '3.0.3'
-    communityMaterialTypefaceVersion = '2.0.46.1'
+    aboutLibrariesVersion = '6.0.8'
+    materializeVersion = '1.1.2'
+    fastadapterVersion = '3.2.5'
     crossfaderVersion = '1.5.2'
     materialAboutVersion = '2.3.0'
     subsamplingScaleImageViewVersion = '3.10.0'

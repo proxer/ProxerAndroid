@@ -42,9 +42,14 @@ ext {
             autoDispose                      : "com.uber.autodispose:autodispose-kotlin:$autoDisposeVersion",
             autoDisposeArchitectureComponents: "com.uber.autodispose:autodispose-android-archcomponents-kotlin:$autoDisposeVersion",
 
-            iconics                          : "com.mikepenz:iconics-core:$iconicsVersion@aar",
-            iconicsViews                     : "com.mikepenz:iconics-views:$iconicsVersion@aar",
-            communityMaterialTypeface        : "com.mikepenz:community-material-typeface:$communityMaterialTypefaceVersion@aar",
+            iconics                          : "com.github.rubengees.Android-Iconics:library-core:$iconicsVersion@aar",
+            iconicsViews                     : "com.github.rubengees.Android-Iconics:iconics-view-library:$iconicsVersion@aar",
+            communityMaterialTypeface        : "com.github.rubengees.Android-Iconics:community-material-typeface-library:$iconicsVersion@aar",
+            materialDrawer                   : "com.mikepenz:materialdrawer:$materialDrawerVersion@aar",
+            aboutLibraries                   : "com.mikepenz:aboutlibraries:$aboutLibrariesVersion@aar",
+            materialize                      : "com.mikepenz:materialize:$materializeVersion@aar",
+            fastadapter                      : "com.mikepenz:fastadapter:$fastadapterVersion@aar",
+            fastadapterExpandable            : "com.mikepenz:fastadapter-extensions-expandable:$fastadapterVersion@aar",
             crossfader                       : "com.mikepenz:crossfader:$crossfaderVersion@aar",
             materialAbout                    : "com.github.daniel-stoneuk:material-about-library:$materialAboutVersion",
             subsamplingScaleImageView        : "com.davemorrissey.labs:subsampling-scale-image-view:$subsamplingScaleImageViewVersion",
@@ -101,11 +106,6 @@ ext {
             roomCompiler  : "android.arch.persistence.room:compiler:$roomVersion",
             glideCompiler : "com.github.bumptech.glide:compiler:$glideVersion",
             alfredCompiler: "com.github.rubengees.Alfred:compiler:$alfredVersion",
-    ]
-
-    transitiveImplementationDependencies = [
-            aboutLibraries: "com.mikepenz:aboutlibraries:$aboutLibrariesVersion@aar",
-            materialDrawer: "com.mikepenz:materialdrawer:$materialDrawerVersion@aar",
     ]
 
     excludingImplementationDependencies = [
