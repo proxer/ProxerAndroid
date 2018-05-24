@@ -26,23 +26,23 @@ apply plugin: 'io.gitlab.arturbosch.detekt'
 apply plugin: 'com.novoda.android-command'
 
 android {
-    compileSdkVersion project.ext.compileSdkVersion
+    compileSdkVersion rootProject.ext.compileSdkVersion
 
     dexOptions {
         preDexLibraries !isCI()
     }
 
     compileOptions {
-        sourceCompatibility project.ext.javaVersion
-        targetCompatibility project.ext.javaVersion
+        sourceCompatibility javaVersion
+        targetCompatibility javaVersion
     }
 
     defaultConfig {
         applicationId 'me.proxer.app'
-        minSdkVersion project.ext.minSdkVersion
-        targetSdkVersion project.ext.targetSdkVersion
-        versionCode project.ext.appVersionMajor * 1000000 + project.ext.appVersionMinor * 10000 + project.ext.appVersionPatch * 100
-        versionName "${project.ext.appVersionMajor}.${project.ext.appVersionMinor}.${project.ext.appVersionPatch}"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode appVersionMajor * 1000000 + appVersionMinor * 10000 + appVersionPatch * 100
+        versionName "$appVersionMajor.$appVersionMinor.$appVersionPatch"
 
         vectorDrawables.useSupportLibrary true
         resConfigs 'de'
@@ -114,9 +114,13 @@ android {
     }
 
     lintOptions {
+        mkdir("$buildDir/reports/lint")
+
         warningsAsErrors = true
 
-        lintConfig new File(rootDir, 'config/lint/lint.xml')
+        lintConfig file("$rootDir/config/lint/lint.xml")
+        xmlOutput file("$buildDir/reports/lint/lint-results.xml")
+        htmlOutput file("$buildDir/reports/lint/lint-results.html")
     }
 
     packagingOptions {
@@ -181,7 +185,7 @@ ktlint {
 }
 
 wrapper {
-    gradleVersion project.ext.gradleVersion
+    gradleVersion rootProject.ext.gradleVersion
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
@@ -199,7 +203,7 @@ static getResSrcDirs() {
     Set<String> result = []
 
     new File(layoutsPath).eachFile(FileType.DIRECTORIES) {
-        result.add("${layoutsPath}/${it.name}")
+        result.add("$layoutsPath/$it.name")
     }
 
     return result
@@ -219,7 +223,8 @@ static String getFromSecrets(String key) {
     }
 
     if (!result.containsKey(key)) {
-        throw new GradleException("Please include a value for $key in your secrets.properties file to perform this action.")
+        throw new GradleException("Please include a value for $key in your secrets.properties " +
+                "file to perform this action.")
     }
 
     return result[key]
