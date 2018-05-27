@@ -384,6 +384,7 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
             onClick = { IndustryActivity.navigateTo(requireActivity(), it.id, it.name) })
     }
 
+    @Suppress("LabeledExpression")
     private fun <T> bindChips(
         layout: FlexboxLayout,
         items: List<T>,
@@ -391,6 +392,7 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
         onClick: ((T) -> Unit)? = null
     ) {
         layout.post {
+            if (layout.width <= 0) return@post
             if (layout.childCount > 0) layout.removeAllViews()
 
             for ((index, mappedItem) in items.map(mapFunction).withIndex()) {
@@ -402,7 +404,7 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
                 badge.setBackgroundColor(ContextCompat.getColor(badge.context, R.color.colorAccent))
                 badge.setOnClickListener { onClick?.invoke(items[index]) }
 
-                if (layout is MaxLineFlexboxLayout && layout.width > 0 && !layout.canAddView(badge)) {
+                if (layout is MaxLineFlexboxLayout && !layout.canAddView(badge)) {
                     layout.enableShowAllButton {
                         layout.maxLines = Int.MAX_VALUE
 
