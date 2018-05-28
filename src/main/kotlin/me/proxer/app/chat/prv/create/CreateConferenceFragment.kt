@@ -23,10 +23,8 @@ import com.mikepenz.iconics.typeface.IIcon
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import com.vanniktech.emoji.EmojiEditText
 import com.vanniktech.emoji.EmojiPopup
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Predicate
-import io.reactivex.schedulers.Schedulers
 import kotterknife.bindView
 import me.proxer.app.GlideApp
 import me.proxer.app.R
@@ -254,33 +252,24 @@ class CreateConferenceFragment : BaseFragment() {
             .subscribe { emojiPopup.toggle() }
 
         sendButton.clicks()
-            .flatMap {
-                Observable.fromCallable {
-                    Validators.validateLogin()
+            .map {
+                Validators.validateLogin()
 
-                    val topic = topicInput.text.toString()
-                    val firstMessage = messageInput.text.toString()
-                    val participants = innerAdapter.participants
+                val topic = topicInput.text.toString()
+                val firstMessage = messageInput.text.toString()
+                val participants = innerAdapter.participants
 
-                    when {
-                        isGroup && topic.isBlank() -> throw TopicEmptyException()
-                        firstMessage.isBlank() -> throw InvalidInputException(requireContext()
-                            .getString(R.string.error_missing_message))
-                        participants.isEmpty() -> throw InvalidInputException(requireContext()
-                            .getString(R.string.error_missing_participants))
-                    }
-
-                    Triple(topic, firstMessage, participants)
-                }.subscribeOn(Schedulers.io())
-            }
-            .observeOn(AndroidSchedulers.mainThread())
-            .autoDispose(this)
-            .subscribeAndLogErrors({ (topic, firstMessage, participants) ->
-                when (isGroup) {
-                    true -> viewModel.createGroup(topic, firstMessage, participants)
-                    false -> viewModel.createChat(firstMessage, participants.first())
+                when {
+                    isGroup && topic.isBlank() -> throw TopicEmptyException()
+                    firstMessage.isBlank() -> throw InvalidInputException(requireContext()
+                        .getString(R.string.error_missing_message))
+                    participants.isEmpty() -> throw InvalidInputException(requireContext()
+                        .getString(R.string.error_missing_participants))
                 }
-            }, {
+
+                Triple(topic, firstMessage, participants)
+            }
+            .doOnError {
                 when (it) {
                     is InvalidInputException -> it.message?.let {
                         multilineSnackbar(root, it)
@@ -294,7 +283,16 @@ class CreateConferenceFragment : BaseFragment() {
                             action.toClickListener(hostingActivity))
                     }
                 }
-            })
+            }
+            .retry()
+            .observeOn(AndroidSchedulers.mainThread())
+            .autoDispose(this)
+            .subscribeAndLogErrors { (topic, firstMessage, participants) ->
+                when (isGroup) {
+                    true -> viewModel.createGroup(topic, firstMessage, participants)
+                    false -> viewModel.createChat(firstMessage, participants.first())
+                }
+            }
 
         if (isGroup) {
             topicInput.textChanges()
