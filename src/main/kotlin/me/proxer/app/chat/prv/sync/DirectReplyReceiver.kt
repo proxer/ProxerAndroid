@@ -41,7 +41,7 @@ class DirectReplyReceiver : BroadcastReceiver() {
                     MessengerNotifications.cancelIndividual(context, conferenceId)
                 }
 
-                MessengerJob.scheduleSynchronization()
+                MessengerWorker.enqueueSynchronization()
             }
             .subscribeOn(Schedulers.io())
             .subscribeAndLogErrors()

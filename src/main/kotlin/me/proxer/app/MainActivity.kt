@@ -16,7 +16,7 @@ import me.proxer.app.bookmark.BookmarkFragment
 import me.proxer.app.chat.ChatContainerFragment
 import me.proxer.app.media.list.MediaListFragment
 import me.proxer.app.news.NewsFragment
-import me.proxer.app.notification.NotificationJob
+import me.proxer.app.notification.NotificationWorker
 import me.proxer.app.settings.AboutFragment
 import me.proxer.app.settings.SettingsFragment
 import me.proxer.app.ui.view.RatingDialog
@@ -122,7 +122,7 @@ class MainActivity : DrawerActivity() {
                             PreferenceHelper.setNewsNotificationsEnabled(this, option.isActivated)
                             PreferenceHelper.setAccountNotificationsEnabled(this, option.isActivated)
 
-                            NotificationJob.scheduleIfPossible(this)
+                            NotificationWorker.enqueueIfPossible(this)
                         }
                         2 -> PreferenceHelper.setVerticalReaderEnabled(this, option.isActivated)
                     }

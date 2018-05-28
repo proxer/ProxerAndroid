@@ -1,76 +1,93 @@
 package me.proxer.app.notification
 
 import android.content.Context
-import com.evernote.android.job.Job
-import com.evernote.android.job.JobManager
-import com.evernote.android.job.JobRequest
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.Worker
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.news.NewsNotificationEvent
 import me.proxer.app.news.NewsNotifications
-import me.proxer.app.util.JobUtils
+import me.proxer.app.util.WorkerUtils
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
+import me.proxer.library.api.ProxerCall
 import me.proxer.library.entity.notifications.NotificationInfo
 import me.proxer.library.enums.NotificationFilter
+import java.util.concurrent.TimeUnit
 
 /**
  * @author Ruben Gees
  */
-class NotificationJob : Job() {
+class NotificationWorker : Worker() {
 
     companion object {
-        const val TAG = "notification_job"
+        private const val TAG = "NotificationWorker"
 
-        fun scheduleIfPossible(context: Context) {
+        fun enqueueIfPossible(context: Context) {
             val areNotificationsEnabled = PreferenceHelper.areNewsNotificationsEnabled(context) ||
                 PreferenceHelper.areAccountNotificationsEnabled(context)
 
+            cancel()
+
             if (areNotificationsEnabled) {
-                schedule(context)
-            } else {
-                cancel()
+                enqueue(context)
             }
         }
 
         fun cancel() {
-            JobManager.instance().cancelAllForTag(TAG)
+            WorkManager.getInstance().cancelAllWorkByTag(TAG)
         }
 
-        private fun schedule(context: Context) {
+        private fun enqueue(context: Context) {
             val interval = PreferenceHelper.getNotificationsInterval(context) * 1000 * 60
 
-            JobRequest.Builder(TAG)
-                .setPeriodic(interval)
-                .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
-                .setUpdateCurrent(true)
-                .build()
-                .scheduleAsync()
+            WorkManager.getInstance().enqueue(
+                PeriodicWorkRequestBuilder<NotificationWorker>(interval, TimeUnit.MILLISECONDS)
+                    .setConstraints(Constraints.Builder()
+                        .setRequiredNetworkType(NetworkType.CONNECTED)
+                        .build())
+                    .addTag(TAG)
+                    .build())
         }
     }
 
-    override fun onRunJob(params: Params) = try {
+    private var currentCall: ProxerCall<*>? = null
+
+    override fun onStopped() {
+        currentCall?.cancel()
+    }
+
+    override fun doWork() = try {
         val notificationInfo = when (StorageHelper.isLoggedIn) {
-            true -> api.notifications().notificationInfo().build().execute()
+            true -> api.notifications().notificationInfo()
+                .build()
+                .also { currentCall = it }
+                .execute()
             false -> null
         }
 
-        if (PreferenceHelper.areNewsNotificationsEnabled(context)) {
-            fetchNews(context, notificationInfo)
+        val areNewsNotificationsEnabled = PreferenceHelper.areNewsNotificationsEnabled(applicationContext)
+        val areAccountNotificationsEnabled = PreferenceHelper.areAccountNotificationsEnabled(applicationContext)
+
+        if (!isStopped && areNewsNotificationsEnabled) {
+            fetchNews(applicationContext, notificationInfo)
         }
 
-        if (PreferenceHelper.areAccountNotificationsEnabled(context) && notificationInfo != null) {
-            fetchAccountNotifications(context, notificationInfo)
+        if (!isStopped && areAccountNotificationsEnabled && notificationInfo != null) {
+            fetchAccountNotifications(applicationContext, notificationInfo)
         }
 
-        Result.SUCCESS
+        WorkerResult.SUCCESS
     } catch (error: Throwable) {
-        if (JobUtils.shouldShowError(params, error)) {
-            AccountNotifications.showError(context, error)
+        if (!isStopped && WorkerUtils.shouldShowError(error)) {
+            AccountNotifications.showError(applicationContext, error)
 
-            Result.FAILURE
+            WorkerResult.FAILURE
         } else {
-            Result.RESCHEDULE
+            WorkerResult.RETRY
         }
     }
 
@@ -82,13 +99,14 @@ class NotificationJob : Job() {
                 .page(0)
                 .limit(notificationInfo?.news ?: 100)
                 .build()
+                .also { currentCall = it }
                 .safeExecute()
                 .filter { it.date.after(lastNewsDate) }
                 .sortedByDescending { it.date }
         }
 
         newNews.firstOrNull()?.date?.let {
-            if (it != lastNewsDate && !bus.post(NewsNotificationEvent())) {
+            if (!isStopped && it != lastNewsDate && !bus.post(NewsNotificationEvent())) {
                 NewsNotifications.showOrUpdate(context, newNews)
 
                 StorageHelper.lastNewsDate = it
@@ -105,11 +123,12 @@ class NotificationJob : Job() {
                 .limit(notificationInfo.notifications)
                 .filter(NotificationFilter.UNREAD)
                 .build()
+                .also { currentCall = it }
                 .safeExecute()
         }
 
         newNotifications.firstOrNull()?.date?.let {
-            if (it != lastNotificationsDate && !bus.post(AccountNotificationEvent())) {
+            if (!isStopped && it != lastNotificationsDate && !bus.post(AccountNotificationEvent())) {
                 AccountNotifications.showOrUpdate(context, newNotifications)
 
                 StorageHelper.lastNotificationsDate = it

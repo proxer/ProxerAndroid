@@ -11,7 +11,7 @@ import me.proxer.app.MainApplication.Companion.messengerDao
 import me.proxer.app.base.BaseViewModel
 import me.proxer.app.chat.prv.LocalConference
 import me.proxer.app.chat.prv.sync.MessengerErrorEvent
-import me.proxer.app.chat.prv.sync.MessengerJob
+import me.proxer.app.chat.prv.sync.MessengerWorker
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
 import me.proxer.app.util.data.StorageHelper
@@ -31,7 +31,7 @@ class ConferenceViewModel(searchQuery: String) : BaseViewModel<List<LocalConfere
         get() = Single
             .fromCallable { Validators.validateLogin() }
             .flatMap {
-                if (!MessengerJob.isRunning()) MessengerJob.scheduleSynchronization()
+                if (!MessengerWorker.isRunning()) MessengerWorker.enqueueSynchronization()
 
                 Single.never<List<LocalConference>>()
             }

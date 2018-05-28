@@ -1,10 +1,14 @@
 package me.proxer.app.chat.prv.sync
 
 import android.content.Context
-import com.evernote.android.job.Job
-import com.evernote.android.job.JobManager
-import com.evernote.android.job.JobRequest
-import com.evernote.android.job.util.support.PersistableBundleCompat
+import androidx.work.Constraints
+import androidx.work.Data
+import androidx.work.ExistingWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.State
+import androidx.work.WorkManager
+import androidx.work.Worker
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.MainApplication.Companion.messengerDao
@@ -13,94 +17,84 @@ import me.proxer.app.chat.prv.LocalConference
 import me.proxer.app.chat.prv.LocalMessage
 import me.proxer.app.chat.prv.conference.ConferenceFragmentPingEvent
 import me.proxer.app.chat.prv.message.MessengerFragmentPingEvent
-import me.proxer.app.chat.prv.sync.MessengerJob.SynchronizationResult.CHANGES
-import me.proxer.app.chat.prv.sync.MessengerJob.SynchronizationResult.ERROR
-import me.proxer.app.chat.prv.sync.MessengerJob.SynchronizationResult.NO_CHANGES
 import me.proxer.app.exception.ChatException
 import me.proxer.app.exception.ChatMessageException
 import me.proxer.app.exception.ChatSendMessageException
 import me.proxer.app.exception.ChatSynchronizationException
 import me.proxer.app.util.ErrorUtils
-import me.proxer.app.util.JobUtils
+import me.proxer.app.util.WorkerUtils
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.toLocalConference
 import me.proxer.app.util.extension.toLocalMessage
+import me.proxer.library.api.ProxerCall
 import me.proxer.library.api.ProxerException
-import me.proxer.library.api.ProxerException.ErrorType
-import me.proxer.library.api.ProxerException.ServerErrorType
 import me.proxer.library.entity.messenger.Conference
 import me.proxer.library.entity.messenger.Message
 import java.util.LinkedHashSet
+import java.util.concurrent.TimeUnit
 
 /**
  * @author Ruben Gees
  */
-class MessengerJob : Job() {
+class MessengerWorker : Worker() {
 
     companion object {
-        const val TAG = "chat_job"
+        private const val NAME = "MessengerWorker"
+        private const val CONFERENCE_ID_ARGUMENT = "conference_id"
 
         const val CONFERENCES_ON_PAGE = 48
         const val MESSAGES_ON_PAGE = 30
 
-        private const val CONFERENCE_ID_EXTRA = "conference_id"
-
-        fun scheduleSynchronizationIfPossible(context: Context) = if (canSchedule(context)) {
-            scheduleSynchronization()
+        fun enqueueSynchronizationIfPossible(context: Context) = if (canSchedule(context)) {
+            enqueueSynchronization()
         } else {
             cancel()
         }
 
-        fun scheduleSynchronization() = doSchedule(1L, 100L)
+        fun enqueueSynchronization() = doEnqueue()
 
-        fun scheduleMessageLoad(conferenceId: Long) = doSchedule(1L, 100L, conferenceId)
+        fun enqueueMessageLoad(conferenceId: Long) = doEnqueue(conferenceId = conferenceId)
 
         fun cancel() {
-            JobManager.instance().cancelAllForTag(TAG)
+            WorkManager.getInstance().cancelUniqueWork(NAME)
         }
 
-        fun isRunning() = JobManager.instance().allJobs.find {
-            it is MessengerJob && !it.isCanceled && !it.isFinished
-        } != null
+        fun isRunning() = WorkManager.getInstance().getStatusesForUniqueWork(NAME)
+            .value?.firstOrNull()?.state == State.RUNNING
 
         private fun reschedule(context: Context, synchronizationResult: SynchronizationResult) {
-            if (canSchedule(context) && synchronizationResult != ERROR) {
-                if (synchronizationResult == CHANGES || bus.post(MessengerFragmentPingEvent())) {
+            if (canSchedule(context) && synchronizationResult != SynchronizationResult.ERROR) {
+                if (synchronizationResult == SynchronizationResult.CHANGES || bus.post(MessengerFragmentPingEvent())) {
                     StorageHelper.resetChatInterval()
 
-                    doSchedule(3_000L, 4_000L)
+                    doEnqueue(3_000L)
                 } else if (bus.post(ConferenceFragmentPingEvent())) {
                     StorageHelper.resetChatInterval()
 
-                    doSchedule(10_000L, 12_000L)
+                    doEnqueue(10_000L)
                 } else {
                     StorageHelper.incrementChatInterval()
 
                     StorageHelper.chatInterval.let {
-                        doSchedule(it, it * 2L)
+                        doEnqueue(it)
                     }
                 }
             }
         }
 
-        private fun doSchedule(startTime: Long, endTime: Long, conferenceId: Long? = null) {
-            JobRequest.Builder(TAG)
-                .apply {
-                    if (startTime != 1L) {
-                        setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
-                    }
-                }
-                .setExecutionWindow(startTime, endTime)
-                .setRequirementsEnforced(true)
-                .setUpdateCurrent(true)
-                .setExtras(PersistableBundleCompat().apply {
-                    if (conferenceId != null) {
-                        putLong(CONFERENCE_ID_EXTRA, conferenceId)
-                    }
-                })
-                .build()
-                .scheduleAsync()
+        private fun doEnqueue(startTime: Long? = null, conferenceId: Long? = null) {
+            WorkManager.getInstance().beginUniqueWork(NAME, ExistingWorkPolicy.REPLACE,
+                OneTimeWorkRequestBuilder<MessengerWorker>()
+                    .setConstraints(Constraints.Builder()
+                        .setRequiredNetworkType(NetworkType.CONNECTED)
+                        .build())
+                    .apply { if (startTime != null) setInitialDelay(startTime, TimeUnit.MILLISECONDS) }
+                    .setInputData(Data.Builder()
+                        .apply { if (conferenceId != null) putLong(CONFERENCE_ID_ARGUMENT, conferenceId) }
+                        .build())
+                    .build())
+                .enqueue()
         }
 
         private fun canSchedule(context: Context) = PreferenceHelper.areChatNotificationsEnabled(context) ||
@@ -111,10 +105,16 @@ class MessengerJob : Job() {
     }
 
     private val conferenceId: Long
-        get() = params.extras.getLong(CONFERENCE_ID_EXTRA, 0)
+        get() = inputData.getLong(CONFERENCE_ID_ARGUMENT, 0L)
 
-    override fun onRunJob(params: Params): Result {
-        if (!StorageHelper.isLoggedIn) return Result.FAILURE
+    private var currentCall: ProxerCall<*>? = null
+
+    override fun onStopped() {
+        currentCall?.cancel()
+    }
+
+    override fun doWork(): WorkerResult {
+        if (!StorageHelper.isLoggedIn) return WorkerResult.FAILURE
 
         val synchronizationResult = when (conferenceId) {
             0L -> try {
@@ -129,9 +129,9 @@ class MessengerJob : Job() {
             }
         }
 
-        reschedule(context, synchronizationResult)
+        reschedule(applicationContext, synchronizationResult)
 
-        return if (synchronizationResult != ERROR) Result.SUCCESS else Result.FAILURE
+        return if (synchronizationResult != SynchronizationResult.ERROR) WorkerResult.SUCCESS else WorkerResult.FAILURE
     }
 
     private fun handleSynchronization(): SynchronizationResult {
@@ -139,11 +139,11 @@ class MessengerJob : Job() {
 
         StorageHelper.areConferencesSynchronized = true
 
-        if (newConferencesAndMessages.isNotEmpty()) {
+        if (newConferencesAndMessages.isNotEmpty() && !isStopped) {
             bus.post(SynchronizationEvent())
 
-            if (canShowNotification(context)) {
-                showNotification(context)
+            if (canShowNotification(applicationContext)) {
+                showNotification(applicationContext)
             }
         }
 
@@ -153,35 +153,42 @@ class MessengerJob : Job() {
             }
         }
 
-        return if (newConferencesAndMessages.isNotEmpty()) CHANGES else NO_CHANGES
+        return when (newConferencesAndMessages.isNotEmpty()) {
+            true -> SynchronizationResult.CHANGES
+            false -> SynchronizationResult.NO_CHANGES
+        }
     }
 
     private fun handleSynchronizationError(error: Throwable): SynchronizationResult {
-        when (error) {
-            is ChatException -> bus.post(MessengerErrorEvent(error))
-            else -> bus.post(MessengerErrorEvent(ChatSynchronizationException(error)))
+        if (!isStopped) {
+            when (error) {
+                is ChatException -> bus.post(MessengerErrorEvent(error))
+                else -> bus.post(MessengerErrorEvent(ChatSynchronizationException(error)))
+            }
         }
 
-        return if (JobUtils.shouldShowError(params, error)) {
-            if (canShowNotification(context)) {
-                MessengerNotifications.showError(context, error)
+        return if (!isStopped && WorkerUtils.shouldShowError(error)) {
+            if (canShowNotification(applicationContext)) {
+                MessengerNotifications.showError(applicationContext, error)
             }
 
-            ERROR
+            SynchronizationResult.ERROR
         } else {
-            NO_CHANGES
+            SynchronizationResult.NO_CHANGES
         }
     }
 
     private fun handleLoadMoreMessagesError(error: Throwable): SynchronizationResult {
-        when (error) {
-            is ChatException -> bus.post(MessengerErrorEvent(error))
-            else -> bus.post(MessengerErrorEvent(ChatMessageException(error)))
+        if (!isStopped) {
+            when (error) {
+                is ChatException -> bus.post(MessengerErrorEvent(error))
+                else -> bus.post(MessengerErrorEvent(ChatMessageException(error)))
+            }
         }
 
-        return when (ErrorUtils.isIpBlockedError(error)) {
-            true -> ERROR
-            false -> NO_CHANGES
+        return when (!isStopped && ErrorUtils.isIpBlockedError(error)) {
+            true -> SynchronizationResult.ERROR
+            false -> SynchronizationResult.NO_CHANGES
         }
     }
 
@@ -194,7 +201,7 @@ class MessengerJob : Job() {
             }
         }
 
-        return CHANGES
+        return SynchronizationResult.CHANGES
     }
 
     @Suppress("RethrowCaughtException")
@@ -260,6 +267,7 @@ class MessengerJob : Job() {
             val result = try {
                 api.messenger().sendMessage(conferenceId.toString(), message)
                     .build()
+                    .also { currentCall = it }
                     .execute()
             } catch (error: ProxerException) {
                 if (error.cause?.stackTrace?.find { it.methodName.contains("read") } != null) {
@@ -287,8 +295,8 @@ class MessengerJob : Job() {
                     }
                 }
 
-                throw ChatSendMessageException(ProxerException(ErrorType.SERVER,
-                    ServerErrorType.MESSAGES_INVALID_MESSAGE, result), messageId)
+                throw ChatSendMessageException(ProxerException(ProxerException.ErrorType.SERVER,
+                    ProxerException.ServerErrorType.MESSAGES_INVALID_MESSAGE, result), messageId)
             }
         }
     }
@@ -296,6 +304,7 @@ class MessengerJob : Job() {
     private fun markConferencesAsRead(conferenceToMarkAsRead: List<LocalConference>) = conferenceToMarkAsRead.forEach {
         api.messenger().markConferenceAsRead(it.id.toString())
             .build()
+            .also { currentCall = it }
             .execute()
     }
 
@@ -307,6 +316,7 @@ class MessengerJob : Job() {
             val fetchedConferences = api.messenger().conferences()
                 .page(page)
                 .build()
+                .also { currentCall = it }
                 .safeExecute()
 
             changedConferences += fetchedConferences.filter {
@@ -345,6 +355,7 @@ class MessengerJob : Job() {
                 .messageId(nextId)
                 .markAsRead(false)
                 .build()
+                .also { currentCall = it }
                 .safeExecute()
 
             newMessages += fetchedMessages
@@ -378,6 +389,7 @@ class MessengerJob : Job() {
                 .messageId(nextId)
                 .markAsRead(false)
                 .build()
+                .also { currentCall = it }
                 .safeExecute()
 
             newMessages += fetchedMessages
@@ -399,6 +411,7 @@ class MessengerJob : Job() {
         .messageId(messengerDao.findOldestMessageForConference(conferenceId)?.id?.toString() ?: "0")
         .markAsRead(false)
         .build()
+        .also { currentCall = it }
         .safeExecute()
         .asReversed()
 

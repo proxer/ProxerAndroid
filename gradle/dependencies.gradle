@@ -27,7 +27,8 @@ ext {
             supportPreferenceFixSpinner      : "net.xpece.android:support-spinner:$supportPreferenceVersion",
             architectureLifecycle            : "android.arch.lifecycle:extensions:$lifecycleVersion",
             room                             : "android.arch.persistence.room:runtime:$roomVersion",
-            androidJob                       : "com.evernote:android-job:$androidJobVersion",
+            work                             : "android.arch.work:work-runtime-ktx:$workVersion",
+            workFirebase                     : "android.arch.work:work-firebase:$workVersion",
             proxerLib                        : "com.github.proxer:ProxerLibJava:$proxerLibVersion",
 
             rxJava                           : "io.reactivex.rxjava2:rxjava:$rxJavaVersion",

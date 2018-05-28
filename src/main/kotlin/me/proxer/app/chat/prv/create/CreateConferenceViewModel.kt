@@ -15,7 +15,7 @@ import me.proxer.app.MainApplication.Companion.messengerDao
 import me.proxer.app.chat.prv.LocalConference
 import me.proxer.app.chat.prv.Participant
 import me.proxer.app.chat.prv.sync.MessengerErrorEvent
-import me.proxer.app.chat.prv.sync.MessengerJob
+import me.proxer.app.chat.prv.sync.MessengerWorker
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.extension.buildSingle
@@ -38,7 +38,7 @@ class CreateConferenceViewModel : ViewModel() {
     private var disposables = CompositeDisposable()
 
     init {
-        disposables += bus.register(MessengerJob.SynchronizationEvent::class.java)
+        disposables += bus.register(MessengerWorker.SynchronizationEvent::class.java)
             .flatMap {
                 newConferenceId.let { newConferenceId ->
                     when (newConferenceId) {
@@ -113,7 +113,7 @@ class CreateConferenceViewModel : ViewModel() {
             .subscribeAndLogErrors({
                 newConferenceId = it.toLong()
 
-                MessengerJob.scheduleSynchronization()
+                MessengerWorker.enqueueSynchronization()
             }, {
                 isLoading.value = false
                 error.value = ErrorUtils.handle(it)

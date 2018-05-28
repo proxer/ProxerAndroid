@@ -9,8 +9,8 @@ import android.support.v7.preference.XpPreferenceFragment
 import android.view.View
 import me.proxer.app.MainApplication.Companion.refWatcher
 import me.proxer.app.R
-import me.proxer.app.chat.prv.sync.MessengerJob
-import me.proxer.app.notification.NotificationJob
+import me.proxer.app.chat.prv.sync.MessengerWorker
+import me.proxer.app.notification.NotificationWorker
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.PreferenceHelper.AGE_CONFIRMATION
 import me.proxer.app.util.data.PreferenceHelper.NOTIFICATIONS_ACCOUNT
@@ -89,14 +89,14 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
             NOTIFICATIONS_NEWS, NOTIFICATIONS_ACCOUNT -> {
                 updateIntervalNotification()
 
-                NotificationJob.scheduleIfPossible(requireContext())
+                NotificationWorker.enqueueIfPossible(requireContext())
             }
 
-            NOTIFICATIONS_CHAT -> MessengerJob.scheduleSynchronizationIfPossible(requireContext())
+            NOTIFICATIONS_CHAT -> MessengerWorker.enqueueSynchronizationIfPossible(requireContext())
 
             NOTIFICATIONS_INTERVAL -> {
-                NotificationJob.scheduleIfPossible(requireContext())
-                MessengerJob.scheduleSynchronizationIfPossible(requireContext())
+                NotificationWorker.enqueueIfPossible(requireContext())
+                MessengerWorker.enqueueSynchronizationIfPossible(requireContext())
             }
         }
     }

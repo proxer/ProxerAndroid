@@ -11,12 +11,11 @@ import android.support.v7.app.AppCompatDelegate
 import android.util.Log
 import android.webkit.WebView
 import android.widget.ImageView
+import androidx.work.Configuration
+import androidx.work.WorkManager
 import cat.ereza.customactivityoncrash.config.CaocConfig
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.devbrackets.android.exomedia.ExoMedia
-import com.evernote.android.job.JobApi
-import com.evernote.android.job.JobConfig
-import com.evernote.android.job.JobManager
 import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.kirillr.strictmodehelper.StrictModeCompat
@@ -39,12 +38,12 @@ import me.proxer.app.auth.LogoutEvent
 import me.proxer.app.auth.ProxerLoginTokenManager
 import me.proxer.app.chat.prv.sync.MessengerDao
 import me.proxer.app.chat.prv.sync.MessengerDatabase
-import me.proxer.app.chat.prv.sync.MessengerJob
 import me.proxer.app.chat.prv.sync.MessengerNotifications
+import me.proxer.app.chat.prv.sync.MessengerWorker
 import me.proxer.app.media.TagDao
 import me.proxer.app.media.TagDatabase
 import me.proxer.app.notification.AccountNotifications
-import me.proxer.app.notification.NotificationJob
+import me.proxer.app.notification.NotificationWorker
 import me.proxer.app.util.NotificationUtils
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
@@ -149,8 +148,8 @@ class MainApplication : Application() {
         bus.register(LoginEvent::class.java)
             .subscribeOn(Schedulers.io())
             .subscribeAndLogErrors {
-                MessengerJob.scheduleSynchronizationIfPossible(this)
-                NotificationJob.scheduleIfPossible(this)
+                MessengerWorker.enqueueSynchronizationIfPossible(this)
+                NotificationWorker.enqueueIfPossible(this)
             }
 
         bus.register(LogoutEvent::class.java)
@@ -159,7 +158,7 @@ class MainApplication : Application() {
                 AccountNotifications.cancel(this)
                 MessengerNotifications.cancel(this)
 
-                MessengerJob.cancel()
+                MessengerWorker.cancel()
 
                 StorageHelper.lastChatMessageDate = Date(0L)
                 StorageHelper.lastNotificationsDate = Date(0L)
@@ -197,15 +196,7 @@ class MainApplication : Application() {
             OkHttpDataSourceFactory(client, GENERIC_USER_AGENT, listener)
         }
 
-        JobConfig.setLogcatEnabled(BuildConfig.DEBUG)
-        JobConfig.setApiEnabled(JobApi.GCM, false)
-        JobManager.create(this).addJobCreator {
-            when (it) {
-                MessengerJob.TAG -> MessengerJob()
-                NotificationJob.TAG -> NotificationJob()
-                else -> null
-            }
-        }
+        WorkManager.initialize(this, Configuration.Builder().build())
 
         RxJavaPlugins.setErrorHandler { error ->
             when (error) {

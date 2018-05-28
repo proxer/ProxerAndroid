@@ -16,7 +16,7 @@ import me.proxer.app.base.PagedViewModel
 import me.proxer.app.chat.prv.LocalConference
 import me.proxer.app.chat.prv.LocalMessage
 import me.proxer.app.chat.prv.sync.MessengerErrorEvent
-import me.proxer.app.chat.prv.sync.MessengerJob
+import me.proxer.app.chat.prv.sync.MessengerWorker
 import me.proxer.app.exception.ChatMessageException
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
@@ -31,7 +31,7 @@ import me.proxer.app.util.extension.subscribeAndLogErrors
 class MessengerViewModel(initialConference: LocalConference) : PagedViewModel<LocalMessage>() {
 
     override val isLoginRequired = true
-    override val itemsOnPage = MessengerJob.MESSAGES_ON_PAGE
+    override val itemsOnPage = MessengerWorker.MESSAGES_ON_PAGE
 
     @Suppress("UNUSED_PARAMETER")
     override var hasReachedEnd
@@ -49,7 +49,7 @@ class MessengerViewModel(initialConference: LocalConference) : PagedViewModel<Lo
                 it?.let {
                     if (StorageHelper.isLoggedIn) {
                         if (it.isEmpty() && !hasReachedEnd) {
-                            MessengerJob.scheduleMessageLoad(safeConference.id)
+                            MessengerWorker.enqueueMessageLoad(safeConference.id)
                         } else {
                             if (error.value == null) {
                                 dataDisposable?.dispose()
@@ -82,7 +82,7 @@ class MessengerViewModel(initialConference: LocalConference) : PagedViewModel<Lo
             .flatMap {
                 when (page) {
                     0 -> messengerDao.markConferenceAsRead(safeConference.id)
-                    else -> MessengerJob.scheduleMessageLoad(safeConference.id)
+                    else -> MessengerWorker.enqueueMessageLoad(safeConference.id)
                 }
 
                 Single.never<List<LocalMessage>>()
@@ -163,7 +163,7 @@ class MessengerViewModel(initialConference: LocalConference) : PagedViewModel<Lo
     fun sendMessage(text: String) {
         disposables += Single
             .fromCallable { messengerDao.insertMessageToSend(text, safeConference.id) }
-            .doOnSuccess { if (!MessengerJob.isRunning()) MessengerJob.scheduleSynchronization() }
+            .doOnSuccess { if (!MessengerWorker.isRunning()) MessengerWorker.enqueueSynchronization() }
             .subscribeOn(Schedulers.io())
             .subscribeAndLogErrors()
     }
