@@ -15,6 +15,7 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import kotterknife.bindView
 import me.proxer.app.R
+import org.jetbrains.anko.childrenSequence
 
 /**
  * @author Ruben Gees
@@ -108,14 +109,11 @@ internal class BBSpoilerView @JvmOverloads constructor(
 
         toggleText.requestLayout()
 
-        post {
-            // Set MATCH_PARENT only for non-dynamic parents.
-            @Suppress("ConvertTwoComparisonsToRangeCheck")
-            if (decoration.width > 0 && decoration.width < width) {
-                decoration.layoutParams.width = MATCH_PARENT
-                container.layoutParams.width = MATCH_PARENT
-                container.requestLayout()
-            }
+        // Ugly workaround to fix issues with dynamic sized TextViews (e.g. in the chat).
+        if (isExpanded && container.childrenSequence().all { it is TextView }) {
+            decoration.layoutParams.width = WRAP_CONTENT
+            container.layoutParams.width = WRAP_CONTENT
+            container.requestLayout()
         }
     }
 
