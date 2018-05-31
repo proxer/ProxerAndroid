@@ -152,7 +152,7 @@ object MessengerNotifications {
         val intent = TaskStackBuilder.create(context)
             .addNextIntent(MainActivity.getSectionIntent(context, DrawerItem.MESSENGER))
             .addNextIntent(MessengerActivity.getIntent(context, conference))
-            .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+            .getPendingIntent(conference.id.toInt(), PendingIntent.FLAG_UPDATE_CURRENT)
 
         return NotificationCompat.Builder(context, CHAT_CHANNEL)
             .setSmallIcon(R.drawable.ic_stat_proxer)
