@@ -104,6 +104,7 @@ object MessengerNotifications {
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setNumber(conferenceAmount)
             .setGroup(GROUP)
+            .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY)
             .setGroupSummary(true)
             .setAutoCancel(true)
             .build()
@@ -161,11 +162,11 @@ object MessengerNotifications {
             .setLargeIcon(icon)
             .setStyle(style)
             .setContentIntent(intent)
-            .setDefaults(0)
             .setColor(ContextCompat.getColor(context, R.color.primary))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setCategory(NotificationCompat.CATEGORY_MESSAGE)
             .setGroup(GROUP)
+            .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY)
             .setAutoCancel(true)
             .apply {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
