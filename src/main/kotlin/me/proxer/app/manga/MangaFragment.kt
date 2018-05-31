@@ -7,7 +7,6 @@ import android.support.design.widget.AppBarLayout
 import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
 import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
 import android.support.design.widget.Snackbar
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
@@ -221,16 +220,6 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            requireActivity().window.decorView.setOnSystemUiVisibilityChangeListener { visibility ->
-                if (visibility and View.SYSTEM_UI_FLAG_FULLSCREEN == View.VISIBLE) {
-                    (activity as AppCompatActivity).supportActionBar?.show()
-                } else {
-                    (activity as AppCompatActivity).supportActionBar?.hide()
-                }
-            }
-        }
-
         innerAdapter.glide = GlideApp.with(this)
 
         viewModel.userStateData.observe(this, Observer {
@@ -299,6 +288,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
     override fun showData(data: MangaChapterInfo) {
         super.showData(data)
 
+        hostingActivity.toggleFullscreen(true)
         bindToolbar()
 
         chapterTitle = data.chapter.title
@@ -314,8 +304,6 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         data.chapter.pages?.let { pages ->
             innerAdapter.swapDataAndNotifyWithDiffing(pages)
         }
-
-        requireActivity().window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LOW_PROFILE
     }
 
     override fun hideData() {
@@ -330,6 +318,8 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
 
     override fun showError(action: ErrorUtils.ErrorAction) {
         super.showError(action)
+
+        hostingActivity.toggleFullscreen(false)
 
         action.data[ErrorUtils.CHAPTER_TITLE_DATA_KEY].let {
             chapterTitle = it as? String
