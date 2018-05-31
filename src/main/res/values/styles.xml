@@ -23,7 +23,7 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="Theme.App.Transparent" parent="Theme.App">
+    <style name="Theme.App.NoBackground" parent="Theme.App">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowContentOverlay">@null</item>
@@ -38,5 +38,5 @@
 
     <style name="Theme.App" parent="Base.Theme.App" />
 
-    <style name="Theme.App.Translucent" parent="Theme.App" />
+    <style name="Theme.App.Transparent" parent="Theme.App" />
 </resources>

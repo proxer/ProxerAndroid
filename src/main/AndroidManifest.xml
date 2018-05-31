@@ -128,7 +128,7 @@
 
         <activity
             android:name=".profile.ProfileActivity"
-            android:theme="@style/Theme.App.Translucent">
+            android:theme="@style/Theme.App.Transparent">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -177,7 +177,7 @@
 
         <activity
             android:name=".media.MediaActivity"
-            android:theme="@style/Theme.App.Translucent">
+            android:theme="@style/Theme.App.Transparent">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -198,15 +198,15 @@
 
         <activity
             android:name=".info.translatorgroup.TranslatorGroupActivity"
-            android:theme="@style/Theme.App.Translucent" />
+            android:theme="@style/Theme.App.Transparent" />
 
         <activity
             android:name=".info.industry.IndustryActivity"
-            android:theme="@style/Theme.App.Translucent" />
+            android:theme="@style/Theme.App.Transparent" />
 
         <activity
             android:name=".ui.ImageDetailActivity"
-            android:theme="@style/Theme.App.Transparent" />
+            android:theme="@style/Theme.App.NoBackground" />
 
         <activity
             android:name=".anime.StreamActivity"

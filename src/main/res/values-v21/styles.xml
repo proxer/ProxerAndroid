@@ -5,7 +5,7 @@
         <item name="android:navigationBarColor">@color/colorPrimary</item>
     </style>
 
-    <style name="Theme.App.Translucent" parent="Theme.App">
+    <style name="Theme.App.Transparent" parent="Theme.App">
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 </resources>
