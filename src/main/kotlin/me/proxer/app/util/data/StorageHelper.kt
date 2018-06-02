@@ -13,7 +13,6 @@ import java.util.Date
  */
 object StorageHelper {
 
-    private const val FIRST_START = "first_start"
     private const val USER = "user"
     private const val TWO_FACTOR_AUTHENTICATION = "two_factor_authentication"
     private const val LAST_NEWS_DATE = "last_news_date"
@@ -31,10 +30,6 @@ object StorageHelper {
         override fun <T : Any?> fromJson(content: String, type: Type) = moshi.adapter<T>(type).fromJson(content)
         override fun toJson(body: Any) = moshi.adapter(body.javaClass).toJson(body)
     }
-
-    var isFirstStart: Boolean
-        get() = safeGet(FIRST_START, true)
-        set(value) = safePut(FIRST_START, value)
 
     var user: LocalUser?
         get() = safeGet(USER)

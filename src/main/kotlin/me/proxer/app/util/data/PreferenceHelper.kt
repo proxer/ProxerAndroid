@@ -59,10 +59,7 @@ object PreferenceHelper {
         .putBoolean(MANGA_VERTICAL_READER, enabled).apply()
 
     fun getLaunches(context: Context) = getDefaultSharedPreferences(context)
-        .getInt(LAUNCHES, 0).let {
-            // TODO: For backwards compatibility, remove in a future update
-            if (it <= 0 && !StorageHelper.isFirstStart) 1 else it
-        }
+        .getInt(LAUNCHES, 0)
 
     fun incrementLaunches(context: Context) = getDefaultSharedPreferences(context).edit()
         .putInt(LAUNCHES, getLaunches(context) + 1).apply()
