@@ -43,9 +43,9 @@ ext {
             autoDispose                      : "com.uber.autodispose:autodispose-kotlin:$autoDisposeVersion",
             autoDisposeArchitectureComponents: "com.uber.autodispose:autodispose-android-archcomponents-kotlin:$autoDisposeVersion",
 
-            iconics                          : "com.github.rubengees.Android-Iconics:library-core:$iconicsVersion@aar",
-            iconicsViews                     : "com.github.rubengees.Android-Iconics:iconics-view-library:$iconicsVersion@aar",
-            communityMaterialTypeface        : "com.github.rubengees.Android-Iconics:community-material-typeface-library:$iconicsVersion@aar",
+            iconics                          : "com.mikepenz:iconics-core:$iconicsVersion@aar",
+            iconicsViews                     : "com.mikepenz:iconics-views:$iconicsVersion@aar",
+            communityMaterialTypeface        : "com.mikepenz:community-material-typeface:$communityMaterialTypefaceVersion@aar",
             materialDrawer                   : "com.mikepenz:materialdrawer:$materialDrawerVersion@aar",
             aboutLibraries                   : "com.mikepenz:aboutlibraries:$aboutLibrariesVersion@aar",
             materialize                      : "com.mikepenz:materialize:$materializeVersion@aar",
