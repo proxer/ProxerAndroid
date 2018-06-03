@@ -3,8 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="me.proxer.app">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
     <application tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name=".log.LogActivity"
