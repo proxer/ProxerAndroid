@@ -9,10 +9,12 @@ import com.bumptech.glide.annotation.GlideModule
 import com.bumptech.glide.integration.okhttp3.OkHttpLibraryGlideModule
 import com.bumptech.glide.integration.okhttp3.OkHttpUrlLoader
 import com.bumptech.glide.load.DecodeFormat
+import com.bumptech.glide.load.engine.cache.DiskLruCacheFactory
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.module.AppGlideModule
 import com.bumptech.glide.request.RequestOptions
 import me.proxer.app.MainApplication.Companion.client
+import me.proxer.app.util.data.PreferenceHelper
 import java.io.InputStream
 
 /**
@@ -22,8 +24,9 @@ import java.io.InputStream
 @Excludes(OkHttpLibraryGlideModule::class)
 class ProxerGlideModule : AppGlideModule() {
 
-    override fun registerComponents(context: Context, glide: Glide, registry: Registry) {
-        registry.replace(GlideUrl::class.java, InputStream::class.java, OkHttpUrlLoader.Factory(client))
+    private companion object {
+        private const val CACHE_SIZE = 1024L * 1024L * 250L
+        private const val CACHE_DIR = "cache"
     }
 
     override fun applyOptions(context: Context, builder: GlideBuilder) {
@@ -31,6 +34,14 @@ class ProxerGlideModule : AppGlideModule() {
             .disallowHardwareConfig()
             .format(DecodeFormat.PREFER_RGB_565)
         )
+
+        if (PreferenceHelper.shouldCacheExternally(context)) {
+            builder.setDiskCache(DiskLruCacheFactory(context.getExternalFilesDir(null).path, CACHE_DIR, CACHE_SIZE))
+        }
+    }
+
+    override fun registerComponents(context: Context, glide: Glide, registry: Registry) {
+        registry.replace(GlideUrl::class.java, InputStream::class.java, OkHttpUrlLoader.Factory(client))
     }
 
     override fun isManifestParsingEnabled() = false

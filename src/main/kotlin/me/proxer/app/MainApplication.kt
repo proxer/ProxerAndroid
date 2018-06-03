@@ -6,6 +6,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.Environment
 import android.support.multidex.MultiDex
 import android.support.v7.app.AppCompatDelegate
 import android.util.Log
@@ -104,6 +105,35 @@ class MainApplication : Application() {
         refWatcher = LeakCanary.install(this)
         globalContext = this
 
+        val hasExternalStorage = Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED
+
+        if (!PreferenceHelper.isCacheExternallySet(this)) {
+            PreferenceHelper.setCacheExternally(this, hasExternalStorage)
+        } else if (PreferenceHelper.shouldCacheExternally(this) && !hasExternalStorage) {
+            PreferenceHelper.setCacheExternally(this, false)
+        }
+
+        NotificationUtils.createNotificationChannels(this)
+
+        messengerDatabase = Room.databaseBuilder(this, MessengerDatabase::class.java, "chat.db").build()
+        tagDatabase = Room.databaseBuilder(this, TagDatabase::class.java, "tags.db").build()
+
+        initBus()
+        initApi()
+        initLibs()
+        initNightMode()
+        enableStrictModeForDebug()
+    }
+
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(base)
+
+        if (BuildConfig.DEBUG) {
+            MultiDex.install(this)
+        }
+    }
+
+    private fun initNightMode() {
         val nightMode = PreferenceHelper.getNightMode(this)
 
         // Ugly hack to avoid WebViews to change the ui mode. On first inflation, a WebView changes the ui mode
@@ -117,23 +147,6 @@ class MainApplication : Application() {
         }
 
         AppCompatDelegate.setDefaultNightMode(nightMode)
-        NotificationUtils.createNotificationChannels(this)
-
-        messengerDatabase = Room.databaseBuilder(this, MessengerDatabase::class.java, "chat.db").build()
-        tagDatabase = Room.databaseBuilder(this, TagDatabase::class.java, "tags.db").build()
-
-        initBus()
-        initApi()
-        initLibs()
-        enableStrictModeForDebug()
-    }
-
-    override fun attachBaseContext(base: Context?) {
-        super.attachBaseContext(base)
-
-        if (BuildConfig.DEBUG) {
-            MultiDex.install(this)
-        }
     }
 
     private fun initBus() {

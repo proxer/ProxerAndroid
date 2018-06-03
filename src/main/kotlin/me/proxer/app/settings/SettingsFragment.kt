@@ -3,6 +3,7 @@ package me.proxer.app.settings
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
+import android.os.Environment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDelegate
 import android.support.v7.preference.XpPreferenceFragment
@@ -13,13 +14,16 @@ import me.proxer.app.chat.prv.sync.MessengerWorker
 import me.proxer.app.notification.NotificationWorker
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.PreferenceHelper.AGE_CONFIRMATION
+import me.proxer.app.util.data.PreferenceHelper.EXTERNAL_CACHE
 import me.proxer.app.util.data.PreferenceHelper.NOTIFICATIONS_ACCOUNT
 import me.proxer.app.util.data.PreferenceHelper.NOTIFICATIONS_CHAT
 import me.proxer.app.util.data.PreferenceHelper.NOTIFICATIONS_INTERVAL
 import me.proxer.app.util.data.PreferenceHelper.NOTIFICATIONS_NEWS
 import me.proxer.app.util.data.PreferenceHelper.THEME
+import me.proxer.app.util.extension.snackbar
 import net.xpece.android.support.preference.TwoStatePreference
 import org.jetbrains.anko.bundleOf
+import org.jetbrains.anko.clearTop
 
 /**
  * @author Ruben Gees
@@ -45,6 +49,10 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
             }
 
             true
+        }
+
+        if (Environment.getExternalStorageState() != Environment.MEDIA_MOUNTED) {
+            findPreference(EXTERNAL_CACHE).isVisible = false
         }
 
         updateIntervalNotification()
@@ -78,6 +86,21 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
         when (key) {
             AGE_CONFIRMATION -> if (PreferenceHelper.isAgeRestrictedMediaAllowed(requireContext())) {
                 (findPreference(AGE_CONFIRMATION) as TwoStatePreference).isChecked = true
+            }
+
+            EXTERNAL_CACHE -> {
+                view?.also { view ->
+                    snackbar(view, R.string.fragment_settings_restart_message,
+                        actionMessage = R.string.fragment_settings_restart_action,
+                        actionCallback = View.OnClickListener {
+                            val packageManager = requireContext().packageManager
+                            val packageName = requireContext().packageName
+                            val intent = packageManager.getLaunchIntentForPackage(packageName).clearTop()
+
+                            startActivity(intent)
+                            System.exit(0)
+                        })
+                }
             }
 
             THEME -> {

@@ -21,6 +21,7 @@ object PreferenceHelper {
     const val MANGA_VERTICAL_READER = "manga_vertical_reader"
     const val LAUNCHES = "launches"
     const val RATED = "rated"
+    const val EXTERNAL_CACHE = "external_cache"
 
     fun isAgeRestrictedMediaAllowed(context: Context) = getDefaultSharedPreferences(context)
         .getBoolean(AGE_CONFIRMATION, false)
@@ -69,6 +70,14 @@ object PreferenceHelper {
 
     fun setHasRated(context: Context) = getDefaultSharedPreferences(context).edit()
         .putBoolean(RATED, true).apply()
+
+    fun shouldCacheExternally(context: Context) = getDefaultSharedPreferences(context)
+        .getBoolean(EXTERNAL_CACHE, true)
+
+    fun setCacheExternally(context: Context, enabled: Boolean) = getDefaultSharedPreferences(context).edit()
+        .putBoolean(EXTERNAL_CACHE, enabled).apply()
+
+    fun isCacheExternallySet(context: Context) = getDefaultSharedPreferences(context).contains(EXTERNAL_CACHE)
 
     @AppCompatDelegate.NightMode
     fun getNightMode(context: Context) = when (getDefaultSharedPreferences(context).getString(THEME, "2")) {

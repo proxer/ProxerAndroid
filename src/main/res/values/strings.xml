@@ -388,6 +388,9 @@
     <string name="fragment_about_skype">Skype</string>
     <string name="fragment_about_deviantart">Deviantart</string>
 
+    <string name="fragment_settings_restart_message">Diese Einstellung wird erst nach einem Neustart aktiv</string>
+    <string name="fragment_settings_restart_action">Neustart</string>
+
     <string name="fragment_media_list_extended_criteria">Erweiterte Kriterien</string>
     <string name="fragment_media_list_search">Suchen</string>
     <string name="fragment_media_list_language">Sprache</string>
@@ -580,6 +583,13 @@
     </string>
     <string name="preference_auto_bookmark_off">
         Lesezeichen werden beim Wechseln des Kapitels oder der Episode nicht automatisch gesetzt
+    </string>
+    <string name="preference_external_cache_title">Speicherort für Bilder</string>
+    <string name="preference_external_cache_summary_off">
+        Bilder werden auf dem internen Speicher zwischengespeichert
+    </string>
+    <string name="preference_external_cache_summary_on">
+        Bilder werden auf dem externen Speicher zwischengespeichert
     </string>
     <string name="preference_start_page_title">Startseite</string>
 
