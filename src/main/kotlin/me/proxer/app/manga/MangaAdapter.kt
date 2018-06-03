@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.ImageView
 import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
 import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
@@ -57,6 +58,7 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
     var id by Delegates.notNull<String>()
 
     private val requiresFallback: ParcelableStringBooleanMap
+    private val preloadTargets = mutableListOf<Target<File>>()
 
     private var lastTouchCoordinates: Pair<Float, Float>? = null
 
@@ -77,7 +79,30 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(data[position])
 
+    override fun swapDataAndNotifyWithDiffing(newData: List<Page>) {
+        super.swapDataAndNotifyWithDiffing(newData)
+
+        preloadTargets.forEach { glide?.clear(it) }
+        preloadTargets.clear()
+
+        newData.forEach { item ->
+            val target = object : SimpleTarget<File>() {
+                override fun onResourceReady(resource: File, transition: Transition<in File>?) = Unit
+            }
+
+            preloadTargets += target
+
+            glide
+                ?.downloadOnly()
+                ?.load(ProxerUrls.mangaPageImage(server, entryId, id, item.decodedName).toString())
+                ?.into(target)
+        }
+    }
+
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        preloadTargets.forEach { glide?.clear(it) }
+        preloadTargets.clear()
+
         glide = null
     }
 
@@ -135,7 +160,8 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
 
             glideTarget?.let { target ->
                 glide
-                    ?.download(ProxerUrls.mangaPageImage(server, entryId, id, item.decodedName).toString())
+                    ?.downloadOnly()
+                    ?.load(ProxerUrls.mangaPageImage(server, entryId, id, item.decodedName).toString())
                     ?.into(target)
             }
         }
