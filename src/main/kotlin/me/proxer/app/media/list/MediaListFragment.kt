@@ -1,5 +1,6 @@
 package me.proxer.app.media.list
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.transition.TransitionManager
 import android.support.v7.widget.SearchView
@@ -208,6 +209,11 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
                 MediaActivity.navigateTo(requireActivity(), entry.id, entry.name, entry.medium.toCategory(), view)
             }
 
+        if (savedInstanceState == null) {
+            setInitialType()
+            setInitialSortCriteria()
+        }
+
         setHasOptionsMenu(true)
     }
 
@@ -324,6 +330,35 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
         if (innerAdapter.itemCount > 0 || adapter.footer == null) {
             recyclerView.setPadding(recyclerView.paddingLeft, recyclerView.paddingTop, recyclerView.paddingRight,
                 recyclerView.paddingBottom + searchBottomSheetTitle.measuredHeight)
+        }
+    }
+
+    private fun setInitialType() {
+        if (requireActivity().intent.action == Intent.ACTION_VIEW) {
+            if (category == Category.ANIME) {
+                when (requireActivity().intent.data.pathSegments.getOrNull(1)) {
+                    "animeseries" -> type = MediaType.ANIMESERIES
+                    "movie" -> type = MediaType.MOVIE
+                    "ova" -> type = MediaType.OVA
+                    "hentai" -> type = MediaType.HENTAI
+                }
+            } else if (category == Category.MANGA) {
+                when (requireActivity().intent.data.pathSegments.getOrNull(1)) {
+                    "mangaseries" -> type = MediaType.MANGASERIES
+                    "oneshot" -> type = MediaType.ONESHOT
+                    "doujin" -> type = MediaType.DOUJIN
+                    "hmanga" -> type = MediaType.HMANGA
+                }
+            }
+        }
+    }
+
+    private fun setInitialSortCriteria() {
+        if (requireActivity().intent.action == Intent.ACTION_VIEW) {
+            when (requireActivity().intent.data.pathSegments.getOrNull(2)) {
+                "rating" -> sortCriteria = MediaSearchSortCriteria.RATING
+                "clicks" -> sortCriteria = MediaSearchSortCriteria.CLICKS
+            }
         }
     }
 }
