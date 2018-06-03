@@ -88,19 +88,17 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
                 (findPreference(AGE_CONFIRMATION) as TwoStatePreference).isChecked = true
             }
 
-            EXTERNAL_CACHE -> {
-                view?.also { view ->
-                    snackbar(view, R.string.fragment_settings_restart_message,
-                        actionMessage = R.string.fragment_settings_restart_action,
-                        actionCallback = View.OnClickListener {
-                            val packageManager = requireContext().packageManager
-                            val packageName = requireContext().packageName
-                            val intent = packageManager.getLaunchIntentForPackage(packageName).clearTop()
+            EXTERNAL_CACHE -> view?.also { view ->
+                snackbar(view, R.string.fragment_settings_restart_message,
+                    actionMessage = R.string.fragment_settings_restart_action,
+                    actionCallback = View.OnClickListener {
+                        val packageManager = requireContext().packageManager
+                        val packageName = requireContext().packageName
+                        val intent = packageManager.getLaunchIntentForPackage(packageName).clearTop()
 
-                            startActivity(intent)
-                            System.exit(0)
-                        })
-                }
+                        startActivity(intent)
+                        System.exit(0)
+                    })
             }
 
             THEME -> {
