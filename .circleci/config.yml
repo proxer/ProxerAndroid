@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/app
     docker:
-      - image: circleci/android:api-27-alpha
+      - image: circleci/android:api-28-alpha
     environment:
       _JAVA_OPTIONS: "-Xms512m -Xmx1536M -XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -XX:ParallelGCThreads=1
                       -Djava.util.concurrent.ForkJoinPool.common.parallelism=1"
