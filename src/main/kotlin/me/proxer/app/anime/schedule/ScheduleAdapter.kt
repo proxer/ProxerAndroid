@@ -18,6 +18,7 @@ import me.proxer.app.R
 import me.proxer.app.anime.schedule.ScheduleAdapter.ViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.util.DeviceUtils
+import me.proxer.app.util.extension.safeLayoutManager
 import me.proxer.app.util.extension.toAppString
 import me.proxer.library.entity.media.CalendarEntry
 import me.proxer.library.enums.CalendarDay
@@ -31,7 +32,7 @@ class ScheduleAdapter : BaseAdapter<Pair<CalendarDay, List<CalendarEntry>>, View
     var glide: GlideRequests? = null
     val clickSubject: PublishSubject<Pair<ImageView, CalendarEntry>> = PublishSubject.create()
 
-    private val layoutManagerStates = mutableMapOf<CalendarDay, Parcelable>()
+    private val layoutManagerStates = mutableMapOf<CalendarDay, Parcelable?>()
 
     init {
         setHasStableIds(true)
@@ -49,7 +50,7 @@ class ScheduleAdapter : BaseAdapter<Pair<CalendarDay, List<CalendarEntry>>, View
 
     override fun onViewRecycled(holder: ViewHolder) {
         withSafeAdapterPosition(holder) {
-            layoutManagerStates[data[it].first] = holder.childRecyclerView.layoutManager.onSaveInstanceState()
+            layoutManagerStates[data[it].first] = holder.childRecyclerView.safeLayoutManager.onSaveInstanceState()
         }
 
         holder.childRecyclerView.layoutManager = null
@@ -92,7 +93,7 @@ class ScheduleAdapter : BaseAdapter<Pair<CalendarDay, List<CalendarEntry>>, View
             childRecyclerView.swapAdapter(adapter, false)
 
             layoutManagerStates[item.first]?.let {
-                childRecyclerView.layoutManager.onRestoreInstanceState(it)
+                childRecyclerView.safeLayoutManager.onRestoreInstanceState(it)
             }
         }
     }

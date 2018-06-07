@@ -27,6 +27,7 @@ import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.linkify
+import me.proxer.app.util.extension.safeText
 import me.proxer.app.util.extension.setSimpleOnLinkClickListener
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Device
@@ -121,7 +122,7 @@ class LoginDialog : BaseDialog() {
     private fun setupViewModels() {
         viewModel.data.observe(this, Observer {
             it?.let {
-                StorageHelper.user = LocalUser(it.loginToken, it.id, username.text.trim().toString(), it.image)
+                StorageHelper.user = LocalUser(it.loginToken, it.id, username.safeText.trim().toString(), it.image)
 
                 bus.post(LoginEvent())
 
@@ -150,9 +151,9 @@ class LoginDialog : BaseDialog() {
     }
 
     private fun validateAndLogin() {
-        val username = username.text.trim().toString()
-        val password = password.text.trim().toString()
-        val secretKey = secret.text.trim().toString()
+        val username = username.safeText.trim().toString()
+        val password = password.safeText.trim().toString()
+        val secretKey = secret.safeText.trim().toString()
 
         if (validateInput(username, password)) {
             viewModel.login(username, password, secretKey)

@@ -32,6 +32,7 @@ import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.isAtTop
 import me.proxer.app.util.extension.postDelayedSafely
+import me.proxer.app.util.extension.safeLayoutManager
 import me.proxer.app.util.extension.scrollToTop
 import me.proxer.app.util.extension.unsafeLazy
 import org.jetbrains.anko.bundleOf
@@ -173,7 +174,7 @@ class ConferenceFragment : BaseContentFragment<List<LocalConference>>() {
     override fun showData(data: List<LocalConference>) {
         super.showData(data)
 
-        val wasAtFirstPosition = recyclerView.layoutManager.isAtTop()
+        val wasAtFirstPosition = recyclerView.safeLayoutManager.isAtTop()
         val wasEmpty = adapter.isEmpty()
 
         adapter.swapDataAndNotifyWithDiffing(data)
@@ -187,7 +188,7 @@ class ConferenceFragment : BaseContentFragment<List<LocalConference>>() {
         } else if (!isFirstData && (wasAtFirstPosition || wasEmpty)) {
             recyclerView.postDelayedSafely({ recyclerView ->
                 when {
-                    wasEmpty -> recyclerView.layoutManager.scrollToTop()
+                    wasEmpty -> recyclerView.safeLayoutManager.scrollToTop()
                     else -> recyclerView.smoothScrollToPosition(0)
                 }
             }, 50)

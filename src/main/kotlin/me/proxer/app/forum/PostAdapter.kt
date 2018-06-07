@@ -55,7 +55,7 @@ class PostAdapter : BaseAdapter<ParsedPost, ViewHolder>() {
         glide = null
     }
 
-    inner class ViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         internal val userContainer by bindView<ViewGroup>(R.id.userContainer)
         internal val image by bindView<ImageView>(R.id.image)

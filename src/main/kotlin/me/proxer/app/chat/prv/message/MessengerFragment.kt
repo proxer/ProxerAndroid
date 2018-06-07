@@ -1,5 +1,6 @@
 package me.proxer.app.chat.prv.message
 
+import android.annotation.SuppressLint
 import android.arch.lifecycle.Observer
 import android.content.ClipData
 import android.os.Bundle
@@ -42,6 +43,7 @@ import me.proxer.app.util.extension.colorRes
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.inputMethodManager
 import me.proxer.app.util.extension.isAtTop
+import me.proxer.app.util.extension.safeText
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.unsafeLazy
 import org.jetbrains.anko.bundleOf
@@ -199,6 +201,7 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
             .subscribe {
                 val currentPosition = layoutManager.findFirstVisibleItemPosition()
 
+                @SuppressLint("RestrictedApi")
                 scrollToBottom.visibility = when (currentPosition <= innerAdapter.enqueuedMessageCount) {
                     true -> View.GONE
                     false -> View.VISIBLE
@@ -232,7 +235,7 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
                     if (text.isNotBlank()) {
                         viewModel.sendMessage(text)
 
-                        messageInput.text.clear()
+                        messageInput.safeText.clear()
 
                         scrollToTop()
                     }
@@ -249,7 +252,7 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
             }
 
         viewModel.draft.observe(this, Observer {
-            if (it != null && messageInput.text.isBlank()) messageInput.setText(it)
+            if (it != null && messageInput.safeText.isBlank()) messageInput.setText(it)
         })
 
         if (savedInstanceState == null) {
@@ -334,7 +337,7 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
         val username = innerAdapter.selectedMessages.first().username
 
         messageInput.setText(getString(R.string.fragment_messenger_reply, username))
-        messageInput.setSelection(messageInput.text.length)
+        messageInput.setSelection(messageInput.safeText.length)
         messageInput.requestFocus()
 
         requireContext().inputMethodManager.showSoftInput(messageInput, InputMethodManager.SHOW_IMPLICIT)

@@ -17,11 +17,13 @@ import android.support.v4.text.util.LinkifyCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
+import android.text.Editable
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.util.Linkify
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
@@ -42,6 +44,12 @@ import java.util.EnumSet
 
 val MENTIONS_REGEX = Regex("(@[^ \n]+)").toPattern()
 
+val RecyclerView.safeLayoutManager: RecyclerView.LayoutManager
+    get() = layoutManager ?: throw IllegalStateException("layoutManager is null")
+
+val EditText.safeText: Editable
+    get() = text ?: throw IllegalStateException("text is null")
+
 inline fun <reified T : Enum<T>> enumSetOf(collection: Collection<T>): EnumSet<T> = when (collection.isEmpty()) {
     true -> EnumSet.noneOf(T::class.java)
     false -> EnumSet.copyOf(collection)
@@ -52,7 +60,8 @@ inline fun <T> unsafeLazy(noinline initializer: () -> T) = lazy(LazyThreadSafety
 inline fun Context.getQuantityString(id: Int, quantity: Int): String = resources
     .getQuantityString(id, quantity, quantity)
 
-inline fun Fragment.dip(value: Int) = context?.dip(value) ?: throw IllegalStateException("context is null")
+inline fun Fragment.dip(value: Int) = context?.dip(value)
+    ?: throw IllegalStateException("context is null")
 
 inline fun IconicsDrawable.colorRes(context: Context, id: Int): IconicsDrawable {
     return this.color(ContextCompat.getColor(context, id))

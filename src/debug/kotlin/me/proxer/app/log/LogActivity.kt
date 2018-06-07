@@ -19,6 +19,7 @@ import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.clipboardManager
 import me.proxer.app.util.extension.isAtTop
 import me.proxer.app.util.extension.postDelayedSafely
+import me.proxer.app.util.extension.safeLayoutManager
 import me.proxer.app.util.extension.snackbar
 import me.proxer.app.util.extension.unsafeLazy
 import org.jetbrains.anko.toast
@@ -59,7 +60,7 @@ class LogActivity : BaseActivity() {
 
         viewModel.data.observe(this, Observer {
             it?.let {
-                val wasAtTop = recyclerView.layoutManager.isAtTop()
+                val wasAtTop = recyclerView.safeLayoutManager.isAtTop()
 
                 adapter.swapDataAndNotifyWithDiffing(it)
 

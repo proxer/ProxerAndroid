@@ -19,6 +19,7 @@ import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseDialog
 import me.proxer.app.util.extension.autoDispose
+import me.proxer.app.util.extension.safeText
 import me.proxer.app.util.extension.unsafeLazy
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.longToast
@@ -96,7 +97,7 @@ class ChatReportDialog : BaseDialog() {
     }
 
     private fun validateAndSendReport() {
-        val message = messageInput.text.trim().toString()
+        val message = messageInput.safeText.trim().toString()
 
         if (validateInput(message)) {
             viewModel.sendReport(messageId, message)

@@ -111,12 +111,12 @@ class MainActivity : DrawerActivity() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == IntroductionBuilder.INTRODUCTION_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                data.getParcelableArrayListExtra<Option>(OPTION_RESULT).forEach { option ->
+                data?.getParcelableArrayListExtra<Option>(OPTION_RESULT)?.forEach { option ->
                     when (option.position) {
                         1 -> {
                             PreferenceHelper.setNewsNotificationsEnabled(this, option.isActivated)

@@ -219,7 +219,7 @@ class MaterialDrawerWrapper(
 
     fun refreshHeader() {
         header.profiles = accountItems
-        drawer.recyclerView.adapter.notifyDataSetChanged()
+        drawer.recyclerView.adapter?.notifyDataSetChanged()
         miniDrawer?.createItems()
     }
 

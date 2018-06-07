@@ -41,6 +41,7 @@ import me.proxer.app.util.extension.activityManager
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.convertToDateTime
 import me.proxer.app.util.extension.multilineSnackbar
+import me.proxer.app.util.extension.safeLayoutManager
 import me.proxer.app.util.extension.snackbar
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.unsafeLazy
@@ -409,7 +410,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
 
         innerAdapter.isVertical = isVertical
 
-        recyclerView.layoutManager.onRestoreInstanceState(state)
+        recyclerView.safeLayoutManager.onRestoreInstanceState(state)
     }
 
     private fun bindToolbar() {
