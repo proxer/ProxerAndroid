@@ -55,7 +55,7 @@ ext {
     materialAboutVersion = '2.3.0'
     subsamplingScaleImageViewVersion = '3.10.0'
     subsamplingPdfDecoderVersion = 'ad07ddf671'
-    tabLayoutHelperVersion = '0.9.0'
+    tabLayoutHelperVersion = 'ebb8a7acec'
     materialDialogsVersion = '0.9.6.0'
     flexboxVersion = '1.0.0'
     emojiIosVersion = '7f7f35c3e7'

@@ -7,9 +7,11 @@ import android.graphics.Typeface
 import android.os.Build
 import android.support.v4.app.NotificationCompat
 import android.support.v4.app.NotificationManagerCompat
+import android.support.v4.app.Person
 import android.support.v4.app.RemoteInput
 import android.support.v4.app.TaskStackBuilder
 import android.support.v4.content.ContextCompat
+import android.support.v4.graphics.drawable.IconCompat
 import android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
 import android.text.SpannableString
 import android.text.style.StyleSpan
@@ -17,7 +19,6 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.MainActivity
 import me.proxer.app.R
-import me.proxer.app.auth.LocalUser
 import me.proxer.app.chat.prv.LocalConference
 import me.proxer.app.chat.prv.LocalMessage
 import me.proxer.app.chat.prv.message.MessengerActivity
@@ -143,13 +144,26 @@ object MessengerNotifications {
             return null
         }
 
+        val person = Person.Builder()
+            .setName(user.name)
+            .apply {
+                if (user.image.isNotBlank()) {
+                    val bitmap = Utils.getCircleBitmapFromUrl(context, ProxerUrls.userImage(user.image))
+
+                    setIcon(IconCompat.createWithBitmap(bitmap))
+                }
+            }
+            .setUri(ProxerUrls.userWeb(user.id).toString())
+            .setKey(user.id)
+            .build()
+
         val content = when (messages.size) {
             1 -> messages.first().message
             else -> context.getQuantityString(R.plurals.notification_chat_message_amount, messages.size)
         }
 
         val icon = buildIndividualIcon(context, conference)
-        val style = buildIndividualStyle(messages, conference, context, user, content)
+        val style = buildIndividualStyle(messages, conference, context, person, content)
         val intent = TaskStackBuilder.create(context)
             .addNextIntent(MainActivity.getSectionIntent(context, DrawerItem.MESSENGER))
             .addNextIntent(MessengerActivity.getIntent(context, conference))
@@ -208,7 +222,7 @@ object MessengerNotifications {
         messages: List<LocalMessage>,
         conference: LocalConference,
         context: Context,
-        user: LocalUser,
+        person: Person,
         content: String
     ) = when (messages.size) {
         1 -> {
@@ -227,11 +241,11 @@ object MessengerNotifications {
                 })
         }
         else -> when (conference.isGroup) {
-            true -> NotificationCompat.MessagingStyle(user.name)
+            true -> NotificationCompat.MessagingStyle(person)
                 .setConversationTitle(conference.topic)
                 .also {
                     messages.forEach { message ->
-                        it.addMessage(message.message, message.date.time, message.username)
+                        it.addMessage(message.message, message.date.time, person)
                     }
                 }
             false -> NotificationCompat.InboxStyle()

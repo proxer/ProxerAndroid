@@ -55,7 +55,7 @@ ext {
             materialAbout                    : "com.github.daniel-stoneuk:material-about-library:$materialAboutVersion",
             subsamplingScaleImageView        : "com.davemorrissey.labs:subsampling-scale-image-view:$subsamplingScaleImageViewVersion",
             subsamplingPdfDecoder            : "com.github.num42:subsampling-pdf-decoder:$subsamplingPdfDecoderVersion",
-            tabLayoutHelper                  : "com.h6ah4i.android.tablayouthelper:tablayouthelper:$tabLayoutHelperVersion",
+            tabLayoutHelper                  : "com.github.rubengees:android-tablayouthelper:$tabLayoutHelperVersion",
             materialDialogs                  : "com.afollestad.material-dialogs:core:$materialDialogsVersion",
             flexbox                          : "com.google.android:flexbox:$flexboxVersion",
             emojiIos                         : "com.github.vanniktech.Emoji:emoji-ios:$emojiIosVersion",
