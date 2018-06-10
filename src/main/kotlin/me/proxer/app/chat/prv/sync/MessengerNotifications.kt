@@ -3,6 +3,7 @@ package me.proxer.app.chat.prv.sync
 import android.app.Notification
 import android.app.PendingIntent
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Typeface
 import android.os.Build
 import android.support.v4.app.NotificationCompat
@@ -151,7 +152,7 @@ object MessengerNotifications {
         }
 
         val icon = buildIndividualIcon(context, conference)
-        val style = buildIndividualStyle(messages, conference, context, user, content)
+        val style = buildIndividualStyle(messages, conference, user, icon)
         val intent = TaskStackBuilder.create(context)
             .addNextIntent(MainActivity.getSectionIntent(context, DrawerItem.MESSENGER))
             .addNextIntent(MessengerActivity.getIntent(context, conference))
@@ -209,62 +210,28 @@ object MessengerNotifications {
     private fun buildIndividualStyle(
         messages: List<LocalMessage>,
         conference: LocalConference,
-        context: Context,
         user: LocalUser,
-        content: String
-    ) = when (conference.isGroup) {
-        true -> {
-            val person = Person.Builder()
-                .apply {
-                    if (user.image.isNotBlank()) {
-                        val bitmap = Utils.getCircleBitmapFromUrl(context, ProxerUrls.userImage(user.image))
+        icon: Bitmap?
+    ): NotificationCompat.MessagingStyle {
+        val person = Person.Builder()
+            .apply { if (icon != null) setIcon(IconCompat.createWithBitmap(icon)) }
+            .setKey(user.id)
+            .setName(user.name)
+            .build()
 
-                        setIcon(IconCompat.createWithBitmap(bitmap))
-                    }
+        return NotificationCompat.MessagingStyle(person)
+            .setGroupConversation(conference.isGroup)
+            .setConversationTitle(conference.topic)
+            .also {
+                messages.forEach { message ->
+                    val messagePerson = Person.Builder()
+                        .setName(message.username)
+                        .setUri(ProxerUrls.userWeb(message.userId).toString())
+                        .setKey(message.userId)
+                        .build()
+
+                    it.addMessage(message.message, message.date.time, messagePerson)
                 }
-                .setKey(user.id)
-                .setName(user.name)
-                .build()
-
-            NotificationCompat.MessagingStyle(person)
-                .setGroupConversation(true)
-                .setConversationTitle(conference.topic)
-                .also {
-                    messages.forEach { message ->
-                        val messagePerson = Person.Builder()
-                            .setName(message.username)
-                            .setUri(ProxerUrls.userWeb(message.userId).toString())
-                            .setKey(message.userId)
-                            .build()
-
-                        it.addMessage(message.message, message.date.time, messagePerson)
-                    }
-                }
-        }
-        false -> when (messages.size) {
-            1 -> {
-                val message = messages.first().message
-                val username = messages.first().username
-                val summaryText = context.getQuantityString(R.plurals.notification_chat_message_amount, messages.size)
-
-                NotificationCompat.BigTextStyle()
-                    .setBigContentTitle(conference.topic)
-                    .setSummaryText(summaryText)
-                    .bigText(when (conference.isGroup) {
-                        true -> SpannableString("$username $message").apply {
-                            setSpan(StyleSpan(Typeface.BOLD), 0, username.length, SPAN_EXCLUSIVE_EXCLUSIVE)
-                        }
-                        false -> message
-                    })
             }
-            else -> NotificationCompat.InboxStyle()
-                .setBigContentTitle(conference.topic)
-                .setSummaryText(content)
-                .also {
-                    messages.forEach { message ->
-                        it.addLine(message.message)
-                    }
-                }
-        }
     }
 }
