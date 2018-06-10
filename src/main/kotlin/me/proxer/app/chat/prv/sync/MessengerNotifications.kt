@@ -212,51 +212,52 @@ object MessengerNotifications {
         context: Context,
         user: LocalUser,
         content: String
-    ) = when (messages.size) {
-        1 -> {
-            val message = messages.first().message
-            val username = messages.first().username
-            val summaryText = context.getQuantityString(R.plurals.notification_chat_message_amount, messages.size)
+    ) = when (conference.isGroup) {
+        true -> {
+            val person = Person.Builder()
+                .apply {
+                    if (user.image.isNotBlank()) {
+                        val bitmap = Utils.getCircleBitmapFromUrl(context, ProxerUrls.userImage(user.image))
 
-            NotificationCompat.BigTextStyle()
-                .setBigContentTitle(conference.topic)
-                .setSummaryText(summaryText)
-                .bigText(when (conference.isGroup) {
-                    true -> SpannableString("$username $message").apply {
-                        setSpan(StyleSpan(Typeface.BOLD), 0, username.length, SPAN_EXCLUSIVE_EXCLUSIVE)
+                        setIcon(IconCompat.createWithBitmap(bitmap))
                     }
-                    false -> message
-                })
+                }
+                .setKey(user.id)
+                .setName(user.name)
+                .build()
+
+            NotificationCompat.MessagingStyle(person)
+                .setGroupConversation(true)
+                .setConversationTitle(conference.topic)
+                .also {
+                    messages.forEach { message ->
+                        val messagePerson = Person.Builder()
+                            .setName(message.username)
+                            .setUri(ProxerUrls.userWeb(message.userId).toString())
+                            .setKey(message.userId)
+                            .build()
+
+                        it.addMessage(message.message, message.date.time, messagePerson)
+                    }
+                }
         }
-        else -> when (conference.isGroup) {
-            true -> {
-                val person = Person.Builder()
-                    .apply {
-                        if (user.image.isNotBlank()) {
-                            val bitmap = Utils.getCircleBitmapFromUrl(context, ProxerUrls.userImage(user.image))
+        false -> when (messages.size) {
+            1 -> {
+                val message = messages.first().message
+                val username = messages.first().username
+                val summaryText = context.getQuantityString(R.plurals.notification_chat_message_amount, messages.size)
 
-                            setIcon(IconCompat.createWithBitmap(bitmap))
+                NotificationCompat.BigTextStyle()
+                    .setBigContentTitle(conference.topic)
+                    .setSummaryText(summaryText)
+                    .bigText(when (conference.isGroup) {
+                        true -> SpannableString("$username $message").apply {
+                            setSpan(StyleSpan(Typeface.BOLD), 0, username.length, SPAN_EXCLUSIVE_EXCLUSIVE)
                         }
-                    }
-                    .setKey(user.id)
-                    .setName(user.name)
-                    .build()
-
-                NotificationCompat.MessagingStyle(person)
-                    .setConversationTitle(conference.topic)
-                    .also {
-                        messages.forEach { message ->
-                            val messagePerson = Person.Builder()
-                                .setName(message.username)
-                                .setUri(ProxerUrls.userWeb(message.userId).toString())
-                                .setKey(message.userId)
-                                .build()
-
-                            it.addMessage(message.message, message.date.time, messagePerson)
-                        }
-                    }
+                        false -> message
+                    })
             }
-            false -> NotificationCompat.InboxStyle()
+            else -> NotificationCompat.InboxStyle()
                 .setBigContentTitle(conference.topic)
                 .setSummaryText(content)
                 .also {
