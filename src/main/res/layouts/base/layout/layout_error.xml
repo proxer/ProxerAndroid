@@ -27,21 +27,19 @@
             android:layout_gravity="center"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="4dp"
             android:gravity="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             tools:text="A problem occurred" />
 
         <Button
             android:id="@+id/errorButton"
-            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginRight="8dp"
-            android:text="@string/error_action_retry"
-            android:textColor="@android:color/white" />
+            android:layout_marginRight="4dp"
+            android:text="@string/error_action_retry" />
     </LinearLayout>
 </FrameLayout>

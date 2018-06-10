@@ -29,11 +29,11 @@
 
                 <Button
                     android:id="@+id/previous"
-                    style="@style/Widget.AppCompat.Button.Colored"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/item_margin"
+                    android:layout_marginRight="@dimen/item_margin"
                     android:minLines="2"
-                    android:textColor="@android:color/white"
                     android:visibility="gone"
                     app:layout_columnWeight="1"
                     app:layout_gravity="fill"
@@ -42,11 +42,11 @@
 
                 <Button
                     android:id="@+id/next"
-                    style="@style/Widget.AppCompat.Button.Colored"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/item_margin"
+                    android:layout_marginRight="@dimen/item_margin"
                     android:minLines="2"
-                    android:textColor="@android:color/white"
                     android:visibility="gone"
                     app:layout_columnWeight="1"
                     app:layout_gravity="fill"
@@ -55,22 +55,22 @@
 
                 <Button
                     android:id="@+id/bookmarkThis"
-                    style="@style/Widget.AppCompat.Button.Colored"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/item_margin"
+                    android:layout_marginRight="@dimen/item_margin"
                     android:minLines="2"
-                    android:textColor="@android:color/white"
                     app:layout_columnWeight="1"
                     app:layout_gravity="fill"
                     app:layout_rowWeight="1" />
 
                 <Button
                     android:id="@+id/bookmarkNext"
-                    style="@style/Widget.AppCompat.Button.Colored"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/item_margin"
+                    android:layout_marginRight="@dimen/item_margin"
                     android:minLines="2"
-                    android:textColor="@android:color/white"
                     app:layout_columnWeight="1"
                     app:layout_gravity="fill"
                     app:layout_rowWeight="1" />

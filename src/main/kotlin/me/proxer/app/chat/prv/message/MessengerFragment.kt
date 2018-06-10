@@ -1,6 +1,5 @@
 package me.proxer.app.chat.prv.message
 
-import android.annotation.SuppressLint
 import android.arch.lifecycle.Observer
 import android.content.ClipData
 import android.os.Bundle
@@ -201,10 +200,9 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
             .subscribe {
                 val currentPosition = layoutManager.findFirstVisibleItemPosition()
 
-                @SuppressLint("RestrictedApi")
-                scrollToBottom.visibility = when (currentPosition <= innerAdapter.enqueuedMessageCount) {
-                    true -> View.GONE
-                    false -> View.VISIBLE
+                when (currentPosition <= innerAdapter.enqueuedMessageCount) {
+                    true -> scrollToBottom.hide()
+                    false -> scrollToBottom.show()
                 }
             }
 

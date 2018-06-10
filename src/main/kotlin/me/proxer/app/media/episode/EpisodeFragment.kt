@@ -103,9 +103,9 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
             .subscribe {
                 val currentPosition = layoutManager.findLastVisibleItemPosition()
 
-                scrollToBottom.visibility = when (currentPosition) {
-                    adapter.itemCount - 1 -> View.GONE
-                    else -> View.VISIBLE
+                when (currentPosition) {
+                    adapter.itemCount - 1 -> scrollToBottom.hide()
+                    else -> scrollToBottom.show()
                 }
             }
 

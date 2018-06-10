@@ -55,15 +55,13 @@
 
                 <include layout="@layout/layout_upload_info" />
 
-                <Button
+                <android.support.design.button.MaterialButton
                     android:id="@+id/play"
-                    style="@style/Widget.AppCompat.Button.Colored"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="16dp"
-                    android:text="@string/fragment_anime_stream_play"
-                    android:textColor="@android:color/white" />
+                    android:text="@string/fragment_anime_stream_play" />
 
                 <TextView
                     android:id="@+id/unsupported"
