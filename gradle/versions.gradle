@@ -47,10 +47,10 @@ ext {
     // UI components
     iconicsVersion = '3.0.4'
     communityMaterialTypefaceVersion = '2.0.46.1'
-    materialDrawerVersion = '6.0.7'
-    aboutLibrariesVersion = '6.0.8'
+    materialDrawerVersion = '6.0.8'
+    aboutLibrariesVersion = '6.0.9'
     materializeVersion = '1.1.2'
-    fastadapterVersion = '3.2.6'
+    fastadapterVersion = '3.2.7'
     crossfaderVersion = '1.5.2'
     materialAboutVersion = '2.3.0'
     subsamplingScaleImageViewVersion = '3.10.0'
