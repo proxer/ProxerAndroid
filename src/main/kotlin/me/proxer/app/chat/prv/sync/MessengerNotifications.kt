@@ -19,6 +19,7 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.MainActivity
 import me.proxer.app.R
+import me.proxer.app.auth.LocalUser
 import me.proxer.app.chat.prv.LocalConference
 import me.proxer.app.chat.prv.LocalMessage
 import me.proxer.app.chat.prv.message.MessengerActivity
@@ -144,26 +145,13 @@ object MessengerNotifications {
             return null
         }
 
-        val person = Person.Builder()
-            .setName(user.name)
-            .apply {
-                if (user.image.isNotBlank()) {
-                    val bitmap = Utils.getCircleBitmapFromUrl(context, ProxerUrls.userImage(user.image))
-
-                    setIcon(IconCompat.createWithBitmap(bitmap))
-                }
-            }
-            .setUri(ProxerUrls.userWeb(user.id).toString())
-            .setKey(user.id)
-            .build()
-
         val content = when (messages.size) {
             1 -> messages.first().message
             else -> context.getQuantityString(R.plurals.notification_chat_message_amount, messages.size)
         }
 
         val icon = buildIndividualIcon(context, conference)
-        val style = buildIndividualStyle(messages, conference, context, person, content)
+        val style = buildIndividualStyle(messages, conference, context, user, content)
         val intent = TaskStackBuilder.create(context)
             .addNextIntent(MainActivity.getSectionIntent(context, DrawerItem.MESSENGER))
             .addNextIntent(MessengerActivity.getIntent(context, conference))
@@ -222,7 +210,7 @@ object MessengerNotifications {
         messages: List<LocalMessage>,
         conference: LocalConference,
         context: Context,
-        person: Person,
+        user: LocalUser,
         content: String
     ) = when (messages.size) {
         1 -> {
@@ -241,13 +229,33 @@ object MessengerNotifications {
                 })
         }
         else -> when (conference.isGroup) {
-            true -> NotificationCompat.MessagingStyle(person)
-                .setConversationTitle(conference.topic)
-                .also {
-                    messages.forEach { message ->
-                        it.addMessage(message.message, message.date.time, person)
+            true -> {
+                val person = Person.Builder()
+                    .apply {
+                        if (user.image.isNotBlank()) {
+                            val bitmap = Utils.getCircleBitmapFromUrl(context, ProxerUrls.userImage(user.image))
+
+                            setIcon(IconCompat.createWithBitmap(bitmap))
+                        }
                     }
-                }
+                    .setKey(user.id)
+                    .setName(user.name)
+                    .build()
+
+                NotificationCompat.MessagingStyle(person)
+                    .setConversationTitle(conference.topic)
+                    .also {
+                        messages.forEach { message ->
+                            val messagePerson = Person.Builder()
+                                .setName(message.username)
+                                .setUri(ProxerUrls.userWeb(message.userId).toString())
+                                .setKey(message.userId)
+                                .build()
+
+                            it.addMessage(message.message, message.date.time, messagePerson)
+                        }
+                    }
+            }
             false -> NotificationCompat.InboxStyle()
                 .setBigContentTitle(conference.topic)
                 .setSummaryText(content)
