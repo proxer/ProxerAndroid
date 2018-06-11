@@ -2,8 +2,8 @@
 
 ### What is this?
 
-This is a client for the german Anime & Manga page [Proxer.Me](https://proxer.me/).<br>
-It features the most important functionalities including an anime player for various hosters and languages, a mobile-friendly vertical manga reader, offline synchronized chat and much more.
+Proxer.Me Android is a client for the german Anime & Manga page [Proxer.Me](https://proxer.me/).<br>
+It features major functionalities including an anime player for various hosters and languages, a mobile-friendly vertical manga reader, offline synchronized chat and much more.
 
 ### How to use it?
 
@@ -23,9 +23,9 @@ PROXER_API_KEY = YourApiKey
 ```
 
 This app offers two variants to build: `debug` and `release`.<br>
-It is strongly advertised to only use the `release` variant as it is faster and does not log any information.
+It is strongly recommended to use the `release` variant as it is faster and does not log data.
 
-Before building, you have to [generate a key](https://developer.android.com/studio/publish/app-signing.html#generate-key) for signing the app if you have none yet.<br>
+Before building, [generate a key](https://developer.android.com/studio/publish/app-signing.html#generate-key) for signing the app if you have none yet.<br>
 Add these fields to your `secrets.properties` file:
 
 ```
@@ -35,7 +35,7 @@ RELEASE_KEY_ALIAS = theAlias
 RELEASE_KEY_PASSWORD = thePasswordForThatAlias
 ```
 
-After that, you can build the app by running:
+You can then build the app by running:
 
 ```bash
 # Linux
@@ -46,7 +46,7 @@ gradlew.bat assembleRelease
 ```
 
 You can find the app in the `app/build/outputs/apk/release/` folder.<br>
-It is also possible to directly install the app on your device if it is connected to your computer by running:
+A direct install of the app is possible for phones connected to your pc by running:
 
 ```bash
 # Linux
@@ -56,7 +56,7 @@ It is also possible to directly install the app on your device if it is connecte
 gradlew.bat installRelease
 ```
 
-If you want to build the app for testing purposes in the `debug` variant, you can run:
+If you want to build the app for testing purposes in the `debug` variant, run:
 
 ```bash
 # Linux
