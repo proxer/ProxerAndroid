@@ -23,7 +23,7 @@ PROXER_API_KEY = YourApiKey
 ```
 
 This app offers two variants to build: `debug` and `release`.<br>
-We strongly recommend to use the `release` variant as it is faster and does not log data.
+It is strongly recommended to use the `release` variant as it is faster and does not log data.
 
 Before building, [generate a key](https://developer.android.com/studio/publish/app-signing.html#generate-key) for signing the app if you have none yet.<br>
 Add these fields to your `secrets.properties` file:
@@ -56,7 +56,7 @@ A direct install of the app is possible for phones connected to your pc by runni
 gradlew.bat installRelease
 ```
 
-If you want to build the app for testing purposes in the `debug` variant, you can run:
+If you want to build the app for testing purposes in the `debug` variant, run:
 
 ```bash
 # Linux
