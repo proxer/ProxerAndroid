@@ -46,7 +46,7 @@ ext {
             iconics                          : "com.mikepenz:iconics-core:$iconicsVersion@aar",
             iconicsViews                     : "com.mikepenz:iconics-views:$iconicsVersion@aar",
             communityMaterialTypeface        : "com.mikepenz:community-material-typeface:$communityMaterialTypefaceVersion@aar",
-            materialDrawer                   : "com.mikepenz:materialdrawer:$materialDrawerVersion@aar",
+            materialDrawer                   : "com.github.mikepenz:MaterialDrawer:$materialDrawerVersion@aar",
             aboutLibraries                   : "com.mikepenz:aboutlibraries:$aboutLibrariesVersion@aar",
             materialize                      : "com.mikepenz:materialize:$materializeVersion@aar",
             fastadapter                      : "com.mikepenz:fastadapter:$fastadapterVersion@aar",
