@@ -19,6 +19,9 @@
     <issue id="UnusedIds" severity="error" />
     <issue id="WrongThreadInterprocedural" severity="error" />
 
+    <!-- False positive, ignore for now. -->
+    <issue id="PrivateResource" severity="informational" />
+
     <!-- Ignore errors about packages not contained in Android. These are safe. -->
     <issue id="InvalidPackage" severity="error">
         <ignore regexp=".*okio.*" />
