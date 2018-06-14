@@ -70,8 +70,10 @@ class MediaListSearchBottomSheet private constructor(
         fragment.fskSelector.items = fskItems
 
         fragment.searchBottomSheetTitle.post {
-            bottomSheetBehaviour.peekHeight = fragment.searchBottomSheetTitle.height + fragment.dip(10)
-            fragment.searchBottomSheet.visibility = View.VISIBLE
+            if (fragment.view != null) {
+                bottomSheetBehaviour.peekHeight = fragment.searchBottomSheetTitle.height + fragment.dip(10)
+                fragment.searchBottomSheet.visibility = View.VISIBLE
+            }
         }
 
         viewModel.loadTags()
