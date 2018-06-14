@@ -71,6 +71,18 @@ class ChatRoomInfoFragment : BaseContentFragment<List<ChatRoomUser>>() {
         userList.adapter = adapter
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        viewModel.resumePolling()
+    }
+
+    override fun onPause() {
+        viewModel.pausePolling()
+
+        super.onPause()
+    }
+
     override fun showData(data: List<ChatRoomUser>) {
         super.showData(data)
 

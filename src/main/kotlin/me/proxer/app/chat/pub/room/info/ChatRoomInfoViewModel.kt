@@ -36,6 +36,16 @@ class ChatRoomInfoViewModel(private val chatRoomId: String) : BaseContentViewMod
         super.onCleared()
     }
 
+    fun pausePolling() {
+        pollingDisposable?.dispose()
+    }
+
+    fun resumePolling() {
+        if (data.value != null) {
+            startPolling()
+        }
+    }
+
     private fun startPolling() {
         pollingDisposable = dataSingle
             .repeatWhen { it.concatMap { Flowable.timer(10, TimeUnit.SECONDS) } }

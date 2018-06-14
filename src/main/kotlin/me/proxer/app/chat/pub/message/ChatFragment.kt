@@ -285,6 +285,18 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
         innerAdapter.saveInstanceState(outState)
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        viewModel.resumePolling()
+    }
+
+    override fun onPause() {
+        viewModel.pausePolling()
+
+        super.onPause()
+    }
+
     override fun onDestroyView() {
         emojiPopup.dismiss()
 

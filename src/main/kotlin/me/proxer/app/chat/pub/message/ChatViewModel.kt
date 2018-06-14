@@ -132,6 +132,16 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ParsedChatM
         }
     }
 
+    fun pausePolling() {
+        pollingDisposable?.dispose()
+    }
+
+    fun resumePolling() {
+        if (data.value != null) {
+            startPolling(true)
+        }
+    }
+
     private fun mergeNewDataWithExistingData(
         newData: List<ParsedChatMessage>,
         currentId: String
