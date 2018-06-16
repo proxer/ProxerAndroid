@@ -19,7 +19,7 @@ import java.io.IOException
 class YourUploadStreamResolver : StreamResolver {
 
     private companion object {
-        private val regex = Regex("<meta property=\"og:video\" content=\"(.*?)\">")
+        private val regex = Regex("file: '(.*?)'")
     }
 
     override val name = "YourUpload"
@@ -35,20 +35,18 @@ class YourUploadStreamResolver : StreamResolver {
                 .toBodySingle()
                 .map {
                     val regexResult = regex.find(it) ?: throw StreamResolutionException()
-                    val apiUrl = regexResult.groupValues[1]
+                    val fileUrl = regexResult.groupValues[1]
 
-                    if (apiUrl.isBlank()) {
-                        throw StreamResolutionException("apiUrl is null")
+                    if (fileUrl.isBlank()) {
+                        throw StreamResolutionException("fileUrl is null")
                     }
 
-                    apiUrl
+                    fileUrl
                 }
                 .flatMap {
                     client.newCall(Request.Builder()
                         .head()
-                        .url(HttpUrl.parse("http://yourupload.com$it")
-                            ?: throw IllegalStateException("url is null")
-                        )
+                        .url(HttpUrl.parse(it) ?: throw IllegalStateException("url is null"))
                         .header("Referer", url)
                         .header("User-Agent", GENERIC_USER_AGENT)
                         .build())
