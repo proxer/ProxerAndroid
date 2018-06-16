@@ -6,11 +6,10 @@ package me.proxer.app.anime.resolver
 object StreamResolverFactory {
 
     private val resolvers = arrayOf(AkibaPassStreamResolver(), AmazonPrimeVideoStreamResolver(),
-        AnimeOnDemandStreamResolver(), AuravidStreamResolver(), WatchboxStreamResolver(), MessageStreamResolver(),
+        AnimeOnDemandStreamResolver(), WatchboxStreamResolver(), MessageStreamResolver(),
         CrunchyrollStreamResolver(), DailymotionStreamResolver(), Mp4UploadStreamResolver(),
         NetflixStreamResolver(), ProsiebenMAXXStreamResolver(), ProxerStreamResolver(),
-        StreamcloudStreamResolver(), VideoweedStreamResolver(), ViewsterStreamResolver(),
-        YourUploadStreamResolver(), YouTubeStreamResolver())
+        StreamcloudStreamResolver(), ViewsterStreamResolver(), YourUploadStreamResolver(), YouTubeStreamResolver())
 
     fun resolverFor(name: String) = resolvers.find { it.supports(name) }
 }
