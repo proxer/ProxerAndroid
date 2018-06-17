@@ -20,9 +20,9 @@ ext {
 
     // Utility plugins
     detektPluginVersion = '1.0.0.RC7-2'
-    gradleVersionsPluginVersion = '0.17.0'
+    gradleVersionsPluginVersion = '0.19.0'
     androidCommandPluginVersion = '2.0.1'
-    ktlintPluginVersion = '4.0.0'
+    ktlintPluginVersion = '4.1.0'
     ktlintVersion = '0.23.1'
 
     // Frameworks and code only libraries
