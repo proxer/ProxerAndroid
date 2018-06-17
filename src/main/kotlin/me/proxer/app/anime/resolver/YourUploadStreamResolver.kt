@@ -38,7 +38,7 @@ class YourUploadStreamResolver : StreamResolver {
                     val fileUrl = regexResult.groupValues[1]
 
                     if (fileUrl.isBlank()) {
-                        throw StreamResolutionException("fileUrl is null")
+                        throw StreamResolutionException()
                     }
 
                     fileUrl
