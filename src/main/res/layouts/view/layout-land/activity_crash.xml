@@ -64,6 +64,7 @@
                     android:id="@+id/report"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Button"
                     android:layout_margin="4dp"
                     android:text="@string/activity_crash_report"
                     tools:ignore="ButtonStyle" />
@@ -71,6 +72,7 @@
                 <Button
                     android:id="@+id/restart"
                     android:layout_width="wrap_content"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Button"
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
                     android:text="@string/activity_crash_restart"

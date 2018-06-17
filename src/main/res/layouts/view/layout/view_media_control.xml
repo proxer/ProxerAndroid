@@ -34,10 +34,12 @@
                     android:layout_marginLeft="@dimen/item_margin"
                     android:layout_marginRight="@dimen/item_margin"
                     android:minLines="2"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Button"
                     android:visibility="gone"
                     app:layout_columnWeight="1"
                     app:layout_gravity="fill"
                     app:layout_rowWeight="1"
+                    tools:text="previous"
                     tools:visibility="visible" />
 
                 <Button
@@ -47,10 +49,12 @@
                     android:layout_marginLeft="@dimen/item_margin"
                     android:layout_marginRight="@dimen/item_margin"
                     android:minLines="2"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Button"
                     android:visibility="gone"
                     app:layout_columnWeight="1"
                     app:layout_gravity="fill"
                     app:layout_rowWeight="1"
+                    tools:text="next"
                     tools:visibility="visible" />
 
                 <Button
@@ -60,9 +64,11 @@
                     android:layout_marginLeft="@dimen/item_margin"
                     android:layout_marginRight="@dimen/item_margin"
                     android:minLines="2"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Button"
                     app:layout_columnWeight="1"
                     app:layout_gravity="fill"
-                    app:layout_rowWeight="1" />
+                    app:layout_rowWeight="1"
+                    tools:text="bookmark this" />
 
                 <Button
                     android:id="@+id/bookmarkNext"
@@ -71,9 +77,11 @@
                     android:layout_marginLeft="@dimen/item_margin"
                     android:layout_marginRight="@dimen/item_margin"
                     android:minLines="2"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Button"
                     app:layout_columnWeight="1"
                     app:layout_gravity="fill"
-                    app:layout_rowWeight="1" />
+                    app:layout_rowWeight="1"
+                    tools:text="bookmark next" />
 
             </android.support.v7.widget.GridLayout>
         </LinearLayout>

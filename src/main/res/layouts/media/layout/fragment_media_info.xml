@@ -153,6 +153,7 @@
                                 android:layout_marginRight="4dp"
                                 android:layout_marginBottom="8dp"
                                 android:layout_weight="1"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Button"
                                 android:textColor="@color/colorAccent" />
 
                             <Button
@@ -168,6 +169,7 @@
                                 android:layout_marginRight="8dp"
                                 android:layout_marginBottom="8dp"
                                 android:layout_weight="1"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Button"
                                 android:textColor="@color/colorAccent" />
                         </LinearLayout>
 
