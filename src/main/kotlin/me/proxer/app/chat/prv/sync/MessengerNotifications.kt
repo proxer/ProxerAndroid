@@ -71,8 +71,6 @@ object MessengerNotifications {
     }
 
     fun cancel(context: Context) = NotificationManagerCompat.from(context).cancel(ID)
-    fun cancelIndividual(context: Context, conferenceId: Long) = NotificationManagerCompat.from(context)
-        .cancel(conferenceId.toInt())
 
     private fun buildChatSummaryNotification(context: Context, conferenceMap: LocalConferenceMap): Notification? {
         val filteredConferenceMap = conferenceMap.filter { it.value.isNotEmpty() }
@@ -103,12 +101,13 @@ object MessengerNotifications {
             .setContentIntent(TaskStackBuilder.create(context)
                 .addNextIntent(MainActivity.getSectionIntent(context, DrawerItem.MESSENGER))
                 .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT))
-            .setDefaults(if (shouldAlert) Notification.DEFAULT_ALL else 0)
+            .setDefaults(Notification.DEFAULT_ALL)
             .setColor(ContextCompat.getColor(context, R.color.primary))
             .setCategory(NotificationCompat.CATEGORY_MESSAGE)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setNumber(conferenceAmount)
             .setGroup(GROUP)
+            .setOnlyAlertOnce(!shouldAlert)
             .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY)
             .setGroupSummary(true)
             .setAutoCancel(true)

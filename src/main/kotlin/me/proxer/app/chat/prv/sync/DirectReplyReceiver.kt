@@ -35,12 +35,14 @@ class DirectReplyReceiver : BroadcastReceiver() {
             .fromAction {
                 messengerDao.insertMessageToSend(getMessageText(intent), conferenceId)
 
-                if (messengerDao.getUnreadConferences().isEmpty()) {
-                    MessengerNotifications.cancel(context)
-                } else {
-                    MessengerNotifications.cancelIndividual(context, conferenceId)
-                }
+                val unreadMap = messengerDao.getUnreadConferences()
+                    .associate {
+                        it to messengerDao.getMostRecentMessagesForConference(it.id, it.unreadMessageAmount)
+                            .asReversed()
+                    }
+                    .plus(messengerDao.getConference(conferenceId) to emptyList())
 
+                MessengerNotifications.showOrUpdate(context, unreadMap)
                 MessengerWorker.enqueueSynchronization()
             }
             .subscribeOn(Schedulers.io())

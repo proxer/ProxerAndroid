@@ -75,6 +75,9 @@ abstract class MessengerDao {
     abstract fun getConferencesToMarkAsRead(): List<LocalConference>
 
     @Query("SELECT * FROM conferences WHERE id = :id LIMIT 1")
+    abstract fun getConference(id: Long): LocalConference
+
+    @Query("SELECT * FROM conferences WHERE id = :id LIMIT 1")
     abstract fun findConference(id: Long): LocalConference?
 
     @Query("SELECT * FROM conferences WHERE topic = :username LIMIT 1")
