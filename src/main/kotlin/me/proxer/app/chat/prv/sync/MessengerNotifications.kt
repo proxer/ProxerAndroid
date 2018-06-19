@@ -43,20 +43,22 @@ object MessengerNotifications {
     private const val ID = 782373275
 
     fun showOrUpdate(context: Context, conferenceMap: LocalConferenceMap) {
-        listOf(ID to buildChatSummaryNotification(context, conferenceMap))
-            .plus(conferenceMap.entries
-                .map { (conference, messages) ->
-                    conference.id.toInt() to when {
-                        messages.isEmpty() -> null
-                        else -> buildIndividualChatNotification(context, conference, messages)
-                    }
-                })
-            .forEach { (id, notification) ->
-                when (notification) {
-                    null -> NotificationManagerCompat.from(context).cancel(id)
-                    else -> NotificationManagerCompat.from(context).notify(id, notification)
+        val notifications = conferenceMap.entries
+            .sortedBy { it.key.date }
+            .map { (conference, messages) ->
+                conference.id.toInt() to when {
+                    messages.isEmpty() -> null
+                    else -> buildIndividualChatNotification(context, conference, messages)
                 }
             }
+            .plus(ID to buildChatSummaryNotification(context, conferenceMap))
+
+        notifications.forEach { (id, notification) ->
+            when (notification) {
+                null -> NotificationManagerCompat.from(context).cancel(id)
+                else -> NotificationManagerCompat.from(context).notify(id, notification)
+            }
+        }
     }
 
     fun showError(context: Context, error: Throwable) {
