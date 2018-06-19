@@ -125,7 +125,7 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
 
         viewModel.userInfoUpdateData.observe(this, Observer {
             it?.let {
-                snackbar(root, R.string.fragment_set_user_info_success)
+                root.post { snackbar(root, R.string.fragment_set_user_info_success) }
             }
         })
 
@@ -178,6 +178,8 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
     }
 
     private fun bind(entry: Entry, userInfo: Optional<MediaUserInfo>) {
+        infoTable.removeAllViews()
+
         bindRating(entry)
         bindSynonyms(entry)
         bindSeasons(entry)
@@ -205,8 +207,10 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
         ratingAmount.visibility = View.GONE
     }
 
-    private fun bindSynonyms(result: Entry) = result.synonyms.forEach {
-        infoTable.addView(constructInfoTableRow(it.toTypeAppString(requireContext()), it.name, true))
+    private fun bindSynonyms(result: Entry) {
+        result.synonyms.forEach {
+            infoTable.addView(constructInfoTableRow(it.toTypeAppString(requireContext()), it.name, true))
+        }
     }
 
     private fun bindSeasons(result: Entry) {
@@ -343,20 +347,24 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
         })
     }
 
-    private fun bindFskConstraints(result: Entry) = if (result.fskConstraints.isEmpty()) {
-        fskConstraintsTitle.visibility = View.GONE
-        fskConstraints.visibility = View.GONE
-    } else {
-        result.fskConstraints.forEach { constraint ->
-            val image = LayoutInflater.from(context)
-                .inflate(R.layout.layout_image, fskConstraints, false) as ImageView
+    private fun bindFskConstraints(result: Entry) {
+        fskConstraints.removeAllViews()
 
-            image.setImageDrawable(constraint.toAppDrawable(requireContext()))
-            image.setOnClickListener {
-                multilineSnackbar(root, constraint.toAppStringDescription(requireContext()))
+        if (result.fskConstraints.isEmpty()) {
+            fskConstraintsTitle.visibility = View.GONE
+            fskConstraints.visibility = View.GONE
+        } else {
+            result.fskConstraints.forEach { constraint ->
+                val image = LayoutInflater.from(context)
+                    .inflate(R.layout.layout_image, fskConstraints, false) as ImageView
+
+                image.setImageDrawable(constraint.toAppDrawable(requireContext()))
+                image.setOnClickListener {
+                    multilineSnackbar(root, constraint.toAppStringDescription(requireContext()))
+                }
+
+                fskConstraints.addView(image)
             }
-
-            fskConstraints.addView(image)
         }
     }
 
