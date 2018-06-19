@@ -2,6 +2,7 @@ package me.proxer.app.notification
 
 import android.content.Context
 import androidx.work.Constraints
+import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
@@ -24,39 +25,38 @@ import java.util.concurrent.TimeUnit
 class NotificationWorker : Worker() {
 
     companion object {
-        private const val TAG = "NotificationWorker"
+        private const val NAME = "NotificationWorker"
 
         fun enqueueIfPossible(context: Context) {
             val areNotificationsEnabled = PreferenceHelper.areNewsNotificationsEnabled(context) ||
                 PreferenceHelper.areAccountNotificationsEnabled(context)
 
-            cancel()
-
             if (areNotificationsEnabled) {
                 enqueue(context)
+            } else {
+                cancel()
             }
         }
 
         fun cancel() {
-            WorkManager.getInstance().cancelAllWorkByTag(TAG)
+            WorkManager.getInstance().cancelUniqueWork(NAME)
         }
 
         private fun enqueue(context: Context) {
             val interval = PreferenceHelper.getNotificationsInterval(context) * 1000 * 60
 
-            WorkManager.getInstance().enqueue(
+            WorkManager.getInstance().enqueueUniquePeriodicWork(NAME, ExistingPeriodicWorkPolicy.REPLACE,
                 PeriodicWorkRequestBuilder<NotificationWorker>(interval, TimeUnit.MILLISECONDS)
                     .setConstraints(Constraints.Builder()
                         .setRequiredNetworkType(NetworkType.CONNECTED)
                         .build())
-                    .addTag(TAG)
                     .build())
         }
     }
 
     private var currentCall: ProxerCall<*>? = null
 
-    override fun onStopped() {
+    override fun onStopped(cancelled: Boolean) {
         currentCall?.cancel()
     }
 
@@ -80,14 +80,14 @@ class NotificationWorker : Worker() {
             fetchAccountNotifications(applicationContext, notificationInfo)
         }
 
-        WorkerResult.SUCCESS
+        Result.SUCCESS
     } catch (error: Throwable) {
-        if (!isStopped && WorkerUtils.shouldShowError(error)) {
+        if (!isStopped && WorkerUtils.shouldShowError(runAttemptCount, error)) {
             AccountNotifications.showError(applicationContext, error)
 
-            WorkerResult.FAILURE
+            Result.FAILURE
         } else {
-            WorkerResult.RETRY
+            Result.RETRY
         }
     }
 

@@ -109,12 +109,12 @@ class MessengerWorker : Worker() {
 
     private var currentCall: ProxerCall<*>? = null
 
-    override fun onStopped() {
+    override fun onStopped(cancelled: Boolean) {
         currentCall?.cancel()
     }
 
-    override fun doWork(): WorkerResult {
-        if (!StorageHelper.isLoggedIn) return WorkerResult.FAILURE
+    override fun doWork(): Result {
+        if (!StorageHelper.isLoggedIn) return Result.FAILURE
 
         val synchronizationResult = when (conferenceId) {
             0L -> try {
@@ -131,7 +131,7 @@ class MessengerWorker : Worker() {
 
         reschedule(applicationContext, synchronizationResult)
 
-        return if (synchronizationResult != SynchronizationResult.ERROR) WorkerResult.SUCCESS else WorkerResult.FAILURE
+        return if (synchronizationResult != SynchronizationResult.ERROR) Result.SUCCESS else Result.FAILURE
     }
 
     private fun handleSynchronization(): SynchronizationResult {
@@ -167,7 +167,7 @@ class MessengerWorker : Worker() {
             }
         }
 
-        return if (!isStopped && WorkerUtils.shouldShowError(error)) {
+        return if (!isStopped && WorkerUtils.shouldShowError(runAttemptCount, error)) {
             if (canShowNotification(applicationContext)) {
                 MessengerNotifications.showError(applicationContext, error)
             }
