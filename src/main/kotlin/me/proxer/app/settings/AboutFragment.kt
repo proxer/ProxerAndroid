@@ -51,7 +51,8 @@ class AboutFragment : MaterialAboutFragment() {
 
         private val FACEBOOK_LINK = Utils.parseAndFixUrl("https://facebook.com/Anime.Proxer.Me")
         private val TWITTER_LINK = Utils.parseAndFixUrl("https://twitter.com/proxerme")
-        private val YOUTUBE_LINK = Utils.parseAndFixUrl("https://youtube.com/channel/UC7h-fT9Y9XFxuZ5GZpbcrtA/")
+        private val YOUTUBE_LINK = Utils.parseAndFixUrl("https://youtube.com/channel/UC7h-fT9Y9XFxuZ5GZpbcrtA")
+        private val DISCORD_LINK = Utils.parseAndFixUrl("https://discord.gg/XwrEDmA")
         private val REPOSITORY_LINK = Utils.parseAndFixUrl("https://github.com/proxer/ProxerAndroid")
 
         private const val SUPPORT_ID = "374605"
@@ -150,6 +151,12 @@ class AboutFragment : MaterialAboutFragment() {
             .subText(R.string.about_youtube_description)
             .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_youtube_play).iconColor(context))
             .setOnClickAction { showPage(YOUTUBE_LINK) }
+            .build(),
+        MaterialAboutActionItem.Builder()
+            .text(R.string.about_discord_title)
+            .subText(R.string.about_discord_description)
+            .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_discord).iconColor(context))
+            .setOnClickAction { showPage(DISCORD_LINK) }
             .build()
     )
 

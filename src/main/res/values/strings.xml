@@ -626,6 +626,8 @@
     <string name="about_twitter_description">Folge Proxer.Me auf Twitter</string>
     <string name="about_youtube_title">YouTube</string>
     <string name="about_youtube_description">Abonniere Proxer.Me auf YouTube</string>
+    <string name="about_discord_title">Discord</string>
+    <string name="about_discord_description">Tritt dem Proxer.Me Discord Server bei</string>
     <string name="about_support_title">Support</string>
     <string name="about_support_forum_title">Forum</string>
     <string name="about_support_forum_description">Berichte Fehler oder mache Verbesserungsvorschläge im Forum</string>
