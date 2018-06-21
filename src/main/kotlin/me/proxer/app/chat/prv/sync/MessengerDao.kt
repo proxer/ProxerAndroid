@@ -6,6 +6,7 @@ import android.arch.persistence.room.Insert
 import android.arch.persistence.room.OnConflictStrategy
 import android.arch.persistence.room.Query
 import android.arch.persistence.room.Transaction
+import me.proxer.app.chat.prv.ConferenceWithMessage
 import me.proxer.app.chat.prv.LocalConference
 import me.proxer.app.chat.prv.LocalMessage
 import me.proxer.app.util.data.StorageHelper
@@ -49,8 +50,20 @@ abstract class MessengerDao {
     @Query("SELECT * FROM conferences ORDER BY date DESC")
     abstract fun getConferences(): List<LocalConference>
 
-    @Query("SELECT * FROM conferences WHERE topic LIKE '%' || :searchQuery || '%' ORDER BY date DESC")
-    abstract fun getConferencesLiveData(searchQuery: String): LiveData<List<LocalConference>?>
+    @Query("SELECT * " +
+        "FROM conferences " +
+        "LEFT JOIN (SELECT Max(id), " +
+        "conferenceId, " +
+        "message, " +
+        "username, " +
+        "`action` from messages " +
+        "GROUP BY conferenceId) AS messages " +
+        "ON conferences.id = messages.conferenceId " +
+        "WHERE  topic LIKE '%' " +
+        "|| :searchQuery " +
+        "|| '%' " +
+        "ORDER  BY date DESC")
+    abstract fun getConferencesLiveData(searchQuery: String): LiveData<List<ConferenceWithMessage>?>
 
     @Query("SELECT * FROM conferences WHERE id = :id LIMIT 1")
     abstract fun getConferenceLiveData(id: Long): LiveData<LocalConference?>

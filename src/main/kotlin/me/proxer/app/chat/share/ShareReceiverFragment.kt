@@ -19,7 +19,7 @@ import kotterknife.bindView
 import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
-import me.proxer.app.chat.prv.LocalConference
+import me.proxer.app.chat.prv.ConferenceWithMessage
 import me.proxer.app.chat.prv.conference.ConferenceAdapter
 import me.proxer.app.chat.prv.conference.ConferenceViewModelProvider
 import me.proxer.app.chat.prv.message.MessengerActivity
@@ -35,7 +35,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-class ShareReceiverFragment : BaseContentFragment<List<LocalConference>>() {
+class ShareReceiverFragment : BaseContentFragment<List<ConferenceWithMessage>>() {
 
     companion object {
         private const val SEARCH_QUERY_ARGUMENT = "search_query"
@@ -78,8 +78,8 @@ class ShareReceiverFragment : BaseContentFragment<List<LocalConference>>() {
             .debounce(50, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
             .autoDispose(this)
-            .subscribe {
-                MessengerActivity.navigateTo(requireActivity(), it, text)
+            .subscribe { (conference) ->
+                MessengerActivity.navigateTo(requireActivity(), conference, text)
 
                 requireActivity().finish()
             }
@@ -148,7 +148,7 @@ class ShareReceiverFragment : BaseContentFragment<List<LocalConference>>() {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    override fun showData(data: List<LocalConference>) {
+    override fun showData(data: List<ConferenceWithMessage>) {
         super.showData(data)
 
         adapter.swapDataAndNotifyWithDiffing(data)

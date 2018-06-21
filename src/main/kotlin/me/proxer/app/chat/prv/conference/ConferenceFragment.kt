@@ -22,7 +22,7 @@ import me.proxer.app.GlideApp
 import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
-import me.proxer.app.chat.prv.LocalConference
+import me.proxer.app.chat.prv.ConferenceWithMessage
 import me.proxer.app.chat.prv.create.CreateConferenceActivity
 import me.proxer.app.chat.prv.message.MessengerActivity
 import me.proxer.app.chat.prv.sync.MessengerNotifications
@@ -42,7 +42,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-class ConferenceFragment : BaseContentFragment<List<LocalConference>>() {
+class ConferenceFragment : BaseContentFragment<List<ConferenceWithMessage>>() {
 
     companion object {
         private const val SEARCH_QUERY_ARGUMENT = "search_query"
@@ -81,7 +81,7 @@ class ConferenceFragment : BaseContentFragment<List<LocalConference>>() {
 
         adapter.clickSubject
             .autoDispose(this)
-            .subscribe { MessengerActivity.navigateTo(requireActivity(), it) }
+            .subscribe { (conference) -> MessengerActivity.navigateTo(requireActivity(), conference) }
 
         setHasOptionsMenu(true)
     }
@@ -171,7 +171,7 @@ class ConferenceFragment : BaseContentFragment<List<LocalConference>>() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun showData(data: List<LocalConference>) {
+    override fun showData(data: List<ConferenceWithMessage>) {
         super.showData(data)
 
         val wasAtFirstPosition = recyclerView.safeLayoutManager.isAtTop()

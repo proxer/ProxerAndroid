@@ -24,6 +24,7 @@ import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.iconColor
+import me.proxer.app.util.extension.toAppString
 import me.proxer.library.enums.MessageAction
 import okhttp3.HttpUrl
 import org.jetbrains.anko.dip
@@ -386,19 +387,9 @@ class MessengerAdapter(
         override fun onContainerLongClick(v: View) = false
 
         override fun applyMessage(message: LocalMessage) {
-            text.setTree(BBParser.parseSimple(generateText(message)).optimize())
-        }
+            val messageText = message.action.toAppString(text.context, message.username, message.message)
 
-        private fun generateText(message: LocalMessage) = when (message.action) {
-            MessageAction.ADD_USER -> text.context.getString(R.string.action_conference_add_user,
-                "@${message.username}", "@${message.message}")
-            MessageAction.REMOVE_USER -> text.context.getString(R.string.action_conference_delete_user,
-                "@${message.username}", "@${message.message}")
-            MessageAction.SET_LEADER -> text.context.getString(R.string.action_conference_set_leader,
-                "@${message.username}", "@${message.message}")
-            MessageAction.SET_TOPIC -> text.context.getString(R.string.action_conference_set_topic,
-                "@${message.username}", message.message)
-            MessageAction.NONE -> message.message
+            text.setTree(BBParser.parseSimple(messageText).optimize())
         }
     }
 

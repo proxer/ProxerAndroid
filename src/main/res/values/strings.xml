@@ -469,10 +469,6 @@
 
     <string name="fragment_discussion_meta_info">Von %1$s in %2$s</string>
 
-    <plurals name="fragment_conference_participants">
-        <item quantity="other">%d Teilnehmer</item>
-    </plurals>
-
     <string name="fragment_messenger_clip_title">Chatverlauf</string>
     <string name="fragment_messenger_message">Tippe eine Nachricht</string>
     <string name="fragment_messenger_reply">"@%s "</string>

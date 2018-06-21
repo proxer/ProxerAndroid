@@ -44,6 +44,7 @@ import me.proxer.library.enums.License
 import me.proxer.library.enums.MediaLanguage
 import me.proxer.library.enums.MediaState
 import me.proxer.library.enums.Medium
+import me.proxer.library.enums.MessageAction
 import me.proxer.library.enums.RelationshipStatus
 import me.proxer.library.enums.Season
 import me.proxer.library.enums.SynonymType
@@ -295,6 +296,14 @@ fun RelationshipStatus.toAppString(context: Context): String = context.getString
     RelationshipStatus.NOT_SEARCHING -> R.string.relationship_status_not_searching
     RelationshipStatus.UNKNOWN -> R.string.relationship_status_unknown
 })
+
+fun MessageAction.toAppString(context: Context, username: String, message: String): String = when (this) {
+    MessageAction.ADD_USER -> context.getString(R.string.action_conference_add_user, "@$username", "@$message")
+    MessageAction.REMOVE_USER -> context.getString(R.string.action_conference_delete_user, "@$username", "@$message")
+    MessageAction.SET_LEADER -> context.getString(R.string.action_conference_set_leader, "@$username", "@$message")
+    MessageAction.SET_TOPIC -> context.getString(R.string.action_conference_set_topic, "@$username", message)
+    MessageAction.NONE -> message
+}
 
 inline val Page.decodedName: String
     get() = try {

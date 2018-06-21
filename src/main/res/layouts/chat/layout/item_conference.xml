@@ -35,53 +35,75 @@
                 android:id="@+id/topic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_toStartOf="@+id/timeContainer"
+                android:layout_toLeftOf="@+id/timeContainer"
+                android:layout_toEndOf="@+id/image"
+                android:layout_toRightOf="@+id/image"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:textColor="@color/textColorPrimary"
+                tools:text="Title" />
+
+            <FrameLayout
+                android:id="@+id/timeContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/topic"
+                android:layout_alignBottom="@+id/topic"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp">
+
+                <TextView
+                    android:id="@+id/time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    tools:text="Two days ago" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/previewTextContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/newMessages"
+                android:layout_alignBottom="@+id/newMessages"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:layout_toStartOf="@+id/newMessages"
                 android:layout_toLeftOf="@+id/newMessages"
                 android:layout_toEndOf="@+id/image"
-                android:layout_toRightOf="@+id/image"
-                android:paddingLeft="8dp"
-                android:paddingTop="8dp"
-                android:paddingRight="8dp"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                tools:text="Title" />
+                android:layout_toRightOf="@+id/image">
+
+                <com.vanniktech.emoji.EmojiTextView
+                    android:id="@+id/previewText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    tools:text="A message" />
+            </FrameLayout>
 
             <com.matrixxun.starry.badgetextview.MaterialBadgeTextView
                 android:id="@+id/newMessages"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/topic"
+                android:layout_below="@+id/topic"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginLeft="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
+                android:layout_marginBottom="8dp"
                 android:textColor="@android:color/white"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/topic"
-                android:layout_alignParentBottom="true"
-                android:layout_toStartOf="@+id/participants"
-                android:layout_toLeftOf="@+id/participants"
-                android:layout_toEndOf="@+id/image"
-                android:layout_toRightOf="@+id/image"
-                android:padding="8dp"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                tools:text="Two days ago" />
-
-            <TextView
-                android:id="@+id/participants"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/topic"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentBottom="true"
-                android:padding="8dp"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                tools:text="5 Participants" />
+                android:textStyle="bold"
+                tools:text="2" />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </FrameLayout>

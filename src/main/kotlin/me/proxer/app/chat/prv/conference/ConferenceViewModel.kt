@@ -9,7 +9,7 @@ import io.reactivex.rxkotlin.plusAssign
 import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.MainApplication.Companion.messengerDao
 import me.proxer.app.base.BaseViewModel
-import me.proxer.app.chat.prv.LocalConference
+import me.proxer.app.chat.prv.ConferenceWithMessage
 import me.proxer.app.chat.prv.sync.MessengerErrorEvent
 import me.proxer.app.chat.prv.sync.MessengerWorker
 import me.proxer.app.util.ErrorUtils
@@ -21,22 +21,22 @@ import kotlin.properties.Delegates
  * @author Ruben Gees
  */
 @GeneratedProvider
-class ConferenceViewModel(searchQuery: String) : BaseViewModel<List<LocalConference>>() {
+class ConferenceViewModel(searchQuery: String) : BaseViewModel<List<ConferenceWithMessage>>() {
 
     override val isLoginRequired = true
 
-    override val data = MediatorLiveData<List<LocalConference>?>()
+    override val data = MediatorLiveData<List<ConferenceWithMessage>?>()
 
-    override val dataSingle: Single<List<LocalConference>>
+    override val dataSingle: Single<List<ConferenceWithMessage>>
         get() = Single
             .fromCallable { Validators.validateLogin() }
             .flatMap {
                 if (!MessengerWorker.isRunning()) MessengerWorker.enqueueSynchronization()
 
-                Single.never<List<LocalConference>>()
+                Single.never<List<ConferenceWithMessage>>()
             }
 
-    private val sourceObserver = Observer { it: List<LocalConference>? ->
+    private val sourceObserver = Observer { it: List<ConferenceWithMessage>? ->
         it?.let {
             val containsRelevantData = it.isNotEmpty() || StorageHelper.areConferencesSynchronized
 
