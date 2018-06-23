@@ -83,6 +83,7 @@
                     android:id="@+id/previewText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:drawablePadding="4dp"
                     android:layout_gravity="center_vertical"
                     android:ellipsize="end"
                     android:maxLines="1"

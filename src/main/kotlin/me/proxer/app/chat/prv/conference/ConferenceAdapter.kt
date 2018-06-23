@@ -1,5 +1,6 @@
 package me.proxer.app.chat.prv.conference
 
+import android.content.Context
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.matrixxun.starry.badgetextview.MaterialBadgeTextView
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
+import com.mikepenz.iconics.typeface.IIcon
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.GlideRequests
@@ -19,11 +21,14 @@ import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.chat.prv.ConferenceWithMessage
 import me.proxer.app.chat.prv.conference.ConferenceAdapter.ViewHolder
+import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.colorRes
 import me.proxer.app.util.extension.convertToRelativeReadableTime
+import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.toAppString
 import me.proxer.library.util.ProxerUrls
 import org.jetbrains.anko.dip
+import org.jetbrains.anko.sp
 
 /**
  * @author Ruben Gees
@@ -85,12 +90,9 @@ class ConferenceAdapter : BaseAdapter<ConferenceWithMessage, ViewHolder>() {
         }
 
         private fun bindTopic(item: ConferenceWithMessage) {
-            val (conference, firstMessageText, firstMessageUsername, firstMessageAction) = item
+            topic.text = item.conference.topic
 
-            topic.text = conference.topic
-
-            if (firstMessageText != null && firstMessageUsername != null && firstMessageAction != null) {
-
+            if (item.message != null) {
                 (topic.layoutParams as RelativeLayout.LayoutParams).apply {
                     bottomMargin = 0
 
@@ -110,27 +112,40 @@ class ConferenceAdapter : BaseAdapter<ConferenceWithMessage, ViewHolder>() {
         }
 
         private fun bindPreviewText(item: ConferenceWithMessage) {
-            val (conference, firstMessageText, firstMessageUsername, firstMessageAction) = item
+            if (item.message != null) {
+                val messageFromUser = item.message.userId == StorageHelper.user?.id
 
-            if (firstMessageText != null && firstMessageUsername != null && firstMessageAction != null) {
-                val trimmedFirstMessageText = firstMessageText
+                val trimmedFirstMessageText = item.message.messageText
                     .replace("\r\n", " ")
                     .replace("\n", " ")
                     .trim()
 
-                val processedFirstMessageText = if (conference.isGroup) {
-                    "$firstMessageUsername: $trimmedFirstMessageText"
+                val processedFirstMessageText = if (item.conference.isGroup && !messageFromUser) {
+                    "${item.message.username}: $trimmedFirstMessageText"
                 } else {
                     trimmedFirstMessageText
                 }
 
-                previewText.text = firstMessageAction.toAppString(previewText.context,
-                    firstMessageUsername, processedFirstMessageText)
+                val icon = when (messageFromUser) {
+                    true -> when (item.message.messageId < 0) {
+                        true -> CommunityMaterial.Icon.cmd_clock
+                        false -> CommunityMaterial.Icon.cmd_check
+                    }
+                    false -> null
+                }
+
+                val iconicsIcon = if (icon == null) null else generateMessageStatusDrawable(previewText.context, icon)
+
+                previewText.text = item.message.messageAction.toAppString(previewText.context,
+                    item.message.username, processedFirstMessageText)
+
+                previewText.setCompoundDrawables(iconicsIcon, null, null, null)
             } else {
                 previewText.text = null
+                previewText.setCompoundDrawables(null, null, null, null)
             }
 
-            if (conference.localIsRead) {
+            if (item.conference.localIsRead) {
                 (previewTextContainer.layoutParams as RelativeLayout.LayoutParams).apply {
                     topMargin = previewTextContainer.context.dip(8)
                     bottomMargin = previewTextContainer.context.dip(8)
@@ -182,5 +197,10 @@ class ConferenceAdapter : BaseAdapter<ConferenceWithMessage, ViewHolder>() {
                     ?.into(image)
             }
         }
+
+        private fun generateMessageStatusDrawable(context: Context, icon: IIcon) = IconicsDrawable(context)
+            .icon(icon)
+            .iconColor(context)
+            .sizePx(context.sp(14))
     }
 }

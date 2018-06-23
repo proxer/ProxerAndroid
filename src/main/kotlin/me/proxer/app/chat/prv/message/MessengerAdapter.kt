@@ -60,7 +60,6 @@ class MessengerAdapter(
     private val messageSelectionMap: ParcelableStringBooleanMap
     private val timeDisplayMap: ParcelableStringBooleanMap
 
-    private val user by lazy { StorageHelper.user }
     private var isSelecting = false
 
     init {
@@ -132,7 +131,7 @@ class MessengerAdapter(
                 }
             }
 
-            if (current.userId == user?.id) {
+            if (current.userId == StorageHelper.user?.id) {
                 result += 4 // Make the item a "self" item.
             }
         }

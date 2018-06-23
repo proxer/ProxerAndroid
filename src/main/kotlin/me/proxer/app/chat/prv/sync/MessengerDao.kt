@@ -5,6 +5,7 @@ import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.OnConflictStrategy
 import android.arch.persistence.room.Query
+import android.arch.persistence.room.RoomWarnings
 import android.arch.persistence.room.Transaction
 import me.proxer.app.chat.prv.ConferenceWithMessage
 import me.proxer.app.chat.prv.LocalConference
@@ -50,13 +51,16 @@ abstract class MessengerDao {
     @Query("SELECT * FROM conferences ORDER BY date DESC")
     abstract fun getConferences(): List<LocalConference>
 
+    @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("SELECT * " +
         "FROM conferences " +
-        "LEFT JOIN (SELECT Max(id), " +
+        "LEFT JOIN (SELECT Max(date), " +
+        "id AS messageId, " +
         "conferenceId, " +
-        "message, " +
+        "userId, " +
+        "message AS messageText, " +
         "username, " +
-        "`action` from messages " +
+        "`action` as messageAction from messages " +
         "GROUP BY conferenceId) AS messages " +
         "ON conferences.id = messages.conferenceId " +
         "WHERE  topic LIKE '%' " +
