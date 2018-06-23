@@ -54,16 +54,18 @@ abstract class MessengerDao {
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("SELECT * " +
         "FROM conferences " +
-        "LEFT JOIN (SELECT Max(date), " +
-        "id AS messageId, " +
+        "LEFT JOIN ( " +
+        "SELECT * FROM ( " +
+        "SELECT id AS messageId, " +
         "conferenceId, " +
         "userId, " +
         "message AS messageText, " +
         "username, " +
         "`action` as messageAction from messages " +
+        "ORDER BY date, id) " +
         "GROUP BY conferenceId) AS messages " +
         "ON conferences.id = messages.conferenceId " +
-        "WHERE  topic LIKE '%' " +
+        "WHERE topic LIKE '%' " +
         "|| :searchQuery " +
         "|| '%' " +
         "ORDER  BY date DESC")
