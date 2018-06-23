@@ -3,6 +3,7 @@ package me.proxer.app.ui.view.bbcode
 import android.content.Context
 import android.support.v4.view.ViewCompat
 import android.util.AttributeSet
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -73,6 +74,7 @@ internal class BBSpoilerView @JvmOverloads constructor(
 
         toggleText.setTextColor(spoilerTextColor)
         toggleText.setTag(R.id.ignore_tag, Unit)
+        toggleText.gravity = Gravity.CENTER
 
         updateToggleButtonIcon()
         handleExpansion()
