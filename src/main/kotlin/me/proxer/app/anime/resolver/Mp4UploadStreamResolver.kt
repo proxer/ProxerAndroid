@@ -52,7 +52,7 @@ class Mp4UploadStreamResolver : StreamResolver {
 
             val decodedUrl = encodedUrl.replace(encodeReplaceRegex) { result ->
                 val base36Index = result.value
-                val index = base36Index.toInt(36) ?: throw StreamResolutionException()
+                val index = base36Index.toIntOrNull(36) ?: throw StreamResolutionException()
                 val item = items.getOrNull(index) ?: throw StreamResolutionException()
 
                 if (item.isNotBlank()) item else base36Index
