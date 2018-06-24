@@ -124,10 +124,17 @@ android {
     }
 
     packagingOptions {
-        exclude '**/*.kotlin_builtins'
-        exclude '**/*.kotlin_module'
-        exclude '**/rxkotlin.properties'
-        exclude '**/*.pro'
+        exclude 'META-INF/*.kotlin_builtins'
+        exclude 'META-INF/*.kotlin_module'
+        exclude 'META-INF/rxkotlin.properties'
+        exclude 'META-INF/proguard/**'
+        exclude 'kotlin/**'
+        exclude 'third_party/**'
+        exclude 'jsr305_annotations/**'
+        exclude 'error_prone/**'
+        exclude 'protobuf.meta'
+        exclude 'build-data.properties'
+        exclude 'androidsupportmultidexversion.txt'
     }
 
     sourceSets {
