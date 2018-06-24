@@ -2,6 +2,7 @@ package me.proxer.app.manga
 
 import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -144,7 +145,11 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
                 itemView.layoutParams.height = MATCH_PARENT
             }
 
-            if (item.name.endsWith("png") || requiresFallback[item.decodedName] == true) {
+            // Do not use RapidDecoder on Android M. Crashing when zooming on that specific version.
+            val shouldUseRapidDecoder = (Build.VERSION.SDK_INT != Build.VERSION_CODES.M && item.name.endsWith("png"))
+            val mustUseRapidDecoder = requiresFallback[item.decodedName] == true
+
+            if (shouldUseRapidDecoder || mustUseRapidDecoder) {
                 image.setBitmapDecoderClass(RapidImageDecoder::class.java)
                 image.setRegionDecoderClass(RapidImageRegionDecoder::class.java)
             } else {
