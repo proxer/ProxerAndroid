@@ -146,7 +146,7 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
             }
 
             // Do not use RapidDecoder on Android M. Crashing when zooming on that specific version.
-            val shouldUseRapidDecoder = (Build.VERSION.SDK_INT != Build.VERSION_CODES.M && item.name.endsWith("png"))
+            val shouldUseRapidDecoder = Build.VERSION.SDK_INT != Build.VERSION_CODES.M && item.name.endsWith("png")
             val mustUseRapidDecoder = requiresFallback[item.decodedName] == true
 
             if (shouldUseRapidDecoder || mustUseRapidDecoder) {
