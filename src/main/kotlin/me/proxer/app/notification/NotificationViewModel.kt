@@ -4,7 +4,6 @@ import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.MainApplication.Companion.bus
@@ -40,7 +39,9 @@ class NotificationViewModel : PagedViewModel<ProxerNotification>() {
                         .limit(Int.MAX_VALUE)
                         .buildSingle()
                         .doOnSuccess { firstPageItemAmount = it.size }
-                        .zipWith(readSingle(), BiFunction { first, second -> first + second })
+                        .flatMap { unreadResult ->
+                            readSingle().map { readResult -> unreadResult + readResult }
+                        }
                     else -> readSingle()
                 }
             }
