@@ -26,7 +26,7 @@ class NotificationAdapter : BaseAdapter<ProxerNotification, ViewHolder>() {
     val deleteClickSubject: PublishSubject<ProxerNotification> = PublishSubject.create()
 
     init {
-        setHasStableIds(false)
+        setHasStableIds(true)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
