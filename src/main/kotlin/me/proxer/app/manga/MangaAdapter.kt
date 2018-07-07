@@ -80,23 +80,23 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(data[position])
 
+    @SuppressLint("CheckResult")
     override fun swapDataAndNotifyWithDiffing(newData: List<Page>) {
         super.swapDataAndNotifyWithDiffing(newData)
 
         preloadTargets.forEach { glide?.clear(it) }
         preloadTargets.clear()
 
-        newData.forEach { item ->
-            val target = object : SimpleTarget<File>() {
-                override fun onResourceReady(resource: File, transition: Transition<in File>?) = Unit
-            }
+        val preloadList = newData.map {
+            ProxerUrls.mangaPageImage(server, entryId, id, it.decodedName).toString()
+        }
 
-            preloadTargets += target
+        if (preloadList.isNotEmpty()) {
+            val preloadMap = preloadList
+                .mapIndexed { index, url -> url to preloadList.getOrNull(index + 1) }
+                .associate { it }
 
-            glide
-                ?.downloadOnly()
-                ?.load(ProxerUrls.mangaPageImage(server, entryId, id, item.decodedName).toString())
-                ?.into(target)
+            preload(preloadMap, preloadList.first())
         }
     }
 
@@ -115,6 +115,25 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
     }
 
     override fun saveInstanceState(outState: Bundle) = outState.putParcelable(REQUIRES_FALLBACK_STATE, requiresFallback)
+
+    private fun preload(links: Map<String, String?>, next: String) {
+        val target = object : SimpleTarget<File>() {
+            override fun onResourceReady(resource: File, transition: Transition<in File>?) {
+                val afterNext = links[next]
+
+                if (afterNext != null) {
+                    preload(links, afterNext)
+                }
+            }
+        }
+
+        preloadTargets += target
+
+        glide
+            ?.downloadOnly()
+            ?.load(next)
+            ?.into(target)
+    }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
