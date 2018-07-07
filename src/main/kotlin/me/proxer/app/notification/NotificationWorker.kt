@@ -39,13 +39,13 @@ class NotificationWorker : Worker() {
         }
 
         fun cancel() {
-            WorkManager.getInstance().cancelUniqueWork(NAME)
+            WorkManager.getInstance()?.cancelUniqueWork(NAME)
         }
 
         private fun enqueue(context: Context) {
             val interval = PreferenceHelper.getNotificationsInterval(context) * 1000 * 60
 
-            WorkManager.getInstance().enqueueUniquePeriodicWork(NAME, ExistingPeriodicWorkPolicy.REPLACE,
+            WorkManager.getInstance()?.enqueueUniquePeriodicWork(NAME, ExistingPeriodicWorkPolicy.REPLACE,
                 PeriodicWorkRequestBuilder<NotificationWorker>(interval, TimeUnit.MILLISECONDS)
                     .setConstraints(Constraints.Builder()
                         .setRequiredNetworkType(NetworkType.CONNECTED)

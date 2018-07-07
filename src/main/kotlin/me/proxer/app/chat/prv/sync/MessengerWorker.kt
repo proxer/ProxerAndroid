@@ -57,11 +57,11 @@ class MessengerWorker : Worker() {
         fun enqueueMessageLoad(conferenceId: Long) = doEnqueue(conferenceId = conferenceId)
 
         fun cancel() {
-            WorkManager.getInstance().cancelUniqueWork(NAME)
+            WorkManager.getInstance()?.cancelUniqueWork(NAME)
         }
 
-        fun isRunning() = WorkManager.getInstance().getStatusesForUniqueWork(NAME)
-            .value?.firstOrNull()?.state == State.RUNNING
+        fun isRunning() = WorkManager.getInstance()?.getStatusesForUniqueWork(NAME)
+            ?.value?.firstOrNull()?.state == State.RUNNING
 
         private fun reschedule(context: Context, synchronizationResult: SynchronizationResult) {
             if (canSchedule(context) && synchronizationResult != SynchronizationResult.ERROR) {
@@ -84,7 +84,7 @@ class MessengerWorker : Worker() {
         }
 
         private fun doEnqueue(startTime: Long? = null, conferenceId: Long? = null) {
-            WorkManager.getInstance().beginUniqueWork(NAME, ExistingWorkPolicy.REPLACE,
+            WorkManager.getInstance()?.beginUniqueWork(NAME, ExistingWorkPolicy.REPLACE,
                 OneTimeWorkRequestBuilder<MessengerWorker>()
                     .setConstraints(Constraints.Builder()
                         .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -94,7 +94,7 @@ class MessengerWorker : Worker() {
                         .apply { if (conferenceId != null) putLong(CONFERENCE_ID_ARGUMENT, conferenceId) }
                         .build())
                     .build())
-                .enqueue()
+                ?.enqueue()
         }
 
         private fun canSchedule(context: Context) = PreferenceHelper.areChatNotificationsEnabled(context) ||
