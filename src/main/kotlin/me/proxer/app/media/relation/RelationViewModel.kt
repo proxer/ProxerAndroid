@@ -22,5 +22,5 @@ class RelationViewModel(private val entryId: String) : BaseContentViewModel<List
 
     override val dataSingle: Single<List<Relation>>
         get() = super.dataSingle
-            .map { it.filterNot { it.id == entryId }.sortedByDescending { it.clicks } }
+            .map { relations -> relations.filterNot { it.id == entryId } }
 }
