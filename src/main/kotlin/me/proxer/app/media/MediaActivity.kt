@@ -1,8 +1,10 @@
 package me.proxer.app.media
 
 import android.app.Activity
+import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.app.ShareCompat
@@ -86,17 +88,15 @@ class MediaActivity : ImageTabsActivity() {
     var category: Category?
         get() = intent.getSerializableExtra(CATEGORY_EXTRA) as Category?
         set(value) {
-            intent.putExtra(CATEGORY_EXTRA, category)
+            intent.putExtra(CATEGORY_EXTRA, value)
 
-            value?.let {
-                sectionsPagerAdapter.updateEpisodesTitle(value)
-            }
+            sectionsPagerAdapter.update()
         }
 
     override val headerImageUrl: HttpUrl by unsafeLazy { ProxerUrls.entryImage(id) }
     override val sectionsPagerAdapter by unsafeLazy { SectionsPagerAdapter(supportFragmentManager) }
 
-    override val itemToDisplay: Int
+    private val customItemToDisplay: Int
         get() = when (intent.action) {
             Intent.ACTION_VIEW -> when (intent.data.pathSegments.getOrNull(2)) {
                 COMMENTS_SUB_SECTION -> 1
@@ -108,6 +108,20 @@ class MediaActivity : ImageTabsActivity() {
             }
             else -> 0
         }
+
+    private val viewModel by unsafeLazy { MediaInfoViewModelProvider.get(this, id) }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        viewModel.data.observe(this, Observer {
+            sectionsPagerAdapter.update()
+
+            if (it != null) {
+                viewPager.currentItem = customItemToDisplay
+            }
+        })
+    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         IconicsMenuInflaterUtil.inflate(menuInflater, this, R.menu.activity_share, menu, true)
@@ -148,7 +162,10 @@ class MediaActivity : ImageTabsActivity() {
             else -> throw IllegalArgumentException("Unknown index passed: $position")
         }
 
-        override fun getCount() = 6
+        override fun getCount() = when (viewModel.data.value) {
+            null -> 1
+            else -> 6
+        }
 
         @Suppress("LabeledExpression")
         override fun getPageTitle(position: Int): String = when (position) {
@@ -162,9 +179,13 @@ class MediaActivity : ImageTabsActivity() {
             else -> throw IllegalArgumentException("Unknown index passed: $position")
         }
 
-        @Suppress("LabeledExpression")
-        fun updateEpisodesTitle(category: Category) {
-            tabs.getTabAt(2)?.text = category.toEpisodeAppString(this@MediaActivity)
+        fun update() {
+            this.notifyDataSetChanged()
+
+            if (count >= 1) {
+                tabs.getTabAt(2)?.text = category?.toEpisodeAppString(this@MediaActivity)
+                    ?: getString(R.string.category_anime_episodes_title)
+            }
         }
     }
 }

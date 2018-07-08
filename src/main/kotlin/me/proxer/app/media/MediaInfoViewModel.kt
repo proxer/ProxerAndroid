@@ -1,4 +1,4 @@
-package me.proxer.app.media.info
+package me.proxer.app.media
 
 import com.gojuno.koptional.None
 import com.gojuno.koptional.Optional
@@ -7,16 +7,24 @@ import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.api
+import me.proxer.app.MainApplication.Companion.bus
+import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.base.BaseViewModel
+import me.proxer.app.exception.AgeConfirmationRequiredException
+import me.proxer.app.settings.AgeConfirmationEvent
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
+import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction
 import me.proxer.app.util.Validators
+import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.buildOptionalSingle
 import me.proxer.app.util.extension.buildSingle
+import me.proxer.app.util.extension.isTrulyAgeRestricted
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.entity.info.Entry
 import me.proxer.library.entity.info.MediaUserInfo
@@ -30,6 +38,11 @@ class MediaInfoViewModel(private val entryId: String) : BaseViewModel<Pair<Entry
     override val dataSingle: Single<Pair<Entry, Optional<MediaUserInfo>>>
         get() = Single.fromCallable { validate() }
             .flatMap { api.info().entry(entryId).buildSingle() }
+            .doOnSuccess {
+                if (it.isTrulyAgeRestricted && !PreferenceHelper.isAgeRestrictedMediaAllowed(globalContext)) {
+                    throw AgeConfirmationRequiredException()
+                }
+            }
             .flatMap { entry ->
                 when (StorageHelper.isLoggedIn) {
                     true -> api.info().userInfo(entryId)
@@ -45,6 +58,12 @@ class MediaInfoViewModel(private val entryId: String) : BaseViewModel<Pair<Entry
 
     private var userInfoUpdateDisposable: Disposable? = null
 
+    init {
+        disposables += bus.register(AgeConfirmationEvent::class.java)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { if (error.value?.buttonAction == ButtonAction.AGE_CONFIRMATION) reload() }
+    }
+
     override fun onCleared() {
         userInfoUpdateDisposable?.dispose()
         userInfoUpdateDisposable = null
@@ -58,9 +77,9 @@ class MediaInfoViewModel(private val entryId: String) : BaseViewModel<Pair<Entry
 
     private fun updateUserInfo(updateType: UserInfoUpdateType) {
         val endpoint = when (updateType) {
-            MediaInfoViewModel.UserInfoUpdateType.NOTE -> api.info().note(entryId)
-            MediaInfoViewModel.UserInfoUpdateType.FAVORITE -> api.info().markAsFavorite(entryId)
-            MediaInfoViewModel.UserInfoUpdateType.FINISHED -> api.info().markAsFinished(entryId)
+            UserInfoUpdateType.NOTE -> api.info().note(entryId)
+            UserInfoUpdateType.FAVORITE -> api.info().markAsFavorite(entryId)
+            UserInfoUpdateType.FINISHED -> api.info().markAsFinished(entryId)
         }
 
         userInfoUpdateDisposable?.dispose()

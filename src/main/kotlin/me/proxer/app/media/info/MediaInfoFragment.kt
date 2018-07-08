@@ -25,6 +25,7 @@ import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.info.industry.IndustryActivity
 import me.proxer.app.info.translatorgroup.TranslatorGroupActivity
 import me.proxer.app.media.MediaActivity
+import me.proxer.app.media.MediaInfoViewModelProvider
 import me.proxer.app.ui.view.MaxLineFlexboxLayout
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.multilineSnackbar
@@ -63,7 +64,7 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
     override val hostingActivity: MediaActivity
         get() = activity as MediaActivity
 
-    override val viewModel by unsafeLazy { MediaInfoViewModelProvider.get(this, id) }
+    override val viewModel by unsafeLazy { MediaInfoViewModelProvider.get(requireActivity(), id) }
 
     private val id: String
         get() = hostingActivity.id

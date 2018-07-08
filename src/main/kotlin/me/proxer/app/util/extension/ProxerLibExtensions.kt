@@ -25,6 +25,7 @@ import me.proxer.library.entity.chat.ChatMessage
 import me.proxer.library.entity.forum.Post
 import me.proxer.library.entity.forum.Topic
 import me.proxer.library.entity.info.Comment
+import me.proxer.library.entity.info.Entry
 import me.proxer.library.entity.info.EntrySeasonInfo
 import me.proxer.library.entity.info.Synonym
 import me.proxer.library.entity.list.Tag
@@ -304,6 +305,10 @@ fun MessageAction.toAppString(context: Context, username: String, message: Strin
     MessageAction.SET_TOPIC -> context.getString(R.string.action_conference_set_topic, "@$username", message)
     MessageAction.NONE -> message
 }
+
+inline val Entry.isTrulyAgeRestricted: Boolean
+    get() = isAgeRestricted || medium == Medium.HMANGA || medium == Medium.HENTAI ||
+        fskConstraints.contains(FskConstraint.FSK_18)
 
 inline val Page.decodedName: String
     get() = try {
