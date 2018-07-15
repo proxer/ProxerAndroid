@@ -146,6 +146,7 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
 
         init {
             image.setDoubleTapZoomDuration(shortAnimationTime)
+            image.isExifInterfaceEnabled = false
 
             errorIndicator.setIconicsImage(CommunityMaterial.Icon.cmd_refresh, 64)
 

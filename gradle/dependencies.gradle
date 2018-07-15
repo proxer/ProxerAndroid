@@ -53,7 +53,7 @@ ext {
             fastadapterExpandable            : "com.mikepenz:fastadapter-extensions-expandable:$fastadapterVersion@aar",
             crossfader                       : "com.mikepenz:crossfader:$crossfaderVersion@aar",
             materialAbout                    : "com.github.daniel-stoneuk:material-about-library:$materialAboutVersion",
-            subsamplingScaleImageView        : "com.davemorrissey.labs:subsampling-scale-image-view:$subsamplingScaleImageViewVersion",
+            subsamplingScaleImageView        : "com.github.rubengees:subsampling-scale-image-view:$subsamplingScaleImageViewVersion",
             subsamplingPdfDecoder            : "com.github.num42:subsampling-pdf-decoder:$subsamplingPdfDecoderVersion",
             tabLayoutHelper                  : "com.github.rubengees:android-tablayouthelper:$tabLayoutHelperVersion",
             materialDialogs                  : "com.afollestad.material-dialogs:core:$materialDialogsVersion",

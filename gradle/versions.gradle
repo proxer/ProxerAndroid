@@ -53,7 +53,7 @@ ext {
     fastadapterVersion = '3.2.7'
     crossfaderVersion = '1.5.2'
     materialAboutVersion = '2.3.0'
-    subsamplingScaleImageViewVersion = '3.10.0'
+    subsamplingScaleImageViewVersion = 'e9398dce15'
     subsamplingPdfDecoderVersion = 'ad07ddf671'
     tabLayoutHelperVersion = 'ebb8a7acec'
     materialDialogsVersion = '0.9.6.0'
