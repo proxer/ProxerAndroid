@@ -9,7 +9,6 @@ import android.net.Uri
 import android.os.Environment
 import android.support.multidex.MultiDex
 import android.support.v7.app.AppCompatDelegate
-import android.util.Log
 import android.webkit.WebView
 import android.widget.ImageView
 import androidx.work.Configuration
@@ -51,6 +50,10 @@ import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.api.ProxerApi
 import me.proxer.library.api.ProxerApi.Builder.LoggingStrategy
 import okhttp3.OkHttpClient
+import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalDateTime
+import timber.log.Timber
+import java.io.File
 import java.util.Date
 import java.util.concurrent.TimeUnit
 import kotlin.properties.Delegates
@@ -61,7 +64,6 @@ import kotlin.properties.Delegates
 class MainApplication : Application() {
 
     companion object {
-        const val LOGGING_TAG = "ProxerAndroid"
         const val USER_AGENT = "ProxerAndroid/${BuildConfig.VERSION_NAME}"
         const val GENERIC_USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
 
@@ -177,8 +179,9 @@ class MainApplication : Application() {
     private fun initApi() {
         api = ProxerApi.Builder(BuildConfig.PROXER_API_KEY)
             .userAgent(USER_AGENT)
+            .apply { if (BuildConfig.LOG) customLogger { Timber.tag("API").i(it) } }
             .loggingStrategy(if (BuildConfig.DEBUG) LoggingStrategy.ALL else LoggingStrategy.NONE)
-            .loggingTag(LOGGING_TAG)
+            .loggingTag("API")
             .loginTokenManager(ProxerLoginTokenManager())
             .client(OkHttpClient.Builder()
                 .retryOnConnectionFailure(false)
@@ -203,10 +206,18 @@ class MainApplication : Application() {
 
         WorkManager.initialize(this, Configuration.Builder().build())
 
+        if (BuildConfig.LOG) {
+            Timber.plant(FileTree())
+
+            if (BuildConfig.DEBUG) {
+                Timber.plant(Timber.DebugTree())
+            }
+        }
+
         RxJavaPlugins.setErrorHandler { error ->
             when (error) {
-                is UndeliverableException -> Log.w(LOGGING_TAG, "Can't deliver error: $error")
-                is InterruptedException -> Log.w(LOGGING_TAG, error)
+                is UndeliverableException -> Timber.w("Can't deliver error: $error")
+                is InterruptedException -> Timber.w(error)
                 else -> Thread.currentThread().uncaughtExceptionHandler.uncaughtException(Thread.currentThread(), error)
             }
         }
@@ -234,6 +245,17 @@ class MainApplication : Application() {
                 .build()
 
             StrictModeCompat.setPolicies(threadPolicy, vmPolicy)
+        }
+    }
+
+    private class FileTree : Timber.Tree() {
+
+        override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
+            val logDir = File(globalContext.getExternalFilesDir(null), "logs").also { it.mkdirs() }
+            val logFile = File(logDir, LocalDate.now().toString() + ".log").also { it.createNewFile() }
+            val currentTime = LocalDateTime.now().toString()
+
+            logFile.appendText("$currentTime  ${if (tag != null) "$tag:" else ""} $message")
         }
     }
 

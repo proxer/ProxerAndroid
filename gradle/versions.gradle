@@ -33,7 +33,7 @@ ext {
     lifecycleVersion = '1.1.1'
     roomVersion = '1.1.1'
     workVersion = '1.0.0-alpha04'
-    proxerLibVersion = '4.4.2'
+    proxerLibVersion = '9b34fe1035'
 
     // RxJava
     rxJavaVersion = '2.1.16'
@@ -91,4 +91,5 @@ ext {
     customActivityOnCrashVersion = '2.2.0'
     strictModeCompatVersion = '26.0.2'
     leakCanaryVersion = '1.6-SNAPSHOT'
+    timberVersion = '4.7.1'
 }

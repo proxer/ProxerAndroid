@@ -5,7 +5,6 @@ import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -26,7 +25,6 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.GlideRequests
-import me.proxer.app.MainApplication.Companion.LOGGING_TAG
 import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.manga.MangaAdapter.ViewHolder
@@ -37,7 +35,7 @@ import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.entity.manga.Page
 import me.proxer.library.util.ProxerUrls
-import org.jetbrains.anko.getStackTraceString
+import timber.log.Timber
 import java.io.File
 import java.lang.Exception
 import kotlin.properties.Delegates
@@ -246,7 +244,7 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
                 errorIndicator.visibility = View.VISIBLE
                 image.visibility = View.GONE
 
-                Log.e(LOGGING_TAG, error.getStackTraceString())
+                Timber.e(error)
             } else {
                 requiresFallback.put(data[position].decodedName, true)
 

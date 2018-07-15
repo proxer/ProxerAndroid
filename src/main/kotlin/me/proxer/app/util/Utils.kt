@@ -10,16 +10,14 @@ import android.net.Uri
 import android.os.Build
 import android.support.annotation.ColorRes
 import android.support.v4.content.ContextCompat
-import android.util.Log
 import com.bumptech.glide.request.target.Target
 import me.proxer.app.GlideApp
-import me.proxer.app.MainApplication.Companion.LOGGING_TAG
 import me.proxer.app.util.extension.androidUri
 import me.proxer.library.api.ProxerException
 import me.proxer.library.api.ProxerException.ErrorType
 import okhttp3.HttpUrl
-import org.jetbrains.anko.getStackTraceString
 import org.threeten.bp.format.DateTimeFormatter
+import timber.log.Timber
 
 /**
  * @author Ruben Gees
@@ -60,7 +58,7 @@ object Utils {
             .submit(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
             .get()
     } catch (error: Throwable) {
-        Log.e(LOGGING_TAG, error.getStackTraceString())
+        Timber.e(error)
 
         null
     }

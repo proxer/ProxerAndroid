@@ -14,6 +14,8 @@ complexity:
     active: false
   ComplexMethod:
     active: false
+  LabeledExpression:
+    active: false
   LargeClass:
     active: false
   LongParameterList:

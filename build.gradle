@@ -73,7 +73,8 @@ android {
 
             archivesBaseName = "app-${defaultConfig.versionName}"
             buildConfigField 'String', 'PROXER_API_KEY', "\"${getFromSecrets('PROXER_API_KEY')}\""
-            buildConfigField 'boolean', 'STORE', "false"
+            buildConfigField 'boolean', 'STORE', "Boolean.parseBoolean(\"false\")"
+            buildConfigField 'boolean', 'LOG', "Boolean.parseBoolean(\"true\")"
         }
 
         release {
@@ -87,7 +88,27 @@ android {
 
             archivesBaseName = "app-${defaultConfig.versionName}"
             buildConfigField 'String', 'PROXER_API_KEY', "\"${getFromSecrets('PROXER_API_KEY')}\""
-            buildConfigField 'boolean', 'STORE', "false"
+            buildConfigField 'boolean', 'STORE', "Boolean.parseBoolean(\"false\")"
+            buildConfigField 'boolean', 'LOG', "Boolean.parseBoolean(\"false\")"
+
+            if (shouldSign) {
+                signingConfig signingConfigs.release
+            }
+        }
+
+        logRelease {
+            postprocessing {
+                removeUnusedCode true
+                removeUnusedResources true
+                obfuscate true
+                optimizeCode true
+                getProguardFiles().add(0, file('config/proguard/proguard-rules.pro'))
+            }
+
+            archivesBaseName = "app-${defaultConfig.versionName}"
+            buildConfigField 'String', 'PROXER_API_KEY', "\"${getFromSecrets('PROXER_API_KEY')}\""
+            buildConfigField 'boolean', 'STORE', "Boolean.parseBoolean(\"false\")"
+            buildConfigField 'boolean', 'LOG', "Boolean.parseBoolean(\"true\")"
 
             if (shouldSign) {
                 signingConfig signingConfigs.release
@@ -105,7 +126,8 @@ android {
 
             archivesBaseName = "app-${defaultConfig.versionName}"
             buildConfigField 'String', 'PROXER_API_KEY', "\"${getFromSecrets('PROXER_API_KEY')}\""
-            buildConfigField 'boolean', 'STORE', "true"
+            buildConfigField 'boolean', 'STORE', "Boolean.parseBoolean(\"true\")"
+            buildConfigField 'boolean', 'LOG', "Boolean.parseBoolean(\"false\")"
 
             if (shouldSign) {
                 signingConfig signingConfigs.release
@@ -144,6 +166,16 @@ android {
             res.srcDirs += getResSrcDirs()
         }
     }
+
+    if (isCI()) {
+        // We do not care for these build types on CI.
+        // These do only add a large amount of build time while not providing a large benefit.
+        variantFilter { variant ->
+            if (variant.buildType.name == "logRelease" || variant.buildType.name == "storeRelease") {
+                setIgnore(true)
+            }
+        }
+    }
 }
 
 repositories {
@@ -158,6 +190,7 @@ dependencies {
     implementationDependencies.values().each { implementation it }
     debugImplementationDependencies.values().each { debugImplementation it }
     releaseImplementationDependencies.values().each { releaseImplementation it }
+    releaseImplementationDependencies.values().each { logReleaseImplementation it }
     releaseImplementationDependencies.values().each { storeReleaseImplementation it }
     compileOnlyDependencies.values().each { compileOnly it }
     kaptDependencies.values().each { kapt it }
