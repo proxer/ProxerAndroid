@@ -61,7 +61,14 @@ class MediaInfoViewModel(private val entryId: String) : BaseViewModel<Pair<Entry
     init {
         disposables += bus.register(AgeConfirmationEvent::class.java)
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { if (error.value?.buttonAction == ButtonAction.AGE_CONFIRMATION) reload() }
+            .subscribe {
+                // TODO: Simplify once proguard does not crash on this.
+                val safeValue = error.value
+
+                if (safeValue != null && safeValue.buttonAction == ButtonAction.AGE_CONFIRMATION) {
+                    reload()
+                }
+            }
     }
 
     override fun onCleared() {
