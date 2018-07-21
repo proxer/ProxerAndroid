@@ -72,6 +72,7 @@ class ProfileAboutFragment : BaseContentFragment<UserAbout>() {
         super.onViewCreated(view, savedInstanceState)
 
         about.setBackgroundColor(Color.TRANSPARENT)
+        about.setInitialScale(1)
         about.settings.cacheMode = WebSettings.LOAD_NO_CACHE
         about.settings.userAgentString = USER_AGENT
         about.settings.loadWithOverviewMode = true
