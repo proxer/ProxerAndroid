@@ -20,12 +20,13 @@ class DirectReplyReceiver : BroadcastReceiver() {
 
         private const val CONFERENCE_ID_EXTRA = "conference_id"
 
-        fun getPendingIntent(context: Context, conferenceId: Long): PendingIntent = PendingIntent.getBroadcast(context,
-            conferenceId.toInt(),
-            Intent(context, DirectReplyReceiver::class.java)
+        fun getPendingIntent(context: Context, conferenceId: Long): PendingIntent {
+            val intent = Intent(context, DirectReplyReceiver::class.java)
                 .addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES)
-                .apply { putExtra(CONFERENCE_ID_EXTRA, conferenceId) },
-            PendingIntent.FLAG_UPDATE_CURRENT)
+                .apply { putExtra(CONFERENCE_ID_EXTRA, conferenceId) }
+
+            return PendingIntent.getBroadcast(context, conferenceId.toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        }
     }
 
     override fun onReceive(context: Context, intent: Intent) {
