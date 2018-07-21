@@ -23,13 +23,10 @@ import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.vanniktech.emoji.EmojiEditText
 import com.vanniktech.emoji.EmojiPopup
-import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import kotterknife.bindView
 import me.proxer.app.MainApplication.Companion.bus
-import me.proxer.app.MainApplication.Companion.messengerDao
 import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.chat.prv.LocalConference
@@ -47,7 +44,6 @@ import me.proxer.app.util.extension.inputMethodManager
 import me.proxer.app.util.extension.isAtTop
 import me.proxer.app.util.extension.safeText
 import me.proxer.app.util.extension.setIconicsImage
-import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.unsafeLazy
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.toast
@@ -265,6 +261,8 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
     override fun onResume() {
         super.onResume()
 
+        MessengerNotifications.cancel(requireContext())
+
         pingDisposable = bus.register(MessengerFragmentPingEvent::class.java).subscribe()
     }
 
@@ -292,22 +290,8 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
 
         super.showData(data)
 
-        if (wasEmpty) {
-            Completable
-                .fromCallable {
-                    val unreadMap = messengerDao.getUnreadConferences().associate {
-                        it to messengerDao.getMostRecentMessagesForConference(it.id, it.unreadMessageAmount)
-                            .asReversed()
-                    }
-
-                    context?.let { context -> MessengerNotifications.showOrUpdate(context, unreadMap) }
-                }
-                .subscribeOn(Schedulers.io())
-                .subscribeAndLogErrors()
-
-            if (conference.unreadMessageAmount >= 1) {
-                recyclerView.scrollToPosition(conference.unreadMessageAmount - 1)
-            }
+        if (wasEmpty && conference.unreadMessageAmount >= 1) {
+            recyclerView.scrollToPosition(conference.unreadMessageAmount - 1)
         }
 
         inputContainer.visibility = View.VISIBLE
