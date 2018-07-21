@@ -78,7 +78,6 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(data[position])
 
-    @SuppressLint("CheckResult")
     override fun swapDataAndNotifyWithDiffing(newData: List<Page>) {
         super.swapDataAndNotifyWithDiffing(newData)
 
