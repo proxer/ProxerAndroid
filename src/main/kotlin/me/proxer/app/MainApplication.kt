@@ -29,6 +29,7 @@ import com.squareup.leakcanary.RefWatcher
 import com.squareup.moshi.Moshi
 import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.ios.IosEmojiProvider
+import io.reactivex.Completable
 import io.reactivex.exceptions.UndeliverableException
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
@@ -251,11 +252,16 @@ class MainApplication : Application() {
     private class FileTree : Timber.Tree() {
 
         override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
-            val logDir = File(globalContext.getExternalFilesDir(null), "logs").also { it.mkdirs() }
-            val logFile = File(logDir, LocalDate.now().toString() + ".log").also { it.createNewFile() }
-            val currentTime = LocalDateTime.now().toString()
+            Completable
+                .fromAction {
+                    val logDir = File(globalContext.getExternalFilesDir(null), "logs").also { it.mkdirs() }
+                    val logFile = File(logDir, LocalDate.now().toString() + ".log").also { it.createNewFile() }
+                    val currentTime = LocalDateTime.now().toString()
 
-            logFile.appendText("$currentTime  ${if (tag != null) "$tag:" else ""} $message")
+                    logFile.appendText("$currentTime  ${if (tag != null) "$tag: " else ""}$message")
+                }
+                .observeOn(Schedulers.io())
+                .subscribe()
         }
     }
 
