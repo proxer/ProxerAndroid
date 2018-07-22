@@ -230,7 +230,6 @@ class StreamActivity : BaseActivity() {
                 .build()
         }
 
-
         override fun provide(userAgent: String, listener: TransferListener<in DataSource>?): DataSource.Factory {
             return OkHttpDataSourceFactory(exoMediaClient, GENERIC_USER_AGENT, listener)
         }

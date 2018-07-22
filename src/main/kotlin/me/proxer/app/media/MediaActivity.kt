@@ -21,6 +21,7 @@ import me.proxer.app.media.info.MediaInfoFragment
 import me.proxer.app.media.recommendation.RecommendationFragment
 import me.proxer.app.media.relation.RelationFragment
 import me.proxer.app.util.ActivityUtils
+import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Category
@@ -162,12 +163,11 @@ class MediaActivity : ImageTabsActivity() {
             else -> throw IllegalArgumentException("Unknown index passed: $position")
         }
 
-        override fun getCount() = when (viewModel.data.value) {
-            null -> 1
-            else -> 6
+        override fun getCount() = when {
+            viewModel.data.value != null || PreferenceHelper.isAgeRestrictedMediaAllowed(this@MediaActivity) -> 6
+            else -> 1
         }
 
-        @Suppress("LabeledExpression")
         override fun getPageTitle(position: Int): String = when (position) {
             0 -> getString(R.string.section_media_info)
             1 -> getString(R.string.section_comments)
