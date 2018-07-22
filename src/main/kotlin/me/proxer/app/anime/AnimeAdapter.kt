@@ -19,6 +19,7 @@ import me.proxer.app.base.BaseAdapter
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.convertToDateTime
 import me.proxer.app.util.extension.defaultLoad
+import me.proxer.app.util.extension.iconColor
 import me.proxer.library.util.ProxerUrls
 
 /**
@@ -75,6 +76,7 @@ class AnimeAdapter(savedInstanceState: Bundle?) : BaseAdapter<AnimeStream, ViewH
         internal val translatorGroup: TextView by bindView(R.id.translatorGroup)
         internal val dateText: TextView by bindView(R.id.date)
 
+        internal val info: TextView by bindView(R.id.info)
         internal val play: Button by bindView(R.id.play)
         internal val unsupported: TextView by bindView(R.id.unsupported)
 
@@ -141,6 +143,28 @@ class AnimeAdapter(savedInstanceState: Bundle?) : BaseAdapter<AnimeStream, ViewH
                 ?: translatorGroup.context.getString(R.string.fragment_anime_empty_subgroup)
 
             dateText.text = Utils.dateFormatter.format(item.date.convertToDateTime())
+
+            if (item.isInternalPlayerOnly) {
+                info.visibility = View.VISIBLE
+
+                info.setText(R.string.fragment_anime_stream_only_internal_player_warning)
+
+                info.setCompoundDrawablesWithIntrinsicBounds(IconicsDrawable(play.context)
+                    .icon(CommunityMaterial.Icon.cmd_alert)
+                    .sizeDp(26)
+                    .iconColor(info.context), null, null, null)
+            } else if (item.isOfficial) {
+                info.visibility = View.VISIBLE
+
+                info.setText(R.string.fragment_anime_stream_official_info)
+
+                info.setCompoundDrawablesWithIntrinsicBounds(IconicsDrawable(play.context)
+                    .icon(CommunityMaterial.Icon.cmd_information)
+                    .sizeDp(26)
+                    .iconColor(info.context), null, null, null)
+            } else {
+                info.visibility = View.GONE
+            }
 
             play.visibility = if (item.isSupported) View.VISIBLE else View.GONE
             unsupported.visibility = if (item.isSupported) View.GONE else View.VISIBLE

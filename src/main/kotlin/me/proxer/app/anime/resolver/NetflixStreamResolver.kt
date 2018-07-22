@@ -19,6 +19,7 @@ class NetflixStreamResolver : StreamResolver {
     }
 
     override val name = "Netflix"
+    override val official = true
 
     override fun resolve(id: String): Single<StreamResolutionResult> = Single
         .fromCallable {

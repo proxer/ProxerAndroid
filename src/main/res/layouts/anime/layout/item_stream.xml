@@ -55,6 +55,18 @@
 
                 <include layout="@layout/layout_upload_info" />
 
+                <TextView
+                    android:id="@+id/info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginRight="8dp"
+                    android:drawablePadding="8dp"
+                    android:gravity="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    tools:text="This hoster is unstable" />
+
                 <android.support.design.button.MaterialButton
                     android:id="@+id/play"
                     android:layout_width="wrap_content"
@@ -68,7 +80,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_margin="16dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="16dp"
                     android:gravity="center"
                     android:text="@string/error_unsupported_hoster"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />

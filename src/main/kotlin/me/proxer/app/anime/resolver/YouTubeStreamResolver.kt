@@ -12,6 +12,7 @@ import me.proxer.app.util.extension.buildSingle
 class YouTubeStreamResolver : StreamResolver {
 
     override val name = "YouTube"
+    override val official = true
 
     override fun resolve(id: String): Single<StreamResolutionResult> = api.anime().link(id)
         .buildSingle()

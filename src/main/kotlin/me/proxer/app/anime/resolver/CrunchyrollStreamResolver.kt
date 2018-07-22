@@ -21,6 +21,7 @@ class CrunchyrollStreamResolver : StreamResolver {
     }
 
     override val name = "Crunchyroll"
+    override val official = true
 
     override fun supports(name: String) = name.startsWith(this.name, true)
 

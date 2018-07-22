@@ -12,6 +12,7 @@ import me.proxer.app.util.extension.buildSingle
 class AkibaPassStreamResolver : StreamResolver {
 
     override val name = "AkibaPass"
+    override val official = true
 
     override fun resolve(id: String): Single<StreamResolutionResult> = api.anime().link(id)
         .buildSingle()

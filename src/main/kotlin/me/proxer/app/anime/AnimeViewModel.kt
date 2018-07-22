@@ -47,7 +47,11 @@ class AnimeViewModel(
             .flatMap {
                 Singles.zip(Single.just(it), streamSingle(it)) { entry, streams ->
                     AnimeStreamInfo(entry.name, entry.episodeAmount, streams.map {
-                        it.toAnimeStreamInfo(StreamResolverFactory.resolverFor(it.hosterName) != null)
+                        val resolver = StreamResolverFactory.resolverFor(it.hosterName)
+                        val internalPlayerOnly = resolver?.internalPlayerOnly ?: false
+                        val official = resolver?.official ?: false
+
+                        it.toAnimeStreamInfo(resolver != null, internalPlayerOnly, official)
                     })
                 }
             }

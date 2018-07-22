@@ -12,6 +12,7 @@ import me.proxer.app.util.extension.buildSingle
 class ProsiebenMAXXStreamResolver : StreamResolver {
 
     override val name = "ProSieben MAXX"
+    override val official = true
 
     override fun resolve(id: String): Single<StreamResolutionResult> = api.anime().link(id)
         .buildSingle()

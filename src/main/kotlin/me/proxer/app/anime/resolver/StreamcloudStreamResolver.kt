@@ -22,6 +22,7 @@ class StreamcloudStreamResolver : StreamResolver {
     }
 
     override val name = "Streamcloud"
+    override val internalPlayerOnly = true
 
     override fun resolve(id: String): Single<StreamResolutionResult> = api.anime().link(id)
         .buildSingle()
@@ -57,10 +58,11 @@ class StreamcloudStreamResolver : StreamResolver {
                         .build())
                         .toBodySingle()
                 }
-        }
-        .map {
-            val result = Uri.parse(fileRegex.find(it)?.groupValues?.get(1) ?: throw StreamResolutionException())
+                .map {
+                    val result = Uri.parse(fileRegex.find(it)?.groupValues?.get(1)
+                        ?: throw StreamResolutionException())
 
-            StreamResolutionResult(result, "video/mp4")
+                    StreamResolutionResult(result, "video/mp4", url)
+                }
         }
 }

@@ -15,8 +15,6 @@ import androidx.work.Configuration
 import androidx.work.WorkManager
 import cat.ereza.customactivityoncrash.config.CaocConfig
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
-import com.devbrackets.android.exomedia.ExoMedia
-import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.kirillr.strictmodehelper.StrictModeCompat
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
@@ -200,10 +198,6 @@ class MainApplication : Application() {
 
         EmojiManager.install(IosEmojiProvider())
         AndroidThreeTen.init(this)
-
-        ExoMedia.setDataSourceFactoryProvider { _, listener ->
-            OkHttpDataSourceFactory(client, GENERIC_USER_AGENT, listener)
-        }
 
         WorkManager.initialize(this, Configuration.Builder().build())
 
