@@ -254,7 +254,7 @@ class MainApplication : Application() {
 
                     logFile.appendText("$currentTime  ${if (tag != null) "$tag: " else ""}$message")
                 }
-                .observeOn(Schedulers.io())
+                .subscribeOn(Schedulers.io())
                 .subscribe()
         }
     }
