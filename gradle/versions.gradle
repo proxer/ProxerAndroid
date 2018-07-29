@@ -23,20 +23,20 @@ ext {
     gradleVersionsPluginVersion = '0.20.0'
     androidCommandPluginVersion = '2.0.1'
     ktlintPluginVersion = '4.1.0'
-    ktlintVersion = '0.24.0'
+    ktlintVersion = '0.25.1'
 
     // Frameworks and code only libraries
     ankoVersion = '0.10.5'
     multidexVersion = '1.0.3'
-    supportLibraryVersion = '28.0.0-alpha3'
-    supportPreferenceVersion = '2.2.0'
+    supportLibraryVersion = '28.0.0-beta01'
+    supportPreferenceVersion = '2.3.1'
     lifecycleVersion = '1.1.1'
     roomVersion = '1.1.1'
     workVersion = '1.0.0-alpha04'
     proxerLibVersion = '9b34fe1035'
 
     // RxJava
-    rxJavaVersion = '2.1.16'
+    rxJavaVersion = '2.1.17'
     rxKotlinVersion = '2.2.0'
     rxAndroidVersion = '2.0.2'
     rxBindingVersion = '2.1.1'
@@ -47,10 +47,10 @@ ext {
     // UI components
     iconicsVersion = '3.0.4'
     communityMaterialTypefaceVersion = '2.0.46.1'
-    materialDrawerVersion = 'v6.0.8'
-    aboutLibrariesVersion = '6.1.0'
+    materialDrawerVersion = 'v6.0.9'
+    aboutLibrariesVersion = '6.1.1'
     materializeVersion = '1.1.2'
-    fastadapterVersion = '3.2.7'
+    fastadapterVersion = '3.2.8'
     crossfaderVersion = '1.5.2'
     materialAboutVersion = '2.3.0'
     subsamplingScaleImageViewVersion = 'e9398dce15'
@@ -90,6 +90,6 @@ ext {
     // Debugging
     customActivityOnCrashVersion = '2.2.0'
     strictModeCompatVersion = '26.0.2'
-    leakCanaryVersion = '1.6'
+    leakCanaryVersion = '1.6.1'
     timberVersion = '4.7.1'
 }

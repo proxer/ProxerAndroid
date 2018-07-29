@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.os.Environment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDelegate
-import android.support.v7.preference.XpPreferenceFragment
 import android.view.View
 import me.proxer.app.MainApplication.Companion.refWatcher
 import me.proxer.app.R
@@ -22,6 +21,7 @@ import me.proxer.app.util.data.PreferenceHelper.NOTIFICATIONS_NEWS
 import me.proxer.app.util.data.PreferenceHelper.THEME
 import me.proxer.app.util.extension.snackbar
 import net.xpece.android.support.preference.TwoStatePreference
+import net.xpece.android.support.preference.XpPreferenceFragment
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.clearTop
 
