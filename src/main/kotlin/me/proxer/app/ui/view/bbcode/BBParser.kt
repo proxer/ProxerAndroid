@@ -56,13 +56,6 @@ object BBParser {
         ListItemPrototype, MapPrototype, AttachmentPrototype, FacebookPrototype, TwitterPrototype, PollPrototype,
         BreakPrototype, PdfPrototype))
 
-    fun parseTextOnly(input: String): CharSequence {
-        val result = parse(input, textOnlyPrototypes).optimize(BBArgs())
-        val args = result.children.firstOrNull()?.args
-
-        return args?.safeText ?: input
-    }
-
     fun parseSimple(input: String): BBTree {
         return parse(input, simplePrototypes)
     }

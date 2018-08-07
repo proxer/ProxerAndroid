@@ -23,6 +23,7 @@ import me.proxer.app.media.episode.EpisodeAdapter.ViewHolder
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.defaultLoad
+import me.proxer.app.util.extension.getSafeParcelable
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.toAppDrawable
 import me.proxer.app.util.extension.toAppString
@@ -55,7 +56,7 @@ class EpisodeAdapter(savedInstanceState: Bundle?) : BaseAdapter<EpisodeRow, View
     init {
         expansionMap = when (savedInstanceState) {
             null -> ParcelableStringBooleanMap()
-            else -> savedInstanceState.getParcelable(EXPANDED_STATE)
+            else -> savedInstanceState.getSafeParcelable(EXPANDED_STATE)
         }
 
         setHasStableIds(true)

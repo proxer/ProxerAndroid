@@ -67,14 +67,14 @@ class MangaActivity : BaseActivity() {
 
     val id: String
         get() = when {
-            intent.action == Intent.ACTION_VIEW -> intent.data.pathSegments.getOrElse(1) { "-1" }
+            intent.action == Intent.ACTION_VIEW -> intent.data?.pathSegments?.getOrElse(1) { "-1" } ?: "-1"
             else -> intent.getStringExtra(ID_EXTRA)
         }
 
     var episode: Int
         get() = when {
-            intent.action == Intent.ACTION_VIEW && !intent.hasExtra(EPISODE_EXTRA) -> intent.data.pathSegments
-                .getOrElse(2) { "1" }.toIntOrNull() ?: 1
+            intent.action == Intent.ACTION_VIEW && !intent.hasExtra(EPISODE_EXTRA) -> intent.data?.pathSegments
+                ?.getOrElse(2) { "1" }?.toIntOrNull() ?: 1
             else -> intent.getIntExtra(EPISODE_EXTRA, 1)
         }
         set(value) {
@@ -85,8 +85,8 @@ class MangaActivity : BaseActivity() {
 
     val language: Language
         get() = when {
-            intent.action == Intent.ACTION_VIEW -> ProxerUtils.toApiEnum(Language::class.java, intent.data.pathSegments
-                .getOrElse(3) { "" }) ?: Language.ENGLISH
+            intent.action == Intent.ACTION_VIEW -> ProxerUtils.toApiEnum(Language::class.java, intent.data?.pathSegments
+                ?.getOrElse(3) { "" } ?: "") ?: Language.ENGLISH
             else -> intent.getSerializableExtra(LANGUAGE_EXTRA) as Language
         }
 
@@ -113,7 +113,7 @@ class MangaActivity : BaseActivity() {
         }
         set(value) {
             when (value) {
-                null -> intent.extras.remove(EPISODE_AMOUNT_EXTRA)
+                null -> intent.removeExtra(EPISODE_AMOUNT_EXTRA)
                 else -> intent.putExtra(EPISODE_AMOUNT_EXTRA, value)
             }
         }
@@ -228,10 +228,10 @@ class MangaActivity : BaseActivity() {
             SYSTEM_UI_FLAG_HIDE_NAVIGATION or
             SYSTEM_UI_FLAG_FULLSCREEN
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            return result or SYSTEM_UI_FLAG_IMMERSIVE
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            result or SYSTEM_UI_FLAG_IMMERSIVE
         } else {
-            return result
+            result
         }
     }
 

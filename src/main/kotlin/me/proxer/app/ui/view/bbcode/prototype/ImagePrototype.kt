@@ -48,7 +48,7 @@ object ImagePrototype : AutoClosingPrototype {
         val childViews = children.flatMap { it.makeViews(context, args) }
 
         val url = (childViews.firstOrNull() as? TextView)?.text.toString().trim()
-        val parsedUrl = Utils.safelyParseAndFixUrl(url)
+        val parsedUrl = Utils.parseAndFixUrl(url)
 
         val width = if (parsedUrl == null) null else args[WIDTH_ARGUMENT] as Int?
 

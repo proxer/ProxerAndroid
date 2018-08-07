@@ -21,6 +21,7 @@ import me.proxer.app.profile.comment.ProfileCommentAdapter.ViewHolder
 import me.proxer.app.ui.view.bbcode.BBCodeView
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.convertToRelativeReadableTime
+import me.proxer.app.util.extension.getSafeParcelable
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.app.util.extension.unsafeLazy
@@ -43,7 +44,7 @@ class ProfileCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedUse
     init {
         expansionMap = when (savedInstanceState) {
             null -> ParcelableStringBooleanMap()
-            else -> savedInstanceState.getParcelable(EXPANDED_STATE)
+            else -> savedInstanceState.getSafeParcelable(EXPANDED_STATE)
         }
 
         setHasStableIds(true)

@@ -2,6 +2,7 @@ package me.proxer.app.news.widget
 
 import android.os.Parcel
 import android.os.Parcelable
+import me.proxer.app.util.extension.readStringSafely
 import java.util.Date
 
 /**
@@ -26,11 +27,11 @@ data class SimpleNews(
     }
 
     constructor(parcel: Parcel) : this(
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
+        parcel.readStringSafely(),
+        parcel.readStringSafely(),
+        parcel.readStringSafely(),
+        parcel.readStringSafely(),
+        parcel.readStringSafely(),
         Date(parcel.readLong())
     )
 

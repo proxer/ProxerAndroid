@@ -74,7 +74,7 @@ class MediaActivity : ImageTabsActivity() {
 
     val id: String
         get() = when (intent.action) {
-            Intent.ACTION_VIEW -> intent.data.pathSegments.getOrElse(1) { "-1" }
+            Intent.ACTION_VIEW -> intent.data?.pathSegments?.getOrElse(1) { "-1" } ?: "-1"
             else -> intent.getStringExtra(ID_EXTRA)
         }
 
@@ -99,7 +99,7 @@ class MediaActivity : ImageTabsActivity() {
 
     private val customItemToDisplay: Int
         get() = when (intent.action) {
-            Intent.ACTION_VIEW -> when (intent.data.pathSegments.getOrNull(2)) {
+            Intent.ACTION_VIEW -> when (intent.data?.pathSegments?.getOrNull(2)) {
                 COMMENTS_SUB_SECTION -> 1
                 EPISODES_SUB_SECTION, EPISODES_ALTERNATIVE_SUB_SECTION -> 2
                 RELATIONS_SUB_SECTION -> 3

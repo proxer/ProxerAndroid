@@ -144,26 +144,32 @@ class AnimeAdapter(savedInstanceState: Bundle?) : BaseAdapter<AnimeStream, ViewH
 
             dateText.text = Utils.dateFormatter.format(item.date.convertToDateTime())
 
-            if (item.isInternalPlayerOnly) {
-                info.visibility = View.VISIBLE
+            when {
+                item.isInternalPlayerOnly -> {
+                    info.visibility = View.VISIBLE
 
-                info.setText(R.string.fragment_anime_stream_only_internal_player_warning)
+                    info.setText(R.string.fragment_anime_stream_only_internal_player_warning)
 
-                info.setCompoundDrawablesWithIntrinsicBounds(IconicsDrawable(play.context)
-                    .icon(CommunityMaterial.Icon.cmd_alert)
-                    .sizeDp(26)
-                    .iconColor(info.context), null, null, null)
-            } else if (item.isOfficial) {
-                info.visibility = View.VISIBLE
+                    info.setCompoundDrawablesWithIntrinsicBounds(
+                        IconicsDrawable(play.context)
+                            .icon(CommunityMaterial.Icon.cmd_alert)
+                            .sizeDp(26)
+                            .iconColor(info.context), null, null, null
+                    )
+                }
+                item.isOfficial -> {
+                    info.visibility = View.VISIBLE
 
-                info.setText(R.string.fragment_anime_stream_official_info)
+                    info.setText(R.string.fragment_anime_stream_official_info)
 
-                info.setCompoundDrawablesWithIntrinsicBounds(IconicsDrawable(play.context)
-                    .icon(CommunityMaterial.Icon.cmd_information)
-                    .sizeDp(26)
-                    .iconColor(info.context), null, null, null)
-            } else {
-                info.visibility = View.GONE
+                    info.setCompoundDrawablesWithIntrinsicBounds(
+                        IconicsDrawable(play.context)
+                            .icon(CommunityMaterial.Icon.cmd_information)
+                            .sizeDp(26)
+                            .iconColor(info.context), null, null, null
+                    )
+                }
+                else -> info.visibility = View.GONE
             }
 
             play.visibility = if (item.isSupported) View.VISIBLE else View.GONE

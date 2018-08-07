@@ -70,7 +70,7 @@ class ProfileActivity : ImageTabsActivity() {
 
     var userId: String?
         get() = when {
-            intent.action == Intent.ACTION_VIEW -> intent.data.pathSegments.getOrNull(1)
+            intent.action == Intent.ACTION_VIEW -> intent.data?.pathSegments?.getOrNull(1)
             else -> intent.getStringExtra(USER_ID_EXTRA)
         }
         set(value) {
@@ -102,7 +102,7 @@ class ProfileActivity : ImageTabsActivity() {
 
     override val itemToDisplay: Int
         get() = when (intent.action) {
-            Intent.ACTION_VIEW -> when (intent.data.pathSegments.getOrNull(2)) {
+            Intent.ACTION_VIEW -> when (intent.data?.pathSegments?.getOrNull(2)) {
                 ABOUT_SUB_SECTION -> 1
                 ANIME_SUB_SECTION -> 3
                 MANGA_SUB_SECTION -> 4

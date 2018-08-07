@@ -88,7 +88,7 @@ object TextPrototype : BBPrototype {
                     true
                 }
                 PatternsCompat.AUTOLINK_WEB_URL.matcher(link).matches() -> {
-                    baseActivity.showPage(Utils.parseAndFixUrl(link))
+                    baseActivity.showPage(Utils.getAndFixUrl(link))
 
                     true
                 }

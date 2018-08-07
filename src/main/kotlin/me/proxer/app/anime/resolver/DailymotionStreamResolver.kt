@@ -36,7 +36,7 @@ class DailymotionStreamResolver : StreamResolver {
             .flatMap { url ->
                 client.newCall(Request.Builder()
                     .get()
-                    .url(Utils.parseAndFixUrl(url))
+                    .url(Utils.getAndFixUrl(url))
                     .header("User-Agent", GENERIC_USER_AGENT)
                     .build())
                     .toBodySingle()

@@ -2,6 +2,7 @@ package me.proxer.app.anime.schedule.widget
 
 import android.content.Intent
 import android.widget.RemoteViewsService
+import me.proxer.app.util.extension.getSafeParcelableArray
 
 /**
  * @author Ruben Gees
@@ -16,7 +17,7 @@ class ScheduleWidgetService : RemoteViewsService() {
 
     override fun onGetViewFactory(intent: Intent): RemoteViewsFactory {
         val calendarEntriesWrapper = intent.getBundleExtra(ARGUMENT_CALENDAR_ENTRIES_WRAPPER)
-        val calendarEntries = calendarEntriesWrapper.getParcelableArray(ARGUMENT_CALENDAR_ENTRIES)
+        val calendarEntries = calendarEntriesWrapper.getSafeParcelableArray(ARGUMENT_CALENDAR_ENTRIES)
             .map { it as SimpleCalendarEntry }
 
         return ScheduleWidgetViewsFactory(applicationContext, false, calendarEntries)

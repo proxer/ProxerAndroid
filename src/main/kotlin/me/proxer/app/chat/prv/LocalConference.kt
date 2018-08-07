@@ -4,6 +4,7 @@ import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 import android.os.Parcel
 import android.os.Parcelable
+import me.proxer.app.util.extension.readStringSafely
 import me.proxer.library.entity.messenger.Conference
 import java.util.Date
 
@@ -38,17 +39,17 @@ data class LocalConference(
 
     constructor(parcel: Parcel) : this(
         parcel.readLong(),
-        parcel.readString(),
-        parcel.readString(),
+        parcel.readStringSafely(),
+        parcel.readStringSafely(),
         parcel.readInt(),
-        parcel.readString(),
-        parcel.readString(),
+        parcel.readStringSafely(),
+        parcel.readStringSafely(),
         parcel.readByte() != 0.toByte(),
         parcel.readByte() != 0.toByte(),
         parcel.readByte() != 0.toByte(),
         Date(parcel.readLong()),
         parcel.readInt(),
-        parcel.readString(),
+        parcel.readStringSafely(),
         parcel.readByte() != 0.toByte()
     )
 

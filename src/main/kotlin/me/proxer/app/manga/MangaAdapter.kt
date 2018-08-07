@@ -31,6 +31,7 @@ import me.proxer.app.manga.MangaAdapter.ViewHolder
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.decodedName
+import me.proxer.app.util.extension.getSafeParcelable
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.entity.manga.Page
@@ -64,7 +65,7 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
     init {
         requiresFallback = when (savedInstanceState) {
             null -> ParcelableStringBooleanMap()
-            else -> savedInstanceState.getParcelable(REQUIRES_FALLBACK_STATE)
+            else -> savedInstanceState.getSafeParcelable(REQUIRES_FALLBACK_STATE)
         }
 
         setHasStableIds(true)

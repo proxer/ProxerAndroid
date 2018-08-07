@@ -49,11 +49,11 @@ class AboutFragment : MaterialAboutFragment() {
 
         private val EXCLUDED_LIBRARIES = arrayOf("fastadapter", "materialize")
 
-        private val FACEBOOK_LINK = Utils.parseAndFixUrl("https://facebook.com/Anime.Proxer.Me")
-        private val TWITTER_LINK = Utils.parseAndFixUrl("https://twitter.com/proxerme")
-        private val YOUTUBE_LINK = Utils.parseAndFixUrl("https://youtube.com/channel/UC7h-fT9Y9XFxuZ5GZpbcrtA")
-        private val DISCORD_LINK = Utils.parseAndFixUrl("https://discord.gg/XwrEDmA")
-        private val REPOSITORY_LINK = Utils.parseAndFixUrl("https://github.com/proxer/ProxerAndroid")
+        private val FACEBOOK_LINK = Utils.getAndFixUrl("https://facebook.com/Anime.Proxer.Me")
+        private val TWITTER_LINK = Utils.getAndFixUrl("https://twitter.com/proxerme")
+        private val YOUTUBE_LINK = Utils.getAndFixUrl("https://youtube.com/channel/UC7h-fT9Y9XFxuZ5GZpbcrtA")
+        private val DISCORD_LINK = Utils.getAndFixUrl("https://discord.gg/XwrEDmA")
+        private val REPOSITORY_LINK = Utils.getAndFixUrl("https://github.com/proxer/ProxerAndroid")
 
         private const val SUPPORT_ID = "374605"
         private const val SUPPORT_CATEGORY = "anwendungen"
@@ -192,7 +192,7 @@ class AboutFragment : MaterialAboutFragment() {
             .text(R.string.about_developer_github_title)
             .subText(DEVELOPER_GITHUB_NAME)
             .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_github_circle).iconColor(context))
-            .setOnClickAction { showPage(Utils.parseAndFixUrl("https://github.com/$DEVELOPER_GITHUB_NAME")) }
+            .setOnClickAction { showPage(Utils.getAndFixUrl("https://github.com/$DEVELOPER_GITHUB_NAME")) }
             .build(),
         MaterialAboutActionItem.Builder()
             .text(getString(R.string.about_developer_proxer_title))

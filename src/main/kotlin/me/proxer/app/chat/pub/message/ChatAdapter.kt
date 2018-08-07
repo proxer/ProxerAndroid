@@ -24,6 +24,7 @@ import me.proxer.app.ui.view.bbcode.BBCodeView
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.convertToRelativeReadableTime
+import me.proxer.app.util.extension.getSafeParcelable
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.library.util.ProxerUrls
@@ -66,12 +67,12 @@ class ChatAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedChatMessage, 
     init {
         messageSelectionMap = when (savedInstanceState) {
             null -> ParcelableStringBooleanMap()
-            else -> savedInstanceState.getParcelable(IS_SELECTING_STATE)
+            else -> savedInstanceState.getSafeParcelable(IS_SELECTING_STATE)
         }
 
         timeDisplayMap = when (savedInstanceState) {
             null -> ParcelableStringBooleanMap()
-            else -> savedInstanceState.getParcelable(TIME_DISPLAY_STATE)
+            else -> savedInstanceState.getSafeParcelable(TIME_DISPLAY_STATE)
         }
 
         isSelecting = savedInstanceState?.getBoolean(MESSAGE_SELECTION_STATE) == true

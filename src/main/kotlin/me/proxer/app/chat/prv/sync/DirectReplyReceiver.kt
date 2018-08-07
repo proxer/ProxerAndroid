@@ -8,6 +8,7 @@ import android.support.v4.app.RemoteInput
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.messengerDao
+import me.proxer.app.util.extension.getSafeCharSequence
 import me.proxer.app.util.extension.subscribeAndLogErrors
 
 /**
@@ -51,6 +52,6 @@ class DirectReplyReceiver : BroadcastReceiver() {
     }
 
     private fun getMessageText(intent: Intent) = RemoteInput.getResultsFromIntent(intent)
-        .getCharSequence(REMOTE_REPLY_EXTRA)
+        .getSafeCharSequence(REMOTE_REPLY_EXTRA)
         .toString()
 }

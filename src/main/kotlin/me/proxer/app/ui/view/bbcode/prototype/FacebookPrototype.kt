@@ -20,7 +20,7 @@ object FacebookPrototype : TextMutatorPrototype, AutoClosingPrototype {
 
     override fun mutate(text: SpannableStringBuilder, args: BBArgs): SpannableStringBuilder {
         val url = text.trim().toString()
-        val parsedUrl = Utils.safelyParseAndFixUrl(url)
+        val parsedUrl = Utils.parseAndFixUrl(url)
 
         return when (parsedUrl) {
             null -> text

@@ -51,7 +51,7 @@ class UcpOverviewFragment : BaseContentFragment<Int>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        profileLink.setSimpleOnLinkClickListener { _, link -> showPage(Utils.parseAndFixUrl(link)) }
+        profileLink.setSimpleOnLinkClickListener { _, link -> showPage(Utils.getAndFixUrl(link)) }
 
         profileLink.setSimpleOnLinkLongClickListener { _, link ->
             val title = getString(R.string.clipboard_title)

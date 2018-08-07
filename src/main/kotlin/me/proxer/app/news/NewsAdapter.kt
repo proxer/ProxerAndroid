@@ -19,6 +19,7 @@ import me.proxer.app.base.BaseAdapter
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.defaultLoad
+import me.proxer.app.util.extension.getSafeParcelable
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.library.entity.notifications.NewsArticle
 import me.proxer.library.util.ProxerUrls
@@ -42,7 +43,7 @@ class NewsAdapter(savedInstanceState: Bundle?) : BaseAdapter<NewsArticle, NewsAd
     init {
         expansionMap = when (savedInstanceState) {
             null -> ParcelableStringBooleanMap()
-            else -> savedInstanceState.getParcelable(EXPANDED_STATE)
+            else -> savedInstanceState.getSafeParcelable(EXPANDED_STATE)
         }
 
         setHasStableIds(true)

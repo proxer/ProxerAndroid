@@ -89,9 +89,9 @@ class ProfileAboutFragment : BaseContentFragment<UserAbout>() {
         about.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest): Boolean {
                 val httpUrl = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    Utils.safelyParseAndFixUrl(request.url.toString())
+                    Utils.parseAndFixUrl(request.url.toString())
                 } else {
-                    Utils.safelyParseAndFixUrl(request.toString())
+                    Utils.parseAndFixUrl(request.toString())
                 }
 
                 return if (httpUrl != null) {
@@ -187,7 +187,7 @@ class ProfileAboutFragment : BaseContentFragment<UserAbout>() {
         contentView.setTextIsSelectable(true)
         contentView.isSaveEnabled = false
 
-        contentView.setSimpleOnLinkClickListener { _, link -> showPage(Utils.parseAndFixUrl(link)) }
+        contentView.setSimpleOnLinkClickListener { _, link -> showPage(Utils.getAndFixUrl(link)) }
         contentView.setSimpleOnLinkLongClickListener { _, link ->
             val clipboardTitle = getString(R.string.clipboard_title)
 

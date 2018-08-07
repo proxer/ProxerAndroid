@@ -26,7 +26,6 @@ object Utils {
 
     val timeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
     val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-    val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss dd.MM.yyyy")
 
     fun findActivity(currentContext: Context): Activity? = when (currentContext) {
         is Activity -> currentContext
@@ -63,7 +62,7 @@ object Utils {
         null
     }
 
-    fun safelyParseAndFixUrl(url: String) = when {
+    fun parseAndFixUrl(url: String) = when {
         url.startsWith("http://") || url.startsWith("https://") -> HttpUrl.parse(url)
         else -> HttpUrl.parse(when {
             url.startsWith("//") -> "http:$url"
@@ -71,8 +70,7 @@ object Utils {
         })
     }
 
-    fun parseAndFixUrl(url: String) = safelyParseAndFixUrl(url)
-        ?: throw ProxerException(ErrorType.PARSING)
+    fun getAndFixUrl(url: String) = parseAndFixUrl(url) ?: throw ProxerException(ErrorType.PARSING)
 
     fun isPackageInstalled(packageManager: PackageManager, packageName: String) = try {
         packageManager.getApplicationInfo(packageName, 0).enabled

@@ -50,14 +50,14 @@ class AnimeActivity : DrawerActivity() {
 
     val id: String
         get() = when (intent.action) {
-            Intent.ACTION_VIEW -> intent.data.pathSegments.getOrElse(1) { "-1" }
+            Intent.ACTION_VIEW -> intent?.data?.pathSegments?.getOrElse(1) { "-1" } ?: "-1"
             else -> intent.getStringExtra(ID_EXTRA)
         }
 
     var episode: Int
         get() = when {
-            intent.action == Intent.ACTION_VIEW && !intent.hasExtra(EPISODE_EXTRA) -> intent.data.pathSegments
-                .getOrElse(2) { "1" }.toIntOrNull() ?: 1
+            intent.action == Intent.ACTION_VIEW && !intent.hasExtra(EPISODE_EXTRA) -> intent?.data?.pathSegments
+                ?.getOrElse(2) { "1" }?.toIntOrNull() ?: 1
             else -> intent.getIntExtra(EPISODE_EXTRA, 1)
         }
         set(value) {
@@ -68,8 +68,8 @@ class AnimeActivity : DrawerActivity() {
 
     val language: AnimeLanguage
         get() = when (intent.action) {
-            Intent.ACTION_VIEW -> ProxerUtils.toApiEnum(AnimeLanguage::class.java, intent.data.pathSegments
-                .getOrElse(3) { "" }) ?: AnimeLanguage.ENGLISH_SUB
+            Intent.ACTION_VIEW -> ProxerUtils.toApiEnum(AnimeLanguage::class.java, intent?.data?.pathSegments
+                ?.getOrElse(3) { "" } ?: "") ?: AnimeLanguage.ENGLISH_SUB
             else -> intent.getSerializableExtra(LANGUAGE_EXTRA) as AnimeLanguage
         }
 
@@ -88,7 +88,7 @@ class AnimeActivity : DrawerActivity() {
         }
         set(value) {
             if (value == null) {
-                intent.extras.remove(EPISODE_AMOUNT_EXTRA)
+                intent.removeExtra(EPISODE_AMOUNT_EXTRA)
             } else {
                 intent.putExtra(EPISODE_AMOUNT_EXTRA, value)
             }

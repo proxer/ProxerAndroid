@@ -43,7 +43,7 @@ class ConferenceChooserTargetService : ChooserTargetService() {
             ChooserTarget(it.topic,
                 constructIcon(it),
                 calculateScore(it.date),
-                ComponentName(packageName, ShareReceiverActivity::class.java.canonicalName),
+                ComponentName(packageName, ShareReceiverActivity::class.java.name),
                 bundleOf(ARGUMENT_CONFERENCE_WRAPPER to bundleOf(ARGUMENT_CONFERENCE to it))
             )
         }

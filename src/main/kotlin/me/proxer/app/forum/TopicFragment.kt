@@ -86,7 +86,7 @@ class TopicFragment : PagedContentFragment<ParsedPost>() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.show_in_browser -> {
-                val url = Utils.safelyParseAndFixUrl(activity?.intent?.dataString ?: "")
+                val url = Utils.parseAndFixUrl(activity?.intent?.dataString ?: "")
 
                 if (url != null) {
                     val mobileUrl = url.newBuilder()

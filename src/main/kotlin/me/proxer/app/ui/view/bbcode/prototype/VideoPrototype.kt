@@ -35,7 +35,8 @@ object VideoPrototype : TextMutatorPrototype, AutoClosingPrototype {
         val type = args[TYPE_ARGUMENT] as String?
         val urlOrId = text.trim()
 
-        val url = Utils.safelyParseAndFixUrl(when {
+        val url = Utils.parseAndFixUrl(
+            when {
             type?.equals(TYPE_YOUTUBE, ignoreCase = true) == true -> "$TYPE_YOUTUBE_URL$urlOrId"
             else -> urlOrId.toString()
         })

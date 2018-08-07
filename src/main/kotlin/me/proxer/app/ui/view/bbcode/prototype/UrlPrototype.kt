@@ -23,15 +23,14 @@ object UrlPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
     private val ATTRIBUTE_REGEX = Regex("url *= *(.+?)( |$)", REGEX_OPTIONS)
     private const val URL_ARGUMENT = "url"
 
-    private val INVALID_URL = HttpUrl.parse("https://proxer.me/404")
-        ?: throw IllegalArgumentException("Could not parse url")
+    private val INVALID_URL = HttpUrl.get("https://proxer.me/404")
 
     override val startRegex = Regex(" *url *= *.+?( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *url *", REGEX_OPTIONS)
 
     override fun construct(code: String, parent: BBTree): BBTree {
         val url = BBUtils.cutAttribute(code, ATTRIBUTE_REGEX)?.trim() ?: ""
-        val parsedUrl = Utils.safelyParseAndFixUrl(url) ?: INVALID_URL
+        val parsedUrl = Utils.parseAndFixUrl(url) ?: INVALID_URL
 
         return BBTree(this, parent, args = BBArgs(custom = *arrayOf(URL_ARGUMENT to parsedUrl)))
     }

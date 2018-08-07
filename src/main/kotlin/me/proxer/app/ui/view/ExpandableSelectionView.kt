@@ -74,7 +74,7 @@ class ExpandableSelectionView @JvmOverloads constructor(
         inflate(context, R.layout.view_expandable_multi_selection, this)
 
         context.theme.obtainStyledAttributes(attrs, R.styleable.ExpandableSelectionView, 0, 0).apply {
-            titleText = getString(R.styleable.ExpandableSelectionView_titleText)
+            titleText = getString(R.styleable.ExpandableSelectionView_titleText) ?: ""
             isSingleSelection = getBoolean(R.styleable.ExpandableSelectionView_singleSelection, false)
 
             recycle()
@@ -214,7 +214,7 @@ class ExpandableSelectionView @JvmOverloads constructor(
         internal val isExtended: Boolean
 
         internal constructor(
-            superState: Parcelable,
+            superState: Parcelable?,
             selection: MutableList<String>,
             isExtended: Boolean
         ) : super(superState) {

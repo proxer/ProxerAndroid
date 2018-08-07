@@ -63,7 +63,7 @@ class IndustryInfoFragment : BaseContentFragment<Industry>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        link.setSimpleOnLinkClickListener { _, link -> showPage(Utils.parseAndFixUrl(link)) }
+        link.setSimpleOnLinkClickListener { _, link -> showPage(Utils.getAndFixUrl(link)) }
 
         link.setSimpleOnLinkLongClickListener { _, link ->
             val title = getString(R.string.clipboard_title)

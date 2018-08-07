@@ -2,6 +2,7 @@ package me.proxer.app.anime.schedule.widget
 
 import android.os.Parcel
 import android.os.Parcelable
+import me.proxer.app.util.extension.readStringSafely
 import java.util.Date
 
 /**
@@ -26,9 +27,9 @@ data class SimpleCalendarEntry(
     }
 
     constructor(parcel: Parcel) : this(
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
+        parcel.readStringSafely(),
+        parcel.readStringSafely(),
+        parcel.readStringSafely(),
         parcel.readInt(),
         Date(parcel.readLong()),
         Date(parcel.readLong())

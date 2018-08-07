@@ -336,14 +336,14 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
     private fun setInitialType() {
         if (requireActivity().intent.action == Intent.ACTION_VIEW) {
             if (category == Category.ANIME) {
-                when (requireActivity().intent.data.pathSegments.getOrNull(1)) {
+                when (requireActivity().intent.data?.pathSegments?.getOrNull(1) ?: 1) {
                     "animeseries" -> type = MediaType.ANIMESERIES
                     "movie" -> type = MediaType.MOVIE
                     "ova" -> type = MediaType.OVA
                     "hentai" -> type = MediaType.HENTAI
                 }
             } else if (category == Category.MANGA) {
-                when (requireActivity().intent.data.pathSegments.getOrNull(1)) {
+                when (requireActivity().intent.data?.pathSegments?.getOrNull(1) ?: 1) {
                     "mangaseries" -> type = MediaType.MANGASERIES
                     "oneshot" -> type = MediaType.ONESHOT
                     "doujin" -> type = MediaType.DOUJIN
@@ -355,7 +355,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
 
     private fun setInitialSortCriteria() {
         if (requireActivity().intent.action == Intent.ACTION_VIEW) {
-            when (requireActivity().intent.data.pathSegments.getOrNull(2)) {
+            when (requireActivity().intent.data?.pathSegments?.getOrNull(2) ?: 2) {
                 "rating" -> sortCriteria = MediaSearchSortCriteria.RATING
                 "clicks" -> sortCriteria = MediaSearchSortCriteria.CLICKS
             }

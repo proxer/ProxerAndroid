@@ -68,7 +68,7 @@ class ConferenceParticipantAdapter : BaseAdapter<ConferenceParticipant, ViewHold
             }
 
             status.setSimpleOnLinkClickListener { _, link ->
-                statusLinkClickSubject.onNext(Utils.parseAndFixUrl(link))
+                statusLinkClickSubject.onNext(Utils.getAndFixUrl(link))
             }
         }
 

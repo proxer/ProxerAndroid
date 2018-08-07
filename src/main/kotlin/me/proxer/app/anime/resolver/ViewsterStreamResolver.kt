@@ -28,7 +28,7 @@ class ViewsterStreamResolver : StreamResolver {
         }
         .flatMap { api.anime().link(id).buildSingle() }
         .map {
-            val uri = Utils.parseAndFixUrl(it.replace("/embed", "")).androidUri()
+            val uri = Utils.getAndFixUrl(it.replace("/embed", "")).androidUri()
 
             StreamResolutionResult(Intent(Intent.ACTION_VIEW, uri).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
         }

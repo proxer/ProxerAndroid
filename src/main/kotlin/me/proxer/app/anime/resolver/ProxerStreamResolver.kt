@@ -27,7 +27,7 @@ class ProxerStreamResolver : StreamResolver {
         .flatMap { url ->
             client.newCall(Request.Builder()
                 .get()
-                .url(Utils.parseAndFixUrl(url))
+                .url(Utils.getAndFixUrl(url))
                 .header("User-Agent", USER_AGENT)
                 .build())
                 .toBodySingle()

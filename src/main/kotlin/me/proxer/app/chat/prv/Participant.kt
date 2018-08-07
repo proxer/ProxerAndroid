@@ -2,6 +2,7 @@ package me.proxer.app.chat.prv
 
 import android.os.Parcel
 import android.os.Parcelable
+import me.proxer.app.util.extension.readStringSafely
 
 /**
  * @author Ruben Gees
@@ -18,8 +19,8 @@ data class Participant(val username: String, val image: String = "") : Parcelabl
     }
 
     constructor(parcel: Parcel) : this(
-        parcel.readString(),
-        parcel.readString()
+        parcel.readStringSafely(),
+        parcel.readStringSafely()
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {

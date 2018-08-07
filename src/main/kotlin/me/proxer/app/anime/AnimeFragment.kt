@@ -31,6 +31,7 @@ import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.addReferer
 import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.multilineSnackbar
+import me.proxer.app.util.extension.safeData
 import me.proxer.app.util.extension.snackbar
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.info.EntryCore
@@ -160,7 +161,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
             it?.let {
                 if (it.intent.action == Intent.ACTION_VIEW) {
                     if (it.intent.type == "text/html") {
-                        showPage(Utils.parseAndFixUrl(it.intent.data.toString()))
+                        showPage(Utils.getAndFixUrl(it.intent.safeData.toString()))
                     } else {
                         requireContext().startActivity(it.intent.addReferer(requireContext()))
                     }

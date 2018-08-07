@@ -19,6 +19,7 @@ import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseDialog
 import me.proxer.app.util.extension.autoDispose
+import me.proxer.app.util.extension.getSafeString
 import me.proxer.app.util.extension.safeText
 import me.proxer.app.util.extension.unsafeLazy
 import org.jetbrains.anko.bundleOf
@@ -45,7 +46,7 @@ class ChatReportDialog : BaseDialog() {
     private val progress: ProgressBar by bindView(R.id.progress)
 
     private val messageId: String
-        get() = requireArguments().getString(MESSAGE_ID_ARGUMENT)
+        get() = requireArguments().getSafeString(MESSAGE_ID_ARGUMENT)
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialDialog.Builder(requireContext())
         .autoDismiss(false)
@@ -92,7 +93,7 @@ class ChatReportDialog : BaseDialog() {
         if (savedInstanceState == null) {
             messageInput.requestFocus()
 
-            dialog.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+            dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
         }
     }
 

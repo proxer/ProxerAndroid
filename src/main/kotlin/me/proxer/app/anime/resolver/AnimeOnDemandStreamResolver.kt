@@ -16,5 +16,5 @@ class AnimeOnDemandStreamResolver : StreamResolver {
 
     override fun resolve(id: String): Single<StreamResolutionResult> = api.anime().link(id)
         .buildSingle()
-        .map { StreamResolutionResult(Utils.parseAndFixUrl(it).androidUri(), "text/html") }
+        .map { StreamResolutionResult(Utils.getAndFixUrl(it).androidUri(), "text/html") }
 }

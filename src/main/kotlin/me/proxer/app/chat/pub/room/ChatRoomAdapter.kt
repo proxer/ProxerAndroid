@@ -45,7 +45,7 @@ class ChatRoomAdapter : BaseAdapter<ChatRoom, ViewHolder>() {
             }
 
             topic.setSimpleOnLinkClickListener { _, link ->
-                Utils.safelyParseAndFixUrl(link)?.let { url -> linkClickSubject.onNext(url) }
+                Utils.parseAndFixUrl(link)?.let { url -> linkClickSubject.onNext(url) }
             }
         }
 

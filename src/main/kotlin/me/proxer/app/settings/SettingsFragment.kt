@@ -94,7 +94,7 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
                     actionCallback = View.OnClickListener {
                         val packageManager = requireContext().packageManager
                         val packageName = requireContext().packageName
-                        val intent = packageManager.getLaunchIntentForPackage(packageName).clearTop()
+                        val intent = packageManager.getLaunchIntentForPackage(packageName)?.clearTop()
 
                         startActivity(intent)
                         System.exit(0)

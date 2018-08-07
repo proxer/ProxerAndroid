@@ -58,7 +58,7 @@ class ProfileInfoFragment : BaseContentFragment<UserInfo>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        statusText.setSimpleOnLinkClickListener { _, link -> showPage(Utils.parseAndFixUrl(link)) }
+        statusText.setSimpleOnLinkClickListener { _, link -> showPage(Utils.getAndFixUrl(link)) }
     }
 
     override fun showData(data: UserInfo) {

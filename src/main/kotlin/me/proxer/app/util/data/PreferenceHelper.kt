@@ -3,6 +3,7 @@ package me.proxer.app.util.data
 import android.content.Context
 import android.preference.PreferenceManager.getDefaultSharedPreferences
 import android.support.v7.app.AppCompatDelegate
+import me.proxer.app.util.extension.getSafeString
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper.DrawerItem
 
 /**
@@ -30,7 +31,8 @@ object PreferenceHelper {
         .getBoolean(AUTO_BOOKMARK, false)
 
     fun getStartPage(context: Context) = DrawerItem.fromIdOrDefault(getDefaultSharedPreferences(context)
-        .getString(START_PAGE, "0").toLongOrNull())
+        .getSafeString(START_PAGE, "0").toLongOrNull()
+    )
 
     fun setAgeRestrictedMediaAllowed(context: Context, allowed: Boolean) = getDefaultSharedPreferences(context).edit()
         .putBoolean(AGE_CONFIRMATION, allowed).apply()
@@ -51,7 +53,7 @@ object PreferenceHelper {
         .putBoolean(NOTIFICATIONS_ACCOUNT, enabled).apply()
 
     fun getNotificationsInterval(context: Context) = getDefaultSharedPreferences(context)
-        .getString(NOTIFICATIONS_INTERVAL, "30").toLong()
+        .getSafeString(NOTIFICATIONS_INTERVAL, "30").toLong()
 
     fun isVerticalReaderEnabled(context: Context) = getDefaultSharedPreferences(context)
         .getBoolean(MANGA_VERTICAL_READER, true)

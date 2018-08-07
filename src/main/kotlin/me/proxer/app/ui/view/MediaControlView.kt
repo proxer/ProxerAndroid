@@ -17,7 +17,7 @@ import org.threeten.bp.LocalDateTime
 /**
  * @author Ruben Gees
  */
-class MediaControlView(context: Context?, attrs: AttributeSet?) : FrameLayout(context, attrs) {
+class MediaControlView(context: Context, attrs: AttributeSet?) : FrameLayout(context, attrs) {
 
     val uploaderClickSubject: PublishSubject<Uploader> = PublishSubject.create()
     val translatorGroupClickSubject: PublishSubject<SimpleTranslatorGroup> = PublishSubject.create()

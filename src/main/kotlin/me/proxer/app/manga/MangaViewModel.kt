@@ -46,7 +46,7 @@ class MangaViewModel(
             .flatMap { entry ->
                 chapterSingle(entry).map { data ->
                     if (data.chapter.pages == null) {
-                        val serverUrl = Utils.safelyParseAndFixUrl(data.chapter.server)
+                        val serverUrl = Utils.parseAndFixUrl(data.chapter.server)
 
                         if (serverUrl != null && serverUrl.host() in supportedExternalServers) {
                             throw PartialException(MangaLinkException(data.chapter.title, serverUrl), entry)

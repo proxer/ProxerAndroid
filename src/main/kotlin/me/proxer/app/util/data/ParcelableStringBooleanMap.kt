@@ -2,6 +2,7 @@ package me.proxer.app.util.data
 
 import android.os.Parcel
 import android.os.Parcelable
+import me.proxer.app.util.extension.readStringSafely
 
 /**
  * @author Ruben Gees
@@ -26,7 +27,7 @@ class ParcelableStringBooleanMap : Parcelable {
 
     internal constructor(source: Parcel) {
         (0 until source.readInt()).forEach {
-            put(source.readString(), source.readInt() == 1)
+            put(source.readStringSafely(), source.readInt() == 1)
         }
     }
 

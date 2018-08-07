@@ -2,6 +2,7 @@ package me.proxer.app.news.widget
 
 import android.content.Intent
 import android.widget.RemoteViewsService
+import me.proxer.app.util.extension.getSafeParcelableArray
 
 /**
  * @author Ruben Gees
@@ -16,7 +17,7 @@ class NewsWidgetDarkService : RemoteViewsService() {
 
     override fun onGetViewFactory(intent: Intent): RemoteViewsFactory {
         val newsWrapper = intent.getBundleExtra(ARGUMENT_NEWS_WRAPPER)
-        val news = newsWrapper.getParcelableArray(ARGUMENT_NEWS).map { it as SimpleNews }
+        val news = newsWrapper.getSafeParcelableArray(ARGUMENT_NEWS).map { it as SimpleNews }
 
         return NewsWidgetViewsFactory(applicationContext, true, news)
     }

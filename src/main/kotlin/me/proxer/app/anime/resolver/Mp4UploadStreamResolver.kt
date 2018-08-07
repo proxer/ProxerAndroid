@@ -30,7 +30,7 @@ class Mp4UploadStreamResolver : StreamResolver {
         .flatMap {
             client.newCall(Request.Builder()
                 .get()
-                .url(Utils.parseAndFixUrl(it))
+                .url(Utils.getAndFixUrl(it))
                 .header("User-Agent", GENERIC_USER_AGENT)
                 .build())
                 .toBodySingle()
@@ -58,7 +58,7 @@ class Mp4UploadStreamResolver : StreamResolver {
                 if (item.isNotBlank()) item else base36Index
             }
 
-            val uri = Utils.parseAndFixUrl(decodedUrl).androidUri()
+            val uri = Utils.getAndFixUrl(decodedUrl).androidUri()
 
             StreamResolutionResult(uri, "video/mp4")
         }

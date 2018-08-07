@@ -8,6 +8,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import me.proxer.app.R
 import me.proxer.app.base.BaseDialog
 import me.proxer.app.util.extension.clipboardManager
+import me.proxer.app.util.extension.getSafeString
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.toast
 
@@ -25,7 +26,7 @@ class CrashDialog : BaseDialog() {
     }
 
     private val errorDetails: String
-        get() = requireArguments().getString(ERROR_DETAILS_ARGUMENT)
+        get() = requireArguments().getSafeString(ERROR_DETAILS_ARGUMENT)
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialDialog.Builder(requireContext())
         .title(R.string.dialog_crash_title)
