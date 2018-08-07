@@ -33,7 +33,7 @@ ext {
     lifecycleVersion = '1.1.1'
     roomVersion = '1.1.1'
     workVersion = '1.0.0-alpha06'
-    proxerLibVersion = '9b34fe1035'
+    proxerLibVersion = 'c474189044'
 
     // RxJava
     rxJavaVersion = '2.2.0'
