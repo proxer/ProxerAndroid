@@ -12,7 +12,7 @@ ext {
     javaVersion = JavaVersion.VERSION_1_8
 
     // Gradle
-    gradleVersion = '4.9'
+    gradleVersion = '4.10-rc-1'
 
     // Core plugins
     androidPluginVersion = '3.3.0-alpha05'
@@ -60,8 +60,8 @@ ext {
     flexboxVersion = '1.0.0'
     emojiIosVersion = '7f7f35c3e7'
     emojiIosVersion = '7f7f35c3e7'
-    exomediaVersion = '4.2.1'
-    exoplayerVersion = '2.8.2'
+    exomediaVersion = '4.2.3'
+    exoplayerVersion = '2.8.3'
     materialProgressBarVersion = '1.4.2'
     materialRatingBarVersion = '1.3.1'
     customtabsHelperVersion = '1.0.4'
@@ -75,7 +75,7 @@ ext {
     hawkVersion = '2.0.1'
     glideVersion = '4.8.0-SNAPSHOT'
     okHttpVersion = '3.11.0'
-    okioVersion = '1.15.0'
+    okioVersion = '2.0.0-RC1'
     easyHeaderFooterAdapterVersion = '3.0.0'
     kOptionalVersion = '1.6.0'
     kotterknifeVersion = '1.1'
