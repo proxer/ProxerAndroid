@@ -23,7 +23,7 @@ complexity:
   NestedBlockDepth:
     active: false
   StringLiteralDuplication:
-    threshold: 5
+      active: false
   TooManyFunctions:
     active: false
 
