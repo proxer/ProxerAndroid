@@ -15,9 +15,9 @@ import me.proxer.app.util.extension.unsafeLazy
 class NotificationDeletionConfirmationDialog : BaseDialog() {
 
     companion object {
-        fun show(activity: AppCompatActivity, fragment: Fragment) = NotificationDeletionConfirmationDialog().apply {
-            setTargetFragment(fragment, 0)
-        }.show(activity.supportFragmentManager, "notification_deletion_confirmation_dialog")
+        fun show(activity: AppCompatActivity, fragment: Fragment) = NotificationDeletionConfirmationDialog()
+            .apply { setTargetFragment(fragment, 0) }
+            .show(activity.supportFragmentManager, "notification_deletion_confirmation_dialog")
     }
 
     private val viewModel by unsafeLazy { NotificationViewModelProvider.get(requireTargetFragment()) }

@@ -37,14 +37,14 @@ class LogoutDialog : BaseDialog() {
         .customView(R.layout.dialog_logout, true)
         .build()
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onDialogCreated(savedInstanceState: Bundle?) {
+        super.onDialogCreated(savedInstanceState)
 
-        viewModel.data.observe(this, Observer {
+        viewModel.data.observe(dialogLifecycleOwner, Observer {
             it?.let { dismiss() }
         })
 
-        viewModel.error.observe(this, Observer {
+        viewModel.error.observe(dialogLifecycleOwner, Observer {
             it?.let {
                 viewModel.error.value = null
 
@@ -52,7 +52,7 @@ class LogoutDialog : BaseDialog() {
             }
         })
 
-        viewModel.isLoading.observe(this, Observer {
+        viewModel.isLoading.observe(dialogLifecycleOwner, Observer {
             content.visibility = if (it == true) View.GONE else View.VISIBLE
             progress.visibility = if (it == true) View.VISIBLE else View.GONE
         })

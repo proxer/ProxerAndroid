@@ -2,7 +2,6 @@
 
 package me.proxer.app.util.extension
 
-import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleOwner
 import com.uber.autodispose.CompletableSubscribeProxy
 import com.uber.autodispose.ObservableSubscribeProxy
@@ -16,13 +15,13 @@ import io.reactivex.disposables.Disposable
 import timber.log.Timber
 
 inline fun <T> Observable<T>.autoDispose(owner: LifecycleOwner) = this
-    .autoDisposable(owner.scope(Lifecycle.Event.ON_DESTROY))
+    .autoDisposable(owner.scope())
 
 inline fun <T> Single<T>.autoDispose(owner: LifecycleOwner) = this
-    .autoDisposable(owner.scope(Lifecycle.Event.ON_DESTROY))
+    .autoDisposable(owner.scope())
 
 inline fun Completable.autoDispose(owner: LifecycleOwner) = this
-    .autoDisposable(owner.scope(Lifecycle.Event.ON_DESTROY))
+    .autoDisposable(owner.scope())
 
 inline fun <T> Observable<T>.subscribeAndLogErrors(
     noinline onSuccess: (T) -> Unit,

@@ -51,24 +51,24 @@ abstract class BaseContentFragment<T> : BaseFragment() {
         progress.isEnabled = isSwipeToRefreshEnabled
 
         progress.refreshes()
-            .autoDispose(this)
+            .autoDispose(viewLifecycleOwner)
             .subscribe { viewModel.refresh() }
 
-        viewModel.error.observe(this, Observer {
+        viewModel.error.observe(viewLifecycleOwner, Observer {
             when (it) {
                 null -> hideError()
                 else -> showError(it)
             }
         })
 
-        viewModel.data.observe(this, Observer {
+        viewModel.data.observe(viewLifecycleOwner, Observer {
             when (it) {
                 null -> hideData()
                 else -> showData(it)
             }
         })
 
-        viewModel.isLoading.observe(this, Observer {
+        viewModel.isLoading.observe(viewLifecycleOwner, Observer {
             progress.isEnabled = it == true || isSwipeToRefreshEnabled
             progress.isRefreshing = it == true
         })
@@ -112,7 +112,7 @@ abstract class BaseContentFragment<T> : BaseFragment() {
         }
 
         errorButton.clicks()
-            .autoDispose(this)
+            .autoDispose(viewLifecycleOwner)
             .subscribe {
                 when (action.message == R.string.error_captcha) {
                     true -> {

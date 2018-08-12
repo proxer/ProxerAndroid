@@ -67,13 +67,6 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.refreshError.observe(this, Observer {
-            it?.let {
-                multilineSnackbar(root, getString(R.string.error_refresh, getString(it.message)), Snackbar.LENGTH_LONG,
-                    it.buttonMessage, it.toClickListener(hostingActivity))
-            }
-        })
-
         adapter = EasyHeaderFooterAdapter(innerAdapter)
         innerAdapter.positionResolver = ContainerPositionResolver(adapter)
 
@@ -83,8 +76,17 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
 
         recyclerView.endScrolls(pagingThreshold)
             .throttleFirst(300, TimeUnit.MILLISECONDS)
-            .autoDispose(this)
+            .autoDispose(viewLifecycleOwner)
             .subscribe { viewModel.loadIfPossible() }
+
+        viewModel.refreshError.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                multilineSnackbar(
+                    root, getString(R.string.error_refresh, getString(it.message)), Snackbar.LENGTH_LONG,
+                    it.buttonMessage, it.toClickListener(hostingActivity)
+                )
+            }
+        })
     }
 
     override fun onDestroyView() {

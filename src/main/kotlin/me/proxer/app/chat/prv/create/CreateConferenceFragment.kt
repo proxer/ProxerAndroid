@@ -123,34 +123,6 @@ class CreateConferenceFragment : BaseFragment() {
         innerAdapter = CreateConferenceParticipantAdapter(savedInstanceState)
         adapter = EasyHeaderFooterAdapter(innerAdapter)
 
-        innerAdapter.removalSubject
-            .autoDispose(this)
-            .subscribe {
-                if (adapter.footer == null) {
-                    adapter.footer = addParticipantFooter
-                }
-            }
-
-        viewModel.isLoading.observe(this, Observer {
-            progress.isEnabled = it == true
-            progress.isRefreshing = it == true
-        })
-
-        viewModel.result.observe(this, Observer {
-            it?.let {
-                requireActivity().finish()
-
-                MessengerActivity.navigateTo(requireActivity(), it)
-            }
-        })
-
-        viewModel.error.observe(this, Observer {
-            it?.let {
-                multilineSnackbar(root, it.message, Snackbar.LENGTH_LONG, it.buttonMessage,
-                    it.toClickListener(hostingActivity))
-            }
-        })
-
         if (savedInstanceState == null) {
             initialParticipant?.let {
                 innerAdapter.add(it)
@@ -160,6 +132,14 @@ class CreateConferenceFragment : BaseFragment() {
                 }
             }
         }
+
+        innerAdapter.removalSubject
+            .autoDispose(this)
+            .subscribe {
+                if (adapter.footer == null) {
+                    adapter.footer = addParticipantFooter
+                }
+            }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -178,7 +158,7 @@ class CreateConferenceFragment : BaseFragment() {
         cancelParticipant.setIconicsImage(CommunityMaterial.Icon.cmd_close, 48, 16)
 
         addParticipantFooter.clicks()
-            .autoDispose(this)
+            .autoDispose(viewLifecycleOwner)
             .subscribe {
                 adapter.footer = addParticipantInputFooter
 
@@ -188,7 +168,7 @@ class CreateConferenceFragment : BaseFragment() {
             }
 
         cancelParticipant.clicks()
-            .autoDispose(this)
+            .autoDispose(viewLifecycleOwner)
             .subscribe {
                 participantInput.text.clear()
 
@@ -198,7 +178,7 @@ class CreateConferenceFragment : BaseFragment() {
             }
 
         acceptParticipant.clicks()
-            .autoDispose(this)
+            .autoDispose(viewLifecycleOwner)
             .subscribe {
                 if (validateAndAddUser()) {
                     messageInput.requestFocus()
@@ -207,14 +187,14 @@ class CreateConferenceFragment : BaseFragment() {
 
         participantInput.textChanges()
             .skipInitialValue()
-            .autoDispose(this)
+            .autoDispose(viewLifecycleOwner)
             .subscribe {
                 participantInputContainer.error = null
                 participantInputContainer.isErrorEnabled = false
             }
 
         participantInput.editorActions(Predicate { it == EditorInfo.IME_ACTION_NEXT })
-            .autoDispose(this)
+            .autoDispose(viewLifecycleOwner)
             .subscribe {
                 if (it == EditorInfo.IME_ACTION_NEXT && validateAndAddUser()) {
                     messageInput.requestFocus()
@@ -248,7 +228,7 @@ class CreateConferenceFragment : BaseFragment() {
             .paddingDp(4))
 
         emojiButton.clicks()
-            .autoDispose(this)
+            .autoDispose(viewLifecycleOwner)
             .subscribe { emojiPopup.toggle() }
 
         sendButton.clicks()
@@ -286,7 +266,7 @@ class CreateConferenceFragment : BaseFragment() {
             }
             .retry()
             .observeOn(AndroidSchedulers.mainThread())
-            .autoDispose(this)
+            .autoDispose(viewLifecycleOwner)
             .subscribeAndLogErrors { (topic, firstMessage, participants) ->
                 when (isGroup) {
                     true -> viewModel.createGroup(topic, firstMessage, participants)
@@ -297,14 +277,14 @@ class CreateConferenceFragment : BaseFragment() {
         if (isGroup) {
             topicInput.textChanges()
                 .skipInitialValue()
-                .autoDispose(this)
+                .autoDispose(viewLifecycleOwner)
                 .subscribe {
                     topicInputContainer.isErrorEnabled = false
                     topicInputContainer.error = null
                 }
 
             topicInput.editorActions(Predicate { it == EditorInfo.IME_ACTION_NEXT })
-                .autoDispose(this)
+                .autoDispose(viewLifecycleOwner)
                 .subscribe {
                     if (it == EditorInfo.IME_ACTION_NEXT) {
                         if (innerAdapter.isEmpty()) {
@@ -327,6 +307,28 @@ class CreateConferenceFragment : BaseFragment() {
                 messageInput.requestFocus()
             }
         }
+
+        viewModel.isLoading.observe(viewLifecycleOwner, Observer {
+            progress.isEnabled = it == true
+            progress.isRefreshing = it == true
+        })
+
+        viewModel.result.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                requireActivity().finish()
+
+                MessengerActivity.navigateTo(requireActivity(), it)
+            }
+        })
+
+        viewModel.error.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                multilineSnackbar(
+                    root, it.message, Snackbar.LENGTH_LONG, it.buttonMessage,
+                    it.toClickListener(hostingActivity)
+                )
+            }
+        })
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

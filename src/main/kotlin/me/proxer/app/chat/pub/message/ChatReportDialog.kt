@@ -58,26 +58,32 @@ class ChatReportDialog : BaseDialog() {
         .customView(R.layout.dialog_chat_report, true)
         .build()
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onDialogCreated(savedInstanceState: Bundle?) {
+        super.onDialogCreated(savedInstanceState)
+
+        if (savedInstanceState == null) {
+            messageInput.requestFocus()
+
+            dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+        }
 
         messageInput.editorActionEvents(Predicate { event -> event.actionId() == EditorInfo.IME_ACTION_GO })
             .filter { event -> event.actionId() == EditorInfo.IME_ACTION_GO }
-            .autoDispose(this)
+            .autoDispose(dialogLifecycleOwner)
             .subscribe { validateAndSendReport() }
 
         messageInput.textChanges()
             .skipInitialValue()
-            .autoDispose(this)
+            .autoDispose(dialogLifecycleOwner)
             .subscribe { setError(messageContainer, null) }
 
-        viewModel.data.observe(this, Observer {
+        viewModel.data.observe(dialogLifecycleOwner, Observer {
             it?.let {
                 dismiss()
             }
         })
 
-        viewModel.error.observe(this, Observer {
+        viewModel.error.observe(dialogLifecycleOwner, Observer {
             it?.let {
                 viewModel.error.value = null
 
@@ -85,16 +91,10 @@ class ChatReportDialog : BaseDialog() {
             }
         })
 
-        viewModel.isLoading.observe(this, Observer {
+        viewModel.isLoading.observe(dialogLifecycleOwner, Observer {
             inputContainer.visibility = if (it == true) View.GONE else View.VISIBLE
             progress.visibility = if (it == true) View.VISIBLE else View.GONE
         })
-
-        if (savedInstanceState == null) {
-            messageInput.requestFocus()
-
-            dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
-        }
     }
 
     private fun validateAndSendReport() {

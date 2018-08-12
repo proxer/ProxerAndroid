@@ -132,7 +132,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
         }
 
         header.episodeSwitchSubject
-            .autoDispose(this)
+            .autoDispose(viewLifecycleOwner)
             .subscribe {
                 if (areBookmarksAutomatic && it > episode && StorageHelper.isLoggedIn) {
                     viewModel.bookmark(it)
@@ -142,11 +142,11 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
             }
 
         header.bookmarkSetSubject
-            .autoDispose(this)
+            .autoDispose(viewLifecycleOwner)
             .subscribe { viewModel.bookmark(it) }
 
         header.finishClickSubject
-            .autoDispose(this)
+            .autoDispose(viewLifecycleOwner)
             .subscribe { viewModel.markAsFinished() }
 
         return inflater.inflate(R.layout.fragment_anime, container, false)
@@ -157,7 +157,11 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
 
         innerAdapter.glide = GlideApp.with(this)
 
-        viewModel.resolutionResult.observe(this, Observer {
+        recyclerView.setHasFixedSize(true)
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.adapter = adapter
+
+        viewModel.resolutionResult.observe(viewLifecycleOwner, Observer {
             it?.let {
                 if (it.intent.action == Intent.ACTION_VIEW) {
                     if (it.intent.type == "text/html") {
@@ -178,7 +182,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
             }
         })
 
-        viewModel.resolutionError.observe(this, Observer {
+        viewModel.resolutionError.observe(viewLifecycleOwner, Observer {
             it?.let {
                 when (it) {
                     is AppRequiredErrorAction -> it.showDialog(hostingActivity)
@@ -188,22 +192,18 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
             }
         })
 
-        viewModel.userStateData.observe(this, Observer {
+        viewModel.userStateData.observe(viewLifecycleOwner, Observer {
             it?.let {
                 snackbar(root, R.string.fragment_set_user_info_success)
             }
         })
 
-        viewModel.userStateError.observe(this, Observer {
+        viewModel.userStateError.observe(viewLifecycleOwner, Observer {
             it?.let {
                 multilineSnackbar(root, getString(R.string.error_set_user_info, getString(it.message)),
                     Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity))
             }
         })
-
-        recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = adapter
     }
 
     override fun onDestroyView() {

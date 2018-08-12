@@ -124,33 +124,23 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.userInfoUpdateData.observe(this, Observer {
-            it?.let {
-                root.post { snackbar(root, R.string.fragment_set_user_info_success) }
-            }
-        })
-
-        viewModel.userInfoUpdateError.observe(this, Observer {
-            it?.let {
-                multilineSnackbar(root, getString(R.string.error_set_user_info, getString(it.message)),
-                    Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity))
-            }
-        })
+        updateUnratedButton()
+        updateSpoilerButton()
 
         noteContainer.clicks()
-            .autoDispose(this)
+            .autoDispose(viewLifecycleOwner)
             .subscribe { viewModel.note() }
 
         favorContainer.clicks()
-            .autoDispose(this)
+            .autoDispose(viewLifecycleOwner)
             .subscribe { viewModel.markAsFavorite() }
 
         finishContainer.clicks()
-            .autoDispose(this)
+            .autoDispose(viewLifecycleOwner)
             .subscribe { viewModel.markAsFinished() }
 
         unratedTags.clicks()
-            .autoDispose(this)
+            .autoDispose(viewLifecycleOwner)
             .subscribe {
                 showUnratedTags = !showUnratedTags
 
@@ -158,15 +148,27 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
             }
 
         spoilerTags.clicks()
-            .autoDispose(this)
+            .autoDispose(viewLifecycleOwner)
             .subscribe {
                 showSpoilerTags = !showSpoilerTags
 
                 viewModel.data.value?.let { bindTags(it.first) }
             }
 
-        updateUnratedButton()
-        updateSpoilerButton()
+        viewModel.userInfoUpdateData.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                root.post { snackbar(root, R.string.fragment_set_user_info_success) }
+            }
+        })
+
+        viewModel.userInfoUpdateError.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                multilineSnackbar(
+                    root, getString(R.string.error_set_user_info, getString(it.message)),
+                    Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
+                )
+            }
+        })
     }
 
     override fun showData(data: Pair<Entry, Optional<MediaUserInfo>>) {
@@ -260,7 +262,7 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
 
                         contentView.setBackgroundResource(selectableItemBackground.resourceId)
                         contentView.clicks()
-                            .autoDispose(this)
+                            .autoDispose(viewLifecycleOwner)
                             .subscribe {
                                 MediaActivity.navigateTo(requireActivity(), adaptionInfo.id, adaptionInfo.name,
                                     adaptionInfo.medium?.toCategory())

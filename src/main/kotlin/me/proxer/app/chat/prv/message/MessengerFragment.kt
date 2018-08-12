@@ -177,10 +177,6 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
         innerAdapter.mentionsClickSubject
             .autoDispose(this)
             .subscribe { ProfileActivity.navigateTo(requireActivity(), username = it) }
-
-        viewModel.conference.observe(this, Observer {
-            it?.let { conference = it }
-        })
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -194,9 +190,13 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
             messageInput.setText(hostingActivity.initialMessage)
         }
 
+        viewModel.conference.observe(viewLifecycleOwner, Observer {
+            it?.let { conference = it }
+        })
+
         recyclerView.scrollEvents()
             .observeOn(AndroidSchedulers.mainThread())
-            .autoDispose(this)
+            .autoDispose(viewLifecycleOwner)
             .subscribe {
                 val currentPosition = layoutManager.findFirstVisibleItemPosition()
 
@@ -211,7 +211,7 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
         scrollToBottom.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32, colorRes = R.color.textColorPrimary)
 
         scrollToBottom.clicks()
-            .autoDispose(this)
+            .autoDispose(viewLifecycleOwner)
             .subscribe {
                 recyclerView.stopScroll()
                 layoutManager.scrollToPositionWithOffset(0, 0)
@@ -223,11 +223,11 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
             .paddingDp(4))
 
         emojiButton.clicks()
-            .autoDispose(this)
+            .autoDispose(viewLifecycleOwner)
             .subscribe { emojiPopup.toggle() }
 
         sendButton.clicks()
-            .autoDispose(this)
+            .autoDispose(viewLifecycleOwner)
             .subscribe {
                 messageInput.text.toString().trim().let { text ->
                     if (text.isNotBlank()) {
@@ -242,20 +242,20 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
 
         messageInput.textChanges()
             .skipInitialValue()
-            .autoDispose(this)
+            .autoDispose(viewLifecycleOwner)
             .subscribe { message ->
                 viewModel.updateDraft(message.toString())
 
                 messageInput.requestFocus()
             }
 
-        viewModel.draft.observe(this, Observer {
-            if (it != null && messageInput.safeText.isBlank()) messageInput.setText(it)
-        })
-
         if (savedInstanceState == null) {
             viewModel.loadDraft()
         }
+
+        viewModel.draft.observe(viewLifecycleOwner, Observer {
+            if (it != null && messageInput.safeText.isBlank()) messageInput.setText(it)
+        })
     }
 
     override fun onResume() {

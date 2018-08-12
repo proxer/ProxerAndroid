@@ -203,16 +203,16 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
 
         innerAdapter = MediaAdapter(category)
 
+        if (savedInstanceState == null) {
+            setInitialType()
+            setInitialSortCriteria()
+        }
+
         innerAdapter.clickSubject
             .autoDispose(this)
             .subscribe { (view, entry) ->
                 MediaActivity.navigateTo(requireActivity(), entry.id, entry.name, entry.medium.toCategory(), view)
             }
-
-        if (savedInstanceState == null) {
-            setInitialType()
-            setInitialSortCriteria()
-        }
 
         setHasOptionsMenu(true)
     }

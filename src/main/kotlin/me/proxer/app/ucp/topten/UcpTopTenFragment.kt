@@ -74,13 +74,6 @@ class UcpTopTenFragment : BaseContentFragment<ZippedTopTenResult>() {
         animeAdapter.glide = GlideApp.with(this)
         mangaAdapter.glide = GlideApp.with(this)
 
-        viewModel.itemDeletionError.observe(this, Observer {
-            it?.let {
-                multilineSnackbar(root, getString(R.string.error_topten_entry_removal, getString(it.message)),
-                    Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity))
-            }
-        })
-
         animeRecyclerView.isNestedScrollingEnabled = false
         animeRecyclerView.layoutManager = GridLayoutManager(context, spanCount)
         animeRecyclerView.adapter = animeAdapter
@@ -88,6 +81,15 @@ class UcpTopTenFragment : BaseContentFragment<ZippedTopTenResult>() {
         mangaRecyclerView.isNestedScrollingEnabled = false
         mangaRecyclerView.layoutManager = GridLayoutManager(context, spanCount)
         mangaRecyclerView.adapter = mangaAdapter
+
+        viewModel.itemDeletionError.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                multilineSnackbar(
+                    root, getString(R.string.error_topten_entry_removal, getString(it.message)),
+                    Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
+                )
+            }
+        })
     }
 
     override fun onDestroyView() {

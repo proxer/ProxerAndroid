@@ -223,26 +223,26 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
 
         innerAdapter.glide = GlideApp.with(this)
 
-        viewModel.userStateData.observe(this, Observer {
+        bindLayoutManager()
+
+        recyclerView.setHasFixedSize(true)
+        recyclerView.adapter = adapter
+
+        viewModel.userStateData.observe(viewLifecycleOwner, Observer {
             it?.let {
                 snackbar(activityRoot, R.string.fragment_set_user_info_success)
             }
         })
 
-        viewModel.userStateError.observe(this, Observer {
+        viewModel.userStateError.observe(viewLifecycleOwner, Observer {
             it?.let {
                 multilineSnackbar(root, getString(R.string.error_set_user_info, getString(it.message)),
                     Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity))
             }
         })
-
-        bindLayoutManager()
-
-        recyclerView.setHasFixedSize(true)
-        recyclerView.adapter = adapter
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         IconicsMenuInflaterUtil.inflate(inflater, context, R.menu.fragment_manga, menu, true)
 
         toolbar.post {

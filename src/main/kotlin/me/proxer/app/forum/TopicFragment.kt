@@ -64,10 +64,6 @@ class TopicFragment : PagedContentFragment<ParsedPost>() {
                     if (view.drawable != null && post.image.isNotBlank()) view else null)
             }
 
-        viewModel.metaData.observe(this, Observer {
-            it?.let { topic = it.subject }
-        })
-
         setHasOptionsMenu(true)
     }
 
@@ -75,9 +71,13 @@ class TopicFragment : PagedContentFragment<ParsedPost>() {
         super.onViewCreated(view, savedInstanceState)
 
         innerAdapter.glide = GlideApp.with(this)
+
+        viewModel.metaData.observe(viewLifecycleOwner, Observer {
+            it?.let { topic = it.subject }
+        })
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         IconicsMenuInflaterUtil.inflate(inflater, context, R.menu.fragment_topic, menu, true)
 
         super.onCreateOptionsMenu(menu, inflater)

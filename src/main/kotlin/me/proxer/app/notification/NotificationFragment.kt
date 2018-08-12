@@ -59,7 +59,7 @@ class NotificationFragment : PagedContentFragment<ProxerNotification>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.deletionError.observe(this, Observer {
+        viewModel.deletionError.observe(viewLifecycleOwner, Observer {
             it?.let {
                 multilineSnackbar(root, getString(R.string.error_notification_deletion, getString(it.message)),
                     Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity))
@@ -67,7 +67,7 @@ class NotificationFragment : PagedContentFragment<ProxerNotification>() {
         })
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         IconicsMenuInflaterUtil.inflate(inflater, context, R.menu.fragment_notifications, menu, true)
 
         super.onCreateOptionsMenu(menu, inflater)

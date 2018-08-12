@@ -185,15 +185,6 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
         innerAdapter.mentionsClickSubject
             .autoDispose(this)
             .subscribe { ProfileActivity.navigateTo(requireActivity(), username = it) }
-
-        Observable.merge(bus.register(LoginEvent::class.java), bus.register(LogoutEvent::class.java))
-            .observeOn(AndroidSchedulers.mainThread())
-            .autoDispose(this)
-            .subscribe {
-                updateInputVisibility()
-
-                actionMode?.invalidate()
-            }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -203,12 +194,22 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        if (savedInstanceState == null) {
+            viewModel.loadDraft()
+        }
+
+        innerAdapter.glide = GlideApp.with(this)
+
         updateInputVisibility()
+
+        emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_emoticon))
+
+        scrollToBottom.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32, colorRes = R.color.textColorPrimary)
 
         recyclerView.scrollEvents()
             .debounce(10, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
-            .autoDispose(this)
+            .autoDispose(viewLifecycleOwner)
             .subscribe {
                 val currentPosition = layoutManager.findFirstVisibleItemPosition()
 
@@ -218,12 +219,8 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
                 }
             }
 
-        emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_emoticon))
-
-        scrollToBottom.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32, colorRes = R.color.textColorPrimary)
-
         scrollToBottom.clicks()
-            .autoDispose(this)
+            .autoDispose(viewLifecycleOwner)
             .subscribe {
                 recyclerView.stopScroll()
                 layoutManager.scrollToPositionWithOffset(0, 0)
@@ -235,11 +232,11 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
             .paddingDp(4))
 
         emojiButton.clicks()
-            .autoDispose(this)
+            .autoDispose(viewLifecycleOwner)
             .subscribe { emojiPopup.toggle() }
 
         sendButton.clicks()
-            .autoDispose(this)
+            .autoDispose(viewLifecycleOwner)
             .subscribe {
                 messageInput.safeText.toString().trim().let { text ->
                     if (text.isNotBlank()) {
@@ -254,29 +251,32 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
 
         messageInput.textChanges()
             .skipInitialValue()
-            .autoDispose(this)
+            .autoDispose(viewLifecycleOwner)
             .subscribe { message ->
                 viewModel.updateDraft(message.toString())
 
                 messageInput.requestFocus()
             }
 
-        viewModel.sendMessageError.observe(this, Observer {
+        Observable.merge(bus.register(LoginEvent::class.java), bus.register(LogoutEvent::class.java))
+            .observeOn(AndroidSchedulers.mainThread())
+            .autoDispose(viewLifecycleOwner)
+            .subscribe {
+                updateInputVisibility()
+
+                actionMode?.invalidate()
+            }
+
+        viewModel.sendMessageError.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 multilineSnackbar(root, getString(R.string.error_chat_send_message, getString(it.message)),
                     Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity))
             }
         })
 
-        viewModel.draft.observe(this, Observer {
+        viewModel.draft.observe(viewLifecycleOwner, Observer {
             if (it != null && messageInput.safeText.isBlank()) messageInput.setText(it)
         })
-
-        if (savedInstanceState == null) {
-            viewModel.loadDraft()
-        }
-
-        innerAdapter.glide = GlideApp.with(this)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

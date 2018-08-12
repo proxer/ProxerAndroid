@@ -74,31 +74,31 @@ class LoginDialog : BaseDialog() {
         .customView(R.layout.dialog_login, true)
         .build()
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        setupViews()
-        setupViewModels()
+    override fun onDialogCreated(savedInstanceState: Bundle?) {
+        super.onDialogCreated(savedInstanceState)
 
         if (savedInstanceState == null) {
             username.requestFocus()
 
             dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
         }
+
+        setupViews()
+        setupViewModel()
     }
 
     private fun setupViews() {
         listOf(password, secret).forEach {
             it.editorActionEvents(Predicate { event -> event.actionId() == EditorInfo.IME_ACTION_GO })
                 .filter { event -> event.actionId() == EditorInfo.IME_ACTION_GO }
-                .autoDispose(this)
+                .autoDispose(dialogLifecycleOwner)
                 .subscribe { validateAndLogin() }
         }
 
         listOf(username to usernameContainer, password to passwordContainer).forEach { (input, container) ->
             input.textChanges()
                 .skipInitialValue()
-                .autoDispose(this)
+                .autoDispose(dialogLifecycleOwner)
                 .subscribe { setError(container, null) }
         }
 
@@ -119,8 +119,8 @@ class LoginDialog : BaseDialog() {
         }
     }
 
-    private fun setupViewModels() {
-        viewModel.data.observe(this, Observer {
+    private fun setupViewModel() {
+        viewModel.data.observe(dialogLifecycleOwner, Observer {
             it?.let {
                 StorageHelper.user = LocalUser(it.loginToken, it.id, username.safeText.trim().toString(), it.image)
 
@@ -130,7 +130,7 @@ class LoginDialog : BaseDialog() {
             }
         })
 
-        viewModel.error.observe(this, Observer {
+        viewModel.error.observe(dialogLifecycleOwner, Observer {
             it?.let {
                 viewModel.error.value = null
 
@@ -138,12 +138,12 @@ class LoginDialog : BaseDialog() {
             }
         })
 
-        viewModel.isLoading.observe(this, Observer {
+        viewModel.isLoading.observe(dialogLifecycleOwner, Observer {
             inputContainer.visibility = if (it == true) View.GONE else View.VISIBLE
             progress.visibility = if (it == true) View.VISIBLE else View.GONE
         })
 
-        viewModel.isTwoFactorAuthenticationEnabled.observe(this, Observer {
+        viewModel.isTwoFactorAuthenticationEnabled.observe(dialogLifecycleOwner, Observer {
             secret.visibility = if (it == true) View.VISIBLE else View.GONE
             secret.imeOptions = if (it == true) EditorInfo.IME_ACTION_GO else EditorInfo.IME_ACTION_NEXT
             password.imeOptions = if (it == true) EditorInfo.IME_ACTION_NEXT else EditorInfo.IME_ACTION_GO

@@ -96,10 +96,12 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = adapter
 
+        scrollToBottom.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32, colorRes = R.color.textColorPrimary)
+
         recyclerView.scrollEvents()
             .debounce(10, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
-            .autoDispose(this)
+            .autoDispose(viewLifecycleOwner)
             .subscribe {
                 val currentPosition = layoutManager.findLastVisibleItemPosition()
 
@@ -109,10 +111,8 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
                 }
             }
 
-        scrollToBottom.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32, colorRes = R.color.textColorPrimary)
-
         scrollToBottom.clicks()
-            .autoDispose(this)
+            .autoDispose(viewLifecycleOwner)
             .subscribe {
                 val indexBasedUserProgress = viewModel.data.value?.firstOrNull()?.userProgress?.minus(1) ?: 0
                 val currentPosition = layoutManager.findLastVisibleItemPosition()
